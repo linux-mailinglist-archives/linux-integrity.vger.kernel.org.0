@@ -2,180 +2,183 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E6B257F0A
-	for <lists+linux-integrity@lfdr.de>; Mon, 31 Aug 2020 18:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914A5257F31
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 Aug 2020 19:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727906AbgHaQts (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 31 Aug 2020 12:49:48 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:35130 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727114AbgHaQtr (ORCPT
+        id S1728211AbgHaRDN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 31 Aug 2020 13:03:13 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59704 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728418AbgHaRDM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 31 Aug 2020 12:49:47 -0400
-Received: from [192.168.1.12] (c-24-16-6-251.hsd1.wa.comcast.net [24.16.6.251])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1650220B7178;
-        Mon, 31 Aug 2020 09:49:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1650220B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1598892586;
-        bh=PrzKyTh1eQTFqyz9YvIS7lChbfnyR5GVvdJUUeI/GPg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=DXSwr9BHig7uLfDsFZePqWKb1toIV8d9DPoGgrhhyC8J6t/bOKZbhlfQNSHkxhvpl
-         Htk8tlhoaSalx+uMdRsl6yI8s8ok51XjdVYn79O8tnUMBs+M5vXNM3mLyoclLdvbdF
-         VuCD8Tr9UPiIezO08LX+YxCMQjs0PNRSyJgAx+A8=
-Subject: Re: [RFC] ima: export the measurement list when needed
-To:     Janne Karhunen <janne.karhunen@gmail.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>
-References: <436e3951-d6d5-014a-dde1-8a6398dfe7a1@linux.microsoft.com>
- <57e0095a-ff6f-e5dc-6250-1320bd6518cb@linux.microsoft.com>
- <CAE=NcrYOy56_mRNUvvOBX5v=zGsNXwqmz9Q6q3Ovu0vfCRKBpQ@mail.gmail.com>
- <CAE=NcraZDd=8GPGYYuKOVtk++yk5iquPHkCa_h4VbUyH-OP6AQ@mail.gmail.com>
- <CAE=NcraN5+K_mNiaDdi7tFn2PFDbXtfaF0K-ozrdq0=_nKtuFA@mail.gmail.com>
-From:   Raphael Gianotti <raphgi@linux.microsoft.com>
-Message-ID: <341c60a8-d037-1b84-d579-e27634c34e68@linux.microsoft.com>
-Date:   Mon, 31 Aug 2020 09:49:40 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <CAE=NcraN5+K_mNiaDdi7tFn2PFDbXtfaF0K-ozrdq0=_nKtuFA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Mon, 31 Aug 2020 13:03:12 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07VH1uUs017762;
+        Mon, 31 Aug 2020 13:03:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=A4B2a9+fgKjB2GfXhrEpVQFgQTELQDJKb0sN6gsP0Ss=;
+ b=g0T45vqHswIrTRR0qxOK4mB2BnzQUmIw40fTIDoytBNg9VEOzF2YVyYO4FnJiZLwfotr
+ bC1uBpAI92bNS+9LJYMRf4JNn1cb/4/S5LEGwFwDvM61h7lAQqOwBtEDK1jEjDQc1iSj
+ LuWitgGqdMfMOmRMCPeFa2JtVtCQ5fUHhy5QHP8AVQl+Woat0PEEPW4W6PcrxN0gmPMl
+ tdEADHm0gWh5gxX/Pkv6bAeGFYNkRRvt+N3DqKol1+D74qTgh95vIlqsAmsOXsSA2WJW
+ AQXVQk8E16gNay7kI37HISYWlg4h4fGw+ftES45CaJifqAuMNIxn++Kj2Yiyl6KIsGwD lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3393sutn1e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Aug 2020 13:03:05 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 07VH2SDP023355;
+        Mon, 31 Aug 2020 13:03:05 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3393sutmyp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Aug 2020 13:03:05 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 07VGxDRK021536;
+        Mon, 31 Aug 2020 17:03:03 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 337en8ac3r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Aug 2020 17:03:03 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 07VH30Uq12058924
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Aug 2020 17:03:01 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C950311C058;
+        Mon, 31 Aug 2020 17:03:00 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD72511C05B;
+        Mon, 31 Aug 2020 17:02:57 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.2.129])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 31 Aug 2020 17:02:57 +0000 (GMT)
+Message-ID: <f11dbfc1382e60c04fdd519ce5122239fa0cab8b.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 3/6] IMA: update process_buffer_measurement to
+ measure buffer hash
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Date:   Mon, 31 Aug 2020 13:02:56 -0400
+In-Reply-To: <20200828015704.6629-4-tusharsu@linux.microsoft.com>
+References: <20200828015704.6629-1-tusharsu@linux.microsoft.com>
+         <20200828015704.6629-4-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-31_08:2020-08-31,2020-08-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 suspectscore=0
+ impostorscore=0 phishscore=0 adultscore=0 spamscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008310099
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Janne,
+On Thu, 2020-08-27 at 18:57 -0700, Tushar Sugandhi wrote:
+> process_buffer_measurement() currently only measures the input buffer.
+> When the buffer being measured is too large, it may result in bloated
+> IMA logs.
 
-Thanks for your response, I didn't reply right away as I hadn't used mm 
-and vmarea via vfs_tmpfile before, so I wanted to read some code to 
-familiarize myself with it. Correct me if I am misunderstanding the 
-approach you mentioned, but in it, we would still lose the logs accross 
-kexec/cold boots as we do today, is that correct? It feels like this 
-approach would solely solve the issue where we can potentially run out 
-of memory for ima logs.
+The subject of  this sentence refers to an individual record, while
+"bloated" refers to the measurement list.  A "bloated" measurement list
+would contain too many or unnecessary records.  Your concern seems to
+be with the size of the individual record, not the number of
+measurement list entries.
 
-For the original approach, I have a prototype version that I intend to 
-send as an RFC soon (I will link you and it's based off of your original 
-RFC from late last year).
+Measuring the hash of the buffer data is similar to measuring the file
+data.  In the case of the file data, however, the attestation server
+may rely on a white list manifest/DB or the file signature to verify
+the file data hash.  For buffer measurements, how will the attestation
+server ascertain what is a valid buffer hash?
 
-- Raphael
+Hint:  I assume, correct me if I'm wrong, the measurement list record
+template data is not meant to be verified, but used to detect if the "critical data" changed.
 
-On 8/26/2020 7:12 AM, Janne Karhunen wrote:
-> Hi,
->
-> Come to think of it, there could be a MM trap though as I'm not sure
-> this has been done before. This new file vmarea would sit in the
-> kernel virtual memory area somewhere above the page_offset and the mm
-> code might assume that there is no need to look for dirty pages there
-> when running the PTE scan. But that shouldn't be more than one line
-> patch if that is the only trap..
->
->
-> --
-> Janne
->
-> On Wed, Aug 26, 2020 at 4:40 PM Janne Karhunen <janne.karhunen@gmail.com> wrote:
->> Hi,
->>
->> Attached a variant of the patch from that time that only does the
->> element free and relies on the userspace reading the data.
->>
->> The reason why I stopped working on this at the time was that below
->> was sufficient for my needs. However, after a discussion between Mimi
->> and myself (based on a suggestion by Amir Goldstein) we realized that
->> we could do something considerably more elegant through vfs_tmpfile.
->> It's also much more work.
->>
->> The way this could probably work the best is if we would implement a
->> new allocator that would pull pages from a vmarea tied to a
->> vfs_tmpfile and the file could be opened by the kernel itself during
->> the ima init. Now if all the measurement list data blobs would be
->> allocated through this allocator the pages would never be permanently
->> resident in the kernel, they would only visit the memory for a while
->> when someone reads the data. If done this way the allocator probably
->> does not even need a 'free' and the mm code would do all the real work
->> pushing the data out.
->>
->> The benefits would be that no-one would ever have to poll from
->> userspace (kernel does not depend on the userspace to work) and we
->> would never OOM because of IMA as long as the filesystem is writable.
->> Also we would never lose any data as long as the file system is
->> functioning.
->>
->> Thoughts?
->>
->>
->> --
->> Janne
->>
->> On Wed, Aug 26, 2020 at 11:14 AM Janne Karhunen
->> <janne.karhunen@gmail.com> wrote:
->>> Hi Raphael,
->>>
->>> Sorry I missed the reply. I'm not working on this right now, feel free
->>> to grab. Please copy me with the results, thank you.
->>>
->>>
->>> --
->>> Janne
->>>
->>> On Tue, Aug 18, 2020 at 12:30 AM Raphael Gianotti
->>> <raphgi@linux.microsoft.com> wrote:
->>>>
->>>> Hi Janne,
->>>>
->>>> Subject: Re: [RFC] ima: export the measurement list when needed
->>>>> Date: Wed, 18 Dec 2019 17:11:22 +0200
->>>>> From: Janne Karhunen <janne.karhunen@gmail.com>
->>>>> To: linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
->>>>> CC: Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
->>>>> monty.wiseman@ge.com
->>>>>
->>>>> Hi,
->>>>>
->>>>> Have in mind that below is the first trial draft that booted and
->>>>> seemingly accomplished the task once, it was not really tested at all
->>>>> yet. I will make a polished and tested version if people like the
->>>>> concept.
->>>>>
->>>>> Note that the code (almost) supports pushing and pulling of the
->>>>> entries. This variant is a simple pull given that the list size is
->>>>> above the defined limits. Pushing can be put in place if the recursion
->>>>> with the list extend_list_mutex is cleared, maybe this could be done
->>>>> via another patch later on when we have a workqueue for the export
->>>>> task? The workqueue might be the best context for the export job since
->>>>> clearing the list is a heavy operation (and it's not entirely correct
->>>>> here AFAIK, there is no rcu sync before the template free).
->>>>>
->>>>>
->>>>> -- Janne
->>>>>
->>>>> On Wed, Dec 18, 2019 at 2:53 PM Janne Karhunen
->>>>> <janne.karhunen@gmail.com> wrote:
->>>>>> Some systems can end up carrying lots of entries in the ima
->>>>>> measurement list. Since every entry is using a bit of kernel
->>>>>> memory, add a new Kconfig variable to allow the sysadmin to
->>>>>> define the maximum measurement list size and the location
->>>>>> of the exported list.
->>>>>>
->>>>>> The list is written out in append mode, so the system will
->>>>>> keep writing new entries as long as it stays running or runs
->>>>>> out of space. File is also automatically truncated on startup.
->>>>>>
->>>>>> Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
->>>>>> ---
->>>>>>   security/integrity/ima/Kconfig     |  10 ++
->>>>>>   security/integrity/ima/ima.h       |   7 +-
->>>>>>   security/integrity/ima/ima_fs.c    | 178 +++++++++++++++++++++++++++++
->>>>>>   security/integrity/ima/ima_queue.c |   2 +-
->>>>>>   4 files changed, 192 insertions(+), 5 deletions(-)
->>>> I've been looking into a solution to this same issue you started some
->>>> work on. I was wondering if you are still working on it. I was
->>>> considering taking your initial prototyping on this and extending it
->>>> into a final solution, but I wanted to reply here first and check if you
->>>> are currently working on this.
->>>>
+Please update the patch description accordingly.
+
+> 
+> Introduce a boolean parameter measure_buf_hash to support measuring
+> hash of a buffer, which would be much smaller, instead of the buffer
+> itself.
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> ---
+
+<snip>
+
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -733,17 +733,21 @@ int ima_load_data(enum kernel_load_data_id id)
+>   * @func: IMA hook
+>   * @pcr: pcr to extend the measurement
+>   * @func_data: private data specific to @func, can be NULL.
+> + * @measure_buf_hash: if set to true - will measure hash of the buf,
+> + *                    instead of buf
+>   *
+>   * Based on policy, the buffer is measured into the ima log.
+>   */
+>  int process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>  			       const char *eventname, enum ima_hooks func,
+> -			       int pcr, const char *func_data)
+> +			       int pcr, const char *func_data,
+> +			       bool measure_buf_hash)
+>  {
+>  	int ret = 0;
+>  	const char *audit_cause = "ENOMEM";
+>  	struct ima_template_entry *entry = NULL;
+>  	struct integrity_iint_cache iint = {};
+> +	struct integrity_iint_cache digest_iint = {};
+>  	struct ima_event_data event_data = {.iint = &iint,
+>  					    .filename = eventname,
+>  					    .buf = buf,
+> @@ -752,7 +756,7 @@ int process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>  	struct {
+>  		struct ima_digest_data hdr;
+>  		char digest[IMA_MAX_DIGEST_SIZE];
+> -	} hash = {};
+> +	} hash = {}, digest_hash = {};
+>  	int violation = 0;
+>  	int action = 0;
+>  	u32 secid;
+> @@ -801,6 +805,24 @@ int process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>  		goto out;
+>  	}
+>  
+> +	if (measure_buf_hash) {
+> +		digest_iint.ima_hash = &digest_hash.hdr;
+> +		digest_iint.ima_hash->algo = ima_hash_algo;
+> +		digest_iint.ima_hash->length = hash_digest_size[ima_hash_algo];
+> +
+> +		ret = ima_calc_buffer_hash(hash.hdr.digest,
+> +					   iint.ima_hash->length,
+> +					   digest_iint.ima_hash);
+> +		if (ret < 0) {
+> +			audit_cause = "digest_hashing_error";
+> +			goto out;
+> +		}
+> +
+> +		event_data.iint = &digest_iint;
+> +		event_data.buf = hash.hdr.digest;
+> +		event_data.buf_len = iint.ima_hash->length;
+> +	}
+> +
+
+There seems to be some code and variable duplication by doing it this
+way.  Copying the caluclated buffer data hash to a temporary buffer
+might eliminate it.
+
+>  	ret = ima_alloc_init_template(&event_data, &entry, template);
+>  	if (ret < 0) {
+>  		audit_cause = "alloc_entry";
+
