@@ -2,180 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F27257AE9
-	for <lists+linux-integrity@lfdr.de>; Mon, 31 Aug 2020 15:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D82257B7B
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 Aug 2020 16:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726359AbgHaNzf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 31 Aug 2020 09:55:35 -0400
-Received: from mga18.intel.com ([134.134.136.126]:25173 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726326AbgHaNzc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 31 Aug 2020 09:55:32 -0400
-IronPort-SDR: FZLc/Okp5nlr0B/GbNIdItGY3Xw6XHlDljA2FlhOj+MR62rIWJyrJqcAA9ryBkZqsh9mhrwOya
- yJhQ/uEzB6dQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9729"; a="144649132"
-X-IronPort-AV: E=Sophos;i="5.76,375,1592895600"; 
-   d="scan'208";a="144649132"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2020 06:55:32 -0700
-IronPort-SDR: 42ZChNozaJ/VtINQ4MqDRE1NN1XmA/0C5vpiRDdj0JpxV87XgVp+S74pqH03cIAjTEssoeBerj
- Msf9Cc7KcdjQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,375,1592895600"; 
-   d="scan'208";a="476736102"
-Received: from mrogowsk-mobl.ger.corp.intel.com (HELO localhost) ([10.252.35.243])
-  by orsmga005.jf.intel.com with ESMTP; 31 Aug 2020 06:55:30 -0700
-Date:   Mon, 31 Aug 2020 16:55:29 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Omar Sandoval <osandov@osandov.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] tpm_tis: work around status register bug in
- STMicroelectronics TPM
-Message-ID: <20200831135529.GA4814@linux.intel.com>
-References: <1586994699.3931.18.camel@HansenPartnership.com>
- <20200827152445.15439-1-jandryuk@gmail.com>
- <20200828231823.GA20705@linux.intel.com>
- <CAKf6xpvJTChV5+pULrWwx7JX+jS6r8nM9mGEBJLQN3P4D1uO_g@mail.gmail.com>
+        id S1728122AbgHaOrT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 31 Aug 2020 10:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726384AbgHaOrP (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 31 Aug 2020 10:47:15 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFFCC061573;
+        Mon, 31 Aug 2020 07:47:14 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id g96so2946895otb.12;
+        Mon, 31 Aug 2020 07:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q2tcN9Jz0h7kw1m7OiNmzbCBKujbmSV8MqHohL1aMxc=;
+        b=okkSFCeO2nLOMIkvoDn5wLrmrRFbpUKUqcypUHRgryOCdvmz3bPyt7lDX0PFnuYEhO
+         6c1MpCfws1lykdrr5sGQGnJ3t2/jkaOafYInME7Uaowdrhymh8jFoBia/4swJJohXsyq
+         QgGEF/yDCmAs0V0u9D3NiJEDrjYd9qH3H6Co+ZRgTYBFxrqUeC8fQ+D1V+PmFF66zVu2
+         pMJrZ0kfwK9NJM9tJ+lwaDcSSBJKkFv6wWGhPOB3InIaQTDMNjD2B6KBwy+kLr52z2ux
+         AVdRnxjK4d1VkohanZCV2N5dT0GVBilRt+j/7o/mxVGHgM2S03t5opG2vu74RxPAaz9+
+         5YgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q2tcN9Jz0h7kw1m7OiNmzbCBKujbmSV8MqHohL1aMxc=;
+        b=SdjyGfHfLkTiniboi0XyCntDZA9EHvE1FvqlVkrwMOsyifVZlhmaTLatpqb65I9t5i
+         KKtjeT3GTzakiqUzlF1vkcf4Ug/I+sKUsHwZUyaisnJloUhWMUK3KkBt/AXabWO2cZ/g
+         UVKnhl+c7Jo6lAwrDbRnNuhPW8PWy8p7yRmH4iUjhPGppSqLVhQaGqrm7ud5wF/H/BEZ
+         weuk3HhJ1Skpv4bqMhR8nG5hLOVgTLiiW3guyYGWOq7DLLm9pK7efEiEFbQZkwUisIi7
+         7Dm9YbFx8utYYf2aGLe3k2ytCwIvs672pVbgIJOGMGaM4DnawboJrsoGZPAGZJO7yZy1
+         MPyA==
+X-Gm-Message-State: AOAM5317WEQUhprz+kgRZFhdAZypa728ybuXV/6gm2pt5raYtcpA6O2U
+        dJbIYb9EXWvoi5MfFzRsm6zHOTUeY9WDzIjin1g=
+X-Google-Smtp-Source: ABdhPJxPXXHtDiYGXjiJJVFSGYMXS15SU9DduSu2S4QuZFBZsnY3dQXEFlX9xjhw6RNRvh0QzILJ6LFIiS2sjeJp1Y8=
+X-Received: by 2002:a05:6830:1258:: with SMTP id s24mr1192602otp.162.1598885233434;
+ Mon, 31 Aug 2020 07:47:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKf6xpvJTChV5+pULrWwx7JX+jS6r8nM9mGEBJLQN3P4D1uO_g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200822010018.19453-1-nramas@linux.microsoft.com>
+ <CAEjxPJ5Kok-TBfS=XQ+NUC5tuaZRkyLBOawG4UDky51_bsMnGw@mail.gmail.com>
+ <418618c4-a0c6-6b28-6718-2726a29b83c5@linux.microsoft.com>
+ <CAEjxPJ6-8WnZRJnADsn=RVakzJiESjEjK-f8nSkscpT7dnricQ@mail.gmail.com>
+ <CAFqZXNvVQ5U6Ea3gT32Z0hfWbu7GPR-mTF2z6-JZZJT57Heuuw@mail.gmail.com>
+ <f041e8ee-3955-9551-b72d-d4d7fa6e636d@linux.microsoft.com>
+ <CAHC9VhQP7_rV+Oi6weLjVhrx2d8iu9UJ8zeE=ZcqnBMqngrJ4Q@mail.gmail.com>
+ <07854807-c495-b7e5-fc44-26d78ff14f1b@linux.microsoft.com> <CAEjxPJ4TkEEKG+pXwUjyysov1s1mFk4jbGGVyC7ghmpfd3TJ4w@mail.gmail.com>
+In-Reply-To: <CAEjxPJ4TkEEKG+pXwUjyysov1s1mFk4jbGGVyC7ghmpfd3TJ4w@mail.gmail.com>
+From:   Stephen Smalley <stephen.smalley.work@gmail.com>
+Date:   Mon, 31 Aug 2020 10:47:02 -0400
+Message-ID: <CAEjxPJ6GkUot29g5qq2GVYzmY2xwfTvVJkNP2kK54OcW7tkz1Q@mail.gmail.com>
+Subject: Re: [PATCH] SELinux: Measure state and hash of policy using IMA
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        tusharsu@linux.microsoft.com, Sasha Levin <sashal@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        linux-integrity@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 08:12:55PM -0400, Jason Andryuk wrote:
-> On Fri, Aug 28, 2020 at 7:18 PM Jarkko Sakkinen
-> <jarkko.sakkinen@linux.intel.com> wrote:
+On Wed, Aug 26, 2020 at 8:51 AM Stephen Smalley
+<stephen.smalley.work@gmail.com> wrote:
+>
+> On Tue, Aug 25, 2020 at 4:49 PM Lakshmi Ramasubramanian
+> <nramas@linux.microsoft.com> wrote:
 > >
-> > On Thu, Aug 27, 2020 at 11:24:45AM -0400, Jason Andryuk wrote:
-> > > James Bottomley wrote:
-> > > >On Wed, 2020-04-15 at 15:45 -0700, Omar Sandoval wrote:
-> > > >> From: Omar Sandoval <osandov@fb.com>
-> > > >>
-> > > >> We've encountered a particular model of STMicroelectronics TPM that
-> > > >> transiently returns a bad value in the status register. This causes
-> > > >> the kernel to believe that the TPM is ready to receive a command when
-> > > >> it actually isn't, which in turn causes the send to time out in
-> > > >> get_burstcount(). In testing, reading the status register one extra
-> > > >> time convinces the TPM to return a valid value.
-> > > >
-> > > >Interesting, I've got a very early upgradeable nuvoton that seems to be
-> > > >behaving like this.
-> > > >
-> > > >> Signed-off-by: Omar Sandoval <osandov@fb.com>
-> > > >> ---
-> > > >>  drivers/char/tpm/tpm_tis_core.c | 12 ++++++++++++
-> > > >>  1 file changed, 12 insertions(+)
-> > > >>
-> > > >> diff --git a/drivers/char/tpm/tpm_tis_core.c
-> > > >> b/drivers/char/tpm/tpm_tis_core.c
-> > > >> index 27c6ca031e23..277a21027fc7 100644
-> > > >> --- a/drivers/char/tpm/tpm_tis_core.c
-> > > >> +++ b/drivers/char/tpm/tpm_tis_core.c
-> > > >> @@ -238,6 +238,18 @@ static u8 tpm_tis_status(struct tpm_chip *chip)
-> > > >>    rc = tpm_tis_read8(priv, TPM_STS(priv->locality), &status);
-> > > >>    if (rc < 0)
-> > > >>            return 0;
-> > > >> +  /*
-> > > >> +   * Some STMicroelectronics TPMs have a bug where the status
-> > > >> register is
-> > > >> +   * sometimes bogus (all 1s) if read immediately after the
-> > > >> access
-> > > >> +   * register is written to. Bits 0, 1, and 5 are always
-> > > >> supposed to read
-> > > >> +   * as 0, so this is clearly invalid. Reading the register a
-> > > >> second time
-> > > >> +   * returns a valid value.
-> > > >> +   */
-> > > >> +  if (unlikely(status == 0xff)) {
-> > > >> +          rc = tpm_tis_read8(priv, TPM_STS(priv->locality),
-> > > >> &status);
-> > > >> +          if (rc < 0)
-> > > >> +                  return 0;
-> > > >> +  }
-> > > >
-> > > >You theorize that your case is fixed by the second read, but what if it
-> > > >isn't and the second read also returns 0xff?  Shouldn't we have a line
-> > > >here saying
-> > > >
-> > > >if (unlikely(status == 0xff))
-> > > >     status = 0;
-> > > >
-> > > >So if we get a second 0xff we just pretend the thing isn't ready?
-> > >
-> > > Thanks for the fix, Omar!
-> > >
-> > > I tried the patch and it helps with STM TPM2 issues where commands fail
-> > > with the kernel reporting:
-> > > tpm tpm0: Unable to read burstcount
-> > > tpm tpm0: tpm_try_transmit: send(): error -16
-> > >
-> > > My testing was with 5.4, and I'd like to see this CC-ed stable.
-> > >
-> > > When trying to diagnose the issue before finding this patch, I found it
-> > > was timing sensitive.  I was seeing failures in the OpenXT installer.
-> > > The system is basically idle when issuing TPM commands which frequently
-> > > failed.  The same hardware booted into a Fedora Live USB image didn't
-> > > have any TPM command failures.  One notable difference between the two
-> > > is Fedora is CONFIG_PREEMPT=y and OpenXT is CONFIG_PREEMPT_NONE=y.
-> > > Switching OpenXT to PREEMPT=y helped some, but there were still some
-> > > issues with commands failing.  The second interesting thing was running tpm
-> > > commands in OpenXT under trace-cmd let them succeed.  I guess that was enough
-> > > to throw the timing off.
-> > >
-> > > Anyway, I'd like to see this patch applied, please.
-> > >
-> > > Thanks,
-> > > Jason
+> > On 8/24/20 3:18 PM, Paul Moore wrote:
 > >
-> > There was v2 sent after this:
+> > Hi Paul,
 > >
-> > https://patchwork.kernel.org/patch/11492125/
-> 
-> Thanks!  That one didn't come up in a search for STM on lore.kernel.org.
-> 
-> > Unfortunately it lacks changelog. What was changed between v1 and v2?
-> > Why v3 has not been sent yet? I see a discussion with no final
-> > conclusion.
-> 
-> Looks like v2 added James's suggestion with a comment (sorry the
-> formating is off):
-> 
-> + /*
-> + * The status is somehow still bad. This hasn't been observed in
-> + * practice, but clear it just in case so that it doesn't appear
-> + * to be ready.
-> + */
-> + if (unlikely(status == 0xff))
-> +         status = 0;
-> 
-> But, yes, the decision on the alternate approach is unresolved.
+> > >>>>> Is Ondrej's re-try approach I need to use to workaround policy reload issue?
+> > >>>>
+> > >>>> No, I think perhaps we should move the mutex to selinux_state instead
+> > >>>> of selinux_fs_info.  selinux_fs_info has a pointer to selinux_state so
+> > >>>> it can then use it indirectly.  Note that your patches are going to
+> > >>>> conflict with other ongoing work in the selinux next branch that is
+> > >>>> refactoring policy load and converting the policy rwlock to RCU.
+> > >>>
+> > >>> Yeah, and I'm experimenting with a patch on top of Stephen's RCU work
+> > >>> that would allow you to do this in a straightforward way without even
+> > >>> messing with the fsi->mutex. My patch may or may not be eventually
+> > >>> committed, but either way I'd recommend holding off on this for a
+> > >>> while until the dust settles around the RCU conversion.
+> > >>
+> > >> I can make the SELinux\IMA changes in "selinux next branch" taking
+> > >> dependencies on Stephen's patches + relevant IMA patches.
+> > >
+> > > I know it can be frustrating to hear what I'm about to say, but the
+> > > best option is probably just to wait a little to let things settle in
+> > > the SELinux -next branch.  There is a lot of stuff going on right now
+> > > with patches flooding in (at least "flooding" from a SELinux kernel
+> > > development perspective) and we/I've haven't gotten through all of
+> > > them yet.
+> > >
+> >
+> > Could you please let me know when the current set of changes in SELinux
+> > next branch would be completed and be ready to take new changes?
+> >
+> > I mean, roughly - would it be a month from now or you expect that to
+> > take longer?
+>
+> I can't speak for Paul but I would expect it to be sooner rather than
+> later. Ondrej has some follow ups on top of my policy rcu conversion
+> but then it should be good to go.
 
-Ya, has been a while so had to check.
+I think the major changes are now merged although there are still a
+couple of changes coming from Ondrej that could affect your code.  For
+your purposes, the important things to note are:
 
-Also, looking at the discussion in the past I'm very confused is this
-problem related to particular models of a particular vendor or does this
-occur among multiple vendors.
+1) The mutex has moved from selinux_fs_info to selinux_state and is
+now named policy_mutex.  You will need to take it around your call to
+security_read_policy_kernel().
 
-Also, the inline comment needs a rewrite. It literally says that this
-has not been observed in practice, which literally tells me not to
-merge this one. Also the explanation "status is somewhow bad" does not
-really make any sense. I don't know what it means something is "somehow
-bad".
+2) security_policydb_len() was removed and security_read_policy() just
+directly reads the policydb len.  You can do the same from your
+security_read_policy_kernel() variant.
 
+3) Ondrej has a pending change to move the policycap[] array from
+selinux_state to selinux_policy so that it can be atomically updated
+with the policy.
 
-
-This must be clarified in the commit message.
-
-> Thanks again,
-> Jason
-
-/Jarkko
+4) Ondrej has a pending change to eliminate the separate initialized
+boolean from selinux_state and just test whether selinux_state.policy
+is non-NULL but as long as you are using selinux_initialized() to
+test, your code should be unaffected.
