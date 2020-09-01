@@ -2,210 +2,177 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B503258889
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Sep 2020 08:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4077F258B0E
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Sep 2020 11:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbgIAGw7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Sep 2020 02:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbgIAGw6 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Sep 2020 02:52:58 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533BFC0612AC
-        for <linux-integrity@vger.kernel.org>; Mon, 31 Aug 2020 23:52:56 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id z17so117731lfi.12
-        for <linux-integrity@vger.kernel.org>; Mon, 31 Aug 2020 23:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h1z2GBSLPGVZ9T3iJ7y2a8ygfj/7iTfSfdQU3ppQ9LA=;
-        b=OtOIfuUJNuZo9hLM/mejSeAlyWBoXGbW57CO+NiggNto1+C1+Oz0YKKTt5ydUoCvfD
-         lY6D/eaQaGpp97L/8sGBX49oOGMcKBBlnmrV/UC2tIgHWpuAr/HrG0UsOrzeLYNpFbXx
-         VBwDNj2nezHX8N3PVT3C5GeJ7rBjIjOcNqsmm0duBiHI1fmKyS17bXTKVAqoke0DeqC9
-         xEMgcc57FpsYT2wLG3sJbPgp/MZmbaeB2zDRgxH83zb5M6W1glEQrKHt7CLJZv5uT26E
-         c8gzqPyTvgOXkqvcEmEzgF5ziOEFOkxpRazyJSVq0vyoYkWTtBmtxW0p3MWU5CrnPkpu
-         AoTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h1z2GBSLPGVZ9T3iJ7y2a8ygfj/7iTfSfdQU3ppQ9LA=;
-        b=Qy20r0/iNkLFuDdYp+WmDG7VVXvVOzNhJEThc8lZs26e0pZBQekyT50wvSuHL5bJ8A
-         9A61JTQen9M+OUqdsXFg/fFQNyJB49ZK5t0HB7v/Mcdxp3Z0F9gvgfqOoNZhSTax/zev
-         WW7tLrbFrQ31Lg50Oh7ECyl/XW3/tpBNdykgGiiRf+p82uENvcGUh8dXMCg+v9DwY9bV
-         n/RzSwOe2rQJYlL1rHY3xXjkQVirbOyhV8zg30cuwZzhMnLqdPoNM5LvbeJ+jOVbLFKz
-         Lwlk3ceNC1nqU13ZbKZR+zRtU1/kLfDk5fbcnig6vljTxNLxujlsjc2yAGZSBJ5BoYjB
-         OxPw==
-X-Gm-Message-State: AOAM530YYFvVuC2F2d6jE02Z445s6OA17zq4YbDXpg4x/hLXVzW1MWx/
-        VFjPcfEYPLQlVCgUfq3BlNbERhd/9AUEp8f+HktoJd+M
-X-Google-Smtp-Source: ABdhPJyc951F2qLAFo8MMHpCEnQVSz/0O0YffH5miuVNr3/RtaBspD+4h5WfGE5QQzotJLpQhMzOr1vURNUJ6X89Rt8=
-X-Received: by 2002:a19:64b:: with SMTP id 72mr400245lfg.106.1598943174249;
- Mon, 31 Aug 2020 23:52:54 -0700 (PDT)
+        id S1726426AbgIAJJA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Sep 2020 05:09:00 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2719 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725848AbgIAJJA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 1 Sep 2020 05:09:00 -0400
+Received: from lhreml732-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 2E910473AFED2B69E7F2;
+        Tue,  1 Sep 2020 10:08:58 +0100 (IST)
+Received: from fraeml702-chm.china.huawei.com (10.206.15.51) by
+ lhreml732-chm.china.huawei.com (10.201.108.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Tue, 1 Sep 2020 10:08:57 +0100
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Tue, 1 Sep 2020 11:08:57 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Tue, 1 Sep 2020 11:08:57 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "mjg59@google.com" <mjg59@google.com>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH 07/11] evm: Set IMA_CHANGE_XATTR/ATTR bit if
+ EVM_ALLOW_METADATA_WRITES is set
+Thread-Topic: [PATCH 07/11] evm: Set IMA_CHANGE_XATTR/ATTR bit if
+ EVM_ALLOW_METADATA_WRITES is set
+Thread-Index: AQHWRYqWnNLPRhTOMk2ID5bSdlZ6YalHdJUAgAx1KTA=
+Date:   Tue, 1 Sep 2020 09:08:57 +0000
+Message-ID: <a5e6a5acf2274a6d844b275dacfbabb8@huawei.com>
+References: <20200618160329.1263-2-roberto.sassu@huawei.com>
+         <20200618160458.1579-7-roberto.sassu@huawei.com>
+ <67cafcf63daf8e418871eb5302e7327ba851e253.camel@linux.ibm.com>
+In-Reply-To: <67cafcf63daf8e418871eb5302e7327ba851e253.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.193.114]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <436e3951-d6d5-014a-dde1-8a6398dfe7a1@linux.microsoft.com>
- <57e0095a-ff6f-e5dc-6250-1320bd6518cb@linux.microsoft.com>
- <CAE=NcrYOy56_mRNUvvOBX5v=zGsNXwqmz9Q6q3Ovu0vfCRKBpQ@mail.gmail.com>
- <CAE=NcraZDd=8GPGYYuKOVtk++yk5iquPHkCa_h4VbUyH-OP6AQ@mail.gmail.com>
- <CAE=NcraN5+K_mNiaDdi7tFn2PFDbXtfaF0K-ozrdq0=_nKtuFA@mail.gmail.com> <341c60a8-d037-1b84-d579-e27634c34e68@linux.microsoft.com>
-In-Reply-To: <341c60a8-d037-1b84-d579-e27634c34e68@linux.microsoft.com>
-From:   Janne Karhunen <janne.karhunen@gmail.com>
-Date:   Tue, 1 Sep 2020 09:52:41 +0300
-Message-ID: <CAE=NcrZzFZeuG0f_otk4p6vU5S+KaPdeuq6srvDe8huKFYRVPQ@mail.gmail.com>
-Subject: Re: [RFC] ima: export the measurement list when needed
-To:     Raphael Gianotti <raphgi@linux.microsoft.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
-        "Wiseman, Monty (GE Global Research, US)" <monty.wiseman@ge.com>
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Raphael,
-
-It depends how well you make it, if you do it right you would not lose
-them. If the pagefile has a readable format it should all be safe,
-right?
-
-
---
-Janne
-
-On Mon, Aug 31, 2020 at 7:49 PM Raphael Gianotti
-<raphgi@linux.microsoft.com> wrote:
->
-> Hi Janne,
->
-> Thanks for your response, I didn't reply right away as I hadn't used mm
-> and vmarea via vfs_tmpfile before, so I wanted to read some code to
-> familiarize myself with it. Correct me if I am misunderstanding the
-> approach you mentioned, but in it, we would still lose the logs accross
-> kexec/cold boots as we do today, is that correct? It feels like this
-> approach would solely solve the issue where we can potentially run out
-> of memory for ima logs.
->
-> For the original approach, I have a prototype version that I intend to
-> send as an RFC soon (I will link you and it's based off of your original
-> RFC from late last year).
->
-> - Raphael
->
-> On 8/26/2020 7:12 AM, Janne Karhunen wrote:
-> > Hi,
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Monday, August 24, 2020 2:18 PM
+> On Thu, 2020-06-18 at 18:04 +0200, Roberto Sassu wrote:
+> > When EVM_ALLOW_METADATA_WRITES is set, EVM allows any operation
+> on
+> > metadata. Its main purpose is to allow users to freely set metadata when
+> > they are protected by a portable signature, until the HMAC key is loaded.
 > >
-> > Come to think of it, there could be a MM trap though as I'm not sure
-> > this has been done before. This new file vmarea would sit in the
-> > kernel virtual memory area somewhere above the page_offset and the mm
-> > code might assume that there is no need to look for dirty pages there
-> > when running the PTE scan. But that shouldn't be more than one line
-> > patch if that is the only trap..
+> > However, IMA is not notified about metadata changes and, after the first
+> > appraisal, always allows access to the files without checking metadata
+> > again.
+> 
+> ^after the first successful appraisal
 > >
+> > This patch checks in evm_reset_status() if EVM_ALLOW_METADATA
+> WRITES is
+> > enabled and if it is, sets the IMA_CHANGE_XATTR/ATTR bits depending on
+> the
+> > operation performed. At the next appraisal, metadata are revalidated.
+> 
+> EVM modifying IMA bits crosses the boundary between EVM and IMA.
+> There
+> is already an IMA post_setattr hook.  IMA could reset its own bit
+> there.  If necessary EVM could export as a function it's status info.
+
+I wouldn't try to guess in IMA when EVM resets its status. We would have
+to duplicate the logic to check if an EVM key is loaded, if the passed xattr
+is a POSIX ACL, ...
+
+I think it is better to set a flag, maybe a new one, directly in EVM, to notify
+the integrity subsystem that iint->evm_status is no longer valid.
+
+If the EVM flag is set, IMA would reset the appraisal flags, as it uses
+iint->evm_status for appraisal. We can consider to reset also the measure
+flags when we have a template that includes file metadata.
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
+
+> Mimi
+> 
 > >
-> > --
-> > Janne
+> > This patch also adds a call to evm_reset_status() in
+> > evm_inode_post_setattr() so that EVM won't return the cached status
+> the
+> > next time appraisal is performed.
 > >
-> > On Wed, Aug 26, 2020 at 4:40 PM Janne Karhunen <janne.karhunen@gmail.com> wrote:
-> >> Hi,
-> >>
-> >> Attached a variant of the patch from that time that only does the
-> >> element free and relies on the userspace reading the data.
-> >>
-> >> The reason why I stopped working on this at the time was that below
-> >> was sufficient for my needs. However, after a discussion between Mimi
-> >> and myself (based on a suggestion by Amir Goldstein) we realized that
-> >> we could do something considerably more elegant through vfs_tmpfile.
-> >> It's also much more work.
-> >>
-> >> The way this could probably work the best is if we would implement a
-> >> new allocator that would pull pages from a vmarea tied to a
-> >> vfs_tmpfile and the file could be opened by the kernel itself during
-> >> the ima init. Now if all the measurement list data blobs would be
-> >> allocated through this allocator the pages would never be permanently
-> >> resident in the kernel, they would only visit the memory for a while
-> >> when someone reads the data. If done this way the allocator probably
-> >> does not even need a 'free' and the mm code would do all the real work
-> >> pushing the data out.
-> >>
-> >> The benefits would be that no-one would ever have to poll from
-> >> userspace (kernel does not depend on the userspace to work) and we
-> >> would never OOM because of IMA as long as the filesystem is writable.
-> >> Also we would never lose any data as long as the file system is
-> >> functioning.
-> >>
-> >> Thoughts?
-> >>
-> >>
-> >> --
-> >> Janne
-> >>
-> >> On Wed, Aug 26, 2020 at 11:14 AM Janne Karhunen
-> >> <janne.karhunen@gmail.com> wrote:
-> >>> Hi Raphael,
-> >>>
-> >>> Sorry I missed the reply. I'm not working on this right now, feel free
-> >>> to grab. Please copy me with the results, thank you.
-> >>>
-> >>>
-> >>> --
-> >>> Janne
-> >>>
-> >>> On Tue, Aug 18, 2020 at 12:30 AM Raphael Gianotti
-> >>> <raphgi@linux.microsoft.com> wrote:
-> >>>>
-> >>>> Hi Janne,
-> >>>>
-> >>>> Subject: Re: [RFC] ima: export the measurement list when needed
-> >>>>> Date: Wed, 18 Dec 2019 17:11:22 +0200
-> >>>>> From: Janne Karhunen <janne.karhunen@gmail.com>
-> >>>>> To: linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-> >>>>> CC: Ken Goldman <kgold@linux.ibm.com>, david.safford@gmail.com,
-> >>>>> monty.wiseman@ge.com
-> >>>>>
-> >>>>> Hi,
-> >>>>>
-> >>>>> Have in mind that below is the first trial draft that booted and
-> >>>>> seemingly accomplished the task once, it was not really tested at all
-> >>>>> yet. I will make a polished and tested version if people like the
-> >>>>> concept.
-> >>>>>
-> >>>>> Note that the code (almost) supports pushing and pulling of the
-> >>>>> entries. This variant is a simple pull given that the list size is
-> >>>>> above the defined limits. Pushing can be put in place if the recursion
-> >>>>> with the list extend_list_mutex is cleared, maybe this could be done
-> >>>>> via another patch later on when we have a workqueue for the export
-> >>>>> task? The workqueue might be the best context for the export job since
-> >>>>> clearing the list is a heavy operation (and it's not entirely correct
-> >>>>> here AFAIK, there is no rcu sync before the template free).
-> >>>>>
-> >>>>>
-> >>>>> -- Janne
-> >>>>>
-> >>>>> On Wed, Dec 18, 2019 at 2:53 PM Janne Karhunen
-> >>>>> <janne.karhunen@gmail.com> wrote:
-> >>>>>> Some systems can end up carrying lots of entries in the ima
-> >>>>>> measurement list. Since every entry is using a bit of kernel
-> >>>>>> memory, add a new Kconfig variable to allow the sysadmin to
-> >>>>>> define the maximum measurement list size and the location
-> >>>>>> of the exported list.
-> >>>>>>
-> >>>>>> The list is written out in append mode, so the system will
-> >>>>>> keep writing new entries as long as it stays running or runs
-> >>>>>> out of space. File is also automatically truncated on startup.
-> >>>>>>
-> >>>>>> Signed-off-by: Janne Karhunen <janne.karhunen@gmail.com>
-> >>>>>> ---
-> >>>>>>   security/integrity/ima/Kconfig     |  10 ++
-> >>>>>>   security/integrity/ima/ima.h       |   7 +-
-> >>>>>>   security/integrity/ima/ima_fs.c    | 178 +++++++++++++++++++++++++++++
-> >>>>>>   security/integrity/ima/ima_queue.c |   2 +-
-> >>>>>>   4 files changed, 192 insertions(+), 5 deletions(-)
-> >>>> I've been looking into a solution to this same issue you started some
-> >>>> work on. I was wondering if you are still working on it. I was
-> >>>> considering taking your initial prototyping on this and extending it
-> >>>> into a final solution, but I wanted to reply here first and check if you
-> >>>> are currently working on this.
-> >>>>
+> > Cc: stable@vger.kernel.org # 4.16.x
+> > Fixes: ae1ba1676b88e ("EVM: Allow userland to permit modification of
+> EVM-protected metadata")
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  security/integrity/evm/evm_main.c | 14 ++++++++++----
+> >  1 file changed, 10 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/security/integrity/evm/evm_main.c
+> b/security/integrity/evm/evm_main.c
+> > index 41cc6a4aaaab..d4d918183094 100644
+> > --- a/security/integrity/evm/evm_main.c
+> > +++ b/security/integrity/evm/evm_main.c
+> > @@ -478,13 +478,17 @@ int evm_inode_removexattr(struct dentry
+> *dentry, const char *xattr_name)
+> >  	return evm_protect_xattr(dentry, xattr_name, NULL, 0);
+> >  }
+> >
+> > -static void evm_reset_status(struct inode *inode)
+> > +static void evm_reset_status(struct inode *inode, int bit)
+> >  {
+> >  	struct integrity_iint_cache *iint;
+> >
+> >  	iint = integrity_iint_find(inode);
+> > -	if (iint)
+> > +	if (iint) {
+> > +		if (evm_initialized & EVM_ALLOW_METADATA_WRITES)
+> > +			set_bit(bit, &iint->atomic_flags);
+> > +
+> >  		iint->evm_status = INTEGRITY_UNKNOWN;
+> > +	}
+> >  }
+> >
+> >  /**:q
+> > @@ -507,7 +511,7 @@ void evm_inode_post_setxattr(struct dentry
+> *dentry, const char *xattr_name,
+> >  				  && !posix_xattr_acl(xattr_name)))
+> >  		return;
+> >
+> > -	evm_reset_status(dentry->d_inode);
+> > +	evm_reset_status(dentry->d_inode, IMA_CHANGE_XATTR);
+> >
+> >  	evm_update_evmxattr(dentry, xattr_name, xattr_value,
+> xattr_value_len);
+> >  }
+> > @@ -527,7 +531,7 @@ void evm_inode_post_removexattr(struct dentry
+> *dentry, const char *xattr_name)
+> >  	if (!evm_key_loaded() || !evm_protected_xattr(xattr_name))
+> >  		return;
+> >
+> > -	evm_reset_status(dentry->d_inode);
+> > +	evm_reset_status(dentry->d_inode, IMA_CHANGE_XATTR);
+> >
+> >  	evm_update_evmxattr(dentry, xattr_name, NULL, 0);
+> >  }
+> > @@ -600,6 +604,8 @@ void evm_inode_post_setattr(struct dentry
+> *dentry, int ia_valid)
+> >  	if (!evm_key_loaded())
+> >  		return;
+> >
+> > +	evm_reset_status(dentry->d_inode, IMA_CHANGE_ATTR);
+> > +
+> >  	if (ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID))
+> >  		evm_update_evmxattr(dentry, NULL, NULL, 0);
+> >  }
+> 
+
