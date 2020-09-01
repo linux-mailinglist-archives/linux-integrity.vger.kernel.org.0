@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE73259F6F
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Sep 2020 21:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6B3259F75
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Sep 2020 21:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732621AbgIATul (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Sep 2020 15:50:41 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:47442 "EHLO
+        id S1732712AbgIATuu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Sep 2020 15:50:50 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:47474 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731964AbgIATuh (ORCPT
+        with ESMTP id S1732542AbgIATuh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Tue, 1 Sep 2020 15:50:37 -0400
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id EAC6E205CFFB;
-        Tue,  1 Sep 2020 12:50:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EAC6E205CFFB
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9FA6620B36E7;
+        Tue,  1 Sep 2020 12:50:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9FA6620B36E7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1598989836;
-        bh=woRVXYCthTA+4j2u5YTq7CagahV1PQQeqqiqJHb7g2Y=;
+        s=default; t=1598989837;
+        bh=uk5tkZtfuu9874FjBZVS0ALgWIcN65kyJsAQnFGmePg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HuBdJFCBGLILh3WV1UbZ87bA2d5hpYoz5mp0oeR+RBPo4pxXuPIgJmDOM/VFmh0u+
-         q7cBfiel1K9x629rPlhh91luVikItriGSg/TxlRs+OQMaA1XdO2FhY5l9UpMTdN9nT
-         5kYSSmniIA63YmV6dbjnJZUFyuDAoGMNqSbKhfHY=
+        b=b/g7HGaXNgg9Bx5QXv8e3+AfjI6jycWPi9gou9LgiIp0OQnt0GV02313bthzWybpG
+         e1/KbWyW2VYR/aoxo0YdWglmTiLTs25/k6bRn7GipJh6pG+T5oRuzhASUbIua1FC0k
+         CX2gsiG5WWsu5Z0oATEAu8zWMKMSaVAX6NDWM718=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
         gregkh@linuxfoundation.org, james.morse@arm.com,
@@ -39,9 +39,9 @@ To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
 Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
         balajib@linux.microsoft.com
-Subject: [PATCH v5 2/3] arm64: Store IMA log information in kimage used for kexec
-Date:   Tue,  1 Sep 2020 12:50:28 -0700
-Message-Id: <20200901195029.30039-3-nramas@linux.microsoft.com>
+Subject: [PATCH v5 3/3] arm64: Add IMA kexec buffer to DTB
+Date:   Tue,  1 Sep 2020 12:50:29 -0700
+Message-Id: <20200901195029.30039-4-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200901195029.30039-1-nramas@linux.microsoft.com>
 References: <20200901195029.30039-1-nramas@linux.microsoft.com>
@@ -52,118 +52,62 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Address and size of the buffer containing the IMA measurement log need
-to be passed from the current kernel to the next kernel on kexec.
+The address and size of the current kernel's IMA measurement log
+need to be added to the device tree's IMA kexec buffer node for
+the log to be carried over to the next kernel on the kexec call.
 
-Add address and size fields to "struct kimage_arch" for ARM64 platform
-to hold the address and size of the IMA measurement log buffer.
-Define an architecture specific function for ARM64 namely
-arch_ima_add_kexec_buffer() that will set the address and size of
-the current kernel's IMA buffer to be passed to the next kernel on kexec.
+Add the IMA measurement log buffer properties to the device tree for
+ARM64 and reserve the memory for storing the IMA log.
+Update CONFIG_KEXEC_FILE to select CONFIG_HAVE_IMA_KEXEC to
+indicate that the IMA measurement log information is present in
+the device tree.
 
 Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Reported-by: kernel test robot <lkp@intel.com> warning: no previous prototype for 'arch_ima_add_kexec_buffer' [-Wmissing-prototypes]
 ---
- arch/arm64/include/asm/ima.h   | 18 ++++++++++++++++++
- arch/arm64/include/asm/kexec.h |  3 +++
- arch/arm64/kernel/Makefile     |  1 +
- arch/arm64/kernel/ima_kexec.c  | 34 ++++++++++++++++++++++++++++++++++
- 4 files changed, 56 insertions(+)
- create mode 100644 arch/arm64/include/asm/ima.h
- create mode 100644 arch/arm64/kernel/ima_kexec.c
+ arch/arm64/Kconfig                     |  1 +
+ arch/arm64/kernel/machine_kexec_file.c | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/arch/arm64/include/asm/ima.h b/arch/arm64/include/asm/ima.h
-new file mode 100644
-index 000000000000..507fc94ddaba
---- /dev/null
-+++ b/arch/arm64/include/asm/ima.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copyright (C) 2019 Microsoft Corporation
-+ *
-+ * Author: Prakhar Srivastava <prsriva@linux.microsoft.com>
-+ *
-+ */
-+#ifndef _ASM_ARCH_IMA_H
-+#define _ASM_ARCH_IMA_H
-+
-+struct kimage;
-+
-+#ifdef CONFIG_IMA_KEXEC
-+int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
-+			      size_t size);
-+#endif /* CONFIG_IMA_KEXEC */
-+
-+#endif /* _ASM_ARCH_IMA_H */
-diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
-index d24b527e8c00..7bd60c185ad3 100644
---- a/arch/arm64/include/asm/kexec.h
-+++ b/arch/arm64/include/asm/kexec.h
-@@ -100,6 +100,9 @@ struct kimage_arch {
- 	void *elf_headers;
- 	unsigned long elf_headers_mem;
- 	unsigned long elf_headers_sz;
-+
-+	phys_addr_t ima_buffer_addr;
-+	size_t ima_buffer_size;
- };
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 6d232837cbee..9f03c8245e5b 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1077,6 +1077,7 @@ config KEXEC
+ config KEXEC_FILE
+ 	bool "kexec file based system call"
+ 	select KEXEC_CORE
++	select HAVE_IMA_KEXEC
+ 	help
+ 	  This is new version of kexec system call. This system call is
+ 	  file based and takes file descriptors as system call argument
+diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+index 361a1143e09e..0fe3d629eefe 100644
+--- a/arch/arm64/kernel/machine_kexec_file.c
++++ b/arch/arm64/kernel/machine_kexec_file.c
+@@ -136,6 +136,21 @@ static int setup_dtb(struct kimage *image,
+ 				FDT_PROP_KASLR_SEED);
+ 	}
  
- extern const struct kexec_file_ops kexec_image_ops;
-diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-index a561cbb91d4d..39c5d99b49fc 100644
---- a/arch/arm64/kernel/Makefile
-+++ b/arch/arm64/kernel/Makefile
-@@ -62,6 +62,7 @@ obj-$(CONFIG_ARM_SDE_INTERFACE)		+= sdei.o
- obj-$(CONFIG_ARM64_SSBD)		+= ssbd.o
- obj-$(CONFIG_ARM64_PTR_AUTH)		+= pointer_auth.o
- obj-$(CONFIG_SHADOW_CALL_STACK)		+= scs.o
-+obj-$(CONFIG_IMA_KEXEC)			+= ima_kexec.o
- 
- obj-y					+= vdso/ probes/
- obj-$(CONFIG_COMPAT_VDSO)		+= vdso32/
-diff --git a/arch/arm64/kernel/ima_kexec.c b/arch/arm64/kernel/ima_kexec.c
-new file mode 100644
-index 000000000000..1847f1230710
---- /dev/null
-+++ b/arch/arm64/kernel/ima_kexec.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (C) 2019 Microsoft Corporation
-+ *
-+ * Author: Prakhar Srivastava <prsriva@linux.microsoft.com>
-+ *
-+ * File: ima_kexec.c
-+ *       Defines IMA kexec functions.
-+ */
++	/* add ima-kexec-buffer */
++	if (image->arch.ima_buffer_size > 0) {
++		ret = fdt_appendprop_addrrange(dtb, 0, off,
++				FDT_PROP_IMA_KEXEC_BUFFER,
++				image->arch.ima_buffer_addr,
++				image->arch.ima_buffer_size);
++		if (ret)
++			return (ret == -FDT_ERR_NOSPACE ? -ENOMEM : -EINVAL);
 +
-+#include <linux/kernel.h>
-+#include <linux/kexec.h>
-+#include <linux/types.h>
-+#include <asm/ima.h>
++		ret = fdt_add_mem_rsv(dtb, image->arch.ima_buffer_addr,
++				      image->arch.ima_buffer_size);
++		if (ret)
++			goto out;
++	}
 +
-+/**
-+ * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA buffer
-+ *
-+ * @image: kimage structure to set ima buffer information in for kexec
-+ * @load_addr: Start address of the IMA buffer
-+ * @size: size of the IMA buffer
-+ *
-+ * Architectures should use this function to pass on the IMA buffer
-+ * information to the next kernel.
-+ *
-+ * Return: 0 on success, negative errno on error.
-+ */
-+int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
-+			      size_t size)
-+{
-+	image->arch.ima_buffer_addr = load_addr;
-+	image->arch.ima_buffer_size = size;
-+	return 0;
-+}
+ 	/* add rng-seed */
+ 	if (rng_is_initialized()) {
+ 		void *rng_seed;
 -- 
 2.28.0
 
