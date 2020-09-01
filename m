@@ -2,65 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BFA259683
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Sep 2020 18:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22856259F6B
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Sep 2020 21:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731549AbgIAPmX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Sep 2020 11:42:23 -0400
-Received: from foss.arm.com ([217.140.110.172]:44150 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730108AbgIAPmW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Sep 2020 11:42:22 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F1521045;
-        Tue,  1 Sep 2020 08:42:21 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.10.252])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E9E23F71F;
-        Tue,  1 Sep 2020 08:42:19 -0700 (PDT)
-Date:   Tue, 1 Sep 2020 16:42:17 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-Cc:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, oleg@redhat.com,
-        x86@kernel.org
-Subject: Re: [PATCH v1 0/4] [RFC] Implement Trampoline File Descriptor
-Message-ID: <20200901154217.GD95447@C02TD0UTHF1T.local>
-References: <aefc85852ea518982e74b233e11e16d2e707bc32>
- <20200728131050.24443-1-madvenka@linux.microsoft.com>
- <20200731180955.GC67415@C02TD0UTHF1T.local>
- <6236adf7-4bed-534e-0956-fddab4fd96b6@linux.microsoft.com>
- <20200804143018.GB7440@C02TD0UTHF1T.local>
- <b3368692-afe6-89b5-d634-12f4f0a601f8@linux.microsoft.com>
- <20200812100650.GB28154@C02TD0UTHF1T.local>
- <41c4de64-68d0-6fcb-e5c3-63ebd459262e@digikod.net>
+        id S1726936AbgIATuh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Sep 2020 15:50:37 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:47328 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728503AbgIATug (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 1 Sep 2020 15:50:36 -0400
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8509D20B7178;
+        Tue,  1 Sep 2020 12:50:34 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8509D20B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1598989835;
+        bh=uWvHk40fyFUaJlPA0v9Id3b/apBcQSEwDctqxKU39bo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ams3OfUP89wKWnb1PcgLR+MgGQWIXF8jROOrxBwSPe4xrYO4ywUAEfwH2ZDdW0UTD
+         9NBo3xOngJWpzTao0lqgc7u1oEjAsSEBHXha4EPtj6eITpYpjvFSMg/TOze54+J/Q2
+         0R/iJR0cDEaXWovObVaIA/48aJNue7wKQgkJDMLg=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
+        gregkh@linuxfoundation.org, james.morse@arm.com,
+        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: [PATCH v5 0/3] Carry forward IMA measurement log on kexec on ARM64
+Date:   Tue,  1 Sep 2020 12:50:26 -0700
+Message-Id: <20200901195029.30039-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <41c4de64-68d0-6fcb-e5c3-63ebd459262e@digikod.net>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 08:53:42PM +0200, Mickaël Salaün wrote:
-> On 12/08/2020 12:06, Mark Rutland wrote:
-> > Contemporary W^X means that a given virtual alias cannot be writeable
-> > and executeable simultaneously, permitting (a) and (b). If you read the
-> > references on the Wikipedia page for W^X you'll see the OpenBSD 3.3
-> > release notes and related presentation make this clear, and further they
-> > expect (b) to occur with JITS flipping W/X with mprotect().
-> 
-> W^X (with "permanent" mprotect restrictions [1]) goes back to 2000 with
-> PaX [2] (which predates partial OpenBSD implementation from 2003).
-> 
-> [1] https://pax.grsecurity.net/docs/mprotect.txt
-> [2] https://undeadly.org/cgi?action=article;sid=20030417082752
+n kexec file load Integrgity Measurement Architecture(IMA) subsystem
+may verify the IMA signature of the kernel and initramfs, and measure
+it. The command line parameters passed to the kernel in the kexec call
+may also be measured by IMA. A remote attestation service can verify
+the measurement through the IMA log and the TPM PCR data. This can be
+achieved only if the IMA measurement log is carried over from
+the current kernel to the next kernel across the kexec call.
+However in the current implementation the IMA measurement logs are not
+carried over on ARM64 platforms. Therefore a remote attestation service
+cannot verify the authenticity of the running kernel on ARM64 platforms
+when the kernel is updated through the kexec system call.
 
-Thanks for the pointers!
+This patch series adds support for carrying forward the IMA measurement
+log on kexec on ARM64. powerpc already supports carrying forward
+the IMA measurement log on kexec.
 
-Mark.
+This series refactors the platform independent code such that it can be
+reused for ARM64 as well. A chosen node namely
+"linux,ima-kexec-buffer" is added to the DTB for ARM64 to hold
+the address and the size of the memory reserved to carry
+the IMA measurement log.
+
+This patch series has been tested for ARM64 platform using QEMU.
+I would like help from the community for testing this change on powerpc.
+Thanks.
+
+This series is based on commit b51594df17d0 ("Merge tag 'docs-5.9-3' of
+git://git.lwn.net/linux") in https://github.com/torvalds/linux
+"master" branch.
+
+Changelog:
+
+v5:
+  - Merged get_addr_size_cells() and do_get_kexec_buffer() into a single
+    function when moving the arch independent code from powerpc to IMA
+  - Reverted the change to use FDT functions in powerpc code and added
+    back the original code in get_addr_size_cells() and
+    do_get_kexec_buffer() for powerpc.
+  - Added fdt_add_mem_rsv() for ARM64 to reserve the memory for
+    the IMA log buffer during kexec.
+  - Fixed the warning reported by kernel test bot for ARM64
+    arch_ima_add_kexec_buffer() - moved this function to a new file
+    namely arch/arm64/kernel/ima_kexec.c
+
+v4:
+  - Submitting the patch series on behalf of the original author
+    Prakhar Srivastava <prsriva@linux.microsoft.com>
+  - Moved FDT_PROP_IMA_KEXEC_BUFFER ("linux,ima-kexec-buffer") to
+    libfdt.h so that it can be shared by multiple platforms.
+
+v3:
+Breakup patches further into separate patches.
+  - Refactoring non architecture specific code out of powerpc
+  - Update powerpc related code to use fdt functions
+  - Update IMA buffer read related code to use of functions
+  - Add support to store the memory information of the IMA
+    measurement logs to be carried forward.
+  - Update the property strings to align with documented nodes
+    https://github.com/devicetree-org/dt-schema/pull/46
+
+v2:
+  Break patches into separate patches.
+  - Powerpc related Refactoring
+  - Updating the docuemntation for chosen node
+  - Updating arm64 to support IMA buffer pass
+
+v1:
+  Refactoring carrying over IMA measuremnet logs over Kexec. This patch
+    moves the non-architecture specific code out of powerpc and adds to
+    security/ima.(Suggested by Thiago)
+  Add Documentation regarding the ima-kexec-buffer node in the chosen
+    node documentation
+
+v0:
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
+
+Lakshmi Ramasubramanian (3):
+  powerpc: Refactor kexec functions to move arch independent code to IMA
+  arm64: Store IMA log information in kimage used for kexec
+  arm64: Add IMA kexec buffer to DTB
+
+ arch/arm64/Kconfig                     |  1 +
+ arch/arm64/include/asm/ima.h           | 18 ++++++
+ arch/arm64/include/asm/kexec.h         |  3 +
+ arch/arm64/kernel/Makefile             |  1 +
+ arch/arm64/kernel/ima_kexec.c          | 34 +++++++++++
+ arch/arm64/kernel/machine_kexec_file.c | 15 +++++
+ arch/powerpc/include/asm/ima.h         |  3 -
+ arch/powerpc/kexec/ima.c               | 60 +------------------
+ include/linux/libfdt.h                 |  3 +
+ security/integrity/ima/ima_kexec.c     | 82 ++++++++++++++++++++++++++
+ 10 files changed, 160 insertions(+), 60 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
+
+-- 
+2.28.0
+
