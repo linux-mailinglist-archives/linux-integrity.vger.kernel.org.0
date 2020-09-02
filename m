@@ -2,134 +2,147 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFEE25AC3C
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Sep 2020 15:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946DC25B41D
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Sep 2020 20:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbgIBNqN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Sep 2020 09:46:13 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2180 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726853AbgIBNpo (ORCPT
+        id S1726426AbgIBSxr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Sep 2020 14:53:47 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10394 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726124AbgIBSxo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Sep 2020 09:45:44 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 082DWCwx077202;
-        Wed, 2 Sep 2020 09:41:00 -0400
+        Wed, 2 Sep 2020 14:53:44 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 082IWCL2121893;
+        Wed, 2 Sep 2020 14:53:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=5oLkh9zCufGNd1xyAl+9tctnQwJ8sBHIuNfKtYGlwVw=;
- b=Rcs11yb/MxsMAIaM7LLduxZtDQ/C5o0jMsp6uzNaigxkhadHGrc1URXBmxKnl/a2ESxy
- pTuuUE2Uf0dC41K3rHnAOFUaSE2+GcMoQDVfpLgkUrOqB2sgmg3An36Nxrt+6kt47ts/
- 8C8I0n+IfqhAPWWXcCBLIiBTk1bAPizg2uyFnwVYVPufLwN9IqYDKavOAOULyjODyiZx
- bADAaLfJp8aGvg3A7A7Kad7rPkziMpbyur3QjHDySAT2LPp4c+OoQYj811jPc+x+qx1H
- a08VCL7d3a9A7LNZCXucjjwyl5TaJ0Rg4arhqgB0jaRdEtFgnjjASNcLwTmmMWXpzWoM 7g== 
+ bh=D8h2MQ2BFxQFN1LZrIEeY+TR98t0M6uXFJff0XnwfCo=;
+ b=nO/4CuY3MHL193LgWq2pWOz32bp8Wps5HPZ1D15dg+xwybGLqQGGr+ewLMi6AJ7TE+U4
+ V9chqW9Lh2zqOMH5EA3kTBjhqnUHroMrkPvUJSC1bsey12HRVPiJKXPMN8chFF+HeSBG
+ DgtR7K6nZQMqwV6e0/AwFuWyk1Ej/Cp11y7Ul/jN6VceIOyBVP4PEeqpRW4Yq+r12yxW
+ JLS2CsBgPFt4VU1v2kv0TZejCZXUngVgA/PJ/0q4+H0R3ohiDY6zSBylP9oi0+bdBXYe
+ OqSYZ2kKyFMsutfd+hfmCAgo7NQXcNyKrgjMtIna8lCrpWJo/PtdMUVfL3j4LoWOVBHT IQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33ab96jjb0-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33agp70p4s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Sep 2020 09:41:00 -0400
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 082DXJq5082445;
-        Wed, 2 Sep 2020 09:41:00 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33ab96jj9j-1
+        Wed, 02 Sep 2020 14:53:25 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 082IWHbV122282;
+        Wed, 2 Sep 2020 14:53:25 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33agp70p42-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Sep 2020 09:40:59 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 082DcMA1022715;
-        Wed, 2 Sep 2020 13:40:57 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 337en7jxa7-1
+        Wed, 02 Sep 2020 14:53:25 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 082Ir06n023126;
+        Wed, 2 Sep 2020 18:53:23 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 339ap7sd77-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Sep 2020 13:40:57 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 082DdNN065405210
+        Wed, 02 Sep 2020 18:53:23 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 082IrLMC25166286
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Sep 2020 13:39:23 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DC0574203F;
-        Wed,  2 Sep 2020 13:40:54 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B66B942042;
-        Wed,  2 Sep 2020 13:40:52 +0000 (GMT)
+        Wed, 2 Sep 2020 18:53:21 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 53F3211C04C;
+        Wed,  2 Sep 2020 18:53:21 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A81211C04A;
+        Wed,  2 Sep 2020 18:53:18 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.121.98])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Sep 2020 13:40:52 +0000 (GMT)
-Message-ID: <3c5840d3a827ccae575fc73d1aa4ed9f523c46b8.camel@linux.ibm.com>
-Subject: Re: [PATCH 01/11] evm: Execute evm_inode_init_security() only when
- the HMAC key is loaded
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Sep 2020 18:53:18 +0000 (GMT)
+Message-ID: <5331e60b5a1afb55e2bc778db1b95998466b687d.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH 00/30] ima: Introduce IMA namespace
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "mjg59@google.com" <mjg59@google.com>, Petr Vorel <pvorel@suse.cz>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
+To:     Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Date:   Wed, 02 Sep 2020 09:40:51 -0400
-In-Reply-To: <5404e618f79b4914b45c1d19791f470b@huawei.com>
-References: <20200618160133.937-1-roberto.sassu@huawei.com>
-         <2b204e31d21e93c0167d154c2397cd5d11be6e7f.camel@linux.ibm.com>
-         <d4c9d5333256b17acdbe41729dd680f534266130.camel@linux.ibm.com>
-         <5404e618f79b4914b45c1d19791f470b@huawei.com>
+        "containers@lists.linux-foundation.org" 
+        <containers@lists.linux-foundation.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Cc:     "stefanb@linux.vnet.ibm.com" <stefanb@linux.vnet.ibm.com>,
+        "sunyuqiong1988@gmail.com" <sunyuqiong1988@gmail.com>,
+        "mkayaalp@cs.binghamton.edu" <mkayaalp@cs.binghamton.edu>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "christian@brauner.io" <christian@brauner.io>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 02 Sep 2020 14:53:17 -0400
+In-Reply-To: <401a2f36149f450291d1742aeb6c2260@huawei.com>
+References: <N> <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
+         <1597767571.3898.15.camel@HansenPartnership.com>
+         <401a2f36149f450291d1742aeb6c2260@huawei.com>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-02_09:2020-09-02,2020-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- bulkscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 adultscore=0 priorityscore=1501 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009020123
+ definitions=2020-09-02_12:2020-09-02,2020-09-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 malwarescore=0 adultscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0 mlxscore=0
+ mlxlogscore=999 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009020170
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-09-02 at 11:42 +0000, Roberto Sassu wrote:
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Monday, August 24, 2020 7:45 PM
-> > Hi Roberto,
+On Fri, 2020-08-21 at 15:13 +0000, Krzysztof Struczynski wrote:
+> > From: James Bottomley [mailto:James.Bottomley@HansenPartnership.com]
+> > On Tue, 2020-08-18 at 17:20 +0200, krzysztof.struczynski@huawei.com
+> > wrote:
+> > > The measurement list remains global, with the assumption that there
+> > > is only one TPM in the system. Each IMA namespace has a unique ID,
+> > > that allows to track measurements per IMA namespace. Processes in one
+> > > namespace, have access only to the measurements from that namespace.
+> > > The exception is made for the initial IMA namespace, whose processes
+> > > have access to all entries.
 > > 
-> > On Fri, 2020-08-21 at 14:30 -0400, Mimi Zohar wrote:
-> > > Sorry for the delay in reviewing these patches.   Missing from this
-> > > patch set is a cover letter with an explanation for grouping these
-> > > patches into a patch set, other than for convenience.  In this case, it
-> > > would be along the lines that the original use case for EVM portable
-> > > and immutable keys support was for a few critical files, not combined
-> > > with an EVM encrypted key type.   This patch set more fully integrates
-> > > the initial EVM portable and immutable signature support.
-> > 
-> > Thank you for more fully integrating the EVM portable signatures into
-> > IMA.
-> > 
-> > " [PATCH 08/11] ima: Allow imasig requirement to be satisfied by EVM
-> > portable signatures" equates an IMA signature to having a portable and
-> > immutable EVM signature.  That is true in terms of signature
-> > verification, but from an attestation perspective the "ima-sig"
-> > template will not contain a signature.  If not the EVM signature, then
-> > at least some other indication should be included in the measurement
-> > list.
+> > So I think this can work in the use case where the system owner is
+> > responsible for doing the logging and attestation and the tenants just
+> > trust the owner without requiring an attestation.  However, in a multi-
+> > tenant system you need a way for the attestation to be per-container
+> > (because the combined list of who executed what would be a security
+> > leak between tenants).  Since we can't virtualise the PCRs without
+> > introducing a vtpm this is going to require a vtpm infrastructure like
+> > that used for virtual machines and then we can do IMA logging per
+> > container.
 > 
-> Would it be ok to print the EVM portable signature in the sig field if the IMA
-> signature is not found? Later we can introduce the new template evm-sig
-> to include all metadata necessary to verify the EVM portable signature.
-
-As long as the attestation server can differentiate between the
-signature types, including the EVM signature should be fine.
-
+> I agree and wonder if we should decouple the attestation trust model,
+> which depends on the specific use case (e.g. multi/single tenant,
+> public/private cloud), from the IMA logic of linking the measurements to
+> the container. Indeed, attestation from within the container might require
+> anchoring to a vTPM/vPCR and the current measurement tagging mechanism can
+> support several ways of anchoring them to a (virtual) root of trust.
 > 
-> > Are you planning on posting the associated IMA/EVM regression tests?
+> > I don't think the above has to be in your first patch set, we just have
+> > to have an idea of how it could be done to show that nothing in this
+> > patch set precludes a follow on from doing this.
 > 
-> I didn't have a look yet at the code. I will try to write some later.
+> Given that virtualizing trust anchors seems like a separate problem in
+> which industry consensus is not easy to reach for all use cases, an
+> anchoring mechanism should probably be a separate IMA feature.
 
-It looks like ima_verify_signature() in ima-evm-utils could be extended
-to support the EVM portable signature or at least not to fail the
-signature verification.
+Other trust anchors for "trusted keys" has been discussed, but I wasn't
+aware of any discussion about other trust anchors for the IMA
+measurement list.  The IMA measurement list is very much tied to a TPM.
+
+Including container measurements in the host measurement list, will
+unnecessarily cause the host measurement list to grow.  The decision of
+what should and shouldn't be included in the host measurement list
+shouldn't be defined by the container.
 
 Mimi
+
+
 
