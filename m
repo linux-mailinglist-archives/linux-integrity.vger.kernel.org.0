@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35CC25CCBD
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Sep 2020 23:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EBD25CD45
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Sep 2020 00:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728975AbgICVur (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Sep 2020 17:50:47 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36804 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726397AbgICVur (ORCPT
+        id S1729172AbgICWMz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Sep 2020 18:12:55 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22708 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728309AbgICWMy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Sep 2020 17:50:47 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 083LWoJv082071;
-        Thu, 3 Sep 2020 17:50:16 -0400
+        Thu, 3 Sep 2020 18:12:54 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 083M2I4g088162;
+        Thu, 3 Sep 2020 18:12:01 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
  cc : subject : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=cjkaZttb2w3H/rGwt9YR9Ok/v2RDmTY8uBKhTtcgvf8=;
- b=BFnnjKPkWcf0MwUvuY69O4iOrHafazQ5JEnpGXXxrampiGmP8661HO4reWhgbVhi+sbN
- rHyRTctCr9yp4CRAEcoyuMTfnUu1CFo+Dh2m+PC1sB5kcsbl2Uc/CwT3Whc/H951cyBV
- BGKigKA8NMAb+GHxO3I0l7a1Io38vi3FwXVOIdqX7kWVMgDMRBDZziUn6e3WLL6EExkq
- PSzEIdl+7ip10LMwWQGaRfLQ3J/N28msekZnJ63LzPx1063J91+HpKf74AbJPCRzo8Ds
- 6z+FPdc7SW7Pk2FvQKAbNAL2MnRX2YZ1rrEnoTG7Jk/OO+LdOPce/rZoUOEwH79Pd/zl +Q== 
+ content-type; s=pp1; bh=vfAxjaSURqVQkdPQBM6+/IzRa+Uk6OykdgGVzRffals=;
+ b=ByB0e8PBQLcON3bXwl5sX4lNJG76MDoMxpAGwYXt94MSuRVtHeYezYCwDwJV6hcoq4yi
+ rwJFqRrHIc9n9u5NBUwmtXNwz80TS4pnVyhJLiBvj14kFOMu+qZD9drJ/RqG7s79sJ/H
+ AZilOvUMjJCGGXTVGMcrMJZ2QQCCw7a6TBW9fZD0guQ/x+9jpJDcRZvTlsCIqj0bzacm
+ eTE2LfUfK6Fuvom08bTrrdSjtJMy9K1RN2X/j98vAymPtqwM2u7mfg6s2BfDeNyrBtlY
+ rvotHgOKnVi6w/fBIGXh99EKFWf65SV/veSSFbwG2FoHoXYeMRkhLKpUmgmOewuBd7FW ww== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33b7cft33c-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33b8n60m1a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Sep 2020 17:50:16 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 083LZR35086960;
-        Thu, 3 Sep 2020 17:50:15 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33b7cft32n-1
+        Thu, 03 Sep 2020 18:12:01 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 083M2kT7090455;
+        Thu, 3 Sep 2020 18:12:00 -0400
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33b8n60m0y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Sep 2020 17:50:14 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 083Llwvc002343;
-        Thu, 3 Sep 2020 21:50:13 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma04dal.us.ibm.com with ESMTP id 339tmvdfft-1
+        Thu, 03 Sep 2020 18:12:00 -0400
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 083MBYkK028762;
+        Thu, 3 Sep 2020 22:12:00 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02wdc.us.ibm.com with ESMTP id 337ena2xht-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Sep 2020 21:50:13 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 083LoCDm38142216
+        Thu, 03 Sep 2020 22:11:59 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 083MBtXH30671564
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Sep 2020 21:50:12 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 28C5FC6055;
-        Thu,  3 Sep 2020 21:50:12 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48AD6C6057;
-        Thu,  3 Sep 2020 21:50:05 +0000 (GMT)
+        Thu, 3 Sep 2020 22:11:55 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E322A78086;
+        Thu,  3 Sep 2020 22:11:58 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D95378083;
+        Thu,  3 Sep 2020 22:11:51 +0000 (GMT)
 Received: from morokweng.localdomain (unknown [9.211.155.22])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Thu,  3 Sep 2020 21:50:04 +0000 (GMT)
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Thu,  3 Sep 2020 22:11:51 +0000 (GMT)
 References: <20200901195029.30039-1-nramas@linux.microsoft.com>
- <20200901195029.30039-3-nramas@linux.microsoft.com>
+ <20200901195029.30039-4-nramas@linux.microsoft.com>
 User-agent: mu4e 1.4.10; emacs 27.1
 From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
 To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
@@ -72,20 +72,19 @@ Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
         christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com
-Subject: Re: [PATCH v5 2/3] arm64: Store IMA log information in kimage used
- for kexec
-In-reply-to: <20200901195029.30039-3-nramas@linux.microsoft.com>
-Date:   Thu, 03 Sep 2020 18:50:02 -0300
-Message-ID: <87v9guy1h1.fsf@morokweng.localdomain>
+Subject: Re: [PATCH v5 3/3] arm64: Add IMA kexec buffer to DTB
+In-reply-to: <20200901195029.30039-4-nramas@linux.microsoft.com>
+Date:   Thu, 03 Sep 2020 19:11:48 -0300
+Message-ID: <87sgbyy0gr.fsf@morokweng.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-03_14:2020-09-03,2020-09-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- mlxscore=0 phishscore=0 suspectscore=0 mlxlogscore=781 impostorscore=0
- lowpriorityscore=0 malwarescore=0 spamscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 malwarescore=0 impostorscore=0 spamscore=0 suspectscore=0
+ mlxscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009030189
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
@@ -95,21 +94,81 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 
-> Address and size of the buffer containing the IMA measurement log need
-> to be passed from the current kernel to the next kernel on kexec.
+> The address and size of the current kernel's IMA measurement log
+> need to be added to the device tree's IMA kexec buffer node for
+> the log to be carried over to the next kernel on the kexec call.
 >
-> Add address and size fields to "struct kimage_arch" for ARM64 platform
-> to hold the address and size of the IMA measurement log buffer.
-> Define an architecture specific function for ARM64 namely
-> arch_ima_add_kexec_buffer() that will set the address and size of
-> the current kernel's IMA buffer to be passed to the next kernel on kexec.
+> Add the IMA measurement log buffer properties to the device tree for
+> ARM64 and reserve the memory for storing the IMA log.
+> Update CONFIG_KEXEC_FILE to select CONFIG_HAVE_IMA_KEXEC to
+> indicate that the IMA measurement log information is present in
+> the device tree.
 >
 > Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 > Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Reported-by: kernel test robot <lkp@intel.com> warning: no previous prototype for 'arch_ima_add_kexec_buffer' [-Wmissing-prototypes]
+> ---
+>  arch/arm64/Kconfig                     |  1 +
+>  arch/arm64/kernel/machine_kexec_file.c | 15 +++++++++++++++
+>  2 files changed, 16 insertions(+)
+>
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 6d232837cbee..9f03c8245e5b 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1077,6 +1077,7 @@ config KEXEC
+>  config KEXEC_FILE
+>  	bool "kexec file based system call"
+>  	select KEXEC_CORE
+> +	select HAVE_IMA_KEXEC
+>  	help
+>  	  This is new version of kexec system call. This system call is
+>  	  file based and takes file descriptors as system call argument
+> diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+> index 361a1143e09e..0fe3d629eefe 100644
+> --- a/arch/arm64/kernel/machine_kexec_file.c
+> +++ b/arch/arm64/kernel/machine_kexec_file.c
+> @@ -136,6 +136,21 @@ static int setup_dtb(struct kimage *image,
+>  				FDT_PROP_KASLR_SEED);
+>  	}
+>  
+> +	/* add ima-kexec-buffer */
+> +	if (image->arch.ima_buffer_size > 0) {
+> +		ret = fdt_appendprop_addrrange(dtb, 0, off,
+> +				FDT_PROP_IMA_KEXEC_BUFFER,
+> +				image->arch.ima_buffer_addr,
+> +				image->arch.ima_buffer_size);
+> +		if (ret)
+> +			return (ret == -FDT_ERR_NOSPACE ? -ENOMEM : -EINVAL);
+> +
+> +		ret = fdt_add_mem_rsv(dtb, image->arch.ima_buffer_addr,
+> +				      image->arch.ima_buffer_size);
+> +		if (ret)
+> +			goto out;
+> +	}
+> +
+>  	/* add rng-seed */
+>  	if (rng_is_initialized()) {
+>  		void *rng_seed;
 
-Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+I just noticed one more thing this code isn't doing compared to the
+powerpc version (sorry to bring these issues piecemeal, I didn't realize
+this before):
+
+You're not checking whether there already is a device tree property and
+corresponding memory reservation for an IMA kexec buffer that the
+currently running kernel might have received from a previous kernel. In
+that case, this code will do the wrong thing because
+fdt_appendprop_addrrange() will append the range to the existing
+property, which is not what you want. You'll also have a memory
+reservation entry for a stale IMA kexec buffer, which just wastes
+memory.
+
+So one thing you need to do, whether or not there's an IMA kexec buffer
+to be passed to the next kernel, is to remove any existing
+FDT_PROP_IMA_KEXEC_BUFFER property and also its corresponding memory
+reservation, so that you avoid accumulating stale memory reservations
+for non-existing IMA kexec buffers from previous kexecs.
 
 -- 
 Thiago Jung Bauermann
