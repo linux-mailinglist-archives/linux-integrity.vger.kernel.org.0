@@ -2,138 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC05425B4D2
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Sep 2020 21:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA55625C449
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Sep 2020 17:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgIBTzc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Sep 2020 15:55:32 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48828 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726140AbgIBTzb (ORCPT
+        id S1729211AbgICPIG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Sep 2020 11:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728844AbgICPIA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Sep 2020 15:55:31 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 082JcAus088084;
-        Wed, 2 Sep 2020 15:55:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=0Ea0UcfMe7PHsrVD0pFOiv8VCaP3XQXJw+mmhy0kNNI=;
- b=smAOh1vp77+krhOR+OeLIDMQOZBPjysMP4piRZ0DlNug5kBuKNY29qDhcQlmpw2APScC
- MltcABAA2oB9SdFDxc1n+bTtAVK6owkaodfN+HiHrGZrz7Rz4I/wCWaMULSgIRX8Nx5B
- 2Xp2T+g+om7rgyTJlASCHtCYLxbc908pnFZCyWL7GvuYRiMGO6kBzZbPlfQvP1/fGRbd
- gycVy7KtNJ4Ck94fYmyxBnO+Z6vffeIHFk45mCj3fp4su0x3rH0RiQP4dTmmgGlM91b9
- Fu0kqEO4mjRYI5mEXMrJuuNebPUqCFWNGsHci1fz65eKbCVS3waZxiFvSeTMUWs5M8fA Hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33afsubr8c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Sep 2020 15:55:09 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 082JcBUT088215;
-        Wed, 2 Sep 2020 15:55:08 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33afsubr7j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Sep 2020 15:55:08 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 082JpFm6029703;
-        Wed, 2 Sep 2020 19:55:05 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 337en8d261-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Sep 2020 19:55:05 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 082Jt36962325230
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Sep 2020 19:55:03 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 81FA4A405B;
-        Wed,  2 Sep 2020 19:55:03 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C8FAA405F;
-        Wed,  2 Sep 2020 19:54:59 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.121.98])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Sep 2020 19:54:59 +0000 (GMT)
-Message-ID: <d77a6cd783319702fddd06783cb84fdeb86210a6.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH 00/30] ima: Introduce IMA namespace
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        krzysztof.struczynski@huawei.com
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, stefanb@linux.vnet.ibm.com,
-        sunyuqiong1988@gmail.com, mkayaalp@cs.binghamton.edu,
-        dmitry.kasatkin@gmail.com, serge@hallyn.com, jmorris@namei.org,
-        christian@brauner.io, silviu.vlasceanu@huawei.com,
-        roberto.sassu@huawei.com, ebiederm@xmission.com,
-        viro@zeniv.linux.org.uk, torvalds@linux-foundation.org,
-        luto@amacapital.net, jannh@google.com
-Date:   Wed, 02 Sep 2020 15:54:58 -0400
-In-Reply-To: <20200818164943.va3um7toztazcfud@wittgenstein>
-References: <N> <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
-         <20200818164943.va3um7toztazcfud@wittgenstein>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-02_14:2020-09-02,2020-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- adultscore=0 lowpriorityscore=0 clxscore=1011 phishscore=0 malwarescore=0
- mlxlogscore=999 priorityscore=1501 impostorscore=0 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009020178
+        Thu, 3 Sep 2020 11:08:00 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2272CC061244
+        for <linux-integrity@vger.kernel.org>; Thu,  3 Sep 2020 08:08:00 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id m1so2795348ilj.10
+        for <linux-integrity@vger.kernel.org>; Thu, 03 Sep 2020 08:08:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=0NIPwB5WRfZyyF/k/B89ED0JGlfKlhV/NTtA4CDxlP4=;
+        b=u+1OR+j7TIAgqwyRrcMrAAPYda5c7VClmjFAUOQ6qt06PHXzgdCtD6dPmuhuUZUc/r
+         VprMz0GSpV2wezXXcqMtXfDBaoS5vgbFnnpAW22HudOnWMDV+AvRrq33NnjU0XQIk7BJ
+         Lh8XvsVbAmwOqD+QNT+3qyiOKv5xpbl6HClyGgoL9+s5ubtSptvZcQOMF8qX7XY+Wvfy
+         DlBxOZZqfVJFgyiOJ8//Y8dkLD1rz6ydb/EQR7F7AptpUlXl/4HVScRix/xKsrC93FqM
+         VLR/wLdQZ6XRdJ0A/EcIiQ19yCJoBrey7ulyHiLSZjGYw8YVjA57yzeXNkUD9lkSABj5
+         hgnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=0NIPwB5WRfZyyF/k/B89ED0JGlfKlhV/NTtA4CDxlP4=;
+        b=hK970qnIW0kSOcy7XWa/Jzzk5/NOHj+jIidVqDyvQtcYK3sUYq97gezJ4Aj18vUq37
+         fJM63llBxeVdcVsHcGfpvYIPI4kGKd60Zhi+yESzXqS+gI/ah9KzusOeIYPeZ7StGBV8
+         V2ENhwRtzP2+eVqdasdW4oaOB+KG+/RSgLyTZhWsip2Vn1Xv+jN5bGNn2rnanzb47uLi
+         0SNCuOhFtgFK/FeM/UAcR22CETeEXF+0dZiO2erA+0aTY7ioRSM8m0g6UyJvRMnPcKBa
+         M9I+lvqn8noM2sV5Wt1rGh/A8SgXWtzAxmoWxISQwKOkfkNRz9xLSBWvTYZy1Um9Gqfu
+         VjhA==
+X-Gm-Message-State: AOAM530orr+yOXtIKHp6pCjGxS//o8w6u2MTw+ry2iLKssriOtYKiPR8
+        W+iL3qNl16KygtEZ7FxjFMcEtuKE8rJMRwpIOBXTYKP5ua0=
+X-Google-Smtp-Source: ABdhPJwD+CppqYzHqXDGarRkEze6fHaXv1rzj+Cu3dmpnCmWOM0kIsQVFFz5fn2cp0pYzvmFryUyK5DCXDvo899pgbc=
+X-Received: by 2002:a92:6a07:: with SMTP id f7mr3626288ilc.163.1599145677003;
+ Thu, 03 Sep 2020 08:07:57 -0700 (PDT)
+MIME-Version: 1.0
+From:   William Roberts <bill.c.roberts@gmail.com>
+Date:   Thu, 3 Sep 2020 10:07:46 -0500
+Message-ID: <CAFftDdoA=XBqseT5JfRbTK2HLVbLkZ=QRpTzmcooNijXvtAhaw@mail.gmail.com>
+Subject: tpm:warn(2.0): out of memory for object contexts
+To:     linux-integrity@vger.kernel.org, jarkko.sakkinen@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-08-18 at 18:49 +0200, Christian Brauner wrote:
-> On Tue, Aug 18, 2020 at 05:20:07PM +0200, krzysztof.struczynski@huawei.com wrote:
-> > From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-> > 
-> > IMA has not been designed to work with containers. It handles every
-> > process in the same way, and it cannot distinguish if a process belongs to
-> > a container or not.
-> > 
-> > Containers use namespaces to make it appear to the processes in the
-> > containers that they have their own isolated instance of the global
-> > resource. For IMA as well, it is desirable to let processes in the
-> 
-> IMA is brought up on a regular basis with "we want to have this" for
-> years and then non-one seems to really care enough.
+Hello,
 
-There is a lot of interest in IMA namespacing, but the question always
-comes back to how to enable it.  Refer to  
-https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
- for Stefan's analysis.
+I maintain a lot of the userspace components in the tpm2-software
+opensource community. We had a bug come in where we're getting oom TPM
+errors when using /dev/tpmrm0. The bug seems to go away when we use
+the userspace resource manager tpm2-abrmd. Thai leads me to believe
+that there is a kernel bug.
 
-I understand "containers" is not a kernel construct, but from my very
-limited perspective, IMA namespacing only makes sense in the context of
-a "container".  The container owner may want to know which files have
-been accessed/executed (measurements, remote attestation) and/or
-constrain which files may be accessed/executed based on signatures
-(appraisal).
+The question is, "is anyone aware of any bugs in the kernel RM that
+could cause this?"
 
-> 
-> I'm highly skeptical of the value of ~2500 lines of code even if it
-> includes a bunch of namespace boilerplate. It's yet another namespace,
-> and yet another security framework.
-> Why does IMA need to be a separate namespace? Keyrings are tied to user
-> namespaces why can't IMA be? 
+The kernel version is:
+5.4.0-42-generic #46-Ubuntu
 
-In the context of a container, the measurement list and IMA/EVM
-keyrings need to be setup before the first file is measured, signature
-verified, or file hash included in the audit log.
+The discussion can be found here:
+  - https://github.com/tpm2-software/tpm2-pkcs11/issues/567
 
-> I believe Eric has even pointed that out
-> before.
-> 
-> Eric, thoughts?
-
-Any help with the above scenario would very be much appreciated.
-
-Mimi
-
+Thanks,
+Bill
