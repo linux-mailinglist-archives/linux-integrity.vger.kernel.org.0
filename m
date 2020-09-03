@@ -2,74 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA55625C449
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Sep 2020 17:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D277A25C6C3
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Sep 2020 18:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729211AbgICPIG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Sep 2020 11:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728844AbgICPIA (ORCPT
+        id S1728304AbgICQ1m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Sep 2020 12:27:42 -0400
+Received: from mxout04.lancloud.ru ([89.108.124.63]:33392 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728901AbgICQ1l (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Sep 2020 11:08:00 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2272CC061244
-        for <linux-integrity@vger.kernel.org>; Thu,  3 Sep 2020 08:08:00 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id m1so2795348ilj.10
-        for <linux-integrity@vger.kernel.org>; Thu, 03 Sep 2020 08:08:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=0NIPwB5WRfZyyF/k/B89ED0JGlfKlhV/NTtA4CDxlP4=;
-        b=u+1OR+j7TIAgqwyRrcMrAAPYda5c7VClmjFAUOQ6qt06PHXzgdCtD6dPmuhuUZUc/r
-         VprMz0GSpV2wezXXcqMtXfDBaoS5vgbFnnpAW22HudOnWMDV+AvRrq33NnjU0XQIk7BJ
-         Lh8XvsVbAmwOqD+QNT+3qyiOKv5xpbl6HClyGgoL9+s5ubtSptvZcQOMF8qX7XY+Wvfy
-         DlBxOZZqfVJFgyiOJ8//Y8dkLD1rz6ydb/EQR7F7AptpUlXl/4HVScRix/xKsrC93FqM
-         VLR/wLdQZ6XRdJ0A/EcIiQ19yCJoBrey7ulyHiLSZjGYw8YVjA57yzeXNkUD9lkSABj5
-         hgnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=0NIPwB5WRfZyyF/k/B89ED0JGlfKlhV/NTtA4CDxlP4=;
-        b=hK970qnIW0kSOcy7XWa/Jzzk5/NOHj+jIidVqDyvQtcYK3sUYq97gezJ4Aj18vUq37
-         fJM63llBxeVdcVsHcGfpvYIPI4kGKd60Zhi+yESzXqS+gI/ah9KzusOeIYPeZ7StGBV8
-         V2ENhwRtzP2+eVqdasdW4oaOB+KG+/RSgLyTZhWsip2Vn1Xv+jN5bGNn2rnanzb47uLi
-         0SNCuOhFtgFK/FeM/UAcR22CETeEXF+0dZiO2erA+0aTY7ioRSM8m0g6UyJvRMnPcKBa
-         M9I+lvqn8noM2sV5Wt1rGh/A8SgXWtzAxmoWxISQwKOkfkNRz9xLSBWvTYZy1Um9Gqfu
-         VjhA==
-X-Gm-Message-State: AOAM530orr+yOXtIKHp6pCjGxS//o8w6u2MTw+ry2iLKssriOtYKiPR8
-        W+iL3qNl16KygtEZ7FxjFMcEtuKE8rJMRwpIOBXTYKP5ua0=
-X-Google-Smtp-Source: ABdhPJwD+CppqYzHqXDGarRkEze6fHaXv1rzj+Cu3dmpnCmWOM0kIsQVFFz5fn2cp0pYzvmFryUyK5DCXDvo899pgbc=
-X-Received: by 2002:a92:6a07:: with SMTP id f7mr3626288ilc.163.1599145677003;
- Thu, 03 Sep 2020 08:07:57 -0700 (PDT)
+        Thu, 3 Sep 2020 12:27:41 -0400
+X-Greylist: delayed 436 seconds by postgrey-1.27 at vger.kernel.org; Thu, 03 Sep 2020 12:27:39 EDT
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 6999D206FFD7
+Received: from LanCloud
+Received: from LanCloud
+To:     linux-integrity <linux-integrity@vger.kernel.org>
+From:   Igor Zhbanov <i.zhbanov@omprussia.ru>
+Subject: LSM that blocks execution of the code from the anonymous pages
+Message-ID: <5f166ecd-38e4-a808-c377-683aabf6bf65@omprussia.ru>
+Date:   Thu, 3 Sep 2020 19:20:22 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-From:   William Roberts <bill.c.roberts@gmail.com>
-Date:   Thu, 3 Sep 2020 10:07:46 -0500
-Message-ID: <CAFftDdoA=XBqseT5JfRbTK2HLVbLkZ=QRpTzmcooNijXvtAhaw@mail.gmail.com>
-Subject: tpm:warn(2.0): out of memory for object contexts
-To:     linux-integrity@vger.kernel.org, jarkko.sakkinen@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: ru-RU
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [89.179.245.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To LFEX15.lancloud.ru
+ (fd00:f066::45)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello,
+Hello!
 
-I maintain a lot of the userspace components in the tpm2-software
-opensource community. We had a bug come in where we're getting oom TPM
-errors when using /dev/tpmrm0. The bug seems to go away when we use
-the userspace resource manager tpm2-abrmd. Thai leads me to believe
-that there is a kernel bug.
+Earlier in the therad "Should mprotect(..., PROT_EXEC) be checked by IMA?"
+we've discussed whether IMA should intercept making executable of anonymous
+pages.
 
-The question is, "is anyone aware of any bugs in the kernel RM that
-could cause this?"
+I've implemented simple LSM that blocks execution of the code from anonymous
+pages, like: mmap(RW) + read_unsigned_code_from_file() + mprotect(RX).
 
-The kernel version is:
-5.4.0-42-generic #46-Ubuntu
+Currently it uses hooks similar to selinux_mmap_file() and
+selinux_file_mprotect() to restrict any privileged processes (any uid is 0,
+or any gid is 0 or any capability is set) from executing of anonymous unsigned
+code.
 
-The discussion can be found here:
-  - https://github.com/tpm2-software/tpm2-pkcs11/issues/567
+The IMA module is specializing in file-backed (non-anonymous) code integrity
+measurement while allowing execution of arbitrary anonymous code. In
+conjunction with my LSM it would be possible to be sure that any code that is
+executed on a device is trusted.
 
-Thanks,
-Bill
+This would prevent malware payloads from being downloaded and executed in
+both file-backed and anonymous memory. For example, there is even a framework
+for making of filless malware:
+https://www.prodefence.org/fireelf-fileless-linux-malware-framework/
+Also there is an article about execution of ELFs from memory:
+https://magisterquis.github.io/2018/03/31/in-memory-only-elf-execution.html
+https://blog.fbkcs.ru/elf-in-memory-execution/
+
+So it could be an independent LSM or extension of the LSM IMA functionality.
+
+Also I'm thinking about extending working modes to:
+1) no anonomous code for privileged processes (as currently),
+2) no anonomous code for all processes,
+3) no anonomous code for all processes with xattr-based exceptions (may be
+    with xattr value signing)
+
+I've found that some applications like browsers are using anonymous code
+pages for JavaScript JIT code. Also some processes are using libffi that also
+modifies to code. But it looks like it's possible to rebuild libffi with
+trampoline support (PaX compatibility mode) to avoid altering the code pages.
+Also QML-based application also use JS JIT. (And may be python scripts too.)
+
+So for some (mostly unprivileged processes) we would need to make the
+exceptions. But for most of the privileged system services (that is a good
+target for attack because of their ptivileges) there is no need in code pages
+modification, so the proposed functionality could be used to protect them,
+as well as in embedded world where could be no user processes with JIT at all.
+
+So IMA with this LSM would ensure that all the code that is executes is
+trusted, signed and verified.
+
+What do you think?
+
+Thank you.
