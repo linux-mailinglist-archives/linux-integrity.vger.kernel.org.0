@@ -2,154 +2,165 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B4D25DBDF
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Sep 2020 16:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5F625E128
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Sep 2020 19:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730797AbgIDOe7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Sep 2020 10:34:59 -0400
-Received: from wind.enjellic.com ([76.10.64.91]:53456 "EHLO wind.enjellic.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730457AbgIDOev (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Sep 2020 10:34:51 -0400
-X-Greylist: delayed 1672 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Sep 2020 10:34:50 EDT
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 084E6Dui018627;
-        Fri, 4 Sep 2020 09:06:13 -0500
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 084E6BWY018626;
-        Fri, 4 Sep 2020 09:06:11 -0500
-Date:   Fri, 4 Sep 2020 09:06:11 -0500
-From:   "Dr. Greg" <greg@enjellic.com>
+        id S1726229AbgIDRr3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Sep 2020 13:47:29 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:28960 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726133AbgIDRr2 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 4 Sep 2020 13:47:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599241646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z7daBZiriNkGEWysVjrSBcJJKttkbiqltSl3BOJC0PY=;
+        b=B64wr5rMcsbrw9P2yWsnHJkCQjH1fhpHsjaSHPbzJBd7qevHGQO3XeepT8apvYhtzKuG6c
+        DQ9XwkyziDxsqXwtZfbeIA2OkbNHI9NxGp/X/bygjNXeE+WHHnYh0HCRcNSz5RXqbfYGub
+        Nmy3uDAGO/Q+qXdH/wMAgo/ZPyGnybc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-13-oFP3jgN5PA6q8sNFtEwdbQ-1; Fri, 04 Sep 2020 13:47:23 -0400
+X-MC-Unique: oFP3jgN5PA6q8sNFtEwdbQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 27B2018B9F41;
+        Fri,  4 Sep 2020 17:47:22 +0000 (UTC)
+Received: from localhost (ovpn-116-173.gru2.redhat.com [10.97.116.173])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 968E87E40A;
+        Fri,  4 Sep 2020 17:47:21 +0000 (UTC)
+Date:   Fri, 4 Sep 2020 14:47:20 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "containers@lists.linux-foundation.org" 
-        <containers@lists.linux-foundation.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stefanb@linux.vnet.ibm.com" <stefanb@linux.vnet.ibm.com>,
-        "sunyuqiong1988@gmail.com" <sunyuqiong1988@gmail.com>,
-        "mkayaalp@cs.binghamton.edu" <mkayaalp@cs.binghamton.edu>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "christian@brauner.io" <christian@brauner.io>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>, nick.dusek@gmail.com
-Subject: Re: [RFC PATCH 00/30] ima: Introduce IMA namespace
-Message-ID: <20200904140611.GA18124@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20200818152037.11869-1-krzysztof.struczynski@huawei.com> <1597767571.3898.15.camel@HansenPartnership.com> <401a2f36149f450291d1742aeb6c2260@huawei.com> <5331e60b5a1afb55e2bc778db1b95998466b687d.camel@linux.ibm.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Cc:     linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 3/4] ima: limit secure boot feedback scope for appraise
+Message-ID: <20200904174720.GG2568@heredoc.io>
+References: <20200817215233.95319-1-bmeneg@redhat.com>
+ <20200817215233.95319-4-bmeneg@redhat.com>
+ <25a0912802168cf104ffc7d8ac4f1b2ec12e054d.camel@linux.ibm.com>
+MIME-Version: 1.0
+In-Reply-To: <25a0912802168cf104ffc7d8ac4f1b2ec12e054d.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=bmeneg@redhat.com
+X-Mimecast-Spam-Score: 0.002
+X-Mimecast-Originator: redhat.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="64j1qyTOoGvYcHb1"
 Content-Disposition: inline
-In-Reply-To: <5331e60b5a1afb55e2bc778db1b95998466b687d.camel@linux.ibm.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Fri, 04 Sep 2020 09:06:13 -0500 (CDT)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 02:53:17PM -0400, Mimi Zohar wrote:
+--64j1qyTOoGvYcHb1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Good morning, I hope the week is ending well for everyone.
+On Mon, Aug 24, 2020 at 04:11:22PM -0400, Mimi Zohar wrote:
+> On Mon, 2020-08-17 at 18:52 -0300, Bruno Meneguele wrote:
+> > Instead of print to kmsg any ima_appraise=3D option passed by the user =
+in case
+> > of secure boot being enabled, first check if the state was really chang=
+ed
+> > from its original "enforce" state, otherwise don't print anything.
+>=20
+> Please reword this patch description, removing "Instead of print to
+> kmsg".
+>=20
 
-> On Fri, 2020-08-21 at 15:13 +0000, Krzysztof Struczynski wrote:
-> > > From: James Bottomley [mailto:James.Bottomley@HansenPartnership.com]
-> > > On Tue, 2020-08-18 at 17:20 +0200, krzysztof.struczynski@huawei.com
-> > > wrote:
-> > > > The measurement list remains global, with the assumption that there
-> > > > is only one TPM in the system. Each IMA namespace has a unique ID,
-> > > > that allows to track measurements per IMA namespace. Processes in one
-> > > > namespace, have access only to the measurements from that namespace.
-> > > > The exception is made for the initial IMA namespace, whose processes
-> > > > have access to all entries.
-> > > 
-> > > So I think this can work in the use case where the system owner is
-> > > responsible for doing the logging and attestation and the tenants just
-> > > trust the owner without requiring an attestation.  However, in a multi-
-> > > tenant system you need a way for the attestation to be per-container
-> > > (because the combined list of who executed what would be a security
-> > > leak between tenants).  Since we can't virtualise the PCRs without
-> > > introducing a vtpm this is going to require a vtpm infrastructure like
-> > > that used for virtual machines and then we can do IMA logging per
-> > > container.
-> > 
-> > I agree and wonder if we should decouple the attestation trust model,
-> > which depends on the specific use case (e.g. multi/single tenant,
-> > public/private cloud), from the IMA logic of linking the measurements to
-> > the container. Indeed, attestation from within the container might require
-> > anchoring to a vTPM/vPCR and the current measurement tagging mechanism can
-> > support several ways of anchoring them to a (virtual) root of trust.
-> > 
-> > > I don't think the above has to be in your first patch set, we just have
-> > > to have an idea of how it could be done to show that nothing in this
-> > > patch set precludes a follow on from doing this.
-> > 
-> > Given that virtualizing trust anchors seems like a separate problem in
-> > which industry consensus is not easy to reach for all use cases, an
-> > anchoring mechanism should probably be a separate IMA feature.
+ack
 
-> Other trust anchors for "trusted keys" has been discussed, but I wasn't
-> aware of any discussion about other trust anchors for the IMA
-> measurement list.  The IMA measurement list is very much tied to a TPM.
-> 
-> Including container measurements in the host measurement list, will
-> unnecessarily cause the host measurement list to grow.  The decision of
-> what should and shouldn't be included in the host measurement list
-> shouldn't be defined by the container.
+> >=20
+> > Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+> > ---
+> >  security/integrity/ima/ima_appraise.c | 16 +++++++++++-----
+> >  1 file changed, 11 insertions(+), 5 deletions(-)
+> >=20
+> > diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity=
+/ima/ima_appraise.c
+> > index 2193b51c2743..000df14f198a 100644
+> > --- a/security/integrity/ima/ima_appraise.c
+> > +++ b/security/integrity/ima/ima_appraise.c
+> > @@ -19,11 +19,7 @@
+> >  static int __init default_appraise_setup(char *str)
+> >  {
+> >  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
+> > -=09if (arch_ima_get_secureboot()) {
+> > -=09=09pr_info("Secure boot enabled: ignoring ima_appraise=3D%s boot pa=
+rameter option",
+> > -=09=09=09str);
+> > -=09=09return 1;
+> > -=09}
+> > +=09bool sb_state =3D arch_ima_get_secureboot();
+> > =20
+> >  =09if (strncmp(str, "off", 3) =3D=3D 0)
+> >  =09=09ima_appraise =3D 0;
+> > @@ -35,6 +31,16 @@ static int __init default_appraise_setup(char *str)
+> >  =09=09ima_appraise =3D IMA_APPRAISE_ENFORCE;
+> >  =09else
+> >  =09=09pr_err("invalid \"%s\" appraise option", str);
+> > +
+> > +=09/* If appraisal state was changed, but secure boot is enabled,
+> > +=09 * reset it to enforced */
+> > +=09if (sb_state) {
+> > +=09=09if (!is_ima_appraise_enabled()) {
+> > +=09=09=09pr_info("Secure boot enabled: ignoring ima_appraise=3D%s opti=
+on",
+> > +=09=09=09=09str);
+> > +=09=09=09ima_appraise =3D IMA_APPRAISE_ENFORCE;
+> > +=09=09}
+> > +=09}
+>=20
+> Instead of changing ima_appraise and then resetting it back to
+> enforcing, how about using a temporary variable instead?  Maybe
+> something like:
+>=20
+> if (!is_ima_appraise_enabled())
+> =09pr_info( ...)
+> else
+>    ima_appraise =3D temporary value
+>=20
 
-We have been shipping, and more importantly maintaining in the wild,
-systems with a namespaced IMA implementation for 4+ years now. We
-presented the foundations for all of this at the 2015 Linux Security
-Summit in Seattle.
+Yes, indeed it would be nice to keep the default state unchanged. Only
+thing is that 'is_ima_appraise_enabled()' directly checks 'ima_appraise &
+IMA_APPRAISE_ENFORCE', changing to a temp var would require the if() to
+check it directly.
 
-For the purposes of further conversation, I should clarify and
-indicate that we have been shipping and maintaining what a namespaced
-IMA implementation turns into when all of the engineering challenges
-have been addressed with respect to workability issues, particularly
-in regards to keeping the resultant system from being too fragile to
-be effectively deployed and maintained.
+I'm going to send a v2 with it changed.
 
-If practical experience is worth anything, I don't believe that
-namespacing the current IMA implementation is the optimum path
-forward.  With respect to developing operationally relevant trusted
-platforms, the objective needs to be modeling the behavior of
-namespaces spawned from a known root behavior.
+Thanks.
 
-The current IMA implementation provides a great deal of relevant
-infrastructure, but as these conversations have suggested, namespacing
-the current implementation is problematic given how entangled it has
-become with existing kernel infrastructure.  What is needed is
-something far simpler that delegates, on the basis of a namespace,
-security policy to something other then the kernel, consistent with
-what we have learned about policy over the last 29+ years of Linux
-development.
+> >  #endif
+> >  =09return 1;
+> >  }
+>=20
+>=20
 
-With respect to roots of trust, I don't think TPM's/fTPM's, virtual or
-otherwise, are going to be the relevant technology moving forward,
-although they will be part of the picture.
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
 
-Mimi has another post down thread that I will provide some more direct
-reflections on all of this for whatever value they may have.
+--64j1qyTOoGvYcHb1
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Mimi
+-----BEGIN PGP SIGNATURE-----
 
-Have a good day.
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl9SfagACgkQYdRkFR+R
+okPDtAgAo+dFCTk/sgjpcy4bcxezWU8FcGuViqkbFz72xVfZA5gMnCf4o99aCl3r
+MFDEl80E/n/fgkqqq9WG7EPIXyizdoAsxyURNvpMFWz/V9KRrw5K5ElwCVcnjAb8
+/S/2kNP9Yx6zDEMzFyzQsNeRQBI7HlpQSY6L8XZ2ilz43wLKrVi2ZSsEVJULZK/l
+sW9w9oCZnmPINqtroagWvbUHOELheIuCgQV7gjrFZoWDxJYNps6TRi70UVTBgvy4
+fFT+uDpdUj6pk5pVI2m8Ke2rsTNETTvojswmDxHXpWys472RTqvbFmmzCpgKRgaH
+7xQf172+/tc0Qg+IhNodDlFE0QckYA==
+=IH38
+-----END PGP SIGNATURE-----
 
-Dr. Greg
+--64j1qyTOoGvYcHb1--
 
-As always,
-Dr. Greg Wettstein, Ph.D, Worker      Autonomously self-defensive
-Enjellic Systems Development, LLC     IOT platforms and edge devices.
-4206 N. 19th Ave.
-Fargo, ND  58102
-PH: 701-281-1686                      EMAIL: dg@enjellic.com
-------------------------------------------------------------------------------
-"I had far rather walk, as I do, in daily terror of eternity, than feel
- that this was only a children's game in which all of the contestants
- would get equally worthless prizes in the end."
-                                -- T. S. Elliot
