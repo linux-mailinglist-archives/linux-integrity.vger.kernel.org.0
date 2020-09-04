@@ -2,86 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D7025E215
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Sep 2020 21:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7301B25E32D
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Sep 2020 23:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728071AbgIDTlf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Sep 2020 15:41:35 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:24925 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728057AbgIDTle (ORCPT
+        id S1727949AbgIDVHR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Sep 2020 17:07:17 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52010 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726842AbgIDVHQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Sep 2020 15:41:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599248493;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+LfMo0bPH1qwF7NhkKROPvBHvn6aBWYvqMe0We0V1A0=;
-        b=Vmr0wn0bbUI/+XmiK19sWEZZKfFyj6oQeerQ4w5Ff9S79jbr5UQ8M0oQ622e3CZIopyoxG
-        9DApe9fdxUiiLr/vOWPiW/qogr/FMErTO2NQ6UcOONFgdw8q5cenFSKldwpQjqEKTPWxiG
-        EMZ529aMn/sEWWkl/nMEqkvBPGgz5is=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-256-6gBDPg3gMXel9fFtSjWU5g-1; Fri, 04 Sep 2020 15:41:29 -0400
-X-MC-Unique: 6gBDPg3gMXel9fFtSjWU5g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 968D71DE13;
-        Fri,  4 Sep 2020 19:41:28 +0000 (UTC)
-Received: from localhost (ovpn-116-173.gru2.redhat.com [10.97.116.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D74735C1D0;
-        Fri,  4 Sep 2020 19:41:24 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zohar@linux.ibm.com, Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH v2 4/4] integrity: prompt keyring name for unknown key request
-Date:   Fri,  4 Sep 2020 16:41:00 -0300
-Message-Id: <20200904194100.761848-5-bmeneg@redhat.com>
-In-Reply-To: <20200904194100.761848-1-bmeneg@redhat.com>
+        Fri, 4 Sep 2020 17:07:16 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 084L30bv087878;
+        Fri, 4 Sep 2020 17:07:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=8FlX3a6DPha2xksiaAE2jDylhVSKzOfJeYPqLS0veX0=;
+ b=llpr8v4zLAHPa+By1H2EBroqfRSkTEl6ftjFyLnOw7x96RiRSW6+MfyC2QW02xbZlTyw
+ 1SkcrAYsn45sN7JulKA1Y0acuYJPpU/+Vk/tp/1vncf9a/64/YypLvxCpo0KOk9Pcf2G
+ L8n5vfhRkCJU/xaZIdogdmeYA3L90EQmr+4bZ8RQkL/kXkcHfdykaonQV7aWoByJLAS8
+ va0R37V4bxX4dH+4JhvlgSsUnLUabsFhlcVKRRwZ92W9IN0S1Vs9nk667se+Je0+opHU
+ G9XbJDSpuuxFMWCMVs/90r2lVyfNgD7mX+TK6cBj19lqvAkG8d8+GX69oJoC9FVbJgO6 gQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33bt7ucd35-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Sep 2020 17:07:15 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 084L4FGC094948;
+        Fri, 4 Sep 2020 17:07:15 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33bt7ucd2j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Sep 2020 17:07:15 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 084L1r7G015742;
+        Fri, 4 Sep 2020 21:07:13 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 337en878gm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Sep 2020 21:07:12 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 084L7AE659441650
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 4 Sep 2020 21:07:10 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A69CA4C052;
+        Fri,  4 Sep 2020 21:07:10 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A02D64C044;
+        Fri,  4 Sep 2020 21:07:09 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.87.223])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  4 Sep 2020 21:07:09 +0000 (GMT)
+Message-ID: <f6b04ff269d3f5f72ee6b005bb97e6ac7b73b43e.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 3/4] ima: limit secure boot feedback scope for
+ appraise
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Bruno Meneguele <bmeneg@redhat.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 04 Sep 2020 17:07:08 -0400
+In-Reply-To: <20200904194100.761848-4-bmeneg@redhat.com>
 References: <20200904194100.761848-1-bmeneg@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+         <20200904194100.761848-4-bmeneg@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-04_15:2020-09-04,2020-09-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=993 phishscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 impostorscore=0 bulkscore=0 malwarescore=0
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009040182
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Depending on the IMA policy a key can be searched in multiple keyrings (e.g.
-.ima and .platform) and possibly failing for both. However, for the user not
-aware of the searching order it's not clear what's the keyring the kernel
-didn't find the key. With this patch we improve this feedback by printing
-the keyring "description" (name).
+Hi Bruno,
 
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
- security/integrity/digsig_asymmetric.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> +	bool sb_state = arch_ima_get_secureboot();
+> +	int appraisal_state = ima_appraise;
+>  
+>  	if (strncmp(str, "off", 3) == 0)
+> -		ima_appraise = 0;
+> +		appraisal_state = 0;
+>  	else if (strncmp(str, "log", 3) == 0)
+> -		ima_appraise = IMA_APPRAISE_LOG;
+> +		appraisal_state = IMA_APPRAISE_LOG;
+>  	else if (strncmp(str, "fix", 3) == 0)
+> -		ima_appraise = IMA_APPRAISE_FIX;
+> +		appraisal_state = IMA_APPRAISE_FIX;
+>  	else if (strncmp(str, "enforce", 7) == 0)
+> -		ima_appraise = IMA_APPRAISE_ENFORCE;
+> +		appraisal_state = IMA_APPRAISE_ENFORCE;
+>  	else
+>  		pr_err("invalid \"%s\" appraise option", str);
+> +
+> +	/* If appraisal state was changed, but secure boot is enabled,
+> +	 * keep its default */
+> +	if (sb_state) {
+> +		if (!(appraisal_state & IMA_APPRAISE_ENFORCE))
+> +			pr_info("Secure boot enabled: ignoring ima_appraise=%s option",
+> +				str);
+> +		else
+> +			ima_appraise = appraisal_state;
+> +	}
 
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index cfa4127d0518..14de98ef67f6 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -55,8 +55,14 @@ static struct key *request_asymmetric_key(struct key *keyring, uint32_t keyid)
- 	}
- 
- 	if (IS_ERR(key)) {
--		pr_err_ratelimited("Request for unknown key '%s' err %ld\n",
--				   name, PTR_ERR(key));
-+		if (keyring)
-+			pr_err_ratelimited("Request for unknown key '%s' in '%s' keyring. err %ld\n",
-+					   name, keyring->description,
-+					   PTR_ERR(key));
-+		else
-+			pr_err_ratelimited("Request for unknown key '%s' err %ld\n",
-+					   name, PTR_ERR(key));
-+
- 		switch (PTR_ERR(key)) {
- 			/* Hide some search errors */
- 		case -EACCES:
--- 
-2.26.2
+Shouldn't the "else" clause be here.   No need to re-post the entire
+patch set.
+
+thanks,
+
+Mimi
+
+>  #endif
+>  	return 1;
+>  }
+
 
