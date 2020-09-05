@@ -2,112 +2,95 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1F725E4D4
-	for <lists+linux-integrity@lfdr.de>; Sat,  5 Sep 2020 03:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809CE25E7CE
+	for <lists+linux-integrity@lfdr.de>; Sat,  5 Sep 2020 15:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgIEBUd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Sep 2020 21:20:33 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45387 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726208AbgIEBUb (ORCPT
+        id S1728336AbgIENSt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 5 Sep 2020 09:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728264AbgIENSr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Sep 2020 21:20:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599268830;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IGUPE18dP1ubWHQBjmJLepq6lKiPEDD++zIAFRiVOYs=;
-        b=KRUUnoS7x01QHInxFlrivDVsgNGwpH6/OCgi2HBUaga8efQVt+dtUYOr406EzvGIphmsXH
-        5DWB+mGOCfH8C/MU8vvwksxsjdYKkdegamqQxW0rghmL72xWPA3BgzejJd7DVvMZdKTtN9
-        TpbnBkEwvBCRtm3L+esFXWhJgRnr+OQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-378-jVBAvNXFNmynmBdfNoNdGQ-1; Fri, 04 Sep 2020 21:20:28 -0400
-X-MC-Unique: jVBAvNXFNmynmBdfNoNdGQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CEAA118A2269;
-        Sat,  5 Sep 2020 01:20:27 +0000 (UTC)
-Received: from localhost (ovpn-116-18.gru2.redhat.com [10.97.116.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 402AB7EED7;
-        Sat,  5 Sep 2020 01:20:24 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     zohar@linux.ibm.com, Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH v3 3/4] ima: limit secure boot feedback scope for appraise
-Date:   Fri,  4 Sep 2020 22:20:20 -0300
-Message-Id: <20200905012020.7024-1-bmeneg@redhat.com>
-In-Reply-To: <20200904194100.761848-4-bmeneg@redhat.com>
-References: <20200904194100.761848-4-bmeneg@redhat.com>
+        Sat, 5 Sep 2020 09:18:47 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7E1C061246
+        for <linux-integrity@vger.kernel.org>; Sat,  5 Sep 2020 06:18:47 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id t16so3776510edw.7
+        for <linux-integrity@vger.kernel.org>; Sat, 05 Sep 2020 06:18:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WK7p3KEx2Y1obY9ifz2GCoN6MGqbfG7ZjSbn/axOcCo=;
+        b=kzz4iRATCdwJ4eMCNcVVCyV1HeAuyVkxgdnyd2WFO6p7cLQtJ9Si7c1zlwT81Qtdqp
+         WwTtTFVaaHkc7wyCOfh3bQt7OX+1xLmfCwHHJelHvhrZozYPnVo0ab1e1LDAURZgIzgz
+         1bpjq333tCHqqG+gZkhd5g/kf9E6n8c7vn8cFqK3ADWT/Q3Yaq7Aw1cqdSuWDMOu4wml
+         VyTEQNyL/jAIkIt1+rhrRkhltrPKYcIBe+eF2S3UyTmY7TnPBuhN+K0+w0r9gq/sL9Wk
+         a9Ne6y6sLF81BYwOt8tVXUNlmGYLMuTU9F6TIqEe8PqXwofl6SDsM/EbW+ax/MePhfMK
+         Rdvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WK7p3KEx2Y1obY9ifz2GCoN6MGqbfG7ZjSbn/axOcCo=;
+        b=oyS+rrRZJKm4Z+Bcv369qCY42x9slSVPhYmueEf7IpEKA9jZREY0kC1lN6p574VnMl
+         sUDbvIsTj0kuP9EAM8uhwqkFHL4zs1Vbdna4SMfMylGBv8TAL8P1E8RhjgKZB99qgJEh
+         eyWupMndQELJ0ybuF+u5YPWN6nXr0T+UrzImW42KClntZ0g+AchGg8wsdp0l52i0dpmD
+         VBthuw8xw98/R24SkxJPip21lZC3h3Dgb5U5gvUtVedbj4gWzkYkdZkD40fwRt19hVSH
+         GFkrXwABtzGTBi+hpx7umtv2IAEHUJuOMbDjSTjj8Z9KJAIwpnOPv7IOEFgcWVpVgi0e
+         +HfA==
+X-Gm-Message-State: AOAM533dA1uoVmjops7qYRawazKs61heQiL8eUlfkSzY4KikoCrnBN93
+        HPN9vypdKAIKeSgcAGZjXtROx15/m1B+ulfToBFC
+X-Google-Smtp-Source: ABdhPJxuCv/2FKUD/4jcrASP1SzCOIc0XcI66J4vGjkUKFwbMiBFGzI4zC9CaPzZEeto9qDHSvepG0dMKziKlEiXQKI=
+X-Received: by 2002:a50:8e17:: with SMTP id 23mr13327162edw.31.1599311925396;
+ Sat, 05 Sep 2020 06:18:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20200826145247.10029-1-casey@schaufler-ca.com> <20200826145247.10029-10-casey@schaufler-ca.com>
+In-Reply-To: <20200826145247.10029-10-casey@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sat, 5 Sep 2020 09:18:34 -0400
+Message-ID: <CAHC9VhSsz+O28xAuVykhYq6L2XBC2gV+G-3A2AqiFzDY1_8Q6A@mail.gmail.com>
+Subject: Re: [PATCH v20 09/23] LSM: Use lsmblob in security_task_getsecid
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, James Morris <jmorris@namei.org>,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Only prompt the unknown/invalid appraisal option if secureboot is enabled and
-if the current appraisal state is different from the original one.
+On Wed, Aug 26, 2020 at 11:11 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> Change the security_task_getsecid() interface to fill in
+> a lsmblob structure instead of a u32 secid in support of
+> LSM stacking. Audit interfaces will need to collect all
+> possible secids for possible reporting.
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: John Johansen <john.johansen@canonical.com>
+> Acked-by: Stephen Smalley <sds@tycho.nsa.gov>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> cc: linux-integrity@vger.kernel.org
+> ---
+>  drivers/android/binder.c              | 12 +------
+>  include/linux/security.h              |  7 ++--
+>  kernel/audit.c                        | 16 ++++-----
+>  kernel/auditfilter.c                  |  4 +--
+>  kernel/auditsc.c                      | 25 +++++++-------
+>  net/netlabel/netlabel_unlabeled.c     |  5 ++-
+>  net/netlabel/netlabel_user.h          |  6 +++-
+>  security/integrity/ima/ima_appraise.c | 10 +++---
+>  security/integrity/ima/ima_main.c     | 49 +++++++++++++++------------
+>  security/security.c                   | 12 +++++--
+>  10 files changed, 76 insertions(+), 70 deletions(-)
 
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
-Changelog:
-v3:
-- fix sb_state conditional (Mimi)
-v2: 
-- update commit message (Mimi)
-- work with a temporary var instead of directly with ima_appraise (Mimi)
+Acked-by: Paul Moore <paul@paul-moore.com>
 
- security/integrity/ima/ima_appraise.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
-
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index 2193b51c2743..4f028f6e8f8d 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -19,22 +19,29 @@
- static int __init default_appraise_setup(char *str)
- {
- #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
--	if (arch_ima_get_secureboot()) {
--		pr_info("Secure boot enabled: ignoring ima_appraise=%s boot parameter option",
--			str);
--		return 1;
--	}
-+	bool sb_state = arch_ima_get_secureboot();
-+	int appraisal_state = ima_appraise;
- 
- 	if (strncmp(str, "off", 3) == 0)
--		ima_appraise = 0;
-+		appraisal_state = 0;
- 	else if (strncmp(str, "log", 3) == 0)
--		ima_appraise = IMA_APPRAISE_LOG;
-+		appraisal_state = IMA_APPRAISE_LOG;
- 	else if (strncmp(str, "fix", 3) == 0)
--		ima_appraise = IMA_APPRAISE_FIX;
-+		appraisal_state = IMA_APPRAISE_FIX;
- 	else if (strncmp(str, "enforce", 7) == 0)
--		ima_appraise = IMA_APPRAISE_ENFORCE;
-+		appraisal_state = IMA_APPRAISE_ENFORCE;
- 	else
- 		pr_err("invalid \"%s\" appraise option", str);
-+
-+	/* If appraisal state was changed, but secure boot is enabled,
-+	 * keep its default */
-+	if (sb_state) {
-+		if (!(appraisal_state & IMA_APPRAISE_ENFORCE))
-+			pr_info("Secure boot enabled: ignoring ima_appraise=%s option",
-+				str);
-+	} else {
-+		ima_appraise = appraisal_state;
-+	}
- #endif
- 	return 1;
- }
 -- 
-2.26.2
-
+paul moore
+www.paul-moore.com
