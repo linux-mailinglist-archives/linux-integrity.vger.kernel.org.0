@@ -2,255 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8048125EF48
-	for <lists+linux-integrity@lfdr.de>; Sun,  6 Sep 2020 19:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1673725F080
+	for <lists+linux-integrity@lfdr.de>; Sun,  6 Sep 2020 22:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729102AbgIFROx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 6 Sep 2020 13:14:53 -0400
-Received: from wind.enjellic.com ([76.10.64.91]:53650 "EHLO wind.enjellic.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725816AbgIFROv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 6 Sep 2020 13:14:51 -0400
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 086HEHep009508;
-        Sun, 6 Sep 2020 12:14:17 -0500
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 086HEDA0009503;
-        Sun, 6 Sep 2020 12:14:13 -0500
-Date:   Sun, 6 Sep 2020 12:14:13 -0500
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        krzysztof.struczynski@huawei.com, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, stefanb@linux.vnet.ibm.com,
-        sunyuqiong1988@gmail.com, mkayaalp@cs.binghamton.edu,
-        dmitry.kasatkin@gmail.com, serge@hallyn.com, jmorris@namei.org,
-        christian@brauner.io, silviu.vlasceanu@huawei.com,
-        roberto.sassu@huawei.com, ebiederm@xmission.com,
-        viro@zeniv.linux.org.uk, torvalds@linux-foundation.org,
-        luto@amacapital.net, jannh@google.com, nick.dusek@gmail.com
-Subject: Re: [RFC PATCH 00/30] ima: Introduce IMA namespace
-Message-ID: <20200906171413.GA8305@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20200818152037.11869-1-krzysztof.struczynski@huawei.com> <20200818164943.va3um7toztazcfud@wittgenstein> <d77a6cd783319702fddd06783cb84fdeb86210a6.camel@linux.ibm.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d77a6cd783319702fddd06783cb84fdeb86210a6.camel@linux.ibm.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Sun, 06 Sep 2020 12:14:18 -0500 (CDT)
+        id S1726165AbgIFUcw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 6 Sep 2020 16:32:52 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:37622 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726127AbgIFUcv (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 6 Sep 2020 16:32:51 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D9F468EE111;
+        Sun,  6 Sep 2020 13:32:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1599424371;
+        bh=O2JKWH7ZUGA7sCFY9kB0OpUQjAE5coW0PFTJWkwqGeM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CY3yfTHq0ZI0Px1R+g8ITYJBpns/gfr736XOh/ZQ4ns2DPYfbQl3t8VfgBB6BSU5r
+         QRix1s571kUAmK6nsP9O64fZxdkzPg9SrqM77yQQveB2WvfxZ/G0K0ABt77OEklvpg
+         UhPrwnLk5m2F7twUdGUFKJ12lgztP+F5+rg0fD8s=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id nuKibM2LiRTo; Sun,  6 Sep 2020 13:32:50 -0700 (PDT)
+Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5FC8D8EE0EA;
+        Sun,  6 Sep 2020 13:32:50 -0700 (PDT)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-api@vger.kernel.org
+Subject: [PATCH RESEND v4 0/1] add sysfs exports for TPM 2 PCR registers
+Date:   Sun,  6 Sep 2020 13:32:44 -0700
+Message-Id: <20200906203245.18429-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 03:54:58PM -0400, Mimi Zohar wrote:
+Cc to linux-api to get an opinion on two issues.  First the background:
 
-Good morning, I hope the weekend is going well for everyone.
+We've had a fairly extensive discussion over on linux-integrity and
+iterated to the conclusion that the kernel does need to export TPM 2.0
+PCR values for use by a variety of userspace integrity programmes
+including early boot.  The principle clinching argument seems to be
+that these values are required by non-root systems, but in a default
+Linux set up the packet marshalled communication device: /dev/tpmrm0,
+is by default only usable by root.  Historically, TPM 1.2 exported
+these values via sysfs in a single file containing all 24 values:
 
-A follow on to my previous e-mail regarding what 'namespaced IMA'
-should look like.
+  /sys/class/tpm/tpm0/pcrs
 
-> On Tue, 2020-08-18 at 18:49 +0200, Christian Brauner wrote:
-> > On Tue, Aug 18, 2020 at 05:20:07PM +0200, krzysztof.struczynski@huawei.com wrote:
-> > > From: Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
-> > > IMA has not been designed to work with containers. It handles
-> > > every process in the same way, and it cannot distinguish if a
-> > > process belongs to a container or not.
-> > >
-> > > Containers use namespaces to make it appear to the processes in
-> > > the containers that they have their own isolated instance of the
-> > > global resource. For IMA as well, it is desirable to let
-> > > processes in the
+with the format
 
-> > IMA is brought up on a regular basis with "we want to have this" for
-> > years and then non-one seems to really care enough.
+  PCR-00: 7D 29 CB 08 0C 0F C4 16 7A 0E 9A F7 C6 D3 97 CD C1 21 A7 69 
+  PCR-01: 9C B6 79 4C E4 4B 62 97 4C AB 55 13 1A 2F 7E AE 09 B3 30 BE 
+  ...
 
-I don't think it is a matter of lack of interest or not caring.  The
-challenge becomes whether or not a business case exists for expending
-the resources and navigating the challenges needed to advance
-infrastructure for inclusion in the kernel.
+TPM 2.0 adds more complexity: because of it's "agile" format, each TPM
+2.0 is required to support a set of hashes (of which at least sha1 and
+sha256 are required but quite a few TPM 2.0s have at least two or
+three more) and maintain 24 PCR registers for each supported hash.
+The current patch exports each PCR bank under the directory
 
-> There is a lot of interest in IMA namespacing, but the question
-> always comes back to how to enable it.  Refer to
-> https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
-> for Stefan's analysis.
+  /sys/class/tpm/tpm0/pcr-<hash>/<bank>
 
-As I noted in my previous e-mail, I believe the path forward is not to
-figure out how to address the rather complex and invasive issue of how
-to namespace IMA, but instead, needs to be what a flexible
-'next-generation' architecture for platform behavioral assessment
-looks like.
+So the sha256 bank value of PCR 7 can be obtained as
 
-In a larger context, I believe the future for security is going to
-involve at a minimum the kernel, and more likely, something tightly
-coupled to the kernel, making active decisions on whether or not a
-behavior that the kernel is contemplating mediating is consistent with
-platform or container security policy.
+  cat /sys/class/tpm/tpm0/pcr-sha256/7
+  2ED93F199692DC6788EFA6A1FE74514AB9760B2A6CEEAEF6C808C13E4ABB0D42
 
-To frame this a bit, the well understood role of the kernel with
-respect to security is to mediate 'Turing Events', or Actor/Subject
-(A/S) interactions.  Both DAC and MAC are based on this concept with
-the interface between an Actor and Subject being a security 'gate'.
+And the output is a single non-space separated ascii hex value of the
+hash.
 
-Given this model, the most simplistic and direct path forward is to
-provide a namespace capable method of exporting a description of the
-identity parameters that characterize the entities involved in an A/S
-interaction.  The kernel, or as I previously suggested as more likely
-moving forward, a closely linked entity can then make a decision as to
-whether or not the behavior should be allowed.
+The issues we'd like input on are:
 
-FWIW, as an example of the minimal impact of this method, here is the
-diffstat of such an implementation:
+ 1. Should this be in sysfs or securityfs?
 
----------------------------------------------------------------------------
- arch/x86/entry/syscalls/syscall_32.tbl    |    2 +
- arch/x86/entry/syscalls/syscall_64.tbl    |    2 +
- fs/proc/array.c                           |    7 +
- fs/proc/namespaces.c                      |    4 +
- include/linux/ima.h                       |   27 +
- include/linux/nsproxy.h                   |    2 +
- include/linux/proc_ns.h                   |    2 +
- include/linux/sched.h                     |    3 +
- include/linux/syscalls.h                  |    6 +
- include/uapi/asm-generic/unistd.h         |    7 +-
- include/uapi/linux/sched.h                |    1 +
- kernel/fork.c                             |    5 +-
- kernel/nsproxy.c                          |   18 +-
- kernel/sys_ni.c                           |    4 +
- security/Kconfig                          |    1 +
- security/Makefile                         |    2 +
- Security/ai/Kconfig                       |   12 +
- security/ai/Makefile                      |    3 +
- security/ai/ai.c                          |  137 ++
- security/integrity/iint.c                 |    5 +
- security/integrity/ima/Makefile           |    2 +-
- security/integrity/ima/ima.h              |   17 +
- security/integrity/ima/ima_api.c          |   37 +-
- security/integrity/ima/ima_fs.c           |   10 +
- security/integrity/ima/ima_identity.c     | 2204 +++++++++++++++++++++++++++++
- security/integrity/ima/ima_init.c         |    6 +-
- security/integrity/ima/ima_main.c         |    7 +
- security/integrity/ima/ima_policy.c       |   74 +-
- security/integrity/ima/ima_queue.c        |   10 +-
- security/integrity/ima/ima_template.c     |    6 +
- security/integrity/ima/ima_template_lib.c |   71 +
- security/integrity/ima/ima_template_lib.h |   10 +
- security/integrity/integrity.h            |    4 +-
- security/security.c                       |    1 +
- 34 files changed, 2684 insertions(+), 25 deletions(-)
----------------------------------------------------------------------------
+  2. Should we export the values as one value per file (current patch)
+     or as a binary blob of all 24?
 
-As can be seen, this was built out in the context of the IMA
-sub-system with the majority of the changes being encapsulated in one
-file.  This includes all of the infrastructure needed for a Trusted
-Execution Environment (TEE) to enforce kernel security policy
-decisions.
+I'm largely ambivalent about 1.  I can easily do securityfs output, it
+is more work than sysfs largely because securityfs lacks most of the
+features of sysfs, including the groups one that this patch uses
+heavily, but that can all be open coded (as most other securityfs
+consumers do).
 
-In addition to a container specific representation of the current
-behavioral state, each namespace exports via a sysfs pseudo-file, the
-following behavioral definition for each A/S interaction.
+I'm less ambivalent about the binary blob idea: pretty much every use
+case we have requires a set of PCRs which are fewer than the 24 and a
+lot only require a single PCR, so providing all 24 in a format that
+has to be parsed seems to make life more difficult for the consuming
+program.  The argument, at least, for providing the PCRs in binary
+form is that most of the consuming programs, once they've selected
+their set, tend to need the hash value of the set, which necessitates
+converting from ascii to binary.  I do this by the simple script (for
+PCRs say 1,6,7) as:
 
-exchange pid{1} event{cboot:/home/greg/runc} actor{uid=0, euid=0, suid=0, gid=0, egid=0, sgid=0, fsuid=0, fsgid=0, cap=0x3fffffffff} subject{uid=50, gid=50, mode=0100755, name_length=15, name=f0da604ff3f0a3e16163bc9d2f99bb9bcd70397d211b746d0104299972cc5505, s_id=sda1, s_uuid=1bfef8aaa45f4bcaa846640ae4547ddc, digest=791a7cf8dec2afe302836b974b3c0f7b0a5983f76d857aa97658ce09d54f60f8}
+  cat /sys/class/tpm/tpm0/pcr-sha256/{1,6,7}|xxd -r -p|sha256sum
 
-Which provides the framework for implementing any number of policy
-decisions, of which integrity is only one element.
+I've cc'd Jarkko, who's the main proponent of the binary blob use case
+because he can make better arguments than I can.
 
-We had initially used SGX to implement a TEE based enforcement engine,
-but given the direction of hardware support, we have largely shelved
-our SGX development efforts in favor of using a micro-controller based
-approach.
+Regards,
 
-Given what appears to be the direction for mobile devices, a
-collection of specialized harware linked by an OS, the notion of a
-separate entity making security policy decisions seems relevant.
+James
 
-> I understand "containers" is not a kernel construct, but from my very
-> limited perspective, IMA namespacing only makes sense in the context of
-> a "container".  The container owner may want to know which files have
-> been accessed/executed (measurements, remote attestation) and/or
-> constrain which files may be accessed/executed based on signatures
-> (appraisal).
+---
 
-Trying to implement supportable and field maintainable 'trusted
-computing' is a fools errand without the notion of containerization of
-platform behavior.  This is true whether the target is the cloud or
-endpoint/IOT class devices.
+James Bottomley (1):
+  tpm: add sysfs exports for all banks of PCR registers
 
-It seems well understood, that while containers are not a first class
-kernel entity, the kernel takes responsibility for implementing
-compartmentalization of resources.  It would seem that security event
-characterizations are consistent with that model.
+ drivers/char/tpm/tpm-sysfs.c | 178 +++++++++++++++++++++++++++++++++++
+ include/linux/tpm.h          |   9 +-
+ 2 files changed, 186 insertions(+), 1 deletion(-)
 
-In addition, none of this works without developer support.  Framing
-behavior assessment in the form of containers means that behavioral
-trajectory definitions for the containers can be a byproduct of
-standard DEVOP's pipelines.
+-- 
+2.26.2
 
-> > I'm highly skeptical of the value of ~2500 lines of code even if
-> > it includes a bunch of namespace boilerplate. It's yet another
-> > namespace, and yet another security framework.  Why does IMA need
-> > to be a separate namespace? Keyrings are tied to user namespaces
-> > why can't IMA be?
-
-> In the context of a container, the measurement list and IMA/EVM
-> keyrings need to be setup before the first file is measured,
-> signature verified, or file hash included in the audit log.
-
-As I've noted previously, namespacing IMA is problematic, what is
-needed is something far simpler and more flexible that provides a
-framework for implementing policy outside of the kernel, or if in the
-kernel, in a highly customizable fashion.
-
-I think that it would be found that user namespaces bring too much
-baggage to the table.  The most effective path forward in this venue
-would seem to be to bring forward the most simplistic, flexiable and
-uncomplicated mechanism possible.
-
-In this model, classic IMA would serve as a trust root on whose
-shoulders a security orchestration framework stands.
-
-> > I believe Eric has even pointed that out before.
-> >
-> > Eric, thoughts?
-
-> Any help with the above scenario would very be much appreciated.
-
-Hopefully the conversation will benefit from actual field experience
-with doing this sort of thing in a supportable fashion.
-
-The concept of 'trusted computing' has been around since the days when
-Dave Grawrock designed TXT, which is heavily linked to the heritage of
-IMA.  The fact that effective solutions in widespread practice have
-not emerged, in the face of demonstrated need, suggests the need to
-develop new solution strategies.
-
-Just to be clear, we are not campaigning or advocating what we have
-done but are simply providing background for discussion.  We haven't
-campaigned this approach given how complex the kernel development has
-become, particurlarly with respect to security infrastructure.
-
-Candidly, given the politics of security technology being viewed as
-'constraining' user rights, I think that a lot of forthcoming security
-technology may end up being out of tree moving forward.
-
-> Mimi
-
-Best wishes for a productive week to everyone.
-
-Dr. Greg
-
-As always,
-Dr. Greg Wettstein, Ph.D, Worker      Autonomously self-defensive
-Enjellic Systems Development, LLC     IOT platforms and edge devices.
-4206 N. 19th Ave.
-Fargo, ND  58102
-PH: 701-281-1686                      EMAIL: dg@enjellic.com
-------------------------------------------------------------------------------
-"A large number of the world's technical challenges have been solved.
- The far greater challenge lies in conveying an understanding of this
- to the world."
-                                -- Dr. Greg Wettstein
-                                   Resurrection
