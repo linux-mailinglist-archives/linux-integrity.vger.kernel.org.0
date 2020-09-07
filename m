@@ -2,39 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C94825FCA1
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Sep 2020 17:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A85025FCA7
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Sep 2020 17:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730089AbgIGPHY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Sep 2020 11:07:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35086 "EHLO mail.kernel.org"
+        id S1730126AbgIGPJl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Sep 2020 11:09:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35130 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730102AbgIGPDv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Sep 2020 11:03:51 -0400
+        id S1730112AbgIGPDu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 7 Sep 2020 11:03:50 -0400
 Received: from localhost (unknown [70.37.104.77])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0265921481;
-        Mon,  7 Sep 2020 15:03:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DB8BD215A4;
+        Mon,  7 Sep 2020 15:03:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599491020;
-        bh=XbIVvWsfCm/G4p7cNAOocEkxrFTNNurqa0/U1011ZAU=;
-        h=Date:From:To:To:To:CC:Cc:Cc:Subject:In-Reply-To:References:From;
-        b=vj1ADFg4g1PfpVI+j3WGSpo5j3udA0cWvuAis+rlnmN0MBjHRt9rZsx5dWSh2GJL0
-         hESTcUQLVTk5zHX8kDOUJW7kV9AgjGBcyAlsNSmMP8tWThJ6IJECMeZZqpCeyxv2L/
-         Q7/q114QZNiQzcnIEsRkBAN/KVXgRh6qHNZRvc0c=
-Date:   Mon, 07 Sep 2020 15:03:39 +0000
+        s=default; t=1599491022;
+        bh=1eaAwoqG6xM+mwzoFpFDJ8EaiOCIJ/KY/5TJzDrqrBY=;
+        h=Date:From:To:To:To:CC:Cc:Subject:In-Reply-To:References:From;
+        b=O8I0ZkJfaH4BpKNRSd64qSCbwO6u5LSeFAAA8DBr2zjKLEqV8af8E6sWSIH5u0cwn
+         4ypvzWnF334eXJD/UrL6THCXjTjMji7aBv+HPKMD+EHYAejnY6E6akOtZhlbh8A6t0
+         jvv+3zie/b4R0w0KC7YLyqtUG4HBMpQSdHM3OhL8=
+Date:   Mon, 07 Sep 2020 15:03:41 +0000
 From:   Sasha Levin <sashal@kernel.org>
 To:     Sasha Levin <sashal@kernel.org>
 To:     Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>, <mjg59@google.com>
 CC:     <linux-integrity@vger.kernel.org>
 Cc:     stable@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH v2 01/12] ima: Don't ignore errors from crypto_shash_update()
-In-Reply-To: <20200904092339.19598-2-roberto.sassu@huawei.com>
-References: <20200904092339.19598-2-roberto.sassu@huawei.com>
-Message-Id: <20200907150340.0265921481@mail.kernel.org>
+Subject: Re: [PATCH v2 04/12] evm: Execute evm_inode_init_security() only when the HMAC key is loaded
+In-Reply-To: <20200904092339.19598-5-roberto.sassu@huawei.com>
+References: <20200904092339.19598-5-roberto.sassu@huawei.com>
+Message-Id: <20200907150341.DB8BD215A4@mail.kernel.org>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
@@ -45,72 +44,29 @@ Hi
 [This is an automated email]
 
 This commit has been processed because it contains a "Fixes:" tag
-fixing commit: 3323eec921ef ("integrity: IMA as an integrity service provider").
+fixing commit: 26ddabfe96bb ("evm: enable EVM when X509 certificate is loaded").
 
-The bot has tested the following trees: v5.8.7, v5.4.63, v4.19.143, v4.14.196, v4.9.235, v4.4.235.
+The bot has tested the following trees: v5.8.7, v5.4.63, v4.19.143, v4.14.196, v4.9.235.
 
 v5.8.7: Build OK!
 v5.4.63: Build OK!
-v4.19.143: Failed to apply! Possible dependencies:
-    100b16a6f290 ("tpm: sort objects in the Makefile")
-    6f1a1d103b48 ("ima: Switch to ima_hash_algo for boot aggregate")
-    70a3199a7101 ("tpm: factor out tpm_get_timeouts()")
-    879b589210a9 ("tpm: retrieve digest size of unknown algorithms with PCR read")
-    95adc6b410b7 ("tpm: use u32 instead of int for PCR index")
-    b03c43702e7b ("tpm: add tpm_auto_startup() into tpm-interface.c")
-    b2d6e6de005e ("tpm: factor out tpm 1.x duration calculation to tpm1-cmd.c")
-    c82a330ceced ("tpm: factor out tpm 1.x pm suspend flow into tpm1-cmd.c")
-    d4a317563207 ("tpm: move tpm 1.x selftest code from tpm-interface.c tpm1-cmd.c")
-    d856c00f7d16 ("tpm: add tpm_calc_ordinal_duration() wrapper")
-
+v4.19.143: Build OK!
 v4.14.196: Failed to apply! Possible dependencies:
-    5ef924d9e2e8 ("tpm: use tpm_msleep() value as max delay")
-    6f1a1d103b48 ("ima: Switch to ima_hash_algo for boot aggregate")
-    879b589210a9 ("tpm: retrieve digest size of unknown algorithms with PCR read")
-    95adc6b410b7 ("tpm: use u32 instead of int for PCR index")
-    aad887f66411 ("tpm: use struct tpm_chip for tpm_chip_find_get()")
-    b03c43702e7b ("tpm: add tpm_auto_startup() into tpm-interface.c")
-    c82a330ceced ("tpm: factor out tpm 1.x pm suspend flow into tpm1-cmd.c")
-    d4a317563207 ("tpm: move tpm 1.x selftest code from tpm-interface.c tpm1-cmd.c")
-    fc1d52b745ba ("tpm: rename tpm_chip_find_get() to tpm_find_get_ops()")
+    21af76631476 ("EVM: turn evm_config_xattrnames into a list")
+    5feeb61183dd ("evm: Allow non-SHA1 digital signatures")
+    650b29dbdf2c ("integrity: Introduce struct evm_xattr")
+    ae1ba1676b88 ("EVM: Allow userland to permit modification of EVM-protected metadata")
+    b33e3cc5c90b ("Merge branch 'next-integrity' of git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security")
+    f00d79750712 ("EVM: Allow userspace to signal an RSA key has been loaded")
 
 v4.9.235: Failed to apply! Possible dependencies:
-    06e93279ca77 ("tpm: move endianness conversion of TPM_TAG_RQU_COMMAND to tpm_input_header")
-    175d5b2a570c ("tpm: move TPM 1.2 code of tpm_pcr_extend() to tpm1_pcr_extend()")
-    37f4915fef05 ("tpm: use idr_find(), not idr_find_slowpath()")
-    51b0be640cf6 ("tpm: Fix expected number of response bytes of TPM1.2 PCR Extend")
-    62bfdacbac4c ("tpm: Do not print an error message when doing TPM auto startup")
-    6f1a1d103b48 ("ima: Switch to ima_hash_algo for boot aggregate")
-    84fda15286d1 ("tpm: sanitize constant expressions")
-    879b589210a9 ("tpm: retrieve digest size of unknown algorithms with PCR read")
-    a69faebf4d3e ("tpm: move endianness conversion of ordinals to tpm_input_header")
-    aaa6f7f6c8bf ("tpm: Clean up reading of timeout and duration capabilities")
-    aad887f66411 ("tpm: use struct tpm_chip for tpm_chip_find_get()")
-    c659af78eb7b ("tpm: Check size of response before accessing data")
-    ca6d45802201 ("tpm: place kdoc just above tpm_pcr_extend")
-    f865c196856d ("tpm: add kdoc for tpm_transmit and tpm_transmit_cmd")
-
-v4.4.235: Failed to apply! Possible dependencies:
-    0014777f989b ("tpm: constify TPM 1.x header structures")
-    062807f20e3f ("tpm: Remove all uses of drvdata from the TPM Core")
-    06e93279ca77 ("tpm: move endianness conversion of TPM_TAG_RQU_COMMAND to tpm_input_header")
-    175d5b2a570c ("tpm: move TPM 1.2 code of tpm_pcr_extend() to tpm1_pcr_extend()")
-    25112048cd59 ("tpm: rework tpm_get_timeouts()")
-    3635e2ec7cbb ("tpm: Get rid of devname")
-    37f4915fef05 ("tpm: use idr_find(), not idr_find_slowpath()")
-    570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific")
-    6e599f6f261f ("tpm: drop 'read_queue' from struct tpm_vendor_specific")
-    6f1a1d103b48 ("ima: Switch to ima_hash_algo for boot aggregate")
-    7ab4032fa579 ("tpm_tis: Get rid of the duplicate IRQ probing code")
-    84fda15286d1 ("tpm: sanitize constant expressions")
-    879b589210a9 ("tpm: retrieve digest size of unknown algorithms with PCR read")
-    a69faebf4d3e ("tpm: move endianness conversion of ordinals to tpm_input_header")
-    aad887f66411 ("tpm: use struct tpm_chip for tpm_chip_find_get()")
-    af782f339a5d ("tpm: Move tpm_vendor_specific data related with PTP specification to tpm_chip")
-    c659af78eb7b ("tpm: Check size of response before accessing data")
-    ddab0e34288a ("tpm/st33zp24: Remove unneeded tpm_reg in get_burstcount")
-    e3837e74a06d ("tpm_tis: Refactor the interrupt setup")
-    f865c196856d ("tpm: add kdoc for tpm_transmit and tpm_transmit_cmd")
+    21af76631476 ("EVM: turn evm_config_xattrnames into a list")
+    5feeb61183dd ("evm: Allow non-SHA1 digital signatures")
+    650b29dbdf2c ("integrity: Introduce struct evm_xattr")
+    ae1ba1676b88 ("EVM: Allow userland to permit modification of EVM-protected metadata")
+    b33e3cc5c90b ("Merge branch 'next-integrity' of git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security")
+    b4bfec7f4a86 ("security/integrity: Harden against malformed xattrs")
+    f00d79750712 ("EVM: Allow userspace to signal an RSA key has been loaded")
 
 
 NOTE: The patch will not be queued to stable trees until it is upstream.
