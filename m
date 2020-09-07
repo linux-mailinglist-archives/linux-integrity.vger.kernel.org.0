@@ -2,77 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A85025FCA7
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Sep 2020 17:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83D3260233
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Sep 2020 19:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730126AbgIGPJl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Sep 2020 11:09:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35130 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730112AbgIGPDu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Sep 2020 11:03:50 -0400
-Received: from localhost (unknown [70.37.104.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DB8BD215A4;
-        Mon,  7 Sep 2020 15:03:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599491022;
-        bh=1eaAwoqG6xM+mwzoFpFDJ8EaiOCIJ/KY/5TJzDrqrBY=;
-        h=Date:From:To:To:To:CC:Cc:Subject:In-Reply-To:References:From;
-        b=O8I0ZkJfaH4BpKNRSd64qSCbwO6u5LSeFAAA8DBr2zjKLEqV8af8E6sWSIH5u0cwn
-         4ypvzWnF334eXJD/UrL6THCXjTjMji7aBv+HPKMD+EHYAejnY6E6akOtZhlbh8A6t0
-         jvv+3zie/b4R0w0KC7YLyqtUG4HBMpQSdHM3OhL8=
-Date:   Mon, 07 Sep 2020 15:03:41 +0000
-From:   Sasha Levin <sashal@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <mjg59@google.com>
-CC:     <linux-integrity@vger.kernel.org>
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH v2 04/12] evm: Execute evm_inode_init_security() only when the HMAC key is loaded
-In-Reply-To: <20200904092339.19598-5-roberto.sassu@huawei.com>
-References: <20200904092339.19598-5-roberto.sassu@huawei.com>
-Message-Id: <20200907150341.DB8BD215A4@mail.kernel.org>
+        id S1729633AbgIGNrr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Sep 2020 09:47:47 -0400
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:52233 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729666AbgIGNrh (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 7 Sep 2020 09:47:37 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 2BF3160C;
+        Mon,  7 Sep 2020 09:36:35 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 07 Sep 2020 09:36:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=dK41NMPYg6hwFg/2puosTJfcGSF
+        TVcf3K/ccUSnYXxY=; b=nyBopx3J9A/4Yia7oSzLKfpL7eCaylJmj1PNC3r6qsj
+        gyKycyHIA3S0ZBScPLhPjbNsS8BQrlBOAyUqGizCZ3kCU6OyYxy2nOytZeOWK6Ut
+        bBgQYMGSV9nWyLRI1iesQHm3HlyFbmXiDfvw+bKFc8VJ1lC9RNzyQEPW+RBSco6J
+        KAMFcFUG+HRPVdmMj7ymyK1/NhcWc6yjRnvN8SUeyVl03rvqd1OWCbEStUvnlv/t
+        eR6CMabTLfOMB7An9L3UGbFtQU1i46thSaHK5Cnv7zYf30Sn7VY2wqkCJ6KXr2iz
+        MF1Eql4foXDZDL9W0UAaOn7NZqR4WjZ8yYC4tEuqS0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=dK41NM
+        PYg6hwFg/2puosTJfcGSFTVcf3K/ccUSnYXxY=; b=PDf0mhD646jHV6yFjnsRIl
+        WzDygkPnUoUbmaDj7SMc26NztPA0CNLGHWjBEYJ1Hhkx/aPEATCFOdExcmFRQR3u
+        ucT7LMl+3XDpuZ01xJNNVmhDiT6Sw4dSGGZkLqv1XNF8/Z0d5wB4Ij8gk+1QAmlX
+        9B1QvmNp7/QDr04E9QV7A45MiPpg2tZPdpnep/6VYH3YSfNzXBcKNkEf/PwvltwT
+        ChQYe/WoBarmm8gmUI7gq4qOHCdigK8BPCuF4i9kemo/CerG71zY4maM+ZxTkiKA
+        LB4myuE13r1ggI0aKPcrTMb4ANN+bYVLpsQ2mED3z16W1P03h/Lwxu3/00fazyig
+        ==
+X-ME-Sender: <xms:YjdWX4yQixl0PbVG-bErTnFnGr6jlmZS5myfzC2Eb3sY8yrOi5wAAg>
+    <xme:YjdWX8RvUDX2amk7i3hC7rJiVbYI-HhovfsA7oiGyFUEOzaMFQTTXyugb5_hlAbZZ
+    gKQ6Q16ZWVSzA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudehtddgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
+    rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:YjdWX6UGuu-iujTDIQlcS9jkiN7OQqTMBEdh_oF-IIXC4cax3y0ciQ>
+    <xmx:YjdWX2h-LK8ROdICENh-H9z9x4cLcGzec264kOwCQ3tuMW0p8_ySRw>
+    <xmx:YjdWX6AGp4M1p582cDyLASM1FqkkbPXLa2GAmBh0Oa85LJMOq7wvEw>
+    <xmx:YjdWX9NHkMdpwEy_OAD-hRckyQk5MYTVkbvaHM90zuXRylgQm64GYA>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id E50473064674;
+        Mon,  7 Sep 2020 09:36:33 -0400 (EDT)
+Date:   Mon, 7 Sep 2020 15:36:46 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-api@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 0/1] add sysfs exports for TPM 2 PCR registers
+Message-ID: <20200907133646.GA2779642@kroah.com>
+References: <20200906203245.18429-1-James.Bottomley@HansenPartnership.com>
+ <20200907053824.GA279469@kroah.com>
+ <20200907132322.GB106839@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200907132322.GB106839@linux.intel.com>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi
+On Mon, Sep 07, 2020 at 04:23:22PM +0300, Jarkko Sakkinen wrote:
+> On Mon, Sep 07, 2020 at 07:38:24AM +0200, Greg KH wrote:
+> > Please just use a binary blob format.  Binary sysfs files are exactly
+> > what this is for, you are just passing the data through the kernel from
+> > the hardware to userspace.
+> > 
+> > You can have 24 binary files if that makes it easier, but the existing
+> > format really is an abuse of sysfs.
+> > 
+> > Or use securityfs, that's fine too, but as you say, you have to write
+> > more code for that.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> I suggested this in previous round: to have a single 'pcrs' binary file
+> with <TPM Alg ID, blob> pairs contained.
 
-[This is an automated email]
-
-This commit has been processed because it contains a "Fixes:" tag
-fixing commit: 26ddabfe96bb ("evm: enable EVM when X509 certificate is loaded").
-
-The bot has tested the following trees: v5.8.7, v5.4.63, v4.19.143, v4.14.196, v4.9.235.
-
-v5.8.7: Build OK!
-v5.4.63: Build OK!
-v4.19.143: Build OK!
-v4.14.196: Failed to apply! Possible dependencies:
-    21af76631476 ("EVM: turn evm_config_xattrnames into a list")
-    5feeb61183dd ("evm: Allow non-SHA1 digital signatures")
-    650b29dbdf2c ("integrity: Introduce struct evm_xattr")
-    ae1ba1676b88 ("EVM: Allow userland to permit modification of EVM-protected metadata")
-    b33e3cc5c90b ("Merge branch 'next-integrity' of git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security")
-    f00d79750712 ("EVM: Allow userspace to signal an RSA key has been loaded")
-
-v4.9.235: Failed to apply! Possible dependencies:
-    21af76631476 ("EVM: turn evm_config_xattrnames into a list")
-    5feeb61183dd ("evm: Allow non-SHA1 digital signatures")
-    650b29dbdf2c ("integrity: Introduce struct evm_xattr")
-    ae1ba1676b88 ("EVM: Allow userland to permit modification of EVM-protected metadata")
-    b33e3cc5c90b ("Merge branch 'next-integrity' of git://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security")
-    b4bfec7f4a86 ("security/integrity: Harden against malformed xattrs")
-    f00d79750712 ("EVM: Allow userspace to signal an RSA key has been loaded")
-
-
-NOTE: The patch will not be queued to stable trees until it is upstream.
-
-How should we proceed with this patch?
-
--- 
-Thanks
-Sasha
+That's fine with me!
