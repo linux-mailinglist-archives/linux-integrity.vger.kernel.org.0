@@ -2,123 +2,188 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 135C8261D35
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Sep 2020 21:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C99261DBD
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Sep 2020 21:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732128AbgIHTdb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Sep 2020 15:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730913AbgIHP6F (ORCPT
+        id S1731889AbgIHTlq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Sep 2020 15:41:46 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7666 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730871AbgIHPxk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Sep 2020 11:58:05 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B105C061757;
-        Tue,  8 Sep 2020 04:58:19 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id n61so6920097ota.10;
-        Tue, 08 Sep 2020 04:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RaWHN9Jo7paHemHHjwRTQUV3IWjnykqiJCEfEZHv7v4=;
-        b=XQJxy7+drpA1/z007ulMkN1jJfrJxnTwWTH7zUGrIvWJbJN/3LQI4R21MC1hN4WRp6
-         4kqIdNmyaIJ8lg2NMqPGV95EHEsf7vWCB6IPgQTTdW7payVALTglDWFIuYyCKnJ6StQI
-         PYiEBLEtxx92y+l6XQPXuO1oAM/WKMsCF7R6ovnwoTY14MoJvAMMYLE1Akv7L2YKOJJ4
-         +ybd56OJWwmLmy28WsspezZ/bpMcnR3H8ZPlYFqhhXSipTD+pZ7qDP9vHvFKbTo49SaH
-         cX1TL6uThBQb90O1HCoWkGJYZ2DkTVE9/WL5LveRkbgFocRBpn+hd0x7ycOMyDmaZSk6
-         zZ4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RaWHN9Jo7paHemHHjwRTQUV3IWjnykqiJCEfEZHv7v4=;
-        b=p2xlqr+1WniT2A6WT+yBhElbaO2UFJcerBkdrkgWhG4m8HXleQ3IYb9YMlMuWbROxy
-         9AD99POu9PECdQtZXCl/EcPEt28/86pnDQ0VXr/BvK69eqaTMyMXGeq85ghhyGLsWr/Q
-         53ne5+Ciyw5vd7SNv9M9tqSZkCBXBiNSj5WjSm/JfEoOMVyqkUx1rWt0BKHXH/PEjmzV
-         DQoDNpq0xlZjpTbTRtYnwGbh79cYbAI8QrHPPbFPqgvBsfrG5Nw+ObYDAkYyAXtEw4uE
-         ytmjRs34o9TDnqgsKMA7rgJzxJ8qiMetZZ6GWTbagOw1H48dezVB9dhminMkwb+0wFxP
-         SQDQ==
-X-Gm-Message-State: AOAM533hfWKFe/muPYheZ9u6ktWf/NZX+g8QIelPhUbtxRZJXqXVxBSl
-        f+FH25ZFC1bhjfayZwg6Lf/EwcgY89CAhbHsjkg=
-X-Google-Smtp-Source: ABdhPJy4RDBv/VXPUBpaer4WIVk5Krko0ixIBq7GboCRidoUovp5rSQSrsUWSyZ+VjFWU7QoAysy6HdfwaIl6E+FSAk=
-X-Received: by 2002:a9d:185:: with SMTP id e5mr18127205ote.135.1599566298111;
- Tue, 08 Sep 2020 04:58:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200907213855.3572-1-nramas@linux.microsoft.com>
- <CAEjxPJ5C64AmmVKuuPmtbfnY06w49ziryRAnARurWxpQumzfow@mail.gmail.com> <7c4e2e9f-54e1-1dee-c33c-64dac0fe9678@linux.microsoft.com>
-In-Reply-To: <7c4e2e9f-54e1-1dee-c33c-64dac0fe9678@linux.microsoft.com>
-From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-Date:   Tue, 8 Sep 2020 07:58:07 -0400
-Message-ID: <CAEjxPJ6eGcmbtGX7Kvn8e=ZxBUQD5G=8D+o9-BsVXyDFcyPYMw@mail.gmail.com>
-Subject: Re: [PATCH] SELinux: Measure state and hash of policy using IMA
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        tusharsu@linux.microsoft.com, Sasha Levin <sashal@kernel.org>,
-        James Morris <jmorris@namei.org>,
+        Tue, 8 Sep 2020 11:53:40 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088C1Q9K046161;
+        Tue, 8 Sep 2020 08:28:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=b2FT1Yp+l4dJYunaB80AnvbJt6l0uG5k65Skbsx6Sy8=;
+ b=V9k77lhW3sb6csdZNpxIl9910mTpoiRoDp3MkEyld/e3fD02yY3g7sxiHE6/gzqLADC+
+ Si+yZmClFZwJQqQNCKq8JAMFBokvbdMnISuehKADurb/l9JjG94mxWNvh0lDzzMq8fW+
+ JLi4sbfAZz2qrDBW5U6Gclc/S0gRO4fiMBzMnLwsvMlMmo2G1vnFQcvUsTZse81XFv5O
+ 6eE0LjwIorjL7Zh62uo3d1btbdUld6I9gjsYhoYG3YI30Hwh49T8NUm5rJ0XmZLmUBuz
+ 5o7sB+/BBWEkHSJckKhWArL2nAqAnhKE6eLI9vE+A18yXbXhYeJp7sLz3ZdKQZCyZTyR Ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33e949j58w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Sep 2020 08:28:30 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088C1aYK046936;
+        Tue, 8 Sep 2020 08:28:30 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33e949j57e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Sep 2020 08:28:29 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088CM7eI018243;
+        Tue, 8 Sep 2020 12:28:27 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 33e5gmr5e5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Sep 2020 12:28:27 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088CSPYM20709662
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Sep 2020 12:28:25 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D4D74203F;
+        Tue,  8 Sep 2020 12:28:25 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D98B42042;
+        Tue,  8 Sep 2020 12:28:16 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.24.202])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  8 Sep 2020 12:28:16 +0000 (GMT)
+Message-ID: <d216615b48c093ebe9349a9dab3830b646575391.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v8 1/3] fs: Introduce AT_INTERPRETED flag for
+ faccessat2(2)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Philippe =?ISO-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
         linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        John Johansen <john.johansen@canonical.com>
+Date:   Tue, 08 Sep 2020 08:28:15 -0400
+In-Reply-To: <20200908075956.1069018-2-mic@digikod.net>
+References: <20200908075956.1069018-1-mic@digikod.net>
+         <20200908075956.1069018-2-mic@digikod.net>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-08_06:2020-09-08,2020-09-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ adultscore=0 priorityscore=1501 suspectscore=0 clxscore=1011
+ impostorscore=0 malwarescore=0 phishscore=0 mlxlogscore=725
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009080108
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 8, 2020 at 12:44 AM Lakshmi Ramasubramanian
-<nramas@linux.microsoft.com> wrote:
->
-> On 9/7/20 3:32 PM, Stephen Smalley wrote:
->
-> >> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> >> Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-> >> Reported-by: kernel test robot <lkp@intel.com> # error: implicit declaration of function 'vfree'
-> >> Reported-by: kernel test robot <lkp@intel.com> # error: implicit declaration of function 'crypto_alloc_shash'
-> >> Reported-by: kernel test robot <lkp@intel.com> # sparse: symbol 'security_read_selinux_policy' was not declared. Should it be static?
-> >
-> > Not sure these Reported-by lines are useful since they were just on
-> > submitted versions of the patch not on an actual merged commit.
->
-> I'll remove them when I update the patch.
->
-> >
-> >> diff --git a/security/selinux/measure.c b/security/selinux/measure.c
-> >> new file mode 100644
-> >> index 000000000000..caf9107937d9
-> >> --- /dev/null
-> >> +++ b/security/selinux/measure.c
-> > <snip>
-> >> +void selinux_measure_state(struct selinux_state *state, bool policy_mutex_held)
-> >> +{
-> > <snip>
-> >> +
-> >> +       if (!policy_mutex_held)
-> >> +               mutex_lock(&state->policy_mutex);
-> >> +
-> >> +       rc = security_read_policy_kernel(state, &policy, &policy_len);
-> >> +
-> >> +       if (!policy_mutex_held)
-> >> +               mutex_unlock(&state->policy_mutex);
-> >
-> > This kind of conditional taking of a mutex is generally frowned upon
-> > in my experience.
-> > You should likely just always take the mutex in the callers of
-> > selinux_measure_state() instead.
-> > In some cases, it may be the caller of the caller.  Arguably selinuxfs
-> > could be taking it around all state modifying operations (e.g.
-> > enforce, checkreqprot) not just policy modifying ones although it
-> > isn't strictly for that purpose.
->
-> Since currently policy_mutex is not used to synchronize access to state
-> variables (enforce, checkreqprot, etc.) I am wondering if
-> selinux_measure_state() should measure only state if policy_mutex is not
-> held by the caller - similar to how we skip measuring policy if
-> initialization is not yet completed.
+Hi Mickael,
 
-No, we want to measure policy whenever there is a policy to measure.
-Just move the taking of the mutex to the callers of
-selinux_measure_state() so that it can be unconditional.
+On Tue, 2020-09-08 at 09:59 +0200, Mickaël Salaün wrote:
+> diff --git a/fs/open.c b/fs/open.c
+> index 9af548fb841b..879bdfbdc6fa 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -405,9 +405,13 @@ static long do_faccessat(int dfd, const char __user *filename, int mode, int fla
+>  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
+>  		return -EINVAL;
+>  
+> -	if (flags & ~(AT_EACCESS | AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH))
+> +	if (flags & ~(AT_EACCESS | AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH |
+> +				AT_INTERPRETED))
+>  		return -EINVAL;
+>  
+> +	/* Only allows X_OK with AT_INTERPRETED for now. */
+> +	if ((flags & AT_INTERPRETED) && !(mode & S_IXOTH))
+> +		return -EINVAL;
+>  	if (flags & AT_SYMLINK_NOFOLLOW)
+>  		lookup_flags &= ~LOOKUP_FOLLOW;
+>  	if (flags & AT_EMPTY_PATH)
+> @@ -426,7 +430,30 @@ static long do_faccessat(int dfd, const char __user *filename, int mode, int fla
+>  
+>  	inode = d_backing_inode(path.dentry);
+>  
+> -	if ((mode & MAY_EXEC) && S_ISREG(inode->i_mode)) {
+> +	if ((flags & AT_INTERPRETED)) {
+> +		/*
+> +		 * For compatibility reasons, without a defined security policy
+> +		 * (via sysctl or LSM), using AT_INTERPRETED must map the
+> +		 * execute permission to the read permission.  Indeed, from
+> +		 * user space point of view, being able to execute data (e.g.
+> +		 * scripts) implies to be able to read this data.
+> +		 *
+> +		 * The MAY_INTERPRETED_EXEC bit is set to enable LSMs to add
+> +		 * custom checks, while being compatible with current policies.
+> +		 */
+> +		if ((mode & MAY_EXEC)) {
+
+Why is the ISREG() test being dropped?   Without dropping it, there
+would be no reason for making the existing test an "else" clause.
+
+> +			mode |= MAY_INTERPRETED_EXEC;
+> +			/*
+> +			 * For compatibility reasons, if the system-wide policy
+> +			 * doesn't enforce file permission checks, then
+> +			 * replaces the execute permission request with a read
+> +			 * permission request.
+> +			 */
+> +			mode &= ~MAY_EXEC;
+> +			/* To be executed *by* user space, files must be readable. */
+> +			mode |= MAY_READ;
+
+After this change, I'm wondering if it makes sense to add a call to
+security_file_permission().  IMA doesn't currently define it, but
+could.
+
+Mimi
+
+> +		}
+> +	} else if ((mode & MAY_EXEC) && S_ISREG(inode->i_mode)) {
+>  		/*
+>  		 * MAY_EXEC on regular files is denied if the fs is mounted
+>  		 * with the "noexec" flag.
+
