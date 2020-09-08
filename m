@@ -2,137 +2,193 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F36BC2617B2
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Sep 2020 19:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEF326176B
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Sep 2020 19:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731689AbgIHRju (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Sep 2020 13:39:50 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46338 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731684AbgIHQOM (ORCPT
+        id S1729097AbgIHRc7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Sep 2020 13:32:59 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44412 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731496AbgIHQPU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Sep 2020 12:14:12 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088E2lYR090675;
-        Tue, 8 Sep 2020 10:03:36 -0400
+        Tue, 8 Sep 2020 12:15:20 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088FEIPO064333;
+        Tue, 8 Sep 2020 11:24:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=qvtY3efdmKTycDkCx+zMSmoSNBQYkw3/GROUiRKGaAk=;
- b=DtSotS3N2vNLQGr0szPGdp1w7Lox58FSAPolXeZjEjmYTcqAovLvnA8S30qKm7keSVK1
- 46B1ujBG+IMiBxRqHK7zpVHVQuV4I145HZuuE7qMYWk0VAIH9RCbEn0JrFthAgm6GoAn
- vkS8wf/uo+FiZEHRWnxl55OMvtYy3Pve/NOybUPYG4IvJS+0vkxkvRGzD0k4iUY8ZWhp
- aKHIJTVkgQEeHtiFrpUZgEVJ/GsQGYIU+uxiPeiBxSoZXx8P2XFJBdNGMdgB8xrAmDel
- o51sUJPzhVfrZF8TbsiuAQ5o1yQr8xC3RY3+bqSbcraTV5x1YTGSfm8dzdZUzwHkF2Y5 sw== 
+ bh=7IkzNkZoIUlzOFHw4iTv2RvvdzGg7LZHb0YG+GU5VtQ=;
+ b=Iq2UPoVJJ6oPpgMLMZ6A6VwVNUCH6DP8XdwhNnkdWSC41s+l1O1Ixh6fujSHT63KIfmE
+ 8q5OYZDVSCxPgEo/AyNaMFYJrysqmwHzsyQ9UdKhMFB+F87i+P97/5MWIEFcUhXzz5X0
+ LVgXeHP9OABM4SY32A4pOUp+EwE6u2Z6qScXkOo9NNk0AbUG9zw49Db4lJtXVGhsrXU9
+ OiHGTexSLOrJPKEplVVrvCCZUDwmE0IzN/TrGzeIJdFWDUAu39uICBne4u+dTw2QaRZR
+ etNrZxYgd+03HXpNiVvJ5buymzV7nyJ5tbEzJQ/el0Di9ooawDBbM4gsLc84Fl2wJiDT 2w== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33eb9886pf-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33e949rn8d-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 10:03:35 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088E32Y6092121;
-        Tue, 8 Sep 2020 10:03:35 -0400
+        Tue, 08 Sep 2020 11:24:39 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088FEl3b066233;
+        Tue, 8 Sep 2020 11:24:38 -0400
 Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33eb9886n6-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33e949rn6w-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 10:03:35 -0400
+        Tue, 08 Sep 2020 11:24:38 -0400
 Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088E1cVf007112;
-        Tue, 8 Sep 2020 14:03:32 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 33c2a8a53w-1
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088FNRZ2013119;
+        Tue, 8 Sep 2020 15:24:36 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 33c2a8a6b3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Sep 2020 14:03:32 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088E3UKl13369646
+        Tue, 08 Sep 2020 15:24:35 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088FOXh431850958
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Sep 2020 14:03:30 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF0A9A405C;
-        Tue,  8 Sep 2020 14:03:29 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4DBCA405F;
-        Tue,  8 Sep 2020 14:03:25 +0000 (GMT)
+        Tue, 8 Sep 2020 15:24:33 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8F2065204F;
+        Tue,  8 Sep 2020 15:24:33 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.24.202])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Sep 2020 14:03:25 +0000 (GMT)
-Message-ID: <d405bab0d262b32fd16e85444791b6c49d820aa2.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH 00/30] ima: Introduce IMA namespace
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 295D75204E;
+        Tue,  8 Sep 2020 15:24:25 +0000 (GMT)
+Message-ID: <01c23b2607a7dbf734722399931473c053d9b362.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v8 1/3] fs: Introduce AT_INTERPRETED flag for
+ faccessat2(2)
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Luke Hinds <lhinds@redhat.com>, "Dr. Greg" <greg@enjellic.com>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        krzysztof.struczynski@huawei.com, linux-integrity@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, stefanb@linux.vnet.ibm.com,
-        sunyuqiong1988@gmail.com, mkayaalp@cs.binghamton.edu,
-        dmitry.kasatkin@gmail.com, "Serge E. Hallyn" <serge@hallyn.com>,
-        James Morris <jmorris@namei.org>, christian@brauner.io,
-        silviu.vlasceanu@huawei.com, roberto.sassu@huawei.com,
-        ebiederm@xmission.com, viro@zeniv.linux.org.uk,
-        torvalds@linux-foundation.org, luto@amacapital.net,
-        jannh@google.com, nick.dusek@gmail.com
-Date:   Tue, 08 Sep 2020 10:03:24 -0400
-In-Reply-To: <CAKrSGQR3Pw=Rad2RgUuCHqr0r2Nc6x2nLoo2cVAkD+_8Vbmd7A@mail.gmail.com>
-References: <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
-         <20200818164943.va3um7toztazcfud@wittgenstein>
-         <d77a6cd783319702fddd06783cb84fdeb86210a6.camel@linux.ibm.com>
-         <20200906171413.GA8305@wind.enjellic.com>
-         <CAKrSGQR3Pw=Rad2RgUuCHqr0r2Nc6x2nLoo2cVAkD+_8Vbmd7A@mail.gmail.com>
+To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Philippe =?ISO-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        John Johansen <john.johansen@canonical.com>
+Date:   Tue, 08 Sep 2020 11:24:25 -0400
+In-Reply-To: <75451684-58f3-b946-dca4-4760fa0d7440@digikod.net>
+References: <20200908075956.1069018-1-mic@digikod.net>
+         <20200908075956.1069018-2-mic@digikod.net>
+         <d216615b48c093ebe9349a9dab3830b646575391.camel@linux.ibm.com>
+         <75451684-58f3-b946-dca4-4760fa0d7440@digikod.net>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-08_07:2020-09-08,2020-09-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 clxscore=1011
- phishscore=0 spamscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009080129
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ adultscore=0 priorityscore=1501 suspectscore=0 clxscore=1015
+ impostorscore=0 malwarescore=0 phishscore=0 mlxlogscore=525
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009080138
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-09-07 at 12:50 +0100, Luke Hinds wrote:
-> > Candidly, given the politics of security technology being viewed as
-> > 'constraining' user rights, I think that a lot of forthcoming security
-> > technology may end up being out of tree moving forward.
+On Tue, 2020-09-08 at 14:43 +0200, Mickaël Salaün wrote:
+> On 08/09/2020 14:28, Mimi Zohar wrote:
+> > Hi Mickael,
 > > 
+> > On Tue, 2020-09-08 at 09:59 +0200, Mickaël Salaün wrote:
+> >> diff --git a/fs/open.c b/fs/open.c
+> >> index 9af548fb841b..879bdfbdc6fa 100644
+> >> --- a/fs/open.c
+> >> +++ b/fs/open.c
+> >> @@ -405,9 +405,13 @@ static long do_faccessat(int dfd, const char __user *filename, int mode, int fla
+> >>  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
+> >>  		return -EINVAL;
+> >>  
+> >> -	if (flags & ~(AT_EACCESS | AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH))
+> >> +	if (flags & ~(AT_EACCESS | AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH |
+> >> +				AT_INTERPRETED))
+> >>  		return -EINVAL;
+> >>  
+> >> +	/* Only allows X_OK with AT_INTERPRETED for now. */
+> >> +	if ((flags & AT_INTERPRETED) && !(mode & S_IXOTH))
+> >> +		return -EINVAL;
+> >>  	if (flags & AT_SYMLINK_NOFOLLOW)
+> >>  		lookup_flags &= ~LOOKUP_FOLLOW;
+> >>  	if (flags & AT_EMPTY_PATH)
+> >> @@ -426,7 +430,30 @@ static long do_faccessat(int dfd, const char __user *filename, int mode, int fla
+> >>  
+> >>  	inode = d_backing_inode(path.dentry);
+> >>  
+> >> -	if ((mode & MAY_EXEC) && S_ISREG(inode->i_mode)) {
+> >> +	if ((flags & AT_INTERPRETED)) {
+> >> +		/*
+> >> +		 * For compatibility reasons, without a defined security policy
+> >> +		 * (via sysctl or LSM), using AT_INTERPRETED must map the
+> >> +		 * execute permission to the read permission.  Indeed, from
+> >> +		 * user space point of view, being able to execute data (e.g.
+> >> +		 * scripts) implies to be able to read this data.
+> >> +		 *
+> >> +		 * The MAY_INTERPRETED_EXEC bit is set to enable LSMs to add
+> >> +		 * custom checks, while being compatible with current policies.
+> >> +		 */
+> >> +		if ((mode & MAY_EXEC)) {
+> > 
+> > Why is the ISREG() test being dropped?   Without dropping it, there
+> > would be no reason for making the existing test an "else" clause.
 > 
-> I think it's prudent to look forward and plan diligently, but I would
-> not want perfect to be the enemy of good.
+> The ISREG() is not dropped, it is just moved below with the rest of the
+> original code. The corresponding code (with the path_noexec call) for
+> AT_INTERPRETED is added with the next commit, and it relies on the
+> sysctl configuration for compatibility reasons.
 
-Agreed.  This isn't an abstract problem, but one that has already come
-up and, hopefully, has been addressed appropriately.
-
-> 
-> I approach this more from a user's perspective. We are using IMA in 
-> https://keylime.dev to measure a host and would like to measure
-> within a container too. It's the most common request we hear from our
-> users.
-> 
-> Perhaps we all collaborate on a proposal extending Stefans work here:
-> https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerati
-> ons
-> 
-> I have seen around 3-4 patches now get submitted, so work has been
-> done before, and as above, users are present too. We could then have
-> some consensus on how this should look and later patches might have
-> more success at landing.
-> 
-> Would anyone be interested in this and have recommendations on how we
-> could approach this?
-
-When Roberto Sassu and Krzysztof Struczynski contacted me about the
-status of Stefan Berger's patch set, based on Yuqiong Sun's work, I was
-under the impression that they would be rebasing it on the latest
-kernel and going forward from there.   Obviously things changed.  I
-pointed out to them resolving the "IMA namespacing" issue would be the
-first thing that needs to be addressed.  So here we are.
-
-Definitely, let's have this discussion.
+Dropping the S_ISREG() check here without an explanation is wrong and
+probably unsafe, as it is only re-added in the subsequent patch and
+only for the "sysctl_interpreted_access" case.  Adding this new test
+after the existing test is probably safer.  If the original test fails,
+it returns the same value as this test -EACCES.
 
 Mimi
+
+> 
+> > 
+> >> +			mode |= MAY_INTERPRETED_EXEC;
+> >> +			/*
+> >> +			 * For compatibility reasons, if the system-wide policy
+> >> +			 * doesn't enforce file permission checks, then
+> >> +			 * replaces the execute permission request with a read
+> >> +			 * permission request.
+> >> +			 */
+> >> +			mode &= ~MAY_EXEC;
+> >> +			/* To be executed *by* user space, files must be readable. */
+> >> +			mode |= MAY_READ;
+
 
