@@ -2,137 +2,137 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 653A12617B7
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Sep 2020 19:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36BC2617B2
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Sep 2020 19:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731955AbgIHRlU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Sep 2020 13:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731623AbgIHQOE (ORCPT
+        id S1731689AbgIHRju (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Sep 2020 13:39:50 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46338 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731684AbgIHQOM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Sep 2020 12:14:04 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB96C061379;
-        Tue,  8 Sep 2020 05:50:25 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id e23so14723553otk.7;
-        Tue, 08 Sep 2020 05:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xtdyDDmFLb1n/bPdUXOwa5UJMDQzkeNGV49EUd3+LOA=;
-        b=KqsK1NT52K0nEsZYDrIpWu/nttM49kNDxDkaTEQ41DlAcJMqFgy9wed9oAOhBOhmp9
-         JjWIha7WgNUYARkHfU31ZSSrWF9UpyHjc97HwVebb5O26IgiHCFN+l4d/KFWvBWtcZTv
-         Vth5VaeiQvFW3eko41wx4jAtxw2/mg/opj2NomPN7bIdTGl/eFfj34xI+YtfoyBJLhO4
-         ZYaKesEZJWG9ZzXmK/OlmuV73f6uZZIja67+5/qKm7MUEk2RinVcTzcSZzgUo4ISxXyG
-         s1WPksUe7qCIKILuYyO3eGU9gozVTrOuUEkYGUdPmjxsNt2nTuZ5m4OdpixNMvbgJDBA
-         7mvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xtdyDDmFLb1n/bPdUXOwa5UJMDQzkeNGV49EUd3+LOA=;
-        b=lF7EuLUvOI0d50EyfDmByouOzxgf4sq1SjCTHmYfkzISCy6YEWEyBB+KtUlbkR4Pc/
-         wYmUwgjQncLYMo273nheXGPfs9qqOnaoE5KZST1BfrIrhybuNJIt52LeBJl7dnzyzejq
-         paAlzDICfBebFXs9lEmrNp6u7FrJ4sBvIkZjgnIeyx4DpLPJqciutF60GD54Ar+trhrB
-         0VGWGDUV+aPym7jLVv1IYzWQIurGSHAaeG56/wRP0PiVHWyOSUlT9wEHbe3npzTreKgW
-         ClJVbz7OXY/6IjDTNm02eyAZ/TKhWeUF53dit4aOKYCNX0fc7iGViR/5JYEZbYJ2ASZh
-         qQ5g==
-X-Gm-Message-State: AOAM5329Lt9WlVWVERfGbmmuLfj1q4FARf2K45Mj6q59YtmQ9HYW0888
-        Z8T/9cZoKGQUMiG8ZR7Nc98Z5AIi+QVFKkij8eY=
-X-Google-Smtp-Source: ABdhPJwtfceBKr4ySVSekpTEJOWofhFAdR/HN5Djc/qSNrXRqYaxksUN/th6Slnv/3Rr9epMjUvjruy4l7jgMS6+JTI=
-X-Received: by 2002:a05:6830:1be7:: with SMTP id k7mr17851789otb.162.1599569425234;
- Tue, 08 Sep 2020 05:50:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200908075956.1069018-1-mic@digikod.net> <20200908075956.1069018-2-mic@digikod.net>
- <d216615b48c093ebe9349a9dab3830b646575391.camel@linux.ibm.com> <75451684-58f3-b946-dca4-4760fa0d7440@digikod.net>
-In-Reply-To: <75451684-58f3-b946-dca4-4760fa0d7440@digikod.net>
-From:   Stephen Smalley <stephen.smalley.work@gmail.com>
-Date:   Tue, 8 Sep 2020 08:50:14 -0400
-Message-ID: <CAEjxPJ49_BgGX50ZAhHh79Qy3OMN6sssnUHT_2yXqdmgyt==9w@mail.gmail.com>
-Subject: Re: [RFC PATCH v8 1/3] fs: Introduce AT_INTERPRETED flag for faccessat2(2)
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        =?UTF-8?Q?Philippe_Tr=C3=A9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>,
-        John Johansen <john.johansen@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 8 Sep 2020 12:14:12 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088E2lYR090675;
+        Tue, 8 Sep 2020 10:03:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=qvtY3efdmKTycDkCx+zMSmoSNBQYkw3/GROUiRKGaAk=;
+ b=DtSotS3N2vNLQGr0szPGdp1w7Lox58FSAPolXeZjEjmYTcqAovLvnA8S30qKm7keSVK1
+ 46B1ujBG+IMiBxRqHK7zpVHVQuV4I145HZuuE7qMYWk0VAIH9RCbEn0JrFthAgm6GoAn
+ vkS8wf/uo+FiZEHRWnxl55OMvtYy3Pve/NOybUPYG4IvJS+0vkxkvRGzD0k4iUY8ZWhp
+ aKHIJTVkgQEeHtiFrpUZgEVJ/GsQGYIU+uxiPeiBxSoZXx8P2XFJBdNGMdgB8xrAmDel
+ o51sUJPzhVfrZF8TbsiuAQ5o1yQr8xC3RY3+bqSbcraTV5x1YTGSfm8dzdZUzwHkF2Y5 sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33eb9886pf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Sep 2020 10:03:35 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 088E32Y6092121;
+        Tue, 8 Sep 2020 10:03:35 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33eb9886n6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Sep 2020 10:03:35 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 088E1cVf007112;
+        Tue, 8 Sep 2020 14:03:32 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 33c2a8a53w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Sep 2020 14:03:32 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 088E3UKl13369646
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Sep 2020 14:03:30 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF0A9A405C;
+        Tue,  8 Sep 2020 14:03:29 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A4DBCA405F;
+        Tue,  8 Sep 2020 14:03:25 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.24.202])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  8 Sep 2020 14:03:25 +0000 (GMT)
+Message-ID: <d405bab0d262b32fd16e85444791b6c49d820aa2.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH 00/30] ima: Introduce IMA namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Luke Hinds <lhinds@redhat.com>, "Dr. Greg" <greg@enjellic.com>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        krzysztof.struczynski@huawei.com, linux-integrity@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, stefanb@linux.vnet.ibm.com,
+        sunyuqiong1988@gmail.com, mkayaalp@cs.binghamton.edu,
+        dmitry.kasatkin@gmail.com, "Serge E. Hallyn" <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>, christian@brauner.io,
+        silviu.vlasceanu@huawei.com, roberto.sassu@huawei.com,
+        ebiederm@xmission.com, viro@zeniv.linux.org.uk,
+        torvalds@linux-foundation.org, luto@amacapital.net,
+        jannh@google.com, nick.dusek@gmail.com
+Date:   Tue, 08 Sep 2020 10:03:24 -0400
+In-Reply-To: <CAKrSGQR3Pw=Rad2RgUuCHqr0r2Nc6x2nLoo2cVAkD+_8Vbmd7A@mail.gmail.com>
+References: <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
+         <20200818164943.va3um7toztazcfud@wittgenstein>
+         <d77a6cd783319702fddd06783cb84fdeb86210a6.camel@linux.ibm.com>
+         <20200906171413.GA8305@wind.enjellic.com>
+         <CAKrSGQR3Pw=Rad2RgUuCHqr0r2Nc6x2nLoo2cVAkD+_8Vbmd7A@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-08_07:2020-09-08,2020-09-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 clxscore=1011
+ phishscore=0 spamscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009080129
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 8, 2020 at 8:43 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> w=
-rote:
->
->
-> On 08/09/2020 14:28, Mimi Zohar wrote:
-> > Hi Mickael,
-> >
-> > On Tue, 2020-09-08 at 09:59 +0200, Micka=C3=ABl Sala=C3=BCn wrote:
-> >> +                    mode |=3D MAY_INTERPRETED_EXEC;
-> >> +                    /*
-> >> +                     * For compatibility reasons, if the system-wide =
-policy
-> >> +                     * doesn't enforce file permission checks, then
-> >> +                     * replaces the execute permission request with a=
- read
-> >> +                     * permission request.
-> >> +                     */
-> >> +                    mode &=3D ~MAY_EXEC;
-> >> +                    /* To be executed *by* user space, files must be =
-readable. */
-> >> +                    mode |=3D MAY_READ;
-> >
-> > After this change, I'm wondering if it makes sense to add a call to
-> > security_file_permission().  IMA doesn't currently define it, but
-> > could.
->
-> Yes, that's the idea. We could replace the following inode_permission()
-> with file_permission(). I'm not sure how this will impact other LSMs thou=
-gh.
+On Mon, 2020-09-07 at 12:50 +0100, Luke Hinds wrote:
+> > Candidly, given the politics of security technology being viewed as
+> > 'constraining' user rights, I think that a lot of forthcoming security
+> > technology may end up being out of tree moving forward.
+> > 
+> 
+> I think it's prudent to look forward and plan diligently, but I would
+> not want perfect to be the enemy of good.
 
-They are not equivalent at least as far as SELinux is concerned.
-security_file_permission() was only to be used to revalidate
-read/write permissions previously checked at file open to support
-policy changes and file or process label changes.  We'd have to modify
-the SELinux hook if we wanted to have it check execute access even if
-nothing has changed since open time.
+Agreed.  This isn't an abstract problem, but one that has already come
+up and, hopefully, has been addressed appropriately.
+
+> 
+> I approach this more from a user's perspective. We are using IMA in 
+> https://keylime.dev to measure a host and would like to measure
+> within a container too. It's the most common request we hear from our
+> users.
+> 
+> Perhaps we all collaborate on a proposal extending Stefans work here:
+> https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerati
+> ons
+> 
+> I have seen around 3-4 patches now get submitted, so work has been
+> done before, and as above, users are present too. We could then have
+> some consensus on how this should look and later patches might have
+> more success at landing.
+> 
+> Would anyone be interested in this and have recommendations on how we
+> could approach this?
+
+When Roberto Sassu and Krzysztof Struczynski contacted me about the
+status of Stefan Berger's patch set, based on Yuqiong Sun's work, I was
+under the impression that they would be rebasing it on the latest
+kernel and going forward from there.   Obviously things changed.  I
+pointed out to them resolving the "IMA namespacing" issue would be the
+first thing that needs to be addressed.  So here we are.
+
+Definitely, let's have this discussion.
+
+Mimi
+
