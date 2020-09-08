@@ -2,152 +2,171 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA06261FA0
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Sep 2020 22:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1896262367
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Sep 2020 01:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730483AbgIHUFl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Sep 2020 16:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729908AbgIHPV5 (ORCPT
+        id S1729876AbgIHXJM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Sep 2020 19:09:12 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:43056 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726683AbgIHXJI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Sep 2020 11:21:57 -0400
-X-Greylist: delayed 22472 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Sep 2020 07:14:48 PDT
-Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [IPv6:2001:1600:3:17::42a9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECDAC0610EC;
-        Tue,  8 Sep 2020 07:14:47 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Bm6bc3HDJzlhTgZ;
-        Tue,  8 Sep 2020 16:14:36 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Bm6bY253dzlh8TH;
-        Tue,  8 Sep 2020 16:14:33 +0200 (CEST)
-Subject: Re: [RFC PATCH v8 1/3] fs: Introduce AT_INTERPRETED flag for
- faccessat2(2)
-To:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        John Johansen <john.johansen@canonical.com>
-References: <20200908075956.1069018-1-mic@digikod.net>
- <20200908075956.1069018-2-mic@digikod.net>
- <d216615b48c093ebe9349a9dab3830b646575391.camel@linux.ibm.com>
- <75451684-58f3-b946-dca4-4760fa0d7440@digikod.net>
- <CAEjxPJ49_BgGX50ZAhHh79Qy3OMN6sssnUHT_2yXqdmgyt==9w@mail.gmail.com>
- <CAEjxPJ6ZTKeunzJvWf_kS3QYjca6v1yJq=ad-jCCuDSgG6n60g@mail.gmail.com>
- <bdc10ab89cf9197e104f02a751009cf0d549ddf5.camel@linux.ibm.com>
- <CAEjxPJ5evWDSv-T-p=4OX29Pr584ZRAsnYoxSRd4qFDoryB+fQ@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <532eefa8-49ca-1c23-1228-d5a4e2d8af90@digikod.net>
-Date:   Tue, 8 Sep 2020 16:14:32 +0200
-User-Agent: 
+        Tue, 8 Sep 2020 19:09:08 -0400
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 67A2B209428E;
+        Tue,  8 Sep 2020 16:09:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 67A2B209428E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1599606547;
+        bh=1FU0V2+EIEqfixDFXSUBYWxqv2BRgH7mU49lrHeqLnc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HH/+7Hl9UtUeFfVFiwAX/hI1xY98DArjwooFsotp8d2l17ruitgJwCgi+I6QydIDL
+         v6GhMqknT65djuEqzutNFZZqvhwrQvc4C0QGIAFZmrtZwZS63dB2FVdzOph/4/9snT
+         wPS5dbLbFHbny23g9nmvVCDpUTB7Yz511Uy6uWUY=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
+        gregkh@linuxfoundation.org, james.morse@arm.com,
+        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: [PATCH v6 0/3] Carry forward IMA measurement log on kexec on ARM64
+Date:   Tue,  8 Sep 2020 16:08:53 -0700
+Message-Id: <20200908230856.9799-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <CAEjxPJ5evWDSv-T-p=4OX29Pr584ZRAsnYoxSRd4qFDoryB+fQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On kexec file load Integrity Measurement Architecture(IMA) subsystem
+may verify the IMA signature of the kernel and initramfs, and measure
+it. The command line parameters passed to the kernel in the kexec call
+may also be measured by IMA. A remote attestation service can verify
+the measurement through the IMA log and the TPM PCR data. This can be
+achieved only if the IMA measurement log is carried over from
+the current kernel to the next kernel across the kexec call.
+However in the current implementation the IMA measurement logs are not
+carried over on ARM64 platforms. Therefore a remote attestation service
+cannot verify the authenticity of the running kernel on ARM64 platforms
+when the kernel is updated through the kexec system call.
 
-On 08/09/2020 15:42, Stephen Smalley wrote:
-> On Tue, Sep 8, 2020 at 9:29 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
->>
->> On Tue, 2020-09-08 at 08:52 -0400, Stephen Smalley wrote:
->>> On Tue, Sep 8, 2020 at 8:50 AM Stephen Smalley
->>> <stephen.smalley.work@gmail.com> wrote:
->>>>
->>>> On Tue, Sep 8, 2020 at 8:43 AM Mickaël Salaün <mic@digikod.net> wrote:
->>>>>
->>>>>
->>>>> On 08/09/2020 14:28, Mimi Zohar wrote:
->>>>>> Hi Mickael,
->>>>>>
->>>>>> On Tue, 2020-09-08 at 09:59 +0200, Mickaël Salaün wrote:
->>>>>>> +                    mode |= MAY_INTERPRETED_EXEC;
->>>>>>> +                    /*
->>>>>>> +                     * For compatibility reasons, if the system-wide policy
->>>>>>> +                     * doesn't enforce file permission checks, then
->>>>>>> +                     * replaces the execute permission request with a read
->>>>>>> +                     * permission request.
->>>>>>> +                     */
->>>>>>> +                    mode &= ~MAY_EXEC;
->>>>>>> +                    /* To be executed *by* user space, files must be readable. */
->>>>>>> +                    mode |= MAY_READ;
->>>>>>
->>>>>> After this change, I'm wondering if it makes sense to add a call to
->>>>>> security_file_permission().  IMA doesn't currently define it, but
->>>>>> could.
->>>>>
->>>>> Yes, that's the idea. We could replace the following inode_permission()
->>>>> with file_permission(). I'm not sure how this will impact other LSMs though.
->>
->> I wasn't suggesting replacing the existing security_inode_permission
->> hook later, but adding a new security_file_permission hook here.
->>
->>>>
->>>> They are not equivalent at least as far as SELinux is concerned.
->>>> security_file_permission() was only to be used to revalidate
->>>> read/write permissions previously checked at file open to support
->>>> policy changes and file or process label changes.  We'd have to modify
->>>> the SELinux hook if we wanted to have it check execute access even if
->>>> nothing has changed since open time.
->>>
->>> Also Smack doesn't appear to implement file_permission at all, so it
->>> would skip Smack checking.
->>
->> My question is whether adding a new security_file_permission call here
->> would break either SELinux or Apparmor?
-> 
-> selinux_inode_permission() has special handling for MAY_ACCESS so we'd
-> need to duplicate that into selinux_file_permission() ->
-> selinux_revalidate_file_permission().  Also likely need to adjust
-> selinux_file_permission() to explicitly check whether the mask
-> includes any permissions not checked at open time.  So some changes
-> would be needed here.  By default, it would be a no-op unless there
-> was a policy reload or the file was relabeled between the open(2) and
-> the faccessat(2) call.
-> 
+This patch series adds support for carrying forward the IMA measurement
+log on kexec on ARM64. powerpc already supports carrying forward
+the IMA measurement log on kexec.
 
-We could create a new hook path_permission(struct path *path, int mask)
-as a superset of inode_permission(). To be more convenient, his new hook
-could then just call inode_permission() for every LSMs not implementing
-path_permission().
+This series refactors the platform independent code defined for powerpc
+such that it can be reused for ARM64 as well. A chosen node namely
+"linux,ima-kexec-buffer" is added to the DTB for ARM64 to hold
+the address and the size of the memory reserved to carry
+the IMA measurement log.
+
+This patch series has been tested for ARM64 platform using QEMU.
+I would like help from the community for testing this change on powerpc.
+Thanks.
+
+This series is based on commit f4d51dffc6c0 ("Linux 5.9-rc4") in
+https://github.com/torvalds/linux "master" branch.
+
+Changelog:
+
+v6:
+  - Remove any existing FDT_PROP_IMA_KEXEC_BUFFER property in the device
+    tree and also its corresponding memory reservation in the currently
+    running kernel.
+  - Moved the function remove_ima_buffer() defined for powerpc to IMA
+    and renamed the function to ima_remove_kexec_buffer(). Also, moved
+    delete_fdt_mem_rsv() from powerpc to IMA.
+
+v5:
+  - Merged get_addr_size_cells() and do_get_kexec_buffer() into a single
+    function when moving the arch independent code from powerpc to IMA
+  - Reverted the change to use FDT functions in powerpc code and added
+    back the original code in get_addr_size_cells() and
+    do_get_kexec_buffer() for powerpc.
+  - Added fdt_add_mem_rsv() for ARM64 to reserve the memory for
+    the IMA log buffer during kexec.
+  - Fixed the warning reported by kernel test bot for ARM64
+    arch_ima_add_kexec_buffer() - moved this function to a new file
+    namely arch/arm64/kernel/ima_kexec.c
+
+v4:
+  - Submitting the patch series on behalf of the original author
+    Prakhar Srivastava <prsriva@linux.microsoft.com>
+  - Moved FDT_PROP_IMA_KEXEC_BUFFER ("linux,ima-kexec-buffer") to
+    libfdt.h so that it can be shared by multiple platforms.
+
+v3:
+Breakup patches further into separate patches.
+  - Refactoring non architecture specific code out of powerpc
+  - Update powerpc related code to use fdt functions
+  - Update IMA buffer read related code to use of functions
+  - Add support to store the memory information of the IMA
+    measurement logs to be carried forward.
+  - Update the property strings to align with documented nodes
+    https://github.com/devicetree-org/dt-schema/pull/46
+
+v2:
+  Break patches into separate patches.
+  - Powerpc related Refactoring
+  - Updating the docuemntation for chosen node
+  - Updating arm64 to support IMA buffer pass
+
+v1:
+  Refactoring carrying over IMA measuremnet logs over Kexec. This patch
+    moves the non-architecture specific code out of powerpc and adds to
+    security/ima.(Suggested by Thiago)
+  Add Documentation regarding the ima-kexec-buffer node in the chosen
+    node documentation
+
+v0:
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
+
+Lakshmi Ramasubramanian (3):
+  powerpc: Refactor kexec functions to move arch independent code to IMA
+  arm64: Store IMA log information in kimage used for kexec
+  arm64: Add IMA kexec buffer to DTB
+
+ arch/arm64/Kconfig                      |   1 +
+ arch/arm64/include/asm/ima.h            |  18 ++++
+ arch/arm64/include/asm/kexec.h          |   3 +
+ arch/arm64/kernel/Makefile              |   1 +
+ arch/arm64/kernel/ima_kexec.c           |  34 ++++++++
+ arch/arm64/kernel/machine_kexec_file.c  |  18 ++++
+ arch/powerpc/include/asm/ima.h          |  11 +--
+ arch/powerpc/include/asm/kexec.h        |   1 -
+ arch/powerpc/kexec/file_load.c          |  33 +-------
+ arch/powerpc/kexec/ima.c                | 104 +-----------------------
+ include/linux/ima.h                     |   2 +
+ include/linux/kexec.h                   |  11 +++
+ include/linux/libfdt.h                  |   3 +
+ security/integrity/ima/Makefile         |   3 +-
+ security/integrity/ima/ima.h            |   2 +
+ security/integrity/ima/ima_fdt.c        |  80 ++++++++++++++++++
+ security/integrity/ima/ima_kexec.c      |  58 +++++++++++++
+ security/integrity/ima/ima_kexec_file.c |  51 ++++++++++++
+ 18 files changed, 289 insertions(+), 145 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
+ create mode 100644 security/integrity/ima/ima_fdt.c
+ create mode 100644 security/integrity/ima/ima_kexec_file.c
+
+-- 
+2.28.0
+
