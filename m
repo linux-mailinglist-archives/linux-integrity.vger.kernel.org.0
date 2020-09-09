@@ -2,105 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF47D263520
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Sep 2020 19:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BABEA263678
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Sep 2020 21:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726414AbgIIR4g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 9 Sep 2020 13:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
+        id S1726184AbgIITJQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 9 Sep 2020 15:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726226AbgIIR4d (ORCPT
+        with ESMTP id S1725772AbgIITJO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 9 Sep 2020 13:56:33 -0400
-Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [IPv6:2001:1600:3:17::8fa9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E0BC061573
-        for <linux-integrity@vger.kernel.org>; Wed,  9 Sep 2020 10:56:32 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BmqSx64STzlhXmq;
-        Wed,  9 Sep 2020 19:56:17 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4BmqSv6SZnzlh8TH;
-        Wed,  9 Sep 2020 19:56:15 +0200 (CEST)
-Subject: Re: [RFC PATCH v8 0/3] Add support for AT_INTERPRETED (was O_MAYEXEC)
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
+        Wed, 9 Sep 2020 15:09:14 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71111C061573;
+        Wed,  9 Sep 2020 12:09:13 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id a9so3491692wmm.2;
+        Wed, 09 Sep 2020 12:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3CtnsHu1kocc8uwLlDaSSxN5AfuSpASFecFNMuqKHqI=;
+        b=Xr0TqVWcl1f3bR1fLi1bK3iFtjf3T3nwYBn4qS4SvMW9SkenRS+jnybhPFvwb/APP+
+         gwGqheFmi7Vh0WPGI5P1tU9VsnUhGiTLp43Tdpp0mURPswE6QMyo8EDUqY7SEZeHRUtY
+         MWnFxi87H6ZmNyNPr5+f+V8G945Rdq7eCNTi5p/e23unmdflSx3oyQoJv60527Ek7cgr
+         DkHiYLHXx9+PHRuuPUdTpZj+l0vxMI5k8lEAEST88k7TdG0tA2N/02CnGqJw8JtSwUOY
+         3U3C18G17PCheM/Hl+KiTPOZIy7VjWFXGDsov1cJm+5ZHrDfeBKbnmtdmleL08wggObM
+         XCfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3CtnsHu1kocc8uwLlDaSSxN5AfuSpASFecFNMuqKHqI=;
+        b=VTCn+glHkT7t+a5qCwfBN3RNoKh6yD/l4D3oM80NsRkyuqUKmT2kv46M7IfIlXRyVp
+         4AAfcouI6dsJmqER+3W2N9wHQxqV0qAYs7RNBXAFVsHwwwgcA0sKmx6i9tr7TuOLSixy
+         qbkSO0Au0lLy9hgaFURIJXlU1oupDF+R0SSfT8extf3+ltESEMOhxo/qEb/nLeHCfTvP
+         pB//BnhuyeJXKljG8VraGhoWrGSa17/3rLV0IV390kisRUQy07RkovdUwxpm8Hh6U3Jo
+         RMHgXCz4mRU/Bj5nhGXRjib1fhaeavLeAQP1qUn/ru/rSyZZUCLyGWITAnU87Rk6O9Sq
+         zfXg==
+X-Gm-Message-State: AOAM5305ipTVxQCNtEmS5DUsN32xHARnXY2rO9kgvsHB7JiyPWuMP9yr
+        HIRZoIKRXzyukUaIdvKKNB0=
+X-Google-Smtp-Source: ABdhPJyOefeiMFkPtAS+u9KKFh1ftgY9to3EIPbs6NcaiNIlTcgWE17qOnji0DYHm6wmjlL1VvK4vg==
+X-Received: by 2002:a7b:ca56:: with SMTP id m22mr4673591wml.12.1599678551993;
+        Wed, 09 Sep 2020 12:09:11 -0700 (PDT)
+Received: from localhost.localdomain (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
+        by smtp.gmail.com with ESMTPSA id b187sm93304wmb.8.2020.09.09.12.09.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2020 12:09:11 -0700 (PDT)
+From:   Alex Dewar <alex.dewar90@gmail.com>
+Cc:     Alex Dewar <alex.dewar90@gmail.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-References: <20200908075956.1069018-1-mic@digikod.net>
- <20200908185026.GU1236603@ZenIV.linux.org.uk>
- <e3223b50-0d00-3b64-1e09-cfb1b9648b02@digikod.net>
- <20200909171316.GW1236603@ZenIV.linux.org.uk>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <2ed377c4-3500-3ddc-7181-a5bc114ddf94@digikod.net>
-Date:   Wed, 9 Sep 2020 19:56:20 +0200
-User-Agent: 
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ima: Use kmemdup rather than kmalloc+memcpy
+Date:   Wed,  9 Sep 2020 20:09:06 +0100
+Message-Id: <20200909190907.164013-1-alex.dewar90@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20200909171316.GW1236603@ZenIV.linux.org.uk>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Issue identified with Coccinelle.
 
-On 09/09/2020 19:13, Al Viro wrote:
-> On Wed, Sep 09, 2020 at 09:19:11AM +0200, Mickaël Salaün wrote:
->>
->> On 08/09/2020 20:50, Al Viro wrote:
->>> On Tue, Sep 08, 2020 at 09:59:53AM +0200, Mickaël Salaün wrote:
->>>> Hi,
->>>>
->>>> This height patch series rework the previous O_MAYEXEC series by not
->>>> adding a new flag to openat2(2) but to faccessat2(2) instead.  As
->>>> suggested, this enables to perform the access check on a file descriptor
->>>> instead of on a file path (while opening it).  This may require two
->>>> checks (one on open and then with faccessat2) but it is a more generic
->>>> approach [8].
->>>
->>> Again, why is that folded into lookup/open/whatnot, rather than being
->>> an operation applied to a file (e.g. O_PATH one)?
->>>
->>
->> I don't understand your question. AT_INTERPRETED can and should be used
->> with AT_EMPTY_PATH. The two checks I wrote about was for IMA.
-> 
-> Once more, with feeling: don't hide that behind existing syscalls.
-> If you want to tell LSM have a look at given fs object in a special
-> way, *add* *a* *new* *system* *call* *for* *doing* *just* *that*.
-> 
+Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
+---
+ security/integrity/ima/ima_policy.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Fine, I'll do it. It will look a lot like this one though.
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index b4de33074b37..1de3140b334f 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -284,15 +284,14 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+ 	struct ima_rule_entry *nentry;
+ 	int i;
+ 
+-	nentry = kmalloc(sizeof(*nentry), GFP_KERNEL);
+-	if (!nentry)
+-		return NULL;
+-
+ 	/*
+ 	 * Immutable elements are copied over as pointers and data; only
+ 	 * lsm rules can change
+ 	 */
+-	memcpy(nentry, entry, sizeof(*nentry));
++	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
++	if (!nentry)
++		return NULL;
++
+ 	memset(nentry->lsm, 0, sizeof_field(struct ima_rule_entry, lsm));
+ 
+ 	for (i = 0; i < MAX_LSM_RULES; i++) {
+-- 
+2.28.0
+
