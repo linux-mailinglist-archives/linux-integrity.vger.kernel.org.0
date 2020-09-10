@@ -2,26 +2,35 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA190264A33
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Sep 2020 18:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C978264A9B
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Sep 2020 19:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725974AbgIJQrc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Sep 2020 12:47:32 -0400
-Received: from smtp-42ac.mail.infomaniak.ch ([84.16.66.172]:45787 "EHLO
-        smtp-42ac.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725877AbgIJQrM (ORCPT
+        id S1727088AbgIJRFH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Sep 2020 13:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727843AbgIJREh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Sep 2020 12:47:12 -0400
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BnPst0XCMzlhPqw;
-        Thu, 10 Sep 2020 18:46:26 +0200 (CEST)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4BnPsr3F4Wzlh8T3;
-        Thu, 10 Sep 2020 18:46:24 +0200 (CEST)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Aleksa Sarai <cyphar@cyphar.com>,
+        Thu, 10 Sep 2020 13:04:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F84C061573;
+        Thu, 10 Sep 2020 10:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=OyXzjCB63mYRe0BvSmc1T78HrhzEXzQ566vkrNeunqA=; b=PNzhRz1iWp6AsZIRd/72enP4n6
+        0cGLlHpItHhRrb4V65JwvV3zyrBFvKYVo7bXAjFWgtvpAGHhyayXpGt/uOkz4CdqT81VeYf3/wKF0
+        dXdbNkOXmfBwjUe/8WbUJI+7Vk5iQf0emhN7GpuPd3c1HZw1T/xWQ/usVNovNbEbO3dRSZMv8JA9H
+        OKXxTeHazmHVvtSSMEOViFLnER1ZFjPDzrdQwYHy6uhKo7rXrBo2NV67Q4zlWAafMgPlX0XLrLhKw
+        SbjsUxcCvBG1XQYoYuuVkZSevrSXz3Hxd8Tl2n4dv5NKRrECTXUzBKQ5zFpZ27FcC/z0JgqFihe9Z
+        QR+thY4g==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kGPzk-000804-44; Thu, 10 Sep 2020 17:04:24 +0000
+Date:   Thu, 10 Sep 2020 18:04:24 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -41,176 +50,49 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         Kees Cook <keescook@chromium.org>,
         Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
         Michael Kerrisk <mtk.manpages@gmail.com>,
         Miklos Szeredi <mszeredi@redhat.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
         <philippe.trebuchet@ssi.gouv.fr>,
         Scott Shell <scottsh@microsoft.com>,
         Sean Christopherson <sean.j.christopherson@intel.com>,
         Shuah Khan <shuah@kernel.org>,
         Steve Dower <steve.dower@python.org>,
         Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
         Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
         kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-fsdevel@vger.kernel.org
-Subject: [RFC PATCH v9 0/3] Add introspect_access(2) (was O_MAYEXEC)
-Date:   Thu, 10 Sep 2020 18:46:09 +0200
-Message-Id: <20200910164612.114215-1-mic@digikod.net>
-X-Mailer: git-send-email 2.28.0
+Subject: Re: [RFC PATCH v9 0/3] Add introspect_access(2) (was O_MAYEXEC)
+Message-ID: <20200910170424.GU6583@casper.infradead.org>
+References: <20200910164612.114215-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200910164612.114215-1-mic@digikod.net>
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+On Thu, Sep 10, 2020 at 06:46:09PM +0200, Mickaël Salaün wrote:
+> This ninth patch series rework the previous AT_INTERPRETED and O_MAYEXEC
+> series with a new syscall: introspect_access(2) .  Access check are now
+> only possible on a file descriptor, which enable to avoid possible race
+> conditions in user space.
 
-This ninth patch series rework the previous AT_INTERPRETED and O_MAYEXEC
-series with a new syscall: introspect_access(2) .  Access check are now
-only possible on a file descriptor, which enable to avoid possible race
-conditions in user space.
+But introspection is about examining _yourself_.  This isn't about
+doing that.  It's about doing ... something ... to a script that you're
+going to execute.  If the script were going to call the syscall, then
+it might be introspection.  Or if the interpreter were measuring itself,
+that would be introspection.  But neither of those would be useful things
+to do, because an attacker could simply avoid doing them.
 
-For now, the only LSM hook triggered by introspect_access(2) is
-inode_permission() which takes a struct inode as argument.  However,
-struct path is still available in this syscall, which enables to add a
-new hook to fit the needs of IMA and other path-based LSMs.
-
-Goal of introspect_access(2)
-============================
-
-The goal of this patch series is to enable to control script execution
-with interpreters help.  A new introspect_access() system call is added
-to enable user space script interpreters to delegate to the kernel (and
-thus the system security policy) the permission to interpret/execute
-scripts or other files containing what can be seen as commands.
-
-A simple system-wide security policy can be enforced by the system
-administrator through a sysctl configuration consistent with the mount
-points or the file access rights.  The documentation patch explains the
-prerequisites.
-
-Furthermore, the security policy can also be delegated to an LSM, either
-a MAC system or an integrity system.  For instance, the new kernel
-MAY_INTROSPECTION_EXEC flag is required to close a major IMA
-measurement/appraisal interpreter integrity gap by bringing the ability
-to check the use of scripts [1].  Other uses are expected, such as for
-magic-links [2], SGX integration [3], bpffs [4] or IPE [5].
-
-Possible extended usage
-=======================
-
-For now, only the X_OK mode is compatible with introspect_access(2).
-This enables to restrict the addition of new control flows in a process.
-Using R_OK or W_OK with introspect_access(2) returns -EINVAL.
-
-Possible future use-cases for R_OK with introspect_access(2) may be to
-check configuration files that may impact the behavior of applications
-(i.e.  influence critical part of the current control flow).  Those
-should then be trusted as well.  The W_OK with introspect_access(2)
-could be used to check that a file descriptor is allowed to receive
-sensitive data such as debug logs.
-
-Prerequisite of its use
-=======================
-
-User space needs to adapt to take advantage of this new feature.  For
-example, the PEP 578 [6] (Runtime Audit Hooks) enables Python 3.8 to be
-extended with policy enforcement points related to code interpretation,
-which can be used to align with the PowerShell audit features.
-Additional Python security improvements (e.g. a limited interpreter
-without -c, stdin piping of code) are on their way [7].
-
-Examples
-========
-
-The initial idea comes from CLIP OS 4 and the original implementation
-has been used for more than 12 years:
-https://github.com/clipos-archive/clipos4_doc
-Chrome OS has a similar approach:
-https://chromium.googlesource.com/chromiumos/docs/+/master/security/noexec_shell_scripts.md
-
-Userland patches can be found here:
-https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
-Actually, there is more than the O_MAYEXEC changes (which matches this search)
-e.g., to prevent Python interactive execution. There are patches for
-Bash, Wine, Java (Icedtea), Busybox's ash, Perl and Python. There are
-also some related patches which do not directly rely on O_MAYEXEC but
-which restrict the use of browser plugins and extensions, which may be
-seen as scripts too:
-https://github.com/clipos-archive/clipos4_portage-overlay/tree/master/www-client
-
-An introduction to O_MAYEXEC was given at the Linux Security Summit
-Europe 2018 - Linux Kernel Security Contributions by ANSSI:
-https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
-The "write xor execute" principle was explained at Kernel Recipes 2018 -
-CLIP OS: a defense-in-depth OS:
-https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
-See also an overview article: https://lwn.net/Articles/820000/
-
-This patch series can be applied on top of v5.9-rc4 .  This can be tested
-with CONFIG_SYSCTL.  I would really appreciate constructive comments on
-this patch series.
-
-Previous version:
-https://lore.kernel.org/lkml/20200908075956.1069018-1-mic@digikod.net/
-
-[1] https://lore.kernel.org/lkml/1544647356.4028.105.camel@linux.ibm.com/
-[2] https://lore.kernel.org/lkml/20190904201933.10736-6-cyphar@cyphar.com/
-[3] https://lore.kernel.org/lkml/CALCETrVovr8XNZSroey7pHF46O=kj_c5D9K8h=z2T_cNrpvMig@mail.gmail.com/
-[4] https://lore.kernel.org/lkml/CALCETrVeZ0eufFXwfhtaG_j+AdvbzEWE0M3wjXMWVEO7pj+xkw@mail.gmail.com/
-[5] https://lore.kernel.org/lkml/20200406221439.1469862-12-deven.desai@linux.microsoft.com/
-[6] https://www.python.org/dev/peps/pep-0578/
-[7] https://lore.kernel.org/lkml/0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org/
-
-Regards,
-
-MickaÃ«l SalaÃ¼n (3):
-  fs: Add introspect_access(2) syscall implementation and related sysctl
-  arch: Wire up introspect_access(2)
-  selftest/interpreter: Add tests for introspect_access(2) policies
-
- Documentation/admin-guide/sysctl/fs.rst       |  50 +++
- arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
- arch/arm/tools/syscall.tbl                    |   1 +
- arch/arm64/include/asm/unistd.h               |   2 +-
- arch/arm64/include/asm/unistd32.h             |   2 +
- arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
- arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
- arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
- arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
- arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
- arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
- arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
- arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
- arch/s390/kernel/syscalls/syscall.tbl         |   1 +
- arch/sh/kernel/syscalls/syscall.tbl           |   1 +
- arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
- arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
- arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
- arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
- fs/open.c                                     |  79 ++++
- include/linux/fs.h                            |   3 +
- include/linux/syscalls.h                      |   1 +
- include/uapi/asm-generic/unistd.h             |   4 +-
- kernel/sysctl.c                               |  12 +-
- .../testing/selftests/interpreter/.gitignore  |   2 +
- tools/testing/selftests/interpreter/Makefile  |  18 +
- tools/testing/selftests/interpreter/config    |   1 +
- .../interpreter/introspection_policy_test.c   | 361 ++++++++++++++++++
- 28 files changed, 547 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/interpreter/.gitignore
- create mode 100644 tools/testing/selftests/interpreter/Makefile
- create mode 100644 tools/testing/selftests/interpreter/config
- create mode 100644 tools/testing/selftests/interpreter/introspection_policy_test.c
-
--- 
-2.28.0
+So, bad name.  What might be better?  sys_security_check()?
+sys_measure()?  sys_verify_fd()?  I don't know.
 
