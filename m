@@ -2,183 +2,148 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 565F12664BB
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 18:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC8226657E
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 19:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725851AbgIKQpN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Sep 2020 12:45:13 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:34266 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726456AbgIKQpD (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Sep 2020 12:45:03 -0400
-Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 955D820716FC;
-        Fri, 11 Sep 2020 09:44:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 955D820716FC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1599842698;
-        bh=gUgZlvI7DrDjGZFf44Vxy3S7MO/Bh6is8wlbtbN++JI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KhjO3g9XgCN1StTC8gEIDZ9q1vanpS1N5gzlJBhXdjraAawoMc1QD8CpdbbG9iUei
-         D208weHnfgrxqfq0FzSPHSb6XXxC12bumrdbj9oLuxBUC79lIc7W5d2Gt28Bqv1wOt
-         eTcNAtP3r0/DVsSWa/WT2wzgjURxo8n4mUcekG0Y=
-Subject: Re: [PATCH v3 3/6] IMA: update process_buffer_measurement to measure
- buffer hash
-To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20200828015704.6629-1-tusharsu@linux.microsoft.com>
- <20200828015704.6629-4-tusharsu@linux.microsoft.com>
- <f11dbfc1382e60c04fdd519ce5122239fa0cab8b.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <c932ae94-d7c3-5d23-2bb4-95517f712ceb@linux.microsoft.com>
-Date:   Fri, 11 Sep 2020 09:44:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726230AbgIKREb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Sep 2020 13:04:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45494 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726256AbgIKPCf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 11 Sep 2020 11:02:35 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 96F3E2244C;
+        Fri, 11 Sep 2020 15:01:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599836481;
+        bh=HtLkUWXhl5XAX6D7GAvZ5uZ8WYlaoexr13YPMrhinX8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=m2hilndopgpM3i5Zr85FVrHoQiXHTDnClGX8KRviAY9HEr77R/8UGRPTAjCfWD7NW
+         cMGT0YRkENBOhhs6s66uohG28ICbHaNthrJfjGTlIbVMtDzesDvy0svVkVT30QhP8n
+         4K3pTPXwBJ8w8GP6r2X9LYf2sYI902a8P9r/9cXc=
+Received: by mail-ot1-f53.google.com with SMTP id g96so8553340otb.12;
+        Fri, 11 Sep 2020 08:01:21 -0700 (PDT)
+X-Gm-Message-State: AOAM531UFkJjKx4XGGsA8Fggh2QAbrsh4UX3VfpK1VsPR7FmPY1WP1HR
+        prZXUkXrbaLuANgMS91XxScF7K7+iZm55C/PXck=
+X-Google-Smtp-Source: ABdhPJxBvUOnWvNWSxd3QQ6q9HAFDX1c50DdJzWPSuvJpfyOY08Sgy4lcuMwSkGA/qIXDW6vtgunB8B+AY4P1aKEKoo=
+X-Received: by 2002:a9d:69c9:: with SMTP id v9mr1381498oto.90.1599836480811;
+ Fri, 11 Sep 2020 08:01:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <f11dbfc1382e60c04fdd519ce5122239fa0cab8b.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200904072905.25332-1-clin@suse.com> <20200904072905.25332-2-clin@suse.com>
+In-Reply-To: <20200904072905.25332-2-clin@suse.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 11 Sep 2020 18:01:09 +0300
+X-Gmail-Original-Message-ID: <CAMj1kXEXvmO5mrTcKpqYUASBAQB-1=xLa0vg7KwmvOHMjaQ34w@mail.gmail.com>
+Message-ID: <CAMj1kXEXvmO5mrTcKpqYUASBAQB-1=xLa0vg7KwmvOHMjaQ34w@mail.gmail.com>
+Subject: Re: [PATCH 1/6] efistub: pass uefi secureboot flag via fdt params
+To:     Chester Lin <clin@suse.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "Lee, Chun-Yi" <jlee@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, 4 Sep 2020 at 10:29, Chester Lin <clin@suse.com> wrote:
+>
+> Add a new UEFI parameter: "linux,uefi-secure-boot" in fdt boot params
+> as other architectures have done in their own boot data. For example,
+> the boot_params->secure_boot in x86.
+>
+> Signed-off-by: Chester Lin <clin@suse.com>
 
+Why do we need this flag? Can't the OS simply check the variable directly?
 
-On 2020-08-31 10:02 a.m., Mimi Zohar wrote:
-> On Thu, 2020-08-27 at 18:57 -0700, Tushar Sugandhi wrote:
->> process_buffer_measurement() currently only measures the input buffer.
->> When the buffer being measured is too large, it may result in bloated
->> IMA logs.
-> 
-> The subject of  this sentence refers to an individual record, while
-> "bloated" refers to the measurement list.  A "bloated" measurement list
-> would contain too many or unnecessary records.  Your concern seems to
-> be with the size of the individual record, not the number of
-> measurement list entries.
-> 
-The intent behind that description was twofold. One, as you mentioned,
-the individual record size being large; and two, multiple large-sized
-individual records will eventually bloat the measurement list too.
-
-It can happen in SeLinux case as we discovered. The SeLinux policy
-(which can be a few MBs) can change from 'foo', to 'bar', back to 'foo'.
-And the requirement from SeLinux is that 'foo' should be measured the
-second time too. When 'foo' and 'bar' are large, the individual records
-in the ima log will be large, which will also result in measurement list
-being bloated.
-
-But I understand your concern with the current wording. I will update 
-the patch description accordingly.
-
-> Measuring the hash of the buffer data is similar to measuring the file
-> data.  In the case of the file data, however, the attestation server
-> may rely on a white list manifest/DB or the file signature to verify
-> the file data hash.  For buffer measurements, how will the attestation
-> server ascertain what is a valid buffer hash?
-The client and the server implementation will go hand in hand. The
-client/kernel would know what data is measured as-is
-(e.g. KEXEC_CMDLINE), and what data has it’s hash measured
-(e.g. SeLinux Policy). And the attestation server would verify data/hash
-accordingly.
-
-Just like the data being measured in other cases, the attestation server 
-will know what are possible values of the large buffers being measured. 
-It will have to maintain the hash of those buffer values.
-> 
-> Hint:  I assume, correct me if I'm wrong, the measurement list record
-> template data is not meant to be verified, but used to detect if the "critical data" changed.
-> 
-As mentioned above, the use case for this feature is in-memory loaded 
-SeLinux policy, which can be quite large (several MBs) – that's why this 
-functionality. The data is meant to be verified by the attestation server.
-
-> Please update the patch description accordingly.
-I will update the patch description to clarify all this.
-> 
->>
->> Introduce a boolean parameter measure_buf_hash to support measuring
->> hash of a buffer, which would be much smaller, instead of the buffer
->> itself.
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> ---
-> 
-> <snip>
-> 
->> +++ b/security/integrity/ima/ima_main.c
->> @@ -733,17 +733,21 @@ int ima_load_data(enum kernel_load_data_id id)
->>    * @func: IMA hook
->>    * @pcr: pcr to extend the measurement
->>    * @func_data: private data specific to @func, can be NULL.
->> + * @measure_buf_hash: if set to true - will measure hash of the buf,
->> + *                    instead of buf
->>    *
->>    * Based on policy, the buffer is measured into the ima log.
->>    */
->>   int process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   			       const char *eventname, enum ima_hooks func,
->> -			       int pcr, const char *func_data)
->> +			       int pcr, const char *func_data,
->> +			       bool measure_buf_hash)
->>   {
->>   	int ret = 0;
->>   	const char *audit_cause = "ENOMEM";
->>   	struct ima_template_entry *entry = NULL;
->>   	struct integrity_iint_cache iint = {};
->> +	struct integrity_iint_cache digest_iint = {};
->>   	struct ima_event_data event_data = {.iint = &iint,
->>   					    .filename = eventname,
->>   					    .buf = buf,
->> @@ -752,7 +756,7 @@ int process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   	struct {
->>   		struct ima_digest_data hdr;
->>   		char digest[IMA_MAX_DIGEST_SIZE];
->> -	} hash = {};
->> +	} hash = {}, digest_hash = {};
->>   	int violation = 0;
->>   	int action = 0;
->>   	u32 secid;
->> @@ -801,6 +805,24 @@ int process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   		goto out;
->>   	}
->>   
->> +	if (measure_buf_hash) {
->> +		digest_iint.ima_hash = &digest_hash.hdr;
->> +		digest_iint.ima_hash->algo = ima_hash_algo;
->> +		digest_iint.ima_hash->length = hash_digest_size[ima_hash_algo];
->> +
->> +		ret = ima_calc_buffer_hash(hash.hdr.digest,
->> +					   iint.ima_hash->length,
->> +					   digest_iint.ima_hash);
->> +		if (ret < 0) {
->> +			audit_cause = "digest_hashing_error";
->> +			goto out;
->> +		}
->> +
->> +		event_data.iint = &digest_iint;
->> +		event_data.buf = hash.hdr.digest;
->> +		event_data.buf_len = iint.ima_hash->length;
->> +	}
->> +
-> 
-> There seems to be some code and variable duplication by doing it this
-> way.  Copying the caluclated buffer data hash to a temporary buffer
-> might eliminate it.
-> 
-With the way ima_calc_buffer_hash() is implemented, I was convinced that
-the variable duplication was needed. I didn't want to write a helper 
-function in order to minimize the unnecessary code churn in p_b_m().
-But I will revisit this to see how I can reduce the code and variable 
-duplication.
-
-Thanks for the feedback.
->>   	ret = ima_alloc_init_template(&event_data, &entry, template);
->>   	if (ret < 0) {
->>   		audit_cause = "alloc_entry";
+> ---
+>  drivers/firmware/efi/libstub/fdt.c | 39 +++++++++++++++++++++++++++++-
+>  1 file changed, 38 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/fdt.c b/drivers/firmware/efi/libstub/fdt.c
+> index 11ecf3c4640e..c9a341e4715f 100644
+> --- a/drivers/firmware/efi/libstub/fdt.c
+> +++ b/drivers/firmware/efi/libstub/fdt.c
+> @@ -136,6 +136,10 @@ static efi_status_t update_fdt(void *orig_fdt, unsigned long orig_fdt_size,
+>         if (status)
+>                 goto fdt_set_fail;
+>
+> +       status = fdt_setprop_var(fdt, node, "linux,uefi-secure-boot", fdt_val32);
+> +       if (status)
+> +               goto fdt_set_fail;
+> +
+>         if (IS_ENABLED(CONFIG_RANDOMIZE_BASE)) {
+>                 efi_status_t efi_status;
+>
+> @@ -199,6 +203,24 @@ static efi_status_t update_fdt_memmap(void *fdt, struct efi_boot_memmap *map)
+>         return EFI_SUCCESS;
+>  }
+>
+> +static efi_status_t update_fdt_secboot(void *fdt, u32 secboot)
+> +{
+> +       int node = fdt_path_offset(fdt, "/chosen");
+> +       u32 fdt_val32;
+> +       int err;
+> +
+> +       if (node < 0)
+> +               return EFI_LOAD_ERROR;
+> +
+> +       fdt_val32 = cpu_to_fdt32(secboot);
+> +
+> +       err = fdt_setprop_inplace_var(fdt, node, "linux,uefi-secure-boot", fdt_val32);
+> +       if (err)
+> +               return EFI_LOAD_ERROR;
+> +
+> +       return EFI_SUCCESS;
+> +}
+> +
+>  struct exit_boot_struct {
+>         efi_memory_desc_t       *runtime_map;
+>         int                     *runtime_entry_count;
+> @@ -208,6 +230,9 @@ struct exit_boot_struct {
+>  static efi_status_t exit_boot_func(struct efi_boot_memmap *map,
+>                                    void *priv)
+>  {
+> +       efi_status_t status;
+> +       enum efi_secureboot_mode secboot_status;
+> +       u32 secboot_var = 0;
+>         struct exit_boot_struct *p = priv;
+>         /*
+>          * Update the memory map with virtual addresses. The function will also
+> @@ -217,7 +242,19 @@ static efi_status_t exit_boot_func(struct efi_boot_memmap *map,
+>         efi_get_virtmap(*map->map, *map->map_size, *map->desc_size,
+>                         p->runtime_map, p->runtime_entry_count);
+>
+> -       return update_fdt_memmap(p->new_fdt_addr, map);
+> +       status = update_fdt_memmap(p->new_fdt_addr, map);
+> +
+> +       if (status != EFI_SUCCESS)
+> +               return status;
+> +
+> +       secboot_status = efi_get_secureboot();
+> +
+> +       if (secboot_status == efi_secureboot_mode_enabled)
+> +               secboot_var = 1;
+> +
+> +       status = update_fdt_secboot(p->new_fdt_addr, secboot_var);
+> +
+> +       return status;
+>  }
+>
+>  #ifndef MAX_FDT_SIZE
+> --
+> 2.26.1
+>
