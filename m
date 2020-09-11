@@ -2,47 +2,79 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A924B266685
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 19:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500E22667AA
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 19:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726503AbgIKR3a (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Sep 2020 13:29:30 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:40246 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726497AbgIKR3U (ORCPT
+        id S1725950AbgIKRq1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Sep 2020 13:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725824AbgIKMQk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Sep 2020 13:29:20 -0400
-Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B1A9020D4DAB;
-        Fri, 11 Sep 2020 10:29:18 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B1A9020D4DAB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1599845359;
-        bh=fPxkLQkgfh+pBwXajBMd60l+4u25hHiWkLzbR/BNlS8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Al2w9lqs0T6TxVObHd+viHQLPtSVZj7Wlw3qXNVxxbXaUah/sZRTuqPiCSJBu5Xfq
-         T9rrIh51sBD4uF6If+9DHeZs2FxIE8YOtz+EMl6QW7zp8Gg8zqjDdeQdRfRClQeAbe
-         yOX/cr42EuUGmXXk5Qh1jCjJ6FANC2C5NrXApdPg=
-Subject: Re: [PATCH v3 4/6] IMA: add policy to measure critical data from
- kernel components
-To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20200828015704.6629-1-tusharsu@linux.microsoft.com>
- <20200828015704.6629-5-tusharsu@linux.microsoft.com>
- <652406e1a08d855a5d9a3e3815835653a12df411.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <0dc88680-eb1c-4343-ad8e-18b0df8d5142@linux.microsoft.com>
-Date:   Fri, 11 Sep 2020 10:29:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 11 Sep 2020 08:16:40 -0400
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [IPv6:2001:1600:3:17::190f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A22C061757
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 05:16:39 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Bnvqv0ZqWzlhfqK;
+        Fri, 11 Sep 2020 14:16:27 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Bnvqq5mSFzlh8T4;
+        Fri, 11 Sep 2020 14:16:23 +0200 (CEST)
+Subject: Re: [RFC PATCH v9 0/3] Add introspect_access(2) (was O_MAYEXEC)
+To:     Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20200910164612.114215-1-mic@digikod.net>
+ <20200910170424.GU6583@casper.infradead.org>
+ <f6e2358c-8e5e-e688-3e66-2cdd943e360e@digikod.net>
+ <a48145770780d36e90f28f1526805a7292eb74f6.camel@linux.ibm.com>
+ <880bb4ee-89a2-b9b0-747b-0f779ceda995@digikod.net>
+ <20200910184033.GX6583@casper.infradead.org>
+ <20200910200010.GF1236603@ZenIV.linux.org.uk>
+ <20200910200543.GY6583@casper.infradead.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <3dd9b2b3-6304-03df-bfba-13864169453e@digikod.net>
+Date:   Fri, 11 Sep 2020 14:16:23 +0200
+User-Agent: 
 MIME-Version: 1.0
-In-Reply-To: <652406e1a08d855a5d9a3e3815835653a12df411.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200910200543.GY6583@casper.infradead.org>
+Content-Type: text/plain; charset=iso-8859-15
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
@@ -51,106 +83,40 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-
-On 2020-08-31 11:15 a.m., Mimi Zohar wrote:
-> On Thu, 2020-08-27 at 18:57 -0700, Tushar Sugandhi wrote:
->> There would be several candidate kernel components suitable for IMA
->> measurement. Not all of them would have support for IMA measurement.
->> Also, system administrators may not want to measure data for all of
->> them, even when they support IMA measurement. An IMA policy specific
->> to various kernel components is needed to measure their respective
->> critical data.
-> 
-> The base policy rules are wide, but may be constrained by specifying
-> different options.  For example the builtin policy rules cannot be
-> written in terms LSM labels, which would constrain them.  A policy rule
-> may measure all keyrings or may constrain which keyrings need to be
-> measured.  Measuring critical data is not any different.
-> 
-> Please rewrite the above paragraph accordingly.
-> 
-Ok. Will do.
+On 10/09/2020 22:05, Matthew Wilcox wrote:
+> On Thu, Sep 10, 2020 at 09:00:10PM +0100, Al Viro wrote:
+>> On Thu, Sep 10, 2020 at 07:40:33PM +0100, Matthew Wilcox wrote:
+>>> On Thu, Sep 10, 2020 at 08:38:21PM +0200, Mickaël Salaün wrote:
+>>>> There is also the use case of noexec mounts and file permissions. From
+>>>> user space point of view, it doesn't matter which kernel component is in
+>>>> charge of defining the policy. The syscall should then not be tied with
+>>>> a verification/integrity/signature/appraisal vocabulary, but simply an
+>>>> access control one.
+>>>
+>>> permission()?
 >>
->> Add a new IMA policy "critical_kernel_data_sources" to support measuring
->> various critical kernel components. This policy would enable the
->> system administrators to limit the measurement to the components,
->> if the components support IMA measurement.
-> 
-> "critical_kernel_data_sources" is really wordy.   Find a better, self
-> defining term for describing the type of data, one that isn't so wordy,
-> and reflect it in the code.
-> 
-Will do. I will go with "critical_data". You also have suggested it in
-the comment below.
-
-"critical_data_sources" also seems right, but that's more wordy than
-"critical_data".
-
-Some more options we considered, but they donâ€™t sound right.
-Please let us know what do you think.
-1. "critical_data_sources="
-2. "critical_kernel_components=" -or- "crit_krnl_comps="
-3. "critical_data_providers="
-4. "critical_kernel_data_providers=" -or- "crit_krnl_dt_provs="
-5. "critical_kernel_data_sources=" -or- "crit_krnl_dt_srcs="
-6. "security_critical_data="
-7. "protectable_data="
-8. "protected_data="
-9. "vital_protected_data="
-
+>> int lsm(int fd, const char *how, char *error, int size);
 >>
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> ---
->>   Documentation/ABI/testing/ima_policy |  3 +++
->>   security/integrity/ima/ima_policy.c  | 29 +++++++++++++++++++++++++++-
->>   2 files changed, 31 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
->> index cd572912c593..7ccdc1964e29 100644
->> --- a/Documentation/ABI/testing/ima_policy
->> +++ b/Documentation/ABI/testing/ima_policy
->> @@ -48,6 +48,9 @@ Description:
->>   			template:= name of a defined IMA template type
->>   			(eg, ima-ng). Only valid when action is "measure".
->>   			pcr:= decimal value
->> +			critical_kernel_data_sources:= list of kernel
->> +			components (eg, selinux|apparmor|dm-crypt) that
->> +			contain data critical to the security of the kernel.
-> 
-> This original policy definition, for the most part, is in Backusâ€“Naur
-> format.   The keyring names is an exception, because it is not limited
-> to pre-defined kernel objects.  The critical data hook is measuring
-> things in kernel memory.  As new calls to measure critical data are
-> added, new identifiers would be added here.
-> 
-> For example, if SELinux is the first example of measuring critical
-> data, then the SELinux critical data patch would include
-> "critical_data:= [selinux]".  Each subsequent critical data being
-> measured would extend this list.  At the same time, the list of known
-> "critical data" defined in patch 6/6 would be updated.
-> 
-> Normally a new feature and the first usage of that feature are included
-> in the same patch set.  Separating them like this makes it difficult to
-> write, review and upstream.
-> 
-> Mimi
-> 
-I agree. But the unique issue we are facing here is there are two
-"first users" of this new "base series".
+>> Seriously, this is "ask LSM to apply special policy to file"; let's
+>> _not_ mess with flags, etc. for that; give it decent bandwidth
+>> and since it's completely opaque for the rest of the kernel,
+>> just a pass a string to be parsed by LSM as it sees fit.
 
-One, SeLinux work (driven by Lakshmi); and two, device-mapper/dm-crypt 
-work (driven by me).
+Well, I don't know why you're so angry against LSM, but as noticed by
+Matthew, the main focus of this patch series is not about LSM (no hook,
+no security/* code, only file permission and mount option checks,
+nothing fancy). Moreover, the syscall you're proposing doesn't make
+sense, but I guess it's yet another sarcastic reply. Please, cool down.
+We asked for constructive comments and already followed your previous
+requests (even if we didn't get answers for some questions), but
+seriously, this one is nonsense.
 
-Both of them need to be reviewed by different maintainers, may go 
-through several iterations before getting accepted.
+> 
+> Hang on, it does have some things which aren't BD^W^WLSM.  It lets
+> the interpreter honour the mount -o noexec option.  I presume it's
+> not easily defeated by
+> 	cat /home/salaun/bin/bad.pl | perl -
+> 
 
-Thatâ€™s why we wanted to keep this "base series" independent of the 
-"first users"; and called the "base series" as a dependency in the 
-dm-crypt[1] / SeLinux[2] series.
-
-We would appreciate your guidance on how we can better author these
-three series - 1.this base series 2. dm-crypt series and 3. SeLinux
-series.
-
-[1]dm-crypt Series: https://patchwork.kernel.org/patch/11743715/
-[2]SeLinux Series: https://patchwork.kernel.org/patch/11762287/
+Funny. I know there is a lot of text and links but please read the
+commit messages before further comments.
