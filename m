@@ -2,79 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 500E22667AA
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 19:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D2E266729
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 19:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbgIKRq1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Sep 2020 13:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725824AbgIKMQk (ORCPT
+        id S1726349AbgIKRik (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Sep 2020 13:38:40 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:41546 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726360AbgIKRic (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Sep 2020 08:16:40 -0400
-Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [IPv6:2001:1600:3:17::190f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A22C061757
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 05:16:39 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Bnvqv0ZqWzlhfqK;
-        Fri, 11 Sep 2020 14:16:27 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Bnvqq5mSFzlh8T4;
-        Fri, 11 Sep 2020 14:16:23 +0200 (CEST)
-Subject: Re: [RFC PATCH v9 0/3] Add introspect_access(2) (was O_MAYEXEC)
-To:     Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-References: <20200910164612.114215-1-mic@digikod.net>
- <20200910170424.GU6583@casper.infradead.org>
- <f6e2358c-8e5e-e688-3e66-2cdd943e360e@digikod.net>
- <a48145770780d36e90f28f1526805a7292eb74f6.camel@linux.ibm.com>
- <880bb4ee-89a2-b9b0-747b-0f779ceda995@digikod.net>
- <20200910184033.GX6583@casper.infradead.org>
- <20200910200010.GF1236603@ZenIV.linux.org.uk>
- <20200910200543.GY6583@casper.infradead.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <3dd9b2b3-6304-03df-bfba-13864169453e@digikod.net>
-Date:   Fri, 11 Sep 2020 14:16:23 +0200
-User-Agent: 
+        Fri, 11 Sep 2020 13:38:32 -0400
+Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D2ECC20D4DAB;
+        Fri, 11 Sep 2020 10:38:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D2ECC20D4DAB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1599845911;
+        bh=ToCW8sjoCQG57z0ML1xQpe4B6MTvl/nMxQSKeRgbf68=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=qHC0tsWAXIQgNPeFgerE6o77naJdkZW7gYDTFSIG+WakHTScTnuv5PEBYj4dgUFJ7
+         l1PuCuNjD8PXh+1m3iFvLwiL6yjb+PDQ0o2nDHAU0a7wUzh9jpYgA4VJZJGBpN3sih
+         Ndn6kLYwMdpMAu38Fh/gG4YnpsU5zof7drq1Oqho=
+Subject: Re: [PATCH v3 5/6] IMA: add hook to measure critical data from kernel
+ components
+To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20200828015704.6629-1-tusharsu@linux.microsoft.com>
+ <20200828015704.6629-6-tusharsu@linux.microsoft.com>
+ <6c80bdad49c72fa58b5a9fb7ce2d20c8cabe1324.camel@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <01f5ea67-447e-c1c2-9c47-49fd3f6c16ec@linux.microsoft.com>
+Date:   Fri, 11 Sep 2020 10:38:30 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200910200543.GY6583@casper.infradead.org>
-Content-Type: text/plain; charset=iso-8859-15
+In-Reply-To: <6c80bdad49c72fa58b5a9fb7ce2d20c8cabe1324.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
@@ -83,40 +51,51 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 10/09/2020 22:05, Matthew Wilcox wrote:
-> On Thu, Sep 10, 2020 at 09:00:10PM +0100, Al Viro wrote:
->> On Thu, Sep 10, 2020 at 07:40:33PM +0100, Matthew Wilcox wrote:
->>> On Thu, Sep 10, 2020 at 08:38:21PM +0200, Mickaël Salaün wrote:
->>>> There is also the use case of noexec mounts and file permissions. From
->>>> user space point of view, it doesn't matter which kernel component is in
->>>> charge of defining the policy. The syscall should then not be tied with
->>>> a verification/integrity/signature/appraisal vocabulary, but simply an
->>>> access control one.
->>>
->>> permission()?
->>
->> int lsm(int fd, const char *how, char *error, int size);
->>
->> Seriously, this is "ask LSM to apply special policy to file"; let's
->> _not_ mess with flags, etc. for that; give it decent bandwidth
->> and since it's completely opaque for the rest of the kernel,
->> just a pass a string to be parsed by LSM as it sees fit.
 
-Well, I don't know why you're so angry against LSM, but as noticed by
-Matthew, the main focus of this patch series is not about LSM (no hook,
-no security/* code, only file permission and mount option checks,
-nothing fancy). Moreover, the syscall you're proposing doesn't make
-sense, but I guess it's yet another sarcastic reply. Please, cool down.
-We asked for constructive comments and already followed your previous
-requests (even if we didn't get answers for some questions), but
-seriously, this one is nonsense.
-
+On 2020-08-31 11:23 a.m., Mimi Zohar wrote:
+>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+>> index 52cbbc1f7ea2..a889bf40cb7e 100644
+>> --- a/security/integrity/ima/ima_main.c
+>> +++ b/security/integrity/ima/ima_main.c
+>> @@ -869,6 +869,30 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+>>   	fdput(f);
+>>   }
+>>   
+>> +/**
+>> + * ima_measure_critical_data - measure critical data
+>> + * @event_name: name for the given data
+>> + * @event_data_source: name of the event data source
+>> + * @buf: pointer to buffer containing data to measure
+>> + * @buf_len: length of buffer(in bytes)
+>> + * @measure_buf_hash: if set to true - will measure hash of the buf,
+>> + *                    instead of buf
+>> + *
+>> + * Buffers can only be measured, not appraised.
+>> + */
+>> +int ima_measure_critical_data(const char *event_name,
+>> +			      const char *event_data_source,
+>> +			      const void *buf, int buf_len,
+>> +			      bool measure_buf_hash)
+>> +{
+>> +	if (!event_name || !event_data_source || !buf || !buf_len)
+>> +		return -EINVAL;
+>> +
+>> +	return process_buffer_measurement(NULL, buf, buf_len, event_name,
+>> +					  CRITICAL_DATA, 0, event_data_source,
+>> +					  measure_buf_hash);
 > 
-> Hang on, it does have some things which aren't BD^W^WLSM.  It lets
-> the interpreter honour the mount -o noexec option.  I presume it's
-> not easily defeated by
-> 	cat /home/salaun/bin/bad.pl | perl -
+> This is exactly what I'm concerned about.  Failure to measure data may
+> be audited, but should never fail.
 > 
+> Mimi
+> 
+As I responded in patch 2, I can ignore the result of 
+process_buffer_measurement() in ima_measure_critical_data(), and make
+ima_measure_critical_data() return type as "void".
 
-Funny. I know there is a lot of text and links but please read the
-commit messages before further comments.
+But thatâ€™s the only place where the results of p_b_m() are being used.
+So I might as well just revert the return type of p_b_m() to the
+original "void".
+
+>> +}
+> 
