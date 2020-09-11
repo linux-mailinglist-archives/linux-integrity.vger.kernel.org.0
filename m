@@ -2,199 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 535D9266239
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 17:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADD0266411
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 18:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726074AbgIKPfG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Sep 2020 11:35:06 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38632 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726536AbgIKPeu (ORCPT
+        id S1726517AbgIKQai (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Sep 2020 12:30:38 -0400
+Received: from mxout04.lancloud.ru ([89.108.124.63]:48782 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725941AbgIKPTe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Sep 2020 11:34:50 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08BEAsde079402;
-        Fri, 11 Sep 2020 10:21:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=4jdpabALJcRG0Ff54RGULkHc+H8aLYR/WaE/focejS8=;
- b=T6krThn3DJ2NcA05aGPAy5TS3GbYDbLlVV9Q6G+YBwzDNr0H5uoRMZtuWYRf+hpmCZHZ
- EWfK3eBwMF3Qc8Os9XQo5cOuPPZ3w3Eu2yzNbDKEUfBJxCetBmwCmBrCE8WNG9qqoPa8
- iE3yMCMa7Alket0YEwB+6YnIKscSqNNkx5h1Zg/w+5gjelRknLv4ce0TLG5JAzMMl+mi
- BmJ+0aLDGaKiSr+/A0OFOIRJxSlqOe+/ST4+qFWEhsLazSk+nCfNSzoI/ojzQRAjxLFG
- +WTVqERAYMnxl3+Eu1f3f7cOrZkqN0Rj2TOrPfuNIWizvGSehH2z/RaFFO0uv3Pd459b 2w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33gaerh2qr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Sep 2020 10:21:29 -0400
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08BEDuYl092454;
-        Fri, 11 Sep 2020 10:21:28 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33gaerh2pr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Sep 2020 10:21:28 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08BEGrBR003842;
-        Fri, 11 Sep 2020 14:21:26 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 33c2a8faqy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Sep 2020 14:21:26 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08BELNS025559396
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Sep 2020 14:21:23 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CCEB4C059;
-        Fri, 11 Sep 2020 14:21:23 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 99F404C050;
-        Fri, 11 Sep 2020 14:21:22 +0000 (GMT)
-Received: from sig-9-65-251-51.ibm.com (unknown [9.65.251.51])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Sep 2020 14:21:22 +0000 (GMT)
-Message-ID: <7bc45e11c9af3fe65a08a379d7690866264a13e5.camel@linux.ibm.com>
-Subject: Re: Potential IMA Signing Bug
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Alexander Gaidis <alexander_gaidis@brown.edu>,
-        linux-integrity@vger.kernel.org, dmitry.kasatkin@gmail.com
-Date:   Fri, 11 Sep 2020 10:21:21 -0400
-In-Reply-To: <322722b2-4253-3069-4cbc-c15e5924f5fc@brown.edu>
-References: <322722b2-4253-3069-4cbc-c15e5924f5fc@brown.edu>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-11_05:2020-09-10,2020-09-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- adultscore=0 impostorscore=0 bulkscore=0 clxscore=1011 suspectscore=3
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009110114
+        Fri, 11 Sep 2020 11:19:34 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 27D1B20A0DEC
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [RFC PATCH v9 0/3] Add introspect_access(2) (was O_MAYEXEC)
+To:     Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+CC:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        <linux-kernel@vger.kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        <kernel-hardening@lists.openwall.com>, <linux-api@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <20200910164612.114215-1-mic@digikod.net>
+ <20200910170424.GU6583@casper.infradead.org>
+ <f6e2358c-8e5e-e688-3e66-2cdd943e360e@digikod.net>
+ <a48145770780d36e90f28f1526805a7292eb74f6.camel@linux.ibm.com>
+ <880bb4ee-89a2-b9b0-747b-0f779ceda995@digikod.net>
+ <20200910184033.GX6583@casper.infradead.org>
+ <20200910200010.GF1236603@ZenIV.linux.org.uk>
+ <20200910200543.GY6583@casper.infradead.org>
+From:   Igor Zhbanov <i.zhbanov@omprussia.ru>
+Message-ID: <c77abad8-55a6-d66a-8d4d-dfc598fe5251@omprussia.ru>
+Date:   Fri, 11 Sep 2020 17:15:10 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
+MIME-Version: 1.0
+In-Reply-To: <20200910200543.GY6583@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: ru-RU
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [89.179.245.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To LFEX15.lancloud.ru
+ (fd00:f066::45)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-09-09 at 13:13 -0600, Alexander Gaidis wrote:
-> I am wondering if the following behavior is a bug.
+On 10.09.2020 23:05, Matthew Wilcox wrote:
+> On Thu, Sep 10, 2020 at 09:00:10PM +0100, Al Viro wrote:
+>> On Thu, Sep 10, 2020 at 07:40:33PM +0100, Matthew Wilcox wrote:
+>>> On Thu, Sep 10, 2020 at 08:38:21PM +0200, Mickaël Salaün wrote:
+>>>> There is also the use case of noexec mounts and file permissions. From
+>>>> user space point of view, it doesn't matter which kernel component is in
+>>>> charge of defining the policy. The syscall should then not be tied with
+>>>> a verification/integrity/signature/appraisal vocabulary, but simply an
+>>>> access control one.
+>>>
+>>> permission()?
+>>
+>> int lsm(int fd, const char *how, char *error, int size);
+>>
+>> Seriously, this is "ask LSM to apply special policy to file"; let's
+>> _not_ mess with flags, etc. for that; give it decent bandwidth
+>> and since it's completely opaque for the rest of the kernel,
+>> just a pass a string to be parsed by LSM as it sees fit.
 > 
-> My system is Debian Buster with Linux kernel v5.7.13 running on x86_64
-> Intel hardware. My kernel's configuration file has the following
-> relevant security options (+ their dependencies) turned on:
-> 
-> ```
-> CONFIG_INTEGRITY=y
-> CONFIG_INTEGRITY_SIGNATURE=y
-> CONFIG_INTEGRITY_ASYMMETRIC_KEYS=y
-> CONFIG_INTEGRITY_AUDIT=y
-> CONFIG_IMA=y
-> CONFIG_IMA_MEASURE_PCR_IDX=10
-> CONFIG_IMA_LSM_RULES=y
-> CONFIG_IMA_NG_TEMPLATE=y
-> CONFIG_IMA_DEFAULT_TEMPLATE="ima-ng"
-> CONFIG_IMA_DEFAULT_HASH_SHA256=y
-> CONFIG_IMA_DEFAULT_HASH="sha256"
-> CONFIG_IMA_WRITE_POLICY=y
-> CONFIG_IMA_READ_POLICY=y
-> CONFIG_IMA_APPRAISE=y
-> CONFIG_IMA_APPRAISE_BOOTPARAM=y
-> CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS=y
-> # CONFIG_INTEGRITY_TRUSTED_KEYRING is not set
-> # CONFIG_INTEGRITY_PLATFORM_KEYRING is not set
-> CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS=y
-> CONFIG_EVM=y
-> CONFIG_EVM_ATTR_FSUUID=y
-> ```
-> 
-> and I updated GRUB to include `ima_appraise=fix` to the boot parameters.
-> The policy I load looks like the following:
-> 
-> ```
-> measure fowner=1000
-> appraise fowner=1000 appraise_type=imasig
-> ```
-> 
-> To sign IMA hashes I load an x509 certificate onto root's `_ima` keyring
-> via the following procedure (assume I have the file x509_ima.genkey as
-> in the `evmctl` manpage):
-> 
-> ```
-> root@deb:~# openssl req -new -nodes -utf8 -sha1 -days 36500 -batch \
-> >    	        -x509 -config x509_ima.genkey \
-> >	        -outform DER -out x509_ima.der -keyout privkey_ima.pem
-> Generating a RSA private key
-> ......+++++
-> ....+++++
-> writing new private key to 'privkey_ima.pem'
-> -----
-> root@deb:~# ima_id=`keyctl newring _ima @u`
-> root@deb:~# cat x509_ima.der | keyctl padd asymmetric 'ima_cert' $ima_id
-> 282969187
-> root@deb:~# keyctl show
-> Session Keyring
->  727602364 --alswrv      0     0  keyring: _ses
->   17430979 --alswrv      0 65534   \_ keyring: _uid.0
->  822262864 --alswrv      0     0       \_ keyring: _ima
->  282969187 --als--v      0     0           \_ asymmetric: ima_cert
-> ```
-> 
-> I have a simple executable, `hello`, that prints a simple "Hello world!"
-> message. Using the matching private key of the x509 certificate above
-> and `evmctl` I can hash and sign the executable:
-> 
-> ```
-> user@deb:~$ sudo evmctl -v ima_sign --key /root/privkey_ima.pem hello
-> hash: 4409ab55775b430524cf9c9bbe798a8213de740e
-> evm/ima signature: 136 bytes
-> 03020277de1ee90080696c392a74513afcff14208fe5c3a56b466a360becf7ca5aa11a502fd249fc7fa04d7631d9cd10602ba460c0133773ce3c33562e5e0d9770b3c0714f7b19bba4e4de0b88b12d512b7fa99732118de59a3fc098e1655d531a60a3c6052c434959ab739d740a5125f435bf0550eb57c9d09195816c6749a0ab6390196893ef9164
-> user@deb:~$ getfattr -m . -d hello
-> # file: hello
-> security.ima=0sAwICd94e6QCAaWw5KnRROvz/FCCP5cOla0ZqNgvs98paoRpQL9JJ/H+gTXYx2c0QYCukYMATN3POPDNWLl4Nl3CzwHFPexm7pOTeC4ixLVErf6mXMhGN5Zo/wJjhZV1TGmCjxgUsQ0lZq3OddApRJfQ1vwVQ61fJ0JGVgWxnSaCrY5AZaJPvkWQ=
-> ```
-> 
-> After rebooting the machine in appraisal mode and loading the keys and
-> policy I am unable to run the file as a user:
-> 
-> ```
-> user@deb:~$ ./hello
-> -bash: ./hello: Permission denied
-> user@deb:~$ sudo dmesg | tail
-> ...
-> [   78.593140] integrity: no _ima keyring: -126
-> [   78.593343] audit: type=1800 audit(1599673725.324:11): pid=582
-> uid=1000 auid=1000 ses=1 subj==unconfined op=appraise_data
-> cause=invalid-signature comm="bash" name="/home/user/hello" dev="sda1"
-> ino=796088 res=0
-> ```
-> 
-> However, after running the file as root and switching back to my user
-> profile I am able to run the file just fine due to the caching of the
-> integrity status of the file.
+> Hang on, it does have some things which aren't BD^W^WLSM.  It lets
+> the interpreter honour the mount -o noexec option.  I presume it's
+> not easily defeated by
+> 	cat /home/salaun/bin/bad.pl | perl -
 
-For some reason as a user you can't access the _ima keyring -
-"integrity: no _ima keyring: -126".   Please create an additional
-signed file and try accessing that one as user, after accessing the
-original signed one succeeds.
+Hi!
 
-> 
-> It seems to me that if a user doesn't have access to the key that signs
-> a file, they should not be able to access the file. Is this a correct
-> assessment of IMA's behavior? If this is a deliberate design choice, can
-> you please explain why?
+It could be bypassed this way. There are several ways of executing some
+script:
 
-A signed file is a signed file.   Who signed it shouldn't make a
-difference.   The public key needs to be on the appropriate keyring and
-accessible by the kernel.
+1) /unsigned.sh (Already handled by IMA)
+2) bash /unsigned.sh (Not handled. Works even with "-o noexec" mount)
+3) bash < /unsigned.sh (Not handled. Works even with "-o noexec" mount)
+4) cat /unsigned.sh | bash (Not handled. Works even with "-o noexec" mount)
 
-Have you tried automatically loading the public key(s) via dracut or
-systemd on boot?  Does that make a difference?
+AFAIK, the proposed syscall solves #2 and may be #3. As for #4 in security
+critical environments there should be system-wide options to disable
+interpreting scripts from the standard input. I suppose, executing commands
+from the stdin is a rare case, and could be avoided entirely in security
+critical environments. And yes, some help from the interpreters is needed
+for that.
 
-thanks,
+As for the usage of the system call, I have a proposal to extend its usage
+to validate systemd unit files. Because a unit file could specify what UID
+to use for a service, also it contains ExecStartPre which is actually a script
+and is running as root (for the system session services).
 
-Mimi
-
+For the syscall name it could be:
+- trusted_file()
+- trusted_file_content()
+- valid_file()
+- file_integrity()
+because what we are checking here is the file content integrity (IMA) and
+may be file permissions/attrs integrity (EVM).
