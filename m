@@ -2,136 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADD0266411
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 18:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C8B266391
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 18:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726517AbgIKQai (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Sep 2020 12:30:38 -0400
-Received: from mxout04.lancloud.ru ([89.108.124.63]:48782 "EHLO
-        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgIKPTe (ORCPT
+        id S1726265AbgIKQUZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Sep 2020 12:20:25 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:58712 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726547AbgIKQTI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Sep 2020 11:19:34 -0400
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 27D1B20A0DEC
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [RFC PATCH v9 0/3] Add introspect_access(2) (was O_MAYEXEC)
-To:     Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-CC:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        <linux-kernel@vger.kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        <kernel-hardening@lists.openwall.com>, <linux-api@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <20200910164612.114215-1-mic@digikod.net>
- <20200910170424.GU6583@casper.infradead.org>
- <f6e2358c-8e5e-e688-3e66-2cdd943e360e@digikod.net>
- <a48145770780d36e90f28f1526805a7292eb74f6.camel@linux.ibm.com>
- <880bb4ee-89a2-b9b0-747b-0f779ceda995@digikod.net>
- <20200910184033.GX6583@casper.infradead.org>
- <20200910200010.GF1236603@ZenIV.linux.org.uk>
- <20200910200543.GY6583@casper.infradead.org>
-From:   Igor Zhbanov <i.zhbanov@omprussia.ru>
-Message-ID: <c77abad8-55a6-d66a-8d4d-dfc598fe5251@omprussia.ru>
-Date:   Fri, 11 Sep 2020 17:15:10 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        Fri, 11 Sep 2020 12:19:08 -0400
+Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id BADE820716FA;
+        Fri, 11 Sep 2020 09:19:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BADE820716FA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1599841143;
+        bh=IGrl9wd59ouiSwrHZJue38Gb4uezQLGVnD6HcWU/o80=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=FsBXu82EbG6MT9yrcRvWBKCe/fCu0gn4AeEUk/dfZHITC7I1H5MCCf54UkUgHic+Q
+         Q6RJ62GCP+uXr5rTl3rBDSNCjuooLp9aVofY2HZwXFj/+dwATBdWZ4oRCjIs0kWFaH
+         hJ/BhkB7cn3gds8zgReSqdEySHPgV159fhuezYAs=
+Subject: Re: [PATCH v3 1/6] IMA: generalize keyring specific measurement
+ constructs
+To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20200828015704.6629-1-tusharsu@linux.microsoft.com>
+ <20200828015704.6629-2-tusharsu@linux.microsoft.com>
+ <4802c73c2ed22c64ea4f315d3115ead919c3205e.camel@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <1a456a10-bb49-206b-9fb9-cc996eea6e29@linux.microsoft.com>
+Date:   Fri, 11 Sep 2020 09:19:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200910200543.GY6583@casper.infradead.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: ru-RU
+In-Reply-To: <4802c73c2ed22c64ea4f315d3115ead919c3205e.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [89.179.245.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To LFEX15.lancloud.ru
- (fd00:f066::45)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 10.09.2020 23:05, Matthew Wilcox wrote:
-> On Thu, Sep 10, 2020 at 09:00:10PM +0100, Al Viro wrote:
->> On Thu, Sep 10, 2020 at 07:40:33PM +0100, Matthew Wilcox wrote:
->>> On Thu, Sep 10, 2020 at 08:38:21PM +0200, Mickaël Salaün wrote:
->>>> There is also the use case of noexec mounts and file permissions. From
->>>> user space point of view, it doesn't matter which kernel component is in
->>>> charge of defining the policy. The syscall should then not be tied with
->>>> a verification/integrity/signature/appraisal vocabulary, but simply an
->>>> access control one.
->>>
->>> permission()?
+
+
+On 2020-08-31 4:55 a.m., Mimi Zohar wrote:
+> On Thu, 2020-08-27 at 18:56 -0700, Tushar Sugandhi wrote:
+>> IMA functions such as ima_match_keyring(), process_buffer_measurement(),
+>> ima_match_policy() etc. handle data specific to keyrings. Currently,
+>> these constructs are not generic to handle any func specific data.
+>> This makes it harder to extend without code duplication.
 >>
->> int lsm(int fd, const char *how, char *error, int size);
->>
->> Seriously, this is "ask LSM to apply special policy to file"; let's
->> _not_ mess with flags, etc. for that; give it decent bandwidth
->> and since it's completely opaque for the rest of the kernel,
->> just a pass a string to be parsed by LSM as it sees fit.
+>> Refactor the keyring specific measurement constructs to be generic and
+>> reusable in other measurement scenarios.
 > 
-> Hang on, it does have some things which aren't BD^W^WLSM.  It lets
-> the interpreter honour the mount -o noexec option.  I presume it's
-> not easily defeated by
-> 	cat /home/salaun/bin/bad.pl | perl -
+> Mostly this patch changes the variable name from keyring to func_data,
+> which is good.  Other changes should be minimized.
+> 
+The only other change in this patch is introduction of
+bool allow_empty_opt_list, which is needed as per my comment below.
 
-Hi!
+Maybe I can move "allow_empty_opt_list" to a new patch after this one in
+this series.
 
-It could be bypassed this way. There are several ways of executing some
-script:
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> ---
+> 
+> <snip>
+> 
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index fe1df373c113..8866e84d0062 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -451,15 +451,21 @@ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
+>>   }
+>>   
+>>   /**
+>> - * ima_match_keyring - determine whether the keyring matches the measure rule
+>> - * @rule: a pointer to a rule
+>> - * @keyring: name of the keyring to match against the measure rule
+>> + * ima_match_rule_data - determine whether the given func_data matches
+>> + *			 the measure rule data
+>> + * @rule: IMA policy rule
+>> + * @opt_list: rule data to match func_data against
+>> + * @func_data: data to match against the measure rule data
+>> + * @allow_empty_opt_list: If true matches all func_data
+>>    * @cred: a pointer to a credentials structure for user validation
+>>    *
+>> - * Returns true if keyring matches one in the rule, false otherwise.
+>> + * Returns true if func_data matches one in the rule, false otherwise.
+>>    */
+>> -static bool ima_match_keyring(struct ima_rule_entry *rule,
+>> -			      const char *keyring, const struct cred *cred)
+>> +static bool ima_match_rule_data(struct ima_rule_entry *rule,
+>> +				const struct ima_rule_opt_list *opt_list,
+> 
+> Ok
+> 
+>> +				const char *func_data,
+>> +				bool allow_empty_opt_list,
+> 
+> As the policy is loaded, shouldn't the rules should be checked, not
+> here on usage?
+> 
+> Mimi
 
-1) /unsigned.sh (Already handled by IMA)
-2) bash /unsigned.sh (Not handled. Works even with "-o noexec" mount)
-3) bash < /unsigned.sh (Not handled. Works even with "-o noexec" mount)
-4) cat /unsigned.sh | bash (Not handled. Works even with "-o noexec" mount)
+Since "keyrings=" is optional, I cannot check the rule at load time for
+keyrings. func=KEY_CHECK may or may not have "keyrings=", and both are
+valid scenarios.
 
-AFAIK, the proposed syscall solves #2 and may be #3. As for #4 in security
-critical environments there should be system-wide options to disable
-interpreting scripts from the standard input. I suppose, executing commands
-from the stdin is a rare case, and could be avoided entirely in security
-critical environments. And yes, some help from the interpreters is needed
-for that.
+However "critical_kernel_data_sources=" is mandatory for 
+func=CRITICAL_DATA.
 
-As for the usage of the system call, I have a proposal to extend its usage
-to validate systemd unit files. Because a unit file could specify what UID
-to use for a service, also it contains ExecStartPre which is actually a script
-and is running as root (for the system session services).
+So I am already making that check at policy load time.
 
-For the syscall name it could be:
-- trusted_file()
-- trusted_file_content()
-- valid_file()
-- file_integrity()
-because what we are checking here is the file content integrity (IMA) and
-may be file permissions/attrs integrity (EVM).
+See patch 5/6 – function ima_match_rules(), where I check for
+IMA_DATA_SOURCES.
+
++       case CRITICAL_DATA:
+<snip>
++               if (!(entry->flags & IMA_DATA_SOURCES) ||
+<snip>
++                       return false;
++
+
+Since ima_match_rule_data (this function) handles both func=KEY_CHECK 
+and func=CRITICAL_DATA, we have to use the bool "allow_empty_opt_list"
+to differentiate between the two scenarios – whether the rule is
+optional or not for a given func.
+
+> 
+>> +				const struct cred *cred)
+>>   {
+>>   	bool matched = false;
+>>   	size_t i;
+>>
