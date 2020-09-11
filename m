@@ -2,106 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3908266803
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 20:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BD82668EA
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Sep 2020 21:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725811AbgIKSDX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Sep 2020 14:03:23 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:59878 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725794AbgIKSDV (ORCPT
+        id S1725793AbgIKTfX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Sep 2020 15:35:23 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36974 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725776AbgIKTfV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Sep 2020 14:03:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599847400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JWNZsM3ndiksz8eE9cLfUOCXmFnQ9mjaV8k7pJEZFmk=;
-        b=MZ1wNXz+EQ8jEzIOsF7fa3XO1pt9C3PcxnJNbcfa5og7xg18hmoFiHecdJzkC3vC10aA0O
-        3jXqiV2/Iz5/Kj9wENhvrn8NdQYU7suv67slea5yRhYW4ioxUJlgzOxuWQzfZNGrQVVeb2
-        kvc/8RHVoxFzTBjKgxaibR59s3VOy/8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-437-o0Ob1UDVOWymE7g_A2uC-Q-1; Fri, 11 Sep 2020 14:03:15 -0400
-X-MC-Unique: o0Ob1UDVOWymE7g_A2uC-Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F159710082EA;
-        Fri, 11 Sep 2020 18:03:13 +0000 (UTC)
-Received: from localhost (ovpn-116-54.gru2.redhat.com [10.97.116.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 57DFE27BD8;
-        Fri, 11 Sep 2020 18:03:13 +0000 (UTC)
-Date:   Fri, 11 Sep 2020 15:03:11 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] ima: limit secure boot feedback scope for appraise
-Message-ID: <20200911180311.GI3635@heredoc.io>
-References: <20200904194100.761848-4-bmeneg@redhat.com>
- <20200905012020.7024-1-bmeneg@redhat.com>
- <d5cc5da578dfcf00adb3c344316677ff1099b591.camel@linux.ibm.com>
+        Fri, 11 Sep 2020 15:35:21 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08BJWtXN084347
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 15:35:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=LzFhy3UkrEinZfXJyG1UQGmxA+06c2McsDi27SPlgK8=;
+ b=G8/UjsOVJ/sHZW1UqkX/qr/IOe+vyKQC3IgnObMb4ln2hSlOxEZoxlRe+4vaIkpLmo6f
+ t0lv2xxrehWKj5K/5XVq3/rBAeqG6sDwCqSdDr7n/urIGrVGBBi0sre6jU0EsVhCVPXH
+ frUwb04XxwK2Uh2H+r1pEDGf0HeR/9xgxE4WSJam1ZurnAQgBbjFGleqo/sDX2uToQid
+ EQkE3Y6CD9a9SzIDs2qRi/evT0EJHpCLV5tLfDc8LLWgVHN9M31IK8daS+ip8vopipwa
+ 5Xb0qIOurq0z38nYUHIh6LV0k9gBYUg8SLyROzrTPq5hZ1kJEyHkm8IfSvY5QYXOTOHX PA== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33gerjh4p8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 15:35:20 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08BJWVpn006177
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 19:35:19 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma02dal.us.ibm.com with ESMTP id 33c2aa6n42-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 19:35:19 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08BJZI0448693616
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 19:35:18 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 722E0112062
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 19:35:18 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5431B112061
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 19:35:18 +0000 (GMT)
+Received: from [9.85.179.93] (unknown [9.85.179.93])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP
+        for <linux-integrity@vger.kernel.org>; Fri, 11 Sep 2020 19:35:18 +0000 (GMT)
+Subject: Re: [Bug Report] Kernel 4.14+ TPM Driver Bug for Atmel TPM Chip
+Cc:     linux-integrity@vger.kernel.org
+References: <9173F912-F682-44CC-8408-565A6C675749@rubrik.com>
+ <20200911041800.GA541925@kroah.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+Message-ID: <5518aa6e-a10f-9e07-e885-2ab43a0906e9@linux.ibm.com>
+Date:   Fri, 11 Sep 2020 15:35:17 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <d5cc5da578dfcf00adb3c344316677ff1099b591.camel@linux.ibm.com>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=bmeneg@redhat.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: redhat.com
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/GPgYEyhnw15BExa"
-Content-Disposition: inline
+In-Reply-To: <20200911041800.GA541925@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-11_10:2020-09-10,2020-09-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ adultscore=0 mlxscore=0 suspectscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=999 phishscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009110152
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---/GPgYEyhnw15BExa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 9/11/2020 12:18 AM, Greg KH wrote:
+> Thus the TPM get queried more frequently than before, which is likely the root cause of the atmel chip crash. We fix it by bumping up the TPM_TIMEOUT to 15ms.
+> 
+> 
+> Rubrik Patch
+> ```
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 72d3ce4..9b8f3f8 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -49,7 +49,15 @@ enum tpm_const {
+>   };
+> 
+>   enum tpm_timeout {
+> -       TPM_TIMEOUT = 5,        /* msecs */
+> +       TPM_TIMEOUT = 15,       /* msecs */
+>          TPM_TIMEOUT_RETRY = 100, /* msecs */
+>          TPM_TIMEOUT_RANGE_US = 300      /* usecs */
+>   };
+> ```
+> With the patch, the atmel TPM chip crash is fixed.
+> 
+> Proposal
+> We want the kernel upstream to adopt the fix or have a better fix for the atmel chip while not bring performance regression for other TPM chips. We understand thathttps://github.com/torvalds/linux/commit/9f3fc7bcddcb51234e23494531f93ab60475e1c3  <https://github.com/torvalds/linux/commit/9f3fc7bcddcb51234e23494531f93ab60475e1c3>  was intended to shorten the TPM
 
-On Fri, Sep 11, 2020 at 11:07:43AM -0400, Mimi Zohar wrote:
-> Hi Bruno,
->=20
-> On Fri, 2020-09-04 at 22:20 -0300, Bruno Meneguele wrote:
-> > Only prompt the unknown/invalid appraisal option if secureboot is enabl=
-ed and
-> > if the current appraisal state is different from the original one.
-> >=20
-> > Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
->=20
-> Thanks.  I tweaked this patch description and that of 4/4.  This patch
-> set is in next-integrity-testing.  Please take a look.
->=20
+Is this the poll time, which was reduced at one point?  If so ...
 
-Thanks Mimi! Just checked in the branch and they're fine.
-
-> thanks,
->=20
-> Mimi
->=20
-
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
-
---/GPgYEyhnw15BExa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAl9bu98ACgkQYdRkFR+R
-okNZ+ggA05kIbmMuJJUTJaMjFU2oqmvblKt66qzm+f4wiE0nW+fR+FVroJqD9aFM
-oOHmXtxd0KWygG3GA5Rt++tRXvGGtS9cebH3uHWZFNrz6X2hDqQH56XljANcvk5i
-KoHO2swjF3lebddZ0xh4Tzk0DWacfxCMPTYEcmw9KU0oePEzruuZjYXZtkYmz1RX
-lJoWket0ObT3CSoqvLvZVEUeRvcWg0bhkIoF1MXYFqNFz9sLr2qCw0n1fd9HQl8U
-cWHN+2JJ+TzBRX/03EK5gpWFOTOc/erZeUuCG8mAyNCI6y6O6cuBDsh2kXYP7O35
-VT7abvtK0sLrXlGShaLil/zs/+n6qA==
-=N47Z
------END PGP SIGNATURE-----
-
---/GPgYEyhnw15BExa--
-
+Be careful about making this a global change.  It could reduce the TPM 
+performance by 3x. We don't want to affect all TPMs to fix a bug in an 
+old TPM 1.2 chip from one vendor.
