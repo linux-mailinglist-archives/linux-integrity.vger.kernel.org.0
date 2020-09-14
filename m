@@ -2,111 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A49D62691F7
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Sep 2020 18:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA332693D9
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Sep 2020 19:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726116AbgINQpd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Sep 2020 12:45:33 -0400
-Received: from smtp-8fa8.mail.infomaniak.ch ([83.166.143.168]:60449 "EHLO
-        smtp-8fa8.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725961AbgINQoH (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Sep 2020 12:44:07 -0400
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BqscT0NnczlhdtR;
-        Mon, 14 Sep 2020 18:43:21 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4BqscQ11RWzlh8TF;
-        Mon, 14 Sep 2020 18:43:18 +0200 (CEST)
-Subject: Re: [RFC PATCH v9 0/3] Add introspect_access(2) (was O_MAYEXEC)
-Cc:     James Morris <jmorris@namei.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mimi Zohar <zohar@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-References: <20200910164612.114215-1-mic@digikod.net>
- <20200910170424.GU6583@casper.infradead.org>
- <f6e2358c-8e5e-e688-3e66-2cdd943e360e@digikod.net>
- <a48145770780d36e90f28f1526805a7292eb74f6.camel@linux.ibm.com>
- <880bb4ee-89a2-b9b0-747b-0f779ceda995@digikod.net>
- <20200910184033.GX6583@casper.infradead.org>
- <alpine.LRH.2.21.2009121019050.17638@namei.org>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-api@vger.kernel.org
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <d7126fd7-cca1-42e4-6a7b-6a3b9e77306e@digikod.net>
-Date:   Mon, 14 Sep 2020 18:43:17 +0200
-User-Agent: 
-MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.21.2009121019050.17638@namei.org>
-Content-Type: text/plain; charset=iso-8859-15
+        id S1726120AbgINRnu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 14 Sep 2020 13:43:50 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2812 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726102AbgINMGa (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 14 Sep 2020 08:06:30 -0400
+Received: from lhreml715-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 9D53517D0D1F819FF294;
+        Mon, 14 Sep 2020 13:06:08 +0100 (IST)
+Received: from fraeml708-chm.china.huawei.com (10.206.15.36) by
+ lhreml715-chm.china.huawei.com (10.201.108.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Mon, 14 Sep 2020 13:05:49 +0100
+Received: from lhreml722-chm.china.huawei.com (10.201.108.73) by
+ fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Mon, 14 Sep 2020 14:05:48 +0200
+Received: from lhreml722-chm.china.huawei.com ([10.201.108.73]) by
+ lhreml722-chm.china.huawei.com ([10.201.108.73]) with mapi id 15.01.1913.007;
+ Mon, 14 Sep 2020 13:05:48 +0100
+From:   Krzysztof Struczynski <krzysztof.struczynski@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "containers@lists.linux-foundation.org" 
+        <containers@lists.linux-foundation.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+CC:     "stefanb@linux.vnet.ibm.com" <stefanb@linux.vnet.ibm.com>,
+        "sunyuqiong1988@gmail.com" <sunyuqiong1988@gmail.com>,
+        "mkayaalp@cs.binghamton.edu" <mkayaalp@cs.binghamton.edu>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "christian@brauner.io" <christian@brauner.io>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: RE: [RFC PATCH 00/30] ima: Introduce IMA namespace
+Thread-Topic: [RFC PATCH 00/30] ima: Introduce IMA namespace
+Thread-Index: AQHWdXPBkpeRDLdh20+fyp1BiEOjYak9+wmAgASx5lCAEwwJgIASd/FA
+Date:   Mon, 14 Sep 2020 12:05:48 +0000
+Message-ID: <2a9fa5a443a84f77992959773369beb2@huawei.com>
+References: <N> <20200818152037.11869-1-krzysztof.struczynski@huawei.com>
+         <1597767571.3898.15.camel@HansenPartnership.com>
+         <401a2f36149f450291d1742aeb6c2260@huawei.com>
+ <5331e60b5a1afb55e2bc778db1b95998466b687d.camel@linux.ibm.com>
+In-Reply-To: <5331e60b5a1afb55e2bc778db1b95998466b687d.camel@linux.ibm.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.217.147]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Arnd and Michael,
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Wednesday, September 2, 2020 8:53 PM
+> > > So I think this can work in the use case where the system owner is
+> > > responsible for doing the logging and attestation and the tenants just
+> > > trust the owner without requiring an attestation.  However, in a multi-
+> > > tenant system you need a way for the attestation to be per-container
+> > > (because the combined list of who executed what would be a security
+> > > leak between tenants).  Since we can't virtualise the PCRs without
+> > > introducing a vtpm this is going to require a vtpm infrastructure like
+> > > that used for virtual machines and then we can do IMA logging per
+> > > container.
+> >
+> > I agree and wonder if we should decouple the attestation trust model,
+> > which depends on the specific use case (e.g. multi/single tenant,
+> > public/private cloud), from the IMA logic of linking the measurements to
+> > the container. Indeed, attestation from within the container might require
+> > anchoring to a vTPM/vPCR and the current measurement tagging mechanism
+> can
+> > support several ways of anchoring them to a (virtual) root of trust.
+> >
+> > > I don't think the above has to be in your first patch set, we just have
+> > > to have an idea of how it could be done to show that nothing in this
+> > > patch set precludes a follow on from doing this.
+> >
+> > Given that virtualizing trust anchors seems like a separate problem in
+> > which industry consensus is not easy to reach for all use cases, an
+> > anchoring mechanism should probably be a separate IMA feature.
+> 
+> Other trust anchors for "trusted keys" has been discussed, but I wasn't
+> aware of any discussion about other trust anchors for the IMA
+> measurement list.  The IMA measurement list is very much tied to a TPM.
+> 
 
-What do you think of "should_faccessat" or "entrusted_faccessat" for
-this new system call?
+Agreed. I wouldn't consider anything else than the TPM in the IMA
+measurement list context. The anchoring mechanism mentioned above
+pertained to the possible extensions of the TPM anchor in the
+containerized environment, like the vTPM.
 
-
-On 12/09/2020 02:28, James Morris wrote:
-> On Thu, 10 Sep 2020, Matthew Wilcox wrote:
-> 
->> On Thu, Sep 10, 2020 at 08:38:21PM +0200, Mickaël Salaün wrote:
->>> There is also the use case of noexec mounts and file permissions. From
->>> user space point of view, it doesn't matter which kernel component is in
->>> charge of defining the policy. The syscall should then not be tied with
->>> a verification/integrity/signature/appraisal vocabulary, but simply an
->>> access control one.
->>
->> permission()?
->>
-> 
-> The caller is not asking the kernel to grant permission, it's asking 
-> "SHOULD I access this file?"
-> 
-> The caller doesn't know, for example, if the script file it's about to 
-> execute has been signed, or if it's from a noexec mount. It's asking the 
-> kernel, which does know. (Note that this could also be extended to reading 
-> configuration files).
-> 
-> How about: should_faccessat ?
+> Including container measurements in the host measurement list, will
+> unnecessarily cause the host measurement list to grow.  The decision of
+> what should and shouldn't be included in the host measurement list
+> shouldn't be defined by the container.
 > 
 
-Sounds good to me.
+The container has no impact on the measurement list entries other than the
+ones related to the processes running within the container. This in turn,
+the same as for the original IMA, is defined by the (container's) policy,
+loaded on the container's creation.
+
+Best regards,
+Krzysztof
+
+> Mimi
+> 
+> 
+
