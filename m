@@ -2,69 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3872F269124
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Sep 2020 18:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49D62691F7
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Sep 2020 18:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726198AbgINQLX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Sep 2020 12:11:23 -0400
-Received: from mga12.intel.com ([192.55.52.136]:56368 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726166AbgINQKi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Sep 2020 12:10:38 -0400
-IronPort-SDR: deVWHz8DCvVjXaTg8SjliIStbEx/VYihGHeHXIS9AJ+UzQGOpgj2/EqZB3py04SdNDgNHvJ/Pr
- dC9RuddCDCsw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="138609994"
-X-IronPort-AV: E=Sophos;i="5.76,426,1592895600"; 
-   d="scan'208";a="138609994"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2020 09:10:38 -0700
-IronPort-SDR: tSFl7hCHlBiQeWsfz5lFgpf7V0tPemhN4x7dz2+dcWTcwOtHmxdFhQT4dgDGqHuEZwomiFaK1a
- GBxMKtZYGaKg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,426,1592895600"; 
-   d="scan'208";a="335328460"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 14 Sep 2020 09:10:36 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kHr3p-00GdcQ-MH; Mon, 14 Sep 2020 19:10:33 +0300
-Date:   Mon, 14 Sep 2020 19:10:33 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v1] tpm: use %*ph to print small buffer
-Message-ID: <20200914161033.GN3956970@smile.fi.intel.com>
-References: <20200730161613.41607-1-andriy.shevchenko@linux.intel.com>
- <20200818053351.GA119714@linux.intel.com>
+        id S1726116AbgINQpd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 14 Sep 2020 12:45:33 -0400
+Received: from smtp-8fa8.mail.infomaniak.ch ([83.166.143.168]:60449 "EHLO
+        smtp-8fa8.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725961AbgINQoH (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 14 Sep 2020 12:44:07 -0400
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BqscT0NnczlhdtR;
+        Mon, 14 Sep 2020 18:43:21 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4BqscQ11RWzlh8TF;
+        Mon, 14 Sep 2020 18:43:18 +0200 (CEST)
+Subject: Re: [RFC PATCH v9 0/3] Add introspect_access(2) (was O_MAYEXEC)
+Cc:     James Morris <jmorris@namei.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mimi Zohar <zohar@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20200910164612.114215-1-mic@digikod.net>
+ <20200910170424.GU6583@casper.infradead.org>
+ <f6e2358c-8e5e-e688-3e66-2cdd943e360e@digikod.net>
+ <a48145770780d36e90f28f1526805a7292eb74f6.camel@linux.ibm.com>
+ <880bb4ee-89a2-b9b0-747b-0f779ceda995@digikod.net>
+ <20200910184033.GX6583@casper.infradead.org>
+ <alpine.LRH.2.21.2009121019050.17638@namei.org>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-api@vger.kernel.org
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <d7126fd7-cca1-42e4-6a7b-6a3b9e77306e@digikod.net>
+Date:   Mon, 14 Sep 2020 18:43:17 +0200
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200818053351.GA119714@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <alpine.LRH.2.21.2009121019050.17638@namei.org>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 08:33:51AM +0300, Jarkko Sakkinen wrote:
-> On Thu, Jul 30, 2020 at 07:16:13PM +0300, Andy Shevchenko wrote:
-> > Use %*ph format to print small buffer as hex string.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Arnd and Michael,
+
+What do you think of "should_faccessat" or "entrusted_faccessat" for
+this new system call?
+
+
+On 12/09/2020 02:28, James Morris wrote:
+> On Thu, 10 Sep 2020, Matthew Wilcox wrote:
 > 
-> Oh, this is handy, thanks.
+>> On Thu, Sep 10, 2020 at 08:38:21PM +0200, Mickaël Salaün wrote:
+>>> There is also the use case of noexec mounts and file permissions. From
+>>> user space point of view, it doesn't matter which kernel component is in
+>>> charge of defining the policy. The syscall should then not be tied with
+>>> a verification/integrity/signature/appraisal vocabulary, but simply an
+>>> access control one.
+>>
+>> permission()?
+>>
 > 
-> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> The caller is not asking the kernel to grant permission, it's asking 
+> "SHOULD I access this file?"
+> 
+> The caller doesn't know, for example, if the script file it's about to 
+> execute has been signed, or if it's from a noexec mount. It's asking the 
+> kernel, which does know. (Note that this could also be extended to reading 
+> configuration files).
+> 
+> How about: should_faccessat ?
+> 
 
-Thanks!
-
-Anybody to push this?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Sounds good to me.
