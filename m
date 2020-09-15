@@ -2,82 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED3826A4D2
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Sep 2020 14:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A26E26A555
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Sep 2020 14:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbgIOMPU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 15 Sep 2020 08:15:20 -0400
-Received: from mga03.intel.com ([134.134.136.65]:51087 "EHLO mga03.intel.com"
+        id S1726137AbgIOMel (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Sep 2020 08:34:41 -0400
+Received: from mga07.intel.com ([134.134.136.100]:5116 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726498AbgIOMPP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 15 Sep 2020 08:15:15 -0400
-IronPort-SDR: raW72nE/iwZg43sMciheqleYTl6OGj7OjUL2KfgWe9elBqKxRCd49A5uSJB7tH+4EdTPlI5cka
- eUiWYKnCPX5A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="159291373"
+        id S1726235AbgIOLpG (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 15 Sep 2020 07:45:06 -0400
+IronPort-SDR: I3o8WKmWj2oB7LW7um3Men8+BQkh3J9+XjpiM8sneSe77YJYXQCWrDhYMJnHsmjnxdJ/mqYe0a
+ rILBm8ZZ9Bkw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="223423963"
 X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="159291373"
+   d="scan'208";a="223423963"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 05:15:10 -0700
-IronPort-SDR: as83Ldh1nOjMKIVxg5d4Ro4g0TgWHqR6bV/HbfDifdcgoZJmtj3D0Tj1u1OkGI/Gl3yF9OeiE7
- IiDveKo80RJQ==
-X-ExtLoop1: 1
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 04:44:25 -0700
+IronPort-SDR: wGxaFMMhXE7aN+G/jV8BWpSD5EaqGZQXV79bkvIPvy2HCsvufc1TYkTTmeAwlpYL8sTH3YWaX9
+ iv+Lxw2m0QGQ==
 X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="335619231"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 15 Sep 2020 05:15:09 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kI9gx-00GpfV-T2; Tue, 15 Sep 2020 15:04:11 +0300
-Date:   Tue, 15 Sep 2020 15:04:11 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v1] tpm: use %*ph to print small buffer
-Message-ID: <20200915120411.GT3956970@smile.fi.intel.com>
-References: <20200730161613.41607-1-andriy.shevchenko@linux.intel.com>
- <20200818053351.GA119714@linux.intel.com>
- <20200914161033.GN3956970@smile.fi.intel.com>
- <20200915094332.GE3612@linux.intel.com>
+   d="scan'208";a="482740278"
+Received: from sgwillia-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.40.166])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 04:44:24 -0700
+Date:   Tue, 15 Sep 2020 14:44:21 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     nayna@linux.vnet.ibm.com, linux-integrity@vger.kernel.org
+Subject: Re: I'm getting panic()s in tpm2_bios_measurements_start()- but
+ don't know why
+Message-ID: <20200915114411.GA898845@linux.intel.com>
+References: <alpine.DEB.2.23.453.2009121522400.7398@xps-7390>
+ <20200914173548.GA8011@linux.intel.com>
+ <alpine.DEB.2.23.453.2009141042540.4716@xps-7390>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200915094332.GE3612@linux.intel.com>
+In-Reply-To: <alpine.DEB.2.23.453.2009141042540.4716@xps-7390>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 12:43:32PM +0300, Jarkko Sakkinen wrote:
-> On Mon, Sep 14, 2020 at 07:10:33PM +0300, Andy Shevchenko wrote:
-> > On Tue, Aug 18, 2020 at 08:33:51AM +0300, Jarkko Sakkinen wrote:
-> > > On Thu, Jul 30, 2020 at 07:16:13PM +0300, Andy Shevchenko wrote:
-> > > > Use %*ph format to print small buffer as hex string.
-> > > > 
-> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > 
-> > > Oh, this is handy, thanks.
-> > > 
-> > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > 
-> > Thanks!
-> > 
-> > Anybody to push this?
+On Mon, Sep 14, 2020 at 10:45:33AM -0700, Kenneth R. Crudup wrote:
 > 
-> It's in my tree git://git.infradead.org/users/jjs/linux-tpmdd.git
+> On Mon, 14 Sep 2020, Jarkko Sakkinen wrote:
 > 
-> So next I'll put it to the next PR.
+> > What about stack trace?
+> 
+> It was attached to my original E-mail. But there was nothing special about it,
+> the _start is just the standard .start call from "struct seq_operations" so
+> that's where the read ends up.
+> 
+> > Also, are you able to bisect this?
+> 
+> I'd done a checkout of the commit that introduced this routine, it appears
+> to be this way from the start.
+> 
+> 	-Kenny
+> 
+> -- 
+> Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Orange County CA
 
-Thanks!
+OK, thanks for the recap.
 
-P.S. I don't see your tree connected to Linux Next, perhaps you can ask Stephen
-to add it?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+/Jarkko
