@@ -2,139 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B4B26A413
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Sep 2020 13:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED3826A4D2
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Sep 2020 14:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726243AbgIOLYA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 15 Sep 2020 07:24:00 -0400
-Received: from mga06.intel.com ([134.134.136.31]:63536 "EHLO mga06.intel.com"
+        id S1726520AbgIOMPU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Sep 2020 08:15:20 -0400
+Received: from mga03.intel.com ([134.134.136.65]:51087 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726189AbgIOLW5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 15 Sep 2020 07:22:57 -0400
-IronPort-SDR: q2heLnW7EBDdAoYSghDKPHpd+N44HiJJ8dzdT4MiU0QEGjxwTyv0Q02SUaLAGmmmN4fauO1DlQ
- e97fhnTSpkeQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="220794378"
+        id S1726498AbgIOMPP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 15 Sep 2020 08:15:15 -0400
+IronPort-SDR: raW72nE/iwZg43sMciheqleYTl6OGj7OjUL2KfgWe9elBqKxRCd49A5uSJB7tH+4EdTPlI5cka
+ eUiWYKnCPX5A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9744"; a="159291373"
 X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="220794378"
+   d="scan'208";a="159291373"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 04:22:11 -0700
-IronPort-SDR: hPJS4EL7yWv/b9KyWBfeyDlNgLpfQnLwicVYGrXGMwJfqf1xkbNX148Hyrw/NIiotFh0dR+Fi3
- nPu3DQgbnnBw==
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 05:15:10 -0700
+IronPort-SDR: as83Ldh1nOjMKIVxg5d4Ro4g0TgWHqR6bV/HbfDifdcgoZJmtj3D0Tj1u1OkGI/Gl3yF9OeiE7
+ IiDveKo80RJQ==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,429,1592895600"; 
-   d="scan'208";a="482732138"
-Received: from aroessle-mobl.ger.corp.intel.com (HELO localhost) ([10.252.62.198])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 04:22:08 -0700
-Date:   Tue, 15 Sep 2020 14:22:06 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v4 1/1] tpm: add sysfs exports for all banks of PCR
- registers
-Message-ID: <20200915112206.GA896555@linux.intel.com>
-References: <20200817213506.4474-1-James.Bottomley@HansenPartnership.com>
- <20200817213506.4474-2-James.Bottomley@HansenPartnership.com>
- <20200914174158.GA5106@linux.intel.com>
- <1600111168.4061.15.camel@HansenPartnership.com>
+   d="scan'208";a="335619231"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 15 Sep 2020 05:15:09 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kI9gx-00GpfV-T2; Tue, 15 Sep 2020 15:04:11 +0300
+Date:   Tue, 15 Sep 2020 15:04:11 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v1] tpm: use %*ph to print small buffer
+Message-ID: <20200915120411.GT3956970@smile.fi.intel.com>
+References: <20200730161613.41607-1-andriy.shevchenko@linux.intel.com>
+ <20200818053351.GA119714@linux.intel.com>
+ <20200914161033.GN3956970@smile.fi.intel.com>
+ <20200915094332.GE3612@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1600111168.4061.15.camel@HansenPartnership.com>
+In-Reply-To: <20200915094332.GE3612@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 12:19:28PM -0700, James Bottomley wrote:
-> On Mon, 2020-09-14 at 20:41 +0300, Jarkko Sakkinen wrote:
-> > On Mon, Aug 17, 2020 at 02:35:06PM -0700, James Bottomley wrote:
-> > > Create sysfs per hash groups with 24 PCR files in them one group,
-> > > named pcr-<hash>, for each agile hash of the TPM.  The files are
-> > > plugged in to a PCR read function which is TPM version agnostic, so
-> > > this works also for TPM 1.2 but the hash is only sha1 in that case.
+On Tue, Sep 15, 2020 at 12:43:32PM +0300, Jarkko Sakkinen wrote:
+> On Mon, Sep 14, 2020 at 07:10:33PM +0300, Andy Shevchenko wrote:
+> > On Tue, Aug 18, 2020 at 08:33:51AM +0300, Jarkko Sakkinen wrote:
+> > > On Thu, Jul 30, 2020 at 07:16:13PM +0300, Andy Shevchenko wrote:
+> > > > Use %*ph format to print small buffer as hex string.
+> > > > 
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > > > 
-> > > Note: the macros used to create the hashes emit spurious checkpatch
-> > > warnings.  Do not try to "fix" them as checkpatch recommends,
-> > > otherwise
-> > > they'll break.
-> > 
-> > "PCR access is required because IMA tools should be able to run
-> > without any sort of TSS dependencies."
-> > 
-> > AFAIK, this is the only reason to merge this and it is missing from
-> > the description. Perhaps you could either include that sentence, or
-> > alternatively write something along the lines?
-> 
-> Sure, I'll add all of them: it's IMA tools, early boot and key locking
-> to PCR policy.
-
-Great!
-
-> > > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.c
-> > > om>
-> > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > > Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-> > 
-> > Please also cc this at least to Greg and Jason Gunthorpe next time.
-> 
-> OK
-> 
-> [...]
-> 
+> > > Oh, this is handy, thanks.
 > > > 
-> > enum tpm_alg_misc {
-> > 	TPM_ALG_ERROR		= 0x0000,
-> > 	TPM_ALG_KEYEDHASH	= 0x0008,
-> > 	TPM_ALG_NULL		= 0x0010,
-> > }
+> > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 > > 
-> > enum tpm_alg_hash {
-> > 	TPM_ALG_SHA1		= 0x0004,
-> > 	TPM_ALG_SHA256		= 0x000B,
-> > 	TPM_ALG_SHA384		= 0x000C,
-> > 	TPM_ALG_SHA512		= 0x000D,
-> > 	TPM_ALG_SM3_256		= 0x0012,
-> > 	TPM_ALG_HASH_MAX,
-> > };
+> > Thanks!
+> > 
+> > Anybody to push this?
 > 
-> I can separate them if you insist, but the latter construction won't
-> work.  TPM_ALG_HASH_MAX will get set to the previous value plus one.
+> It's in my tree git://git.infradead.org/users/jjs/linux-tpmdd.git
 > 
-> You can see this with the test programme:
-> 
-> ---
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <unistd.h>
-> 
-> enum tpm_alg_hash {
->         TPM_ALG_SHA1            = 0x0004,
->         TPM_ALG_SHA256          = 0x000B,
->         TPM_ALG_SHA384          = 0x000C,
->         TPM_ALG_SHA512          = 0x000D,
->         TPM_ALG_SM3_256         = 0x0012,
->         TPM_ALG_HASH_MAX,
-> };
-> 
-> int main()
-> {
-> 	printf("TPM_ALG_HASH_MAX = %d\n", TPM_ALG_HASH_MAX);
-> }
-> ---
-> 
-> Which gives
-> 
-> jejb@jarvis> ./a.out
-> TPM_ALG_HASH_MAX = 19
-> 
-> Which is clearly the wrong value (it's 0x12 + 1).
-> 
-> That being so, is there any reason to separate up the algorithms enum?
-> 
-> James
+> So next I'll put it to the next PR.
 
-No, my bad.
+Thanks!
 
-/Jarkko
+P.S. I don't see your tree connected to Linux Next, perhaps you can ask Stephen
+to add it?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
