@@ -2,94 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8378B26A889
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Sep 2020 17:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5164426B060
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Sep 2020 00:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727387AbgIOPPH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 15 Sep 2020 11:15:07 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61874 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727316AbgIOPOw (ORCPT
+        id S1728012AbgIOWIJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Sep 2020 18:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727965AbgIOUVM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 15 Sep 2020 11:14:52 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08FEAiCV052790;
-        Tue, 15 Sep 2020 10:15:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=0ZkMtvaol0O1zExLBnchm1pvMGJxGEuBOg21YBExhuw=;
- b=dD+9ZZKx97GUhIv1ofS4VUGkh7ZE2aM9CYF0T0VQ+5IEPsUzZYSf0N3eC9QOw1y/ix19
- NLKMqRrOjuyN++3jl51vkRm5vOI+NntC6IxKll0u/ADMJLhdLm44wV0Y/qJezFbYme9Q
- /ZYPfRg1Mgj6rglompcct95b4yI3Hk/EQWf7bYs5sFCY4KAz+blqoIun6FeX3l+dTeUo
- nO3sF8E/Zpz8ML+a7+yCil7af5Rdm0Zz7i2DI0/1z+N3fb7oGa6Qbui0zJAcB1lihvnX
- vrTO/YOwVRL7WVlQZb6TmOrRJaum2ELs1WxgijG/44SiPtX0ojo7oB2TTMM5OyUjzaUy Tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33jshrupad-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Sep 2020 10:15:03 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08FEB8rH055123;
-        Tue, 15 Sep 2020 10:15:03 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33jshrup8x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Sep 2020 10:15:02 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08FE8I99019472;
-        Tue, 15 Sep 2020 14:15:00 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 33gny8bp08-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Sep 2020 14:15:00 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08FEEw4022348284
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Sep 2020 14:14:58 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 145F6AE05D;
-        Tue, 15 Sep 2020 14:14:58 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3AC34AE061;
-        Tue, 15 Sep 2020 14:14:56 +0000 (GMT)
-Received: from sig-9-65-196-230.ibm.com (unknown [9.65.196.230])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Sep 2020 14:14:55 +0000 (GMT)
-Message-ID: <91de933c58124113608d88e3bb289ec476b79701.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Use kmemdup rather than kmalloc+memcpy
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Alex Dewar <alex.dewar90@gmail.com>
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 15 Sep 2020 10:14:55 -0400
-In-Reply-To: <20200909190907.164013-1-alex.dewar90@gmail.com>
-References: <20200909190907.164013-1-alex.dewar90@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-15_08:2020-09-15,2020-09-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- clxscore=1015 lowpriorityscore=0 impostorscore=0 mlxlogscore=749
- priorityscore=1501 suspectscore=3 phishscore=0 spamscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009150114
+        Tue, 15 Sep 2020 16:21:12 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15DDC06178A
+        for <linux-integrity@vger.kernel.org>; Tue, 15 Sep 2020 13:20:33 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id s65so2617101pgb.0
+        for <linux-integrity@vger.kernel.org>; Tue, 15 Sep 2020 13:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KKOXRLJhkGhiu92khwe8SCHm7fBcYmv/ys0l/XPzjKs=;
+        b=Wz+BieWsz9tBppl55cH0gZUAY+AWg0bv7saM/2nDohe3eL0PP9s7q0ZlQFWXA82A3/
+         7i0rO/EVbOXnbgU/Re1YvOR4pVy/dxFhLx50NgG323jKRkAIGglycn7vmPT59RtsbKfn
+         G8cojrdxnvoSJFIhiOxzAahRGvlqL7L3r4det3ATlvHWboIpPKriHFZPcDzMGYio/bcK
+         IYAeJeiakQUvcZnggP5T05SIEnwMvwVxkTdNyCN2Gb0Zg3YN5QflfqPsVJeqK91Ctpig
+         F4DBVPDSLClXVcinR++JFhI+TqKyJl4vh09kO+RTE/EjlPPmtLKwyOnQBzvmBLlVaH7h
+         D+6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KKOXRLJhkGhiu92khwe8SCHm7fBcYmv/ys0l/XPzjKs=;
+        b=Ejdk5UY0HVKZ4ebbBIIfNAbtbKAP3CxQCkweMHRGExQXMtS5ESGrltvDW94saLd2gc
+         +SiAwqfkwHflTLOWa3PG1NfE+EoEiN0Ny+aVMbXP5WkcVITDl7DcDsHIJb+YtJP+0GTF
+         DLIPLWb+b+dRARkNhoCcTQLduaOGzobSXlCMvWRtf20gXE+pCxY3mc2va0x57Wz3zwCI
+         d1lkbUN3gT09nnYGV6Z01KNg9mfzXEKHt1afW1e16wR5xBHzHfeTdPTd1EDsKVYTS3YV
+         IHIaoO/JZ4trqHEme6L7bW4MicnALiMzrvAw4mw+DSgjy+nNj8EqIaHu3fTeSM15iF5R
+         +wvg==
+X-Gm-Message-State: AOAM533mDimXO6lMkmTuE+VO1Pjs3NyYdx2QRLbZgzBTa0DVoLosnozf
+        XEtBKKV6Rczqz3tE5spaIlKAvGIhBr9/6CwB1k11WA==
+X-Google-Smtp-Source: ABdhPJzopiasXStsZ048nRyWlzMTOvMY5O+fmTdHlgtoYibbwZ7I2wht/t3RyRw/q/Vft3U9WgLWjsqor4gfSAj+bZs=
+X-Received: by 2002:a63:31d2:: with SMTP id x201mr16442770pgx.263.1600201232776;
+ Tue, 15 Sep 2020 13:20:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200912172643.9063-5-James.Bottomley@HansenPartnership.com>
+ <202009131413.8dt8QEc8%lkp@intel.com> <1600016571.7833.9.camel@HansenPartnership.com>
+ <20200915091140.GC3612@linux.intel.com>
+In-Reply-To: <20200915091140.GC3612@linux.intel.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 15 Sep 2020 13:20:20 -0700
+Message-ID: <CAKwvOdnDJKPJ__sVKX2HmLUWyNPo=b0ccLvyBLyWoFfC0EFkiA@mail.gmail.com>
+Subject: Re: [PATCH v11 4/5] security: keys: trusted: use ASN.1 TPM2 key
+ format for the blobs
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     kernel test robot <lkp@intel.com>, linux-integrity@vger.kernel.org,
+        kbuild-all@lists.01.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-09-09 at 20:09 +0100, Alex Dewar wrote:
-> Issue identified with Coccinelle.
-> 
-> Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
+On Tue, Sep 15, 2020 at 2:11 AM Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Sun, Sep 13, 2020 at 10:02:51AM -0700, James Bottomley wrote:
+> > On Sun, 2020-09-13 at 14:26 +0800, kernel test robot wrote:
+> > > Hi James,
+> > >
+> > > I love your patch! Yet something to improve:
+> > >
+> > > [auto build test ERROR on integrity/next-integrity]
+> > > [also build test ERROR on linus/master v5.9-rc4 next-20200911]
+> > > [cannot apply to security/next-testing dhowells-fs/fscache-next]
+> > > [If your patch is applied to the wrong git tree, kindly drop us a
+> > > note.
+> > > And when submitting patch, we suggest to use '--base' as documented
+> > > in
+> > > https://git-scm.com/docs/git-format-patch]
+> > >
+> > > url:    https://github.com/0day-ci/linux/commits/James-Bottomley/TPM-
+> > > 2-0-trusted-key-rework/20200913-013201
+> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-i
+> > > ntegrity.git next-integrity
+> > > config: arm-randconfig-r013-20200913 (attached as .config)
 
-Thank you.
+arm-randconfig ^  You'll need to download and gunzip then use the config file.
 
-Mimi
+> > > compiler: clang version 12.0.0 (https://github.com/llvm/llvm-project
+> > > 3170d54842655d6d936aae32b7d0bc92fce7f22e)
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master
+> > > /sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # install arm cross compiling tool for clang build
+> > >         # apt-get install binutils-arm-linux-gnueabi
+> > >         # save the attached .config to linux build tree
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
+> > > ARCH=arm
+> > >
+> > > If you fix the issue, kindly add following tag as appropriate
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > >
+> > > All errors (new ones prefixed by >>):
+> > >
+> > > > > security/keys/trusted-keys/trusted_tpm2.c:19:10: fatal error:
+> > > > > 'tpm2key.asn1.h' file not found
+> > >
+> > >    #include "tpm2key.asn1.h"
+> > >             ^~~~~~~~~~~~~~~~
+> > >    1 error generated.
+> >
+> > Do you have the actual build log for this?  On x86 the build process
+> > builds any precursors first, which is the tpm2key.asn1.o, which
+> > generates that header file, so we see:
+> >
+> >   ASN.1   security/keys/trusted-keys/tpm2key.asn1.[ch]
+> >   CC [M]  security/keys/trusted-keys/trusted_tpm2.o
+> >   CC [M]  security/keys/trusted-keys/tpm2-policy.o
+> >   CC [M]  security/keys/trusted-keys/tpm2key.asn1.o
+> >   LD [M]  security/keys/trusted-keys/trusted.o
+> >
+> > Is ARM doing a lazier version of that?  In which case the fix might be
+> > to move trusted_tpm2.o to after tpm2key.asn1.o in the Makefile, this
+> > line:
+> >
+> > trusted-y += trusted_tpm2.o tpm2key.asn1.o
+> >
+> > James
+>
+> You can try to reproduce the arm build with BuildRoot. That's what I
+> usually do when bumping something like this with arm.
 
+You shouldn't need buildroot for build failures (we use buildroot, for
+boot testing).
+
+For an arm build, you should be able to cross compile with:
+$ ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make CC=clang -j
+
+(You can try without CC=clang first, may not be clang specific)
+(You should install arm-linux-gnueabihf-gcc and the same for binutils.
+Some distros have separate target triples without `hf` in them; either
+should be fine for the kernel as long as your invocation of make
+matches what you have installed).
+-- 
+Thanks,
+~Nick Desaulniers
