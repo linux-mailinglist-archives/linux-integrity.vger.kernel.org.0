@@ -2,423 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FFF26C7A1
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Sep 2020 20:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8DF26CA39
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Sep 2020 21:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728124AbgIPSbT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Sep 2020 14:31:19 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37876 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728097AbgIPSaF (ORCPT
+        id S1727864AbgIPTw3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 16 Sep 2020 15:52:29 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:55536 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727745AbgIPTwU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Sep 2020 14:30:05 -0400
-Received: from localhost.localdomain (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4870820BBF7F;
-        Wed, 16 Sep 2020 08:08:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4870820BBF7F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1600268916;
-        bh=7zXFDd5e9gQDRl70elYDzZIUqUSxDlwg1R6LYZvjU+I=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=s2ZFheVG+P0uRmjNTszmwk9fbxWsYCCpDqdIGp30oHwFKYghaxExAOPCVPHp+tPSl
-         6vJViEnIrdgBcxzgdTL3n1FkpLxcsEDLRwYMF86YzQjb4Y846v0MRWwA0iA27t4T/2
-         CfADuZvI7CGd2bZouNpMCVpBurSU8DdGLI1X38nE=
-From:   madvenka@linux.microsoft.com
-To:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, oleg@redhat.com,
-        x86@kernel.org, madvenka@linux.microsoft.com
-Subject: [PATCH v2 3/4] [RFC] arm64/trampfd: Provide support for the trampoline file descriptor
-Date:   Wed, 16 Sep 2020 10:08:25 -0500
-Message-Id: <20200916150826.5990-4-madvenka@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200916150826.5990-1-madvenka@linux.microsoft.com>
-References: <210d7cd762d5307c2aa1676705b392bd445f1baa>
- <20200916150826.5990-1-madvenka@linux.microsoft.com>
+        Wed, 16 Sep 2020 15:52:20 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 400A08EE7B7;
+        Wed, 16 Sep 2020 12:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1600285936;
+        bh=CM5FFtoiUXeFDS04HDTOcYoUbEJiATN117O4vHwx2oo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LpGstKQBeDnpBUf59CwzaJlszBaCFr1PtqY/G//bx/zEUnl02pqVCM+6heHLIjvbU
+         gTcvpn+Bg9XqtKD8FFvpEXUt+j1zszj3lkFa2o3sFMFfWHGLLo6hRvNRpkk2eee1EZ
+         PSsRr3XDJuiSaGSgpflN+UVQB9EleUirRGmlmtsA=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id YvCNN2sTluOY; Wed, 16 Sep 2020 12:52:16 -0700 (PDT)
+Received: from [153.66.254.174] (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id ACA828EE792;
+        Wed, 16 Sep 2020 12:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1600285936;
+        bh=CM5FFtoiUXeFDS04HDTOcYoUbEJiATN117O4vHwx2oo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LpGstKQBeDnpBUf59CwzaJlszBaCFr1PtqY/G//bx/zEUnl02pqVCM+6heHLIjvbU
+         gTcvpn+Bg9XqtKD8FFvpEXUt+j1zszj3lkFa2o3sFMFfWHGLLo6hRvNRpkk2eee1EZ
+         PSsRr3XDJuiSaGSgpflN+UVQB9EleUirRGmlmtsA=
+Message-ID: <1600285934.7475.19.camel@HansenPartnership.com>
+Subject: Re: [PATCH v11 3/5] security: keys: trusted: fix TPM2 authorizations
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
+Date:   Wed, 16 Sep 2020 12:52:14 -0700
+In-Reply-To: <20200915090950.GB3612@linux.intel.com>
+References: <20200912172643.9063-1-James.Bottomley@HansenPartnership.com>
+         <20200912172643.9063-4-James.Bottomley@HansenPartnership.com>
+         <20200915090950.GB3612@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-integrity-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+On Tue, 2020-09-15 at 12:09 +0300, Jarkko Sakkinen wrote:
+> On Sat, Sep 12, 2020 at 10:26:41AM -0700, James Bottomley wrote:
+> > In TPM 1.2 an authorization was a 20 byte number.  The spec
+> > actually recommended you to hash variable length passwords and use
+> > the sha1 hash as the authorization.  Because the spec doesn't
+> > require this hashing, the current authorization for trusted keys is
+> > a 40 digit hex number.  For TPM 2.0 the spec allows the passing in
+> > of variable length passwords and passphrases directly, so we should
+> > allow that in trusted keys for ease of use.  Update the 'blobauth'
+> > parameter to take this into account, so we can now use plain text
+> > passwords for the keys.
+> > 
+> > so before
+> > 
+> > keyctl add trusted kmk "new 32
+> > blobauth=f572d396fae9206628714fb2ce00f72e94f2258f"
+> > 
+> > after we will accept both the old hex sha1 form as well as a new
+> > directly supplied password:
+> > 
+> > keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001"
+> > 
+> > Since a sha1 hex code must be exactly 40 bytes long and a direct
+> > password must be 20 or less, we use the length as the discriminator
+> > for which form is input.
+> > 
+> > Note this is both and enhancement and a potential bug fix.  The TPM
+> > 2.0 spec requires us to strip leading zeros, meaning empyty
+> > authorization is a zero length HMAC whereas we're currently passing
+> > in 20 bytes of zeros.  A lot of TPMs simply accept this as OK, but
+> > the Microsoft TPM emulator rejects it with TPM_RC_BAD_AUTH, so this
+> > patch makes the Microsoft TPM emulator work with trusted keys.
+> > 
+> > Fixes: 0fe5480303a1 ("keys, trusted: seal/unseal with TPM 2.0
+> > chips")
+> > Signed-off-by: James Bottomley
+> > <James.Bottomley@HansenPartnership.com>
+> > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> 
+> I created a key:
+> 
+> $ sudo ./tpm2-root-key
+> 0x80000000
+> $ sudo ./tpm2-list-handles
+> 0x80000000
+> $ keyctl add trusted kmk "new 32 blobauth=hello keyhandle=0x80000000"
+> <keyctl usage>
 
-	- Define architecture specific register names
-	- Architecture specific functions for:
-		- system call init
-		- code descriptor check
-		- data descriptor check
-	- Fill a page with a trampoline table for:
-		- 32-bit user process
-		- 64-bit user process
+Well, you're getting that because the command isn't complete ... you
+need a keyring specifier at the end, like @u.  However, even with that
+there's a bug in the code that would cause this to return EINVAL: the
+blobauth handler has a return 0 where it should have a break ... I
+think that happened as a result of the v6 rework which split up the if
+... else if ... else chain.  The result is the processing of options
+terminates at blobauth, so if it's last, as I've been testing with,
+everything is fine.  If it's first as you specify, none of the options
+following the blobauth get processed.  I'll fix this up and add an @u
+to the commit message.
 
-Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
----
- arch/arm64/include/asm/unistd.h      |   2 +-
- arch/arm64/include/asm/unistd32.h    |   2 +
- arch/arm64/include/uapi/asm/ptrace.h |  59 +++++++
- arch/arm64/kernel/Makefile           |   2 +
- arch/arm64/kernel/trampfd.c          | 244 +++++++++++++++++++++++++++
- 5 files changed, 308 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/kernel/trampfd.c
-
-diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-index 3b859596840d..b3b2019f8d16 100644
---- a/arch/arm64/include/asm/unistd.h
-+++ b/arch/arm64/include/asm/unistd.h
-@@ -38,7 +38,7 @@
- #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
- #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
- 
--#define __NR_compat_syscalls		440
-+#define __NR_compat_syscalls		441
- #endif
- 
- #define __ARCH_WANT_SYS_CLONE
-diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index 6d95d0c8bf2f..c0493c5322d9 100644
---- a/arch/arm64/include/asm/unistd32.h
-+++ b/arch/arm64/include/asm/unistd32.h
-@@ -885,6 +885,8 @@ __SYSCALL(__NR_openat2, sys_openat2)
- __SYSCALL(__NR_pidfd_getfd, sys_pidfd_getfd)
- #define __NR_faccessat2 439
- __SYSCALL(__NR_faccessat2, sys_faccessat2)
-+#define __NR_trampfd 440
-+__SYSCALL(__NR_trampfd, sys_trampfd)
- 
- /*
-  * Please add new compat syscalls above this comment and update
-diff --git a/arch/arm64/include/uapi/asm/ptrace.h b/arch/arm64/include/uapi/asm/ptrace.h
-index 42cbe34d95ce..2778789c1cbe 100644
---- a/arch/arm64/include/uapi/asm/ptrace.h
-+++ b/arch/arm64/include/uapi/asm/ptrace.h
-@@ -88,6 +88,65 @@ struct user_pt_regs {
- 	__u64		pstate;
- };
- 
-+/*
-+ * These register names are to be used by 32-bit applications.
-+ */
-+enum reg_32_name {
-+	arm_min,
-+	arm_r0 = arm_min,
-+	arm_r1,
-+	arm_r2,
-+	arm_r3,
-+	arm_r4,
-+	arm_r5,
-+	arm_r6,
-+	arm_r7,
-+	arm_r8,
-+	arm_r9,
-+	arm_r10,
-+	arm_r11,
-+	arm_r12,
-+	arm_max,
-+};
-+
-+/*
-+ * These register names are to be used by 64-bit applications.
-+ */
-+enum reg_64_name {
-+	arm64_min = arm_max,
-+	arm64_r0 = arm64_min,
-+	arm64_r1,
-+	arm64_r2,
-+	arm64_r3,
-+	arm64_r4,
-+	arm64_r5,
-+	arm64_r6,
-+	arm64_r7,
-+	arm64_r8,
-+	arm64_r9,
-+	arm64_r10,
-+	arm64_r11,
-+	arm64_r12,
-+	arm64_r13,
-+	arm64_r14,
-+	arm64_r15,
-+	arm64_r16,
-+	arm64_r17,
-+	arm64_r18,
-+	arm64_r19,
-+	arm64_r20,
-+	arm64_r21,
-+	arm64_r22,
-+	arm64_r23,
-+	arm64_r24,
-+	arm64_r25,
-+	arm64_r26,
-+	arm64_r27,
-+	arm64_r28,
-+	arm64_r29,
-+	arm64_max,
-+};
-+
- struct user_fpsimd_state {
- 	__uint128_t	vregs[32];
- 	__u32		fpsr;
-diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-index a561cbb91d4d..18d373fb1208 100644
---- a/arch/arm64/kernel/Makefile
-+++ b/arch/arm64/kernel/Makefile
-@@ -71,3 +71,5 @@ extra-y					+= $(head-y) vmlinux.lds
- ifeq ($(CONFIG_DEBUG_EFI),y)
- AFLAGS_head.o += -DVMLINUX_PATH="\"$(realpath $(objtree)/vmlinux)\""
- endif
-+
-+obj-$(CONFIG_TRAMPFD)			+= trampfd.o
-diff --git a/arch/arm64/kernel/trampfd.c b/arch/arm64/kernel/trampfd.c
-new file mode 100644
-index 000000000000..3b40ebb12907
---- /dev/null
-+++ b/arch/arm64/kernel/trampfd.c
-@@ -0,0 +1,244 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Trampoline FD - ARM64 support.
-+ *
-+ * Author: Madhavan T. Venkataraman (madvenka@linux.microsoft.com)
-+ *
-+ * Copyright (c) 2020, Microsoft Corporation.
-+ */
-+
-+#include <linux/thread_info.h>
-+#include <asm/compat.h>
-+#include <linux/trampfd.h>
-+
-+#define TRAMPFD_CODE_32_SIZE		28
-+#define TRAMPFD_CODE_64_SIZE		48
-+
-+static inline bool is_compat(void)
-+{
-+	return is_compat_thread(task_thread_info(current));
-+}
-+
-+/*
-+ * trampfd syscall.
-+ */
-+void trampfd_arch(struct trampfd_info *info)
-+{
-+	if (is_compat())
-+		info->code_size = TRAMPFD_CODE_32_SIZE;
-+	else
-+		info->code_size = TRAMPFD_CODE_64_SIZE;
-+	info->ntrampolines = PAGE_SIZE / info->code_size;
-+	info->code_offset = TRAMPFD_CODE_PGOFF << PAGE_SHIFT;
-+	info->reserved = 0;
-+}
-+
-+/*
-+ * trampfd code descriptor check.
-+ */
-+int trampfd_code_arch(struct trampfd_code *code)
-+{
-+	int	ntrampolines;
-+	int	min, max;
-+
-+	if (is_compat()) {
-+		min = arm_min;
-+		max = arm_max;
-+		ntrampolines = PAGE_SIZE / TRAMPFD_CODE_32_SIZE;
-+	} else {
-+		min = arm64_min;
-+		max = arm64_max;
-+		ntrampolines = PAGE_SIZE / TRAMPFD_CODE_64_SIZE;
-+	}
-+
-+	if (code->reg < min || code->reg >= max)
-+		return -EINVAL;
-+
-+	if (!code->ntrampolines || code->ntrampolines > ntrampolines)
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+/*
-+ * trampfd data descriptor check.
-+ */
-+int trampfd_data_arch(struct trampfd_data *data)
-+{
-+	int	min, max;
-+
-+	if (is_compat()) {
-+		min = arm_min;
-+		max = arm_max;
-+	} else {
-+		min = arm64_min;
-+		max = arm64_max;
-+	}
-+
-+	if (data->reg < min || data->reg >= max)
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+#define MOVARM(ins, reg, imm32)						\
-+{									\
-+	u16	*_imm16 = (u16 *) &(imm32);	/* little endian */	\
-+	int	_hw, _opcode;						\
-+									\
-+	for (_hw = 0; _hw < 2; _hw++) {					\
-+		/* movw or movt */					\
-+		_opcode = _hw ? 0xe3400000 : 0xe3000000;		\
-+		*ins++ = _opcode | (_imm16[_hw] >> 12) << 16 |		\
-+			 (reg) << 12 | (_imm16[_hw] & 0xFFF);		\
-+	}								\
-+}
-+
-+#define LDRARM(ins, reg)						\
-+{									\
-+	*ins++ = 0xe5900000 | (reg) << 16 | (reg) << 12;		\
-+}
-+
-+#define BXARM(ins, reg)							\
-+{									\
-+	*ins++ = 0xe12fff10 | (reg);					\
-+}
-+
-+static void trampfd_code_fill_32(struct trampfd *trampfd, char *addr)
-+{
-+	char		*eaddr = addr + PAGE_SIZE;
-+	int		creg = trampfd->code_reg - arm_min;
-+	int		dreg = trampfd->data_reg - arm_min;
-+	u32		*code = trampfd->code;
-+	u32		*data = trampfd->data;
-+	u32		*instruction = (u32 *) addr;
-+	int		i;
-+
-+	for (i = 0; i < trampfd->ntrampolines; i++, code++, data++) {
-+		/*
-+		 * movw creg, code & 0xFFFF
-+		 * movt creg, code >> 16
-+		 */
-+		MOVARM(instruction, creg, code);
-+
-+		/*
-+		 * ldr	creg, [creg]
-+		 */
-+		LDRARM(instruction, creg);
-+
-+		/*
-+		 * movw dreg, data & 0xFFFF
-+		 * movt dreg, data >> 16
-+		 */
-+		MOVARM(instruction, dreg, data);
-+
-+		/*
-+		 * ldr	dreg, [dreg]
-+		 */
-+		LDRARM(instruction, dreg);
-+
-+		/*
-+		 * bx	creg
-+		 */
-+		BXARM(instruction, creg);
-+	}
-+	addr = (char *) instruction;
-+	memset(addr, 0, eaddr - addr);
-+}
-+
-+#define MOVQ(ins, reg, imm64)						\
-+{									\
-+	u16	*_imm16 = (u16 *) &(imm64);	/* little endian */	\
-+	int	_hw, _opcode;						\
-+									\
-+	for (_hw = 0; _hw < 4; _hw++) {					\
-+		/* movz or movk */					\
-+		_opcode = _hw ? 0xf2800000 : 0xd2800000;		\
-+		*ins++ = _opcode | _hw << 21 | _imm16[_hw] << 5 | (reg);\
-+	}								\
-+}
-+
-+#define LDR(ins, reg)							\
-+{									\
-+	*ins++ = 0xf9400000 | (reg) << 5 | (reg);			\
-+}
-+
-+#define BR(ins, reg)							\
-+{									\
-+	*ins++ = 0xd61f0000 | (reg) << 5;				\
-+}
-+
-+#define PAD(ins)							\
-+{									\
-+	while ((uintptr_t) ins & 7)					\
-+		*ins++ = 0;						\
-+}
-+
-+static void trampfd_code_fill_64(struct trampfd *trampfd, char *addr)
-+{
-+	char		*eaddr = addr + PAGE_SIZE;
-+	int		creg = trampfd->code_reg - arm64_min;
-+	int		dreg = trampfd->data_reg - arm64_min;
-+	u64		*code = trampfd->code;
-+	u64		*data = trampfd->data;
-+	u32		*instruction = (u32 *) addr;
-+	int		i;
-+
-+	for (i = 0; i < trampfd->ntrampolines; i++, code++, data++) {
-+		/*
-+		 * Pseudo instruction:
-+		 *
-+		 * movq creg, code
-+		 *
-+		 * Actual instructions:
-+		 *
-+		 * movz	creg, code & 0xFFFF
-+		 * movk	creg, (code >> 16) & 0xFFFF, lsl 16
-+		 * movk	creg, (code >> 32) & 0xFFFF, lsl 32
-+		 * movk	creg, (code >> 48) & 0xFFFF, lsl 48
-+		 */
-+		MOVQ(instruction, creg, code);
-+
-+		/*
-+		 * ldr	creg, [creg]
-+		 */
-+		LDR(instruction, creg);
-+
-+		/*
-+		 * Pseudo instruction:
-+		 *
-+		 * movq dreg, data
-+		 *
-+		 * Actual instructions:
-+		 *
-+		 * movz	dreg, data & 0xFFFF
-+		 * movk	dreg, (data >> 16) & 0xFFFF, lsl 16
-+		 * movk	dreg, (data >> 32) & 0xFFFF, lsl 32
-+		 * movk	dreg, (data >> 48) & 0xFFFF, lsl 48
-+		 */
-+		MOVQ(instruction, dreg, data);
-+
-+		/*
-+		 * ldr	dreg, [dreg]
-+		 */
-+		LDR(instruction, dreg);
-+
-+		/*
-+		 * br	creg
-+		 */
-+		BR(instruction, creg);
-+
-+		/*
-+		 * Pad to 8-byte boundary
-+		 */
-+		PAD(instruction);
-+	}
-+	addr = (char *) instruction;
-+	memset(addr, 0, eaddr - addr);
-+}
-+
-+void trampfd_code_fill(struct trampfd *trampfd, char *addr)
-+{
-+	if (is_compat())
-+		trampfd_code_fill_32(trampfd, addr);
-+	else
-+		trampfd_code_fill_64(trampfd, addr);
-+}
--- 
-2.17.1
+James
 
