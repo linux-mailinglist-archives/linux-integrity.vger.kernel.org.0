@@ -2,342 +2,167 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAFD26DDB0
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Sep 2020 16:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F76726DE34
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Sep 2020 16:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727183AbgIQOMs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Sep 2020 10:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727251AbgIQN6l (ORCPT
+        id S1727255AbgIQO1W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Sep 2020 10:27:22 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20102 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727470AbgIQOZs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Sep 2020 09:58:41 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC3BC061A30
-        for <linux-integrity@vger.kernel.org>; Thu, 17 Sep 2020 06:47:35 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id d13so1394831pgl.6
-        for <linux-integrity@vger.kernel.org>; Thu, 17 Sep 2020 06:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aIsejcsJ7icTxOyem8cwVZXkHEitHo8H+bkBiZNVJ+Y=;
-        b=AsXQkdBIH1NvCBpPgehUr/Xw0qxEpPXl+NISmZA0BAaIhtVl4veBs12LBArP9tpIXX
-         VKlPrpDFQ0gBWC+svssmMIkb5NVhMs1dMuEz5AK14mMV5l4zGvnk37p9NipMVodqD22n
-         3qmsg1wpK5oMUnOEV2wMRDLS72h8gnK965Sa/VdQzGJJwV9qAmGtUYuLxgOK2gjCpP3e
-         poYowXzEAwNh8oyau8/frGQelcd8XFZyXJ/eyhGXwXpeavy8lQqakeq5PVKK8Rcm4pzU
-         h8UD72oaF+H+eZK08Zw+3zxVfSUxtJLRt8w8VucpdrpOgyWmTewGM+aO0n4J23JPL41a
-         xo7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aIsejcsJ7icTxOyem8cwVZXkHEitHo8H+bkBiZNVJ+Y=;
-        b=I5ySkArVUrvqpmgW/VcwPwInhIsfVgRn8/+0rJoR/v4KFNo2bP/nUHUIuGbAgLpekU
-         S9h+ZzRR2yt/pHUs1qYE9eXHpPiBf/XANtiUG78enFmP63YBKbotUD4/hZYeg5lVWdhZ
-         E8N918CoGNi0zLO4CwYlewGaBFLBvGifhtLafqdo9TyFjyfW7xX2p0xDZE5PmHMseB3m
-         4uEAgu/uN7rxU/weSQ7BIOe3io8DcUslvhMHTFE0RQcF3j7cVCiOoIebHBRdfF6BKasj
-         QgtLd0sWQ2T2+23TpMytLNTRe2SQE5HtfdCWrP4kToRNZPeAWm9+3ojjI50YVnA0p8QF
-         dm+w==
-X-Gm-Message-State: AOAM5333S9TzTr7Ap7oiwhKOe0YxQrs5m+4ZD1JBnb2uBArCCEsC32s7
-        vuFZ9mjL9smleWJSdSB3G/HsdA==
-X-Google-Smtp-Source: ABdhPJyQWPr/018DpJS78j3J4Bj/IQlZHr37DIPWdTllsmrFNi9P0YPa5jbl54DxGITFyx35fXW53w==
-X-Received: by 2002:a63:a4d:: with SMTP id z13mr16478207pgk.247.1600350454678;
-        Thu, 17 Sep 2020 06:47:34 -0700 (PDT)
-Received: from localhost.localdomain ([117.252.66.163])
-        by smtp.gmail.com with ESMTPSA id i73sm6821120pfe.67.2020.09.17.06.47.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Sep 2020 06:47:33 -0700 (PDT)
-From:   Sumit Garg <sumit.garg@linaro.org>
-To:     jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
-        jejb@linux.ibm.com
-Cc:     dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
-        jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
-        janne.karhunen@gmail.com, daniel.thompson@linaro.org,
-        Markus.Wamser@mixed-mode.de, lhinds@redhat.com,
-        keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Sumit Garg <sumit.garg@linaro.org>
-Subject: [PATCH v6 3/4] doc: trusted-encrypted: updates with TEE as a new trust source
-Date:   Thu, 17 Sep 2020 19:16:37 +0530
-Message-Id: <1600350398-4813-4-git-send-email-sumit.garg@linaro.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1600350398-4813-1-git-send-email-sumit.garg@linaro.org>
-References: <1600350398-4813-1-git-send-email-sumit.garg@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Thu, 17 Sep 2020 10:25:48 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08HEKOow088363;
+        Thu, 17 Sep 2020 10:25:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=6ux8W4aMaDCbaNX+eSW+989K6Uhm9qqViIHvfk7gyPE=;
+ b=R9MCMKO/d+GBH3F9fKieIvs7PSFjlbMZq9knUd51rzHjx0Unhg0VR4zutu4G/AEQAUlR
+ dhq7Cto+6JagzepUzUZqypRZm7GnRoSykhi7S70x7pKnAmwtV//d0SfoG1rI8JnwBJoR
+ uFxySYVQKrUlZJxD3V9mMA4Ks6rAK7MkTQgdoQ+0feock7lFGWgA37Zv0Vm79dqb/GsT
+ KEAnc65fq8imr2RI6LZqI5vOJtqz3eDAnlCDFqscx5vW6SS7aAHHrHg6SxhByMntkiur
+ In7Uo55bBpquaPRb7kMRDS5VIgZ4rIddgSaI/7kAQNrK20shIloBoe3YyyPWfWx0QP6v Aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33m9fmr3g2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Sep 2020 10:25:16 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08HEKZo1089837;
+        Thu, 17 Sep 2020 10:25:16 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33m9fmr3ex-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Sep 2020 10:25:16 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08HEHZZ9015305;
+        Thu, 17 Sep 2020 14:25:13 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 33k6f2h4jd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Sep 2020 14:25:13 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08HEPBpW23790008
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Sep 2020 14:25:11 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2D074C059;
+        Thu, 17 Sep 2020 14:25:10 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B10144C04A;
+        Thu, 17 Sep 2020 14:25:09 +0000 (GMT)
+Received: from sig-9-65-208-105.ibm.com (unknown [9.65.208.105])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Sep 2020 14:25:09 +0000 (GMT)
+Message-ID: <c8d3c70e74e607a4b73239bef1e9db0d304200fc.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 11/12] ima: Introduce template field evmsig and write
+ to field sig as fallback
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com
+Date:   Thu, 17 Sep 2020 10:25:08 -0400
+In-Reply-To: <20200904092643.20013-7-roberto.sassu@huawei.com>
+References: <20200904092339.19598-1-roberto.sassu@huawei.com>
+         <20200904092643.20013-7-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-17_09:2020-09-16,2020-09-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ malwarescore=0 suspectscore=3 priorityscore=1501 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=999
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009170104
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Update documentation for Trusted and Encrypted Keys with TEE as a new
-trust source. Following is brief description of updates:
+Hi Roberto,
 
-- Add a section to demostrate a list of supported devices along with
-  their security properties/guarantees.
-- Add a key generation section.
-- Updates for usage section including differences specific to a trust
-  source.
+On Fri, 2020-09-04 at 11:26 +0200, Roberto Sassu wrote:
+> With the patch to accept EVM portable signatures when the
+> appraise_type=imasig requirement is specified in the policy, appraisal can
+> be successfully done even if the file does not have an IMA signature.
+> 
+> However, remote attestation would not see that a different signature type
+> was used, as only IMA signatures can be included in the measurement list.
+> This patch solves the issue by introducing the new template field 'evmsig'
+> to show EVM portable signatures and by including its value in the existing
+> field 'sig' if the IMA signature is not found.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
----
- Documentation/security/keys/trusted-encrypted.rst | 203 ++++++++++++++++++----
- 1 file changed, 171 insertions(+), 32 deletions(-)
+Thank you!   Just a minor comment below.
 
-diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-index 9483a74..a355045 100644
---- a/Documentation/security/keys/trusted-encrypted.rst
-+++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -6,30 +6,161 @@ Trusted and Encrypted Keys are two new key types added to the existing kernel
- key ring service.  Both of these new types are variable length symmetric keys,
- and in both cases all keys are created in the kernel, and user space sees,
- stores, and loads only encrypted blobs.  Trusted Keys require the availability
--of a Trusted Platform Module (TPM) chip for greater security, while Encrypted
--Keys can be used on any system.  All user level blobs, are displayed and loaded
--in hex ascii for convenience, and are integrity verified.
-+of a Trust Source for greater security, while Encrypted Keys can be used on any
-+system. All user level blobs, are displayed and loaded in hex ascii for
-+convenience, and are integrity verified.
- 
--Trusted Keys use a TPM both to generate and to seal the keys.  Keys are sealed
--under a 2048 bit RSA key in the TPM, and optionally sealed to specified PCR
--(integrity measurement) values, and only unsealed by the TPM, if PCRs and blob
--integrity verifications match.  A loaded Trusted Key can be updated with new
--(future) PCR values, so keys are easily migrated to new pcr values, such as
--when the kernel and initramfs are updated.  The same key can have many saved
--blobs under different PCR values, so multiple boots are easily supported.
- 
--TPM 1.2
---------
-+Trust Source
-+============
- 
--By default, trusted keys are sealed under the SRK, which has the default
--authorization value (20 zeros).  This can be set at takeownership time with the
--trouser's utility: "tpm_takeownership -u -z".
-+Trust Source provides the source of security for the Trusted Keys, on which
-+basis Trusted Keys establishes a Trust model with its user. A Trust Source could
-+differ from one system to another depending on its security requirements. It
-+could be either an off-chip device or an on-chip device. Following section
-+demostrates a list of supported devices along with their security properties/
-+guarantees:
- 
--TPM 2.0
---------
-+  *  Root of trust for storage
- 
--The user must first create a storage key and make it persistent, so the key is
--available after reboot. This can be done using the following commands.
-+     (1) TPM (Trusted Platform Module: hardware device)
-+
-+         Rooted to Storage Root Key (SRK) which never leaves the TPM that
-+         provides crypto operation to establish root of trust for storage.
-+
-+     (2) TEE (Trusted Execution Environment: OP-TEE based on Arm TrustZone)
-+
-+         Rooted to Hardware Unique Key (HUK) which is generally burnt in on-chip
-+         fuses and is accessible to TEE only.
-+
-+  *  Execution isolation
-+
-+     (1) TPM
-+
-+         Fixed set of operations running in isolated execution environment.
-+
-+     (2) TEE
-+
-+         Customizable set of operations running in isolated execution
-+         environment verified via Secure/Trusted boot process.
-+
-+  * Optional binding to platform integrity state
-+
-+     (1) TPM
-+
-+         Keys can be optionally sealed to specified PCR (integrity measurement)
-+         values, and only unsealed by the TPM, if PCRs and blob integrity
-+         verifications match. A loaded Trusted Key can be updated with new
-+         (future) PCR values, so keys are easily migrated to new PCR values,
-+         such as when the kernel and initramfs are updated. The same key can
-+         have many saved blobs under different PCR values, so multiple boots are
-+         easily supported.
-+
-+     (2) TEE
-+
-+         Relies on Secure/Trusted boot process for platform integrity. It can
-+         be extended with TEE based measured boot process.
-+
-+  *  On-chip versus off-chip
-+
-+     (1) TPM
-+
-+         Off-chip device connected via serial bus (like I2C, SPI etc.) exposing
-+         physical access which represents an attack surface that can be
-+         mitigated via tamper detection.
-+
-+     (2) TEE
-+
-+         On-chip functionality, immune to this attack surface.
-+
-+  *  Memory attacks (DRAM based like attaching a bus monitor etc.)
-+
-+     (1) TPM
-+
-+         Immune to these attacks as it doesn’t make use of system DRAM.
-+
-+     (2) TEE
-+
-+         An implementation based on TrustZone protected DRAM is susceptible to
-+         such attacks. In order to mitigate these attacks one needs to rely on
-+         on-chip secure RAM to store secrets or have the entire TEE
-+         implementation based on on-chip secure RAM. An alternative mitigation
-+         would be to use encrypted DRAM.
-+
-+  *  Side-channel attacks (cache, memory, CPU or time based)
-+
-+     (1) TPM
-+
-+         Immune to side-channel attacks as its resources are isolated from the
-+         main OS.
-+
-+     (2) TEE
-+
-+         A careful implementation is required to mitigate against these attacks
-+         for resources which are shared (eg. shared memory) with the main OS.
-+         Cache and CPU based side-channel attacks can be mitigated via
-+         invalidating caches and CPU registers during context switch to and from
-+         the secure world.
-+         To mitigate against time based attacks, one needs to have time
-+         invariant implementations (like crypto algorithms etc.).
-+
-+  *  Resistance to physical attacks (power analysis, electromagnetic emanation,
-+     probes etc.)
-+
-+     (1) TPM
-+
-+         Provides limited protection utilizing tamper resistance.
-+
-+     (2) TEE
-+
-+         Provides no protection by itself, relies on the underlying platform for
-+         features such as tamper resistance.
-+
-+
-+Key Generation
-+==============
-+
-+Trusted Keys
-+------------
-+
-+New keys are created from trust source generated random numbers, and are
-+encrypted/decrypted using trust source storage root key.
-+
-+  *  TPM (hardware device) based RNG
-+
-+     Strength of random numbers may vary from one device manufacturer to
-+     another.
-+
-+  *  TEE (OP-TEE based on Arm TrustZone) based RNG
-+
-+     RNG is customizable as per platform needs. It can either be direct output
-+     from platform specific hardware RNG or a software based Fortuna CSPRNG
-+     which can be seeded via multiple entropy sources.
-+
-+Encrypted Keys
-+--------------
-+
-+Encrypted keys do not depend on a trust source, and are faster, as they use AES
-+for encryption/decryption. New keys are created from kernel generated random
-+numbers, and are encrypted/decrypted using a specified ‘master’ key. The
-+‘master’ key can either be a trusted-key or user-key type. The main disadvantage
-+of encrypted keys is that if they are not rooted in a trusted key, they are only
-+as secure as the user key encrypting them. The master user key should therefore
-+be loaded in as secure a way as possible, preferably early in boot.
-+
-+
-+Usage
-+=====
-+
-+Trusted Keys usage: TPM
-+-----------------------
-+
-+TPM 1.2: By default, trusted keys are sealed under the SRK, which has the
-+default authorization value (20 zeros).  This can be set at takeownership time
-+with the TrouSerS utility: "tpm_takeownership -u -z".
-+
-+TPM 2.0: The user must first create a storage key and make it persistent, so the
-+key is available after reboot. This can be done using the following commands.
- 
- With the IBM TSS 2 stack::
- 
-@@ -79,14 +210,21 @@ TPM_STORED_DATA format.  The key length for new keys are always in bytes.
- Trusted Keys can be 32 - 128 bytes (256 - 1024 bits), the upper limit is to fit
- within the 2048 bit SRK (RSA) keylength, with all necessary structure/padding.
- 
--Encrypted keys do not depend on a TPM, and are faster, as they use AES for
--encryption/decryption.  New keys are created from kernel generated random
--numbers, and are encrypted/decrypted using a specified 'master' key.  The
--'master' key can either be a trusted-key or user-key type.  The main
--disadvantage of encrypted keys is that if they are not rooted in a trusted key,
--they are only as secure as the user key encrypting them.  The master user key
--should therefore be loaded in as secure a way as possible, preferably early in
--boot.
-+Trusted Keys usage: TEE
-+-----------------------
-+
-+Usage::
-+
-+    keyctl add trusted name "new keylen" ring
-+    keyctl add trusted name "load hex_blob" ring
-+    keyctl print keyid
-+
-+"keyctl print" returns an ascii hex copy of the sealed key, which is in format
-+specific to TEE device implementation.  The key length for new keys are always
-+in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-+
-+Encrypted Keys usage
-+--------------------
- 
- The decrypted portion of encrypted keys can contain either a simple symmetric
- key or a more complex structure. The format of the more complex structure is
-@@ -104,8 +242,8 @@ Where::
- 	format:= 'default | ecryptfs | enc32'
- 	key-type:= 'trusted' | 'user'
- 
--
- Examples of trusted and encrypted key usage:
-+--------------------------------------------
- 
- Create and save a trusted key named "kmk" of length 32 bytes.
- 
-@@ -151,7 +289,7 @@ Load a trusted key from the saved blob::
-     f1f8fff03ad0acb083725535636addb08d73dedb9832da198081e5deae84bfaf0409c22b
-     e4a8aea2b607ec96931e6f4d4fe563ba
- 
--Reseal a trusted key under new pcr values::
-+Reseal (TPM specific) a trusted key under new PCR values::
- 
-     $ keyctl update 268728824 "update pcrinfo=`cat pcr.blob`"
-     $ keyctl print 268728824
-@@ -165,11 +303,12 @@ Reseal a trusted key under new pcr values::
-     7ef6a24defe4846104209bf0c3eced7fa1a672ed5b125fc9d8cd88b476a658a4434644ef
-     df8ae9a178e9f83ba9f08d10fa47e4226b98b0702f06b3b8
- 
-+
- The initial consumer of trusted keys is EVM, which at boot time needs a high
--quality symmetric key for HMAC protection of file metadata.  The use of a
-+quality symmetric key for HMAC protection of file metadata. The use of a
- trusted key provides strong guarantees that the EVM key has not been
--compromised by a user level problem, and when sealed to specific boot PCR
--values, protects against boot and offline attacks.  Create and save an
-+compromised by a user level problem, and when sealed to a platform integrity
-+state, protects against boot and offline attacks. Create and save an
- encrypted key "evm" using the above trusted key "kmk":
- 
- option 1: omitting 'format'::
--- 
-2.7.4
+<snip>
+
+> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+> index c022ee9e2a4e..2c596c2a89cc 100644
+> --- a/security/integrity/ima/ima_template_lib.c
+> +++ b/security/integrity/ima/ima_template_lib.c
+> 
+> @@ -438,7 +439,7 @@ int ima_eventsig_init(struct ima_event_data *event_data,
+>  	struct evm_ima_xattr_data *xattr_value = event_data->xattr_value;
+>  
+>  	if ((!xattr_value) || (xattr_value->type != EVM_IMA_XATTR_DIGSIG))
+> -		return 0;
+> +		return ima_eventevmsig_init(event_data, field_data);
+>  
+>  	return ima_write_template_field_data(xattr_value, event_data->xattr_len,
+>  					     DATA_FMT_HEX, field_data);
+> @@ -484,3 +485,39 @@ int ima_eventmodsig_init(struct ima_event_data *event_data,
+>  	return ima_write_template_field_data(data, data_len, DATA_FMT_HEX,
+>  					     field_data);
+>  }
+> +
+> +/*
+> + *  ima_eventevmsig_init - include the EVM portable signature as part of the
+> + *  template data
+> + */
+> +int ima_eventevmsig_init(struct ima_event_data *event_data,
+> +			 struct ima_field_data *field_data)
+> +{
+> +	struct evm_ima_xattr_data *xattr_data = NULL;
+> +	int rc = 0;
+> +
+> +	if (!event_data->file)
+> +		return 0;
+> +
+> +	if (!(file_inode(event_data->file)->i_opflags & IOP_XATTR))
+> +		return 0;
+> +
+> +	rc = vfs_getxattr_alloc(file_dentry(event_data->file), XATTR_NAME_EVM,
+> +				(char **)&xattr_data, 0, GFP_NOFS);
+> +	if (rc <= 0) {
+> +		if (!rc || rc == -ENODATA)
+> +			return 0;
+> +
+> +		return rc;
+
+We're including the EVM signature on a best effort basis to help with
+attestation.  Do we really care why it failed?   Are we going to act on
+it?
+
+Mimi
+
+> +	}
+> +
+> +	if (xattr_data->type != EVM_XATTR_PORTABLE_DIGSIG) {
+> +		kfree(xattr_data);
+> +		return 0;
+> +	}
+> +
+> +	rc = ima_write_template_field_data((char *)xattr_data, rc, DATA_FMT_HEX,
+> +					   field_data);
+> +	kfree(xattr_data);
+> +	return rc;
+> +}
+
 
