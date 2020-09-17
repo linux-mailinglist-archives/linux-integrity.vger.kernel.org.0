@@ -2,119 +2,172 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6087A26DFB4
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Sep 2020 17:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A1A26E011
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Sep 2020 17:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728140AbgIQPbs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Sep 2020 11:31:48 -0400
-Received: from mga04.intel.com ([192.55.52.120]:9074 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728203AbgIQPbn (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Sep 2020 11:31:43 -0400
-X-Greylist: delayed 569 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 11:31:40 EDT
-IronPort-SDR: 94aBwliQ1C1nBmcFdKM7vA/ghA2xH8LcmLcemg0i6/oPGcLBnCZrj//J47eECPN0KNgmVt5e++
- VsmjlZklZgEA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9747"; a="157107484"
-X-IronPort-AV: E=Sophos;i="5.77,271,1596524400"; 
-   d="scan'208";a="157107484"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 08:22:03 -0700
-IronPort-SDR: IZG7WXN5+7oWENMzB31OtquHbg4t/UtDS3zCpMfH4swni9wlGWlHMzV7i68kPPT2zj1//CaOs5
- B3WEN0hczsow==
-X-IronPort-AV: E=Sophos;i="5.77,271,1596524400"; 
-   d="scan'208";a="483787229"
-Received: from sdompke-mobl.ger.corp.intel.com (HELO localhost) ([10.249.45.123])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2020 08:22:01 -0700
-Date:   Thu, 17 Sep 2020 18:21:59 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH v11 3/5] security: keys: trusted: fix TPM2 authorizations
-Message-ID: <20200917152159.GB7389@linux.intel.com>
-References: <20200912172643.9063-1-James.Bottomley@HansenPartnership.com>
- <20200912172643.9063-4-James.Bottomley@HansenPartnership.com>
- <20200915090950.GB3612@linux.intel.com>
- <1600285934.7475.19.camel@HansenPartnership.com>
+        id S1728265AbgIQPv3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Sep 2020 11:51:29 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55182 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727959AbgIQPvA (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 17 Sep 2020 11:51:00 -0400
+Received: from [192.168.254.38] (unknown [47.187.206.220])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B4CB020B7178;
+        Thu, 17 Sep 2020 08:36:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B4CB020B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1600356964;
+        bh=QO+LfG0Faopxheg2cutvYRBT+pPhms6wveYLa1LgL+U=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=BFLuqVFA/BDQQm7DZtjpCvIA39dAw9ux6L9xLBXRs6zIIXnRN+iAbXLuSLqhrzA+k
+         BG7bFfSeOzurlviYcp2xoC7KmQR6uPkch48sGL+8ZSgMbTtNqSk+vcT3F4zKwn48wg
+         Rw5oLxGtZN7S6/Kam+IanR5OdBOQIIId/5GCFEoU=
+Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
+To:     Florian Weimer <fw@deneb.enyo.de>
+Cc:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, oleg@redhat.com,
+        x86@kernel.org, libffi-discuss@sourceware.org
+References: <20200916150826.5990-1-madvenka@linux.microsoft.com>
+ <87v9gdz01h.fsf@mid.deneb.enyo.de>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Message-ID: <96ea02df-4154-5888-1669-f3beeed60b33@linux.microsoft.com>
+Date:   Thu, 17 Sep 2020 10:36:02 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1600285934.7475.19.camel@HansenPartnership.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <87v9gdz01h.fsf@mid.deneb.enyo.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 12:52:14PM -0700, James Bottomley wrote:
-> On Tue, 2020-09-15 at 12:09 +0300, Jarkko Sakkinen wrote:
-> > On Sat, Sep 12, 2020 at 10:26:41AM -0700, James Bottomley wrote:
-> > > In TPM 1.2 an authorization was a 20 byte number.  The spec
-> > > actually recommended you to hash variable length passwords and use
-> > > the sha1 hash as the authorization.  Because the spec doesn't
-> > > require this hashing, the current authorization for trusted keys is
-> > > a 40 digit hex number.  For TPM 2.0 the spec allows the passing in
-> > > of variable length passwords and passphrases directly, so we should
-> > > allow that in trusted keys for ease of use.  Update the 'blobauth'
-> > > parameter to take this into account, so we can now use plain text
-> > > passwords for the keys.
-> > > 
-> > > so before
-> > > 
-> > > keyctl add trusted kmk "new 32
-> > > blobauth=f572d396fae9206628714fb2ce00f72e94f2258f"
-> > > 
-> > > after we will accept both the old hex sha1 form as well as a new
-> > > directly supplied password:
-> > > 
-> > > keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001"
-> > > 
-> > > Since a sha1 hex code must be exactly 40 bytes long and a direct
-> > > password must be 20 or less, we use the length as the discriminator
-> > > for which form is input.
-> > > 
-> > > Note this is both and enhancement and a potential bug fix.  The TPM
-> > > 2.0 spec requires us to strip leading zeros, meaning empyty
-> > > authorization is a zero length HMAC whereas we're currently passing
-> > > in 20 bytes of zeros.  A lot of TPMs simply accept this as OK, but
-> > > the Microsoft TPM emulator rejects it with TPM_RC_BAD_AUTH, so this
-> > > patch makes the Microsoft TPM emulator work with trusted keys.
-> > > 
-> > > Fixes: 0fe5480303a1 ("keys, trusted: seal/unseal with TPM 2.0
-> > > chips")
-> > > Signed-off-by: James Bottomley
-> > > <James.Bottomley@HansenPartnership.com>
-> > > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > 
-> > I created a key:
-> > 
-> > $ sudo ./tpm2-root-key
-> > 0x80000000
-> > $ sudo ./tpm2-list-handles
-> > 0x80000000
-> > $ keyctl add trusted kmk "new 32 blobauth=hello keyhandle=0x80000000"
-> > <keyctl usage>
+
+
+On 9/16/20 8:04 PM, Florian Weimer wrote:
+> * madvenka:
 > 
-> Well, you're getting that because the command isn't complete ... you
-> need a keyring specifier at the end, like @u.  However, even with that
-> there's a bug in the code that would cause this to return EINVAL: the
-> blobauth handler has a return 0 where it should have a break ... I
-> think that happened as a result of the v6 rework which split up the if
-> ... else if ... else chain.  The result is the processing of options
-> terminates at blobauth, so if it's last, as I've been testing with,
-> everything is fine.  If it's first as you specify, none of the options
-> following the blobauth get processed.  I'll fix this up and add an @u
-> to the commit message.
-
-Ugh, it's true, missing @u from the tail :-) And I was looking for a long
-time old test script and this and wondering where is the difference...
-
-Fix those so that we can finally merge this :-)
-
+>> Examples of trampolines
+>> =======================
+>>
+>> libffi (A Portable Foreign Function Interface Library):
+>>
+>> libffi allows a user to define functions with an arbitrary list of
+>> arguments and return value through a feature called "Closures".
+>> Closures use trampolines to jump to ABI handlers that handle calling
+>> conventions and call a target function. libffi is used by a lot
+>> of different applications. To name a few:
+>>
+>> 	- Python
+>> 	- Java
+>> 	- Javascript
+>> 	- Ruby FFI
+>> 	- Lisp
+>> 	- Objective C
 > 
-> James
+> libffi does not actually need this.  It currently collocates
+> trampolines and the data they need on the same page, but that's
+> actually unecessary.  It's possible to avoid doing this just by
+> changing libffi, without any kernel changes.
+> 
+> I think this has already been done for the iOS port.
 > 
 
-/Jarkko
+The trampoline table that has been implemented for the iOS port (MACH)
+is based on PC-relative data referencing. That is, the code and data
+are placed in adjacent pages so that the code can access the data using
+an address relative to the current PC.
+
+This is an ISA feature that is not supported on all architectures.
+
+Now, if it is a performance feature, we can include some architectures
+and exclude others. But this is a security feature. IMO, we cannot
+exclude any architecture even if it is a legacy one as long as Linux
+is running on the architecture. So, we need a solution that does
+not assume any specific ISA feature.
+
+>> The code for trampoline X in the trampoline table is:
+>>
+>> 	load	&code_table[X], code_reg
+>> 	load	(code_reg), code_reg
+>> 	load	&data_table[X], data_reg
+>> 	load	(data_reg), data_reg
+>> 	jump	code_reg
+>>
+>> The addresses &code_table[X] and &data_table[X] are baked into the
+>> trampoline code. So, PC-relative data references are not needed. The user
+>> can modify code_table[X] and data_table[X] dynamically.
+> 
+> You can put this code into the libffi shared object and map it from
+> there, just like the rest of the libffi code.  To get more
+> trampolines, you can map the page containing the trampolines multiple
+> times, each instance preceded by a separate data page with the control
+> information.
+> 
+
+If you put the code in the libffi shared object, how do you pass data to
+the code at runtime? If the code we are talking about is a function, then
+there is an ABI defined way to pass data to the function. But if the
+code we are talking about is some arbitrary code such as a trampoline,
+there is no ABI defined way to pass data to it except in a couple of
+platforms such as HP PA-RISC that have support for function descriptors
+in the ABI itself.
+
+As mentioned before, if the ISA supports PC-relative data references
+(e.g., X86 64-bit platforms support RIP-relative data references)
+then we can pass data to that code by placing the code and data in
+adjacent pages. So, you can implement the trampoline table for X64.
+i386 does not support it.
+
+
+> I think the previous patch submission has also resulted in several
+> comments along those lines, so I'm not sure why you are reposting
+> this.
+
+IIRC, I have answered all of those comments by mentioning the point
+that we need to support all architectures without requiring special
+ISA features. Taking the kernel's help in this is one solution.
+
+
+> 
+>> libffi
+>> ======
+>>
+>> I have implemented my solution for libffi and provided the changes for
+>> X86 and ARM, 32-bit and 64-bit. Here is the reference patch:
+>>
+>> http://linux.microsoft.com/~madvenka/libffi/libffi.v2.txt
+> 
+> The URL does not appear to work, I get a 403 error.
+
+I apologize for that. That site is supposed to be accessible publicly.
+I will contact the administrator and get this resolved.
+
+Sorry for the annoyance.
+
+> 
+>> If the trampfd patchset gets accepted, I will send the libffi changes
+>> to the maintainers for a review. BTW, I have also successfully executed
+>> the libffi self tests.
+> 
+> I have not seen your libffi changes, but I expect that the complexity
+> is about the same as a userspace-only solution.
+> 
+> 
+
+I agree. The complexity is about the same. But the support is for all
+architectures. Once the common code is in place, the changes for each
+architecture are trivial.
+
+Madhavan
+
+> Cc:ing libffi upstream for awareness.  The start of the thread is
+> here:
+> 
+> <https://lore.kernel.org/linux-api/20200916150826.5990-1-madvenka@linux.microsoft.com/>
+> 
