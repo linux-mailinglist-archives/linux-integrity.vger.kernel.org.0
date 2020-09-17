@@ -2,111 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD5526CD9A
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Sep 2020 23:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1138E26D069
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Sep 2020 03:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbgIPVCT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Sep 2020 17:02:19 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:17116 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726502AbgIPQTJ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Sep 2020 12:19:09 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08GG2RVq051537;
-        Wed, 16 Sep 2020 12:15:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=cPFcV4rzKB/0Ttq4UdnaRFgFQtnB3Rt6bFZmoLbN3TA=;
- b=fbB6UXDp4J6Nh7LIFvNSPUqmT1WQkclkByz0A/4/8RPFctgDRTVIHJP/lptuWf6Q1YS6
- eRcWZtzthv/BudMssP5pO2gK8YJxsrur/IcF7FtFz8HjxLojViWlOdVvrYsSKyjodaG/
- prahTgontzzogWT3mKPaMwlGXMOZZHCrNFdU/ivLBrdMu9wC4fN3be3333rFhYieUU6l
- QdtFViyeYY4yGF5ss5lGdyDI3Rt5rOMPelfzwuKSW/iEMPYNNMsuvqZfEF3KdinkBkL6
- 0YkLbk/xQGVbPuM6I6WiwW5bmRnXhWlgnJQpVcV/Oc/E34kSYReeLsqTYWyGXqpLfcCx uw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33knk1h39v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Sep 2020 12:15:27 -0400
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08GG3Fpd057597;
-        Wed, 16 Sep 2020 12:15:26 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33knk1h38g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Sep 2020 12:15:26 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08GGEbEP025728;
-        Wed, 16 Sep 2020 16:15:23 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 33k6esgth3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Sep 2020 16:15:23 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08GGFLW922479182
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Sep 2020 16:15:21 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 061B04C05A;
-        Wed, 16 Sep 2020 16:15:21 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4457B4C04E;
-        Wed, 16 Sep 2020 16:15:19 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.98.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 16 Sep 2020 16:15:19 +0000 (GMT)
-Message-ID: <3183edb20e3a84c29be6f3e3b459bf51c3355b6b.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 04/12] evm: Execute evm_inode_init_security() only
- when the HMAC key is loaded
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
-        stable@vger.kernel.org
-Date:   Wed, 16 Sep 2020 12:15:18 -0400
-In-Reply-To: <20200904092339.19598-5-roberto.sassu@huawei.com>
-References: <20200904092339.19598-1-roberto.sassu@huawei.com>
-         <20200904092339.19598-5-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-16_10:2020-09-16,2020-09-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- clxscore=1015 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- spamscore=0 suspectscore=0 mlxscore=0 impostorscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009160114
-Sender: linux-integrity-owner@vger.kernel.org
+        id S1726047AbgIQBKM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 16 Sep 2020 21:10:12 -0400
+Received: from albireo.enyo.de ([37.24.231.21]:38836 "EHLO albireo.enyo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726022AbgIQBKK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 16 Sep 2020 21:10:10 -0400
+X-Greylist: delayed 347 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Sep 2020 21:10:08 EDT
+Received: from [172.17.203.2] (helo=deneb.enyo.de)
+        by albireo.enyo.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1kIiLL-0001Q0-41; Thu, 17 Sep 2020 01:04:11 +0000
+Received: from fw by deneb.enyo.de with local (Exim 4.92)
+        (envelope-from <fw@deneb.enyo.de>)
+        id 1kIiLK-0001qn-R0; Thu, 17 Sep 2020 03:04:10 +0200
+From:   Florian Weimer <fw@deneb.enyo.de>
+To:     madvenka@linux.microsoft.com
+Cc:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, oleg@redhat.com,
+        x86@kernel.org, libffi-discuss@sourceware.org
+Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
+References: <20200916150826.5990-1-madvenka@linux.microsoft.com>
+Date:   Thu, 17 Sep 2020 03:04:10 +0200
+In-Reply-To: <20200916150826.5990-1-madvenka@linux.microsoft.com> (madvenka's
+        message of "Wed, 16 Sep 2020 10:08:22 -0500")
+Message-ID: <87v9gdz01h.fsf@mid.deneb.enyo.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
+* madvenka:
 
-On Fri, 2020-09-04 at 11:23 +0200, Roberto Sassu wrote:
-> evm_inode_init_security() requires the HMAC key to calculate the HMAC on
-> initial xattrs provided by LSMs. Unfortunately, with the evm_key_loaded()
-> check, the function continues even if the HMAC key is not loaded
-> (evm_key_loaded() returns true also if EVM has been initialized only with a
-> public key). If the HMAC key is not loaded, evm_inode_init_security()
-> returns an error later when it calls evm_init_hmac().
+> Examples of trampolines
+> =======================
+>
+> libffi (A Portable Foreign Function Interface Library):
+>
+> libffi allows a user to define functions with an arbitrary list of
+> arguments and return value through a feature called "Closures".
+> Closures use trampolines to jump to ABI handlers that handle calling
+> conventions and call a target function. libffi is used by a lot
+> of different applications. To name a few:
+>
+> 	- Python
+> 	- Java
+> 	- Javascript
+> 	- Ruby FFI
+> 	- Lisp
+> 	- Objective C
 
-This is all true, but the context for why it wasn't an issue previously
-is missing.
+libffi does not actually need this.  It currently collocates
+trampolines and the data they need on the same page, but that's
+actually unecessary.  It's possible to avoid doing this just by
+changing libffi, without any kernel changes.
 
-The original usecase for allowing signature verificaton prior to
-loading the HMAC key was a fully signed, possibly immutable, initrd. 
-No new files were created or, at least, were in policy until the HMAC
-key was loaded.   More recently support for requiring an EVM HMAC key
-was removed.  Files having a portable and immutable signature were
-given additional privileges.
+I think this has already been done for the iOS port.
 
-Please update the patch description with the context of what has
-changed.
+> The code for trampoline X in the trampoline table is:
+> 
+> 	load	&code_table[X], code_reg
+> 	load	(code_reg), code_reg
+> 	load	&data_table[X], data_reg
+> 	load	(data_reg), data_reg
+> 	jump	code_reg
+> 
+> The addresses &code_table[X] and &data_table[X] are baked into the
+> trampoline code. So, PC-relative data references are not needed. The user
+> can modify code_table[X] and data_table[X] dynamically.
 
-Mimi
+You can put this code into the libffi shared object and map it from
+there, just like the rest of the libffi code.  To get more
+trampolines, you can map the page containing the trampolines multiple
+times, each instance preceded by a separate data page with the control
+information.
 
+I think the previous patch submission has also resulted in several
+comments along those lines, so I'm not sure why you are reposting
+this.
+
+> libffi
+> ======
+>
+> I have implemented my solution for libffi and provided the changes for
+> X86 and ARM, 32-bit and 64-bit. Here is the reference patch:
+>
+> http://linux.microsoft.com/~madvenka/libffi/libffi.v2.txt
+
+The URL does not appear to work, I get a 403 error.
+
+> If the trampfd patchset gets accepted, I will send the libffi changes
+> to the maintainers for a review. BTW, I have also successfully executed
+> the libffi self tests.
+
+I have not seen your libffi changes, but I expect that the complexity
+is about the same as a userspace-only solution.
+
+
+Cc:ing libffi upstream for awareness.  The start of the thread is
+here:
+
+<https://lore.kernel.org/linux-api/20200916150826.5990-1-madvenka@linux.microsoft.com/>
