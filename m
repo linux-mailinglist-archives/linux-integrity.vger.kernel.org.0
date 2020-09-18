@@ -2,106 +2,199 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE3F26E6F4
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Sep 2020 22:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997C926F671
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Sep 2020 09:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbgIQUyB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Sep 2020 16:54:01 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16880 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726180AbgIQUyB (ORCPT
+        id S1726559AbgIRHDb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 18 Sep 2020 03:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726109AbgIRHDa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Sep 2020 16:54:01 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08HKWaNo039062;
-        Thu, 17 Sep 2020 16:53:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=xQvwnAivXgUxH+l33TWWdZYCxIRDFo0lKCWSsGIqums=;
- b=LeKvkbkFzIV8dbkMqn8pr34ZDvibP5Ly5UBSmNCdfOIB96mGFZs+thLToamH0rEc7RtO
- vxf7efDFP4+Gw8vuy42x4hBQ48PKOeNPTvCyvIV3GnX4Fb6/6ema6Ab9GVwUZNHT6NGe
- 0Lalfco2tHfX+XyJKw2t57dUgK+CeLh1CXIqkNpYIC+EXhPtufRzNVvcqgx0wfjnIKxu
- BAPjfNmSsF4k0gejqNiGXcyIKCvp19ghlV+S1aC9ljhnCnyH0TXShmEM0OPmJDvT7QJx
- 0gZRdPFRJUBAawmfUUVZt07KWcqzGZzW7zVorD5emmS0hxk9sAV4lLFJ1le3j6UQ7yBP lA== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33mea81bc0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Sep 2020 16:53:56 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08HKrDYS027406;
-        Thu, 17 Sep 2020 20:53:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 33k6f2h9cs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Sep 2020 20:53:54 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08HKrpxc25624980
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Sep 2020 20:53:51 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D79FA4053;
-        Thu, 17 Sep 2020 20:53:52 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A02BEA404D;
-        Thu, 17 Sep 2020 20:53:51 +0000 (GMT)
-Received: from sig-9-65-208-105.ibm.com (unknown [9.65.208.105])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Sep 2020 20:53:51 +0000 (GMT)
-Message-ID: <7488a57e29dd33440ae98d6883f8f92d5833b97a.camel@linux.ibm.com>
-Subject: Re: LSM that blocks execution of the code from the anonymous pages
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        linux-integrity <linux-integrity@vger.kernel.org>
-Cc:     linux-security-module <linux-security-module@vger.kernel.org>
-Date:   Thu, 17 Sep 2020 16:53:50 -0400
-In-Reply-To: <88b9444e-08bc-4240-7943-298070dfc47c@omprussia.ru>
-References: <5f166ecd-38e4-a808-c377-683aabf6bf65@omprussia.ru>
-         <2ba01c4961b2b967bb314e2d618a92e91d4fe511.camel@linux.ibm.com>
-         <88b9444e-08bc-4240-7943-298070dfc47c@omprussia.ru>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-17_17:2020-09-16,2020-09-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- suspectscore=62 malwarescore=0 phishscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009170146
+        Fri, 18 Sep 2020 03:03:30 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB30C06174A
+        for <linux-integrity@vger.kernel.org>; Fri, 18 Sep 2020 00:03:30 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id z19so4987738lfr.4
+        for <linux-integrity@vger.kernel.org>; Fri, 18 Sep 2020 00:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NmmjmHcBY8BbhioV7WK8K+GOMybyd/oBkZZKD/aKF+E=;
+        b=aYMkTBVEhpmeibkJNMW8F0pM9TM7QFOuWu/3srU31dDTGy8DT7vhwP20g1CaVTkKED
+         tln3quJTl/JUFcaUYDO+GW1fOyC7OZcRlLfOjlVvUTecHce9SzjaOVjHH1Pqyll8JB4K
+         GqE11kfv6p9VAaMUrG+NvXu5AnHWPGGxmemtz02FxTVDSwd33MMwzBDPoL9q+VRvzXk+
+         isfXxEhOGHr08L0zlwQO0PZI+6DtNPGih9FniPrTlrkE3HHi3NudmVg7zO+gZMdIjknU
+         /+Ovorz6Sc/96FRDNZIJAVDrUI0mfOkt3rPTpKfRJ8iuKXg0vYQRu9k7jw//2ksgPGnd
+         Hekg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NmmjmHcBY8BbhioV7WK8K+GOMybyd/oBkZZKD/aKF+E=;
+        b=lR+QLOHZZ+RVZWxeOcMzg8qRjvoROjpGy9m3o0uaFNwqB2tuKx9DsIRuVDFDu7ieVR
+         l89vkRT51WELnvIrmRUU6BNjLj0h7sjPdW560Ag1ywUCmMVpIP9L4NDo+H0hDQVyVGo6
+         mIJKQCxRw7zXvorX69W6ToMlqPd7qSykG3jLPSxeFDFIX45jsLsgEsP6W7CY6IGSlghP
+         AK5AxdwxVFo8SMvGSosqmPdNX4MtrQh2ayV1IBVXVEtHIXR8l80p+Ua1WiKmfp00Mksl
+         Wxu2mmxHrUHN1E/AF9KGQ1tkYOeYWshynNDyBOPdGd5RS1KVdGF1s3Xc8npv1howQ5CL
+         7dNA==
+X-Gm-Message-State: AOAM531mjYebeHGbSfNnh0CbEe2GW81Hl5drjAtsg4bkWDb9BtYDtNEJ
+        lzjA2P9+3EB3jsfOzGoNofFn2PYi5Hdd/NphJI+XmQ==
+X-Google-Smtp-Source: ABdhPJz6k7WIbUShytMLjZXYouPFD4sNGIoslozx6Fxb93jmSonJHYJ1qWh6s2afHrjoNsg/kefS7+OKREWfMI/SpYc=
+X-Received: by 2002:a05:6512:2e5:: with SMTP id m5mr9808120lfq.598.1600412608442;
+ Fri, 18 Sep 2020 00:03:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <1600350398-4813-1-git-send-email-sumit.garg@linaro.org>
+ <1600350398-4813-2-git-send-email-sumit.garg@linaro.org> <20200917162142.GB9750@linux.intel.com>
+ <20200917162506.GC9750@linux.intel.com>
+In-Reply-To: <20200917162506.GC9750@linux.intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 18 Sep 2020 12:33:17 +0530
+Message-ID: <CAFA6WYNR2rMkEskJooDjQuu+dQ_zwVq-_9paW=zBgXmqM1GJqA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] KEYS: trusted: Add generic trusted keys framework
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        Luke Hinds <lhinds@redhat.com>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Igor,
+On Thu, 17 Sep 2020 at 21:55, Jarkko Sakkinen
+<jarkko.sakkinen@linux.intel.com> wrote:
+>
+> On Thu, Sep 17, 2020 at 07:21:49PM +0300, Jarkko Sakkinen wrote:
+> > On Thu, Sep 17, 2020 at 07:16:35PM +0530, Sumit Garg wrote:
+> > > Current trusted keys framework is tightly coupled to use TPM device as
+> > > an underlying implementation which makes it difficult for implementations
+> > > like Trusted Execution Environment (TEE) etc. to provide trusted keys
+> > > support in case platform doesn't posses a TPM device.
+> > >
+> > > So this patch tries to add generic trusted keys framework where underlying
+> > > implementations like TPM, TEE etc. could be easily plugged-in.
+> >
+> > I would rephrase this a bit:
+> >
+> > "Add a generic trusted keys framework where underlying implementations
+> > can be easily plugged in. Create struct trusted_key_ops to achieve this,
+> > which contains necessary functions of a backend."
+> >
 
-(Reminder the Linux kernel mailing lists convention is to inline/bottom
-post.)
+Okay, will use it instead.
 
-On Thu, 2020-09-17 at 23:39 +0300, Igor Zhbanov wrote:
-> My question is more about whether this functionality fits into IMA's
-> responsibility. I.e. I can propose the changes as the extension of IMA's
-> functionality (which I think it would be better), or I could create a separate
-> LSM if this functionality doesn't align with IMA's purpose for some reason.
-> This is the first question.
-> 
-> And the second question, what kind of operation modes do you think would
-> be useful?
-> 
-> 1) no anonymous code for privileged processes (as currently),
-> 2) no anonymous code for all processes,
-> 3) no anonymous code for all processes with xattr-based exceptions (may be
->       with xattr value signing)
+> > I remember asking about this approach that what if there was just a
+> > header for trusted key functions and a compile time decision, which C
+> > file to include instead of ops struct. I don't remember if these was a
+> > conclusion on this or not.
 
-These are generic questions not dependent on whether this would be
-upstreamed as an independent LSM or as part of IMA.  For this reason,
-I've Cc'ed the LSM mailing list.
+This approach was implemented as part of v5 and we concluded here [1]
+to revert back to the dynamic approach as distro vendors won't like to
+make opinionated selection at compile time which could rather be
+achieved dynamically based on platform capability.
 
-Mimi
+[1] https://www.spinics.net/lists/keyrings/msg08161.html
 
-> 
-> For #3 I definitely would prefer to implement the code as a part of IMA
-> because of sharing of xattrs cache, etc. to avoid reinventing the wheel.
+> >
+> > E.g. lets say you have a device with TEE and TPM, should you be able
+> > to be use both at run-time? I might play along how this works now but
+> > somehow, in the commit message preferably, it should be conclude why
+> > one alternative is chosen over another.
+>
 
+Okay, so how about adding a kernel module parameter which can enforce
+the user's preference about which trust source to use at runtime? And
+we should only check availability for that trust source if preference
+is provided otherwise by default we can traverse the trust sources
+list.
+
+See following change, if this approach looks sane, I can include it in
+next version:
+
+diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+index edd635a..a566451 100644
+--- a/include/keys/trusted-type.h
++++ b/include/keys/trusted-type.h
+@@ -63,6 +63,11 @@ struct trusted_key_ops {
+        void (*exit)(void);
+ };
+
++struct trusted_key_source {
++       char *name;
++       struct trusted_key_ops *ops;
++};
++
+ extern struct key_type key_type_trusted;
+
+ #define TRUSTED_DEBUG 0
+diff --git a/security/keys/trusted-keys/trusted_core.c
+b/security/keys/trusted-keys/trusted_core.c
+index 83a6a15..74a3d80 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -21,12 +21,16 @@
+ #include <linux/string.h>
+ #include <linux/uaccess.h>
+
+-static struct trusted_key_ops *available_trusted_key_ops[] = {
++static char *trusted_key_source;
++module_param_named(source, trusted_key_source, charp, 0);
++MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
++
++static struct trusted_key_source trusted_key_sources[] = {
+ #if defined(CONFIG_TCG_TPM)
+-       &tpm_trusted_key_ops,
++       { "tpm", &tpm_trusted_key_ops },
+ #endif
+ #if defined(CONFIG_TEE)
+-       &tee_trusted_key_ops,
++       { "tee", &tee_trusted_key_ops },
+ #endif
+ };
+ static struct trusted_key_ops *trusted_key_ops;
+@@ -296,8 +300,13 @@ static int __init init_trusted(void)
+ {
+        int i, ret = 0;
+
+-       for (i = 0; i < sizeof(available_trusted_key_ops); i++) {
+-               trusted_key_ops = available_trusted_key_ops[i];
++       for (i = 0; i < ARRAY_SIZE(trusted_key_sources); i++) {
++               if (trusted_key_source &&
++                   strncmp(trusted_key_source, trusted_key_sources[i].name,
++                           strlen(trusted_key_sources[i].name)))
++                       continue;
++
++               trusted_key_ops = trusted_key_sources[i].ops;
+
+                ret = trusted_key_ops->init();
+                if (!ret)
+
+> We must somehow seal this discussion because the other changes are
+> based on this decision.
+>
+> I don't think tail of this patch set takes a long time spin. This
+> is the main architectural decision.
+
+Agree.
+
+-Sumit
+
+>
+> /Jarkko
