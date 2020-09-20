@@ -2,106 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DD12715BD
-	for <lists+linux-integrity@lfdr.de>; Sun, 20 Sep 2020 18:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFAC82715F0
+	for <lists+linux-integrity@lfdr.de>; Sun, 20 Sep 2020 18:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726412AbgITQVY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 20 Sep 2020 12:21:24 -0400
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:50650 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726311AbgITQVT (ORCPT
+        id S1726311AbgITQd6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 20 Sep 2020 12:33:58 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:42102 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726267AbgITQd6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 20 Sep 2020 12:21:19 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0U9VME3F_1600618869;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0U9VME3F_1600618869)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 21 Sep 2020 00:21:10 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Howells <dhowells@redhat.com>,
-        Eric Biggers <ebiggers@google.com>,
+        Sun, 20 Sep 2020 12:33:58 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C7B238EE1C3;
+        Sun, 20 Sep 2020 09:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1600619637;
+        bh=dJCCx6emeShuTI19LmYiADaWvZz8J6xU7s7ioY2/PWc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hMkn+c0RZQxqVoLC+NVqpuaI/dVXB2Xp6AMILPLmVNuC4K3LJskqkeiFy9iaxqQ/i
+         osIY4BzcABasQiwshex3YwWcgwzFnurAZfCvcOYyuqTsI8YTMjsKoz+cSwpbRFaUmW
+         m9o6LTokLaSmuimWFm29MkHZn/zv9IJenLuJIhTc=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Mn5rpNTaX-qV; Sun, 20 Sep 2020 09:33:57 -0700 (PDT)
+Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3EB1F8EE107;
+        Sun, 20 Sep 2020 09:33:57 -0700 (PDT)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Waiman Long <longman@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        "Gilad Ben-Yossef" <gilad@benyossef.com>,
-        Pascal van Leeuwen <pvanleeuwen@rambus.com>,
-        linux-crypto@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Xufeng Zhang <yunbo.xufeng@linux.alibaba.com>,
-        Jia Zhang <zhang.jia@linux.alibaba.com>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v7 10/10] integrity: Asymmetric digsig supports SM2-with-SM3 algorithm
-Date:   Mon, 21 Sep 2020 00:21:03 +0800
-Message-Id: <20200920162103.83197-11-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.3.ge56e4f7
-In-Reply-To: <20200920162103.83197-1-tianjia.zhang@linux.alibaba.com>
-References: <20200920162103.83197-1-tianjia.zhang@linux.alibaba.com>
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
+Subject: [PATCH v12 0/5] TPM 2.0 trusted key rework
+Date:   Sun, 20 Sep 2020 09:33:46 -0700
+Message-Id: <20200920163351.11293-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Asymmetric digsig supports SM2-with-SM3 algorithm combination,
-so that IMA can also verify SM2's signature data.
+Update to fix blobauth parsing problem.
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Tested-by: Xufeng Zhang <yunbo.xufeng@linux.alibaba.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Reviewed-by: Vitaly Chikunov <vt@altlinux.org>
+General cover letter minus policy bit:
+
+This patch updates the trusted key code to export keys in the ASN.1
+format used by current TPM key tools (openssl_tpm2_engine and
+openconnect).  The current code will try to load keys containing
+policy, but being unable to formulate the policy commands necessary to
+load them, the unseal will always fail unless the policy is executed
+in user space and a pre-formed policy session passed in.
+
+The key format is designed to be compatible with our two openssl
+engine implementations as well as with the format used by openconnect.
+I've added seal/unseal to my engine so I can use it for
+interoperability testing and I'll later use this for sealed symmetric
+keys via engine:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/
+
+James
+
 ---
- security/integrity/digsig_asymmetric.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index cfa4127d0518..b86a4a8f61ab 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -99,14 +99,22 @@ int asymmetric_verify(struct key *keyring, const char *sig,
- 	memset(&pks, 0, sizeof(pks));
- 
- 	pks.hash_algo = hash_algo_name[hdr->hash_algo];
--	if (hdr->hash_algo == HASH_ALGO_STREEBOG_256 ||
--	    hdr->hash_algo == HASH_ALGO_STREEBOG_512) {
-+	switch (hdr->hash_algo) {
-+	case HASH_ALGO_STREEBOG_256:
-+	case HASH_ALGO_STREEBOG_512:
- 		/* EC-RDSA and Streebog should go together. */
- 		pks.pkey_algo = "ecrdsa";
- 		pks.encoding = "raw";
--	} else {
-+		break;
-+	case HASH_ALGO_SM3_256:
-+		/* SM2 and SM3 should go together. */
-+		pks.pkey_algo = "sm2";
-+		pks.encoding = "raw";
-+		break;
-+	default:
- 		pks.pkey_algo = "rsa";
- 		pks.encoding = "pkcs1";
-+		break;
- 	}
- 	pks.digest = (u8 *)data;
- 	pks.digest_size = datalen;
+James Bottomley (5):
+  lib: add ASN.1 encoder
+  oid_registry: Add TCG defined OIDS for TPM keys
+  security: keys: trusted: fix TPM2 authorizations
+  security: keys: trusted: use ASN.1 TPM2 key format for the blobs
+  security: keys: trusted: Make sealed key properly interoperable
+
+ .../security/keys/trusted-encrypted.rst       |  58 +++
+ include/keys/trusted-type.h                   |   2 +
+ include/linux/asn1_encoder.h                  |  32 ++
+ include/linux/oid_registry.h                  |   5 +
+ include/linux/tpm.h                           |   2 +
+ lib/Kconfig                                   |   3 +
+ lib/Makefile                                  |   1 +
+ lib/asn1_encoder.c                            | 454 ++++++++++++++++++
+ security/keys/Kconfig                         |   1 +
+ security/keys/trusted-keys/Makefile           |   2 +-
+ security/keys/trusted-keys/tpm2key.asn1       |  11 +
+ security/keys/trusted-keys/trusted_tpm1.c     |  34 +-
+ security/keys/trusted-keys/trusted_tpm2.c     | 266 +++++++++-
+ 13 files changed, 840 insertions(+), 31 deletions(-)
+ create mode 100644 include/linux/asn1_encoder.h
+ create mode 100644 lib/asn1_encoder.c
+ create mode 100644 security/keys/trusted-keys/tpm2key.asn1
+
 -- 
-2.19.1.3.ge56e4f7
+2.26.2
 
