@@ -2,204 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5C1273885
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Sep 2020 04:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6FC273887
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Sep 2020 04:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729660AbgIVCb1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Sep 2020 22:31:27 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:35984 "EHLO
+        id S1729663AbgIVCc1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Sep 2020 22:32:27 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:36050 "EHLO
         bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729445AbgIVCb1 (ORCPT
+        by vger.kernel.org with ESMTP id S1729445AbgIVCc1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Sep 2020 22:31:27 -0400
+        Mon, 21 Sep 2020 22:32:27 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id DFB668EE194;
-        Mon, 21 Sep 2020 19:31:26 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6BAEB8EE194;
+        Mon, 21 Sep 2020 19:32:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1600741886;
-        bh=DTofm+BJJFi59mTghseaTGq0nbL/Ik10Mlgo69EyJ4Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CfqacVYeEnRFFzFyvzPPWVSON+OIE5sG6ku6USLStFOKvj3G/sPc1/zK+jNB3G1WZ
-         lqEnMTzBtXVldQiMZ5z1i2GWQplJt4xYrifdLLxR3UuQo6C/be2xISigM3PG4mGmtl
-         oHa0Snnrxonn4GizTh6XrVWvQf/2v853XmX6TkPQ=
+        s=20151216; t=1600741947;
+        bh=R4bJcld1QRYXm3pcd3xlNvVf/mGbcFHpfhE+2OyHkuw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UKQ94cOkaGoyRK7NAaDkB34ObQ0fB7f7FoQJSuougT8v/lTOnpNprFQz3L5qU4VYl
+         SRmIvtgw/oE81i5F8ywjy0JWr/O1l/YyIXI9PS6QVs266qIdjjBNjMTVQkWLeD/+IE
+         ji2coax6ohozynYNamtYMzDhoDQ+d8HsmUCX5e5E=
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id C6Szn1e0LC3H; Mon, 21 Sep 2020 19:31:26 -0700 (PDT)
+        with ESMTP id dXfwoZuYt40x; Mon, 21 Sep 2020 19:32:27 -0700 (PDT)
 Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 556C98EE0CF;
-        Mon, 21 Sep 2020 19:31:26 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D9CF68EE0CF;
+        Mon, 21 Sep 2020 19:32:26 -0700 (PDT)
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         David Woodhouse <dwmw2@infradead.org>,
         keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: [PATCH v13 5/5] security: keys: trusted: Make sealed key properly interoperable
-Date:   Mon, 21 Sep 2020 19:28:09 -0700
-Message-Id: <20200922022809.7105-6-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v13 0/3] Trusted Key policy for TPM 2.0
+Date:   Mon, 21 Sep 2020 19:32:15 -0700
+Message-Id: <20200922023218.7466-1-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200922022809.7105-1-James.Bottomley@HansenPartnership.com>
-References: <20200922022809.7105-1-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The current implementation appends a migratable flag to the end of a
-key, meaning the format isn't exactly interoperable because the using
-party needs to know to strip this extra byte.  However, all other
-consumers of TPM sealed blobs expect the unseal to return exactly the
-key.  Since TPM2 keys have a key property flag that corresponds to
-migratable, use that flag instead and make the actual key the only
-sealed quantity.  This is secure because the key properties are bound
-to a hash in the private part, so if they're altered the key won't
-load.
+Updated to fix compile problem identified by 0day
 
-Backwards compatibility is implemented by detecting whether we're
-loading a new format key or not and correctly setting migratable from
-the last byte of old format keys.
+Original cover letter:
 
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+This is a lockstep patch with the prior trusted key rework patch (so
+requires it as a percursor).  Now the key format is ASN.1, the policy
+statements needed to unseal the key can be coded into the key file
+itself meaning the kernel can now construct and use the policy session
+necessary rather than the user having to do it.  This makes using TPM
+2.0 keys with policy much easier.
+
+The current implementation only has a limited subset of the full TPM
+2.0 policy commands, but it is enough to implement keys locked to PCR
+values and expiring keys.  The main missing feature is support for the
+TPM2_PolicyOR statement, which means all current policy has to be AND
+chains (key doesn't unlock unless every policy statement succeeds).
+
+James
 
 ---
 
-v2: added length checks to untrusted payload
-v8: recover patch
----
- include/linux/tpm.h                       |  2 +
- security/keys/trusted-keys/trusted_tpm2.c | 53 ++++++++++++++++-------
- 2 files changed, 40 insertions(+), 15 deletions(-)
+James Bottomley (3):
+  security: keys: trusted: add PCR policy to TPM2 keys
+  security: keys: trusted: add ability to specify arbitrary policy
+  security: keys: trusted: implement counter/timer policy
 
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index ae2482510f8c..35224860fd0c 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -305,6 +305,8 @@ struct tpm_buf {
- };
- 
- enum tpm2_object_attributes {
-+	TPM2_OA_FIXED_TPM		= BIT(1),
-+	TPM2_OA_FIXED_PARENT		= BIT(4),
- 	TPM2_OA_USER_WITH_AUTH		= BIT(6),
- };
- 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index e8dcc47b3388..905c5ca4d51c 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -231,6 +231,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 	unsigned int blob_len;
- 	struct tpm_buf buf;
- 	u32 hash;
-+	u32 flags;
- 	int i;
- 	int rc;
- 
-@@ -259,31 +260,32 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 			     TPM_DIGEST_SIZE);
- 
- 	/* sensitive */
--	tpm_buf_append_u16(&buf, 4 + options->blobauth_len + payload->key_len + 1);
-+	tpm_buf_append_u16(&buf, 4 + options->blobauth_len + payload->key_len);
- 
- 	tpm_buf_append_u16(&buf, options->blobauth_len);
- 	if (options->blobauth_len)
- 		tpm_buf_append(&buf, options->blobauth, options->blobauth_len);
- 
--	tpm_buf_append_u16(&buf, payload->key_len + 1);
-+	tpm_buf_append_u16(&buf, payload->key_len);
- 	tpm_buf_append(&buf, payload->key, payload->key_len);
--	tpm_buf_append_u8(&buf, payload->migratable);
- 
- 	/* public */
- 	tpm_buf_append_u16(&buf, 14 + options->policydigest_len);
- 	tpm_buf_append_u16(&buf, TPM_ALG_KEYEDHASH);
- 	tpm_buf_append_u16(&buf, hash);
- 
-+	/* key properties */
-+	flags = 0;
-+	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
-+	flags |= payload->migratable ? (TPM2_OA_FIXED_TPM |
-+					TPM2_OA_FIXED_PARENT) : 0;
-+	tpm_buf_append_u32(&buf, flags);
-+
- 	/* policy */
--	if (options->policydigest_len) {
--		tpm_buf_append_u32(&buf, 0);
--		tpm_buf_append_u16(&buf, options->policydigest_len);
-+	tpm_buf_append_u16(&buf, options->policydigest_len);
-+	if (options->policydigest_len)
- 		tpm_buf_append(&buf, options->policydigest,
- 			       options->policydigest_len);
--	} else {
--		tpm_buf_append_u32(&buf, TPM2_OA_USER_WITH_AUTH);
--		tpm_buf_append_u16(&buf, 0);
--	}
- 
- 	/* public parameters */
- 	tpm_buf_append_u16(&buf, TPM_ALG_NULL);
-@@ -356,8 +358,9 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 	unsigned int private_len;
- 	unsigned int public_len;
- 	unsigned int blob_len;
--	u8 *blob;
-+	u8 *blob, *pub;
- 	int rc;
-+	u32 attrs;
- 
- 	rc = tpm2_key_decode(payload, options, &blob);
- 	if (rc) {
-@@ -384,6 +387,16 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 	if (private_len + 2 + public_len + 2 > payload->blob_len)
- 		return -E2BIG;
- 
-+	pub = blob + 2 + private_len + 2;
-+	/* key attributes are always at offset 4 */
-+	attrs = get_unaligned_be32(pub + 4);
-+
-+	if ((attrs & (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT)) ==
-+	    (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT))
-+		payload->migratable = 0;
-+	else
-+		payload->migratable = 1;
-+
- 	blob_len = private_len + public_len + 4;
- 	if (blob_len > payload->blob_len)
- 		return -E2BIG;
-@@ -464,7 +477,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
- 	if (!rc) {
- 		data_len = be16_to_cpup(
- 			(__be16 *) &buf.data[TPM_HEADER_SIZE + 4]);
--		if (data_len < MIN_KEY_SIZE ||  data_len > MAX_KEY_SIZE + 1) {
-+		if (data_len < MIN_KEY_SIZE ||  data_len > MAX_KEY_SIZE) {
- 			rc = -EFAULT;
- 			goto out;
- 		}
-@@ -475,9 +488,19 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
- 		}
- 		data = &buf.data[TPM_HEADER_SIZE + 6];
- 
--		memcpy(payload->key, data, data_len - 1);
--		payload->key_len = data_len - 1;
--		payload->migratable = data[data_len - 1];
-+		if (payload->old_format) {
-+			/* migratable flag is at the end of the key */
-+			memcpy(payload->key, data, data_len - 1);
-+			payload->key_len = data_len - 1;
-+			payload->migratable = data[data_len - 1];
-+		} else {
-+			/*
-+			 * migratable flag already collected from key
-+			 * attributes
-+			 */
-+			memcpy(payload->key, data, data_len);
-+			payload->key_len = data_len;
-+		}
- 	}
- 
- out:
+ .../security/keys/trusted-encrypted.rst       |  83 +++-
+ include/keys/trusted-type.h                   |   5 +-
+ include/linux/tpm.h                           |   6 +
+ security/keys/Kconfig                         |   2 +
+ security/keys/trusted-keys/Makefile           |   4 +-
+ security/keys/trusted-keys/tpm2-policy.c      | 465 ++++++++++++++++++
+ security/keys/trusted-keys/tpm2-policy.h      |  31 ++
+ security/keys/trusted-keys/tpm2key.asn1       |  13 +
+ security/keys/trusted-keys/trusted_tpm1.c     |  23 +-
+ security/keys/trusted-keys/trusted_tpm2.c     | 120 ++++-
+ 10 files changed, 736 insertions(+), 16 deletions(-)
+ create mode 100644 security/keys/trusted-keys/tpm2-policy.c
+ create mode 100644 security/keys/trusted-keys/tpm2-policy.h
+
 -- 
 2.26.2
 
