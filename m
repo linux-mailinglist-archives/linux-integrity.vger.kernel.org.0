@@ -2,95 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFC9275FE9
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Sep 2020 20:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6290C276077
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Sep 2020 20:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbgIWScl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Sep 2020 14:32:41 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:41288 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726650AbgIWScl (ORCPT
+        id S1726743AbgIWSte (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Sep 2020 14:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbgIWSte (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Sep 2020 14:32:41 -0400
-Received: from [192.168.254.38] (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C2FCF20B7179;
-        Wed, 23 Sep 2020 11:32:39 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C2FCF20B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1600885960;
-        bh=eYamxZ/9KfLziSqDZDGqyg7y9XmLAhhecaK/mPCYbeo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=IEKAOv4CAGnJC0ocS9BKbEqfbu3dCVuW/cFUdHjlI4t7pPCt2gifpPrQEZh/AH9+R
-         6V0pnvqh/QE35boMAi5/Gc9Y99hTzFFKdtBE5V31AAbiKRFLHnNCgM4e8sTkn1d/mq
-         KWb62hF+OUSGnVGFx0w0M2JxeTlKiQXTMnTJ7lkA=
-Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Wed, 23 Sep 2020 14:49:34 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3841CC0613CE;
+        Wed, 23 Sep 2020 11:49:34 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id y11so779462qtn.9;
+        Wed, 23 Sep 2020 11:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RkpPiL5sLMoQ72Z4SVPCyIzaZVEUsKD6IONs26Z9oQ4=;
+        b=j6zFoRR/TNHPnYOJYg/v6yC5mOjqz6GhBvNdUdw/ZZY3Z659h4thQrXUvmYYNs/dMc
+         9AtbSQc1r9/KTQ+OdnHEMcrYOKmjexHp+zLAowzXW60xVUgp32upPori8ocBAUEa2r3r
+         RBgGigmHJn+mG8rh+rrSfDqq2SdthMmzakAE8uf56Ks1STHFgtkyEvVJSTmUDeKd4JlH
+         Cx+3SJd1aI9By0RJ0GJTBMtFDnsq45jEHay9VWPh2LaXhf87zwX1sup1iq4GFW7bYwHN
+         wYZuJxH556l/n/M+2V+a2YdPh4IkzEbo9S36Kf5zviplDX4eWHJkLL/e8sUM7P5GbZLv
+         8Ccw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=RkpPiL5sLMoQ72Z4SVPCyIzaZVEUsKD6IONs26Z9oQ4=;
+        b=dUYeTO293gYaaqNb5QY1CAxzysue013cNtGWDEbX/qPCgeAuN8dX5ow7pR/MBc2qyN
+         Fvlsha7nrvoddkJIVG/VQIFJWB3layfykHnz8wTsTT9xZza0zIg6BFISjdN9R0Yuh+13
+         t5XilUwLTqq4NSK0jl1isZctxhr6xrHaOGzpXZPMXKFqWAAu7lF9UJMWtwwWrg3rDC6q
+         IyVflyHaInlZdYFZIZ0BjEELl3UQy8pf6+lVJ227a8Cj2p81TL7jtvlFY+HoE5grPZaZ
+         tTd6tlsrgSr2C3Z62MFmI6lGRVulvElWrsUmDzQija7gQfl5Rp4ZUB9tBiwmDY2yVV/7
+         oePg==
+X-Gm-Message-State: AOAM531c8/RUS3QgJnipt9vrddG/HBzvwgqbUD5Fq6kMG0a8QN+Yox69
+        6rLqmahsS0W6uU9jpD2jRMSNTLsmOPw=
+X-Google-Smtp-Source: ABdhPJwkH8cFnD08Pdj7anSenqn2tvNw6QetwTg2I4xIrVuO/X572JBB17yMeOLN0zGx1aVaPRH8zA==
+X-Received: by 2002:aed:3203:: with SMTP id y3mr1556830qtd.278.1600886973396;
+        Wed, 23 Sep 2020 11:49:33 -0700 (PDT)
+Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
+        by smtp.gmail.com with ESMTPSA id r187sm518764qkc.63.2020.09.23.11.49.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2020 11:49:32 -0700 (PDT)
+Sender: Arvind Sankar <niveditas98@gmail.com>
+From:   Arvind Sankar <nivedita@alum.mit.edu>
+X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
+Date:   Wed, 23 Sep 2020 14:49:30 -0400
+To:     Solar Designer <solar@openwall.com>
+Cc:     Florian Weimer <fweimer@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        madvenka@linux.microsoft.com, kernel-hardening@lists.openwall.com,
+        linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org, oleg@redhat.com,
         x86@kernel.org, luto@kernel.org, David.Laight@ACULAB.COM,
-        fweimer@redhat.com, mark.rutland@arm.com, mic@digikod.net
-References: <210d7cd762d5307c2aa1676705b392bd445f1baa>
- <20200922215326.4603-1-madvenka@linux.microsoft.com>
+        mark.rutland@arm.com, mic@digikod.net,
+        Rich Felker <dalias@libc.org>
+Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
+Message-ID: <20200923184930.GA1352963@rani.riverdale.lan>
+References: <20200922215326.4603-1-madvenka@linux.microsoft.com>
  <20200923081426.GA30279@amd>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <8daf09c0-1651-143b-c57c-433c850605c3@linux.microsoft.com>
-Date:   Wed, 23 Sep 2020 13:32:38 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <20200923091456.GA6177@openwall.com>
+ <87wo0ko8v0.fsf@oldenburg2.str.redhat.com>
+ <20200923181136.GA8846@openwall.com>
 MIME-Version: 1.0
-In-Reply-To: <20200923081426.GA30279@amd>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200923181136.GA8846@openwall.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-...
->> The W^X implementation today is not complete. There exist many user level
->> tricks that can be used to load and execute dynamic code. E.g.,
->>
->> - Load the code into a file and map the file with R-X.
->>
->> - Load the code in an RW- page. Change the permissions to R--. Then,
->>   change the permissions to R-X.
->>
->> - Load the code in an RW- page. Remap the page with R-X to get a separate
->>   mapping to the same underlying physical page.
->>
->> IMO, these are all security holes as an attacker can exploit them to inject
->> his own code.
+On Wed, Sep 23, 2020 at 08:11:36PM +0200, Solar Designer wrote:
+> On Wed, Sep 23, 2020 at 04:39:31PM +0200, Florian Weimer wrote:
+> > * Solar Designer:
+> > 
+> > > While I share my opinion here, I don't mean that to block Madhavan's
+> > > work.  I'd rather defer to people more knowledgeable in current userland
+> > > and ABI issues/limitations and plans on dealing with those, especially
+> > > to Florian Weimer.  I haven't seen Florian say anything specific for or
+> > > against Madhavan's proposal, and I'd like to.  (Have I missed that?)
 > 
-> IMO, you are smoking crack^H^H very seriously misunderstanding what
-> W^X is supposed to protect from.
+> [...]
+> > I think it's unnecessary for the libffi use case.
+> [...]
 > 
-> W^X is not supposed to protect you from attackers that can already do
-> system calls. So loading code into a file then mapping the file as R-X
-> is in no way security hole in W^X.
+> > I don't know if kernel support could
+> > make sense in this context, but it would be a completely different
+> > patch.
 > 
-> If you want to provide protection from attackers that _can_ do system
-> calls, fine, but please don't talk about W^X and please specify what
-> types of attacks you want to prevent and why that's good thing.
+> Thanks.  Are there currently relevant use cases where the proposed
+> trampfd would be useful and likely actually made use of by userland -
+> e.g., specific userland project developers saying they'd use it, or
+> Madhavan intending to develop and contribute userland patches?
 > 
+> Alexander
 
-
-There are two things here - the idea behind W^X and the current realization
-of that idea in actual implementation. The idea behind W^X, as I understand,
-is to prevent a user from loading arbitrary code into a page and getting it
-to execute. If the user code contains a vulnerability, an attacker can 
-exploit it to potentially inject his own code and get it to execute. This
-cannot be denied.
-
-From that perspective, all of the above tricks I have mentioned are tricks
-that user code can use to load arbitrary code into a page and get it to
-execute.
-
-Now, I don't want the discussion to be stuck in a mere name. If what I am
-suggesting needs a name other than "W^X" in the opinion of the reviewers,
-that is fine with me. But I don't believe there is any disagreement that
-the above user tricks are security holes.
-
-Madhavan
+The trampoline it provides in this version can be implemented completely
+in userspace. The kernel part of it is essentially just providing a way
+to do text relocations without needing a WX mapping, but the text
+relocations would be unnecessary in the first place if the trampoline
+was position-independent code.
