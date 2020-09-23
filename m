@@ -2,109 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB70C275A57
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Sep 2020 16:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B649B275B6F
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Sep 2020 17:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbgIWOjw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Sep 2020 10:39:52 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:46564 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726610AbgIWOjt (ORCPT
+        id S1726727AbgIWPSj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Sep 2020 11:18:39 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:56626 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726603AbgIWPSj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Sep 2020 10:39:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600871988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XtUNJYHV2J1JZ6JLBA0jisxCSujCzEq2vD80O/D6hKQ=;
-        b=G+dmkEqPJBi3f5i7FcUcaVulmRYMAH2y73HVTLnvN6Mb3DmCloP3XKtaNvgoBj2RDKbHwA
-        2MWENmDITUuUSD8/OUY1HqonbmMY3rVqddRf32kXbvH+xrq0lAzmXKun8FRQVr+oNDgv5a
-        8Zj2hNFefaykwdvpC11DhMr7gX9oNk0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-497-Ai1jqBmFMUa4zYresSj0Pg-1; Wed, 23 Sep 2020 10:39:44 -0400
-X-MC-Unique: Ai1jqBmFMUa4zYresSj0Pg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CBF2018A2249;
-        Wed, 23 Sep 2020 14:39:40 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-114-108.ams2.redhat.com [10.36.114.108])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 147BA7882D;
-        Wed, 23 Sep 2020 14:39:32 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
+        Wed, 23 Sep 2020 11:18:39 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 8B8181C0BBB; Wed, 23 Sep 2020 17:18:35 +0200 (CEST)
+Date:   Wed, 23 Sep 2020 17:18:35 +0200
+From:   Pavel Machek <pavel@ucw.cz>
 To:     Solar Designer <solar@openwall.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, madvenka@linux.microsoft.com,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+Cc:     madvenka@linux.microsoft.com, kernel-hardening@lists.openwall.com,
+        linux-api@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org, oleg@redhat.com,
         x86@kernel.org, luto@kernel.org, David.Laight@ACULAB.COM,
-        mark.rutland@arm.com, mic@digikod.net,
+        fweimer@redhat.com, mark.rutland@arm.com, mic@digikod.net,
         Rich Felker <dalias@libc.org>
 Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
+Message-ID: <20200923151835.GA32555@duo.ucw.cz>
 References: <20200922215326.4603-1-madvenka@linux.microsoft.com>
-        <20200923081426.GA30279@amd> <20200923091456.GA6177@openwall.com>
-Date:   Wed, 23 Sep 2020 16:39:31 +0200
-In-Reply-To: <20200923091456.GA6177@openwall.com> (Solar Designer's message of
-        "Wed, 23 Sep 2020 11:14:57 +0200")
-Message-ID: <87wo0ko8v0.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+ <20200923081426.GA30279@amd>
+ <20200923091456.GA6177@openwall.com>
+ <20200923141102.GA7142@openwall.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="fUYQa+Pmc3FrFX/N"
+Content-Disposition: inline
+In-Reply-To: <20200923141102.GA7142@openwall.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-* Solar Designer:
 
-> While I share my opinion here, I don't mean that to block Madhavan's
-> work.  I'd rather defer to people more knowledgeable in current userland
-> and ABI issues/limitations and plans on dealing with those, especially
-> to Florian Weimer.  I haven't seen Florian say anything specific for or
-> against Madhavan's proposal, and I'd like to.  (Have I missed that?)
+--fUYQa+Pmc3FrFX/N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There was a previous discussion, where I provided feedback (not much
-different from the feedback here, given that the mechanism is mostly the
-same).
+Hi!
 
-I think it's unnecessary for the libffi use case.  Precompiled code can
-be loaded from disk because the libffi trampolines are so regular.  On
-most architectures, it's not even the code that's patched, but some of
-the data driving it, which happens to be located on the same page due to
-a libffi quirk.
+> > > > The W^X implementation today is not complete. There exist many user=
+ level
+> > > > tricks that can be used to load and execute dynamic code. E.g.,
+> > > >=20
+> > > > - Load the code into a file and map the file with R-X.
+> > > >=20
+> > > > - Load the code in an RW- page. Change the permissions to R--. Then,
+> > > >   change the permissions to R-X.
+> > > >=20
+> > > > - Load the code in an RW- page. Remap the page with R-X to get a se=
+parate
+> > > >   mapping to the same underlying physical page.
+> > > >=20
+> > > > IMO, these are all security holes as an attacker can exploit them t=
+o inject
+> > > > his own code.
+> > >=20
+> > > IMO, you are smoking crack^H^H very seriously misunderstanding what
+> > > W^X is supposed to protect from.
+> > >=20
+> > > W^X is not supposed to protect you from attackers that can already do
+> > > system calls. So loading code into a file then mapping the file as R-X
+> > > is in no way security hole in W^X.
+> > >=20
+> > > If you want to provide protection from attackers that _can_ do system
+> > > calls, fine, but please don't talk about W^X and please specify what
+> > > types of attacks you want to prevent and why that's good thing.
+> >=20
+> > On one hand, Pavel is absolutely right.  It is ridiculous to say that
+> > "these are all security holes as an attacker can exploit them to inject
+> > his own code."
+>=20
+> I stand corrected, due to Brad's tweet and follow-ups here:
+>=20
+> https://twitter.com/spendergrsec/status/1308728284390318082
+>=20
+> It sure does make sense to combine ret2libc/ROP to mprotect() with one's
+> own injected shellcode.  Compared to doing everything from ROP, this is
+> easier and more reliable across versions/builds if the desired
+> payload
 
-The libffi use case is a bit strange anyway: its trampolines are
-type-generic, and the per-call adjustment is data-driven.  This means
-that once you have libffi in the process, you have a generic
-data-to-function-call mechanism available that can be abused (it's even
-fully CET compatible in recent versions).  And then you need to look at
-the processes that use libffi.  A lot of them contain bytecode
-interpreters, and those enable data-driven arbitrary code execution as
-well.  I know that there are efforts under way to harden Python, but
-it's going to be tough to get to the point where things are still
-difficult for an attacker once they have the ability to make mprotect
-calls.
+Ok, so this starts to be a bit confusing.
 
-It was pointed out to me that libffi is doing things wrong, and the
-trampolines should not be type-generic, but generated so that they match
-the function being called.  That is, the marshal/unmarshal code would be
-open-coded in the trampoline, rather than using some generic mechanism
-plus run-time dispatch on data tables describing the function type.
-That is a very different design (and typically used by compilers (JIT or
-not JIT) to implement native calls).  Mapping some code page with a
-repeating pattern would no longer work to defeat anti-JIT measures
-because it's closer to real JIT.  I don't know if kernel support could
-make sense in this context, but it would be a completely different
-patch.
+I thought W^X is to protect from attackers that have overflowed buffer
+somewhere, but can not to do arbitrary syscalls, yet.
 
-Thanks,
-Florian
--- 
-Red Hat GmbH, https://de.redhat.com/ , Registered seat: Grasbrunn,
-Commercial register: Amtsgericht Muenchen, HRB 153243,
-Managing Directors: Charles Cachera, Brian Klemm, Laurie Krebs, Michael O'Neill
+You are saying that there's important class of attackers that can do
+some syscalls but not arbitrary ones.
 
+I'd like to see definition of that attacker (and perhaps description
+of the system the protection is expected to be useful on -- if it is
+not close to common Linux distros).
+
+Best regards,
+
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--fUYQa+Pmc3FrFX/N
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2tnSwAKCRAw5/Bqldv6
+8i65AKCaFokdFtwbykoqIQdSHvCvSHOLDQCdFG4dtfWtOuYiT5+Qq+ozWoM46eM=
+=Ferp
+-----END PGP SIGNATURE-----
+
+--fUYQa+Pmc3FrFX/N--
