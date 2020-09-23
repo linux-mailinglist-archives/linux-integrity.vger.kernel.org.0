@@ -2,161 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC3327613E
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Sep 2020 21:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EA4276166
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Sep 2020 21:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbgIWTlI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Sep 2020 15:41:08 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:50450 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726156AbgIWTlH (ORCPT
+        id S1726466AbgIWTvv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Sep 2020 15:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726199AbgIWTvv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Sep 2020 15:41:07 -0400
-Received: from [192.168.254.38] (unknown [47.187.206.220])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 24DE220B7179;
-        Wed, 23 Sep 2020 12:41:05 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 24DE220B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1600890066;
-        bh=SHLv6M19mTEA3Q+HMwGO2d17v134ff6kOkHWg2oExmk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kGXISa+fmD0BCDpEQnnCH9Pq25TnzBLU7eNC7j4udIn/khcedGMZt32Iq7JAPGchg
-         luAP/WHcUq9x1xW1/50YFmrTM0/nW5osVqFkqlgScNmlE+wnu2v0ZixY9PaCUGo0Y4
-         MRQIBAlfv+g5G8+XBslF45bPRw9XRky7bkjKl3Bc=
-Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
-To:     Solar Designer <solar@openwall.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        Wed, 23 Sep 2020 15:51:51 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC40C0613CE;
+        Wed, 23 Sep 2020 12:51:51 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id z2so934352qtv.12;
+        Wed, 23 Sep 2020 12:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=K/pUtqEAd6FaTDCf00ujMgUqqETSXfPhUeGuKchWXUs=;
+        b=YDuXTVEPUbAJafRqh/dypmyCmOtqDZ2dqQKZplay/eHegdSKIEI9B7GFZydCeewdM1
+         F4y82sJPZZrXoXdu89i+v9LgMLfLO5dWf9qfjvTSJyJaARNyPQcUnI/xdfnZWaIeip+4
+         IuGNV9+2rBKAd87bd/oKTVle2Y16/7RrJZgWLHmEvSY4vKB5y+il7B34hPUS0X/6OpZd
+         gOmpExT9thdKpwF+eJKIOgmu/jncp8hF7T//iMWu+dOFW7m+WSZH5yMLDv/wBjTEAMW1
+         XU3qN/29UsHna8AFr4iVe8VMhv03zG+KI/2MhWWWHNBqTHY70yRtXnOJOsK722s1fruS
+         +O3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=K/pUtqEAd6FaTDCf00ujMgUqqETSXfPhUeGuKchWXUs=;
+        b=FqTUVIcnSTpBn2jRknUJBqwWDa7kgmy/e9P8FrbHNcbnj3pKaUdXUWXwlbk/cQTkQt
+         4wvi4JzM4cnifS1SzPIGxbPCloPdWfDeuPSUuzy2cn7o2bsONjcJlEQTPTsywAkJo0Nc
+         SfuXxJFXhzUp7OG4HuDrZbC1EJcAJNIoz0sLM7odXeI11esrCWJ+9jSEaWxG1vVx5aPS
+         TVv5zlICC72qnDUBq97ImuA5v/RLwMI+In5Oy6e+SKaMg/5PGQgP+APkpm14x/3bhCCN
+         CuDn6MiREkriwhiaFjrIMjKGbhhUml7+oEhvhnFwi2lTP4KYhRS2ko/3Nd1j5n2AlhUC
+         I7rQ==
+X-Gm-Message-State: AOAM530mX86XLxgLngrOA0pHdZ0W2VDHyl0giCHHTA8g3MrbgpbhJGFi
+        whVejSG3rCjOpA86dsyrpeTc6lVeodY=
+X-Google-Smtp-Source: ABdhPJzjUTxogU34ItSMJ0OdmM63Q03/ic99kwSF7ETgPXeMzfaQhO5sAjfKzolXALvtzOWcxGlwDw==
+X-Received: by 2002:ac8:5d43:: with SMTP id g3mr1813055qtx.295.1600890710351;
+        Wed, 23 Sep 2020 12:51:50 -0700 (PDT)
+Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
+        by smtp.gmail.com with ESMTPSA id n144sm648905qkn.69.2020.09.23.12.51.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2020 12:51:49 -0700 (PDT)
+Sender: Arvind Sankar <niveditas98@gmail.com>
+From:   Arvind Sankar <nivedita@alum.mit.edu>
+X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
+Date:   Wed, 23 Sep 2020 15:51:47 -0400
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org, oleg@redhat.com,
-        x86@kernel.org, luto@kernel.org, David.Laight@ACULAB.COM,
-        fweimer@redhat.com, mark.rutland@arm.com, mic@digikod.net,
-        Rich Felker <dalias@libc.org>
-References: <20200922215326.4603-1-madvenka@linux.microsoft.com>
- <20200923081426.GA30279@amd> <20200923091456.GA6177@openwall.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <1c3acf03-94af-1d5e-00c6-d874ee0ef330@linux.microsoft.com>
-Date:   Wed, 23 Sep 2020 14:41:04 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        x86@kernel.org, libffi-discuss@sourceware.org, luto@kernel.org,
+        David.Laight@ACULAB.COM, mark.rutland@arm.com, mic@digikod.net,
+        pavel@ucw.cz
+Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
+Message-ID: <20200923195147.GA1358246@rani.riverdale.lan>
+References: <20200916150826.5990-1-madvenka@linux.microsoft.com>
+ <87v9gdz01h.fsf@mid.deneb.enyo.de>
+ <96ea02df-4154-5888-1669-f3beeed60b33@linux.microsoft.com>
+ <20200923014616.GA1216401@rani.riverdale.lan>
+ <20200923091125.GB1240819@rani.riverdale.lan>
+ <a742b9cd-4ffb-60e0-63b8-894800009700@linux.microsoft.com>
 MIME-Version: 1.0
-In-Reply-To: <20200923091456.GA6177@openwall.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <a742b9cd-4ffb-60e0-63b8-894800009700@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On 9/23/20 4:14 AM, Solar Designer wrote:
->>> The W^X implementation today is not complete. There exist many user level
->>> tricks that can be used to load and execute dynamic code. E.g.,
->>>
->>> - Load the code into a file and map the file with R-X.
->>>
->>> - Load the code in an RW- page. Change the permissions to R--. Then,
->>>   change the permissions to R-X.
->>>
->>> - Load the code in an RW- page. Remap the page with R-X to get a separate
->>>   mapping to the same underlying physical page.
->>>
->>> IMO, these are all security holes as an attacker can exploit them to inject
->>> his own code.
->> IMO, you are smoking crack^H^H very seriously misunderstanding what
->> W^X is supposed to protect from.
->>
->> W^X is not supposed to protect you from attackers that can already do
->> system calls. So loading code into a file then mapping the file as R-X
->> is in no way security hole in W^X.
->>
->> If you want to provide protection from attackers that _can_ do system
->> calls, fine, but please don't talk about W^X and please specify what
->> types of attacks you want to prevent and why that's good thing.
-> On one hand, Pavel is absolutely right.  It is ridiculous to say that
-> "these are all security holes as an attacker can exploit them to inject
-> his own code."
+On Wed, Sep 23, 2020 at 02:17:30PM -0500, Madhavan T. Venkataraman wrote:
 > 
-
-Why? Isn't it possible that an attacker can exploit some vulnerability such
-as buffer overflow and overwrite the buffer that contains the dynamic code?
-
-
-> On the other hand, "what W^X is supposed to protect from" depends on how
-> the term W^X is defined (historically, by PaX and OpenBSD).  It may be
-> that W^X is partially not a feature to defeat attacks per se, but also a
-> policy enforcement feature preventing use of dangerous techniques (JIT).
 > 
-> Such policy might or might not make sense.  It might make sense for ease
-> of reasoning, e.g. "I've flipped this setting, and now I'm certain the
-> system doesn't have JIT within a process (can still have it through
-> dynamically creating and invoking an entire new program), so there are
-> no opportunities for an attacker to inject code nor generate previously
-> non-existing ROP gadgets into an executable mapping within a process."
+> On 9/23/20 4:11 AM, Arvind Sankar wrote:
+> > For libffi, I think the proposed standard trampoline won't actually
+> > work, because not all ABIs have two scratch registers available to use
+> > as code_reg and data_reg. Eg i386 fastcall only has one, and register
+> > has zero scratch registers. I believe 32-bit ARM only has one scratch
+> > register as well.
 > 
-> I do find it questionable whether such policy and such reasoning make
-> sense beyond academia.
+> The trampoline is invoked as a function call in the libffi case. Any
+> caller saved register can be used as code_reg, can it not? And the
+> scratch register is needed only to jump to the code. After that, it
+> can be reused for any other purpose.
 > 
-> Then, there might be even more ways in which W^X is not perfect enough
-> to enable such reasoning.  What about using ptrace(2) to inject code?
-> Should enabling W^X also disable ability to debug programs by non-root?
-> We already have Yama ptrace_scope, which can achieve that at the highest
-> setting, although that's rather inconvenient and is probably unexpected
-> by most to be a requirement for having (ridiculously?) full W^X allowing
-> for the academic reasoning.
+> However, for ARM, you are quite correct. There is only one scratch
+> register. This means that I have to provide two types of trampolines:
 > 
-
-I am not suggesting that W^X be fixed. That is up to the maintainers of that
-code. I am saying that if the security subsystem is enhanced in the future with
-policies and settings that prevent the user tricks I mentioned, then it becomes
-impossible to execute dynamic code except by making security exceptions on a case
-by case basis.
-
-As an alternative to making security exceptions, one could convert dynamic code
-to static code which can then be authenticated.
-
-> Personally, I am for policies that make more practical sense.  For
-> example, years ago I advocated here on kernel-hardening that we should
-> have a mode where ELF flags enabling/disabling executable stack are
-> ignored, and non-executable stack is always enforced.  This should also
-> be extended to default (at program startup) permissions on more than
-> just stack (but also on .bss, typical libcs' heap allocations, etc.)
-> However, I am not convinced there's enough value in extending the policy
-> to restricting explicit uses of mprotect(2).
+> 	- If an architecture has enough scratch registers, use the currently
+> 	  defined trampoline.
 > 
-> Yes, PaX did that, and its emutramp.txt said "runtime code generation is
-> by its nature incompatible with PaX's PAGEEXEC/SEGMEXEC and MPROTECT
-> features, therefore the real solution is not in emulation but by
-> designing a kernel API for runtime code generation and modifying
-> userland to make use of it."  However, not being convinced in the
-> MPROTECT feature having enough practical value, I am also not convinced
-> "a kernel API for runtime code generation and modifying userland to make
-> use of it" is the way to go.
+> 	- If the architecture has only one scratch register, but has PC-relative
+> 	  data references, then embed the code address at the bottom of the
+> 	  trampoline and access it using PC-relative addressing.
 > 
-
-In a separate email, I will try to answer this and provide justification
-for why it is better to do it in the kernel.
-
-> Having static instead of dynamically-generated trampolines in userland
-> code where possible (and making other userland/ABI changes to make that
-> possible in more/all cases) is an obvious improvement, and IMO should be
-> a priority over the above.
->
-
-> While I share my opinion here, I don't mean that to block Madhavan's
-> work.  I'd rather defer to people more knowledgeable in current userland
-> and ABI issues/limitations and plans on dealing with those, especially
-> to Florian Weimer.  I haven't seen Florian say anything specific for or
-> against Madhavan's proposal, and I'd like to.  (Have I missed that?)
-> It'd be wrong to introduce a kernel API that userland doesn't need, and
-> it'd be right to introduce one that userland actually intends to use.
+> Thanks for pointing this out.
 > 
-> I've also added Rich Felker to CC here, for musl libc and its possible
-> intent to use the proposed API.  (My guess is there's no such need, and
-> thus no intent, but Rich might want to confirm that or correct me.)
-> 
-> Alexander
+> Madhavan
 
-Madhavan
+libffi is trying to provide closures with non-standard ABIs as well: the
+actual user function is standard ABI, but the closure can be called with
+a different ABI. If the closure was created with FFI_REGISTER abi, there
+are no registers available for the trampoline to use: EAX, EDX and ECX
+contain the first three arguments of the function, and every other
+register is callee-save.
+
+I provided a sample of the kind of trampoline that would be needed in
+this case -- it's position-independent and doesn't clobber any registers
+at all, and you get 255 trampolines per page. If I take another 16-byte
+slot out of the page for the end trampoline that does the actual work,
+I'm sure I could even come up with one that can just call a normal C
+function, only the return might need special handling depending on the
+return type.
+
+And again, do you actually have any example of an architecture that
+cannot run position-independent code? PC-relative addressing is an
+implementation detail: the fact that it's available for x86_64 but not
+for i386 just makes position-independent code more cumbersome on i386,
+but it doesn't make it impossible. For the tiny trampolines here, it
+makes almost no difference.
