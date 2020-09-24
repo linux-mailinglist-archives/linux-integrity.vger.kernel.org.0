@@ -2,119 +2,158 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B08277714
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Sep 2020 18:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6333B2777E5
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Sep 2020 19:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbgIXQpC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Sep 2020 12:45:02 -0400
-Received: from smtp-190a.mail.infomaniak.ch ([185.125.25.10]:52367 "EHLO
-        smtp-190a.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726920AbgIXQpC (ORCPT
+        id S1727555AbgIXRiG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Sep 2020 13:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726477AbgIXRiF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Sep 2020 12:45:02 -0400
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4By19B01Y1zlhTqt;
-        Thu, 24 Sep 2020 18:44:30 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4By1972FNszlh8Yx;
-        Thu, 24 Sep 2020 18:44:27 +0200 (CEST)
-Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
-To:     Pavel Machek <pavel@ucw.cz>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, oleg@redhat.com,
-        x86@kernel.org, luto@kernel.org, David.Laight@ACULAB.COM,
-        fweimer@redhat.com, mark.rutland@arm.com
-References: <210d7cd762d5307c2aa1676705b392bd445f1baa>
- <20200922215326.4603-1-madvenka@linux.microsoft.com>
- <20200923084232.GB30279@amd>
- <34257bc9-173d-8ef9-0c97-fb6bd0f69ecb@linux.microsoft.com>
- <20200923205156.GA12034@duo.ucw.cz>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <c5ddf0c2-962a-f93a-e666-1c6f64482d97@digikod.net>
-Date:   Thu, 24 Sep 2020 18:44:26 +0200
-User-Agent: 
+        Thu, 24 Sep 2020 13:38:05 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D62C0613CE;
+        Thu, 24 Sep 2020 10:38:05 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id q5so286891qkc.2;
+        Thu, 24 Sep 2020 10:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5bhRjdNmwctA9bi8GxsYvmMwgzV/9dcdCn2Ip4F4euc=;
+        b=cZOWGP+ALCi4vj4BHTzKgWDrtzwE4tF3jGNpkhuLUh6fG/k8zqpGq1Lo/0dcBLLoIi
+         pPGI5IpS/OrzvOjkni8+1PZ149ujLT0LOP6DV/JchuR6Qm2t3wNtyHG6ve58+vpA1a+n
+         vo9tdcnK4n/fTNOQCs55j4rhmmB4gid8Yk08zVDqQHhgx6gWFwcbAHR0ggH6v1Hu9XQg
+         NWk8LyxkU2lLBfuX9c41Izqi6n4RXF8OzcYv/vBHceR4AQDOinz6HygZUKBdg1Ok6Fhz
+         x7PDV/Kr3TTU4rGFdiyUzzj3q20kP8wByDlsqyrvCMsSIga89AVXjSHZt/HQ36A/Zqys
+         Zm7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=5bhRjdNmwctA9bi8GxsYvmMwgzV/9dcdCn2Ip4F4euc=;
+        b=EMrsNQXf4gCxtm1u3qeXqYCljaVzImbs5t2tgxVSEFEYnOYu141mHiKutlLC7bXHDY
+         PlsQ+BMtUZUrg5Av+HOpRmViWVzCpsjUKDN5NDPG6eQQFFAUAXWh4I0pLqN+qu3eQ85p
+         +/a1qG1jwVvoAcAFz+AVYHTzR49bQrMCei+XqMr/oAhCKBWOSxeFvMhLC0Zrg/7fQBd+
+         XgxUwvS3VwhCb+pV2xBr6GEldGZLVLJD1TzfNQD0aD3zk0jjtKvQI6k54x43F9lCnDej
+         ihhwfyoSUIYb09eXKLr17czvAdNv1W8UO3yx6rdb2iK9TYATNulfyq03oXhAzhJvoR1e
+         AbbA==
+X-Gm-Message-State: AOAM531+HhRlU4/fQPZZYI5GoKpHSJ03TR08FOwCyUnKS5M6A/gjbKmj
+        gEedA1FF5YcL2pXQVhLCoFA=
+X-Google-Smtp-Source: ABdhPJzvAQTyLYVuqTgONX5CqLnI4a7/K1S3m2ztmokOk/j35ocAhw/nB+FROtf10E9RL4+9MkjRSg==
+X-Received: by 2002:a37:9c8:: with SMTP id 191mr213412qkj.292.1600969083722;
+        Thu, 24 Sep 2020 10:38:03 -0700 (PDT)
+Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
+        by smtp.gmail.com with ESMTPSA id n136sm96584qkn.14.2020.09.24.10.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2020 10:38:03 -0700 (PDT)
+Sender: Arvind Sankar <niveditas98@gmail.com>
+From:   Arvind Sankar <nivedita@alum.mit.edu>
+X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
+Date:   Thu, 24 Sep 2020 13:38:01 -0400
+To:     Ross Philipson <ross.philipson@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
+        linux-doc@vger.kernel.org, dpsmith@apertussolutions.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        luto@amacapital.net, trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH 07/13] x86: Secure Launch kernel early boot stub
+Message-ID: <20200924173801.GA103726@rani.riverdale.lan>
+References: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
+ <1600959521-24158-8-git-send-email-ross.philipson@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <20200923205156.GA12034@duo.ucw.cz>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1600959521-24158-8-git-send-email-ross.philipson@oracle.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-On 23/09/2020 22:51, Pavel Machek wrote:
-> Hi!
+On Thu, Sep 24, 2020 at 10:58:35AM -0400, Ross Philipson wrote:
+> The Secure Launch (SL) stub provides the entry point for Intel TXT (and
+> later AMD SKINIT) to vector to during the late launch. The symbol
+> sl_stub_entry is that entry point and its offset into the kernel is
+> conveyed to the launching code using the MLE (Measured Launch
+> Environment) header in the structure named mle_header. The offset of the
+> MLE header is set in the kernel_info. The routine sl_stub contains the
+> very early late launch setup code responsible for setting up the basic
+> environment to allow the normal kernel startup_32 code to proceed. It is
+> also responsible for properly waking and handling the APs on Intel
+> platforms. The routine sl_main which runs after entering 64b mode is
+> responsible for measuring configuration and module information before
+> it is used like the boot params, the kernel command line, the TXT heap,
+> an external initramfs, etc.
 > 
->>>> Scenario 2
->>>> ----------
->>>>
->>>> We know what code we need in advance. User trampolines are a good example of
->>>> this. It is possible to define such code statically with some help from the
->>>> kernel.
->>>>
->>>> This RFC addresses (2). (1) needs a general purpose trusted code generator
->>>> and is out of scope for this RFC.
->>>
->>> This is slightly less crazy talk than introduction talking about holes
->>> in W^X. But it is very, very far from normal Unix system, where you
->>> have selection of interpretters to run your malware on (sh, python,
->>> awk, emacs, ...) and often you can even compile malware from sources. 
->>>
->>> And as you noted, we don't have "a general purpose trusted code
->>> generator" for our systems.
->>>
->>> I believe you should simply delete confusing "introduction" and
->>> provide details of super-secure system where your patches would be
->>> useful, instead.
->>
->> This RFC talks about converting dynamic code (which cannot be authenticated)
->> to static code that can be authenticated using signature verification. That
->> is the scope of this RFC.
->>
->> If I have not been clear before, by dynamic code, I mean machine code that is
->> dynamic in nature. Scripts are beyond the scope of this RFC.
->>
->> Also, malware compiled from sources is not dynamic code. That is orthogonal
->> to this RFC. If such malware has a valid signature that the kernel permits its
->> execution, we have a systemic problem.
->>
->> I am not saying that script authentication or compiled malware are not problems.
->> I am just saying that this RFC is not trying to solve all of the security problems.
->> It is trying to define one way to convert dynamic code to static code to address
->> one class of problems.
-> 
-> Well, you don't have to solve all problems at once.
-> 
-> But solutions have to exist, and AFAIK in this case they don't. You
-> are armoring doors, but ignoring open windows.
+> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 
-FYI, script execution is being addressed (for the kernel part) by this
-patch series:
-https://lore.kernel.org/lkml/20200924153228.387737-1-mic@digikod.net/
+Which version of the kernel is this based on?
 
-> 
-> Or very probably you are thinking about something different than
-> normal desktop distros (Debian 10). Because on my systems, I have
-> python, gdb and gcc...
+> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+> index 97d37f0..42043bf 100644
+> --- a/arch/x86/boot/compressed/head_64.S
+> +++ b/arch/x86/boot/compressed/head_64.S
+> @@ -279,6 +279,21 @@ SYM_INNER_LABEL(efi32_pe_stub_entry, SYM_L_LOCAL)
+>  SYM_FUNC_END(efi32_stub_entry)
+>  #endif
+>  
+> +#ifdef CONFIG_SECURE_LAUNCH
+> +SYM_FUNC_START(sl_stub_entry)
+> +	/*
+> +	 * On entry, %ebx has the entry abs offset to sl_stub_entry. To
+> +	 * find the beginning of where we are loaded, sub off from the
+> +	 * beginning.
+> +	 */
 
-It doesn't make sense for a tailored security system to leave all these
-tools available to an attacker.
+This requirement should be added to the documentation. Is it necessary
+or can this stub just figure out the address the same way as the other
+32-bit entry points, using the scratch space in bootparams as a little
+stack?
 
-> 
-> It would be nice to specify what other pieces need to be present for
-> this to make sense -- because it makes no sense on Debian 10.
+> +	leal	(startup_32 - sl_stub_entry)(%ebx), %ebx
+> +
+> +	/* More room to work in sl_stub in the text section */
+> +	jmp	sl_stub
+> +
+> +SYM_FUNC_END(sl_stub_entry)
+> +#endif
+> +
+>  	.code64
+>  	.org 0x200
+>  SYM_CODE_START(startup_64)
+> @@ -537,6 +552,25 @@ SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
+>  	shrq	$3, %rcx
+>  	rep	stosq
+>  
+> +#ifdef CONFIG_SECURE_LAUNCH
+> +	/*
+> +	 * Have to do the final early sl stub work in 64b area.
+> +	 *
+> +	 * *********** NOTE ***********
+> +	 *
+> +	 * Several boot params get used before we get a chance to measure
+> +	 * them in this call. This is a known issue and we currently don't
+> +	 * have a solution. The scratch field doesn't matter and loadflags
+> +	 * have KEEP_SEGMENTS set by the stub code. There is no obvious way
+> +	 * to do anything about the use of kernel_alignment or init_size
+> +	 * though these seem low risk.
+> +	 */
 
-Not all kernel features make sense for a generic/undefined usage,
-especially specific security mechanisms (e.g. SELinux, Smack, Tomoyo,
-SafeSetID, LoadPin, IMA, IPE, secure/trusted boot, lockdown, etc.), but
-they can still be definitely useful.
+There are various fields in bootparams that depend on where the
+kernel/initrd and cmdline are loaded in memory. If the entire bootparams
+page is getting measured, does that mean they all have to be at fixed
+addresses on every boot?
 
-> 
-> Best regards,
-> 									Pavel
-> 
+Also KEEP_SEGMENTS support is gone from the kernel since v5.7, since it
+was unused. startup_32 now always loads a GDT and then the segment
+registers. I think this should be ok for you as the only thing the flag
+used to do in the 64-bit kernel was to stop startup_32 from blindly
+loading __BOOT_DS into the segment registers before it had setup its own
+GDT.
+
+For the 32-bit assembler code that's being added, tip/master now has
+changes that prevent the compressed kernel from having any runtime
+relocations.  You'll need to revise some of the code and the data
+structures initial values to avoid creating relocations.
+
+Thanks.
