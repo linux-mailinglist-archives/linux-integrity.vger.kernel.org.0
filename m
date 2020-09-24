@@ -2,44 +2,45 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71382277493
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Sep 2020 16:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8006A277495
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Sep 2020 16:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728379AbgIXO6w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Sep 2020 10:58:52 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:55946 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728417AbgIXO6m (ORCPT
+        id S1728430AbgIXO6x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Sep 2020 10:58:53 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:57268 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728407AbgIXO6o (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Sep 2020 10:58:42 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OEtGnj037479;
-        Thu, 24 Sep 2020 14:58:12 GMT
+        Thu, 24 Sep 2020 10:58:44 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OErXCk101477;
+        Thu, 24 Sep 2020 14:58:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=VJyk/H2s9dDWeqPz/Xhx7qOnjD9xCnM1/44obMCXtFQ=;
- b=kX6ueIyp4SVt52upchUJrxzu7FHQ0xT74oC3QL5lhVkRTFND6nN7NKypsp5fUsJDf9pk
- 958nmSRZVe9Uzex2aTzmQ57Zr83VBw8HEm0VZ7OSGJ2kRX4VuK1WxonM0IXjzUWoeBzi
- +uUwjKyxRVOC5rZnIgopDVYDLrOXjsyBYHDvF9PvwKIf+HO+wyf4srOQXCvON7UvG3iM
- EW5CVXAIx95W1opZCIZf9m0KhrjCqt8DPym2k6161BPygIbW8yKCdeGqbmL+F8nc+/Gz
- nDemT3/HIfxX4drL+lE+M0QtjKTHBDGBCuUIBDc9lcwiA7rrh/hMCFv4ev6p48dqQK0i xg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 33q5rgq57x-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=SW4zrkSQwoEdLRCEgQ4sbnKb+1sGwz7LtQQgdwwQPMY=;
+ b=Xm/zkyJdaioXa/mvDiV1Orqy22dUH3TrUqTa0QYLhfwAAh0LFhvUq4wNFp3dQsYErI86
+ 4dXmxbAvRFdmPXROnZBrFInPDYmgwUEUB3wzOXqXOKeze4FlNRiqGIAFnWNbSkBnLJJ8
+ /wWMg3b6Y2n867N2XzDk7v/2uDDqeK3CRBsPqx6qvkoPK9mhlAI6/renhI2txN3yCwxP
+ exNejxsbPEoFAvBf85fgbOTwocm1TrNc3Weqz0YHl1NM7EwnMqmBj4M7pwCpBW2hY33J
+ XlaaJRyTmBiNaWBCFQGUOmycY4xerYc0UQh/tmWwYu+MHJGy+8G93k7dXyjBoG47kAav yA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2130.oracle.com with ESMTP id 33qcpu5qc4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Sep 2020 14:58:12 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OEuTGG126226;
-        Thu, 24 Sep 2020 14:58:12 GMT
+        Thu, 24 Sep 2020 14:58:13 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OEuUQB096519;
+        Thu, 24 Sep 2020 14:58:13 GMT
 Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 33nujr18a6-1
+        by userp3020.oracle.com with ESMTP id 33nurw9x1u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 24 Sep 2020 14:58:12 +0000
 Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08OEwAkv002765;
-        Thu, 24 Sep 2020 14:58:10 GMT
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08OEwB9k002771;
+        Thu, 24 Sep 2020 14:58:11 GMT
 Received: from disposition.us.oracle.com (/10.152.32.81)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 24 Sep 2020 07:58:10 -0700
+        with ESMTP ; Thu, 24 Sep 2020 07:58:11 -0700
 From:   Ross Philipson <ross.philipson@oracle.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
@@ -47,490 +48,1093 @@ To:     linux-kernel@vger.kernel.org, x86@kernel.org,
 Cc:     ross.philipson@oracle.com, dpsmith@apertussolutions.com,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
         luto@amacapital.net, trenchboot-devel@googlegroups.com
-Subject: [PATCH 03/13] x86: Add early SHA support for Secure Launch early measurements
-Date:   Thu, 24 Sep 2020 10:58:31 -0400
-Message-Id: <1600959521-24158-4-git-send-email-ross.philipson@oracle.com>
+Subject: [PATCH 04/13] x86: Add early TPM TIS/CRB interface support for Secure Launch
+Date:   Thu, 24 Sep 2020 10:58:32 -0400
+Message-Id: <1600959521-24158-5-git-send-email-ross.philipson@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
 References: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9753 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
- mlxlogscore=999 phishscore=0 adultscore=0 spamscore=0 suspectscore=2
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
+ phishscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0 suspectscore=2
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009240114
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9753 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 impostorscore=0
- clxscore=1011 suspectscore=2 phishscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=999 adultscore=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009240114
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 mlxlogscore=999
+ adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 spamscore=0 malwarescore=0 clxscore=1015 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009240114
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The SHA algorithms are necessary to measure configuration information into
-the TPM as early as possible before using the values. This implementation
-uses the established approach of #including the SHA libraries directly in
-the code since the compressed kernel is not uncompressed at this point.
+From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
 
-The SHA code here has its origins in the code from the main kernel. That
-code could not be pulled directly into the setup portion of the compressed
-kernel because of other dependencies it pulls in. The result is this is a
-modified copy of that code that still leverages the core SHA algorithms.
+The Secure Launch capability that is part of the compressed kernel
+requires the ability to send measurements it takes to the TPM. This
+commit introduces the necessary code to communicate with the hardware
+interface of TPM devices.
 
 Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
 Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 ---
- arch/x86/boot/compressed/Makefile       |   4 +
- arch/x86/boot/compressed/early_sha1.c   | 104 ++++++++++++++++
- arch/x86/boot/compressed/early_sha1.h   |  17 +++
- arch/x86/boot/compressed/early_sha256.c |   6 +
- arch/x86/boot/compressed/early_sha512.c |   6 +
- include/linux/sha512.h                  |  21 ++++
- lib/sha1.c                              |   4 +
- lib/sha512.c                            | 209 ++++++++++++++++++++++++++++++++
- 8 files changed, 371 insertions(+)
- create mode 100644 arch/x86/boot/compressed/early_sha1.c
- create mode 100644 arch/x86/boot/compressed/early_sha1.h
- create mode 100644 arch/x86/boot/compressed/early_sha256.c
- create mode 100644 arch/x86/boot/compressed/early_sha512.c
- create mode 100644 include/linux/sha512.h
- create mode 100644 lib/sha512.c
+ arch/x86/boot/compressed/Makefile         |   2 +
+ arch/x86/boot/compressed/tpm/crb.c        | 304 ++++++++++++++++++++++++++++++
+ arch/x86/boot/compressed/tpm/crb.h        |  20 ++
+ arch/x86/boot/compressed/tpm/tis.c        | 215 +++++++++++++++++++++
+ arch/x86/boot/compressed/tpm/tis.h        |  46 +++++
+ arch/x86/boot/compressed/tpm/tpm.h        |  48 +++++
+ arch/x86/boot/compressed/tpm/tpm_buff.c   | 121 ++++++++++++
+ arch/x86/boot/compressed/tpm/tpm_common.h | 127 +++++++++++++
+ arch/x86/boot/compressed/tpm/tpmbuff.h    |  34 ++++
+ arch/x86/boot/compressed/tpm/tpmio.c      |  51 +++++
+ 10 files changed, 968 insertions(+)
+ create mode 100644 arch/x86/boot/compressed/tpm/crb.c
+ create mode 100644 arch/x86/boot/compressed/tpm/crb.h
+ create mode 100644 arch/x86/boot/compressed/tpm/tis.c
+ create mode 100644 arch/x86/boot/compressed/tpm/tis.h
+ create mode 100644 arch/x86/boot/compressed/tpm/tpm.h
+ create mode 100644 arch/x86/boot/compressed/tpm/tpm_buff.c
+ create mode 100644 arch/x86/boot/compressed/tpm/tpm_common.h
+ create mode 100644 arch/x86/boot/compressed/tpm/tpmbuff.h
+ create mode 100644 arch/x86/boot/compressed/tpm/tpmio.c
 
 diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index ff7894f..0fd84b9 100644
+index 0fd84b9..5515afa 100644
 --- a/arch/x86/boot/compressed/Makefile
 +++ b/arch/x86/boot/compressed/Makefile
-@@ -96,6 +96,10 @@ vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
- vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_thunk_$(BITS).o
- efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
+@@ -99,6 +99,8 @@ efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
+ vmlinux-objs-$(CONFIG_SECURE_LAUNCH) += $(obj)/early_sha1.o
+ vmlinux-objs-$(CONFIG_SECURE_LAUNCH_SHA256) += $(obj)/early_sha256.o
+ vmlinux-objs-$(CONFIG_SECURE_LAUNCH_SHA512) += $(obj)/early_sha512.o
++vmlinux-objs-$(CONFIG_SECURE_LAUNCH) += $(obj)/tpm/tpmio.o $(obj)/tpm/tpm_buff.o \
++	$(obj)/tpm/tis.o $(obj)/tpm/crb.o
  
-+vmlinux-objs-$(CONFIG_SECURE_LAUNCH) += $(obj)/early_sha1.o
-+vmlinux-objs-$(CONFIG_SECURE_LAUNCH_SHA256) += $(obj)/early_sha256.o
-+vmlinux-objs-$(CONFIG_SECURE_LAUNCH_SHA512) += $(obj)/early_sha512.o
-+
  # The compressed kernel is built with -fPIC/-fPIE so that a boot loader
  # can place it anywhere in memory and it will still run. However, since
- # it is executed as-is without any ELF relocation processing performed
-diff --git a/arch/x86/boot/compressed/early_sha1.c b/arch/x86/boot/compressed/early_sha1.c
+diff --git a/arch/x86/boot/compressed/tpm/crb.c b/arch/x86/boot/compressed/tpm/crb.c
 new file mode 100644
-index 0000000..198c46d
+index 0000000..05c4038
 --- /dev/null
-+++ b/arch/x86/boot/compressed/early_sha1.c
-@@ -0,0 +1,104 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2020, Oracle and/or its affiliates.
-+ * Copyright (c) 2020 Apertus Solutions, LLC.
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/linkage.h>
-+#include <linux/string.h>
-+#include <asm/boot.h>
-+#include <asm/unaligned.h>
-+
-+#include "early_sha1.h"
-+
-+#define SHA1_DISABLE_EXPORT
-+#include "../../../../lib/sha1.c"
-+
-+/* The SHA1 implementation in lib/sha1.c was written to get the workspace
-+ * buffer as a parameter. This wrapper function provides a container
-+ * around a temporary workspace that is cleared after the transform completes.
-+ */
-+static void __sha_transform(u32 *digest, const char *data)
-+{
-+	u32 ws[SHA1_WORKSPACE_WORDS];
-+
-+	sha1_transform(digest, data, ws);
-+
-+	memset(ws, 0, sizeof(ws));
-+	/*
-+	 * As this is cryptographic code, prevent the memset 0 from being
-+	 * optimized out potentially leaving secrets in memory.
-+	 */
-+	wmb();
-+
-+}
-+
-+void early_sha1_init(struct sha1_state *sctx)
-+{
-+	sha1_init(sctx->state);
-+	sctx->count = 0;
-+}
-+
-+void early_sha1_update(struct sha1_state *sctx,
-+		       const u8 *data,
-+		       unsigned int len)
-+{
-+	unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
-+
-+	sctx->count += len;
-+
-+	if (likely((partial + len) >= SHA1_BLOCK_SIZE)) {
-+		int blocks;
-+
-+		if (partial) {
-+			int p = SHA1_BLOCK_SIZE - partial;
-+
-+			memcpy(sctx->buffer + partial, data, p);
-+			data += p;
-+			len -= p;
-+
-+			__sha_transform(sctx->state, sctx->buffer);
-+		}
-+
-+		blocks = len / SHA1_BLOCK_SIZE;
-+		len %= SHA1_BLOCK_SIZE;
-+
-+		if (blocks) {
-+			while (blocks--) {
-+				__sha_transform(sctx->state, data);
-+				data += SHA1_BLOCK_SIZE;
-+			}
-+		}
-+		partial = 0;
-+	}
-+
-+	if (len)
-+		memcpy(sctx->buffer + partial, data, len);
-+}
-+
-+void early_sha1_final(struct sha1_state *sctx, u8 *out)
-+{
-+	const int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
-+	__be64 *bits = (__be64 *)(sctx->buffer + bit_offset);
-+	__be32 *digest = (__be32 *)out;
-+	unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
-+	int i;
-+
-+	sctx->buffer[partial++] = 0x80;
-+	if (partial > bit_offset) {
-+		memset(sctx->buffer + partial, 0x0, SHA1_BLOCK_SIZE - partial);
-+		partial = 0;
-+
-+		__sha_transform(sctx->state, sctx->buffer);
-+	}
-+
-+	memset(sctx->buffer + partial, 0x0, bit_offset - partial);
-+	*bits = cpu_to_be64(sctx->count << 3);
-+	__sha_transform(sctx->state, sctx->buffer);
-+
-+	for (i = 0; i < SHA1_DIGEST_SIZE / sizeof(__be32); i++)
-+		put_unaligned_be32(sctx->state[i], digest++);
-+
-+	*sctx = (struct sha1_state){};
-+}
-diff --git a/arch/x86/boot/compressed/early_sha1.h b/arch/x86/boot/compressed/early_sha1.h
-new file mode 100644
-index 0000000..8e19f13
---- /dev/null
-+++ b/arch/x86/boot/compressed/early_sha1.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2020, Oracle and/or its affiliates.
-+ */
-+
-+#ifndef BOOT_COMPRESSED_EARLY_SHA1_H
-+#define BOOT_COMPRESSED_EARLY_SHA1_H
-+
-+#include <crypto/sha.h>
-+
-+void early_sha1_init(struct sha1_state *sctx);
-+void early_sha1_update(struct sha1_state *sctx,
-+		       const u8 *data,
-+		       unsigned int len);
-+void early_sha1_final(struct sha1_state *sctx, u8 *out);
-+
-+#endif /* BOOT_COMPRESSED_EARLY_SHA1_H */
-diff --git a/arch/x86/boot/compressed/early_sha256.c b/arch/x86/boot/compressed/early_sha256.c
-new file mode 100644
-index 0000000..20cdc43
---- /dev/null
-+++ b/arch/x86/boot/compressed/early_sha256.c
-@@ -0,0 +1,6 @@
++++ b/arch/x86/boot/compressed/tpm/crb.c
+@@ -0,0 +1,304 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2020 Apertus Solutions, LLC
-+ */
-+
-+#include "../../../../lib/crypto/sha256.c"
-diff --git a/arch/x86/boot/compressed/early_sha512.c b/arch/x86/boot/compressed/early_sha512.c
-new file mode 100644
-index 0000000..d352c55
---- /dev/null
-+++ b/arch/x86/boot/compressed/early_sha512.c
-@@ -0,0 +1,6 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2020 Apertus Solutions, LLC
-+ */
-+
-+#include "../../../../lib/sha512.c"
-diff --git a/include/linux/sha512.h b/include/linux/sha512.h
-new file mode 100644
-index 0000000..d562237
---- /dev/null
-+++ b/include/linux/sha512.h
-@@ -0,0 +1,21 @@
-+/*
-+ *  Copyright (C) 2020 Apertus Solutions, LLC
 + *
-+ *  Author: Daniel P. Smith <dpsmith@apertussolutions.com>
-+ *
-+ * This source code is licensed under the GNU General Public License,
-+ * Version 2.  See the file COPYING for more details.
++ * Author(s):
++ *      Daniel P. Smith <dpsmith@apertussolutions.com>
 + */
-+
-+#ifndef SHA512_H
-+#define SHA512_H
 +
 +#include <linux/types.h>
-+#include <crypto/sha.h>
++#include "tpm.h"
++#include "tpmbuff.h"
++#include "crb.h"
++#include "tpm_common.h"
 +
-+extern int sha512_init(struct sha512_state *sctx);
-+extern int sha512_update(struct sha512_state *sctx, const u8 *input,
-+			 unsigned int length);
-+extern int sha512_final(struct sha512_state *sctx, u8 *hash);
++#define TPM_LOC_STATE		0x0000
++#define TPM_LOC_CTRL		0x0008
++#define TPM_LOC_STS		0x000C
++#define TPM_CRB_INTF_ID		0x0030
++#define TPM_CRB_CTRL_EXT	0x0038
++#define TPM_CRB_CTRL_REQ	0x0040
++#define TPM_CRB_CTRL_STS	0x0044
++#define TPM_CRB_CTRL_CANCEL	0x0048
++#define TPM_CRB_CTRL_START	0x004C
++#define TPM_CRB_INT_ENABLE	0x0050
++#define TPM_CRB_INT_STS		0x0054
++#define TPM_CRB_CTRL_CMD_SIZE	0x0058
++#define TPM_CRB_CTRL_CMD_LADDR	0x005C
++#define TPM_CRB_CTRL_CMD_HADDR	0x0060
++#define TPM_CRB_CTRL_RSP_SIZE	0x0064
++#define TPM_CRB_CTRL_RSP_ADDR	0x0068
++#define TPM_CRB_DATA_BUFFER	0x0080
 +
-+#endif /* SHA512_H */
-diff --git a/lib/sha1.c b/lib/sha1.c
-index 49257a9..f4efe6f 100644
---- a/lib/sha1.c
-+++ b/lib/sha1.c
-@@ -187,7 +187,9 @@ void sha1_transform(__u32 *digest, const char *data, __u32 *array)
- 	digest[3] += D;
- 	digest[4] += E;
- }
-+#ifndef SHA1_DISABLE_EXPORT
- EXPORT_SYMBOL(sha1_transform);
-+#endif
- 
- /**
-  * sha1_init - initialize the vectors for a SHA1 digest
-@@ -201,4 +203,6 @@ void sha1_init(__u32 *buf)
- 	buf[3] = 0x10325476;
- 	buf[4] = 0xc3d2e1f0;
- }
-+#ifndef SHA1_DISABLE_EXPORT
- EXPORT_SYMBOL(sha1_init);
-+#endif
-diff --git a/lib/sha512.c b/lib/sha512.c
++#define REGISTER(l, r)		(((l) << 12) | (r))
++
++static u8 locality = TPM_NO_LOCALITY;
++
++struct tpm_loc_state {
++	union {
++		u8 val;
++		struct {
++			u8 tpm_established:1;
++			u8 loc_assigned:1;
++			u8 active_locality:3;
++			u8 _reserved:2;
++			u8 tpm_reg_valid_sts:1;
++		};
++	};
++} __packed;
++
++struct tpm_loc_ctrl {
++	union {
++		u32 val;
++		struct {
++			u32 request_access:1;
++			u32 relinquish:1;
++			u32 seize:1;
++			u32 reset_establishment_bit:1;
++			u32 _reserved:28;
++		};
++	};
++} __packed;
++
++struct tpm_loc_sts {
++	union {
++		u32 val;
++		struct {
++			u32 granted:1;
++			u32 beenSeized:1;
++			u32 _reserved:30;
++		};
++	};
++} __packed;
++
++struct tpm_crb_ctrl_req {
++	union {
++		u32 val;
++		struct {
++			u32 cmd_ready:1;
++			u32 go_idle:1;
++			u32 _reserved:30;
++		};
++	};
++} __packed;
++
++struct tpm_crb_ctrl_sts {
++	union {
++		u32 val;
++		struct {
++			u32 tpm_sts:1;
++			u32 tpm_idle:1;
++			u32 _reserved:30;
++		};
++	};
++} __packed;
++
++struct tpm_crb_intf_id_ext {
++	union {
++		u32 val;
++		struct {
++			u32 vid:16;
++			u32 did:16;
++		};
++	};
++} __packed;
++
++/*
++ * Durations derived from Table 15 of the PTP but is purely an artifact of this
++ * implementation
++ */
++
++/* TPM Duration A: 20ms */
++static void duration_a(void)
++{
++	tpm_mdelay(20);
++}
++
++/* TPM Duration B: 750ms */
++static void __maybe_unused duration_b(void)
++{
++	tpm_mdelay(750);
++}
++
++/* TPM Duration C: 1000ms */
++static void __maybe_unused duration_c(void)
++{
++	tpm_mdelay(1000);
++}
++
++static u8 is_idle(void)
++{
++	struct tpm_crb_ctrl_sts ctl_sts;
++
++	ctl_sts.val = tpm_read32(REGISTER(locality, TPM_CRB_CTRL_STS));
++	if (ctl_sts.tpm_idle == 1)
++		return 1;
++
++	return 0;
++}
++
++static u8 __maybe_unused is_ready(void)
++{
++	struct tpm_crb_ctrl_sts ctl_sts;
++
++	ctl_sts.val = tpm_read32(REGISTER(locality, TPM_CRB_CTRL_STS));
++	return ctl_sts.val == 0;
++}
++
++static u8 is_cmd_exec(void)
++{
++	u32 ctrl_start;
++
++	ctrl_start = tpm_read32(REGISTER(locality, TPM_CRB_CTRL_START));
++	if (ctrl_start == 1)
++		return 1;
++
++	return 0;
++}
++
++static s8 cmd_ready(void)
++{
++	struct tpm_crb_ctrl_req ctl_req;
++
++	if (is_idle()) {
++		ctl_req.cmd_ready = 1;
++		tpm_write32(ctl_req.val, REGISTER(locality, TPM_CRB_CTRL_REQ));
++		tpm2_timeout_c();
++
++		if (is_idle())
++			return -1;
++	}
++
++	return 0;
++}
++
++static void go_idle(void)
++{
++	struct tpm_crb_ctrl_req ctl_req;
++
++	if (is_idle())
++		return;
++
++	ctl_req.go_idle = 1;
++	tpm_write32(ctl_req.val, REGISTER(locality, TPM_CRB_CTRL_REQ));
++
++	/* pause to give tpm time to complete the request */
++	tpm2_timeout_c();
++}
++
++static void crb_relinquish_locality_internal(u16 l)
++{
++	struct tpm_loc_ctrl loc_ctrl;
++
++	loc_ctrl.relinquish = 1;
++
++	tpm_write32(loc_ctrl.val, REGISTER(l, TPM_LOC_CTRL));
++}
++
++u8 crb_request_locality(u8 l)
++{
++	struct tpm_loc_state loc_state;
++	struct tpm_loc_ctrl loc_ctrl;
++	struct tpm_loc_sts loc_sts;
++
++	/* TPM_LOC_STATE is aliased across all localities */
++	loc_state.val = tpm_read8(REGISTER(0, TPM_LOC_STATE));
++
++	if (loc_state.loc_assigned == 1) {
++		if (loc_state.active_locality == l) {
++			locality = l;
++			return locality;
++		}
++
++		crb_relinquish_locality_internal(loc_state.loc_assigned);
++	}
++
++	loc_ctrl.request_access = 1;
++	tpm_write32(loc_ctrl.val, REGISTER(l, TPM_LOC_CTRL));
++
++	loc_sts.val = tpm_read32(REGISTER(l, TPM_LOC_STS));
++	if (loc_sts.granted != 1) {
++		locality = TPM_NO_LOCALITY;
++		return locality;
++	}
++
++	locality = l;
++	return locality;
++}
++
++void crb_relinquish_locality(void)
++{
++	crb_relinquish_locality_internal(locality);
++}
++
++/* assumes cancel will succeed */
++static void cancel_send(void)
++{
++	if (is_cmd_exec()) {
++		tpm_write32(1, REGISTER(locality, TPM_CRB_CTRL_CANCEL));
++		timeout_b();
++
++		tpm_write32(0, REGISTER(locality, TPM_CRB_CTRL_CANCEL));
++	}
++}
++
++size_t crb_send(struct tpmbuff *buf)
++{
++	u32 ctrl_start = 1;
++
++	if (is_idle())
++		return 0;
++
++	tpm_write32(ctrl_start, REGISTER(locality, TPM_CRB_CTRL_START));
++
++	/*
++	 * Most command sequences this code is interested with operates with
++	 * 20/750 duration/timeout schedule
++	 */
++	duration_a();
++	ctrl_start = tpm_read32(REGISTER(locality, TPM_CRB_CTRL_START));
++	if (ctrl_start != 0) {
++		timeout_a();
++		ctrl_start = tpm_read32(REGISTER(locality, TPM_CRB_CTRL_START));
++		if (ctrl_start != 0) {
++			cancel_send();
++			/* minimum response is header with cancel ord */
++			return sizeof(struct tpm_header);
++		}
++	}
++
++	return buf->len;
++}
++
++size_t crb_recv(__attribute__((unused)) enum tpm_family family,
++		__attribute__((unused)) struct tpmbuff *buf)
++{
++	/* noop, currently send waits until execution is complete*/
++	return 0;
++}
++
++u8 crb_init(struct tpm *t)
++{
++	u8 i;
++	struct tpm_crb_intf_id_ext id;
++
++	if (crb_request_locality(0) == TPM_NO_LOCALITY)
++		return 0;
++
++	id.val = tpm_read32(REGISTER(0, TPM_CRB_INTF_ID + 4));
++	t->vendor = ((id.vid & 0x00FF) << 8) | ((id.vid & 0xFF00) >> 8);
++	if ((t->vendor & 0xFFFF) == 0xFFFF)
++		return 0;
++
++	/* have the tpm invalidate the buffer if left in completion state */
++	go_idle();
++	/* now move to ready state */
++	cmd_ready();
++
++	t->ops.request_locality = crb_request_locality;
++	t->ops.relinquish_locality = crb_relinquish_locality;
++	t->ops.send = crb_send;
++	t->ops.recv = crb_recv;
++
++	return 1;
++}
+diff --git a/arch/x86/boot/compressed/tpm/crb.h b/arch/x86/boot/compressed/tpm/crb.h
 new file mode 100644
-index 0000000..7f91d83
+index 0000000..8ab162e
 --- /dev/null
-+++ b/lib/sha512.c
-@@ -0,0 +1,209 @@
-+/* SHA-512 code by Jean-Luc Cooke <jlcooke@certainkey.com>
++++ b/arch/x86/boot/compressed/tpm/crb.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 Apertus Solutions, LLC
 + *
-+ * Copyright (c) Jean-Luc Cooke <jlcooke@certainkey.com>
-+ * Copyright (c) Andrew McDonald <andrew@mcdonald.org.uk>
-+ * Copyright (c) 2003 Kyle McMartin <kyle@debian.org>
-+ * Copyright (C) 2015 Linaro Ltd <ard.biesheuvel@linaro.org>
-+ * Copyright (C) 2020 Apertus Solutions, LLC <dpsmith@apertussolutions.com>
++ * Author(s):
++ *      Daniel P. Smith <dpsmith@apertussolutions.com>
 + *
-+ * This program is free software; you can redistribute it and/or modify it
-+ * under the terms of the GNU General Public License as published by the
-+ * Free Software Foundation; either version 2, or (at your option) any
-+ * later version.
++ * The definitions in this header are extracted from the Trusted Computing
++ * Group's "TPM Main Specification", Parts 1-3.
 + *
 + */
-+#include <linux/bitops.h>
-+#include <linux/sha512.h>
-+#include <linux/string.h>
++
++#ifndef _CRB_H
++#define _CRB_H
++
++#include "tpm.h"
++
++u8 crb_init(struct tpm *t);
++
++#endif
+diff --git a/arch/x86/boot/compressed/tpm/tis.c b/arch/x86/boot/compressed/tpm/tis.c
+new file mode 100644
+index 0000000..bc67b23
+--- /dev/null
++++ b/arch/x86/boot/compressed/tpm/tis.c
+@@ -0,0 +1,215 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2020 Apertus Solutions, LLC
++ *
++ * Author(s):
++ *      Daniel P. Smith <dpsmith@apertussolutions.com>
++ *
++ * The code in this file is based on the article "Writing a TPM Device Driver"
++ * published on http://ptgmedia.pearsoncmg.com.
++ *
++ */
++
++#include <linux/types.h>
 +#include <asm/byteorder.h>
++#include "tpm.h"
++#include "tpmbuff.h"
++#include "tpm_common.h"
++#include "tis.h"
 +
-+#include <asm/unaligned.h>
++#define TPM_BURST_MIN_DELAY 100 /* 100us */
 +
-+static inline u64 Ch(u64 x, u64 y, u64 z)
++static u8 locality = TPM_NO_LOCALITY;
++
++static u32 burst_wait(void)
 +{
-+        return z ^ (x & (y ^ z));
++	u32 count = 0;
++
++	while (count == 0) {
++		count = tpm_read8(STS(locality) + 1);
++		count += tpm_read8(STS(locality) + 2) << 8;
++
++		/* Wait for FIFO to drain */
++		if (count == 0)
++			tpm_udelay(TPM_BURST_MIN_DELAY);
++	}
++
++	return count;
 +}
 +
-+static inline u64 Maj(u64 x, u64 y, u64 z)
++void tis_relinquish_locality(void)
 +{
-+        return (x & y) | (z & (x | y));
++	if (locality < TPM_MAX_LOCALITY)
++		tpm_write8(ACCESS_RELINQUISH_LOCALITY, ACCESS(locality));
++
++	locality = TPM_NO_LOCALITY;
 +}
 +
-+static const u64 sha512_K[80] = {
-+        0x428a2f98d728ae22ULL, 0x7137449123ef65cdULL, 0xb5c0fbcfec4d3b2fULL,
-+        0xe9b5dba58189dbbcULL, 0x3956c25bf348b538ULL, 0x59f111f1b605d019ULL,
-+        0x923f82a4af194f9bULL, 0xab1c5ed5da6d8118ULL, 0xd807aa98a3030242ULL,
-+        0x12835b0145706fbeULL, 0x243185be4ee4b28cULL, 0x550c7dc3d5ffb4e2ULL,
-+        0x72be5d74f27b896fULL, 0x80deb1fe3b1696b1ULL, 0x9bdc06a725c71235ULL,
-+        0xc19bf174cf692694ULL, 0xe49b69c19ef14ad2ULL, 0xefbe4786384f25e3ULL,
-+        0x0fc19dc68b8cd5b5ULL, 0x240ca1cc77ac9c65ULL, 0x2de92c6f592b0275ULL,
-+        0x4a7484aa6ea6e483ULL, 0x5cb0a9dcbd41fbd4ULL, 0x76f988da831153b5ULL,
-+        0x983e5152ee66dfabULL, 0xa831c66d2db43210ULL, 0xb00327c898fb213fULL,
-+        0xbf597fc7beef0ee4ULL, 0xc6e00bf33da88fc2ULL, 0xd5a79147930aa725ULL,
-+        0x06ca6351e003826fULL, 0x142929670a0e6e70ULL, 0x27b70a8546d22ffcULL,
-+        0x2e1b21385c26c926ULL, 0x4d2c6dfc5ac42aedULL, 0x53380d139d95b3dfULL,
-+        0x650a73548baf63deULL, 0x766a0abb3c77b2a8ULL, 0x81c2c92e47edaee6ULL,
-+        0x92722c851482353bULL, 0xa2bfe8a14cf10364ULL, 0xa81a664bbc423001ULL,
-+        0xc24b8b70d0f89791ULL, 0xc76c51a30654be30ULL, 0xd192e819d6ef5218ULL,
-+        0xd69906245565a910ULL, 0xf40e35855771202aULL, 0x106aa07032bbd1b8ULL,
-+        0x19a4c116b8d2d0c8ULL, 0x1e376c085141ab53ULL, 0x2748774cdf8eeb99ULL,
-+        0x34b0bcb5e19b48a8ULL, 0x391c0cb3c5c95a63ULL, 0x4ed8aa4ae3418acbULL,
-+        0x5b9cca4f7763e373ULL, 0x682e6ff3d6b2b8a3ULL, 0x748f82ee5defb2fcULL,
-+        0x78a5636f43172f60ULL, 0x84c87814a1f0ab72ULL, 0x8cc702081a6439ecULL,
-+        0x90befffa23631e28ULL, 0xa4506cebde82bde9ULL, 0xbef9a3f7b2c67915ULL,
-+        0xc67178f2e372532bULL, 0xca273eceea26619cULL, 0xd186b8c721c0c207ULL,
-+        0xeada7dd6cde0eb1eULL, 0xf57d4f7fee6ed178ULL, 0x06f067aa72176fbaULL,
-+        0x0a637dc5a2c898a6ULL, 0x113f9804bef90daeULL, 0x1b710b35131c471bULL,
-+        0x28db77f523047d84ULL, 0x32caab7b40c72493ULL, 0x3c9ebe0a15c9bebcULL,
-+        0x431d67c49c100d4cULL, 0x4cc5d4becb3e42b6ULL, 0x597f299cfc657e2aULL,
-+        0x5fcb6fab3ad6faecULL, 0x6c44198c4a475817ULL,
++u8 tis_request_locality(u8 l)
++{
++	if (l > TPM_MAX_LOCALITY)
++		return TPM_NO_LOCALITY;
++
++	if (l == locality)
++		return locality;
++
++	tis_relinquish_locality();
++
++	tpm_write8(ACCESS_REQUEST_USE, ACCESS(l));
++
++	/* wait for locality to be granted */
++	if (tpm_read8(ACCESS(l)) & ACCESS_ACTIVE_LOCALITY)
++		locality = l;
++
++	return locality;
++}
++
++size_t tis_send(struct tpmbuff *buf)
++{
++	u8 status, *buf_ptr;
++	u32 burstcnt = 0;
++	u32 count = 0;
++
++	if (locality > TPM_MAX_LOCALITY)
++		return 0;
++
++	for (status = 0; (status & STS_COMMAND_READY) == 0; ) {
++		tpm_write8(STS_COMMAND_READY, STS(locality));
++		status = tpm_read8(STS(locality));
++	}
++
++	buf_ptr = buf->head;
++
++	/* send all but the last byte */
++	while (count < (buf->len - 1)) {
++		burstcnt = burst_wait();
++		for (; burstcnt > 0 && count < (buf->len - 1); burstcnt--) {
++			tpm_write8(buf_ptr[count], DATA_FIFO(locality));
++			count++;
++		}
++
++		/* check for overflow */
++		for (status = 0; (status & STS_VALID) == 0; )
++			status = tpm_read8(STS(locality));
++
++		if ((status & STS_DATA_EXPECT) == 0)
++			return 0;
++	}
++
++	/* write last byte */
++	tpm_write8(buf_ptr[buf->len - 1], DATA_FIFO(locality));
++	count++;
++
++	/* make sure it stuck */
++	for (status = 0; (status & STS_VALID) == 0; )
++		status = tpm_read8(STS(locality));
++
++	if ((status & STS_DATA_EXPECT) != 0)
++		return 0;
++
++	/* go and do it */
++	tpm_write8(STS_GO, STS(locality));
++
++	return (size_t)count;
++}
++
++static size_t recv_data(unsigned char *buf, size_t len)
++{
++	size_t size = 0;
++	u8 *bufptr;
++	u32 burstcnt = 0;
++
++	bufptr = (u8 *)buf;
++
++	while (tis_data_available(locality) && size < len) {
++		burstcnt = burst_wait();
++		for (; burstcnt > 0 && size < len; burstcnt--) {
++			*bufptr = tpm_read8(DATA_FIFO(locality));
++			bufptr++;
++			size++;
++		}
++	}
++
++	return size;
++}
++
++size_t tis_recv(enum tpm_family f, struct tpmbuff *buf)
++{
++	u32 expected;
++	u8 *buf_ptr;
++	struct tpm_header *hdr;
++
++	if (locality > TPM_MAX_LOCALITY)
++		return 0;
++
++	/* ensure that there is data available */
++	if (!tis_data_available(locality)) {
++		if (f == TPM12)
++			tpm1_timeout_d();
++		else
++			tpm2_timeout_d();
++
++		if (!tis_data_available(locality))
++			return 0;
++	}
++
++	/* read header */
++	hdr = (struct tpm_header *)buf->head;
++	expected = sizeof(struct tpm_header);
++	if (recv_data(buf->head, expected) < expected)
++		return 0;
++
++	/* convert header */
++	hdr->tag = be16_to_cpu(hdr->tag);
++	hdr->size = be32_to_cpu(hdr->size);
++	hdr->code = be32_to_cpu(hdr->code);
++
++	/* protect against integer underflow */
++	if (hdr->size <= expected)
++		return 0;
++
++	/* hdr->size = header + data */
++	expected = hdr->size - expected;
++	buf_ptr = tpmb_put(buf, expected);
++	if (!buf_ptr)
++		return 0;
++
++	/* read all data, except last byte */
++	if (recv_data(buf_ptr, expected - 1) < (expected - 1))
++		return 0;
++
++	/* check for receive underflow */
++	if (!tis_data_available(locality))
++		return 0;
++
++	/* read last byte */
++	if (recv_data(buf_ptr, 1) != 1)
++		return 0;
++
++	/* make sure we read everything */
++	if (tis_data_available(locality))
++		return 0;
++
++	tpm_write8(STS_COMMAND_READY, STS(locality));
++
++	return hdr->size;
++}
++
++u8 tis_init(struct tpm *t)
++{
++	locality = TPM_NO_LOCALITY;
++
++	if (tis_request_locality(0) != 0)
++		return 0;
++
++	t->vendor = tpm_read32(DID_VID(0));
++	if ((t->vendor & 0xFFFF) == 0xFFFF)
++		return 0;
++
++	t->ops.request_locality = tis_request_locality;
++	t->ops.relinquish_locality = tis_relinquish_locality;
++	t->ops.send = tis_send;
++	t->ops.recv = tis_recv;
++
++	return 1;
++}
+diff --git a/arch/x86/boot/compressed/tpm/tis.h b/arch/x86/boot/compressed/tpm/tis.h
+new file mode 100644
+index 0000000..31e6df1
+--- /dev/null
++++ b/arch/x86/boot/compressed/tpm/tis.h
+@@ -0,0 +1,46 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 Apertus Solutions, LLC
++ *
++ * Author(s):
++ *      Daniel P. Smith <dpsmith@apertussolutions.com>
++ *
++ * The definitions in this header are extracted from the Trusted Computing
++ * Group's "TPM Main Specification", Parts 1-3.
++ *
++ */
++
++#ifndef _TIS_H
++#define _TIS_H
++
++#include "tpm.h"
++#include "tpm_common.h"
++
++/* macros to access registers at locality ’’l’’ */
++#define ACCESS(l)			(0x0000 | ((l) << 12))
++#define STS(l)				(0x0018 | ((l) << 12))
++#define DATA_FIFO(l)			(0x0024 | ((l) << 12))
++#define DID_VID(l)			(0x0F00 | ((l) << 12))
++/* access bits */
++#define ACCESS_ACTIVE_LOCALITY		0x20 /* (R)*/
++#define ACCESS_RELINQUISH_LOCALITY	0x20 /* (W) */
++#define ACCESS_REQUEST_USE		0x02 /* (W) */
++/* status bits */
++#define STS_VALID			0x80 /* (R) */
++#define STS_COMMAND_READY		0x40 /* (R) */
++#define STS_DATA_AVAIL			0x10 /* (R) */
++#define STS_DATA_EXPECT			0x08 /* (R) */
++#define STS_GO				0x20 /* (W) */
++
++static inline bool tis_data_available(int locality)
++{
++	int status;
++
++	status = tpm_read8(STS(locality));
++	return ((status & (STS_DATA_AVAIL | STS_VALID)) ==
++		(STS_DATA_AVAIL | STS_VALID));
++}
++
++u8 tis_init(struct tpm *t);
++
++#endif
+diff --git a/arch/x86/boot/compressed/tpm/tpm.h b/arch/x86/boot/compressed/tpm/tpm.h
+new file mode 100644
+index 0000000..1d3f12f
+--- /dev/null
++++ b/arch/x86/boot/compressed/tpm/tpm.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 Apertus Solutions, LLC
++ *
++ * Author(s):
++ *      Daniel P. Smith <dpsmith@apertussolutions.com>
++ *
++ */
++
++#ifndef _TPM_H
++#define _TPM_H
++
++#define TPM_NO_LOCALITY		0xFF
++
++enum tpm_hw_intf {
++	TPM_TIS,
++	TPM_CRB
 +};
 +
-+#define e0(x)       (ror64(x,28) ^ ror64(x,34) ^ ror64(x,39))
-+#define e1(x)       (ror64(x,14) ^ ror64(x,18) ^ ror64(x,41))
-+#define s0(x)       (ror64(x, 1) ^ ror64(x, 8) ^ (x >> 7))
-+#define s1(x)       (ror64(x,19) ^ ror64(x,61) ^ (x >> 6))
++enum tpm_family {
++	TPM12,
++	TPM20
++};
 +
-+static inline void LOAD_OP(int I, u64 *W, const u8 *input)
++struct tpmbuff;
++
++struct tpm_hw_ops {
++	u8 (*request_locality)(u8 l);
++	void (*relinquish_locality)(void);
++	size_t (*send)(struct tpmbuff *buf);
++	size_t (*recv)(enum tpm_family family, struct tpmbuff *buf);
++};
++
++struct tpm {
++	u32 vendor;
++	enum tpm_family family;
++	enum tpm_hw_intf intf;
++	struct tpm_hw_ops ops;
++	struct tpmbuff *buff;
++};
++
++extern struct tpm *enable_tpm(void);
++extern u8 tpm_request_locality(struct tpm *t, u8 l);
++extern void tpm_relinquish_locality(struct tpm *t);
++extern int tpm_extend_pcr(struct tpm *t, u32 pcr, u16 algo,
++		u8 *digest);
++extern void free_tpm(struct tpm *t);
++#endif
+diff --git a/arch/x86/boot/compressed/tpm/tpm_buff.c b/arch/x86/boot/compressed/tpm/tpm_buff.c
+new file mode 100644
+index 0000000..628ac87
+--- /dev/null
++++ b/arch/x86/boot/compressed/tpm/tpm_buff.c
+@@ -0,0 +1,121 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2020 Apertus Solutions, LLC
++ *
++ * Author(s):
++ *      Daniel P. Smith <dpsmith@apertussolutions.com>
++ *
++ */
++
++#include <linux/types.h>
++#include <linux/string.h>
++#include "tpm.h"
++#include "tpmbuff.h"
++#include "tpm_common.h"
++
++#define STATIC_TIS_BUFFER_SIZE		1024
++
++#define TPM_CRB_DATA_BUFFER_OFFSET	0x80
++#define TPM_CRB_DATA_BUFFER_SIZE	3966
++
++u8 *tpmb_reserve(struct tpmbuff *b)
 +{
-+	W[I] = get_unaligned_be64((__u64 *)input + I);
++	if (b->locked)
++		return NULL;
++
++	b->len = sizeof(struct tpm_header);
++	b->locked = 1;
++	b->data = b->head + b->len;
++	b->tail = b->data;
++
++	return b->head;
 +}
 +
-+static inline void BLEND_OP(int I, u64 *W)
++void tpmb_free(struct tpmbuff *b)
 +{
-+	W[I & 15] += s1(W[(I-2) & 15]) + W[(I-7) & 15] + s0(W[(I-15) & 15]);
++	memset(b->head, 0, b->len);
++
++	b->len = 0;
++	b->locked = 0;
++	b->data = NULL;
++	b->tail = NULL;
 +}
 +
-+static void sha512_transform(u64 *state, const u8 *input)
++u8 *tpmb_put(struct tpmbuff *b, size_t size)
 +{
-+	u64 a, b, c, d, e, f, g, h, t1, t2;
++	u8 *tail = b->tail;
 +
++	if ((b->len + size) > b->truesize)
++		return NULL; /* TODO: add overflow buffer support */
++
++	b->tail += size;
++	b->len += size;
++
++	return tail;
++}
++
++size_t tpmb_trim(struct tpmbuff *b, size_t size)
++{
++	if (b->len < size)
++		size = b->len;
++
++	/* TODO: add overflow buffer support */
++
++	b->tail -= size;
++	b->len -= size;
++
++	return size;
++}
++
++size_t tpmb_size(struct tpmbuff *b)
++{
++	return b->len;
++}
++
++static u8 tis_buff[STATIC_TIS_BUFFER_SIZE];
++static struct tpmbuff tpm_buff;
++
++struct tpmbuff *alloc_tpmbuff(enum tpm_hw_intf intf, u8 locality)
++{
++	struct tpmbuff *b = &tpm_buff;
++
++	switch (intf) {
++	case TPM_TIS:
++		if (b->head)
++			goto reset;
++
++		b->head = (u8 *)&tis_buff;
++		b->truesize = STATIC_TIS_BUFFER_SIZE;
++		break;
++	case TPM_CRB:
++		b->head = (u8 *)(uintptr_t)(TPM_MMIO_BASE + (locality << 12)
++			       + TPM_CRB_DATA_BUFFER_OFFSET);
++		b->truesize = TPM_CRB_DATA_BUFFER_SIZE;
++		break;
++	default:
++		return NULL;
++	}
++
++reset:
++	b->len = 0;
++	b->locked = 0;
++	b->data = NULL;
++	b->tail = NULL;
++	b->end = b->head + (b->truesize - 1);
++
++	return b;
++}
++
++void free_tpmbuff(struct tpmbuff *b, enum tpm_hw_intf intf)
++{
++	switch (intf) {
++	case TPM_TIS:
++		b->head = NULL;
++		break;
++	case TPM_CRB:
++		b->head = NULL;
++		break;
++	default:
++		break;
++	}
++}
+diff --git a/arch/x86/boot/compressed/tpm/tpm_common.h b/arch/x86/boot/compressed/tpm/tpm_common.h
+new file mode 100644
+index 0000000..84f765c
+--- /dev/null
++++ b/arch/x86/boot/compressed/tpm/tpm_common.h
+@@ -0,0 +1,127 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 Apertus Solutions, LLC
++ *
++ * Author(s):
++ *      Daniel P. Smith <dpsmith@apertussolutions.com>
++ *
++ */
++
++#ifndef _TPM_COMMON_H
++#define _TPM_COMMON_H
++
++#define TPM_MMIO_BASE		0xFED40000
++#define TPM_MAX_LOCALITY	4
++
++#define SHA1_SIZE	20
++#define SHA256_SIZE	32
++#define SHA384_SIZE	48
++#define SHA512_SIZE	64
++#define SM3256_SIZE	32
++
++struct tpm_header {
++	u16 tag;
++	u32 size;
++	u32 code;
++} __packed;
++
++#define TPM_INTERFACE_ID_0	0x30
++#define TPM_TIS_INTF_ACTIVE	0x00
++#define TPM_CRB_INTF_ACTIVE	0x01
++
++struct tpm_interface_id {
++	union {
++		u32 val;
++		struct {
++			u32 interface_type:4;
++			u32 interface_version:4;
++			u32 cap_locality:1;
++			u32 reserved1:4;
++			u32 cap_tis:1;
++			u32 cap_crb:1;
++			u32 cap_if_res:2;
++			u32 interface_selector:2;
++			u32 intf_sel_lock:1;
++			u32 reserved2:4;
++			u32 reserved3:8;
++		};
++	};
++} __packed;
++
++#define TPM_INTF_CAPABILITY_0	0x14
++#define TPM12_TIS_INTF_12	0x00
++#define TPM12_TIS_INTF_13	0x02
++#define TPM20_TIS_INTF_13	0x03
++
++struct tpm_intf_capability {
++	union {
++		u32 val;
++		struct {
++			u32 data_avail_int_support:1;
++			u32 sts_valid_int_support:1;
++			u32 locality_change_int_support:1;
++			u32 interrupt_level_high:1;
++			u32 interrupt_level_low:1;
++			u32 interrupt_edge_rising:1;
++			u32 interrupt_edge_falling:1;
++			u32 command_ready_int_support:1;
++			u32 burst_count_static:1;
++			u32 data_transfer_size_support:2;
++			u32 reserved1:17;
++			u32 interface_version:3;
++			u32 reserved2:1;
++		};
++	};
++} __packed;
++
++void tpm_udelay(int loops);
++void tpm_mdelay(int ms);
++
++/*
++ * Timeouts defined in Table 16 from the TPM2 PTP and
++ * Table 15 from the PC Client TIS
++ */
++
++/* TPM Timeout A: 750ms */
++static inline void timeout_a(void)
++{
++	tpm_mdelay(750);
++}
++
++/* TPM Timeout B: 2000ms */
++static inline void timeout_b(void)
++{
++	tpm_mdelay(2000);
++}
++
++/* Timeouts C & D are different between 1.2 & 2.0 */
++/* TPM1.2 Timeout C: 750ms */
++static inline void tpm1_timeout_c(void)
++{
++	tpm_mdelay(750);
++}
++
++/* TPM1.2 Timeout D: 750ms */
++static inline void tpm1_timeout_d(void)
++{
++	tpm_mdelay(750);
++}
++
++/* TPM2 Timeout C: 200ms */
++static inline void tpm2_timeout_c(void)
++{
++	tpm_mdelay(200);
++}
++
++/* TPM2 Timeout D: 30ms */
++static inline void tpm2_timeout_d(void)
++{
++	tpm_mdelay(30);
++}
++
++u8 tpm_read8(u32 field);
++void tpm_write8(unsigned char val, u32 field);
++u32 tpm_read32(u32 field);
++void tpm_write32(unsigned int val, u32 field);
++
++#endif
+diff --git a/arch/x86/boot/compressed/tpm/tpmbuff.h b/arch/x86/boot/compressed/tpm/tpmbuff.h
+new file mode 100644
+index 0000000..562e586
+--- /dev/null
++++ b/arch/x86/boot/compressed/tpm/tpmbuff.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2020 Apertus Solutions, LLC
++ *
++ * Author(s):
++ *      Daniel P. Smith <dpsmith@apertussolutions.com>
++ *
++ */
++
++#ifndef _TPMBUFF_H
++#define _TPMBUFF_H
++
++/* mirroring Linux SKB */
++struct tpmbuff {
++	size_t truesize;
++	size_t len;
++
++	u8 locked;
++
++	u8 *head;
++	u8 *data;
++	u8 *tail;
++	u8 *end;
++};
++
++u8 *tpmb_reserve(struct tpmbuff *b);
++void tpmb_free(struct tpmbuff *b);
++u8 *tpmb_put(struct tpmbuff *b, size_t size);
++size_t tpmb_trim(struct tpmbuff *b, size_t size);
++size_t tpmb_size(struct tpmbuff *b);
++struct tpmbuff *alloc_tpmbuff(enum tpm_hw_intf i, u8 locality);
++void free_tpmbuff(struct tpmbuff *b, enum tpm_hw_intf i);
++
++#endif
+diff --git a/arch/x86/boot/compressed/tpm/tpmio.c b/arch/x86/boot/compressed/tpm/tpmio.c
+new file mode 100644
+index 0000000..1502ec1
+--- /dev/null
++++ b/arch/x86/boot/compressed/tpm/tpmio.c
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2020 Apertus Solutions, LLC
++ *
++ * Author(s):
++ *      Daniel P. Smith <dpsmith@apertussolutions.com>
++ */
++
++#include <linux/types.h>
++#include <asm/io.h>
++#include "tpm_common.h"
++
++static noinline void tpm_io_delay(void)
++{
++	/* This is the default delay type in native_io_delay */
++	asm volatile ("outb %al, $0x80");
++}
++
++void tpm_udelay(int loops)
++{
++	while (loops--)
++		tpm_io_delay();	/* Approximately 1 us */
++}
++
++void tpm_mdelay(int ms)
++{
 +	int i;
-+	u64 W[16];
 +
-+	/* load the state into our registers */
-+	a=state[0];   b=state[1];   c=state[2];   d=state[3];
-+	e=state[4];   f=state[5];   g=state[6];   h=state[7];
-+
-+	/* now iterate */
-+	for (i=0; i<80; i+=8) {
-+		if (!(i & 8)) {
-+			int j;
-+
-+			if (i < 16) {
-+				/* load the input */
-+				for (j = 0; j < 16; j++)
-+					LOAD_OP(i + j, W, input);
-+			} else {
-+				for (j = 0; j < 16; j++) {
-+					BLEND_OP(i + j, W);
-+				}
-+			}
-+		}
-+
-+		t1 = h + e1(e) + Ch(e,f,g) + sha512_K[i  ] + W[(i & 15)];
-+		t2 = e0(a) + Maj(a,b,c);    d+=t1;    h=t1+t2;
-+		t1 = g + e1(d) + Ch(d,e,f) + sha512_K[i+1] + W[(i & 15) + 1];
-+		t2 = e0(h) + Maj(h,a,b);    c+=t1;    g=t1+t2;
-+		t1 = f + e1(c) + Ch(c,d,e) + sha512_K[i+2] + W[(i & 15) + 2];
-+		t2 = e0(g) + Maj(g,h,a);    b+=t1;    f=t1+t2;
-+		t1 = e + e1(b) + Ch(b,c,d) + sha512_K[i+3] + W[(i & 15) + 3];
-+		t2 = e0(f) + Maj(f,g,h);    a+=t1;    e=t1+t2;
-+		t1 = d + e1(a) + Ch(a,b,c) + sha512_K[i+4] + W[(i & 15) + 4];
-+		t2 = e0(e) + Maj(e,f,g);    h+=t1;    d=t1+t2;
-+		t1 = c + e1(h) + Ch(h,a,b) + sha512_K[i+5] + W[(i & 15) + 5];
-+		t2 = e0(d) + Maj(d,e,f);    g+=t1;    c=t1+t2;
-+		t1 = b + e1(g) + Ch(g,h,a) + sha512_K[i+6] + W[(i & 15) + 6];
-+		t2 = e0(c) + Maj(c,d,e);    f+=t1;    b=t1+t2;
-+		t1 = a + e1(f) + Ch(f,g,h) + sha512_K[i+7] + W[(i & 15) + 7];
-+		t2 = e0(b) + Maj(b,c,d);    e+=t1;    a=t1+t2;
-+	}
-+
-+	state[0] += a; state[1] += b; state[2] += c; state[3] += d;
-+	state[4] += e; state[5] += f; state[6] += g; state[7] += h;
-+
-+	/* erase our data */
-+	a = b = c = d = e = f = g = h = t1 = t2 = 0;
++	for (i = 0; i < ms; i++)
++		tpm_udelay(1000);
 +}
 +
-+int sha512_init(struct sha512_state *sctx)
++u8 tpm_read8(u32 field)
 +{
-+	sctx->state[0] = SHA512_H0;
-+	sctx->state[1] = SHA512_H1;
-+	sctx->state[2] = SHA512_H2;
-+	sctx->state[3] = SHA512_H3;
-+	sctx->state[4] = SHA512_H4;
-+	sctx->state[5] = SHA512_H5;
-+	sctx->state[6] = SHA512_H6;
-+	sctx->state[7] = SHA512_H7;
-+	sctx->count[0] = sctx->count[1] = 0;
-+
-+	return 0;
++	return readb((void *)(u64)(TPM_MMIO_BASE | field));
 +}
 +
-+int sha512_update(struct sha512_state *sctx, const u8 *data, unsigned int len)
++void tpm_write8(unsigned char val, u32 field)
 +{
-+	unsigned int partial = sctx->count[0] % SHA512_BLOCK_SIZE;
-+
-+	sctx->count[0] += len;
-+	if (sctx->count[0] < len)
-+		sctx->count[1]++;
-+
-+	if (likely((partial + len) >= SHA512_BLOCK_SIZE)) {
-+		int blocks;
-+
-+		if (partial) {
-+			int p = SHA512_BLOCK_SIZE - partial;
-+
-+			memcpy(sctx->buf + partial, data, p);
-+			data += p;
-+			len -= p;
-+
-+			sha512_transform(sctx->state, sctx->buf);
-+		}
-+
-+		blocks = len / SHA512_BLOCK_SIZE;
-+		len %= SHA512_BLOCK_SIZE;
-+
-+		if (blocks) {
-+			while (blocks--) {
-+				sha512_transform(sctx->state, data);
-+				data += SHA512_BLOCK_SIZE;
-+			}
-+		}
-+		partial = 0;
-+	}
-+	if (len)
-+		memcpy(sctx->buf + partial, data, len);
-+
-+	return 0;
++	writeb(val, (void *)(u64)(TPM_MMIO_BASE | field));
 +}
 +
-+int sha512_final(struct sha512_state *sctx, u8 *out)
++u32 tpm_read32(u32 field)
 +{
-+	const int bit_offset = SHA512_BLOCK_SIZE - sizeof(__be64[2]);
-+	__be64 *bits = (__be64 *)(sctx->buf + bit_offset);
-+	__be64 *digest = (__be64 *)out;
-+	unsigned int partial = sctx->count[0] % SHA512_BLOCK_SIZE;
-+	unsigned int digest_size = SHA512_DIGEST_SIZE;
-+	int i;
++	return readl((void *)(u64)(TPM_MMIO_BASE | field));
++}
 +
-+	sctx->buf[partial++] = 0x80;
-+	if (partial > bit_offset) {
-+		memset(sctx->buf + partial, 0x0, SHA512_BLOCK_SIZE - partial);
-+		partial = 0;
-+
-+		sha512_transform(sctx->state, sctx->buf);
-+	}
-+
-+	memset(sctx->buf + partial, 0x0, bit_offset - partial);
-+	bits[0] = cpu_to_be64(sctx->count[1] << 3 | sctx->count[0] >> 61);
-+	bits[1] = cpu_to_be64(sctx->count[0] << 3);
-+	sha512_transform(sctx->state, sctx->buf);
-+
-+	for (i = 0; digest_size > 0; i++, digest_size -= sizeof(__be64))
-+		put_unaligned_be64(sctx->state[i], digest++);
-+
-+	*sctx = (struct sha512_state){};
-+	return 0;
++void tpm_write32(u32 val, u32 field)
++{
++	writel(val, (void *)(u64)(TPM_MMIO_BASE | field));
 +}
 -- 
 1.8.3.1
