@@ -2,44 +2,44 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D2B277486
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Sep 2020 16:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47829277487
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Sep 2020 16:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728440AbgIXO6m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        id S1728436AbgIXO6m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Thu, 24 Sep 2020 10:58:42 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:55966 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728424AbgIXO6l (ORCPT
+Received: from aserp2130.oracle.com ([141.146.126.79]:57270 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728408AbgIXO6l (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Thu, 24 Sep 2020 10:58:41 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OEtGqE037460;
-        Thu, 24 Sep 2020 14:58:19 GMT
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OErXvv101502;
+        Thu, 24 Sep 2020 14:58:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=NiAX/lKhBwtj/b+yjV6cXPKWwcBGqpXA7p5pUSchAm0=;
- b=vD7Wb2hE0pZQ+BeUmSaNSTuKgTZLdB2OSQDork8YNrZIlKQnKWTrRriOQWEvr4fOpZ8F
- 7l2AKA351i5WLNejNJaLNVKCkYfcd99x+hqmbLyCufqV+UJibijufGVOyT7uauKMhFJ9
- FA/n5Kd/wpes59nIiav7hqNUFcJkMYCHuafxChDxoiylu7iUVvTWngp2ab7bccHmtOUf
- C7miJPOuWQ5V7oSFyqqeJoOk+SG9d+4qhIkLYY/1u3tHv/Xm8DDnitIOMJ2kZOFyLsQO
- idAwfNvewodWonkZV8qcdVVZzb7rqdjwrmqTM6sw2ojECHzsSI6sQSfk/Xs8RtUih+ha xw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 33q5rgq585-1
+ bh=EG2cDtHDj3afXnJV2kE6YpRWdf+r6HX61ECzGa4txCg=;
+ b=IahnXl8HN8sriDPY4qBMrEjj0cpksyu87777AgCnlvd433L2GxdhBXGtxsMEOGY9XJS4
+ ZEpHEMeTn9bto6biMUo0YVi6HXHhjxTatqGsxxDU6U9l51BJtRD5OZh/3C4l9VMoDecM
+ s1keeIlhTS4GOZtB3M4ZBZ6h0Cj/Btyo5okriT/MoTsa7f9lH8yEXDghi0arnwaabujR
+ HU79PSfaeOz//T2ikWpn3fLVGDTFq/n+98HenF/JDAozyeDFcguPdMjszMfvlorZzpkN
+ cnajd4BEXtXUXQOvY2LKs6uVX7JJC4ZhdeLftfXLafbt4W6gNBIWEEjluMWCztoPb3Ha DQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 33qcpu5qcr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Sep 2020 14:58:18 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OEuApX177221;
-        Thu, 24 Sep 2020 14:58:18 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 33r28x3vkd-1
+        Thu, 24 Sep 2020 14:58:20 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OEtUQZ159389;
+        Thu, 24 Sep 2020 14:58:19 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 33nux2vwnf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Sep 2020 14:58:18 +0000
+        Thu, 24 Sep 2020 14:58:19 +0000
 Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08OEwFG7000849;
-        Thu, 24 Sep 2020 14:58:15 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08OEwGIx016161;
+        Thu, 24 Sep 2020 14:58:16 GMT
 Received: from disposition.us.oracle.com (/10.152.32.81)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 24 Sep 2020 07:58:15 -0700
+        with ESMTP ; Thu, 24 Sep 2020 07:58:16 -0700
 From:   Ross Philipson <ross.philipson@oracle.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
@@ -47,240 +47,348 @@ To:     linux-kernel@vger.kernel.org, x86@kernel.org,
 Cc:     ross.philipson@oracle.com, dpsmith@apertussolutions.com,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
         luto@amacapital.net, trenchboot-devel@googlegroups.com
-Subject: [PATCH 09/13] x86: Secure Launch SMP bringup support
-Date:   Thu, 24 Sep 2020 10:58:37 -0400
-Message-Id: <1600959521-24158-10-git-send-email-ross.philipson@oracle.com>
+Subject: [PATCH 10/13] x86: Secure Launch adding event log securityfs
+Date:   Thu, 24 Sep 2020 10:58:38 -0400
+Message-Id: <1600959521-24158-11-git-send-email-ross.philipson@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
 References: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9753 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
- suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009240114
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009240114
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9753 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 impostorscore=0
- clxscore=1015 suspectscore=0 phishscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=999 adultscore=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009240114
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+ adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 spamscore=0 malwarescore=0 clxscore=1015 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009240114
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Intel, the APs are left in a well documented state after TXT performs
-the late launch. Specifically they cannot have #INIT asserted on them so
-a standard startup via INIT/SIPI/SIPI cannot be performed. Instead the
-early SL stub code parked the APs in a pause/jmp loop waiting for an NMI.
-The modified SMP boot code is called for the Secure Launch case. The
-jump address for the RM piggy entry point is fixed up in the jump where
-the APs are waiting and an NMI IPI is sent to the AP. The AP vectors to
-the Secure Launch entry point in the RM piggy which mimics what the real
-mode code would do then jumps the the standard RM piggy protected mode
-entry point.
+From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
 
+The late init functionality registers securityfs nodes to allow access
+to TXT register fields on Intel along with the fetching of and writing
+events to the late launch TPM log.
+
+Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
 Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+Signed-off-by: garnetgrimm <grimmg@ainfosec.com>
 ---
- arch/x86/include/asm/realmode.h      |  3 ++
- arch/x86/kernel/smpboot.c            | 86 ++++++++++++++++++++++++++++++++++++
- arch/x86/realmode/rm/header.S        |  3 ++
- arch/x86/realmode/rm/trampoline_64.S | 37 ++++++++++++++++
- 4 files changed, 129 insertions(+)
+ arch/x86/kernel/slaunch.c | 293 +++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 292 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
-index b35030e..20bc283 100644
---- a/arch/x86/include/asm/realmode.h
-+++ b/arch/x86/include/asm/realmode.h
-@@ -34,6 +34,9 @@ struct real_mode_header {
- #ifdef CONFIG_X86_64
- 	u32	machine_real_restart_seg;
- #endif
-+#ifdef CONFIG_SECURE_LAUNCH
-+	u32	sl_trampoline_start32;
-+#endif
- };
+diff --git a/arch/x86/kernel/slaunch.c b/arch/x86/kernel/slaunch.c
+index e040e32..7bdb89e 100644
+--- a/arch/x86/kernel/slaunch.c
++++ b/arch/x86/kernel/slaunch.c
+@@ -8,7 +8,7 @@
+  *
+  * Author(s):
+  *     Daniel P. Smith <dpsmith@apertussolutions.com>
+- *
++ *     Garnet T. Grimm <grimmg@ainfosec.com>
+  */
  
- /* This must match data at realmode/rm/trampoline_{32,64}.S */
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index f5ef689..0ca0b07 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -56,6 +56,7 @@
- #include <linux/numa.h>
- #include <linux/pgtable.h>
- #include <linux/overflow.h>
-+#include <linux/slaunch.h>
- 
- #include <asm/acpi.h>
- #include <asm/desc.h>
-@@ -1017,6 +1018,83 @@ int common_cpu_up(unsigned int cpu, struct task_struct *idle)
- 	return 0;
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+@@ -493,3 +493,294 @@ void __init slaunch_setup(void)
+ 	    vendor[3] == INTEL_CPUID_MFGID_EDX)
+ 		slaunch_setup_intel();
  }
- 
-+#ifdef CONFIG_SECURE_LAUNCH
 +
-+static atomic_t first_ap_only = {1};
++#define SL_FS_ENTRIES		10
++/* root directory node must be last */
++#define SL_ROOT_DIR_ENTRY	(SL_FS_ENTRIES - 1)
++#define SL_TXT_DIR_ENTRY	(SL_FS_ENTRIES - 2)
++#define SL_TXT_FILE_FIRST	(SL_TXT_DIR_ENTRY - 1)
++#define SL_TXT_ENTRY_COUNT	7
++
++#define DECLARE_TXT_PUB_READ_U(size, fmt, msg_size)			\
++static ssize_t txt_pub_read_u##size(unsigned int offset,		\
++		loff_t *read_offset,					\
++		size_t read_len,					\
++		char __user *buf)					\
++{									\
++	void __iomem *txt;						\
++	char msg_buffer[msg_size];					\
++	u##size reg_value = 0;						\
++	txt = ioremap(TXT_PUB_CONFIG_REGS_BASE,				\
++			TXT_NR_CONFIG_PAGES * PAGE_SIZE);		\
++	if (IS_ERR(txt))						\
++		return PTR_ERR(txt);					\
++	memcpy_fromio(&reg_value, txt + offset, sizeof(u##size));	\
++	iounmap(txt);							\
++	snprintf(msg_buffer, msg_size, fmt, reg_value);			\
++	return simple_read_from_buffer(buf, read_len, read_offset,	\
++			&msg_buffer, msg_size);				\
++}
++
++DECLARE_TXT_PUB_READ_U(8, "%#04x\n", 6);
++DECLARE_TXT_PUB_READ_U(32, "%#010x\n", 12);
++DECLARE_TXT_PUB_READ_U(64, "%#018llx\n", 20);
++
++#define DECLARE_TXT_FOPS(reg_name, reg_offset, reg_size)		\
++static ssize_t txt_##reg_name##_read(struct file *flip,			\
++		char __user *buf, size_t read_len, loff_t *read_offset)	\
++{									\
++	return txt_pub_read_u##reg_size(reg_offset, read_offset,	\
++			read_len, buf);					\
++}									\
++static const struct file_operations reg_name##_ops = {			\
++	.read = txt_##reg_name##_read,					\
++}
++
++DECLARE_TXT_FOPS(sts, TXT_CR_STS, 64);
++DECLARE_TXT_FOPS(ests, TXT_CR_ESTS, 8);
++DECLARE_TXT_FOPS(errorcode, TXT_CR_ERRORCODE, 32);
++DECLARE_TXT_FOPS(didvid, TXT_CR_DIDVID, 64);
++DECLARE_TXT_FOPS(e2sts, TXT_CR_E2STS, 64);
++DECLARE_TXT_FOPS(ver_emif, TXT_CR_VER_EMIF, 32);
++DECLARE_TXT_FOPS(scratchpad, TXT_CR_SCRATCHPAD, 64);
 +
 +/*
-+ * Called to fix the long jump address for the waiting APs to vector to
-+ * the correct startup location in the Secure Launch stub in the rmpiggy.
++ * Securityfs exposure
 + */
-+static int
-+slaunch_fixup_jump_vector(void)
-+{
-+	struct sl_ap_wake_info *ap_wake_info;
-+	unsigned int *ap_jmp_ptr = 0;
++struct memfile {
++	char *name;
++	void *addr;
++	size_t size;
++};
 +
-+	if (!atomic_dec_and_test(&first_ap_only))
++static struct memfile sl_evtlog = {"eventlog", 0, 0};
++static void *txt_heap;
++static struct txt_heap_event_log_pointer2_1_element __iomem *evtlog20;
++static DEFINE_MUTEX(sl_evt_log_mutex);
++
++static ssize_t sl_evtlog_read(struct file *file, char __user *buf,
++			      size_t count, loff_t *pos)
++{
++	ssize_t size;
++
++	if (!sl_evtlog.addr)
 +		return 0;
 +
-+	ap_wake_info = slaunch_get_ap_wake_info();
++	mutex_lock(&sl_evt_log_mutex);
++	size = simple_read_from_buffer(buf, count, pos, sl_evtlog.addr,
++				       sl_evtlog.size);
++	mutex_unlock(&sl_evt_log_mutex);
 +
-+	ap_jmp_ptr = (unsigned int *)__va(ap_wake_info->ap_wake_block +
-+					  ap_wake_info->ap_jmp_offset);
++	return size;
++}
 +
-+	*ap_jmp_ptr = real_mode_header->sl_trampoline_start32;
++static ssize_t sl_evtlog_write(struct file *file, const char __user *buf,
++				size_t datalen, loff_t *ppos)
++{
++	char *data;
++	ssize_t result;
 +
-+	pr_info("TXT AP long jump address updated\n");
++	if (!sl_evtlog.addr)
++		return 0;
 +
++	/* No partial writes. */
++	result = -EINVAL;
++	if (*ppos != 0)
++		goto out;
++
++	data = memdup_user(buf, datalen);
++	if (IS_ERR(data)) {
++		result = PTR_ERR(data);
++		goto out;
++	}
++
++	mutex_lock(&sl_evt_log_mutex);
++	if (evtlog20)
++		result = tpm20_log_event(evtlog20, sl_evtlog.addr,
++					 datalen, data);
++	else
++		result = tpm12_log_event(sl_evtlog.addr, datalen, data);
++	mutex_unlock(&sl_evt_log_mutex);
++
++	kfree(data);
++out:
++	return result;
++}
++
++static const struct file_operations sl_evtlog_ops = {
++	.read = sl_evtlog_read,
++	.write = sl_evtlog_write,
++	.llseek	= default_llseek,
++};
++
++static struct dentry *fs_entries[SL_FS_ENTRIES];
++
++struct sfs_file {
++	int parent;
++	const char *name;
++	const struct file_operations *fops;
++};
++
++static const struct sfs_file sl_files[] = {
++	{ SL_TXT_DIR_ENTRY, "sts", &sts_ops },
++	{ SL_TXT_DIR_ENTRY, "ests", &ests_ops },
++	{ SL_TXT_DIR_ENTRY, "errorcode", &errorcode_ops },
++	{ SL_TXT_DIR_ENTRY, "didvid", &didvid_ops },
++	{ SL_TXT_DIR_ENTRY, "ver_emif", &ver_emif_ops },
++	{ SL_TXT_DIR_ENTRY, "scratchpad", &scratchpad_ops },
++	{ SL_TXT_DIR_ENTRY, "e2sts", &e2sts_ops }
++};
++
++static int sl_create_file(int entry, int parent, const char *name,
++		const struct file_operations *ops)
++{
++	if (entry < 0 || entry > SL_TXT_DIR_ENTRY)
++		return -EINVAL;
++	fs_entries[entry] = securityfs_create_file(name, 0440,
++			fs_entries[parent], NULL, ops);
++	if (IS_ERR(fs_entries[entry])) {
++		pr_err("Error creating securityfs %s file\n", name);
++		return PTR_ERR(fs_entries[entry]);
++	}
 +	return 0;
 +}
 +
-+/*
-+ * TXT AP startup is quite different than normal. The APs cannot have #INIT
-+ * asserted on them or receive SIPIs. The early Secure Launch code has parked
-+ * the APs in a pause loop waiting to receive an NMI. This will wake the APs
-+ * and have them jump to the protected mode code in the rmpiggy where the rest
-+ * of the SMP boot of the AP will proceed normally.
-+ */
-+static int
-+slaunch_wakeup_cpu_from_txt(int cpu, int apicid)
++static long slaunch_expose_securityfs(void)
 +{
-+	unsigned long send_status = 0, accept_status = 0;
++	long ret = 0;
++	int i = 0;
 +
-+	/* Only done once */
-+	if (slaunch_fixup_jump_vector())
-+		return -1;
-+
-+	/* Send NMI IPI to idling AP and wake it up */
-+	apic_icr_write(APIC_DM_NMI, apicid);
-+
-+	if (init_udelay == 0)
-+		udelay(10);
-+	else
-+		udelay(300);
-+
-+	send_status = safe_apic_wait_icr_idle();
-+
-+	if (init_udelay == 0)
-+		udelay(10);
-+	else
-+		udelay(300);
-+
-+	accept_status = (apic_read(APIC_ESR) & 0xEF);
-+
-+	if (send_status)
-+		pr_err("Secure Launch IPI never delivered???\n");
-+	if (accept_status)
-+		pr_err("Secure Launch IPI delivery error (%lx)\n",
-+			accept_status);
-+
-+	return (send_status | accept_status);
-+}
-+
-+#else
-+
-+#define slaunch_wakeup_cpu_from_txt(cpu, apicid)	0
-+
-+#endif  /* !CONFIG_SECURE_LAUNCH */
-+
- /*
-  * NOTE - on most systems this is a PHYSICAL apic ID, but on multiquad
-  * (ie clustered apic addressing mode), this is a LOGICAL apic ID.
-@@ -1071,6 +1149,12 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
- 	cpumask_clear_cpu(cpu, cpu_initialized_mask);
- 	smp_mb();
- 
-+	/* With Intel TXT, the AP startup is totally different */
-+	if (slaunch_get_flags() & (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) {
-+		boot_error = slaunch_wakeup_cpu_from_txt(cpu, apicid);
-+		goto txt_wake;
++	fs_entries[SL_ROOT_DIR_ENTRY] = securityfs_create_dir("slaunch", NULL);
++	if (IS_ERR(fs_entries[SL_ROOT_DIR_ENTRY])) {
++		pr_err("Error creating securityfs slaunch root directory\n");
++		ret = PTR_ERR(fs_entries[SL_ROOT_DIR_ENTRY]);
++		goto err;
 +	}
 +
- 	/*
- 	 * Wake up a CPU in difference cases:
- 	 * - Use the method in the APIC driver if it's defined
-@@ -1083,6 +1167,8 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
- 		boot_error = wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
- 						     cpu0_nmi_registered);
- 
-+txt_wake:
++	if (sl_flags & SL_FLAG_ARCH_TXT) {
++		fs_entries[SL_TXT_DIR_ENTRY] = securityfs_create_dir("txt",
++				fs_entries[SL_ROOT_DIR_ENTRY]);
++		if (IS_ERR(fs_entries[SL_TXT_DIR_ENTRY])) {
++			pr_err("Error creating securityfs txt directory\n");
++			ret = PTR_ERR(fs_entries[SL_TXT_DIR_ENTRY]);
++			goto err_dir;
++		}
 +
- 	if (!boot_error) {
- 		/*
- 		 * Wait 10s total for first sign of life from AP
-diff --git a/arch/x86/realmode/rm/header.S b/arch/x86/realmode/rm/header.S
-index af04512..7215040 100644
---- a/arch/x86/realmode/rm/header.S
-+++ b/arch/x86/realmode/rm/header.S
-@@ -33,6 +33,9 @@ SYM_DATA_START(real_mode_header)
- #ifdef CONFIG_X86_64
- 	.long	__KERNEL32_CS
- #endif
-+#ifdef CONFIG_SECURE_LAUNCH
-+	.long	pa_sl_trampoline_start32
-+#endif
- SYM_DATA_END(real_mode_header)
- 
- 	/* End signature, used to verify integrity */
-diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
-index 251758e..d5fb210 100644
---- a/arch/x86/realmode/rm/trampoline_64.S
-+++ b/arch/x86/realmode/rm/trampoline_64.S
-@@ -84,6 +84,43 @@ SYM_CODE_END(trampoline_start)
- 
- 	.section ".text32","ax"
- 	.code32
-+#ifdef CONFIG_SECURE_LAUNCH
-+	.balign 4
-+SYM_CODE_START(sl_trampoline_start32)
++		for (i = 0; i < SL_TXT_ENTRY_COUNT; i++) {
++			ret = sl_create_file(SL_TXT_FILE_FIRST - i,
++					sl_files[i].parent, sl_files[i].name,
++					sl_files[i].fops);
++			if (ret)
++				goto err_dir;
++		}
++	}
++
++	if (sl_evtlog.addr > 0) {
++		ret = sl_create_file(0, SL_ROOT_DIR_ENTRY, sl_evtlog.name,
++				&sl_evtlog_ops);
++		if (ret)
++			goto err_dir;
++	}
++
++	return 0;
++
++err_dir:
++	for (i = 0; i <= SL_ROOT_DIR_ENTRY; i++)
++		securityfs_remove(fs_entries[i]);
++err:
++	return ret;
++}
++
++static void slaunch_teardown_securityfs(void)
++{
++	int i;
++
++	for (i = 0; i < SL_FS_ENTRIES; i++)
++		securityfs_remove(fs_entries[i]);
++
++	if (sl_flags & SL_FLAG_ARCH_TXT) {
++		if (sl_evtlog.addr) {
++			memunmap(sl_evtlog.addr);
++			sl_evtlog.addr = NULL;
++		}
++		sl_evtlog.size = 0;
++		if (txt_heap) {
++			memunmap(txt_heap);
++			txt_heap = NULL;
++		}
++	}
++}
++
++static void slaunch_intel_evtlog(void)
++{
++	void __iomem *config;
++	struct txt_os_mle_data *params;
++	void *os_sinit_data;
++	u64 base, size;
++
++	config = ioremap(TXT_PUB_CONFIG_REGS_BASE, TXT_NR_CONFIG_PAGES *
++			 PAGE_SIZE);
++	if (!config) {
++		pr_err("Error failed to ioremap TXT reqs\n");
++		return;
++	}
++
++	memcpy_fromio(&base, config + TXT_CR_HEAP_BASE, sizeof(u64));
++	memcpy_fromio(&size, config + TXT_CR_HEAP_SIZE, sizeof(u64));
++	iounmap(config);
++
++	/* now map TXT heap */
++	txt_heap = memremap(base, size, MEMREMAP_WB);
++	if (!txt_heap) {
++		pr_err("Error failed to memremap TXT heap\n");
++		return;
++	}
++
++	params = (struct txt_os_mle_data *)txt_os_mle_data_start(txt_heap);
++
++	sl_evtlog.size = params->evtlog_size;
++	sl_evtlog.addr = memremap(params->evtlog_addr, params->evtlog_size,
++				  MEMREMAP_WB);
++	if (!sl_evtlog.addr) {
++		pr_err("Error failed to memremap TPM event log\n");
++		return;
++	}
++
++	/* Determine if this is TPM 1.2 or 2.0 event log */
++	if (memcmp(sl_evtlog.addr + sizeof(struct tpm12_pcr_event),
++		    TPM20_EVTLOG_SIGNATURE, sizeof(TPM20_EVTLOG_SIGNATURE)))
++		return; /* looks like it is not 2.0 */
++
++	/* For TPM 2.0 logs, the extended heap element must be located */
++	os_sinit_data = txt_os_sinit_data_start(txt_heap);
++
++	evtlog20 = tpm20_find_log2_1_element(os_sinit_data);
++
 +	/*
-+	 * The early secure launch stub AP wakeup code has taken care of all
-+	 * the vagaries of launching out of TXT. This bit just mimics what the
-+	 * 16b entry code does and jumps off to the real startup_32.
++	 * If this fails, things are in really bad shape. Any attempt to write
++	 * events to the log will fail.
 +	 */
-+	cli
-+	wbinvd
++	if (!evtlog20)
++		pr_err("Error failed to find TPM20 event log element\n");
++}
 +
-+	/*
-+	 * The %ebx provided is not terribly useful since it is the physical
-+	 * address of tb_trampoline_start and not the base of the image.
-+	 * Use pa_real_mode_base, which is fixed up, to get a run time
-+	 * base register to use for offsets to location that do not have
-+	 * pa_ symbols.
-+	 */
-+	movl    $pa_real_mode_base, %ebx
++static int __init slaunch_late_init(void)
++{
++	/* Check to see if Secure Launch happened */
++	if (!(sl_flags & (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)))
++		return 0;
 +
-+	/*
-+	 * This may seem a little odd but this is what %esp would have had in
-+	 * it on the jmp from real mode because all real mode fixups were done
-+	 * via the code segment. The base is added at the 32b entry.
-+	 */
-+	movl	rm_stack_end, %esp
++	/* Only Intel TXT is supported at this point */
++	slaunch_intel_evtlog();
 +
-+	lgdt    tr_gdt(%ebx)
-+	lidt    tr_idt(%ebx)
++	return slaunch_expose_securityfs();
++}
 +
-+	movw	$__KERNEL_DS, %dx	# Data segment descriptor
++static void __exit slaunch_exit(void)
++{
++	slaunch_teardown_securityfs();
++}
 +
-+	/* Jump to where the 16b code would have jumped */
-+	ljmpl	$__KERNEL32_CS, $pa_startup_32
-+SYM_CODE_END(sl_trampoline_start32)
-+#endif
++late_initcall(slaunch_late_init);
 +
- 	.balign 4
- SYM_CODE_START(startup_32)
- 	movl	%edx, %ss
++__exitcall(slaunch_exit);
 -- 
 1.8.3.1
 
