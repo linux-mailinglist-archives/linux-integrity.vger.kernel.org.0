@@ -2,44 +2,45 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 532AD2774BA
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Sep 2020 17:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202A72774B1
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Sep 2020 17:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728274AbgIXPCJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Sep 2020 11:02:09 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:60638 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728139AbgIXPCI (ORCPT
+        id S1728536AbgIXPAh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Sep 2020 11:00:37 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:57872 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728522AbgIXPAf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Sep 2020 11:02:08 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OF062S123345;
-        Thu, 24 Sep 2020 15:00:12 GMT
+        Thu, 24 Sep 2020 11:00:35 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OExMuU057870;
+        Thu, 24 Sep 2020 15:00:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2020-01-29;
- bh=cELzVuMzCPT3axjaAeiEoxE5gCcx4JGS/89qgFwwGjc=;
- b=dJZAnOWHg7MuyRDw+xyXx9dYFAt67GAK28MGWTMHNeQaJuAAhC4nRWLIVbDvexjWcwga
- kFyFy4k4gQBiv+DVLi+56UBgJtbn/H2TVUXcHkA0I17daxAXRcTjwkgQLCXhU+Dc3qxp
- MQILaP4wqnAtRewoOW5OO5V2mZE0fX0FzNmmc5jTJ/LpElcZPCzlJY3pRLTVhVDTPxBB
- tJeCzMJ1basCoNJHFwY8KQ+1ZGpfwIzsBQZf5l0PzS8ZEtUk8zC+FcvA3YMOw3agzOyI
- BKtyddq9PRnrSTeLYDmAc4RxhlMuH2krmAcnjixiVhZejRV43sn5vs80uHNMdGXddzvg rQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2130.oracle.com with ESMTP id 33qcpu5qqj-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=yg4M06FIQJ2u5BXPw1XKsLXjtLOTZNeOwA/0MhZC+5I=;
+ b=V6Y0XJNbInDYYuYExYE5nm5iEloc7qnPMzW66VFnn/iqTzeD1ycdb6783VP8uhGnQ56T
+ wIduJWSSY0LK7UWYVTYE6NhCAcrk7ols4gLQs6kvoPVy2SOaxbQZFRhU/Ge0UY4v64Pk
+ qfif7OAKHotFCRAzHkSj8TwB6AznMclRgfwcuWbTJRfiImmbXQSVj+pgQrfTP+U0rEcP
+ 3dKvkYuZQK3S09ajQBWJLBgDyuLcWlXCjrEbAg6yth3/Xlo+kTx0AkLlWV8/DrAJIKuD
+ JPhTA8jaG1KsIvW8r4uNht7o+N+za+BUr6vOHQlf/h5Uq1wUtSUEAw+OMyo4VAzgAjNF zg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 33q5rgq5k5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Sep 2020 15:00:12 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OEu93S177146;
+        Thu, 24 Sep 2020 15:00:13 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08OEtT6r159274;
         Thu, 24 Sep 2020 14:58:12 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 33r28x3vg9-1
+        by userp3030.oracle.com with ESMTP id 33nux2vwjb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 24 Sep 2020 14:58:12 +0000
 Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08OEw7CH022535;
-        Thu, 24 Sep 2020 14:58:07 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08OEw9OM022555;
+        Thu, 24 Sep 2020 14:58:09 GMT
 Received: from disposition.us.oracle.com (/10.152.32.81)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 24 Sep 2020 07:58:07 -0700
+        with ESMTP ; Thu, 24 Sep 2020 07:58:09 -0700
 From:   Ross Philipson <ross.philipson@oracle.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
@@ -47,189 +48,589 @@ To:     linux-kernel@vger.kernel.org, x86@kernel.org,
 Cc:     ross.philipson@oracle.com, dpsmith@apertussolutions.com,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
         luto@amacapital.net, trenchboot-devel@googlegroups.com
-Subject: [PATCH 00/13] x86: Trenchboot secure dynamic launch Linux kernel support
-Date:   Thu, 24 Sep 2020 10:58:28 -0400
-Message-Id: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
+Subject: [PATCH 02/13] x86: Secure Launch main header file
+Date:   Thu, 24 Sep 2020 10:58:30 -0400
+Message-Id: <1600959521-24158-3-git-send-email-ross.philipson@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
+References: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9753 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
- suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009240114
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9753 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
- phishscore=0 spamscore=0 malwarescore=0 clxscore=1015 impostorscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009240115
+ definitions=main-2009240114
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9753 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 impostorscore=0
+ clxscore=1015 suspectscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 adultscore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009240115
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The Trenchboot project focus on boot security has led to the enabling of
-the Linux kernel to be directly invocable by the x86 Dynamic Launch
-instruction(s) for establishing a Dynamic Root of Trust for Measurement
-(DRTM). The dynamic launch will be initiated by a boot loader with
-associated support added to it, for example the first targeted boot
-loader will be GRUB2. An integral part of establishing the DRTM involves
-measuring everything that is intended to be run (kernel image, initrd,
-etc) and everything that will configure that kernel to run (command
-line, boot params, etc) into specific PCRs, the DRTM PCRs (17-22), in
-the TPM. Another key aspect is the dynamic launch is rooted in hardware,
-that is to say the hardware (CPU) is what takes the first measurement
-for the chain of integrity measurements. On Intel this is done using
-the GETSEC instruction provided by Intel's TXT and the SKINIT
-instruction provided by AMD's AMD-V. Information on these technologies
-can be readily found online. This patchset introduces Intel TXT support.
+Introduce the main Secure Launch header file used in the early SL stub
+and the early setup code.
 
-To enable the kernel to be launched by GETSEC, a stub must be built
-into the setup section of the compressed kernel to handle the specific
-state that the dynamic launch process leaves the BSP in. This is
-analogous to the EFI stub that is found in the same area. Also this stub
-must measure everything that is going to be used as early as possible.
-This stub code and subsequent code must also deal with the specific
-state that the dynamic launch leaves the APs in.
-
-A quick note on terminology. The larger open source project itself is
-called Trenchboot, which is hosted on Github (links below). The kernel
-feature enabling the use of the x86 technology is referred to as "Secure
-Launch" within the kernel code. As such the prefixes sl_/SL_ or
-slaunch/SLAUNCH will be seen in the code. The stub code discussed above
-is referred to as the SL stub.
-
-The basic flow is:
-
- - Entry from the dynamic launch jumps to the SL stub
- - SL stub fixes up the world on the BSP
- - For TXT, SL stub wakes the APs, fixes up their worlds
- - For TXT, APs are left halted waiting for an NMI to wake them
- - SL stub jumps to startup_32
- - SL main runs to measure configuration and module information into the
-   DRTM PCRs. It also locates the TPM event log.
- - Kernel boot proceeds normally from this point.
- - During early setup, slaunch_setup() runs to finish some validation
-   and setup tasks.
- - The SMP bringup code is modified to wake the waiting APs. APs vector
-   to rmpiggy and start up normally from that point.
- - Kernel boot finishes booting normally
- - SL securityfs module is present to allow reading and writing of the
-   TPM event log.
- - SEXIT support to leave SMX mode is present on the kexec path and
-   the various reboot paths (poweroff, reset, halt).
-
-Links:
-
-The Trenchboot project including documentation:
-
-https://github.com/trenchboot
-
-Intel TXT is documented in its own specification and in the SDM Instruction Set volume:
-
-https://www.intel.com/content/dam/www/public/us/en/documents/guides/intel-txt-software-development-guide.pdf
-https://software.intel.com/en-us/articles/intel-sdm
-
-AMD SKINIT is documented in the System Programming manual:
-
-https://www.amd.com/system/files/TechDocs/24593.pdf
-
-GRUB2 pre-launch support patchset (WIP):
-
-https://lists.gnu.org/archive/html/grub-devel/2020-05/msg00011.html
-
-Thanks
-Ross Philipson and Daniel P. Smith
-
-Daniel P. Smith (4):
-  x86: Add early TPM TIS/CRB interface support for Secure Launch
-  x86: Add early TPM1.2/TPM2.0 interface support for Secure Launch
-  x86: Add early general TPM interface support for Secure Launch
-  x86: Secure Launch adding event log securityfs
-
-Ross Philipson (9):
-  x86: Secure Launch Kconfig
-  x86: Secure Launch main header file
-  x86: Add early SHA support for Secure Launch early measurements
-  x86: Secure Launch kernel early boot stub
-  x86: Secure Launch kernel late boot stub
-  x86: Secure Launch SMP bringup support
-  kexec: Secure Launch kexec SEXIT support
-  reboot: Secure Launch SEXIT support on reboot paths
-  tpm: Allow locality 2 to be set when initializing the TPM for Secure
-    Launch
-
- Documentation/x86/boot.rst                    |   9 +
- arch/x86/Kconfig                              |  36 ++
- arch/x86/boot/compressed/Makefile             |   8 +
- arch/x86/boot/compressed/early_sha1.c         | 104 ++++
- arch/x86/boot/compressed/early_sha1.h         |  17 +
- arch/x86/boot/compressed/early_sha256.c       |   6 +
- arch/x86/boot/compressed/early_sha512.c       |   6 +
- arch/x86/boot/compressed/head_64.S            |  34 +
- arch/x86/boot/compressed/kernel_info.S        |   7 +
- arch/x86/boot/compressed/sl_main.c            | 390 ++++++++++++
- arch/x86/boot/compressed/sl_stub.S            | 606 ++++++++++++++++++
- arch/x86/boot/compressed/tpm/crb.c            | 304 +++++++++
- arch/x86/boot/compressed/tpm/crb.h            |  20 +
- arch/x86/boot/compressed/tpm/tis.c            | 215 +++++++
- arch/x86/boot/compressed/tpm/tis.h            |  46 ++
- arch/x86/boot/compressed/tpm/tpm.c            | 145 +++++
- arch/x86/boot/compressed/tpm/tpm.h            |  48 ++
- arch/x86/boot/compressed/tpm/tpm1.h           | 112 ++++
- arch/x86/boot/compressed/tpm/tpm1_cmds.c      |  99 +++
- arch/x86/boot/compressed/tpm/tpm2.h           |  89 +++
- arch/x86/boot/compressed/tpm/tpm2_auth.c      |  44 ++
- arch/x86/boot/compressed/tpm/tpm2_auth.h      |  21 +
- arch/x86/boot/compressed/tpm/tpm2_cmds.c      | 145 +++++
- arch/x86/boot/compressed/tpm/tpm2_constants.h |  66 ++
- arch/x86/boot/compressed/tpm/tpm_buff.c       | 121 ++++
- arch/x86/boot/compressed/tpm/tpm_common.h     | 127 ++++
- arch/x86/boot/compressed/tpm/tpmbuff.h        |  34 +
- arch/x86/boot/compressed/tpm/tpmio.c          |  51 ++
- arch/x86/include/asm/realmode.h               |   3 +
- arch/x86/kernel/Makefile                      |   1 +
- arch/x86/kernel/asm-offsets.c                 |  16 +
- arch/x86/kernel/reboot.c                      |  10 +
- arch/x86/kernel/setup.c                       |   3 +
- arch/x86/kernel/slaunch.c                     | 856 ++++++++++++++++++++++++++
- arch/x86/kernel/smpboot.c                     |  86 +++
- arch/x86/realmode/rm/header.S                 |   3 +
- arch/x86/realmode/rm/trampoline_64.S          |  37 ++
- drivers/char/tpm/tpm-chip.c                   |  13 +-
- drivers/iommu/intel/dmar.c                    |   4 +
- include/linux/sha512.h                        |  21 +
- include/linux/slaunch.h                       | 544 ++++++++++++++++
- kernel/kexec_core.c                           |   4 +
- lib/sha1.c                                    |   4 +
- lib/sha512.c                                  | 209 +++++++
- 44 files changed, 4722 insertions(+), 2 deletions(-)
- create mode 100644 arch/x86/boot/compressed/early_sha1.c
- create mode 100644 arch/x86/boot/compressed/early_sha1.h
- create mode 100644 arch/x86/boot/compressed/early_sha256.c
- create mode 100644 arch/x86/boot/compressed/early_sha512.c
- create mode 100644 arch/x86/boot/compressed/sl_main.c
- create mode 100644 arch/x86/boot/compressed/sl_stub.S
- create mode 100644 arch/x86/boot/compressed/tpm/crb.c
- create mode 100644 arch/x86/boot/compressed/tpm/crb.h
- create mode 100644 arch/x86/boot/compressed/tpm/tis.c
- create mode 100644 arch/x86/boot/compressed/tpm/tis.h
- create mode 100644 arch/x86/boot/compressed/tpm/tpm.c
- create mode 100644 arch/x86/boot/compressed/tpm/tpm.h
- create mode 100644 arch/x86/boot/compressed/tpm/tpm1.h
- create mode 100644 arch/x86/boot/compressed/tpm/tpm1_cmds.c
- create mode 100644 arch/x86/boot/compressed/tpm/tpm2.h
- create mode 100644 arch/x86/boot/compressed/tpm/tpm2_auth.c
- create mode 100644 arch/x86/boot/compressed/tpm/tpm2_auth.h
- create mode 100644 arch/x86/boot/compressed/tpm/tpm2_cmds.c
- create mode 100644 arch/x86/boot/compressed/tpm/tpm2_constants.h
- create mode 100644 arch/x86/boot/compressed/tpm/tpm_buff.c
- create mode 100644 arch/x86/boot/compressed/tpm/tpm_common.h
- create mode 100644 arch/x86/boot/compressed/tpm/tpmbuff.h
- create mode 100644 arch/x86/boot/compressed/tpm/tpmio.c
- create mode 100644 arch/x86/kernel/slaunch.c
- create mode 100644 include/linux/sha512.h
+Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+---
+ include/linux/slaunch.h | 544 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 544 insertions(+)
  create mode 100644 include/linux/slaunch.h
- create mode 100644 lib/sha512.c
 
+diff --git a/include/linux/slaunch.h b/include/linux/slaunch.h
+new file mode 100644
+index 0000000..88adc69
+--- /dev/null
++++ b/include/linux/slaunch.h
+@@ -0,0 +1,544 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Main Secure Launch header file.
++ *
++ * Copyright (c) 2020, Oracle and/or its affiliates.
++ */
++
++#ifndef _LINUX_SLAUNCH_H
++#define _LINUX_SLAUNCH_H
++
++/*
++ * Secure Launch Defined State Flags
++ */
++#define SL_FLAG_ACTIVE		0x00000001
++#define SL_FLAG_ARCH_SKINIT	0x00000002
++#define SL_FLAG_ARCH_TXT	0x00000004
++
++#ifdef CONFIG_SECURE_LAUNCH
++
++/*
++ * Secure Launch main definitions file.
++ *
++ * Copyright (c) 2019 Oracle and/or its affiliates. All rights reserved.
++ */
++
++#define __SL32_CS	0x0008
++#define __SL32_DS	0x0010
++
++#define SL_CPU_AMD	1
++#define SL_CPU_INTEL	2
++
++#define INTEL_CPUID_MFGID_EBX	0x756e6547 /* Genu */
++#define INTEL_CPUID_MFGID_EDX	0x49656e69 /* ineI */
++#define INTEL_CPUID_MFGID_ECX	0x6c65746e /* ntel */
++
++#define AMD_CPUID_MFGID_EBX	0x68747541 /* Auth */
++#define AMD_CPUID_MFGID_EDX	0x69746e65 /* enti */
++#define AMD_CPUID_MFGID_ECX	0x444d4163 /* cAMD */
++
++/*
++ * Intel Safer Mode Extensions (SMX)
++ *
++ * Intel SMX provides a programming interface to establish a Measured Launched
++ * Environment (MLE). The measurement and protection mechanisms supported by the
++ * capabilities of an Intel Trusted Execution Technology (TXT) platform. SMX is
++ * the processor’s programming interface in an Intel TXT platform.
++ *
++ * See Intel SDM Volume 2 - 6.1 "Safer Mode Extensions Reference"
++ */
++
++/*
++ * SMX GETSEC Leaf Functions
++ */
++#define SMX_X86_GETSEC_SEXIT	5
++#define SMX_X86_GETSEC_SMCTRL	7
++#define SMX_X86_GETSEC_WAKEUP	8
++
++/*
++ * Intel Trusted Execution Technology MMIO Registers Banks
++ */
++#define TXT_PUB_CONFIG_REGS_BASE	0xfed30000
++#define TXT_PRIV_CONFIG_REGS_BASE	0xfed20000
++#define TXT_NR_CONFIG_PAGES     ((TXT_PUB_CONFIG_REGS_BASE - \
++				  TXT_PRIV_CONFIG_REGS_BASE) >> PAGE_SHIFT)
++
++/*
++ * Intel Trusted Execution Technology (TXT) Registers
++ */
++#define TXT_CR_STS			0x0000
++#define TXT_CR_ESTS			0x0008
++#define TXT_CR_ERRORCODE		0x0030
++#define TXT_CR_CMD_RESET		0x0038
++#define TXT_CR_CMD_CLOSE_PRIVATE	0x0048
++#define TXT_CR_DIDVID			0x0110
++#define TXT_CR_VER_EMIF			0x0200
++#define TXT_CR_CMD_UNLOCK_MEM_CONFIG	0x0218
++#define TXT_CR_SINIT_BASE		0x0270
++#define TXT_CR_SINIT_SIZE		0x0278
++#define TXT_CR_MLE_JOIN			0x0290
++#define TXT_CR_HEAP_BASE		0x0300
++#define TXT_CR_HEAP_SIZE		0x0308
++#define TXT_CR_SCRATCHPAD		0x0378
++#define TXT_CR_CMD_OPEN_LOCALITY1	0x0380
++#define TXT_CR_CMD_CLOSE_LOCALITY1	0x0388
++#define TXT_CR_CMD_OPEN_LOCALITY2	0x0390
++#define TXT_CR_CMD_CLOSE_LOCALITY2	0x0398
++#define TXT_CR_CMD_SECRETS		0x08e0
++#define TXT_CR_CMD_NO_SECRETS		0x08e8
++#define TXT_CR_E2STS			0x08f0
++
++/* TXTCR_STS status bits */
++#define TXT_SENTER_DONE_STS		(1<<0)
++#define TXT_SEXIT_DONE_STS		(1<<1)
++
++/*
++ * SINIT/MLE Capabilities Field Bit Definitions
++ */
++#define TXT_SINIT_MLE_CAP_WAKE_GETSEC	0
++#define TXT_SINIT_MLE_CAP_WAKE_MONITOR	1
++
++/*
++ * OS/MLE Secure Launch Specific Definitions
++ */
++#define TXT_OS_MLE_STRUCT_VERSION	1
++#define TXT_OS_MLE_MAX_VARIABLE_MTRRS	32
++
++/*
++ * TXT Heap Table Enumeration
++ */
++#define TXT_BIOS_DATA_TABLE		1
++#define TXT_OS_MLE_DATA_TABLE		2
++#define TXT_OS_SINIT_DATA_TABLE		3
++#define TXT_SINIT_MLE_DATA_TABLE	4
++
++/*
++ * Secure Launch Defined Error Codes used in MLE-initiated TXT resets.
++ *
++ * TXT Specification
++ * Appendix I ACM Error Codes
++ */
++#define SL_ERROR_GENERIC		0xc0008001
++#define SL_ERROR_TPM_INIT		0xc0008002
++#define SL_ERROR_TPM_INVALID_LOG20	0xc0008003
++#define SL_ERROR_TPM_LOGGING_FAILED	0xc0008004
++#define SL_ERROR_TPM_GET_LOC		0xc0008005
++#define SL_ERROR_TPM_EXTEND		0xc0008006
++#define SL_ERROR_MTRR_INV_VCNT		0xc0008007
++#define SL_ERROR_MTRR_INV_DEF_TYPE	0xc0008008
++#define SL_ERROR_MTRR_INV_BASE		0xc0008009
++#define SL_ERROR_MTRR_INV_MASK		0xc000800a
++#define SL_ERROR_MSR_INV_MISC_EN	0xc000800b
++#define SL_ERROR_INV_AP_INTERRUPT	0xc000800c
++#define SL_ERROR_RESERVE_AP_WAKE	0xc000800d
++#define SL_ERROR_HEAP_WALK		0xc000800e
++#define SL_ERROR_HEAP_MAP		0xc000800f
++#define SL_ERROR_HEAP_MDR_VALS		0xc0008010
++#define SL_ERROR_HEAP_INVALID_DMAR	0xc0008011
++#define SL_ERROR_HEAP_DMAR_SIZE		0xc0008012
++#define SL_ERROR_HEAP_DMAR_MAP		0xc0008013
++#define SL_ERROR_HI_PMR_BASE		0xc0008014
++#define SL_ERROR_HI_PMR_SIZE		0xc0008015
++#define SL_ERROR_LO_PMR_BASE		0xc0008016
++#define SL_ERROR_LO_PMR_MLE		0xc0008017
++#define SL_ERROR_LO_PMR_INITRD		0xc0008018
++#define SL_ERROR_HEAP_ZERO_OFFSET	0xc0008019
++#define SL_ERROR_WAKE_BLOCK_TOO_SMALL	0xc000801a
++
++/*
++ * Secure Launch Defined Limits
++ */
++#define TXT_MAX_CPUS		512
++#define TXT_BOOT_STACK_SIZE	24
++
++/*
++ * Secure Launch event log entry type. The TXT specification defines the
++ * base event value as 0x400 for DRTM values.
++ */
++#define TXT_EVTYPE_BASE		0x400
++#define TXT_EVTYPE_SLAUNCH	(TXT_EVTYPE_BASE + 0x102)
++
++/*
++ * Measured Launch PCRs
++ */
++#define SL_IMAGE_PCR17		17
++#define SL_CONFIG_PCR18		18
++
++/*
++ * MLE scratch area offsets
++ */
++#define SL_SCRATCH_AP_EBX		0
++#define SL_SCRATCH_AP_JMP_OFFSET	4
++#define SL_SCRATCH_AP_PAUSE		8
++
++#ifndef __ASSEMBLY__
++
++#include <linux/io.h>
++
++/*
++ * Secure Launch AP wakeup information fetched in SMP boot code.
++ */
++struct sl_ap_wake_info {
++	u32 ap_wake_block;
++	u32 ap_wake_block_size;
++	u32 ap_jmp_offset;
++};
++
++/*
++ * TXT heap extended data elements.
++ */
++struct txt_heap_ext_data_element {
++	u32 type;
++	u32 size;
++	/* Data */
++} __packed;
++
++#define TXT_HEAP_EXTDATA_TYPE_END			0
++
++struct txt_heap_end_element {
++	u32 type;
++	u32 size;
++} __packed;
++
++#define TXT_HEAP_EXTDATA_TYPE_TPM_EVENT_LOG_PTR		5
++
++struct txt_heap_event_log_element {
++	u64 event_log_phys_addr;
++} __packed;
++
++#define TXT_HEAP_EXTDATA_TYPE_EVENT_LOG_POINTER2_1	8
++
++struct txt_heap_event_log_pointer2_1_element {
++	u64 phys_addr;
++	u32 allocated_event_container_size;
++	u32 first_record_offset;
++	u32 next_record_offset;
++} __packed;
++
++/*
++ * Secure Launch defined MTRR saving structures
++ */
++struct txt_mtrr_pair {
++	u64 mtrr_physbase;
++	u64 mtrr_physmask;
++} __packed;
++
++struct txt_mtrr_state {
++	u64 default_mem_type;
++	u64 mtrr_vcnt;
++	struct txt_mtrr_pair mtrr_pair[TXT_OS_MLE_MAX_VARIABLE_MTRRS];
++} __packed;
++
++/*
++ * Secure Launch defined OS/MLE TXT Heap table
++ */
++struct txt_os_mle_data {
++	u32 version;
++	u32 boot_params_addr;
++	u64 saved_misc_enable_msr;
++	struct txt_mtrr_state saved_bsp_mtrrs;
++	u32 ap_wake_block;
++	u32 ap_wake_block_size;
++	u64 evtlog_addr;
++	u32 evtlog_size;
++	u8 mle_scratch[64];
++} __packed;
++
++/*
++ * TXT specification defined BIOS data TXT Heap table
++ */
++struct txt_bios_data {
++	u32 version; /* Currently 5 for TPM 1.2 and 6 for TPM 2.0 */
++	u32 bios_sinit_size;
++	u64 reserved1;
++	u64 reserved2;
++	u32 num_logical_procs;
++	/* Versions >= 5 with updates in version 6 */
++	u32 sinit_flags;
++	u32 mle_flags;
++	/* Versions >= 4 */
++	/* Ext Data Elements */
++} __packed;
++
++/*
++ * TXT specification defined OS/SINIT TXT Heap table
++ */
++struct txt_os_sinit_data {
++	u32 version; /* Currently 6 for TPM 1.2 and 7 for TPM 2.0 */
++	u32 flags;
++	u64 mle_ptab;
++	u64 mle_size;
++	u64 mle_hdr_base;
++	u64 vtd_pmr_lo_base;
++	u64 vtd_pmr_lo_size;
++	u64 vtd_pmr_hi_base;
++	u64 vtd_pmr_hi_size;
++	u64 lcp_po_base;
++	u64 lcp_po_size;
++	u32 capabilities;
++	/* Version = 5 */
++	u64 efi_rsdt_ptr;
++	/* Versions >= 6 */
++	/* Ext Data Elements */
++} __packed;
++
++/*
++ * TXT specification defined SINIT/MLE TXT Heap table
++ */
++struct txt_sinit_mle_data {
++	u32 version;             /* Current values are 6 through 9 */
++	/* Versions <= 8 */
++	u8 bios_acm_id[20];
++	u32 edx_senter_flags;
++	u64 mseg_valid;
++	u8 sinit_hash[20];
++	u8 mle_hash[20];
++	u8 stm_hash[20];
++	u8 lcp_policy_hash[20];
++	u32 lcp_policy_control;
++	/* Versions >= 7 */
++	u32 rlp_wakeup_addr;
++	u32 reserved;
++	u32 num_of_sinit_mdrs;
++	u32 sinit_mdrs_table_offset;
++	u32 sinit_vtd_dmar_table_size;
++	u32 sinit_vtd_dmar_table_offset;
++	/* Versions >= 8 */
++	u32 processor_scrtm_status;
++	/* Versions >= 9 */
++	/* Ext Data Elements */
++} __packed;
++
++/*
++ * TXT data reporting structure for memory types
++ */
++struct txt_sinit_memory_descriptor_record {
++	u64 address;
++	u64 length;
++	u8 type;
++	u8 reserved[7];
++} __packed;
++
++/*
++ * TXT data structure used by a responsive local processor (RLP) to start
++ * execution in response to a GETSEC[WAKEUP].
++ */
++struct smx_rlp_mle_join {
++	u32 rlp_gdt_limit;
++	u32 rlp_gdt_base;
++	u32 rlp_seg_sel;     /* cs (ds, es, ss are seg_sel+8) */
++	u32 rlp_entry_point; /* phys addr */
++} __packed;
++
++/*
++ * TPM event log structures defined in both the TXT specification and
++ * the TCG documentation.
++ */
++#define TPM12_EVTLOG_SIGNATURE "TXT Event Container"
++
++struct tpm12_event_log_header {
++	char signature[20];
++	char reserved[12];
++	u8 container_ver_major;
++	u8 container_ver_minor;
++	u8 pcr_event_ver_major;
++	u8 pcr_event_ver_minor;
++	u32 container_size;
++	u32 pcr_events_offset;
++	u32 next_event_offset;
++	/* PCREvents[] */
++} __packed;
++
++struct tpm12_pcr_event {
++	u32 pcr_index;
++	u32 type;
++	u8 digest[20];
++	u32 size;
++	/* Data[] */
++} __packed;
++
++#define TPM20_EVTLOG_SIGNATURE "Spec ID Event03"
++
++struct tpm20_ha {
++	u16 algorithm_id;
++	/* digest[AlgorithmID_DIGEST_SIZE] */
++} __packed;
++
++struct tpm20_digest_values {
++	u32 count;
++	/* TPMT_HA digests[count] */
++} __packed;
++
++struct tpm20_pcr_event_head {
++	u32 pcr_index;
++	u32 event_type;
++} __packed;
++
++/* Variable size array of hashes in the tpm20_digest_values structure */
++
++struct tpm20_pcr_event_tail {
++	u32 event_size;
++	/* Event[EventSize]; */
++} __packed;
++
++/*
++ * Functions to extract data from the Intel TXT Heap Memory. The layout
++ * of the heap is as follows:
++ *  +----------------------------+
++ *  | Size Bios Data table (u64) |
++ *  +----------------------------+
++ *  | Bios Data table            |
++ *  +----------------------------+
++ *  | Size OS MLE table (u64)    |
++ *  +----------------------------+
++ *  | OS MLE table               |
++ *  +--------------------------- +
++ *  | Size OS SINIT table (u64)  |
++ *  +----------------------------+
++ *  | OS SINIT table             |
++ *  +----------------------------+
++ *  | Size SINIT MLE table (u64) |
++ *  +----------------------------+
++ *  | SINIT MLE table            |
++ *  +----------------------------+
++ *
++ *  NOTE: the table size fields include the 8 byte size field itself.
++ */
++static inline u64 txt_bios_data_size(void *heap)
++{
++	return *((u64 *)heap);
++}
++
++static inline void *txt_bios_data_start(void *heap)
++{
++	return heap + sizeof(u64);
++}
++
++static inline u64 txt_os_mle_data_size(void *heap)
++{
++	return *((u64 *)(heap + txt_bios_data_size(heap)));
++}
++
++static inline void *txt_os_mle_data_start(void *heap)
++{
++	return heap + txt_bios_data_size(heap) + sizeof(u64);
++}
++
++static inline u64 txt_os_sinit_data_size(void *heap)
++{
++	return *((u64 *)(heap + txt_bios_data_size(heap) +
++			txt_os_mle_data_size(heap)));
++}
++
++static inline void *txt_os_sinit_data_start(void *heap)
++{
++	return heap + txt_bios_data_size(heap) +
++		txt_os_mle_data_size(heap) + sizeof(u64);
++}
++
++static inline u64 txt_sinit_mle_data_size(void *heap)
++{
++	return *((u64 *)(heap + txt_bios_data_size(heap) +
++			txt_os_mle_data_size(heap) +
++			txt_os_sinit_data_size(heap)));
++}
++
++static inline void *txt_sinit_mle_data_start(void *heap)
++{
++	return heap + txt_bios_data_size(heap) +
++		txt_os_mle_data_size(heap) +
++		txt_sinit_mle_data_size(heap) + sizeof(u64);
++}
++
++/*
++ * TPM event logging functions.
++ */
++static inline struct txt_heap_event_log_pointer2_1_element*
++tpm20_find_log2_1_element(struct txt_os_sinit_data *os_sinit_data)
++{
++	struct txt_heap_ext_data_element *ext_elem;
++
++	/* The extended element array as at the end of this table */
++	ext_elem = (struct txt_heap_ext_data_element *)
++		((u8 *)os_sinit_data + sizeof(struct txt_os_sinit_data));
++
++	while (ext_elem->type != TXT_HEAP_EXTDATA_TYPE_END) {
++		if (ext_elem->type ==
++		    TXT_HEAP_EXTDATA_TYPE_EVENT_LOG_POINTER2_1) {
++			return (struct txt_heap_event_log_pointer2_1_element *)
++				((u8 *)ext_elem +
++					sizeof(struct txt_heap_ext_data_element));
++		}
++		ext_elem =
++			(struct txt_heap_ext_data_element *)
++			((u8 *)ext_elem + ext_elem->size);
++	}
++
++	return NULL;
++}
++
++static inline int tpm12_log_event(void *evtlog_base,
++				  u32 event_size, void *event)
++{
++	struct tpm12_event_log_header *evtlog =
++		(struct tpm12_event_log_header *)evtlog_base;
++
++	if (memcmp(evtlog->signature, TPM12_EVTLOG_SIGNATURE,
++		   sizeof(TPM12_EVTLOG_SIGNATURE)))
++		return -EINVAL;
++
++	if (evtlog->next_event_offset + event_size > evtlog->container_size)
++		return -E2BIG;
++
++	memcpy(evtlog_base + evtlog->next_event_offset, event, event_size);
++	evtlog->next_event_offset += event_size;
++
++	return 0;
++}
++
++static inline int tpm20_log_event(struct txt_heap_event_log_pointer2_1_element *elem,
++				  void *evtlog_base,
++				  u32 event_size, void *event)
++{
++	struct tpm12_pcr_event *header =
++		(struct tpm12_pcr_event *)evtlog_base;
++
++	/* Has to be at least big enough for the signature */
++	if (header->size < sizeof(TPM20_EVTLOG_SIGNATURE))
++		return -EINVAL;
++
++	if (memcmp((u8 *)header + sizeof(struct tpm12_pcr_event),
++		   TPM20_EVTLOG_SIGNATURE, sizeof(TPM20_EVTLOG_SIGNATURE)))
++		return -EINVAL;
++
++	if (elem->next_record_offset + event_size >
++	    elem->allocated_event_container_size)
++		return -E2BIG;
++
++	memcpy(evtlog_base + elem->next_record_offset, event, event_size);
++	elem->next_record_offset += event_size;
++
++	return 0;
++}
++
++/*
++ * External functions
++ */
++extern void slaunch_setup(void);
++extern u32 slaunch_get_flags(void);
++extern struct sl_ap_wake_info *slaunch_get_ap_wake_info(void);
++extern struct acpi_table_header *slaunch_get_dmar_table(struct acpi_table_header *dmar);
++extern void slaunch_finalize(int do_sexit);
++
++#endif /* !__ASSEMBLY */
++
++#else
++
++#define slaunch_setup()			do { } while (0)
++#define slaunch_get_flags()		0
++#define slaunch_get_dmar_table(d)	(d)
++#define slaunch_finalize(d)		do { } while (0)
++
++#endif /* !CONFIG_SECURE_LAUNCH */
++
++#endif /* _LINUX_SLAUNCH_H */
 -- 
 1.8.3.1
 
