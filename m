@@ -2,135 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C93872784D0
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Sep 2020 12:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7F8278513
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Sep 2020 12:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbgIYKMg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Sep 2020 06:12:36 -0400
-Received: from smtp-8fa8.mail.infomaniak.ch ([83.166.143.168]:44291 "EHLO
-        smtp-8fa8.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728072AbgIYKMg (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Sep 2020 06:12:36 -0400
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4BySPv3N5jzlhwQV;
-        Fri, 25 Sep 2020 12:12:03 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4BySPs41tdzllmgP;
-        Fri, 25 Sep 2020 12:12:01 +0200 (CEST)
-Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, oleg@redhat.com,
-        x86@kernel.org, luto@kernel.org, David.Laight@ACULAB.COM,
-        fweimer@redhat.com, mark.rutland@arm.com
-References: <210d7cd762d5307c2aa1676705b392bd445f1baa>
- <20200922215326.4603-1-madvenka@linux.microsoft.com>
- <20200923084232.GB30279@amd>
- <34257bc9-173d-8ef9-0c97-fb6bd0f69ecb@linux.microsoft.com>
- <20200923205156.GA12034@duo.ucw.cz>
- <c5ddf0c2-962a-f93a-e666-1c6f64482d97@digikod.net>
- <20200924220540.GA13185@amd>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <eec5d097-c70f-365b-3548-66726ad49f04@digikod.net>
-Date:   Fri, 25 Sep 2020 12:12:01 +0200
-User-Agent: 
+        id S1727151AbgIYK3Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Sep 2020 06:29:24 -0400
+Received: from mga12.intel.com ([192.55.52.136]:21115 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727132AbgIYK3Y (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 25 Sep 2020 06:29:24 -0400
+IronPort-SDR: vuOcnjED3Fx0CeCEZsVaptiom6ZqPLQHOh0joeyQC4aDCqcOWpKtr2EeWc2uTeTLwOfWR+thi1
+ OgKw3v/T6uaQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9754"; a="140904959"
+X-IronPort-AV: E=Sophos;i="5.77,301,1596524400"; 
+   d="scan'208";a="140904959"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 03:29:24 -0700
+IronPort-SDR: 6yOz4t4UbYext8bf560KO5M7v1plRNU+tSJgTyJBDE1vo7EE4RE7RggBMPB2j+H49EhzuSE9RH
+ yhPJD8TzwMHA==
+X-IronPort-AV: E=Sophos;i="5.77,301,1596524400"; 
+   d="scan'208";a="455766872"
+Received: from tjhenson-mobl.amr.corp.intel.com (HELO localhost) ([10.252.48.117])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 03:29:22 -0700
+Date:   Fri, 25 Sep 2020 13:29:20 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH] tpm: of: avoid __va() translation for event log address
+Message-ID: <20200925102920.GA180915@linux.intel.com>
+References: <20200922094128.26245-1-ardb@kernel.org>
+ <20200925055626.GC165011@linux.intel.com>
+ <CAMj1kXFLWsFz7HV4sHLbwBkuiEu0gT4esSH8umVrvDDrJaOLrQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200924220540.GA13185@amd>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFLWsFz7HV4sHLbwBkuiEu0gT4esSH8umVrvDDrJaOLrQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-On 25/09/2020 00:05, Pavel Machek wrote:
-> Hi!
+On Fri, Sep 25, 2020 at 09:00:56AM +0200, Ard Biesheuvel wrote:
+> On Fri, 25 Sep 2020 at 07:56, Jarkko Sakkinen
+> <jarkko.sakkinen@linux.intel.com> wrote:
+> >
+> > On Tue, Sep 22, 2020 at 11:41:28AM +0200, Ard Biesheuvel wrote:
+> > > The TPM event log is provided to the OS by the firmware, by loading
+> > > it into an area in memory and passing the physical address via a node
+> > > in the device tree.
+> > >
+> > > Currently, we use __va() to access the memory via the kernel's linear
+> > > map: however, it is not guaranteed that the linear map covers this
+> > > particular address, as we may be running under HIGHMEM on a 32-bit
+> > > architecture, or running firmware that uses a memory type for the
+> > > event log that is omitted from the linear map (such as EfiReserved).
+> >
+> > Makes perfect sense to the level that I wonder if this should have a
+> > fixes tag and/or needs to be backported to the stable kernels?
+> >
 > 
->>>>> I believe you should simply delete confusing "introduction" and
->>>>> provide details of super-secure system where your patches would be
->>>>> useful, instead.
->>>>
->>>> This RFC talks about converting dynamic code (which cannot be authenticated)
->>>> to static code that can be authenticated using signature verification. That
->>>> is the scope of this RFC.
->>>>
->>>> If I have not been clear before, by dynamic code, I mean machine code that is
->>>> dynamic in nature. Scripts are beyond the scope of this RFC.
->>>>
->>>> Also, malware compiled from sources is not dynamic code. That is orthogonal
->>>> to this RFC. If such malware has a valid signature that the kernel permits its
->>>> execution, we have a systemic problem.
->>>>
->>>> I am not saying that script authentication or compiled malware are not problems.
->>>> I am just saying that this RFC is not trying to solve all of the security problems.
->>>> It is trying to define one way to convert dynamic code to static code to address
->>>> one class of problems.
->>>
->>> Well, you don't have to solve all problems at once.
->>>
->>> But solutions have to exist, and AFAIK in this case they don't. You
->>> are armoring doors, but ignoring open windows.
->>
->> FYI, script execution is being addressed (for the kernel part) by this
->> patch series:
->> https://lore.kernel.org/lkml/20200924153228.387737-1-mic@digikod.net/
+> AIUI, the code was written specifically for ppc64, which is a
+> non-highmem, non-EFI architecture. However, when we start reusing this
+> driver for ARM, this issue could pop up.
 > 
-> Ok.
+> The code itself has been refactored a couple of times, so I think it
+> will require different versions of the patch for different generations
+> of stable kernels.
 > 
->>> Or very probably you are thinking about something different than
->>> normal desktop distros (Debian 10). Because on my systems, I have
->>> python, gdb and gcc...
->>
->> It doesn't make sense for a tailored security system to leave all these
->> tools available to an attacker.
+> So perhaps just add Cc: <stable@vger.kernel.org>, and wait and see how
+> far back it applies cleanly?
+
+Yeah, I think I'll cc it with some note before the diffstat.
+
+I'm thinking to cap it to only 5.x kernels (at least first) unless it is
+dead easy to backport below that.
+
+> > This is a really great catch!
+> >
+> > I'm a bit late of my PR a bit because of SGX upstreaming madness
+> > (sending v39 soon). If you can answer to my question above, I can do
+> > that nitpick change to patch and get it to my v5.10 PR.
+> >
 > 
-> And it also does not make sense to use "trampoline file descriptor" on
-> generic system... while W^X should make sense there.
+> Yes, please.
 
-Well, as said before, (full/original/system-wide) W^X may require
-trampfd (as well as other building-blocks).
+Great, will do, thanks again for fixing this issue!
 
-I guess most Linux deployments are not on "generic systems"
-anyway (even if they may be based on generic distros), and W^X
-contradicts the fact that users/attackers can do whatever they want on
-the system.
-
-> 
->>> It would be nice to specify what other pieces need to be present for
->>> this to make sense -- because it makes no sense on Debian 10.
->>
->> Not all kernel features make sense for a generic/undefined usage,
->> especially specific security mechanisms (e.g. SELinux, Smack, Tomoyo,
->> SafeSetID, LoadPin, IMA, IPE, secure/trusted boot, lockdown, etc.), but
->> they can still be definitely useful.
-> 
-> Yep... so... I'd expect something like... "so you have single-purpose
-> system
-
-No one talked about a single-purpose system.
-
-> with all script interpreters removed,
-
-Not necessarily with the patch series I pointed out just before.
-
-> IMA hashing all the files
-> to make sure they are not modified, and W^X enabled.
-
-System-wide W^X is not only for memory, and as Madhavan said: "this RFC
-pertains to converting dynamic [writable] machine code to static
-[non-writable] code".
-
-> Attacker can
-> still execute code after buffer overflow by .... and trapoline file
-> descriptor addrsses that"... so that people running generic systems
-> can stop reading after first sentence.
-
-Are you proposing to add a
-"[feature-not-useful-without-a-proper-system-configuration]" tag in
-subjects? :)
+/Jarkko
