@@ -2,115 +2,194 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 659A6278684
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Sep 2020 14:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F6C278A3E
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Sep 2020 16:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728056AbgIYMAU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Sep 2020 08:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728148AbgIYMAU (ORCPT
+        id S1728753AbgIYOBZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Sep 2020 10:01:25 -0400
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:39918 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728365AbgIYOBZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Sep 2020 08:00:20 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F56C0613D3
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Sep 2020 05:00:20 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id q5so2484977qkc.2
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Sep 2020 05:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rIuYtEL8Ho/A+a5HBfrQNagOxrR0aWDpVzG6iTo4eE8=;
-        b=erbaTgqjcRvgzvAj3JDGURJKefgiqFgAtYhbtoxeo5AsoLv7f6EB9N3ZzNsEOPSp8v
-         6sq/HX7Uxi9akTTh+XFsHzFtUXMqbirMtYYzCCgWVy5GYLkDdYl2JH6K2QIQDYcm4fQH
-         WMWugilt5Hjg1+dQEw5amV4Dy3t8QgUTR4ai9V29Z9GA6Dg7YtEvZvM24An3iOOhmJs8
-         zzB2oFkbCby/mvR7NPzSowW9Rw8OJg+7xsDCgPYDhC5XSlDCp7GDpjUhmE6nxPeVmdp5
-         KWwCU7JsmsVmNzfXNstQisrXorK1WeS15j9w+R6P6UAWzAfGJNYKbLAd6MPAQAPQwc1s
-         O6oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rIuYtEL8Ho/A+a5HBfrQNagOxrR0aWDpVzG6iTo4eE8=;
-        b=BdzlSmLMEm/Nao8ZDpjIsfy24oFutuubFF9QYAhe8ilOkja5Z40NmmHjO8k0JgZbqz
-         Vq8XBE2lmZHTixV+YNTUjJy5uNOIbLBPTKUf4hqb9BVb7sretTLp/aMAWxUl3AMk1Rgu
-         Dg6Uns42Wg5Ri0Z/MrD4dejWXXOcoD9/vlW6JHDdTLw5r/XMt+08vJR/0RtxhROX6F7q
-         /ZcB1bS0O/k2Wp30HqaiRkHX5VHgm/8GPk/jUMp/CUNKCdFMxn6czdC1AT9Ku7wxtann
-         V1f5PxV7M+VeXaDYcAW5+RKO3PxUCLDZUefYvyIXsKCYaiBLQxqd8DIbRbrytkLgva4o
-         dsrA==
-X-Gm-Message-State: AOAM531MJWUovHK/m1N6y4mR6o5Q0EaTfx5DB6pYJLO6Lc7tZWUJm03b
-        FllEhyGcDv8FbxJqH5GNkXggTA==
-X-Google-Smtp-Source: ABdhPJwMSZO4wBP1qq0t6fhMdo1TSXgA0/hT/4ls6tA8iNgqFTTpehyXXULUgKbSvrFWL38LELQ5qw==
-X-Received: by 2002:a37:a50b:: with SMTP id o11mr3520279qke.439.1601035219677;
-        Fri, 25 Sep 2020 05:00:19 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id g19sm1521418qka.84.2020.09.25.05.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2020 05:00:19 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kLmOg-000nSE-8H; Fri, 25 Sep 2020 09:00:18 -0300
-Date:   Fri, 25 Sep 2020 09:00:18 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH] tpm: of: avoid __va() translation for event log address
-Message-ID: <20200925120018.GH9916@ziepe.ca>
-References: <20200922094128.26245-1-ardb@kernel.org>
- <20200925055626.GC165011@linux.intel.com>
- <CAMj1kXFLWsFz7HV4sHLbwBkuiEu0gT4esSH8umVrvDDrJaOLrQ@mail.gmail.com>
- <20200925102920.GA180915@linux.intel.com>
+        Fri, 25 Sep 2020 10:01:25 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R601e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0UA2lM0k_1601042472;
+Received: from 30.25.232.10(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UA2lM0k_1601042472)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 25 Sep 2020 22:01:14 +0800
+Subject: Re: [PATCH] lib/mpi: Fix unused variable warnings
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        David Howells <dhowells@redhat.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephan Mueller <smueller@chronox.de>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Waiman Long <longman@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Pascal van Leeuwen <pvanleeuwen@rambus.com>,
+        linux-crypto@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Xufeng Zhang <yunbo.xufeng@linux.alibaba.com>,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+References: <20200920162103.83197-1-tianjia.zhang@linux.alibaba.com>
+ <20200920162103.83197-3-tianjia.zhang@linux.alibaba.com>
+ <20200925081955.GV6381@gondor.apana.org.au>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <5dc5b1cf-389c-0f96-0b8c-50fa41d186a9@linux.alibaba.com>
+Date:   Fri, 25 Sep 2020 22:01:12 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200925102920.GA180915@linux.intel.com>
+In-Reply-To: <20200925081955.GV6381@gondor.apana.org.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 01:29:20PM +0300, Jarkko Sakkinen wrote:
-> On Fri, Sep 25, 2020 at 09:00:56AM +0200, Ard Biesheuvel wrote:
-> > On Fri, 25 Sep 2020 at 07:56, Jarkko Sakkinen
-> > <jarkko.sakkinen@linux.intel.com> wrote:
-> > >
-> > > On Tue, Sep 22, 2020 at 11:41:28AM +0200, Ard Biesheuvel wrote:
-> > > > The TPM event log is provided to the OS by the firmware, by loading
-> > > > it into an area in memory and passing the physical address via a node
-> > > > in the device tree.
-> > > >
-> > > > Currently, we use __va() to access the memory via the kernel's linear
-> > > > map: however, it is not guaranteed that the linear map covers this
-> > > > particular address, as we may be running under HIGHMEM on a 32-bit
-> > > > architecture, or running firmware that uses a memory type for the
-> > > > event log that is omitted from the linear map (such as EfiReserved).
-> > >
-> > > Makes perfect sense to the level that I wonder if this should have a
-> > > fixes tag and/or needs to be backported to the stable kernels?
-> > >
-> > 
-> > AIUI, the code was written specifically for ppc64, which is a
-> > non-highmem, non-EFI architecture. However, when we start reusing this
-> > driver for ARM, this issue could pop up.
-> > 
-> > The code itself has been refactored a couple of times, so I think it
-> > will require different versions of the patch for different generations
-> > of stable kernels.
-> > 
-> > So perhaps just add Cc: <stable@vger.kernel.org>, and wait and see how
-> > far back it applies cleanly?
+Hi Herbert,
+
+Thanks for your patch, The changes look good.
+I have tested this patch, so,
+
+Tested-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+
+Best regards,
+Tianjia
+
+On 9/25/20 4:19 PM, Herbert Xu wrote:
+> On Mon, Sep 21, 2020 at 12:20:55AM +0800, Tianjia Zhang wrote:
+>> Expand the mpi library based on libgcrypt, and the ECC algorithm of
+>> mpi based on libgcrypt requires these functions.
+>> Some other algorithms will be developed based on mpi ecc, such as SM2.
+>>
+>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>> Tested-by: Xufeng Zhang <yunbo.xufeng@linux.alibaba.com>
 > 
-> Yeah, I think I'll cc it with some note before the diffstat.
+> This creates some compiler warnings.
 > 
-> I'm thinking to cap it to only 5.x kernels (at least first) unless it is
-> dead easy to backport below that.
-
-I have this vauge recollection of pointing at this before and being
-told that it had to be __va for some PPC reason?
-
-Do check with the PPC people first, I see none on the CC list.
-
-Jason
+> ---8<---
+> This patch removes a number of unused variables and marks others
+> as unused in order to silence compiler warnings about them.
+> 
+> Fixes: a8ea8bdd9df9 ("lib/mpi: Extend the MPI library")
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> 
+> diff --git a/lib/mpi/mpi-div.c b/lib/mpi/mpi-div.c
+> index 21332dab97d4..45beab8b9e9e 100644
+> --- a/lib/mpi/mpi-div.c
+> +++ b/lib/mpi/mpi-div.c
+> @@ -92,7 +92,6 @@ void mpi_tdiv_qr(MPI quot, MPI rem, MPI num, MPI den)
+>   	unsigned int normalization_steps;
+>   	mpi_limb_t q_limb;
+>   	mpi_ptr_t marker[5];
+> -	unsigned int marker_nlimbs[5];
+>   	int markidx = 0;
+>   
+>   	/* Ensure space is enough for quotient and remainder.
+> @@ -152,7 +151,6 @@ void mpi_tdiv_qr(MPI quot, MPI rem, MPI num, MPI den)
+>   		 * numerator would be gradually overwritten by the quotient limbs.
+>   		 */
+>   		if (qp == np) { /* Copy NP object to temporary space.  */
+> -			marker_nlimbs[markidx] = nsize;
+>   			np = marker[markidx++] = mpi_alloc_limb_space(nsize);
+>   			MPN_COPY(np, qp, nsize);
+>   		}
+> @@ -173,7 +171,6 @@ void mpi_tdiv_qr(MPI quot, MPI rem, MPI num, MPI den)
+>   		 * the most significant word.  Use temporary storage not to clobber
+>   		 * the original contents of the denominator.
+>   		 */
+> -		marker_nlimbs[markidx] = dsize;
+>   		tp = marker[markidx++] = mpi_alloc_limb_space(dsize);
+>   		mpihelp_lshift(tp, dp, dsize, normalization_steps);
+>   		dp = tp;
+> @@ -195,7 +192,6 @@ void mpi_tdiv_qr(MPI quot, MPI rem, MPI num, MPI den)
+>   		if (dp == rp || (quot && (dp == qp))) {
+>   			mpi_ptr_t tp;
+>   
+> -			marker_nlimbs[markidx] = dsize;
+>   			tp = marker[markidx++] = mpi_alloc_limb_space(dsize);
+>   			MPN_COPY(tp, dp, dsize);
+>   			dp = tp;
+> diff --git a/lib/mpi/mpi-internal.h b/lib/mpi/mpi-internal.h
+> index d29c4537c3a3..554002182db1 100644
+> --- a/lib/mpi/mpi-internal.h
+> +++ b/lib/mpi/mpi-internal.h
+> @@ -114,7 +114,7 @@ typedef int mpi_size_t;		/* (must be a signed type) */
+>    */
+>   #define UDIV_QRNND_PREINV(q, r, nh, nl, d, di)				\
+>   	do {								\
+> -		mpi_limb_t _ql;						\
+> +		mpi_limb_t _ql __maybe_unused;				\
+>   		mpi_limb_t _q, _r;					\
+>   		mpi_limb_t _xh, _xl;					\
+>   		umul_ppmm(_q, _ql, (nh), (di));				\
+> diff --git a/lib/mpi/mpi-mul.c b/lib/mpi/mpi-mul.c
+> index 587e6335cc12..8f5fa200f297 100644
+> --- a/lib/mpi/mpi-mul.c
+> +++ b/lib/mpi/mpi-mul.c
+> @@ -21,7 +21,6 @@ void mpi_mul(MPI w, MPI u, MPI v)
+>   	int usign, vsign, sign_product;
+>   	int assign_wp = 0;
+>   	mpi_ptr_t tmp_limb = NULL;
+> -	unsigned int tmp_limb_nlimbs = 0;
+>   
+>   	if (u->nlimbs < v->nlimbs) {
+>   		/* Swap U and V. */
+> @@ -55,7 +54,6 @@ void mpi_mul(MPI w, MPI u, MPI v)
+>   	} else { /* Make U and V not overlap with W.	*/
+>   		if (wp == up) {
+>   			/* W and U are identical.  Allocate temporary space for U. */
+> -			tmp_limb_nlimbs = usize;
+>   			up = tmp_limb = mpi_alloc_limb_space(usize);
+>   			/* Is V identical too?  Keep it identical with U.  */
+>   			if (wp == vp)
+> @@ -64,7 +62,6 @@ void mpi_mul(MPI w, MPI u, MPI v)
+>   			MPN_COPY(up, wp, usize);
+>   		} else if (wp == vp) {
+>   			/* W and V are identical.  Allocate temporary space for V. */
+> -			tmp_limb_nlimbs = vsize;
+>   			vp = tmp_limb = mpi_alloc_limb_space(vsize);
+>   			/* Copy to the temporary space.  */
+>   			MPN_COPY(vp, wp, vsize);
+> diff --git a/lib/mpi/mpih-div.c b/lib/mpi/mpih-div.c
+> index 182a656a1ba0..be70ee2e42d3 100644
+> --- a/lib/mpi/mpih-div.c
+> +++ b/lib/mpi/mpih-div.c
+> @@ -31,7 +31,7 @@ mpihelp_mod_1(mpi_ptr_t dividend_ptr, mpi_size_t dividend_size,
+>   {
+>   	mpi_size_t i;
+>   	mpi_limb_t n1, n0, r;
+> -	mpi_limb_t dummy;
+> +	mpi_limb_t dummy __maybe_unused;
+>   
+>   	/* Botch: Should this be handled at all?  Rely on callers?	*/
+>   	if (!dividend_size)
+> @@ -382,7 +382,7 @@ mpihelp_divmod_1(mpi_ptr_t quot_ptr,
+>   {
+>   	mpi_size_t i;
+>   	mpi_limb_t n1, n0, r;
+> -	mpi_limb_t dummy;
+> +	mpi_limb_t dummy __maybe_unused;
+>   
+>   	if (!dividend_size)
+>   		return 0;
+> 
