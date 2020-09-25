@@ -2,264 +2,258 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFEE2793BE
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Sep 2020 23:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41FB279407
+	for <lists+linux-integrity@lfdr.de>; Sat, 26 Sep 2020 00:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727286AbgIYVso (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Sep 2020 17:48:44 -0400
-Received: from sender4-of-o51.zoho.com ([136.143.188.51]:21146 "EHLO
-        sender4-of-o51.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727067AbgIYVso (ORCPT
+        id S1727495AbgIYWWI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Sep 2020 18:22:08 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37628 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726694AbgIYWWI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Sep 2020 17:48:44 -0400
-X-Greylist: delayed 906 seconds by postgrey-1.27 at vger.kernel.org; Fri, 25 Sep 2020 17:48:41 EDT
-ARC-Seal: i=1; a=rsa-sha256; t=1601069575; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=eaCridq/Q/bPqSpnsGv/DJP6Af6/ncIr2v/Qf8j8EGiSN5pUxISglSxhg0elB/41ayTlI2YKZ8pZnWTFbUbJklfdDvQCOj8B0fCxdc8rh0XadT/UJzFBbCBU1yMRnp75hcbcVvAFC6+rbIJMARqR4sCb6zqH6qfj1yXd+406l5U=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1601069575; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=0a7g0NVpSKP3n73d4Kbie2Bt3f9aurS3uIGDEm9zTs8=; 
-        b=dxw/TJwnUBKaP0P0ILY/i2BLJ4r+gYKey93bBzChSs3ax3+wOsVoWVYEAJ4MPJ4mtFCK4q+H/F2y2Vosr8QSSjCLtxSASL5crgyxTGAxjtArgWXQ6miEvlSiBDketKM5Y4nieFp7HmnDQaFTsqQPZqeL1nQ+J4+oZwlKXhfgDb4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=apertussolutions.com;
-        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-        dmarc=pass header.from=<dpsmith@apertussolutions.com> header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1601069575;
-        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        bh=0a7g0NVpSKP3n73d4Kbie2Bt3f9aurS3uIGDEm9zTs8=;
-        b=kQ0ksBHC73Nhf3QsqlgJGUOmpoeQQeVZL0cpPok5s92kAwdC/qZsEhhOqweVurav
-        S7E5Gat7JVVnw6mD9i8b8EcmsiVW6ezfvE8uFH4GaK19nb7Na8qtR1cm3rvBTNPrlVp
-        qc90V9VtyQo34Al/a6roBwy8NP/5tWpmOfVYMowA=
-Received: from [10.10.1.24] (c-73-129-147-140.hsd1.md.comcast.net [73.129.147.140]) by mx.zohomail.com
-        with SMTPS id 1601069573615900.4080400133685; Fri, 25 Sep 2020 14:32:53 -0700 (PDT)
-Subject: Re: [PATCH 00/13] x86: Trenchboot secure dynamic launch Linux kernel
- support
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, luto@amacapital.net,
-        trenchboot-devel@googlegroups.com
-References: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
- <20200925053051.GA165011@linux.intel.com>
-From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Message-ID: <8329607a-704d-1da0-dc7b-4b97c2440afb@apertussolutions.com>
-Autocrypt: addr=dpsmith@apertussolutions.com; prefer-encrypt=mutual; keydata=
- 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
-Date:   Fri, 25 Sep 2020 17:32:50 -0400
+        Fri, 25 Sep 2020 18:22:08 -0400
+Received: from [192.168.254.38] (unknown [47.187.206.220])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 270E320B7179;
+        Fri, 25 Sep 2020 15:22:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 270E320B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1601072527;
+        bh=CtfK2RmYieDmRDw24zWHirWtpfw9TSkDGo/OHGd2khY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=L1Tnh9cUKbIv8sb36wOJHo5gTvwoZfP3A7tFZQedg3xDu7eQlGlMr8fkDfnnoKeAt
+         +19mQmaCJMQDjOd/BSO0TL73Zw7FX6wix/euEgK1YDGoBwIEy1ADOVImdfJvBFF15T
+         nw6sFmaXF1NgNsNvpCmh5eag6ZnN4mvdF/MmIwQE=
+Subject: Re: [PATCH v2 0/4] [RFC] Implement Trampoline File Descriptor
+To:     Florian Weimer <fw@deneb.enyo.de>
+Cc:     Arvind Sankar <nivedita@alum.mit.edu>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, oleg@redhat.com,
+        x86@kernel.org, libffi-discuss@sourceware.org, luto@kernel.org,
+        David.Laight@ACULAB.COM, mark.rutland@arm.com, mic@digikod.net,
+        pavel@ucw.cz
+References: <20200916150826.5990-1-madvenka@linux.microsoft.com>
+ <87v9gdz01h.fsf@mid.deneb.enyo.de>
+ <96ea02df-4154-5888-1669-f3beeed60b33@linux.microsoft.com>
+ <20200923014616.GA1216401@rani.riverdale.lan>
+ <20200923091125.GB1240819@rani.riverdale.lan>
+ <a742b9cd-4ffb-60e0-63b8-894800009700@linux.microsoft.com>
+ <20200923195147.GA1358246@rani.riverdale.lan>
+ <2ed2becd-49b5-7e76-9836-6a43707f539f@linux.microsoft.com>
+ <87o8luvqw9.fsf@mid.deneb.enyo.de>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Message-ID: <3fe7ba84-b719-b44d-da87-6eda60543118@linux.microsoft.com>
+Date:   Fri, 25 Sep 2020 17:22:05 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200925053051.GA165011@linux.intel.com>
+In-Reply-To: <87o8luvqw9.fsf@mid.deneb.enyo.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 9/25/20 1:30 AM, Jarkko Sakkinen wrote:
-> On Thu, Sep 24, 2020 at 10:58:28AM -0400, Ross Philipson wrote:
->> The Trenchboot project focus on boot security has led to the enabling of
->> the Linux kernel to be directly invocable by the x86 Dynamic Launch
->> instruction(s) for establishing a Dynamic Root of Trust for Measurement
->> (DRTM). The dynamic launch will be initiated by a boot loader with
->=20
-> What is "the dynamic launch"?
-
-Dynamic launch is the term used to reference the event/process of
-restarting a system without reboot to establish the DRTM. It is defined
-in the TCG Glossary[1], is discussed in detail in the TCG D-RTM
-Architecture specification[2], and covered in minimal detail in sections
-9.5.5 and 34.2 of the TCG TPM2.0 Architecture specification[3].
-
-[1]
-https://trustedcomputinggroup.org/wp-content/uploads/TCG-Glossary-V1.1-Rev-=
-1.0.pdf
-[2]
-https://trustedcomputinggroup.org/wp-content/uploads/TCG_D-RTM_Architecture=
-_v1-0_Published_06172013.pdf
-[3]
-https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part1_A=
-rchitecture_pub.pdf
-
->> associated support added to it, for example the first targeted boot
->> loader will be GRUB2. An integral part of establishing the DRTM involves
->> measuring everything that is intended to be run (kernel image, initrd,
->> etc) and everything that will configure that kernel to run (command
->> line, boot params, etc) into specific PCRs, the DRTM PCRs (17-22), in
->> the TPM. Another key aspect is the dynamic launch is rooted in hardware,
->> that is to say the hardware (CPU) is what takes the first measurement
->> for the chain of integrity measurements. On Intel this is done using
->> the GETSEC instruction provided by Intel's TXT and the SKINIT
->> instruction provided by AMD's AMD-V. Information on these technologies
->> can be readily found online. This patchset introduces Intel TXT support.
->=20
-> Why not both Intel and AMD? You should explain this in the cover letter.
-
-The work for this is split across different teams with different
-resourcing levels resulting in one organization working Intel and
-another working AMD. This then raised the concern over submitting a
-single patch set developed by two groups pseudo-independently. In this
-situation the result would be patches being submitted from one
-organization that had no direct development or testing and therefore
-could not sign off on a subset of the patches being submitted.
-
-> I'd be more motivated to review and test a full all encompassing x86
-> solution. It would increase the patch set size but would also give it
-> a better test coverage, which I think would be a huge plus in such a
-> complex patch set.
-
-We would not disagree with those sentiments but see the previous
-response about the conflict that exists.
-
->> To enable the kernel to be launched by GETSEC, a stub must be built
->> into the setup section of the compressed kernel to handle the specific
->> state that the dynamic launch process leaves the BSP in. This is
->> analogous to the EFI stub that is found in the same area. Also this stub
->=20
-> How is it analogous?
-
-It is analogous as we used it as the pattern to follow for adding a
-configurable entry point to the kernel. There was a discussion on this
-when we published the RFC patches[4].
-
-[4] https://lkml.org/lkml/2020/3/25/982
-
->> must measure everything that is going to be used as early as possible.
->> This stub code and subsequent code must also deal with the specific
->> state that the dynamic launch leaves the APs in.
->=20
-> What is "the specific state"?
-
-The details are a bit more than I would prefer to explain here, I would
-recommend reading section 2.3 and 2.4 of Intel's TXT Software
-Development Guide[5] for all the details of the state and the prescribed
-initialization sequence.
-
-[5]
-https://www.intel.com/content/dam/www/public/us/en/documents/guides/intel-t=
-xt-software-development-guide.pdf
-
->> A quick note on terminology. The larger open source project itself is
->> called Trenchboot, which is hosted on Github (links below). The kernel
->> feature enabling the use of the x86 technology is referred to as "Secure
->> Launch" within the kernel code. As such the prefixes sl_/SL_ or
->> slaunch/SLAUNCH will be seen in the code. The stub code discussed above
->> is referred to as the SL stub.
->=20
-> Is this only for Trenchboot? I'm a bit lost. What is it anyway?
-
-TrenchBoot is a meta-project that is working to bring a unified approach
-to using DRTM across CPU implementations and open source projects.
-Currently we are working to integrate a dynamic launch preamble (the
-code that sets up for calling the dynamic launch CPU instruction) in
-GRUB, building an open AMD Secure Loader that aligns with how Intel's
-SINIT ACM hands off to an MLE, bring the first directly launchable
-implementation to Linux (Secure Launch) with Xen being the next directly
-launchable implementation, providing the u-root project a secure launch
-initramfs init routine to demonstrate a policy driven measurement and
-attestation framework that can be used in conjunction with a Secure
-Launch kernel.
 
 
->> The basic flow is:
+On 9/24/20 3:52 PM, Florian Weimer wrote:
+> * Madhavan T. Venkataraman:
+> 
+>> Otherwise, using an ABI quirk or a calling convention side effect to
+>> load the PC into a GPR is, IMO, non-standard or non-compliant or
+>> non-approved or whatever you want to call it. I would be
+>> conservative and not use it. Who knows what incompatibility there
+>> will be with some future software or hardware features?
+> 
+> AArch64 PAC makes a backwards-incompatible change that touches this
+> area, but we'll see if they can actually get away with it.
+> 
+> In general, these things are baked into the ABI, even if they are not
+> spelled out explicitly in the psABI supplement.
+> 
+>> For instance, in the i386 example, we do a call without a matching return.
+>> Also, we use a pop to undo the call. Can anyone tell me if this kind of use
+>> is an ABI approved one?
+> 
+> Yes, for i386, this is completely valid from an ABI point of view.
+> It's equally possible to use a regular function call and just read the
+> return address that has been pushed to the stack.  Then there's no
+> stack mismatch at all.  Return stack predictors (including the one
+> used by SHSTK) also recognize the CALL 0 construct, so that's fine as
+> well.  The i386 psABI does not use function descriptors, and either
+> approach (out-of-line thunk or CALL 0) is in common use to materialize
+> the program counter in a register and construct the GOT pointer.
+> 
+>> If the kernel supplies this, then all applications and libraries can use
+>> it for all architectures with one single, simple API. Without this, each
+>> application/library has to roll its own solution for every architecture-ABI
+>> combo it wants to support.
+> 
+> Is there any other user for these type-generic trampolines?
+> Everything else I've seen generates machine code specific to the
+> function being called.  libffi is quite the outlier in my experience
+> because the trampoline calls a generic data-driven
+> marshaller/unmarshaller.  The other trampoline generators put this
+> marshalling code directly into the generated trampoline.
+> 
+> I'm still not convinced that this can't be done directly in libffi,
+> without kernel help.  Hiding the architecture-specific code in the
+> kernel doesn't reduce overall system complexity.
+> 
+
+See below. I have accepted the community's recommendation to implement it
+in user land. However, this is not just for libffi. It is for all dynamic
+code. libffi is just the first use case I am addressing with this.
+
+>> As an example, in libffi:
 >>
->>  - Entry from the dynamic launch jumps to the SL stub
->>  - SL stub fixes up the world on the BSP
->=20
-> What is "SL"?
+>> 	ffi_closure_alloc() would call alloc_tramp()
+>>
+>> 	ffi_prep_closure_loc() would call init_tramp()
+>>
+>> 	ffi_closure_free() would call free_tramp()
+>>
+>> That is it! It works on all the architectures supported in the kernel for
+>> trampfd.
+> 
+> ffi_prep_closure_loc would still need to check whether the trampoline
+> has been allocated by alloc_tramp because some applications supply
+> their own (executable and writable) mapping.  ffi_closure_alloc would
+> need to support different sizes (not matching the trampoline).  It's
+> also unclear to me to what extent software out there writes to the
+> trampoline data directly, bypassing the libffi API (the structs are
+> not opaque, after all).  And all the existing libffi memory management
+> code (including the embedded dlmalloc copy) would be needed to support
+> kernels without trampfd for years to come.
+> 
 
-As mentioned above, it is just shorthand for Secure Launch.
+In the libffi patch I have included, I have handled this. The closure
+structure contains a tramp field:
 
->>  - For TXT, SL stub wakes the APs, fixes up their worlds
->>  - For TXT, APs are left halted waiting for an NMI to wake them
->>  - SL stub jumps to startup_32
->>  - SL main runs to measure configuration and module information into the
->>    DRTM PCRs. It also locates the TPM event log.
->>  - Kernel boot proceeds normally from this point.
->>  - During early setup, slaunch_setup() runs to finish some validation
->>    and setup tasks.
->=20
-> What are "some" validation and setup tasks?
+  char tramp[FFI_TRAMPOLINE_SIZE];
 
-The validation and setup steps are to ensure the environment was setup
-in a manner that we expected as outlined in the Intel TXT Software
-Development guide[4]. At this point these are,
-- Ensure that SENTER completed successfully and was not initiated by TBOOT.
-- Check that the private MMIO register bank is available.
-- Fetch values needed from the TXT heap for later operations.
-- Verify the PMR values cover the MLE and other memory regions that need
-to be secure.
-- Reserve certain TXT specific areas of physical memory.
-- Fetch the copy of the DMAR table from the TXT heap to provide to the
-IOMMU driver later.
+If trampfd is not used, this array will contain the actual
+trampoline code. If trampfd is used, then we don't need the array for
+storing any trampoline code. That space can be used for storing trampfd
+related information.
 
->>  - The SMP bringup code is modified to wake the waiting APs. APs vector
->>    to rmpiggy and start up normally from that point.
->>  - Kernel boot finishes booting normally
->>  - SL securityfs module is present to allow reading and writing of the
->>    TPM event log.
->=20
-> What is SL securityfs module? Why is it needed? We already have
-> securityfs file for the event log. Why it needs to be writable?
+So, there is no change to the closure structure.
 
-The securityfs nodes provides access to the TXT registers to inspect the
-details from the dynamic launch and access to the DRTM event log. The
-DRTM event log is setup by the DRTM process and is a different/separate
-event log from the SRTM/UEFI event log. We need write access for use
-cases where the Secure Launch kernel is being used as an intermediate
-launch kernel where additional measurements about the final target
-environment are being collected.
+Also, the code can tell if the closure has been allocated from dlmalloc()
+called from ffi_closure_alloc() or has been allocated by the caller
+directly without calling ffi_closure_alloc(). I have written this function:
 
->>  - SEXIT support to leave SMX mode is present on the kexec path and
->>    the various reboot paths (poweroff, reset, halt).
->=20
-> What SEXIT do and why it is required on the kexec path?
+int ffi_closure_alloc_called(void *closure)
+{
+  msegmentptr seg = segment_holding (gm, closure);
+  return (seg != NULL);
+}
 
-The SEXIT instruction "exits" SMX mode. The why is because when in SMX
-mode the CPU has a set of behaviors different than what is typically
-expected, especially for SMP management. As good custodians, this
-ensures that the system is in a usable state for a follow-on kernel that
-is not SMX/Secure Launch aware. From a security use case perspective,
-leaving SMX mode disables access to localities 1-3 of the TPM. This
-essentially "locks" the values in the DRTM PCRs from further
-modification/extends until another dynamic launch event is fired which
-will in turn result in the DRTM PCRs being reset.
+Using this function, I can tell how the closure has been allocated. I use
+trampfd only for closures that have been allocated using ffi_closure_alloc().
+So, I believe I have handled all the cases. If I have missed anything,
+let me know. I will address it.
 
-> /Jarkko
->=20
+> I very much agree that we have a gap in libffi when it comes to
+> JIT-less operation.  But I'm not convinced that kernel support is
+> needed to close it, or that it is even the right design.
+> 
 
+I have taken into account most of the comments received so far and I have
+come up with a proposal:
 
+I would like to do this in two separate RFCs:
+
+library RFC
+-----------
+
+I accept the recommendation of the reviewers about implementing it in
+user land in a library.
+
+Just for the sake of context, I would like to reiterate the problem being
+solved and what the library will contain. Bear with me.
+
+My goal is to help convert existing dynamic code to static code as far as
+possible. The binary generated from the static code can be signed. The
+kernel can use signature verification to authenticate the code. This way,
+we don't need to disable W^X or make exceptions for the code (exemem etc) or
+use any user level methods to somehow map and execute the code.
+
+The dynamic code can be very simple like the libffi trampoline. Or, it can
+be a lot more complex. E.g., a trampoline that uses data marshaling as Florian
+mentioned. In all cases, when the code is converted to static code, the static
+code needs to know where its data will be located at runtime. If static code is
+a function, then one can just pass parameters. But if it is arbitrary code,
+then one needs a way to inform the static code where it can find its data.
+
+The code can use PC-relative referencing where available. For the sake of this
+discussion, let us assume that we can use some trick or the other to load the
+current PC into a GPR on all architectures. Then, we can use PC-relative
+referencing. Let us assume that these tricks will not cause ABI compliance
+issues in the future.
+
+The maintainer of the dynamic code who wishes to convert it to static code
+should not have to deal with all of these details. The static code should
+be able to assume that its data is pointed to by a designated register. Or,
+it should be able to assume that the data pointer has been pushed on the
+stack. Then, it is easier for maintainers to adopt this and move their code
+to a more secure model.
+
+This can be achieved by providing a small, minimal trampoline that loads the
+data pointer in a register or pushes it on the stack and jumps to the static
+code.
+
+The reviewers felt that the minimal trampoline can be provided in user land.
+So, I will provide a user library. The user library will:
+
+	- define the minimal trampoline statically for different architectures
+	  using some flavor of PC-relative data referencing
+	
+	- provide a table of trampolines in a page
+	
+	- create and manage code and data pages
+	
+	- present a simple API to dynamic code maintainers
+
+This overall approach has pretty much been agreed upon by the community so
+far. I will send out an RFC for the library once I have the code ready.
+
+Which library?
+--------------
+
+I need a recommendation from the community on this. Should I just place the
+code in glibc? Or, should I create a libtramp for this? I prefer glibc as
+it will make for easier adoption. But I will defer to the community on this.
+What do you recommend?
+
+trampfd RFC version 3
+---------------------
+
+Once the library RFC is accepted, I would, however, like to submit
+version 3 of trampfd.
+
+The library would support a choice of trampoline:
+
+	- fast user trampoline described above
+
+	- slow kernel trampoline described below that supports security
+	  checks each time the trampoline is invoked
+
+The minimal trampoline mentioned above would also be implemented in the
+kernel. The mechanism is outlined in version 1. When the application executes
+the trampoline, it would trap into the kernel and the kernel would do the
+work (load the data pointer in a user register or push it on the user stack and set
+the user PC to the target code and return). The kernel will perform security checks when
+the trampoline is invoked. For instance, to reduce or eliminate the possibility
+of the trampoline being used in an ROP/BOP chain. The checks are work in
+progress. But I think I can nail them.
+
+Note that there is no code generation involved in this proposal. The kernel
+is the trampoline.
+
+Would you guys be willing to consider this approach?
+
+Madhavan
