@@ -2,148 +2,68 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C45278106
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Sep 2020 09:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAA927818A
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Sep 2020 09:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbgIYHBJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 25 Sep 2020 03:01:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37172 "EHLO mail.kernel.org"
+        id S1727135AbgIYH2e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Sep 2020 03:28:34 -0400
+Received: from mga07.intel.com ([134.134.136.100]:12164 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727044AbgIYHBI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 25 Sep 2020 03:01:08 -0400
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8992221EB;
-        Fri, 25 Sep 2020 07:01:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601017268;
-        bh=aOUjjDgtVWkcQodJAgxOumrSwAyHIJQ5o0no1CvLCso=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sXkdNhgR8BtkcwNFqSrytDMDRQf7rIwVzL9UuurNMUsy4vExrC6rA9+X2JMEcEHWk
-         vRz7Up4PJD2acJ8rdo2mrNnTUpFgWPR2gEopMxEOlsU3FjEfNOIZGZIwgNEIMOTG7k
-         CqGe2WeeaascagdB2X6giJFmqsioo0Sv1adSe1Us=
-Received: by mail-oi1-f173.google.com with SMTP id v20so1789737oiv.3;
-        Fri, 25 Sep 2020 00:01:07 -0700 (PDT)
-X-Gm-Message-State: AOAM530jDjqfP+e26scvhxZz3dKPNRzSWeBj5CoDIGgCSjted4fa6lWf
-        YPC1Xphz3d/YPzfnN81PdaK9PrDi4DOhU2E8r5Q=
-X-Google-Smtp-Source: ABdhPJzTIcPgRg3N/EEZgSGid4+8+hR0XtJxMO/6Gi0/0/erclCg7R46ka+Ii25iZa5FMsvpMy/oOuQlBzSbt2qEO4s=
-X-Received: by 2002:a54:4517:: with SMTP id l23mr780843oil.174.1601017267272;
- Fri, 25 Sep 2020 00:01:07 -0700 (PDT)
+        id S1726990AbgIYH2e (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 25 Sep 2020 03:28:34 -0400
+IronPort-SDR: MFgZD3nf7bbcN+n1X5MIEE06U+qBnpOa3WZ5Xs4wyttqQ5MyUrSVYiirjI/59193dcBlYynvkw
+ MtFsaJ/lDA7Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9754"; a="225604546"
+X-IronPort-AV: E=Sophos;i="5.77,301,1596524400"; 
+   d="scan'208";a="225604546"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 00:28:33 -0700
+IronPort-SDR: I6pBUfQhZtJrH/ezp8atgpyz3LUTLntAd+FtNIS14S4J5gCLAh1sfVjQyEkuSxTilN7Qd01dhN
+ 623hYXFIxldQ==
+X-IronPort-AV: E=Sophos;i="5.77,301,1596524400"; 
+   d="scan'208";a="487357963"
+Received: from zzombora-mobl1.ti.intel.com (HELO localhost) ([10.249.32.47])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 00:28:32 -0700
+Date:   Fri, 25 Sep 2020 10:28:29 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
+Subject: Re: [PATCH v13 3/5] security: keys: trusted: fix TPM2 authorizations
+Message-ID: <20200925072829.GA170658@linux.intel.com>
+References: <20200922022809.7105-1-James.Bottomley@HansenPartnership.com>
+ <20200922022809.7105-4-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
-References: <20200922094128.26245-1-ardb@kernel.org> <20200925055626.GC165011@linux.intel.com>
-In-Reply-To: <20200925055626.GC165011@linux.intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 25 Sep 2020 09:00:56 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFLWsFz7HV4sHLbwBkuiEu0gT4esSH8umVrvDDrJaOLrQ@mail.gmail.com>
-Message-ID: <CAMj1kXFLWsFz7HV4sHLbwBkuiEu0gT4esSH8umVrvDDrJaOLrQ@mail.gmail.com>
-Subject: Re: [PATCH] tpm: of: avoid __va() translation for event log address
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200922022809.7105-4-James.Bottomley@HansenPartnership.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 25 Sep 2020 at 07:56, Jarkko Sakkinen
-<jarkko.sakkinen@linux.intel.com> wrote:
->
-> On Tue, Sep 22, 2020 at 11:41:28AM +0200, Ard Biesheuvel wrote:
-> > The TPM event log is provided to the OS by the firmware, by loading
-> > it into an area in memory and passing the physical address via a node
-> > in the device tree.
-> >
-> > Currently, we use __va() to access the memory via the kernel's linear
-> > map: however, it is not guaranteed that the linear map covers this
-> > particular address, as we may be running under HIGHMEM on a 32-bit
-> > architecture, or running firmware that uses a memory type for the
-> > event log that is omitted from the linear map (such as EfiReserved).
->
-> Makes perfect sense to the level that I wonder if this should have a
-> fixes tag and/or needs to be backported to the stable kernels?
->
+On Mon, Sep 21, 2020 at 07:28:07PM -0700, James Bottomley wrote:
+> In TPM 1.2 an authorization was a 20 byte number.  The spec actually
+> recommended you to hash variable length passwords and use the sha1
+> hash as the authorization.  Because the spec doesn't require this
+> hashing, the current authorization for trusted keys is a 40 digit hex
+> number.  For TPM 2.0 the spec allows the passing in of variable length
+> passwords and passphrases directly, so we should allow that in trusted
+> keys for ease of use.  Update the 'blobauth' parameter to take this
+> into account, so we can now use plain text passwords for the keys.
+> 
+> so before
+> 
+> keyctl add trusted kmk "new 32 blobauth=f572d396fae9206628714fb2ce00f72e94f2258fkeyhandle=81000001" @u
+> 
+> after we will accept both the old hex sha1 form as well as a new
+> directly supplied password:
+> 
+> keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001" @u
 
-AIUI, the code was written specifically for ppc64, which is a
-non-highmem, non-EFI architecture. However, when we start reusing this
-driver for ARM, this issue could pop up.
+I'm still getting -EINVAL from both with a Geminilake NUC.
 
-The code itself has been refactored a couple of times, so I think it
-will require different versions of the patch for different generations
-of stable kernels.
-
-So perhaps just add Cc: <stable@vger.kernel.org>, and wait and see how
-far back it applies cleanly?
-
-
-> > So instead, use memremap(), which will reuse the linear mapping if
-> > it is valid, or create another mapping otherwise.
-> >
-> > Cc: Peter Huewe <peterhuewe@gmx.de>
-> > Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  drivers/char/tpm/eventlog/of.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-> > index a9ce66d09a75..9178547589a3 100644
-> > --- a/drivers/char/tpm/eventlog/of.c
-> > +++ b/drivers/char/tpm/eventlog/of.c
-> > @@ -11,6 +11,7 @@
-> >   */
-> >
-> >  #include <linux/slab.h>
-> > +#include <linux/io.h>
-> >  #include <linux/of.h>
-> >  #include <linux/tpm_eventlog.h>
-> >
-> > @@ -25,6 +26,7 @@ int tpm_read_log_of(struct tpm_chip *chip)
-> >       struct tpm_bios_log *log;
-> >       u32 size;
-> >       u64 base;
-> > +     void *p;
->
-> I'd just use 'ptr' for readability sake.
->
-
-If you prefer
-
-> >       log = &chip->log;
-> >       if (chip->dev.parent && chip->dev.parent->of_node)
-> > @@ -65,7 +67,11 @@ int tpm_read_log_of(struct tpm_chip *chip)
-> >               return -EIO;
-> >       }
-> >
-> > -     log->bios_event_log = kmemdup(__va(base), size, GFP_KERNEL);
-> > +     p = memremap(base, size, MEMREMAP_WB);
-> > +     if (!p)
-> > +             return -ENOMEM;
-> > +     log->bios_event_log = kmemdup(p, size, GFP_KERNEL);
-> > +     memunmap(p);
-> >       if (!log->bios_event_log)
-> >               return -ENOMEM;
-> >
-> > --
-> > 2.17.1
-> >
->
-> This is a really great catch!
->
-> I'm a bit late of my PR a bit because of SGX upstreaming madness
-> (sending v39 soon). If you can answer to my question above, I can do
-> that nitpick change to patch and get it to my v5.10 PR.
->
-
-Yes, please.
-
-> PS. Just so that you know, once I've applied it, it will be available
-> here:
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
->
-> I'll include MAINTAINERS update to that PR.
->
-> /Jarkko
+/Jarkko
