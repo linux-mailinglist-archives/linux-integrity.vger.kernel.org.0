@@ -2,144 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5945627A477
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 01:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE2D27A498
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 01:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgI0XRm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 27 Sep 2020 19:17:42 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:50424 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726369AbgI0XRm (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 27 Sep 2020 19:17:42 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id BA1508EE17F;
-        Sun, 27 Sep 2020 16:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1601248661;
-        bh=3+c0CPRM++6Djus/P02s4x9GdYlXB8QO4iG8pUNUIdo=;
-        h=Subject:From:To:Cc:Date:From;
-        b=jP7EZuIshTGzw1Y9zUkEOkphG1lGTRhID+WWS93lgPLYcyTinkHSD/EECkYZTn4TC
-         XZ7IuyPH8MGauELxvAuZaaoLEHYkiY/fg3+c7JNdL0sTydvH73YEaM08xYns+5dX+F
-         8cY6lw0VWtk4e+2Rm7SCPv2Ta+RFzv/EjBvrebWc=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mxY1MjN6zQVo; Sun, 27 Sep 2020 16:17:41 -0700 (PDT)
-Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 632CA8EE012;
-        Sun, 27 Sep 2020 16:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1601248661;
-        bh=3+c0CPRM++6Djus/P02s4x9GdYlXB8QO4iG8pUNUIdo=;
-        h=Subject:From:To:Cc:Date:From;
-        b=jP7EZuIshTGzw1Y9zUkEOkphG1lGTRhID+WWS93lgPLYcyTinkHSD/EECkYZTn4TC
-         XZ7IuyPH8MGauELxvAuZaaoLEHYkiY/fg3+c7JNdL0sTydvH73YEaM08xYns+5dX+F
-         8cY6lw0VWtk4e+2Rm7SCPv2Ta+RFzv/EjBvrebWc=
-Message-ID: <e63012add04eee75d67d15f55fe4f6b68fb1d6ed.camel@HansenPartnership.com>
-Subject: [PATCH] tpm: only export stand alone version of flush context
- command
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Date:   Sun, 27 Sep 2020 16:17:40 -0700
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726421AbgI0Xog (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 27 Sep 2020 19:44:36 -0400
+Received: from mga07.intel.com ([134.134.136.100]:49228 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726392AbgI0Xof (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 27 Sep 2020 19:44:35 -0400
+IronPort-SDR: myz93UbUXq+313TweIkD60PEEJc1x4J3hTjFAzlJvwRnE1cx9SiUI8VOwbMJ9kTZTNf0qOZZPk
+ sYeRtxFWKgsw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9757"; a="226066131"
+X-IronPort-AV: E=Sophos;i="5.77,311,1596524400"; 
+   d="scan'208";a="226066131"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2020 16:44:34 -0700
+IronPort-SDR: p/MoEwnZUTIU6YADym/9tny3NBWILcdmUcBVG/1LvGtme765bN2LwleFvXBR+JX1SFCFJi8nh0
+ Tbob45FrVRsw==
+X-IronPort-AV: E=Sophos;i="5.77,311,1596524400"; 
+   d="scan'208";a="488337532"
+Received: from memara-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.157])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2020 16:44:32 -0700
+Date:   Mon, 28 Sep 2020 02:44:34 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] tpm: of: avoid __va() translation for event log address
+Message-ID: <20200927234434.GA5283@linux.intel.com>
+References: <20200922094128.26245-1-ardb@kernel.org>
+ <20200925055626.GC165011@linux.intel.com>
+ <CAMj1kXFLWsFz7HV4sHLbwBkuiEu0gT4esSH8umVrvDDrJaOLrQ@mail.gmail.com>
+ <20200925102920.GA180915@linux.intel.com>
+ <20200925120018.GH9916@ziepe.ca>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200925120018.GH9916@ziepe.ca>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Remove the currently exported version of flush context, which is
-designed for tpm core internal use only and substitute a corrected
-version that does the necessary tpm ops get/put.  This fixes a bug
-with trusted keys in that some TIS TPMs are unable to flush the
-loaded secret because the status register isn't reading correctly.
+On Fri, Sep 25, 2020 at 09:00:18AM -0300, Jason Gunthorpe wrote:
+> On Fri, Sep 25, 2020 at 01:29:20PM +0300, Jarkko Sakkinen wrote:
+> > On Fri, Sep 25, 2020 at 09:00:56AM +0200, Ard Biesheuvel wrote:
+> > > On Fri, 25 Sep 2020 at 07:56, Jarkko Sakkinen
+> > > <jarkko.sakkinen@linux.intel.com> wrote:
+> > > >
+> > > > On Tue, Sep 22, 2020 at 11:41:28AM +0200, Ard Biesheuvel wrote:
+> > > > > The TPM event log is provided to the OS by the firmware, by loading
+> > > > > it into an area in memory and passing the physical address via a node
+> > > > > in the device tree.
+> > > > >
+> > > > > Currently, we use __va() to access the memory via the kernel's linear
+> > > > > map: however, it is not guaranteed that the linear map covers this
+> > > > > particular address, as we may be running under HIGHMEM on a 32-bit
+> > > > > architecture, or running firmware that uses a memory type for the
+> > > > > event log that is omitted from the linear map (such as EfiReserved).
+> > > >
+> > > > Makes perfect sense to the level that I wonder if this should have a
+> > > > fixes tag and/or needs to be backported to the stable kernels?
+> > > >
+> > > 
+> > > AIUI, the code was written specifically for ppc64, which is a
+> > > non-highmem, non-EFI architecture. However, when we start reusing this
+> > > driver for ARM, this issue could pop up.
+> > > 
+> > > The code itself has been refactored a couple of times, so I think it
+> > > will require different versions of the patch for different generations
+> > > of stable kernels.
+> > > 
+> > > So perhaps just add Cc: <stable@vger.kernel.org>, and wait and see how
+> > > far back it applies cleanly?
+> > 
+> > Yeah, I think I'll cc it with some note before the diffstat.
+> > 
+> > I'm thinking to cap it to only 5.x kernels (at least first) unless it is
+> > dead easy to backport below that.
+> 
+> I have this vauge recollection of pointing at this before and being
+> told that it had to be __va for some PPC reason?
+> 
+> Do check with the PPC people first, I see none on the CC list.
+> 
+> Jason
 
-Fixes: 45477b3fe3d1 ("security: keys: trusted: fix lost handle flush")
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- drivers/char/tpm/tpm.h                    |  1 +
- drivers/char/tpm/tpm2-cmd.c               | 23 ++++++++++++++++++++++-
- include/linux/tpm.h                       |  2 +-
- security/keys/trusted-keys/trusted_tpm2.c |  2 +-
- 4 files changed, 25 insertions(+), 3 deletions(-)
+Thanks, added arch/powerpc maintainers.
 
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index 21ac88d4076c..cba09be7ce23 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -240,6 +240,7 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
- 		       size_t cmdsiz);
- int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
- 		      size_t *bufsiz);
-+void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
- 
- void tpm_bios_log_setup(struct tpm_chip *chip);
- void tpm_bios_log_teardown(struct tpm_chip *chip);
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index 9b84158c5a9e..d5aaea72d578 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -362,7 +362,28 @@ void tpm2_flush_context(struct tpm_chip *chip, u32 handle)
- 	tpm_transmit_cmd(chip, &buf, 0, "flushing context");
- 	tpm_buf_destroy(&buf);
- }
--EXPORT_SYMBOL_GPL(tpm2_flush_context);
-+
-+/**
-+ * tpm2_flush_context_cmd() - execute a TPM2_FlushContext command
-+ * @chip:	TPM chip to use
-+ * @handle:	context handle
-+ *
-+ * This version of the command is designed to be used outside the
-+ * TPM core so acquires and releases the tpm ops.
-+ */
-+void tpm2_flush_context_cmd(struct tpm_chip *chip, u32 handle)
-+{
-+	int rc;
-+
-+	rc = tpm_try_get_ops(chip);
-+	if (rc) {
-+		dev_err(&chip->dev, "Failed to acquire tpm ops for flush\n");
-+		return;
-+	}
-+	tpm2_flush_context(chip, handle);
-+	tpm_put_ops(chip);
-+}
-+EXPORT_SYMBOL_GPL(tpm2_flush_context_cmd);
- 
- struct tpm2_get_cap_out {
- 	u8 more_data;
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index ae2482510f8c..c4ca52138e8b 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -411,7 +411,7 @@ extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- extern int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen);
- extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
- extern struct tpm_chip *tpm_default_chip(void);
--void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
-+void tpm2_flush_context_cmd(struct tpm_chip *chip, u32 handle);
- #else
- static inline int tpm_is_tpm2(struct tpm_chip *chip)
- {
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 08ec7f48f01d..38bb33333cdf 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -309,7 +309,7 @@ int tpm2_unseal_trusted(struct tpm_chip *chip,
- 		return rc;
- 
- 	rc = tpm2_unseal_cmd(chip, payload, options, blob_handle);
--	tpm2_flush_context(chip, blob_handle);
-+	tpm2_flush_context_cmd(chip, blob_handle);
- 
- 	return rc;
- }
--- 
-2.26.2
-
-
+/Jarkko
