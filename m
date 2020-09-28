@@ -2,146 +2,168 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE7D27A75A
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 08:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E5927AC94
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 13:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726421AbgI1GUc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Sep 2020 02:20:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60880 "EHLO mail.kernel.org"
+        id S1726590AbgI1LUs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Sep 2020 07:20:48 -0400
+Received: from mga09.intel.com ([134.134.136.24]:59050 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726380AbgI1GUb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Sep 2020 02:20:31 -0400
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D1DD720BED;
-        Mon, 28 Sep 2020 06:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601274030;
-        bh=qGVBcNhDEEBkJu2At1hZbhtzuUFdZojHwVUCzhbrbsk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DRd1dek7hHeI6wDiG0Q2fzMYzBlt6/up5Isinltgd8XP78NXerLQJNSRJfHvz8nfY
-         Yo7QHaHM97V17vkYE7WYc/dl153B28rc9/2n0GzwtIN0moyws3EeKCDw+EuCCVANmv
-         tg2YBUl8W9p/tJfLEsRuuOcZX6GtKHIKZaDGiutc=
-Received: by mail-oo1-f46.google.com with SMTP id z1so20237ooj.3;
-        Sun, 27 Sep 2020 23:20:30 -0700 (PDT)
-X-Gm-Message-State: AOAM531wNH68i0VL1ziDaiBb6QZZUWknls1k9bFHSopFUozATrudeoO8
-        oEJzvvJa93R3NUaFywhkOYd8Rl5IelRFWyQzxwA=
-X-Google-Smtp-Source: ABdhPJya6+NUXngiNKxeosaYSdyZVPk+uYtQRGhgdz0kf1DdRjRrFRW4PGdNv65YNWycBUG1REBKMRMNa4ltvRyBeVk=
-X-Received: by 2002:a4a:4910:: with SMTP id z16mr24551ooa.41.1601274030150;
- Sun, 27 Sep 2020 23:20:30 -0700 (PDT)
+        id S1726566AbgI1LUs (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 28 Sep 2020 07:20:48 -0400
+IronPort-SDR: pibj+CzohTL2BKWh1U9d4hR7kXwN1vHya18FEBYk9CaUv5wRprqS6SjlS896oMNya5Umg+lpRo
+ B3GEs+WwuCwQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9757"; a="162860381"
+X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
+   d="scan'208";a="162860381"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 04:20:47 -0700
+IronPort-SDR: 22w3e0WMmVGIIIrZdDI6Us3A7/DSA/knkQnn/YHnMXM+Y+g8xPaZZqwXH1P7wi0yE1K2TzhFVj
+ 0EI+Sch6smOg==
+X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
+   d="scan'208";a="488535387"
+Received: from memara-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.157])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 04:20:45 -0700
+Date:   Mon, 28 Sep 2020 14:20:46 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] tpm: only export stand alone version of flush context
+ command
+Message-ID: <20200928112046.GA14051@linux.intel.com>
+References: <e63012add04eee75d67d15f55fe4f6b68fb1d6ed.camel@HansenPartnership.com>
+ <20200928001138.GE5283@linux.intel.com>
+ <4b5a58aedb596937618dd7d8fecda9743371d101.camel@HansenPartnership.com>
 MIME-Version: 1.0
-References: <20200922094128.26245-1-ardb@kernel.org> <20200925055626.GC165011@linux.intel.com>
- <CAMj1kXFLWsFz7HV4sHLbwBkuiEu0gT4esSH8umVrvDDrJaOLrQ@mail.gmail.com>
- <20200925102920.GA180915@linux.intel.com> <20200925120018.GH9916@ziepe.ca>
- <20200927234434.GA5283@linux.intel.com> <9be9c7e7-c424-d241-2255-ad854221bd2e@csgroup.eu>
-In-Reply-To: <9be9c7e7-c424-d241-2255-ad854221bd2e@csgroup.eu>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 28 Sep 2020 08:20:18 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGxNgixUEocma-9F3fYgdJJJADh=bvyrCziXkuArErWdA@mail.gmail.com>
-Message-ID: <CAMj1kXGxNgixUEocma-9F3fYgdJJJADh=bvyrCziXkuArErWdA@mail.gmail.com>
-Subject: Re: [PATCH] tpm: of: avoid __va() translation for event log address
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>, Peter Huewe <peterhuewe@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4b5a58aedb596937618dd7d8fecda9743371d101.camel@HansenPartnership.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 28 Sep 2020 at 07:56, Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 28/09/2020 =C3=A0 01:44, Jarkko Sakkinen a =C3=A9crit :
-> > On Fri, Sep 25, 2020 at 09:00:18AM -0300, Jason Gunthorpe wrote:
-> >> On Fri, Sep 25, 2020 at 01:29:20PM +0300, Jarkko Sakkinen wrote:
-> >>> On Fri, Sep 25, 2020 at 09:00:56AM +0200, Ard Biesheuvel wrote:
-> >>>> On Fri, 25 Sep 2020 at 07:56, Jarkko Sakkinen
-> >>>> <jarkko.sakkinen@linux.intel.com> wrote:
-> >>>>>
-> >>>>> On Tue, Sep 22, 2020 at 11:41:28AM +0200, Ard Biesheuvel wrote:
-> >>>>>> The TPM event log is provided to the OS by the firmware, by loadin=
-g
-> >>>>>> it into an area in memory and passing the physical address via a n=
-ode
-> >>>>>> in the device tree.
-> >>>>>>
-> >>>>>> Currently, we use __va() to access the memory via the kernel's lin=
-ear
-> >>>>>> map: however, it is not guaranteed that the linear map covers this
-> >>>>>> particular address, as we may be running under HIGHMEM on a 32-bit
-> >>>>>> architecture, or running firmware that uses a memory type for the
-> >>>>>> event log that is omitted from the linear map (such as EfiReserved=
-).
-> >>>>>
-> >>>>> Makes perfect sense to the level that I wonder if this should have =
-a
-> >>>>> fixes tag and/or needs to be backported to the stable kernels?
-> >>>>>
-> >>>>
-> >>>> AIUI, the code was written specifically for ppc64, which is a
-> >>>> non-highmem, non-EFI architecture. However, when we start reusing th=
-is
-> >>>> driver for ARM, this issue could pop up.
-> >>>>
-> >>>> The code itself has been refactored a couple of times, so I think it
-> >>>> will require different versions of the patch for different generatio=
-ns
-> >>>> of stable kernels.
-> >>>>
-> >>>> So perhaps just add Cc: <stable@vger.kernel.org>, and wait and see h=
-ow
-> >>>> far back it applies cleanly?
-> >>>
-> >>> Yeah, I think I'll cc it with some note before the diffstat.
-> >>>
-> >>> I'm thinking to cap it to only 5.x kernels (at least first) unless it=
- is
-> >>> dead easy to backport below that.
-> >>
-> >> I have this vauge recollection of pointing at this before and being
-> >> told that it had to be __va for some PPC reason?
-> >>
-> >> Do check with the PPC people first, I see none on the CC list.
-> >>
-> >> Jason
-> >
-> > Thanks, added arch/powerpc maintainers.
-> >
->
-> As far as I can see, memremap() won't work on PPC32 at least:
->
-> IIUC, memremap() calls arch_memremap_wb()
-> arch_memremap_wb() calls ioremap_cache()
-> In case of failure, then ioremap_wt() and ioremap_wc() are tried.
->
-> All ioremap calls end up in __ioremap_caller() which will return NULL in =
-case you try to ioremap RAM.
->
-> So the statement "So instead, use memremap(), which will reuse the linear=
- mapping if
-> it is valid, or create another mapping otherwise." seems to be wrong, at =
-least for PPC32.
->
-> Even for PPC64 which doesn't seem to have the RAM check, I can't see that=
- it will "reuse the linear
-> mapping".
->
+On Sun, Sep 27, 2020 at 06:03:37PM -0700, James Bottomley wrote:
+> On Mon, 2020-09-28 at 03:11 +0300, Jarkko Sakkinen wrote:
+> > On Sun, Sep 27, 2020 at 04:17:40PM -0700, James Bottomley wrote:
+> > > Remove the currently exported version of flush context, which is
+> > > designed for tpm core internal use only and substitute a corrected
+> > > version that does the necessary tpm ops get/put.  This fixes a bug
+> > > with trusted keys in that some TIS TPMs are unable to flush the
+> > > loaded secret because the status register isn't reading correctly.
+> > > 
+> > > Fixes: 45477b3fe3d1 ("security: keys: trusted: fix lost handle
+> > > flush")
+> > > Signed-off-by: James Bottomley <
+> > > James.Bottomley@HansenPartnership.com>
+> > > ---
+> > >  drivers/char/tpm/tpm.h                    |  1 +
+> > >  drivers/char/tpm/tpm2-cmd.c               | 23
+> > > ++++++++++++++++++++++-
+> > >  include/linux/tpm.h                       |  2 +-
+> > >  security/keys/trusted-keys/trusted_tpm2.c |  2 +-
+> > >  4 files changed, 25 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > > index 21ac88d4076c..cba09be7ce23 100644
+> > > --- a/drivers/char/tpm/tpm.h
+> > > +++ b/drivers/char/tpm/tpm.h
+> > > @@ -240,6 +240,7 @@ int tpm2_prepare_space(struct tpm_chip *chip,
+> > > struct tpm_space *space, u8 *cmd,
+> > >  		       size_t cmdsiz);
+> > >  int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space
+> > > *space, void *buf,
+> > >  		      size_t *bufsiz);
+> > > +void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
+> > >  
+> > >  void tpm_bios_log_setup(struct tpm_chip *chip);
+> > >  void tpm_bios_log_teardown(struct tpm_chip *chip);
+> > > diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-
+> > > cmd.c
+> > > index 9b84158c5a9e..d5aaea72d578 100644
+> > > --- a/drivers/char/tpm/tpm2-cmd.c
+> > > +++ b/drivers/char/tpm/tpm2-cmd.c
+> > > @@ -362,7 +362,28 @@ void tpm2_flush_context(struct tpm_chip *chip,
+> > > u32 handle)
+> > >  	tpm_transmit_cmd(chip, &buf, 0, "flushing context");
+> > >  	tpm_buf_destroy(&buf);
+> > >  }
+> > > -EXPORT_SYMBOL_GPL(tpm2_flush_context);
+> > > +
+> > > +/**
+> > > + * tpm2_flush_context_cmd() - execute a TPM2_FlushContext command
+> > > + * @chip:	TPM chip to use
+> > > + * @handle:	context handle
+> > > + *
+> > > + * This version of the command is designed to be used outside the
+> > > + * TPM core so acquires and releases the tpm ops.
+> > > + */
+> > > +void tpm2_flush_context_cmd(struct tpm_chip *chip, u32 handle)
+> > > +{
+> > > +	int rc;
+> > > +
+> > > +	rc = tpm_try_get_ops(chip);
+> > > +	if (rc) {
+> > > +		dev_err(&chip->dev, "Failed to acquire tpm ops for
+> > > flush\n");
+> > > +		return;
+> > > +	}
+> > > +	tpm2_flush_context(chip, handle);
+> > > +	tpm_put_ops(chip);
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(tpm2_flush_context_cmd);
+> > 
+> > Otherwise fine but please rename the existing function as
+> > __tpm2_flush_context() and exported as tpm2_flush_context().
+> 
+> If I do this it churns the code base more: we have one external
+> consumer and four internal ones, so now each of the internal ones would
+> have to become __tpm_flush_context().  We also have precedence for the
+> xxx_cmd form with tpm2_unseal_cmd, tpm2_load_cmd.
 
-It is there, please look again. Before any of the above happens,
-memremap() will call try_ram_remap() for regions that are covered by a
-IORESOURCE_SYSTEM_RAM, and map it using __va() if its PFN is valid and
-it is not highmem.
+There are no internals version of aforementioned functions, but in the
+sense of common convention for such that encapsulate a single TPM
+command and nothing more or less, your argument make sense.
 
-So as far as I can tell, this change has no effect on PPC at all
-unless its RAM is not described as IORESOURCE_SYSTEM_RAM.
+But it is somewhat common pattern to prefix internal/unlocked version
+with two underscores. So summarizing this I think that the best names
+would be __tpm2_flush_context_cmd() and tpm2_flush_context_cmd().
+
+But now that I looked at your patch, I remembered the reason why the
+function in question does not take ops, albeit I'm not fully in the
+page why this was not properly implemented in trusted_tpm2.c.
+
+The principal idea was that the client, e.g. trusted keys would take
+the ops and execute series of commands and then return ops. Otherwise,
+there is a probel in atomicity, i.e. someone could race between unseal
+and flush.
+
+int tpm2_unseal_trusted(struct tpm_chip *chip,
+			struct trusted_key_payload *payload,
+			struct trusted_key_options *options)
+{
+	u32 blob_handle;
+	int rc;
+
+	rc = tpm_try_get_ops(chip);
+	if (rc)
+		goto out;
+
+	rc = tpm2_load_cmd(chip, payload, options, &blob_handle);
+	if (rc)
+		goto out;
+
+	rc = tpm2_unseal_cmd(chip, payload, options, blob_handle);
+	tpm2_flush_context(chip, blob_handle);
+
+out:
+	tpm_put_ops(chip);
+	return rc;
+}
+
+In addition to this fix, I think we should put a note to kdoc of each
+exported function that please grab the ops before using.
+
+/Jarkko
