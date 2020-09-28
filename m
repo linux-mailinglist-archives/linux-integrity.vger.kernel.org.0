@@ -2,106 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1EB27A72F
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 08:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE7D27A75A
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 08:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgI1GDu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Sep 2020 02:03:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725290AbgI1GDt (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Sep 2020 02:03:49 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F20C0613CE
-        for <linux-integrity@vger.kernel.org>; Sun, 27 Sep 2020 23:03:49 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id o20so8361732pfp.11
-        for <linux-integrity@vger.kernel.org>; Sun, 27 Sep 2020 23:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rubrik.com; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=uNIIwJypljaMLPF8081AsThwTR6qY/Xcan83ZMzBJXg=;
-        b=CzB6wLd5ehuADwT4jpgjVK67RwY8iSEq0mMe1A04kzKNu+rcPnPH4yVVeCb7WmgHaQ
-         cv6owKlvRN9n2JXLi1/9cvNvWddOMFRhX6gesug+WVXs20gOoMY7aNxZ7cw9zY8/OPL8
-         1yk2yIViPtyHm42G7b2l0BDPrdVBY8TdGX03k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=uNIIwJypljaMLPF8081AsThwTR6qY/Xcan83ZMzBJXg=;
-        b=nF8BxmNHV8HcnbcGhpzTAm3/yC1fQyIbJGW80a6O/YVfr5dwQ17Y0Zu7QIHG112+DC
-         1arFqvSdUzzLwHyo2mZQcT+eQyJ3uDGl6W8PtoCJAISHOygWzR2P+5fvrsTK1AAZ1Eij
-         IIMJmRwW6khNZMZhay9yz/c8D7vz41qP/pz79I3jkFCPhoE/mIriEwbNB3L1tAJ9tQRh
-         nwnSoIcIFq+YBs8q2bn7hO8YKOm7/2bVEt0/X5i0OESV5YQzwpjsco/haDfqYw/py3iL
-         NEcYETHG/R2uuxFkGOAcN4bAGy35mBqUrL20ReNhlNZ8xJ8UA3EAxKPLNS+L7IU7kVmx
-         FLRA==
-X-Gm-Message-State: AOAM531eAQqCz3v/Mx2qpJ/VO2eUSydKugvY6p09BabeUnxJu9yq7F7q
-        k2lZEmlqx+cicdhqIXXBtLDCrQ==
-X-Google-Smtp-Source: ABdhPJx8lr7qcPFdA0vzZZnZwTVpaj582wQazPcANUcYqPtEkhF2cYkqWxcKDngXPIMaX9WfpTsiEg==
-X-Received: by 2002:a62:7511:0:b029:142:2501:35da with SMTP id q17-20020a6275110000b0290142250135damr124703pfc.58.1601273029095;
-        Sun, 27 Sep 2020 23:03:49 -0700 (PDT)
-Received: from ?IPv6:2601:647:4200:3be0:5808:e111:eba3:c439? ([2601:647:4200:3be0:5808:e111:eba3:c439])
-        by smtp.gmail.com with ESMTPSA id cf7sm5761492pjb.52.2020.09.27.23.03.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 27 Sep 2020 23:03:48 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
-Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
-From:   Hao Wu <hao.wu@rubrik.com>
-In-Reply-To: <20200928010835.GD6704@linux.intel.com>
-Date:   Sun, 27 Sep 2020 23:03:47 -0700
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Nayna Jain <nayna@linux.vnet.ibm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
-        Hamza Attak <hamza@hpe.com>, why2jjj.linux@gmail.com,
-        zohar@linux.vnet.ibm.com, linux-integrity@vger.kernel.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        Seungyeop Han <seungyeop.han@rubrik.com>,
-        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
-        Anish Jhaveri <anish.jhaveri@rubrik.com>
+        id S1726421AbgI1GUc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Sep 2020 02:20:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60880 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726380AbgI1GUb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 28 Sep 2020 02:20:31 -0400
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D1DD720BED;
+        Mon, 28 Sep 2020 06:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601274030;
+        bh=qGVBcNhDEEBkJu2At1hZbhtzuUFdZojHwVUCzhbrbsk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DRd1dek7hHeI6wDiG0Q2fzMYzBlt6/up5Isinltgd8XP78NXerLQJNSRJfHvz8nfY
+         Yo7QHaHM97V17vkYE7WYc/dl153B28rc9/2n0GzwtIN0moyws3EeKCDw+EuCCVANmv
+         tg2YBUl8W9p/tJfLEsRuuOcZX6GtKHIKZaDGiutc=
+Received: by mail-oo1-f46.google.com with SMTP id z1so20237ooj.3;
+        Sun, 27 Sep 2020 23:20:30 -0700 (PDT)
+X-Gm-Message-State: AOAM531wNH68i0VL1ziDaiBb6QZZUWknls1k9bFHSopFUozATrudeoO8
+        oEJzvvJa93R3NUaFywhkOYd8Rl5IelRFWyQzxwA=
+X-Google-Smtp-Source: ABdhPJya6+NUXngiNKxeosaYSdyZVPk+uYtQRGhgdz0kf1DdRjRrFRW4PGdNv65YNWycBUG1REBKMRMNa4ltvRyBeVk=
+X-Received: by 2002:a4a:4910:: with SMTP id z16mr24551ooa.41.1601274030150;
+ Sun, 27 Sep 2020 23:20:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200922094128.26245-1-ardb@kernel.org> <20200925055626.GC165011@linux.intel.com>
+ <CAMj1kXFLWsFz7HV4sHLbwBkuiEu0gT4esSH8umVrvDDrJaOLrQ@mail.gmail.com>
+ <20200925102920.GA180915@linux.intel.com> <20200925120018.GH9916@ziepe.ca>
+ <20200927234434.GA5283@linux.intel.com> <9be9c7e7-c424-d241-2255-ad854221bd2e@csgroup.eu>
+In-Reply-To: <9be9c7e7-c424-d241-2255-ad854221bd2e@csgroup.eu>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 28 Sep 2020 08:20:18 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGxNgixUEocma-9F3fYgdJJJADh=bvyrCziXkuArErWdA@mail.gmail.com>
+Message-ID: <CAMj1kXGxNgixUEocma-9F3fYgdJJJADh=bvyrCziXkuArErWdA@mail.gmail.com>
+Subject: Re: [PATCH] tpm: of: avoid __va() translation for event log address
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>, Peter Huewe <peterhuewe@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <1F6A3D58-6B60-4FCB-A629-34CE8813E04C@rubrik.com>
-References: <20200926223150.109645-1-hao.wu@rubrik.com>
- <73405d14d7665e8a4e3e9defde7fb12aeae7784c.camel@HansenPartnership.com>
- <DFD7629C-05BF-46C1-B3D7-92FBBC176D9E@rubrik.com>
- <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
- <20200928010835.GD6704@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-X-Mailer: Apple Mail (2.3608.120.23.2.1)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko,
+On Mon, 28 Sep 2020 at 07:56, Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 28/09/2020 =C3=A0 01:44, Jarkko Sakkinen a =C3=A9crit :
+> > On Fri, Sep 25, 2020 at 09:00:18AM -0300, Jason Gunthorpe wrote:
+> >> On Fri, Sep 25, 2020 at 01:29:20PM +0300, Jarkko Sakkinen wrote:
+> >>> On Fri, Sep 25, 2020 at 09:00:56AM +0200, Ard Biesheuvel wrote:
+> >>>> On Fri, 25 Sep 2020 at 07:56, Jarkko Sakkinen
+> >>>> <jarkko.sakkinen@linux.intel.com> wrote:
+> >>>>>
+> >>>>> On Tue, Sep 22, 2020 at 11:41:28AM +0200, Ard Biesheuvel wrote:
+> >>>>>> The TPM event log is provided to the OS by the firmware, by loadin=
+g
+> >>>>>> it into an area in memory and passing the physical address via a n=
+ode
+> >>>>>> in the device tree.
+> >>>>>>
+> >>>>>> Currently, we use __va() to access the memory via the kernel's lin=
+ear
+> >>>>>> map: however, it is not guaranteed that the linear map covers this
+> >>>>>> particular address, as we may be running under HIGHMEM on a 32-bit
+> >>>>>> architecture, or running firmware that uses a memory type for the
+> >>>>>> event log that is omitted from the linear map (such as EfiReserved=
+).
+> >>>>>
+> >>>>> Makes perfect sense to the level that I wonder if this should have =
+a
+> >>>>> fixes tag and/or needs to be backported to the stable kernels?
+> >>>>>
+> >>>>
+> >>>> AIUI, the code was written specifically for ppc64, which is a
+> >>>> non-highmem, non-EFI architecture. However, when we start reusing th=
+is
+> >>>> driver for ARM, this issue could pop up.
+> >>>>
+> >>>> The code itself has been refactored a couple of times, so I think it
+> >>>> will require different versions of the patch for different generatio=
+ns
+> >>>> of stable kernels.
+> >>>>
+> >>>> So perhaps just add Cc: <stable@vger.kernel.org>, and wait and see h=
+ow
+> >>>> far back it applies cleanly?
+> >>>
+> >>> Yeah, I think I'll cc it with some note before the diffstat.
+> >>>
+> >>> I'm thinking to cap it to only 5.x kernels (at least first) unless it=
+ is
+> >>> dead easy to backport below that.
+> >>
+> >> I have this vauge recollection of pointing at this before and being
+> >> told that it had to be __va for some PPC reason?
+> >>
+> >> Do check with the PPC people first, I see none on the CC list.
+> >>
+> >> Jason
+> >
+> > Thanks, added arch/powerpc maintainers.
+> >
+>
+> As far as I can see, memremap() won't work on PPC32 at least:
+>
+> IIUC, memremap() calls arch_memremap_wb()
+> arch_memremap_wb() calls ioremap_cache()
+> In case of failure, then ioremap_wt() and ioremap_wc() are tried.
+>
+> All ioremap calls end up in __ioremap_caller() which will return NULL in =
+case you try to ioremap RAM.
+>
+> So the statement "So instead, use memremap(), which will reuse the linear=
+ mapping if
+> it is valid, or create another mapping otherwise." seems to be wrong, at =
+least for PPC32.
+>
+> Even for PPC64 which doesn't seem to have the RAM check, I can't see that=
+ it will "reuse the linear
+> mapping".
+>
 
-Just to be clear it is not caused by that single commit, but a few =
-accumulated commits
-=
-https://github.com/torvalds/linux/commit/9f3fc7bcddcb51234e23494531f93ab60=
-475e1c3
-=
-https://github.com/torvalds/linux/commit/cf151a9a44d52a63332e8e926234574fe=
-5a5d784
-=
-https://github.com/torvalds/linux/commit/59f5a6b07f6434efac0057dc2f303a96b=
-871811b
-=
-https://github.com/torvalds/linux/commit/424eaf910c329ab06ad03a527ef45dcf6=
-a328f00
+It is there, please look again. Before any of the above happens,
+memremap() will call try_ram_remap() for regions that are covered by a
+IORESOURCE_SYSTEM_RAM, and map it using __va() if its PFN is valid and
+it is not highmem.
 
-The easy way is probably just apply the patch I provided, and then =
-revisit the value
-for TPM_TIMEOUT_WAIT_STAT =20
-
-Thanks
-Hao
-
->=20
-> I think I should revert 424eaf910c329, up until more legit values are =
-found.
->=20
-> /Jarkko
-
+So as far as I can tell, this change has no effect on PPC at all
+unless its RAM is not described as IORESOURCE_SYSTEM_RAM.
