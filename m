@@ -2,75 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D06FD27A4A0
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 01:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F6E27A4B3
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 02:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726328AbgI0X7L (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 27 Sep 2020 19:59:11 -0400
-Received: from mga11.intel.com ([192.55.52.93]:40803 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726316AbgI0X7L (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 27 Sep 2020 19:59:11 -0400
-IronPort-SDR: SLjhBCtzX196bb3oUSU8uHkG2mGml7WqD+QGgr98sZheIbPQ1gaetOwqQlIHZ88tKz4dIxSivj
- FH/xZ/nLkQCw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9757"; a="159265637"
-X-IronPort-AV: E=Sophos;i="5.77,311,1596524400"; 
-   d="scan'208";a="159265637"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2020 16:59:10 -0700
-IronPort-SDR: opfHP+mi7b+9hDG7K3XH6ZaD53EIAcHlw2mkDousIGYiufJK7+3aBAsiIOhyodytHmlVxPF98w
- WwVfw9OGLLww==
-X-IronPort-AV: E=Sophos;i="5.77,311,1596524400"; 
-   d="scan'208";a="488339604"
-Received: from memara-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.157])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2020 16:59:07 -0700
-Date:   Mon, 28 Sep 2020 02:59:08 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Cc:     Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, luto@amacapital.net,
-        trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH 00/13] x86: Trenchboot secure dynamic launch Linux kernel
- support
-Message-ID: <20200927235908.GC5283@linux.intel.com>
-References: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
- <20200925053051.GA165011@linux.intel.com>
- <8329607a-704d-1da0-dc7b-4b97c2440afb@apertussolutions.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8329607a-704d-1da0-dc7b-4b97c2440afb@apertussolutions.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1726392AbgI1ALb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 27 Sep 2020 20:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726316AbgI1ALa (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 27 Sep 2020 20:11:30 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AEEC0613CE
+        for <linux-integrity@vger.kernel.org>; Sun, 27 Sep 2020 17:11:30 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id mn7so2546682pjb.5
+        for <linux-integrity@vger.kernel.org>; Sun, 27 Sep 2020 17:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rubrik.com; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=A6mR5ROEJzh58GXS2N8RGbR/C2ISKi+pYWvUdSGwxxY=;
+        b=H3axNa4g5JIy3ZVQDeo/tcGNFK70cpYrux2tkAUhsQ8WVrBEWk711IyOvj266rpspC
+         Tn0RXIJWEwGMhd+7IH0Ree1SKUDdVvVagxY4OH5c4D0372WV35EfobADh8bDnlS80iU0
+         72+E/AJizMjVDqED39ASYEPmK1CG82POlLank=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=A6mR5ROEJzh58GXS2N8RGbR/C2ISKi+pYWvUdSGwxxY=;
+        b=C0aQXMbvGRz5MboJhQueZx2z+rpx9ijJIfIJc3mnCm0eir9Ujg3XZZAQVbNvq4N8sA
+         i+10WTXGoELlSJrIiKZgK0pQ+EIoXG8q3WNTPUJM3Jo2DafZ2w+4lz8TRVzYcSdTK1y9
+         xGTYpP5EMiSrICiZJXenJVqMugwkPnq5kZPBa63xvhfgcCRjlxCZVqUq6gC+RdogPrmn
+         LE5DqMdPYTauwPbSCJ+fkNcEoDLh7E8ekx4FmRq7CJGwZY8v+E7rM1LCqysJBXaCKhtN
+         SAed2jVSoZ7ewvUYzramNGT4ydTWwfjbQYYeprUJohsYa8MurEoK9QCbomkCfFPvdWXP
+         zENQ==
+X-Gm-Message-State: AOAM532iUdfkLomBfxr/BP6jN8zUiwMWzN7Bq0AfM6dKy42ZomRtImRl
+        H4lz+39eddf5hJmC97InnpVplw==
+X-Google-Smtp-Source: ABdhPJy5GHn3Mi+C/fGaukQPAq4Viu45PT/y1E6IBc9tGuXBLTAs8Rqko9rY1C103E942Dzt/jP8sw==
+X-Received: by 2002:a17:90a:67c7:: with SMTP id g7mr6790414pjm.42.1601251889899;
+        Sun, 27 Sep 2020 17:11:29 -0700 (PDT)
+Received: from ?IPv6:2601:647:4200:3be0:5808:e111:eba3:c439? ([2601:647:4200:3be0:5808:e111:eba3:c439])
+        by smtp.gmail.com with ESMTPSA id t12sm1065662pgk.32.2020.09.27.17.11.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 27 Sep 2020 17:11:29 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
+Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
+From:   Hao Wu <hao.wu@rubrik.com>
+In-Reply-To: <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
+Date:   Sun, 27 Sep 2020 17:11:27 -0700
+Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        Hamza Attak <hamza@hpe.com>, nayna@linux.vnet.ibm.com,
+        why2jjj.linux@gmail.com, zohar@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        Seungyeop Han <seungyeop.han@rubrik.com>,
+        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
+        Anish Jhaveri <anish.jhaveri@rubrik.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E6E3C07D-57F4-48F5-B4A9-50868B82E779@rubrik.com>
+References: <20200926223150.109645-1-hao.wu@rubrik.com>
+ <73405d14d7665e8a4e3e9defde7fb12aeae7784c.camel@HansenPartnership.com>
+ <DFD7629C-05BF-46C1-B3D7-92FBBC176D9E@rubrik.com>
+ <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.1)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 05:32:50PM -0400, Daniel P. Smith wrote:
-> The work for this is split across different teams with different
-> resourcing levels resulting in one organization working Intel and
-> another working AMD. This then raised the concern over submitting a
-> single patch set developed by two groups pseudo-independently. In this
-> situation the result would be patches being submitted from one
-> organization that had no direct development or testing and therefore
-> could not sign off on a subset of the patches being submitted.
+Hi James,
 
-Not sure if internal team structures qualify as a techical argument for
-upstream code.
+Maybe there is a misunderstanding. Here I am using tpm_msleep, not =
+msleep.
+tpm_msleep is using usleep underlaying. See
+=
+https://github.com/torvalds/linux/blob/master/drivers/char/tpm/tpm.h#L188
 
-> > I'd be more motivated to review and test a full all encompassing x86
-> > solution. It would increase the patch set size but would also give it
-> > a better test coverage, which I think would be a huge plus in such a
-> > complex patch set.
-> 
-> We would not disagree with those sentiments but see the previous
-> response about the conflict that exists.
+The reasons I choose 15ms, is because before=20
+=
+https://github.com/torvalds/linux/commit/9f3fc7bcddcb51234e23494531f93ab60=
+475e1c3
+(Where msleep is changed to tpm_msleep (which is essentially usleep)),
+The actual sleep time is 15ms, thus here we change this back to 15ms to =
+fix
+regression.
 
-At minimum, you have to make the case that the AMD support is easy to
-tackle in to the framework of things you have later on.
+Thanks
+Hao=20
 
-/Jarkko
+> On Sep 27, 2020, at 11:25 AM, James Bottomley =
+<James.Bottomley@HansenPartnership.com> wrote:
+>=20
+> On Sat, 2020-09-26 at 16:10 -0700, Hao Wu wrote:
+>> Resending following email in plaintext.
+>>=20
+>> ----
+>>=20
+>> Hi James,
+>>=20
+>> Thanks for following up.
+>>=20
+>> We have actually tried change=20
+>> TPM_TIMEOUT_USECS_MIN / TPM_TIMEOUT_USECS_MAX=20
+>> according to https://patchwork.kernel.org/patch/10520247/
+>> It does not solve the problem for ATMEL chip. The chips facing crash
+>> is=20
+>> not experimental, but happens commonly in=20
+>> the production systems we and our customers are using.
+>> It is widely found in Cisco 220 / 240 systems which are using
+>> Ateml chips.
+>=20
+> Well, I came up with the values in that patch by trial and error ....
+> all I know is they work for my nuvoton. If they're not right for you,
+> see if you can find what values actually do work for your TPM.  The
+> difference between msleep and usleep_range is that the former can have
+> an indefinitely long timeout and the latter has a range bounded one.=20=
+
+> If you think msleep works for you, the chances are it doesn't and
+> you're relying on the large upper bound to make the bug infrequent
+> enough for you not to see it.  Playing with the values in usleep range
+> will help you find what the actual timeout is and eliminate the =
+problem
+> for good.
+>=20
+> James
+
