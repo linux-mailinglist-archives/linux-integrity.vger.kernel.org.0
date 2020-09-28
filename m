@@ -2,35 +2,46 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4543027A511
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 03:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA5E27A52C
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 03:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726409AbgI1BIi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 27 Sep 2020 21:08:38 -0400
-Received: from mga07.intel.com ([134.134.136.100]:22624 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726406AbgI1BIi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 27 Sep 2020 21:08:38 -0400
-IronPort-SDR: GcTR+sW+pxuABLkl0shx+uaqUjVpwWvrUDvucwCB1ycTzUnN7LtwygbxfNDPzuNj8Cd/6wEdrb
- eNN2Cw0Tk/dw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9757"; a="226072036"
-X-IronPort-AV: E=Sophos;i="5.77,312,1596524400"; 
-   d="scan'208";a="226072036"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2020 18:08:37 -0700
-IronPort-SDR: phkIfXwF+q7AxoOv7Bo+mL7Se/Nz8tsqPkmHIteD+GJJXtMc+TbxqM5gGgImWwfc91UpP8KW6M
- nMeI/UC2fFCQ==
-X-IronPort-AV: E=Sophos;i="5.77,312,1596524400"; 
-   d="scan'208";a="488357231"
-Received: from memara-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.157])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2020 18:08:33 -0700
-Date:   Mon, 28 Sep 2020 04:08:35 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Nayna Jain <nayna@linux.vnet.ibm.com>
-Cc:     Hao Wu <hao.wu@rubrik.com>, peterhuewe@gmx.de, jgg@ziepe.ca,
+        id S1726406AbgI1BWd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 27 Sep 2020 21:22:33 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:51342 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726387AbgI1BWd (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 27 Sep 2020 21:22:33 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A9BD08EE17F;
+        Sun, 27 Sep 2020 18:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601256152;
+        bh=yoHIHM3+Su6TOLDsV9bLyo6wb/q8x7fR8ORf1mIC/QI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=mqaW3PwczvahHGO2n+c8gTA28ei4nSKyxypJ/dja9Kp/et1p+GZGLVoLMjU6mVbE9
+         U2Km0YFUY+/Xruo/5+Slq7prrE6P9wmjoHmFNFIkvejBpUzVCRhVxFJu66kT3iEEoL
+         T9Qy7XfAi1JUwIdE72ncZxJil2DdhRi1VZJNQj0s=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id MaCHzYzCib9D; Sun, 27 Sep 2020 18:22:32 -0700 (PDT)
+Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 0D2458EE012;
+        Sun, 27 Sep 2020 18:22:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601256152;
+        bh=yoHIHM3+Su6TOLDsV9bLyo6wb/q8x7fR8ORf1mIC/QI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=mqaW3PwczvahHGO2n+c8gTA28ei4nSKyxypJ/dja9Kp/et1p+GZGLVoLMjU6mVbE9
+         U2Km0YFUY+/Xruo/5+Slq7prrE6P9wmjoHmFNFIkvejBpUzVCRhVxFJu66kT3iEEoL
+         T9Qy7XfAi1JUwIdE72ncZxJil2DdhRi1VZJNQj0s=
+Message-ID: <0c896ca8eb0e30d6e75843cfbf2aa627ddc63feb.camel@HansenPartnership.com>
+Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Hao Wu <hao.wu@rubrik.com>
+Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
         arnd@arndb.de, gregkh@linuxfoundation.org,
         Hamza Attak <hamza@hpe.com>, nayna@linux.vnet.ibm.com,
         why2jjj.linux@gmail.com, zohar@linux.vnet.ibm.com,
@@ -40,54 +51,51 @@ Cc:     Hao Wu <hao.wu@rubrik.com>, peterhuewe@gmx.de, jgg@ziepe.ca,
         Seungyeop Han <seungyeop.han@rubrik.com>,
         Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
         Anish Jhaveri <anish.jhaveri@rubrik.com>
-Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
-Message-ID: <20200928010835.GD6704@linux.intel.com>
+Date:   Sun, 27 Sep 2020 18:22:30 -0700
+In-Reply-To: <E6E3C07D-57F4-48F5-B4A9-50868B82E779@rubrik.com>
 References: <20200926223150.109645-1-hao.wu@rubrik.com>
- <73405d14d7665e8a4e3e9defde7fb12aeae7784c.camel@HansenPartnership.com>
- <DFD7629C-05BF-46C1-B3D7-92FBBC176D9E@rubrik.com>
- <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
+         <73405d14d7665e8a4e3e9defde7fb12aeae7784c.camel@HansenPartnership.com>
+         <DFD7629C-05BF-46C1-B3D7-92FBBC176D9E@rubrik.com>
+         <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
+         <E6E3C07D-57F4-48F5-B4A9-50868B82E779@rubrik.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Sep 27, 2020 at 11:25:39AM -0700, James Bottomley wrote:
-> On Sat, 2020-09-26 at 16:10 -0700, Hao Wu wrote:
-> > Resending following email in plaintext.
-> > 
-> > ----
-> > 
-> > Hi James,
-> > 
-> > Thanks for following up.
-> > 
-> > We have actually tried change 
-> > TPM_TIMEOUT_USECS_MIN / TPM_TIMEOUT_USECS_MAX 
-> > according to https://patchwork.kernel.org/patch/10520247/
-> > It does not solve the problem for ATMEL chip. The chips facing crash
-> > is 
-> > not experimental, but happens commonly in 
-> > the production systems we and our customers are using.
-> > It is widely found in Cisco 220 / 240 systems which are using
-> > Ateml chips.
+On Sun, 2020-09-27 at 17:11 -0700, Hao Wu wrote:
+> Hi James,
 > 
-> Well, I came up with the values in that patch by trial and error ....
-> all I know is they work for my nuvoton. If they're not right for you,
-> see if you can find what values actually do work for your TPM.  The
-> difference between msleep and usleep_range is that the former can have
-> an indefinitely long timeout and the latter has a range bounded one. 
-> If you think msleep works for you, the chances are it doesn't and
-> you're relying on the large upper bound to make the bug infrequent
-> enough for you not to see it.  Playing with the values in usleep range
-> will help you find what the actual timeout is and eliminate the problem
-> for good.
-> 
-> James
+> Maybe there is a misunderstanding. Here I am using tpm_msleep, not
+> msleep. tpm_msleep is using usleep underlaying. See
+> https://github.com/torvalds/linux/blob/master/drivers/char/tpm/tpm.h#L188
 
-I think I should revert 424eaf910c329, up until more legit values are found.
+Right, I had missed that.
 
-/Jarkko
+> The reasons I choose 15ms, is because before 
+> https://github.com/torvalds/linux/commit/9f3fc7bcddcb51234e23494531f93ab60475e1c3
+> (Where msleep is changed to tpm_msleep (which is essentially
+> usleep)), The actual sleep time is 15ms, thus here we change this
+> back to 15ms to fix regression.
+
+Right now most TIS TPMs operate successfully with a sleep in there of
+the range 0.1-0.5ms.  Upping that to 15ms introduces a 100x delay in
+our status wait for the TPM to become ready, potentially slowing down
+all TIS TPM operations by 100x, which will hit us most with the PCR
+writes we do for IMA logging ... that seems like a bad bargain for a
+single TPM family manufacturer.
+
+However, there is another possibility: it's something to do with the
+byte read; I notice you don't require the same slowdown for the burst
+count read, which actually reads the status register and burst count as
+a read32.  If that really is the case, for the atmel would substituting
+a read32 and just throwing the upper bytes away in tpm_tis_status()
+allow us to keep the current timings?  I can actually try doing this
+and see if it fixes my nuvoton.
+
+James
+
+
