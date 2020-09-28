@@ -2,53 +2,56 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9D927B351
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 19:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C584527B371
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 19:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbgI1ReI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Sep 2020 13:34:08 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:32792 "EHLO
+        id S1726328AbgI1Rk5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Sep 2020 13:40:57 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:32884 "EHLO
         bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726310AbgI1ReH (ORCPT
+        by vger.kernel.org with ESMTP id S1726325AbgI1Rk5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Sep 2020 13:34:07 -0400
+        Mon, 28 Sep 2020 13:40:57 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 324158EE17F;
-        Mon, 28 Sep 2020 10:34:07 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CDCAA8EE1B3;
+        Mon, 28 Sep 2020 10:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1601314447;
-        bh=xfPXCAnSWbfdcaCeT5jlt+0esdBjW/yyJ/fu4jXc8yw=;
+        s=20151216; t=1601314856;
+        bh=U7KmiKD9wNjbj4JTVNYw++ncBO19LzKpySn4DDFfmyw=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=bmt0L45Eg4VlOHy/vNNmzEd350NHyy15zWII1FrXymRl+F995GPN+mNmLkIXevSND
-         cZrzZ8CD+rgXPmDG9AvqVHnplhJu1C+KrBq0qSI8DK1jcuW97Fz3qYlYouAGQWkMzs
-         ejKA9/KVmKmgzF/eMRF0xN0Btcb+cayXxxTtRbVc=
+        b=NTLzN6Gnd/Td1xeATtXdD0f/3u4NtUMg7WO7i/OpcqPZyOWWE326slCdZvxfaRvKe
+         r6QZIS9VyupFfelkbSY5Kyn/sUG99Uvn8xnSsBi3ig+mtCe91ljf5KcGJ0FdQwfR9C
+         o0OGG5Mz2lbJ4pNKTd61Owo/fRzXUt87CcBiwc0U=
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id r0nmdKk0mxx3; Mon, 28 Sep 2020 10:34:07 -0700 (PDT)
+        with ESMTP id 8DU97wyYWEYh; Mon, 28 Sep 2020 10:40:56 -0700 (PDT)
 Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id AAA478EE0F5;
-        Mon, 28 Sep 2020 10:34:06 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5F1FB8EE0F5;
+        Mon, 28 Sep 2020 10:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1601314447;
-        bh=xfPXCAnSWbfdcaCeT5jlt+0esdBjW/yyJ/fu4jXc8yw=;
+        s=20151216; t=1601314856;
+        bh=U7KmiKD9wNjbj4JTVNYw++ncBO19LzKpySn4DDFfmyw=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=bmt0L45Eg4VlOHy/vNNmzEd350NHyy15zWII1FrXymRl+F995GPN+mNmLkIXevSND
-         cZrzZ8CD+rgXPmDG9AvqVHnplhJu1C+KrBq0qSI8DK1jcuW97Fz3qYlYouAGQWkMzs
-         ejKA9/KVmKmgzF/eMRF0xN0Btcb+cayXxxTtRbVc=
-Message-ID: <75ef25d05e3e2b57861cb5baa59151860b581648.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 2/2] KEYS: trusted: Reserve TPM for seal and unseal
- operations
+        b=NTLzN6Gnd/Td1xeATtXdD0f/3u4NtUMg7WO7i/OpcqPZyOWWE326slCdZvxfaRvKe
+         r6QZIS9VyupFfelkbSY5Kyn/sUG99Uvn8xnSsBi3ig+mtCe91ljf5KcGJ0FdQwfR9C
+         o0OGG5Mz2lbJ4pNKTd61Owo/fRzXUt87CcBiwc0U=
+Message-ID: <d44256f102c7be01808c5186d2c23b685ff090b7.camel@HansenPartnership.com>
+Subject: Re: [PATCH] tpm: only export stand alone version of flush context
+ command
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        David Howells <dhowells@redhat.com>, stable@vger.kernel.org
-Date:   Mon, 28 Sep 2020 10:34:05 -0700
-In-Reply-To: <20200928153133.114953-2-jarkko.sakkinen@linux.intel.com>
-References: <20200928153133.114953-1-jarkko.sakkinen@linux.intel.com>
-         <20200928153133.114953-2-jarkko.sakkinen@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org
+Date:   Mon, 28 Sep 2020 10:40:55 -0700
+In-Reply-To: <20200928170720.GA119268@linux.intel.com>
+References: <e63012add04eee75d67d15f55fe4f6b68fb1d6ed.camel@HansenPartnership.com>
+         <20200928001138.GE5283@linux.intel.com>
+         <4b5a58aedb596937618dd7d8fecda9743371d101.camel@HansenPartnership.com>
+         <20200928112046.GA14051@linux.intel.com>
+         <3f369592267e8f502f435584b9220e81263eae2c.camel@HansenPartnership.com>
+         <20200928163114.GC92669@linux.intel.com>
+         <20200928170720.GA119268@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
@@ -57,214 +60,77 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-09-28 at 18:31 +0300, Jarkko Sakkinen wrote:
-> When TPM 2.0 trusted keys code was moved to the trusted keys
-> subsystem,
-> the operations were unwrapped from tpm_try_get_ops() and
-> tpm_put_ops(),
-> which are used to take temporarily the ownership of the TPM chip.
-> 
-> Fix this issue by introducting trusted_tpm_load() and
-> trusted_tpm_new(),
-> which wrap these operations.
-> 
-> Fixes: 2e19e10131a0 ("KEYS: trusted: Move TPM2 trusted keys code")
-> Reported-by: "James E.J. Bottomley" <
-> James.Bottomley@HansenPartnership.com>
-> Cc: Sumit Garg <sumit.garg@linaro.org>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> ---
->  drivers/char/tpm/tpm.h                    |  2 -
->  include/linux/tpm.h                       | 10 ++-
->  security/keys/trusted-keys/trusted_tpm1.c | 78 +++++++++++++++----
-> ----
->  3 files changed, 62 insertions(+), 28 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 947d1db0a5cc..4338573a8d48 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -194,8 +194,6 @@ static inline void tpm_msleep(unsigned int
-> delay_msec)
->  int tpm_chip_start(struct tpm_chip *chip);
->  void tpm_chip_stop(struct tpm_chip *chip);
->  struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
-> -__must_check int tpm_try_get_ops(struct tpm_chip *chip);
-> -void tpm_put_ops(struct tpm_chip *chip);
->  
->  struct tpm_chip *tpm_chip_alloc(struct device *dev,
->  				const struct tpm_class_ops *ops);
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 8f4ff39f51e7..0fe1cb5517ea 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -397,6 +397,8 @@ static inline u32 tpm2_rc_value(u32 rc)
->  #if defined(CONFIG_TCG_TPM) || defined(CONFIG_TCG_TPM_MODULE)
->  
->  extern int tpm_is_tpm2(struct tpm_chip *chip);
-> +extern __must_check int tpm_try_get_ops(struct tpm_chip *chip);
-> +extern void tpm_put_ops(struct tpm_chip *chip);
->  extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
->  			struct tpm_digest *digest);
->  extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
-> @@ -410,7 +412,13 @@ static inline int tpm_is_tpm2(struct tpm_chip
-> *chip)
->  {
->  	return -ENODEV;
->  }
-> -
-> +static inline int tpm_try_get_ops(struct tpm_chip *chip)
-> +{
-> +	return -ENODEV;
-> +}
-> +static inline void tpm_put_ops(struct tpm_chip *chip)
-> +{
-> +}
->  static inline int tpm_pcr_read(struct tpm_chip *chip, int pcr_idx,
->  			       struct tpm_digest *digest)
->  {
-> diff --git a/security/keys/trusted-keys/trusted_tpm1.c
-> b/security/keys/trusted-keys/trusted_tpm1.c
-> index c7b1701cdac5..c1dfc32c780b 100644
-> --- a/security/keys/trusted-keys/trusted_tpm1.c
-> +++ b/security/keys/trusted-keys/trusted_tpm1.c
-> @@ -950,6 +950,51 @@ static struct trusted_key_payload
-> *trusted_payload_alloc(struct key *key)
->  	return p;
->  }
->  
-> +static int trusted_tpm_load(struct tpm_chip *chip,
-> +			    struct trusted_key_payload *payload,
-> +			    struct trusted_key_options *options)
-> +{
-> +	int ret;
-> +
-> +	if (tpm_is_tpm2(chip)) {
-> +		ret = tpm_try_get_ops(chip);
-> +		if (!ret) {
-> +			ret = tpm2_unseal_trusted(chip, payload,
-> options);
-> +			tpm_put_ops(chip);
-> +		}
-> +	} else {
-> +		ret = key_unseal(payload, options);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int trusted_tpm_new(struct tpm_chip *chip,
-> +			   struct trusted_key_payload *payload,
-> +			   struct trusted_key_options *options)
-> +{
-> +	int ret;
-> +
-> +	ret = tpm_get_random(chip, payload->key, payload->key_len);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (ret != payload->key_len)
-> +		return -EIO;
-> +
-> +	if (tpm_is_tpm2(chip)) {
-> +		ret = tpm_try_get_ops(chip);
-> +		if (!ret) {
-> +			ret = tpm2_seal_trusted(chip, payload,
-> options);
-> +			tpm_put_ops(chip);
-> +		}
-> +	} else {
-> +		ret = key_seal(payload, options);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  /*
->   * trusted_instantiate - create a new trusted key
->   *
-> @@ -968,12 +1013,6 @@ static int trusted_instantiate(struct key *key,
->  	char *datablob;
->  	int ret = 0;
->  	int key_cmd;
-> -	size_t key_len;
-> -	int tpm2;
-> -
-> -	tpm2 = tpm_is_tpm2(chip);
-> -	if (tpm2 < 0)
-> -		return tpm2;
->  
->  	if (datalen <= 0 || datalen > 32767 || !prep->data)
->  		return -EINVAL;
-> @@ -1011,32 +1050,21 @@ static int trusted_instantiate(struct key
-> *key,
->  
->  	switch (key_cmd) {
->  	case Opt_load:
-> -		if (tpm2)
-> -			ret = tpm2_unseal_trusted(chip, payload,
-> options);
-> -		else
-> -			ret = key_unseal(payload, options);
-> +		ret = trusted_tpm_load(chip, payload, options);
-> +
->  		dump_payload(payload);
->  		dump_options(options);
-> +
->  		if (ret < 0)
-> -			pr_info("trusted_key: key_unseal failed
-> (%d)\n", ret);
-> +			pr_info("%s: load failed (%d)\n", __func__,
-> ret);
-> +
->  		break;
->  	case Opt_new:
-> -		key_len = payload->key_len;
-> -		ret = tpm_get_random(chip, payload->key, key_len);
-> -		if (ret < 0)
-> -			goto out;
-> +		ret = trusted_tpm_new(chip, payload, options);
->  
-> -		if (ret != key_len) {
-> -			pr_info("trusted_key: key_create failed
-> (%d)\n", ret);
-> -			ret = -EIO;
-> -			goto out;
-> -		}
-> -		if (tpm2)
-> -			ret = tpm2_seal_trusted(chip, payload,
-> options);
-> -		else
-> -			ret = key_seal(payload, options);
->  		if (ret < 0)
-> -			pr_info("trusted_key: key_seal failed (%d)\n",
-> ret);
-> +			pr_info("%s: new failed (%d)\n", __func__,
-> ret);
-> +
->  		break;
->  	default:
->  		ret = -EINVAL;
+On Mon, 2020-09-28 at 20:07 +0300, Jarkko Sakkinen wrote:
+> On Mon, Sep 28, 2020 at 07:31:18PM +0300, Jarkko Sakkinen wrote:
+> > > Well, um, that's precisely what this function originally did when
+> > > it was inside drivers/char/tpm.  You told the guy who did the
+> > > move into security/keys/trusted-keys to convert everything to use
+> > > tpm_send which encapsulates the get/put operation, which is why
+> > > we now have the flush bug.  If you really want it done like this,
+> > > then I'd recommend moving everything back to drivers/char/tpm so
+> > > we don't have to do a global exposure of a load of tpm internal
+> > > functions (i.e. move them from drivers/char/tmp.h to
+> > > include/linux/tpm.h and do an export on them).
+> > 
+> > My BuildRoot test image did not include the patch. I was wondering
+> > why I did not bump into deadlock with the fix candidate :-/ Forgot
+> > export LINUX_OVERRIDE_SRCDIR.
+> > 
+> > But you are absolutely correct, thanks for recalling. I made a
+> > mistake there.
+> > 
+> > I do disagree though that this should be moved back to
+> > drivers/char/tpm, as also TPM 1.x code lives in trusted-keys. It is
+> > good to have API for doing sequences TPM commands and keep the core
+> > in drivers/char/tpm.
 
-You didn't actually test this, did you?  It trips over the double
-tpm_try_get_ops, once above then again in tpm_send.  This is the hang:
+I think tpm2_load_cmd is likely going to have to move back anyway just
+because more things than trusted keys need to use it.  I can't really
+see any other use for the seal/unseal so they can stay in trusted keys
+until someone finds a use for them.
 
-[<0>] tpm_try_get_ops+0x3b/0x80
-[<0>] tpm_find_get_ops+0x14/0x50
-[<0>] tpm_send+0x23/0x80
-[<0>] tpm2_seal_trusted+0x4b0/0x6c0 [trusted]
-[<0>] trusted_instantiate+0x353/0x3a0 [trusted]
-[<0>] __key_instantiate_and_link+0x50/0x160
-[<0>] key_create_or_update+0x438/0x520
-[<0>] __x64_sys_add_key+0x102/0x1f0
-[<0>] do_syscall_64+0x33/0x80
-[<0>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> > If you look at tpm_send() it is in essence just simply locking TPM
+> > and and calling tpm_transmit_cmd(). And tpm_transmit_cmd() is
+> > already an exported symbol. It only needs to be declared in
+> > include/linux/tpm.h.
+> > 
+> > I'd suggest that I refine my series to call tpm_transmit_cmd() and
+> > we have a fairly clean solution where the load sequence is atomic.
+> 
+> I see that it is perfectly fine to make tpm_transmit_cmd() globally
+> callable. It is already used by tpm_vtpm_proxy and does have clear
+> semantics.
+> 
+> The way you use it is just:
+> 
+> 1. tpm_try_get_ops
+> 2. Use tpm_transmit_cmd() N times.
+> 3. tpm_put_ops
+> 
+> If we moved TPM 2.x trusted keys code back to drivers/char/tpm,for
+> the sake of consistency the same would have to be done for TPM 1.2
+> code. I'd rather fix the regression and be done with it.
+> 
+> Or if reverted like that, also asym_tpm.c code should also live
+> inside the TPM driver directory.
+> 
+> All this work with tpm_buf and the locking functions makes most sense
+> if it gives ability for callers to build their own TPM commands
+> 
+> I'm right now building test image with v3 of my fixes (this time
+> properly included to the kernel image). I also uploaded the
+> (untested) patches over here:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=trusted-fix
 
-You need to replace all the tpm_send's in the code with
-tpm_transmit_cmd.
+I think we can do that ... in which case the fix for the tis interrupt
+trigger also becomes a get/put ops around the tpm2_get_tpm_pt.
+
+After the transformation is complete, tpm_send() becomes obsolete,
+doesn't it, so it can be removed?
 
 James
+
+
 
 
