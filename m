@@ -2,75 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7566027AFCF
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 16:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D5227B04B
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 16:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726325AbgI1OQR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Sep 2020 10:16:17 -0400
-Received: from mga05.intel.com ([192.55.52.43]:54532 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726461AbgI1OQQ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Sep 2020 10:16:16 -0400
-IronPort-SDR: rjUu92lA+djZnfzEAs01y5BaCGaCYBTPB7B9sCzpV3vyUbbd/nsIzeKZkuzSTRN95Br/6pfQhW
- 9FPI4EaWXY3g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9757"; a="246740439"
-X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
-   d="scan'208";a="246740439"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 07:16:16 -0700
-IronPort-SDR: Y1N4FP+h9NfmFZLps4jLAQPrnr9h6SrT7eQcEYcOxqlRlOFq/MNOy4nUBwbyfAvF3u67uT4Td+
- GmahZ5rKr2eQ==
-X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
-   d="scan'208";a="488597261"
-Received: from schuethe-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.34.214])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 07:16:12 -0700
-Date:   Mon, 28 Sep 2020 17:16:13 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Hao Wu <hao.wu@rubrik.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Nayna Jain <nayna@linux.vnet.ibm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
-        Hamza Attak <hamza@hpe.com>, why2jjj.linux@gmail.com,
-        zohar@linux.vnet.ibm.com, linux-integrity@vger.kernel.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        Seungyeop Han <seungyeop.han@rubrik.com>,
-        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
-        Anish Jhaveri <anish.jhaveri@rubrik.com>
-Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
-Message-ID: <20200928141613.GB70098@linux.intel.com>
-References: <20200926223150.109645-1-hao.wu@rubrik.com>
- <73405d14d7665e8a4e3e9defde7fb12aeae7784c.camel@HansenPartnership.com>
- <DFD7629C-05BF-46C1-B3D7-92FBBC176D9E@rubrik.com>
- <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
- <20200928010835.GD6704@linux.intel.com>
- <1F6A3D58-6B60-4FCB-A629-34CE8813E04C@rubrik.com>
+        id S1726573AbgI1Oud (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Sep 2020 10:50:33 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:58902 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726566AbgI1Oud (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 28 Sep 2020 10:50:33 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3422D8EE17F;
+        Mon, 28 Sep 2020 07:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601304633;
+        bh=QPMiw+UPWT9wnfFHfp1mNcpfRVz1F0n0BLZsybmitjE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=rWF0CuGELib6HaWotbn36ppb/UX6noH44fC+8xxU9Fa3blT9rnpA/NYn83DBEJhSo
+         970upOBjkGFDE5NFtazOmPHI2u6XlQvQWjvUdsmLEBHgoR0Fn49/RoSazqg0Mm2aYe
+         jLrbsoYxw5YZ5Xqea5ASpmgjgP0ODJd7xut+zi4g=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id NT6DxHfBC2e5; Mon, 28 Sep 2020 07:50:33 -0700 (PDT)
+Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id A93208EE0F5;
+        Mon, 28 Sep 2020 07:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601304632;
+        bh=QPMiw+UPWT9wnfFHfp1mNcpfRVz1F0n0BLZsybmitjE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=AMgZzFbQCbqbbHCDfdm3p+mxZd2i85E6UAVzgORS2UH9jjH/ZoGJKbFfR7ZPD9VA/
+         4azg/R4bB0DEAimSR7xN1yMj6yhrsDqp5zPyk4LaWNS5N/eWqcxqDwwzWwVeLiaG6g
+         ujY+VTDPFssNbvOru/HRMIJUw/+Kpwv8vmPxGxTk=
+Message-ID: <3f369592267e8f502f435584b9220e81263eae2c.camel@HansenPartnership.com>
+Subject: Re: [PATCH] tpm: only export stand alone version of flush context
+ command
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org
+Date:   Mon, 28 Sep 2020 07:50:31 -0700
+In-Reply-To: <20200928112046.GA14051@linux.intel.com>
+References: <e63012add04eee75d67d15f55fe4f6b68fb1d6ed.camel@HansenPartnership.com>
+         <20200928001138.GE5283@linux.intel.com>
+         <4b5a58aedb596937618dd7d8fecda9743371d101.camel@HansenPartnership.com>
+         <20200928112046.GA14051@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1F6A3D58-6B60-4FCB-A629-34CE8813E04C@rubrik.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Sep 27, 2020 at 11:03:47PM -0700, Hao Wu wrote:
-> Hi Jarkko,
+On Mon, 2020-09-28 at 14:20 +0300, Jarkko Sakkinen wrote:
+> On Sun, Sep 27, 2020 at 06:03:37PM -0700, James Bottomley wrote:
+> > On Mon, 2020-09-28 at 03:11 +0300, Jarkko Sakkinen wrote:
+> > > On Sun, Sep 27, 2020 at 04:17:40PM -0700, James Bottomley wrote:
+[...]
+> > > > +EXPORT_SYMBOL_GPL(tpm2_flush_context_cmd);
+> > > 
+> > > Otherwise fine but please rename the existing function as
+> > > __tpm2_flush_context() and exported as tpm2_flush_context().
+> > 
+> > If I do this it churns the code base more: we have one external
+> > consumer and four internal ones, so now each of the internal ones
+> > would have to become __tpm_flush_context().  We also have
+> > precedence for the xxx_cmd form with tpm2_unseal_cmd,
+> > tpm2_load_cmd.
 > 
-> Just to be clear it is not caused by that single commit, but a few accumulated commits
-> https://github.com/torvalds/linux/commit/9f3fc7bcddcb51234e23494531f93ab60475e1c3
-> https://github.com/torvalds/linux/commit/cf151a9a44d52a63332e8e926234574fe5a5d784
-> https://github.com/torvalds/linux/commit/59f5a6b07f6434efac0057dc2f303a96b871811b
-> https://github.com/torvalds/linux/commit/424eaf910c329ab06ad03a527ef45dcf6a328f00
+> There are no internals version of aforementioned functions, but in
+> the sense of common convention for such that encapsulate a single TPM
+> command and nothing more or less, your argument make sense.
+
+By internal, I mean use within the tpm core that doesn't require
+get/put ops ... there are four of them.
+
+> But it is somewhat common pattern to prefix internal/unlocked version
+> with two underscores. So summarizing this I think that the best names
+> would be __tpm2_flush_context_cmd() and tpm2_flush_context_cmd().
 > 
-> The easy way is probably just apply the patch I provided, and then revisit the value
-> for TPM_TIMEOUT_WAIT_STAT  
+> But now that I looked at your patch, I remembered the reason why the
+> function in question does not take ops, albeit I'm not fully in the
+> page why this was not properly implemented in trusted_tpm2.c.
+> 
+> The principal idea was that the client, e.g. trusted keys would take
+> the ops and execute series of commands and then return ops.
+> Otherwise, there is a probel in atomicity, i.e. someone could race
+> between unseal and flush.
+> 
+> int tpm2_unseal_trusted(struct tpm_chip *chip,
+> 			struct trusted_key_payload *payload,
+> 			struct trusted_key_options *options)
+> {
+> 	u32 blob_handle;
+> 	int rc;
+> 
+> 	rc = tpm_try_get_ops(chip);
+> 	if (rc)
+> 		goto out;
+> 
+> 	rc = tpm2_load_cmd(chip, payload, options, &blob_handle);
+> 	if (rc)
+> 		goto out;
+> 
+> 	rc = tpm2_unseal_cmd(chip, payload, options, blob_handle);
+> 	tpm2_flush_context(chip, blob_handle);
+> 
+> out:
+> 	tpm_put_ops(chip);
+> 	return rc;
+> }
+> 
+> In addition to this fix, I think we should put a note to kdoc of each
+> exported function that please grab the ops before using.
 
-When you response, please quote properly, and do not top post.  The
-discussion is impossible to follow this way.
+Well, um, that's precisely what this function originally did when it
+was inside drivers/char/tpm.  You told the guy who did the move into
+security/keys/trusted-keys to convert everything to use tpm_send which
+encapsulates the get/put operation, which is why we now have the flush
+bug.  If you really want it done like this, then I'd recommend moving
+everything back to drivers/char/tpm so we don't have to do a global
+exposure of a load of tpm internal functions (i.e. move them from
+drivers/char/tmp.h to include/linux/tpm.h and do an export on them).
 
-I'm not sure if I buy that. Which one is the first failing commit?
+James
 
-/Jarkko
+
