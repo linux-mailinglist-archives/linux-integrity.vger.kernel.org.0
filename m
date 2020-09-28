@@ -2,132 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D5227B04B
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 16:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2175927B0DC
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 17:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726573AbgI1Oud (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Sep 2020 10:50:33 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:58902 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726566AbgI1Oud (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Sep 2020 10:50:33 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3422D8EE17F;
-        Mon, 28 Sep 2020 07:50:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1601304633;
-        bh=QPMiw+UPWT9wnfFHfp1mNcpfRVz1F0n0BLZsybmitjE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=rWF0CuGELib6HaWotbn36ppb/UX6noH44fC+8xxU9Fa3blT9rnpA/NYn83DBEJhSo
-         970upOBjkGFDE5NFtazOmPHI2u6XlQvQWjvUdsmLEBHgoR0Fn49/RoSazqg0Mm2aYe
-         jLrbsoYxw5YZ5Xqea5ASpmgjgP0ODJd7xut+zi4g=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NT6DxHfBC2e5; Mon, 28 Sep 2020 07:50:33 -0700 (PDT)
-Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id A93208EE0F5;
-        Mon, 28 Sep 2020 07:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1601304632;
-        bh=QPMiw+UPWT9wnfFHfp1mNcpfRVz1F0n0BLZsybmitjE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=AMgZzFbQCbqbbHCDfdm3p+mxZd2i85E6UAVzgORS2UH9jjH/ZoGJKbFfR7ZPD9VA/
-         4azg/R4bB0DEAimSR7xN1yMj6yhrsDqp5zPyk4LaWNS5N/eWqcxqDwwzWwVeLiaG6g
-         ujY+VTDPFssNbvOru/HRMIJUw/+Kpwv8vmPxGxTk=
-Message-ID: <3f369592267e8f502f435584b9220e81263eae2c.camel@HansenPartnership.com>
-Subject: Re: [PATCH] tpm: only export stand alone version of flush context
- command
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org
-Date:   Mon, 28 Sep 2020 07:50:31 -0700
-In-Reply-To: <20200928112046.GA14051@linux.intel.com>
-References: <e63012add04eee75d67d15f55fe4f6b68fb1d6ed.camel@HansenPartnership.com>
-         <20200928001138.GE5283@linux.intel.com>
-         <4b5a58aedb596937618dd7d8fecda9743371d101.camel@HansenPartnership.com>
-         <20200928112046.GA14051@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726564AbgI1PYe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Sep 2020 11:24:34 -0400
+Received: from mga03.intel.com ([134.134.136.65]:5963 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726281AbgI1PYe (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 28 Sep 2020 11:24:34 -0400
+IronPort-SDR: bsLW0TZYuwku2RqoCLWj30hKy2PRubiORVIASahMuUg1k07J36oRmSLRvey7ZQHXiUwqaesI4j
+ Cz/ZCknzu91w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9758"; a="162069047"
+X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
+   d="scan'208";a="162069047"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 08:24:32 -0700
+IronPort-SDR: 1psaqP+XFbyJbm7SOWmz85uX4oOAJ/3vo7nJHq/HfWFZmwxaelbGk+I4QVxBiH4BXEthPLUoRf
+ UvMrRm5jTzfw==
+X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
+   d="scan'208";a="488620669"
+Received: from dprzyby-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.31])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 08:24:30 -0700
+Date:   Mon, 28 Sep 2020 18:24:31 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Kent Yoder <key@linux.vnet.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] KEYS: trusted: Fix incorrect handling of
+ tpm_get_random()
+Message-ID: <20200928152431.GA93932@linux.intel.com>
+References: <20200928132405.68624-1-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200928132405.68624-1-jarkko.sakkinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-09-28 at 14:20 +0300, Jarkko Sakkinen wrote:
-> On Sun, Sep 27, 2020 at 06:03:37PM -0700, James Bottomley wrote:
-> > On Mon, 2020-09-28 at 03:11 +0300, Jarkko Sakkinen wrote:
-> > > On Sun, Sep 27, 2020 at 04:17:40PM -0700, James Bottomley wrote:
-[...]
-> > > > +EXPORT_SYMBOL_GPL(tpm2_flush_context_cmd);
-> > > 
-> > > Otherwise fine but please rename the existing function as
-> > > __tpm2_flush_context() and exported as tpm2_flush_context().
-> > 
-> > If I do this it churns the code base more: we have one external
-> > consumer and four internal ones, so now each of the internal ones
-> > would have to become __tpm_flush_context().  We also have
-> > precedence for the xxx_cmd form with tpm2_unseal_cmd,
-> > tpm2_load_cmd.
+On Mon, Sep 28, 2020 at 04:24:04PM +0300, Jarkko Sakkinen wrote:
+> When tpm_get_random() was introduced, it defined the following API for the
+> return value:
 > 
-> There are no internals version of aforementioned functions, but in
-> the sense of common convention for such that encapsulate a single TPM
-> command and nothing more or less, your argument make sense.
+> 1. A positive value tells how many bytes of random data was generated.
+> 2. A negative value on error.
+> 
+> However, in the call sites the API was used incorrectly, i.e. as it would
+> only return negative values and otherwise zero. Returning he positive read
+> counts to the user space does not make any possible sense.
+> 
+> Fix this by returning -EIO when tpm_get_random() returns a positive value.
+> 
+> Fixes: 41ab999c80f1 ("tpm: Move tpm_get_random api into the TPM device driver")
+> Cc: Kent Yoder <key@linux.vnet.ibm.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> ---
+>  security/keys/trusted-keys/trusted_tpm1.c | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+> index b9fe02e5f84f..0f2e893c6b5f 100644
+> --- a/security/keys/trusted-keys/trusted_tpm1.c
+> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+> @@ -403,9 +403,12 @@ static int osap(struct tpm_buf *tb, struct osapsess *s,
+>  	int ret;
+>  
+>  	ret = tpm_get_random(chip, ononce, TPM_NONCE_SIZE);
+> -	if (ret != TPM_NONCE_SIZE)
+> +	if (ret < 0)
+>  		return ret;
+>  
+> +	if (ret != TPM_NONCE_SIZE)
+> +		return -EIO;
+> +
+>  	tpm_buf_reset(tb, TPM_TAG_RQU_COMMAND, TPM_ORD_OSAP);
+>  	tpm_buf_append_u16(tb, type);
+>  	tpm_buf_append_u32(tb, handle);
+> @@ -496,8 +499,12 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
+>  		goto out;
+>  
+>  	ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	if (ret != TPM_NONCE_SIZE)
+> -		goto out;
+> +		return -EIO;
+> +
+>  	ordinal = htonl(TPM_ORD_SEAL);
+>  	datsize = htonl(datalen);
+>  	pcrsize = htonl(pcrinfosize);
+> @@ -601,6 +608,9 @@ static int tpm_unseal(struct tpm_buf *tb,
+>  
+>  	ordinal = htonl(TPM_ORD_UNSEAL);
+>  	ret = tpm_get_random(chip, nonceodd, TPM_NONCE_SIZE);
+> +	if (ret < 0)
+> +		return -EIO;
+> +
+>  	if (ret != TPM_NONCE_SIZE) {
+>  		pr_info("trusted_key: tpm_get_random failed (%d)\n", ret);
+>  		return ret;
+> @@ -1013,6 +1023,11 @@ static int trusted_instantiate(struct key *key,
+>  	case Opt_new:
+>  		key_len = payload->key_len;
+>  		ret = tpm_get_random(chip, payload->key, key_len);
+> +		if (ret < 0) {
+> +			ret = -EIO;
+> +			goto out;
+> +		}
+> +
+>  		if (ret != key_len) {
+>  			pr_info("trusted_key: key_create failed (%d)\n", ret);
+>  			goto out;
 
-By internal, I mean use within the tpm core that doesn't require
-get/put ops ... there are four of them.
+Ugh. I'll send an update (was not the final version, had unstaged
+changes).
 
-> But it is somewhat common pattern to prefix internal/unlocked version
-> with two underscores. So summarizing this I think that the best names
-> would be __tpm2_flush_context_cmd() and tpm2_flush_context_cmd().
-> 
-> But now that I looked at your patch, I remembered the reason why the
-> function in question does not take ops, albeit I'm not fully in the
-> page why this was not properly implemented in trusted_tpm2.c.
-> 
-> The principal idea was that the client, e.g. trusted keys would take
-> the ops and execute series of commands and then return ops.
-> Otherwise, there is a probel in atomicity, i.e. someone could race
-> between unseal and flush.
-> 
-> int tpm2_unseal_trusted(struct tpm_chip *chip,
-> 			struct trusted_key_payload *payload,
-> 			struct trusted_key_options *options)
-> {
-> 	u32 blob_handle;
-> 	int rc;
-> 
-> 	rc = tpm_try_get_ops(chip);
-> 	if (rc)
-> 		goto out;
-> 
-> 	rc = tpm2_load_cmd(chip, payload, options, &blob_handle);
-> 	if (rc)
-> 		goto out;
-> 
-> 	rc = tpm2_unseal_cmd(chip, payload, options, blob_handle);
-> 	tpm2_flush_context(chip, blob_handle);
-> 
-> out:
-> 	tpm_put_ops(chip);
-> 	return rc;
-> }
-> 
-> In addition to this fix, I think we should put a note to kdoc of each
-> exported function that please grab the ops before using.
-
-Well, um, that's precisely what this function originally did when it
-was inside drivers/char/tpm.  You told the guy who did the move into
-security/keys/trusted-keys to convert everything to use tpm_send which
-encapsulates the get/put operation, which is why we now have the flush
-bug.  If you really want it done like this, then I'd recommend moving
-everything back to drivers/char/tpm so we don't have to do a global
-exposure of a load of tpm internal functions (i.e. move them from
-drivers/char/tmp.h to include/linux/tpm.h and do an export on them).
-
-James
-
-
+/Jarkko
