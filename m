@@ -2,127 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D06D27B640
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 22:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC6727B6E6
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 23:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726779AbgI1U1R (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Sep 2020 16:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726590AbgI1U1R (ORCPT
+        id S1726627AbgI1VPg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Sep 2020 17:15:36 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:36096 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726565AbgI1VPf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Sep 2020 16:27:17 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD6AC061755
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Sep 2020 13:27:17 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id w7so2202073pfi.4
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Sep 2020 13:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rubrik.com; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=y9VwOKQaTKYSQSXUB9gnHqjEsWRXrXah3/4TCXnIoXw=;
-        b=gV5coDlrIQ17gA4Bo0ACdNsEgKqVbvtIGM6H17GsHnl5PcSKl62gFhM0L0LIMzWWL0
-         8dkZzNLEgND/snMm1CAGO+Of3Z5pICNIgxxxXI/pkp25ljbhZwp11SNyW6j2V9ZGG+1v
-         PpgxDaQ06MbPtc4W1JS2bTyiqDp9hiAPLRksw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=y9VwOKQaTKYSQSXUB9gnHqjEsWRXrXah3/4TCXnIoXw=;
-        b=NmowMXTI4UNvPB4BjYFGBvfgzYFmN8KfFRLw2yd0hdUvEtYQEGJSEtIddqTDZSsMgF
-         A1GCis6UHR7ffAQLHquGUTlLG3r8SqXXvtsfFzltTw/PqK3cDBMCJcazpllg/oNXpz0N
-         44xYIOPJFn5WPbNVy9d2yhlT/FWe6aGneHwNM7AxN7PbEchCtTvR0jGHowJIvyptrpLR
-         s5J85Qo3FFuJApPfaVfDntk6lQlQJ7qzVhYhZw1bu9pxySn/pSmn3An8YssX2+h20Gve
-         4LxGQ8wA6zRPrbuoFgLbfGhT2xwyN++9T3noyis/YULYgCi2FcgSKfzhKIHCZMxpgcUt
-         0yQA==
-X-Gm-Message-State: AOAM533Ny3VWHF8Oc8/XMPr0v1eDmUjBBZVao3hdeLNIX0OMOhWO6lbU
-        u7c7EqzD4hUIA1HmZgX9ZL0TlQ==
-X-Google-Smtp-Source: ABdhPJyLj1+4q1e6YEvELoFc3RHw21MNrAPdge8+pcvlsRa2WfsV65ArAgxFrZdyNwseEtE5Hu1uNg==
-X-Received: by 2002:a05:6a00:792:b029:13c:1611:652d with SMTP id g18-20020a056a000792b029013c1611652dmr958353pfu.13.1601324836465;
-        Mon, 28 Sep 2020 13:27:16 -0700 (PDT)
-Received: from ?IPv6:2601:647:4200:3be0:5808:e111:eba3:c439? ([2601:647:4200:3be0:5808:e111:eba3:c439])
-        by smtp.gmail.com with ESMTPSA id 64sm2613065pfd.7.2020.09.28.13.27.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Sep 2020 13:27:15 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
-Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
-From:   Hao Wu <hao.wu@rubrik.com>
-In-Reply-To: <20200928194745.GB125819@linux.intel.com>
-Date:   Mon, 28 Sep 2020 13:27:14 -0700
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Nayna Jain <nayna@linux.vnet.ibm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
-        Hamza Attak <hamza@hpe.com>, why2jjj.linux@gmail.com,
-        zohar@linux.vnet.ibm.com, linux-integrity@vger.kernel.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        Seungyeop Han <seungyeop.han@rubrik.com>,
-        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
-        Anish Jhaveri <anish.jhaveri@rubrik.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <18048BE4-2700-4BF9-8959-D024ECF0B704@rubrik.com>
-References: <20200926223150.109645-1-hao.wu@rubrik.com>
- <73405d14d7665e8a4e3e9defde7fb12aeae7784c.camel@HansenPartnership.com>
- <DFD7629C-05BF-46C1-B3D7-92FBBC176D9E@rubrik.com>
- <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
- <20200928010835.GD6704@linux.intel.com>
- <1F6A3D58-6B60-4FCB-A629-34CE8813E04C@rubrik.com>
- <20200928141613.GB70098@linux.intel.com>
- <E0629B0C-E49F-4FA1-8DBA-E8CB1EDEFD1A@rubrik.com>
- <20200928194745.GB125819@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-X-Mailer: Apple Mail (2.3608.120.23.2.1)
+        Mon, 28 Sep 2020 17:15:35 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7011B8EE17F;
+        Mon, 28 Sep 2020 14:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601327735;
+        bh=cd9UlN+XhmBbNgrcBt64nxLtOQ+3Su4wIg8oMd1CwVU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=qCCxQPy7VuyP/c11Fq/mC21TRQPIRMnt/Pb46D8A03BUPxH/cIkrgn0KVjkei47Cf
+         aFBPuahpNRwVpBfbuDp9ojUbMImGl8Qr5f1XDYuLbNd2TFqbdr7gLuTVx71noPIANd
+         sAmjBP8zrEF9/84z9Na8EMTay5LC0D4sEhdtZxQY=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id YT76NM0OnY9S; Mon, 28 Sep 2020 14:15:35 -0700 (PDT)
+Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id DA94D8EE0F5;
+        Mon, 28 Sep 2020 14:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601327735;
+        bh=cd9UlN+XhmBbNgrcBt64nxLtOQ+3Su4wIg8oMd1CwVU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=qCCxQPy7VuyP/c11Fq/mC21TRQPIRMnt/Pb46D8A03BUPxH/cIkrgn0KVjkei47Cf
+         aFBPuahpNRwVpBfbuDp9ojUbMImGl8Qr5f1XDYuLbNd2TFqbdr7gLuTVx71noPIANd
+         sAmjBP8zrEF9/84z9Na8EMTay5LC0D4sEhdtZxQY=
+Message-ID: <f0dcade667d226e982db89389fd0d86368c67ba9.camel@HansenPartnership.com>
+Subject: Re: [PATCH] tpm_tis: Add a check for invalid status
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-integrity@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+Date:   Mon, 28 Sep 2020 14:15:33 -0700
+In-Reply-To: <20200928183351.GA587339@ziepe.ca>
+References: <9bad3da0c31ae2620aaae0d75748c3387afa3d47.camel@HansenPartnership.com>
+         <20200928183351.GA587339@ziepe.ca>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Mon, 2020-09-28 at 15:33 -0300, Jason Gunthorpe wrote:
+> On Mon, Sep 28, 2020 at 11:00:12AM -0700, James Bottomley wrote:
+> > Some TIS based TPMs can return 0xff to status reads if the locality
+> > hasn't been properly requested.  Detect this condition by checking
+> > the bits that the TIS spec specifies must return zero are clear and
+> > return zero in that case.  Also drop a warning so the problem can
+> > be identified in the calling path and fixed (usually a missing
+> > try_get_ops()).
+> > 
+> > Signed-off-by: James Bottomley <
+> > James.Bottomley@HansenPartnership.com>
+> > 
+> > This is the patch I've been using to catch and kill all the points
+> > in the stack where we're not properly using get/put ops on the tpm
+> > chip.
+> 
+> If this is a problem add a lockdep on ops_sem in various places too?
 
+It's not really possible because of the init issue with checking the
+interrupt.  That originally had no locking at all (it doesn't need any
+because the TPM device isn't publicly exposed at the point the check is
+done).  If the patch to add get/put around the tpm2_get_tpm_pt is
+acceptable, then perhaps we could because I think that's the last
+unguarded use of tpm_tis_status.
 
-> On Sep 28, 2020, at 12:47 PM, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->=20
-> On Mon, Sep 28, 2020 at 10:49:56AM -0700, Hao Wu wrote:
->> Hi Jarkko,
->>=20
->> =
-https://github.com/torvalds/linux/commit/9f3fc7bcddcb51234e23494531f93ab60=
-475e1c3=20
->> Is the one introducing the issue since 4.14. Then the other three =
-commits
->> changed the relevant code a bit. Probably you can check the timestamp =
-/ release version
->> on each commit to understand the relationship.
->>=20
->> I think the original patch commit message can help you understand the =
-root cause.
->> Attaching the commit here for your convenience.
->>=20
->> Thanks
->> Hao
->=20
-> Please, again, when you respond quote properly instead of putting your
-> response on top. Thank you.
->=20
-> Yes, I know the issue and it is already documented also in the James'
-> earlier patch that did a similar change. I.e. for some reason some =
-TPM's
-> (or the bus itself) do not like poking it too often.
-Yes, probably. Although the issue James=E2=80=99s patch fixes has the =
-same error code,
-it is about a different issue which is similar.
-
-> So: what if you revert on using msleep(TPM_TIMEOUT) in
-> wait_for_tpm_stat(), i.e. revert to the behaviour before the
-> aformentioned commit?
-I believe that should resolve the issue as well
-
-Thanks
-Hao
-
-
-
+James
 
 
