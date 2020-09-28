@@ -2,166 +2,175 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1570B27A608
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 05:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0344F27A72C
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Sep 2020 07:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgI1D4U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 27 Sep 2020 23:56:20 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:39246 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726380AbgI1D4U (ORCPT
+        id S1726478AbgI1F7g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Sep 2020 01:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725290AbgI1F7g (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 27 Sep 2020 23:56:20 -0400
-Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 73DD9208ABC7;
-        Sun, 27 Sep 2020 20:56:19 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 73DD9208ABC7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1601265379;
-        bh=rzh9do29mmz5gxBiNXt0gG2p7pXuvKOF0Ny99h/ur8o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S+ur5vCfr4zMrfzvWHeoy9ro+gwLce9UZ0zvY+d69GNtc5cnHfEgjfx8lZQJWoRkE
-         dMtizeiTeu4zbjfz57Fpq4vXEysjsn6QVzFaYmKBp9Oo2q6HHiGfr4ZcWX2avFzIY9
-         ESM+6vBee947haVG4G2oWmzN+HMK2IrwJFbOBWxM=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, pvorel@suse.cz
-Cc:     nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        dm-devel@redhat.com, ltp@lists.linux.it
-Subject: [PATCH v2 2/2] IMA: Add test for dm-crypt measurement
-Date:   Sun, 27 Sep 2020 20:56:05 -0700
-Message-Id: <20200928035605.22701-3-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200928035605.22701-1-tusharsu@linux.microsoft.com>
-References: <20200928035605.22701-1-tusharsu@linux.microsoft.com>
+        Mon, 28 Sep 2020 01:59:36 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75294C0613CE
+        for <linux-integrity@vger.kernel.org>; Sun, 27 Sep 2020 22:59:36 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id a9so2961126pjg.1
+        for <linux-integrity@vger.kernel.org>; Sun, 27 Sep 2020 22:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rubrik.com; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=solfXapgbg+iuv30WemFtClyAffk/cNrWlhqezcPjc4=;
+        b=GVR8pUin16qFydgY7wqnOlVN9SlHRYIp5/TYxyrkRXJwd/RTeYK1H2Tnrc7wgFNS/P
+         y6ImunhgtqFLOTsreDlTm8xoFz0WPvnDXtnpPAf35Qp2hl4kr/6/5YfPZu2SIWqDUk61
+         Ffzwra6YN4m4VSKMp/2nyTsquJWDtFsGbTsmE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=solfXapgbg+iuv30WemFtClyAffk/cNrWlhqezcPjc4=;
+        b=WoWdhxa+7lwdkTeoK0NLjyaHYuHZArnvMXQBW22Z8gu/kUJ9ZoSGmrH+O30hf3qC71
+         eBFW8I2TRRWRivdv7op2Nb+qrLF2fa901zh1JZtbT4N6NtYPwUmnHqKVvkiOTx8Lkitr
+         4zbtwfbL5OWNqd8zisWs/WiBkQNKf8t1HLExGI5QOT6ksJSEtbdO2nOcaeVLwcNIxAk/
+         xRjDxpZ4eRSa5i7sVUuLYXeeoUePxMoI3SgHGv7c2Y5m6Pr7tjTIfLFchysnEN4pAQOb
+         p6QWf4zzjSat1oAy7qsqYIMDzPSEG1E6KRLsdbIF8omGtOW8or1SWAslrD5TfnPLZ+Pe
+         +Pmg==
+X-Gm-Message-State: AOAM532e75UHoK/WZ8xQ49Zyj7VXIgguO7aistBgUuK9WACmTXBx2zSN
+        8uteRzJj2jeoCgq/1QayJQNPKA==
+X-Google-Smtp-Source: ABdhPJx5Vm84twcDoOJ03H1pP2wO/wkkNOBwdZhNLk5vRY/9aDJKqZG8t8E3T6g02pM8QY3P2plEgw==
+X-Received: by 2002:a17:90a:cf07:: with SMTP id h7mr7832036pju.142.1601272775345;
+        Sun, 27 Sep 2020 22:59:35 -0700 (PDT)
+Received: from ?IPv6:2601:647:4200:3be0:5808:e111:eba3:c439? ([2601:647:4200:3be0:5808:e111:eba3:c439])
+        by smtp.gmail.com with ESMTPSA id h10sm8371575pgm.65.2020.09.27.22.59.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 27 Sep 2020 22:59:34 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.1\))
+Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
+From:   Hao Wu <hao.wu@rubrik.com>
+In-Reply-To: <0c896ca8eb0e30d6e75843cfbf2aa627ddc63feb.camel@HansenPartnership.com>
+Date:   Sun, 27 Sep 2020 22:59:33 -0700
+Cc:     peterhuewe@gmx.de, jarkko.sakkinen@linux.intel.com, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        Hamza Attak <hamza@hpe.com>, nayna@linux.vnet.ibm.com,
+        why2jjj.linux@gmail.com, zohar@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        Seungyeop Han <seungyeop.han@rubrik.com>,
+        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
+        Anish Jhaveri <anish.jhaveri@rubrik.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <246A111F-C72C-4CA2-B439-A6BBE0E85087@rubrik.com>
+References: <20200926223150.109645-1-hao.wu@rubrik.com>
+ <73405d14d7665e8a4e3e9defde7fb12aeae7784c.camel@HansenPartnership.com>
+ <DFD7629C-05BF-46C1-B3D7-92FBBC176D9E@rubrik.com>
+ <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
+ <E6E3C07D-57F4-48F5-B4A9-50868B82E779@rubrik.com>
+ <0c896ca8eb0e30d6e75843cfbf2aa627ddc63feb.camel@HansenPartnership.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.1)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-New functionality is being added to IMA to measure data provided by
-kernel components. With this feature, IMA policy can be set to enable
-measuring data provided by device-mapper targets. Currently one such
-device-mapper target - dm-crypt, is being updated to use this
-functionality. This new functionality needs test automation in LTP.
+Hi James,
 
-Add a testcase which verifies that the IMA subsystem correctly measures
-the data coming from a device-mapper target - dm-crypt.
+>  Upping that to 15ms introduces a 100x delay in
+> our status wait for the TPM to become ready, potentially slowing down
+> all TIS TPM operations by 100x, which will hit us most with the PCR
+> writes we do for IMA logging ... that seems like a bad bargain for a
+> single TPM family manufacturer.
+1. It is unlike to be 100x delay=20
+According to=20
+=
+https://github.com/torvalds/linux/commit/59f5a6b07f6434efac0057dc2f303a96b=
+871811b
+=
+https://github.com/torvalds/linux/commit/424eaf910c329ab06ad03a527ef45dcf6=
+a328f00
+It only optimize from 14sec to 7sec. Which is only a 2x speed up by =
+using sleep time from 5ms to >1ms.
+Here we change it back to 15 ms is very unlikely to have 100x delay.=20
+The optimization does not worth to have a breakage on chip from one =
+manufacturer.
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
----
- runtest/ima                                   |  1 +
- .../kernel/security/integrity/ima/README.md   | 20 +++++++
- .../integrity/ima/tests/ima_dm_crypt.sh       | 60 +++++++++++++++++++
- 3 files changed, 81 insertions(+)
- create mode 100755 testcases/kernel/security/integrity/ima/tests/ima_dm_crypt.sh
+2. In my opinion, the kernel should support all manufacturers which were =
+supported before.=20
+Not supporting any of them would lead to kernel divergence, because =
+those chip users have to
+Use it anyway. Maybe we can see the maintainers=E2=80=99 opinion on =
+this.
 
-diff --git a/runtest/ima b/runtest/ima
-index 5f4b4a7a1..123b6c8b0 100644
---- a/runtest/ima
-+++ b/runtest/ima
-@@ -5,4 +5,5 @@ ima_tpm ima_tpm.sh
- ima_violations ima_violations.sh
- ima_keys ima_keys.sh
- ima_kexec ima_kexec.sh
-+ima_dm_crypt ima_dm_crypt.sh
- evm_overlay evm_overlay.sh
-diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
-index 68d046678..007662fae 100644
---- a/testcases/kernel/security/integrity/ima/README.md
-+++ b/testcases/kernel/security/integrity/ima/README.md
-@@ -37,6 +37,26 @@ see example in `kexec.policy`.
- The test attempts to kexec the existing running kernel image.
- To kexec a different kernel image export `IMA_KEXEC_IMAGE=<pathname>`.
- 
-+### IMA DM target (dm-crypt) measurement test
-+
-+To enable IMA to measure device-mapper target - dm-crypt,
-+`ima_dm_crypt.sh` requires a readable IMA policy, as well as
-+a loaded measure policy with
-+`func=CRITICAL_DATA data_sources=dm-crypt`
-+
-+As well as what's required for the IMA tests, dm-crypt measurement test require
-+reading the IMA policy allowed in the kernel configuration:
-+```
-+CONFIG_IMA_READ_POLICY=y
-+```
-+
-+The following kernel configuration is also required. It enables compiling
-+the device-mapper target module dm-crypt, which allows to create a device
-+that transparently encrypts the data on it.
-+```
-+CONFIG_DM_CRYPT
-+```
-+
- ## EVM tests
- 
- `evm_overlay.sh` requires a builtin IMA appraise tcb policy (e.g. `ima_policy=appraise_tcb`
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_dm_crypt.sh b/testcases/kernel/security/integrity/ima/tests/ima_dm_crypt.sh
-new file mode 100755
-index 000000000..396033f8d
---- /dev/null
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_dm_crypt.sh
-@@ -0,0 +1,60 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (c) 2020 Microsoft Corporation
-+# Author: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-+#
-+# Verify that DM target dm-crypt are measured correctly based on policy.
-+
-+TST_NEEDS_CMDS="dmsetup"
-+TST_CNT=1
-+TST_NEEDS_DEVICE=1
-+TST_SETUP=setup
-+TST_CLEANUP=cleanup
-+
-+. ima_setup.sh
-+
-+FUNC_CRIT_DATA='func=CRITICAL_DATA'
-+TEMPLATE_BUF='template=ima-buf'
-+REQUIRED_POLICY="^measure.*($FUNC_CRIT_DATA.*$TEMPLATE_BUF|$TEMPLATE_BUF.*$FUNC_CRIT_DATA)"
-+
-+setup()
-+{
-+	require_ima_policy_content "$REQUIRED_POLICY" '-E' > $TST_TMPDIR/policy.txt
-+}
-+
-+cleanup()
-+{
-+	ROD "dmsetup remove test-crypt"
-+}
-+
-+test1()
-+{
-+	local input_digest="039d8ff71918608d585adca3e5aab2e3f41f84d6"
-+	local pattern='data_sources=[^[:space:]]+'
-+	local tmp_file="$TST_TMPDIR/dm_crypt_tmp.txt"
-+	local policy="data_sources"
-+	local arg key res
-+
-+	tst_res TINFO "verifying dm target - dmcrypt gets measured correctly"
-+
-+	check_policy_pattern "$pattern" $FUNC_CRIT_DATA $TEMPLATE_BUF > $tmp_file || return
-+
-+	tgt="crypt"
-+	key="faf453b4ee938cff2f0d2c869a0b743f59125c0a37f5bcd8f1dbbd911a78abaa"
-+
-+	arg="'0 1953125 crypt aes-xts-plain64 "
-+	arg="$arg $key 0 "
-+	arg="$arg /dev/loop0 0 1 allow_discards'"
-+
-+	ROD "dmsetup create test-crypt --table $arg"
-+
-+	res="$(check_ima_ascii_log_for_policy $policy $tmp_file $input_digest)"
-+
-+	if [ $res = "0" ]; then
-+		tst_res TPASS "dm-crypt target verification passed"
-+	else
-+		tst_res TFAIL "dm-crypt target verification failed"
-+	fi
-+}
-+
-+tst_run
--- 
-2.17.1
+3. I am kind of opposing to coming up smaller values without doing =
+comprehensive
+qualification on all supported manufacturers. Stable is probably more =
+important for such software.
+Looking back to these commits that introduced the breakages, only one or =
+two
+chips are tested. If that is a common case, probably we should refactor
+the TPM driver to better support per-manufacturer configuration?   =20
+
+> However, there is another possibility: it's something to do with the
+> byte read; I notice you don't require the same slowdown for the burst
+> count read, which actually reads the status register and burst count =
+as
+> a read32.  If that really is the case, for the atmel would =
+substituting
+> a read32 and just throwing the upper bytes away in tpm_tis_status()
+> allow us to keep the current timings?  I can actually try doing this
+> and see if it fixes my nuvoton.
+
+If would be helpful if you can find the solution without reducing =
+performance.
+I think it is a separate problem to address though. Maybe not worth to =
+mix
+them in the same fix.
+
+Thanks
+Hao
+
+> On Sep 27, 2020, at 6:22 PM, James Bottomley =
+<James.Bottomley@HansenPartnership.com> wrote:
+>=20
+> On Sun, 2020-09-27 at 17:11 -0700, Hao Wu wrote:
+>> Hi James,
+>>=20
+>> Maybe there is a misunderstanding. Here I am using tpm_msleep, not
+>> msleep. tpm_msleep is using usleep underlaying. See
+>> =
+https://github.com/torvalds/linux/blob/master/drivers/char/tpm/tpm.h#L188
+>=20
+> Right, I had missed that.
+>=20
+>> The reasons I choose 15ms, is because before=20
+>> =
+https://github.com/torvalds/linux/commit/9f3fc7bcddcb51234e23494531f93ab60=
+475e1c3
+>> (Where msleep is changed to tpm_msleep (which is essentially
+>> usleep)), The actual sleep time is 15ms, thus here we change this
+>> back to 15ms to fix regression.
+>=20
+> Right now most TIS TPMs operate successfully with a sleep in there of
+> the range 0.1-0.5ms.  Upping that to 15ms introduces a 100x delay in
+> our status wait for the TPM to become ready, potentially slowing down
+> all TIS TPM operations by 100x, which will hit us most with the PCR
+> writes we do for IMA logging ... that seems like a bad bargain for a
+> single TPM family manufacturer.
+>=20
+> However, there is another possibility: it's something to do with the
+> byte read; I notice you don't require the same slowdown for the burst
+> count read, which actually reads the status register and burst count =
+as
+> a read32.  If that really is the case, for the atmel would =
+substituting
+> a read32 and just throwing the upper bytes away in tpm_tis_status()
+> allow us to keep the current timings?  I can actually try doing this
+> and see if it fixes my nuvoton.
+>=20
+> James
+>=20
+>=20
 
