@@ -2,135 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE2F27B876
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Sep 2020 01:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB4727B90D
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Sep 2020 02:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbgI1XvE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Sep 2020 19:51:04 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:46878 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726891AbgI1XvE (ORCPT
+        id S1727117AbgI2Awp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Sep 2020 20:52:45 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:37824 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726419AbgI2Awp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Sep 2020 19:51:04 -0400
-Received: from [192.168.1.12] (c-24-16-6-251.hsd1.wa.comcast.net [24.16.6.251])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 6885420B7178;
-        Mon, 28 Sep 2020 15:31:39 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6885420B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1601332299;
-        bh=bD9fMoyf3+5YIghWGXuM1TXkhY1JnyytLtuTzPy6xVw=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=kwxDYxZhx8J7OYvu0uoTsu3xM8DtVWv4mKe5+nkr0pEYWhXxNZF3Pnk30npAy73fK
-         iEovSUM3jUBwJtKRInEBVSEKyufMKVxwV/UE6+oTg28F2Rhi+ImIULyjLaMVLuSXBA
-         dg4bSMtr2QCmAvkJNeupxkudp5rfiC4Nz4JbQaXU=
-Subject: Re: Fwd: How to extract linux kernel version information from a
- kernel image?
-To:     "Kayaalp, Mehmet" <Mehmet.Kayaalp@unh.edu>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-References: <b8e9ee52-c0fd-a6cf-3054-4220636a60e9@linux.microsoft.com>
- <8bc330b9-d680-c00a-4bc1-c35cb21d2b34@linux.microsoft.com>
- <a1c877b3-9f99-04a6-2f21-495fc62d0591@unh.edu>
-From:   Raphael Gianotti <raphgi@linux.microsoft.com>
-Message-ID: <7ac370dd-20d5-757b-1574-d151332527f3@linux.microsoft.com>
-Date:   Mon, 28 Sep 2020 15:31:38 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Mon, 28 Sep 2020 20:52:45 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 137688EE17F;
+        Mon, 28 Sep 2020 17:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601340765;
+        bh=XWjGsmip3sDbI8MMtkRp4A/MsuNAJppBo7b1QqZicAc=;
+        h=Subject:From:To:Cc:Date:From;
+        b=ZN+6vzCUNLyBlicnD3N4rOhpJ2kt3ZtKqQRAL10hNqSTuc77xN7K+1niKh4Z96Ytd
+         5hv0oLQpGLNADbxTBdsHkiY2gK1OX+5oH7LJrUjktRYx+8RURowpjVeZbMdE2xmic/
+         Tv0ZiNkYjvHh2PjAyGLNjXgmfLifupRhXZFPS2bA=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3pWp_xZMl1f6; Mon, 28 Sep 2020 17:52:44 -0700 (PDT)
+Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 764698EE0F5;
+        Mon, 28 Sep 2020 17:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601340764;
+        bh=XWjGsmip3sDbI8MMtkRp4A/MsuNAJppBo7b1QqZicAc=;
+        h=Subject:From:To:Cc:Date:From;
+        b=Gfa1f+WxbblihxJlySgVWLiO1ww2D37dnn4KDcjyORQkTyFykH8OJL4rvmZFgG0LC
+         Oij9+tSKIg9f0MQZ1pKzskQCvCBvQW/4654SGlnT5i9lACdHK/wzGNHXhrwXZzIx74
+         k0bNnIlhMQ6b0lou08UWhbvQA5z9wm8/CrUZ5Jrc=
+Message-ID: <ea07fe04f61fe1ad19060f600ec219679c7bae2d.camel@HansenPartnership.com>
+Subject: More interrupt problems with TIS TPM
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Date:   Mon, 28 Sep 2020 17:52:43 -0700
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <a1c877b3-9f99-04a6-2f21-495fc62d0591@unh.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 9/25/2020 4:06 PM, Kayaalp, Mehmet wrote:
-> On 9/24/20 4:05 PM, Raphael Gianotti wrote:
->> Forwarding this here since the final intent here is an IMA related
->> change to see if anyone has any suggestions.
->>
->>
->> -------- Forwarded Message --------
->> Subject:        How to extract linux kernel version information from a
->> kernel
->> image?
->> Date:   Fri, 18 Sep 2020 12:47:13 -0700
->> From:   Raphael Gianotti <raphgi@linux.microsoft.com>
->> To:     linux-kernel@vger.kernel.org
->>
->>
->>
->> Hi,
->>
->> I have been investigating a way to extract the version strong from a
->> kernel image (e.g., vmlinux). The version string I've been looking at is
->> essentially the linux_banner symbol.
->>
->> We'll use IMA to measure the version string on the kexec system call,
->> providing a way for an attestation service, for instance, to attest to
->> what version of the kernel is running on the client.
->>
->> I haven't found a way to extract the version from the image that isn't
->> simply searching the whole image for it. I was hoping someone here may
->> be able to point me to a better approach to retrieve the linux_banner
->> symbol value from an image or  any existing kernel code that does
->> similar parsing.
->>
->> If that matters for any suggestions, my current focus is on ARM64 images
->> (if the code ends up having to be arch specific).
->>
->> Thanks,
->>
->> -Raphael
->>
-> In Linux/x86 Boot Protocol [1], the kernel header contains a pointer to
-> the kernel_version string at offset 020E (2-byte value):
->
->       # hexdump -s 0x020E -n 2 -e '/2 "%x"'
-> /boot/vmlinuz-5.4.0-48-generic; echo
->       3900
->
-> Starting after the header (512 bytes), the string is 0x3900 bytes into
-> the vmlinuz file:
->
->       # dd bs=1 skip=$((0x3900+512)) if=/boot/vmlinuz-5.4.0-48-generic
-> |tr -s '\000' '\n'|head -n 1
->       5.4.0-48-generic (buildd@lcy01-amd64-010) #52-Ubuntu SMP Thu Sep 10
-> 10:58:49 UTC 2020
->
-> In ARM64, the vmlinux is stripped of symbols and compressed into the
-> bzImage. To find the linux_banner, System.map file is needed:
->
->       # grep ' linux_banner$' /boot/System.map-5.4.0-48-generic
->       ffff800010df00d0 R linux_banner
->
-> The offset into the file can be found by subtracting the load address:
->
->       # grep ' _head$' /boot/System.map-5.4.0-48-generic
->       ffff800010080000 t _head
->
->       # zcat /boot/vmlinuz-5.4.0-48-generic | dd bs=1
-> skip=$((0xffff800010df00d0-0xffff800010080000)) | tr -s '\000' '\n' |
-> head -n 1
->       Linux version 5.4.0-48-generic (buildd@bos02-arm64-053) (gcc
-> version 9.3.0 (Ubuntu 9.3.0-10ubuntu2)) #52-Ubuntu SMP Thu Sep 10
-> 11:01:50 UTC 2020 (Ubuntu 5.4.0-48.52-generic 5.4.60)
->
-> [1]: https://www.kernel.org/doc/html/latest/x86/boot.html
->
-> Mehmet
+I've got hold of an infineon TIS TPM which actually has a working
+interrupt.  I find even with the other fix I still need the patch below
+to get the interrupt to fire because without it nothing ever sets
+TPM_CHIP_FLAG_IRQ which means the interrupt test code is never
+executed.
 
-Regarding the arm64 vmlinux files, I've noticed in some, if you run the 
-file command for them in the terminal, it does give a "not stripped" 
-string in its result. Also, for those files, objdump does print out 
-symbols, including linux_banner. I've found that out last Friday and I 
-am in the process of looking at what the code for objdump to see how it 
-finds the symbols there and see if I can get its value from the image. I 
-wonder if I am missing something and that reported linux_banner symbol I 
-get from objdump is not what I think it is, so do let me know if I am 
-just wasting my time in investigating that when it comes to arm64.
+Finally with all this probing fixed, I'm seeing interrupt storms.  The
+way this TPM seems to work is that if you allow it to send command
+ready interrupts, it will send them any time it can accept a command. 
+The problem is if you clear the interrupt and it can accept a command,
+it will send another command ready interrupt ... hence the storm since
+the TPM is pretty much always in the command ready state.  The only way
+to mitigate this seems to be *only* to enable the command ready
+interrupt when you're preparing to wait for the TPM to become ready. 
+i.e. these interrupts have to be treated as one shot enable, so the
+interrupt routine has to mask the command ready interrupt before doing
+a TPM_EOI in our way of doing things.  There seems to be support for
+this in the TIS spec around line 1135 where it advises us to keep all
+interrupts masked until polling says we have to wait for a particular
+state.
 
-Thanks,
+James
 
-Raphael
+---
+
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 6b884badabe7..1578d158416c 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -804,6 +810,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+ 		return rc;
+ 
+ 	priv->irq_tested = false;
++	chip->flags |= TPM_CHIP_FLAG_IRQ;
+ 
+ 	/* Generate an interrupt by having the core call through to
+ 	 * tpm_tis_send
+
 
