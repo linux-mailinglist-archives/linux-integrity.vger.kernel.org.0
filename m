@@ -2,79 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D2F27DC1F
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Sep 2020 00:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD01727DC50
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Sep 2020 00:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728192AbgI2WeS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Sep 2020 18:34:18 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:51338 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728142AbgI2WeS (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Sep 2020 18:34:18 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0510F8EE17F;
-        Tue, 29 Sep 2020 15:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1601418858;
-        bh=UjoWhQsfJF0wlY7djVDjNwxpe5OSPsx27bOacLF0BRQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SCsgOWHVIkizbMHqXiV0rQ31KlcoTJVl6VcW3WfxtBWXL4MBSM7Y/5K4r6BhJxLtA
-         SFn/+YXkMnUt9Ni3Vy7abZ4XDxZAuH/y97nws3t3YgZH6U2UEYI/s2iqVhEUNVSV4A
-         pjHbqrX6YCYzUEnR7I7+2xWi2GQ3f+Qa4dM/20+k=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id rj8nHCb8TBzt; Tue, 29 Sep 2020 15:34:17 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 814FF8EE119;
-        Tue, 29 Sep 2020 15:34:17 -0700 (PDT)
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+        id S1728487AbgI2Wvq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Sep 2020 18:51:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49490 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728115AbgI2Wvq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 29 Sep 2020 18:51:46 -0400
+Received: from localhost (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A0E2920756;
+        Tue, 29 Sep 2020 22:51:45 +0000 (UTC)
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     linux-integrity@vger.kernel.org
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Subject: [PATCH 4/4] Revert "tpm: Revert "tpm_tis_core: Turn on the TPM before probing IRQ's""
-Date:   Tue, 29 Sep 2020 15:32:16 -0700
-Message-Id: <20200929223216.22584-5-James.Bottomley@HansenPartnership.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200929223216.22584-1-James.Bottomley@HansenPartnership.com>
-References: <20200929223216.22584-1-James.Bottomley@HansenPartnership.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Kent Yoder <key@linux.vnet.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v3 1/2] KEYS: trusted: Fix incorrect handling of tpm_get_random()
+Date:   Wed, 30 Sep 2020 01:51:40 +0300
+Message-Id: <20200929225141.804688-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Revert the patch aa4a63dd9816 which stops interrupt probing from
-working, now that it should be safe to allow interrupt probing on all
-systems without incurring interrupt storms.
+When tpm_get_random() was introduced, it defined the following API for the
+return value:
 
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+1. A positive value tells how many bytes of random data was generated.
+2. A negative value on error.
+
+However, in the call sites the API was used incorrectly, i.e. as it would
+only return negative values and otherwise zero. Returning he positive read
+counts to the user space does not make any possible sense.
+
+Fix this by returning -EIO when tpm_get_random() returns a positive value.
+
+Fixes: 41ab999c80f1 ("tpm: Move tpm_get_random api into the TPM device driver")
+Cc: Kent Yoder <key@linux.vnet.ibm.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 ---
- drivers/char/tpm/tpm_tis_core.c | 2 ++
- 1 file changed, 2 insertions(+)
+ security/keys/trusted-keys/trusted_tpm1.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index b8ab26077cb1..0a86cf392466 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -1116,6 +1116,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 			goto out_err;
- 		}
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index b9fe02e5f84f..c7b1701cdac5 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -403,9 +403,12 @@ static int osap(struct tpm_buf *tb, struct osapsess *s,
+ 	int ret;
  
-+		tpm_chip_start(chip);
- 		if (irq) {
- 			tpm_tis_probe_irq_single(chip, IRQF_SHARED, irq);
- 			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
-@@ -1127,6 +1128,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 		} else {
- 			tpm_tis_probe_irq(chip);
- 		}
-+		tpm_chip_stop(chip);
+ 	ret = tpm_get_random(chip, ononce, TPM_NONCE_SIZE);
+-	if (ret != TPM_NONCE_SIZE)
++	if (ret < 0)
+ 		return ret;
+ 
++	if (ret != TPM_NONCE_SIZE)
++		return -EIO;
++
+ 	tpm_buf_reset(tb, TPM_TAG_RQU_COMMAND, TPM_ORD_OSAP);
+ 	tpm_buf_append_u16(tb, type);
+ 	tpm_buf_append_u32(tb, handle);
+@@ -496,8 +499,12 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
+ 		goto out;
+ 
+ 	ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
++	if (ret < 0)
++		return ret;
++
+ 	if (ret != TPM_NONCE_SIZE)
+-		goto out;
++		return -EIO;
++
+ 	ordinal = htonl(TPM_ORD_SEAL);
+ 	datsize = htonl(datalen);
+ 	pcrsize = htonl(pcrinfosize);
+@@ -601,9 +608,12 @@ static int tpm_unseal(struct tpm_buf *tb,
+ 
+ 	ordinal = htonl(TPM_ORD_UNSEAL);
+ 	ret = tpm_get_random(chip, nonceodd, TPM_NONCE_SIZE);
++	if (ret < 0)
++		return ret;
++
+ 	if (ret != TPM_NONCE_SIZE) {
+ 		pr_info("trusted_key: tpm_get_random failed (%d)\n", ret);
+-		return ret;
++		return -EIO;
  	}
- 
- 	rc = tpm_chip_register(chip);
+ 	ret = TSS_authhmac(authdata1, keyauth, TPM_NONCE_SIZE,
+ 			   enonce1, nonceodd, cont, sizeof(uint32_t),
+@@ -1013,8 +1023,12 @@ static int trusted_instantiate(struct key *key,
+ 	case Opt_new:
+ 		key_len = payload->key_len;
+ 		ret = tpm_get_random(chip, payload->key, key_len);
++		if (ret < 0)
++			goto out;
++
+ 		if (ret != key_len) {
+ 			pr_info("trusted_key: key_create failed (%d)\n", ret);
++			ret = -EIO;
+ 			goto out;
+ 		}
+ 		if (tpm2)
 -- 
-2.28.0
+2.25.1
 
