@@ -2,90 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 626DC27E778
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Sep 2020 13:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C5D27E796
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Sep 2020 13:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729021AbgI3LLG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Sep 2020 07:11:06 -0400
-Received: from mga18.intel.com ([134.134.136.126]:30590 "EHLO mga18.intel.com"
+        id S1725779AbgI3LYt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Sep 2020 07:24:49 -0400
+Received: from mga05.intel.com ([192.55.52.43]:34414 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725779AbgI3LLG (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Sep 2020 07:11:06 -0400
-IronPort-SDR: GNnLLoxI1ucMyJPLRAqiDBy3fP0l3Z5XyUE9ybGLPwFVEX3p15rljnGyjQBWgARSCLrmh0+Bzq
- YQRHnjAmK7FQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9759"; a="150203879"
+        id S1725776AbgI3LYt (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 30 Sep 2020 07:24:49 -0400
+IronPort-SDR: DUX6MuxePhqayVLFxLV0IiKB/R5QDGGaLF4vnFlIhwggu8geEZfIR+v9FSnjkGTLjObL74xZEq
+ H/dVJN+KQAAQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9759"; a="247152243"
 X-IronPort-AV: E=Sophos;i="5.77,322,1596524400"; 
-   d="scan'208";a="150203879"
+   d="scan'208";a="247152243"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2020 04:11:06 -0700
-IronPort-SDR: 4EyDY2I/TMpPT80mWeRJaP2cgPGvW6DBzs55XeIxpMw/WCJtTb4deUnfiuHMe17ib5OZ9CDXhI
- waU9oWodTG6Q==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2020 04:24:48 -0700
+IronPort-SDR: kJD3HtYmUgsrsqkx4RpK+1IrJVQraGCs8QdKc+Ka7jwri+kDt7A0MhpvOeiy5QBRJI5Kt13mh6
+ g4THvChePu2g==
 X-IronPort-AV: E=Sophos;i="5.77,322,1596524400"; 
-   d="scan'208";a="497020114"
+   d="scan'208";a="497076174"
 Received: from lbentzio-mobl.ger.corp.intel.com (HELO localhost) ([10.252.32.88])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2020 04:11:04 -0700
-Date:   Wed, 30 Sep 2020 14:11:02 +0300
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2020 04:24:46 -0700
+Date:   Wed, 30 Sep 2020 14:24:44 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>
 Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
         David Woodhouse <dwmw2@infradead.org>,
         keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH v13 4/5] security: keys: trusted: use ASN.1 TPM2 key
- format for the blobs
-Message-ID: <20200930111102.GB5145@linux.intel.com>
+Subject: Re: [PATCH v13 5/5] security: keys: trusted: Make sealed key
+ properly interoperable
+Message-ID: <20200930112444.GC5145@linux.intel.com>
 References: <20200922022809.7105-1-James.Bottomley@HansenPartnership.com>
- <20200922022809.7105-5-James.Bottomley@HansenPartnership.com>
+ <20200922022809.7105-6-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200922022809.7105-5-James.Bottomley@HansenPartnership.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200922022809.7105-6-James.Bottomley@HansenPartnership.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 07:28:08PM -0700, James Bottomley wrote:
-> Modify the TPM2 key format blob output to export and import in the
-> ASN.1 form for TPM2 sealed object keys.  For compatibility with prior
-> trusted keys, the importer will also accept two TPM2B quantities
-> representing the public and private parts of the key.  However, the
-> export via keyctl pipe will only output the ASN.1 format.
+On Mon, Sep 21, 2020 at 07:28:09PM -0700, James Bottomley wrote:
+> The current implementation appends a migratable flag to the end of a
+> key, meaning the format isn't exactly interoperable because the using
+> party needs to know to strip this extra byte.  However, all other
+> consumers of TPM sealed blobs expect the unseal to return exactly the
+> key.  Since TPM2 keys have a key property flag that corresponds to
+> migratable, use that flag instead and make the actual key the only
+> sealed quantity.  This is secure because the key properties are bound
+> to a hash in the private part, so if they're altered the key won't
+> load.
 > 
-> The benefit of the ASN.1 format is that it's a standard and thus the
-> exported key can be used by userspace tools (openssl_tpm2_engine,
-> openconnect and tpm2-tss-engine).  The format includes policy
-> specifications, thus it gets us out of having to construct policy
-> handles in userspace and the format includes the parent meaning you
-> don't have to keep passing it in each time.
-> 
-> This patch only implements basic handling for the ASN.1 format, so
-> keys with passwords but no policy.
+> Backwards compatibility is implemented by detecting whether we're
+> loading a new format key or not and correctly setting migratable from
+> the last byte of old format keys.
 > 
 > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-
-I did the test for 3/5 with this patch applied (actually all patches in this
-series) so I can safely
+> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
 Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-I have one wish though before giving reviewed-by.
+➜  tpm2-scripts (master) ✗ sudo keyctl add trusted kmk2 "new 32 blobauth=world keyhandle=80000000 migratable=1" @u
+add_key: Invalid argument
+➜  tpm2-scripts (master) ✗ sudo keyctl add trusted kmk2 "new 32 blobauth=world keyhandle=80000000 migratable=0" @u
+608433517
 
-In my recent trusted keys fixes I took the convention trusted_tpm_* for
-TPM trusted keys functions. I think we should start doing that for all
-functions:
+Showed the -EINVAL example just to point out this:
 
-1. For interface functions trusted_tpm_*
-2. TPM1: trusted_tpm1_*
-2. TPM2: trusted_tpm2_*
+	case Opt_migratable:
+		if (*args[0].from == '0')
+			pay->migratable = 0;
+		else
+			return -EINVAL;
+		break;
 
-This is to manage chaos with TEE Trusted Keys in future and make the
-distinction with TPM subsystem functions, and make it easier to grep and
-trace this stuff with the various tracing tools.
+I think it should just set migratable in both cases even if no-op,
+given that it takes the value and also the documentation says that
+"migratable=1" is legit:
 
-This anyway needs one more rebase on top of the fixes that I did.
+"migratable=   0|1 indicating permission to reseal to new PCR values,
+                default 1 (resealing allowed)"
 
-BTW, what is the situation with the ARM compilation issue?
+Obviously not a concern of this patch but this is still IMHO a bug.
+Would be nce if you could drop a prepending patch to fix this, when you
+rebase the series, with this fixes tag:
+
+Fixes: d00a1c72f7f4 ("keys: add new trusted key-type")
+
+BTW, please check my fixes so that I can push them ASAP and you get to
+rebase this and we can land it. Now everything is properly tested.
 
 /Jarkko
