@@ -2,91 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8245227DE5E
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Sep 2020 04:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071D127DE63
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Sep 2020 04:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729779AbgI3COf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Sep 2020 22:14:35 -0400
-Received: from mga11.intel.com ([192.55.52.93]:35099 "EHLO mga11.intel.com"
+        id S1729322AbgI3CQt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Sep 2020 22:16:49 -0400
+Received: from mga18.intel.com ([134.134.136.126]:51661 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729322AbgI3COf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Sep 2020 22:14:35 -0400
-IronPort-SDR: 2IUyRP3iVNw2Z77wA7+GKimls/ql2sAeU5jZHQUJMxBoBSAt3y6XD+lPYrePzm52QaoidkY5oH
- g7hDnnBMzz0A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9759"; a="159676410"
+        id S1726689AbgI3CQt (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 29 Sep 2020 22:16:49 -0400
+IronPort-SDR: z4hMBw/4a4KkJ+462l9h2iC0mW2nFZVTMKMnI2gaHnoPbyVVX8OiZ6dAxKaQmRNrKExhmKOI/q
+ vFjJjrfYA0rg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9759"; a="150115776"
 X-IronPort-AV: E=Sophos;i="5.77,320,1596524400"; 
-   d="scan'208";a="159676410"
+   d="scan'208";a="150115776"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2020 19:14:31 -0700
-IronPort-SDR: p94e2mfCv28+yFwfS2hMhUcYT66EeBAsXXIgQO7w/I18L0GJgghVdRiIoNXM2d6T/je+P4ApNK
- CU66VDES/HyQ==
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2020 19:16:46 -0700
+IronPort-SDR: pbBCHHkindS+uQ7x1xqq62iOfD+Dgk29ZkEjybqJcOnoZextidcz1Zilsjo5v/WGqnxUdBbZH/
+ +s/nQyMu5l5g==
 X-IronPort-AV: E=Sophos;i="5.77,320,1596524400"; 
-   d="scan'208";a="494831481"
+   d="scan'208";a="457487340"
 Received: from xinpan-mobl.ger.corp.intel.com (HELO localhost) ([10.249.35.239])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2020 19:14:30 -0700
-Date:   Wed, 30 Sep 2020 05:14:27 +0300
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2020 19:16:40 -0700
+Date:   Wed, 30 Sep 2020 05:16:37 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: More interrupt problems with TIS TPM
-Message-ID: <20200930021427.GE808399@linux.intel.com>
-References: <ea07fe04f61fe1ad19060f600ec219679c7bae2d.camel@HansenPartnership.com>
+Cc:     Hao Wu <hao.wu@rubrik.com>, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        Hamza Attak <hamza@hpe.com>, nayna@linux.vnet.ibm.com,
+        why2jjj.linux@gmail.com, zohar@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        Seungyeop Han <seungyeop.han@rubrik.com>,
+        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
+        Anish Jhaveri <anish.jhaveri@rubrik.com>
+Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
+Message-ID: <20200930021637.GF808399@linux.intel.com>
+References: <20200926223150.109645-1-hao.wu@rubrik.com>
+ <73405d14d7665e8a4e3e9defde7fb12aeae7784c.camel@HansenPartnership.com>
+ <DFD7629C-05BF-46C1-B3D7-92FBBC176D9E@rubrik.com>
+ <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
+ <E6E3C07D-57F4-48F5-B4A9-50868B82E779@rubrik.com>
+ <0c896ca8eb0e30d6e75843cfbf2aa627ddc63feb.camel@HansenPartnership.com>
+ <246A111F-C72C-4CA2-B439-A6BBE0E85087@rubrik.com>
+ <ceb230ea03858f5f6c7d77cfd7adea6e9f864699.camel@HansenPartnership.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ea07fe04f61fe1ad19060f600ec219679c7bae2d.camel@HansenPartnership.com>
+In-Reply-To: <ceb230ea03858f5f6c7d77cfd7adea6e9f864699.camel@HansenPartnership.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 05:52:43PM -0700, James Bottomley wrote:
-> I've got hold of an infineon TIS TPM which actually has a working
-> interrupt.  I find even with the other fix I still need the patch below
-> to get the interrupt to fire because without it nothing ever sets
-> TPM_CHIP_FLAG_IRQ which means the interrupt test code is never
-> executed.
+On Mon, Sep 28, 2020 at 03:11:39PM -0700, James Bottomley wrote:
+> On Sun, 2020-09-27 at 22:59 -0700, Hao Wu wrote:
+> [...]
+> > > However, there is another possibility: it's something to do with
+> > > the byte read; I notice you don't require the same slowdown for the
+> > > burst count read, which actually reads the status register and
+> > > burst count as a read32.  If that really is the case, for the atmel
+> > > would substituting a read32 and just throwing the upper bytes away
+> > > in tpm_tis_status() allow us to keep the current timings?  I can
+> > > actually try doing this and see if it fixes my nuvoton.
+> > 
+> > If would be helpful if you can find the solution without reducing
+> > performance. I think it is a separate problem to address though.
+> > Maybe not worth to mix them in the same fix.
 > 
-> Finally with all this probing fixed, I'm seeing interrupt storms.  The
-> way this TPM seems to work is that if you allow it to send command
-> ready interrupts, it will send them any time it can accept a command. 
-> The problem is if you clear the interrupt and it can accept a command,
-> it will send another command ready interrupt ... hence the storm since
-> the TPM is pretty much always in the command ready state.  The only way
-> to mitigate this seems to be *only* to enable the command ready
-> interrupt when you're preparing to wait for the TPM to become ready. 
-> i.e. these interrupts have to be treated as one shot enable, so the
-> interrupt routine has to mask the command ready interrupt before doing
-> a TPM_EOI in our way of doing things.  There seems to be support for
-> this in the TIS spec around line 1135 where it advises us to keep all
-> interrupts masked until polling says we have to wait for a particular
-> state.
+> Well, if it works, no other fix is needed.
+> 
+> This is what I'm currently trying out on my nuvoton with the timings
+> reverted to being those in the vanilla kernel.  So far it hasn't
+> crashed, but I haven't run it for long enough to be sure yet.
 > 
 > James
 
-OK, this makes a lot of sense. I'll go through the patch set that you
-posted. Thank you.
+OK, so the bus does not like one byte reads but prefers full (32-bit)
+word reads? I.e. what's the context?
 
-> 
 > ---
 > 
 > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 6b884badabe7..1578d158416c 100644
+> index 6b884badabe7..c4dbac8edc9b 100644
 > --- a/drivers/char/tpm/tpm_tis_core.c
 > +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -804,6 +810,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  		return rc;
+> @@ -233,9 +233,9 @@ static u8 tpm_tis_status(struct tpm_chip *chip)
+>  {
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  	int rc;
+> -	u8 status;
+> +	u32 status;
 >  
->  	priv->irq_tested = false;
-> +	chip->flags |= TPM_CHIP_FLAG_IRQ;
+> -	rc = tpm_tis_read8(priv, TPM_STS(priv->locality), &status);
+> +	rc = tpm_tis_read32(priv, TPM_STS(priv->locality), &status);
+>  	if (rc < 0)
+>  		return 0;
 >  
->  	/* Generate an interrupt by having the core call through to
->  	 * tpm_tis_send
-> 
 > 
 
 /Jarkko
