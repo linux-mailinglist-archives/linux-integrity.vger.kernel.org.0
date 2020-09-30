@@ -2,119 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A1627EAE0
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Sep 2020 16:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFA127EB59
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Sep 2020 16:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730226AbgI3O0V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Sep 2020 10:26:21 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:57534 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730195AbgI3O0V (ORCPT
+        id S1730196AbgI3Otz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Sep 2020 10:49:55 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:32794 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729767AbgI3Otz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Sep 2020 10:26:21 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 879D720B7178;
-        Wed, 30 Sep 2020 07:26:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 879D720B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1601475980;
-        bh=/TmI+R+MOE67+Ea8E2HPwFjBBTPt64CHISo+2O7ANIE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=iGoLWk5KJ76k+m1oEMSlCadtbYcyywe5jCu/x2Uji+76pVJugELXYyQDy9FDebRSq
-         xRazxBIBqJa998WLBnl6IwUylU3FrFGZOc06pc2ZxzKxzrT9R2V6xPZ89TQjLF6QR6
-         ns4au3ejy1olW3vPyoVz4iVvwEv3WuCQUAGBxD4s=
-Subject: Re: [PATCH v1 0/1] ima: Add test for selinux measurement
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        paul@paul-moore.com, tusharsu@linux.microsoft.com,
-        ltp@lists.linux.it, linux-integrity@vger.kernel.org
-References: <20200928194730.20862-1-nramas@linux.microsoft.com>
- <20200929052340.GA4976@dell5510>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <281c5fa0-8d3a-0812-9d20-a5c7ee4f7666@linux.microsoft.com>
-Date:   Wed, 30 Sep 2020 07:26:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 30 Sep 2020 10:49:55 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A73A28EE14D;
+        Wed, 30 Sep 2020 07:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601477394;
+        bh=TvP7s5XtsfpB2dpAskNg0N42/e2s1CPr/YVReRaKh4U=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HoKrxgt4Bxz380Q55vq8Bk/U4Wvm7HGARzTyRUSAUp/aHfe0mlPwmFNj9q+7R74CF
+         aLmajkmlU2H82w6eU/GaJb84YehWYTJL0fGbsThU91OLhXZn0ia8TSx/0PQ7HT4SEi
+         XX6nXCu37m1BroOgi29FGTnbhVLk9eHSqDha+oEc=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3DYRRwicsEAW; Wed, 30 Sep 2020 07:49:54 -0700 (PDT)
+Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id BAB608EE0E2;
+        Wed, 30 Sep 2020 07:49:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601477394;
+        bh=TvP7s5XtsfpB2dpAskNg0N42/e2s1CPr/YVReRaKh4U=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HoKrxgt4Bxz380Q55vq8Bk/U4Wvm7HGARzTyRUSAUp/aHfe0mlPwmFNj9q+7R74CF
+         aLmajkmlU2H82w6eU/GaJb84YehWYTJL0fGbsThU91OLhXZn0ia8TSx/0PQ7HT4SEi
+         XX6nXCu37m1BroOgi29FGTnbhVLk9eHSqDha+oEc=
+Message-ID: <b8de8923e026525589c97b3cb7691a557c0a292f.camel@HansenPartnership.com>
+Subject: Re: [PATCH v13 4/5] security: keys: trusted: use ASN.1 TPM2 key
+ format for the blobs
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
+Date:   Wed, 30 Sep 2020 07:49:51 -0700
+In-Reply-To: <20200930111102.GB5145@linux.intel.com>
+References: <20200922022809.7105-1-James.Bottomley@HansenPartnership.com>
+         <20200922022809.7105-5-James.Bottomley@HansenPartnership.com>
+         <20200930111102.GB5145@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <20200929052340.GA4976@dell5510>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 9/28/20 10:23 PM, Petr Vorel wrote:
-> Hi Lakshmi,
+On Wed, 2020-09-30 at 14:11 +0300, Jarkko Sakkinen wrote:
+> On Mon, Sep 21, 2020 at 07:28:08PM -0700, James Bottomley wrote:
+> > Modify the TPM2 key format blob output to export and import in the
+> > ASN.1 form for TPM2 sealed object keys.  For compatibility with
+> > prior trusted keys, the importer will also accept two TPM2B
+> > quantities representing the public and private parts of the
+> > key.  However, the export via keyctl pipe will only output the
+> > ASN.1 format.
+> > 
+> > The benefit of the ASN.1 format is that it's a standard and thus
+> > the exported key can be used by userspace tools
+> > (openssl_tpm2_engine, openconnect and tpm2-tss-engine).  The format
+> > includes policy specifications, thus it gets us out of having to
+> > construct policy handles in userspace and the format includes the
+> > parent meaning you don't have to keep passing it in each time.
+> > 
+> > This patch only implements basic handling for the ASN.1 format, so
+> > keys with passwords but no policy.
+> > 
+> > Signed-off-by: James Bottomley <
+> > James.Bottomley@HansenPartnership.com>
 > 
-> Thanks for your patch. FYI I'll try to have look ASAP, but as there is LTP
-> freeze and work needed to review fixes before release I'll probably review this
-> after the release (1, max. 2 weeks).
+> I did the test for 3/5 with this patch applied (actually all patches
+> in this series) so I can safely
 > 
-> Could you please have a look at fix planned to be part of the release?
-> https://patchwork.ozlabs.org/project/ltp/list/?series=204230
+> Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 > 
+> I have one wish though before giving reviewed-by.
+> 
+> In my recent trusted keys fixes I took the convention trusted_tpm_*
+> for TPM trusted keys functions. I think we should start doing that
+> for all functions:
+> 
+> 1. For interface functions trusted_tpm_*
+> 2. TPM1: trusted_tpm1_*
+> 2. TPM2: trusted_tpm2_*
 
-Will do Petr.
+I'm not such a fan of this: we've discussed moving some of the
+functions around because we expect to grow consumers.  We really don't
+want to be having to rename everything as we move it, so I'd far prefer
+the name were related to the function rather than the location in the
+kernel tree.
 
+> This is to manage chaos with TEE Trusted Keys in future and make the
+> distinction with TPM subsystem functions, and make it easier to grep
+> and trace this stuff with the various tracing tools.
 > 
->> New functionality is being added to IMA to measure data provided by
->> kernel components. With this feature, IMA policy can be set to enable
->> measuring data provided by Linux Security Modules (LSM). Currently one
->> such LSM namely selinux is being updated to use this functionality.
->> This new functionality needs test automation in LTP.
+> This anyway needs one more rebase on top of the fixes that I did.
 > 
->> This patch set adds tests which verify that the IMA subsystem correctly
->> measures the data provided by selinux.
-> 
->> This patch is based on
->> commit 286401a1c1f3 ("thp04: Add linux tag")
->> in "master" branch in https://github.com/linux-test-project/ltp
-> 
->> This patch is dependent on the following patch series in LTP
->> https://patchwork.kernel.org/patch/11802771/
-> I put link to LTP patchwork to avoid the confusion.
-> https://patchwork.ozlabs.org/project/ltp/list/?series=204486
+> BTW, what is the situation with the ARM compilation issue?
 
-Thanks. On the next update I'll add the LTP patchwork URL.
+It was fixed in this incarnation.
 
-> 
->> This series needs a kernel built on the following repo/branch/patches:
->> repo: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
->> branch: next
->> commit 8861d0af642c ("selinux: Add helper functions to get and set checkreqprot")
-> Thanks for adding this info. It'd be great if it were part of kernel commit
-> message and also added as a comment in the test itself (we don't want to get it
-> lost).
-> 
-> BTW LTP has 2 kind ways of handling of kernel versions:
-> 
-> * fixes which are meant to be backported to the stable trees:
-> In C API it looks like (here also with CVE entry):
-> https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/bpf/bpf_prog03.c#L187
-> .tags = (const struct tst_tag[]) {
-> 		{"linux-git", "95a762e2c8c9"},
-> 		{"CVE", "2017-16995"},
-> 		{}
-> This is not part of shell API, but I'll add it after the release. Thus we don't
-> want to loose this info.
-> 
-> * new kernel features, which are likely not to be backported
-> You either have some way to detect this feature is presented (ideally) or you
-> specify kernel version since it should be run
-> This is used in shell API as:
-> https://github.com/linux-test-project/ltp/blob/master/testcases/network/tcp_cc/bbr02.sh#L8
-> TST_MIN_KVER="4.13"
+James
 
-Thanks for the info.
-
-  -lakshmi
-
-> 
->> And the following patch series should be applied in the following order:
->>    1, https://patchwork.kernel.org/patch/11709527/
->>    2, https://patchwork.kernel.org/patch/11795559/
->>    3, https://patchwork.kernel.org/patch/11801525/
->>    4, https://patchwork.kernel.org/patch/11801585/
-> 
 
