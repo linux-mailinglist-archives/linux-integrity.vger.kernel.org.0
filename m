@@ -2,142 +2,215 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E791280357
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Oct 2020 17:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C922804D3
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Oct 2020 19:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732342AbgJAP63 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Oct 2020 11:58:29 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:49098 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732213AbgJAP63 (ORCPT
+        id S1732980AbgJARMp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Oct 2020 13:12:45 -0400
+Received: from smtp-190a.mail.infomaniak.ch ([185.125.25.10]:43521 "EHLO
+        smtp-190a.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732751AbgJARM3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Oct 2020 11:58:29 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 4E89F8EE17F;
-        Thu,  1 Oct 2020 08:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1601567908;
-        bh=rSPPZ8/oZgy5hChynAOVFoajICqrGtoregQlaW4X26g=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=HY+J6TicjkT5Cb7ZUkSE+jHyQbVZfVmVUjLivWFdMHXXOJWbIV28CeUqAMHIya0Fh
-         wwB3F5lR+BqX5wtIfc94+GMcYyvTeB0dosvQKOcmloL2kwemYHD2HcazRbluB8L0Dz
-         R0x8drfsHkscfod4JkOYqgl3gUiW018qv7+H5jtc=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zM40LH2b4MAa; Thu,  1 Oct 2020 08:58:27 -0700 (PDT)
-Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id D7FE78EE0DA;
-        Thu,  1 Oct 2020 08:58:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1601567907;
-        bh=rSPPZ8/oZgy5hChynAOVFoajICqrGtoregQlaW4X26g=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=fXdYWB5UuX4qRuKZlmWpF5DJxtQIoy+3WWPT8WPlh9JPt8XGzQ5jpfHoP3/siEXmZ
-         nHUuz7F5yYzGRUQ4WEHmv8fHZggrA0WO/JSeaRqBx91YilT93OcIhaFFxOG3HkrJ8+
-         lvkNKQJbqaHei6KaSXAfu56vxW1XDfdtkwiQrPcw=
-Message-ID: <635963b53711cdf9c7e1b6534eeb3f172969d1b2.camel@HansenPartnership.com>
-Subject: Re: [PATCH 1/4] tpm_tis: Clean up locality release
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Laurent Bigonville <bigon@debian.org>
-Date:   Thu, 01 Oct 2020 08:58:25 -0700
-In-Reply-To: <87h7reddat.fsf@jsnitsel.users.ipa.redhat.com>
-References: <20200929223216.22584-1-James.Bottomley@HansenPartnership.com>
-         <20200929223216.22584-2-James.Bottomley@HansenPartnership.com>
-         <87eemjgdy3.fsf@jsnitsel.users.ipa.redhat.com>
-         <8ed5a80a9b2cfa37f0b8348906d292a7b1a1c02e.camel@HansenPartnership.com>
-         <87h7reddat.fsf@jsnitsel.users.ipa.redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Thu, 1 Oct 2020 13:12:29 -0400
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4C2KF85H94zlhPF8;
+        Thu,  1 Oct 2020 19:02:52 +0200 (CEST)
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4C2KF42P4czlh8TP;
+        Thu,  1 Oct 2020 19:02:48 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        James Morris <jmorris@namei.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Thibaut Sautereau <thibaut.sautereau@clip-os.org>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH v11 0/3] Add trusted_for(2) (was O_MAYEXEC)
+Date:   Thu,  1 Oct 2020 19:02:29 +0200
+Message-Id: <20201001170232.522331-1-mic@digikod.net>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-09-30 at 17:01 -0700, Jerry Snitselaar wrote:
-> James Bottomley @ 2020-09-30 16:03 MST:
-> 
-> > On Wed, 2020-09-30 at 14:19 -0700, Jerry Snitselaar wrote:
-> > > James Bottomley @ 2020-09-29 15:32 MST:
-> > > 
-> > > > The current release locality code seems to be based on the
-> > > > misunderstanding that the TPM interrupts when a locality is
-> > > > released: it doesn't, only when the locality is acquired.
-> > > > 
-> > > > Furthermore, there seems to be no point in waiting for the
-> > > > locality to be released.  All it does is penalize the last TPM
-> > > > user.  However, if there's no next TPM user, this is a
-> > > > pointless wait and if there is a next TPM user, they'll pay the
-> > > > penalty waiting for the new locality (or possibly not if it's
-> > > > the same as the old locality).
-> > > > 
-> > > > Fix the code by making release_locality as simple write to
-> > > > release with no waiting for completion.
-> > [...]
-> > > My recollection is that this was added because there were some
-> > > chips that took so long to release locality that a subsequent
-> > > request_locality call was seeing the locality as already active,
-> > > moving on, and then the locality was getting released out from
-> > > under the user.
-> > 
-> > Well, I could simply dump the interrupt code, which can never work
-> > and we could always poll.
-> > 
-> > However, there also appears to be a bug in our locality requesting
-> > code.  We write the request and wait for the grant, but a grant
-> > should be signalled by not only the ACCESS_ACTIVE_LOCALITY being 1
-> > but also the ACCESS_REQUEST_USE going to 0.  As you say, if we're
-> > slow to relinquish, ACCESS_ACTIVE_LOCALITY could already be 1 and
-> > we'd think we were granted, but ACCESS_REQUEST_USE should stay 1
-> > until the TPM actually grants the next request.
-> > 
-> > If I code up a fix is there any chance you still have access to a
-> > problem TPM?  Mine all seem to grant and release localities fairly
-> > instantaneously.
-> > 
-> > James
-> 
-> Sorry, I seemed to make a mess of it. I don't have access to a system
-> where it occurred, but cc'ing Laurent since he reported the problem
-> and might still have access to the system.
-> 
-> I'd say fix up the check for locality request to look at
-> ACCESS_REQUEST_USE, and go with this patch to clean up locality
-> release. Hopefully Laurent still has access and can test. I do have a
-> laptop now where I should be able to test the other bits in your
-> patchset since this is one of the models that hit interrupt storm
-> problem when Stefan's 2 patches were originally applied. Lenovo
-> applied a fix to their bios, but this should still have the older one
-> version that has the issue. I'm on PTO this week, but I will try to
-> spend some time in the next couple days reproducing and then trying
-> your patches.
+Hi,
 
-Thanks.  I think the patch to fix to request access is very simple ...
-it's just to check the request bit has gone to zero, so I've attached
-it below.  It seems to work fine for me.
+This eleventh patch series brings small fixes.
 
-James
+Andrew, should this be merged with your tree?
 
----
+The final goal of this patch series is to enable the kernel to be a
+global policy manager by entrusting processes with access control at
+their level.  To reach this goal, two complementary parts are required:
+* user space needs to be able to know if it can trust some file
+  descriptor content for a specific usage;
+* and the kernel needs to make available some part of the policy
+  configured by the system administrator.
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 0a86cf392466..5e56e8c67791 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -168,7 +168,8 @@ static bool check_locality(struct tpm_chip *chip, int l)
- 	if (rc < 0)
- 		return false;
- 
--	if ((access & (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID)) ==
-+	if ((access & (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID
-+		       | TPM_ACCESS_REQUEST_USE)) ==
- 	    (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID)) {
- 		priv->locality = l;
- 		return true;
+Primary goal of trusted_for(2)
+==============================
+
+This new syscall enables user space to ask the kernel: is this file
+descriptor's content trusted to be used for this purpose?  The set of
+usage currently only contains "execution", but other may follow (e.g.
+"configuration", "sensitive_data").  If the kernel identifies the file
+descriptor as trustworthy for this usage, user space should then take
+this information into account.  The "execution" usage means that the
+content of the file descriptor is trusted according to the system policy
+to be executed by user space, which means that it interprets the content
+or (try to) maps it as executable memory.
+
+A simple system-wide security policy can be enforced by the system
+administrator through a sysctl configuration consistent with the mount
+points or the file access rights.  The documentation patch explains the
+prerequisites.
+
+It is important to note that this can only enable to extend access
+control managed by the kernel.  Hence it enables current access control
+mechanism to be extended and become a superset of what they can
+currently control.  Indeed, the security policy could also be delegated
+to an LSM, either a MAC system or an integrity system.  For instance,
+this is required to close a major IMA measurement/appraisal interpreter
+integrity gap by bringing the ability to check the use of scripts [1].
+Other uses are expected, such as for magic-links [2], SGX integration
+[3], bpffs [4].
+
+Complementary W^X protections can be brought by SELinux, IPE [5] and
+trampfd [6].
+
+Prerequisite of its use
+=======================
+
+User space needs to adapt to take advantage of this new feature.  For
+example, the PEP 578 [7] (Runtime Audit Hooks) enables Python 3.8 to be
+extended with policy enforcement points related to code interpretation,
+which can be used to align with the PowerShell audit features.
+Additional Python security improvements (e.g. a limited interpreter
+without -c, stdin piping of code) are on their way [8].
+
+Examples
+========
+
+The initial idea comes from CLIP OS 4 and the original implementation
+has been used for more than 12 years:
+https://github.com/clipos-archive/clipos4_doc
+Chrome OS has a similar approach:
+https://chromium.googlesource.com/chromiumos/docs/+/master/security/noexec_shell_scripts.md
+
+Userland patches can be found here:
+https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+Actually, there is more than the O_MAYEXEC changes (which matches this search)
+e.g., to prevent Python interactive execution. There are patches for
+Bash, Wine, Java (Icedtea), Busybox's ash, Perl and Python. There are
+also some related patches which do not directly rely on O_MAYEXEC but
+which restrict the use of browser plugins and extensions, which may be
+seen as scripts too:
+https://github.com/clipos-archive/clipos4_portage-overlay/tree/master/www-client
+
+An introduction to O_MAYEXEC was given at the Linux Security Summit
+Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+The "write xor execute" principle was explained at Kernel Recipes 2018 -
+CLIP OS: a defense-in-depth OS:
+https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+See also an overview article: https://lwn.net/Articles/820000/
+
+This patch series can be applied on top of v5.9-rc7 .  This can be tested
+with CONFIG_SYSCTL.  I would really appreciate constructive comments on
+this patch series.
+
+Previous version:
+https://lore.kernel.org/lkml/20200924153228.387737-1-mic@digikod.net/
+
+[1] https://lore.kernel.org/lkml/1544647356.4028.105.camel@linux.ibm.com/
+[2] https://lore.kernel.org/lkml/20190904201933.10736-6-cyphar@cyphar.com/
+[3] https://lore.kernel.org/lkml/CALCETrVovr8XNZSroey7pHF46O=kj_c5D9K8h=z2T_cNrpvMig@mail.gmail.com/
+[4] https://lore.kernel.org/lkml/CALCETrVeZ0eufFXwfhtaG_j+AdvbzEWE0M3wjXMWVEO7pj+xkw@mail.gmail.com/
+[5] https://lore.kernel.org/lkml/20200406221439.1469862-12-deven.desai@linux.microsoft.com/
+[6] https://lore.kernel.org/lkml/20200922215326.4603-1-madvenka@linux.microsoft.com/
+[7] https://www.python.org/dev/peps/pep-0578/
+[8] https://lore.kernel.org/lkml/0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org/
+
+Regards,
+
+Mickaël Salaün (3):
+  fs: Add trusted_for(2) syscall implementation and related sysctl
+  arch: Wire up trusted_for(2)
+  selftest/interpreter: Add tests for trusted_for(2) policies
+
+ Documentation/admin-guide/sysctl/fs.rst       |  50 +++
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/open.c                                     |  77 ++++
+ include/linux/fs.h                            |   1 +
+ include/linux/syscalls.h                      |   2 +
+ include/uapi/asm-generic/unistd.h             |   4 +-
+ include/uapi/linux/trusted-for.h              |  18 +
+ kernel/sysctl.c                               |  12 +-
+ tools/testing/selftests/Makefile              |   1 +
+ .../testing/selftests/interpreter/.gitignore  |   2 +
+ tools/testing/selftests/interpreter/Makefile  |  21 +
+ tools/testing/selftests/interpreter/config    |   1 +
+ .../selftests/interpreter/trust_policy_test.c | 362 ++++++++++++++++++
+ 30 files changed, 567 insertions(+), 4 deletions(-)
+ create mode 100644 include/uapi/linux/trusted-for.h
+ create mode 100644 tools/testing/selftests/interpreter/.gitignore
+ create mode 100644 tools/testing/selftests/interpreter/Makefile
+ create mode 100644 tools/testing/selftests/interpreter/config
+ create mode 100644 tools/testing/selftests/interpreter/trust_policy_test.c
+
+-- 
+2.28.0
 
