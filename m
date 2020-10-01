@@ -2,132 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA6727F830
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Oct 2020 05:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A274D27F8C5
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Oct 2020 06:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729617AbgJADcb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Sep 2020 23:32:31 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64872 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725799AbgJADca (ORCPT
+        id S1725878AbgJAEts (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Oct 2020 00:49:48 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:41710 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725876AbgJAEts (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Sep 2020 23:32:30 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0913VuwM133167;
-        Wed, 30 Sep 2020 23:32:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=KowU7UeaTMRvSx6ar6ifxL4UGWL2NjkBx9pfovmyXW8=;
- b=YJ9ZGMJ2UONJrgUE098fuOPdXFGqBFIFYnoGzbQGKC0XqEtRh3GGERE5uwPWqClNyewn
- kX/qkjNJ30hlXZif8pPMJF8ijUWDdMUGLNzae01gavaYdA7r2ZdbRz10zv5BBq6lQdTO
- 8V5hzLVFj54vSKAWCdSff05a9XfDG0lwksiaehkwqT1F8iEWb3CJTI6Hs9P5FGqi3QjN
- KDql1DmvlXcakbPyHEnRFS+EZFYG/3ZJRdgeJuBTG/HxTkjGAkQZm5/i0mnIOxnoSu6z
- Wl+LHUO8ZYoidxcbzWnM4dLX3vwukcArjQ8yvv1P/WFHoOaP72ULTXgIoAujwVBRwhP3 qQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33w72x087u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Sep 2020 23:32:24 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0913VWMQ024532;
-        Thu, 1 Oct 2020 03:32:22 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 33sw985250-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Oct 2020 03:32:21 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0913WJYm27197900
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Oct 2020 03:32:19 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A82DDA4051;
-        Thu,  1 Oct 2020 03:32:19 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 56AE9A4057;
-        Thu,  1 Oct 2020 03:32:18 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.36.232])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Oct 2020 03:32:18 +0000 (GMT)
-Message-ID: <b10815a3a0abade8ec8872757ab5ac2a4f7839f4.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 4/4] ima_tpm.sh: Fix calculating PCR aggregate
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Date:   Wed, 30 Sep 2020 23:32:17 -0400
-In-Reply-To: <20200930160214.29358-5-pvorel@suse.cz>
-References: <20200930160214.29358-1-pvorel@suse.cz>
-         <20200930160214.29358-5-pvorel@suse.cz>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
+        Thu, 1 Oct 2020 00:49:48 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D06648EE14D;
+        Wed, 30 Sep 2020 21:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601527787;
+        bh=Z/x9udoxiaBGdppo5RLOw/mzU62NmIcy5DaeZaPMig4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=NMdGEhsez3cWyPQ29nDwI5RpiLfE2u77Pb/8CdIciTZmNvgKAS8F7ltMSOCcQBPgN
+         ArD1sYgXpSBK0MaxydW35iz7Dc5qx/U4ixkMQBzaT9zULTTrWj7jVEL0vkrbAHQ0Nz
+         F0F15yKTPGFe+LJBwTf29NP5kJQzPqap51pJ8EVQ=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id DyBreY1lsd5s; Wed, 30 Sep 2020 21:49:47 -0700 (PDT)
+Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 467F58EE0E2;
+        Wed, 30 Sep 2020 21:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601527787;
+        bh=Z/x9udoxiaBGdppo5RLOw/mzU62NmIcy5DaeZaPMig4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=NMdGEhsez3cWyPQ29nDwI5RpiLfE2u77Pb/8CdIciTZmNvgKAS8F7ltMSOCcQBPgN
+         ArD1sYgXpSBK0MaxydW35iz7Dc5qx/U4ixkMQBzaT9zULTTrWj7jVEL0vkrbAHQ0Nz
+         F0F15yKTPGFe+LJBwTf29NP5kJQzPqap51pJ8EVQ=
+Message-ID: <00f787a5108a1ef2613193099c8b7394f4ef5eed.camel@HansenPartnership.com>
+Subject: Re: [PATCH 1/4] tpm_tis: Clean up locality release
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>
+Date:   Wed, 30 Sep 2020 21:49:46 -0700
+In-Reply-To: <20201001020152.GB5971@linux.intel.com>
+References: <20200929223216.22584-1-James.Bottomley@HansenPartnership.com>
+         <20200929223216.22584-2-James.Bottomley@HansenPartnership.com>
+         <87eemjgdy3.fsf@jsnitsel.users.ipa.redhat.com>
+         <8ed5a80a9b2cfa37f0b8348906d292a7b1a1c02e.camel@HansenPartnership.com>
+         <20201001020152.GB5971@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-01_02:2020-09-30,2020-10-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 bulkscore=0 impostorscore=0 mlxlogscore=999
- malwarescore=0 phishscore=0 suspectscore=0 adultscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010010025
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-09-30 at 18:02 +0200, Petr Vorel wrote:
+On Thu, 2020-10-01 at 05:01 +0300, Jarkko Sakkinen wrote:
+> On Wed, Sep 30, 2020 at 04:03:25PM -0700, James Bottomley wrote:
+> > On Wed, 2020-09-30 at 14:19 -0700, Jerry Snitselaar wrote:
+> > > James Bottomley @ 2020-09-29 15:32 MST:
+> > > 
+> > > > The current release locality code seems to be based on the
+> > > > misunderstanding that the TPM interrupts when a locality is
+> > > > released: it doesn't, only when the locality is acquired.
+> > > > 
+> > > > Furthermore, there seems to be no point in waiting for the
+> > > > locality to be released.  All it does is penalize the last TPM
+> > > > user.  However, if there's no next TPM user, this is a
+> > > > pointless wait and if there is a next TPM user, they'll pay the
+> > > > penalty waiting for the new locality (or possibly not if it's
+> > > > the same as the old locality).
+> > > > 
+> > > > Fix the code by making release_locality as simple write to
+> > > > release with no waiting for completion.
+> > [...]
+> > > My recollection is that this was added because there were some
+> > > chips that took so long to release locality that a subsequent
+> > > request_locality call was seeing the locality as already active,
+> > > moving on, and then the locality was getting released out from
+> > > under the user.
+> > 
+> > Well, I could simply dump the interrupt code, which can never work
+> > and we could always poll.
+> 
+> Side-topic: What is the benefit of using int's in a TPM driver
+> anyway? I have never had any interest to dive into this with tpm_crb
+> because I don't have the answer.
 
-<snip>
+polling for events that don't immediately happen is a huge waste of
+time.  That's why interrupts were invented in the first place.  If you
+poll too fast, you consume wakeups which are really expensive to idle
+time and if you poll too slowly you wait too long and your throughput
+really tanks.  For stuff like disk and network transfers interrupts are
+basically essential.  For less high volume stuff, like the TPM, we can
+get away with polling, but it's hugely suboptimal if you have a large
+number of events to get through ... like updating the IMA log.
 
-> +get_pcr10_aggregate()
-> +{
-> +	local params pcr
-> +	local msg="$ERRMSG_EVMCTL"
-> +	local res=TCONF
-> +
-> +	if [ -z "$MISSING_EVMCTL" ]; then
-> +		params="--ignore-violations"  <=== 
+> *Perhaps* in some smallest form factor battery run devices you could
+> get some gain in run-time power saving but usually in such situations
+> you use something similar to TEE to do a measured boot.
 
-Violations should cause the measurement list verification to fail.
+It's not about power saving, it's about doing stuff at the right time.
 
-> +		msg=
-> +		res=TFAIL
-> +	elif check_ima_policy_cmdline "tcb"; then
-> +		tst_res TCONF "using builtin IMA TCB policy $ERRMSG_EVMCTL"
-> +		return
-> +	fi
-> +
-> +	evmctl -v ima_measurement $params $BINARY_MEASUREMENTS > hash.txt 2>&1
-> +	if [ $? -ne 0 -a -z "$MISSING_EVMCTL" ]; then
-> +		tst_res TFAIL "evmctl failed $ERRMSG_EVMCTL"
-> +		tst_res TINFO "hash file:"
-> +		cat hash.txt >&2
-> +		return
-> +	fi
-> +
-> +	pcr=$(grep -E "^($ALGORITHM: )*PCRAgg.*:" hash.txt \
-
-The IMA measurement list may contain records for other PCR 10.  The
-output may contain other PCRs.  Using "PCRAgg.*10:" is safer.  
-Probably need to use "grep -m 1 -E" as well.
-
-thanks,
-
-Mimi
-
-> +		| awk '{print $NF}')
-> +
-> +	if [ -z "$pcr" ]; then
-> +		tst_res $res "failed to find aggregate PCR-10 $msg"
-> +		tst_res TINFO "hash file:"
-> +		cat hash.txt >&2
-> +		return
-> +	fi
-> +
-> +	echo "$pcr"
-> +}
-> +
-
-
+James
 
 
