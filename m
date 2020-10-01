@@ -2,146 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C03A728011E
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Oct 2020 16:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E791280357
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Oct 2020 17:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732467AbgJAORa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Oct 2020 10:17:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33072 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732104AbgJAOR3 (ORCPT
+        id S1732342AbgJAP63 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Oct 2020 11:58:29 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:49098 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732213AbgJAP63 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Oct 2020 10:17:29 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 091ECtf5074912;
-        Thu, 1 Oct 2020 10:17:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=uCjLx3JAn4oDf/Z/P4KtHa7R5B9aUB7Skx7uMNNrCUo=;
- b=O4iH48NByl2pkIqx+pnBX1kgwo8OXUo01npbtvPhKoOYctZzIt9Yh/1J3TJgJ8QpQN2w
- TJSuJ+UsktIbxdEG7xqA4B+jnMSH5PNCq2Qm+3xr6dR0g1imZfRHuu5mMtTu2F2v6Kwq
- 5pTKXMpjJuRuNlZIz68ujVo+K2cyAMerSNPgAkCXYluk7HMxnoJ//lv+rkXEeSwRP5Ci
- 10fKuLsbOh7pMWbxR5fHO5fXwwNtRWD8nVBHF3yoYCn10tOs4KQzfer/+vmiM5OsePY6
- ITj78i0TZyTzNEQDANZ+cvOx0MLXrV9vANusVePmpg/RJMQ/FsnhJWjt6IW/O6yJBLG6 Rg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33wgp10579-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Oct 2020 10:17:10 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 091EFKEq087179;
-        Thu, 1 Oct 2020 10:17:09 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 33wgp1055s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Oct 2020 10:17:09 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 091E8IFk029765;
-        Thu, 1 Oct 2020 14:17:07 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 33v6mgt5mp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Oct 2020 14:17:07 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 091EH4JH29098268
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Oct 2020 14:17:05 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DE79FAE051;
-        Thu,  1 Oct 2020 14:17:04 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 31051AE055;
-        Thu,  1 Oct 2020 14:17:01 +0000 (GMT)
-Received: from sig-9-65-202-121.ibm.com (unknown [9.65.202.121])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Oct 2020 14:17:01 +0000 (GMT)
-Message-ID: <71c7773f1393fb3bec3851f0869952c308dc2149.camel@linux.ibm.com>
-Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Hao Wu <hao.wu@rubrik.com>,
+        Thu, 1 Oct 2020 11:58:29 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 4E89F8EE17F;
+        Thu,  1 Oct 2020 08:58:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601567908;
+        bh=rSPPZ8/oZgy5hChynAOVFoajICqrGtoregQlaW4X26g=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HY+J6TicjkT5Cb7ZUkSE+jHyQbVZfVmVUjLivWFdMHXXOJWbIV28CeUqAMHIya0Fh
+         wwB3F5lR+BqX5wtIfc94+GMcYyvTeB0dosvQKOcmloL2kwemYHD2HcazRbluB8L0Dz
+         R0x8drfsHkscfod4JkOYqgl3gUiW018qv7+H5jtc=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zM40LH2b4MAa; Thu,  1 Oct 2020 08:58:27 -0700 (PDT)
+Received: from jarvis (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id D7FE78EE0DA;
+        Thu,  1 Oct 2020 08:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1601567907;
+        bh=rSPPZ8/oZgy5hChynAOVFoajICqrGtoregQlaW4X26g=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=fXdYWB5UuX4qRuKZlmWpF5DJxtQIoy+3WWPT8WPlh9JPt8XGzQ5jpfHoP3/siEXmZ
+         nHUuz7F5yYzGRUQ4WEHmv8fHZggrA0WO/JSeaRqBx91YilT93OcIhaFFxOG3HkrJ8+
+         lvkNKQJbqaHei6KaSXAfu56vxW1XDfdtkwiQrPcw=
+Message-ID: <635963b53711cdf9c7e1b6534eeb3f172969d1b2.camel@HansenPartnership.com>
+Subject: Re: [PATCH 1/4] tpm_tis: Clean up locality release
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Nayna Jain <nayna@linux.vnet.ibm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
-        Hamza Attak <hamza@hpe.com>, why2jjj.linux@gmail.com,
-        zohar@linux.vnet.ibm.com, linux-integrity@vger.kernel.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        Seungyeop Han <seungyeop.han@rubrik.com>,
-        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
-        Anish Jhaveri <anish.jhaveri@rubrik.com>
-Date:   Thu, 01 Oct 2020 10:16:59 -0400
-In-Reply-To: <EA1EE8F8-F054-4E1B-B830-231398D33CB8@rubrik.com>
-References: <20200926223150.109645-1-hao.wu@rubrik.com>
-         <73405d14d7665e8a4e3e9defde7fb12aeae7784c.camel@HansenPartnership.com>
-         <DFD7629C-05BF-46C1-B3D7-92FBBC176D9E@rubrik.com>
-         <cf5c8035b7183522fb8a5df4baa95bd24288e61f.camel@HansenPartnership.com>
-         <20200928010835.GD6704@linux.intel.com>
-         <1F6A3D58-6B60-4FCB-A629-34CE8813E04C@rubrik.com>
-         <20200928141613.GB70098@linux.intel.com>
-         <E0629B0C-E49F-4FA1-8DBA-E8CB1EDEFD1A@rubrik.com>
-         <20200928194745.GB125819@linux.intel.com>
-         <18048BE4-2700-4BF9-8959-D024ECF0B704@rubrik.com>
-         <20200930021136.GD808399@linux.intel.com>
-         <5B6A7DBB-C06B-467E-9BA4-C0F9E241F5A6@rubrik.com>
-         <EA1EE8F8-F054-4E1B-B830-231398D33CB8@rubrik.com>
+        Peter Huewe <peterhuewe@gmx.de>,
+        Laurent Bigonville <bigon@debian.org>
+Date:   Thu, 01 Oct 2020 08:58:25 -0700
+In-Reply-To: <87h7reddat.fsf@jsnitsel.users.ipa.redhat.com>
+References: <20200929223216.22584-1-James.Bottomley@HansenPartnership.com>
+         <20200929223216.22584-2-James.Bottomley@HansenPartnership.com>
+         <87eemjgdy3.fsf@jsnitsel.users.ipa.redhat.com>
+         <8ed5a80a9b2cfa37f0b8348906d292a7b1a1c02e.camel@HansenPartnership.com>
+         <87h7reddat.fsf@jsnitsel.users.ipa.redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-01_04:2020-10-01,2020-10-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- spamscore=0 lowpriorityscore=0 clxscore=1011 impostorscore=0
- suspectscore=3 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010010116
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Hao,
-
-When posting to the mailing list, please respond using plain text and
-inline/bottom post.
-
-On Wed, 2020-09-30 at 22:26 -0700, Hao Wu wrote:
-> 7.1
+On Wed, 2020-09-30 at 17:01 -0700, Jerry Snitselaar wrote:
+> James Bottomley @ 2020-09-30 16:03 MST:
 > 
-> - Jarkko’s proposal: Using msleep(TPM_TIMEOUT) for wait_for_tpm_stat(), resolve
->   the Atmel crash as we expect.  
+> > On Wed, 2020-09-30 at 14:19 -0700, Jerry Snitselaar wrote:
+> > > James Bottomley @ 2020-09-29 15:32 MST:
+> > > 
+> > > > The current release locality code seems to be based on the
+> > > > misunderstanding that the TPM interrupts when a locality is
+> > > > released: it doesn't, only when the locality is acquired.
+> > > > 
+> > > > Furthermore, there seems to be no point in waiting for the
+> > > > locality to be released.  All it does is penalize the last TPM
+> > > > user.  However, if there's no next TPM user, this is a
+> > > > pointless wait and if there is a next TPM user, they'll pay the
+> > > > penalty waiting for the new locality (or possibly not if it's
+> > > > the same as the old locality).
+> > > > 
+> > > > Fix the code by making release_locality as simple write to
+> > > > release with no waiting for completion.
+> > [...]
+> > > My recollection is that this was added because there were some
+> > > chips that took so long to release locality that a subsequent
+> > > request_locality call was seeing the locality as already active,
+> > > moving on, and then the locality was getting released out from
+> > > under the user.
+> > 
+> > Well, I could simply dump the interrupt code, which can never work
+> > and we could always poll.
+> > 
+> > However, there also appears to be a bug in our locality requesting
+> > code.  We write the request and wait for the grant, but a grant
+> > should be signalled by not only the ACCESS_ACTIVE_LOCALITY being 1
+> > but also the ACCESS_REQUEST_USE going to 0.  As you say, if we're
+> > slow to relinquish, ACCESS_ACTIVE_LOCALITY could already be 1 and
+> > we'd think we were granted, but ACCESS_REQUEST_USE should stay 1
+> > until the TPM actually grants the next request.
+> > 
+> > If I code up a fix is there any chance you still have access to a
+> > problem TPM?  Mine all seem to grant and release localities fairly
+> > instantaneously.
+> > 
+> > James
 > 
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> Sorry, I seemed to make a mess of it. I don't have access to a system
+> where it occurred, but cc'ing Laurent since he reported the problem
+> and might still have access to the system.
 > 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 65ab1b027949..7dd9bcff542d 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -80,8 +80,9 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
->  		}
->  	} else {
->  		do {
-> -			usleep_range(TPM_TIMEOUT_USECS_MIN,
-> -				     TPM_TIMEOUT_USECS_MAX);
-> +            msleep(TPM_TIMEOUT);
-> +			// usleep_range(TPM_TIMEOUT_USECS_MIN,
-> +			//	     TPM_TIMEOUT_USECS_MAX);
->  			status = chip->ops->status(chip);
->  			if ((status & mask) == mask)
->  				return 0;
-> --
-> 2.17.1
-> 
-> But I think tpm_msleep(15) is still the right way to go.
+> I'd say fix up the check for locality request to look at
+> ACCESS_REQUEST_USE, and go with this patch to clean up locality
+> release. Hopefully Laurent still has access and can test. I do have a
+> laptop now where I should be able to test the other bits in your
+> patchset since this is one of the models that hit interrupt storm
+> problem when Stefan's 2 patches were originally applied. Lenovo
+> applied a fix to their bios, but this should still have the older one
+> version that has the issue. I'm on PTO this week, but I will try to
+> spend some time in the next couple days reproducing and then trying
+> your patches.
 
-Using msleep is definitely not the right way of going.   Please refer
-to commit a233a0289cf9 ("tpm: msleep() delays - replace with
-usleep_range() in i2c nuvoton driver") for a detailed explanation.
+Thanks.  I think the patch to fix to request access is very simple ...
+it's just to check the request bit has gone to zero, so I've attached
+it below.  It seems to work fine for me.
 
-thanks,
+James
 
-Mimi
+---
+
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 0a86cf392466..5e56e8c67791 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -168,7 +168,8 @@ static bool check_locality(struct tpm_chip *chip, int l)
+ 	if (rc < 0)
+ 		return false;
+ 
+-	if ((access & (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID)) ==
++	if ((access & (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID
++		       | TPM_ACCESS_REQUEST_USE)) ==
+ 	    (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID)) {
+ 		priv->locality = l;
+ 		return true;
 
