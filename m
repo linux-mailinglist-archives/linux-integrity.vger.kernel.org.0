@@ -2,69 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2CE284E9E
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Oct 2020 17:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F4B284F77
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Oct 2020 18:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbgJFPHp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Oct 2020 11:07:45 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34438 "EHLO mx2.suse.de"
+        id S1726064AbgJFQGM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Oct 2020 12:06:12 -0400
+Received: from mga02.intel.com ([134.134.136.20]:9941 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725943AbgJFPHo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Oct 2020 11:07:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CED6EAF1F;
-        Tue,  6 Oct 2020 15:07:43 +0000 (UTC)
-Date:   Tue, 6 Oct 2020 17:07:42 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Ken Goldman <kgold@linux.ibm.com>
-Cc:     Linux Integrity <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH 3/6] ima-evm-utils: When using the IBM TSS, link in its
- library
-Message-ID: <20201006150742.GA16684@dell5510>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <136e154e-16bc-9d6e-90a3-075cc67be333@linux.ibm.com>
+        id S1726012AbgJFQGM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 6 Oct 2020 12:06:12 -0400
+IronPort-SDR: +VHdlPkP5lEMYjlejseNMUXbbpQRw1fYyGwxi8zWsdFL5WJHIWysePHjN9hsesM1hbtTDhnRa5
+ e5caJAt80/sw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9765"; a="151478600"
+X-IronPort-AV: E=Sophos;i="5.77,343,1596524400"; 
+   d="scan'208";a="151478600"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2020 08:53:30 -0700
+IronPort-SDR: 23esREes3quhmaB1RNURzlbQedPnL0PAQO0ERuYFStc4mqJUcMFUsmXSGnmB7L9g+GuAXZJcgJ
+ oAQ3TNVKEcIg==
+X-IronPort-AV: E=Sophos;i="5.77,343,1596524400"; 
+   d="scan'208";a="527413376"
+Received: from thijsmet-mobl.ger.corp.intel.com (HELO localhost) ([10.249.34.36])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2020 08:53:29 -0700
+Date:   Tue, 6 Oct 2020 18:53:22 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] TPM 2.0 fixes in IMA tests
+Message-ID: <20201006155322.GA111447@linux.intel.com>
+References: <20200929165021.11731-1-pvorel@suse.cz>
+ <20200929231118.GA805493@linux.intel.com>
+ <20200930055314.GA21664@dell5510>
+ <20200930115939.GB7612@linux.intel.com>
+ <20201001120125.GE32109@dell5510>
+ <20201001183104.GA15664@linux.intel.com>
+ <20201006100130.GA14868@dell5510>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <136e154e-16bc-9d6e-90a3-075cc67be333@linux.ibm.com>
+In-Reply-To: <20201006100130.GA14868@dell5510>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Ken,
+On Tue, Oct 06, 2020 at 12:01:30PM +0200, Petr Vorel wrote:
+> Hi Jarkko,
+> 
+> can rely on /dev/tpm0 and /dev/tpmrm0 for TPM detection?
+> i.e.:
+> /dev/tpmrm0 => TPM 2.0
+> /dev/tpm0 => both TPM 1.2 or 2.0
+> none of them => No TPM device
 
-> This is a prerequisite for the code change that uses the TSS rather
-> than the command line tools.
+I think that should work as tpmrm0 is unconditionally available for
+TPM devices.
 
-> Signed-off-by: Ken Goldman <kgoldman@us.ibm.com>
-> ---
->  src/Makefile.am | 1 +
->  1 file changed, 1 insertion(+)
+Since Linux v5.6 there has been a sysfs file called tpm_version_major
+available too.
 
-> diff --git a/src/Makefile.am b/src/Makefile.am
-> index d6c779f..bf18caf 100644
-> --- a/src/Makefile.am
-> +++ b/src/Makefile.am
-> @@ -26,6 +26,7 @@ if USE_PCRTSS
->  evmctl_SOURCES += pcr_tss.c
->  else
->  evmctl_SOURCES += pcr_tsspcrread.c
-> +evmctl_LDADD += -libmtss
->  endif
-But pcr_tsspcrread.c uses the binary (tsspcrread).
-
-pcr_tss.c uses TSS, but that's already covered:
-ldd src/.libs/evmctl |grep tss
-	libtss2-rc.so.0 => /usr/lib64/libtss2-rc.so.0 (0x00007fb82514c000)
-	libtss2-esys.so.0 => /usr/lib64/libtss2-esys.so.0 (0x00007fb824eba000)
-	libtss2-sys.so.0 => /usr/lib64/libtss2-sys.so.0 (0x00007fb8244ba000)
-	libtss2-mu.so.0 => /usr/lib64/libtss2-mu.so.0 (0x00007fb824276000)
-
-Thus I thing this patch is invalid. Or do I miss something obvious?
-
-And other thing: could you please rebase your patches for next-testing branch?
-It's not applicable for master, next and next-testing.
-
-Kind regards,
-Petr
+/Jarkko
