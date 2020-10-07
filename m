@@ -2,75 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C32E285F23
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 Oct 2020 14:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16EA285F4D
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Oct 2020 14:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728282AbgJGMZV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 7 Oct 2020 08:25:21 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43438 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728196AbgJGMZV (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 7 Oct 2020 08:25:21 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 0CC84ADEC;
-        Wed,  7 Oct 2020 12:25:20 +0000 (UTC)
-Date:   Wed, 7 Oct 2020 14:25:18 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Ken Goldman <kgold@linux.ibm.com>
-Cc:     Linux Integrity <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH 3/6] ima-evm-utils: When using the IBM TSS, link in its
- library
-Message-ID: <20201007122518.GB9829@dell5510>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <136e154e-16bc-9d6e-90a3-075cc67be333@linux.ibm.com>
- <20201006150742.GA16684@dell5510>
- <f3b8356f-6476-5b1c-5faa-9b0dcd45d7dc@linux.ibm.com>
+        id S1728193AbgJGMit (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 7 Oct 2020 08:38:49 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2964 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727927AbgJGMit (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 7 Oct 2020 08:38:49 -0400
+Received: from lhreml737-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id 51B82FE16407BB6B87D2;
+        Wed,  7 Oct 2020 13:38:44 +0100 (IST)
+Received: from fraeml702-chm.china.huawei.com (10.206.15.51) by
+ lhreml737-chm.china.huawei.com (10.201.108.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.1913.5; Wed, 7 Oct 2020 13:38:44 +0100
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Wed, 7 Oct 2020 14:38:43 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Wed, 7 Oct 2020 14:38:43 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Colin King <colin.king@canonical.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Roberto Sassu <roberto.sassu@polito.it>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Silviu Vlasceanu" <Silviu.Vlasceanu@huawei.com>
+Subject: RE: [PATCH] ima: Fix sizeof mismatches
+Thread-Topic: [PATCH] ima: Fix sizeof mismatches
+Thread-Index: AQHWnJmhl+2ccdx8rkqE0F+MK/ZxlKmMEx7g
+Date:   Wed, 7 Oct 2020 12:38:43 +0000
+Message-ID: <cf66956ac2df49e6b51cacf94a8a31b9@huawei.com>
+References: <20201007110243.19033-1-colin.king@canonical.com>
+In-Reply-To: <20201007110243.19033-1-colin.king@canonical.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.220.96.108]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f3b8356f-6476-5b1c-5faa-9b0dcd45d7dc@linux.ibm.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Ken,
-
-...
-> > > diff --git a/src/Makefile.am b/src/Makefile.am
-> > > index d6c779f..bf18caf 100644
-> > > --- a/src/Makefile.am
-> > > +++ b/src/Makefile.am
-> > > @@ -26,6 +26,7 @@ if USE_PCRTSS
-> > >   evmctl_SOURCES += pcr_tss.c
-> > >   else
-> > >   evmctl_SOURCES += pcr_tsspcrread.c
-> > > +evmctl_LDADD += -libmtss
-> > >   endif
-> > But pcr_tsspcrread.c uses the binary (tsspcrread).
-
-> The idea is to eliminate the calls to command line utilities that
-> are not as stable as the TSS library.  Patch 4/6 does that.
-I'm sorry, I overlooked that.
-
-> I'm a git newbie.  I thought the idea was to do the patches as
-> small pieces.  Thus, this one does the autotools piece.  Then
-> the next one does the C code.  Should they be combined?
-I'd personally put it into the 4/6 patch (code change is small and it's related
-to the code change).
-
-> > pcr_tss.c uses TSS, but that's already covered:
-> > ldd src/.libs/evmctl |grep tss
-> > 	libtss2-rc.so.0 => /usr/lib64/libtss2-rc.so.0 (0x00007fb82514c000)
-> > 	libtss2-esys.so.0 => /usr/lib64/libtss2-esys.so.0 (0x00007fb824eba000)
-> > 	libtss2-sys.so.0 => /usr/lib64/libtss2-sys.so.0 (0x00007fb8244ba000)
-> > 	libtss2-mu.so.0 => /usr/lib64/libtss2-mu.so.0 (0x00007fb824276000)
-
-> > Thus I thing this patch is invalid. Or do I miss something obvious?
-
-> There are two TSSes.  This one's for the IBM TSS.  Your traces are
-> for the ESAPI (aka
-Thanks for explanation.
-
-Kind regards,
-Petr
+PiBGcm9tOiBDb2xpbiBLaW5nIFttYWlsdG86Y29saW4ua2luZ0BjYW5vbmljYWwuY29tXQ0KPiBT
+ZW50OiBXZWRuZXNkYXksIE9jdG9iZXIgNywgMjAyMCAxOjAzIFBNDQo+IEZyb206IENvbGluIElh
+biBLaW5nIDxjb2xpbi5raW5nQGNhbm9uaWNhbC5jb20+DQo+IA0KPiBBbiBpbmNvcnJlY3Qgc2l6
+ZW9mIGlzIGJlaW5nIHVzZWQsIHNpemVvZigqZmllbGRzKSBpcyBub3QgY29ycmVjdCwNCj4gaXQg
+c2hvdWxkIGJlIHNpemVvZigqKmZpZWxkcykuIFRoaXMgaXMgbm90IGNhdXNpbmcgYSBwcm9ibGVt
+IHNpbmNlDQo+IHRoZSBzaXplIG9mIHRoZXNlIGlzIHRoZSBzYW1lLiBGaXggdGhpcyBpbiB0aGUg
+a21hbGxvY19hcnJheSBhbmQNCj4gbWVtY3B5IGNhbGxzLg0KPiANCj4gQWRkcmVzc2VzLUNvdmVy
+aXR5OiAoIlNpemVvZiBub3QgcG9ydGFibGUgKFNJWkVPRl9NSVNNQVRDSCkiKQ0KPiBGaXhlczog
+MWJkN2ZhY2U3NDM5ICgiaW1hOiBhbGxvY2F0ZSBmaWVsZCBwb2ludGVycyBhcnJheSBvbiBkZW1h
+bmQgaW4NCj4gdGVtcGxhdGVfZGVzY19pbml0X2ZpZWxkcygpIikNCj4gU2lnbmVkLW9mZi1ieTog
+Q29saW4gSWFuIEtpbmcgPGNvbGluLmtpbmdAY2Fub25pY2FsLmNvbT4NCg0KVGhhbmtzIENvbGlu
+Lg0KDQpSZXZpZXdlZC1ieTogUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29t
+Pg0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNITk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJC
+IDU2MDYzDQpNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywgTGkgSmlhbiwgU2hpIFlhbmxpDQoN
+Cj4gLS0tDQo+ICBzZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV90ZW1wbGF0ZS5jIHwgNCArKy0t
+DQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiAN
+Cj4gZGlmZiAtLWdpdCBhL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX3RlbXBsYXRlLmMNCj4g
+Yi9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV90ZW1wbGF0ZS5jDQo+IGluZGV4IDFlODllMmQz
+ODUxZi4uODg4NGJiZjAzYjQzIDEwMDY0NA0KPiAtLS0gYS9zZWN1cml0eS9pbnRlZ3JpdHkvaW1h
+L2ltYV90ZW1wbGF0ZS5jDQo+ICsrKyBiL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX3RlbXBs
+YXRlLmMNCj4gQEAgLTIxNiwxMSArMjE2LDExIEBAIGludCB0ZW1wbGF0ZV9kZXNjX2luaXRfZmll
+bGRzKGNvbnN0IGNoYXINCj4gKnRlbXBsYXRlX2ZtdCwNCj4gIAl9DQo+IA0KPiAgCWlmIChmaWVs
+ZHMgJiYgbnVtX2ZpZWxkcykgew0KPiAtCQkqZmllbGRzID0ga21hbGxvY19hcnJheShpLCBzaXpl
+b2YoKmZpZWxkcyksIEdGUF9LRVJORUwpOw0KPiArCQkqZmllbGRzID0ga21hbGxvY19hcnJheShp
+LCBzaXplb2YoKipmaWVsZHMpLCBHRlBfS0VSTkVMKTsNCj4gIAkJaWYgKCpmaWVsZHMgPT0gTlVM
+TCkNCj4gIAkJCXJldHVybiAtRU5PTUVNOw0KPiANCj4gLQkJbWVtY3B5KCpmaWVsZHMsIGZvdW5k
+X2ZpZWxkcywgaSAqIHNpemVvZigqZmllbGRzKSk7DQo+ICsJCW1lbWNweSgqZmllbGRzLCBmb3Vu
+ZF9maWVsZHMsIGkgKiBzaXplb2YoKipmaWVsZHMpKTsNCj4gIAkJKm51bV9maWVsZHMgPSBpOw0K
+PiAgCX0NCj4gDQo+IC0tDQo+IDIuMjcuMA0KDQo=
