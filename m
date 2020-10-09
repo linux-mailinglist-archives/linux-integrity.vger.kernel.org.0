@@ -2,115 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88EE828865A
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Oct 2020 11:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213BE288D43
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Oct 2020 17:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733239AbgJIJuE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Oct 2020 05:50:04 -0400
-Received: from smtp-8faf.mail.infomaniak.ch ([83.166.143.175]:39463 "EHLO
-        smtp-8faf.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725917AbgJIJuE (ORCPT
+        id S2389425AbgJIPsV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Oct 2020 11:48:21 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45128 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389144AbgJIPsU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Oct 2020 05:50:04 -0400
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4C73G20ms8zlhJG2;
-        Fri,  9 Oct 2020 11:50:02 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4C73G12Gytzllmh6;
-        Fri,  9 Oct 2020 11:50:01 +0200 (CEST)
-Subject: Re: [PATCH v1] dm verity: Add support for signature verification with
- 2nd keyring
-To:     Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>
-Cc:     Deven Bowers <deven.desai@linux.microsoft.com>,
-        Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
-        Milan Broz <gmazyland@gmail.com>, dm-devel@redhat.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20201002071802.535023-1-mic@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <bda2ffd7-3b7c-33a4-667f-a3435e112fc1@digikod.net>
-Date:   Fri, 9 Oct 2020 11:50:03 +0200
-User-Agent: 
+        Fri, 9 Oct 2020 11:48:20 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 099FWvFD177550
+        for <linux-integrity@vger.kernel.org>; Fri, 9 Oct 2020 11:48:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=to : from : subject :
+ message-id : date : mime-version : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=RyO5badgUT3UQu8cVOS8+mYAL7AEGFr+3sUqf7O3mzM=;
+ b=YQuQ/mQO9sxbfEsWRHNl9nD4zAqgfqAqOWfpfHI2ZfVa7S+E/wQK/dX4bLd4kGJ8FTX4
+ AyIM8QPtStEiFt1fKctkEoslBXEpiCa8POwWDyQA2lXNkgZG/sibqxp76/werzGbDLGt
+ 1Cyx9sSy0jwzWqbhaNm8veXveODSRGCc+tW1gyNl+jU8R4HOs9H2ZR3vuya4bV9pAbe1
+ klHE6RE6nSMMt55qFSTmLcktuz8/Tg4VV/b3yW6+u+zYVcyruP9q6WvHgkuI891NXrls
+ QAWLAR1Yirp84TNA5H+bQpHkf4hpmY9DyWcpQYRi6tFAfEVtP+gIYyMb32HQMo4rgJZG ww== 
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 342smfas4y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 09 Oct 2020 11:48:18 -0400
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 099FgRFv011275
+        for <linux-integrity@vger.kernel.org>; Fri, 9 Oct 2020 15:48:18 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03wdc.us.ibm.com with ESMTP id 3429j36cn6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Fri, 09 Oct 2020 15:48:18 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 099FmHcR15728988
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-integrity@vger.kernel.org>; Fri, 9 Oct 2020 15:48:17 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 81547C6057
+        for <linux-integrity@vger.kernel.org>; Fri,  9 Oct 2020 15:48:17 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 56B81C605A
+        for <linux-integrity@vger.kernel.org>; Fri,  9 Oct 2020 15:48:17 +0000 (GMT)
+Received: from [9.85.186.165] (unknown [9.85.186.165])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP
+        for <linux-integrity@vger.kernel.org>; Fri,  9 Oct 2020 15:48:17 +0000 (GMT)
+To:     Linux Integrity <linux-integrity@vger.kernel.org>
+From:   Ken Goldman <kgold@linux.ibm.com>
+Subject: [PATCH 0/5] Updates to use IBM TSS C API rather than command line
+ tools
+Message-ID: <ef2ecc38-46d0-a969-9945-a7868564739d@linux.ibm.com>
+Date:   Fri, 9 Oct 2020 11:48:16 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-In-Reply-To: <20201002071802.535023-1-mic@digikod.net>
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-09_06:2020-10-09,2020-10-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=876
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1015
+ phishscore=0 mlxscore=0 spamscore=0 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010090112
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+This patch set replaces calls to command line tools with C code.  This
+should be more stable and easier to maintain.  INSTALL instructions
+are updated.
 
-What do you think about this patch?
+While the code is being touched, it changes the PCR handle from
+a signed int to a uint32_t, removing the need for error checking.
 
-Regards,
- Mickaël
+Finally, it fixes an environment variable issue and some spelling
+errors.
 
-On 02/10/2020 09:18, Mickaël Salaün wrote:
-> From: Mickaël Salaün <mic@linux.microsoft.com>
-> 
-> Add a new DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING configuration
-> to enable dm-verity signatures to be verified against the secondary
-> trusted keyring.  This allows certificate updates without kernel update
-> and reboot, aligning with module and kernel (kexec) signature
-> verifications.
-> 
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> Cc: Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
-> Cc: Mike Snitzer <snitzer@redhat.com>
-> Cc: Milan Broz <gmazyland@gmail.com>
-> ---
->  drivers/md/Kconfig                | 13 ++++++++++++-
->  drivers/md/dm-verity-verify-sig.c |  9 +++++++--
->  2 files changed, 19 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/md/Kconfig b/drivers/md/Kconfig
-> index 30ba3573626c..63870fdfe8ce 100644
-> --- a/drivers/md/Kconfig
-> +++ b/drivers/md/Kconfig
-> @@ -530,11 +530,22 @@ config DM_VERITY_VERIFY_ROOTHASH_SIG
->  	bool "Verity data device root hash signature verification support"
->  	depends on DM_VERITY
->  	select SYSTEM_DATA_VERIFICATION
-> -	  help
-> +	---help---
->  	  Add ability for dm-verity device to be validated if the
->  	  pre-generated tree of cryptographic checksums passed has a pkcs#7
->  	  signature file that can validate the roothash of the tree.
->  
-> +	  By default, rely on the builtin trusted keyring.
-> +
-> +	  If unsure, say N.
-> +
-> +config DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
-> +	bool "Verity data device root hash signature verification with secondary keyring"
-> +	depends on DM_VERITY_VERIFY_ROOTHASH_SIG
-> +	depends on SECONDARY_TRUSTED_KEYRING
-> +	---help---
-> +	  Rely on the secondary trusted keyring to verify dm-verity signatures.
-> +
->  	  If unsure, say N.
->  
->  config DM_VERITY_FEC
-> diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-> index 614e43db93aa..29385dc470d5 100644
-> --- a/drivers/md/dm-verity-verify-sig.c
-> +++ b/drivers/md/dm-verity-verify-sig.c
-> @@ -119,8 +119,13 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
->  	}
->  
->  	ret = verify_pkcs7_signature(root_hash, root_hash_len, sig_data,
-> -				sig_len, NULL, VERIFYING_UNSPECIFIED_SIGNATURE,
-> -				NULL, NULL);
-> +				sig_len,
-> +#ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
-> +				VERIFY_USE_SECONDARY_KEYRING,
-> +#else
-> +				NULL,
-> +#endif
-> +				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
->  
->  	return ret;
->  }
-> 
+Ken Goldman (5):
+   ima-evm-utils: Change env variable TPM_SERVER_TYPE for tpm_server
+   ima-evm-utils: Change PCR iterator from int to uint32_t
+   ima-evm-utils: Change tpm2_pcr_read() to use C code
+   ima-evm-utils: Correct spelling errors
+   ima-evm-utils: Expand the INSTALL instructions.
+
+  INSTALL                   |  25 +++++-
+  src/Makefile.am           |   1 +
+  src/evmctl.c              |   9 ++-
+  src/pcr.h                 |   2 +-
+  src/pcr_tss.c             |   4 +-
+  src/pcr_tsspcrread.c      | 156 +++++++++++++++++++++++++++++---------
+  tests/boot_aggregate.test |   7 +-
+  7 files changed, 159 insertions(+), 45 deletions(-)
+
+-- 
+2.25.1
