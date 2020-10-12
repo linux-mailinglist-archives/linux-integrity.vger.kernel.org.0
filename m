@@ -2,161 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C10F28ADCB
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Oct 2020 07:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6C828AFF7
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Oct 2020 10:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726359AbgJLFjP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 12 Oct 2020 01:39:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53609 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726072AbgJLFjP (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 12 Oct 2020 01:39:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602481153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=O37VJpIWkXShByZUbx7ohohOTeDqW1Ey/TTnbYW9+SQ=;
-        b=gREYRLsJJJNvPKY3t7uwrwFifX43fEmuVB8UZlPpcDGlsv70wtqJAf9OP7zh2odgfIfEbr
-        dUx74Kj6uhLNU7YS2+8tLIi8gSKJtUswF2Xv8zn77L/Od/ZCHRzd5C1/nuY8rE5fia4Z0a
-        m3mEpWwMSto9zaVecBH+2RRGfFsaND8=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-589-SRSBSe8PNIW1BHZtkxdynw-1; Mon, 12 Oct 2020 01:39:10 -0400
-X-MC-Unique: SRSBSe8PNIW1BHZtkxdynw-1
-Received: by mail-pg1-f199.google.com with SMTP id n8so11507775pgv.14
-        for <linux-integrity@vger.kernel.org>; Sun, 11 Oct 2020 22:39:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=O37VJpIWkXShByZUbx7ohohOTeDqW1Ey/TTnbYW9+SQ=;
-        b=qYu99qKH6pmAnzhPTEfZwlLd0SH65Gm7Rxm4wV+Uc73wWa78PCKp+JnvxoM/JFmG6A
-         VBVrWVkWhel9v+qWhjjBF0TGRFVfJ81ExElFEl+Vqec/RTze4xY7VNWTZMnVXKWHSKN7
-         Dhds/pfcrXeRhRvaAjTYeVPJnXjPrZw87yRcTWCnRayUQlkFCgut9JJpIhB4GjcK+/7x
-         ZhAqVL5yH/aUmWiMSvAjQx69IeWjjLNLH/dLDrivLoxh8CJMuX3qFxNB3XbypjDNSKEw
-         qWFRn2ROJ8TnENoseGWKG9eVZfshKyK6/HI9DWLXfwOwrzLDWgnpva3ZP58XfUpcLmMk
-         K2wA==
-X-Gm-Message-State: AOAM531SdO9rHqlCKhv4NSOxnn1WizltthpH2XkMrca/LAbDGiW7lNhf
-        dSYFV9FBYvsSPrdTuDt1YiSth/9ilDt5lC052o/cMwCB3+FmF/fW6kL21Z9p6By8V/L3h5x5Bbj
-        vJw/gqi0swpi7IGaeCtv6HwMTZskU
-X-Received: by 2002:a17:90a:be0e:: with SMTP id a14mr18327265pjs.57.1602481149358;
-        Sun, 11 Oct 2020 22:39:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwJXjtIbsMp+fCcHse+S6zByjhxmDx9cu87JfcRfICcPE/vXI6mOg0RsouxghxPUfUcR82scg==
-X-Received: by 2002:a17:90a:be0e:: with SMTP id a14mr18327247pjs.57.1602481149016;
-        Sun, 11 Oct 2020 22:39:09 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id v20sm13203271pjh.5.2020.10.11.22.39.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Oct 2020 22:39:08 -0700 (PDT)
-References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v2 0/5] tpm_tis: fix interrupts (again)
-In-reply-to: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
-Date:   Sun, 11 Oct 2020 22:39:07 -0700
-Message-ID: <87r1q4xatg.fsf@redhat.com>
+        id S1726468AbgJLIU3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Oct 2020 04:20:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51904 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726098AbgJLIU3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 12 Oct 2020 04:20:29 -0400
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE3872173E;
+        Mon, 12 Oct 2020 08:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602490828;
+        bh=EyzO8tMJTCC+XyN3KqgvVYGrtb1TyCbmbp+zSz7Ppb8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MK0Oh3MqDgB9koAAuMRnltl0pM4teX6nvEbpJ8eTuCY4Ggb6RJkrfQuKryQEnkujO
+         cRs9QYAesP58e8cpB3x/UynzJ84dbIIpfCCvp8guHgBATm5jFZRQ4TIaa11tnHce83
+         LO5hd35DYO0JYp4pgONIK9qaZz8LdV3m0ec96GxY=
+Received: by mail-oo1-f49.google.com with SMTP id w25so3875330oos.10;
+        Mon, 12 Oct 2020 01:20:28 -0700 (PDT)
+X-Gm-Message-State: AOAM531feG3SP0ZMvNpwJpBG+8ZKzOx2k9CeB3eBm+qY/9hMbIFtEtWc
+        2cRg6O5g7KmyEHZUJli/AmfwYA/bGdoBURldPyY=
+X-Google-Smtp-Source: ABdhPJz18oAbSZB6d6XIsdsJGA0aS3dlg/rVP/cn+P035DH9wUktgzqk1T3Vckd4dT99S0gHURmYGdxdLHe5gZ9haKc=
+X-Received: by 2002:a4a:c3ca:: with SMTP id e10mr17802185ooq.41.1602490827863;
+ Mon, 12 Oct 2020 01:20:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20200904072905.25332-1-clin@suse.com> <20200904072905.25332-2-clin@suse.com>
+ <CAMj1kXEXvmO5mrTcKpqYUASBAQB-1=xLa0vg7KwmvOHMjaQ34w@mail.gmail.com>
+ <20200914080522.GA26718@linux-8mug> <20201005022014.GA5112@linux-8mug>
+In-Reply-To: <20201005022014.GA5112@linux-8mug>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 12 Oct 2020 10:20:15 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXErMjbvwuP6YhgaZ4M47vzhYkFJb2kYC+h7Odr4Zu3eSA@mail.gmail.com>
+Message-ID: <CAMj1kXErMjbvwuP6YhgaZ4M47vzhYkFJb2kYC+h7Odr4Zu3eSA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] efistub: pass uefi secureboot flag via fdt params
+To:     Chester Lin <clin@suse.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "Lee, Chun-Yi" <jlee@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-James Bottomley @ 2020-10-01 11:09 MST:
-
-> The current state of the TIS TPM is that interrupts have been globally
-> disabled by various changes.  The problems we got reported the last
-> time they were enabled was interrupt storms.  With my own TIS TPM,
-> I've found that this is caused because my TPM doesn't do legacy
-> cycles, The TIS spec (chapter 6.1 "Locality Usage Per Register")
-> requires any TIS TPM without legacy cycles not to act on any write to
-> an interrupt register unless the locality is enabled.  This means if
-> an interrupt fires after we relinquish the locality, the TPM_EOI in
-> the interrupt routine is ineffective meaning the same interrupt
-> triggers over and over again.  This problem also means we can have
-> trouble setting up interrupts on TIS TPMs because the current init
-> code does the setup before the locality is claimed for the first time.
+On Mon, 5 Oct 2020 at 04:20, Chester Lin <clin@suse.com> wrote:
 >
-> James
+> On Mon, Sep 14, 2020 at 04:05:22PM +0800, Chester Lin wrote:
+> > Hi Ard,
+> >
+> > On Fri, Sep 11, 2020 at 06:01:09PM +0300, Ard Biesheuvel wrote:
+> > > On Fri, 4 Sep 2020 at 10:29, Chester Lin <clin@suse.com> wrote:
+> > > >
+> > > > Add a new UEFI parameter: "linux,uefi-secure-boot" in fdt boot params
+> > > > as other architectures have done in their own boot data. For example,
+> > > > the boot_params->secure_boot in x86.
+> > > >
+> > > > Signed-off-by: Chester Lin <clin@suse.com>
+> > >
+> > > Why do we need this flag? Can't the OS simply check the variable directly?
+> > >
+> >
+> > In fact, there's a difficulty to achieve this.
+> >
+> > When linux kernel is booting on ARM, the runtime services are enabled later on.
+> > It's done by arm_enable_runtime_services(), which is registered as an early_initcall.
+> > Before it calls efi_native_runtime_setup(), all EFI runtime callbacks are still
+> > NULL so calling efi.get_variable() will cause NULL pointer dereference.
+> >
+> > There's a case that arch_ima_get_secureboot() can be called in early boot stage.
+> > For example, when you try to set "ima_appraise=off" in kernel command line, it's
+> > actually handled early:
+> >
+> > [    0.000000] Kernel command line: BOOT_IMAGE=/boot/Image-5.9.0-rc3-9.gdd61cda-
+> > vanilla root=UUID=a88bfb80-8abb-425c-a0f3-ad317465c28b splash=silent mitigations
+> > =auto ignore_loglevel earlycon=pl011,mmio,0x9000000 console=ttyAMA0 ima_appraise=off
+> > [    0.000000] ima: Secure boot enabled: ignoring ima_appraise=off boot parameter option
+> > [    0.000000] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+> >
+> > However EFI services are remapped and enabled afterwards.
+> >
+> > [    0.082286] rcu: Hierarchical SRCU implementation.
+> > [    0.089592] Remapping and enabling EFI services.
+> > [    0.097509] smp: Bringing up secondary CPUs ...
+> >
+> > Another problem is that efi_rts_wq is created in subsys_initcall so we have to
+> > wait for both EFI services mapping and the workqueue get initiated before calling
+> > efi.get_variable() on ARM.
+> >
+> > The only way I can think of is to put a flag via fdt params. May I have your
+> > suggestions? I will appreciate if there's any better approach.
+> >
+> > Thanks,
+> > Chester
+>
+> Ping. May I have some suggestions here?
 >
 
+IMA itself is initialized as a late initcall. The only reason you see
+this message early is because this is where the parsing of the command
+line parameter happens.
 
-I tested initially with the following commits reverted:
-
-aa4a63dd9816 tpm: Revert "tpm_tis_core: Turn on the TPM before probing IRQ's" | 2020-01-06 | (Stefan Berger)
-dda8b2af395b tpm: Revert "tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts" | 2020-01-06 | (Stefan Berger)
-
-The laptop doesn't become unusable, but I lose the trackpad and get the following:
-
-[    3.070501] irq 31: nobody cared (try booting with the "irqpoll" option)
-[    3.070504] CPU: 2 PID: 251 Comm: rngd Not tainted 5.8.13-201.local.fc32.x86_64 #1
-[    3.070504] Hardware name: LENOVO 20NYS7K90F/20NYS7K90F, BIOS N2JET83W (1.61 ) 11/22/2019
-[    3.070505] Call Trace:
-[    3.070511]  dump_stack+0x6b/0x88
-[    3.070514]  __report_bad_irq+0x35/0xa7
-[    3.070516]  note_interrupt.cold+0xb/0x6a
-[    3.070518]  handle_irq_event+0x88/0x8a
-[    3.070519]  handle_fasteoi_irq+0x78/0x1c0
-[    3.070522]  common_interrupt+0x68/0x140
-[    3.070524]  ? asm_common_interrupt+0x8/0x40
-[    3.070525]  asm_common_interrupt+0x1e/0x40
-[    3.070527] RIP: 0033:0x7f2eea3249b5
-[    3.070529] Code: e0 48 c1 e8 3c 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 37 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 1e 83 e0 01 48 31 45 f0 <48> 8b 45 e0 48 c1 e8 1b 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8
-[    3.070529] RSP: 002b:00007f2ee3ffebc0 EFLAGS: 00000202
-[    3.070530] RAX: 0000000000000001 RBX: 000000000000000a RCX: 000000000000002e
-[    3.070531] RDX: 0463400000000000 RSI: 0000000000000000 RDI: 0000000000000001
-[    3.070532] RBP: 00007f2ee3ffec10 R08: 0000000000000000 R09: 0000000000000035
-[    3.070532] R10: 00007ffde716f080 R11: 00007ffde716f080 R12: 00007f2edc004c00
-[    3.070533] R13: 00007ffde700a54f R14: 00007f2ee3ffed10 R15: 00005598a41e3680
-[    3.070534] handlers:
-[    3.070537] [<000000007b6f3232>] tis_int_handler
-[    3.070538] Disabling IRQ #31
-...
-[   14.956342] irq 16: nobody cared (try booting with the "irqpoll" option)
-[   14.956344] CPU: 0 PID: 1013 Comm: rngd Not tainted 5.8.13-201.local.fc32.x86_64 #1
-[   14.956344] Hardware name: LENOVO 20NYS7K90F/20NYS7K90F, BIOS N2JET83W (1.61 ) 11/22/2019
-[   14.956345] Call Trace:
-[   14.956350]  dump_stack+0x6b/0x88
-[   14.956353]  __report_bad_irq+0x35/0xa7
-[   14.956354]  note_interrupt.cold+0xb/0x6a
-[   14.956355]  handle_irq_event+0x88/0x8a
-[   14.956356]  handle_fasteoi_irq+0x78/0x1c0
-[   14.956358]  common_interrupt+0x68/0x140
-[   14.956360]  ? asm_common_interrupt+0x8/0x40
-[   14.956361]  asm_common_interrupt+0x1e/0x40
-[   14.956362] RIP: 0033:0x7fcaff4399d3
-[   14.956363] Code: e0 48 c1 e8 1e 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 1b 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 16 83 e0 01 48 31 45 f0 <48> d1 65 e0 48 8b 45 f0 48 31 45 e0 83 45 d4 01 83 7d d4 40 0f 86
-[   14.956364] RSP: 002b:00007fcafe544bc0 EFLAGS: 00000246
-[   14.956364] RAX: 0000000000000000 RBX: 000000000000000a RCX: 0000000000000026
-[   14.956365] RDX: 000df20000000000 RSI: 0000000000000000 RDI: 0000000000000001
-[   14.956365] RBP: 00007fcafe544c10 R08: 0000000000000000 R09: 0000000000000035
-[   14.956366] R10: 00007ffc30bd2080 R11: 00007ffc30bd2080 R12: 00007fcaf0004c00
-[   14.956366] R13: 00007fcaf0004c00 R14: 00007fcaf0000b60 R15: 0000560216fcf0f2
-[   14.956367] handlers:
-[   14.956370] [<0000000024c0571e>] i801_isr [i2c_i801]
-[   14.956371] Disabling IRQ #16
-
-/proc/interrupts shows:
-
-  16:     100000          0          0          0          0          0          0          0  IR-IO-APIC   16-fasteoi   i801_smbus
-  31:          0          0     100000          0          0          0          0          0  IR-IO-APIC   31-fasteoi   tpm0
-
-
-I also get this behavior with your patchset applied. If I boot with
-tpm_tis.interrupts=0 it behaves.  The thought from Hans is to look at
-the dmi info and key off the vendor being Lenovo and bios date to
-decide if interrupts should be disabled. Since Dan ran also into this
-with something internal at Intel I don't know if that will be
-sufficient.
-
-I hope to look over this patchset tomorrow.
-
-Regards,
-Jerry
-
+I'll send out a patch with a proposed solution for this issue.
