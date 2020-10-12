@@ -2,162 +2,161 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 888F328A88E
-	for <lists+linux-integrity@lfdr.de>; Sun, 11 Oct 2020 19:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C10F28ADCB
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Oct 2020 07:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730304AbgJKRpJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 11 Oct 2020 13:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbgJKRpI (ORCPT
+        id S1726359AbgJLFjP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Oct 2020 01:39:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53609 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726072AbgJLFjP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 11 Oct 2020 13:45:08 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0E4C0613CE;
-        Sun, 11 Oct 2020 10:45:08 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id q26so11979259qtb.5;
-        Sun, 11 Oct 2020 10:45:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=K/LoyPsHfKdi1ZcF54EQc3/yoAQf3NlApRaky4RKPyc=;
-        b=C+5/IiiRVGGxoh+Ms5u7ykIDc/PvT2O8zozK5Gr3dfpziSnB40aH++yKtTu8WDhNVl
-         hnC5v3J9Go7/tPGhhl4NPMq38QJj69ROAUrkhK7IksDADPFZRQUHp1BT5d2WGS7kRvOi
-         5Vaury5XX4AQE6yZhCk+3Cfnoj0WZlI/n2peOBnNoeD3B1w3mpv+x1bXdWmLJJjd8xbz
-         G4qQPA/5/O7w5zlHH/EGGjsQ9e0iESScUX2L46Pv9ZMEcGgSIGHaIuTySp9WA7WOamSj
-         +FNdyyloyGuh8kDHaJ2DhEBvZjzV45Ebh+snLoO0M8Ay4oM2n6wS1ixU1jIUizN8x2ou
-         AFeA==
+        Mon, 12 Oct 2020 01:39:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602481153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=O37VJpIWkXShByZUbx7ohohOTeDqW1Ey/TTnbYW9+SQ=;
+        b=gREYRLsJJJNvPKY3t7uwrwFifX43fEmuVB8UZlPpcDGlsv70wtqJAf9OP7zh2odgfIfEbr
+        dUx74Kj6uhLNU7YS2+8tLIi8gSKJtUswF2Xv8zn77L/Od/ZCHRzd5C1/nuY8rE5fia4Z0a
+        m3mEpWwMSto9zaVecBH+2RRGfFsaND8=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-589-SRSBSe8PNIW1BHZtkxdynw-1; Mon, 12 Oct 2020 01:39:10 -0400
+X-MC-Unique: SRSBSe8PNIW1BHZtkxdynw-1
+Received: by mail-pg1-f199.google.com with SMTP id n8so11507775pgv.14
+        for <linux-integrity@vger.kernel.org>; Sun, 11 Oct 2020 22:39:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=K/LoyPsHfKdi1ZcF54EQc3/yoAQf3NlApRaky4RKPyc=;
-        b=SqHUu9+jjQSAJE2DCG+BhM0foRyvuqDWiL+z0cG/hPIbqw2Dn+bifkv5Afn3Kvl1i+
-         iyjXYhf3SC/EVhb96IBym+7gpdwsso0aKfT92fnDBbdMmiOwtGZjFRU3mjXFpu82J/XB
-         XnQj0VBGjtQW6VmGuRJaX/yJ7PpQSIXeFFRPu3OIYNN5/IoGoHfOkdPVCPp75p3503wP
-         WZnJVFGsN/oS7+oY3kdeTJKjTuIwaDNUBDFqXJP0uaM5fuuL9hVLqyi112JGytZdEjXL
-         F1Rx6NUQYfmb4fwtD7UcF4GNAox12HFqUTj0V3tt77LOLSglc7ssUYe7RzbAsFRxmkrD
-         /ocw==
-X-Gm-Message-State: AOAM533NqVfU979DIp3VYBXdZm77I6kcKpwjg5AXfoDgLUt+a4ko8Atf
-        4Gcq74CaT0fNTgAajKCenw1e7c7fm0wp0lJkSyAcnuNGsqc=
-X-Google-Smtp-Source: ABdhPJxuo+aCmgWZsDtGhosoNajO/8pXwJUo3wF2L6USdMnd1zioOSmaG8X/5Byia21t0o1w8QchekFEMJnJOiOVsRo=
-X-Received: by 2002:a05:622a:208:: with SMTP id b8mr6950167qtx.101.1602438307044;
- Sun, 11 Oct 2020 10:45:07 -0700 (PDT)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=O37VJpIWkXShByZUbx7ohohOTeDqW1Ey/TTnbYW9+SQ=;
+        b=qYu99qKH6pmAnzhPTEfZwlLd0SH65Gm7Rxm4wV+Uc73wWa78PCKp+JnvxoM/JFmG6A
+         VBVrWVkWhel9v+qWhjjBF0TGRFVfJ81ExElFEl+Vqec/RTze4xY7VNWTZMnVXKWHSKN7
+         Dhds/pfcrXeRhRvaAjTYeVPJnXjPrZw87yRcTWCnRayUQlkFCgut9JJpIhB4GjcK+/7x
+         ZhAqVL5yH/aUmWiMSvAjQx69IeWjjLNLH/dLDrivLoxh8CJMuX3qFxNB3XbypjDNSKEw
+         qWFRn2ROJ8TnENoseGWKG9eVZfshKyK6/HI9DWLXfwOwrzLDWgnpva3ZP58XfUpcLmMk
+         K2wA==
+X-Gm-Message-State: AOAM531SdO9rHqlCKhv4NSOxnn1WizltthpH2XkMrca/LAbDGiW7lNhf
+        dSYFV9FBYvsSPrdTuDt1YiSth/9ilDt5lC052o/cMwCB3+FmF/fW6kL21Z9p6By8V/L3h5x5Bbj
+        vJw/gqi0swpi7IGaeCtv6HwMTZskU
+X-Received: by 2002:a17:90a:be0e:: with SMTP id a14mr18327265pjs.57.1602481149358;
+        Sun, 11 Oct 2020 22:39:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwJXjtIbsMp+fCcHse+S6zByjhxmDx9cu87JfcRfICcPE/vXI6mOg0RsouxghxPUfUcR82scg==
+X-Received: by 2002:a17:90a:be0e:: with SMTP id a14mr18327247pjs.57.1602481149016;
+        Sun, 11 Oct 2020 22:39:09 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id v20sm13203271pjh.5.2020.10.11.22.39.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Oct 2020 22:39:08 -0700 (PDT)
+References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v2 0/5] tpm_tis: fix interrupts (again)
+In-reply-to: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
+Date:   Sun, 11 Oct 2020 22:39:07 -0700
+Message-ID: <87r1q4xatg.fsf@redhat.com>
 MIME-Version: 1.0
-From:   rishi gupta <gupt21@gmail.com>
-Date:   Sun, 11 Oct 2020 23:14:54 +0530
-Message-ID: <CALUj-gs2-kCX00Pf42kb+fYo0UE6DD6he3z=-Lz8M52-AFFi_Q@mail.gmail.com>
-Subject: Does selinux rule needed for .ima keyring access - integrity: Request
- for unknown key 'id:87deb3bf' err -13
-To:     linux-integrity <linux-integrity@vger.kernel.org>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi IMA experts,
 
-Do we need to write any rule for selinux to allow access to key in
-.ima keyring for all processes or I am thinking in wrong direction.
+James Bottomley @ 2020-10-01 11:09 MST:
 
-"integrity: Request for unknown key 'id:87deb3bf' err -13" is the
-error with selinux enabled (kernel is 4.14). Without selinux enabled,
-IMA appraisal works fine.
-Audit logs:
-[10012.824868] type=1800 audit(315974764.149:5729): pid=7511 uid=1001
-auid=4294967295 ses=4294967295
-subj=system_u:system_r:testd_cm_t:s0-s15:c0.c1023 op="appraise_data"
-cause="invalid-signature" comm="sh" name="/sbin/testdaemon"
-dev="ubifs" ino=18446 res=0
+> The current state of the TIS TPM is that interrupts have been globally
+> disabled by various changes.  The problems we got reported the last
+> time they were enabled was interrupt storms.  With my own TIS TPM,
+> I've found that this is caused because my TPM doesn't do legacy
+> cycles, The TIS spec (chapter 6.1 "Locality Usage Per Register")
+> requires any TIS TPM without legacy cycles not to act on any write to
+> an interrupt register unless the locality is enabled.  This means if
+> an interrupt fires after we relinquish the locality, the TPM_EOI in
+> the interrupt routine is ineffective meaning the same interrupt
+> triggers over and over again.  This problem also means we can have
+> trouble setting up interrupts on TIS TPMs because the current init
+> code does the setup before the locality is claimed for the first time.
+>
+> James
+>
 
-Output of few commands just in case it is useful:
 
-# keyctl show -x %:.builtin_trusted_keys
-Keyring
-0x26edf4c7 ---lswrv      0     0  keyring: .builtin_trusted_keys
-0x3e65ef00 ---lswrv      0     0   \_ asymmetric: IMA-CA: IMA/EVM
-certificate signing key: 20c98dcf771b2a945c0ffd245011118299f90bdf
+I tested initially with the following commits reverted:
 
-# keyctl show -x %:.ima
-Keyring
-0x0e961ca8 ---lswrv      0     0  keyring: .ima
-0x2e3011f8 ---lswrv      0     0   \_ asymmetric: ima: signing key:
-edc4697e8b77ef2713e491616726090c87deb3bf
+aa4a63dd9816 tpm: Revert "tpm_tis_core: Turn on the TPM before probing IRQ's" | 2020-01-06 | (Stefan Berger)
+dda8b2af395b tpm: Revert "tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts" | 2020-01-06 | (Stefan Berger)
 
-/ # cat /proc/keys
-02fdee99 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-035ab7c0 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-0439d238 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-04964e3e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-04da590e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-054ef37d I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-055154e2 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-06511dd4 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-0761426a I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-0793080e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-07f495f8 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-082f71d6 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-096dee7c I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-09904799 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-0b87b742 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-0c1b072c I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
-0d02c3ff I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
-0db26b5a I--Q---     8 perm 3f030000     0     0 keyring   _ses: 1
-0dc6c62e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-0e961ca8 I------     1 perm 1f0f0000     0     0 keyring   .ima: 1
-0ff12212 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-1156ac2d I--Q---    13 perm 3f030000     0     0 keyring   _ses: 1
-1252fe6f I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
-1285aef6 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-1322fc5e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-13866397 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-14173f44 I--Q---     2 perm 1f3f0000     0 65534 keyring   _uid.0: empty
-14931524 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
-155502e8 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
-1604215d I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-16b40b6b I--Q---     4 perm 3f030000     0     0 keyring   _ses: 1
-17db30d9 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
-18ea41e0 I--Q---     5 perm 3f030000     0     0 keyring   _ses: 1
-19b92253 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-19eeed3f I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-1b89b979 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
-1c0a573f I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-1cd763d5 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-1d3caf71 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-1d6a3880 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
-1ddffca9 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-1df0c622 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-201c5a37 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-2045b3bb I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-20993304 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
-2154e4a6 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-22f2253f I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-25e97a49 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-2665b7b4 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-26edf4c7 I------     1 perm 1f0b0000     0     0 keyring
-.builtin_trusted_keys: 1
-2798bd15 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-29931371 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-2a3853b1 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-2cc594f1 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-2dc04d98 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
-2e0e4f06 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-2e3011f8 I------     1 perm 1f030000     0     0 asymmetri ima:
-signing key: edc4697e8b77ef2713e491616726090c87deb3bf: X509.rsa
-87deb3bf []
-2e769ee9 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-2ebb4809 I--Q---     1 perm 1f3f0000     0 65534 keyring   _uid_ses.0: 1
-2fdc0299 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-307f8910 I--Q---     1 perm 3f030000     0     0 keyring   _ses: 1
-3384a46f I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-357dd4d1 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-3be9a95e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-3c3162f6 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
-3d47a3ab I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
-3e65ef00 I------     1 perm 1f030000     0     0 asymmetri IMA-CA:
-IMA/EVM certificate signing key:
-20c98dcf771b2a945c0ffd245011118299f90bdf: X509.rsa 99f90bdf []
-3f625ed4 I--Q---     5 perm 3f030000     0     0 keyring   _ses: 1
+The laptop doesn't become unusable, but I lose the trackpad and get the following:
 
-Regards.,
-Rishi
+[    3.070501] irq 31: nobody cared (try booting with the "irqpoll" option)
+[    3.070504] CPU: 2 PID: 251 Comm: rngd Not tainted 5.8.13-201.local.fc32.x86_64 #1
+[    3.070504] Hardware name: LENOVO 20NYS7K90F/20NYS7K90F, BIOS N2JET83W (1.61 ) 11/22/2019
+[    3.070505] Call Trace:
+[    3.070511]  dump_stack+0x6b/0x88
+[    3.070514]  __report_bad_irq+0x35/0xa7
+[    3.070516]  note_interrupt.cold+0xb/0x6a
+[    3.070518]  handle_irq_event+0x88/0x8a
+[    3.070519]  handle_fasteoi_irq+0x78/0x1c0
+[    3.070522]  common_interrupt+0x68/0x140
+[    3.070524]  ? asm_common_interrupt+0x8/0x40
+[    3.070525]  asm_common_interrupt+0x1e/0x40
+[    3.070527] RIP: 0033:0x7f2eea3249b5
+[    3.070529] Code: e0 48 c1 e8 3c 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 37 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 1e 83 e0 01 48 31 45 f0 <48> 8b 45 e0 48 c1 e8 1b 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8
+[    3.070529] RSP: 002b:00007f2ee3ffebc0 EFLAGS: 00000202
+[    3.070530] RAX: 0000000000000001 RBX: 000000000000000a RCX: 000000000000002e
+[    3.070531] RDX: 0463400000000000 RSI: 0000000000000000 RDI: 0000000000000001
+[    3.070532] RBP: 00007f2ee3ffec10 R08: 0000000000000000 R09: 0000000000000035
+[    3.070532] R10: 00007ffde716f080 R11: 00007ffde716f080 R12: 00007f2edc004c00
+[    3.070533] R13: 00007ffde700a54f R14: 00007f2ee3ffed10 R15: 00005598a41e3680
+[    3.070534] handlers:
+[    3.070537] [<000000007b6f3232>] tis_int_handler
+[    3.070538] Disabling IRQ #31
+...
+[   14.956342] irq 16: nobody cared (try booting with the "irqpoll" option)
+[   14.956344] CPU: 0 PID: 1013 Comm: rngd Not tainted 5.8.13-201.local.fc32.x86_64 #1
+[   14.956344] Hardware name: LENOVO 20NYS7K90F/20NYS7K90F, BIOS N2JET83W (1.61 ) 11/22/2019
+[   14.956345] Call Trace:
+[   14.956350]  dump_stack+0x6b/0x88
+[   14.956353]  __report_bad_irq+0x35/0xa7
+[   14.956354]  note_interrupt.cold+0xb/0x6a
+[   14.956355]  handle_irq_event+0x88/0x8a
+[   14.956356]  handle_fasteoi_irq+0x78/0x1c0
+[   14.956358]  common_interrupt+0x68/0x140
+[   14.956360]  ? asm_common_interrupt+0x8/0x40
+[   14.956361]  asm_common_interrupt+0x1e/0x40
+[   14.956362] RIP: 0033:0x7fcaff4399d3
+[   14.956363] Code: e0 48 c1 e8 1e 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 1b 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 16 83 e0 01 48 31 45 f0 <48> d1 65 e0 48 8b 45 f0 48 31 45 e0 83 45 d4 01 83 7d d4 40 0f 86
+[   14.956364] RSP: 002b:00007fcafe544bc0 EFLAGS: 00000246
+[   14.956364] RAX: 0000000000000000 RBX: 000000000000000a RCX: 0000000000000026
+[   14.956365] RDX: 000df20000000000 RSI: 0000000000000000 RDI: 0000000000000001
+[   14.956365] RBP: 00007fcafe544c10 R08: 0000000000000000 R09: 0000000000000035
+[   14.956366] R10: 00007ffc30bd2080 R11: 00007ffc30bd2080 R12: 00007fcaf0004c00
+[   14.956366] R13: 00007fcaf0004c00 R14: 00007fcaf0000b60 R15: 0000560216fcf0f2
+[   14.956367] handlers:
+[   14.956370] [<0000000024c0571e>] i801_isr [i2c_i801]
+[   14.956371] Disabling IRQ #16
+
+/proc/interrupts shows:
+
+  16:     100000          0          0          0          0          0          0          0  IR-IO-APIC   16-fasteoi   i801_smbus
+  31:          0          0     100000          0          0          0          0          0  IR-IO-APIC   31-fasteoi   tpm0
+
+
+I also get this behavior with your patchset applied. If I boot with
+tpm_tis.interrupts=0 it behaves.  The thought from Hans is to look at
+the dmi info and key off the vendor being Lenovo and bios date to
+decide if interrupts should be disabled. Since Dan ran also into this
+with something internal at Intel I don't know if that will be
+sufficient.
+
+I hope to look over this patchset tomorrow.
+
+Regards,
+Jerry
+
