@@ -2,144 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 339E028CA04
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 10:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F91428CA83
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 10:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387915AbgJMIS2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 13 Oct 2020 04:18:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50068 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387718AbgJMIS0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 13 Oct 2020 04:18:26 -0400
-Received: from e123331-lin.nice.arm.com (lfbn-nic-1-188-42.w2-15.abo.wanadoo.fr [2.15.37.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D5B6F2078A;
-        Tue, 13 Oct 2020 08:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602577105;
-        bh=7aBU9lDEUXen8HeupJi7723iiG7XIrGp0iNfq6lCotc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=y5YduaJR3w30ue1Jdje2lFT7jcXhOBW1N4BBMZdso9n5ms/gzhMEm7740YkTRHwXH
-         EE0h1N4V3EJQSVJFHiQlhEhlNKgoiqpvt2NSl5q1JK+G6ud+ydgXY9JQ33cL/Gzogj
-         oCojvnCna9JGKJFEiZbqJKHb3/lrWe8OrldYKabk=
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-efi@vger.kernel.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>, Chester Lin <clin@suse.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: [PATCH v2] ima: defer arch_ima_get_secureboot() call to IMA init time
-Date:   Tue, 13 Oct 2020 10:18:04 +0200
-Message-Id: <20201013081804.17332-1-ardb@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S2390696AbgJMIvi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 13 Oct 2020 04:51:38 -0400
+Received: from smtp-8fa9.mail.infomaniak.ch ([83.166.143.169]:45065 "EHLO
+        smtp-8fa9.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390190AbgJMIvi (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 13 Oct 2020 04:51:38 -0400
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4C9Tml6Zp0zlkxyN;
+        Tue, 13 Oct 2020 10:51:35 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4C9Tmk5Vd6zlh8WW;
+        Tue, 13 Oct 2020 10:51:34 +0200 (CEST)
+Subject: Re: [PATCH v1] dm verity: Add support for signature verification with
+ 2nd keyring
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
+        Milan Broz <gmazyland@gmail.com>, dm-devel@redhat.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20201002071802.535023-1-mic@digikod.net>
+ <bda2ffd7-3b7c-33a4-667f-a3435e112fc1@digikod.net>
+ <20201012235502.GA36149@linux.intel.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <1b344a3c-2671-3b1a-3c6b-f3b28e819bc5@digikod.net>
+Date:   Tue, 13 Oct 2020 10:51:34 +0200
+User-Agent: 
+MIME-Version: 1.0
+In-Reply-To: <20201012235502.GA36149@linux.intel.com>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Chester reports that it is necessary to introduce a new way to pass
-the EFI secure boot status between the EFI stub and the core kernel
-on ARM systems. The usual way of obtaining this information is by
-checking the SecureBoot and SetupMode EFI variables, but this can
-only be done after the EFI variable workqueue is created, which
-occurs in a subsys_initcall(), whereas arch_ima_get_secureboot()
-is called much earlier by the IMA framework.
 
-However, the IMA framework itself is started as a late_initcall,
-and the only reason the call to arch_ima_get_secureboot() occurs
-so early is because it happens in the context of a __setup()
-callback that parses the ima_appraise= command line parameter.
+On 13/10/2020 01:55, Jarkko Sakkinen wrote:
+> On Fri, Oct 09, 2020 at 11:50:03AM +0200, Mickaël Salaün wrote:
+>> Hi,
+>>
+>> What do you think about this patch?
+>>
+>> Regards,
+>>  Mickaël
+>>
+>> On 02/10/2020 09:18, Mickaël Salaün wrote:
+>>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>>
+>>> Add a new DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING configuration
+>>> to enable dm-verity signatures to be verified against the secondary
+>>> trusted keyring.  This allows certificate updates without kernel update
+>>> and reboot, aligning with module and kernel (kexec) signature
+>>> verifications.
+> 
+> I'd prefer a bit more verbose phrasing, not least because I have never
+> really even peeked at dm-verity, but it is also a good practice.
+> 
+> You have the middle part of the story missing - explaining the semantics
+> of how the feature leads to the aimed solution.
 
-So let's refactor this code a little bit, by using a core_param()
-callback to capture the command line argument, and deferring any
-reasoning based on its contents to the IMA init routine.
+OK, what about:
 
-Cc: Chester Lin <clin@suse.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Link: https://lore.kernel.org/linux-arm-kernel/20200904072905.25332-2-clin@suse.com/
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
-v2: rebase onto series 'integrity: improve user feedback for invalid bootparams'
-
- include/linux/ima.h                   |  6 ++++++
- security/integrity/ima/ima_appraise.c | 16 ++++++++++------
- security/integrity/ima/ima_main.c     |  1 +
- 3 files changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index d15100de6cdd..8aefee9c36ab 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -27,6 +27,12 @@ extern void ima_post_path_mknod(struct dentry *dentry);
- extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
- extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
- 
-+#ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-+extern void ima_appraise_parse_cmdline(void);
-+#else
-+static inline void ima_appraise_parse_cmdline(void) {}
-+#endif
-+
- #ifdef CONFIG_IMA_KEXEC
- extern void ima_add_kexec_buffer(struct kimage *image);
- #endif
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index 3dd8c2e4314e..dfe08489faea 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -16,12 +16,19 @@
- 
- #include "ima.h"
- 
--static int __init default_appraise_setup(char *str)
--{
- #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
-+static char *ima_appraise_cmdline_default __initdata;
-+core_param(ima_appraise, ima_appraise_cmdline_default, charp, 0);
-+
-+void __init ima_appraise_parse_cmdline(void)
-+{
-+	const char *str = ima_appraise_cmdline_default;
- 	bool sb_state = arch_ima_get_secureboot();
- 	int appraisal_state = ima_appraise;
- 
-+	if (!str)
-+		return;
-+
- 	if (strncmp(str, "off", 3) == 0)
- 		appraisal_state = 0;
- 	else if (strncmp(str, "log", 3) == 0)
-@@ -42,11 +49,8 @@ static int __init default_appraise_setup(char *str)
- 	} else {
- 		ima_appraise = appraisal_state;
- 	}
--#endif
--	return 1;
- }
--
--__setup("ima_appraise=", default_appraise_setup);
-+#endif
- 
- /*
-  * is_ima_appraise_enabled - return appraise status
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index a5a2ae36a36d..2497412b1ad2 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -865,6 +865,7 @@ static int __init init_ima(void)
- {
- 	int error;
- 
-+	ima_appraise_parse_cmdline();
- 	ima_init_template_list();
- 	hash_setup(CONFIG_IMA_DEFAULT_HASH);
- 	error = ima_init();
--- 
-2.17.1
-
+Add a new configuration DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
+to enable dm-verity signatures to be verified against the secondary
+trusted keyring. Instead of relying on the builtin trusted keyring (with
+hard-coded certificates), the second trusted keyring can include
+certificate authorities from the builtin trusted keyring and child
+certificates loaded at run time. Using the secondary trusted keyring
+enables to use dm-verity disks (e.g. loop devices) signed by keys which
+did not exist at kernel build time, leveraging the certificate chain of
+trust model. In practice, this allows to update certificates without
+kernel update and reboot, aligning with module and kernel (kexec)
+signature verification which already use the secondary trusted keyring.
