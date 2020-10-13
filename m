@@ -2,85 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840B628C73D
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 04:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3739328C745
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 04:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727451AbgJMCrX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 12 Oct 2020 22:47:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60356 "EHLO mail.kernel.org"
+        id S1727618AbgJMCrY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Oct 2020 22:47:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60336 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727025AbgJMCrW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        id S1726791AbgJMCrW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
         Mon, 12 Oct 2020 22:47:22 -0400
 Received: from localhost (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 60396208B8;
-        Tue, 13 Oct 2020 02:21:59 +0000 (UTC)
-Date:   Tue, 13 Oct 2020 05:21:57 +0300
+        by mail.kernel.org (Postfix) with ESMTPSA id 9D04121582;
+        Tue, 13 Oct 2020 02:39:29 +0000 (UTC)
+Date:   Tue, 13 Oct 2020 05:39:27 +0300
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     zohar@linux.ibm.com, jejb@linux.ibm.com, dhowells@redhat.com,
-        jens.wiklander@linaro.org, corbet@lwn.net, jmorris@namei.org,
-        serge@hallyn.com, casey@schaufler-ca.com, janne.karhunen@gmail.com,
-        daniel.thompson@linaro.org, Markus.Wamser@mixed-mode.de,
-        lhinds@redhat.com, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org
-Subject: Re: [PATCH v7 4/4] MAINTAINERS: Add entry for TEE based Trusted Keys
-Message-ID: <20201013022157.GA47751@linux.intel.com>
-References: <1602065268-26017-1-git-send-email-sumit.garg@linaro.org>
- <1602065268-26017-5-git-send-email-sumit.garg@linaro.org>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     linux-integrity@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, stable@vger.kernel.org,
+        Sumit Garg <sumit.garg@linaro.org>,
+        kernel test robot <lkp@intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KEYS-TRUSTED" <keyrings@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v3 3/3] KEYS: trusted: Reserve TPM for seal and unseal
+ operations
+Message-ID: <20201013023927.GA71954@linux.intel.com>
+References: <20201013002815.40256-1-jarkko.sakkinen@linux.intel.com>
+ <20201013002815.40256-4-jarkko.sakkinen@linux.intel.com>
+ <b56dd2e9f3934e24f08005b9c5588c54b4837ff6.camel@HansenPartnership.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1602065268-26017-5-git-send-email-sumit.garg@linaro.org>
+In-Reply-To: <b56dd2e9f3934e24f08005b9c5588c54b4837ff6.camel@HansenPartnership.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Oct 07, 2020 at 03:37:48PM +0530, Sumit Garg wrote:
-> Add MAINTAINERS entry for TEE based Trusted Keys framework.
+On Mon, Oct 12, 2020 at 05:58:04PM -0700, James Bottomley wrote:
+> On Tue, 2020-10-13 at 03:28 +0300, Jarkko Sakkinen wrote:
+> [...]
+> > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> > index 8f4ff39f51e7..f0ebce14d2f8 100644
+> > --- a/include/linux/tpm.h
+> > +++ b/include/linux/tpm.h
+> > @@ -397,6 +397,10 @@ static inline u32 tpm2_rc_value(u32 rc)
+> >  #if defined(CONFIG_TCG_TPM) || defined(CONFIG_TCG_TPM_MODULE)
+> >  
+> >  extern int tpm_is_tpm2(struct tpm_chip *chip);
+> > +extern __must_check int tpm_try_get_ops(struct tpm_chip *chip);
+> > +extern void tpm_put_ops(struct tpm_chip *chip);
+> > +extern ssize_t tpm_transmit_cmd(struct tpm_chip *chip, struct
+> > tpm_buf *buf,
+> > +				size_t min_rsp_body_length, const char
+> > *desc);
+> >  extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+> >  			struct tpm_digest *digest);
+> >  extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+> > @@ -410,7 +414,18 @@ static inline int tpm_is_tpm2(struct tpm_chip
+> > *chip)
+> >  {
+> >  	return -ENODEV;
+> >  }
+> > -
+> > +static inline int tpm_try_get_ops(struct tpm_chip *chip)
+> > +{
+> > +	return -ENODEV;
+> > +}
+> > +static inline void tpm_put_ops(struct tpm_chip *chip)
+> > +{
+> > +}
+> > +static inline ssize_t tpm_transmit_cmd(struct tpm_chip *chip, struct
+> > tpm_buf *buf,
+> > +				       size_t min_rsp_body_length,
+> > const char *desc)
+> > +{
+> > +	return -ENODEV;
+> > +}
+> >  static inline int tpm_pcr_read(struct tpm_chip *chip, int pcr_idx,
 > 
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> I don't think we want this, do we?  That's only for API access which
+> should be available when the TPM isn't selected.  Given that get/put
+> are TPM critical operations, they should only appear when inside code
+> where the TPM has already been selected.  If they appear outside TPM
+> selected code, I think we want the compile to fail, which is why we
+> don't want these backup definitions.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 48aff80..eb3d889 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9663,6 +9663,14 @@ F:	include/keys/trusted-type.h
->  F:	include/keys/trusted_tpm.h
->  F:	security/keys/trusted-keys/
->  
-> +KEYS-TRUSTED-TEE
-> +M:	Sumit Garg <sumit.garg@linaro.org>
-> +L:	linux-integrity@vger.kernel.org
-> +L:	keyrings@vger.kernel.org
-> +S:	Supported
-> +F:	include/keys/trusted_tee.h
-> +F:	security/keys/trusted-keys/trusted_tee.c
-> +
->  KEYS/KEYRINGS
->  M:	David Howells <dhowells@redhat.com>
->  M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> -- 
-> 2.7.4
+> James
 
-I'm sorry but I think I have changed my mind on this. This has been
-spinning for a while and sometimes conclusions change over the time.
+OK, I'll change it.
 
-I don't think that we really need a separate subsystem tag. I'd be for a
-new M-entry or R-entry to the existing subsystem tag. It's essential to
-have ack from someone with ARM and TEE knowledge but this way too heavy
-for the purpose.
-
-I also see it the most manageable if the trusted keys PR's come from a
-single source.
+Thanks.
 
 /Jarkko
