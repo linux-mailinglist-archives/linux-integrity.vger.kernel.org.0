@@ -2,107 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3739328C745
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 04:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8658428C74E
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 04:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727618AbgJMCrY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 12 Oct 2020 22:47:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60336 "EHLO mail.kernel.org"
+        id S1727072AbgJMCwO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Oct 2020 22:52:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60892 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726791AbgJMCrW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 12 Oct 2020 22:47:22 -0400
+        id S1727023AbgJMCwO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 12 Oct 2020 22:52:14 -0400
 Received: from localhost (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D04121582;
-        Tue, 13 Oct 2020 02:39:29 +0000 (UTC)
-Date:   Tue, 13 Oct 2020 05:39:27 +0300
+        by mail.kernel.org (Postfix) with ESMTPSA id D04AA206FB;
+        Tue, 13 Oct 2020 02:52:13 +0000 (UTC)
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, stable@vger.kernel.org,
-        Sumit Garg <sumit.garg@linaro.org>,
-        kernel test robot <lkp@intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KEYS-TRUSTED" <keyrings@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v3 3/3] KEYS: trusted: Reserve TPM for seal and unseal
- operations
-Message-ID: <20201013023927.GA71954@linux.intel.com>
-References: <20201013002815.40256-1-jarkko.sakkinen@linux.intel.com>
- <20201013002815.40256-4-jarkko.sakkinen@linux.intel.com>
- <b56dd2e9f3934e24f08005b9c5588c54b4837ff6.camel@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: [PATCH v4 0/3] KEYS, trusted: a bunch of bug fixes
+Date:   Tue, 13 Oct 2020 05:51:53 +0300
+Message-Id: <20201013025156.111305-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b56dd2e9f3934e24f08005b9c5588c54b4837ff6.camel@HansenPartnership.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 05:58:04PM -0700, James Bottomley wrote:
-> On Tue, 2020-10-13 at 03:28 +0300, Jarkko Sakkinen wrote:
-> [...]
-> > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> > index 8f4ff39f51e7..f0ebce14d2f8 100644
-> > --- a/include/linux/tpm.h
-> > +++ b/include/linux/tpm.h
-> > @@ -397,6 +397,10 @@ static inline u32 tpm2_rc_value(u32 rc)
-> >  #if defined(CONFIG_TCG_TPM) || defined(CONFIG_TCG_TPM_MODULE)
-> >  
-> >  extern int tpm_is_tpm2(struct tpm_chip *chip);
-> > +extern __must_check int tpm_try_get_ops(struct tpm_chip *chip);
-> > +extern void tpm_put_ops(struct tpm_chip *chip);
-> > +extern ssize_t tpm_transmit_cmd(struct tpm_chip *chip, struct
-> > tpm_buf *buf,
-> > +				size_t min_rsp_body_length, const char
-> > *desc);
-> >  extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
-> >  			struct tpm_digest *digest);
-> >  extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
-> > @@ -410,7 +414,18 @@ static inline int tpm_is_tpm2(struct tpm_chip
-> > *chip)
-> >  {
-> >  	return -ENODEV;
-> >  }
-> > -
-> > +static inline int tpm_try_get_ops(struct tpm_chip *chip)
-> > +{
-> > +	return -ENODEV;
-> > +}
-> > +static inline void tpm_put_ops(struct tpm_chip *chip)
-> > +{
-> > +}
-> > +static inline ssize_t tpm_transmit_cmd(struct tpm_chip *chip, struct
-> > tpm_buf *buf,
-> > +				       size_t min_rsp_body_length,
-> > const char *desc)
-> > +{
-> > +	return -ENODEV;
-> > +}
-> >  static inline int tpm_pcr_read(struct tpm_chip *chip, int pcr_idx,
-> 
-> I don't think we want this, do we?  That's only for API access which
-> should be available when the TPM isn't selected.  Given that get/put
-> are TPM critical operations, they should only appear when inside code
-> where the TPM has already been selected.  If they appear outside TPM
-> selected code, I think we want the compile to fail, which is why we
-> don't want these backup definitions.
-> 
-> James
+This patch set contains a bunch of disjoint bug fixes.
 
-OK, I'll change it.
+v4:
+* Do not create stubs for tpm_transmit_cmd(), tpm_try_get_ops() and
+  tpm_put_ops().
+  https://lore.kernel.org/linux-integrity/20201013023927.GA71954@linux.intel.com/
 
-Thanks.
+v3:
+* Reordered patches a bit, i.e. trivial fixes in the head and the least
+  trivial in the tail.
+  <no xref>
+* Added the missing "return -ENODEV;" to tpm_transmit_cmd(), when the
+  kernel is compiled without TPM support.
+  https://lore.kernel.org/linux-integrity/202010110927.zsxMpek2-lkp@intel.com/
 
-/Jarkko
+v2:
+* Fix a kernel test bot warning.
+  https://lore.kernel.org/linux-integrity/202010051152.9kxy43LO-lkp@intel.com/
+
+Jarkko Sakkinen (3):
+  KEYS: trusted: Fix incorrect handling of tpm_get_random()
+  KEYS: trusted: Fix migratable=1 failing
+  KEYS: trusted: Reserve TPM for seal and unseal operations
+
+ drivers/char/tpm/tpm.h                    |  4 -
+ include/linux/tpm.h                       |  5 +-
+ security/keys/trusted-keys/trusted_tpm1.c | 94 ++++++++++++++++-------
+ security/keys/trusted-keys/trusted_tpm2.c |  6 +-
+ 4 files changed, 75 insertions(+), 34 deletions(-)
+
+-- 
+2.25.1
+
