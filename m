@@ -2,66 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8658428C74E
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 04:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3118D28C74F
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 04:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgJMCwO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 12 Oct 2020 22:52:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60892 "EHLO mail.kernel.org"
+        id S1727351AbgJMCwR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Oct 2020 22:52:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727023AbgJMCwO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 12 Oct 2020 22:52:14 -0400
+        id S1727023AbgJMCwR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 12 Oct 2020 22:52:17 -0400
 Received: from localhost (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D04AA206FB;
-        Tue, 13 Oct 2020 02:52:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9451020735;
+        Tue, 13 Oct 2020 02:52:16 +0000 (UTC)
 From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     David Howells <dhowells@redhat.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v4 0/3] KEYS, trusted: a bunch of bug fixes
-Date:   Tue, 13 Oct 2020 05:51:53 +0300
-Message-Id: <20201013025156.111305-1-jarkko.sakkinen@linux.intel.com>
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        stable@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Kent Yoder <key@linux.vnet.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "H. Peter Anvin" <hpa@linux.intel.com>,
+        David Safford <safford@linux.vnet.ibm.com>,
+        keyrings@vger.kernel.org (open list:KEYS-TRUSTED),
+        linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4 1/3] KEYS: trusted: Fix incorrect handling of tpm_get_random()
+Date:   Tue, 13 Oct 2020 05:51:54 +0300
+Message-Id: <20201013025156.111305-2-jarkko.sakkinen@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201013025156.111305-1-jarkko.sakkinen@linux.intel.com>
+References: <20201013025156.111305-1-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch set contains a bunch of disjoint bug fixes.
+When tpm_get_random() was introduced, it defined the following API for the
+return value:
 
-v4:
-* Do not create stubs for tpm_transmit_cmd(), tpm_try_get_ops() and
-  tpm_put_ops().
-  https://lore.kernel.org/linux-integrity/20201013023927.GA71954@linux.intel.com/
+1. A positive value tells how many bytes of random data was generated.
+2. A negative value on error.
 
-v3:
-* Reordered patches a bit, i.e. trivial fixes in the head and the least
-  trivial in the tail.
-  <no xref>
-* Added the missing "return -ENODEV;" to tpm_transmit_cmd(), when the
-  kernel is compiled without TPM support.
-  https://lore.kernel.org/linux-integrity/202010110927.zsxMpek2-lkp@intel.com/
+However, in the call sites the API was used incorrectly, i.e. as it would
+only return negative values and otherwise zero. Returning he positive read
+counts to the user space does not make any possible sense.
 
-v2:
-* Fix a kernel test bot warning.
-  https://lore.kernel.org/linux-integrity/202010051152.9kxy43LO-lkp@intel.com/
+Fix this by returning -EIO when tpm_get_random() returns a positive value.
 
-Jarkko Sakkinen (3):
-  KEYS: trusted: Fix incorrect handling of tpm_get_random()
-  KEYS: trusted: Fix migratable=1 failing
-  KEYS: trusted: Reserve TPM for seal and unseal operations
+Fixes: 41ab999c80f1 ("tpm: Move tpm_get_random api into the TPM device driver")
+Cc: stable@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Kent Yoder <key@linux.vnet.ibm.com>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+ security/keys/trusted-keys/trusted_tpm1.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
- drivers/char/tpm/tpm.h                    |  4 -
- include/linux/tpm.h                       |  5 +-
- security/keys/trusted-keys/trusted_tpm1.c | 94 ++++++++++++++++-------
- security/keys/trusted-keys/trusted_tpm2.c |  6 +-
- 4 files changed, 75 insertions(+), 34 deletions(-)
-
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index b9fe02e5f84f..c7b1701cdac5 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -403,9 +403,12 @@ static int osap(struct tpm_buf *tb, struct osapsess *s,
+ 	int ret;
+ 
+ 	ret = tpm_get_random(chip, ononce, TPM_NONCE_SIZE);
+-	if (ret != TPM_NONCE_SIZE)
++	if (ret < 0)
+ 		return ret;
+ 
++	if (ret != TPM_NONCE_SIZE)
++		return -EIO;
++
+ 	tpm_buf_reset(tb, TPM_TAG_RQU_COMMAND, TPM_ORD_OSAP);
+ 	tpm_buf_append_u16(tb, type);
+ 	tpm_buf_append_u32(tb, handle);
+@@ -496,8 +499,12 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
+ 		goto out;
+ 
+ 	ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
++	if (ret < 0)
++		return ret;
++
+ 	if (ret != TPM_NONCE_SIZE)
+-		goto out;
++		return -EIO;
++
+ 	ordinal = htonl(TPM_ORD_SEAL);
+ 	datsize = htonl(datalen);
+ 	pcrsize = htonl(pcrinfosize);
+@@ -601,9 +608,12 @@ static int tpm_unseal(struct tpm_buf *tb,
+ 
+ 	ordinal = htonl(TPM_ORD_UNSEAL);
+ 	ret = tpm_get_random(chip, nonceodd, TPM_NONCE_SIZE);
++	if (ret < 0)
++		return ret;
++
+ 	if (ret != TPM_NONCE_SIZE) {
+ 		pr_info("trusted_key: tpm_get_random failed (%d)\n", ret);
+-		return ret;
++		return -EIO;
+ 	}
+ 	ret = TSS_authhmac(authdata1, keyauth, TPM_NONCE_SIZE,
+ 			   enonce1, nonceodd, cont, sizeof(uint32_t),
+@@ -1013,8 +1023,12 @@ static int trusted_instantiate(struct key *key,
+ 	case Opt_new:
+ 		key_len = payload->key_len;
+ 		ret = tpm_get_random(chip, payload->key, key_len);
++		if (ret < 0)
++			goto out;
++
+ 		if (ret != key_len) {
+ 			pr_info("trusted_key: key_create failed (%d)\n", ret);
++			ret = -EIO;
+ 			goto out;
+ 		}
+ 		if (tpm2)
 -- 
 2.25.1
 
