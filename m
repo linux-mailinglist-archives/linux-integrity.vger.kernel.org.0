@@ -2,97 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E419928D485
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 21:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B03028D4E1
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 21:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728562AbgJMTgt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 13 Oct 2020 15:36:49 -0400
-Received: from smtprelay0225.hostedemail.com ([216.40.44.225]:50550 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725919AbgJMTgs (ORCPT
+        id S1731913AbgJMTqH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 13 Oct 2020 15:46:07 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4548 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728042AbgJMTqH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 13 Oct 2020 15:36:48 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 9445A180A7FCA;
-        Tue, 13 Oct 2020 19:36:47 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:2895:3138:3139:3140:3141:3142:3352:3622:3865:3867:3873:3874:4250:4321:5007:6119:7514:7809:9010:10004:10400:10848:11232:11658:11914:12043:12114:12297:12555:12740:12760:12895:13069:13311:13357:13439:13891:14096:14097:14181:14659:14721:21080:21433:21627:21740:30003:30054:30064:30070:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
-X-HE-Tag: fork80_091106427205
-X-Filterd-Recvd-Size: 2979
-Received: from XPS-9350 (cpe-72-134-80-165.natsow.res.rr.com [72.134.80.165])
-        (Authenticated sender: joe@perches.com)
-        by omf15.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 13 Oct 2020 19:36:45 +0000 (UTC)
-Message-ID: <b1ccdfbb3119528490ea10f40e1da084b1b23f87.camel@perches.com>
-Subject: Re: [PATCH] MAINTAINERS: jarkko.sakkinen@linux.intel.com ->
- jarkko@kernel.org
-From:   Joe Perches <joe@perches.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>
-Date:   Tue, 13 Oct 2020 12:36:44 -0700
-In-Reply-To: <20201013192524.GA164334@kernel.org>
-References: <20201013104705.140127-1-jarkko.sakkinen@linux.intel.com>
-         <dce9442565fc3176ad770788bc1cf76b02080486.camel@perches.com>
-         <20201013192524.GA164334@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
-MIME-Version: 1.0
+        Tue, 13 Oct 2020 15:46:07 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09DJY4d0179336;
+        Tue, 13 Oct 2020 15:45:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=wjgRi0JKXCA+0MevYmBRStAWxi1vVqqvVpMDV3OGaHY=;
+ b=ofbmEHpj/HiqpFVYoUpJc1CptudDCiqJuewrLBlLd6fhph58Ir1kclCkuSUK3j5p/MFY
+ FUoYrmA4nYUwMkULfI4E4GgR4bXVatntZGhq4QDgtZ+KxJxJfQHR2WtMDvdNXnhVsc2p
+ ivS4wEeclmH6hZb3G116bEJYT8Pho6nMCSMgFA5ZWhEDoxaHnF0nt14Dwd+lfYDRAYCJ
+ kUL4KuoOa8hascylFLRFbKk3K8BtRPSGjoU8xyoA/bo0Vk/kcZ0UdRWHezWBq8ZLRuLS
+ FZusq++dnZSSJ9Akli9JVrLK28+6vAZS5HrgVgZnoxXGRbogqhvx0xAsZkQMOOUGiGSJ AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 345jac8k3x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Oct 2020 15:45:50 -0400
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09DJYlcD184984;
+        Tue, 13 Oct 2020 15:45:49 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 345jac8k37-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Oct 2020 15:45:49 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09DJbP5F001513;
+        Tue, 13 Oct 2020 19:45:47 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 3434k81s1j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Oct 2020 19:45:47 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09DJjiBN17236448
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Oct 2020 19:45:45 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DEDA511C050;
+        Tue, 13 Oct 2020 19:45:44 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D215111C054;
+        Tue, 13 Oct 2020 19:45:42 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.65.195])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 13 Oct 2020 19:45:42 +0000 (GMT)
+Message-ID: <6a4ad1dbf6d7a59b3728f3847fdbea04b73aff69.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima: defer arch_ima_get_secureboot() call to IMA
+ init time
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-security-module@vger.kernel.org, Chester Lin <clin@suse.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>
+Date:   Tue, 13 Oct 2020 15:45:41 -0400
+In-Reply-To: <CAMj1kXFZVR46_oeYTxJ59q-7u+zFCFtOQuSQoiEzKLhXzpydow@mail.gmail.com>
+References: <20201013081804.17332-1-ardb@kernel.org>
+         <ae9ab2560f6d7b114726efb1ec26f0a36f695335.camel@linux.ibm.com>
+         <CAMj1kXFZVR46_oeYTxJ59q-7u+zFCFtOQuSQoiEzKLhXzpydow@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-13_13:2020-10-13,2020-10-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ adultscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0
+ malwarescore=0 mlxscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=995
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010130137
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-10-13 at 22:25 +0300, Jarkko Sakkinen wrote:
-> On Tue, Oct 13, 2020 at 08:30:38AM -0700, Joe Perches wrote:
-> > On Tue, 2020-10-13 at 13:46 +0300, Jarkko Sakkinen wrote:
-> > > Use korg address as the main communications end point. Update the
-> > > corresponding M-entries.
-> > 
-> > Maybe add an equivalent entry to .mailmap?
-> 
-> Ugh, neither has @linux.intel.com. So, I'll insert these two lines:
-> 
-> Jarkko Sakkinen <jarkko@kernel.org>
-> Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+On Tue, 2020-10-13 at 18:59 +0200, Ard Biesheuvel wrote:
+> Suggestion: can we take the get_sb_mode() code from ima_arch.c in
+> arch/x86, and generalize it for all EFI architectures? That way, we
+> can enable 32-bit ARM and RISC-V seamlessly once someone gets around
+> to enabling IMA on those platforms. In fact, get_sb_mode() itself
+> should probably be factored out into a generic helper for use outside
+> of IMA as well (Xen/x86 has code that does roughly the same already)
 
-I think a single line like works
-Jarkko Sakkinen <jarkko@kernel.org> <jarkko.sakkinen@linux.intel.com>
+On Power, there are three different policies - secure, trusted, and
+secure & trusted boot policy rules.  Based on whether secure or trusted
+boot is enabled, the appropriate policy is enabled.  On x86, if
+secure_boot is enabled (and CONFIG_IMA_ARCH_POLICY is enabled) both the
+secure and trusted boot rules are defined.  Is this design fine enough
+granularity or should should there be a get_trustedboot_mode() function
+as well?
 
-Adding this to .mailmap gives:
+Agreed, the code should not be duplicated across arch's.  As for making
+get_sb_mode() generic, not dependent on IMA, where would it reside? 
+Would this be in EFI?
 
-$ ./scripts/get_maintainer.pl -f drivers/char/tpm/tpm-sysfs.c
-Peter Huewe <peterhuewe@gmx.de> (maintainer:TPM DEVICE DRIVER)
-Jarkko Sakkinen <jarkko@kernel.org> (maintainer:TPM DEVICE DRIVER)
-Jason Gunthorpe <jgg@ziepe.ca> (reviewer:TPM DEVICE DRIVER)
-linux-integrity@vger.kernel.org (open list:TPM DEVICE DRIVER)
-linux-kernel@vger.kernel.org (open list)
+thanks,
 
-even without the MAINTAINER file changes
-
-(though you should really do those too so
- people that read the file can use the
- proper address)
-
----
-.mailmap | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/.mailmap b/.mailmap
-index e4ccac4e2f88..1e14566a3d56 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -133,6 +133,7 @@ James Ketrenos <jketreno@io.(none)>
- Jan Glauber <jan.glauber@gmail.com> <jang@de.ibm.com>
- Jan Glauber <jan.glauber@gmail.com> <jang@linux.vnet.ibm.com>
- Jan Glauber <jan.glauber@gmail.com> <jglauber@cavium.com>
-+Jarkko Sakkinen <jarkko@kernel.org> <jarkko.sakkinen@linux.intel.com>
- Jason Gunthorpe <jgg@ziepe.ca> <jgg@mellanox.com>
- Jason Gunthorpe <jgg@ziepe.ca> <jgg@nvidia.com>
- Jason Gunthorpe <jgg@ziepe.ca> <jgunthorpe@obsidianresearch.com>
-
+Mimi
 
