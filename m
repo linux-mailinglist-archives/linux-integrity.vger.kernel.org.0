@@ -2,78 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A9228D2A8
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 18:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B6228D2B8
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Oct 2020 18:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387570AbgJMQxX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 13 Oct 2020 12:53:23 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:59165 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727696AbgJMQxW (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 13 Oct 2020 12:53:22 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1kSNY5-00024v-5D; Tue, 13 Oct 2020 16:53:17 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
+        id S1728694AbgJMQ7e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 13 Oct 2020 12:59:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36052 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728680AbgJMQ7e (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 13 Oct 2020 12:59:34 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 65A0F25307;
+        Tue, 13 Oct 2020 16:59:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602608373;
+        bh=osZ8tJsN1XJAdwSi1ibvFjOI4ppbEHzl507BtoRa3RY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BVgO/RpFUbXU0rUhiHQ4PV7seCBjZCA5VZpjLt9fb7pnoZxE7/J2v8gFkpMq7al/x
+         NMjFN0+OeJ/sVOOsN2LLPY3YNMD8GoZ5ncaUEdxxceVdpuik78E54GRrZLBAYex/Fk
+         VhTmOSSHk5b6rOkFbDuFk7NR3TEllYJasaYjeEQ4=
+Received: by mail-oi1-f171.google.com with SMTP id w141so131382oia.2;
+        Tue, 13 Oct 2020 09:59:33 -0700 (PDT)
+X-Gm-Message-State: AOAM53068MuKC1W0RBsGNaXD3pm6HByvtGHd5jULBpD0WfPpugzEmdRB
+        /I4FkeYKFV9kJPZw9a+CW92m5ZqI07k3yU5Vums=
+X-Google-Smtp-Source: ABdhPJyCyAZiLNWtZEpxTAWgjVYup7xXC2n8Dw2lOiZtXYQDhs3t2O/klyNtVYYJ8v1GO87o7QPqDtWtI4WZYBPYbfs=
+X-Received: by 2002:aca:d845:: with SMTP id p66mr382549oig.47.1602608372672;
+ Tue, 13 Oct 2020 09:59:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201013081804.17332-1-ardb@kernel.org> <ae9ab2560f6d7b114726efb1ec26f0a36f695335.camel@linux.ibm.com>
+In-Reply-To: <ae9ab2560f6d7b114726efb1ec26f0a36f695335.camel@linux.ibm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 13 Oct 2020 18:59:21 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFZVR46_oeYTxJ59q-7u+zFCFtOQuSQoiEzKLhXzpydow@mail.gmail.com>
+Message-ID: <CAMj1kXFZVR46_oeYTxJ59q-7u+zFCFtOQuSQoiEzKLhXzpydow@mail.gmail.com>
+Subject: Re: [PATCH v2] ima: defer arch_ima_get_secureboot() call to IMA init time
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-security-module@vger.kernel.org, Chester Lin <clin@suse.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Roberto Sassu <roberto.sassu@polito.it>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][V2] ima: Fix sizeof mismatches
-Date:   Tue, 13 Oct 2020 17:53:16 +0100
-Message-Id: <20201013165316.215897-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Tue, 13 Oct 2020 at 18:46, Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> [Cc'ing linuxppc-dev@lists.ozlabs.org]
+>
+> On Tue, 2020-10-13 at 10:18 +0200, Ard Biesheuvel wrote:
+> > Chester reports that it is necessary to introduce a new way to pass
+> > the EFI secure boot status between the EFI stub and the core kernel
+> > on ARM systems. The usual way of obtaining this information is by
+> > checking the SecureBoot and SetupMode EFI variables, but this can
+> > only be done after the EFI variable workqueue is created, which
+> > occurs in a subsys_initcall(), whereas arch_ima_get_secureboot()
+> > is called much earlier by the IMA framework.
+> >
+> > However, the IMA framework itself is started as a late_initcall,
+> > and the only reason the call to arch_ima_get_secureboot() occurs
+> > so early is because it happens in the context of a __setup()
+> > callback that parses the ima_appraise= command line parameter.
+> >
+> > So let's refactor this code a little bit, by using a core_param()
+> > callback to capture the command line argument, and deferring any
+> > reasoning based on its contents to the IMA init routine.
+> >
+> > Cc: Chester Lin <clin@suse.com>
+> > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> > Cc: James Morris <jmorris@namei.org>
+> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > Link: https://lore.kernel.org/linux-arm-kernel/20200904072905.25332-2-clin@suse.com/
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > ---
+> > v2: rebase onto series 'integrity: improve user feedback for invalid bootparams'
+>
+> Thanks, Ard.  Based on my initial, limited testing on Power, it looks
+> good, but I'm hesistant to include it in the integrity 5.10 pull
+> request without it having been in linux-next and some additional
+> testing.  It's now queued in the next-integrity-testing branch awaiting
+> some tags.
+>
 
-An incorrect sizeof is being used, sizeof(*fields) is not correct,
-it should be sizeof(**fields). This is not causing a problem since
-the size of these is the same. Fix this. 
+Thanks. No rush as far as I am concerned, although I suppose Chester
+may want to rebase his arm64 IMA enablement series on this.
 
-Also replace kmalloc_array and memcpy with a kmemdup.
-
-Addresses-Coverity: ("Sizeof not portable (SIZEOF_MISMATCH)")
-Fixes: 1bd7face7439 ("ima: allocate field pointers array on demand in template_desc_init_fields()")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
-
-V2: Replace kmalloc_array and memcpy with kmemdup as suggested by
-    Joe Perches.
-
----
- security/integrity/ima/ima_template.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 1e89e2d3851f..83886e767678 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -216,11 +216,10 @@ int template_desc_init_fields(const char *template_fmt,
- 	}
- 
- 	if (fields && num_fields) {
--		*fields = kmalloc_array(i, sizeof(*fields), GFP_KERNEL);
-+		*fields = kmemdup(found_fields, i * sizeof(**fields), GFP_KERNEL);
- 		if (*fields == NULL)
- 			return -ENOMEM;
- 
--		memcpy(*fields, found_fields, i * sizeof(*fields));
- 		*num_fields = i;
- 	}
- 
--- 
-2.27.0
-
+Suggestion: can we take the get_sb_mode() code from ima_arch.c in
+arch/x86, and generalize it for all EFI architectures? That way, we
+can enable 32-bit ARM and RISC-V seamlessly once someone gets around
+to enabling IMA on those platforms. In fact, get_sb_mode() itself
+should probably be factored out into a generic helper for use outside
+of IMA as well (Xen/x86 has code that does roughly the same already)
