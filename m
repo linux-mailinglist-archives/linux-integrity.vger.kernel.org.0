@@ -2,314 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EDE28E01A
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Oct 2020 13:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC3728E2BC
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Oct 2020 17:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727830AbgJNL5H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 14 Oct 2020 07:57:07 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33114 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726814AbgJNL5H (ORCPT
+        id S1726111AbgJNPDS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 14 Oct 2020 11:03:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47089 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725983AbgJNPDR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 14 Oct 2020 07:57:07 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09EBXE5p176539;
-        Wed, 14 Oct 2020 07:56:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=BTlOnbpUAUcDb4UPCTOiAatpqX4R9DTQ5GOjIxbyyZ8=;
- b=CVssf4o4/g3EPsUEIGqqW1+77zTEyQi33ds5TyILl2SEJCJ8C6VIT9QPB1cdbkwzkEFI
- RdsQXFYt1Momhx2ki6b6qTnma8cMsY9Rr7XBY4uowJLsGr5XjxgOehnAMUZm50SiWgK1
- valx2TmKOfJMNVJ1DXuzF96/KO73Sya8BSWFocBLGPfWMgHc4+I+C2s0Gqu0qJOtC+nT
- Z5LJ/+i41Oc4lU2PnNaaJGvHyiKipCcMV0YO4HfZyuzDwVE1OPMZSHNwmH0O5xmeL7Pf
- C6NfAeWSydbrdT6LDxQ4PD2a8oi5dWSIXUsf6B1YuuYKYkI2DZCTV9gU2BMIxa2QOq/A zQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3460349mkt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Oct 2020 07:56:28 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09EBXLrs177077;
-        Wed, 14 Oct 2020 07:56:28 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3460349mgb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Oct 2020 07:56:28 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09EBpmNZ003728;
-        Wed, 14 Oct 2020 11:56:23 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3434k7v3j1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Oct 2020 11:56:23 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09EBuL2T26345738
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Oct 2020 11:56:21 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8082511C054;
-        Wed, 14 Oct 2020 11:56:21 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 01E3611C04A;
-        Wed, 14 Oct 2020 11:56:18 +0000 (GMT)
-Received: from sig-9-65-216-73.ibm.com (unknown [9.65.216.73])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 14 Oct 2020 11:56:17 +0000 (GMT)
-Message-ID: <e436ab32ba30549591753cb3ec43749a6776f43e.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 1/2] efi: add secure boot get helper
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>, Chester Lin <clin@suse.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        "Lee, Chun-Yi" <jlee@suse.com>
-Date:   Wed, 14 Oct 2020 07:56:17 -0400
-In-Reply-To: <CAMj1kXGacnj=uh9WFh1+YBVXxzZbxeN==Y_f-rhJZ=3385B68g@mail.gmail.com>
-References: <20201014104032.9776-1-clin@suse.com>
-         <20201014104032.9776-2-clin@suse.com>
-         <CAMj1kXGacnj=uh9WFh1+YBVXxzZbxeN==Y_f-rhJZ=3385B68g@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
+        Wed, 14 Oct 2020 11:03:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602687795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fn4NjpcSWEQF8D1FGUViD+uc0UbBqUgMHiaWZYLHP1s=;
+        b=HoJNhqmAOFKLO6bwdCnPN/02nYusg/a51SEw0JoSnI601u3qOyY9U4ntEbs7HPjmqk2vtn
+        UD/EHQuGfnyVWPehVuculPFCTkeZ+1tvyw19CSEBGrgwMJBfLtjgVpAF9I5RwAC1pCHg60
+        hdMSL0c7CVgT2q+/AdApVYFHDmcghLg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-90-6FS6jECnNz6P09gGThaNWg-1; Wed, 14 Oct 2020 11:03:13 -0400
+X-MC-Unique: 6FS6jECnNz6P09gGThaNWg-1
+Received: by mail-ed1-f72.google.com with SMTP id t4so1314351edv.7
+        for <linux-integrity@vger.kernel.org>; Wed, 14 Oct 2020 08:03:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Fn4NjpcSWEQF8D1FGUViD+uc0UbBqUgMHiaWZYLHP1s=;
+        b=nO2SxkD9JK5YDCtyThDwv7pQmWVCbwcQOloO7SnANP3QSzWLqFBuUrnMxbdtIMd8hu
+         Nq6iZ61zD6syrdHXhs6gVlX4FQcT0q34FZv9QJNi8flpI2C0e52ad+Lxn/VBhUdAweUM
+         4xp7cn7nE0emoYeoaGIg5vOhBeV/uZYUVU0e+vETQJJBSHYC9ssl7qwQMhSA8gly63fo
+         L43QTjqtJetCHy6Keps8aTUoeX1XE/vut9pOlqc05OpkMq4zre/GNs2eEOEaHI0Bsv9V
+         8swhwvqD6/gX6TiYvW7MQ+O2YF3Ab00TsX6LTFM9WgB4I3ak9QfLf1R9Z0Zw7ObZeTu6
+         7p5A==
+X-Gm-Message-State: AOAM530Zlxhq//JbqBJudZcjqC2mLYjAbsxFIB+A7lVESpHwtlbmfxDG
+        nC4DWVqrotb2BSkHpuxjT0ptnrVy3eISyRXrEr03XKkK6pz+O9GYrfCd405i5yS2NLVIIyh5ggj
+        fbAtiN75G/OXNC3SPkVJxr22HwnSL
+X-Received: by 2002:a17:906:4d10:: with SMTP id r16mr6101820eju.68.1602687791387;
+        Wed, 14 Oct 2020 08:03:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyuClzqyyr5qLhq11A4WXem4rjBtrXkEx2gOE7n120ScBrCcZOQSCcn7JvzXcvXSsjWOTcJLQ==
+X-Received: by 2002:a17:906:4d10:: with SMTP id r16mr6101790eju.68.1602687791140;
+        Wed, 14 Oct 2020 08:03:11 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id de16sm1797220edb.23.2020.10.14.08.03.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Oct 2020 08:03:10 -0700 (PDT)
+Subject: Re: [PATCH v2 0/5] tpm_tis: fix interrupts (again)
+To:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     equired@linux.intel.com,
+        justmentioningitbecauseIthinkthatwouldbeagood@linux.intel.com,
+        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Hans de Goede <jwrdegoede@fedoraproject.org>
+References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
+ <20201013011745.GA41176@linux.intel.com>
+ <87tuuyf97r.fsf@jsnitsel.users.ipa.redhat.com>
+ <e6930fa6df318ee2f51e13f6402d264fedb5d9ab.camel@HansenPartnership.com>
+ <87lfgaf6ww.fsf@jsnitsel.users.ipa.redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <5f9ead56-78ff-e8b4-d646-654c9a08c519@redhat.com>
+Date:   Wed, 14 Oct 2020 17:03:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <87lfgaf6ww.fsf@jsnitsel.users.ipa.redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-14_07:2020-10-14,2020-10-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1011
- malwarescore=0 suspectscore=3 mlxlogscore=999 spamscore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010140085
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-10-14 at 13:00 +0200, Ard Biesheuvel wrote:
-> Hello Chester,
-> 
-> Thanks for looking into this.
-> 
-> Some comments below.
-> 
-> On Wed, 14 Oct 2020 at 12:41, Chester Lin <clin@suse.com> wrote:
-> >
-> > Separate the get_sb_mode() from arch/x86 and treat it as a common function
-> > [rename to efi_get_secureboot_mode] so all EFI-based architectures can
-> > reuse the same logic.
-> >
-> > Signed-off-by: Chester Lin <clin@suse.com>
-> > ---
-> >  arch/x86/kernel/ima_arch.c | 47 ++------------------------------------
-> >  drivers/firmware/efi/efi.c | 43 ++++++++++++++++++++++++++++++++++
-> >  include/linux/efi.h        |  5 ++++
-> >  3 files changed, 50 insertions(+), 45 deletions(-)
-> >
-> > diff --git a/arch/x86/kernel/ima_arch.c b/arch/x86/kernel/ima_arch.c
-> > index 7dfb1e808928..ed4623ecda6e 100644
-> > --- a/arch/x86/kernel/ima_arch.c
-> > +++ b/arch/x86/kernel/ima_arch.c
-> > @@ -8,49 +8,6 @@
-> >
-> >  extern struct boot_params boot_params;
-> >
-> > -static enum efi_secureboot_mode get_sb_mode(void)
-> > -{
-> > -       efi_guid_t efi_variable_guid = EFI_GLOBAL_VARIABLE_GUID;
-> > -       efi_status_t status;
-> > -       unsigned long size;
-> > -       u8 secboot, setupmode;
-> > -
-> > -       size = sizeof(secboot);
-> > -
-> > -       if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE)) {
-> > -               pr_info("ima: secureboot mode unknown, no efi\n");
-> > -               return efi_secureboot_mode_unknown;
-> > -       }
-> > -
-> > -       /* Get variable contents into buffer */
-> > -       status = efi.get_variable(L"SecureBoot", &efi_variable_guid,
-> > -                                 NULL, &size, &secboot);
-> > -       if (status == EFI_NOT_FOUND) {
-> > -               pr_info("ima: secureboot mode disabled\n");
-> > -               return efi_secureboot_mode_disabled;
-> > -       }
-> > -
-> > -       if (status != EFI_SUCCESS) {
-> > -               pr_info("ima: secureboot mode unknown\n");
-> > -               return efi_secureboot_mode_unknown;
-> > -       }
-> > -
-> > -       size = sizeof(setupmode);
-> > -       status = efi.get_variable(L"SetupMode", &efi_variable_guid,
-> > -                                 NULL, &size, &setupmode);
-> > -
-> > -       if (status != EFI_SUCCESS)      /* ignore unknown SetupMode */
-> > -               setupmode = 0;
-> > -
-> > -       if (secboot == 0 || setupmode == 1) {
-> > -               pr_info("ima: secureboot mode disabled\n");
-> > -               return efi_secureboot_mode_disabled;
-> > -       }
-> > -
-> > -       pr_info("ima: secureboot mode enabled\n");
-> > -       return efi_secureboot_mode_enabled;
-> > -}
-> > -
-> >  bool arch_ima_get_secureboot(void)
-> >  {
-> >         static enum efi_secureboot_mode sb_mode;
-> > @@ -60,7 +17,7 @@ bool arch_ima_get_secureboot(void)
-> >                 sb_mode = boot_params.secure_boot;
-> >
-> >                 if (sb_mode == efi_secureboot_mode_unset)
-> > -                       sb_mode = get_sb_mode();
-> > +                       sb_mode = efi_get_secureboot_mode();
-> >                 initialized = true;
-> >         }
-> >
-> > @@ -70,7 +27,7 @@ bool arch_ima_get_secureboot(void)
-> >                 return false;
-> >  }
-> >
-> > -/* secureboot arch rules */
-> > +/* secure and trusted boot arch rules */
-> >  static const char * const sb_arch_rules[] = {
-> >  #if !IS_ENABLED(CONFIG_KEXEC_SIG)
-> >         "appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig",
-> > diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> > index 5e5480a0a32d..68ffa6a069c0 100644
-> > --- a/drivers/firmware/efi/efi.c
-> > +++ b/drivers/firmware/efi/efi.c
-> > @@ -1022,3 +1022,46 @@ static int __init register_update_efi_random_seed(void)
-> >  }
-> >  late_initcall(register_update_efi_random_seed);
-> >  #endif
-> > +
-> > +enum efi_secureboot_mode efi_get_secureboot_mode(void)
-> > +{
-> > +       efi_guid_t efi_variable_guid = EFI_GLOBAL_VARIABLE_GUID;
-> > +       efi_status_t status;
-> > +       unsigned long size;
-> > +       u8 secboot, setupmode;
-> > +
-> > +       size = sizeof(secboot);
-> > +
-> > +       if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE)) {
-> > +               pr_info("ima: secureboot mode unknown, no efi\n");
-> 
-> These prints don't belong here anymore.
-> 
-> Also, it would be useful if we could reuse this logic in the EFI stub
-> as well, which is built as a separate executable, and does not provide
-> efi.get_variable().
-> 
-> So, you could you please break this up into
-> 
-> static inline
-> enum efi_secureboot_mode efi_get_secureboot_mode(efi_get_variable_t *get_var)
-> {
-> }
-> 
-> placed into include/linux/efi.h, which encapsulates the core logic,
-> but using get_var(), and without the prints.
-> 
-> Then, we could put something like
-> 
-> bool efi_ima_get_secureboot(void)
-> {
-> }
-> 
-> in drivers/firmware/efi/efi.c (guarded by #ifdef CONFIG_IMA_xxx),
-> which performs the
-> efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE)) check, calls
-> efi_get_secureboot_mode(efi.get_variable), and implements the logic.
-> 
-> And actually, if the logic is identical between x86 and arm64, I
-> wonder if it wouldn't be better to put the whole thing into
-> 
-> drivers/firmware/efi/efi-ima.c
-> 
-> or
-> 
-> security/integrity/ima/ima-efi.c
-> 
-> with the only difference being the boot_params->secure_boot access for
-> x86, which we can factor out to a static inline helper.
-> 
-> Mimi, any thoughts here?
+Hi,
 
-Sounds good.  Keeping as much IMA code in the IMA directory makes
-sense.   The IMA Makefile would then include ima-efi.c based on an EFI
-Kconfig option.
-
-thanks,
-
-Mimi
+On 10/13/20 6:05 PM, Jerry Snitselaar wrote:
 > 
+> James Bottomley @ 2020-10-13 08:24 MST:
 > 
+>> On Tue, 2020-10-13 at 08:15 -0700, Jerry Snitselaar wrote:
+>>> Jarkko Sakkinen @ 2020-10-12 18:17 MST:
+>>>
+>>>> On Thu, Oct 01, 2020 at 11:09:20AM -0700, James Bottomley wrote:
+>>>>> The current state of the TIS TPM is that interrupts have been
+>>>>> globally disabled by various changes.  The problems we got
+>>>>> reported the last time they were enabled was interrupt
+>>>>> storms.  With my own TIS TPM, I've found that this is caused
+>>>>> because my TPM doesn't do legacy cycles, The TIS spec (chapter
+>>>>> 6.1 "Locality Usage Per Register") requires any TIS TPM without
+>>>>> legacy cycles not to act on any write to an interrupt register
+>>>>> unless the locality is enabled.  This means if an interrupt fires
+>>>>> after we relinquish the locality, the TPM_EOI in the interrupt
+>>>>> routine is ineffective meaning the same interrupt triggers over
+>>>>> and over again.  This problem also means we can have trouble
+>>>>> setting up interrupts on TIS TPMs because the current init
+>>>>> code does the setup before the locality is claimed for the first
+>>>>> time.
+>>>>>
+>>>>> James
+>>>>
+>>>> You should consider expanding the audience.
+>>
+>> Well, most people interested in testing this sort of thing are already
+>> on the integrity list.
+>>
+>>>>   Jerry, once you have some bandwidth (no rush, does not land before
+>>>> rc2), it would be great that if you could try this. I'm emphasizing
+>>>> this just because of the intersection. I think it would also make
+>>>> senset to get tested-by from Nayna.
+>>>
+>>> I will run some tests on some other systems I have access to. As
+>>> noted in the other email I did a quick test with a t490s with an
+>>> older bios that exhibits the problem originally reported when
+>>> Stefan's patch enabled interrupts.
+>>
+>> Well, it means there's still some other problem.  I was hoping that
+>> because the rainbow pass system originally exhibited the same symptoms
+>> (interrupt storm) fixing it would also fix the t490 and the ineffective
+>> EOI bug looked like a great candidate for being the root cause.
+>>
 > 
-> > +               return efi_secureboot_mode_unknown;
-> > +       }
-> > +
-> > +       /* Get variable contents into buffer */
-> > +       status = efi.get_variable(L"SecureBoot", &efi_variable_guid,
-> > +                                 NULL, &size, &secboot);
-> > +       if (status == EFI_NOT_FOUND) {
-> > +               pr_info("ima: secureboot mode disabled\n");
-> > +               return efi_secureboot_mode_disabled;
-> > +       }
-> > +
-> > +       if (status != EFI_SUCCESS) {
-> > +               pr_info("ima: secureboot mode unknown\n");
-> > +               return efi_secureboot_mode_unknown;
-> > +       }
-> > +
-> > +       size = sizeof(setupmode);
-> > +       status = efi.get_variable(L"SetupMode", &efi_variable_guid,
-> > +                                 NULL, &size, &setupmode);
-> > +
-> > +       if (status != EFI_SUCCESS)      /* ignore unknown SetupMode */
-> > +               setupmode = 0;
-> > +
-> > +       if (secboot == 0 || setupmode == 1) {
-> > +               pr_info("ima: secureboot mode disabled\n");
-> > +               return efi_secureboot_mode_disabled;
-> > +       }
-> > +
-> > +       pr_info("ima: secureboot mode enabled\n");
-> > +       return efi_secureboot_mode_enabled;
-> > +}
-> > diff --git a/include/linux/efi.h b/include/linux/efi.h
-> > index d7c0e73af2b9..a73e5ae04672 100644
-> > --- a/include/linux/efi.h
-> > +++ b/include/linux/efi.h
-> > @@ -1076,8 +1076,13 @@ static inline int efi_runtime_map_copy(void *buf, size_t bufsz)
-> >
-> >  #ifdef CONFIG_EFI
-> >  extern bool efi_runtime_disabled(void);
-> > +extern enum efi_secureboot_mode efi_get_secureboot_mode(void);
-> >  #else
-> >  static inline bool efi_runtime_disabled(void) { return true; }
-> > +static inline enum efi_secureboot_mode efi_get_secureboot_mode(void)
-> > +{
-> > +       return efi_secureboot_mode_disabled;
-> > +}
-> >  #endif
-> >
-> >  extern void efi_call_virt_check_flags(unsigned long flags, const char *call);
-> > --
-> > 2.26.1
-> >
+> Adding Hans to the list.
+> 
+> IIUC in the t490s case the problem lies with the hardware itself. Hans,
+> is that correct?
 
+More or less. AFAIK / have been told by Lenovo it is an issue with the
+configuration of the inerrupt-type of the GPIO pin used for the IRQ,
+which is a firmware issue which could be fixed by a BIOS update
+(the pin is setup as a direct-irq pin for the APIC, so the OS has no
+control of the IRQ type since with APIC irqs this is all supposed to
+be setup properly before hand).
+
+But it is a model specific issue, if we denylist IRQ usage on this
+Lenovo model (and probably a few others) then we should be able to
+restore the IRQ code to normal functionality for all other device
+models which declare an IRQ in their resource tables.
+
+Regards,
+
+Hans
 
