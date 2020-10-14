@@ -2,134 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD9928E53C
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Oct 2020 19:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E801928E61C
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Oct 2020 20:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729070AbgJNRTj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 14 Oct 2020 13:19:39 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34966 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726942AbgJNRTj (ORCPT
+        id S1729709AbgJNSOU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 14 Oct 2020 14:14:20 -0400
+Received: from services.gouders.net ([141.101.32.176]:58519 "EHLO
+        services.gouders.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727369AbgJNSOT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 14 Oct 2020 13:19:39 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09EHGtvC081400;
-        Wed, 14 Oct 2020 13:19:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : mime-version :
- content-transfer-encoding; s=pp1;
- bh=a64pXVUhT/TgbYZWTiVZCYeTe9kTEZ7WJQiYDLNnV1w=;
- b=OL0Vo1BgKxG0aCG4dOx+CI7O4D1YQIV4HndT4XPlH09wpNgTHQx8jbacHcCtNzer+bic
- tquW5qy5THwVqRANzgl4jUQWtZ2Fe9yHzujAeyUhXRtWQ6+mBDPytPuVpWgKTSTjn6H+
- PVk2S2lQk0QumfApyN1LtVN84RqerByfhZi8NKn8CBLww4KyaUKpOkqChImoqIohFAGy
- AFAWF2SwujG3mAaNeVVoTcPRloEF5sMad+F/jZxHE89t6gj7Y2wFkMtlVVFX3OUMzOMW
- VeNEPAv0e/5IvG2FQzwIyazTj8riYqWJcWc1oBnvvj11Sgf/rv8pSsmBOQdtft6r4yBJ 6g== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3465kh01a0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Oct 2020 13:19:37 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09EHISau013289;
-        Wed, 14 Oct 2020 17:19:35 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3434k84d1k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Oct 2020 17:19:35 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09EHJXIq28508598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Oct 2020 17:19:33 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 541ABA404D;
-        Wed, 14 Oct 2020 17:19:33 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4CE8FA4040;
-        Wed, 14 Oct 2020 17:19:32 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.12.97])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 14 Oct 2020 17:19:31 +0000 (GMT)
-Message-ID: <1bd027b4212db6f3630b8344efde4678fcd90088.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity subsystem updates for v5.10
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Wed, 14 Oct 2020 13:19:31 -0400
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-14_09:2020-10-14,2020-10-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 suspectscore=0 phishscore=0
- adultscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 clxscore=1011
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010140122
+        Wed, 14 Oct 2020 14:14:19 -0400
+X-Greylist: delayed 586 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Oct 2020 14:14:18 EDT
+Received: from localhost (ltea-047-066-024-155.pools.arcor-ip.net [47.66.24.155])
+        (authenticated bits=0)
+        by services.gouders.net (8.14.8/8.14.8) with ESMTP id 09EHw0mN016575
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Oct 2020 19:58:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gouders.net; s=gnet;
+        t=1602698281; bh=gPsnsrn9YDnCmifoFEdCiXxsmRo+UCWyR79aiM4dlA4=;
+        h=From:To:Cc:Subject:Date;
+        b=M4DquBsFTE0UzzpiYuCbtSqbEM3hGFgS76Omdi9sFRrLMvRRXkySmdkXNzzKNTKSX
+         62qTwjvETpwXSK7OEDJFyhzpnS6vI46ry3fFBxNTo9mO8IOaKpXs3Fm/xHhypwIZKV
+         wdYpa5vijUGYfrWwNOaOthx6wAjEkvgDtq843Ygs=
+From:   Dirk Gouders <dirk@gouders.net>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: WARN_ONCE triggered: tpm_tis: Add a check for invalid status
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Wed, 14 Oct 2020 19:57:43 +0200
+Message-ID: <ghsgagsnag.fsf@gouders.net>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
-  
-The changes include continuation of the IMA policy rule cleanup and
-validation in particular for measuring keys, adding/removing/updating
-informational and error messages (e.g. "ima_appraise" boot command line
-option), and other bug fixes (e.g. minimal data size validation before
-use, return code and NULL pointer checking).
+On my laptop the check introduced with 55707d531af62b (tpm_tis: Add a
+check for invalid status) triggered the warning (output below).
 
-thanks,
+So, my laptop seems to be a candidate for testing.
 
-Mimi
+Dirk
 
-The following changes since commit d012a7190fc1fd72ed48911e77ca97ba4521bccd:
-
-  Linux 5.9-rc2 (2020-08-23 14:08:43 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.10
-
-for you to fetch changes up to aa662fc04f5b290b3979332588bf8d812b189962:
-
-  ima: Fix NULL pointer dereference in ima_file_hash (2020-09-16 17:43:02 -0400)
-
-----------------------------------------------------------------
-integrity-v5.10
-
-----------------------------------------------------------------
-Alex Dewar (1):
-      ima: Use kmemdup rather than kmalloc+memcpy
-
-Bruno Meneguele (4):
-      ima: add check for enforced appraise option
-      integrity: invalid kernel parameters feedback
-      ima: limit secure boot feedback scope for appraise
-      integrity: include keyring name for unknown key request
-
-Denis Efremov (1):
-      integrity: Use current_uid() in integrity_audit_message()
-
-KP Singh (1):
-      ima: Fix NULL pointer dereference in ima_file_hash
-
-Roberto Sassu (3):
-      ima: Don't ignore errors from crypto_shash_update()
-      ima: Remove semicolon at the end of ima_get_binary_runtime_size()
-      evm: Check size of security.evm before using it
-
-Tyler Hicks (2):
-      ima: Pre-parse the list of keyrings in a KEY_CHECK rule
-      ima: Fail rule parsing when asymmetric key measurement isn't supportable
-
- security/integrity/digsig_asymmetric.c |  10 ++-
- security/integrity/evm/evm_main.c      |   9 ++
- security/integrity/ima/ima_appraise.c  |  27 ++++--
- security/integrity/ima/ima_crypto.c    |   2 +
- security/integrity/ima/ima_main.c      |  23 ++++-
- security/integrity/ima/ima_policy.c    | 153 ++++++++++++++++++++++-----------
- security/integrity/ima/ima_queue.c     |   2 +-
- security/integrity/integrity_audit.c   |   2 +-
- 8 files changed, 161 insertions(+), 67 deletions(-)
-
+[    7.255467] ------------[ cut here ]------------
+[    7.255468] TPM returned invalid status
+[    7.255481] WARNING: CPU: 4 PID: 816 at drivers/char/tpm/tpm_tis_core.c:249 tpm_tis_status+0x5e/0x7f [tpm_tis_core]
+[    7.255481] Modules linked in: nvram tpm_tis(+) tpm_tis_core tpm wmi pinctrl_amd
+[    7.255485] CPU: 4 PID: 816 Comm: udevd Not tainted 5.9.0-x86_64+ #148
+[    7.255486] Hardware name: LENOVO 20U50008GE/20U50008GE, BIOS R19ET26W (1.10 ) 06/22/2020
+[    7.255488] RIP: 0010:tpm_tis_status+0x5e/0x7f [tpm_tis_core]
+[    7.255489] Code: 44 8a 64 24 07 41 f6 c4 23 74 21 45 31 e4 80 3d 86 26 00 00 00 75 15 48 c7 c7 2a 71 01 a0 c6 05 76 26 00 00 01 e8 e1 17 0e e1 <0f> 0b 48 8b 44 24 08 65 48 33 04 25 28 00 00 00 74 05 e8 cd cd a2
+[    7.255489] RSP: 0018:ffffc90000f7f8b8 EFLAGS: 00010286
+[    7.255490] RAX: 0000000000000000 RBX: ffff8883f9117198 RCX: 000000000000038a
+[    7.255490] RDX: 0000000000000001 RSI: 0000000000000002 RDI: ffffffff82dbd34c
+[    7.255491] RBP: ffff8883f8aae000 R08: 0000000000000001 R09: 0000000000012d00
+[    7.255491] R10: 0000000000000000 R11: 000000000000003c R12: 0000000000000000
+[    7.255492] R13: 0000000000000000 R14: ffff8883f7c8a000 R15: 0000000000000016
+[    7.255493] FS:  00007f350c98d780(0000) GS:ffff88840ed00000(0000) knlGS:0000000000000000
+[    7.255493] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    7.255494] CR2: 00007f350c572ca8 CR3: 00000003f7000000 CR4: 0000000000350ee0
+[    7.255494] Call Trace:
+[    7.255497]  tpm_tis_send_data+0x28/0x187 [tpm_tis_core]
+[    7.255498]  tpm_tis_send_main+0x14/0x84 [tpm_tis_core]
+[    7.255500]  tpm_transmit+0xc5/0x2d7 [tpm]
+[    7.255503]  tpm_transmit_cmd+0x23/0x8b [tpm]
+[    7.255504]  tpm2_get_tpm_pt+0x71/0xb2 [tpm]
+[    7.255505]  tpm_tis_probe_irq_single+0x134/0xbe2 [tpm_tis_core]
+[    7.255506]  tpm_tis_core_init+0x3b3/0x47b [tpm_tis_core]
+[    7.255508]  tpm_tis_plat_probe+0xa7/0xc5 [tpm_tis]
+[    7.255512]  platform_drv_probe+0x2a/0x6b
+[    7.255514]  really_probe+0x157/0x32a
+[    7.255516]  driver_probe_device+0x63/0x97
+[    7.255517]  device_driver_attach+0x37/0x50
+[    7.255518]  __driver_attach+0x92/0x9a
+[    7.255519]  ? device_driver_attach+0x50/0x50
+[    7.255520]  bus_for_each_dev+0x70/0xa6
+[    7.255521]  bus_add_driver+0x103/0x1b4
+[    7.255522]  driver_register+0x99/0xd2
+[    7.255523]  ? 0xffffffffa0023000
+[    7.255524]  init_tis+0x88/0x1000 [tpm_tis]
+[    7.255526]  ? consume_skb+0x9/0x20
+[    7.255529]  ? ___cache_free+0x5c/0x153
+[    7.255531]  ? _cond_resched+0x1b/0x1e
+[    7.255532]  do_one_initcall+0x8a/0x195
+[    7.255534]  ? kmem_cache_alloc_trace+0x80/0x8f
+[    7.255536]  do_init_module+0x56/0x1e8
+[    7.255537]  load_module+0x1c2c/0x2139
+[    7.255538]  ? __do_sys_finit_module+0x8f/0xb6
+[    7.255539]  __do_sys_finit_module+0x8f/0xb6
+[    7.255541]  do_syscall_64+0x5d/0x6a
+[    7.255543]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[    7.255544] RIP: 0033:0x7f350cae8919
+[    7.255545] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 47 05 0c 00 f7 d8 64 89 01 48
+[    7.255545] RSP: 002b:00007ffe0e5ed928 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[    7.255546] RAX: ffffffffffffffda RBX: 000055a400c373e0 RCX: 00007f350cae8919
+[    7.255546] RDX: 0000000000000000 RSI: 00007f350cbc1a7d RDI: 000000000000000b
+[    7.255547] RBP: 0000000000020000 R08: 0000000000000000 R09: 00007ffe0e5edaa0
+[    7.255547] R10: 000000000000000b R11: 0000000000000246 R12: 00007f350cbc1a7d
+[    7.255548] R13: 0000000000000000 R14: 000055a400c30e10 R15: 000055a400c373e0
+[    7.255548] ---[ end trace 883dd41f557db5d3 ]---
