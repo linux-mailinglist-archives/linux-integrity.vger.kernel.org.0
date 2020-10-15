@@ -2,138 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4297C28FAC7
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 23:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E85128FAFD
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Oct 2020 00:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730455AbgJOVom (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Oct 2020 17:44:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43525 "EHLO
+        id S1730878AbgJOWBI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Oct 2020 18:01:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32521 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729254AbgJOVoj (ORCPT
+        by vger.kernel.org with ESMTP id S1730241AbgJOWBH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Oct 2020 17:44:39 -0400
+        Thu, 15 Oct 2020 18:01:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602798278;
+        s=mimecast20190719; t=1602799266;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mpuNHZgzNVhYq85pnOEXEuCpteLYCDH+aPUQTLrccAI=;
-        b=XhWh0F9mqU1dwqcmQBkLEOKaCsr2E8EbSvQmrwaCSW0FpVXKQq2aOOz8je/0tCsFYDdxkI
-        NNb0KfYKZezApqEZBCxHhWvX7i5Ot4e+aRTNum2biXMp/2M3KYu1W+JksmVEWTbhX/JdQo
-        FE9hGaXlPQkSUjE/Lr7RKkMGFnOXXyw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-353-Ftts9uMfPl-YR3YS8Fd97A-1; Thu, 15 Oct 2020 17:44:35 -0400
-X-MC-Unique: Ftts9uMfPl-YR3YS8Fd97A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B3D34186841C;
-        Thu, 15 Oct 2020 21:44:33 +0000 (UTC)
-Received: from jsnitsel.users.ipa.redhat.com (ovpn-112-224.phx2.redhat.com [10.3.112.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F009176649;
-        Thu, 15 Oct 2020 21:44:32 +0000 (UTC)
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pDWmqUHLp8FIGfU/X7rfOUyiGs+RfGnhGhcKMN8cq6Q=;
+        b=haCOl9g2HGVmwk2IrxkHbDMjSc2oBr3hsEWAqoYr77uECzpbJmShuhIpjSVRpmwfjZYIP6
+        xqcr9ypwSmAH31uUq3R7EeKCiQ0wF2XTVyglc7gVdd/6UalcRYYPZUNKEMy/j8CmD3KvDN
+        RmuKF2AQLHwiadXkCWUtteZMXXS9Dz8=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-465-zyWRjs4aOzG-YYQzDNne9w-1; Thu, 15 Oct 2020 18:01:05 -0400
+X-MC-Unique: zyWRjs4aOzG-YYQzDNne9w-1
+Received: by mail-ot1-f70.google.com with SMTP id f4so157089oto.15
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Oct 2020 15:01:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=pDWmqUHLp8FIGfU/X7rfOUyiGs+RfGnhGhcKMN8cq6Q=;
+        b=abRLixPrVglr0OZDzF8oXVHhGVfNlbuT/GtUDadFgdTMFQeoXqt7YeX9r2zu1yGxxU
+         4JzG0nyL/WY0rspdvzycLD57iz88us68ZgOruLx3d5cizZLb/g02PokUK806Zh/djCzE
+         CHhm7Jlj3rmAI77NfMKBzNOGJuSIjuDqG+d+o2yCPGN09JGhGpJL4klR216AIaRIThVU
+         4weoGNAGbAk5xLBQGUNMJUxrjK2txu0JdvziYdaI9Nr8ucY9rdhBrnaqdyFgUB9gzI5c
+         Cdft9X9/pB4ikXwb1acwH5WPzJgx+0awENmDNqgxFf9pCaL2wZNjKegtcmRrkmtppKMg
+         Q9Hg==
+X-Gm-Message-State: AOAM531piuZuGevFqCkN0fTyajGlIoi9MogwHUsT9WBr27o1pXRUI8af
+        boOA91mYP9VSKIjRBYlA97uTZQ2Kryi1zJNZcKe3AcevtwK+Xln21ypedYymkx2K/sZAyukW1r5
+        460L5UUBSEEgyv8YXlvj1Yj1QIMDB
+X-Received: by 2002:a9d:6847:: with SMTP id c7mr417953oto.134.1602799264433;
+        Thu, 15 Oct 2020 15:01:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxux9nnpe8794oowHdNnMJ76DKX1MNKqZBhVeSffzj8tYw+EXRmhyjkJwc1tly4S0UqOUKlAQ==
+X-Received: by 2002:a9d:6847:: with SMTP id c7mr417936oto.134.1602799264234;
+        Thu, 15 Oct 2020 15:01:04 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id v123sm178673oif.29.2020.10.15.15.01.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2020 15:01:03 -0700 (PDT)
+References: <20201015214430.17937-1-jsnitsel@redhat.com>
+User-agent: mu4e 1.4.10; emacs 27.1
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-integrity@vger.kernel.org
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
 Cc:     linux-kernel@vger.kernel.org, jarkko@kernel.org,
         Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Hans de Goede <hdegoede@redhat.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH] tpm_tis: Disable interrupts on ThinkPad T490s
-Date:   Thu, 15 Oct 2020 14:44:30 -0700
-Message-Id: <20201015214430.17937-1-jsnitsel@redhat.com>
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] tpm_tis: Disable interrupts on ThinkPad T490s
+In-reply-to: <20201015214430.17937-1-jsnitsel@redhat.com>
+Date:   Thu, 15 Oct 2020 15:01:02 -0700
+Message-ID: <87imbbtaht.fsf@jsnitsel.users.ipa.redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-There is a misconfiguration in the bios of the gpio pin used for the
-interrupt in the T490s. When interrupts are enabled in the tpm_tis
-driver code this results in an interrupt storm. This was initially
-reported when we attempted to enable the interrupt code in the tpm_tis
-driver, which previously wasn't setting a flag to enable it. Due to
-the reports of the interrupt storm that code was reverted and we went back
-to polling instead of using interrupts. Now that we know the T490s problem
-is a firmware issue, add code to check if the system is a T490s and
-disable interrupts if that is the case. This will allow us to enable
-interrupts for everyone else. If the user has a fixed bios they can
-force the enabling of interrupts with tpm_tis.interrupts=1 on the
-kernel command line.
 
-Cc: jarkko@kernel.org
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- drivers/char/tpm/tpm_tis.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+James should this get tacked on the end of your patchset?
 
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index 0b214963539d..4ed6e660273a 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -27,6 +27,7 @@
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/kernel.h>
-+#include <linux/dmi.h>
- #include "tpm.h"
- #include "tpm_tis_core.h"
- 
-@@ -49,8 +50,8 @@ static inline struct tpm_tis_tcg_phy *to_tpm_tis_tcg_phy(struct tpm_tis_data *da
- 	return container_of(data, struct tpm_tis_tcg_phy, priv);
- }
- 
--static bool interrupts = true;
--module_param(interrupts, bool, 0444);
-+static int interrupts = -1;
-+module_param(interrupts, int, 0444);
- MODULE_PARM_DESC(interrupts, "Enable interrupts");
- 
- static bool itpm;
-@@ -63,6 +64,28 @@ module_param(force, bool, 0444);
- MODULE_PARM_DESC(force, "Force device probe rather than using ACPI entry");
- #endif
- 
-+static int tpm_tis_disable_irq(const struct dmi_system_id *d)
-+{
-+	if (interrupts == -1) {
-+		pr_notice("tpm_tis: %s detected: disabling interrupts.\n", d->ident);
-+		interrupts = 0;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dmi_system_id tpm_tis_dmi_table[] = {
-+	{
-+		.callback = tpm_tis_disable_irq,
-+		.ident = "ThinkPad T490s",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
-+		},
-+	},
-+	{}
-+};
-+
- #if defined(CONFIG_PNP) && defined(CONFIG_ACPI)
- static int has_hid(struct acpi_device *dev, const char *hid)
- {
-@@ -192,6 +215,8 @@ static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
- 	int irq = -1;
- 	int rc;
- 
-+	dmi_check_system(tpm_tis_dmi_table);
-+
- 	rc = check_acpi_tpm2(dev);
- 	if (rc)
- 		return rc;
--- 
-2.28.0
+Regards,
+Jerry
 
