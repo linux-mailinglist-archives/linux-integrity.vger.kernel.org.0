@@ -2,106 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F026A28F4B1
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 16:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F255E28F581
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 17:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388297AbgJOO11 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Oct 2020 10:27:27 -0400
-Received: from mga14.intel.com ([192.55.52.115]:14154 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730882AbgJOO11 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Oct 2020 10:27:27 -0400
-IronPort-SDR: ZoXx9AkVkzjC6g6ZiMC/A/m9MmOiyiot9mr+kFmLM4bXUq6wuHtj/pgDGAOKHe9afKn/ox0gfY
- Rd8NzEFDHi9g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9774"; a="165581470"
-X-IronPort-AV: E=Sophos;i="5.77,379,1596524400"; 
-   d="scan'208";a="165581470"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 07:27:26 -0700
-IronPort-SDR: +ny1WHzu6fLRQQOwVpnzusLvy3sUUu1Iw0e1Vs3fvkxbTQO+G6HJ8C8PDm7uqKHLd9SNQTuSv+
- jNDWgwjcDqqw==
-X-IronPort-AV: E=Sophos;i="5.77,379,1596524400"; 
-   d="scan'208";a="300276779"
-Received: from cbenunes-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.35.89])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 07:27:21 -0700
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-sgx@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org, Joe Perches <joe@perches.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        id S2389487AbgJOPFu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Oct 2020 11:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389486AbgJOPFt (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 15 Oct 2020 11:05:49 -0400
+Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F18AC061755
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Oct 2020 08:05:49 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CBszX6q78zlhTrD;
+        Thu, 15 Oct 2020 17:05:44 +0200 (CEST)
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CBszX0rtzzlh8Tg;
+        Thu, 15 Oct 2020 17:05:44 +0200 (CEST)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2] MAINTAINERS: jarkko.sakkinen@linux.intel.com -> jarkko@kernel.org
-Date:   Thu, 15 Oct 2020 17:26:37 +0300
-Message-Id: <20201015142710.8371-1-jarkko.sakkinen@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
+        Milan Broz <gmazyland@gmail.com>, dm-devel@redhat.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
+Subject: [PATCH v2] dm verity: Add support for signature verification with 2nd keyring
+Date:   Thu, 15 Oct 2020 17:05:04 +0200
+Message-Id: <20201015150504.1319098-1-mic@digikod.net>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Use @kernel.org address as the main communications end point. Update the
-corresponding M-entries and .mailmap (for git shortlog translation).
+From: Mickaël Salaün <mic@linux.microsoft.com>
 
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Add a new configuration DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
+to enable dm-verity signatures to be verified against the secondary
+trusted keyring.  Instead of relying on the builtin trusted keyring
+(with hard-coded certificates), the second trusted keyring can include
+certificate authorities from the builtin trusted keyring and child
+certificates loaded at run time.  Using the secondary trusted keyring
+enables to use dm-verity disks (e.g. loop devices) signed by keys which
+did not exist at kernel build time, leveraging the certificate chain of
+trust model.  In practice, this makes it possible to update certificates
+without kernel update and reboot, aligning with module and kernel
+(kexec) signature verification which already use the secondary trusted
+keyring.
+
+Cc: Alasdair Kergon <agk@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc: Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
+Cc: Mike Snitzer <snitzer@redhat.com>
+Cc: Milan Broz <gmazyland@gmail.com>
+Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
 ---
-v2:
-* Update the .mailmap (suggested by Joe Perches).
-  https://lore.kernel.org/lkml/b1ccdfbb3119528490ea10f40e1da084b1b23f87.camel@perches.com/
- .mailmap    | 1 +
- MAINTAINERS | 6 +++---
- 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/.mailmap b/.mailmap
-index e4ccac4e2f88..1e14566a3d56 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -133,6 +133,7 @@ James Ketrenos <jketreno@io.(none)>
- Jan Glauber <jan.glauber@gmail.com> <jang@de.ibm.com>
- Jan Glauber <jan.glauber@gmail.com> <jang@linux.vnet.ibm.com>
- Jan Glauber <jan.glauber@gmail.com> <jglauber@cavium.com>
-+Jarkko Sakkinen <jarkko@kernel.org> <jarkko.sakkinen@linux.intel.com>
- Jason Gunthorpe <jgg@ziepe.ca> <jgg@mellanox.com>
- Jason Gunthorpe <jgg@ziepe.ca> <jgg@nvidia.com>
- Jason Gunthorpe <jgg@ziepe.ca> <jgunthorpe@obsidianresearch.com>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6594f0966716..afe2a20fb85a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9668,7 +9668,7 @@ F:	security/keys/encrypted-keys/
+Previous version:
+https://lore.kernel.org/lkml/20201002071802.535023-1-mic@digikod.net/
+
+Changes since v1:
+* Extend the commit message (asked by Jarkko Sakkinen).
+* Rename the Kconfig "help" keyword according to commit 84af7a6194e4
+  ("checkpatch: kconfig: prefer 'help' over '---help---'").
+---
+ drivers/md/Kconfig                | 13 ++++++++++++-
+ drivers/md/dm-verity-verify-sig.c |  9 +++++++--
+ 2 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/md/Kconfig b/drivers/md/Kconfig
+index 30ba3573626c..1d68935e45ef 100644
+--- a/drivers/md/Kconfig
++++ b/drivers/md/Kconfig
+@@ -530,11 +530,22 @@ config DM_VERITY_VERIFY_ROOTHASH_SIG
+ 	bool "Verity data device root hash signature verification support"
+ 	depends on DM_VERITY
+ 	select SYSTEM_DATA_VERIFICATION
+-	  help
++	help
+ 	  Add ability for dm-verity device to be validated if the
+ 	  pre-generated tree of cryptographic checksums passed has a pkcs#7
+ 	  signature file that can validate the roothash of the tree.
  
- KEYS-TRUSTED
- M:	James Bottomley <jejb@linux.ibm.com>
--M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-+M:	Jarkko Sakkinen <jarkko@kernel.org>
- M:	Mimi Zohar <zohar@linux.ibm.com>
- L:	linux-integrity@vger.kernel.org
- L:	keyrings@vger.kernel.org
-@@ -9680,7 +9680,7 @@ F:	security/keys/trusted-keys/
++	  By default, rely on the builtin trusted keyring.
++
++	  If unsure, say N.
++
++config DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
++	bool "Verity data device root hash signature verification with secondary keyring"
++	depends on DM_VERITY_VERIFY_ROOTHASH_SIG
++	depends on SECONDARY_TRUSTED_KEYRING
++	help
++	  Rely on the secondary trusted keyring to verify dm-verity signatures.
++
+ 	  If unsure, say N.
  
- KEYS/KEYRINGS
- M:	David Howells <dhowells@redhat.com>
--M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-+M:	Jarkko Sakkinen <jarkko@kernel.org>
- L:	keyrings@vger.kernel.org
- S:	Maintained
- F:	Documentation/security/keys/core.rst
-@@ -17616,7 +17616,7 @@ F:	drivers/platform/x86/toshiba-wmi.c
+ config DM_VERITY_FEC
+diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+index 614e43db93aa..29385dc470d5 100644
+--- a/drivers/md/dm-verity-verify-sig.c
++++ b/drivers/md/dm-verity-verify-sig.c
+@@ -119,8 +119,13 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+ 	}
  
- TPM DEVICE DRIVER
- M:	Peter Huewe <peterhuewe@gmx.de>
--M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-+M:	Jarkko Sakkinen <jarkko@kernel.org>
- R:	Jason Gunthorpe <jgg@ziepe.ca>
- L:	linux-integrity@vger.kernel.org
- S:	Maintained
+ 	ret = verify_pkcs7_signature(root_hash, root_hash_len, sig_data,
+-				sig_len, NULL, VERIFYING_UNSPECIFIED_SIGNATURE,
+-				NULL, NULL);
++				sig_len,
++#ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
++				VERIFY_USE_SECONDARY_KEYRING,
++#else
++				NULL,
++#endif
++				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
+ 
+ 	return ret;
+ }
+
+base-commit: bbf5c979011a099af5dc76498918ed7df445635b
 -- 
-2.25.1
+2.28.0
 
