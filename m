@@ -2,177 +2,245 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 958E028E8BB
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 00:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C2328EDCD
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 09:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728742AbgJNW2T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 14 Oct 2020 18:28:19 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:63804 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726747AbgJNW2T (ORCPT
+        id S1727736AbgJOHic (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Oct 2020 03:38:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:23766 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726103AbgJOHic (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 14 Oct 2020 18:28:19 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09EME5Go042515;
-        Wed, 14 Oct 2020 18:28:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=maDsznPc30xxzlFJkXf1VRSMUiRwkdduwJm1xlNv+dI=;
- b=Q4GUro/6Tg+ASJVIA7RDGJhJVx/OutsU2USLKaycbbNVI1K01SoeHWVUb6P82z7AxTde
- R4jgOUj3Tw4Ihu9x+K0vY/Z1ZxhwJiIgYOeQqLRwrRVyfTOfy1PwyydPx+aHEjtdmJfl
- jNHzPV+vwibZUeR8+u+5si1e1BvTaTLz55E+fDmoGfyFgZCMJh8+ZCB4ewlp47o9L3Fm
- SnrvTKH0yO7fQNsc09Zb5q6SW8GAFWurupkAP6NNgs+Ed4cZYCkF31V/5pk8UhU9B5Uv
- IoHSBqDDykczmCjcoHQgZP1OgIh8xd8DzVoNMxsrarZ4uyQ8i7BPbvGiDttLuaPoWDsm 7A== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3469xg89t4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Oct 2020 18:28:15 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09EMIOBx009038;
-        Wed, 14 Oct 2020 22:28:13 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3434k84kjk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Oct 2020 22:28:13 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09EMSBsj30015992
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Oct 2020 22:28:11 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0027F4C046;
-        Wed, 14 Oct 2020 22:28:11 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D52BE4C040;
-        Wed, 14 Oct 2020 22:28:09 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.12.97])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 14 Oct 2020 22:28:09 +0000 (GMT)
-Message-ID: <a0060e2dd23281b1dbcc0d71f7615d46dd6f5aa7.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 1/5] ima-evm-utils: Change env variable
- TPM_SERVER_TYPE for tpm_server
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Ken Goldman <kgold@linux.ibm.com>,
-        Ken Goldman <kgoldman@us.ibm.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>
-Cc:     Petr Vorel <pvorel@suse.cz>
-Date:   Wed, 14 Oct 2020 18:28:09 -0400
-In-Reply-To: <fc912ea2-ef89-7fc4-8bf2-5f107b8cfc7e@linux.ibm.com>
-References: <20201012234416.20995-1-kgoldman@us.ibm.com>
-         <20201012234416.20995-2-kgoldman@us.ibm.com>
-         <ac8d885af1f79a8d1e2c137654b9924693b328b1.camel@linux.ibm.com>
-         <fc912ea2-ef89-7fc4-8bf2-5f107b8cfc7e@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
+        Thu, 15 Oct 2020 03:38:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602747509;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2WzoLdoCnSPUyg1A6GEWeA+pBiQibg0HW/VW3OtjuIs=;
+        b=Jhus31HAUI1UeG3OVNFYTC2ZoWhV3+8fWSMuPST6KL54062k4SEh1GmTkExjCFj788eZ04
+        DVJ8NGIupbp3co743gMeVlVphDmyNSZaJjRYHxmsswl1svIzSW+vBsW2mmtxh7JFGw/HRN
+        zn1GlVKXA91ceJIbUxQFPAJtkwZmTcw=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-534-JrL6Xpt8NBS35lVYFgeNmg-1; Thu, 15 Oct 2020 03:38:27 -0400
+X-MC-Unique: JrL6Xpt8NBS35lVYFgeNmg-1
+Received: by mail-ej1-f71.google.com with SMTP id ga21so719891ejb.14
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Oct 2020 00:38:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2WzoLdoCnSPUyg1A6GEWeA+pBiQibg0HW/VW3OtjuIs=;
+        b=ToPfe52v2Dn8+rmfN+LIWIAWC99Ar28uQ/wKxP0SVYIghfusyb/Kq8/0ToPqQNOuIR
+         PAc1QC7FN+TQ2WiXQq9jI95MCc211+sK9R4RlTrgnFvdXCCuASjRLp/zb9eRbjkkxCE/
+         xcdjE+DwLSJ6+HZ8MeAHKm/C8pmUMTe6Bn3GYUJaR2baEEZFvA+luTD6ddSNp6+g9XVg
+         seMbCHDEdKK545RiQinEanbUfpZyX+mC6QYxAMyNk3Qi4S9L/dduTo4k4BVLN+GWf3t0
+         MHSNEz9BTbY8NOmnIxJ8axOQdAThcYvOpC4/vkZoXzeG/uDzc2RKnsl5E7OSOGRvpbve
+         AWtA==
+X-Gm-Message-State: AOAM5324GibYPZqrtkpvXRs+Li3o+9BmDA1EQ9dpCQJgJlxH7atxb5Fy
+        5z97NJ+/HVRRmBNbZ1y7ztDSQttyl2lVbZ8ZB0om+9pWKerMreBRj0dmA23dffnvu+4EFffvTuP
+        EVP98WUWrYmmjNP8/VCgvEIDXIBob
+X-Received: by 2002:aa7:dc16:: with SMTP id b22mr2958530edu.252.1602747506428;
+        Thu, 15 Oct 2020 00:38:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw1vp1Vtsxsk1JDSTQyzhsuZ0AYijo6iZ3Eo0MH/oX8+C8nbxPVuLEfAJorQrIPGDtXPRGSqQ==
+X-Received: by 2002:aa7:dc16:: with SMTP id b22mr2958517edu.252.1602747506140;
+        Thu, 15 Oct 2020 00:38:26 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id s25sm963128ejc.29.2020.10.15.00.38.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2020 00:38:25 -0700 (PDT)
+Subject: Re: [PATCH v2 0/5] tpm_tis: fix interrupts (again)
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        equired@linux.intel.com,
+        justmentioningitbecauseIthinkthatwouldbeagood@linux.intel.com,
+        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Hans de Goede <jwrdegoede@fedoraproject.org>
+References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
+ <20201013011745.GA41176@linux.intel.com>
+ <87tuuyf97r.fsf@jsnitsel.users.ipa.redhat.com>
+ <e6930fa6df318ee2f51e13f6402d264fedb5d9ab.camel@HansenPartnership.com>
+ <87lfgaf6ww.fsf@jsnitsel.users.ipa.redhat.com>
+ <5f9ead56-78ff-e8b4-d646-654c9a08c519@redhat.com>
+ <82a5c6e4a9f7fe037f12cd2eba7512bd8b04f21a.camel@HansenPartnership.com>
+ <cd221dae-1c37-76d9-8ba2-1e4ceb528292@redhat.com>
+ <87ft6gg41b.fsf@jsnitsel.users.ipa.redhat.com>
+ <2553a8f3-6a71-7b05-52ab-8c346e2cb6ec@redhat.com>
+ <87sgagv82r.fsf@jsnitsel.users.ipa.redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <b6863c56-fc13-d0e4-6747-ae09ea3d45a3@redhat.com>
+Date:   Thu, 15 Oct 2020 09:38:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
+MIME-Version: 1.0
+In-Reply-To: <87sgagv82r.fsf@jsnitsel.users.ipa.redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-14_12:2020-10-14,2020-10-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- mlxlogscore=999 bulkscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
- phishscore=0 suspectscore=0 adultscore=0 priorityscore=1501 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010140150
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-10-14 at 18:17 -0400, Ken Goldman wrote:
-> On 10/14/2020 6:04 PM, Mimi Zohar wrote:
-> > Hi Ken,
-> > 
-> > On Mon, 2020-10-12 at 19:44 -0400, Ken Goldman wrote:
-> >> The default value raw is appropriate for 'swtpm'.  tpm_server
-> >> uses the Microsoft packet encapsulation, so the env variable
-> >> must have the value mssim.
-> >>
-> >> Signed-off-by: Ken Goldman <kgoldman@us.ibm.com>
-> > 
-> > Thank you for noticing this regression.
-> > 
-> >> ---
-> >>   tests/boot_aggregate.test | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/tests/boot_aggregate.test b/tests/boot_aggregate.test
-> >> index 1c7b1f2..b109a32 100755
-> >> --- a/tests/boot_aggregate.test
-> >> +++ b/tests/boot_aggregate.test
-> >> @@ -35,6 +35,7 @@ else
-> >>   	export TPM_COMMAND_PORT=2321
-> >>   	export TPM_PLATFORM_PORT=2322
-> >>   	export TPM_SERVER_NAME="localhost"
-> >> +	# swtpm uses the raw, unencapsulated packet format
-> >>   	export TPM_SERVER_TYPE="raw"
-> > 
-> > Instead of adding a comment here, how about only exporting
-> > TPM_SERVER_TYPE for "swtpm".
+Hi,
+
+On 10/14/20 10:58 PM, Jerry Snitselaar wrote:
 > 
-> That certainly works.  I thought the idea was, "Make the
-> smallest change that fixes the problem."   Moving that
-> line under swtpm is a reasonable alternative.
+> Hans de Goede @ 2020-10-14 09:46 MST:
+> 
+>> Hi,
+>>
+>> On 10/14/20 6:34 PM, Jerry Snitselaar wrote:
+>>> Hans de Goede @ 2020-10-14 09:04 MST:
+>>>
+>>>> Hi,
+>>>>
+>>>> On 10/14/20 5:23 PM, James Bottomley wrote:
+>>>>> On Wed, 2020-10-14 at 17:03 +0200, Hans de Goede wrote:
+>>>>>> On 10/13/20 6:05 PM, Jerry Snitselaar wrote:
+>>>>>>> James Bottomley @ 2020-10-13 08:24 MST:
+>>>>>>>> On Tue, 2020-10-13 at 08:15 -0700, Jerry Snitselaar wrote:
+>>>>>>>>> Jarkko Sakkinen @ 2020-10-12 18:17 MST:
+>>>>> [...]
+>>>>>>>>>>      Jerry, once you have some bandwidth (no rush, does not land
+>>>>>>>>>> before rc2), it would be great that if you could try this.
+>>>>>>>>>> I'm emphasizing this just because of the intersection. I
+>>>>>>>>>> think it would also make senset to get tested-by from Nayna.
+>>>>>>>>>
+>>>>>>>>> I will run some tests on some other systems I have access to.
+>>>>>>>>> As noted in the other email I did a quick test with a t490s
+>>>>>>>>> with an older bios that exhibits the problem originally
+>>>>>>>>> reported when Stefan's patch enabled interrupts.
+>>>>>>>>
+>>>>>>>> Well, it means there's still some other problem.  I was hoping
+>>>>>>>> that because the rainbow pass system originally exhibited the
+>>>>>>>> same symptoms (interrupt storm) fixing it would also fix the t490
+>>>>>>>> and the ineffective EOI bug looked like a great candidate for
+>>>>>>>> being the root cause.
+>>>>>>>>
+>>>>>>>
+>>>>>>> Adding Hans to the list.
+>>>>>>>
+>>>>>>> IIUC in the t490s case the problem lies with the hardware itself.
+>>>>>>> Hans, is that correct?
+>>>>>>
+>>>>>> More or less. AFAIK / have been told by Lenovo it is an issue with
+>>>>>> the configuration of the inerrupt-type of the GPIO pin used for the
+>>>>>> IRQ, which is a firmware issue which could be fixed by a BIOS update
+>>>>>> (the pin is setup as a direct-irq pin for the APIC, so the OS has no
+>>>>>> control of the IRQ type since with APIC irqs this is all supposed to
+>>>>>> be setup properly before hand).
+>>>>>>
+>>>>>> But it is a model specific issue, if we denylist IRQ usage on this
+>>>>>> Lenovo model (and probably a few others) then we should be able to
+>>>>>> restore the IRQ code to normal functionality for all other device
+>>>>>> models which declare an IRQ in their resource tables.
+>>>>> I can do that with a quirk, but how do I identify the device?  TPM
+>>>>> manufacturer and version? or do I have to use something like the ACPI
+>>>>> bios version?
+>>>>
+>>>> I'm not sure if the TPM ids are unique to one model/series of laptops.
+>>>>
+>>>> So my idea for this was to match on DMI strings, specifically
+>>>> use a DMI match on the DMI_SYS_VENDOR and DMI_PRODUCT_VERSION
+>>>> strings (normally one would use DMI_PRODUCT_NAME but for Lenovo
+>>>> devices the string which you expect to be in DMI_PRODUCT_NAME
+>>>> is actually in DMI_PRODUCT_VERSION).
+>>>>
+>>>> You can easily get the strings for your device by doing:
+>>>>
+>>>> cat /sys/class/dmi/id/sys_vendor
+>>>> cat /sys/class/dmi/id/product_version
+>>>>
+>>>> Regards,
+>>>>
+>>>> Hans
+>>> Plus use dmi_get_date(DMI_BIOS_DATE,...) to check
+>>> if the bios is older than the fixed bios? Has Lenovo
+>>> released the fixed bios?
+>>
+>> Maybe, the fixed BIOS-es which I have seen (for the X1C8,
+>> broken BIOS was a pre-production BIOS) "fixed" this by
+>> no longer listing an IRQ in the ACPI resources for the TPM.
+>>
+>> Which means that the new BIOS still being on the deny list
+>> does not matter since the IRQ support won't work anyways as
+>> we no longer get an IRQ assigned.
+>>
+>> So I don't think this is necessary and it will just complicate
+>> things unnecessarily. This whole saga has already taken way
+>> too long to fix. So IMHO the simplest fix where we just deny
+>> list the broken models independent of BIOS versions and move
+>> on seems best.
+>>
+>> Regards,
+>>
+>> Hans
+> 
+> This worked for me:
 
-In this case, moving the line and adding the comment is the smallest
-change.  To indicate this is a bug fix, you would add "Fixes:
-f831508297cd ("Install the swtpm package, if available") in addition to
-your Signed-off-by tag.
+That looks good to me, can you submit this upstream please ?
+
+If you Cc me I'll give it my Reviewed-by.
+
+Regards,
+
+Hans
+
 
 > 
-> I'd leave the comment.  I suspect many people
-> don't know about the Microsoft TPM packet format,
-> so the line would otherwise be confusing.
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index 0b214963539d..abe674d1de6d 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -27,6 +27,7 @@
+>   #include <linux/of.h>
+>   #include <linux/of_device.h>
+>   #include <linux/kernel.h>
+> +#include <linux/dmi.h>
+>   #include "tpm.h"
+>   #include "tpm_tis_core.h"
 > 
-> > 
-> >>   
-> >>   fi
-> >> @@ -73,6 +74,8 @@ swtpm_start() {
-> >>   			SWTPM_PPID=$!
-> >>   		fi
-> >>   	elif [ -n "${swtpm}" ]; then
-> >> +	        # tpm_server uses the Microsoft simulator encapsulated packet format
-> >> +                export TPM_SERVER_TYPE="mssim"
-> > 
-> > Exporting TPM_SERVER_TYPE like this is causing openssl/tumbleweed to
-> > fail.
-> > 
+> @@ -63,6 +64,26 @@ module_param(force, bool, 0444);
+>   MODULE_PARM_DESC(force, "Force device probe rather than using ACPI entry");
+>   #endif
 > 
-> That's odd.  Are you saying that openssl uses the env variable
-> TPM_SERVER_TYPE?  What in openssl fails?  What's the error
-> message.
-
-"make check" is showing:
-
-
-TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
-initialized
-3: pcrread: failed, rc 00000100
-TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
-initialized
-4: pcrread: failed, rc 00000100
-TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
-initialized
-5: pcrread: failed, rc 00000100
-TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
-initialized
-6: pcrread: failed, rc 00000100
-TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
-initialized
-7: pcrread: failed, rc 00000100
-TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
-initialized
-8: pcrread: failed, rc 00000100
-TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
-initialized
-9: pcrread: failed, rc 00000100
-TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
-initialized
-INFO: Calculating the boot_aggregate (PCRs 0 - 9) for multiple banks
-Failed to read any TPM PCRs
-errno: No such file or directory (2)
-SKIP: evmctl ima_boot_aggregate: 
-
-thanks,
-
-Mimi
+> +static int tpm_tis_disable_irq(const struct dmi_system_id *d)
+> +{
+> +       pr_notice("tpm_tis: %s detected: disabling interrupts.\n", d->ident);
+> +       interrupts = false;
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct dmi_system_id tpm_tis_dmi_table[] = {
+> +       {
+> +               .callback = tpm_tis_disable_irq,
+> +               .ident = "ThinkPad T490s",
+> +               .matches = {
+> +                       DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +                       DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
+> +               },
+> +       },
+> +       {}
+> +};
+> +
+>   #if defined(CONFIG_PNP) && defined(CONFIG_ACPI)
+>   static int has_hid(struct acpi_device *dev, const char *hid)
+>   {
+> @@ -192,6 +213,8 @@ static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
+>          int irq = -1;
+>          int rc;
+> 
+> +       dmi_check_system(tpm_tis_dmi_table);
+> +
+>          rc = check_acpi_tpm2(dev);
+>          if (rc)
+>                  return rc;
+> 
 
