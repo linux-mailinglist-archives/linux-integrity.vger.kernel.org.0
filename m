@@ -2,144 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9328A28F2E3
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 15:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3289828F35E
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 15:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726814AbgJONEs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Oct 2020 09:04:48 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17940 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726121AbgJONEs (ORCPT
+        id S1729918AbgJONgr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Oct 2020 09:36:47 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3066 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729679AbgJONgr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Oct 2020 09:04:48 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09FD2HPs151166;
-        Thu, 15 Oct 2020 09:04:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Editoim7y1q+HBIS/s7GtfFpmxMrMRA6CVw4hXetAvI=;
- b=iN+CkHULfY/LRVoEoaC72J8ZsCIxT37oPNM5sCSJFrH3YyBxbvZBywLL6mNic88GAMym
- k/qLRht4aa9ilC2fpGWEqcyWj3d7ZQf+tIqCMTJet1ox2zPiKikoMyNJeY6nc4wXVRuX
- uemSDor93ZBrOpoSpwK3VwLUsnKSbAv5RRc+CYUFyiw7plnPMD7Wz5wk9T8ospE6hYbn
- z+cKKhvVLauj5HVvBbjXDBXR7yJw2BtBl+hOP1v4BpNRa/9k4jvGGlmqJ8ek3fGaT7ot
- W2GKw3cOCfdXf6t5utfcZt/czTV05d3Mxx6+ka5THUXCC+55NdjnhgjK7+CWy8kA6Jjv 5w== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 346pss0g71-1
+        Thu, 15 Oct 2020 09:36:47 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09FDWwwW036086;
+        Thu, 15 Oct 2020 09:36:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=hlCkMv6J8aF7eWzsCbE7T8d75Uoi7rDw65qi5aB3Flc=;
+ b=EnP10peLDN8RtkEZERSLrAnmfrbQEnnhSG5btP8ETPPunTGCs3/jsmBWU/t/QMSWxtTc
+ MjRZtKIkNTL4F8w8OM+t+G9S4BNEQ4Yog4zz86CyZvjDcgQM5kya1X0QjvG75m+pXlNJ
+ 56/XR6PGWfGorblnpAz8lSsRL/3AVRQLY7qgoj7A0dn2f6neqpKkPnsfSiujscQHI4z4
+ GI5BU9EhZnjw2vf8AgMazkFGjUJBNQxCovLZPOOM95cd/uj7l+4s/8w04j9GGNm4eM4L
+ /+2p+w55/mTzj5apriQz1DI+sq00fuF4dUdOcRdtKGwouKe+hiRt9NcVP5QkkyGgOLbY TQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 346q6g8mnj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Oct 2020 09:04:45 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09FD3nte001825;
-        Thu, 15 Oct 2020 13:04:42 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma03dal.us.ibm.com with ESMTP id 3434k9car5-1
+        Thu, 15 Oct 2020 09:36:44 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09FDW37a019085;
+        Thu, 15 Oct 2020 13:36:41 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3434k7w9gr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Oct 2020 13:04:42 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09FD4fA948169372
+        Thu, 15 Oct 2020 13:36:41 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09FDadLr22806840
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Oct 2020 13:04:41 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D732112062;
-        Thu, 15 Oct 2020 13:04:41 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 597B1112070;
-        Thu, 15 Oct 2020 13:04:41 +0000 (GMT)
-Received: from [9.80.236.207] (unknown [9.80.236.207])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Oct 2020 13:04:41 +0000 (GMT)
-Subject: Re: [PATCH v2 1/5] ima-evm-utils: Change env variable TPM_SERVER_TYPE
- for tpm_server
-To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Thu, 15 Oct 2020 13:36:39 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 49F6FA4051;
+        Thu, 15 Oct 2020 13:36:39 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 271BEA4055;
+        Thu, 15 Oct 2020 13:36:38 +0000 (GMT)
+Received: from sig-9-65-201-109.ibm.com (unknown [9.65.201.109])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 15 Oct 2020 13:36:37 +0000 (GMT)
+Message-ID: <8d27071d0d4f72d99201e283b2840da53c2c3785.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 1/5] ima-evm-utils: Change env variable
+ TPM_SERVER_TYPE for tpm_server
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Ken Goldman <kgold@linux.ibm.com>,
         Ken Goldman <kgoldman@us.ibm.com>,
         Linux Integrity <linux-integrity@vger.kernel.org>
 Cc:     Petr Vorel <pvorel@suse.cz>
+Date:   Thu, 15 Oct 2020 09:36:37 -0400
+In-Reply-To: <7db39195-0e73-5958-03e3-7850bf5eb6b5@linux.ibm.com>
 References: <20201012234416.20995-1-kgoldman@us.ibm.com>
- <20201012234416.20995-2-kgoldman@us.ibm.com>
- <ac8d885af1f79a8d1e2c137654b9924693b328b1.camel@linux.ibm.com>
- <fc912ea2-ef89-7fc4-8bf2-5f107b8cfc7e@linux.ibm.com>
- <a0060e2dd23281b1dbcc0d71f7615d46dd6f5aa7.camel@linux.ibm.com>
-From:   Ken Goldman <kgold@linux.ibm.com>
-Message-ID: <7f070a41-97a8-2cf7-930f-8d194b5b8a97@linux.ibm.com>
-Date:   Thu, 15 Oct 2020 09:04:42 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.2
-MIME-Version: 1.0
-In-Reply-To: <a0060e2dd23281b1dbcc0d71f7615d46dd6f5aa7.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
+         <20201012234416.20995-2-kgoldman@us.ibm.com>
+         <ac8d885af1f79a8d1e2c137654b9924693b328b1.camel@linux.ibm.com>
+         <fc912ea2-ef89-7fc4-8bf2-5f107b8cfc7e@linux.ibm.com>
+         <a0060e2dd23281b1dbcc0d71f7615d46dd6f5aa7.camel@linux.ibm.com>
+         <7db39195-0e73-5958-03e3-7850bf5eb6b5@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-15_07:2020-10-14,2020-10-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- mlxscore=0 priorityscore=1501 spamscore=0 impostorscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 bulkscore=0 malwarescore=0 clxscore=1015
+ definitions=2020-10-15_08:2020-10-14,2020-10-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=3 clxscore=1015
+ phishscore=0 adultscore=0 spamscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010150090
+ definitions=main-2010150096
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 10/14/2020 6:28 PM, Mimi Zohar wrote:
- >>>>
- >>>>    fi
- >>>> @@ -73,6 +74,8 @@ swtpm_start() {
- >>>>    			SWTPM_PPID=$!
- >>>>    		fi
- >>>>    	elif [ -n "${swtpm}" ]; then
- >>>> +	        # tpm_server uses the Microsoft simulator encapsulated packet format
- >>>> +                export TPM_SERVER_TYPE="mssim"
- >>> Exporting TPM_SERVER_TYPE like this is causing openssl/tumbleweed to
- >>> fail.
- >>>
- >> That's odd.  Are you saying that openssl uses the env variable
- >> TPM_SERVER_TYPE?  What in openssl fails?  What's the error
- >> message.
- > "make check" is showing:
- >
- >
- > TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
- > initialized
- > 3: pcrread: failed, rc 00000100
- > TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
- > initialized
- > 4: pcrread: failed, rc 00000100
- > TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
- > initialized
- > 5: pcrread: failed, rc 00000100
- > TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
- > initialized
- > 6: pcrread: failed, rc 00000100
- > TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
- > initialized
- > 7: pcrread: failed, rc 00000100
- > TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
- > initialized
- > 8: pcrread: failed, rc 00000100
- > TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
- > initialized
- > 9: pcrread: failed, rc 00000100
- > TPM_RC_INITIALIZE - TPM not initialized by TPM2_Startup or already
- > initialized
- > INFO: Calculating the boot_aggregate (PCRs 0 - 9) for multiple banks
- > Failed to read any TPM PCRs
- > errno: No such file or directory (2)
- > SKIP: evmctl ima_boot_aggregate:
+On Thu, 2020-10-15 at 08:54 -0400, Ken Goldman wrote:
+> On 10/14/2020 6:28 PM, Mimi Zohar wrote:
+> >>> Instead of adding a comment here, how about only exporting
+> >>> TPM_SERVER_TYPE for "swtpm".
+> 
+> >> That certainly works.  I thought the idea was, "Make the
+> >> smallest change that fixes the problem."   Moving that
+> >> line under swtpm is a reasonable alternative.
+> 
+> > In this case, moving the line and adding the comment is the smallest
+> > change.  To indicate this is a bug fix, you would add "Fixes:
+> > f831508297cd ("Install the swtpm package, if available") in addition to
+> > your Signed-off-by tag.
+> > 
+> 
+> The current patch adds one line.  This proposal adds one line and
+> moves another line.  It also changes the swtpm flow, which must
+> be tested.
+> 
+> It's OK with me.  Let me know.
+> 
+> Where should I add that "Fixes ..." text?  What is the exact format?
 
-Are you sure that this failure is within openssl?  It doesn't look
-that way to me.
+The "Fixes" tag belongs in the patch description above your Signed-off-
+by tag.  The format is:  Fixes: < commit number> < commit ttitle>
 
-Were there perhaps more of those errors?  I suspect that because
-the messages are labeled 3-9, but PCR 0-9 are read.
+e.g. Fixes: f831508297cd ("Install the swtpm package, if available")
 
-I don't know the test code.  My guess is:
+As this is a bug fix, please update the Subject line and post this
+change independently of the other changes.  I've already tested the
+suggested change.  Once the updated patch is posted, it will hopefully
+be tested by the distros as well.
 
-- If there were 10 errors, the startup command is missing,
-causing each PCR read to fail.
+thanks,
 
-- If there were 9 errors, startup is being sent before each PCR read,
-but only one is permitted.
-
-
+Mimi
 
