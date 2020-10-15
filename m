@@ -2,185 +2,329 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A79128F87E
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 20:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD3828F8DD
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 20:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391022AbgJOS1k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Oct 2020 14:27:40 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:48750 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729842AbgJOS1j (ORCPT
+        id S1726244AbgJOSs1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Oct 2020 14:48:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39841 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726196AbgJOSs0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Oct 2020 14:27:39 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09FIAcSn042985;
-        Thu, 15 Oct 2020 18:27:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=Pbs6sItLT9P+3Wm5yB8xeVF+/nDCCHUlx/SaWc5x4sg=;
- b=JZXLPH0mKC0PI23vZ1Iqc+DNQYsGy3+c+GwqGykt5CrjdOAdRt6900nobqgBNZ1sDloy
- FaYL2ywwpq2BjO/iYj7bdbv3xO9R7JfUjA47DdEHY/SfvvdYSYwQ8X9MpPwlL2tvZLB6
- rmOH0KoBNvylaCLh/+taYfR+dEjCEYJLZBMTtM1IcR2vPDdE4DF9pRb6v9Bi6N0zJkU+
- kZqD32+SRIks2+hBUBlLmZ+fT28/OevDGRhNSRurHiudag8cuzv2/j6dFs41vDElf5aM
- TIJfPwIJxUtw7nDG3hmkmFd5QC7p8zMXwh4iVKvLqv5ly6i0dF58/YRgbYFy1igvc+CR fQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 3434wkxant-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Oct 2020 18:27:08 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09FIAeTR018733;
-        Thu, 15 Oct 2020 18:27:07 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 343pw0r6uj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Oct 2020 18:27:07 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09FIR0l0029619;
-        Thu, 15 Oct 2020 18:27:00 GMT
-Received: from tomti.i.net-space.pl (/10.175.198.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 15 Oct 2020 11:27:00 -0700
-Date:   Thu, 15 Oct 2020 20:26:54 +0200
-From:   Daniel Kiper <daniel.kiper@oracle.com>
-To:     Arvind Sankar <nivedita@alum.mit.edu>
-Cc:     Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, dpsmith@apertussolutions.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        luto@amacapital.net, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH 07/13] x86: Secure Launch kernel early boot stub
-Message-ID: <20201015182654.lgtht5fd2aaunczu@tomti.i.net-space.pl>
-References: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
- <1600959521-24158-8-git-send-email-ross.philipson@oracle.com>
- <20200924173801.GA103726@rani.riverdale.lan>
- <c9ab2edf-1aaf-a1c9-92d5-2d37382a3163@oracle.com>
- <20200925191842.GA643740@rani.riverdale.lan>
- <d34c189c-4528-0458-0b84-cfd36dc068b3@oracle.com>
+        Thu, 15 Oct 2020 14:48:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602787704;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cTUyz1qobTwbt+eCfOuN8CzafpEghJzufGGu8NroTTA=;
+        b=J8wvnqKUxWmNpPH+YkUa0W2GfKV5IAXqmfiU9PZBHZNbJBnlIQOKIgXSqHygF0Uinpk/Tc
+        4/+nLyIOj6p4hbF1e6PkgyhrmGiWZ++ZnvFECgErg2MJs/e6jWa6kB+Hn1Fnc6FnE2J3wM
+        oepS6IAa5zpwNZKxfWTlx+iPeGtHZMI=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-501-FKbU5ji1NFKytI_3TzHDhA-1; Thu, 15 Oct 2020 14:48:21 -0400
+X-MC-Unique: FKbU5ji1NFKytI_3TzHDhA-1
+Received: by mail-oo1-f70.google.com with SMTP id g9so1684094ooq.17
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Oct 2020 11:48:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=cTUyz1qobTwbt+eCfOuN8CzafpEghJzufGGu8NroTTA=;
+        b=e0cD52sRgv6AUdQPGU40kvBptIs0kAUnDEUHGQgmsskyznqAshLDaPE6tpMYRDWKUw
+         ED7xgYn1LuFVXJnXUIrZ7OhkQoOnNLKpJt+r9P//n2rQNU4BZbEIgFwLYbdMXItH+LaL
+         c02MZJyOze8zbFYVmU6v32neFSxqjDFOEk1iUxlQO7mnjRQk7HlPiHgW+PG6l93pnI3t
+         jtU12Ht6zf6qx2ZpsEJpsKQBkFm61MMuFkva5D4x4Ak2QQCoBRpfxh8e6Sgk4qh4Pk/W
+         zEpwENxJknfG+UY9taAy7KBYD9O7QfSAxLestTkJIb36KHMMWJ1Xp9uVsojic/eB08C7
+         iZ3w==
+X-Gm-Message-State: AOAM531Mo4lCDAaBHeKXXXIp2lUjospMyNwPDmznp884DP1DLESBJ1gA
+        v5ugxgPGbg+3nCNalZFJ7nKPZR9bggQZtLqcsNO/+uO7lSW9khY93571ymdFN9Y4nIkTsYj/TWA
+        N8Rzfgl0WogsvSUvH/NM2JV4VxTtk
+X-Received: by 2002:aca:abce:: with SMTP id u197mr113291oie.135.1602787700591;
+        Thu, 15 Oct 2020 11:48:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyMSM5tY4HAaM2R8csWZ6cep7u5ALHU4Ph01WLZeV5kdxIfv0gwMGDkp+UJiOXZ4wInUhIMag==
+X-Received: by 2002:aca:abce:: with SMTP id u197mr113278oie.135.1602787700293;
+        Thu, 15 Oct 2020 11:48:20 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id p21sm13758oto.21.2020.10.15.11.48.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2020 11:48:19 -0700 (PDT)
+References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
+ <20201013011745.GA41176@linux.intel.com>
+ <87tuuyf97r.fsf@jsnitsel.users.ipa.redhat.com>
+ <e6930fa6df318ee2f51e13f6402d264fedb5d9ab.camel@HansenPartnership.com>
+ <87lfgaf6ww.fsf@jsnitsel.users.ipa.redhat.com>
+ <5f9ead56-78ff-e8b4-d646-654c9a08c519@redhat.com>
+ <82a5c6e4a9f7fe037f12cd2eba7512bd8b04f21a.camel@HansenPartnership.com>
+ <cd221dae-1c37-76d9-8ba2-1e4ceb528292@redhat.com>
+ <87ft6gg41b.fsf@jsnitsel.users.ipa.redhat.com>
+ <2553a8f3-6a71-7b05-52ab-8c346e2cb6ec@redhat.com>
+ <87sgagv82r.fsf@jsnitsel.users.ipa.redhat.com>
+ <c16b45762ccc824b7a4d3aa5340a978c42d4ee6c.camel@HansenPartnership.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, equired@linux.intel.com,
+        justmentioningitbecauseIthinkthatwouldbeagood@linux.intel.com,
+        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Hans de Goede <jwrdegoede@fedoraproject.org>
+Subject: Re: [PATCH v2 0/5] tpm_tis: fix interrupts (again)
+In-reply-to: <c16b45762ccc824b7a4d3aa5340a978c42d4ee6c.camel@HansenPartnership.com>
+Date:   Thu, 15 Oct 2020 11:48:17 -0700
+Message-ID: <87mu0nba1a.fsf@jsnitsel.users.ipa.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d34c189c-4528-0458-0b84-cfd36dc068b3@oracle.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9775 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 adultscore=0
- bulkscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010150122
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9775 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 phishscore=0 suspectscore=0 impostorscore=0 clxscore=1011
- spamscore=0 priorityscore=1501 bulkscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010150122
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 10:03:47AM -0400, Ross Philipson wrote:
-> On 9/25/20 3:18 PM, Arvind Sankar wrote:
 
-[...]
+James Bottomley @ 2020-10-15 08:36 MST:
 
-> > You should see them if you do
-> > 	readelf -r arch/x86/boot/compressed/vmlinux
-> >
-> > In terms of the code, things like:
-> >
-> > 	addl    %ebx, (sl_gdt_desc + 2)(%ebx)
-> >
-> > will create a relocation, because the linker interprets this as wanting
-> > the runtime address of sl_gdt_desc, rather than just the offset from
-> > startup_32.
-> >
-> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/tree/arch/x86/boot/compressed/head_64.S*n48__;Iw!!GqivPVa7Brio!JpZWv1cCPZdjD2jbCCGT7P9UIVl_lhX7YjckAnUcvi927jwZI7X3nX0MpIAZOyktJds$
-> >
-> > has a comment with some explanation and a macro that the 32-bit code in
-> > startup_32 uses to avoid creating relocations.
-> >
-> > Since the SL code is in a different assembler file (and a different
-> > section), you can't directly use the same macro. I would suggest getting
-> > rid of sl_stub_entry and entering directly at sl_stub, and then the code
-> > in sl_stub.S can use sl_stub for the base address, defining the rva()
-> > macro there as
-> >
-> > 	#define rva(X) ((X) - sl_stub)
-> >
-> > You will also need to avoid initializing data with symbol addresses.
-> >
-> > 	.long mle_header
-> > 	.long sl_stub_entry
-> > 	.long sl_gdt
-> >
-> > will create relocations. The third one is easy, just replace it with
-> > sl_gdt - sl_gdt_desc and initialize it at runtime with
-> >
-> > 	leal	rva(sl_gdt_desc)(%ebx), %eax
-> > 	addl	%eax, 2(%eax)
-> > 	lgdt	(%eax)
-> >
-> > The other two are more messy, unfortunately there is no easy way to tell
-> > the linker what we want here. The other entry point addresses (for the
-> > EFI stub) are populated in a post-processing step after the compressed
-> > kernel has been linked, we could teach it to also update kernel_info.
-> >
-> > Without that, for kernel_info, you could change it to store the offset
-> > of the MLE header from kernel_info, instead of from the start of the
-> > image.
-> >
-> > For the MLE header, it could be moved to .head.text in head_64.S, and
-> > initialized with
-> > 	.long rva(sl_stub)
-> > This will also let it be placed at a fixed offset from startup_32, so
-> > that kernel_info can just be populated with a constant.
+> On Wed, 2020-10-14 at 13:58 -0700, Jerry Snitselaar wrote:
+>> Hans de Goede @ 2020-10-14 09:46 MST:
+>> 
+>> > Hi,
+>> > 
+>> > On 10/14/20 6:34 PM, Jerry Snitselaar wrote:
+>> > > Hans de Goede @ 2020-10-14 09:04 MST:
+>> > > 
+>> > > > Hi,
+>> > > > 
+>> > > > On 10/14/20 5:23 PM, James Bottomley wrote:
+>> > > > > On Wed, 2020-10-14 at 17:03 +0200, Hans de Goede wrote:
+>> > > > > > On 10/13/20 6:05 PM, Jerry Snitselaar wrote:
+>> > > > > > > James Bottomley @ 2020-10-13 08:24 MST:
+>> > > > > > > > On Tue, 2020-10-13 at 08:15 -0700, Jerry Snitselaar
+>> > > > > > > > wrote:
+>> > > > > > > > > Jarkko Sakkinen @ 2020-10-12 18:17 MST:
+>> > > > > [...]
+>> > > > > > > > > >     Jerry, once you have some bandwidth (no rush,
+>> > > > > > > > > > does not land
+>> > > > > > > > > > before rc2), it would be great that if you could
+>> > > > > > > > > > try this.
+>> > > > > > > > > > I'm emphasizing this just because of the
+>> > > > > > > > > > intersection. I
+>> > > > > > > > > > think it would also make senset to get tested-by
+>> > > > > > > > > > from Nayna.
+>> > > > > > > > > 
+>> > > > > > > > > I will run some tests on some other systems I have
+>> > > > > > > > > access to.
+>> > > > > > > > > As noted in the other email I did a quick test with a
+>> > > > > > > > > t490s
+>> > > > > > > > > with an older bios that exhibits the problem
+>> > > > > > > > > originally
+>> > > > > > > > > reported when Stefan's patch enabled interrupts.
+>> > > > > > > > 
+>> > > > > > > > Well, it means there's still some other problem.  I was
+>> > > > > > > > hoping
+>> > > > > > > > that because the rainbow pass system originally
+>> > > > > > > > exhibited the
+>> > > > > > > > same symptoms (interrupt storm) fixing it would also
+>> > > > > > > > fix the t490
+>> > > > > > > > and the ineffective EOI bug looked like a great
+>> > > > > > > > candidate for
+>> > > > > > > > being the root cause.
+>> > > > > > > > 
+>> > > > > > > 
+>> > > > > > > Adding Hans to the list.
+>> > > > > > > 
+>> > > > > > > IIUC in the t490s case the problem lies with the hardware
+>> > > > > > > itself.
+>> > > > > > > Hans, is that correct?
+>> > > > > > 
+>> > > > > > More or less. AFAIK / have been told by Lenovo it is an
+>> > > > > > issue with
+>> > > > > > the configuration of the inerrupt-type of the GPIO pin used
+>> > > > > > for the
+>> > > > > > IRQ, which is a firmware issue which could be fixed by a
+>> > > > > > BIOS update
+>> > > > > > (the pin is setup as a direct-irq pin for the APIC, so the
+>> > > > > > OS has no
+>> > > > > > control of the IRQ type since with APIC irqs this is all
+>> > > > > > supposed to
+>> > > > > > be setup properly before hand).
+>> > > > > > 
+>> > > > > > But it is a model specific issue, if we denylist IRQ usage
+>> > > > > > on this
+>> > > > > > Lenovo model (and probably a few others) then we should be
+>> > > > > > able to
+>> > > > > > restore the IRQ code to normal functionality for all other
+>> > > > > > device
+>> > > > > > models which declare an IRQ in their resource tables.
+>> > > > > I can do that with a quirk, but how do I identify the
+>> > > > > device?  TPM
+>> > > > > manufacturer and version? or do I have to use something like
+>> > > > > the ACPI
+>> > > > > bios version?
+>> > > > 
+>> > > > I'm not sure if the TPM ids are unique to one model/series of
+>> > > > laptops.
+>> > > > 
+>> > > > So my idea for this was to match on DMI strings, specifically
+>> > > > use a DMI match on the DMI_SYS_VENDOR and DMI_PRODUCT_VERSION
+>> > > > strings (normally one would use DMI_PRODUCT_NAME but for Lenovo
+>> > > > devices the string which you expect to be in DMI_PRODUCT_NAME
+>> > > > is actually in DMI_PRODUCT_VERSION).
+>> > > > 
+>> > > > You can easily get the strings for your device by doing:
+>> > > > 
+>> > > > cat /sys/class/dmi/id/sys_vendor
+>> > > > cat /sys/class/dmi/id/product_version
+>> > > > 
+>> > > > Regards,
+>> > > > 
+>> > > > Hans
+>> > > Plus use dmi_get_date(DMI_BIOS_DATE,...) to check
+>> > > if the bios is older than the fixed bios? Has Lenovo
+>> > > released the fixed bios?
+>> > 
+>> > Maybe, the fixed BIOS-es which I have seen (for the X1C8,
+>> > broken BIOS was a pre-production BIOS) "fixed" this by
+>> > no longer listing an IRQ in the ACPI resources for the TPM.
+>> > 
+>> > Which means that the new BIOS still being on the deny list
+>> > does not matter since the IRQ support won't work anyways as
+>> > we no longer get an IRQ assigned.
+>> > 
+>> > So I don't think this is necessary and it will just complicate
+>> > things unnecessarily. This whole saga has already taken way
+>> > too long to fix. So IMHO the simplest fix where we just deny
+>> > list the broken models independent of BIOS versions and move
+>> > on seems best.
+>> > 
+>> > Regards,
+>> > 
+>> > Hans
+>> 
+>> This worked for me:
+>> 
+>> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+>> index 0b214963539d..abe674d1de6d 100644
+>> --- a/drivers/char/tpm/tpm_tis.c
+>> +++ b/drivers/char/tpm/tpm_tis.c
+>> @@ -27,6 +27,7 @@
+>>  #include <linux/of.h>
+>>  #include <linux/of_device.h>
+>>  #include <linux/kernel.h>
+>> +#include <linux/dmi.h>
+>>  #include "tpm.h"
+>>  #include "tpm_tis_core.h"
+>> 
+>> @@ -63,6 +64,26 @@ module_param(force, bool, 0444);
+>>  MODULE_PARM_DESC(force, "Force device probe rather than using ACPI
+>> entry");
+>>  #endif
+>> 
+>> +static int tpm_tis_disable_irq(const struct dmi_system_id *d)
+>> +{
+>> +       pr_notice("tpm_tis: %s detected: disabling interrupts.\n", d-
+>> >ident);
+>> +       interrupts = false;
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static const struct dmi_system_id tpm_tis_dmi_table[] = {
+>> +       {
+>> +               .callback = tpm_tis_disable_irq,
+>> +               .ident = "ThinkPad T490s",
+>> +               .matches = {
+>> +                       DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+>> +                       DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad
+>> T490s"),
+>> +               },
+>> +       },
+>> +       {}
+>> +};
+>> +
+>>  #if defined(CONFIG_PNP) && defined(CONFIG_ACPI)
+>>  static int has_hid(struct acpi_device *dev, const char *hid)
+>>  {
+>> @@ -192,6 +213,8 @@ static int tpm_tis_init(struct device *dev,
+>> struct tpm_info *tpm_info)
+>>         int irq = -1;
+>>         int rc;
+>> 
+>> +       dmi_check_system(tpm_tis_dmi_table);
+>> +
+>>         rc = check_acpi_tpm2(dev);
+>>         if (rc)
+>>                 return rc;
+>
+> This looks OK to me with the caveat that anyone on one of these systems
+> has no way to enable interrupts again if they think they have a fixed
+> bios.  What about making interrupts a tristate with the default value
+> -1?  Then in the dmi check, if we see -1 we set it to 0 but if we see 1
+> (the user has specified interrupts=1 on the module insert line) we
+> leave it?
+>
+> James
 
-I am discussing with Ross the other option. We can create
-.rodata.mle_header section and put it at fixed offset as
-kernel_info is. So, we would have, e.g.:
+like this?
 
-arch/x86/boot/compressed/vmlinux.lds.S:
-        .rodata.kernel_info KERNEL_INFO_OFFSET : {
-                *(.rodata.kernel_info)
-        }
-        ASSERT(ABSOLUTE(kernel_info) == KERNEL_INFO_OFFSET, "kernel_info at bad address!")
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index 0b214963539d..10c46cb26c5a 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -27,6 +27,7 @@
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/kernel.h>
++#include <linux/dmi.h>
+ #include "tpm.h"
+ #include "tpm_tis_core.h"
 
-        .rodata.mle_header MLE_HEADER_OFFSET : {
-                *(.rodata.mle_header)
-        }
-        ASSERT(ABSOLUTE(mle_header) == MLE_HEADER_OFFSET, "mle_header at bad address!")
+@@ -49,8 +50,8 @@ static inline struct tpm_tis_tcg_phy *to_tpm_tis_tcg_phy(struct tpm_tis_data *da
+        return container_of(data, struct tpm_tis_tcg_phy, priv);
+ }
 
-arch/x86/boot/compressed/sl_stub.S:
-#define mleh_rva(X) (((X) - mle_header) + MLE_HEADER_OFFSET)
+-static bool interrupts = true;
+-module_param(interrupts, bool, 0444);
++static int interrupts = -1;
++module_param(interrupts, int, 0444);
+ MODULE_PARM_DESC(interrupts, "Enable interrupts");
 
-        .section ".rodata.mle_header", "a"
+ static bool itpm;
+@@ -63,6 +64,27 @@ module_param(force, bool, 0444);
+ MODULE_PARM_DESC(force, "Force device probe rather than using ACPI entry");
+ #endif
 
-SYM_DATA_START(mle_header)
-        .long   0x9082ac5a    /* UUID0 */
-        .long   0x74a7476f    /* UUID1 */
-        .long   0xa2555c0f    /* UUID2 */
-        .long   0x42b651cb    /* UUID3 */
-        .long   0x00000034    /* MLE header size */
-        .long   0x00020002    /* MLE version 2.2 */
-        .long   mleh_rva(sl_stub_entry)    /* Linear entry point of MLE (virt. address) */
-        .long   0x00000000    /* First valid page of MLE */
-        .long   0x00000000    /* Offset within binary of first byte of MLE */
-        .long   0x00000000    /* Offset within binary of last byte + 1 of MLE */
-        .long   0x00000223    /* Bit vector of MLE-supported capabilities */
-        .long   0x00000000    /* Starting linear address of command line (unused) */
-        .long   0x00000000    /* Ending linear address of command line (unused) */
-SYM_DATA_END(mle_header)
++static int tpm_tis_disable_irq(const struct dmi_system_id *d)
++{
++       pr_notice("tpm_tis: %s detected: disabling interrupts.\n", d->ident);
++       if (interrupts == -1)
++               interrupts = 0;
++
++       return 0;
++}
++
++static const struct dmi_system_id tpm_tis_dmi_table[] = {
++       {
++               .callback = tpm_tis_disable_irq,
++               .ident = "ThinkPad T490s",
++               .matches = {
++                       DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++                       DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
++               },
++       },
++       {}
++};
++
+ #if defined(CONFIG_PNP) && defined(CONFIG_ACPI)
+ static int has_hid(struct acpi_device *dev, const char *hid)
+ {
+@@ -192,6 +214,8 @@ static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
+        int irq = -1;
+        int rc;
 
-Of course MLE_HEADER_OFFSET has to be defined as a constant somewhere.
-Anyway, is it acceptable?
++       dmi_check_system(tpm_tis_dmi_table);
++
+        rc = check_acpi_tpm2(dev);
+        if (rc)
+                return rc;
 
-There is also another problem. We have to put into mle_header size of
-the Linux kernel image. Currently it is done by the bootloader but
-I think it is not a role of the bootloader. The kernel image should
-provide all data describing its properties and do not rely on the
-bootloader to do that. Ross and I investigated various options but we
-did not find a good/simple way to do that. Could you suggest how we
-should do that or at least where we should take a look to get some
-ideas?
-
-Daniel
