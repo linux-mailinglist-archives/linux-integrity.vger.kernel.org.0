@@ -2,118 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3289828F35E
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 15:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F026A28F4B1
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 16:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729918AbgJONgr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Oct 2020 09:36:47 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3066 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729679AbgJONgr (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Oct 2020 09:36:47 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09FDWwwW036086;
-        Thu, 15 Oct 2020 09:36:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=hlCkMv6J8aF7eWzsCbE7T8d75Uoi7rDw65qi5aB3Flc=;
- b=EnP10peLDN8RtkEZERSLrAnmfrbQEnnhSG5btP8ETPPunTGCs3/jsmBWU/t/QMSWxtTc
- MjRZtKIkNTL4F8w8OM+t+G9S4BNEQ4Yog4zz86CyZvjDcgQM5kya1X0QjvG75m+pXlNJ
- 56/XR6PGWfGorblnpAz8lSsRL/3AVRQLY7qgoj7A0dn2f6neqpKkPnsfSiujscQHI4z4
- GI5BU9EhZnjw2vf8AgMazkFGjUJBNQxCovLZPOOM95cd/uj7l+4s/8w04j9GGNm4eM4L
- /+2p+w55/mTzj5apriQz1DI+sq00fuF4dUdOcRdtKGwouKe+hiRt9NcVP5QkkyGgOLbY TQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 346q6g8mnj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Oct 2020 09:36:44 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09FDW37a019085;
-        Thu, 15 Oct 2020 13:36:41 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3434k7w9gr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Oct 2020 13:36:41 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09FDadLr22806840
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Oct 2020 13:36:39 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 49F6FA4051;
-        Thu, 15 Oct 2020 13:36:39 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 271BEA4055;
-        Thu, 15 Oct 2020 13:36:38 +0000 (GMT)
-Received: from sig-9-65-201-109.ibm.com (unknown [9.65.201.109])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Oct 2020 13:36:37 +0000 (GMT)
-Message-ID: <8d27071d0d4f72d99201e283b2840da53c2c3785.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 1/5] ima-evm-utils: Change env variable
- TPM_SERVER_TYPE for tpm_server
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Ken Goldman <kgold@linux.ibm.com>,
-        Ken Goldman <kgoldman@us.ibm.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>
-Cc:     Petr Vorel <pvorel@suse.cz>
-Date:   Thu, 15 Oct 2020 09:36:37 -0400
-In-Reply-To: <7db39195-0e73-5958-03e3-7850bf5eb6b5@linux.ibm.com>
-References: <20201012234416.20995-1-kgoldman@us.ibm.com>
-         <20201012234416.20995-2-kgoldman@us.ibm.com>
-         <ac8d885af1f79a8d1e2c137654b9924693b328b1.camel@linux.ibm.com>
-         <fc912ea2-ef89-7fc4-8bf2-5f107b8cfc7e@linux.ibm.com>
-         <a0060e2dd23281b1dbcc0d71f7615d46dd6f5aa7.camel@linux.ibm.com>
-         <7db39195-0e73-5958-03e3-7850bf5eb6b5@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-15_08:2020-10-14,2020-10-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=3 clxscore=1015
- phishscore=0 adultscore=0 spamscore=0 priorityscore=1501 impostorscore=0
- mlxlogscore=999 lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010150096
+        id S2388297AbgJOO11 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Oct 2020 10:27:27 -0400
+Received: from mga14.intel.com ([192.55.52.115]:14154 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730882AbgJOO11 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 15 Oct 2020 10:27:27 -0400
+IronPort-SDR: ZoXx9AkVkzjC6g6ZiMC/A/m9MmOiyiot9mr+kFmLM4bXUq6wuHtj/pgDGAOKHe9afKn/ox0gfY
+ Rd8NzEFDHi9g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9774"; a="165581470"
+X-IronPort-AV: E=Sophos;i="5.77,379,1596524400"; 
+   d="scan'208";a="165581470"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 07:27:26 -0700
+IronPort-SDR: +ny1WHzu6fLRQQOwVpnzusLvy3sUUu1Iw0e1Vs3fvkxbTQO+G6HJ8C8PDm7uqKHLd9SNQTuSv+
+ jNDWgwjcDqqw==
+X-IronPort-AV: E=Sophos;i="5.77,379,1596524400"; 
+   d="scan'208";a="300276779"
+Received: from cbenunes-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.35.89])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 07:27:21 -0700
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-sgx@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Joe Perches <joe@perches.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2] MAINTAINERS: jarkko.sakkinen@linux.intel.com -> jarkko@kernel.org
+Date:   Thu, 15 Oct 2020 17:26:37 +0300
+Message-Id: <20201015142710.8371-1-jarkko.sakkinen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-10-15 at 08:54 -0400, Ken Goldman wrote:
-> On 10/14/2020 6:28 PM, Mimi Zohar wrote:
-> >>> Instead of adding a comment here, how about only exporting
-> >>> TPM_SERVER_TYPE for "swtpm".
-> 
-> >> That certainly works.  I thought the idea was, "Make the
-> >> smallest change that fixes the problem."   Moving that
-> >> line under swtpm is a reasonable alternative.
-> 
-> > In this case, moving the line and adding the comment is the smallest
-> > change.  To indicate this is a bug fix, you would add "Fixes:
-> > f831508297cd ("Install the swtpm package, if available") in addition to
-> > your Signed-off-by tag.
-> > 
-> 
-> The current patch adds one line.  This proposal adds one line and
-> moves another line.  It also changes the swtpm flow, which must
-> be tested.
-> 
-> It's OK with me.  Let me know.
-> 
-> Where should I add that "Fixes ..." text?  What is the exact format?
+Use @kernel.org address as the main communications end point. Update the
+corresponding M-entries and .mailmap (for git shortlog translation).
 
-The "Fixes" tag belongs in the patch description above your Signed-off-
-by tag.  The format is:  Fixes: < commit number> < commit ttitle>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+---
+v2:
+* Update the .mailmap (suggested by Joe Perches).
+  https://lore.kernel.org/lkml/b1ccdfbb3119528490ea10f40e1da084b1b23f87.camel@perches.com/
+ .mailmap    | 1 +
+ MAINTAINERS | 6 +++---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-e.g. Fixes: f831508297cd ("Install the swtpm package, if available")
-
-As this is a bug fix, please update the Subject line and post this
-change independently of the other changes.  I've already tested the
-suggested change.  Once the updated patch is posted, it will hopefully
-be tested by the distros as well.
-
-thanks,
-
-Mimi
+diff --git a/.mailmap b/.mailmap
+index e4ccac4e2f88..1e14566a3d56 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -133,6 +133,7 @@ James Ketrenos <jketreno@io.(none)>
+ Jan Glauber <jan.glauber@gmail.com> <jang@de.ibm.com>
+ Jan Glauber <jan.glauber@gmail.com> <jang@linux.vnet.ibm.com>
+ Jan Glauber <jan.glauber@gmail.com> <jglauber@cavium.com>
++Jarkko Sakkinen <jarkko@kernel.org> <jarkko.sakkinen@linux.intel.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgg@mellanox.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgg@nvidia.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgunthorpe@obsidianresearch.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6594f0966716..afe2a20fb85a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9668,7 +9668,7 @@ F:	security/keys/encrypted-keys/
+ 
+ KEYS-TRUSTED
+ M:	James Bottomley <jejb@linux.ibm.com>
+-M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
++M:	Jarkko Sakkinen <jarkko@kernel.org>
+ M:	Mimi Zohar <zohar@linux.ibm.com>
+ L:	linux-integrity@vger.kernel.org
+ L:	keyrings@vger.kernel.org
+@@ -9680,7 +9680,7 @@ F:	security/keys/trusted-keys/
+ 
+ KEYS/KEYRINGS
+ M:	David Howells <dhowells@redhat.com>
+-M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
++M:	Jarkko Sakkinen <jarkko@kernel.org>
+ L:	keyrings@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/security/keys/core.rst
+@@ -17616,7 +17616,7 @@ F:	drivers/platform/x86/toshiba-wmi.c
+ 
+ TPM DEVICE DRIVER
+ M:	Peter Huewe <peterhuewe@gmx.de>
+-M:	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
++M:	Jarkko Sakkinen <jarkko@kernel.org>
+ R:	Jason Gunthorpe <jgg@ziepe.ca>
+ L:	linux-integrity@vger.kernel.org
+ S:	Maintained
+-- 
+2.25.1
 
