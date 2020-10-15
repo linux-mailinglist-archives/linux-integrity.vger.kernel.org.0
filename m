@@ -2,168 +2,185 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E492528F72C
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 18:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A79128F87E
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 20:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731049AbgJOQwq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Oct 2020 12:52:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57991 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730137AbgJOQwm (ORCPT
+        id S2391022AbgJOS1k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Oct 2020 14:27:40 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:48750 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729842AbgJOS1j (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Oct 2020 12:52:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602780760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BwZ2RO/PthchT0q2HhH4BHmetPcJkEk1Sez5Pbqx4Lk=;
-        b=OWcBkZbvm78BbCvKL/QNWSClPya62Oel1HrvJgpX1vmEfa83oZkSy126Uhen/YbPpTklsK
-        uxAFad3VC3gHN99G6992V45P5+D4ce0k4Cbeeye6II7noNRGVae7ookIIBYSvg48Xsveu6
-        b8Anll1xaJoPYSqWJrbfjhkCny/yXLo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-13-OQB3MFcmNKKVut8qKvf4jQ-1; Thu, 15 Oct 2020 12:52:36 -0400
-X-MC-Unique: OQB3MFcmNKKVut8qKvf4jQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7C8DF835B74;
-        Thu, 15 Oct 2020 16:52:34 +0000 (UTC)
-Received: from localhost (unknown [10.18.25.174])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A51DD76649;
-        Thu, 15 Oct 2020 16:52:30 +0000 (UTC)
-Date:   Thu, 15 Oct 2020 12:52:29 -0400
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Alasdair Kergon <agk@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
-        Milan Broz <gmazyland@gmail.com>, dm-devel@redhat.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v2] dm verity: Add support for signature verification
- with 2nd keyring
-Message-ID: <20201015165229.GA5513@redhat.com>
-References: <20201015150504.1319098-1-mic@digikod.net>
+        Thu, 15 Oct 2020 14:27:39 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09FIAcSn042985;
+        Thu, 15 Oct 2020 18:27:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=Pbs6sItLT9P+3Wm5yB8xeVF+/nDCCHUlx/SaWc5x4sg=;
+ b=JZXLPH0mKC0PI23vZ1Iqc+DNQYsGy3+c+GwqGykt5CrjdOAdRt6900nobqgBNZ1sDloy
+ FaYL2ywwpq2BjO/iYj7bdbv3xO9R7JfUjA47DdEHY/SfvvdYSYwQ8X9MpPwlL2tvZLB6
+ rmOH0KoBNvylaCLh/+taYfR+dEjCEYJLZBMTtM1IcR2vPDdE4DF9pRb6v9Bi6N0zJkU+
+ kZqD32+SRIks2+hBUBlLmZ+fT28/OevDGRhNSRurHiudag8cuzv2/j6dFs41vDElf5aM
+ TIJfPwIJxUtw7nDG3hmkmFd5QC7p8zMXwh4iVKvLqv5ly6i0dF58/YRgbYFy1igvc+CR fQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 3434wkxant-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Oct 2020 18:27:08 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09FIAeTR018733;
+        Thu, 15 Oct 2020 18:27:07 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 343pw0r6uj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Oct 2020 18:27:07 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09FIR0l0029619;
+        Thu, 15 Oct 2020 18:27:00 GMT
+Received: from tomti.i.net-space.pl (/10.175.198.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 15 Oct 2020 11:27:00 -0700
+Date:   Thu, 15 Oct 2020 20:26:54 +0200
+From:   Daniel Kiper <daniel.kiper@oracle.com>
+To:     Arvind Sankar <nivedita@alum.mit.edu>
+Cc:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
+        linux-doc@vger.kernel.org, dpsmith@apertussolutions.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        luto@amacapital.net, trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH 07/13] x86: Secure Launch kernel early boot stub
+Message-ID: <20201015182654.lgtht5fd2aaunczu@tomti.i.net-space.pl>
+References: <1600959521-24158-1-git-send-email-ross.philipson@oracle.com>
+ <1600959521-24158-8-git-send-email-ross.philipson@oracle.com>
+ <20200924173801.GA103726@rani.riverdale.lan>
+ <c9ab2edf-1aaf-a1c9-92d5-2d37382a3163@oracle.com>
+ <20200925191842.GA643740@rani.riverdale.lan>
+ <d34c189c-4528-0458-0b84-cfd36dc068b3@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201015150504.1319098-1-mic@digikod.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <d34c189c-4528-0458-0b84-cfd36dc068b3@oracle.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9775 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010150122
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9775 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 mlxscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 impostorscore=0 clxscore=1011
+ spamscore=0 priorityscore=1501 bulkscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010150122
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 15 2020 at 11:05am -0400,
-Mickaël Salaün <mic@digikod.net> wrote:
+On Tue, Sep 29, 2020 at 10:03:47AM -0400, Ross Philipson wrote:
+> On 9/25/20 3:18 PM, Arvind Sankar wrote:
 
-> From: Mickaël Salaün <mic@linux.microsoft.com>
-> 
-> Add a new configuration DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
-> to enable dm-verity signatures to be verified against the secondary
-> trusted keyring.  Instead of relying on the builtin trusted keyring
-> (with hard-coded certificates), the second trusted keyring can include
-> certificate authorities from the builtin trusted keyring and child
-> certificates loaded at run time.  Using the secondary trusted keyring
-> enables to use dm-verity disks (e.g. loop devices) signed by keys which
-> did not exist at kernel build time, leveraging the certificate chain of
-> trust model.  In practice, this makes it possible to update certificates
-> without kernel update and reboot, aligning with module and kernel
-> (kexec) signature verification which already use the secondary trusted
-> keyring.
-> 
-> Cc: Alasdair Kergon <agk@redhat.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> Cc: Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
-> Cc: Mike Snitzer <snitzer@redhat.com>
-> Cc: Milan Broz <gmazyland@gmail.com>
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> ---
-> 
-> Previous version:
-> https://lore.kernel.org/lkml/20201002071802.535023-1-mic@digikod.net/
-> 
-> Changes since v1:
-> * Extend the commit message (asked by Jarkko Sakkinen).
-> * Rename the Kconfig "help" keyword according to commit 84af7a6194e4
->   ("checkpatch: kconfig: prefer 'help' over '---help---'").
+[...]
 
-Can you please explain why you've decided to make this a Kconfig CONFIG
-knob?  Why not either add: a dm-verity table argument? A dm-verity
-kernel module parameter? or both (to allow a particular default but then
-per-device override)?
+> > You should see them if you do
+> > 	readelf -r arch/x86/boot/compressed/vmlinux
+> >
+> > In terms of the code, things like:
+> >
+> > 	addl    %ebx, (sl_gdt_desc + 2)(%ebx)
+> >
+> > will create a relocation, because the linker interprets this as wanting
+> > the runtime address of sl_gdt_desc, rather than just the offset from
+> > startup_32.
+> >
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/tree/arch/x86/boot/compressed/head_64.S*n48__;Iw!!GqivPVa7Brio!JpZWv1cCPZdjD2jbCCGT7P9UIVl_lhX7YjckAnUcvi927jwZI7X3nX0MpIAZOyktJds$
+> >
+> > has a comment with some explanation and a macro that the 32-bit code in
+> > startup_32 uses to avoid creating relocations.
+> >
+> > Since the SL code is in a different assembler file (and a different
+> > section), you can't directly use the same macro. I would suggest getting
+> > rid of sl_stub_entry and entering directly at sl_stub, and then the code
+> > in sl_stub.S can use sl_stub for the base address, defining the rva()
+> > macro there as
+> >
+> > 	#define rva(X) ((X) - sl_stub)
+> >
+> > You will also need to avoid initializing data with symbol addresses.
+> >
+> > 	.long mle_header
+> > 	.long sl_stub_entry
+> > 	.long sl_gdt
+> >
+> > will create relocations. The third one is easy, just replace it with
+> > sl_gdt - sl_gdt_desc and initialize it at runtime with
+> >
+> > 	leal	rva(sl_gdt_desc)(%ebx), %eax
+> > 	addl	%eax, 2(%eax)
+> > 	lgdt	(%eax)
+> >
+> > The other two are more messy, unfortunately there is no easy way to tell
+> > the linker what we want here. The other entry point addresses (for the
+> > EFI stub) are populated in a post-processing step after the compressed
+> > kernel has been linked, we could teach it to also update kernel_info.
+> >
+> > Without that, for kernel_info, you could change it to store the offset
+> > of the MLE header from kernel_info, instead of from the start of the
+> > image.
+> >
+> > For the MLE header, it could be moved to .head.text in head_64.S, and
+> > initialized with
+> > 	.long rva(sl_stub)
+> > This will also let it be placed at a fixed offset from startup_32, so
+> > that kernel_info can just be populated with a constant.
 
-Otherwise, _all_ DM verity devices will be configured to use secondary
-keyring fallback.  Is that really desirable?
+I am discussing with Ross the other option. We can create
+.rodata.mle_header section and put it at fixed offset as
+kernel_info is. So, we would have, e.g.:
 
-Regardless, I really don't see why a Kconfig knob is appropriate.
+arch/x86/boot/compressed/vmlinux.lds.S:
+        .rodata.kernel_info KERNEL_INFO_OFFSET : {
+                *(.rodata.kernel_info)
+        }
+        ASSERT(ABSOLUTE(kernel_info) == KERNEL_INFO_OFFSET, "kernel_info at bad address!")
 
-Mike
+        .rodata.mle_header MLE_HEADER_OFFSET : {
+                *(.rodata.mle_header)
+        }
+        ASSERT(ABSOLUTE(mle_header) == MLE_HEADER_OFFSET, "mle_header at bad address!")
 
+arch/x86/boot/compressed/sl_stub.S:
+#define mleh_rva(X) (((X) - mle_header) + MLE_HEADER_OFFSET)
 
-> ---
->  drivers/md/Kconfig                | 13 ++++++++++++-
->  drivers/md/dm-verity-verify-sig.c |  9 +++++++--
->  2 files changed, 19 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/md/Kconfig b/drivers/md/Kconfig
-> index 30ba3573626c..1d68935e45ef 100644
-> --- a/drivers/md/Kconfig
-> +++ b/drivers/md/Kconfig
-> @@ -530,11 +530,22 @@ config DM_VERITY_VERIFY_ROOTHASH_SIG
->  	bool "Verity data device root hash signature verification support"
->  	depends on DM_VERITY
->  	select SYSTEM_DATA_VERIFICATION
-> -	  help
-> +	help
->  	  Add ability for dm-verity device to be validated if the
->  	  pre-generated tree of cryptographic checksums passed has a pkcs#7
->  	  signature file that can validate the roothash of the tree.
->  
-> +	  By default, rely on the builtin trusted keyring.
-> +
-> +	  If unsure, say N.
-> +
-> +config DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
-> +	bool "Verity data device root hash signature verification with secondary keyring"
-> +	depends on DM_VERITY_VERIFY_ROOTHASH_SIG
-> +	depends on SECONDARY_TRUSTED_KEYRING
-> +	help
-> +	  Rely on the secondary trusted keyring to verify dm-verity signatures.
-> +
->  	  If unsure, say N.
->  
->  config DM_VERITY_FEC
-> diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-> index 614e43db93aa..29385dc470d5 100644
-> --- a/drivers/md/dm-verity-verify-sig.c
-> +++ b/drivers/md/dm-verity-verify-sig.c
-> @@ -119,8 +119,13 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
->  	}
->  
->  	ret = verify_pkcs7_signature(root_hash, root_hash_len, sig_data,
-> -				sig_len, NULL, VERIFYING_UNSPECIFIED_SIGNATURE,
-> -				NULL, NULL);
-> +				sig_len,
-> +#ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
-> +				VERIFY_USE_SECONDARY_KEYRING,
-> +#else
-> +				NULL,
-> +#endif
-> +				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
->  
->  	return ret;
->  }
-> 
-> base-commit: bbf5c979011a099af5dc76498918ed7df445635b
-> -- 
-> 2.28.0
-> 
+        .section ".rodata.mle_header", "a"
 
+SYM_DATA_START(mle_header)
+        .long   0x9082ac5a    /* UUID0 */
+        .long   0x74a7476f    /* UUID1 */
+        .long   0xa2555c0f    /* UUID2 */
+        .long   0x42b651cb    /* UUID3 */
+        .long   0x00000034    /* MLE header size */
+        .long   0x00020002    /* MLE version 2.2 */
+        .long   mleh_rva(sl_stub_entry)    /* Linear entry point of MLE (virt. address) */
+        .long   0x00000000    /* First valid page of MLE */
+        .long   0x00000000    /* Offset within binary of first byte of MLE */
+        .long   0x00000000    /* Offset within binary of last byte + 1 of MLE */
+        .long   0x00000223    /* Bit vector of MLE-supported capabilities */
+        .long   0x00000000    /* Starting linear address of command line (unused) */
+        .long   0x00000000    /* Ending linear address of command line (unused) */
+SYM_DATA_END(mle_header)
+
+Of course MLE_HEADER_OFFSET has to be defined as a constant somewhere.
+Anyway, is it acceptable?
+
+There is also another problem. We have to put into mle_header size of
+the Linux kernel image. Currently it is done by the bootloader but
+I think it is not a role of the bootloader. The kernel image should
+provide all data describing its properties and do not rely on the
+bootloader to do that. Ross and I investigated various options but we
+did not find a good/simple way to do that. Could you suggest how we
+should do that or at least where we should take a look to get some
+ideas?
+
+Daniel
