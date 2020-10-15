@@ -2,252 +2,168 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A33128F5EF
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 17:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E492528F72C
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Oct 2020 18:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387888AbgJOPgX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Oct 2020 11:36:23 -0400
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:60686 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729327AbgJOPgX (ORCPT
+        id S1731049AbgJOQwq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Oct 2020 12:52:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57991 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730137AbgJOQwm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Oct 2020 11:36:23 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 675091280F6C;
-        Thu, 15 Oct 2020 08:36:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1602776183;
-        bh=eN46aC+G/+cxwfEH/lhib50K668t+0EidfIxoyS8hss=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=BGSrMly73GKs4+3UlqMvNGXdBHAJS8grjqw4Sdn2JqIFXlwQbcYQO8V9bWddRVJaz
-         pW63uVI6uX4qG+Ux8M+Q8bzVqaQ3LnRKYYPCZ5c7Y1nMWQd0w19CBtvHLq4fnGlNkr
-         iEuVjW1FYjpGN7ielkcIJ1dt7J+3AtUxlF9FjNew=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zMJK4lapT3PD; Thu, 15 Oct 2020 08:36:23 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 15 Oct 2020 12:52:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602780760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BwZ2RO/PthchT0q2HhH4BHmetPcJkEk1Sez5Pbqx4Lk=;
+        b=OWcBkZbvm78BbCvKL/QNWSClPya62Oel1HrvJgpX1vmEfa83oZkSy126Uhen/YbPpTklsK
+        uxAFad3VC3gHN99G6992V45P5+D4ce0k4Cbeeye6II7noNRGVae7ookIIBYSvg48Xsveu6
+        b8Anll1xaJoPYSqWJrbfjhkCny/yXLo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-13-OQB3MFcmNKKVut8qKvf4jQ-1; Thu, 15 Oct 2020 12:52:36 -0400
+X-MC-Unique: OQB3MFcmNKKVut8qKvf4jQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id B68B41280F6B;
-        Thu, 15 Oct 2020 08:36:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1602776183;
-        bh=eN46aC+G/+cxwfEH/lhib50K668t+0EidfIxoyS8hss=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=BGSrMly73GKs4+3UlqMvNGXdBHAJS8grjqw4Sdn2JqIFXlwQbcYQO8V9bWddRVJaz
-         pW63uVI6uX4qG+Ux8M+Q8bzVqaQ3LnRKYYPCZ5c7Y1nMWQd0w19CBtvHLq4fnGlNkr
-         iEuVjW1FYjpGN7ielkcIJ1dt7J+3AtUxlF9FjNew=
-Message-ID: <c16b45762ccc824b7a4d3aa5340a978c42d4ee6c.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 0/5] tpm_tis: fix interrupts (again)
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     equired@linux.intel.com,
-        justmentioningitbecauseIthinkthatwouldbeagood@linux.intel.com,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Hans de Goede <jwrdegoede@fedoraproject.org>
-Date:   Thu, 15 Oct 2020 08:36:21 -0700
-In-Reply-To: <87sgagv82r.fsf@jsnitsel.users.ipa.redhat.com>
-References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
-         <20201013011745.GA41176@linux.intel.com>
-         <87tuuyf97r.fsf@jsnitsel.users.ipa.redhat.com>
-         <e6930fa6df318ee2f51e13f6402d264fedb5d9ab.camel@HansenPartnership.com>
-         <87lfgaf6ww.fsf@jsnitsel.users.ipa.redhat.com>
-         <5f9ead56-78ff-e8b4-d646-654c9a08c519@redhat.com>
-         <82a5c6e4a9f7fe037f12cd2eba7512bd8b04f21a.camel@HansenPartnership.com>
-         <cd221dae-1c37-76d9-8ba2-1e4ceb528292@redhat.com>
-         <87ft6gg41b.fsf@jsnitsel.users.ipa.redhat.com>
-         <2553a8f3-6a71-7b05-52ab-8c346e2cb6ec@redhat.com>
-         <87sgagv82r.fsf@jsnitsel.users.ipa.redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7C8DF835B74;
+        Thu, 15 Oct 2020 16:52:34 +0000 (UTC)
+Received: from localhost (unknown [10.18.25.174])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A51DD76649;
+        Thu, 15 Oct 2020 16:52:30 +0000 (UTC)
+Date:   Thu, 15 Oct 2020 12:52:29 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
+        Milan Broz <gmazyland@gmail.com>, dm-devel@redhat.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v2] dm verity: Add support for signature verification
+ with 2nd keyring
+Message-ID: <20201015165229.GA5513@redhat.com>
+References: <20201015150504.1319098-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201015150504.1319098-1-mic@digikod.net>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-10-14 at 13:58 -0700, Jerry Snitselaar wrote:
-> Hans de Goede @ 2020-10-14 09:46 MST:
-> 
-> > Hi,
-> > 
-> > On 10/14/20 6:34 PM, Jerry Snitselaar wrote:
-> > > Hans de Goede @ 2020-10-14 09:04 MST:
-> > > 
-> > > > Hi,
-> > > > 
-> > > > On 10/14/20 5:23 PM, James Bottomley wrote:
-> > > > > On Wed, 2020-10-14 at 17:03 +0200, Hans de Goede wrote:
-> > > > > > On 10/13/20 6:05 PM, Jerry Snitselaar wrote:
-> > > > > > > James Bottomley @ 2020-10-13 08:24 MST:
-> > > > > > > > On Tue, 2020-10-13 at 08:15 -0700, Jerry Snitselaar
-> > > > > > > > wrote:
-> > > > > > > > > Jarkko Sakkinen @ 2020-10-12 18:17 MST:
-> > > > > [...]
-> > > > > > > > > >     Jerry, once you have some bandwidth (no rush,
-> > > > > > > > > > does not land
-> > > > > > > > > > before rc2), it would be great that if you could
-> > > > > > > > > > try this.
-> > > > > > > > > > I'm emphasizing this just because of the
-> > > > > > > > > > intersection. I
-> > > > > > > > > > think it would also make senset to get tested-by
-> > > > > > > > > > from Nayna.
-> > > > > > > > > 
-> > > > > > > > > I will run some tests on some other systems I have
-> > > > > > > > > access to.
-> > > > > > > > > As noted in the other email I did a quick test with a
-> > > > > > > > > t490s
-> > > > > > > > > with an older bios that exhibits the problem
-> > > > > > > > > originally
-> > > > > > > > > reported when Stefan's patch enabled interrupts.
-> > > > > > > > 
-> > > > > > > > Well, it means there's still some other problem.  I was
-> > > > > > > > hoping
-> > > > > > > > that because the rainbow pass system originally
-> > > > > > > > exhibited the
-> > > > > > > > same symptoms (interrupt storm) fixing it would also
-> > > > > > > > fix the t490
-> > > > > > > > and the ineffective EOI bug looked like a great
-> > > > > > > > candidate for
-> > > > > > > > being the root cause.
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > Adding Hans to the list.
-> > > > > > > 
-> > > > > > > IIUC in the t490s case the problem lies with the hardware
-> > > > > > > itself.
-> > > > > > > Hans, is that correct?
-> > > > > > 
-> > > > > > More or less. AFAIK / have been told by Lenovo it is an
-> > > > > > issue with
-> > > > > > the configuration of the inerrupt-type of the GPIO pin used
-> > > > > > for the
-> > > > > > IRQ, which is a firmware issue which could be fixed by a
-> > > > > > BIOS update
-> > > > > > (the pin is setup as a direct-irq pin for the APIC, so the
-> > > > > > OS has no
-> > > > > > control of the IRQ type since with APIC irqs this is all
-> > > > > > supposed to
-> > > > > > be setup properly before hand).
-> > > > > > 
-> > > > > > But it is a model specific issue, if we denylist IRQ usage
-> > > > > > on this
-> > > > > > Lenovo model (and probably a few others) then we should be
-> > > > > > able to
-> > > > > > restore the IRQ code to normal functionality for all other
-> > > > > > device
-> > > > > > models which declare an IRQ in their resource tables.
-> > > > > I can do that with a quirk, but how do I identify the
-> > > > > device?  TPM
-> > > > > manufacturer and version? or do I have to use something like
-> > > > > the ACPI
-> > > > > bios version?
-> > > > 
-> > > > I'm not sure if the TPM ids are unique to one model/series of
-> > > > laptops.
-> > > > 
-> > > > So my idea for this was to match on DMI strings, specifically
-> > > > use a DMI match on the DMI_SYS_VENDOR and DMI_PRODUCT_VERSION
-> > > > strings (normally one would use DMI_PRODUCT_NAME but for Lenovo
-> > > > devices the string which you expect to be in DMI_PRODUCT_NAME
-> > > > is actually in DMI_PRODUCT_VERSION).
-> > > > 
-> > > > You can easily get the strings for your device by doing:
-> > > > 
-> > > > cat /sys/class/dmi/id/sys_vendor
-> > > > cat /sys/class/dmi/id/product_version
-> > > > 
-> > > > Regards,
-> > > > 
-> > > > Hans
-> > > Plus use dmi_get_date(DMI_BIOS_DATE,...) to check
-> > > if the bios is older than the fixed bios? Has Lenovo
-> > > released the fixed bios?
-> > 
-> > Maybe, the fixed BIOS-es which I have seen (for the X1C8,
-> > broken BIOS was a pre-production BIOS) "fixed" this by
-> > no longer listing an IRQ in the ACPI resources for the TPM.
-> > 
-> > Which means that the new BIOS still being on the deny list
-> > does not matter since the IRQ support won't work anyways as
-> > we no longer get an IRQ assigned.
-> > 
-> > So I don't think this is necessary and it will just complicate
-> > things unnecessarily. This whole saga has already taken way
-> > too long to fix. So IMHO the simplest fix where we just deny
-> > list the broken models independent of BIOS versions and move
-> > on seems best.
-> > 
-> > Regards,
-> > 
-> > Hans
-> 
-> This worked for me:
-> 
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index 0b214963539d..abe674d1de6d 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -27,6 +27,7 @@
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/kernel.h>
-> +#include <linux/dmi.h>
->  #include "tpm.h"
->  #include "tpm_tis_core.h"
-> 
-> @@ -63,6 +64,26 @@ module_param(force, bool, 0444);
->  MODULE_PARM_DESC(force, "Force device probe rather than using ACPI
-> entry");
->  #endif
-> 
-> +static int tpm_tis_disable_irq(const struct dmi_system_id *d)
-> +{
-> +       pr_notice("tpm_tis: %s detected: disabling interrupts.\n", d-
-> >ident);
-> +       interrupts = false;
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct dmi_system_id tpm_tis_dmi_table[] = {
-> +       {
-> +               .callback = tpm_tis_disable_irq,
-> +               .ident = "ThinkPad T490s",
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +                       DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad
-> T490s"),
-> +               },
-> +       },
-> +       {}
-> +};
-> +
->  #if defined(CONFIG_PNP) && defined(CONFIG_ACPI)
->  static int has_hid(struct acpi_device *dev, const char *hid)
->  {
-> @@ -192,6 +213,8 @@ static int tpm_tis_init(struct device *dev,
-> struct tpm_info *tpm_info)
->         int irq = -1;
->         int rc;
-> 
-> +       dmi_check_system(tpm_tis_dmi_table);
-> +
->         rc = check_acpi_tpm2(dev);
->         if (rc)
->                 return rc;
+On Thu, Oct 15 2020 at 11:05am -0400,
+Mickaël Salaün <mic@digikod.net> wrote:
 
-This looks OK to me with the caveat that anyone on one of these systems
-has no way to enable interrupts again if they think they have a fixed
-bios.  What about making interrupts a tristate with the default value
--1?  Then in the dmi check, if we see -1 we set it to 0 but if we see 1
-(the user has specified interrupts=1 on the module insert line) we
-leave it?
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> Add a new configuration DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
+> to enable dm-verity signatures to be verified against the secondary
+> trusted keyring.  Instead of relying on the builtin trusted keyring
+> (with hard-coded certificates), the second trusted keyring can include
+> certificate authorities from the builtin trusted keyring and child
+> certificates loaded at run time.  Using the secondary trusted keyring
+> enables to use dm-verity disks (e.g. loop devices) signed by keys which
+> did not exist at kernel build time, leveraging the certificate chain of
+> trust model.  In practice, this makes it possible to update certificates
+> without kernel update and reboot, aligning with module and kernel
+> (kexec) signature verification which already use the secondary trusted
+> keyring.
+> 
+> Cc: Alasdair Kergon <agk@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Cc: Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
+> Cc: Mike Snitzer <snitzer@redhat.com>
+> Cc: Milan Broz <gmazyland@gmail.com>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> ---
+> 
+> Previous version:
+> https://lore.kernel.org/lkml/20201002071802.535023-1-mic@digikod.net/
+> 
+> Changes since v1:
+> * Extend the commit message (asked by Jarkko Sakkinen).
+> * Rename the Kconfig "help" keyword according to commit 84af7a6194e4
+>   ("checkpatch: kconfig: prefer 'help' over '---help---'").
 
-James
+Can you please explain why you've decided to make this a Kconfig CONFIG
+knob?  Why not either add: a dm-verity table argument? A dm-verity
+kernel module parameter? or both (to allow a particular default but then
+per-device override)?
 
+Otherwise, _all_ DM verity devices will be configured to use secondary
+keyring fallback.  Is that really desirable?
+
+Regardless, I really don't see why a Kconfig knob is appropriate.
+
+Mike
+
+
+> ---
+>  drivers/md/Kconfig                | 13 ++++++++++++-
+>  drivers/md/dm-verity-verify-sig.c |  9 +++++++--
+>  2 files changed, 19 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/md/Kconfig b/drivers/md/Kconfig
+> index 30ba3573626c..1d68935e45ef 100644
+> --- a/drivers/md/Kconfig
+> +++ b/drivers/md/Kconfig
+> @@ -530,11 +530,22 @@ config DM_VERITY_VERIFY_ROOTHASH_SIG
+>  	bool "Verity data device root hash signature verification support"
+>  	depends on DM_VERITY
+>  	select SYSTEM_DATA_VERIFICATION
+> -	  help
+> +	help
+>  	  Add ability for dm-verity device to be validated if the
+>  	  pre-generated tree of cryptographic checksums passed has a pkcs#7
+>  	  signature file that can validate the roothash of the tree.
+>  
+> +	  By default, rely on the builtin trusted keyring.
+> +
+> +	  If unsure, say N.
+> +
+> +config DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
+> +	bool "Verity data device root hash signature verification with secondary keyring"
+> +	depends on DM_VERITY_VERIFY_ROOTHASH_SIG
+> +	depends on SECONDARY_TRUSTED_KEYRING
+> +	help
+> +	  Rely on the secondary trusted keyring to verify dm-verity signatures.
+> +
+>  	  If unsure, say N.
+>  
+>  config DM_VERITY_FEC
+> diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+> index 614e43db93aa..29385dc470d5 100644
+> --- a/drivers/md/dm-verity-verify-sig.c
+> +++ b/drivers/md/dm-verity-verify-sig.c
+> @@ -119,8 +119,13 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+>  	}
+>  
+>  	ret = verify_pkcs7_signature(root_hash, root_hash_len, sig_data,
+> -				sig_len, NULL, VERIFYING_UNSPECIFIED_SIGNATURE,
+> -				NULL, NULL);
+> +				sig_len,
+> +#ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
+> +				VERIFY_USE_SECONDARY_KEYRING,
+> +#else
+> +				NULL,
+> +#endif
+> +				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
+>  
+>  	return ret;
+>  }
+> 
+> base-commit: bbf5c979011a099af5dc76498918ed7df445635b
+> -- 
+> 2.28.0
+> 
 
