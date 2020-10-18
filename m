@@ -2,200 +2,147 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C35262915FF
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Oct 2020 07:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB9429160B
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Oct 2020 07:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbgJRFUX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 18 Oct 2020 01:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725294AbgJRFUX (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 18 Oct 2020 01:20:23 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA8BC061755
-        for <linux-integrity@vger.kernel.org>; Sat, 17 Oct 2020 22:20:21 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d23so3338426pll.7
-        for <linux-integrity@vger.kernel.org>; Sat, 17 Oct 2020 22:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rubrik.com; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=zhsQWT1z5HaER8SZuguyfeErof3sFlaWxr4qjsdufAk=;
-        b=G8Pik2u6O6ehxWdjTioFN0PN6eWFynE4juC2K4sZ91Y3+26GKQhI83yS1GATLo2n0i
-         HzxN74RWqnW4JP2iMrfWKPZMa1LcqSU1Jh/9F6ZNgXUkSPligNeMVFP+BVO+Z4R2NgTU
-         +jY9dD2CdtODSTJW0pbIbvIK1g6ANb0G/c4lU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=zhsQWT1z5HaER8SZuguyfeErof3sFlaWxr4qjsdufAk=;
-        b=gq36bOzUOFm2k5sUm5yqku0n8IwTj9OsinrhGq9cSMhYxJAMpnG8ID3/1C/55lJFS7
-         SAmx1QYxvyXGgCrU5qYeAg6iIl/XWpc7uH0vp2faQ8r/VpGURRGUSK4Irolh55w+8gD6
-         ticQqd62mzWqC5lGOgklqQBcDwfNuV5bLepScAA9qeHYD7up1cx34gCkkxBcYUo5TGye
-         sBWqy1jn/Je8kefHumfUZ72/UbZx9ZG5zH7q4Wqxq7cEGe0bNYvx5fDJPaU1JrhLqTxQ
-         eo6jjDp9+9F+o90XJs5hN/caaiB1/Ls3w/xxQkuPH6v5bSNXC50X5QaCsNB18nZbNP+C
-         Ua8g==
-X-Gm-Message-State: AOAM532gK4A6bG1H1C9IucMwyDddZKg4RrRu8XjsjKNTtmJ+m6hrMw+O
-        /tFvFQAAxa8T2Xl14CPGp8lyT8wamwBIIemWcTQ=
-X-Google-Smtp-Source: ABdhPJyykGhkMVOt9YPxmn0Cs2F9PQMB0bgqzT1cTHlguABXi4YLK2cCe7dAR4onLcjWKZsRaEDCKQ==
-X-Received: by 2002:a17:90b:4a10:: with SMTP id kk16mr12033269pjb.77.1602998421146;
-        Sat, 17 Oct 2020 22:20:21 -0700 (PDT)
-Received: from ?IPv6:2601:647:4200:3be0:8182:c989:712f:b2aa? ([2601:647:4200:3be0:8182:c989:712f:b2aa])
-        by smtp.gmail.com with ESMTPSA id 9sm7747207pfx.138.2020.10.17.22.20.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 17 Oct 2020 22:20:20 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
-From:   Hao Wu <hao.wu@rubrik.com>
-In-Reply-To: <20201018050951.GL68722@linux.intel.com>
-Date:   Sat, 17 Oct 2020 22:20:18 -0700
+        id S1725308AbgJRFec (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 18 Oct 2020 01:34:32 -0400
+Received: from mga03.intel.com ([134.134.136.65]:39770 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725275AbgJRFeb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 18 Oct 2020 01:34:31 -0400
+IronPort-SDR: ai2WB3FbgjoFVngCFA+jWfVcpszzqQbo0OvFG83tgzaWIIjIR00fCq+AGea6ijVOc4hXzzumIp
+ NsrBeBI5CrPA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9777"; a="166945546"
+X-IronPort-AV: E=Sophos;i="5.77,388,1596524400"; 
+   d="scan'208";a="166945546"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2020 22:34:26 -0700
+IronPort-SDR: GDJmgUq95PSY5H0mGXXvd3Rg95Donu8yw5OPtiIgFihwYeVXMaM/pW/svtcOKr50GzrZJc7oSB
+ 4UmAVcllzMvw==
+X-IronPort-AV: E=Sophos;i="5.77,388,1596524400"; 
+   d="scan'208";a="532240707"
+Received: from neck-mobl.amr.corp.intel.com (HELO localhost) ([10.252.39.40])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2020 22:34:22 -0700
+Date:   Sun, 18 Oct 2020 08:34:18 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
 Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
-        Hamza Attak <hamza@hpe.com>, why2jjj.linux@gmail.com,
-        zohar@linux.vnet.ibm.com, linux-integrity@vger.kernel.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        Seungyeop Han <seungyeop.han@rubrik.com>,
-        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
-        Anish Jhaveri <anish.jhaveri@rubrik.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <53B75B06-FD89-4B00-BC3F-46C5B28DC201@rubrik.com>
-References: <20200930153715.GC52739@linux.intel.com>
- <95aafaa1e3037cb7b99ae0e76c02a419d366a407.camel@HansenPartnership.com>
- <20200930210956.GC65339@linux.intel.com>
- <6e7b54c268d25a86f8f969bcc01729eaadef6530.camel@HansenPartnership.com>
- <20201001015051.GA5971@linux.intel.com>
- <1aed1b0734435959d5e53b8a4b3c18558243e6b8.camel@HansenPartnership.com>
- <19de5527-2d56-6a07-3ce7-ba216b208090@linux.vnet.ibm.com>
- <38e165055bae62d4e97f702c05e3a76ccdeeac0f.camel@HansenPartnership.com>
- <20201001230426.GA26517@linux.intel.com>
- <FCA90A49-CCE3-4DDF-A876-230C42744D2A@rubrik.com>
- <20201018050951.GL68722@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
+        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v2 0/5] tpm_tis: fix interrupts (again)
+Message-ID: <20201018053418.GA4598@linux.intel.com>
+References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
+ <87r1q4xatg.fsf@redhat.com>
+ <20201013012354.GB41176@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201013012354.GB41176@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> On Oct 17, 2020, at 10:09 PM, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->=20
-> On Fri, Oct 16, 2020 at 11:11:37PM -0700, Hao Wu wrote:
->>> On Oct 1, 2020, at 4:04 PM, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->>>=20
->>> On Thu, Oct 01, 2020 at 11:32:59AM -0700, James Bottomley wrote:
->>>> On Thu, 2020-10-01 at 14:15 -0400, Nayna wrote:
->>>>> On 10/1/20 12:53 AM, James Bottomley wrote:
->>>>>> On Thu, 2020-10-01 at 04:50 +0300, Jarkko Sakkinen wrote:
->>>>>>> On Wed, Sep 30, 2020 at 03:31:20PM -0700, James Bottomley wrote:
->>>>>>>> On Thu, 2020-10-01 at 00:09 +0300, Jarkko Sakkinen wrote:
->>>> [...]
->>>>>>>>> I also wonder if we could adjust the frequency dynamically.
->>>>>>>>> I.e. start with optimistic value and lower it until finding
->>>>>>>>> the sweet spot.
->>>>>>>>=20
->>>>>>>> The problem is the way this crashes: the TPM seems to be
->>>>>>>> unrecoverable. If it were recoverable without a hard reset of
->>>>>>>> the entire machine, we could certainly play around with it.  I
->>>>>>>> can try alternative mechanisms to see if anything's viable, but
->>>>>>>> to all intents and purposes, it looks like my TPM simply stops
->>>>>>>> responding to the TIS interface.
->>>>>>>=20
->>>>>>> A quickly scraped idea probably with some holes in it but I was
->>>>>>> thinking something like
->>>>>>>=20
->>>>>>> 1. Initially set slow value for latency, this could be the
->>>>>>> original 15 ms.
->>>>>>> 2. Use this to read TPM_PT_VENDOR_STRING_*.
->>>>>>> 3. Lookup based vendor string from a fixup table a latency that
->>>>>>> works
->>>>>>>   (the fallback latency could be the existing latency).
->>>>>>=20
->>>>>> Well, yes, that was sort of what I was thinking of doing for the
->>>>>> Atmel ... except I was thinking of using the TIS VID (16 byte
->>>>>> assigned vendor ID) which means we can get the information to set
->>>>>> the timeout before we have to do any TPM operations.
->>>>>=20
->>>>> I wonder if the timeout issue exists for all TPM commands for the
->>>>> same manufacturer.  For example, does the ATMEL TPM also crash =
-when=20
->>>>> extending  PCRs ?
->>>>>=20
->>>>> In addition to defining a per TPM vendor based lookup table for
->>>>> timeout, would it be a good idea to also define a Kconfig/boot =
-param
->>>>> option to allow timeout setting.  This will enable to set the =
-timeout
->>>>> based on the specific use.
->>>>=20
->>>> I don't think we need go that far (yet).  The timing change has =
-been in
->>>> upstream since:
->>>>=20
->>>> commit 424eaf910c329ab06ad03a527ef45dcf6a328f00
->>>> Author: Nayna Jain <nayna@linux.vnet.ibm.com>
->>>> Date:   Wed May 16 01:51:25 2018 -0400
->>>>=20
->>>>   tpm: reduce polling time to usecs for even finer granularity
->>>>=20
->>>> Which was in the released kernel 4.18: over two years ago.  In all =
-that
->>>> time we've discovered two problems: mine which looks to be an =
-artifact
->>>> of an experimental upgrade process in a new nuvoton and the Atmel.=20=
+On Tue, Oct 13, 2020 at 04:23:54AM +0300, Jarkko Sakkinen wrote:
+> On Sun, Oct 11, 2020 at 10:39:07PM -0700, Jerry Snitselaar wrote:
+> > 
+> > James Bottomley @ 2020-10-01 11:09 MST:
+> > 
+> > > The current state of the TIS TPM is that interrupts have been globally
+> > > disabled by various changes.  The problems we got reported the last
+> > > time they were enabled was interrupt storms.  With my own TIS TPM,
+> > > I've found that this is caused because my TPM doesn't do legacy
+> > > cycles, The TIS spec (chapter 6.1 "Locality Usage Per Register")
+> > > requires any TIS TPM without legacy cycles not to act on any write to
+> > > an interrupt register unless the locality is enabled.  This means if
+> > > an interrupt fires after we relinquish the locality, the TPM_EOI in
+> > > the interrupt routine is ineffective meaning the same interrupt
+> > > triggers over and over again.  This problem also means we can have
+> > > trouble setting up interrupts on TIS TPMs because the current init
+> > > code does the setup before the locality is claimed for the first time.
+> > >
+> > > James
+> > >
+> > 
+> > 
+> > I tested initially with the following commits reverted:
+> > 
+> > aa4a63dd9816 tpm: Revert "tpm_tis_core: Turn on the TPM before probing IRQ's" | 2020-01-06 | (Stefan Berger)
+> > dda8b2af395b tpm: Revert "tpm_tis_core: Set TPM_CHIP_FLAG_IRQ before probing for interrupts" | 2020-01-06 | (Stefan Berger)
+> > 
+> > The laptop doesn't become unusable, but I lose the trackpad and get the following:
+> > 
+> > [    3.070501] irq 31: nobody cared (try booting with the "irqpoll" option)
+> > [    3.070504] CPU: 2 PID: 251 Comm: rngd Not tainted 5.8.13-201.local.fc32.x86_64 #1
+> > [    3.070504] Hardware name: LENOVO 20NYS7K90F/20NYS7K90F, BIOS N2JET83W (1.61 ) 11/22/2019
+> > [    3.070505] Call Trace:
+> > [    3.070511]  dump_stack+0x6b/0x88
+> > [    3.070514]  __report_bad_irq+0x35/0xa7
+> > [    3.070516]  note_interrupt.cold+0xb/0x6a
+> > [    3.070518]  handle_irq_event+0x88/0x8a
+> > [    3.070519]  handle_fasteoi_irq+0x78/0x1c0
+> > [    3.070522]  common_interrupt+0x68/0x140
+> > [    3.070524]  ? asm_common_interrupt+0x8/0x40
+> > [    3.070525]  asm_common_interrupt+0x1e/0x40
+> > [    3.070527] RIP: 0033:0x7f2eea3249b5
+> > [    3.070529] Code: e0 48 c1 e8 3c 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 37 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 1e 83 e0 01 48 31 45 f0 <48> 8b 45 e0 48 c1 e8 1b 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8
+> > [    3.070529] RSP: 002b:00007f2ee3ffebc0 EFLAGS: 00000202
+> > [    3.070530] RAX: 0000000000000001 RBX: 000000000000000a RCX: 000000000000002e
+> > [    3.070531] RDX: 0463400000000000 RSI: 0000000000000000 RDI: 0000000000000001
+> > [    3.070532] RBP: 00007f2ee3ffec10 R08: 0000000000000000 R09: 0000000000000035
+> > [    3.070532] R10: 00007ffde716f080 R11: 00007ffde716f080 R12: 00007f2edc004c00
+> > [    3.070533] R13: 00007ffde700a54f R14: 00007f2ee3ffed10 R15: 00005598a41e3680
+> > [    3.070534] handlers:
+> > [    3.070537] [<000000007b6f3232>] tis_int_handler
+> > [    3.070538] Disabling IRQ #31
+> > ...
+> > [   14.956342] irq 16: nobody cared (try booting with the "irqpoll" option)
+> > [   14.956344] CPU: 0 PID: 1013 Comm: rngd Not tainted 5.8.13-201.local.fc32.x86_64 #1
+> > [   14.956344] Hardware name: LENOVO 20NYS7K90F/20NYS7K90F, BIOS N2JET83W (1.61 ) 11/22/2019
+> > [   14.956345] Call Trace:
+> > [   14.956350]  dump_stack+0x6b/0x88
+> > [   14.956353]  __report_bad_irq+0x35/0xa7
+> > [   14.956354]  note_interrupt.cold+0xb/0x6a
+> > [   14.956355]  handle_irq_event+0x88/0x8a
+> > [   14.956356]  handle_fasteoi_irq+0x78/0x1c0
+> > [   14.956358]  common_interrupt+0x68/0x140
+> > [   14.956360]  ? asm_common_interrupt+0x8/0x40
+> > [   14.956361]  asm_common_interrupt+0x1e/0x40
+> > [   14.956362] RIP: 0033:0x7fcaff4399d3
+> > [   14.956363] Code: e0 48 c1 e8 1e 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 1b 83 e0 01 48 31 45 f0 48 8b 45 e0 48 c1 e8 16 83 e0 01 48 31 45 f0 <48> d1 65 e0 48 8b 45 f0 48 31 45 e0 83 45 d4 01 83 7d d4 40 0f 86
+> > [   14.956364] RSP: 002b:00007fcafe544bc0 EFLAGS: 00000246
+> > [   14.956364] RAX: 0000000000000000 RBX: 000000000000000a RCX: 0000000000000026
+> > [   14.956365] RDX: 000df20000000000 RSI: 0000000000000000 RDI: 0000000000000001
+> > [   14.956365] RBP: 00007fcafe544c10 R08: 0000000000000000 R09: 0000000000000035
+> > [   14.956366] R10: 00007ffc30bd2080 R11: 00007ffc30bd2080 R12: 00007fcaf0004c00
+> > [   14.956366] R13: 00007fcaf0004c00 R14: 00007fcaf0000b60 R15: 0000560216fcf0f2
+> > [   14.956367] handlers:
+> > [   14.956370] [<0000000024c0571e>] i801_isr [i2c_i801]
+> > [   14.956371] Disabling IRQ #16
+> > 
+> > /proc/interrupts shows:
+> > 
+> >   16:     100000          0          0          0          0          0          0          0  IR-IO-APIC   16-fasteoi   i801_smbus
+> >   31:          0          0     100000          0          0          0          0          0  IR-IO-APIC   31-fasteoi   tpm0
+> > 
+> > 
+> > I also get this behavior with your patchset applied. If I boot with
+> > tpm_tis.interrupts=0 it behaves.  The thought from Hans is to look at
+> > the dmi info and key off the vendor being Lenovo and bios date to
+> > decide if interrupts should be disabled. Since Dan ran also into this
+> > with something internal at Intel I don't know if that will be
+> > sufficient.
+> > 
+> > I hope to look over this patchset tomorrow.
+> > 
+> > Regards,
+> > Jerry
+> 
+> I'm sorry, I received this email only after pulling the latest with fdm.
 
->>>> That means pretty much every other TPM simply works with the =
-existing
->>>> timings
->>>>=20
->>>>> I was also thinking how will we decide the lookup table values for
->>>>> each vendor ?
->>>>=20
->>>> I wasn't thinking we would.  I was thinking I'd do a simple =
-exception
->>>> for the Atmel and nothing else.  I don't think my Nuvoton is in any =
-way
->>>> characteristic.  Indeed my pluggable TPM rainbow bridge system =
-works
->>>> just fine with a Nuvoton and the current timings.
->>>>=20
->>>> We can add additional exceptions if they actually turn up.
->>>=20
->>> I'd add a table and fallback.
->>>=20
->>=20
->> Hi folks,
->>=20
->> I want to follow up this a bit and check whether we reached a =
-consensus=20
->> on how to fix the timeout issue for Atmel chip.
->>=20
->> Should we revert the changes or introduce the lookup table for chips.
->>=20
->> Is there anything I can help from Rubrik side.
->>=20
->> Thanks
->> Hao
->=20
-> There is nothing to revert as the previous was not applied but I'm
-> of course ready to review any new attempts.
->=20
+So, this is the main blocker to take these patches.
 
-Hi Jarkko,
-
-By =E2=80=9Crevert=E2=80=9D I meant we revert the timeout value changes =
-by applying
-the patch I proposed, as the timeout value discussed does cause issues.
-
-Why don=E2=80=99t we apply the patch and improve the perf in the way of =
-not
-breaking TPMs ?=20
-
-Hao
-=20
-
+/Jarkko
