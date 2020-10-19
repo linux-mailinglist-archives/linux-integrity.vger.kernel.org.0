@@ -2,117 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557B5293187
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Oct 2020 00:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6757A293196
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Oct 2020 00:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388706AbgJSWyo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Oct 2020 18:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388705AbgJSWyn (ORCPT
+        id S2388794AbgJSW7j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Oct 2020 18:59:39 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:34820 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388772AbgJSW7e (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Oct 2020 18:54:43 -0400
-X-Greylist: delayed 99664 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Oct 2020 15:54:43 PDT
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6492C0613CE
-        for <linux-integrity@vger.kernel.org>; Mon, 19 Oct 2020 15:54:43 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 72B1912818D2;
-        Mon, 19 Oct 2020 15:54:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1603148082;
-        bh=uTDGqc1IL393bCCcxoT3tjo2J6Ow/cuKZRK/KqS5ahQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=VOe2IAWxNHlDWp+QwGXjKaLUk1ke1mexKmtuSf7qqlRDWPLSuWa0/HPLzftx4A2vA
-         gqiAGnpjktaDDvf+Lr3VMcfqnhPDOPXv+2BmZHxU0KHJQS9Lx2/a2YD9NK8PJACW+7
-         +0rgWLpjwRV7RnlxY27PXgx/wyrwTKR1CXARpTvQ=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4V8vpjiBRmBn; Mon, 19 Oct 2020 15:54:42 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 04D3512818A5;
-        Mon, 19 Oct 2020 15:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1603148082;
-        bh=uTDGqc1IL393bCCcxoT3tjo2J6Ow/cuKZRK/KqS5ahQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=VOe2IAWxNHlDWp+QwGXjKaLUk1ke1mexKmtuSf7qqlRDWPLSuWa0/HPLzftx4A2vA
-         gqiAGnpjktaDDvf+Lr3VMcfqnhPDOPXv+2BmZHxU0KHJQS9Lx2/a2YD9NK8PJACW+7
-         +0rgWLpjwRV7RnlxY27PXgx/wyrwTKR1CXARpTvQ=
-Message-ID: <3793c0c226d4d7c66452c161973c24e0118ebbba.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 5/5] Revert "tpm: Revert "tpm_tis_core: Turn on the
- TPM before probing IRQ's""
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Date:   Mon, 19 Oct 2020 15:54:41 -0700
-In-Reply-To: <87blgyge2x.fsf@redhat.com>
-References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
-         <20201001180925.13808-6-James.Bottomley@HansenPartnership.com>
-         <87blgyge2x.fsf@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Mon, 19 Oct 2020 18:59:34 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A9C2820B36E7;
+        Mon, 19 Oct 2020 15:59:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A9C2820B36E7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1603148373;
+        bh=v6MzvmSWcZVS4ikkTcvRXsjiTMX3satCUGMxxfinNYA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Pppi9Jz2ZYnofJUpwD3486W2l8oLpVmR+iMCCbJ5soOvkcbVAn+xJoGAV3IL6cjgg
+         Cpb8MG2fVhfsy6uxkTmq5BhfGxJz/cZVogTwu+0cjEfOE4AJQjkHbjU4zgFb6C/SCB
+         LAyeeQeEfV4lBRq7XDVWYXRV3BYE+LvWOslYy9gc=
+Subject: Re: [PATCH] file2bin: Pass the right values to size and count
+ parameters for fread()
+To:     Mimi Zohar <zohar@linux.ibm.com>, pvorel@suse.cz
+Cc:     linux-integrity@vger.kernel.org
+References: <20201019200526.12678-1-nramas@linux.microsoft.com>
+ <9dd83103f724484a8f1febb37b54616d136930fe.camel@linux.ibm.com>
+ <d4c7c8f3-e6b4-a962-c402-88982f86b79f@linux.microsoft.com>
+ <b0b0c3f0199333c7ef909c7ffcb22036e83e92bd.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <cf7a9726-87d0-c3e6-9658-0a7e7a154c51@linux.microsoft.com>
+Date:   Mon, 19 Oct 2020 15:59:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <b0b0c3f0199333c7ef909c7ffcb22036e83e92bd.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-10-19 at 13:23 -0700, Jerry Snitselaar wrote:
-> James Bottomley @ 2020-10-01 11:09 MST:
+On 10/19/20 3:30 PM, Mimi Zohar wrote:
+> On Mon, 2020-10-19 at 15:22 -0700, Lakshmi Ramasubramanian wrote:
+>> On 10/19/20 3:12 PM, Mimi Zohar wrote:
+>>> Hi Lakshmi,
+>>>
+>>> On Mon, 2020-10-19 at 13:05 -0700, Lakshmi Ramasubramanian wrote:
+>>>> The 2nd parameter to fread() namely "size" specifies the size, in
+>>>> bytes of each element to be read, and the 3rd parameter namely "count"
+>>>> specifies the number of elements, each one with a size of "size" bytes.
+>>>>
+>>>>    size_t fread ( void * ptr, size_t size, size_t count, FILE * stream );
+>>>>
+>>>> But in the function file2bin() the values passed to "size" and "count"
+>>>> are reversed causing the function to return an error eventhough the file
+>>>> was sucdessfully read.
+>>>>
+>>>> Pass the right values to "size" and "count" parameters for fread() in
+>>>> the function file2bin().
+>>>>
+>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>>> ---
+>>>>    src/evmctl.c | 3 ++-
+>>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/src/evmctl.c b/src/evmctl.c
+>>>> index 7ad1150..d49988e 100644
+>>>> --- a/src/evmctl.c
+>>>> +++ b/src/evmctl.c
+>>>> @@ -221,7 +221,8 @@ static unsigned char *file2bin(const char *file, const char *ext, int *size)
+>>>>    		fclose(fp);
+>>>>    		return NULL;
+>>>>    	}
+>>>> -	if (fread(data, len, 1, fp) != len) {
+>>>> +
+>>>> +	if (fread(data, 1, len, fp) != len) {
+>>>>    		log_err("Failed to fread %zu bytes: %s\n", len, name);
+>>>>    		fclose(fp);
+>>>>    		free(data);
+>>>
+>>> Wasn't this problem addressed by Vitaly's patch.  Please look at commit
+>>> c89e8508864b ("ima-evm-utils: Fix reading of sigfile").
+>>>
+>>
+>> You are right Mimi. I missed the patch posted by Vitaly. Sorry for the
+>> duplicate one.
+>>
+>> Looks like Vitaly's change hasn't been merged to "master" branch yet in
+>> https://github.com/pevik/ima-evm-utils
 > 
-> > Revert the patch aa4a63dd9816 which stops interrupt probing from
-> > working, now that it should be safe to allow interrupt probing on
-> > all
-> > systems without incurring interrupt storms.
-> > 
-> > Signed-off-by: James Bottomley <
-> > James.Bottomley@HansenPartnership.com>
-> > ---
-> >  drivers/char/tpm/tpm_tis_core.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/char/tpm/tpm_tis_core.c
-> > b/drivers/char/tpm/tpm_tis_core.c
-> > index 12b657ed3a39..23b60583928b 100644
-> > --- a/drivers/char/tpm/tpm_tis_core.c
-> > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > @@ -1117,6 +1117,7 @@ int tpm_tis_core_init(struct device *dev,
-> > struct tpm_tis_data *priv, int irq,
-> >  			goto out_err;
-> >  		}
-> >  
-> > +		tpm_chip_start(chip);
-> >  		if (irq) {
-> >  			tpm_tis_probe_irq_single(chip, IRQF_SHARED,
-> > irq);
-> >  			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
-> > @@ -1128,6 +1129,7 @@ int tpm_tis_core_init(struct device *dev,
-> > struct tpm_tis_data *priv, int irq,
-> >  		} else {
-> >  			tpm_tis_probe_irq(chip);
-> >  		}
-> > +		tpm_chip_stop(chip);
-> >  	}
-> >  
-> >  	rc = tpm_chip_register(chip);
-> 
-> I know this is a revert, but should there be a commit on top of this
-> to move the tpm_chip_start above the tpm_get_timeouts right before
-> this?
+> Only after the release would it be in master.   Until then it would be
+> in next, which it isn't either.   Can I add your Reviewed-by tag on
+> this patched?
 
-Not for tpm 2: tpm2_get_timeouts doesn't actually query the device.  I
-think this may be required for TPM 1.2 since it does send a
-capabilities, but I don't actually know if any TPM 1.2 systems have the
-ineffective locality problem this fix addresses (I don't have one to
-check) ... I'm guessing not otherwise we'd have had bug reports about
-TPM 1.2 failing to get the timeouts (it dumps an error message to the
-logs).
+Sure.
 
-James
+Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+
+  -lakshmi
 
 
