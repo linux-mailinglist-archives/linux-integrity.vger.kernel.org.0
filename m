@@ -2,66 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D1C2931DF
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Oct 2020 01:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40005293211
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Oct 2020 01:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388958AbgJSXSH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Oct 2020 19:18:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:49788 "EHLO
+        id S2388997AbgJSXkj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Oct 2020 19:40:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26911 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388957AbgJSXSH (ORCPT
+        by vger.kernel.org with ESMTP id S1726995AbgJSXkj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Oct 2020 19:18:07 -0400
+        Mon, 19 Oct 2020 19:40:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603149486;
+        s=mimecast20190719; t=1603150838;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=SvxuptEVvfZQrWTRClDw/ls0nxuu6Baz4wVB6qJRkTk=;
-        b=dC0EMU290Z2zEDrPbWaTBSj50fsZ0CUYJu4KXoXCDPPYa88hPyO0qdz2k3tI40j3whlgkx
-        Bf/UoMmtuQYr0wI9eSvcHOE4ThCnhI3e8F1UdlaUoUiWOApbSgSupg8Tc0f7zoYQ5Y7D/+
-        4DL9m2dinXN/ULYIf/yUo+YxMAKj0hU=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-400-iPPizuDrNhO63DTUYsVLvg-1; Mon, 19 Oct 2020 19:18:04 -0400
-X-MC-Unique: iPPizuDrNhO63DTUYsVLvg-1
-Received: by mail-qt1-f200.google.com with SMTP id c4so35683qtx.20
-        for <linux-integrity@vger.kernel.org>; Mon, 19 Oct 2020 16:18:04 -0700 (PDT)
+        bh=2hdeBqu05QKsBNi900Hdxv2vV0GrjZPBoqKkxF6m/nE=;
+        b=UtHNNNE4pM4Sdu9gnEC+Qd5R4XcCZwx64b0v6iiijPV0Dc9MF35Rv5R8hv+eA8FdF/Qik8
+        nRlzGNAIoEDSgeruRmH8izL0pVcL+4zBOw/njZmoFqBuXgwMUXqSSAEcmVfpedcCke5puA
+        CDNkmUxgi7CejIpQ6QgFty7ucOpzbSo=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-473-26exbKR0OY-ibhaPzQ-NLA-1; Mon, 19 Oct 2020 19:40:36 -0400
+X-MC-Unique: 26exbKR0OY-ibhaPzQ-NLA-1
+Received: by mail-qk1-f200.google.com with SMTP id y77so9645qkb.8
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Oct 2020 16:40:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:references:user-agent:from:to:cc:subject
          :in-reply-to:date:message-id:mime-version;
-        bh=SvxuptEVvfZQrWTRClDw/ls0nxuu6Baz4wVB6qJRkTk=;
-        b=lAISFLWi1P5lCeYHZui987ynw8pd5/Vbq7BHkw1ZOUxGU0Bx+yKrMbTapWh6hq038A
-         sW8Gy59kNoVyVkVooD9Jal2ChDvxOjLQ8+6s6GR5UpwWkXitWJY1imAu5L5cy5zj0uIH
-         8mb8BT3+3XEBo8+KUKf6G7/rxoNpn32XG/NdT9GjlMpQLLUR/7J4EiYiIphajBNCpUYA
-         uveBWUUcRDyUGHIwCkJpCLixQy8prS9qPrjRIb70yUT0xnu0vTxvBAKzKaiqqVjR0tvX
-         cAo5czmZZTfR0+k3skK/g2qDXjY3YzZp8E62nQ0bki1Tup8hfGEZK51p97+XUmAu+0C6
-         YfbA==
-X-Gm-Message-State: AOAM532RFFYpFoTVjx/ObkLTfFCFsPXjq7TIcyiDmXV8dRhdm5vNYK2L
-        E1bEOwsNaSjz4B/0EcvRczU3B0o48pPM93CYfBZKZd5SRq2XB0PC+eo517w/tJ8NYZK+zZUE5Ee
-        beWSZFIoByWRC3GQxY0aVXafq05hY
-X-Received: by 2002:a37:a4cf:: with SMTP id n198mr33105qke.271.1603149483998;
-        Mon, 19 Oct 2020 16:18:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyNEP2BKp0oeI5MTFX5cSR7jZMHtlR7IHDePQiBElSsP2/ZqiVybSsOYDiI7AmZATOwfwMKrw==
-X-Received: by 2002:a37:a4cf:: with SMTP id n198mr33095qke.271.1603149483778;
-        Mon, 19 Oct 2020 16:18:03 -0700 (PDT)
+        bh=2hdeBqu05QKsBNi900Hdxv2vV0GrjZPBoqKkxF6m/nE=;
+        b=WgLta23gK9gYzJHYJ3tVQ0NL+Yj+0Hr+ag179iKGBHr36AEQ6vQydfhcZTgXiKClWz
+         /NofV4hrwzrG2HNA1NtbxCIXNpb6WsLmH+MY559kGZhI5O1u7N4OgL3ARxq/6NY/VPFy
+         ERJyDJ/0FTwRtRft0Mxtj/WIpPb7o661SYXTq0QF0PsJcLY2BrY+BvhjP5JxSXxCp+bG
+         jopbcW3zNlso8l02y/L0iH2DUx4n2+Ty4wrPdvG7xG59ufHgvxK0z4yrRwndjbr18ATv
+         FdkKthX4IuLp2HPlClY12HQ3Gv2db3PIqQl5xxPc5afE5izT1lfk2okHgKmZf2lfgB3X
+         MzWA==
+X-Gm-Message-State: AOAM532iXyKL6c+gobfslFbDj0WkUeTDHtusV2B3X61FmTdxnf8MqjSB
+        KL8WrKaP9nAwIhuWf8R2FIoLYVuPmmsT+tZ7kAMWM9YnJh83VzmL9JUDko+R73g+uyqxsZaGQqc
+        INb0DmSOr0DfvCJ4FRLJToar8E0RX
+X-Received: by 2002:ac8:59c9:: with SMTP id f9mr1884785qtf.85.1603150836005;
+        Mon, 19 Oct 2020 16:40:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyXdUv7YyH4g7arau9Zsp067cW2vKkGjPVTQAw1T95XNnlFWDgZxin12bDr6kCKpiRNWI1vdw==
+X-Received: by 2002:ac8:59c9:: with SMTP id f9mr1884773qtf.85.1603150835815;
+        Mon, 19 Oct 2020 16:40:35 -0700 (PDT)
 Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id e39sm35593qtk.32.2020.10.19.16.18.01
+        by smtp.gmail.com with ESMTPSA id g16sm71398qke.90.2020.10.19.16.40.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2020 16:18:03 -0700 (PDT)
+        Mon, 19 Oct 2020 16:40:34 -0700 (PDT)
 References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
- <20201001180925.13808-3-James.Bottomley@HansenPartnership.com>
+ <20201001180925.13808-6-James.Bottomley@HansenPartnership.com>
 User-agent: mu4e 1.4.10; emacs 27.1
 From:   Jerry Snitselaar <jsnitsel@redhat.com>
 To:     James Bottomley <James.Bottomley@HansenPartnership.com>
 Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v2 2/5] tpm_tis: Clean up locality release
-In-reply-to: <20201001180925.13808-3-James.Bottomley@HansenPartnership.com>
-Date:   Mon, 19 Oct 2020 16:17:59 -0700
-Message-ID: <875z75hkk8.fsf@redhat.com>
+Subject: Re: [PATCH v2 5/5] Revert "tpm: Revert "tpm_tis_core: Turn on the
+ TPM before probing IRQ's""
+In-reply-to: <20201001180925.13808-6-James.Bottomley@HansenPartnership.com>
+Date:   Mon, 19 Oct 2020 16:40:33 -0700
+Message-ID: <873629hjim.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -71,93 +72,36 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 James Bottomley @ 2020-10-01 11:09 MST:
 
-> The current release locality code seems to be based on the
-> misunderstanding that the TPM interrupts when a locality is released:
-> it doesn't, only when the locality is acquired.
+> Revert the patch aa4a63dd9816 which stops interrupt probing from
+> working, now that it should be safe to allow interrupt probing on all
+> systems without incurring interrupt storms.
 >
-> Furthermore, there seems to be no point in waiting for the locality to
-> be released.  All it does is penalize the last TPM user.  However, if
-> there's no next TPM user, this is a pointless wait and if there is a
-> next TPM user, they'll pay the penalty waiting for the new locality
-> (or possibly not if it's the same as the old locality).
->
-> Fix the code by making release_locality as simple write to release
-> with no waiting for completion.
->
-> Fixes: 33bafe90824b ("tpm_tis: verify locality released before returning from release_locality")
 > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
->
 > ---
->
-> v2: added fixes
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 47 +--------------------------------
->  1 file changed, 1 insertion(+), 46 deletions(-)
+>  drivers/char/tpm/tpm_tis_core.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
 > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index f3ecde8df47d..431919d5f48a 100644
+> index 12b657ed3a39..23b60583928b 100644
 > --- a/drivers/char/tpm/tpm_tis_core.c
 > +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -135,58 +135,13 @@ static bool check_locality(struct tpm_chip *chip, int l)
->  	return false;
->  }
+> @@ -1117,6 +1117,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  			goto out_err;
+>  		}
 >  
-> -static bool locality_inactive(struct tpm_chip *chip, int l)
-> -{
-> -	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> -	int rc;
-> -	u8 access;
-> -
-> -	rc = tpm_tis_read8(priv, TPM_ACCESS(l), &access);
-> -	if (rc < 0)
-> -		return false;
-> -
-> -	if ((access & (TPM_ACCESS_VALID | TPM_ACCESS_ACTIVE_LOCALITY))
-> -	    == TPM_ACCESS_VALID)
-> -		return true;
-> -
-> -	return false;
-> -}
-> -
->  static int release_locality(struct tpm_chip *chip, int l)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> -	unsigned long stop, timeout;
-> -	long rc;
+> +		tpm_chip_start(chip);
+>  		if (irq) {
+>  			tpm_tis_probe_irq_single(chip, IRQF_SHARED, irq);
+>  			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+> @@ -1128,6 +1129,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  		} else {
+>  			tpm_tis_probe_irq(chip);
+>  		}
+> +		tpm_chip_stop(chip);
+>  	}
 >  
->  	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
->  
-> -	stop = jiffies + chip->timeout_a;
-> -
-> -	if (chip->flags & TPM_CHIP_FLAG_IRQ) {
-> -again:
-> -		timeout = stop - jiffies;
-> -		if ((long)timeout <= 0)
-> -			return -1;
-> -
-> -		rc = wait_event_interruptible_timeout(priv->int_queue,
-> -						      (locality_inactive(chip, l)),
-> -						      timeout);
-> -
-> -		if (rc > 0)
-> -			return 0;
-> -
-> -		if (rc == -ERESTARTSYS && freezing(current)) {
-> -			clear_thread_flag(TIF_SIGPENDING);
-> -			goto again;
-> -		}
-> -	} else {
-> -		do {
-> -			if (locality_inactive(chip, l))
-> -				return 0;
-> -			tpm_msleep(TPM_TIMEOUT);
-> -		} while (time_before(jiffies, stop));
-> -	}
-> -	return -1;
-> +	return 0;
->  }
->  
->  static int request_locality(struct tpm_chip *chip, int l)
+>  	rc = tpm_chip_register(chip);
+
 
 Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
