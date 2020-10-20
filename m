@@ -2,156 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4CA293E46
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Oct 2020 16:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DDC2941CF
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Oct 2020 20:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407901AbgJTOJs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Oct 2020 10:09:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30564 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2407813AbgJTOJd (ORCPT
+        id S2408896AbgJTSCt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Oct 2020 14:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408895AbgJTSCs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Oct 2020 10:09:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603202971;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rOdQp2iOSkahNa0CfH1+VDlgH/zqWEjNOjN0qUXEes0=;
-        b=cuyIW1vX98ejDJgGwWUrx5HXCyaRZHAdK8jbsDHi6bt2cJE/GyXTfgYKvfyCxzlkRvK5cq
-        U/9NpE0AZnBJ12NKKZWjwB4FYjRIXi2QUCsk8EviSsGgpl7YwKTYtrluIutBzuCRV7heFV
-        J9KA6VI/uMpQZYuy/0zKz5S53TGjgz0=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-456-7Aq4mfniOTW0S2OUcHLxrg-1; Tue, 20 Oct 2020 10:09:30 -0400
-X-MC-Unique: 7Aq4mfniOTW0S2OUcHLxrg-1
-Received: by mail-qk1-f198.google.com with SMTP id a81so1836044qkg.10
-        for <linux-integrity@vger.kernel.org>; Tue, 20 Oct 2020 07:09:30 -0700 (PDT)
+        Tue, 20 Oct 2020 14:02:48 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B19C0613CE
+        for <linux-integrity@vger.kernel.org>; Tue, 20 Oct 2020 11:02:47 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id n18so3303669wrs.5
+        for <linux-integrity@vger.kernel.org>; Tue, 20 Oct 2020 11:02:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3C43ehene0sz3wj0W6VYck8XLVUCMtd4AQSAoxmbLuA=;
+        b=Q92lI3jOIPh6gwlYPTUULybXuQr0NKVDgfSaLMv1mwiJMhOrXhWe7gbJ+odadb4wvN
+         2rd3uHY3vk7AD8NKvBanG5SA8LRgJHsGkIP2pDhsDqWqfjVlJlsTKkVe+NYyhN1ZKp5x
+         gESYZfXOdrJ6doXjXvWXbPlUn9qpbYQanEg5cSFmudqhmgIri24EVVGSAWuX7vdIXkfQ
+         aRSAlgFuYa4+ietk/KaCD88134GHQSEPyawGBmxrt5meypQ4sne1Ax0oq71wa7q6tNhp
+         MwaFjTf/QJ6t5HjSrQpQf3twZm5b3BDACviUKsulwZBD4zIHTBmtv3CSrTiBWst4JR03
+         WBCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=rOdQp2iOSkahNa0CfH1+VDlgH/zqWEjNOjN0qUXEes0=;
-        b=S4qvZRutoRXkQMAWGo/VLdevYdF7zrlijubOLglumRGbAuUt6mCQQfmn5nu4RqWJxM
-         gq3zFfS6p68BojyUqxg8qD/U1wIMktEUZ9Dq90OfVboAf/Sq+wvfm9PQrP7pptKLQim9
-         KFZrzi9QhddNNmeRgIoyD60N4BAnFeyiHVMuMsy6iK/OP+tq0qxhRGtyv8Us8iQhfIpZ
-         p6WRO9Apee5Ipfgsmcv/RwyR5fFXVqQqxqw1sLjFDuTjhcE7W2oyXVc8y3ILEPgDOuA9
-         FCorJbjNNamLlB7kLSWoQyBGunfRQosgZCoARY8MfhSsh74Xv/b/Xio8SdpPuQryMPOY
-         aX1w==
-X-Gm-Message-State: AOAM531dpoMYbQgdE2RffZvvQhEd4ZqowK8pc4zfHNuAagnoo0PhdlB9
-        shAorSIZQ8mSsjnYdiTYouVJJ9BYzDCHwCVy5zVyy/T2bHbKOUMNlLIkhQ9827lSLCoKmxc4/qz
-        1BagK9vSSd2NWxqqELwO5kR3sEDgS
-X-Received: by 2002:a05:620a:2195:: with SMTP id g21mr2990064qka.358.1603202969735;
-        Tue, 20 Oct 2020 07:09:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwKUy8N8weGLwzCzHDZ8oTBMtQsWbHEBLlPfZD5zpEfJ13ExA6QvxSe7FmqqHnm4D1jNxINeQ==
-X-Received: by 2002:a05:620a:2195:: with SMTP id g21mr2990039qka.358.1603202969497;
-        Tue, 20 Oct 2020 07:09:29 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id o14sm785284qto.16.2020.10.20.07.09.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2020 07:09:28 -0700 (PDT)
-Subject: Re: [RFC] treewide: cleanup unreachable breaks
-To:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
-        storagedev@microchip.com, devel@driverdev.osuosl.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        George Burgess <gbiv@google.com>
-References: <20201017160928.12698-1-trix@redhat.com>
- <20201018054332.GB593954@kroah.com>
- <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
- <20201019230546.GH36674@ziepe.ca>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <859ff6ff-3e10-195c-6961-7b2902b151d4@redhat.com>
-Date:   Tue, 20 Oct 2020 07:09:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=3C43ehene0sz3wj0W6VYck8XLVUCMtd4AQSAoxmbLuA=;
+        b=dNuj8ogm2STZwSvI/zaJUj4UR9GwrS0Ib8KFW4fkckCjpfERPxGR2BctrYnvUzaX7g
+         g5XkVghClgZjDTIfOvPqWxuOIBgdWimsB8FNimwuURL/gaYEVmG4/swNfRfOXTHYfS+L
+         A0kRzL/Qe3Fal0kth4Hr+HrbPElujwc25E5XCIfM9z0vTSz4nH5nlGQnsTD45rKMoKkC
+         XL7CA9ib3CE8QE++EccdepzoLt4bZ8VC7HKS50JdCXM7qmKHqPG5vUC84LHyCTzOnTB7
+         vTeGblgcMDaBSOQxqLDf3c/gEtXxiDDg7cPYSHW6oIcUW1zN+ONyP75NSENIFr/rYf1n
+         kysg==
+X-Gm-Message-State: AOAM531giyjNSPRWtg9HMwpEPmnYnbfG3GaPWugmV2+O3+CEm047DgNc
+        Wt2XgxPzCZ7AFvce3FG0KxA=
+X-Google-Smtp-Source: ABdhPJxc0G93I08VXBdtJfsQuOjes3t5BwQxwlQJV8EOgXpk2wv21udJYYllHsY7KSt4/eLQ8Crx+g==
+X-Received: by 2002:a05:6000:10c6:: with SMTP id b6mr5011712wrx.10.1603216964827;
+        Tue, 20 Oct 2020 11:02:44 -0700 (PDT)
+Received: from dell5510 ([62.201.25.198])
+        by smtp.gmail.com with ESMTPSA id d129sm2769353wmd.5.2020.10.20.11.02.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2020 11:02:40 -0700 (PDT)
+Date:   Tue, 20 Oct 2020 20:02:31 +0200
+From:   Petr Vorel <petr.vorel@gmail.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>
+Subject: Re: [PATCH ima-evm-utils] boot_aggregate.test: Skip if CONFIG_IMA
+ not enabled
+Message-ID: <20201020180231.GA14580@dell5510>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
+References: <20201019200803.35255-1-petr.vorel@gmail.com>
+ <e274a823ca408f33c11ea03878442189e62d9f9b.camel@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20201019230546.GH36674@ziepe.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e274a823ca408f33c11ea03878442189e62d9f9b.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Mimi, Dmitry,
 
-On 10/19/20 4:05 PM, Jason Gunthorpe wrote:
-> On Mon, Oct 19, 2020 at 12:42:15PM -0700, Nick Desaulniers wrote:
->> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->>> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
->>>> From: Tom Rix <trix@redhat.com>
->>>>
->>>> This is a upcoming change to clean up a new warning treewide.
->>>> I am wondering if the change could be one mega patch (see below) or
->>>> normal patch per file about 100 patches or somewhere half way by collecting
->>>> early acks.
->>> Please break it up into one-patch-per-subsystem, like normal, and get it
->>> merged that way.
->>>
->>> Sending us a patch, without even a diffstat to review, isn't going to
->>> get you very far...
->> Tom,
->> If you're able to automate this cleanup, I suggest checking in a
->> script that can be run on a directory.  Then for each subsystem you
->> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
->>  Then others can help you drive the tree wide cleanup.  Then we can
->> enable -Wunreachable-code-break either by default, or W=2 right now
->> might be a good idea.
-> I remember using clang-modernize in the past to fix issues very
-> similar to this, if clang machinery can generate the warning, can't
-> something like clang-tidy directly generate the patch?
+> [Cc'ing Dmitry Eremin-Solenikov]
 
-Yes clang-tidy and similar are good tools.
+> Hi Petr,
 
-Sometimes they change too much and your time shifts
+> On Mon, 2020-10-19 at 22:08 +0200, Petr Vorel wrote:
+> > This is required, because when TPM HW available (i.e. -c /dev/tpm0),
+> > evmctl ima_boot_aggregate returns sha1:xxxx.
 
-from editing to analyzing and dropping changes.
+> > skip requires to move cleanup().
 
+> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-I am looking at them for auto changing api.
+> Nice.
+> > ---
+> > Hi Mimi,
 
-When i have something greater than half baked i will post.
+> > this Fixes problems on current Debian, which has still disabled CONFIG_IMA
+> > (FYI [1]). I was not able to figure out how to get it working with
+> > sample-* files, but maybe there is a way.
 
-Tom
+> > Although it sound strange, people may want to build and check evmctl
+> > even on a system with disabled CONFIG_IMA (both Debian and Ubuntu have
+> > outdated ima-evm-utils (1.1)).
 
->
-> You can send me a patch for drivers/infiniband/* as well
->
-> Thanks,
-> Jason
->
+> Oops, I need to keep Dmitry in the loop better.  I'm hoping to release
+> v1.3 shortly.
+Thanks!
+@Dmitry do you wish to be Cc: before release or any other time?
 
+> > Kind regards,
+> > Petr
+
+> > [1] https://bugs.debian.org/972459 linux: Reenable CONFIG_IMA
+
+> I wasn't aware that because of lockdown, IMA was disabled.  Thank you
+> for reporting and updating the IMA w/lockdown status.
+Feel free to comment it, please. It'd be nice to have IMA in Debian (not sure
+about Ubuntu status).
+
+@Dmitry: do you plan to update Debian package? (you're the listed maintainer,
+although the package was signed by Wartan Hachaturow).
+
+> Mimi
+
+Kind regards,
+Petr
