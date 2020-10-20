@@ -2,117 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DDC2941CF
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Oct 2020 20:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 346F329425F
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Oct 2020 20:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408896AbgJTSCt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Oct 2020 14:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408895AbgJTSCs (ORCPT
+        id S2437577AbgJTSmz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Oct 2020 14:42:55 -0400
+Received: from smtprelay0130.hostedemail.com ([216.40.44.130]:38858 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2437566AbgJTSmy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Oct 2020 14:02:48 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B19C0613CE
-        for <linux-integrity@vger.kernel.org>; Tue, 20 Oct 2020 11:02:47 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id n18so3303669wrs.5
-        for <linux-integrity@vger.kernel.org>; Tue, 20 Oct 2020 11:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3C43ehene0sz3wj0W6VYck8XLVUCMtd4AQSAoxmbLuA=;
-        b=Q92lI3jOIPh6gwlYPTUULybXuQr0NKVDgfSaLMv1mwiJMhOrXhWe7gbJ+odadb4wvN
-         2rd3uHY3vk7AD8NKvBanG5SA8LRgJHsGkIP2pDhsDqWqfjVlJlsTKkVe+NYyhN1ZKp5x
-         gESYZfXOdrJ6doXjXvWXbPlUn9qpbYQanEg5cSFmudqhmgIri24EVVGSAWuX7vdIXkfQ
-         aRSAlgFuYa4+ietk/KaCD88134GHQSEPyawGBmxrt5meypQ4sne1Ax0oq71wa7q6tNhp
-         MwaFjTf/QJ6t5HjSrQpQf3twZm5b3BDACviUKsulwZBD4zIHTBmtv3CSrTiBWst4JR03
-         WBCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3C43ehene0sz3wj0W6VYck8XLVUCMtd4AQSAoxmbLuA=;
-        b=dNuj8ogm2STZwSvI/zaJUj4UR9GwrS0Ib8KFW4fkckCjpfERPxGR2BctrYnvUzaX7g
-         g5XkVghClgZjDTIfOvPqWxuOIBgdWimsB8FNimwuURL/gaYEVmG4/swNfRfOXTHYfS+L
-         A0kRzL/Qe3Fal0kth4Hr+HrbPElujwc25E5XCIfM9z0vTSz4nH5nlGQnsTD45rKMoKkC
-         XL7CA9ib3CE8QE++EccdepzoLt4bZ8VC7HKS50JdCXM7qmKHqPG5vUC84LHyCTzOnTB7
-         vTeGblgcMDaBSOQxqLDf3c/gEtXxiDDg7cPYSHW6oIcUW1zN+ONyP75NSENIFr/rYf1n
-         kysg==
-X-Gm-Message-State: AOAM531giyjNSPRWtg9HMwpEPmnYnbfG3GaPWugmV2+O3+CEm047DgNc
-        Wt2XgxPzCZ7AFvce3FG0KxA=
-X-Google-Smtp-Source: ABdhPJxc0G93I08VXBdtJfsQuOjes3t5BwQxwlQJV8EOgXpk2wv21udJYYllHsY7KSt4/eLQ8Crx+g==
-X-Received: by 2002:a05:6000:10c6:: with SMTP id b6mr5011712wrx.10.1603216964827;
-        Tue, 20 Oct 2020 11:02:44 -0700 (PDT)
-Received: from dell5510 ([62.201.25.198])
-        by smtp.gmail.com with ESMTPSA id d129sm2769353wmd.5.2020.10.20.11.02.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2020 11:02:40 -0700 (PDT)
-Date:   Tue, 20 Oct 2020 20:02:31 +0200
-From:   Petr Vorel <petr.vorel@gmail.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>
-Subject: Re: [PATCH ima-evm-utils] boot_aggregate.test: Skip if CONFIG_IMA
- not enabled
-Message-ID: <20201020180231.GA14580@dell5510>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-References: <20201019200803.35255-1-petr.vorel@gmail.com>
- <e274a823ca408f33c11ea03878442189e62d9f9b.camel@linux.ibm.com>
+        Tue, 20 Oct 2020 14:42:54 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 43FA51260;
+        Tue, 20 Oct 2020 18:42:51 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:967:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1434:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2525:2553:2560:2563:2682:2685:2731:2828:2859:2911:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3354:3622:3865:3866:3867:3868:3870:3871:3872:3873:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:4425:5007:6742:6743:7576:7903:8957:9025:10004:10400:10450:10455:10848:11232:11658:11914:12043:12295:12297:12663:12740:12760:12895:13153:13228:13439:14181:14659:14721:19904:19999:21080:21451:21627:21939:21990:30012:30034:30054:30070:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: humor84_3a06a8527241
+X-Filterd-Recvd-Size: 4943
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf17.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 20 Oct 2020 18:42:43 +0000 (UTC)
+Message-ID: <3bc5c2e3b3edc22a4d167ec807ecdaaf8dcda76d.camel@perches.com>
+Subject: Re: [RFC] treewide: cleanup unreachable breaks
+From:   Joe Perches <joe@perches.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        storagedev@microchip.com, devel@driverdev.osuosl.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        George Burgess <gbiv@google.com>
+Date:   Tue, 20 Oct 2020 11:42:42 -0700
+In-Reply-To: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+References: <20201017160928.12698-1-trix@redhat.com>
+         <20201018054332.GB593954@kroah.com>
+         <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e274a823ca408f33c11ea03878442189e62d9f9b.camel@linux.ibm.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi, Dmitry,
+On Mon, 2020-10-19 at 12:42 -0700, Nick Desaulniers wrote:
+> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
+> > > From: Tom Rix <trix@redhat.com>
+> > > 
+> > > This is a upcoming change to clean up a new warning treewide.
+> > > I am wondering if the change could be one mega patch (see below) or
+> > > normal patch per file about 100 patches or somewhere half way by collecting
+> > > early acks.
+> > 
+> > Please break it up into one-patch-per-subsystem, like normal, and get it
+> > merged that way.
+> > 
+> > Sending us a patch, without even a diffstat to review, isn't going to
+> > get you very far...
+> 
+> Tom,
+> If you're able to automate this cleanup, I suggest checking in a
+> script that can be run on a directory.  Then for each subsystem you
+> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
+>  Then others can help you drive the tree wide cleanup.  Then we can
+> enable -Wunreachable-code-break either by default, or W=2 right now
+> might be a good idea.
+> 
+> Ah, George (gbiv@, cc'ed), did an analysis recently of
+> `-Wunreachable-code-loop-increment`, `-Wunreachable-code-break`, and
+> `-Wunreachable-code-return` for Android userspace.  From the review:
+> ```
+> Spoilers: of these, it seems useful to turn on
+> -Wunreachable-code-loop-increment and -Wunreachable-code-return by
+> default for Android
+> ...
+> While these conventions about always having break arguably became
+> obsolete when we enabled -Wfallthrough, my sample turned up zero
+> potential bugs caught by this warning, and we'd need to put a lot of
+> effort into getting a clean tree. So this warning doesn't seem to be
+> worth it.
+> ```
+> Looks like there's an order of magnitude of `-Wunreachable-code-break`
+> than the other two.
+> 
+> We probably should add all 3 to W=2 builds (wrapped in cc-option).
+> I've filed https://github.com/ClangBuiltLinux/linux/issues/1180 to
+> follow up on.
 
-> [Cc'ing Dmitry Eremin-Solenikov]
+I suggest using W=1 as people that are doing cleanups
+generally use that and not W=123 or any other style.
 
-> Hi Petr,
+Every other use of W= is still quite noisy and these
+code warnings are relatively trivially to fix up.
 
-> On Mon, 2020-10-19 at 22:08 +0200, Petr Vorel wrote:
-> > This is required, because when TPM HW available (i.e. -c /dev/tpm0),
-> > evmctl ima_boot_aggregate returns sha1:xxxx.
 
-> > skip requires to move cleanup().
-
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-
-> Nice.
-> > ---
-> > Hi Mimi,
-
-> > this Fixes problems on current Debian, which has still disabled CONFIG_IMA
-> > (FYI [1]). I was not able to figure out how to get it working with
-> > sample-* files, but maybe there is a way.
-
-> > Although it sound strange, people may want to build and check evmctl
-> > even on a system with disabled CONFIG_IMA (both Debian and Ubuntu have
-> > outdated ima-evm-utils (1.1)).
-
-> Oops, I need to keep Dmitry in the loop better.  I'm hoping to release
-> v1.3 shortly.
-Thanks!
-@Dmitry do you wish to be Cc: before release or any other time?
-
-> > Kind regards,
-> > Petr
-
-> > [1] https://bugs.debian.org/972459 linux: Reenable CONFIG_IMA
-
-> I wasn't aware that because of lockdown, IMA was disabled.  Thank you
-> for reporting and updating the IMA w/lockdown status.
-Feel free to comment it, please. It'd be nice to have IMA in Debian (not sure
-about Ubuntu status).
-
-@Dmitry: do you plan to update Debian package? (you're the listed maintainer,
-although the package was signed by Wartan Hachaturow).
-
-> Mimi
-
-Kind regards,
-Petr
