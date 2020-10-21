@@ -2,254 +2,213 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A992947F1
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Oct 2020 07:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6C9294C85
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Oct 2020 14:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731470AbgJUFtC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 21 Oct 2020 01:49:02 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:47958 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730469AbgJUFtC (ORCPT
+        id S2411881AbgJUM0F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 21 Oct 2020 08:26:05 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8858 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725791AbgJUM0E (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 21 Oct 2020 01:49:02 -0400
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E028E20B9C34;
-        Tue, 20 Oct 2020 22:48:59 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E028E20B9C34
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1603259340;
-        bh=uLbv6jJ5BnH4193peDIwzQWbp4jYgcirlTrqHTsfRPA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=muxaPHfzDqKFXlbfWUSOryhE9bHCST1DuzFX9ubdYnDOadfqxmt6EOJD44NfVkIAM
-         kq8XFCAhHxoWL59yS9ysoF56Y5F9SeJE7n/UWyXGJTIqTKF9Wf8mr/ZYkDeaMzAMKq
-         xmkRJlsII6N4aaW1Wh4bW0PUpONFo6pYQAeCdGk8=
-Date:   Wed, 21 Oct 2020 00:48:49 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
+        Wed, 21 Oct 2020 08:26:04 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09LC3ZMk115791;
+        Wed, 21 Oct 2020 08:25:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=bvSsPq3wOmmtOX1az4xCyTfWApYvcQkBAvmNyM4Gu/k=;
+ b=jDOgf0Qi/Sfe+6zHOdryNDHp6PEAoQIUv6TAVYN7AN285iFKam5UdOLQ1rLc2u59HXdO
+ qg8wMwH6KEvRao0u/p/Gn5/JnkCxOqU8bYpsMJib1LZPjfxzMgCH8UdqmvZI6mrDFZBJ
+ psJuJMBJVwMkuDPePGZnuPboeSizU2G648FNjJV/aUsVynXGY/J8gsWJB9rRtcnkOudB
+ NhUXSzPevHWifnim3vTckQy27ecypWvuQoaL11zQ2F7SyapPGwvu/L47c5PM2csZx65T
+ NtHUILzQEqxFqIa+MrnDnoOedaMn021bLHv2yhV4lH9haaHUK4iS0rdULyz4gv5i2PxX dA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34ak37krm8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Oct 2020 08:25:41 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09LC5592123886;
+        Wed, 21 Oct 2020 08:25:41 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34ak37krkj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Oct 2020 08:25:41 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09LCCH5h010636;
+        Wed, 21 Oct 2020 12:25:39 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 347qvhca8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Oct 2020 12:25:38 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09LCPa9t28901750
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Oct 2020 12:25:36 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 883C04C050;
+        Wed, 21 Oct 2020 12:25:36 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 709A94C040;
+        Wed, 21 Oct 2020 12:25:32 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.92.86])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 21 Oct 2020 12:25:32 +0000 (GMT)
+Message-ID: <7b2ccd620a9de5c2fd57b8e8aeb41d5476f83b28.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 1/4] KEYS: trusted: Add generic trusted keys framework
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
 Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        Luke Hinds <lhinds@redhat.com>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
         linux-integrity@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [Regression] "tpm: Require that all digests are present in
- TCG_PCR_EVENT2 structures" causes null pointer dereference
-Message-ID: <20201021054849.GA6856@sequoia>
-References: <E1FDCCCB-CA51-4AEE-AC83-9CDE995EAE52@canonical.com>
- <20200928140623.GA69515@linux.intel.com>
- <BB63B86E-CA44-4EB7-A5D1-21B0E9EB2850@canonical.com>
- <846fe4da67d05f57fba33e38c9a6e394e657adc3.camel@linux.ibm.com>
- <2d181eb8b62ae9a1821bb9093dccc3d6bcecbd23.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <2d181eb8b62ae9a1821bb9093dccc3d6bcecbd23.camel@linux.ibm.com>
+        linux-security-module@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org
+Date:   Wed, 21 Oct 2020 08:25:31 -0400
+In-Reply-To: <CAFA6WYM7aJwP9j_ayGvbJPu-cyv87rsm9N4Wj2OCOMnmfDx+Rw@mail.gmail.com>
+References: <1602065268-26017-1-git-send-email-sumit.garg@linaro.org>
+         <1602065268-26017-2-git-send-email-sumit.garg@linaro.org>
+         <8e07f9401c9f7e18fb1453b7b290472c0049c6e6.camel@linux.ibm.com>
+         <CAFA6WYM7aJwP9j_ayGvbJPu-cyv87rsm9N4Wj2OCOMnmfDx+Rw@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
+ definitions=2020-10-21_05:2020-10-20,2020-10-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999 mlxscore=0
+ phishscore=0 adultscore=0 suspectscore=2 bulkscore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010210096
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2020-10-20 17:07:50, Mimi Zohar wrote:
-> On Tue, 2020-09-29 at 13:52 -0400, Mimi Zohar wrote:
-> > On Mon, 2020-09-28 at 22:16 +0800, Kai-Heng Feng wrote:
-> > > Hi Jarkko,
-> > >=20
-> > > > On Sep 28, 2020, at 22:06, Jarkko Sakkinen <jarkko.sakkinen@linux.i=
-ntel.com> wrote:
-> > > >=20
-> > > > On Mon, Sep 28, 2020 at 08:31:04PM +0800, Kai-Heng Feng wrote:
-> > > >> Commit 7f3d176f5f7e "tpm: Require that all digests are present in
-> > > >> TCG_PCR_EVENT2 structures" causes a null pointer dereference on all
-> > > >> laptops I have:
-> > > >=20
-> > > > ...
-> > > >=20
-> > > >> [   17.868849] BUG: kernel NULL pointer dereference, address: 0000=
-00000000002c
-> > > >> [   17.868852] #PF: supervisor read access in kernel mode
-> > > >> [   17.868854] #PF: error_code(0x0000) - not-present page
-> > > >> [   17.868855] PGD 0 P4D 0=20
-> > > >> [   17.868858] Oops: 0000 [#1] SMP PTI
-> > > >> [   17.868860] CPU: 0 PID: 1873 Comm: fwupd Not tainted 5.8.0-rc6+=
- #25
-> > > >> [   17.868861] Hardware name: LENOVO 20LAZ3TXCN/20LAZ3TXCN, BIOS N=
-27ET38W (1.24 ) 11/28/2019
-> > > >> [   17.868866] RIP: 0010:tpm2_bios_measurements_start+0x38/0x1f0
-> > > >> [   17.868868] Code: 55 41 54 53 48 83 ec 30 4c 8b 16 65 48 8b 04 =
-25 28 00 00 00 48 89 45 d0 48 8b 47 70 4c 8b a0 d0 06 00 00 48 8b 88 d8 06 =
-00 00 <41> 8b 5c 24 1c 48 89 4d b0 48 89 d8 48 83 c3 20 4d 85 d2 75 31 4c
-> > > >> [   17.868869] RSP: 0018:ffff9da500a9fde0 EFLAGS: 00010282
-> > > >> [   17.868871] RAX: ffff917d03dc4000 RBX: 0000000000000000 RCX: 00=
-00000000000010
-> > > >> [   17.868872] RDX: 0000000000001000 RSI: ffff917c99b19460 RDI: ff=
-ff917c99b19438
-> > > >> [   17.868873] RBP: ffff9da500a9fe38 R08: ffffbda4ffa33fc0 R09: ff=
-ff917cbfeae4c0
-> > > >> [   17.868874] R10: 0000000000000000 R11: 0000000000000002 R12: 00=
-00000000000010
-> > > >> [   17.868875] R13: ffff917c99b19438 R14: ffff917c99b19460 R15: ff=
-ff917c99b19470
-> > > >> [   17.868876] FS:  00007f9d80988b00(0000) GS:ffff917d07400000(000=
-0) knlGS:0000000000000000
-> > > >> [   17.868877] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > >> [   17.868878] CR2: 000000000000002c CR3: 0000000219b12004 CR4: 00=
-000000003606f0
-> > > >> [   17.868879] Call Trace:
-> > > >> [   17.868884]  seq_read+0x95/0x470
-> > > >> [   17.868887]  ? security_file_permission+0x150/0x160
-> > > >> [   17.868889]  vfs_read+0xaa/0x190
-> > > >> [   17.868891]  ksys_read+0x67/0xe0
-> > > >> [   17.868893]  __x64_sys_read+0x1a/0x20
-> > > >> [   17.868896]  do_syscall_64+0x52/0xc0
-> > > >> [   17.868898]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> > > >> [   17.868900] RIP: 0033:0x7f9d83be91dc
-> > > >> [   17.868901] Code: Bad RIP value.
-> > > >> [   17.868902] RSP: 002b:00007fff7f5e0250 EFLAGS: 00000246 ORIG_RA=
-X: 0000000000000000
-> > > >> [   17.868903] RAX: ffffffffffffffda RBX: 00005651d262f420 RCX: 00=
-007f9d83be91dc
-> > > >> [   17.868904] RDX: 0000000000001000 RSI: 00007fff7f5e0350 RDI: 00=
-00000000000010
-> > > >> [   17.868905] RBP: 00007f9d83cc54a0 R08: 0000000000000000 R09: 00=
-005651d26c1830
-> > > >> [   17.868906] R10: 00005651d2582010 R11: 0000000000000246 R12: 00=
-00000000001000
-> > > >> [   17.868907] R13: 00007fff7f5e0350 R14: 0000000000000d68 R15: 00=
-007f9d83cc48a0
-> > > >> [   17.868909] Modules linked in: rfcomm ccm cmac algif_hash algif=
-_skcipher af_alg snd_hda_codec_hdmi snd_hda_codec_realtek snd_hda_codec_gen=
-eric bnep joydev mei_hdcp wmi_bmof intel_rapl_msr intel_wmi_thunderbolt x86=
-_pkg_temp_thermal intel_powerclamp coretemp nls_iso8859_1 kvm_intel kvm crc=
-t10dif_pclmul crc32_pclmul ghash_clmulni_intel aesni_intel glue_helper cryp=
-to_simd cryptd rapl input_leds intel_cstate snd_hda_intel snd_intel_dspcfg =
-rmi_smbus iwlmvm snd_hda_codec serio_raw snd_hwdep mac80211 rmi_core snd_hd=
-a_core libarc4 uvcvideo snd_pcm videobuf2_vmalloc btusb videobuf2_memops iw=
-lwifi videobuf2_v4l2 btrtl btbcm videobuf2_common btintel thunderbolt i915 =
-bluetooth mei_me videodev thinkpad_acpi nvram cfg80211 ledtrig_audio mei mc=
- ecdh_generic ecc i2c_algo_bit processor_thermal_device snd_seq_midi drm_km=
-s_helper snd_seq_midi_event intel_soc_dts_iosf syscopyarea sysfillrect snd_=
-rawmidi intel_pch_thermal sysimgblt intel_rapl_common intel_xhci_usb_role_s=
-witch fb_sys_fops
->   u
-> >  cs
-> > >  i_acpi r
-> > >  o
-> > > > les cec
-> > > >> [   17.868935]  typec_ucsi typec nxp_nci_i2c snd_seq nxp_nci wmi n=
-ci nfc snd_timer snd_seq_device snd int3403_thermal soundcore int340x_therm=
-al_zone video mac_hid int3400_thermal acpi_pad acpi_thermal_rel sch_fq_code=
-l parport_pc ppdev lp parport drm ip_tables x_tables autofs4 btrfs blake2b_=
-generic libcrc32c xor zstd_compress raid6_pq uas usb_storage psmouse e1000e=
- nvme i2c_i801 i2c_smbus nvme_core intel_lpss_pci intel_lpss idma64 virt_dm=
-a pinctrl_sunrisepoint pinctrl_intel
-> > > >> [   17.868951] CR2: 000000000000002c
-> > > >> [   17.868953] ---[ end trace ee7716fff5dec2fb ]---
-> > > >> [   17.868955] RIP: 0010:tpm2_bios_measurements_start+0x38/0x1f0
-> > > >> [   17.868957] Code: 55 41 54 53 48 83 ec 30 4c 8b 16 65 48 8b 04 =
-25 28 00 00 00 48 89 45 d0 48 8b 47 70 4c 8b a0 d0 06 00 00 48 8b 88 d8 06 =
-00 00 <41> 8b 5c 24 1c 48 89 4d b0 48 89 d8 48 83 c3 20 4d 85 d2 75 31 4c
-> > > >> [   17.868958] RSP: 0018:ffff9da500a9fde0 EFLAGS: 00010282
-> > > >> [   17.868959] RAX: ffff917d03dc4000 RBX: 0000000000000000 RCX: 00=
-00000000000010
-> > > >> [   17.868960] RDX: 0000000000001000 RSI: ffff917c99b19460 RDI: ff=
-ff917c99b19438
-> > > >> [   17.868961] RBP: ffff9da500a9fe38 R08: ffffbda4ffa33fc0 R09: ff=
-ff917cbfeae4c0
-> > > >> [   17.868962] R10: 0000000000000000 R11: 0000000000000002 R12: 00=
-00000000000010
-> > > >> [   17.868963] R13: ffff917c99b19438 R14: ffff917c99b19460 R15: ff=
-ff917c99b19470
-> > > >> [   17.868964] FS:  00007f9d80988b00(0000) GS:ffff917d07400000(000=
-0) knlGS:0000000000000000
-> > > >> [   17.868965] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > >> [   17.868966] CR2: 000000000000002c CR3: 0000000219b12004 CR4: 00=
-000000003606f0
-> > > >=20
-> > > > It is possible but initially feels a bit weird:
-> > > >=20
-> > > > -                  sizeof(TCG_SPECID_SIG)) || count > efispecid->nu=
-m_algs) {
-> > > > +                  sizeof(TCG_SPECID_SIG)) ||
-> > > > +           !efispecid->num_algs || count !=3D efispecid->num_algs)=
- {
-> > > >=20
-> > > > Assuming that check does not pass because of a more strict constrai=
-nt,
-> > > > __calc_tpm2_event_size() returns 0.
-> > > >=20
-> > > > It is wrapped like this in drivers/char/tpm/eventlog/tpm2.c:
-> > > >=20
-> > > > static size_t calc_tpm2_event_size(struct tcg_pcr_event2_head *even=
-t,
-> > > > 				   struct tcg_pcr_event *event_header)
-> > > > {
-> > > > 	return __calc_tpm2_event_size(event, event_header, false);
-> > > > }
-> > > >=20
-> > > > I.e. TPM_MEMUNMAP will not get executed because "do_mapping =3D=3D =
-false".
-> > > > tpm2_bios_measurements_start() checks for "size =3D=3D 0" and retur=
-ns NULL
-> > > > whenever this happens.
-> > > >=20
-> > > > Are you 100% sure that it is exactly this commit that triggers the =
-bug?
-> > >=20
-> > > Yes I am 100% sure. The issue happens all the time, and never happens
-> > > if I checkout the previous commit.
-> >=20
-> > I'm seeing this too on my test Ubuntu laptop.  Reverting the patch
-> > fixes it, but there's no data.
->=20
-> For a while I wasn't able to boot the test system with secure boot
-> enabled.  The NULL pointer dereference problem occurred during the
-> period of time that secure boot was disabled.   Once the secure boot
-> issue was resolved, the NULL pointer dereference problem was resolved
-> as well, when booting with/without secure boot enabled.
+On Wed, 2020-10-21 at 11:16 +0530, Sumit Garg wrote:
+> Thanks Mimi for your comments.
+> 
+> On Wed, 21 Oct 2020 at 08:51, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >
+> > On Wed, 2020-10-07 at 15:37 +0530, Sumit Garg wrote:
+> >
+> > > +/*
+> > > + * trusted_destroy - clear and free the key's payload
+> > > + */
+> > > +static void trusted_destroy(struct key *key)
+> > > +{
+> > > +     kfree_sensitive(key->payload.data[0]);
+> > > +}
+> > > +
+> > > +struct key_type key_type_trusted = {
+> > > +     .name = "trusted",
+> > > +     .instantiate = trusted_instantiate,
+> > > +     .update = trusted_update,
+> > > +     .destroy = trusted_destroy,
+> > > +     .describe = user_describe,
+> > > +     .read = trusted_read,
+> > > +};
+> > > +EXPORT_SYMBOL_GPL(key_type_trusted);
+> > > +
+> > > +static int __init init_trusted(void)
+> > > +{
+> > > +     int i, ret = 0;
+> > > +
+> > > +     for (i = 0; i < ARRAY_SIZE(trusted_key_sources); i++) {
+> > > +             if (trusted_key_source &&
+> > > +                 strncmp(trusted_key_source, trusted_key_sources[i].name,
+> > > +                         strlen(trusted_key_sources[i].name)))
+> > > +                     continue;
+> > > +
+> > > +             trusted_key_ops = trusted_key_sources[i].ops;
+> > > +
+> > > +             ret = trusted_key_ops->init();
+> > > +             if (!ret)
+> > > +                     break;
+> > > +     }
+> >
+> > In the case when the module paramater isn't specified and both TPM and
+> > TEE are enabled, trusted_key_ops is set to the last source initialized.
+> 
+> I guess there is some misunderstanding. Here it's only a single trust
+> source (TPM *or* TEE) is initialized and only that trust source would
+> be active at runtime. And trusted_key_ops would be initialized to the
+> first trust source whose initialization is successful (see check: "if
+> (!ret)").
 
-I noticed that Kai had disabled secure boot, as well. I found a Thinkpad
-with the same BIOS revision as Kai's Thinkpad (N27ET38W - 1.24) and
-tested an unpatched v5.9 kernel running on an up-to-date Ubuntu 20.04.1
-userspace. The main difference is that he has a Thinkpad T580 and I was
-using a Thinkpad P52s. I was unable to reproduce the crash either by
-running fwupdtpmevlog or cat'ing /sys/kernel/security/tpm0/binary_bios_meas=
-urements.
+My mistake.
 
-I noticed that Kai had cleared his secure boot allowed signature
-database (db) so I also tried that but was still unsuccessful in
-reproducing the crash.
+> 
+> > After patch 2/4, the last trusted source initialized is TEE.  If the
+> > intention is to limit it to either TPM or TEE, then trusted_key_ops
+> > should have a default value, which could be overwritten at runtime.
+> > That would address Luke Hind's concerns of making the decision at
+> > compile time.
+> 
+> I think traversing the trust source list with the initial value being
+> TPM would be default value.
 
-Of course, I also tested with secure boot enabled and also after
-toggling every secure boot and TPM related option in the BIOS. Still no
-luck.
+Agreed
+> 
+> >
+> > trusted_key_ops should be defined as __ro_after_init, like is currently
+> > done for other LSM structures.
+> 
+> Sure, will do.
 
-Kenneth mentioned elsewhere[1] that he experienced the crash with
-Ubuntu's 5.8.0-18 kernel so I also tried that but still no luck.
+Thanks
+> 
+> >
+> > > +
+> > > +     /*
+> > > +      * encrypted_keys.ko depends on successful load of this module even if
+> > > +      * trusted key implementation is not found.
+> > > +      */
+> > > +     if (ret == -ENODEV)
+> > > +             return 0;
+> > > +
+> > > +     return ret;
+> > > +}
+> > > +
+> > > +static void __exit cleanup_trusted(void)
+> > > +{
+> > > +     trusted_key_ops->exit();
+> >
+> > If the intention is really to support both TPM and TEE trusted keys at
+> > the same time, as James suggested, then the same "for" loop as in
+> > init_trusted() is needed here and probably elsewhere.
+> 
+> Current intention is to only support a single trust source (TPM or
+> TEE) at runtime. But in future if there are use-cases then framework
+> can be extended to support multiple trust sources at runtime as well.
 
-Everyone that has reported this crash[1][2][3][4] seems to have been
-running with an Ubuntu userspace. I do see that Ubuntu recently fixed a
-shim bug[5] on Sept 24. Ubuntu auto-installs security updates by default
-but this was not a security update so perhaps folks that were initially
-affected by this crash hadn't yet applied the update. It looks unrelated
-to me but it might explain why I can't reproduce this crash now, how the
-crash no longer affects Mimi, and why nobody else is complaining about
-the crash in recent weeks.
+Ok, the last sentence of the patch description, "Also, add a module
+parameter in order to select a particular trust source in case a
+platform support multiple trust sources.", needs to be expanded to:
+- indicate only one trust source at a time is supported
+- indicate the default, if the module_param is not specified
 
-Kai, could you please try once more with v5.9 and ensuring that your
-Ubuntu system is fully updated? If you're able to reproduce it with
-v5.9, please send me your kernel config and your raw
-/sys/kernel/security/tpm0/binary_bios_measurements file contents after
-rebooting into a working kernel. I really appreciate it!
+I would also change the word from "add" to "define".   The new "source"
+module parameter needs to be added to the admin-guide/kernel-parameters 
+documentation.
 
-Tyler
+thanks,
 
-[1] https://lore.kernel.org/linux-integrity/alpine.DEB.2.23.453.20091215224=
-00.7398@xps-7390/
-[2] https://lore.kernel.org/lkml/E1FDCCCB-CA51-4AEE-AC83-9CDE995EAE52@canon=
-ical.com/
-[3] https://lore.kernel.org/lkml/846fe4da67d05f57fba33e38c9a6e394e657adc3.c=
-amel@linux.ibm.com/
-[4] https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1898998
-[5] https://bugs.launchpad.net/ubuntu/+source/shim/+bug/1864223
+Mimi   
 
->=20
-> Mimi
->=20
+
