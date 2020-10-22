@@ -2,195 +2,205 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1623295384
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Oct 2020 22:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E720295D8D
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Oct 2020 13:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505378AbgJUUg5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 21 Oct 2020 16:36:57 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:52704 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2410722AbgJUUg5 (ORCPT
+        id S2441517AbgJVLlD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Oct 2020 07:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503032AbgJVLlA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 21 Oct 2020 16:36:57 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09LKEhPn103150;
-        Wed, 21 Oct 2020 20:36:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=ZVPoJnV7ys/S2zhaIuNFlC/M5y606GF+69f28P/G54s=;
- b=Gxrp99jyobldIjG+CoFPmp4ItSH4F1qDM9mJRMedqqKTOzRWxR9zm5PR+jOwd6cJwhA5
- Op41xcukQ81GLKmgk0FrYyyLaUbmKZeVhz/nYUXhcVqwUmy1E3m8WpsjJ80mNJfiHkaC
- /r1uGYwvc8CXZF8cC7Eb3Q35HwpJL5Wfp/Tkz6LN9qnvXu8M6SrmLUyOQtmTnJJjNXdx
- zEzoppZmZJ/1X89z2BinkW2ZUNOviT2TkHADExPwJ0AoBa+n3XI+uQF+K4cUaKMQSUYV
- YE1EKuts4hIDwcXMi849RlpPBF6uYEykr3knBq6W5X0HkeEIazdmZw8rAChfiEg+kVcH aA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 34ak16k20t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 21 Oct 2020 20:36:39 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09LKZ0fK100071;
-        Wed, 21 Oct 2020 20:36:38 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 348ahy15my-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 21 Oct 2020 20:36:38 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09LKaYZR031899;
-        Wed, 21 Oct 2020 20:36:34 GMT
-Received: from [10.39.200.42] (/10.39.200.42)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 21 Oct 2020 13:36:33 -0700
-Subject: Re: [PATCH 07/13] x86: Secure Launch kernel early boot stub
-To:     Arvind Sankar <nivedita@alum.mit.edu>,
-        Daniel Kiper <daniel.kiper@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, dpsmith@apertussolutions.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        luto@amacapital.net, trenchboot-devel@googlegroups.com
-References: <1600959521-24158-8-git-send-email-ross.philipson@oracle.com>
- <20200924173801.GA103726@rani.riverdale.lan>
- <c9ab2edf-1aaf-a1c9-92d5-2d37382a3163@oracle.com>
- <20200925191842.GA643740@rani.riverdale.lan>
- <d34c189c-4528-0458-0b84-cfd36dc068b3@oracle.com>
- <20201015182654.lgtht5fd2aaunczu@tomti.i.net-space.pl>
- <20201016205151.GA1618249@rani.riverdale.lan>
- <20201019145153.7b6cg3rzj7g4njz6@tomti.i.net-space.pl>
- <20201019171822.GD2701355@rani.riverdale.lan>
- <20201021152833.b3oys643ckcl5evq@tomti.i.net-space.pl>
- <20201021161837.GA3795579@rani.riverdale.lan>
-From:   Ross Philipson <ross.philipson@oracle.com>
-Autocrypt: addr=ross.philipson@oracle.com; keydata=
- mQENBFtHZ04BCADHhtvMImplKfIEOytU7ZH4haZ9eFAqZpGeIpG9D+pzTCuReM2/49bvgNoI
- e1xuiQFO+UEJ8FjedFjDdqY7fSw3xVdX9gLwD1Rmw0Dadc1w6sGbcoOQLHcglesu+BmcKBtU
- tWQZkzCpEShN4etgZThk8469YnAvO08vNZsrizgrpD90T7mEYiNXxIkX87sPGbnBrL1X7RvZ
- TaRXfE8174W+XVwGEpSiO/GjRgLW8+DFZB5MgXpCR993+U1YT9Lz97/MRzr4hqcOYry6LBYi
- s8dOly4oP7gK15oW8Xap9+ur0Jd8Vy8o99Axq+7yunF+2KE2SwP3/w8H3VDpx7EeDhWDABEB
- AAG0KlJvc3MgUGhpbGlwc29uIDxyb3NzLnBoaWxpcHNvbkBvcmFjbGUuY29tPokBVAQTAQgA
- PgIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBFsN7r6v0OZTCaJ1wdpHdTZHiMYcBQJb
- R2eBBQkJZgGzAAoJENpHdTZHiMYcPYcH/Rlp3/F3P4/2i/W0F4yQDVD6rAkejCws4KlbgC5D
- Slkdvk6j8jOW/HNeIY3n+a3mW0iyyhZlipgYAqkK1loDiDxJjc2eUaHxiYWNLQ4CwIj2EC27
- AWCp6hgwHNWmZrdeNbM/Z6LTFQILx5xzgX+86KNqzFV7gOcAaS2qBVz1D83dgrFZaGaao918
- nvfe+SnImo0GaEf8nVDKgsD2zfzMBkk4q/E0mrEADFXwBHSvNCnVyrCN6Ve0dHWgI7SszUDt
- 7v01zbGPR5mRfGuyC9gykd2SDCw5/Q27RMWfaPFL/dtiZBljUzb2yW5jicZAz7zNdDcBSUGR
- r//wxtG4k/dBrMW5AQ0EW0dnTwEIAPelEnLDnfJnHdFR+1Thrvv3Udt/1cjqQfHqH4F8zef/
- MsIcPV1skL7qPUYD+CrbasvmqhlPxtJAtN68inPa70fA2g0PtNmLUH1NBb2e6EjOoVZg9ais
- BWfdYUITZouOXs2zCTFsoNWjTJANnXxexbTf1ZEqfzlVtQK+xAnXl3kiL4Y47VMbgDkGedhw
- 3ZMWQ2zMMZqYJkPYhtlTXtedhV91DL1347ULwHsvkUJDZ0gL+WU6tYhsCOOiD61x58PfUiFb
- /WkZEPxb96dSSSWrTlLlBWSSD24RnhfbJjfsXeSu9s4XldmGTDkj7jclMVU1xV0BUfqEwhVn
- xR8FlC+dZvkAEQEAAYkBPAQYAQgAJgIbDBYhBFsN7r6v0OZTCaJ1wdpHdTZHiMYcBQJbR2eB
- BQkJZgGyAAoJENpHdTZHiMYcDIAIAIRJrKjIStRvLsOOCX92s9XJPUjrC/xmtVsqVviyFWIC
- QRPQzDE+bDSvRazudBHmcPW+BOOB5B+p7zKZzOGoZV2peG8oA/Y8oCxOYBtpbBaZ5KJexm/g
- BbnJUwb3uhmKtDShHGUCmtq8MZBJBr6Q6xHprOU8Qnzs9Jea8NVwaz9O226Rrg4XVv/sK1Lh
- ++xZfhi7YqKWdx5vdfdnX1xWe8ma0eXLeCDh3V6Ys+Habw1jEbMuafrcVzAbp1rMt2Lju1ls
- BNAoxeViK7QXWfwGTmGJP++jHmo99gMqEtiohf+37N0oS6uYu6kaE7PxsEcOjWKJxW/DdgwO
- eFq+D6xuiKk=
-Message-ID: <a4f999cf-733e-d5a9-254e-3829439dcb2d@oracle.com>
-Date:   Wed, 21 Oct 2020 16:36:29 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 22 Oct 2020 07:41:00 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3994BC0613D4
+        for <linux-integrity@vger.kernel.org>; Thu, 22 Oct 2020 04:41:00 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id h20so1550238lji.9
+        for <linux-integrity@vger.kernel.org>; Thu, 22 Oct 2020 04:41:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5gzlInlR4QMg3ZQ/I04CuQTpDYmT0qaMY9vRAxu4Izc=;
+        b=mTKSsn/Q3P3WeHCjoX5IQNxgRPV8RleCVN6AJn7mcrVmanmbBnlGkT50iAk+PxYC5j
+         qQp9dWwiw/3KBUeWUcdU8Fz65Z4hbWiPLxYfYlJ2km2Apub6hdQ90j9/EiD63ru4QnUC
+         35Uu1f/K8zugcF0ZzbhV7dVmvdFnKt8vmm0OwH+9M+1zea7hY/I8uqan0ceGDBy9koWS
+         /SDmF5NqmFjznRTDWV9I8pKTm6iE2ADiCMXGzc9L7H0LAPxeKUHetrcuREUBZUMYa317
+         N/Dl8oD6wbmqaIyz6NX3u4V0w3I3OT4GnY6XMDFUUV8EWkgXIogzyJhTUm/ubnNSrbib
+         Vy9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5gzlInlR4QMg3ZQ/I04CuQTpDYmT0qaMY9vRAxu4Izc=;
+        b=h0093Sp+olyuVqn104Vd+OrVWnnE8257gp5o5nLPPXehJsVy9H6xBSbstbN6WUKVOR
+         DtufpGrxdPtYmbmSPKBK34DhAq2R4g0JAgOIFVkviyEON2ZDVi8gAXTIxf6pShm3r6jy
+         0TxLzmhgbnvdrOcT3WrgG+TUD7Oma+Gqjlak7O0xiPTVqDzEMQaB8/VxdKKPyWEYNJuQ
+         1n7qQeFk4yu1AZRPfiBMcPsiOFTFdIpnw9jkRc78GD0xyoWpuVPGuExqR/ZWlQIhz/O0
+         jtbT2JVzn5e3QP4vgKmQEYWhtBcCpW48vXmgIaGP45w1nmfwkVly0x9VPFRUINAHwOHW
+         Lb7Q==
+X-Gm-Message-State: AOAM53252JjRw2g3+7yR4R3Y/mq4RHjBM8SuTHNnUrgW2D7WpvsCtKVm
+        vFJs36AY9C+mms+ILoDzx9HBeWvbpFmVpV2bTYYBiqGm62I=
+X-Google-Smtp-Source: ABdhPJxUbvoDDVe1JBLdhgQ6HTPf1Z1n3SNPOWQyCMzodZYqfouUt/OW/JYE6i7f1PkVqM+wnwM+ontG7U00cKi1ihU=
+X-Received: by 2002:a2e:b009:: with SMTP id y9mr751337ljk.372.1603366858536;
+ Thu, 22 Oct 2020 04:40:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201021161837.GA3795579@rani.riverdale.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9781 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 bulkscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010210142
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9781 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
- priorityscore=1501 clxscore=1015 malwarescore=0 mlxscore=0 adultscore=0
- lowpriorityscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010210141
+References: <1602065268-26017-1-git-send-email-sumit.garg@linaro.org>
+ <1602065268-26017-2-git-send-email-sumit.garg@linaro.org> <8e07f9401c9f7e18fb1453b7b290472c0049c6e6.camel@linux.ibm.com>
+ <CAFA6WYM7aJwP9j_ayGvbJPu-cyv87rsm9N4Wj2OCOMnmfDx+Rw@mail.gmail.com> <7b2ccd620a9de5c2fd57b8e8aeb41d5476f83b28.camel@linux.ibm.com>
+In-Reply-To: <7b2ccd620a9de5c2fd57b8e8aeb41d5476f83b28.camel@linux.ibm.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 22 Oct 2020 17:10:46 +0530
+Message-ID: <CAFA6WYMk8g8i+zcEHYsUcZBq4_k5yGwYzLdEOMbRRnobz9xT4A@mail.gmail.com>
+Subject: Re: [PATCH v7 1/4] KEYS: trusted: Add generic trusted keys framework
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        Luke Hinds <lhinds@redhat.com>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 10/21/20 12:18 PM, Arvind Sankar wrote:
-> On Wed, Oct 21, 2020 at 05:28:33PM +0200, Daniel Kiper wrote:
->> On Mon, Oct 19, 2020 at 01:18:22PM -0400, Arvind Sankar wrote:
->>> On Mon, Oct 19, 2020 at 04:51:53PM +0200, Daniel Kiper wrote:
->>>> On Fri, Oct 16, 2020 at 04:51:51PM -0400, Arvind Sankar wrote:
->>>>> On Thu, Oct 15, 2020 at 08:26:54PM +0200, Daniel Kiper wrote:
->>>>>>
->>>>>> I am discussing with Ross the other option. We can create
->>>>>> .rodata.mle_header section and put it at fixed offset as
->>>>>> kernel_info is. So, we would have, e.g.:
->>>>>>
->>>>>> arch/x86/boot/compressed/vmlinux.lds.S:
->>>>>>         .rodata.kernel_info KERNEL_INFO_OFFSET : {
->>>>>>                 *(.rodata.kernel_info)
->>>>>>         }
->>>>>>         ASSERT(ABSOLUTE(kernel_info) == KERNEL_INFO_OFFSET, "kernel_info at bad address!")
->>>>>>
->>>>>>         .rodata.mle_header MLE_HEADER_OFFSET : {
->>>>>>                 *(.rodata.mle_header)
->>>>>>         }
->>>>>>         ASSERT(ABSOLUTE(mle_header) == MLE_HEADER_OFFSET, "mle_header at bad address!")
->>>>>>
->>>>>> arch/x86/boot/compressed/sl_stub.S:
->>>>>> #define mleh_rva(X) (((X) - mle_header) + MLE_HEADER_OFFSET)
->>>>>>
->>>>>>         .section ".rodata.mle_header", "a"
->>>>>>
->>>>>> SYM_DATA_START(mle_header)
->>>>>>         .long   0x9082ac5a    /* UUID0 */
->>>>>>         .long   0x74a7476f    /* UUID1 */
->>>>>>         .long   0xa2555c0f    /* UUID2 */
->>>>>>         .long   0x42b651cb    /* UUID3 */
->>>>>>         .long   0x00000034    /* MLE header size */
->>>>>>         .long   0x00020002    /* MLE version 2.2 */
->>>>>>         .long   mleh_rva(sl_stub_entry)    /* Linear entry point of MLE (virt. address) */
->>>>>>         .long   0x00000000    /* First valid page of MLE */
->>>>>>         .long   0x00000000    /* Offset within binary of first byte of MLE */
->>>>>>         .long   0x00000000    /* Offset within binary of last byte + 1 of MLE */
->>>>>>         .long   0x00000223    /* Bit vector of MLE-supported capabilities */
->>>>>>         .long   0x00000000    /* Starting linear address of command line (unused) */
->>>>>>         .long   0x00000000    /* Ending linear address of command line (unused) */
->>>>>> SYM_DATA_END(mle_header)
->>>>>>
->>>>>> Of course MLE_HEADER_OFFSET has to be defined as a constant somewhere.
->>>>>> Anyway, is it acceptable?
->>>>
->>>> What do you think about my MLE_HEADER_OFFSET and related stuff proposal?
->>>>
->>>
->>> I'm wondering if it would be easier to just allow relocations in these
->>> special "header" sections. I need to check how easy/hard it is to do
->>> that without triggering linker warnings.
->>
->> Ross and I still bouncing some ideas. We came to the conclusion that
->> putting mle_header into kernel .rodata.kernel_info section or even
->> arch/x86/boot/compressed/kernel_info.S file would be the easiest thing
->> to do at this point. Of course I would suggest some renaming too. E.g.
->> .rodata.kernel_info to .rodata.kernel_headers, etc. Does it make sense
->> for you?
->>
->> Daniel
-> 
-> I haven't been able to come up with any different options that don't
-> require post-processing of the kernel image. Allowing relocations in
-> specific sections seems to not be possible with lld, and anyway would
-> require the fields to be 64-bit sized so it doesn't really help.
-> 
-> Putting mle_header into kernel_info seems like a reasonable thing to me,
-> and if you do that, putting it into kernel_info.S would seem to be
-> necessary?  Would you also have a fixed field with the offset of the
+On Wed, 21 Oct 2020 at 17:55, Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> On Wed, 2020-10-21 at 11:16 +0530, Sumit Garg wrote:
+> > Thanks Mimi for your comments.
+> >
+> > On Wed, 21 Oct 2020 at 08:51, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > >
+> > > On Wed, 2020-10-07 at 15:37 +0530, Sumit Garg wrote:
+> > >
+> > > > +/*
+> > > > + * trusted_destroy - clear and free the key's payload
+> > > > + */
+> > > > +static void trusted_destroy(struct key *key)
+> > > > +{
+> > > > +     kfree_sensitive(key->payload.data[0]);
+> > > > +}
+> > > > +
+> > > > +struct key_type key_type_trusted = {
+> > > > +     .name = "trusted",
+> > > > +     .instantiate = trusted_instantiate,
+> > > > +     .update = trusted_update,
+> > > > +     .destroy = trusted_destroy,
+> > > > +     .describe = user_describe,
+> > > > +     .read = trusted_read,
+> > > > +};
+> > > > +EXPORT_SYMBOL_GPL(key_type_trusted);
+> > > > +
+> > > > +static int __init init_trusted(void)
+> > > > +{
+> > > > +     int i, ret = 0;
+> > > > +
+> > > > +     for (i = 0; i < ARRAY_SIZE(trusted_key_sources); i++) {
+> > > > +             if (trusted_key_source &&
+> > > > +                 strncmp(trusted_key_source, trusted_key_sources[i].name,
+> > > > +                         strlen(trusted_key_sources[i].name)))
+> > > > +                     continue;
+> > > > +
+> > > > +             trusted_key_ops = trusted_key_sources[i].ops;
+> > > > +
+> > > > +             ret = trusted_key_ops->init();
+> > > > +             if (!ret)
+> > > > +                     break;
+> > > > +     }
+> > >
+> > > In the case when the module paramater isn't specified and both TPM and
+> > > TEE are enabled, trusted_key_ops is set to the last source initialized.
+> >
+> > I guess there is some misunderstanding. Here it's only a single trust
+> > source (TPM *or* TEE) is initialized and only that trust source would
+> > be active at runtime. And trusted_key_ops would be initialized to the
+> > first trust source whose initialization is successful (see check: "if
+> > (!ret)").
+>
+> My mistake.
+>
+> >
+> > > After patch 2/4, the last trusted source initialized is TEE.  If the
+> > > intention is to limit it to either TPM or TEE, then trusted_key_ops
+> > > should have a default value, which could be overwritten at runtime.
+> > > That would address Luke Hind's concerns of making the decision at
+> > > compile time.
+> >
+> > I think traversing the trust source list with the initial value being
+> > TPM would be default value.
+>
+> Agreed
+> >
+> > >
+> > > trusted_key_ops should be defined as __ro_after_init, like is currently
+> > > done for other LSM structures.
+> >
+> > Sure, will do.
+>
+> Thanks
+> >
+> > >
+> > > > +
+> > > > +     /*
+> > > > +      * encrypted_keys.ko depends on successful load of this module even if
+> > > > +      * trusted key implementation is not found.
+> > > > +      */
+> > > > +     if (ret == -ENODEV)
+> > > > +             return 0;
+> > > > +
+> > > > +     return ret;
+> > > > +}
+> > > > +
+> > > > +static void __exit cleanup_trusted(void)
+> > > > +{
+> > > > +     trusted_key_ops->exit();
+> > >
+> > > If the intention is really to support both TPM and TEE trusted keys at
+> > > the same time, as James suggested, then the same "for" loop as in
+> > > init_trusted() is needed here and probably elsewhere.
+> >
+> > Current intention is to only support a single trust source (TPM or
+> > TEE) at runtime. But in future if there are use-cases then framework
+> > can be extended to support multiple trust sources at runtime as well.
+>
+> Ok, the last sentence of the patch description, "Also, add a module
+> parameter in order to select a particular trust source in case a
+> platform support multiple trust sources.", needs to be expanded to:
+> - indicate only one trust source at a time is supported
+> - indicate the default, if the module_param is not specified
+>
 
-That seems like a reasonable place for it to go.
+Sure, I will expand that.
 
-> mle_header from kernel_info?  That seems nicer than having the
-> bootloader scan the variable data for magic strings.
+> I would also change the word from "add" to "define".
 
-Yes kernel_info will have a field to the offset of the mle_header. I
-agree that would be nicer.
+Ack.
 
-Thanks
-Ross
+>   The new "source"
+> module parameter needs to be added to the admin-guide/kernel-parameters
+> documentation.
 
-> 
+Okay, will update documentation as well.
 
+-Sumit
+
+>
+> thanks,
+>
+> Mimi
+>
+>
