@@ -2,107 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCAF296F9B
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Oct 2020 14:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03762297203
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Oct 2020 17:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S464009AbgJWMqK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Oct 2020 08:46:10 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52390 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S463977AbgJWMqJ (ORCPT
+        id S461732AbgJWPMD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Oct 2020 11:12:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:37849 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S461722AbgJWPMC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Oct 2020 08:46:09 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09NCWLX4171125
-        for <linux-integrity@vger.kernel.org>; Fri, 23 Oct 2020 08:46:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=6I1SrkJ+djDEZ8+7gK/ZHFxY7puWxVsYjSIyFn7Cv+w=;
- b=dhEE20XfWK8chfxEOSy8rHcM0RiiIHbipraITVeUGud4KSgpzG5rQE0Nb8iV1n0vpny6
- 2l+nY1B52UR2eCUcme7MaKcwEwT27x2U7zFfOriYXXN6HClkb/wnKk7GNahvUKf1zbzi
- LyPxvWPB3zpWPKdE2hDlM6PaHisp3PmQgm6B/V9g5Uo4//dvcw/LTO9xH9SrS1GtGHEF
- QwHNLIJ52izim+YiIXckrOioMMsadD1fLeMH2aqznbhj+nMj+0LHBaIjia01vSz1CULd
- Mh0rGJisDYtctiZQwVXnvraXljI1f2ghbHmBV5FHtCcaNjQO/obOvDZuSr2mKlBDFRzs 6w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34bx0rtkw2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 23 Oct 2020 08:46:09 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09NCXm0W175802
-        for <linux-integrity@vger.kernel.org>; Fri, 23 Oct 2020 08:46:08 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34bx0rtkus-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Oct 2020 08:46:08 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09NCSB7Y000482;
-        Fri, 23 Oct 2020 12:46:06 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 347r87ue68-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Oct 2020 12:46:05 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09NCk3ap33292702
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 23 Oct 2020 12:46:03 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9217552054;
-        Fri, 23 Oct 2020 12:46:03 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.127.13])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 4F85652052;
-        Fri, 23 Oct 2020 12:46:02 +0000 (GMT)
-Message-ID: <a8f7aee73cb834184fc89d87d0fe72263952a0e7.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils] boot_aggregate.test: Skip if CONFIG_IMA
- not enabled
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <petr.vorel@gmail.com>, linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>
-Date:   Fri, 23 Oct 2020 08:46:01 -0400
-In-Reply-To: <e274a823ca408f33c11ea03878442189e62d9f9b.camel@linux.ibm.com>
-References: <20201019200803.35255-1-petr.vorel@gmail.com>
-         <e274a823ca408f33c11ea03878442189e62d9f9b.camel@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
- definitions=2020-10-23_04:2020-10-23,2020-10-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0 clxscore=1015
- spamscore=0 phishscore=0 mlxlogscore=999 priorityscore=1501 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2010230086
+        Fri, 23 Oct 2020 11:12:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603465920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jTHdNB/AczUtmx4fGGDW94Nf1D2Dq1eyonOLPvs49Qw=;
+        b=Ugy+E86GoCq9L7V7Ep28b8hWeSLMkq82O18q71ju2g/SPsq8/VEzdg8LTsRpWjqfn3clTD
+        Z6MFitu/YZ2fA/eN8Hc2F0CU3IK0GCRotRhht/BHc/RBoJR+FrrmPTGhYvCMr5jWfXhGJ4
+        TS4J4xU9dMSOC5exMRv1ZWy+G+/xQuU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-192-veHNhlKUOSesxsITs8zIeQ-1; Fri, 23 Oct 2020 11:11:58 -0400
+X-MC-Unique: veHNhlKUOSesxsITs8zIeQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C31A74236C;
+        Fri, 23 Oct 2020 15:11:56 +0000 (UTC)
+Received: from localhost (unknown [10.18.25.174])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 48C855D9D5;
+        Fri, 23 Oct 2020 15:11:53 +0000 (UTC)
+Date:   Fri, 23 Oct 2020 11:11:52 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
+        dm-devel@redhat.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Milan Broz <gmazyland@gmail.com>
+Subject: Re: [PATCH v2] dm verity: Add support for signature verification
+ with 2nd keyring
+Message-ID: <20201023151152.GA21936@redhat.com>
+References: <20201015150504.1319098-1-mic@digikod.net>
+ <20201015165229.GA5513@redhat.com>
+ <022e949e-00c4-d98a-b536-1c5f9e05c09c@digikod.net>
+ <b7ba2ff9-5f5f-8c1e-dfaa-33da56d3d8de@digikod.net>
+ <b7ccaa01-0398-f108-a70d-c67753d9fa6d@gmail.com>
+ <55389f91-60a5-05db-b3e1-8f24aa356893@digikod.net>
+ <54e98aa6-0e52-1147-b9ce-a640e2317b00@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <54e98aa6-0e52-1147-b9ce-a640e2317b00@digikod.net>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Petr,
+On Fri, Oct 23 2020 at  6:20am -0400,
+Mickaël Salaün <mic@digikod.net> wrote:
 
-On Mon, 2020-10-19 at 19:10 -0400, Mimi Zohar wrote:
-> On Mon, 2020-10-19 at 22:08 +0200, Petr Vorel wrote:
-> > This is required, because when TPM HW available (i.e. -c /dev/tpm0),
-> > evmctl ima_boot_aggregate returns sha1:xxxx.
-> > 
-> > skip requires to move cleanup().
-> > 
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> It seems that there is no more question. Mike, Alasdair, could you
+> please consider to merge this into the tree?
 > 
-> Nice.
-> > ---
-> > Hi Mimi,
+> On 16/10/2020 14:19, Mickaël Salaün wrote:
 > > 
-> > this Fixes problems on current Debian, which has still disabled CONFIG_IMA
-> > (FYI [1]). I was not able to figure out how to get it working with
-> > sample-* files, but maybe there is a way.
+> > On 16/10/2020 13:08, Milan Broz wrote:
+> >> On 16/10/2020 10:49, Mickaël Salaün wrote:
+> >>> On 16/10/2020 10:29, Mickaël Salaün wrote:
+> >>>>
+> >>>> On 15/10/2020 18:52, Mike Snitzer wrote:
+> >>>>> Can you please explain why you've decided to make this a Kconfig CONFIG
+> >>>>> knob?  Why not either add: a dm-verity table argument? A dm-verity
+> >>>>> kernel module parameter? or both (to allow a particular default but
+> >>>>> then
+> >>>>> per-device override)?
+> >>>>
+> >>>> The purpose of signed dm-verity images is to authenticate files, or said
+> >>>> in another way, to enable the kernel to trust disk images in a flexible
+> >>>> way (i.e. thanks to certificate's chain of trust). Being able to update
+> >>>> such chain at run time requires to use the second trusted keyring. This
+> >>>> keyring automatically includes the certificate authorities from the
+> >>>> builtin trusted keyring, which are required to dynamically populate the
+> >>>> secondary trusted keyring with certificates signed by an already trusted
+> >>>> authority. The roots of trust must then be included at build time in the
+> >>>> builtin trusted keyring.
+> >>>>
+> >>>> To be meaningful, using dm-verity signatures implies to have a
+> >>>> restricted user space, i.e. even the root user has limited power over
+> >>>> the kernel and the rest of the system. Blindly trusting data provided by
+> >>>> user space (e.g. dm-verity table argument, kernel module parameter)
+> >>>> defeat the purpose of (mandatory) authenticated images.
+> >>>>
+> >>>>>
+> >>>>> Otherwise, _all_ DM verity devices will be configured to use secondary
+> >>>>> keyring fallback.  Is that really desirable?
+> >>>>
+> >>>> That is already the current state (on purpose).
+> >>>
+> >>> I meant that when DM_VERITY_VERIFY_ROOTHASH_SIG is set, dm-verity
+> >>> signature becomes mandatory. This new configuration
+> >>> DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING extend this trust to the
+> >>> secondary trusted keyring, which contains certificates signed (directly
+> >>> or indirectly) by CA from the builtin trusted keyring.
+> >>>
+> >>> So yes, this new (optional) configuration *extends* the source of trust
+> >>> for all dm-verity devices, and yes, it is desirable. I think it should
+> >>> have been this way from the beginning (as for other authentication
+> >>> mechanisms) but it wasn't necessary at that time.
+> >>
+> >> Well, I understand why you need a config option here.
+> >> And using the secondary keyring actually makes much more sense to me than
+> >> the original approach.
+> >>
+> >> But please do not forget that dm-verity is sometimes used in different
+> >> contexts where such strict in-kernel certificate trust is unnecessary.
+> >> With your configure options set, you deliberately remove the possibility
+> >> to configure such devices.
+> > It doesn't make sense to set DM_VERITY_VERIFY_ROOTHASH_SIG in generic
+> > distro because such policy is configured at build time in the kernel
+> > with hardcoded CAs. If the new option is not set then nothing change. I
+> > don't see why it could be an issue for use cases we previously defined
+> > (with DM_VERITY_VERIFY_ROOTHASH_SIG).
+> > 
+> >> I understand that it is needed for "trusted" systems, but we should be
+> >> clear
+> >> in the documentation.
+> >> Maybe also add note to
+> >> /Documentation/admin-guide/device-mapper/verity.rst ?
+> >> We already mention DM_VERITY_VERIFY_ROOTHASH_SIG there.
+> > 
+> > The current documentation remains true.
+> > DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING depends on
+> > DM_VERITY_VERIFY_ROOTHASH_SIG.
 
-Moving the test down to within "if [ "$(id -u)" = 0 ] && [ -c
-"/dev/tpm0" ]; then" will allow the sample tests to work.  I've
-modified your patch and pushed it out to next-testing.
+Yes, while true that doesn't change the fact that documenting
+DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING is useful to potential
+consumers of baseline DM_VERITY_VERIFY_ROOTHASH_SIG.
 
-thanks,
+Please update Documentation and post v3, I'll get it merged for 5.11.
 
-Mimi
+Thanks,
+Mike
 
