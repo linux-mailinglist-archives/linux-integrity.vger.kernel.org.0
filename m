@@ -2,155 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA7D29757F
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Oct 2020 19:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7512A297955
+	for <lists+linux-integrity@lfdr.de>; Sat, 24 Oct 2020 00:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1752985AbgJWRF1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Oct 2020 13:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S464587AbgJWRF0 (ORCPT
+        id S1752926AbgJWWiQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Oct 2020 18:38:16 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:33828 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S461456AbgJWWiP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Oct 2020 13:05:26 -0400
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CF6C0613CE
-        for <linux-integrity@vger.kernel.org>; Fri, 23 Oct 2020 10:05:26 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CHrFt53RpzlhypJ;
-        Fri, 23 Oct 2020 19:05:22 +0200 (CEST)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CHrFt26Xvzlh8TG;
-        Fri, 23 Oct 2020 19:05:22 +0200 (CEST)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>,
-        Milan Broz <gmazyland@gmail.com>, dm-devel@redhat.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v3] dm verity: Add support for signature verification with 2nd keyring
-Date:   Fri, 23 Oct 2020 19:05:12 +0200
-Message-Id: <20201023170512.201124-1-mic@digikod.net>
-X-Mailer: git-send-email 2.28.0
+        Fri, 23 Oct 2020 18:38:15 -0400
+Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8447220B4905;
+        Fri, 23 Oct 2020 15:38:14 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8447220B4905
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1603492695;
+        bh=2/tAyBtYGB8cgYKxut3JbtspLYA7Spm6lLnqtN9/PzI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=e5vEP6UUDK9pN9xNXhnq8RMAeKZr6yGJ8ZgYjH4bZm0T2KDw4itqnfji9qmYu4viN
+         kyScnA/VKZRy/RZfXxMCFKF5RfmAYZ8+a1JWQs+PNGjoctVOvEyQq+kdmh/LiQSn0s
+         a/kOOB7bAChrtuc4jAN0//Ww4huMq3DcZfXhJJVs=
+Subject: Re: [PATCH v4 1/6] IMA: generalize keyring specific measurement
+ constructs
+To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20200923192011.5293-1-tusharsu@linux.microsoft.com>
+ <20200923192011.5293-2-tusharsu@linux.microsoft.com>
+ <45aae09df5c301497efc697c17921e9b2a3c8ae8.camel@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <71db5ccf-c9b3-68b0-4d48-93e2b1ba0d98@linux.microsoft.com>
+Date:   Fri, 23 Oct 2020 15:38:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <45aae09df5c301497efc697c17921e9b2a3c8ae8.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+Thanks Mimi for your overall feedback on this series.
+Really appreciate it.
 
-Add a new configuration DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
-to enable dm-verity signatures to be verified against the secondary
-trusted keyring.  Instead of relying on the builtin trusted keyring
-(with hard-coded certificates), the second trusted keyring can include
-certificate authorities from the builtin trusted keyring and child
-certificates loaded at run time.  Using the secondary trusted keyring
-enables to use dm-verity disks (e.g. loop devices) signed by keys which
-did not exist at kernel build time, leveraging the certificate chain of
-trust model.  In practice, this makes it possible to update certificates
-without kernel update and reboot, aligning with module and kernel
-(kexec) signature verification which already use the secondary trusted
-keyring.
-
-Cc: Alasdair Kergon <agk@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc: Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
-Cc: Mike Snitzer <snitzer@redhat.com>
-Cc: Milan Broz <gmazyland@gmail.com>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
----
-
-Previous version:
-https://lore.kernel.org/lkml/20201015150504.1319098-1-mic@digikod.net/
-
-Changes since v2:
-* Add documentation about the builtin and the secondary trusted keyrings
-  (requested by Mike Snitzer).
-
-Changes since v1:
-* Extend the commit message (asked by Jarkko Sakkinen).
-* Rename the Kconfig "help" keyword according to commit 84af7a6194e4
-  ("checkpatch: kconfig: prefer 'help' over '---help---'").
----
- Documentation/admin-guide/device-mapper/verity.rst |  7 ++++++-
- drivers/md/Kconfig                                 | 13 ++++++++++++-
- drivers/md/dm-verity-verify-sig.c                  |  9 +++++++--
- 3 files changed, 25 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/admin-guide/device-mapper/verity.rst b/Documentation/admin-guide/device-mapper/verity.rst
-index 66f71f0dab1b..b088a647acb7 100644
---- a/Documentation/admin-guide/device-mapper/verity.rst
-+++ b/Documentation/admin-guide/device-mapper/verity.rst
-@@ -134,7 +134,12 @@ root_hash_sig_key_desc <key_description>
-     the pkcs7 signature of the roothash. The pkcs7 signature is used to validate
-     the root hash during the creation of the device mapper block device.
-     Verification of roothash depends on the config DM_VERITY_VERIFY_ROOTHASH_SIG
--    being set in the kernel.
-+    being set in the kernel.  The signatures are checked against the builtin
-+    trusted keyring by default, or the secondary trusted keyring if
-+    DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING is set.  The secondary
-+    trusted keyring includes by default the builtin trusted keyring, and it can
-+    also gain new certificates at run time if they are signed by a certificate
-+    already in the secondary trusted keyring.
- 
- Theory of operation
- ===================
-diff --git a/drivers/md/Kconfig b/drivers/md/Kconfig
-index 30ba3573626c..1d68935e45ef 100644
---- a/drivers/md/Kconfig
-+++ b/drivers/md/Kconfig
-@@ -530,11 +530,22 @@ config DM_VERITY_VERIFY_ROOTHASH_SIG
- 	bool "Verity data device root hash signature verification support"
- 	depends on DM_VERITY
- 	select SYSTEM_DATA_VERIFICATION
--	  help
-+	help
- 	  Add ability for dm-verity device to be validated if the
- 	  pre-generated tree of cryptographic checksums passed has a pkcs#7
- 	  signature file that can validate the roothash of the tree.
- 
-+	  By default, rely on the builtin trusted keyring.
-+
-+	  If unsure, say N.
-+
-+config DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
-+	bool "Verity data device root hash signature verification with secondary keyring"
-+	depends on DM_VERITY_VERIFY_ROOTHASH_SIG
-+	depends on SECONDARY_TRUSTED_KEYRING
-+	help
-+	  Rely on the secondary trusted keyring to verify dm-verity signatures.
-+
- 	  If unsure, say N.
- 
- config DM_VERITY_FEC
-diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-index 614e43db93aa..29385dc470d5 100644
---- a/drivers/md/dm-verity-verify-sig.c
-+++ b/drivers/md/dm-verity-verify-sig.c
-@@ -119,8 +119,13 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
- 	}
- 
- 	ret = verify_pkcs7_signature(root_hash, root_hash_len, sig_data,
--				sig_len, NULL, VERIFYING_UNSPECIFIED_SIGNATURE,
--				NULL, NULL);
-+				sig_len,
-+#ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_SECONDARY_KEYRING
-+				VERIFY_USE_SECONDARY_KEYRING,
-+#else
-+				NULL,
-+#endif
-+				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
- 
- 	return ret;
- }
-
-base-commit: bbf5c979011a099af5dc76498918ed7df445635b
--- 
-2.28.0
-
+On 2020-10-22 12:39 p.m., Mimi Zohar wrote:
+> Hi Tushar,
+> 
+> On Wed, 2020-09-23 at 12:20 -0700, Tushar Sugandhi wrote:
+> 
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index fe1df373c113..31a772d8a86b 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -451,15 +451,19 @@ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
+>>   }
+>>   
+>>   /**
+>> - * ima_match_keyring - determine whether the keyring matches the measure rule
+>> - * @rule: a pointer to a rule
+>> - * @keyring: name of the keyring to match against the measure rule
+>> + * ima_match_rule_data - determine whether the given func_data matches
+>> + *			 the measure rule data
+>> + * @rule: IMA policy rule
+>> + * @opt_list: rule data to match func_data against
+>> + * @func_data: data to match against the measure rule data
+>>    * @cred: a pointer to a credentials structure for user validation
+>>    *
+>> - * Returns true if keyring matches one in the rule, false otherwise.
+>> + * Returns true if func_data matches one in the rule, false otherwise.
+>>    */
+>> -static bool ima_match_keyring(struct ima_rule_entry *rule,
+>> -			      const char *keyring, const struct cred *cred)
+>> +static bool ima_match_rule_data(struct ima_rule_entry *rule,
+>> +				const struct ima_rule_opt_list *opt_list,
+>> +				const char *func_data,
+>> +				const struct cred *cred)
+>>   {
+>>   	bool matched = false;
+>>   	size_t i;
+>> @@ -467,14 +471,14 @@ static bool ima_match_keyring(struct ima_rule_entry *rule,
+>>   	if ((rule->flags & IMA_UID) && !rule->uid_op(cred->uid, rule->uid))
+>>   		return false;
+>>   
+>> -	if (!rule->keyrings)
+>> +	if (!opt_list)
+>>   		return true;
+> 
+> The opt_list should be based on rule->func.  There shouldn't be a need
+> to pass it as a variable.
+> 
+> Mimi
+Makes sense. Will do. Thanks Mimi.
+~Tushar
+> 
+>>   
+>> -	if (!keyring)
+>> +	if (!func_data)
+>>   		return false;
+>>   
+>> -	for (i = 0; i < rule->keyrings->count; i++) {
+>> -		if (!strcmp(rule->keyrings->items[i], keyring)) {
+>> +	for (i = 0; i < opt_list->count; i++) {
+>> +		if (!strcmp(opt_list->items[i], func_data)) {
+>>   			matched = true;
+>>   			break;
+>>   		}
