@@ -2,189 +2,198 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4648629675D
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Oct 2020 00:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EB52968E4
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Oct 2020 05:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S372947AbgJVWgO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Oct 2020 18:36:14 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55118 "EHLO
+        id S369886AbgJWDsk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Oct 2020 23:48:40 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12076 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S372941AbgJVWf2 (ORCPT
+        by vger.kernel.org with ESMTP id S2508690AbgJWDsk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Oct 2020 18:35:28 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09MMVZuh058551;
-        Thu, 22 Oct 2020 18:35:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=j9XsJrYwmd69hAlmharqLVM7LiBlchSRoT0dWPuOUlA=;
- b=og1B0xcg7eiRllSH+fQlz7FRLmTvsR3+RTaUzVPIG7zwDNtFSGFqHJvOH/kp3ALYUChr
- hB5DIZfGntE4RXmWNMZXVYQaaChMGXshlLseCyz+F9RP42bfrkInMMAePFeZRDbAfYrh
- XFIP9hmPzOudTJQ36++bKo4tukXizOmb+YYAXwv8m6ac/uAFMUpjs6Zt2PhXTkr3Alp/
- 96hGlrLGqEY41tpWpEoR1sWThthEbsdlDXfMRnMj9/BRiqLftvC+WR5kYurVVTXNZ9fi
- IGC7BqUfn0DdlPKLjmDCHp9RczLlaP6flpY0VqKwhUUeSj+rnzuMXxGGoyfnJ115sKjx 8A== 
+        Thu, 22 Oct 2020 23:48:40 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09N3Vn1m091859;
+        Thu, 22 Oct 2020 23:47:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
+ cc : subject : in-reply-to : date : message-id : mime-version :
+ content-type; s=pp1; bh=xAYDfmymI+Ty800nDVHYH/CaeH2ar053zNVW+bwUMn8=;
+ b=lKiNhpQA7ySDrEkM2LUts/UM5STTnISQXZMuGhk1bjqgo2/1S7fF2ngySOb946cOqB7w
+ L9pDsESCZVqlMP8UjIfBEwGqTPZ36S0+lAu/O+liCx1JUXiwIwudL//6dtgtCmSxa+17
+ trYsuwBLGXUbvCb+Tw+Av7E+Y3qCH68yL7NWr0e/6nyFkIt/OYOrx56GivSba1b8/L43
+ dfBiRzPQM8Erv215AvN6z2S2OgLPOzW8PtrADzRl/PFcU9fFZrH7T9r2l9lACqufxnFW
+ rwdeay0aT06ACw2gXJDzGAkRmvIa30RifUnpwsIDI+fZCTQFK4/CjigPWLkc4sXFX/xm lw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34be0u1n33-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34b0vsfyde-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Oct 2020 18:35:22 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09MMZ8I2071182;
-        Thu, 22 Oct 2020 18:35:21 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34be0u1n29-1
+        Thu, 22 Oct 2020 23:47:12 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09N3Vopn092412;
+        Thu, 22 Oct 2020 23:47:11 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34b0vsfycr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Oct 2020 18:35:21 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09MMWw6H011289;
-        Thu, 22 Oct 2020 22:35:19 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 347qvhdxw5-1
+        Thu, 22 Oct 2020 23:47:11 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09N3l0Gs028042;
+        Fri, 23 Oct 2020 03:47:10 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma01dal.us.ibm.com with ESMTP id 34bhyqaen5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Oct 2020 22:35:19 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09MMZHDD32571854
+        Fri, 23 Oct 2020 03:47:10 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09N3l1N539518582
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 22 Oct 2020 22:35:17 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 231B111C081;
-        Thu, 22 Oct 2020 22:35:17 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5619311C080;
-        Thu, 22 Oct 2020 22:35:13 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.54.44])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 22 Oct 2020 22:35:13 +0000 (GMT)
-Message-ID: <dc22359475f0c233abdb9257d1ca745d4be3f9af.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 5/6] IMA: add hook to measure critical data from
- kernel components
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
-        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Date:   Thu, 22 Oct 2020 18:35:11 -0400
-In-Reply-To: <20200923192011.5293-6-tusharsu@linux.microsoft.com>
-References: <20200923192011.5293-1-tusharsu@linux.microsoft.com>
-         <20200923192011.5293-6-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Fri, 23 Oct 2020 03:47:01 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0413C605B;
+        Fri, 23 Oct 2020 03:47:08 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6BE50C6055;
+        Fri, 23 Oct 2020 03:47:01 +0000 (GMT)
+Received: from morokweng.localdomain (unknown [9.211.157.146])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Fri, 23 Oct 2020 03:47:01 +0000 (GMT)
+References: <20200930205941.1576-1-nramas@linux.microsoft.com>
+ <20200930205941.1576-2-nramas@linux.microsoft.com>
+ <bfaadaffafa3b8c12fce7e8491ea77e22a5821a8.camel@linux.ibm.com>
+ <81c4a9ce-c363-a87a-06de-4a8729702b97@linux.microsoft.com>
+ <a6c3e3ecb5c1c6f35b747f1ea4d8261667f9a376.camel@linux.ibm.com>
+ <af13db86-09c1-db12-330e-57e24bd07b9a@linux.microsoft.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, robh@kernel.org,
+        gregkh@linuxfoundation.org, james.morse@arm.com,
+        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com
+Subject: Re: [PATCH v7 1/4] powerpc: Refactor kexec functions to move arch
+ independent code to kernel
+In-reply-to: <af13db86-09c1-db12-330e-57e24bd07b9a@linux.microsoft.com>
+Date:   Fri, 23 Oct 2020 00:46:58 -0300
+Message-ID: <87v9f1eh8t.fsf@morokweng.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
- definitions=2020-10-22_17:2020-10-20,2020-10-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- phishscore=0 spamscore=0 clxscore=1015 priorityscore=1501
- lowpriorityscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2010220140
+ definitions=2020-10-23_01:2020-10-20,2020-10-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 suspectscore=2 impostorscore=0 malwarescore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010230024
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Tushar,
 
-On Wed, 2020-09-23 at 12:20 -0700, Tushar Sugandhi wrote:
-> Currently, IMA does not provide a generic function for kernel components
-> to measure their data. A generic function provided by IMA would
-> enable various parts of the kernel with easier and faster on-boarding to
-> use IMA infrastructure, would avoid code duplication, and consistent
-> usage of IMA policy option "data_sources:=" across the kernel.
-> 
-> Add a new IMA func CRITICAL_DATA and a corresponding IMA hook
-> ima_measure_critical_data() to support measuring various critical kernel
-> components. Limit the measurement to the components that are specified
-> in the IMA policy - CRITICAL_DATA+data_sources.
-> 
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Hello Lakshmi,
 
-Normally the new LSM or IMA hook is defined before defining a method of
-constraining that hook.  Please drop 2/6 (IMA: conditionally allow
-empty rule data) and reverse the order of 4/6 and 5/6.   That will
-allow each patch to update the Documentation appropriately, making the
-change self contained.
+Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 
-> ---
->  Documentation/ABI/testing/ima_policy |  8 ++++++-
->  include/linux/ima.h                  |  8 +++++++
->  security/integrity/ima/ima.h         |  1 +
->  security/integrity/ima/ima_api.c     |  2 +-
->  security/integrity/ima/ima_main.c    | 26 +++++++++++++++++++++
->  security/integrity/ima/ima_policy.c  | 34 ++++++++++++++++++++++++----
->  6 files changed, 72 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-> index a81cf79fb255..d33bb51309fc 100644
-> --- a/Documentation/ABI/testing/ima_policy
-> +++ b/Documentation/ABI/testing/ima_policy
-> @@ -29,7 +29,7 @@ Description:
->  		base: 	func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK]
->  				[FIRMWARE_CHECK]
->  				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
-> -				[KEXEC_CMDLINE] [KEY_CHECK]
-> +				[KEXEC_CMDLINE] [KEY_CHECK] [CRITICAL_DATA]
->  			mask:= [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
->  			       [[^]MAY_EXEC]
->  			fsmagic:= hex value
-> @@ -51,6 +51,8 @@ Description:
->  			data_sources:= list of kernel components
->  			(eg, selinux|apparmor|dm-crypt) that contain data critical
->  			to the security of the kernel.
-> +			Only valid when action is "measure" and func is
-> +			CRITICAL_DATA.
->  
->  		default policy:
->  			# PROC_SUPER_MAGIC
-> @@ -128,3 +130,7 @@ Description:
->  		keys added to .builtin_trusted_keys or .ima keyring:
->  
->  			measure func=KEY_CHECK keyrings=.builtin_trusted_keys|.ima
-> +
-> +		Example of measure rule using CRITICAL_DATA to measure critical data
-> +
-> +			measure func=CRITICAL_DATA data_sources=selinux|apparmor|dm-crypt
+> On 10/20/20 8:17 PM, Mimi Zohar wrote:
+>> On Tue, 2020-10-20 at 19:25 -0700, Lakshmi Ramasubramanian wrote:
+>>> On 10/20/20 1:00 PM, Mimi Zohar wrote:
+>>>> Hi Lakshmi,
+>>>>
+>>>> On Wed, 2020-09-30 at 13:59 -0700, Lakshmi Ramasubramanian wrote:
+>>>>> The functions remove_ima_buffer() and delete_fdt_mem_rsv() that handle
+>>>>> carrying forward the IMA measurement logs on kexec for powerpc do not
+>>>>> have architecture specific code, but they are currently defined for
+>>>>> powerpc only.
+>>>>>
+>>>>> remove_ima_buffer() and delete_fdt_mem_rsv() are used to remove
+>>>>> the IMA log entry from the device tree and free the memory reserved
+>>>>> for the log. These functions need to be defined even if the current
+>>>>> kernel does not support carrying forward IMA log across kexec since
+>>>>> the previous kernel could have supported that and therefore the current
+>>>>> kernel needs to free the allocation.
+>>>>>
+>>>>> Rename remove_ima_buffer() to remove_ima_kexec_buffer().
+>>>>> Define remove_ima_kexec_buffer() and delete_fdt_mem_rsv() in kernel.
+>>>>> A later patch in this series will use these functions to free
+>>>>> the allocation, if any, made by the previous kernel for ARM64.
+>>>>>
+>>>>> Define FDT_PROP_IMA_KEXEC_BUFFER for the chosen node, namely
+>>>>> "linux,ima-kexec-buffer", that is added to the DTB to hold
+>>>>> the address and the size of the memory reserved to carry
+>>>>> the IMA measurement log.
+>>>>
+>>>>> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>>> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>>>> Reported-by: kernel test robot <lkp@intel.com> error: implicit declaration of function 'delete_fdt_mem_rsv' [-Werror,-Wimplicit-function-declaration]
+>>>>
+>>>> Much better!  This version limits unnecessarily changing the existing
+>>>> code to adding a couple of debugging statements, but that looks to be
+>>>> about it.
+>>> Yes Mimi - that's correct.
+>>>
+>>>>
+>>>> Based on Chester Lin's "ima_arch" support for arm64 discussion, the IMA generic
+>>>> EFI support will be defined in ima/ima-efi.c.  Similarly, I think it would make sense to put the generic device tree support in ima/ima_kexec_fdt.c or ima/ima_fdt.c, as opposed to kernel/.  (Refer to my comments on 2/4 about the new file named ima_kexec_fdt.c.)
+>>>
+>>> The functions remove_ima_kexec_buffer() and delete_fdt_mem_rsv(), which
+>>> are defined in kernel/ima_kexec.c and kernel/kexec_file_fdt.c
+>>> respectively, are needed even when CONFIG_IMA is not defined. These
+>>> functions need to be called by the current kernel to free the ima kexec
+>>> buffer resources allocated by the previous kernel. This is the reason,
+>>> these functions are defined under "kernel" instead of
+>>> "security/integrity/ima".
+>>>
+>>> If there is a better location to move the above C files, please let me
+>>> know. I'll move them.
+>> Freeing the previous kernel measurement list is currently called from
+>> ima_load_kexec_buffer(), only after the measurement list has been
+>> restored.  The only other time the memory is freed is when the
+>> allocated memory size isn't sufficient to hold the measurement list,
+>> which could happen if there is a delay between loading and executing
+>> the kexec.
+>> 
+>
+> There are two "free" operations we need to perform with respect to ima buffer on
+> kexec:
+>
+> 1, The ima_free_kexec_buffer() called from ima_load_kexec_buffer() - the one you
+> have stated above.
+>
+> Here we remove the "ima buffer" node from the "OF" tree and free the memory
+> pages that were allocated for the measurement list.
+>
+> This one is already present in ima and there's no change in that in my patches.
+>
+> 2, The other one is remove_ima_kexec_buffer() called from setup_ima_buffer()
+> defined in "arch/powerpc/kexec/ima.c"
+>
+>  This function removes the "ima buffer" node from the "FDT" and also frees the
+> physical memory reserved for the "ima measurement list" by the previous kernel.
+>
+>  This "free" operation needs to be performed even if the current kernel does not
+> support IMA kexec since the previous kernel could have passed the IMA
+> measurement list (in FDT and reserved physical memory).
+>
+> For this reason, remove_ima_kexec_buffer() cannot be defined in "ima" but some
+> other place which will be built even if ima is not enabled. I chose to define
+> this function in "kernel" since that is guaranteed to be always built.
+>
+> thanks,
+>  -lakshmi
 
+That is true. I believe a more fitting place for these functions is
+drivers/of/fdt.c rather than these new files in kernel/. Both CONFIG_PPC
+and CONFIG_ARM64 select CONFIG_OF and CONFIG_OF_FLATTREE (indirectly,
+via CONFIG_OF_EARLY_FLATTREE) so they will both build that file.
 
-As data sources are added, the documentation example should be updated
-to reflect the new source.  Please do not include examples that don't
-yet exist.
-
-
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 6888fc372abf..d55896f28790 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -867,6 +867,32 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
->  	fdput(f);
->  }
->  
-> +/**
-> + * ima_measure_critical_data - measure critical data
-> + * @event_name: name for the given data
-> + * @event_data_source: name of the event data source
-> + * @buf: pointer to buffer containing data to measure
-> + * @buf_len: length of buffer(in bytes)
-> + * @measure_buf_hash: if set to true - will measure hash of the buf,
-> + *                    instead of buf
-> + *
-> + * Buffers can only be measured, not appraised.
-> + */
-
-Perhaps the reason for defining both the event_name and
-event_data_source will become clearer with an example.  At this point I
-can only guess as to why both are needed (e.g. perhaps a data source
-defines multiple events).
-
-While "Buffers can only be measured, not appraised" is true, it was cut
-& pasted from ima_kexec_cmdline.  Measuring the kexec boot cmdline is
-self describing.  Here, a larger, more detailed IMA hook description
-would be appropriate.
-
-thanks,
-
-Mimi
-
+-- 
+Thiago Jung Bauermann
+IBM Linux Technology Center
