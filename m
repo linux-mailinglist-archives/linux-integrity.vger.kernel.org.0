@@ -2,106 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 571D1297C4C
-	for <lists+linux-integrity@lfdr.de>; Sat, 24 Oct 2020 14:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF406297FE8
+	for <lists+linux-integrity@lfdr.de>; Sun, 25 Oct 2020 04:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1761363AbgJXMUK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 24 Oct 2020 08:20:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59858 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1761252AbgJXMUK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 24 Oct 2020 08:20:10 -0400
-Received: from localhost (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 11C4C20725;
-        Sat, 24 Oct 2020 12:20:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603542009;
-        bh=R+PTaQxkUD552VPcKHn7XRypzkQms1wfyevgaYGV2xg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nvT/T3c2dJf33cvAPTqI8hAz2BA2jifQXJlRmZFsTA0EoXzoLT/bKF99D/hFKktlI
-         JdhBnNX8oSbSMPEiGIHxiBN/+zRUcNBZS/bLW0aPK6KUXhcrps9k9w0lvg/DjbREBV
-         Z0Q6ryT5JptbiabD7r7wiJMbADjo8qtWiG7OQ/Vw=
-Date:   Sat, 24 Oct 2020 15:20:07 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     equired@linux.intel.com,
-        justmentioningitbecauseIthinkthatwouldbeagood@linux.intel.com,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: Re: [PATCH v2 0/5] tpm_tis: fix interrupts (again)
-Message-ID: <20201024122007.GD32960@kernel.org>
-References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
- <20201013011745.GA41176@linux.intel.com>
- <87tuuyf97r.fsf@jsnitsel.users.ipa.redhat.com>
- <20201018210539.GA575510@kapsi.fi>
- <87y2k0v6h9.fsf@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y2k0v6h9.fsf@redhat.com>
+        id S1766935AbgJYDgI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 24 Oct 2020 23:36:08 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46686 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1762952AbgJYDgI (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 24 Oct 2020 23:36:08 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09P3Vfpa048417;
+        Sat, 24 Oct 2020 23:36:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=f6c5YRP6wKJcOYJ6F1ufzms6nMkKE3xLN5sdbD90VrM=;
+ b=ifGNjgOfwjK1lmoqls57eVdLtj/Yf467Q0wCDEkYt1lhwjQmoGtW5Y4U6Wqhk9BgHybN
+ 7l4P4rkWHWQ/GWthPn+0d+1LfExETAE/tvj+FRIuMp+Gd7/gj1wPRjungRpEwgO5/6DX
+ hkBexZu3pvdOl87pLN1I4GziQC/M1WJIyGC7++M3LgDCQo+I9zdLadMsVRQkefsJk0Nk
+ ElWlEHZUMZeS5LuYUejdm2Z0N64h0VcDQTgeIiiTMWWgFduAkFDZvNOKsJRqMDaF2mXX
+ gKFm4s63cTNeUgYcBRgI7Y4+5F6d5//Ln4DsD+jFwSteTH63QLj2J4TCSJu419KD98wM EQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34d0xs8qmy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Oct 2020 23:36:02 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09P3a2NB060532;
+        Sat, 24 Oct 2020 23:36:02 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34d0xs8qmj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 24 Oct 2020 23:36:02 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09P3UBRi027808;
+        Sun, 25 Oct 2020 03:35:59 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 34cbw88e5h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 25 Oct 2020 03:35:59 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09P3ZvoH37159234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 25 Oct 2020 03:35:57 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 86DDAA4065;
+        Sun, 25 Oct 2020 03:35:57 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 23FCEA405B;
+        Sun, 25 Oct 2020 03:35:54 +0000 (GMT)
+Received: from sig-9-65-192-162.ibm.com (unknown [9.65.192.162])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 25 Oct 2020 03:35:53 +0000 (GMT)
+Message-ID: <2c7da61fbeb17c577253b117829b3bd544d8cf44.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 0/6] IMA: Infrastructure for measurement of critical
+ kernel data
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Date:   Sat, 24 Oct 2020 23:35:53 -0400
+In-Reply-To: <20200923192011.5293-1-tusharsu@linux.microsoft.com>
+References: <20200923192011.5293-1-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.737
+ definitions=2020-10-25_01:2020-10-23,2020-10-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ adultscore=0 suspectscore=3 impostorscore=0 mlxscore=0 priorityscore=1501
+ malwarescore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010250022
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 04:10:42PM -0700, Jerry Snitselaar wrote:
-> 
-> Jarkko Sakkinen @ 2020-10-18 14:05 MST:
-> 
-> > On Tue, Oct 13, 2020 at 08:15:36AM -0700, Jerry Snitselaar wrote:
-> >> 
-> >> Jarkko Sakkinen @ 2020-10-12 18:17 MST:
-> >> 
-> >> > On Thu, Oct 01, 2020 at 11:09:20AM -0700, James Bottomley wrote:
-> >> >> The current state of the TIS TPM is that interrupts have been globally
-> >> >> disabled by various changes.  The problems we got reported the last
-> >> >> time they were enabled was interrupt storms.  With my own TIS TPM,
-> >> >> I've found that this is caused because my TPM doesn't do legacy
-> >> >> cycles, The TIS spec (chapter 6.1 "Locality Usage Per Register")
-> >> >> requires any TIS TPM without legacy cycles not to act on any write to
-> >> >> an interrupt register unless the locality is enabled.  This means if
-> >> >> an interrupt fires after we relinquish the locality, the TPM_EOI in
-> >> >> the interrupt routine is ineffective meaning the same interrupt
-> >> >> triggers over and over again.  This problem also means we can have
-> >> >> trouble setting up interrupts on TIS TPMs because the current init
-> >> >> code does the setup before the locality is claimed for the first time.
-> >> >> 
-> >> >> James
-> >> >
-> >> > You should consider expanding the audience. Jerry, once you have some
-> >> > bandwidth (no rush, does not land before rc2), it would be great that if
-> >> > you could try this. I'm emphasizing this just because of the
-> >> > intersection. I think it would also make senset to get tested-by from
-> >> > Nayna.
-> >> 
-> >> I will run some tests on some other systems I have access to. As noted
-> >> in the other email I did a quick test with a t490s with an older bios
-> >> that exhibits the problem originally reported when Stefan's patch
-> >> enabled interrupts.
-> >
-> > Thank you. As said, I can make a pull request to rc2 or even rc3, if
-> > needed.
-> >
-> > /Jarkko
-> 
-> So outside of the t490s I have access to, it looks like the nuc5 with
-> tpm2.0 device, and and older lenovo D30 with a tpm1.2 device both are
-> not using interrupts. I'm digging around to see if I can find some
-> other systems that I can test interrupts on.
-> 
-> Regards,
-> Jerry
+Hi Tushar,
 
-I'm going to test with this C720P chromebook, which has a long standing
-bug in the kernel bugzilla. I got it a while ago but it's stuck in the
-boot.
+On Wed, 2020-09-23 at 12:20 -0700, Tushar Sugandhi wrote:
+> There are several kernel components that contain critical data which if
+> accidentally or maliciously altered, can compromise the security of the
+> kernel. Example of such components would include LSMs like SELinux, or
+> AppArmor; or device-mapper targets like dm-crypt, dm-verity etc.
 
-If that doesn't boot, I'll pick up old Ivylake NUC from the office,
-which has TPM 1.2 and bit newer TPM 2.0 NUC. Should anyway pick them,
-have not used them for testing for a while because of pandemia.
+^"the integrity of the system."
 
-/Jarkko
+This cover letter needs to be re-written from a higher perspective,
+explaining what is meant by "critical data" (e.g. kernel subsystem
+specific information only stored in kernel memory).
+
+> 
+> Many of these components do not use the capabilities provided by kernel
+> integrity subsystem (IMA), and thus they don't use the benefits of
+> extended TPM PCR quotes and ultimately the benefits of remote attestation.
+
+True, up until recently IMA only measured files, nothing else.  Why is
+this paragraph needed?  What new information is provided?
+
+> This series bridges this gap, so that potential kernel components that
+> contain data critical to the security of the kernel could take advantage
+> of IMA's measuring and quoting abilities - thus ultimately enabling
+> remote attestation for their specific data.
+
+Perhaps, something more along the lines, "This patch set defines a new
+IMA hook named ... to measure critical data."
+
+> 
+> System administrators may want to pick and choose which kernel
+> components they would want to enable for measurements, quoting, and
+> remote attestation. To enable that, a new IMA policy is introduced.
+
+Reverse the order of this paragraph and the following one, describing
+the new feature and only afterwards explaining how it may be
+constrained.
+
+> 
+> And lastly, the functionality is exposed through a function
+> ima_measure_critical_data(). The functionality is generic enough to
+> measure the data of any kernel component at run-time. To ensure that
+> only data from supported sources are measured, the kernel component
+> needs to be added to a compile-time list of supported sources (an
+> "allowed list of components"). IMA validates the source passed to
+> ima_measure_critical_data() against this allowed list at run-time.
+
+This patch set must include at least one example of measuring critical
+data, before it can be upstreamed.  Tushar, please coordinate with
+Lakshmi and Raphael.
+
+thanks,
+
+Mimi
+
