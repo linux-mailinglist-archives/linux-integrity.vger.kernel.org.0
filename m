@@ -2,144 +2,178 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A81299550
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Oct 2020 19:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D1429957B
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Oct 2020 19:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1789778AbgJZS3x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Oct 2020 14:29:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:24114 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1789777AbgJZS3x (ORCPT
+        id S1790035AbgJZSgY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Oct 2020 14:36:24 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:38712 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1790032AbgJZSgX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Oct 2020 14:29:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603736991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KggODvm7RX2zDubhypxKzbAEvh5UTHnnlgLGb89lhOM=;
-        b=PPrVvLUpte2mQJ5k2bvhck0WVkZnnZ6rOSjmYNwCDKq/rhBBaMhXssQqLocdIRmLBPpxYC
-        Id52TjlXygzbKA97KxhG8YX0Yqw++xLvTPAELwinWtZtd7D0DzJ4fABdFrJHyDbr6wxI6e
-        /xR7CJmUQ0hlZSrCVec0+Nb7aa9Vvhc=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-276-6dRxRFvFOVSpm4UZoAPQZA-1; Mon, 26 Oct 2020 14:29:49 -0400
-X-MC-Unique: 6dRxRFvFOVSpm4UZoAPQZA-1
-Received: by mail-oi1-f200.google.com with SMTP id c198so3142939oig.7
-        for <linux-integrity@vger.kernel.org>; Mon, 26 Oct 2020 11:29:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=KggODvm7RX2zDubhypxKzbAEvh5UTHnnlgLGb89lhOM=;
-        b=gPSrwwIgx0ggabjOso5TWEAwfSshkPKsJ5J7hj1eYl48E4wpjFzBv3avzm0AAS7uo8
-         VVUvOQPh1X01k4GRlcJvFlLJ5W4tBOJKa6LVN49jUQ06Ri8GycOwtjEFy9edk9VkLq22
-         rt7DUg8aACiJc3BMtL/izzXPK8zyIL7hRQMIGSJAsXrsDLxt/J5Rhvr/TOTSaurITGAm
-         8/Jwy+ZJ8ZiIwFx4+Sm1U3msRm15fQazRddkpTSVDsWOfYOTpX3TyeVuWYF4WR4zve+o
-         cS9TST76ZoAwx61XMtugcr/QKAE6GgVveENb38nFnELCcLNPVVcEkl/iSWO0dnveKgkw
-         Dobg==
-X-Gm-Message-State: AOAM531B1rwnb+rWp7pEEnVHGDxydDFvVch56P41RjAMME0imYuSg1ds
-        C1JU+kLFFf2+0/EtVhf6Rt21lD9vIwMyifM53SFGPxVUAel2P/3H5dhE1DUKu2U6jwz9c7/UY4T
-        F9iS18M/E5/PdlgLBRqOcthIv8WEL
-X-Received: by 2002:a9d:2f69:: with SMTP id h96mr12002058otb.62.1603736988861;
-        Mon, 26 Oct 2020 11:29:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy3VBw8Mj4UXhDBEkJ1ihlF5mqAKwqDjkPqPVFgEPZewHtqvrNDdyyTZPz+hDRrfr+vXVN2tw==
-X-Received: by 2002:a9d:2f69:: with SMTP id h96mr12002039otb.62.1603736988622;
-        Mon, 26 Oct 2020 11:29:48 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id 15sm4531012ooy.36.2020.10.26.11.29.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 11:29:47 -0700 (PDT)
-References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
- <20201013011745.GA41176@linux.intel.com>
- <87tuuyf97r.fsf@jsnitsel.users.ipa.redhat.com>
- <20201018210539.GA575510@kapsi.fi> <87y2k0v6h9.fsf@redhat.com>
- <20201024122007.GD32960@kernel.org>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     equired@linux.intel.com,
-        justmentioningitbecauseIthinkthatwouldbeagood@linux.intel.com,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Nayna Jain <nayna@linux.ibm.com>
-Subject: Re: [PATCH v2 0/5] tpm_tis: fix interrupts (again)
-In-reply-to: <20201024122007.GD32960@kernel.org>
-Date:   Mon, 26 Oct 2020 11:29:46 -0700
-Message-ID: <87o8kox2lh.fsf@redhat.com>
+        Mon, 26 Oct 2020 14:36:23 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 728F720B4905;
+        Mon, 26 Oct 2020 11:36:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 728F720B4905
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1603737382;
+        bh=8qHkrnzaEbS4RRTrIwve8nZUA9/BuXPOXtM1phzHgsU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=GW0lo+xiMDmJ98rYQ6xS5lHJOMJVT3p/QXPfU/3ZtAMyS5Hymipt/pjt6MBEi6mol
+         YQRenmZ+7inoqVOZPno0JLTSIh1iOiYTAvAvNl8BQihiUcDNA1KncN2Rt8SLfCQDo5
+         GnhbSdAGcWPGayFc5obIU/mAK9iC36KgeA4q/LJY=
+Subject: Re: [PATCH v7 1/4] powerpc: Refactor kexec functions to move arch
+ independent code to kernel
+To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, robh@kernel.org,
+        gregkh@linuxfoundation.org, james.morse@arm.com,
+        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com
+References: <20200930205941.1576-1-nramas@linux.microsoft.com>
+ <20200930205941.1576-2-nramas@linux.microsoft.com>
+ <bfaadaffafa3b8c12fce7e8491ea77e22a5821a8.camel@linux.ibm.com>
+ <81c4a9ce-c363-a87a-06de-4a8729702b97@linux.microsoft.com>
+ <a6c3e3ecb5c1c6f35b747f1ea4d8261667f9a376.camel@linux.ibm.com>
+ <af13db86-09c1-db12-330e-57e24bd07b9a@linux.microsoft.com>
+ <87v9f1eh8t.fsf@morokweng.localdomain>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <7b6dce85-983e-c344-4fb1-da103cf3dfb3@linux.microsoft.com>
+Date:   Mon, 26 Oct 2020 11:36:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <87v9f1eh8t.fsf@morokweng.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 10/22/20 8:46 PM, Thiago Jung Bauermann wrote:
 
-Jarkko Sakkinen @ 2020-10-24 05:20 MST:
+Hi Thiago,
 
-> On Tue, Oct 20, 2020 at 04:10:42PM -0700, Jerry Snitselaar wrote:
->> 
->> Jarkko Sakkinen @ 2020-10-18 14:05 MST:
->> 
->> > On Tue, Oct 13, 2020 at 08:15:36AM -0700, Jerry Snitselaar wrote:
->> >> 
->> >> Jarkko Sakkinen @ 2020-10-12 18:17 MST:
->> >> 
->> >> > On Thu, Oct 01, 2020 at 11:09:20AM -0700, James Bottomley wrote:
->> >> >> The current state of the TIS TPM is that interrupts have been globally
->> >> >> disabled by various changes.  The problems we got reported the last
->> >> >> time they were enabled was interrupt storms.  With my own TIS TPM,
->> >> >> I've found that this is caused because my TPM doesn't do legacy
->> >> >> cycles, The TIS spec (chapter 6.1 "Locality Usage Per Register")
->> >> >> requires any TIS TPM without legacy cycles not to act on any write to
->> >> >> an interrupt register unless the locality is enabled.  This means if
->> >> >> an interrupt fires after we relinquish the locality, the TPM_EOI in
->> >> >> the interrupt routine is ineffective meaning the same interrupt
->> >> >> triggers over and over again.  This problem also means we can have
->> >> >> trouble setting up interrupts on TIS TPMs because the current init
->> >> >> code does the setup before the locality is claimed for the first time.
->> >> >> 
->> >> >> James
->> >> >
->> >> > You should consider expanding the audience. Jerry, once you have some
->> >> > bandwidth (no rush, does not land before rc2), it would be great that if
->> >> > you could try this. I'm emphasizing this just because of the
->> >> > intersection. I think it would also make senset to get tested-by from
->> >> > Nayna.
->> >> 
->> >> I will run some tests on some other systems I have access to. As noted
->> >> in the other email I did a quick test with a t490s with an older bios
->> >> that exhibits the problem originally reported when Stefan's patch
->> >> enabled interrupts.
->> >
->> > Thank you. As said, I can make a pull request to rc2 or even rc3, if
->> > needed.
->> >
->> > /Jarkko
->> 
->> So outside of the t490s I have access to, it looks like the nuc5 with
->> tpm2.0 device, and and older lenovo D30 with a tpm1.2 device both are
->> not using interrupts. I'm digging around to see if I can find some
->> other systems that I can test interrupts on.
->> 
->> Regards,
->> Jerry
->
-> I'm going to test with this C720P chromebook, which has a long standing
-> bug in the kernel bugzilla. I got it a while ago but it's stuck in the
-> boot.
->
-> If that doesn't boot, I'll pick up old Ivylake NUC from the office,
-> which has TPM 1.2 and bit newer TPM 2.0 NUC. Should anyway pick them,
-> have not used them for testing for a while because of pandemia.
->
-> /Jarkko
+> 
+> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+> 
+>> On 10/20/20 8:17 PM, Mimi Zohar wrote:
+>>> On Tue, 2020-10-20 at 19:25 -0700, Lakshmi Ramasubramanian wrote:
+>>>> On 10/20/20 1:00 PM, Mimi Zohar wrote:
+>>>>> Hi Lakshmi,
+>>>>>
+>>>>> On Wed, 2020-09-30 at 13:59 -0700, Lakshmi Ramasubramanian wrote:
+>>>>>> The functions remove_ima_buffer() and delete_fdt_mem_rsv() that handle
+>>>>>> carrying forward the IMA measurement logs on kexec for powerpc do not
+>>>>>> have architecture specific code, but they are currently defined for
+>>>>>> powerpc only.
+>>>>>>
+>>>>>> remove_ima_buffer() and delete_fdt_mem_rsv() are used to remove
+>>>>>> the IMA log entry from the device tree and free the memory reserved
+>>>>>> for the log. These functions need to be defined even if the current
+>>>>>> kernel does not support carrying forward IMA log across kexec since
+>>>>>> the previous kernel could have supported that and therefore the current
+>>>>>> kernel needs to free the allocation.
+>>>>>>
+>>>>>> Rename remove_ima_buffer() to remove_ima_kexec_buffer().
+>>>>>> Define remove_ima_kexec_buffer() and delete_fdt_mem_rsv() in kernel.
+>>>>>> A later patch in this series will use these functions to free
+>>>>>> the allocation, if any, made by the previous kernel for ARM64.
+>>>>>>
+>>>>>> Define FDT_PROP_IMA_KEXEC_BUFFER for the chosen node, namely
+>>>>>> "linux,ima-kexec-buffer", that is added to the DTB to hold
+>>>>>> the address and the size of the memory reserved to carry
+>>>>>> the IMA measurement log.
+>>>>>
+>>>>>> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>>>> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>>>>> Reported-by: kernel test robot <lkp@intel.com> error: implicit declaration of function 'delete_fdt_mem_rsv' [-Werror,-Wimplicit-function-declaration]
+>>>>>
+>>>>> Much better!  This version limits unnecessarily changing the existing
+>>>>> code to adding a couple of debugging statements, but that looks to be
+>>>>> about it.
+>>>> Yes Mimi - that's correct.
+>>>>
+>>>>>
+>>>>> Based on Chester Lin's "ima_arch" support for arm64 discussion, the IMA generic
+>>>>> EFI support will be defined in ima/ima-efi.c.  Similarly, I think it would make sense to put the generic device tree support in ima/ima_kexec_fdt.c or ima/ima_fdt.c, as opposed to kernel/.  (Refer to my comments on 2/4 about the new file named ima_kexec_fdt.c.)
+>>>>
+>>>> The functions remove_ima_kexec_buffer() and delete_fdt_mem_rsv(), which
+>>>> are defined in kernel/ima_kexec.c and kernel/kexec_file_fdt.c
+>>>> respectively, are needed even when CONFIG_IMA is not defined. These
+>>>> functions need to be called by the current kernel to free the ima kexec
+>>>> buffer resources allocated by the previous kernel. This is the reason,
+>>>> these functions are defined under "kernel" instead of
+>>>> "security/integrity/ima".
+>>>>
+>>>> If there is a better location to move the above C files, please let me
+>>>> know. I'll move them.
+>>> Freeing the previous kernel measurement list is currently called from
+>>> ima_load_kexec_buffer(), only after the measurement list has been
+>>> restored.  The only other time the memory is freed is when the
+>>> allocated memory size isn't sufficient to hold the measurement list,
+>>> which could happen if there is a delay between loading and executing
+>>> the kexec.
+>>>
+>>
+>> There are two "free" operations we need to perform with respect to ima buffer on
+>> kexec:
+>>
+>> 1, The ima_free_kexec_buffer() called from ima_load_kexec_buffer() - the one you
+>> have stated above.
+>>
+>> Here we remove the "ima buffer" node from the "OF" tree and free the memory
+>> pages that were allocated for the measurement list.
+>>
+>> This one is already present in ima and there's no change in that in my patches.
+>>
+>> 2, The other one is remove_ima_kexec_buffer() called from setup_ima_buffer()
+>> defined in "arch/powerpc/kexec/ima.c"
+>>
+>>   This function removes the "ima buffer" node from the "FDT" and also frees the
+>> physical memory reserved for the "ima measurement list" by the previous kernel.
+>>
+>>   This "free" operation needs to be performed even if the current kernel does not
+>> support IMA kexec since the previous kernel could have passed the IMA
+>> measurement list (in FDT and reserved physical memory).
+>>
+>> For this reason, remove_ima_kexec_buffer() cannot be defined in "ima" but some
+>> other place which will be built even if ima is not enabled. I chose to define
+>> this function in "kernel" since that is guaranteed to be always built.
+>>
+>> thanks,
+>>   -lakshmi
+> 
+> That is true. I believe a more fitting place for these functions is
+> drivers/of/fdt.c rather than these new files in kernel/. Both CONFIG_PPC
+> and CONFIG_ARM64 select CONFIG_OF and CONFIG_OF_FLATTREE (indirectly,
+> via CONFIG_OF_EARLY_FLATTREE) so they will both build that file.
+> 
 
-My search continues through the systems in our labs. Running into the
-same issue with the Dells. Looking at the TCPA table it looks like
-they aren't set up for interrupts as well. I have some tpm2.0 systems
-to still try.
+I moved the above mentioned functions to drivers/of/fdt.c => it works.
 
-Jerry
+But I am not sure if "drivers/of" is the right place - this driver is 
+handling data from firmware and building FDT. I do not see any kexec 
+related operations being handled by this driver in the current 
+implementation.
+
+Also, being a driver can it be loaded/unloaded on-demand? If yes, it may 
+not be available when "ima kexec" calls are needed.
+
+@Rob Herring - what do you think?
+
+thanks,
+  -lakshmi
 
