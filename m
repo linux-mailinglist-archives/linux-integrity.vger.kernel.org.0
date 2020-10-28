@@ -2,102 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D261429D7C5
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Oct 2020 23:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B74A29D91B
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Oct 2020 23:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733116AbgJ1W0u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Oct 2020 18:26:50 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:54176 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733111AbgJ1W0t (ORCPT
+        id S2389301AbgJ1WoZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Oct 2020 18:44:25 -0400
+Received: from mx0b-00176a03.pphosted.com ([67.231.157.48]:64496 "EHLO
+        mx0a-00176a03.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2389277AbgJ1Wmq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:26:49 -0400
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CD3D020B9C34;
-        Wed, 28 Oct 2020 10:40:07 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CD3D020B9C34
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1603906808;
-        bh=9V/wA3eXya9REkla/z2rwncx5LLcdFmF/Ap1Ekj0sjU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NflQEIxO3XBHmrmUqH90zd3OayoD/Scy0UPhkh0+nac9jaT38VztFcWZ5eqfaOa95
-         EaZtVM4a2uGCtavOI2YM1PfSZZEnYBWY0HmRbmIQ0sUHefFo2WPrgG23zxrgZj7Gbq
-         oLyXB3CYM3c91nbIPdZuoeXvoR5vpxAb2JvbtRp4=
-Date:   Wed, 28 Oct 2020 12:39:58 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "Kenneth R . Crudup" <kenny@panix.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org,
-        =?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH] tpm: efi: Don't create binary_bios_measurements file for
- an empty log
-Message-ID: <20201028173958.GA4624@sequoia>
-References: <E1FDCCCB-CA51-4AEE-AC83-9CDE995EAE52@canonical.com>
- <20201028154102.9595-1-tyhicks@linux.microsoft.com>
- <20201028163002.GA5150@sequoia>
+        Wed, 28 Oct 2020 18:42:46 -0400
+X-Greylist: delayed 3237 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Oct 2020 18:42:46 EDT
+Received: from pps.filterd (m0048299.ppops.net [127.0.0.1])
+        by m0048299.ppops.net-00176a03. (8.16.0.42/8.16.0.42) with SMTP id 09SJH7HE007403
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Oct 2020 15:32:03 -0400
+From:   "Ahmed, Safayet (GE Research, US)" <Safayet.Ahmed@ge.com>
+To:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Subject: evmctl argument parsing, HMAC algorithm, HMAC replacement
+Thread-Topic: evmctl argument parsing, HMAC algorithm, HMAC replacement
+Thread-Index: AdatSwxlcXMoK+W2SsCwyvuGMpS9oAAFIN1A
+Date:   Wed, 28 Oct 2020 19:31:59 +0000
+Message-ID: <4256e1cc5c5340eba005039e13fcbd5a@ge.com>
+References: <85ea42e260344f5bb7e21daec5f2d3d0@ge.com>
+In-Reply-To: <85ea42e260344f5bb7e21daec5f2d3d0@ge.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMjAwMDE5OTI1?=
+ =?us-ascii?Q?XGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0?=
+ =?us-ascii?Q?YmEyOWUzNWJcbXNnc1xtc2ctMzAzM2Y2ZTktMTk1NC0xMWViLTkyY2QtNWM1?=
+ =?us-ascii?Q?ZjY3YjU2ZWFkXGFtZS10ZXN0XDMwMzNmNmViLTE5NTQtMTFlYi05MmNkLTVj?=
+ =?us-ascii?Q?NWY2N2I1NmVhZGJvZHkudHh0IiBzej0iMTc1MSIgdD0iMTMyNDgzODcwOTUx?=
+ =?us-ascii?Q?ODYxMzg3IiBoPSJ5YkN1dkdGcnVvY29UTE0rK2dqOW9welhYRG89IiBpZD0i?=
+ =?us-ascii?Q?IiBibD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQUFDUUVB?=
+ =?us-ascii?Q?QUNMN0kzeVlLM1dBU0VVVWUvK1RTNzBJUlJSNy81Tkx2UUdBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBSEFBQUFDMEF3QUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBRUFBUUFCQUFBQVBzcXFNd0FBQUFBQUFBQUFBQUFBQUo0QUFBQm5BR1VB?=
+ =?us-ascii?Q?WHdCakFHOEFiZ0JtQUdrQVpBQmxBRzRBZEFCcEFHRUFiQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdjQVpRQmZBR2dBYVFCbkFHZ0Fi?=
+ =?us-ascii?Q?QUI1QUdNQWJ3QnVBR1lBYVFCa0FHVUFiZ0IwQUdrQVlRQnNBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNB?=
+ =?us-ascii?Q?QUFBQUFDZUFBQUFad0JsQUY4QWJnQnZBRzRBY0FCMUFHSUFiQUJwQUdNQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCbkFH?=
+ =?us-ascii?Q?VUFYd0J3QUc4QWR3QmZBR01BYndCdUFHWUFhUUJrQUdVQWJnQjBBR2tBWVFC?=
+ =?us-ascii?Q?c0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR2NBWlFCZkFIQUFid0IzQUY4?=
+ =?us-ascii?Q?QWFBQnBBR2NBYUFCc0FIa0FYd0JqQUc4QWJnQm1BR2tBWkFCbEFHNEFkQUJw?=
+ =?us-ascii?Q?QUdFQWJBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFB?=
+ =?us-ascii?Q?Q0FBQUFBQUNlQUFBQWNBQnZBSGNBWlFCeUFGOEFaQUJsQUhNQWFRQm5BRzRB?=
+ =?us-ascii?Q?WHdCd0FISUFZUUJqQUhRQWFRQmpBR1VBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFBPT0iLz48?=
+ =?us-ascii?Q?L21ldGE+?=
+x-dg-rorf: true
+x-originating-ip: [3.202.188.220]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201028163002.GA5150@sequoia>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-28_09:2020-10-28,2020-10-28 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ malwarescore=0 clxscore=1011 impostorscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=987 bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010280122
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2020-10-28 11:30:11, Tyler Hicks wrote:
-> So, we need help from Kai, Kenneth, or Mimi to verify my assumption that
-> their firmware is providing an empty main event log and a populated
-> final event log.
+Hello,
 
-Hi Kai, Kenneth, and Mimi - could one or two of you please follow these
-steps:
+I just had a few questions:
 
-1) Apply the proposed patch in the grandparent of this email so that
-   your kernel doesn't crash
-2) Revert commit 7f3d176f5f7e ("tpm: Require that all digests are
-   present in TCG_PCR_EVENT2 structures") so that
-   __calc_tpm2_event_size() goes back to being less picky and may treat
-   a final log event as a valid event log header
-3) Add some debugging warnings in efi_tpm_eventlog_init() to check for
-   an empty main event log and a populated final event log, as shown
-   below
-4) Boot the resulting kernel build, look for the warnings, and report
-   back
+1) evmctl utility source, "evmctl.c", in "sign_ima_file" function on line 713:
+the default signing-key path is set to "/etc/keys/privkey_evm.pem".
+Should that be "/etc/keys/privkey_ima.pem"?
 
-diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
-index c1955d320fec..c4d2dbd5ed42 100644
---- a/drivers/firmware/efi/tpm.c
-+++ b/drivers/firmware/efi/tpm.c
-@@ -78,6 +78,9 @@ int __init efi_tpm_eventlog_init(void)
- 		goto out;
- 	}
- 
-+	WARN(!log_tbl->size && final_tbl->nr_events,
-+	     "nr_events = %llu\n", final_tbl->nr_events);
-+
- 	tbl_size = 0;
- 	if (final_tbl->nr_events != 0) {
- 		void *events = (void *)efi.tpm_final_log
-@@ -95,6 +98,8 @@ int __init efi_tpm_eventlog_init(void)
- 		goto out_calc;
- 	}
- 
-+	WARN(!log_tbl->size && tbl_size, "tbl_size = %d\n", tbl_size);
-+
- 	memblock_reserve((unsigned long)final_tbl,
- 			 tbl_size + sizeof(*final_tbl));
- 	efi_tpm_final_log_size = tbl_size;
+2) Currently, the hashing algorithm for HMAC signatures in the kernel is hardcoded to SHA1.
+SHA1 is considered too short to provide protection against collision attacks. (Such attacks have been demonstrated).
+Are there plans to move to more secure hashing algorithms?
 
-For your convenience, I've created a branch with these changes on top of
-v5.9:
+3) Is there any document that lists the events that cause the kernel to update asymmetric EVM signatures with HMAC signatures?
 
- https://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/linux.git/log/?h=tpm/bin-bios-measurements-debug
+I thnk this update happens in "evm_update_evmxattr".
+This function is called directly by "evm_verify_hmac", but I didn't fully understand the set of conditions that need to be satisfied before the replacement is performed.
 
-Thank you!
+There is a call chain from IMA's "process_measurement" function to "evm_verify_hmac".
 
-Tyler
+I did some experiments where I
+- check the "security.evm" extended attribute using the "getfattr" utility on a script with an IMA and EVM RSA signature.
+- perform an operation
+- check the extended attribute again to see if it's replaced with something much shorter.
+
+In my experiment, just calling the script (which should eventually invoke ""process_measurement") doesn't cause the EVM RSA signature to be replaced with an HMAC signature.
+
+However, I've been able to force the replacement by changing file attributes. I suspect changes to extended attributes will achieve the same as well.
+
+Thank you for your help,
+
+Safayet N. Ahmed Ph.D
+Lead Engineer
+Embedded Computing Group
+GE Research
+
