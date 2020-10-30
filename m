@@ -2,151 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7ED429F9B8
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Oct 2020 01:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 188F429FB1E
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Oct 2020 03:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725800AbgJ3AcX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Oct 2020 20:32:23 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3822 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725372AbgJ3AcW (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Oct 2020 20:32:22 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09U0VoVR006543;
-        Thu, 29 Oct 2020 20:32:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=yCu1W6Us4NJ9GuAgohY813aWiiXCnsRGcrSqKs3EhI4=;
- b=nZTLGtByaFbLodUY9l67uXk5pQRyEn7ehuW9/aaGRqOejq/yDHxuLdrxmltCfjwjQ7/g
- MaRHa/98vdZLV7nVT9qTTc5AwXMab1CGWZJJEiSMwoFF0OK8eqdZysP8mSVWHDdRw3nn
- 1O6dpaxMMKkUwnS0h5YNBZ0XXj0VLzG7/dVKh3J3Z0/HohdcI401MkDqvGQ/THRZjKg2
- W58+eu45hs5prVXIYSHUZ8kni93dalWdfuuR2KLSmsYB4tTz2ZUfspyxL+EleRDSH433
- po0dNaG6YLlnEy1J7sttehNpqghCwbuF+DdVWIPoxxgczmxJ34K6gMbk/QYHrnymWQ+z Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34g6sya7yd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Oct 2020 20:32:20 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09U0Vw6H006858;
-        Thu, 29 Oct 2020 20:32:20 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34g6sya7xt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Oct 2020 20:32:20 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09U0Gp27023837;
-        Fri, 30 Oct 2020 00:32:17 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 34g41xr6hj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Oct 2020 00:32:17 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09U0WF1A19005908
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Oct 2020 00:32:15 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7F8014C046;
-        Fri, 30 Oct 2020 00:32:15 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A51824C052;
-        Fri, 30 Oct 2020 00:32:13 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.78.12])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 30 Oct 2020 00:32:13 +0000 (GMT)
-Message-ID: <f99f0f03aecc778826d79eb83d60cfd1a95196c5.camel@linux.ibm.com>
-Subject: Re: [RFC] Finding the right target branch for patches that span IMA
- and SeLinux
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        stephen.smalley.work@gmail.com, paul@paul-moore.com
-Cc:     SELinux <selinux@vger.kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Date:   Thu, 29 Oct 2020 20:32:12 -0400
-In-Reply-To: <703ced1a-3a48-f29e-9141-af78415d8402@linux.microsoft.com>
-References: <703ced1a-3a48-f29e-9141-af78415d8402@linux.microsoft.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-10-29_12:2020-10-29,2020-10-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 mlxlogscore=999 clxscore=1015 malwarescore=0 suspectscore=0
- impostorscore=0 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010290167
+        id S1725909AbgJ3CSJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Oct 2020 22:18:09 -0400
+Received: from mail.hallyn.com ([178.63.66.53]:38118 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725781AbgJ3CSJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 29 Oct 2020 22:18:09 -0400
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 027D69B4; Thu, 29 Oct 2020 21:18:05 -0500 (CDT)
+Date:   Thu, 29 Oct 2020 21:18:05 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jann Horn <jannh@google.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        smbarber@chromium.org, Phil Estes <estesp@gmail.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-audit@redhat.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: Re: [PATCH 00/34] fs: idmapped mounts
+Message-ID: <20201030021805.GA20489@mail.hallyn.com>
+References: <20201029003252.2128653-1-christian.brauner@ubuntu.com>
+ <87pn51ghju.fsf@x220.int.ebiederm.org>
+ <20201029155148.5odu4j2kt62ahcxq@yavin.dot.cyphar.com>
+ <87361xdm4c.fsf@x220.int.ebiederm.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87361xdm4c.fsf@x220.int.ebiederm.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2020-10-29 at 16:33 -0700, Tushar Sugandhi wrote:
-> Hello Mimi/Stephen/Paul,
+On Thu, Oct 29, 2020 at 11:37:23AM -0500, Eric W. Biederman wrote:
+> Aleksa Sarai <cyphar@cyphar.com> writes:
 > 
-> As you are already aware, we have several patch-sets in review for
-> IMA infrastructure for measurement of critical kernel data and it's
-> usage.
+> > On 2020-10-29, Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >> Christian Brauner <christian.brauner@ubuntu.com> writes:
+> >> 
+> >> > Hey everyone,
+> >> >
+> >> > I vanished for a little while to focus on this work here so sorry for
+> >> > not being available by mail for a while.
+> >> >
+> >> > Since quite a long time we have issues with sharing mounts between
+> >> > multiple unprivileged containers with different id mappings, sharing a
+> >> > rootfs between multiple containers with different id mappings, and also
+> >> > sharing regular directories and filesystems between users with different
+> >> > uids and gids. The latter use-cases have become even more important with
+> >> > the availability and adoption of systemd-homed (cf. [1]) to implement
+> >> > portable home directories.
+> >> 
+> >> Can you walk us through the motivating use case?
+> >> 
+> >> As of this year's LPC I had the distinct impression that the primary use
+> >> case for such a feature was due to the RLIMIT_NPROC problem where two
+> >> containers with the same users still wanted different uid mappings to
+> >> the disk because the users were conflicting with each other because of
+> >> the per user rlimits.
+> >> 
+> >> Fixing rlimits is straight forward to implement, and easier to manage
+> >> for implementations and administrators.
+> >
+> > This is separate to the question of "isolated user namespaces" and
+> > managing different mappings between containers. This patchset is solving
+> > the same problem that shiftfs solved -- sharing a single directory tree
+> > between containers that have different ID mappings. rlimits (nor any of
+> > the other proposals we discussed at LPC) will help with this problem.
 > 
-> [1] infrastructure for measurement of critical data patch-set:
+> First and foremost: A uid shift on write to a filesystem is a security
+> bug waiting to happen.  This is especially in the context of facilities
+> like iouring, that play very agressive games with how process context
+> makes it to  system calls.
 > 
-> https://patchwork.kernel.org/project/linux-integrity/list/?series=354437
+> The only reason containers were not immediately exploitable when iouring
+> was introduced is because the mechanisms are built so that even if
+> something escapes containment the security properties still apply.
+> Changes to the uid when writing to the filesystem does not have that
+> property.  The tiniest slip in containment will be a security issue.
 > 
-> [2] Using [1] to measure SeLinux data:
->      https://patchwork.kernel.org/patch/11801585/
+> This is not even the least bit theoretical.  I have seem reports of how
+> shitfs+overlayfs created a situation where anyone could read
+> /etc/shadow.
 > 
-> [3] Using [1] to measure dm-crypt data:
-> 
-> https://patchwork.kernel.org/project/linux-integrity/list/?series=366903
-> 
-> [4] Using [1] to measure kernel_version:
->      https://patchwork.kernel.org/patch/11854625/
-> 
-> [5] built-in IMA policy rule to handle critical data before
->      a custom IMA policy is loaded:
->      {Patch is not yet sent for public review}
-> 
-> Mimi has suggested that patch-set [1] should include a demonstrative
-> example use of the functionality in the same series. And that example
-> should be SeLinux (patch-set [2]).
-> 
-> However, SeLinux patch-set [2] depends on the functionality in SeLinux
-> branch [7], which is not yet merged in Integrity branch [6].
-> Therefore SeLinux patch-set [2] does not apply on the Integrity branch
-> at this time.
-> 
-> Further, SeLinux patch-set [2] also depends on the new code for
-> critical data infrastructure (patch-set [1] and [5]) which is all
-> IMA code. Patch-set [1] and [5], even though all IMA code, applies
-> cleanly on SeLinux branch - along with patch-set [2].
-> 
-> For the above reason, the new series we are going to post, which
-> combines [1], [2], and [5], needs to be based on SeLinux branch.
-> 
-> Since [1] and [5] contains IMA code - we wanted to confirm with the
-> maintainers if there are any concerns to base the series on SeLinux
-> branch.
-> 
-> Thanks,
-> Tushar
-> 
-> [6] Integrity Repo/Branch:
-> Repo: 
-> https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
-> Branch: linux-integrity
-> 
-> [7] SeLinux Branch:
-> Repo: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
-> Branch: next
+> If you are going to write using the same uid to disk from different
+> containers the question becomes why can't those containers configure
+> those users to use the same kuid?
 
-Unless this patch set is specifically dependent on the two patches in
-the SELinux tree beyond v5.10.0-rc1, please base it on v5.10.0-rc1.
+Because if user 'myapp' in two otherwise isolated containers both have
+the same kuid, so that they can write to a shared directory, then root
+in container 1 has privilege over all files owned by 'myapp' in
+container 2.
 
-thanks,
+Whereas if they can each have distinct kuids, but when writing to the
+shared fs have a shared uid not otherwise belonging to either container,
+their rootfs's can remain completely off limits to each other.
 
-Mimi
-
-
+> What fixing rlimits does is it fixes one of the reasons that different
+> containers could not share the same kuid for users that want to write to
+> disk with the same uid.
+> 
+> 
+> I humbly suggest that it will be more secure, and easier to maintain for
+> both developers and users if we fix the reasons people want different
+> containers to have the same user running with different kuids.
+> 
+> If not what are the reasons we fundamentally need the same on-disk user
+> using multiple kuids in the kernel?
+> 
+> Eric
