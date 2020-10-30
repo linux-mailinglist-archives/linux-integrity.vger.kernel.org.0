@@ -2,83 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9394F2A0A45
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Oct 2020 16:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D87A82A0AA4
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Oct 2020 17:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbgJ3Pt3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Oct 2020 11:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbgJ3Pt3 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Oct 2020 11:49:29 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02790C0613CF
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Oct 2020 08:49:29 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id BE9FC12803D3;
-        Fri, 30 Oct 2020 08:49:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1604072968;
-        bh=eTT+CgK3U0fdlTfv948/eSIweR6CywUvIbiVBRDVxx0=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=UXv6mm/pgjFy4ggHIOu8plHTizHYBnrIU+GgO7DQaSsZbEfEqYS67hA+dc3DAQ5+H
-         9yzAMVQms9JgTidtv9nja79TNtCn1XGJNRPuUP0pRtj/1fX7Gap1DBve71EZweoy2d
-         l3PpRBDGLpwEMBBFCjn4f20uyhxN74pX95lnZAgc=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id a4Ff7WMRKgTQ; Fri, 30 Oct 2020 08:49:28 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 49CF2128032B;
-        Fri, 30 Oct 2020 08:49:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1604072968;
-        bh=eTT+CgK3U0fdlTfv948/eSIweR6CywUvIbiVBRDVxx0=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=UXv6mm/pgjFy4ggHIOu8plHTizHYBnrIU+GgO7DQaSsZbEfEqYS67hA+dc3DAQ5+H
-         9yzAMVQms9JgTidtv9nja79TNtCn1XGJNRPuUP0pRtj/1fX7Gap1DBve71EZweoy2d
-         l3PpRBDGLpwEMBBFCjn4f20uyhxN74pX95lnZAgc=
-Message-ID: <837dbe43b7507a765553260289de5fd8eee397c4.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2 4/5] tpm_tis: fix IRQ probing
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Date:   Fri, 30 Oct 2020 08:49:27 -0700
-In-Reply-To: <20201030124335.GD522355@kernel.org>
-References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
-         <20201001180925.13808-5-James.Bottomley@HansenPartnership.com>
-         <87zh4hg4wg.fsf@redhat.com> <20201024121718.GC32960@kernel.org>
-         <20201030124335.GD522355@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726396AbgJ3QDh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Oct 2020 12:03:37 -0400
+Received: from mail.hallyn.com ([178.63.66.53]:57022 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726061AbgJ3QDg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 30 Oct 2020 12:03:36 -0400
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 0CBD712C3; Fri, 30 Oct 2020 11:03:32 -0500 (CDT)
+Date:   Fri, 30 Oct 2020 11:03:32 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Seth Forshee <seth.forshee@canonical.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jann Horn <jannh@google.com>,
+        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        smbarber@chromium.org, Phil Estes <estesp@gmail.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-audit@redhat.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: Re: [PATCH 00/34] fs: idmapped mounts
+Message-ID: <20201030160332.GA30083@mail.hallyn.com>
+References: <20201029003252.2128653-1-christian.brauner@ubuntu.com>
+ <87pn51ghju.fsf@x220.int.ebiederm.org>
+ <20201029155148.5odu4j2kt62ahcxq@yavin.dot.cyphar.com>
+ <87361xdm4c.fsf@x220.int.ebiederm.org>
+ <20201030150748.GA176340@ubuntu-x1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201030150748.GA176340@ubuntu-x1>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-10-30 at 14:43 +0200, Jarkko Sakkinen wrote:
-[...]
-> I tested this with:
+On Fri, Oct 30, 2020 at 10:07:48AM -0500, Seth Forshee wrote:
+> On Thu, Oct 29, 2020 at 11:37:23AM -0500, Eric W. Biederman wrote:
+> > First and foremost: A uid shift on write to a filesystem is a security
+> > bug waiting to happen.  This is especially in the context of facilities
+> > like iouring, that play very agressive games with how process context
+> > makes it to  system calls.
+> > 
+> > The only reason containers were not immediately exploitable when iouring
+> > was introduced is because the mechanisms are built so that even if
+> > something escapes containment the security properties still apply.
+> > Changes to the uid when writing to the filesystem does not have that
+> > property.  The tiniest slip in containment will be a security issue.
+> > 
+> > This is not even the least bit theoretical.  I have seem reports of how
+> > shitfs+overlayfs created a situation where anyone could read
+> > /etc/shadow.
 > 
-> - 
-> https://ark.intel.com/content/www/us/en/ark/products/84861/intel-nuc-kit-nuc5i5myhe.html
->   dTPM 1.2
-> - 
-> https://ark.intel.com/content/www/us/en/ark/products/74483/intel-nuc-kit-dc53427hye.html
->   dTPM 2.0
+> This bug was the result of a complex interaction with several
+> contributing factors. It's fair to say that one component was overlayfs
+> writing through an id-shifted mount, but the primary cause was related
+> to how copy-up was done coupled with allowing unprivileged overlayfs
+> mounts in a user ns. Checks that the mounter had access to the lower fs
+> file were not done before copying data up, and so the file was copied up
+> temporarily to the id shifted upperdir. Even though it was immediately
+> removed, other factors made it possible for the user to get the file
+> contents from the upperdir.
 > 
-> I did not get "TPM interrupt not working, polling instead" to klog.
-> But I neither see tpm0 in /proc/interrupts. What I'm doing wrong?
+> Regardless, I do think you raise a good point. We need to be wary of any
+> place the kernel could open files through a shifted mount, especially
+> when the open could be influenced by userspace.
+> 
+> Perhaps kernel file opens through shifted mounts should to be opt-in.
+> I.e. unless a flag is passed, or a different open interface used, the
+> open will fail if the dentry being opened is subject to id shifting.
+> This way any kernel writes which would be subject to id shifting will
+> only happen through code which as been written to take it into account.
 
-That's usually what you get when ACPI specifies the interrupt isn't
-connected (we don't try to probe it).
+For my use cases, it would be fine to require opt-in at original fs
+mount time by init_user_ns admin.  I.e.
+    mount -o allow_idmap /dev/mapper/whoozit /whatzit
+I'm quite certain I would always be sharing a separate LV or loopback or
+tmpfs.
 
-James
-
-
+-serge
