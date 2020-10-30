@@ -2,316 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E83D02A04F0
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Oct 2020 13:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37AE2A04EC
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Oct 2020 13:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgJ3MCN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Oct 2020 08:02:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42038 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725993AbgJ3MCK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Oct 2020 08:02:10 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D0EB222241;
-        Fri, 30 Oct 2020 11:51:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604058683;
-        bh=iAlwuTdtaIWHAl/BzByU2/AHOTw8WNQf01j7i+WfeTc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=a+Hus/IAXtz6Y0C7bc2/VW4IC2S75Usph/HU0NsgKNAO79sTCVe/Bv1LxFnfMibHO
-         +tfvm9uXIfxcFUGdCiPAjG1xwSBkIc1klLG0S9fygtxlDNSyN8UY5kDiAUrwTPxZiu
-         LxDeo5GrEkxfE4gtzCiXpAxusxZ8Z2fHNpEd59Ks=
-Received: by mail-oi1-f177.google.com with SMTP id m128so6360958oig.7;
-        Fri, 30 Oct 2020 04:51:22 -0700 (PDT)
-X-Gm-Message-State: AOAM532dRz8YaIEnIcVq9SDX8maJRSM/VpFjnEwxli7Jlh9I/fSsuqRB
-        4VCQeQ5+b+gDxkaLct4ZPkwQmCZb41uOoUViGj0=
-X-Google-Smtp-Source: ABdhPJxIeLsTOfSSrXskv1BVND+IRksJHTYNIXmsLhSPevTBgNsUNCa+yGIYO+eV7Mi8Vsn/9SuBRAbBcBLXm7WDkRo=
-X-Received: by 2002:aca:2310:: with SMTP id e16mr1215934oie.47.1604058681854;
- Fri, 30 Oct 2020 04:51:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201030060840.1810-1-clin@suse.com> <20201030060840.1810-2-clin@suse.com>
-In-Reply-To: <20201030060840.1810-2-clin@suse.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 30 Oct 2020 12:51:10 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFaARnhvnSKSFvAXXY1TKfv=_hG3z=B2j=G3p7qLeQaYw@mail.gmail.com>
-Message-ID: <CAMj1kXFaARnhvnSKSFvAXXY1TKfv=_hG3z=B2j=G3p7qLeQaYw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] efi: generalize efi_get_secureboot
-To:     Chester Lin <clin@suse.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
+        id S1726423AbgJ3MCJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Oct 2020 08:02:09 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39709 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725808AbgJ3MCJ (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 30 Oct 2020 08:02:09 -0400
+Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1kYT6V-0006JV-Px; Fri, 30 Oct 2020 12:01:59 +0000
+Date:   Fri, 30 Oct 2020 13:01:57 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Andy Lutomirski <luto@amacapital.net>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-security-module@vger.kernel.org, X86 ML <x86@kernel.org>,
-        "Lee, Chun-Yi" <jlee@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Jann Horn <jannh@google.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
+        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-audit@redhat.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: Re: [PATCH 00/34] fs: idmapped mounts
+Message-ID: <20201030120157.exz4rxmebruh7bgp@wittgenstein>
+References: <20201029003252.2128653-1-christian.brauner@ubuntu.com>
+ <8E455D54-FED4-4D06-8CB7-FC6291C64259@amacapital.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8E455D54-FED4-4D06-8CB7-FC6291C64259@amacapital.net>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Chester,
+On Thu, Oct 29, 2020 at 02:58:55PM -0700, Andy Lutomirski wrote:
+> 
+> 
+> > On Oct 28, 2020, at 5:35 PM, Christian Brauner <christian.brauner@ubuntu.com> wrote:
+> > 
+> > ﻿Hey everyone,
+> > 
+> > I vanished for a little while to focus on this work here so sorry for
+> > not being available by mail for a while.
+> > 
+> > Since quite a long time we have issues with sharing mounts between
+> > multiple unprivileged containers with different id mappings, sharing a
+> > rootfs between multiple containers with different id mappings, and also
+> > sharing regular directories and filesystems between users with different
+> > uids and gids. The latter use-cases have become even more important with
+> > the availability and adoption of systemd-homed (cf. [1]) to implement
+> > portable home directories.
+> > 
+> > The solutions we have tried and proposed so far include the introduction
+> > of fsid mappings, a tiny overlay based filesystem, and an approach to
+> > call override creds in the vfs. None of these solutions have covered all
+> > of the above use-cases.
+> > 
+> > The solution proposed here has it's origins in multiple discussions
+> > during Linux Plumbers 2017 during and after the end of the containers
+> > microconference.
+> > To the best of my knowledge this involved Aleksa, Stéphane, Eric, David,
+> > James, and myself. A variant of the solution proposed here has also been
+> > discussed, again to the best of my knowledge, after a Linux conference
+> > in St. Petersburg in Russia between Christoph, Tycho, and myself in 2017
+> > after Linux Plumbers.
+> > I've taken the time to finally implement a working version of this
+> > solution over the last weeks to the best of my abilities. Tycho has
+> > signed up for this sligthly crazy endeavour as well and he has helped
+> > with the conversion of the xattr codepaths.
+> > 
+> > The core idea is to make idmappings a property of struct vfsmount
+> > instead of tying it to a process being inside of a user namespace which
+> > has been the case for all other proposed approaches.
+> > It means that idmappings become a property of bind-mounts, i.e. each
+> > bind-mount can have a separate idmapping. This has the obvious advantage
+> > that idmapped mounts can be created inside of the initial user
+> > namespace, i.e. on the host itself instead of requiring the caller to be
+> > located inside of a user namespace. This enables such use-cases as e.g.
+> > making a usb stick available in multiple locations with different
+> > idmappings (see the vfat port that is part of this patch series).
+> > 
+> > The vfsmount struct gains a new struct user_namespace member. The
+> > idmapping of the user namespace becomes the idmapping of the mount. A
+> > caller that is either privileged with respect to the user namespace of
+> > the superblock of the underlying filesystem or a caller that is
+> > privileged with respect to the user namespace a mount has been idmapped
+> > with can create a new bind-mount and mark it with a user namespace.
+> 
+> So one way of thinking about this is that a user namespace that has an idmapped mount can, effectively, create or chown files with *any* on-disk uid or gid by doing it directly (if that uid exists in-namespace, which is likely for interesting ids like 0) or by creating a new userns with that id inside.
+> 
+> For a file system that is private to a container, this seems moderately safe, although this may depend on what exactly “private” means. We probably want a mechanism such that, if you are outside the namespace, a reference to a file with the namespace’s vfsmnt does not confer suid privilege.
+> 
+> Imagine the following attack: user creates a namespace with a root user and arranges to get an idmapped fs, e.g. by inserting an ext4 usb stick or using whatever container management tool does this.  Inside the namespace, the user creates a suid-root file.
+> 
+> Now, outside the namespace, the user has privilege over the namespace.  (I’m assuming there is some tool that will idmap things in a namespace owned by an unprivileged user, which seems likely.). So the user makes a new bind mount and if maps it to the init namespace. Game over.
+> 
+> So I think we need to have some control to mitigate this in a comprehensible way. A big hammer would be to require nosuid. A smaller hammer might be to say that you can’t create a new idmapped mount unless you have privilege over the userns that you want to use for the idmap and to say that a vfsmnt’s paths don’t do suid outside the idmap namespace.  We already do the latter for the vfsmnt’s mntns’s userns.
 
-Thanks again for looking into this.
+With this series, in order to create an idmapped mount the user must
+either be cap_sys_admin in the superblock of the underlying filesystem
+or if the mount is already idmapped and they want to create another
+idmapped mount from it they must have cap_sys_admin in the userns that
+the mount is currrently marked with. It is also not possible to change
+an idmapped mount once it has been idmapped, i.e. the user must create a
+new detached bind-mount first.
 
-On Fri, 30 Oct 2020 at 07:09, Chester Lin <clin@suse.com> wrote:
->
-> Generalize the efi_get_secureboot() function so not only efistub but also
-> other subsystems can use it.
->
-> Signed-off-by: Chester Lin <clin@suse.com>
-> ---
->  drivers/firmware/efi/libstub/Makefile     |  2 +-
->  drivers/firmware/efi/libstub/efi-stub.c   |  2 +-
->  drivers/firmware/efi/libstub/efistub.h    | 22 ++++---
->  drivers/firmware/efi/libstub/secureboot.c | 76 -----------------------
->  drivers/firmware/efi/libstub/x86-stub.c   |  2 +-
->  include/linux/efi.h                       | 41 +++++++++++-
->  6 files changed, 57 insertions(+), 88 deletions(-)
->  delete mode 100644 drivers/firmware/efi/libstub/secureboot.c
->
-> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-> index 8a94388e38b3..88e47b0ca09d 100644
-> --- a/drivers/firmware/efi/libstub/Makefile
-> +++ b/drivers/firmware/efi/libstub/Makefile
-> @@ -49,7 +49,7 @@ OBJECT_FILES_NON_STANDARD     := y
->  # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
->  KCOV_INSTRUMENT                        := n
->
-> -lib-y                          := efi-stub-helper.o gop.o secureboot.o tpm.o \
-> +lib-y                          := efi-stub-helper.o gop.o tpm.o \
->                                    file.o mem.o random.o randomalloc.o pci.o \
->                                    skip_spaces.o lib-cmdline.o lib-ctype.o \
->                                    alignedmem.o relocate.o vsprintf.o
-> diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
-> index 914a343c7785..ad96f1d786a9 100644
-> --- a/drivers/firmware/efi/libstub/efi-stub.c
-> +++ b/drivers/firmware/efi/libstub/efi-stub.c
-> @@ -196,7 +196,7 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
->         /* Ask the firmware to clear memory on unclean shutdown */
->         efi_enable_reset_attack_mitigation();
->
-> -       secure_boot = efi_get_secureboot();
-> +       secure_boot = efi_get_secureboot(get_efi_var);
->
->         /*
->          * Unauthenticated device tree data is a security hazard, so ignore
-> diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-> index 2d7abcd99de9..b1833b51e6d6 100644
-> --- a/drivers/firmware/efi/libstub/efistub.h
-> +++ b/drivers/firmware/efi/libstub/efistub.h
-> @@ -91,14 +91,6 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
->         fdt_setprop((fdt), (node_offset), (name), &(var), sizeof(var))
->  #endif
->
-> -#define get_efi_var(name, vendor, ...)                         \
-> -       efi_rt_call(get_variable, (efi_char16_t *)(name),       \
-> -                   (efi_guid_t *)(vendor), __VA_ARGS__)
-> -
-> -#define set_efi_var(name, vendor, ...)                         \
-> -       efi_rt_call(set_variable, (efi_char16_t *)(name),       \
-> -                   (efi_guid_t *)(vendor), __VA_ARGS__)
-> -
->  #define efi_get_handle_at(array, idx)                                  \
->         (efi_is_native() ? (array)[idx]                                 \
->                 : (efi_handle_t)(unsigned long)((u32 *)(array))[idx])
-> @@ -112,6 +104,20 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
->                 ((handle = efi_get_handle_at((array), i)) || true);     \
->              i++)
->
-> +static inline
-> +efi_status_t get_efi_var(efi_char16_t *name, efi_guid_t *vendor, u32 *attr,
-> +                        unsigned long *size, void *data)
-> +{
-> +       return efi_rt_call(get_variable, name, vendor, attr, size, data);
-> +}
-> +
-> +static inline
-> +efi_status_t set_efi_var(efi_char16_t *name, efi_guid_t *vendor, u32 attr,
-> +                        unsigned long size, void *data)
-> +{
-> +       return efi_rt_call(set_variable, name, vendor, attr, size, data);
-> +}
-> +
->  static inline
->  void efi_set_u64_split(u64 data, u32 *lo, u32 *hi)
->  {
-> diff --git a/drivers/firmware/efi/libstub/secureboot.c b/drivers/firmware/efi/libstub/secureboot.c
-> deleted file mode 100644
-> index 5efc524b14be..000000000000
-> --- a/drivers/firmware/efi/libstub/secureboot.c
-> +++ /dev/null
+> 
+> Hmm.  What happens if we require that an idmap userns equal the vfsmnt’s mntns’s userns?  Is that too limiting?
+> 
+> I hope that whatever solution gets used is straightforward enough to wrap one’s head around.
+> 
+> > When a file/inode is accessed through an idmapped mount the i_uid and
+> > i_gid of the inode will be remapped according to the user namespace the
+> > mount has been marked with. When a new object is created based on the
+> > fsuid and fsgid of the caller they will similarly be remapped according
+> > to the user namespace of the mount they care created from.
+> 
+> By “mapped according to”, I presume you mean that the on-disk uid/gid is the gid as seen in the user namespace in question.
 
-Please keep this file (see below)
-
-> @@ -1,76 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/*
-> - * Secure boot handling.
-> - *
-> - * Copyright (C) 2013,2014 Linaro Limited
-> - *     Roy Franz <roy.franz@linaro.org
-> - * Copyright (C) 2013 Red Hat, Inc.
-> - *     Mark Salter <msalter@redhat.com>
-> - */
-> -#include <linux/efi.h>
-> -#include <asm/efi.h>
-> -
-> -#include "efistub.h"
-> -
-> -/* BIOS variables */
-> -static const efi_guid_t efi_variable_guid = EFI_GLOBAL_VARIABLE_GUID;
-> -static const efi_char16_t efi_SecureBoot_name[] = L"SecureBoot";
-> -static const efi_char16_t efi_SetupMode_name[] = L"SetupMode";
-> -
-> -/* SHIM variables */
-> -static const efi_guid_t shim_guid = EFI_SHIM_LOCK_GUID;
-> -static const efi_char16_t shim_MokSBState_name[] = L"MokSBState";
-> -
-> -/*
-> - * Determine whether we're in secure boot mode.
-> - *
-> - * Please keep the logic in sync with
-> - * arch/x86/xen/efi.c:xen_efi_get_secureboot().
-> - */
-> -enum efi_secureboot_mode efi_get_secureboot(void)
-> -{
-> -       u32 attr;
-> -       u8 secboot, setupmode, moksbstate;
-> -       unsigned long size;
-> -       efi_status_t status;
-> -
-> -       size = sizeof(secboot);
-> -       status = get_efi_var(efi_SecureBoot_name, &efi_variable_guid,
-> -                            NULL, &size, &secboot);
-> -       if (status == EFI_NOT_FOUND)
-> -               return efi_secureboot_mode_disabled;
-> -       if (status != EFI_SUCCESS)
-> -               goto out_efi_err;
-> -
-> -       size = sizeof(setupmode);
-> -       status = get_efi_var(efi_SetupMode_name, &efi_variable_guid,
-> -                            NULL, &size, &setupmode);
-> -       if (status != EFI_SUCCESS)
-> -               goto out_efi_err;
-> -
-> -       if (secboot == 0 || setupmode == 1)
-> -               return efi_secureboot_mode_disabled;
-> -
-> -       /*
-> -        * See if a user has put the shim into insecure mode. If so, and if the
-> -        * variable doesn't have the runtime attribute set, we might as well
-> -        * honor that.
-> -        */
-> -       size = sizeof(moksbstate);
-> -       status = get_efi_var(shim_MokSBState_name, &shim_guid,
-> -                            &attr, &size, &moksbstate);
-> -
-
-MokSBState is a boot time variable, so we cannot access it when
-running under the OS. Xen also has a code flow similar to this one,
-but it looks at MokSbStateRt instead (which may be a mistake but let's
-forget about that for now)
-
-So what we will need to do is factor out only the top part of this
-function (which, incidentally, is the only part that IMA uses in the
-first place)
-
-> -       /* If it fails, we don't care why. Default to secure */
-> -       if (status != EFI_SUCCESS)
-> -               goto secure_boot_enabled;
-> -       if (!(attr & EFI_VARIABLE_RUNTIME_ACCESS) && moksbstate == 1)
-> -               return efi_secureboot_mode_disabled;
-> -
-> -secure_boot_enabled:
-> -       efi_info("UEFI Secure Boot is enabled.\n");
-> -       return efi_secureboot_mode_enabled;
-> -
-> -out_efi_err:
-> -       efi_err("Could not determine UEFI Secure Boot status.\n");
-> -       return efi_secureboot_mode_unknown;
-> -}
-
-So let's keep this file, and also, let's put a wrapper function around
-get_efi_var() here, of which you can take the address and pass to the
-static inline function.
-
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 3672539cb96e..3f9b492c566b 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -781,7 +781,7 @@ unsigned long efi_main(efi_handle_t handle,
->          * otherwise we ask the BIOS.
->          */
->         if (boot_params->secure_boot == efi_secureboot_mode_unset)
-> -               boot_params->secure_boot = efi_get_secureboot();
-> +               boot_params->secure_boot = efi_get_secureboot(get_efi_var);
->
->         /* Ask the firmware to clear memory on unclean shutdown */
->         efi_enable_reset_attack_mitigation();
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index d7c0e73af2b9..cc2d3de39031 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -1089,7 +1089,46 @@ enum efi_secureboot_mode {
->         efi_secureboot_mode_disabled,
->         efi_secureboot_mode_enabled,
->  };
-> -enum efi_secureboot_mode efi_get_secureboot(void);
-> +
-> +static inline enum efi_secureboot_mode efi_get_secureboot(efi_get_variable_t *get_var)
-> +{
-> +       efi_guid_t var_guid = EFI_GLOBAL_VARIABLE_GUID;
-> +       efi_guid_t shim_guid = EFI_SHIM_LOCK_GUID;
-> +       efi_status_t status;
-> +       unsigned long size;
-> +       u8 secboot, setupmode, moksbstate;
-> +       u32 attr;
-> +
-> +       size = sizeof(secboot);
-> +       status = get_var(L"SecureBoot", &var_guid, NULL, &size, &secboot);
-> +
-> +       if (status == EFI_NOT_FOUND)
-> +               return efi_secureboot_mode_disabled;
-> +       if (status != EFI_SUCCESS)
-> +               return efi_secureboot_mode_unknown;
-> +
-> +       size = sizeof(setupmode);
-> +       status = get_var(L"SetupMode", &var_guid, NULL, &size, &setupmode);
-> +
-> +       if (status != EFI_SUCCESS)
-> +               return efi_secureboot_mode_unknown;
-> +       if (secboot == 0 || setupmode == 1)
-> +               return efi_secureboot_mode_disabled;
-> +
-
-So keep until here and move the rest back into the .c file
-
-> +       /*
-> +        * See if a user has put the shim into insecure mode. If so, and if the
-> +        * variable doesn't have the runtime attribute set, we might as well
-> +        * honor that.
-> +        */
-> +       size = sizeof(moksbstate);
-> +       status = get_var(L"MokSBState", &shim_guid, &attr, &size, &moksbstate);
-> +       /* If it fails, we don't care why. Default to secure */
-> +       if (status == EFI_SUCCESS && moksbstate == 1
-> +           && !(attr & EFI_VARIABLE_RUNTIME_ACCESS))
-> +               return efi_secureboot_mode_disabled;
-> +
-> +       return efi_secureboot_mode_enabled;
-> +}
->
->  #ifdef CONFIG_RESET_ATTACK_MITIGATION
->  void efi_enable_reset_attack_mitigation(void);
-> --
-> 2.28.0
->
+If I understand you correctly, then yes.
