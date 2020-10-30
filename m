@@ -2,102 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F21A82A05AA
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Oct 2020 13:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C702A08B8
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Oct 2020 16:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbgJ3Mnl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Oct 2020 08:43:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56696 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726513AbgJ3Mnl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Oct 2020 08:43:41 -0400
-Received: from kernel.org (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6334A221EB;
-        Fri, 30 Oct 2020 12:43:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604061820;
-        bh=7lAxEhQrhJbso4MW6ti4aK3YXNMKdjk1481K/O+7EL8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LM5Qelkh+m0aFYlc4OQamim8NR4Vsknz9fSg7XenM/WmoqcS8OOFvBjZ/9v80aoqs
-         zZUypReGD6hAPYs279frgoGqdDXAhzFuR3HdmrSlHHiTg6cR4fPrl/wCZtCYWIIpyh
-         eQeXH4VMcimKrAzYZsePZfsDBofwMuFs8W9AaPZQ=
-Date:   Fri, 30 Oct 2020 14:43:35 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v2 4/5] tpm_tis: fix IRQ probing
-Message-ID: <20201030124335.GD522355@kernel.org>
-References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
- <20201001180925.13808-5-James.Bottomley@HansenPartnership.com>
- <87zh4hg4wg.fsf@redhat.com>
- <20201024121718.GC32960@kernel.org>
+        id S1726951AbgJ3PAb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Oct 2020 11:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726815AbgJ3PAa (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 30 Oct 2020 11:00:30 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DF4C0613E1
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Oct 2020 07:59:35 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id l16so7005331eds.3
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Oct 2020 07:59:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=TjZDjTDUyG5IOPAjtKhDz6bJNm6DqwPh3GYjQnJOtk58Qe+VS+LrjG9D+UJTL89L5a
+         hPszd6YttBU2gVDN4Hgd0nVvKmUsgBGa0RfR9y4dU1VG6wqrOSeXXlqa/jT4b2a91QjD
+         sT+ma7QKBtdbME0ZKxl0kc6DEI2BSZsRxuMkNkQsvOWxO6URWAKkh65L3Tk879AJ4LqG
+         Bj9eXYFDUcjXqha9S32esb82rsLCjf9rEdFYrDoZfWxC18Um3HNxqbzetSufrWkdrmWB
+         Hgfuw2XlX0g8ZkLr3paRT5DvZbKL3ccSJq24BaLzNsiQWn1tArC4uUyPSHMQ3hVqPZo6
+         Sb9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=Fd/FGzu5AgMTEWfyFAGL9TDpflYD1kDUWH5hQq+uh6sN6UjD/UkwQzYGU+9tdJxrs3
+         Z0xhFLvYERQwGz0uvZzANtgpT224+tsylNgXXQ9UcxwJEZaWubtS4qJ8BYC465o0Ngqg
+         TnQCQncMABIWm6LPztEQwqMhrGJz+XaQcr+Ko6WUMV4AEo8KIlDAphFuALYuPPZk/KRP
+         vHQUsC9ZS2qWKPgLvPJ2//5bG+9VjoAMPY4M0UCkXNgOs5Wvp4Ux3Cci+TCoAp+pHb0k
+         n6/O98SKpNs4M/xhtif5pMmEBNZ70RWrbtQBMZepA12ebQd6hieWZgG3v7RhNOMArU8R
+         knzQ==
+X-Gm-Message-State: AOAM530e3/VEPMjsZLOudSsEqzwrBH1m2T8FnpsrWnCPxcQD+O4voeQD
+        wd17v2czx3MNV6s0wjO0jdXcTCagvDe4q8uFFg==
+X-Google-Smtp-Source: ABdhPJz0XXuJnPS5g3+lbBiW+XXmkDUqYoNBDu76t3os6QvlPQSI6Onyl30CWs+Md1o+E0r28qs03HXLpOQosKz8YWo=
+X-Received: by 2002:a50:f307:: with SMTP id p7mr2761574edm.235.1604069974505;
+ Fri, 30 Oct 2020 07:59:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201024121718.GC32960@kernel.org>
+Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 07:59:34
+ -0700 (PDT)
+Reply-To: li.anable85@gmail.com
+From:   Liliane Abel <k.griest04@gmail.com>
+Date:   Fri, 30 Oct 2020 15:59:34 +0100
+Message-ID: <CABAZL7=b-NWks3DKb=fdDjnu_xt_-CcJCqf-F5s0yQCFVH73-A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Oct 24, 2020 at 03:17:18PM +0300, Jarkko Sakkinen wrote:
-> On Mon, Oct 19, 2020 at 04:41:35PM -0700, Jerry Snitselaar wrote:
-> > 
-> > James Bottomley @ 2020-10-01 11:09 MST:
-> > 
-> > > There are two problems with our current interrupt probing: firstly the
-> > > TPM_CHIP_FLAG_IRQ never gets set initially, so a check for interrupts
-> > > is never done.  Fix this by setting the flag before we generate and
-> > > interrupt for probing.  Secondly our IRQ setup may be ineffective on a
-> > > TPM without legacy access cycles becuase according to the TPM
-> > > Interface Specification the interrupt registers are only writeable in
-> > > the current locality, so issue a request_locality before setting up
-> > > the interrupts.
-> > >
-> > > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > >
-> > > ---
-> > >
-> > > v2: improved description
-> > > ---
-> > >  drivers/char/tpm/tpm_tis_core.c | 14 ++++++++++++++
-> > >  1 file changed, 14 insertions(+)
-> > >
-> > > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> > > index 0c07da8cd680..12b657ed3a39 100644
-> > > --- a/drivers/char/tpm/tpm_tis_core.c
-> > > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > > @@ -809,6 +809,19 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip,
-> > >  	}
-> > >  	priv->irq = irq;
-> > >  
-> > > +	/*
-> > > +	 * note writes to the interrupt registers are only effective
-> > > +	 * when the TPM is in the active locality, so we have to
-> > > +	 * request the locality here to get the interrupt set up.
-> > > +	 * This request has no corresponding release, because the
-> > > +	 * locality will be relinquished at the end of the tpm command
-> > > +	 * that probes the interrupts
-> > > +	 */
-> > > +	if (request_locality(chip, 0) != 0) {
-> > > +		dev_err(&chip->dev, "failed to gain locality for irq probe\n");
-> > > +		return -EBUSY;
-> > > +	}
-> 
-> Appreciate the comment a lot, but s/note/Note/
+Dearest
 
-I tested this with:
+Greeting my dear, I am Liliane Abel by name, The only daughter of late
+Mr.Benson Abel. My father is one of the top Politician in our country
+and my mother is a farmers and cocoa merchant when they were both
+alive. After the death of my mother, long ago, my father was
+controlling their business until he was poisoned by his business
+associates which he suffered and died.
 
-- https://ark.intel.com/content/www/us/en/ark/products/84861/intel-nuc-kit-nuc5i5myhe.html
-  dTPM 1.2
-- https://ark.intel.com/content/www/us/en/ark/products/74483/intel-nuc-kit-dc53427hye.html
-  dTPM 2.0
-
-I did not get "TPM interrupt not working, polling instead" to klog.
-But I neither see tpm0 in /proc/interrupts. What I'm doing wrong?
-
-/Jarkko
+Before the death of my father, He told me about (two million five
+hundred thousand united states dollars) which he deposited in the bank
+in Lome-Togo, It was the money he intended to transfer overseas for
+investment before he was poisoned. He also instructed me that I should
+seek for foreign partners in any country of my choice who will assist
+me transfer this money in overseas account where the money will be
+wisely invested.
+I am seeking for your kind assistance in the following ways:  (1) to
+provide a safe bank account into where the money will be transferred
+for investment. (2) To serve as a guardian of this fund since I am a
+girl of 19 years old. (3) To make arrangement for me to come over to
+your country to further my education. This is my reason for writing to
+you. Please if you are willing to assist me I will offer you 25% of
+the total money. Reply if  you are interested
+Best regards.
+Liliane Abel.
