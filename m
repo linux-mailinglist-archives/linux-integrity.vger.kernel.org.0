@@ -2,129 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBEB2A1BBC
-	for <lists+linux-integrity@lfdr.de>; Sun,  1 Nov 2020 04:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 589D52A1E9D
+	for <lists+linux-integrity@lfdr.de>; Sun,  1 Nov 2020 15:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726295AbgKADIT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 31 Oct 2020 23:08:19 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:43564 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726195AbgKADIT (ORCPT
+        id S1726497AbgKAOlY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 1 Nov 2020 09:41:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726458AbgKAOlY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 31 Oct 2020 23:08:19 -0400
-Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5B46620B4905;
-        Sat, 31 Oct 2020 20:08:18 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5B46620B4905
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1604200098;
-        bh=vnpGRdofobwuxdcpYzqgJbbMDhOYuoItMQZu+EpDLyI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ppJUiqBkQ8D0qXAAsYljmFa/fQRc/nX0eYW7QLQ+aCSbNi6JMFGoSuEAy6jJipSP8
-         +v3gS44y+m6HmR0UYGnkcfaXpgxVFL1fhTZi2b/fTPGUWOzx/0/WOLzJ/pr/aWqzQB
-         JNULC8U+0/rxZyypjMoNr5wQ1IURRpoiAIBuDQEk=
-Subject: Re: [RFC] Finding the right target branch for patches that span IMA
- and SeLinux
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Sun, 1 Nov 2020 09:41:24 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6378C0617A6;
+        Sun,  1 Nov 2020 06:41:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JLQ1tQXc9bAL3Tc10fp3l/hgY8fF0ZkXSA4m3zd3IYM=; b=RTKMydVtbSPCwZGEemrV2Qaq7t
+        ZlkjBevTM42JrP+u77IXmMh8iPEGF6aqpVgKyc6AUjmGP+mqol7anlD9ldBfIgYJAhRuSrV0new+H
+        YSIqTXP3bAuELZ527GOXoMFavVhV0IJzIkBfzs2KQzeEn0ZQWDkrPH6UapYvgzp7rsxp0bksTKGBj
+        vvTUjJaB6biygJluyLveCHr/mpIsrKXfJBrAaQoMTYuPQzq9DY8anRXKCMpkKGnpJ2UOskRcAQWLn
+        sRKALkArBQDn9PfEAPB7vrAnaUbFoETA7stMPHzH3xyjePWgxRox5oXiVfyZUrT/lheIvlD97cB9p
+        g6+8nZfA==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kZEXc-0006Hp-5O; Sun, 01 Nov 2020 14:41:08 +0000
+Date:   Sun, 1 Nov 2020 14:41:08 +0000
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         Stephen Smalley <stephen.smalley.work@gmail.com>,
-        SELinux <selinux@vger.kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-References: <703ced1a-3a48-f29e-9141-af78415d8402@linux.microsoft.com>
- <f99f0f03aecc778826d79eb83d60cfd1a95196c5.camel@linux.ibm.com>
- <2ea3d341-6299-ec40-b553-f9f59a36cfb3@linux.microsoft.com>
- <CAHC9VhR8mbqZS3TVgG7MxQywe9uqDRCN+c59PozLTpOoQ-mK7Q@mail.gmail.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <9195fd7a-a5c5-8588-d33c-772d2f530032@linux.microsoft.com>
-Date:   Sat, 31 Oct 2020 20:08:17 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jann Horn <jannh@google.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        St??phane Graber <stgraber@ubuntu.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
+        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-audit@redhat.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: Re: [PATCH 01/34] namespace: take lock_mount_hash() directly when
+ changing flags
+Message-ID: <20201101144108.GA23378@infradead.org>
+References: <20201029003252.2128653-1-christian.brauner@ubuntu.com>
+ <20201029003252.2128653-2-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhR8mbqZS3TVgG7MxQywe9uqDRCN+c59PozLTpOoQ-mK7Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201029003252.2128653-2-christian.brauner@ubuntu.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Paul,
+> index cebaa3e81794..20ee291a7af4 100644
+> --- a/fs/namespace.c
+> +++ b/fs/namespace.c
+> @@ -463,7 +463,6 @@ static int mnt_make_readonly(struct mount *mnt)
+>  {
+>  	int ret = 0;
+>  
+> -	lock_mount_hash();
 
-On 2020-10-30 1:37 p.m., Paul Moore wrote:
-> On Fri, Oct 30, 2020 at 12:43 PM Tushar Sugandhi
-> <tusharsu@linux.microsoft.com> wrote:
->>> Unless this patch set is specifically dependent on the two patches in
->>> the SELinux tree beyond v5.10.0-rc1, please base it on v5.10.0-rc1.
->>
->> Thanks Mimi. We don't have dependencies on those two patches in SELinux
->> tree.
->>
->> We'll base our changes on v5.10.0-rc1 in SELinux tree.
->>
->> Thanks for the quick response.
-> 
-> I'm not as fast as Mimi, but I thought it might be worthwhile to
-> provide a bit more detail as to what I expect from SELinux kernel
-> submissions.  I believe most other maintainers operate in a similar
-> manner, but I obviously can't speak for them.
-Thanks a lot for the detailed information Paul.
-Its very helpful, and we appreciate it.
-> 
-> Unless there is an exception due to a previous discussion, I ask that
-> all SELinux kernel patches be based on either the selinux/next branch
-> or Linus' current tree.  If your patch(set) applies cleanly to either
-> of those branches, and passes review, I'll merge it into the
-> selinux/next branch taking care of any merge conflicts that may arise.
-We will base on SeLinux -> next branch, as you/Mimi suggested.
+What about adding a lockdep_assert_lock_held in all the functions
+that used to take the lock to document the assumptions?
 
-> If the merge is particularly tricky I may ask you to double check the
-> merge afterwards, but in my experience that is rare, most merge
-> conflicts are trivially resolved.
-> 
-Based on our testing so far, there aren't any merge conflicts.
-But if the need arises, we'll do our best to help you resolve/review
-them.
+>  static int __mnt_unmake_readonly(struct mount *mnt)
+>  {
+> -	lock_mount_hash();
+>  	mnt->mnt.mnt_flags &= ~MNT_READONLY;
+> -	unlock_mount_hash();
+>  	return 0;
 
-> In the case where a patch(set) being proposed for inclusion in the
-> SELinux tree has significant changes to another subsystem, I will ask
-> the affected subsystem's maintainer to review the patch(set).  If the
-> other maintainers do not provide an ACK for the patch(set) I will not
-> merge the patches.  If the other maintainers do not respond at all for
-> a few weeks, I may go ahead and merge the patch(set) anyway; that is a
-> decision made on a case-by-base basis.
-Mimi has been actively reviewing IMA side of the changes for this
-patch-set.
+This helper is rather pointless now.
 
-> 
-> If the patch(set) introduces new functionality I will ask you to add
-> or update an existing test in the selinux-testsuite.
-> * https://github.com/SELinuxProject/selinux-testsuite
-> 
-Lakshmi has written an SeLinux test for this feature, and it is
-currently being targeted for LTP repo.
-https://github.com/linux-test-project/ltp
+>  static void set_mount_attributes(struct mount *mnt, unsigned int mnt_flags)
+>  {
+> -	lock_mount_hash();
+>  	mnt_flags |= mnt->mnt.mnt_flags & ~MNT_USER_SETTABLE_MASK;
+>  	mnt->mnt.mnt_flags = mnt_flags;
+>  	touch_mnt_namespace(mnt->mnt_ns);
+> -	unlock_mount_hash();
 
-We can work with you to also get it incorporated in selinux-testsuite.
-But the concern here is we may have to pull additional dependent scripts
-from LTP to selinux-testsuite to support our test.
+In linux-next there is an additional notify_mount after the unlock here.
 
-Could you please take a look at Lakshmi's SeLinux test, and guide us
-further on this? Here is the patch.
-https://patchwork.kernel.org/patch/11804587/
-
-
-> If the patch(set) introduces new, or changed, functionality I may ask
-> you to update The SELinux Notebook.
-> * https://github.com/SELinuxProject/selinux-notebook
-> 
-Will do. Thanks.
-
-> Beyond the above, the general SELinux kernel tree process is
-> documented in the README.md found in selinux/main:
-> * https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git/tree/README.md
-> 
-Thanks for the pointer.
-We'll go through the documentation.
-~Tushar
+Also while you touch this lock_mount_hash/unlock_mount_hash could be
+moved to namespace.c and maked static now.
