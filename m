@@ -2,125 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A550B2A3544
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Nov 2020 21:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D299A2A369C
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Nov 2020 23:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725833AbgKBUi7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Nov 2020 15:38:59 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:47780 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726794AbgKBUiO (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Nov 2020 15:38:14 -0500
-Received: from [192.168.86.21] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1337E20B4905;
-        Mon,  2 Nov 2020 12:38:13 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1337E20B4905
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1604349493;
-        bh=A9puWUBw2GZStdPfUDTSMK8RC4dl3Ke5HWaaHfg3h+0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=oyRIDQr2OzuPOugckBG7GYNCRXLddmjvNPH+24jtF64hgJV8+G3SDUIszswyftiiQ
-         2m9l44GztdRqgIE8mQJN+DNef0rQCxRANSNyotZl73gNK7xt78sPeRsZ1Tato4o7Rn
-         NFcwZUeuryt1kfBUZa0QH98UJC0kx4EvoHhsLH3A=
-Subject: Re: [RFC] Finding the right target branch for patches that span IMA
- and SeLinux
-To:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        SELinux <selinux@vger.kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-References: <703ced1a-3a48-f29e-9141-af78415d8402@linux.microsoft.com>
- <f99f0f03aecc778826d79eb83d60cfd1a95196c5.camel@linux.ibm.com>
- <2ea3d341-6299-ec40-b553-f9f59a36cfb3@linux.microsoft.com>
- <CAHC9VhR8mbqZS3TVgG7MxQywe9uqDRCN+c59PozLTpOoQ-mK7Q@mail.gmail.com>
- <9195fd7a-a5c5-8588-d33c-772d2f530032@linux.microsoft.com>
- <66678394f824be5367cc0e1745f1bda98b436550.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <c8787d87-e098-26af-f522-b252592c8fb1@linux.microsoft.com>
-Date:   Mon, 2 Nov 2020 12:38:12 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <66678394f824be5367cc0e1745f1bda98b436550.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1725807AbgKBWiW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Nov 2020 17:38:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55154 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725785AbgKBWiW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 2 Nov 2020 17:38:22 -0500
+Received: from e123331-lin.nice.arm.com (lfbn-nic-1-188-42.w2-15.abo.wanadoo.fr [2.15.37.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 92D0120786;
+        Mon,  2 Nov 2020 22:38:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604356701;
+        bh=MnRwNpTxYL2HWRVBDNlcJB605B7LEOgiTxYCjqWKkkE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NwH6zNp7aUEa8vIeWOgEpOMnO6D3UjVOWyZKzVGKiXvNtRGCIZTKfROoJyZCouK9/
+         z35OFNR5CKDbnbSEuaCIUSNMsVfACajppzruOPr7/wG3HdrTPN3AqOctpY4iJe1odl
+         l94IZ+5YK6B+oJIS3scy3FDQOdS1zr0hg4WDSfGU=
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-efi@vger.kernel.org
+Cc:     Ard Biesheuvel <ardb@kernel.org>, zohar@linux.ibm.com,
+        jmorris@namei.org, serge@hallyn.com, dmitry.kasatkin@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, clin@suse.com,
+        x86@kernel.org, jlee@suse.com, linux-integrity@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v4 0/3] wire up IMA secure boot for arm64
+Date:   Mon,  2 Nov 2020 23:37:57 +0100
+Message-Id: <20201102223800.12181-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+This is a follow-up to Chester's series [0] to enable IMA to the secure
+boot state of arm64 platforms, which is EFI based.
 
+This v4 implements the changes I suggested to Chester, in particular:
+- disregard MokSbState when factoring out secure boot mode discovery
+- turn the x86 IMA arch code into shared code for all architectures.
 
-On 2020-11-02 8:35 a.m., Mimi Zohar wrote:
-> On Sat, 2020-10-31 at 20:08 -0700, Tushar Sugandhi wrote:
->> Hi Paul,
->>
->> On 2020-10-30 1:37 p.m., Paul Moore wrote:
->>> On Fri, Oct 30, 2020 at 12:43 PM Tushar Sugandhi
->>> <tusharsu@linux.microsoft.com> wrote:
->>>>> Unless this patch set is specifically dependent on the two patches in
->>>>> the SELinux tree beyond v5.10.0-rc1, please base it on v5.10.0-rc1.
->>>>
->>>> Thanks Mimi. We don't have dependencies on those two patches in SELinux
->>>> tree.
->>>>
->>>> We'll base our changes on v5.10.0-rc1 in SELinux tree.
->>>>
->>>> Thanks for the quick response.
->>>
->>> I'm not as fast as Mimi, but I thought it might be worthwhile to
->>> provide a bit more detail as to what I expect from SELinux kernel
->>> submissions.  I believe most other maintainers operate in a similar
->>> manner, but I obviously can't speak for them.
->> Thanks a lot for the detailed information Paul.
->> Its very helpful, and we appreciate it.
->>>
->>> Unless there is an exception due to a previous discussion, I ask that
->>> all SELinux kernel patches be based on either the selinux/next branch
->>> or Linus' current tree.  If your patch(set) applies cleanly to either
->>> of those branches, and passes review, I'll merge it into the
->>> selinux/next branch taking care of any merge conflicts that may arise.
->> We will base on SeLinux -> next branch, as you/Mimi suggested.
-> 
-> Unless there was a compelling reason for basing it on the SELinux
-> branch, I asked that you base the changes on v5.10.0-rc1 (or later),
-> which has nothing to do with the SELinux branch.  Once this patch set
-> is reviewed and ready to be upstreamed, a topic branch will be created
-> containing at least the IMA patches.   The decision as to how the the
-> SELinux patch will be upstreamed will be made at that point.  That
-> discussion will be between Paul and me.
-> 
-Sincere apologies Mimi.
-We misunderstood your feedback when you mentioned -
-"Unless this patch set is specifically dependent on the two patches in
-the SELinux tree beyond v5.10.0-rc1, please base it on v5.10.0-rc1."
+This reduces the final patch to a one liner enabling a Kconfig option
+for arm64 when EFI is enabled.
 
-We believed you were recommending selinux repo as there were exactly
-two patches present in the selinux/next branch after the tag v5.10-rc1.
+Build tested only.
 
-Anyways - we tried applying the patches to -
-repo: https://github.com/torvalds/linux
-branch: master
-tag: v5.10-rc1
+[0] https://lore.kernel.org/linux-arm-kernel/20201030060840.1810-1-clin@suse.com/
 
-and they get applied cleanly and are working fine.
+Cc: zohar@linux.ibm.com
+Cc: jmorris@namei.org
+Cc: serge@hallyn.com
+Cc: dmitry.kasatkin@gmail.com
+Cc: catalin.marinas@arm.com
+Cc: will@kernel.org
+Cc: clin@suse.com
+Cc: x86@kernel.org
+Cc: jlee@suse.com
+Cc: linux-integrity@vger.kernel.org,
+Cc: linux-arm-kernel@lists.infradead.org
+  
+Chester Lin (3):
+  efi: generalize efi_get_secureboot
+  ima: generalize x86/EFI arch glue for other EFI architectures
+  arm64/ima: add ima_arch support
 
-We will wait for feedback on the v5 patch from you/Paul/Stephen, address
-those, and then base v6 of the series to tarvolds/master branch on
-v5.10-rc1 (or later).
+ arch/arm64/Kconfig                            |  1 +
+ arch/x86/boot/compressed/Makefile             |  2 +-
+ arch/x86/include/asm/efi.h                    |  3 ++
+ arch/x86/kernel/Makefile                      |  2 -
+ drivers/firmware/efi/libstub/efistub.h        |  2 +
+ drivers/firmware/efi/libstub/secureboot.c     | 41 +++++++----------
+ include/linux/efi.h                           | 23 +++++++++-
+ security/integrity/ima/Makefile               |  4 ++
+ .../integrity/ima/ima_efi.c                   | 45 +++++--------------
+ 9 files changed, 60 insertions(+), 63 deletions(-)
+ rename arch/x86/kernel/ima_arch.c => security/integrity/ima/ima_efi.c (60%)
 
-Does it sound ok?
+-- 
+2.17.1
 
-Here is the v5 of the series we published yesterday.
-https://patchwork.kernel.org/project/linux-integrity/list/?series=375103
-
-Thanks,
-Tushar
-
-
-> thanks,
-> 
-> Mimi
-> 
