@@ -2,29 +2,29 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 455042A500C
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 20:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB612A5011
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 20:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729661AbgKCTX4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Nov 2020 14:23:56 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:59230 "EHLO
+        id S1728621AbgKCT0s (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Nov 2020 14:26:48 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:59626 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725957AbgKCTX4 (ORCPT
+        with ESMTP id S1725957AbgKCT0r (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Nov 2020 14:23:56 -0500
+        Tue, 3 Nov 2020 14:26:47 -0500
 Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id AE7C320B4905;
-        Tue,  3 Nov 2020 11:23:54 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AE7C320B4905
+        by linux.microsoft.com (Postfix) with ESMTPSA id 195FF20B4905;
+        Tue,  3 Nov 2020 11:26:46 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 195FF20B4905
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1604431435;
-        bh=cs89L/JSwQ4PBZQ9fMSdMK2jKgvcRPsdCyr6JSRaH3M=;
+        s=default; t=1604431606;
+        bh=W0Zh911SvMPBVmdEXmA1HcYsG++HUAmXbKA5/8UO44g=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=GKn7Me70XCoz1djbJxVdpP5W78oyHhN77zDj5VwRM/ygOVttppLfAwYfrsowfXBSS
-         Kn73G43Jiuo9J19WlT4CQfKThwAgv1m7alRvQgBJkbdIiI/2PbChAJx2rJn44pxuJG
-         KwnQ9+7ewrIUz5EPQPkwZUWqcmxQ0mapDGv92nsc=
-Subject: Re: [PATCH v8 2/4] powerpc: Refactor kexec functions to move arch
- independent code to ima
+        b=iuF/o2WK5I9LEylsm091pAyVfXK+P1AU4Afj1Dcmwc+awaZDdF4z+OO6lS42ENqvG
+         CfVTYLd/4+L/UrGBS3R714iOd07K7cQK/N6L95GDpf0QF4/L0/W3tnrXo13e9y2Qqw
+         hOOWvgFlOzFOwvzya6D7NrtOnZgLm/fPEfzYEYy8=
+Subject: Re: [PATCH v8 0/4] Carry forward IMA measurement log on kexec on
+ ARM64
 To:     Mimi Zohar <zohar@linux.ibm.com>, bauerman@linux.ibm.com,
         robh@kernel.org, gregkh@linuxfoundation.org, james.morse@arm.com,
         catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
@@ -41,15 +41,14 @@ Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
         balajib@linux.microsoft.com
 References: <20201030174429.29893-1-nramas@linux.microsoft.com>
- <20201030174429.29893-3-nramas@linux.microsoft.com>
- <87f63dc12739b346d556f85537324d3ae055097d.camel@linux.ibm.com>
+ <053cf58ae21f2e7088e22eedf8c5ee6e73a1e835.camel@linux.ibm.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <397f1bbf-46bf-b522-616b-2e006ef30e70@linux.microsoft.com>
-Date:   Tue, 3 Nov 2020 11:23:49 -0800
+Message-ID: <1f01055c-acb8-6497-0144-dfeb78f08eee@linux.microsoft.com>
+Date:   Tue, 3 Nov 2020 11:26:45 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <87f63dc12739b346d556f85537324d3ae055097d.camel@linux.ibm.com>
+In-Reply-To: <053cf58ae21f2e7088e22eedf8c5ee6e73a1e835.camel@linux.ibm.com>
 Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,61 +56,56 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/3/20 6:55 AM, Mimi Zohar wrote:
+On 11/3/20 7:18 AM, Mimi Zohar wrote:
 
 Hi Mimi,
 
-> 
 > On Fri, 2020-10-30 at 10:44 -0700, Lakshmi Ramasubramanian wrote:
->> The functions ima_get_kexec_buffer() and ima_free_kexec_buffer(),
->> that handle carrying forward the IMA measurement logs on kexec for
->> powerpc do not have architecture specific code, but they are currently
->> defined for powerpc only.
->>
->> Move ima_get_kexec_buffer() and ima_free_kexec_buffer() to IMA
->> subsystem. A later patch in this series will use these functions for
->> carrying forward the IMA measurement log for ARM64.
->>
->> With the above refactoring arch/powerpc/kexec/ima.c contains only
->> functions used when CONFIG_IMA_KEXEC is enabled. Update Makefile
->> in arch/powerpc/kexec to include arch/powerpc/kexec/ima.c only
->> when CONFIG_IMA_KEXEC is enabled.
->>
->> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
->> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
->> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>> On kexec file load Integrity Measurement Architecture (IMA) subsystem
+>> may verify the IMA signature of the kernel and initramfs, and measure
+>> it. The command line parameters passed to the kernel in the kexec call
+>> may also be measured by IMA. A remote attestation service can verify
+>> the measurement through the IMA log and the TPM PCR data. This can be
+>> achieved only if the IMA measurement log is carried over from
+>> the current kernel to the next kernel across the kexec call.
 > 
-> Similar comments to 1/4.
-> -  Last line of first paragraph can be rephrased like " ... on kexec,
-> do not contain architecture specific code, but are currently limited to
-> powerpc."
+> Nice, but you might want to tweak it a bit.  This is just a suggestion.
+> "A remote attestation service can verify a TPM quote based on the TPM
+> event log, the IMA measurement list, and the TPM PCR data".
+Sure - will make this change.
+
+> 
+>> However in the current implementation the IMA measurement logs are not
+>> carried over on ARM64 platforms. Therefore a remote attestation service
+>> cannot verify the authenticity of the running kernel on ARM64 platforms
+>> when the kernel is updated through the kexec system call.
+> 
+> The paragraphs above and below are redundant.  The first paragraph
+> already explained why carrying the measurement across kexec is needed.
+> Perhaps drop the above paragraph.
 Sure.
 
-> -  This patch should be limited to moving existing functions.
-> Truncate the Subject line to "Move arch independent IMA kexec functions
-> to ima_kexec.c."
-Will do.
-
-> - Don't refer to a later patch, but explain the purpose here.  For
-> example, "Move ... , making them accessible to other archs."
+> 
+>> This patch series adds support for carrying forward the IMA measurement
+>> log on kexec on ARM64. powerpc already supports carrying forward
+>> the IMA measurement log on kexec.
+> 
+> And invert these sentences, starting the paragraph with "Powerpc
+> already" and ending with ARM64.
 Sure.
 
-> - The definition of "FDT_PROP_IMA_KEXEC_BUFFER" should be made as a
-> separate, prepartory patch, prior to the existing 1/4.  The resulting
-> code being moved in this patch (and similarly for 1/4) will be exactly
-> the same as the code being deleted.
+> 
+>>
+>> This series refactors the platform independent code defined for powerpc
+>> such that it can be reused for ARM64 as well. A chosen node namely
+>> "linux,ima-kexec-buffer" is added to the DTB for ARM64 to hold
+>> the address and the size of the memory reserved to carry
+>> the IMA measurement log.
+> 
+> ^This patch set moves ..."
+Sure - will make this change.
 
-Definition of FDT_PROP_IMA_KEXEC_BUFFER will be made as a preparatory 
-patch as you'd mentioned in the comments for [PATCH 1/4].
+Thanks again for reviewing the patches. Will post the updated patch set 
+shortly.
 
-Will split [PATCH 2/4] as listed below:
-
-PATCH #1: Move ima_get_kexec_buffer() and ima_free_kexec_buffer() to 
-IMA, along with deleting them in arch/powerpc/kexec/ima.c
-
-PATCH #2: Update arch/powerpc/kexec/Makefile and
-           arch/powerpc/kexec/ima.c
-           to compile when CONFIG_IMA_KEXEC is defined.
-
-thanks,
   -lakshmi
