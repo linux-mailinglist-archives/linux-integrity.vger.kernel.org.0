@@ -2,210 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4B52A476E
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 15:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD572A48C1
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 15:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729502AbgKCOKy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Nov 2020 09:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729562AbgKCOKt (ORCPT
+        id S1728119AbgKCO41 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Nov 2020 09:56:27 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27954 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728087AbgKCO4T (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Nov 2020 09:10:49 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4412C061A4B
-        for <linux-integrity@vger.kernel.org>; Tue,  3 Nov 2020 06:10:48 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id l24so18369614edj.8
-        for <linux-integrity@vger.kernel.org>; Tue, 03 Nov 2020 06:10:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=y8WQjpT9rqVrgeh99s8m7L7lW+jgLfIjyGz2M8+krP0=;
-        b=jNSrYWNMri4UzTfQTwvUoeI3d9PbxAntszBtbkOHWPbsmFNLXoekIJ8TcfDFJbJf7v
-         6+eYLKBEUBAXwADA9DJI10J7imuIzSuwLQhtXLJY1nc7fmB3dMavlYA1Xmy9wmU6aG0F
-         m9nefJssTHLgeDNMLEKBtF2hV/CbFCCq5QOzc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=y8WQjpT9rqVrgeh99s8m7L7lW+jgLfIjyGz2M8+krP0=;
-        b=ez0tOpsaH+50vLltxtP4T5asLfU0RMK1OUn/JuDLBcC76dqMpjY5WS10U14xGOKkk2
-         6Gsw6Y5cMblLYV9fWnJhIxfGUjWVfGUlOmpNrC66O4YwSFWI8oE8OFd5wBOVmjB7+OOk
-         +SYrdTW263vjNH4uV+lVFlaVD0LjBAzsfiFag2UCsNSPeubXQkHEWOTDD+joeVV7FkL5
-         bEqU4iPlx16Y7Q0e3fUH9RgprwA90a2cNUZ1o59QARI65ZW99RLsi7e4Hhthx+WOKR9m
-         X9fccJdpzQJd0JziPLY3hNO9p5BS1p1qBtmPz+3vTgmGIhFJ0h2F7K1zS8Kqil1IKnMq
-         wy2w==
-X-Gm-Message-State: AOAM533YyhorqzWJTAAz2ETvZvSp/vyrzC5XZaFfAGwbnbN1yAiqIyl5
-        5cX0mogBKPhT37Fp+xzCqRr0FCO3v3IGvj/TgDf93w==
-X-Google-Smtp-Source: ABdhPJwp4QL8RwmQmcT2CoPcUplHSU9HiByLsXAEntwM01IPEN+3MiJMYkcJQ6Od81V70aDSuFwsTxILAnA/OMfjXrI=
-X-Received: by 2002:a05:6402:a57:: with SMTP id bt23mr10741907edb.62.1604412647178;
- Tue, 03 Nov 2020 06:10:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20201029003252.2128653-1-christian.brauner@ubuntu.com>
- <87pn51ghju.fsf@x220.int.ebiederm.org> <20201029155148.5odu4j2kt62ahcxq@yavin.dot.cyphar.com>
- <87361xdm4c.fsf@x220.int.ebiederm.org>
-In-Reply-To: <87361xdm4c.fsf@x220.int.ebiederm.org>
-From:   Alban Crequy <alban@kinvolk.io>
-Date:   Tue, 3 Nov 2020 15:10:35 +0100
-Message-ID: <CADZs7q4abuN6n8HMrpe2R2kRBUDVPoYRNpezKk4cvXRk7CVHng@mail.gmail.com>
-Subject: Re: [PATCH 00/34] fs: idmapped mounts
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Theodore Tso <tytso@mit.edu>, Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jann Horn <jannh@google.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        smbarber@chromium.org, Phil Estes <estesp@gmail.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        linux-api@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-audit@redhat.com,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 3 Nov 2020 09:56:19 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A3EXvAX083657;
+        Tue, 3 Nov 2020 09:55:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=wwBNzfpsSPmSsQz65LMWGCrtvQLcfVtSMBGkdkyC3MU=;
+ b=s7nq2whjfZtOMzbXNJ5esd2sqRQzcwitui9hWfGHEGsxsz3kE+qs87i2x7ZM01Q7ad4w
+ cSugHQDzcgBBgyoluEQ91obYvuxBNsxvxBwLBVDXrFormrI2vbv+Nm8DGmKJIC0NZx+5
+ 22VlYNamyuIKoEdlmijwgA41n3uUFFUBhACzex09TBU5Ym6rJxpZNqOcw0ICvvc+soL9
+ +97CIe8mqtDsFr/T9DSlyZzGwFdawAzcR+5duStjceYPLyFkxgvYwbJ8kNkbJYKd5Yqo
+ E8fxVBi9R6xFZaN0puPf+hisuuHksxNVHz8TB5eyjnMEOL/YOXmQLbl+WiDqoXsWKlyk Rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34jyyta3px-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Nov 2020 09:55:26 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A3EZ27b091221;
+        Tue, 3 Nov 2020 09:55:22 -0500
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34jyyta3js-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Nov 2020 09:55:22 -0500
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A3En4u0011411;
+        Tue, 3 Nov 2020 14:55:14 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 34h0f6sq5p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Nov 2020 14:55:14 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A3EtBKw64946674
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Nov 2020 14:55:11 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B902FA4064;
+        Tue,  3 Nov 2020 14:55:11 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4477FA4054;
+        Tue,  3 Nov 2020 14:55:04 +0000 (GMT)
+Received: from sig-9-65-255-16.ibm.com (unknown [9.65.255.16])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  3 Nov 2020 14:55:04 +0000 (GMT)
+Message-ID: <506372c01decf59bc2ef39c92a86ba7f6f2ae81b.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 1/4] powerpc: Refactor kexec functions to move arch
+ independent code to drivers/of
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        bauerman@linux.ibm.com, robh@kernel.org,
+        gregkh@linuxfoundation.org, james.morse@arm.com,
+        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Date:   Tue, 03 Nov 2020 09:55:03 -0500
+In-Reply-To: <20201030174429.29893-2-nramas@linux.microsoft.com>
+References: <20201030174429.29893-1-nramas@linux.microsoft.com>
+         <20201030174429.29893-2-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-03_08:2020-11-03,2020-11-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ impostorscore=0 clxscore=1015 suspectscore=11 priorityscore=1501
+ adultscore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011030097
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 5:37 PM Eric W. Biederman <ebiederm@xmission.com> w=
-rote:
->
-> Aleksa Sarai <cyphar@cyphar.com> writes:
->
-> > On 2020-10-29, Eric W. Biederman <ebiederm@xmission.com> wrote:
-> >> Christian Brauner <christian.brauner@ubuntu.com> writes:
-> >>
-> >> > Hey everyone,
-> >> >
-> >> > I vanished for a little while to focus on this work here so sorry fo=
-r
-> >> > not being available by mail for a while.
-> >> >
-> >> > Since quite a long time we have issues with sharing mounts between
-> >> > multiple unprivileged containers with different id mappings, sharing=
- a
-> >> > rootfs between multiple containers with different id mappings, and a=
-lso
-> >> > sharing regular directories and filesystems between users with diffe=
-rent
-> >> > uids and gids. The latter use-cases have become even more important =
-with
-> >> > the availability and adoption of systemd-homed (cf. [1]) to implemen=
-t
-> >> > portable home directories.
-> >>
-> >> Can you walk us through the motivating use case?
-> >>
-> >> As of this year's LPC I had the distinct impression that the primary u=
-se
-> >> case for such a feature was due to the RLIMIT_NPROC problem where two
-> >> containers with the same users still wanted different uid mappings to
-> >> the disk because the users were conflicting with each other because of
-> >> the per user rlimits.
-> >>
-> >> Fixing rlimits is straight forward to implement, and easier to manage
-> >> for implementations and administrators.
-> >
-> > This is separate to the question of "isolated user namespaces" and
-> > managing different mappings between containers. This patchset is solvin=
-g
-> > the same problem that shiftfs solved -- sharing a single directory tree
-> > between containers that have different ID mappings. rlimits (nor any of
-> > the other proposals we discussed at LPC) will help with this problem.
->
-> First and foremost: A uid shift on write to a filesystem is a security
-> bug waiting to happen.  This is especially in the context of facilities
-> like iouring, that play very agressive games with how process context
-> makes it to  system calls.
->
-> The only reason containers were not immediately exploitable when iouring
-> was introduced is because the mechanisms are built so that even if
-> something escapes containment the security properties still apply.
-> Changes to the uid when writing to the filesystem does not have that
-> property.  The tiniest slip in containment will be a security issue.
->
-> This is not even the least bit theoretical.  I have seem reports of how
-> shitfs+overlayfs created a situation where anyone could read
-> /etc/shadow.
->
-> If you are going to write using the same uid to disk from different
-> containers the question becomes why can't those containers configure
-> those users to use the same kuid?
->
-> What fixing rlimits does is it fixes one of the reasons that different
-> containers could not share the same kuid for users that want to write to
-> disk with the same uid.
->
->
-> I humbly suggest that it will be more secure, and easier to maintain for
-> both developers and users if we fix the reasons people want different
-> containers to have the same user running with different kuids.
->
-> If not what are the reasons we fundamentally need the same on-disk user
-> using multiple kuids in the kernel?
+Hi Lakshmi,
 
-I would like to use this patch set in the context of Kubernetes. I
-described my two possible setups in
-https://www.spinics.net/lists/linux-containers/msg36537.html:
+On Fri, 2020-10-30 at 10:44 -0700, Lakshmi Ramasubramanian wrote:
+> The functions remove_ima_buffer() and delete_fdt_mem_rsv() that handle
+> carrying forward the IMA measurement logs on kexec for powerpc do not
+> have architecture specific code, but they are currently defined for
+> powerpc only.
 
-1. Each Kubernetes pod has its own userns but with the same user id mapping
-2. Each Kubernetes pod has its own userns with non-overlapping user id
-mapping (providing additional isolation between pods)
+^ ... logs on kexec, do not have architecture specific code, but are
+currently limited to powerpc.
 
-But even in the setup where all pods run with the same id mappings,
-this patch set is still useful to me for 2 reasons:
+> 
+> remove_ima_buffer() and delete_fdt_mem_rsv() are used to remove
+> the IMA log entry from the device tree and free the memory reserved
+> for the log. These functions need to be defined even if the current
+> kernel does not support carrying forward IMA log across kexec since
+> the previous kernel could have supported that and therefore the current
+> kernel needs to free the allocation.
 
-1. To avoid the expensive recursive chown of the rootfs. We cannot
-necessarily extract the tarball directly with the right uids because
-we might use the same container image for privileged containers (with
-the host userns) and unprivileged containers (with a new userns), so
-we have at least 2 =E2=80=9Cmappings=E2=80=9D (taking more time and resulti=
-ng in more
-storage space). Although the =E2=80=9Cmetacopy=E2=80=9D mount option in ove=
-rlayfs
-helps to make the recursive chown faster, it can still take time with
-large container images with lots of files. I=E2=80=99d like to use this pat=
-ch
-set to set up the root fs in constant time.
+The first paragraph describes these function as "handle carrying
+forward the IMA measurement logs on kexec", while this paragraph says
+"are used to remove the IMA log entry".  Consider listing all of the
+functions being moved in the first paragrah, then "handle carrying
+forward" could be expanded to "carrying ... and removing".
 
-2. To manage large external volumes (NFS or other filesystems). Even
-if admins can decide to use the same kuid on all the nodes of the
-Kubernetes cluster, this is impractical for migration. People can have
-existing Kubernetes clusters (currently without using user namespaces)
-and large NFS volumes. If they want to switch to a new version of
-Kubernetes with the user namespace feature enabled, they would need to
-recursively chown all the files on the NFS shares. This could take
-time on large filesystems and realistically, we want to support
-rolling updates where some nodes use the previous version without user
-namespaces and new nodes are progressively migrated to the new userns
-with the new id mapping. If both sets of nodes use the same NFS share,
-that can=E2=80=99t work.
+> 
+> Rename remove_ima_buffer() to remove_ima_kexec_buffer().
+> Define remove_ima_kexec_buffer() and delete_fdt_mem_rsv() in
+> drivers/of/fdt.c. A later patch in this series will use these functions
+> to free the allocation, if any, made by the previous kernel for ARM64.
 
-Alban
+- ^Define -> Move
+- Three functions are being moved, but only two are listed. 
+"do_get_kexec_buffer" is not mentioned.
+- Don't refer to a later patch, but explain the purpose here.  For
+example, "Move ... , making them accessible to other archs."
+
+> 
+> Define FDT_PROP_IMA_KEXEC_BUFFER for the chosen node, namely
+> "linux,ima-kexec-buffer", that is added to the DTB to hold
+> the address and the size of the memory reserved to carry
+> the IMA measurement log.
+
+The above two paragraphs describe renaming a function and defining a
+chosen node.  These two preparatory changes should be made,
+independently of each other, prior to this patch.  This patch should be
+limited to moving code, with the subject line truncated to "move arch
+independent code to drivers/of".
+
+thanks,
+
+Mimi
+
