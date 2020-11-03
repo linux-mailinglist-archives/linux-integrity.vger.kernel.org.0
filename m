@@ -2,84 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6842A3B7A
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 05:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8452B2A450B
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 13:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725952AbgKCEne (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Nov 2020 23:43:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41456 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725940AbgKCEne (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Nov 2020 23:43:34 -0500
-Received: from kernel.org (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 16A00207BB;
-        Tue,  3 Nov 2020 04:43:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604378613;
-        bh=744BrGTw3BJtm5DzR5GgZcmHpaqVKx7nxLQ4zI6bBJ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=emDVtYO1f+7pZU4ltoBPdEEzmA5L1htCESCj4qkZ1wH/YCQHof4zKooO+ALHnN8vc
-         gT1D5Q0F98vVB22cW/cgSJCOLnYJMHXHpJDHZx2ZmJD7tL5Rpae/y8uHRkKYMQiC2K
-         h1tbNmcM4WHgLHAJbnPGhljWHCdS0lwR72pnPT80=
-Date:   Tue, 3 Nov 2020 06:43:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v2 4/5] tpm_tis: fix IRQ probing
-Message-ID: <20201103044328.GA58053@kernel.org>
-References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
- <20201001180925.13808-5-James.Bottomley@HansenPartnership.com>
- <87zh4hg4wg.fsf@redhat.com>
- <20201024121718.GC32960@kernel.org>
- <20201030124335.GD522355@kernel.org>
- <837dbe43b7507a765553260289de5fd8eee397c4.camel@HansenPartnership.com>
- <87sg9vbsnh.fsf@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sg9vbsnh.fsf@redhat.com>
+        id S1729013AbgKCM0F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Nov 2020 07:26:05 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:17992 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728168AbgKCM0E (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 3 Nov 2020 07:26:04 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A3C2GZq092419;
+        Tue, 3 Nov 2020 07:26:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=mRDWfholXgQVY2y/aiRKFYk8NKIPeiRCHUtnSKceUOc=;
+ b=MstBgu2sussRmhhbGxlmVcJojYSeSunWveLmw7mv51jRkUtfJoFitHvo1dwsLyaRlXKM
+ VxNDD4UIhnb6aenxwi1IG4gsWiDjyjFtmarx/e6n/i6WLl6ztBTrmx23EF1jD5X2OH3/
+ oSo5Z068XdjnlWmhxMuvUkp1ekx84ZgxmTwiB4jpRECQM9aKg0Rlzc8KAkfjKoy0h82m
+ 0Nir9uwtVTHcHF9IiQRrfrne2ZrWUppmbD2sBHFiFU/qRaz/P6dbYSEOhq/CCDv0lAs4
+ HkT/Cb8rJImJmslMbRAQ9BWeAxoqivfd0tgLjbwKozFMXDSoC5vXECZx6LUvSIEWwOPz AA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34jwmh8cpq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Nov 2020 07:26:01 -0500
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A3C4PsY104366;
+        Tue, 3 Nov 2020 07:26:01 -0500
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34jwmh8cnh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Nov 2020 07:26:00 -0500
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A3CE74G025823;
+        Tue, 3 Nov 2020 12:25:58 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 34jbytrrp3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Nov 2020 12:25:58 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A3CPubX3015340
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Nov 2020 12:25:56 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40D5BAE045;
+        Tue,  3 Nov 2020 12:25:56 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 28F2DAE051;
+        Tue,  3 Nov 2020 12:25:55 +0000 (GMT)
+Received: from sig-9-65-255-16.ibm.com (unknown [9.65.255.16])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  3 Nov 2020 12:25:55 +0000 (GMT)
+Message-ID: <9bdf80cc1ab1c6344ff2cf88130aff3f87a7247b.camel@linux.ibm.com>
+Subject: Re: [RFC] Finding the right target branch for patches that span IMA
+ and SeLinux
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Paul Moore <paul@paul-moore.com>,
+        Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        SELinux <selinux@vger.kernel.org>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org
+Date:   Tue, 03 Nov 2020 07:25:54 -0500
+In-Reply-To: <CAHC9VhT36qSJvhH5CFwixdT8tzH2bqfvaDa6nPZt1rmOKOr_kQ@mail.gmail.com>
+References: <703ced1a-3a48-f29e-9141-af78415d8402@linux.microsoft.com>
+         <f99f0f03aecc778826d79eb83d60cfd1a95196c5.camel@linux.ibm.com>
+         <2ea3d341-6299-ec40-b553-f9f59a36cfb3@linux.microsoft.com>
+         <CAHC9VhR8mbqZS3TVgG7MxQywe9uqDRCN+c59PozLTpOoQ-mK7Q@mail.gmail.com>
+         <9195fd7a-a5c5-8588-d33c-772d2f530032@linux.microsoft.com>
+         <CAHC9VhT36qSJvhH5CFwixdT8tzH2bqfvaDa6nPZt1rmOKOr_kQ@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-03_07:2020-11-03,2020-11-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ mlxscore=0 bulkscore=0 phishscore=0 priorityscore=1501 suspectscore=3
+ adultscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011030079
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 09:11:30AM -0700, Jerry Snitselaar wrote:
+On Mon, 2020-11-02 at 22:11 -0500, Paul Moore wrote:
+> On Sat, Oct 31, 2020 at 11:08 PM Tushar Sugandhi
 > 
-> James Bottomley @ 2020-10-30 08:49 MST:
-> 
-> > On Fri, 2020-10-30 at 14:43 +0200, Jarkko Sakkinen wrote:
-> > [...]
-> >> I tested this with:
-> >> 
-> >> - 
-> >> https://ark.intel.com/content/www/us/en/ark/products/84861/intel-nuc-kit-nuc5i5myhe.html
-> >>   dTPM 1.2
-> >> - 
-> >> https://ark.intel.com/content/www/us/en/ark/products/74483/intel-nuc-kit-dc53427hye.html
-> >>   dTPM 2.0
-> >> 
-> >> I did not get "TPM interrupt not working, polling instead" to klog.
-> >> But I neither see tpm0 in /proc/interrupts. What I'm doing wrong?
-> >
-> > That's usually what you get when ACPI specifies the interrupt isn't
-> > connected (we don't try to probe it).
-> >
-> > James
-> 
-> That is the problem I've been running into. When I do find a system
-> with a tpm and using tpm_tis, it usually seems to not have the interrupt
-> connected.
-> 
-> Should this commit have:
-> 
-> Fixes: 570a36097f30 ("tpm: drop 'irq' from struct tpm_vendor_specific")
-> 
-> That is where TPM_CHIP_FLAG_IRQ was added and not set for tpm_tis.
+> Can you and Lakshmi help me better understand the state of the
+> SELinux/IMA patches?  I see that you included Lakshmi's SELinux/IMA
+> patch in your last patchset, and it appears to have included feedback
+> from Stephen's last review.  Is it your intent to continue to submit
+> the SELinux/IMA patch as part of a larger patchset, or do you plan to
+> split that back out into a standalone patch?
 
-Have you tested 4eea703caaac?
+Paul,  I've asked Tushar and Lakshmi to first define "critical data"
+and then include at least one example of measuring "critical data" to
+simplify review.  As the SELinux patch is the first example, there is a
+dependency on the rest of the patch set.
 
-/Jarkko
+thanks,
+
+Mimi
+
