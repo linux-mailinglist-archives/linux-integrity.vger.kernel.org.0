@@ -2,106 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 843E62A50A6
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 21:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128632A50AC
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 21:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729672AbgKCUDh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Nov 2020 15:03:37 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44738 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727688AbgKCUDh (ORCPT
+        id S1727688AbgKCUF0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Nov 2020 15:05:26 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36156 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725997AbgKCUF0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Nov 2020 15:03:37 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A3K2x5O184970;
-        Tue, 3 Nov 2020 15:03:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=8FVQINE+bcKvDVL9N41N7knor54BJiq6qPUipkFnb4g=;
- b=hm4q/D0tGANPl8WKan/+nywwpKvAF1GL7/YbTKafg9fFnOgkaa1PhvBmMVpe1wNuizVw
- 74rNZGN8rZQ+GTqxVmu8AziHlBBMEma6KPNguZdZS+AGssdLPYSy+fioGxXzlpoYCINq
- fHB56Qm7Qvti+79sjMGmUY3LZzHI8IrlG/eIWUC+WPIojIsatZm+amT60K2j/87WRf2i
- xNHbmJAa9pQq3D24ao4/aBVo6pH6xQmlYZ7uAwUfzdhLdsIwWFKrZhqwxhC8yKfBPht0
- 1yyBHMhVrByZQXIMkFP8jUxbQUFREWj5tlWyyQcJvOPKq3gffmjRtIeVJlrx6hM+lsZc IQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34kdmqre7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Nov 2020 15:03:17 -0500
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A3K356B185937;
-        Tue, 3 Nov 2020 15:03:17 -0500
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34kdmqre5x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Nov 2020 15:03:16 -0500
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A3JvvuN004503;
-        Tue, 3 Nov 2020 20:03:14 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 34h01khuex-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Nov 2020 20:03:14 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A3K3BOq6488642
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Nov 2020 20:03:11 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CC79B11C04A;
-        Tue,  3 Nov 2020 20:03:11 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5C58211C050;
-        Tue,  3 Nov 2020 20:03:09 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.125.87])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  3 Nov 2020 20:03:09 +0000 (GMT)
-Message-ID: <3d8e2997ea1a87a91d35dbcb5e5c5faea0349f70.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 1/3] efi: generalize efi_get_secureboot
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi <linux-efi@vger.kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Chester Lin <clin@suse.com>,
-        X86 ML <x86@kernel.org>, "Lee, Chun-Yi" <jlee@suse.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Date:   Tue, 03 Nov 2020 15:03:08 -0500
-In-Reply-To: <CAMj1kXHQe46CuGSna8+EJw6MGq1keLbcuit16LfJbKGnfnAN6g@mail.gmail.com>
-References: <20201102223800.12181-1-ardb@kernel.org>
-         <20201102223800.12181-2-ardb@kernel.org>
-         <93e614b138c9f047612db304ca5ebe8a7b21c941.camel@linux.ibm.com>
-         <CAMj1kXHQe46CuGSna8+EJw6MGq1keLbcuit16LfJbKGnfnAN6g@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
+        Tue, 3 Nov 2020 15:05:26 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B307F20B4905;
+        Tue,  3 Nov 2020 12:05:24 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B307F20B4905
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1604433925;
+        bh=FpRaU+1eA08DHDzzs2SLgSYuS0jFUegfVIwGSw2MrPM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Ow5SVZ/xuAOhzp4Gps8tIL5ExIsBerckCwQ+gbwRldD48gb0cbTNKextoK9tcQLE8
+         QIZpQOczJZO+5O9w6sd6HuJlKll9ibyG9qnXqVGlM07/NVnPTttih9uLvj6lxSVUEH
+         gFTDxBqxhYtJBY60Ky5uwXO3lRaqmh0dbY5qDM4k=
+Subject: Re: [PATCH v8 2/4] powerpc: Refactor kexec functions to move arch
+ independent code to ima
+To:     Mimi Zohar <zohar@linux.ibm.com>, bauerman@linux.ibm.com,
+        robh@kernel.org, gregkh@linuxfoundation.org, james.morse@arm.com,
+        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
+        balajib@linux.microsoft.com
+References: <20201030174429.29893-1-nramas@linux.microsoft.com>
+ <20201030174429.29893-3-nramas@linux.microsoft.com>
+ <87f63dc12739b346d556f85537324d3ae055097d.camel@linux.ibm.com>
+ <397f1bbf-46bf-b522-616b-2e006ef30e70@linux.microsoft.com>
+ <f45e865c005ce05a6bc376e14c089937197e2aeb.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <5032768c-779b-a03f-aacc-0c2da51ecc87@linux.microsoft.com>
+Date:   Tue, 3 Nov 2020 12:05:24 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <f45e865c005ce05a6bc376e14c089937197e2aeb.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-03_08:2020-11-03,2020-11-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 priorityscore=1501 adultscore=0 mlxlogscore=820 mlxscore=0
- bulkscore=0 suspectscore=0 phishscore=0 clxscore=1015 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011030131
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-11-03 at 20:01 +0100, Ard Biesheuvel wrote:
-> > get_var() should be defined as "efi_status_t".   If this is being
-> > upstreamed via integrity, I can make the change.
-> >
+On 11/3/20 11:50 AM, Mimi Zohar wrote:
+> On Tue, 2020-11-03 at 11:23 -0800, Lakshmi Ramasubramanian wrote:
+>> On 11/3/20 6:55 AM, Mimi Zohar wrote:
+>>
+>> Hi Mimi,
+>>
+>>>
+>>> On Fri, 2020-10-30 at 10:44 -0700, Lakshmi Ramasubramanian wrote:
+>>>> The functions ima_get_kexec_buffer() and ima_free_kexec_buffer(),
+>>>> that handle carrying forward the IMA measurement logs on kexec for
+>>>> powerpc do not have architecture specific code, but they are currently
+>>>> defined for powerpc only.
+>>>>
+>>>> Move ima_get_kexec_buffer() and ima_free_kexec_buffer() to IMA
+>>>> subsystem. A later patch in this series will use these functions for
+>>>> carrying forward the IMA measurement log for ARM64.
+>>>>
+>>>> With the above refactoring arch/powerpc/kexec/ima.c contains only
+>>>> functions used when CONFIG_IMA_KEXEC is enabled. Update Makefile
+>>>> in arch/powerpc/kexec to include arch/powerpc/kexec/ima.c only
+>>>> when CONFIG_IMA_KEXEC is enabled.
+>>>>
+>>>> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>>
+>>> Similar comments to 1/4.
+>>> -  Last line of first paragraph can be rephrased like " ... on kexec,
+>>> do not contain architecture specific code, but are currently limited to
+>>> powerpc."
+>> Sure.
+>>
+>>> -  This patch should be limited to moving existing functions.
+>>> Truncate the Subject line to "Move arch independent IMA kexec functions
+>>> to ima_kexec.c."
+>> Will do.
+>>
+>>> - Don't refer to a later patch, but explain the purpose here.  For
+>>> example, "Move ... , making them accessible to other archs."
+>> Sure.
+>>
+>>> - The definition of "FDT_PROP_IMA_KEXEC_BUFFER" should be made as a
+>>> separate, prepartory patch, prior to the existing 1/4.  The resulting
+>>> code being moved in this patch (and similarly for 1/4) will be exactly
+>>> the same as the code being deleted.
+>>
+>> Definition of FDT_PROP_IMA_KEXEC_BUFFER will be made as a preparatory
+>> patch as you'd mentioned in the comments for [PATCH 1/4].
+>>
+>> Will split [PATCH 2/4] as listed below:
+>>
+>> PATCH #1: Move ima_get_kexec_buffer() and ima_free_kexec_buffer() to
+>> IMA, along with deleting them in arch/powerpc/kexec/ima.c
 > 
-> No, get_var is a pointer to a function returning efi_status_t, check
-> include/linux/efi.h for details.
+> No, other than the comments above, this patch is fine.  It moves
+> ima_get_kexec_buffer() and ima_free_kexec_buffer() to ima_kexec.c.
+> 
 
-Got it.
+Ok - I will do the updates in the patch description only and keep the 
+code changes as is. Thanks for clarifying.
 
-thanks,
-
-Mimi
+  -lakshmi
 
 
