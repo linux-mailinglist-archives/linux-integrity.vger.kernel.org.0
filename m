@@ -2,125 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E699D2A4F54
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 19:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D842A4F7A
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 19:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728351AbgKCStX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Nov 2020 13:49:23 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47816 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725892AbgKCStX (ORCPT
+        id S1729429AbgKCS5g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Nov 2020 13:57:36 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:55822 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725892AbgKCS5f (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Nov 2020 13:49:23 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A3IVInp076108;
-        Tue, 3 Nov 2020 13:49:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=XbU6z4LdrYfUhGMmjonRce3KkZEv6u0ng4kVFEKxkqg=;
- b=Oogk72Up/WJecFnZF65tJk6ABaa75uNw1rpMZrP4SLkQJnuMQ7eTwCR/tZGvLR0bR5lW
- nDRiCWjcnCMEBoawWD4CV2mYERs6P3xvkuRRljAcxDTV5NyZca7idApOatqaYEmPoxkd
- lKemYUoKnPVnFT/+Ovu7CgSz4V5aqQw9XODfDXtYfkQxRzUREsVt5jG+qeJYoJmuAfNa
- x1Wef4dqptLs9N1udtBBiCzbrdgOjfvWt+2BcSWseD46k1R2I7akfTV9dVQXxSWBCaZ2
- XdOZTGg0OyyRuZNnVw3ZgUVjwz+N6h/2F0mq6dINonBIicKDg2FoOBeongYELmlvs3GC ZA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 34jwj1nts6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Nov 2020 13:49:06 -0500
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A3IepPM127117;
-        Tue, 3 Nov 2020 13:49:06 -0500
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 34jwj1ntr3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Nov 2020 13:49:05 -0500
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A3Il7DA008820;
-        Tue, 3 Nov 2020 18:49:03 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma02fra.de.ibm.com with ESMTP id 34j6j41222-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Nov 2020 18:49:03 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A3In1du19792288
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Nov 2020 18:49:01 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C5B742049;
-        Tue,  3 Nov 2020 18:49:01 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5845542041;
-        Tue,  3 Nov 2020 18:48:58 +0000 (GMT)
-Received: from sig-9-65-255-16.ibm.com (unknown [9.65.255.16])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  3 Nov 2020 18:48:58 +0000 (GMT)
-Message-ID: <93e614b138c9f047612db304ca5ebe8a7b21c941.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 1/3] efi: generalize efi_get_secureboot
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
-Cc:     jmorris@namei.org, serge@hallyn.com, dmitry.kasatkin@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, clin@suse.com,
-        x86@kernel.org, jlee@suse.com, linux-integrity@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Tue, 03 Nov 2020 13:48:56 -0500
-In-Reply-To: <20201102223800.12181-2-ardb@kernel.org>
-References: <20201102223800.12181-1-ardb@kernel.org>
-         <20201102223800.12181-2-ardb@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
+        Tue, 3 Nov 2020 13:57:35 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 26E0720B4905;
+        Tue,  3 Nov 2020 10:57:35 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 26E0720B4905
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1604429855;
+        bh=cVbItptAW1tS1kJXEj6/BOOB6hgB5fsNAx9vzKmya7E=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=feOdQ716roT1YxuIu88Yr/V2A4sKG6SPqDvsuaDKRqg9d3kjBEWhVcI+6vAeAsSDH
+         R4wGFCbTQFGfC85IdMg6azVXp/VwVdPwnlhMJ9ff+1jjR91zDRBfuUn5Br5V2IB+B+
+         7dSYPQXeKPYh/ClSIGny9wfQNwgDNH3rZtaYkPlQ=
+Subject: Re: [RFC] Finding the right target branch for patches that span IMA
+ and SeLinux
+To:     Paul Moore <paul@paul-moore.com>,
+        Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        SELinux <selinux@vger.kernel.org>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org
+References: <703ced1a-3a48-f29e-9141-af78415d8402@linux.microsoft.com>
+ <f99f0f03aecc778826d79eb83d60cfd1a95196c5.camel@linux.ibm.com>
+ <2ea3d341-6299-ec40-b553-f9f59a36cfb3@linux.microsoft.com>
+ <CAHC9VhR8mbqZS3TVgG7MxQywe9uqDRCN+c59PozLTpOoQ-mK7Q@mail.gmail.com>
+ <9195fd7a-a5c5-8588-d33c-772d2f530032@linux.microsoft.com>
+ <CAHC9VhT36qSJvhH5CFwixdT8tzH2bqfvaDa6nPZt1rmOKOr_kQ@mail.gmail.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <58293728-9f2b-8a6c-ec32-ec35f594094e@linux.microsoft.com>
+Date:   Tue, 3 Nov 2020 10:57:29 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAHC9VhT36qSJvhH5CFwixdT8tzH2bqfvaDa6nPZt1rmOKOr_kQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-03_08:2020-11-03,2020-11-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=3
- adultscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- impostorscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011030123
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-11-02 at 23:37 +0100, Ard Biesheuvel wrote:
-> From: Chester Lin <clin@suse.com>
-> 
-> Generalize the efi_get_secureboot() function so not only efistub but also
-> other subsystems can use it.
-> 
-> Note that the MokSbState handling is not factored out: the variable is
-> boot time only, and so it cannot be parameterized as easily. Also, the
-> IMA code will switch to this version in a future patch, and it does not
-> incorporate the MokSbState exception in the first place.
-> 
-> Note that the new efi_get_secureboot_mode() helper treats any failures
-> to read SetupMode as setup mode being disabled.
-> 
-> Co-developed-by: Chester Lin <clin@suse.com>
-> Signed-off-by: Chester Lin <clin@suse.com>
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+On 11/2/20 7:11 PM, Paul Moore wrote:
 
-Thanks, Ard.  Other than one minor thing inline below, the patch looks
-good.  I haven't done any testing yet.
+Hi Paul,
 
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index bd9d83a94173..79b2d4de62e0 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -1082,7 +1082,28 @@ enum efi_secureboot_mode {
->  	efi_secureboot_mode_disabled,
->  	efi_secureboot_mode_enabled,
->  };
-> -enum efi_secureboot_mode efi_get_secureboot(void);
-> +
-> +static inline
-> +enum efi_secureboot_mode efi_get_secureboot_mode(efi_get_variable_t *get_var)
+> On Sat, Oct 31, 2020 at 11:08 PM Tushar Sugandhi
+> <tusharsu@linux.microsoft.com> wrote:
+>> On 2020-10-30 1:37 p.m., Paul Moore wrote:
+> 
+> ...
+> 
+>>> If the patch(set) introduces new functionality I will ask you to add
+>>> or update an existing test in the selinux-testsuite.
+>>> * https://github.com/SELinuxProject/selinux-testsuite
+>>
+>> Lakshmi has written an SeLinux test for this feature, and it is
+>> currently being targeted for LTP repo.
+>> https://github.com/linux-test-project/ltp
+>>
+>> We can work with you to also get it incorporated in selinux-testsuite.
+>> But the concern here is we may have to pull additional dependent scripts
+>> from LTP to selinux-testsuite to support our test.
+>>
+>> Could you please take a look at Lakshmi's SeLinux test, and guide us
+>> further on this? Here is the patch.
+>> https://patchwork.kernel.org/patch/11804587/
+> 
+> As I'm looking at the test(s) above, I'm thinking that this may not be
+> something that needs to be in the selinux-testsuite.  While SELinux is
+> obviously an important part of the test, the test is more IMA focused
+> (which is probably the way it should be).
 
-get_var() should be defined as "efi_status_t".   If this is being
-upstreamed via integrity, I can make the change.
+Yes, as you mentioned, the test is more IMA focused. It is to validate 
+the measurement done by IMA against the current state of the 
+configuration and policy of SELinux. Therefore we would like to keep it 
+in LTP.
+
+> 
+> As a bit of background, the selinux-testsuite is intended to serve as
+> a relatively easy and quick to run test that can be used by developers
+> to quickly test their patches; while it aims for good coverage, it
+> does not try to be a comprehensive regression test suite.  Not only
+> would that be duplicating other efforts such as the LTP, it would go
+> against the goal of making the test suite quick and easy to use.
+> 
 
 thanks,
-
-Mimi
-
+  -lakshmi
