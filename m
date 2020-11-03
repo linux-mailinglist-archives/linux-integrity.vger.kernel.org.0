@@ -2,99 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0961B2A4AAA
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 17:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E699D2A4F54
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Nov 2020 19:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726126AbgKCQDR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Nov 2020 11:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728264AbgKCQDN (ORCPT
+        id S1728351AbgKCStX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Nov 2020 13:49:23 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47816 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725892AbgKCStX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Nov 2020 11:03:13 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009CEC061A48
-        for <linux-integrity@vger.kernel.org>; Tue,  3 Nov 2020 08:03:11 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id b12so8768036plr.4
-        for <linux-integrity@vger.kernel.org>; Tue, 03 Nov 2020 08:03:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=zDggAsDI739UznsdJGV123TENJ6R94pJsrrMJ096A5w=;
-        b=Yogn/KZ7ijrqJ0T2z6E6jJ/rsJS/CsbY+bDuFIpVxXfqjMcWW2r08cwmXmAnkPO8Zk
-         c7p/xjaHTOXmoh8uNv5PKN9wLS4o5WIjsMHsU1kQq5RaEOxjg0bxrN7YquTnw/jETLzN
-         6O2kQyddalRqkFMq+FMzq6T1IBEUisid1qQEJQGyA09dLUaAvuP+4K8B6p04KoC/t/yB
-         dY4VycxSHAP9qayaKCSYcfYI4XUqe8Z6W/dVieZiJG51iCGiehSC/g42n2M4ylVHfJhE
-         gz+Q5wKalOZ/rS17Pyx2kfsZINr2mm7Q13P09PN8q5rP4/huSmsGxOCUU2wKZv1EorO5
-         8GDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=zDggAsDI739UznsdJGV123TENJ6R94pJsrrMJ096A5w=;
-        b=XwlzmNfmk6FHQNon+V3ZUxH8/49AlL5BuztH4rmZH52iyZIexSXOVNJx547TsG+wgr
-         VrVF4Uvdq1zs6GZmnrTHFMuRIuCFHc41u8h5ZhqAOX2iHNQGCSZVy1diRl48uySZxfyK
-         WbpXlzHvRbCZYHHpDokQQ7ORIME1+g5P8Qt2xc5bKZNouAmY6ZfUvIb98tLDUDsoIN9D
-         7CpbItQ9iB1XLSxaXSz1F8qyQjFOQvP0DJNtBMNLtir0/l+FN5S9FTLGtdmAkRYaVEjY
-         hPQDpGoy+QNfo7X5Ch7y70EOdc1fv3KcmV18toi7vYUWGxyI8z7FsFq90J6mXRTgbo9o
-         WPgw==
-X-Gm-Message-State: AOAM532otH9JuBtfEs1zHAl7sEbZ4CVxSr35zT4JJsdD4BFj303nYXyd
-        aLUZQ377MXju73o+GCJFIEsOpA==
-X-Google-Smtp-Source: ABdhPJzq35Qf86wUQrahPKwseE7thoRB6fMPDxpfeiSBGzmY3jo07CAGFTuARsNI+6+8+yZsb+pOVQ==
-X-Received: by 2002:a17:902:6942:b029:d6:18b0:8a with SMTP id k2-20020a1709026942b02900d618b0008amr25452573plt.23.1604419391553;
-        Tue, 03 Nov 2020 08:03:11 -0800 (PST)
-Received: from localhost.localdomain ([122.173.169.225])
-        by smtp.gmail.com with ESMTPSA id j140sm8471006pfd.216.2020.11.03.08.03.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Nov 2020 08:03:10 -0800 (PST)
-From:   Sumit Garg <sumit.garg@linaro.org>
-To:     jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
-        jejb@linux.ibm.com
-Cc:     dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
-        jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
-        janne.karhunen@gmail.com, daniel.thompson@linaro.org,
-        Markus.Wamser@mixed-mode.de, lhinds@redhat.com,
-        keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Sumit Garg <sumit.garg@linaro.org>
-Subject: [PATCH v8 4/4] MAINTAINERS: Add myself as Trusted Keys co-maintainer
-Date:   Tue,  3 Nov 2020 21:31:46 +0530
-Message-Id: <1604419306-26105-5-git-send-email-sumit.garg@linaro.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
-References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
+        Tue, 3 Nov 2020 13:49:23 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A3IVInp076108;
+        Tue, 3 Nov 2020 13:49:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=XbU6z4LdrYfUhGMmjonRce3KkZEv6u0ng4kVFEKxkqg=;
+ b=Oogk72Up/WJecFnZF65tJk6ABaa75uNw1rpMZrP4SLkQJnuMQ7eTwCR/tZGvLR0bR5lW
+ nDRiCWjcnCMEBoawWD4CV2mYERs6P3xvkuRRljAcxDTV5NyZca7idApOatqaYEmPoxkd
+ lKemYUoKnPVnFT/+Ovu7CgSz4V5aqQw9XODfDXtYfkQxRzUREsVt5jG+qeJYoJmuAfNa
+ x1Wef4dqptLs9N1udtBBiCzbrdgOjfvWt+2BcSWseD46k1R2I7akfTV9dVQXxSWBCaZ2
+ XdOZTGg0OyyRuZNnVw3ZgUVjwz+N6h/2F0mq6dINonBIicKDg2FoOBeongYELmlvs3GC ZA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 34jwj1nts6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Nov 2020 13:49:06 -0500
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A3IepPM127117;
+        Tue, 3 Nov 2020 13:49:06 -0500
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 34jwj1ntr3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Nov 2020 13:49:05 -0500
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A3Il7DA008820;
+        Tue, 3 Nov 2020 18:49:03 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 34j6j41222-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Nov 2020 18:49:03 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A3In1du19792288
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Nov 2020 18:49:01 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C5B742049;
+        Tue,  3 Nov 2020 18:49:01 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5845542041;
+        Tue,  3 Nov 2020 18:48:58 +0000 (GMT)
+Received: from sig-9-65-255-16.ibm.com (unknown [9.65.255.16])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  3 Nov 2020 18:48:58 +0000 (GMT)
+Message-ID: <93e614b138c9f047612db304ca5ebe8a7b21c941.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 1/3] efi: generalize efi_get_secureboot
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Cc:     jmorris@namei.org, serge@hallyn.com, dmitry.kasatkin@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, clin@suse.com,
+        x86@kernel.org, jlee@suse.com, linux-integrity@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Tue, 03 Nov 2020 13:48:56 -0500
+In-Reply-To: <20201102223800.12181-2-ardb@kernel.org>
+References: <20201102223800.12181-1-ardb@kernel.org>
+         <20201102223800.12181-2-ardb@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-03_08:2020-11-03,2020-11-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=3
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011030123
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add a Trusted Keys co-maintainer entry in order to support TEE based
-Trusted Keys framework.
+On Mon, 2020-11-02 at 23:37 +0100, Ard Biesheuvel wrote:
+> From: Chester Lin <clin@suse.com>
+> 
+> Generalize the efi_get_secureboot() function so not only efistub but also
+> other subsystems can use it.
+> 
+> Note that the MokSbState handling is not factored out: the variable is
+> boot time only, and so it cannot be parameterized as easily. Also, the
+> IMA code will switch to this version in a future patch, and it does not
+> incorporate the MokSbState exception in the first place.
+> 
+> Note that the new efi_get_secureboot_mode() helper treats any failures
+> to read SetupMode as setup mode being disabled.
+> 
+> Co-developed-by: Chester Lin <clin@suse.com>
+> Signed-off-by: Chester Lin <clin@suse.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks, Ard.  Other than one minor thing inline below, the patch looks
+good.  I haven't done any testing yet.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e73636b..52687bb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9732,11 +9732,13 @@ KEYS-TRUSTED
- M:	James Bottomley <jejb@linux.ibm.com>
- M:	Jarkko Sakkinen <jarkko@kernel.org>
- M:	Mimi Zohar <zohar@linux.ibm.com>
-+M:	Sumit Garg <sumit.garg@linaro.org>
- L:	linux-integrity@vger.kernel.org
- L:	keyrings@vger.kernel.org
- S:	Supported
- F:	Documentation/security/keys/trusted-encrypted.rst
- F:	include/keys/trusted-type.h
-+F:	include/keys/trusted_tee.h
- F:	include/keys/trusted_tpm.h
- F:	security/keys/trusted-keys/
- 
--- 
-2.7.4
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index bd9d83a94173..79b2d4de62e0 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -1082,7 +1082,28 @@ enum efi_secureboot_mode {
+>  	efi_secureboot_mode_disabled,
+>  	efi_secureboot_mode_enabled,
+>  };
+> -enum efi_secureboot_mode efi_get_secureboot(void);
+> +
+> +static inline
+> +enum efi_secureboot_mode efi_get_secureboot_mode(efi_get_variable_t *get_var)
+
+get_var() should be defined as "efi_status_t".   If this is being
+upstreamed via integrity, I can make the change.
+
+thanks,
+
+Mimi
 
