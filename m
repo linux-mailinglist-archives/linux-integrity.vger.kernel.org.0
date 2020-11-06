@@ -2,61 +2,61 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3BC2A96F1
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Nov 2020 14:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DF92A972C
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Nov 2020 14:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727396AbgKFNYf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Nov 2020 08:24:35 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12354 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727287AbgKFNYf (ORCPT
+        id S1727353AbgKFNnW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Nov 2020 08:43:22 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31222 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726708AbgKFNnW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Nov 2020 08:24:35 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A6D3KAc045401;
-        Fri, 6 Nov 2020 08:24:28 -0500
+        Fri, 6 Nov 2020 08:43:22 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A6DbTfk095718;
+        Fri, 6 Nov 2020 08:43:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=pHx2leChPrzAo4WC2IenghVznIUYtgXXGfVyOhtlw/U=;
- b=PhsbIFYfRhRbCifMPlvp61ET8lMmQMqn26XRNQyyRN67kOkrOSj78oknde0VDPW7vMAR
- NWP/WG7uI+cPXkS9QMtMUnjZ4jLYvIerlmNGmN/C7fPB1YL5ak0MW8nem9671aFo/8hJ
- Orm/UcJo7phBFjVMn0ATnldfVuqxMcZ9rx+rDMqlW7tXOxTV5++eJF2+zKx6bgRnpTEM
- DTTgzcbcRmYEZE7u7Kajod6apwv1svfVM3q5V8pWm29JVVP68Gg2JWn/9v0qrftr2XgO
- AsfqaSnPfMhDtrk9PHBxA3FmTgX08xOPWqS2D8FWRmgOHUpa5H8b03EbQm5dNz8NWCgJ PA== 
+ bh=TuBf/6UR73LWJaaVgiNYfCFd4f2OcwVJWUGa7qux3W8=;
+ b=P2aQctbngYEygPUfbBejgF4uBkI+2owNKPFizEnVbWI8yj5I4pVB2QYMGg8Of87AAK+u
+ lnvtyC0dY/Ku9fMTAR2mNH3Z7E+YsQEf1fTNQMz8tmGwqaPwwuT6Y5MR8wYejazz4ae/
+ XiC2ztPd3oE8vf+MgNa0Rk/mxOnn+dfrfp2FiDqoKauc80IhxFAIW2r7M+C20qUq5Vjs
+ hQNiToMNM3z+R/kMw5k8uKC37ADY5MMpvqLdXFdduv5IV+8aP33IjJoFh15UeL1VnMSy
+ L4vjgwI9/sLRb6ROMHv5BRdT4QN8Naxi54eKipZCEJuafmNNNgvj2bFD0txDNT2BM2G1 zg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 34n3qr7m4p-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34m7teu97j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Nov 2020 08:24:28 -0500
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A6DFnwV106475;
-        Fri, 6 Nov 2020 08:24:27 -0500
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 34n3qr7m3m-1
+        Fri, 06 Nov 2020 08:43:15 -0500
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A6D4svQ096378;
+        Fri, 6 Nov 2020 08:43:14 -0500
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34m7teu93m-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Nov 2020 08:24:27 -0500
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A6DLxKn004773;
-        Fri, 6 Nov 2020 13:24:25 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 34hm6hdskk-1
+        Fri, 06 Nov 2020 08:43:14 -0500
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A6Dh9jT015155;
+        Fri, 6 Nov 2020 13:43:09 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 34jbyttffn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Nov 2020 13:24:25 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A6DONFB64553234
+        Fri, 06 Nov 2020 13:43:08 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A6Dh6YD6423102
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 Nov 2020 13:24:23 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36A63AE056;
-        Fri,  6 Nov 2020 13:24:23 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6192AE051;
-        Fri,  6 Nov 2020 13:24:19 +0000 (GMT)
+        Fri, 6 Nov 2020 13:43:06 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7FE93A4060;
+        Fri,  6 Nov 2020 13:43:06 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B31CAA405C;
+        Fri,  6 Nov 2020 13:43:02 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.77.67])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  6 Nov 2020 13:24:19 +0000 (GMT)
-Message-ID: <1f83ec246cb6356c340b379ab00e43f0b5bba0ae.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 3/7] IMA: add hook to measure critical data
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  6 Nov 2020 13:43:02 +0000 (GMT)
+Message-ID: <6d835878af2f11c837633510775742e57a1506eb.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 4/7] IMA: add policy to measure critical data
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
         stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
@@ -66,10 +66,10 @@ Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
         selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Date:   Fri, 06 Nov 2020 08:24:18 -0500
-In-Reply-To: <20201101222626.6111-4-tusharsu@linux.microsoft.com>
+Date:   Fri, 06 Nov 2020 08:43:01 -0500
+In-Reply-To: <20201101222626.6111-5-tusharsu@linux.microsoft.com>
 References: <20201101222626.6111-1-tusharsu@linux.microsoft.com>
-         <20201101222626.6111-4-tusharsu@linux.microsoft.com>
+         <20201101222626.6111-5-tusharsu@linux.microsoft.com>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
 Mime-Version: 1.0
@@ -77,11 +77,11 @@ Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-06_04:2020-11-05,2020-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- impostorscore=0 adultscore=0 phishscore=0 malwarescore=0 clxscore=1015
- mlxscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011060090
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ clxscore=1015 mlxscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011060092
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -89,115 +89,33 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 Hi Tushar,
 
 On Sun, 2020-11-01 at 14:26 -0800, Tushar Sugandhi wrote:
-> Currently, IMA does not provide a generic function for kernel subsystems
-> to measure their critical data. Examples of critical data in this context
-> could be kernel in-memory r/o structures, hash of the memory structures,
-> or data that represents a linux kernel subsystem state change. The 
-> critical data, if accidentally or maliciously altered, can compromise
-> the integrity of the system.
+> System administrators should be able to choose which kernel subsystems
+> they want to measure the critical data for. To enable that, an IMA policy
+> option to choose specific kernel subsystems is needed. This policy option
+> would constrain the measurement of the critical data to the given kernel
+> subsystems.
 
-Start out with what IMA does do (e.g. measures files and more recently
-buffer data).  Afterwards continue with kernel integrity critical data
-should also be measured.  Please include a definition of kernel
-integrity critical data here, as well as in the cover letter.
-
-> 
-> A generic function provided by IMA to measure critical data would enable
-> various subsystems with easier and faster on-boarding to use IMA
-> infrastructure and would also avoid code duplication.
-
-By definition LSM and IMA hooks are generic with callers in appropriate
-places in the kernel.   This paragraph is redundant.
-
-> 
-> Add a new IMA func CRITICAL_DATA and a corresponding IMA hook
-> ima_measure_critical_data() to support measuring critical data for 
-> various kernel subsystems. 
-
-Instead of using the word "add", it would be more appropriate to use
-the word "define".   Define a new IMA hook named
-ima_measure_critical_data to measure kernel integrity critical data.  
-Please also update the Subject line as well.  "ima: define an IMA hook
-to measure kernel integrity critical data".
-
-> 
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> ---
-> 
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 4485d87c0aa5..6e1b11dcba53 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -921,6 +921,44 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
->  	fdput(f);
->  }
->  
-> +/**
-> + * ima_measure_critical_data - measure kernel subsystem data
-> + * critical to integrity of the kernel
-
-Please change this to "measure kernel integrity critical data".
-
-> + * @event_data_source: name of the data source being measured;
-> + * typically it should be the name of the kernel subsystem that is sending
-> + * the data for measurement
-
-Including "data_source" here isn't quite right.  "data source" should
-only be added in the first patch which uses it, not here.   When adding
-it please shorten the field description to "kernel data source".   The
-longer explanation can be included in the longer function description.
-
-> + * @event_name: name of an event from the kernel subsystem that is sending
-> + * the data for measurement
-
-As this is being passed to process_buffer_measurement(), this should be
-the same or similar to the existing definition.
-
-> + * @buf: pointer to buffer containing data to measure
-> + * @buf_len: length of buffer(in bytes)
-> + * @measure_buf_hash: if set to true - will measure hash of the buf,
-> + *                    instead of buf
-
- kernel doc requires a single line.  In this case, please shorten the
-argument definition to "measure buffer data or buffer data hash".   The
-details can be included in the longer function description.
-
-> + *
-> + * A given kernel subsystem (event_data_source) may send
-> + * data (buf) to be measured when the data or the subsystem state changes.
-> + * The state/data change can be described by event_name.
-> + * Examples of critical data (buf) could be kernel in-memory r/o structures,
-> + * hash of the memory structures, or data that represents subsystem
-> + * state change.
-> + * measure_buf_hash can be used to save space, if the data being measured
-> + * is too large.
-> + * The data (buf) can only be measured, not appraised.
-> + */
-
-Please remove this longer function description, replacing it something
-more appropriate.  The subsequent patch that introduces the "data
-source" parameter would expand the description.
+Measuring critical data should not be dependent on the source of the
+critical data.   This patch needs to be split up.  The "data sources"
+should be move to it's own separate patch.  This patch should be
+limited to adding the policy code needed for measuring criticial data. 
+Limiting critical data sources should be the last patch in this series.
 
 thanks,
 
 Mimi
 
-> +void ima_measure_critical_data(const char *event_data_source,
-> +			       const char *event_name,
-> +			       const void *buf, int buf_len,
-> +			       bool measure_buf_hash)
-> +{
-> +	if (!event_name || !event_data_source || !buf || !buf_len) {
-> +		pr_err("Invalid arguments passed to %s().\n", __func__);
-> +		return;
-> +	}
-> +
-> +	process_buffer_measurement(NULL, buf, buf_len, event_name,
-> +				   CRITICAL_DATA, 0, event_data_source,
-> +				   measure_buf_hash);
-> +}
-> +
->  static int __init init_ima(void)
->  {
->  	int error;
+> 
+> Add a new IMA policy option - "data_sources:=" to the IMA func 
+> CRITICAL_DATA to allow measurement of various kernel subsystems. This
+> policy option would enable the system administrators to limit the
+> measurement to the subsystems listed in "data_sources:=", if the 
+> subsystem measures its data by calling ima_measure_critical_data().
+> 
+> Limit the measurement to the subsystems that are specified in the IMA
+> policy - CRITICAL_DATA+"data_sources:=". If "data_sources:=" is not
+> provided with the func CRITICAL_DATA, measure the data from all the
+> supported kernel subsystems.
+> 
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 
