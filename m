@@ -2,84 +2,167 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A672A9843
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Nov 2020 16:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB9F2A9878
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Nov 2020 16:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbgKFPNB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Nov 2020 10:13:01 -0500
-Received: from mail.rosalinux.ru ([195.19.76.54]:49696 "EHLO mail.rosalinux.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726813AbgKFPNA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Nov 2020 10:13:00 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id 46518DA413D25;
-        Fri,  6 Nov 2020 18:12:58 +0300 (MSK)
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id zZZWS39NdJUO; Fri,  6 Nov 2020 18:12:57 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id CB77EDA4580C6;
-        Fri,  6 Nov 2020 18:12:57 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru CB77EDA4580C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
-        s=A1AAD92A-9767-11E6-A27F-AC75C9F78EF4; t=1604675577;
-        bh=Ui8SloZuOqfppbuiT2A/TkSHVxDlEW+r7SCbL3jNjCE=;
-        h=To:From:Message-ID:Date:MIME-Version;
-        b=K0NWZ6kQOOqaEYan4orujB3fPC6pRIFauqVX8kXTtZcOYKOrtNqN2ivZXMd1oV/ME
-         eqeC4X41QsTRjlo8i6Pej5U6aaVB1C0aK59givGtdZ/N01on0woIbsd+//oKRSpyQX
-         INZb47OSINiaKA8OuRDX8Nb8zvjmHw37NTazyCRGTLxiXe0TTtue7yNEMiT25ong5h
-         O0cs2pY0riQ1g6bKkLEBtSV+/FuRxB7nYW+zalmdMeoqs8QqOuI2X9bvlVVCSNpIpi
-         8xIIqjNOCEMTm4TngQn4a70q5JXFHBsr9iIh9B2BAvEBY4HmtBQ5cCb4yNZTqA/TQE
-         3zg5P+PBgXr8g==
-X-Virus-Scanned: amavisd-new at rosalinux.ru
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id n9qkarrnGy5H; Fri,  6 Nov 2020 18:12:57 +0300 (MSK)
-Received: from [192.168.1.173] (broadband-90-154-71-72.ip.moscow.rt.ru [90.154.71.72])
-        by mail.rosalinux.ru (Postfix) with ESMTPSA id 6E77DD989FE20;
-        Fri,  6 Nov 2020 18:12:57 +0300 (MSK)
-Subject: Re: Selinux policy for x509_ima.der public certificate loaded by
- kernel during boot
-To:     rishi gupta <gupt21@gmail.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        selinux-refpolicy@vger.kernel.org, selinux@vger.kernel.org
-References: <CALUj-gt8KD4Cc-zgvXP-8vNdR3RB_Sdx7yd2cv7GX_wBCM6gEQ@mail.gmail.com>
-From:   Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
-Message-ID: <28afd683-8423-0331-4b7d-ec71d46be30c@rosalinux.ru>
-Date:   Fri, 6 Nov 2020 18:12:56 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CALUj-gt8KD4Cc-zgvXP-8vNdR3RB_Sdx7yd2cv7GX_wBCM6gEQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: ru-RU
-Content-Transfer-Encoding: quoted-printable
+        id S1727314AbgKFPYh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Nov 2020 10:24:37 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40422 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726812AbgKFPYh (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 6 Nov 2020 10:24:37 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A6F3NAP056226;
+        Fri, 6 Nov 2020 10:24:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=KBbdnSiz3EXWnhfRMbhvejhr2vQ9k1ez+Tx9W+nIVrg=;
+ b=SeSFoE3ZLmWoOCeSZKrKTM4Cc/LeywdLW6aPcK/QiWrDmjWo/DqyXxv1jsn6ZmgMnYzY
+ npaIIaL6ZMkaLmAN1cNLCQbysemsixL0OOwfVp5OsyViRGScJIQRYCPOdNPMQWk/v3HC
+ 179cayvgqfqJFX1iEbf3r4rKUAzvJRLucCK5eRMmXvnys1Vi8H/UJdmieH/HUq21SMXi
+ n2jkTHsTe8drlmtrShyz2S9HwYGWO+AGjsQJra4Kt0B1CWmeZfvvYpSGdcKrPCgP6k7V
+ yQ1wjO2bDQJVDByFw3XNj0HRksHP9T7MeaETnOnQ5JCUU1y8twSv2rOpRF7uYlnE8sZV AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34n0vygnj0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Nov 2020 10:24:33 -0500
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A6F3Sk9056743;
+        Fri, 6 Nov 2020 10:24:32 -0500
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34n0vygngs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Nov 2020 10:24:32 -0500
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A6FCigg013609;
+        Fri, 6 Nov 2020 15:24:29 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 34h01quduh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Nov 2020 15:24:29 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A6FORP05505684
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 6 Nov 2020 15:24:27 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6F92DAE051;
+        Fri,  6 Nov 2020 15:24:27 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B4A4AE045;
+        Fri,  6 Nov 2020 15:24:24 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.77.67])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  6 Nov 2020 15:24:23 +0000 (GMT)
+Message-ID: <7219f4404bc1bed6eb090b94363c283ec3266a17.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 6/7] IMA: add critical_data to the built-in policy
+ rules
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Date:   Fri, 06 Nov 2020 10:24:23 -0500
+In-Reply-To: <20201101222626.6111-7-tusharsu@linux.microsoft.com>
+References: <20201101222626.6111-1-tusharsu@linux.microsoft.com>
+         <20201101222626.6111-7-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-06_06:2020-11-05,2020-11-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 spamscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011060109
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-06.11.2020 15:22, rishi gupta =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> I am getting below error as selinux is denying access to the .ima
-> keyring. Looking for guidance for asymmetric public key selinux
-> policy.
->
-> [  172.014855] integrity: Request for unknown key 'id:87deb3bf' err -13
-I am getting the same error without selinux.
->
-> [  172.015035] audit: type=3D1800 audit(1604596570.579:240): pid=3D825
-> uid=3D1021 auid=3D4294967295 ses=3D4294967295
-> subj=3Dsystem_u:system_r:mydaemon_t:s0-s15:c0.c1023 op=3D"appraise_data=
-"
-> cause=3D"invalid-signature" comm=3D"mydaemon"
-> name=3D"/usr/lib/libstdc++.so.6.0.25" dev=3D"ubifs" ino=3D14353 res=3D0
-Selinux context is just logged here. It has nothing to do with reasons of=
- ivalid signature. Public key seems to be not loaded.
->
-> (a) Do I need to set the selinux context of file
-> /etc/keys/x509_ima.der. If yes what it should be.
-> (b) Do I need to set some selinux rule for .ima keyring. If yes how. I
-> tried a lot but could not find any resource.
-Usually IMA policy is loaded before SELinux policy I think
->
-> Regards,
-> Rishi
+Hi Lakshmi, Tushar,
+
+This patch defines a new critical_data builtin policy.  Please update
+the Subject line.
+
+On Sun, 2020-11-01 at 14:26 -0800, Tushar Sugandhi wrote:
+> From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> 
+> The IMA hook to measure kernel critical data, namely
+> ima_measure_critical_data(), could be called before a custom IMA policy
+> is loaded. For example, SELinux calls ima_measure_critical_data() to
+> measure its state and policy when they are initialized. This occurs
+> before a custom IMA policy is loaded, and hence IMA hook will not
+> measure the data. A built-in policy is therefore needed to measure
+> critical data provided by callers before a custom IMA policy is loaded.
+
+^Define a new critical data builtin policy to allow measuring early
+kernel integrity critical data before a custom IMA policy is loaded.
+
+Either remove the references to SELinux or move this patch after the
+subsequent patch which measures SELinux critical data.
+
+> 
+> Add CRITICAL_DATA to built-in IMA rules if the kernel command line
+> contains "ima_policy=critical_data". Set the IMA template for this rule
+> to "ima-buf" since ima_measure_critical_data() measures a buffer.
+> 
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+
+> ---
+>  security/integrity/ima/ima_policy.c | 32 +++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index ec99e0bb6c6f..dc8fe969d3fe 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+
+> @@ -875,6 +884,29 @@ void __init ima_init_policy(void)
+>  			  ARRAY_SIZE(default_appraise_rules),
+>  			  IMA_DEFAULT_POLICY);
+>  
+> +	if (ima_use_critical_data) {
+> +		template = lookup_template_desc("ima-buf");
+> +		if (!template) {
+> +			ret = -EINVAL;
+> +			goto out;
+> +		}
+> +
+> +		ret = template_desc_init_fields(template->fmt,
+> +						&(template->fields),
+> +						&(template->num_fields));
+
+The default IMA template when measuring buffer data is "ima_buf".   Is
+there a reason for allocating and initializing it here and not
+deferring it until process_buffer_measurement()?
+
+thanks,
+
+Mimi
+
+> +		if (ret)
+> +			goto out;
+> +
+> +		critical_data_rules[0].template = template;
+> +		add_rules(critical_data_rules,
+> +			  ARRAY_SIZE(critical_data_rules),
+> +			  IMA_DEFAULT_POLICY);
+> +	}
+> +
+> +out:
+> +	if (ret)
+> +		pr_err("%s failed, result: %d\n", __func__, ret);
+> +
+>  	ima_update_policy_flag();
+>  }
+>  
+
+
