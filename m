@@ -2,93 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 806DD2A97E7
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Nov 2020 15:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A672A9843
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Nov 2020 16:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbgKFOxB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Nov 2020 09:53:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41134 "EHLO mail.kernel.org"
+        id S1727020AbgKFPNB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Nov 2020 10:13:01 -0500
+Received: from mail.rosalinux.ru ([195.19.76.54]:49696 "EHLO mail.rosalinux.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726694AbgKFOxB (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Nov 2020 09:53:01 -0500
-Received: from kernel.org (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 68C9921556;
-        Fri,  6 Nov 2020 14:52:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604674380;
-        bh=EFmjPlOdyLT5ZNZK+D5Ee4aaKlYdMVdLhDBsCsU5sfI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K/OUy9MS5Am1Y+Darp4BPkNby574zAigogMyhAp4k8pvYpHAxPOYk4gX4KCmd8ecI
-         Ns7qUatjY6s1MEBfBIW8TWTkmlIs43PQiO60Kf9f1rcPqRnr45bVNb3AR7jD6Ucwlp
-         EqKT0+YVEJPn0xwiDQCx3AXVdCbVYsK1OPdwAWDk=
-Date:   Fri, 6 Nov 2020 16:52:52 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Markus Wamser <Markus.Wamser@mixed-mode.de>,
-        Luke Hinds <lhinds@redhat.com>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: Re: [PATCH v8 0/4] Introduce TEE based Trusted Keys support
-Message-ID: <20201106145252.GA10434@kernel.org>
-References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
- <20201105050736.GA702944@kernel.org>
- <CAFA6WYPetvod-Wov2n_L5TL771j+-kt+_csyWYT-uM=haEKMZQ@mail.gmail.com>
+        id S1726813AbgKFPNA (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 6 Nov 2020 10:13:00 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.rosalinux.ru (Postfix) with ESMTP id 46518DA413D25;
+        Fri,  6 Nov 2020 18:12:58 +0300 (MSK)
+Received: from mail.rosalinux.ru ([127.0.0.1])
+        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id zZZWS39NdJUO; Fri,  6 Nov 2020 18:12:57 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.rosalinux.ru (Postfix) with ESMTP id CB77EDA4580C6;
+        Fri,  6 Nov 2020 18:12:57 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru CB77EDA4580C6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
+        s=A1AAD92A-9767-11E6-A27F-AC75C9F78EF4; t=1604675577;
+        bh=Ui8SloZuOqfppbuiT2A/TkSHVxDlEW+r7SCbL3jNjCE=;
+        h=To:From:Message-ID:Date:MIME-Version;
+        b=K0NWZ6kQOOqaEYan4orujB3fPC6pRIFauqVX8kXTtZcOYKOrtNqN2ivZXMd1oV/ME
+         eqeC4X41QsTRjlo8i6Pej5U6aaVB1C0aK59givGtdZ/N01on0woIbsd+//oKRSpyQX
+         INZb47OSINiaKA8OuRDX8Nb8zvjmHw37NTazyCRGTLxiXe0TTtue7yNEMiT25ong5h
+         O0cs2pY0riQ1g6bKkLEBtSV+/FuRxB7nYW+zalmdMeoqs8QqOuI2X9bvlVVCSNpIpi
+         8xIIqjNOCEMTm4TngQn4a70q5JXFHBsr9iIh9B2BAvEBY4HmtBQ5cCb4yNZTqA/TQE
+         3zg5P+PBgXr8g==
+X-Virus-Scanned: amavisd-new at rosalinux.ru
+Received: from mail.rosalinux.ru ([127.0.0.1])
+        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id n9qkarrnGy5H; Fri,  6 Nov 2020 18:12:57 +0300 (MSK)
+Received: from [192.168.1.173] (broadband-90-154-71-72.ip.moscow.rt.ru [90.154.71.72])
+        by mail.rosalinux.ru (Postfix) with ESMTPSA id 6E77DD989FE20;
+        Fri,  6 Nov 2020 18:12:57 +0300 (MSK)
+Subject: Re: Selinux policy for x509_ima.der public certificate loaded by
+ kernel during boot
+To:     rishi gupta <gupt21@gmail.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        selinux-refpolicy@vger.kernel.org, selinux@vger.kernel.org
+References: <CALUj-gt8KD4Cc-zgvXP-8vNdR3RB_Sdx7yd2cv7GX_wBCM6gEQ@mail.gmail.com>
+From:   Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
+Message-ID: <28afd683-8423-0331-4b7d-ec71d46be30c@rosalinux.ru>
+Date:   Fri, 6 Nov 2020 18:12:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYPetvod-Wov2n_L5TL771j+-kt+_csyWYT-uM=haEKMZQ@mail.gmail.com>
+In-Reply-To: <CALUj-gt8KD4Cc-zgvXP-8vNdR3RB_Sdx7yd2cv7GX_wBCM6gEQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: ru-RU
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 03:02:41PM +0530, Sumit Garg wrote:
-> On Thu, 5 Nov 2020 at 10:37, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Tue, Nov 03, 2020 at 09:31:42PM +0530, Sumit Garg wrote:
-> > > Add support for TEE based trusted keys where TEE provides the functionality
-> > > to seal and unseal trusted keys using hardware unique key. Also, this is
-> > > an alternative in case platform doesn't possess a TPM device.
-> > >
-> > > This patch-set has been tested with OP-TEE based early TA which is already
-> > > merged in upstream [1].
-> >
-> > Is the new RPI400 computer a platform that can be used for testing
-> > patch sets like this? I've been looking for a while something ARM64
-> > based with similar convenience as Intel NUC's, and on the surface
-> > this new RPI product looks great for kernel testing purposes.
-> 
-> Here [1] is the list of supported versions of Raspberry Pi in OP-TEE.
-> The easiest approach would be to pick up a supported version or else
-> do an OP-TEE port for an unsupported one (which should involve minimal
-> effort).
-> 
-> [1] https://optee.readthedocs.io/en/latest/building/devices/rpi3.html#what-versions-of-raspberry-pi-will-work
-> 
-> -Sumit
-
-If porting is doable, then I'll just order RPI 400, and test with QEMU
-up until either I port OP-TEE myself or someone else does it.
-
-For seldom ARM testing, RPI 400 is really convenient device with its
-boxed form factor.
-
-/Jarkko
+06.11.2020 15:22, rishi gupta =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> I am getting below error as selinux is denying access to the .ima
+> keyring. Looking for guidance for asymmetric public key selinux
+> policy.
+>
+> [  172.014855] integrity: Request for unknown key 'id:87deb3bf' err -13
+I am getting the same error without selinux.
+>
+> [  172.015035] audit: type=3D1800 audit(1604596570.579:240): pid=3D825
+> uid=3D1021 auid=3D4294967295 ses=3D4294967295
+> subj=3Dsystem_u:system_r:mydaemon_t:s0-s15:c0.c1023 op=3D"appraise_data=
+"
+> cause=3D"invalid-signature" comm=3D"mydaemon"
+> name=3D"/usr/lib/libstdc++.so.6.0.25" dev=3D"ubifs" ino=3D14353 res=3D0
+Selinux context is just logged here. It has nothing to do with reasons of=
+ ivalid signature. Public key seems to be not loaded.
+>
+> (a) Do I need to set the selinux context of file
+> /etc/keys/x509_ima.der. If yes what it should be.
+> (b) Do I need to set some selinux rule for .ima keyring. If yes how. I
+> tried a lot but could not find any resource.
+Usually IMA policy is loaded before SELinux policy I think
+>
+> Regards,
+> Rishi
