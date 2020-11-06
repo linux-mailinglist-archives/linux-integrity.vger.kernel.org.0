@@ -2,101 +2,163 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAD92A9FC8
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Nov 2020 23:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA122AA191
+	for <lists+linux-integrity@lfdr.de>; Sat,  7 Nov 2020 00:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728625AbgKFWQA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Nov 2020 17:16:00 -0500
-Received: from mail.rosalinux.ru ([195.19.76.54]:35534 "EHLO mail.rosalinux.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728131AbgKFWP7 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Nov 2020 17:15:59 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id CE212DB8EE21B;
-        Sat,  7 Nov 2020 01:15:55 +0300 (MSK)
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id hopWbOV1vp0F; Sat,  7 Nov 2020 01:15:55 +0300 (MSK)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rosalinux.ru (Postfix) with ESMTP id 39947DB8EE204;
-        Sat,  7 Nov 2020 01:15:55 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru 39947DB8EE204
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
-        s=A1AAD92A-9767-11E6-A27F-AC75C9F78EF4; t=1604700955;
-        bh=Ue6ZRRrBPjLGXdUu0xLub/SlWb78cpWnaDjMIMfLwtY=;
-        h=To:From:Message-ID:Date:MIME-Version;
-        b=epSn7RlOjWUtFh7BHOK1XvN0CObN775w+8XVtsGUayqKCgKwhZRthfZKOGGSbF3S/
-         IAgkLGfnDSZrqK6AZGsKQFBMDcoYtLyWEQOyeB7ff1K/kK9um3C5M6pA2bxTa3XZQu
-         /0LCBQHDJ0Z5UXIudPIVMbGuZmcMMVcJw3fSweCkTXFznw4neYgsQ5Xj+B1QEB5aMl
-         7y83QiolwCudSIkFBKL+7YQD/AFKngOm6oxnJ1BDZQkEirTu1kx5PVYpD+How10b4M
-         Bq77WCz9PumvMTzB/EtdKJREXjJm1slBjSmiYTN2fj86aAwS4/Sqxc5rwwrKPzNeDv
-         TIbzG5r6Wzpfg==
-X-Virus-Scanned: amavisd-new at rosalinux.ru
-Received: from mail.rosalinux.ru ([127.0.0.1])
-        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id IvHGINrad3MD; Sat,  7 Nov 2020 01:15:55 +0300 (MSK)
-Received: from [192.168.1.173] (broadband-90-154-71-72.ip.moscow.rt.ru [90.154.71.72])
-        by mail.rosalinux.ru (Postfix) with ESMTPSA id C71ACDB8D6477;
-        Sat,  7 Nov 2020 01:15:54 +0300 (MSK)
-Subject: Re: Selinux policy for x509_ima.der public certificate loaded by
- kernel during boot
-To:     rishi gupta <gupt21@gmail.com>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        selinux-refpolicy@vger.kernel.org, selinux@vger.kernel.org
-References: <CALUj-gt8KD4Cc-zgvXP-8vNdR3RB_Sdx7yd2cv7GX_wBCM6gEQ@mail.gmail.com>
- <28afd683-8423-0331-4b7d-ec71d46be30c@rosalinux.ru>
- <CALUj-gtyVJ9nLYWYbX2Oa9=dcCYqc2H0RkO4HQcJKj2ejAfSYg@mail.gmail.com>
-From:   Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
-Message-ID: <bdd1becf-c72d-876a-cd9b-cef7b6fe55e9@rosalinux.ru>
-Date:   Sat, 7 Nov 2020 01:15:54 +0300
+        id S1728111AbgKFXwQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Nov 2020 18:52:16 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:35246 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727257AbgKFXv5 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 6 Nov 2020 18:51:57 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 65C7C20B4905;
+        Fri,  6 Nov 2020 15:51:56 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 65C7C20B4905
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1604706716;
+        bh=kxGG60RxNjicxicPDbW3b+qxMgL79W4w0YXfA5Y3vXU=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=ex4EsTrt+j5vt4L1eNjZYdFgpeTFKDoZ5jgR2zpjEXTnRPKKHXcfm+Ynn9jNE9hvc
+         NwVziSgFGzqJfvGTP9cytdr4U6rByB3I49bfWK3vXJZSrSfWDqjltnJgYD04Tksm/k
+         Gr8k8DbOaTjLewSUY1EooTrwSI9KK+zMWouAhXG4=
+Subject: Re: [PATCH v5 6/7] IMA: add critical_data to the built-in policy
+ rules
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20201101222626.6111-1-tusharsu@linux.microsoft.com>
+ <20201101222626.6111-7-tusharsu@linux.microsoft.com>
+ <7219f4404bc1bed6eb090b94363c283ec3266a17.camel@linux.ibm.com>
+ <cdcd63f7-ce1f-4463-f886-c36832d7a706@linux.microsoft.com>
+Message-ID: <d92869b5-7244-e29e-5d30-c0e06cf45be1@linux.microsoft.com>
+Date:   Fri, 6 Nov 2020 15:51:51 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CALUj-gtyVJ9nLYWYbX2Oa9=dcCYqc2H0RkO4HQcJKj2ejAfSYg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: ru-RU
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <cdcd63f7-ce1f-4463-f886-c36832d7a706@linux.microsoft.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 11/6/20 7:37 AM, Lakshmi Ramasubramanian wrote:
 
-06.11.2020 18:50, rishi gupta =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> On Fri, Nov 6, 2020 at 8:42 PM Mikhail Novosyolov
-> <m.novosyolov@rosalinux.ru> wrote:
->> 06.11.2020 15:22, rishi gupta =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>> I am getting below error as selinux is denying access to the .ima
->>> keyring. Looking for guidance for asymmetric public key selinux
->>> policy.
+Hi Mimi,
+
+> 
+>> Hi Lakshmi, Tushar,
+>>
+>> This patch defines a new critical_data builtin policy.  Please update
+>> the Subject line.
+>>
+>> On Sun, 2020-11-01 at 14:26 -0800, Tushar Sugandhi wrote:
+>>> From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 >>>
->>> [  172.014855] integrity: Request for unknown key 'id:87deb3bf' err -=
-13
->> I am getting the same error without selinux.
-> If I make selinux permissive, it works for me. So I know in my case
-> the problem is selinux.
->>> [  172.015035] audit: type=3D1800 audit(1604596570.579:240): pid=3D82=
-5
->>> uid=3D1021 auid=3D4294967295 ses=3D4294967295
->>> subj=3Dsystem_u:system_r:mydaemon_t:s0-s15:c0.c1023 op=3D"appraise_da=
-ta"
->>> cause=3D"invalid-signature" comm=3D"mydaemon"
->>> name=3D"/usr/lib/libstdc++.so.6.0.25" dev=3D"ubifs" ino=3D14353 res=3D=
-0
->> Selinux context is just logged here. It has nothing to do with reasons=
- of ivalid signature. Public key seems to be not loaded.
-> Basically when we access a file, driver checks if selinux allow access
-> to it or not. In my case this function is returning -EACCES
-> https://github.com/torvalds/linux/blob/master/security/keys/permission.=
-c#L88
->>> (a) Do I need to set the selinux context of file
->>> /etc/keys/x509_ima.der. If yes what it should be.
->>> (b) Do I need to set some selinux rule for .ima keyring. If yes how. =
-I
->>> tried a lot but could not find any resource.
->> Usually IMA policy is loaded before SELinux policy I think
-> I am using the policy defined in ima_policy driver as of now. My kernel=
- is 4.14.
-What is "ima_policy driver"? How does selinux and IMA policies get loaded=
- on your system?
->>> Regards,
->>> Rishi
+>>> The IMA hook to measure kernel critical data, namely
+>>> ima_measure_critical_data(), could be called before a custom IMA policy
+>>> is loaded. For example, SELinux calls ima_measure_critical_data() to
+>>> measure its state and policy when they are initialized. This occurs
+>>> before a custom IMA policy is loaded, and hence IMA hook will not
+>>> measure the data. A built-in policy is therefore needed to measure
+>>> critical data provided by callers before a custom IMA policy is loaded.
+>>
+>> ^Define a new critical data builtin policy to allow measuring early
+>> kernel integrity critical data before a custom IMA policy is loaded.
+> 
+> I will add the above line in the patch description.
+> 
+>>
+>> Either remove the references to SELinux or move this patch after the
+>> subsequent patch which measures SELinux critical data.
+> 
+> I will remove the reference to SELinux.
+> I think it would be better to have this patch before the SELinux 
+> measurement patch.
+> 
+>>
+>>>
+>>> Add CRITICAL_DATA to built-in IMA rules if the kernel command line
+>>> contains "ima_policy=critical_data". Set the IMA template for this rule
+>>> to "ima-buf" since ima_measure_critical_data() measures a buffer.
+>>>
+>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>
+>>> ---
+>>>   security/integrity/ima/ima_policy.c | 32 +++++++++++++++++++++++++++++
+>>>   1 file changed, 32 insertions(+)
+>>>
+>>> diff --git a/security/integrity/ima/ima_policy.c 
+>>> b/security/integrity/ima/ima_policy.c
+>>> index ec99e0bb6c6f..dc8fe969d3fe 100644
+>>> --- a/security/integrity/ima/ima_policy.c
+>>> +++ b/security/integrity/ima/ima_policy.c
+>>
+>>> @@ -875,6 +884,29 @@ void __init ima_init_policy(void)
+>>>                 ARRAY_SIZE(default_appraise_rules),
+>>>                 IMA_DEFAULT_POLICY);
+>>> +    if (ima_use_critical_data) {
+>>> +        template = lookup_template_desc("ima-buf");
+>>> +        if (!template) {
+>>> +            ret = -EINVAL;
+>>> +            goto out;
+>>> +        }
+>>> +
+>>> +        ret = template_desc_init_fields(template->fmt,
+>>> +                        &(template->fields),
+>>> +                        &(template->num_fields));
+>>
+>> The default IMA template when measuring buffer data is "ima_buf".   Is
+>> there a reason for allocating and initializing it here and not
+>> deferring it until process_buffer_measurement()?
+>>
+> 
+> You are right - good catch.
+> I will remove the above and validate.
+> 
+
+process_buffer_measurement() allocates and initializes "ima-buf" 
+template only when the parameter "func" is NONE. Currently, only 
+ima_check_blacklist() passes NONE for func when calling 
+process_buffer_measurement().
+
+If "func" is anything other than NONE, ima_match_policy() picks
+the default IMA template if the IMA policy rule does not specify a template.
+
+We need to add "ima-buf" in the built-in policy for critical_data so 
+that the default template is not used for buffer measurement.
+
+Please let me know if I am missing something.
+
+thanks,
+  -lakshmi
+
+>>
+>>> +        if (ret)
+>>> +            goto out;
+>>> +
+>>> +        critical_data_rules[0].template = template;
+>>> +        add_rules(critical_data_rules,
+>>> +              ARRAY_SIZE(critical_data_rules),
+>>> +              IMA_DEFAULT_POLICY);
+>>> +    }
+>>> +
+>>> +out:
+>>> +    if (ret)
+>>> +        pr_err("%s failed, result: %d\n", __func__, ret);
+>>> +
+>>>       ima_update_policy_flag();
+>>>   }
+>>
+> 
+
