@@ -2,117 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6172AC025
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Nov 2020 16:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838F62AC21F
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Nov 2020 18:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729320AbgKIPo2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Nov 2020 10:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726691AbgKIPo2 (ORCPT
+        id S1731289AbgKIRYG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Nov 2020 12:24:06 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:38056 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730588AbgKIRYG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Nov 2020 10:44:28 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529C1C0613CF;
-        Mon,  9 Nov 2020 07:44:28 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id y197so8288314qkb.7;
-        Mon, 09 Nov 2020 07:44:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=F11XWqHBkNs2G7N10KYRgvOsa+l8J0ZMIfdZaFwpxL0=;
-        b=tV/G4/nKXC+vpSdtZQGn2yFncbijp47eVjDEJkY7SxySB1EuUgxPxVSXeLIvVDxatM
-         w26l2+KWvyrfgHH6FGrxrlDa5N6sFm/o+LqkZ4eoez8jIcqkTf2Gzy6sxP3Wdh3Ael84
-         RKwVzQE1ORPzx1/xysBt/vVj46flUFB13ucK3P2J67YSiyC/HapntfOo6pd9vsWF1lwy
-         Vml3+bTUsn26+Zdi23ADwh1MnxBb4H9LTpgn5yhAFWkfYQltuj0cd88bhcqxfB3XP/aw
-         AzV4fz1r5AYLKBvuRaCcZtFhQuhoXtBYWMf8IR1Uk8BDe3Xs/xqwBUDnKbcIVLscQACm
-         6QSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=F11XWqHBkNs2G7N10KYRgvOsa+l8J0ZMIfdZaFwpxL0=;
-        b=QeGJenlPNSlBoz71/2Z4EBdeYanT0vMdLrCS8q3qqiWzbJZOUW5RnTvw2oZctSXx6d
-         6wyy6cNeKHZWj9CfjIPN5thsn0zAt6eRObLH0indMscUvrfwgNUOvv7YN81/n96aycjB
-         YwDJvdLSkHslqDx7bu5QI+hIGju9+mmZJNYsLffobyg+MvqhoFV1y6xDA0VCsy39gbU1
-         QMCM/UItTvRKyU6q1KdHd+rOAcbJRAVJF/zMSt26NQiTDjktO8/BeQHBlST9aBlruPBa
-         t6h5N7Lat00cPQ3Rvv/wXjB/avNZhETowoQ//UN0Yn0v29ZqwByXHF67zq3dWZV5xS9x
-         Rp+w==
-X-Gm-Message-State: AOAM533tS2PQ6C+1pJZgOEmHM/O+vZMTBrN7s68r3RUgcykrPfJy/Xd7
-        woL5caB98mamFRb+daFYxkokYwANQo7S2ApTlFFNj/tjv4izuw==
-X-Google-Smtp-Source: ABdhPJzPjpm7yJ8DWaA96wDB1v7XhVSeHu4S+wDOr+zVKb6173ksFJUqJypqrddEfxmqfbGrJVJO6NllcW0CEDBPb84=
-X-Received: by 2002:a37:f503:: with SMTP id l3mr13099138qkk.160.1604936666800;
- Mon, 09 Nov 2020 07:44:26 -0800 (PST)
+        Mon, 9 Nov 2020 12:24:06 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0418D20B4905;
+        Mon,  9 Nov 2020 09:24:04 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0418D20B4905
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1604942645;
+        bh=ta06hzgZzpA5ollIFWxpN65xzXn96qZS7d0S0MEGpnE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=e20YFcngAW2EheTQNcto50vE8IPR7U6bJ1KFsZZSgd8SV7QIB7x1pSLCf8jIuKGz3
+         9osm//coJGoMMv9BUBy4SCs06mVYnb4vDoHn2vf5s3mzq6bkfeRcg5Dwv/QLyS71+O
+         6NzLb842Vpdr3vNJtLvTrpCmn6hGwUiqrL4VPRG8=
+Subject: Re: [PATCH v5 6/7] IMA: add critical_data to the built-in policy
+ rules
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20201101222626.6111-1-tusharsu@linux.microsoft.com>
+ <20201101222626.6111-7-tusharsu@linux.microsoft.com>
+ <7219f4404bc1bed6eb090b94363c283ec3266a17.camel@linux.ibm.com>
+ <cdcd63f7-ce1f-4463-f886-c36832d7a706@linux.microsoft.com>
+ <d92869b5-7244-e29e-5d30-c0e06cf45be1@linux.microsoft.com>
+ <c2c6efe8b2903949fb7118b56991988ba9c4f582.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <4c568853-1e26-0a7b-f83b-022622e46031@linux.microsoft.com>
+Date:   Mon, 9 Nov 2020 09:24:04 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <CALUj-gt8KD4Cc-zgvXP-8vNdR3RB_Sdx7yd2cv7GX_wBCM6gEQ@mail.gmail.com>
- <28afd683-8423-0331-4b7d-ec71d46be30c@rosalinux.ru> <CALUj-gtyVJ9nLYWYbX2Oa9=dcCYqc2H0RkO4HQcJKj2ejAfSYg@mail.gmail.com>
- <bdd1becf-c72d-876a-cd9b-cef7b6fe55e9@rosalinux.ru>
-In-Reply-To: <bdd1becf-c72d-876a-cd9b-cef7b6fe55e9@rosalinux.ru>
-From:   rishi gupta <gupt21@gmail.com>
-Date:   Mon, 9 Nov 2020 21:14:14 +0530
-Message-ID: <CALUj-gtQsSnU0Yq5Syc7aOkN0PH_MHvziuuG1-9zotVUAJ2QoQ@mail.gmail.com>
-Subject: Re: Selinux policy for x509_ima.der public certificate loaded by
- kernel during boot
-To:     Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        selinux-refpolicy@vger.kernel.org, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <c2c6efe8b2903949fb7118b56991988ba9c4f582.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Nov 7, 2020 at 3:45 AM Mikhail Novosyolov
-<m.novosyolov@rosalinux.ru> wrote:
->
->
-> 06.11.2020 18:50, rishi gupta =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Fri, Nov 6, 2020 at 8:42 PM Mikhail Novosyolov
-> > <m.novosyolov@rosalinux.ru> wrote:
-> >> 06.11.2020 15:22, rishi gupta =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >>> I am getting below error as selinux is denying access to the .ima
-> >>> keyring. Looking for guidance for asymmetric public key selinux
-> >>> policy.
-> >>>
-> >>> [  172.014855] integrity: Request for unknown key 'id:87deb3bf' err -=
-13
-> >> I am getting the same error without selinux.
-> > If I make selinux permissive, it works for me. So I know in my case
-> > the problem is selinux.
-> >>> [  172.015035] audit: type=3D1800 audit(1604596570.579:240): pid=3D82=
-5
-> >>> uid=3D1021 auid=3D4294967295 ses=3D4294967295
-> >>> subj=3Dsystem_u:system_r:mydaemon_t:s0-s15:c0.c1023 op=3D"appraise_da=
-ta"
-> >>> cause=3D"invalid-signature" comm=3D"mydaemon"
-> >>> name=3D"/usr/lib/libstdc++.so.6.0.25" dev=3D"ubifs" ino=3D14353 res=
-=3D0
-> >> Selinux context is just logged here. It has nothing to do with reasons=
- of ivalid signature. Public key seems to be not loaded.
-> > Basically when we access a file, driver checks if selinux allow access
-> > to it or not. In my case this function is returning -EACCES
-> > https://github.com/torvalds/linux/blob/master/security/keys/permission.=
-c#L88
-> >>> (a) Do I need to set the selinux context of file
-> >>> /etc/keys/x509_ima.der. If yes what it should be.
-> >>> (b) Do I need to set some selinux rule for .ima keyring. If yes how. =
-I
-> >>> tried a lot but could not find any resource.
-> >> Usually IMA policy is loaded before SELinux policy I think
-> > I am using the policy defined in ima_policy driver as of now. My kernel=
- is 4.14.
-> What is "ima_policy driver"? How does selinux and IMA policies get loaded=
- on your system?
+On 11/8/20 7:46 AM, Mimi Zohar wrote:
+> Hi Lakshmi,
+> 
+> On Fri, 2020-11-06 at 15:51 -0800, Lakshmi Ramasubramanian wrote:
+>>
+>>>>> diff --git a/security/integrity/ima/ima_policy.c
+>>>>> b/security/integrity/ima/ima_policy.c
+>>>>> index ec99e0bb6c6f..dc8fe969d3fe 100644
+>>>>> --- a/security/integrity/ima/ima_policy.c
+>>>>> +++ b/security/integrity/ima/ima_policy.c
+>>>>
+>>>>> @@ -875,6 +884,29 @@ void __init ima_init_policy(void)
+>>>>>                  ARRAY_SIZE(default_appraise_rules),
+>>>>>                  IMA_DEFAULT_POLICY);
+>>>>> +    if (ima_use_critical_data) {
+>>>>> +        template = lookup_template_desc("ima-buf");
+>>>>> +        if (!template) {
+>>>>> +            ret = -EINVAL;
+>>>>> +            goto out;
+>>>>> +        }
+>>>>> +
+>>>>> +        ret = template_desc_init_fields(template->fmt,
+>>>>> +                        &(template->fields),
+>>>>> +                        &(template->num_fields));
+>>>>
+>>>> The default IMA template when measuring buffer data is "ima_buf".   Is
+>>>> there a reason for allocating and initializing it here and not
+>>>> deferring it until process_buffer_measurement()?
+>>>>
+>>>
+>>> You are right - good catch.
+>>> I will remove the above and validate.
+>>>
+>>
+>> process_buffer_measurement() allocates and initializes "ima-buf"
+>> template only when the parameter "func" is NONE. Currently, only
+>> ima_check_blacklist() passes NONE for func when calling
+>> process_buffer_measurement().
+>>
+>> If "func" is anything other than NONE, ima_match_policy() picks
+>> the default IMA template if the IMA policy rule does not specify a template.
+>>
+>> We need to add "ima-buf" in the built-in policy for critical_data so
+>> that the default template is not used for buffer measurement.
+>>
+>> Please let me know if I am missing something.
+>>
+> 
+> Let's explain a bit further what is happening and why.   As you said
+> ima_get_action() returns the template format, which may be the default
+> IMA template or the specific IMA policy rule template format.  This
+> works properly for both the arch specific and custom policies, but not
+> for builtin policies, because the policy rules may contain a rule
+> specific .template field.   When the rules don't contain a rule
+> specific template field, they default to the IMA default template.  In
+> the case of builtin policies, the policy rules cannot contain the
+> .template field.
+> 
+> The default template field for process_buffer_measurement() should
+> always be "ima-buf", not the default IMA template format.   Let's fix
+> this prior to this patch.
+> 
+> Probably something like this:
+> - In addition to initializing the default IMA template, initialize the
+> "ima-buf" template.  Maybe something similiar to
+> ima_template_desc_current().
+> - Set the default in process_buffer_measurement() to "ima-buf", before
+> calling ima_get_action().
+> - modify ima_match_policy() so that the default policy isn't reset when
+> already specified.
+> 
 
-For test purpose I am using "ima_policy=3Dtcb ima_appraise_tcb" in the
-commandline.
-I have not changed anything in the policy defined in 4.14 kernel driver for=
- now.
-https://github.com/torvalds/linux/blob/bebc6082da0a9f5d47a1ea2edc099bf67105=
-8bd4/security/integrity/ima/ima_policy.c#L132
-https://github.com/torvalds/linux/blob/bebc6082da0a9f5d47a1ea2edc099bf67105=
-8bd4/security/integrity/ima/ima_policy.c#L88
+Sure Mimi - I will try this out and update.
 
-> >>> Regards,
-> >>> Rishi
+thanks,
+  -lakshmi
+
+> 
+> 
+>>>>
+>>>>> +        if (ret)
+>>>>> +            goto out;
+>>>>> +
+>>>>> +        critical_data_rules[0].template = template;
+>>>>> +        add_rules(critical_data_rules,
+>>>>> +              ARRAY_SIZE(critical_data_rules),
+>>>>> +              IMA_DEFAULT_POLICY);
+>>>>> +    }
+>>>>> +
+>>>>> +out:
+>>>>> +    if (ret)
+>>>>> +        pr_err("%s failed, result: %d\n", __func__, ret);
+>>>>> +
+>>>>>        ima_update_policy_flag();
+>>>>>    }
+>>>>
+>>>
+>>
+
