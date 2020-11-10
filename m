@@ -2,320 +2,199 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 702B82ADB38
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Nov 2020 17:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF2D2AE036
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Nov 2020 20:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730479AbgKJQFG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Nov 2020 11:05:06 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:63078 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730186AbgKJQFG (ORCPT
+        id S1731623AbgKJTyc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Nov 2020 14:54:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726400AbgKJTyb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Nov 2020 11:05:06 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AAG1wHt149724
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Nov 2020 11:05:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=Y+K07jIcAoHXIf3ojqVBT8f3DNxMwKuW82/lOQARSro=;
- b=T810hrWe91XtlK5aQS471LF0YYFPO8asby/edLeJZjfW0qMpW1g+xj4OcPrbFsdBsAND
- OTc4+l3NtQ/4TfpK9MYqbulc28ME3Q0/zexcJ8WYMj9RB0NvV2eIoppAyE1msBhZh2zR
- ipEDf2OvL12/DDcu25GqC/U2Np4pTQkuLyHle8SHZYSkg+aiaKKCC0oh7FEadIYXMR4d
- bVEWw8WeNE3Yf46vLxZRLmHe/m3OWsKGY8KSCxGcc1YZGc+ljRk9mRx3Of5dfagyd4fo
- DXePMTH/DnUb0J0AjYPniv0QqXyYXH6+jq7oLrbp/uWIidj6nwbrStO7O4lJreUudrN+ DQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34qsbctc5s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Nov 2020 11:05:04 -0500
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AAG31JH007486
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Nov 2020 16:05:02 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 34nk789pmq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Nov 2020 16:05:02 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AAG503T1311280
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Nov 2020 16:05:00 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 240E411C05B;
-        Tue, 10 Nov 2020 16:05:00 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6955011C04A;
-        Tue, 10 Nov 2020 16:04:59 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.83.27])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 10 Nov 2020 16:04:59 +0000 (GMT)
-Message-ID: <d19bc808b3eeb40f47e010e0b23c26d2c807c538.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 3/5] ima-evm-utils: Change tpm2_pcr_read() to use C
- code
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Ken Goldman <kgoldman@us.ibm.com>,
-        Linux Integrity <linux-integrity@vger.kernel.org>
-Date:   Tue, 10 Nov 2020 11:04:58 -0500
-In-Reply-To: <20201012234416.20995-4-kgoldman@us.ibm.com>
-References: <20201012234416.20995-1-kgoldman@us.ibm.com>
-         <20201012234416.20995-4-kgoldman@us.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-10_06:2020-11-10,2020-11-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- mlxscore=0 priorityscore=1501 bulkscore=0 suspectscore=0 impostorscore=0
- spamscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011100111
+        Tue, 10 Nov 2020 14:54:31 -0500
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42925C0617A6
+        for <linux-integrity@vger.kernel.org>; Tue, 10 Nov 2020 11:54:30 -0800 (PST)
+Received: by mail-io1-xd41.google.com with SMTP id p7so15573158ioo.6
+        for <linux-integrity@vger.kernel.org>; Tue, 10 Nov 2020 11:54:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vdba1It8LuruBRXATlGs5ogDOu37tb0jUQlcsfQ+i94=;
+        b=erhpGeuR4YZoPxfbaOj6VRTo5qEDTaMnmy8kz3XZUQlHcvUC5PAMnd4vRUgcWhnCY4
+         HmjHbSPgIj5umTnUKC8XvX1IvbsCFZxMBGUdUE7TrHhyO2iCd6OhgwKqfD97WQg1umxw
+         JFTX/vqjOOD2aZVjcPXZOK3wm7m2rMYTBiYoY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vdba1It8LuruBRXATlGs5ogDOu37tb0jUQlcsfQ+i94=;
+        b=a7u13QfpB9Egl7hxZMnyZIYlwCvMe+jIDKOzFd1p/RdRmI0ysoO34U+bz+U3/SHtUq
+         E+oB+DVE1yGjNi7MZ7wqEIAaDS4GY13ZtBOxQJccsmMWHuMFAdKNXMZfbN96vwjLVKjg
+         ehWvJNC7D2O5OZlu/5f0lfbvwWa+9bouLxCrJQ+cVDcXIvTeVnq94bIYxBPRa72Q5wuD
+         rxzr6osr0eW3eLyxnodJYlIgclz6KESgS/SsyVTLPuSWbVE/JRX3DYpnX+jRO263wK+J
+         9m/D3wQYsRqpEnw8giaxEvmpz+m+KPaOdexaLm5+odB9yX+EHaDnVihMmIk88bypeSDy
+         GZrQ==
+X-Gm-Message-State: AOAM533BgiJew9VkSpCfadqUPDsJTdF7jPnPmmATeeqbb9DJiSoo0/RE
+        RVkUOs/+y1jNYK2ezvIiP2/lZg==
+X-Google-Smtp-Source: ABdhPJzSoGm8gSgvRaSBerc+sxmFJLhfNH27ldXelE/5n3b7bzL48Ie7m56QLtjKLU/yXqTHWYQj8w==
+X-Received: by 2002:a6b:b30b:: with SMTP id c11mr15269551iof.175.1605038069386;
+        Tue, 10 Nov 2020 11:54:29 -0800 (PST)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id o14sm123971ilg.71.2020.11.10.11.54.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Nov 2020 11:54:28 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
+        peterz@infradead.org, rafael@kernel.org, lenb@kernel.org,
+        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
+        rric@kernel.org, valentina.manea.m@gmail.com, shuah@kernel.org,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 00/13] Introduce seqnum_ops 
+Date:   Tue, 10 Nov 2020 12:53:26 -0700
+Message-Id: <cover.1605027593.git.skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Ken,
+There are a number of atomic_t usages in the kernel where atomic_t api
+is used strictly for counting sequence numbers and other statistical
+counters and not for managing object lifetime.
 
-On Mon, 2020-10-12 at 19:44 -0400, Ken Goldman wrote:
-> Replace the call out to the command line tools with C functions.
-> 
-> The algorithm_string_to_algid() function supports only the digest
-> algorithms in use.  The table has place holders for other agorithms as
-> they are needed and the C strings are defined.
-> 
-> The table can also be used for an algrithm ID to string function if
-> it's ever needed.
-> 
-> When using the IBM TSS, link in its library.
-> 
-> Signed-off-by: Ken Goldman <kgoldman@us.ibm.com>
+The purpose of these Sequence Number Ops is to clearly differentiate
+atomic_t counter usages from atomic_t usages that guard object lifetimes,
+hence prone to overflow and underflow errors.
 
-The code seems to be working properly, but needs to be cleaned up. 
-There are simple formatting changes and some style changes.
+The atomic_t api provides a wide range of atomic operations as a base
+api to implement atomic counters, bitops, spinlock interfaces. The usages
+also evolved into being used for resource lifetimes and state management.
+The refcount_t api was introduced to address resource lifetime problems
+related to atomic_t wrapping. There is a large overlap between the
+atomic_t api used for resource lifetimes and just counters, stats, and
+sequence numbers. It has become difficult to differentiate between the
+atomic_t usages that should be converted to refcount_t and the ones that
+can be left alone. Introducing seqnum_ops to wrap the usages that are
+stats, counters, sequence numbers makes it easier for tools that scan
+for underflow and overflow on atomic_t usages to detect overflow and
+underflows to scan just the cases that are prone to errors.
 
-Simple formatting changes:
-- Tabs should be 8 characters.
-- Remove blank spaces before code.
-- 80 characater maximum line length.
-- Leave a blank line between variable definitions and code.
-- Long comments should start with "/*" and end with "*/" on separate
-lines:
-/*
- * multiple line comments
- * continued
- */
-- When defining function variables, please use the format:
-term:
-<definition>
+Sequence Number api provides interfaces for simple atomic_t counter usages
+that just count, and don't guard resource lifetimes. The seqnum_ops are
+built on top of atomic_t api, providing a smaller subset of atomic_t
+interfaces necessary to support atomic_t usages as simple counters.
+This api has init/set/inc/dec/read and doesn't support any other atomic_t
+ops with the intent to restrict the use of these interfaces as simple
+counting usages.
 
+Sequence Numbers wrap around to INT_MIN when it overflows and should not
+be used to guard resource lifetimes, device usage and open counts that
+control state changes, and pm states. Overflowing to INT_MIN is consistent
+with the atomic_t api, which it is built on top of.
 
-Style changes:
-- There are valid reasons for having a common function exit (e.g.
-freeing memory), otherwise the function should exit early.  The "if (rc
-== 0)" tests cause the code to unnecessarily be indented.  Instead the
-test could be inverted "if (!rc)" followed by a "goto out".
+Using seqnum to guard lifetimes could lead to use-after free when it
+overflows and undefined behavior when used to manage state changes and
+device usage/open states.
 
-- Please do not use camel or Hungarian variable naming conventions.  
-The variable definition can reference the spec name.
+In addition this patch series converts a few drivers to use the new api.
+The following criteria is used for select variables for conversion:
 
-thanks,
+1. Variable doesn't guard object lifetimes, manage state changes e.g:
+   device usage counts, device open counts, and pm states.
+2. Variable is used for stats and counters.
+3. The conversion doesn't change the overflow behavior.
+4. Note: inc_return() usages are changed to _inc() followed by _read()
+   Patches: 03/13, 04/13, 09/13, 10/13, 11/13
+5. drivers/acpi and drivers/acpi/apei patches have been reviewed
+   before the rename, however in addition to rename, inc_return()
+   usages are changed to _inc() followed by _read()
+6. test_async_driver_probe, char/ipmi, and edac patches have been
+   reviewed and no changes other than the rename to seqnum_ops.
+7. security/integrity/ima: Okay to depend on CONFIG_64BIT? 
 
-Mimi
+The work for this is a follow-on to the discussion and review of
+Introduce Simple atomic counters patch series:
 
-> ---
->  src/Makefile.am      |   1 +
->  src/pcr_tsspcrread.c | 156 +++++++++++++++++++++++++++++++++----------
->  2 files changed, 123 insertions(+), 34 deletions(-)
-> 
-> diff --git a/src/Makefile.am b/src/Makefile.am
-> index d6c779f..bf18caf 100644
-> --- a/src/Makefile.am
-> +++ b/src/Makefile.am
-> @@ -26,6 +26,7 @@ if USE_PCRTSS
->  evmctl_SOURCES += pcr_tss.c
->  else
->  evmctl_SOURCES += pcr_tsspcrread.c
-> +evmctl_LDADD += -libmtss
->  endif
->  
->  AM_CPPFLAGS = -I$(top_srcdir) -include config.h
-> diff --git a/src/pcr_tsspcrread.c b/src/pcr_tsspcrread.c
-> index 118c7d2..eae68b7 100644
-> --- a/src/pcr_tsspcrread.c
-> +++ b/src/pcr_tsspcrread.c
-> @@ -50,6 +50,10 @@
->  #include "utils.h"
->  #include "imaevm.h"
->  
-> +#define TPM_POSIX	/* use Posix, not Windows constructs in TSS */
-> +#undef MAX_DIGEST_SIZE	/* imaevm uses a different value than the TSS */
-> +#include <ibmtss/tss.h>
-> +
->  #define CMD "tsspcrread"
->  
->  static char path[PATH_MAX];
-> @@ -68,44 +72,128 @@ int tpm2_pcr_supported(void)
->  	return 1;
->  }
->  
-> -int tpm2_pcr_read(const char *algo_name, uint32_t pcrHandle, uint8_t *hwpcr,
-> -		 int len, char **errmsg)
-> -{
-> -	FILE *fp;
-> -	char pcr[100];	/* may contain an error */
-> -	char cmd[PATH_MAX + 50];
-> -	int ret;
-> -
-> -	sprintf(cmd, "%s -halg %s -ha %d -ns 2> /dev/null",
-> -		path, algo_name, pcrHandle);
-> -	fp = popen(cmd, "r");
-> -	if (!fp) {
-> -		ret = asprintf(errmsg, "popen failed: %s", strerror(errno));
-> -		if (ret == -1)	/* the contents of errmsg is undefined */
-> -			*errmsg = NULL;
-> -		return -1;
-> -	}
-> +/* Table mapping C strings to TCG algorithm identifiers */
-> +
-> +typedef struct tdAlgorithm_Map {
-> +    const char *algorithm_string;
-> +    TPMI_ALG_HASH algid;
-> +} Algorithm_Map;
->  
-> -	if (fgets(pcr, sizeof(pcr), fp) == NULL) {
-> -		ret = asprintf(errmsg, "tsspcrread failed: %s",
-> -			       strerror(errno));
-> -		if (ret == -1)	/* the contents of errmsg is undefined */
-> -			*errmsg = NULL;
-> -		ret = pclose(fp);
-> -		return -1;
-> +Algorithm_Map algorithm_map[] = {
-> +				 { "sha1", TPM_ALG_SHA1},
-> +				 { "sha256", TPM_ALG_SHA256},
-> +#if 0	/* uncomment as these digest algorithms are supported */
-> +				 { "", TPM_ALG_SHA384},
-> +				 { "", TPM_ALG_SHA512},
-> +				 { "", TPM_ALG_SM3_256},
-> +				 { "", TPM_ALG_SHA3_256},
-> +				 { "", TPM_ALG_SHA3_384},
-> +				 { "", TPM_ALG_SHA3_512},
-> +#endif
-> +};
-> +
-> +/* algorithm_string_to_algid() converts a digest algorithm from a C string to a TCG algorithm
-> +   identifier as defined in the TCG Algorithm Regisrty..
-> +
-> +   Returns TPM_ALG_ERROR if the string has an unsupported value.
-> +*/
-> +
-> +static TPMI_ALG_HASH algorithm_string_to_algid(const char *algorithm_string)
-> +{
-> +    size_t 	i;
-> +    for (i=0 ; i < sizeof(algorithm_map)/sizeof(Algorithm_Map) ; i++) {
-> +	if (strcmp(algorithm_string, algorithm_map[i].algorithm_string) == 0) {
-> +	    return algorithm_map[i].algid; /* if match */
->  	}
-> +    }
-> +    return TPM_ALG_ERROR;
-> +}
->  
-> -	/* get the popen "cmd" return code */
-> -	ret = pclose(fp);
-> +/* tpm2_pcr_read() reads the PCR
->  
-> -	/* Treat an unallocated bank as an error */
-> -	if (!ret && (strlen(pcr) < SHA_DIGEST_LENGTH))
-> -		ret = -1;
-> +   algo_name is the PCR digest algorithm (the PCR bank) as a C string
-> +   pcrHandle is the PCR number to read
-> +   hwpcr is a buffer for the PCR output in binary
-> +   len is the allocated size of hwpcr and should match the digest algorithm
-> +*/
->  
-> -	if (!ret)
-> -		hex2bin(hwpcr, pcr, len);
-> -	else
-> -		*errmsg = strndup(pcr, strlen(pcr) - 1); /* remove newline */
-> +int tpm2_pcr_read(const char *algo_name, uint32_t pcrHandle, uint8_t *hwpcr,
-> +		 int len, char **errmsg)
-> +{
-> +        int 			ret = 0;	/* function return code */
-> +	TPM_RC			rc = 0;		/* TCG return code */
-> +	PCR_Read_In 		pcrReadIn;	/* command input */
-> +	PCR_Read_Out 		pcrReadOut;	/* response output */
-> +	TSS_CONTEXT		*tssContext = NULL;
-> +	TPMI_ALG_HASH 		alg_id;		/* PCR algorithm */
->  
-> -	return ret;
-> +	if (rc == 0) {		/* map algorithm string to TCG value */
-> +	    alg_id = algorithm_string_to_algid(algo_name);
-> +	    if (alg_id == TPM_ALG_ERROR) {
-> +		ret = asprintf(errmsg, "tpm2_pcr_read: unknown algorithm %s", algo_name);
-> +		if (ret == -1) {	/* the contents of errmsg is undefined */
-> +		    *errmsg = NULL;
-> +		}
-> +		rc = 1;
-> +	    }
-> +	}
-> +	if (rc == 0) {
-> +	    rc = TSS_Create(&tssContext);
-> +	}
-> +	/* call TSS to execute the command */
-> +	if (rc == 0) {
-> +	    pcrReadIn.pcrSelectionIn.count = 1;
-> +	    pcrReadIn.pcrSelectionIn.pcrSelections[0].hash = alg_id;
-> +	    pcrReadIn.pcrSelectionIn.pcrSelections[0].sizeofSelect = 3;
-> +	    pcrReadIn.pcrSelectionIn.pcrSelections[0].pcrSelect[0] = 0;
-> +	    pcrReadIn.pcrSelectionIn.pcrSelections[0].pcrSelect[1] = 0;
-> +	    pcrReadIn.pcrSelectionIn.pcrSelections[0].pcrSelect[2] = 0;
-> +	    pcrReadIn.pcrSelectionIn.pcrSelections[0].pcrSelect[pcrHandle / 8] =
-> +		1 << (pcrHandle % 8);
-> +	    rc = TSS_Execute(tssContext,
-> +			     (RESPONSE_PARAMETERS *)&pcrReadOut,
-> +			     (COMMAND_PARAMETERS *)&pcrReadIn,
-> +			     NULL,
-> +			     TPM_CC_PCR_Read,
-> +			     TPM_RH_NULL, NULL, 0);
-> +	}
-> +	if (rc == 0) {
-> +	    /* nothing read, bank missing */
-> +	    if (pcrReadOut.pcrValues.count == 0) {
-> +		ret = asprintf(errmsg, "tpm2_pcr_read: returned count 0 for %s", algo_name);
-> +		if (ret == -1) {	/* the contents of errmsg is undefined */
-> +		    *errmsg = NULL;
-> +		}
-> +		rc = 1;
-> +	    }
-> +	    /* len parameter did not match the digest algorithm */
-> +	    else if (pcrReadOut.pcrValues.digests[0].t.size != len) {
-> +		ret = asprintf(errmsg,
-> +			       "tpm2_pcr_read: expected length %d actual %u for %s",
-> +			       len, pcrReadOut.pcrValues.digests[0].t.size, algo_name);
-> +		if (ret == -1) {	/* the contents of errmsg is undefined */
-> +		    *errmsg = NULL;
-> +		}
-> +		rc = 1;
-> +	    }
-> +	    else {
-> +		memcpy(hwpcr,
-> +		       pcrReadOut.pcrValues.digests[0].t.buffer,
-> +		       pcrReadOut.pcrValues.digests[0].t.size);
-> +	    }
-> +	}
-> +	{
-> +	    TPM_RC rc1 = TSS_Delete(tssContext);
-> +	    if (rc == 0) {
-> +		rc = rc1;
-> +	    }
-> +	}
-> +	/* map TCG return code to function return code */
-> +	if (rc == 0) {
-> +	    return 0;
-> +	}
-> +	else {
-> +	    return -1;
-> +	}
->  }
-> +
+//lore.kernel.org/lkml/cover.1602209970.git.skhan@linuxfoundation.org/
 
+Based on the feedback to restrict and limit the scope:
+- dropped inc_return()
+- renamed interfaces to match the intent and also shorten the
+  interface names.
+
+Shuah Khan (13):
+  seqnum_ops: Introduce Sequence Number Ops
+  selftests: lib:test_seqnum_ops: add new test for seqnum_ops
+  drivers/acpi: convert seqno seqnum_ops
+  drivers/acpi/apei: convert seqno to seqnum_ops
+  drivers/base/test/test_async_driver_probe: convert to use seqnum_ops
+  drivers/char/ipmi: convert stats to use seqnum_ops
+  drivers/edac: convert pci counters to seqnum_ops
+  drivers/oprofile: convert stats to use seqnum_ops
+  drivers/staging/rtl8723bs: convert stats to use seqnum_ops
+  usb: usbip/vhci: convert seqno to seqnum_ops
+  drivers/staging/rtl8188eu: convert stats to use seqnum_ops
+  drivers/staging/unisys/visorhba: convert stats to use seqnum_ops
+  security/integrity/ima: converts stats to seqnum_ops
+
+ Documentation/core-api/atomic_ops.rst         |   4 +
+ Documentation/core-api/index.rst              |   1 +
+ Documentation/core-api/seqnum_ops.rst         | 126 ++++++++++++++
+ MAINTAINERS                                   |   8 +
+ drivers/acpi/acpi_extlog.c                    |   6 +-
+ drivers/acpi/apei/ghes.c                      |   6 +-
+ drivers/base/test/test_async_driver_probe.c   |  26 +--
+ drivers/char/ipmi/ipmi_msghandler.c           |   9 +-
+ drivers/char/ipmi/ipmi_si_intf.c              |   9 +-
+ drivers/char/ipmi/ipmi_ssif.c                 |   9 +-
+ drivers/edac/edac_pci.h                       |   5 +-
+ drivers/edac/edac_pci_sysfs.c                 |  28 ++--
+ drivers/oprofile/buffer_sync.c                |   9 +-
+ drivers/oprofile/event_buffer.c               |   3 +-
+ drivers/oprofile/oprof.c                      |   3 +-
+ drivers/oprofile/oprofile_stats.c             |  11 +-
+ drivers/oprofile/oprofile_stats.h             |  11 +-
+ drivers/oprofile/oprofilefs.c                 |   3 +-
+ drivers/staging/rtl8188eu/core/rtw_mlme_ext.c |  23 ++-
+ .../staging/rtl8188eu/include/rtw_mlme_ext.h  |   3 +-
+ drivers/staging/rtl8723bs/core/rtw_cmd.c      |   3 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c |  33 ++--
+ drivers/staging/rtl8723bs/include/rtw_cmd.h   |   3 +-
+ .../staging/rtl8723bs/include/rtw_mlme_ext.h  |   3 +-
+ .../staging/unisys/visorhba/visorhba_main.c   |  37 +++--
+ drivers/usb/usbip/vhci.h                      |   3 +-
+ drivers/usb/usbip/vhci_hcd.c                  |   9 +-
+ drivers/usb/usbip/vhci_rx.c                   |   3 +-
+ include/linux/oprofile.h                      |   3 +-
+ include/linux/seqnum_ops.h                    | 154 ++++++++++++++++++
+ lib/Kconfig                                   |   9 +
+ lib/Makefile                                  |   1 +
+ lib/test_seqnum_ops.c                         | 154 ++++++++++++++++++
+ security/integrity/ima/ima.h                  |   5 +-
+ security/integrity/ima/ima_api.c              |   2 +-
+ security/integrity/ima/ima_fs.c               |   4 +-
+ security/integrity/ima/ima_queue.c            |   7 +-
+ tools/testing/selftests/lib/Makefile          |   1 +
+ tools/testing/selftests/lib/config            |   1 +
+ .../testing/selftests/lib/test_seqnum_ops.sh  |  10 ++
+ 40 files changed, 637 insertions(+), 111 deletions(-)
+ create mode 100644 Documentation/core-api/seqnum_ops.rst
+ create mode 100644 include/linux/seqnum_ops.h
+ create mode 100644 lib/test_seqnum_ops.c
+ create mode 100755 tools/testing/selftests/lib/test_seqnum_ops.sh
+
+-- 
+2.27.0
 
