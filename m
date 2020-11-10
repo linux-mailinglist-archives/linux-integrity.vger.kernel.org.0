@@ -2,154 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 838F62AC21F
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Nov 2020 18:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9BD2ACD19
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Nov 2020 04:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731289AbgKIRYG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Nov 2020 12:24:06 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:38056 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730588AbgKIRYG (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Nov 2020 12:24:06 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0418D20B4905;
-        Mon,  9 Nov 2020 09:24:04 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0418D20B4905
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1604942645;
-        bh=ta06hzgZzpA5ollIFWxpN65xzXn96qZS7d0S0MEGpnE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=e20YFcngAW2EheTQNcto50vE8IPR7U6bJ1KFsZZSgd8SV7QIB7x1pSLCf8jIuKGz3
-         9osm//coJGoMMv9BUBy4SCs06mVYnb4vDoHn2vf5s3mzq6bkfeRcg5Dwv/QLyS71+O
-         6NzLb842Vpdr3vNJtLvTrpCmn6hGwUiqrL4VPRG8=
-Subject: Re: [PATCH v5 6/7] IMA: add critical_data to the built-in policy
- rules
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
-        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
-        paul@paul-moore.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20201101222626.6111-1-tusharsu@linux.microsoft.com>
- <20201101222626.6111-7-tusharsu@linux.microsoft.com>
- <7219f4404bc1bed6eb090b94363c283ec3266a17.camel@linux.ibm.com>
- <cdcd63f7-ce1f-4463-f886-c36832d7a706@linux.microsoft.com>
- <d92869b5-7244-e29e-5d30-c0e06cf45be1@linux.microsoft.com>
- <c2c6efe8b2903949fb7118b56991988ba9c4f582.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <4c568853-1e26-0a7b-f83b-022622e46031@linux.microsoft.com>
-Date:   Mon, 9 Nov 2020 09:24:04 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1732936AbgKJD7p (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Nov 2020 22:59:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57966 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387474AbgKJD4I (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:56:08 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 428CF20870;
+        Tue, 10 Nov 2020 03:56:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604980568;
+        bh=VA5SZyo0Z8SFLkqcGfxNL8fP++Eeshs2aTA2ESgMpzs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=2bC7iuFI0JqDW75vQRU6DMstrpNpZSAIqht5mdSVn7v3PE+k9icC+ntysmOIISx1u
+         fpcwhjjJ0glGuRT7/wCV4Y7VSiNUY9ZoNu1Bx4cFVQSiPpF4RsKVdzFFYkfy6kBb/q
+         Q/GCk35STLQOtDRKFqROTZpqDpZKsmrW3eYM7qkY=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Hans de Goede <hdegoede@redhat.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 20/21] tpm_tis: Disable interrupts on ThinkPad T490s
+Date:   Mon,  9 Nov 2020 22:55:40 -0500
+Message-Id: <20201110035541.424648-20-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201110035541.424648-1-sashal@kernel.org>
+References: <20201110035541.424648-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <c2c6efe8b2903949fb7118b56991988ba9c4f582.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/8/20 7:46 AM, Mimi Zohar wrote:
-> Hi Lakshmi,
-> 
-> On Fri, 2020-11-06 at 15:51 -0800, Lakshmi Ramasubramanian wrote:
->>
->>>>> diff --git a/security/integrity/ima/ima_policy.c
->>>>> b/security/integrity/ima/ima_policy.c
->>>>> index ec99e0bb6c6f..dc8fe969d3fe 100644
->>>>> --- a/security/integrity/ima/ima_policy.c
->>>>> +++ b/security/integrity/ima/ima_policy.c
->>>>
->>>>> @@ -875,6 +884,29 @@ void __init ima_init_policy(void)
->>>>>                  ARRAY_SIZE(default_appraise_rules),
->>>>>                  IMA_DEFAULT_POLICY);
->>>>> +    if (ima_use_critical_data) {
->>>>> +        template = lookup_template_desc("ima-buf");
->>>>> +        if (!template) {
->>>>> +            ret = -EINVAL;
->>>>> +            goto out;
->>>>> +        }
->>>>> +
->>>>> +        ret = template_desc_init_fields(template->fmt,
->>>>> +                        &(template->fields),
->>>>> +                        &(template->num_fields));
->>>>
->>>> The default IMA template when measuring buffer data is "ima_buf".   Is
->>>> there a reason for allocating and initializing it here and not
->>>> deferring it until process_buffer_measurement()?
->>>>
->>>
->>> You are right - good catch.
->>> I will remove the above and validate.
->>>
->>
->> process_buffer_measurement() allocates and initializes "ima-buf"
->> template only when the parameter "func" is NONE. Currently, only
->> ima_check_blacklist() passes NONE for func when calling
->> process_buffer_measurement().
->>
->> If "func" is anything other than NONE, ima_match_policy() picks
->> the default IMA template if the IMA policy rule does not specify a template.
->>
->> We need to add "ima-buf" in the built-in policy for critical_data so
->> that the default template is not used for buffer measurement.
->>
->> Please let me know if I am missing something.
->>
-> 
-> Let's explain a bit further what is happening and why.   As you said
-> ima_get_action() returns the template format, which may be the default
-> IMA template or the specific IMA policy rule template format.  This
-> works properly for both the arch specific and custom policies, but not
-> for builtin policies, because the policy rules may contain a rule
-> specific .template field.   When the rules don't contain a rule
-> specific template field, they default to the IMA default template.  In
-> the case of builtin policies, the policy rules cannot contain the
-> .template field.
-> 
-> The default template field for process_buffer_measurement() should
-> always be "ima-buf", not the default IMA template format.   Let's fix
-> this prior to this patch.
-> 
-> Probably something like this:
-> - In addition to initializing the default IMA template, initialize the
-> "ima-buf" template.  Maybe something similiar to
-> ima_template_desc_current().
-> - Set the default in process_buffer_measurement() to "ima-buf", before
-> calling ima_get_action().
-> - modify ima_match_policy() so that the default policy isn't reset when
-> already specified.
-> 
+From: Jerry Snitselaar <jsnitsel@redhat.com>
 
-Sure Mimi - I will try this out and update.
+[ Upstream commit b154ce11ead925de6a94feb3b0317fafeefa0ebc ]
 
-thanks,
-  -lakshmi
+There is a misconfiguration in the bios of the gpio pin used for the
+interrupt in the T490s. When interrupts are enabled in the tpm_tis
+driver code this results in an interrupt storm. This was initially
+reported when we attempted to enable the interrupt code in the tpm_tis
+driver, which previously wasn't setting a flag to enable it. Due to
+the reports of the interrupt storm that code was reverted and we went back
+to polling instead of using interrupts. Now that we know the T490s problem
+is a firmware issue, add code to check if the system is a T490s and
+disable interrupts if that is the case. This will allow us to enable
+interrupts for everyone else. If the user has a fixed bios they can
+force the enabling of interrupts with tpm_tis.interrupts=1 on the
+kernel command line.
 
-> 
-> 
->>>>
->>>>> +        if (ret)
->>>>> +            goto out;
->>>>> +
->>>>> +        critical_data_rules[0].template = template;
->>>>> +        add_rules(critical_data_rules,
->>>>> +              ARRAY_SIZE(critical_data_rules),
->>>>> +              IMA_DEFAULT_POLICY);
->>>>> +    }
->>>>> +
->>>>> +out:
->>>>> +    if (ret)
->>>>> +        pr_err("%s failed, result: %d\n", __func__, ret);
->>>>> +
->>>>>        ima_update_policy_flag();
->>>>>    }
->>>>
->>>
->>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Reviewed-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/char/tpm/tpm_tis.c | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index f08949a5f6785..5a3a4f0953910 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -31,6 +31,7 @@
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/kernel.h>
++#include <linux/dmi.h>
+ #include "tpm.h"
+ #include "tpm_tis_core.h"
+ 
+@@ -53,8 +54,8 @@ static inline struct tpm_tis_tcg_phy *to_tpm_tis_tcg_phy(struct tpm_tis_data *da
+ 	return container_of(data, struct tpm_tis_tcg_phy, priv);
+ }
+ 
+-static bool interrupts = true;
+-module_param(interrupts, bool, 0444);
++static int interrupts = -1;
++module_param(interrupts, int, 0444);
+ MODULE_PARM_DESC(interrupts, "Enable interrupts");
+ 
+ static bool itpm;
+@@ -67,6 +68,28 @@ module_param(force, bool, 0444);
+ MODULE_PARM_DESC(force, "Force device probe rather than using ACPI entry");
+ #endif
+ 
++static int tpm_tis_disable_irq(const struct dmi_system_id *d)
++{
++	if (interrupts == -1) {
++		pr_notice("tpm_tis: %s detected: disabling interrupts.\n", d->ident);
++		interrupts = 0;
++	}
++
++	return 0;
++}
++
++static const struct dmi_system_id tpm_tis_dmi_table[] = {
++	{
++		.callback = tpm_tis_disable_irq,
++		.ident = "ThinkPad T490s",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
++		},
++	},
++	{}
++};
++
+ #if defined(CONFIG_PNP) && defined(CONFIG_ACPI)
+ static int has_hid(struct acpi_device *dev, const char *hid)
+ {
+@@ -196,6 +219,8 @@ static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
+ 	int irq = -1;
+ 	int rc;
+ 
++	dmi_check_system(tpm_tis_dmi_table);
++
+ 	rc = check_acpi_tpm2(dev);
+ 	if (rc)
+ 		return rc;
+-- 
+2.27.0
 
