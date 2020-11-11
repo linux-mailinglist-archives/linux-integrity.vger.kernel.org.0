@@ -2,52 +2,34 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 195342AE37F
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Nov 2020 23:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BBF2AE76D
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Nov 2020 05:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732350AbgKJWmQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Nov 2020 17:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
+        id S1725870AbgKKEde (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Nov 2020 23:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732320AbgKJWmP (ORCPT
+        with ESMTP id S1725828AbgKKEde (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Nov 2020 17:42:15 -0500
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA77AC061A04
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Nov 2020 14:42:14 -0800 (PST)
-Received: by mail-il1-x141.google.com with SMTP id z2so108455ilh.11
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Nov 2020 14:42:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7jSf/XzZ4jyQ+1vMaLtMgIwZ1Hd3aE57H+YNIg7Vd6s=;
-        b=HmAOZ27e8pHLOZtNt33kCndwJB139JyHCZFOiD/C94/+pWb2KGdTlQCvLFR1HyR9mk
-         lFx1ytT/rJSJ7/tpMYshlVQIWUN/TZct4TCzlg9wYsDyPKswhZWrEi9oFiHeYSi0CMuE
-         tmbYZnr4Jy0AgOqG0pqnPBmt6xrLd9kKaYRBo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7jSf/XzZ4jyQ+1vMaLtMgIwZ1Hd3aE57H+YNIg7Vd6s=;
-        b=YwZ4btl1d4xtKJTv8aJgNTiZR+307/2wODf1apds1rpb9uDKICIcTYoSlc3JXFs4tr
-         WXEuvbmyKVPL0/D5Mmg1ivvO5du2Cv5dmPH1GpR4Bb1UZUGAOUMlXU/6xcgA+ecg3kQb
-         cpgohZh0g+3PaswbRDo5P/zmp5DJtUvY+ae9fvWzl05dcuuurkWWCAX4UWoSyp/v54Gy
-         ckfDdh+w59xXhOTWMkexWf5feWW1I6p089F0t25uf5S28a9+orH4a6hwnafeJ+UpBV7M
-         Pie7qTybndkgj1H85PhMDREXuCtzlho9/ONDY25oAASurgwEm7XgfjGzc6t5w5sLpCNj
-         +tow==
-X-Gm-Message-State: AOAM531c8neEVtE5lmy9T0xT5c/ZIRyd7Qv3hTTKtOgKdQdFFtEwDLDI
-        P3ZxgFxmje3aopLkl8q7ggc8zQ==
-X-Google-Smtp-Source: ABdhPJy+/m7HgoPinpwrhFYoHGR3jeRThmYkrgj1Js7jS1hKjj3aF+EFXbp2kYFpSB7gnDlz1TZdJg==
-X-Received: by 2002:a92:99ce:: with SMTP id t75mr16441201ilk.257.1605048133972;
-        Tue, 10 Nov 2020 14:42:13 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id e12sm38652ilq.65.2020.11.10.14.42.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Nov 2020 14:42:13 -0800 (PST)
-Subject: Re: [PATCH 00/13] Introduce seqnum_ops
-To:     Alan Stern <stern@rowland.harvard.edu>
+        Tue, 10 Nov 2020 23:33:34 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE02FC0613D1;
+        Tue, 10 Nov 2020 20:33:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gL0OocahXZn8ZQNF8szmGW51uY79EBzlZ34GhrWeBso=; b=oDeBdofTe937SyWQ5KS04zcvqC
+        lgvZ1G91Fpn0+Q6hWzn8iz4pOCTvXSHpD6P1QhX5Qd04Kt1Qw+XpMngVvHfktQNVQ1ulA67YiL7nL
+        tA8aihrql/H2AMkAyYWzWFIN9Ce0745Pa94PaKzEiQEtKHdWkthYtwOI+SQpKIJw6ptG47vbEq7Sm
+        XbhcamxT5yKVkB0cRiWCzjhuX2LfopicPBECLbWzvfoBpL8c7A/pYE1TRlavFekqmDsyuYQ9Lmaqv
+        TacYawpzSIaJXXew8hPtbksnGSLMeAoHskMPJw9V8IhREGECwGEFySLXGWxjJ//+BgXGebA+WR5kI
+        gAImvbZw==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kchoe-0002CB-P0; Wed, 11 Nov 2020 04:33:04 +0000
+Date:   Wed, 11 Nov 2020 04:33:04 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
 Cc:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
         peterz@infradead.org, rafael@kernel.org, lenb@kernel.org,
         james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
@@ -61,72 +43,21 @@ Cc:     corbet@lwn.net, keescook@chromium.org, gregkh@linuxfoundation.org,
         linux-edac@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 00/13] Introduce seqnum_ops
+Message-ID: <20201111043304.GS17076@casper.infradead.org>
 References: <cover.1605027593.git.skhan@linuxfoundation.org>
- <20201110204414.GA204624@rowland.harvard.edu>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <c58fde16-4bd1-0e1e-94ce-a15c359f9f91@linuxfoundation.org>
-Date:   Tue, 10 Nov 2020 15:42:11 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.2
 MIME-Version: 1.0
-In-Reply-To: <20201110204414.GA204624@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1605027593.git.skhan@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/10/20 1:44 PM, Alan Stern wrote:
-> On Tue, Nov 10, 2020 at 12:53:26PM -0700, Shuah Khan wrote:
->> There are a number of atomic_t usages in the kernel where atomic_t api
->> is used strictly for counting sequence numbers and other statistical
->> counters and not for managing object lifetime.
->>
->> The purpose of these Sequence Number Ops is to clearly differentiate
->> atomic_t counter usages from atomic_t usages that guard object lifetimes,
->> hence prone to overflow and underflow errors.
->>
->> The atomic_t api provides a wide range of atomic operations as a base
->> api to implement atomic counters, bitops, spinlock interfaces. The usages
->> also evolved into being used for resource lifetimes and state management.
->> The refcount_t api was introduced to address resource lifetime problems
->> related to atomic_t wrapping. There is a large overlap between the
->> atomic_t api used for resource lifetimes and just counters, stats, and
->> sequence numbers. It has become difficult to differentiate between the
->> atomic_t usages that should be converted to refcount_t and the ones that
->> can be left alone. Introducing seqnum_ops to wrap the usages that are
->> stats, counters, sequence numbers makes it easier for tools that scan
->> for underflow and overflow on atomic_t usages to detect overflow and
->> underflows to scan just the cases that are prone to errors.
->>
->> Sequence Number api provides interfaces for simple atomic_t counter usages
->> that just count, and don't guard resource lifetimes. The seqnum_ops are
->> built on top of atomic_t api, providing a smaller subset of atomic_t
->> interfaces necessary to support atomic_t usages as simple counters.
->> This api has init/set/inc/dec/read and doesn't support any other atomic_t
->> ops with the intent to restrict the use of these interfaces as simple
->> counting usages.
->>
->> Sequence Numbers wrap around to INT_MIN when it overflows and should not
->> be used to guard resource lifetimes, device usage and open counts that
->> control state changes, and pm states. Overflowing to INT_MIN is consistent
->> with the atomic_t api, which it is built on top of.
-> 
-> If Sequence Numbers are subject to wraparound then they aren't reliable.
-> Given that they aren't reliable, why use atomic instructions at all?
-> Why not just use plain regular integers with READ_ONCE and WRITE_ONCE?
-> 
+On Tue, Nov 10, 2020 at 12:53:26PM -0700, Shuah Khan wrote:
+> There are a number of atomic_t usages in the kernel where atomic_t api
+> is used strictly for counting sequence numbers and other statistical
+> counters and not for managing object lifetime.
 
-You still need atomic update for these numbers. The intent is to provide
-atomic api for cases where the variable doesn't guard lifetimes and yet
-needs atomic instructions.
-
-Several such usages where atomic_t is used for up counting, also use
-upper bounds. It is also an option to switch to seqnum64 to avoid
-wrap around in case there is a concern.
-
-thanks,
--- Shuah
-
-
+We already have something in Linux called a sequence counter, and it's
+different from this.  ID counter?  instance number?  monotonic_t?  stat_t?
