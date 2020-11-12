@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0622B108E
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Nov 2020 22:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CB02B109F
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Nov 2020 22:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbgKLVr3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Nov 2020 16:47:29 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:53474 "EHLO
+        id S1727384AbgKLVs4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Nov 2020 16:48:56 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:53680 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726960AbgKLVr2 (ORCPT
+        with ESMTP id S1727362AbgKLVsz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Nov 2020 16:47:28 -0500
+        Thu, 12 Nov 2020 16:48:55 -0500
 Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C6CEE20C2872;
-        Thu, 12 Nov 2020 13:47:27 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C6CEE20C2872
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4CDCA20C2872;
+        Thu, 12 Nov 2020 13:48:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4CDCA20C2872
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1605217648;
-        bh=IYRQbMtYBZ7qgPiPGwnVjY8YEci9yTL8glUotKnXc/k=;
+        s=default; t=1605217734;
+        bh=gj7I7H7R+K+HUdjzOSyTXtGvFpPPfgwXVjL9OcdcHEo=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=akCFzKtaivx6Ishh+tDLpQiWEGlNvCRC3PYSQhJuYeiR4/8FrafD5T2rL10xIVsfl
-         TQa2RppfkMs4t7OiBnv1zoZXrZFiydrYrhWaE3lWlrBbLiGnTqG3fWZb32E3ztD1F9
-         DaMA+eMfYasQCfhzyx9VlYJyY3M+hkEKZ4g0HVGM=
+        b=RBiN6mtpwxcu9Z+PR5cU/KcnnExclGovD66+hhEb4gPSium3dfPvzhtaGPdEUjbzY
+         2JO6951UPvYg7t/EaqmVMnYF8N3jfjC5/eumKdaTxoyUhw96E2kxbbH2yVIXDr1XPZ
+         tvV2Bs9ArFN0/wjQ9AKGSGKFMCiqdW10LeVV9ipo=
 Subject: Re: [PATCH v5 2/7] IMA: update process_buffer_measurement to measure
  buffer hash
 To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
@@ -34,89 +34,106 @@ Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         linux-kernel@vger.kernel.org, dm-devel@redhat.com
 References: <20201101222626.6111-1-tusharsu@linux.microsoft.com>
  <20201101222626.6111-3-tusharsu@linux.microsoft.com>
- <d0e96ccc49590c5ff11675661592b70b0f021636.camel@linux.ibm.com>
+ <811fbc4a6f4bd02c77518bd4196d354071145f3e.camel@linux.ibm.com>
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <7034a775-cde6-1eae-132a-4cb84f310bca@linux.microsoft.com>
-Date:   Thu, 12 Nov 2020 13:47:27 -0800
+Message-ID: <702e7d17-27f0-30e7-b5ce-affecb0c8de7@linux.microsoft.com>
+Date:   Thu, 12 Nov 2020 13:48:53 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <d0e96ccc49590c5ff11675661592b70b0f021636.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <811fbc4a6f4bd02c77518bd4196d354071145f3e.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Mimi,
 
-On 2020-11-05 6:30 a.m., Mimi Zohar wrote:
+
+On 2020-11-06 4:11 a.m., Mimi Zohar wrote:
 > Hi Tushar,
 > 
-> Please don't include the filename in the Subject line[1].   The Subject
-> line should be a summary phrase describing the patch.   In this case,
-> it is adding support for measuring the buffer data hash.
+> Below inline are a few additional comments.
 > 
-Thanks. Will update the subject line accordingly.
+>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+>> index ae5da9f3339d..4485d87c0aa5 100644
+>> --- a/security/integrity/ima/ima_main.c
+>> +++ b/security/integrity/ima/ima_main.c
+>> @@ -787,12 +787,15 @@ int ima_post_load_data(char *buf, loff_t size,
+>>    * @func: IMA hook
+>>    * @pcr: pcr to extend the measurement
+>>    * @func_data: private data specific to @func, can be NULL.
+>> + * @measure_buf_hash: if set to true - will measure hash of the buf,
+>> + *                    instead of buf
+>>    *
+>>    * Based on policy, the buffer is measured into the ima log.
+> 
+> Both the brief and longer function descriptions need to be updated, as
+> well as the last argument description.  The last argument should be
+> limited to "measure buffer hash".  How it is used could be included in
+> the longer function description.  The longer function description would
+> include adding the buffer data or the buffer data hash to the IMA
+> measurement list and extending the PCR.
+> 
+> For example,
+> process_buffer_measurement - measure the buffer data or the buffer data
+> hash
+> 
+Thanks Mimi. Will update the brief and longer descriptions accordingly.
+> 
+>>    */
+>>   void process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>>   				const char *eventname, enum ima_hooks func,
+>> -				int pcr, const char *func_data)
+>> +				int pcr, const char *func_data,
+>> +				bool measure_buf_hash)
+>>   {
+>>   	int ret = 0;
+>>   	const char *audit_cause = "ENOMEM";
+>> @@ -807,6 +810,8 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>>   		struct ima_digest_data hdr;
+>>   		char digest[IMA_MAX_DIGEST_SIZE];
+>>   	} hash = {};
+>> +	char digest_hash[IMA_MAX_DIGEST_SIZE];
+>> +	int hash_len = hash_digest_size[ima_hash_algo];
+>>   	int violation = 0;
+>>   	int action = 0;
+>>   	u32 secid;
+>> @@ -855,6 +860,21 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>>   		goto out;
+>>   	}
+>>   
+>> +	if (measure_buf_hash) {
+>> +		memcpy(digest_hash, hash.hdr.digest, hash_len);
+> 
+> Instead of digest_hash and hash_len, consider naming the variables
+> buf_hash and buf_hashlen.
+> 
+Thanks. Will do.
+>> +
+>> +		ret = ima_calc_buffer_hash(digest_hash,
+>> +					   hash_len,
+>> +					   iint.ima_hash);
+> 
+> There's no need for each variable to be on a separate line.
+> 
+Thanks, will fix.
+~Tushar
 
-> On Sun, 2020-11-01 at 14:26 -0800, Tushar Sugandhi wrote:
->> process_buffer_measurement() currently only measures the input buffer.
->> In case of SeLinux policy measurement, the policy being measured could
->> be large (several MB). This may result in a large entry in IMA
->> measurement log.
-> 
-> SELinux is an example of measuring large buffer data.  Please rewrite
-> this patch description (and the other patch descriptions in this patch
-> set) without using the example to describe its purpose [1].
-> 
-> In this case, you might say,
-> 
-> The original IMA buffer data measurement sizes were small (e.g. boot
-> command line), but new buffer data measurement use cases are a lot
-> larger.  Just as IMA measures the file data hash, not the file data,
-> IMA should similarly support measuring the buffer data hash.
-> 
-Sure. Thanks a lot for giving an example wording for us. Will update.
->>
->> Introduce a boolean parameter measure_buf_hash to support measuring
->> hash of a buffer, which would be much smaller, instead of the buffer
->> itself.
-> 
->> To use the functionality introduced in this patch, the attestation
->> client and the server changes need to go hand in hand. The
->> client/kernel would know what data is being measured as-is
->> (e.g. KEXEC_CMDLINE), and what data has it’s hash measured (e.g. SeLinux
->> Policy). And the attestation server should verify data/hash accordingly.
->>
->> Just like the data being measured in other cases, the attestation server
->> will know what are possible values of the large buffers being measured.
->> e.g. the possible valid SeLinux policy values that are being pushed to
->> the client. The attestation server will have to maintain the hash of
->> those buffer values.
-> 
-> Each patch in the patch set builds upon the previous one.   (Think of
-> it as a story, where each chapter builds upon the previous ones.)
-> With rare exceptions, should patches reference subsequent patches. [2]
-> 
-> [1] Refer to Documentation/process/submitting-patches.rst
-> [2] Refer to the section "8) Commenting" in
-> Documentation/process/coding-style.rst
-> 
 > thanks,
 > 
 > Mimi
 > 
-I am not sure if you have any concerns about the last two paragraphs.
-The description about the attestation client and server (the last two
-paragraphs) was added for information/clarification purpose only, as per
-your feedback on previous iterations. The subsequent patches don’t have
-any code pertaining to attestation client/server.
-
-*Question*
-Maybe the last two paragraphs are confusing/redundant. Could you please
-let me know if I should remove the above two paragraphs altogether? 
-(starting with “To use the functionality introduced in this patch ...”)
-
-If we decide to keep the paragraphs, I will remove the specific examples
-(KEXEC_CMDLINE, SeLinux etc.) as you mentioned elsewhere.
+>> +		if (ret < 0) {
+>> +			audit_cause = "measure_buf_hash_error";
+>> +			goto out;
+>> +		}
+>> +
+>> +		event_data.buf = digest_hash;
+>> +		event_data.buf_len = hash_len;
+>> +	}
+>> +
+>>   	ret = ima_alloc_init_template(&event_data, &entry, template);
+>>   	if (ret < 0) {
+>>   		audit_cause = "alloc_entry";
