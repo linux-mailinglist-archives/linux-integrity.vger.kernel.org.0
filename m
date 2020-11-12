@@ -2,29 +2,28 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CB02B109F
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Nov 2020 22:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66392B10BE
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Nov 2020 22:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727384AbgKLVs4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Nov 2020 16:48:56 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:53680 "EHLO
+        id S1727175AbgKLV5Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Nov 2020 16:57:24 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:54722 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727362AbgKLVsz (ORCPT
+        with ESMTP id S1727043AbgKLV5Y (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Nov 2020 16:48:55 -0500
+        Thu, 12 Nov 2020 16:57:24 -0500
 Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4CDCA20C2872;
-        Thu, 12 Nov 2020 13:48:54 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4CDCA20C2872
+        by linux.microsoft.com (Postfix) with ESMTPSA id CBA5920C2872;
+        Thu, 12 Nov 2020 13:57:22 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CBA5920C2872
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1605217734;
-        bh=gj7I7H7R+K+HUdjzOSyTXtGvFpPPfgwXVjL9OcdcHEo=;
+        s=default; t=1605218243;
+        bh=PkdjkruNANX8wdTbYPq9U2AHzVXQRRmafd7bWjQQQ9Y=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=RBiN6mtpwxcu9Z+PR5cU/KcnnExclGovD66+hhEb4gPSium3dfPvzhtaGPdEUjbzY
-         2JO6951UPvYg7t/EaqmVMnYF8N3jfjC5/eumKdaTxoyUhw96E2kxbbH2yVIXDr1XPZ
-         tvV2Bs9ArFN0/wjQ9AKGSGKFMCiqdW10LeVV9ipo=
-Subject: Re: [PATCH v5 2/7] IMA: update process_buffer_measurement to measure
- buffer hash
+        b=pb5+ds9Y1dHnrmNkg9sdbhb7z8gLlGW/fGr6/SoubR2iPOSlWiXvd8Cuj8JRaXBJ+
+         zCz4CA7hkVKQ/Jxg4W1xa03C7v0iARqYKG8lptnRBYBhctzmlh2naTTJrP/2HwfMVd
+         WM5cawaRS7G50Pc3DbXOkRnm7IH9v2F2XoizC3WY=
+Subject: Re: [PATCH v5 3/7] IMA: add hook to measure critical data
 To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
         casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
         gmazyland@gmail.com, paul@paul-moore.com
@@ -33,107 +32,174 @@ Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, dm-devel@redhat.com
 References: <20201101222626.6111-1-tusharsu@linux.microsoft.com>
- <20201101222626.6111-3-tusharsu@linux.microsoft.com>
- <811fbc4a6f4bd02c77518bd4196d354071145f3e.camel@linux.ibm.com>
+ <20201101222626.6111-4-tusharsu@linux.microsoft.com>
+ <1f83ec246cb6356c340b379ab00e43f0b5bba0ae.camel@linux.ibm.com>
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <702e7d17-27f0-30e7-b5ce-affecb0c8de7@linux.microsoft.com>
-Date:   Thu, 12 Nov 2020 13:48:53 -0800
+Message-ID: <25622ca6-359d-fa97-c5e6-e314cba51306@linux.microsoft.com>
+Date:   Thu, 12 Nov 2020 13:57:22 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <811fbc4a6f4bd02c77518bd4196d354071145f3e.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
+In-Reply-To: <1f83ec246cb6356c340b379ab00e43f0b5bba0ae.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 
-On 2020-11-06 4:11 a.m., Mimi Zohar wrote:
+On 2020-11-06 5:24 a.m., Mimi Zohar wrote:
 > Hi Tushar,
 > 
-> Below inline are a few additional comments.
+> On Sun, 2020-11-01 at 14:26 -0800, Tushar Sugandhi wrote:
+>> Currently, IMA does not provide a generic function for kernel subsystems
+>> to measure their critical data. Examples of critical data in this context
+>> could be kernel in-memory r/o structures, hash of the memory structures,
+>> or data that represents a linux kernel subsystem state change. The
+>> critical data, if accidentally or maliciously altered, can compromise
+>> the integrity of the system.
 > 
+> Start out with what IMA does do (e.g. measures files and more recently
+> buffer data).  Afterwards continue with kernel integrity critical data
+> should also be measured.  Please include a definition of kernel
+> integrity critical data here, as well as in the cover letter.
+> 
+Yes, will do. I will also describe what kernel integrity critical data
+is – by providing a definition, and not by example -  as you suggested.
+(here and in the cover letter)
+
+>>
+>> A generic function provided by IMA to measure critical data would enable
+>> various subsystems with easier and faster on-boarding to use IMA
+>> infrastructure and would also avoid code duplication.
+> 
+> By definition LSM and IMA hooks are generic with callers in appropriate
+> places in the kernel.   This paragraph is redundant.
+> 
+Sounds good. I will remove this paragraph.
+>>
+>> Add a new IMA func CRITICAL_DATA and a corresponding IMA hook
+>> ima_measure_critical_data() to support measuring critical data for
+>> various kernel subsystems.
+> 
+> Instead of using the word "add", it would be more appropriate to use
+> the word "define".   Define a new IMA hook named
+> ima_measure_critical_data to measure kernel integrity critical data.
+> Please also update the Subject line as well.  "ima: define an IMA hook
+> to measure kernel integrity critical data".
+> 
+Sounds good. Will do.
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> ---
+>>
 >> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
->> index ae5da9f3339d..4485d87c0aa5 100644
+>> index 4485d87c0aa5..6e1b11dcba53 100644
 >> --- a/security/integrity/ima/ima_main.c
 >> +++ b/security/integrity/ima/ima_main.c
->> @@ -787,12 +787,15 @@ int ima_post_load_data(char *buf, loff_t size,
->>    * @func: IMA hook
->>    * @pcr: pcr to extend the measurement
->>    * @func_data: private data specific to @func, can be NULL.
+>> @@ -921,6 +921,44 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+>>   	fdput(f);
+>>   }
+>>   
+>> +/**
+>> + * ima_measure_critical_data - measure kernel subsystem data
+>> + * critical to integrity of the kernel
+> 
+> Please change this to "measure kernel integrity critical data".
+> 
+*Question*
+Thanks Mimi. Do you want us just to update the description, or do you
+want us to update the function name too?
+
+I believe you meant just description, but still want to clarify.
+
+ima_measure_kernel_integrity_critical_data() would be too long.
+Maybe ima_measure_integrity_critical_data()?
+
+Or do you want us to keep the existing ima_measure_critical_data()?
+Could you please let us know?
+
+>> + * @event_data_source: name of the data source being measured;
+>> + * typically it should be the name of the kernel subsystem that is sending
+>> + * the data for measurement
+> 
+> Including "data_source" here isn't quite right.  "data source" should
+> only be added in the first patch which uses it, not here.   When adding
+> it please shorten the field description to "kernel data source".   The
+> longer explanation can be included in the longer function description.
+> 
+*Question*
+Do you mean the parameter @event_data_source should be removed from this
+patch? And then later added in patch 7/7 – where SeLinux uses it?
+
+But ima_measure_critical_data() calls process_buffer_measurement(), and
+p_b_m() accepts it as part of the param @func_data.
+
+What should we pass to p_b_m() @func_data in this patch, if we remove
+@event_data_source from this patch?
+
+>> + * @event_name: name of an event from the kernel subsystem that is sending
+>> + * the data for measurement
+> 
+> As this is being passed to process_buffer_measurement(), this should be
+> the same or similar to the existing definition.
+> 
+Ok. I will change this to @eventname to be consistemt with p_b_m().
+
+>> + * @buf: pointer to buffer containing data to measure
+>> + * @buf_len: length of buffer(in bytes)
 >> + * @measure_buf_hash: if set to true - will measure hash of the buf,
 >> + *                    instead of buf
->>    *
->>    * Based on policy, the buffer is measured into the ima log.
 > 
-> Both the brief and longer function descriptions need to be updated, as
-> well as the last argument description.  The last argument should be
-> limited to "measure buffer hash".  How it is used could be included in
-> the longer function description.  The longer function description would
-> include adding the buffer data or the buffer data hash to the IMA
-> measurement list and extending the PCR.
+>   kernel doc requires a single line.  In this case, please shorten the
+> argument definition to "measure buffer data or buffer data hash".   The
+> details can be included in the longer function description.
 > 
-> For example,
-> process_buffer_measurement - measure the buffer data or the buffer data
-> hash
+Sounds good. Will do.
+>> + *
+>> + * A given kernel subsystem (event_data_source) may send
+>> + * data (buf) to be measured when the data or the subsystem state changes.
+>> + * The state/data change can be described by event_name.
+>> + * Examples of critical data (buf) could be kernel in-memory r/o structures,
+>> + * hash of the memory structures, or data that represents subsystem
+>> + * state change.
+>> + * measure_buf_hash can be used to save space, if the data being measured
+>> + * is too large.
+>> + * The data (buf) can only be measured, not appraised.
+>> + */
 > 
-Thanks Mimi. Will update the brief and longer descriptions accordingly.
+> Please remove this longer function description, replacing it something
+> more appropriate.  The subsequent patch that introduces the "data
+> source" parameter would expand the description.
 > 
->>    */
->>   void process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   				const char *eventname, enum ima_hooks func,
->> -				int pcr, const char *func_data)
->> +				int pcr, const char *func_data,
->> +				bool measure_buf_hash)
->>   {
->>   	int ret = 0;
->>   	const char *audit_cause = "ENOMEM";
->> @@ -807,6 +810,8 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   		struct ima_digest_data hdr;
->>   		char digest[IMA_MAX_DIGEST_SIZE];
->>   	} hash = {};
->> +	char digest_hash[IMA_MAX_DIGEST_SIZE];
->> +	int hash_len = hash_digest_size[ima_hash_algo];
->>   	int violation = 0;
->>   	int action = 0;
->>   	u32 secid;
->> @@ -855,6 +860,21 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   		goto out;
->>   	}
->>   
->> +	if (measure_buf_hash) {
->> +		memcpy(digest_hash, hash.hdr.digest, hash_len);
-> 
-> Instead of digest_hash and hash_len, consider naming the variables
-> buf_hash and buf_hashlen.
-> 
-Thanks. Will do.
->> +
->> +		ret = ima_calc_buffer_hash(digest_hash,
->> +					   hash_len,
->> +					   iint.ima_hash);
-> 
-> There's no need for each variable to be on a separate line.
-> 
-Thanks, will fix.
-~Tushar
-
 > thanks,
 > 
 > Mimi
 > 
->> +		if (ret < 0) {
->> +			audit_cause = "measure_buf_hash_error";
->> +			goto out;
->> +		}
->> +
->> +		event_data.buf = digest_hash;
->> +		event_data.buf_len = hash_len;
+*Question*
+Hi Mimi, will do.
+Do you want the data_source to be part of SeLinux patch? (patch 7/7 of
+this series).
+Or a separate patch before it?
+~Tushar
+
+>> +void ima_measure_critical_data(const char *event_data_source,
+>> +			       const char *event_name,
+>> +			       const void *buf, int buf_len,
+>> +			       bool measure_buf_hash)
+>> +{
+>> +	if (!event_name || !event_data_source || !buf || !buf_len) {
+>> +		pr_err("Invalid arguments passed to %s().\n", __func__);
+>> +		return;
 >> +	}
 >> +
->>   	ret = ima_alloc_init_template(&event_data, &entry, template);
->>   	if (ret < 0) {
->>   		audit_cause = "alloc_entry";
+>> +	process_buffer_measurement(NULL, buf, buf_len, event_name,
+>> +				   CRITICAL_DATA, 0, event_data_source,
+>> +				   measure_buf_hash);
+>> +}
+>> +
+>>   static int __init init_ima(void)
+>>   {
+>>   	int error;
