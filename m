@@ -2,53 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F392AFEAC
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Nov 2020 06:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B6F2B0998
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Nov 2020 17:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728966AbgKLFjX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Nov 2020 00:39:23 -0500
-Received: from mail-proxy101.phy.heteml.jp ([157.7.189.101]:38188 "EHLO
-        mail-proxy101.phy.heteml.jp" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728344AbgKLDkS (ORCPT
+        id S1728756AbgKLQLf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Nov 2020 11:11:35 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2096 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728426AbgKLQLf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Nov 2020 22:40:18 -0500
-X-Greylist: delayed 888 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Nov 2020 22:40:14 EST
-Received: from mail-proxy101.phy.heteml.jp (localhost [127.0.0.1])
-        by mail-proxy101.phy.heteml.jp (Postfix) with ESMTP id 5D4F41661124;
-        Thu, 12 Nov 2020 12:25:22 +0900 (JST)
-Received: from 127.0.0.1 (127.0.0.1)
- by mail-proxy101.phy.heteml.jp (HETEML-Fsecure);
- Thu, 12 Nov 2020 12:25:22 +0900 (JST)
-X-Virus-Status: clean(HETEML-Fsecure)
-Received: from User (unknown [52.231.203.57])
-        (Authenticated sender: form@healingart-n.jp)
-        by mail-proxy101.phy.heteml.jp (Postfix) with ESMTPA;
-        Thu, 12 Nov 2020 12:25:22 +0900 (JST)
-Reply-To: <reemhashimymail@gmail.com>
-From:   "Reem" <form@healingart-n.jp>
-Subject: Hello Friend  12/11/2020
-Date:   Thu, 12 Nov 2020 03:25:24 -0000
+        Thu, 12 Nov 2020 11:11:35 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CX64K1xg2z67Ks4;
+        Fri, 13 Nov 2020 00:09:37 +0800 (CST)
+Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.161)
+ by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Thu, 12 Nov 2020 17:11:33 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH] ima: Set and clear FMODE_CAN_READ in ima_calc_file_hash()
+Date:   Thu, 12 Nov 2020 17:10:05 +0100
+Message-ID: <20201112161005.6192-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.27.GIT
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20201112032522.5D4F41661124@mail-proxy101.phy.heteml.jp>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.65.161]
+X-ClientProxiedBy: lhreml715-chm.china.huawei.com (10.201.108.66) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-My name is Reem Hashimy, the Emirates Minister of State and Managing Director of the United Arab Emirates (Dubai) World Expo 2020 Committee which has been postponed to October 2021 to March 2022 because of the Covid-19 pandemic.
- 
-I am writing to you to manage the funds I received as financial gratification from various foreign companies I assisted to receive a participation approval to the coming event. The amount is $44,762,906.00 United States dollars. But I can not personally manage the fund in my country because of the sensitive nature of my office and the certain restriction on married Muslim women.
+Commit a1f9b1c0439db ("integrity/ima: switch to using __kernel_read")
+replaced the __vfs_read() call in integrity_kernel_read() with
+__kernel_read(), a new helper introduced by commit 61a707c543e2a ("fs: add
+a __kernel_read helper").
 
-For this reason, an agreement was reached with a consulting firm to direct the various financial gifts into an open beneficiary account in my name with a bank where it will be possible for me to instruct the transfer of ownership right to a third party for investment purpose; which is the reason I am contacting you to receive the fund and manage it as my investment partner. Note that the fund is NOT connected to any criminal or terrorist activity.
- 
-On your indication of interest with your information to include your name, your phone number and contact mailing address; I will instruct the consulting firm to process the fund from the bank to your country for investment purposes.
+Since the new helper requires that also the FMODE_CAN_READ flag is set in
+file->f_mode, this patch saves the original f_mode and sets the flag if the
+file descriptor has the necessary file operation. Lastly, it restores the
+original f_mode at the end of ima_calc_file_hash().
 
-Regards.
-Reem Hashimy.
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima_crypto.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
+index 21989fa0c107..22ed86a0c964 100644
+--- a/security/integrity/ima/ima_crypto.c
++++ b/security/integrity/ima/ima_crypto.c
+@@ -537,6 +537,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ 	loff_t i_size;
+ 	int rc;
+ 	struct file *f = file;
++	fmode_t saved_mode;
+ 	bool new_file_instance = false, modified_mode = false;
+ 
+ 	/*
+@@ -550,7 +551,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ 	}
+ 
+ 	/* Open a new file instance in O_RDONLY if we cannot read */
+-	if (!(file->f_mode & FMODE_READ)) {
++	if (!(file->f_mode & FMODE_READ) || !(file->f_mode & FMODE_CAN_READ)) {
+ 		int flags = file->f_flags & ~(O_WRONLY | O_APPEND |
+ 				O_TRUNC | O_CREAT | O_NOCTTY | O_EXCL);
+ 		flags |= O_RDONLY;
+@@ -562,7 +563,10 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ 			 */
+ 			pr_info_ratelimited("Unable to reopen file for reading.\n");
+ 			f = file;
++			saved_mode = f->f_mode;
+ 			f->f_mode |= FMODE_READ;
++			if (likely(file->f_op->read || file->f_op->read_iter))
++				f->f_mode |= FMODE_CAN_READ;
+ 			modified_mode = true;
+ 		} else {
+ 			new_file_instance = true;
+@@ -582,7 +586,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
+ 	if (new_file_instance)
+ 		fput(f);
+ 	else if (modified_mode)
+-		f->f_mode &= ~FMODE_READ;
++		f->f_mode = saved_mode;
+ 	return rc;
+ }
+ 
+-- 
+2.27.GIT
+
