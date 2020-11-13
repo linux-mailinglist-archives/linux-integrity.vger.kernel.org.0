@@ -2,103 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF25C2B16D6
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Nov 2020 09:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F0B2B1F3B
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Nov 2020 16:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbgKMIBx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Nov 2020 03:01:53 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2098 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbgKMIBx (ORCPT
+        id S1726465AbgKMPxj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Nov 2020 10:53:39 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30858 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726336AbgKMPxj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Nov 2020 03:01:53 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CXW975bv4z67L3Y;
-        Fri, 13 Nov 2020 16:00:11 +0800 (CST)
-Received: from roberto-HP-EliteDesk-800-G2-DM-65W.huawei.com (10.204.65.161)
- by fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Fri, 13 Nov 2020 09:01:50 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <silviu.vlasceanu@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        <stable@vger.kernel.org>
-Subject: [RESEND][PATCH] ima: Set and clear FMODE_CAN_READ in ima_calc_file_hash()
-Date:   Fri, 13 Nov 2020 09:01:32 +0100
-Message-ID: <20201113080132.16591-1-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.27.GIT
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.65.161]
-X-ClientProxiedBy: lhreml741-chm.china.huawei.com (10.201.108.191) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+        Fri, 13 Nov 2020 10:53:39 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ADFgQOv001669;
+        Fri, 13 Nov 2020 10:53:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=3kL6l2FHVjUYAjyXMCRCHnUHf/ZCbsy2OYnrcqRqQXc=;
+ b=PMqvv56aKMWatQCnSnmA09JPKVpDu+3Hf2eTSw3ph0mjwhKI3AXngFs0sZTnMZTQmLMY
+ RZm2Z0PmI6hFIFAha3EJh1yR3icOFSSUBM+pdTS1lGXSss3j9IwjYZ04CCyUWeUavpxD
+ sBO44i7uLwW8+6Q55Ovxs9Upn9qNr6di4XAo+cfgRjS4XCqCGmR9lPzt/3XtmHPi4p0s
+ rS5LQNU3csJSPu6YFrbj8HdTl711fzYZYsz2DZ6R1eVlQRyiuDMeigzB5O1JvW6tfkBj
+ IInKlVbdtuV98VN9on2G4NARGK5FvcuFojwlVTWWv9b1RPxn2o4a7Y020OeKGnDO+kSd CA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 34sw138axm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Nov 2020 10:53:26 -0500
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0ADFqZxt026344;
+        Fri, 13 Nov 2020 15:53:24 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 34njuh6ut2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Nov 2020 15:53:24 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0ADFrM9W59900268
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 Nov 2020 15:53:22 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02A3911C04A;
+        Fri, 13 Nov 2020 15:53:22 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 91C6E11C052;
+        Fri, 13 Nov 2020 15:53:20 +0000 (GMT)
+Received: from sig-9-65-233-212.ibm.com (unknown [9.65.233.212])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 13 Nov 2020 15:53:20 +0000 (GMT)
+Message-ID: <04d8b0b3876eba71d58295d24e403505d6d77b55.camel@linux.ibm.com>
+Subject: Re: [RESEND][PATCH] ima: Set and clear FMODE_CAN_READ in
+ ima_calc_file_hash()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, silviu.vlasceanu@huawei.com,
+        stable@vger.kernel.org
+Date:   Fri, 13 Nov 2020 10:53:19 -0500
+In-Reply-To: <20201113080132.16591-1-roberto.sassu@huawei.com>
+References: <20201113080132.16591-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-13_10:2020-11-13,2020-11-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=3 bulkscore=0
+ mlxlogscore=627 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ impostorscore=0 clxscore=1011 phishscore=0 mlxscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011130096
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Commit a1f9b1c0439db ("integrity/ima: switch to using __kernel_read")
-replaced the __vfs_read() call in integrity_kernel_read() with
-__kernel_read(), a new helper introduced by commit 61a707c543e2a ("fs: add
-a __kernel_read helper").
+Hi Roberto,
 
-Since the new helper requires that also the FMODE_CAN_READ flag is set in
-file->f_mode, this patch saves the original f_mode and sets the flag if the
-the file descriptor has the necessary file operation. Lastly, it restores
-the original f_mode at the end of ima_calc_file_hash().
+On Fri, 2020-11-13 at 09:01 +0100, Roberto Sassu wrote:
+> Commit a1f9b1c0439db ("integrity/ima: switch to using __kernel_read")
+> replaced the __vfs_read() call in integrity_kernel_read() with
+> __kernel_read(), a new helper introduced by commit 61a707c543e2a ("fs: add
+> a __kernel_read helper").
+> 
+> Since the new helper requires that also the FMODE_CAN_READ flag is set in
+> file->f_mode, this patch saves the original f_mode and sets the flag if the
+> the file descriptor has the necessary file operation. Lastly, it restores
+> the original f_mode at the end of ima_calc_file_hash().
+> 
+> Cc: stable@vger.kernel.org # 5.8.x
+> Fixes: a1f9b1c0439db ("integrity/ima: switch to using __kernel_read")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Cc: stable@vger.kernel.org # 5.8.x
-Fixes: a1f9b1c0439db ("integrity/ima: switch to using __kernel_read")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima_crypto.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Thanks!  It's now queued in next-integrity-testing.
 
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 21989fa0c107..22ed86a0c964 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -537,6 +537,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
- 	loff_t i_size;
- 	int rc;
- 	struct file *f = file;
-+	fmode_t saved_mode;
- 	bool new_file_instance = false, modified_mode = false;
- 
- 	/*
-@@ -550,7 +551,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
- 	}
- 
- 	/* Open a new file instance in O_RDONLY if we cannot read */
--	if (!(file->f_mode & FMODE_READ)) {
-+	if (!(file->f_mode & FMODE_READ) || !(file->f_mode & FMODE_CAN_READ)) {
- 		int flags = file->f_flags & ~(O_WRONLY | O_APPEND |
- 				O_TRUNC | O_CREAT | O_NOCTTY | O_EXCL);
- 		flags |= O_RDONLY;
-@@ -562,7 +563,10 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
- 			 */
- 			pr_info_ratelimited("Unable to reopen file for reading.\n");
- 			f = file;
-+			saved_mode = f->f_mode;
- 			f->f_mode |= FMODE_READ;
-+			if (likely(file->f_op->read || file->f_op->read_iter))
-+				f->f_mode |= FMODE_CAN_READ;
- 			modified_mode = true;
- 		} else {
- 			new_file_instance = true;
-@@ -582,7 +586,7 @@ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash)
- 	if (new_file_instance)
- 		fput(f);
- 	else if (modified_mode)
--		f->f_mode &= ~FMODE_READ;
-+		f->f_mode = saved_mode;
- 	return rc;
- }
- 
--- 
-2.27.GIT
+Mimi
 
