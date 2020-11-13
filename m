@@ -2,187 +2,195 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41422B22EC
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Nov 2020 18:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32DC22B247B
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Nov 2020 20:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgKMRqw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Nov 2020 12:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726788AbgKMRqv (ORCPT
+        id S1726240AbgKMTWv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Nov 2020 14:22:51 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:48774 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725866AbgKMTWu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Nov 2020 12:46:51 -0500
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE65C0617A7
-        for <linux-integrity@vger.kernel.org>; Fri, 13 Nov 2020 09:46:50 -0800 (PST)
-Received: by mail-io1-xd43.google.com with SMTP id o11so10577472ioo.11
-        for <linux-integrity@vger.kernel.org>; Fri, 13 Nov 2020 09:46:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0XXhH7qcVrLXeOHTjqjbb9SlOasuwoAvKOqdPfs+ZZI=;
-        b=LiZHAO+FzlcE+5DwCJmZb2Q6fHxkPymunRNrhdla31wrTq7VEJBoRagRW2Sbr9rr4C
-         BtEMYb0LE7CNvn5NIqbfYgpiA0jFg00Osu14Y9CParAbyd/mFMrHwkU+kY43EZgDdv5+
-         5AGo0gHKdq5JfUfZLqFT2pWxevxsBrfOydx0U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0XXhH7qcVrLXeOHTjqjbb9SlOasuwoAvKOqdPfs+ZZI=;
-        b=OW9uJu5VEd34h0EMsgCMXunoTyewo0/PiAcBgC/3W9OZkabRFFsVsIRRVhQVN5omYJ
-         Rdjvlmkvdb87iBG74443S4sE/BwhDSkGlIabdwRRUJqTLAPAiP7RwmXP4AVB093zylxP
-         LDWeUdKVgzwB4O7863UPQvsY+htEfYC+FrFjlnoeXWzSfqZ1Qs/1vlMxdx/AtL/5QvPA
-         aOPk5D+6SZKq5E18IV2Ee3BXZtqosCOeR8JyDkOttR08HSJbG2+l/EEEg4sPJZFg8gvJ
-         ZO3Pbme0tZ3uw4l/gjCHe+/CjWjXKSnJKKIwVpr8y9j7OX+x+d4THEh0VMwKWLDSeQRC
-         B1LQ==
-X-Gm-Message-State: AOAM530QZQjbG0NHvPVugWml0ht6e3lx/hGhn8q9o4sCQaxeefoj4os5
-        qdERvGegTMIFaV5EELZ1E6KeNg==
-X-Google-Smtp-Source: ABdhPJxB7CZ8T8JeyOZ0SHjxvEaIs/2j4OzqTcw/ETrRmPgGNbYYCeb+BS5kNo/mIfFgPyuwQKloCQ==
-X-Received: by 2002:a6b:4a0d:: with SMTP id w13mr675503iob.104.1605289609057;
-        Fri, 13 Nov 2020 09:46:49 -0800 (PST)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id y14sm4772585ilb.66.2020.11.13.09.46.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2020 09:46:48 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, gregkh@linuxfoundation.org,
-        keescook@chromium.org, peterz@infradead.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 13/13] security/integrity/ima: converts stats to seqnum_ops
-Date:   Fri, 13 Nov 2020 10:46:15 -0700
-Message-Id: <581db581b900a01887ecfc3ec6b92e19d54cd2d9.1605287778.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1605287778.git.skhan@linuxfoundation.org>
-References: <cover.1605287778.git.skhan@linuxfoundation.org>
+        Fri, 13 Nov 2020 14:22:50 -0500
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 29BFC20C28A4;
+        Fri, 13 Nov 2020 11:22:48 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 29BFC20C28A4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1605295368;
+        bh=m0MyMkys5ovStzp4k3nvzOlTXOU2Kk5+gezRRqQPzFM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DLpl/OyAC4YbjeYc1eZ4nxuoXFaHKWJ0jtDZDow1s2kZ0+zlgr1TbXiKhy+YJLoFL
+         e08p3Xaqh16c+ALCLZBC79rN8HgFVYwuA7wkjQ0DqcJpgztZg9LbZsBv0fie0eebjF
+         m16lG6aHf2QWFjUPvaGW0IPfJGrSaNDecGpbuUtM=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
+        gregkh@linuxfoundation.org, james.morse@arm.com,
+        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: [PATCH v9 0/8] Carry forward IMA measurement log on kexec on ARM64
+Date:   Fri, 13 Nov 2020 11:22:35 -0800
+Message-Id: <20201113192243.1993-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Sequence Number api provides interfaces for unsigned atomic up counters
-leveraging atomic_t and atomic64_t ops underneath. Convert it to use
-seqnum_ops.
+On kexec file load Integrity Measurement Architecture (IMA) subsystem
+may verify the IMA signature of the kernel and initramfs, and measure
+it. The command line parameters passed to the kernel in the kexec call
+may also be measured by IMA. A remote attestation service can verify
+a TPM quote based on the TPM event log, the IMA measurement list, and
+the TPM PCR data. This can be achieved only if the IMA measurement log
+is carried over from the current kernel to the next kernel across
+the kexec call.
 
-atomic_t variables used for ima_htable.violations and number of stored
-measurements and ios_threshold are atomic counters. Convert them to
-seqnum_ops.
+powerpc already supports carrying forward the IMA measurement log on
+kexec. This patch set adds support for carrying forward the IMA
+measurement log on kexec on ARM64. 
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- security/integrity/ima/ima.h       | 5 +++--
- security/integrity/ima/ima_api.c   | 3 ++-
- security/integrity/ima/ima_fs.c    | 5 +++--
- security/integrity/ima/ima_queue.c | 7 ++++---
- 4 files changed, 12 insertions(+), 8 deletions(-)
+This patch set moves the platform independent code defined for powerpc
+such that it can be reused for other platforms as well. A chosen node
+namely "linux,ima-kexec-buffer" is added to the DTB for ARM64 to hold
+the address and the size of the memory reserved to carry
+the IMA measurement log.
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 6ebefec616e4..55fe1d14c67a 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -21,6 +21,7 @@
- #include <linux/tpm.h>
- #include <linux/audit.h>
- #include <crypto/hash_info.h>
-+#include <linux/seqnum_ops.h>
- 
- #include "../integrity.h"
- 
-@@ -174,8 +175,8 @@ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
- extern spinlock_t ima_queue_lock;
- 
- struct ima_h_table {
--	atomic_long_t len;	/* number of stored measurements in the list */
--	atomic_long_t violations;
-+	struct seqnum64 len;	/* number of stored measurements in the list */
-+	struct seqnum64 violations;
- 	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
- };
- extern struct ima_h_table ima_htable;
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 4f39fb93f278..c6c442b93ce3 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -14,6 +14,7 @@
- #include <linux/xattr.h>
- #include <linux/evm.h>
- #include <linux/iversion.h>
-+#include <linux/seqnum_ops.h>
- 
- #include "ima.h"
- 
-@@ -144,7 +145,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
- 	int result;
- 
- 	/* can overflow, only indicator */
--	atomic_long_inc(&ima_htable.violations);
-+	seqnum64_inc_return(&ima_htable.violations);
- 
- 	result = ima_alloc_init_template(&event_data, &entry, NULL);
- 	if (result < 0) {
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index ea8ff8a07b36..83a0d33e6f70 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -21,6 +21,7 @@
- #include <linux/rcupdate.h>
- #include <linux/parser.h>
- #include <linux/vmalloc.h>
-+#include <linux/seqnum_ops.h>
- 
- #include "ima.h"
- 
-@@ -39,12 +40,12 @@ __setup("ima_canonical_fmt", default_canonical_fmt_setup);
- static int valid_policy = 1;
- 
- static ssize_t ima_show_htable_value(char __user *buf, size_t count,
--				     loff_t *ppos, atomic_long_t *val)
-+				     loff_t *ppos, struct seqnum64 *val)
- {
- 	char tmpbuf[32];	/* greater than largest 'long' string value */
- 	ssize_t len;
- 
--	len = scnprintf(tmpbuf, sizeof(tmpbuf), "%li\n", atomic_long_read(val));
-+	len = scnprintf(tmpbuf, sizeof(tmpbuf), "%llu\n", seqnum64_fetch(val));
- 	return simple_read_from_buffer(buf, count, ppos, tmpbuf, len);
- }
- 
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index c096ef8945c7..38c31bc62358 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -17,6 +17,7 @@
- 
- #include <linux/rculist.h>
- #include <linux/slab.h>
-+#include <linux/seqnum_ops.h>
- #include "ima.h"
- 
- #define AUDIT_CAUSE_LEN_MAX 32
-@@ -33,8 +34,8 @@ static unsigned long binary_runtime_size = ULONG_MAX;
- 
- /* key: inode (before secure-hashing a file) */
- struct ima_h_table ima_htable = {
--	.len = ATOMIC_LONG_INIT(0),
--	.violations = ATOMIC_LONG_INIT(0),
-+	.len = SEQNUM_INIT(0),
-+	.violations = SEQNUM_INIT(0),
- 	.queue[0 ... IMA_MEASURE_HTABLE_SIZE - 1] = HLIST_HEAD_INIT
- };
- 
-@@ -106,7 +107,7 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
- 	INIT_LIST_HEAD(&qe->later);
- 	list_add_tail_rcu(&qe->later, &ima_measurements);
- 
--	atomic_long_inc(&ima_htable.len);
-+	seqnum64_inc_return(&ima_htable.len);
- 	if (update_htable) {
- 		key = ima_hash_key(entry->digests[ima_hash_algo_idx].digest);
- 		hlist_add_head_rcu(&qe->hnext, &ima_htable.queue[key]);
+This patch set has been tested for ARM64 platform using QEMU.
+I would like help from the community for testing this change on powerpc.
+Thanks.
+
+This patch set is based on
+commit af5043c89a8e ("Merge tag 'acpi-5.10-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm")
+in https://github.com/torvalds/linux "master" branch.
+
+Changelog:
+
+v9
+  - Moved delete_fdt_mem_rsv() to drivers/of/kexec_fdt.c
+  - Defined a new function get_ima_kexec_buffer() in
+    drivers/of/ima_kexec.c to replace do_get_kexec_buffer()
+  - Changed remove_ima_kexec_buffer() to the original function name
+    remove_ima_buffer()
+  - Moved remove_ima_buffer() to drivers/of/ima_kexec.c
+  - Moved ima_get_kexec_buffer() and ima_free_kexec_buffer()
+    to security/integrity/ima/ima_kexec.c
+
+v8:
+  - Moved remove_ima_kexec_buffer(), do_get_kexec_buffer(), and
+    delete_fdt_mem_rsv() to drivers/of/fdt.c
+  - Moved ima_dump_measurement_list() and ima_add_kexec_buffer()
+    back to security/integrity/ima/ima_kexec.c
+
+v7:
+  - Renamed remove_ima_buffer() to remove_ima_kexec_buffer() and moved
+    this function definition to kernel.
+  - Moved delete_fdt_mem_rsv() definition to kernel
+  - Moved ima_dump_measurement_list() and ima_add_kexec_buffer() to
+    a new file namely ima_kexec_fdt.c in IMA
+
+v6:
+  - Remove any existing FDT_PROP_IMA_KEXEC_BUFFER property in the device
+    tree and also its corresponding memory reservation in the currently
+    running kernel.
+  - Moved the function remove_ima_buffer() defined for powerpc to IMA
+    and renamed the function to ima_remove_kexec_buffer(). Also, moved
+    delete_fdt_mem_rsv() from powerpc to IMA.
+
+v5:
+  - Merged get_addr_size_cells() and do_get_kexec_buffer() into a single
+    function when moving the arch independent code from powerpc to IMA
+  - Reverted the change to use FDT functions in powerpc code and added
+    back the original code in get_addr_size_cells() and
+    do_get_kexec_buffer() for powerpc.
+  - Added fdt_add_mem_rsv() for ARM64 to reserve the memory for
+    the IMA log buffer during kexec.
+  - Fixed the warning reported by kernel test bot for ARM64
+    arch_ima_add_kexec_buffer() - moved this function to a new file
+    namely arch/arm64/kernel/ima_kexec.c
+
+v4:
+  - Submitting the patch series on behalf of the original author
+    Prakhar Srivastava <prsriva@linux.microsoft.com>
+  - Moved FDT_PROP_IMA_KEXEC_BUFFER ("linux,ima-kexec-buffer") to
+    libfdt.h so that it can be shared by multiple platforms.
+
+v3:
+Breakup patches further into separate patches.
+  - Refactoring non architecture specific code out of powerpc
+  - Update powerpc related code to use fdt functions
+  - Update IMA buffer read related code to use of functions
+  - Add support to store the memory information of the IMA
+    measurement logs to be carried forward.
+  - Update the property strings to align with documented nodes
+    https://github.com/devicetree-org/dt-schema/pull/46
+
+v2:
+  Break patches into separate patches.
+  - Powerpc related Refactoring
+  - Updating the docuemntation for chosen node
+  - Updating arm64 to support IMA buffer pass
+
+v1:
+  Refactoring carrying over IMA measuremnet logs over Kexec. This patch
+    moves the non-architecture specific code out of powerpc and adds to
+    security/ima.(Suggested by Thiago)
+  Add Documentation regarding the ima-kexec-buffer node in the chosen
+    node documentation
+
+v0:
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
+
+Lakshmi Ramasubramanian (8):
+  powerpc: fix compiler warnings and errors
+  powerpc: Move delete_fdt_mem_rsv() to drivers/of
+  ima: Define get_ima_kexec_buffer() in drivers/of
+  powerpc: Use get_ima_kexec_buffer to get ima kexec buffer
+  powerpc: Move remove_ima_buffer() to drivers/of
+  powerpc: Move ima_get_kexec_buffer() and ima_free_kexec_buffer() to
+    ima
+  arm64: Store IMA log information in kimage used for kexec
+  arm64: Add IMA kexec buffer to DTB
+
+ arch/arm64/Kconfig                     |   1 +
+ arch/arm64/include/asm/ima.h           |  18 +++++
+ arch/arm64/include/asm/kexec.h         |   3 +
+ arch/arm64/kernel/Makefile             |   1 +
+ arch/arm64/kernel/ima_kexec.c          |  34 ++++++++
+ arch/arm64/kernel/machine_kexec_file.c |  18 +++++
+ arch/powerpc/include/asm/ima.h         |  11 +--
+ arch/powerpc/include/asm/kexec.h       |   1 -
+ arch/powerpc/kexec/Makefile            |   7 +-
+ arch/powerpc/kexec/file_load.c         |  32 --------
+ arch/powerpc/kexec/ima.c               | 106 ++-----------------------
+ drivers/of/Makefile                    |   9 +++
+ drivers/of/ima_kexec.c                 |  91 +++++++++++++++++++++
+ drivers/of/kexec_fdt.c                 |  55 +++++++++++++
+ include/linux/kexec.h                  |  24 ++++++
+ security/integrity/ima/ima_kexec.c     |  51 ++++++++++++
+ 16 files changed, 313 insertions(+), 149 deletions(-)
+ create mode 100644 arch/arm64/include/asm/ima.h
+ create mode 100644 arch/arm64/kernel/ima_kexec.c
+ create mode 100644 drivers/of/ima_kexec.c
+ create mode 100644 drivers/of/kexec_fdt.c
+
 -- 
-2.27.0
+2.29.2
 
