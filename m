@@ -2,21 +2,21 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3763F2B3428
-	for <lists+linux-integrity@lfdr.de>; Sun, 15 Nov 2020 11:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 397CD2B344E
+	for <lists+linux-integrity@lfdr.de>; Sun, 15 Nov 2020 11:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbgKOKr6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 15 Nov 2020 05:47:58 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:59758 "EHLO
+        id S1727098AbgKOKss (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 15 Nov 2020 05:48:48 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:59880 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726647AbgKOKrS (ORCPT
+        with ESMTP id S1727076AbgKOKs2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 15 Nov 2020 05:47:18 -0500
+        Sun, 15 Nov 2020 05:48:28 -0500
 Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1keFRc-0000Kt-PM; Sun, 15 Nov 2020 10:39:40 +0000
+        id 1keFRj-0000Kt-8Y; Sun, 15 Nov 2020 10:39:47 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christoph Hellwig <hch@infradead.org>,
@@ -51,11 +51,10 @@ Cc:     John Johansen <john.johansen@canonical.com>,
         linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
         linux-ext4@vger.kernel.org, linux-audit@redhat.com,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v2 28/39] exec: handle idmapped mounts
-Date:   Sun, 15 Nov 2020 11:37:07 +0100
-Message-Id: <20201115103718.298186-29-christian.brauner@ubuntu.com>
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH v2 30/39] apparmor: handle idmapped mounts
+Date:   Sun, 15 Nov 2020 11:37:09 +0100
+Message-Id: <20201115103718.298186-31-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201115103718.298186-1-christian.brauner@ubuntu.com>
 References: <20201115103718.298186-1-christian.brauner@ubuntu.com>
@@ -65,55 +64,140 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When executing a setuid binary the kernel will verify in bprm_fill_uid() that
-the inode has a mapping in the caller's user namespace before setting the
-callers uid and gid. Let bprm_fill_uid() handle idmapped mounts. If the inode
-is accessed through an idmapped mount it is mapped according to the mount's
-user namespace. Afterwards the checks are identical to non-idmapped mounts.On
-regular mounts this is a nop.
+The i_uid and i_gid are only ever used when logging for AppArmor. This is
+already broken in a bunch of places where the global root id is reported
+instead of the i_uid or i_gid of the file. Nonetheless, be kind and log the
+mapped inode if we're coming from an idmapped mount.
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
 /* v2 */
 unchanged
 ---
- fs/exec.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ security/apparmor/domain.c |  9 ++++++---
+ security/apparmor/file.c   |  5 ++++-
+ security/apparmor/lsm.c    | 12 ++++++++----
+ 3 files changed, 18 insertions(+), 8 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 10c06fdf78a7..7d6d3dd17e84 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1567,6 +1567,7 @@ static void check_unsafe_exec(struct linux_binprm *bprm)
- static void bprm_fill_uid(struct linux_binprm *bprm, struct file *file)
+diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
+index 16f184bc48de..4f997dba4573 100644
+--- a/security/apparmor/domain.c
++++ b/security/apparmor/domain.c
+@@ -10,12 +10,14 @@
+ 
+ #include <linux/errno.h>
+ #include <linux/fdtable.h>
++#include <linux/fs.h>
+ #include <linux/file.h>
+ #include <linux/mount.h>
+ #include <linux/syscalls.h>
+ #include <linux/tracehook.h>
+ #include <linux/personality.h>
+ #include <linux/xattr.h>
++#include <linux/user_namespace.h>
+ 
+ #include "include/audit.h"
+ #include "include/apparmorfs.h"
+@@ -858,8 +860,10 @@ int apparmor_bprm_creds_for_exec(struct linux_binprm *bprm)
+ 	const char *info = NULL;
+ 	int error = 0;
+ 	bool unsafe = false;
++	struct user_namespace *user_ns = mnt_user_ns(bprm->file->f_path.mnt);
++	kuid_t i_uid = i_uid_into_mnt(user_ns, file_inode(bprm->file));
+ 	struct path_cond cond = {
+-		file_inode(bprm->file)->i_uid,
++		i_uid,
+ 		file_inode(bprm->file)->i_mode
+ 	};
+ 
+@@ -967,8 +971,7 @@ int apparmor_bprm_creds_for_exec(struct linux_binprm *bprm)
+ 	error = fn_for_each(label, profile,
+ 			aa_audit_file(profile, &nullperms, OP_EXEC, MAY_EXEC,
+ 				      bprm->filename, NULL, new,
+-				      file_inode(bprm->file)->i_uid, info,
+-				      error));
++				      i_uid, info, error));
+ 	aa_put_label(new);
+ 	goto done;
+ }
+diff --git a/security/apparmor/file.c b/security/apparmor/file.c
+index 92acf9a49405..d6d9e71f1900 100644
+--- a/security/apparmor/file.c
++++ b/security/apparmor/file.c
+@@ -11,6 +11,8 @@
+ #include <linux/tty.h>
+ #include <linux/fdtable.h>
+ #include <linux/file.h>
++#include <linux/fs.h>
++#include <linux/mount.h>
+ 
+ #include "include/apparmor.h"
+ #include "include/audit.h"
+@@ -508,8 +510,9 @@ static int __file_path_perm(const char *op, struct aa_label *label,
  {
- 	/* Handle suid and sgid on files */
-+	struct user_namespace *user_ns;
- 	struct inode *inode;
- 	unsigned int mode;
- 	kuid_t uid;
-@@ -1583,13 +1584,15 @@ static void bprm_fill_uid(struct linux_binprm *bprm, struct file *file)
- 	if (!(mode & (S_ISUID|S_ISGID)))
- 		return;
+ 	struct aa_profile *profile;
+ 	struct aa_perms perms = {};
++	struct user_namespace *user_ns = mnt_user_ns(file->f_path.mnt);
+ 	struct path_cond cond = {
+-		.uid = file_inode(file)->i_uid,
++		.uid = i_uid_into_mnt(user_ns, file_inode(file)),
+ 		.mode = file_inode(file)->i_mode
+ 	};
+ 	char *buffer;
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index ffeaee5ed968..ece9afc3994f 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -224,7 +224,8 @@ static int common_perm(const char *op, const struct path *path, u32 mask,
+  */
+ static int common_perm_cond(const char *op, const struct path *path, u32 mask)
+ {
+-	struct path_cond cond = { d_backing_inode(path->dentry)->i_uid,
++	struct user_namespace *user_ns = mnt_user_ns(path->mnt);
++	struct path_cond cond = { i_uid_into_mnt(user_ns, d_backing_inode(path->dentry)),
+ 				  d_backing_inode(path->dentry)->i_mode
+ 	};
  
-+	user_ns = mnt_user_ns(file->f_path.mnt);
-+
- 	/* Be careful if suid/sgid is set */
- 	inode_lock(inode);
+@@ -266,12 +267,13 @@ static int common_perm_rm(const char *op, const struct path *dir,
+ 			  struct dentry *dentry, u32 mask)
+ {
+ 	struct inode *inode = d_backing_inode(dentry);
++	struct user_namespace *user_ns = mnt_user_ns(dir->mnt);
+ 	struct path_cond cond = { };
  
- 	/* reload atomically mode/uid/gid now that lock held */
- 	mode = inode->i_mode;
--	uid = inode->i_uid;
--	gid = inode->i_gid;
-+	uid = i_uid_into_mnt(user_ns, inode);
-+	gid = i_gid_into_mnt(user_ns, inode);
- 	inode_unlock(inode);
+ 	if (!inode || !path_mediated_fs(dentry))
+ 		return 0;
  
- 	/* We ignore suid/sgid if there are no mappings for them in the ns */
+-	cond.uid = inode->i_uid;
++	cond.uid = i_uid_into_mnt(user_ns, inode);
+ 	cond.mode = inode->i_mode;
+ 
+ 	return common_perm_dir_dentry(op, dir, dentry, mask, &cond);
+@@ -361,11 +363,12 @@ static int apparmor_path_rename(const struct path *old_dir, struct dentry *old_d
+ 
+ 	label = begin_current_label_crit_section();
+ 	if (!unconfined(label)) {
++		struct user_namespace *user_ns = mnt_user_ns(old_dir->mnt);
+ 		struct path old_path = { .mnt = old_dir->mnt,
+ 					 .dentry = old_dentry };
+ 		struct path new_path = { .mnt = new_dir->mnt,
+ 					 .dentry = new_dentry };
+-		struct path_cond cond = { d_backing_inode(old_dentry)->i_uid,
++		struct path_cond cond = { i_uid_into_mnt(user_ns, d_backing_inode(old_dentry)),
+ 					  d_backing_inode(old_dentry)->i_mode
+ 		};
+ 
+@@ -420,8 +423,9 @@ static int apparmor_file_open(struct file *file)
+ 
+ 	label = aa_get_newest_cred_label(file->f_cred);
+ 	if (!unconfined(label)) {
++		struct user_namespace *user_ns = mnt_user_ns(file->f_path.mnt);
+ 		struct inode *inode = file_inode(file);
+-		struct path_cond cond = { inode->i_uid, inode->i_mode };
++		struct path_cond cond = { i_uid_into_mnt(user_ns, inode), inode->i_mode };
+ 
+ 		error = aa_path_perm(OP_OPEN, label, &file->f_path, 0,
+ 				     aa_map_file_to_perms(file), &cond);
 -- 
 2.29.2
 
