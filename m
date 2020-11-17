@@ -2,57 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5122B5A63
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Nov 2020 08:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7762B5F1B
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Nov 2020 13:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726278AbgKQHih convert rfc822-to-8bit (ORCPT
+        id S1726310AbgKQM36 convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 17 Nov 2020 02:38:37 -0500
-Received: from tigeramira.ro ([88.158.78.30]:39652 "EHLO mail.tigeramira.ro"
-        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1725771AbgKQHih (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 17 Nov 2020 02:38:37 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 84A5FC0B66D
-        for <linux-integrity@vger.kernel.org>; Sat, 14 Nov 2020 18:29:35 +0200 (EET)
-Received: from mail.tigeramira.ro ([127.0.0.1])
-        by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id DLRdsbgKPM60 for <linux-integrity@vger.kernel.org>;
-        Sat, 14 Nov 2020 18:29:35 +0200 (EET)
-Received: from mail.tigeramira.ro (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 706BC79A1F6
-        for <linux-integrity@vger.kernel.org>; Wed, 11 Nov 2020 20:56:34 +0200 (EET)
-Received: from [156.96.44.214] (unknown [192.168.12.254])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 68A34D3FDD3
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Nov 2020 17:09:50 +0200 (EET)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
+        Tue, 17 Nov 2020 07:29:58 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2116 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgKQM36 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 17 Nov 2020 07:29:58 -0500
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Cb4w04p1dz67F1g;
+        Tue, 17 Nov 2020 20:27:44 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Tue, 17 Nov 2020 13:29:55 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
+ Tue, 17 Nov 2020 13:29:55 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Mimi Zohar <zohar@linux.ibm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+Subject: RE: [RESEND][PATCH] ima: Set and clear FMODE_CAN_READ in
+ ima_calc_file_hash()
+Thread-Topic: [RESEND][PATCH] ima: Set and clear FMODE_CAN_READ in
+ ima_calc_file_hash()
+Thread-Index: AQHWuZM+vbqfejrqe02000rC0h3xoqnHabyAgAMLzKCAAG/IAIAABvEAgAAOKACAAAjEgIABPphg
+Date:   Tue, 17 Nov 2020 12:29:55 +0000
+Message-ID: <945773097832444ca31847c830b0053c@huawei.com>
+References: <20201113080132.16591-1-roberto.sassu@huawei.com>
+ <20201114111057.GA16415@infradead.org>
+ <0fd0fb3360194d909ba48f13220f9302@huawei.com>
+ <20201116162202.GA15010@infradead.org>
+ <c556508437ffc10d3873fe25cbbba3484ca574df.camel@linux.ibm.com>
+ <CAHk-=wiso=-Fhe2m042CfBNUGhoVB1Pry14DF64uUgztHVOW0g@mail.gmail.com>
+ <20201116180855.GX3576660@ZenIV.linux.org.uk>
+In-Reply-To: <20201116180855.GX3576660@ZenIV.linux.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.220.96.108]
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Corporate and Personal Loan/
-To:     linux-integrity@vger.kernel.org
-From:   "Investment  Corporate" <financialcapability6@gmail.com>
-Date:   Tue, 10 Nov 2020 06:10:18 -0800
-Reply-To: hmurrah39@gmail.com
-Message-Id: <20201110150951.68A34D3FDD3@mail.tigeramira.ro>
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello linux-integrity@vger.kernel.org
+> From: Al Viro [mailto:viro@ftp.linux.org.uk] On Behalf Of Al Viro
+> Sent: Monday, November 16, 2020 7:09 PM
+> On Mon, Nov 16, 2020 at 09:37:32AM -0800, Linus Torvalds wrote:
+> > On Mon, Nov 16, 2020 at 8:47 AM Mimi Zohar <zohar@linux.ibm.com>
+> wrote:
+> > >
+> > > This discussion seems to be going down the path of requiring an IMA
+> > > filesystem hook for reading the file, again.  That solution was
+> > > rejected, not by me.  What is new this time?
+> >
+> > You can't read a non-read-opened file. Not even IMA can.
+> >
+> > So don't do that then.
+> >
+> > IMA is doing something wrong. Why would you ever read a file that can't
+> be read?
+> >
+> > Fix whatever "open" function instead of trying to work around the fact
+> > that you opened it wrong.
+> 
+> IMA pulls that crap on _every_ open(2), including O_WRONLY.  As far as I'm
+> concerned, the only sane answer is not enabling that thing on your builds;
+> they are deeply special and I hadn't been able to reason with them no
+> matter how much I tried ;-/
 
+A file-based protection mechanism against offline attacks would require
+to verify the current HMAC also before writing and to update the HMAC
+after the write.
 
-We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+One of the reasons why dentry_open() cannot be used and IMA switches
+to the old method of changing the mode of the current file descriptor is
+that the current process does not have enough privileges to do the
+operation.
 
+If we find a way to read the file that always works, without reducing the
+security, the old method can be removed.
 
-We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+Roberto
 
-
-Please get back to me if you are interested for more
-
-details.
-
-
-Yours faithfully,
-
-Hashim Murrah
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
