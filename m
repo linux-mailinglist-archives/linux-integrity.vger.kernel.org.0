@@ -2,113 +2,188 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1323D2B83D3
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Nov 2020 19:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F712B8659
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Nov 2020 22:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgKRS25 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 18 Nov 2020 13:28:57 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51782 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726098AbgKRS24 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 18 Nov 2020 13:28:56 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AIIBuv6156954;
-        Wed, 18 Nov 2020 13:28:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=ieECabNj9Nkw3pmQnqfIS+TIFqQu2Vl+ABLyf3b+yg0=;
- b=Y95ECNekhOzFlD4tVBHfD7RVhY8mOtNKNzBR8NB12FCka/t0iZlrp6r34VAUno1rgXA2
- u5mGRVIbG1Wez0nMsOAPUabDhdM5GsCXjv41U/xrwlN49fERl01IvHePBny0bFt3Z2xz
- ch/uVoMTcLCqp5lZ7V38AucuEeF0k/GnKINwPlEJFRTgGJFn7o/fuFTYCgTCqZe9kDJS
- +L5Z0g7S+3cMlfJR9SA+lgw6d0dMuxkvJU8hbv8iriuyG8thM9E3CPrMeBzUaOAhOKl+
- pLkDlurPK3NwRZZvKMTAljlGjNNR5VaK9L59wNlVjqz57zLid5Rfjvi2iuaCjEt4qXDg eg== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 34w8p8ggj3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Nov 2020 13:28:45 -0500
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AIISigt003533;
-        Wed, 18 Nov 2020 18:28:44 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06fra.de.ibm.com with ESMTP id 34t6gha9b8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Nov 2020 18:28:44 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AIISfaQ63832452
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Nov 2020 18:28:41 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B71F4C04A;
-        Wed, 18 Nov 2020 18:28:41 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34BAC4C040;
-        Wed, 18 Nov 2020 18:28:39 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.77.84])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Nov 2020 18:28:38 +0000 (GMT)
-Message-ID: <939ee428816825b5b28641d6e09b5e75b4172917.camel@linux.ibm.com>
-Subject: Re: [RESEND][PATCH] ima: Set and clear FMODE_CAN_READ in
- ima_calc_file_hash()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Date:   Wed, 18 Nov 2020 13:28:38 -0500
-In-Reply-To: <CAHk-=wjinHpYRk_F1qiaXbXcMtn-ZHKkPkBvZpDJHjoN_2o4ag@mail.gmail.com>
-References: <20201113080132.16591-1-roberto.sassu@huawei.com>
-         <20201114111057.GA16415@infradead.org>
-         <0fd0fb3360194d909ba48f13220f9302@huawei.com>
-         <20201116162202.GA15010@infradead.org>
-         <c556508437ffc10d3873fe25cbbba3484ca574df.camel@linux.ibm.com>
-         <CAHk-=wiso=-Fhe2m042CfBNUGhoVB1Pry14DF64uUgztHVOW0g@mail.gmail.com>
-         <20201116174127.GA4578@infradead.org>
-         <CAHk-=wjd0RNthZQTLVsnK_d9SFYH0rug2tkezLLB0J-YZzVC+Q@mail.gmail.com>
-         <3f8cc7c9462353ac2eef58e39beee079bdd9c7b4.camel@linux.ibm.com>
-         <CAHk-=wih-ibNUxeiKpuKrw3Rd2=QEAZ8zgRWt_CORAjbZykRWQ@mail.gmail.com>
-         <5d8fa26d376999f703aac9103166a572fc0df437.camel@linux.ibm.com>
-         <CAHk-=wiPfWZYsAqhQry=mhAbKei8bHZDyVPJS0XHZz_FH9Jymw@mail.gmail.com>
-         <CAHk-=wjinHpYRk_F1qiaXbXcMtn-ZHKkPkBvZpDJHjoN_2o4ag@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-18_06:2020-11-17,2020-11-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- phishscore=0 mlxscore=0 adultscore=0 impostorscore=0 mlxlogscore=951
- malwarescore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011180122
+        id S1726651AbgKRVLu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 18 Nov 2020 16:11:50 -0500
+Received: from mga18.intel.com ([134.134.136.126]:19676 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726098AbgKRVLt (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 18 Nov 2020 16:11:49 -0500
+IronPort-SDR: TyM7TzmnVR1Ukz2+eFGxeB2k2lENJ4fFqPh9Xcns+PsXk/plZLwBx6U9AmYIHKzf7B2rwN1BE9
+ Mg4W35MREePw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9809"; a="158959666"
+X-IronPort-AV: E=Sophos;i="5.77,488,1596524400"; 
+   d="scan'208";a="158959666"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 13:11:48 -0800
+IronPort-SDR: 4ug92vCsHAXxSDZWy6XQfcE0r+Zr+Dm1Rvm9l1P3AkFhlRiYI1h20keOppD2MhHIEGFflYI2dL
+ 98dL9lM3jv9A==
+X-IronPort-AV: E=Sophos;i="5.77,488,1596524400"; 
+   d="scan'208";a="544710250"
+Received: from stephanh-mobl.ger.corp.intel.com (HELO linux.intel.com) ([10.252.53.212])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2020 13:11:41 -0800
+Date:   Wed, 18 Nov 2020 23:11:34 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Hao Wu <hao.wu@rubrik.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
+        Hamza Attak <hamza@hpe.com>, why2jjj.linux@gmail.com,
+        zohar@linux.vnet.ibm.com, linux-integrity@vger.kernel.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Ken Goldman <kgold@linux.ibm.com>,
+        Seungyeop Han <seungyeop.han@rubrik.com>,
+        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
+        Anish Jhaveri <anish.jhaveri@rubrik.com>
+Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
+Message-ID: <20201118211134.GA5034@linux.intel.com>
+References: <6e7b54c268d25a86f8f969bcc01729eaadef6530.camel@HansenPartnership.com>
+ <20201001015051.GA5971@linux.intel.com>
+ <1aed1b0734435959d5e53b8a4b3c18558243e6b8.camel@HansenPartnership.com>
+ <19de5527-2d56-6a07-3ce7-ba216b208090@linux.vnet.ibm.com>
+ <38e165055bae62d4e97f702c05e3a76ccdeeac0f.camel@HansenPartnership.com>
+ <20201001230426.GA26517@linux.intel.com>
+ <FCA90A49-CCE3-4DDF-A876-230C42744D2A@rubrik.com>
+ <20201018050951.GL68722@linux.intel.com>
+ <53B75B06-FD89-4B00-BC3F-46C5B28DC201@rubrik.com>
+ <9E249567-4901-4FA4-BA89-EF6DE51F7E7A@rubrik.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9E249567-4901-4FA4-BA89-EF6DE51F7E7A@rubrik.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2020-11-17 at 15:36 -0800, Linus Torvalds wrote:
-> Another alternative is to change the policy and say "any write-only
-> open gets turned into a read-write open".
+On Fri, Nov 13, 2020 at 08:39:28PM -0800, Hao Wu wrote:
+> > On Oct 17, 2020, at 10:20 PM, Hao Wu <hao.wu@rubrik.com> wrote:
+> > 
+> >> On Oct 17, 2020, at 10:09 PM, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> >> 
+> >> On Fri, Oct 16, 2020 at 11:11:37PM -0700, Hao Wu wrote:
+> >>>> On Oct 1, 2020, at 4:04 PM, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> >>>> 
+> >>>> On Thu, Oct 01, 2020 at 11:32:59AM -0700, James Bottomley wrote:
+> >>>>> On Thu, 2020-10-01 at 14:15 -0400, Nayna wrote:
+> >>>>>> On 10/1/20 12:53 AM, James Bottomley wrote:
+> >>>>>>> On Thu, 2020-10-01 at 04:50 +0300, Jarkko Sakkinen wrote:
+> >>>>>>>> On Wed, Sep 30, 2020 at 03:31:20PM -0700, James Bottomley wrote:
+> >>>>>>>>> On Thu, 2020-10-01 at 00:09 +0300, Jarkko Sakkinen wrote:
+> >>>>> [...]
+> >>>>>>>>>> I also wonder if we could adjust the frequency dynamically.
+> >>>>>>>>>> I.e. start with optimistic value and lower it until finding
+> >>>>>>>>>> the sweet spot.
+> >>>>>>>>> 
+> >>>>>>>>> The problem is the way this crashes: the TPM seems to be
+> >>>>>>>>> unrecoverable. If it were recoverable without a hard reset of
+> >>>>>>>>> the entire machine, we could certainly play around with it.  I
+> >>>>>>>>> can try alternative mechanisms to see if anything's viable, but
+> >>>>>>>>> to all intents and purposes, it looks like my TPM simply stops
+> >>>>>>>>> responding to the TIS interface.
+> >>>>>>>> 
+> >>>>>>>> A quickly scraped idea probably with some holes in it but I was
+> >>>>>>>> thinking something like
+> >>>>>>>> 
+> >>>>>>>> 1. Initially set slow value for latency, this could be the
+> >>>>>>>> original 15 ms.
+> >>>>>>>> 2. Use this to read TPM_PT_VENDOR_STRING_*.
+> >>>>>>>> 3. Lookup based vendor string from a fixup table a latency that
+> >>>>>>>> works
+> >>>>>>>>  (the fallback latency could be the existing latency).
+> >>>>>>> 
+> >>>>>>> Well, yes, that was sort of what I was thinking of doing for the
+> >>>>>>> Atmel ... except I was thinking of using the TIS VID (16 byte
+> >>>>>>> assigned vendor ID) which means we can get the information to set
+> >>>>>>> the timeout before we have to do any TPM operations.
+> >>>>>> 
+> >>>>>> I wonder if the timeout issue exists for all TPM commands for the
+> >>>>>> same manufacturer.  For example, does the ATMEL TPM also crash when 
+> >>>>>> extending  PCRs ?
+> >>>>>> 
+> >>>>>> In addition to defining a per TPM vendor based lookup table for
+> >>>>>> timeout, would it be a good idea to also define a Kconfig/boot param
+> >>>>>> option to allow timeout setting.  This will enable to set the timeout
+> >>>>>> based on the specific use.
+> >>>>> 
+> >>>>> I don't think we need go that far (yet).  The timing change has been in
+> >>>>> upstream since:
+> >>>>> 
+> >>>>> commit 424eaf910c329ab06ad03a527ef45dcf6a328f00
+> >>>>> Author: Nayna Jain <nayna@linux.vnet.ibm.com>
+> >>>>> Date:   Wed May 16 01:51:25 2018 -0400
+> >>>>> 
+> >>>>>  tpm: reduce polling time to usecs for even finer granularity
+> >>>>> 
+> >>>>> Which was in the released kernel 4.18: over two years ago.  In all that
+> >>>>> time we've discovered two problems: mine which looks to be an artifact
+> >>>>> of an experimental upgrade process in a new nuvoton and the Atmel. 
+> >>>>> That means pretty much every other TPM simply works with the existing
+> >>>>> timings
+> >>>>> 
+> >>>>>> I was also thinking how will we decide the lookup table values for
+> >>>>>> each vendor ?
+> >>>>> 
+> >>>>> I wasn't thinking we would.  I was thinking I'd do a simple exception
+> >>>>> for the Atmel and nothing else.  I don't think my Nuvoton is in any way
+> >>>>> characteristic.  Indeed my pluggable TPM rainbow bridge system works
+> >>>>> just fine with a Nuvoton and the current timings.
+> >>>>> 
+> >>>>> We can add additional exceptions if they actually turn up.
+> >>>> 
+> >>>> I'd add a table and fallback.
+> >>>> 
+> >>> 
+> >>> Hi folks,
+> >>> 
+> >>> I want to follow up this a bit and check whether we reached a consensus 
+> >>> on how to fix the timeout issue for Atmel chip.
+> >>> 
+> >>> Should we revert the changes or introduce the lookup table for chips.
+> >>> 
+> >>> Is there anything I can help from Rubrik side.
+> >>> 
+> >>> Thanks
+> >>> Hao
+> >> 
+> >> There is nothing to revert as the previous was not applied but I'm
+> >> of course ready to review any new attempts.
+> >> 
+> > 
+> > Hi Jarkko,
+> > 
+> > By “revert” I meant we revert the timeout value changes by applying
+> > the patch I proposed, as the timeout value discussed does cause issues.
+> > 
+> > Why don’t we apply the patch and improve the perf in the way of not
+> > breaking TPMs ? 
+> > 
+> > Hao
 > 
-> But it needs to be done at *OPEN* time, not randomly afterwards by
-> just lying to the 'struct file'.
+> Hi Jarkko and folks,
+> 
+> It’s being a while since our last discussion. I want to push a fix in the upstream for ateml chip. 
+> It looks like we currently have following choices:
+> 1.  generic fix for all vendors: have a lookup table for sleep time of wait_for_tpm_stat 
+>   (i.e. TPM_TIMEOUT_WAIT_STAT in my proposed patch) 
+> 2.  quick fix for the regression: change the sleep time of wait_for_tpm_stat back to 15ms.
+>   It is the current proposed patch
+> 3. Fix regression by making exception for ateml chip.  
+> 
+> Should we reach consensus on which one we want to pursue before dig
+> into implementation of the patch? In my opinion, I prefer to fix the
+> regression with 2, and then pursue 1 as long-term solution. 3 is
+> hacky.
 
-The ima_file_check hook is at open, but it is immediately after
-vfs_open().   Only after the file is opened can we determine if the
-file is in policy.  If the file was originally opened without read
-permission, a new file instance (dentry_open) with read permission is
-opened.  Would limiting opening a new file instance with read
-permission to just the ima_file_check hook be acceptable?
+What does option 1 fix for *all* vendors?
 
-thanks,
+> Let me know what do you guys think
+> 
+> Hao
 
-Mimi
-
+/Jarkko
