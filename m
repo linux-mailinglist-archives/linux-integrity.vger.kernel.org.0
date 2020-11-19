@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEA32B9E30
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Nov 2020 00:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D82AD2B9E47
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Nov 2020 00:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727095AbgKSX01 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 19 Nov 2020 18:26:27 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:32978 "EHLO
+        id S1727152AbgKSX0i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Nov 2020 18:26:38 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:33002 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727069AbgKSX0Z (ORCPT
+        with ESMTP id S1727070AbgKSX00 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 19 Nov 2020 18:26:25 -0500
+        Thu, 19 Nov 2020 18:26:26 -0500
 Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0411720B7133;
-        Thu, 19 Nov 2020 15:26:23 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0411720B7133
+        by linux.microsoft.com (Postfix) with ESMTPSA id 94B1F20B8005;
+        Thu, 19 Nov 2020 15:26:24 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 94B1F20B8005
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1605828384;
-        bh=zxzJjRVL4Fw/rli7hkZOoZEuxfHZymVb0lvoIbeaev0=;
+        s=default; t=1605828385;
+        bh=uk4x4LQiWntk6528VOlokJxBRGx63RfP1GrYurFa5OI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HMfweoFp7uHK00RJeXeETLV0MZGJdjAIqIz5bVWxDLV8uCide56pZiI4B2M1mhyCb
-         mff2cJPlCShtEo1DjwLEns1rswSZVbfmIm/UM3jBCxU7y6s5EMObHcS8MYIXjiEddf
-         qcNIKd2hrOxzFfwrhfYSEwT/87v5ugPIppyH/5iY=
+        b=qEZd7tyFxy6Hzpyvftyyglq0YHDh6WKPkmyzcSyI4JZCdGKJ0J3/YPV6L2iMDYBWz
+         7DTsQuz9XNOb7JLLg74Q5ZVpqqnMCuhsgcNsvU4/oVtFX7OD4MYi250SWEXB7TuGJc
+         QQ8BPP/Mb+wuewh7tm72NOYej0SpBDWctJcWzO2o=
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
 To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
         casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
@@ -31,9 +31,9 @@ Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
         selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: [PATCH v6 6/8] IMA: add support to critical data hook to limit data sources for measurement
-Date:   Thu, 19 Nov 2020 15:26:09 -0800
-Message-Id: <20201119232611.30114-7-tusharsu@linux.microsoft.com>
+Subject: [PATCH v6 7/8] IMA: add a built-in policy rule for critical data measurement
+Date:   Thu, 19 Nov 2020 15:26:10 -0800
+Message-Id: <20201119232611.30114-8-tusharsu@linux.microsoft.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
 References: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
@@ -41,87 +41,64 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The IMA hook ima_measure_critical_data() does not support a way to
-specify the source of the critical data provider. Thus, the data
-measurement cannot be constrained, based on the data source, through the
-IMA policy.
+From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
-Extend the IMA hook ima_measure_critical_data() to support passing 
-the data source name as an input parameter, so that the policy rule can
-be used to limit data sources being measured.
+The IMA hook to measure kernel critical data, namely
+ima_measure_critical_data(), could be called before a custom IMA policy
+is loaded. Define a new critical data builtin policy to allow measuring
+early kernel integrity critical data before a custom IMA policy is
+loaded.
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Add critical data to built-in IMA rules if the kernel command line
+contains "ima_policy=critical_data".
+
+Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 ---
- include/linux/ima.h               |  6 ++++--
- security/integrity/ima/ima_main.c | 11 ++++++++---
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ security/integrity/ima/ima_policy.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 9911a6e496b6..60ba073f1575 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -30,7 +30,8 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- extern void ima_post_path_mknod(struct dentry *dentry);
- extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
- extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
--extern void ima_measure_critical_data(const char *event_name,
-+extern void ima_measure_critical_data(const char *event_data_source,
-+				      const char *event_name,
- 				      const void *buf, int buf_len,
- 				      bool measure_buf_hash);
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index c9e52dab0638..119604a3efa0 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -206,6 +206,10 @@ static struct ima_rule_entry secure_boot_rules[] __ro_after_init = {
+ 	 .flags = IMA_FUNC | IMA_DIGSIG_REQUIRED},
+ };
  
-@@ -119,7 +120,8 @@ static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
- }
++static struct ima_rule_entry critical_data_rules[] __ro_after_init = {
++	{.action = MEASURE, .func = CRITICAL_DATA, .flags = IMA_FUNC},
++};
++
+ /* An array of architecture specific rules */
+ static struct ima_rule_entry *arch_policy_entry __ro_after_init;
  
- static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
--static inline void ima_measure_critical_data(const char *event_name,
-+static inline void ima_measure_critical_data(const char *event_data_source,
-+					     const char *event_name,
- 					     const void *buf, int buf_len,
- 					     bool measure_buf_hash) {}
- #endif /* CONFIG_IMA */
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 7661f09569f3..27b8b8316622 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -924,6 +924,7 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+@@ -228,6 +232,7 @@ __setup("ima_tcb", default_measure_policy_setup);
  
- /**
-  * ima_measure_critical_data - measure kernel integrity critical data
-+ * @event_data_source: kernel data source being measured
-  * @event_name: event name to be used for the buffer entry
-  * @buf: pointer to buffer containing data to measure
-  * @buf_len: length of buffer(in bytes)
-@@ -932,6 +933,9 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
-  * Measure the kernel subsystem data, critical to the integrity of the kernel,
-  * into the IMA log and extend the @pcr.
-  *
-+ * Use @event_data_source to describe the kernel data source for the buffer
-+ * being measured.
-+ *
-  * Use @event_name to describe the state/buffer data change.
-  * Examples of critical data (buf) could be kernel in-memory r/o structures,
-  * hash of the memory structures, or data that represents subsystem state
-@@ -944,17 +948,18 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
-  *
-  * The data (buf) can only be measured, not appraised.
-  */
--void ima_measure_critical_data(const char *event_name,
-+void ima_measure_critical_data(const char *event_data_source,
-+			       const char *event_name,
- 			       const void *buf, int buf_len,
- 			       bool measure_buf_hash)
+ static bool ima_use_appraise_tcb __initdata;
+ static bool ima_use_secure_boot __initdata;
++static bool ima_use_critical_data __ro_after_init;
+ static bool ima_fail_unverifiable_sigs __ro_after_init;
+ static int __init policy_setup(char *str)
  {
--	if (!event_name || !buf || !buf_len) {
-+	if (!event_name || !event_data_source || !buf || !buf_len) {
- 		pr_err("Invalid arguments passed to %s().\n", __func__);
- 		return;
- 	}
+@@ -242,6 +247,8 @@ static int __init policy_setup(char *str)
+ 			ima_use_appraise_tcb = true;
+ 		else if (strcmp(p, "secure_boot") == 0)
+ 			ima_use_secure_boot = true;
++		else if (strcmp(p, "critical_data") == 0)
++			ima_use_critical_data = true;
+ 		else if (strcmp(p, "fail_securely") == 0)
+ 			ima_fail_unverifiable_sigs = true;
+ 		else
+@@ -875,6 +882,11 @@ void __init ima_init_policy(void)
+ 			  ARRAY_SIZE(default_appraise_rules),
+ 			  IMA_DEFAULT_POLICY);
  
- 	process_buffer_measurement(NULL, buf, buf_len, event_name,
--				   CRITICAL_DATA, 0, NULL,
-+				   CRITICAL_DATA, 0, event_data_source,
- 				   measure_buf_hash);
++	if (ima_use_critical_data)
++		add_rules(critical_data_rules,
++			  ARRAY_SIZE(critical_data_rules),
++			  IMA_DEFAULT_POLICY);
++
+ 	ima_update_policy_flag();
  }
  
 -- 
