@@ -2,126 +2,146 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3B02BB8DA
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Nov 2020 23:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 118582BBA37
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Nov 2020 00:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728708AbgKTWVb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Nov 2020 17:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728362AbgKTWV3 (ORCPT
+        id S1728318AbgKTXdo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Nov 2020 18:33:44 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:44502 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726255AbgKTXdm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Nov 2020 17:21:29 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED15C061A04;
-        Fri, 20 Nov 2020 14:21:29 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id 10so9964113ybx.9;
-        Fri, 20 Nov 2020 14:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=29/AaAKKWIjlxKBDiu42mXe16/c3LUzQvTdn0Wctw9g=;
-        b=th/UjqVcversiy9gEUr46cKRrhHywr0iTgf9mzUejm+T3/Jtu2c6ftjob7N1dnOe2S
-         rGVMit/4Gqy7ZDqW+do8x9wI8RCPt/cmuWncILsoBuux3CBAtfG8gT+eTL8wiBVSM5EH
-         rDgxqkIvK+vUXnfhgj71GxYIUQH1hInVNMbCl5+3prik9RGhi+hsmul85xXuf9uJVr2L
-         NGLQGWDmOXXHg4l9XujW0HrVyacbE3Q1QSLAkLJ0BjE5AdFqhLyeU3T8/6+nJ9hH0JSR
-         o1vAVeqr6Bt+/W6rGIwrn7PuvAvMGRmk1Avx4k6vjCg8etglRiDTMnimrqKcX/KEsNCP
-         0CAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=29/AaAKKWIjlxKBDiu42mXe16/c3LUzQvTdn0Wctw9g=;
-        b=g6dF/T3IXVX8QT4MfDxe+zp+ZIZ9xHCuMvUBvTX6zqjs95vMoZCWRjOR8ZvnplwSFE
-         MpW7FRJ+Cocr8Ai+2u86hCuhUCXhzTl/KKj91vXaqYUhzxnR9kkROQOnLFCEmRZKla1D
-         /TWlHYZvWd31yby8t+xuOaetfQfCA2rnKbYtvImZQoEgF4bMcyOH0wDgheWTNO/AQcgq
-         vKJHu61yvY4IK3yHPMgnP62czhvJ3I6HVNj4LuPzgNFrgnx06uPJAt0tvxIYKvpgGW+N
-         wvCFfMuDeRyb4r/j+b87COnXbi+be8kDhPqdSYEtYbeDyH//DWkZBm0w3V06nDyXNEdi
-         ds0A==
-X-Gm-Message-State: AOAM533E6x8M4HleYo3hGWOidsXyMY+wptATrgMwyVNBk+Ieg+ndwvCB
-        qvPHidvB8XuYLS48BjmsDU0X4FK8+hiPxZdptxg=
-X-Google-Smtp-Source: ABdhPJzYUhkcjTyH5GIcOV5fWMsl+OUdzem471zLY9usW3RhV8izQIRbyESMTmZwFikqgbfOQQqVvSSQCZzBPJX4q90=
-X-Received: by 2002:a5b:40e:: with SMTP id m14mr22113400ybp.33.1605910888617;
- Fri, 20 Nov 2020 14:21:28 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1605896059.git.gustavoars@kernel.org>
-In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 20 Nov 2020 23:21:17 +0100
-Message-ID: <CANiq72=E_gEVvqUUTSqU4zegC2=yZSTM4b=4G-iofp6d3=UgWQ@mail.gmail.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        Fri, 20 Nov 2020 18:33:42 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 89BC420B717A;
+        Fri, 20 Nov 2020 15:33:41 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 89BC420B717A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1605915221;
+        bh=zmpsSKY4r1FjWqHBJ/nPiw3LVnG+vNwkCnUTsFeLSRM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=VzXBAcAfAz5Ayii51kKy40d0qTGct8L6HwgiTEnBqNwIDE99VdQSgw5O3QTe6/oGF
+         YVbjddqbqrGxB13ZGH2jr4YTVbTRmMj0vj7IFXSHQBlEFomqRDvoAhy1O8EP/gtYxX
+         EKtEfEIhW/YrDq6NxVjwIIkoO2lon0aagWOwdNJc=
+Subject: Re: [PATCH v6 7/8] IMA: add a built-in policy rule for critical data
+ measurement
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
+ <20201119232611.30114-8-tusharsu@linux.microsoft.com>
+ <e151e67e0749766c1b501ecc54dbeb0450c0cea2.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <58607cc2-2a20-03d7-9f38-9c3bebb1c494@linux.microsoft.com>
+Date:   Fri, 20 Nov 2020 15:33:36 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <e151e67e0749766c1b501ecc54dbeb0450c0cea2.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Gustavo,
+On 11/20/20 6:30 AM, Mimi Zohar wrote:
 
-On Fri, Nov 20, 2020 at 7:21 PM Gustavo A. R. Silva
-<gustavoars@kernel.org> wrote:
->
-> Hi all,
->
-> This series aims to fix almost all remaining fall-through warnings in
-> order to enable -Wimplicit-fallthrough for Clang.
+Hi Mimi,
 
-Thanks for this.
+> 
+> On Thu, 2020-11-19 at 15:26 -0800, Tushar Sugandhi wrote:
+>> From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>
+>> The IMA hook to measure kernel critical data, namely
+>> ima_measure_critical_data(), could be called before a custom IMA policy
+>> is loaded.
+>> Define a new critical data builtin policy to allow measuring
+>> early kernel integrity critical data before a custom IMA policy is
+>> loaded.
+> 
+> Everything needing to be said seems to be included in the second
+> sentence.  Does the first sentence add anything?  "Define a new
+> critical data builtin policy" makes for a good Subject line.
 
-Since this warning is reliable in both/all compilers and we are
-eventually getting rid of all the cases, what about going even further
-and making it an error right after?
+Agreed - will update.
 
-Cheers,
-Miguel
+> 
+>>
+>> Add critical data to built-in IMA rules if the kernel command line
+>> contains "ima_policy=critical_data".
+> 
+> The boot command line parameters are defined in Documentation/admin-
+> guide/kernel-parameters.txt.  Please update "ima_policy".
+
+Will do.
+
+> 
+>>
+>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>> ---
+>>   security/integrity/ima/ima_policy.c | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index c9e52dab0638..119604a3efa0 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -206,6 +206,10 @@ static struct ima_rule_entry secure_boot_rules[] __ro_after_init = {
+>>   	 .flags = IMA_FUNC | IMA_DIGSIG_REQUIRED},
+>>   };
+>>
+>> +static struct ima_rule_entry critical_data_rules[] __ro_after_init = {
+>> +	{.action = MEASURE, .func = CRITICAL_DATA, .flags = IMA_FUNC},
+>> +};
+>> +
+>>   /* An array of architecture specific rules */
+>>   static struct ima_rule_entry *arch_policy_entry __ro_after_init;
+>>   
+>> @@ -228,6 +232,7 @@ __setup("ima_tcb", default_measure_policy_setup);
+>>   
+>>   static bool ima_use_appraise_tcb __initdata;
+>>   static bool ima_use_secure_boot __initdata;
+>> +static bool ima_use_critical_data __ro_after_init;
+> 
+> Unlike ima_fail_unverifiable_sigs, ima_use_critical_data is only used
+> during __init.  Please change "__ro_after_init" to "__initdata".  (The
+> critical data policy itself is defined properly as __ro_after_init.)
+
+Will do.
+
+> 
+>>   static bool ima_fail_unverifiable_sigs __ro_after_init;
+>>   static int __init policy_setup(char *str)
+>>   {
+>> @@ -242,6 +247,8 @@ static int __init policy_setup(char *str)
+>>   			ima_use_appraise_tcb = true;
+>>   		else if (strcmp(p, "secure_boot") == 0)
+>>   			ima_use_secure_boot = true;
+>> +		else if (strcmp(p, "critical_data") == 0)
+>> +			ima_use_critical_data = true;
+>>   		else if (strcmp(p, "fail_securely") == 0)
+>>   			ima_fail_unverifiable_sigs = true;
+>>   		else
+>> @@ -875,6 +882,11 @@ void __init ima_init_policy(void)
+>>   			  ARRAY_SIZE(default_appraise_rules),
+>>   			  IMA_DEFAULT_POLICY);
+>>   
+>> +	if (ima_use_critical_data)
+>> +		add_rules(critical_data_rules,
+>> +			  ARRAY_SIZE(critical_data_rules),
+>> +			  IMA_DEFAULT_POLICY);
+>> +
+>>   	ima_update_policy_flag();
+>>   }
+>>   
+> 
+
+thanks,
+  -lakshmi
