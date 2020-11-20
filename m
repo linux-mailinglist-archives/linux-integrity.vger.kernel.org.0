@@ -2,95 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 575D62BA9AC
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Nov 2020 12:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFFA2BAA6C
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Nov 2020 13:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727842AbgKTL6z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Nov 2020 06:58:55 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:45815 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727083AbgKTL6z (ORCPT
+        id S1728045AbgKTMrB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Nov 2020 07:47:01 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:36618 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727789AbgKTMrB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Nov 2020 06:58:55 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kg53v-0000wK-0F; Fri, 20 Nov 2020 11:58:47 +0000
-Date:   Fri, 20 Nov 2020 12:58:44 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jann Horn <jannh@google.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        St??phane Graber <stgraber@ubuntu.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-audit@redhat.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v2 00/39] fs: idmapped mounts
-Message-ID: <20201120115844.h732hi5p3ullzfvs@wittgenstein>
-References: <20201115103718.298186-1-christian.brauner@ubuntu.com>
- <20201120023309.GH9685@magnolia>
- <20201120091044.ofkzgiwoyru23vc4@wittgenstein>
- <20201120091247.GA14894@infradead.org>
+        Fri, 20 Nov 2020 07:47:01 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id ECF241C0BBF; Fri, 20 Nov 2020 13:46:57 +0100 (CET)
+Date:   Fri, 20 Nov 2020 13:46:57 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com,
+        tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Subject: Re: [PATCH v6 0/8] IMA: support for measuring kernel integrity
+ critical data
+Message-ID: <20201120124657.GA31468@duo.ucw.cz>
+References: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="7AUc2qLy4jB3hD7Z"
 Content-Disposition: inline
-In-Reply-To: <20201120091247.GA14894@infradead.org>
+In-Reply-To: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 09:12:47AM +0000, Christoph Hellwig wrote:
-> On Fri, Nov 20, 2020 at 10:10:44AM +0100, Christian Brauner wrote:
-> > Maybe you didn't see this or you're referring to xfstests but this
-> > series contains a >=4000 lines long test-suite that validates all core
-> > features with and without idmapped mounts. It's the last patch in this
-> > version of the series and it's located in:
-> > tools/testing/selftests/idmap_mounts.
-> > 
-> > Everytime a filesystem is added this test-suite will be updated. We
-> > would perfer if this test would be shipped with the kernel itself and
-> > not in a separate test-suite such as xfstests. But we're happy to add
-> > patches for the latter at some point too.
-> 
-> selftests is a complete pain to use, partialy because it is not
-> integrated with the framework we file system developers use (xfstests)
-> and partially because having the test suite in the kernel tree really
-> breaks a lot of the typical use cases.  So I think we'll need to wire
-> this up in the proper place instead.
 
-Ok, I think I can basically port the test-suite at the end of this patch
-series so that it can be carried in xfstests/src/idmapped_mounts.c
+--7AUc2qLy4jB3hD7Z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'll start doing that now.
-It would make it a bit easier if we could carry it as a single file for
-now.
+On Thu 2020-11-19 15:26:03, Tushar Sugandhi wrote:
+> Kernel integrity critical data can be defined as the in-memory kernel
+> data which if accidentally or maliciously altered, can compromise the
+> integrity of the system.
 
-Christian
+Is that an useful definition?
+
+> There are several kernel subsystems that contain integrity critical
+> data - e.g. LSMs like SELinux, or AppArmor; or device-mapper targets
+> like dm-crypt, dm-verity etc. Examples of critical data could be kernel
+> in-memory r/o structures, hash of the memory structures, or data that
+> represents a linux kernel subsystem state.
+>=20
+> This patch set defines a new IMA hook namely ima_measure_critical_data()
+> to measure the critical data. Kernel subsystems can use this
+> functionality, to take advantage of IMA's measuring and quoting=20
+> abilities - thus ultimately enabling remote attestation for the
+> subsystem specific information stored in the kernel memory.
+
+How is it supposed to be useful?
+
+I'm pretty sure there are critical data that are not measured by
+proposed module... and that are written under normal circumstances.
+
+Best regards,
+
+									Pavel
+
+--=20
+http://www.livejournal.com/~pavelmachek
+
+--7AUc2qLy4jB3hD7Z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX7e6wQAKCRAw5/Bqldv6
+8i6vAKC6FrLMFyZX0lHzJkX+8Mez8H3kogCeJ64mXaqCarNAouB4RShXr1Nthec=
+=jlIk
+-----END PGP SIGNATURE-----
+
+--7AUc2qLy4jB3hD7Z--
