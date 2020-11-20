@@ -2,112 +2,168 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EC52BAA92
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Nov 2020 13:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A3E2BABE2
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Nov 2020 15:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbgKTMwD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Nov 2020 07:52:03 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2136 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726586AbgKTMwD (ORCPT
+        id S1727755AbgKTOaS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Nov 2020 09:30:18 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53254 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727740AbgKTOaR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Nov 2020 07:52:03 -0500
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CcxGl1WXgz67Fvf;
-        Fri, 20 Nov 2020 20:50:23 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1913.5; Fri, 20 Nov 2020 13:52:00 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.1913.007;
- Fri, 20 Nov 2020 13:52:00 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-CC:     Christoph Hellwig <hch@infradead.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Casey Schaufler" <casey@schaufler-ca.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        "James Morris" <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Micah Morton" <mortonm@chromium.org>
-Subject: RE: [RESEND][PATCH] ima: Set and clear FMODE_CAN_READ in
- ima_calc_file_hash()
-Thread-Topic: [RESEND][PATCH] ima: Set and clear FMODE_CAN_READ in
- ima_calc_file_hash()
-Thread-Index: AQHWuZM+vbqfejrqe02000rC0h3xoqnHabyAgAMLzKCAAG/IAIAABvEAgAAOKACAAAEYgIAAB9QAgAAHL4CAAY8zAIAAU72AgAABvoCAAAHXAIAD/8pw
-Date:   Fri, 20 Nov 2020 12:52:00 +0000
-Message-ID: <6dafff7889d34bc799b4c5bfd0bfebc8@huawei.com>
-References: <20201113080132.16591-1-roberto.sassu@huawei.com>
- <20201114111057.GA16415@infradead.org>
- <0fd0fb3360194d909ba48f13220f9302@huawei.com>
- <20201116162202.GA15010@infradead.org>
- <c556508437ffc10d3873fe25cbbba3484ca574df.camel@linux.ibm.com>
- <CAHk-=wiso=-Fhe2m042CfBNUGhoVB1Pry14DF64uUgztHVOW0g@mail.gmail.com>
- <20201116174127.GA4578@infradead.org>
- <CAHk-=wjd0RNthZQTLVsnK_d9SFYH0rug2tkezLLB0J-YZzVC+Q@mail.gmail.com>
- <3f8cc7c9462353ac2eef58e39beee079bdd9c7b4.camel@linux.ibm.com>
- <CAHk-=wih-ibNUxeiKpuKrw3Rd2=QEAZ8zgRWt_CORAjbZykRWQ@mail.gmail.com>
- <5d8fa26d376999f703aac9103166a572fc0df437.camel@linux.ibm.com>
- <CAHk-=wiPfWZYsAqhQry=mhAbKei8bHZDyVPJS0XHZz_FH9Jymw@mail.gmail.com>
- <CAHk-=wjinHpYRk_F1qiaXbXcMtn-ZHKkPkBvZpDJHjoN_2o4ag@mail.gmail.com>
-In-Reply-To: <CAHk-=wjinHpYRk_F1qiaXbXcMtn-ZHKkPkBvZpDJHjoN_2o4ag@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.220.96.108]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+        Fri, 20 Nov 2020 09:30:17 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AKE3U9B040412;
+        Fri, 20 Nov 2020 09:30:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=JZPHYx+6W4w8WOG3lRJPtgP3mZ8e+VXBMIW7EBpKJSQ=;
+ b=rDaBKqueYW8UgRgk+ixhhk0btgA1A8TcGdpJvgn6VFAuXA1mvVp+VgATbJ6ZHsrYLPUV
+ n/abyS+USjWjB6XT6OQxj9KaNYW2uVbTS2TPCs0yFDzdFck5U6S1szXvF8zCncdY6TS+
+ CtAwArd2PQy8mJZckd33i+82dXtxvrxhxOufItIY6ZaRRgmbMDPmJT0khYia7hg8Kv0v
+ uInFPC0lKAD+c+D+DMcEhY9GttnM88ndznX+7kmkXYz9igRpdhcjHU7uo6souKoRTEDw
+ peOFNZCk72RJpK9JrQO2Xs7PgVYFpnhV6axa9SME8l8SPCoZD8daADXOhS0k2O7kUpaB jw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34xe6b37fb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Nov 2020 09:30:11 -0500
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0AKE3mQu045247;
+        Fri, 20 Nov 2020 09:30:11 -0500
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34xe6b37dc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Nov 2020 09:30:11 -0500
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0AKESVLD021127;
+        Fri, 20 Nov 2020 14:30:08 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06fra.de.ibm.com with ESMTP id 34t6ghba1b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Nov 2020 14:30:08 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0AKEU6sv44368354
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 Nov 2020 14:30:06 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3414A42049;
+        Fri, 20 Nov 2020 14:30:06 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D55F4204C;
+        Fri, 20 Nov 2020 14:30:03 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.96.125])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 20 Nov 2020 14:30:03 +0000 (GMT)
+Message-ID: <e151e67e0749766c1b501ecc54dbeb0450c0cea2.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 7/8] IMA: add a built-in policy rule for critical
+ data measurement
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Date:   Fri, 20 Nov 2020 09:30:02 -0500
+In-Reply-To: <20201119232611.30114-8-tusharsu@linux.microsoft.com>
+References: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
+         <20201119232611.30114-8-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-20_07:2020-11-20,2020-11-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 clxscore=1015 malwarescore=0 impostorscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011200096
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBMaW51cyBUb3J2YWxkcyBbbWFpbHRvOnRvcnZhbGRzQGxpbnV4LWZvdW5kYXRpb24u
-b3JnXQ0KPiBTZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDE4LCAyMDIwIDEyOjM3IEFNDQo+IE9u
-IFR1ZSwgTm92IDE3LCAyMDIwIGF0IDM6MjkgUE0gTGludXMgVG9ydmFsZHMNCj4gPHRvcnZhbGRz
-QGxpbnV4LWZvdW5kYXRpb24ub3JnPiB3cm90ZToNCj4gPg0KPiA+IE9uIFR1ZSwgTm92IDE3LCAy
-MDIwIGF0IDM6MjQgUE0gTWltaSBab2hhciA8em9oYXJAbGludXguaWJtLmNvbT4NCj4gd3JvdGU6
-DQo+ID4gPg0KPiA+ID4gSSByZWFsbHkgd2lzaCBpdCB3YXNuJ3QgbmVlZGVkLg0KPiA+DQo+ID4g
-U2VyaW91c2x5LCBJIGdldCB0aGUgZmVlbGluZyB0aGF0IElNQSBpcyBjb21wbGV0ZWx5IG1pcy1k
-ZXNpZ25lZCwgYW5kDQo+ID4gaXMgZG9pbmcgYWN0aXZlbHkgYmFkIHRoaW5ncy4NCj4gPg0KPiA+
-IFdobyB1c2VzIHRoaXMgImZlYXR1cmUiLCBhbmQgd2hvIGNhcmVzPyBCZWNhdXNlIEkgd291bGQg
-c3VnZ2VzdCB5b3UNCj4gPiBqdXN0IGNoYW5nZSB0aGUgcG9saWN5IGFuZCBiZSBkb25lIHdpdGgg
-aXQuDQo+IA0KPiBBbm90aGVyIGFsdGVybmF0aXZlIGlzIHRvIGNoYW5nZSB0aGUgcG9saWN5IGFu
-ZCBzYXkgImFueSB3cml0ZS1vbmx5DQo+IG9wZW4gZ2V0cyB0dXJuZWQgaW50byBhIHJlYWQtd3Jp
-dGUgb3BlbiIuDQoNCk9uZSBpc3N1ZSB0aGF0IHdvdWxkIGFyaXNlIGZyb20gZG9pbmcgaXQgaXMg
-dGhhdCBzZWN1cml0eSBwb2xpY2llcyBuZWVkDQp0byBiZSBtb2RpZmllZCB0byBncmFudCB0aGUg
-YWRkaXRpb25hbCByZWFkIHBlcm1pc3Npb24uIElmIHRoZSBvcGVuDQpmbGFnIGlzIGFkZGVkIGVh
-cmx5LCB0aGUgTFNNIGhvb2sgc2VjdXJpdHlfZmlsZV9vcGVuKCkgd2lsbCBzZWUgaXQuDQoNClRo
-aXMgc29sdXRpb24gc2VlbXMgbm90IG9wdGltYWwsIGFzIHdlIGFyZSBnaXZpbmcgdG8gcHJvY2Vz
-c2VzIGENCnBlcm1pc3Npb24gdGhhdCB0aGV5IHdvdWxkbid0IHJlYWxseSB0YWtlIGFkdmFudGFn
-ZSBvZiwgc2luY2UgdGhlDQpjb250ZW50IHJlYWQgcmVtYWlucyBpbiBrZXJuZWwgc3BhY2UuIEFu
-ZCBhbiBhZGRpdGlvbmFsIHBlcm1pc3Npb24NCmlzIGEgcGVybWlzc2lvbiB0aGF0IGNhbiBiZSBl
-eHBsb2l0ZWQuDQoNCkFzIE1pbWkgc2FpZCwgd2UgYWxyZWFkeSBoYXZlIGEgc2Vjb25kIG9wZW4g
-d2l0aCBkZW50cnlfb3BlbigpIHdoZW4NCnRoZSBvcmlnaW5hbCBmaWxlIGRlc2NyaXB0b3IgaXMg
-bm90IHN1aXRhYmxlLiBUaGUgb25seSBwcm9ibGVtLCB3aGljaCBpcw0Kd2h5IGNoYW5naW5nIHRo
-ZSBtb2RlIGlzIHN0aWxsIHRoZXJlLCBpcyB0aGF0IGEgcHJvY2VzcyBzdGlsbCBtaWdodCBub3QN
-CmhhdmUgdGhlIHByaXZpbGVnZSB0byByZWFkLCBhbmQgdGhpcyBpcyBhIGxlZ2l0aW1hdGUgY2Fz
-ZS4NCg0KV2UgY291bGQgYXNzaWduIGEgbW9yZSBwb3dlcmZ1bCBjcmVkZW50aWFsIHRvIHRoZSBw
-cm9jZXNzLCBzaW5jZQ0KZGVudHJ5X29wZW4oKSBhY2NlcHRzIGEgY3JlZGVudGlhbCBhcyBhbiBh
-cmd1bWVudC4gV2UgY291bGQgb2J0YWluDQpzdWNoIHBvd2VyZnVsIGNyZWRlbnRpYWwgZnJvbSBw
-cmVwYXJlX2tlcm5lbF9jcmVkKCkuIFRoaXMgb3B0aW9uDQpoYXMgYmV0dGVyIGNoYW5jZXMgdG8g
-d29yayB3aXRob3V0IG1vZGlmeWluZyBleGlzdGluZyBzZWN1cml0eSBwb2xpY2llcw0KYXMgbGlr
-ZWx5IHRob3NlIHBvbGljaWVzIGFscmVhZHkgYXNzaWduZWQgdGhlIHJlcXVpcmVkIHByaXZpbGVn
-ZSB0byB0aGUNCmtlcm5lbC4gSG93ZXZlciwgZG9pbmcgc28gbWlnaHQgbm90IGJlIHdoYXQgTFNN
-IHBlb3BsZSByZWNvbW1lbmQuDQoNCkFueSBzdWdnZXN0aW9uPw0KDQpUaGFua3MNCg0KUm9iZXJ0
-bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFu
-YWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIExpIEppYW4sIFNoaSBZYW5saQ0K
+Hi Lakshmi,
+
+On Thu, 2020-11-19 at 15:26 -0800, Tushar Sugandhi wrote:
+> From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> 
+> The IMA hook to measure kernel critical data, namely
+> ima_measure_critical_data(), could be called before a custom IMA policy
+> is loaded.
+> Define a new critical data builtin policy to allow measuring
+> early kernel integrity critical data before a custom IMA policy is
+> loaded.
+
+Everything needing to be said seems to be included in the second
+sentence.  Does the first sentence add anything?  "Define a new
+critical data builtin policy" makes for a good Subject line.
+
+> 
+> Add critical data to built-in IMA rules if the kernel command line
+> contains "ima_policy=critical_data".
+
+The boot command line parameters are defined in Documentation/admin-
+guide/kernel-parameters.txt.  Please update "ima_policy".
+
+> 
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> ---
+>  security/integrity/ima/ima_policy.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index c9e52dab0638..119604a3efa0 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -206,6 +206,10 @@ static struct ima_rule_entry secure_boot_rules[] __ro_after_init = {
+>  	 .flags = IMA_FUNC | IMA_DIGSIG_REQUIRED},
+>  };
+> 
+> +static struct ima_rule_entry critical_data_rules[] __ro_after_init = {
+> +	{.action = MEASURE, .func = CRITICAL_DATA, .flags = IMA_FUNC},
+> +};
+> +
+>  /* An array of architecture specific rules */
+>  static struct ima_rule_entry *arch_policy_entry __ro_after_init;
+>  
+> @@ -228,6 +232,7 @@ __setup("ima_tcb", default_measure_policy_setup);
+>  
+>  static bool ima_use_appraise_tcb __initdata;
+>  static bool ima_use_secure_boot __initdata;
+> +static bool ima_use_critical_data __ro_after_init;
+
+Unlike ima_fail_unverifiable_sigs, ima_use_critical_data is only used
+during __init.  Please change "__ro_after_init" to "__initdata".  (The
+critical data policy itself is defined properly as __ro_after_init.)
+
+>  static bool ima_fail_unverifiable_sigs __ro_after_init;
+>  static int __init policy_setup(char *str)
+>  {
+> @@ -242,6 +247,8 @@ static int __init policy_setup(char *str)
+>  			ima_use_appraise_tcb = true;
+>  		else if (strcmp(p, "secure_boot") == 0)
+>  			ima_use_secure_boot = true;
+> +		else if (strcmp(p, "critical_data") == 0)
+> +			ima_use_critical_data = true;
+>  		else if (strcmp(p, "fail_securely") == 0)
+>  			ima_fail_unverifiable_sigs = true;
+>  		else
+> @@ -875,6 +882,11 @@ void __init ima_init_policy(void)
+>  			  ARRAY_SIZE(default_appraise_rules),
+>  			  IMA_DEFAULT_POLICY);
+>  
+> +	if (ima_use_critical_data)
+> +		add_rules(critical_data_rules,
+> +			  ARRAY_SIZE(critical_data_rules),
+> +			  IMA_DEFAULT_POLICY);
+> +
+>  	ima_update_policy_flag();
+>  }
+>  
+
+
