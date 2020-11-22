@@ -2,171 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1797C2BC988
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Nov 2020 22:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 160C52BFC0A
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Nov 2020 23:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725833AbgKVVTJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 22 Nov 2020 16:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725831AbgKVVTJ (ORCPT
+        id S1726477AbgKVWLA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 22 Nov 2020 17:11:00 -0500
+Received: from asavdk4.altibox.net ([109.247.116.15]:51724 "EHLO
+        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbgKVWK6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 22 Nov 2020 16:19:09 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A746FC061A4B
-        for <linux-integrity@vger.kernel.org>; Sun, 22 Nov 2020 13:19:08 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id k1so2152049eds.13
-        for <linux-integrity@vger.kernel.org>; Sun, 22 Nov 2020 13:19:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TnYAfYzK9z2CU6n9f6EQEQr3kUIpHz74aN1sscdy0dE=;
-        b=SbzxRegB0eYgWQjrzVNZhGj7xGAuKSyhCYUAI+WyaPpWKWhEN6iqWX+bEcJKbYoB0L
-         e+h2FSiOvFHziiUa44whQFraYTHOU8p50iPMrz8231dDk9fhDLvFKe/Cjby4M/d+4U6r
-         W07v+9gVUkUhjxH3Geo4u+yVOo02UkCH74LdJNvQKI4YCSBilG3kHI2Y62XjETJSZ/uX
-         MlbS32EkSSCU1n+fb8kYyduz0/3kWYDqvMuc0IaCRimx25Yqqx0UR7QjDDjbfQt8oUSD
-         2DZTJmGkdogVeaLOCgp12rxjJJwbqtgcnvKaMV8RD8yIeQUYlTY9lypDDNNSf4zLZOfd
-         JgQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TnYAfYzK9z2CU6n9f6EQEQr3kUIpHz74aN1sscdy0dE=;
-        b=HM0JxXAuTpgTD3yzQdlx+Er17hKHtwH34+71SeLomhLRvU8VpRatfeKPhzHDycTQSl
-         /PWjY17Yz0sFoIOeJ+O5dZ3eoCe2x1Xs32xyVb7Qm72Ew8cnuC8VTeaTMbH8AzHYI8hs
-         6+HQgB+DYiWN2n6BBfzCE/xBKc2ITC9zc4V6Obg1mIUWV96LVBDCqm8YPVvG9kY6XuK8
-         MiFggpQJR4AsMORtWjZBGgni0oxrKrD/K3RmeYx3PeTGdKNYMlkglf2/ab2yun+fpP0y
-         t75v+G1Yyo+IBHId0ZCymGL4M3WLXY3BSHkPUqFTkBxldAtYszOr93MmYeNanSqzdKXH
-         72fw==
-X-Gm-Message-State: AOAM530wvNuNIliTHuiXGkGqCn/46nOaxuWK3cHyKD9PldrJLfFtstI4
-        kgKVv6u5iPOKEyQnFk8yijo3UGPIO953WsY6FuTS
-X-Google-Smtp-Source: ABdhPJxWDVFzpcLiB/ip+VH1A679zZkgv5lzs7PTKex+TlERHeuhuyes1CoTwmWTuMvWpYfUdNgQEs+SrGqG31WGjjs=
-X-Received: by 2002:aa7:de01:: with SMTP id h1mr44059484edv.269.1606079946987;
- Sun, 22 Nov 2020 13:19:06 -0800 (PST)
+        Sun, 22 Nov 2020 17:10:58 -0500
+Received: from ravnborg.org (unknown [188.228.123.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk4.altibox.net (Postfix) with ESMTPS id 2C52280567;
+        Sun, 22 Nov 2020 23:10:42 +0100 (CET)
+Date:   Sun, 22 Nov 2020 23:10:40 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
+        linux-atm-general@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        selinux@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        target-devel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-hwmon@vger.kernel.org, x86@kernel.org,
+        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
+        linux-mm@kvack.org, netdev@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-usb@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, patches@opensource.cirrus.com,
+        Joe Perches <joe@perches.com>, linux-integrity@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+Message-ID: <20201122221040.GD566387@ravnborg.org>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook>
+ <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook>
+ <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
 MIME-Version: 1.0
-References: <20201115103718.298186-1-christian.brauner@ubuntu.com> <20201115103718.298186-15-christian.brauner@ubuntu.com>
-In-Reply-To: <20201115103718.298186-15-christian.brauner@ubuntu.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sun, 22 Nov 2020 16:18:55 -0500
-Message-ID: <CAHC9VhRqk1WMXyHTsrLcJnpxMPgJs_CxeG2uCaaBGgHqK_jj=g@mail.gmail.com>
-Subject: Re: [PATCH v2 14/39] commoncap: handle idmapped mounts
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jann Horn <jannh@google.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-audit@redhat.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=VafZwmh9 c=1 sm=1 tr=0
+        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
+        a=kj9zAlcOel0A:10 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8
+        a=7T594MSkF3521FIrX4wA:9 a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Nov 15, 2020 at 5:39 AM Christian Brauner
-<christian.brauner@ubuntu.com> wrote:
-> When interacting with user namespace and non-user namespace aware
-> filesystem capabilities the vfs will perform various security checks to
-> determine whether or not the filesystem capabilities can be used by the
-> caller (e.g. during exec), or even whether they need to be removed. The
-> main infrastructure for this resides in the capability codepaths but they
-> are called through the LSM security infrastructure even though they are not
-> technically an LSM or optional. This extends the existing security hooks
-> security_inode_removexattr(), security_inode_killpriv(),
-> security_inode_getsecurity() to pass down the mount's user namespace and
-> makes them aware of idmapped mounts.
-> In order to actually get filesystem capabilities from disk the capability
-> infrastructure exposes the get_vfs_caps_from_disk() helper. For user
-> namespace aware filesystem capabilities a root uid is stored alongside the
-> capabilities.
-> In order to determine whether the caller can make use of the filesystem
-> capability or whether it needs to be ignored it is translated according to
-> the superblock's user namespace. If it can be translated to uid 0 according
-> to that id mapping the caller can use the filesystem capabilities stored on
-> disk. If we are accessing the inode that holds the filesystem capabilities
-> through an idmapped mount we need to map the root uid according to the
-> mount's user namespace.
-> Afterwards the checks are identical to non-idmapped mounts. Reading
-> filesystem caps from disk enforces that the root uid associated with the
-> filesystem capability must have a mapping in the superblock's user
-> namespace and that the caller is either in the same user namespace or is a
-> descendant of the superblock's user namespace. For filesystems that are
-> mountable inside user namespace the container can just mount the filesystem
-> and won't usually need to idmap it. If it does create an idmapped mount it
-> can mark it with a user namespace it has created and which is therefore a
-> descendant of the s_user_ns. For filesystems that are not mountable inside
-> user namespaces the descendant rule is trivially true because the s_user_ns
-> will be the initial user namespace.
->
-> If the initial user namespace is passed all operations are a nop so
-> non-idmapped mounts will not see a change in behavior and will also not see
-> any performance impact.
->
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: linux-fsdevel@vger.kernel.org
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Hi James.
 
-...
+> > > If none of the 140 patches here fix a real bug, and there is no
+> > > change to machine code then it sounds to me like a W=2 kind of a
+> > > warning.
+> > 
+> > FWIW, this series has found at least one bug so far:
+> > https://lore.kernel.org/lkml/CAFCwf11izHF=g1mGry1fE5kvFFFrxzhPSM6qKAO8gxSp=Kr_CQ@mail.gmail.com/
+> 
+> 
+> Well, it's a problem in an error leg, sure, but it's not a really
+> compelling reason for a 141 patch series, is it?  All that fixing this
+> error will do is get the driver to print "oh dear there's a problem"
+> under four more conditions than it previously did.
 
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 8dba8f0983b5..ddb9213a3e81 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -1944,7 +1944,7 @@ static inline int audit_copy_fcaps(struct audit_names *name,
->         if (!dentry)
->                 return 0;
->
-> -       rc = get_vfs_caps_from_disk(dentry, &caps);
-> +       rc = get_vfs_caps_from_disk(&init_user_ns, dentry, &caps);
->         if (rc)
->                 return rc;
->
-> @@ -2495,7 +2495,8 @@ int __audit_log_bprm_fcaps(struct linux_binprm *bprm,
->         ax->d.next = context->aux;
->         context->aux = (void *)ax;
->
-> -       get_vfs_caps_from_disk(bprm->file->f_path.dentry, &vcaps);
-> +       get_vfs_caps_from_disk(mnt_user_ns(bprm->file->f_path.mnt),
-> +                              bprm->file->f_path.dentry, &vcaps);
+You are asking the wrong question here.
 
-As audit currently records information in the context of the
-initial/host namespace I'm guessing we don't want the mnt_user_ns()
-call above; it seems like &init_user_ns would be the right choice
-(similar to audit_copy_fcaps()), yes?
+Yuo should ask  how many hours could have been saved by all the bugs
+people have been fighting with and then fixed *before* the code
+hit the kernel at all.
 
->         ax->fcap.permitted = vcaps.permitted;
->         ax->fcap.inheritable = vcaps.inheritable;
+My personal experience is that I, more than once, have had errors
+related to a missing break in my code. So this warnings is IMO a win.
 
--- 
-paul moore
-www.paul-moore.com
+And if we are only ~100 patches to have it globally enabled then it is a
+no-brainer in my book.
+
+	Sam
