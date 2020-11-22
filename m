@@ -2,250 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 158922BC1D0
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Nov 2020 20:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9B52BC6D1
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Nov 2020 17:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728511AbgKUTrH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 21 Nov 2020 14:47:07 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:44774 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728477AbgKUTrH (ORCPT
+        id S1728118AbgKVQRK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 22 Nov 2020 11:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728069AbgKVQRH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 21 Nov 2020 14:47:07 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 582C320B717A;
-        Sat, 21 Nov 2020 11:47:04 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 582C320B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1605988025;
-        bh=59IvGgvZFlnKU2vwMSgUoi2T91vH4paBI5R//tIote0=;
-        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
-        b=qaIidqjqfgmp+YzmaXu/XHNpFvGL7i8TpuDJM/WSlOKIXC5Abql0R1lwqfpnhtPbA
-         RiGT0pchPl2inXyodYv2KKWhHKXdwq4r7kOXAt8PC2PJCZTsmikiJmxbvG4bLRh5Pi
-         QkrE7gJ9xRU1S12V2qpT8gLDLAV0PENA/uxP9cXE=
-Subject: Re: [PATCH v9 0/8] Carry forward IMA measurement log on kexec on
- ARM64
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     zohar@linux.ibm.com, bauerman@linux.ibm.com,
-        gregkh@linuxfoundation.org, james.morse@arm.com,
-        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        frowand.list@gmail.com, vincenzo.frascino@arm.com,
-        mark.rutland@arm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, pasha.tatashin@soleen.com, allison@lohutok.net,
-        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
-        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
-        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
-        christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        prsriva@linux.microsoft.com, balajib@linux.microsoft.com
-References: <20201113192243.1993-1-nramas@linux.microsoft.com>
- <20201121135719.GA2134870@robh.at.kernel.org>
- <415b4d0b-3d93-40ce-b74e-48fdce7fbf7f@linux.microsoft.com>
-Message-ID: <10fb7958-c6e1-e8c9-8802-f85f2a9311ed@linux.microsoft.com>
-Date:   Sat, 21 Nov 2020 11:47:03 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 22 Nov 2020 11:17:07 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F1EC08E861
+        for <linux-integrity@vger.kernel.org>; Sun, 22 Nov 2020 08:17:06 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id l17so1477509pgk.1
+        for <linux-integrity@vger.kernel.org>; Sun, 22 Nov 2020 08:17:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9LoGd3XD212DnUOzzxWdBwAHKcFiABUM1eku/Z5s9PQ=;
+        b=ECdUiFozoGotedNMltHxGvt7ELeQp/og9KGaJat0+erwcdPPWVCrU8KkW+JV4RYPeo
+         GTWUobzmr0s313q/lzhn4jF5RxJP4nhZO/aj20hZaH8d/g/a456RbO+LKniOS4LntN7M
+         GHx9cYZv8xWYKIg8n9C3ZJn+Q+L/6/s35hbx0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9LoGd3XD212DnUOzzxWdBwAHKcFiABUM1eku/Z5s9PQ=;
+        b=n+pS2mygKY54neF6e75EJHeBjfC+dpBuL25+7VJol6uE9aGGmDnyWEai8TbXNVS024
+         VlCXcq7XWieSenztJUblR5wVvwlVp0Rsig/hhkve3+XX1M9uF2UM2US9xpzdoi4CJK3i
+         QYoEg96nlFX9lr0J2CW1iYV3ZrowgMVv3t3sMLX79FaLisIMn8WpGeVCNABTeci9mAua
+         Ep41XXd36O6ldIKAfIGGeypkfo0AasnGiNg3bZ6RTAX0SC24WyY2eGD6UzuZuD9dh3Bv
+         3EgirZCjxD4T3lCBZyIcCqrSpzWOP83Sg2fU16oJqO4w6y1gbI09lakXSPZmEHibww3y
+         k3JQ==
+X-Gm-Message-State: AOAM533MjrFCSTtsjH3FydGmBCjIeltjgZ1GttNHBvjdOD0oboAGR0hN
+        3G+fGlzI9072QvH0lgtaIXEMrg==
+X-Google-Smtp-Source: ABdhPJwZLmFbbTaRxBkTtuJWbjEgTUtKMFpd77L8KmHflX2OUVWZyNqpGNaeYR87Y149sjgotBbRUA==
+X-Received: by 2002:a62:790f:0:b029:18a:ae57:353f with SMTP id u15-20020a62790f0000b029018aae57353fmr22300068pfc.78.1606061825417;
+        Sun, 22 Nov 2020 08:17:05 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t5sm10642660pjj.31.2020.11.22.08.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Nov 2020 08:17:04 -0800 (PST)
+Date:   Sun, 22 Nov 2020 08:17:03 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        amd-gfx@lists.freedesktop.org, bridge@lists.linux-foundation.org,
+        ceph-devel@vger.kernel.org, cluster-devel@redhat.com,
+        coreteam@netfilter.org, devel@driverdev.osuosl.org,
+        dm-devel@redhat.com, drbd-dev@lists.linbit.com,
+        dri-devel@lists.freedesktop.org, GR-everest-linux-l2@marvell.com,
+        GR-Linux-NIC-Dev@marvell.com, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-acpi@vger.kernel.org,
+        linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+Message-ID: <202011220816.8B6591A@keescook>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook>
+ <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-In-Reply-To: <415b4d0b-3d93-40ce-b74e-48fdce7fbf7f@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 11/21/20 6:38 AM, Lakshmi Ramasubramanian wrote:
-> On 11/21/20 5:57 AM, Rob Herring wrote:
->> On Fri, Nov 13, 2020 at 11:22:35AM -0800, Lakshmi Ramasubramanian wrote:
->>> On kexec file load Integrity Measurement Architecture (IMA) subsystem
->>> may verify the IMA signature of the kernel and initramfs, and measure
->>> it. The command line parameters passed to the kernel in the kexec call
->>> may also be measured by IMA. A remote attestation service can verify
->>> a TPM quote based on the TPM event log, the IMA measurement list, and
->>> the TPM PCR data. This can be achieved only if the IMA measurement log
->>> is carried over from the current kernel to the next kernel across
->>> the kexec call.
->>>
->>> powerpc already supports carrying forward the IMA measurement log on
->>> kexec. This patch set adds support for carrying forward the IMA
->>> measurement log on kexec on ARM64.
->>>
->>> This patch set moves the platform independent code defined for powerpc
->>> such that it can be reused for other platforms as well. A chosen node
->>> namely "linux,ima-kexec-buffer" is added to the DTB for ARM64 to hold
->>> the address and the size of the memory reserved to carry
->>> the IMA measurement log.
->>>
->>> This patch set has been tested for ARM64 platform using QEMU.
->>> I would like help from the community for testing this change on powerpc.
->>> Thanks.
->>
->> As I mentioned previously, please move the kexec code to drivers/of/. Or
->> at least put the infrastructure in place so we're not defining public
->> IMA functions and then making them static later.
+On Fri, Nov 20, 2020 at 11:51:42AM -0800, Jakub Kicinski wrote:
+> On Fri, 20 Nov 2020 11:30:40 -0800 Kees Cook wrote:
+> > On Fri, Nov 20, 2020 at 10:53:44AM -0800, Jakub Kicinski wrote:
+> > > On Fri, 20 Nov 2020 12:21:39 -0600 Gustavo A. R. Silva wrote:  
+> > > > This series aims to fix almost all remaining fall-through warnings in
+> > > > order to enable -Wimplicit-fallthrough for Clang.
+> > > > 
+> > > > In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
+> > > > add multiple break/goto/return/fallthrough statements instead of just
+> > > > letting the code fall through to the next case.
+> > > > 
+> > > > Notice that in order to enable -Wimplicit-fallthrough for Clang, this
+> > > > change[1] is meant to be reverted at some point. So, this patch helps
+> > > > to move in that direction.
+> > > > 
+> > > > Something important to mention is that there is currently a discrepancy
+> > > > between GCC and Clang when dealing with switch fall-through to empty case
+> > > > statements or to cases that only contain a break/continue/return
+> > > > statement[2][3][4].  
+> > > 
+> > > Are we sure we want to make this change? Was it discussed before?
+> > > 
+> > > Are there any bugs Clangs puritanical definition of fallthrough helped
+> > > find?
+> > > 
+> > > IMVHO compiler warnings are supposed to warn about issues that could
+> > > be bugs. Falling through to default: break; can hardly be a bug?!  
+> > 
+> > It's certainly a place where the intent is not always clear. I think
+> > this makes all the cases unambiguous, and doesn't impact the machine
+> > code, since the compiler will happily optimize away any behavioral
+> > redundancy.
 > 
-> I am not sure I am following you. Could you please clarify -
-> In this patch series, per your suggestion, I have moved the architecture 
-> independent kexec code to "drivers/of".
-> 
->      => drivers/of/ima_kexec.c
->      => drivers/of/kexec_fdt.c
-> 
-> Please let me know if I missed something.
+> If none of the 140 patches here fix a real bug, and there is no change
+> to machine code then it sounds to me like a W=2 kind of a warning.
 
-The following two arch independent kexec functions are required only 
-when CONFIG_IMA is enabled. So I moved them under security/integrity/ima
+FWIW, this series has found at least one bug so far:
+https://lore.kernel.org/lkml/CAFCwf11izHF=g1mGry1fE5kvFFFrxzhPSM6qKAO8gxSp=Kr_CQ@mail.gmail.com/
 
-	=> ima_get_kexec_buffer()
-	=> ima_free_kexec_buffer()
-
-But the other arch independent kexec functions have been moved to 
-drivers/of.
-
-I am not sure if you wanted ima_get_kexec_buffer() and 
-ima_free_kexec_buffer() to also be moved to "drivers/of". Please clarify.
-
-thanks,
-  -lakshmi
-
->>> This patch set is based on
->>> commit af5043c89a8e ("Merge tag 'acpi-5.10-rc4' of 
->>> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm")
->>> in https://github.com/torvalds/linux "master" branch.
->>>
->>> Changelog:
->>>
->>> v9
->>>    - Moved delete_fdt_mem_rsv() to drivers/of/kexec_fdt.c
->>>    - Defined a new function get_ima_kexec_buffer() in
->>>      drivers/of/ima_kexec.c to replace do_get_kexec_buffer()
->>>    - Changed remove_ima_kexec_buffer() to the original function name
->>>      remove_ima_buffer()
->>>    - Moved remove_ima_buffer() to drivers/of/ima_kexec.c
->>>    - Moved ima_get_kexec_buffer() and ima_free_kexec_buffer()
->>>      to security/integrity/ima/ima_kexec.c
->>>
->>> v8:
->>>    - Moved remove_ima_kexec_buffer(), do_get_kexec_buffer(), and
->>>      delete_fdt_mem_rsv() to drivers/of/fdt.c
->>>    - Moved ima_dump_measurement_list() and ima_add_kexec_buffer()
->>>      back to security/integrity/ima/ima_kexec.c
->>>
->>> v7:
->>>    - Renamed remove_ima_buffer() to remove_ima_kexec_buffer() and moved
->>>      this function definition to kernel.
->>>    - Moved delete_fdt_mem_rsv() definition to kernel
->>>    - Moved ima_dump_measurement_list() and ima_add_kexec_buffer() to
->>>      a new file namely ima_kexec_fdt.c in IMA
->>>
->>> v6:
->>>    - Remove any existing FDT_PROP_IMA_KEXEC_BUFFER property in the 
->>> device
->>>      tree and also its corresponding memory reservation in the currently
->>>      running kernel.
->>>    - Moved the function remove_ima_buffer() defined for powerpc to IMA
->>>      and renamed the function to ima_remove_kexec_buffer(). Also, moved
->>>      delete_fdt_mem_rsv() from powerpc to IMA.
->>>
->>> v5:
->>>    - Merged get_addr_size_cells() and do_get_kexec_buffer() into a 
->>> single
->>>      function when moving the arch independent code from powerpc to IMA
->>>    - Reverted the change to use FDT functions in powerpc code and added
->>>      back the original code in get_addr_size_cells() and
->>>      do_get_kexec_buffer() for powerpc.
->>>    - Added fdt_add_mem_rsv() for ARM64 to reserve the memory for
->>>      the IMA log buffer during kexec.
->>>    - Fixed the warning reported by kernel test bot for ARM64
->>>      arch_ima_add_kexec_buffer() - moved this function to a new file
->>>      namely arch/arm64/kernel/ima_kexec.c
->>>
->>> v4:
->>>    - Submitting the patch series on behalf of the original author
->>>      Prakhar Srivastava <prsriva@linux.microsoft.com>
->>>    - Moved FDT_PROP_IMA_KEXEC_BUFFER ("linux,ima-kexec-buffer") to
->>>      libfdt.h so that it can be shared by multiple platforms.
->>>
->>> v3:
->>> Breakup patches further into separate patches.
->>>    - Refactoring non architecture specific code out of powerpc
->>>    - Update powerpc related code to use fdt functions
->>>    - Update IMA buffer read related code to use of functions
->>>    - Add support to store the memory information of the IMA
->>>      measurement logs to be carried forward.
->>>    - Update the property strings to align with documented nodes
->>>      https://github.com/devicetree-org/dt-schema/pull/46
->>>
->>> v2:
->>>    Break patches into separate patches.
->>>    - Powerpc related Refactoring
->>>    - Updating the docuemntation for chosen node
->>>    - Updating arm64 to support IMA buffer pass
->>>
->>> v1:
->>>    Refactoring carrying over IMA measuremnet logs over Kexec. This patch
->>>      moves the non-architecture specific code out of powerpc and adds to
->>>      security/ima.(Suggested by Thiago)
->>>    Add Documentation regarding the ima-kexec-buffer node in the chosen
->>>      node documentation
->>>
->>> v0:
->>>    Add a layer of abstraction to use the memory reserved by device tree
->>>      for ima buffer pass.
->>>    Add support for ima buffer pass using reserved memory for arm64 
->>> kexec.
->>>      Update the arch sepcific code path in kexec file load to store the
->>>      ima buffer in the reserved memory. The same reserved memory is read
->>>      on kexec or cold boot.
->>>
->>> Lakshmi Ramasubramanian (8):
->>>    powerpc: fix compiler warnings and errors
->>>    powerpc: Move delete_fdt_mem_rsv() to drivers/of
->>>    ima: Define get_ima_kexec_buffer() in drivers/of
->>>    powerpc: Use get_ima_kexec_buffer to get ima kexec buffer
->>>    powerpc: Move remove_ima_buffer() to drivers/of
->>>    powerpc: Move ima_get_kexec_buffer() and ima_free_kexec_buffer() to
->>>      ima
->>>    arm64: Store IMA log information in kimage used for kexec
->>>    arm64: Add IMA kexec buffer to DTB
->>>
->>>   arch/arm64/Kconfig                     |   1 +
->>>   arch/arm64/include/asm/ima.h           |  18 +++++
->>>   arch/arm64/include/asm/kexec.h         |   3 +
->>>   arch/arm64/kernel/Makefile             |   1 +
->>>   arch/arm64/kernel/ima_kexec.c          |  34 ++++++++
->>>   arch/arm64/kernel/machine_kexec_file.c |  18 +++++
->>>   arch/powerpc/include/asm/ima.h         |  11 +--
->>>   arch/powerpc/include/asm/kexec.h       |   1 -
->>>   arch/powerpc/kexec/Makefile            |   7 +-
->>>   arch/powerpc/kexec/file_load.c         |  32 --------
->>>   arch/powerpc/kexec/ima.c               | 106 ++-----------------------
->>>   drivers/of/Makefile                    |   9 +++
->>
->>>   drivers/of/ima_kexec.c                 |  91 +++++++++++++++++++++
->>>   drivers/of/kexec_fdt.c                 |  55 +++++++++++++
->>
->> Does this need to be 2 files? Just kexec.c?
-> 
-> Since the functions defined in "ima_kexec.c" and "kexec_fdt.c" are 
-> enabled on 2 different kernel CONFIGs, keeping them in 2 files enables 
-> us to avoid using "#ifdef" in C files.
-> 
-> thanks,
->   -lakshmi
-> 
->>
->>>   include/linux/kexec.h                  |  24 ++++++
->>>   security/integrity/ima/ima_kexec.c     |  51 ++++++++++++
->>>   16 files changed, 313 insertions(+), 149 deletions(-)
->>>   create mode 100644 arch/arm64/include/asm/ima.h
->>>   create mode 100644 arch/arm64/kernel/ima_kexec.c
->>>   create mode 100644 drivers/of/ima_kexec.c
->>>   create mode 100644 drivers/of/kexec_fdt.c
->>>
->>> -- 
->>> 2.29.2
->>>
-
+-- 
+Kees Cook
