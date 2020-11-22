@@ -2,135 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F085E2BC94A
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Nov 2020 21:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5A02BC966
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Nov 2020 21:54:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727902AbgKVUgO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 22 Nov 2020 15:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727637AbgKVUgM (ORCPT
+        id S1727460AbgKVUxj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 22 Nov 2020 15:53:39 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:49316 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727418AbgKVUxi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 22 Nov 2020 15:36:12 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A97FC0613D3;
-        Sun, 22 Nov 2020 12:36:10 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id 10so14048150ybx.9;
-        Sun, 22 Nov 2020 12:36:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GG13N+h9bYKW0tA8PzZdEh0PqD5/qSPuWfMm4/MLZZE=;
-        b=tX7AFJY3IoP+sTWjLWjwUeA0EiMqyjgmEMGUK52Uheybmur4GieXYHjq/4452d4+Q2
-         I9IJc2W+KgP7eM5cLMrffBSaL1fq5VPLYq7a7Nqy7aqiJs+SWc7hYJy9lsWlIs20dLH2
-         W28Iwaw2K1E1/9bR59jMmk/7Gq8vv14a82SqbrX8Cr26/AWqo5ergIUL6PfX6EI1DxrF
-         H3tDAymEGdy6lnWgT39rAP3JOfP6UnfKa9FSSCeE7ggKiNT9+2hZ/9zdGiTOU+6HH+d5
-         TmFQQAuEaRP9Z2Bh9bU0txdUhaZCbT+Ezs+qExtvq1zOJlrZzRYF6kJpZnKXIPWyTN/2
-         bJqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GG13N+h9bYKW0tA8PzZdEh0PqD5/qSPuWfMm4/MLZZE=;
-        b=cJfjc+j5slxPJthWAzX8B2rKYrwB5xpjQ+veY6dlcvnvHvWXN4pGZ5nOhwkwrbgOpe
-         wswNL7rRwNIhUcponoGCjSbguzv+CwxcD01lrqGgYDBrXDflfjyNiv6hZunD3GhpPl3D
-         1lxEqgUzrMN1gWnS/Us5xnk5Nkit3Ouo29JBvj+poY3mAEe4rsIpu95pcVmU2//LGeGz
-         YvMXoL4AEKkN8UYks8ZHGK35KzC1nOCkCltug4kSBr5jauBhFHAKbd9844otAsupDU1R
-         2VXLIpg4k4B3GNggLw2OGG7McXjUJ4NsG6g/mEqlKuFq0yNig3IEUFI/+wUcwhlk+dCx
-         8EMQ==
-X-Gm-Message-State: AOAM532pxbXaeBX/VOkcgBR/mHHA2Ye/5KC0aTKAoxoVPE6mZi/LceAi
-        nUuMkdbFliZ69jO1+Z3ynceay3eoOITWkRPMaBg=
-X-Google-Smtp-Source: ABdhPJzCLkP7XKvI+ogPcqXNjFlbBz0ulixnxLa8L+LTJiC1sb757UHHSouM0vJ9LX/4+Ocy8hzM6Anb9s4lPpy7cZY=
-X-Received: by 2002:a25:6986:: with SMTP id e128mr4956056ybc.93.1606077369721;
- Sun, 22 Nov 2020 12:36:09 -0800 (PST)
+        Sun, 22 Nov 2020 15:53:38 -0500
+Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B7AFB20B717A;
+        Sun, 22 Nov 2020 12:53:36 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B7AFB20B717A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1606078417;
+        bh=alE6Kb/zDgqzLgdvNjihsk5l+fJjrnYiq4iR3wkQH+k=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=gGXIdg7oo3NxBnYLTF6PEbRZvdcXdbnnlLlQ3YfDgE+wvrZM0lYR6WqM4X+tCmiPP
+         EldLucw+lLJagJHWRX5TeaWcO7cM4RDF6UClTg5vO12b7cWO7BvlKuK9EQNMlEbryD
+         Z/IiP2IE9CP5mW6v/DXF7UjLxi4UYMaRHDrEQGhs=
+Subject: Re: [PATCH v6 0/8] IMA: support for measuring kernel integrity
+ critical data
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com,
+        tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
+ <20201120124657.GA31468@duo.ucw.cz>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <aadf6e35-39bc-74d4-6ca3-d708860738a5@linux.microsoft.com>
+Date:   Sun, 22 Nov 2020 12:53:35 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
-In-Reply-To: <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sun, 22 Nov 2020 21:35:58 +0100
-Message-ID: <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201120124657.GA31468@duo.ucw.cz>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Nov 22, 2020 at 7:22 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> Well, it's a problem in an error leg, sure, but it's not a really
-> compelling reason for a 141 patch series, is it?  All that fixing this
-> error will do is get the driver to print "oh dear there's a problem"
-> under four more conditions than it previously did.
->
-> We've been at this for three years now with nearly a thousand patches,
-> firstly marking all the fall throughs with /* fall through */ and later
-> changing it to fallthrough.  At some point we do have to ask if the
-> effort is commensurate with the protection afforded.  Please tell me
-> our reward for all this effort isn't a single missing error print.
+Thanks Pavel for looking at this series.
 
-It isn't that much effort, isn't it? Plus we need to take into account
-the future mistakes that it might prevent, too. So even if there were
-zero problems found so far, it is still a positive change.
+On 2020-11-20 4:46 a.m., Pavel Machek wrote:
+> On Thu 2020-11-19 15:26:03, Tushar Sugandhi wrote:
+>> Kernel integrity critical data can be defined as the in-memory kernel
+>> data which if accidentally or maliciously altered, can compromise the
+>> integrity of the system.
+> 
+> Is that an useful definition?
+I will rework on the definition in the next iteration.
+Meanwhile, if you have any feedback on what can we add to the
+definition, that would help is.
 
-I would agree if these changes were high risk, though; but they are
-almost trivial.
+> 
+>> There are several kernel subsystems that contain integrity critical
+>> data - e.g. LSMs like SELinux, or AppArmor; or device-mapper targets
+>> like dm-crypt, dm-verity etc. Examples of critical data could be kernel
+>> in-memory r/o structures, hash of the memory structures, or data that
+>> represents a linux kernel subsystem state.
+>>
+>> This patch set defines a new IMA hook namely ima_measure_critical_data()
+>> to measure the critical data. Kernel subsystems can use this
+>> functionality, to take advantage of IMA's measuring and quoting
+>> abilities - thus ultimately enabling remote attestation for the
+>> subsystem specific information stored in the kernel memory.
+> 
+> How is it supposed to be useful?
+> 
+> I'm pretty sure there are critical data that are not measured by
+> proposed module... and that are written under normal circumstances.
+> 
+The goal of this series is to introduce the IMA hook
+measure_critical_data() and the necessary policies to use it; and
+illustrate that use with one example (SELinux). It is not scalable to 
+identify and update all the critical data sources to use the proposed
+module at once.
 
-Cheers,
-Miguel
+A piecemeal approach to add more critical data measurement in subsequent
+patches would be easy to implement and review.
+
+Please let me know if you have more thoughts on this. (what critical
+data you think would be useful to measure etc.)
+
+~Tushar
+
+> Best regards,
+> 
+> 									Pavel
+> 
