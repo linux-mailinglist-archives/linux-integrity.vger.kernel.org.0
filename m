@@ -2,108 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6DE2C14BF
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Nov 2020 20:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCFD2C14FF
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Nov 2020 21:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730593AbgKWTt2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Nov 2020 14:49:28 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16350 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728973AbgKWTt2 (ORCPT
+        id S1728910AbgKWUD4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Nov 2020 15:03:56 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17000 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726770AbgKWUDy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Nov 2020 14:49:28 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ANJVUjP007843;
-        Mon, 23 Nov 2020 14:49:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=0B9RKFIVUN2IsJ5nGG5ET35xVEvhvmpf5VR3A1EdtVw=;
- b=PTQJX6vRLuNFFGrSSIFWnCHNJkByX+ZN1uZnD1tNeGuMLztS6t21jN1wZh9xahrH2ALf
- nW1WE8XL39qmM+zhmEaxvBw6R0jWWE79RmCRBb9bZlfhQas8u/L2owlqKk9OMALNCOVr
- 4Us4ic23o1mb1ftuKBZ4TJ8rkcMoLUnuJNVcA0jwaZSPzuASPiFT/eL10kgbmfT7pWzQ
- uKTM45/rFQPjmoxXRZ74gw0UEkihMXmlYkJOAQxfZeHkrSa30SRGHh+5PU1l2qZUmRK1
- GIFOx7Fr0MbchyYXF2FrHUkQWXRyRhF21F+lWS34u6vhVGhC2GRaLBvfOfUp/emzfJgo nQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34ygtt4m2m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Nov 2020 14:49:19 -0500
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0ANJVerJ008563;
-        Mon, 23 Nov 2020 14:49:18 -0500
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34ygtt4m20-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Nov 2020 14:49:18 -0500
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0ANJluVM026535;
-        Mon, 23 Nov 2020 19:49:16 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 34xth8aurd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Nov 2020 19:49:16 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0ANJnENL49152498
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Nov 2020 19:49:14 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D37952051;
-        Mon, 23 Nov 2020 19:49:14 +0000 (GMT)
-Received: from sig-9-65-241-175.ibm.com (unknown [9.65.241.175])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E380E52057;
-        Mon, 23 Nov 2020 19:49:10 +0000 (GMT)
-Message-ID: <7990c489ed6fb3ae36978820400b7cf60c55c126.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 0/8] IMA: support for measuring kernel integrity
- critical data
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
-        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
-        paul@paul-moore.com, tyhicks@linux.microsoft.com,
-        sashal@kernel.org, jmorris@namei.org, nramas@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Date:   Mon, 23 Nov 2020 14:49:10 -0500
-In-Reply-To: <20201123171800.GA6407@duo.ucw.cz>
-References: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
-         <20201120124657.GA31468@duo.ucw.cz>
-         <aadf6e35-39bc-74d4-6ca3-d708860738a5@linux.microsoft.com>
-         <20201122210031.GA26756@amd>
-         <d82ad1cac36e948c904300548c64244c145589ee.camel@linux.ibm.com>
-         <20201123171800.GA6407@duo.ucw.cz>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-23_17:2020-11-23,2020-11-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- mlxscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999 suspectscore=3
- bulkscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2011230124
+        Mon, 23 Nov 2020 15:03:54 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fbc15a70004>; Mon, 23 Nov 2020 12:03:51 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 23 Nov
+ 2020 20:03:49 +0000
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.103)
+ by HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Mon, 23 Nov 2020 20:03:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gITd84wMHHzcOptjQRg1Bi4wKYLoloErjGXTzbxbsYYxXpRm6DfDjP1G8JsqPPruG8n8djHpWT3ChykgCoTQdTlPHkj05TPw7WZ4Y46HlI8bprZC3XuF3n009Te/qaTwPxc9ef3s3wxgnUStlvtZrJvP5WQhh3MIKLFTGEWjhLXWcgs1VmoV9q6ndrBwWgPhsRBIC9rKh9qqm9cf9Ujr9sks/ml2cZ4bW16uPSJVifE1ke5RuUikXPZ60YcpNVw15sbmeBPfJ8v059YAkVfr8AOpsBgi+OymMySTg/JYVNFtVJ2pGo3M9pC5txLp474ztgTCR2D9RfvqUQOXT+42RA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QophqWBVIGhmInjMMmoN1JCz5yEuED07MVw87J8AVUY=;
+ b=dpOj+p56VpZQgFejSTc+TjZx9PpIbmIlWcJPfXyA8QiV6hyerQ1PNIg37pZm/OoPMM7dRNU+MPO2Sxmva5Z6iKtLQpQNkcM79tS52of8WjxHEmReB+Qc/VB0gzy26dU2FtXMoEzn5Rx6YHRp97uhlWeSk7Nsi1BUrieORD+G9yqkgKBmwQvC726s6EkJ0s32uNc7iMGffyCjKbyBtSLggJX9G9WEJ0m0GYQlYWRE7aVXL+Iy16bXoksvn7nW7YXP74v45GAqxPt7EElquzCZ4kXurFfWXXWM9ThsUobGLm/yb7wWVAmTEM+ttWZwc1mR7P3I+RsId2H9o2Xiqq+zAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com (2603:10b6:5:14a::12)
+ by DM6PR12MB4338.namprd12.prod.outlook.com (2603:10b6:5:2a2::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.21; Mon, 23 Nov
+ 2020 20:03:48 +0000
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::e40c:730c:156c:2ef9]) by DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::e40c:730c:156c:2ef9%7]) with mapi id 15.20.3589.022; Mon, 23 Nov 2020
+ 20:03:48 +0000
+Date:   Mon, 23 Nov 2020 16:03:45 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <amd-gfx@lists.freedesktop.org>,
+        <bridge@lists.linux-foundation.org>, <ceph-devel@vger.kernel.org>,
+        <cluster-devel@redhat.com>, <coreteam@netfilter.org>,
+        <devel@driverdev.osuosl.org>, <dm-devel@redhat.com>,
+        <drbd-dev@lists.linbit.com>, <dri-devel@lists.freedesktop.org>,
+        <GR-everest-linux-l2@marvell.com>, <GR-Linux-NIC-Dev@marvell.com>,
+        <intel-gfx@lists.freedesktop.org>,
+        <intel-wired-lan@lists.osuosl.org>, <keyrings@vger.kernel.org>,
+        <linux1394-devel@lists.sourceforge.net>,
+        <linux-acpi@vger.kernel.org>, <linux-afs@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-atm-general@lists.sourceforge.net>,
+        <linux-block@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-cifs@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-decnet-user@lists.sourceforge.net>,
+        <linux-ext4@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-geode@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
+        <linux-hams@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-i3c@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-mtd@lists.infradead.org>,
+        <linux-nfs@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-sctp@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-usb@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <netfilter-devel@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
+        <op-tee@lists.trustedfirmware.org>, <oss-drivers@netronome.com>,
+        <patches@opensource.cirrus.com>, <rds-devel@oss.oracle.com>,
+        <reiserfs-devel@vger.kernel.org>,
+        <samba-technical@lists.samba.org>, <selinux@vger.kernel.org>,
+        <target-devel@vger.kernel.org>,
+        <tipc-discussion@lists.sourceforge.net>,
+        <usb-storage@lists.one-eyed-alien.net>,
+        <virtualization@lists.linux-foundation.org>,
+        <wcn36xx@lists.infradead.org>, <x86@kernel.org>,
+        <xen-devel@lists.xenproject.org>,
+        <linux-hardening@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+Message-ID: <20201123200345.GA38546@nvidia.com>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
+X-ClientProxiedBy: MN2PR03CA0013.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::18) To DM6PR12MB3834.namprd12.prod.outlook.com
+ (2603:10b6:5:14a::12)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from mlx.ziepe.ca (156.34.48.30) by MN2PR03CA0013.namprd03.prod.outlook.com (2603:10b6:208:23a::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend Transport; Mon, 23 Nov 2020 20:03:47 +0000
+Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1khI3t-000A35-Tb; Mon, 23 Nov 2020 16:03:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1606161831; bh=QophqWBVIGhmInjMMmoN1JCz5yEuED07MVw87J8AVUY=;
+        h=ARC-Seal:ARC-Message-Signature:ARC-Authentication-Results:Date:
+         From:To:CC:Subject:Message-ID:References:Content-Type:
+         Content-Disposition:In-Reply-To:X-ClientProxiedBy:MIME-Version:
+         X-MS-Exchange-MessageSentRepresentingType;
+        b=Zr1EZlr7FGouweCXJ2A3YJZ8lxsTazMwmiIDkNNgeYuPc4M3hA0h9guNHLXrnnLeX
+         Dp0jtpGLpYuZZsYit0m8+Y/3Pgk+U78P2KDuhjfei0oh+kHbQnRfzB2jD1Wu7rVyZ8
+         A2iuCgvA8hhwNVx8Bo/l4LfRAECKvf8eJj6um7c8+wyJ6oFgyijvPixB8Xcq6YNTLj
+         o7o09Zdo2SkPJV9Ld82VvGAW1KENwGx8qxL8L4kHw5xGizl/kk/4FLfOCs8mx17bXD
+         N2PIS7AsaPoH2bHogxWrZ7vcH6YOCMGYKk/oZQ1BhSoaDoH96AMZAs9BCirfcyYEMq
+         3EMRDyReptNPA==
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-11-23 at 18:18 +0100, Pavel Machek wrote:
-> > > Basically every other data structure in kernel is "critical" by your
-> > > definition, and you can't really measure them all; some of them change
-> > > rather often. Going piecemeal does not really help here.
-> > 
-> > Agreed, measuring data structures that change is not really applicable.
-> > However, measuring data structures that once initialized don't change,
-> > does make sense (similar concept to __ro_after_init).  The attestation
-> > server doesn't need to know anything about the measurement, other than
-> > more than a single measurement is indicative of a problem.
-> 
-> So, why not simply measure everything that is ro_after_init?
+On Fri, Nov 20, 2020 at 12:21:39PM -0600, Gustavo A. R. Silva wrote:
 
-I guess we could, but the original discussion, a long time ago prior to
-LSM stacking, was limited to measuring the LSM hooks.
+>   IB/hfi1: Fix fall-through warnings for Clang
+>   IB/mlx4: Fix fall-through warnings for Clang
+>   IB/qedr: Fix fall-through warnings for Clang
+>   RDMA/mlx5: Fix fall-through warnings for Clang
 
-Mimi
+I picked these four to the rdma tree, thanks
 
+Jason
