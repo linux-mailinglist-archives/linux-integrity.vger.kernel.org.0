@@ -2,172 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 236602C140A
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Nov 2020 20:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAFF2C1493
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Nov 2020 20:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732783AbgKWS4U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Nov 2020 13:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728971AbgKWS4O (ORCPT
+        id S1730697AbgKWThu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Nov 2020 14:37:50 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:43592 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730683AbgKWTht (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Nov 2020 13:56:14 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00615C0613CF;
-        Mon, 23 Nov 2020 10:56:12 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id r127so13134731yba.10;
-        Mon, 23 Nov 2020 10:56:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KNG9rf3jiBLOHJ1Qe+5HClUHwDC8G2v5PJoNSRMQj2o=;
-        b=ZA1WcoeOdsWbRfOoumZEJTLTRH6V2Lpq2CDbZ0VVs1hbOT/vd/v8/YkJaULhb4MkV5
-         MHmDtgQZ7Y6vQOoRafNcjdab1m8jmYbh8Ox0xcyAJF866JXyArBCoNYzebFkQV1wRZF3
-         r3hM3WSnIq7Ht5VQ2PIwvurJMfamtV7PLgYZxEoHoT74qEv3IGeXPryfDRdu7AW/qetQ
-         L1ocOXaYsoIrsq1AVQ8cgaa4G2qWRkZviQ+mOBHOVW/MFUti3ALLJAr2MKUeWh+s4BW6
-         tAJsdEl41qUIuUvcW5DdLnVlmhWMC8lZFuXyyo4x1R3eX3DaWLHh1JzDrRZDt/CN6qga
-         036w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KNG9rf3jiBLOHJ1Qe+5HClUHwDC8G2v5PJoNSRMQj2o=;
-        b=VbZ3df0KDvvcjS3oqE4FKJaZu54g4MCdauiP/ZXziJ057Qx+7gO7Xq0DclJJwhkD7A
-         V6wIvyE+iMUTqz9Et4Z5swtCvEVohOYgCr45PQIT1naTPGLjdngls6PaxJ+2dTpwG1sS
-         2J24JWWgll1XCaG4p5TRtdZUw6zFy8CD4ZY8+HNTau19MRyRUhc0Rog1oJz/01j+Rfnb
-         WQq0qXGIb+h89MExl9hJwrFqamYs85+hsGdPRw0lifURgwY7tjHV2PXA1XofJs4XbGTP
-         NEC3DNi0ZW4kVx5Dh9aHDLI9NF0b3y4MyZAlGF5HprxmF8/01jZ1NEiPPRMmDsEjbPZl
-         WrcQ==
-X-Gm-Message-State: AOAM530c8BEunJnR0wvAHz7GM7Tlf3BoUFJdhEyagiplOb8fmebtcUxB
-        ATgeO04Jk0JP04fO5wqwIYLVC06oaCpaZhmWiko=
-X-Google-Smtp-Source: ABdhPJyhWLCSkpSmtD0p55Cmpr9Ao1aJs0IYHWLu4Tcyj9q39OBvqgrIxMZMaEy7w1zacpD3mVr5R93EsjzwMBkGuSA=
-X-Received: by 2002:a25:df55:: with SMTP id w82mr977719ybg.135.1606157772316;
- Mon, 23 Nov 2020 10:56:12 -0800 (PST)
+        Mon, 23 Nov 2020 14:37:49 -0500
+Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 999C720B717A;
+        Mon, 23 Nov 2020 11:37:48 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 999C720B717A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1606160269;
+        bh=nKE9ax347McNMh2dmVuxCHdA60lE1Lj1JfhVD8MiYHg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=gQt1e+OQTP6YHmycUCZNsLBZ5DpexXnLF946JnOKKBsGiIGRldemKi+3Vi+rPJQxU
+         puJnpgUGzmgK6b5l0gZAudPAZe+5UhD0Di5yzUMOaL00REoPCK+iUpJjtDH8AGyGew
+         YdSpUpMRjoTjlyo4VQKQClPH1t7jXW2OwHOCL3fw=
+Subject: Re: [PATCH v6 8/8] selinux: measure state and hash of the policy
+ using IMA
+To:     James Morris <jmorris@namei.org>
+Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com,
+        tyhicks@linux.microsoft.com, sashal@kernel.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20201119232611.30114-1-tusharsu@linux.microsoft.com>
+ <20201119232611.30114-9-tusharsu@linux.microsoft.com>
+ <alpine.LRH.2.21.2011211301340.18334@namei.org>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <33718d39-a3a2-595b-46b0-f1a195348000@linux.microsoft.com>
+Date:   Mon, 23 Nov 2020 11:37:47 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
- <1c7d7fde126bc0acf825766de64bf2f9b888f216.camel@HansenPartnership.com>
- <CANiq72m22Jb5_+62NnwX8xds2iUdWDMAqD8PZw9cuxdHd95W0A@mail.gmail.com> <fc45750b6d0277c401015b7aa11e16cd15f32ab2.camel@HansenPartnership.com>
-In-Reply-To: <fc45750b6d0277c401015b7aa11e16cd15f32ab2.camel@HansenPartnership.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 23 Nov 2020 19:56:01 +0100
-Message-ID: <CANiq72k5tpDoDPmJ0ZWc1DGqm+81Gi-uEENAtvEs9v3SZcx6_Q@mail.gmail.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <alpine.LRH.2.21.2011211301340.18334@namei.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 4:58 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> Well, I used git.  It says that as of today in Linus' tree we have 889
-> patches related to fall throughs and the first series went in in
-> october 2017 ... ignoring a couple of outliers back to February.
+Hi James,
 
-I can see ~10k insertions over ~1k commits and 15 years that mention a
-fallthrough in the entire repo. That is including some commits (like
-the biggest one, 960 insertions) that have nothing to do with C
-fallthrough. A single kernel release has an order of magnitude more
-changes than this...
+On 2020-11-20 6:05 p.m., James Morris wrote:
+> On Thu, 19 Nov 2020, Tushar Sugandhi wrote:
+> 
+>> an impact on the security guarantees provided by SELinux. Measuring
+>> such in-memory data structures through IMA subsystem provides a secure
+>> way for a remote attestation service to know the state of the system
+>> and also the runtime changes in the state of the system.
+> 
+> I think we need better clarity on the security model here than just "a
+> secure way...".  Secure how and against what threats?
+> 
+Thanks for taking a look at this patch series.
 
-But if we do the math, for an author, at even 1 minute per line change
-and assuming nothing can be automated at all, it would take 1 month of
-work. For maintainers, a couple of trivial lines is noise compared to
-many other patches.
+Here is the overall threat model:
 
-In fact, this discussion probably took more time than the time it
-would take to review the 200 lines. :-)
+For a given device inside an organization, various services/
+infrastructure tools owned by the org interact with the device. These
+services/tools can be external to the device. They can interact with the
+device both during setup and rest of the device lifetime. These
+interactions may involve sharing the org sensitive data and/or running
+business critical workload on that device. Before sharing data/running
+workload on that device - the org would want to know the security
+profile of the device. E.g. SELinux is enforced (with the policy that is
+expected by the org), disks are encrypted with a certain configuration,
+secure boot is enabled etc. If the org requirements are satisfied, then
+only the external services will start interacting with the device.
 
-> We're also complaining about the inability to recruit maintainers:
->
-> https://www.theregister.com/2020/06/30/hard_to_find_linux_maintainers_says_torvalds/
->
-> And burn out:
->
-> http://antirez.com/news/129
+For the org, extracting that information from the device is tricky.
+The services could look for some markers on the device necessary to
+satisfy the org requirements. But the device could already be
+compromised with some malware, and could simply lie to the external
+services by putting false markers on the device. For instance, the
+malware can put a random SELinux policy file at the expected location
+even when SELinux is not even enabled on the device.
 
-Accepting trivial and useful 1-line patches is not what makes a
-voluntary maintainer quit... Thankless work with demanding deadlines is.
+If the org trusts these false markers, the compromised device could go
+undetected - and can do further damage once it has access to the org
+sensitive data / business critical processes.
 
-> The whole crux of your argument seems to be maintainers' time isn't
-> important so we should accept all trivial patches
+This is the threat we are trying to address.
 
-I have not said that, at all. In fact, I am a voluntary one and I
-welcome patches like this. It takes very little effort on my side to
-review and it helps the kernel overall. Paid maintainers are the ones
-that can take care of big features/reviews.
+For the org, to address this threat - at least three things are needed:
 
-> What I'm actually trying to articulate is a way of measuring value of
-> the patch vs cost ... it has nothing really to do with who foots the
-> actual bill.
+(1) Producers of the markers are as close to the source as possible:
+The source that does the work of actually protecting the device.
+E.g. SELinux state reported from the SELinux kernel LVM itself, rather
+than some user mode process extracting that information).
+This will make it harder for the bad actors to mimic the information -
+thus reducing the ROI for them.
 
-I understand your point, but you were the one putting it in terms of a
-junior FTE. In my view, 1 month-work (worst case) is very much worth
-removing a class of errors from a critical codebase.
+(2) Extracting the information from the device in a tamper resistant
+way:
+Even if the information is produced by the expected source, it can still
+get altered by attackers. This can happen before the info reaches the
+external services - the services that make the decision whether to trust
+the device with org sensitive info or not.
+The IMA measurement infrastructure, with TPM extend and quoting,
+provides the necessary assurance to those services - that the
+information coming from the device is not tampered with.
 
-> One thesis I'm actually starting to formulate is that this continual
-> devaluing of maintainers is why we have so much difficulty keeping and
-> recruiting them.
+(3) Tracking the state change during the lifetime of the device:
+The device may start in a good configuration. But over the lifetime,
+that configuration may deteriorate. E.g. SELinux stores the
+current operating mode, in memory, which could be "enforce" or "audit".
+Changes to this data at runtime impacts the security guarantees provided
+by SELinux. Such changes could be made inadvertently or by malware
+running on the device.
 
-That may very well be true, but I don't feel anybody has devalued
-maintainers in this discussion.
 
-Cheers,
-Miguel
+The IMA hook plus policies in the first 7/8 patches provide the
+necessary functionality to achieve (2).
+
+The last SELinux 8/8 patch helps achieve (1).
+
+And the patches in the series overall work together to achieve (3).
+
+> This looks to me like configuration assurance, i.e. you just want to know
+> that systems have been configured correctly, not to detect a competent
+> attack. Is that correct?
+
+The attestation service would look at various measurements coming from
+the device. And there could be a discrepancy between the measurements,
+or the measurements won't match the expected predetermined values. In
+that case, the attestation service may conclude that not only the device
+is misconfigured, but also that misconfiguration is a result of
+potentially compromised device. Then the necessary action can be taken
+for the device (removing it from the network, not sharing data/workload
+with it etc.)
+
+~Tushar
