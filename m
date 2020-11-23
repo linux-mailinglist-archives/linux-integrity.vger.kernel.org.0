@@ -2,181 +2,140 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A802C0563
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Nov 2020 13:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0122C090B
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Nov 2020 14:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729305AbgKWMT7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Nov 2020 07:19:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23934 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729294AbgKWMT7 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Nov 2020 07:19:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606133997;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qeeoAM4hcE2Tqdj1kMierMvn1UuzyrNRXJg0gIbWESE=;
-        b=A9aclAGorfxswmzI8hYIV0Rrqba5CTkPzRqiVRr5ySWgc+qNPForxotX44dvttEbq9VG6f
-        zIoCIdnN6jphjiGFU5Ai5phVxiK2sNrIily6I6FkDQpii63Fgd2FxWJ//5szCj1u0lJl9O
-        bklba/Q11L2IXSSPZLlm3n087ICuQYI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-43-iWEZJlFQO1m5vNUbsnnk7Q-1; Mon, 23 Nov 2020 07:19:56 -0500
-X-MC-Unique: iWEZJlFQO1m5vNUbsnnk7Q-1
-Received: by mail-ed1-f70.google.com with SMTP id f20so6450106edx.23
-        for <linux-integrity@vger.kernel.org>; Mon, 23 Nov 2020 04:19:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qeeoAM4hcE2Tqdj1kMierMvn1UuzyrNRXJg0gIbWESE=;
-        b=qjHqd2wKelDR7MeFLMELatqqfEBJSdzdvMpOQu/va4p+Ca2cmEVyISIkOasoL51m7b
-         kLCfi6Uk6xcTM0dvyV9qp5QfZO36j9los29QfYREkxGfYf6JXqMBJzF0HyCzqhDEp8+0
-         Dp4HtkbqaYj6vsFhgvZjbo0RwpCVSn/QUC+K5ex9+ro4xIaVcPpgoR/LLJB5PvM+Hpmc
-         4pzomHKBkA9FMTSjeSuHAkne07UhJ2uKMaGUf+RJ7wIPi43vu1YC545oqfq60drCSlcI
-         IOlI7at+DFTJDO5+kBpy7zuMU7jdxxdQdPa/6VAPB5+282mLFtfESeLnE4VXIoFi8Rk8
-         gLjQ==
-X-Gm-Message-State: AOAM531h24cNNb4ly+Q4we+erqjhi0WvMpOIGdALj3+U4lLzKj8wdjof
-        SytvMDA5xoFR7eDxlC/dqx65F2OiKIkXG6zSSQO34yDTiUQQMhMJZit103ibk9d1kM7D6GveZky
-        C2zdl/OwiSStgseTgF8KeIV/cqKMO
-X-Received: by 2002:a17:907:20ac:: with SMTP id pw12mr15813615ejb.245.1606133994792;
-        Mon, 23 Nov 2020 04:19:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyCl6Est+5O33dD1/yIKWd+wwfQ8dObfaPnfKKKa4No6mpzqBFG+RaxPcyjk/JdrcxX1xjM2Q==
-X-Received: by 2002:a17:907:20ac:: with SMTP id pw12mr15813584ejb.245.1606133994369;
-        Mon, 23 Nov 2020 04:19:54 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-6c10-fbf3-14c4-884c.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:6c10:fbf3:14c4:884c])
-        by smtp.gmail.com with ESMTPSA id u7sm4196388ejt.33.2020.11.23.04.19.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2020 04:19:53 -0800 (PST)
-Subject: Re: [PATCH] tpm_tis: Disable interrupts on ThinkPad T490s
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     Matthew Garrett <mjg59@google.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jarkko@kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-References: <20201015214430.17937-1-jsnitsel@redhat.com>
- <CACdnJuuAyBYacCiOOZ8-L-0Xnfa3+pCVY_oejOJ8RPzuG2QgrQ@mail.gmail.com>
- <87d009c0pn.fsf@redhat.com> <77498b10-cf2c-690b-8dad-78cbd61712ba@redhat.com>
- <87a6vdb7l2.fsf@redhat.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <161ade15-5e13-361a-572b-78dbbd1f764a@redhat.com>
-Date:   Mon, 23 Nov 2020 13:19:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S2388381AbgKWNDs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Nov 2020 08:03:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40738 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388335AbgKWNDp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 23 Nov 2020 08:03:45 -0500
+Received: from embeddedor (187-162-31-110.static.axtel.net [187.162.31.110])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 191D120758;
+        Mon, 23 Nov 2020 13:03:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606136621;
+        bh=J/TET3MqSRKQBkZDLmw3offBuTNq8xblR6VPj5c7KTQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=huMDpxd34lY8zl81VJt6WrkzA8VbZ3WZKfCc+01YUsnQkEm+dvBfrNL343ZTscxgS
+         4cn7RRAIuR/6lyK6TO0qxACy3TNrSBuTodAx+s4Q2YpvApK9inZpqsbsSdtJmbV9Zx
+         YwwBYqtSxUH9kHvWkiEz2t98c4vnYVnAJ6qqQTEg=
+Date:   Mon, 23 Nov 2020 07:03:48 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Joe Perches <joe@perches.com>, Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
+        linux-atm-general@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        selinux@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        x86@kernel.org, linux-nfs@vger.kernel.org,
+        GR-Linux-NIC-Dev@marvell.com, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-decnet-user@lists.sourceforge.net,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-integrity@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for
+ Clang
+Message-ID: <20201123130348.GA3119@embeddedor>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook>
+ <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook>
+ <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+ <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
+ <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
+ <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
+ <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
 MIME-Version: 1.0
-In-Reply-To: <87a6vdb7l2.fsf@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
-
-On 11/19/20 6:05 PM, Jerry Snitselaar wrote:
+On Sun, Nov 22, 2020 at 11:53:55AM -0800, James Bottomley wrote:
+> On Sun, 2020-11-22 at 11:22 -0800, Joe Perches wrote:
+> > On Sun, 2020-11-22 at 11:12 -0800, James Bottomley wrote:
+> > > On Sun, 2020-11-22 at 10:25 -0800, Joe Perches wrote:
+> > > > On Sun, 2020-11-22 at 10:21 -0800, James Bottomley wrote:
+> > > > > Please tell me our reward for all this effort isn't a single
+> > > > > missing error print.
+> > > > 
+> > > > There were quite literally dozens of logical defects found
+> > > > by the fallthrough additions.  Very few were logging only.
+> > > 
+> > > So can you give us the best examples (or indeed all of them if
+> > > someone is keeping score)?  hopefully this isn't a US election
+> > > situation ...
+> > 
+> > Gustavo?  Are you running for congress now?
+> > 
+> > https://lwn.net/Articles/794944/
 > 
-> Hans de Goede @ 2020-11-19 07:42 MST:
-> 
->> Hi,
->>
->> On 11/19/20 7:36 AM, Jerry Snitselaar wrote:
->>>
->>> Matthew Garrett @ 2020-10-15 15:39 MST:
->>>
->>>> On Thu, Oct 15, 2020 at 2:44 PM Jerry Snitselaar <jsnitsel@redhat.com> wrote:
->>>>>
->>>>> There is a misconfiguration in the bios of the gpio pin used for the
->>>>> interrupt in the T490s. When interrupts are enabled in the tpm_tis
->>>>> driver code this results in an interrupt storm. This was initially
->>>>> reported when we attempted to enable the interrupt code in the tpm_tis
->>>>> driver, which previously wasn't setting a flag to enable it. Due to
->>>>> the reports of the interrupt storm that code was reverted and we went back
->>>>> to polling instead of using interrupts. Now that we know the T490s problem
->>>>> is a firmware issue, add code to check if the system is a T490s and
->>>>> disable interrupts if that is the case. This will allow us to enable
->>>>> interrupts for everyone else. If the user has a fixed bios they can
->>>>> force the enabling of interrupts with tpm_tis.interrupts=1 on the
->>>>> kernel command line.
->>>>
->>>> I think an implication of this is that systems haven't been
->>>> well-tested with interrupts enabled. In general when we've found a
->>>> firmware issue in one place it ends up happening elsewhere as well, so
->>>> it wouldn't surprise me if there are other machines that will also be
->>>> unhappy with interrupts enabled. Would it be possible to automatically
->>>> detect this case (eg, if we get more than a certain number of
->>>> interrupts in a certain timeframe immediately after enabling the
->>>> interrupt) and automatically fall back to polling in that case? It
->>>> would also mean that users with fixed firmware wouldn't need to pass a
->>>> parameter.
->>>
->>> I believe Matthew is correct here. I found another system today
->>> with completely different vendor for both the system and the tpm chip.
->>> In addition another Lenovo model, the L490, has the issue.
->>>
->>> This initial attempt at a solution like Matthew suggested works on
->>> the system I found today, but I imagine it is all sorts of wrong.
->>> In the 2 systems where I've seen it, there are about 100000 interrupts
->>> in around 1.5 seconds, and then the irq code shuts down the interrupt
->>> because they aren't being handled.
->>
->> Is that with your patch? The IRQ should be silenced as soon as
->> devm_free_irq(chip->dev.parent, priv->irq, chip); is called.
->>
-> 
-> No that is just with James' patchset that enables interrupts for
-> tpm_tis. It looks like the irq is firing, but the tpm's int_status
-> register is clear, so the handler immediately returns IRQ_NONE. After
-> that happens 100000 times the core irq code shuts down the irq, but it
-> isn't released so I could still see the stats in /proc/interrupts.
+> That's 21 reported fixes of which about 50% seem to produce no change
+> in code behaviour at all, a quarter seem to have no user visible effect
+> with the remaining quarter producing unexpected errors on obscure
+> configuration parameters, which is why no-one really noticed them
+> before.
 
-I see, yes I have seen this behavior on the X1C8 with a pre-production BIOS.
+The really important point here is the number of bugs this has prevented
+and will prevent in the future. See an example of this, below:
 
-> With
-> my attempt below on top of that patchset it releases the irq. I had to
-> stick the check prior to it checking the int_status register because it
-> is cleared and the handler returns,
+https://lore.kernel.org/linux-iio/20190813135802.GB27392@kroah.com/
 
-Ack.
+This work is still relevant, even if the total number of issues/bugs
+we find in the process is zero (which is not the case).
 
-> and I couldn't do the devm_free_irq
-> directly in tis_int_handler, so I tried sticking it in tpm_tis_send
-> where the other odd irq testing code was already located. I'm not sure
-> if there is another place that would work better for calling the
-> devm_free_irq.
+"The sucky thing about doing hard work to deploy hardening is that the
+result is totally invisible by definition (things not happening) [..]"
+- Dmitry Vyukov
 
-Adding it together with the other IRQ testing related code seems fine
-to me.
+Thanks
+--
+Gustavo
 
->> Depending on if we can get your storm-detection to work or not,
->> we might also choose to just never try to use the IRQ (at least on
->> x86 systems). AFAIK the TPM is never used for high-throughput stuff
->> so the polling overhead should not be a big deal (and I'm getting the feeling
->> that Windows always polls).
->>
-> 
-> I was wondering about Windows as well. In addition to the Lenovo systems
-> which the T490s had Nuvoton tpm, the system I found yesterday was a development
-> system we have from a partner with an Infineon tpm. Dan Williams has
-> seen it internally at Intel as well on some system.
 
-Sounds to me like Windows never uses the IRQ, so we get the fun of finding
-all the untested firmware bugs.
 
-So if we cannot get this detection code to work reliable, maybe we should
-just not use the IRQ at all, at least on X86 + ACPI systems?
 
-Anyways lets try this storm-detection thing first, but I have the feeling
-we should not spend too much time on this. Just outright disabling IRQ
-support might be better.
-
-REgards,
-
-Hans
 
