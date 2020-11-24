@@ -2,115 +2,213 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BE52C25BD
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Nov 2020 13:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 864042C26EA
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Nov 2020 14:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733037AbgKXMav (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Nov 2020 07:30:51 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:52354 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733011AbgKXMau (ORCPT
+        id S2387947AbgKXNOc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Nov 2020 08:14:32 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46856 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387878AbgKXNOc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Nov 2020 07:30:50 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1khXSv-0004ea-Op; Tue, 24 Nov 2020 12:30:37 +0000
-Date:   Tue, 24 Nov 2020 13:30:35 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Tycho Andersen <tycho@tycho.pizza>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>, smbarber@chromium.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-ext4@vger.kernel.org, Mrunal Patel <mpatel@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        selinux@vger.kernel.org, Josh Triplett <josh@joshtriplett.org>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Lennart Poettering <lennart@poettering.net>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        David Howells <dhowells@redhat.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Theodore Tso <tytso@mit.edu>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-audit@redhat.com,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Alban Crequy <alban@kinvolk.io>,
-        linux-integrity@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Todd Kjos <tkjos@google.com>
-Subject: Re: [PATCH v2 07/39] mount: attach mappings to mounts
-Message-ID: <20201124123035.hbv4sstyoucht7xp@wittgenstein>
-References: <20201115103718.298186-1-christian.brauner@ubuntu.com>
- <20201115103718.298186-8-christian.brauner@ubuntu.com>
- <20201123154719.GD4025434@cisco>
- <20201123162428.GA24807@cisco>
+        Tue, 24 Nov 2020 08:14:32 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 74AF61F4526B
+Message-ID: <f36c43f81968a9ce2f3342e5c2c069722d8bfc7f.camel@collabora.com>
+Subject: Re: [PATCH v2] char: tpm: add i2c driver for cr50
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Adrian Ratiu <adrian.ratiu@collabora.com>
+Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Helen Koike <helen.koike@collabora.com>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>, kernel@collabora.com,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 24 Nov 2020 10:14:22 -0300
+In-Reply-To: <20201123220643.GA16777@kernel.org>
+References: <20201120172345.4040187-1-adrian.ratiu@collabora.com>
+         <20201123220643.GA16777@kernel.org>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201123162428.GA24807@cisco>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 11:24:28AM -0500, Tycho Andersen wrote:
-> On Mon, Nov 23, 2020 at 10:47:19AM -0500, Tycho Andersen wrote:
-> > On Sun, Nov 15, 2020 at 11:36:46AM +0100, Christian Brauner wrote:
-> > > +static inline struct user_namespace *mnt_user_ns(const struct vfsmount *mnt)
-> > > +{
-> > > +	return mnt->mnt_user_ns;
-> > > +}
-> > 
-> > I think you might want a READ_ONCE() here. Right now it seems ok, since the
-> > mnt_user_ns can't change, but if we ever allow it to change (and I see you have
-> > a idmapped_mounts_wip_v2_allow_to_change_idmapping branch on your public tree
-> > :D), the pattern of,
-> > 
-> >         user_ns = mnt_user_ns(path->mnt);
-> >         if (mnt_idmapped(path->mnt)) {
-> >                 uid = kuid_from_mnt(user_ns, uid);
-> >                 gid = kgid_from_mnt(user_ns, gid);
-> >         }
-> > 
-> > could race.
-> 
-> Actually, isn't a race possible now?
-> 
-> kuid_from_mnt(mnt_user_ns(path->mnt) /* &init_user_ns */);
-> WRITE_ONCE(mnt->mnt.mnt_user_ns, user_ns);
-> WRITE_ONCE(m->mnt.mnt_flags, flags);
-> kgid_from_mnt(mnt_user_ns(path->mnt) /* the right user ns */);
-> 
-> So maybe it should be:
-> 
->          if (mnt_idmapped(path->mnt)) {
->                  barrier();
->                  user_ns = mnt_user_ns(path->mnt);
->                  uid = kuid_from_mnt(user_ns, uid);
->                  gid = kgid_from_mnt(user_ns, gid);
->          }
-> 
-> since there's no data dependency between mnt_idmapped() and
-> mnt_user_ns()?
+Hi Jarkko,
 
-I think I had something to handle this case in another branch of mine.
-The READ_ONCE() you mentioned in another patch I had originally dropped
-because I wasn't sure whether it works on pointers but after talking to
-Jann and David it seems that it handles pointers fine.
-Let me take a look and fix it in the next version. I just finished
-porting the test suite to xfstests as Christoph requested and I'm
-looking at this now.
+Thanks for your review.
 
-Thanks!
-Christian
+On Tue, 2020-11-24 at 00:06 +0200, Jarkko Sakkinen wrote:
+> On Fri, Nov 20, 2020 at 07:23:45PM +0200, Adrian Ratiu wrote:
+> > From: "dlaurie@chromium.org" <dlaurie@chromium.org>
+> > 
+> > Add TPM 2.0 compatible I2C interface for chips with cr50 firmware.
+> > 
+> > The firmware running on the currently supported H1 MCU requires a
+> > special driver to handle its specific protocol, and this makes it
+> > unsuitable to use tpm_tis_core_* and instead it must implement the
+> > underlying TPM protocol similar to the other I2C TPM drivers.
+> > 
+> > - All 4 byes of status register must be read/written at once.
+> > - FIFO and burst count is limited to 63 and must be drained by AP.
+> > - Provides an interrupt to indicate when read response data is ready
+> > and when the TPM is finished processing write data.
+> > 
+> > This driver is based on the existing infineon I2C TPM driver, which
+> > most closely matches the cr50 i2c protocol behavior.
+> > 
+> > Cc: Helen Koike <helen.koike@collabora.com>
+> > Signed-off-by: Duncan Laurie <dlaurie@chromium.org>
+> > [swboyd@chromium.org: Depend on i2c even if it's a module, replace
+> > boilier plate with SPDX tag, drop asm/byteorder.h include, simplify
+> > return from probe]
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> > Signed-off-by: Fabien Lahoudere <fabien.lahoudere@collabora.com>
+> > Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+> > ---
+> > Changes in v2:
+> >   - Various small fixes all over (reorder includes, MAX_BUFSIZE, comments, etc)
+> >   - Reworked return values of i2c_wait_tpm_ready() to fix timeout mis-handling
+> > so ret == 0 now means success, the wait period jiffies is ignored because that
+> > number is meaningless and return a proper timeout error in case jiffies == 0.
+> >   - Make i2c default to 1 message per transfer (requested by Helen)
+> >   - Move -EIO error reporting to transfer function to cleanup transfer() itself
+> > and its R/W callers
+> >   - Remove magic value hardcodings and introduce enum force_release.
+> > 
+> > v1 posted at https://lkml.org/lkml/2020/2/25/349
+> > 
+> > Applies on next-20201120, tested on Chromebook EVE.
+> > ---
+> >  drivers/char/tpm/Kconfig            |  10 +
+> >  drivers/char/tpm/Makefile           |   2 +
+> >  drivers/char/tpm/tpm_tis_i2c_cr50.c | 768 ++++++++++++++++++++++++++++
+> >  3 files changed, 780 insertions(+)
+> >  create mode 100644 drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > 
+> > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> > index a18c314da211..4308f9ca7a43 100644
+> > --- a/drivers/char/tpm/Kconfig
+> > +++ b/drivers/char/tpm/Kconfig
+> > @@ -86,6 +86,16 @@ config TCG_TIS_SYNQUACER
+> >  	  To compile this driver as a module, choose  M here;
+> >  	  the module will be called tpm_tis_synquacer.
+> >  
+> > +config TCG_TIS_I2C_CR50
+> > +	tristate "TPM Interface Specification 2.0 Interface (I2C - CR50)"
+> > +	depends on I2C
+> > +	select TCG_CR50
+> > +	help
+> > +	  This is a driver for the Google cr50 I2C TPM interface which is a
+> > +	  custom microcontroller and requires a custom i2c protocol interface
+> > +	  to handle the limitations of the hardware.  To compile this driver
+> > +	  as a module, choose M here; the module will be called tcg_tis_i2c_cr50.
+> > +
+> >  config TCG_TIS_I2C_ATMEL
+> >  	tristate "TPM Interface Specification 1.2 Interface (I2C - Atmel)"
+> >  	depends on I2C
+> > diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+> > index 84db4fb3a9c9..66d39ea6bd10 100644
+> > --- a/drivers/char/tpm/Makefile
+> > +++ b/drivers/char/tpm/Makefile
+> > @@ -27,6 +27,8 @@ obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
+> >  tpm_tis_spi-y := tpm_tis_spi_main.o
+> >  tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
+> >  
+> > +obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
+> > +
+> >  obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
+> >  obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
+> >  obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
+> > diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > new file mode 100644
+> > index 000000000000..37555dafdca0
+> > --- /dev/null
+> > +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > @@ -0,0 +1,768 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright 2016 Google Inc.
+> > + *
+> > + * Based on Linux Kernel TPM driver by
+> > + * Peter Huewe <peter.huewe@infineon.com>
+> > + * Copyright (C) 2011 Infineon Technologies
+> > + */
+> > +
+> > +/*
+> > + * cr50 is a firmware for H1 secure modules that requires special
+> > + * handling for the I2C interface.
+> > + *
+> > + * - Use an interrupt for transaction status instead of hardcoded delays
+> > + * - Must use write+wait+read read protocol
+> > + * - All 4 bytes of status register must be read/written at once
+> > + * - Burst count max is 63 bytes, and burst count behaves
+> > + *   slightly differently than other I2C TPMs
+> > + * - When reading from FIFO the full burstcnt must be read
+> > + *   instead of just reading header and determining the remainder
+> > + */
+> > +
+> > +#include <linux/acpi.h>
+> > +#include <linux/completion.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/interrupt.h>
+> > +#include <linux/module.h>
+> > +#include <linux/pm.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/wait.h>
+> > +
+> > +#include "tpm_tis_core.h"
+> > +
+> > +#define CR50_MAX_BUFSIZE	64
+> > +#define CR50_TIMEOUT_SHORT_MS	2	/* Short timeout during transactions */
+> > +#define CR50_TIMEOUT_NOIRQ_MS	20	/* Timeout for TPM ready without IRQ */
+> > +#define CR50_I2C_DID_VID	0x00281ae0L
+> > +#define CR50_I2C_MAX_RETRIES	3	/* Max retries due to I2C errors */
+> > +#define CR50_I2C_RETRY_DELAY_LO	55	/* Min usecs between retries on I2C */
+> > +#define CR50_I2C_RETRY_DELAY_HI	65	/* Max usecs between retries on I2C */
+> 
+> CR50_ -> TPM_CR50_
+> 
+> > +
+> > +#define TPM_I2C_ACCESS(l)	(0x0000 | ((l) << 4))
+> > +#define TPM_I2C_STS(l)		(0x0001 | ((l) << 4))
+> > +#define TPM_I2C_DATA_FIFO(l)	(0x0005 | ((l) << 4))
+> > +#define TPM_I2C_DID_VID(l)	(0x0006 | ((l) << 4))
+> > +
+> > +struct priv_data {
+> > +	int irq;
+> > +	int locality;
+> > +	struct completion tpm_ready;
+> > +	u8 buf[CR50_MAX_BUFSIZE];
+> > +};
+> 
+> tpm_i2c_cr50_priv_data
+> 
+> > +
+> > +enum force_release {
+> > +	CR50_NO_FORCE = 0x0,
+> > +	CR50_FORCE = 0x1,
+> > +};
+> 
+> I'd just 
+> 
+> #define TPM_I2C_CR50_NO_FORCE	0
+> #define TPM_I2C_CR50_FORCE	1
+> 
+
+A proper enumerated type has advantages over a preprocessor macro:
+even if the compiler won't warn you, static analyzers can warn
+about a misuse.
+
+Also, it allows for a more obvious prototype.
+
+I am curious why do you propose this change?
+
+Thanks,
+Ezequiel
+
