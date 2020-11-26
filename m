@@ -2,137 +2,259 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C70C72C4C1A
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Nov 2020 01:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1973B2C4DCD
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Nov 2020 04:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729216AbgKZAaq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 25 Nov 2020 19:30:46 -0500
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:42610 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgKZAao (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 25 Nov 2020 19:30:44 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 742A42A495;
-        Wed, 25 Nov 2020 19:30:37 -0500 (EST)
-Date:   Thu, 26 Nov 2020 11:30:36 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Joe Perches <joe@perches.com>,
-        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-scsi@vger.kernel.org,
-        linux-rdma@vger.kernel.org, oss-drivers@netronome.com,
-        bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        selinux@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>, patches@opensource.cirrus.com,
-        linux-integrity@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for
- Clang
-In-Reply-To: <CAKwvOdna5Zj_O=sB7Q0jHZX0BJSaakX=ZyftwQ_3=L3-ZB54XQ@mail.gmail.com>
-Message-ID: <alpine.LNX.2.23.453.2011261031290.6@nippy.intranet>
-References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com> <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
- <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com> <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com> <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com> <20201123130348.GA3119@embeddedor>
- <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com> <202011241327.BB28F12F6@keescook> <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com> <CAKwvOdkGBn7nuWTAqrORMeN1G+w3YwBfCqqaRD2nwvoAXKi=Aw@mail.gmail.com>
- <alpine.LNX.2.23.453.2011260750300.6@nippy.intranet> <CAKwvOdna5Zj_O=sB7Q0jHZX0BJSaakX=ZyftwQ_3=L3-ZB54XQ@mail.gmail.com>
+        id S1731020AbgKZDbP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Nov 2020 22:31:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42424 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730930AbgKZDbP (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 25 Nov 2020 22:31:15 -0500
+Received: from suppilovahvero.lan (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 70AED21741;
+        Thu, 26 Nov 2020 03:31:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606361474;
+        bh=5ZKQEvzl3d+izjSmHH3HjnXQRphRvWxGFVuxZCSyKBQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=hQ8DBIzK24L6OS9BoMJpfzPZzqqOij+kqvanvH4NwbqFaO55GL7FCqSbzOPm1Yp60
+         QE+JER27/optcIYlRzj8XxX4R0TU3i0cniZIWGImo2guvOECNKHdKQ/gY9g2BQv6v2
+         4NIOIo2eU03D3yzbsR2YPtfA29248fadl7GBLnP0=
+Message-ID: <7edf80b70e4dd67d6f95c796c1ae26df9e51ba8d.camel@kernel.org>
+Subject: Re: [PATCH v2] char: tpm: add i2c driver for cr50
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Adrian Ratiu <adrian.ratiu@collabora.com>
+Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Helen Koike <helen.koike@collabora.com>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>, kernel@collabora.com,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 26 Nov 2020 05:30:24 +0200
+In-Reply-To: <f36c43f81968a9ce2f3342e5c2c069722d8bfc7f.camel@collabora.com>
+References: <20201120172345.4040187-1-adrian.ratiu@collabora.com>
+         <20201123220643.GA16777@kernel.org>
+         <f36c43f81968a9ce2f3342e5c2c069722d8bfc7f.camel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-
-On Wed, 25 Nov 2020, Nick Desaulniers wrote:
-
-> On Wed, Nov 25, 2020 at 1:33 PM Finn Thain <fthain@telegraphics.com.au> wrote:
-> >
-> > Or do you think that a codebase can somehow satisfy multiple checkers 
-> > and their divergent interpretations of the language spec?
+On Tue, 2020-11-24 at 10:14 -0300, Ezequiel Garcia wrote:
+> Hi Jarkko,
 > 
-> Have we found any cases yet that are divergent? I don't think so. 
+> Thanks for your review.
+> 
+> On Tue, 2020-11-24 at 00:06 +0200, Jarkko Sakkinen wrote:
+> > On Fri, Nov 20, 2020 at 07:23:45PM +0200, Adrian Ratiu wrote:
+> > > From: "dlaurie@chromium.org" <dlaurie@chromium.org>
+> > > 
+> > > Add TPM 2.0 compatible I2C interface for chips with cr50
+> > > firmware.
+> > > 
+> > > The firmware running on the currently supported H1 MCU requires a
+> > > special driver to handle its specific protocol, and this makes it
+> > > unsuitable to use tpm_tis_core_* and instead it must implement
+> > > the
+> > > underlying TPM protocol similar to the other I2C TPM drivers.
+> > > 
+> > > - All 4 byes of status register must be read/written at once.
+> > > - FIFO and burst count is limited to 63 and must be drained by
+> > > AP.
+> > > - Provides an interrupt to indicate when read response data is
+> > > ready
+> > > and when the TPM is finished processing write data.
+> > > 
+> > > This driver is based on the existing infineon I2C TPM driver,
+> > > which
+> > > most closely matches the cr50 i2c protocol behavior.
+> > > 
+> > > Cc: Helen Koike <helen.koike@collabora.com>
+> > > Signed-off-by: Duncan Laurie <dlaurie@chromium.org>
+> > > [swboyd@chromium.org: Depend on i2c even if it's a module,
+> > > replace
+> > > boilier plate with SPDX tag, drop asm/byteorder.h include,
+> > > simplify
+> > > return from probe]
+> > > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> > > Signed-off-by: Fabien Lahoudere <fabien.lahoudere@collabora.com>
+> > > Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+> > > ---
+> > > Changes in v2:
+> > >   - Various small fixes all over (reorder includes, MAX_BUFSIZE,
+> > > comments, etc)
+> > >   - Reworked return values of i2c_wait_tpm_ready() to fix timeout
+> > > mis-handling
+> > > so ret == 0 now means success, the wait period jiffies is ignored
+> > > because that
+> > > number is meaningless and return a proper timeout error in case
+> > > jiffies == 0.
+> > >   - Make i2c default to 1 message per transfer (requested by
+> > > Helen)
+> > >   - Move -EIO error reporting to transfer function to cleanup
+> > > transfer() itself
+> > > and its R/W callers
+> > >   - Remove magic value hardcodings and introduce enum
+> > > force_release.
+> > > 
+> > > v1 posted at https://lkml.org/lkml/2020/2/25/349
+> > > 
+> > > Applies on next-20201120, tested on Chromebook EVE.
+> > > ---
+> > >  drivers/char/tpm/Kconfig            |  10 +
+> > >  drivers/char/tpm/Makefile           |   2 +
+> > >  drivers/char/tpm/tpm_tis_i2c_cr50.c | 768
+> > > ++++++++++++++++++++++++++++
+> > >  3 files changed, 780 insertions(+)
+> > >  create mode 100644 drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > > 
+> > > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> > > index a18c314da211..4308f9ca7a43 100644
+> > > --- a/drivers/char/tpm/Kconfig
+> > > +++ b/drivers/char/tpm/Kconfig
+> > > @@ -86,6 +86,16 @@ config TCG_TIS_SYNQUACER
+> > >           To compile this driver as a module, choose  M here;
+> > >           the module will be called tpm_tis_synquacer.
+> > >  
+> > > +config TCG_TIS_I2C_CR50
+> > > +       tristate "TPM Interface Specification 2.0 Interface (I2C
+> > > - CR50)"
+> > > +       depends on I2C
+> > > +       select TCG_CR50
+> > > +       help
+> > > +         This is a driver for the Google cr50 I2C TPM interface
+> > > which is a
+> > > +         custom microcontroller and requires a custom i2c
+> > > protocol interface
+> > > +         to handle the limitations of the hardware.  To compile
+> > > this driver
+> > > +         as a module, choose M here; the module will be called
+> > > tcg_tis_i2c_cr50.
+> > > +
+> > >  config TCG_TIS_I2C_ATMEL
+> > >         tristate "TPM Interface Specification 1.2 Interface (I2C
+> > > - Atmel)"
+> > >         depends on I2C
+> > > diff --git a/drivers/char/tpm/Makefile
+> > > b/drivers/char/tpm/Makefile
+> > > index 84db4fb3a9c9..66d39ea6bd10 100644
+> > > --- a/drivers/char/tpm/Makefile
+> > > +++ b/drivers/char/tpm/Makefile
+> > > @@ -27,6 +27,8 @@ obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
+> > >  tpm_tis_spi-y := tpm_tis_spi_main.o
+> > >  tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
+> > >  
+> > > +obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
+> > > +
+> > >  obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
+> > >  obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
+> > >  obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
+> > > diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > > b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > > new file mode 100644
+> > > index 000000000000..37555dafdca0
+> > > --- /dev/null
+> > > +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > > @@ -0,0 +1,768 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Copyright 2016 Google Inc.
+> > > + *
+> > > + * Based on Linux Kernel TPM driver by
+> > > + * Peter Huewe <peter.huewe@infineon.com>
+> > > + * Copyright (C) 2011 Infineon Technologies
+> > > + */
+> > > +
+> > > +/*
+> > > + * cr50 is a firmware for H1 secure modules that requires
+> > > special
+> > > + * handling for the I2C interface.
+> > > + *
+> > > + * - Use an interrupt for transaction status instead of
+> > > hardcoded delays
+> > > + * - Must use write+wait+read read protocol
+> > > + * - All 4 bytes of status register must be read/written at once
+> > > + * - Burst count max is 63 bytes, and burst count behaves
+> > > + *   slightly differently than other I2C TPMs
+> > > + * - When reading from FIFO the full burstcnt must be read
+> > > + *   instead of just reading header and determining the
+> > > remainder
+> > > + */
+> > > +
+> > > +#include <linux/acpi.h>
+> > > +#include <linux/completion.h>
+> > > +#include <linux/i2c.h>
+> > > +#include <linux/interrupt.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/pm.h>
+> > > +#include <linux/slab.h>
+> > > +#include <linux/wait.h>
+> > > +
+> > > +#include "tpm_tis_core.h"
+> > > +
+> > > +#define CR50_MAX_BUFSIZE       64
+> > > +#define CR50_TIMEOUT_SHORT_MS  2       /* Short timeout during
+> > > transactions */
+> > > +#define CR50_TIMEOUT_NOIRQ_MS  20      /* Timeout for TPM ready
+> > > without IRQ */
+> > > +#define CR50_I2C_DID_VID       0x00281ae0L
+> > > +#define CR50_I2C_MAX_RETRIES   3       /* Max retries due to I2C
+> > > errors */
+> > > +#define CR50_I2C_RETRY_DELAY_LO        55      /* Min usecs
+> > > between retries on I2C */
+> > > +#define CR50_I2C_RETRY_DELAY_HI        65      /* Max usecs
+> > > between retries on I2C */
+> > 
+> > CR50_ -> TPM_CR50_
+> > 
+> > > +
+> > > +#define TPM_I2C_ACCESS(l)      (0x0000 | ((l) << 4))
+> > > +#define TPM_I2C_STS(l)         (0x0001 | ((l) << 4))
+> > > +#define TPM_I2C_DATA_FIFO(l)   (0x0005 | ((l) << 4))
+> > > +#define TPM_I2C_DID_VID(l)     (0x0006 | ((l) << 4))
+> > > +
+> > > +struct priv_data {
+> > > +       int irq;
+> > > +       int locality;
+> > > +       struct completion tpm_ready;
+> > > +       u8 buf[CR50_MAX_BUFSIZE];
+> > > +};
+> > 
+> > tpm_i2c_cr50_priv_data
+> > 
+> > > +
+> > > +enum force_release {
+> > > +       CR50_NO_FORCE = 0x0,
+> > > +       CR50_FORCE = 0x1,
+> > > +};
+> > 
+> > I'd just 
+> > 
+> > #define TPM_I2C_CR50_NO_FORCE   0
+> > #define TPM_I2C_CR50_FORCE      1
+> > 
+> 
+> A proper enumerated type has advantages over a preprocessor macro:
+> even if the compiler won't warn you, static analyzers can warn
+> about a misuse.
 
-You mean, aside from -Wimplicit-fallthrough? I'm glad you asked. How about 
--Wincompatible-pointer-types and -Wframe-larger-than?
+Why don't you just use "bool", "true" and "false"? I ignored that
+this has nothing to do with the hardware last time.
 
-All of the following files have been affected by divergent diagnostics 
-produced by clang and gcc.
 
-arch/arm64/include/asm/neon-intrinsics.h
-arch/powerpc/xmon/Makefile
-drivers/gpu/drm/i915/Makefile
-drivers/gpu/drm/i915/i915_utils.h
-drivers/staging/media/atomisp/pci/atomisp_subdev.c
-fs/ext4/super.c
-include/trace/events/qla.h
-net/mac80211/rate.c
-tools/lib/string.c
-tools/perf/util/setup.py
-tools/scripts/Makefile.include
+> Also, it allows for a more obvious prototype.
+> 
+> I am curious why do you propose this change?
+> 
+> Thanks,
+> Ezequiel
 
-And if I searched for 'smatch' or 'coverity' instead of 'clang' I'd 
-probably find more divergence.
+/Jarkko
 
-Here are some of the relevant commits.
-
-0738c8b5915c7eaf1e6007b441008e8f3b460443
-9c87156cce5a63735d1218f0096a65c50a7a32aa
-babaab2f473817f173a2d08e410c25abf5ed0f6b
-065e5e559555e2f100bc95792a8ef1b609bbe130
-93f56de259376d7e4fff2b2d104082e1fa66e237
-6c4798d3f08b81c2c52936b10e0fa872590c96ae
-b7a313d84e853049062011d78cb04b6decd12f5c
-093b75ef5995ea35d7f6bdb6c7b32a42a1999813
-
-And before you object, "but -Wconstant-logical-operand is a clang-only 
-warning! it can't be divergent with gcc!", consider that the special cases 
-added to deal with clang-only warnings have to be removed when gcc catches 
-up, which is more churn. Now multiply that by the number of checkers you 
-care about.
