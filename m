@@ -2,26 +2,24 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 164CB2C72D2
-	for <lists+linux-integrity@lfdr.de>; Sat, 28 Nov 2020 23:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4C62C7631
+	for <lists+linux-integrity@lfdr.de>; Sat, 28 Nov 2020 23:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387787AbgK1WI3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 28 Nov 2020 17:08:29 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:55213 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387631AbgK1WI0 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 28 Nov 2020 17:08:26 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kj83j-0002aM-7d; Sat, 28 Nov 2020 21:47:11 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        id S2387471AbgK1Wet (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 28 Nov 2020 17:34:49 -0500
+Received: from mail.hallyn.com ([178.63.66.53]:59468 "EHLO mail.hallyn.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730501AbgK1Wet (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 28 Nov 2020 17:34:49 -0500
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 00D0B6A6; Sat, 28 Nov 2020 16:34:02 -0600 (CST)
+Date:   Sat, 28 Nov 2020 16:34:02 -0600
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     John Johansen <john.johansen@canonical.com>,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
         James Morris <jmorris@namei.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
@@ -39,7 +37,7 @@ Cc:     John Johansen <john.johansen@canonical.com>,
         David Howells <dhowells@redhat.com>,
         James Bottomley <James.Bottomley@hansenpartnership.com>,
         Seth Forshee <seth.forshee@canonical.com>,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
+        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
         Aleksa Sarai <cyphar@cyphar.com>,
         Lennart Poettering <lennart@poettering.net>,
         "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
@@ -50,549 +48,289 @@ Cc:     John Johansen <john.johansen@canonical.com>,
         containers@lists.linux-foundation.org, fstests@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
         linux-ext4@vger.kernel.org, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v3 37/38] tests: extend mount_setattr tests
-Date:   Sat, 28 Nov 2020 22:35:26 +0100
-Message-Id: <20201128213527.2669807-38-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201128213527.2669807-1-christian.brauner@ubuntu.com>
+        selinux@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v3 08/38] capability: handle idmapped mounts
+Message-ID: <20201128223402.GA22812@mail.hallyn.com>
 References: <20201128213527.2669807-1-christian.brauner@ubuntu.com>
+ <20201128213527.2669807-9-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201128213527.2669807-9-christian.brauner@ubuntu.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Extend the mount_setattr test-suite to include tests for idmapped mounts. Note,
-the main test-suite ist part of xfstests and is pretty huge. These tests here
-just make sure that the syscalls bits work correctly.
+On Sat, Nov 28, 2020 at 10:34:57PM +0100, Christian Brauner wrote:
+> In order to determine whether a caller holds privilege over a given inode the
+> capability framework exposes the two helpers privileged_wrt_inode_uidgid() and
+> capable_wrt_inode_uidgid(). The former verifies that the inode has a mapping in
+> the caller's user namespace and the latter additionally verifies that the caller
+> has the requested capability in their current user namespace.
+> If the inode is accessed through an idmapped mount we simply need to map it
+> according to the mount's user namespace. Afterwards the checks are identical to
+> non-idmapped inodes. If the initial user namespace is passed all operations are
+> a nop so non-idmapped mounts will not see a change in behavior and will also not
+> see any performance impact.
+> 
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: linux-fsdevel@vger.kernel.org
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* v2 */
-patch introduced
+Acked-by: Serge Hallyn <serge@hallyn.com>
 
-/* v3 */
-- Christoph Hellwig <hch@lst.de>, Darrick J. Wong <darrick.wong@oracle.com>:
-  - Port main test-suite to xfstests.
----
- .../mount_setattr/mount_setattr_test.c        | 483 ++++++++++++++++++
- 1 file changed, 483 insertions(+)
-
-diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-index d940356ab277..9ac898b2eb33 100644
---- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-+++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-@@ -108,15 +108,57 @@ struct mount_attr {
- 	__u64 attr_set;
- 	__u64 attr_clr;
- 	__u64 propagation;
-+	__u64 userns_fd;
- };
- #endif
- 
-+#ifndef __NR_open_tree
-+	#if defined __alpha__
-+		#define __NR_open_tree 538
-+	#elif defined _MIPS_SIM
-+		#if _MIPS_SIM == _MIPS_SIM_ABI32	/* o32 */
-+			#define __NR_open_tree 4428
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_NABI32	/* n32 */
-+			#define __NR_open_tree 6428
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_ABI64	/* n64 */
-+			#define __NR_open_tree 5428
-+		#endif
-+	#elif defined __ia64__
-+		#define __NR_open_tree (428 + 1024)
-+	#else
-+		#define __NR_open_tree 428
-+	#endif
-+#endif
-+
-+#ifndef MOUNT_ATTR_IDMAP
-+#define MOUNT_ATTR_IDMAP 0x00100000
-+#endif
-+
- static inline int sys_mount_setattr(int dfd, const char *path, unsigned int flags,
- 				    struct mount_attr *attr, size_t size)
- {
- 	return syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
- }
- 
-+#ifndef OPEN_TREE_CLONE
-+#define OPEN_TREE_CLONE 1
-+#endif
-+
-+#ifndef OPEN_TREE_CLOEXEC
-+#define OPEN_TREE_CLOEXEC O_CLOEXEC
-+#endif
-+
-+#ifndef AT_RECURSIVE
-+#define AT_RECURSIVE 0x8000 /* Apply to the entire subtree */
-+#endif
-+
-+static inline int sys_open_tree(int dfd, const char *filename, unsigned int flags)
-+{
-+	return syscall(__NR_open_tree, dfd, filename, flags);
-+}
-+
- static ssize_t write_nointr(int fd, const void *buf, size_t count)
- {
- 	ssize_t ret;
-@@ -938,4 +980,445 @@ TEST_F(mount_setattr, wrong_mount_namespace)
- 	ASSERT_EQ(errno, EINVAL);
- }
- 
-+FIXTURE(mount_setattr_idmapped) {
-+};
-+
-+FIXTURE_SETUP(mount_setattr_idmapped)
-+{
-+	int img_fd = -EBADF;
-+
-+	ASSERT_EQ(unshare(CLONE_NEWNS), 0);
-+
-+	ASSERT_EQ(mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, 0), 0);
-+
-+	(void)umount2("/mnt", MNT_DETACH);
-+	(void)umount2("/tmp", MNT_DETACH);
-+
-+	ASSERT_EQ(mount("testing", "/tmp", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mkdir("/tmp/B", 0777), 0);
-+	ASSERT_EQ(mknodat(-EBADF, "/tmp/B/b", S_IFREG | 0644, 0), 0);
-+	ASSERT_EQ(chown("/tmp/B/b", 0, 0), 0);
-+
-+	ASSERT_EQ(mount("testing", "/tmp/B", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mkdir("/tmp/B/BB", 0777), 0);
-+	ASSERT_EQ(mknodat(-EBADF, "/tmp/B/BB/b", S_IFREG | 0644, 0), 0);
-+	ASSERT_EQ(chown("/tmp/B/BB/b", 0, 0), 0);
-+
-+	ASSERT_EQ(mount("testing", "/tmp/B/BB", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mount("testing", "/mnt", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/A", 0777), 0);
-+
-+	ASSERT_EQ(mount("testing", "/mnt/A", "tmpfs", MS_NOATIME | MS_NODEV,
-+			"size=100000,mode=700"), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/A/AA", 0777), 0);
-+
-+	ASSERT_EQ(mount("/tmp", "/mnt/A/AA", NULL, MS_BIND | MS_REC, NULL), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/B", 0777), 0);
-+
-+	ASSERT_EQ(mount("testing", "/mnt/B", "ramfs",
-+			MS_NOATIME | MS_NODEV | MS_NOSUID, 0), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/B/BB", 0777), 0);
-+
-+	ASSERT_EQ(mount("testing", "/tmp/B/BB", "devpts",
-+			MS_RELATIME | MS_NOEXEC | MS_RDONLY, 0), 0);
-+
-+	ASSERT_EQ(mkdir("/mnt/C", 0777), 0);
-+	ASSERT_EQ(mkdir("/mnt/D", 0777), 0);
-+	img_fd = openat(-EBADF, "/mnt/C/ext4.img", O_CREAT | O_WRONLY, 0600);
-+	ASSERT_GE(img_fd, 0);
-+	ASSERT_EQ(ftruncate(img_fd, 1024 * 2048), 0);
-+	ASSERT_EQ(system("mkfs.ext4 -q /mnt/C/ext4.img"), 0);
-+	ASSERT_EQ(system("mount -o loop -t ext4 /mnt/C/ext4.img /mnt/D/"), 0);
-+	ASSERT_EQ(close(img_fd), 0);
-+}
-+
-+FIXTURE_TEARDOWN(mount_setattr_idmapped)
-+{
-+	(void)umount2("/mnt/A", MNT_DETACH);
-+	(void)umount2("/tmp", MNT_DETACH);
-+}
-+
-+/**
-+ * Validate that negative fd values are rejected.
-+ */
-+TEST_F(mount_setattr_idmapped, invalid_fd_negative)
-+{
-+	struct mount_attr attr = {
-+		.attr_set	= MOUNT_ATTR_IDMAP,
-+		.userns_fd	= -EBADF,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	ASSERT_NE(sys_mount_setattr(-1, "/", 0, &attr, sizeof(attr)), 0) {
-+		TH_LOG("failure: created idmapped mount with negative fd");
-+	}
-+}
-+
-+/**
-+ * Validate that excessively large fd values are rejected.
-+ */
-+TEST_F(mount_setattr_idmapped, invalid_fd_large)
-+{
-+	struct mount_attr attr = {
-+		.attr_set	= MOUNT_ATTR_IDMAP,
-+		.userns_fd	= INT64_MAX,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	ASSERT_NE(sys_mount_setattr(-1, "/", 0, &attr, sizeof(attr)), 0) {
-+		TH_LOG("failure: created idmapped mount with too large fd value");
-+	}
-+}
-+
-+/**
-+ * Validate that closed fd values are rejected.
-+ */
-+TEST_F(mount_setattr_idmapped, invalid_fd_closed)
-+{
-+	int fd;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(fd, 0);
-+	ASSERT_GE(close(fd), 0);
-+
-+	attr.userns_fd = fd;
-+	ASSERT_NE(sys_mount_setattr(-1, "/", 0, &attr, sizeof(attr)), 0) {
-+		TH_LOG("failure: created idmapped mount with closed fd");
-+	}
-+}
-+
-+/**
-+ * Validate that the initial user namespace is rejected.
-+ */
-+TEST_F(mount_setattr_idmapped, invalid_fd_initial_userns)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC | OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	attr.userns_fd = open("/proc/1/ns/user", O_RDONLY | O_CLOEXEC);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(errno, EPERM);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+static int map_ids(pid_t pid, unsigned long nsid, unsigned long hostid,
-+		   unsigned long range)
-+{
-+	char map[100], procfile[256];
-+
-+	snprintf(procfile, sizeof(procfile), "/proc/%d/uid_map", pid);
-+	snprintf(map, sizeof(map), "%lu %lu %lu", nsid, hostid, range);
-+	if (write_file(procfile, map, strlen(map)))
-+		return -1;
-+
-+
-+	snprintf(procfile, sizeof(procfile), "/proc/%d/gid_map", pid);
-+	snprintf(map, sizeof(map), "%lu %lu %lu", nsid, hostid, range);
-+	if (write_file(procfile, map, strlen(map)))
-+		return -1;
-+
-+	return 0;
-+}
-+
-+#define __STACK_SIZE (8 * 1024 * 1024)
-+static pid_t do_clone(int (*fn)(void *), void *arg, int flags)
-+{
-+	void *stack;
-+
-+	stack = malloc(__STACK_SIZE);
-+	if (!stack)
-+		return -ENOMEM;
-+
-+#ifdef __ia64__
-+	return __clone2(fn, stack, __STACK_SIZE, flags | SIGCHLD, arg, NULL);
-+#else
-+	return clone(fn, stack + __STACK_SIZE, flags | SIGCHLD, arg, NULL);
-+#endif
-+}
-+
-+static int get_userns_fd_cb(void *data)
-+{
-+	return kill(getpid(), SIGSTOP);
-+}
-+
-+static int wait_for_pid(pid_t pid)
-+{
-+	int status, ret;
-+
-+again:
-+	ret = waitpid(pid, &status, 0);
-+	if (ret == -1) {
-+		if (errno == EINTR)
-+			goto again;
-+
-+		return -1;
-+	}
-+
-+	if (!WIFEXITED(status))
-+		return -1;
-+
-+	return WEXITSTATUS(status);
-+}
-+
-+static int get_userns_fd(unsigned long nsid, unsigned long hostid, unsigned long range)
-+{
-+	int ret;
-+	pid_t pid;
-+	char path[256];
-+
-+	pid = do_clone(get_userns_fd_cb, NULL, CLONE_NEWUSER);
-+	if (pid < 0)
-+		return -errno;
-+
-+	ret = map_ids(pid, nsid, hostid, range);
-+	if (ret < 0)
-+		return ret;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/ns/user", pid);
-+	ret = open(path, O_RDONLY | O_CLOEXEC);
-+	kill(pid, SIGKILL);
-+	wait_for_pid(pid);
-+	return ret;
-+}
-+
-+/**
-+ * Validate that an attached mount in our mount namespace can be idmapped.
-+ * (The kernel enforces that the mount's mount namespace and the caller's mount
-+ *  namespace match.)
-+ */
-+TEST_F(mount_setattr_idmapped, attached_mount_inside_current_mount_namespace)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_EQ(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+/**
-+ * Validate that idmapping a mount is rejected if the mount's mount namespace
-+ * and our mount namespace don't match.
-+ * (The kernel enforces that the mount's mount namespace and the caller's mount
-+ *  namespace match.)
-+ */
-+TEST_F(mount_setattr_idmapped, attached_mount_outside_current_mount_namespace)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	ASSERT_EQ(unshare(CLONE_NEWNS), 0);
-+
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr,
-+				    sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+/**
-+ * Validate that an attached mount in our mount namespace can be idmapped.
-+ */
-+TEST_F(mount_setattr_idmapped, detached_mount_inside_current_mount_namespace)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC |
-+				     OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	/* Changing mount properties on a detached mount. */
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_EQ(sys_mount_setattr(open_tree_fd, "",
-+				    AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+/**
-+ * Validate that a detached mount not in our mount namespace can be idmapped.
-+ */
-+TEST_F(mount_setattr_idmapped, detached_mount_outside_current_mount_namespace)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC |
-+				     OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	ASSERT_EQ(unshare(CLONE_NEWNS), 0);
-+
-+	/* Changing mount properties on a detached mount. */
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_EQ(sys_mount_setattr(open_tree_fd, "",
-+				    AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+/**
-+ * Validate that currently changing the idmapping of an idmapped mount fails.
-+ */
-+TEST_F(mount_setattr_idmapped, change_idmapping)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/D",
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC |
-+				     OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_EQ(sys_mount_setattr(open_tree_fd, "",
-+				    AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+
-+	/* Change idmapping on a detached mount that is already idmapped. */
-+	attr.userns_fd	= get_userns_fd(0, 20000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+}
-+
-+static bool expected_uid_gid(int dfd, const char *path, int flags,
-+			     uid_t expected_uid, gid_t expected_gid)
-+{
-+	int ret;
-+	struct stat st;
-+
-+	ret = fstatat(dfd, path, &st, flags);
-+	if (ret < 0)
-+		return false;
-+
-+	return st.st_uid == expected_uid && st.st_gid == expected_gid;
-+}
-+
-+TEST_F(mount_setattr_idmapped, idmap_mount_tree_invalid)
-+{
-+	int open_tree_fd = -EBADF;
-+	struct mount_attr attr = {
-+		.attr_set = MOUNT_ATTR_IDMAP,
-+	};
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	ASSERT_EQ(expected_uid_gid(-EBADF, "/tmp/B/b", 0, 0, 0), 0);
-+	ASSERT_EQ(expected_uid_gid(-EBADF, "/tmp/B/BB/b", 0, 0, 0), 0);
-+
-+	open_tree_fd = sys_open_tree(-EBADF, "/mnt/A",
-+				     AT_RECURSIVE |
-+				     AT_EMPTY_PATH |
-+				     AT_NO_AUTOMOUNT |
-+				     AT_SYMLINK_NOFOLLOW |
-+				     OPEN_TREE_CLOEXEC |
-+				     OPEN_TREE_CLONE);
-+	ASSERT_GE(open_tree_fd, 0);
-+
-+	attr.userns_fd	= get_userns_fd(0, 10000, 10000);
-+	ASSERT_GE(attr.userns_fd, 0);
-+	ASSERT_NE(sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr, sizeof(attr)), 0);
-+	ASSERT_EQ(close(attr.userns_fd), 0);
-+	ASSERT_EQ(close(open_tree_fd), 0);
-+
-+	ASSERT_EQ(expected_uid_gid(-EBADF, "/tmp/B/b", 0, 0, 0), 0);
-+	ASSERT_EQ(expected_uid_gid(-EBADF, "/tmp/B/BB/b", 0, 0, 0), 0);
-+	ASSERT_EQ(expected_uid_gid(open_tree_fd, "B/b", 0, 0, 0), 0);
-+	ASSERT_EQ(expected_uid_gid(open_tree_fd, "B/BB/b", 0, 0, 0), 0);
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.29.2
-
+> ---
+> /* v2 */
+> - Christoph Hellwig <hch@lst.de>:
+>   - Don't pollute the vfs with additional helpers simply extend the existing
+>     helpers with an additional argument and switch all callers.
+> 
+> /* v3 */
+> unchanged
+> ---
+>  fs/attr.c                  |  8 ++++----
+>  fs/exec.c                  |  2 +-
+>  fs/inode.c                 |  2 +-
+>  fs/namei.c                 | 13 ++++++++-----
+>  fs/overlayfs/super.c       |  2 +-
+>  fs/posix_acl.c             |  2 +-
+>  fs/xfs/xfs_ioctl.c         |  2 +-
+>  include/linux/capability.h |  7 +++++--
+>  kernel/capability.c        | 14 +++++++++-----
+>  security/commoncap.c       |  5 +++--
+>  10 files changed, 34 insertions(+), 23 deletions(-)
+> 
+> diff --git a/fs/attr.c b/fs/attr.c
+> index b4bbdbd4c8ca..d270f640a192 100644
+> --- a/fs/attr.c
+> +++ b/fs/attr.c
+> @@ -23,7 +23,7 @@ static bool chown_ok(const struct inode *inode, kuid_t uid)
+>  	if (uid_eq(current_fsuid(), inode->i_uid) &&
+>  	    uid_eq(uid, inode->i_uid))
+>  		return true;
+> -	if (capable_wrt_inode_uidgid(inode, CAP_CHOWN))
+> +	if (capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_CHOWN))
+>  		return true;
+>  	if (uid_eq(inode->i_uid, INVALID_UID) &&
+>  	    ns_capable(inode->i_sb->s_user_ns, CAP_CHOWN))
+> @@ -36,7 +36,7 @@ static bool chgrp_ok(const struct inode *inode, kgid_t gid)
+>  	if (uid_eq(current_fsuid(), inode->i_uid) &&
+>  	    (in_group_p(gid) || gid_eq(gid, inode->i_gid)))
+>  		return true;
+> -	if (capable_wrt_inode_uidgid(inode, CAP_CHOWN))
+> +	if (capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_CHOWN))
+>  		return true;
+>  	if (gid_eq(inode->i_gid, INVALID_GID) &&
+>  	    ns_capable(inode->i_sb->s_user_ns, CAP_CHOWN))
+> @@ -92,7 +92,7 @@ int setattr_prepare(struct dentry *dentry, struct iattr *attr)
+>  		/* Also check the setgid bit! */
+>  		if (!in_group_p((ia_valid & ATTR_GID) ? attr->ia_gid :
+>  				inode->i_gid) &&
+> -		    !capable_wrt_inode_uidgid(inode, CAP_FSETID))
+> +		    !capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_FSETID))
+>  			attr->ia_mode &= ~S_ISGID;
+>  	}
+>  
+> @@ -193,7 +193,7 @@ void setattr_copy(struct inode *inode, const struct iattr *attr)
+>  		umode_t mode = attr->ia_mode;
+>  
+>  		if (!in_group_p(inode->i_gid) &&
+> -		    !capable_wrt_inode_uidgid(inode, CAP_FSETID))
+> +		    !capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_FSETID))
+>  			mode &= ~S_ISGID;
+>  		inode->i_mode = mode;
+>  	}
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 547a2390baf5..8e75d7a33514 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1398,7 +1398,7 @@ void would_dump(struct linux_binprm *bprm, struct file *file)
+>  		/* Ensure mm->user_ns contains the executable */
+>  		user_ns = old = bprm->mm->user_ns;
+>  		while ((user_ns != &init_user_ns) &&
+> -		       !privileged_wrt_inode_uidgid(user_ns, inode))
+> +		       !privileged_wrt_inode_uidgid(user_ns, &init_user_ns, inode))
+>  			user_ns = user_ns->parent;
+>  
+>  		if (old != user_ns) {
+> diff --git a/fs/inode.c b/fs/inode.c
+> index 9d78c37b00b8..7a15372d9c2d 100644
+> --- a/fs/inode.c
+> +++ b/fs/inode.c
+> @@ -2147,7 +2147,7 @@ void inode_init_owner(struct inode *inode, const struct inode *dir,
+>  			mode |= S_ISGID;
+>  		else if ((mode & (S_ISGID | S_IXGRP)) == (S_ISGID | S_IXGRP) &&
+>  			 !in_group_p(inode->i_gid) &&
+> -			 !capable_wrt_inode_uidgid(dir, CAP_FSETID))
+> +			 !capable_wrt_inode_uidgid(&init_user_ns, dir, CAP_FSETID))
+>  			mode &= ~S_ISGID;
+>  	} else
+>  		inode->i_gid = current_fsgid();
+> diff --git a/fs/namei.c b/fs/namei.c
+> index d4a6dd772303..3f52730af6c5 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -357,10 +357,11 @@ int generic_permission(struct inode *inode, int mask)
+>  	if (S_ISDIR(inode->i_mode)) {
+>  		/* DACs are overridable for directories */
+>  		if (!(mask & MAY_WRITE))
+> -			if (capable_wrt_inode_uidgid(inode,
+> +			if (capable_wrt_inode_uidgid(&init_user_ns, inode,
+>  						     CAP_DAC_READ_SEARCH))
+>  				return 0;
+> -		if (capable_wrt_inode_uidgid(inode, CAP_DAC_OVERRIDE))
+> +		if (capable_wrt_inode_uidgid(&init_user_ns, inode,
+> +					     CAP_DAC_OVERRIDE))
+>  			return 0;
+>  		return -EACCES;
+>  	}
+> @@ -370,7 +371,8 @@ int generic_permission(struct inode *inode, int mask)
+>  	 */
+>  	mask &= MAY_READ | MAY_WRITE | MAY_EXEC;
+>  	if (mask == MAY_READ)
+> -		if (capable_wrt_inode_uidgid(inode, CAP_DAC_READ_SEARCH))
+> +		if (capable_wrt_inode_uidgid(&init_user_ns, inode,
+> +					     CAP_DAC_READ_SEARCH))
+>  			return 0;
+>  	/*
+>  	 * Read/write DACs are always overridable.
+> @@ -378,7 +380,8 @@ int generic_permission(struct inode *inode, int mask)
+>  	 * at least one exec bit set.
+>  	 */
+>  	if (!(mask & MAY_EXEC) || (inode->i_mode & S_IXUGO))
+> -		if (capable_wrt_inode_uidgid(inode, CAP_DAC_OVERRIDE))
+> +		if (capable_wrt_inode_uidgid(&init_user_ns, inode,
+> +					     CAP_DAC_OVERRIDE))
+>  			return 0;
+>  
+>  	return -EACCES;
+> @@ -2657,7 +2660,7 @@ int __check_sticky(struct inode *dir, struct inode *inode)
+>  		return 0;
+>  	if (uid_eq(dir->i_uid, fsuid))
+>  		return 0;
+> -	return !capable_wrt_inode_uidgid(inode, CAP_FOWNER);
+> +	return !capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_FOWNER);
+>  }
+>  EXPORT_SYMBOL(__check_sticky);
+>  
+> diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+> index 290983bcfbb3..196fe3e3f02b 100644
+> --- a/fs/overlayfs/super.c
+> +++ b/fs/overlayfs/super.c
+> @@ -972,7 +972,7 @@ ovl_posix_acl_xattr_set(const struct xattr_handler *handler,
+>  	if (unlikely(inode->i_mode & S_ISGID) &&
+>  	    handler->flags == ACL_TYPE_ACCESS &&
+>  	    !in_group_p(inode->i_gid) &&
+> -	    !capable_wrt_inode_uidgid(inode, CAP_FSETID)) {
+> +	    !capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_FSETID)) {
+>  		struct iattr iattr = { .ia_valid = ATTR_KILL_SGID };
+>  
+>  		err = ovl_setattr(dentry, &iattr);
+> diff --git a/fs/posix_acl.c b/fs/posix_acl.c
+> index 95882b3f5f62..4ca6d53c6f0a 100644
+> --- a/fs/posix_acl.c
+> +++ b/fs/posix_acl.c
+> @@ -656,7 +656,7 @@ int posix_acl_update_mode(struct inode *inode, umode_t *mode_p,
+>  	if (error == 0)
+>  		*acl = NULL;
+>  	if (!in_group_p(inode->i_gid) &&
+> -	    !capable_wrt_inode_uidgid(inode, CAP_FSETID))
+> +	    !capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_FSETID))
+>  		mode &= ~S_ISGID;
+>  	*mode_p = mode;
+>  	return 0;
+> diff --git a/fs/xfs/xfs_ioctl.c b/fs/xfs/xfs_ioctl.c
+> index 3fbd98f61ea5..97bd29fc8c43 100644
+> --- a/fs/xfs/xfs_ioctl.c
+> +++ b/fs/xfs/xfs_ioctl.c
+> @@ -1502,7 +1502,7 @@ xfs_ioctl_setattr(
+>  	 */
+>  
+>  	if ((VFS_I(ip)->i_mode & (S_ISUID|S_ISGID)) &&
+> -	    !capable_wrt_inode_uidgid(VFS_I(ip), CAP_FSETID))
+> +	    !capable_wrt_inode_uidgid(&init_user_ns, VFS_I(ip), CAP_FSETID))
+>  		VFS_I(ip)->i_mode &= ~(S_ISUID|S_ISGID);
+>  
+>  	/* Change the ownerships and register project quota modifications */
+> diff --git a/include/linux/capability.h b/include/linux/capability.h
+> index 1e7fe311cabe..041e336f3369 100644
+> --- a/include/linux/capability.h
+> +++ b/include/linux/capability.h
+> @@ -247,8 +247,11 @@ static inline bool ns_capable_setid(struct user_namespace *ns, int cap)
+>  	return true;
+>  }
+>  #endif /* CONFIG_MULTIUSER */
+> -extern bool privileged_wrt_inode_uidgid(struct user_namespace *ns, const struct inode *inode);
+> -extern bool capable_wrt_inode_uidgid(const struct inode *inode, int cap);
+> +extern bool privileged_wrt_inode_uidgid(struct user_namespace *ns,
+> +					struct user_namespace *mnt_user_ns,
+> +					const struct inode *inode);
+> +extern bool capable_wrt_inode_uidgid(struct user_namespace *mnt_user_ns,
+> +				     const struct inode *inode, int cap);
+>  extern bool file_ns_capable(const struct file *file, struct user_namespace *ns, int cap);
+>  extern bool ptracer_capable(struct task_struct *tsk, struct user_namespace *ns);
+>  static inline bool perfmon_capable(void)
+> diff --git a/kernel/capability.c b/kernel/capability.c
+> index de7eac903a2a..28e3a599ff7a 100644
+> --- a/kernel/capability.c
+> +++ b/kernel/capability.c
+> @@ -484,10 +484,12 @@ EXPORT_SYMBOL(file_ns_capable);
+>   *
+>   * Return true if the inode uid and gid are within the namespace.
+>   */
+> -bool privileged_wrt_inode_uidgid(struct user_namespace *ns, const struct inode *inode)
+> +bool privileged_wrt_inode_uidgid(struct user_namespace *ns,
+> +				 struct user_namespace *mnt_user_ns,
+> +				 const struct inode *inode)
+>  {
+> -	return kuid_has_mapping(ns, inode->i_uid) &&
+> -		kgid_has_mapping(ns, inode->i_gid);
+> +	return kuid_has_mapping(ns, i_uid_into_mnt(mnt_user_ns, inode)) &&
+> +	       kgid_has_mapping(ns, i_gid_into_mnt(mnt_user_ns, inode));
+>  }
+>  
+>  /**
+> @@ -499,11 +501,13 @@ bool privileged_wrt_inode_uidgid(struct user_namespace *ns, const struct inode *
+>   * its own user namespace and that the given inode's uid and gid are
+>   * mapped into the current user namespace.
+>   */
+> -bool capable_wrt_inode_uidgid(const struct inode *inode, int cap)
+> +bool capable_wrt_inode_uidgid(struct user_namespace *mnt_user_ns,
+> +			      const struct inode *inode, int cap)
+>  {
+>  	struct user_namespace *ns = current_user_ns();
+>  
+> -	return ns_capable(ns, cap) && privileged_wrt_inode_uidgid(ns, inode);
+> +	return ns_capable(ns, cap) &&
+> +	       privileged_wrt_inode_uidgid(ns, mnt_user_ns, inode);
+>  }
+>  EXPORT_SYMBOL(capable_wrt_inode_uidgid);
+>  
+> diff --git a/security/commoncap.c b/security/commoncap.c
+> index 59bf3c1674c8..4cd2bdfd0a8b 100644
+> --- a/security/commoncap.c
+> +++ b/security/commoncap.c
+> @@ -489,7 +489,7 @@ int cap_convert_nscap(struct dentry *dentry, void **ivalue, size_t size)
+>  		return -EINVAL;
+>  	if (!validheader(size, cap))
+>  		return -EINVAL;
+> -	if (!capable_wrt_inode_uidgid(inode, CAP_SETFCAP))
+> +	if (!capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_SETFCAP))
+>  		return -EPERM;
+>  	if (size == XATTR_CAPS_SZ_2)
+>  		if (ns_capable(inode->i_sb->s_user_ns, CAP_SETFCAP))
+> @@ -957,7 +957,8 @@ int cap_inode_removexattr(struct dentry *dentry, const char *name)
+>  		struct inode *inode = d_backing_inode(dentry);
+>  		if (!inode)
+>  			return -EINVAL;
+> -		if (!capable_wrt_inode_uidgid(inode, CAP_SETFCAP))
+> +		if (!capable_wrt_inode_uidgid(&init_user_ns, inode,
+> +					      CAP_SETFCAP))
+>  			return -EPERM;
+>  		return 0;
+>  	}
+> -- 
+> 2.29.2
