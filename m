@@ -2,41 +2,44 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A58732C7BAE
-	for <lists+linux-integrity@lfdr.de>; Sun, 29 Nov 2020 23:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640FD2C7BB0
+	for <lists+linux-integrity@lfdr.de>; Sun, 29 Nov 2020 23:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbgK2WX5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 29 Nov 2020 17:23:57 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:42014 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726304AbgK2WX5 (ORCPT
+        id S1726293AbgK2WZW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 29 Nov 2020 17:25:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725950AbgK2WZV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 29 Nov 2020 17:23:57 -0500
+        Sun, 29 Nov 2020 17:25:21 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04E7C0613CF;
+        Sun, 29 Nov 2020 14:24:41 -0800 (PST)
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 66B451280A23;
-        Sun, 29 Nov 2020 14:23:17 -0800 (PST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7AD801280A29;
+        Sun, 29 Nov 2020 14:24:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1606688597;
-        bh=ck2ZIwBvUdlkG2aSWZp5Jzk7xWAy/yINKGxE2dUpmBo=;
+        d=hansenpartnership.com; s=20151216; t=1606688681;
+        bh=K4WTUFM4hScMChbYVDjVnCJ/DgvW84I5stItHuNpcME=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-        b=eUUKSdHweHuLJf2bjUMXnMMwaUcFO4tjCMnBzKc+3XaZ59LRdHV6sndDJKt7yS6Bf
-         ZjhDgXLc3Dxp5CtktITjg7tX9afsPw0aC4MKC/aDT3gZHWcgTtpWQEzL7BVI0O5Qsr
-         32KMnmFV68lY5QCZ2yKT8w4cTg8PfUHU/kjX9goI=
+        b=MXYrbiH+Piwzva6bsHUIIhJ9VdCEd0e5w0/MJRgYhbPobinXc/pCpF789rJ5QgDQn
+         OyyCKGYxULSvMbO6ERdmoSy0aCDV0VofwB/UodEdPq/a3jbvm+/zzrWUyv4weY83m/
+         LsjWHb0OjJhPE1lP2UXbLNcNi93EXBfixlqtlurw=
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Ql8eIxMjb8jy; Sun, 29 Nov 2020 14:23:17 -0800 (PST)
+        with ESMTP id JbBA4e6oILiJ; Sun, 29 Nov 2020 14:24:41 -0800 (PST)
 Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id ECB371280A21;
-        Sun, 29 Nov 2020 14:23:16 -0800 (PST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 03D061280A26;
+        Sun, 29 Nov 2020 14:24:40 -0800 (PST)
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         David Woodhouse <dwmw2@infradead.org>,
         keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: [PATCH v14 2/5] oid_registry: Add TCG defined OIDS for TPM keys
-Date:   Sun, 29 Nov 2020 14:20:01 -0800
-Message-Id: <20201129222004.4428-3-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v14 3/5] security: keys: trusted: fix TPM2 authorizations
+Date:   Sun, 29 Nov 2020 14:20:02 -0800
+Message-Id: <20201129222004.4428-4-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201129222004.4428-1-James.Bottomley@HansenPartnership.com>
 References: <20201129222004.4428-1-James.Bottomley@HansenPartnership.com>
@@ -46,61 +49,139 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The TCG has defined an OID prefix "2.23.133.10.1" for the various TPM
-key uses.  We've defined three of the available numbers:
+In TPM 1.2 an authorization was a 20 byte number.  The spec actually
+recommended you to hash variable length passwords and use the sha1
+hash as the authorization.  Because the spec doesn't require this
+hashing, the current authorization for trusted keys is a 40 digit hex
+number.  For TPM 2.0 the spec allows the passing in of variable length
+passwords and passphrases directly, so we should allow that in trusted
+keys for ease of use.  Update the 'blobauth' parameter to take this
+into account, so we can now use plain text passwords for the keys.
 
-2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key (Usually
-		RSA2048 or Elliptic Curve) which can be imported by a
-		TPM2_Load() operation.
+so before
 
-2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key (Usually
-		RSA2048 or Elliptic Curve) which can be imported by a
-		TPM2_Import() operation.
+keyctl add trusted kmk "new 32 blobauth=f572d396fae9206628714fb2ce00f72e94f2258fkeyhandle=81000001" @u
 
-Both loadable and importable keys are specific to a given TPM, the
-difference is that a loadable key is wrapped with the symmetric
-secret, so must have been created by the TPM itself.  An importable
-key is wrapped with a DH shared secret, and may be created without
-access to the TPM provided you know the public part of the parent key.
+after we will accept both the old hex sha1 form as well as a new
+directly supplied password:
 
-2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to 128
-		bytes) which is sealed by the TPM.  It usually
-		represents a symmetric key and must be unsealed before
-		use.
+keyctl add trusted kmk "new 32 blobauth=hello keyhandle=81000001" @u
 
-The ASN.1 binary key form starts of with this OID as the first element
-of a sequence, giving the binary form a unique recognizable identity
-marker regardless of encoding.
+Since a sha1 hex code must be exactly 40 bytes long and a direct
+password must be 20 or less, we use the length as the discriminator
+for which form is input.
 
+Note this is both and enhancement and a potential bug fix.  The TPM
+2.0 spec requires us to strip leading zeros, meaning empyty
+authorization is a zero length HMAC whereas we're currently passing in
+20 bytes of zeros.  A lot of TPMs simply accept this as OK, but the
+Microsoft TPM emulator rejects it with TPM_RC_BAD_AUTH, so this patch
+makes the Microsoft TPM emulator work with trusted keys.
+
+Fixes: 0fe5480303a1 ("keys, trusted: seal/unseal with TPM 2.0 chips")
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-Acked-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Reviewed-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
 ---
 
-v3: correct OID_TPMImportableKey name
-v7: add ack
-v9: add review
----
- include/linux/oid_registry.h | 5 +++++
- 1 file changed, 5 insertions(+)
+v6: change comment, eliminate else clauses and add fixes tag
+v7: fixes before signoff
+v12: fix mismerge from v6 to make processing continue after blobauth
+v14: add tested by
 
-diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-index 4462ed2c18cd..d06988d1565e 100644
---- a/include/linux/oid_registry.h
-+++ b/include/linux/oid_registry.h
-@@ -113,6 +113,11 @@ enum OID {
- 	OID_SM2_with_SM3,		/* 1.2.156.10197.1.501 */
- 	OID_sm3WithRSAEncryption,	/* 1.2.156.10197.1.504 */
- 
-+	/* TCG defined OIDS for TPM based keys */
-+	OID_TPMLoadableKey,		/* 2.23.133.10.1.3 */
-+	OID_TPMImportableKey,		/* 2.23.133.10.1.4 */
-+	OID_TPMSealedData,		/* 2.23.133.10.1.5 */
+Merge with auth fix
+---
+ include/keys/trusted-type.h               |  1 +
+ security/keys/trusted-keys/trusted_tpm1.c | 32 ++++++++++++++++++-----
+ security/keys/trusted-keys/trusted_tpm2.c | 10 ++++---
+ 3 files changed, 33 insertions(+), 10 deletions(-)
+
+diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+index a94c03a61d8f..b2ed3481c6a0 100644
+--- a/include/keys/trusted-type.h
++++ b/include/keys/trusted-type.h
+@@ -30,6 +30,7 @@ struct trusted_key_options {
+ 	uint16_t keytype;
+ 	uint32_t keyhandle;
+ 	unsigned char keyauth[TPM_DIGEST_SIZE];
++	uint32_t blobauth_len;
+ 	unsigned char blobauth[TPM_DIGEST_SIZE];
+ 	uint32_t pcrinfo_len;
+ 	unsigned char pcrinfo[MAX_PCRINFO_SIZE];
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index b9fe02e5f84f..eaa2e7ca136e 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -781,13 +781,33 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+ 				return -EINVAL;
+ 			break;
+ 		case Opt_blobauth:
+-			if (strlen(args[0].from) != 2 * SHA1_DIGEST_SIZE)
+-				return -EINVAL;
+-			res = hex2bin(opt->blobauth, args[0].from,
+-				      SHA1_DIGEST_SIZE);
+-			if (res < 0)
+-				return -EINVAL;
++			/*
++			 * TPM 1.2 authorizations are sha1 hashes passed in as
++			 * hex strings.  TPM 2.0 authorizations are simple
++			 * passwords (although it can take a hash as well)
++			 */
++			opt->blobauth_len = strlen(args[0].from);
 +
- 	OID__NR
- };
++			if (opt->blobauth_len == 2 * TPM_DIGEST_SIZE) {
++				res = hex2bin(opt->blobauth, args[0].from,
++					      TPM_DIGEST_SIZE);
++				if (res < 0)
++					return -EINVAL;
++
++				opt->blobauth_len = TPM_DIGEST_SIZE;
++				break;
++			}
++
++			if (tpm2 && opt->blobauth_len <= sizeof(opt->blobauth)) {
++				memcpy(opt->blobauth, args[0].from,
++				       opt->blobauth_len);
++				break;
++			}
++
++			return -EINVAL;
++
+ 			break;
++
+ 		case Opt_migratable:
+ 			if (*args[0].from == '0')
+ 				pay->migratable = 0;
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 38bb33333cdf..6c6dd88d7bf6 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -91,10 +91,12 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 			     TPM_DIGEST_SIZE);
  
+ 	/* sensitive */
+-	tpm_buf_append_u16(&buf, 4 + TPM_DIGEST_SIZE + payload->key_len + 1);
++	tpm_buf_append_u16(&buf, 4 + options->blobauth_len + payload->key_len + 1);
++
++	tpm_buf_append_u16(&buf, options->blobauth_len);
++	if (options->blobauth_len)
++		tpm_buf_append(&buf, options->blobauth, options->blobauth_len);
+ 
+-	tpm_buf_append_u16(&buf, TPM_DIGEST_SIZE);
+-	tpm_buf_append(&buf, options->blobauth, TPM_DIGEST_SIZE);
+ 	tpm_buf_append_u16(&buf, payload->key_len + 1);
+ 	tpm_buf_append(&buf, payload->key, payload->key_len);
+ 	tpm_buf_append_u8(&buf, payload->migratable);
+@@ -258,7 +260,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 			     NULL /* nonce */, 0,
+ 			     TPM2_SA_CONTINUE_SESSION,
+ 			     options->blobauth /* hmac */,
+-			     TPM_DIGEST_SIZE);
++			     options->blobauth_len);
+ 
+ 	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
+ 	if (rc > 0)
 -- 
 2.26.2
 
