@@ -2,126 +2,300 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC682C7BB8
-	for <lists+linux-integrity@lfdr.de>; Sun, 29 Nov 2020 23:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB4A2C7BB9
+	for <lists+linux-integrity@lfdr.de>; Sun, 29 Nov 2020 23:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbgK2WbJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 29 Nov 2020 17:31:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726304AbgK2WbJ (ORCPT
+        id S1726777AbgK2WcY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 29 Nov 2020 17:32:24 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:43170 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726293AbgK2WcY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 29 Nov 2020 17:31:09 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CE6C0613CF;
-        Sun, 29 Nov 2020 14:30:28 -0800 (PST)
+        Sun, 29 Nov 2020 17:32:24 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A93591280A68;
-        Sun, 29 Nov 2020 14:30:28 -0800 (PST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 579A71280A68;
+        Sun, 29 Nov 2020 14:31:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1606689028;
-        bh=O2JKWH7ZUGA7sCFY9kB0OpUQjAE5coW0PFTJWkwqGeM=;
-        h=From:To:Subject:Date:Message-Id:From;
-        b=WSLReXExHwcB3NzRQX1/nTb6YSjKXyckISOCiKnIpiHCUD2YsiHUC9E6fpbbu88LQ
-         vI+VEMaTBC4b4kgpVhz2IYI5r9JDyLS0bsSWwB65SS4NtXdPMg2zyT+TxHyuU2GFYk
-         uedwmwmAdIZgZgdupJz/QXMsdIme3E060+eqK9hA=
+        d=hansenpartnership.com; s=20151216; t=1606689104;
+        bh=8X3yL2AuLIaM0wA+kItXl7WdN9cOjB1p/krP+TEjd68=;
+        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
+        b=YPs9unYzbriWgohupMvlAgRL0oGljgPlIDOorIachIsm/F9IULJrNEC8msImH3kAd
+         vZGbcUNe+ol1nE3hZl61dH8mUhQqbs+8nVzHUTxADs+xuHWhXtAuLiE6lT20zYWt5l
+         FbwpfEaOfODBw0kuOeD1E7/1EIjA3CeTbI63JkFY=
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Sfkbf8mGDSqK; Sun, 29 Nov 2020 14:30:28 -0800 (PST)
+        with ESMTP id VsknrmvGa2cM; Sun, 29 Nov 2020 14:31:44 -0800 (PST)
 Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 4635A1280A67;
-        Sun, 29 Nov 2020 14:30:28 -0800 (PST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id ED7521280A67;
+        Sun, 29 Nov 2020 14:31:43 -0800 (PST)
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         linux-api@vger.kernel.org
-Subject: [PATCH RESEND v4 0/1] add sysfs exports for TPM 2 PCR registers
-Date:   Sun, 29 Nov 2020 14:30:21 -0800
-Message-Id: <20201129223022.5153-1-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH RESEND v4 1/1] tpm: add sysfs exports for all banks of PCR registers
+Date:   Sun, 29 Nov 2020 14:30:22 -0800
+Message-Id: <20201129223022.5153-2-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20201129223022.5153-1-James.Bottomley@HansenPartnership.com>
+References: <20201129223022.5153-1-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Cc to linux-api to get an opinion on two issues.  First the background:
+Create sysfs per hash groups with 24 PCR files in them one group,
+named pcr-<hash>, for each agile hash of the TPM.  The files are
+plugged in to a PCR read function which is TPM version agnostic, so
+this works also for TPM 1.2 but the hash is only sha1 in that case.
 
-We've had a fairly extensive discussion over on linux-integrity and
-iterated to the conclusion that the kernel does need to export TPM 2.0
-PCR values for use by a variety of userspace integrity programmes
-including early boot.  The principle clinching argument seems to be
-that these values are required by non-root systems, but in a default
-Linux set up the packet marshalled communication device: /dev/tpmrm0,
-is by default only usable by root.  Historically, TPM 1.2 exported
-these values via sysfs in a single file containing all 24 values:
+Note: the macros used to create the hashes emit spurious checkpatch
+warnings.  Do not try to "fix" them as checkpatch recommends, otherwise
+they'll break.
 
-  /sys/class/tpm/tpm0/pcrs
-
-with the format
-
-  PCR-00: 7D 29 CB 08 0C 0F C4 16 7A 0E 9A F7 C6 D3 97 CD C1 21 A7 69 
-  PCR-01: 9C B6 79 4C E4 4B 62 97 4C AB 55 13 1A 2F 7E AE 09 B3 30 BE 
-  ...
-
-TPM 2.0 adds more complexity: because of it's "agile" format, each TPM
-2.0 is required to support a set of hashes (of which at least sha1 and
-sha256 are required but quite a few TPM 2.0s have at least two or
-three more) and maintain 24 PCR registers for each supported hash.
-The current patch exports each PCR bank under the directory
-
-  /sys/class/tpm/tpm0/pcr-<hash>/<bank>
-
-So the sha256 bank value of PCR 7 can be obtained as
-
-  cat /sys/class/tpm/tpm0/pcr-sha256/7
-  2ED93F199692DC6788EFA6A1FE74514AB9760B2A6CEEAEF6C808C13E4ABB0D42
-
-And the output is a single non-space separated ascii hex value of the
-hash.
-
-The issues we'd like input on are:
-
- 1. Should this be in sysfs or securityfs?
-
-  2. Should we export the values as one value per file (current patch)
-     or as a binary blob of all 24?
-
-I'm largely ambivalent about 1.  I can easily do securityfs output, it
-is more work than sysfs largely because securityfs lacks most of the
-features of sysfs, including the groups one that this patch uses
-heavily, but that can all be open coded (as most other securityfs
-consumers do).
-
-I'm less ambivalent about the binary blob idea: pretty much every use
-case we have requires a set of PCRs which are fewer than the 24 and a
-lot only require a single PCR, so providing all 24 in a format that
-has to be parsed seems to make life more difficult for the consuming
-program.  The argument, at least, for providing the PCRs in binary
-form is that most of the consuming programs, once they've selected
-their set, tend to need the hash value of the set, which necessitates
-converting from ascii to binary.  I do this by the simple script (for
-PCRs say 1,6,7) as:
-
-  cat /sys/class/tpm/tpm0/pcr-sha256/{1,6,7}|xxd -r -p|sha256sum
-
-I've cc'd Jarkko, who's the main proponent of the binary blob use case
-because he can make better arguments than I can.
-
-Regards,
-
-James
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 
 ---
 
-James Bottomley (1):
-  tpm: add sysfs exports for all banks of PCR registers
-
+v2: fix TPM 1.2 legacy links failure
+v3: fix warn on and add note to tpm_algorithms
+v4: reword commit and add tested-by
+---
  drivers/char/tpm/tpm-sysfs.c | 178 +++++++++++++++++++++++++++++++++++
  include/linux/tpm.h          |   9 +-
  2 files changed, 186 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
+index d52bf4df0bca..81a02200b207 100644
+--- a/drivers/char/tpm/tpm-sysfs.c
++++ b/drivers/char/tpm/tpm-sysfs.c
+@@ -348,11 +348,189 @@ static const struct attribute_group tpm2_dev_group = {
+ 	.attrs = tpm2_dev_attrs,
+ };
+ 
++struct tpm_pcr_attr {
++	int alg_id;
++	int pcr;
++	struct device_attribute attr;
++};
++
++#define to_tpm_pcr_attr(a) container_of(a, struct tpm_pcr_attr, attr)
++
++static ssize_t pcr_value_show(struct device *dev,
++			      struct device_attribute *attr,
++			      char *buf)
++{
++	struct tpm_pcr_attr *ha = to_tpm_pcr_attr(attr);
++	struct tpm_chip *chip = to_tpm_chip(dev);
++	struct tpm_digest digest;
++	int i;
++	int digest_size = 0;
++	int rc;
++	char *str = buf;
++
++	for (i = 0; i < chip->nr_allocated_banks; i++)
++		if (ha->alg_id == chip->allocated_banks[i].alg_id)
++			digest_size = chip->allocated_banks[i].digest_size;
++	/* should never happen */
++	if (!digest_size)
++		return -EINVAL;
++
++	digest.alg_id = ha->alg_id;
++	rc = tpm_pcr_read(chip, ha->pcr, &digest);
++	if (rc)
++		return rc;
++	for (i = 0; i < digest_size; i++)
++		str += sprintf(str, "%02X", digest.digest[i]);
++	str += sprintf(str, "\n");
++
++	return str - buf;
++}
++
++/*
++ * The following set of defines represents all the magic to build
++ * the per hash attribute groups for displaying each bank of PCRs.
++ * The only slight problem with this approach is that every PCR is
++ * hard coded to be present, so you don't know if an PCR is missing
++ * until a cat of the file returns -EINVAL
++ *
++ * Also note you must ignore checkpatch warnings in this macro
++ * code. This is deep macro magic that checkpatch.pl doesn't
++ * understand.
++ */
++
++/* Note, this must match TPM2_PLATFORM_PCR which is fixed at 24. */
++#define _TPM_HELPER(_alg, _hash, F) \
++	F(_alg, _hash, 0)	    \
++	F(_alg, _hash, 1)	    \
++	F(_alg, _hash, 2)	    \
++	F(_alg, _hash, 3)	    \
++	F(_alg, _hash, 4)	    \
++	F(_alg, _hash, 5)	    \
++	F(_alg, _hash, 6)	    \
++	F(_alg, _hash, 7)	    \
++	F(_alg, _hash, 8)	    \
++	F(_alg, _hash, 9)	    \
++	F(_alg, _hash, 10)	    \
++	F(_alg, _hash, 11)	    \
++	F(_alg, _hash, 12)	    \
++	F(_alg, _hash, 13)	    \
++	F(_alg, _hash, 14)	    \
++	F(_alg, _hash, 15)	    \
++	F(_alg, _hash, 16)	    \
++	F(_alg, _hash, 17)	    \
++	F(_alg, _hash, 18)	    \
++	F(_alg, _hash, 19)	    \
++	F(_alg, _hash, 20)	    \
++	F(_alg, _hash, 21)	    \
++	F(_alg, _hash, 22)	    \
++	F(_alg, _hash, 23)
++
++/* ignore checkpatch warning about trailing ; in macro. */
++#define PCR_ATTR(_alg, _hash, _pcr)				   \
++	static struct tpm_pcr_attr dev_attr_pcr_##_hash##_##_pcr = {	\
++		.alg_id = _alg,					   \
++		.pcr = _pcr,					   \
++		.attr = {					   \
++			.attr = {				   \
++				.name = __stringify(_pcr),	   \
++				.mode = 0444			   \
++			},					   \
++			.show = pcr_value_show			   \
++		}						   \
++	};
++
++#define PCR_ATTRS(_alg, _hash)			\
++	_TPM_HELPER(_alg, _hash, PCR_ATTR)
++
++/* ignore checkpatch warning about trailing , in macro. */
++#define PCR_ATTR_VAL(_alg, _hash, _pcr)		\
++	&dev_attr_pcr_##_hash##_##_pcr.attr.attr,
++
++#define PCR_ATTR_GROUP_ARRAY(_alg, _hash)		       \
++	static struct attribute *pcr_group_attrs_##_hash[] = { \
++		_TPM_HELPER(_alg, _hash, PCR_ATTR_VAL)	       \
++		NULL					       \
++	}
++
++#define PCR_ATTR_GROUP(_alg, _hash)			    \
++	static struct attribute_group pcr_group_##_hash = { \
++		.name = "pcr-" __stringify(_hash),	    \
++		.attrs = pcr_group_attrs_##_hash	    \
++	}
++
++#define PCR_ATTR_BUILD(_alg, _hash)	   \
++	PCR_ATTRS(_alg, _hash)		   \
++	PCR_ATTR_GROUP_ARRAY(_alg, _hash); \
++	PCR_ATTR_GROUP(_alg, _hash)
++/*
++ * End of macro structure to build an attribute group containing 24
++ * PCR value files for each supported hash algorithm
++ */
++
++/*
++ * The next set of macros implements the cleverness for each hash to
++ * build a static attribute group called pcr_group_<hash> which can be
++ * added to chip->groups[].
++ *
++ * The first argument is the TPM algorithm id and the second is the
++ * hash used as both the suffix and the group name.  Note: the group
++ * name is a directory in the top level tpm class with the name
++ * pcr-<hash>, so it must not clash with any other names already
++ * in the sysfs directory.
++ */
++PCR_ATTR_BUILD(TPM_ALG_SHA1, sha1);
++PCR_ATTR_BUILD(TPM_ALG_SHA256, sha256);
++PCR_ATTR_BUILD(TPM_ALG_SHA384, sha384);
++PCR_ATTR_BUILD(TPM_ALG_SHA512, sha512);
++PCR_ATTR_BUILD(TPM_ALG_SM3_256, sm3);
++
++
+ void tpm_sysfs_add_device(struct tpm_chip *chip)
+ {
++	int i;
++
+ 	WARN_ON(chip->groups_cnt != 0);
++
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+ 		chip->groups[chip->groups_cnt++] = &tpm2_dev_group;
+ 	else
+ 		chip->groups[chip->groups_cnt++] = &tpm1_dev_group;
++
++	/* add one group for each bank hash */
++	for (i = 0; i < chip->nr_allocated_banks; i++) {
++		switch (chip->allocated_banks[i].alg_id) {
++		case TPM_ALG_SHA1:
++			chip->groups[chip->groups_cnt++] = &pcr_group_sha1;
++			break;
++		case TPM_ALG_SHA256:
++			chip->groups[chip->groups_cnt++] = &pcr_group_sha256;
++			break;
++		case TPM_ALG_SHA384:
++			chip->groups[chip->groups_cnt++] = &pcr_group_sha384;
++			break;
++		case TPM_ALG_SHA512:
++			chip->groups[chip->groups_cnt++] = &pcr_group_sha512;
++			break;
++		case TPM_ALG_SM3_256:
++			chip->groups[chip->groups_cnt++] = &pcr_group_sm3;
++			break;
++		default:
++			/*
++			 * If this warning triggers, send a patch to
++			 * add both a PCR_ATTR_BUILD() macro above for
++			 * the missing algorithm as well as an
++			 * additional case in this switch statement.
++			 */
++			WARN(1, "TPM with unsupported bank algorthm 0x%04x",
++			     chip->allocated_banks[i].alg_id);
++			break;
++		}
++	}
++
++	/*
++	 * This will only trigger if someone has added an additional
++	 * hash to the tpm_algorithms enum without incrementing
++	 * TPM_MAX_HASHES.
++	 */
++	WARN_ON(chip->groups_cnt > TPM_MAX_HASHES + 1);
+ }
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 3b5d455501c5..cc0b94dcf21e 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -31,6 +31,7 @@ struct tpm_chip;
+ struct trusted_key_payload;
+ struct trusted_key_options;
+ 
++/* if you add a new hash to this, increment TPM_MAX_HASHES below */
+ enum tpm_algorithms {
+ 	TPM_ALG_ERROR		= 0x0000,
+ 	TPM_ALG_SHA1		= 0x0004,
+@@ -42,6 +43,12 @@ enum tpm_algorithms {
+ 	TPM_ALG_SM3_256		= 0x0012,
+ };
+ 
++/*
++ * maximum number of hashing algorithms a TPM can have.  This is
++ * basically a count of every hash in tpm_algorithms above
++ */
++#define TPM_MAX_HASHES	5
++
+ struct tpm_digest {
+ 	u16 alg_id;
+ 	u8 digest[TPM_MAX_DIGEST_SIZE];
+@@ -146,7 +153,7 @@ struct tpm_chip {
+ 
+ 	struct dentry *bios_dir[TPM_NUM_EVENT_LOG_FILES];
+ 
+-	const struct attribute_group *groups[3];
++	const struct attribute_group *groups[3 + TPM_MAX_HASHES];
+ 	unsigned int groups_cnt;
+ 
+ 	u32 nr_allocated_banks;
 -- 
 2.26.2
 
