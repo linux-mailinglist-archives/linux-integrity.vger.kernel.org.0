@@ -2,52 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7A02C918A
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Nov 2020 23:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0498F2C91A0
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Nov 2020 23:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388108AbgK3WvH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Nov 2020 17:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S2388678AbgK3WxE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Nov 2020 17:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730565AbgK3WvH (ORCPT
+        with ESMTP id S2388756AbgK3WxD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Nov 2020 17:51:07 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDF8C0613D3
-        for <linux-integrity@vger.kernel.org>; Mon, 30 Nov 2020 14:50:21 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id o24so20718094ljj.6
-        for <linux-integrity@vger.kernel.org>; Mon, 30 Nov 2020 14:50:20 -0800 (PST)
+        Mon, 30 Nov 2020 17:53:03 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423AAC0613D2
+        for <linux-integrity@vger.kernel.org>; Mon, 30 Nov 2020 14:52:17 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id d20so25085708lfe.11
+        for <linux-integrity@vger.kernel.org>; Mon, 30 Nov 2020 14:52:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1bDJzC+7/EeDz8Z4TYtcl8pVmXB1VZfQyZ+oFPIZuXs=;
-        b=FjoZwlqRl25v3f0bwesiLG6VMDJ0cdT+WZsk9oJG7qotZdfQy3Bnzm/ErkRC6KEF0Q
-         V8tXzsGFOERVPlB9fDDUrXunF4OR96Byp7o91ITmQ4f6ghX4OplZA9VRfMBWotgDeDXS
-         4fMHVDZZFkLBQZtMZ9inRIOYwvw2PRu8hX+wE=
+        bh=PQg0SNNWkwV7My6wc0FC7IpKl7QLq5MHv/j5j0aPpNA=;
+        b=QuqQG9ADdDmV18jCrPnWfHcW15X5FNFPRcNOsTuadXp0R1ofszUYyn14cFgcYm1xt9
+         Ohx+O/XrOQeBzi2yNeMof2W9YaRXAoKumW+LWK+qJSn1igYlensrTdITOtBIwPZWx8hE
+         yhr6LcaDWCZeMzfGxo8TOF8bDqi5UbWdB4uhs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1bDJzC+7/EeDz8Z4TYtcl8pVmXB1VZfQyZ+oFPIZuXs=;
-        b=NHgMEUhnI/+9ACfYGJZ65YjuQHajwcxUmDm3eB+n2R9KBvZk6HTkLiTjljOJvy5u75
-         U7ceWVlo2BeGv0DRRo8zY+h5KHkrSpNDXmsyU0ET7lowc/mwIlBtk2W+fJqcz8iMcghP
-         10pVja5ahd77PbVHru0aoKJAyAyrz0EGFl2bAVZpvBoB7S1QB6iaBsL4fkyq309DL4l7
-         PPq5QMqeUIS480AcWuLnp+VjWW47KGnyc231j6ospl62xAZpgkshidb5MmLRaZbeM7yj
-         iNcaPibtCXaoEgPrwK5kkLM5Qi2YZXx865G3guCBGb+8iDzSevuI+YMjx/qXbxb9sDT7
-         7Fvw==
-X-Gm-Message-State: AOAM532NaecP0ApEPVfnUcXuqnOpyUpZyiXBY+RjJw0GwGTaFxuZu+SD
-        VgWDtjvtTZXfunV2uyXPNCZXQGD8o16pp0AACvELQg==
-X-Google-Smtp-Source: ABdhPJyMsQBDmsS07l72ppmPq7n5DMn6hdGTx4GyLQK7ar2TSxkO0y0Q1aohyJmtrB+4dMWzWOlvHMr1zq5pbE7LHlg=
-X-Received: by 2002:a2e:b386:: with SMTP id f6mr10646917lje.320.1606776619482;
- Mon, 30 Nov 2020 14:50:19 -0800 (PST)
+        bh=PQg0SNNWkwV7My6wc0FC7IpKl7QLq5MHv/j5j0aPpNA=;
+        b=fAkqc6X4GXLyA0Wz89ID/nk86kv2GW7AJ0DIW9O7i7JwAFnFlOB/UujR0gmBWArQIM
+         +CbQ+Y57K+ODsqbHTq35H1XW7gL7Nbj8/SvvwjKzlcJr1xKkGThAdB26avPEMK3u2pUy
+         C8woIs38YzHhB98Thylw4Rn0bsCnNX+PPPpIn7H9iQYSbku0V4ziVmDAhE70A8TonjX6
+         R2QLHKmlQI5P6jmgRSZqjx/49khddzm6bVl6GOXowwZrltZCcF1l0UNJtXcZLkzOrc4D
+         a+ESNeE4nAOqLmy9j50FHSSr0WMNFYlCtFqqkWXoU1PxzJw5K9AL9lbqwCGBvkQqntSE
+         Fj8A==
+X-Gm-Message-State: AOAM533BmuT6sgAzIFRF8Gy3s8KWLy4jh9Opm/+KpUt9+IT2CWcyLVLp
+        +y0xFjg4EH+n+nx6yecuh+UkmFmS5nkrxPSAZq9lJQ==
+X-Google-Smtp-Source: ABdhPJz6lQl/wsVF1Ne7U27EUw+OIPqS46oDCHQlHg6Xbv5haiwWr87dAhx/ApTPrUOy9koOzRi6b9gPinDiWazEth4=
+X-Received: by 2002:a19:8684:: with SMTP id i126mr841376lfd.561.1606776735655;
+ Mon, 30 Nov 2020 14:52:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20201128213527.2669807-1-christian.brauner@ubuntu.com> <20201128213527.2669807-33-christian.brauner@ubuntu.com>
-In-Reply-To: <20201128213527.2669807-33-christian.brauner@ubuntu.com>
+References: <20201128213527.2669807-1-christian.brauner@ubuntu.com> <20201128213527.2669807-34-christian.brauner@ubuntu.com>
+In-Reply-To: <20201128213527.2669807-34-christian.brauner@ubuntu.com>
 From:   =?UTF-8?Q?Mauricio_V=C3=A1squez_Bernal?= <mauricio@kinvolk.io>
-Date:   Mon, 30 Nov 2020 17:50:08 -0500
-Message-ID: <CAHap4zu3wjCqjbxaXbsPqz2Q_oNRm0Q=xQMudPStwN8h92Stcw@mail.gmail.com>
-Subject: Re: [PATCH v3 32/38] fat: handle idmapped mounts
+Date:   Mon, 30 Nov 2020 17:52:04 -0500
+Message-ID: <CAHap4zvDuSpZzeyZPc61mQURu_0oGKjkiROohYXkAFYyD85Vvw@mail.gmail.com>
+Subject: Re: [PATCH v3 33/38] ext4: support idmapped mounts
 To:     Christian Brauner <christian.brauner@ubuntu.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christoph Hellwig <hch@infradead.org>,
@@ -85,8 +85,21 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+> diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
+> index 619dd35ddd48..5918c05cfe5b 100644
+> --- a/fs/ext4/Kconfig
+> +++ b/fs/ext4/Kconfig
+> @@ -118,3 +118,12 @@ config EXT4_KUNIT_TESTS
+>           to the KUnit documentation in Documentation/dev-tools/kunit/.
 >
-> mount2 --idmap both:1000:1001:1
->
+>           If unsure, say N.
+> +
+> +config EXT4_IDMAP_MOUNTS
+> +       bool "Support vfs idmapped mounts in ext4"
+> +       depends on EXT4_FS
+> +       default n
+> +       help
+> +         The vfs allows to expose a filesystem at different mountpoints with
+> +         differnet idmappings. Allow ext4 to be exposed through idmapped
 
-Nit: missing arguments to mount2.
+s/differnet/different/g
