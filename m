@@ -2,45 +2,45 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B06B92C7F94
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Nov 2020 09:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0211A2C7F9C
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Nov 2020 09:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbgK3IRB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Nov 2020 03:17:01 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:37791 "EHLO
+        id S1725972AbgK3ISc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Nov 2020 03:18:32 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:60079 "EHLO
         wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725880AbgK3IQ6 (ORCPT
+        by vger.kernel.org with ESMTP id S1725965AbgK3ISc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Nov 2020 03:16:58 -0500
+        Mon, 30 Nov 2020 03:18:32 -0500
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 7664B9DC;
-        Mon, 30 Nov 2020 03:16:12 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 30 Nov 2020 03:16:12 -0500
+        by mailout.west.internal (Postfix) with ESMTP id B39D454C;
+        Mon, 30 Nov 2020 03:17:46 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 30 Nov 2020 03:17:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=UZt3jBS1V7/eUWPiR5/xHK18WsO
-        MuArjHheUEpbXOhg=; b=jrAOk1G1jSED3i1x6WOz17Ux6gGgU71pCodct7jEH2/
-        ZnAe9ygZPuuDHsss1oXvGiTEJ7J/MuuDA077iZONIO/ILtoGsY7bzvQPRIpeh7Zc
-        95jxNAbtImv4sZDLTDR71FWZx24CciJScGG/RipiRLsfhgN1jBDWnTWVuUln6/Gm
-        9fVUB/LnBp9rBUOIvMr4sR9mV6lnF/vTdtZKcd/GOOOlpjTLd3AHVzl0dlveEKVw
-        nrsA5WPu+5VIOS10VXYijCZiJv/X01o99pnt2w/gAx40ND9sMuxesqmEiifyCVUD
-        YZwzzrLLVAWVyPOeqBeEei6187omtz5/hvo5WXLe7Kw==
+        :content-type:in-reply-to; s=fm2; bh=QJ1/n/0c+L4Kvg4Z/+ZQizdRexd
+        edUn1wem9EXuv8Kk=; b=CT7mQKMvq3JleGmnFfFM95rElndc+HSAuaXGrMS3CEQ
+        RIPuQv7fG6uGc3hIuuKmRImoEG62r94n0x3YvtfAWg0+SUG5r4Mj/kzBuKcOz2u6
+        EdGOOPJQpqnLjcCwh5myccFCW6dy+7es4TbdmC5tHj4pQd+6jsFIVFwD0MNcQgqF
+        znJtYTFQ9W9Si3SMlfG9y6FNAjZgkLktu/9uj+Ywi1HfKPgcgF/+MQo1skMrtcsw
+        EjlqWcks/mNJzjbqlFG6u87eawZsehFaKOC3BIsfx2AyiO/K1qqpFzUJNmXoXHph
+        BIqauLZmaQPh/5RW2P6s17UhZ0HeHhW13Fj6vXpcCSg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=UZt3jB
-        S1V7/eUWPiR5/xHK18WsOMuArjHheUEpbXOhg=; b=TVzQQP83T0oz6al6kyfPmR
-        T1BMUeCXSXmFX+DsMyGEswe/ZKVP3cRQcfdgSnJvf3gOMUjeomLWCNHUCI69TO8z
-        PF4vMvvYQKK0ZD8HJ/yPhDRGd+lG1EKkNob9URN44Lohrxm5HVRdGOO6rAX0mbl9
-        H9aSrCX8HwZHZCy4uDH9Fm4pY86yXFgW0u7WO+G0qwUlRE5OW5s8D/QyAQXNuaqW
-        5CdmnewODa5fzDIb/n2FuVUmBx3SPEgzzQrRnWmuI2ACvxxRY9F3xwMUBlqV6GzX
-        mS9PHuzTYNm4pjt/e02UI+eFZJq3WcPkLMUS9bNY+oEFX9UF7i6LxWb5TKryMUJg
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=QJ1/n/
+        0c+L4Kvg4Z/+ZQizdRexdedUn1wem9EXuv8Kk=; b=iRqW5IC7tkdYUh313j0AJY
+        gchKxDC1THEECzfauMZQpRP1bLkOOdyrctuPhY96h8v0gplEctGTgKnOXVu4/fUW
+        35x+Olukz9tuBvlnGEyEioJQYESPkF7r+hcM8k5qHzTYvM+tXTtP6GwTBQhWyCnr
+        1EI7+UD4AHH2TgnkZo0gfqUEjn5G3tZSZ5lb0WYVjIUdqxZOlfXjK6JkmfvxR8jF
+        WWA/u8DO/+4OM/s51gtMOA3Ll2O2Kh8fro4QcyDJ4a7gkvxgkvECZcBZZFjLR98G
+        1dGDNuJYQWE9OgKHV5Bf4JeAfBYypEZnjFNyV6oNJDiFM+D8KFgWj6hd3gyiuHHQ
         ==
-X-ME-Sender: <xms:S6rEX5KSZPVeGfKQo4xM6Svl39lFqZAT8VFziYUtfYP8pTv5BkkxIg>
-    <xme:S6rEX1KwD9oB5EkXGg_7FMaKARZqXDLtMIdEZeHFnI21kZ9whbz9d6FP5bqOkc7ly
-    A0J3f81K9FSkg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudehledgudduiecutefuodetggdotefrod
+X-ME-Sender: <xms:qarEX3Io3igHl4d-_nqGunHBPOsI61T-voiKuMMoIEnFix5mUDU8tQ>
+    <xme:qarEX7LA-2sM3n0XxPgQ_D8e_P6zS6Bnjn9tVyiPkt7gIEr6WQyIe5b1ONAer90B6
+    Y6K492XhICyHA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudehledguddujecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
@@ -48,57 +48,83 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudehledgudduiecutefuodetgg
     ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeek
     fedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
     hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:S6rEXxsXEJAFOB1kdHRHNjgoUfoHwMaLab0PBTtRCIwnt36k0Ru_VQ>
-    <xmx:S6rEX6aEY8crjA3vH2-zS0sc3WPbSVJx9sFwU4ASJfVHyINQrsU6YA>
-    <xmx:S6rEXwZj2Md3TUZ43esjfgB6RrjVEk0byCM189NR2A-4N1VQiQjCZQ>
-    <xmx:TKrEX_mKDu-iCzOTtUGVE3QhFTdbarFyt1hyWkS3MXG5ikwLH1dxXA>
+X-ME-Proxy: <xmx:qarEX_tPySBDd-zry6XeW2B88D9AbptiqAGSYPcNbUxqw1YMFehNMQ>
+    <xmx:qarEXwb82X0UiUjQe09PuRduyJeVJ1-l-hmdvJv2eAS-u2Criv-DlQ>
+    <xmx:qarEX-Z2CTQ9zASgqLsiFAARJSxBhaATIohxL3Uqgj_ZQUeYoMnb3g>
+    <xmx:qqrEX9k6GlwFRJQmZTLSxJw6JXo-dx80MtbZPJ4AEC3U1BmE6D0akA>
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 682BF3064AAE;
-        Mon, 30 Nov 2020 03:16:11 -0500 (EST)
-Date:   Mon, 30 Nov 2020 09:17:16 +0100
+        by mail.messagingengine.com (Postfix) with ESMTPA id 32453328005E;
+        Mon, 30 Nov 2020 03:17:45 -0500 (EST)
+Date:   Mon, 30 Nov 2020 09:18:49 +0100
 From:   Greg KH <greg@kroah.com>
 To:     James Bottomley <James.Bottomley@hansenpartnership.com>
 Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
         linux-api@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 1/1] tpm: add sysfs exports for all banks of
- PCR registers
-Message-ID: <X8SqjCOJNzL/aZrC@kroah.com>
+Subject: Re: [PATCH RESEND v4 0/1] add sysfs exports for TPM 2 PCR registers
+Message-ID: <X8Sq6VPMtOxPAi3N@kroah.com>
 References: <20201129223022.5153-1-James.Bottomley@HansenPartnership.com>
- <20201129223022.5153-2-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201129223022.5153-2-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20201129223022.5153-1-James.Bottomley@HansenPartnership.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Nov 29, 2020 at 02:30:22PM -0800, James Bottomley wrote:
-> Create sysfs per hash groups with 24 PCR files in them one group,
-> named pcr-<hash>, for each agile hash of the TPM.  The files are
-> plugged in to a PCR read function which is TPM version agnostic, so
-> this works also for TPM 1.2 but the hash is only sha1 in that case.
+On Sun, Nov 29, 2020 at 02:30:21PM -0800, James Bottomley wrote:
+> Cc to linux-api to get an opinion on two issues.  First the background:
 > 
-> Note: the macros used to create the hashes emit spurious checkpatch
-> warnings.  Do not try to "fix" them as checkpatch recommends, otherwise
-> they'll break.
+> We've had a fairly extensive discussion over on linux-integrity and
+> iterated to the conclusion that the kernel does need to export TPM 2.0
+> PCR values for use by a variety of userspace integrity programmes
+> including early boot.  The principle clinching argument seems to be
+> that these values are required by non-root systems, but in a default
+> Linux set up the packet marshalled communication device: /dev/tpmrm0,
+> is by default only usable by root.  Historically, TPM 1.2 exported
+> these values via sysfs in a single file containing all 24 values:
 > 
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+>   /sys/class/tpm/tpm0/pcrs
 > 
-> ---
+> with the format
 > 
-> v2: fix TPM 1.2 legacy links failure
-> v3: fix warn on and add note to tpm_algorithms
-> v4: reword commit and add tested-by
-> ---
->  drivers/char/tpm/tpm-sysfs.c | 178 +++++++++++++++++++++++++++++++++++
->  include/linux/tpm.h          |   9 +-
->  2 files changed, 186 insertions(+), 1 deletion(-)
+>   PCR-00: 7D 29 CB 08 0C 0F C4 16 7A 0E 9A F7 C6 D3 97 CD C1 21 A7 69 
+>   PCR-01: 9C B6 79 4C E4 4B 62 97 4C AB 55 13 1A 2F 7E AE 09 B3 30 BE 
+>   ...
 
-No Documentation/ABI/ entry for new sysfs files?
+As you know, this breaks the "one value per file" for sysfs, so please,
+do not add more files that do this.
 
-:(
+> TPM 2.0 adds more complexity: because of it's "agile" format, each TPM
+> 2.0 is required to support a set of hashes (of which at least sha1 and
+> sha256 are required but quite a few TPM 2.0s have at least two or
+> three more) and maintain 24 PCR registers for each supported hash.
+> The current patch exports each PCR bank under the directory
+> 
+>   /sys/class/tpm/tpm0/pcr-<hash>/<bank>
+> 
+> So the sha256 bank value of PCR 7 can be obtained as
+> 
+>   cat /sys/class/tpm/tpm0/pcr-sha256/7
+>   2ED93F199692DC6788EFA6A1FE74514AB9760B2A6CEEAEF6C808C13E4ABB0D42
+> 
+> And the output is a single non-space separated ascii hex value of the
+> hash.
+> 
+> The issues we'd like input on are:
+> 
+>  1. Should this be in sysfs or securityfs?
 
+If you want to use sysfs, use one value per file please.
+
+>   2. Should we export the values as one value per file (current patch)
+>      or as a binary blob of all 24?
+
+Binary sysfs files are for "pass-through" mode where the kernel is not
+parsing/manipulating the data at all.  Do these values come straight
+from the hardware?  If so, sure, use a binary blob.  If not, then no, do
+not use that in sysfs as sysfs is to be in text format.
+
+thanks,
+
+greg k-h
