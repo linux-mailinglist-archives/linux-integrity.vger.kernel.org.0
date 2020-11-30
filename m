@@ -2,188 +2,160 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15EA82C91C3
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 00:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 269802C927C
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 00:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729963AbgK3W6W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Nov 2020 17:58:22 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:47148 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728648AbgK3W6S (ORCPT
+        id S1730591AbgK3XZO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Nov 2020 18:25:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38066 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726158AbgK3XZN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Nov 2020 17:58:18 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 16A861280996;
-        Mon, 30 Nov 2020 14:57:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1606777058;
-        bh=DpwBXc4nj/fAPjJW+kwpvG65yBZzJWqqTWjfSdPgo18=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=HaANaHmgJWnrAqo+tI4sihhb/BUwu4+QnbpmZ+ivrYdM1a+TwtuaxN3uoVMm0SHfW
-         qKia6HNncx7m4Em/mKkVBKruTvvE1mPceffnvD7KcGL49OyjWyCy3vLL8mfpTh3bdv
-         Rm0gTjQCwYLaeyu+4JAcT6v2Ca77TK5a0qNoct2w=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Cuk1A96NYp1M; Mon, 30 Nov 2020 14:57:38 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 30 Nov 2020 18:25:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606778627;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=2tm0ts6hF/lDJ0xq+K4NQnQ/+pAecSXKtAVp+dAxXA0=;
+        b=ZxoBinYr6dh6UjzpkqoIPcrvP4CNDkulhuN0IAVWJ9aK1xC5mCXzRxC0DQKYyMVQ8IXiB/
+        +CYUopMorLqV2hdIRaelocmcszV1p6yTgg7uCN6gl6mpl6l06L9xlmytvK7ipqJFbQ18zi
+        JqyLwC3MhofdqG4jUO0zB+NPsPxDnT0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-213-sckWWLILP0yqObZECNOSjQ-1; Mon, 30 Nov 2020 18:23:43 -0500
+X-MC-Unique: sckWWLILP0yqObZECNOSjQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9DCE2128099D;
-        Mon, 30 Nov 2020 14:57:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1606777057;
-        bh=DpwBXc4nj/fAPjJW+kwpvG65yBZzJWqqTWjfSdPgo18=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=ByFo7x0v0WlkfDyFvAKl6IjTGjXukYroS7aVcXSRW/NBYVFko34mJTKAunhE48cPN
-         O4XI1MKcslk36l8jCVfZ+Uj0grKj1ZzFyDev1POQmV55e5z854IDelaFePI7halAAM
-         qPfM4RcRAGP+t25sNNxfS9e59B0wnObzvVhLs0qs=
-Message-ID: <295ac6a70554b8a4c930866e002a37c68a7dbdd3.camel@HansenPartnership.com>
-Subject: Re: [PATCH RESEND v4 1/1] tpm: add sysfs exports for all banks of
- PCR registers
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
-Date:   Mon, 30 Nov 2020 14:57:36 -0800
-In-Reply-To: <TU4PR8401MB10556D3CE22216CC6B15B57EABF50@TU4PR8401MB1055.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20201129223022.5153-1-James.Bottomley@HansenPartnership.com>
-         <20201129223022.5153-2-James.Bottomley@HansenPartnership.com>
-         <TU4PR8401MB105585A7FD1E1EB317FD13F7ABF50@TU4PR8401MB1055.NAMPRD84.PROD.OUTLOOK.COM>
-         <d1775d709b3b88b494e95fff6dbdbda72e1e3b61.camel@HansenPartnership.com>
-         <TU4PR8401MB10556D3CE22216CC6B15B57EABF50@TU4PR8401MB1055.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8861E1842146;
+        Mon, 30 Nov 2020 23:23:41 +0000 (UTC)
+Received: from cantor.redhat.com (ovpn-115-84.phx2.redhat.com [10.3.115.84])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 134AC5D9C0;
+        Mon, 30 Nov 2020 23:23:41 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH] tpm_tis: Disable interrupts if interrupt storm detected
+Date:   Mon, 30 Nov 2020 16:23:38 -0700
+Message-Id: <20201130232338.106892-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2020-11-30 at 22:50 +0000, Elliott, Robert (Servers) wrote:
-> > -----Original Message-----
-> > From: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > Sent: Monday, November 30, 2020 1:54 PM
-> > To: Elliott, Robert (Servers) <elliott@hpe.com>; linux-
-> > integrity@vger.kernel.org
-> > Cc: Mimi Zohar <zohar@linux.ibm.com>; Jarkko Sakkinen
-> > <jarkko.sakkinen@linux.intel.com>; linux-api@vger.kernel.org
-> > Subject: Re: [PATCH RESEND v4 1/1] tpm: add sysfs exports for all
-> > banks of PCR registers
-> > 
-> > On Mon, 2020-11-30 at 19:00 +0000, Elliott, Robert (Servers) wrote:
-> > > ...
-> > > > + * The first argument is the TPM algorithm id and the second
-> > > > is
-> > > > the
-> > > > + * hash used as both the suffix and the group name.  Note: the
-> > > > group
-> > > > + * name is a directory in the top level tpm class with the
-> > > > name
-> > > > + * pcr-<hash>, so it must not clash with any other names
-> > > > already
-> > > > + * in the sysfs directory.
-> > > > + */
-> > > > +PCR_ATTR_BUILD(TPM_ALG_SHA1, sha1);
-> > > > +PCR_ATTR_BUILD(TPM_ALG_SHA256, sha256);
-> > > > +PCR_ATTR_BUILD(TPM_ALG_SHA384, sha384);
-> > > > +PCR_ATTR_BUILD(TPM_ALG_SHA512, sha512);
-> > > > +PCR_ATTR_BUILD(TPM_ALG_SM3_256, sm3);
-> > > 
-> > > The latest PC Client Platform TPM Profile and TPM 2.0 Part 2
-> > > Structures specs also define codes for three SHA-3 hash
-> > > algorithms:
-> > >   TPM_ALG_SHA3_256
-> > >   TPM_ALG_SHA3_384
-> > >   TPM_ALG_SHA3_512
-> > 
-> > this is PTP 1.05 which was published this September?  The basic
-> > reason
-> > is it wasn't there when this patch was first published, but they
-> > can
-> > always be added ... the whole idea is to be extensible.
-> 
-> Yes, they are in
-> * TCG PC Client Platform TPM Profile Specification for TPM 2.0
->   Version 1.05, Revision 14, 4 September 2020
-> * Trusted Platform Module Library Part 2: Structures
->   Family 2.0, Level 00 Revision 1.59, 8 November 2019
-> 
-> I don't know if anyone has started implementing SHA-3 for PCRs.
+When enabling the interrupt code for the tpm_tis driver we have
+noticed some systems have a bios issue causing an interrupt storm to
+occur. The issue isn't limited to a single tpm or system vendor
+so keeping a denylist of systems with the issue isn't optimal. Instead
+try to detect the problem occurring, disable interrupts, and revert to
+polling when it happens.
 
-We at least need the algorithms to get added to our tpm.h, which really
-has to be a separate patch, so I'd rather not conflate it with this
-one.  I'll make sure that they're added to this patch (provided it's
-upstream) at the same time they get added to our tpm.h.
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Matthew Garrett <mjg59@google.com>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+ drivers/char/tpm/tpm_tis_core.c | 34 +++++++++++++++++++++++++++++++++
+ drivers/char/tpm/tpm_tis_core.h |  2 ++
+ 2 files changed, 36 insertions(+)
 
-> > > ...
-> > > > +
-> > > > +	/* add one group for each bank hash */
-> > > > +	for (i = 0; i < chip->nr_allocated_banks; i++) {
-> > > > +		switch (chip->allocated_banks[i].alg_id) {
-> > > > +		case TPM_ALG_SHA1:
-> > > > +			chip->groups[chip->groups_cnt++] =
-> > > > &pcr_group_sha1;
-> > > > +			break;
-> > > > +		case TPM_ALG_SHA256:
-> > > > +			chip->groups[chip->groups_cnt++] =
-> > > > &pcr_group_sha256;
-> > > > +			break;
-> > > > +		case TPM_ALG_SHA384:
-> > > > +			chip->groups[chip->groups_cnt++] =
-> > > > &pcr_group_sha384;
-> > > > +			break;
-> > > > +		case TPM_ALG_SHA512:
-> > > > +			chip->groups[chip->groups_cnt++] =
-> > > > &pcr_group_sha512;
-> > > > +			break;
-> > > > +		case TPM_ALG_SM3_256:
-> > > > +			chip->groups[chip->groups_cnt++] =
-> > > > &pcr_group_sm3;
-> > > > +			break;
-> > > > +		default:
-> > > > +			/*
-> > > > +			 * If this warning triggers, send a
-> > > > patch to
-> > > > +			 * add both a PCR_ATTR_BUILD() macro
-> > > > above for
-> > > > +			 * the missing algorithm as well as an
-> > > > +			 * additional case in this switch
-> > > > statement.
-> > > > +			 */
-> > > > +			WARN(1, "TPM with unsupported bank
-> > > > algorthm
-> > > > 0x%04x",
-> > > > +			     chip->allocated_banks[i].alg_id);
-> > > 
-> > > algorithm is missing the letter i.
-> > 
-> > Yes, I'll fix that.
-> > 
-> > > It might help to print the bank id (variable i) as well.
-> > 
-> > I'm not sure how it helps the user.  We deliberately hide the bank
-> > numbers because all banks in sysfs are referred to by hash ... how
-> > would exposing the bank number here help?
-> 
-> I just noticed the WARN inside the for loop and worried about
-> spewing a lot of similar messages, each with long stack traces.
-> 
-> nr_allocated_banks shouldn't be very large, though, so there's
-> probably nothing to be concerned about.
-> 
-> Maybe consider dev_warn instead of WARN? That would indicate which
-> TPM has the unsupported algorithm, which could be useful, but avoid
-> the stack dump, which might not be useful (except that it is more
-> likely to be reported back to kernel developers).
-
-The reason for a WARN is that we want it to trip a big bad error for
-the developer.  It means we came across a TPM whose algorithm is
-unsupported, so it really needs adding ASAP.  People take reporting
-back WARN stack traces much more seriously than a stray dev_warn()
-which often gets ignored.
-
-James
-
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 92c51c6cfd1b..19115a628f25 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -24,6 +24,8 @@
+ #include <linux/wait.h>
+ #include <linux/acpi.h>
+ #include <linux/freezer.h>
++#include <linux/workqueue.h>
++#include <linux/kernel_stat.h>
+ #include "tpm.h"
+ #include "tpm_tis_core.h"
+ 
+@@ -711,13 +713,30 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+ 	}
+ }
+ 
++static struct workqueue_struct *tpm_tis_wq;
++static DEFINE_MUTEX(tpm_tis_wq_lock);
++
+ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+ {
+ 	struct tpm_chip *chip = dev_id;
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
++	static bool check_storm = true;
++	static unsigned int check_start;
+ 	u32 interrupt;
+ 	int i, rc;
+ 
++	if (unlikely(check_storm)) {
++		if (!check_start) {
++			check_start = jiffies_to_msecs(jiffies);
++		} else if ((kstat_irqs(priv->irq) > 1000) &&
++			   (jiffies_to_msecs(jiffies) - check_start < 500)) {
++			check_storm = false;
++			queue_work(tpm_tis_wq, &priv->storm_work);
++		} else if (jiffies_to_msecs(jiffies) - check_start >= 500) {
++			check_storm = false;
++		}
++	}
++
+ 	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+ 	if (rc < 0)
+ 		return IRQ_NONE;
+@@ -943,6 +962,14 @@ static const struct tpm_class_ops tpm_tis = {
+ 	.clk_enable = tpm_tis_clkrun_enable,
+ };
+ 
++static void tpm_tis_storm_work(struct work_struct *work)
++{
++	struct tpm_tis_data *priv = container_of(work, struct tpm_tis_data, storm_work);
++
++	disable_interrupts(priv->chip);
++	dev_warn(&priv->chip->dev, "Interrupt storm detected, using polling.\n");
++}
++
+ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		      const struct tpm_tis_phy_ops *phy_ops,
+ 		      acpi_handle acpi_dev_handle)
+@@ -959,6 +986,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	if (IS_ERR(chip))
+ 		return PTR_ERR(chip);
+ 
++	priv->chip = chip;
++	tpm_tis_wq = alloc_workqueue("tpm_tis_wq", WQ_MEM_RECLAIM, 0);
++	if (!tpm_tis_wq)
++		return -ENOMEM;
++
++	INIT_WORK(&priv->storm_work, tpm_tis_storm_work);
++
+ #ifdef CONFIG_ACPI
+ 	chip->acpi_dev_handle = acpi_dev_handle;
+ #endif
+diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+index 9b2d32a59f67..973297ee2e16 100644
+--- a/drivers/char/tpm/tpm_tis_core.h
++++ b/drivers/char/tpm/tpm_tis_core.h
+@@ -95,6 +95,8 @@ struct tpm_tis_data {
+ 	u16 clkrun_enabled;
+ 	wait_queue_head_t int_queue;
+ 	wait_queue_head_t read_queue;
++	struct work_struct storm_work;
++	struct tpm_chip *chip;
+ 	const struct tpm_tis_phy_ops *phy_ops;
+ 	unsigned short rng_quality;
+ };
+-- 
+2.27.0
 
