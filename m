@@ -2,129 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0211A2C7F9C
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Nov 2020 09:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE46E2C7FC8
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Nov 2020 09:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725972AbgK3ISc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Nov 2020 03:18:32 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:60079 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725965AbgK3ISc (ORCPT
+        id S1726883AbgK3IZK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Nov 2020 03:25:10 -0500
+Received: from smtp-190c.mail.infomaniak.ch ([185.125.25.12]:43947 "EHLO
+        smtp-190c.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727534AbgK3IZI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Nov 2020 03:18:32 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id B39D454C;
-        Mon, 30 Nov 2020 03:17:46 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 30 Nov 2020 03:17:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=QJ1/n/0c+L4Kvg4Z/+ZQizdRexd
-        edUn1wem9EXuv8Kk=; b=CT7mQKMvq3JleGmnFfFM95rElndc+HSAuaXGrMS3CEQ
-        RIPuQv7fG6uGc3hIuuKmRImoEG62r94n0x3YvtfAWg0+SUG5r4Mj/kzBuKcOz2u6
-        EdGOOPJQpqnLjcCwh5myccFCW6dy+7es4TbdmC5tHj4pQd+6jsFIVFwD0MNcQgqF
-        znJtYTFQ9W9Si3SMlfG9y6FNAjZgkLktu/9uj+Ywi1HfKPgcgF/+MQo1skMrtcsw
-        EjlqWcks/mNJzjbqlFG6u87eawZsehFaKOC3BIsfx2AyiO/K1qqpFzUJNmXoXHph
-        BIqauLZmaQPh/5RW2P6s17UhZ0HeHhW13Fj6vXpcCSg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=QJ1/n/
-        0c+L4Kvg4Z/+ZQizdRexdedUn1wem9EXuv8Kk=; b=iRqW5IC7tkdYUh313j0AJY
-        gchKxDC1THEECzfauMZQpRP1bLkOOdyrctuPhY96h8v0gplEctGTgKnOXVu4/fUW
-        35x+Olukz9tuBvlnGEyEioJQYESPkF7r+hcM8k5qHzTYvM+tXTtP6GwTBQhWyCnr
-        1EI7+UD4AHH2TgnkZo0gfqUEjn5G3tZSZ5lb0WYVjIUdqxZOlfXjK6JkmfvxR8jF
-        WWA/u8DO/+4OM/s51gtMOA3Ll2O2Kh8fro4QcyDJ4a7gkvxgkvECZcBZZFjLR98G
-        1dGDNuJYQWE9OgKHV5Bf4JeAfBYypEZnjFNyV6oNJDiFM+D8KFgWj6hd3gyiuHHQ
-        ==
-X-ME-Sender: <xms:qarEX3Io3igHl4d-_nqGunHBPOsI61T-voiKuMMoIEnFix5mUDU8tQ>
-    <xme:qarEX7LA-2sM3n0XxPgQ_D8e_P6zS6Bnjn9tVyiPkt7gIEr6WQyIe5b1ONAer90B6
-    Y6K492XhICyHA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudehledguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeek
-    fedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:qarEX_tPySBDd-zry6XeW2B88D9AbptiqAGSYPcNbUxqw1YMFehNMQ>
-    <xmx:qarEXwb82X0UiUjQe09PuRduyJeVJ1-l-hmdvJv2eAS-u2Criv-DlQ>
-    <xmx:qarEX-Z2CTQ9zASgqLsiFAARJSxBhaATIohxL3Uqgj_ZQUeYoMnb3g>
-    <xmx:qqrEX9k6GlwFRJQmZTLSxJw6JXo-dx80MtbZPJ4AEC3U1BmE6D0akA>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 32453328005E;
-        Mon, 30 Nov 2020 03:17:45 -0500 (EST)
-Date:   Mon, 30 Nov 2020 09:18:49 +0100
-From:   Greg KH <greg@kroah.com>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-api@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 0/1] add sysfs exports for TPM 2 PCR registers
-Message-ID: <X8Sq6VPMtOxPAi3N@kroah.com>
-References: <20201129223022.5153-1-James.Bottomley@HansenPartnership.com>
+        Mon, 30 Nov 2020 03:25:08 -0500
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Ckyv71SkPzlhCHK;
+        Mon, 30 Nov 2020 09:24:19 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Ckyv42C21zlh8TB;
+        Mon, 30 Nov 2020 09:24:16 +0100 (CET)
+Subject: Re: [PATCH v1 0/9] Enable root to update the blacklist keyring
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20201120180426.922572-1-mic@digikod.net>
+ <20201130024011.GA24870@kernel.org>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <80fb0eae-8321-5ae2-8d50-eabbe86981da@digikod.net>
+Date:   Mon, 30 Nov 2020 09:23:59 +0100
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201129223022.5153-1-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20201130024011.GA24870@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Nov 29, 2020 at 02:30:21PM -0800, James Bottomley wrote:
-> Cc to linux-api to get an opinion on two issues.  First the background:
-> 
-> We've had a fairly extensive discussion over on linux-integrity and
-> iterated to the conclusion that the kernel does need to export TPM 2.0
-> PCR values for use by a variety of userspace integrity programmes
-> including early boot.  The principle clinching argument seems to be
-> that these values are required by non-root systems, but in a default
-> Linux set up the packet marshalled communication device: /dev/tpmrm0,
-> is by default only usable by root.  Historically, TPM 1.2 exported
-> these values via sysfs in a single file containing all 24 values:
-> 
->   /sys/class/tpm/tpm0/pcrs
-> 
-> with the format
-> 
->   PCR-00: 7D 29 CB 08 0C 0F C4 16 7A 0E 9A F7 C6 D3 97 CD C1 21 A7 69 
->   PCR-01: 9C B6 79 4C E4 4B 62 97 4C AB 55 13 1A 2F 7E AE 09 B3 30 BE 
->   ...
 
-As you know, this breaks the "one value per file" for sysfs, so please,
-do not add more files that do this.
-
-> TPM 2.0 adds more complexity: because of it's "agile" format, each TPM
-> 2.0 is required to support a set of hashes (of which at least sha1 and
-> sha256 are required but quite a few TPM 2.0s have at least two or
-> three more) and maintain 24 PCR registers for each supported hash.
-> The current patch exports each PCR bank under the directory
+On 30/11/2020 03:40, Jarkko Sakkinen wrote:
+> On Fri, Nov 20, 2020 at 07:04:17PM +0100, Mickaël Salaün wrote:
+>> Hi,
+>>
+>> This patch series mainly add a new configuration option to enable the
+>> root user to load signed keys in the blacklist keyring.  This keyring is
+>> useful to "untrust" certificates or files.  Enabling to safely update
+>> this keyring without recompiling the kernel makes it more usable.
 > 
->   /sys/class/tpm/tpm0/pcr-<hash>/<bank>
+> I apologize for latency. This cycle has been difficult because of
+> final cuts with the huge SGX patch set.
 > 
-> So the sha256 bank value of PCR 7 can be obtained as
+> I did skim through this and did not see anything striking (but it
+> was a quick look).
 > 
->   cat /sys/class/tpm/tpm0/pcr-sha256/7
->   2ED93F199692DC6788EFA6A1FE74514AB9760B2A6CEEAEF6C808C13E4ABB0D42
+> What would be easiest way to smoke test the changes?
+
+An easy way to test it is to enable the second trusted keyring to
+dynamically load certificates in the kernel. Then we can create a hash
+of a valid certificate (but not loaded yet) and sign it as explained in
+tools/certs/print-cert-tbs-hash.sh (patch 9/9). Once this hash is loaded
+in the kernel, loading the blacklisted certificate will be denied. We
+can also test it with a PKCS#7 signature chain, either with the
+blacklist keyring itself, or with a signed dm-verity image.
+
 > 
-> And the output is a single non-space separated ascii hex value of the
-> hash.
+>> Regards,
+>>
+>> Mickaël Salaün (9):
+>>   certs: Fix blacklisted hexadecimal hash string check
+>>   certs: Make blacklist_vet_description() more strict
+>>   certs: Factor out the blacklist hash creation
+>>   certs: Check that builtin blacklist hashes are valid
+>>   PKCS#7: Fix missing include
+>>   certs: Fix blacklist flag type confusion
+>>   certs: Allow root user to append signed hashes to the blacklist
+>>     keyring
+>>   certs: Replace K{U,G}IDT_INIT() with GLOBAL_ROOT_{U,G}ID
+>>   tools/certs: Add print-cert-tbs-hash.sh
+>>
+>>  MAINTAINERS                                   |   2 +
+>>  certs/.gitignore                              |   1 +
+>>  certs/Kconfig                                 |  10 +
+>>  certs/Makefile                                |  15 +-
+>>  certs/blacklist.c                             | 210 +++++++++++++-----
+>>  certs/system_keyring.c                        |   5 +-
+>>  crypto/asymmetric_keys/x509_public_key.c      |   3 +-
+>>  include/keys/system_keyring.h                 |  14 +-
+>>  include/linux/verification.h                  |   2 +
+>>  scripts/check-blacklist-hashes.awk            |  37 +++
+>>  .../platform_certs/keyring_handler.c          |  26 +--
+>>  tools/certs/print-cert-tbs-hash.sh            |  91 ++++++++
+>>  12 files changed, 335 insertions(+), 81 deletions(-)
+>>  create mode 100755 scripts/check-blacklist-hashes.awk
+>>  create mode 100755 tools/certs/print-cert-tbs-hash.sh
+>>
+>>
+>> base-commit: 09162bc32c880a791c6c0668ce0745cf7958f576
+>> -- 
+>> 2.29.2
+>>
+>>
 > 
-> The issues we'd like input on are:
+> /Jarkko
 > 
->  1. Should this be in sysfs or securityfs?
-
-If you want to use sysfs, use one value per file please.
-
->   2. Should we export the values as one value per file (current patch)
->      or as a binary blob of all 24?
-
-Binary sysfs files are for "pass-through" mode where the kernel is not
-parsing/manipulating the data at all.  Do these values come straight
-from the hardware?  If so, sure, use a binary blob.  If not, then no, do
-not use that in sysfs as sysfs is to be in text format.
-
-thanks,
-
-greg k-h
