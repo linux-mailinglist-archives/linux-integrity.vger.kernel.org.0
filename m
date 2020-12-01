@@ -2,154 +2,140 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF8E2C9578
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 04:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6092C95A0
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 04:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727060AbgLAC7j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Nov 2020 21:59:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:42676 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726923AbgLAC7i (ORCPT
+        id S1726151AbgLADNx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Nov 2020 22:13:53 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20366 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727175AbgLADNw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Nov 2020 21:59:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606791492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hxkTXZyAiIYzqxHIYeZdFwHfkIFnjh3lzejgigCLCGk=;
-        b=JAwh1R35mXa7wbLCi9E+/on5KHYNwh0Av4xf9xGimC47clUYItQpuB1+Df1AamIhBPe0Za
-        H6+b7ogUU4AF/KnTs+TlimXDld0MiXz20rJijoFnFjsXASMXnE37foRQMKcoCuVRhYLuoo
-        ghNpJOE+gJA9lAzjyWFkGE8NodNu6es=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-12-zfU2AHezPsu38QNkPwUoQw-1; Mon, 30 Nov 2020 21:58:10 -0500
-X-MC-Unique: zfU2AHezPsu38QNkPwUoQw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 12C033E74B;
-        Tue,  1 Dec 2020 02:58:09 +0000 (UTC)
-Received: from cantor.redhat.com (ovpn-115-84.phx2.redhat.com [10.3.115.84])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8896F5D9C0;
-        Tue,  1 Dec 2020 02:58:08 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v2] tpm_tis: Disable interrupts if interrupt storm detected
-Date:   Mon, 30 Nov 2020 19:58:07 -0700
-Message-Id: <20201201025807.162241-1-jsnitsel@redhat.com>
-In-Reply-To: <20201130232338.106892-1-jsnitsel@redhat.com>
-References: <20201130232338.106892-1-jsnitsel@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+        Mon, 30 Nov 2020 22:13:52 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B12XWtF006157;
+        Mon, 30 Nov 2020 22:13:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=U+7tVdah5JE6eK79o/rDLnBG1iVAJhi1zZFFZuJdUoI=;
+ b=nJvsqH/TBLc+bfD1FJgxehzybeOIXPaKrq7a42pLx4ToFJ+W0ltWoE6G5fHz8zZ7k6Uh
+ flkPpUj4T/X/eyZT5svj7nBDHW6ET1rdntb6xdahghiKyDh2flaa7ipY9hj85H+OnvLA
+ g5CklXIyalVuask+cUVtnLXsJ2TSfsNBczntIEI8LkjlyMkT2vWlWvtlFFp1lgrDaw1K
+ f616rQcwyb5+BQELArp+dStxd7o4Y794OrbKx/tBVWkIY/wq+xsEKm/vKywV/pJkeWfH
+ t8tvmQHp0nkYZpl6g/NQcjhGKTJ6BoOydbKRl4sUQGTqHuAYVEQSrUQ8OEET7k+LddgD BA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 355d210yx2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Nov 2020 22:13:10 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B131ljO121314;
+        Mon, 30 Nov 2020 22:13:10 -0500
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 355d210ywd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Nov 2020 22:13:10 -0500
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B138TBH028584;
+        Tue, 1 Dec 2020 03:13:08 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 354fpd9df5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Dec 2020 03:13:07 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B13D5re45809934
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Dec 2020 03:13:05 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 95D02A4057;
+        Tue,  1 Dec 2020 03:13:05 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 189E8A4051;
+        Tue,  1 Dec 2020 03:13:04 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.59.46])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Dec 2020 03:13:03 +0000 (GMT)
+Message-ID: <02e53ce5fc00a2eaff3cace9c94b8b375dc580ef.camel@linux.ibm.com>
+Subject: Re: [PATCH AUTOSEL 5.7 03/30] ima: extend boot_aggregate with
+ kernel measurements
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Maurizio Drocco <maurizio.drocco@ibm.com>,
+        Bruno Meneguele <bmeneg@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Mon, 30 Nov 2020 22:13:02 -0500
+In-Reply-To: <20201201002157.GT643756@sasha-vm>
+References: <20200708154116.3199728-1-sashal@kernel.org>
+         <20200708154116.3199728-3-sashal@kernel.org>
+         <1594224793.23056.251.camel@linux.ibm.com>
+         <20200709012735.GX2722994@sasha-vm>
+         <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
+         <20201201002157.GT643756@sasha-vm>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-30_12:2020-11-30,2020-11-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1031 malwarescore=0 bulkscore=0
+ mlxlogscore=999 priorityscore=1501 spamscore=0 mlxscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012010015
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When enabling the interrupt code for the tpm_tis driver we have
-noticed some systems have a bios issue causing an interrupt storm to
-occur. The issue isn't limited to a single tpm or system manufacturer
-so keeping a denylist of systems with the issue isn't optimal. Instead
-try to detect the problem occurring, disable interrupts, and revert to
-polling when it happens.
+On Mon, 2020-11-30 at 19:21 -0500, Sasha Levin wrote:
+> On Sun, Nov 29, 2020 at 08:17:38AM -0500, Mimi Zohar wrote:
+> >Hi Sasha,
+> >
+> >On Wed, 2020-07-08 at 21:27 -0400, Sasha Levin wrote:
+> >> On Wed, Jul 08, 2020 at 12:13:13PM -0400, Mimi Zohar wrote:
+> >> >Hi Sasha,
+> >> >
+> >> >On Wed, 2020-07-08 at 11:40 -0400, Sasha Levin wrote:
+> >> >> From: Maurizio Drocco <maurizio.drocco@ibm.com>
+> >> >>
+> >> >> [ Upstream commit 20c59ce010f84300f6c655d32db2610d3433f85c ]
+> >> >>
+> >> >> Registers 8-9 are used to store measurements of the kernel and its
+> >> >> command line (e.g., grub2 bootloader with tpm module enabled). IMA
+> >> >> should include them in the boot aggregate. Registers 8-9 should be
+> >> >> only included in non-SHA1 digests to avoid ambiguity.
+> >> >
+> >> >Prior to Linux 5.8, the SHA1 template data hashes were padded before
+> >> >being extended into the TPM.  Support for calculating and extending
+> >> >the per TPM bank template data digests is only being upstreamed in
+> >> >Linux 5.8.
+> >> >
+> >> >How will attestation servers know whether to include PCRs 8 & 9 in the
+> >> >the boot_aggregate calculation?  Now, there is a direct relationship
+> >> >between the template data SHA1 padded digest not including PCRs 8 & 9,
+> >> >and the new per TPM bank template data digest including them.
+> >>
+> >> Got it, I'll drop it then, thank you!
+> >
+> >After re-thinking this over, I realized that the attestation server can
+> >verify the "boot_aggregate" based on the quoted PCRs without knowing
+> >whether padded SHA1 hashes or per TPM bank hash values were extended
+> >into the TPM[1], but non-SHA1 boot aggregate values [2] should always
+> >include PCRs 8 & 9.
+> >
+> >Any place commit 6f1a1d103b48 was backported [2], this commit
+> >20c59ce010f8 ("ima: extend boot_aggregate with kernel measurements")
+> >should be backported as well.
+> 
+> Which kernels should it apply to? 5.7 is EOL now, so I looked at 5.4 but
+> it doesn't apply cleanly there.
 
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: Matthew Garrett <mjg59@google.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
-v2: drop tpm_tis specific workqueue and use just system_wq
+For 5.4, both "git cherry-pick" and "git am --3way" for 20c59ce010f8
+seem to work.
 
-drivers/char/tpm/tpm_tis_core.c | 27 +++++++++++++++++++++++++++
- drivers/char/tpm/tpm_tis_core.h |  2 ++
- 2 files changed, 29 insertions(+)
+thanks,
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 23b60583928b..72cc8a5a152c 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -24,6 +24,8 @@
- #include <linux/wait.h>
- #include <linux/acpi.h>
- #include <linux/freezer.h>
-+#include <linux/workqueue.h>
-+#include <linux/kernel_stat.h>
- #include "tpm.h"
- #include "tpm_tis_core.h"
- 
-@@ -745,9 +747,23 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
- {
- 	struct tpm_chip *chip = dev_id;
- 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-+	static bool check_storm = true;
-+	static unsigned int check_start;
- 	u32 interrupt;
- 	int i, rc;
- 
-+	if (unlikely(check_storm)) {
-+		if (!check_start) {
-+			check_start = jiffies_to_msecs(jiffies);
-+		} else if ((kstat_irqs(priv->irq) > 1000) &&
-+			   (jiffies_to_msecs(jiffies) - check_start < 500)) {
-+			check_storm = false;
-+			schedule_work(&priv->storm_work);
-+		} else if (jiffies_to_msecs(jiffies) - check_start >= 500) {
-+			check_storm = false;
-+		}
-+	}
-+
- 	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
- 	if (rc < 0)
- 		return IRQ_NONE;
-@@ -987,6 +1003,14 @@ static const struct tpm_class_ops tpm_tis = {
- 	.clk_enable = tpm_tis_clkrun_enable,
- };
- 
-+static void tpm_tis_storm_work(struct work_struct *work)
-+{
-+	struct tpm_tis_data *priv = container_of(work, struct tpm_tis_data, storm_work);
-+
-+	disable_interrupts(priv->chip);
-+	dev_warn(&priv->chip->dev, "Interrupt storm detected, using polling.\n");
-+}
-+
- int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 		      const struct tpm_tis_phy_ops *phy_ops,
- 		      acpi_handle acpi_dev_handle)
-@@ -1003,6 +1027,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 	if (IS_ERR(chip))
- 		return PTR_ERR(chip);
- 
-+	priv->chip = chip;
-+	INIT_WORK(&priv->storm_work, tpm_tis_storm_work);
-+
- #ifdef CONFIG_ACPI
- 	chip->acpi_dev_handle = acpi_dev_handle;
- #endif
-diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index edeb5dc61c95..5630f294dc0c 100644
---- a/drivers/char/tpm/tpm_tis_core.h
-+++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -95,6 +95,8 @@ struct tpm_tis_data {
- 	u16 clkrun_enabled;
- 	wait_queue_head_t int_queue;
- 	wait_queue_head_t read_queue;
-+	struct work_struct storm_work;
-+	struct tpm_chip *chip;
- 	const struct tpm_tis_phy_ops *phy_ops;
- 	unsigned short rng_quality;
- };
--- 
-2.27.0
+Mimi
 
