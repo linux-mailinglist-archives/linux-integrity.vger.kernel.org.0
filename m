@@ -2,123 +2,179 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D310C2C95B0
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 04:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091532C95C2
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 04:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727530AbgLADSD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Nov 2020 22:18:03 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32818 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725859AbgLADSC (ORCPT
+        id S1726740AbgLAD1j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Nov 2020 22:27:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:39932 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725859AbgLAD1j (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Nov 2020 22:18:02 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B131cAv060829;
-        Mon, 30 Nov 2020 22:16:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=1jmy35x0vr7C4X6dggumRbQlb2Eb0tL0Obh/EuedGys=;
- b=AFwcoEKt/tLxFkUpsMxBeDlbbKmJdB7nSHYqOW6dPid4X7qxcYWkVo73E1gW4tTXwyNO
- jT4KL93EkGLf1x4dIdJ7GStGCFob6e0WQxjhtFn+DhJPTjxsAKGANjZgcmej2Ty9xqkR
- 8mH7ap5Q4zDG1Qsq5hsJ08EO/HxxH53qfsrl6KMqwy/eDQ0n5HuOnCPazQWxvOMOncJO
- eeDVymnGiktnb63upCSAAK/k1entTE+PcoybMMsj3egyXEA0/UTaTLHDgGPVceCQ0Vep
- qgSd41dPIEXEgIK+HZvGTc77fJsCitrRLmrwDjgO1ZpjYgg7TFQp5mf+ctGRDOqfAUtz WQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 355d9crpss-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Nov 2020 22:16:46 -0500
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B13BnAO100587;
-        Mon, 30 Nov 2020 22:16:43 -0500
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 355d9crpsa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Nov 2020 22:16:43 -0500
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B13Gb33015723;
-        Tue, 1 Dec 2020 03:16:41 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 353e68anwy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Dec 2020 03:16:41 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B13Gd1Y63046118
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Dec 2020 03:16:39 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27E1F42042;
-        Tue,  1 Dec 2020 03:16:39 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E759D4203F;
-        Tue,  1 Dec 2020 03:16:31 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.59.46])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Dec 2020 03:16:31 +0000 (GMT)
-Message-ID: <582bb3537b10f55c0825ec48e2fc0f6b310efeaa.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 1/8] powerpc: fix compiler warnings and errors
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        bauerman@linux.ibm.com, robh@kernel.org,
-        gregkh@linuxfoundation.org, james.morse@arm.com,
-        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        robh+dt@kernel.org, frowand.list@gmail.com,
-        vincenzo.frascino@arm.com, mark.rutland@arm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        pasha.tatashin@soleen.com, allison@lohutok.net,
-        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
-        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
-        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
-        christophe.leroy@c-s.fr
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
-        balajib@linux.microsoft.com
-Date:   Mon, 30 Nov 2020 22:16:30 -0500
-In-Reply-To: <20201113192243.1993-2-nramas@linux.microsoft.com>
-References: <20201113192243.1993-1-nramas@linux.microsoft.com>
-         <20201113192243.1993-2-nramas@linux.microsoft.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-30_12:2020-11-30,2020-11-30 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999
- clxscore=1011 mlxscore=0 malwarescore=0 spamscore=0 bulkscore=0
- adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2012010015
+        Mon, 30 Nov 2020 22:27:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606793171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jvfW+fviF6jxkM+6v1ZjUq0xrU6vbi09UMUegRZAFnI=;
+        b=GRLDm65kRyxP7zolg058TRlgC2j7bPXk4F5fTehRMjMw0B51za0wRfQJ5okCh7ah6vDVnm
+        3AzpvcDDr01sErwUpipQ4VOEPwPyzd8+ep80nkmV1tGQ0zbJ/tZR+8Lk2qDho4b1Kgf6oK
+        KlOLFyfqEbYDUA81uxkPlRYoX1qSy8s=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-292-kXtk2hufMxecix9CmOpJ5w-1; Mon, 30 Nov 2020 22:26:09 -0500
+X-MC-Unique: kXtk2hufMxecix9CmOpJ5w-1
+Received: by mail-qv1-f72.google.com with SMTP id m3so206591qvw.5
+        for <linux-integrity@vger.kernel.org>; Mon, 30 Nov 2020 19:26:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=jvfW+fviF6jxkM+6v1ZjUq0xrU6vbi09UMUegRZAFnI=;
+        b=YXCfoiWdhZCTlWUxkLFiBE41fdi8ra86Oj+WQuJ3sOPHNY0zJUGWVQpXtaYlWZPvto
+         f+ovTuQ5PAyFw741mrG6OUnTMivS+pWVGXugBkfIXQvPV+3UXu6zvw/805EHL06yaYnb
+         BL9zz39QM3s6qJ99hua370vhUz0gF9muqid2dKLMVky4cpeo66C8FsBXoDNFbhX26fxo
+         PYjE5JZw3eu8flB/8l92z8aORRbnWBGBYKz+3iRq4axqNs6RP6GQqR5h8ypos2YxML9J
+         c3SMtKYsA2ccvXV7j4CQQSmhW71dYMHUtBIu+1ac5Me1PHKUH0Lm+LC8oJX5ELOPmkhR
+         8amQ==
+X-Gm-Message-State: AOAM532v6RibVv2kIQzX8QmF5DGRUE3bOV/m+Hn2pUMP77gVOlUk7OT5
+        Cvxl3A4Y6+66fWx5gW3ShlIffOMgj8MR5Vrdh0lkaBJF4aPG7Y18LzWLYZbLn66gSqcfqrWkLyc
+        GProtcI0g+DuFGJgn3qAt2847nbMl
+X-Received: by 2002:a05:620a:688:: with SMTP id f8mr873067qkh.151.1606793168692;
+        Mon, 30 Nov 2020 19:26:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwVl6T2zjtcb0sb1286WE6fgYQ8dN4yhblpupqsRiLzncAkKZC2zQkAcGL2elX+LJCtwZKPng==
+X-Received: by 2002:a05:620a:688:: with SMTP id f8mr873049qkh.151.1606793168480;
+        Mon, 30 Nov 2020 19:26:08 -0800 (PST)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id j63sm525165qke.67.2020.11.30.19.26.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 19:26:07 -0800 (PST)
+References: <20201130232338.106892-1-jsnitsel@redhat.com>
+ <20201201025807.162241-1-jsnitsel@redhat.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v2] tpm_tis: Disable interrupts if interrupt storm detected
+In-reply-to: <20201201025807.162241-1-jsnitsel@redhat.com>
+Date:   Mon, 30 Nov 2020 20:26:06 -0700
+Message-ID: <87czzujjg1.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Lakshmi,
 
-On Fri, 2020-11-13 at 11:22 -0800, Lakshmi Ramasubramanian wrote:
-> The function prototype for the functions defined in ima.c for powerpc
-> are given in the header file ima.h. But this header file is not
-> included in ima.c resulting in compilation errors such as given below.
-> 
-> arch/powerpc/kexec/ima.c:56:5: error: no previous prototype for 'ima_get_kexec_buffer' [-Werror=missing-prototypes]
->    56 | int ima_get_kexec_buffer(void **addr, size_t *size)
->       |     ^~~~~~~~~~~~~~~~~~~~
-> 
-> The function parameters for remove_ima_buffer() and
-> arch_ima_add_kexec_buffer() are not described in the function header
-> resulting in warnings such as given below.
-> 
-> arch/powerpc/kexec/ima.c:111: warning: Function parameter or member 'fdt' not described in 'remove_ima_buffer'
-> 
-> Include ima.h in ima.c for powerpc. Describe the function parameters for
-> remove_ima_buffer() and arch_ima_add_kexec_buffer().
-> 
-> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Jerry Snitselaar @ 2020-11-30 19:58 MST:
 
-thanks,
+> When enabling the interrupt code for the tpm_tis driver we have
+> noticed some systems have a bios issue causing an interrupt storm to
+> occur. The issue isn't limited to a single tpm or system manufacturer
+> so keeping a denylist of systems with the issue isn't optimal. Instead
+> try to detect the problem occurring, disable interrupts, and revert to
+> polling when it happens.
+>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Peter Huewe <peterhuewe@gmx.de>
+> Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Cc: Matthew Garrett <mjg59@google.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> ---
+> v2: drop tpm_tis specific workqueue and use just system_wq
+>
+> drivers/char/tpm/tpm_tis_core.c | 27 +++++++++++++++++++++++++++
+>  drivers/char/tpm/tpm_tis_core.h |  2 ++
+>  2 files changed, 29 insertions(+)
+>
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 23b60583928b..72cc8a5a152c 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -24,6 +24,8 @@
+>  #include <linux/wait.h>
+>  #include <linux/acpi.h>
+>  #include <linux/freezer.h>
+> +#include <linux/workqueue.h>
+> +#include <linux/kernel_stat.h>
+>  #include "tpm.h"
+>  #include "tpm_tis_core.h"
+>  
+> @@ -745,9 +747,23 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  {
+>  	struct tpm_chip *chip = dev_id;
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	static bool check_storm = true;
+> +	static unsigned int check_start;
+>  	u32 interrupt;
+>  	int i, rc;
+>  
+> +	if (unlikely(check_storm)) {
+> +		if (!check_start) {
+> +			check_start = jiffies_to_msecs(jiffies);
+> +		} else if ((kstat_irqs(priv->irq) > 1000) &&
+> +			   (jiffies_to_msecs(jiffies) - check_start < 500)) {
+> +			check_storm = false;
+> +			schedule_work(&priv->storm_work);
+> +		} else if (jiffies_to_msecs(jiffies) - check_start >= 500) {
+> +			check_storm = false;
+> +		}
+> +	}
+> +
+>  	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+>  	if (rc < 0)
+>  		return IRQ_NONE;
+> @@ -987,6 +1003,14 @@ static const struct tpm_class_ops tpm_tis = {
+>  	.clk_enable = tpm_tis_clkrun_enable,
+>  };
+>  
+> +static void tpm_tis_storm_work(struct work_struct *work)
+> +{
+> +	struct tpm_tis_data *priv = container_of(work, struct tpm_tis_data, storm_work);
+> +
+> +	disable_interrupts(priv->chip);
+> +	dev_warn(&priv->chip->dev, "Interrupt storm detected, using polling.\n");
+> +}
+> +
+>  int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  		      const struct tpm_tis_phy_ops *phy_ops,
+>  		      acpi_handle acpi_dev_handle)
+> @@ -1003,6 +1027,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  	if (IS_ERR(chip))
+>  		return PTR_ERR(chip);
+>  
+> +	priv->chip = chip;
+> +	INIT_WORK(&priv->storm_work, tpm_tis_storm_work);
+> +
+>  #ifdef CONFIG_ACPI
+>  	chip->acpi_dev_handle = acpi_dev_handle;
+>  #endif
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index edeb5dc61c95..5630f294dc0c 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -95,6 +95,8 @@ struct tpm_tis_data {
+>  	u16 clkrun_enabled;
+>  	wait_queue_head_t int_queue;
+>  	wait_queue_head_t read_queue;
+> +	struct work_struct storm_work;
+> +	struct tpm_chip *chip;
+>  	const struct tpm_tis_phy_ops *phy_ops;
+>  	unsigned short rng_quality;
+>  };
 
-Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
+I've tested this with the Intel platform that has an Infineon chip that
+I found the other week. It works, but isn't the complete fix. With this
+on top of James' patchset I sometimes see the message "Lost Interrupt
+waiting for TPM stat", so I guess there needs to be a check in
+wait_for_tpm_stat and request_locality to see if interrupts were
+disabled when the wait_event_interruptible_timeout call times out.
 
