@@ -2,62 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 805E42CA19A
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 12:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6F32CA1A2
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 12:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730649AbgLALjs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Dec 2020 06:39:48 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42428 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728194AbgLALjs (ORCPT
+        id S1730776AbgLALk1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Dec 2020 06:40:27 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60212 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730646AbgLALk0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Dec 2020 06:39:48 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B1BZBEY190034;
-        Tue, 1 Dec 2020 06:38:22 -0500
+        Tue, 1 Dec 2020 06:40:26 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B1BWoOc194166;
+        Tue, 1 Dec 2020 06:39:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=LslFoUWAmy3eJ8wtX1Tx8izP74FXAubZfJLRb8YwCzc=;
- b=K7HlZS6dZ9j02bp397SHAzjkqsxLfzYhV3yp+BowHqYXfXl9tNwGxnJAcjRUmPh6Rv6f
- +lOG8mLwsW6d7Ae8iSzzc+P23IAONM6qCEOQCVt0aK4mJGvCgLGoEsagJ8ulb10gWcR7
- 2RXkJs7cKLZFn3GC6wBDy4xYPBgvDUOZcn8lP4Kq0wtkiNRjRXJOzqz7e7WeSb5AU57Q
- FJGhYEW42hocRl86jJHwHXt4qAfxenb6Rc/y2Fv2Xhsr1uuGwVoqgUsYqgYWl68/4zON
- xifhhkEe/EQ3OSyGhfjHZOKG2EcVBZlfM+HhNqPpqyHGXqSZv8CfrvT1Ql9VfxFRmegM FQ== 
+ bh=3R71xWX7EOICe2ryEC+thn9RyY+wps7xMitcUuPVvGQ=;
+ b=qNeWEgcEULQYZHtcw8diO0EaB1t++qgyhsOrCbkp+yUvP3qz6mVgwRhcD/OeWjRVWglV
+ +wOronTo9KDcfO0RlX5D/8+NuQp2Hz8wEPpNDDeC8ikzU9u5+/plvAnJliJIfqPrZU29
+ ZajDNPwbVobmd/SJ7qQMboyWpGKXwb8TzDYqKSImWvbpD1tW+ZtYpmdBumlOBIg+Dn2s
+ 8Mfa4cZZZAu6QndTFl10BPi++DL03i1oatATo59p4AIzQNy8m62ULNMZEqc3ysBrbR1W
+ qDB8eYiYzKZTicKJ68Z8Qxks2S2z5joEn1KW2tJtTEGkkaBAoZTntjPA1IrFViCzX7FA lg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 355j4f5k25-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 355jjncvdr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Dec 2020 06:38:22 -0500
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B1BcL2d007121;
-        Tue, 1 Dec 2020 06:38:21 -0500
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 355j4f5k11-1
+        Tue, 01 Dec 2020 06:39:17 -0500
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B1BXHfK004063;
+        Tue, 1 Dec 2020 06:39:17 -0500
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 355jjncvcy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Dec 2020 06:38:21 -0500
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B1BMIKP014882;
-        Tue, 1 Dec 2020 11:38:18 GMT
+        Tue, 01 Dec 2020 06:39:16 -0500
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B1BN0V4029991;
+        Tue, 1 Dec 2020 11:39:14 GMT
 Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 354fpd9ts2-1
+        by ppma03ams.nl.ibm.com with ESMTP id 353e68b32v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Dec 2020 11:38:18 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B1BcGNs56033614
+        Tue, 01 Dec 2020 11:39:14 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B1BdCFn56951058
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Dec 2020 11:38:16 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 73299A4040;
-        Tue,  1 Dec 2020 11:38:16 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0397FA4053;
-        Tue,  1 Dec 2020 11:38:10 +0000 (GMT)
+        Tue, 1 Dec 2020 11:39:12 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E33974203F;
+        Tue,  1 Dec 2020 11:39:11 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 00F2742045;
+        Tue,  1 Dec 2020 11:39:05 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.54.13])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Dec 2020 11:38:09 +0000 (GMT)
-Message-ID: <493cf3c91579877d7e9cb79ad87ac086671d6ffc.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 6/8] powerpc: Move ima_get_kexec_buffer() and
- ima_free_kexec_buffer() to ima
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Dec 2020 11:39:04 +0000 (GMT)
+Message-ID: <f0ac42878a713b270f7bad22d44f61739d582db8.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 7/8] arm64: Store IMA log information in kimage used
+ for kexec
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         bauerman@linux.ibm.com, robh@kernel.org,
@@ -75,10 +75,10 @@ To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
 Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
         balajib@linux.microsoft.com
-Date:   Tue, 01 Dec 2020 06:38:09 -0500
-In-Reply-To: <20201113192243.1993-7-nramas@linux.microsoft.com>
+Date:   Tue, 01 Dec 2020 06:39:04 -0500
+In-Reply-To: <20201113192243.1993-8-nramas@linux.microsoft.com>
 References: <20201113192243.1993-1-nramas@linux.microsoft.com>
-         <20201113192243.1993-7-nramas@linux.microsoft.com>
+         <20201113192243.1993-8-nramas@linux.microsoft.com>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
 Mime-Version: 1.0
@@ -86,121 +86,124 @@ Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-01_04:2020-11-30,2020-12-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=2 bulkscore=0
- adultscore=0 lowpriorityscore=0 mlxlogscore=999 malwarescore=0
- priorityscore=1501 clxscore=1015 spamscore=0 impostorscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012010072
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 spamscore=0 bulkscore=0 adultscore=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 mlxlogscore=999
+ clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012010075
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Lakshmi,
-
 On Fri, 2020-11-13 at 11:22 -0800, Lakshmi Ramasubramanian wrote:
-> ima_get_kexec_buffer() retrieves the address and size of the buffer
-> used for carrying forward the IMA measurement logs on kexec from
-> the device tree.
+> Address and size of the buffer containing the IMA measurement log need
+> to be passed from the current kernel to the next kernel on kexec.
 > 
-> ima_free_kexec_buffer() removes the chosen node namely
-> "linux,ima-kexec-buffer" from the device tree, and frees the buffer
-> used for carrying forward the IMA measurement logs on kexec.
-> 
-> These functions do not have architecture specific code, but are
-> currently limited to powerpc.
-> 
-> Move ima_get_kexec_buffer() and ima_free_kexec_buffer() to ima_kexec.c
-> in IMA so that they are accessible for other architectures as well.
-
-This sentence flows from the previous line.  No need for separate
-paragraphs here.  
-
-> 
-> With the above change the functions in arch/powerpc/kexec/ima.c are
-> defined only when the kernel config CONFIG_IMA_KEXEC is enabled.
-> Update the Makefile to build arch/powerpc/kexec/ima.c only when
-> CONFIG_IMA_KEXEC is enabled and remove "#ifdef CONFIG_IMA_KEXEC"
-> in arch/powerpc/kexec/ima.c.
+> Add address and size fields to "struct kimage_arch" for ARM64 platform
+> to hold the address and size of the IMA measurement log buffer.
+> Define an architecture specific function for ARM64 namely
+> arch_ima_add_kexec_buffer() that will set the address and size of
+> the current kernel's IMA buffer to be passed to the next kernel on kexec.
 > 
 > Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 > Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> ---
+>  arch/arm64/include/asm/ima.h   | 18 ++++++++++++++++++
+>  arch/arm64/include/asm/kexec.h |  3 +++
+>  arch/arm64/kernel/Makefile     |  1 +
+>  arch/arm64/kernel/ima_kexec.c  | 34 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 56 insertions(+)
+>  create mode 100644 arch/arm64/include/asm/ima.h
+>  create mode 100644 arch/arm64/kernel/ima_kexec.c
+> 
+> diff --git a/arch/arm64/include/asm/ima.h b/arch/arm64/include/asm/ima.h
+> new file mode 100644
+> index 000000000000..507fc94ddaba
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/ima.h
+> @@ -0,0 +1,18 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/*
+> + * Copyright (C) 2019 Microsoft Corporation
+> + *
+> + * Author: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> + *
+> + */
+> +#ifndef _ASM_ARCH_IMA_H
+> +#define _ASM_ARCH_IMA_H
+> +
+> +struct kimage;
+> +
+> +#ifdef CONFIG_IMA_KEXEC
+> +int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
+> +			      size_t size);
+> +#endif /* CONFIG_IMA_KEXEC */
+> +
+> +#endif /* _ASM_ARCH_IMA_H */
+> diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
+> index d24b527e8c00..7bd60c185ad3 100644
+> --- a/arch/arm64/include/asm/kexec.h
+> +++ b/arch/arm64/include/asm/kexec.h
+> @@ -100,6 +100,9 @@ struct kimage_arch {
+>  	void *elf_headers;
+>  	unsigned long elf_headers_mem;
+>  	unsigned long elf_headers_sz;
+> +
+> +	phys_addr_t ima_buffer_addr;
+> +	size_t ima_buffer_size;
+>  };
 
-After making the two changes,
+Any reason these definitions are not conditionally defined based on
+CONFIG_IMA_KEXEC, like on powerpc?
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-
-
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index 121de3e04af2..3f0fa2673dd3 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -9,9 +9,60 @@
->  
->  #include <linux/seq_file.h>
->  #include <linux/vmalloc.h>
-> +#include <linux/memblock.h>
-> +#include <linux/of.h>
->  #include <linux/kexec.h>
-> +#include <linux/ima.h>
->  #include "ima.h"
->  
+> 
+> diff --git a/arch/arm64/kernel/ima_kexec.c b/arch/arm64/kernel/ima_kexec.c
+> new file mode 100644
+> index 000000000000..1847f1230710
+> --- /dev/null
+> +++ b/arch/arm64/kernel/ima_kexec.c
+> @@ -0,0 +1,34 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2019 Microsoft Corporation
+> + *
+> + * Author: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> + *
+> + * File: ima_kexec.c
+> + *       Defines IMA kexec functions.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/kexec.h>
+> +#include <linux/types.h>
+> +#include <asm/ima.h>
+> +
 > +/**
-> + * ima_get_kexec_buffer - get IMA buffer from the previous kernel
-> + * @addr:	On successful return, set to point to the buffer contents.
-> + * @size:	On successful return, set to the buffer size.
+> + * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA buffer
+> + *
+> + * @image: kimage structure to set ima buffer information in for kexec
+> + * @load_addr: Start address of the IMA buffer
+> + * @size: size of the IMA buffer
+> + *
+> + * Architectures should use this function to pass on the IMA buffer
+> + * information to the next kernel.
 > + *
 > + * Return: 0 on success, negative errno on error.
 > + */
-> +static int ima_get_kexec_buffer(void **addr, size_t *size)
+> +int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
+> +			      size_t size)
 > +{
-> +	int ret;
-> +	unsigned long tmp_addr;
-> +	size_t tmp_size;
-> +
-> +	ret = get_ima_kexec_buffer(NULL, 0, &tmp_addr, &tmp_size);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*addr = __va(tmp_addr);
-> +	*size = tmp_size;
-> +
+> +	image->arch.ima_buffer_addr = load_addr;
+> +	image->arch.ima_buffer_size = size;
 > +	return 0;
 > +}
-> +
-> +/**
-> + * ima_free_kexec_buffer - free memory used by the IMA buffer
-> + */
-> +static int ima_free_kexec_buffer(void)
-> +{
-> +	int ret;
-> +	unsigned long addr;
-> +	size_t size;
-> +	struct property *prop;
-> +
-> +	prop = of_find_property(of_chosen, "linux,ima-kexec-buffer", NULL);
-> +	if (!prop)
-> +		return -ENOENT;
-> +
-> +	ret = get_ima_kexec_buffer(NULL, 0, &addr, &size);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = of_remove_property(of_chosen, prop);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return memblock_free(addr, size);
-> +}
-> +
 
-Please move these functions, after the ifdef below, before the function
-where they're used.
+This is exactly the same as the powerpc version.  Couldn't there be a
+common version of this as well?
 
 Mimi
 
->  #ifdef CONFIG_IMA_KEXEC
->  static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
->  				     unsigned long segment_size)
 
 
