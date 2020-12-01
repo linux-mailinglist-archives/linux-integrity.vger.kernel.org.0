@@ -2,160 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 269802C927C
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 00:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A712C93DB
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 01:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730591AbgK3XZO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 30 Nov 2020 18:25:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38066 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726158AbgK3XZN (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 30 Nov 2020 18:25:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606778627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2tm0ts6hF/lDJ0xq+K4NQnQ/+pAecSXKtAVp+dAxXA0=;
-        b=ZxoBinYr6dh6UjzpkqoIPcrvP4CNDkulhuN0IAVWJ9aK1xC5mCXzRxC0DQKYyMVQ8IXiB/
-        +CYUopMorLqV2hdIRaelocmcszV1p6yTgg7uCN6gl6mpl6l06L9xlmytvK7ipqJFbQ18zi
-        JqyLwC3MhofdqG4jUO0zB+NPsPxDnT0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-213-sckWWLILP0yqObZECNOSjQ-1; Mon, 30 Nov 2020 18:23:43 -0500
-X-MC-Unique: sckWWLILP0yqObZECNOSjQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1729938AbgLAAWk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 30 Nov 2020 19:22:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53870 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727375AbgLAAWk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 30 Nov 2020 19:22:40 -0500
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8861E1842146;
-        Mon, 30 Nov 2020 23:23:41 +0000 (UTC)
-Received: from cantor.redhat.com (ovpn-115-84.phx2.redhat.com [10.3.115.84])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 134AC5D9C0;
-        Mon, 30 Nov 2020 23:23:41 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH] tpm_tis: Disable interrupts if interrupt storm detected
-Date:   Mon, 30 Nov 2020 16:23:38 -0700
-Message-Id: <20201130232338.106892-1-jsnitsel@redhat.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E14720706;
+        Tue,  1 Dec 2020 00:21:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606782119;
+        bh=jidxCeKSZhkwUbNx5KSkEk3WyfcJfqoe6qsuKPa93Xg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OZSIUni6CuHazkbY4OgDC4XQpZdATYDeMo2AQrStNF+L0AxXLrQVGpDeIJspqRJdZ
+         igso+8FlvYZAATRbsbBFCBTIx7AYTpkTMfpk5a0BS1kMRmstzrgYG3GCxtzywkfgZ5
+         pJXoeQtko8JHeg1/5/lv2AZSjNYTxnBM/sTMZH3A=
+Date:   Mon, 30 Nov 2020 19:21:57 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Maurizio Drocco <maurizio.drocco@ibm.com>,
+        Bruno Meneguele <bmeneg@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.7 03/30] ima: extend boot_aggregate with kernel
+ measurements
+Message-ID: <20201201002157.GT643756@sasha-vm>
+References: <20200708154116.3199728-1-sashal@kernel.org>
+ <20200708154116.3199728-3-sashal@kernel.org>
+ <1594224793.23056.251.camel@linux.ibm.com>
+ <20200709012735.GX2722994@sasha-vm>
+ <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When enabling the interrupt code for the tpm_tis driver we have
-noticed some systems have a bios issue causing an interrupt storm to
-occur. The issue isn't limited to a single tpm or system vendor
-so keeping a denylist of systems with the issue isn't optimal. Instead
-try to detect the problem occurring, disable interrupts, and revert to
-polling when it happens.
+On Sun, Nov 29, 2020 at 08:17:38AM -0500, Mimi Zohar wrote:
+>Hi Sasha,
+>
+>On Wed, 2020-07-08 at 21:27 -0400, Sasha Levin wrote:
+>> On Wed, Jul 08, 2020 at 12:13:13PM -0400, Mimi Zohar wrote:
+>> >Hi Sasha,
+>> >
+>> >On Wed, 2020-07-08 at 11:40 -0400, Sasha Levin wrote:
+>> >> From: Maurizio Drocco <maurizio.drocco@ibm.com>
+>> >>
+>> >> [ Upstream commit 20c59ce010f84300f6c655d32db2610d3433f85c ]
+>> >>
+>> >> Registers 8-9 are used to store measurements of the kernel and its
+>> >> command line (e.g., grub2 bootloader with tpm module enabled). IMA
+>> >> should include them in the boot aggregate. Registers 8-9 should be
+>> >> only included in non-SHA1 digests to avoid ambiguity.
+>> >
+>> >Prior to Linux 5.8, the SHA1 template data hashes were padded before
+>> >being extended into the TPM.  Support for calculating and extending
+>> >the per TPM bank template data digests is only being upstreamed in
+>> >Linux 5.8.
+>> >
+>> >How will attestation servers know whether to include PCRs 8 & 9 in the
+>> >the boot_aggregate calculation?  Now, there is a direct relationship
+>> >between the template data SHA1 padded digest not including PCRs 8 & 9,
+>> >and the new per TPM bank template data digest including them.
+>>
+>> Got it, I'll drop it then, thank you!
+>
+>After re-thinking this over, I realized that the attestation server can
+>verify the "boot_aggregate" based on the quoted PCRs without knowing
+>whether padded SHA1 hashes or per TPM bank hash values were extended
+>into the TPM[1], but non-SHA1 boot aggregate values [2] should always
+>include PCRs 8 & 9.
+>
+>Any place commit 6f1a1d103b48 was backported [2], this commit
+>20c59ce010f8 ("ima: extend boot_aggregate with kernel measurements")
+>should be backported as well.
 
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: Matthew Garrett <mjg59@google.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- drivers/char/tpm/tpm_tis_core.c | 34 +++++++++++++++++++++++++++++++++
- drivers/char/tpm/tpm_tis_core.h |  2 ++
- 2 files changed, 36 insertions(+)
+Which kernels should it apply to? 5.7 is EOL now, so I looked at 5.4 but
+it doesn't apply cleanly there.
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 92c51c6cfd1b..19115a628f25 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -24,6 +24,8 @@
- #include <linux/wait.h>
- #include <linux/acpi.h>
- #include <linux/freezer.h>
-+#include <linux/workqueue.h>
-+#include <linux/kernel_stat.h>
- #include "tpm.h"
- #include "tpm_tis_core.h"
- 
-@@ -711,13 +713,30 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
- 	}
- }
- 
-+static struct workqueue_struct *tpm_tis_wq;
-+static DEFINE_MUTEX(tpm_tis_wq_lock);
-+
- static irqreturn_t tis_int_handler(int dummy, void *dev_id)
- {
- 	struct tpm_chip *chip = dev_id;
- 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-+	static bool check_storm = true;
-+	static unsigned int check_start;
- 	u32 interrupt;
- 	int i, rc;
- 
-+	if (unlikely(check_storm)) {
-+		if (!check_start) {
-+			check_start = jiffies_to_msecs(jiffies);
-+		} else if ((kstat_irqs(priv->irq) > 1000) &&
-+			   (jiffies_to_msecs(jiffies) - check_start < 500)) {
-+			check_storm = false;
-+			queue_work(tpm_tis_wq, &priv->storm_work);
-+		} else if (jiffies_to_msecs(jiffies) - check_start >= 500) {
-+			check_storm = false;
-+		}
-+	}
-+
- 	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
- 	if (rc < 0)
- 		return IRQ_NONE;
-@@ -943,6 +962,14 @@ static const struct tpm_class_ops tpm_tis = {
- 	.clk_enable = tpm_tis_clkrun_enable,
- };
- 
-+static void tpm_tis_storm_work(struct work_struct *work)
-+{
-+	struct tpm_tis_data *priv = container_of(work, struct tpm_tis_data, storm_work);
-+
-+	disable_interrupts(priv->chip);
-+	dev_warn(&priv->chip->dev, "Interrupt storm detected, using polling.\n");
-+}
-+
- int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 		      const struct tpm_tis_phy_ops *phy_ops,
- 		      acpi_handle acpi_dev_handle)
-@@ -959,6 +986,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 	if (IS_ERR(chip))
- 		return PTR_ERR(chip);
- 
-+	priv->chip = chip;
-+	tpm_tis_wq = alloc_workqueue("tpm_tis_wq", WQ_MEM_RECLAIM, 0);
-+	if (!tpm_tis_wq)
-+		return -ENOMEM;
-+
-+	INIT_WORK(&priv->storm_work, tpm_tis_storm_work);
-+
- #ifdef CONFIG_ACPI
- 	chip->acpi_dev_handle = acpi_dev_handle;
- #endif
-diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index 9b2d32a59f67..973297ee2e16 100644
---- a/drivers/char/tpm/tpm_tis_core.h
-+++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -95,6 +95,8 @@ struct tpm_tis_data {
- 	u16 clkrun_enabled;
- 	wait_queue_head_t int_queue;
- 	wait_queue_head_t read_queue;
-+	struct work_struct storm_work;
-+	struct tpm_chip *chip;
- 	const struct tpm_tis_phy_ops *phy_ops;
- 	unsigned short rng_quality;
- };
 -- 
-2.27.0
-
+Thanks,
+Sasha
