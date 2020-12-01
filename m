@@ -2,142 +2,203 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 308982CADD3
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 21:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 572932CAE0E
+	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 22:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729244AbgLAUxj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Dec 2020 15:53:39 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3068 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729183AbgLAUxi (ORCPT
+        id S1728009AbgLAVH1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Dec 2020 16:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727974AbgLAVH1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Dec 2020 15:53:38 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B1KXBwA055455;
-        Tue, 1 Dec 2020 15:52:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=APMTXe6+p68TNGCweQqMwpTcWSnBIulipluxdg/4dMI=;
- b=ro3anzC85I+sf6+LeJKjYBW0cIvmTnbV5cVAipOfkFZiwezT1/r3eHOI2A7/mkT9zQZ1
- z2KKZ4/8sbdVwa1tuaiEffwbmrqiOoLY3Xy3VlI00kdslZN7qYv6rNjoh8VblCDsPkK0
- xdO9mlLsr8c05t2de1cqjxLYaGJnnF1zuF1FbS9za6PSuHazrmBauQzce95hL/chtAFM
- qx7DqtyPGFHnpnm33NNTUdzWqVR6Ie4ey+gLCzpiZ/3hBlPvFZEqxcG8neigMQ01W7Op
- CP/P5pYWz63ztSMhlv1FzZQYmsvGGdvhf4kq2XtFXjLmD9tDu8SNVdw6JoylvcuKqVvy YQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 355jjnxnxt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Dec 2020 15:52:53 -0500
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B1KYHkE062548;
-        Tue, 1 Dec 2020 15:52:52 -0500
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 355jjnxnx3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Dec 2020 15:52:52 -0500
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B1KmZMI007327;
-        Tue, 1 Dec 2020 20:52:50 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 354fpda8y6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Dec 2020 20:52:50 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B1Kqm2E63832448
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Dec 2020 20:52:48 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 133454C040;
-        Tue,  1 Dec 2020 20:52:48 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 434514C044;
-        Tue,  1 Dec 2020 20:52:46 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.54.13])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Dec 2020 20:52:46 +0000 (GMT)
-Message-ID: <feb537b46b78054239397396ea1fdabc1a3c44e2.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 00/11] evm: Improve usability of portable signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        silviu.vlasceanu@huawei.com
-Date:   Tue, 01 Dec 2020 15:52:45 -0500
-In-Reply-To: <20201111092302.1589-1-roberto.sassu@huawei.com>
-References: <20201111092302.1589-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
+        Tue, 1 Dec 2020 16:07:27 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C265C0613CF
+        for <linux-integrity@vger.kernel.org>; Tue,  1 Dec 2020 13:06:47 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5F0EC1280A32;
+        Tue,  1 Dec 2020 13:06:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1606856806;
+        bh=YHNjf92UMJR/sialed9anF9jmC4fMNPzepbKvCRTvvQ=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=qSkTc4yJklvAeDqpb5sa7yOAlgFn3iSLcGRG8aT936Z4m+y+RcpV97C/TgVjQ0+bR
+         6wjNgfhjC4MN8A5yfthWaV7PxI6UmXnK+31eawp7nRfaKITrevHYMv3gt/bTTG+etf
+         0GU87fyIg+Loq8TE90wAgmWaw8aMTX2LkACI9PAg=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WA5xJ9It0Ku0; Tue,  1 Dec 2020 13:06:46 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id EED7C1280A30;
+        Tue,  1 Dec 2020 13:06:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1606856806;
+        bh=YHNjf92UMJR/sialed9anF9jmC4fMNPzepbKvCRTvvQ=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=qSkTc4yJklvAeDqpb5sa7yOAlgFn3iSLcGRG8aT936Z4m+y+RcpV97C/TgVjQ0+bR
+         6wjNgfhjC4MN8A5yfthWaV7PxI6UmXnK+31eawp7nRfaKITrevHYMv3gt/bTTG+etf
+         0GU87fyIg+Loq8TE90wAgmWaw8aMTX2LkACI9PAg=
+Message-ID: <2bf904f16673c4443bfc95f19d7fb49b97b9b159.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 3/5] tpm_tis: Fix interrupts for TIS TPMs without
+ legacy cycles
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+Date:   Tue, 01 Dec 2020 13:06:44 -0800
+In-Reply-To: <87blfdmhm8.fsf@redhat.com>
+References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
+         <20201001180925.13808-4-James.Bottomley@HansenPartnership.com>
+         <87h7p5mm3g.fsf@redhat.com> <87blfdmhm8.fsf@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-01_09:2020-11-30,2020-12-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 spamscore=0 bulkscore=0 adultscore=0 mlxscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 mlxlogscore=910
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012010124
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
-
-On Wed, 2020-11-11 at 10:22 +0100, Roberto Sassu wrote:
-> EVM portable signatures are particularly suitable for the protection of
-> metadata of immutable files where metadata is signed by a software vendor.
-> They can be used for example in conjunction with an IMA policy that
-> appraises only executed and memory mapped files.
-
-The existing "appraise_tcb" builtin policy verify all root owned files.
-Defining a new builtin policy to verify only executed and memory
-mmapped files would make a nice addition and would probably simplify
-testing.
-
+On Tue, 2020-12-01 at 12:49 -0700, Jerry Snitselaar wrote:
+> Jerry Snitselaar @ 2020-12-01 11:12 MST:
 > 
-> However, some usability issues are still unsolved, especially when EVM is
-> used without loading an HMAC key. This patch set attempts to fix the open
-> issues.
-
-We need regression tests for each of these changes.
-
-To prevent affecting the running system, the appraise policy rules
-could be limited to a loopback mounted filesystem. 
-
+> > James Bottomley @ 2020-10-01 11:09 MST:
+> > 
+> > > If a TIS TPM doesn't have legacy cycles, any write to the
+> > > interrupt
+> > > registers is ignored unless a locality is active.  This means
+> > > even to
+> > > set up the interrupt vectors a locality must first be
+> > > activated.  Fix
+> > > this by activating the 0 locality in the interrupt probe setup.
+> > > 
+> > > Since the TPM_EOI signalling also requires an active locality,
+> > > the
+> > > interrupt routine cannot end an interrupt if the locality is
+> > > released.
+> > > This can lead to a situation where the TPM goes command ready
+> > > after
+> > > locality release and since the interrupt cannot be ended it
+> > > refires
+> > > continuously.  Fix this by disabling all interrupts except
+> > > locality
+> > > change when a locality is released (this only fires when a
+> > > locality
+> > > becomes active, meaning the TPM_EOI should work).
+> > > 
+> > > Finally, since we now disable all status based interrupts in the
+> > > locality release, they must be re-enabled before waiting to check
+> > > the
+> > > condition, so add interrupt enabling to the status wait.
+> > > 
+> > > Signed-off-by: James Bottomley <
+> > > James.Bottomley@HansenPartnership.com>
+> > > 
+> > > ---
+> > > 
+> > > v2: renamed functions
+> > > ---
+> > >  drivers/char/tpm/tpm_tis_core.c | 125
+> > > ++++++++++++++++++++++++++------
+> > >  1 file changed, 101 insertions(+), 24 deletions(-)
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm_tis_core.c
+> > > b/drivers/char/tpm/tpm_tis_core.c
+> > > index 431919d5f48a..0c07da8cd680 100644
+> > > --- a/drivers/char/tpm/tpm_tis_core.c
+> > > +++ b/drivers/char/tpm/tpm_tis_core.c
+> > > @@ -29,6 +29,46 @@
+> > >  
+> > >  static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool
+> > > value);
+> > >  
+> > > +static void tpm_tis_enable_interrupt(struct tpm_chip *chip, u8
+> > > mask)
+> > > +{
+> > > +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> > > +	u32 intmask;
+> > > +
+> > > +	/* Take control of the TPM's interrupt hardware and shut it off
+> > > */
+> > > +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> > > +
+> > > +	intmask |= mask | TPM_GLOBAL_INT_ENABLE;
+> > > +
+> > > +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> > > +}
+> > > +
+> > > +static void tpm_tis_disable_interrupt(struct tpm_chip *chip, u8
+> > > mask)
+> > > +{
+> > > +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> > > +	u32 intmask;
+> > > +
+> > > +	/* Take control of the TPM's interrupt hardware and shut it off
+> > > */
+> > > +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> > > +
+> > > +	intmask &= ~mask;
+> > > +
+> > > +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> > > +}
+> > > +
+> > > +static void tpm_tis_enable_stat_interrupts(struct tpm_chip
+> > > *chip, u8 stat)
+> > > +{
+> > > +	u32 mask = 0;
+> > > +
+> > > +	if (stat & TPM_STS_COMMAND_READY)
+> > > +		mask |= TPM_INTF_CMD_READY_INT;
+> > > +	if (stat & TPM_STS_VALID)
+> > > +		mask |= TPM_INTF_STS_VALID_INT;
+> > > +	if (stat & TPM_STS_DATA_AVAIL)
+> > > +		mask |= TPM_INTF_DATA_AVAIL_INT;
+> > > +
+> > > +	tpm_tis_enable_interrupt(chip, mask);
+> > > +}
+> > > +
+> > >  static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8
+> > > mask,
+> > >  					bool check_cancel, bool
+> > > *canceled)
+> > >  {
+> > > @@ -65,11 +105,14 @@ static int wait_for_tpm_stat(struct tpm_chip
+> > > *chip, u8 mask,
+> > >  		timeout = stop - jiffies;
+> > >  		if ((long)timeout <= 0)
+> > >  			return -ETIME;
+> > > +		tpm_tis_enable_stat_interrupts(chip, mask);
+> > >  		rc = wait_event_interruptible_timeout(*queue,
+> > >  			wait_for_tpm_stat_cond(chip, mask,
+> > > check_cancel,
+> > >  					       &canceled),
+> > >  			timeout);
+> > >  		if (rc > 0) {
+> > > +			if (rc == 1)
+> > > +				dev_err(&chip->dev, "Lost Interrupt
+> > > waiting for TPM stat\n");
+> > 
+> > With my proposed patch to check for the interrupt storm condition I
+> > sometimes see this message. Do you think it would make sense to
+> > have a check here and in the request_locality location to see that
+> > TPM_CHIP_FLAG is still enabled? It will print a message about the
+> > interrupt storm being detected, and switching to polling, so I
+> > don't know if this will cause confusion for people to have this
+> > show up as well in that case.
+> > 
 > 
-> Patch 1 allows EVM to be used without loading an HMAC key. Patch 2 avoids
-> appraisal verification of public keys (they are already verified by the key
-> subsystem).
+> I guess it wouldn't be too confusing since the messages will appear
+> close together.
 
-Loading the EVM key(s) occurs early, either the builtin x509 EVM key or
-during the initramfs, makes testing difficult.  Based on
-security/evm/evm, different tests could be defined for when only x509
-keys, only HMAC key, or both EVM key types are loaded.
+But since we have a discriminator I'll try to use it and see if we can
+tidy up the messages.  I think the condition just becomes
 
-> 
-> Patches 3-5 allow metadata verification to be turned off when no HMAC key
-> is loaded and to use this mode in a safe way (by ensuring that IMA
-> revalidates metadata when there is a change).
-> 
-> Patches 6-8 make portable signatures more usable if metadata verification
-> is not turned off, by ignoring the INTEGRITY_NOLABEL error when no HMAC key
-> is loaded, by accepting any metadata modification until signature
-> verification succeeds (useful when xattrs/attrs are copied sequentially
-> from a source) and by allowing operations that don't change metadata.
-> 
-> Patch 9 makes it possible to use portable signatures when the IMA policy
-> requires file signatures and patch 10 shows portable signatures in the
-> measurement list when the ima-sig template is selected.
+if (rc == 1 && (chip->flags & TPM_CHIP_FLAG_IRQ))
 
-ima-evm-utils needs to be updated to support EVM portable & immutable
-signatures.
+because you'll have reset that if you found a storm?
 
-> 
-> Lastly, patch 11 avoids undesired removal of security.ima when a file is
-> not selected by the IMA policy.
+James
 
-thanks,
-
-Mimi
 
