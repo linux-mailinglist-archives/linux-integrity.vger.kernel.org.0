@@ -2,221 +2,196 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E6F2CBC2A
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Dec 2020 12:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BA92CBCCC
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Dec 2020 13:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729196AbgLBL5i convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Dec 2020 06:57:38 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2192 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbgLBL5i (ORCPT
+        id S1726985AbgLBMSg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Dec 2020 07:18:36 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:32851 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726881AbgLBMSg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Dec 2020 06:57:38 -0500
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4CmHTJ0gSgz67GZG;
-        Wed,  2 Dec 2020 19:55:00 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Wed, 2 Dec 2020 12:56:55 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2106.002;
- Wed, 2 Dec 2020 12:56:55 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "mjg59@google.com" <mjg59@google.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>
-Subject: RE: [PATCH v3 04/11] ima: Move ima_reset_appraise_flags() call to
- post hooks
-Thread-Topic: [PATCH v3 04/11] ima: Move ima_reset_appraise_flags() call to
- post hooks
-Thread-Index: AQHWuAxk5SBMtTsknkm2+R4w/QyBPKnj0s2g
-Date:   Wed, 2 Dec 2020 11:56:55 +0000
-Message-ID: <a401e63a91114daba2037e2b0083101f@huawei.com>
-References: <20201111092302.1589-1-roberto.sassu@huawei.com>
- <20201111092302.1589-5-roberto.sassu@huawei.com>
-In-Reply-To: <20201111092302.1589-5-roberto.sassu@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.220.96.108]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+        Wed, 2 Dec 2020 07:18:36 -0500
+Received: from orion.localdomain ([77.7.48.174]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MJV9M-1kV75Q0XNo-00JsFP; Wed, 02 Dec 2020 13:15:56 +0100
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        benh@kernel.crashing.org, paulus@samba.org,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] drivers: char: tpm: remove unneeded MODULE_VERSION() usage
+Date:   Wed,  2 Dec 2020 13:15:53 +0100
+Message-Id: <20201202121553.9383-1-info@metux.net>
+X-Mailer: git-send-email 2.11.0
+X-Provags-ID: V03:K1:S6jGKntch7TnNIvjw5HeYSwa3cdu9ChH6KIdjiN8Aw6I10nMGVT
+ TfxVfBy1k7mv46B8Dyrm80CAJCZqiQzdUJlFmeCNabr0Yole0YWL1/NssfqGPj25DwI+gDj
+ axY/uaskxTMUnwAA/4I8jGIBD5qbYDx2YnkpBrrX7YVWCj1EqbEgOxsztP6dEwhqkIaNs9W
+ dv4rRCeBj25UrBA2tthTA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1FdbRDQJofQ=:4P+X4mrrTmi5GX6ObomhZ1
+ MZ/jKta9twQOXBklTXSMoDO/Z/D3xZtZLzUU19BZxf8UAPldSdnh9da4xIE3t1/uGReSjOCGz
+ kEs2HeMiAzXjS3rOg6idRdVa0gIK55msLcyGHWdOIgnBF0eLbUhFKBIuurzK699pFDkLCdxVT
+ YlpdOzqLlPwQwHg0O8P41vznDzybuat5+F8gXZqsWj2vUBNJCWcWPWD7eslKj94UqpbuOy+e/
+ 3USLs+PVMOozbri5MbE6kbAkb+rTwYlthmRwwNXVKldMrjP6nKzebKii8w/JQYuSfzXYJ1iH9
+ hD/rag3PQcqYpyuvQmLvqFG49fH2Wf1LV1gbiTaUfGwduG5J4E1Qrnc/x/JuTqzV5TQmW6gyn
+ uDrSZ8ClNOH3m8q/wg4m6Dw8FXxHIcySf3arg4wDixCDzZbRfJTnCC0DfM0qz
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Roberto Sassu
-> Sent: Wednesday, November 11, 2020 10:23 AM
-> ima_inode_setxattr() and ima_inode_removexattr() hooks are called
-> before an
-> operation is performed. Thus, ima_reset_appraise_flags() should not be
-> called there, as flags might be unnecessarily reset if the operation is
-> denied.
-> 
-> This patch introduces the post hooks ima_inode_post_setxattr() and
-> ima_inode_post_removexattr(), removes ima_inode_removexattr() and
-> adds the
-> call to ima_reset_appraise_flags() in the new functions.
+Remove MODULE_VERSION(), as it isn't needed at all: the only version
+making sense is the kernel version.
 
-Removing ima_inode_removexattr() is not correct. We should still prevent
-that security.ima is removed when CAP_SYS_ADMIN is not set. I will fix
-this in the next version.
+Link: https://lkml.org/lkml/2017/11/22/480
 
-Roberto
+Signed-off-by: Enrico Weigelt <info@metux.net>
+---
+ drivers/char/tpm/st33zp24/i2c.c      | 1 -
+ drivers/char/tpm/st33zp24/spi.c      | 1 -
+ drivers/char/tpm/st33zp24/st33zp24.c | 1 -
+ drivers/char/tpm/tpm-interface.c     | 1 -
+ drivers/char/tpm/tpm_atmel.c         | 1 -
+ drivers/char/tpm/tpm_crb.c           | 1 -
+ drivers/char/tpm/tpm_i2c_infineon.c  | 1 -
+ drivers/char/tpm/tpm_ibmvtpm.c       | 1 -
+ drivers/char/tpm/tpm_infineon.c      | 1 -
+ drivers/char/tpm/tpm_nsc.c           | 1 -
+ drivers/char/tpm/tpm_tis.c           | 1 -
+ drivers/char/tpm/tpm_tis_core.c      | 1 -
+ drivers/char/tpm/tpm_vtpm_proxy.c    | 1 -
+ 13 files changed, 13 deletions(-)
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
-
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  fs/xattr.c                            |  2 ++
->  include/linux/ima.h                   | 19 +++++++++++++++----
->  security/integrity/ima/ima_appraise.c | 22 +++++++++++++++-------
->  security/security.c                   |  4 +---
->  4 files changed, 33 insertions(+), 14 deletions(-)
-> 
-> diff --git a/fs/xattr.c b/fs/xattr.c
-> index cd7a563e8bcd..149b8cf5f99f 100644
-> --- a/fs/xattr.c
-> +++ b/fs/xattr.c
-> @@ -16,6 +16,7 @@
->  #include <linux/namei.h>
->  #include <linux/security.h>
->  #include <linux/evm.h>
-> +#include <linux/ima.h>
->  #include <linux/syscalls.h>
->  #include <linux/export.h>
->  #include <linux/fsnotify.h>
-> @@ -474,6 +475,7 @@ __vfs_removexattr_locked(struct dentry *dentry,
-> const char *name,
-> 
->  	if (!error) {
->  		fsnotify_xattr(dentry);
-> +		ima_inode_post_removexattr(dentry, name);
->  		evm_inode_post_removexattr(dentry, name);
->  	}
-> 
-> diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index ac3d82f962f2..19a775fa2ba5 100644
-> --- a/include/linux/ima.h
-> +++ b/include/linux/ima.h
-> @@ -150,7 +150,12 @@ extern bool is_ima_appraise_enabled(void);
->  extern void ima_inode_post_setattr(struct dentry *dentry);
->  extern int ima_inode_setxattr(struct dentry *dentry, const char
-> *xattr_name,
->  		       const void *xattr_value, size_t xattr_value_len);
-> -extern int ima_inode_removexattr(struct dentry *dentry, const char
-> *xattr_name);
-> +extern void ima_inode_post_setxattr(struct dentry *dentry,
-> +				    const char *xattr_name,
-> +				    const void *xattr_value,
-> +				    size_t xattr_value_len);
-> +extern void ima_inode_post_removexattr(struct dentry *dentry,
-> +				       const char *xattr_name);
->  #else
->  static inline bool is_ima_appraise_enabled(void)
->  {
-> @@ -170,10 +175,16 @@ static inline int ima_inode_setxattr(struct dentry
-> *dentry,
->  	return 0;
->  }
-> 
-> -static inline int ima_inode_removexattr(struct dentry *dentry,
-> -					const char *xattr_name)
-> +static inline void ima_inode_post_setxattr(struct dentry *dentry,
-> +					   const char *xattr_name,
-> +					   const void *xattr_value,
-> +					   size_t xattr_value_len)
-> +{
-> +}
-> +
-> +static inline void ima_inode_post_removexattr(struct dentry *dentry,
-> +					      const char *xattr_name)
->  {
-> -	return 0;
->  }
->  #endif /* CONFIG_IMA_APPRAISE */
-> 
-> diff --git a/security/integrity/ima/ima_appraise.c
-> b/security/integrity/ima/ima_appraise.c
-> index 8361941ee0a1..77c01f50425e 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -574,21 +574,29 @@ int ima_inode_setxattr(struct dentry *dentry,
-> const char *xattr_name,
->  	if (result == 1) {
->  		if (!xattr_value_len || (xvalue->type >= IMA_XATTR_LAST))
->  			return -EINVAL;
-> -		ima_reset_appraise_flags(d_backing_inode(dentry),
-> -			xvalue->type == EVM_IMA_XATTR_DIGSIG);
->  		result = 0;
->  	}
->  	return result;
->  }
-> 
-> -int ima_inode_removexattr(struct dentry *dentry, const char *xattr_name)
-> +void ima_inode_post_setxattr(struct dentry *dentry, const char
-> *xattr_name,
-> +			     const void *xattr_value, size_t xattr_value_len)
-> +{
-> +	const struct evm_ima_xattr_data *xvalue = xattr_value;
-> +	int result;
-> +
-> +	result = ima_protect_xattr(dentry, xattr_name, xattr_value,
-> +				   xattr_value_len);
-> +	if (result == 1)
-> +		ima_reset_appraise_flags(d_backing_inode(dentry),
-> +			xvalue->type == EVM_IMA_XATTR_DIGSIG);
-> +}
-> +
-> +void ima_inode_post_removexattr(struct dentry *dentry, const char
-> *xattr_name)
->  {
->  	int result;
-> 
->  	result = ima_protect_xattr(dentry, xattr_name, NULL, 0);
-> -	if (result == 1) {
-> +	if (result == 1)
->  		ima_reset_appraise_flags(d_backing_inode(dentry), 0);
-> -		result = 0;
-> -	}
-> -	return result;
->  }
-> diff --git a/security/security.c b/security/security.c
-> index a28045dc9e7f..fc43f45938b4 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1309,6 +1309,7 @@ void security_inode_post_setxattr(struct dentry
-> *dentry, const char *name,
->  	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
->  		return;
->  	call_void_hook(inode_post_setxattr, dentry, name, value, size,
-> flags);
-> +	ima_inode_post_setxattr(dentry, name, value, size);
->  	evm_inode_post_setxattr(dentry, name, value, size);
->  }
-> 
-> @@ -1339,9 +1340,6 @@ int security_inode_removexattr(struct dentry
-> *dentry, const char *name)
->  	ret = call_int_hook(inode_removexattr, 1, dentry, name);
->  	if (ret == 1)
->  		ret = cap_inode_removexattr(dentry, name);
-> -	if (ret)
-> -		return ret;
-> -	ret = ima_inode_removexattr(dentry, name);
->  	if (ret)
->  		return ret;
->  	return evm_inode_removexattr(dentry, name);
-> --
-> 2.27.GIT
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index 7c617edff4ca..7ed9829cacc4 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -313,5 +313,4 @@ module_i2c_driver(st33zp24_i2c_driver);
+ 
+ MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
+ MODULE_DESCRIPTION("STM TPM 1.2 I2C ST33 Driver");
+-MODULE_VERSION("1.3.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index a75dafd39445..147efea4eb05 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -430,5 +430,4 @@ module_spi_driver(st33zp24_spi_driver);
+ 
+ MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
+ MODULE_DESCRIPTION("STM TPM 1.2 SPI ST33 Driver");
+-MODULE_VERSION("1.3.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
+index 4ec10ab5e576..e0f1a5828993 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.c
++++ b/drivers/char/tpm/st33zp24/st33zp24.c
+@@ -646,5 +646,4 @@ EXPORT_SYMBOL(st33zp24_pm_resume);
+ 
+ MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
+ MODULE_DESCRIPTION("ST33ZP24 TPM 1.2 driver");
+-MODULE_VERSION("1.3.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 1621ce818705..dfdc68b8bf88 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -514,5 +514,4 @@ module_exit(tpm_exit);
+ 
+ MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+ MODULE_DESCRIPTION("TPM Driver");
+-MODULE_VERSION("2.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm_atmel.c b/drivers/char/tpm/tpm_atmel.c
+index 54a6750a6757..35bf249cc95a 100644
+--- a/drivers/char/tpm/tpm_atmel.c
++++ b/drivers/char/tpm/tpm_atmel.c
+@@ -231,5 +231,4 @@ module_exit(cleanup_atmel);
+ 
+ MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+ MODULE_DESCRIPTION("TPM Driver");
+-MODULE_VERSION("2.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+index a9dcf31eadd2..3e72b7b99cce 100644
+--- a/drivers/char/tpm/tpm_crb.c
++++ b/drivers/char/tpm/tpm_crb.c
+@@ -748,5 +748,4 @@ static struct acpi_driver crb_acpi_driver = {
+ module_acpi_driver(crb_acpi_driver);
+ MODULE_AUTHOR("Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>");
+ MODULE_DESCRIPTION("TPM2 Driver");
+-MODULE_VERSION("0.1");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm_i2c_infineon.c b/drivers/char/tpm/tpm_i2c_infineon.c
+index a19d32cb4e94..8920b7c19fcb 100644
+--- a/drivers/char/tpm/tpm_i2c_infineon.c
++++ b/drivers/char/tpm/tpm_i2c_infineon.c
+@@ -731,5 +731,4 @@ static struct i2c_driver tpm_tis_i2c_driver = {
+ module_i2c_driver(tpm_tis_i2c_driver);
+ MODULE_AUTHOR("Peter Huewe <peter.huewe@infineon.com>");
+ MODULE_DESCRIPTION("TPM TIS I2C Infineon Driver");
+-MODULE_VERSION("2.2.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+index 994385bf37c0..5b04d113f634 100644
+--- a/drivers/char/tpm/tpm_ibmvtpm.c
++++ b/drivers/char/tpm/tpm_ibmvtpm.c
+@@ -750,5 +750,4 @@ module_exit(ibmvtpm_module_exit);
+ 
+ MODULE_AUTHOR("adlai@us.ibm.com");
+ MODULE_DESCRIPTION("IBM vTPM Driver");
+-MODULE_VERSION("1.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
+index 9c924a1440a9..8a58966c5c9b 100644
+--- a/drivers/char/tpm/tpm_infineon.c
++++ b/drivers/char/tpm/tpm_infineon.c
+@@ -621,5 +621,4 @@ module_pnp_driver(tpm_inf_pnp_driver);
+ 
+ MODULE_AUTHOR("Marcel Selhorst <tpmdd@sirrix.com>");
+ MODULE_DESCRIPTION("Driver for Infineon TPM SLD 9630 TT 1.1 / SLB 9635 TT 1.2");
+-MODULE_VERSION("1.9.2");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm_nsc.c b/drivers/char/tpm/tpm_nsc.c
+index 038701d48351..6ab2fe7e8782 100644
+--- a/drivers/char/tpm/tpm_nsc.c
++++ b/drivers/char/tpm/tpm_nsc.c
+@@ -412,5 +412,4 @@ module_exit(cleanup_nsc);
+ 
+ MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+ MODULE_DESCRIPTION("TPM Driver");
+-MODULE_VERSION("2.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index 4ed6e660273a..3074235b405d 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -429,5 +429,4 @@ module_init(init_tis);
+ module_exit(cleanup_tis);
+ MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+ MODULE_DESCRIPTION("TPM Driver");
+-MODULE_VERSION("2.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 92c51c6cfd1b..20f4b2c7ea52 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -1164,5 +1164,4 @@ EXPORT_SYMBOL_GPL(tpm_tis_resume);
+ 
+ MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+ MODULE_DESCRIPTION("TPM Driver");
+-MODULE_VERSION("2.0");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+index 91c772e38bb5..18f14162d1c1 100644
+--- a/drivers/char/tpm/tpm_vtpm_proxy.c
++++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -729,5 +729,4 @@ module_exit(vtpm_module_exit);
+ 
+ MODULE_AUTHOR("Stefan Berger (stefanb@us.ibm.com)");
+ MODULE_DESCRIPTION("vTPM Driver");
+-MODULE_VERSION("0.1");
+ MODULE_LICENSE("GPL");
+-- 
+2.11.0
 
