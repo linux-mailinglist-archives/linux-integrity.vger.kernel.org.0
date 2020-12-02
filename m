@@ -2,220 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E242CAF21
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Dec 2020 22:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF0E2CB2CA
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Dec 2020 03:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729752AbgLAVso (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 1 Dec 2020 16:48:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:36514 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728614AbgLAVsn (ORCPT
+        id S1727561AbgLBC0E (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 1 Dec 2020 21:26:04 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:55964 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727099AbgLBC0E (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 1 Dec 2020 16:48:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606859236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/soQd5paAGtsC+Ucl/RB+lxOX1sTWIxr6snR+ODgDiw=;
-        b=Zhv5x+65H+Bieo8rSgb6U/Z5EdPXPNM5AmQXYMuBQ7EDE3W8BKujcfDGrI5mUVB+rxJ/y4
-        nQkmQXcbTFnxtFc2JW5FLJJx0UwCEBy2GT/R/VCxhq+A5MFMhYcAoQTOTty5rtGP3xCrZd
-        5CM3RybDA854UoJS6CqTfPyxXvNsehk=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-514-P7m0y_DMPhO_syurVxoF1w-1; Tue, 01 Dec 2020 16:47:15 -0500
-X-MC-Unique: P7m0y_DMPhO_syurVxoF1w-1
-Received: by mail-qk1-f200.google.com with SMTP id g28so2486959qka.4
-        for <linux-integrity@vger.kernel.org>; Tue, 01 Dec 2020 13:47:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=/soQd5paAGtsC+Ucl/RB+lxOX1sTWIxr6snR+ODgDiw=;
-        b=gq51S4ncWXDYJqnwZ2XFUrxdrzVwY4KucYZqJeOuHxe68HUj4Qu50rwcktw3RFA8zt
-         dSRQTH6DNNCRN+Sq7jFwDpK8xqNUsI3ZwjcIzan8lf5ZTmMZK37pqDvKDXOIar16n45S
-         GnrqUsyTcRyoU5n3zThqMQmWadcjvgviASvbA0/BRwhDzKCNK1zTJs+6SKR8V73Hu0C9
-         pBX49iXsMJXoivpdrz2rJSe4yU9/VHr3Q1b0JpPKcy3PvA5i0f6wPH6yf0xLXXi6Hsg/
-         UFRLqSEPk+zBoS36rN94M7yhXLkdo95HAES2O/AT80sEwFVY3/dN3BavdUP8CHmDAD83
-         20eg==
-X-Gm-Message-State: AOAM532jhbZuV719vHe8tl7Oh90PyWzWgnw5u3IUzGL4ChIbSrNbtXnf
-        daLkDCdjCzwQsvBByMYFQoTT1yATuKtqJBCNzuPj737Lo7cNSyJXujGFX+ZzFeWYd5t7M2UXqlV
-        lxJg+qVOTWuf15IZNwozb4nY33zoh
-X-Received: by 2002:a05:620a:94d:: with SMTP id w13mr5152215qkw.194.1606859234657;
-        Tue, 01 Dec 2020 13:47:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyttxx7fhA1D/CmhS3ifIpgxK5JvNV1GNBD6gPTYjcFT2ZW4zwfZFvXz1DJ6BOPf9YlU6BI5A==
-X-Received: by 2002:a05:620a:94d:: with SMTP id w13mr5152196qkw.194.1606859234422;
-        Tue, 01 Dec 2020 13:47:14 -0800 (PST)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id k188sm1014751qkd.98.2020.12.01.13.47.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Dec 2020 13:47:13 -0800 (PST)
-References: <20201001180925.13808-1-James.Bottomley@HansenPartnership.com>
- <20201001180925.13808-4-James.Bottomley@HansenPartnership.com>
- <87h7p5mm3g.fsf@redhat.com> <87blfdmhm8.fsf@redhat.com>
- <2bf904f16673c4443bfc95f19d7fb49b97b9b159.camel@HansenPartnership.com>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        "Jarkko Sakkinen" <jarkko.sakkinen@linux.intel.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v2 3/5] tpm_tis: Fix interrupts for TIS TPMs without
- legacy cycles
-In-reply-to: <2bf904f16673c4443bfc95f19d7fb49b97b9b159.camel@HansenPartnership.com>
-Date:   Tue, 01 Dec 2020 14:47:12 -0700
-Message-ID: <87zh2xkxlr.fsf@redhat.com>
+        Tue, 1 Dec 2020 21:26:04 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D4B6B20B717A;
+        Tue,  1 Dec 2020 18:25:22 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D4B6B20B717A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1606875923;
+        bh=8zAZBN7xMgg91o7+5aZk7oyTbbSqBxC+Lh9bjFbKL7A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Za7YFMlkQR7YFVFZjNbKLQhXOxaM/Ozhxo8jt2SfQQxYcTOA+iHOJ+LblUiT+K5nG
+         QXKsTQ+mVKJrF2XNnphlFbe6nfQSW0u9kH1FXdbMq0g0mpUAImNAymJzyHFrEWKmXq
+         RQXAnGmoCFzlZNI6drbrZ3X0BF2QGF50y72O/i18=
+Subject: Re: [PATCH v9 0/8] Carry forward IMA measurement log on kexec on
+ ARM64
+To:     Mimi Zohar <zohar@linux.ibm.com>, Rob Herring <robh@kernel.org>
+Cc:     bauerman@linux.ibm.com, gregkh@linuxfoundation.org,
+        james.morse@arm.com, catalin.marinas@arm.com, sashal@kernel.org,
+        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com
+References: <20201113192243.1993-1-nramas@linux.microsoft.com>
+ <20201121135719.GA2134870@robh.at.kernel.org>
+ <415b4d0b-3d93-40ce-b74e-48fdce7fbf7f@linux.microsoft.com>
+ <a73a47da53b795617758cc23991624dfca173eba.camel@linux.ibm.com>
+ <76a749ac-8465-1d82-0ff5-0a46e0a29f18@linux.microsoft.com>
+ <f25df5ba1cda54f3b7c555367f58f43caf3a3c7d.camel@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <4d776cba-1380-0151-b9b4-4bbbe320742e@linux.microsoft.com>
+Date:   Tue, 1 Dec 2020 18:25:22 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <f25df5ba1cda54f3b7c555367f58f43caf3a3c7d.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 12/1/20 11:15 AM, Mimi Zohar wrote:
+> On Tue, 2020-12-01 at 11:10 -0800, Lakshmi Ramasubramanian wrote:
+>> On 12/1/20 3:34 AM, Mimi Zohar wrote:
+>>> On Sat, 2020-11-21 at 06:38 -0800, Lakshmi Ramasubramanian wrote:
+>>>> On 11/21/20 5:57 AM, Rob Herring wrote:
+>>>>> On Fri, Nov 13, 2020 at 11:22:35AM -0800, Lakshmi Ramasubramanian wrote:
+>>>
+>>>>>>     arch/powerpc/include/asm/kexec.h       |   1 -
+>>>>>>     arch/powerpc/kexec/Makefile            |   7 +-
+>>>>>>     arch/powerpc/kexec/file_load.c         |  32 --------
+>>>>>>     arch/powerpc/kexec/ima.c               | 106 ++-----------------------
+>>>>>>     drivers/of/Makefile                    |   9 +++
+>>>>>
+>>>>>>     drivers/of/ima_kexec.c                 |  91 +++++++++++++++++++++
+>>>>>>     drivers/of/kexec_fdt.c                 |  55 +++++++++++++
+>>>>>
+>>>>> Does this need to be 2 files? Just kexec.c?
+>>>>
+>>>> Since the functions defined in "ima_kexec.c" and "kexec_fdt.c" are
+>>>> enabled on 2 different kernel CONFIGs, keeping them in 2 files enables
+>>>> us to avoid using "#ifdef" in C files.
+>>>
+>>> Normally that is true, but just as all of the kexec related functions
+>>> are co-located in ima/ima_kexec.c, co-locating all of the kexec related
+>>> functions in drivers/of makes sense.
+>>>
+>>
+>> Sounds good - i'll make the change.
+>> Instead of "#ifdef" will use "IS_ENABLED" macro, and define the kexec
+>> related functions in drivers/of/ima_kexec.c
+> 
+> Perhaps name the file kexec.c, as Rob suggested.
+> 
 
-James Bottomley @ 2020-12-01 14:06 MST:
+Will do.
 
-> On Tue, 2020-12-01 at 12:49 -0700, Jerry Snitselaar wrote:
->> Jerry Snitselaar @ 2020-12-01 11:12 MST:
->> 
->> > James Bottomley @ 2020-10-01 11:09 MST:
->> > 
->> > > If a TIS TPM doesn't have legacy cycles, any write to the
->> > > interrupt
->> > > registers is ignored unless a locality is active.  This means
->> > > even to
->> > > set up the interrupt vectors a locality must first be
->> > > activated.  Fix
->> > > this by activating the 0 locality in the interrupt probe setup.
->> > > 
->> > > Since the TPM_EOI signalling also requires an active locality,
->> > > the
->> > > interrupt routine cannot end an interrupt if the locality is
->> > > released.
->> > > This can lead to a situation where the TPM goes command ready
->> > > after
->> > > locality release and since the interrupt cannot be ended it
->> > > refires
->> > > continuously.  Fix this by disabling all interrupts except
->> > > locality
->> > > change when a locality is released (this only fires when a
->> > > locality
->> > > becomes active, meaning the TPM_EOI should work).
->> > > 
->> > > Finally, since we now disable all status based interrupts in the
->> > > locality release, they must be re-enabled before waiting to check
->> > > the
->> > > condition, so add interrupt enabling to the status wait.
->> > > 
->> > > Signed-off-by: James Bottomley <
->> > > James.Bottomley@HansenPartnership.com>
->> > > 
->> > > ---
->> > > 
->> > > v2: renamed functions
->> > > ---
->> > >  drivers/char/tpm/tpm_tis_core.c | 125
->> > > ++++++++++++++++++++++++++------
->> > >  1 file changed, 101 insertions(+), 24 deletions(-)
->> > > 
->> > > diff --git a/drivers/char/tpm/tpm_tis_core.c
->> > > b/drivers/char/tpm/tpm_tis_core.c
->> > > index 431919d5f48a..0c07da8cd680 100644
->> > > --- a/drivers/char/tpm/tpm_tis_core.c
->> > > +++ b/drivers/char/tpm/tpm_tis_core.c
->> > > @@ -29,6 +29,46 @@
->> > >  
->> > >  static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool
->> > > value);
->> > >  
->> > > +static void tpm_tis_enable_interrupt(struct tpm_chip *chip, u8
->> > > mask)
->> > > +{
->> > > +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->> > > +	u32 intmask;
->> > > +
->> > > +	/* Take control of the TPM's interrupt hardware and shut it off
->> > > */
->> > > +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
->> > > +
->> > > +	intmask |= mask | TPM_GLOBAL_INT_ENABLE;
->> > > +
->> > > +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
->> > > +}
->> > > +
->> > > +static void tpm_tis_disable_interrupt(struct tpm_chip *chip, u8
->> > > mask)
->> > > +{
->> > > +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->> > > +	u32 intmask;
->> > > +
->> > > +	/* Take control of the TPM's interrupt hardware and shut it off
->> > > */
->> > > +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
->> > > +
->> > > +	intmask &= ~mask;
->> > > +
->> > > +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
->> > > +}
->> > > +
->> > > +static void tpm_tis_enable_stat_interrupts(struct tpm_chip
->> > > *chip, u8 stat)
->> > > +{
->> > > +	u32 mask = 0;
->> > > +
->> > > +	if (stat & TPM_STS_COMMAND_READY)
->> > > +		mask |= TPM_INTF_CMD_READY_INT;
->> > > +	if (stat & TPM_STS_VALID)
->> > > +		mask |= TPM_INTF_STS_VALID_INT;
->> > > +	if (stat & TPM_STS_DATA_AVAIL)
->> > > +		mask |= TPM_INTF_DATA_AVAIL_INT;
->> > > +
->> > > +	tpm_tis_enable_interrupt(chip, mask);
->> > > +}
->> > > +
->> > >  static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8
->> > > mask,
->> > >  					bool check_cancel, bool
->> > > *canceled)
->> > >  {
->> > > @@ -65,11 +105,14 @@ static int wait_for_tpm_stat(struct tpm_chip
->> > > *chip, u8 mask,
->> > >  		timeout = stop - jiffies;
->> > >  		if ((long)timeout <= 0)
->> > >  			return -ETIME;
->> > > +		tpm_tis_enable_stat_interrupts(chip, mask);
->> > >  		rc = wait_event_interruptible_timeout(*queue,
->> > >  			wait_for_tpm_stat_cond(chip, mask,
->> > > check_cancel,
->> > >  					       &canceled),
->> > >  			timeout);
->> > >  		if (rc > 0) {
->> > > +			if (rc == 1)
->> > > +				dev_err(&chip->dev, "Lost Interrupt
->> > > waiting for TPM stat\n");
->> > 
->> > With my proposed patch to check for the interrupt storm condition I
->> > sometimes see this message. Do you think it would make sense to
->> > have a check here and in the request_locality location to see that
->> > TPM_CHIP_FLAG is still enabled? It will print a message about the
->> > interrupt storm being detected, and switching to polling, so I
->> > don't know if this will cause confusion for people to have this
->> > show up as well in that case.
->> > 
->> 
->> I guess it wouldn't be too confusing since the messages will appear
->> close together.
->
-> But since we have a discriminator I'll try to use it and see if we can
-> tidy up the messages.  I think the condition just becomes
->
-> if (rc == 1 && (chip->flags & TPM_CHIP_FLAG_IRQ))
->
-> because you'll have reset that if you found a storm?
->
-> James
+thanks,
+  -lakshmi
 
-
-Yes, the worker calls disable_interrupts() and that clears the flag.
-
-Jerry
 
