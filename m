@@ -2,266 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 544372CC838
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Dec 2020 21:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3A52CC8AC
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Dec 2020 22:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727395AbgLBUon (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Dec 2020 15:44:43 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:54574 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730289AbgLBUom (ORCPT
+        id S1726694AbgLBVKu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Dec 2020 16:10:50 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58194 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726634AbgLBVKu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Dec 2020 15:44:42 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: aratiu)
-        with ESMTPSA id EDE4D1F451E5
-From:   Adrian Ratiu <adrian.ratiu@collabora.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Duncan Laurie <dlaurie@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: Re: [PATCH v4] char: tpm: add i2c driver for cr50
-In-Reply-To: <20201202170215.GB91318@kernel.org>
-References: <20201202105805.132183-1-adrian.ratiu@collabora.com>
- <20201202170215.GB91318@kernel.org>
-Date:   Wed, 02 Dec 2020 22:43:51 +0200
-Message-ID: <87ft4oos54.fsf@iwork.i-did-not-set--mail-host-address--so-tickle-me>
-MIME-Version: 1.0
-Content-Type: text/plain; format=flowed
+        Wed, 2 Dec 2020 16:10:50 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B2L3jgq052776;
+        Wed, 2 Dec 2020 16:10:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=LGkIrjtqa4joGxWb7uI/qvkO4B4va5rfsqLIzouACJ0=;
+ b=Tqcx84/+3LacU4+UY8colQcRxLLIUvRYwlaRCZOy5d/ZgWZ7DUiUkiF+X/vSTUxVmjzr
+ NdGGnWU1Zkj3v7ma7aCyMEuZNpvCum5Ku0S15p1gf3FSM+t3ev0lesJPRxd8rJfZVyLV
+ 5w+WqOsyAfGLIIJZPHJvkEZpuWxPAQXRhoK8V6bnrS6n5sxhTWgxrDkv5eD41UuRbKsI
+ cXoSjVph+XLBK+Rhn5q8ctNAKkwK3W3NpLieqS1h2zfgImhWFj+uYQvYVvStqLfV6s2q
+ tgnbHeVzDl7tKxwfHqDGwoYgJ+mnKqJks6EikLr94Xkiuh7C/b5FawP1X/Nf4cpDJJQB Ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 356jekga8p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Dec 2020 16:10:04 -0500
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B2L4grh064376;
+        Wed, 2 Dec 2020 16:10:03 -0500
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 356jekga7u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Dec 2020 16:10:03 -0500
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B2L7TJj017114;
+        Wed, 2 Dec 2020 21:10:02 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03fra.de.ibm.com with ESMTP id 353e686s1k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Dec 2020 21:10:02 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B2L7UE85309106
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Dec 2020 21:07:30 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1674D4C046;
+        Wed,  2 Dec 2020 21:07:30 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B80B4C04E;
+        Wed,  2 Dec 2020 21:07:28 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.92.233])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Dec 2020 21:07:27 +0000 (GMT)
+Message-ID: <a84520e3c7de9c767cbbc17e8ad894525043e211.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 03/11] evm: Refuse EVM_ALLOW_METADATA_WRITES only if
+ an HMAC key is loaded
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        silviu.vlasceanu@huawei.com, stable@vger.kernel.org
+Date:   Wed, 02 Dec 2020 16:07:27 -0500
+In-Reply-To: <20201111092302.1589-4-roberto.sassu@huawei.com>
+References: <20201111092302.1589-1-roberto.sassu@huawei.com>
+         <20201111092302.1589-4-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-02_12:2020-11-30,2020-12-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 phishscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 spamscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012020123
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 02 Dec 2020, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> On Wed, Dec 02, 2020 at 12:58:05PM +0200, Adrian Ratiu wrote: 
->> From: "dlaurie@chromium.org" <dlaurie@chromium.org>  Add TPM 
->> 2.0 compatible I2C interface for chips with cr50 firmware. 
->> The firmware running on the currently supported H1 MCU requires 
->> a special driver to handle its specific protocol, and this 
->> makes it unsuitable to use tpm_tis_core_* and instead it must 
->> implement the underlying TPM protocol similar to the other I2C 
->> TPM drivers.   - All 4 bytes of status register must be 
->> read/written at once.  - FIFO and burst count is limited to 63 
->> and must be drained by AP.  - Provides an interrupt to indicate 
->> when read response data is ready and when the TPM is finished 
->> processing write data.   This driver is based on the existing 
->> infineon I2C TPM driver, which most closely matches the cr50 
->> i2c protocol behavior.   Cc: Helen Koike 
->> <helen.koike@collabora.com> Cc: Jarkko Sakkinen 
->> <jarkko@kernel.org> Cc: Ezequiel Garcia 
->> <ezequiel@collabora.com> Signed-off-by: Duncan Laurie 
->> <dlaurie@chromium.org> [swboyd@chromium.org: Depend on i2c even 
->> if it's a module, replace boilier plate with SPDX tag, drop 
->> asm/byteorder.h include, simplify return from probe] 
->> Signed-off-by: Stephen Boyd <swboyd@chromium.org> 
->> Signed-off-by: Fabien Lahoudere 
->> <fabien.lahoudere@collabora.com> Signed-off-by: Adrian Ratiu 
->> <adrian.ratiu@collabora.com> --- Changes in v4: 
->>   - Replace force_release enum with defines (Jarkko) 
->>  Changes in v3: 
->>   - Misc small fixes (typos/renamings, comments, default 
->>   values) - Moved i2c_write memcpy before lock to minimize 
->>   critical section (Helen) - Dropped priv->locality because it 
->>   stored a constant value (Helen) - Many kdoc, function name 
->>   and style fixes in general (Jarkko) - Kept the force release 
->>   enum instead of defines or bool (Ezequiel) 
->>  Changes in v2: 
->>   - Various small fixes all over (reorder includes, 
->>   MAX_BUFSIZE, comments, etc) - Reworked return values of 
->>   i2c_wait_tpm_ready() to fix timeout mis-handling 
->> so ret == 0 now means success, the wait period jiffies is 
->> ignored because that number is meaningless and return a proper 
->> timeout error in case jiffies == 0. 
->>   - Make i2c default to 1 message per transfer (requested by 
->>   Helen) - Move -EIO error reporting to transfer function to 
->>   cleanup transfer() itself 
->> and its R/W callers 
->>   - Remove magic value hardcodings and introduce enum 
->>   force_release. 
->>  Applies on next-20201201, tested on Chromebook EVE.  --- 
->>  drivers/char/tpm/Kconfig            |  10 + 
->>  drivers/char/tpm/Makefile           |   2 + 
->>  drivers/char/tpm/tpm_tis_i2c_cr50.c | 767 
->>  ++++++++++++++++++++++++++++ 3 files changed, 779 
->>  insertions(+) create mode 100644 
->>  drivers/char/tpm/tpm_tis_i2c_cr50.c 
->>  diff --git a/drivers/char/tpm/Kconfig 
->> b/drivers/char/tpm/Kconfig index a18c314da211..4308f9ca7a43 
->> 100644 --- a/drivers/char/tpm/Kconfig +++ 
->> b/drivers/char/tpm/Kconfig @@ -86,6 +86,16 @@ config 
->> TCG_TIS_SYNQUACER 
->>  	  To compile this driver as a module, choose  M here; the 
->>  module will be called tpm_tis_synquacer.  
->> +config TCG_TIS_I2C_CR50 +	tristate "TPM Interface 
->> Specification 2.0 Interface (I2C - CR50)" +	depends on I2C + 
->> select TCG_CR50 +	help +	  This is a driver for the Google 
->> cr50 I2C TPM interface which is a +	  custom microcontroller 
->> and requires a custom i2c protocol interface +	  to 
->> handle the limitations of the hardware.  To compile this driver 
->> +	  as a module, choose M here; the module will be called 
->> tcg_tis_i2c_cr50.  + 
->>  config TCG_TIS_I2C_ATMEL tristate "TPM Interface Specification 
->>  1.2 Interface (I2C - Atmel)" depends on I2C 
->> diff --git a/drivers/char/tpm/Makefile 
->> b/drivers/char/tpm/Makefile index 84db4fb3a9c9..66d39ea6bd10 
->> 100644 --- a/drivers/char/tpm/Makefile +++ 
->> b/drivers/char/tpm/Makefile @@ -27,6 +27,8 @@ 
->> obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o 
->>  tpm_tis_spi-y := tpm_tis_spi_main.o 
->>  tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o  
->> +obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o + 
->>  obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o 
->>  obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o 
->>  obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o 
->> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c 
->> b/drivers/char/tpm/tpm_tis_i2c_cr50.c new file mode 100644 
->> index 000000000000..a374853a3b4b --- /dev/null +++ 
->> b/drivers/char/tpm/tpm_tis_i2c_cr50.c @@ -0,0 +1,767 @@ +// 
->> SPDX-License-Identifier: GPL-2.0 +/* + * Copyright 2016 Google 
->> Inc. 
+On Wed, 2020-11-11 at 10:22 +0100, Roberto Sassu wrote:
+> EVM_ALLOW_METADATA_WRITES is an EVM initialization flag that can be set to
+> temporarily disable metadata verification until all xattrs/attrs necessary
+> to verify an EVM portable signature are copied to the file. This flag is
+> cleared when EVM is initialized with an HMAC key, to avoid that the HMAC is
+> calculated on unverified xattrs/attrs.
 > 
-> Should be 2020. 
+> Currently EVM unnecessarily denies setting this flag if EVM is initialized
+> with a public key, which is not a concern as it cannot be used to trust
+> xattrs/attrs updates. This patch removes this limitation.
 > 
->> + * + * Based on Linux Kernel TPM driver by + * Peter Huewe 
->> <peter.huewe@infineon.com> + * Copyright (C) 2011 Infineon 
->> Technologies 
+> Cc: stable@vger.kernel.org # 4.16.x
+> Fixes: ae1ba1676b88e ("EVM: Allow userland to permit modification of EVM-protected metadata")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  Documentation/ABI/testing/evm      | 5 +++--
+>  security/integrity/evm/evm_secfs.c | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 > 
-> Not sure how this was derived. 
->
+> diff --git a/Documentation/ABI/testing/evm b/Documentation/ABI/testing/evm
+> index 3c477ba48a31..eb6d70fd6fa2 100644
+> --- a/Documentation/ABI/testing/evm
+> +++ b/Documentation/ABI/testing/evm
+> @@ -49,8 +49,9 @@ Description:
+>  		modification of EVM-protected metadata and
+>  		disable all further modification of policy
+>  
+> -		Note that once a key has been loaded, it will no longer be
+> -		possible to enable metadata modification.
+> +		Note that once an HMAC key has been loaded, it will no longer
+> +		be possible to enable metadata modification and, if it is
+> +		already enabled, it will be disabled.
+>  
+>  		Until key loading has been signaled EVM can not create
+>  		or validate the 'security.evm' xattr, but returns
+> diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
+> index cfc3075769bb..92fe26ace797 100644
+> --- a/security/integrity/evm/evm_secfs.c
+> +++ b/security/integrity/evm/evm_secfs.c
+> @@ -84,7 +84,7 @@ static ssize_t evm_write_key(struct file *file, const char __user *buf,
+>  	 * keys are loaded.
+>  	 */
+>  	if ((i & EVM_ALLOW_METADATA_WRITES) &&
+> -	    ((evm_initialized & EVM_KEY_MASK) != 0) &&
+> +	    ((evm_initialized & EVM_INIT_HMAC) != 0) &&
+>  	    !(evm_initialized & EVM_ALLOW_METADATA_WRITES))
+>  		return -EPERM;
+>  
 
-Indeed I think we should just mention the original author and 
-driver like Infineon driver itself does. Thanks!
- 
->> + * + * cr50 is a firmware for H1 secure modules that requires 
->> special + * handling for the I2C interface.  + * + * - Use an 
->> interrupt for transaction status instead of hardcoded delays. 
->> + * - Must use write+wait+read read protocol.  + * - All 4 
->> bytes of status register must be read/written at once.  + * - 
->> Burst count max is 63 bytes, and burst count behaves slightly 
->> differently + *   than other I2C TPMs.  + * - When reading from 
->> FIFO the full burstcnt must be read instead of just + * 
->> reading header and determining the remainder.  + */ + +#include 
->> <linux/acpi.h> +#include <linux/completion.h> +#include 
->> <linux/i2c.h> +#include <linux/interrupt.h> +#include 
->> <linux/module.h> +#include <linux/pm.h> +#include 
->> <linux/slab.h> +#include <linux/wait.h> + +#include 
->> "tpm_tis_core.h" + +#define TPM_CR50_MAX_BUFSIZE		64 
->> +#define TPM_CR50_TIMEOUT_SHORT_MS	2	/* Short timeout 
->> during transactions */ +#define TPM_CR50_TIMEOUT_NOIRQ_MS	20 
->> /* Timeout for TPM ready without IRQ */ +#define 
->> TPM_CR50_I2C_DID_VID		0x00281ae0L /* Device and vendor 
->> ID reg value */ +#define TPM_CR50_I2C_MAX_RETRIES	3	/* 
->> Max retries due to I2C errors */ +#define 
->> TPM_CR50_I2C_RETRY_DELAY_LO	55	/* Min usecs between 
->> retries on I2C */ +#define TPM_CR50_I2C_RETRY_DELAY_HI	65 
->> /* Max usecs between retries on I2C */ + +#define 
->> TPM_I2C_ACCESS(l)	(0x0000 | ((l) << 4)) +#define 
->> TPM_I2C_STS(l)		(0x0001 | ((l) << 4)) +#define 
->> TPM_I2C_DATA_FIFO(l)	(0x0005 | ((l) << 4)) +#define 
->> TPM_I2C_DID_VID(l)	(0x0006 | ((l) << 4)) + +#define 
->> TPM_I2C_CR50_NO_FORCE	0 +#define TPM_I2C_CR50_FORCE	1 
-> 
-> No need for these. 
-> 
->> + +/** + * struct tpm_i2c_cr50_priv_data - Driver private data. 
->> + * @irq: Irq number used for this chip.  + *       If irq <= 
->> 0, then a fixed timeout is used instead of waiting for irq.  + 
->> * @tpm_ready: Struct used by irq handler to signal R/W 
->> readiness.  + * @buf: Buffer used for i2c writes, with i2c 
->> address prepended to content. 
-> 
-> Not properly aligned. 
-> 
-> https://www.kernel.org/doc/Documentation/kernel-doc-nano-HOWTO.txt 
-> 
->> + */ +struct tpm_i2c_cr50_priv_data { +	int irq; + 
->> struct completion tpm_ready; +	u8 
->> buf[TPM_CR50_MAX_BUFSIZE]; +}; + +/** + * 
->> tpm_cr50_i2c_int_handler() - cr50 interrupt handler.  + * 
->> @dummy: Unused parameter.  + * @dev_id: TPM chip information. 
-> 
-> This is alignment everywhere. Why the parameter is called 
-> "dev_id" anyway? 
->
+If an HMAC key is loaded EVM_ALLOW_METADATA_WRITES should already be
+disabled.  Testing EVM_ALLOW_METADATA_WRITES shouldn't be needed. 
+Please update the comment: "Don't allow a request to freshly enable
+metadata writes if keys are loaded."
 
-I think it got copied from all the other tpm drivers which use the 
-"dev_id" identifier in the irq handler. In the end it's a void 
-pointer in C, it could be anything. :)
+thanks,
 
-I will improve the name while at it with the alignments, thanks!
- 
->> + * + * The cr50 interrupt handler signals waiting threads that 
->> the + * interrupt has been asserted. It does not do any 
->> interrupt triggered + * processing but is instead used to avoid 
->> fixed delays.  + */ +static irqreturn_t 
->> tpm_cr50_i2c_int_handler(int dummy, void *dev_id) +{ + 
->> struct tpm_chip *chip = dev_id; +	struct 
->> tpm_i2c_cr50_priv_data *priv = dev_get_drvdata(&chip->dev); + + 
->> complete(&priv->tpm_ready); + +	return IRQ_HANDLED; +} + 
->> +/** + * tpm_cr50_i2c_wait_tpm_ready() - Wait for tpm to signal 
->> ready.  + * @chip: TPM chip information.  + * + * Wait for 
->> completion interrupt if available, otherwise use a fixed + * 
->> delay for the TPM to be ready.  + * + * Return: 0 for success 
->> or timeout error number.  + */ +static int 
->> tpm_cr50_i2c_wait_tpm_ready(struct tpm_chip *chip) +{ + 
->> struct tpm_i2c_cr50_priv_data *priv = 
->> dev_get_drvdata(&chip->dev); + +	/* Use a safe fixed delay 
->> if interrupt is not supported */ +	if (priv->irq <= 0) { + 
->> msleep(TPM_CR50_TIMEOUT_NOIRQ_MS); +		return 0; +	} 
->> + +	/* Wait for interrupt to indicate TPM is ready to respond 
->> */ +	if (!wait_for_completion_timeout(&priv->tpm_ready, + 
->> msecs_to_jiffies(chip->timeout_a))) { + 
->> dev_warn(&chip->dev, "Timeout waiting for TPM ready\n"); + 
->> return -ETIMEDOUT; +	} + +	return 0; +} + +/** + * 
->> tpm_cr50_i2c_enable_tpm_irq() - Enable TPM irq.  + * @chip: TPM 
->> chip information.  + */ +static void 
->> tpm_cr50_i2c_enable_tpm_irq(struct tpm_chip *chip) +{ + 
->> struct tpm_i2c_cr50_priv_data *priv = 
->> dev_get_drvdata(&chip->dev); + +	if (priv->irq > 0) { + 
->> reinit_completion(&priv->tpm_ready); + 
->> enable_irq(priv->irq); +	} +} + +/** + * 
->> tpm_cr50_i2c_disable_tpm_irq() - Disable TPM irq.  + * @chip: 
->> TPM chip information.  + */ +static void 
->> tpm_cr50_i2c_disable_tpm_irq(struct tpm_chip *chip) +{ + 
->> struct tpm_i2c_cr50_priv_data *priv = 
->> dev_get_drvdata(&chip->dev); + +	if (priv->irq > 0) + 
->> disable_irq(priv->irq); +} + +/** + * 
->> tpm_cr50_i2c_transfer_message() - Transfer a message over i2c. 
->> + * @dev: Device information.  + * @adapter: I2C adapter.  + * 
->> @msg:Mmessage to transfer. 
-> 
-> Alignment etc. 
-> 
->> + * + * Call unlocked i2c transfer routine with the provided 
->> parameters and + * retry in case of bus errors.  + * + * 
->> Return: 0 on success, otherwise negative errno.  + */ +static 
->> int tpm_cr50_i2c_transfer_message(struct device *dev, + 
->> struct i2c_adapter *adapter, + 
->> struct i2c_msg *msg) +{ +	int rc; +	unsigned int try; 
-> 
-> Opposite order would be more readable (reverse christmas tree). 
-> 
->> + +	for (try = 0; try < TPM_CR50_I2C_MAX_RETRIES; try++) { + 
->> rc = __i2c_transfer(adapter, msg, 1); +		if (rc == 
->> 1) +			return 0; /* Successfully transferred the 
->> message */ +		if (try) + 
->> dev_warn(dev, "i2c transfer failed (attempt %d/%d): %d\n", + 
->> try + 1, TPM_CR50_I2C_MAX_RETRIES, rc); + 
->> usleep_range(TPM_CR50_I2C_RETRY_DELAY_LO, + 
->> TPM_CR50_I2C_RETRY_DELAY_HI); 
-> 
-> Can be probably put into one line without checkpatch.pl 
-> complaining. 
-> 
-> Giving up at this point.
+Mimi
 
-Thanks for the feedback, will send another version with fixes 
-soon.
-
-Adrian
-
->
-> /Jarkko
