@@ -2,131 +2,205 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E020A2CC2F9
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Dec 2020 18:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA262CC30A
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Dec 2020 18:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387569AbgLBREc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Dec 2020 12:04:32 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13434 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387464AbgLBREc (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Dec 2020 12:04:32 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B2GVeXk018304;
-        Wed, 2 Dec 2020 12:03:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=VkAK9awdrlq9A2BqEcSqkXYPO2nZPqg2uDrl8aCSr8c=;
- b=FpXLeMbGp2LkCIUGhyE6f6Rd77dMZhgDDxn23HsKYaTE0uEEb+HTLSNWLglI964V1Bo7
- Ir9vbn6RkxaIsmvPnU9yYR9N7/B4gLE9NqfAxwmBdVBy2CiqO5M3RGErR27UochMCyMp
- itAioCGaob3hYYkFD0P6ETc5Sr+B7raPrz/haj0V258fk75u2Ndj4j9hbH94wosQ4Bw5
- v6C8u5QgukhHIsb/zEr2YLopx7suwT9TZaSbs+qbE6io0FjgN2sVr2kLqAuvI7iXI/91
- lamQi1YtH+BS2fnqciYt7rLfRhTBE9qcKNgsaqPhOkuNI0IpMa9pg4VEONxTsozJVUXH mQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3569tgk0hc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Dec 2020 12:03:41 -0500
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B2GiTnx056004;
-        Wed, 2 Dec 2020 12:03:41 -0500
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3569tgk0gm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Dec 2020 12:03:41 -0500
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B2H26QK013988;
-        Wed, 2 Dec 2020 17:03:39 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 354fpdb622-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Dec 2020 17:03:39 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B2H3a6Y58065406
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Dec 2020 17:03:37 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DA2115204E;
-        Wed,  2 Dec 2020 17:03:36 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.92.233])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5092452052;
-        Wed,  2 Dec 2020 17:03:35 +0000 (GMT)
-Message-ID: <c90746b88ff93402910f03a02ffb555bb781578d.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 01/11] evm: Execute evm_inode_init_security() only
- when an HMAC key is loaded
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        silviu.vlasceanu@huawei.com, stable@vger.kernel.org
-Date:   Wed, 02 Dec 2020 12:03:34 -0500
-In-Reply-To: <20201111092302.1589-2-roberto.sassu@huawei.com>
-References: <20201111092302.1589-1-roberto.sassu@huawei.com>
-         <20201111092302.1589-2-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-02_08:2020-11-30,2020-12-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- mlxlogscore=999 suspectscore=0 clxscore=1015 lowpriorityscore=0
- adultscore=0 spamscore=0 impostorscore=0 bulkscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012020096
+        id S1728737AbgLBRHk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Dec 2020 12:07:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34782 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728731AbgLBRHk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 2 Dec 2020 12:07:40 -0500
+Date:   Wed, 2 Dec 2020 19:06:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606928818;
+        bh=erzBmx7mDxpVxZlbI/ey56oFt86ALNg3K4J7JVsrYe4=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z9E8/rPz9CHXmX5f9N9BnYhpungErfM7FuTCpxq0/ldpVvn8xjMIifUuJzUNklqGP
+         jvnChIGCrThPQyWmtil4E+SwMdCr1Upj5jBVzYtgqHSCeBuXV2QXQaZXTHvgqnGWxO
+         PmEFcSIvBBG1vt1oHORqOuiyAfmJURnq+yeOWQXo=
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        benh@kernel.crashing.org, paulus@samba.org,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] drivers: char: tpm: remove unneeded MODULE_VERSION()
+ usage
+Message-ID: <20201202170653.GA91741@kernel.org>
+References: <20201202121553.9383-1-info@metux.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201202121553.9383-1-info@metux.net>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2020-11-11 at 10:22 +0100, Roberto Sassu wrote:
-> evm_inode_init_security() requires an HMAC key to calculate the HMAC on
-> initial xattrs provided by LSMs. However, it checks generically whether a
-> key has been loaded, including also public keys, which is not correct as
-> public keys are not suitable to calculate the HMAC.
-> 
-> Originally, support for signature verification was introduced to verify a
-> possibly immutable initial ram disk, when no new files are created, and to
-> switch to HMAC for the root filesystem. By that time, an HMAC key should
-> have been loaded and usable to calculate HMACs for new files.
-> 
-> More recently support for requiring an HMAC key was removed from the
-> kernel, so that signature verification can be used alone. Since this is a
-> legitimate use case, evm_inode_init_security() should not return an error
-> when no HMAC key has been loaded.
-> 
-> This patch fixes this problem by replacing the evm_key_loaded() check with
-> a check of the EVM_INIT_HMAC flag in evm_initialized.
-> 
-> Cc: stable@vger.kernel.org # 4.5.x
-> Fixes: 26ddabfe96b ("evm: enable EVM when X509 certificate is loaded")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+On Wed, Dec 02, 2020 at 01:15:53PM +0100, Enrico Weigelt, metux IT consult wrote:
+> Remove MODULE_VERSION(), as it isn't needed at all: the only version
+> making sense is the kernel version.
+
+Kernel version neither does make sense here. Why are mentioning it
+in the commit message? Please just derive the commit message from
+the one that Greg wrote.
+
+> Link: https://lkml.org/lkml/2017/11/22/480
+>
+
+Remove the spurious empty line.
+
+> Signed-off-by: Enrico Weigelt <info@metux.net>
 > ---
->  security/integrity/evm/evm_main.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/char/tpm/st33zp24/i2c.c      | 1 -
+>  drivers/char/tpm/st33zp24/spi.c      | 1 -
+>  drivers/char/tpm/st33zp24/st33zp24.c | 1 -
+>  drivers/char/tpm/tpm-interface.c     | 1 -
+>  drivers/char/tpm/tpm_atmel.c         | 1 -
+>  drivers/char/tpm/tpm_crb.c           | 1 -
+>  drivers/char/tpm/tpm_i2c_infineon.c  | 1 -
+>  drivers/char/tpm/tpm_ibmvtpm.c       | 1 -
+>  drivers/char/tpm/tpm_infineon.c      | 1 -
+>  drivers/char/tpm/tpm_nsc.c           | 1 -
+>  drivers/char/tpm/tpm_tis.c           | 1 -
+>  drivers/char/tpm/tpm_tis_core.c      | 1 -
+>  drivers/char/tpm/tpm_vtpm_proxy.c    | 1 -
+>  13 files changed, 13 deletions(-)
 > 
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> index 76d19146d74b..001e001eae01 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -530,7 +530,8 @@ int evm_inode_init_security(struct inode *inode,
->  	struct evm_xattr *xattr_data;
->  	int rc;
+> diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+> index 7c617edff4ca..7ed9829cacc4 100644
+> --- a/drivers/char/tpm/st33zp24/i2c.c
+> +++ b/drivers/char/tpm/st33zp24/i2c.c
+> @@ -313,5 +313,4 @@ module_i2c_driver(st33zp24_i2c_driver);
 >  
-> -	if (!evm_key_loaded() || !evm_protected_xattr(lsm_xattr->name))
-> +	if (!(evm_initialized & EVM_INIT_HMAC) ||
-> +	    !evm_protected_xattr(lsm_xattr->name))
->  		return 0;
+>  MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
+>  MODULE_DESCRIPTION("STM TPM 1.2 I2C ST33 Driver");
+> -MODULE_VERSION("1.3.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+> index a75dafd39445..147efea4eb05 100644
+> --- a/drivers/char/tpm/st33zp24/spi.c
+> +++ b/drivers/char/tpm/st33zp24/spi.c
+> @@ -430,5 +430,4 @@ module_spi_driver(st33zp24_spi_driver);
 >  
->  	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
+>  MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
+>  MODULE_DESCRIPTION("STM TPM 1.2 SPI ST33 Driver");
+> -MODULE_VERSION("1.3.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
+> index 4ec10ab5e576..e0f1a5828993 100644
+> --- a/drivers/char/tpm/st33zp24/st33zp24.c
+> +++ b/drivers/char/tpm/st33zp24/st33zp24.c
+> @@ -646,5 +646,4 @@ EXPORT_SYMBOL(st33zp24_pm_resume);
+>  
+>  MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
+>  MODULE_DESCRIPTION("ST33ZP24 TPM 1.2 driver");
+> -MODULE_VERSION("1.3.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 1621ce818705..dfdc68b8bf88 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -514,5 +514,4 @@ module_exit(tpm_exit);
+>  
+>  MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+>  MODULE_DESCRIPTION("TPM Driver");
+> -MODULE_VERSION("2.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm_atmel.c b/drivers/char/tpm/tpm_atmel.c
+> index 54a6750a6757..35bf249cc95a 100644
+> --- a/drivers/char/tpm/tpm_atmel.c
+> +++ b/drivers/char/tpm/tpm_atmel.c
+> @@ -231,5 +231,4 @@ module_exit(cleanup_atmel);
+>  
+>  MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+>  MODULE_DESCRIPTION("TPM Driver");
+> -MODULE_VERSION("2.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+> index a9dcf31eadd2..3e72b7b99cce 100644
+> --- a/drivers/char/tpm/tpm_crb.c
+> +++ b/drivers/char/tpm/tpm_crb.c
+> @@ -748,5 +748,4 @@ static struct acpi_driver crb_acpi_driver = {
+>  module_acpi_driver(crb_acpi_driver);
+>  MODULE_AUTHOR("Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>");
+>  MODULE_DESCRIPTION("TPM2 Driver");
+> -MODULE_VERSION("0.1");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm_i2c_infineon.c b/drivers/char/tpm/tpm_i2c_infineon.c
+> index a19d32cb4e94..8920b7c19fcb 100644
+> --- a/drivers/char/tpm/tpm_i2c_infineon.c
+> +++ b/drivers/char/tpm/tpm_i2c_infineon.c
+> @@ -731,5 +731,4 @@ static struct i2c_driver tpm_tis_i2c_driver = {
+>  module_i2c_driver(tpm_tis_i2c_driver);
+>  MODULE_AUTHOR("Peter Huewe <peter.huewe@infineon.com>");
+>  MODULE_DESCRIPTION("TPM TIS I2C Infineon Driver");
+> -MODULE_VERSION("2.2.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+> index 994385bf37c0..5b04d113f634 100644
+> --- a/drivers/char/tpm/tpm_ibmvtpm.c
+> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
+> @@ -750,5 +750,4 @@ module_exit(ibmvtpm_module_exit);
+>  
+>  MODULE_AUTHOR("adlai@us.ibm.com");
+>  MODULE_DESCRIPTION("IBM vTPM Driver");
+> -MODULE_VERSION("1.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
+> index 9c924a1440a9..8a58966c5c9b 100644
+> --- a/drivers/char/tpm/tpm_infineon.c
+> +++ b/drivers/char/tpm/tpm_infineon.c
+> @@ -621,5 +621,4 @@ module_pnp_driver(tpm_inf_pnp_driver);
+>  
+>  MODULE_AUTHOR("Marcel Selhorst <tpmdd@sirrix.com>");
+>  MODULE_DESCRIPTION("Driver for Infineon TPM SLD 9630 TT 1.1 / SLB 9635 TT 1.2");
+> -MODULE_VERSION("1.9.2");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm_nsc.c b/drivers/char/tpm/tpm_nsc.c
+> index 038701d48351..6ab2fe7e8782 100644
+> --- a/drivers/char/tpm/tpm_nsc.c
+> +++ b/drivers/char/tpm/tpm_nsc.c
+> @@ -412,5 +412,4 @@ module_exit(cleanup_nsc);
+>  
+>  MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+>  MODULE_DESCRIPTION("TPM Driver");
+> -MODULE_VERSION("2.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index 4ed6e660273a..3074235b405d 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -429,5 +429,4 @@ module_init(init_tis);
+>  module_exit(cleanup_tis);
+>  MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+>  MODULE_DESCRIPTION("TPM Driver");
+> -MODULE_VERSION("2.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 92c51c6cfd1b..20f4b2c7ea52 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -1164,5 +1164,4 @@ EXPORT_SYMBOL_GPL(tpm_tis_resume);
+>  
+>  MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
+>  MODULE_DESCRIPTION("TPM Driver");
+> -MODULE_VERSION("2.0");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+> index 91c772e38bb5..18f14162d1c1 100644
+> --- a/drivers/char/tpm/tpm_vtpm_proxy.c
+> +++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+> @@ -729,5 +729,4 @@ module_exit(vtpm_module_exit);
+>  
+>  MODULE_AUTHOR("Stefan Berger (stefanb@us.ibm.com)");
+>  MODULE_DESCRIPTION("vTPM Driver");
+> -MODULE_VERSION("0.1");
+>  MODULE_LICENSE("GPL");
+> -- 
+> 2.11.0
+> 
+> 
 
-Let's update the function description to make it explicit.  Something
-like: "evm_inode_init_security - initializes security.evm HMAC value"
+Thanks.
 
-Mimi
-
-
-
+/Jarkko
