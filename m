@@ -2,196 +2,208 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BA92CBCCC
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Dec 2020 13:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6293F2CC1B6
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Dec 2020 17:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726985AbgLBMSg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Dec 2020 07:18:36 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:32851 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726881AbgLBMSg (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Dec 2020 07:18:36 -0500
-Received: from orion.localdomain ([77.7.48.174]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MJV9M-1kV75Q0XNo-00JsFP; Wed, 02 Dec 2020 13:15:56 +0100
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        benh@kernel.crashing.org, paulus@samba.org,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] drivers: char: tpm: remove unneeded MODULE_VERSION() usage
-Date:   Wed,  2 Dec 2020 13:15:53 +0100
-Message-Id: <20201202121553.9383-1-info@metux.net>
-X-Mailer: git-send-email 2.11.0
-X-Provags-ID: V03:K1:S6jGKntch7TnNIvjw5HeYSwa3cdu9ChH6KIdjiN8Aw6I10nMGVT
- TfxVfBy1k7mv46B8Dyrm80CAJCZqiQzdUJlFmeCNabr0Yole0YWL1/NssfqGPj25DwI+gDj
- axY/uaskxTMUnwAA/4I8jGIBD5qbYDx2YnkpBrrX7YVWCj1EqbEgOxsztP6dEwhqkIaNs9W
- dv4rRCeBj25UrBA2tthTA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1FdbRDQJofQ=:4P+X4mrrTmi5GX6ObomhZ1
- MZ/jKta9twQOXBklTXSMoDO/Z/D3xZtZLzUU19BZxf8UAPldSdnh9da4xIE3t1/uGReSjOCGz
- kEs2HeMiAzXjS3rOg6idRdVa0gIK55msLcyGHWdOIgnBF0eLbUhFKBIuurzK699pFDkLCdxVT
- YlpdOzqLlPwQwHg0O8P41vznDzybuat5+F8gXZqsWj2vUBNJCWcWPWD7eslKj94UqpbuOy+e/
- 3USLs+PVMOozbri5MbE6kbAkb+rTwYlthmRwwNXVKldMrjP6nKzebKii8w/JQYuSfzXYJ1iH9
- hD/rag3PQcqYpyuvQmLvqFG49fH2Wf1LV1gbiTaUfGwduG5J4E1Qrnc/x/JuTqzV5TQmW6gyn
- uDrSZ8ClNOH3m8q/wg4m6Dw8FXxHIcySf3arg4wDixCDzZbRfJTnCC0DfM0qz
+        id S1730504AbgLBQIS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Dec 2020 11:08:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41768 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726507AbgLBQIS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 2 Dec 2020 11:08:18 -0500
+Date:   Wed, 2 Dec 2020 18:07:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606925256;
+        bh=m0B4hqCmVP5ioXQ59O+oGLVtK09+12KaEmJZX1yQyQc=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XBCpBc41VEeMesPZ5up25cDfsp09/qdSp4hRTRwbm+GZef5OlaOq+qt/vMgKAmoC0
+         aJRWs0jzES9tmKU4UJ3PlWj/LJU76ANOt8OUdtADGWqyLgfSDXNbJZ+L7ufM+h1C9c
+         +ZGgMQSoo/Zr+d57qOZWlgCxWJz0ZZVBr+vLSN6Y=
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [PATCH] tpm_tis: Disable interrupts on ThinkPad T490s
+Message-ID: <20201202160730.GA87890@kernel.org>
+References: <20201015214430.17937-1-jsnitsel@redhat.com>
+ <CACdnJuuAyBYacCiOOZ8-L-0Xnfa3+pCVY_oejOJ8RPzuG2QgrQ@mail.gmail.com>
+ <87d009c0pn.fsf@redhat.com>
+ <20201124032623.GA40007@kernel.org>
+ <871rgiod53.fsf@redhat.com>
+ <7779bfbc-f96b-dd81-313f-36f451ce9c32@redhat.com>
+ <20201129032306.GD39488@kernel.org>
+ <7811f4fd-934b-e9f1-5712-7490409d6a7f@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7811f4fd-934b-e9f1-5712-7490409d6a7f@redhat.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Remove MODULE_VERSION(), as it isn't needed at all: the only version
-making sense is the kernel version.
+On Sun, Nov 29, 2020 at 12:34:34PM +0100, Hans de Goede wrote:
+> Hi All,
+> 
+> On 11/29/20 4:23 AM, Jarkko Sakkinen wrote:
+> > On Tue, Nov 24, 2020 at 10:45:01PM +0100, Hans de Goede wrote:
+> >> Hi,
+> >>
+> >> On 11/24/20 6:52 PM, Jerry Snitselaar wrote:
+> >>>
+> >>> Jarkko Sakkinen @ 2020-11-23 20:26 MST:
+> >>>
+> >>>> On Wed, Nov 18, 2020 at 11:36:20PM -0700, Jerry Snitselaar wrote:
+> >>>>>
+> >>>>> Matthew Garrett @ 2020-10-15 15:39 MST:
+> >>>>>
+> >>>>>> On Thu, Oct 15, 2020 at 2:44 PM Jerry Snitselaar <jsnitsel@redhat.com> wrote:
+> >>>>>>>
+> >>>>>>> There is a misconfiguration in the bios of the gpio pin used for the
+> >>>>>>> interrupt in the T490s. When interrupts are enabled in the tpm_tis
+> >>>>>>> driver code this results in an interrupt storm. This was initially
+> >>>>>>> reported when we attempted to enable the interrupt code in the tpm_tis
+> >>>>>>> driver, which previously wasn't setting a flag to enable it. Due to
+> >>>>>>> the reports of the interrupt storm that code was reverted and we went back
+> >>>>>>> to polling instead of using interrupts. Now that we know the T490s problem
+> >>>>>>> is a firmware issue, add code to check if the system is a T490s and
+> >>>>>>> disable interrupts if that is the case. This will allow us to enable
+> >>>>>>> interrupts for everyone else. If the user has a fixed bios they can
+> >>>>>>> force the enabling of interrupts with tpm_tis.interrupts=1 on the
+> >>>>>>> kernel command line.
+> >>>>>>
+> >>>>>> I think an implication of this is that systems haven't been
+> >>>>>> well-tested with interrupts enabled. In general when we've found a
+> >>>>>> firmware issue in one place it ends up happening elsewhere as well, so
+> >>>>>> it wouldn't surprise me if there are other machines that will also be
+> >>>>>> unhappy with interrupts enabled. Would it be possible to automatically
+> >>>>>> detect this case (eg, if we get more than a certain number of
+> >>>>>> interrupts in a certain timeframe immediately after enabling the
+> >>>>>> interrupt) and automatically fall back to polling in that case? It
+> >>>>>> would also mean that users with fixed firmware wouldn't need to pass a
+> >>>>>> parameter.
+> >>>>>
+> >>>>> I believe Matthew is correct here. I found another system today
+> >>>>> with completely different vendor for both the system and the tpm chip.
+> >>>>> In addition another Lenovo model, the L490, has the issue.
+> >>>>>
+> >>>>> This initial attempt at a solution like Matthew suggested works on
+> >>>>> the system I found today, but I imagine it is all sorts of wrong.
+> >>>>> In the 2 systems where I've seen it, there are about 100000 interrupts
+> >>>>> in around 1.5 seconds, and then the irq code shuts down the interrupt
+> >>>>> because they aren't being handled.
+> >>>>>
+> >>>>>
+> >>>>> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> >>>>> index 49ae09ac604f..478e9d02a3fa 100644
+> >>>>> --- a/drivers/char/tpm/tpm_tis_core.c
+> >>>>> +++ b/drivers/char/tpm/tpm_tis_core.c
+> >>>>> @@ -27,6 +27,11 @@
+> >>>>>  #include "tpm.h"
+> >>>>>  #include "tpm_tis_core.h"
+> >>>>>
+> >>>>> +static unsigned int time_start = 0;
+> >>>>> +static bool storm_check = true;
+> >>>>> +static bool storm_killed = false;
+> >>>>> +static u32 irqs_fired = 0;
+> >>>>
+> >>>> Maybe kstat_irqs() would be a better idea than ad hoc stats.
+> >>>>
+> >>>
+> >>> Thanks, yes that would be better.
+> >>>
+> >>>>> +
+> >>>>>  static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value);
+> >>>>>
+> >>>>>  static void tpm_tis_enable_interrupt(struct tpm_chip *chip, u8 mask)
+> >>>>> @@ -464,25 +469,31 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+> >>>>>         return rc;
+> >>>>>  }
+> >>>>>
+> >>>>> -static void disable_interrupts(struct tpm_chip *chip)
+> >>>>> +static void __disable_interrupts(struct tpm_chip *chip)
+> >>>>>  {
+> >>>>>         struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> >>>>>         u32 intmask;
+> >>>>>         int rc;
+> >>>>>
+> >>>>> -       if (priv->irq == 0)
+> >>>>> -               return;
+> >>>>> -
+> >>>>>         rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> >>>>>         if (rc < 0)
+> >>>>>                 intmask = 0;
+> >>>>>
+> >>>>>         intmask &= ~TPM_GLOBAL_INT_ENABLE;
+> >>>>>         rc = tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> >>>>> +       chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+> >>>>> +}
+> >>>>> +
+> >>>>> +static void disable_interrupts(struct tpm_chip *chip)
+> >>>>> +{
+> >>>>> +       struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> >>>>>
+> >>>>> +       if (priv->irq == 0)
+> >>>>> +               return;
+> >>>>> +
+> >>>>> +       __disable_interrupts(chip);
+> >>>>>         devm_free_irq(chip->dev.parent, priv->irq, chip);
+> >>>>>         priv->irq = 0;
+> >>>>> -       chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+> >>>>>  }
+> >>>>>
+> >>>>>  /*
+> >>>>> @@ -528,6 +539,12 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
+> >>>>>         int rc, irq;
+> >>>>>         struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> >>>>>
+> >>>>> +       if (unlikely(storm_killed)) {
+> >>>>> +               devm_free_irq(chip->dev.parent, priv->irq, chip);
+> >>>>> +               priv->irq = 0;
+> >>>>> +               storm_killed = false;
+> >>>>> +       }
+> >>>>
+> >>>> OK this kind of bad solution because if tpm_tis_send() is not called,
+> >>>> then IRQ is never freed. AFAIK, devres_* do not sleep but use spin
+> >>>> lock, i.e. you could render out both storm_check and storm_killed.
+> >>>>
+> >>>
+> >>> Is there a way to flag it for freeing later while in an interrupt
+> >>> context? I'm not sure where to clean it up since devm_free_irq can't be
+> >>> called in tis_int_handler.
+> >>
+> >> You could add a workqueue work-struct just for this and queue that up
+> >> to do the free when you detect the storm. That will then run pretty much
+> >> immediately, avoiding the storm going on for (much) longer.
+> > 
+> > That's sounds feasible.
+> > 
+> >>> Before diving further into that though, does anyone else have an opinion
+> >>> on ripping out the irq code, and just using polling? We've been only
+> >>> polling since 2015 anyways.
+> >>
+> >> Given James Bottomley's reply I guess it would be worthwhile to get the
+> >> storm detection to work.
+> > 
+> > OK, agreed. I take my words back from a response few minutes ago :-)
+> 
+> :)
+> 
+> To be clear, I think we should give the storm detection a go. Especially
+> given the problems which James has seen with polling on some TPMs.
+> 
+> But if that turns out to not be feasible I agree we should just either
+> disable IRQs by default on standard x86 platforms, or just remove the
+> IRQ support all together.
 
-Link: https://lkml.org/lkml/2017/11/22/480
+Just for completeness: one option is also to whitelist IRQ's.
 
-Signed-off-by: Enrico Weigelt <info@metux.net>
----
- drivers/char/tpm/st33zp24/i2c.c      | 1 -
- drivers/char/tpm/st33zp24/spi.c      | 1 -
- drivers/char/tpm/st33zp24/st33zp24.c | 1 -
- drivers/char/tpm/tpm-interface.c     | 1 -
- drivers/char/tpm/tpm_atmel.c         | 1 -
- drivers/char/tpm/tpm_crb.c           | 1 -
- drivers/char/tpm/tpm_i2c_infineon.c  | 1 -
- drivers/char/tpm/tpm_ibmvtpm.c       | 1 -
- drivers/char/tpm/tpm_infineon.c      | 1 -
- drivers/char/tpm/tpm_nsc.c           | 1 -
- drivers/char/tpm/tpm_tis.c           | 1 -
- drivers/char/tpm/tpm_tis_core.c      | 1 -
- drivers/char/tpm/tpm_vtpm_proxy.c    | 1 -
- 13 files changed, 13 deletions(-)
+> Regards,
+> 
+> Hans
 
-diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-index 7c617edff4ca..7ed9829cacc4 100644
---- a/drivers/char/tpm/st33zp24/i2c.c
-+++ b/drivers/char/tpm/st33zp24/i2c.c
-@@ -313,5 +313,4 @@ module_i2c_driver(st33zp24_i2c_driver);
- 
- MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
- MODULE_DESCRIPTION("STM TPM 1.2 I2C ST33 Driver");
--MODULE_VERSION("1.3.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-index a75dafd39445..147efea4eb05 100644
---- a/drivers/char/tpm/st33zp24/spi.c
-+++ b/drivers/char/tpm/st33zp24/spi.c
-@@ -430,5 +430,4 @@ module_spi_driver(st33zp24_spi_driver);
- 
- MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
- MODULE_DESCRIPTION("STM TPM 1.2 SPI ST33 Driver");
--MODULE_VERSION("1.3.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
-index 4ec10ab5e576..e0f1a5828993 100644
---- a/drivers/char/tpm/st33zp24/st33zp24.c
-+++ b/drivers/char/tpm/st33zp24/st33zp24.c
-@@ -646,5 +646,4 @@ EXPORT_SYMBOL(st33zp24_pm_resume);
- 
- MODULE_AUTHOR("TPM support (TPMsupport@list.st.com)");
- MODULE_DESCRIPTION("ST33ZP24 TPM 1.2 driver");
--MODULE_VERSION("1.3.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index 1621ce818705..dfdc68b8bf88 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -514,5 +514,4 @@ module_exit(tpm_exit);
- 
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_atmel.c b/drivers/char/tpm/tpm_atmel.c
-index 54a6750a6757..35bf249cc95a 100644
---- a/drivers/char/tpm/tpm_atmel.c
-+++ b/drivers/char/tpm/tpm_atmel.c
-@@ -231,5 +231,4 @@ module_exit(cleanup_atmel);
- 
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index a9dcf31eadd2..3e72b7b99cce 100644
---- a/drivers/char/tpm/tpm_crb.c
-+++ b/drivers/char/tpm/tpm_crb.c
-@@ -748,5 +748,4 @@ static struct acpi_driver crb_acpi_driver = {
- module_acpi_driver(crb_acpi_driver);
- MODULE_AUTHOR("Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>");
- MODULE_DESCRIPTION("TPM2 Driver");
--MODULE_VERSION("0.1");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_i2c_infineon.c b/drivers/char/tpm/tpm_i2c_infineon.c
-index a19d32cb4e94..8920b7c19fcb 100644
---- a/drivers/char/tpm/tpm_i2c_infineon.c
-+++ b/drivers/char/tpm/tpm_i2c_infineon.c
-@@ -731,5 +731,4 @@ static struct i2c_driver tpm_tis_i2c_driver = {
- module_i2c_driver(tpm_tis_i2c_driver);
- MODULE_AUTHOR("Peter Huewe <peter.huewe@infineon.com>");
- MODULE_DESCRIPTION("TPM TIS I2C Infineon Driver");
--MODULE_VERSION("2.2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
-index 994385bf37c0..5b04d113f634 100644
---- a/drivers/char/tpm/tpm_ibmvtpm.c
-+++ b/drivers/char/tpm/tpm_ibmvtpm.c
-@@ -750,5 +750,4 @@ module_exit(ibmvtpm_module_exit);
- 
- MODULE_AUTHOR("adlai@us.ibm.com");
- MODULE_DESCRIPTION("IBM vTPM Driver");
--MODULE_VERSION("1.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
-index 9c924a1440a9..8a58966c5c9b 100644
---- a/drivers/char/tpm/tpm_infineon.c
-+++ b/drivers/char/tpm/tpm_infineon.c
-@@ -621,5 +621,4 @@ module_pnp_driver(tpm_inf_pnp_driver);
- 
- MODULE_AUTHOR("Marcel Selhorst <tpmdd@sirrix.com>");
- MODULE_DESCRIPTION("Driver for Infineon TPM SLD 9630 TT 1.1 / SLB 9635 TT 1.2");
--MODULE_VERSION("1.9.2");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_nsc.c b/drivers/char/tpm/tpm_nsc.c
-index 038701d48351..6ab2fe7e8782 100644
---- a/drivers/char/tpm/tpm_nsc.c
-+++ b/drivers/char/tpm/tpm_nsc.c
-@@ -412,5 +412,4 @@ module_exit(cleanup_nsc);
- 
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index 4ed6e660273a..3074235b405d 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -429,5 +429,4 @@ module_init(init_tis);
- module_exit(cleanup_tis);
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 92c51c6cfd1b..20f4b2c7ea52 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -1164,5 +1164,4 @@ EXPORT_SYMBOL_GPL(tpm_tis_resume);
- 
- MODULE_AUTHOR("Leendert van Doorn (leendert@watson.ibm.com)");
- MODULE_DESCRIPTION("TPM Driver");
--MODULE_VERSION("2.0");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-index 91c772e38bb5..18f14162d1c1 100644
---- a/drivers/char/tpm/tpm_vtpm_proxy.c
-+++ b/drivers/char/tpm/tpm_vtpm_proxy.c
-@@ -729,5 +729,4 @@ module_exit(vtpm_module_exit);
- 
- MODULE_AUTHOR("Stefan Berger (stefanb@us.ibm.com)");
- MODULE_DESCRIPTION("vTPM Driver");
--MODULE_VERSION("0.1");
- MODULE_LICENSE("GPL");
--- 
-2.11.0
-
+/Jarkko
