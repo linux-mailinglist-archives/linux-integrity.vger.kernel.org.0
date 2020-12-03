@@ -2,917 +2,819 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 978F12CE0F6
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Dec 2020 22:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9284B2CE3C0
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Dec 2020 01:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727901AbgLCVkN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Dec 2020 16:40:13 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39120 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726173AbgLCVkN (ORCPT
+        id S2501868AbgLDACy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Dec 2020 19:02:54 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:41705 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387921AbgLDACY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Dec 2020 16:40:13 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: aratiu)
-        with ESMTPSA id 0AEBA1F45C9D
-From:   Adrian Ratiu <adrian.ratiu@collabora.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Duncan Laurie <dlaurie@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v5] char: tpm: add i2c driver for cr50
-Date:   Thu,  3 Dec 2020 23:39:19 +0200
-Message-Id: <20201203213919.2736079-1-adrian.ratiu@collabora.com>
+        Thu, 3 Dec 2020 19:02:24 -0500
+Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1kkyXC-0007ka-01; Fri, 04 Dec 2020 00:01:14 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
+        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH v4 00/40] idmapped mounts
+Date:   Fri,  4 Dec 2020 00:56:56 +0100
+Message-Id: <20201203235736.3528991-1-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: "dlaurie@chromium.org" <dlaurie@chromium.org>
+Hey everyone,
 
-Add TPM 2.0 compatible I2C interface for chips with cr50 firmware.
+/* v4 */
+- Split out several preparatory patches from the initial mount_setattr
+  patch as requested by Christoph.
+- Add new tests for file/directory creation in directories with the
+  setgid bit set. Specifically, verify that the setgid bit is correctly
+  ignored when creating a file with the setgid bit and the parent
+  directory's i_gid isn't in_group_p() and the caller isn't
+  capable_wrt_inode_uidgid() over the parent directory's inode when
+  inode_init_owner() is called.
+  Conversely, verify that the setgid bit is set when creating a file
+  with the setgid bit and the parent's i_gid is either in_group_p() or
+  the caller is capable_wrt_inode_uidgid() over the parent directory's
+  inode. In additiona, verify that the setgid bit is always inherited
+  when creating directories.
+  Test all of this on regular mounts, idmapped mounts, and on idmapped
+  mounts in user namespaces.
+- Add new tests to verify that the i_gid of newly created files or
+  directories is correctly set to the parent directory's i_gid when the
+  parent directory has the setgid bit set.
+- Use "mnt_userns" as the de facto name for a vfsmount's user namespace
+  everywhere as suggested by Serge.
+- Reuse existing propagation flags instead of introducing new ones as
+  suggested by Christoph. (This is in line with Linus request to not
+  introduce too many new flags as evidenced by prior discussions on
+  other patchsets such as openat2().)
+- Add first set of Acked-bys from Serge and Reviewed-bys from Christoph.
+- Fix commit messages to reflect the fact that we modify existing
+  vfs helpers but do not introduce new ones like we did in the first
+  version. Some commit messages still implied we were adding new
+  helpers.
+- Reformat all commit messages to adhere to 73 char length limit and
+  wrap all lines in commits at 80 chars whenever this doesn't hinder
+  legibility.
+- Simplify various codepaths with Christoph's suggestions.
 
-The firmware running on the currently supported H1 MCU requires a
-special driver to handle its specific protocol, and this makes it
-unsuitable to use tpm_tis_core_* and instead it must implement the
-underlying TPM protocol similar to the other I2C TPM drivers.
+/* v3 */
+- The major change is the port of the test-suite from the
+  kernel-internal selftests framework to xfstests as requested by
+  Darrick and Christoph. The test-suite for xfstests is patch 38 in this
+  series. It has been kept as part of this series even though it belongs
+  to xfstests so it's easier to see what is tested and to keep it
+  in-sync.
+- Note, the test-suite now has been extended to cover io_uring and
+  idmapped mounts. The IORING_REGISTER_PERSONALITY feature allows to
+  register the caller's credentials with io_uring and returns an id
+  associated with these credentials. This is useful for applications
+  that wish to share a ring between separate users/processes. Callers
+  can pass in the credential id in the sqe personality field. If set,
+  that particular sqe will be issued with these credentials.
+  The test-suite now tests that the openat* operations with different
+  registered credentials work correctly and safely on regular mounts, on
+  regular mounts inside user namespaces, on idmapped mounts, and on
+  idmapped mounts inside user namespaces.
 
-- All 4 bytes of status register must be read/written at once.
-- FIFO and burst count is limited to 63 and must be drained by AP.
-- Provides an interrupt to indicate when read response data is ready
-and when the TPM is finished processing write data.
+/* v2 */
+- The major change is the rework requested by Christoph and others to
+  adapt all relevant helpers and inode_operations methods to account for
+  idmapped mounts instead of introducing new helpers and methods
+  specific to idmapped mounts like we did before. We've also moved the
+  overlayfs conversion to handle idmapped mounts into a separate
+  patchset that will be sent out separately after the core changes
+  landed. The converted filesytems in this series include fat and ext4.
+  As per Christoph's request the vfs-wide config option to disable
+  idmapped mounts has been removed. Instead the filesystems can decide
+  whether or not they want to allow idmap mounts through a config
+  option. These config options default to off. Having a config option
+  allows us to gain some confidence in the patchset over multiple kernel
+  releases.
+- This version introduces a large test-suite to test current vfs
+  behavior and idmapped mounts behavior. This test-suite is intended to
+  grow over time.
+- While while working on adapting this patchset to the requested
+  changes, the runC and containerd crowd was nice enough to adapt
+  containerd to this patchset to make use of idmapped mounts in one of
+  the most widely used container runtimes:
+  https://github.com/containerd/containerd/pull/4734
 
-This driver is based on the existing infineon I2C TPM driver, which
-most closely matches the cr50 i2c protocol behavior.
+With this patchset we make it possible to attach idmappings to mounts.
+This handles several common use-cases. Here are just a few:
+- Shifting of a container rootfs or base image without having to mangle
+  every file (runc, Docker, containerd, k8s, LXD, systemd ...)
+- Sharing of data between host or privileged containers with
+  underprivileged containers (runc, Docker, containerd, k8s, LXD, ...)
+- Shifting of subset of ownership-less filesystems (vfat) for use by
+  multiple users, effectively allowing for DAC on such devices (systemd,
+  Android, ...)
+- Data sharing between multiple user namespaces with incompatible maps
+  (LXD, k8s, ...)
+Making it possible to share directories and mounts between users with
+different uids and gids is itself quite an important use-case in
+distributed systems environments. It's of course especially useful in
+general for portable usb sticks, sharing data between multiple users in
+general, and sharing home directories between multiple users. The last
+example is now elegantly expressed in systemd's homed concept for
+portable home directories. As mentioned above, idmapped mounts also
+allow data from the host to be shared with unprivileged containers,
+between privileged and unprivileged containers simultaneously and in
+addition also between unprivileged containers with different idmappings
+whenever they are used to isolate one container completely from another
+container.
+As can be seen from answers to earlier threads of this patchset and from
+the list of potential users interest in this patchset is widespread.
 
-Cc: Helen Koike <helen.koike@collabora.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Ezequiel Garcia <ezequiel@collabora.com>
-Signed-off-by: Duncan Laurie <dlaurie@chromium.org>
-[swboyd@chromium.org: Depend on i2c even if it's a module, replace
-boilier plate with SPDX tag, drop asm/byteorder.h include, simplify
-return from probe]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Fabien Lahoudere <fabien.lahoudere@collabora.com>
-Signed-off-by: Adrian Ratiu <adrian.ratiu@collabora.com>
----
-Changes in v5:
-  - Fix copyringht notice (Jarkko)
-  - Drop CR50_NO/FORCE defines (Jarkko)
-  - Rename irq handler arg dev_id -> tpm_info (Jarkko)
-  - Whitespace, brakcets, christmas tree, `checkpatch --strict`, W=n fixes
+We have implemented and proposed multiple solutions to this before. This
+included the introduction of fsid mappings, a tiny filesystem that is
+currently carried in Ubuntu that has shown it's limitations, and an
+approach to call override creds in the vfs. None of these solutions have
+covered all of the above use-cases. Some of them have been fairly hacky
+too by e.g. violating how things should be passed down to the individual
+filesystems.
+The solution proposed here has it's origins in multiple discussions
+during Linux Plumbers 2017 during and after the end of the containers
+microconference.
+To the best of my knowledge this involved Aleksa, Stéphane, Eric, David,
+James, and myself. The original idea or a variant thereof has been
+discussed, again to the best of my knowledge, after a Linux conference
+in St. Petersburg in Russia in 2017 between Christoph, Tycho, and
+myself.
+We've taken the time to implement a working version of this solution
+over the last weeks to the best of my abilities. Tycho has signed up
+for this sligthly crazy endeavour as well and he has helped with the
+conversion of the xattr codepaths and will be involved with others in
+converting additional filesystems.
 
-Changes in v4:
-  - Replace force_release enum with defines (Jarkko)
+Idmappings become a property of struct vfsmount instead of tying it to a
+process being inside of a user namespace which has been the case for all
+other proposed approaches. It also allows to pass down the user
+namespace into the filesystems which is a clean way instead of violating
+calling conventions by strapping the user namespace information that is
+a property of the mount to the caller's credentials or similar hacks.
+Each mount can have a separate idmapping and idmapped mounts can even be
+created in the initial user namespace unblocking a range of use-cases.
 
-Changes in v3:
-  - Misc small fixes (typos/renamings, comments, default values)
-  - Moved i2c_write memcpy before lock to minimize critical section (Helen)
-  - Dropped priv->locality because it stored a constant value (Helen)
-  - Many kdoc, function name and style fixes in general (Jarkko)
-  - Kept the force release enum instead of defines or bool (Ezequiel)
+To this end the vfsmount struct gains a new struct user_namespace
+member. The idmapping of the user namespace becomes the idmapping of the
+mount. A caller that is privileged with respect to the user namespace of
+the superblock of the underlying filesystem can create an idmapped
+mount. In the future, we can enable unprivileged use-cases by checking
+whether the caller is privileged wrt to the user namespace than an
+already idmapped mount has been marked with, allowing them to change the
+idmapping. For now, keep things simple until we feel sure enough.
+Note, that with syscall interception it is already possible to intercept
+idmapped mount requests from unprivileged containers and handle them in
+a sufficiently privileged container manager. Support for this is already
+available in LXD and will be available in runC were syscall interception
+is currently in the process of becoming part of the runtime spec:
+https://github.com/opencontainers/runtime-spec/pull/1074.
 
-Changes in v2:
-  - Various small fixes all over (reorder includes, MAX_BUFSIZE, comments, etc)
-  - Reworked return values of i2c_wait_tpm_ready() to fix timeout mis-handling
-so ret == 0 now means success, the wait period jiffies is ignored because that
-number is meaningless and return a proper timeout error in case jiffies == 0.
-  - Make i2c default to 1 message per transfer (requested by Helen)
-  - Move -EIO error reporting to transfer function to cleanup transfer() itself
-and its R/W callers
-  - Remove magic value hardcodings and introduce enum force_release.
+The user namespace the mount will be marked with can be specified by
+passing a file descriptor refering to the user namespace as an argument
+to the new mount_setattr() syscall together with the new
+MOUNT_ATTR_IDMAP flag. By default vfsmounts are marked with the initial
+user namespace and no behavioral or performance changes should be
+observed. All mapping operations are nops for the initial user
+namespace. When a file/inode is accessed through an idmapped mount the
+i_uid and i_gid of the inode will be remapped according to the user
+namespace the mount has been marked with.
 
-Applies on next-20201201, tested on Chromebook EVE.
----
- drivers/char/tpm/Kconfig            |  10 +
- drivers/char/tpm/Makefile           |   2 +
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 777 ++++++++++++++++++++++++++++
- 3 files changed, 789 insertions(+)
- create mode 100644 drivers/char/tpm/tpm_tis_i2c_cr50.c
+In order to support idmapped mounts, filesystems need to be changed and
+mark themselves with the FS_ALLOW_IDMAP flag in fs_flags. The initial
+version contains fat and ext4 including a list of examples. But patches
+for other filesystems are actively worked on but will be sent out
+separately. We are here to see this through and there are multiple
+people involved in converting filesystems. So filesystem developers are
+not left alone with this.
 
-diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-index a18c314da211..4308f9ca7a43 100644
---- a/drivers/char/tpm/Kconfig
-+++ b/drivers/char/tpm/Kconfig
-@@ -86,6 +86,16 @@ config TCG_TIS_SYNQUACER
- 	  To compile this driver as a module, choose  M here;
- 	  the module will be called tpm_tis_synquacer.
- 
-+config TCG_TIS_I2C_CR50
-+	tristate "TPM Interface Specification 2.0 Interface (I2C - CR50)"
-+	depends on I2C
-+	select TCG_CR50
-+	help
-+	  This is a driver for the Google cr50 I2C TPM interface which is a
-+	  custom microcontroller and requires a custom i2c protocol interface
-+	  to handle the limitations of the hardware.  To compile this driver
-+	  as a module, choose M here; the module will be called tcg_tis_i2c_cr50.
-+
- config TCG_TIS_I2C_ATMEL
- 	tristate "TPM Interface Specification 1.2 Interface (I2C - Atmel)"
- 	depends on I2C
-diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-index 84db4fb3a9c9..66d39ea6bd10 100644
---- a/drivers/char/tpm/Makefile
-+++ b/drivers/char/tpm/Makefile
-@@ -27,6 +27,8 @@ obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
- tpm_tis_spi-y := tpm_tis_spi_main.o
- tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
- 
-+obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
-+
- obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
- obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
- obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-new file mode 100644
-index 000000000000..0e9d2da9dcf5
---- /dev/null
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -0,0 +1,777 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2020 Google Inc.
-+ *
-+ * Based on Infineon TPM driver by Peter Huewe.
-+ *
-+ * cr50 is a firmware for H1 secure modules that requires special
-+ * handling for the I2C interface.
-+ *
-+ * - Use an interrupt for transaction status instead of hardcoded delays.
-+ * - Must use write+wait+read read protocol.
-+ * - All 4 bytes of status register must be read/written at once.
-+ * - Burst count max is 63 bytes, and burst count behaves slightly differently
-+ *   than other I2C TPMs.
-+ * - When reading from FIFO the full burstcnt must be read instead of just
-+ *   reading header and determining the remainder.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/completion.h>
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/pm.h>
-+#include <linux/slab.h>
-+#include <linux/wait.h>
-+
-+#include "tpm_tis_core.h"
-+
-+#define TPM_CR50_MAX_BUFSIZE		64
-+#define TPM_CR50_TIMEOUT_SHORT_MS	2	/* Short timeout during transactions */
-+#define TPM_CR50_TIMEOUT_NOIRQ_MS	20	/* Timeout for TPM ready without IRQ */
-+#define TPM_CR50_I2C_DID_VID		0x00281ae0L /* Device and vendor ID reg value */
-+#define TPM_CR50_I2C_MAX_RETRIES	3	/* Max retries due to I2C errors */
-+#define TPM_CR50_I2C_RETRY_DELAY_LO	55	/* Min usecs between retries on I2C */
-+#define TPM_CR50_I2C_RETRY_DELAY_HI	65	/* Max usecs between retries on I2C */
-+
-+#define TPM_I2C_ACCESS(l)	(0x0000 | ((l) << 4))
-+#define TPM_I2C_STS(l)		(0x0001 | ((l) << 4))
-+#define TPM_I2C_DATA_FIFO(l)	(0x0005 | ((l) << 4))
-+#define TPM_I2C_DID_VID(l)	(0x0006 | ((l) << 4))
-+
-+/**
-+ * struct tpm_i2c_cr50_priv_data - Driver private data.
-+ * @irq:	Irq number used for this chip.
-+ *		If irq <= 0, then a fixed timeout is used instead of waiting for irq.
-+ * @tpm_ready:	Struct used by irq handler to signal R/W readiness.
-+ * @buf:	Buffer used for i2c writes, with i2c address prepended to content.
-+ *
-+ * Private driver struct used by kernel threads and interrupt context.
-+ */
-+struct tpm_i2c_cr50_priv_data {
-+	int irq;
-+	struct completion tpm_ready;
-+	u8 buf[TPM_CR50_MAX_BUFSIZE];
-+};
-+
-+/**
-+ * tpm_cr50_i2c_int_handler() - cr50 interrupt handler.
-+ * @dummy:	Unused parameter.
-+ * @tpm_info:	TPM chip information.
-+ *
-+ * The cr50 interrupt handler signals waiting threads that the
-+ * interrupt has been asserted. It does not do any interrupt triggered
-+ * processing but is instead used to avoid fixed delays.
-+ *
-+ * Return:
-+ *	IRQ_HANDLED signifies irq was handled by this device.
-+ */
-+static irqreturn_t tpm_cr50_i2c_int_handler(int dummy, void *tpm_info)
-+{
-+	struct tpm_chip *chip = tpm_info;
-+	struct tpm_i2c_cr50_priv_data *priv = dev_get_drvdata(&chip->dev);
-+
-+	complete(&priv->tpm_ready);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+/**
-+ * tpm_cr50_i2c_wait_tpm_ready() - Wait for tpm to signal ready.
-+ * @chip: TPM chip information.
-+ *
-+ * Wait for completion interrupt if available, otherwise use a fixed
-+ * delay for the TPM to be ready.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_i2c_wait_tpm_ready(struct tpm_chip *chip)
-+{
-+	struct tpm_i2c_cr50_priv_data *priv = dev_get_drvdata(&chip->dev);
-+
-+	/* Use a safe fixed delay if interrupt is not supported */
-+	if (priv->irq <= 0) {
-+		msleep(TPM_CR50_TIMEOUT_NOIRQ_MS);
-+		return 0;
-+	}
-+
-+	/* Wait for interrupt to indicate TPM is ready to respond */
-+	if (!wait_for_completion_timeout(&priv->tpm_ready,
-+					 msecs_to_jiffies(chip->timeout_a))) {
-+		dev_warn(&chip->dev, "Timeout waiting for TPM ready\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * tpm_cr50_i2c_enable_tpm_irq() - Enable TPM irq.
-+ * @chip: TPM chip information.
-+ */
-+static void tpm_cr50_i2c_enable_tpm_irq(struct tpm_chip *chip)
-+{
-+	struct tpm_i2c_cr50_priv_data *priv = dev_get_drvdata(&chip->dev);
-+
-+	if (priv->irq > 0) {
-+		reinit_completion(&priv->tpm_ready);
-+		enable_irq(priv->irq);
-+	}
-+}
-+
-+/**
-+ * tpm_cr50_i2c_disable_tpm_irq() - Disable TPM irq.
-+ * @chip: TPM chip information.
-+ */
-+static void tpm_cr50_i2c_disable_tpm_irq(struct tpm_chip *chip)
-+{
-+	struct tpm_i2c_cr50_priv_data *priv = dev_get_drvdata(&chip->dev);
-+
-+	if (priv->irq > 0)
-+		disable_irq(priv->irq);
-+}
-+
-+/**
-+ * tpm_cr50_i2c_transfer_message() - Transfer a message over i2c.
-+ * @dev:	Device information.
-+ * @adapter:	I2C adapter.
-+ * @msg:	Message to transfer.
-+ *
-+ * Call unlocked i2c transfer routine with the provided parameters and
-+ * retry in case of bus errors.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_i2c_transfer_message(struct device *dev,
-+					 struct i2c_adapter *adapter,
-+					 struct i2c_msg *msg)
-+{
-+	unsigned int try;
-+	int rc;
-+
-+	for (try = 0; try < TPM_CR50_I2C_MAX_RETRIES; try++) {
-+		rc = __i2c_transfer(adapter, msg, 1);
-+		if (rc == 1)
-+			return 0; /* Successfully transferred the message */
-+		if (try)
-+			dev_warn(dev, "i2c transfer failed (attempt %d/%d): %d\n",
-+				 try + 1, TPM_CR50_I2C_MAX_RETRIES, rc);
-+		usleep_range(TPM_CR50_I2C_RETRY_DELAY_LO, TPM_CR50_I2C_RETRY_DELAY_HI);
-+	}
-+
-+	return -EIO; /* No i2c message transferred */
-+}
-+
-+/**
-+ * tpm_cr50_i2c_read() - Read from TPM register.
-+ * @chip:	TPM chip information.
-+ * @addr:	Register address to read from.
-+ * @buffer:	Read destination, provided by caller.
-+ * @len:	Number of bytes to read.
-+ *
-+ * Sends the register address byte to the TPM, then waits until TPM
-+ * is ready via interrupt signal or timeout expiration, then 'len'
-+ * bytes are read from TPM response into the provided 'buffer'.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t len)
-+{
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
-+	struct i2c_msg msg_reg_addr = {
-+		.addr = client->addr,
-+		.len = 1,
-+		.buf = &addr
-+	};
-+	struct i2c_msg msg_response = {
-+		.addr = client->addr,
-+		.flags = I2C_M_RD,
-+		.len = len,
-+		.buf = buffer
-+	};
-+	int rc;
-+
-+	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
-+	/* Prepare for completion interrupt */
-+	tpm_cr50_i2c_enable_tpm_irq(chip);
-+
-+	/* Send the register address byte to the TPM */
-+	rc = tpm_cr50_i2c_transfer_message(&chip->dev, client->adapter, &msg_reg_addr);
-+	if (rc < 0)
-+		goto out;
-+
-+	/* Wait for TPM to be ready with response data */
-+	rc = tpm_cr50_i2c_wait_tpm_ready(chip);
-+	if (rc < 0)
-+		goto out;
-+
-+	/* Read response data from the TPM */
-+	rc = tpm_cr50_i2c_transfer_message(&chip->dev, client->adapter, &msg_response);
-+
-+out:
-+	tpm_cr50_i2c_disable_tpm_irq(chip);
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
-+	if (rc < 0)
-+		return rc;
-+
-+	return 0;
-+}
-+
-+/**
-+ * tpm_cr50_i2c_write()- Write to TPM register.
-+ * @chip:	TPM chip information.
-+ * @addr:	Register address to write to.
-+ * @buffer:	Data to write.
-+ * @len:	Number of bytes to write.
-+ *
-+ * The provided address is prepended to the data in 'buffer', the
-+ * cobined address+data is sent to the TPM, then wait for TPM to
-+ * indicate it is done writing.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
-+			      size_t len)
-+{
-+	struct tpm_i2c_cr50_priv_data *priv = dev_get_drvdata(&chip->dev);
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
-+	struct i2c_msg msg = {
-+		.addr = client->addr,
-+		.len = len + 1,
-+		.buf = priv->buf
-+	};
-+	int rc;
-+
-+	if (len > TPM_CR50_MAX_BUFSIZE - 1)
-+		return -EINVAL;
-+
-+	/* Prepend the 'register address' to the buffer */
-+	priv->buf[0] = addr;
-+	memcpy(priv->buf + 1, buffer, len);
-+
-+	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
-+	/* Prepare for completion interrupt */
-+	tpm_cr50_i2c_enable_tpm_irq(chip);
-+
-+	/* Send write request buffer with address */
-+	rc = tpm_cr50_i2c_transfer_message(&chip->dev, client->adapter, &msg);
-+	if (rc < 0)
-+		goto out;
-+
-+	/* Wait for TPM to be ready, ignore timeout */
-+	tpm_cr50_i2c_wait_tpm_ready(chip);
-+
-+out:
-+	tpm_cr50_i2c_disable_tpm_irq(chip);
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
-+	if (rc < 0)
-+		return rc;
-+
-+	return 0;
-+}
-+
-+/**
-+ * tpm_cr50_check_locality() - Verify TPM locality 0 is active.
-+ * @chip: TPM chip information.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_check_locality(struct tpm_chip *chip)
-+{
-+	u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_ACTIVE_LOCALITY;
-+	u8 buf;
-+	int rc;
-+
-+	rc = tpm_cr50_i2c_read(chip, TPM_I2C_ACCESS(0), &buf, sizeof(buf));
-+	if (rc < 0)
-+		return rc;
-+
-+	if ((buf & mask) == mask)
-+		return 0;
-+
-+	return -EIO;
-+}
-+
-+/**
-+ * tpm_cr50_release_locality() - Release TPM locality.
-+ * @chip:	TPM chip information.
-+ * @force:	Flag to force release if set.
-+ */
-+static void tpm_cr50_release_locality(struct tpm_chip *chip, bool force)
-+{
-+	u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_PENDING;
-+	u8 addr = TPM_I2C_ACCESS(0);
-+	u8 buf;
-+
-+	if (tpm_cr50_i2c_read(chip, addr, &buf, sizeof(buf)) < 0)
-+		return;
-+
-+	if (force || (buf & mask) == mask) {
-+		buf = TPM_ACCESS_ACTIVE_LOCALITY;
-+		tpm_cr50_i2c_write(chip, addr, &buf, sizeof(buf));
-+	}
-+}
-+
-+/**
-+ * tpm_cr50_request_locality() - Request TPM locality 0.
-+ * @chip: TPM chip information.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_request_locality(struct tpm_chip *chip)
-+{
-+	u8 buf = TPM_ACCESS_REQUEST_USE;
-+	unsigned long stop;
-+	int rc;
-+
-+	if (!tpm_cr50_check_locality(chip))
-+		return 0;
-+
-+	rc = tpm_cr50_i2c_write(chip, TPM_I2C_ACCESS(0), &buf, sizeof(buf));
-+	if (rc < 0)
-+		return rc;
-+
-+	stop = jiffies + chip->timeout_a;
-+	do {
-+		if (!tpm_cr50_check_locality(chip))
-+			return 0;
-+
-+		msleep(TPM_CR50_TIMEOUT_SHORT_MS);
-+	} while (time_before(jiffies, stop));
-+
-+	return -ETIMEDOUT;
-+}
-+
-+/**
-+ * tpm_cr50_i2c_tis_status() - Read cr50 tis status.
-+ * @chip: TPM chip information.
-+ *
-+ * cr50 requires all 4 bytes of status register to be read.
-+ *
-+ * Return:
-+ *	TPM status byte.
-+ */
-+static u8 tpm_cr50_i2c_tis_status(struct tpm_chip *chip)
-+{
-+	u8 buf[4];
-+
-+	if (tpm_cr50_i2c_read(chip, TPM_I2C_STS(0), buf, sizeof(buf)) < 0)
-+		return 0;
-+
-+	return buf[0];
-+}
-+
-+/**
-+ * tpm_cr50_i2c_tis_set_ready() - Set status register to ready.
-+ * @chip: TPM chip information.
-+ *
-+ * cr50 requires all 4 bytes of status register to be written.
-+ */
-+static void tpm_cr50_i2c_tis_set_ready(struct tpm_chip *chip)
-+{
-+	u8 buf[4] = { TPM_STS_COMMAND_READY };
-+
-+	tpm_cr50_i2c_write(chip, TPM_I2C_STS(0), buf, sizeof(buf));
-+	msleep(TPM_CR50_TIMEOUT_SHORT_MS);
-+}
-+
-+/**
-+ * tpm_cr50_i2c_get_burst_and_status() - Get burst count and status.
-+ * @chip:	TPM chip information.
-+ * @mask:	Status mask.
-+ * @burst:	Return value for burst.
-+ * @status:	Return value for status.
-+ *
-+ * cr50 uses bytes 3:2 of status register for burst count and
-+ * all 4 bytes must be read.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_i2c_get_burst_and_status(struct tpm_chip *chip, u8 mask,
-+					     size_t *burst, u32 *status)
-+{
-+	unsigned long stop;
-+	u8 buf[4];
-+
-+	*status = 0;
-+
-+	/* wait for burstcount */
-+	stop = jiffies + chip->timeout_b;
-+
-+	do {
-+		if (tpm_cr50_i2c_read(chip, TPM_I2C_STS(0), buf, sizeof(buf)) < 0) {
-+			msleep(TPM_CR50_TIMEOUT_SHORT_MS);
-+			continue;
-+		}
-+
-+		*status = *buf;
-+		*burst = le16_to_cpup((__le16 *)(buf + 1));
-+
-+		if ((*status & mask) == mask &&
-+		    *burst > 0 && *burst <= TPM_CR50_MAX_BUFSIZE - 1)
-+			return 0;
-+
-+		msleep(TPM_CR50_TIMEOUT_SHORT_MS);
-+	} while (time_before(jiffies, stop));
-+
-+	dev_err(&chip->dev, "Timeout reading burst and status\n");
-+	return -ETIMEDOUT;
-+}
-+
-+/**
-+ * tpm_cr50_i2c_tis_recv() - TPM reception callback.
-+ * @chip:	TPM chip information.
-+ * @buf:	Reception buffer.
-+ * @buf_len:	Buffer length to read.
-+ *
-+ * Return:
-+ *	Number of read bytes for success, otherwise negative errno.
-+ */
-+static int tpm_cr50_i2c_tis_recv(struct tpm_chip *chip, u8 *buf, size_t buf_len)
-+{
-+	int rc;
-+	size_t burstcnt, cur, len, expected;
-+	u8 addr = TPM_I2C_DATA_FIFO(0);
-+	u8 mask = TPM_STS_VALID | TPM_STS_DATA_AVAIL;
-+	u32 status;
-+
-+	if (buf_len < TPM_HEADER_SIZE)
-+		return -EINVAL;
-+
-+	rc = tpm_cr50_i2c_get_burst_and_status(chip, mask, &burstcnt, &status);
-+	if (rc < 0)
-+		goto out_err;
-+
-+	if (burstcnt > buf_len || burstcnt < TPM_HEADER_SIZE) {
-+		dev_err(&chip->dev,
-+			"Unexpected burstcnt: %zu (max=%zu, min=%d)\n",
-+			burstcnt, buf_len, TPM_HEADER_SIZE);
-+		rc = -EIO;
-+		goto out_err;
-+	}
-+
-+	/* Read first chunk of burstcnt bytes */
-+	rc = tpm_cr50_i2c_read(chip, addr, buf, burstcnt);
-+	if (rc < 0) {
-+		dev_err(&chip->dev, "Read of first chunk failed\n");
-+		goto out_err;
-+	}
-+
-+	/* Determine expected data in the return buffer */
-+	expected = be32_to_cpup((__be32 *)(buf + 2));
-+	if (expected > buf_len) {
-+		dev_err(&chip->dev, "Buffer too small to receive i2c data\n");
-+		goto out_err;
-+	}
-+
-+	/* Now read the rest of the data */
-+	cur = burstcnt;
-+	while (cur < expected) {
-+		/* Read updated burst count and check status */
-+		rc = tpm_cr50_i2c_get_burst_and_status(chip, mask, &burstcnt, &status);
-+		if (rc < 0)
-+			goto out_err;
-+
-+		len = min_t(size_t, burstcnt, expected - cur);
-+		rc = tpm_cr50_i2c_read(chip, addr, buf + cur, len);
-+		if (rc < 0) {
-+			dev_err(&chip->dev, "Read failed\n");
-+			goto out_err;
-+		}
-+
-+		cur += len;
-+	}
-+
-+	/* Ensure TPM is done reading data */
-+	rc = tpm_cr50_i2c_get_burst_and_status(chip, TPM_STS_VALID, &burstcnt, &status);
-+	if (rc < 0)
-+		goto out_err;
-+	if (status & TPM_STS_DATA_AVAIL) {
-+		dev_err(&chip->dev, "Data still available\n");
-+		rc = -EIO;
-+		goto out_err;
-+	}
-+
-+	tpm_cr50_release_locality(chip, false);
-+	return cur;
-+
-+out_err:
-+	/* Abort current transaction if still pending */
-+	if (tpm_cr50_i2c_tis_status(chip) & TPM_STS_COMMAND_READY)
-+		tpm_cr50_i2c_tis_set_ready(chip);
-+
-+	tpm_cr50_release_locality(chip, false);
-+	return rc;
-+}
-+
-+/**
-+ * tpm_cr50_i2c_tis_send() - TPM transmission callback.
-+ * @chip:	TPM chip information.
-+ * @buf:	Buffer to send.
-+ * @len:	Buffer length.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_i2c_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
-+{
-+	size_t burstcnt, limit, sent = 0;
-+	int rc;
-+	u32 status;
-+	unsigned long stop;
-+	u8 tpm_go[4] = { TPM_STS_GO };
-+
-+	rc = tpm_cr50_request_locality(chip);
-+	if (rc < 0)
-+		return rc;
-+
-+	/* Wait until TPM is ready for a command */
-+	stop = jiffies + chip->timeout_b;
-+	while (!(tpm_cr50_i2c_tis_status(chip) & TPM_STS_COMMAND_READY)) {
-+		if (time_after(jiffies, stop)) {
-+			rc = -ETIMEDOUT;
-+			goto out_err;
-+		}
-+
-+		tpm_cr50_i2c_tis_set_ready(chip);
-+	}
-+
-+	while (len > 0) {
-+		u8 mask = TPM_STS_VALID;
-+
-+		/* Wait for data if this is not the first chunk */
-+		if (sent > 0)
-+			mask |= TPM_STS_DATA_EXPECT;
-+
-+		/* Read burst count and check status */
-+		rc = tpm_cr50_i2c_get_burst_and_status(chip, mask, &burstcnt, &status);
-+		if (rc < 0)
-+			goto out_err;
-+
-+		/*
-+		 * Use burstcnt - 1 to account for the address byte
-+		 * that is inserted by tpm_cr50_i2c_write()
-+		 */
-+		limit = min_t(size_t, burstcnt - 1, len);
-+		rc = tpm_cr50_i2c_write(chip, TPM_I2C_DATA_FIFO(0), &buf[sent], limit);
-+		if (rc < 0) {
-+			dev_err(&chip->dev, "Write failed\n");
-+			goto out_err;
-+		}
-+
-+		sent += limit;
-+		len -= limit;
-+	}
-+
-+	/* Ensure TPM is not expecting more data */
-+	rc = tpm_cr50_i2c_get_burst_and_status(chip, TPM_STS_VALID, &burstcnt, &status);
-+	if (rc < 0)
-+		goto out_err;
-+	if (status & TPM_STS_DATA_EXPECT) {
-+		dev_err(&chip->dev, "Data still expected\n");
-+		rc = -EIO;
-+		goto out_err;
-+	}
-+
-+	/* Start the TPM command */
-+	rc = tpm_cr50_i2c_write(chip, TPM_I2C_STS(0), tpm_go,
-+				sizeof(tpm_go));
-+	if (rc < 0) {
-+		dev_err(&chip->dev, "Start command failed\n");
-+		goto out_err;
-+	}
-+	return 0;
-+
-+out_err:
-+	/* Abort current transaction if still pending */
-+	if (tpm_cr50_i2c_tis_status(chip) & TPM_STS_COMMAND_READY)
-+		tpm_cr50_i2c_tis_set_ready(chip);
-+
-+	tpm_cr50_release_locality(chip, false);
-+	return rc;
-+}
-+
-+/**
-+ * tpm_cr50_i2c_req_canceled() - Callback to notify a request cancel.
-+ * @chip:	TPM chip information.
-+ * @status:	Status given by the cancel callback.
-+ *
-+ * Return:
-+ *	True if command is ready, False otherwise.
-+ */
-+static bool tpm_cr50_i2c_req_canceled(struct tpm_chip *chip, u8 status)
-+{
-+	return (status == TPM_STS_COMMAND_READY);
-+}
-+
-+static const struct tpm_class_ops cr50_i2c = {
-+	.flags = TPM_OPS_AUTO_STARTUP,
-+	.status = &tpm_cr50_i2c_tis_status,
-+	.recv = &tpm_cr50_i2c_tis_recv,
-+	.send = &tpm_cr50_i2c_tis_send,
-+	.cancel = &tpm_cr50_i2c_tis_set_ready,
-+	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
-+	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
-+	.req_canceled = &tpm_cr50_i2c_req_canceled,
-+};
-+
-+static const struct i2c_device_id cr50_i2c_table[] = {
-+	{"cr50_i2c", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, cr50_i2c_table);
-+
-+#ifdef CONFIG_ACPI
-+static const struct acpi_device_id cr50_i2c_acpi_id[] = {
-+	{ "GOOG0005", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, cr50_i2c_acpi_id);
-+#endif
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id of_cr50_i2c_match[] = {
-+	{ .compatible = "google,cr50", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, of_cr50_i2c_match);
-+#endif
-+
-+/**
-+ * tpm_cr50_i2c_probe() - Driver probe function.
-+ * @client:	I2C client information.
-+ * @id:		I2C device id.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_i2c_probe(struct i2c_client *client,
-+			      const struct i2c_device_id *id)
-+{
-+	struct device *dev = &client->dev;
-+	struct tpm_chip *chip;
-+	struct tpm_i2c_cr50_priv_data *priv;
-+	u8 buf[4];
-+	u32 vendor;
-+	int rc;
-+
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-+		return -ENODEV;
-+
-+	chip = tpmm_chip_alloc(dev, &cr50_i2c);
-+	if (IS_ERR(chip))
-+		return PTR_ERR(chip);
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	/* cr50 is a TPM 2.0 chip */
-+	chip->flags |= TPM_CHIP_FLAG_TPM2;
-+	chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
-+
-+	/* Default timeouts */
-+	chip->timeout_a = msecs_to_jiffies(TIS_SHORT_TIMEOUT);
-+	chip->timeout_b = msecs_to_jiffies(TIS_LONG_TIMEOUT);
-+	chip->timeout_c = msecs_to_jiffies(TIS_SHORT_TIMEOUT);
-+	chip->timeout_d = msecs_to_jiffies(TIS_SHORT_TIMEOUT);
-+
-+	dev_set_drvdata(&chip->dev, priv);
-+	init_completion(&priv->tpm_ready);
-+
-+	if (client->irq > 0) {
-+		rc = devm_request_irq(dev, client->irq, tpm_cr50_i2c_int_handler,
-+				      IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-+				      dev->driver->name, chip);
-+		if (rc < 0) {
-+			dev_err(dev, "Failed to probe IRQ %d\n", client->irq);
-+			return rc;
-+		}
-+
-+		disable_irq(client->irq);
-+		priv->irq = client->irq;
-+	} else {
-+		dev_warn(dev, "No IRQ, will use %ums delay for TPM ready\n",
-+			 TPM_CR50_TIMEOUT_NOIRQ_MS);
-+	}
-+
-+	rc = tpm_cr50_request_locality(chip);
-+	if (rc < 0) {
-+		dev_err(dev, "Could not request locality\n");
-+		return rc;
-+	}
-+
-+	/* Read four bytes from DID_VID register */
-+	rc = tpm_cr50_i2c_read(chip, TPM_I2C_DID_VID(0), buf, sizeof(buf));
-+	if (rc < 0) {
-+		dev_err(dev, "Could not read vendor id\n");
-+		tpm_cr50_release_locality(chip, true);
-+		return rc;
-+	}
-+
-+	vendor = le32_to_cpup((__le32 *)buf);
-+	if (vendor != TPM_CR50_I2C_DID_VID) {
-+		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
-+		tpm_cr50_release_locality(chip, true);
-+		return -ENODEV;
-+	}
-+
-+	dev_info(dev, "cr50 TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-+		 client->addr, client->irq, vendor >> 16);
-+
-+	return tpm_chip_register(chip);
-+}
-+
-+/**
-+ * tpm_cr50_i2c_remove() - Driver remove function.
-+ * @client: I2C client information.
-+ *
-+ * Return:
-+ *	On success, 0. On failure, -errno.
-+ */
-+static int tpm_cr50_i2c_remove(struct i2c_client *client)
-+{
-+	struct tpm_chip *chip = i2c_get_clientdata(client);
-+	struct device *dev = &client->dev;
-+
-+	if (!chip) {
-+		dev_err(dev, "Could not get client data at remove\n");
-+		return -ENODEV;
-+	}
-+
-+	tpm_chip_unregister(chip);
-+	tpm_cr50_release_locality(chip, true);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(cr50_i2c_pm, tpm_pm_suspend, tpm_pm_resume);
-+
-+static struct i2c_driver cr50_i2c_driver = {
-+	.id_table = cr50_i2c_table,
-+	.probe = tpm_cr50_i2c_probe,
-+	.remove = tpm_cr50_i2c_remove,
-+	.driver = {
-+		.name = "cr50_i2c",
-+		.pm = &cr50_i2c_pm,
-+		.acpi_match_table = ACPI_PTR(cr50_i2c_acpi_id),
-+		.of_match_table = of_match_ptr(of_cr50_i2c_match),
-+	},
-+};
-+
-+module_i2c_driver(cr50_i2c_driver);
-+
-+MODULE_DESCRIPTION("cr50 TPM I2C Driver");
-+MODULE_LICENSE("GPL");
+There is a simple tool available at
+https://github.com/brauner/mount-idmapped that allows to create idmapped
+mounts so people can play with this patch series. Here are a few
+illustrations:
+
+1. Create a simple idmapped mount of another user's home directory
+
+u1001@f2-vm:/$ sudo ./mount-idmapped --map-mount b:1000:1001:1 /home/ubuntu/ /mnt
+u1001@f2-vm:/$ ls -al /home/ubuntu/
+total 28
+drwxr-xr-x 2 ubuntu ubuntu 4096 Oct 28 22:07 .
+drwxr-xr-x 4 root   root   4096 Oct 28 04:00 ..
+-rw------- 1 ubuntu ubuntu 3154 Oct 28 22:12 .bash_history
+-rw-r--r-- 1 ubuntu ubuntu  220 Feb 25  2020 .bash_logout
+-rw-r--r-- 1 ubuntu ubuntu 3771 Feb 25  2020 .bashrc
+-rw-r--r-- 1 ubuntu ubuntu  807 Feb 25  2020 .profile
+-rw-r--r-- 1 ubuntu ubuntu    0 Oct 16 16:11 .sudo_as_admin_successful
+-rw------- 1 ubuntu ubuntu 1144 Oct 28 00:43 .viminfo
+u1001@f2-vm:/$ ls -al /mnt/
+total 28
+drwxr-xr-x  2 u1001 u1001 4096 Oct 28 22:07 .
+drwxr-xr-x 29 root  root  4096 Oct 28 22:01 ..
+-rw-------  1 u1001 u1001 3154 Oct 28 22:12 .bash_history
+-rw-r--r--  1 u1001 u1001  220 Feb 25  2020 .bash_logout
+-rw-r--r--  1 u1001 u1001 3771 Feb 25  2020 .bashrc
+-rw-r--r--  1 u1001 u1001  807 Feb 25  2020 .profile
+-rw-r--r--  1 u1001 u1001    0 Oct 16 16:11 .sudo_as_admin_successful
+-rw-------  1 u1001 u1001 1144 Oct 28 00:43 .viminfo
+u1001@f2-vm:/$ touch /mnt/my-file
+u1001@f2-vm:/$ setfacl -m u:1001:rwx /mnt/my-file
+u1001@f2-vm:/$ sudo setcap -n 1001 cap_net_raw+ep /mnt/my-file
+u1001@f2-vm:/$ ls -al /mnt/my-file
+-rw-rwxr--+ 1 u1001 u1001 0 Oct 28 22:14 /mnt/my-file
+u1001@f2-vm:/$ ls -al /home/ubuntu/my-file
+-rw-rwxr--+ 1 ubuntu ubuntu 0 Oct 28 22:14 /home/ubuntu/my-file
+u1001@f2-vm:/$ getfacl /mnt/my-file
+getfacl: Removing leading '/' from absolute path names
+# file: mnt/my-file
+# owner: u1001
+# group: u1001
+user::rw-
+user:u1001:rwx
+group::rw-
+mask::rwx
+other::r--
+u1001@f2-vm:/$ getfacl /home/ubuntu/my-file
+getfacl: Removing leading '/' from absolute path names
+# file: home/ubuntu/my-file
+# owner: ubuntu
+# group: ubuntu
+user::rw-
+user:ubuntu:rwx
+group::rw-
+mask::rwx
+other::r--
+
+2. Create mapping of the whole ext4 rootfs without a mapping for uid and gid 0
+
+ubuntu@f2-vm:~$ sudo /mount-idmapped --map-mount b:1:1:65536 / /mnt/
+ubuntu@f2-vm:~$ findmnt | grep mnt
+└─/mnt                                /dev/sda2  ext4       rw,relatime
+  └─/mnt/mnt                          /dev/sda2  ext4       rw,relatime
+ubuntu@f2-vm:~$ sudo mkdir /AS-ROOT-CAN-CREATE
+ubuntu@f2-vm:~$ sudo mkdir /mnt/AS-ROOT-CANT-CREATE
+mkdir: cannot create directory ‘/mnt/AS-ROOT-CANT-CREATE’: Value too large for defined data type
+ubuntu@f2-vm:~$ mkdir /mnt/home/ubuntu/AS-USER-1000-CAN-CREATE
+
+3. Create a vfat usb mount and expose to user 1001 and 5000
+
+ubuntu@f2-vm:/$ sudo mount /dev/sdb /mnt
+ubuntu@f2-vm:/$ findmnt  | grep mnt
+└─/mnt                                /dev/sdb vfat       rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro
+ubuntu@f2-vm:/$ ls -al /mnt
+total 12
+drwxr-xr-x  2 root root 4096 Jan  1  1970 .
+drwxr-xr-x 34 root root 4096 Oct 28 22:24 ..
+-rwxr-xr-x  1 root root    4 Oct 28 03:44 aaa
+-rwxr-xr-x  1 root root    0 Oct 28 01:09 bbb
+ubuntu@f2-vm:/$ sudo /mount-idmapped --map-mount b:0:1001:1 /mnt /mnt-1001/
+ubuntu@f2-vm:/$ ls -al /mnt-1001/
+total 12
+drwxr-xr-x  2 u1001 u1001 4096 Jan  1  1970 .
+drwxr-xr-x 34 root  root  4096 Oct 28 22:24 ..
+-rwxr-xr-x  1 u1001 u1001    4 Oct 28 03:44 aaa
+-rwxr-xr-x  1 u1001 u1001    0 Oct 28 01:09 bbb
+ubuntu@f2-vm:/$ sudo /mount-idmapped --map-mount b:0:5000:1 /mnt /mnt-5000/
+ubuntu@f2-vm:/$ ls -al /mnt-5000/
+total 12
+drwxr-xr-x  2 5000 5000 4096 Jan  1  1970 .
+drwxr-xr-x 34 root root 4096 Oct 28 22:24 ..
+-rwxr-xr-x  1 5000 5000    4 Oct 28 03:44 aaa
+-rwxr-xr-x  1 5000 5000    0 Oct 28 01:09 bbb
+
+4. Create an idmapped rootfs mount for a container
+
+root@f2-vm:~# ls -al /var/lib/lxc/f2/rootfs/
+total 68
+drwxr-xr-x 17 20000 20000 4096 Sep 24 07:48 .
+drwxrwx---  3 20000 20000 4096 Oct 16 19:26 ..
+lrwxrwxrwx  1 20000 20000    7 Sep 24 07:43 bin -> usr/bin
+drwxr-xr-x  2 20000 20000 4096 Apr 15  2020 boot
+drwxr-xr-x  3 20000 20000 4096 Oct 16 19:26 dev
+drwxr-xr-x 61 20000 20000 4096 Oct 16 19:26 etc
+drwxr-xr-x  3 20000 20000 4096 Sep 24 07:45 home
+lrwxrwxrwx  1 20000 20000    7 Sep 24 07:43 lib -> usr/lib
+lrwxrwxrwx  1 20000 20000    9 Sep 24 07:43 lib32 -> usr/lib32
+lrwxrwxrwx  1 20000 20000    9 Sep 24 07:43 lib64 -> usr/lib64
+lrwxrwxrwx  1 20000 20000   10 Sep 24 07:43 libx32 -> usr/libx32
+drwxr-xr-x  2 20000 20000 4096 Sep 24 07:43 media
+drwxr-xr-x  2 20000 20000 4096 Sep 24 07:43 mnt
+drwxr-xr-x  2 20000 20000 4096 Sep 24 07:43 opt
+drwxr-xr-x  2 20000 20000 4096 Apr 15  2020 proc
+drwx------  2 20000 20000 4096 Sep 24 07:43 root
+drwxr-xr-x  2 20000 20000 4096 Sep 24 07:45 run
+lrwxrwxrwx  1 20000 20000    8 Sep 24 07:43 sbin -> usr/sbin
+drwxr-xr-x  2 20000 20000 4096 Sep 24 07:43 srv
+drwxr-xr-x  2 20000 20000 4096 Apr 15  2020 sys
+drwxrwxrwt  2 20000 20000 4096 Sep 24 07:44 tmp
+drwxr-xr-x 13 20000 20000 4096 Sep 24 07:43 usr
+drwxr-xr-x 12 20000 20000 4096 Sep 24 07:44 var
+root@f2-vm:~# /mount-idmapped --map-mount b:20000:10000:100000 /var/lib/lxc/f2/rootfs/ /mnt
+root@f2-vm:~# ls -al /mnt
+total 68
+drwxr-xr-x 17 10000 10000 4096 Sep 24 07:48 .
+drwxr-xr-x 34 root  root  4096 Oct 28 22:24 ..
+lrwxrwxrwx  1 10000 10000    7 Sep 24 07:43 bin -> usr/bin
+drwxr-xr-x  2 10000 10000 4096 Apr 15  2020 boot
+drwxr-xr-x  3 10000 10000 4096 Oct 16 19:26 dev
+drwxr-xr-x 61 10000 10000 4096 Oct 16 19:26 etc
+drwxr-xr-x  3 10000 10000 4096 Sep 24 07:45 home
+lrwxrwxrwx  1 10000 10000    7 Sep 24 07:43 lib -> usr/lib
+lrwxrwxrwx  1 10000 10000    9 Sep 24 07:43 lib32 -> usr/lib32
+lrwxrwxrwx  1 10000 10000    9 Sep 24 07:43 lib64 -> usr/lib64
+lrwxrwxrwx  1 10000 10000   10 Sep 24 07:43 libx32 -> usr/libx32
+drwxr-xr-x  2 10000 10000 4096 Sep 24 07:43 media
+drwxr-xr-x  2 10000 10000 4096 Sep 24 07:43 mnt
+drwxr-xr-x  2 10000 10000 4096 Sep 24 07:43 opt
+drwxr-xr-x  2 10000 10000 4096 Apr 15  2020 proc
+drwx------  2 10000 10000 4096 Sep 24 07:43 root
+drwxr-xr-x  2 10000 10000 4096 Sep 24 07:45 run
+lrwxrwxrwx  1 10000 10000    8 Sep 24 07:43 sbin -> usr/sbin
+drwxr-xr-x  2 10000 10000 4096 Sep 24 07:43 srv
+drwxr-xr-x  2 10000 10000 4096 Apr 15  2020 sys
+drwxrwxrwt  2 10000 10000 4096 Sep 24 07:44 tmp
+drwxr-xr-x 13 10000 10000 4096 Sep 24 07:43 usr
+drwxr-xr-x 12 10000 10000 4096 Sep 24 07:44 var
+root@f2-vm:~# lxc-start f2 # uses /mnt as rootfs
+root@f2-vm:~# lxc-attach f2 -- cat /proc/1/uid_map
+         0      10000      10000
+root@f2-vm:~# lxc-attach f2 -- cat /proc/1/gid_map
+         0      10000      10000
+root@f2-vm:~# lxc-attach f2 -- ls -al /
+total 52
+drwxr-xr-x  17 root   root    4096 Sep 24 07:48 .
+drwxr-xr-x  17 root   root    4096 Sep 24 07:48 ..
+lrwxrwxrwx   1 root   root       7 Sep 24 07:43 bin -> usr/bin
+drwxr-xr-x   2 root   root    4096 Apr 15  2020 boot
+drwxr-xr-x   5 root   root     500 Oct 28 23:39 dev
+drwxr-xr-x  61 root   root    4096 Oct 28 23:39 etc
+drwxr-xr-x   3 root   root    4096 Sep 24 07:45 home
+lrwxrwxrwx   1 root   root       7 Sep 24 07:43 lib -> usr/lib
+lrwxrwxrwx   1 root   root       9 Sep 24 07:43 lib32 -> usr/lib32
+lrwxrwxrwx   1 root   root       9 Sep 24 07:43 lib64 -> usr/lib64
+lrwxrwxrwx   1 root   root      10 Sep 24 07:43 libx32 -> usr/libx32
+drwxr-xr-x   2 root   root    4096 Sep 24 07:43 media
+drwxr-xr-x   2 root   root    4096 Sep 24 07:43 mnt
+drwxr-xr-x   2 root   root    4096 Sep 24 07:43 opt
+dr-xr-xr-x 232 nobody nogroup    0 Oct 28 23:39 proc
+drwx------   2 root   root    4096 Oct 28 23:41 root
+drwxr-xr-x  12 root   root     360 Oct 28 23:39 run
+lrwxrwxrwx   1 root   root       8 Sep 24 07:43 sbin -> usr/sbin
+drwxr-xr-x   2 root   root    4096 Sep 24 07:43 srv
+dr-xr-xr-x  13 nobody nogroup    0 Oct 28 23:39 sys
+drwxrwxrwt  11 root   root    4096 Oct 28 23:40 tmp
+drwxr-xr-x  13 root   root    4096 Sep 24 07:43 usr
+drwxr-xr-x  12 root   root    4096 Sep 24 07:44 var
+root@f2-vm:~# lxc-attach f2 -- ls -al /my-file
+-rw-r--r-- 1 root root 0 Oct 28 23:43 /my-file
+root@f2-vm:~# ls -al /var/lib/lxc/f2/rootfs/my-file
+-rw-r--r-- 1 20000 20000 0 Oct 28 23:43 /var/lib/lxc/f2/rootfs/my-file
+
+I'd like to say thanks to:
+Al for pointing me into the direction to avoid inode alias issues during
+lookup. David for various discussions around this. Christoph for proving
+a first proper review and for being involved in the original idea. Tycho
+for helping with this series and on future patches to convert
+filesystems. Alban Crequy and the Kinvolk peeps located just a few
+streets away from me in Berlin for providing use-case discussions and
+writing patches for containerd. Stéphane for his invaluable input on
+many things and level head and enabling me to work on this. Amir for
+explaining and discussing aspects of overlayfs with me. I'd like to
+especially thank Seth Forshee. He provided a lot of good analysis,
+suggestions, and participated in short-notice discussions in both chat
+and video for some nitty-gritty technical details.
+
+This series can be found and pulled from the three usual locations:
+https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=idmapped_mounts
+https://github.com/brauner/linux/tree/idmapped_mounts
+https://gitlab.com/brauner/linux/-/commits/idmapped_mounts
+
+Thanks!
+Christian
+
+Christian Brauner (38):
+  namespace: take lock_mount_hash() directly when changing flags
+  mount: make {lock,unlock}_mount_hash() static
+  namespace: only take read lock in do_reconfigure_mnt()
+  fs: split out functions to hold writers
+  fs: add attr_flags_to_mnt_flags helper
+  fs: add mount_setattr()
+  tests: add mount_setattr() selftests
+  fs: add id translation helpers
+  mount: attach mappings to mounts
+  capability: handle idmapped mounts
+  namei: make permission helpers idmapped mount aware
+  inode: make init and permission helpers idmapped mount aware
+  attr: handle idmapped mounts
+  acl: handle idmapped mounts
+  commoncap: handle idmapped mounts
+  stat: handle idmapped mounts
+  namei: handle idmapped mounts in may_*() helpers
+  namei: introduce struct renamedata
+  namei: prepare for idmapped mounts
+  open: handle idmapped mounts in do_truncate()
+  open: handle idmapped mounts
+  af_unix: handle idmapped mounts
+  utimes: handle idmapped mounts
+  fcntl: handle idmapped mounts
+  notify: handle idmapped mounts
+  init: handle idmapped mounts
+  ioctl: handle idmapped mounts
+  would_dump: handle idmapped mounts
+  exec: handle idmapped mounts
+  fs: make helpers idmap mount aware
+  apparmor: handle idmapped mounts
+  ima: handle idmapped mounts
+  fat: handle idmapped mounts
+  ext4: support idmapped mounts
+  ecryptfs: do not mount on top of idmapped mounts
+  overlayfs: do not mount on top of idmapped mounts
+  fs: introduce MOUNT_ATTR_IDMAP
+  tests: extend mount_setattr tests
+
+Tycho Andersen (1):
+  xattr: handle idmapped mounts
+
+ Documentation/filesystems/locking.rst         |    6 +-
+ Documentation/filesystems/porting.rst         |    2 +
+ Documentation/filesystems/vfs.rst             |   19 +-
+ arch/alpha/kernel/syscalls/syscall.tbl        |    1 +
+ arch/arm/tools/syscall.tbl                    |    1 +
+ arch/arm64/include/asm/unistd32.h             |    2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |    1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |    1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |    1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |    1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |    1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |    1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |    1 +
+ arch/powerpc/platforms/cell/spufs/inode.c     |    5 +-
+ arch/s390/kernel/syscalls/syscall.tbl         |    1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |    1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |    1 +
+ drivers/android/binderfs.c                    |    6 +-
+ drivers/base/devtmpfs.c                       |   12 +-
+ fs/9p/acl.c                                   |    8 +-
+ fs/9p/v9fs.h                                  |    3 +-
+ fs/9p/v9fs_vfs.h                              |    2 +-
+ fs/9p/vfs_inode.c                             |   36 +-
+ fs/9p/vfs_inode_dotl.c                        |   39 +-
+ fs/9p/xattr.c                                 |    1 +
+ fs/adfs/adfs.h                                |    3 +-
+ fs/adfs/inode.c                               |    5 +-
+ fs/affs/affs.h                                |   10 +-
+ fs/affs/inode.c                               |    7 +-
+ fs/affs/namei.c                               |   15 +-
+ fs/afs/dir.c                                  |   34 +-
+ fs/afs/inode.c                                |    9 +-
+ fs/afs/internal.h                             |    7 +-
+ fs/afs/security.c                             |    2 +-
+ fs/afs/xattr.c                                |    2 +
+ fs/attr.c                                     |  124 +-
+ fs/autofs/root.c                              |   13 +-
+ fs/bad_inode.c                                |   36 +-
+ fs/bfs/dir.c                                  |   12 +-
+ fs/btrfs/acl.c                                |    5 +-
+ fs/btrfs/ctree.h                              |    3 +-
+ fs/btrfs/inode.c                              |   45 +-
+ fs/btrfs/ioctl.c                              |   25 +-
+ fs/btrfs/tests/btrfs-tests.c                  |    2 +-
+ fs/btrfs/xattr.c                              |    2 +
+ fs/cachefiles/interface.c                     |    4 +-
+ fs/cachefiles/namei.c                         |   19 +-
+ fs/cachefiles/xattr.c                         |   16 +-
+ fs/ceph/acl.c                                 |    5 +-
+ fs/ceph/dir.c                                 |   23 +-
+ fs/ceph/inode.c                               |   17 +-
+ fs/ceph/super.h                               |   12 +-
+ fs/ceph/xattr.c                               |    1 +
+ fs/cifs/cifsfs.c                              |    4 +-
+ fs/cifs/cifsfs.h                              |   21 +-
+ fs/cifs/dir.c                                 |    8 +-
+ fs/cifs/inode.c                               |   26 +-
+ fs/cifs/link.c                                |    3 +-
+ fs/cifs/xattr.c                               |    1 +
+ fs/coda/coda_linux.h                          |    6 +-
+ fs/coda/dir.c                                 |   17 +-
+ fs/coda/inode.c                               |    9 +-
+ fs/coda/pioctl.c                              |    6 +-
+ fs/configfs/configfs_internal.h               |    7 +-
+ fs/configfs/dir.c                             |    3 +-
+ fs/configfs/inode.c                           |    5 +-
+ fs/configfs/symlink.c                         |    5 +-
+ fs/coredump.c                                 |   14 +-
+ fs/crypto/policy.c                            |    2 +-
+ fs/debugfs/inode.c                            |    9 +-
+ fs/ecryptfs/crypto.c                          |    4 +-
+ fs/ecryptfs/inode.c                           |   80 +-
+ fs/ecryptfs/main.c                            |    6 +
+ fs/ecryptfs/mmap.c                            |    4 +-
+ fs/efivarfs/file.c                            |    2 +-
+ fs/efivarfs/inode.c                           |    4 +-
+ fs/erofs/inode.c                              |    7 +-
+ fs/erofs/internal.h                           |    5 +-
+ fs/exec.c                                     |   12 +-
+ fs/exfat/exfat_fs.h                           |    8 +-
+ fs/exfat/file.c                               |   14 +-
+ fs/exfat/namei.c                              |   14 +-
+ fs/ext2/acl.c                                 |    5 +-
+ fs/ext2/acl.h                                 |    3 +-
+ fs/ext2/ext2.h                                |    5 +-
+ fs/ext2/ialloc.c                              |    2 +-
+ fs/ext2/inode.c                               |   15 +-
+ fs/ext2/ioctl.c                               |    6 +-
+ fs/ext2/namei.c                               |   22 +-
+ fs/ext2/xattr_security.c                      |    1 +
+ fs/ext2/xattr_trusted.c                       |    1 +
+ fs/ext2/xattr_user.c                          |    1 +
+ fs/ext4/acl.c                                 |    5 +-
+ fs/ext4/acl.h                                 |    3 +-
+ fs/ext4/ext4.h                                |   21 +-
+ fs/ext4/ialloc.c                              |    7 +-
+ fs/ext4/inode.c                               |   21 +-
+ fs/ext4/ioctl.c                               |   19 +-
+ fs/ext4/namei.c                               |   49 +-
+ fs/ext4/super.c                               |    2 +-
+ fs/ext4/xattr_hurd.c                          |    1 +
+ fs/ext4/xattr_security.c                      |    1 +
+ fs/ext4/xattr_trusted.c                       |    1 +
+ fs/ext4/xattr_user.c                          |    1 +
+ fs/f2fs/acl.c                                 |    5 +-
+ fs/f2fs/acl.h                                 |    3 +-
+ fs/f2fs/f2fs.h                                |    7 +-
+ fs/f2fs/file.c                                |   35 +-
+ fs/f2fs/namei.c                               |   23 +-
+ fs/f2fs/xattr.c                               |    4 +-
+ fs/fat/fat.h                                  |    6 +-
+ fs/fat/file.c                                 |   24 +-
+ fs/fat/namei_msdos.c                          |   12 +-
+ fs/fat/namei_vfat.c                           |   15 +-
+ fs/fcntl.c                                    |    3 +-
+ fs/fuse/acl.c                                 |    3 +-
+ fs/fuse/dir.c                                 |   45 +-
+ fs/fuse/fuse_i.h                              |    4 +-
+ fs/fuse/xattr.c                               |    2 +
+ fs/gfs2/acl.c                                 |    5 +-
+ fs/gfs2/acl.h                                 |    3 +-
+ fs/gfs2/file.c                                |    4 +-
+ fs/gfs2/inode.c                               |   59 +-
+ fs/gfs2/inode.h                               |    3 +-
+ fs/gfs2/xattr.c                               |    1 +
+ fs/hfs/attr.c                                 |    1 +
+ fs/hfs/dir.c                                  |   13 +-
+ fs/hfs/hfs_fs.h                               |    2 +-
+ fs/hfs/inode.c                                |    7 +-
+ fs/hfsplus/dir.c                              |   25 +-
+ fs/hfsplus/hfsplus_fs.h                       |    5 +-
+ fs/hfsplus/inode.c                            |   16 +-
+ fs/hfsplus/ioctl.c                            |    2 +-
+ fs/hfsplus/xattr.c                            |    1 +
+ fs/hfsplus/xattr_security.c                   |    1 +
+ fs/hfsplus/xattr_trusted.c                    |    1 +
+ fs/hfsplus/xattr_user.c                       |    1 +
+ fs/hostfs/hostfs_kern.c                       |   29 +-
+ fs/hpfs/hpfs_fn.h                             |    2 +-
+ fs/hpfs/inode.c                               |    7 +-
+ fs/hpfs/namei.c                               |   20 +-
+ fs/hugetlbfs/inode.c                          |   31 +-
+ fs/init.c                                     |   27 +-
+ fs/inode.c                                    |   50 +-
+ fs/internal.h                                 |    2 +-
+ fs/jffs2/acl.c                                |    5 +-
+ fs/jffs2/acl.h                                |    3 +-
+ fs/jffs2/dir.c                                |   32 +-
+ fs/jffs2/fs.c                                 |    7 +-
+ fs/jffs2/os-linux.h                           |    2 +-
+ fs/jffs2/security.c                           |    1 +
+ fs/jffs2/xattr_trusted.c                      |    1 +
+ fs/jffs2/xattr_user.c                         |    1 +
+ fs/jfs/acl.c                                  |    5 +-
+ fs/jfs/file.c                                 |    9 +-
+ fs/jfs/ioctl.c                                |    2 +-
+ fs/jfs/jfs_acl.h                              |    3 +-
+ fs/jfs/jfs_inode.c                            |    2 +-
+ fs/jfs/jfs_inode.h                            |    2 +-
+ fs/jfs/namei.c                                |   21 +-
+ fs/jfs/xattr.c                                |    2 +
+ fs/kernfs/dir.c                               |    7 +-
+ fs/kernfs/inode.c                             |   19 +-
+ fs/kernfs/kernfs-internal.h                   |    9 +-
+ fs/libfs.c                                    |   28 +-
+ fs/minix/bitmap.c                             |    2 +-
+ fs/minix/file.c                               |    7 +-
+ fs/minix/inode.c                              |    6 +-
+ fs/minix/minix.h                              |    3 +-
+ fs/minix/namei.c                              |   24 +-
+ fs/mount.h                                    |   10 -
+ fs/namei.c                                    |  507 ++++--
+ fs/namespace.c                                |  495 +++++-
+ fs/nfs/dir.c                                  |   25 +-
+ fs/nfs/inode.c                                |    9 +-
+ fs/nfs/internal.h                             |   10 +-
+ fs/nfs/namespace.c                            |   14 +-
+ fs/nfs/nfs3_fs.h                              |    3 +-
+ fs/nfs/nfs3acl.c                              |    3 +-
+ fs/nfs/nfs4proc.c                             |    3 +
+ fs/nfsd/nfs2acl.c                             |    4 +-
+ fs/nfsd/nfs3acl.c                             |    4 +-
+ fs/nfsd/nfs4acl.c                             |    4 +-
+ fs/nfsd/nfs4recover.c                         |    6 +-
+ fs/nfsd/nfsfh.c                               |    2 +-
+ fs/nfsd/nfsproc.c                             |    2 +-
+ fs/nfsd/vfs.c                                 |   47 +-
+ fs/nilfs2/inode.c                             |   13 +-
+ fs/nilfs2/ioctl.c                             |    2 +-
+ fs/nilfs2/namei.c                             |   19 +-
+ fs/nilfs2/nilfs.h                             |    4 +-
+ fs/notify/fanotify/fanotify_user.c            |    2 +-
+ fs/notify/inotify/inotify_user.c              |    3 +-
+ fs/ntfs/inode.c                               |    6 +-
+ fs/ntfs/inode.h                               |    3 +-
+ fs/ocfs2/acl.c                                |    5 +-
+ fs/ocfs2/acl.h                                |    3 +-
+ fs/ocfs2/dlmfs/dlmfs.c                        |   17 +-
+ fs/ocfs2/file.c                               |   17 +-
+ fs/ocfs2/file.h                               |   11 +-
+ fs/ocfs2/ioctl.c                              |    2 +-
+ fs/ocfs2/namei.c                              |   21 +-
+ fs/ocfs2/refcounttree.c                       |    4 +-
+ fs/ocfs2/xattr.c                              |    3 +
+ fs/omfs/dir.c                                 |   13 +-
+ fs/omfs/file.c                                |    7 +-
+ fs/omfs/inode.c                               |    2 +-
+ fs/open.c                                     |   50 +-
+ fs/orangefs/acl.c                             |    5 +-
+ fs/orangefs/inode.c                           |   20 +-
+ fs/orangefs/namei.c                           |   12 +-
+ fs/orangefs/orangefs-kernel.h                 |   13 +-
+ fs/orangefs/xattr.c                           |    1 +
+ fs/overlayfs/copy_up.c                        |   20 +-
+ fs/overlayfs/dir.c                            |   31 +-
+ fs/overlayfs/file.c                           |    6 +-
+ fs/overlayfs/inode.c                          |   26 +-
+ fs/overlayfs/overlayfs.h                      |   44 +-
+ fs/overlayfs/super.c                          |   19 +-
+ fs/overlayfs/util.c                           |    4 +-
+ fs/posix_acl.c                                |  101 +-
+ fs/proc/base.c                                |   28 +-
+ fs/proc/fd.c                                  |    5 +-
+ fs/proc/fd.h                                  |    3 +-
+ fs/proc/generic.c                             |   12 +-
+ fs/proc/internal.h                            |    5 +-
+ fs/proc/proc_net.c                            |    5 +-
+ fs/proc/proc_sysctl.c                         |   15 +-
+ fs/proc/root.c                                |    5 +-
+ fs/proc_namespace.c                           |    3 +
+ fs/ramfs/file-nommu.c                         |    9 +-
+ fs/ramfs/inode.c                              |   18 +-
+ fs/reiserfs/acl.h                             |    3 +-
+ fs/reiserfs/inode.c                           |    7 +-
+ fs/reiserfs/ioctl.c                           |    4 +-
+ fs/reiserfs/namei.c                           |   21 +-
+ fs/reiserfs/reiserfs.h                        |    3 +-
+ fs/reiserfs/xattr.c                           |   12 +-
+ fs/reiserfs/xattr.h                           |    3 +-
+ fs/reiserfs/xattr_acl.c                       |    7 +-
+ fs/reiserfs/xattr_security.c                  |    3 +-
+ fs/reiserfs/xattr_trusted.c                   |    3 +-
+ fs/reiserfs/xattr_user.c                      |    3 +-
+ fs/remap_range.c                              |    7 +-
+ fs/stat.c                                     |   26 +-
+ fs/sysv/file.c                                |    7 +-
+ fs/sysv/ialloc.c                              |    2 +-
+ fs/sysv/itree.c                               |    6 +-
+ fs/sysv/namei.c                               |   21 +-
+ fs/sysv/sysv.h                                |    3 +-
+ fs/tracefs/inode.c                            |    4 +-
+ fs/ubifs/dir.c                                |   30 +-
+ fs/ubifs/file.c                               |    5 +-
+ fs/ubifs/ioctl.c                              |    2 +-
+ fs/ubifs/ubifs.h                              |    5 +-
+ fs/ubifs/xattr.c                              |    1 +
+ fs/udf/file.c                                 |    9 +-
+ fs/udf/ialloc.c                               |    2 +-
+ fs/udf/namei.c                                |   24 +-
+ fs/udf/symlink.c                              |    7 +-
+ fs/ufs/ialloc.c                               |    2 +-
+ fs/ufs/inode.c                                |    7 +-
+ fs/ufs/namei.c                                |   19 +-
+ fs/ufs/ufs.h                                  |    3 +-
+ fs/utimes.c                                   |    4 +-
+ fs/vboxsf/dir.c                               |   12 +-
+ fs/vboxsf/utils.c                             |    9 +-
+ fs/vboxsf/vfsmod.h                            |    8 +-
+ fs/verity/enable.c                            |    2 +-
+ fs/xattr.c                                    |  136 +-
+ fs/xfs/xfs_acl.c                              |    5 +-
+ fs/xfs/xfs_acl.h                              |    3 +-
+ fs/xfs/xfs_ioctl.c                            |    4 +-
+ fs/xfs/xfs_iops.c                             |   56 +-
+ fs/xfs/xfs_xattr.c                            |    3 +-
+ fs/zonefs/super.c                             |    9 +-
+ include/linux/capability.h                    |   14 +-
+ include/linux/fs.h                            |  157 +-
+ include/linux/ima.h                           |   17 +-
+ include/linux/lsm_hook_defs.h                 |   15 +-
+ include/linux/lsm_hooks.h                     |    1 +
+ include/linux/mount.h                         |    7 +
+ include/linux/nfs_fs.h                        |    7 +-
+ include/linux/posix_acl.h                     |   15 +-
+ include/linux/posix_acl_xattr.h               |   12 +-
+ include/linux/security.h                      |   44 +-
+ include/linux/syscalls.h                      |    3 +
+ include/linux/xattr.h                         |   30 +-
+ include/uapi/asm-generic/unistd.h             |    4 +-
+ include/uapi/linux/mount.h                    |   17 +
+ ipc/mqueue.c                                  |    8 +-
+ kernel/auditsc.c                              |    5 +-
+ kernel/bpf/inode.c                            |   13 +-
+ kernel/capability.c                           |   14 +-
+ kernel/cgroup/cgroup.c                        |    2 +-
+ kernel/sys.c                                  |    2 +-
+ mm/madvise.c                                  |    4 +-
+ mm/memcontrol.c                               |    2 +-
+ mm/mincore.c                                  |    4 +-
+ mm/shmem.c                                    |   48 +-
+ net/socket.c                                  |    6 +-
+ net/unix/af_unix.c                            |    4 +-
+ security/apparmor/apparmorfs.c                |    3 +-
+ security/apparmor/domain.c                    |   13 +-
+ security/apparmor/file.c                      |    5 +-
+ security/apparmor/lsm.c                       |   12 +-
+ security/commoncap.c                          |  109 +-
+ security/integrity/evm/evm_crypto.c           |   11 +-
+ security/integrity/evm/evm_main.c             |    4 +-
+ security/integrity/evm/evm_secfs.c            |    2 +-
+ security/integrity/ima/ima.h                  |   19 +-
+ security/integrity/ima/ima_api.c              |   10 +-
+ security/integrity/ima/ima_appraise.c         |   22 +-
+ security/integrity/ima/ima_asymmetric_keys.c  |    2 +-
+ security/integrity/ima/ima_main.c             |   29 +-
+ security/integrity/ima/ima_policy.c           |   19 +-
+ security/integrity/ima/ima_queue_keys.c       |    2 +-
+ security/security.c                           |   25 +-
+ security/selinux/hooks.c                      |   22 +-
+ security/smack/smack_lsm.c                    |   18 +-
+ tools/include/uapi/asm-generic/unistd.h       |    4 +-
+ tools/testing/selftests/Makefile              |    1 +
+ .../selftests/mount_setattr/.gitignore        |    1 +
+ .../testing/selftests/mount_setattr/Makefile  |    7 +
+ tools/testing/selftests/mount_setattr/config  |    1 +
+ .../mount_setattr/mount_setattr_test.c        | 1424 +++++++++++++++++
+ 330 files changed, 4641 insertions(+), 1681 deletions(-)
+ create mode 100644 tools/testing/selftests/mount_setattr/.gitignore
+ create mode 100644 tools/testing/selftests/mount_setattr/Makefile
+ create mode 100644 tools/testing/selftests/mount_setattr/config
+ create mode 100644 tools/testing/selftests/mount_setattr/mount_setattr_test.c
+
+
+base-commit: b65054597872ce3aefbc6a666385eabdf9e288da
 -- 
 2.29.2
 
