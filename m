@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1B22CF522
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Dec 2020 20:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 043162CF527
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Dec 2020 20:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730932AbgLDTxS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Dec 2020 14:53:18 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:52954 "EHLO
+        id S2388083AbgLDTx1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Dec 2020 14:53:27 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:52956 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730743AbgLDTxS (ORCPT
+        with ESMTP id S1730647AbgLDTxS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 4 Dec 2020 14:53:18 -0500
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 89B2520B718A;
-        Fri,  4 Dec 2020 11:51:58 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 89B2520B718A
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3EB2020B718B;
+        Fri,  4 Dec 2020 11:51:59 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3EB2020B718B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1607111519;
-        bh=drG9z5++NDKCI6ahOaQyIoHZgSgy1kpa74CvAavpIa0=;
+        bh=c9hfHV9xUhOxPKkKCPQSF8NLSo8arbAWLA6eKI8Sitc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fMWQZUi9uhP9xJLTTq8g/qcpJ0xSr338r9tAnIeo5ziCqIPG7log8yaNeWoGQxefq
-         XRDCwQzWLonOFG89C4QhXtQaTmoemQdIgsm7TDdUxuRE5IvWZHJmtPAbt6WsgQk4ht
-         Wk3zIBXZejVpjGUJUYjYWGUccm9A/xpRtBQxAdYk=
+        b=f5rlirFjXGIEhNFVOMz2N0x0e3iCjqzeaz7YFF+NNooFvETzoWEslCHbtWMMNvY48
+         7SjCdlZf667+5ps92NgDwTrAfjv8xiW32ofWM4m5ZwmOVxw6A2HxYIOhR32ISkJe4r
+         aGjw4qkUlLEx39fvr6ON190AI5qVnBQzq//YnLec=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
         gregkh@linuxfoundation.org, james.morse@arm.com,
@@ -39,9 +39,9 @@ To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
 Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, prsriva@linux.microsoft.com,
         balajib@linux.microsoft.com
-Subject: [PATCH v10 5/8] powerpc: Move remove_ima_buffer() to drivers/of/kexec.c
-Date:   Fri,  4 Dec 2020 11:51:46 -0800
-Message-Id: <20201204195149.611-6-nramas@linux.microsoft.com>
+Subject: [PATCH v10 6/8] powerpc: Move ima_get_kexec_buffer() and ima_free_kexec_buffer() to ima
+Date:   Fri,  4 Dec 2020 11:51:47 -0800
+Message-Id: <20201204195149.611-7-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201204195149.611-1-nramas@linux.microsoft.com>
 References: <20201204195149.611-1-nramas@linux.microsoft.com>
@@ -51,134 +51,203 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-remove_ima_buffer() removes the chosen node "linux,ima-kexec-buffer"
-from the device tree and frees the memory reserved for carrying forward
-the IMA measurement logs on kexec. This function does not have
-architecture specific code, but is currently limited to powerpc.
+ima_get_kexec_buffer() retrieves the address and size of the buffer
+used for carrying forward the IMA measurement logs on kexec from
+the device tree.
 
-Move remove_ima_buffer() to "drivers/of/ima_kexec.c" so that it is
+ima_free_kexec_buffer() removes the chosen node
+"linux,ima-kexec-buffer" from the device tree, and frees the buffer
+used for carrying forward the IMA measurement logs on kexec.
+
+These functions do not have architecture specific code, but are
+currently limited to powerpc. Move ima_get_kexec_buffer() and
+ima_free_kexec_buffer() to ima_kexec.c in IMA so that they are
 accessible for other architectures as well.
+
+With the above change the functions in arch/powerpc/kexec/ima.c are
+defined only when the kernel config CONFIG_IMA_KEXEC is enabled.
+Update the Makefile to build arch/powerpc/kexec/ima.c only when
+CONFIG_IMA_KEXEC is enabled and remove "#ifdef CONFIG_IMA_KEXEC"
+in arch/powerpc/kexec/ima.c.
 
 Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- arch/powerpc/include/asm/ima.h |  8 ++------
- arch/powerpc/kexec/ima.c       | 26 --------------------------
- drivers/of/kexec.c             | 29 +++++++++++++++++++++++++++++
- include/linux/kexec.h          |  1 +
- 4 files changed, 32 insertions(+), 32 deletions(-)
+ arch/powerpc/include/asm/ima.h     |  3 --
+ arch/powerpc/kexec/Makefile        |  7 +---
+ arch/powerpc/kexec/ima.c           | 50 -----------------------------
+ security/integrity/ima/ima_kexec.c | 51 ++++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+), 59 deletions(-)
 
 diff --git a/arch/powerpc/include/asm/ima.h b/arch/powerpc/include/asm/ima.h
-index ead488cf3981..a2fc71bc3b23 100644
+index a2fc71bc3b23..d8444d27f0d8 100644
 --- a/arch/powerpc/include/asm/ima.h
 +++ b/arch/powerpc/include/asm/ima.h
-@@ -2,17 +2,13 @@
- #ifndef _ASM_POWERPC_IMA_H
- #define _ASM_POWERPC_IMA_H
+@@ -6,9 +6,6 @@
  
-+#include <linux/kexec.h>
-+
  struct kimage;
  
- int ima_get_kexec_buffer(void **addr, size_t *size);
- int ima_free_kexec_buffer(void);
- 
--#ifdef CONFIG_IMA
--void remove_ima_buffer(void *fdt, int chosen_node);
--#else
--static inline void remove_ima_buffer(void *fdt, int chosen_node) {}
--#endif
+-int ima_get_kexec_buffer(void **addr, size_t *size);
+-int ima_free_kexec_buffer(void);
 -
  #ifdef CONFIG_IMA_KEXEC
  int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
  			      size_t size);
+diff --git a/arch/powerpc/kexec/Makefile b/arch/powerpc/kexec/Makefile
+index 4aff6846c772..f54a9dbff4c8 100644
+--- a/arch/powerpc/kexec/Makefile
++++ b/arch/powerpc/kexec/Makefile
+@@ -9,12 +9,7 @@ obj-$(CONFIG_PPC32)		+= relocate_32.o
+ 
+ obj-$(CONFIG_KEXEC_FILE)	+= file_load.o ranges.o file_load_$(BITS).o elf_$(BITS).o
+ 
+-ifdef CONFIG_HAVE_IMA_KEXEC
+-ifdef CONFIG_IMA
+-obj-y				+= ima.o
+-endif
+-endif
+-
++obj-$(CONFIG_IMA_KEXEC)		+= ima.o
+ 
+ # Disable GCOV, KCOV & sanitizers in odd or sensitive code
+ GCOV_PROFILE_core_$(BITS).o := n
 diff --git a/arch/powerpc/kexec/ima.c b/arch/powerpc/kexec/ima.c
-index 906e8212435d..68017123b07d 100644
+index 68017123b07d..bf7084c0c4da 100644
 --- a/arch/powerpc/kexec/ima.c
 +++ b/arch/powerpc/kexec/ima.c
-@@ -61,32 +61,6 @@ int ima_free_kexec_buffer(void)
- 	return memblock_free(addr, size);
- }
+@@ -13,55 +13,6 @@
+ #include <linux/libfdt.h>
+ #include <asm/ima.h>
  
 -/**
-- * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
+- * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+- * @addr:	On successful return, set to point to the buffer contents.
+- * @size:	On successful return, set to the buffer size.
 - *
-- * @fdt: Flattened Device Tree to update
-- * @chosen_node: Offset to the chosen node in the device tree
-- *
-- * The IMA measurement buffer is of no use to a subsequent kernel, so we always
-- * remove it from the device tree.
+- * Return: 0 on success, negative errno on error.
 - */
--void remove_ima_buffer(void *fdt, int chosen_node)
+-int ima_get_kexec_buffer(void **addr, size_t *size)
+-{
+-	int ret;
+-	unsigned long tmp_addr;
+-	size_t tmp_size;
+-
+-	ret = get_ima_kexec_buffer(NULL, 0, &tmp_addr, &tmp_size);
+-	if (ret)
+-		return ret;
+-
+-	*addr = __va(tmp_addr);
+-	*size = tmp_size;
+-
+-	return 0;
+-}
+-
+-/**
+- * ima_free_kexec_buffer - free memory used by the IMA buffer
+- */
+-int ima_free_kexec_buffer(void)
 -{
 -	int ret;
 -	unsigned long addr;
 -	size_t size;
+-	struct property *prop;
 -
--	ret = get_ima_kexec_buffer(fdt, chosen_node, &addr, &size);
+-	prop = of_find_property(of_chosen, "linux,ima-kexec-buffer", NULL);
+-	if (!prop)
+-		return -ENOENT;
+-
+-	ret = get_ima_kexec_buffer(NULL, 0, &addr, &size);
 -	if (ret)
--		return;
+-		return ret;
 -
--	fdt_delprop(fdt, chosen_node, "linux,ima-kexec-buffer");
+-	ret = of_remove_property(of_chosen, prop);
+-	if (ret)
+-		return ret;
 -
--	ret = delete_fdt_mem_rsv(fdt, addr, size);
--	if (!ret)
--		pr_debug("Removed old IMA buffer reservation.\n");
+-	return memblock_free(addr, size);
 -}
 -
- #ifdef CONFIG_IMA_KEXEC
+-#ifdef CONFIG_IMA_KEXEC
  /**
   * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA buffer
-diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
-index 516b86f7113a..42d16dfff78d 100644
---- a/drivers/of/kexec.c
-+++ b/drivers/of/kexec.c
-@@ -129,3 +129,32 @@ int get_ima_kexec_buffer(void *fdt, int chosen_node,
+  *
+@@ -154,4 +105,3 @@ int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node)
  
  	return 0;
  }
+-#endif /* CONFIG_IMA_KEXEC */
+diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+index 121de3e04af2..4d354593aecf 100644
+--- a/security/integrity/ima/ima_kexec.c
++++ b/security/integrity/ima/ima_kexec.c
+@@ -9,7 +9,10 @@
+ 
+ #include <linux/seq_file.h>
+ #include <linux/vmalloc.h>
++#include <linux/memblock.h>
++#include <linux/of.h>
+ #include <linux/kexec.h>
++#include <linux/ima.h>
+ #include "ima.h"
+ 
+ #ifdef CONFIG_IMA_KEXEC
+@@ -133,6 +136,54 @@ void ima_add_kexec_buffer(struct kimage *image)
+ }
+ #endif /* IMA_KEXEC */
+ 
++/**
++ * ima_get_kexec_buffer - get IMA buffer from the previous kernel
++ * @addr:	On successful return, set to point to the buffer contents.
++ * @size:	On successful return, set to the buffer size.
++ *
++ * Return: 0 on success, negative errno on error.
++ */
++static int ima_get_kexec_buffer(void **addr, size_t *size)
++{
++	int ret;
++	unsigned long tmp_addr;
++	size_t tmp_size;
++
++	ret = get_ima_kexec_buffer(NULL, 0, &tmp_addr, &tmp_size);
++	if (ret)
++		return ret;
++
++	*addr = __va(tmp_addr);
++	*size = tmp_size;
++
++	return 0;
++}
 +
 +/**
-+ * remove_ima_buffer - remove the IMA buffer property and reservation from @fdt
-+ *
-+ * @fdt: Flattened Device Tree to update
-+ * @chosen_node: Offset to the chosen node in the device tree
-+ *
-+ * The IMA measurement buffer is of no use to a subsequent kernel, so we always
-+ * remove it from the device tree.
++ * ima_free_kexec_buffer - free memory used by the IMA buffer
 + */
-+void remove_ima_buffer(void *fdt, int chosen_node)
++static int ima_free_kexec_buffer(void)
 +{
 +	int ret;
 +	unsigned long addr;
 +	size_t size;
++	struct property *prop;
 +
-+	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-+		return;
++	prop = of_find_property(of_chosen, "linux,ima-kexec-buffer", NULL);
++	if (!prop)
++		return -ENOENT;
 +
-+	ret = get_ima_kexec_buffer(fdt, chosen_node, &addr, &size);
++	ret = get_ima_kexec_buffer(NULL, 0, &addr, &size);
 +	if (ret)
-+		return;
++		return ret;
 +
-+	fdt_delprop(fdt, chosen_node, "linux,ima-kexec-buffer");
++	ret = of_remove_property(of_chosen, prop);
++	if (ret)
++		return ret;
 +
-+	ret = delete_fdt_mem_rsv(fdt, addr, size);
-+	if (!ret)
-+		pr_debug("Removed old IMA buffer reservation.\n");
++	return memblock_free(addr, size);
 +}
-diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-index 10ff704ab670..52a0efff184d 100644
---- a/include/linux/kexec.h
-+++ b/include/linux/kexec.h
-@@ -411,6 +411,7 @@ static inline int kexec_crash_loaded(void) { return 0; }
- extern int get_root_addr_size_cells(int *addr_cells, int *size_cells);
- extern int get_ima_kexec_buffer(void *fdt, int chosen_node,
- 				unsigned long *addr, size_t *size);
-+extern void remove_ima_buffer(void *fdt, int chosen_node);
- extern int delete_fdt_mem_rsv(void *fdt, unsigned long start,
- 			      unsigned long size);
- #endif /* CONFIG_OF_FLATTREE */
++
+ /*
+  * Restore the measurement list from the previous kernel.
+  */
 -- 
 2.29.2
 
