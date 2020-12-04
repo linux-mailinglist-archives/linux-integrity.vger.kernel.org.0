@@ -2,76 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D842CEF81
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Dec 2020 15:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40A82CF003
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Dec 2020 15:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730293AbgLDOMv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Dec 2020 09:12:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29348 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730257AbgLDOMu (ORCPT
+        id S1730333AbgLDOtg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Dec 2020 09:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729716AbgLDOtf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Dec 2020 09:12:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607091084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r1VG7SFtbOohmrCLoZzjoPPuejrZtDnvMuH2N2CQsck=;
-        b=DsgNdp0htpIdSvl2eQvKt2k+bkRiKjW2/G/6B/cewnqMLt/RHY9JnpMsv3B/XR8VaILP0A
-        wtDPHk9tHQC+73S3eM6jlhbC3Fl5yFuixjgOjlaadlq0r4nKguyOnpM4OMEgcaml5gbMwF
-        wgC6gQuPHGqJIVVHi4fi2YqVkl0dlqM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-561-vzj_kwkaPQ2itXILUasN0g-1; Fri, 04 Dec 2020 09:11:20 -0500
-X-MC-Unique: vzj_kwkaPQ2itXILUasN0g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 01C4F8049C0;
-        Fri,  4 Dec 2020 14:11:18 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-116-67.rdu2.redhat.com [10.10.116.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5932E5D6A1;
-        Fri,  4 Dec 2020 14:11:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20201120180426.922572-9-mic@digikod.net>
-References: <20201120180426.922572-9-mic@digikod.net> <20201120180426.922572-1-mic@digikod.net>
-To:     =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl=3D20Sala=3DC3=3DBCn=3F?=
-         =?us-ascii?Q?=3D?= <mic@digikod.net>
-Cc:     dhowells@redhat.com, David Woodhouse <dwmw2@infradead.org>,
+        Fri, 4 Dec 2020 09:49:35 -0500
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99993C0613D1
+        for <linux-integrity@vger.kernel.org>; Fri,  4 Dec 2020 06:48:50 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CnbDv6MYszlhrjs;
+        Fri,  4 Dec 2020 15:48:47 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CnbDt1CdYzlh8TT;
+        Fri,  4 Dec 2020 15:48:46 +0100 (CET)
+Subject: Re: [PATCH v1 1/9] certs: Fix blacklisted hexadecimal hash string
+ check
+To:     David Howells <dhowells@redhat.com>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
         "David S . Miller" <davem@davemloft.net>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         James Morris <jmorris@namei.org>,
         Jarkko Sakkinen <jarkko@kernel.org>,
-        =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl?=
-         =?us-ascii?Q?=3D20Sala=3DC3=3DBCn=3F=3D?= 
-        <mic@linux.microsoft.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v1 8/9] certs: Replace K{U,G}IDT_INIT() with GLOBAL_ROOT_{U,G}ID
+References: <20201120180426.922572-2-mic@digikod.net>
+ <20201120180426.922572-1-mic@digikod.net>
+ <113785.1607090759@warthog.procyon.org.uk>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <c9664a67-61b7-6b4a-86d7-5aca9ff06fa5@digikod.net>
+Date:   Fri, 4 Dec 2020 15:48:45 +0100
+User-Agent: 
 MIME-Version: 1.0
+In-Reply-To: <113785.1607090759@warthog.procyon.org.uk>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 04 Dec 2020 14:11:14 +0000
-Message-ID: <114084.1607091074@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
 
-> -			      KUIDT_INIT(0), KGIDT_INIT(0), current_cred(),
-> +			      GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, current_cred(),
+On 04/12/2020 15:05, David Howells wrote:
+> Mickaël Salaün <mic@digikod.net> wrote:
+> 
+>> When looking for a blacklisted hash, bin2hex() is used to transform a
+>> binary hash to an ascii (lowercase) hexadecimal string.  This string is
+>> then search for in the description of the keys from the blacklist
+>> keyring.  When adding a key to the blacklist keyring,
+>> blacklist_vet_description() checks the hash prefix and the hexadecimal
+>> string, but not that this string is lowercase.  It is then valid to set
+>> hashes with uppercase hexadecimal, which will be silently ignored by the
+>> kernel.
+>>
+>> Add an additional check to blacklist_vet_description() to check that
+>> hexadecimal strings are in lowercase.
+> 
+> I wonder if it would be a better idea to allow the keyring type to adjust the
+> description string - in this instance to change it to all lowercase.
 
-I may pull out some of the relatively trivial changes like this and add them
-to my keys-fixes branch.
+Right now, this patch helps user space identifies which hashes where
+ignored. I think it is an interesting information on its own because it
+enables to remove a false sense of security and warns about
+mis-blacklisted certificates or binaries.
 
-David
+When authenticity/signature of such hash is taken into account, I also
+prefer to not change the data that user space signed and pushed to the
+kernel, but to teach user space what is correct.
 
+Moreover, modifying the description cannot be done with the
+vet_description-type function and would be a more invasive keyring
+modification because, AFAIK, no current key type already does such change.
+
+> 
+> David
+> 
