@@ -2,127 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B82002CEF1D
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Dec 2020 15:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1FD2CEF36
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Dec 2020 15:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729261AbgLDN5k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Dec 2020 08:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727855AbgLDN5k (ORCPT
+        id S2388132AbgLDODO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Dec 2020 09:03:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:32592 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387474AbgLDODO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Dec 2020 08:57:40 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8CEC0613D1
-        for <linux-integrity@vger.kernel.org>; Fri,  4 Dec 2020 05:57:00 -0800 (PST)
-Received: from guri.fritz.box (p200300c7cf49f800d89bd04994991187.dip0.t-ipconnect.de [IPv6:2003:c7:cf49:f800:d89b:d049:9499:1187])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Fri, 4 Dec 2020 09:03:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607090508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4M4yoOZ8+d2uOnRn+suIjK8Rel43Q7KGhvoch0szyZ0=;
+        b=It2q/rtxa4PNwJtJE18C15hOA4oCKQVRqSkB5pzKAm/L/v6iyNt6Rs1ot0r8NmzKlNcSMn
+        BMRbNbnPVWM06Ulqp4OMBQwuitElfmJK108tq2kkRZGGLMLf8EHY0mVBtJm/3JjH08nxiz
+        IbYcjSz9D+tKfDKlHLb2MkvoCeQEi+w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-46-99hyNT8ANI6M6dKa2e9EUQ-1; Fri, 04 Dec 2020 09:01:44 -0500
+X-MC-Unique: 99hyNT8ANI6M6dKa2e9EUQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 156E71F4608B;
-        Fri,  4 Dec 2020 13:56:57 +0000 (GMT)
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        enric.balletbo@collabora.com, dafna.hirschfeld@collabora.com,
-        kernel@collabora.com, dafna3@gmail.com,
-        Andrey Pronin <apronin@chromium.org>
-Subject: [PATCH] tpm: ignore failed selftest in probe
-Date:   Fri,  4 Dec 2020 14:56:49 +0100
-Message-Id: <20201204135649.19391-1-dafna.hirschfeld@collabora.com>
-X-Mailer: git-send-email 2.17.1
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ACB5B193ECE3;
+        Fri,  4 Dec 2020 14:01:40 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-116-67.rdu2.redhat.com [10.10.116.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B36C9100164C;
+        Fri,  4 Dec 2020 14:01:37 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <80fb0eae-8321-5ae2-8d50-eabbe86981da@digikod.net>
+References: <80fb0eae-8321-5ae2-8d50-eabbe86981da@digikod.net> <20201120180426.922572-1-mic@digikod.net> <20201130024011.GA24870@kernel.org>
+To:     =?us-ascii?Q?=3D=3FUTF-8=3FQ=3FMicka=3Dc3=3Dabl=5FSala=3Dc3=3Dbcn=3F?=
+         =?us-ascii?Q?=3D?= <mic@digikod.net>
+Cc:     dhowells@redhat.com, Jarkko Sakkinen <jarkko@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?us-ascii?Q?=3D=3FUTF-8=3FQ=3FMicka=3Dc3=3Dabl?=
+         =?us-ascii?Q?=5FSala=3Dc3=3Dbcn=3F=3D?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v1 0/9] Enable root to update the blacklist keyring
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 04 Dec 2020 14:01:36 +0000
+Message-ID: <113544.1607090496@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Andrey Pronin <apronin@chromium.org>
+Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
 
-If a tpm firmware update is interrupted, e.g due
-to loss of power or a reset while installing the
-update, you end with the tpm chip in failure mode.
-ConstinueSelfTest command results in TPM_FAILEDSELFTEST
-error, and probe fails. The tpm device is not
-created, and that prevents the OS from attempting
-any further recover operations with the tpm. Instead,
-ignore the error code of the self test, and create the
-device - the chip is out there, it's just in the
-failed state.
+> > What would be easiest way to smoke test the changes?
+>=20
+> An easy way to test it is to enable the second trusted keyring to
+> dynamically load certificates in the kernel. Then we can create a hash
+> of a valid certificate (but not loaded yet) and sign it as explained in
+> tools/certs/print-cert-tbs-hash.sh (patch 9/9). Once this hash is loaded
+> in the kernel, loading the blacklisted certificate will be denied. We
+> can also test it with a PKCS#7 signature chain, either with the
+> blacklist keyring itself, or with a signed dm-verity image.
 
-Testing:
-Tested with swtpm as tpm simulator and a patch in libtpms
-to enter failure mode
+It might also be possible to use the pkcs#7 test key type
+(CONFIG_PKCS7_TEST_KEY) to aid in that.
 
-With this settings, the 'dev/tpm0' is created but
-the tcsd daemon fails to run.
-In addition, the commands
-TPM_GetTestResult, TPM_GetCapability and TPM_GetRandom
-were tested.
-
-A normal operation was tested with
-Chromeos Elm device.
-
-Signed-off-by: Andrey Pronin <apronin@chromium.org>
-[change the code to still fail in case of fatal error]
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-
----
-This commit comes from chromeos:
-https://chromium.googlesource.com/chromiumos/third_party/kernel/+/1065c2fe54d6%5E%21/
-
-In Chromeos, the selftest fails if the tpm firmware is updated
-during EC reset. In that case the userspace wants to access
-the tpm for recovery.
-
-This patch is for tpm 1.2 only, I can also send a patch for tpm 2
-if it is required that the behaviour stays consistent among the versions.
-
-libtpms patch:
-https://gitlab.collabora.com/dafna/libtpms/-/commit/42848f4a838636d01ddb5ed353b3990dad3f601d
-
-tpm tests:
-https://gitlab.collabora.com/dafna/test-tpm1.git
----
- drivers/char/tpm/tpm1-cmd.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-index ca7158fa6e6c..8b7997ef8d1c 100644
---- a/drivers/char/tpm/tpm1-cmd.c
-+++ b/drivers/char/tpm/tpm1-cmd.c
-@@ -697,6 +697,8 @@ EXPORT_SYMBOL_GPL(tpm1_do_selftest);
- /**
-  * tpm1_auto_startup - Perform the standard automatic TPM initialization
-  *                     sequence
-+ * NOTE: if tpm1_do_selftest returns with a TPM error code, we return 0 (success)
-+ *	 to allow userspace interaction with the TPM when it is on failure mode.
-  * @chip: TPM chip to use
-  *
-  * Returns 0 on success, < 0 in case of fatal error.
-@@ -707,18 +709,15 @@ int tpm1_auto_startup(struct tpm_chip *chip)
- 
- 	rc = tpm1_get_timeouts(chip);
- 	if (rc)
--		goto out;
-+		return rc < 0 ? rc : -ENODEV;
-+
- 	rc = tpm1_do_selftest(chip);
- 	if (rc) {
--		dev_err(&chip->dev, "TPM self test failed\n");
--		goto out;
-+		dev_err(&chip->dev, "TPM self test failed %d\n", rc);
-+		if (rc < 0)
-+			return rc;
- 	}
--
--	return rc;
--out:
--	if (rc > 0)
--		rc = -ENODEV;
--	return rc;
-+	return 0;
- }
- 
- #define TPM_ORD_SAVESTATE 152
--- 
-2.17.1
+David
 
