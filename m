@@ -2,92 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E63812CF0BD
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Dec 2020 16:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6F12CF0DD
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Dec 2020 16:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730395AbgLDPb1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Dec 2020 10:31:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38116 "EHLO mail.kernel.org"
+        id S1729144AbgLDPi3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Dec 2020 10:38:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40178 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729840AbgLDPb0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Dec 2020 10:31:26 -0500
-Date:   Fri, 4 Dec 2020 17:30:37 +0200
+        id S1727153AbgLDPi3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 4 Dec 2020 10:38:29 -0500
+Date:   Fri, 4 Dec 2020 17:37:43 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607095846;
-        bh=NHKkkiVjcEytL4TWZgxQrssmxGcP3N0tIxymDLc440g=;
+        s=k20201202; t=1607096268;
+        bh=hIB09Y3GrjL/5l/QzpOvJADROc32g4QH+imO+G2d6ys=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qBI1LL+o1KhplcvIkiunZUov3Mg8GnpFsgg7rJ/ut5AHZOEsNV4OUKeAFdFG2Oa0W
-         mYkMXl5jIgoqDfpjRIBbIgHXQ1vGWbb0OJFqvLLg+/XuL+lBJh7xa0Q/BiAj3ikEL8
-         hFI1078z6KQxlbDqHQLWcwwhNDknoAl1RP1j3k/GDVli6LOaHaOgW7IGuTTAWPD+b3
-         SIOWgpOoZsKoIaw8zdMRVVevSi2HKOvRJq245q2Vh0NLbYcDJYJ++WCfiaQonzWDoC
-         iQExKMaT6wKrDsc7Kf/xO0p6HpdWfM32hCMFmYWeBE/i7pedyt6CyIQgLp2+OMK7WD
-         yYC7QSsicJNyw==
+        b=L78R5U2UvhDm9u5+AQ6vgVTnodERvRaW8EWJ145KshY5luSl0LyrMdmDGEXGctKDS
+         gbdn3u/CyqMAputGWpxJV2dGiYJA0qXd0TWeZAkNV8jvNc7ym559u4xXfBeYD4IrQL
+         2OVMfglHy9zq9txgj/Do2xeVMrHrs5c4IH2LSdnKmY12d80YF9Pvkx8ElpZEOsCVEp
+         p+VX2hjEF2SSADuwAuntO6VBCgwRfrbEDtDOSITUILDU4RverPQGvNV2ZqAGbXAPBv
+         b6y0fiXXS1eWQGv41ZSuUHUHj/JaFf0Sq5dcTXAgr/27/9SQGqt8LaYOFLIWs+gQUG
+         2qg/o6XgfVLdw==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     gmail Elaine Palmer <erpalmerny@gmail.com>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
-        jejb@linux.ibm.com, dhowells@redhat.com, jens.wiklander@linaro.org,
-        corbet@lwn.net, jmorris@namei.org, serge@hallyn.com,
-        casey@schaufler-ca.com, janne.karhunen@gmail.com,
-        daniel.thompson@linaro.org, Markus.Wamser@mixed-mode.de,
-        lhinds@redhat.com, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Kenneth Goldman <kgoldman@us.ibm.com>, gcwilson@linux.ibm.com,
-        zgu@us.ibm.com, stefanb@us.ibm.com, NAYNA JAIN1 <naynjain@ibm.com>
-Subject: Re: [PATCH v8 3/4] doc: trusted-encrypted: updates with TEE as a new
- trust source
-Message-ID: <20201204153037.GC4922@kernel.org>
-References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
- <1604419306-26105-4-git-send-email-sumit.garg@linaro.org>
- <81A6B61D-3811-4957-B270-52AE5FA6DE4F@gmail.com>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        enric.balletbo@collabora.com, kernel@collabora.com,
+        dafna3@gmail.com, Andrey Pronin <apronin@chromium.org>
+Subject: Re: [PATCH] tpm: ignore failed selftest in probe
+Message-ID: <20201204153743.GA6337@kernel.org>
+References: <20201204135649.19391-1-dafna.hirschfeld@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <81A6B61D-3811-4957-B270-52AE5FA6DE4F@gmail.com>
+In-Reply-To: <20201204135649.19391-1-dafna.hirschfeld@collabora.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Dec 02, 2020 at 02:34:07PM -0500, gmail Elaine Palmer wrote:
-> Hi Sumit,  
+On Fri, Dec 04, 2020 at 02:56:49PM +0100, Dafna Hirschfeld wrote:
+> From: Andrey Pronin <apronin@chromium.org>
 > 
-> Thank you for the detailed descriptions and examples of trust sources
-> for Trusted Keys.   A group of us in IBM (Stefan Berger, Ken Goldman,
-> Zhongshu Gu, Nayna Jain, Elaine Palmer, George Wilson, Mimi Zohar)
-> have been doing related work for quite some time, and we have one
-> primary concern and some suggested changes to the document. 
+> If a tpm firmware update is interrupted, e.g due
+> to loss of power or a reset while installing the
+> update, you end with the tpm chip in failure mode.
+> ConstinueSelfTest command results in TPM_FAILEDSELFTEST
+
+I guess ContinueSelfTest? What command is that anywyay
+in which context? TPM spec does not have that at least.
+
+Please use the exact same phrasings as they are in the
+TPM spec.
+
+> error, and probe fails. The tpm device is not
+> created, and that prevents the OS from attempting
+> any further recover operations with the tpm. Instead,
+> ignore the error code of the self test, and create the
+> device - the chip is out there, it's just in the
+> failed state.
 > 
-> Our primary concern is that describing a TEE as a Trust Source needs
-> to be more specific.   For example, "ARM TrustZone" is not sufficient,
-> but "wolfSSL embedded SSL/TLS library with ARM TrustZone
-> CryptoCell-310" is.  Just because a key is protected by software
-> running in a TEE is not enough to establish trust.  Just like
-> cryptographic modules, a Trust Source should be defined as a specific
-> implementation on specific hardware with well-documented environmental
-> assumptions, dependencies, and threats.
+> Testing:
+> Tested with swtpm as tpm simulator and a patch in libtpms
+> to enter failure mode
 > 
-> In addition to the above concern, our suggested changes are inline
-> below.
+> With this settings, the 'dev/tpm0' is created but
 
-In order to give a decent review comment it should have two ingredients:
+'dev/tpm0' -> /dev/tpm0
 
-- Where the existing line of code / text / whatever goes wrong.
-- How it should modified and why that makes sense. And use as plain
-  English and non-academic terms as possible, if it is documentation.
-  Further, scope is only the kernel implementation, no more or no
-  less.
+> the tcsd daemon fails to run.
+> In addition, the commands
+> TPM_GetTestResult, TPM_GetCapability and TPM_GetRandom
+> were tested.
+> 
+> A normal operation was tested with
+> Chromeos Elm device.
 
-"do this" is not unfortunately an argument. Feedback is welcome when
-it is supported by something common sensse.
+Please format these paragraphs properly using 75 character
+line length. And capitalize acronyms correctly, e.g. "TPM",
+not "tpm".
 
-Some meta suggestion of related to email:
+Please explain what "Elm" is as I have zero idea of it.
 
-Please also use a proper email client and split your paragraphs into
-at most 80 character lines with new line characters when writing email.
-I prefer to use 72 character line length so that there's some space
-for longer email threads.
+> 
+> Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> [change the code to still fail in case of fatal error]
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> 
+> ---
+
+Please put all below just before diffstat.
+
+> This commit comes from chromeos:
+> https://chromium.googlesource.com/chromiumos/third_party/kernel/+/1065c2fe54d6%5E%21/
+> 
+> In Chromeos, the selftest fails if the tpm firmware is updated
+> during EC reset. In that case the userspace wants to access
+> the tpm for recovery.
+> 
+> This patch is for tpm 1.2 only, I can also send a patch for tpm 2
+> if it is required that the behaviour stays consistent among the versions.
+> 
+> libtpms patch:
+> https://gitlab.collabora.com/dafna/libtpms/-/commit/42848f4a838636d01ddb5ed353b3990dad3f601d
+> 
+> tpm tests:
+> https://gitlab.collabora.com/dafna/test-tpm1.git
+> ---
+>  drivers/char/tpm/tpm1-cmd.c | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> index ca7158fa6e6c..8b7997ef8d1c 100644
+> --- a/drivers/char/tpm/tpm1-cmd.c
+> +++ b/drivers/char/tpm/tpm1-cmd.c
+> @@ -697,6 +697,8 @@ EXPORT_SYMBOL_GPL(tpm1_do_selftest);
+>  /**
+>   * tpm1_auto_startup - Perform the standard automatic TPM initialization
+>   *                     sequence
+> + * NOTE: if tpm1_do_selftest returns with a TPM error code, we return 0 (success)
+> + *	 to allow userspace interaction with the TPM when it is on failure mode.
+>   * @chip: TPM chip to use
+>   *
+>   * Returns 0 on success, < 0 in case of fatal error.
+> @@ -707,18 +709,15 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+>  
+>  	rc = tpm1_get_timeouts(chip);
+>  	if (rc)
+> -		goto out;
+> +		return rc < 0 ? rc : -ENODEV;
+> +
+>  	rc = tpm1_do_selftest(chip);
+>  	if (rc) {
+> -		dev_err(&chip->dev, "TPM self test failed\n");
+> -		goto out;
+> +		dev_err(&chip->dev, "TPM self test failed %d\n", rc);
+> +		if (rc < 0)
+> +			return rc;
+>  	}
+> -
+> -	return rc;
+> -out:
+> -	if (rc > 0)
+> -		rc = -ENODEV;
+> -	return rc;
+> +	return 0;
+>  }
+>  
+>  #define TPM_ORD_SAVESTATE 152
+> -- 
+> 2.17.1
+> 
+> 
+
+Let's look at the code change once the commit message looks sane...
 
 /Jarkko
