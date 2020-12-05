@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF882CFF0C
-	for <lists+linux-integrity@lfdr.de>; Sat,  5 Dec 2020 22:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 164782CFF4C
+	for <lists+linux-integrity@lfdr.de>; Sat,  5 Dec 2020 22:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726003AbgLEVDh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 5 Dec 2020 16:03:37 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:14076 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725270AbgLEVDg (ORCPT
+        id S1726265AbgLEViR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 5 Dec 2020 16:38:17 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:3166 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725933AbgLEViR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 5 Dec 2020 16:03:36 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B5KZinU172460;
-        Sat, 5 Dec 2020 16:02:19 -0500
+        Sat, 5 Dec 2020 16:38:17 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B5LWPjg021605;
+        Sat, 5 Dec 2020 16:36:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
  cc : subject : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=RtedBLX2+TsYnSc7y8UU7YZr7ycYL7nIEyY97NlbG/c=;
- b=sMTf1Nzxsy1ckClRq3LhFCEiu2fSrzCr1y3nHjwGHmLwVwOPRLaro9Pa+7ZoFLK4INDD
- ghcYy1RKMlijB2HeZWV5aZ+jN3amFPi4eSIDJSOc7O3V5mzx+uoLTBnbntxmJDNSD6mx
- DWL0P3KmEoV/HTiZwWIMbChuoKDmPkAtl+04cHa1rievXywNxyhOWaUfxcBUxpoyF47K
- kx/BIXhn03GQnB6V0Z5dTUPFrTpmp4pFEAmDgM/tAEA6jfDtCJ9wi9TTXdXiZU0SXbX1
- fsdDoEcFpx3EKzEz+hKlle+tsWY7GEdu5+2aV7BRgptYoJBsExi7swG6kGi680teA+1K xQ== 
+ content-type; s=pp1; bh=vXk0Ry8r0udMrQMw9qlr3RrPhTQPkuTMBd5GSYiIIhA=;
+ b=W1MV6cpLZMHOXBiJJI1o7Vld82fJFn4u4tg8sa9F+5v6mkPk6BeDjB4KgO7dNIGpt1K2
+ 8F2HGrG+77XMhw/R4+Zj73MEvbhbf2qG21VPeLMo2U1myTzVt5u2WpsHVbPy2FTN2eJC
+ hpiUT4LuYjXwtl3XHi+i9HzJPtWGCeLZqEDdfplLSV31+dnANTW7SA6xOmGPIODHv9b0
+ nU7TPtTMW1mCBzgW9CVqT/lRxo37P6E0MYhQkm42u/S9u7Esl8DNzjKW75A2lkyAEVn6
+ p8YbJBccr9PsRkftxPcadOkb6B6opbBqyJOQG9RHylCO6xw/B548fGf5OxaJXaXSNP3R pg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3587ks1be7-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35877j30ue-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 05 Dec 2020 16:02:19 -0500
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B5KqwDk051522;
-        Sat, 5 Dec 2020 16:02:18 -0500
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3587ks1bdt-1
+        Sat, 05 Dec 2020 16:36:57 -0500
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B5LYoku028911;
+        Sat, 5 Dec 2020 16:36:57 -0500
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35877j30u5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 05 Dec 2020 16:02:18 -0500
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B5Kup16026541;
-        Sat, 5 Dec 2020 21:02:17 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma04dal.us.ibm.com with ESMTP id 3581u8nq9a-1
+        Sat, 05 Dec 2020 16:36:57 -0500
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B5Latw5031067;
+        Sat, 5 Dec 2020 21:36:56 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma02wdc.us.ibm.com with ESMTP id 3581u8mqsf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 05 Dec 2020 21:02:17 +0000
+        Sat, 05 Dec 2020 21:36:56 +0000
 Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B5L2Gns11141856
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B5Late039387620
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 5 Dec 2020 21:02:16 GMT
+        Sat, 5 Dec 2020 21:36:55 GMT
 Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 669ADAC05E;
-        Sat,  5 Dec 2020 21:02:16 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 953FEAC05B;
+        Sat,  5 Dec 2020 21:36:55 +0000 (GMT)
 Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A455AC059;
-        Sat,  5 Dec 2020 21:02:09 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 8B8EDAC059;
+        Sat,  5 Dec 2020 21:36:48 +0000 (GMT)
 Received: from manicouagan.localdomain (unknown [9.85.177.236])
         by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Sat,  5 Dec 2020 21:02:09 +0000 (GMT)
+        Sat,  5 Dec 2020 21:36:48 +0000 (GMT)
 References: <20201204195149.611-1-nramas@linux.microsoft.com>
- <20201204195149.611-7-nramas@linux.microsoft.com>
+ <20201204195149.611-8-nramas@linux.microsoft.com>
 User-agent: mu4e 1.4.10; emacs 27.1
 From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
 To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
@@ -72,21 +72,20 @@ Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
         christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com
-Subject: Re: [PATCH v10 6/8] powerpc: Move ima_get_kexec_buffer() and
- ima_free_kexec_buffer() to ima
-In-reply-to: <20201204195149.611-7-nramas@linux.microsoft.com>
-Date:   Sat, 05 Dec 2020 18:02:07 -0300
-Message-ID: <87mtysm0fk.fsf@manicouagan.localdomain>
+Subject: Re: [PATCH v10 7/8] powerpc: Move arch_ima_add_kexec_buffer to ima
+In-reply-to: <20201204195149.611-8-nramas@linux.microsoft.com>
+Date:   Sat, 05 Dec 2020 18:36:46 -0300
+Message-ID: <87k0twlytt.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-05_18:2020-12-04,2020-12-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=2
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 clxscore=1015
- phishscore=0 bulkscore=0 mlxscore=0 mlxlogscore=814 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012050138
+ definitions=2020-12-05_19:2020-12-04,2020-12-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ impostorscore=0 phishscore=0 adultscore=0 priorityscore=1501 clxscore=1015
+ spamscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012050142
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -94,146 +93,118 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 
-> ima_get_kexec_buffer() retrieves the address and size of the buffer
-> used for carrying forward the IMA measurement logs on kexec from
-> the device tree.
+> arch_ima_add_kexec_buffer() sets the address and size of the IMA
+> measurement log in the architecture specific field in struct kimage.
+> This function does not have architecture specific code, but is
+> currently limited to powerpc.
 >
-> ima_free_kexec_buffer() removes the chosen node
-> "linux,ima-kexec-buffer" from the device tree, and frees the buffer
-> used for carrying forward the IMA measurement logs on kexec.
+> Move arch_ima_add_kexec_buffer() to
+> security/integrity/ima/ima_kexec.c so that it is accessible for
+> other architectures as well.
 >
-> These functions do not have architecture specific code, but are
-> currently limited to powerpc. Move ima_get_kexec_buffer() and
-> ima_free_kexec_buffer() to ima_kexec.c in IMA so that they are
-> accessible for other architectures as well.
->
-> With the above change the functions in arch/powerpc/kexec/ima.c are
-> defined only when the kernel config CONFIG_IMA_KEXEC is enabled.
-> Update the Makefile to build arch/powerpc/kexec/ima.c only when
-> CONFIG_IMA_KEXEC is enabled and remove "#ifdef CONFIG_IMA_KEXEC"
-> in arch/powerpc/kexec/ima.c.
-
-Nice.
-
-> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
+Not sure if the maintainers will agree with me (see below), but FWIW:
 
 Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 
-Just a small nit below:
-
 > ---
->  arch/powerpc/include/asm/ima.h     |  3 --
->  arch/powerpc/kexec/Makefile        |  7 +---
->  arch/powerpc/kexec/ima.c           | 50 -----------------------------
->  security/integrity/ima/ima_kexec.c | 51 ++++++++++++++++++++++++++++++
->  4 files changed, 52 insertions(+), 59 deletions(-)
+>  arch/powerpc/include/asm/ima.h     |  3 ---
+>  arch/powerpc/kexec/ima.c           | 21 ---------------------
+>  security/integrity/ima/ima_kexec.c | 22 ++++++++++++++++++++++
+>  3 files changed, 22 insertions(+), 24 deletions(-)
 >
 > diff --git a/arch/powerpc/include/asm/ima.h b/arch/powerpc/include/asm/ima.h
-> index a2fc71bc3b23..d8444d27f0d8 100644
+> index d8444d27f0d8..d6ab5d944dcd 100644
 > --- a/arch/powerpc/include/asm/ima.h
 > +++ b/arch/powerpc/include/asm/ima.h
-> @@ -6,9 +6,6 @@
->  
+> @@ -7,9 +7,6 @@
 >  struct kimage;
 >  
-> -int ima_get_kexec_buffer(void **addr, size_t *size);
-> -int ima_free_kexec_buffer(void);
-> -
 >  #ifdef CONFIG_IMA_KEXEC
->  int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
->  			      size_t size);
-> diff --git a/arch/powerpc/kexec/Makefile b/arch/powerpc/kexec/Makefile
-> index 4aff6846c772..f54a9dbff4c8 100644
-> --- a/arch/powerpc/kexec/Makefile
-> +++ b/arch/powerpc/kexec/Makefile
-> @@ -9,12 +9,7 @@ obj-$(CONFIG_PPC32)		+= relocate_32.o
->  
->  obj-$(CONFIG_KEXEC_FILE)	+= file_load.o ranges.o file_load_$(BITS).o elf_$(BITS).o
->  
-> -ifdef CONFIG_HAVE_IMA_KEXEC
-> -ifdef CONFIG_IMA
-> -obj-y				+= ima.o
-> -endif
-> -endif
+> -int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
+> -			      size_t size);
 > -
-> +obj-$(CONFIG_IMA_KEXEC)		+= ima.o
->  
->  # Disable GCOV, KCOV & sanitizers in odd or sensitive code
->  GCOV_PROFILE_core_$(BITS).o := n
+>  int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node);
+>  #else
+>  static inline int setup_ima_buffer(const struct kimage *image, void *fdt,
 > diff --git a/arch/powerpc/kexec/ima.c b/arch/powerpc/kexec/ima.c
-> index 68017123b07d..bf7084c0c4da 100644
+> index bf7084c0c4da..b2793be353a9 100644
 > --- a/arch/powerpc/kexec/ima.c
 > +++ b/arch/powerpc/kexec/ima.c
-> @@ -13,55 +13,6 @@
+> @@ -13,27 +13,6 @@
 >  #include <linux/libfdt.h>
 >  #include <asm/ima.h>
-
-With this patch, the following includes become unnecessary and can be
-removed from this file:
-
-#include <linux/of.h>
-#include <linux/memblock.h>
-
+>  
 > -/**
-> - * ima_get_kexec_buffer - get IMA buffer from the previous kernel
-> - * @addr:	On successful return, set to point to the buffer contents.
-> - * @size:	On successful return, set to the buffer size.
+> - * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA buffer
+> - *
+> - * @image: kimage struct to set IMA buffer data
+> - * @load_addr: Starting address where IMA buffer is loaded at
+> - * @size: Number of bytes in the IMA buffer
+> - *
+> - * Architectures should use this function to pass on the IMA buffer
+> - * information to the next kernel.
 > - *
 > - * Return: 0 on success, negative errno on error.
 > - */
-> -int ima_get_kexec_buffer(void **addr, size_t *size)
+> -int arch_ima_add_kexec_buffer(struct kimage *image, unsigned long load_addr,
+> -			      size_t size)
 > -{
-> -	int ret;
-> -	unsigned long tmp_addr;
-> -	size_t tmp_size;
-> -
-> -	ret = get_ima_kexec_buffer(NULL, 0, &tmp_addr, &tmp_size);
-> -	if (ret)
-> -		return ret;
-> -
-> -	*addr = __va(tmp_addr);
-> -	*size = tmp_size;
+> -	image->arch.ima_buffer_addr = load_addr;
+> -	image->arch.ima_buffer_size = size;
 > -
 > -	return 0;
 > -}
 > -
-> -/**
-> - * ima_free_kexec_buffer - free memory used by the IMA buffer
-> - */
-> -int ima_free_kexec_buffer(void)
-> -{
-> -	int ret;
-> -	unsigned long addr;
-> -	size_t size;
-> -	struct property *prop;
-> -
-> -	prop = of_find_property(of_chosen, "linux,ima-kexec-buffer", NULL);
-> -	if (!prop)
-> -		return -ENOENT;
-> -
-> -	ret = get_ima_kexec_buffer(NULL, 0, &addr, &size);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = of_remove_property(of_chosen, prop);
-> -	if (ret)
-> -		return ret;
-> -
-> -	return memblock_free(addr, size);
-> -}
-> -
-> -#ifdef CONFIG_IMA_KEXEC
->  /**
->   * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA buffer
->   *
-> @@ -154,4 +105,3 @@ int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node)
->  
->  	return 0;
+>  static int write_number(void *p, u64 value, int cells)
+>  {
+>  	if (cells == 1) {
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index 4d354593aecf..5263dafe8f4d 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -74,6 +74,28 @@ static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
+>  	return ret;
 >  }
-> -#endif /* CONFIG_IMA_KEXEC */
+>  
+> +/**
+> + * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA buffer
+> + *
+> + * @image: kimage struct to set IMA buffer data
+> + * @load_addr: Starting address where IMA buffer is loaded at
+> + * @size: Number of bytes in the IMA buffer
+> + *
+> + * Architectures should use this function to pass on the IMA buffer
+> + * information to the next kernel.
+> + *
+> + * Return: 0 on success, negative errno on error.
+> + */
+> +static int arch_ima_add_kexec_buffer(struct kimage *image,
+> +				     unsigned long load_addr,
+> +				     size_t size)
+> +{
+> +	image->arch.ima_buffer_addr = load_addr;
+> +	image->arch.ima_buffer_size = size;
+> +
+> +	return 0;
+> +}
+> +
+
+Both powerpc and arm64 use the definition above for
+arch_ima_add_kexec_buffer(), so it makes sense to share them as you do
+in this patch. This file isn't the best one to put arch-specific code
+which happens to be identical among architectures, but I can't think of
+somewhere else to put it.
+
+For now this isn't an issue since powerpc and arm64 are the only arches
+implementing tihs feature. If a third arch implemented it and also used
+the same function definition as above, it wouldn't be an issue either so
+perhaps this is good enough for the time being? :-)
+
+With this patch, the `#include <asm/ima.h>` in
+security/integrity/ima/ima.h can be removed. It was there just to
+provide a declaration of arch_ima_add_kexec_buffer().
 
 -- 
 Thiago Jung Bauermann
