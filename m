@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B672E2CFE91
-	for <lists+linux-integrity@lfdr.de>; Sat,  5 Dec 2020 20:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 789972CFE95
+	for <lists+linux-integrity@lfdr.de>; Sat,  5 Dec 2020 20:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726043AbgLETu1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 5 Dec 2020 14:50:27 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3782 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725536AbgLETu0 (ORCPT
+        id S1726000AbgLETxR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 5 Dec 2020 14:53:17 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56140 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725863AbgLETxP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 5 Dec 2020 14:50:26 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B5JXCEO163033;
-        Sat, 5 Dec 2020 14:49:09 -0500
+        Sat, 5 Dec 2020 14:53:15 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B5JWKnk100929;
+        Sat, 5 Dec 2020 14:51:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
  cc : subject : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=TkHcsLG8dAL+RnhNBxOBlnSfXxHw/ayhM50ATHOAvdI=;
- b=gq6W7yzSDeOA/2osPmeE0OkSF6rrF/Js1p5pYpjNUvPTWnIBU80t5UCA4uUy6caXRCXt
- RdsVYRFkJTJRMfq+iM+fX6fJt2OOfwEUWuySrlMZVGIExKuDO3tA69J07zp2LskeCrE+
- MGPqeMwLgqX1L7QDEgQYKS1Y3mW6xVfQU5t0Qjw9LTDtGO7lHTcox7h1Ie0GFUfRmoBu
- mUWVCqkml3zBO/9EvBIQSz5zzY2qgsMiCQtJOXIZ9nngILJd1GLZDUB6kZwQ670mYpnz
- VWEyOaQgjE7jj8KHrhQC55NMKe8s9P7x50agELMeuv6uSjt13hEdLV+mNwzWJ+eW8JV4 Aw== 
+ content-type; s=pp1; bh=20DojOCkzItIpggooTsWGti8C6d2j+Xs/EA/CGgXk0A=;
+ b=sTbTTf56SL5BZO6TZ/7yWLtd6WiUVEkivfREZ8xEDUClx3T387iGUHVSNKvy8VYHrHxJ
+ ptvJhyPfp3/Yjn3iC7dLYhft+m+YKNxjlJzb9hj7+pH2be4aVE6IntptICFf0gtM330L
+ 92rzWoxRutEGUKiOuAHTSLpATbaku/leZB4hljdjwm3byqLrfFdJntudMHR5yuJuFaBo
+ qbA+OJsbEEm7eQXE7xYaZRqNH3bXnxEydUK1R2UwKj7cAxTatzw8cEUX9O68DSgkiheT
+ b2FOv5ahXmuqeE/9GMuLQotSIQwNuftEl+LCVjldC6apX2F8SHqIB2QA/AkLdhTe+vzq Wg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3586dbjgu1-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35857sax5e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 05 Dec 2020 14:49:09 -0500
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B5JYInf164918;
-        Sat, 5 Dec 2020 14:49:09 -0500
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3586dbjgsu-1
+        Sat, 05 Dec 2020 14:51:43 -0500
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B5Jl483141760;
+        Sat, 5 Dec 2020 14:51:42 -0500
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35857sax57-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 05 Dec 2020 14:49:08 -0500
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B5JhBWk012199;
-        Sat, 5 Dec 2020 19:49:07 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04dal.us.ibm.com with ESMTP id 3581u8nbcg-1
+        Sat, 05 Dec 2020 14:51:42 -0500
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B5JfiBd014850;
+        Sat, 5 Dec 2020 19:51:41 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma01dal.us.ibm.com with ESMTP id 3581u8dbvj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 05 Dec 2020 19:49:07 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B5Jn6fc17891756
+        Sat, 05 Dec 2020 19:51:41 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B5Jpehw23593426
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 5 Dec 2020 19:49:06 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C5B3BE059;
-        Sat,  5 Dec 2020 19:49:06 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9390BE04F;
-        Sat,  5 Dec 2020 19:48:58 +0000 (GMT)
+        Sat, 5 Dec 2020 19:51:40 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1625478060;
+        Sat,  5 Dec 2020 19:51:40 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A15577805C;
+        Sat,  5 Dec 2020 19:51:32 +0000 (GMT)
 Received: from manicouagan.localdomain (unknown [9.85.177.236])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Sat,  5 Dec 2020 19:48:58 +0000 (GMT)
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Sat,  5 Dec 2020 19:51:32 +0000 (GMT)
 References: <20201204195149.611-1-nramas@linux.microsoft.com>
- <20201204195149.611-4-nramas@linux.microsoft.com>
+ <20201204195149.611-5-nramas@linux.microsoft.com>
 User-agent: mu4e 1.4.10; emacs 27.1
 From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
 To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
@@ -72,21 +72,20 @@ Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
         christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com
-Subject: Re: [PATCH v10 3/8] powerpc: Move ima buffer functions to
- drivers/of/kexec.c
-In-reply-to: <20201204195149.611-4-nramas@linux.microsoft.com>
-Date:   Sat, 05 Dec 2020 16:48:56 -0300
-Message-ID: <87zh2sm3tj.fsf@manicouagan.localdomain>
+Subject: Re: [PATCH v10 4/8] powerpc: Use ima kexec node functions
+In-reply-to: <20201204195149.611-5-nramas@linux.microsoft.com>
+Date:   Sat, 05 Dec 2020 16:51:30 -0300
+Message-ID: <87v9dgm3p9.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-05_15:2020-12-04,2020-12-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- adultscore=0 phishscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- malwarescore=0 suspectscore=0 clxscore=1015 impostorscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012050130
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ lowpriorityscore=0 clxscore=1015 priorityscore=1501 adultscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 suspectscore=2 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012050127
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -94,133 +93,148 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 
-> The functions do_get_kexec_buffer() and get_addr_size_cells(),
-> defined in arch/powerpc/kexec/ima.c, retrieve the address and size
-> of the given property from the device tree blob. These functions do
-> not have architecture specific code, but are currently limited to
-> powerpc. do_get_kexec_buffer() correctly handles a device tree property
-> that is a child node of the root node, but not anything other than
-> the immediate root child nodes.
+> do_get_kexec_buffer() and get_addr_size_cells() are called by
+> ima_get_kexec_buffer(), ima_free_kexec_buffer, and remove_ima_buffer()
+> to retrieve the address and size of the buffer used for carrying
+> forward the IMA measurement log across kexec system call. These
+> functions correctly handle a device tree property that is a child node
+> of the root node, but not anything other than the immediate root
+> child nodes.
 >
-> Move architecture independent functions get_ima_kexec_buffer() and
-> get_root_addr_size_cells() to "drivers/of/kexec.c". These functions
-> retrieve the chosen node "linux,ima-kexec-buffer" from the device tree,
-> and return the address and size of the buffer used for carrying forward
-> the IMA measurement log across kexec system call.
+> Use the architecture independent functions get_ima_kexec_buffer()
+> and get_root_addr_size_cells() defined in "drivers/of/ima_kexec.c",
+
+s/ima_kexec.c/kexec.c/
+
+> to get the address and size of the IMA measurement log buffer from
+> the device tree. Remove do_get_kexec_buffer() and get_addr_size_cells()
+> since they are not used anymore.
 >
 > Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 > Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
-I'd personally squash this patch with the next one, but I'll leave it
-just as a suggestion since maintainers are the ones who know best what
-works well in this regard.
-
-The code is good, except for a nit below:
+Looks good. Thanks!
 
 Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 
 > ---
->  drivers/of/kexec.c    | 70 +++++++++++++++++++++++++++++++++++++++++++
->  include/linux/kexec.h |  3 ++
->  2 files changed, 73 insertions(+)
+>  arch/powerpc/kexec/ima.c | 58 +++++-----------------------------------
+>  1 file changed, 7 insertions(+), 51 deletions(-)
 >
-> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
-> index b7d59105fcb8..516b86f7113a 100644
-> --- a/drivers/of/kexec.c
-> +++ b/drivers/of/kexec.c
-> @@ -59,3 +59,73 @@ int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size)
+> diff --git a/arch/powerpc/kexec/ima.c b/arch/powerpc/kexec/ima.c
+> index a36c39db4b1a..906e8212435d 100644
+> --- a/arch/powerpc/kexec/ima.c
+> +++ b/arch/powerpc/kexec/ima.c
+> @@ -13,40 +13,6 @@
+>  #include <linux/libfdt.h>
+>  #include <asm/ima.h>
 >  
->  	return -ENOENT;
+> -static int get_addr_size_cells(int *addr_cells, int *size_cells)
+> -{
+> -	struct device_node *root;
+> -
+> -	root = of_find_node_by_path("/");
+> -	if (!root)
+> -		return -EINVAL;
+> -
+> -	*addr_cells = of_n_addr_cells(root);
+> -	*size_cells = of_n_size_cells(root);
+> -
+> -	of_node_put(root);
+> -
+> -	return 0;
+> -}
+> -
+> -static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
+> -			       size_t *size)
+> -{
+> -	int ret, addr_cells, size_cells;
+> -
+> -	ret = get_addr_size_cells(&addr_cells, &size_cells);
+> -	if (ret)
+> -		return ret;
+> -
+> -	if (len < 4 * (addr_cells + size_cells))
+> -		return -ENOENT;
+> -
+> -	*addr = of_read_number(prop, addr_cells);
+> -	*size = of_read_number(prop + 4 * addr_cells, size_cells);
+> -
+> -	return 0;
+> -}
+> -
+>  /**
+>   * ima_get_kexec_buffer - get IMA buffer from the previous kernel
+>   * @addr:	On successful return, set to point to the buffer contents.
+> @@ -56,16 +22,11 @@ static int do_get_kexec_buffer(const void *prop, int len, unsigned long *addr,
+>   */
+>  int ima_get_kexec_buffer(void **addr, size_t *size)
+>  {
+> -	int ret, len;
+> +	int ret;
+>  	unsigned long tmp_addr;
+>  	size_t tmp_size;
+> -	const void *prop;
+>  
+> -	prop = of_get_property(of_chosen, "linux,ima-kexec-buffer", &len);
+> -	if (!prop)
+> -		return -ENOENT;
+> -
+> -	ret = do_get_kexec_buffer(prop, len, &tmp_addr, &tmp_size);
+> +	ret = get_ima_kexec_buffer(NULL, 0, &tmp_addr, &tmp_size);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -89,7 +50,7 @@ int ima_free_kexec_buffer(void)
+>  	if (!prop)
+>  		return -ENOENT;
+>  
+> -	ret = do_get_kexec_buffer(prop->value, prop->length, &addr, &size);
+> +	ret = get_ima_kexec_buffer(NULL, 0, &addr, &size);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -98,7 +59,6 @@ int ima_free_kexec_buffer(void)
+>  		return ret;
+>  
+>  	return memblock_free(addr, size);
+> -
 >  }
-> +
-> +/**
-> + * get_root_addr_size_cells - Get address and size of root node
-> + *
-> + * @addr_cells: Return address of the root node
-> + * @size_cells: Return size of the root node
-> + *
-> + * Return: 0 on success, or negative errno on error.
-> + */
-> +int get_root_addr_size_cells(int *addr_cells, int *size_cells)
-> +{
-> +	struct device_node *root;
-> +
-> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> +		return -EOPNOTSUPP;
-> +
-> +	root = of_find_node_by_path("/");
-> +	if (!root)
-> +		return -EINVAL;
-> +
-> +	*addr_cells = of_n_addr_cells(root);
-> +	*size_cells = of_n_size_cells(root);
-> +
-> +	of_node_put(root);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * get_ima_kexec_buffer - Get address and size of IMA kexec buffer
-> + *
-> + * @fdt: Flattened Device Tree
-> + * @chosen_node: Offset of chosen node in the FDT
-> + * @addr: Return address of the node
-> + * @size: Return size of the node
-> + *
-> + * Return: 0 on success, or negative errno on error.
-> + */
-> +int get_ima_kexec_buffer(void *fdt, int chosen_node,
-> +			 unsigned long *addr, size_t *size)
-> +{
-> +	const void *prop;
-> +	int addr_cells, size_cells, prop_len;
-> +	int rc;
-> +
-> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> +		return -EOPNOTSUPP;
-> +
-> +	rc = get_root_addr_size_cells(&addr_cells, &size_cells);
-> +	if (rc)
-> +		return rc;
-> +
-> +	if (fdt)
-> +		prop = fdt_getprop(fdt, chosen_node,
-> +				   "linux,ima-kexec-buffer", &prop_len);
-> +	else
-> +		prop = of_get_property(of_chosen,
-> +				       "linux,ima-kexec-buffer", &prop_len);
-> +
-> +	if (!prop)
-> +		return -ENOENT;
-> +
-> +	if (prop_len < 4 * (addr_cells + size_cells))
-> +		return -EINVAL;
-> +
-> +	*addr = of_read_number(prop, addr_cells);
-> +	*size = of_read_number(prop + 4 * addr_cells, size_cells);
-> +
-> +	return 0;
-> +}
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index d0234c4815da..10ff704ab670 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -408,6 +408,9 @@ static inline int kexec_crash_loaded(void) { return 0; }
->  #endif /* CONFIG_KEXEC_CORE */
 >  
->  #if defined(CONFIG_OF_FLATTREE)
-> +extern int get_root_addr_size_cells(int *addr_cells, int *size_cells);
-> +extern int get_ima_kexec_buffer(void *fdt, int chosen_node,
-> +				unsigned long *addr, size_t *size);
->  extern int delete_fdt_mem_rsv(void *fdt, unsigned long start,
->  			      unsigned long size);
->  #endif /* CONFIG_OF_FLATTREE */
+>  /**
+> @@ -112,19 +72,15 @@ int ima_free_kexec_buffer(void)
+>   */
+>  void remove_ima_buffer(void *fdt, int chosen_node)
+>  {
+> -	int ret, len;
+> +	int ret;
+>  	unsigned long addr;
+>  	size_t size;
+> -	const void *prop;
+>  
+> -	prop = fdt_getprop(fdt, chosen_node, "linux,ima-kexec-buffer", &len);
+> -	if (!prop)
+> +	ret = get_ima_kexec_buffer(fdt, chosen_node, &addr, &size);
+> +	if (ret)
+>  		return;
+>  
+> -	ret = do_get_kexec_buffer(prop, len, &addr, &size);
+>  	fdt_delprop(fdt, chosen_node, "linux,ima-kexec-buffer");
+> -	if (ret)
+> -		return;
+>  
+>  	ret = delete_fdt_mem_rsv(fdt, addr, size);
+>  	if (!ret)
+> @@ -191,7 +147,7 @@ int setup_ima_buffer(const struct kimage *image, void *fdt, int chosen_node)
+>  	if (!image->arch.ima_buffer_size)
+>  		return 0;
+>  
+> -	ret = get_addr_size_cells(&addr_cells, &size_cells);
+> +	ret = get_root_addr_size_cells(&addr_cells, &size_cells);
+>  	if (ret)
+>  		return ret;
 
-The extern keyword on function prototypes doesn't have any meaning.
-It's better to drop them (I should have mentioned this on the previous
-patch as well).
 
 -- 
 Thiago Jung Bauermann
