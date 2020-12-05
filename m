@@ -2,122 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E23942CF7CA
-	for <lists+linux-integrity@lfdr.de>; Sat,  5 Dec 2020 01:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FDC2CF88E
+	for <lists+linux-integrity@lfdr.de>; Sat,  5 Dec 2020 02:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726598AbgLEAH0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Dec 2020 19:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726508AbgLEAH0 (ORCPT
+        id S1726210AbgLEBWP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Dec 2020 20:22:15 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64866 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725300AbgLEBWP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Dec 2020 19:07:26 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DE9C0613D1;
-        Fri,  4 Dec 2020 16:06:46 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CE8961280B60;
-        Fri,  4 Dec 2020 16:06:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1607126805;
-        bh=+4daNnoifoPt3+krlY8/jTtTh/XHP2d4pPOqjTWgpII=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=OPggrwG7JNJIcnOU3JNJ6edNbfB4AhB6awcH1Un2Y2ToAu3eLVuFL1dcdaJHVVCrZ
-         ws/KsCOa2ztTKazAJl94NWYdaHPvegx112PS/dbT7ML6EsNlYuiRAgNTnqYO9J2Sjc
-         K5EPyKErWagGprvpsD35JAhsnccBU7muCH7dnrqE=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id G5OWr2Ntt5qM; Fri,  4 Dec 2020 16:06:45 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2BC2F1280B59;
-        Fri,  4 Dec 2020 16:06:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1607126805;
-        bh=+4daNnoifoPt3+krlY8/jTtTh/XHP2d4pPOqjTWgpII=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=OPggrwG7JNJIcnOU3JNJ6edNbfB4AhB6awcH1Un2Y2ToAu3eLVuFL1dcdaJHVVCrZ
-         ws/KsCOa2ztTKazAJl94NWYdaHPvegx112PS/dbT7ML6EsNlYuiRAgNTnqYO9J2Sjc
-         K5EPyKErWagGprvpsD35JAhsnccBU7muCH7dnrqE=
-Message-ID: <e2b07ef9132f150f6d8ee169e249b2ce33a0db10.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2] tpm_tis: Disable interrupts if interrupt storm
- detected
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Matthew Garrett <mjg59@google.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Date:   Fri, 04 Dec 2020 16:06:44 -0800
-In-Reply-To: <87czzpw88m.fsf@redhat.com>
-References: <20201130232338.106892-1-jsnitsel@redhat.com>
-         <20201201025807.162241-1-jsnitsel@redhat.com> <87czzujjg1.fsf@redhat.com>
-         <878sahmh5w.fsf@redhat.com> <20201202164931.GA91318@kernel.org>
-         <87sg8noixh.fsf@redhat.com> <87lfefe7vm.fsf@redhat.com>
-         <87ft4mpryt.fsf@redhat.com>
-         <8a7d2fda891e45b098b603064d45dd7d53898fd4.camel@HansenPartnership.com>
-         <87czzpw88m.fsf@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 4 Dec 2020 20:22:15 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B50XVas000872;
+        Fri, 4 Dec 2020 20:20:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
+ cc : subject : in-reply-to : date : message-id : mime-version :
+ content-type; s=pp1; bh=xNnZ/ZkntbjED8A3awgVAApqgSCj5zVZ3LoHd65+kEA=;
+ b=dlx58ryIncl/0bicYIpwkY7DRs1Uzoy5EGOn1XQtEigrPlfG5vFICpnicIRhQPoYKNro
+ LFueyisOnXsD6g2KYYCyi5YLyzenpCHWkqYFej5SGYfPCLApriMoaSCcgesARkWdeGn9
+ WY8QckvLz+ZhZOgq0futsGVj5R4Y0MCN2dnnfaUENY25xTDEzObqC7yVrG6TYg2T3Y7l
+ bIkjyB0tL4AZDnXjS3zqrSUKkSx3xGdumZE82Z1VcXL7PkuakcVGLE1IFFrndbjIjiJn
+ eQau1ec/Wmci2x27P1IHKLWeWbzWffHRAQbd9ALpPkq8UTDEiTPSFhXCVVtFYzNOHzLn Dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 357yjc914v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Dec 2020 20:20:40 -0500
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B50oe75061768;
+        Fri, 4 Dec 2020 20:20:40 -0500
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 357yjc914a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Dec 2020 20:20:39 -0500
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B51Fa1Q030816;
+        Sat, 5 Dec 2020 01:20:38 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02wdc.us.ibm.com with ESMTP id 356cbf44j4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 05 Dec 2020 01:20:38 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B51Kb7C18547190
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 5 Dec 2020 01:20:37 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A675BE054;
+        Sat,  5 Dec 2020 01:20:37 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D4125BE04F;
+        Sat,  5 Dec 2020 01:20:27 +0000 (GMT)
+Received: from manicouagan.localdomain (unknown [9.80.203.141])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Sat,  5 Dec 2020 01:20:27 +0000 (GMT)
+References: <20201204195149.611-1-nramas@linux.microsoft.com>
+ <20201204195149.611-2-nramas@linux.microsoft.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
+        james.morse@arm.com, catalin.marinas@arm.com, sashal@kernel.org,
+        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com
+Subject: Re: [PATCH v10 1/8] powerpc: fix compiler warnings and errors
+In-reply-to: <20201204195149.611-2-nramas@linux.microsoft.com>
+Date:   Fri, 04 Dec 2020 22:20:24 -0300
+Message-ID: <87mtytoxpj.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-04_13:2020-12-04,2020-12-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ mlxscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=776 lowpriorityscore=0 spamscore=0 bulkscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012050000
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2020-12-04 at 14:51 -0700, Jerry Snitselaar wrote:
-> James Bottomley @ 2020-12-03 14:05 MST:
-> 
-> > On Thu, 2020-12-03 at 13:14 -0700, Jerry Snitselaar wrote:
-> > > Jerry Snitselaar @ 2020-12-02 23:11 MST:
-> > [...]
-> > > > The interrupt storm detection code works on the T490s. I'm not
-> > > > sure what is going on with the L490. I will see if I can get
-> > > > access to one.
-> > > > 
-> > > > Jerry
-> > > 
-> > > Lenovo verified that the L490 hangs.
-> > 
-> > Just to confirm, that's this system:
-> > 
-> > https://www.lenovo.com/us/en/laptops/thinkpad/thinkpad-l/ThinkPad-L490/p/22TP2TBL490
-> > 
-> > We could ask if lenovo will give us one, but if not we could pull a
-> > Jens.  [the backstory is that when Jens was doing queueing in the
-> > block layer, there were lots of SATA devices that didn't work quite
-> > right but you couldn't tell unless you actually tried them
-> > out.  Getting manufacturers to send samples is rather arduous, so
-> > he took to ordering them online, testing them out, and then
-> > returning them for a full refund within the allowed window]
-> > 
-> > It looks like Lenovo has a nice christmas returns policy:
-> > 
-> > https://www.lenovo.com/us/en/shopping-faq/#returns
-> > 
-> > James
-> 
-> Yes, that is the one. I'm seeing if we have any located somewhere, or
-> if Lenovo will loan me one.
 
-OK, that would be best since it's your patch.  We've got 12 days left
-to get the free returns policy, so if you haven't managed to find one
-by the end of next week, I'll order one and play with it ... you could
-always put your manager's credit card down for one as well ...
-especially as it should get refunded ...
+Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 
->  I think for the time being the patch that disabled interrupts for
-> the T490s could be changed to it for the L490 instead. I'll post a v3
-> of my current patchset. It would probably make sense for it to go in
-> with your patches when they land.
+> The function prototype for the functions defined in ima.c for powerpc
+> are given in the header file ima.h. But this header file is not
+> included in ima.c resulting in compilation errors such as given below.
+>
+> arch/powerpc/kexec/ima.c:56:5: error: no previous prototype for 'ima_get_kexec_buffer' [-Werror=missing-prototypes]
+>    56 | int ima_get_kexec_buffer(void **addr, size_t *size)
+>       |     ^~~~~~~~~~~~~~~~~~~~
+>
+> The function parameters for remove_ima_buffer() and
+> arch_ima_add_kexec_buffer() are not described in the function header
+> resulting in warnings such as given below.
+>
+> arch/powerpc/kexec/ima.c:111: warning: Function parameter or member 'fdt' not described in 'remove_ima_buffer'
+>
+> Include ima.h in ima.c for powerpc. Describe the function parameters for
+> remove_ima_buffer() and arch_ima_add_kexec_buffer().
+>
+> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Absolutely ... we can't turn interrupts on and then have a load of hung
-laptops we already knew about ...
+These warnings showed up when using `make W=1`, and this patch fixes
+them. Thanks!
 
-James
+Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 
 
+-- 
+Thiago Jung Bauermann
+IBM Linux Technology Center
