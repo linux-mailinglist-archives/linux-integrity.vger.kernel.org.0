@@ -2,28 +2,28 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DD72D08EF
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Dec 2020 02:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FCB2D08F3
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Dec 2020 02:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727618AbgLGBvY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 6 Dec 2020 20:51:24 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:49282 "EHLO
+        id S1727393AbgLGBxw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 6 Dec 2020 20:53:52 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:49650 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727040AbgLGBvY (ORCPT
+        with ESMTP id S1727375AbgLGBxw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 6 Dec 2020 20:51:24 -0500
+        Sun, 6 Dec 2020 20:53:52 -0500
 Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 73EE020B717A;
-        Sun,  6 Dec 2020 17:50:41 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 73EE020B717A
+        by linux.microsoft.com (Postfix) with ESMTPSA id E484320B717A;
+        Sun,  6 Dec 2020 17:53:10 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E484320B717A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1607305842;
-        bh=vtq8CyQBySYNuts4DDchsgC3KgHAe6Af4KocNaAPQZw=;
+        s=default; t=1607305991;
+        bh=sgdL0j12SkYfd6O2k0i5MCPfASlpZiQl5L2oSTtnExg=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=LtRQZg+2FE0F3ZEro0HxgFb8Pb+6iJetwOA0BneYeF5Eoen9J+voUIfOUSV3N1MHj
-         CGHdsDIzs9J6/zsAxGtOeTqBj2S34LHl/L4d3DWv15UwNk35LTXbLoZB8fon4tPM9e
-         4H/TLv4OSL4EA5GJnMUkrk//mHAUyOxsk3GGXsn4=
-Subject: Re: [PATCH v10 2/8] powerpc: Move delete_fdt_mem_rsv() to
+        b=lSEaFq24iswnBHkkvOvtSsaHlHv8asqj2zKTAMnEGBveDHAZdaTkxcJn9UzooyBt2
+         pxyxGOpLYYAS1CrbLSve10yadHx92v2EpoEH/flJbYvZA0vL47F94Mo5Y+MQAtmEGo
+         gvMOwf6bn6g27PnVchozZDezvCH/lSqPJ3OXOkGQ=
+Subject: Re: [PATCH v10 3/8] powerpc: Move ima buffer functions to
  drivers/of/kexec.c
 To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
 Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
@@ -40,15 +40,15 @@ Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com
 References: <20201204195149.611-1-nramas@linux.microsoft.com>
- <20201204195149.611-3-nramas@linux.microsoft.com>
- <87ft4louto.fsf@manicouagan.localdomain>
+ <20201204195149.611-4-nramas@linux.microsoft.com>
+ <87zh2sm3tj.fsf@manicouagan.localdomain>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <40f8c03a-f08f-d49e-b404-9a6d79873dd1@linux.microsoft.com>
-Date:   Sun, 6 Dec 2020 17:50:40 -0800
+Message-ID: <0cb40d89-cc0b-25cc-479c-f8269af0346a@linux.microsoft.com>
+Date:   Sun, 6 Dec 2020 17:53:10 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <87ft4louto.fsf@manicouagan.localdomain>
+In-Reply-To: <87zh2sm3tj.fsf@manicouagan.localdomain>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -56,228 +56,144 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 12/4/20 6:22 PM, Thiago Jung Bauermann wrote:
-> 
-> Hello Lakshmi,
+On 12/5/20 11:48 AM, Thiago Jung Bauermann wrote:
 > 
 > Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 > 
->> delete_fdt_mem_rsv() retrieves the memory reserve map entry, for
->> the given starting address and size, from the device tree blob, and
->> removes the entry from the device tree blob. This function is called
->> to free the resources reserved for the buffer used for carrying forward
->> the IMA measurement logs on kexec. This function does not have
->> architecture specific code, but is currently limited to powerpc.
+>> The functions do_get_kexec_buffer() and get_addr_size_cells(),
+>> defined in arch/powerpc/kexec/ima.c, retrieve the address and size
+>> of the given property from the device tree blob. These functions do
+>> not have architecture specific code, but are currently limited to
+>> powerpc. do_get_kexec_buffer() correctly handles a device tree property
+>> that is a child node of the root node, but not anything other than
+>> the immediate root child nodes.
 >>
->> Move delete_fdt_mem_rsv() to "drivers/of/kexec_fdt.c" so that it is
-> 
-> s/kexec_fdt.c/kexec.c/
-
-Missed that in the patch description. Will fix it. Thanks.
-
->> accessible for other architectures as well.
+>> Move architecture independent functions get_ima_kexec_buffer() and
+>> get_root_addr_size_cells() to "drivers/of/kexec.c". These functions
+>> retrieve the chosen node "linux,ima-kexec-buffer" from the device tree,
+>> and return the address and size of the buffer used for carrying forward
+>> the IMA measurement log across kexec system call.
 >>
 >> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 >> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 >> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> 
+> I'd personally squash this patch with the next one, but I'll leave it
+> just as a suggestion since maintainers are the ones who know best what
+> works well in this regard.
+> 
+> The code is good, except for a nit below:
+> 
+> Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+
+Thanks Thiago.
+
+I'll remove "extern" key word in function declarations when I update the 
+patch.
+
+  -lakshmi
+
+> 
 >> ---
->>   arch/powerpc/include/asm/kexec.h |  1 -
->>   arch/powerpc/kexec/file_load.c   | 32 -----------------
->>   drivers/of/Makefile              |  1 +
->>   drivers/of/kexec.c               | 61 ++++++++++++++++++++++++++++++++
->>   include/linux/kexec.h            |  5 +++
->>   5 files changed, 67 insertions(+), 33 deletions(-)
->>   create mode 100644 drivers/of/kexec.c
+>>   drivers/of/kexec.c    | 70 +++++++++++++++++++++++++++++++++++++++++++
+>>   include/linux/kexec.h |  3 ++
+>>   2 files changed, 73 insertions(+)
 >>
->> diff --git a/arch/powerpc/include/asm/kexec.h b/arch/powerpc/include/asm/kexec.h
->> index 55d6ede30c19..7c223031ecdd 100644
->> --- a/arch/powerpc/include/asm/kexec.h
->> +++ b/arch/powerpc/include/asm/kexec.h
->> @@ -126,7 +126,6 @@ int setup_purgatory(struct kimage *image, const void *slave_code,
->>   int setup_new_fdt(const struct kimage *image, void *fdt,
->>   		  unsigned long initrd_load_addr, unsigned long initrd_len,
->>   		  const char *cmdline);
->> -int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size);
->>   
->>   #ifdef CONFIG_PPC64
->>   struct kexec_buf;
->> diff --git a/arch/powerpc/kexec/file_load.c b/arch/powerpc/kexec/file_load.c
->> index 9a232bc36c8f..9efc98b1e2ae 100644
->> --- a/arch/powerpc/kexec/file_load.c
->> +++ b/arch/powerpc/kexec/file_load.c
->> @@ -109,38 +109,6 @@ int setup_purgatory(struct kimage *image, const void *slave_code,
->>   	return 0;
->>   }
->>   
->> -/**
->> - * delete_fdt_mem_rsv - delete memory reservation with given address and size
->> - *
->> - * Return: 0 on success, or negative errno on error.
->> - */
->> -int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size)
->> -{
->> -	int i, ret, num_rsvs = fdt_num_mem_rsv(fdt);
->> -
->> -	for (i = 0; i < num_rsvs; i++) {
->> -		uint64_t rsv_start, rsv_size;
->> -
->> -		ret = fdt_get_mem_rsv(fdt, i, &rsv_start, &rsv_size);
->> -		if (ret) {
->> -			pr_err("Malformed device tree.\n");
->> -			return -EINVAL;
->> -		}
->> -
->> -		if (rsv_start == start && rsv_size == size) {
->> -			ret = fdt_del_mem_rsv(fdt, i);
->> -			if (ret) {
->> -				pr_err("Error deleting device tree reservation.\n");
->> -				return -EINVAL;
->> -			}
->> -
->> -			return 0;
->> -		}
->> -	}
->> -
->> -	return -ENOENT;
->> -}
->> -
->>   /*
->>    * setup_new_fdt - modify /chosen and memory reservation for the next kernel
->>    * @image:		kexec image being loaded.
->> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
->> index 6e1e5212f058..77d24712c0c8 100644
->> --- a/drivers/of/Makefile
->> +++ b/drivers/of/Makefile
->> @@ -13,5 +13,6 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
->>   obj-$(CONFIG_OF_RESOLVE)  += resolver.o
->>   obj-$(CONFIG_OF_OVERLAY) += overlay.o
->>   obj-$(CONFIG_OF_NUMA) += of_numa.o
->> +obj-$(CONFIG_OF_FLATTREE) += kexec.o
-> 
-> Isn't this too broad? kexec.o will only be useful to kernel configs
-> which enable CONFIG_KEXEC_FILE, so perhaps do:
-> 
-> ifdef CONFIG_OF_FLATTREE
-> ifdef CONFIG_KEXEC_FILE
-> obj-y += kexec.o
-> endif
-> endif
-> 
-> What do you think?
-
-Per Rob's feedback on v9 patch set, I have moved all the architecture 
-independent ima kexec functions to a single file "drivers/of/kexec.c"
-
-Since these functions are enabled on different kernel CONFIGs, I have 
-used IS_ENABLED(CONFIG_XYZ) macro instead of "#ifdef" in the C file to 
-conditionally compile.
-
-> 
->>   obj-$(CONFIG_OF_UNITTEST) += unittest-data/
 >> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
->> new file mode 100644
->> index 000000000000..b7d59105fcb8
->> --- /dev/null
+>> index b7d59105fcb8..516b86f7113a 100644
+>> --- a/drivers/of/kexec.c
 >> +++ b/drivers/of/kexec.c
->> @@ -0,0 +1,61 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Copyright (C) 2020 Microsoft Corporation
->> + *
->> + * Author: Lakshmi Ramasubramanian (nramas@linux.microsoft.com)
->> + *
->> + * File: kexec.c
->> + *	Defines kexec related functions.
->> + */
->> +
->> +#define pr_fmt(fmt)	"OF: kexec: " fmt
->> +
->> +#include <linux/kernel.h>
->> +#include <linux/slab.h>
->> +#include <linux/memblock.h>
->> +#include <linux/kexec.h>
->> +#include <linux/of.h>
->> +#include <linux/of_fdt.h>
->> +#include <linux/libfdt.h>
+>> @@ -59,3 +59,73 @@ int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size)
+>>   
+>>   	return -ENOENT;
+>>   }
 >> +
 >> +/**
->> + * delete_fdt_mem_rsv - delete memory reservation with given address and size
+>> + * get_root_addr_size_cells - Get address and size of root node
 >> + *
->> + * @fdt: Flattened Device Tree to update
->> + * @start: Starting address of the reservation to delete
->> + * @size: Size of the reservation to delete
+>> + * @addr_cells: Return address of the root node
+>> + * @size_cells: Return size of the root node
 >> + *
 >> + * Return: 0 on success, or negative errno on error.
 >> + */
->> +int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size)
+>> +int get_root_addr_size_cells(int *addr_cells, int *size_cells)
 >> +{
->> +	int i, ret, num_rsvs;
+>> +	struct device_node *root;
 >> +
->> +	if (!IS_ENABLED(CONFIG_KEXEC_FILE))
->> +		return 0;
-> 
-> If you agree with my suggestion, then this IS_ENABLED() wouldn't be
-> needed.
-> 
-
-Please see my response above.
-
-If there is a way to keep all the ima kexec functions in a single file 
-and yet not use "#ifdef" in C file to conditionally compile, please let 
-me know. I'll update.
-
-thanks,
-  -lakshmi
-
+>> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+>> +		return -EOPNOTSUPP;
 >> +
->> +	num_rsvs = fdt_num_mem_rsv(fdt);
->> +	for (i = 0; i < num_rsvs; i++) {
->> +		uint64_t rsv_start, rsv_size;
+>> +	root = of_find_node_by_path("/");
+>> +	if (!root)
+>> +		return -EINVAL;
 >> +
->> +		ret = fdt_get_mem_rsv(fdt, i, &rsv_start, &rsv_size);
->> +		if (ret) {
->> +			pr_err("Malformed device tree.\n");
->> +			return -EINVAL;
->> +		}
+>> +	*addr_cells = of_n_addr_cells(root);
+>> +	*size_cells = of_n_size_cells(root);
 >> +
->> +		if (rsv_start == start && rsv_size == size) {
->> +			ret = fdt_del_mem_rsv(fdt, i);
->> +			if (ret) {
->> +				pr_err("Error deleting device tree reservation.\n");
->> +				return -EINVAL;
->> +			}
+>> +	of_node_put(root);
 >> +
->> +			pr_debug("Freed reserved memory at %lu of size %lu\n",
->> +				 start, size);
->> +			return 0;
->> +		}
->> +	}
->> +
->> +	return -ENOENT;
+>> +	return 0;
 >> +}
-> 
-> The function code is unchanged apart from the addition of the
-> IS_ENABLED() and the pr_debug(), so that is good.
-> 
+>> +
+>> +/**
+>> + * get_ima_kexec_buffer - Get address and size of IMA kexec buffer
+>> + *
+>> + * @fdt: Flattened Device Tree
+>> + * @chosen_node: Offset of chosen node in the FDT
+>> + * @addr: Return address of the node
+>> + * @size: Return size of the node
+>> + *
+>> + * Return: 0 on success, or negative errno on error.
+>> + */
+>> +int get_ima_kexec_buffer(void *fdt, int chosen_node,
+>> +			 unsigned long *addr, size_t *size)
+>> +{
+>> +	const void *prop;
+>> +	int addr_cells, size_cells, prop_len;
+>> +	int rc;
+>> +
+>> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	rc = get_root_addr_size_cells(&addr_cells, &size_cells);
+>> +	if (rc)
+>> +		return rc;
+>> +
+>> +	if (fdt)
+>> +		prop = fdt_getprop(fdt, chosen_node,
+>> +				   "linux,ima-kexec-buffer", &prop_len);
+>> +	else
+>> +		prop = of_get_property(of_chosen,
+>> +				       "linux,ima-kexec-buffer", &prop_len);
+>> +
+>> +	if (!prop)
+>> +		return -ENOENT;
+>> +
+>> +	if (prop_len < 4 * (addr_cells + size_cells))
+>> +		return -EINVAL;
+>> +
+>> +	*addr = of_read_number(prop, addr_cells);
+>> +	*size = of_read_number(prop + 4 * addr_cells, size_cells);
+>> +
+>> +	return 0;
+>> +}
 >> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
->> index 9e93bef52968..d0234c4815da 100644
+>> index d0234c4815da..10ff704ab670 100644
 >> --- a/include/linux/kexec.h
 >> +++ b/include/linux/kexec.h
->> @@ -407,6 +407,11 @@ static inline int kexec_crash_loaded(void) { return 0; }
->>   #define kexec_in_progress false
+>> @@ -408,6 +408,9 @@ static inline int kexec_crash_loaded(void) { return 0; }
 >>   #endif /* CONFIG_KEXEC_CORE */
 >>   
->> +#if defined(CONFIG_OF_FLATTREE)
+>>   #if defined(CONFIG_OF_FLATTREE)
+>> +extern int get_root_addr_size_cells(int *addr_cells, int *size_cells);
+>> +extern int get_ima_kexec_buffer(void *fdt, int chosen_node,
+>> +				unsigned long *addr, size_t *size);
+>>   extern int delete_fdt_mem_rsv(void *fdt, unsigned long start,
+>>   			      unsigned long size);
+>>   #endif /* CONFIG_OF_FLATTREE */
 > 
-> This would also change to require CONFIG_KEXEC_FILE.
-> 
->> +extern int delete_fdt_mem_rsv(void *fdt, unsigned long start,
->> +			      unsigned long size);
->> +#endif /* CONFIG_OF_FLATTREE */
->> +
->>   #endif /* !defined(__ASSEBMLY__) */
->>   
->>   #endif /* LINUX_KEXEC_H */
-> 
+> The extern keyword on function prototypes doesn't have any meaning.
+> It's better to drop them (I should have mentioned this on the previous
+> patch as well).
 > 
 
