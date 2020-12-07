@@ -2,160 +2,559 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFDB2D1439
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Dec 2020 16:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D702D15E6
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Dec 2020 17:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726042AbgLGO7g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Dec 2020 09:59:36 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43202 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725772AbgLGO7g (ORCPT
+        id S1726311AbgLGQYg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Dec 2020 11:24:36 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:53834 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725863AbgLGQYg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Dec 2020 09:59:36 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B7EbJNs020191;
-        Mon, 7 Dec 2020 09:58:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=6b/b5Dxe605BC5GsozJi2jrq8Z2Th2EsN7f8+8G/lm4=;
- b=g4rAs4oqnDgqpOwA0rAY9SsZ9PrfQhbHu4niNfOCs8IwbWotJykuqzJMMdLyVQuOKnDc
- WU9npB/Im5C8FmnWEAKtcygzPWeUDlqe05mBomL3LlNwgQRm1Ka+49xGCx7bcUfOWTJ6
- KzXjKODkFlE2AOimM69/O6yIE1l48BDeyAiC0MfrQxUudRxeCnT8RrZ24xkK1+4+S027
- qh7xGl6tfDCP1cMBlj/OSsgZzj4QbXSAG+bX9+qYdOYAOwVIIO9wqUwxivDJnL3b+g4Z
- 1jHVGNSFmobt/I8uCCASgM61Kl6mmB1Fzs5SHVwkq1vpsZTpYxmb+E/ABQfvkGQNpHyn 0Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 359p0dsbts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Dec 2020 09:58:07 -0500
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B7EbALl019040;
-        Mon, 7 Dec 2020 09:58:06 -0500
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 359p0dsbst-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Dec 2020 09:58:06 -0500
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B7EqRFq020474;
-        Mon, 7 Dec 2020 14:58:03 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3581fhjk8p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Dec 2020 14:58:03 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B7Ew1R364815572
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 7 Dec 2020 14:58:01 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3649DA4064;
-        Mon,  7 Dec 2020 14:58:01 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2ED88A4054;
-        Mon,  7 Dec 2020 14:57:55 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.115.213])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  7 Dec 2020 14:57:55 +0000 (GMT)
-Message-ID: <49408f07b91685e058f94844e73c753bb2033d35.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 7/8] powerpc: Move arch_ima_add_kexec_buffer to ima
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc:     robh@kernel.org, gregkh@linuxfoundation.org, james.morse@arm.com,
-        catalin.marinas@arm.com, sashal@kernel.org, will@kernel.org,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        robh+dt@kernel.org, frowand.list@gmail.com,
-        vincenzo.frascino@arm.com, mark.rutland@arm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        pasha.tatashin@soleen.com, allison@lohutok.net,
-        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
-        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
-        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
-        christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        prsriva@linux.microsoft.com, balajib@linux.microsoft.com
-Date:   Mon, 07 Dec 2020 09:57:54 -0500
-In-Reply-To: <0f60b35e-eff6-20c6-363d-82f0b10a1c1f@linux.microsoft.com>
-References: <20201204195149.611-1-nramas@linux.microsoft.com>
-         <20201204195149.611-8-nramas@linux.microsoft.com>
-         <87k0twlytt.fsf@manicouagan.localdomain>
-         <0f60b35e-eff6-20c6-363d-82f0b10a1c1f@linux.microsoft.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
+        Mon, 7 Dec 2020 11:24:36 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id B4D491280882;
+        Mon,  7 Dec 2020 08:23:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1607358235;
+        bh=1gmDXs4W+Ut3KADAUhIjRSfOtV0SqOF9OmJ2aTtxnvU=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=Ykm/d29TjiRLjTM4NphA4N60RmqpsfS+Wox9pYcndxZyP3wxawXG9UOuuk9jgpQzN
+         IDCdPTz0oYEYFKTRd8EcZNQnwMIJTn3nvs5aj+8l/GQZPwqNfujSrewUTtcNaX7V+D
+         LwL/dkIHhyokd8qRFzx8B+LZlSYnayL+9J1wYWOU=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ikU9pkA7wLEW; Mon,  7 Dec 2020 08:23:55 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 203631280857;
+        Mon,  7 Dec 2020 08:23:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1607358235;
+        bh=1gmDXs4W+Ut3KADAUhIjRSfOtV0SqOF9OmJ2aTtxnvU=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=Ykm/d29TjiRLjTM4NphA4N60RmqpsfS+Wox9pYcndxZyP3wxawXG9UOuuk9jgpQzN
+         IDCdPTz0oYEYFKTRd8EcZNQnwMIJTn3nvs5aj+8l/GQZPwqNfujSrewUTtcNaX7V+D
+         LwL/dkIHhyokd8qRFzx8B+LZlSYnayL+9J1wYWOU=
+Message-ID: <4b73d100255adefbeb6929481e218ef39592bcc8.camel@HansenPartnership.com>
+Subject: Re: [PATCH v14 4/5] security: keys: trusted: use ASN.1 TPM2 key
+ format for the blobs
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     kernel test robot <lkp@intel.com>, linux-integrity@vger.kernel.org,
+        kbuild-all@lists.01.org, Mimi Zohar <zohar@linux.ibm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        jarkko@kernel.org
+Date:   Mon, 07 Dec 2020 08:23:53 -0800
+In-Reply-To: <20201204045021.GE84413@linux.intel.com>
+References: <20201129222004.4428-5-James.Bottomley@HansenPartnership.com>
+         <202011301002.yYRCOdq5-lkp@intel.com>
+         <5e94c7199c675bbfa7112f8b79fcb91f8d2d4fe7.camel@HansenPartnership.com>
+         <20201204044908.GD84413@linux.intel.com>
+         <20201204045021.GE84413@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-07_11:2020-12-04,2020-12-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
- phishscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012070094
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, 2020-12-06 at 18:03 -0800, Lakshmi Ramasubramanian wrote:
-> On 12/5/20 1:36 PM, Thiago Jung Bauermann wrote:
+On Fri, 2020-12-04 at 06:50 +0200, Jarkko Sakkinen wrote:
+> On Fri, Dec 04, 2020 at 06:49:15AM +0200, Jarkko Sakkinen wrote:
+> > On Mon, Nov 30, 2020 at 11:58:43AM -0800, James Bottomley wrote:
+> > > On Mon, 2020-11-30 at 10:10 +0800, kernel test robot wrote:
+> > > [...]
+> > > >  > 331		if (payload->blob_len < 0)
+> > > >    332			return payload->blob_len;
+> > > 
+> > > OK, I can rework this to use the signed version of blob len as
+> > > below.
+> > > 
+> > > James
 > > 
-> > Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
-> 
-> >> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> >> index 4d354593aecf..5263dafe8f4d 100644
-> >> --- a/security/integrity/ima/ima_kexec.c
-> >> +++ b/security/integrity/ima/ima_kexec.c
-> >> @@ -74,6 +74,28 @@ static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
-> >>   	return ret;
-> >>   }
-> >>   
-> >> +/**
-> >> + * arch_ima_add_kexec_buffer - do arch-specific steps to add the IMA buffer
-> >> + *
-> >> + * @image: kimage struct to set IMA buffer data
-> >> + * @load_addr: Starting address where IMA buffer is loaded at
-> >> + * @size: Number of bytes in the IMA buffer
-> >> + *
-> >> + * Architectures should use this function to pass on the IMA buffer
-> >> + * information to the next kernel.
-> >> + *
-> >> + * Return: 0 on success, negative errno on error.
-> >> + */
-> >> +static int arch_ima_add_kexec_buffer(struct kimage *image,
-> >> +				     unsigned long load_addr,
-> >> +				     size_t size)
-> >> +{
-> >> +	image->arch.ima_buffer_addr = load_addr;
-> >> +	image->arch.ima_buffer_size = size;
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
+> > Do you have the patches in a git branch somewhere with this fixed?
 > > 
-> > Both powerpc and arm64 use the definition above for
-> > arch_ima_add_kexec_buffer(), so it makes sense to share them as you do
-> > in this patch. This file isn't the best one to put arch-specific code
-> > which happens to be identical among architectures, but I can't think of
-> > somewhere else to put it.
-> > 
-> > For now this isn't an issue since powerpc and arm64 are the only arches
-> > implementing tihs feature. If a third arch implemented it and also used
-> > the same function definition as above, it wouldn't be an issue either so
-> > perhaps this is good enough for the time being? :-)
+> > I can take from there and apply.
 > 
-> If Mimi doesn't have any objection, I'll leave this function in this 
-> file. The other option is to move this function also to 
-> "drivers/of/kexec.c".
-> 
-> Please let me know.
+> CC my korg address. Sorry for the latency, I have this LKML migration
+> going on (MAINTAINERS is already updated). Sometimes forgot to check
+> this inbox.
 
-Defining arch_ima_add_kexec_buffer() function, as static, here in
-ima_kexec.c is weird.  For this reason, I specifically asked Thiago to
-look at it.  Thanks, Thiago, for looking and reviewing the rest of the
-patch set.  Duplicating the code or defining it in drivers/of, doesn't
-make sense either.  As Thiago suggested, define it here until there is
-a reason to move it.
+I'm preparing a v15 but this is basically the only code change.
 
-thanks,
+James
 
-Mimi
+---8>8>8><8<8<8---
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH] security: keys: trusted: use ASN.1 TPM2 key format for the
+ blobs
+
+Modify the TPM2 key format blob output to export and import in the
+ASN.1 form for TPM2 sealed object keys.  For compatibility with prior
+trusted keys, the importer will also accept two TPM2B quantities
+representing the public and private parts of the key.  However, the
+export via keyctl pipe will only output the ASN.1 format.
+
+The benefit of the ASN.1 format is that it's a standard and thus the
+exported key can be used by userspace tools (openssl_tpm2_engine,
+openconnect and tpm2-tss-engine).  The format includes policy
+specifications, thus it gets us out of having to construct policy
+handles in userspace and the format includes the parent meaning you
+don't have to keep passing it in each time.
+
+This patch only implements basic handling for the ASN.1 format, so
+keys with passwords but no policy.
+
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+
+---
+v2: Updated encode API, added length checks
+v5: correct export format after doing interoperability checks
+v7: use prefix tpm2_key_ instead of tpmkey_ for functions
+v8: resplit commit
+v9: select ASN1_ENCODER
+v11: add ASN.1 format description
+v13: fix ASN.1 compiler dependency
+v14: select OID_REGISTRY add tested by
+v15: signed blob len
+---
+ .../security/keys/trusted-encrypted.rst       |  58 +++++
+ include/keys/trusted-type.h                   |   1 +
+ security/keys/Kconfig                         |   3 +
+ security/keys/trusted-keys/Makefile           |   4 +-
+ security/keys/trusted-keys/tpm2key.asn1       |  11 +
+ security/keys/trusted-keys/trusted_tpm1.c     |   2 +-
+ security/keys/trusted-keys/trusted_tpm2.c     | 210 +++++++++++++++++-
+ 7 files changed, 280 insertions(+), 9 deletions(-)
+ create mode 100644 security/keys/trusted-keys/tpm2key.asn1
+
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index 1da879a68640..549aa1308949 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -207,3 +207,61 @@ about the usage can be found in the file
+ Another new format 'enc32' has been defined in order to support encrypted keys
+ with payload size of 32 bytes. This will initially be used for nvdimm security
+ but may expand to other usages that require 32 bytes payload.
++
++
++TPM 2.0 ASN.1 Key Format
++------------------------
++
++The TPM 2.0 ASN.1 key format is designed to be easily recognisable,
++even in binary form (fixing a problem we had with the TPM 1.2 ASN.1
++format) and to be extensible for additions like importable keys and
++policy::
++
++    TPMKey ::= SEQUENCE {
++        type		OBJECT IDENTIFIER
++        emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL
++        parent		INTEGER
++        pubkey		OCTET STRING
++        privkey		OCTET STRING
++    }
++
++type is what distinguishes the key even in binary form since the OID
++is provided by the TCG to be unique and thus forms a recognizable
++binary pattern at offset 3 in the key.  The OIDs currently made
++available are::
++
++    2.23.133.10.1.3 TPM Loadable key.  This is an asymmetric key (Usually
++                    RSA2048 or Elliptic Curve) which can be imported by a
++                    TPM2_Load() operation.
++
++    2.23.133.10.1.4 TPM Importable Key.  This is an asymmetric key (Usually
++                    RSA2048 or Elliptic Curve) which can be imported by a
++                    TPM2_Import() operation.
++
++    2.23.133.10.1.5 TPM Sealed Data.  This is a set of data (up to 128
++                    bytes) which is sealed by the TPM.  It usually
++                    represents a symmetric key and must be unsealed before
++                    use.
++
++The trusted key code only uses the TPM Sealed Data OID.
++
++emptyAuth is true if the key has well known authorization "".  If it
++is false or not present, the key requires an explicit authorization
++phrase.  This is used by most user space consumers to decide whether
++to prompt for a password.
++
++parent represents the parent key handle, either in the 0x81 MSO space,
++like 0x81000001 for the RSA primary storage key.  Userspace programmes
++also support specifying the primary handle in the 0x40 MSO space.  If
++this happens the Elliptic Curve variant of the primary key using the
++TCG defined template will be generated on the fly into a volatile
++object and used as the parent.  The current kernel code only supports
++the 0x81 MSO form.
++
++pubkey is the binary representation of TPM2B_PRIVATE excluding the
++initial TPM2B header, which can be reconstructed from the ASN.1 octet
++string length.
++
++privkey is the binary representation of TPM2B_PUBLIC excluding the
++initial TPM2B header which can be reconstructed from the ASN.1 octed
++string length.
+diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+index b2ed3481c6a0..b2d87ad21714 100644
+--- a/include/keys/trusted-type.h
++++ b/include/keys/trusted-type.h
+@@ -22,6 +22,7 @@ struct trusted_key_payload {
+ 	unsigned int key_len;
+ 	unsigned int blob_len;
+ 	unsigned char migratable;
++	unsigned char old_format;
+ 	unsigned char key[MAX_KEY_SIZE + 1];
+ 	unsigned char blob[MAX_BLOB_SIZE];
+ };
+diff --git a/security/keys/Kconfig b/security/keys/Kconfig
+index 83bc23409164..f0912692469b 100644
+--- a/security/keys/Kconfig
++++ b/security/keys/Kconfig
+@@ -75,6 +75,9 @@ config TRUSTED_KEYS
+ 	select CRYPTO_HMAC
+ 	select CRYPTO_SHA1
+ 	select CRYPTO_HASH_INFO
++	select ASN1_ENCODER
++	select OID_REGISTRY
++	select ASN1
+ 	help
+ 	  This option provides support for creating, sealing, and unsealing
+ 	  keys in the kernel. Trusted keys are random number symmetric keys,
+diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
+index 7b73cebbb378..f87c43f306d5 100644
+--- a/security/keys/trusted-keys/Makefile
++++ b/security/keys/trusted-keys/Makefile
+@@ -5,4 +5,6 @@
+ 
+ obj-$(CONFIG_TRUSTED_KEYS) += trusted.o
+ trusted-y += trusted_tpm1.o
+-trusted-y += trusted_tpm2.o
++
++$(obj)/trusted_tpm2.o: $(obj)/tpm2key.asn1.h
++trusted-y += trusted_tpm2.o tpm2key.asn1.o
+diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trusted-keys/tpm2key.asn1
+new file mode 100644
+index 000000000000..3f6a9d01d1e5
+--- /dev/null
++++ b/security/keys/trusted-keys/tpm2key.asn1
+@@ -0,0 +1,11 @@
++---
++--- ASN.1 for for TPM 2.0 keys
++---
++
++TPMKey ::= SEQUENCE {
++	type		OBJECT IDENTIFIER ({tpm2_key_type}),
++	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
++	parent		INTEGER ({tpm2_key_parent}),
++	pubkey		OCTET STRING ({tpm2_key_pub}),
++	privkey		OCTET STRING ({tpm2_key_priv})
++	}
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index eaa2e7ca136e..f235637865b9 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -1011,7 +1011,7 @@ static int trusted_instantiate(struct key *key,
+ 		goto out;
+ 	}
+ 
+-	if (!options->keyhandle) {
++	if (!options->keyhandle && !tpm2) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 6c6dd88d7bf6..b8ef087528e9 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -4,6 +4,8 @@
+  * Copyright (C) 2014 Intel Corporation
+  */
+ 
++#include <linux/asn1_encoder.h>
++#include <linux/oid_registry.h>
+ #include <linux/string.h>
+ #include <linux/err.h>
+ #include <linux/tpm.h>
+@@ -12,6 +14,10 @@
+ #include <keys/trusted-type.h>
+ #include <keys/trusted_tpm.h>
+ 
++#include <asm/unaligned.h>
++
++#include "tpm2key.asn1.h"
++
+ static struct tpm2_hash tpm2_hash_map[] = {
+ 	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+ 	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+@@ -20,6 +26,165 @@ static struct tpm2_hash tpm2_hash_map[] = {
+ 	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+ };
+ 
++static u32 tpm2key_oid[] = { 2,23,133,10,1,5 };
++
++static int tpm2_key_encode(struct trusted_key_payload *payload,
++			   struct trusted_key_options *options,
++			   u8 *src, u32 len)
++{
++	const int SCRATCH_SIZE = PAGE_SIZE;
++	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
++	u8 *work = scratch, *work1;
++	u8 *end_work = scratch + SCRATCH_SIZE;
++	u8 *priv, *pub;
++	u16 priv_len, pub_len;
++
++	priv_len = get_unaligned_be16(src) + 2;
++	priv = src;
++
++	src += priv_len;
++
++	pub_len = get_unaligned_be16(src) + 2;
++	pub = src;
++
++	if (!scratch)
++		return -ENOMEM;
++
++	work = asn1_encode_oid(work, end_work, tpm2key_oid,
++			       asn1_oid_len(tpm2key_oid));
++
++	if (options->blobauth_len == 0) {
++		unsigned char bool[3], *w = bool;
++		/* tag 0 is emptyAuth */
++		w = asn1_encode_boolean(w, w + sizeof(bool), true);
++		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
++			return PTR_ERR(w);
++		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
++	}
++
++	/*
++	 * Assume both octet strings will encode to a 2 byte definite length
++	 *
++	 * Note: For a well behaved TPM, this warning should never
++	 * trigger, so if it does there's something nefarious going on
++	 */
++	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
++		 "BUG: scratch buffer is too small"))
++		return -EINVAL;
++
++	work = asn1_encode_integer(work, end_work, options->keyhandle);
++	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
++	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
++
++	work1 = payload->blob;
++	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
++				     scratch, work - scratch);
++	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
++		return PTR_ERR(work1);
++
++	return work1 - payload->blob;
++}
++
++struct tpm2_key_context {
++	u32 parent;
++	const u8 *pub;
++	u32 pub_len;
++	const u8 *priv;
++	u32 priv_len;
++};
++
++static int tpm2_key_decode(struct trusted_key_payload *payload,
++			   struct trusted_key_options *options,
++			   u8 **buf)
++{
++	int ret;
++	struct tpm2_key_context ctx;
++	u8 *blob;
++
++	memset(&ctx, 0, sizeof(ctx));
++
++	ret = asn1_ber_decoder(&tpm2key_decoder, &ctx, payload->blob,
++			       payload->blob_len);
++	if (ret < 0)
++		return ret;
++
++	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
++		return -EINVAL;
++
++	blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
++	if (!blob)
++		return -ENOMEM;
++
++	*buf = blob;
++	options->keyhandle = ctx.parent;
++
++	memcpy(blob, ctx.priv, ctx.priv_len);
++	blob += ctx.priv_len;
++
++	memcpy(blob, ctx.pub, ctx.pub_len);
++
++	return 0;
++}
++
++int tpm2_key_parent(void *context, size_t hdrlen,
++		  unsigned char tag,
++		  const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++	const u8 *v = value;
++	int i;
++
++	ctx->parent = 0;
++	for (i = 0; i < vlen; i++) {
++		ctx->parent <<= 8;
++		ctx->parent |= v[i];
++	}
++
++	return 0;
++}
++
++int tpm2_key_type(void *context, size_t hdrlen,
++		unsigned char tag,
++		const void *value, size_t vlen)
++{
++	enum OID oid = look_up_OID(value, vlen);
++
++	if (oid != OID_TPMSealedData) {
++		char buffer[50];
++
++		sprint_oid(value, vlen, buffer, sizeof(buffer));
++		pr_debug("OID is \"%s\" which is not TPMSealedData\n",
++			 buffer);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++int tpm2_key_pub(void *context, size_t hdrlen,
++	       unsigned char tag,
++	       const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++
++	ctx->pub = value;
++	ctx->pub_len = vlen;
++
++	return 0;
++}
++
++int tpm2_key_priv(void *context, size_t hdrlen,
++		unsigned char tag,
++		const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++
++	ctx->priv = value;
++	ctx->priv_len = vlen;
++
++	return 0;
++}
++
+ /**
+  * tpm_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+  *
+@@ -63,7 +228,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 		      struct trusted_key_payload *payload,
+ 		      struct trusted_key_options *options)
+ {
+-	unsigned int blob_len;
++	int blob_len = 0;
+ 	struct tpm_buf buf;
+ 	u32 hash;
+ 	int i;
+@@ -79,6 +244,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 	if (i == ARRAY_SIZE(tpm2_hash_map))
+ 		return -EINVAL;
+ 
++	if (!options->keyhandle)
++		return -EINVAL;
++
+ 	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
+ 	if (rc)
+ 		return rc;
+@@ -146,8 +314,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 		goto out;
+ 	}
+ 
+-	memcpy(payload->blob, &buf.data[TPM_HEADER_SIZE + 4], blob_len);
+-	payload->blob_len = blob_len;
++	blob_len = tpm2_key_encode(payload, options,
++				   &buf.data[TPM_HEADER_SIZE + 4],
++				   blob_len);
+ 
+ out:
+ 	tpm_buf_destroy(&buf);
+@@ -158,6 +327,10 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 		else
+ 			rc = -EPERM;
+ 	}
++	if (blob_len < 0)
++		return blob_len;
++
++	payload->blob_len = blob_len;
+ 
+ 	return rc;
+ }
+@@ -184,13 +357,34 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 	unsigned int private_len;
+ 	unsigned int public_len;
+ 	unsigned int blob_len;
++	u8 *blob;
+ 	int rc;
+ 
+-	private_len = be16_to_cpup((__be16 *) &payload->blob[0]);
+-	if (private_len > (payload->blob_len - 2))
++	rc = tpm2_key_decode(payload, options, &blob);
++	if (rc) {
++		/* old form */
++		blob = payload->blob;
++		payload->old_format = 1;
++	}
++
++	/* new format carries keyhandle but old format doesn't */
++	if (!options->keyhandle)
++		return -EINVAL;
++
++	/* must be big enough for at least the two be16 size counts */
++	if (payload->blob_len < 4)
++		return -EINVAL;
++
++	private_len = get_unaligned_be16(blob);
++
++	/* must be big enough for following public_len */
++	if (private_len + 2 + 2 > (payload->blob_len))
++		return -E2BIG;
++
++	public_len = get_unaligned_be16(blob + 2 + private_len);
++	if (private_len + 2 + public_len + 2 > payload->blob_len)
+ 		return -E2BIG;
+ 
+-	public_len = be16_to_cpup((__be16 *) &payload->blob[2 + private_len]);
+ 	blob_len = private_len + public_len + 4;
+ 	if (blob_len > payload->blob_len)
+ 		return -E2BIG;
+@@ -206,7 +400,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 			     options->keyauth /* hmac */,
+ 			     TPM_DIGEST_SIZE);
+ 
+-	tpm_buf_append(&buf, payload->blob, blob_len);
++	tpm_buf_append(&buf, blob, blob_len);
+ 
+ 	if (buf.flags & TPM_BUF_OVERFLOW) {
+ 		rc = -E2BIG;
+@@ -219,6 +413,8 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
+ 
+ out:
++	if (blob != payload->blob)
++		kfree(blob);
+ 	tpm_buf_destroy(&buf);
+ 
+ 	if (rc > 0)
+-- 
+2.26.2
+
 
