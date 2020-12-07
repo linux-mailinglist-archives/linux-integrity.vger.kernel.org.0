@@ -2,76 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C791E2D09C8
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Dec 2020 05:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985502D12B5
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Dec 2020 14:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728804AbgLGEnk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 6 Dec 2020 23:43:40 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:49141 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728690AbgLGEnk (ORCPT
+        id S1726412AbgLGN6T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Dec 2020 08:58:19 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:50626 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726370AbgLGN6T (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 6 Dec 2020 23:43:40 -0500
-Received: from mail-pj1-f71.google.com ([209.85.216.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1km8MT-0005Ed-Vh
-        for linux-integrity@vger.kernel.org; Mon, 07 Dec 2020 04:42:58 +0000
-Received: by mail-pj1-f71.google.com with SMTP id o19so6483215pjr.8
-        for <linux-integrity@vger.kernel.org>; Sun, 06 Dec 2020 20:42:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:content-transfer-encoding:mime-version
-         :subject:message-id:date:cc:to;
-        bh=dRTRoGxZQjf5VfvQ9QuIyncdiTUdvBDf3dsatRDVAPg=;
-        b=dTjQcePeB5641oPYu8RYtO45X6Ojtt4sHZWZPun3JhwybemSWlh8KUWpVYBAoKFFpU
-         aip0/c5T9ygQrTWWQsdasYUQSLN7pCDWEHNvVC8vJw+OUFAulRmJ9Kwsa5BTnOj+bD1L
-         Lr3gNwwlRzeYY0v+9CKiCnQnFxl2d2auv8IrXQ+LcfTUzf8zfGQTYRd/91uG3ZeVw9wi
-         y4wf5aWXcSl46PoJpJBvQpyAMfCksodCmLo+Eix7IweD/GdqajmtR8nJ6xTKR/6VMccp
-         ko5K3sKW73n5+hbZjJVigQgaSGFE8cQF4uCsZOUKQBO3g+uLYQ0xUcHoM0Zn9s0hArRT
-         J1FA==
-X-Gm-Message-State: AOAM530RP4mzgSO8Z41xvjsIIPcnghyZ155k8kwghMy2+UveX3Syumu1
-        voST9Xex10rMLVfMkYjucPL4/2fhcnY2X5Zo4Mc/d4Qeyio03gRAOpDoL1ULcbycHcQxEf6yoe3
-        QZrj5JT5elXh5HtRabIOKNGXGDcVo61PLwBH2S1WxdkgliA==
-X-Received: by 2002:a62:2cc3:0:b029:197:dda8:476a with SMTP id s186-20020a622cc30000b0290197dda8476amr14074266pfs.37.1607316176710;
-        Sun, 06 Dec 2020 20:42:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzcuP2lNMdUlH6UM9n5vr/FUv5lVhwMXHQSz4F1MIyvm218sS3P3QzvWgVdfMzSLSxeSqIrNA==
-X-Received: by 2002:a62:2cc3:0:b029:197:dda8:476a with SMTP id s186-20020a622cc30000b0290197dda8476amr14074254pfs.37.1607316176412;
-        Sun, 06 Dec 2020 20:42:56 -0800 (PST)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id q35sm8987011pjh.38.2020.12.06.20.42.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 06 Dec 2020 20:42:55 -0800 (PST)
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: 8BIT
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.20.0.2.21\))
-Subject: [Regression] Can only do S3 once after "tpm: take TPM chip power
- gating out of tpm_transmit()"
-Message-Id: <7E60C7F0-85C6-4A9A-B905-904D37A5E67B@canonical.com>
-Date:   Mon, 7 Dec 2020 12:42:53 +0800
-Cc:     linux-integrity@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-X-Mailer: Apple Mail (2.3654.20.0.2.21)
+        Mon, 7 Dec 2020 08:58:19 -0500
+Received: from guri.fritz.box (p200300c7cf349800c84e93961ddb4a49.dip0.t-ipconnect.de [IPv6:2003:c7:cf34:9800:c84e:9396:1ddb:4a49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D35191F45014;
+        Mon,  7 Dec 2020 13:57:37 +0000 (GMT)
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        enric.balletbo@collabora.com, dafna.hirschfeld@collabora.com,
+        kernel@collabora.com, dafna3@gmail.com,
+        Andrey Pronin <apronin@chromium.org>
+Subject: [PATCH v2] tpm: ignore failed selftest in probe
+Date:   Mon,  7 Dec 2020 14:57:10 +0100
+Message-Id: <20201207135710.17321-1-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko,
+From: Andrey Pronin <apronin@chromium.org>
 
-A user report that the system can only do S3 once. Subsequent S3 fails after commit a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()").
+If a TPM firmware update is interrupted, e.g due to loss of power or a
+reset while installing the update, you end with the TPM chip in failure
+mode. TPM_ContinueSelfTest command is called when the device is probed.
+It results in TPM_FAILEDSELFTEST error, and probe fails. The TPM device
+is not created, and that prevents the OS from attempting any further
+recover operations with the TPM. Instead, ignore the error code of the
+TPM_ContinueSelfTest command, and create the device - the chip is out
+there, it's just in failure mode.
 
-Dmesg with the issue, collected under 5.10-rc2:
-https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1891502/comments/14
+Testing:
+Tested with the swtpm as TPM simulator and a patch in 'libtpms'
+to enter failure mode
 
-Dmesg without the issue, collected under 5.0.0-rc8:
-https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1891502/comments/16
+With this settings, the '/dev/tpm0' is created but the tcsd daemon fails
+to run.  In addition, the commands TPM_GetTestResult, TPM_GetCapability
+and TPM_GetRandom were tested.
 
-Full bug report here:
-https://bugs.launchpad.net/bugs/1891502
+A normal operation was tested with an Acer Chromebook R13 device
+(also called Elm) running Debian.
 
-Kai-Heng
+Signed-off-by: Andrey Pronin <apronin@chromium.org>
+[change the code to still fail in case of fatal error]
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+
+---
+changes since v1:
+- rewriting the commit message
+
+This commit comes from chromeos:
+https://chromium.googlesource.com/chromiumos/third_party/kernel/+/1065c2fe54d6%5E%21/
+
+In Chromeos, the selftest fails if the TPM firmware is updated during EC
+reset. In that case the userspace wants to access the TPM for recovery.
+
+This patch is for TPM 1.2 only, I can also send a patch for TPM 2 if it
+is required that the behaviour stays consistent among the versions.
+
+libtpms patch:
+https://gitlab.collabora.com/dafna/libtpms/-/commit/42848f4a838636d01ddb5ed353b3990dad3f601d
+
+TPM tests:
+https://gitlab.collabora.com/dafna/test-tpm1.git
+
+ drivers/char/tpm/tpm1-cmd.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+index ca7158fa6e6c..8b7997ef8d1c 100644
+--- a/drivers/char/tpm/tpm1-cmd.c
++++ b/drivers/char/tpm/tpm1-cmd.c
+@@ -697,6 +697,8 @@ EXPORT_SYMBOL_GPL(tpm1_do_selftest);
+ /**
+  * tpm1_auto_startup - Perform the standard automatic TPM initialization
+  *                     sequence
++ * NOTE: if tpm1_do_selftest returns with a TPM error code, we return 0 (success)
++ *	 to allow userspace interaction with the TPM when it is on failure mode.
+  * @chip: TPM chip to use
+  *
+  * Returns 0 on success, < 0 in case of fatal error.
+@@ -707,18 +709,15 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+ 
+ 	rc = tpm1_get_timeouts(chip);
+ 	if (rc)
+-		goto out;
++		return rc < 0 ? rc : -ENODEV;
++
+ 	rc = tpm1_do_selftest(chip);
+ 	if (rc) {
+-		dev_err(&chip->dev, "TPM self test failed\n");
+-		goto out;
++		dev_err(&chip->dev, "TPM self test failed %d\n", rc);
++		if (rc < 0)
++			return rc;
+ 	}
+-
+-	return rc;
+-out:
+-	if (rc > 0)
+-		rc = -ENODEV;
+-	return rc;
++	return 0;
+ }
+ 
+ #define TPM_ORD_SAVESTATE 152
+-- 
+2.17.1
+
