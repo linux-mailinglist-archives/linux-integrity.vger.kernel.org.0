@@ -2,149 +2,123 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2B02D28A5
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Dec 2020 11:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC5A2D290F
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Dec 2020 11:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727988AbgLHKSb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Dec 2020 05:18:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38938 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726226AbgLHKSb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Dec 2020 05:18:31 -0500
-Date:   Tue, 8 Dec 2020 12:17:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607422670;
-        bh=+QbYQwiHG9EdKJm4MkP7kLOgeXCfM4QFP3uDpEXKIDw=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CjxhEjroKpLIePFfW/3V2BBs4fTGSP1TDtQeQS+YwQqgKf7BYb3/AYLnAnh0/FwIX
-         jrkGSOkJ8zsnl8N6KWxBYEGltB0215UaprkUB5MRymSxQvLV1Bx9p9MuktXtAXFDqO
-         Cd48P18cfEaRKztvJZq+pCxj4xlTGZqxXh3+eVpCppRgF0AXp324qqnlp8rJD+qWll
-         KqCjXF14aA4jOTLdMX2OJQY+/x6rt2bMd0Fvb7C4GevPb6sqbmHir8bv2UYFQJEHsp
-         Db4C1r78wx6rJ+PQFIxgnjySkeLZAj7CvbTCybA8tmuF0OSRYb7hn+Px8mSyKkyXUk
-         BAcK5yvro6AWA==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     linux-integrity@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [Regression] Can only do S3 once after "tpm: take TPM chip power
- gating out of tpm_transmit()"
-Message-ID: <20201208101746.GA45313@kernel.org>
-References: <7E60C7F0-85C6-4A9A-B905-904D37A5E67B@canonical.com>
+        id S1726755AbgLHKh7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Dec 2020 05:37:59 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:38573 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbgLHKh6 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 8 Dec 2020 05:37:58 -0500
+Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1kmaMp-0003ta-EI; Tue, 08 Dec 2020 10:37:11 +0000
+Date:   Tue, 8 Dec 2020 11:37:07 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
+        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org
+Subject: Re: [PATCH v4 06/40] fs: add mount_setattr()
+Message-ID: <20201208103707.px6buexwuusn6d3f@wittgenstein>
+References: <20201203235736.3528991-1-christian.brauner@ubuntu.com>
+ <20201203235736.3528991-7-christian.brauner@ubuntu.com>
+ <20201207171456.GC13614@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7E60C7F0-85C6-4A9A-B905-904D37A5E67B@canonical.com>
+In-Reply-To: <20201207171456.GC13614@lst.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Dec 07, 2020 at 12:42:53PM +0800, Kai-Heng Feng wrote:
-> Hi Jarkko,
+On Mon, Dec 07, 2020 at 06:14:56PM +0100, Christoph Hellwig wrote:
+> > +	switch (attr->propagation) {
+> > +	case 0:
+> > +		kattr->propagation = 0;
+> > +		break;
+> > +	case MS_UNBINDABLE:
+> > +		kattr->propagation = MS_UNBINDABLE;
+> > +		break;
+> > +	case MS_PRIVATE:
+> > +		kattr->propagation = MS_PRIVATE;
+> > +		break;
+> > +	case MS_SLAVE:
+> > +		kattr->propagation = MS_SLAVE;
+> > +		break;
+> > +	case MS_SHARED:
+> > +		kattr->propagation = MS_SHARED;
+> > +		break;
+> > +	default:
+> > +		return -EINVAL;
+> > +	}
 > 
-> A user report that the system can only do S3 once. Subsequent S3 fails after commit a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()").
+> This can be shortened to:
 > 
-> Dmesg with the issue, collected under 5.10-rc2:
-> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1891502/comments/14
+> #define MOUNT_SETATTR_PROPAGATION_FLAGS \
+> 	(MS_UNBINDABLE | MS_PRIVATE | MS_SLAVE | MS_SHARED)
 > 
-> Dmesg without the issue, collected under 5.0.0-rc8:
-> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1891502/comments/16
+> 	if (attr->propagation & ~MOUNT_SETATTR_PROPAGATION_FLAGS)
+> 		return -EINVAL;
+> 	if (hweight32(attr->propagation & MOUNT_SETATTR_PROPAGATION_FLAGS) > 1)
+> 		return -EINVAL;
+> 	kattr->propagation = attr->propagation;
+
+Looks good! I've applied that.
+
 > 
-> Full bug report here:
-> https://bugs.launchpad.net/bugs/1891502
+> > +asmlinkage long sys_mount_setattr(int dfd, const char __user *path, unsigned int flags,
 > 
-> Kai-Heng
+> Overly long line.
 
-Relevant part:
+Folded after @path now.
 
+> 
+> Otherwise looks good:
+> 
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-[80601.620149] tpm tpm0: Error (28) sending savestate before suspend
-[80601.620165] PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x90 returns 28
-[80601.620172] PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x20 returns 28
-[80601.620178] PM: Device 00:01 failed to suspend: error 28
+Thanks, I've pushed out the changes to:
+https://git.kernel.org/brauner/h/idmapped_mounts
+the original v4 can now be found at:
+https://git.kernel.org/brauner/h/idmapped_mounts_v4
 
-Looking at this there are two issues:
+You want a v5 with the changes you requested before you continue
+reviewing? Otherwise I'll just let you go through v4.
 
-A. TPM_ORD_SAVESTATE command failing, this a new regression.
-B. When tpm_pm_suspend() fails, it should not fail the whole suspend
-   procedure. And it returns the TPM error code back to the upper
-   layers when it does so, which makes no sense. This is an old
-   issue revealed by A.
-
-Let's look at tpm_pm_suspend():
-
-/*
- * We are about to suspend. Save the TPM state
- * so that it can be restored.
- */
-int tpm_pm_suspend(struct device *dev)
-{
-	struct tpm_chip *chip = dev_get_drvdata(dev);
-	int rc = 0;
-
-	if (!chip)
-		return -ENODEV;
-
-	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
-		goto suspended;
-
-	if ((chip->flags & TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED) &&
-	    !pm_suspend_via_firmware())
-		goto suspended;
-
-	if (!tpm_chip_start(chip)) {
-		if (chip->flags & TPM_CHIP_FLAG_TPM2)
-			tpm2_shutdown(chip, TPM2_SU_STATE);
-		else
-			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
-
-		tpm_chip_stop(chip);
-	}
-
-suspended:
-	return rc;
-}
-EXPORT_SYMBOL_GPL(tpm_pm_suspend);
-
-I would modify this into:
-
-/*
- * We are about to suspend. Save the TPM state
- * so that it can be restored.
- */
-int tpm_pm_suspend(struct device *dev)
-{
-	struct tpm_chip *chip = dev_get_drvdata(dev);
-	int rc = 0;
-
-	if (!chip)
-		return -ENODEV;
-
-	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
-		goto suspended;
-
-	if ((chip->flags & TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED) &&
-	    !pm_suspend_via_firmware())
-		goto suspended;
-
-	if (!tpm_chip_start(chip)) {
-		if (chip->flags & TPM_CHIP_FLAG_TPM2)
-			tpm2_shutdown(chip, TPM2_SU_STATE);
-		else
-			tpm1_pm_suspend(chip, tpm_suspend_pcr);
-
-		tpm_chip_stop(chip);
-	}
-
-suspended:
-	return rc;
-}
-EXPORT_SYMBOL_GPL(tpm_pm_suspend);
-
-I.e. it's a good idea to put something into klog but that should not
-fail the whole suspend procedure. TPM is essentially opt-in feature.
-
-Of course issue A needs to be also sorted out but would this work as
-a quick initial fix? I can queue a patch for this. Is it possible to
-try out this fix for if I drop a patch?
-
-/Jarkko
+Thanks!
+Christian
