@@ -2,81 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 116912D2878
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Dec 2020 11:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2B02D28A5
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Dec 2020 11:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgLHKII (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Dec 2020 05:08:08 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:37384 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727122AbgLHKIH (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Dec 2020 05:08:07 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kmZtq-0001Ek-3Q; Tue, 08 Dec 2020 10:07:14 +0000
-Date:   Tue, 8 Dec 2020 11:07:10 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org
-Subject: Re: [PATCH v4 05/40] fs: add attr_flags_to_mnt_flags helper
-Message-ID: <20201208100710.7hmim5663xeqnivu@wittgenstein>
-References: <20201203235736.3528991-1-christian.brauner@ubuntu.com>
- <20201203235736.3528991-6-christian.brauner@ubuntu.com>
- <20201207171021.GB13614@lst.de>
+        id S1727988AbgLHKSb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Dec 2020 05:18:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38938 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726226AbgLHKSb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 8 Dec 2020 05:18:31 -0500
+Date:   Tue, 8 Dec 2020 12:17:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607422670;
+        bh=+QbYQwiHG9EdKJm4MkP7kLOgeXCfM4QFP3uDpEXKIDw=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CjxhEjroKpLIePFfW/3V2BBs4fTGSP1TDtQeQS+YwQqgKf7BYb3/AYLnAnh0/FwIX
+         jrkGSOkJ8zsnl8N6KWxBYEGltB0215UaprkUB5MRymSxQvLV1Bx9p9MuktXtAXFDqO
+         Cd48P18cfEaRKztvJZq+pCxj4xlTGZqxXh3+eVpCppRgF0AXp324qqnlp8rJD+qWll
+         KqCjXF14aA4jOTLdMX2OJQY+/x6rt2bMd0Fvb7C4GevPb6sqbmHir8bv2UYFQJEHsp
+         Db4C1r78wx6rJ+PQFIxgnjySkeLZAj7CvbTCybA8tmuF0OSRYb7hn+Px8mSyKkyXUk
+         BAcK5yvro6AWA==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     linux-integrity@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [Regression] Can only do S3 once after "tpm: take TPM chip power
+ gating out of tpm_transmit()"
+Message-ID: <20201208101746.GA45313@kernel.org>
+References: <7E60C7F0-85C6-4A9A-B905-904D37A5E67B@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201207171021.GB13614@lst.de>
+In-Reply-To: <7E60C7F0-85C6-4A9A-B905-904D37A5E67B@canonical.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Dec 07, 2020 at 06:10:21PM +0100, Christoph Hellwig wrote:
-> > @@ -3450,6 +3450,28 @@ SYSCALL_DEFINE5(mount, char __user *, dev_name, char __user *, dir_name,
-> >  	return ret;
-> >  }
-> >  
-> > +#define FSMOUNT_VALID_FLAGS                                                    \
-> > +	(MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOSUID | MOUNT_ATTR_NODEV |            \
-> > +	 MOUNT_ATTR_NOEXEC | MOUNT_ATTR__ATIME | MOUNT_ATTR_NODIRATIME)
+On Mon, Dec 07, 2020 at 12:42:53PM +0800, Kai-Heng Feng wrote:
+> Hi Jarkko,
 > 
-> Any good reason for aligning the \ using spaces all the way out?
+> A user report that the system can only do S3 once. Subsequent S3 fails after commit a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()").
+> 
+> Dmesg with the issue, collected under 5.10-rc2:
+> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1891502/comments/14
+> 
+> Dmesg without the issue, collected under 5.0.0-rc8:
+> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1891502/comments/16
+> 
+> Full bug report here:
+> https://bugs.launchpad.net/bugs/1891502
+> 
+> Kai-Heng
 
-That's just my clang-format config I use with vim. When I do Ctrl + E it
-automatically aligns them on the closest "tab boundary. I'll fix this
-up.
+Relevant part:
+
+
+[80601.620149] tpm tpm0: Error (28) sending savestate before suspend
+[80601.620165] PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x90 returns 28
+[80601.620172] PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x20 returns 28
+[80601.620178] PM: Device 00:01 failed to suspend: error 28
+
+Looking at this there are two issues:
+
+A. TPM_ORD_SAVESTATE command failing, this a new regression.
+B. When tpm_pm_suspend() fails, it should not fail the whole suspend
+   procedure. And it returns the TPM error code back to the upper
+   layers when it does so, which makes no sense. This is an old
+   issue revealed by A.
+
+Let's look at tpm_pm_suspend():
+
+/*
+ * We are about to suspend. Save the TPM state
+ * so that it can be restored.
+ */
+int tpm_pm_suspend(struct device *dev)
+{
+	struct tpm_chip *chip = dev_get_drvdata(dev);
+	int rc = 0;
+
+	if (!chip)
+		return -ENODEV;
+
+	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+		goto suspended;
+
+	if ((chip->flags & TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED) &&
+	    !pm_suspend_via_firmware())
+		goto suspended;
+
+	if (!tpm_chip_start(chip)) {
+		if (chip->flags & TPM_CHIP_FLAG_TPM2)
+			tpm2_shutdown(chip, TPM2_SU_STATE);
+		else
+			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+
+		tpm_chip_stop(chip);
+	}
+
+suspended:
+	return rc;
+}
+EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+
+I would modify this into:
+
+/*
+ * We are about to suspend. Save the TPM state
+ * so that it can be restored.
+ */
+int tpm_pm_suspend(struct device *dev)
+{
+	struct tpm_chip *chip = dev_get_drvdata(dev);
+	int rc = 0;
+
+	if (!chip)
+		return -ENODEV;
+
+	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+		goto suspended;
+
+	if ((chip->flags & TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED) &&
+	    !pm_suspend_via_firmware())
+		goto suspended;
+
+	if (!tpm_chip_start(chip)) {
+		if (chip->flags & TPM_CHIP_FLAG_TPM2)
+			tpm2_shutdown(chip, TPM2_SU_STATE);
+		else
+			tpm1_pm_suspend(chip, tpm_suspend_pcr);
+
+		tpm_chip_stop(chip);
+	}
+
+suspended:
+	return rc;
+}
+EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+
+I.e. it's a good idea to put something into klog but that should not
+fail the whole suspend procedure. TPM is essentially opt-in feature.
+
+Of course issue A needs to be also sorted out but would this work as
+a quick initial fix? I can queue a patch for this. Is it possible to
+try out this fix for if I drop a patch?
+
+/Jarkko
