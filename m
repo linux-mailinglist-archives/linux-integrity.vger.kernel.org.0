@@ -2,141 +2,178 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CD42D3092
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Dec 2020 18:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B76C2D3133
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Dec 2020 18:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730183AbgLHRJc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Dec 2020 12:09:32 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12858 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728679AbgLHRJb (ORCPT
+        id S1730203AbgLHRfh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Dec 2020 12:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726278AbgLHRfh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Dec 2020 12:09:31 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B8H53pE102777;
-        Tue, 8 Dec 2020 12:07:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=MZ7ovSGWvDyzVOlz/bs+1cG//Ep+jGNzjI98A0YkdF0=;
- b=d20BGCCfUGfbibnjvvhOFSWhZ/z3xqLtbywy8JRivaZzKTiW4Q/v03i9AtHBCELsQrsa
- ii+JyhSMERpCQsOIJdWLwaKZ+NW7Tgds9ONI0LnBm52ZT7vZaQ1ByFKEERFEp23YJ43a
- MlgUrnYdAE7AsrZQI7u2CcyoI94v5gCCyIVzBw9wHS73eRAXG7UcBeyJpjtmKkEdF96Y
- X08hihoovRLKAt2S05nffmor4yMLBPTOpZtYD2KAElu1Y99L06GVcGoJYDO2CSftkQwv
- QChpRphuhIAg1lN611DnyeGcSt+MnxDUbI3E+UDxxdgdWw78RIG6mJVGGZHthYBUb/3E +Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35a5ufyrpv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Dec 2020 12:07:25 -0500
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B8H5P9t105606;
-        Tue, 8 Dec 2020 12:07:24 -0500
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35a5ufyrms-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Dec 2020 12:07:24 -0500
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0B8H6gFB008135;
-        Tue, 8 Dec 2020 17:07:21 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3581fhks5v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Dec 2020 17:07:21 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0B8H7I8m50528692
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Dec 2020 17:07:18 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47EF152052;
-        Tue,  8 Dec 2020 17:07:18 +0000 (GMT)
-Received: from sig-9-65-221-14.ibm.com (unknown [9.65.221.14])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 0240852057;
-        Tue,  8 Dec 2020 17:07:13 +0000 (GMT)
-Message-ID: <6c0428647fc83c2220e15e62dc1b566d250b7968.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 3/4] doc: trusted-encrypted: updates with TEE as a
- new trust source
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Sumit Garg <sumit.garg@linaro.org>,
-        jarkko.sakkinen@linux.intel.com, jejb@linux.ibm.com,
-        Elaine Palmer <erpalmer@us.ibm.com>
-Cc:     dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
-        jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
-        janne.karhunen@gmail.com, daniel.thompson@linaro.org,
-        Markus.Wamser@mixed-mode.de, lhinds@redhat.com,
-        keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        George Wilson <gcwilson@us.ibm.com>
-Date:   Tue, 08 Dec 2020 12:07:13 -0500
-In-Reply-To: <f00c8c7dd1e184e139e6cb5aba2b4a1c5fc68363.camel@linux.ibm.com>
-References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
-         <1604419306-26105-4-git-send-email-sumit.garg@linaro.org>
-         <f00c8c7dd1e184e139e6cb5aba2b4a1c5fc68363.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-08_14:2020-12-08,2020-12-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- suspectscore=0 adultscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012080104
+        Tue, 8 Dec 2020 12:35:37 -0500
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D53DC061749
+        for <linux-integrity@vger.kernel.org>; Tue,  8 Dec 2020 09:34:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=O5FDiRTsliEq8+2pz2ae1HrRqZgOVeCYVz3ir+qNdkY=; b=jtoP9P15WtYQ+APcBXTxALbNXB
+        BRX6YepL4TY0HljBWfiYMPi6l801wulRSmiVa0dhkdZLLBetAwdFwprtHrOL0YusNDbazM0yIKeAY
+        4nG4M4wHHV77DaF+BT0osAsoZ81yC3L/A8pYUz9RGmV5Yoh0ZfRH/8BBfCQsSUhy636MyQBo5IZui
+        kTs2iNLOkL8IHdgTL3O3Of69CtOFYB2QX/EP1yOWnVJ9tI+NuCibDm5/7z5k0HXbCMxFTt/l4pA4a
+        u+kwfVg78jaVoZ0m7I3sOqFqLtvlbiB3YuZtd/R3mqCDeqfR1N3m4yJij4/PrgQOwHfvLPV3npIKu
+        BE8dQTxA==;
+Received: from 83-245-197-237.elisa-laajakaista.fi ([83.245.197.237] helo=kapsi.fi)
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <jarkko.sakkinen@iki.fi>)
+        id 1kmgt3-0007FJ-5C; Tue, 08 Dec 2020 19:34:53 +0200
+Date:   Tue, 8 Dec 2020 19:34:51 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, enric.balletbo@collabora.com,
+        kernel@collabora.com, dafna3@gmail.com,
+        Andrey Pronin <apronin@chromium.org>
+Subject: Re: [PATCH v2] tpm: ignore failed selftest in probe
+Message-ID: <20201208173451.GA57585@kapsi.fi>
+References: <20201207135710.17321-1-dafna.hirschfeld@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201207135710.17321-1-dafna.hirschfeld@collabora.com>
+X-SA-Exim-Connect-IP: 83.245.197.237
+X-SA-Exim-Mail-From: jarkko.sakkinen@iki.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Sumit, Jarkko,
-
-On Tue, 2020-12-08 at 10:55 -0500, Mimi Zohar wrote:
-> Re-posting Elaine Palmer's comments, inline below, trimmed and properly
-> formatted.
-
-Continued ...
-
-Thank you for the detailed descriptions and examples of trust sources
-for Trusted Keys.  A group of us in IBM (Stefan Berger, Ken Goldman,
-Zhongshu Gu, Nayna Jain, Elaine Palmer, George Wilson, Mimi Zohar) have
-some concerns with extending trusted keys to new sources without
-providing a threat model.   The following is based on our internal
-discussions.
-
-> * Threat model
+On Mon, Dec 07, 2020 at 02:57:10PM +0100, Dafna Hirschfeld wrote:
+> From: Andrey Pronin <apronin@chromium.org>
 > 
-> The strength and appropriateness of TPMs and TEEs for a given purpose
-> must be assessed when using them to protect security-relevant data.
+> If a TPM firmware update is interrupted, e.g due to loss of power or a
+> reset while installing the update, you end with the TPM chip in failure
+> mode. TPM_ContinueSelfTest command is called when the device is probed.
+> It results in TPM_FAILEDSELFTEST error, and probe fails. The TPM device
+> is not created, and that prevents the OS from attempting any further
+> recover operations with the TPM. Instead, ignore the error code of the
+> TPM_ContinueSelfTest command, and create the device - the chip is out
+> there, it's just in failure mode.
+> 
+> Testing:
+> Tested with the swtpm as TPM simulator and a patch in 'libtpms'
+> to enter failure mode
+> 
+> With this settings, the '/dev/tpm0' is created but the tcsd daemon fails
+> to run.  In addition, the commands TPM_GetTestResult, TPM_GetCapability
+> and TPM_GetRandom were tested.
+> 
+> A normal operation was tested with an Acer Chromebook R13 device
+> (also called Elm) running Debian.
 
-The original Trusted Keys implementation assumed discrete physical TPMs
-for key protection[1].  However, even physical TPMs themselves vary
-based on the manufacturer and systems in which they are placed.  The
-embedded chipset, firmware load, algorithms, packaging, pins, and
-countermeasures vary.  (Threats and mitigations on physical TPMs are
-well documented, e.g., "Threat Model of a Scenario Based on Trusted
-Platform Module 2.0 Specification” (http://ceur-ws.org/Vol-1011/6.pdf).
+Move testing part to the stuff before diffstat.
 
-Extending Trusted Keys to support new trust sources needs to provide
-consumers of these new sources enough information so that they can
-create their own threat models tailored to their use cases.
+> Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> [change the code to still fail in case of fatal error]
 
-Just as each new LSM needs to comply with Documentation/security/lsm-
-development.rst, we recommend each new source should provide a high-
-level threat model.  We suggest documenting environmental assumptions
-and dependencies in a high-level threat model for each additional trust
-source.  An example of a high-level threat model is "Common Security
-Threats v1.0” (
-https://www.opencompute.org/documents/common-security-threats-notes-1-pdf
- ).
+What is this?
 
-Thank you,
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> 
+> ---
+> changes since v1:
+> - rewriting the commit message
+> 
+> This commit comes from chromeos:
+> https://chromium.googlesource.com/chromiumos/third_party/kernel/+/1065c2fe54d6%5E%21/
+> 
+> In Chromeos, the selftest fails if the TPM firmware is updated during EC
+> reset. In that case the userspace wants to access the TPM for recovery.
+> 
+> This patch is for TPM 1.2 only, I can also send a patch for TPM 2 if it
+> is required that the behaviour stays consistent among the versions.
+> 
+> libtpms patch:
+> https://gitlab.collabora.com/dafna/libtpms/-/commit/42848f4a838636d01ddb5ed353b3990dad3f601d
+> 
+> TPM tests:
+> https://gitlab.collabora.com/dafna/test-tpm1.git
+> 
+>  drivers/char/tpm/tpm1-cmd.c | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> index ca7158fa6e6c..8b7997ef8d1c 100644
+> --- a/drivers/char/tpm/tpm1-cmd.c
+> +++ b/drivers/char/tpm/tpm1-cmd.c
+> @@ -697,6 +697,8 @@ EXPORT_SYMBOL_GPL(tpm1_do_selftest);
+>  /**
+>   * tpm1_auto_startup - Perform the standard automatic TPM initialization
+>   *                     sequence
+> + * NOTE: if tpm1_do_selftest returns with a TPM error code, we return 0 (success)
+> + *	 to allow userspace interaction with the TPM when it is on failure mode.
+>   * @chip: TPM chip to use
 
-Elaine (and Mimi)
+
+Please do not use "we ...". Use imperative form.
+
+Also that is wrong place for the description:
+
+https://www.kernel.org/doc/Documentation/kernel-doc-nano-HOWTO.txt
+
+>   *
+>   * Returns 0 on success, < 0 in case of fatal error.
+> @@ -707,18 +709,15 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+>  
+>  	rc = tpm1_get_timeouts(chip);
+>  	if (rc)
+> -		goto out;
+> +		return rc < 0 ? rc : -ENODEV;
+
+Do not use ternary operators. Also we are interested on
+TPM_SELFTESTFAILED only (according to the commit message).
+
+I.e. afaik should be
+
+	if (rc) {
+		if (rc == TPM_SELFTESTFAILED)
+			return -ENODEV;
+		else
+			return rc;
+	}
 
 
-[1] Specific to Trusted Keys and TPMs, there is some discussion of
-threats and mitigations in the Integrity_overview.pdf on the IMA wiki:
+> +
+>  	rc = tpm1_do_selftest(chip);
+>  	if (rc) {
+> -		dev_err(&chip->dev, "TPM self test failed\n");
+> -		goto out;
+> +		dev_err(&chip->dev, "TPM self test failed %d\n", rc);
+> +		if (rc < 0)
+> +			return rc;
+>  	}
+> -
+> -	return rc;
+> -out:
+> -	if (rc > 0)
+> -		rc = -ENODEV;
+> -	return rc;
+> +	return 0;
 
-"The trusted key component does two things to help with secure key management on Linux. First, it provides a kernel key ring service in which the symmetric encryption keys are never visible in plain text to userspace. The keys are created in the kernel, and sealed by a hardware device such as a TPM, with userspace seeing only the sealed blobs. Malicious or compromised applications cannot steal a trusted key, since only the kernel can see the unsealed blobs. Secondly, the trusted keys can tie key unsealing to the integrity measurements, so that keys cannot be stolen in an offline attack, such as by booting an unlocked Linux image from CD or USB.  As the measurements will be different, the TPM chip will refuse to unseal the keys, even for the kernel."
+You don't need to remove the goto-statement. You could just
+replace the existing condition with what I described above.
+This is patch is doing changes that are not mandatory for
+the change.
 
+>  }
+>  
+>  #define TPM_ORD_SAVESTATE 152
+> -- 
+> 2.17.1
+
+/Jarkko
