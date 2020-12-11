@@ -2,171 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2E92D7159
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 09:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB912D7400
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 11:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403778AbgLKIP5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Dec 2020 03:15:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55554 "EHLO mail.kernel.org"
+        id S1732043AbgLKKfn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Dec 2020 05:35:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47912 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388352AbgLKIPj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Dec 2020 03:15:39 -0500
-Date:   Fri, 11 Dec 2020 10:14:54 +0200
+        id S2388923AbgLKKfa (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 11 Dec 2020 05:35:30 -0500
+Date:   Fri, 11 Dec 2020 12:34:43 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607674498;
-        bh=iBKehJ8hF1AD6c9e71eHXqVLRytDmT9uPZqT5CPhPn8=;
+        s=k20201202; t=1607682889;
+        bh=RxLguaip6eAFD602x8RxLNaRpnJiw4iK1s1yEniLyX4=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BnekXr6flXd64QnmUlaSAHpzXJVBVlAbibmGSOi8846t51TlJ7Rzp4wc3xBYfBLto
-         x3vNrRVNhOqPUSmcUyzYekb14dcC9GpzsGgIL7wxqZyM6B9hXPB4Bx1Ol1QFKKBXJd
-         KlWgVr2h7Ox5eG7ZucJNKVWdkBC3qq/YNtHqYj5ZEXjof8sB+rk8lHCCDIqiGjFK/C
-         LSOoMkwbgZ5Wo+i58UL59pk7nBWsm5xa0cOlyfdd8BMVFsiaW+YCVuKxz/ylPRLgsR
-         Mhbx61H5mwAQnO4JEuQt6ttrzw2/+uMTWLPXKmI9z5o3EGDGYjprZm0tAN4DXxHgbT
-         1eB+hOsgHXZdg==
+        b=RdATM7AX03CEGeL4h5FRY7F6jbeVKs+pb3piPWc8ungFq5OrBiDRufdmUYnqpJtQo
+         GJ9yvChWDCDF6KpPS7alzs85WO5c3R5Ej0J4caUji6Tc0GzAqgSLAU6DaZ9PY4XZrH
+         1lIPMighTE97mpqOdG6ZyjrlmYMwZBgJlLeRrM3CPHyooHKoP4btBJbfDHf5nH+9l8
+         Qi3qnaAxxKri3ZXrwyCJaVAm6DmzlqgKmq2iDkOzF+UYh1E0ceAX/FskkIetYsmC0Z
+         Quit9VftK/AWdt1y6iiF3SwQ8TSAvfaZg9kYyWgGAvJAjHJTa9WJEJ1T8cCYkwZNqZ
+         qGk+Foexo9o6g==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Elaine Palmer <erpalmer@us.ibm.com>, sumit.garg@linaro.org,
-        George Wilson <gcwilson@us.ibm.com>, zgu@us.ibm.com
-Subject: Re: [PATCH] doc: trusted-encrypted: updates with TEE as a new trust
- source (update)
-Message-ID: <20201211081454.GA5262@kernel.org>
-References: <20201209164249.715178-1-zohar@linux.ibm.com>
+To:     Adrian Ratiu <adrian.ratiu@collabora.com>
+Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        "dlaurie@chromium.org" <dlaurie@chromium.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: Re: [PATCH v6] char: tpm: add i2c driver for cr50
+Message-ID: <20201211103443.GA12091@kernel.org>
+References: <20201207142016.482122-1-adrian.ratiu@collabora.com>
+ <20201208173906.GA58213@kernel.org>
+ <87y2i7b186.fsf@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201209164249.715178-1-zohar@linux.ibm.com>
+In-Reply-To: <87y2i7b186.fsf@collabora.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Dec 09, 2020 at 11:42:49AM -0500, Mimi Zohar wrote:
-> From: Elaine Palmer <erpalmer@us.ibm.com>
+On Wed, Dec 09, 2020 at 02:41:45PM +0200, Adrian Ratiu wrote:
+> On Tue, 08 Dec 2020, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > On Mon, Dec 07, 2020 at 04:20:16PM +0200, Adrian Ratiu wrote:
+> > > From: "dlaurie@chromium.org" <dlaurie@chromium.org>  Add TPM 2.0
+> > > compatible I2C interface for chips with cr50 firmware. The firmware
+> > > running on the currently supported H1 MCU requires a special driver
+> > > to handle its specific protocol, and this makes it unsuitable to use
+> > > tpm_tis_core_* and instead it must implement the underlying TPM
+> > > protocol similar to the other I2C TPM drivers.   - All 4 bytes of
+> > > status register must be read/written at once.  - FIFO and burst
+> > > count is limited to 63 and must be drained by AP.  - Provides an
+> > > interrupt to indicate when read response data is ready and when the
+> > > TPM is finished processing write data.   This driver is based on the
+> > > existing infineon I2C TPM driver, which most closely matches the
+> > > cr50 i2c protocol behavior.
+> > 
+> > Starts to look legit. Has anyone tested this?
 > 
-> Update trusted key documentation with additional comparisons between
-> discrete TPMs and TEE.
+> I tested on an x86_64 Chromebook EVE (aka Google Pixelbook) by chainloading
+> in legacy mode and booting into a Yocto-based userspace (meta-chromebook)
+> where I used tpm2-tools to communicate with the chip and also built and
+> tested a ChromiumOS userspace in developer mode.
 > 
-> Signed-off-by: Elaine Palmer <erpalmer@us.ibm.com>
-
-Right, so OP-TEE is not the same as TEE. I did not know this and the
-patch set does not underline this.
-
-I re-checked the patches and none of them say explicitly that OP-TEE
-is an application living inside TEE.
-
-This essentially means that the backend needs to be renamed as "op_tee".
-
-All patches need to be rewritten according to this.
-
-
-> ---
->  .../security/keys/trusted-encrypted.rst       | 73 +++++++++++++++++--
->  1 file changed, 65 insertions(+), 8 deletions(-)
+> I do not have access to other HW which has this chip, so it is about as much
+> testing I can do to confirm the driver works on this HW.
 > 
-> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-> index 16042c8ff8ae..90c02105ab89 100644
-> --- a/Documentation/security/keys/trusted-encrypted.rst
-> +++ b/Documentation/security/keys/trusted-encrypted.rst
-> @@ -14,12 +14,14 @@ convenience, and are integrity verified.
->  Trust Source
->  ============
->  
-> -Trust Source provides the source of security for the Trusted Keys, on which
-> -basis Trusted Keys establishes a Trust model with its user. A Trust Source could
-> -differ from one system to another depending on its security requirements. It
-> -could be either an off-chip device or an on-chip device. Following section
-> -demostrates a list of supported devices along with their security properties/
-> -guarantees:
-> +A trust source provides the source of security for Trusted Keys.  This
-> +section lists currently supported trust sources, along with their security
-> +considerations.  Whether or not a trust source is sufficiently safe depends
-> +on the strength and correctness of its implementation, as well as the threat
-> +environment for a specific use case.  Since the kernel doesn't know what the
-> +environment is, and there is no metric of trust, it is dependent on the
-> +consumer of the Trusted Keys to determine if the trust source is sufficiently
-> +safe.
->  
->    *  Root of trust for storage
->  
-> @@ -116,6 +118,59 @@ guarantees:
->           Provides no protection by itself, relies on the underlying platform for
->           features such as tamper resistance.
->  
-> +  *  Provisioning - the trust source's unique and verifiable cryptographic
-> +     identity is provisioned during manufacturing
-> +
-> +     (1) TPM
-> +
-> +         The unique and verifiable cryptographic identity is the endorsement
-> +         key (EK) or its primary seed.  A review of the generation of the EK
-> +         and its accompanying certificate is part of the Common Criteria
-> +         evaluation of the product's lifecycle processes (ALC_*).  See "TCG
-> +         Protection Profile for PC Client Specific TPM 2"
-> +
-> +     (2) TEE
-> +
-> +         A protection profile for TEEs does not yet exist.  Therefore, the
-> +         provisioning process that generates the Hardware Unique Key is not
-> +         evaluated by an independent third party and is highly dependent on
-> +         the manufacturing environment.
+> Adrian
 
-Comparing TPM and TEE does not make logically any sense given that TPM
-is application and TEE a platfrom.
-
-> +
-> +
-> +  *  Cryptography
-> +
-> +     (1) TPM
-> +
-> +         As part of the TPM's mandatory Common Criteria evaluation, the
-> +         correctness of the TPM's implementation of cryptographic algorithms,
-> +         the protection of keys, and the generation of random numbers, and other
-> +         security-relevant functions must be documented, reviewed, and tested by
-> +         an independent third party evaluation agency.  It must meet the
-> +         requirements of FIPS 140-2, FIPS 140-3, or ISO/IEC 19790:2012.
-> +
-> +     (2) TEE
-> +
-> +         Evaluations of cryptographic modules within TEEs are not required, but
-> +         some are available for specific implementations within TEEs.
-> +
-> +
-> +  *  Interfaces and APIs
-> +
-> +     (1) TPM
-> +
-> +         TPMs have well-documented, standardized interfaces and APIs.
-> +
-> +     (2) TEE
-> +
-> +         Unless TEEs implement functionality such as a virtual TPM, they have
-> +         custom interfaces and APIs.
-> +
-> +
-> +  *  Threat model
-> +
-> +     The strength and appropriateness of a particular TPM or TEE for a given
-> +     purpose must be assessed when using them to protect security-relevant data.
-> +
->  
->  Key Generation
->  ==============
-> @@ -123,8 +178,10 @@ Key Generation
->  Trusted Keys
->  ------------
->  
-> -New keys are created from trust source generated random numbers, and are
-> -encrypted/decrypted using trust source storage root key.
-> +New keys are created from random numbers generated in the trust source. They
-> +are encrypted/decrypted using a child key in the storage key hierarchy.
-> +Encryption and decryption of the child key must be protected by a strong
-> +access control policy within the trust source.
->  
->    *  TPM (hardware device) based RNG
->  
-> -- 
-> 2.18.4
-> 
-> 
-
-/Jarkko
+So can you respond to this with tested-by. It's sufficient because
+collateral effects of driver failing are insignificant for the kernel
+as whole.
+ 
+ /Jarkko
