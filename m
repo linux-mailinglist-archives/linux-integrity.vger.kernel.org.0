@@ -2,38 +2,38 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 872322D81A3
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 23:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D6C2D81A7
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 23:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392481AbgLKWK6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Dec 2020 17:10:58 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:33563 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394203AbgLKWKu (ORCPT
+        id S2406587AbgLKWLa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Dec 2020 17:11:30 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:40487 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394262AbgLKWKz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Dec 2020 17:10:50 -0500
-Received: by mail-ot1-f66.google.com with SMTP id b18so9686548ots.0;
-        Fri, 11 Dec 2020 14:10:35 -0800 (PST)
+        Fri, 11 Dec 2020 17:10:55 -0500
+Received: by mail-ot1-f65.google.com with SMTP id j12so9665184ota.7;
+        Fri, 11 Dec 2020 14:10:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oq++uhCmsnyyXvk0n60vkspuJ0SIr1rZ3dJJxaNRN5E=;
-        b=UONlHUL63OTmkZlsBHudAw5CqXuwAzVvx6F8eXcR3elMY1TYjwGWf7evseeL9FYWSY
-         NyU38tBHxRCeJhbDfBoj53WxqLQEEcDirBTEz3LBskxlbg+9Qzf17xzq5rZwb9Pha0/b
-         2zy/U4AXqSAzfrVaFxxDgZlPuQ2C/y57EwuceS+T//MWulZJ4u+w+F3tFtq2Iw1EhE/e
-         8vBqeGMpW3OFwABKSMFky6oH2jIWaIIXfzHhQyglZIcl59wJuE4HI8YGJIXvztOifp3K
-         hy8jV3NrAtgtf0UCW4EVnINJeCe3cXCN6NHSnLwoYDitMGix8v8Vke65KGvYZTH6ZW4s
-         f55Q==
-X-Gm-Message-State: AOAM533im8T1/Gijf8Sr9q6INeGKmm8PMQNRhTweD5QIyeE8Lsry5Vc0
-        Uw3Sc7+U4HXfMpXuaOnsNg==
-X-Google-Smtp-Source: ABdhPJzeBX2tVJeSiGStJt2Ek5vehPy1u8gbNMa270Il+3gKwOB7uc/SjrhkjkULY9asLmo+pxIcqQ==
-X-Received: by 2002:a9d:506:: with SMTP id 6mr10864645otw.95.1607724610264;
-        Fri, 11 Dec 2020 14:10:10 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5DOUAwNBZTpsAGtj8/sa2DV++d3Am3UoJ46lgHI5NXw=;
+        b=QoWSMnbppJSUUFb2H8QEY3uQskYL6C1V4t+yuxVo0PwvPZzl+WXljFchfg4U2l1bb1
+         QkZtqQnZxLWfrMGQP2mG6lvX/N32VNTzZMkx02Nwy3/yekUJN79e112wxf3+kCh8GXsC
+         LWcZiGbeSvFYWeBrFa2WzzYpt/nJhZoRbD7auscNtM++BelSvjfrbLHKwEpDPD4KeWd+
+         RLz+yl6IpBam5aAsnQVh3zkyWT7l4yEaT0aCqsARcxfU0RYn+lYUAuGGe8ZFR8DYdy5M
+         SScUsKBdY3TeHz4zHNYkErINx9KWQ3aJ9luNo4tcUI7WYKmSjfT4p9TPXDBqELs9Qq5a
+         9p8Q==
+X-Gm-Message-State: AOAM533MDVCvk6Z2gafqAviN/IhmzebBdYMMQGB6MsiAJ/Tg1oC722g7
+        3BrN3ksj4lHnDBG7gtFflQ==
+X-Google-Smtp-Source: ABdhPJxgyfaoDh+m5zmI8+VyVda4yZOf75Uysw6WxEnATVYka7mAtOv01ywSDzDwYlxDFX56wS+ecA==
+X-Received: by 2002:a9d:37c4:: with SMTP id x62mr10493712otb.87.1607724614033;
+        Fri, 11 Dec 2020 14:10:14 -0800 (PST)
 Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id p3sm2137383otf.3.2020.12.11.14.10.07
+        by smtp.googlemail.com with ESMTPSA id p3sm2137383otf.3.2020.12.11.14.10.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 14:10:09 -0800 (PST)
+        Fri, 11 Dec 2020 14:10:11 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
 To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         takahiro.akashi@linaro.org, will@kernel.org,
@@ -49,48 +49,84 @@ Cc:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com
-Subject: [RFC PATCH 0/4] Kexec FDT setup consolidation
-Date:   Fri, 11 Dec 2020 16:10:02 -0600
-Message-Id: <20201211221006.1052453-1-robh@kernel.org>
+Subject: [RFC PATCH 1/4] powerpc: Rename kexec elfcorehdr_addr to elf_headers_mem
+Date:   Fri, 11 Dec 2020 16:10:03 -0600
+Message-Id: <20201211221006.1052453-2-robh@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201211221006.1052453-1-robh@kernel.org>
+References: <20201211221006.1052453-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Lakshmi,
+Align with arm64 name so common code can use it.
 
-As I mentioned before for the arm64 IMA support[1], the common parts of
-kexec FDT setup need to be pulled out before adding IMA support. This series
-is what I'd like to see done before we add any more kexec features. Arm64
-and powerpc do essentially the same DT setup and the differences don't
-conflict.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ arch/powerpc/include/asm/kexec.h  | 2 +-
+ arch/powerpc/kexec/file_load.c    | 4 ++--
+ arch/powerpc/kexec/file_load_64.c | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-It's RFC because it's compile tested only, could use some better commit
-messages, and I'm only throwing it out to show what I want here. A branch
-is here[2].
-
-Rob
-
-[1] https://lore.kernel.org/lkml/CAL_Jsq+3qBr6JT3dysSt28j0UJq80u9YRf5pAh0Dvv5_+pFKXw@mail.gmail.com/
-[2] git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git dt/kexec
-
-Rob Herring (4):
-  powerpc: Rename kexec elfcorehdr_addr to elf_headers_mem
-  of: Add a common kexec FDT setup function
-  arm64: Use common of_kexec_setup_new_fdt()
-  powerpc: Use common of_kexec_setup_new_fdt()
-
- arch/arm64/kernel/machine_kexec_file.c | 123 +------------
- arch/powerpc/include/asm/kexec.h       |   2 +-
- arch/powerpc/kexec/file_load.c         | 127 +-------------
- arch/powerpc/kexec/file_load_64.c      |   4 +-
- drivers/of/Makefile                    |   1 +
- drivers/of/kexec.c                     | 228 +++++++++++++++++++++++++
- include/linux/of.h                     |   5 +
- 7 files changed, 247 insertions(+), 243 deletions(-)
- create mode 100644 drivers/of/kexec.c
-
---
+diff --git a/arch/powerpc/include/asm/kexec.h b/arch/powerpc/include/asm/kexec.h
+index 55d6ede30c19..dbf09d2f36d0 100644
+--- a/arch/powerpc/include/asm/kexec.h
++++ b/arch/powerpc/include/asm/kexec.h
+@@ -108,7 +108,7 @@ struct kimage_arch {
+ 	unsigned long backup_start;
+ 	void *backup_buf;
+ 
+-	unsigned long elfcorehdr_addr;
++	unsigned long elf_headers_mem;
+ 	unsigned long elf_headers_sz;
+ 	void *elf_headers;
+ 
+diff --git a/arch/powerpc/kexec/file_load.c b/arch/powerpc/kexec/file_load.c
+index 9a232bc36c8f..e452b11df631 100644
+--- a/arch/powerpc/kexec/file_load.c
++++ b/arch/powerpc/kexec/file_load.c
+@@ -45,7 +45,7 @@ char *setup_kdump_cmdline(struct kimage *image, char *cmdline,
+ 		return NULL;
+ 
+ 	elfcorehdr_strlen = sprintf(cmdline_ptr, "elfcorehdr=0x%lx ",
+-				    image->arch.elfcorehdr_addr);
++				    image->arch.elf_headers_mem);
+ 
+ 	if (elfcorehdr_strlen + cmdline_len > COMMAND_LINE_SIZE) {
+ 		pr_err("Appending elfcorehdr=<addr> exceeds cmdline size\n");
+@@ -263,7 +263,7 @@ int setup_new_fdt(const struct kimage *image, void *fdt,
+ 		 * Avoid elfcorehdr from being stomped on in kdump kernel by
+ 		 * setting up memory reserve map.
+ 		 */
+-		ret = fdt_add_mem_rsv(fdt, image->arch.elfcorehdr_addr,
++		ret = fdt_add_mem_rsv(fdt, image->arch.elf_headers_mem,
+ 				      image->arch.elf_headers_sz);
+ 		if (ret) {
+ 			pr_err("Error reserving elfcorehdr memory: %s\n",
+diff --git a/arch/powerpc/kexec/file_load_64.c b/arch/powerpc/kexec/file_load_64.c
+index c69bcf9b547a..a05c19b3cc60 100644
+--- a/arch/powerpc/kexec/file_load_64.c
++++ b/arch/powerpc/kexec/file_load_64.c
+@@ -815,7 +815,7 @@ static int load_elfcorehdr_segment(struct kimage *image, struct kexec_buf *kbuf)
+ 		goto out;
+ 	}
+ 
+-	image->arch.elfcorehdr_addr = kbuf->mem;
++	image->arch.elf_headers_mem = kbuf->mem;
+ 	image->arch.elf_headers_sz = headers_sz;
+ 	image->arch.elf_headers = headers;
+ out:
+@@ -851,7 +851,7 @@ int load_crashdump_segments_ppc64(struct kimage *image,
+ 		return ret;
+ 	}
+ 	pr_debug("Loaded elf core header at 0x%lx, bufsz=0x%lx memsz=0x%lx\n",
+-		 image->arch.elfcorehdr_addr, kbuf->bufsz, kbuf->memsz);
++		 image->arch.elf_headers_mem, kbuf->bufsz, kbuf->memsz);
+ 
+ 	return 0;
+ }
+-- 
 2.25.1
+
