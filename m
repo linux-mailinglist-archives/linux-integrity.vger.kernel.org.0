@@ -2,68 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CA42D7CE3
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 18:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E506B2D7D39
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 18:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395150AbgLKR3N (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Dec 2020 12:29:13 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:33958 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394616AbgLKR2x (ORCPT
+        id S2395540AbgLKRry (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Dec 2020 12:47:54 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:59906 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405633AbgLKRrS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Dec 2020 12:28:53 -0500
-Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1616220B717A;
-        Fri, 11 Dec 2020 09:28:12 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1616220B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1607707692;
-        bh=Hk+1o6qAUkRmm64fM9bJ/clQ0i7hDtiKdMK/UvrH55s=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=j7w4kZQDQ8Gvuat3uH0J0qoskfgEj4aQHWIxWqJqU8/B+7j1ul13OO27hzYKusDXB
-         tPeW18Zc43ck5wwPkskxx9pTUoKXKvNKRZnNTwpJ7D/t2ANjBHoeXiGpxkfQQvXmD7
-         PUYSLBTZbDNmFs3EYvyfvZ3YWucpvLgkq1XHiAKU=
-Subject: Re: [PATCH v7 3/8] IMA: define a hook to measure kernel integrity
- critical data
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, paul@paul-moore.com, sashal@kernel.org,
-        jmorris@namei.org, nramas@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20201209194212.5131-1-tusharsu@linux.microsoft.com>
- <20201209194212.5131-4-tusharsu@linux.microsoft.com>
- <20201210230218.GH489768@sequoia>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <b65f2a10-037b-0fb7-fe88-5cc8482faedc@linux.microsoft.com>
-Date:   Fri, 11 Dec 2020 09:28:11 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 11 Dec 2020 12:47:18 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A4A201280195;
+        Fri, 11 Dec 2020 09:46:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1607708796;
+        bh=eES7dkAWAETGlrB/U5ZcYdxiZYF5ERyWxz5zpk5XS54=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=aSCTaU08AIo2KulFz0YKW5uDbOoeqsKWNO8rT5OQkooKfvQgZoFprGW9Hij4XfqTn
+         U6PBJKECnnVooKjlRbbwv/O+OMIQxkgFYOrYx4KGngF+2bMuaHYc7bQbSrXlhucPGg
+         1E0wiTJzYVG7ZyXVanYziUzjN9e8C++KrjAVm4iI=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id wC4SYAMM1k4E; Fri, 11 Dec 2020 09:46:36 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 114BA1280193;
+        Fri, 11 Dec 2020 09:46:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1607708796;
+        bh=eES7dkAWAETGlrB/U5ZcYdxiZYF5ERyWxz5zpk5XS54=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=aSCTaU08AIo2KulFz0YKW5uDbOoeqsKWNO8rT5OQkooKfvQgZoFprGW9Hij4XfqTn
+         U6PBJKECnnVooKjlRbbwv/O+OMIQxkgFYOrYx4KGngF+2bMuaHYc7bQbSrXlhucPGg
+         1E0wiTJzYVG7ZyXVanYziUzjN9e8C++KrjAVm4iI=
+Message-ID: <76710d8ec58c440ed7a7b446696b8659f694d0db.camel@HansenPartnership.com>
+Subject: Re: [PATCH AUTOSEL 5.7 03/30] ima: extend boot_aggregate with
+ kernel measurements
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Maurizio Drocco <maurizio.drocco@ibm.com>,
+        Bruno Meneguele <bmeneg@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Fri, 11 Dec 2020 09:46:35 -0800
+In-Reply-To: <659c09673affe9637a5d1391c12af3aa710ba78a.camel@linux.ibm.com>
+References: <20200708154116.3199728-1-sashal@kernel.org>
+         <20200708154116.3199728-3-sashal@kernel.org>
+         <1594224793.23056.251.camel@linux.ibm.com>
+         <20200709012735.GX2722994@sasha-vm>
+         <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
+         <20201211031008.GN489768@sequoia>
+         <659c09673affe9637a5d1391c12af3aa710ba78a.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <20201210230218.GH489768@sequoia>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-<snip>
+On Fri, 2020-12-11 at 06:01 -0500, Mimi Zohar wrote:
+> On Thu, 2020-12-10 at 21:10 -0600, Tyler Hicks wrote:
+> > On 2020-11-29 08:17:38, Mimi Zohar wrote:
+> > > Hi Sasha,
+> > > 
+> > > On Wed, 2020-07-08 at 21:27 -0400, Sasha Levin wrote:
+> > > > On Wed, Jul 08, 2020 at 12:13:13PM -0400, Mimi Zohar wrote:
+> > > > > Hi Sasha,
+> > > > > 
+> > > > > On Wed, 2020-07-08 at 11:40 -0400, Sasha Levin wrote:
+> > > > > > From: Maurizio Drocco <maurizio.drocco@ibm.com>
+> > > > > > 
+> > > > > > [ Upstream commit 20c59ce010f84300f6c655d32db2610d3433f85c
+> > > > > > ]
+> > > > > > 
+> > > > > > Registers 8-9 are used to store measurements of the kernel
+> > > > > > and its command line (e.g., grub2 bootloader with tpm
+> > > > > > module enabled). IMA should include them in the boot
+> > > > > > aggregate. Registers 8-9 should be only included in non-
+> > > > > > SHA1 digests to avoid ambiguity.
+> > > > > 
+> > > > > Prior to Linux 5.8, the SHA1 template data hashes were padded
+> > > > > before being extended into the TPM.  Support for calculating
+> > > > > and extending the per TPM bank template data digests is only
+> > > > > being upstreamed in Linux 5.8.
+> > > > > 
+> > > > > How will attestation servers know whether to include PCRs 8 &
+> > > > > 9 in the the boot_aggregate calculation?  Now, there is a
+> > > > > direct relationship between the template data SHA1 padded
+> > > > > digest not including PCRs 8 & 9, and the new per TPM bank
+> > > > > template data digest including them.
+> > > > 
+> > > > Got it, I'll drop it then, thank you!
+> > > 
+> > > After re-thinking this over, I realized that the attestation
+> > > server can verify the "boot_aggregate" based on the quoted PCRs
+> > > without knowing whether padded SHA1 hashes or per TPM bank hash
+> > > values were extended into the TPM[1], but non-SHA1 boot aggregate
+> > > values [2] should always include PCRs 8 & 9.
+> > 
+> > I'm still not clear on how an attestation server would know to
+> > include PCRs 8 and 9 after this change came through a stable kernel
+> > update. It doesn't seem like something appropriate for stable since
+> > it requires code changes to attestation servers to handle the
+> > change.
+> > 
+> > I know this has already been released in some stable releases, so
+> > I'm too late, but perhaps I'm missing something.
+> 
+> The point of adding PCRs 8 & 9 only to non-SHA1 boot_aggregate values
+> was to avoid affecting existing attestation servers.  The intention
+> was when attestation servers added support for the non-sha1
+> boot_aggregate values, they'd also include PCRs 8 & 9.  The existing
+> SHA1 boot_aggregate value remains PCRs 0 - 7.
+> 
+> To prevent this or something similar from happening again, what
+> should have been the proper way of including PCRs 8 & 9?
 
->> + */
->> +void ima_measure_critical_data(const char *event_name,
->> +			       const void *buf, int buf_len,
->> +			       bool measure_buf_hash)
->> +{
->> +	if (!event_name || !buf || !buf_len) {
->> +		pr_err("Invalid arguments passed to %s().\n", __func__);
-> 
-> This is a problem for the developer making use of the
-> ima_measure_critical_data() API and shouldn't be logged, IMO, because a
-> user/admin can do nothing about it. I think the error message should be
-> dropped.
-> 
-Thanks Tyler.
-Will drop the message.
+Just to be pragmatic: this is going to happen again.  Shim is already
+measuring the Mok variables through PCR 14, so if we want an accurate
+boot aggregate, we're going to have to include PCR 14 as well (or
+persuade shim to measure through a PCR we're already including, which
+isn't impossible since I think shim should be measuring the Mok
+variables using the EV_EFI_VARIABLE_DRIVER_CONFIG event and, since it
+affects secure boot policy, that does argue it should be measured
+through PCR 7).
+
+James
+
+
