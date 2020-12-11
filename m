@@ -2,79 +2,165 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C17A2D7407
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 11:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68B02D7439
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 11:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392157AbgLKKhv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Dec 2020 05:37:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48324 "EHLO mail.kernel.org"
+        id S2393198AbgLKKwP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Dec 2020 05:52:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391516AbgLKKhR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Dec 2020 05:37:17 -0500
-Date:   Fri, 11 Dec 2020 12:36:27 +0200
+        id S2393447AbgLKKvp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 11 Dec 2020 05:51:45 -0500
+Date:   Fri, 11 Dec 2020 12:51:00 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607682996;
-        bh=BRZS5nXnwYhgoP19iUYWZOQLdrsuQXTKNWUg3UCsC1E=;
+        s=k20201202; t=1607683864;
+        bh=pHizgzZaAV2YvZFffI4jhiS94/hBYDoDgYLKPSsbO7E=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IVCFcShfylaXBFX5PnCG5paBrp/6eCQ9IMvAY/s1AjaZ82EGXq/MwWbqR3I4//rUM
-         dm2NojWfPzzA8AFjS5TvuOIKmpzW0x/akYuWEF/X0d4nq6gJDyxSagwE3hBOgPLdJB
-         /RXS8FFvET7SyYLOfd/2is712MTtZt/jqvxFFnntt1jHmPOFrB+yV3wRJVnGL7yugJ
-         1U61cNlgew06kq3PtnKTW0Jwk/3UKswf628fy2rM0sVc2rnUvtLw8XPjR7/SzYj5Es
-         FMS9XnANIIyBLa8YoUvuNTNUjnnCnVjQbGXnDwvoHI2gLnq4PUaIeOwlC6d3Vx3oZt
-         hscL/O2IrOQ2A==
+        b=N7fL81o7iLrGo/MSpnnlOay13hmMLN/ScnO/GyjHY0DqLuhAy1keHHIF0H4c4YP3G
+         E5iJEzic88FTq8WFq4bbTEjGHODVWw7obzIyu9nj6kMvEP+CZ0K2RgWb7hHtzEL3N2
+         vWsrJBMPyyisKy7LaljejcCzdf3VVSReM6zmnOaORunugBoeX5E3MGBwf2j+AOV9hl
+         /OUQAAgkxrkNm3VSICWljXNQ9V6HPztMSxqfAVTX+NJohy3rzL58NS2PBHWPCaloKA
+         qgfsCniLg5PePeegbPMBhUSM/OX5hR/UkHJdSaGktK8SJrthAjUknqcw5nFGtLXfB1
+         BN1vwSp7HgDlg==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     sumit.garg@linaro.org, Elaine Palmer <erpalmerny@gmail.com>,
-        jarkko.sakkinen@linux.intel.com, jejb@linux.ibm.com,
-        dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
-        jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
-        janne.karhunen@gmail.com, daniel.thompson@linaro.org,
-        Markus.Wamser@mixed-mode.de, lhinds@redhat.com,
-        keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Kenneth Goldman <kgoldman@us.ibm.com>, gcwilson@linux.ibm.com,
-        zgu@us.ibm.com, stefanb@us.ibm.com, NAYNA JAIN1 <naynjain@ibm.com>
-Subject: Re: [PATCH v8 3/4] doc: trusted-encrypted: updates with TEE as a new
- trust source
-Message-ID: <20201211103627.GB12091@kernel.org>
-References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
- <1604419306-26105-4-git-send-email-sumit.garg@linaro.org>
- <81A6B61D-3811-4957-B270-52AE5FA6DE4F@gmail.com>
- <20201204153037.GC4922@kernel.org>
- <ba6cd934bf7460cf6e9fc101a759a63fdd4e6e9b.camel@linux.ibm.com>
- <20201208174906.GA58572@kernel.org>
- <b2465d27f3683331019c5a9b6d0856304d992a0a.camel@linux.ibm.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     linux-integrity@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [Regression] Can only do S3 once after "tpm: take TPM chip power
+ gating out of tpm_transmit()"
+Message-ID: <20201211105100.GE12091@kernel.org>
+References: <7E60C7F0-85C6-4A9A-B905-904D37A5E67B@canonical.com>
+ <20201208101746.GA45313@kernel.org>
+ <C9737DC9-6484-4497-83F4-494DBFD90D9C@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b2465d27f3683331019c5a9b6d0856304d992a0a.camel@linux.ibm.com>
+In-Reply-To: <C9737DC9-6484-4497-83F4-494DBFD90D9C@canonical.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Dec 09, 2020 at 11:50:19AM -0500, Mimi Zohar wrote:
-> On Tue, 2020-12-08 at 19:49 +0200, Jarkko Sakkinen wrote:
-> > On Tue, Dec 08, 2020 at 10:02:57AM -0500, Mimi Zohar wrote:
+On Thu, Dec 10, 2020 at 12:23:57PM +0800, Kai-Heng Feng wrote:
 > 
-> > > > Please also use a proper email client and split your paragraphs into
-> > > > at most 80 character lines with new line characters when writing email.
-> > > > I prefer to use 72 character line length so that there's some space
-> > > > for longer email threads.
-> > > 
-> > > Sure, we'll re-post the suggested documentation changes/additions.
-> > > 
-> > > Mimi
+> 
+> > On Dec 8, 2020, at 18:17, Jarkko Sakkinen <jarkko@kernel.org> wrote:
 > > 
-> > So. Wouldn't it be a better idea to post a patch that Sumit could
-> > squash to his (and add co-developed-by tag)?
+> > On Mon, Dec 07, 2020 at 12:42:53PM +0800, Kai-Heng Feng wrote:
+> >> Hi Jarkko,
+> >> 
+> >> A user report that the system can only do S3 once. Subsequent S3 fails after commit a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()").
+> >> 
+> >> Dmesg with the issue, collected under 5.10-rc2:
+> >> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1891502/comments/14
+> >> 
+> >> Dmesg without the issue, collected under 5.0.0-rc8:
+> >> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1891502/comments/16
+> >> 
+> >> Full bug report here:
+> >> https://bugs.launchpad.net/bugs/1891502
+> >> 
+> >> Kai-Heng
+> > 
+> > Relevant part:
+> > 
+> > 
+> > [80601.620149] tpm tpm0: Error (28) sending savestate before suspend
+> > [80601.620165] PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x90 returns 28
+> > [80601.620172] PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x20 returns 28
+> > [80601.620178] PM: Device 00:01 failed to suspend: error 28
+> > 
+> > Looking at this there are two issues:
+> > 
+> > A. TPM_ORD_SAVESTATE command failing, this a new regression.
+> > B. When tpm_pm_suspend() fails, it should not fail the whole suspend
+> >   procedure. And it returns the TPM error code back to the upper
+> >   layers when it does so, which makes no sense. This is an old
+> >   issue revealed by A.
+> > 
+> > Let's look at tpm_pm_suspend():
+> > 
+> > /*
+> > * We are about to suspend. Save the TPM state
+> > * so that it can be restored.
+> > */
+> > int tpm_pm_suspend(struct device *dev)
+> > {
+> > 	struct tpm_chip *chip = dev_get_drvdata(dev);
+> > 	int rc = 0;
+> > 
+> > 	if (!chip)
+> > 		return -ENODEV;
+> > 
+> > 	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+> > 		goto suspended;
+> > 
+> > 	if ((chip->flags & TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED) &&
+> > 	    !pm_suspend_via_firmware())
+> > 		goto suspended;
+> > 
+> > 	if (!tpm_chip_start(chip)) {
+> > 		if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> > 			tpm2_shutdown(chip, TPM2_SU_STATE);
+> > 		else
+> > 			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+> > 
+> > 		tpm_chip_stop(chip);
+> > 	}
+> > 
+> > suspended:
+> > 	return rc;
+> > }
+> > EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+> > 
+> > I would modify this into:
+> > 
+> > /*
+> > * We are about to suspend. Save the TPM state
+> > * so that it can be restored.
+> > */
+> > int tpm_pm_suspend(struct device *dev)
+> > {
+> > 	struct tpm_chip *chip = dev_get_drvdata(dev);
+> > 	int rc = 0;
+> > 
+> > 	if (!chip)
+> > 		return -ENODEV;
+> > 
+> > 	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+> > 		goto suspended;
+> > 
+> > 	if ((chip->flags & TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED) &&
+> > 	    !pm_suspend_via_firmware())
+> > 		goto suspended;
+> > 
+> > 	if (!tpm_chip_start(chip)) {
+> > 		if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> > 			tpm2_shutdown(chip, TPM2_SU_STATE);
+> > 		else
+> > 			tpm1_pm_suspend(chip, tpm_suspend_pcr);
+> > 
+> > 		tpm_chip_stop(chip);
+> > 	}
+> > 
+> > suspended:
+> > 	return rc;
+> > }
+> > EXPORT_SYMBOL_GPL(tpm_pm_suspend);
+> > 
+> > I.e. it's a good idea to put something into klog but that should not
+> > fail the whole suspend procedure. TPM is essentially opt-in feature.
+> > 
+> > Of course issue A needs to be also sorted out but would this work as
+> > a quick initial fix? I can queue a patch for this. Is it possible to
+> > try out this fix for if I drop a patch?
 > 
-> I just posted it on Elaine's behalf.
->   
-> Mimi
+> Yes, possible test result from affected user.
+> 
+> I had to cut those code and do a diff side by side to find what changed.
+> Hopefully next time I can get one from `git diff`...
+> 
+> Kai-Heng
 
-I responded. It's good that this feedback came as I think the whole
-thing does not have the correct label for it.
+Yes you can. Sorry about that.
 
 /Jarkko
