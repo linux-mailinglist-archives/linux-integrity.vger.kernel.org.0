@@ -2,222 +2,186 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 947462D81A9
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 23:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC502D8314
+	for <lists+linux-integrity@lfdr.de>; Sat, 12 Dec 2020 01:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406604AbgLKWLg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Dec 2020 17:11:36 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:41179 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406573AbgLKWLF (ORCPT
+        id S2407250AbgLKX7X (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Dec 2020 18:59:23 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:54714 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407228AbgLKX7B (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Dec 2020 17:11:05 -0500
-Received: by mail-oi1-f196.google.com with SMTP id 15so11583703oix.8;
-        Fri, 11 Dec 2020 14:10:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sZsbBtl86KBSh7SposuR5mWR/E5ADZV446RLtS+YWPM=;
-        b=OGM6hCQT981eG6OOxJtcP0JGTGo+C1TyXNg7sL55GdS639UStuZbZ8kccriDvvI7Q4
-         XNOmXlopGXTZpJbMCkkysJvPUIhgGS0ClUBtKTXSb/RdVMox6eI61wpM6WM80SWqmW3p
-         V1UGQU5IUlMc4HMwwC+T1wJIfNv5mw29JawBZb2FkEzS5FrK4dEFU62nxCq1A7DxP+3Q
-         +FvHcwEvJWKGWzYqFAeNKs+QjA1v2oYngiIRqQeyyIh2boUJTJEhA22V56OydcbF3dzH
-         NDBzcGHufQI5xZyYJvBSjNNuVUml2s9hUjZ8a4miakTEd2cB02c4WkuQ4kh13vEcI/Wi
-         tC+w==
-X-Gm-Message-State: AOAM531R4xfQnnkfi8neprU3IblLR6JK4JUIOXgLOtC0pIQMsE1pY0ZO
-        +U6rWFVaKR+yLTNCMveZuQ==
-X-Google-Smtp-Source: ABdhPJy5LRQclo0O7hCh4PpsWuQuDVh9fwWspX5Lxm/JR8O3OB2Pr/cajXyzNclFZ+tDC/nxzB8I+g==
-X-Received: by 2002:aca:ba42:: with SMTP id k63mr10639446oif.111.1607724624431;
-        Fri, 11 Dec 2020 14:10:24 -0800 (PST)
-Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id p3sm2137383otf.3.2020.12.11.14.10.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 14:10:23 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        takahiro.akashi@linaro.org, will@kernel.org,
-        catalin.marinas@arm.com, mpe@ellerman.id.au
-Cc:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        zohar@linux.ibm.com, james.morse@arm.com, sashal@kernel.org,
-        benh@kernel.crashing.org, paulus@samba.org, frowand.list@gmail.com,
-        vincenzo.frascino@arm.com, mark.rutland@arm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        pasha.tatashin@soleen.com, allison@lohutok.net,
-        masahiroy@kernel.org, bhsharma@redhat.com, mbrugger@suse.com,
-        hsinyi@chromium.org, tao.li@vivo.com, christophe.leroy@c-s.fr,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        prsriva@linux.microsoft.com, balajib@linux.microsoft.com
-Subject: [RFC PATCH 4/4] powerpc: Use common of_kexec_setup_new_fdt()
-Date:   Fri, 11 Dec 2020 16:10:06 -0600
-Message-Id: <20201211221006.1052453-5-robh@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201211221006.1052453-1-robh@kernel.org>
-References: <20201211221006.1052453-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 11 Dec 2020 18:59:01 -0500
+Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EF86920B717A;
+        Fri, 11 Dec 2020 15:58:18 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EF86920B717A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1607731099;
+        bh=B+rxgnWxxN983tdB2USvYpvsAwLZIwfzBOfZa3HZQnc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NP8XZiAA+jNhBNRMldjVFbwBJNs2QUZKDEvN6VZJkWASNpUD+HwjlnMMKRKU4XD0I
+         +pY78xNbQ/ejFMoLxspggicHfDfeYHg5UOthkxyQMrqdB/kAaGJb6yzz0/RbFo1rvK
+         yExf0jWY+Dfjv3YM60ipkktIOTdpQMT7wxh+UbCU=
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Subject: [PATCH v8 0/8] IMA: support for measuring kernel integrity critical data
+Date:   Fri, 11 Dec 2020 15:57:59 -0800
+Message-Id: <20201211235807.30815-1-tusharsu@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
+IMA measures files and buffer data such as keys, command-line arguments
+passed to the kernel on kexec system call, etc. While these measurements
+are necessary for monitoring and validating the integrity of the system,
+they are not sufficient. Various data structures, policies, and states
+stored in kernel memory also impact the integrity of the system.
+Several kernel subsystems contain such integrity critical data -
+e.g. LSMs like SELinux, AppArmor etc. or device-mapper targets like
+dm-crypt, dm-verity, dm-integrity etc. These kernel subsystems help
+protect the integrity of a device. Their integrity critical data is not
+expected to change frequently during run-time. Some of these structures
+cannot be defined as __ro_after_init, because they are initialized later.
 
-After the IMA changes, delete_fdt_mem_rsv() can also be removed.
+For a given device, various external services/infrastructure tools
+(including the attestation service) interact with it - both during the
+setup and during rest of the device run-time. They share sensitive data
+and/or execute critical workload on that device. The external services
+may want to verify the current run-time state of the relevant kernel
+subsystems before fully trusting the device with business critical
+data/workload. For instance, verifying that SELinux is in "enforce" mode
+along with the expected policy, disks are encrypted with a certain
+configuration, secure boot is enabled etc.
 
- arch/powerpc/kexec/file_load.c | 125 ++-------------------------------
- 1 file changed, 6 insertions(+), 119 deletions(-)
+This series provides the necessary IMA functionality for kernel
+subsystems to ensure their configuration can be measured:
+  - by kernel subsystems themselves,
+  - in a tamper resistant way,
+  - and re-measured - triggered on state/configuration change.
 
-diff --git a/arch/powerpc/kexec/file_load.c b/arch/powerpc/kexec/file_load.c
-index e452b11df631..956bcb2d1ec2 100644
---- a/arch/powerpc/kexec/file_load.c
-+++ b/arch/powerpc/kexec/file_load.c
-@@ -16,6 +16,7 @@
+This patch set:
+  - defines a new IMA hook ima_measure_critical_data() to measure
+    integrity critical data,
+  - limits the critical data being measured based on a label,
+  - defines a builtin critical data measurement policy,
+  - and includes an SELinux consumer of the new IMA critical data hook.
 
- #include <linux/slab.h>
- #include <linux/kexec.h>
-+#include <linux/of.h>
- #include <linux/of_fdt.h>
- #include <linux/libfdt.h>
- #include <asm/setup.h>
-@@ -156,132 +157,18 @@ int setup_new_fdt(const struct kimage *image, void *fdt,
- 		  unsigned long initrd_load_addr, unsigned long initrd_len,
- 		  const char *cmdline)
- {
--	int ret, chosen_node;
--	const void *prop;
--
--	/* Remove memory reservation for the current device tree. */
--	ret = delete_fdt_mem_rsv(fdt, __pa(initial_boot_params),
--				 fdt_totalsize(initial_boot_params));
--	if (ret == 0)
--		pr_debug("Removed old device tree reservation.\n");
--	else if (ret != -ENOENT)
--		return ret;
--
--	chosen_node = fdt_path_offset(fdt, "/chosen");
--	if (chosen_node == -FDT_ERR_NOTFOUND) {
--		chosen_node = fdt_add_subnode(fdt, fdt_path_offset(fdt, "/"),
--					      "chosen");
--		if (chosen_node < 0) {
--			pr_err("Error creating /chosen.\n");
--			return -EINVAL;
--		}
--	} else if (chosen_node < 0) {
--		pr_err("Malformed device tree: error reading /chosen.\n");
--		return -EINVAL;
--	}
--
--	/* Did we boot using an initrd? */
--	prop = fdt_getprop(fdt, chosen_node, "linux,initrd-start", NULL);
--	if (prop) {
--		uint64_t tmp_start, tmp_end, tmp_size;
--
--		tmp_start = fdt64_to_cpu(*((const fdt64_t *) prop));
--
--		prop = fdt_getprop(fdt, chosen_node, "linux,initrd-end", NULL);
--		if (!prop) {
--			pr_err("Malformed device tree.\n");
--			return -EINVAL;
--		}
--		tmp_end = fdt64_to_cpu(*((const fdt64_t *) prop));
--
--		/*
--		 * kexec reserves exact initrd size, while firmware may
--		 * reserve a multiple of PAGE_SIZE, so check for both.
--		 */
--		tmp_size = tmp_end - tmp_start;
--		ret = delete_fdt_mem_rsv(fdt, tmp_start, tmp_size);
--		if (ret == -ENOENT)
--			ret = delete_fdt_mem_rsv(fdt, tmp_start,
--						 round_up(tmp_size, PAGE_SIZE));
--		if (ret == 0)
--			pr_debug("Removed old initrd reservation.\n");
--		else if (ret != -ENOENT)
--			return ret;
--
--		/* If there's no new initrd, delete the old initrd's info. */
--		if (initrd_len == 0) {
--			ret = fdt_delprop(fdt, chosen_node,
--					  "linux,initrd-start");
--			if (ret) {
--				pr_err("Error deleting linux,initrd-start.\n");
--				return -EINVAL;
--			}
--
--			ret = fdt_delprop(fdt, chosen_node, "linux,initrd-end");
--			if (ret) {
--				pr_err("Error deleting linux,initrd-end.\n");
--				return -EINVAL;
--			}
--		}
--	}
--
--	if (initrd_len) {
--		ret = fdt_setprop_u64(fdt, chosen_node,
--				      "linux,initrd-start",
--				      initrd_load_addr);
--		if (ret < 0)
--			goto err;
--
--		/* initrd-end is the first address after the initrd image. */
--		ret = fdt_setprop_u64(fdt, chosen_node, "linux,initrd-end",
--				      initrd_load_addr + initrd_len);
--		if (ret < 0)
--			goto err;
--
--		ret = fdt_add_mem_rsv(fdt, initrd_load_addr, initrd_len);
--		if (ret) {
--			pr_err("Error reserving initrd memory: %s\n",
--			       fdt_strerror(ret));
--			return -EINVAL;
--		}
--	}
--
--	if (cmdline != NULL) {
--		ret = fdt_setprop_string(fdt, chosen_node, "bootargs", cmdline);
--		if (ret < 0)
--			goto err;
--	} else {
--		ret = fdt_delprop(fdt, chosen_node, "bootargs");
--		if (ret && ret != -FDT_ERR_NOTFOUND) {
--			pr_err("Error deleting bootargs.\n");
--			return -EINVAL;
--		}
--	}
-+	int ret;
+This series is based on the following repo/branch:
 
--	if (image->type == KEXEC_TYPE_CRASH) {
--		/*
--		 * Avoid elfcorehdr from being stomped on in kdump kernel by
--		 * setting up memory reserve map.
--		 */
--		ret = fdt_add_mem_rsv(fdt, image->arch.elf_headers_mem,
--				      image->arch.elf_headers_sz);
--		if (ret) {
--			pr_err("Error reserving elfcorehdr memory: %s\n",
--			       fdt_strerror(ret));
--			goto err;
--		}
--	}
-+	ret = of_kexec_setup_new_fdt(image, fdt, initrd_load_addr, initrd_len, cmdline);
-+	if (ret)
-+		goto err;
+ repo: https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+ branch: next-integrity
+ commit 207cdd565dfc ("ima: Don't modify file descriptor mode on the fly")
 
--	ret = setup_ima_buffer(image, fdt, chosen_node);
-+	ret = setup_ima_buffer(image, fdt, fdt_path_offset(fdt, "/chosen"));
- 	if (ret) {
- 		pr_err("Error setting up the new device tree.\n");
- 		return ret;
- 	}
+Change Log v8:
+Incorporated feedback from Tyler on v7 of this series.
+ - Removed unnecessary 'else' clauses in ima_match_rule_data().
+ - Fixed ima_store_template() to pass the buffer hash in case the
+   buffer is large.
+ - fixed function description for ima_measure_critical_data().
+ - Moved some usage of CRITICAL_DATA from Patch #3 to Patch #4.
+ - Moved IMA_DATA_SOURCE from Patch #4 to Patch #5.
+ - Removed unnecessary pr_err() from ima_measure_critical_data()
+   and selinux_event_name().
+ - Fixed log formatting in selinux_measure_state() to be consistent
+   with other messages in that file.
 
--	ret = fdt_setprop(fdt, chosen_node, "linux,booted-from-kexec", NULL, 0);
--	if (ret)
--		goto err;
--
- 	return 0;
+Change Log v7:
+Incorporated feedback from Mimi on v6 of this series.
+ - Updated cover letter and patch descriptions as per Mimi's feedback.
+ - Changed references to variable names and policy documentation from
+   plural "data_sources" to singular "data_source".
+ - Updated SELinux patch to measure only policy, instead of policy and
+   state. The state measurement will be upstreamed through a separate
+   patch.
+ - Updated admin-guide/kernel-parameters.txt to document support for
+   critical_data in builtin policy.
 
- err:
---
-2.25.1
+Change Log v6:
+Incorporated feedback from Mimi on v5 of this series.
+ - Got rid of patch 5 from the v5 of the series.(the allow list for data
+   sources)
+ - Updated function descriptions, changed variable names etc.
+ - Moved the input param event_data_source in ima_measure_critical_data()
+   to a new patch. (patch 6/8 of this series)
+ - Split patch 4 from v5 of the series into two patches (patch 4/8 and 
+   patch 5/8)
+ - Updated cover letter and patch descriptions as per feedback.
+
+Change Log v5:
+(1) Incorporated feedback from Stephen on the last SeLinux patch.
+ SeLinux Patch: https://patchwork.kernel.org/patch/11801585/
+ - Freed memory in the reverse order of allocation in 
+   selinux_measure_state().
+ - Used scnprintf() instead of snprintf() to create the string for
+   selinux state.
+ - Allocated event name passed to ima_measure_critical_data() before
+   gathering selinux state and policy information for measuring.
+
+(2) Incorporated feedback from Mimi on v4 of this series.
+ V4 of this Series: https://patchwork.kernel.org/project/linux-integrity/list/?series=354437
+
+ - Removed patch "[v4,2/6] IMA: conditionally allow empty rule data"
+ - Reversed the order of following patches.
+      [v4,4/6] IMA: add policy to measure critical data from kernel components
+      [v4,5/6] IMA: add hook to measure critical data from kernel components
+   and renamed them to remove "from kernel components"
+ - Added a new patch to this series - 
+       IMA: add critical_data to built-in policy rules
+
+ - Added the next version of SeLinux patch (mentioned above) to this
+   series 
+       selinux: measure state and hash of the policy using IMA
+
+ - Updated cover-letter description to give broader perspective of the
+   feature, rearranging paragraphs, removing unnecessary info, clarifying
+   terms etc.
+ - Got rid of opt_list param from ima_match_rule_data().
+ - Updated the documentation to remove sources that don't yet exist.
+ - detailed IMA hook description added to ima_measure_critical_data(),
+   as well as elaborating terms event_name, event_data_source. 
+ - "data_sources:=" is not a mandatory policy option for 
+   func=CRITICAL_DATA anymore. If not present, all the data sources
+   specified in __ima_supported_kernel_data_sources will be measured.
+
+
+Lakshmi Ramasubramanian (2):
+  IMA: define a builtin critical data measurement policy
+  selinux: include a consumer of the new IMA critical data hook
+
+Tushar Sugandhi (6):
+  IMA: generalize keyring specific measurement constructs
+  IMA: add support to measure buffer data hash
+  IMA: define a hook to measure kernel integrity critical data
+  IMA: add policy rule to measure critical data
+  IMA: limit critical data measurement based on a label
+  IMA: extend critical data hook to limit the measurement based on a
+    label
+
+ Documentation/ABI/testing/ima_policy          |   5 +-
+ .../admin-guide/kernel-parameters.txt         |   5 +-
+ include/linux/ima.h                           |   8 ++
+ security/integrity/ima/ima.h                  |   8 +-
+ security/integrity/ima/ima_api.c              |   8 +-
+ security/integrity/ima/ima_appraise.c         |   2 +-
+ security/integrity/ima/ima_asymmetric_keys.c  |   2 +-
+ security/integrity/ima/ima_main.c             |  81 ++++++++++--
+ security/integrity/ima/ima_policy.c           | 118 ++++++++++++++----
+ security/integrity/ima/ima_queue_keys.c       |   3 +-
+ security/selinux/Makefile                     |   2 +
+ security/selinux/include/security.h           |  11 +-
+ security/selinux/measure.c                    |  81 ++++++++++++
+ security/selinux/ss/services.c                |  71 +++++++++--
+ 14 files changed, 354 insertions(+), 51 deletions(-)
+ create mode 100644 security/selinux/measure.c
+
+-- 
+2.17.1
+
