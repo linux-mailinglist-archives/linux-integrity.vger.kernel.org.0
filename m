@@ -2,165 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BD12D7900
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 16:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2352D796A
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 16:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437717AbgLKPR3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Dec 2020 10:17:29 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9414 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2437781AbgLKPRQ (ORCPT
+        id S1728514AbgLKPbx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Dec 2020 10:31:53 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55800 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2392580AbgLKPbY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Dec 2020 10:17:16 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BBFA19m003243;
-        Fri, 11 Dec 2020 10:16:33 -0500
+        Fri, 11 Dec 2020 10:31:24 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BBF1lBh032965;
+        Fri, 11 Dec 2020 10:29:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=tBG/kgmrHwHHCFwPH+IjefqVYj6JhBo89wTlaxA9G4E=;
- b=nf6ejnImxPNjvQujjeQgav9/beOyHHRIiR05c93WvcPr5EXnfDEUqvVBH1tgAKmPR2tO
- jtT2ZHgd0n08yj2JT7eP21BGB2bPUClWMIcTQ+QCGhqYQQK3haE//W03Kq7Zng9q0FVz
- lI1oCl8mgAmbEBQMDNXIcho6KW9Ne5/YHMEij0LfLSNv4aRWK1hH1ZXyvjY2FDyLj5bb
- PAvtJbuGVCbsRYLw0HnHGQUmCdDMzvpMHxXB4nv9cx686iXYOWoeIbLVi2RM4IiINtkA
- P0DSyASMgw0Z/GCNzy3iWtywMSHXHHWCa+mOn8N0GWx3iNSECTMppIRXJwZ25p2AqrEB jg== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35cawb0er8-1
+ bh=dE77lBifutitPgjNq+uJQtv07f69I9KMEub6+IAdnRE=;
+ b=pbBH/5aHPByyVd73OZfxHOGPzCGuoL3RAF6Tw3fy/0I72vTWENfSuNhDocYek2jJhnmI
+ VkeYSZc31BgQaVDMk1Td2oPtU9+go5C7RXyA0xddPNxPT85qV0kl57plxBxBesGTfIqS
+ sz7lVH8Cj4sqyXF4DexvatUl4BovS2VRGrlM/Ys/Xh2+80gesrZlMjpJ2eQYUXEJwK4w
+ o2mzKLmz87j8xfHx4NZARdpD8rVKj72K9+H3QtpyRtveGPWU9l8qGQbH/hpoif10JVHX
+ NIXXqs9Q3M4KiwRcC75Us9Y6Bk0+SijmcJUnhQ13QCky6Tp5iLdi8m4LkSAQ/i3J9AtY /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35catw9ahq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Dec 2020 10:16:33 -0500
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BBFCT3U019902;
-        Fri, 11 Dec 2020 15:16:27 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06fra.de.ibm.com with ESMTP id 3581fhkre9-1
+        Fri, 11 Dec 2020 10:29:18 -0500
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BBF2fWP038032;
+        Fri, 11 Dec 2020 10:29:18 -0500
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35catw9afx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Dec 2020 15:16:27 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BBFGPbo62849458
+        Fri, 11 Dec 2020 10:29:18 -0500
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BBFSfN8006184;
+        Fri, 11 Dec 2020 15:29:15 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3581fhq6wa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Dec 2020 15:29:15 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BBFTCGL16646498
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Dec 2020 15:16:25 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F2CD952067;
-        Fri, 11 Dec 2020 15:16:24 +0000 (GMT)
+        Fri, 11 Dec 2020 15:29:12 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B4E24C052;
+        Fri, 11 Dec 2020 15:29:12 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C991C4C046;
+        Fri, 11 Dec 2020 15:29:06 +0000 (GMT)
 Received: from sig-9-65-201-46.ibm.com (unknown [9.65.201.46])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id BECE352054;
-        Fri, 11 Dec 2020 15:16:23 +0000 (GMT)
-Message-ID: <289450498f2ff2c8186d6ac72bc94f17d354e96d.camel@linux.ibm.com>
-Subject: Re: [PATCH] doc: trusted-encrypted: updates with TEE as a new trust
- source (update)
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 11 Dec 2020 15:29:06 +0000 (GMT)
+Message-ID: <16a279eaf2c209345044c3b4e1e57e2878798940.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 3/4] doc: trusted-encrypted: updates with TEE as a
+ new trust source
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Elaine Palmer <erpalmer@us.ibm.com>, sumit.garg@linaro.org,
-        George Wilson <gcwilson@us.ibm.com>, zgu@us.ibm.com
-Date:   Fri, 11 Dec 2020 10:16:22 -0500
-In-Reply-To: <20201211081454.GA5262@kernel.org>
-References: <20201209164249.715178-1-zohar@linux.ibm.com>
-         <20201211081454.GA5262@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
+Cc:     sumit.garg@linaro.org, Elaine Palmer <erpalmerny@gmail.com>,
+        jarkko.sakkinen@linux.intel.com, jejb@linux.ibm.com,
+        dhowells@redhat.com, jens.wiklander@linaro.org, corbet@lwn.net,
+        jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com,
+        janne.karhunen@gmail.com, daniel.thompson@linaro.org,
+        Markus.Wamser@mixed-mode.de, lhinds@redhat.com,
+        keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org,
+        Kenneth Goldman <kgoldman@us.ibm.com>, gcwilson@linux.ibm.com,
+        zgu@us.ibm.com, stefanb@us.ibm.com, NAYNA JAIN1 <naynjain@ibm.com>,
+        Zohargshu Gu <zgu@us.ibm.com>
+Date:   Fri, 11 Dec 2020 10:29:05 -0500
+In-Reply-To: <20201211103627.GB12091@kernel.org>
+References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
+         <1604419306-26105-4-git-send-email-sumit.garg@linaro.org>
+         <81A6B61D-3811-4957-B270-52AE5FA6DE4F@gmail.com>
+         <20201204153037.GC4922@kernel.org>
+         <ba6cd934bf7460cf6e9fc101a759a63fdd4e6e9b.camel@linux.ibm.com>
+         <20201208174906.GA58572@kernel.org>
+         <b2465d27f3683331019c5a9b6d0856304d992a0a.camel@linux.ibm.com>
+         <20201211103627.GB12091@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-11_03:2020-12-11,2020-12-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=3
- impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
- phishscore=0 clxscore=1015 adultscore=0 mlxscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012110099
+ definitions=2020-12-11_02:2020-12-11,2020-12-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012110095
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Response from Zohargshu Gu <zgu@us.ibm.com>, Elaine Palmer <
-erpalmer@us.ibm.com>]
-
-On Fri, 2020-12-11 at 10:14 +0200, Jarkko Sakkinen wrote:
-> On Wed, Dec 09, 2020 at 11:42:49AM -0500, Mimi Zohar wrote:
-> > From: Elaine Palmer <erpalmer@us.ibm.com>
+On Fri, 2020-12-11 at 12:36 +0200, Jarkko Sakkinen wrote:
+> On Wed, Dec 09, 2020 at 11:50:19AM -0500, Mimi Zohar wrote:
+> > On Tue, 2020-12-08 at 19:49 +0200, Jarkko Sakkinen wrote:
+> > > On Tue, Dec 08, 2020 at 10:02:57AM -0500, Mimi Zohar wrote:
 > > 
-> > Update trusted key documentation with additional comparisons between
-> > discrete TPMs and TEE.
+> > > > > Please also use a proper email client and split your paragraphs into
+> > > > > at most 80 character lines with new line characters when writing email.
+> > > > > I prefer to use 72 character line length so that there's some space
+> > > > > for longer email threads.
+> > > > 
+> > > > Sure, we'll re-post the suggested documentation changes/additions.
+> > > > 
+> > > 
+> > > So. Wouldn't it be a better idea to post a patch that Sumit could
+> > > squash to his (and add co-developed-by tag)?
 > > 
-> > Signed-off-by: Elaine Palmer <erpalmer@us.ibm.com>
+> > I just posted it on Elaine's behalf.
+> >   
 > 
-> Right, so OP-TEE is not the same as TEE. I did not know this and the
-> patch set does not underline this.
-> 
-> I re-checked the patches and none of them say explicitly that OP-TEE
-> is an application living inside TEE.
-> 
-> This essentially means that the backend needs to be renamed as "op_tee".
-> 
-> All patches need to be rewritten according to this.
-> 
-> 
-> > ---
-> >  .../security/keys/trusted-encrypted.rst       | 73 +++++++++++++++++--
-> >  1 file changed, 65 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-> > index 16042c8ff8ae..90c02105ab89 100644
-> > --- a/Documentation/security/keys/trusted-encrypted.rst
-> > +++ b/Documentation/security/keys/trusted-encrypted.rst
-> > @@ -14,12 +14,14 @@ convenience, and are integrity verified.
-> >  Trust Source
-> >  ============
-> >  
-> > -Trust Source provides the source of security for the Trusted Keys, on which
-> > -basis Trusted Keys establishes a Trust model with its user. A Trust Source could
-> > -differ from one system to another depending on its security requirements. It
-> > -could be either an off-chip device or an on-chip device. Following section
-> > -demostrates a list of supported devices along with their security properties/
-> > -guarantees:
-> > +A trust source provides the source of security for Trusted Keys.  This
-> > +section lists currently supported trust sources, along with their security
-> > +considerations.  Whether or not a trust source is sufficiently safe depends
-> > +on the strength and correctness of its implementation, as well as the threat
-> > +environment for a specific use case.  Since the kernel doesn't know what the
-> > +environment is, and there is no metric of trust, it is dependent on the
-> > +consumer of the Trusted Keys to determine if the trust source is sufficiently
-> > +safe.
-> >  
-> >    *  Root of trust for storage
-> >  
-> > @@ -116,6 +118,59 @@ guarantees:
-> >           Provides no protection by itself, relies on the underlying platform for
-> >           features such as tamper resistance.
-> >  
-> > +  *  Provisioning - the trust source's unique and verifiable cryptographic
-> > +     identity is provisioned during manufacturing
-> > +
-> > +     (1) TPM
-> > +
-> > +         The unique and verifiable cryptographic identity is the endorsement
-> > +         key (EK) or its primary seed.  A review of the generation of the EK
-> > +         and its accompanying certificate is part of the Common Criteria
-> > +         evaluation of the product's lifecycle processes (ALC_*).  See "TCG
-> > +         Protection Profile for PC Client Specific TPM 2"
-> > +
-> > +     (2) TEE
-> > +
-> > +         A protection profile for TEEs does not yet exist.  Therefore, the
-> > +         provisioning process that generates the Hardware Unique Key is not
-> > +         evaluated by an independent third party and is highly dependent on
-> > +         the manufacturing environment.
-> 
-> Comparing TPM and TEE does not make logically any sense given that TPM
-> is application and TEE a platfrom.
+> I responded. It's good that this feedback came as I think the whole
+> thing does not have the correct label for it.
 
-Thanks Jarkko for the response.  The other suggestion we have is with
-regard to the "on-chip versus off-chip" section.  TPM can have
-different implementations. That section only covers the traditional
-discrete TPMs.  However, TPM can also be an independent chip packaged
-with processor, e.g., Microsoft Pluton.  TPM can also be implemented in
-system firmware, e.g., Intel Platform Trust Technology (PTT).  We
-suggest renaming this section "Packaging and integration" to cover
-multiple chips, removable daughter cards, multi-chip modules, discrete
-TPMs, fTPMs, exposed buses, etc.
+Every HW is going to want to add "trusted keys" support.   We've seen
+this with Udit Agarwal's "secure keys" proposal for NXP CAAM crypto HW
+accelerator.  If we go down this route to extend "trusted keys" to
+support specific implementations like this one, I strongly recommend
+requiring an accompaying high-level threat model.  This is similar to
+how new LSMs need to comply with Documentation/security/lsm-
+development.rst.
 
-Thank you. 
+Based on Elaine's work with OCP, an example of a high-level threat
+model is "Common Security Threats v1.0” (
+https://www.opencompute.org/documents/common-security-threats-notes-1-pdf
+ ).
 
-Zhongshu, Elaine
+thanks,
+
+Mimi
 
