@@ -2,214 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8942D6DFB
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 03:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B23C2D6E5A
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 04:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389381AbgLKCJc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Dec 2020 21:09:32 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:58586 "EHLO
+        id S2388169AbgLKDLC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Dec 2020 22:11:02 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:38126 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389315AbgLKCJS (ORCPT
+        with ESMTP id S1729331AbgLKDKv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Dec 2020 21:09:18 -0500
+        Thu, 10 Dec 2020 22:10:51 -0500
 Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0D8A820B717A;
-        Thu, 10 Dec 2020 18:08:34 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0D8A820B717A
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1AA7920B717A;
+        Thu, 10 Dec 2020 19:10:10 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1AA7920B717A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1607652516;
-        bh=9X/NJCjbNRL+2FRUiUBV5P5PMfmvUnnF+PMN3fhX2f8=;
+        s=default; t=1607656210;
+        bh=UjXdwP2ZHKFxPJkmlk76kE+9RzmPBF3Xf8HNjv05RPE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qJ4kL50mWser+1/zBiQQ6cfgXARSNcSdfYIGjsCoBZSxWLSshBUJZvb/DGjc/Ikom
-         MC4ou8NBhcD2stSkHZmxXhhPF0g9CQAilLsvTXcs5oYxe2Ix9VQhn+IeyYoU93tdr9
-         iRpoUGFQJC2R1tvx/bZjP6vf8gt1HtBTjTyc+VNY=
-Date:   Thu, 10 Dec 2020 20:08:33 -0600
+        b=iZFK29ut36BwHBbKNBpcvUPr32umM+0qxOCVISeIxhi6k7fwPq+62tCU8Gwl5W5pm
+         4YhdwUVPbyrQP39Wq9uhsPJcZsLYwJASDupHYEkW6gywDAJqD0U67kwwkSt1aysqwc
+         lWL6VcuecrDcXM5Um1L7FU/qizWs6Gg5YQteOUMI=
+Date:   Thu, 10 Dec 2020 21:10:08 -0600
 From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, paul@paul-moore.com, sashal@kernel.org,
-        jmorris@namei.org, nramas@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: Re: [PATCH v7 2/8] IMA: add support to measure buffer data hash
-Message-ID: <20201211020833.GM489768@sequoia>
-References: <20201209194212.5131-1-tusharsu@linux.microsoft.com>
- <20201209194212.5131-3-tusharsu@linux.microsoft.com>
- <20201210223854.GG489768@sequoia>
- <09d42e5e-09bf-af6e-cc45-c2f9bc8b39de@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Maurizio Drocco <maurizio.drocco@ibm.com>,
+        Bruno Meneguele <bmeneg@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.7 03/30] ima: extend boot_aggregate with kernel
+ measurements
+Message-ID: <20201211031008.GN489768@sequoia>
+References: <20200708154116.3199728-1-sashal@kernel.org>
+ <20200708154116.3199728-3-sashal@kernel.org>
+ <1594224793.23056.251.camel@linux.ibm.com>
+ <20200709012735.GX2722994@sasha-vm>
+ <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <09d42e5e-09bf-af6e-cc45-c2f9bc8b39de@linux.microsoft.com>
+In-Reply-To: <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2020-12-10 17:21:19, Tushar Sugandhi wrote:
+On 2020-11-29 08:17:38, Mimi Zohar wrote:
+> Hi Sasha,
 > 
-> 
-> On 2020-12-10 2:38 p.m., Tyler Hicks wrote:
-> > On 2020-12-09 11:42:06, Tushar Sugandhi wrote:
-> > > The original IMA buffer data measurement sizes were small (e.g. boot
-> > > command line), but the new buffer data measurement use cases have data
-> > > sizes that are a lot larger.  Just as IMA measures the file data hash,
-> > > not the file data, IMA should similarly support the option for measuring
-> > > the hash of the buffer data.
-> > > 
-> > > Measuring in-memory buffer-data/buffer-data-hash is different than
-> > > measuring file-data/file-data-hash. For the file, IMA stores the
-> > > measurements in both measurement log and the file's extended attribute -
-> > > which can later be used for appraisal as well. For buffer, the
-> > > measurements are only stored in the IMA log, since the buffer has no
-> > > extended attributes associated with it.
-> > > 
-> > > Introduce a boolean parameter measure_buf_hash to support measuring
-> > > hash of a buffer, which would be much smaller, instead of the buffer
-> > > itself.
-> > > 
-> > > Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> > > ---
-> > >   security/integrity/ima/ima.h                 |  3 +-
-> > >   security/integrity/ima/ima_appraise.c        |  2 +-
-> > >   security/integrity/ima/ima_asymmetric_keys.c |  2 +-
-> > >   security/integrity/ima/ima_main.c            | 36 +++++++++++++++++---
-> > >   security/integrity/ima/ima_queue_keys.c      |  3 +-
-> > >   5 files changed, 38 insertions(+), 8 deletions(-)
-> > > 
-> > > diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> > > index e5622ce8cbb1..fa3044a7539f 100644
-> > > --- a/security/integrity/ima/ima.h
-> > > +++ b/security/integrity/ima/ima.h
-> > > @@ -268,7 +268,8 @@ void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
-> > >   			   struct ima_template_desc *template_desc);
-> > >   void process_buffer_measurement(struct inode *inode, const void *buf, int size,
-> > >   				const char *eventname, enum ima_hooks func,
-> > > -				int pcr, const char *func_data);
-> > > +				int pcr, const char *func_data,
-> > > +				bool measure_buf_hash);
-> > >   void ima_audit_measurement(struct integrity_iint_cache *iint,
-> > >   			   const unsigned char *filename);
-> > >   int ima_alloc_init_template(struct ima_event_data *event_data,
-> > > diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> > > index 8361941ee0a1..46ffa38bab12 100644
-> > > --- a/security/integrity/ima/ima_appraise.c
-> > > +++ b/security/integrity/ima/ima_appraise.c
-> > > @@ -352,7 +352,7 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
-> > >   		if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
-> > >   			process_buffer_measurement(NULL, digest, digestsize,
-> > >   						   "blacklisted-hash", NONE,
-> > > -						   pcr, NULL);
-> > > +						   pcr, NULL, false);
-> > >   	}
-> > >   	return rc;
-> > > diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-> > > index 1c68c500c26f..a74095793936 100644
-> > > --- a/security/integrity/ima/ima_asymmetric_keys.c
-> > > +++ b/security/integrity/ima/ima_asymmetric_keys.c
-> > > @@ -60,5 +60,5 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
-> > >   	 */
-> > >   	process_buffer_measurement(NULL, payload, payload_len,
-> > >   				   keyring->description, KEY_CHECK, 0,
-> > > -				   keyring->description);
-> > > +				   keyring->description, false);
-> > >   }
-> > > diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> > > index e76ef4bfd0f4..03aad13e9e70 100644
-> > > --- a/security/integrity/ima/ima_main.c
-> > > +++ b/security/integrity/ima/ima_main.c
-> > > @@ -779,7 +779,7 @@ int ima_post_load_data(char *buf, loff_t size,
-> > >   }
-> > >   /*
-> > > - * process_buffer_measurement - Measure the buffer to ima log.
-> > > + * process_buffer_measurement - Measure the buffer or the buffer data hash
-> > >    * @inode: inode associated with the object being measured (NULL for KEY_CHECK)
-> > >    * @buf: pointer to the buffer that needs to be added to the log.
-> > >    * @size: size of buffer(in bytes).
-> > > @@ -787,12 +787,23 @@ int ima_post_load_data(char *buf, loff_t size,
-> > >    * @func: IMA hook
-> > >    * @pcr: pcr to extend the measurement
-> > >    * @func_data: private data specific to @func, can be NULL.
-> > > + * @measure_buf_hash: measure buffer hash
-> > >    *
-> > > - * Based on policy, the buffer is measured into the ima log.
-> > > + * Measure the buffer into the IMA log, and extend the @pcr.
-> > > + *
-> > > + * Determine what buffers are allowed to be measured, based on the policy rules
-> > > + * and the IMA hook passed using @func.
-> > > + *
-> > > + * Use @func_data, if provided, to match against the measurement policy rule
-> > > + * data for @func.
-> > > + *
-> > > + * If @measure_buf_hash is set to true - measure hash of the buffer data,
-> > > + * else measure the buffer data itself.
-> > >    */
-> > >   void process_buffer_measurement(struct inode *inode, const void *buf, int size,
-> > >   				const char *eventname, enum ima_hooks func,
-> > > -				int pcr, const char *func_data)
-> > > +				int pcr, const char *func_data,
-> > > +				bool measure_buf_hash)
-> > >   {
-> > >   	int ret = 0;
-> > >   	const char *audit_cause = "ENOMEM";
-> > > @@ -807,6 +818,8 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
-> > >   		struct ima_digest_data hdr;
-> > >   		char digest[IMA_MAX_DIGEST_SIZE];
-> > >   	} hash = {};
-> > > +	char buf_hash[IMA_MAX_DIGEST_SIZE];
-> > > +	int buf_hash_len = hash_digest_size[ima_hash_algo];
-> > >   	int violation = 0;
-> > >   	int action = 0;
-> > >   	u32 secid;
-> > > @@ -849,6 +862,20 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
-> > >   		goto out;
-> > >   	}
-> > > +	if (measure_buf_hash) {
-> > > +		memcpy(buf_hash, hash.hdr.digest, buf_hash_len);
-> > > +
-> > > +		ret = ima_calc_buffer_hash(buf_hash, buf_hash_len,
-> > > +					   iint.ima_hash);
-> > > +		if (ret < 0) {
-> > > +			audit_cause = "measure_buf_hash_error";
-> > > +			goto out;
-> > > +		}
-> > > +
-> > > +		event_data.buf = buf_hash;
-> > > +		event_data.buf_len = buf_hash_len;
-> > > +	}
-> > > +
-> > >   	ret = ima_alloc_init_template(&event_data, &entry, template);
-> > >   	if (ret < 0) {
-> > >   		audit_cause = "alloc_entry";
+> On Wed, 2020-07-08 at 21:27 -0400, Sasha Levin wrote:
+> > On Wed, Jul 08, 2020 at 12:13:13PM -0400, Mimi Zohar wrote:
+> > >Hi Sasha,
+> > >
+> > >On Wed, 2020-07-08 at 11:40 -0400, Sasha Levin wrote:
+> > >> From: Maurizio Drocco <maurizio.drocco@ibm.com>
+> > >>
+> > >> [ Upstream commit 20c59ce010f84300f6c655d32db2610d3433f85c ]
+> > >>
+> > >> Registers 8-9 are used to store measurements of the kernel and its
+> > >> command line (e.g., grub2 bootloader with tpm module enabled). IMA
+> > >> should include them in the boot aggregate. Registers 8-9 should be
+> > >> only included in non-SHA1 digests to avoid ambiguity.
+> > >
+> > >Prior to Linux 5.8, the SHA1 template data hashes were padded before
+> > >being extended into the TPM.  Support for calculating and extending
+> > >the per TPM bank template data digests is only being upstreamed in
+> > >Linux 5.8.
+> > >
+> > >How will attestation servers know whether to include PCRs 8 & 9 in the
+> > >the boot_aggregate calculation?  Now, there is a direct relationship
+> > >between the template data SHA1 padded digest not including PCRs 8 & 9,
+> > >and the new per TPM bank template data digest including them.
 > > 
-> > A few more lines below, not present in this context, is a call to
-> > ima_store_template() with buf as the fourth parameter passed in. That
-> > parameter eventually makes its way to integrity_audit_message() and ends
-> > up as part of an audit message as the value of the "name=" field. This
-> > is usually a filename, the name of a key, or a kexec cmdline. In the
-> > case of measuring SELinux policy, do we want the entire buf to be
-> > included in the audit message?
-> > 
-> > Tyler
-> > 
-> Great catch.
-> We obviously don't want to include the entire buf in the audit message,
-> especially when the measure_buf_hash is set to true. (the buffer being
-> measured is expected to be large in that case)
+> > Got it, I'll drop it then, thank you!
 > 
-> How about the following? Does it look ok to you? Mimi?
-> 
-> if (measure_buf_hash)
->     ret = ima_store_template(entry, violation, NULL, buf_hash, pcr);
-> else
->     ret = ima_store_template(entry, violation, NULL, buf, pcr);
+> After re-thinking this over, I realized that the attestation server can
+> verify the "boot_aggregate" based on the quoted PCRs without knowing
+> whether padded SHA1 hashes or per TPM bank hash values were extended
+> into the TPM[1], but non-SHA1 boot aggregate values [2] should always
+> include PCRs 8 & 9.
 
-I think that looks fine. You could also just pass event_data.buf to
-ima_store_template().
+I'm still not clear on how an attestation server would know to include
+PCRs 8 and 9 after this change came through a stable kernel update. It
+doesn't seem like something appropriate for stable since it requires
+code changes to attestation servers to handle the change.
+
+I know this has already been released in some stable releases, so I'm
+too late, but perhaps I'm missing something.
 
 Tyler
 
 > 
-> ~Tushar
+> Any place commit 6f1a1d103b48 was backported [2], this commit
+> 20c59ce010f8 ("ima: extend boot_aggregate with kernel measurements")
+> should be backported as well.
+> 
+> thanks,
+> 
+> Mimi
+> 
+> [1] commit 1ea973df6e21 ("ima: Calculate and extend PCR with digests in ima_template_entry")
+> [2] commit 6f1a1d103b48 ("ima: Switch to ima_hash_algo for boot aggregate")
 > 
