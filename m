@@ -2,105 +2,227 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B23C2D6E5A
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 04:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF472D6E93
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 04:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388169AbgLKDLC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Dec 2020 22:11:02 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:38126 "EHLO
+        id S2405214AbgLKD2I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Dec 2020 22:28:08 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:40252 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729331AbgLKDKv (ORCPT
+        with ESMTP id S2395077AbgLKD1i (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Dec 2020 22:10:51 -0500
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1AA7920B717A;
-        Thu, 10 Dec 2020 19:10:10 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1AA7920B717A
+        Thu, 10 Dec 2020 22:27:38 -0500
+Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AA7E420B717A;
+        Thu, 10 Dec 2020 19:26:56 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AA7E420B717A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1607656210;
-        bh=UjXdwP2ZHKFxPJkmlk76kE+9RzmPBF3Xf8HNjv05RPE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iZFK29ut36BwHBbKNBpcvUPr32umM+0qxOCVISeIxhi6k7fwPq+62tCU8Gwl5W5pm
-         4YhdwUVPbyrQP39Wq9uhsPJcZsLYwJASDupHYEkW6gywDAJqD0U67kwwkSt1aysqwc
-         lWL6VcuecrDcXM5Um1L7FU/qizWs6Gg5YQteOUMI=
-Date:   Thu, 10 Dec 2020 21:10:08 -0600
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Maurizio Drocco <maurizio.drocco@ibm.com>,
-        Bruno Meneguele <bmeneg@redhat.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.7 03/30] ima: extend boot_aggregate with kernel
- measurements
-Message-ID: <20201211031008.GN489768@sequoia>
-References: <20200708154116.3199728-1-sashal@kernel.org>
- <20200708154116.3199728-3-sashal@kernel.org>
- <1594224793.23056.251.camel@linux.ibm.com>
- <20200709012735.GX2722994@sasha-vm>
- <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
+        s=default; t=1607657217;
+        bh=/e0c0n3IE2pXtjcTFX4BNwIA8+eocPqJr0iF9IzcPzc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=KY7ejHqr2TeGr8ZvPkCaO5kLZZUk2bSWooDafV60aqH2Fg00L1e8QOCFicvLz9v38
+         SRfvbPlH7I8d/satn7O5d5XCEJAjQOsHPjCJsk8y7YHxFWzHLO+hxCdM3Zdbu0ywmS
+         UgCbgJYGbiCErntJpwaW8oTMKXTLuK8E9+zS/1sI=
+Subject: Re: [PATCH v7 3/8] IMA: define a hook to measure kernel integrity
+ critical data
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com, sashal@kernel.org,
+        jmorris@namei.org, nramas@linux.microsoft.com,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20201209194212.5131-1-tusharsu@linux.microsoft.com>
+ <20201209194212.5131-4-tusharsu@linux.microsoft.com>
+ <20201210230218.GH489768@sequoia>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <492dd4a8-1edd-211f-42d5-59c24731ddbb@linux.microsoft.com>
+Date:   Thu, 10 Dec 2020 19:26:56 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
+In-Reply-To: <20201210230218.GH489768@sequoia>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2020-11-29 08:17:38, Mimi Zohar wrote:
-> Hi Sasha,
-> 
-> On Wed, 2020-07-08 at 21:27 -0400, Sasha Levin wrote:
-> > On Wed, Jul 08, 2020 at 12:13:13PM -0400, Mimi Zohar wrote:
-> > >Hi Sasha,
-> > >
-> > >On Wed, 2020-07-08 at 11:40 -0400, Sasha Levin wrote:
-> > >> From: Maurizio Drocco <maurizio.drocco@ibm.com>
-> > >>
-> > >> [ Upstream commit 20c59ce010f84300f6c655d32db2610d3433f85c ]
-> > >>
-> > >> Registers 8-9 are used to store measurements of the kernel and its
-> > >> command line (e.g., grub2 bootloader with tpm module enabled). IMA
-> > >> should include them in the boot aggregate. Registers 8-9 should be
-> > >> only included in non-SHA1 digests to avoid ambiguity.
-> > >
-> > >Prior to Linux 5.8, the SHA1 template data hashes were padded before
-> > >being extended into the TPM.  Support for calculating and extending
-> > >the per TPM bank template data digests is only being upstreamed in
-> > >Linux 5.8.
-> > >
-> > >How will attestation servers know whether to include PCRs 8 & 9 in the
-> > >the boot_aggregate calculation?  Now, there is a direct relationship
-> > >between the template data SHA1 padded digest not including PCRs 8 & 9,
-> > >and the new per TPM bank template data digest including them.
-> > 
-> > Got it, I'll drop it then, thank you!
-> 
-> After re-thinking this over, I realized that the attestation server can
-> verify the "boot_aggregate" based on the quoted PCRs without knowing
-> whether padded SHA1 hashes or per TPM bank hash values were extended
-> into the TPM[1], but non-SHA1 boot aggregate values [2] should always
-> include PCRs 8 & 9.
 
-I'm still not clear on how an attestation server would know to include
-PCRs 8 and 9 after this change came through a stable kernel update. It
-doesn't seem like something appropriate for stable since it requires
-code changes to attestation servers to handle the change.
 
-I know this has already been released in some stable releases, so I'm
-too late, but perhaps I'm missing something.
-
-Tyler
-
+On 2020-12-10 3:02 p.m., Tyler Hicks wrote:
+> On 2020-12-09 11:42:07, Tushar Sugandhi wrote:
+>> IMA provides capabilities to measure file data, and in-memory buffer
+>> data. However, various data structures, policies, and states
+>> stored in kernel memory also impact the integrity of the system.
+>> Several kernel subsystems contain such integrity critical data. These
+>> kernel subsystems help protect the integrity of a device. Currently,
+>> IMA does not provide a generic function for kernel subsystems to measure
+>> their integrity critical data.
+>>   
+>> Define a new IMA hook - ima_measure_critical_data to measure kernel
+>> integrity critical data.
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> ---
+>>   Documentation/ABI/testing/ima_policy |  2 +-
+>>   include/linux/ima.h                  |  6 +++++
+>>   security/integrity/ima/ima.h         |  1 +
+>>   security/integrity/ima/ima_api.c     |  2 +-
+>>   security/integrity/ima/ima_main.c    | 36 ++++++++++++++++++++++++++++
+>>   security/integrity/ima/ima_policy.c  |  2 ++
+>>   6 files changed, 47 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
+>> index e35263f97fc1..6ec7daa87cba 100644
+>> --- a/Documentation/ABI/testing/ima_policy
+>> +++ b/Documentation/ABI/testing/ima_policy
+>> @@ -32,7 +32,7 @@ Description:
+>>   			func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK]MODULE_CHECK]
+>>   			        [FIRMWARE_CHECK]
+>>   				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
+>> -				[KEXEC_CMDLINE] [KEY_CHECK]
+>> +				[KEXEC_CMDLINE] [KEY_CHECK] [CRITICAL_DATA]
+>>   			mask:= [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
+>>   			       [[^]MAY_EXEC]
+>>   			fsmagic:= hex value
+>> diff --git a/include/linux/ima.h b/include/linux/ima.h
+>> index ac3d82f962f2..675f54db6264 100644
+>> --- a/include/linux/ima.h
+>> +++ b/include/linux/ima.h
+>> @@ -30,6 +30,9 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
+>>   extern void ima_post_path_mknod(struct dentry *dentry);
+>>   extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
+>>   extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
+>> +extern void ima_measure_critical_data(const char *event_name,
+>> +				      const void *buf, int buf_len,
+>> +				      bool measure_buf_hash);
+>>   
+>>   #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
+>>   extern void ima_appraise_parse_cmdline(void);
+>> @@ -122,6 +125,9 @@ static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+>>   }
+>>   
+>>   static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
+>> +static inline void ima_measure_critical_data(const char *event_name,
+>> +					     const void *buf, int buf_len,
+>> +					     bool measure_buf_hash) {}
+>>   #endif /* CONFIG_IMA */
+>>   
+>>   #ifndef CONFIG_IMA_KEXEC
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index fa3044a7539f..7d9deda6a8b3 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -201,6 +201,7 @@ static inline unsigned int ima_hash_key(u8 *digest)
+>>   	hook(POLICY_CHECK, policy)			\
+>>   	hook(KEXEC_CMDLINE, kexec_cmdline)		\
+>>   	hook(KEY_CHECK, key)				\
+>> +	hook(CRITICAL_DATA, critical_data)		\
+>>   	hook(MAX_CHECK, none)
+>>   
+>>   #define __ima_hook_enumify(ENUM, str)	ENUM,
+>> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+>> index af218babd198..9917e1730cb6 100644
+>> --- a/security/integrity/ima/ima_api.c
+>> +++ b/security/integrity/ima/ima_api.c
+>> @@ -176,7 +176,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
+>>    *		subj=, obj=, type=, func=, mask=, fsmagic=
+>>    *	subj,obj, and type: are LSM specific.
+>>    *	func: FILE_CHECK | BPRM_CHECK | CREDS_CHECK | MMAP_CHECK | MODULE_CHECK
+>> - *	| KEXEC_CMDLINE | KEY_CHECK
+>> + *	| KEXEC_CMDLINE | KEY_CHECK | CRITICAL_DATA
+>>    *	mask: contains the permission mask
+>>    *	fsmagic: hex value
+>>    *
+>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+>> index 03aad13e9e70..ae59f4a4dd70 100644
+>> --- a/security/integrity/ima/ima_main.c
+>> +++ b/security/integrity/ima/ima_main.c
+>> @@ -922,6 +922,42 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+>>   	fdput(f);
+>>   }
+>>   
+>> +/**
+>> + * ima_measure_critical_data - measure kernel integrity critical data
+>> + * @event_name: event name to be used for the buffer entry
+>> + * @buf: pointer to buffer containing data to measure
+>> + * @buf_len: length of buffer(in bytes)
+>> + * @measure_buf_hash: measure buffer hash
+>> + *
+>> + * Measure the kernel subsystem data, critical to the integrity of the kernel,
+>> + * into the IMA log and extend the @pcr.
+>> + *
+>> + * Use @event_name to describe the state/buffer data change.
+>> + * Examples of critical data (buf) could be kernel in-memory r/o structures,
+>                                   ^
+> 				 @buf
 > 
-> Any place commit 6f1a1d103b48 was backported [2], this commit
-> 20c59ce010f8 ("ima: extend boot_aggregate with kernel measurements")
-> should be backported as well.
+Will do.
+>> + * hash of the memory structures, or data that represents subsystem state
+>> + * change.
+>> + *
+>> + * If @measure_buf_hash is set to true - measure hash of the buffer data,
+>> + * else measure the buffer data itself.
+>> + * measure_buf_hash can be used to save space, if the data being measured
+>        ^
+>        @measure_buf_hash
 > 
-> thanks,
+>> + * is too large.
+>> + *
+>> + * The data (buf) can only be measured, not appraised.
+>                  ^
+> 		@buf
 > 
-> Mimi
+Will do.
+>> + */
+>> +void ima_measure_critical_data(const char *event_name,
+>> +			       const void *buf, int buf_len,
+>> +			       bool measure_buf_hash)
+>> +{
+>> +	if (!event_name || !buf || !buf_len) {
+>> +		pr_err("Invalid arguments passed to %s().\n", __func__);
 > 
-> [1] commit 1ea973df6e21 ("ima: Calculate and extend PCR with digests in ima_template_entry")
-> [2] commit 6f1a1d103b48 ("ima: Switch to ima_hash_algo for boot aggregate")
+> This is a problem for the developer making use of the
+> ima_measure_critical_data() API and shouldn't be logged, IMO, because a
+> user/admin can do nothing about it. I think the error message should be
+> dropped.
 > 
+>> +		return;
+>> +	}
+>> +
+>> +	process_buffer_measurement(NULL, buf, buf_len, event_name,
+>> +				   CRITICAL_DATA, 0, NULL,
+>> +				   measure_buf_hash);
+>> +}
+>> +
+>>   static int __init init_ima(void)
+>>   {
+>>   	int error;
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index 25419c7ff50b..2a0c0603626e 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -1251,6 +1251,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>>   			else if (IS_ENABLED(CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS) &&
+>>   				 strcmp(args[0].from, "KEY_CHECK") == 0)
+>>   				entry->func = KEY_CHECK;
+>> +			else if (strcmp(args[0].from, "CRITICAL_DATA") == 0)
+>> +				entry->func = CRITICAL_DATA;
+>>   			else
+>>   				result = -EINVAL;
+>>   			if (!result)
+> 
+> This hunk and the above change to Documentation/ABI/testing/ima_policy
+> need to be moved to the next patch when you introduce the policy
+> changes.
+> 
+Will do.
+~Tushar
+> Tyler
+> 
+>> -- 
+>> 2.17.1
+>>
