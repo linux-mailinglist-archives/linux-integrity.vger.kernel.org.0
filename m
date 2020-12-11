@@ -2,160 +2,171 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5549F2D6EA1
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 04:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2E92D7159
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 09:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395115AbgLKDaQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Dec 2020 22:30:16 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:40524 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395109AbgLKD3k (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Dec 2020 22:29:40 -0500
-Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1A7BF20B717A;
-        Thu, 10 Dec 2020 19:28:59 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1A7BF20B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1607657339;
-        bh=rcijWVVTMTzX5ZOWnSTyFBk2pvV6w0RdbNA7Gje7iD4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=TBF+wcoIRE6sji0On6Qc1ljAt2RENrh6+/tBpIIOKUNLezGTP/fFVBE7O/nIVjs4b
-         wbRoHeZbMuuwiRsQGmskUBvQS7MgN+f7pn9ysGEfHLolD01YG9kxEofHnE9IONRVq8
-         a2K5As5n+9Cyv1c3U1xLNVqaGYvEgof4qdJYhquw=
-Subject: Re: [PATCH v7 5/8] IMA: limit critical data measurement based on a
- label
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, paul@paul-moore.com, sashal@kernel.org,
-        jmorris@namei.org, nramas@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20201209194212.5131-1-tusharsu@linux.microsoft.com>
- <20201209194212.5131-6-tusharsu@linux.microsoft.com>
- <20201210231505.GJ489768@sequoia>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <730f52ec-4b78-9aac-6c2e-c1ca63c929f1@linux.microsoft.com>
-Date:   Thu, 10 Dec 2020 19:28:58 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2403778AbgLKIP5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Dec 2020 03:15:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55554 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388352AbgLKIPj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 11 Dec 2020 03:15:39 -0500
+Date:   Fri, 11 Dec 2020 10:14:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607674498;
+        bh=iBKehJ8hF1AD6c9e71eHXqVLRytDmT9uPZqT5CPhPn8=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BnekXr6flXd64QnmUlaSAHpzXJVBVlAbibmGSOi8846t51TlJ7Rzp4wc3xBYfBLto
+         x3vNrRVNhOqPUSmcUyzYekb14dcC9GpzsGgIL7wxqZyM6B9hXPB4Bx1Ol1QFKKBXJd
+         KlWgVr2h7Ox5eG7ZucJNKVWdkBC3qq/YNtHqYj5ZEXjof8sB+rk8lHCCDIqiGjFK/C
+         LSOoMkwbgZ5Wo+i58UL59pk7nBWsm5xa0cOlyfdd8BMVFsiaW+YCVuKxz/ylPRLgsR
+         Mhbx61H5mwAQnO4JEuQt6ttrzw2/+uMTWLPXKmI9z5o3EGDGYjprZm0tAN4DXxHgbT
+         1eB+hOsgHXZdg==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Elaine Palmer <erpalmer@us.ibm.com>, sumit.garg@linaro.org,
+        George Wilson <gcwilson@us.ibm.com>, zgu@us.ibm.com
+Subject: Re: [PATCH] doc: trusted-encrypted: updates with TEE as a new trust
+ source (update)
+Message-ID: <20201211081454.GA5262@kernel.org>
+References: <20201209164249.715178-1-zohar@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20201210231505.GJ489768@sequoia>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201209164249.715178-1-zohar@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Wed, Dec 09, 2020 at 11:42:49AM -0500, Mimi Zohar wrote:
+> From: Elaine Palmer <erpalmer@us.ibm.com>
+> 
+> Update trusted key documentation with additional comparisons between
+> discrete TPMs and TEE.
+> 
+> Signed-off-by: Elaine Palmer <erpalmer@us.ibm.com>
+
+Right, so OP-TEE is not the same as TEE. I did not know this and the
+patch set does not underline this.
+
+I re-checked the patches and none of them say explicitly that OP-TEE
+is an application living inside TEE.
+
+This essentially means that the backend needs to be renamed as "op_tee".
+
+All patches need to be rewritten according to this.
 
 
-On 2020-12-10 3:15 p.m., Tyler Hicks wrote:
-> On 2020-12-09 11:42:09, Tushar Sugandhi wrote:
->> System administrators should be able to limit which kernel subsystems
->> they want to measure the critical data for. To enable that, an IMA policy
->> condition to choose specific kernel subsystems is needed. This policy
->> condition would constrain the measurement of the critical data based on
->> a label for the given subsystems.
->>
->> Add a new IMA policy condition - "data_source:=" to the IMA func
->> CRITICAL_DATA to allow measurement of various kernel subsystems. This
->> policy condition would enable the system administrators to restrict the
->> measurement to the labels listed in "data_source:=".
->>
->> Limit the measurement to the labels that are specified in the IMA
->> policy - CRITICAL_DATA+"data_source:=". If "data_sources:=" is not
->> provided with the func CRITICAL_DATA, the data from all the
->> supported kernel subsystems is measured.
->>
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> ---
+>  .../security/keys/trusted-encrypted.rst       | 73 +++++++++++++++++--
+>  1 file changed, 65 insertions(+), 8 deletions(-)
 > 
-> This patch will look good once all the IMA_DATA_SOURCE stuff is moved
-> over from patch #4.
-> 
-> Tyler
-> 
-Sounds good. Will do.
-~Tushar
+> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+> index 16042c8ff8ae..90c02105ab89 100644
+> --- a/Documentation/security/keys/trusted-encrypted.rst
+> +++ b/Documentation/security/keys/trusted-encrypted.rst
+> @@ -14,12 +14,14 @@ convenience, and are integrity verified.
+>  Trust Source
+>  ============
+>  
+> -Trust Source provides the source of security for the Trusted Keys, on which
+> -basis Trusted Keys establishes a Trust model with its user. A Trust Source could
+> -differ from one system to another depending on its security requirements. It
+> -could be either an off-chip device or an on-chip device. Following section
+> -demostrates a list of supported devices along with their security properties/
+> -guarantees:
+> +A trust source provides the source of security for Trusted Keys.  This
+> +section lists currently supported trust sources, along with their security
+> +considerations.  Whether or not a trust source is sufficiently safe depends
+> +on the strength and correctness of its implementation, as well as the threat
+> +environment for a specific use case.  Since the kernel doesn't know what the
+> +environment is, and there is no metric of trust, it is dependent on the
+> +consumer of the Trusted Keys to determine if the trust source is sufficiently
+> +safe.
+>  
+>    *  Root of trust for storage
+>  
+> @@ -116,6 +118,59 @@ guarantees:
+>           Provides no protection by itself, relies on the underlying platform for
+>           features such as tamper resistance.
+>  
+> +  *  Provisioning - the trust source's unique and verifiable cryptographic
+> +     identity is provisioned during manufacturing
+> +
+> +     (1) TPM
+> +
+> +         The unique and verifiable cryptographic identity is the endorsement
+> +         key (EK) or its primary seed.  A review of the generation of the EK
+> +         and its accompanying certificate is part of the Common Criteria
+> +         evaluation of the product's lifecycle processes (ALC_*).  See "TCG
+> +         Protection Profile for PC Client Specific TPM 2"
+> +
+> +     (2) TEE
+> +
+> +         A protection profile for TEEs does not yet exist.  Therefore, the
+> +         provisioning process that generates the Hardware Unique Key is not
+> +         evaluated by an independent third party and is highly dependent on
+> +         the manufacturing environment.
 
->> ---
->>   Documentation/ABI/testing/ima_policy |  2 ++
->>   security/integrity/ima/ima_policy.c  | 26 +++++++++++++++++++++++++-
->>   2 files changed, 27 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
->> index 6ec7daa87cba..0f4ee9e0a455 100644
->> --- a/Documentation/ABI/testing/ima_policy
->> +++ b/Documentation/ABI/testing/ima_policy
->> @@ -52,6 +52,8 @@ Description:
->>   			template:= name of a defined IMA template type
->>   			(eg, ima-ng). Only valid when action is "measure".
->>   			pcr:= decimal value
->> +			data_source:= [label]
->> +			label:= a unique string used for grouping and limiting critical data.
->>   
->>   		  default policy:
->>   			# PROC_SUPER_MAGIC
->> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->> index 9a8ee80a3128..7486d09a3f60 100644
->> --- a/security/integrity/ima/ima_policy.c
->> +++ b/security/integrity/ima/ima_policy.c
->> @@ -934,7 +934,7 @@ enum {
->>   	Opt_uid_lt, Opt_euid_lt, Opt_fowner_lt,
->>   	Opt_appraise_type, Opt_appraise_flag,
->>   	Opt_permit_directio, Opt_pcr, Opt_template, Opt_keyrings,
->> -	Opt_err
->> +	Opt_data_source, Opt_err
->>   };
->>   
->>   static const match_table_t policy_tokens = {
->> @@ -971,6 +971,7 @@ static const match_table_t policy_tokens = {
->>   	{Opt_pcr, "pcr=%s"},
->>   	{Opt_template, "template=%s"},
->>   	{Opt_keyrings, "keyrings=%s"},
->> +	{Opt_data_source, "data_source=%s"},
->>   	{Opt_err, NULL}
->>   };
->>   
->> @@ -1350,6 +1351,23 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
->>   
->>   			entry->flags |= IMA_KEYRINGS;
->>   			break;
->> +		case Opt_data_source:
->> +			ima_log_string(ab, "data_source", args[0].from);
->> +
->> +			if (entry->data_source) {
->> +				result = -EINVAL;
->> +				break;
->> +			}
->> +
->> +			entry->data_source = ima_alloc_rule_opt_list(args);
->> +			if (IS_ERR(entry->data_source)) {
->> +				result = PTR_ERR(entry->data_source);
->> +				entry->data_source = NULL;
->> +				break;
->> +			}
->> +
->> +			entry->flags |= IMA_DATA_SOURCE;
->> +			break;
->>   		case Opt_fsuuid:
->>   			ima_log_string(ab, "fsuuid", args[0].from);
->>   
->> @@ -1730,6 +1748,12 @@ int ima_policy_show(struct seq_file *m, void *v)
->>   		seq_puts(m, " ");
->>   	}
->>   
->> +	if (entry->flags & IMA_DATA_SOURCE) {
->> +		seq_puts(m, "data_source=");
->> +		ima_show_rule_opt_list(m, entry->data_source);
->> +		seq_puts(m, " ");
->> +	}
->> +
->>   	if (entry->flags & IMA_PCR) {
->>   		snprintf(tbuf, sizeof(tbuf), "%d", entry->pcr);
->>   		seq_printf(m, pt(Opt_pcr), tbuf);
->> -- 
->> 2.17.1
->>
+Comparing TPM and TEE does not make logically any sense given that TPM
+is application and TEE a platfrom.
+
+> +
+> +
+> +  *  Cryptography
+> +
+> +     (1) TPM
+> +
+> +         As part of the TPM's mandatory Common Criteria evaluation, the
+> +         correctness of the TPM's implementation of cryptographic algorithms,
+> +         the protection of keys, and the generation of random numbers, and other
+> +         security-relevant functions must be documented, reviewed, and tested by
+> +         an independent third party evaluation agency.  It must meet the
+> +         requirements of FIPS 140-2, FIPS 140-3, or ISO/IEC 19790:2012.
+> +
+> +     (2) TEE
+> +
+> +         Evaluations of cryptographic modules within TEEs are not required, but
+> +         some are available for specific implementations within TEEs.
+> +
+> +
+> +  *  Interfaces and APIs
+> +
+> +     (1) TPM
+> +
+> +         TPMs have well-documented, standardized interfaces and APIs.
+> +
+> +     (2) TEE
+> +
+> +         Unless TEEs implement functionality such as a virtual TPM, they have
+> +         custom interfaces and APIs.
+> +
+> +
+> +  *  Threat model
+> +
+> +     The strength and appropriateness of a particular TPM or TEE for a given
+> +     purpose must be assessed when using them to protect security-relevant data.
+> +
+>  
+>  Key Generation
+>  ==============
+> @@ -123,8 +178,10 @@ Key Generation
+>  Trusted Keys
+>  ------------
+>  
+> -New keys are created from trust source generated random numbers, and are
+> -encrypted/decrypted using trust source storage root key.
+> +New keys are created from random numbers generated in the trust source. They
+> +are encrypted/decrypted using a child key in the storage key hierarchy.
+> +Encryption and decryption of the child key must be protected by a strong
+> +access control policy within the trust source.
+>  
+>    *  TPM (hardware device) based RNG
+>  
+> -- 
+> 2.18.4
+> 
+> 
+
+/Jarkko
