@@ -2,191 +2,256 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 960F22D7D84
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 19:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4276E2D7DEE
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Dec 2020 19:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391580AbgLKR6e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Dec 2020 12:58:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38016 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393130AbgLKR6b (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Dec 2020 12:58:31 -0500
-Date:   Fri, 11 Dec 2020 19:57:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607709471;
-        bh=tkO1EluQu5ZWiVhEjAj2vhHocMYZbvDc67cBYRuuMFA=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ct5CIflkJzrGJpsVozYnkSv813UO7KDvlEXbHpWuhofWaxVMh3xnV65d7Sp+KvmXc
-         w63e24MSp2UN5ytwT0Oh7u3HxUeBjgj3cJoKJ5aK14jKsdYVxn1W7szpL2BSWf2zwV
-         KNIvGciBtqSCrDUQN47ulVuaq37iYXXDEi3bDYkWNT9aPkLedO71zEL5f/6KCYVp8y
-         Ot0aAUwdoX18J9jIZ4zXF+99rkubWuacqq9efy+Sh1/tBv9j7QQ3UIqgLB6ReM0MFW
-         32LzNiA5j5Fpgi77H71ztJX+TRizcDEB1jFSNcfon8YsjHpWALBXTEWYc1wROhDFrd
-         8//GlOfXUaxBg==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@iki.fi>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        enric.balletbo@collabora.com, kernel@collabora.com,
-        dafna3@gmail.com, Andrey Pronin <apronin@chromium.org>
-Subject: Re: [PATCH v2] tpm: ignore failed selftest in probe
-Message-ID: <20201211175745.GA34718@kernel.org>
-References: <20201207135710.17321-1-dafna.hirschfeld@collabora.com>
- <20201208173451.GA57585@kapsi.fi>
- <ca37d350-d79c-41ad-f221-55d8851437bc@collabora.com>
+        id S2393134AbgLKSVa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Dec 2020 13:21:30 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40194 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2392900AbgLKSVS (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 11 Dec 2020 13:21:18 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BBI4s17139690;
+        Fri, 11 Dec 2020 13:19:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
+ cc : subject : in-reply-to : date : message-id : mime-version :
+ content-type; s=pp1; bh=qpGm3kQ0ZbvtzQ9CK1gFqWjG/Rnaoq8h7KtEQcDd1jg=;
+ b=kZ3n3qO27kMYXvJfJDI+ePWP6N/Eb0rVXIoHPBnpUA8Vl6wg6GrlSTnj1MU5ZTuMy3uA
+ PwIVNe2vU8xnihmAwmzW+i7QAqWk3VNFmmEM4EqiLwk/Wx057kju/00oAjIJOOtceW+n
+ 6oQbn/2dH+My9o9wn6leFW6FAp4oefNqusfRdA3KtlgOlufYV9vWEOXCxdyjJVOvWC0W
+ 6FIERIZe4VLFi/qviS7ak2gnr7F8OybRhFn0yVBXicn93yHvUSsl0MQg6kU5zavjqdSI
+ n5DKvG+IuERdxG5V6B6fTpn+zNuLkEYY0Jsny0zCCoIWEPzyeTxq2sl6X4OkFEgEgS0c mg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35cbx63p3b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Dec 2020 13:19:56 -0500
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BBI567Q144454;
+        Fri, 11 Dec 2020 13:19:55 -0500
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35cbx63p2w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Dec 2020 13:19:55 -0500
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BBID6aF009324;
+        Fri, 11 Dec 2020 18:19:54 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma04dal.us.ibm.com with ESMTP id 3581uadvdw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Dec 2020 18:19:54 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BBIJrdO20644190
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Dec 2020 18:19:53 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4237BBE053;
+        Fri, 11 Dec 2020 18:19:53 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 46D2ABE051;
+        Fri, 11 Dec 2020 18:19:43 +0000 (GMT)
+Received: from manicouagan.localdomain (unknown [9.160.59.9])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Fri, 11 Dec 2020 18:19:42 +0000 (GMT)
+References: <20201204195149.611-1-nramas@linux.microsoft.com>
+ <20201204195149.611-3-nramas@linux.microsoft.com>
+ <87ft4louto.fsf@manicouagan.localdomain>
+ <40f8c03a-f08f-d49e-b404-9a6d79873dd1@linux.microsoft.com>
+ <4a8a9d8f-22b8-0961-7c31-39eb1fe9cb65@linux.microsoft.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, robh@kernel.org, gregkh@linuxfoundation.org,
+        james.morse@arm.com, catalin.marinas@arm.com, sashal@kernel.org,
+        will@kernel.org, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, robh+dt@kernel.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        kstewart@linuxfoundation.org, takahiro.akashi@linaro.org,
+        tglx@linutronix.de, masahiroy@kernel.org, bhsharma@redhat.com,
+        mbrugger@suse.com, hsinyi@chromium.org, tao.li@vivo.com,
+        christophe.leroy@c-s.fr, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com
+Subject: Re: [PATCH v10 2/8] powerpc: Move delete_fdt_mem_rsv() to
+ drivers/of/kexec.c
+In-reply-to: <4a8a9d8f-22b8-0961-7c31-39eb1fe9cb65@linux.microsoft.com>
+Date:   Fri, 11 Dec 2020 15:19:40 -0300
+Message-ID: <878sa49pdv.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca37d350-d79c-41ad-f221-55d8851437bc@collabora.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-11_05:2020-12-11,2020-12-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 impostorscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
+ suspectscore=2 priorityscore=1501 phishscore=0 spamscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012110118
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Dec 11, 2020 at 05:56:24PM +0100, Dafna Hirschfeld wrote:
-> Hi,
-> 
-> 
-> Am 08.12.20 um 18:34 schrieb Jarkko Sakkinen:
-> > On Mon, Dec 07, 2020 at 02:57:10PM +0100, Dafna Hirschfeld wrote:
-> > > From: Andrey Pronin <apronin@chromium.org>
-> > > 
-> > > If a TPM firmware update is interrupted, e.g due to loss of power or a
-> > > reset while installing the update, you end with the TPM chip in failure
-> > > mode. TPM_ContinueSelfTest command is called when the device is probed.
-> > > It results in TPM_FAILEDSELFTEST error, and probe fails. The TPM device
-> > > is not created, and that prevents the OS from attempting any further
-> > > recover operations with the TPM. Instead, ignore the error code of the
-> > > TPM_ContinueSelfTest command, and create the device - the chip is out
-> > > there, it's just in failure mode.
-> > > 
-> > > Testing:
-> > > Tested with the swtpm as TPM simulator and a patch in 'libtpms'
-> > > to enter failure mode
-> > > 
-> > > With this settings, the '/dev/tpm0' is created but the tcsd daemon fails
-> > > to run.  In addition, the commands TPM_GetTestResult, TPM_GetCapability
-> > > and TPM_GetRandom were tested.
-> > > 
-> > > A normal operation was tested with an Acer Chromebook R13 device
-> > > (also called Elm) running Debian.
-> > 
-> > Move testing part to the stuff before diffstat.
-> > 
-> > > Signed-off-by: Andrey Pronin <apronin@chromium.org>
-> > > [change the code to still fail in case of fatal error]
-> > 
-> > What is this?
-> 
-> In the original patch, any return value from 'tpm1_do_selftest'
-> is ignored. I change the original patch so that in case of system
->  error (rc < 0) the error is not ignored since this error did not
-> come from the TPM but from the system.
-> 
-> > 
-> > > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> > > 
-> > > ---
-> > > changes since v1:
-> > > - rewriting the commit message
-> > > 
-> > > This commit comes from chromeos:
-> > > https://chromium.googlesource.com/chromiumos/third_party/kernel/+/1065c2fe54d6%5E%21/
-> > > 
-> > > In Chromeos, the selftest fails if the TPM firmware is updated during EC
-> > > reset. In that case the userspace wants to access the TPM for recovery.
-> > > 
-> > > This patch is for TPM 1.2 only, I can also send a patch for TPM 2 if it
-> > > is required that the behaviour stays consistent among the versions.
-> > > 
-> > > libtpms patch:
-> > > https://gitlab.collabora.com/dafna/libtpms/-/commit/42848f4a838636d01ddb5ed353b3990dad3f601d
-> > > 
-> > > TPM tests:
-> > > https://gitlab.collabora.com/dafna/test-tpm1.git
-> > > 
-> > >   drivers/char/tpm/tpm1-cmd.c | 17 ++++++++---------
-> > >   1 file changed, 8 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> > > index ca7158fa6e6c..8b7997ef8d1c 100644
-> > > --- a/drivers/char/tpm/tpm1-cmd.c
-> > > +++ b/drivers/char/tpm/tpm1-cmd.c
-> > > @@ -697,6 +697,8 @@ EXPORT_SYMBOL_GPL(tpm1_do_selftest);
-> > >   /**
-> > >    * tpm1_auto_startup - Perform the standard automatic TPM initialization
-> > >    *                     sequence
-> > > + * NOTE: if tpm1_do_selftest returns with a TPM error code, we return 0 (success)
-> > > + *	 to allow userspace interaction with the TPM when it is on failure mode.
-> > >    * @chip: TPM chip to use
-> > 
-> > 
-> > Please do not use "we ...". Use imperative form.
-> > 
-> > Also that is wrong place for the description:
-> > 
-> > https://www.kernel.org/doc/Documentation/kernel-doc-nano-HOWTO.txt
-> > 
-> > >    *
-> > >    * Returns 0 on success, < 0 in case of fatal error.
-> > > @@ -707,18 +709,15 @@ int tpm1_auto_startup(struct tpm_chip *chip)
-> > >   	rc = tpm1_get_timeouts(chip);
-> > >   	if (rc)
-> > > -		goto out;
-> > > +		return rc < 0 ? rc : -ENODEV;
-> > 
-> > Do not use ternary operators. Also we are interested on
-> > TPM_SELFTESTFAILED only (according to the commit message).
-> > 
-> > I.e. afaik should be
-> > 
-> > 	if (rc) {
-> > 		if (rc == TPM_SELFTESTFAILED)
-> > 			return -ENODEV;
-> > 		else
-> > 			return rc;
-> > 	}
-> 
-> I read the description of TPM_ContinueSelfTest
-> in the spec file
-> https://trustedcomputinggroup.org/wp-content/uploads/TPM-Main-Part-3-Commands_v1.2_rev116_01032011.pdf
-> 
-> It is stated there that when running a command C1 before running TPM_ContinueSelfTest
-> then the command might return error codes TPM_NEEDS_SELFTEST/TPM_DOING_SELFTEST.
-> In those cases the command tpm1_get_timeouts should be called again after  calling
-> 'tpm1_continue_selftest'.
-> So it seems that we can just move the the call to 'tpm1_get_timeouts' to
-> after the call to 'tpm1_continue_selftest'.
-> 
-> I guess that the ChromeOS's TPM can support TPM_GetCapability for TPM_CAP_PROP_TIS_TIMEOUT, also
-> when it is on failure mode and this is why their patch ignores only the
-> result of 'tpm1_do_selftest' and not the result of 'tpm1_get_timeouts'.
-> 
-> The idea of the patch is opposite than what you suggest.
-> If 'tpm1_get_timeouts' returns 'TPM_SELFTESTFAILED' then the code should not return '-ENODEV'
-> since we do want to have '/dev/tpm*' in that case.
-> 
-> Thanks,
-> Dafna
- 
-My mistake.
 
-You only need to add two lines of code:
+Hi Lakshmi,
 
-out:
-	if (rc == TPM_SELFTESTFAILED)
-		rc = 0;
-	if (rc > 0)
-		rc = -ENODEV;
-	return rc;
-}
+Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 
-But how does this patch deal with TPM2?
+> On 12/6/20 5:50 PM, Lakshmi Ramasubramanian wrote:
+>
+> Hi Thiago,
+>
+>> On 12/4/20 6:22 PM, Thiago Jung Bauermann wrote
+>>>
+>>> Hello Lakshmi,
+>>>
+>>> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+>>>
+>>>> delete_fdt_mem_rsv() retrieves the memory reserve map entry, for
+>>>> the given starting address and size, from the device tree blob, and
+>>>> removes the entry from the device tree blob. This function is called
+>>>> to free the resources reserved for the buffer used for carrying forward
+>>>> the IMA measurement logs on kexec. This function does not have
+>>>> architecture specific code, but is currently limited to powerpc.
+>>>>
+>>>> Move delete_fdt_mem_rsv() to "drivers/of/kexec_fdt.c" so that it is
+>>>
+>>> s/kexec_fdt.c/kexec.c/
+>> Missed that in the patch description. Will fix it. Thanks.
+>> 
+>>>> accessible for other architectures as well.
+>>>>
+>>>> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>>> ---
+>>>>   arch/powerpc/include/asm/kexec.h |  1 -
+>>>>   arch/powerpc/kexec/file_load.c   | 32 -----------------
+>>>>   drivers/of/Makefile              |  1 +
+>>>>   drivers/of/kexec.c               | 61 ++++++++++++++++++++++++++++++++
+>>>>   include/linux/kexec.h            |  5 +++
+>>>>   5 files changed, 67 insertions(+), 33 deletions(-)
+>>>>   create mode 100644 drivers/of/kexec.c
+>>>>
+>>>> diff --git a/arch/powerpc/include/asm/kexec.h
+>>>> b/arch/powerpc/include/asm/kexec.h
+>>>> index 55d6ede30c19..7c223031ecdd 100644
+>>>> --- a/arch/powerpc/include/asm/kexec.h
+>>>> +++ b/arch/powerpc/include/asm/kexec.h
+>>>> @@ -126,7 +126,6 @@ int setup_purgatory(struct kimage *image, const void
+>>>> *slave_code,
+>>>>   int setup_new_fdt(const struct kimage *image, void *fdt,
+>>>>             unsigned long initrd_load_addr, unsigned long initrd_len,
+>>>>             const char *cmdline);
+>>>> -int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size);
+>>>>   #ifdef CONFIG_PPC64
+>>>>   struct kexec_buf;
+>>>> diff --git a/arch/powerpc/kexec/file_load.c b/arch/powerpc/kexec/file_load.c
+>>>> index 9a232bc36c8f..9efc98b1e2ae 100644
+>>>> --- a/arch/powerpc/kexec/file_load.c
+>>>> +++ b/arch/powerpc/kexec/file_load.c
+>>>> @@ -109,38 +109,6 @@ int setup_purgatory(struct kimage *image, const void
+>>>> *slave_code,
+>>>>       return 0;
+>>>>   }
+>>>> -/**
+>>>> - * delete_fdt_mem_rsv - delete memory reservation with given address and
+>>>> size
+>>>> - *
+>>>> - * Return: 0 on success, or negative errno on error.
+>>>> - */
+>>>> -int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size)
+>>>> -{
+>>>> -    int i, ret, num_rsvs = fdt_num_mem_rsv(fdt);
+>>>> -
+>>>> -    for (i = 0; i < num_rsvs; i++) {
+>>>> -        uint64_t rsv_start, rsv_size;
+>>>> -
+>>>> -        ret = fdt_get_mem_rsv(fdt, i, &rsv_start, &rsv_size);
+>>>> -        if (ret) {
+>>>> -            pr_err("Malformed device tree.\n");
+>>>> -            return -EINVAL;
+>>>> -        }
+>>>> -
+>>>> -        if (rsv_start == start && rsv_size == size) {
+>>>> -            ret = fdt_del_mem_rsv(fdt, i);
+>>>> -            if (ret) {
+>>>> -                pr_err("Error deleting device tree reservation.\n");
+>>>> -                return -EINVAL;
+>>>> -            }
+>>>> -
+>>>> -            return 0;
+>>>> -        }
+>>>> -    }
+>>>> -
+>>>> -    return -ENOENT;
+>>>> -}
+>>>> -
+>>>>   /*
+>>>>    * setup_new_fdt - modify /chosen and memory reservation for the next
+>>>> kernel
+>>>>    * @image:        kexec image being loaded.
+>>>> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+>>>> index 6e1e5212f058..77d24712c0c8 100644
+>>>> --- a/drivers/of/Makefile
+>>>> +++ b/drivers/of/Makefile
+>>>> @@ -13,5 +13,6 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
+>>>>   obj-$(CONFIG_OF_RESOLVE)  += resolver.o
+>>>>   obj-$(CONFIG_OF_OVERLAY) += overlay.o
+>>>>   obj-$(CONFIG_OF_NUMA) += of_numa.o
+>>>> +obj-$(CONFIG_OF_FLATTREE) += kexec.o
+>>>
+>>> Isn't this too broad? kexec.o will only be useful to kernel configs
+>>> which enable CONFIG_KEXEC_FILE, so perhaps do:
+>>>
+>>> ifdef CONFIG_OF_FLATTREE
+>>> ifdef CONFIG_KEXEC_FILE
+>>> obj-y += kexec.o
+>>> endif
+>>> endif
+>>>
+>>> What do you think?
+>> Per Rob's feedback on v9 patch set, I have moved all the architecture 
+>> independent ima kexec functions to a single file "drivers/of/kexec.c"
+>> Since these functions are enabled on different kernel CONFIGs, I have 
+>> used IS_ENABLED(CONFIG_XYZ) macro instead of "#ifdef" in the C file to
+>> conditionally compile.
+> Per Rob's feedback on the v9 patch, I'll keep the ima kexec functions in a
+> single file (in "drivers/of/kexec.c") and use IS_ENABLED() macro to handle the
+> function calls.
+>
+> I'll make the other changes you'd suggested on v10 patches and will post v11
+> patch set shortly.
 
-This should be opt-in feature or restricted to a narrow subset of TPM
-commands. Please rephrase this for next iteration:
+From a cursory look at the use of functions in this file, I got the
+impression that there wouldn't be any reference to them in kernel
+configs that didn't have CONFIG_KEXEC_FILE enabled, which is why I
+suggested the change above. I think you can make it without any other
+changes to the code.
 
-"The TPM device is not created, and that prevents the OS from attempting
-any further recover operations with the TPM."
+I could be wrong though, and there could be some config which tried to
+use some of these functions even when CONFIG_KEXEC_FILE is disabled. In
+that case, the customary way to resolve it is to provide static inline
+stub versions in a header file (not in a .c file) of just those
+functions that are needed.
 
-What you've sent works only as a PoC.
-	
-/Jarkko
+The reason why placing stub functions in header files is better is that
+then the compiler has visibility of the dummy function when compiling
+the source file which uses the function, and is able to eliminate the
+dead code that arises from the function always returning one value.
+
+Using IS_ENABLED() to do an early return as the first operation in the
+function in a separate .c file means that the compiler doesn't know
+anything and has to put a jump to the dummy function (only to
+immediately return), and retain the code that deals with the possibility
+of different values being returned.
+
+It's not a big deal in this case because none of these functions is in a
+hot path, but it does make the kernel text a tiny bit bigger than
+necessary.
+
+-- 
+Thiago Jung Bauermann
+IBM Linux Technology Center
