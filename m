@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0BA2D88F9
-	for <lists+linux-integrity@lfdr.de>; Sat, 12 Dec 2020 19:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA3D2D88FB
+	for <lists+linux-integrity@lfdr.de>; Sat, 12 Dec 2020 19:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439720AbgLLSEt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 12 Dec 2020 13:04:49 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:51192 "EHLO
+        id S2439725AbgLLSEw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 12 Dec 2020 13:04:52 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:51186 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439716AbgLLSEn (ORCPT
+        with ESMTP id S2439709AbgLLSEm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 12 Dec 2020 13:04:43 -0500
+        Sat, 12 Dec 2020 13:04:42 -0500
 Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2C2AE20B718A;
+        by linux.microsoft.com (Postfix) with ESMTPSA id B7ECD20B718B;
         Sat, 12 Dec 2020 10:03:16 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2C2AE20B718A
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B7ECD20B718B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1607796196;
-        bh=8h7TwgUp8bwboDjUpPUXGzHiI2PtMKaAOLH+dNVFLx0=;
+        s=default; t=1607796197;
+        bh=MM3ClDqEP+SzUBB8BN8JUnd+31NPdgl7RcDy+xWWqKE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nfuurs16uH1Le/5uQ4FD8zxI0Gle0leH6PumeDCppkPT/H9APNChy8JobWBoPjCsO
-         faloXtqnj5E/J7ieas7fydOexV8/7X6QX4JjWMPpB9SAVfYW3EBzN7WUOeYExjd9Ox
-         yL5FwQsU04UaeBPPBX8VQpkSiKdkQZRHpX9EnknA=
+        b=BcV9b1x2lQ6ZunNABOkcHmwGoYXmZS8Ck1AXnDLp+zoGblpL3c1z/QpPMxdlK33Qj
+         /1vc4FiCfFkUE2yGyhy+ojkU51faR4ELM9f/7wxglUCksi8DSmlEO/pz9im83g4CW2
+         szpEPqwa3u1tZiINAm7py6zMYJR8sRRdzkMOMujU=
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
 To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
         casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
@@ -31,9 +31,9 @@ Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
         selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: [PATCH v9 5/8] IMA: limit critical data measurement based on a label
-Date:   Sat, 12 Dec 2020 10:02:48 -0800
-Message-Id: <20201212180251.9943-6-tusharsu@linux.microsoft.com>
+Subject: [PATCH v9 6/8] IMA: extend critical data hook to limit the measurement based on a label
+Date:   Sat, 12 Dec 2020 10:02:49 -0800
+Message-Id: <20201212180251.9943-7-tusharsu@linux.microsoft.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201212180251.9943-1-tusharsu@linux.microsoft.com>
 References: <20201212180251.9943-1-tusharsu@linux.microsoft.com>
@@ -41,138 +41,88 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-System administrators should be able to limit which kernel subsystems
-they want to measure the critical data for. To enable that, an IMA policy
-condition to choose specific kernel subsystems is needed. This policy
-condition would constrain the measurement of the critical data based on
-a label for the given subsystems.
+The IMA hook ima_measure_critical_data() does not support a way to
+specify the source of the critical data provider. Thus, the data
+measurement cannot be constrained based on the data source label
+in the IMA policy.
 
-Add a new IMA policy condition - "data_source:=" to the IMA func
-CRITICAL_DATA to allow measurement of various kernel subsystems. This
-policy condition would enable the system administrators to restrict the
-measurement to the labels listed in "data_source:=".
-
-Limit the measurement to the labels that are specified in the IMA
-policy - CRITICAL_DATA+"data_source:=". If "data_sources:=" is not
-provided with the func CRITICAL_DATA, the data from all the
-supported kernel subsystems is measured.
+Extend the IMA hook ima_measure_critical_data() to support passing 
+the data source label as an input parameter, so that the policy rule can
+be used to limit the measurements based on the label.
 
 Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 ---
- Documentation/ABI/testing/ima_policy |  2 ++
- security/integrity/ima/ima_policy.c  | 37 +++++++++++++++++++++++++---
- 2 files changed, 36 insertions(+), 3 deletions(-)
+ include/linux/ima.h               |  6 ++++--
+ security/integrity/ima/ima_main.c | 11 ++++++++---
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index 6ec7daa87cba..0f4ee9e0a455 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -52,6 +52,8 @@ Description:
- 			template:= name of a defined IMA template type
- 			(eg, ima-ng). Only valid when action is "measure".
- 			pcr:= decimal value
-+			data_source:= [label]
-+			label:= a unique string used for grouping and limiting critical data.
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 675f54db6264..6434287a81cd 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -30,7 +30,8 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
+ extern void ima_post_path_mknod(struct dentry *dentry);
+ extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
+ extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
+-extern void ima_measure_critical_data(const char *event_name,
++extern void ima_measure_critical_data(const char *event_data_source,
++				      const char *event_name,
+ 				      const void *buf, int buf_len,
+ 				      bool measure_buf_hash);
  
- 		  default policy:
- 			# PROC_SUPER_MAGIC
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index d45c2dbb6d45..fea996a9e26c 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -34,6 +34,7 @@
- #define IMA_PCR		0x0100
- #define IMA_FSNAME	0x0200
- #define IMA_KEYRINGS	0x0400
-+#define IMA_DATA_SOURCE	0x0800
+@@ -125,7 +126,8 @@ static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+ }
  
- #define UNKNOWN		0
- #define MEASURE		0x0001	/* same as IMA_MEASURE */
-@@ -85,6 +86,7 @@ struct ima_rule_entry {
- 	} lsm[MAX_LSM_RULES];
- 	char *fsname;
- 	struct ima_rule_opt_list *keyrings; /* Measure keys added to these keyrings */
-+	struct ima_rule_opt_list *data_source; /* Measure data from this source */
- 	struct ima_template_desc *template;
- };
+ static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
+-static inline void ima_measure_critical_data(const char *event_name,
++static inline void ima_measure_critical_data(const char *event_data_source,
++					     const char *event_name,
+ 					     const void *buf, int buf_len,
+ 					     bool measure_buf_hash) {}
+ #endif /* CONFIG_IMA */
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index dff4bce4fb09..cc828ba00790 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -924,6 +924,7 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
  
-@@ -480,7 +482,11 @@ static bool ima_match_rule_data(struct ima_rule_entry *rule,
- 		opt_list = rule->keyrings;
- 		break;
- 	case CRITICAL_DATA:
--		return true;
-+		if (!rule->data_source)
-+			return true;
-+
-+		opt_list = rule->data_source;
-+		break;
- 	default:
- 		return false;
- 	}
-@@ -925,7 +931,7 @@ enum {
- 	Opt_uid_lt, Opt_euid_lt, Opt_fowner_lt,
- 	Opt_appraise_type, Opt_appraise_flag,
- 	Opt_permit_directio, Opt_pcr, Opt_template, Opt_keyrings,
--	Opt_err
-+	Opt_data_source, Opt_err
- };
+ /**
+  * ima_measure_critical_data - measure kernel integrity critical data
++ * @event_data_source: kernel data source being measured
+  * @event_name: event name to be used for the buffer entry
+  * @buf: pointer to buffer containing data to measure
+  * @buf_len: length of buffer(in bytes)
+@@ -932,6 +933,9 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+  * Measure the kernel subsystem data, critical to the integrity of the kernel,
+  * into the IMA log and extend the @pcr.
+  *
++ * Use @event_data_source to describe the kernel data source for the buffer
++ * being measured.
++ *
+  * Use @event_name to describe the state/buffer data change.
+  * Examples of critical data (@buf) could be various data structures,
+  * policies, and states stored in kernel memory that can impact the integrity
+@@ -944,15 +948,16 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+  *
+  * The data (@buf) can only be measured, not appraised.
+  */
+-void ima_measure_critical_data(const char *event_name,
++void ima_measure_critical_data(const char *event_data_source,
++			       const char *event_name,
+ 			       const void *buf, int buf_len,
+ 			       bool measure_buf_hash)
+ {
+-	if (!event_name || !buf || !buf_len)
++	if (!event_name || !event_data_source || !buf || !buf_len)
+ 		return;
  
- static const match_table_t policy_tokens = {
-@@ -962,6 +968,7 @@ static const match_table_t policy_tokens = {
- 	{Opt_pcr, "pcr=%s"},
- 	{Opt_template, "template=%s"},
- 	{Opt_keyrings, "keyrings=%s"},
-+	{Opt_data_source, "data_source=%s"},
- 	{Opt_err, NULL}
- };
+ 	process_buffer_measurement(NULL, buf, buf_len, event_name,
+-				   CRITICAL_DATA, 0, NULL,
++				   CRITICAL_DATA, 0, event_data_source,
+ 				   measure_buf_hash);
+ }
  
-@@ -1129,7 +1136,8 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
- 		if (entry->action & ~(MEASURE | DONT_MEASURE))
- 			return false;
- 
--		if (entry->flags & ~(IMA_FUNC | IMA_UID | IMA_PCR))
-+		if (entry->flags & ~(IMA_FUNC | IMA_UID | IMA_PCR |
-+				     IMA_DATA_SOURCE))
- 			return false;
- 
- 		if (ima_rule_contains_lsm_cond(entry))
-@@ -1339,6 +1347,23 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 
- 			entry->flags |= IMA_KEYRINGS;
- 			break;
-+		case Opt_data_source:
-+			ima_log_string(ab, "data_source", args[0].from);
-+
-+			if (entry->data_source) {
-+				result = -EINVAL;
-+				break;
-+			}
-+
-+			entry->data_source = ima_alloc_rule_opt_list(args);
-+			if (IS_ERR(entry->data_source)) {
-+				result = PTR_ERR(entry->data_source);
-+				entry->data_source = NULL;
-+				break;
-+			}
-+
-+			entry->flags |= IMA_DATA_SOURCE;
-+			break;
- 		case Opt_fsuuid:
- 			ima_log_string(ab, "fsuuid", args[0].from);
- 
-@@ -1719,6 +1744,12 @@ int ima_policy_show(struct seq_file *m, void *v)
- 		seq_puts(m, " ");
- 	}
- 
-+	if (entry->flags & IMA_DATA_SOURCE) {
-+		seq_puts(m, "data_source=");
-+		ima_show_rule_opt_list(m, entry->data_source);
-+		seq_puts(m, " ");
-+	}
-+
- 	if (entry->flags & IMA_PCR) {
- 		snprintf(tbuf, sizeof(tbuf), "%d", entry->pcr);
- 		seq_printf(m, pt(Opt_pcr), tbuf);
 -- 
 2.17.1
 
