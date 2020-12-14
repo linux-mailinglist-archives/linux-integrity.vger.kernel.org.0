@@ -2,76 +2,126 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 197A32D9CD2
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Dec 2020 17:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25EB2D9CDD
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Dec 2020 17:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729598AbgLNQiq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Dec 2020 11:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727024AbgLNQil (ORCPT
+        id S1728826AbgLNQnQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 14 Dec 2020 11:43:16 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:35526 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726223AbgLNQnG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Dec 2020 11:38:41 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F9FC0613D3;
-        Mon, 14 Dec 2020 08:38:01 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: aratiu)
-        with ESMTPSA id DE2D51F442AB
-From:   Adrian Ratiu <adrian.ratiu@collabora.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>
-Cc:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        kernel@collabora.com,
-        "dlaurie@chromium.org" <dlaurie@chromium.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: Re: [PATCH v6] char: tpm: add i2c driver for cr50
-In-Reply-To: <20201211103443.GA12091@kernel.org>
-References: <20201207142016.482122-1-adrian.ratiu@collabora.com>
- <20201208173906.GA58213@kernel.org> <87y2i7b186.fsf@collabora.com>
- <20201211103443.GA12091@kernel.org>
-Date:   Mon, 14 Dec 2020 18:37:55 +0200
-Message-ID: <87v9d4baxo.fsf@collabora.com>
+        Mon, 14 Dec 2020 11:43:06 -0500
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5131F20B717A;
+        Mon, 14 Dec 2020 08:42:24 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5131F20B717A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1607964144;
+        bh=17oy4+dXfaSLajpExnudcAmGMiMK3qcSh76GKO4RE2Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b2qc6msEewlTpaaV0pHx7Usu0G6P2kINFg1UemHsrAy0bPMmhv+KSd6uf9Ipt43F7
+         9ZVKoQrg73yNjw0u7uwhG92+h9a+KuVMhqxpH5ycdsnsUvuE2IjguASH0E3x3Yx3iV
+         XzTsxGp+NTbKbRHRyT9l877JRxZkgxsHU+0yRmnY=
+Date:   Mon, 14 Dec 2020 10:42:22 -0600
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Maurizio Drocco <maurizio.drocco@ibm.com>,
+        Bruno Meneguele <bmeneg@redhat.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.7 03/30] ima: extend boot_aggregate with kernel
+ measurements
+Message-ID: <20201214164222.GK4951@sequoia>
+References: <20200708154116.3199728-1-sashal@kernel.org>
+ <20200708154116.3199728-3-sashal@kernel.org>
+ <1594224793.23056.251.camel@linux.ibm.com>
+ <20200709012735.GX2722994@sasha-vm>
+ <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
+ <20201211031008.GN489768@sequoia>
+ <659c09673affe9637a5d1391c12af3aa710ba78a.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <659c09673affe9637a5d1391c12af3aa710ba78a.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 11 Dec 2020, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> On Wed, Dec 09, 2020 at 02:41:45PM +0200, Adrian Ratiu wrote: 
->> On Tue, 08 Dec 2020, Jarkko Sakkinen <jarkko@kernel.org> wrote: 
->> > On Mon, Dec 07, 2020 at 04:20:16PM +0200, Adrian Ratiu wrote: 
->> > > From: "dlaurie@chromium.org" <dlaurie@chromium.org>  Add 
->> > > TPM 2.0 compatible I2C interface for chips with cr50 
->> > > firmware. The firmware running on the currently supported 
->> > > H1 MCU requires a special driver to handle its specific 
->> > > protocol, and this makes it unsuitable to use 
->> > > tpm_tis_core_* and instead it must implement the underlying 
->> > > TPM protocol similar to the other I2C TPM drivers.   - All 
->> > > 4 bytes of status register must be read/written at once.  - 
->> > > FIFO and burst count is limited to 63 and must be drained 
->> > > by AP.  - Provides an interrupt to indicate when read 
->> > > response data is ready and when the TPM is finished 
->> > > processing write data.   This driver is based on the 
->> > > existing infineon I2C TPM driver, which most closely 
->> > > matches the cr50 i2c protocol behavior. 
->> >  Starts to look legit. Has anyone tested this? 
->>  I tested on an x86_64 Chromebook EVE (aka Google Pixelbook) by 
->> chainloading in legacy mode and booting into a Yocto-based 
->> userspace (meta-chromebook) where I used tpm2-tools to 
->> communicate with the chip and also built and tested a 
->> ChromiumOS userspace in developer mode.   I do not have access 
->> to other HW which has this chip, so it is about as much testing 
->> I can do to confirm the driver works on this HW.   Adrian 
+On 2020-12-11 06:01:54, Mimi Zohar wrote:
+> On Thu, 2020-12-10 at 21:10 -0600, Tyler Hicks wrote:
+> > On 2020-11-29 08:17:38, Mimi Zohar wrote:
+> > > Hi Sasha,
+> > > 
+> > > On Wed, 2020-07-08 at 21:27 -0400, Sasha Levin wrote:
+> > > > On Wed, Jul 08, 2020 at 12:13:13PM -0400, Mimi Zohar wrote:
+> > > > >Hi Sasha,
+> > > > >
+> > > > >On Wed, 2020-07-08 at 11:40 -0400, Sasha Levin wrote:
+> > > > >> From: Maurizio Drocco <maurizio.drocco@ibm.com>
+> > > > >>
+> > > > >> [ Upstream commit 20c59ce010f84300f6c655d32db2610d3433f85c ]
+> > > > >>
+> > > > >> Registers 8-9 are used to store measurements of the kernel and its
+> > > > >> command line (e.g., grub2 bootloader with tpm module enabled). IMA
+> > > > >> should include them in the boot aggregate. Registers 8-9 should be
+> > > > >> only included in non-SHA1 digests to avoid ambiguity.
+> > > > >
+> > > > >Prior to Linux 5.8, the SHA1 template data hashes were padded before
+> > > > >being extended into the TPM.  Support for calculating and extending
+> > > > >the per TPM bank template data digests is only being upstreamed in
+> > > > >Linux 5.8.
+> > > > >
+> > > > >How will attestation servers know whether to include PCRs 8 & 9 in the
+> > > > >the boot_aggregate calculation?  Now, there is a direct relationship
+> > > > >between the template data SHA1 padded digest not including PCRs 8 & 9,
+> > > > >and the new per TPM bank template data digest including them.
+> > > > 
+> > > > Got it, I'll drop it then, thank you!
+> > > 
+> > > After re-thinking this over, I realized that the attestation server can
+> > > verify the "boot_aggregate" based on the quoted PCRs without knowing
+> > > whether padded SHA1 hashes or per TPM bank hash values were extended
+> > > into the TPM[1], but non-SHA1 boot aggregate values [2] should always
+> > > include PCRs 8 & 9.
+> > 
+> > I'm still not clear on how an attestation server would know to include
+> > PCRs 8 and 9 after this change came through a stable kernel update. It
+> > doesn't seem like something appropriate for stable since it requires
+> > code changes to attestation servers to handle the change.
+> > 
+> > I know this has already been released in some stable releases, so I'm
+> > too late, but perhaps I'm missing something.
 > 
-> So can you respond to this with tested-by. It's sufficient 
-> because collateral effects of driver failing are insignificant 
-> for the kernel as whole. 
+> The point of adding PCRs 8 & 9 only to non-SHA1 boot_aggregate values
+> was to avoid affecting existing attestation servers.  The intention was
+> when attestation servers added support for the non-sha1 boot_aggregate
+> values, they'd also include PCRs 8 & 9.  The existing SHA1
+> boot_aggregate value remains PCRs 0 - 7.
 
-Tested-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+AFAIK, there's nothing that prevents the non-SHA1 TPM 2.0 PCR banks from
+being used even before v5.8, albeit with zero padded SHA1 digests.
+Existing attestation servers that already support that configuration are
+broken by this stable backport.
 
->  
->  /Jarkko
+> To prevent this or something similar from happening again, what should
+> have been the proper way of including PCRs 8 & 9?
+
+I don't think that commits like 6f1a1d103b48 ("ima: Switch to
+ima_hash_algo for boot aggregate") and 20c59ce010f8 ("ima: extend
+boot_aggregate with kernel measurements") should be backported to
+stable.
+
+Including PCRs 8 and 9 definitely makes sense to include in the
+boot_aggregate value but limiting such a change to "starting in 5.8",
+rather than "starting in 5.8 and 5.4.82", is the safer approach when
+attestation server modifications are required.
+
+Tyler
+
+> 
+> thanks,
+> 
+> Mimi
+> 
