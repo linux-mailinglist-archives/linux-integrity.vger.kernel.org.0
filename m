@@ -2,126 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F25EB2D9CDD
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Dec 2020 17:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 682422D9CFF
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Dec 2020 17:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728826AbgLNQnQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Dec 2020 11:43:16 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:35526 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726223AbgLNQnG (ORCPT
+        id S2440230AbgLNQzd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 14 Dec 2020 11:55:33 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:41066 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729493AbgLNQzd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Dec 2020 11:43:06 -0500
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5131F20B717A;
-        Mon, 14 Dec 2020 08:42:24 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5131F20B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1607964144;
-        bh=17oy4+dXfaSLajpExnudcAmGMiMK3qcSh76GKO4RE2Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b2qc6msEewlTpaaV0pHx7Usu0G6P2kINFg1UemHsrAy0bPMmhv+KSd6uf9Ipt43F7
-         9ZVKoQrg73yNjw0u7uwhG92+h9a+KuVMhqxpH5ycdsnsUvuE2IjguASH0E3x3Yx3iV
-         XzTsxGp+NTbKbRHRyT9l877JRxZkgxsHU+0yRmnY=
-Date:   Mon, 14 Dec 2020 10:42:22 -0600
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Maurizio Drocco <maurizio.drocco@ibm.com>,
-        Bruno Meneguele <bmeneg@redhat.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.7 03/30] ima: extend boot_aggregate with kernel
- measurements
-Message-ID: <20201214164222.GK4951@sequoia>
-References: <20200708154116.3199728-1-sashal@kernel.org>
- <20200708154116.3199728-3-sashal@kernel.org>
- <1594224793.23056.251.camel@linux.ibm.com>
- <20200709012735.GX2722994@sasha-vm>
- <5b8dcdaf66fbe2a39631833b03772a11613fbbbf.camel@linux.ibm.com>
- <20201211031008.GN489768@sequoia>
- <659c09673affe9637a5d1391c12af3aa710ba78a.camel@linux.ibm.com>
+        Mon, 14 Dec 2020 11:55:33 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id DEE47128098D;
+        Mon, 14 Dec 2020 08:54:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1607964892;
+        bh=UHUbxU8MjLcolafOQDhasLysUHkdYUG7xy2k16O+1GY=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=IUYAI0PlYVLiS73KVZZk1m6bdkXkr7KN9YDFdABNmq/ehJl7I48hhE6x7snZBqHQj
+         Ys30nvM/s2v5usbAJuI3IfN/H9QBwq7ZQLPXUlvvOJR2gUNGy3KBmGSIuEdEn8TMMB
+         1m8gQuwCSwtYVXeZ88OF97M+S7Qk4F2AC/f3oRPU=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id EGkgHWQ1zIzl; Mon, 14 Dec 2020 08:54:52 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 51C9F128098B;
+        Mon, 14 Dec 2020 08:54:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1607964892;
+        bh=UHUbxU8MjLcolafOQDhasLysUHkdYUG7xy2k16O+1GY=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=IUYAI0PlYVLiS73KVZZk1m6bdkXkr7KN9YDFdABNmq/ehJl7I48hhE6x7snZBqHQj
+         Ys30nvM/s2v5usbAJuI3IfN/H9QBwq7ZQLPXUlvvOJR2gUNGy3KBmGSIuEdEn8TMMB
+         1m8gQuwCSwtYVXeZ88OF97M+S7Qk4F2AC/f3oRPU=
+Message-ID: <80f02e5b510d6d11bf8e85be79a6db923c9037d1.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2] tpm: ignore failed selftest in probe
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@iki.fi>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        enric.balletbo@collabora.com, kernel@collabora.com,
+        dafna3@gmail.com, Andrey Pronin <apronin@chromium.org>
+Date:   Mon, 14 Dec 2020 08:54:51 -0800
+In-Reply-To: <eea2618c-f22c-1e68-7502-dcbc2ae7c494@collabora.com>
+References: <20201207135710.17321-1-dafna.hirschfeld@collabora.com>
+         <20201208173451.GA57585@kapsi.fi>
+         <ca37d350-d79c-41ad-f221-55d8851437bc@collabora.com>
+         <20201211175745.GA34718@kernel.org>
+         <eea2618c-f22c-1e68-7502-dcbc2ae7c494@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <659c09673affe9637a5d1391c12af3aa710ba78a.camel@linux.ibm.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2020-12-11 06:01:54, Mimi Zohar wrote:
-> On Thu, 2020-12-10 at 21:10 -0600, Tyler Hicks wrote:
-> > On 2020-11-29 08:17:38, Mimi Zohar wrote:
-> > > Hi Sasha,
-> > > 
-> > > On Wed, 2020-07-08 at 21:27 -0400, Sasha Levin wrote:
-> > > > On Wed, Jul 08, 2020 at 12:13:13PM -0400, Mimi Zohar wrote:
-> > > > >Hi Sasha,
-> > > > >
-> > > > >On Wed, 2020-07-08 at 11:40 -0400, Sasha Levin wrote:
-> > > > >> From: Maurizio Drocco <maurizio.drocco@ibm.com>
-> > > > >>
-> > > > >> [ Upstream commit 20c59ce010f84300f6c655d32db2610d3433f85c ]
-> > > > >>
-> > > > >> Registers 8-9 are used to store measurements of the kernel and its
-> > > > >> command line (e.g., grub2 bootloader with tpm module enabled). IMA
-> > > > >> should include them in the boot aggregate. Registers 8-9 should be
-> > > > >> only included in non-SHA1 digests to avoid ambiguity.
-> > > > >
-> > > > >Prior to Linux 5.8, the SHA1 template data hashes were padded before
-> > > > >being extended into the TPM.  Support for calculating and extending
-> > > > >the per TPM bank template data digests is only being upstreamed in
-> > > > >Linux 5.8.
-> > > > >
-> > > > >How will attestation servers know whether to include PCRs 8 & 9 in the
-> > > > >the boot_aggregate calculation?  Now, there is a direct relationship
-> > > > >between the template data SHA1 padded digest not including PCRs 8 & 9,
-> > > > >and the new per TPM bank template data digest including them.
-> > > > 
-> > > > Got it, I'll drop it then, thank you!
-> > > 
-> > > After re-thinking this over, I realized that the attestation server can
-> > > verify the "boot_aggregate" based on the quoted PCRs without knowing
-> > > whether padded SHA1 hashes or per TPM bank hash values were extended
-> > > into the TPM[1], but non-SHA1 boot aggregate values [2] should always
-> > > include PCRs 8 & 9.
-> > 
-> > I'm still not clear on how an attestation server would know to include
-> > PCRs 8 and 9 after this change came through a stable kernel update. It
-> > doesn't seem like something appropriate for stable since it requires
-> > code changes to attestation servers to handle the change.
-> > 
-> > I know this has already been released in some stable releases, so I'm
-> > too late, but perhaps I'm missing something.
+On Mon, 2020-12-14 at 10:50 +0100, Dafna Hirschfeld wrote:
+> Am 11.12.20 um 18:57 schrieb Jarkko Sakkinen:
+[...]
+> > But how does this patch deal with TPM2?
 > 
-> The point of adding PCRs 8 & 9 only to non-SHA1 boot_aggregate values
-> was to avoid affecting existing attestation servers.  The intention was
-> when attestation servers added support for the non-sha1 boot_aggregate
-> values, they'd also include PCRs 8 & 9.  The existing SHA1
-> boot_aggregate value remains PCRs 0 - 7.
+> It doesn't, I was not sure if there is need to keep consistent
+> behavior between 1.2 and 2. I can send next version with the same
+> behavior for TPM 2.
 
-AFAIK, there's nothing that prevents the non-SHA1 TPM 2.0 PCR banks from
-being used even before v5.8, albeit with zero padded SHA1 digests.
-Existing attestation servers that already support that configuration are
-broken by this stable backport.
+This comes up a lot, so let me give my view that this really has to be
+our requirement going forward.  TPM 1.2 is pretty much a dead device
+and, thanks to being sha1 only, it's definitely not used to provide
+security in any serious devices anymore.  So effectively any patch
+which is TPM 1.2 only is either because there's a problem in a legacy
+system which was fixed in 2.0 or because for some reason the patch
+producer is working on a legacy system, but it also needs to be
+provided for TPM 2.0.
 
-> To prevent this or something similar from happening again, what should
-> have been the proper way of including PCRs 8 & 9?
+On this patch, I've got a TPM 2.0 which I can trigger into failure mode
+on demand (just not get it back again without a power cycle).  Since it
+does correctly respond TPM_RC_FAILURE to every command, it could be
+attached with no command restriction.  The problem is that TPM 2 is an
+agile device so we need to probe some of its characteristics on attach,
+which we can't if it's in a failed state.  So if we're going to attach
+a failed TPM 2, we're going to have to make assumptions about the
+probed values.  What do we use as the assumptions for things like
+number of PCRS (24 woud be reasonable) and hashes and banks (sha1 and
+sha256), attribute table?  The problem here is we only probe this at
+attach, so if the TPM somehow unfails, all of the assumptions are
+likely to be wrong and we're going to get issues ... this last bit
+argues that we should restrict the command list to make sure we don't
+send it a command with incorrect assumptions.
 
-I don't think that commits like 6f1a1d103b48 ("ima: Switch to
-ima_hash_algo for boot aggregate") and 20c59ce010f8 ("ima: extend
-boot_aggregate with kernel measurements") should be backported to
-stable.
+James
 
-Including PCRs 8 and 9 definitely makes sense to include in the
-boot_aggregate value but limiting such a change to "starting in 5.8",
-rather than "starting in 5.8 and 5.4.82", is the safer approach when
-attestation server modifications are required.
 
-Tyler
 
-> 
-> thanks,
-> 
-> Mimi
-> 
