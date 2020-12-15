@@ -2,221 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECFF2DA756
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Dec 2020 06:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1CB2DAD6D
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Dec 2020 13:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725957AbgLOFIF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 15 Dec 2020 00:08:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35022 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725960AbgLOFHz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 15 Dec 2020 00:07:55 -0500
-Date:   Tue, 15 Dec 2020 07:07:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608008834;
-        bh=e5WaUyfmz4Eo6OCzwspptZ2qxSpMgG6bYWuJrOC6ZTM=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T+ukGWeMpgqXuOTKkwU9WpcW7be1R+3JdNESGS+VrlZxRPpi2lzQJF1doFucA5ZhF
-         ABpu2X/6XHyU0Vl8FdWbJWP2H09ZgUhM+r+Rh0dAyddTrd2CJxhfsIxC0z7mDEZ9VF
-         5lbYQ+7dbrTTFYP5HKOapl6Yg4KX8W4jdNErK4FUSJYF+Tu6LPErcMC7wxxnvkSVex
-         qPDPkJFLjIFkY4yFuqay85lKvQHlHas1/pnsLTakmQx0T6D4anb0n74InjlzXW9xh4
-         D0Qp3RzdcG0I0eO79miG8VKI/i9lnjg9z4LgJR+p5z2LiBfrEBD/Rl2yY1P6GbWC9M
-         Su5Q5Bxyr2vPg==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@iki.fi>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        enric.balletbo@collabora.com, kernel@collabora.com,
-        dafna3@gmail.com, Andrey Pronin <apronin@chromium.org>
-Subject: Re: [PATCH v2] tpm: ignore failed selftest in probe
-Message-ID: <20201215050709.GB23937@kernel.org>
-References: <20201207135710.17321-1-dafna.hirschfeld@collabora.com>
- <20201208173451.GA57585@kapsi.fi>
- <ca37d350-d79c-41ad-f221-55d8851437bc@collabora.com>
- <20201211175745.GA34718@kernel.org>
- <eea2618c-f22c-1e68-7502-dcbc2ae7c494@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eea2618c-f22c-1e68-7502-dcbc2ae7c494@collabora.com>
+        id S1727190AbgLOMqP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Dec 2020 07:46:15 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41248 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728841AbgLOMqP (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 15 Dec 2020 07:46:15 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BFCWWVi180926;
+        Tue, 15 Dec 2020 07:45:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=n7uDpeokGZ+dAfGQJNp3tTusSHjI7NCE3+fLK4oiBq8=;
+ b=GpAkp1ri2CgVP0eNuX5OcZ4pcv8UOLlYkjYHfjzvssjhbNBqUwY16QwQ0JEfQ6+4YV+W
+ 2EfQSW3H19HZ39hWUUxCAg5envrepdzC8CO0RtR9KPLfboGDbZeEHppxS9vLxheVtGeQ
+ HsSMXP6ve+jjwowcJT3b3ZGCmwnFg1cReTSENENDA7CdjO2fFVWu60RU70dQaGWdFK9F
+ YHLN7IGXJ2zqhE2/74x0MWT5+T3s4guocCdxXKi6SyA3VOV9MGs481uhUhSclFl5Q6le
+ MHkW3USwQPt9lm+9JWcqreXTX7x1Cj6UaJoMVvelokbm2mblPvCs+sBQugtj4rEe4a9B WQ== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35eumx39w4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Dec 2020 07:45:33 -0500
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BFCY3YY029296;
+        Tue, 15 Dec 2020 12:45:31 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 35d3109d95-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Dec 2020 12:45:31 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BFCjTAr34079006
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Dec 2020 12:45:29 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 347C6AE053;
+        Tue, 15 Dec 2020 12:45:29 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E252AE045;
+        Tue, 15 Dec 2020 12:45:28 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.21.236])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 15 Dec 2020 12:45:27 +0000 (GMT)
+Message-ID: <1d4caa0d060caa9249d97acf5d8a9a0fe944076b.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity subsystem updates for v5.11
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 15 Dec 2020 07:45:27 -0500
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-15_10:2020-12-14,2020-12-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
+ mlxscore=0 spamscore=0 impostorscore=0 clxscore=1015 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012150085
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Dec 14, 2020 at 10:50:25AM +0100, Dafna Hirschfeld wrote:
-> 
-> 
-> Am 11.12.20 um 18:57 schrieb Jarkko Sakkinen:
-> > On Fri, Dec 11, 2020 at 05:56:24PM +0100, Dafna Hirschfeld wrote:
-> > > Hi,
-> > > 
-> > > 
-> > > Am 08.12.20 um 18:34 schrieb Jarkko Sakkinen:
-> > > > On Mon, Dec 07, 2020 at 02:57:10PM +0100, Dafna Hirschfeld wrote:
-> > > > > From: Andrey Pronin <apronin@chromium.org>
-> > > > > 
-> > > > > If a TPM firmware update is interrupted, e.g due to loss of power or a
-> > > > > reset while installing the update, you end with the TPM chip in failure
-> > > > > mode. TPM_ContinueSelfTest command is called when the device is probed.
-> > > > > It results in TPM_FAILEDSELFTEST error, and probe fails. The TPM device
-> > > > > is not created, and that prevents the OS from attempting any further
-> > > > > recover operations with the TPM. Instead, ignore the error code of the
-> > > > > TPM_ContinueSelfTest command, and create the device - the chip is out
-> > > > > there, it's just in failure mode.
-> > > > > 
-> > > > > Testing:
-> > > > > Tested with the swtpm as TPM simulator and a patch in 'libtpms'
-> > > > > to enter failure mode
-> > > > > 
-> > > > > With this settings, the '/dev/tpm0' is created but the tcsd daemon fails
-> > > > > to run.  In addition, the commands TPM_GetTestResult, TPM_GetCapability
-> > > > > and TPM_GetRandom were tested.
-> > > > > 
-> > > > > A normal operation was tested with an Acer Chromebook R13 device
-> > > > > (also called Elm) running Debian.
-> > > > 
-> > > > Move testing part to the stuff before diffstat.
-> > > > 
-> > > > > Signed-off-by: Andrey Pronin <apronin@chromium.org>
-> > > > > [change the code to still fail in case of fatal error]
-> > > > 
-> > > > What is this?
-> > > 
-> > > In the original patch, any return value from 'tpm1_do_selftest'
-> > > is ignored. I change the original patch so that in case of system
-> > >   error (rc < 0) the error is not ignored since this error did not
-> > > come from the TPM but from the system.
-> > > 
-> > > > 
-> > > > > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> > > > > 
-> > > > > ---
-> > > > > changes since v1:
-> > > > > - rewriting the commit message
-> > > > > 
-> > > > > This commit comes from chromeos:
-> > > > > https://chromium.googlesource.com/chromiumos/third_party/kernel/+/1065c2fe54d6%5E%21/
-> > > > > 
-> > > > > In Chromeos, the selftest fails if the TPM firmware is updated during EC
-> > > > > reset. In that case the userspace wants to access the TPM for recovery.
-> > > > > 
-> > > > > This patch is for TPM 1.2 only, I can also send a patch for TPM 2 if it
-> > > > > is required that the behaviour stays consistent among the versions.
-> > > > > 
-> > > > > libtpms patch:
-> > > > > https://gitlab.collabora.com/dafna/libtpms/-/commit/42848f4a838636d01ddb5ed353b3990dad3f601d
-> > > > > 
-> > > > > TPM tests:
-> > > > > https://gitlab.collabora.com/dafna/test-tpm1.git
-> > > > > 
-> > > > >    drivers/char/tpm/tpm1-cmd.c | 17 ++++++++---------
-> > > > >    1 file changed, 8 insertions(+), 9 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> > > > > index ca7158fa6e6c..8b7997ef8d1c 100644
-> > > > > --- a/drivers/char/tpm/tpm1-cmd.c
-> > > > > +++ b/drivers/char/tpm/tpm1-cmd.c
-> > > > > @@ -697,6 +697,8 @@ EXPORT_SYMBOL_GPL(tpm1_do_selftest);
-> > > > >    /**
-> > > > >     * tpm1_auto_startup - Perform the standard automatic TPM initialization
-> > > > >     *                     sequence
-> > > > > + * NOTE: if tpm1_do_selftest returns with a TPM error code, we return 0 (success)
-> > > > > + *	 to allow userspace interaction with the TPM when it is on failure mode.
-> > > > >     * @chip: TPM chip to use
-> > > > 
-> > > > 
-> > > > Please do not use "we ...". Use imperative form.
-> > > > 
-> > > > Also that is wrong place for the description:
-> > > > 
-> > > > https://www.kernel.org/doc/Documentation/kernel-doc-nano-HOWTO.txt
-> > > > 
-> > > > >     *
-> > > > >     * Returns 0 on success, < 0 in case of fatal error.
-> > > > > @@ -707,18 +709,15 @@ int tpm1_auto_startup(struct tpm_chip *chip)
-> > > > >    	rc = tpm1_get_timeouts(chip);
-> > > > >    	if (rc)
-> > > > > -		goto out;
-> > > > > +		return rc < 0 ? rc : -ENODEV;
-> > > > 
-> > > > Do not use ternary operators. Also we are interested on
-> > > > TPM_SELFTESTFAILED only (according to the commit message).
-> > > > 
-> > > > I.e. afaik should be
-> > > > 
-> > > > 	if (rc) {
-> > > > 		if (rc == TPM_SELFTESTFAILED)
-> > > > 			return -ENODEV;
-> > > > 		else
-> > > > 			return rc;
-> > > > 	}
-> > > 
-> > > I read the description of TPM_ContinueSelfTest
-> > > in the spec file
-> > > https://trustedcomputinggroup.org/wp-content/uploads/TPM-Main-Part-3-Commands_v1.2_rev116_01032011.pdf
-> > > 
-> > > It is stated there that when running a command C1 before running TPM_ContinueSelfTest
-> > > then the command might return error codes TPM_NEEDS_SELFTEST/TPM_DOING_SELFTEST.
-> > > In those cases the command tpm1_get_timeouts should be called again after  calling
-> > > 'tpm1_continue_selftest'.
-> > > So it seems that we can just move the the call to 'tpm1_get_timeouts' to
-> > > after the call to 'tpm1_continue_selftest'.
-> > > 
-> > > I guess that the ChromeOS's TPM can support TPM_GetCapability for TPM_CAP_PROP_TIS_TIMEOUT, also
-> > > when it is on failure mode and this is why their patch ignores only the
-> > > result of 'tpm1_do_selftest' and not the result of 'tpm1_get_timeouts'.
-> > > 
-> > > The idea of the patch is opposite than what you suggest.
-> > > If 'tpm1_get_timeouts' returns 'TPM_SELFTESTFAILED' then the code should not return '-ENODEV'
-> > > since we do want to have '/dev/tpm*' in that case.
-> > > 
-> > > Thanks,
-> > > Dafna
-> > My mistake.
-> > 
-> > You only need to add two lines of code:
-> > 
-> > out:
-> > 	if (rc == TPM_SELFTESTFAILED)
-> > 		rc = 0;
-> > 	if (rc > 0)
-> > 		rc = -ENODEV;
-> > 	return rc;
-> > }
-> > 
-> > But how does this patch deal with TPM2?
-> 
-> It doesn't, I was not sure if there is need to keep consistent behavior
-> between 1.2 and 2. I can send next version with the same behavior for TPM 2.
+Hi Linus,
 
-Yeah, it would make sense have consistent behaviour.
+Included in this pull request are just 3 patches.  Other integrity
+changes are being upstreamed via EFI (defines a common EFI secure and
+trusted boot IMA policy) and BPF LSM (exporting the IMA file cache hash
+info based on inode).
 
-> > This should be opt-in feature or restricted to a narrow subset of TPM
-> > commands. Please rephrase this for next iteration:
-> > 
-> > "The TPM device is not created, and that prevents the OS from attempting
-> > any further recover operations with the TPM."
-> > 
-> 
-> In failure mode, the TPM should fail for almost all commands except for
-> TPM_GetTestResult, and some params of TPM_GetCapability. So I don't see a
-> reason to restrict the commands in the kernel.
-> 
-> Can you be more clear, what should I rephrase in the above sentence?
-> should I describe in detail the recovery steps?
+The 3 patches included in this pull request:
+- bug fix: fail calculating the file hash, when a file not opened for
+read and the attempt to re-open it for read fails.
+- defer processing the "ima_appraise" boot command line option to avoid
+enabling different modes (e.g. fix, log) to when the secure boot flag
+is available on arm.
+- defines "ima-buf" as the default IMA buffer measurement template in
+preparation for the builtin integrity "critical data" policy.
 
-This changes the ABI behaviour from previous kernel versions.
+thanks,
 
-> > What you've sent works only as a PoC.
-> 
-> Can you give more details of what should be added to the patch so
-> it is not just a PoC ?
-> 
-> Thanks,
-> Dafna
+Mimi
 
-You don't make it explicit how the "broken" TPM is used by the user
-space. This makes it imposibble to decipher whether this the right
-way to change the kernel or not.
 
-/Jarkko
+The following changes since commit 3cea11cd5e3b00d91caf0b4730194039b45c5891:
+
+  Linux 5.10-rc2 (2020-11-01 14:43:51 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.11
+
+for you to fetch changes up to 207cdd565dfc95a0a5185263a567817b7ebf5467:
+
+  ima: Don't modify file descriptor mode on the fly (2020-11-29 07:02:53 -0500)
+
+----------------------------------------------------------------
+integrity-v5.11
+
+----------------------------------------------------------------
+Ard Biesheuvel (1):
+      ima: defer arch_ima_get_secureboot() call to IMA init time
+
+Lakshmi Ramasubramanian (1):
+      ima: select ima-buf template for buffer measurement
+
+Roberto Sassu (1):
+      ima: Don't modify file descriptor mode on the fly
+
+ include/linux/ima.h                   |  6 ++++++
+ security/integrity/ima/ima.h          |  1 +
+ security/integrity/ima/ima_appraise.c | 17 +++++++++++------
+ security/integrity/ima/ima_crypto.c   | 20 +++++---------------
+ security/integrity/ima/ima_main.c     | 25 ++++++++++---------------
+ security/integrity/ima/ima_policy.c   |  2 +-
+ security/integrity/ima/ima_template.c | 26 ++++++++++++++++++++++++++
+ 7 files changed, 60 insertions(+), 37 deletions(-)
+
