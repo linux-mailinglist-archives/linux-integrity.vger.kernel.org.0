@@ -2,127 +2,208 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1CB2DAD6D
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Dec 2020 13:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F23EC2DAE26
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Dec 2020 14:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727190AbgLOMqP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 15 Dec 2020 07:46:15 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41248 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728841AbgLOMqP (ORCPT
+        id S1727200AbgLONjf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Dec 2020 08:39:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727925AbgLONjZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 15 Dec 2020 07:46:15 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BFCWWVi180926;
-        Tue, 15 Dec 2020 07:45:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : mime-version :
- content-transfer-encoding; s=pp1;
- bh=n7uDpeokGZ+dAfGQJNp3tTusSHjI7NCE3+fLK4oiBq8=;
- b=GpAkp1ri2CgVP0eNuX5OcZ4pcv8UOLlYkjYHfjzvssjhbNBqUwY16QwQ0JEfQ6+4YV+W
- 2EfQSW3H19HZ39hWUUxCAg5envrepdzC8CO0RtR9KPLfboGDbZeEHppxS9vLxheVtGeQ
- HsSMXP6ve+jjwowcJT3b3ZGCmwnFg1cReTSENENDA7CdjO2fFVWu60RU70dQaGWdFK9F
- YHLN7IGXJ2zqhE2/74x0MWT5+T3s4guocCdxXKi6SyA3VOV9MGs481uhUhSclFl5Q6le
- MHkW3USwQPt9lm+9JWcqreXTX7x1Cj6UaJoMVvelokbm2mblPvCs+sBQugtj4rEe4a9B WQ== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 35eumx39w4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Dec 2020 07:45:33 -0500
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BFCY3YY029296;
-        Tue, 15 Dec 2020 12:45:31 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 35d3109d95-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Dec 2020 12:45:31 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BFCjTAr34079006
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Dec 2020 12:45:29 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 347C6AE053;
-        Tue, 15 Dec 2020 12:45:29 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E252AE045;
-        Tue, 15 Dec 2020 12:45:28 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.21.236])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Dec 2020 12:45:27 +0000 (GMT)
-Message-ID: <1d4caa0d060caa9249d97acf5d8a9a0fe944076b.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity subsystem updates for v5.11
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 15 Dec 2020 07:45:27 -0500
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-15_10:2020-12-14,2020-12-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- bulkscore=0 phishscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
- mlxscore=0 spamscore=0 impostorscore=0 clxscore=1015 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012150085
+        Tue, 15 Dec 2020 08:39:25 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E74DC061282;
+        Tue, 15 Dec 2020 05:38:10 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id y19so39335428lfa.13;
+        Tue, 15 Dec 2020 05:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l3rwgtx+k7bK/9dBR4Eu+0zKh7+91fkk0ZrYSZag/yU=;
+        b=kHt3u4Revzv7Xvn5lOD0zme4cBX7WpulkbNUUAvgG7ZOraIqKvo+V4O/MDw4G/KyDl
+         m5mpUVimtoVSADL47QyNxxisySs4XZ7ANW62q1uEvUcWLng4p3zR1BSFJVM3YgvKT5hu
+         QhHlpUfz5O4JhUC3Q6IeqyYq2iIYhr/bLnJavmcPNCcbfjptfo8bNZYvKi97UjBccM3t
+         Gi+zaRKiD8S8gDBimZArddRTp25yLcdVQwOP9Fd/FqML7iofdioEcsid19FG3wVeigEU
+         KLj5GH+d1bUWRRaFzT9yeX5zPYLcRmsgGd/vlwSy2A45pogztbjcCRmICDebuuZuA8cw
+         uRvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l3rwgtx+k7bK/9dBR4Eu+0zKh7+91fkk0ZrYSZag/yU=;
+        b=LiEpRNmGcnIKo4mDw7HFV8o11BNCULw0EITEJYhbJEhgqbNZ2uPhuOTl6JtZ7cabDG
+         dApr6AWvpmSpFK7u0obupqUBt67Vqf3OUdLngsXSJuOGUCFdcSAnWOLdUB3BC/2Tdl5j
+         Z26Y8nciwIIts6HSXYcDojPkElKpykipXptoQNHBD+R9Xcv4urBkLGPwR0w/dwTbjViq
+         3CJ2w7BAUJZYzoy6oVZPEbulAxD5xc61o8IvZuqDlSYSHfecOfb9L1lm38ezTvfKWps6
+         P0tSzD8ab+rqNuNKtJFJhkhfb/G8maYi4pe3XY+XTFaWtzr13bwuc4DZzvD3Q6JIlHg9
+         /eeg==
+X-Gm-Message-State: AOAM5300gd0hyFGleF8EZTMoCcHfdec3E8jadQ7zSrEty4R46DQUgUXP
+        dduLWaP/413MN/jL3DQRIUI=
+X-Google-Smtp-Source: ABdhPJyymFFz0RNoj3qwTVZD409RgrSTmwHzKoF2z7yvGDRCs/p53YRu6FpcVwZzie9VJ0I9ikuIxw==
+X-Received: by 2002:ac2:454e:: with SMTP id j14mr11302225lfm.123.1608039488812;
+        Tue, 15 Dec 2020 05:38:08 -0800 (PST)
+Received: from localhost.localdomain (109-252-202-142.dynamic.spd-mgts.ru. [109.252.202.142])
+        by smtp.gmail.com with ESMTPSA id u30sm209019lfc.238.2020.12.15.05.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Dec 2020 05:38:07 -0800 (PST)
+From:   Sergey Temerkhanov <s.temerkhanov@gmail.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Sergey Temerkhanov <s.temerkhanov@gmail.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] tpm: Rework open/close/shutdown to avoid races
+Date:   Tue, 15 Dec 2020 16:38:01 +0300
+Message-Id: <20201215133801.546207-1-s.temerkhanov@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
+Avoid race condition at shutdown by shutting downn the TPM 2.0
+devices synchronously. This eliminates the condition when the
+shutdown sequence sets chip->ops to NULL leading to the following:
 
-Included in this pull request are just 3 patches.  Other integrity
-changes are being upstreamed via EFI (defines a common EFI secure and
-trusted boot IMA policy) and BPF LSM (exporting the IMA file cache hash
-info based on inode).
+[ 1586.593561][ T8669] tpm2_del_space+0x28/0x73
+[ 1586.598718][ T8669] tpmrm_release+0x27/0x33wq
+[ 1586.603774][ T8669] __fput+0x109/0x1d
+[ 1586.608380][ T8669] task_work_run+0x7c/0x90
+[ 1586.613414][ T8669] prepare_exit_to_usermode+0xb8/0x128
+[ 1586.619522][ T8669] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[ 1586.626068][ T8669] RIP: 0033:0x4cb4bb
 
-The 3 patches included in this pull request:
-- bug fix: fail calculating the file hash, when a file not opened for
-read and the attempt to re-open it for read fails.
-- defer processing the "ima_appraise" boot command line option to avoid
-enabling different modes (e.g. fix, log) to when the secure boot flag
-is available on arm.
-- defines "ima-buf" as the default IMA buffer measurement template in
-preparation for the builtin integrity "critical data" policy.
+Signed-off-by: Sergey Temerkhanov <s.temerkhanov@gmail.com>
+---
+ drivers/char/tpm/tpm-chip.c  |  2 ++
+ drivers/char/tpm/tpm-dev.c   | 20 +++++++++++++-------
+ drivers/char/tpm/tpmrm-dev.c |  3 +++
+ include/linux/tpm.h          |  6 ++++--
+ 4 files changed, 22 insertions(+), 9 deletions(-)
 
-thanks,
-
-Mimi
-
-
-The following changes since commit 3cea11cd5e3b00d91caf0b4730194039b45c5891:
-
-  Linux 5.10-rc2 (2020-11-01 14:43:51 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.11
-
-for you to fetch changes up to 207cdd565dfc95a0a5185263a567817b7ebf5467:
-
-  ima: Don't modify file descriptor mode on the fly (2020-11-29 07:02:53 -0500)
-
-----------------------------------------------------------------
-integrity-v5.11
-
-----------------------------------------------------------------
-Ard Biesheuvel (1):
-      ima: defer arch_ima_get_secureboot() call to IMA init time
-
-Lakshmi Ramasubramanian (1):
-      ima: select ima-buf template for buffer measurement
-
-Roberto Sassu (1):
-      ima: Don't modify file descriptor mode on the fly
-
- include/linux/ima.h                   |  6 ++++++
- security/integrity/ima/ima.h          |  1 +
- security/integrity/ima/ima_appraise.c | 17 +++++++++++------
- security/integrity/ima/ima_crypto.c   | 20 +++++---------------
- security/integrity/ima/ima_main.c     | 25 ++++++++++---------------
- security/integrity/ima/ima_policy.c   |  2 +-
- security/integrity/ima/ima_template.c | 26 ++++++++++++++++++++++++++
- 7 files changed, 60 insertions(+), 37 deletions(-)
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index ddaeceb7e109..e94148b8e180 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -295,6 +295,7 @@ static int tpm_class_shutdown(struct device *dev)
+ {
+ 	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
+ 
++	wait_event_idle(chip->waitq, !atomic_read(&chip->refcount));
+ 	down_write(&chip->ops_sem);
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+ 		if (!tpm_chip_start(chip)) {
+@@ -330,6 +331,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+ 
+ 	mutex_init(&chip->tpm_mutex);
+ 	init_rwsem(&chip->ops_sem);
++	init_waitqueue_head(&chip->waitq);
+ 
+ 	chip->ops = ops;
+ 
+diff --git a/drivers/char/tpm/tpm-dev.c b/drivers/char/tpm/tpm-dev.c
+index e2c0baa69fef..8558f0f7382c 100644
+--- a/drivers/char/tpm/tpm-dev.c
++++ b/drivers/char/tpm/tpm-dev.c
+@@ -19,27 +19,32 @@ static int tpm_open(struct inode *inode, struct file *file)
+ {
+ 	struct tpm_chip *chip;
+ 	struct file_priv *priv;
++	int ret = 0;
+ 
+ 	chip = container_of(inode->i_cdev, struct tpm_chip, cdev);
+ 
+ 	/* It's assured that the chip will be opened just once,
+-	 * by the check of is_open variable, which is protected
+-	 * by driver_lock. */
+-	if (test_and_set_bit(0, &chip->is_open)) {
++	 * by the check of the chip reference count.
++	 */
++	if (atomic_fetch_inc(&chip->refcount)) {
+ 		dev_dbg(&chip->dev, "Another process owns this TPM\n");
+-		return -EBUSY;
++		ret = -EBUSY;
++		goto out;
+ 	}
+ 
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+-	if (priv == NULL)
++	if (priv == NULL) {
++		ret = -ENOMEM;
+ 		goto out;
++	}
+ 
+ 	tpm_common_open(file, chip, priv, NULL);
+ 
+ 	return 0;
+ 
+  out:
+-	clear_bit(0, &chip->is_open);
++	atomic_dec(&chip->refcount);
++	wake_up_all(&chip->waitq);
+ 	return -ENOMEM;
+ }
+ 
+@@ -51,7 +56,8 @@ static int tpm_release(struct inode *inode, struct file *file)
+ 	struct file_priv *priv = file->private_data;
+ 
+ 	tpm_common_release(file, priv);
+-	clear_bit(0, &priv->chip->is_open);
++	atomic_dec(&priv->chip->refcount);
++	wake_up_all(&priv->chip->waitq);
+ 	kfree(priv);
+ 
+ 	return 0;
+diff --git a/drivers/char/tpm/tpmrm-dev.c b/drivers/char/tpm/tpmrm-dev.c
+index eef0fb06ea83..fb3cb7b03814 100644
+--- a/drivers/char/tpm/tpmrm-dev.c
++++ b/drivers/char/tpm/tpmrm-dev.c
+@@ -28,6 +28,7 @@ static int tpmrm_open(struct inode *inode, struct file *file)
+ 	}
+ 
+ 	tpm_common_open(file, chip, &priv->priv, &priv->space);
++	atomic_inc(&chip->refcount);
+ 
+ 	return 0;
+ }
+@@ -39,6 +40,8 @@ static int tpmrm_release(struct inode *inode, struct file *file)
+ 
+ 	tpm_common_release(file, fpriv);
+ 	tpm2_del_space(fpriv->chip, &priv->space);
++	atomic_dec(&fpriv->chip->refcount);
++	wake_up_all(&fpriv->chip->waitq);
+ 	kfree(priv);
+ 
+ 	return 0;
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 8f4ff39f51e7..0c8842783823 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -22,6 +22,7 @@
+ #include <linux/cdev.h>
+ #include <linux/fs.h>
+ #include <linux/highmem.h>
++#include <linux/atomic.h>
+ #include <crypto/hash_info.h>
+ 
+ #define TPM_DIGEST_SIZE 20	/* Max TPM v1.2 PCR size */
+@@ -128,8 +129,9 @@ struct tpm_chip {
+ 
+ 	unsigned int flags;
+ 
+-	int dev_num;		/* /dev/tpm# */
+-	unsigned long is_open;	/* only one allowed */
++	int dev_num;		 /* /dev/tpm# */
++	atomic_t refcount;	 /* /dev/tmp# can only be opened once */
++	wait_queue_head_t waitq; /* Wait queue for synchronous ops */
+ 
+ 	char hwrng_name[64];
+ 	struct hwrng hwrng;
+-- 
+2.25.1
 
