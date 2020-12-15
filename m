@@ -2,351 +2,221 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A16BA2DA343
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Dec 2020 23:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECFF2DA756
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Dec 2020 06:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438568AbgLNWUh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Dec 2020 17:20:37 -0500
-Received: from mx2.suse.de ([195.135.220.15]:44236 "EHLO mx2.suse.de"
+        id S1725957AbgLOFIF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Dec 2020 00:08:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438470AbgLNWUh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Dec 2020 17:20:37 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 4461DAF32;
-        Mon, 14 Dec 2020 22:19:55 +0000 (UTC)
-From:   Petr Vorel <pvorel@suse.cz>
-To:     ltp@lists.linux.it
-Cc:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH v5 4/4] ima_tpm.sh: Fix calculating PCR aggregate
-Date:   Mon, 14 Dec 2020 23:19:46 +0100
-Message-Id: <20201214221946.6340-5-pvorel@suse.cz>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201214221946.6340-1-pvorel@suse.cz>
-References: <20201214221946.6340-1-pvorel@suse.cz>
+        id S1725960AbgLOFHz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 15 Dec 2020 00:07:55 -0500
+Date:   Tue, 15 Dec 2020 07:07:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608008834;
+        bh=e5WaUyfmz4Eo6OCzwspptZ2qxSpMgG6bYWuJrOC6ZTM=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T+ukGWeMpgqXuOTKkwU9WpcW7be1R+3JdNESGS+VrlZxRPpi2lzQJF1doFucA5ZhF
+         ABpu2X/6XHyU0Vl8FdWbJWP2H09ZgUhM+r+Rh0dAyddTrd2CJxhfsIxC0z7mDEZ9VF
+         5lbYQ+7dbrTTFYP5HKOapl6Yg4KX8W4jdNErK4FUSJYF+Tu6LPErcMC7wxxnvkSVex
+         qPDPkJFLjIFkY4yFuqay85lKvQHlHas1/pnsLTakmQx0T6D4anb0n74InjlzXW9xh4
+         D0Qp3RzdcG0I0eO79miG8VKI/i9lnjg9z4LgJR+p5z2LiBfrEBD/Rl2yY1P6GbWC9M
+         Su5Q5Bxyr2vPg==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@iki.fi>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        enric.balletbo@collabora.com, kernel@collabora.com,
+        dafna3@gmail.com, Andrey Pronin <apronin@chromium.org>
+Subject: Re: [PATCH v2] tpm: ignore failed selftest in probe
+Message-ID: <20201215050709.GB23937@kernel.org>
+References: <20201207135710.17321-1-dafna.hirschfeld@collabora.com>
+ <20201208173451.GA57585@kapsi.fi>
+ <ca37d350-d79c-41ad-f221-55d8851437bc@collabora.com>
+ <20201211175745.GA34718@kernel.org>
+ <eea2618c-f22c-1e68-7502-dcbc2ae7c494@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eea2618c-f22c-1e68-7502-dcbc2ae7c494@collabora.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-for TPM 2.0 and support more evmctl versions.
+On Mon, Dec 14, 2020 at 10:50:25AM +0100, Dafna Hirschfeld wrote:
+> 
+> 
+> Am 11.12.20 um 18:57 schrieb Jarkko Sakkinen:
+> > On Fri, Dec 11, 2020 at 05:56:24PM +0100, Dafna Hirschfeld wrote:
+> > > Hi,
+> > > 
+> > > 
+> > > Am 08.12.20 um 18:34 schrieb Jarkko Sakkinen:
+> > > > On Mon, Dec 07, 2020 at 02:57:10PM +0100, Dafna Hirschfeld wrote:
+> > > > > From: Andrey Pronin <apronin@chromium.org>
+> > > > > 
+> > > > > If a TPM firmware update is interrupted, e.g due to loss of power or a
+> > > > > reset while installing the update, you end with the TPM chip in failure
+> > > > > mode. TPM_ContinueSelfTest command is called when the device is probed.
+> > > > > It results in TPM_FAILEDSELFTEST error, and probe fails. The TPM device
+> > > > > is not created, and that prevents the OS from attempting any further
+> > > > > recover operations with the TPM. Instead, ignore the error code of the
+> > > > > TPM_ContinueSelfTest command, and create the device - the chip is out
+> > > > > there, it's just in failure mode.
+> > > > > 
+> > > > > Testing:
+> > > > > Tested with the swtpm as TPM simulator and a patch in 'libtpms'
+> > > > > to enter failure mode
+> > > > > 
+> > > > > With this settings, the '/dev/tpm0' is created but the tcsd daemon fails
+> > > > > to run.  In addition, the commands TPM_GetTestResult, TPM_GetCapability
+> > > > > and TPM_GetRandom were tested.
+> > > > > 
+> > > > > A normal operation was tested with an Acer Chromebook R13 device
+> > > > > (also called Elm) running Debian.
+> > > > 
+> > > > Move testing part to the stuff before diffstat.
+> > > > 
+> > > > > Signed-off-by: Andrey Pronin <apronin@chromium.org>
+> > > > > [change the code to still fail in case of fatal error]
+> > > > 
+> > > > What is this?
+> > > 
+> > > In the original patch, any return value from 'tpm1_do_selftest'
+> > > is ignored. I change the original patch so that in case of system
+> > >   error (rc < 0) the error is not ignored since this error did not
+> > > come from the TPM but from the system.
+> > > 
+> > > > 
+> > > > > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> > > > > 
+> > > > > ---
+> > > > > changes since v1:
+> > > > > - rewriting the commit message
+> > > > > 
+> > > > > This commit comes from chromeos:
+> > > > > https://chromium.googlesource.com/chromiumos/third_party/kernel/+/1065c2fe54d6%5E%21/
+> > > > > 
+> > > > > In Chromeos, the selftest fails if the TPM firmware is updated during EC
+> > > > > reset. In that case the userspace wants to access the TPM for recovery.
+> > > > > 
+> > > > > This patch is for TPM 1.2 only, I can also send a patch for TPM 2 if it
+> > > > > is required that the behaviour stays consistent among the versions.
+> > > > > 
+> > > > > libtpms patch:
+> > > > > https://gitlab.collabora.com/dafna/libtpms/-/commit/42848f4a838636d01ddb5ed353b3990dad3f601d
+> > > > > 
+> > > > > TPM tests:
+> > > > > https://gitlab.collabora.com/dafna/test-tpm1.git
+> > > > > 
+> > > > >    drivers/char/tpm/tpm1-cmd.c | 17 ++++++++---------
+> > > > >    1 file changed, 8 insertions(+), 9 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> > > > > index ca7158fa6e6c..8b7997ef8d1c 100644
+> > > > > --- a/drivers/char/tpm/tpm1-cmd.c
+> > > > > +++ b/drivers/char/tpm/tpm1-cmd.c
+> > > > > @@ -697,6 +697,8 @@ EXPORT_SYMBOL_GPL(tpm1_do_selftest);
+> > > > >    /**
+> > > > >     * tpm1_auto_startup - Perform the standard automatic TPM initialization
+> > > > >     *                     sequence
+> > > > > + * NOTE: if tpm1_do_selftest returns with a TPM error code, we return 0 (success)
+> > > > > + *	 to allow userspace interaction with the TPM when it is on failure mode.
+> > > > >     * @chip: TPM chip to use
+> > > > 
+> > > > 
+> > > > Please do not use "we ...". Use imperative form.
+> > > > 
+> > > > Also that is wrong place for the description:
+> > > > 
+> > > > https://www.kernel.org/doc/Documentation/kernel-doc-nano-HOWTO.txt
+> > > > 
+> > > > >     *
+> > > > >     * Returns 0 on success, < 0 in case of fatal error.
+> > > > > @@ -707,18 +709,15 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+> > > > >    	rc = tpm1_get_timeouts(chip);
+> > > > >    	if (rc)
+> > > > > -		goto out;
+> > > > > +		return rc < 0 ? rc : -ENODEV;
+> > > > 
+> > > > Do not use ternary operators. Also we are interested on
+> > > > TPM_SELFTESTFAILED only (according to the commit message).
+> > > > 
+> > > > I.e. afaik should be
+> > > > 
+> > > > 	if (rc) {
+> > > > 		if (rc == TPM_SELFTESTFAILED)
+> > > > 			return -ENODEV;
+> > > > 		else
+> > > > 			return rc;
+> > > > 	}
+> > > 
+> > > I read the description of TPM_ContinueSelfTest
+> > > in the spec file
+> > > https://trustedcomputinggroup.org/wp-content/uploads/TPM-Main-Part-3-Commands_v1.2_rev116_01032011.pdf
+> > > 
+> > > It is stated there that when running a command C1 before running TPM_ContinueSelfTest
+> > > then the command might return error codes TPM_NEEDS_SELFTEST/TPM_DOING_SELFTEST.
+> > > In those cases the command tpm1_get_timeouts should be called again after  calling
+> > > 'tpm1_continue_selftest'.
+> > > So it seems that we can just move the the call to 'tpm1_get_timeouts' to
+> > > after the call to 'tpm1_continue_selftest'.
+> > > 
+> > > I guess that the ChromeOS's TPM can support TPM_GetCapability for TPM_CAP_PROP_TIS_TIMEOUT, also
+> > > when it is on failure mode and this is why their patch ignores only the
+> > > result of 'tpm1_do_selftest' and not the result of 'tpm1_get_timeouts'.
+> > > 
+> > > The idea of the patch is opposite than what you suggest.
+> > > If 'tpm1_get_timeouts' returns 'TPM_SELFTESTFAILED' then the code should not return '-ENODEV'
+> > > since we do want to have '/dev/tpm*' in that case.
+> > > 
+> > > Thanks,
+> > > Dafna
+> > My mistake.
+> > 
+> > You only need to add two lines of code:
+> > 
+> > out:
+> > 	if (rc == TPM_SELFTESTFAILED)
+> > 		rc = 0;
+> > 	if (rc > 0)
+> > 		rc = -ENODEV;
+> > 	return rc;
+> > }
+> > 
+> > But how does this patch deal with TPM2?
+> 
+> It doesn't, I was not sure if there is need to keep consistent behavior
+> between 1.2 and 2. I can send next version with the same behavior for TPM 2.
 
-Because exporting PCR registers for TPM 2.0 has not been upstreamed [1],
-we use user space code, which requires evmctl >= 1.3.1 and tsspcrread.
-Using evmctl allows to test for TPM devices which does not export event
-log (/sys/kernel/security/tpm0/binary_bios_measurements).
+Yeah, it would make sense have consistent behaviour.
 
-For TPM 1.2 read tpm0 device's pcrs file from sysfs. (tss1pcrread could
-be also used, but it's not yet packaged by distros.)
+> > This should be opt-in feature or restricted to a narrow subset of TPM
+> > commands. Please rephrase this for next iteration:
+> > 
+> > "The TPM device is not created, and that prevents the OS from attempting
+> > any further recover operations with the TPM."
+> > 
+> 
+> In failure mode, the TPM should fail for almost all commands except for
+> TPM_GetTestResult, and some params of TPM_GetCapability. So I don't see a
+> reason to restrict the commands in the kernel.
+> 
+> Can you be more clear, what should I rephrase in the above sentence?
+> should I describe in detail the recovery steps?
 
-For old kernels which use SHA1/MD5, any evmctl version is required (evmctl
-ima_measurement was introduced in very old v0.7), but
-* newer sysctl path /sys/class/tpm/tpm0/device/pcrs requires evmctl 1.1
-* using ima_policy=tcb requires 1.3.1 due --ignore-violations
+This changes the ABI behaviour from previous kernel versions.
 
-We now support output format of ima_measurement command for various
-evmctl versions:
-* 1.3: "sha256: TPM PCR-10:" (or other algorithm, e.g. "sha1:")
-* 1.1-1.2.1: "HW PCR-10:" (the only previously supported format)
-* 0.7-1.0: "PCR-10:"
+> > What you've sent works only as a PoC.
+> 
+> Can you give more details of what should be added to the patch so
+> it is not just a PoC ?
+> 
+> Thanks,
+> Dafna
 
-NOTE: we ignore evmctl failure for evmctl < 1.3.1 (missing --ignore-violations,
-also evmctl < 1.1 fails with "PCRAgg does not match PCR-10")
+You don't make it explicit how the "broken" TPM is used by the user
+space. This makes it imposibble to decipher whether this the right
+way to change the kernel or not.
 
-As for previous commit fix testing with TPM 2.0 device which does not
-export event log (/sys/kernel/security/tpm0/binary_bios_measurements):
-not wrongly assuming TPM-bypass when kernel didn't export other TPM
-2.0 files we check in get_tpm_version() but bios boot aggregate is
-correct (i.e. not 0x00s). In that case evmctl ima_boot_aggregate can get
-boot aggregate even without TPM event log.
-
-[1] https://patchwork.kernel.org/patch/11759729/
-
-Co-developed-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
-Changes v4->v5:
-* improved TPM 2.0 detection (e.g. check for /dev/tpmrm0 and /dev/tpm0)
-* test2: if evmctl ima_measurement fails, run again with --ignore-violations
-* test2: assume TPM 2, if not detected
-* print TPM kernel config
-* cleanup
-
- .../security/integrity/ima/tests/ima_setup.sh |  14 +-
- .../security/integrity/ima/tests/ima_tpm.sh   | 176 +++++++++++++-----
- 2 files changed, 144 insertions(+), 46 deletions(-)
-
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-index dbf8a1db4..59a7ffeac 100644
---- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-@@ -93,7 +93,7 @@ require_ima_policy_content()
- 	fi
- }
- 
--require_ima_policy_cmdline()
-+check_ima_policy_cmdline()
- {
- 	local policy="$1"
- 	local i
-@@ -101,10 +101,18 @@ require_ima_policy_cmdline()
- 	grep -q "ima_$policy" /proc/cmdline && return
- 	for i in $(cat /proc/cmdline); do
- 		if echo "$i" | grep -q '^ima_policy='; then
--			echo "$i" | grep -q -e "|[ ]*$policy" -e "$policy[ ]*|" -e "=$policy" && return
-+			echo "$i" | grep -q -e "|[ ]*$policy" -e "$policy[ ]*|" -e "=$policy" && return 0
- 		fi
- 	done
--	tst_brk TCONF "IMA measurement tests require builtin IMA $policy policy (e.g. ima_policy=$policy kernel parameter)"
-+	return 1
-+}
-+
-+require_ima_policy_cmdline()
-+{
-+	local policy="$1"
-+
-+	check_ima_policy_cmdline $policy || \
-+		tst_brk TCONF "IMA measurement tests require builtin IMA $policy policy (e.g. ima_policy=$policy kernel parameter)"
- }
- 
- mount_helper()
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_tpm.sh b/testcases/kernel/security/integrity/ima/tests/ima_tpm.sh
-index 195fcb16c..233fdeed8 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_tpm.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_tpm.sh
-@@ -7,13 +7,14 @@
- # Verify the boot and PCR aggregates.
- 
- TST_CNT=2
--TST_NEEDS_CMDS="awk cut"
-+TST_NEEDS_CMDS="awk cut tail"
- TST_SETUP="setup"
- 
- . ima_setup.sh
- 
- EVMCTL_REQUIRED='1.3.1'
- ERRMSG_EVMCTL="=> install evmctl >= $EVMCTL_REQUIRED"
-+ERRMSG_TPM="TPM hardware support not enabled in kernel or no TPM chip found"
- 
- setup()
- {
-@@ -31,7 +32,7 @@ setup()
- 
- 	TPM_VERSION="$(get_tpm_version)"
- 	if [ -z "$TPM_VERSION" ]; then
--		tst_res TINFO "TPM hardware support not enabled in kernel or no TPM chip found, testing TPM-bypass"
-+		tst_res TINFO "$ERRMSG_TPM, testing TPM-bypass"
- 	else
- 		tst_res TINFO "TMP major version: $TPM_VERSION"
- 	fi
-@@ -121,6 +122,93 @@ get_tpm_version()
- 	fi
- }
- 
-+read_pcr_tpm1()
-+{
-+	local pcrs_path="/sys/class/tpm/tpm0/device/pcrs"
-+	local evmctl_required="1.1"
-+	local hash pcr
-+
-+	if [ ! -f "$pcrs_path" ]; then
-+		pcrs_path="/sys/class/misc/tpm0/device/pcrs"
-+	elif ! check_evmctl $evmctl_required; then
-+		echo "evmctl >= $evmctl_required required"
-+		return 32
-+	fi
-+
-+	if [ ! -f "$pcrs_path" ]; then
-+		echo "missing PCR file $pcrs_path ($ERRMSG_TPM)"
-+		return 32
-+	fi
-+
-+	while read line; do
-+		pcr="$(echo $line | cut -d':' -f1)"
-+		hash="$(echo $line | cut -d':' -f2 | awk '{ gsub (" ", "", $0); print tolower($0) }')"
-+		echo "$pcr: $hash"
-+	done < $pcrs_path
-+
-+	return 0
-+}
-+
-+# NOTE: TPM 1.2 would require to use tss1pcrread which is not fully adopted
-+# by distros yet.
-+read_pcr_tpm2()
-+{
-+	local pcrmax=23
-+	local pcrread="tsspcrread -halg $ALGORITHM"
-+	local i pcr
-+
-+	tst_check_cmds tsspcrread || return 1
-+
-+	for i in $(seq 0 $pcrmax); do
-+		pcr=$($pcrread -ha "$i" -ns)
-+		if [ $? -ne 0 ]; then
-+			echo "tsspcrread failed: $pcr"
-+			return 1
-+		fi
-+		printf "PCR-%02d: %s\n" $i "$pcr"
-+	done
-+
-+	return 0
-+}
-+
-+get_pcr10_aggregate()
-+{
-+	local cmd="evmctl -vv ima_measurement $BINARY_MEASUREMENTS"
-+	local msg="$ERRMSG_EVMCTL"
-+	local res=TCONF
-+	local pcr ret
-+
-+	if [ -z "$MISSING_EVMCTL" ]; then
-+		msg=
-+		res=TFAIL
-+	fi
-+
-+	$cmd > hash.txt 2>&1
-+	ret=$?
-+	if [ $ret -ne 0 -a -z "$MISSING_EVMCTL" ]; then
-+		tst_res TFAIL "evmctl failed, trying with --ignore-violations"
-+		cmd="$cmd --ignore-violations"
-+		$cmd > hash.txt 2>&1
-+		ret=$?
-+	elif [ $ret -ne 0 -a "$MISSING_EVMCTL" = 1 ]; then
-+		tst_brk TFAIL "evmctl failed $msg"
-+	fi
-+
-+	[ $ret -ne 0 ] && tst_res TWARN "evmctl failed, trying to continue $msg"
-+
-+	pcr=$(grep -E "^($ALGORITHM: )*PCRAgg(.*10)*:" hash.txt | tail -1 \
-+		| awk '{print $NF}')
-+
-+	if [ -z "$pcr" ]; then
-+		tst_res $res "failed to find aggregate PCR-10 $msg"
-+		tst_res TINFO "hash file:"
-+		cat hash.txt >&2
-+		return
-+	fi
-+
-+	echo "$pcr"
-+}
-+
- test1_tpm_bypass_mode()
- {
- 	local zero=$(echo $DIGEST | awk '{gsub(/./, "0")}; {print}')
-@@ -139,8 +227,10 @@ test1_hw_tpm()
- 	local cmd="evmctl ima_boot_aggregate -v"
- 	local boot_aggregate
- 
--	[ -z "$TPM_VERSION" ] && \
-+	if [ -z "$TPM_VERSION" ]; then
- 		tst_res TWARN "TPM-bypass failed, trying to test TPM device (unknown TPM version)"
-+		MAYBE_TPM2=1
-+	fi
- 
- 	if [ "$MISSING_EVMCTL" = 1 ]; then
- 		if [ ! -f "$tpm_bios" ]; then
-@@ -174,57 +264,57 @@ test1()
- 	[ -z "$TPM_VERSION" ] && test1_tpm_bypass_mode || test1_hw_tpm
- }
- 
--# Probably cleaner to programmatically read the PCR values directly
--# from the TPM, but that would require a TPM library. For now, use
--# the PCR values from /sys/devices.
--validate_pcr()
-+test2()
- {
--	tst_res TINFO "verify PCR (Process Control Register)"
-+	local hash pcr_aggregate out ret
- 
--	local dev_pcrs="$1"
--	local pcr hash aggregate_pcr
-+	tst_res TINFO "verify PCR values"
- 
--	aggregate_pcr="$(evmctl -v ima_measurement $BINARY_MEASUREMENTS 2>&1 | \
--		grep 'HW PCR-10:' | awk '{print $3}')"
--	if [ -z "$aggregate_pcr" ]; then
--		tst_res TFAIL "failed to get PCR-10"
--		return 1
-+	if [ "$MAYBE_TPM2" = 1 ]; then
-+		tst_res TINFO "TMP version not detected ($ERRMSG_TPM), assume TPM 2"
-+		TPM_VERSION=2
- 	fi
- 
--	while read line; do
--		pcr="$(echo $line | cut -d':' -f1)"
--		if [ "$pcr" = "PCR-10" ]; then
--			hash="$(echo $line | cut -d':' -f2 | awk '{ gsub (" ", "", $0); print tolower($0) }')"
--			[ "$hash" = "$aggregate_pcr" ]
--			return $?
--		fi
--	done < $dev_pcrs
--	return 1
--}
-+	if [ -z "$TPM_VERSION" ]; then
-+		tst_brk TCONF "TMP version not detected ($ERRMSG_TPM)"
-+	fi
- 
--test2()
--{
--	tst_res TINFO "verify PCR values"
--	tst_check_cmds evmctl || return
-+	if [ "$ALGORITHM" = "sha1" -a "$MISSING_EVMCTL" = 1 ]; then
-+		tst_check_cmds evmctl || return 1
-+	fi
- 
--	tst_res TINFO "evmctl version: $(evmctl --version)"
-+	out=$(read_pcr_tpm$TPM_VERSION)
-+	ret=$?
- 
--	local pcrs_path="/sys/class/tpm/tpm0/device/pcrs"
--	if [ -f "$pcrs_path" ]; then
--		tst_res TINFO "new PCRS path, evmctl >= 1.1 required"
--	else
--		pcrs_path="/sys/class/misc/tpm0/device/pcrs"
-+	if [ $ret -ne 0 ]; then
-+		case "$ret" in
-+			1) tst_res TFAIL "$out";;
-+			32) tst_res TCONF "$out";;
-+			*) tst_brk TBROK "unsupported return type '$1'";;
-+		esac
-+		return
- 	fi
- 
--	if [ -f "$pcrs_path" ]; then
--		validate_pcr $pcrs_path
--		if [ $? -eq 0 ]; then
--			tst_res TPASS "aggregate PCR value matches real PCR value"
--		else
--			tst_res TFAIL "aggregate PCR value does not match real PCR value"
--		fi
-+	hash=$(echo "$out" | grep "^PCR-10" | cut -d' ' -f2)
-+
-+	if [ -z "$out" ]; then
-+		tst_res TFAIL "PCR-10 hash not found"
-+		return
-+	fi
-+
-+	tst_res TINFO "real PCR-10: '$hash'"
-+
-+	get_pcr10_aggregate > tmp.txt
-+	pcr_aggregate="$(cat tmp.txt)"
-+	if [ -z "$pcr_aggregate" ]; then
-+		return
-+	fi
-+	tst_res TINFO "aggregate PCR-10: '$pcr_aggregate'"
-+
-+	if [ "$hash" = "$pcr_aggregate" ]; then
-+		tst_res TPASS "aggregate PCR value matches real PCR value"
- 	else
--		tst_res TCONF "TPM Hardware Support not enabled in kernel or no TPM chip found"
-+		tst_res TFAIL "aggregate PCR value does not match real PCR value"
- 	fi
- }
- 
--- 
-2.29.2
-
+/Jarkko
