@@ -2,142 +2,216 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 624892DE8FA
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Dec 2020 19:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F88F2DF0D7
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Dec 2020 18:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725895AbgLRSia (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 18 Dec 2020 13:38:30 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45890 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726080AbgLRSia (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 18 Dec 2020 13:38:30 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2D51BAC7B;
-        Fri, 18 Dec 2020 18:37:48 +0000 (UTC)
-Date:   Fri, 18 Dec 2020 19:37:46 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        paul@paul-moore.com, tusharsu@linux.microsoft.com,
-        ltp@lists.linux.it, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] ima: Add test for selinux measurement
-Message-ID: <X9z2+nXBdTMqHPgD@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20200928194730.20862-1-nramas@linux.microsoft.com>
- <20200928194730.20862-2-nramas@linux.microsoft.com>
+        id S1727352AbgLSR6U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 19 Dec 2020 12:58:20 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:51008 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726028AbgLSR6T (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 19 Dec 2020 12:58:19 -0500
+Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id DBB7120B83DE;
+        Sat, 19 Dec 2020 09:57:36 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DBB7120B83DE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1608400657;
+        bh=tO0eRQtqkUR7r20QrbiaEUkpe/auXx2AWJHGdYmtjNU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gqSEepphAqWHEmmYc5dbJplaNT76I5l6haopwpwsnkDHSNHq9Grf2OUB9jUKiT7Ca
+         jBh6lpM64hmBKdoCREK1wTaMbwungare52zfnnG6ghz5rn1Al8w+1CwTRLRF02Aq75
+         8zKUVLfebzEYSZKz3TsK3lW+Z091XXGxRod8Yiac=
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
+        takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
+        will@kernel.org, catalin.marinas@arm.com, mpe@ellerman.id.au
+Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
+        paulus@samba.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        masahiroy@kernel.org, bhsharma@redhat.com, mbrugger@suse.com,
+        hsinyi@chromium.org, tao.li@vivo.com, christophe.leroy@c-s.fr,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [PATCH v13 0/6] Carry forward IMA measurement log on kexec on ARM64
+Date:   Sat, 19 Dec 2020 09:57:07 -0800
+Message-Id: <20201219175713.18888-1-nramas@linux.microsoft.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200928194730.20862-2-nramas@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Lakshmi, Mimi, all,
+On kexec file load Integrity Measurement Architecture (IMA) subsystem
+may verify the IMA signature of the kernel and initramfs, and measure
+it. The command line parameters passed to the kernel in the kexec call
+may also be measured by IMA. A remote attestation service can verify
+a TPM quote based on the TPM event log, the IMA measurement list, and
+the TPM PCR data. This can be achieved only if the IMA measurement log
+is carried over from the current kernel to the next kernel across
+the kexec call.
 
-@Lakshmi
-TL;DR: I added some fixes in my fork, branch ima/selinux.v2.draft,
-https://github.com/pevik/ltp/commits/ima/selinux.v2.draft
+powerpc already supports carrying forward the IMA measurement log on
+kexec. This patch set adds support for carrying forward the IMA
+measurement log on kexec on ARM64. 
 
-+ added 3 additional commits, one of them as you as the author.
-I moved some functions to testcases/lib/tst_security.sh, renamed them.
-Can you please have a look and test? I don't have any SELinux machine.
+This patch set moves the platform independent code defined for powerpc
+such that it can be reused for other platforms as well. A chosen node
+"linux,ima-kexec-buffer" is added to the DTB for ARM64 to hold
+the address and the size of the memory reserved to carry
+the IMA measurement log.
 
-@Mimi, all: any comment to this test? My changes are just LTP cleanup
-so you can comment it on this patchset.
-I suppose you get to this in January.
+This patch set has been tested for ARM64 platform using QEMU.
+I would like help from the community for testing this change on powerpc.
+Thanks.
 
-Some notes for my changes:
+This patch set is based on
+commit a29a64445089 ("powerpc: Use common of_kexec_setup_new_fdt()")
+in https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
+"dt/kexec" branch.
 
-As files are quite similar (checks etc), I put both tests into single
-file ima_selinux.sh.
+Changelog:
 
-> New functionality is being added to IMA to measure data provided by
-> kernel components. With this feature, IMA policy can be set to enable
-> measuring data provided by Linux Security Modules (LSM). Currently one
-> such LSM namely selinux is being updated to use this functionality.
-> This new functionality needs test automation in LTP.
+v13
+  - Moved the arch independent functions to drivers/of/kexec.c
+    and then refactored the code.
+  - Moved arch_ima_add_kexec_buffer() to
+    security/integrity/ima/ima_kexec.c
 
-> Add test cases which verify that the IMA subsystem correctly measures
-> the data provided by selinux.
+v12
+  - Use fdt_appendprop_addrrange() in setup_ima_buffer()
+    to setup the IMA measurement list property in
+    the device tree.
+  - Moved architecture independent functions from
+    "arch/powerpc/kexec/ima.c" to "drivers/of/kexec."
+  - Deleted "arch/powerpc/kexec/ima.c" and
+    "arch/powerpc/include/asm/ima.h".
 
-Could you please put into commit message and test kernel commit hash relevant
-for the test. Is that 8861d0af642c646c8e148ce34c294bdef6f32f6a (merged into
-v5.10-rc1) or there are more relevant commits?
+v11
+  - Rebased the changes on the kexec code refactoring done by
+    Rob Herring in his "dt/kexec" branch
+  - Removed "extern" keyword in function declarations
+  - Removed unnecessary header files included in C files
+  - Updated patch descriptions per Thiago's comments
 
-...
-> +### IMA SELinux test
-> +
-> +To enable IMA to measure SELinux state and policy, `ima_selinux_policy.sh`
-> +and `ima_selinux_state.sh` require a readable IMA policy, as well as
-> +a loaded measure policy with
-> +`measure func=CRITICAL_DATA data_sources=selinux template=ima-buf`
-I put this into
-testcases/kernel/security/integrity/ima/datafiles/ima_selinux/selinux.policy
-and mention it in docs.
+v10
+  - Moved delete_fdt_mem_rsv(), remove_ima_buffer(),
+    get_ima_kexec_buffer, and get_root_addr_size_cells()
+    to drivers/of/kexec.c
+  - Moved arch_ima_add_kexec_buffer() to
+    security/integrity/ima/ima_kexec.c
+  - Conditionally define IMA buffer fields in struct kimage_arch
 
-> +test1()
-> +{
-> +	local policy_digest expected_policy_digest algorithm
-> +	local data_source_name="selinux"
-> +	local pattern="data_sources=[^[:space:]]*$data_source_name"
-> +	local tmp_file="$TST_TMPDIR/selinux_policy_tmp_file.txt"
-> +
-> +	check_policy_pattern "$pattern" $FUNC_CRITICAL_DATA $TEMPLATE_BUF > $tmp_file || return
-> +
-> +	tst_res TINFO "Verifying selinux policy measurement"
-> +
-> +	#
-> +	# Trigger a measurement by changing selinux state
-> +	#
-> +	update_selinux_state
-Here I used tst_update_selinux_state.
+v9
+  - Moved delete_fdt_mem_rsv() to drivers/of/kexec_fdt.c
+  - Defined a new function get_ima_kexec_buffer() in
+    drivers/of/ima_kexec.c to replace do_get_kexec_buffer()
+  - Changed remove_ima_kexec_buffer() to the original function name
+    remove_ima_buffer()
+  - Moved remove_ima_buffer() to drivers/of/ima_kexec.c
+  - Moved ima_get_kexec_buffer() and ima_free_kexec_buffer()
+    to security/integrity/ima/ima_kexec.c
 
-...
-> --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+v8:
+  - Moved remove_ima_kexec_buffer(), do_get_kexec_buffer(), and
+    delete_fdt_mem_rsv() to drivers/of/fdt.c
+  - Moved ima_dump_measurement_list() and ima_add_kexec_buffer()
+    back to security/integrity/ima/ima_kexec.c
 
-> +#
-> +# Update selinux state. This is used for validating IMA
-> +# measurement of selinux constructs.
-> +#
-> +update_selinux_state()
-> +{
-> +	local cur_val new_val
-> +
-> +	cur_val=$(cat $SELINUX_FOLDER/checkreqprot)
-> +
-> +	if [ $cur_val = 1 ]; then
-> +		new_val=0
-> +	else
-> +		new_val=1
-> +	fi
-> +
-> +	echo $new_val > $SELINUX_FOLDER/checkreqprot
-> +}
-> +
-> +#
-> +# Verify selinux is enabled in the system
-> +#
-> +check_selinux_state()
-> +{
-> +	[ -d $SELINUX_FOLDER ] || tst_brk TCONF "selinux is not enabled"
-> +}
+v7:
+  - Renamed remove_ima_buffer() to remove_ima_kexec_buffer() and moved
+    this function definition to kernel.
+  - Moved delete_fdt_mem_rsv() definition to kernel
+  - Moved ima_dump_measurement_list() and ima_add_kexec_buffer() to
+    a new file namely ima_kexec_fdt.c in IMA
 
-As I mentioned above, this is not needed as I put them under different names in
-testcases/lib/tst_security.sh.
+v6:
+  - Remove any existing FDT_PROP_IMA_KEXEC_BUFFER property in the device
+    tree and also its corresponding memory reservation in the currently
+    running kernel.
+  - Moved the function remove_ima_buffer() defined for powerpc to IMA
+    and renamed the function to ima_remove_kexec_buffer(). Also, moved
+    delete_fdt_mem_rsv() from powerpc to IMA.
 
->  mount_helper()
->  {
->  	local type="$1"
-> @@ -238,6 +265,7 @@ ima_setup()
->  	ASCII_MEASUREMENTS="$IMA_DIR/ascii_runtime_measurements"
->  	BINARY_MEASUREMENTS="$IMA_DIR/binary_runtime_measurements"
->  	IMA_POLICY="$IMA_DIR/policy"
-> +	SELINUX_FOLDER="$SYSFS/fs/selinux"
+v5:
+  - Merged get_addr_size_cells() and do_get_kexec_buffer() into a single
+    function when moving the arch independent code from powerpc to IMA
+  - Reverted the change to use FDT functions in powerpc code and added
+    back the original code in get_addr_size_cells() and
+    do_get_kexec_buffer() for powerpc.
+  - Added fdt_add_mem_rsv() for ARM64 to reserve the memory for
+    the IMA log buffer during kexec.
+  - Fixed the warning reported by kernel test bot for ARM64
+    arch_ima_add_kexec_buffer() - moved this function to a new file
+    namely arch/arm64/kernel/ima_kexec.c
 
-nit: I renamed it to $SELINUX_DIR (for consistency with $IMA_DIR)
-and moved to ima_selinux.sh.
+v4:
+  - Submitting the patch series on behalf of the original author
+    Prakhar Srivastava <prsriva@linux.microsoft.com>
+  - Moved FDT_PROP_IMA_KEXEC_BUFFER ("linux,ima-kexec-buffer") to
+    libfdt.h so that it can be shared by multiple platforms.
 
-Kind regards,
-Petr
+v3:
+Breakup patches further into separate patches.
+  - Refactoring non architecture specific code out of powerpc
+  - Update powerpc related code to use fdt functions
+  - Update IMA buffer read related code to use of functions
+  - Add support to store the memory information of the IMA
+    measurement logs to be carried forward.
+  - Update the property strings to align with documented nodes
+    https://github.com/devicetree-org/dt-schema/pull/46
+
+v2:
+  Break patches into separate patches.
+  - Powerpc related Refactoring
+  - Updating the docuemntation for chosen node
+  - Updating arm64 to support IMA buffer pass
+
+v1:
+  Refactoring carrying over IMA measuremnet logs over Kexec. This patch
+    moves the non-architecture specific code out of powerpc and adds to
+    security/ima.(Suggested by Thiago)
+  Add Documentation regarding the ima-kexec-buffer node in the chosen
+    node documentation
+
+v0:
+  Add a layer of abstraction to use the memory reserved by device tree
+    for ima buffer pass.
+  Add support for ima buffer pass using reserved memory for arm64 kexec.
+    Update the arch sepcific code path in kexec file load to store the
+    ima buffer in the reserved memory. The same reserved memory is read
+    on kexec or cold boot.
+
+Lakshmi Ramasubramanian (6):
+  ima: Move arch_ima_add_kexec_buffer() to ima
+  powerpc: Move arch independent ima kexec functions to
+    drivers/of/kexec.c
+  kexec: Use fdt_appendprop_addrrange() to add ima buffer to FDT
+  powerpc: Delete unused function delete_fdt_mem_rsv()
+  arm64: Free DTB buffer if fdt_open_into() fails
+  arm64: Add IMA log information in kimage used for kexec
+
+ arch/arm64/Kconfig                     |   1 +
+ arch/arm64/include/asm/kexec.h         |   5 +
+ arch/arm64/kernel/machine_kexec_file.c |   4 +-
+ arch/powerpc/include/asm/ima.h         |  30 ----
+ arch/powerpc/include/asm/kexec.h       |   1 -
+ arch/powerpc/kexec/Makefile            |   7 -
+ arch/powerpc/kexec/file_load.c         |  39 -----
+ arch/powerpc/kexec/ima.c               | 219 -------------------------
+ drivers/of/kexec.c                     | 188 +++++++++++++++++++++
+ include/linux/of.h                     |   2 +
+ security/integrity/ima/ima.h           |   4 -
+ security/integrity/ima/ima_kexec.c     |  23 +++
+ 12 files changed, 222 insertions(+), 301 deletions(-)
+ delete mode 100644 arch/powerpc/include/asm/ima.h
+ delete mode 100644 arch/powerpc/kexec/ima.c
+
+-- 
+2.29.2
+
