@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF142DF0E0
+	by mail.lfdr.de (Postfix) with ESMTP id CB1D32DF0E1
 	for <lists+linux-integrity@lfdr.de>; Sat, 19 Dec 2020 18:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbgLSR6f (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 19 Dec 2020 12:58:35 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:51190 "EHLO
+        id S1727032AbgLSR67 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 19 Dec 2020 12:58:59 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:51392 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726028AbgLSR6U (ORCPT
+        with ESMTP id S1726028AbgLSR67 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 19 Dec 2020 12:58:20 -0500
+        Sat, 19 Dec 2020 12:58:59 -0500
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9703720B83F8;
-        Sat, 19 Dec 2020 09:57:39 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9703720B83F8
+        by linux.microsoft.com (Postfix) with ESMTPSA id 45C4520B83FA;
+        Sat, 19 Dec 2020 09:57:40 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 45C4520B83FA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1608400660;
-        bh=S1gZLw99awaQRS7NJkvSEk2nmr83hjctOQA+vcCw1Gw=;
+        bh=gscK54u45qi2UgB3Y3zYKc0Nw3wjy595bT77iYKmpoY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tDLXS3DDr8ScMen8XwFjU50tCHdXtR4UYvkZvjnsAkGdoIkjEBXbvQLHzS/1w1vrh
-         13FZRwfh3Ypvk0dsodjTtQOQ6s8YIbpxWovntW0oBSHQyREgPumBhUDl/bGQ5KyvAX
-         f8hLZIx6uIc8mLIAjvvx8yXGHXjgCEUp+bsYySlA=
+        b=qg4zTxUWm7n2kz2rjPbh8ffY0qlgq4I+fA6Oq0BNu3vlvX9knIFja85pGdUDmeR5c
+         3SvJzsJnjoa9k7qwPK4n1c0NgkdB49ag/9jDwoOkTHHohFuQPVuhINvOZXz4Ig33fa
+         MpAlwGu1sN6LBMKDIKR2B48tOnAjku46kezUzRiQ=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
         takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
@@ -37,9 +37,9 @@ Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: [PATCH v13 4/6] powerpc: Delete unused function delete_fdt_mem_rsv()
-Date:   Sat, 19 Dec 2020 09:57:11 -0800
-Message-Id: <20201219175713.18888-5-nramas@linux.microsoft.com>
+Subject: [PATCH v13 5/6] arm64: Free DTB buffer if fdt_open_into() fails
+Date:   Sat, 19 Dec 2020 09:57:12 -0800
+Message-Id: <20201219175713.18888-6-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201219175713.18888-1-nramas@linux.microsoft.com>
 References: <20201219175713.18888-1-nramas@linux.microsoft.com>
@@ -49,75 +49,37 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-delete_fdt_mem_rsv() defined in "arch/powerpc/kexec/file_load.c"
-has been renamed to fdt_find_and_del_mem_rsv(), and moved to
-"drivers/of/kexec.c".
+create_dtb() function allocates memory for the device tree blob (DTB)
+and calls fdt_open_into(). If this call fails the memory allocated
+for the DTB is not freed before returning from create_dtb() thereby
+leaking memory.
 
-Remove delete_fdt_mem_rsv() in "arch/powerpc/kexec/file_load.c".
+Call vfree() to free the memory allocated for the DTB if fdt_open_into()
+fails.
 
 Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 ---
- arch/powerpc/include/asm/kexec.h |  1 -
- arch/powerpc/kexec/file_load.c   | 32 --------------------------------
- 2 files changed, 33 deletions(-)
+ arch/arm64/kernel/machine_kexec_file.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/include/asm/kexec.h b/arch/powerpc/include/asm/kexec.h
-index dbf09d2f36d0..d4b7d2d6191d 100644
---- a/arch/powerpc/include/asm/kexec.h
-+++ b/arch/powerpc/include/asm/kexec.h
-@@ -126,7 +126,6 @@ int setup_purgatory(struct kimage *image, const void *slave_code,
- int setup_new_fdt(const struct kimage *image, void *fdt,
- 		  unsigned long initrd_load_addr, unsigned long initrd_len,
- 		  const char *cmdline);
--int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size);
+diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+index 7de9c47dee7c..3e045cd62451 100644
+--- a/arch/arm64/kernel/machine_kexec_file.c
++++ b/arch/arm64/kernel/machine_kexec_file.c
+@@ -65,8 +65,10 @@ static int create_dtb(struct kimage *image,
  
- #ifdef CONFIG_PPC64
- struct kexec_buf;
-diff --git a/arch/powerpc/kexec/file_load.c b/arch/powerpc/kexec/file_load.c
-index 9f3ec0b239ef..f37652ccb8a1 100644
---- a/arch/powerpc/kexec/file_load.c
-+++ b/arch/powerpc/kexec/file_load.c
-@@ -109,38 +109,6 @@ int setup_purgatory(struct kimage *image, const void *slave_code,
- 	return 0;
- }
+ 		/* duplicate a device tree blob */
+ 		ret = fdt_open_into(initial_boot_params, buf, buf_size);
+-		if (ret)
++		if (ret) {
++			vfree(buf);
+ 			return -EINVAL;
++		}
  
--/**
-- * delete_fdt_mem_rsv - delete memory reservation with given address and size
-- *
-- * Return: 0 on success, or negative errno on error.
-- */
--int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size)
--{
--	int i, ret, num_rsvs = fdt_num_mem_rsv(fdt);
--
--	for (i = 0; i < num_rsvs; i++) {
--		uint64_t rsv_start, rsv_size;
--
--		ret = fdt_get_mem_rsv(fdt, i, &rsv_start, &rsv_size);
--		if (ret) {
--			pr_err("Malformed device tree.\n");
--			return -EINVAL;
--		}
--
--		if (rsv_start == start && rsv_size == size) {
--			ret = fdt_del_mem_rsv(fdt, i);
--			if (ret) {
--				pr_err("Error deleting device tree reservation.\n");
--				return -EINVAL;
--			}
--
--			return 0;
--		}
--	}
--
--	return -ENOENT;
--}
--
- /*
-  * setup_new_fdt - modify /chosen and memory reservation for the next kernel
-  * @image:		kexec image being loaded.
+ 		ret = of_kexec_setup_new_fdt(image, buf, initrd_load_addr,
+ 					     initrd_len, cmdline);
 -- 
 2.29.2
 
