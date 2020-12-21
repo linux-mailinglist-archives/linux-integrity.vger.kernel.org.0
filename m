@@ -2,112 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A09202DF0E8
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Dec 2020 19:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BFA2DF810
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Dec 2020 04:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727471AbgLSR7D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 19 Dec 2020 12:59:03 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:51390 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725562AbgLSR7A (ORCPT
+        id S1725791AbgLUDrU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 20 Dec 2020 22:47:20 -0500
+Received: from casper.infradead.org ([90.155.50.34]:38478 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725308AbgLUDrT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 19 Dec 2020 12:59:00 -0500
-Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E04F920B8760;
-        Sat, 19 Dec 2020 09:57:40 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E04F920B8760
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1608400661;
-        bh=OVwA4inNau2hmijx/oPmAOP24IyIW5ZqUgc87HT/n4c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BYvY8oFR77uNrtNi8uvYFk928ERQQrPMySXkp4MZRHkdjUzOGddbLY4oHuZoCVJzE
-         gXMYZ60NeqQYjkqg/235ZIxhe5No/45Hqigzgdxev0OAvkJTk/gwfSfptVDTxHwabq
-         Wo+Kf6RvfNRCdJaiUV1f17GXtyok9+IY0uucsfmY=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
-        takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
-        will@kernel.org, catalin.marinas@arm.com, mpe@ellerman.id.au
-Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
-        paulus@samba.org, frowand.list@gmail.com,
-        vincenzo.frascino@arm.com, mark.rutland@arm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        pasha.tatashin@soleen.com, allison@lohutok.net,
-        masahiroy@kernel.org, bhsharma@redhat.com, mbrugger@suse.com,
-        hsinyi@chromium.org, tao.li@vivo.com, christophe.leroy@c-s.fr,
-        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: [PATCH v13 6/6] arm64: Add IMA log information in kimage used for kexec
-Date:   Sat, 19 Dec 2020 09:57:13 -0800
-Message-Id: <20201219175713.18888-7-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201219175713.18888-1-nramas@linux.microsoft.com>
-References: <20201219175713.18888-1-nramas@linux.microsoft.com>
+        Sun, 20 Dec 2020 22:47:19 -0500
+X-Greylist: delayed 1143 seconds by postgrey-1.27 at vger.kernel.org; Sun, 20 Dec 2020 22:47:19 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=1wn+qnkPDAZUCQEYEI3B57TLhs2MEwZtEb8Tmd7HIcY=; b=XMTNKkqIkf5IAPiefdOzcpLDuC
+        +rabIa4lNXH/SKOP2FeRyquZlDiM2Q7iodYJsu/hRxoI9tmuImIZjb8Fmsf/EAg4G7FZsRGKZzao0
+        q+t7cmDDuc/qtgoR8kJYRGaIx7EvlvGwkZ8uXAuNIKmDa5bsbXCEXLccT1oZNQ73f5xvBxopPTcgI
+        7K0GFihJ5wWUSL91pDPnRA4KcBHNhG7pFevmMnjdOZDIM01uGRU+xFA5LiXOYsrdWTg/uIJ/T/JBw
+        Knuc0phLeB1gnuqyse+L+n81twh2HI+G3ipTnO3GKdpjPp9M/e4zPJ9wJ2gYedQn6C9WpLhLskuOy
+        BSSwDGtA==;
+Received: from [2601:1c0:6280:3f0::64ea] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1krBr4-0007Fx-KH; Mon, 21 Dec 2020 03:27:27 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v2] security: ima: delete a repeated word in comments
+Date:   Sun, 20 Dec 2020 19:27:20 -0800
+Message-Id: <20201221032720.11325-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Address and size of the buffer containing the IMA measurement log need
-to be passed from the current kernel to the next kernel on kexec.
+Drop a repeated word in comments.
+{the}
 
-Any existing "linux,ima-kexec-buffer" property in the device tree
-needs to be removed and its corresponding memory reservation in
-the currently running kernel needs to be freed. The address and
-size of the current kernel's IMA measurement log need to be added
-to the device tree's IMA kexec buffer node and memory for the buffer
-needs to be reserved for the log to be carried over to the next kernel
-on the kexec call.
-
-Add address and size fields to "struct kimage_arch" for ARM64 platform
-to hold the address and size of the IMA measurement log buffer. Remove
-any existing "linux,ima-kexec-buffer" property in the device tree and
-free the corresponding memory reservation in the currently running
-kernel. Add "linux,ima-kexec-buffer" property to the device tree and
-reserve the memory for storing the IMA log that needs to be passed from
-the current kernel to the next one.
-
-Update CONFIG_KEXEC_FILE to select CONFIG_HAVE_IMA_KEXEC to indicate
-that the IMA measurement log information is present in the device tree
-for ARM64.
-
-Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: linux-integrity@vger.kernel.org
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: linux-security-module@vger.kernel.org
 ---
- arch/arm64/Kconfig             | 1 +
- arch/arm64/include/asm/kexec.h | 5 +++++
- 2 files changed, 6 insertions(+)
+v2: rebase
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1d466addb078..c85d18b1f2fd 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1094,6 +1094,7 @@ config KEXEC
- config KEXEC_FILE
- 	bool "kexec file based system call"
- 	select KEXEC_CORE
-+	select HAVE_IMA_KEXEC
- 	help
- 	  This is new version of kexec system call. This system call is
- 	  file based and takes file descriptors as system call argument
-diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
-index d24b527e8c00..2bd19ccb6c43 100644
---- a/arch/arm64/include/asm/kexec.h
-+++ b/arch/arm64/include/asm/kexec.h
-@@ -100,6 +100,11 @@ struct kimage_arch {
- 	void *elf_headers;
- 	unsigned long elf_headers_mem;
- 	unsigned long elf_headers_sz;
-+
-+#ifdef CONFIG_IMA_KEXEC
-+	phys_addr_t ima_buffer_addr;
-+	size_t ima_buffer_size;
-+#endif
- };
- 
- extern const struct kexec_file_ops kexec_image_ops;
--- 
-2.29.2
+ security/integrity/ima/ima_policy.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+--- linux-next-20201218.orig/security/integrity/ima/ima_policy.c
++++ linux-next-20201218/security/integrity/ima/ima_policy.c
+@@ -781,7 +781,7 @@ static int __init ima_init_arch_policy(v
+  * ima_init_policy - initialize the default measure rules.
+  *
+  * ima_rules points to either the ima_default_rules or the
+- * the new ima_policy_rules.
++ * new ima_policy_rules.
+  */
+ void __init ima_init_policy(void)
+ {
