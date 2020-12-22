@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E290A2E0FED
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Dec 2020 22:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9142E0FF1
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Dec 2020 22:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727889AbgLVVtk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Dec 2020 16:49:40 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27116 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727851AbgLVVtj (ORCPT
+        id S1726161AbgLVVun (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Dec 2020 16:50:43 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38630 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726131AbgLVVum (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Dec 2020 16:49:39 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BMLWF8v009787;
-        Tue, 22 Dec 2020 16:48:27 -0500
+        Tue, 22 Dec 2020 16:50:42 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BMLmvmG025583;
+        Tue, 22 Dec 2020 16:49:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
  cc : subject : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=Hgf1i+Wh3yiW1rvV/bB1osgr6+rdIPucMbnT7oTGS5c=;
- b=Mxd5f/R9w9/mXh+HgzT5CtuNMtvN1sOPwhODNYPv3yKjDTieM8pWhy8u8j1B4NjK9foD
- arLEeKU6QFSKMqe+sTp1Butn/whapP+YpunYu+LRau6ACeqiMBk4OfuISPizdoJrZt02
- SMq3iGbcri2DuxYC6UyktLHdXugYwG3YRGKeXa1pDtRuK0cEdVuNlfXzIteXtHhTh7Cp
- A7iUKx4lOOu2fzt1cqc3PseQuN2r9qBmnIPo5sAM66lp1PiHJ7g3P7NfoADuzm7vkoCP
- McXoAbQuhh8yZBpPvFVYbfS2ZdatCYpJckjJ5MfxO2BQQxGNynWo4KJ152Al/4zXhuQc kQ== 
+ content-type; s=pp1; bh=oMzFnXOlXBXAxMqQNCIK8nUDPKtGisYhqTED6tXcaOU=;
+ b=Q5qlRKIXnLqpRmH7IMlxx6BYr2XGk5h41+7459fpi70uf1/52NPeMHLa3Abrz4DbHL5x
+ g+RYxCi039VX9oqfiVwqzb9FvVFOqmtHnxCM18yKpiV2bsjUvpy2SN7P/aDYScwzBGnp
+ aFunsUZxpZN+l4G21UsTaRuRiD9m88Zt2njnArYACsmdykccsyoR4vfUJcLtwDE+im9o
+ g5RIBBE3TJzVTNxx3gkcqR2TvzpIvyt+FwfIv9SIjCDG49KElZT3dZ2Agnw/OCk8+OtI
+ /ElZaPsQy0K+azsFFp+AlQagfQzfGE5BgeKE2txGmwAIyBzMWRSTSx/2Jzlqx1UOzVqu Zg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 35kqaxtc0a-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 35ks1q0090-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 16:48:26 -0500
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BMLXDXo012462;
-        Tue, 22 Dec 2020 16:48:26 -0500
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 35kqaxtc00-1
+        Tue, 22 Dec 2020 16:49:30 -0500
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BMLnTlQ028660;
+        Tue, 22 Dec 2020 16:49:29 -0500
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 35ks1q008q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 16:48:26 -0500
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BMLbCbE027959;
-        Tue, 22 Dec 2020 21:48:25 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma03dal.us.ibm.com with ESMTP id 35k02etxhw-1
+        Tue, 22 Dec 2020 16:49:29 -0500
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BMLbcm9007010;
+        Tue, 22 Dec 2020 21:49:28 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04dal.us.ibm.com with ESMTP id 35kk8ram0u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 21:48:25 +0000
+        Tue, 22 Dec 2020 21:49:28 +0000
 Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BMLmOmc20250956
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BMLnRAf23527746
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Dec 2020 21:48:24 GMT
+        Tue, 22 Dec 2020 21:49:27 GMT
 Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 10452C6057;
-        Tue, 22 Dec 2020 21:48:24 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id E4EBDC6057;
+        Tue, 22 Dec 2020 21:49:26 +0000 (GMT)
 Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 58626C6055;
-        Tue, 22 Dec 2020 21:48:16 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 5C20AC6055;
+        Tue, 22 Dec 2020 21:49:19 +0000 (GMT)
 Received: from manicouagan.localdomain (unknown [9.80.219.136])
         by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Tue, 22 Dec 2020 21:48:15 +0000 (GMT)
+        Tue, 22 Dec 2020 21:49:19 +0000 (GMT)
 References: <20201211221006.1052453-1-robh@kernel.org>
- <20201211221006.1052453-3-robh@kernel.org>
+ <20201211221006.1052453-4-robh@kernel.org>
 User-agent: mu4e 1.4.10; emacs 27.1
 From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
 To:     Rob Herring <robh@kernel.org>
@@ -72,20 +72,20 @@ Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com
-Subject: Re: [RFC PATCH 2/4] of: Add a common kexec FDT setup function
-In-reply-to: <20201211221006.1052453-3-robh@kernel.org>
-Date:   Tue, 22 Dec 2020 18:48:14 -0300
-Message-ID: <87mty5ldgh.fsf@manicouagan.localdomain>
+Subject: Re: [RFC PATCH 3/4] arm64: Use common of_kexec_setup_new_fdt()
+In-reply-to: <20201211221006.1052453-4-robh@kernel.org>
+Date:   Tue, 22 Dec 2020 18:49:17 -0300
+Message-ID: <87k0t9ldeq.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2020-12-22_11:2020-12-21,2020-12-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxscore=0 malwarescore=0 clxscore=1015 bulkscore=0
- suspectscore=0 spamscore=0 phishscore=0 mlxlogscore=999 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012220153
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 bulkscore=0 spamscore=0
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=864 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2012220157
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -93,39 +93,10 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Rob Herring <robh@kernel.org> writes:
 
-> Both arm64 and powerpc do essentially the same FDT /chosen setup for
-> kexec. We can simply combine everything each arch does. The differences
-> are either omissions that arm64 should have or additional properties
-> that will be ignored.
->
-> The differences relative to the arm64 version:
-> - If /chosen doesn't exist, it will be created (should never happen).
-> - Any old dtb and initrd reserved memory will be released.
-> - The new initrd and elfcorehdr are marked reserved.
-> - "linux,booted-from-kexec" is set.
->
-> The differences relative to the powerpc version:
-> - "kaslr-seed" and "rng-seed" may be set.
-> - "linux,elfcorehdr" is set.
-
-I especially like the elfcorehdr property. It always bothered me that we
-pass it on the kernel command line, since it's not something that could
-or should be set by an admin.
-
-> - Any existing "linux,usable-memory-range" is removed.
->
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
-> This could be taken a step further and do the allocation of the new
-> FDT. The difference is arm64 uses vmalloc and powerpc uses kmalloc. The
-> arm64 version also retries with a bigger allocation. That seems
-> unnecessary.
-> ---
->  drivers/of/Makefile |   1 +
->  drivers/of/kexec.c  | 228 ++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/of.h  |   5 +
->  3 files changed, 234 insertions(+)
->  create mode 100644 drivers/of/kexec.c
+>  arch/arm64/kernel/machine_kexec_file.c | 123 +------------------------
+>  1 file changed, 3 insertions(+), 120 deletions(-)
 
 Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 
