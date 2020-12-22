@@ -2,136 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E692E1069
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Dec 2020 23:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBA22E1074
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Dec 2020 00:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727678AbgLVWym (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Dec 2020 17:54:42 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19746 "EHLO
+        id S1727866AbgLVXCe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Dec 2020 18:02:34 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1106 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727559AbgLVWyl (ORCPT
+        by vger.kernel.org with ESMTP id S1726615AbgLVXCe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Dec 2020 17:54:41 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BMMWE1W196591;
-        Tue, 22 Dec 2020 17:53:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
- cc : subject : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=8jk/M5PwVWO5wCBRpi9U2tfKxLuehNr5+6fPogwpGkI=;
- b=crM0xizDekFtIHO00jVdxL37gyE/toBUdwbyhNICzkCR9cQ5Hp6Q0XkClF7aHcXk7jDG
- wg7bVc5B/cSIEsYnAQPH15LbxFwn3Gii0TCw7LuO9M/3c8VdMyMKAa5GMTZYu0DOPMvJ
- y0pSETEVSjIsqYTHGQxGkSitKKD0W5nzO0Tn4lL+Mwd1UdpIZWqOntpfHyjjhC5+yi5W
- 0f68UYxIdlKe75rgqx/IoEQkEUHi2UAazEUGKwm7xqf30dkl7Wds53xFQJyGlfoUF+I3
- 60fK5uP1rLtkzJwp5CoPY6cjYMVEu+z0pPCwd7z6UI2zjHT4i9OsfvgKmPNakG2AUc8G Kg== 
+        Tue, 22 Dec 2020 18:02:34 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BMMsDRX165581;
+        Tue, 22 Dec 2020 18:01:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=zz4SMB61qEYh82fBXNJFG2tiluDKf+DNmmx+H7ilapo=;
+ b=Z1c4rs8wf5lxrl13fDZNZDzST6mmc+CvpTxMRSDLK/OHm7DnDod3PFJBRRyyGzcork0A
+ X2nsJsOe7nQrqBjdE8tRbPhqW83nsDumGIUUc89Pf0JuaAW0ImhmMTGEnsJ+ck1Ha784
+ Q6pmmqBbhA4eSTHDxM53zrFOKVMfTNhTwVsAerPJUKJPNiXFjtPQDTztXdUobXNjc5pA
+ 0IPXNW3sTZ5xmZLZR7fe1yDNfTCGIewJIPBq9BX8/lsnd/cpdK4nxUe2iKStB4TTUHht
+ QPuV8qVUmPOy6jZrz1z+XvY85/BW3+0mb2ii193NvCLThQGhNjcMTGdPwO6KzwrnmNPy vg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35kr71j8xs-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 35kt0fr44p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 17:53:23 -0500
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BMMrMKu086583;
-        Tue, 22 Dec 2020 17:53:22 -0500
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35kr71j8xg-1
+        Tue, 22 Dec 2020 18:01:47 -0500
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BMN1le5023390;
+        Tue, 22 Dec 2020 18:01:47 -0500
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 35kt0fr43y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 17:53:22 -0500
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BMMrAKW006408;
-        Tue, 22 Dec 2020 22:53:21 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02dal.us.ibm.com with ESMTP id 35kj7queyv-1
+        Tue, 22 Dec 2020 18:01:47 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BMMvEeS000374;
+        Tue, 22 Dec 2020 23:01:46 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03dal.us.ibm.com with ESMTP id 35k02eubxc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 22:53:21 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BMMrKgW23396644
+        Tue, 22 Dec 2020 23:01:46 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BMN1j8924379672
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Dec 2020 22:53:20 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3357EC6055;
-        Tue, 22 Dec 2020 22:53:20 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 23184C605B;
-        Tue, 22 Dec 2020 22:53:13 +0000 (GMT)
-Received: from manicouagan.localdomain (unknown [9.80.219.136])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Tue, 22 Dec 2020 22:53:12 +0000 (GMT)
-References: <20201219175713.18888-1-nramas@linux.microsoft.com>
- <20201219175713.18888-2-nramas@linux.microsoft.com>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, robh@kernel.org, takahiro.akashi@linaro.org,
-        gregkh@linuxfoundation.org, will@kernel.org,
-        catalin.marinas@arm.com, mpe@ellerman.id.au, james.morse@arm.com,
-        sashal@kernel.org, benh@kernel.crashing.org, paulus@samba.org,
-        frowand.list@gmail.com, vincenzo.frascino@arm.com,
-        mark.rutland@arm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, pasha.tatashin@soleen.com, allison@lohutok.net,
-        masahiroy@kernel.org, bhsharma@redhat.com, mbrugger@suse.com,
-        hsinyi@chromium.org, tao.li@vivo.com, christophe.leroy@c-s.fr,
-        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v13 1/6] ima: Move arch_ima_add_kexec_buffer() to ima
-In-reply-to: <20201219175713.18888-2-nramas@linux.microsoft.com>
-Date:   Tue, 22 Dec 2020 19:53:10 -0300
-Message-ID: <87eejhlag9.fsf@manicouagan.localdomain>
+        Tue, 22 Dec 2020 23:01:45 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 159206A047;
+        Tue, 22 Dec 2020 23:01:45 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E3886A04F;
+        Tue, 22 Dec 2020 23:01:44 +0000 (GMT)
+Received: from [9.85.203.88] (unknown [9.85.203.88])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Dec 2020 23:01:44 +0000 (GMT)
+Subject: Re: [PATCH v14 3/5] security: keys: trusted: fix TPM2 authorizations
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
+References: <20201129222004.4428-1-James.Bottomley@HansenPartnership.com>
+ <20201129222004.4428-4-James.Bottomley@HansenPartnership.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+Message-ID: <dfd33d3d-8e1c-8acf-a3aa-3b62659d5d68@linux.ibm.com>
+Date:   Tue, 22 Dec 2020 18:01:46 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20201129222004.4428-4-James.Bottomley@HansenPartnership.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-22_11:2020-12-21,2020-12-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012220159
+ definitions=2020-12-22_13:2020-12-21,2020-12-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 lowpriorityscore=0 clxscore=1011 priorityscore=1501
+ malwarescore=0 bulkscore=0 mlxscore=0 spamscore=0 adultscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2012220163
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 11/29/2020 5:20 PM, James Bottomley wrote:
+> 
+> Note this is both and enhancement and a potential bug fix.  The TPM
+> 2.0 spec requires us to strip leading zeros, meaning empyty
+> authorization is a zero length HMAC whereas we're currently passing in
+> 20 bytes of zeros.  A lot of TPMs simply accept this as OK, but the
+> Microsoft TPM emulator rejects it with TPM_RC_BAD_AUTH, so this patch
+> makes the Microsoft TPM emulator work with trusted keys.
 
-Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+1 - To be precise, it strips trailing zeros, but 20 bytes of zero
+results in an empty buffer either way.
 
-> arch_ima_add_kexec_buffer() defined in "arch/powerpc/kexec/ima.c"
-> sets up the address and size of the IMA measurement list in
-> the architecture specific fields in kimage struct. This function does not
-> have architecture specific code, but is currently limited to powerpc.
->
-> Move arch_ima_add_kexec_buffer() to ima.
->
-> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> ---
->  arch/powerpc/include/asm/ima.h     |  3 ---
->  arch/powerpc/kexec/ima.c           | 17 -----------------
->  security/integrity/ima/ima_kexec.c | 22 ++++++++++++++++++++++
->  3 files changed, 22 insertions(+), 20 deletions(-)
+"
+Part 1 19.6.4.3	Authorization Size Convention
 
-Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Trailing octets of zero are to be removed from any string before it is used as an authValue.
+"
 
-Just one nit below.
 
-Also, I just noticed that this patch series hasn't been cc'd to the linuxppc-dev
-mailing list. You should do that, since it affects powerpc code. The
-powerpc maintainers are being copied so at least they've been made aware
-of it, but that isn't enough.
+2 - If you have a test case for the MS simulator, post it and I'll give it a try.
 
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index 121de3e04af2..38bcd7543e27 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -10,6 +10,7 @@
->  #include <linux/seq_file.h>
->  #include <linux/vmalloc.h>
->  #include <linux/kexec.h>
-> +#include <linux/ima.h>
->  #include "ima.h"
->  
->  #ifdef CONFIG_IMA_KEXEC
+I did a quick test, power cycle to set platform auth to empty, than
+create primary with a parent password 20 bytes of zero, and the
+SW TPM accepted it.
 
-There's no need to add this include.
+This was a password session, not an HMAC session.
 
--- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
