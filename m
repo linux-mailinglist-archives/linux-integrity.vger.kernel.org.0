@@ -2,181 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF0E2E0E44
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Dec 2020 19:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A640F2E0E72
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Dec 2020 19:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726161AbgLVSig (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Dec 2020 13:38:36 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:36724 "EHLO
+        id S1726384AbgLVSyT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Dec 2020 13:54:19 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:38580 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725913AbgLVSig (ORCPT
+        with ESMTP id S1726356AbgLVSyT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Dec 2020 13:38:36 -0500
+        Tue, 22 Dec 2020 13:54:19 -0500
 Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 665BF20B83DE;
-        Tue, 22 Dec 2020 10:37:54 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 665BF20B83DE
+        by linux.microsoft.com (Postfix) with ESMTPSA id C490C20B83DE;
+        Tue, 22 Dec 2020 10:53:37 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C490C20B83DE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1608662274;
-        bh=RlzaGSzxcAjcy4e0WbapOoCPC8AIE8qAdKsa1Onqa70=;
+        s=default; t=1608663218;
+        bh=//PxRnptZMzVjXYlyIzWx/0zydVkwQDoYcP2NBeyDZ8=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=o/UEuB23MVhad1F9P2MJz5oTPv7lEAHUzWCLKMdNNWMNksSDtQSIPFnL17Ko3Qc8a
-         F0FJhPS0ZN8RT5v+jd6vpvNU/SgVVoQxrxcyg8wwzWNffLx6BUbUc3TqP74ruan5Om
-         44RRf6mKkKUuDuvuqEnJCq5f2NXzDcTTTKxDXjCI=
-Subject: Re: [PATCH v1 1/1] ima: Add test for selinux measurement
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        paul@paul-moore.com, tusharsu@linux.microsoft.com,
-        ltp@lists.linux.it, linux-integrity@vger.kernel.org
-References: <20200928194730.20862-1-nramas@linux.microsoft.com>
- <20200928194730.20862-2-nramas@linux.microsoft.com> <X9z2+nXBdTMqHPgD@pevik>
+        b=Hb9HWHUZ+LQw+0OkX+tP5HdR/Q7wQOGoBlOskRnaFQ9kuqceUyz0iOqmuPLV+VsI6
+         V1Jtbm11qxpVrmrWUGgcl9d8+EW5IESynwTuFoKFmuHwK2PM/gmJU17L5+D/ZXVouc
+         gy+KEEVaVTjiZoJHevX/cRW3Nc/dI01qh7Y6625M=
+Subject: Re: [PATCH v13 2/6] powerpc: Move arch independent ima kexec
+ functions to drivers/of/kexec.c
+To:     Mimi Zohar <zohar@linux.ibm.com>, bauerman@linux.ibm.com,
+        robh@kernel.org, takahiro.akashi@linaro.org,
+        gregkh@linuxfoundation.org, will@kernel.org,
+        catalin.marinas@arm.com, mpe@ellerman.id.au
+Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
+        paulus@samba.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        masahiroy@kernel.org, bhsharma@redhat.com, mbrugger@suse.com,
+        hsinyi@chromium.org, tao.li@vivo.com, christophe.leroy@c-s.fr,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+References: <20201219175713.18888-1-nramas@linux.microsoft.com>
+ <20201219175713.18888-3-nramas@linux.microsoft.com>
+ <a1a4526c0759eb3b5d70fb8edc89360718376def.camel@linux.ibm.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <0db52810-c7e2-713a-80ed-748e8bb3db74@linux.microsoft.com>
-Date:   Tue, 22 Dec 2020 10:37:53 -0800
+Message-ID: <e0d9398b-1b46-8115-7bf0-28e9826fcd6b@linux.microsoft.com>
+Date:   Tue, 22 Dec 2020 10:53:37 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <X9z2+nXBdTMqHPgD@pevik>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <a1a4526c0759eb3b5d70fb8edc89360718376def.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 12/18/20 10:37 AM, Petr Vorel wrote:
+On 12/22/20 6:26 AM, Mimi Zohar wrote:
 
-Hi Petr,
-
-> 
-> @Lakshmi
-> TL;DR: I added some fixes in my fork, branch ima/selinux.v2.draft,
-> https://github.com/pevik/ltp/commits/ima/selinux.v2.draft
-> 
-> + added 3 additional commits, one of them as you as the author.
-> I moved some functions to testcases/lib/tst_security.sh, renamed them.
-> Can you please have a look and test? I don't have any SELinux machine.
-
-I'll take a look at the changes in your branch and test it with SELinux 
-enabled.
+Hi Mimi,
 
 > 
-> @Mimi, all: any comment to this test? My changes are just LTP cleanup
-> so you can comment it on this patchset.
-> I suppose you get to this in January.
+> On Sat, 2020-12-19 at 09:57 -0800, Lakshmi Ramasubramanian wrote:
+>>
+>> diff --git a/arch/powerpc/kexec/Makefile b/arch/powerpc/kexec/Makefile
+>> index 4aff6846c772..b6c52608cb49 100644
+>> --- a/arch/powerpc/kexec/Makefile
+>> +++ b/arch/powerpc/kexec/Makefile
+>> @@ -9,13 +9,6 @@ obj-$(CONFIG_PPC32)		+= relocate_32.o
+>>   
+>>   obj-$(CONFIG_KEXEC_FILE)	+= file_load.o ranges.o file_load_$(BITS).o elf_$(BITS).o
+>>   
+>> -ifdef CONFIG_HAVE_IMA_KEXEC
+>> -ifdef CONFIG_IMA
+>> -obj-y				+= ima.o
+>> -endif
+>> -endif
 > 
-> Some notes for my changes:
+> Notice how "kexec/ima.o" is only included if the architecture supports
+> it and IMA is configured.  In addition only if CONFIG_IMA_KEXEC is
+> configured, is the IMA measurement list carried across kexec.  After
+> moving the rest of ima.c to drivers/of/kexec.c, this changes.   Notice
+> how drivers/of/Kconfig includes kexec.o:
 > 
-> As files are quite similar (checks etc), I put both tests into single
-> file ima_selinux.sh.
-This should be fine.
+> obj-$(CONFIG_KEXEC_FILE) += kexec.o
+> 
+> It is not dependent on CONFIG_HAVE_IMA_KEXEC.  Shouldn't all of the
+> functions defined in ima.c being moved to kexec.o be defined within a
+> CONFIG_HAVE_IMA_KEXEC ifdef?
+> 
 
-The reason I put the tests in different files was because I couldn't 
-find a way to run the tests independently (i mean - say, run the SELinux 
-policy measurement test but not the state measurement test or vice-versa).
+Thanks for reviewing the changes.
 
-> 
->> New functionality is being added to IMA to measure data provided by
->> kernel components. With this feature, IMA policy can be set to enable
->> measuring data provided by Linux Security Modules (LSM). Currently one
->> such LSM namely selinux is being updated to use this functionality.
->> This new functionality needs test automation in LTP.
-> 
->> Add test cases which verify that the IMA subsystem correctly measures
->> the data provided by selinux.
-> 
-> Could you please put into commit message and test kernel commit hash relevant
-> for the test. Is that 8861d0af642c646c8e148ce34c294bdef6f32f6a (merged into
-> v5.10-rc1) or there are more relevant commits?
+In "drivers/of/kexec.c" the function remove_ima_buffer() is defined 
+under "#ifdef CONFIG_HAVE_IMA_KEXEC"
 
-The IMA hook to measure kernel critical data + SELinux measurement 
-changes are still being reviewed. Tushar has posted v9 of the patch set.
+setup_ima_buffer() is defined under "#ifdef CONFIG_IMA_KEXEC" - the same 
+way it was defined in "arch/powerpc/kexec/ima.c".
 
-> 
-> ...
->> +### IMA SELinux test
->> +
->> +To enable IMA to measure SELinux state and policy, `ima_selinux_policy.sh`
->> +and `ima_selinux_state.sh` require a readable IMA policy, as well as
->> +a loaded measure policy with
->> +`measure func=CRITICAL_DATA data_sources=selinux template=ima-buf`
-> I put this into
-> testcases/kernel/security/integrity/ima/datafiles/ima_selinux/selinux.policy
-> and mention it in docs.
-Sounds good - Thanks.
+As you know, CONFIG_IMA_KEXEC depends on CONFIG_HAVE_IMA_KEXEC (as 
+defined in "security/integrity/ima/Kconfig").
 
-"template=ima_buf" is no longer needed in the IMA policy rule since 
-"ima_buf" is the default template for buffer measurement now. I will 
-update "datafiles/ima_selinux/selinux.policy" file.
+ima_get_kexec_buffer() and ima_free_kexec_buffer() are unconditionally 
+defined in "drivers/of/kexec.c" even though they are called only when 
+CONFIG_HAVE_IMA_KEXEC is enabled. I will update these two functions to 
+be moved under "#ifdef CONFIG_HAVE_IMA_KEXEC"
 
-> 
->> +test1()
->> +{
->> +	local policy_digest expected_policy_digest algorithm
->> +	local data_source_name="selinux"
->> +	local pattern="data_sources=[^[:space:]]*$data_source_name"
->> +	local tmp_file="$TST_TMPDIR/selinux_policy_tmp_file.txt"
->> +
->> +	check_policy_pattern "$pattern" $FUNC_CRITICAL_DATA $TEMPLATE_BUF > $tmp_file || return
->> +
->> +	tst_res TINFO "Verifying selinux policy measurement"
->> +
->> +	#
->> +	# Trigger a measurement by changing selinux state
->> +	#
->> +	update_selinux_state
-> Here I used tst_update_selinux_state.
-okay.
+Rob/Mimi/Thiago - Please let me know if you have other comments in the 
+v13 patches. Will address those as well and post v14.
 
-> 
-> ...
->> --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-> 
->> +#
->> +# Update selinux state. This is used for validating IMA
->> +# measurement of selinux constructs.
->> +#
->> +update_selinux_state()
->> +{
->> +	local cur_val new_val
->> +
->> +	cur_val=$(cat $SELINUX_FOLDER/checkreqprot)
->> +
->> +	if [ $cur_val = 1 ]; then
->> +		new_val=0
->> +	else
->> +		new_val=1
->> +	fi
->> +
->> +	echo $new_val > $SELINUX_FOLDER/checkreqprot
->> +}
->> +
->> +#
->> +# Verify selinux is enabled in the system
->> +#
->> +check_selinux_state()
->> +{
->> +	[ -d $SELINUX_FOLDER ] || tst_brk TCONF "selinux is not enabled"
->> +}
-> 
-> As I mentioned above, this is not needed as I put them under different names in
-> testcases/lib/tst_security.sh.
-okay.
-
-> 
->>   mount_helper()
->>   {
->>   	local type="$1"
->> @@ -238,6 +265,7 @@ ima_setup()
->>   	ASCII_MEASUREMENTS="$IMA_DIR/ascii_runtime_measurements"
->>   	BINARY_MEASUREMENTS="$IMA_DIR/binary_runtime_measurements"
->>   	IMA_POLICY="$IMA_DIR/policy"
->> +	SELINUX_FOLDER="$SYSFS/fs/selinux"
-> 
-> nit: I renamed it to $SELINUX_DIR (for consistency with $IMA_DIR)
-> and moved to ima_selinux.sh.
-okay.
-
-Thanks a lot for your help Petr. Appreciate it.
-
+thanks,
   -lakshmi
