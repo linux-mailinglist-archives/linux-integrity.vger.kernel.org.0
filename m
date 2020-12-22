@@ -2,33 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A640F2E0E72
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Dec 2020 19:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D962E0F11
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Dec 2020 20:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbgLVSyT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Dec 2020 13:54:19 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:38580 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726356AbgLVSyT (ORCPT
+        id S1726605AbgLVTqd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Dec 2020 14:46:33 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10494 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726289AbgLVTqd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Dec 2020 13:54:19 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C490C20B83DE;
-        Tue, 22 Dec 2020 10:53:37 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C490C20B83DE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1608663218;
-        bh=//PxRnptZMzVjXYlyIzWx/0zydVkwQDoYcP2NBeyDZ8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Hb9HWHUZ+LQw+0OkX+tP5HdR/Q7wQOGoBlOskRnaFQ9kuqceUyz0iOqmuPLV+VsI6
-         V1Jtbm11qxpVrmrWUGgcl9d8+EW5IESynwTuFoKFmuHwK2PM/gmJU17L5+D/ZXVouc
-         gy+KEEVaVTjiZoJHevX/cRW3Nc/dI01qh7Y6625M=
+        Tue, 22 Dec 2020 14:46:33 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BMJVni1083551;
+        Tue, 22 Dec 2020 14:45:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=WjWJp3AIQDryqKRLNFaJp2pECH69G2IqGHqR79KvEbc=;
+ b=FTzBjeQfUBVJlL0tLCUMdFNUkKef5XjZrUcQatIb/gXq4l1UEeEUDr+6P+09+GzLtR+B
+ 7dDdkpAj+rGI19o+ojyccouiH6aX8rhERWxJqwB2awEWUQw3NxwVEG/etjeaZmMYWyrI
+ YY2fV8su9X9CvL4WtE+JY+DOWeYG4S18loWP4F1Mviwn9eUOPuOZ7SoQxdOe6ltIx6rP
+ FBbSMYjs75OEgJbCt6D4UCaGqiWP4XXtt1aQPsfl4bk7+ydo9EpYg/m5cmGqgewf2Io7
+ YMr1tkU8HwqwqV6GiGKU0RxcpCQRWLHbxjLD7rjZqgeVk0/7I79sY+mSjF7PltfRt1gF kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 35kq008bv6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Dec 2020 14:45:18 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BMJYrsg094719;
+        Tue, 22 Dec 2020 14:45:18 -0500
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 35kq008bub-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Dec 2020 14:45:17 -0500
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BMJjFmn032299;
+        Tue, 22 Dec 2020 19:45:15 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 35kefjg7hg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Dec 2020 19:45:15 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BMJjCL625952760
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Dec 2020 19:45:12 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 948BDA4067;
+        Tue, 22 Dec 2020 19:45:12 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F0C3A4060;
+        Tue, 22 Dec 2020 19:45:06 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.81.142])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Dec 2020 19:45:06 +0000 (GMT)
+Message-ID: <7a347c8f2a76fc80551a3dfcb66b0eec9b024a90.camel@linux.ibm.com>
 Subject: Re: [PATCH v13 2/6] powerpc: Move arch independent ima kexec
  functions to drivers/of/kexec.c
-To:     Mimi Zohar <zohar@linux.ibm.com>, bauerman@linux.ibm.com,
-        robh@kernel.org, takahiro.akashi@linaro.org,
-        gregkh@linuxfoundation.org, will@kernel.org,
-        catalin.marinas@arm.com, mpe@ellerman.id.au
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        bauerman@linux.ibm.com, robh@kernel.org,
+        takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
+        will@kernel.org, catalin.marinas@arm.com, mpe@ellerman.id.au
 Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
         paulus@samba.org, frowand.list@gmail.com,
         vincenzo.frascino@arm.com, mark.rutland@arm.com,
@@ -39,75 +73,92 @@ Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Date:   Tue, 22 Dec 2020 14:45:05 -0500
+In-Reply-To: <e0d9398b-1b46-8115-7bf0-28e9826fcd6b@linux.microsoft.com>
 References: <20201219175713.18888-1-nramas@linux.microsoft.com>
- <20201219175713.18888-3-nramas@linux.microsoft.com>
- <a1a4526c0759eb3b5d70fb8edc89360718376def.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <e0d9398b-1b46-8115-7bf0-28e9826fcd6b@linux.microsoft.com>
-Date:   Tue, 22 Dec 2020 10:53:37 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <a1a4526c0759eb3b5d70fb8edc89360718376def.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
+         <20201219175713.18888-3-nramas@linux.microsoft.com>
+         <a1a4526c0759eb3b5d70fb8edc89360718376def.camel@linux.ibm.com>
+         <e0d9398b-1b46-8115-7bf0-28e9826fcd6b@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-22_09:2020-12-21,2020-12-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=999
+ suspectscore=0 mlxscore=0 malwarescore=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2012220138
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 12/22/20 6:26 AM, Mimi Zohar wrote:
-
-Hi Mimi,
-
+On Tue, 2020-12-22 at 10:53 -0800, Lakshmi Ramasubramanian wrote:
+> On 12/22/20 6:26 AM, Mimi Zohar wrote:
 > 
-> On Sat, 2020-12-19 at 09:57 -0800, Lakshmi Ramasubramanian wrote:
->>
->> diff --git a/arch/powerpc/kexec/Makefile b/arch/powerpc/kexec/Makefile
->> index 4aff6846c772..b6c52608cb49 100644
->> --- a/arch/powerpc/kexec/Makefile
->> +++ b/arch/powerpc/kexec/Makefile
->> @@ -9,13 +9,6 @@ obj-$(CONFIG_PPC32)		+= relocate_32.o
->>   
->>   obj-$(CONFIG_KEXEC_FILE)	+= file_load.o ranges.o file_load_$(BITS).o elf_$(BITS).o
->>   
->> -ifdef CONFIG_HAVE_IMA_KEXEC
->> -ifdef CONFIG_IMA
->> -obj-y				+= ima.o
->> -endif
->> -endif
+> Hi Mimi,
 > 
-> Notice how "kexec/ima.o" is only included if the architecture supports
-> it and IMA is configured.  In addition only if CONFIG_IMA_KEXEC is
-> configured, is the IMA measurement list carried across kexec.  After
-> moving the rest of ima.c to drivers/of/kexec.c, this changes.   Notice
-> how drivers/of/Kconfig includes kexec.o:
+> > 
+> > On Sat, 2020-12-19 at 09:57 -0800, Lakshmi Ramasubramanian wrote:
+> >>
+> >> diff --git a/arch/powerpc/kexec/Makefile b/arch/powerpc/kexec/Makefile
+> >> index 4aff6846c772..b6c52608cb49 100644
+> >> --- a/arch/powerpc/kexec/Makefile
+> >> +++ b/arch/powerpc/kexec/Makefile
+> >> @@ -9,13 +9,6 @@ obj-$(CONFIG_PPC32)		+= relocate_32.o
+> >>   
+> >>   obj-$(CONFIG_KEXEC_FILE)	+= file_load.o ranges.o file_load_$(BITS).o elf_$(BITS).o
+> >>   
+> >> -ifdef CONFIG_HAVE_IMA_KEXEC
+> >> -ifdef CONFIG_IMA
+> >> -obj-y				+= ima.o
+> >> -endif
+> >> -endif
+> > 
+> > Notice how "kexec/ima.o" is only included if the architecture supports
+> > it and IMA is configured.  In addition only if CONFIG_IMA_KEXEC is
+> > configured, is the IMA measurement list carried across kexec.  After
+> > moving the rest of ima.c to drivers/of/kexec.c, this changes.   Notice
+> > how drivers/of/Kconfig includes kexec.o:
+> > 
+> > obj-$(CONFIG_KEXEC_FILE) += kexec.o
+> > 
+> > It is not dependent on CONFIG_HAVE_IMA_KEXEC.  Shouldn't all of the
+> > functions defined in ima.c being moved to kexec.o be defined within a
+> > CONFIG_HAVE_IMA_KEXEC ifdef?
+> > 
 > 
-> obj-$(CONFIG_KEXEC_FILE) += kexec.o
+> Thanks for reviewing the changes.
 > 
-> It is not dependent on CONFIG_HAVE_IMA_KEXEC.  Shouldn't all of the
-> functions defined in ima.c being moved to kexec.o be defined within a
-> CONFIG_HAVE_IMA_KEXEC ifdef?
+> In "drivers/of/kexec.c" the function remove_ima_buffer() is defined 
+> under "#ifdef CONFIG_HAVE_IMA_KEXEC"
 > 
+> setup_ima_buffer() is defined under "#ifdef CONFIG_IMA_KEXEC" - the same 
+> way it was defined in "arch/powerpc/kexec/ima.c".
+> 
+> As you know, CONFIG_IMA_KEXEC depends on CONFIG_HAVE_IMA_KEXEC (as 
+> defined in "security/integrity/ima/Kconfig").
+> 
+> ima_get_kexec_buffer() and ima_free_kexec_buffer() are unconditionally 
+> defined in "drivers/of/kexec.c" even though they are called only when 
+> CONFIG_HAVE_IMA_KEXEC is enabled. I will update these two functions to 
+> be moved under "#ifdef CONFIG_HAVE_IMA_KEXEC"
 
-Thanks for reviewing the changes.
+The issue is the reverse.  CONFIG_HAVE_IMA_KEXEC may be enabled without
+CONFIG_IMA_KEXEC being enabled.  This allows the architecture to
+support carrying the measurement list across kexec, but requires
+enabling it at build time.
 
-In "drivers/of/kexec.c" the function remove_ima_buffer() is defined 
-under "#ifdef CONFIG_HAVE_IMA_KEXEC"
+Only if CONFIG_HAVE_IMA_KEXEC is enabled should any of these functions
+be compiled at build.  This allows restoring the previous IMA
+measurement list, even if CONFIG_IMA_KEXEC is not enabled.
 
-setup_ima_buffer() is defined under "#ifdef CONFIG_IMA_KEXEC" - the same 
-way it was defined in "arch/powerpc/kexec/ima.c".
+Only if CONFIG_IMA_KEXEC is enabled, should carrying the measurement
+list across kexec be enabled.  See how arch_ima_add_kexec_buffer,
+write_number, setup_ima_buffer are ifdef'ed in
+arch/powerpc/kexec/ima.c.
 
-As you know, CONFIG_IMA_KEXEC depends on CONFIG_HAVE_IMA_KEXEC (as 
-defined in "security/integrity/ima/Kconfig").
+Mimi
 
-ima_get_kexec_buffer() and ima_free_kexec_buffer() are unconditionally 
-defined in "drivers/of/kexec.c" even though they are called only when 
-CONFIG_HAVE_IMA_KEXEC is enabled. I will update these two functions to 
-be moved under "#ifdef CONFIG_HAVE_IMA_KEXEC"
-
-Rob/Mimi/Thiago - Please let me know if you have other comments in the 
-v13 patches. Will address those as well and post v14.
-
-thanks,
-  -lakshmi
