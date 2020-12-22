@@ -2,128 +2,181 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F16122E0BA9
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Dec 2020 15:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF0E2E0E44
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Dec 2020 19:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727236AbgLVO2C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Dec 2020 09:28:02 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10068 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726868AbgLVO2B (ORCPT
+        id S1726161AbgLVSig (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Dec 2020 13:38:36 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36724 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725913AbgLVSig (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Dec 2020 09:28:01 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BME2Ewp030714;
-        Tue, 22 Dec 2020 09:26:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=t7mh7qSe2dZshMhzvQ4TKn7yhZMhWv9/dyw8UHUoins=;
- b=rKh99nCLhMi5Cuwifv43Nj7SKXdgiUFtE3YCvDhWeS6tDZKnExJUXMfoCOrlJ4puVdeK
- 3ZT06vHqAyQ1Px4BXXFbJZ+u3CNTkfYh5VgHSxqMkzsCK/13yoZzl9g9YELWzX0+wSVn
- Bp8whtELTClCCzIYc33xhA3biOYg+4enksfzcrQWhzCajGuPeq9t5fDuKPe+lEf7KwDA
- b41J4j6ej9DXijpvk2ngG2Mnhb5UzpdjGiHNAHeM4IqEWwnmAMCgdt23ob1nvwahrunA
- +rSU7bL3ML1vg0f4GaYy5yqRatW/UMliNAyvIZUge5ZICAWjBbgNUWGQ7XEyPvqTzSAM 0g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35kgkkk2dj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 09:26:42 -0500
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BME2Oqp030941;
-        Tue, 22 Dec 2020 09:26:39 -0500
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35kgkkk2bc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 09:26:39 -0500
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BMEM0Cm021227;
-        Tue, 22 Dec 2020 14:26:35 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 35h958b473-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 14:26:35 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BMEQWMj16777680
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Dec 2020 14:26:32 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 057B94C050;
-        Tue, 22 Dec 2020 14:26:33 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D5F244C044;
-        Tue, 22 Dec 2020 14:26:26 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.81.142])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 22 Dec 2020 14:26:26 +0000 (GMT)
-Message-ID: <a1a4526c0759eb3b5d70fb8edc89360718376def.camel@linux.ibm.com>
-Subject: Re: [PATCH v13 2/6] powerpc: Move arch independent ima kexec
- functions to drivers/of/kexec.c
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        bauerman@linux.ibm.com, robh@kernel.org,
-        takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
-        will@kernel.org, catalin.marinas@arm.com, mpe@ellerman.id.au
-Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
-        paulus@samba.org, frowand.list@gmail.com,
-        vincenzo.frascino@arm.com, mark.rutland@arm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        pasha.tatashin@soleen.com, allison@lohutok.net,
-        masahiroy@kernel.org, bhsharma@redhat.com, mbrugger@suse.com,
-        hsinyi@chromium.org, tao.li@vivo.com, christophe.leroy@c-s.fr,
-        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Date:   Tue, 22 Dec 2020 09:26:25 -0500
-In-Reply-To: <20201219175713.18888-3-nramas@linux.microsoft.com>
-References: <20201219175713.18888-1-nramas@linux.microsoft.com>
-         <20201219175713.18888-3-nramas@linux.microsoft.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
+        Tue, 22 Dec 2020 13:38:36 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 665BF20B83DE;
+        Tue, 22 Dec 2020 10:37:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 665BF20B83DE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1608662274;
+        bh=RlzaGSzxcAjcy4e0WbapOoCPC8AIE8qAdKsa1Onqa70=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=o/UEuB23MVhad1F9P2MJz5oTPv7lEAHUzWCLKMdNNWMNksSDtQSIPFnL17Ko3Qc8a
+         F0FJhPS0ZN8RT5v+jd6vpvNU/SgVVoQxrxcyg8wwzWNffLx6BUbUc3TqP74ruan5Om
+         44RRf6mKkKUuDuvuqEnJCq5f2NXzDcTTTKxDXjCI=
+Subject: Re: [PATCH v1 1/1] ima: Add test for selinux measurement
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        paul@paul-moore.com, tusharsu@linux.microsoft.com,
+        ltp@lists.linux.it, linux-integrity@vger.kernel.org
+References: <20200928194730.20862-1-nramas@linux.microsoft.com>
+ <20200928194730.20862-2-nramas@linux.microsoft.com> <X9z2+nXBdTMqHPgD@pevik>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <0db52810-c7e2-713a-80ed-748e8bb3db74@linux.microsoft.com>
+Date:   Tue, 22 Dec 2020 10:37:53 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <X9z2+nXBdTMqHPgD@pevik>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-22_06:2020-12-21,2020-12-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- clxscore=1015 priorityscore=1501 suspectscore=0 bulkscore=0
- mlxlogscore=999 impostorscore=0 mlxscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012220100
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Lakshmi,
+On 12/18/20 10:37 AM, Petr Vorel wrote:
 
-On Sat, 2020-12-19 at 09:57 -0800, Lakshmi Ramasubramanian wrote:
+Hi Petr,
+
 > 
-> diff --git a/arch/powerpc/kexec/Makefile b/arch/powerpc/kexec/Makefile
-> index 4aff6846c772..b6c52608cb49 100644
-> --- a/arch/powerpc/kexec/Makefile
-> +++ b/arch/powerpc/kexec/Makefile
-> @@ -9,13 +9,6 @@ obj-$(CONFIG_PPC32)		+= relocate_32.o
->  
->  obj-$(CONFIG_KEXEC_FILE)	+= file_load.o ranges.o file_load_$(BITS).o elf_$(BITS).o
->  
-> -ifdef CONFIG_HAVE_IMA_KEXEC
-> -ifdef CONFIG_IMA
-> -obj-y				+= ima.o
-> -endif
-> -endif
+> @Lakshmi
+> TL;DR: I added some fixes in my fork, branch ima/selinux.v2.draft,
+> https://github.com/pevik/ltp/commits/ima/selinux.v2.draft
+> 
+> + added 3 additional commits, one of them as you as the author.
+> I moved some functions to testcases/lib/tst_security.sh, renamed them.
+> Can you please have a look and test? I don't have any SELinux machine.
 
-Notice how "kexec/ima.o" is only included if the architecture supports
-it and IMA is configured.  In addition only if CONFIG_IMA_KEXEC is
-configured, is the IMA measurement list carried across kexec.  After
-moving the rest of ima.c to drivers/of/kexec.c, this changes.   Notice
-how drivers/of/Kconfig includes kexec.o:
+I'll take a look at the changes in your branch and test it with SELinux 
+enabled.
 
-obj-$(CONFIG_KEXEC_FILE) += kexec.o
+> 
+> @Mimi, all: any comment to this test? My changes are just LTP cleanup
+> so you can comment it on this patchset.
+> I suppose you get to this in January.
+> 
+> Some notes for my changes:
+> 
+> As files are quite similar (checks etc), I put both tests into single
+> file ima_selinux.sh.
+This should be fine.
 
-It is not dependent on CONFIG_HAVE_IMA_KEXEC.  Shouldn't all of the
-functions defined in ima.c being moved to kexec.o be defined within a
-CONFIG_HAVE_IMA_KEXEC ifdef?
+The reason I put the tests in different files was because I couldn't 
+find a way to run the tests independently (i mean - say, run the SELinux 
+policy measurement test but not the state measurement test or vice-versa).
 
-thanks,
+> 
+>> New functionality is being added to IMA to measure data provided by
+>> kernel components. With this feature, IMA policy can be set to enable
+>> measuring data provided by Linux Security Modules (LSM). Currently one
+>> such LSM namely selinux is being updated to use this functionality.
+>> This new functionality needs test automation in LTP.
+> 
+>> Add test cases which verify that the IMA subsystem correctly measures
+>> the data provided by selinux.
+> 
+> Could you please put into commit message and test kernel commit hash relevant
+> for the test. Is that 8861d0af642c646c8e148ce34c294bdef6f32f6a (merged into
+> v5.10-rc1) or there are more relevant commits?
 
-Mimi
+The IMA hook to measure kernel critical data + SELinux measurement 
+changes are still being reviewed. Tushar has posted v9 of the patch set.
 
+> 
+> ...
+>> +### IMA SELinux test
+>> +
+>> +To enable IMA to measure SELinux state and policy, `ima_selinux_policy.sh`
+>> +and `ima_selinux_state.sh` require a readable IMA policy, as well as
+>> +a loaded measure policy with
+>> +`measure func=CRITICAL_DATA data_sources=selinux template=ima-buf`
+> I put this into
+> testcases/kernel/security/integrity/ima/datafiles/ima_selinux/selinux.policy
+> and mention it in docs.
+Sounds good - Thanks.
+
+"template=ima_buf" is no longer needed in the IMA policy rule since 
+"ima_buf" is the default template for buffer measurement now. I will 
+update "datafiles/ima_selinux/selinux.policy" file.
+
+> 
+>> +test1()
+>> +{
+>> +	local policy_digest expected_policy_digest algorithm
+>> +	local data_source_name="selinux"
+>> +	local pattern="data_sources=[^[:space:]]*$data_source_name"
+>> +	local tmp_file="$TST_TMPDIR/selinux_policy_tmp_file.txt"
+>> +
+>> +	check_policy_pattern "$pattern" $FUNC_CRITICAL_DATA $TEMPLATE_BUF > $tmp_file || return
+>> +
+>> +	tst_res TINFO "Verifying selinux policy measurement"
+>> +
+>> +	#
+>> +	# Trigger a measurement by changing selinux state
+>> +	#
+>> +	update_selinux_state
+> Here I used tst_update_selinux_state.
+okay.
+
+> 
+> ...
+>> --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> 
+>> +#
+>> +# Update selinux state. This is used for validating IMA
+>> +# measurement of selinux constructs.
+>> +#
+>> +update_selinux_state()
+>> +{
+>> +	local cur_val new_val
+>> +
+>> +	cur_val=$(cat $SELINUX_FOLDER/checkreqprot)
+>> +
+>> +	if [ $cur_val = 1 ]; then
+>> +		new_val=0
+>> +	else
+>> +		new_val=1
+>> +	fi
+>> +
+>> +	echo $new_val > $SELINUX_FOLDER/checkreqprot
+>> +}
+>> +
+>> +#
+>> +# Verify selinux is enabled in the system
+>> +#
+>> +check_selinux_state()
+>> +{
+>> +	[ -d $SELINUX_FOLDER ] || tst_brk TCONF "selinux is not enabled"
+>> +}
+> 
+> As I mentioned above, this is not needed as I put them under different names in
+> testcases/lib/tst_security.sh.
+okay.
+
+> 
+>>   mount_helper()
+>>   {
+>>   	local type="$1"
+>> @@ -238,6 +265,7 @@ ima_setup()
+>>   	ASCII_MEASUREMENTS="$IMA_DIR/ascii_runtime_measurements"
+>>   	BINARY_MEASUREMENTS="$IMA_DIR/binary_runtime_measurements"
+>>   	IMA_POLICY="$IMA_DIR/policy"
+>> +	SELINUX_FOLDER="$SYSFS/fs/selinux"
+> 
+> nit: I renamed it to $SELINUX_DIR (for consistency with $IMA_DIR)
+> and moved to ima_selinux.sh.
+okay.
+
+Thanks a lot for your help Petr. Appreciate it.
+
+  -lakshmi
