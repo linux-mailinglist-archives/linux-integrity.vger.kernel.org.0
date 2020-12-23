@@ -2,63 +2,30 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 704D62E114A
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Dec 2020 02:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD652E1832
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Dec 2020 05:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726475AbgLWBTI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 22 Dec 2020 20:19:08 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47964 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725300AbgLWBTH (ORCPT
+        id S1726239AbgLWE51 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 22 Dec 2020 23:57:27 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:33010 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726161AbgLWE51 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 22 Dec 2020 20:19:07 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BN1Ctlq051015;
-        Tue, 22 Dec 2020 20:17:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
- cc : subject : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=Xqj4XnC91lloERXo758sMR6xKYMKm2wGq3qvpsAxQ1E=;
- b=M4MQzIhJ6rkD1twjow4VT1fj/PAvEIzGA+oPDoomT+b1ngtfAD8l7DxcfdeZG7JSsRVn
- 9kBhqT6wDdbjtboSRKfpGWxqOmX0VuTfrehUyHoKbqVRwYnwp4xXkTnyDQFXpKmfxEOX
- aJyhE8RuomKpiGr/TtHejveOKYVJv1JKS2rFPJ6BlMuv4ZNZSzkdznmXjl/TQ2SDeCr7
- MPEE226j1Up1K2mWG15CZ46oJKKZvVXKXrYCQ1519mrn++cz8huLQdLmYQLkUJfBWOmb
- rUQqVFmgb39j993ypShia2iaqPi63NKWUQkwbr2SSeqSRv13UDAHq7P3Q05Wvt7dv1bq ug== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35kv1g02rs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 20:17:58 -0500
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BN1EuqW058860;
-        Tue, 22 Dec 2020 20:17:57 -0500
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35kv1g02rf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Dec 2020 20:17:57 -0500
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BN1DEon004574;
-        Wed, 23 Dec 2020 01:17:56 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02dal.us.ibm.com with ESMTP id 35kj7qvbyb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Dec 2020 01:17:56 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BN1Ht9A27460002
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Dec 2020 01:17:55 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55434BE053;
-        Wed, 23 Dec 2020 01:17:55 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8397BBE051;
-        Wed, 23 Dec 2020 01:17:46 +0000 (GMT)
-Received: from manicouagan.localdomain (unknown [9.80.219.136])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Wed, 23 Dec 2020 01:17:46 +0000 (GMT)
-References: <20201219175713.18888-1-nramas@linux.microsoft.com>
- <20201219175713.18888-7-nramas@linux.microsoft.com>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+        Tue, 22 Dec 2020 23:57:27 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id BD2E520B7192;
+        Tue, 22 Dec 2020 20:56:45 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BD2E520B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1608699406;
+        bh=XGD1UGZ6RZjC4xpp5KtSuriQKt2Ml3utmTd4kuwn/SE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=WrWIEPk23qk6GDC6v9DLLAM7WGqBG2c+BJWDZg0LRo3Azp7AVj9K3Bx7F/t5Wb8Xx
+         UoGdCX5PxPaBaBWFUz/bTcPDju+dcNjrYC+dZ2cR5h/2S2qK/qiF1LuOwq0eMY6tqJ
+         9ck7wm9S4v8Tbqh22HOo2ttRSwuC/4+ye9E6MwG4=
+Subject: Re: [PATCH v13 2/6] powerpc: Move arch independent ima kexec
+ functions to drivers/of/kexec.c
+To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
 Cc:     zohar@linux.ibm.com, robh@kernel.org, takahiro.akashi@linaro.org,
         gregkh@linuxfoundation.org, will@kernel.org,
         catalin.marinas@arm.com, mpe@ellerman.id.au, james.morse@arm.com,
@@ -71,76 +38,64 @@ Cc:     zohar@linux.ibm.com, robh@kernel.org, takahiro.akashi@linaro.org,
         prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v13 6/6] arm64: Add IMA log information in kimage used
- for kexec
-In-reply-to: <20201219175713.18888-7-nramas@linux.microsoft.com>
-Date:   Tue, 22 Dec 2020 22:17:44 -0300
-Message-ID: <87sg7xjp6v.fsf@manicouagan.localdomain>
+References: <20201219175713.18888-1-nramas@linux.microsoft.com>
+ <20201219175713.18888-3-nramas@linux.microsoft.com>
+ <875z4tl54t.fsf@manicouagan.localdomain>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <caf829a6-4d88-d932-f1cb-7dc16817719d@linux.microsoft.com>
+Date:   Tue, 22 Dec 2020 20:56:45 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-22_13:2020-12-21,2020-12-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- priorityscore=1501 phishscore=0 malwarescore=0 bulkscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012230003
+In-Reply-To: <875z4tl54t.fsf@manicouagan.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 12/22/20 4:48 PM, Thiago Jung Bauermann wrote:
+> 
+> Actually, I have one more comment on this patch:
+> 
+> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+> 
+>> diff --git a/arch/powerpc/kexec/file_load.c b/arch/powerpc/kexec/file_load.c
+>> index 956bcb2d1ec2..9f3ec0b239ef 100644
+>> --- a/arch/powerpc/kexec/file_load.c
+>> +++ b/arch/powerpc/kexec/file_load.c
+>> @@ -20,7 +20,6 @@
+>>   #include <linux/of_fdt.h>
+>>   #include <linux/libfdt.h>
+>>   #include <asm/setup.h>
+>> -#include <asm/ima.h>
+>>   
+>>   #define SLAVE_CODE_SIZE		256	/* First 0x100 bytes */
+>>   
+>> @@ -163,12 +162,6 @@ int setup_new_fdt(const struct kimage *image, void *fdt,
+>>   	if (ret)
+>>   		goto err;
+>>   
+>> -	ret = setup_ima_buffer(image, fdt, fdt_path_offset(fdt, "/chosen"));
+>> -	if (ret) {
+>> -		pr_err("Error setting up the new device tree.\n");
+>> -		return ret;
+>> -	}
+>> -
+>>   	return 0;
+>>   
+>>   err:
+> 
+> With this change, setup_new_fdt() is nothing more than a call to
+> of_kexec_setup_new_fdt(). It should be removed, and its caller should
+> call of_kexec_setup_new_fdt() directly.
+> 
+> This change could be done in patch 4 of this series, to keep this patch
+> simpler.
+> 
 
-Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+Sure Thiago - I will make that change.
 
-> Address and size of the buffer containing the IMA measurement log need
-> to be passed from the current kernel to the next kernel on kexec.
->
-> Any existing "linux,ima-kexec-buffer" property in the device tree
-> needs to be removed and its corresponding memory reservation in
-> the currently running kernel needs to be freed. The address and
-> size of the current kernel's IMA measurement log need to be added
-> to the device tree's IMA kexec buffer node and memory for the buffer
-> needs to be reserved for the log to be carried over to the next kernel
-> on the kexec call.
->
-> Add address and size fields to "struct kimage_arch" for ARM64 platform
-> to hold the address and size of the IMA measurement log buffer. Remove
-> any existing "linux,ima-kexec-buffer" property in the device tree and
-> free the corresponding memory reservation in the currently running
-> kernel. Add "linux,ima-kexec-buffer" property to the device tree and
-> reserve the memory for storing the IMA log that needs to be passed from
-> the current kernel to the next one.
->
-> Update CONFIG_KEXEC_FILE to select CONFIG_HAVE_IMA_KEXEC to indicate
-> that the IMA measurement log information is present in the device tree
-> for ARM64.
->
-> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> ---
->  arch/arm64/Kconfig             | 1 +
->  arch/arm64/include/asm/kexec.h | 5 +++++
->  2 files changed, 6 insertions(+)
->
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 1d466addb078..c85d18b1f2fd 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -1094,6 +1094,7 @@ config KEXEC
->  config KEXEC_FILE
->  	bool "kexec file based system call"
->  	select KEXEC_CORE
-> +	select HAVE_IMA_KEXEC
->  	help
->  	  This is new version of kexec system call. This system call is
->  	  file based and takes file descriptors as system call argument
-
-As I suggested in the other email, this should be:
-
-	select HAVE_IMA_KEXEC if IMA
-
--- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
+thanks,
+  -lakshmi
