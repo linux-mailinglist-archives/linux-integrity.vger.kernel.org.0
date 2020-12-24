@@ -2,409 +2,295 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CB62E21EF
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Dec 2020 22:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7BD2E22E0
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Dec 2020 01:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729121AbgLWVLV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Dec 2020 16:11:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728973AbgLWVLV (ORCPT
+        id S1727282AbgLXAEP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Dec 2020 19:04:15 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57320 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727029AbgLXAEP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Dec 2020 16:11:21 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0355AC061282
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Dec 2020 13:10:41 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id y24so448945edt.10
-        for <linux-integrity@vger.kernel.org>; Wed, 23 Dec 2020 13:10:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uawmuf30g8hFwJC27vRaIVBzmTPClIdro7xuWf9Sm78=;
-        b=nf6MtDLj0yXfwMPHKj4F6uS38hp9/FgE7WjMbs9W5hfOPEvyrZd/Vo+KPXWajBblp6
-         51SJeGJME12NKkBhQE2UIzKlXEd9sZMHvtAKyex8rxbP9mu47/exsMyDjlz1rZt3qnCj
-         UfjN0ESqMMUzQ9WeMYXu+JqsoditdMCJ8spKYK1/ytp36yaSADUHD5FmSFBS/A3Uk4S8
-         5aPPJBBw9rYqz+XZrU67AfX8FIGwZsV9xM8wdpWiaHPiixgoP3i7BvwNeFcnhHwzM0gM
-         MDdX6kok64X3ScN405uKj3qKCde34YYylnRtoJdTD5u8Ulq/j1AfXzDx14gN5Aq98wFG
-         o/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uawmuf30g8hFwJC27vRaIVBzmTPClIdro7xuWf9Sm78=;
-        b=NBu2fbrDtO+Ami3SqlCqDySmLIiB60zDherimKk1q5lAZekLe7iPizdjd7KHxejyy2
-         GstrRrtI2N7GVPrhEHhAsgwBZorLaWgXQhSPYYx8ILqDO94NsD9hXCQiCFOxB+hLgC62
-         XC6soGxWmFI0TfU30hEbLvel0jcWZY1CY+04vU9ZkBvRPFPSLEXj4yHeLO4HIY1Mc+oj
-         l6QeNlDqglPBQoj/TCOzFgRATkQ/bSY3cIL4tLLQ7OlxgriPJtr3EwNJRcclaCprlZgp
-         Kn/YpxxLU+H1JCVKTAJkFFMdQ5C5Ro2w+r+t+aftypLX5+AwHziQWJU657rLttlt0iXz
-         lFvA==
-X-Gm-Message-State: AOAM531KeSxOcoPhNCYrmdxcE7hvocgGb9YmNhHaFH+B1Y3OCIp5jRnn
-        lrYg8i9es9HkXm2y9Var93GeER53oonJIdccv8Sl
-X-Google-Smtp-Source: ABdhPJwDgd5vJjHNoYvW6djLXniqbUaSdL2T70zxwf8HHr0zlEHG3Y5JtpuVE8PoB63cYTHQgTDHwgNYF4vQ9gmJcio=
-X-Received: by 2002:aa7:c0d6:: with SMTP id j22mr26211419edp.31.1608757839451;
- Wed, 23 Dec 2020 13:10:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20201212180251.9943-1-tusharsu@linux.microsoft.com> <20201212180251.9943-9-tusharsu@linux.microsoft.com>
-In-Reply-To: <20201212180251.9943-9-tusharsu@linux.microsoft.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 23 Dec 2020 16:10:28 -0500
-Message-ID: <CAHC9VhSao7DGtskbDMax8hN+PhQr8homFXUGjm+c7NtEUCtKhg@mail.gmail.com>
-Subject: Re: [PATCH v9 8/8] selinux: include a consumer of the new IMA
- critical data hook
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, tyhicks@linux.microsoft.com,
-        sashal@kernel.org, James Morris <jmorris@namei.org>,
+        Wed, 23 Dec 2020 19:04:15 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BO02rK1170192;
+        Wed, 23 Dec 2020 19:03:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=tLvO6SEvcChgdZNNMk9EMe9BKdPJmunmiub1yKoe5Bs=;
+ b=C3Ebt7sSjC1YF6KKNFurFd0Nss6ZeoFAToX1WBUtuvn7UrMj80OHkoZfWByo7RdWGghW
+ oGvYZXY0OdqQNeeaOsbPOmA/Cc5A2vQYWm1PniCnlLuyeGvCLCMUMucTbmJDmVxXCQJ9
+ AM+dCO2WApOh1uWfZkaUGauvMNFg/0uyp2+V00VCWLm/O7UqTwI0Gvqho9XYykXaMMSm
+ UpnKFtWTXP/RPQFAE/s/a7SPMKtlbTtF4+VIoxYglGordiJfCF2zUum7EIIdUqeiD5wh
+ cjhfe5jF7/2RtBGasRV7xaie5Is8FOQ/3tobradbebO6otOReuMvAKcqHU8BbRSguInm 8w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35mff78mdh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Dec 2020 19:03:27 -0500
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BO03RjI174558;
+        Wed, 23 Dec 2020 19:03:27 -0500
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35mff78mcq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Dec 2020 19:03:27 -0500
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BO02rW6029657;
+        Thu, 24 Dec 2020 00:03:25 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 35h8sh4dhk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Dec 2020 00:03:25 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BO03NcW43712808
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Dec 2020 00:03:23 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3961652057;
+        Thu, 24 Dec 2020 00:03:23 +0000 (GMT)
+Received: from sig-9-65-213-118.ibm.com (unknown [9.65.213.118])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 930335204E;
+        Thu, 24 Dec 2020 00:03:19 +0000 (GMT)
+Message-ID: <4e83480731b937cea479f688029560444b9cb66a.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 2/8] IMA: add support to measure buffer data hash
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
         selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Date:   Wed, 23 Dec 2020 19:03:18 -0500
+In-Reply-To: <20201212180251.9943-3-tusharsu@linux.microsoft.com>
+References: <20201212180251.9943-1-tusharsu@linux.microsoft.com>
+         <20201212180251.9943-3-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-23_14:2020-12-23,2020-12-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ suspectscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ mlxlogscore=999 spamscore=0 adultscore=0 clxscore=1011 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012230164
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Dec 12, 2020 at 1:03 PM Tushar Sugandhi
-<tusharsu@linux.microsoft.com> wrote:
-> From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
->
-> SELinux stores the active policy in memory, so the changes to this data
-> at runtime would have an impact on the security guarantees provided
-> by SELinux. Measuring in-memory SELinux policy through IMA subsystem
-> provides a secure way for the attestation service to remotely validate
-> the policy contents at runtime.
->
-> Measure the hash of the loaded policy by calling the IMA hook
-> ima_measure_critical_data(). Since the size of the loaded policy can
-> be large (several MB), measure the hash of the policy instead of
-> the entire policy to avoid bloating the IMA log entry.
->
-> Add "selinux" to the list of supported data sources maintained by IMA
-> to enable measuring SELinux data.
->
-> To enable SELinux data measurement, the following steps are required:
->
-> 1, Add "ima_policy=critical_data" to the kernel command line arguments
->    to enable measuring SELinux data at boot time.
-> For example,
->   BOOT_IMAGE=/boot/vmlinuz-5.10.0-rc1+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset security=selinux ima_policy=critical_data
->
-> 2, Add the following rule to /etc/ima/ima-policy
->    measure func=CRITICAL_DATA data_source=selinux
->
-> Sample measurement of the hash of SELinux policy:
->
-> To verify the measured data with the current SELinux policy run
-> the following commands and verify the output hash values match.
->
->   sha256sum /sys/fs/selinux/policy | cut -d' ' -f 1
->
->   grep "selinux-policy-hash" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | tail -1 | cut -d' ' -f 6
->
-> Note that the actual verification of SELinux policy would require loading
-> the expected policy into an identical kernel on a pristine/known-safe
-> system and run the sha256sum /sys/kernel/selinux/policy there to get
-> the expected hash.
->
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+On Sat, 2020-12-12 at 10:02 -0800, Tushar Sugandhi wrote:
+> The original IMA buffer data measurement sizes were small (e.g. boot
+> command line), but the new buffer data measurement use cases have data 
+> sizes that are a lot larger.  Just as IMA measures the file data hash,
+> not the file data, IMA should similarly support the option for measuring 
+> the hash of the buffer data.
+> 
+> Measuring in-memory buffer-data/buffer-data-hash is different than
+> measuring file-data/file-data-hash. For the file, IMA stores the
+> measurements in both measurement log and the file's extended attribute -
+> which can later be used for appraisal as well. For buffer, the
+> measurements are only stored in the IMA log, since the buffer has no
+> extended attributes associated with it.
+
+By definition, buffer data is only measured.  Nothing new is added by
+the above paragraph.  Please remove it.
+
+> 
+> Introduce a boolean parameter measure_buf_hash to support measuring
+> hash of a buffer, which would be much smaller, instead of the buffer
+> itself.
+
+Like the patch Subject line use "the buffer data hash" instead of the
+"hash of a buffer".
+
+There's no need to include the boolean parameter name
+"measure_buf_hash".  Please remove it.
+
+> 
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 > Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 > ---
->  Documentation/ABI/testing/ima_policy |  3 +-
->  security/selinux/Makefile            |  2 +
->  security/selinux/include/security.h  | 11 +++-
->  security/selinux/measure.c           | 79 ++++++++++++++++++++++++++++
->  security/selinux/ss/services.c       | 71 +++++++++++++++++++++----
->  5 files changed, 155 insertions(+), 11 deletions(-)
->  create mode 100644 security/selinux/measure.c
+>  security/integrity/ima/ima.h                 |  3 +-
+>  security/integrity/ima/ima_appraise.c        |  2 +-
+>  security/integrity/ima/ima_asymmetric_keys.c |  2 +-
+>  security/integrity/ima/ima_main.c            | 38 +++++++++++++++++---
+>  security/integrity/ima/ima_queue_keys.c      |  3 +-
+>  5 files changed, 39 insertions(+), 9 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index e5622ce8cbb1..fa3044a7539f 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -268,7 +268,8 @@ void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
+>  			   struct ima_template_desc *template_desc);
+>  void process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>  				const char *eventname, enum ima_hooks func,
+> -				int pcr, const char *func_data);
+> +				int pcr, const char *func_data,
+> +				bool measure_buf_hash);
 
-...
+Please abbreviate the boolean name to "hash".   The test would then be
+"if (hash == true)" or "if (hash)".
 
-> diff --git a/security/selinux/Makefile b/security/selinux/Makefile
-> index 4d8e0e8adf0b..83d512116341 100644
-> --- a/security/selinux/Makefile
-> +++ b/security/selinux/Makefile
-> @@ -16,6 +16,8 @@ selinux-$(CONFIG_NETLABEL) += netlabel.o
->
->  selinux-$(CONFIG_SECURITY_INFINIBAND) += ibpkey.o
->
-> +selinux-$(CONFIG_IMA) += measure.o
-
-Naming things is hard, I get that, but I would prefer if we just
-called this file "ima.c" or something similar.  The name "measure.c"
-implies a level of abstraction or general use which simply doesn't
-exist here.  Let's help make it a bit more obvious what should belong
-in this file.
-
-> diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
-> index 3cc8bab31ea8..18ee65c98446 100644
-> --- a/security/selinux/include/security.h
-> +++ b/security/selinux/include/security.h
-> @@ -229,7 +229,8 @@ void selinux_policy_cancel(struct selinux_state *state,
->                         struct selinux_policy *policy);
->  int security_read_policy(struct selinux_state *state,
->                          void **data, size_t *len);
-> -
-> +int security_read_policy_kernel(struct selinux_state *state,
-> +                               void **data, size_t *len);
->  int security_policycap_supported(struct selinux_state *state,
->                                  unsigned int req_cap);
->
-> @@ -446,4 +447,12 @@ extern void ebitmap_cache_init(void);
->  extern void hashtab_cache_init(void);
->  extern int security_sidtab_hash_stats(struct selinux_state *state, char *page);
->
-> +#ifdef CONFIG_IMA
-> +extern void selinux_measure_state(struct selinux_state *selinux_state);
-> +#else
-> +static inline void selinux_measure_state(struct selinux_state *selinux_state)
-> +{
-> +}
-> +#endif
-
-If you are going to put the SELinux/IMA function(s) into a separate
-source file, please put the function declarations into a separate
-header file too.  For example, look at
-security/selinux/include/{netif,netnode,netport,etc.}.h.
-
-> diff --git a/security/selinux/measure.c b/security/selinux/measure.c
-> new file mode 100644
-> index 000000000000..b7e24358e11d
-> --- /dev/null
-> +++ b/security/selinux/measure.c
-> @@ -0,0 +1,79 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Measure SELinux state using IMA subsystem.
-> + */
-> +#include <linux/vmalloc.h>
-> +#include <linux/ktime.h>
-> +#include <linux/ima.h>
-> +#include "security.h"
-> +
-> +/*
-> + * This function creates a unique name by appending the timestamp to
-> + * the given string. This string is passed as "event_name" to the IMA
-> + * hook to measure the given SELinux data.
-> + *
-> + * The data provided by SELinux to the IMA subsystem for measuring may have
-> + * already been measured (for instance the same state existed earlier).
-> + * But for SELinux the current data represents a state change and hence
-> + * needs to be measured again. To enable this, pass a unique "event_name"
-> + * to the IMA hook so that IMA subsystem will always measure the given data.
-> + *
-> + * For example,
-> + * At time T0 SELinux data to be measured is "foo". IMA measures it.
-> + * At time T1 the data is changed to "bar". IMA measures it.
-> + * At time T2 the data is changed to "foo" again. IMA will not measure it
-> + * (since it was already measured) unless the event_name, for instance,
-> + * is different in this call.
-> + */
-> +static char *selinux_event_name(const char *name_prefix)
-> +{
-> +       struct timespec64 cur_time;
-> +
-> +       ktime_get_real_ts64(&cur_time);
-> +       return kasprintf(GFP_KERNEL, "%s-%lld:%09ld", name_prefix,
-> +                        cur_time.tv_sec, cur_time.tv_nsec);
-> +}
-
-Why is this a separate function?  It's three lines long and only
-called from selinux_measure_state().  Do you ever see the SELinux/IMA
-code in this file expanding to the point where this function is nice
-from a reuse standpoint?
-
-Also, I assume you are not concerned about someone circumventing the
-IMA measurements by manipulating the time?  In most systems I would
-expect the time to be a protected entity, but with many systems
-getting their time from remote systems I thought it was worth
-mentioning.
-
-> +/*
-> + * selinux_measure_state - Measure hash of the SELinux policy
-> + *
-> + * @state: selinux state struct
-> + *
-> + * NOTE: This function must be called with policy_mutex held.
-> + */
-> +void selinux_measure_state(struct selinux_state *state)
-
-Similar to the name of this source file, let's make it clear this is
-for IMA.  How about calling this selinux_ima_measure_state() or
-similar?
-
-> +{
-> +       void *policy = NULL;
-> +       char *policy_event_name = NULL;
-> +       size_t policy_len;
-> +       int rc = 0;
-> +       bool initialized = selinux_initialized(state);
-
-Why bother with the initialized variable?  Unless I'm missing
-something it is only used once in the code below.
-
-> +       /*
-> +        * Measure SELinux policy only after initialization is completed.
-> +        */
-> +       if (!initialized)
-> +               goto out;
-> +
-> +       policy_event_name = selinux_event_name("selinux-policy-hash");
-> +       if (!policy_event_name) {
-> +               pr_err("SELinux: %s: event name for policy not allocated.\n",
-> +                      __func__);
-> +               rc = -ENOMEM;
-
-This function doesn't return an error code, why bother with setting
-the rc variable here?
-
-> +               goto out;
-> +       }
-> +
-> +       rc = security_read_policy_kernel(state, &policy, &policy_len);
-> +       if (rc) {
-> +               pr_err("SELinux: %s: failed to read policy %d.\n", __func__, rc);
-> +               goto out;
-> +       }
-> +
-> +       ima_measure_critical_data("selinux", policy_event_name,
-> +                                 policy, policy_len, true);
-> +
-> +       vfree(policy);
-> +
-> +out:
-> +       kfree(policy_event_name);
-> +}
-> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-> index 9704c8a32303..dfa2e00894ae 100644
-> --- a/security/selinux/ss/services.c
-> +++ b/security/selinux/ss/services.c
-> @@ -2180,6 +2180,7 @@ static void selinux_notify_policy_change(struct selinux_state *state,
->         selinux_status_update_policyload(state, seqno);
->         selinux_netlbl_cache_invalidate();
->         selinux_xfrm_notify_policyload();
-> +       selinux_measure_state(state);
+>  void ima_audit_measurement(struct integrity_iint_cache *iint,
+>  			   const unsigned char *filename);
+>  int ima_alloc_init_template(struct ima_event_data *event_data,
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index 8361941ee0a1..46ffa38bab12 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -352,7 +352,7 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
+>  		if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
+>  			process_buffer_measurement(NULL, digest, digestsize,
+>  						   "blacklisted-hash", NONE,
+> -						   pcr, NULL);
+> +						   pcr, NULL, false);
+>  	}
+>  
+>  	return rc;
+> diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
+> index 1c68c500c26f..a74095793936 100644
+> --- a/security/integrity/ima/ima_asymmetric_keys.c
+> +++ b/security/integrity/ima/ima_asymmetric_keys.c
+> @@ -60,5 +60,5 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+>  	 */
+>  	process_buffer_measurement(NULL, payload, payload_len,
+>  				   keyring->description, KEY_CHECK, 0,
+> -				   keyring->description);
+> +				   keyring->description, false);
 >  }
->
->  void selinux_policy_commit(struct selinux_state *state,
-> @@ -3875,8 +3876,33 @@ int security_netlbl_sid_to_secattr(struct selinux_state *state,
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index e76ef4bfd0f4..0f8409d77602 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -779,7 +779,7 @@ int ima_post_load_data(char *buf, loff_t size,
 >  }
->  #endif /* CONFIG_NETLABEL */
->
-> +/**
-> + * security_read_selinux_policy - read the policy.
-> + * @policy: SELinux policy
-> + * @data: binary policy data
-> + * @len: length of data in bytes
-> + *
-> + */
-> +static int security_read_selinux_policy(struct selinux_policy *policy,
-> +                                       void *data, size_t *len)
+>  
+>  /*
+> - * process_buffer_measurement - Measure the buffer to ima log.
+> + * process_buffer_measurement - Measure the buffer or the buffer data hash
+>   * @inode: inode associated with the object being measured (NULL for KEY_CHECK)
+>   * @buf: pointer to the buffer that needs to be added to the log.
+>   * @size: size of buffer(in bytes).
+> @@ -787,12 +787,23 @@ int ima_post_load_data(char *buf, loff_t size,
+>   * @func: IMA hook
+>   * @pcr: pcr to extend the measurement
+>   * @func_data: private data specific to @func, can be NULL.
+> + * @measure_buf_hash: measure buffer hash
 
-Let's just call this "security_read_policy()".
+^@hash: measure buffer data hash
 
-> +{
-> +       int rc;
-> +       struct policy_file fp;
-> +
-> +       fp.data = data;
-> +       fp.len = *len;
-> +
-> +       rc = policydb_write(&policy->policydb, &fp);
-> +       if (rc)
-> +               return rc;
-> +
-> +       *len = (unsigned long)fp.data - (unsigned long)data;
-> +       return 0;
-> +}
-> +
->  /**
->   * security_read_policy - read the policy.
-> + * @state: selinux_state
->   * @data: binary policy data
->   * @len: length of data in bytes
 >   *
-> @@ -3885,8 +3911,6 @@ int security_read_policy(struct selinux_state *state,
->                          void **data, size_t *len)
+> - * Based on policy, the buffer is measured into the ima log.
+> + * Measure the buffer into the IMA log, and extend the @pcr.
+
+IMA always measures/appraises files and measures buffer data based on
+policy.  The above sentence succintly summarizes what
+process_buffer_measurement() does.   This patch adds support for
+measuring the "buffer data hash".   The following would be an
+appropriate change.
+
+* Based on policy, either the buffer data or buffer data hash is
+measured
+
+> + *
+> + * Determine what buffers are allowed to be measured, based on the policy rules
+> + * and the IMA hook passed using @func.
+> + *
+> + * Use @func_data, if provided, to match against the measurement policy rule
+> + * data for @func.
+> + *
+> + * If @measure_buf_hash is set to true - measure hash of the buffer data,
+> + * else measure the buffer data itself.
+
+This patch should be limited to adding "buffer data hash" support. 
+These changes don't belong in this patch.  Please remove.
+
+>   */
+>  void process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>  				const char *eventname, enum ima_hooks func,
+> -				int pcr, const char *func_data)
+> +				int pcr, const char *func_data,
+> +				bool measure_buf_hash)
 >  {
->         struct selinux_policy *policy;
-> -       int rc;
-> -       struct policy_file fp;
->
->         policy = rcu_dereference_protected(
->                         state->policy, lockdep_is_held(&state->policy_mutex));
-> @@ -3898,14 +3922,43 @@ int security_read_policy(struct selinux_state *state,
->         if (!*data)> --
-> 2.17.1
->
+>  	int ret = 0;
+>  	const char *audit_cause = "ENOMEM";
+> @@ -807,6 +818,8 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>  		struct ima_digest_data hdr;
+>  		char digest[IMA_MAX_DIGEST_SIZE];
+>  	} hash = {};
+> +	char buf_hash[IMA_MAX_DIGEST_SIZE];
+> +	int buf_hash_len = hash_digest_size[ima_hash_algo];
+>  	int violation = 0;
+>  	int action = 0;
+>  	u32 secid;
+> @@ -849,13 +862,27 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
+>  		goto out;
+>  	}
+>  
+> +	if (measure_buf_hash) {
 
->                 return -ENOMEM;
->
-> -       fp.data = *data;
-> -       fp.len = *len;
-> +       return security_read_selinux_policy(policy, *data, len);
-> +}
->
-> -       rc = policydb_write(&policy->policydb, &fp);
-> -       if (rc)
-> -               return rc;
-> +/**
-> + * security_read_policy_kernel - read the policy.
-> + * @state: selinux_state
-> + * @data: binary policy data
-> + * @len: length of data in bytes
-> + *
-> + * Allocates kernel memory for reading SELinux policy.
-> + * This function is for internal use only and should not
-> + * be used for returning data to user space.
-> + *
-> + * This function must be called with policy_mutex held.
-> + */
-> +int security_read_policy_kernel(struct selinux_state *state,
-> +                               void **data, size_t *len)
-
-Let's call this "security_read_state_kernel()".
-
-> +{
-> +       struct selinux_policy *policy;
-> +       int rc = 0;
-
-See below, the rc variable is not needed.
-
-> -       *len = (unsigned long)fp.data - (unsigned long)*data;
-> -       return 0;
-> +       policy = rcu_dereference_protected(
-> +                       state->policy, lockdep_is_held(&state->policy_mutex));
-> +       if (!policy) {
-> +               rc = -EINVAL;
-> +               goto out;
-
-Jumping to the out label is a little silly since it is just a return;
-do a "return -EINVAL;" here instead.
-
-> +       }
+^ if (hash) {
+> +		memcpy(buf_hash, hash.hdr.digest, buf_hash_len);
 > +
-> +       *len = policy->policydb.len;
-> +       *data = vmalloc(*len);
-> +       if (!*data) {
-> +               rc = -ENOMEM;
-> +               goto out;
+> +		ret = ima_calc_buffer_hash(buf_hash, buf_hash_len,
+> +					   iint.ima_hash);
+> +		if (ret < 0) {
+> +			audit_cause = "measure_buf_hash_error";
 
-Same as above, "return -ENOMEM;" please.
+I don't see a good no reason for defining a new audit cause.  Use the
+existing "hashing_error".
 
-> +       }
->
-> +       rc = security_read_selinux_policy(policy, *data, len);
+thanks,
 
-You should be able to do "return security_read_selinux_policy(...);" here.
+Mimi
 
+> +			goto out;
+> +		}
 > +
-> +out:
-> +       return rc;
+> +		event_data.buf = buf_hash;
+> +		event_data.buf_len = buf_hash_len;
+> +	}
+> +
+>  	ret = ima_alloc_init_template(&event_data, &entry, template);
+>  	if (ret < 0) {
+>  		audit_cause = "alloc_entry";
+>  		goto out;
+>  	}
+>  
+> -	ret = ima_store_template(entry, violation, NULL, buf, pcr);
+> +	ret = ima_store_template(entry, violation, NULL, event_data.buf, pcr);
+>  	if (ret < 0) {
+>  		audit_cause = "store_entry";
+>  		ima_free_template_entry(entry);
+> @@ -890,7 +917,8 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+>  		return;
+>  
+>  	process_buffer_measurement(file_inode(f.file), buf, size,
+> -				   "kexec-cmdline", KEXEC_CMDLINE, 0, NULL);
+> +				   "kexec-cmdline", KEXEC_CMDLINE, 0, NULL,
+> +				   false);
+>  	fdput(f);
 >  }
+>  
+> diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
+> index 69a8626a35c0..c2f2ad34f9b7 100644
+> --- a/security/integrity/ima/ima_queue_keys.c
+> +++ b/security/integrity/ima/ima_queue_keys.c
+> @@ -162,7 +162,8 @@ void ima_process_queued_keys(void)
+>  						   entry->payload_len,
+>  						   entry->keyring_name,
+>  						   KEY_CHECK, 0,
+> -						   entry->keyring_name);
+> +						   entry->keyring_name,
+> +						   false);
+>  		list_del(&entry->list);
+>  		ima_free_key_entry(entry);
+>  	}
 
--- 
-paul moore
-www.paul-moore.com
+
