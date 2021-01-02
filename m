@@ -2,72 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CA72E8945
-	for <lists+linux-integrity@lfdr.de>; Sun,  3 Jan 2021 00:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6083B2E895C
+	for <lists+linux-integrity@lfdr.de>; Sun,  3 Jan 2021 00:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbhABXIs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 2 Jan 2021 18:08:48 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:34411 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726894AbhABXIs (ORCPT
+        id S1726893AbhABXoD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 2 Jan 2021 18:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726766AbhABXoC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 2 Jan 2021 18:08:48 -0500
-Received: by mail-il1-f200.google.com with SMTP id c72so23421074ila.1
-        for <linux-integrity@vger.kernel.org>; Sat, 02 Jan 2021 15:08:32 -0800 (PST)
+        Sat, 2 Jan 2021 18:44:02 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BBEC061573
+        for <linux-integrity@vger.kernel.org>; Sat,  2 Jan 2021 15:43:22 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id b24so22802568otj.0
+        for <linux-integrity@vger.kernel.org>; Sat, 02 Jan 2021 15:43:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gfK59qElpmcMSWiFsxzdYlNuH1Et8G2dRjUlpzcjxEE=;
+        b=hPwVzGWryfetS/nJ55hzTzoh/4Ax1bO0LTnU1aOxzVvlgsL3x7MuiWTK/i7iVu9y99
+         IHLQms1Xvx0GpADVuPUoh6qn0PBteWloXncQgiQiufhHw8hrgib50XQSLfxDxBNvbJ4V
+         t13OsjsjTN/TRE1j5zCTNEgWWIW4MgPOFirUtqMXGGVslqsolFioaVTuFftEmD1MIK9J
+         6MSsm6RGaEaB2CZylA64XcCor0APrbEW821OWMoJ04L+CyWoktP41qvqCWPqpTw5YPNU
+         kp1hLERBswRAuhd+fuR/6bptSyq/nARX6L5XVN32leshKb+ntspJst6sTR/ccXjHsXoq
+         70pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=xiEz0zPMyUpnKzLhYUnlv16mJTBk47GYHjbMemvYGag=;
-        b=nXdn6OsgHM5ERZk6+qOaYDolv8gQJKmkqtmdglNaaXznkomDQj9uuZ1jrC2FhFH4rx
-         QrYV4epksQU2pd+gAZ2NYJar80Rgc7H6D8y5uueLZQ+CGgU6lFwSMYlzljY7SkTW00xj
-         jSyfcei8aCMoE8GAHztzuZ6BfrVpS9WLKKv1bUV8m/4I7HHB6J+YyS76wDr3UlIjzh7S
-         eWsRSAQ0otUOjxhLpr1ZEuY2cH2sS0bKuXHqR8BCBnp1kbAjmXj5BKL9I7MG6O/gJbdX
-         a2WvKEudqJg/XHKUax5oLsqG2QQy6Ol62d83gAD3PApJDHoKnEJDokiDF3xznnlCNcbm
-         RKDA==
-X-Gm-Message-State: AOAM533bo+KV+u67LFq5pc1ZDrJ8PwJKzg9HZMPYCO0u+6bZhiGOtit5
-        WK4dRh7kc1AMQXPjSEkJlowxsC/KggaOpaAL7GUeSCRYPP5G
-X-Google-Smtp-Source: ABdhPJw5aPB63tv+UKyWH6P3GLw1/joSnocDf9Va4zkVn9W6ovN0OmH9m4h5GDMUABDOGXo/PpQv9dQg0Tviuv4SPWoyM7fs5DD8
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gfK59qElpmcMSWiFsxzdYlNuH1Et8G2dRjUlpzcjxEE=;
+        b=WVom/P10EdyMvPhaBLoVSScIy54DL+2cOqIa+Izjk3UVtlBUPEcQJlZoWfZ3QJ2MRA
+         /84znfyQJ6RZlX0BvxAklBkZXTxU7mxlVKjJrRGvVPcoLeY1IXHEv6hQswPU0NvTszFE
+         4x/MZ4aDG8KmtzwznGnOJ9fV3O4so/8CYoudX6bGBeUpf3Vnc3L/5A7QfDX8uxE3jJpR
+         v4niQTeda1tbOjwP+Z5BVeBx/ExsFGmbyvU8L7qv8xWWSI3BbOKSIGeTIcR20Hm4cJJ8
+         +Qni/zKd4s+8rJ3JoTt/0ExayoLZ1YvVod6SCE3xuwUJBGAn2zw+qzD4Q0pIIuN57gd4
+         OdWA==
+X-Gm-Message-State: AOAM531CenWm+U1hsNHT3b3f+v3kEu7KCl79lggQrI6AeyqarvUqgnLz
+        aI+DcfZ26qp30dwX2IJaSPzElsCe5b9tnkUrMD8=
+X-Google-Smtp-Source: ABdhPJxHgkIyI6H3/mUZbvYU5xBaoYUT/af9Au504rZ5fhu/Eexy37Rqyw7i9Wvgiq3JhUScJo++awM1ZL6KivR9f2A=
+X-Received: by 2002:a05:6830:20d5:: with SMTP id z21mr47649733otq.310.1609631001458;
+ Sat, 02 Jan 2021 15:43:21 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:1508:: with SMTP id v8mr37962807ilk.162.1609628887224;
- Sat, 02 Jan 2021 15:08:07 -0800 (PST)
-Date:   Sat, 02 Jan 2021 15:08:07 -0800
-In-Reply-To: <000000000000880dcc0598bcfac9@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000b157705b7f2eefd@google.com>
-Subject: Re: possible deadlock in process_measurement (2)
-From:   syzbot <syzbot+18a1619cceea30ed45af@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bhe@redhat.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, mike.kravetz@oracle.com,
-        richard.weiyang@linux.alibaba.com, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        zohar@linux.ibm.com
+Received: by 2002:a05:6808:614:0:0:0:0 with HTTP; Sat, 2 Jan 2021 15:43:20
+ -0800 (PST)
+Reply-To: hs8qfc11@gmail.com
+From:   Mr Bill T Winters <ptsd383@gmail.com>
+Date:   Sun, 3 Jan 2021 00:43:20 +0100
+Message-ID: <CAPdjYafbw2ANX1js5+wi1-NkbOrgtYvrUuW8NoQwbQasJV0MRw@mail.gmail.com>
+Subject: Good Morning,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+-- 
+I Mr Bill T, did you Receive the (FUND), that was paid to you? please,
+do not hesitate to Let me know with your full name:.. for immediate
+verification notice,
 
-commit 15a8d68e9dc23dc9def4bd7e9563db60f4f86580
-Author: Wei Yang <richard.weiyang@linux.alibaba.com>
-Date:   Tue Oct 13 23:56:33 2020 +0000
+Sincerely Yours, Respectfully,
 
-    mm/hugetlb: a page from buddy is not on any list
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13612350d00000
-start commit:   1590a2e1 Merge tag 'acpi-5.8-rc3' of git://git.kernel.org/..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bf3aec367b9ab569
-dashboard link: https://syzkaller.appspot.com/bug?extid=18a1619cceea30ed45af
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c79dbb100000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=169bba3d100000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: mm/hugetlb: a page from buddy is not on any list
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Mr Bill T Winters,
+Group Chief Executive Officer & Executive Director,
