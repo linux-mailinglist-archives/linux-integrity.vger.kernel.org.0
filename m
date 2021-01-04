@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBD72E9E22
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Jan 2021 20:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403222E9E15
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Jan 2021 20:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728002AbhADT1O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 4 Jan 2021 14:27:14 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:36580 "EHLO
+        id S1727815AbhADT06 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 4 Jan 2021 14:26:58 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36618 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727520AbhADT0y (ORCPT
+        with ESMTP id S1726074AbhADT0z (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 4 Jan 2021 14:26:54 -0500
+        Mon, 4 Jan 2021 14:26:55 -0500
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C7C4820B6C42;
-        Mon,  4 Jan 2021 11:26:12 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C7C4820B6C42
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7BD5720B6C44;
+        Mon,  4 Jan 2021 11:26:13 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7BD5720B6C44
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1609788373;
-        bh=HL6to3zIpD157+Axm2zUZyuM6pBas6XN9X7BttUpCNI=;
+        s=default; t=1609788374;
+        bh=QtA5ZG9+mfQLbU0zgq3RW/Zfvthx1wqVNrJpmA5Xovg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NXIeWc1xUTnh4uqLuBt7IPa2n3zeaf8TGFHCpV13zEjRBaLSUlNsR60qNIXSbYbgc
-         p+Gdlacjprsr8SNBVmwDqQORJcCmNnizur6JS/UA90UlkywYC7ce4sWPwFx+29Duet
-         YRn7l20Q3ZzWyloklikps4k8kXpwH6heHtG8h1GQ=
+        b=UO/aVBhfFcBbT+AIh8/ntP4BHIxr/pFExVVhnY+M2txpeCr72xP/MUyMKH6DpfMvV
+         TMyLdKl6+i6Lkfv6SY9mpCTvlSvEn21MJB/jHk/hXJj8ap6XoyGekraeFlC8kwZi5X
+         VYiY+fyWQ40F1m52YpleadWVCKNt0OuPgIDAbPxE=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
         takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
@@ -38,9 +38,9 @@ Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linuxppc-dev@vger.kernel.org
-Subject: [PATCH v14 3/6] kexec: Use fdt_appendprop_addrrange() to add ima buffer to FDT
-Date:   Mon,  4 Jan 2021 11:25:59 -0800
-Message-Id: <20210104192602.10131-4-nramas@linux.microsoft.com>
+Subject: [PATCH v14 4/6] powerpc: Delete unused functions
+Date:   Mon,  4 Jan 2021 11:26:00 -0800
+Message-Id: <20210104192602.10131-5-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210104192602.10131-1-nramas@linux.microsoft.com>
 References: <20210104192602.10131-1-nramas@linux.microsoft.com>
@@ -50,106 +50,128 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-fdt_appendprop_addrrange() function adds a property, with the given name,
-to the device tree at the given node offset, and also sets the address
-and size of the property. This function should be used to add
-"linux,ima-kexec-buffer" property to the device tree and set the address
-and size of the IMA measurement buffer, instead of using custom function.
+delete_fdt_mem_rsv() defined in "arch/powerpc/kexec/file_load.c"
+has been renamed to fdt_find_and_del_mem_rsv(), and moved to
+"drivers/of/kexec.c".
 
-Use fdt_appendprop_addrrange() to add  "linux,ima-kexec-buffer" property
-to the device tree. This property holds the address and size of
-the IMA measurement buffer that needs to be passed from the current
-kernel to the next kernel across kexec system call.
+Remove delete_fdt_mem_rsv() in "arch/powerpc/kexec/file_load.c".
 
-Remove custom code that is used in setup_ima_buffer() to add
-"linux,ima-kexec-buffer" property to the device tree.
+Call of_kexec_setup_new_fdt() from setup_new_fdt_ppc64() and
+remove setup_new_fdt() in "arch/powerpc/kexec/file_load.c".
 
 Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 ---
- drivers/of/kexec.c | 57 ++++------------------------------------------
- 1 file changed, 5 insertions(+), 52 deletions(-)
+ arch/powerpc/include/asm/kexec.h  |  4 ---
+ arch/powerpc/kexec/file_load.c    | 60 -------------------------------
+ arch/powerpc/kexec/file_load_64.c |  4 ++-
+ 3 files changed, 3 insertions(+), 65 deletions(-)
 
-diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
-index 9b1650b5c036..d06556dba03b 100644
---- a/drivers/of/kexec.c
-+++ b/drivers/of/kexec.c
-@@ -206,36 +206,6 @@ int ima_free_kexec_buffer(void)
- }
+diff --git a/arch/powerpc/include/asm/kexec.h b/arch/powerpc/include/asm/kexec.h
+index dbf09d2f36d0..b8c270e08481 100644
+--- a/arch/powerpc/include/asm/kexec.h
++++ b/arch/powerpc/include/asm/kexec.h
+@@ -123,10 +123,6 @@ char *setup_kdump_cmdline(struct kimage *image, char *cmdline,
+ int setup_purgatory(struct kimage *image, const void *slave_code,
+ 		    const void *fdt, unsigned long kernel_load_addr,
+ 		    unsigned long fdt_load_addr);
+-int setup_new_fdt(const struct kimage *image, void *fdt,
+-		  unsigned long initrd_load_addr, unsigned long initrd_len,
+-		  const char *cmdline);
+-int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size);
  
- #ifdef CONFIG_IMA_KEXEC
+ #ifdef CONFIG_PPC64
+ struct kexec_buf;
+diff --git a/arch/powerpc/kexec/file_load.c b/arch/powerpc/kexec/file_load.c
+index 9f3ec0b239ef..036c8fb48fc3 100644
+--- a/arch/powerpc/kexec/file_load.c
++++ b/arch/powerpc/kexec/file_load.c
+@@ -108,63 +108,3 @@ int setup_purgatory(struct kimage *image, const void *slave_code,
+ 
+ 	return 0;
+ }
+-
 -/**
-- * write_number - Convert number to big-endian format
-- *
-- * @p:		Buffer to write the number to
-- * @value:	Number to convert
-- * @cells:	Number of cells
+- * delete_fdt_mem_rsv - delete memory reservation with given address and size
 - *
 - * Return: 0 on success, or negative errno on error.
 - */
--static int write_number(void *p, u64 value, int cells)
+-int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size)
 -{
--	if (cells == 1) {
--		u32 tmp;
+-	int i, ret, num_rsvs = fdt_num_mem_rsv(fdt);
 -
--		if (value > U32_MAX)
+-	for (i = 0; i < num_rsvs; i++) {
+-		uint64_t rsv_start, rsv_size;
+-
+-		ret = fdt_get_mem_rsv(fdt, i, &rsv_start, &rsv_size);
+-		if (ret) {
+-			pr_err("Malformed device tree.\n");
 -			return -EINVAL;
+-		}
 -
--		tmp = cpu_to_be32(value);
--		memcpy(p, &tmp, sizeof(tmp));
--	} else if (cells == 2) {
--		u64 tmp;
+-		if (rsv_start == start && rsv_size == size) {
+-			ret = fdt_del_mem_rsv(fdt, i);
+-			if (ret) {
+-				pr_err("Error deleting device tree reservation.\n");
+-				return -EINVAL;
+-			}
 -
--		tmp = cpu_to_be64(value);
--		memcpy(p, &tmp, sizeof(tmp));
--	} else
--		return -EINVAL;
+-			return 0;
+-		}
+-	}
 -
--	return 0;
+-	return -ENOENT;
 -}
 -
- /**
-  * setup_ima_buffer - add IMA buffer information to the fdt
-  * @image:		kexec image being loaded.
-@@ -247,32 +217,15 @@ static int write_number(void *p, u64 value, int cells)
- static int setup_ima_buffer(const struct kimage *image, void *fdt,
- 			    int chosen_node)
- {
--	int ret, addr_cells, size_cells, entry_size;
--	u8 value[16];
-+	int ret;
+-/*
+- * setup_new_fdt - modify /chosen and memory reservation for the next kernel
+- * @image:		kexec image being loaded.
+- * @fdt:		Flattened device tree for the next kernel.
+- * @initrd_load_addr:	Address where the next initrd will be loaded.
+- * @initrd_len:		Size of the next initrd, or 0 if there will be none.
+- * @cmdline:		Command line for the next kernel, or NULL if there will
+- *			be none.
+- *
+- * Return: 0 on success, or negative errno on error.
+- */
+-int setup_new_fdt(const struct kimage *image, void *fdt,
+-		  unsigned long initrd_load_addr, unsigned long initrd_len,
+-		  const char *cmdline)
+-{
+-	int ret;
+-
+-	ret = of_kexec_setup_new_fdt(image, fdt, initrd_load_addr, initrd_len, cmdline);
+-	if (ret)
+-		goto err;
+-
+-	return 0;
+-
+-err:
+-	pr_err("Error setting up the new device tree.\n");
+-	return -EINVAL;
+-}
+diff --git a/arch/powerpc/kexec/file_load_64.c b/arch/powerpc/kexec/file_load_64.c
+index a05c19b3cc60..3cab318aa3b9 100644
+--- a/arch/powerpc/kexec/file_load_64.c
++++ b/arch/powerpc/kexec/file_load_64.c
+@@ -17,6 +17,7 @@
+ #include <linux/kexec.h>
+ #include <linux/of_fdt.h>
+ #include <linux/libfdt.h>
++#include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/memblock.h>
+ #include <linux/slab.h>
+@@ -944,7 +945,8 @@ int setup_new_fdt_ppc64(const struct kimage *image, void *fdt,
+ 	struct crash_mem *umem = NULL, *rmem = NULL;
+ 	int i, nr_ranges, ret;
  
- 	if (!image->arch.ima_buffer_size)
- 		return 0;
- 
--	ret = get_addr_size_cells(&addr_cells, &size_cells);
--	if (ret)
--		return ret;
--
--	entry_size = 4 * (addr_cells + size_cells);
--
--	if (entry_size > sizeof(value))
--		return -EINVAL;
--
--	ret = write_number(value, image->arch.ima_buffer_addr, addr_cells);
--	if (ret)
--		return ret;
--
--	ret = write_number(value + 4 * addr_cells, image->arch.ima_buffer_size,
--			   size_cells);
--	if (ret)
--		return ret;
--
--	ret = fdt_setprop(fdt, chosen_node, "linux,ima-kexec-buffer", value,
--			  entry_size);
-+	ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
-+				       "linux,ima-kexec-buffer",
-+				       image->arch.ima_buffer_addr,
-+				       image->arch.ima_buffer_size);
- 	if (ret < 0)
- 		return -EINVAL;
+-	ret = setup_new_fdt(image, fdt, initrd_load_addr, initrd_len, cmdline);
++	ret = of_kexec_setup_new_fdt(image, fdt, initrd_load_addr, initrd_len,
++				     cmdline);
+ 	if (ret)
+ 		goto out;
  
 -- 
 2.29.2
