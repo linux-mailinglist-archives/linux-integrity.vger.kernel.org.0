@@ -2,273 +2,430 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A1B2EB2D7
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Jan 2021 19:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8C12EB3C5
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Jan 2021 20:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729619AbhAESxr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 5 Jan 2021 13:53:47 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:34276 "EHLO
+        id S1730931AbhAET6d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 5 Jan 2021 14:58:33 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:42028 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726258AbhAESxr (ORCPT
+        with ESMTP id S1730887AbhAET6c (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 5 Jan 2021 13:53:47 -0500
-Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 167CF20B7192;
-        Tue,  5 Jan 2021 10:53:05 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 167CF20B7192
+        Tue, 5 Jan 2021 14:58:32 -0500
+Received: from rapha-Virtual-Machine.mshome.net (unknown [131.107.160.57])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6FEEB20B7192;
+        Tue,  5 Jan 2021 11:57:51 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6FEEB20B7192
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1609872786;
-        bh=4z0o1Q8ayYYboZSCQkOiVolnujOFfwOB2QkQyjTsAWE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=jZyYAnaB9eK3CuK0Ewu7CmvJoRWBLCBCMZWVFAzdfUA2jknYGnBTUMcEZklImzaYz
-         l1KgcpBPp67qtRox4suu7A0AFaAxfNKjFG6Qk1cfEiIE17LRYX0hhC3w3JGzawYLEC
-         5emVQZXR+1yklfN/Hsj8IbUAfgfE8v8ct+iBxJaY=
-Subject: Re: [PATCH v9 2/8] IMA: add support to measure buffer data hash
-To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, paul@paul-moore.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20201212180251.9943-1-tusharsu@linux.microsoft.com>
- <20201212180251.9943-3-tusharsu@linux.microsoft.com>
- <4e83480731b937cea479f688029560444b9cb66a.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <3fdb72ae-f291-386b-e7b9-688dfe092dc5@linux.microsoft.com>
-Date:   Tue, 5 Jan 2021 10:53:04 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        s=default; t=1609876671;
+        bh=TkslHbaczP8oeubEpEAetQD431q8kpd0060+1grQUx4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LVJb/0iBo9UkborSzSUyk4tiyXbIcFd6KlSw9pfa70mmNK2tV+VeOPwDUIW1EmYW0
+         BwzTVUdrVADbSUYRUOMRrt/OVcenUWhhiIUzWhckq4cnvYlLc7Dpe0OGGhyODjM8dv
+         b9UrKuVzBNY5Y+Q3uQ0q1SbEo1eqsGVall3XJeqI=
+From:   Raphael Gianotti <raphgi@linux.microsoft.com>
+To:     zohar@linux.ibm.com, janne.karhunen@gmail.com
+Cc:     linux-integrity@vger.kernel.org, tusharsu@linux.microsoft.com,
+        tyhicks@linux.microsoft.com, nramas@linux.microsoft.com,
+        balajib@linux.microsoft.com
+Subject: [RFC] Persist ima logs to disk
+Date:   Tue,  5 Jan 2021 11:57:42 -0800
+Message-Id: <20210105195742.2629-1-raphgi@linux.microsoft.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <4e83480731b937cea479f688029560444b9cb66a.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+IMA measures files and buffer data and some systems may end up
+generating lots of entries in the IMA measurement list. This list is
+kept in kernel memoryc and as it grows in size it could end up taking
+too many resources, causing the system to run out of available
+memory. During kexec, the IMA measurement list can be carried over in
+memory, but it's possible for the list to become too large for that
+to happen.
 
+The Kconfig introduced in this series enables admins to configure a
+maximum number of entries and a file to export the IMA measurement
+list to whenever the set limit is reached.
 
-On 2020-12-23 4:03 p.m., Mimi Zohar wrote:
-> On Sat, 2020-12-12 at 10:02 -0800, Tushar Sugandhi wrote:
->> The original IMA buffer data measurement sizes were small (e.g. boot
->> command line), but the new buffer data measurement use cases have data
->> sizes that are a lot larger.  Just as IMA measures the file data hash,
->> not the file data, IMA should similarly support the option for measuring
->> the hash of the buffer data.
->>
->> Measuring in-memory buffer-data/buffer-data-hash is different than
->> measuring file-data/file-data-hash. For the file, IMA stores the
->> measurements in both measurement log and the file's extended attribute -
->> which can later be used for appraisal as well. For buffer, the
->> measurements are only stored in the IMA log, since the buffer has no
->> extended attributes associated with it.
-> 
-> By definition, buffer data is only measured.  Nothing new is added by
-> the above paragraph.  Please remove it.
-> 
-Sure. Will remove.
->>
->> Introduce a boolean parameter measure_buf_hash to support measuring
->> hash of a buffer, which would be much smaller, instead of the buffer
->> itself.
-> 
-> Like the patch Subject line use "the buffer data hash" instead of the
-> "hash of a buffer".
-> 
-Will do.
-> There's no need to include the boolean parameter name
-> "measure_buf_hash".  Please remove it.
-> 
-Will do.
->>
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
->> ---
->>   security/integrity/ima/ima.h                 |  3 +-
->>   security/integrity/ima/ima_appraise.c        |  2 +-
->>   security/integrity/ima/ima_asymmetric_keys.c |  2 +-
->>   security/integrity/ima/ima_main.c            | 38 +++++++++++++++++---
->>   security/integrity/ima/ima_queue_keys.c      |  3 +-
->>   5 files changed, 39 insertions(+), 9 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index e5622ce8cbb1..fa3044a7539f 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -268,7 +268,8 @@ void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
->>   			   struct ima_template_desc *template_desc);
->>   void process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   				const char *eventname, enum ima_hooks func,
->> -				int pcr, const char *func_data);
->> +				int pcr, const char *func_data,
->> +				bool measure_buf_hash);
-> 
-> Please abbreviate the boolean name to "hash".   The test would then be
-> "if (hash == true)" or "if (hash)".
-> 
-Will do.
->>   void ima_audit_measurement(struct integrity_iint_cache *iint,
->>   			   const unsigned char *filename);
->>   int ima_alloc_init_template(struct ima_event_data *event_data,
->> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
->> index 8361941ee0a1..46ffa38bab12 100644
->> --- a/security/integrity/ima/ima_appraise.c
->> +++ b/security/integrity/ima/ima_appraise.c
->> @@ -352,7 +352,7 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
->>   		if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
->>   			process_buffer_measurement(NULL, digest, digestsize,
->>   						   "blacklisted-hash", NONE,
->> -						   pcr, NULL);
->> +						   pcr, NULL, false);
->>   	}
->>   
->>   	return rc;
->> diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
->> index 1c68c500c26f..a74095793936 100644
->> --- a/security/integrity/ima/ima_asymmetric_keys.c
->> +++ b/security/integrity/ima/ima_asymmetric_keys.c
->> @@ -60,5 +60,5 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
->>   	 */
->>   	process_buffer_measurement(NULL, payload, payload_len,
->>   				   keyring->description, KEY_CHECK, 0,
->> -				   keyring->description);
->> +				   keyring->description, false);
->>   }
->> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
->> index e76ef4bfd0f4..0f8409d77602 100644
->> --- a/security/integrity/ima/ima_main.c
->> +++ b/security/integrity/ima/ima_main.c
->> @@ -779,7 +779,7 @@ int ima_post_load_data(char *buf, loff_t size,
->>   }
->>   
->>   /*
->> - * process_buffer_measurement - Measure the buffer to ima log.
->> + * process_buffer_measurement - Measure the buffer or the buffer data hash
->>    * @inode: inode associated with the object being measured (NULL for KEY_CHECK)
->>    * @buf: pointer to the buffer that needs to be added to the log.
->>    * @size: size of buffer(in bytes).
->> @@ -787,12 +787,23 @@ int ima_post_load_data(char *buf, loff_t size,
->>    * @func: IMA hook
->>    * @pcr: pcr to extend the measurement
->>    * @func_data: private data specific to @func, can be NULL.
->> + * @measure_buf_hash: measure buffer hash
-> 
-> ^@hash: measure buffer data hash
-> 
-Agreed. Will fix.
->>    *
->> - * Based on policy, the buffer is measured into the ima log.
->> + * Measure the buffer into the IMA log, and extend the @pcr.
-> 
-> IMA always measures/appraises files and measures buffer data based on
-> policy.  The above sentence succintly summarizes what
-> process_buffer_measurement() does.   This patch adds support for
-> measuring the "buffer data hash".   The following would be an
-> appropriate change.
-> 
-> * Based on policy, either the buffer data or buffer data hash is
-> measured
-> 
-Sounds good. Will update.
->> + *
->> + * Determine what buffers are allowed to be measured, based on the policy rules
->> + * and the IMA hook passed using @func.
->> + *
->> + * Use @func_data, if provided, to match against the measurement policy rule
->> + * data for @func.
->> + *
->> + * If @measure_buf_hash is set to true - measure hash of the buffer data,
->> + * else measure the buffer data itself.
-> 
-> This patch should be limited to adding "buffer data hash" support.
-> These changes don't belong in this patch.  Please remove.
-> 
-Agreed. Will remove.
->>    */
->>   void process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   				const char *eventname, enum ima_hooks func,
->> -				int pcr, const char *func_data)
->> +				int pcr, const char *func_data,
->> +				bool measure_buf_hash)
->>   {
->>   	int ret = 0;
->>   	const char *audit_cause = "ENOMEM";
->> @@ -807,6 +818,8 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   		struct ima_digest_data hdr;
->>   		char digest[IMA_MAX_DIGEST_SIZE];
->>   	} hash = {};
->> +	char buf_hash[IMA_MAX_DIGEST_SIZE];
->> +	int buf_hash_len = hash_digest_size[ima_hash_algo];
->>   	int violation = 0;
->>   	int action = 0;
->>   	u32 secid;
->> @@ -849,13 +862,27 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
->>   		goto out;
->>   	}
->>   
->> +	if (measure_buf_hash) {
-> 
-> ^ if (hash) {
-Yes.
->> +		memcpy(buf_hash, hash.hdr.digest, buf_hash_len);
->> +
->> +		ret = ima_calc_buffer_hash(buf_hash, buf_hash_len,
->> +					   iint.ima_hash);
->> +		if (ret < 0) {
->> +			audit_cause = "measure_buf_hash_error";
-> 
-> I don't see a good no reason for defining a new audit cause.  Use the
-> existing "hashing_error".
-> 
-> thanks,
-> 
-> Mimi
-> 
+The list is written out in append mode, so the system will keep
+writing new entries as long as it stays running or runs out of
+space. Whenever the export file is set, it's truncated. If writing
+to the export list fails, a flag is set to prevent further exports,
+as the file is likely in a bad state. Setting a new export file
+resets this flag, allowing exports to resume and giving admins a way
+to recover from this state if necessary.
 
-Thanks,
-Tushar
->> +			goto out;
->> +		}
->> +
->> +		event_data.buf = buf_hash;
->> +		event_data.buf_len = buf_hash_len;
->> +	}
->> +
->>   	ret = ima_alloc_init_template(&event_data, &entry, template);
->>   	if (ret < 0) {
->>   		audit_cause = "alloc_entry";
->>   		goto out;
->>   	}
->>   
->> -	ret = ima_store_template(entry, violation, NULL, buf, pcr);
->> +	ret = ima_store_template(entry, violation, NULL, event_data.buf, pcr);
->>   	if (ret < 0) {
->>   		audit_cause = "store_entry";
->>   		ima_free_template_entry(entry);
->> @@ -890,7 +917,8 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
->>   		return;
->>   
->>   	process_buffer_measurement(file_inode(f.file), buf, size,
->> -				   "kexec-cmdline", KEXEC_CMDLINE, 0, NULL);
->> +				   "kexec-cmdline", KEXEC_CMDLINE, 0, NULL,
->> +				   false);
->>   	fdput(f);
->>   }
->>   
->> diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
->> index 69a8626a35c0..c2f2ad34f9b7 100644
->> --- a/security/integrity/ima/ima_queue_keys.c
->> +++ b/security/integrity/ima/ima_queue_keys.c
->> @@ -162,7 +162,8 @@ void ima_process_queued_keys(void)
->>   						   entry->payload_len,
->>   						   entry->keyring_name,
->>   						   KEY_CHECK, 0,
->> -						   entry->keyring_name);
->> +						   entry->keyring_name,
->> +						   false);
->>   		list_del(&entry->list);
->>   		ima_free_key_entry(entry);
->>   	}
-> 
+In the case of kexec, if the list is too large too be carried over in
+memory and an export file is configured, the list will be exported,
+preventing the measurements from being lost during kexec.
+
+This code is based off of a previous RFC sent by Janne Karhunen[1],
+and is intended to pick up where that was left off.
+
+In a thread with Janne Karhunen[2], it was mentioned that another
+approach, using mm had been considered. Upon some investigation the
+approach used in this RFC still seemed adequate for solving this
+problem.
+
+[1] https://patchwork.kernel.org/project/linux-integrity/patch/201912
+20074929.8191-1-janne.karhunen@gmail.com/
+[2] https://lore.kernel.org/linux-integrity/CAE=NcrbdS-3gVvnnEwdNSOLO
+vTenLjyppDz2aJACGRgBYSh=Gw@mail.gmail.com/
+
+Signed-off-by: Raphael Gianotti <raphgi@linux.microsoft.com>
+---
+ security/integrity/ima/Kconfig     |   9 ++
+ security/integrity/ima/ima.h       |   7 ++
+ security/integrity/ima/ima_api.c   |   1 +
+ security/integrity/ima/ima_fs.c    | 194 +++++++++++++++++++++++++++++
+ security/integrity/ima/ima_kexec.c |   7 +-
+ security/integrity/ima/ima_queue.c |   2 +-
+ 6 files changed, 217 insertions(+), 3 deletions(-)
+
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index 12e9250c1bec..faea01fc1dd1 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -334,3 +334,12 @@ config IMA_SECURE_AND_OR_TRUSTED_BOOT
+        help
+           This option is selected by architectures to enable secure and/or
+           trusted boot based on IMA runtime policies.
++config IMA_MEASUREMENT_ENTRY_COUNT
++	int
++	depends on IMA
++	default 2000
++	help
++	   This option defines the maximum number of entries in the
++	   measurement list. Once the limit is reached, the entire
++	   list is exported to a user defined file and the kernel
++	   list is freed.
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 38043074ce5e..d072943149d8 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -47,6 +47,9 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
+ 
+ #define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks : 0)
+ 
++#define secfs_mnt       "/sys/kernel/security"
++#define am_filename     "/integrity/ima/ascii_runtime_measurements"
++
+ /* current content of the policy */
+ extern int ima_policy_flag;
+ 
+@@ -158,6 +161,7 @@ int template_desc_init_fields(const char *template_fmt,
+ struct ima_template_desc *ima_template_desc_current(void);
+ struct ima_template_desc *lookup_template_desc(const char *name);
+ bool ima_template_has_modsig(const struct ima_template_desc *ima_template);
++void ima_free_template_entry(struct ima_template_entry *entry);
+ int ima_restore_measurement_entry(struct ima_template_entry *entry);
+ int ima_restore_measurement_list(loff_t bufsize, void *buf);
+ int ima_measurements_show(struct seq_file *m, void *v);
+@@ -167,12 +171,15 @@ void ima_init_template_list(void);
+ int __init ima_init_digests(void);
+ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
+ 			  void *lsm_data);
++int ima_export_list(const char *sourcefile);
+ 
+ /*
+  * used to protect h_table and sha_table
+  */
+ extern spinlock_t ima_queue_lock;
+ 
++extern struct mutex ima_extend_list_mutex;
++
+ struct ima_h_table {
+ 	atomic_long_t len;	/* number of stored measurements in the list */
+ 	atomic_long_t violations;
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index 4f39fb93f278..37fbf59547c1 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -120,6 +120,7 @@ int ima_store_template(struct ima_template_entry *entry,
+ 	}
+ 	entry->pcr = pcr;
+ 	result = ima_add_template_entry(entry, violation, op, inode, filename);
++	ima_export_list(NULL);
+ 	return result;
+ }
+ 
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index e3fcad871861..dd9e2d04e9bc 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -20,10 +20,15 @@
+ #include <linux/rcupdate.h>
+ #include <linux/parser.h>
+ #include <linux/vmalloc.h>
++#include <linux/fs_struct.h>
++#include <linux/syscalls.h>
++#include <../fs/internal.h>
+ 
+ #include "ima.h"
+ 
+ static DEFINE_MUTEX(ima_write_mutex);
++static DEFINE_MUTEX(ima_list_mutex);
++static char *ima_msmt_list_name = NULL;
+ 
+ bool ima_canonical_fmt;
+ static int __init default_canonical_fmt_setup(char *str)
+@@ -37,6 +42,9 @@ __setup("ima_canonical_fmt", default_canonical_fmt_setup);
+ 
+ static int valid_policy = 1;
+ 
++static bool init_list_export = true;
++static bool list_export_ok = true;
++
+ static ssize_t ima_show_htable_value(char __user *buf, size_t count,
+ 				     loff_t *ppos, atomic_long_t *val)
+ {
+@@ -359,6 +367,7 @@ static struct dentry *ascii_runtime_measurements;
+ static struct dentry *runtime_measurements_count;
+ static struct dentry *violations;
+ static struct dentry *ima_policy;
++static struct dentry *ima_list_name;
+ 
+ enum ima_fs_flags {
+ 	IMA_FS_BUSY,
+@@ -446,6 +455,184 @@ static const struct file_operations ima_measure_policy_ops = {
+ 	.llseek = generic_file_llseek,
+ };
+ 
++/*
++ * (Called with ima_extend_list_mutex held.)
++ */
++static void ima_free_list(void)
++{
++	struct ima_queue_entry *qe, *e;
++
++	list_for_each_entry_safe(qe, e, &ima_measurements, later) {
++		hlist_del_rcu(&qe->hnext);
++		list_del_rcu(&qe->later);
++		ima_free_template_entry(qe->entry);
++		kzfree(qe);
++	}
++	atomic_long_set(&ima_htable.len, 0);
++}
++
++static int ima_unlink_file(const char *filename)
++{
++	struct filename *file;
++
++	file = getname_kernel(filename);
++	if (IS_ERR(file))
++		return -EINVAL;
++	
++	return do_unlinkat(AT_FDCWD, file);
++}
++
++int ima_export_list(const char *sourcefile)
++{
++	struct file *file_out = NULL;
++	struct file *file_in = NULL;
++	const char *targetfile = ima_msmt_list_name;
++	ssize_t bytesin, bytesout;
++	mm_segment_t fs;
++	struct path root;
++	loff_t offin = 0, offout = 0;
++	char data[512];
++	long htable_len;
++	int err = 0;
++
++	htable_len = atomic_long_read(&ima_htable.len);
++	if (CONFIG_IMA_MEASUREMENT_ENTRY_COUNT <= 0)
++		goto out_err;
++	if (sourcefile == NULL && htable_len <= CONFIG_IMA_MEASUREMENT_ENTRY_COUNT)
++		goto out_err;
++	if (targetfile == NULL)
++		goto out_err;
++	if (sourcefile == NULL) {
++		pr_info("msmt list size (%ld/%ld) exceeded, exporting to %s\n",
++                	htable_len, (long)CONFIG_IMA_MEASUREMENT_ENTRY_COUNT, targetfile);
++		sourcefile = secfs_mnt am_filename;
++	}
++	if (!list_export_ok) {
++		err = -EFAULT;
++		goto out_err;
++	}
++
++	fs = get_fs();
++	set_fs(KERNEL_DS);
++
++	if (init_list_export) {
++		ima_unlink_file(targetfile);
++		init_list_export = false;
++	}
++	task_lock(&init_task);
++	get_fs_root(init_task.fs, &root);
++	task_unlock(&init_task);
++
++	file_out = file_open_root(root.dentry, root.mnt, targetfile,
++				  O_CREAT|O_WRONLY|O_APPEND|O_NOFOLLOW,
++				  0400);
++	if (IS_ERR(file_out)) {
++		err = PTR_ERR(file_out);
++		pr_err("failed to open %s, err %d\n", targetfile, err);
++		file_out = NULL;
++		goto out_close;
++	}
++	file_in = file_open_root(root.dentry, root.mnt, sourcefile, O_RDONLY, 0);
++	if (IS_ERR(file_in)) {
++		err = PTR_ERR(file_in);
++		pr_err("failed to open %s, err %d\n", sourcefile, err);
++		file_in = NULL;
++		goto out_close;
++	}
++	mutex_lock(&ima_extend_list_mutex);
++	/*
++	 * if we fail writing, the recovery is a job for the admin.
++	 * Logs will be kept in memory.
++	 */
++	list_export_ok = false;
++	do {
++		bytesin = vfs_read(file_in, data, 512, &offin);
++		if (bytesin < 0) {
++			pr_err("read error at %lld\n", offin);
++			err = -EIO;
++			goto out_unlock;
++		}
++		bytesout = vfs_write(file_out, data, bytesin, &offout);
++		if (bytesout < 0) {
++			pr_err("write error at %lld\n", offout);
++			err = -EIO;
++			goto out_unlock;
++		}
++		if (bytesin != bytesout) {
++			err = bytesout;
++			goto out_unlock;
++		}
++	} while (bytesin == 512);
++	list_export_ok = true;
++	ima_free_list();
++
++out_unlock:
++	if (!list_export_ok) {
++		pr_err("failed to export measurement list to %s", targetfile);
++	}
++	mutex_unlock(&ima_extend_list_mutex);
++out_close:
++	if (file_in)
++		filp_close(file_in, NULL);
++	if (file_out)
++		filp_close(file_out, NULL);
++
++	path_put(&root);
++	set_fs(fs);
++out_err:
++	return err;
++}
++
++static ssize_t ima_write_list_name(struct file *file,
++				   const char __user *buf,
++				   size_t datalen, loff_t *ppos)
++{
++	int err;
++
++	if (!capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	if ((datalen <= 1) || (datalen >= 255))
++		return -EINVAL;
++
++	mutex_lock(&ima_list_mutex);
++	
++	ima_msmt_list_name = memdup_user(buf, datalen);
++
++	if (IS_ERR(ima_msmt_list_name)) {
++		err = PTR_ERR(ima_msmt_list_name);
++		goto out_unlock;
++	}
++
++	if (*ima_msmt_list_name != '/') {
++		kfree(ima_msmt_list_name);
++		ima_msmt_list_name = NULL;
++		err = -EINVAL;
++		goto out_unlock;
++	}
++
++	if (ima_msmt_list_name[datalen-1] != '\0')
++		ima_msmt_list_name[datalen-1] = '\0';
++
++	list_export_ok = true;
++	init_list_export = true;
++	err = ima_export_list(NULL);
++	if (err) {
++		pr_err("list export failed with %d\n", err);
++		goto out_unlock;
++	}
++
++	err = datalen;
++
++out_unlock:
++	mutex_unlock(&ima_list_mutex);
++	return err;
++}
++
++static const struct file_operations ima_list_export_ops = {
++	.write = ima_write_list_name,
++};
++
+ int __init ima_fs_init(void)
+ {
+ 	ima_dir = securityfs_create_dir("ima", integrity_dir);
+@@ -490,6 +677,11 @@ int __init ima_fs_init(void)
+ 	if (IS_ERR(ima_policy))
+ 		goto out;
+ 
++	ima_list_name = securityfs_create_file("runtime_measurements_export_list_path", S_IWUSR | S_IWGRP, ima_dir,
++					       NULL, &ima_list_export_ops);
++	if (IS_ERR(ima_list_name))
++		goto out;
++
+ 	return 0;
+ out:
+ 	securityfs_remove(violations);
+@@ -499,5 +691,7 @@ int __init ima_fs_init(void)
+ 	securityfs_remove(ima_symlink);
+ 	securityfs_remove(ima_dir);
+ 	securityfs_remove(ima_policy);
++	securityfs_remove(ima_list_name);
++
+ 	return -1;
+ }
+diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+index 121de3e04af2..aa4bd4ba07c7 100644
+--- a/security/integrity/ima/ima_kexec.c
++++ b/security/integrity/ima/ima_kexec.c
+@@ -102,8 +102,11 @@ void ima_add_kexec_buffer(struct kimage *image)
+ 					   PAGE_SIZE / 2, PAGE_SIZE);
+ 	if ((kexec_segment_size == ULONG_MAX) ||
+ 	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
+-		pr_err("Binary measurement list too large.\n");
+-		return;
++		ret = export_ima_list(secfs_mnt am_filename);
++		if (ret) {
++			pr_err("Binary measurement list too large.\n");
++			return;
++		}
+ 	}
+ 
+ 	ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
+diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
+index c096ef8945c7..deaea4780359 100644
+--- a/security/integrity/ima/ima_queue.c
++++ b/security/integrity/ima/ima_queue.c
+@@ -42,7 +42,7 @@ struct ima_h_table ima_htable = {
+  * and extending the TPM PCR aggregate. Since tpm_extend can take
+  * long (and the tpm driver uses a mutex), we can't use the spinlock.
+  */
+-static DEFINE_MUTEX(ima_extend_list_mutex);
++DEFINE_MUTEX(ima_extend_list_mutex);
+ 
+ /* lookup up the digest value in the hash table, and return the entry */
+ static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
+-- 
+2.28.0
+
