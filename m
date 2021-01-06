@@ -2,31 +2,31 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 319602EBBCC
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Jan 2021 10:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 101622EBBCB
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Jan 2021 10:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725941AbhAFJrN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 6 Jan 2021 04:47:13 -0500
-Received: from mail-eopbgr60078.outbound.protection.outlook.com ([40.107.6.78]:39120
+        id S1726454AbhAFJq5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 6 Jan 2021 04:46:57 -0500
+Received: from mail-eopbgr60071.outbound.protection.outlook.com ([40.107.6.71]:19939
         "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725792AbhAFJrM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 6 Jan 2021 04:47:12 -0500
+        id S1726062AbhAFJq4 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 6 Jan 2021 04:46:56 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AiyUypGscHKcv/mhcBQz5Fg7VrIb1k4PxBUj83ZSS5Kdrkb6UJemLw77XzHVXYbd+05S1mh4c/C+j9vZsV/AgQkv7j5rZSsjTi0DUlkCwjBNpBYSQfku4rIUsKnrdqyHXQjGmG3eqiWwQGh3GaWpJBIqlyDLZaj1vfr7NAE+ZqmoaWy/YaJIz+Mr8AukCvYryFGz6fZtMHnfvBTK4dKIE46HyIUTV9Xd0ceP8vQwwjsMT9wTOtFjjoljz/x2N//LOcP23W5/rlNRQhsUos6LBSPmGLQBVEXDzfjY/Wiy/pyyAezKpxp9hiBoI8+lpgGq75+PpOyi5wGpkDVwcOiVhg==
+ b=hz9445XXLAwCdCfbXxdYPNeYNo14gFZPz2nnpFBcjkvQMlq+MrlCpxwM3G4b+Bd4jLFnEi2mkW//SLVrFPSSmK6XWKOcWM2MpJ3DsZmi7C6qR4eahyMmZEaiFNAMqmIBcVGAAgupH75uS+FCG4raDk75r0d4zB2jkDUp81IHoFPQUxuO+3SNGwrrVOvrinkNj3NKOxE0MvXhDWQyoiNEw2icKHyJKP2AhWbDzvpvwULb+CKVUV8ClvotGnJlaJuIQCg+8YYrLvc9tnwnzjdqSljyC6V3td6dzeFWrmW7O/gqFYpFM+2ezGhc3zpxLzOsVuWR2H9e42JkzEQwGuWgPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nNKPypLTDj360lcIb2su2U9gc+ErcwrjHRxVp6W1HhM=;
- b=lDL39gcbh8f5v0EzrVSliHu+FkdsByxo1C5L+X9/2EdiVpkOXwxYU4jN0+LIGHoALm/QSdK20F6k0wtiVaPrVx7WJJVzFSqHUxeo73rNtVnRQMX9CwsQRm6Ooa/XyTDazkhlNVPsO8UuWYtY169OidQSrMr5hVVEhJITp+NlJuz6qCvne8WF+uFAR+uJY0F/iuPy5iZP99PyFMcehaXqkNO8LN8VhowSkpDJq1xAjTKZ/SiOcvdwRpFlpDHlcXuC3e2EH0P07DOCyzIoD+M4PdcxDx1obv2yvwqwSgtDKDhchE6evNp9I+nfTXVKky3otKhgJV9OGzQAVWlKDl3WWg==
+ bh=neDwzcJwzT23VLlU9U1FUmZpNdKQs+iZYJ+mTqde1RU=;
+ b=lDaEW0b8a8QEyztPI2f+gZlW5QqU1xAhGuAH1KZ7YxkdiRPTngHh6I1khjmYhswdA+076zvgQKulNqlVLAtFC6WOQqxJ3noWqjMzQlgKY/xu62snSQ90gF4o+Nm3x9Wyvjxi77upuK4bxcH1Lwr9yTBNCOt+9Wpocpg2OuB+GTObUzcmaORU8VQasud6qlDcY2gy1fDJc2P/ciPcgkz0na+gnyUVWkmr6HMiRJe8hHxgcprI0MukzZ9xkK2lDsfUZ9QR4WSu54lu8GMkG7O8TYgWpp+LORqyi7/9n+yQ/KwEena45fvQsRDsGDUsQIAEz8Ect9RbWZ+Lgn/Pn5YfDg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=puiterwijk.org; dmarc=pass action=none
  header.from=puiterwijk.org; dkim=pass header.d=puiterwijk.org; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=puiterwijk.org;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nNKPypLTDj360lcIb2su2U9gc+ErcwrjHRxVp6W1HhM=;
- b=bTf1ynIdmh5bchnSrypK5XKfQiyW7YXO+W98eS+WwqHP7ZuJdiuQw2++rQWa+WxlGC5Te1JmFXF3aEuFJbUszU0r/NI4JH4rPGgUSTNeCEWJL4yiHVaqe+KQKMsDKJVhBb1JFkCdGgeL+boBI24vVIKRaN1lALjucTae3br5qsLA7AKo0vFU7eittwwTYa1Y4aPkDloE6ZzDH/oOu9bKvqfWhMRznmUVOfDM/OJI/QNq4M+Ydlhe/X+6xd9cM/ejXFTY9/8IRxCLVVrs4xkh1wSlEOJc2NsMsENgI6AMW8smvT+qPQpl4DIQWM2mVpn9Y/EGRArrybcwuy7gN29Hpw==
+ bh=neDwzcJwzT23VLlU9U1FUmZpNdKQs+iZYJ+mTqde1RU=;
+ b=OZp1AYDnrAex6H+64tY4vZEF2ERrX0aUYF9iMFaNk82cEy0Q7QX+vJvs6in8QaauXzydpIpdG7kJdX7q90dkV2u7Lb6YmR1pIZG53kCBdO5NVsiWkFfnWSs+Bnta9mNYJRoBo6HFxnd/Qtv9hbzvSD2HQiNssWceseuzFuKhyrhUJbaUJz0VjqcWU8BOVjv6275kTqwG0irGu0686rTCsmRJBEacXX7ATaMKfRne4I0TCThPCp+OfW5LD39BfjRv5Q9rPoPYv0YwjpGcswk3b4jmljqHFOWBdu2KWYhp51MiY6QvuwedgPhW/02aeRFAuIi7/o5ni0qUYxadSszR9w==
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none
  header.from=puiterwijk.org;
@@ -34,17 +34,17 @@ Received: from AM0P191MB0721.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:15f::13)
  by AM9P191MB1367.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:1f3::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Wed, 6 Jan
- 2021 09:45:55 +0000
+ 2021 09:45:56 +0000
 Received: from AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
  ([fe80::692e:dea5:e2e4:c09]) by AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
  ([fe80::692e:dea5:e2e4:c09%7]) with mapi id 15.20.3742.006; Wed, 6 Jan 2021
- 09:45:55 +0000
+ 09:45:56 +0000
 From:   Patrick Uiterwijk <patrick@puiterwijk.org>
 To:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com
 Cc:     pbrobinson@redhat.com, Patrick Uiterwijk <patrick@puiterwijk.org>
-Subject: [PATCH 1/2] Fix sign_hash not observing the hashalgo argument
-Date:   Wed,  6 Jan 2021 10:43:34 +0100
-Message-Id: <20210106094335.3178261-2-patrick@puiterwijk.org>
+Subject: [PATCH 2/2] Add test for using sign_hash API
+Date:   Wed,  6 Jan 2021 10:43:35 +0100
+Message-Id: <20210106094335.3178261-3-patrick@puiterwijk.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210106094335.3178261-1-patrick@puiterwijk.org>
 References: <20210106094335.3178261-1-patrick@puiterwijk.org>
@@ -58,78 +58,293 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 Received: from rowhammer.home.puiterwijk.org (2a10:3781:662:0:daf9:2c4e:f3f0:a740) by AM0PR02CA0202.eurprd02.prod.outlook.com (2603:10a6:20b:28f::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6 via Frontend Transport; Wed, 6 Jan 2021 09:45:55 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4aca6e16-0503-40f8-b657-08d8b227dd27
+X-MS-Office365-Filtering-Correlation-Id: d1536064-089e-4d9c-40b5-08d8b227dd6a
 X-MS-TrafficTypeDiagnostic: AM9P191MB1367:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM9P191MB136791D9B18B2E6E3B48389DC8D00@AM9P191MB1367.EURP191.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:421;
+X-Microsoft-Antispam-PRVS: <AM9P191MB13679A30583BB1D54F389F87C8D00@AM9P191MB1367.EURP191.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:454;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2aFxMDnrg+TMtkkaM+XK8oW8XaY37sdgpQnFMAD0ozVE60xaodLIENG/0dKuv+0FzFa1pqVrnPSpfToGWkx0GThgwPdU9lRqimSTJEes8o0+A1sqbPNmmvzVT1T3OPtyal8vh09O3FiKIG1s8Fm9dcebaH9vpuFMyKESc93njFIwVP87/9RbJIpr925QMs5sd7OVvTbyR+1YcyKFPkx/R9YAkONWxD0zSD4ZVo9GzhRZM3iESbFifVGSESz4u4pbaThbn4LPf79nJSG4LFih9hL7y5M5QLD3JY29kD6ozWS/c3t+nWff7Bqg4jji2crXwIHxXdHFcjd0RGw9FCdBmiH0Dhgh8hJ3TCDKT1CnPYgdOSgNqxnJ9THhJPK2QGIkwNbPUraa7lEuxf4gND1HVw==
+X-Microsoft-Antispam-Message-Info: 5NIQKqmnX6KBSutG42hjI1LSHv4YPwrp+vdOaRnYhrsNgF2QUtqmruwPaB8DJh2pKDs+seBkrJR40B3UhJh/WKn5u5cxJhCipgE9FUsuFPeKrM9I1BkCQ6Kpm0BrKkuG0DkuggjRYwep6iogG6ACXEBbbk1GU92FuCytxBjMa6KuRhUx61Es+Hejd+9OxE0DueZVITelqekal1iB4NvL4XJQEjdhEJ6+Xm6+E8usVz/x7JXar4Fbf3To4PFW1EbFH1+Zietw6RFNpT80RV+BCiK9ShuXwYx3w3tW2t+hkvE0XjcWvSWaUqS3HHQENbceU34WWCoyNI+qN40KT2bnF7DxjnbJNxqLBzEXfJ5rLJzaw8o2sZi689C4dg66G7nLvd53rkXwpUnWhsckLk/sfQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P191MB0721.EURP191.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(366004)(136003)(39830400003)(376002)(346002)(6486002)(16526019)(186003)(83380400001)(36756003)(316002)(52116002)(8936002)(7696005)(107886003)(4326008)(6666004)(86362001)(2906002)(1076003)(2616005)(66556008)(66476007)(66946007)(478600001)(5660300002)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?BZEYiQKgIfdTQc7W0c7tJ0O4cYqsHbFDafmizkgRmnz82XIgN8Tw7bcBI37l?=
- =?us-ascii?Q?ZzOyyI7UStP7sg4mtDHj618HfIRzVnlZC1/MflhX4IO20Xm/bbuBdzJ0m5kP?=
- =?us-ascii?Q?q3Fn4qtICbp+KhMPR811t4rzc/tkK9xf5Uo65tzbLozNzVlAa15QlWGHrOUU?=
- =?us-ascii?Q?SeGo6FqXSks2bu3nbF2IaBvB2QCnpXdApUZ0K5xpPnma2vSpe1qURjZ0j7Pp?=
- =?us-ascii?Q?ib3yRYeF0AG9/VfmdHWgbioB4oHPpvxwOer5HBBHneov4DjrbP6LysToGlRE?=
- =?us-ascii?Q?DFtL6iS8Ddj7Xl9JnkdmqI+x81x0N345a/Xk5v8gW6bMvZfP9n1r3pQhdAnr?=
- =?us-ascii?Q?sV+u27bFWB+XFBEM+kxO4ijsHVpUVsfh/HvZY8ePGrzFcstJtUc1IOANGNz7?=
- =?us-ascii?Q?VtW1iLiBvHTEzXZGU01pY1s41jNc8ag7FX9Fo+pXcK3s+jSUj4lBIsXLuT2t?=
- =?us-ascii?Q?GmnG2f7KO66EvVypViCfA+o5UqRSHCFT6L/BfUIknKLFcAlqpUACYX/8OmbY?=
- =?us-ascii?Q?VFWupDBSxYDA/MEYgd+M1T6OtYo1gB2Z2nAgitMyQLsEpbAk6SIzIk8OmzhM?=
- =?us-ascii?Q?0t2Pw+NC2Xdig6cLoA4bF21dASlBmjSsUHKhiIhgV8hNpt9vt6e86K2ewbn5?=
- =?us-ascii?Q?GbWFY4snyXhtw4euo/zwja0fic0GgQQbfwcHL26+6kQ5N1mJCYzPXMrmh5tQ?=
- =?us-ascii?Q?XI84zV5ExA4JXG15OeAUsKS+iU0cZ24G09rpcENuyKCty2PU/tlOd/CE9oOs?=
- =?us-ascii?Q?Hv4VfW8TA1C3zx7pOvyci2QZPbsFeXvq8tqATMJqEDfcALYEBKi7oMySaSjl?=
- =?us-ascii?Q?5evgeMFpFQspuE3aWVvYAJoGf3U72MVW4hMCRpD9jETGIKjbef/4+7v8VcTe?=
- =?us-ascii?Q?2DORXenEpzgiR3LnJTb2m0dDDsRkSrxM0zcPhJD4g4lGO6rFluuxzLTbGZtl?=
- =?us-ascii?Q?glq4bZ5zPwSl5aXDioSDuLQn5+4qQaU0+qSweAaavJGnLZPzhc7q/eT6iWZp?=
- =?us-ascii?Q?dbuzKD+7EesSTY9ZB/Z4yUEcFbbIXJv6PPO/I2mhTSq52lQ=3D?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?jTzJ4jIqcVj5+wP7AISqYw7JjI5zevxUSjjOVZDqyWbSIxsQKztbsXpyJuaZ?=
+ =?us-ascii?Q?VsYQCLrLQ5eEPBvU76iOy29UeUHnyxBqDPwFZ1iILSXvLhfekNtgY3WAFQQS?=
+ =?us-ascii?Q?g0OC8oKzV9/1wKaVr/0XNBSWNfiTpJWWjkIaMKv88AoaWep2GLzAtxXIZRPT?=
+ =?us-ascii?Q?wYTajQn4iT+MFWMKbl0/OVdtMRIwa9/CfAwORj0jRKJGCJ0MNdteZLLkV2D/?=
+ =?us-ascii?Q?JlNCTsKiCiJ6tCXTEsSVBdDNjcWy5eObrHOG6ml0epbWrlJ3xPHQYMi6GWI8?=
+ =?us-ascii?Q?pITYtCj9//A0Hg16UPOrw3Dfqgw7L8eIQLfU0aknmUnvJGVPWFAoTlKmCiMT?=
+ =?us-ascii?Q?yYoZsXdZUIkH5V40V3zstGJQmsyQzBV1qIz1K0kRoMr7h2UbnG0vBJQRJJ7z?=
+ =?us-ascii?Q?FxfeOEiTfZE9C8F5TkWWSRAyBr1OB2kKphLKpvH2kmQwU91jKWKIRHS5sP32?=
+ =?us-ascii?Q?MXPo3YOcfytkAIRNCq/f7oKA4Km09XnrfZGfEtqLmMoKnGTV79Y7TbwS60j2?=
+ =?us-ascii?Q?RlcCcwPSXEEFQ2GK0dzNamuOONPLt+9NeBKUoSEzXBgSEmLYC01yLUKgfO6U?=
+ =?us-ascii?Q?GRbKikbXunmHxeYb7kD2zr6GQs7oX+TYcByxQygvVOAIF0eWwEQn2ahp0TGn?=
+ =?us-ascii?Q?x0GfBTxcOhplHEbXqB9m4gXiee+svuyw0FjN7desywONTo+5+096nIg2/DRG?=
+ =?us-ascii?Q?xRW2IZXL1rAfSh0IydNqH5p7tgOp+TTS6+1IwdjmnUCPxAaSGIzjzpWf1w+B?=
+ =?us-ascii?Q?f51VILOLO2nUlicz4Q8zMaGqenZoSQ29c0yGX6J/94I+vueJtzIIu8T3tzQR?=
+ =?us-ascii?Q?UcjXpIcTXMj+mvqFNrj0mV7SpOXV1XpEkxz1v4IXx9qsZekQQCGiEt0s8lSW?=
+ =?us-ascii?Q?dsQstyS9EvpVIUg3PPcpJb5+GmhMNnKQsStnChuqxnENfx/QRsGOnrKMHnvx?=
+ =?us-ascii?Q?5L8YuWDF/yVFKKADXAwTUr9DDOGRKHtmv390hxLRSD3XskLf+DRA0DquLHqd?=
+ =?us-ascii?Q?xKcOxSFl/UgQ50NT3pXGNeY7MwAeTgsN8DDy/eKmVqdqM+Y=3D?=
 X-OriginatorOrg: puiterwijk.org
 X-MS-Exchange-CrossTenant-AuthSource: AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2021 09:45:55.5178
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2021 09:45:55.9877
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 963619a5-d7a7-4543-a254-29462dc51fb3
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4aca6e16-0503-40f8-b657-08d8b227dd27
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1536064-089e-4d9c-40b5-08d8b227dd6a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 91bv9M4bTllWCz4tCDLf6AiXI5YGrJUy3oLfiLlUmJUt6DSz61wYaIPqEEYPfeE3RVwfdhLZey3xIvCaXo/6hA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: PXbUEwEy/IvApjd3j0uniWn8k41R5hb3TxmYQIj4Q2X5asR7+XA2uFl03pIl7DpkmrQlqDvn6awAwtgNptKYNw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9P191MB1367
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This fixes sign_hash not using the correct algorithm for creating the
-signature, by ensuring it uses the passed in variable value.
+This adds a test with a small program that calls the sign_hash API, to
+ensure that that codepath works.
 
 Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
 ---
- src/libimaevm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ src/evmctl.c                | 23 ----------------
+ src/utils.c                 | 20 ++++++++++++++
+ src/utils.h                 |  1 +
+ tests/.gitignore            |  2 ++
+ tests/Makefile.am           |  5 ++++
+ tests/sign_verify.apitest.c | 55 +++++++++++++++++++++++++++++++++++++
+ tests/sign_verify.test      | 30 ++++++++++++++++----
+ 7 files changed, 107 insertions(+), 29 deletions(-)
+ create mode 100644 tests/sign_verify.apitest.c
 
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index fa6c278..72d5e67 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -916,7 +916,7 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
- 		return -1;
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 1815f55..bb51688 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -165,29 +165,6 @@ struct tpm_bank_info {
+ static char *pcrfile[MAX_PCRFILE];
+ static unsigned npcrfile;
+ 
+-static int bin2file(const char *file, const char *ext, const unsigned char *data, int len)
+-{
+-	FILE *fp;
+-	char name[strlen(file) + (ext ? strlen(ext) : 0) + 2];
+-	int err;
+-
+-	if (ext)
+-		sprintf(name, "%s.%s", file, ext);
+-	else
+-		sprintf(name, "%s", file);
+-
+-	log_info("Writing to %s\n", name);
+-
+-	fp = fopen(name, "w");
+-	if (!fp) {
+-		log_err("Failed to open: %s\n", name);
+-		return -1;
+-	}
+-	err = fwrite(data, len, 1, fp);
+-	fclose(fp);
+-	return err;
+-}
+-
+ static unsigned char *file2bin(const char *file, const char *ext, int *size)
+ {
+ 	FILE *fp;
+diff --git a/src/utils.c b/src/utils.c
+index fbb6a4b..6b99e78 100644
+--- a/src/utils.c
++++ b/src/utils.c
+@@ -112,3 +112,23 @@ int hex2bin(void *dst, const char *src, size_t count)
  	}
+ 	return 0;
+ }
++
++int bin2file(const char *file, const char *ext, const unsigned char *data, int len)
++{
++	FILE *fp;
++	char name[strlen(file) + (ext ? strlen(ext) : 0) + 2];
++	int err;
++
++	if (ext)
++		sprintf(name, "%s.%s", file, ext);
++	else
++		sprintf(name, "%s", file);
++
++	fp = fopen(name, "w");
++	if (!fp) {
++		return -1;
++	}
++	err = fwrite(data, len, 1, fp);
++	fclose(fp);
++	return err;
++}
+diff --git a/src/utils.h b/src/utils.h
+index 9ea179f..081997a 100644
+--- a/src/utils.h
++++ b/src/utils.h
+@@ -4,3 +4,4 @@
+ int get_cmd_path(const char *prog_name, char *buf, size_t buf_len);
+ int hex_to_bin(char ch);
+ int hex2bin(void *dst, const char *src, size_t count);
++int bin2file(const char *file, const char *ext, const unsigned char *data, int len);
+diff --git a/tests/.gitignore b/tests/.gitignore
+index 9ecc984..c40735d 100644
+--- a/tests/.gitignore
++++ b/tests/.gitignore
+@@ -14,3 +14,5 @@
+ *.key
+ *.conf
  
--	log_info("hash(%s): ", imaevm_params.hash_algo);
-+	log_info("hash(%s): ", algo);
- 	log_dump(hash, size);
++# Compiled version of apitest
++sign_verify_apitest
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index ff928e1..74f6125 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -10,3 +10,8 @@ distclean: distclean-keys
+ .PHONY: distclean-keys
+ distclean-keys:
+ 	./gen-keys.sh clean
++
++AUTOMAKE_OPTIONS = subdir-objects
++bin_PROGRAMS = sign_verify_apitest
++sign_verify_apitest_SOURCES = sign_verify.apitest.c ../src/utils.c
++sign_verify_apitest_LDFLAGS = -limaevm -L../src/.libs
+diff --git a/tests/sign_verify.apitest.c b/tests/sign_verify.apitest.c
+new file mode 100644
+index 0000000..20e2160
+--- /dev/null
++++ b/tests/sign_verify.apitest.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * sign_verify.apitest: Test program for verifying sign_hash
++ *
++ * Copyright (C) 2020 Patrick Uiterwijk <patrick@puiterwijk.org>
++ * Copyright (C) 2013,2014 Samsung Electronics
++ * Copyright (C) 2011,2012,2013 Intel Corporation
++ * Copyright (C) 2011 Nokia Corporation
++ * Copyright (C) 2010 Cyril Hrubis <chrubis@suse.cz>
++ */
++
++#include <assert.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/types.h>
++#include <attr/xattr.h>
++
++#include "../src/imaevm.h"
++#include "../src/utils.h"
++
++int main(int argc, char **argv) {
++	unsigned char hash[MAX_DIGEST_SIZE];
++	unsigned char sig[MAX_SIGNATURE_SIZE];
++	int len, err;
++    char *file = argv[1];
++    char *key = argv[2];
++    char *algo = argv[3];
++    char *digest = argv[4];
++
++    len = strlen(digest) / 2;
++    if (hex2bin(hash, digest, len) != 0) {
++        fprintf(stderr, "Error during hex2bin\n");
++        return 1;
++    }
++
++    len = sign_hash(algo, hash, len, key, NULL, sig + 1);
++	if (len <= 1) {
++        fprintf(stderr, "Error signing\n");
++        return 1;
++    }
++
++	/* add header */
++	len++;
++	sig[0] = EVM_IMA_XATTR_DIGSIG;
++
++    bin2file(file, "sig", sig, len);
++
++    err = lsetxattr(file, "user.ima", sig, len, 0);
++    if (err < 0) {
++        log_err("setxattr failed: %s\n", file);
++        return 1;
++    }
++
++	return 0;
++}
+diff --git a/tests/sign_verify.test b/tests/sign_verify.test
+index 288e133..e909d01 100755
+--- a/tests/sign_verify.test
++++ b/tests/sign_verify.test
+@@ -65,14 +65,14 @@ _keyid_from_cert() {
  
- 	pkey = read_priv_pkey(keyfile, imaevm_params.keypass);
-@@ -942,7 +942,7 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
- 	if (!EVP_PKEY_sign_init(ctx))
- 		goto err;
- 	st = "EVP_get_digestbyname";
--	if (!(md = EVP_get_digestbyname(imaevm_params.hash_algo)))
-+	if (!(md = EVP_get_digestbyname(algo)))
- 		goto err;
- 	st = "EVP_PKEY_CTX_set_signature_md";
- 	if (!EVP_PKEY_CTX_set_signature_md(ctx, md))
+ # Convert test $type into evmctl op prefix
+ _op() {
+-  if [ "$1" = ima ]; then
++  if [ "$1" = ima -o "$1" = ima_api ]; then
+     echo ima_
+   fi
+ }
+ 
+ # Convert test $type into xattr name
+ _xattr() {
+-  if [ "$1" = ima ]; then
++  if [ "$1" = ima -o "$1" = ima_api ]; then
+     echo user.ima
+   else
+     echo user.evm
+@@ -112,11 +112,13 @@ _evmctl_sign() {
+   [ "$type" = ima ] && opts+=" --sigfile"
+ 
+   # shellcheck disable=SC2086
+-  ADD_TEXT_FOR="$alg ($key)" ADD_DEL=$file \
++  [ "$type" = ima -o "$type" = evm ] && (ADD_TEXT_FOR="$alg ($key)" ADD_DEL=$file \
+     _evmctl_run "$(_op "$type")sign" $opts \
+-    --hashalgo "$alg" --key "$key" --xattr-user "$file" || return
++    --hashalgo "$alg" --key "$key" --xattr-user "$file" || return)
++  [ "$type" = ima_api ] && ADD_TEXT_FOR="$alg ($key)" ADD_DEL=$file \
++    ./sign_verify_apitest "$file" "$key" "$alg" "$(openssl dgst $OPENSSL_ENGINE -$ALG -hex -r $FILE | awk '{print $1}')"
+ 
+-  if [ "$type" = ima ]; then
++  if [ "$type" = ima -o "$type" = ima_api ]; then
+     _test_sigfile "$file" "$(_xattr "$type")" "$file.sig" "$file.sig2"
+   fi
+ }
+@@ -124,12 +126,14 @@ _evmctl_sign() {
+ # Run and test {ima_,}sign operation
+ check_sign() {
+   # Arguments are passed via global vars:
+-  # TYPE (ima or evm),
++  # TYPE (ima, ima_api or evm),
+   # KEY,
+   # ALG (hash algo),
+   # PREFIX (signature header prefix in hex),
+   # OPTS (additional options for evmctl),
+   # FILE (working file to sign).
++  [ "$TYPE" = ima_api ] && [[ "$OPTS" =~ --rsa ]] && return "$SKIP"
++
+   local "$@"
+   local KEY=${KEY%.*}.key
+   local FILE=${FILE:-$ALG.txt}
+@@ -267,6 +271,20 @@ sign_verify() {
+     # Multiple files and some don't verify
+     expect_fail check_verify FILE="/dev/null $file"
+ 
++    setfattr -x user.ima "$FILE"
++    rm "$FILE.sig"
++  fi
++
++  TYPE=ima_api
++  if expect_pass check_sign; then
++
++    # Normal verify with proper key should pass
++    expect_pass check_verify
++    expect_pass check_verify OPTS="--sigfile"
++
++    # Multiple files and some don't verify
++    expect_fail check_verify FILE="/dev/null $file"
++
+     rm "$FILE.sig"
+   fi
+ 
 -- 
 2.26.2
 
