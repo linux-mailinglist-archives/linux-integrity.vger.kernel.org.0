@@ -2,181 +2,208 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B07DA2EE988
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Jan 2021 00:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F26E02EEC2B
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Jan 2021 05:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727722AbhAGXBX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Jan 2021 18:01:23 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29412 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728534AbhAGXBX (ORCPT
+        id S1727169AbhAHEIF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Jan 2021 23:08:05 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:59024 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727130AbhAHEIE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Jan 2021 18:01:23 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 107MX8RK055030;
-        Thu, 7 Jan 2021 18:00:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=djGqFdX6Yp2+RevvDkAzOQopt4ApoLVp3qyOwQh1etw=;
- b=GniLimlGgF7n0ctNIWXBLhzxpD0mSq4ZO91GKDkJrKkiV1XZmuNVF7W/RI7isIVKN37O
- OoXDfde48tQ6IBl3d05XKizubNtMokSMaPU5O+TVEfNVpBHSePpImvJ27KDU5719u/mU
- CFMbY5yCxXQ7be5tAY8d1wtt2kd1rcQCOMcwOupEUxK29jIjHx/UMwp93ZHPkcuYLTPN
- pL2lCakixUjCoJQIdQQL570bmjjxiLttg2ivfusQ7lzY9IihDfJJvQh50M8dS4H0nBUL
- oVapomwZZCzOH+i3+I6M/TJUnv/oa7UrnqjSCvu7l8tVrVCGZHqjOra6gkAgDWEfesVz hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35xb5ngj0j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jan 2021 18:00:40 -0500
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 107MxU9X033442;
-        Thu, 7 Jan 2021 18:00:40 -0500
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35xb5nghy6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jan 2021 18:00:39 -0500
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 107Mn1Bv011121;
-        Thu, 7 Jan 2021 23:00:37 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 35tgf8dbms-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Jan 2021 23:00:37 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 107N0XE928639660
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 7 Jan 2021 23:00:35 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B4A78A406D;
-        Thu,  7 Jan 2021 23:00:33 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6C65A4062;
-        Thu,  7 Jan 2021 23:00:31 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.77.227])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  7 Jan 2021 23:00:31 +0000 (GMT)
-Message-ID: <6da004ef930540e0ff808f6a2e474d3b3c15f60f.camel@linux.ibm.com>
-Subject: Re: [RFC] Persist ima logs to disk
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Raphael Gianotti <raphgi@linux.microsoft.com>,
-        janne.karhunen@gmail.com
-Cc:     linux-integrity@vger.kernel.org, tusharsu@linux.microsoft.com,
-        tyhicks@linux.microsoft.com, nramas@linux.microsoft.com,
-        balajib@linux.microsoft.com, Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 07 Jan 2021 18:00:30 -0500
-In-Reply-To: <13447f30db609d4bd77d5a826c5102dd5a931a19.camel@HansenPartnership.com>
-References: <20210105195742.2629-1-raphgi@linux.microsoft.com>
-         <87127d502bcb9707dd4e7a43475ab6bed2fdd421.camel@linux.ibm.com>
-         <715a265180a092754ab9ea8522c39427645b25ad.camel@HansenPartnership.com>
-         <6e28c7a9742131cf508e77448bfee0a03b2c2e5e.camel@linux.ibm.com>
-         <3c50bc449aae2f09bd7d43c401cc9b292f9ec2ae.camel@HansenPartnership.com>
-         <570d54ca679b7a4f786fa65eb78601a2af91c397.camel@linux.ibm.com>
-         <13447f30db609d4bd77d5a826c5102dd5a931a19.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-07_11:2021-01-07,2021-01-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- mlxscore=0 bulkscore=0 suspectscore=0 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 adultscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101070127
+        Thu, 7 Jan 2021 23:08:04 -0500
+Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1D09E20B7192;
+        Thu,  7 Jan 2021 20:07:22 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1D09E20B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1610078842;
+        bh=5mxT9GXqO4axnOP29qQaLwD4eTXGvMC1ITYyCaCZZe8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IThPsHJzgjQI7lqM9/e6afvKY2VtsZoWLUI7cOS8X36Jmm2G9LArMcfAQbvKe4vxL
+         yuw0CjOuU4407bpj2Bom9YOUDbxH4YswpvXT5jJkJVc1WEcsjSWXinVCQomDTS2Wvl
+         vDiy5Z42aauYsT29GxG9XxX3k09dhzRrZdZ7x1YM=
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Subject: [PATCH v10 0/8] IMA: support for measuring kernel integrity critical data
+Date:   Thu,  7 Jan 2021 20:07:00 -0800
+Message-Id: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2021-01-07 at 13:48 -0800, James Bottomley wrote:
-> On Thu, 2021-01-07 at 15:51 -0500, Mimi Zohar wrote:
-> > On Thu, 2021-01-07 at 12:37 -0800, James Bottomley wrote:
-> > > On Thu, 2021-01-07 at 15:02 -0500, Mimi Zohar wrote:
-> > > > On Thu, 2021-01-07 at 08:42 -0800, James Bottomley wrote:
-> [...]
-> > > > > What about having a log entry that's the current PCR
-> > > > > value?  Then stretches of the log starting with these entries
-> > > > > would be independently verifiable provided you had a way of
-> > > > > trusting the PCR value.  It might be possible to get the TPM to
-> > > > > add a signed quote as an optional part of the log entry (of
-> > > > > course this brings other problems like which key do you use for
-> > > > > the signing and how does it get verified) which would provide
-> > > > > the trust and would definitively allow you to archive log
-> > > > > segments and still make the rest of the log useful.
-> > > > 
-> > > > The current PCR values are aggregated and stored in the
-> > > > boot_aggregate record.  As part of the new boot_aggregate record
-> > > > format, the individual PCR values could be included.
-> > > 
-> > > I don't think we care about the boot aggregate ... it's just the
-> > > initial log entry that ties the boot state to the initial runtime
-> > > state.  All we need for the proposed entry is the current value of
-> > > the IMA PCR so provided you trust that value it becomes a base on
-> > > which the following measurements can build and be trusted.
-> > 
-> > The IMA measurement list may contain multiple PCRs, not just the
-> > default IMA PCR.   Each kexec results in an additional boot_aggregate
-> > record, but an equivalent record for after truncating the measurement
-> > list might help.
-> 
-> Right, this would specifically be only of the IMA PCR so you can use it
-> as a base to begin the hash of the following log segment.  The log can
-> still contain other boot aggregate entries, but the assumption is that
-> boot aggregate entries in the prior log have already been evaluated.
+IMA measures files and buffer data such as keys, command-line arguments
+passed to the kernel on kexec system call, etc.  While these measurements
+are necessary for monitoring and validating the integrity of the system,
+they are not sufficient.  Various data structures, policies, and states
+stored in kernel memory also impact the integrity of the system.
+Several kernel subsystems contain such integrity critical data -
+e.g.  LSMs like SELinux, AppArmor etc.  or device-mapper targets like
+dm-crypt, dm-verity, dm-integrity etc.  These kernel subsystems help
+protect the integrity of a system.  Their integrity critical data is not
+expected to change frequently during run-time.  Some of these structures
+cannot be defined as __ro_after_init, because they are initialized later.
 
-IMA may be configured on a per rule basis to measure files into
-different PCRs.  Between the previous boot aggregate record and
-truncating the measurement list, other PCRs may have been extended.
+For a given system, various external services/infrastructure tools
+(including the attestation service) interact with it - both during the
+setup and during rest of the system run-time.  They share sensitive data
+and/or execute critical workload on that system.  The external services
+may want to verify the current run-time state of the relevant kernel
+subsystems before fully trusting the system with business critical
+data/workload.  For instance, verifying that SELinux is in "enforce" mode
+along with the expected policy, disks are encrypted with a certain
+configuration, secure boot is enabled etc.
 
-> 
-> > > > But this doesn't address where the offloaded measurement list
-> > > > will be stored, how long the list will be retained, nor who
-> > > > guarantees the integrity of the offloaded list.  In addition,
-> > > > different form factors will have different requirements.
-> > > 
-> > > I'm not sure you need any store at all.  The basic idea is that the
-> > > log is divided into individually verifiable segments.  For auditing
-> > > purposes you could keep all segments, so you have the entire log,
-> > > but if you've acted on the prior log entries and you don't have an
-> > > audit reason to keep them, you could erase that segment of the log
-> > > because you've placed all your trust in the prior log segments into
-> > > the PCR entry that forms the base of your current segment.
-> > > 
-> > > Essentially the question devolves to what mechanisms can give you
-> > > this trust in the base PCR log entry.
-> > 
-> > 
-> > Not retaining the entire measurement list would limit it's verification
-> > to a single server/system.
-> 
-> Well, it would limit its verification to just that log segment, yes.
+This series provides the necessary IMA functionality for kernel
+subsystems to ensure their configuration can be measured:
+  - by kernel subsystems themselves,
+  - in a tamper resistant way,
+  - and re-measured - triggered on state/configuration change.
 
-Verifying only the current log segment only makes sense, if the
-previous log segments were previously verified.
+This patch set:
+  - defines a new IMA hook ima_measure_critical_data() to measure
+    integrity critical data,
+  - limits the critical data being measured based on a label,
+  - defines a builtin critical data measurement policy,
+  - and includes an SELinux consumer of the new IMA critical data hook.
 
-> 
-> I'm thinking in the cloud there are a couple of potential consumers:  
-> 
->    1. The cloud monitor, which acts on the verified log, such as killing a
->       node for trying to execute an unverified binary or emailing the
->       guest owner.  This type of consumer doesn't need the historical log,
->       they just need to verify the entries they haven't already seen and
->       act on them according to whatever policy they're given.
->    2. The second type of cloud consumer is the audit case where the
->       aggregate hash is used to assure some auditor, some time after the
->       actual events, that the entire runtime of the VM was properly
->       monitored and the auditor wants to see the log  or a segment of it
->       to prove the hash.
-> 
-> Case 1 doesn't need historical storage, case 2 definitely does.  I
-> think we should support both use cases particularly in the long running
-> scenario where we need to recover memory.  Having verifiable log
-> segments seems to satisfy both cases, but what you do with the segments
-> would vary.
+This series is based on the following repo/branch:
 
-As Ken previously pointed out, the attestation server itself can
-request only the new measurements.
+ repo: https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+ branch: next-integrity
+ commit 207cdd565dfc ("ima: Don't modify file descriptor mode on the fly")
 
-Mimi
+Change Log v10:
+Incorporated feedback from Mimi on v9 of this series.
+ - Updated function description comments to simplify language and remove
+   unnecessary text.
+ - Changed references to variable names and policy documentation from
+   "data_source" to "label".
+ - Updated patch descriptions to simplify language and remove unnecessary
+   text.
+ - Updated function names and file name related to SELinux IMA
+   measurements per feedback from Paul Moore.
+ - Updated patch description for adding a built-in IMA policy for
+   measuring kernel critical data.
+
+Change Log v9:
+Incorporated feedback from Tyler on v8 of this series.
+ - Moved rule->data_source logic from Patch #4 to Patch #5.
+ - Removed unnecessary variable event_name from selinux_event_name()
+   in Patch #8.
+
+
+Change Log v8:
+Incorporated feedback from Tyler on v7 of this series.
+ - Removed unnecessary 'else' clauses in ima_match_rule_data().
+ - Fixed ima_store_template() to pass the buffer hash in case the
+   buffer is large.
+ - fixed function description for ima_measure_critical_data().
+ - Moved some usage of CRITICAL_DATA from Patch #3 to Patch #4.
+ - Moved IMA_DATA_SOURCE from Patch #4 to Patch #5.
+ - Removed unnecessary pr_err() from ima_measure_critical_data()
+   and selinux_event_name().
+ - Fixed log formatting in selinux_measure_state() to be consistent
+   with other messages in that file.
+
+Change Log v7:
+Incorporated feedback from Mimi on v6 of this series.
+ - Updated cover letter and patch descriptions as per Mimi's feedback.
+ - Changed references to variable names and policy documentation from
+   plural "data_sources" to singular "data_source".
+ - Updated SELinux patch to measure only policy, instead of policy and
+   state.  The state measurement will be upstreamed through a separate
+   patch.
+ - Updated admin-guide/kernel-parameters.txt to document support for
+   critical_data in builtin policy.
+
+Change Log v6:
+Incorporated feedback from Mimi on v5 of this series.
+ - Got rid of patch 5 from the v5 of the series.(the allow list for data
+   sources)
+ - Updated function descriptions, changed variable names etc.
+ - Moved the input param event_data_source in ima_measure_critical_data()
+   to a new patch.  (patch 6/8 of this series)
+ - Split patch 4 from v5 of the series into two patches (patch 4/8 and 
+   patch 5/8)
+ - Updated cover letter and patch descriptions as per feedback.
+
+Change Log v5:
+(1) Incorporated feedback from Stephen on the last SeLinux patch.
+ SeLinux Patch: https://patchwork.kernel.org/patch/11801585/
+ - Freed memory in the reverse order of allocation in 
+   selinux_measure_state().
+ - Used scnprintf() instead of snprintf() to create the string for
+   selinux state.
+ - Allocated event name passed to ima_measure_critical_data() before
+   gathering selinux state and policy information for measuring.
+
+(2) Incorporated feedback from Mimi on v4 of this series.
+ V4 of this Series: https://patchwork.kernel.org/project/linux-integrity/list/?series=354437
+
+ - Removed patch "[v4,2/6] IMA: conditionally allow empty rule data"
+ - Reversed the order of following patches.
+      [v4,4/6] IMA: add policy to measure critical data from kernel components
+      [v4,5/6] IMA: add hook to measure critical data from kernel components
+   and renamed them to remove "from kernel components"
+ - Added a new patch to this series - 
+       IMA: add critical_data to built-in policy rules
+
+ - Added the next version of SeLinux patch (mentioned above) to this
+   series 
+       selinux: measure state and hash of the policy using IMA
+
+ - Updated cover-letter description to give broader perspective of the
+   feature, rearranging paragraphs, removing unnecessary info, clarifying
+   terms etc.
+ - Got rid of opt_list param from ima_match_rule_data().
+ - Updated the documentation to remove sources that don't yet exist.
+ - detailed IMA hook description added to ima_measure_critical_data(),
+   as well as elaborating terms event_name, event_data_source.
+ - "data_sources:=" is not a mandatory policy option for 
+   func=CRITICAL_DATA anymore.  If not present, all the data sources
+   specified in __ima_supported_kernel_data_sources will be measured.
+
+
+Lakshmi Ramasubramanian (2):
+  IMA: define a builtin critical data measurement policy
+  selinux: include a consumer of the new IMA critical data hook
+
+Tushar Sugandhi (6):
+  IMA: generalize keyring specific measurement constructs
+  IMA: add support to measure buffer data hash
+  IMA: define a hook to measure kernel integrity critical data
+  IMA: add policy rule to measure critical data
+  IMA: limit critical data measurement based on a label
+  IMA: extend critical data hook to limit the measurement based on a
+    label
+
+ Documentation/ABI/testing/ima_policy          |   5 +-
+ .../admin-guide/kernel-parameters.txt         |   5 +-
+ include/linux/ima.h                           |  10 ++
+ security/integrity/ima/ima.h                  |   8 +-
+ security/integrity/ima/ima_api.c              |   8 +-
+ security/integrity/ima/ima_appraise.c         |   2 +-
+ security/integrity/ima/ima_asymmetric_keys.c  |   2 +-
+ security/integrity/ima/ima_main.c             |  59 +++++++--
+ security/integrity/ima/ima_policy.c           | 115 ++++++++++++++----
+ security/integrity/ima/ima_queue_keys.c       |   3 +-
+ security/selinux/Makefile                     |   2 +
+ security/selinux/ima.c                        |  64 ++++++++++
+ security/selinux/include/ima.h                |  24 ++++
+ security/selinux/include/security.h           |   3 +-
+ security/selinux/ss/services.c                |  64 ++++++++--
+ 15 files changed, 324 insertions(+), 50 deletions(-)
+ create mode 100644 security/selinux/ima.c
+ create mode 100644 security/selinux/include/ima.h
+
+-- 
+2.17.1
 
