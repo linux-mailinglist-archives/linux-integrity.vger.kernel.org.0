@@ -2,344 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9466C2EEC47
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Jan 2021 05:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDBD2EF29B
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Jan 2021 13:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbhAHEIs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Jan 2021 23:08:48 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:59258 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727455AbhAHEIr (ORCPT
+        id S1725965AbhAHMjY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 8 Jan 2021 07:39:24 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25550 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725816AbhAHMjY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Jan 2021 23:08:47 -0500
-Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B16DC20B6C47;
-        Thu,  7 Jan 2021 20:07:26 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B16DC20B6C47
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1610078847;
-        bh=AgvYAJJjP1R66s0Ox9IE0VuR3xlSiEzYCYXqnGjJ/8U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QLv36zaq28Y7t/lSyM5Y79XKQ7tjLhsjhqsaBeIaR8Ja0sjKtILfSYB0W/5tLMuNY
-         nK4j9LuuX5W9KtmjqwhwHfYx2Sgu7/i6jwJLIwROs9p9juXr/YaXGs6t3KulJnso15
-         zqvmuqBEXlGZQJD/OUgkx/zyrh0y0patvMKFnn2M=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, paul@paul-moore.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: [PATCH v10 8/8] selinux: include a consumer of the new IMA critical data hook
-Date:   Thu,  7 Jan 2021 20:07:08 -0800
-Message-Id: <20210108040708.8389-9-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
-References: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
+        Fri, 8 Jan 2021 07:39:24 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 108CWH1j129369;
+        Fri, 8 Jan 2021 07:38:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=9WUjq2a9S7jh0LFexPEehScoiNInFQI0hx81mT/OLgk=;
+ b=I9D40xaGHF4ZnXJS+oqwlT7zPcNv8VDxDT9RiQ29f0PtTiSVc+uzv5rAnO+mhlba3iSw
+ vYKcUOt0SRygv5ahFdpne1fs7A1awkT748b2IuIwGSCiWB1aCKef32rLHwvravVUvOFN
+ V68f7R1CYq2NIE3EMDQTrWQvBEKifagvWUawoULRhTsvOYH0X0a6d3ueI81aHVP9IJwU
+ thwD81aKu+m3PXg6DJu41RX/qWtKZamGhf7A5oeMPwDeT24kIcQZv5j+EQ4OfiiSZPbU
+ BPXMUm5Z/B1uQRp+BUnO9k+aLYMfoiOjg4vyZBgorjUfzae7yTC8szDBi4jQ0YubAU4j xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 35xqcc0aq7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Jan 2021 07:38:42 -0500
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 108CWRCx130095;
+        Fri, 8 Jan 2021 07:38:41 -0500
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 35xqcc0apa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Jan 2021 07:38:41 -0500
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 108CWmhh003996;
+        Fri, 8 Jan 2021 12:38:39 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 35tgf8e36y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Jan 2021 12:38:39 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 108CcbZn42270978
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 8 Jan 2021 12:38:37 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E840A4051;
+        Fri,  8 Jan 2021 12:38:37 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E7388A405D;
+        Fri,  8 Jan 2021 12:38:34 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.88.40])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  8 Jan 2021 12:38:34 +0000 (GMT)
+Message-ID: <8c78437d0e9a4968996b834030661b6f567f87eb.camel@linux.ibm.com>
+Subject: Re: [RFC] Persist ima logs to disk
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Raphael Gianotti <raphgi@linux.microsoft.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        janne.karhunen@gmail.com
+Cc:     linux-integrity@vger.kernel.org, tusharsu@linux.microsoft.com,
+        tyhicks@linux.microsoft.com, nramas@linux.microsoft.com,
+        balajib@linux.microsoft.com, Amir Goldstein <amir73il@gmail.com>
+Date:   Fri, 08 Jan 2021 07:38:33 -0500
+In-Reply-To: <734adc26-0050-ce8f-4c8c-c8a907b569a6@linux.microsoft.com>
+References: <20210105195742.2629-1-raphgi@linux.microsoft.com>
+         <87127d502bcb9707dd4e7a43475ab6bed2fdd421.camel@linux.ibm.com>
+         <715a265180a092754ab9ea8522c39427645b25ad.camel@HansenPartnership.com>
+         <6e28c7a9742131cf508e77448bfee0a03b2c2e5e.camel@linux.ibm.com>
+         <3c50bc449aae2f09bd7d43c401cc9b292f9ec2ae.camel@HansenPartnership.com>
+         <570d54ca679b7a4f786fa65eb78601a2af91c397.camel@linux.ibm.com>
+         <13447f30db609d4bd77d5a826c5102dd5a931a19.camel@HansenPartnership.com>
+         <734adc26-0050-ce8f-4c8c-c8a907b569a6@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-08_07:2021-01-07,2021-01-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+ adultscore=0 spamscore=0 malwarescore=0 phishscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101080069
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+On Thu, 2021-01-07 at 14:57 -0800, Raphael Gianotti wrote:
+> >>>> But this doesn't address where the offloaded measurement list
+> >>>> will be stored, how long the list will be retained, nor who
+> >>>> guarantees the integrity of the offloaded list.  In addition,
+> >>>> different form factors will have different requirements.
+> 
+> For how long the list would be retained, or in the case of a log segments, it
+> might make sense to have that be an admin decision, something that can be
+> configured to satisfy the needs of a specific system, as mentioned below by
+> James, does that seem correct?
 
-SELinux stores the active policy in memory, so the changes to this data
-at runtime would have an impact on the security guarantees provided
-by SELinux.  Measuring in-memory SELinux policy through IMA subsystem
-provides a secure way for the attestation service to remotely validate
-the policy contents at runtime.
+For the discussion on exporting and truncating the IMA measurement
+list, refer to: 
+https://lore.kernel.org/linux-integrity/1580998432.5585.411.camel@linux.ibm.com/
 
-Measure the hash of the loaded policy by calling the IMA hook
-ima_measure_critical_data().  Since the size of the loaded policy
-can be large (several MB), measure the hash of the policy instead of
-the entire policy to avoid bloating the IMA log entry.
+> 
+> Given the possibility of keeping the logs around for an indefinite amount of
+> time, would using an expansion of the method present in this RFC be more
+> appropriate than going down the vfs_tmpfile route? Forgive my lack on expertise
+> on mm, but would the vfs_tmpfile approach work for keeping several log segments
+> across multiple kexecs?
 
-To enable SELinux data measurement, the following steps are required:
+With the "vfs_tmpfile" mechanism, breaking up and saving the log in
+segments isn't needed.  The existing mechanism for carrying the
+measurement list across kexec would still be used.  Currently, if the
+kernel cannot allocate the memory needed for carrying the measurement
+across kexec, it simply emits an error message, but continues with the
+kexec.
 
-1, Add "ima_policy=critical_data" to the kernel command line arguments
-   to enable measuring SELinux data at boot time.
-For example,
-  BOOT_IMAGE=/boot/vmlinuz-5.10.0-rc1+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset security=selinux ima_policy=critical_data
-
-2, Add the following rule to /etc/ima/ima-policy
-   measure func=CRITICAL_DATA label=selinux
-
-Sample measurement of the hash of SELinux policy:
-
-To verify the measured data with the current SELinux policy run
-the following commands and verify the output hash values match.
-
-  sha256sum /sys/fs/selinux/policy | cut -d' ' -f 1
-
-  grep "selinux-policy-hash" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | tail -1 | cut -d' ' -f 6
-
-Note that the actual verification of SELinux policy would require loading
-the expected policy into an identical kernel on a pristine/known-safe
-system and run the sha256sum /sys/kernel/selinux/policy there to get
-the expected hash.
-
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
----
- Documentation/ABI/testing/ima_policy |  3 +-
- security/selinux/Makefile            |  2 +
- security/selinux/ima.c               | 64 ++++++++++++++++++++++++++++
- security/selinux/include/ima.h       | 24 +++++++++++
- security/selinux/include/security.h  |  3 +-
- security/selinux/ss/services.c       | 64 ++++++++++++++++++++++++----
- 6 files changed, 149 insertions(+), 11 deletions(-)
- create mode 100644 security/selinux/ima.c
- create mode 100644 security/selinux/include/ima.h
-
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index 54fe1c15ed50..8365596cb42b 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -52,8 +52,9 @@ Description:
- 			template:= name of a defined IMA template type
- 			(eg, ima-ng). Only valid when action is "measure".
- 			pcr:= decimal value
--			label:= [data_label]
-+			label:= [selinux]|[data_label]
- 			data_label:= a unique string used for grouping and limiting critical data.
-+			For example, "selinux" to measure critical data for SELinux.
- 
- 		  default policy:
- 			# PROC_SUPER_MAGIC
-diff --git a/security/selinux/Makefile b/security/selinux/Makefile
-index 4d8e0e8adf0b..776162444882 100644
---- a/security/selinux/Makefile
-+++ b/security/selinux/Makefile
-@@ -16,6 +16,8 @@ selinux-$(CONFIG_NETLABEL) += netlabel.o
- 
- selinux-$(CONFIG_SECURITY_INFINIBAND) += ibpkey.o
- 
-+selinux-$(CONFIG_IMA) += ima.o
-+
- ccflags-y := -I$(srctree)/security/selinux -I$(srctree)/security/selinux/include
- 
- $(addprefix $(obj)/,$(selinux-y)): $(obj)/flask.h
-diff --git a/security/selinux/ima.c b/security/selinux/ima.c
-new file mode 100644
-index 000000000000..0b835bdc3aa9
---- /dev/null
-+++ b/security/selinux/ima.c
-@@ -0,0 +1,64 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2021 Microsoft Corporation
-+ *
-+ * Author: Lakshmi Ramasubramanian (nramas@linux.microsoft.com)
-+ *
-+ * Measure critical data structures maintainted by SELinux
-+ * using IMA subsystem.
-+ */
-+#include <linux/vmalloc.h>
-+#include <linux/ktime.h>
-+#include <linux/ima.h>
-+#include "security.h"
-+#include "ima.h"
-+
-+/*
-+ * selinux_ima_measure_state - Measure hash of the SELinux policy
-+ *
-+ * @state: selinux state struct
-+ *
-+ * NOTE: This function must be called with policy_mutex held.
-+ */
-+void selinux_ima_measure_state(struct selinux_state *state)
-+{
-+	struct timespec64 cur_time;
-+	void *policy = NULL;
-+	char *policy_event_name = NULL;
-+	size_t policy_len;
-+	int rc = 0;
-+
-+	/*
-+	 * Measure SELinux policy only after initialization is completed.
-+	 */
-+	if (!selinux_initialized(state))
-+		return;
-+
-+	/*
-+	 * Pass a unique "event_name" to the IMA hook so that IMA subsystem
-+	 * will always measure the given data.
-+	 */
-+	ktime_get_real_ts64(&cur_time);
-+	policy_event_name = kasprintf(GFP_KERNEL, "%s-%lld:%09ld",
-+				      "selinux-policy-hash",
-+				      cur_time.tv_sec, cur_time.tv_nsec);
-+	if (!policy_event_name) {
-+		pr_err("SELinux: %s: event name for policy not allocated.\n",
-+		       __func__);
-+		goto out;
-+	}
-+
-+	rc = security_read_state_kernel(state, &policy, &policy_len);
-+	if (rc) {
-+		pr_err("SELinux: %s: failed to read policy %d.\n", __func__, rc);
-+		goto out;
-+	}
-+
-+	ima_measure_critical_data("selinux", policy_event_name,
-+				  policy, policy_len, true);
-+
-+	vfree(policy);
-+
-+out:
-+	kfree(policy_event_name);
-+}
-diff --git a/security/selinux/include/ima.h b/security/selinux/include/ima.h
-new file mode 100644
-index 000000000000..d69c36611423
---- /dev/null
-+++ b/security/selinux/include/ima.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright (C) 2021 Microsoft Corporation
-+ *
-+ * Author: Lakshmi Ramasubramanian (nramas@linux.microsoft.com)
-+ *
-+ * Measure critical data structures maintainted by SELinux
-+ * using IMA subsystem.
-+ */
-+
-+#ifndef _SELINUX_IMA_H_
-+#define _SELINUX_IMA_H_
-+
-+#include "security.h"
-+
-+#ifdef CONFIG_IMA
-+extern void selinux_ima_measure_state(struct selinux_state *selinux_state);
-+#else
-+static inline void selinux_ima_measure_state(struct selinux_state *selinux_state)
-+{
-+}
-+#endif
-+
-+#endif	/* _SELINUX_IMA_H_ */
-diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
-index 3cc8bab31ea8..29cae32d3fc5 100644
---- a/security/selinux/include/security.h
-+++ b/security/selinux/include/security.h
-@@ -229,7 +229,8 @@ void selinux_policy_cancel(struct selinux_state *state,
- 			struct selinux_policy *policy);
- int security_read_policy(struct selinux_state *state,
- 			 void **data, size_t *len);
--
-+int security_read_state_kernel(struct selinux_state *state,
-+			       void **data, size_t *len);
- int security_policycap_supported(struct selinux_state *state,
- 				 unsigned int req_cap);
- 
-diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-index 9704c8a32303..cc8dbc4ed8db 100644
---- a/security/selinux/ss/services.c
-+++ b/security/selinux/ss/services.c
-@@ -65,6 +65,7 @@
- #include "ebitmap.h"
- #include "audit.h"
- #include "policycap_names.h"
-+#include "ima.h"
- 
- /* Forward declaration. */
- static int context_struct_to_string(struct policydb *policydb,
-@@ -2180,6 +2181,7 @@ static void selinux_notify_policy_change(struct selinux_state *state,
- 	selinux_status_update_policyload(state, seqno);
- 	selinux_netlbl_cache_invalidate();
- 	selinux_xfrm_notify_policyload();
-+	selinux_ima_measure_state(state);
- }
- 
- void selinux_policy_commit(struct selinux_state *state,
-@@ -3875,8 +3877,33 @@ int security_netlbl_sid_to_secattr(struct selinux_state *state,
- }
- #endif /* CONFIG_NETLABEL */
- 
-+/**
-+ * __security_read_policy - read the policy.
-+ * @policy: SELinux policy
-+ * @data: binary policy data
-+ * @len: length of data in bytes
-+ *
-+ */
-+static int __security_read_policy(struct selinux_policy *policy,
-+				  void *data, size_t *len)
-+{
-+	int rc;
-+	struct policy_file fp;
-+
-+	fp.data = data;
-+	fp.len = *len;
-+
-+	rc = policydb_write(&policy->policydb, &fp);
-+	if (rc)
-+		return rc;
-+
-+	*len = (unsigned long)fp.data - (unsigned long)data;
-+	return 0;
-+}
-+
- /**
-  * security_read_policy - read the policy.
-+ * @state: selinux_state
-  * @data: binary policy data
-  * @len: length of data in bytes
-  *
-@@ -3885,8 +3912,6 @@ int security_read_policy(struct selinux_state *state,
- 			 void **data, size_t *len)
- {
- 	struct selinux_policy *policy;
--	int rc;
--	struct policy_file fp;
- 
- 	policy = rcu_dereference_protected(
- 			state->policy, lockdep_is_held(&state->policy_mutex));
-@@ -3898,14 +3923,35 @@ int security_read_policy(struct selinux_state *state,
- 	if (!*data)
- 		return -ENOMEM;
- 
--	fp.data = *data;
--	fp.len = *len;
-+	return __security_read_policy(policy, *data, len);
-+}
- 
--	rc = policydb_write(&policy->policydb, &fp);
--	if (rc)
--		return rc;
-+/**
-+ * security_read_state_kernel - read the policy.
-+ * @state: selinux_state
-+ * @data: binary policy data
-+ * @len: length of data in bytes
-+ *
-+ * Allocates kernel memory for reading SELinux policy.
-+ * This function is for internal use only and should not
-+ * be used for returning data to user space.
-+ *
-+ * This function must be called with policy_mutex held.
-+ */
-+int security_read_state_kernel(struct selinux_state *state,
-+			       void **data, size_t *len)
-+{
-+	struct selinux_policy *policy;
- 
--	*len = (unsigned long)fp.data - (unsigned long)*data;
--	return 0;
-+	policy = rcu_dereference_protected(
-+			state->policy, lockdep_is_held(&state->policy_mutex));
-+	if (!policy)
-+		return -EINVAL;
-+
-+	*len = policy->policydb.len;
-+	*data = vmalloc(*len);
-+	if (!*data)
-+		return -ENOMEM;
- 
-+	return __security_read_policy(policy, *data, len);
- }
--- 
-2.17.1
+Mimi
 
