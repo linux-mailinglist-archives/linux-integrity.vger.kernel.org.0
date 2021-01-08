@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FD62EEC43
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Jan 2021 05:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C902EEC4A
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Jan 2021 05:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727474AbhAHEIq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Jan 2021 23:08:46 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:59246 "EHLO
+        id S1727612AbhAHEIz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Jan 2021 23:08:55 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:59260 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727453AbhAHEIp (ORCPT
+        with ESMTP id S1727454AbhAHEIq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Jan 2021 23:08:45 -0500
+        Thu, 7 Jan 2021 23:08:46 -0500
 Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 892ED20B6C45;
-        Thu,  7 Jan 2021 20:07:25 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 892ED20B6C45
+        by linux.microsoft.com (Postfix) with ESMTPSA id 273D920B6C46;
+        Thu,  7 Jan 2021 20:07:26 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 273D920B6C46
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1610078846;
-        bh=VIKMJbFu3cOL+5bOVp1iBn5J7QnndlyqYVvuPWOMxHo=;
+        bh=NblfeM4gSvMTuDUnr/Ywi4/vYvY7tsPtE6p51c4jjrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nozqnuyNEh353Q4nxQavHSSiQ7vXvceqoXSVyr1uAummB94jPOYtDT6U5SsYsyeaK
-         L7hvDb5jVEPaaWRENLP21XYYk66eUAKBJUxwwEnNHQKTyR5hi+0easlQIBDT1QZs0P
-         fa89vIZd83MUi/1rBkXMn1dGQ+Qg6ViohLZd1g8E=
+        b=KTB1yGAbNVHfWJR6Tw/kNYwCDj3hdE5krKuPj5C0Oa9QiOhpDKgjTAdxK3p4WgctB
+         mSavfFsrZhphARf9DfRA4Uxl2dtO2recLkn8EkoSltEOvBuOgPMO+hb++vE7ebbGrc
+         0oZNB2q722hUNtT2HzykKzKtltHC0O+2hnJrD84g=
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
 To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
         casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
@@ -31,9 +31,9 @@ Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
         selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: [PATCH v10 6/8] IMA: extend critical data hook to limit the measurement based on a label
-Date:   Thu,  7 Jan 2021 20:07:06 -0800
-Message-Id: <20210108040708.8389-7-tusharsu@linux.microsoft.com>
+Subject: [PATCH v10 7/8] IMA: define a builtin critical data measurement policy
+Date:   Thu,  7 Jan 2021 20:07:07 -0800
+Message-Id: <20210108040708.8389-8-tusharsu@linux.microsoft.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
 References: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
@@ -41,79 +41,88 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The IMA hook ima_measure_critical_data() does not support a way to
-specify the source of the critical data provider.  Thus, the data
-measurement cannot be constrained based on the data source label
-in the IMA policy.
+From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
-Extend the IMA hook ima_measure_critical_data() to support passing 
-the data source label as an input parameter, so that the policy rule can
-be used to limit the measurements based on the label.
+Define a new critical data builtin policy to allow measuring
+early kernel integrity critical data before a custom IMA policy
+is loaded.
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Update the documentation on kernel parameters to document
+the new critical data builtin policy.
+
+Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- include/linux/ima.h               | 7 +++++--
- security/integrity/ima/ima_main.c | 8 +++++---
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |  5 ++++-
+ security/integrity/ima/ima_policy.c             | 12 ++++++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 37a0727c1c31..6d00542de135 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -30,7 +30,8 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- extern void ima_post_path_mknod(struct dentry *dentry);
- extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
- extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
--extern void ima_measure_critical_data(const char *event_name,
-+extern void ima_measure_critical_data(const char *event_label,
-+				      const char *event_name,
- 				      const void *buf, size_t buf_len,
- 				      bool hash);
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 526d65d8573a..6034d75c3ca0 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1746,7 +1746,7 @@
+ 	ima_policy=	[IMA]
+ 			The builtin policies to load during IMA setup.
+ 			Format: "tcb | appraise_tcb | secure_boot |
+-				 fail_securely"
++				 fail_securely | critical_data"
  
-@@ -126,9 +127,11 @@ static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+ 			The "tcb" policy measures all programs exec'd, files
+ 			mmap'd for exec, and all files opened with the read
+@@ -1765,6 +1765,9 @@
+ 			filesystems with the SB_I_UNVERIFIABLE_SIGNATURE
+ 			flag.
  
- static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
- 
--static inline void ima_measure_critical_data(const char *event_name,
-+static inline void ima_measure_critical_data(const char *event_label,
-+					     const char *event_name,
- 					     const void *buf, size_t buf_len,
- 					     bool hash) {}
++			The "critical_data" policy measures kernel integrity
++			critical data.
 +
- #endif /* CONFIG_IMA */
+ 	ima_tcb		[IMA] Deprecated.  Use ima_policy= instead.
+ 			Load a policy which meets the needs of the Trusted
+ 			Computing Base.  This means IMA will measure all
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 2c9db2d0b434..9b45d064a87d 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -206,6 +206,10 @@ static struct ima_rule_entry secure_boot_rules[] __ro_after_init = {
+ 	 .flags = IMA_FUNC | IMA_DIGSIG_REQUIRED},
+ };
  
- #ifndef CONFIG_IMA_KEXEC
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index ef37307e79dd..edfb1367a11d 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -915,6 +915,7 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
++static struct ima_rule_entry critical_data_rules[] __ro_after_init = {
++	{.action = MEASURE, .func = CRITICAL_DATA, .flags = IMA_FUNC},
++};
++
+ /* An array of architecture specific rules */
+ static struct ima_rule_entry *arch_policy_entry __ro_after_init;
  
- /**
-  * ima_measure_critical_data - measure kernel integrity critical data
-+ * @event_label: unique event label for grouping and limiting critical data
-  * @event_name: event name for the record in the IMA measurement list
-  * @buf: pointer to buffer data
-  * @buf_len: length of buffer data (in bytes)
-@@ -925,15 +926,16 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
-  * structures, policies, and states stored in kernel memory that can
-  * impact the integrity of the system.
-  */
--void ima_measure_critical_data(const char *event_name,
-+void ima_measure_critical_data(const char *event_label,
-+			       const char *event_name,
- 			       const void *buf, size_t buf_len,
- 			       bool hash)
+@@ -228,6 +232,7 @@ __setup("ima_tcb", default_measure_policy_setup);
+ 
+ static bool ima_use_appraise_tcb __initdata;
+ static bool ima_use_secure_boot __initdata;
++static bool ima_use_critical_data __initdata;
+ static bool ima_fail_unverifiable_sigs __ro_after_init;
+ static int __init policy_setup(char *str)
  {
--	if (!event_name || !buf || !buf_len)
-+	if (!event_name || !event_label || !buf || !buf_len)
- 		return;
+@@ -242,6 +247,8 @@ static int __init policy_setup(char *str)
+ 			ima_use_appraise_tcb = true;
+ 		else if (strcmp(p, "secure_boot") == 0)
+ 			ima_use_secure_boot = true;
++		else if (strcmp(p, "critical_data") == 0)
++			ima_use_critical_data = true;
+ 		else if (strcmp(p, "fail_securely") == 0)
+ 			ima_fail_unverifiable_sigs = true;
+ 		else
+@@ -871,6 +878,11 @@ void __init ima_init_policy(void)
+ 			  ARRAY_SIZE(default_appraise_rules),
+ 			  IMA_DEFAULT_POLICY);
  
- 	process_buffer_measurement(NULL, buf, buf_len, event_name,
--				   CRITICAL_DATA, 0, NULL,
-+				   CRITICAL_DATA, 0, event_label,
- 				   hash);
++	if (ima_use_critical_data)
++		add_rules(critical_data_rules,
++			  ARRAY_SIZE(critical_data_rules),
++			  IMA_DEFAULT_POLICY);
++
+ 	ima_update_policy_flag();
  }
  
 -- 
