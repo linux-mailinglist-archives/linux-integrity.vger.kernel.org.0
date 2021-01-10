@@ -2,71 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4A32F04D8
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 Jan 2021 04:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8812F04DB
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 Jan 2021 04:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbhAJDPH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 9 Jan 2021 22:15:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32812 "EHLO mail.kernel.org"
+        id S1726293AbhAJDRj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 9 Jan 2021 22:17:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33004 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726062AbhAJDPH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 9 Jan 2021 22:15:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DF80122507;
-        Sun, 10 Jan 2021 03:14:24 +0000 (UTC)
+        id S1726132AbhAJDRj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 9 Jan 2021 22:17:39 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 93C5B22507;
+        Sun, 10 Jan 2021 03:16:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610248467;
-        bh=ox1ut7hVVYrKa5F+DtrMnt1bKVMe1dBRNN/sU51U5Tg=;
+        s=k20201202; t=1610248618;
+        bh=0/faSiD+RC5oedQgVQ8n1GEL7aCxyH2Yq/wnxLRgX9g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ar8UbxQNNajdzNw0NSJ0f1hQqJbi2x84v1BK60fO4KV8uXzsThdO446awc/F2Tc6Z
-         tLAKXQK+wTZmddzSix6AKVPq9dnria1pAaAlp63DH18hosJFexJvlF/HYWre77u13G
-         AUtZcqjnplBnHpNuPmQ0hJmbp4J8ayNxkHD3N4K5pmE8fzMT6OBvt9WIWSYWUqW7pq
-         4YRYgY9FYz1MQIU+kuDR+XRoqq8An9A8CjmY0JWAM6SJzVhrIpJTKRG+UnZdYn572O
-         MGw9K5LMjDfcBMsBrcUQIM7Txhb67qwJAq4fB7xi88GB5U37k4nAsx7Ia+mEJLvN12
-         opzdzFxkndb8Q==
-Date:   Sun, 10 Jan 2021 05:14:19 +0200
+        b=uCMXa7RwJA/POYoDN6jzJhfZEu1cVc3e9Bcaqa0QQO7aLs4rs5xWoL+lWhAbqu07Y
+         oTGveLkDknA98oUf7FxEgeWFjB83LRwQaFGlmmjijOyD5qSCicmm4u+5/QENRusu9b
+         gBOexWM0c13lesrlTj3J43JEZJGp6D5nL46FrtLF3xW22ORODV/y0tQZsdKWE+FDBe
+         jOWjIktKSq1ZtwmtWAOLakRkcZ3yCrLMDS0qIuryTcp7PeUrXzc+LPs5CxeKeuAm8v
+         kYbkoBqzA2Mw8uiH6iXzLj2N4w5/gQnmnF/fITG85NsMeOGCcw/7EnuX2IoOTROUSL
+         oPOXsdhub4s9w==
+Date:   Sun, 10 Jan 2021 05:16:52 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
         Elaine Palmer <erpalmer@us.ibm.com>,
-        linux-integrity@vger.kernel.org,
         George Wilson <gcwilson@us.ibm.com>, zgu@us.ibm.com
 Subject: Re: [PATCH] doc: trusted-encrypted: updates with TEE as a new trust
  source (update)
-Message-ID: <X/pxC3vvGBsn1T09@kernel.org>
+Message-ID: <X/pxpAfn4MFsXT4g@kernel.org>
 References: <20201209164249.715178-1-zohar@linux.ibm.com>
- <CAFA6WYPEGGDGqryu1UXNeBsN9NxShEbv8CVxOp=Pt9Vc1LXB4A@mail.gmail.com>
+ <20201211081454.GA5262@kernel.org>
+ <CAFA6WYMt5+zX09bdgugSq9SgqF=V_OfOZee8fBEAv1thFLs3nA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFA6WYPEGGDGqryu1UXNeBsN9NxShEbv8CVxOp=Pt9Vc1LXB4A@mail.gmail.com>
+In-Reply-To: <CAFA6WYMt5+zX09bdgugSq9SgqF=V_OfOZee8fBEAv1thFLs3nA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jan 04, 2021 at 05:45:55PM +0530, Sumit Garg wrote:
-> Hi Mimi and Elaine,
+On Mon, Jan 04, 2021 at 06:06:33PM +0530, Sumit Garg wrote:
+> Hi Jarkko,
 > 
-> Apologies for my delayed reply as I was busy with other high priority work.
-> 
-> On Wed, 9 Dec 2020 at 22:14, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> On Fri, 11 Dec 2020 at 13:44, Jarkko Sakkinen <jarkko@kernel.org> wrote:
 > >
-> > From: Elaine Palmer <erpalmer@us.ibm.com>
+> > On Wed, Dec 09, 2020 at 11:42:49AM -0500, Mimi Zohar wrote:
+> > > From: Elaine Palmer <erpalmer@us.ibm.com>
+> > >
+> > > Update trusted key documentation with additional comparisons between
+> > > discrete TPMs and TEE.
+> > >
+> > > Signed-off-by: Elaine Palmer <erpalmer@us.ibm.com>
 > >
-> > Update trusted key documentation with additional comparisons between
-> > discrete TPMs and TEE.
+> > Right, so OP-TEE is not the same as TEE. I did not know this and the
+> > patch set does not underline this.
+> >
+> > I re-checked the patches and none of them say explicitly that OP-TEE
+> > is an application living inside TEE.
 > 
-> Isn't this additional comparison limited to a particular type of TPM
-> (discrete TPMs) and ignored other TPM implementations (virtual TPM,
-> firmware TPM etc.)? I think your later comment about on-chip versus
-> off-chip points at these missing pieces as well.
+> This patch-set provides a trust source based on generic TEE interface
+> where underlying TEE implementations like OP-TEE (drivers/tee/optee/),
+> AMD TEE (drivers/tee/amdtee/) etc. can easily be hooked up. And this
+> is similar to the TPM interface where underlying TPM implementations
+> like discrete TPM, virtual TPM, firmware TPM etc. can be easily hooked
+> up.
 > 
-> I would rather suggest comparing TPM and TEE on the basis of
-> interfaces and implementation guidelines provided by corresponding
-> standards as I think this is the most relevant part to the kernel.
+> >
+> > This essentially means that the backend needs to be renamed as "op_tee".
+> >
+> 
+> I don't see any need for this, see above.
 
-I agree with this point of view.
+Right, TEE is a protocol standard, just like TPM, and OP-TEE is one
+implementation of this interface? I.e. OP-TEE does not define API
+that is hard bound to OP-TEE?
 
-I'm also finding hard to understand the reason for the thread model
-documentation, i.e. how it connects to the implementation.
+Better to ask the very basic questions out and loud to get this
+right.
 
 /Jarkko
