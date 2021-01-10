@@ -2,103 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B79702F05BF
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 Jan 2021 07:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8102F05C5
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 Jan 2021 08:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725385AbhAJGyV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 10 Jan 2021 01:54:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52862 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725267AbhAJGyV (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 10 Jan 2021 01:54:21 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 17B9923884;
-        Sun, 10 Jan 2021 06:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610261620;
-        bh=zkbXK6BnoIMcnVylcGQ3Y2IBNNSj9bS1jAU9NzNCeiI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bYQCbsBDLTQFKB/qib2gQU9NwhewXR0H5EQnYrmo2MSPdX1DozlrhICO6yGnoC+Z3
-         tkxkopqVjgeDnjp3yr/jYG24F34Pxlx4VvSgPtHIu5WwsV62ZtoQT4c1eGEYLK1VI6
-         szqUC09R9wk+YIHl/Br36iPzfo3sxWnKtACQWmzLi3eN5e1QhWHB+6Rgsr4zGiqGso
-         SX2XbAlSoXUhoyZvNpTAHE1eL6MfNjclbD/ZUtwfmT5XpLE+UGreaLYcvWTegcQKz3
-         Zep9eBTpbfz/F10vWx+OWGGP/D5CG20Lb0Gpzj3IivD7PJ+EdVkWd8al+lsJ4VYbaa
-         c7sCoCOCOXinQ==
-Date:   Sat, 9 Jan 2021 22:53:38 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     dinghao.liu@zju.edu.cn
-Cc:     kjlu@umn.edu, Mimi Zohar <zohar@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
+        id S1725385AbhAJHCW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 10 Jan 2021 02:02:22 -0500
+Received: from mail.zju.edu.cn ([61.164.42.155]:10710 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725270AbhAJHCW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 10 Jan 2021 02:02:22 -0500
+Received: by ajax-webmail-mail-app4 (Coremail) ; Sun, 10 Jan 2021 15:01:02
+ +0800 (GMT+08:00)
+X-Originating-IP: [222.205.25.254]
+Date:   Sun, 10 Jan 2021 15:01:02 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   dinghao.liu@zju.edu.cn
+To:     "Eric Biggers" <ebiggers@kernel.org>
+Cc:     kjlu@umn.edu, "Mimi Zohar" <zohar@linux.ibm.com>,
+        "James Morris" <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@nokia.com>,
+        "Dmitry Kasatkin" <dmitry.kasatkin@nokia.com>,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] evm: Fix memleak in init_desc
-Message-ID: <X/qkcgLg2h8Yxn3a@sol.localdomain>
+Subject: Re: Re: Re: [PATCH] evm: Fix memleak in init_desc
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20200917(3e19599d)
+ Copyright (c) 2002-2021 www.mailtech.cn zju.edu.cn
+In-Reply-To: <X/qkcgLg2h8Yxn3a@sol.localdomain>
 References: <20210109113305.11035-1-dinghao.liu@zju.edu.cn>
  <X/nixOkNqQdWUAv8@sol.localdomain>
  <5a36a73a.2e704.176eac332ca.Coremail.dinghao.liu@zju.edu.cn>
+ <X/qkcgLg2h8Yxn3a@sol.localdomain>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5a36a73a.2e704.176eac332ca.Coremail.dinghao.liu@zju.edu.cn>
+Message-ID: <9626978.2e99b.176eb1925c4.Coremail.dinghao.liu@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgC3mR4upvpfClhAAA--.10948W
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgoBBlZdtR6iiAACsH
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Jan 10, 2021 at 01:27:09PM +0800, dinghao.liu@zju.edu.cn wrote:
-> > On Sat, Jan 09, 2021 at 07:33:05PM +0800, Dinghao Liu wrote:
-> > > When kmalloc() fails, tmp_tfm allocated by
-> > > crypto_alloc_shash() has not been freed, which
-> > > leads to memleak.
-> > > 
-> > > Fixes: d46eb3699502b ("evm: crypto hash replaced by shash")
-> > > Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-> > > ---
-> > >  security/integrity/evm/evm_crypto.c | 9 +++++++--
-> > >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-> > > index 168c3b78ac47..39fb31a638ac 100644
-> > > --- a/security/integrity/evm/evm_crypto.c
-> > > +++ b/security/integrity/evm/evm_crypto.c
-> > > @@ -73,7 +73,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
-> > >  {
-> > >  	long rc;
-> > >  	const char *algo;
-> > > -	struct crypto_shash **tfm, *tmp_tfm;
-> > > +	struct crypto_shash **tfm, *tmp_tfm = NULL;
-> > >  	struct shash_desc *desc;
-> > >  
-> > >  	if (type == EVM_XATTR_HMAC) {
-> > > @@ -118,13 +118,18 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
-> > >  alloc:
-> > >  	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
-> > >  			GFP_KERNEL);
-> > > -	if (!desc)
-> > > +	if (!desc) {
-> > > +		if (tmp_tfm)
-> > > +			crypto_free_shash(tmp_tfm);
-> > >  		return ERR_PTR(-ENOMEM);
-> > > +	}
-> > >  
-> > >  	desc->tfm = *tfm;
-> > >  
-> > >  	rc = crypto_shash_init(desc);
-> > >  	if (rc) {
-> > > +		if (tmp_tfm)
-> > > +			crypto_free_shash(tmp_tfm);
-> > >  		kfree(desc);
-> > >  		return ERR_PTR(rc);
-> > >  	}
-> > 
-> > There's no need to check for NULL before calling crypto_free_shash().
-> > 
-> 
-> I find there is a crypto_shash_tfm() in the definition of 
-> crypto_free_shash(). Will this lead to null pointer dereference
-> when we use it to free a NULL pointer?
-> 
-
-No.  It does &tfm->base, not tfm->base.
-
-- Eric
+PiBPbiBTdW4sIEphbiAxMCwgMjAyMSBhdCAwMToyNzowOVBNICswODAwLCBkaW5naGFvLmxpdUB6
+anUuZWR1LmNuIHdyb3RlOgo+ID4gPiBPbiBTYXQsIEphbiAwOSwgMjAyMSBhdCAwNzozMzowNVBN
+ICswODAwLCBEaW5naGFvIExpdSB3cm90ZToKPiA+ID4gPiBXaGVuIGttYWxsb2MoKSBmYWlscywg
+dG1wX3RmbSBhbGxvY2F0ZWQgYnkKPiA+ID4gPiBjcnlwdG9fYWxsb2Nfc2hhc2goKSBoYXMgbm90
+IGJlZW4gZnJlZWQsIHdoaWNoCj4gPiA+ID4gbGVhZHMgdG8gbWVtbGVhay4KPiA+ID4gPiAKPiA+
+ID4gPiBGaXhlczogZDQ2ZWIzNjk5NTAyYiAoImV2bTogY3J5cHRvIGhhc2ggcmVwbGFjZWQgYnkg
+c2hhc2giKQo+ID4gPiA+IFNpZ25lZC1vZmYtYnk6IERpbmdoYW8gTGl1IDxkaW5naGFvLmxpdUB6
+anUuZWR1LmNuPgo+ID4gPiA+IC0tLQo+ID4gPiA+ICBzZWN1cml0eS9pbnRlZ3JpdHkvZXZtL2V2
+bV9jcnlwdG8uYyB8IDkgKysrKysrKy0tCj4gPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2Vy
+dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gPiA+ID4gCj4gPiA+ID4gZGlmZiAtLWdpdCBhL3Nl
+Y3VyaXR5L2ludGVncml0eS9ldm0vZXZtX2NyeXB0by5jIGIvc2VjdXJpdHkvaW50ZWdyaXR5L2V2
+bS9ldm1fY3J5cHRvLmMKPiA+ID4gPiBpbmRleCAxNjhjM2I3OGFjNDcuLjM5ZmIzMWE2MzhhYyAx
+MDA2NDQKPiA+ID4gPiAtLS0gYS9zZWN1cml0eS9pbnRlZ3JpdHkvZXZtL2V2bV9jcnlwdG8uYwo+
+ID4gPiA+ICsrKyBiL3NlY3VyaXR5L2ludGVncml0eS9ldm0vZXZtX2NyeXB0by5jCj4gPiA+ID4g
+QEAgLTczLDcgKzczLDcgQEAgc3RhdGljIHN0cnVjdCBzaGFzaF9kZXNjICppbml0X2Rlc2MoY2hh
+ciB0eXBlLCB1aW50OF90IGhhc2hfYWxnbykKPiA+ID4gPiAgewo+ID4gPiA+ICAJbG9uZyByYzsK
+PiA+ID4gPiAgCWNvbnN0IGNoYXIgKmFsZ287Cj4gPiA+ID4gLQlzdHJ1Y3QgY3J5cHRvX3NoYXNo
+ICoqdGZtLCAqdG1wX3RmbTsKPiA+ID4gPiArCXN0cnVjdCBjcnlwdG9fc2hhc2ggKip0Zm0sICp0
+bXBfdGZtID0gTlVMTDsKPiA+ID4gPiAgCXN0cnVjdCBzaGFzaF9kZXNjICpkZXNjOwo+ID4gPiA+
+ICAKPiA+ID4gPiAgCWlmICh0eXBlID09IEVWTV9YQVRUUl9ITUFDKSB7Cj4gPiA+ID4gQEAgLTEx
+OCwxMyArMTE4LDE4IEBAIHN0YXRpYyBzdHJ1Y3Qgc2hhc2hfZGVzYyAqaW5pdF9kZXNjKGNoYXIg
+dHlwZSwgdWludDhfdCBoYXNoX2FsZ28pCj4gPiA+ID4gIGFsbG9jOgo+ID4gPiA+ICAJZGVzYyA9
+IGttYWxsb2Moc2l6ZW9mKCpkZXNjKSArIGNyeXB0b19zaGFzaF9kZXNjc2l6ZSgqdGZtKSwKPiA+
+ID4gPiAgCQkJR0ZQX0tFUk5FTCk7Cj4gPiA+ID4gLQlpZiAoIWRlc2MpCj4gPiA+ID4gKwlpZiAo
+IWRlc2MpIHsKPiA+ID4gPiArCQlpZiAodG1wX3RmbSkKPiA+ID4gPiArCQkJY3J5cHRvX2ZyZWVf
+c2hhc2godG1wX3RmbSk7Cj4gPiA+ID4gIAkJcmV0dXJuIEVSUl9QVFIoLUVOT01FTSk7Cj4gPiA+
+ID4gKwl9Cj4gPiA+ID4gIAo+ID4gPiA+ICAJZGVzYy0+dGZtID0gKnRmbTsKPiA+ID4gPiAgCj4g
+PiA+ID4gIAlyYyA9IGNyeXB0b19zaGFzaF9pbml0KGRlc2MpOwo+ID4gPiA+ICAJaWYgKHJjKSB7
+Cj4gPiA+ID4gKwkJaWYgKHRtcF90Zm0pCj4gPiA+ID4gKwkJCWNyeXB0b19mcmVlX3NoYXNoKHRt
+cF90Zm0pOwo+ID4gPiA+ICAJCWtmcmVlKGRlc2MpOwo+ID4gPiA+ICAJCXJldHVybiBFUlJfUFRS
+KHJjKTsKPiA+ID4gPiAgCX0KPiA+ID4gCj4gPiA+IFRoZXJlJ3Mgbm8gbmVlZCB0byBjaGVjayBm
+b3IgTlVMTCBiZWZvcmUgY2FsbGluZyBjcnlwdG9fZnJlZV9zaGFzaCgpLgo+ID4gPiAKPiA+IAo+
+ID4gSSBmaW5kIHRoZXJlIGlzIGEgY3J5cHRvX3NoYXNoX3RmbSgpIGluIHRoZSBkZWZpbml0aW9u
+IG9mIAo+ID4gY3J5cHRvX2ZyZWVfc2hhc2goKS4gV2lsbCB0aGlzIGxlYWQgdG8gbnVsbCBwb2lu
+dGVyIGRlcmVmZXJlbmNlCj4gPiB3aGVuIHdlIHVzZSBpdCB0byBmcmVlIGEgTlVMTCBwb2ludGVy
+Pwo+ID4gCj4gCj4gTm8uICBJdCBkb2VzICZ0Zm0tPmJhc2UsIG5vdCB0Zm0tPmJhc2UuCj4gCgpU
+aGFuayB5b3UgZm9yIHlvdXIgYWR2aWNlISBJIHdpbGwgcmVzZW5kIGEgbmV3IHBhdGNoIHNvb24u
+CgpSZWdhcmRzLApEaW5naGFv
