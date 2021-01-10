@@ -2,77 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC692F055D
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 Jan 2021 06:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B79702F05BF
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 Jan 2021 07:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725270AbhAJF2J (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 10 Jan 2021 00:28:09 -0500
-Received: from spam.zju.edu.cn ([61.164.42.155]:5440 "EHLO zju.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725267AbhAJF2I (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 10 Jan 2021 00:28:08 -0500
-Received: by ajax-webmail-mail-app4 (Coremail) ; Sun, 10 Jan 2021 13:27:09
- +0800 (GMT+08:00)
-X-Originating-IP: [222.205.25.254]
-Date:   Sun, 10 Jan 2021 13:27:09 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   dinghao.liu@zju.edu.cn
-To:     "Eric Biggers" <ebiggers@kernel.org>
-Cc:     kjlu@umn.edu, "Mimi Zohar" <zohar@linux.ibm.com>,
-        "James Morris" <jmorris@namei.org>,
+        id S1725385AbhAJGyV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 10 Jan 2021 01:54:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52862 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725267AbhAJGyV (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 10 Jan 2021 01:54:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 17B9923884;
+        Sun, 10 Jan 2021 06:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610261620;
+        bh=zkbXK6BnoIMcnVylcGQ3Y2IBNNSj9bS1jAU9NzNCeiI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bYQCbsBDLTQFKB/qib2gQU9NwhewXR0H5EQnYrmo2MSPdX1DozlrhICO6yGnoC+Z3
+         tkxkopqVjgeDnjp3yr/jYG24F34Pxlx4VvSgPtHIu5WwsV62ZtoQT4c1eGEYLK1VI6
+         szqUC09R9wk+YIHl/Br36iPzfo3sxWnKtACQWmzLi3eN5e1QhWHB+6Rgsr4zGiqGso
+         SX2XbAlSoXUhoyZvNpTAHE1eL6MfNjclbD/ZUtwfmT5XpLE+UGreaLYcvWTegcQKz3
+         Zep9eBTpbfz/F10vWx+OWGGP/D5CG20Lb0Gpzj3IivD7PJ+EdVkWd8al+lsJ4VYbaa
+         c7sCoCOCOXinQ==
+Date:   Sat, 9 Jan 2021 22:53:38 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     dinghao.liu@zju.edu.cn
+Cc:     kjlu@umn.edu, Mimi Zohar <zohar@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        "Dmitry Kasatkin" <dmitry.kasatkin@nokia.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@nokia.com>,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: Re: [PATCH] evm: Fix memleak in init_desc
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20200917(3e19599d)
- Copyright (c) 2002-2021 www.mailtech.cn zju.edu.cn
-In-Reply-To: <X/nixOkNqQdWUAv8@sol.localdomain>
+Message-ID: <X/qkcgLg2h8Yxn3a@sol.localdomain>
 References: <20210109113305.11035-1-dinghao.liu@zju.edu.cn>
  <X/nixOkNqQdWUAv8@sol.localdomain>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+ <5a36a73a.2e704.176eac332ca.Coremail.dinghao.liu@zju.edu.cn>
 MIME-Version: 1.0
-Message-ID: <5a36a73a.2e704.176eac332ca.Coremail.dinghao.liu@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgC3mR4tkPpfPao_AA--.10866W
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgEBBlZdtR6iegABs9
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a36a73a.2e704.176eac332ca.Coremail.dinghao.liu@zju.edu.cn>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBPbiBTYXQsIEphbiAwOSwgMjAyMSBhdCAwNzozMzowNVBNICswODAwLCBEaW5naGFvIExpdSB3
-cm90ZToKPiA+IFdoZW4ga21hbGxvYygpIGZhaWxzLCB0bXBfdGZtIGFsbG9jYXRlZCBieQo+ID4g
-Y3J5cHRvX2FsbG9jX3NoYXNoKCkgaGFzIG5vdCBiZWVuIGZyZWVkLCB3aGljaAo+ID4gbGVhZHMg
-dG8gbWVtbGVhay4KPiA+IAo+ID4gRml4ZXM6IGQ0NmViMzY5OTUwMmIgKCJldm06IGNyeXB0byBo
-YXNoIHJlcGxhY2VkIGJ5IHNoYXNoIikKPiA+IFNpZ25lZC1vZmYtYnk6IERpbmdoYW8gTGl1IDxk
-aW5naGFvLmxpdUB6anUuZWR1LmNuPgo+ID4gLS0tCj4gPiAgc2VjdXJpdHkvaW50ZWdyaXR5L2V2
-bS9ldm1fY3J5cHRvLmMgfCA5ICsrKysrKystLQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2Vy
-dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9zZWN1cml0eS9p
-bnRlZ3JpdHkvZXZtL2V2bV9jcnlwdG8uYyBiL3NlY3VyaXR5L2ludGVncml0eS9ldm0vZXZtX2Ny
-eXB0by5jCj4gPiBpbmRleCAxNjhjM2I3OGFjNDcuLjM5ZmIzMWE2MzhhYyAxMDA2NDQKPiA+IC0t
-LSBhL3NlY3VyaXR5L2ludGVncml0eS9ldm0vZXZtX2NyeXB0by5jCj4gPiArKysgYi9zZWN1cml0
-eS9pbnRlZ3JpdHkvZXZtL2V2bV9jcnlwdG8uYwo+ID4gQEAgLTczLDcgKzczLDcgQEAgc3RhdGlj
-IHN0cnVjdCBzaGFzaF9kZXNjICppbml0X2Rlc2MoY2hhciB0eXBlLCB1aW50OF90IGhhc2hfYWxn
-bykKPiA+ICB7Cj4gPiAgCWxvbmcgcmM7Cj4gPiAgCWNvbnN0IGNoYXIgKmFsZ287Cj4gPiAtCXN0
-cnVjdCBjcnlwdG9fc2hhc2ggKip0Zm0sICp0bXBfdGZtOwo+ID4gKwlzdHJ1Y3QgY3J5cHRvX3No
-YXNoICoqdGZtLCAqdG1wX3RmbSA9IE5VTEw7Cj4gPiAgCXN0cnVjdCBzaGFzaF9kZXNjICpkZXNj
-Owo+ID4gIAo+ID4gIAlpZiAodHlwZSA9PSBFVk1fWEFUVFJfSE1BQykgewo+ID4gQEAgLTExOCwx
-MyArMTE4LDE4IEBAIHN0YXRpYyBzdHJ1Y3Qgc2hhc2hfZGVzYyAqaW5pdF9kZXNjKGNoYXIgdHlw
-ZSwgdWludDhfdCBoYXNoX2FsZ28pCj4gPiAgYWxsb2M6Cj4gPiAgCWRlc2MgPSBrbWFsbG9jKHNp
-emVvZigqZGVzYykgKyBjcnlwdG9fc2hhc2hfZGVzY3NpemUoKnRmbSksCj4gPiAgCQkJR0ZQX0tF
-Uk5FTCk7Cj4gPiAtCWlmICghZGVzYykKPiA+ICsJaWYgKCFkZXNjKSB7Cj4gPiArCQlpZiAodG1w
-X3RmbSkKPiA+ICsJCQljcnlwdG9fZnJlZV9zaGFzaCh0bXBfdGZtKTsKPiA+ICAJCXJldHVybiBF
-UlJfUFRSKC1FTk9NRU0pOwo+ID4gKwl9Cj4gPiAgCj4gPiAgCWRlc2MtPnRmbSA9ICp0Zm07Cj4g
-PiAgCj4gPiAgCXJjID0gY3J5cHRvX3NoYXNoX2luaXQoZGVzYyk7Cj4gPiAgCWlmIChyYykgewo+
-ID4gKwkJaWYgKHRtcF90Zm0pCj4gPiArCQkJY3J5cHRvX2ZyZWVfc2hhc2godG1wX3RmbSk7Cj4g
-PiAgCQlrZnJlZShkZXNjKTsKPiA+ICAJCXJldHVybiBFUlJfUFRSKHJjKTsKPiA+ICAJfQo+IAo+
-IFRoZXJlJ3Mgbm8gbmVlZCB0byBjaGVjayBmb3IgTlVMTCBiZWZvcmUgY2FsbGluZyBjcnlwdG9f
-ZnJlZV9zaGFzaCgpLgo+IAoKSSBmaW5kIHRoZXJlIGlzIGEgY3J5cHRvX3NoYXNoX3RmbSgpIGlu
-IHRoZSBkZWZpbml0aW9uIG9mIApjcnlwdG9fZnJlZV9zaGFzaCgpLiBXaWxsIHRoaXMgbGVhZCB0
-byBudWxsIHBvaW50ZXIgZGVyZWZlcmVuY2UKd2hlbiB3ZSB1c2UgaXQgdG8gZnJlZSBhIE5VTEwg
-cG9pbnRlcj8KClJlZ2FyZHMsCkRpbmdoYW8=
+On Sun, Jan 10, 2021 at 01:27:09PM +0800, dinghao.liu@zju.edu.cn wrote:
+> > On Sat, Jan 09, 2021 at 07:33:05PM +0800, Dinghao Liu wrote:
+> > > When kmalloc() fails, tmp_tfm allocated by
+> > > crypto_alloc_shash() has not been freed, which
+> > > leads to memleak.
+> > > 
+> > > Fixes: d46eb3699502b ("evm: crypto hash replaced by shash")
+> > > Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+> > > ---
+> > >  security/integrity/evm/evm_crypto.c | 9 +++++++--
+> > >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+> > > index 168c3b78ac47..39fb31a638ac 100644
+> > > --- a/security/integrity/evm/evm_crypto.c
+> > > +++ b/security/integrity/evm/evm_crypto.c
+> > > @@ -73,7 +73,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+> > >  {
+> > >  	long rc;
+> > >  	const char *algo;
+> > > -	struct crypto_shash **tfm, *tmp_tfm;
+> > > +	struct crypto_shash **tfm, *tmp_tfm = NULL;
+> > >  	struct shash_desc *desc;
+> > >  
+> > >  	if (type == EVM_XATTR_HMAC) {
+> > > @@ -118,13 +118,18 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+> > >  alloc:
+> > >  	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
+> > >  			GFP_KERNEL);
+> > > -	if (!desc)
+> > > +	if (!desc) {
+> > > +		if (tmp_tfm)
+> > > +			crypto_free_shash(tmp_tfm);
+> > >  		return ERR_PTR(-ENOMEM);
+> > > +	}
+> > >  
+> > >  	desc->tfm = *tfm;
+> > >  
+> > >  	rc = crypto_shash_init(desc);
+> > >  	if (rc) {
+> > > +		if (tmp_tfm)
+> > > +			crypto_free_shash(tmp_tfm);
+> > >  		kfree(desc);
+> > >  		return ERR_PTR(rc);
+> > >  	}
+> > 
+> > There's no need to check for NULL before calling crypto_free_shash().
+> > 
+> 
+> I find there is a crypto_shash_tfm() in the definition of 
+> crypto_free_shash(). Will this lead to null pointer dereference
+> when we use it to free a NULL pointer?
+> 
+
+No.  It does &tfm->base, not tfm->base.
+
+- Eric
