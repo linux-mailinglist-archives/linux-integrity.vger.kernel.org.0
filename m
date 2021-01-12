@@ -2,79 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0D12F1B0A
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Jan 2021 17:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5270E2F27D6
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Jan 2021 06:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732337AbhAKQfv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 11 Jan 2021 11:35:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42352 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726997AbhAKQfv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 11 Jan 2021 11:35:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BCB3320B1F;
-        Mon, 11 Jan 2021 16:35:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610382910;
-        bh=JwHzWOn98yP3yzjPMaZT6BMENGep8O1PUosAAXMJ+PQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LjWTOdqglUL1RdtD3rwVIVY38br9kVmLGLXirDWW1EgbAq4d1GdUpUUgPEWivBPE2
-         nnO0Nom/TCusPJLUkaV/mH09njqN/xX6cUTBgSjpx3iPeJqpMf7b1wNxxZdM0mdoQy
-         FehL8I6bcBffc0xWYD9pECgm/7iofA/JISWVRGSQGDyExFlnHY4fggpaOOm//UQ/Xy
-         nKL2GNEeWxfYAVvQlKVKMdcD5RrBqe58NqbrAwMYg7TI83hAHhydx63rh0yoOCccWd
-         5yt0G0ygSQQDAyMSozaTDMqMiOXzQECWhY91mhRHR1jgVPDqdnbjlpCiOGKfM147JP
-         wB994mNoJ52yg==
-Date:   Mon, 11 Jan 2021 18:35:03 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
-        jejb@linux.ibm.com, dhowells@redhat.com, jens.wiklander@linaro.org,
-        corbet@lwn.net, jmorris@namei.org, serge@hallyn.com,
-        casey@schaufler-ca.com, janne.karhunen@gmail.com,
-        daniel.thompson@linaro.org, Markus.Wamser@mixed-mode.de,
-        lhinds@redhat.com, keyrings@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org
-Subject: Re: [PATCH v8 2/4] KEYS: trusted: Introduce TEE based Trusted Keys
-Message-ID: <X/x+N0fgrzIZTeNi@kernel.org>
-References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
- <1604419306-26105-3-git-send-email-sumit.garg@linaro.org>
+        id S2388663AbhALF0i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Jan 2021 00:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732060AbhALF0i (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 12 Jan 2021 00:26:38 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8B2C061575
+        for <linux-integrity@vger.kernel.org>; Mon, 11 Jan 2021 21:25:57 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id m12so1484226lfo.7
+        for <linux-integrity@vger.kernel.org>; Mon, 11 Jan 2021 21:25:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g5uedHlyKo0jbM2L3sce03wCRnXD2qBFYgsuv3OnBEg=;
+        b=UW8/sx2kLLpEuIdfvLMzlufG1I/pYYtS68HrwLOXy7SlVzmK0to3os2IS9S5XuLD6r
+         ipMpxePpLuwuVtDk6vjMFuTchmFSBX3arpGOjL1tp8u4+LKRG0QRk7d2VDdCVjVLGTX3
+         5T4XXpPhleATfvckzWdUJMeU3CqD6Rzo1MUQIVwti8j+EoVzpjbV5gw9EarEVR3LIq+h
+         ku+8eUl9sJVuF0YeB3QVZN3hlv0ia/of9ymYX8pyu6PG5TBvI+ut2JgAmnYS03wzTekd
+         uXg4QYWPAnR5eFZ8UKuu0GV8JqvfZkqwc/zVs1lC1URSy0caPO6yvCz+bfh+T8fag0nz
+         KrEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g5uedHlyKo0jbM2L3sce03wCRnXD2qBFYgsuv3OnBEg=;
+        b=VMAM2hGBCWAB850K1ozqE4ZHdVIhdEQpIz6lD80dKXGNRdRO3N8+SeqDjIO4byDRB7
+         yl/1Ll4Xbe56bnroJLun9FzbUgvaS9sEuCCMeB+Kltzifppf/sAW914NAjNIbupzHAgI
+         mGVgF7jkBDqfVSw+GiZ03Hy0mmd+Z3wyIPBk0PyZD2DXPipQji1arOr1PC2YgZi2BFFU
+         LsAkUJvr208Y+KOOrwHhrOUUhDWG0SKuDACkpD/uOWBKbB4AAzV92J3cSY0+fI6JfZJK
+         8f6Wg3QEIyOXM73fjKO75pMAKPgvRYr/uwyg2XDl8s+Bflfy7zeX2jI/b4r7RSNdGm8i
+         2/7Q==
+X-Gm-Message-State: AOAM531EfvPVp/uoTgcKdLkAb3Ysk4VPZVSLSKsIRAWHgcEMqbzGTN4M
+        Y3kUl9elvyVq5F2lXl9astZ1CJhlRGIoeg1yr/XbjMPJBqB0xQ==
+X-Google-Smtp-Source: ABdhPJwdCvSoj0NVqGd/o38Bt3FgV7AqZmr2g2AJqttjDsKYBu4JSBt1/um1vqoB30efPOuZGjeqdBgmreRMBC/9RY4=
+X-Received: by 2002:a05:6512:30d:: with SMTP id t13mr1367008lfp.84.1610429155640;
+ Mon, 11 Jan 2021 21:25:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1604419306-26105-3-git-send-email-sumit.garg@linaro.org>
+References: <20201209164249.715178-1-zohar@linux.ibm.com> <20201211081454.GA5262@kernel.org>
+ <CAFA6WYMt5+zX09bdgugSq9SgqF=V_OfOZee8fBEAv1thFLs3nA@mail.gmail.com> <X/pxpAfn4MFsXT4g@kernel.org>
+In-Reply-To: <X/pxpAfn4MFsXT4g@kernel.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Tue, 12 Jan 2021 10:55:44 +0530
+Message-ID: <CAFA6WYO0CW3k+OCBV2UqM1-kK6Fm1A6PfNpLCOA6g=mwYRgb2Q@mail.gmail.com>
+Subject: Re: [PATCH] doc: trusted-encrypted: updates with TEE as a new trust
+ source (update)
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        George Wilson <gcwilson@us.ibm.com>, zgu@us.ibm.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 09:31:44PM +0530, Sumit Garg wrote:
-> Add support for TEE based trusted keys where TEE provides the functionality
-> to seal and unseal trusted keys using hardware unique key.
-> 
-> Refer to Documentation/tee.txt for detailed information about TEE.
-> 
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+On Sun, 10 Jan 2021 at 08:46, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Mon, Jan 04, 2021 at 06:06:33PM +0530, Sumit Garg wrote:
+> > Hi Jarkko,
+> >
+> > On Fri, 11 Dec 2020 at 13:44, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > >
+> > > On Wed, Dec 09, 2020 at 11:42:49AM -0500, Mimi Zohar wrote:
+> > > > From: Elaine Palmer <erpalmer@us.ibm.com>
+> > > >
+> > > > Update trusted key documentation with additional comparisons between
+> > > > discrete TPMs and TEE.
+> > > >
+> > > > Signed-off-by: Elaine Palmer <erpalmer@us.ibm.com>
+> > >
+> > > Right, so OP-TEE is not the same as TEE. I did not know this and the
+> > > patch set does not underline this.
+> > >
+> > > I re-checked the patches and none of them say explicitly that OP-TEE
+> > > is an application living inside TEE.
+> >
+> > This patch-set provides a trust source based on generic TEE interface
+> > where underlying TEE implementations like OP-TEE (drivers/tee/optee/),
+> > AMD TEE (drivers/tee/amdtee/) etc. can easily be hooked up. And this
+> > is similar to the TPM interface where underlying TPM implementations
+> > like discrete TPM, virtual TPM, firmware TPM etc. can be easily hooked
+> > up.
+> >
+> > >
+> > > This essentially means that the backend needs to be renamed as "op_tee".
+> > >
+> >
+> > I don't see any need for this, see above.
+>
+> Right, TEE is a protocol standard, just like TPM, and OP-TEE is one
+> implementation of this interface? I.e. OP-TEE does not define API
+> that is hard bound to OP-TEE?
+>
 
-I haven't yet got QEMU environment working with aarch64, this produces
-just a blank screen:
+Yes, OP-TEE doesn't define a hard bound client interface API. The
+client API is based on TEE client API specification [1] from
+GlobalPlatform.
 
-./output/host/usr/bin/qemu-system-aarch64 -M virt -cpu cortex-a53 -smp 1 -kernel output/images/Image -initrd output/images/rootfs.cpio -serial stdio
+[1] http://globalplatform.org/specs-library/tee-client-api-specification/
 
-My BuildRoot fork for TPM and keyring testing is located over here:
+-Sumit
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/buildroot-tpmdd.git/
-
-The "ARM version" is at this point in aarch64 branch. Over time I will
-define tpmdd-x86_64 and tpmdd-aarch64 boards and everything will be then
-in the master branch.
-
-To create identical images you just need to
-
-$ make tpmdd_defconfig && make
-
-Can you check if you see anything obviously wrong? I'm eager to test this
-patch set, and in bigger picture I really need to have ready to run
-aarch64 environment available.
-
-/Jarkko
+> Better to ask the very basic questions out and loud to get this
+> right.
+>
+> /Jarkko
