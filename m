@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 858DE2F4584
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Jan 2021 08:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3162F458C
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Jan 2021 08:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726471AbhAMHth (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Jan 2021 02:49:37 -0500
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:59481 "EHLO
+        id S1726463AbhAMHvD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Jan 2021 02:51:03 -0500
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:58779 "EHLO
         out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726010AbhAMHtg (ORCPT
+        by vger.kernel.org with ESMTP id S1725949AbhAMHvD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Jan 2021 02:49:36 -0500
+        Wed, 13 Jan 2021 02:51:03 -0500
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id EBBD65C04F0;
-        Wed, 13 Jan 2021 02:48:30 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 13 Jan 2021 02:48:30 -0500
+        by mailout.nyi.internal (Postfix) with ESMTP id A5B905C05B1;
+        Wed, 13 Jan 2021 02:50:14 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 13 Jan 2021 02:50:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=uk4l3Ijiax/TJ1Nop/MMYDTynqh
-        LEIqVVBQ3b7Ozw/Q=; b=BGtrnabDT3vxBa874N/NfJ/l/cVElYd78s+31R5W9jJ
-        7XtoZxlzlCCwinqJYhXLZpoq/6VKTlJ32j8oJqY9XfvxAt8CviErF+AsyYSSqTNg
-        epR85bZ6C1UBk/2VWqhNquhWkfzXIvVIEqv27B1Pl/JJjdyUXZtW4GX7hKCPqz1V
-        P7V/t15vxE1N7zz9XwGboI10coCsPLnXn1SYF6ZTR6wORqvTomZX1ogkZDpfscjA
-        M+Ht85Q3xvYR4HppT4R56Kn08FRb8ZKF1N2DvdS3boLKAtaGmJ1hRYJ9rDi1WXyQ
-        4vmQ/CmR8LVrm/aY6xjXVAW5UePJ6FDKB5mcLflBrwA==
+        :content-type:in-reply-to; s=fm2; bh=Q+gfiW21e+iUSVAjHLJaEmlTToT
+        hRwbt8xbTZ2vNRhc=; b=ZAUmE899Zza5e8SJ6lVtE4r33o5cY+Eurllzi/ECQfn
+        sI2xz0nki/g+5/XfNHpwNSMGU/zBMadV1dhkSmLXUFCjTbRdwDRBCevsWdij4+HE
+        0XglqFc8B0OlFZ5qtg2nFTnD+dHMeeyyp8B87x7ZE9PvA/cF/PdfbtVn8omk91SL
+        GAeeAgwfNa/FacVrwGLTiOpyrBPhpEyQ0OXpeaZotqXjhQaBMCA+DVMmWhXpJ1px
+        QiEl/FhJxxPNprSUO0Gw3B4F2rwOu44r0ZGi0cB/AVIvl+IYZHD0Ks1tczFb4OfW
+        5ikyxP4eqwbWFItLdc6TLa9Og0JrMpesA2TfnVFIllw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=uk4l3I
-        jiax/TJ1Nop/MMYDTynqhLEIqVVBQ3b7Ozw/Q=; b=d1puOBM0WIHuJHoU6CPzMO
-        MPvKQjfSaGNGG7Db41G5RC/TezpEajybeb2cQSUf7m2wiex7syMXhILMoo+wu75d
-        zE3s4QVmyCJyigSnoSvwewYxBluLrHgBLxlggqAbakeena3U1QF5WKyd1QVu2w4I
-        R4mx5y+LBgm/jA7FAdEUqyN6UBASLnWBw491DC3MVYzGExGiUAwDMzi+dbYFSwKG
-        ZR5juaXjmZLkDY7540BQSqJy93K8VHnpYAkzt2tMGROzn2oIKexczN6RL7z90m0P
-        GTo3i9hVpRfYU7mTEOl7lRoyWBr4uCTCkBxcAgxaDpPBpBTd7FipEJR5yIIRgMvA
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Q+gfiW
+        21e+iUSVAjHLJaEmlTToThRwbt8xbTZ2vNRhc=; b=bJ8TAppSNi83ZmDanBgP4I
+        p54aZMQNErX/2jCBxquozNZx2/4478QBqfR6Gz/OHJCU7kCBnkltejQ8lkWerlrZ
+        edhX533RF69XQHGhlBmMJtR/qT8QDtZLgiclxipjlrR1Of69AGXwNBffncjOU8g1
+        egaAWYBSO/NEATivu97YlRmpTaQfCCVi2cXM1Sb+BJfNyHo7h6vPfQVR6eXUd9sa
+        kZx9Utr15CAyM2eC1fjymB19boHWx3rTlHK7JJjTwqzCDgZ26p+HQxM3depdVj76
+        xAP2gpCpa1RXer5TW+9JBcQZuPSCEYu8BasANmChJG5NuHv/6wQGdAby5rrHHGvg
         ==
-X-ME-Sender: <xms:zqX-X5IrMO2A6TGOBl3ZMHhrA2lGj-s9A4_Ypc125priydNhO78aLg>
-    <xme:zqX-X1LVNVOI3DCOsHH3Qa56DWeUVR0jVfWi7fHDsC5tT9E_JVdhpoHGfKvQLGrAc
-    Qapxm-_Lkb3eQ>
+X-ME-Sender: <xms:Nqb-X8om1WB9Vf02OSAYBYqVgw9-W5mcCleBOfJMcFvaeqdi79Zy4g>
+    <xme:Nqb-XyocyfHPKJ3E2HrMgAr8vEoUax5lKf45_nbyPum6W6psl29_jVbWY3zBcBLqV
+    IdJLuLVm2mCaw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedukedrtddugdduudefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
     mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
     fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
-    rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrih
     hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:zqX-XxvYi4ZEHs_C6e7OPjieL5d82gK7uEra_wCQRQloe0vfHUabNQ>
-    <xmx:zqX-X6axetUlKoGJ8t-p_XLoM46GWg7ywOimfWsMY_ziD9nrZ0uZUA>
-    <xmx:zqX-XwaMJBZ0aRS8LEF7RmtAu78f75Qv-n4M3lG0v86jJyPCfV9X8Q>
-    <xmx:zqX-X_nTVkFW-CdPOKoAYftY72x-KBlhSk74dKsercwvsLP_c9gL3A>
+X-ME-Proxy: <xmx:Nqb-XxMSB_zP6iNF-TxA49V05G5uEPNcZHUXyBwBTJ3tJ0SMeGQC2g>
+    <xmx:Nqb-Xz4wpxHf0vvrGeH1SN5ys5M47lwGNAccZF-e8Tq1di-LSZfY5g>
+    <xmx:Nqb-X74C8zLoyeUuyrvu2s7JI4L2igkyZMGRc0R3yK24c2_gwBM4Ag>
+    <xmx:Nqb-X7FpSKSz2xJW6IwG24kgNqk9P3XAZvtjzOj9jtzONbj7LMPPWw>
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 007FA24005B;
-        Wed, 13 Jan 2021 02:48:29 -0500 (EST)
-Date:   Wed, 13 Jan 2021 08:48:26 +0100
+        by mail.messagingengine.com (Postfix) with ESMTPA id 218621080064;
+        Wed, 13 Jan 2021 02:50:14 -0500 (EST)
+Date:   Wed, 13 Jan 2021 08:50:11 +0100
 From:   Greg KH <greg@kroah.com>
 To:     James Bottomley <James.Bottomley@hansenpartnership.com>
 Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
@@ -63,7 +63,7 @@ Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
         linux-api@vger.kernel.org
 Subject: Re: [PATCH v5 1/1] tpm: add sysfs exports for all banks of PCR
  registers
-Message-ID: <X/6lyuhqQ8TSXOSa@kroah.com>
+Message-ID: <X/6mM/egPLyXASM9@kroah.com>
 References: <20210113015958.6685-1-James.Bottomley@HansenPartnership.com>
  <20210113015958.6685-2-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
@@ -98,11 +98,119 @@ On Tue, Jan 12, 2021 at 05:59:58PM -0800, James Bottomley wrote:
 >  drivers/char/tpm/tpm-sysfs.c | 179 +++++++++++++++++++++++++++++++++++
 >  include/linux/tpm.h          |   9 +-
 >  2 files changed, 187 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
+> index e2ff0b273a0f..63f03cfb8e6a 100644
+> --- a/drivers/char/tpm/tpm-sysfs.c
+> +++ b/drivers/char/tpm/tpm-sysfs.c
+> @@ -337,11 +337,190 @@ static const struct attribute_group tpm2_dev_group = {
+>  	.attrs = tpm2_dev_attrs,
+>  };
+>  
+> +struct tpm_pcr_attr {
+> +	int alg_id;
+> +	int pcr;
+> +	struct device_attribute attr;
+> +};
+> +
+> +#define to_tpm_pcr_attr(a) container_of(a, struct tpm_pcr_attr, attr)
+> +
+> +static ssize_t pcr_value_show(struct device *dev,
+> +			      struct device_attribute *attr,
+> +			      char *buf)
+> +{
+> +	struct tpm_pcr_attr *ha = to_tpm_pcr_attr(attr);
+> +	struct tpm_chip *chip = to_tpm_chip(dev);
+> +	struct tpm_digest digest;
+> +	int i;
+> +	int digest_size = 0;
+> +	int rc;
+> +	char *str = buf;
+> +
+> +	for (i = 0; i < chip->nr_allocated_banks; i++)
+> +		if (ha->alg_id == chip->allocated_banks[i].alg_id)
+> +			digest_size = chip->allocated_banks[i].digest_size;
+> +	/* should never happen */
+> +	if (!digest_size)
+> +		return -EINVAL;
+> +
+> +	digest.alg_id = ha->alg_id;
+> +	rc = tpm_pcr_read(chip, ha->pcr, &digest);
+> +	if (rc)
+> +		return rc;
+> +	for (i = 0; i < digest_size; i++)
+> +		str += sprintf(str, "%02X", digest.digest[i]);
+> +	str += sprintf(str, "\n");
 
-You add new sysfs files, but do not add Documentation/ABI/ entries
-showing how they are used and what they contain :(
+sysfs_emit()?
 
-Please do that for the next version of this patch.
+
+
+
+> +
+> +	return str - buf;
+> +}
+> +
+> +/*
+> + * The following set of defines represents all the magic to build
+> + * the per hash attribute groups for displaying each bank of PCRs.
+> + * The only slight problem with this approach is that every PCR is
+> + * hard coded to be present, so you don't know if an PCR is missing
+> + * until a cat of the file returns -EINVAL
+> + *
+> + * Also note you must ignore checkpatch warnings in this macro
+> + * code. This is deep macro magic that checkpatch.pl doesn't
+> + * understand.
+> + */
+> +
+> +/* Note, this must match TPM2_PLATFORM_PCR which is fixed at 24. */
+> +#define _TPM_HELPER(_alg, _hash, F) \
+> +	F(_alg, _hash, 0)	    \
+> +	F(_alg, _hash, 1)	    \
+> +	F(_alg, _hash, 2)	    \
+> +	F(_alg, _hash, 3)	    \
+> +	F(_alg, _hash, 4)	    \
+> +	F(_alg, _hash, 5)	    \
+> +	F(_alg, _hash, 6)	    \
+> +	F(_alg, _hash, 7)	    \
+> +	F(_alg, _hash, 8)	    \
+> +	F(_alg, _hash, 9)	    \
+> +	F(_alg, _hash, 10)	    \
+> +	F(_alg, _hash, 11)	    \
+> +	F(_alg, _hash, 12)	    \
+> +	F(_alg, _hash, 13)	    \
+> +	F(_alg, _hash, 14)	    \
+> +	F(_alg, _hash, 15)	    \
+> +	F(_alg, _hash, 16)	    \
+> +	F(_alg, _hash, 17)	    \
+> +	F(_alg, _hash, 18)	    \
+> +	F(_alg, _hash, 19)	    \
+> +	F(_alg, _hash, 20)	    \
+> +	F(_alg, _hash, 21)	    \
+> +	F(_alg, _hash, 22)	    \
+> +	F(_alg, _hash, 23)
+> +
+> +/* ignore checkpatch warning about trailing ; in macro. */
+> +#define PCR_ATTR(_alg, _hash, _pcr)				   \
+> +	static struct tpm_pcr_attr dev_attr_pcr_##_hash##_##_pcr = {	\
+> +		.alg_id = _alg,					   \
+> +		.pcr = _pcr,					   \
+> +		.attr = {					   \
+> +			.attr = {				   \
+> +				.name = __stringify(_pcr),	   \
+> +				.mode = 0444			   \
+> +			},					   \
+
+__ATTR_RO()?
+
+>  void tpm_sysfs_add_device(struct tpm_chip *chip)
+>  {
+> +	int i;
+> +
+>  	WARN_ON(chip->groups_cnt != 0);
+> +
+
+How can that WARN_ON happen?
 
 thanks,
 
