@@ -2,126 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 711352F5471
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Jan 2021 22:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AA32F5494
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Jan 2021 22:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728930AbhAMVDu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Jan 2021 16:03:50 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:42726 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728932AbhAMVCO (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Jan 2021 16:02:14 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D0F711280937;
-        Wed, 13 Jan 2021 13:02:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1610571757;
-        bh=fE4Zcfq/Y4akqpkapJYGe64eKFJFZOMq55tpgFz7vVs=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=dl4yC8ZtzcsUIGnJEZLCCSO6SL4K+hUbygwLH50SE/qHCnZUBXjYJbiVY1M9dcPXl
-         /kIL3wmstaREA7lwPLYkf8iOA3cDxIwsATy8uCbu42ScydQItnxfc8xk7ME/xytV+E
-         2ku1pYYnoS9EIreFKn+V/0rw7w07p/Fz78clOybk=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id nxOEhDK8RJzd; Wed, 13 Jan 2021 13:02:37 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (c-73-35-198-56.hsd1.wa.comcast.net [73.35.198.56])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6C1111280935;
-        Wed, 13 Jan 2021 13:02:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1610571757;
-        bh=fE4Zcfq/Y4akqpkapJYGe64eKFJFZOMq55tpgFz7vVs=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=dl4yC8ZtzcsUIGnJEZLCCSO6SL4K+hUbygwLH50SE/qHCnZUBXjYJbiVY1M9dcPXl
-         /kIL3wmstaREA7lwPLYkf8iOA3cDxIwsATy8uCbu42ScydQItnxfc8xk7ME/xytV+E
-         2ku1pYYnoS9EIreFKn+V/0rw7w07p/Fz78clOybk=
-Message-ID: <f2ce12077098dc87c7fb7fd52f3b8f0cf93509e7.camel@HansenPartnership.com>
-Subject: Re: [PATCH v5 0/1] add sysfs exports for TPM 2 PCR registers
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        linux-api@vger.kernel.org
-Date:   Wed, 13 Jan 2021 13:02:36 -0800
-In-Reply-To: <X/9cqbUN263oR8gZ@linux.intel.com>
-References: <20210113015958.6685-1-James.Bottomley@HansenPartnership.com>
-         <X/9cqbUN263oR8gZ@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1729072AbhAMVZE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Jan 2021 16:25:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39596 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729111AbhAMVYV (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 13 Jan 2021 16:24:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D1F01208E4;
+        Wed, 13 Jan 2021 21:23:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610573020;
+        bh=t8bCdPZCVkccgr/RQonsyxz8QpySml/FPPRsSWUxTOY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ixiW3kqdCp0Y0ojjPPOYNjZaTJc2PQufAGp56+AS6IzJJmG1eqrSXHY5Do5KjdZjU
+         Ta5j78WPecnlJlPjUJa2jFVnsWRM4EXVCKDrXeknJcktqWQw7aoqc37IOJjhumBIn3
+         HKA6g7/kxxyXuaGjw630iWxMshLf6r/HPV1uxhBSm+d1KtjdyKbkhAnVV7SZ89/kfp
+         JiLhi5dQpjN1txS3SrMFb11NO3a+b76FJiH1lXL9+NN5wVhdfnpGk+XS2a4yxa8tEv
+         1SgCqv+4R5TQVvfEwwo6ujIT68gD5k9/m5Q9jebRcHGNQXXjbl4NiXVPeu/v/8ErOW
+         vwiigqdQHEuCA==
+Date:   Wed, 13 Jan 2021 23:23:35 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        George Wilson <gcwilson@us.ibm.com>, zgu@us.ibm.com
+Subject: Re: [PATCH] doc: trusted-encrypted: updates with TEE as a new trust
+ source (update)
+Message-ID: <X/9k19UoZZdC+y0+@kernel.org>
+References: <20201209164249.715178-1-zohar@linux.ibm.com>
+ <20201211081454.GA5262@kernel.org>
+ <CAFA6WYMt5+zX09bdgugSq9SgqF=V_OfOZee8fBEAv1thFLs3nA@mail.gmail.com>
+ <X/pxpAfn4MFsXT4g@kernel.org>
+ <CAFA6WYO0CW3k+OCBV2UqM1-kK6Fm1A6PfNpLCOA6g=mwYRgb2Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYO0CW3k+OCBV2UqM1-kK6Fm1A6PfNpLCOA6g=mwYRgb2Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2021-01-13 at 22:48 +0200, Jarkko Sakkinen wrote:
-> On Tue, Jan 12, 2021 at 05:59:57PM -0800, James Bottomley wrote:
-> > This represents v5 which has the spelling mistake fixed and the
-> > WARN
-> > on unrecognized TPM hash algorithm becoming a dev_err.
-> > 
-> > We've had a fairly extensive discussion and iterated to agreement
-> > on
-> > the output format, which becomes our ABI being one single compact
-> > hex
-> > representation of the hash value per file according to sysfs rules,
-> > with the file hierarchy going under
-> > 
-> >   /sys/class/tpm/tmp<x>/pcr-<hash>/<pcr number>
-> > 
-> > So to get the value of PCR 7 in the sha256 bank of the default TPM
-> > I'd do
-> > 
-> >    cat /sys/class/tpm/tpm0/pcr-sha256/7
-> >    2ED93F199692DC6788EFA6A1FE74514AB9760B2A6CEEAEF6C808C13E4ABB0D42
-> > 
-> > If you need the binary hash of a set of PCRs, as is required for
-> > TPM
-> > policy statements that lock to PCRs, you'd use something like:
-> > 
-> >   cat /sys/class/tpm/tpm0/pcr-sha256/{1,6,7}|xxd -r -p|sha256sum
-> > 
-> > Which produces the binary hash of PCRs 1, 6 and 7 in that order.
-> > 
-> > Note that this patch also adds the sha1 bank for TPM 1.2 in the
-> > same
-> > manner (one file per PCR) but does not remove the existing pcrs
-> > file
-> > which has the space separated all PCRs in one file format of
-> > 
-> >   PCR-00: 7D 29 CB 08 0C 0F C4 16 7A 0E 9A F7 C6 D3 97 CD C1 21 A7
-> > 69 
-> >   PCR-01: 9C B6 79 4C E4 4B 62 97 4C AB 55 13 1A 2F 7E AE 09 B3 30
-> > BE 
-> >   ...
-> > 
-> > 
-> > James
-> > 
-> > ---
-> > 
-> > James Bottomley (1):
-> >   tpm: add sysfs exports for all banks of PCR registers
-> > 
-> >  drivers/char/tpm/tpm-sysfs.c | 179
-> > +++++++++++++++++++++++++++++++++++
-> >  include/linux/tpm.h          |   9 +-
-> >  2 files changed, 187 insertions(+), 1 deletion(-)
-> > 
-> > -- 
-> > 2.26.2
-> > 
+On Tue, Jan 12, 2021 at 10:55:44AM +0530, Sumit Garg wrote:
+> On Sun, 10 Jan 2021 at 08:46, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Mon, Jan 04, 2021 at 06:06:33PM +0530, Sumit Garg wrote:
+> > > Hi Jarkko,
+> > >
+> > > On Fri, 11 Dec 2020 at 13:44, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > >
+> > > > On Wed, Dec 09, 2020 at 11:42:49AM -0500, Mimi Zohar wrote:
+> > > > > From: Elaine Palmer <erpalmer@us.ibm.com>
+> > > > >
+> > > > > Update trusted key documentation with additional comparisons between
+> > > > > discrete TPMs and TEE.
+> > > > >
+> > > > > Signed-off-by: Elaine Palmer <erpalmer@us.ibm.com>
+> > > >
+> > > > Right, so OP-TEE is not the same as TEE. I did not know this and the
+> > > > patch set does not underline this.
+> > > >
+> > > > I re-checked the patches and none of them say explicitly that OP-TEE
+> > > > is an application living inside TEE.
+> > >
+> > > This patch-set provides a trust source based on generic TEE interface
+> > > where underlying TEE implementations like OP-TEE (drivers/tee/optee/),
+> > > AMD TEE (drivers/tee/amdtee/) etc. can easily be hooked up. And this
+> > > is similar to the TPM interface where underlying TPM implementations
+> > > like discrete TPM, virtual TPM, firmware TPM etc. can be easily hooked
+> > > up.
+> > >
+> > > >
+> > > > This essentially means that the backend needs to be renamed as "op_tee".
+> > > >
+> > >
+> > > I don't see any need for this, see above.
+> >
+> > Right, TEE is a protocol standard, just like TPM, and OP-TEE is one
+> > implementation of this interface? I.e. OP-TEE does not define API
+> > that is hard bound to OP-TEE?
+> >
 > 
-> After clearing out Greg's remarks, can you use jarkko@kernel.org
-> for the next version?
+> Yes, OP-TEE doesn't define a hard bound client interface API. The
+> client API is based on TEE client API specification [1] from
+> GlobalPlatform.
+> 
+> [1] http://globalplatform.org/specs-library/tee-client-api-specification/
+> 
+> -Sumit
 
-Sorry, it's a force of habit process: i go back to version n-1 and copy
-the to and cc list ... so the promise to sent to kernel.org didn't get
-realised.
+Thanks, bookmarked. No need for name change.
 
-I'll just do a resend since there are no changes requested.
-
-James
-
-
+/Jarkko
