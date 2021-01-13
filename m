@@ -2,210 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDA32F40C4
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Jan 2021 01:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A0A2F4177
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Jan 2021 03:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731418AbhAMAnG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Jan 2021 19:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S1726562AbhAMCAo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Jan 2021 21:00:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392449AbhAMAeK (ORCPT
+        with ESMTP id S1726011AbhAMCAo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Jan 2021 19:34:10 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FCAC0617AA;
-        Tue, 12 Jan 2021 16:33:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=I9mSrNXmHFYMPApxgFQbDM45P8v8X64ckBsmGZBNtcc=; b=u46K90hkeHO3rgVFT8nIkAgzOu
-        URjQXngiZDy+HRu2wxUeRCxaK99ieki5JPU6LEoLpjhkVt8RQaLmgBoK0NLhGruy0JFl5qwVZ9cPS
-        SBniw1n3CBJVYJBUDWfaeMzEtZSYDwOFRVc7C9nhxeLaPFQjoJu2oIJ7p6N9bT8/PtXvBzktQxxnd
-        lRIYvTygjTQRLIo9G3UJCdSTY71pssx/RAVQAZanXGgnbufK9U6wyvZ9UVYX99gwEq42DMQDLHimz
-        u/83ju95Eitc0mOBWxZ9GyeE9wzkY074t/cE1JnWyD2WdLBsAqlep2idC+WvMkdxzcr/OJOiGlAaG
-        4EiP6yjQ==;
-Received: from [2601:1c0:6280:3f0::9abc]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kzU5g-0006Zu-CI; Wed, 13 Jan 2021 00:32:48 +0000
-Subject: Re: [PATCH v5 41/42] tests: extend mount_setattr tests
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20210112220124.837960-1-christian.brauner@ubuntu.com>
- <20210112220124.837960-42-christian.brauner@ubuntu.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <5060dcc4-09a3-0ccc-6080-aab3f6b9caef@infradead.org>
-Date:   Tue, 12 Jan 2021 16:32:32 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        Tue, 12 Jan 2021 21:00:44 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB62C061575;
+        Tue, 12 Jan 2021 18:00:03 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 053E71280302;
+        Tue, 12 Jan 2021 18:00:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1610503202;
+        bh=f1Dnw4/nY9A1kP44Bb2C0wMMkXBagHIrPgNeC3Jtk9U=;
+        h=From:To:Subject:Date:Message-Id:From;
+        b=lJqkMHvI2Iv0pt9dGdd3gIE05uaTodEtlh15AG+ghr7+6YlWFsFdzKnknIk+PplYW
+         PnNaUzXUWczRBgXa08cTKW9BkgkDFO+AGPD7RX7bQH5IUVpoHhaOUY1Oh8k5o6zLhD
+         SVTz9Luw4U/Gv9SVx1uZazCkkWlwt6DGOTrnVaDY=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 6Vvr8-p4Felp; Tue, 12 Jan 2021 18:00:01 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 9BD4B1280300;
+        Tue, 12 Jan 2021 18:00:01 -0800 (PST)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-api@vger.kernel.org
+Subject: [PATCH v5 0/1] add sysfs exports for TPM 2 PCR registers
+Date:   Tue, 12 Jan 2021 17:59:57 -0800
+Message-Id: <20210113015958.6685-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20210112220124.837960-42-christian.brauner@ubuntu.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+This represents v5 which has the spelling mistake fixed and the WARN
+on unrecognized TPM hash algorithm becoming a dev_err.
+
+We've had a fairly extensive discussion and iterated to agreement on
+the output format, which becomes our ABI being one single compact hex
+representation of the hash value per file according to sysfs rules,
+with the file hierarchy going under
+
+  /sys/class/tpm/tmp<x>/pcr-<hash>/<pcr number>
+
+So to get the value of PCR 7 in the sha256 bank of the default TPM I'd do
+
+   cat /sys/class/tpm/tpm0/pcr-sha256/7
+   2ED93F199692DC6788EFA6A1FE74514AB9760B2A6CEEAEF6C808C13E4ABB0D42
+
+If you need the binary hash of a set of PCRs, as is required for TPM
+policy statements that lock to PCRs, you'd use something like:
+
+  cat /sys/class/tpm/tpm0/pcr-sha256/{1,6,7}|xxd -r -p|sha256sum
+
+Which produces the binary hash of PCRs 1, 6 and 7 in that order.
+
+Note that this patch also adds the sha1 bank for TPM 1.2 in the same
+manner (one file per PCR) but does not remove the existing pcrs file
+which has the space separated all PCRs in one file format of
+
+  PCR-00: 7D 29 CB 08 0C 0F C4 16 7A 0E 9A F7 C6 D3 97 CD C1 21 A7 69 
+  PCR-01: 9C B6 79 4C E4 4B 62 97 4C AB 55 13 1A 2F 7E AE 09 B3 30 BE 
+  ...
 
 
-On 1/12/21 2:01 PM, Christian Brauner wrote:
-> ---
-> /* v2 */
-> patch introduced
-> 
-> /* v3 */
-> - Christoph Hellwig <hch@lst.de>, Darrick J. Wong <darrick.wong@oracle.com>:
->   - Port main test-suite to xfstests.
-> 
-> /* v4 */
-> unchanged
-> 
-> /* v5 */
-> base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
-> ---
->  .../mount_setattr/mount_setattr_test.c        | 483 ++++++++++++++++++
->  1 file changed, 483 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> index 447b91c05cbd..4e94e566e040 100644
-> --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> @@ -108,15 +108,57 @@ struct mount_attr {
->  	__u64 attr_set;
->  	__u64 attr_clr;
->  	__u64 propagation;
-> +	__u64 userns_fd;
->  };
->  #endif
+James
 
-...
+---
 
+James Bottomley (1):
+  tpm: add sysfs exports for all banks of PCR registers
 
-Does "/**" have any special meaning inside tools/testing/ and the
-selftest framework?  (I don't see any other such users.)
+ drivers/char/tpm/tpm-sysfs.c | 179 +++++++++++++++++++++++++++++++++++
+ include/linux/tpm.h          |   9 +-
+ 2 files changed, 187 insertions(+), 1 deletion(-)
 
-If not, can you just use the usual "/*" instead? (multiple locations)
-
-
-> +/**
-> + * Validate that negative fd values are rejected.
-> + */
-> +TEST_F(mount_setattr_idmapped, invalid_fd_negative)
-> +{
-...
-
-> +}
-> +
-> +/**
-> + * Validate that excessively large fd values are rejected.
-> + */
-> +TEST_F(mount_setattr_idmapped, invalid_fd_large)
-> +{
-...
-
-> +}
-> +
-> +/**
-> + * Validate that closed fd values are rejected.
-> + */
-> +TEST_F(mount_setattr_idmapped, invalid_fd_closed)
-> +{
-...
-
-> +	}
-> +}
-> +
-> +/**
-> + * Validate that the initial user namespace is rejected.
-> + */
-> +TEST_F(mount_setattr_idmapped, invalid_fd_initial_userns)
-> +{
-...
-
-> +/**
-> + * Validate that an attached mount in our mount namespace can be idmapped.
-> + * (The kernel enforces that the mount's mount namespace and the caller's mount
-> + *  namespace match.)
-> + */
-> +TEST_F(mount_setattr_idmapped, attached_mount_inside_current_mount_namespace)
-> +{
-> +}
-> +
-> +/**
-> + * Validate that idmapping a mount is rejected if the mount's mount namespace
-> + * and our mount namespace don't match.
-> + * (The kernel enforces that the mount's mount namespace and the caller's mount
-> + *  namespace match.)
-> + */
-> +TEST_F(mount_setattr_idmapped, attached_mount_outside_current_mount_namespace)
-> +{
-...
-
-> +}
-> +
-> +/**
-> + * Validate that an attached mount in our mount namespace can be idmapped.
-> + */
-> +TEST_F(mount_setattr_idmapped, detached_mount_inside_current_mount_namespace)
-> +{
-...
-
-> +}
-> +
-> +/**
-> + * Validate that a detached mount not in our mount namespace can be idmapped.
-> + */
-> +TEST_F(mount_setattr_idmapped, detached_mount_outside_current_mount_namespace)
-> +{
-...
-
-> +}
-> +
-> +/**
-> + * Validate that currently changing the idmapping of an idmapped mount fails.
-> + */
-> +TEST_F(mount_setattr_idmapped, change_idmapping)
-> +{
-
-
-thanks.
 -- 
-~Randy
-You can't do anything without having to do something else first.
--- Belefant's Law
+2.26.2
+
