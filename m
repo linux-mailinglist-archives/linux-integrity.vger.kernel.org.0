@@ -2,83 +2,162 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3D92F59D9
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 05:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD722F5BEB
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 09:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726929AbhANEQL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Jan 2021 23:16:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32928 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725997AbhANEQK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Jan 2021 23:16:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A9062221EA;
-        Thu, 14 Jan 2021 04:15:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610597730;
-        bh=5bNu9OxM9PUIxaOuedQwfOFYLhmDVNIPEZSAT3dGhb4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lrSQCF9v7s7KHxfHt1nkxgsmvAit5IxBibLwjFe2veJ3/4mOHUNU1Z4GkBW3HKTfX
-         V5Vcy5OHNrVjf3NxqbB/STou7PmQ+6bK0zTLYvQieLffpEzIXdlAa3eMGytH4gxVoh
-         f/3+LsE4zIaW9espS0TlkNyF4vihVTAUORBcgS40TZDk2U/Pt3+4GV36s4mJ90qp6x
-         BmUWhC9474MZLGcxHWUG6uwhLPx/ECjuQ92VnC7nPZNhD+kXzamEL5TQbmzgUbDN2d
-         L0gmAdcGs8DocVDSD68w0WVDWbF+KNM4Gf1+s2XbynEQo9SR3QnfURob5hY+q2kRm8
-         H2ENi2WpF+SZg==
-Date:   Thu, 14 Jan 2021 06:15:24 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] Enable root to update the blacklist keyring
-Message-ID: <X//FXJjQNV/ElHQg@kernel.org>
-References: <20201211190330.2586116-1-mic@digikod.net>
- <67945fa6-2796-bfcd-5541-d54662e9802a@digikod.net>
- <X/qJJsVe7+nP+gR6@kernel.org>
+        id S1727275AbhANIAX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 Jan 2021 03:00:23 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:57493 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727374AbhANIAW (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 14 Jan 2021 03:00:22 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 74652134E;
+        Thu, 14 Jan 2021 02:59:35 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 14 Jan 2021 02:59:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=yvYpFGO9MesyeqnSwFBmc3vHur3
+        55sBthcHVnzFujXs=; b=UfePJs0eheOLSmd5xKMtscaPFoPwO3soCz47oYNjLXl
+        71CGRQcThu/YdZgDlbUh5Wt7fqNkAONOSFV0XQkq9f94CEqZ8KFqPmMiEHrp9TXE
+        5l1n9kD2XXV5EoqcKLMojhk64FvecngmOVv2MMAXy3pz+obSXaRNUylQm5fmSxPG
+        YzDJm9Yb3oeQ72V9bAhXUw14OCO5NQDMdZ+BUDIHPc5JTn0mvieu02uOx0M1yVec
+        tzOxjo5pUcyRoEJFSSFYa6WiG6GZUQ6pJ/PuKImtxo+/DQII1AR4Pfic/vqsXgBr
+        M0JWHoYiKg54XimQAyX5T5RxsblicxHe7h39P2eFkiQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=yvYpFG
+        O9MesyeqnSwFBmc3vHur355sBthcHVnzFujXs=; b=b0DzXf79QV02B981kHGL27
+        t61bRrCD8rIkah/HR+mgFrMAfUKUOUBrCW5VrX1CYirL91FHTDY1XyMY5vhlhX4m
+        ABRBEr0yWOfdqVZ0WtFsFFbSEO/x85S8DviLpMXaE7PzBxi6DxyCc/cdwMiynQlH
+        sHFTz7hME7anvVP+dWKvqCHlHZzSSGX9YJfzkdrceup3Dp69MEJAwwmRcVp5htvj
+        f7MbcgEPPdGI/MJN1pPRx7thi9tmsEk/IshyyMTYC5jdu5i7LBNoQFKjxXFoRlDh
+        jMDPM12vTJndx6O/QV8lxexD0B+zhz4xVxs1DP50K01c0pj0bvDmiPBEWNS/GFpA
+        ==
+X-ME-Sender: <xms:5vn_X6jQsp1ymrE0683eFtxgmu9iWSOoBdE4gBhzuulzxQmAYoPlkg>
+    <xme:5vn_X7Djbx-P3TPDh3tTLi4aMT51mouxr-05mJDVxjvA5fXyxDz2SW8xZgQW4v1cn
+    rwH1kKT3ln_PQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedukedrtdeggdduudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
+    rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:5vn_XyFq1GZzIDHLTColKMJ2PwhOa7to0_mpVgVw1B0rjaRqedBzLw>
+    <xmx:5vn_XzRCGlnTIp2qndWB0SajGzUOwhNd2FXLisvgL6Is92p30TwdWg>
+    <xmx:5vn_X3ys3ONFF5xSaKoQH0npThWVKICCDObL4e2_cu2pjmL_b1dtvg>
+    <xmx:5_n_Xy9NSh3wTmRxDUrNTUe26TvvK9CN83d14VIiO8RTnSCpqyBWKw>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 5BF0324005A;
+        Thu, 14 Jan 2021 02:59:34 -0500 (EST)
+Date:   Thu, 14 Jan 2021 08:59:32 +0100
+From:   Greg KH <greg@kroah.com>
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-api@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] tpm: add sysfs exports for all banks of PCR
+ registers
+Message-ID: <X//55I26mxVQKKOE@kroah.com>
+References: <20210113232634.23242-1-James.Bottomley@HansenPartnership.com>
+ <20210113232634.23242-2-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <X/qJJsVe7+nP+gR6@kernel.org>
+In-Reply-To: <20210113232634.23242-2-James.Bottomley@HansenPartnership.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Jan 10, 2021 at 06:57:10AM +0200, Jarkko Sakkinen wrote:
-> On Tue, Jan 05, 2021 at 11:12:57AM +0100, Mickaël Salaün wrote:
-> > Jarkko, David, what is the status of this patch series? Do you need help
-> > to test it?
+On Wed, Jan 13, 2021 at 03:26:33PM -0800, James Bottomley wrote:
+> Create sysfs per hash groups with 24 PCR files in them one group,
+> named pcr-<hash>, for each agile hash of the TPM.  The files are
+> plugged in to a PCR read function which is TPM version agnostic, so
+> this works also for TPM 1.2 but the hash is only sha1 in that case.
 > 
-> Hi, a leave/vacation and the holiday period badly mixed my schedules.
+> Note: the macros used to create the hashes emit spurious checkpatch
+> warnings.  Do not try to "fix" them as checkpatch recommends, otherwise
+> they'll break.
 > 
-> I'm testing this upcoming week.
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 > 
-> /Jarkko
+> ---
+> 
+> v2: fix TPM 1.2 legacy links failure
+> v3: fix warn on and add note to tpm_algorithms
+> v4: reword commit and add tested-by
+> v5: algorithm spelling fix WARN->dev_err
+> ---
+>  drivers/char/tpm/tpm-sysfs.c | 179 +++++++++++++++++++++++++++++++++++
+>  include/linux/tpm.h          |   9 +-
+>  2 files changed, 187 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
+> index e2ff0b273a0f..63f03cfb8e6a 100644
+> --- a/drivers/char/tpm/tpm-sysfs.c
+> +++ b/drivers/char/tpm/tpm-sysfs.c
+> @@ -337,11 +337,190 @@ static const struct attribute_group tpm2_dev_group = {
+>  	.attrs = tpm2_dev_attrs,
+>  };
+>  
+> +struct tpm_pcr_attr {
+> +	int alg_id;
+> +	int pcr;
+> +	struct device_attribute attr;
+> +};
+> +
+> +#define to_tpm_pcr_attr(a) container_of(a, struct tpm_pcr_attr, attr)
+> +
+> +static ssize_t pcr_value_show(struct device *dev,
+> +			      struct device_attribute *attr,
+> +			      char *buf)
+> +{
+> +	struct tpm_pcr_attr *ha = to_tpm_pcr_attr(attr);
+> +	struct tpm_chip *chip = to_tpm_chip(dev);
+> +	struct tpm_digest digest;
+> +	int i;
+> +	int digest_size = 0;
+> +	int rc;
+> +	char *str = buf;
+> +
+> +	for (i = 0; i < chip->nr_allocated_banks; i++)
+> +		if (ha->alg_id == chip->allocated_banks[i].alg_id)
+> +			digest_size = chip->allocated_banks[i].digest_size;
+> +	/* should never happen */
+> +	if (!digest_size)
+> +		return -EINVAL;
+> +
+> +	digest.alg_id = ha->alg_id;
+> +	rc = tpm_pcr_read(chip, ha->pcr, &digest);
+> +	if (rc)
+> +		return rc;
+> +	for (i = 0; i < digest_size; i++)
+> +		str += sprintf(str, "%02X", digest.digest[i]);
+> +	str += sprintf(str, "\n");
 
-❯ git-pw series apply 400795
-Applying: certs: Make blacklist_vet_description() more strict
-error: sha1 information is lacking or useless (certs/blacklist.c).
-error: could not build fake ancestor
-hint: Use 'git am --show-current-patch=diff' to see the failed patch
-Patch failed at 0001 certs: Make blacklist_vet_description() more strict
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
+Please use sysfs_emit() and sysfs_emit_at() for new sysfs files.
 
-Can you rebase to rc3 and resend? 
+> +/* ignore checkpatch warning about trailing ; in macro. */
+> +#define PCR_ATTR(_alg, _hash, _pcr)				   \
+> +	static struct tpm_pcr_attr dev_attr_pcr_##_hash##_##_pcr = {	\
+> +		.alg_id = _alg,					   \
+> +		.pcr = _pcr,					   \
+> +		.attr = {					   \
+> +			.attr = {				   \
+> +				.name = __stringify(_pcr),	   \
+> +				.mode = 0444			   \
+> +			},					   \
+> +			.show = pcr_value_show			   \
 
-Also, please add this to the patches 1-3:
+Can you use __ATTR_RO()?  "open" coding the sysfs mode is frowned apon
+these days.
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+thanks,
 
-Also, 4-5 look good but I hold for testing before acking further.
-
-Thanks, and apologies for such a long wait.
-
-/Jarkko
+greg k-h
