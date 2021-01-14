@@ -2,114 +2,147 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 417AF2F6829
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 18:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A24622F6873
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 18:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727095AbhANRtT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Jan 2021 12:49:19 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:44074 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbhANRtS (ORCPT
+        id S1729347AbhANRzm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 Jan 2021 12:55:42 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:38811 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729326AbhANRzl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Jan 2021 12:49:18 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0549E20B6C40;
-        Thu, 14 Jan 2021 09:48:36 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0549E20B6C40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1610646516;
-        bh=IDz7KaJG5kbJOoxja6fNIBDIe3SS26k4IRwDifYIxWE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=egdpsF7dCnjCV1iRCsJdHGgt0w/MB3L7po1+MFlYfzgZvlB5qBCbYAC4PGBBc3Xx+
-         OntdNyLGyZoQe9j+38NdLfJzwhZsUkouKD5ThmbMUGqmCiUMEICkegHdNkyH4Km390
-         0qVhUEw/RLmmIV819GtKMtp0co7A5AEi+6QUaE1U=
-Subject: Re: [PATCH v10 8/8] selinux: include a consumer of the new IMA
- critical data hook
-To:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-        Sasha Levin <sashal@kernel.org>
-Cc:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, tyhicks@linux.microsoft.com,
+        Thu, 14 Jan 2021 12:55:41 -0500
+Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1l06pa-0006dG-Cq; Thu, 14 Jan 2021 17:54:46 +0000
+Date:   Thu, 14 Jan 2021 18:54:41 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
         James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-References: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
- <20210108040708.8389-9-tusharsu@linux.microsoft.com>
- <CAHC9VhSJk0wG=WzO3bwsueiy19mMi9m6MamTrQfH8C=gXUtvGw@mail.gmail.com>
- <97328fc71687a0e1c327f6821548be9ba35bb193.camel@linux.ibm.com>
- <CAHC9VhTzaQ_q8gJ0oeok_yJ54XLETNvOuhhKnyRwgqsqvpBLCw@mail.gmail.com>
- <71cddb6c8676ccd63c89364d805cfca76d32cb6e.camel@linux.ibm.com>
- <CAHC9VhRhYWEcK7TepZ=LK1m=9Zn_gtOZyAYfamP-TFU3rRH+zw@mail.gmail.com>
- <e29a618645b0e73ec06960a02b6da465614689ff.camel@linux.ibm.com>
- <CAHC9VhTHqwKem=MyQBY4TNAq-DOVhwEZS8pjrSE=4OxdEVm-GA@mail.gmail.com>
- <3746bc7673df25354411151442a7772b867be396.camel@linux.ibm.com>
- <fc80b1a1-ff4d-3bf2-59bd-2cb56135bf0f@linux.microsoft.com>
- <99be76345f375bb2f485f08a53dcb8ed806dc538.camel@linux.ibm.com>
- <f42d49d2e876379c0ef6e31a34027be95ffb1375.camel@linux.ibm.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <e883298b-1027-2a58-dcf8-fc940ebc27ff@linux.microsoft.com>
-Date:   Thu, 14 Jan 2021 09:48:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
+        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Subject: Re: [PATCH v5 00/42] idmapped mounts
+Message-ID: <20210114175441.v5cbtzad3ejjcjsw@wittgenstein>
+References: <20210112220124.837960-1-christian.brauner@ubuntu.com>
+ <20210114171241.GA1164240@magnolia>
 MIME-Version: 1.0
-In-Reply-To: <f42d49d2e876379c0ef6e31a34027be95ffb1375.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210114171241.GA1164240@magnolia>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 1/14/21 8:50 AM, Mimi Zohar wrote:
-> On Thu, 2021-01-14 at 11:44 -0500, Mimi Zohar wrote:
->> [Cc'ing Sasha]
->>
->> Hi Lakshmi,
->>
->> On Thu, 2021-01-14 at 08:22 -0800, Lakshmi Ramasubramanian wrote:
->>> On 1/13/21 6:49 PM, Mimi Zohar wrote:
->>
->>>>>> Lakshmi is trying to address the situation where an event changes a
->>>>>> value, but then is restored to the original value.  The original and
->>>>>> subsequent events are measured, but restoring to the original value
->>>>>> isn't re-measured.  This isn't any different than when a file is
->>>>>> modified and then reverted.
->>>>>>
->>>>>> Instead of changing the name like this, which doesn't work for files,
->>>>>> allowing duplicate measurements should be generic, based on policy.
->>>>>
->>>>> Perhaps it is just the end of the day and I'm a bit tired, but I just
->>>>> read all of the above and I have no idea what your current thoughts
->>>>> are regarding this patch.
->>>>
->>>> Other than appending the timestamp, which is a hack, the patch is fine.
->>>> Support for re-measuring an event can be upstreamed independently.
->>>>
->>>
->>> Thanks for clarifying the details related to duplicate measurement
->>> detection and re-measuring.
->>>
->>> I will keep the timestamp for the time being, even though its a hack, as
->>> it helps with re-measuring state changes in SELinux. We will add support
->>> for "policy driven" re-measurement as a subsequent patch series.
->>
->> Once including the timestamp is upstreamed, removing it will be
->> difficult, especially if different userspace applications are dependent
->> on it.  Unless everyone is on board that removing the timestamp
->> wouldn't be considered a regression, it cannot be upstreamed.
+On Thu, Jan 14, 2021 at 09:12:41AM -0800, Darrick J. Wong wrote:
+> On Tue, Jan 12, 2021 at 11:00:42PM +0100, Christian Brauner wrote:
+> > Hey everyone,
+> > 
+> > The only major change is the inclusion of hch's patch to port XFS to
+> > support idmapped mounts. Thanks to Christoph for doing that work.
 > 
-> Feel free to just re-post just this one patch.  Otherwise the patch set
-> looks good.
+> Yay :)
 > 
-> thanks,
+> > (For a full list of major changes between versions see the end of this
+> >  cover letter.
+> >  Please also note the large xfstests testsuite in patch 42 that has been
+> >  kept as part of this series. It verifies correct vfs behavior with and
+> >  without idmapped mounts including covering newer vfs features such as
+> >  io_uring.
+> >  I currently still plan to target the v5.12 merge window.)
+> > 
+> > With this patchset we make it possible to attach idmappings to mounts,
+> > i.e. simply put different bind mounts can expose the same file or
+> > directory with different ownership.
+> > Shifting of ownership on a per-mount basis handles a wide range of
+> > long standing use-cases. Here are just a few:
+> > - Shifting of a subset of ownership-less filesystems (vfat) for use by
+> >   multiple users, effectively allowing for DAC on such devices
+> >   (systemd, Android, ...)
+> > - Allow remapping uid/gid on external filesystems or paths (USB sticks,
+> >   network filesystem, ...) to match the local system's user and groups.
+> >   (David Howells intends to port AFS as a first candidate.)
+> > - Shifting of a container rootfs or base image without having to mangle
+> >   every file (runc, Docker, containerd, k8s, LXD, systemd ...)
+> > - Sharing of data between host or privileged containers with
+> >   unprivileged containers (runC, Docker, containerd, k8s, LXD, ...)
+> > - Data sharing between multiple user namespaces with incompatible maps
+> >   (LXD, k8s, ...)
 > 
+> That sounds neat.  AFAICT, the VFS passes the filesystem a mount userns
+> structure, which is then carried down the call stack to whatever
+> functions actually care about mapping kernel [ug]ids to their ondisk
+> versions?
 
-Sounds good Mimi - I will remove the timestamp and re-post the selinux 
-patch.
+Yes. This requires not too many changes to the actual filesystems as you
+can see from the xfs conversion that Christoph has done.
 
-thanks,
-  -lakshmi
+> 
+> Does quota still work after this patchset is applied?  There isn't any
+> mention of that in the cover letter and I don't see a code patch, so
+> does that mean everything just works?  I'm particularly curious about
 
+The most interesting quota codepaths I audited are dquot_transfer that
+transfers quota from one inode to another one during setattr. That
+happens via a struct iattr which will already contain correctly
+translated ia_uid and ia_gid values according to the mount the caller is
+coming from. I'll take another close look at that now and add tests for
+that if I can find some in xfstests.
 
+> whether there can exist processes with CAP_SYS_ADMIN and an idmapped
+> mount?  Syscalls like bulkstat and quotactl present file [ug]ids to
+
+Yes, that should be possible.
+
+> programs, but afaict there won't be any translating going on?
+
+quotactl operates on the superblock. So the caller would need a mapping
+in the user namespace of the superblock. That doesn't need to change.
+But we could in the future extend this to be on a per-mount basis if
+this was a desired use-case. I don't think it needs to happen right now
+though.
+
+> 
+> (To be fair, bulkstat is an xfs-only thing, but quota control isn't.)
+
+I'm certain we'll find more things to cover after the first version has
+landed. :)
+We for sure won't cover it all in the first iteration.
+
+> 
+> I'll start skimming the patchset...
+
+Thanks!
+Christian
