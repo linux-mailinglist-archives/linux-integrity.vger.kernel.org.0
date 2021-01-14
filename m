@@ -2,115 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CAE62F57C3
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 04:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51D52F57DF
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 04:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729182AbhANCGV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Jan 2021 21:06:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42588 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729109AbhANCGT (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Jan 2021 21:06:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C0C9223442;
-        Thu, 14 Jan 2021 02:05:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610589938;
-        bh=NNgK5BZvTtLVTBZUqJP4R8eSarXLcVpD1VeEm8Vu678=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uEbV8/lm9F6iat9HimlHsiyPyU7AtTod+Gg+fJNZtrdkgZzZFz+9JsAWD2RYgolAy
-         zd23Qdv8WM3G/NHSLsEIu07x7B8V0NS0KLE2Cq6nAhkI1a2G7lDOnpvCG7UfwpERtY
-         YSAfuut5osfYLOXLZjDF6T/hbMCAB1kUSspXmMpxzmH0DDX0fSf55dZKV3bBFkThsY
-         AAUY/7Mz8S1jU4JIZahoaTywyTn/kTlM1YPf+vCrPm59ZUvORuNPcy/OlzXnc7K8at
-         qj3qmvqCUzX0XG7wNxM+Csrb3WyJBgHr4QRrdYADo3S7lpxoyTGZPyjinLwkQsZEkz
-         LINZx0hO334Bg==
-Date:   Thu, 14 Jan 2021 04:05:31 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Markus Wamser <Markus.Wamser@mixed-mode.de>,
-        Luke Hinds <lhinds@redhat.com>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: Re: [PATCH v8 2/4] KEYS: trusted: Introduce TEE based Trusted Keys
-Message-ID: <X/+m6+m2/snYj9Vc@kernel.org>
-References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
- <1604419306-26105-3-git-send-email-sumit.garg@linaro.org>
- <X/x+N0fgrzIZTeNi@kernel.org>
- <CAFA6WYOUvWAZtYfR4q8beZFkX-CtdxqwJaRQM+GHNMDfQiEWOA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYOUvWAZtYfR4q8beZFkX-CtdxqwJaRQM+GHNMDfQiEWOA@mail.gmail.com>
+        id S1729250AbhANCKd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Jan 2021 21:10:33 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4618 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730421AbhANCKT (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 13 Jan 2021 21:10:19 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10E21gSP085411;
+        Wed, 13 Jan 2021 21:09:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=yO8Cs6Z6wq2Tuu/b+rcgyQuxeXhGRdj+H+Csv0c2SiU=;
+ b=DOe2T7YgApNsyweg0SLA74KB279y6wTfUN+f1Ao4z/0Bof+7o9K7b1XukZYGEiaDKTyK
+ e620iP2oLs/EEhQfhrvcx3qCkTFzA6WpDDWHqGQusxqk1xuIIrkhqoufDyzFrs6iyuU7
+ ta7l//4+c1HbddcR0fcqW9MDVuydKACByrHA6NmYu4Epi8XpNgU+bC3CeQAIuERlxd2y
+ fVY3HGecS3bpm0Bee8/0t8538NtRvwfNIbC5ne9J5G6Y50+RDcIEdiSxAWX6gL9PTB6/
+ EZIpZHOTMWEtY5KZuqxsEWaWydNwDEUSp2aZzdQlaxkTlXtLta93H7hmgfj7qiIYVo55 oQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 362cqerc0e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jan 2021 21:09:32 -0500
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10E23Md7096659;
+        Wed, 13 Jan 2021 21:09:32 -0500
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 362cqerby2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jan 2021 21:09:32 -0500
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10E279c9018267;
+        Thu, 14 Jan 2021 02:09:30 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 361wgq8j0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Jan 2021 02:09:30 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10E29Ms018809252
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Jan 2021 02:09:22 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C101AA4055;
+        Thu, 14 Jan 2021 02:09:27 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69D46A4040;
+        Thu, 14 Jan 2021 02:09:24 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.57.196])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Jan 2021 02:09:24 +0000 (GMT)
+Message-ID: <73a82dff7be151298f51c0db6f3c4996ccf44a19.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 5/8] IMA: limit critical data measurement based on a
+ label
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Date:   Wed, 13 Jan 2021 21:09:23 -0500
+In-Reply-To: <20210108040708.8389-6-tusharsu@linux.microsoft.com>
+References: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
+         <20210108040708.8389-6-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-13_14:2021-01-13,2021-01-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 phishscore=0 mlxscore=0 impostorscore=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101140003
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 04:47:00PM +0530, Sumit Garg wrote:
-> Hi Jarkko,
+On Thu, 2021-01-07 at 20:07 -0800, Tushar Sugandhi wrote:
+> Integrity critical data may belong to a single subsystem or it may
+> arise from cross subsystem interaction.  Currently there is no mechanism
+> to group or limit the data based on certain label.  Limiting and
+> grouping critical data based on a label would make it flexible and
+> configurable to measure.
 > 
-> On Mon, 11 Jan 2021 at 22:05, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Tue, Nov 03, 2020 at 09:31:44PM +0530, Sumit Garg wrote:
-> > > Add support for TEE based trusted keys where TEE provides the functionality
-> > > to seal and unseal trusted keys using hardware unique key.
-> > >
-> > > Refer to Documentation/tee.txt for detailed information about TEE.
-> > >
-> > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> >
-> > I haven't yet got QEMU environment working with aarch64, this produces
-> > just a blank screen:
-> >
-> > ./output/host/usr/bin/qemu-system-aarch64 -M virt -cpu cortex-a53 -smp 1 -kernel output/images/Image -initrd output/images/rootfs.cpio -serial stdio
-> >
-> > My BuildRoot fork for TPM and keyring testing is located over here:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/buildroot-tpmdd.git/
-> >
-> > The "ARM version" is at this point in aarch64 branch. Over time I will
-> > define tpmdd-x86_64 and tpmdd-aarch64 boards and everything will be then
-> > in the master branch.
-> >
-> > To create identical images you just need to
-> >
-> > $ make tpmdd_defconfig && make
-> >
-> > Can you check if you see anything obviously wrong? I'm eager to test this
-> > patch set, and in bigger picture I really need to have ready to run
-> > aarch64 environment available.
+> Define "label:=", a new IMA policy condition, for the IMA func
+> CRITICAL_DATA to allow grouping and limiting measurement of integrity
+> critical data.
 > 
-> I would rather suggest you to follow steps listed here [1] as to test
-> this feature on Qemu aarch64 we need to build firmwares such as TF-A,
-> OP-TEE, UEFI etc. which are all integrated into OP-TEE Qemu build
-> system [2]. And then it would be easier to migrate them to your
-> buildroot environment as well.
+> Limit the measurement to the labels that are specified in the IMA
+> policy - CRITICAL_DATA+"label:=".  If "label:=" is not provided with
+> the func CRITICAL_DATA, measure all the input integrity critical data.
 > 
-> [1] https://lists.trustedfirmware.org/pipermail/op-tee/2020-May/000027.html
-> [2] https://optee.readthedocs.io/en/latest/building/devices/qemu.html#qemu-v8
-> 
-> -Sumit
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-Can you provide 'keyctl_change'? Otherwise, the steps are easy to follow.
+This is looking a lot better.
 
-After I've successfully tested 2/4, I'd suggest that you roll out one more
-version and CC the documentation patch to Elaine and Mini, and clearly
-remark in the commit message that TEE is a standard, with a link to the
-specification.
+thanks,
 
-/Jarkko
+Mimi
+
