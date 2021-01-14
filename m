@@ -2,83 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 289202F58B0
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 04:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730AA2F58C1
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 04:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727009AbhANCwT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Jan 2021 21:52:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49426 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725844AbhANCwM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Jan 2021 21:52:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B08D5235FF;
-        Thu, 14 Jan 2021 02:51:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610592692;
-        bh=kA9yXXpdDPjKVxfq3CqRKkEzJJlAEd43QeCIiR9fR4I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tt9GZfIfGlQnWcVcwsCJLfnGfb4UxiZbUl/tNF0YLHnTCEKKlujGIvZyAadpASTw+
-         rYUTlNF7QehedC0VxcQ1AQx90WJb4sdMhiPLCq/wQF+ig3Bppt3T5EEQFNk5cBbyJS
-         DF0t3E4I/hgKwycox366VECqRrXjlyMnohf+6Xg4Lik7Rq6ox4EDMD3khlHxXRK0GU
-         H0NwpUW3L83hKnfBDb7GuGQemViJEiBvsmU+Nk6ahcJgspGayYpHBKiOILOZdshtUG
-         yunuWEvBtiK/5fd1osL87KQjPXKZHHtg+gF9AoMNWxtTnYkx1d6MsXMhCOmUTTIFOl
-         K7FoO0v9ByL6Q==
-Date:   Thu, 14 Jan 2021 04:51:27 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-Subject: Re: [PATCH] tpm/tpm_tis: Fix variable reset during IRQ probing
-Message-ID: <X/+xr/L+m2k5fObZ@kernel.org>
-References: <20210113120021.59045-1-tianjia.zhang@linux.alibaba.com>
+        id S1726151AbhANC4U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Jan 2021 21:56:20 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:58418 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725885AbhANC4T (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 13 Jan 2021 21:56:19 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CAF7A12806CB;
+        Wed, 13 Jan 2021 18:55:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1610592938;
+        bh=/Utd+gnwerCye7uCKqqxDj780oiA3dxjew+vCI8nNlQ=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=ESSUmWiCS0RVnB1flSzD0lhD6JbpWNzqmGkSaBsgEDNqum/7CRvLmCaSylmaiJeOz
+         uCTIrxIO1JNdqNr3g3VndnIqZwPnBri2RA8VFMUqDVOhrS23T+dOjNbE21p7kXCmyN
+         4zfSQHEKMT211WjP5C1eHW9Adi9FwbzDgHQSsLq8=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1uezo24jHUMq; Wed, 13 Jan 2021 18:55:38 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 570A712806BD;
+        Wed, 13 Jan 2021 18:55:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1610592938;
+        bh=/Utd+gnwerCye7uCKqqxDj780oiA3dxjew+vCI8nNlQ=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=ESSUmWiCS0RVnB1flSzD0lhD6JbpWNzqmGkSaBsgEDNqum/7CRvLmCaSylmaiJeOz
+         uCTIrxIO1JNdqNr3g3VndnIqZwPnBri2RA8VFMUqDVOhrS23T+dOjNbE21p7kXCmyN
+         4zfSQHEKMT211WjP5C1eHW9Adi9FwbzDgHQSsLq8=
+Message-ID: <7bb26e6550ec35b3aa4bdb2e1dbfec04c3f4c871.camel@HansenPartnership.com>
+Subject: Re: [PATCH v5 1/1] tpm: add sysfs exports for all banks of PCR
+ registers
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Greg KH <greg@kroah.com>, linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-api@vger.kernel.org
+Date:   Wed, 13 Jan 2021 18:55:37 -0800
+In-Reply-To: <X/9wwEr477zSttED@kernel.org>
+References: <20210113015958.6685-1-James.Bottomley@HansenPartnership.com>
+         <20210113015958.6685-2-James.Bottomley@HansenPartnership.com>
+         <X/6lyuhqQ8TSXOSa@kroah.com>
+         <a6bdeef73f9271cca99585d3e855681cf6b6f589.camel@HansenPartnership.com>
+         <X/9wwEr477zSttED@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210113120021.59045-1-tianjia.zhang@linux.alibaba.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 08:00:21PM +0800, Tianjia Zhang wrote:
-> In tpm_tis_core_init(), tpm2_probe() will be called first, this
-> function will eventually call tpm_tis_send(), and then
-> tpm_tis_probe_irq_single() will detect whether the interrupt is
-> normal, mainly the installation interrupted, set `priv->irq_tested`
-> to false. The logic will eventually be executed to tpm_tis_send()
-> to trigger an interrupt.
+On Thu, 2021-01-14 at 00:14 +0200, Jarkko Sakkinen wrote:
+> On Wed, Jan 13, 2021 at 09:31:44AM -0800, James Bottomley wrote:
+> > On Wed, 2021-01-13 at 08:48 +0100, Greg KH wrote:
+> > > On Tue, Jan 12, 2021 at 05:59:58PM -0800, James Bottomley wrote:
+> > > > Create sysfs per hash groups with 24 PCR files in them one
+> > > > group,
+> > > > named pcr-<hash>, for each agile hash of the TPM.  The files
+> > > > are
+> > > > plugged in to a PCR read function which is TPM version
+> > > > agnostic, so
+> > > > this works also for TPM 1.2 but the hash is only sha1 in that
+> > > > case.
+> > > > 
+> > > > Note: the macros used to create the hashes emit spurious
+> > > > checkpatch
+> > > > warnings.  Do not try to "fix" them as checkpatch recommends,
+> > > > otherwise
+> > > > they'll break.
+> > > > 
+> > > > Signed-off-by: James Bottomley <
+> > > > James.Bottomley@HansenPartnership.com>
+> > > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> > > > Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> > > > 
+> > > > ---
+> > > > 
+> > > > v2: fix TPM 1.2 legacy links failure
+> > > > v3: fix warn on and add note to tpm_algorithms
+> > > > v4: reword commit and add tested-by
+> > > > v5: algorithm spelling fix WARN->dev_err
+> > > > ---
+> > > >  drivers/char/tpm/tpm-sysfs.c | 179
+> > > > +++++++++++++++++++++++++++++++++++
+> > > >  include/linux/tpm.h          |   9 +-
+> > > >  2 files changed, 187 insertions(+), 1 deletion(-)
+> > > 
+> > > You add new sysfs files, but do not add Documentation/ABI/
+> > > entries
+> > > showing how they are used and what they contain :(
+> > > 
+> > > Please do that for the next version of this patch.
+> > 
+> > It's a bit of a chicken and egg problem since I've no idea when
+> > this
+> > will go upstream and the entries require that information making
+> > the
+> > ABI more of a post accept type thing.  I can make a guess about the
+> > values if Jarkko is going to but this in for the next merge window.
+> > 
+> > James
 > 
-> There is currently such a scenario, which will cause the IRQ probe
-> code to never be executed, so that the TPM device is in polling
-> mode: after setting irq_tested to false, an interrupt occurs
-> between entering the ttpm_tis_send() function, and the interrupt
-> will be first set irq_tested to true will cause the IRQ probe code
-> to never be executed.
-
-Can you describe the scenario more detail?
-
-> It seems that this interrupt comes from tpm2_probe(). Although the
-> interrupt has not been installed when tpm2_probe() is called, the
-> interrupt of tpm2_probe() is only received after IRQ detection.
+> I agree with the ABI side, so you can safely include this to the
+> patch set. 
+> And yes, this looks like something I can include to the 5.12 PR.
 > 
-> This patch solves this issue by introducing a new variable, which
-> is only used in interrupts, and irq_tested only marks whether the
-> interrupt test has been completed.
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
+> Did you address Greg's remarks about warns?
 
-I'm not sure I understand this patch. TPM should be in polling
-mode. This is also assumption before calling tpm_get_timeouts():
+You mean Rob Elliott's?  Yes, it was in the change log
 
-/* Before doing irq testing issue a command to the TPM in polling mode
- * to make sure it works. May as well use that command to set the
- * proper timeouts for the driver.
- */
-if (tpm_get_timeouts(chip)) {
-        dev_err(dev, "Could not get TPM timeouts and durations\n");
-        rc = -ENODEV;
-        goto out_err;
-}
+> Other than that, please send a version with ABI entries  so that
+> we can move forward with this.
 
-/Jarkko
+It's already sent ... although vger is being a bit slow at the moment.
+
+James
+
+
