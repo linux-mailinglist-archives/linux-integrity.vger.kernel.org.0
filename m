@@ -2,162 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD722F5BEB
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 09:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A21BA2F6465
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 16:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727275AbhANIAX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Jan 2021 03:00:23 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:57493 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727374AbhANIAW (ORCPT
+        id S1729619AbhANPVX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 Jan 2021 10:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729307AbhANPVX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Jan 2021 03:00:22 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 74652134E;
-        Thu, 14 Jan 2021 02:59:35 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 14 Jan 2021 02:59:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=yvYpFGO9MesyeqnSwFBmc3vHur3
-        55sBthcHVnzFujXs=; b=UfePJs0eheOLSmd5xKMtscaPFoPwO3soCz47oYNjLXl
-        71CGRQcThu/YdZgDlbUh5Wt7fqNkAONOSFV0XQkq9f94CEqZ8KFqPmMiEHrp9TXE
-        5l1n9kD2XXV5EoqcKLMojhk64FvecngmOVv2MMAXy3pz+obSXaRNUylQm5fmSxPG
-        YzDJm9Yb3oeQ72V9bAhXUw14OCO5NQDMdZ+BUDIHPc5JTn0mvieu02uOx0M1yVec
-        tzOxjo5pUcyRoEJFSSFYa6WiG6GZUQ6pJ/PuKImtxo+/DQII1AR4Pfic/vqsXgBr
-        M0JWHoYiKg54XimQAyX5T5RxsblicxHe7h39P2eFkiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=yvYpFG
-        O9MesyeqnSwFBmc3vHur355sBthcHVnzFujXs=; b=b0DzXf79QV02B981kHGL27
-        t61bRrCD8rIkah/HR+mgFrMAfUKUOUBrCW5VrX1CYirL91FHTDY1XyMY5vhlhX4m
-        ABRBEr0yWOfdqVZ0WtFsFFbSEO/x85S8DviLpMXaE7PzBxi6DxyCc/cdwMiynQlH
-        sHFTz7hME7anvVP+dWKvqCHlHZzSSGX9YJfzkdrceup3Dp69MEJAwwmRcVp5htvj
-        f7MbcgEPPdGI/MJN1pPRx7thi9tmsEk/IshyyMTYC5jdu5i7LBNoQFKjxXFoRlDh
-        jMDPM12vTJndx6O/QV8lxexD0B+zhz4xVxs1DP50K01c0pj0bvDmiPBEWNS/GFpA
-        ==
-X-ME-Sender: <xms:5vn_X6jQsp1ymrE0683eFtxgmu9iWSOoBdE4gBhzuulzxQmAYoPlkg>
-    <xme:5vn_X7Djbx-P3TPDh3tTLi4aMT51mouxr-05mJDVxjvA5fXyxDz2SW8xZgQW4v1cn
-    rwH1kKT3ln_PQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedukedrtdeggdduudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
-    rdekiedrjeegrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:5vn_XyFq1GZzIDHLTColKMJ2PwhOa7to0_mpVgVw1B0rjaRqedBzLw>
-    <xmx:5vn_XzRCGlnTIp2qndWB0SajGzUOwhNd2FXLisvgL6Is92p30TwdWg>
-    <xmx:5vn_X3ys3ONFF5xSaKoQH0npThWVKICCDObL4e2_cu2pjmL_b1dtvg>
-    <xmx:5_n_Xy9NSh3wTmRxDUrNTUe26TvvK9CN83d14VIiO8RTnSCpqyBWKw>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 5BF0324005A;
-        Thu, 14 Jan 2021 02:59:34 -0500 (EST)
-Date:   Thu, 14 Jan 2021 08:59:32 +0100
-From:   Greg KH <greg@kroah.com>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-api@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] tpm: add sysfs exports for all banks of PCR
- registers
-Message-ID: <X//55I26mxVQKKOE@kroah.com>
-References: <20210113232634.23242-1-James.Bottomley@HansenPartnership.com>
- <20210113232634.23242-2-James.Bottomley@HansenPartnership.com>
+        Thu, 14 Jan 2021 10:21:23 -0500
+Received: from smtp-8fae.mail.infomaniak.ch (smtp-8fae.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fae])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26942C06179E
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Jan 2021 07:19:51 -0800 (PST)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DGnyv17ylzMprrf;
+        Thu, 14 Jan 2021 16:19:03 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4DGnys0Ff7zlh8TH;
+        Thu, 14 Jan 2021 16:19:00 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH v3 00/10] Enable root to update the blacklist keyring
+Date:   Thu, 14 Jan 2021 16:18:59 +0100
+Message-Id: <20210114151909.2344974-1-mic@digikod.net>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210113232634.23242-2-James.Bottomley@HansenPartnership.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 03:26:33PM -0800, James Bottomley wrote:
-> Create sysfs per hash groups with 24 PCR files in them one group,
-> named pcr-<hash>, for each agile hash of the TPM.  The files are
-> plugged in to a PCR read function which is TPM version agnostic, so
-> this works also for TPM 1.2 but the hash is only sha1 in that case.
-> 
-> Note: the macros used to create the hashes emit spurious checkpatch
-> warnings.  Do not try to "fix" them as checkpatch recommends, otherwise
-> they'll break.
-> 
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-> 
-> ---
-> 
-> v2: fix TPM 1.2 legacy links failure
-> v3: fix warn on and add note to tpm_algorithms
-> v4: reword commit and add tested-by
-> v5: algorithm spelling fix WARN->dev_err
-> ---
->  drivers/char/tpm/tpm-sysfs.c | 179 +++++++++++++++++++++++++++++++++++
->  include/linux/tpm.h          |   9 +-
->  2 files changed, 187 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-> index e2ff0b273a0f..63f03cfb8e6a 100644
-> --- a/drivers/char/tpm/tpm-sysfs.c
-> +++ b/drivers/char/tpm/tpm-sysfs.c
-> @@ -337,11 +337,190 @@ static const struct attribute_group tpm2_dev_group = {
->  	.attrs = tpm2_dev_attrs,
->  };
->  
-> +struct tpm_pcr_attr {
-> +	int alg_id;
-> +	int pcr;
-> +	struct device_attribute attr;
-> +};
-> +
-> +#define to_tpm_pcr_attr(a) container_of(a, struct tpm_pcr_attr, attr)
-> +
-> +static ssize_t pcr_value_show(struct device *dev,
-> +			      struct device_attribute *attr,
-> +			      char *buf)
-> +{
-> +	struct tpm_pcr_attr *ha = to_tpm_pcr_attr(attr);
-> +	struct tpm_chip *chip = to_tpm_chip(dev);
-> +	struct tpm_digest digest;
-> +	int i;
-> +	int digest_size = 0;
-> +	int rc;
-> +	char *str = buf;
-> +
-> +	for (i = 0; i < chip->nr_allocated_banks; i++)
-> +		if (ha->alg_id == chip->allocated_banks[i].alg_id)
-> +			digest_size = chip->allocated_banks[i].digest_size;
-> +	/* should never happen */
-> +	if (!digest_size)
-> +		return -EINVAL;
-> +
-> +	digest.alg_id = ha->alg_id;
-> +	rc = tpm_pcr_read(chip, ha->pcr, &digest);
-> +	if (rc)
-> +		return rc;
-> +	for (i = 0; i < digest_size; i++)
-> +		str += sprintf(str, "%02X", digest.digest[i]);
-> +	str += sprintf(str, "\n");
+This third patch series includes back three fix patches taken from the first
+series (and cherry-picked from David Howells's tree [1]), and one cosmetic fix
+from Alex Shi which helps avoid future conflicts.  I also added some Acked-by
+and improved comments.  As requested, this series is based on v5.11-rc3.
 
-Please use sysfs_emit() and sysfs_emit_at() for new sysfs files.
+The goal of these patches is to add a new configuration option to enable the
+root user to load signed keys in the blacklist keyring.  This keyring is useful
+to "untrust" certificates or files.  Enabling to safely update this keyring
+without recompiling the kernel makes it more usable.
 
-> +/* ignore checkpatch warning about trailing ; in macro. */
-> +#define PCR_ATTR(_alg, _hash, _pcr)				   \
-> +	static struct tpm_pcr_attr dev_attr_pcr_##_hash##_##_pcr = {	\
-> +		.alg_id = _alg,					   \
-> +		.pcr = _pcr,					   \
-> +		.attr = {					   \
-> +			.attr = {				   \
-> +				.name = __stringify(_pcr),	   \
-> +				.mode = 0444			   \
-> +			},					   \
-> +			.show = pcr_value_show			   \
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=keys-fixes
 
-Can you use __ATTR_RO()?  "open" coding the sysfs mode is frowned apon
-these days.
+Previous patch series:
+https://lore.kernel.org/lkml/20201211190330.2586116-1-mic@digikod.net/
 
-thanks,
+Regards,
 
-greg k-h
+Alex Shi (1):
+  certs/blacklist: fix kernel doc interface issue
+
+David Howells (1):
+  certs: Fix blacklist flag type confusion
+
+Mickaël Salaün (8):
+  certs: Fix blacklisted hexadecimal hash string check
+  PKCS#7: Fix missing include
+  certs: Replace K{U,G}IDT_INIT() with GLOBAL_ROOT_{U,G}ID
+  certs: Make blacklist_vet_description() more strict
+  certs: Factor out the blacklist hash creation
+  certs: Check that builtin blacklist hashes are valid
+  certs: Allow root user to append signed hashes to the blacklist
+    keyring
+  tools/certs: Add print-cert-tbs-hash.sh
+
+ MAINTAINERS                                   |   2 +
+ certs/.gitignore                              |   1 +
+ certs/Kconfig                                 |  10 +
+ certs/Makefile                                |  15 +-
+ certs/blacklist.c                             | 217 ++++++++++++++----
+ certs/system_keyring.c                        |   5 +-
+ crypto/asymmetric_keys/x509_public_key.c      |   3 +-
+ include/keys/system_keyring.h                 |  14 +-
+ include/linux/key.h                           |   1 +
+ include/linux/verification.h                  |   2 +
+ scripts/check-blacklist-hashes.awk            |  37 +++
+ security/integrity/ima/ima_mok.c              |   4 +-
+ .../platform_certs/keyring_handler.c          |  26 +--
+ security/keys/key.c                           |   2 +
+ tools/certs/print-cert-tbs-hash.sh            |  91 ++++++++
+ 15 files changed, 345 insertions(+), 85 deletions(-)
+ create mode 100755 scripts/check-blacklist-hashes.awk
+ create mode 100755 tools/certs/print-cert-tbs-hash.sh
+
+
+base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
+-- 
+2.30.0
+
