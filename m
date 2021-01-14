@@ -2,25 +2,25 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD922F6450
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 16:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E44F82F646A
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 16:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729327AbhANPUi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Jan 2021 10:20:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S1727562AbhANPVZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 Jan 2021 10:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729162AbhANPUh (ORCPT
+        with ESMTP id S1729307AbhANPVY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Jan 2021 10:20:37 -0500
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [IPv6:2001:1600:3:17::42af])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07128C0613D3;
-        Thu, 14 Jan 2021 07:19:10 -0800 (PST)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DGnz12R99zMqq1X;
-        Thu, 14 Jan 2021 16:19:09 +0100 (CET)
+        Thu, 14 Jan 2021 10:21:24 -0500
+Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5798C0613CF
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Jan 2021 07:19:57 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DGnz24C0JzMr6dr;
+        Thu, 14 Jan 2021 16:19:10 +0100 (CET)
 Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4DGnz109Spzlppyw;
-        Thu, 14 Jan 2021 16:19:09 +0100 (CET)
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4DGnz21z4Szlh8TH;
+        Thu, 14 Jan 2021 16:19:10 +0100 (CET)
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     David Howells <dhowells@redhat.com>,
         David Woodhouse <dwmw2@infradead.org>,
@@ -33,12 +33,10 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         Mimi Zohar <zohar@linux.ibm.com>,
         "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>
-Subject: [PATCH v3 04/10] certs: Fix blacklist flag type confusion
-Date:   Thu, 14 Jan 2021 16:19:03 +0100
-Message-Id: <20210114151909.2344974-5-mic@digikod.net>
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH v3 05/10] certs: Replace K{U,G}IDT_INIT() with GLOBAL_ROOT_{U,G}ID
+Date:   Thu, 14 Jan 2021 16:19:04 +0100
+Message-Id: <20210114151909.2344974-6-mic@digikod.net>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210114151909.2344974-1-mic@digikod.net>
 References: <20210114151909.2344974-1-mic@digikod.net>
@@ -49,105 +47,76 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Mickaël Salaün <mic@linux.microsoft.com>
 
-KEY_FLAG_KEEP is not meant to be passed to keyring_alloc() or key_alloc(),
-as these only take KEY_ALLOC_* flags.  KEY_FLAG_KEEP has the same value as
-KEY_ALLOC_BYPASS_RESTRICTION, but fortunately only key_create_or_update()
-uses it.  LSMs using the key_alloc hook don't check that flag.
+Align with the new macros and add appropriate include files.
 
-KEY_FLAG_KEEP is then ignored but fortunately (again) the root user cannot
-write to the blacklist keyring, so it is not possible to remove a key/hash
-from it.
-
-Fix this by adding a KEY_ALLOC_SET_KEEP flag that tells key_alloc() to set
-KEY_FLAG_KEEP on the new key.  blacklist_init() can then, correctly, pass
-this to keyring_alloc().
-
-We can also use this in ima_mok_init() rather than setting the flag
-manually.
-
-Note that this doesn't fix an observable bug with the current
-implementation but it is required to allow addition of new hashes to the
-blacklist in the future without making it possible for them to be removed.
-
-Fixes: 734114f8782f ("KEYS: Add a system blacklist keyring")
-cc: Mimi Zohar <zohar@linux.vnet.ibm.com>
 Cc: David Woodhouse <dwmw2@infradead.org>
-Reported-by: Mickaël Salaün <mic@linux.microsoft.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-[mic@linux.microsoft.com: fix ima_mok_init()]
 Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
 ---
 
 Changes since v2:
-* Cherry-pick rewritten v1 patch from
+* Cherry-pick v1 patch from
   https://lore.kernel.org/lkml/2659836.1607940186@warthog.procyon.org.uk/
-  to rebase on v5.11-rc3 and fix ima_mok_init().
+  to rebase on v5.11-rc3.
 ---
- certs/blacklist.c                | 2 +-
- include/linux/key.h              | 1 +
- security/integrity/ima/ima_mok.c | 4 +---
- security/keys/key.c              | 2 ++
- 4 files changed, 5 insertions(+), 4 deletions(-)
+ certs/blacklist.c      | 4 ++--
+ certs/system_keyring.c | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/certs/blacklist.c b/certs/blacklist.c
-index a888b934a1cd..029471947838 100644
+index 029471947838..bffe4c6f4a9e 100644
 --- a/certs/blacklist.c
 +++ b/certs/blacklist.c
-@@ -162,7 +162,7 @@ static int __init blacklist_init(void)
+@@ -14,6 +14,7 @@
+ #include <linux/ctype.h>
+ #include <linux/err.h>
+ #include <linux/seq_file.h>
++#include <linux/uidgid.h>
+ #include <keys/system_keyring.h>
+ #include "blacklist.h"
+ 
+@@ -156,8 +157,7 @@ static int __init blacklist_init(void)
+ 
+ 	blacklist_keyring =
+ 		keyring_alloc(".blacklist",
+-			      KUIDT_INIT(0), KGIDT_INIT(0),
+-			      current_cred(),
++			      GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, current_cred(),
+ 			      (KEY_POS_ALL & ~KEY_POS_SETATTR) |
  			      KEY_USR_VIEW | KEY_USR_READ |
  			      KEY_USR_SEARCH,
- 			      KEY_ALLOC_NOT_IN_QUOTA |
--			      KEY_FLAG_KEEP,
-+			      KEY_ALLOC_SET_KEEP,
- 			      NULL, NULL);
- 	if (IS_ERR(blacklist_keyring))
- 		panic("Can't allocate system blacklist keyring\n");
-diff --git a/include/linux/key.h b/include/linux/key.h
-index 0f2e24f13c2b..eed3ce139a32 100644
---- a/include/linux/key.h
-+++ b/include/linux/key.h
-@@ -289,6 +289,7 @@ extern struct key *key_alloc(struct key_type *type,
- #define KEY_ALLOC_BUILT_IN		0x0004	/* Key is built into kernel */
- #define KEY_ALLOC_BYPASS_RESTRICTION	0x0008	/* Override the check on restricted keyrings */
- #define KEY_ALLOC_UID_KEYRING		0x0010	/* allocating a user or user session keyring */
-+#define KEY_ALLOC_SET_KEEP		0x0020	/* Set the KEEP flag on the key/keyring */
+diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+index 798291177186..4b693da488f1 100644
+--- a/certs/system_keyring.c
++++ b/certs/system_keyring.c
+@@ -11,6 +11,7 @@
+ #include <linux/cred.h>
+ #include <linux/err.h>
+ #include <linux/slab.h>
++#include <linux/uidgid.h>
+ #include <linux/verification.h>
+ #include <keys/asymmetric-type.h>
+ #include <keys/system_keyring.h>
+@@ -98,7 +99,7 @@ static __init int system_trusted_keyring_init(void)
  
- extern void key_revoke(struct key *key);
- extern void key_invalidate(struct key *key);
-diff --git a/security/integrity/ima/ima_mok.c b/security/integrity/ima/ima_mok.c
-index 36cadadbfba4..5594dd38ab04 100644
---- a/security/integrity/ima/ima_mok.c
-+++ b/security/integrity/ima/ima_mok.c
-@@ -38,13 +38,11 @@ __init int ima_mok_init(void)
- 				(KEY_POS_ALL & ~KEY_POS_SETATTR) |
- 				KEY_USR_VIEW | KEY_USR_READ |
- 				KEY_USR_WRITE | KEY_USR_SEARCH,
--				KEY_ALLOC_NOT_IN_QUOTA,
-+				KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_SET_KEEP,
- 				restriction, NULL);
- 
- 	if (IS_ERR(ima_blacklist_keyring))
- 		panic("Can't allocate IMA blacklist keyring.");
--
--	set_bit(KEY_FLAG_KEEP, &ima_blacklist_keyring->flags);
- 	return 0;
- }
- device_initcall(ima_mok_init);
-diff --git a/security/keys/key.c b/security/keys/key.c
-index ebe752b137aa..c45afdd1dfbb 100644
---- a/security/keys/key.c
-+++ b/security/keys/key.c
-@@ -303,6 +303,8 @@ struct key *key_alloc(struct key_type *type, const char *desc,
- 		key->flags |= 1 << KEY_FLAG_BUILTIN;
- 	if (flags & KEY_ALLOC_UID_KEYRING)
- 		key->flags |= 1 << KEY_FLAG_UID_KEYRING;
-+	if (flags & KEY_ALLOC_SET_KEEP)
-+		key->flags |= 1 << KEY_FLAG_KEEP;
- 
- #ifdef KEY_DEBUGGING
- 	key->magic = KEY_DEBUG_MAGIC;
+ 	builtin_trusted_keys =
+ 		keyring_alloc(".builtin_trusted_keys",
+-			      KUIDT_INIT(0), KGIDT_INIT(0), current_cred(),
++			      GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, current_cred(),
+ 			      ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
+ 			      KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEARCH),
+ 			      KEY_ALLOC_NOT_IN_QUOTA,
+@@ -109,7 +110,7 @@ static __init int system_trusted_keyring_init(void)
+ #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
+ 	secondary_trusted_keys =
+ 		keyring_alloc(".secondary_trusted_keys",
+-			      KUIDT_INIT(0), KGIDT_INIT(0), current_cred(),
++			      GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, current_cred(),
+ 			      ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
+ 			       KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEARCH |
+ 			       KEY_USR_WRITE),
 -- 
 2.30.0
 
