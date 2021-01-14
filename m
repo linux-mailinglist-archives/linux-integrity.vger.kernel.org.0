@@ -2,147 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A24622F6873
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 18:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CECC2F688D
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Jan 2021 19:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729347AbhANRzm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Jan 2021 12:55:42 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:38811 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729326AbhANRzl (ORCPT
+        id S1727719AbhANR6K (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 Jan 2021 12:58:10 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:45194 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726428AbhANR6K (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Jan 2021 12:55:41 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l06pa-0006dG-Cq; Thu, 14 Jan 2021 17:54:46 +0000
-Date:   Thu, 14 Jan 2021 18:54:41 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v5 00/42] idmapped mounts
-Message-ID: <20210114175441.v5cbtzad3ejjcjsw@wittgenstein>
-References: <20210112220124.837960-1-christian.brauner@ubuntu.com>
- <20210114171241.GA1164240@magnolia>
+        Thu, 14 Jan 2021 12:58:10 -0500
+Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D7E4720B6C40;
+        Thu, 14 Jan 2021 09:57:28 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D7E4720B6C40
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1610647049;
+        bh=A4xGRwtz6F/ItvEdkk7Mb8VZ62q+X4ffVSeGTPCYbj0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Ms+8Ksq1OiZWytgF1KBjTZpUlM/Mljo9UN9DsX4FbPYkGZEwDl5l+ublRojq3l+De
+         onLI2IsuQjAtzreV8nfOQy2Nu+zA1sGousMbny+4FLoyhNB6TfSDRuDcSX3k/nSKp0
+         9dODlIIkdzCGk3Y9ixlK26nnvqfpz21QyroeBZDk=
+Subject: Re: [PATCH v10 5/8] IMA: limit critical data measurement based on a
+ label
+To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+References: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
+ <20210108040708.8389-6-tusharsu@linux.microsoft.com>
+ <73a82dff7be151298f51c0db6f3c4996ccf44a19.camel@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <3105b0b9-4e74-691c-56ab-6ca183cb2038@linux.microsoft.com>
+Date:   Thu, 14 Jan 2021 09:57:27 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210114171241.GA1164240@magnolia>
+In-Reply-To: <73a82dff7be151298f51c0db6f3c4996ccf44a19.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 09:12:41AM -0800, Darrick J. Wong wrote:
-> On Tue, Jan 12, 2021 at 11:00:42PM +0100, Christian Brauner wrote:
-> > Hey everyone,
-> > 
-> > The only major change is the inclusion of hch's patch to port XFS to
-> > support idmapped mounts. Thanks to Christoph for doing that work.
+
+
+On 2021-01-13 6:09 p.m., Mimi Zohar wrote:
+> On Thu, 2021-01-07 at 20:07 -0800, Tushar Sugandhi wrote:
+>> Integrity critical data may belong to a single subsystem or it may
+>> arise from cross subsystem interaction.  Currently there is no mechanism
+>> to group or limit the data based on certain label.  Limiting and
+>> grouping critical data based on a label would make it flexible and
+>> configurable to measure.
+>>
+>> Define "label:=", a new IMA policy condition, for the IMA func
+>> CRITICAL_DATA to allow grouping and limiting measurement of integrity
+>> critical data.
+>>
+>> Limit the measurement to the labels that are specified in the IMA
+>> policy - CRITICAL_DATA+"label:=".  If "label:=" is not provided with
+>> the func CRITICAL_DATA, measure all the input integrity critical data.
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 > 
-> Yay :)
+> This is looking a lot better.
 > 
-> > (For a full list of major changes between versions see the end of this
-> >  cover letter.
-> >  Please also note the large xfstests testsuite in patch 42 that has been
-> >  kept as part of this series. It verifies correct vfs behavior with and
-> >  without idmapped mounts including covering newer vfs features such as
-> >  io_uring.
-> >  I currently still plan to target the v5.12 merge window.)
-> > 
-> > With this patchset we make it possible to attach idmappings to mounts,
-> > i.e. simply put different bind mounts can expose the same file or
-> > directory with different ownership.
-> > Shifting of ownership on a per-mount basis handles a wide range of
-> > long standing use-cases. Here are just a few:
-> > - Shifting of a subset of ownership-less filesystems (vfat) for use by
-> >   multiple users, effectively allowing for DAC on such devices
-> >   (systemd, Android, ...)
-> > - Allow remapping uid/gid on external filesystems or paths (USB sticks,
-> >   network filesystem, ...) to match the local system's user and groups.
-> >   (David Howells intends to port AFS as a first candidate.)
-> > - Shifting of a container rootfs or base image without having to mangle
-> >   every file (runc, Docker, containerd, k8s, LXD, systemd ...)
-> > - Sharing of data between host or privileged containers with
-> >   unprivileged containers (runC, Docker, containerd, k8s, LXD, ...)
-> > - Data sharing between multiple user namespaces with incompatible maps
-> >   (LXD, k8s, ...)
+> thanks,
 > 
-> That sounds neat.  AFAICT, the VFS passes the filesystem a mount userns
-> structure, which is then carried down the call stack to whatever
-> functions actually care about mapping kernel [ug]ids to their ondisk
-> versions?
-
-Yes. This requires not too many changes to the actual filesystems as you
-can see from the xfs conversion that Christoph has done.
-
+> Mimi
 > 
-> Does quota still work after this patchset is applied?  There isn't any
-> mention of that in the cover letter and I don't see a code patch, so
-> does that mean everything just works?  I'm particularly curious about
+Thanks a lot for the feedback Mimi.
+Appreciate it. :)
 
-The most interesting quota codepaths I audited are dquot_transfer that
-transfers quota from one inode to another one during setattr. That
-happens via a struct iattr which will already contain correctly
-translated ia_uid and ia_gid values according to the mount the caller is
-coming from. I'll take another close look at that now and add tests for
-that if I can find some in xfstests.
-
-> whether there can exist processes with CAP_SYS_ADMIN and an idmapped
-> mount?  Syscalls like bulkstat and quotactl present file [ug]ids to
-
-Yes, that should be possible.
-
-> programs, but afaict there won't be any translating going on?
-
-quotactl operates on the superblock. So the caller would need a mapping
-in the user namespace of the superblock. That doesn't need to change.
-But we could in the future extend this to be on a per-mount basis if
-this was a desired use-case. I don't think it needs to happen right now
-though.
-
-> 
-> (To be fair, bulkstat is an xfs-only thing, but quota control isn't.)
-
-I'm certain we'll find more things to cover after the first version has
-landed. :)
-We for sure won't cover it all in the first iteration.
-
-> 
-> I'll start skimming the patchset...
-
-Thanks!
-Christian
+~Tushar
