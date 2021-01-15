@@ -2,105 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A17D72F80B6
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 17:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B3C2F81BF
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 18:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730766AbhAOQ0k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Jan 2021 11:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S1733203AbhAORLJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Jan 2021 12:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727049AbhAOQ0k (ORCPT
+        with ESMTP id S1733189AbhAORLJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Jan 2021 11:26:40 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620ACC061757;
-        Fri, 15 Jan 2021 08:25:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Er+tBpIbbLuj0OIqdNy2chPN/Ve8hzD1kKT3RJP39d0=; b=rwXZgdKUw066MkReZNwTWvdrDZ
-        +O+Z5xhLd7/kx+ppy6ccAkQPteVkBvNBYeFaNHb1vOy5WPgAW8pROAq3ALviE/ofBGb5Z0OIJ5+AX
-        3aTO9JYoy07VWConrD3cxcC01n5AJ/XuQifDlQYUD7Zdk9xhYoZlPu08/WVLh1X6pEs1F95ixJXRs
-        GvyrkCwwE3486p2RN5bLzW9J4juLcJMEweckdeecRjBTjh/0ItC7SFnldUzVWbPOEdW/VcDQv0rsX
-        QN+h7onKLGjZ6CTuzd6MpZCvn+yYvVFCLUl5X+47PEYMBijpxrr/AfP2+Fj9IHKDJgSwUxYKCpsOi
-        aoK+IQOA==;
-Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1l0Rtf-0099Fq-85; Fri, 15 Jan 2021 16:24:27 +0000
-Date:   Fri, 15 Jan 2021 16:24:23 +0000
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        St?phane Graber <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v5 00/42] idmapped mounts
-Message-ID: <20210115162423.GB2179337@infradead.org>
-References: <20210112220124.837960-1-christian.brauner@ubuntu.com>
- <20210114171241.GA1164240@magnolia>
- <20210114204334.GK331610@dread.disaster.area>
+        Fri, 15 Jan 2021 12:11:09 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC908C0613C1;
+        Fri, 15 Jan 2021 09:10:28 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 218F41280055;
+        Fri, 15 Jan 2021 09:10:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1610730627;
+        bh=xRezMHxeSl+GO5HaRdmwnmMXlQPWEuyHU3WuQttC27Q=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=M0N6HV1gj4oLueTDraK9xEGp4+oVVGfxCI1eXGlsrd/bshdcnu6dxSg95khxrnEra
+         5jEojYVxEpYQpte/3pde2rdJb0rW9R4vuTWMExT1GyGz8s2kK3RM1U/Dzw6zSoSRz+
+         HJQYT0SMSwsoX2WSWDSQEYnmh6uf9JfIIE+d9HXE=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tUA6MTpo-UTL; Fri, 15 Jan 2021 09:10:27 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C6A6D128005D;
+        Fri, 15 Jan 2021 09:10:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1610730627;
+        bh=xRezMHxeSl+GO5HaRdmwnmMXlQPWEuyHU3WuQttC27Q=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=M0N6HV1gj4oLueTDraK9xEGp4+oVVGfxCI1eXGlsrd/bshdcnu6dxSg95khxrnEra
+         5jEojYVxEpYQpte/3pde2rdJb0rW9R4vuTWMExT1GyGz8s2kK3RM1U/Dzw6zSoSRz+
+         HJQYT0SMSwsoX2WSWDSQEYnmh6uf9JfIIE+d9HXE=
+Message-ID: <d80ad831d970e1c0828c8eb44ff5359bf07474b5.camel@HansenPartnership.com>
+Subject: Re: [PATCH v5 1/2] tpm: add sysfs exports for all banks of PCR
+ registers
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Greg KH <greg@kroah.com>, linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>, linux-api@vger.kernel.org
+Date:   Fri, 15 Jan 2021 09:10:25 -0800
+In-Reply-To: <YAE8fjt/lfYmEZxc@kernel.org>
+References: <20210113232634.23242-1-James.Bottomley@HansenPartnership.com>
+         <20210113232634.23242-2-James.Bottomley@HansenPartnership.com>
+         <X//55I26mxVQKKOE@kroah.com>
+         <ce0ce0c5b3b66e2b1506ab9c4f10ffbbcfa648d8.camel@HansenPartnership.com>
+         <YAE8fjt/lfYmEZxc@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210114204334.GK331610@dread.disaster.area>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jan 15, 2021 at 07:43:34AM +1100, Dave Chinner wrote:
-> > That sounds neat.  AFAICT, the VFS passes the filesystem a mount userns
-> > structure, which is then carried down the call stack to whatever
-> > functions actually care about mapping kernel [ug]ids to their ondisk
-> > versions?
+On Fri, 2021-01-15 at 08:55 +0200, Jarkko Sakkinen wrote:
+> On Thu, Jan 14, 2021 at 04:21:08PM -0800, James Bottomley wrote:
+> > On Thu, 2021-01-14 at 08:59 +0100, Greg KH wrote:
+[...]
+> > > Please use sysfs_emit() and sysfs_emit_at() for new sysfs files.
 > > 
-> > Does quota still work after this patchset is applied?  There isn't any
-> > mention of that in the cover letter and I don't see a code patch, so
-> > does that mean everything just works?  I'm particularly curious about
-> > whether there can exist processes with CAP_SYS_ADMIN and an idmapped
-> > mount?  Syscalls like bulkstat and quotactl present file [ug]ids to
-> > programs, but afaict there won't be any translating going on?
+> > Hey these interfaces were added after this patch began life.  But
+> > looking at sysfs_emit_at() I've got to say "aah ... don't you guys
+> > ever read rusty's guide to interfaces?" an interface which takes in
+> > an absolute page position but returns a relative offset to the
+> > position it took in is asking for people to get it wrong.  You
+> > should always be consistent about uses for inputs and
+> > outputs.  Basically the only way you can ever use sysfs_emit_at in
+> > a show routine is as
+> > 
+> > offset += sysfs_emit_at(buf, offset, ...);
+> > 
+> > because you always need to track the absolute offset.
+> > 
+> > It looks like we already have a couple of bugs in the kernel
+> > introduced by this confusion ...  return sysfs_emit() vs return
+> > sysfs_emit_at() being the most tricky ...
 > 
-> bulkstat is not allowed inside user namespaces. It's an init
-> namespace only thing because it provides unchecked/unbounded access
-> to all inodes in the filesystem, not just those contained within a
-> specific mount container.
-> 
-> Hence I don't think bulkstat output (and other initns+root only
-> filesystem introspection APIs) should be subject to or concerned
-> about idmapping.
+> How is using sysfs_emit() different from using snprintf() for the
+> caller, ignoring the added safety measures? I'm new to this API.
 
-That is what the capabilities are designed for and we already check
-for them.
+Using the sprintX variants you maintain a cursor pointer, so they all
+look like
+
+char *cursor = buf;
+
+...
+
+cursor += sprintX(cursor, "...", ...
+
+...
+
+return cursor - buf;
+
+So the input is a relative cursor and the output is the additional
+offset.  I'm not claiming it's the best interface but it is hard to get
+wrong, just that if we're going to force a new interface we should make
+it much better.
+
+with sysfs_emit_at you use an offset "cursor" but it's hard to know
+without reading the function how to do it because the return is
+relative rather than absolute.  To have an interface it would be hard
+to misuse, I think the best way would be to take a pointer to the
+offset and adjust it after use, so
+
+sysfs_emit_at(buf, &offset, ...);
+
+That way it returns void so you can't use it in place of 
+
+return sysfs_emit()
+
+And you don't have to worry about whether the return is absolute or
+relative because it adjusts the pointer for you.
+
+The whole point about Rusty and interfaces is that if you are going to
+invent new interfaces you should make them easy to get right and hard
+to misuse.  A function you can't figure out how to use until you read
+the source is about 2/10 on the rusty scale:
+
+https://ozlabs.org/~rusty/index.cgi/tech/2008-03-30.html
+
+James
+
+
