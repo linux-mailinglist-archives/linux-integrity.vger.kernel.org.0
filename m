@@ -2,188 +2,167 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB072F6F66
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 01:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A742F72AB
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 07:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731073AbhAOAVw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Jan 2021 19:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S1726528AbhAOGD1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Jan 2021 01:03:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729277AbhAOAVw (ORCPT
+        with ESMTP id S1726402AbhAOGDZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Jan 2021 19:21:52 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22775C061757;
-        Thu, 14 Jan 2021 16:21:12 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 4BC6012805DF;
-        Thu, 14 Jan 2021 16:21:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1610670070;
-        bh=Z/80WxnmyVN4MNwcV/6bLJbZSolw+PaNjpJ9lPpv6P8=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=MBOLz1iB/s79Gv+orJ5+EYX8c2m/T3briSUViECx0fGz16Vi+01KRNQrNFca+y3C7
-         zzAkEb6/2sHCp1rjGPNFvLmYWQc3b8Md6DoiaPOsyzaivjIOAqtiWDvcCxObS+0pRt
-         CyCQEwrQ83e/VDgkbBSVDXykDmoP8Jx0qu5Cazus=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tliCG-qvlkpv; Thu, 14 Jan 2021 16:21:10 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id D551A12805D9;
-        Thu, 14 Jan 2021 16:21:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1610670070;
-        bh=Z/80WxnmyVN4MNwcV/6bLJbZSolw+PaNjpJ9lPpv6P8=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=MBOLz1iB/s79Gv+orJ5+EYX8c2m/T3briSUViECx0fGz16Vi+01KRNQrNFca+y3C7
-         zzAkEb6/2sHCp1rjGPNFvLmYWQc3b8Md6DoiaPOsyzaivjIOAqtiWDvcCxObS+0pRt
-         CyCQEwrQ83e/VDgkbBSVDXykDmoP8Jx0qu5Cazus=
-Message-ID: <ce0ce0c5b3b66e2b1506ab9c4f10ffbbcfa648d8.camel@HansenPartnership.com>
-Subject: Re: [PATCH v5 1/2] tpm: add sysfs exports for all banks of PCR
- registers
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Greg KH <greg@kroah.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-api@vger.kernel.org
-Date:   Thu, 14 Jan 2021 16:21:08 -0800
-In-Reply-To: <X//55I26mxVQKKOE@kroah.com>
-References: <20210113232634.23242-1-James.Bottomley@HansenPartnership.com>
-         <20210113232634.23242-2-James.Bottomley@HansenPartnership.com>
-         <X//55I26mxVQKKOE@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 15 Jan 2021 01:03:25 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610DAC061757
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Jan 2021 22:02:45 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id f17so9103234ljg.12
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Jan 2021 22:02:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MDmlV62xy2dTAa7jUaW4qdfTp5nhVCOQRSmVDFfq7CU=;
+        b=P3f/TC0N21PLslxgUMkEFSMq6IEjaNybcJJZ9sGTGnSYNOG2usJJTVflhsSmi4hqHR
+         KN06JeUoyNa7d3JQCTiClZLNTEcyDizNR63bHhj/nr66vJLqBVq0wsG6z/M0+ht2q9QW
+         aGskVR2SNoz2AmO8Ad2lStOC76v9OnGDq/QyQ+wISQgNLdZx7kcJkH+Uz2V+JXLJ78mW
+         BXRHu0W6VcWo1rVP/TqK9xCMkJE3QIgdaDSJqdhEcf7YqGQkxJ7SH9gRjTFEy9FslFfb
+         /4ZCr3zhKywmBqS6j721detK5gmAfBUoyFS5OZt72xdBTeJ81NKxZ0c6BjI9gc+8hXCC
+         1/QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MDmlV62xy2dTAa7jUaW4qdfTp5nhVCOQRSmVDFfq7CU=;
+        b=h3TtBDyLo+wwzoLhalCowbw7ZdN8SNt4yUTI6R4U72qOKZFwGIlymhgG6nnphFX8az
+         RtVrLm3DFWmHddGuBJHvhCv2nHUsRLXVemInj3WkbGK+6sqkzgJWbhqr/fxIe/U+NPS+
+         jawVpyG+rJggs9z71o2mNxqiCB1FXdk6IfdZAwqddF+tVy/QU2BK8aRlium562yuWteO
+         Hl8pG8KDrZrtGt2Au2VoT3XMQ/XsgnU6smIz2GhE9D5MK8MZLFX6ivH4EbgslCNs+oU4
+         DfRP5z5QxXUS2z3bz4+Qtdysm/KS4KJifAKYJqPqWBYGxkF++Mu0VKLF7ND2PcHJuPiQ
+         qg1Q==
+X-Gm-Message-State: AOAM533bmYiyORk7w5iH0W6r0NXEAxeTB8b7CAg/UlRiKuTHc0IM6Xk5
+        BrGVkvGK5FjhEytRQTyMpkr61E0h1UAFGCqzx5T71w==
+X-Google-Smtp-Source: ABdhPJx95UKtrbv3RMWAwaHdwARhnz6c9CWvdsRsZhfDyk0HF1CL0Rx8irqQzcSP9Qi0gnaJ8BTByLuHRW09qLnJd7M=
+X-Received: by 2002:a2e:2242:: with SMTP id i63mr4467220lji.343.1610690563696;
+ Thu, 14 Jan 2021 22:02:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
+ <1604419306-26105-3-git-send-email-sumit.garg@linaro.org> <X/x+N0fgrzIZTeNi@kernel.org>
+ <CAFA6WYOUvWAZtYfR4q8beZFkX-CtdxqwJaRQM+GHNMDfQiEWOA@mail.gmail.com> <X/+m6+m2/snYj9Vc@kernel.org>
+In-Reply-To: <X/+m6+m2/snYj9Vc@kernel.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 15 Jan 2021 11:32:31 +0530
+Message-ID: <CAFA6WYNyirit_AFhoE+XR9PHw=OjRgEdXDqz1uanj_SN2NXeMw@mail.gmail.com>
+Subject: Re: [PATCH v8 2/4] KEYS: trusted: Introduce TEE based Trusted Keys
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        Luke Hinds <lhinds@redhat.com>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2021-01-14 at 08:59 +0100, Greg KH wrote:
-> On Wed, Jan 13, 2021 at 03:26:33PM -0800, James Bottomley wrote:
-> > Create sysfs per hash groups with 24 PCR files in them one group,
-> > named pcr-<hash>, for each agile hash of the TPM.  The files are
-> > plugged in to a PCR read function which is TPM version agnostic, so
-> > this works also for TPM 1.2 but the hash is only sha1 in that case.
-> > 
-> > Note: the macros used to create the hashes emit spurious checkpatch
-> > warnings.  Do not try to "fix" them as checkpatch recommends,
-> > otherwise
-> > they'll break.
-> > 
-> > Signed-off-by: James Bottomley <
-> > James.Bottomley@HansenPartnership.com>
-> > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> > Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-> > 
-> > ---
-> > 
-> > v2: fix TPM 1.2 legacy links failure
-> > v3: fix warn on and add note to tpm_algorithms
-> > v4: reword commit and add tested-by
-> > v5: algorithm spelling fix WARN->dev_err
-> > ---
-> >  drivers/char/tpm/tpm-sysfs.c | 179
-> > +++++++++++++++++++++++++++++++++++
-> >  include/linux/tpm.h          |   9 +-
-> >  2 files changed, 187 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-
-> > sysfs.c
-> > index e2ff0b273a0f..63f03cfb8e6a 100644
-> > --- a/drivers/char/tpm/tpm-sysfs.c
-> > +++ b/drivers/char/tpm/tpm-sysfs.c
-> > @@ -337,11 +337,190 @@ static const struct attribute_group
-> > tpm2_dev_group = {
-> >  	.attrs = tpm2_dev_attrs,
-> >  };
-> >  
-> > +struct tpm_pcr_attr {
-> > +	int alg_id;
-> > +	int pcr;
-> > +	struct device_attribute attr;
-> > +};
-> > +
-> > +#define to_tpm_pcr_attr(a) container_of(a, struct tpm_pcr_attr,
-> > attr)
-> > +
-> > +static ssize_t pcr_value_show(struct device *dev,
-> > +			      struct device_attribute *attr,
-> > +			      char *buf)
-> > +{
-> > +	struct tpm_pcr_attr *ha = to_tpm_pcr_attr(attr);
-> > +	struct tpm_chip *chip = to_tpm_chip(dev);
-> > +	struct tpm_digest digest;
-> > +	int i;
-> > +	int digest_size = 0;
-> > +	int rc;
-> > +	char *str = buf;
-> > +
-> > +	for (i = 0; i < chip->nr_allocated_banks; i++)
-> > +		if (ha->alg_id == chip->allocated_banks[i].alg_id)
-> > +			digest_size = chip-
-> > >allocated_banks[i].digest_size;
-> > +	/* should never happen */
-> > +	if (!digest_size)
-> > +		return -EINVAL;
-> > +
-> > +	digest.alg_id = ha->alg_id;
-> > +	rc = tpm_pcr_read(chip, ha->pcr, &digest);
-> > +	if (rc)
-> > +		return rc;
-> > +	for (i = 0; i < digest_size; i++)
-> > +		str += sprintf(str, "%02X", digest.digest[i]);
-> > +	str += sprintf(str, "\n");
-> 
-> Please use sysfs_emit() and sysfs_emit_at() for new sysfs files.
+On Thu, 14 Jan 2021 at 07:35, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, Jan 13, 2021 at 04:47:00PM +0530, Sumit Garg wrote:
+> > Hi Jarkko,
+> >
+> > On Mon, 11 Jan 2021 at 22:05, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > >
+> > > On Tue, Nov 03, 2020 at 09:31:44PM +0530, Sumit Garg wrote:
+> > > > Add support for TEE based trusted keys where TEE provides the functionality
+> > > > to seal and unseal trusted keys using hardware unique key.
+> > > >
+> > > > Refer to Documentation/tee.txt for detailed information about TEE.
+> > > >
+> > > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> > >
+> > > I haven't yet got QEMU environment working with aarch64, this produces
+> > > just a blank screen:
+> > >
+> > > ./output/host/usr/bin/qemu-system-aarch64 -M virt -cpu cortex-a53 -smp 1 -kernel output/images/Image -initrd output/images/rootfs.cpio -serial stdio
+> > >
+> > > My BuildRoot fork for TPM and keyring testing is located over here:
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/buildroot-tpmdd.git/
+> > >
+> > > The "ARM version" is at this point in aarch64 branch. Over time I will
+> > > define tpmdd-x86_64 and tpmdd-aarch64 boards and everything will be then
+> > > in the master branch.
+> > >
+> > > To create identical images you just need to
+> > >
+> > > $ make tpmdd_defconfig && make
+> > >
+> > > Can you check if you see anything obviously wrong? I'm eager to test this
+> > > patch set, and in bigger picture I really need to have ready to run
+> > > aarch64 environment available.
+> >
+> > I would rather suggest you to follow steps listed here [1] as to test
+> > this feature on Qemu aarch64 we need to build firmwares such as TF-A,
+> > OP-TEE, UEFI etc. which are all integrated into OP-TEE Qemu build
+> > system [2]. And then it would be easier to migrate them to your
+> > buildroot environment as well.
+> >
+> > [1] https://lists.trustedfirmware.org/pipermail/op-tee/2020-May/000027.html
+> > [2] https://optee.readthedocs.io/en/latest/building/devices/qemu.html#qemu-v8
+> >
+> > -Sumit
+>
+> Can you provide 'keyctl_change'? Otherwise, the steps are easy to follow.
+>
 
-Hey these interfaces were added after this patch began life.  But
-looking at sysfs_emit_at() I've got to say "aah ... don't you guys ever
-read rusty's guide to interfaces?" an interface which takes in an
-absolute page position but returns a relative offset to the position it
-took in is asking for people to get it wrong.  You should always be
-consistent about uses for inputs and outputs.  Basically the only way
-you can ever use sysfs_emit_at in a show routine is as
+$ cat keyctl_change
+diff --git a/common.mk b/common.mk
+index aeb7b41..663e528 100644
+--- a/common.mk
++++ b/common.mk
+@@ -229,6 +229,7 @@ BR2_PACKAGE_OPTEE_TEST_SDK ?= $(OPTEE_OS_TA_DEV_KIT_DIR)
+ BR2_PACKAGE_OPTEE_TEST_SITE ?= $(OPTEE_TEST_PATH)
+ BR2_PACKAGE_STRACE ?= y
+ BR2_TARGET_GENERIC_GETTY_PORT ?= $(if
+$(CFG_NW_CONSOLE_UART),ttyAMA$(CFG_NW_CONSOLE_UART),ttyAMA0)
++BR2_PACKAGE_KEYUTILS := y
 
-offset += sysfs_emit_at(buf, offset, ...);
+ # All BR2_* variables from the makefile or the environment are appended to
+ # ../out-br/extra.conf. All values are quoted "..." except y and n.
+diff --git a/kconfigs/qemu.conf b/kconfigs/qemu.conf
+index 368c18a..832ab74 100644
+--- a/kconfigs/qemu.conf
++++ b/kconfigs/qemu.conf
+@@ -20,3 +20,5 @@ CONFIG_9P_FS=y
+ CONFIG_9P_FS_POSIX_ACL=y
+ CONFIG_HW_RANDOM=y
+ CONFIG_HW_RANDOM_VIRTIO=y
++CONFIG_TRUSTED_KEYS=y
++CONFIG_ENCRYPTED_KEYS=y
 
-because you always need to track the absolute offset.
+> After I've successfully tested 2/4, I'd suggest that you roll out one more
+> version and CC the documentation patch to Elaine and Mini, and clearly
+> remark in the commit message that TEE is a standard, with a link to the
+> specification.
+>
 
-It looks like we already have a couple of bugs in the kernel introduced
-by this confusion ...  return sysfs_emit() vs return sysfs_emit_at()
-being the most tricky ...
+Sure, I will roll out the next version after your testing.
 
-> > +/* ignore checkpatch warning about trailing ; in macro. */
-> > +#define PCR_ATTR(_alg, _hash, _pcr)				
-> >    \
-> > +	static struct tpm_pcr_attr dev_attr_pcr_##_hash##_##_pcr = {	
-> > \
-> > +		.alg_id = _alg,					   
-> > \
-> > +		.pcr = _pcr,					   
-> > \
-> > +		.attr = {					   \
-> > +			.attr = {				   \
-> > +				.name = __stringify(_pcr),	   \
-> > +				.mode = 0444			   
-> > \
-> > +			},					   \
-> > +			.show = pcr_value_show			   
-> > \
-> 
-> Can you use __ATTR_RO()?  "open" coding the sysfs mode is frowned
-> apon these days.
+-Sumit
 
-No because the .show function is the same for every attribute even
-though the name is different.  Somewhere way back at the beginning of
-this there was a thread about trying to use the ATTR macros, but the
-problem is there are multiple hash banks that each want files called
-"1" "2" and so on ... we just can't structure the show functions to be
-one per the entire attribute set without either including the hash in
-the name, which we don't want because it's in the directory, or
-creating clashes in the .show file.
-
-James
-
-
+> /Jarkko
