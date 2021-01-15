@@ -2,127 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0326B2F756C
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 10:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACA82F7AD4
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 13:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729056AbhAOJ3Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Jan 2021 04:29:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43310 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726852AbhAOJ3X (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Jan 2021 04:29:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 685E923436;
-        Fri, 15 Jan 2021 09:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610702922;
-        bh=apGADtKlrfa4YYghHsGMEpjHQn9bjjZ8mMzl0uMAbUU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jr3i3MiraGrjKs3dkoOrrhe26xY9WZ3gv63Y830+mFmZ9n0uMvXfHG5CfK0CSGga8
-         zL01ymSiNWnvu6IzJFAvpoE2annb2KlC3299fymNakZtiTOLxPTALNu35jM0mY3i8n
-         qX3R7NGB93+EHg7HbgW/NLExg7g6WT3KIj/RkUxthccdljsyQnz+PBYBHRH3TjgRL/
-         SS/TcvR+RqeWK0R8RasrsAY6JlMl7dLojuPzmSSzhZFMN8fe0yWSCODXxhzHcD6Na6
-         6vWWIm+8FEoeDL0D4swTkpWSqkBXBBgNfQH1/j8FyojawxRoGbSKfAUjS+qCP5o6it
-         uAjUDiy5Mklpg==
-Date:   Fri, 15 Jan 2021 11:28:35 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 00/10] Enable root to update the blacklist keyring
-Message-ID: <YAFgQ1SN24iFujjx@kernel.org>
-References: <20210114151909.2344974-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210114151909.2344974-1-mic@digikod.net>
+        id S2387547AbhAOMzo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Jan 2021 07:55:44 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57162 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387432AbhAOMzh (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 15 Jan 2021 07:55:37 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10FChZkS069087;
+        Fri, 15 Jan 2021 07:54:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=zr8ucYm/euG5aZ/Crxkx/ZKJSlbjbnPNJdYEzl/ZSRM=;
+ b=aXcegOv87io7bFkwnJuL0pg8eHaQjh9qE/7XDrZMn0hPDf9YZ9CXmdw8R7sKxvq5V4NS
+ V/f8fgoM6mvrlTvZ9toRlVI6yPPgS+K6Wq9dFylsdsiLKLTJhsqR9303KIUZoTUfMiMk
+ mN73IHQEcWbmhZ1sMaPKy1tSGZDv0x7+ydrnUYjbAmdxAg8LRTBmtroV/FgIXDgd38tl
+ GCorkH93Mr6+giSfYjGQ95q6oSDMul+U2KndiK2nR8NU9cH+2eBOcz50z+0bwTrSCuSE
+ jGYwq02jQZWnA2C+dE2VjrQ7uaYjXi1YaMHPf1rDvsMgixCO6SrPOLC9wceAQcKF7R51 Tg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 363ba808u9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jan 2021 07:54:52 -0500
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10FCspkm150385;
+        Fri, 15 Jan 2021 07:54:51 -0500
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 363ba808t1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jan 2021 07:54:51 -0500
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10FCrcRI016803;
+        Fri, 15 Jan 2021 12:54:49 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 35y448c04e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Jan 2021 12:54:49 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10FCsfKd27656698
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Jan 2021 12:54:41 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C723C5204F;
+        Fri, 15 Jan 2021 12:54:46 +0000 (GMT)
+Received: from sig-9-65-220-78.ibm.com (unknown [9.65.220.78])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7B1D05204E;
+        Fri, 15 Jan 2021 12:54:43 +0000 (GMT)
+Message-ID: <5189c15054885863b1b5cb86a43bec09725d8650.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 0/8] IMA: support for measuring kernel integrity
+ critical data
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
+        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
+        paul@paul-moore.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dm-devel@redhat.com
+Date:   Fri, 15 Jan 2021 07:54:42 -0500
+In-Reply-To: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
+References: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-15_07:2021-01-15,2021-01-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ clxscore=1015 mlxscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101150077
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 04:18:59PM +0100, Mickaël Salaün wrote:
-> This third patch series includes back three fix patches taken from the first
-> series (and cherry-picked from David Howells's tree [1]), and one cosmetic fix
-> from Alex Shi which helps avoid future conflicts.  I also added some Acked-by
-> and improved comments.  As requested, this series is based on v5.11-rc3.
+On Thu, 2021-01-07 at 20:07 -0800, Tushar Sugandhi wrote:
+> IMA measures files and buffer data such as keys, command-line arguments
+> passed to the kernel on kexec system call, etc.  While these measurements
+> are necessary for monitoring and validating the integrity of the system,
+> they are not sufficient.  Various data structures, policies, and states
+> stored in kernel memory also impact the integrity of the system.
+> Several kernel subsystems contain such integrity critical data -
+> e.g.  LSMs like SELinux, AppArmor etc.  or device-mapper targets like
+> dm-crypt, dm-verity, dm-integrity etc.  These kernel subsystems help
+> protect the integrity of a system.  Their integrity critical data is not
+> expected to change frequently during run-time.  Some of these structures
+> cannot be defined as __ro_after_init, because they are initialized later.
 > 
-> The goal of these patches is to add a new configuration option to enable the
-> root user to load signed keys in the blacklist keyring.  This keyring is useful
-> to "untrust" certificates or files.  Enabling to safely update this keyring
-> without recompiling the kernel makes it more usable.
+> For a given system, various external services/infrastructure tools
+> (including the attestation service) interact with it - both during the
+> setup and during rest of the system run-time.  They share sensitive data
+> and/or execute critical workload on that system.  The external services
+> may want to verify the current run-time state of the relevant kernel
+> subsystems before fully trusting the system with business critical
+> data/workload.  For instance, verifying that SELinux is in "enforce" mode
+> along with the expected policy, disks are encrypted with a certain
+> configuration, secure boot is enabled etc.
 > 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=keys-fixes
+> This series provides the necessary IMA functionality for kernel
+> subsystems to ensure their configuration can be measured:
+>   - by kernel subsystems themselves,
+>   - in a tamper resistant way,
+>   - and re-measured - triggered on state/configuration change.
 > 
-> Previous patch series:
-> https://lore.kernel.org/lkml/20201211190330.2586116-1-mic@digikod.net/
-> 
-> Regards,
-> 
-> Alex Shi (1):
->   certs/blacklist: fix kernel doc interface issue
-> 
-> David Howells (1):
->   certs: Fix blacklist flag type confusion
-> 
-> Mickaël Salaün (8):
->   certs: Fix blacklisted hexadecimal hash string check
->   PKCS#7: Fix missing include
->   certs: Replace K{U,G}IDT_INIT() with GLOBAL_ROOT_{U,G}ID
->   certs: Make blacklist_vet_description() more strict
->   certs: Factor out the blacklist hash creation
->   certs: Check that builtin blacklist hashes are valid
->   certs: Allow root user to append signed hashes to the blacklist
->     keyring
->   tools/certs: Add print-cert-tbs-hash.sh
-> 
->  MAINTAINERS                                   |   2 +
->  certs/.gitignore                              |   1 +
->  certs/Kconfig                                 |  10 +
->  certs/Makefile                                |  15 +-
->  certs/blacklist.c                             | 217 ++++++++++++++----
->  certs/system_keyring.c                        |   5 +-
->  crypto/asymmetric_keys/x509_public_key.c      |   3 +-
->  include/keys/system_keyring.h                 |  14 +-
->  include/linux/key.h                           |   1 +
->  include/linux/verification.h                  |   2 +
->  scripts/check-blacklist-hashes.awk            |  37 +++
->  security/integrity/ima/ima_mok.c              |   4 +-
->  .../platform_certs/keyring_handler.c          |  26 +--
->  security/keys/key.c                           |   2 +
->  tools/certs/print-cert-tbs-hash.sh            |  91 ++++++++
->  15 files changed, 345 insertions(+), 85 deletions(-)
->  create mode 100755 scripts/check-blacklist-hashes.awk
->  create mode 100755 tools/certs/print-cert-tbs-hash.sh
-> 
-> 
-> base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
-> -- 
-> 2.30.0
-> 
-> 
+> This patch set:
+>   - defines a new IMA hook ima_measure_critical_data() to measure
+>     integrity critical data,
+>   - limits the critical data being measured based on a label,
+>   - defines a builtin critical data measurement policy,
+>   - and includes an SELinux consumer of the new IMA critical data hook.
 
-Thank you. Unfortunately no time to review this anymore this week but I
-sanity checked that this applies cleanly now, so should be easy to get on
-testing this series next week:
+Thanks Tushar, Lakshmi.  This patch set is queued in the next-
+integrity-testing branch.
 
-$ git-pw series apply 414691
-Applying: certs/blacklist: fix kernel doc interface issue
-Applying: certs: Fix blacklisted hexadecimal hash string check
-Applying: PKCS#7: Fix missing include
-Applying: certs: Fix blacklist flag type confusion
-Applying: certs: Replace K{U,G}IDT_INIT() with GLOBAL_ROOT_{U,G}ID
-Applying: certs: Make blacklist_vet_description() more strict
-Applying: certs: Factor out the blacklist hash creation
-Applying: certs: Check that builtin blacklist hashes are valid
-Applying: certs: Allow root user to append signed hashes to the blacklist keyring
-Applying: tools/certs: Add print-cert-tbs-hash.sh
+Mimi
 
-/Jarkko
