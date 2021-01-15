@@ -2,125 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACA82F7AD4
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 13:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2372F7C18
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 14:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387547AbhAOMzo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Jan 2021 07:55:44 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57162 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387432AbhAOMzh (ORCPT
+        id S2387936AbhAONJP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Jan 2021 08:09:15 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20524 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732697AbhAONJN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Jan 2021 07:55:37 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10FChZkS069087;
-        Fri, 15 Jan 2021 07:54:52 -0500
+        Fri, 15 Jan 2021 08:09:13 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10FD4XRt124176;
+        Fri, 15 Jan 2021 08:08:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=zr8ucYm/euG5aZ/Crxkx/ZKJSlbjbnPNJdYEzl/ZSRM=;
- b=aXcegOv87io7bFkwnJuL0pg8eHaQjh9qE/7XDrZMn0hPDf9YZ9CXmdw8R7sKxvq5V4NS
- V/f8fgoM6mvrlTvZ9toRlVI6yPPgS+K6Wq9dFylsdsiLKLTJhsqR9303KIUZoTUfMiMk
- mN73IHQEcWbmhZ1sMaPKy1tSGZDv0x7+ydrnUYjbAmdxAg8LRTBmtroV/FgIXDgd38tl
- GCorkH93Mr6+giSfYjGQ95q6oSDMul+U2KndiK2nR8NU9cH+2eBOcz50z+0bwTrSCuSE
- jGYwq02jQZWnA2C+dE2VjrQ7uaYjXi1YaMHPf1rDvsMgixCO6SrPOLC9wceAQcKF7R51 Tg== 
+ bh=llJi/OMxHgn3H9Db7HWf4+KNzFiqFCWEBYm3DrO1KZ8=;
+ b=T2pgB+3ox1sTrn+4EPHbnVLShUJT7Z8S0dwBAul4yh1ZaeAJoqXYNp8GBBCaj5sQJnR3
+ xXE4I/e+GKzIGTlvtWJkWRZ/Z5v6YDM1r+bfsYheuFqegqTH4UBNR1vCpefIkZuzAP/h
+ 4TPgKCEUdl16vdVlqsD+q73MemzRAOOWxxHYvy9nD2kWxtYPMJZ158mUeyFW6LgpXcJy
+ dboaMvfe9PA+r4moTHQw1RRqxdx+1Xotxqjwp93VyoUk+ExmA6m0YsQXzsmHTnToEQq/
+ nmA1/qGSmXa/71TfE6JWo1yJk/9PqbsP3DQDsbm9JgayUpOUz8K9HRThqXtWpeWDBQAF Zw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 363ba808u9-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 363af5t65b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jan 2021 07:54:52 -0500
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10FCspkm150385;
-        Fri, 15 Jan 2021 07:54:51 -0500
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 363ba808t1-1
+        Fri, 15 Jan 2021 08:08:01 -0500
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10FD5A5s127151;
+        Fri, 15 Jan 2021 08:07:23 -0500
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 363af5t5gu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jan 2021 07:54:51 -0500
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10FCrcRI016803;
-        Fri, 15 Jan 2021 12:54:49 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 35y448c04e-1
+        Fri, 15 Jan 2021 08:07:23 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10FD6Wae005060;
+        Fri, 15 Jan 2021 13:07:04 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 35y448fr3a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jan 2021 12:54:49 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10FCsfKd27656698
+        Fri, 15 Jan 2021 13:07:04 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10FD71Ai35848662
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 Jan 2021 12:54:41 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C723C5204F;
-        Fri, 15 Jan 2021 12:54:46 +0000 (GMT)
+        Fri, 15 Jan 2021 13:07:01 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9AEC64C04E;
+        Fri, 15 Jan 2021 13:07:01 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 56C6E4C046;
+        Fri, 15 Jan 2021 13:06:58 +0000 (GMT)
 Received: from sig-9-65-220-78.ibm.com (unknown [9.65.220.78])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7B1D05204E;
-        Fri, 15 Jan 2021 12:54:43 +0000 (GMT)
-Message-ID: <5189c15054885863b1b5cb86a43bec09725d8650.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 0/8] IMA: support for measuring kernel integrity
- critical data
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 15 Jan 2021 13:06:58 +0000 (GMT)
+Message-ID: <e1c072eba237e75fc687e9318f65e7395e2ca00b.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 09/10] certs: Allow root user to append signed hashes
+ to the blacklist keyring
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
-        agk@redhat.com, snitzer@redhat.com, gmazyland@gmail.com,
-        paul@paul-moore.com
-Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
-        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Date:   Fri, 15 Jan 2021 07:54:42 -0500
-In-Reply-To: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
-References: <20210108040708.8389-1-tusharsu@linux.microsoft.com>
+To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Date:   Fri, 15 Jan 2021 08:06:57 -0500
+In-Reply-To: <20210114151909.2344974-10-mic@digikod.net>
+References: <20210114151909.2344974-1-mic@digikod.net>
+         <20210114151909.2344974-10-mic@digikod.net>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2021-01-15_07:2021-01-15,2021-01-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 priorityscore=1501 suspectscore=0 adultscore=0
- clxscore=1015 mlxscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ bulkscore=0 mlxlogscore=834 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 suspectscore=0 impostorscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2101150077
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2021-01-07 at 20:07 -0800, Tushar Sugandhi wrote:
-> IMA measures files and buffer data such as keys, command-line arguments
-> passed to the kernel on kexec system call, etc.  While these measurements
-> are necessary for monitoring and validating the integrity of the system,
-> they are not sufficient.  Various data structures, policies, and states
-> stored in kernel memory also impact the integrity of the system.
-> Several kernel subsystems contain such integrity critical data -
-> e.g.  LSMs like SELinux, AppArmor etc.  or device-mapper targets like
-> dm-crypt, dm-verity, dm-integrity etc.  These kernel subsystems help
-> protect the integrity of a system.  Their integrity critical data is not
-> expected to change frequently during run-time.  Some of these structures
-> cannot be defined as __ro_after_init, because they are initialized later.
-> 
-> For a given system, various external services/infrastructure tools
-> (including the attestation service) interact with it - both during the
-> setup and during rest of the system run-time.  They share sensitive data
-> and/or execute critical workload on that system.  The external services
-> may want to verify the current run-time state of the relevant kernel
-> subsystems before fully trusting the system with business critical
-> data/workload.  For instance, verifying that SELinux is in "enforce" mode
-> along with the expected policy, disks are encrypted with a certain
-> configuration, secure boot is enabled etc.
-> 
-> This series provides the necessary IMA functionality for kernel
-> subsystems to ensure their configuration can be measured:
->   - by kernel subsystems themselves,
->   - in a tamper resistant way,
->   - and re-measured - triggered on state/configuration change.
-> 
-> This patch set:
->   - defines a new IMA hook ima_measure_critical_data() to measure
->     integrity critical data,
->   - limits the critical data being measured based on a label,
->   - defines a builtin critical data measurement policy,
->   - and includes an SELinux consumer of the new IMA critical data hook.
+Hi Mickaël,
 
-Thanks Tushar, Lakshmi.  This patch set is queued in the next-
-integrity-testing branch.
+On Thu, 2021-01-14 at 16:19 +0100, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
+> 
+> Add a kernel option SYSTEM_BLACKLIST_AUTH_UPDATE to enable the root user
+> to dynamically add new keys to the blacklist keyring.  This enables to
+> invalidate new certificates, either from being loaded in a keyring, or
+> from being trusted in a PKCS#7 certificate chain.  This also enables to
+> add new file hashes to be denied by the integrity infrastructure.
+> 
+> Being able to untrust a certificate which could have normaly been
+> trusted is a sensitive operation.  This is why adding new hashes to the
+> blacklist keyring is only allowed when these hashes are signed and
+> vouched by the builtin trusted keyring.  A blacklist hash is stored as a
+> key description.  The PKCS#7 signature of this description must be
+> provided as the key payload.
+> 
+> Marking a certificate as untrusted should be enforced while the system
+> is running.  It is then forbiden to remove such blacklist keys.
+> 
+> Update blacklist keyring and blacklist key access rights:
+> * allows the root user to search for a specific blacklisted hash, which
+>   make sense because the descriptions are already viewable;
+> * forbids key update;
+> * restricts kernel rights on the blacklist keyring to align with the
+>   root user rights.
+> 
+> See the help in tools/certs/print-cert-tbs-hash.sh provided by a
+> following commit.
+
+The design looks good.  I'm hoping to review/test at least this patch
+next week.
+
+thanks,
 
 Mimi
 
