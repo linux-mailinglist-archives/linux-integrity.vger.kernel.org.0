@@ -2,410 +2,265 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C288B2F7393
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 08:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7C82F74C4
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 09:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728526AbhAOHRs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Jan 2021 02:17:48 -0500
-Received: from mail-eopbgr40066.outbound.protection.outlook.com ([40.107.4.66]:38852
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727174AbhAOHRr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Jan 2021 02:17:47 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UvQpef8sUe3Kg4yM1LqytU3l+PDqeaf67Oby0MVJxtNsfzXjC+wQ5YKix5klxIEFLMqVOGGxgTYkqsqVOdGllWx5qP+yjcGxQEA9gqTm+X3S2ok3Lo64oAqJ/HGVF63WjLMT9caNFvQvDIMIWJTtUEQ42Drc1D5c1JdrUGZqe4boIKwqyH83h4b+M2LtiAk0UM1K26rWzbRx15v9QL2UnUA0vEI0zBlW/JOH5OKbsy8j8TPlJTqUynGXSReNkB2QlqOk0QZ6LCS610zPLenO5IBJkNHAsziaJNYSSu5Jjecpjsj1GZiYUa7aAGiv0ymlwiwGO5CojNJPPJKG2O5J3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9jw4pkyTzx8Nw+LHW7lnXCIoymb9FbHJd7faytF48aE=;
- b=DJNOspadusdLMD7xVfkXEdZOFRDCFMtDmpAJ/VxFAlDipJd4aISqPGASBpb/k3zavm9Cy4o3ozPPmGocwrEsgwDewwNqArtDrg+Ky2fuZbgYVBIPpa2I6XKzgo4vd2shY6dLbiYrxNOj/TY3W8m/6gA1hmMaBg+C+p02wd2elBk3UQZqN29UTti3i1DC/N+RJ3utnhpkpr8wDn7i29FZiyfXnuUnw15Vp7gVLdl/aYkIC8BS0anCjcNbGHu6D7zDsdFaUo1vubFZ7Wp3/toYVmVzJkTsYxwYP1LqQ7aUYl37GsMRSYvKDfdPjND7n9Z4Y3U9C0RskEkduXy0mLJ8CA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=siemens.onmicrosoft.com; s=selector1-siemens-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9jw4pkyTzx8Nw+LHW7lnXCIoymb9FbHJd7faytF48aE=;
- b=LgQ6EDUItSDZoYoyy9NddFdTZ0E5v+uNLBHmXi73XqSytQhyZFoe8LHLP8U++Tr2RnwaQKI/Ll5D03nvctR386n5DDAg0qjU9kaZT+Hfpv5HlCTIJ0miIILaTP9oo2cU8xyXpNc4idAqlBLOAxA/uLyQVaoBB+i7M6oTxMSZH9U=
-Received: from VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:d2::22)
- by VI1PR1001MB1152.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:6c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Fri, 15 Jan
- 2021 07:17:02 +0000
-Received: from VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::bc45:b6c:8cb5:b9f4]) by VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::bc45:b6c:8cb5:b9f4%3]) with mapi id 15.20.3763.012; Fri, 15 Jan 2021
- 07:17:02 +0000
-From:   "florian.manoel@siemens.com" <florian.manoel@siemens.com>
-To:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-CC:     "Fuchs, Andreas" <andreas.fuchs@sit.fraunhofer.de>,
-        "Peter.Huewe@infineon.com" <Peter.Huewe@infineon.com>
-Subject: AW: TPM V2: kernel panic on linux reboot
-Thread-Topic: TPM V2: kernel panic on linux reboot
-Thread-Index: AdbrC5vRfY3emgdzQJCNnKjYyzhKVAAAgKhw
-Date:   Fri, 15 Jan 2021 07:17:01 +0000
-Message-ID: <VI1PR10MB2559EA5D0EC208129AA503F684A70@VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM>
-References: <VI1PR10MB2559EB47FE26FA85EB4B4D4484A70@VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <VI1PR10MB2559EB47FE26FA85EB4B4D4484A70@VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Enabled=true;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SetDate=2021-01-15T07:16:59Z;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Method=Standard;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Name=restricted-default;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ActionId=036c5a56-a570-40ae-bbe8-79c2a8e028e9;
- MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ContentBits=0
-document_confidentiality: Restricted
-authentication-results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=siemens.com;
-x-originating-ip: [165.225.26.250]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 33889d4a-8b7d-41e9-58ee-08d8b9258e0e
-x-ms-traffictypediagnostic: VI1PR1001MB1152:
-x-microsoft-antispam-prvs: <VI1PR1001MB1152E69FD76100D8F549B67A84A70@VI1PR1001MB1152.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4uyTfza7FJ8txFxHIkgTEeRSNKWMl/B2+uVhlsi9tR4EHhcrzZwxkwLqYECYGAN1d6O0v5QZz7q0jXrtqYvdFuDH9cgbfWWJN+3QEw85NxpUsU+2XD5Gl0zfhFdcqNyq/yIXSY9SW6GQGREOKuPn9ecFzKC0iQE+eQWF/9RBWXMWWG/Ely661Xz0IzWuVzOltnA1nQ1hJEQHWyPD0Hn+jlH5K9lQXiTfGkXmwTF8pzW3T6fS6KULRu7WtIvQ+iTeR0FrBmUog9Kq4Iec9/Ev5Q49R4JzfueYXpKfM7Xhzd25EyedLbe6gIUv14RFQSBr93gQuIhUJlfen0o7jpwrxyGJxePKkuLXndYO2KyV+ek0KbCsyvUkcphG5xp2kLyoIc47FeUgyNOymfAl2ZhwhgZUMyyjXZXB5KUFcQW+oa1fiLfp4s4iN2s7UlkbuBki7dyad+rOWZl3NsgH6Rh2qtctD8xSAq2PAb1fk7wXNbmt3+tDjy6S2+pLaS1rUK/6PPYdj7b4kvLpfve/OQh0yQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(376002)(346002)(366004)(396003)(8936002)(66476007)(5660300002)(966005)(66574015)(66946007)(55236004)(83380400001)(9686003)(6916009)(8676002)(2906002)(478600001)(30864003)(6506007)(7696005)(76116006)(66556008)(64756008)(26005)(55016002)(86362001)(52536014)(316002)(186003)(71200400001)(54906003)(2940100002)(33656002)(66446008)(45080400002)(4326008)(2004002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?iso-8859-1?Q?diqs0dPwJaDlm/kd5CL1GhRmwFNxz9i/pvL9+IqXAdsFR7ZziZg6oPmxXW?=
- =?iso-8859-1?Q?AvY2A9WbeOhuTwAdRmEBpQIJdQmCbuqDkiU3sHXayvRlcTbIhiieLzIgTz?=
- =?iso-8859-1?Q?pw/nTaP/HEo8Ttk/QxwE5jPoBr6tq62N2iVL857GMIo+cl1emgzGU4GgQs?=
- =?iso-8859-1?Q?ED/Ll/HefjhU7lUS/c2glJdPGW7xcMC2A5NQfBCEiPJegWptFILgmyu8Bw?=
- =?iso-8859-1?Q?oBF08kUliZqoyeI3UXyfWnUyJYUmuZS4DMtU4lHGb6Q7KwGnZy8iA0aGH7?=
- =?iso-8859-1?Q?ld+/VRmsVBIOJSutuhLDf8/slGymPqt60MAI707nJ3nvl1fKOqnbl+bakC?=
- =?iso-8859-1?Q?+QCHfBAoWqstrflkrmDazDeqCAwKKcIxe58t9gvxxknW7UAVjcdP+IuTdZ?=
- =?iso-8859-1?Q?it+9YgaujdGuXhJj8CA3R9DQjcAyI5IXE5OOcRpn8gIB3xYpNbff0KCSb1?=
- =?iso-8859-1?Q?SVpB4URp0JnSi37fs/H6sxg4sYeyM1jL6S0ysOQi1JypnOsl9827pbEROj?=
- =?iso-8859-1?Q?mybFkP7nXaRmZ9JiHGNyqBTVM/R5UGEB2Lf5TB+p9bhSnLsvnn3WBDSC9s?=
- =?iso-8859-1?Q?NWWE7u07yblHt8Z3tOspELT0NTBbZlgKeIIKcPuH17Xdb/C810LsLojAyH?=
- =?iso-8859-1?Q?Xbu29SFVgvvVhckyCdKULvvDU2+ytzd7O3zjCZ4/eUauWr5buHKYZ/aE6z?=
- =?iso-8859-1?Q?f2SUakUwOa/OR23ppIpFxPInCamlBv0RpI+FmnVkPStBJKtgsALOFcB01g?=
- =?iso-8859-1?Q?TnQGZCk1hvO1oB2Vz6Sw8laBvVtYZFORJvbjmNgwTu72NO1xspx4snOpWt?=
- =?iso-8859-1?Q?Lf0gG1zbhHLAAhbZjivXu+vvyrjPGvRiPLZDcTs0ZqNUfbPlC27hEWw7jK?=
- =?iso-8859-1?Q?HnST1valQHF0zqROOSLXGnwVpFckmnHytP7BEpcWWImLfNI0b72z/SzrOG?=
- =?iso-8859-1?Q?3YOsXboE7MY+bLwlDOLhngnsbasIqc52KpMpxNlXBcoKCv0o5i0F4+9jvK?=
- =?iso-8859-1?Q?UvOUGBa4YQRQWPXG4=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1726439AbhAOI7Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Jan 2021 03:59:24 -0500
+Received: from mail.rosalinux.ru ([195.19.76.54]:46812 "EHLO mail.rosalinux.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726381AbhAOI7X (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 15 Jan 2021 03:59:23 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.rosalinux.ru (Postfix) with ESMTP id 2C880E25DECE5
+        for <linux-integrity@vger.kernel.org>; Fri, 15 Jan 2021 11:58:40 +0300 (MSK)
+Received: from mail.rosalinux.ru ([127.0.0.1])
+        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id T_lh7tMojXu2 for <linux-integrity@vger.kernel.org>;
+        Fri, 15 Jan 2021 11:58:39 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.rosalinux.ru (Postfix) with ESMTP id 2C151E25DECE7
+        for <linux-integrity@vger.kernel.org>; Fri, 15 Jan 2021 11:58:39 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rosalinux.ru 2C151E25DECE7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosalinux.ru;
+        s=A1AAD92A-9767-11E6-A27F-AC75C9F78EF4; t=1610701119;
+        bh=VMyqU5X5F142E5ER3KVzhrc1REsO3KbJDYc2yKbD1m8=;
+        h=From:To:Message-ID:Date:MIME-Version;
+        b=GF0JCqEuGrJgfbqiGg4swgORcmLC0V/j9dXVjJRHJ6eot2HEC6KHDqi8CyKmRV6MX
+         SRDe7HZzMZCXIP+5aMCDxftzOraSEPZGihpVt3AQXFVKTfrZoh4T1EtPfBdmHBScop
+         uXm52pJC9XeKFXK8kCVmlzOAlGw1HoiRSH5+bJ7bgM/Myp5T9i6uLEDnJ7Y5PvXibE
+         7nHHICUxNqblz7eDX2bBbR6GeHR0kq/ECo8UzKmAka+s9b50EPLZWGRydcWXDY5l74
+         4LiFoHd+guuOLk3AJc11916gqPKBDXinjdDeGn6ylHdeC5cYYVNXLmF5ucPB+RAEEV
+         foRtKeL7VaDsw==
+X-Virus-Scanned: amavisd-new at rosalinux.ru
+Received: from mail.rosalinux.ru ([127.0.0.1])
+        by localhost (mail.rosalinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id cCQIxIZgY94e for <linux-integrity@vger.kernel.org>;
+        Fri, 15 Jan 2021 11:58:39 +0300 (MSK)
+Received: from rosa2019.1 (broadband-90-154-71-126.ip.moscow.rt.ru [90.154.71.126])
+        by mail.rosalinux.ru (Postfix) with ESMTPSA id 0D357E25DECE5
+        for <linux-integrity@vger.kernel.org>; Fri, 15 Jan 2021 11:58:39 +0300 (MSK)
+Subject: Re: evmctl import -EPERM in initrd (dracut), but works after system
+ boot
+From:   Mikhail Novosyolov <m.novosyolov@rosalinux.ru>
+To:     linux-integrity <linux-integrity@vger.kernel.org>
+References: <297dc20a-8045-d945-351d-0e15c134ae71@rosalinux.ru>
+ <e7f819bb-d284-7843-dd8c-bbb20bb3d978@rosalinux.ru>
+Message-ID: <a4b5a350-b2a6-726e-8f5b-983b68ed5c31@rosalinux.ru>
+Date:   Fri, 15 Jan 2021 11:58:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33889d4a-8b7d-41e9-58ee-08d8b9258e0e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2021 07:17:01.4432
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mIJoN0BT8mmGrySf9HUotIhpfIyhTk1G0UGOSooIooRmJbvpNCSdEF9+R5qBDUwogeEau/KLNjT+kWLseGG1s4RvB3glT0vbQJSQRULluJI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR1001MB1152
+In-Reply-To: <e7f819bb-d284-7843-dd8c-bbb20bb3d978@rosalinux.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+13.01.2021 17:09, Mikhail Novosyolov =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> It is -EACCES, not -EPERM
+>
+> From strace inside initrd:
+>
+> 575=C2=A0=C2=A0 write(2, "Importing public key 5ac982c4 fr"..., 98) =3D=
+ 98
+> 575=C2=A0=C2=A0 add_key("asymmetric", NULL, "0\202\2\2040\202\1\356\240=
+\3\2\1\2\2\t\0\242\5\2726G\242\331\3220\f\6\10*\205\3\7"..., 648, 1311993=
+47) =3D -1 EACCES (Permission denied)
+> 575=C2=A0=C2=A0 write(2, "add_key failed\n", 15)=C2=A0 =3D 15
+> 575=C2=A0=C2=A0 write(2, "errno: Permission denied (13)\n", 30) =3D 30
+>
+> 13.01.2021 15:18, Mikhail Novosyolov =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> Hello
+>>
+>> I am trying to make IMA work properly and have faced a strange issue w=
+hich I cannot explain.
+>>
+>> What I want to do is load IMA policy from /etc/sysconfig/ima-policy in=
+ initrd (it is loaded OK) and then load a self-created public key, I crea=
+ted a pair of keys (using LibreSSL, patch for ima-evm-utils is ready, but=
+ I need to make everyting work), and I configured the kernel to make it p=
+ossible to load my own key which does not have to be signed with an in-ke=
+rnel key. EVM is not configured, only IMA.
+>>
+>> dracut's itegrity module [1] tries to load the public key inside initr=
+d, but receives -EPERM:
 
-Hi,
+I have found a workaround:
 
-this is my first post on this mailing list, so I briefly introduce myself. =
-I am Florian Mano=EBl, working at Siemens in Germany.
-I am currently on charge to implement a TPM V2 (Infineon slb9670, SPI conne=
-cted) on our custom board, named 'LPE9403', equipped with a processor 64-bi=
-t ARM NXP LS1043a.
-I already made some adjustment (defconfig in U-Boot and Linux, device tree,=
- init code in U-Boot).
-I have installed "tpm2-tools" using 'apt-get install'. I get to the point w=
-here the TPM is correctly detected and I can use some of the function like =
-tpm2_getrandom().
+add "KeyringMode=3Dshared" to /usr/lib/dracut/modules.d/98dracut-systemd/=
+dracut-pre-pivot.service
 
-However, when I execute the command 'reboot', it leads every time to a kern=
-el panic. The logs seems to indicate that something went wrong with the shu=
-tdown of the TPM.
-In the first time, I wrote to the mailing list of 'tpm2-tools' and got redi=
-rected here.
-Can you provide me support to fix this issue ?
-My config :
-- Processor 64-bit ARM NXP LS1043a
-- TPM V2 Infineon slb9670
-- linux kernel version: 4.19.144
+https://github.com/systemd/systemd/issues/5522 is what made me come to th=
+is workaround.
 
-Below the logs of the Linux boot + kernel panic :
-"
-Starting kernel ...
+But for now I do not fully understand why this helped and how to solve th=
+is problem properly.
 
-[=A0=A0=A0 0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd034=
-]
-[=A0=A0=A0 0.000000] Linux version 4.19.144-audis-std (builder@isar) (gcc v=
-ersion 8.3.0 (Debian 8.3.0-2)) #1 SMP PREEMPT Wed Dec 2 12:18:57 UTC 2020
-[=A0=A0=A0 0.000000] Machine model: Siemens LPE9403
+Seems that nobody uses dracut+integrity module+_ima keyring (not .ima)...
 
-/*
-Non relevant logs removed
-*/
+I've created a bug report in dracut to track this problem: https://github=
+.com/dracutdevs/dracut/issues/1007
 
-[=A0=A0=A0 2.240475] fsl-dspi 2100000.spi: registered master spi3
-[=A0=A0=A0 2.245980] spi spi3.3: setup mode 0, 8 bits/w, 18500000 Hz max --=
-> 0
-[=A0=A0=A0 2.258637] tpm_tis_spi spi3.3: 2.0 TPM (device-id 0x1B, rev-id 22=
-)
-[=A0=A0=A0 2.264946] random: fast init done
-[=A0=A0=A0 2.289984] fsl-dspi 2100000.spi: registered child spi3.3
-
-/*
-Non relevant logs removed
-*/
-
-Debian GNU/Linux 10 lpe9403-VPM7001303 ttyS0
-
-lpe9403-VPM7001303 login: admin
-Last login: Tue Nov 16 02:12:25 UTC 2021 on ttyS0
-Linux lpe9403-VPM7001303 4.19.144-audis-std #1 SMP PREEMPT Wed Dec 2 12:18:=
-57 UTC 2020 aarch64
-
-The programs included with the Debian GNU/Linux system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
-
-Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-
-admin@lpe9403-VPM7001303:~$ sudo reboot
-=A0=A0=A0=A0=A0=A0=A0=A0 Stoppin[=A0 OK=A0 ] Stopped target Graphical Inter=
-face.
-[=A0 OK=A0 ] Stopped Daily Cleanup of Temporary Directories.
-[ =A0OK=A0 ] Stopped Syncronise system .ardware clock every 5 minutes.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping watchdog daemon...
-[=A0 OK=A0 ] Stopped Serial Getty on ttyS0.
-[=A0 OK=A0 ] Stopped Wait for ntpd to synchronize system clock.
-[=A0 OK=A0 ] Stopped Session 1 of user admin.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping User Manager for UID 1000...
-[=A0 OK=A0 ] Removed slice system-serial\x2dgetty.slice.
-[=A0 OK=A0 ] Stopped User Manager for UID 1000.
-[=A0 OK=A0 ] Stopped watchdog daemon.
-[=A0 OK=A0 ] Stopped target Multi-User System.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping DCP daemon...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Login Service...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Event Manager service...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping OpenBSD Secure Shell server...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping SFP daemon...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Link Layer Discovery Protocol Agent Daemo=
-n....
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Simple Network Ma.ent Protocol (SNMP) Dae=
-mon....
-[=A0 OK=A0 ] Stopped target Login Prompts.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Getty on tty1...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Temperature Monitor service...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Network Time Service...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Docker Application Container Engine...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Fail2Ban Service...
-[=A0 OK=A0 ] Stopped Firmware Update Confirmation.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping User Runtime Directory /run/user/1000...
-[=A0 OK=A0 ] Unmounted /run/user/1000.
-[=A0 OK=A0 ] Stopped Login Service.
-[=A0 OK=A0 ] Stopped Temperature Monitor service.
-[=A0 OK=A0 ] Stopped SFP daemon.
-[=A0 OK=A0 ] Stopped Event Manager service.
-[=A0 OK=A0 ] Stopped DCP daemon.
-[=A0 OK=A0 ] Stopped Link Layer Discovery Protocol Agent Daemon..
-[=A0 OK=A0 ] Stopped Simple Network Man.ement Protocol (SNMP) Daemon..
-[=A0 OK=A0 ] Stopped Getty on tty1.
-[=A0 OK=A0 ] Stopped Network Time Service.
-[=A0 OK=A0 ] Stopped OpenBSD Secure Shell server.
-[=A0 OK=A0 ] Stopped Docker Application Container Engine.
-[=A0 OK=A0 ] Stopped User Runtime Directory /run/user/1000.
-[=A0 OK=A0 ] Removed slice User Slice of UID 1000.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping containerd container runtime...
-[=A0 OK=A0 ] Stopped target Network is Online.
-[=A0 OK=A0 ] Stopped target Host and Network Name Lookups.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Permit User Sessions...
-[=A0 OK=A0 ] Removed slice system-getty.slice.
-[=A0 OK=A0 ] Stopped containerd container runtime.
-[=A0 OK=A0 ] Stopped Permit User Sessions.
-[=A0 OK=A0 ] Stopped Fail2Ban Service.
-[=A0 OK=A0 ] Stopped target Remote File Systems.
-[=A0 OK=A0 ] Stopped target Network.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Network Name Resolution...
-[=A0 OK=A0 ] Stopped Network Name Resolution.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Network Service...
-[=A0 OK=A0 ] Stopped Network Service.
-[=A0 OK=A0 ] Stopped target Network (Pre).
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping firewalld - dynamic firewall daemon...
-[=A0 OK=A0 ] Stopped firewalld - dynamic firewall daemon.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping D-Bus System Message Bus...
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Authorization Manager...
-[=A0 OK=A0 ] Stopped D-Bus System Message Bus.
-[=A0 OK=A0 ] Stopped Authorization Manager.
-[=A0 OK=A0 ] Stopped target Basic System.
-[=A0 OK=A0 ] Stopped target Slices.
-[=A0 OK=A0 ] Removed slice User and Session Slice.
-[=A0 OK=A0 ] Stopped target Sockets.
-[=A0 OK=A0 ] Closed lldpad.socket.
-[=A0 OK=A0 ] Closed Docker Socket for the API.
-[=A0 OK=A0 ] Closed sfw_manager socket listener.
-[=A0 OK=A0 ] Closed SWUpdate socket listener.
-[=A0 OK=A0 ] Stopped target Paths.
-[=A0 OK=A0 ] Closed D-Bus System Message Bus Socket.
-[=A0 OK=A0 ] Stopped target System Initialization.
-[=A0 OK=A0 ] Stopped target Swap.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Update UTMP about System Boot/Shutdown...
-[=A0 OK=A0 ] Stopped Apply Kernel Variables.
-=A0=A0=A0=A0=A0=A0=A0=A0 Stopping Load/Save Random Seed...
-[=A0 OK=A0 ] Stopped target Local Encrypted Volumes.
-[=A0 OK=A0 ] Stopped Dispatch Password .ts to Console Directory Watch.
-[=A0 OK=A0 ] Stopped Forward Password R.uests to Wall Directory Watch.
-[=A0 OK=A0 ] Stopped Load Kernel Modules.
-[=A0 OK=A0 ] Stopped Load/Save Random Seed.
-[=A0 OK=A0 ] Stopped Update UTMP about System Boot/Shutdown.
-[=A0 OK=A0 ] Stopped Create Volatile Files and Directories.
-[=A0 OK=A0 ] Stopped target Local File Systems.
-=A0=A0=A0=A0=A0=A0=A0=A0 Unmounting /etc...
-=A0=A0=A0=A0=A0=A0=A0=A0 Unmounting Home mount userdata...
-=A0=A0=A0=A0=A0=A0=A0=A0 Unmounting /var/log...
-[=A0 OK=A0 ] Unmounted /etc.
-[=A0 OK=A0 ] Unmounted Home mount userdata.
-[=A0 OK=A0 ] Unmounted /var/log.
-=A0=A0=A0=A0=A0=A0=A0=A0 Unmounting /userdata...
-[=A0 OK=A0 ] Unmounted /userdata.
-[=A0 OK=A0 ] Reached target Unmount All Filesystems.
-[=A0 OK=A0 ] Stopped target Local File Systems (Pre).
-[=A0 OK=A0 ] Stopped Create Static Device Nodes in /dev.
-[=A0 OK=A0 ] Stopped Create System Users.
-[=A0 OK=A0 ] Stopped Remount Root and Kernel File Systems.
-[=A0 OK=A0 ] Reached target Shutdown.
-[=A0 OK=A0 ] Reached target Final Step.
-[=A0 OK=A0 ] Started Reboot.
-[=A0 OK=A0 ] Reached target Reboot.
-[=A0 675.609520] watchdog: watchdog0: watchdog did not stop!
-[=A0 675.618665] systemd-shutdow: 24 output lines suppressed due to ratelim=
-iting
-[=A0 675.662848] systemd-shutdown[1]: Syncing filesystems and block devices=
-.
-[=A0 675.672034] systemd-shutdown[1]: Sending SIGTERM to remaining processe=
-s...
-[=A0 675.686963] systemd-journald[233]: Received SIGTERM from PID 1 (system=
-d-shutdow).
-[=A0 675.730174] systemd-shutdown[1]: Sending SIGKILL to remaining processe=
-s...
-[=A0 675.743123] systemd-shutdown[1]: Hardware watchdog 'GPIO Watchdog', ve=
-rsion 0
-[=A0 675.752565] systemd-shutdown[1]: Unmounting file systems.
-[=A0 675.760922] [1021]: Remounting '/' read-only in with options '(null)'.
-[=A0 675.782087] EXT4-fs (mmcblk0p1): re-mounted. Opts: (null)
-[=A0 675.795819] systemd-shutdown[1]: All filesystems unmounted.
-[=A0 675.801420] systemd-shutdown[1]: Deactivating swaps.
-[=A0 675.806725] systemd-shutdown[1]: All swaps deactivated.
-[=A0 675.811975] systemd-shutdown[1]: Detaching loop devices.
-[=A0 675.820775] systemd-shutdown[1]: All loop devices detached.
-[=A0 675.895298] Unable to handle kernel NULL pointer dereference at virtua=
-l address 0000000000000058
-[=A0 675.904126] Mem abort info:
-[=A0 675.906933]=A0=A0 ESR =3D 0x96000005
-[=A0 675.909995]=A0=A0 Exception class =3D DABT (current EL), IL =3D 32 bit=
-s
-[=A0 675.915924]=A0=A0 SET =3D 0, FnV =3D 0
-[=A0 675.918989]=A0=A0 EA =3D 0, S1PTW =3D 0
-[=A0 675.922138] Data abort info:
-[=A0 675.925012]=A0=A0 ISV =3D 0, ISS =3D 0x00000005
-[=A0 675.928856]=A0=A0 CM =3D 0, WnR =3D 0
-[=A0 675.931830] user pgtable: 4k pages, 39-bit VAs, pgdp =3D 00000000bec7a=
-5cc
-[=A0 675.938447] [0000000000000058] pgd=3D0000000000000000, pud=3D000000000=
-0000000
-[=A0 675.945244] Internal error: Oops: 96000005 [#1] PREEMPT SMP
-[=A0 675.950807] Modules linked in: ipt_MASQUERADE(E) nf_conntrack_netlink(=
-E) xt_addrtype(E) br_netfilter(E) xt_tcpudp(E) ip6t_rpfilter(E) ip6t_REJECT=
-(E) nf_reject_ipv6(E) ipt_REJECT(E) nf_reject_ipv4(E) xt_conntrack(E) nft_c=
-ounter(E) nft_chain_nat_ipv6(E) nf_nat_ipv6(E) nft_chain_route_ipv6(E) nft_=
-chain_nat_ipv4(E) nf_nat_ipv4(E) nf_nat(E) nft_chain_route_ipv4(E) nf_connt=
-rack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) ip6_tables(E) nft_compat(E) nf_=
-tables(E) nfnetlink(E) audis_info(OE) ip_tables(E) x_tables(E)
-[=A0 675.995303] Process systemd-shutdow (pid: 1, stack limit =3D 0x0000000=
-010d499d8)
-[=A0 676.002518] CPU: 0 PID: 1 Comm: systemd-shutdow Tainted: G=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 OE=A0=A0=A0=A0 4.19.144-audis-std #1
-[=A0 676.011379] Hardware name: Siemens LPE9403 (DT)
-[=A0 676.015902] pstate: 40000005 (nZcv daif -PAN -UAO)
-[=A0 676.020692] pc : tpm_transmit+0x148/0x678
-[=A0 676.024692] lr : tpm_transmit+0x3b4/0x678
-[=A0 676.028691] sp : ffffff800803b840
-[=A0 676.031996] x29: ffffff800803b840 x28: 0000000000000000=20
-[=A0 676.037300] x27: 0000000000000000 x26: 000000000000000c=20
-[=A0 676.042604] x25: ffffff8008d1c508 x24: 0000000000000014=20
-[=A0 676.047908] x23: 0000000000001000 x22: ffffffc874d37000=20
-[=A0 676.053212] x21: 0000000000001000 x20: 0000000000000145=20
-[=A0 676.058516] x19: ffffffc87680c000 x18: 0000000000000000=20
-[=A0 676.063820] x17: 0000000000000000 x16: 0000000000000000=20
-[=A0 676.069123] x15: ffffffffffffffff x14: ffffff8008f09848=20
-[=A0 676.074427] x13: ffffffc873ae391c x12: ffffffc873ae31a9=20
-[=A0 676.079731] x11: 0101010101010101 x10: 0000000000000040=20
-[=A0 676.085036] x9 : ffffff8008f9c8f8 x8 : 0000000000004501=20
-[=A0 676.090339] x7 : ffffffc87680c000 x6 : ffffff800803b8fc=20
-[=A0 676.095643] x5 : 0000000000000000 x4 : 0000000000000000=20
-[=A0 676.100947] x3 : 0000000000004501 x2 : ffffffc83f794040=20
-[=A0 676.106250] x1 : 0000000000000000 x0 : 0000000000000000=20
-[=A0 676.111553] Call trace:
-[=A0 676.113992]=A0 tpm_transmit+0x148/0x678
-[=A0 676.117646]=A0 tpm_transmit_cmd+0x54/0xe8
-[=A0 676.121475]=A0 tpm2_shutdown+0x88/0xa8
-[=A0 676.125041]=A0 tpm_chip_unregister+0xc4/0xe0
-[=A0 676.129130]=A0 tpm_tis_spi_remove+0x24/0x40
-[=A0 676.133133]=A0 spi_drv_remove+0x34/0x58
-[=A0 676.136788]=A0 device_release_driver_internal+0x1a4/0x238
-[=A0 676.142005]=A0 device_release_driver+0x28/0x38
-[=A0 676.146267]=A0 bus_remove_device+0xd4/0x148
-[=A0 676.150269]=A0 device_del+0x158/0x388
-[=A0 676.153749]=A0 device_unregister+0x24/0x78
-[=A0 676.157664]=A0 spi_unregister_device+0x38/0x48
-[=A0 676.161926]=A0 __unregister+0x20/0x30
-[=A0 676.165407]=A0 device_for_each_child+0x58/0x88
-[=A0 676.169669]=A0 spi_unregister_controller+0x44/0x128
-[=A0 676.174364]=A0 dspi_remove+0x28/0x170
-[=A0 676.177843]=A0 dspi_shutdown+0x20/0x30
-[=A0 676.181410]=A0 platform_drv_shutdown+0x2c/0x38
-[=A0 676.185671]=A0 device_shutdown+0x114/0x1f0
-[=A0 676.189588]=A0 kernel_restart_prepare+0x44/0x50
-[=A0 676.193936]=A0 kernel_restart+0x20/0x68
-[=A0 676.197590]=A0 __se_sys_reboot+0x220/0x248
-[=A0 676.201505]=A0 __arm64_sys_reboot+0x24/0x30
-[=A0 676.205507]=A0 el0_svc_common+0xa4/0x198
-[=A0 676.209248]=A0 el0_svc_handler+0x38/0x78
-[=A0 676.212988]=A0 el0_svc+0x8/0xe8
-[=A0 676.215949] Code: 72000400 b90073e0 54001360 f9435ec0 (f9402c02)=20
-[=A0 676.222039] ---[ end trace 8d405bebaa8bfb3f ]---
-[=A0 676.226710] Kernel panic - not syncing: Attempted to kill init! exitco=
-de=3D0x0000000b
-[=A0 676.226710]=20
-[=A0 676.235839] Kernel Offset: disabled
-[ =A0676.239319] CPU features: 0x0,20002004
-[=A0 676.243058] Memory Limit: none
-[=A0 676.246108] Rebooting in 90 seconds..
-"
-
-If needed, I can provide more information (u-boot logs and init code, devic=
-e tree, u-boot and linux defconfig.)=20
-Thanks for your support.
-
-Mit freundlichen Gr=FC=DFen
-Florian Mano=EBl
-
-Siemens AG
-Digital Industries
-Process Automation
-DI PA DCP R&D 2
-=D6stliche Rheinbr=FCckenstr. 50
-76187 Karlsruhe, Deutschland
-Tel.: +49 721 667-20051
-mailto:florian.manoel@siemens.com
-https://siemens.com
-
-Siemens Aktiengesellschaft: Vorsitzender des Aufsichtsrats: Jim Hagemann Sn=
-abe; Vorstand: Joe Kaeser, Vorsitzender; Roland Busch, Klaus Helmrich, Cedr=
-ik Neike, Matthias Rebellius, Ralf P. Thomas, Judith Wiese; Sitz der Gesell=
-schaft: Berlin und M=FCnchen, Deutschland; Registergericht: Berlin-Charlott=
-enburg, HRB 12300, M=FCnchen, HRB 6684; WEEE-Reg.-Nr. DE 23691322
+>>
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: /lib=
+/dracut-lib.sh@431(source_all): . //lib/dracut/hooks/pre-pivot/61-ima-key=
+s-load.sh
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@3(source): SECURITYFSDIR=3D=
+/sys/kernel/security
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@4(source): IMASECDIR=3D/sys=
+/kernel/security/ima
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@5(source): IMACONFIG=3D/sys=
+root/etc/sysconfig/ima
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@43(source): '[' '!' -e /sys=
+/kernel/security/ima ']'
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[565]: ////=
+lib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@51(source): keyctl describ=
+e %keyring:.ima
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[565]: Can'=
+t find 'keyring:.ima'
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@51(source): line=3D
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@52(source): '[' 1 -eq 0 ']'
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[566]: ////=
+lib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@55(source): keyctl search =
+@u keyring _ima
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[566]: keyc=
+tl_search: Required key not available
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@55(source): _ima_id=3D
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@56(source): '[' -z '' ']'
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[567]: ////=
+lib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@57(source): keyctl newring=
+ _ima @u
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@57(source): _ima_id=3D54136=
+3765
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@62(source): load_x509_keys =
+541363765
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@9(load_x509_keys): KEYRING_=
+ID=3D541363765
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@12(load_x509_keys): '[' -f =
+/sysroot/etc/sysconfig/ima ']'
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@16(load_x509_keys): '[' -z =
+'' ']'
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@17(load_x509_keys): IMAKEYS=
+DIR=3D/etc/keys/ima
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[568]: ////=
+lib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@20(load_x509_keys): ls /sy=
+sroot/etc/keys/ima/x509_evm.der
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@20(load_x509_keys): PUBKEY_=
+LIST=3D/sysroot/etc/keys/ima/x509_evm.der
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@21(load_x509_keys): for PUB=
+KEY in ${PUBKEY_LIST}
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[554]: ///l=
+ib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@23(load_x509_keys): '[' '!'=
+ -f /sysroot/etc/keys/ima/x509_evm.der ']'
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:36 rosa2019.1 dracut-pre-pivot[569]: ////=
+lib/dracut/hooks/pre-pivot/61-ima-keys-load.sh@30(load_x509_keys): evmctl=
+ import /sysroot/etc/keys/ima/x509_evm.der 541363765
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:38 rosa2019.1 kernel: random: crng init d=
+one
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:38 rosa2019.1 kernel: random: 7 urandom w=
+arning(s) missed due to ratelimiting
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:38 rosa2019.1 dracut-pre-pivot[569]: Read=
+ing to /sysroot/etc/keys/ima/x509_evm.der
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:38 rosa2019.1 dracut-pre-pivot[569]: Impo=
+rting public key 5ac982c4 from file /sysroot/etc/keys/ima/x509_evm.der in=
+to keyring 541363765
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:38 rosa2019.1 dracut-pre-pivot[569]: add_=
+key failed
+>>> =D1=8F=D0=BD=D0=B2 13 14:06:38 rosa2019.1 dracut-pre-pivot[569]: errn=
+o: Permission denied (13)
+>> So, evmctl import /sysroot/etc/keys/ima/x509_evm.der 541363765 got -EP=
+ERM from the kernel.
+>>
+>> Now I do exactly the same in already booted system... and it works, no=
+ -EPERM!
+>>
+>> [root@rosa2019 ima-certs]# evmctl import /etc/keys/ima/x509_evm.der 54=
+1363765
+>> Reading to /etc/keys/ima/x509_evm.der
+>> Importing public key 5ac982c4 from file /etc/keys/ima/x509_evm.der int=
+o keyring 541363765
+>> keyid: 483258747
+>> 483258747
+>>
+>> [root@rosa2019 ima-certs]# cat /proc/keys | grep ima
+>> 20448e35 I--Q---=C2=A0=C2=A0=C2=A0=C2=A0 2 perm 3f010000=C2=A0=C2=A0=C2=
+=A0=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0 0 keyring=C2=A0=C2=A0 _ima: 1
+>>
+>> Here are related kernel config parts:
+>>
+>>> [root@rosa2019 ima-certs]# cat /boot/config-5.10.4-generic-5rosa2019.=
+1-x86_64 | grep -E '_IMA|INTEGRITY'
+>>> CONFIG_BLK_DEV_INTEGRITY=3Dy
+>>> CONFIG_BLK_DEV_INTEGRITY_T10=3Dy
+>>> CONFIG_DM_INTEGRITY=3Dm
+>>> CONFIG_FB_CFB_IMAGEBLIT=3Dy
+>>> CONFIG_FB_SYS_IMAGEBLIT=3Dm
+>>> # CONFIG_BTRFS_FS_CHECK_INTEGRITY is not set
+>>> CONFIG_INTEGRITY=3Dy
+>>> CONFIG_INTEGRITY_SIGNATURE=3Dy
+>>> CONFIG_INTEGRITY_ASYMMETRIC_KEYS=3Dy
+>>> # CONFIG_INTEGRITY_TRUSTED_KEYRING is not set
+>>> CONFIG_INTEGRITY_PLATFORM_KEYRING=3Dy
+>>> CONFIG_INTEGRITY_AUDIT=3Dy
+>>> CONFIG_IMA=3Dy
+>>> CONFIG_IMA_MEASURE_PCR_IDX=3D10
+>>> CONFIG_IMA_LSM_RULES=3Dy
+>>> # CONFIG_IMA_TEMPLATE is not set
+>>> CONFIG_IMA_NG_TEMPLATE=3Dy
+>>> # CONFIG_IMA_SIG_TEMPLATE is not set
+>>> CONFIG_IMA_DEFAULT_TEMPLATE=3D"ima-ng"
+>>> CONFIG_IMA_DEFAULT_HASH_SHA1=3Dy
+>>> # CONFIG_IMA_DEFAULT_HASH_SHA256 is not set
+>>> # CONFIG_IMA_DEFAULT_HASH_SHA512 is not set
+>>> CONFIG_IMA_DEFAULT_HASH=3D"sha1"
+>>> # CONFIG_IMA_WRITE_POLICY is not set
+>>> CONFIG_IMA_READ_POLICY=3Dy
+>>> CONFIG_IMA_APPRAISE=3Dy
+>>> # CONFIG_IMA_ARCH_POLICY is not set
+>>> # CONFIG_IMA_APPRAISE_BUILD_POLICY is not set
+>>> CONFIG_IMA_APPRAISE_BOOTPARAM=3Dy
+>>> CONFIG_IMA_APPRAISE_MODSIG=3Dy
+>>> # CONFIG_IMA_TRUSTED_KEYRING is not set
+>>> # CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY is not se=
+t
+>>> CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS=3Dy
+>>> CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS=3Dy
+>>> # CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT is not set
+>>> [root@rosa2019 ima-certs]# cat /proc/cmdline
+>>> BOOT_IMAGE=3D/@rosa201910/boot/vmlinuz-5.10.4-generic-5rosa2019.1-x86=
+_64 root=3DUUID=3D745b0c43-6a82-4bce-9821-7f5dd88a9246 ro rootflags=3Dsub=
+vol=3D@rosa201910 ima_appraise=3Dlog rd.shell rd.debug resume=3DUUID=3D59=
+b4ab95-b679-4c7c-8272-253715edc865
+>>> [root@rosa2019 ima-certs]#=C2=A0
+>> I do not have ideas how it may happen. Kernel keyring _ima was created=
+ by dracut, then evemctl from initrd got -EPERM, but then evmctl worked O=
+K with exectly the same keyring from booted system. Could some one please=
+ help to track the issue?
+>>
+>> # evmctl --version
+>> evmctl 1.3.2
+>>
+>> Thanks!
+>>
+>> [1] https://github.com/dracutdevs/dracut/tree/master/modules.d/98integ=
+rity
+>>
