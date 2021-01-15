@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FE92F8281
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 18:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 875E82F8284
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Jan 2021 18:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732257AbhAORbq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        id S2387677AbhAORbq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Fri, 15 Jan 2021 12:31:46 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:56856 "EHLO
+Received: from linux.microsoft.com ([13.77.154.182]:56854 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729353AbhAORbp (ORCPT
+        with ESMTP id S1727876AbhAORbp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 15 Jan 2021 12:31:45 -0500
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 687B420B6C48;
-        Fri, 15 Jan 2021 09:30:29 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 687B420B6C48
+        by linux.microsoft.com (Postfix) with ESMTPSA id 573DE20B6C49;
+        Fri, 15 Jan 2021 09:30:30 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 573DE20B6C49
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1610731830;
-        bh=axPbEa6PnZm+iW25Zsi9IlEECBFRe6hBfmO2Ulu9IEs=;
+        s=default; t=1610731831;
+        bh=1aotmbJQziKORS3Wqv9k380Z5OVfRIDlDlUpXWgDkCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jf5B9mbOV5Z9FseEFixwYoYT/sNPZ5VkfqSOIKX7Wxxb9AhFYZty+z0EHderu5hsO
-         Q0FbrBbSam7UfegH2wIKa7xQINuS9tmb0xkcOkg9PB81roGo2LGW+AA3EgUIL3fqq2
-         0nNAIysgt1rH6iOnFkvlf9vgxHXlYh1eXm2WkQ5E=
+        b=brt42/YQlIYys51K/dU8hS75f0odrbrz1DCtM1XqjsmDvrhNeWLi+EerVR+0yW+7j
+         H5mfZm0kSWSAGDFouK2eZARqB+AdYAhJz0loy2ZH2Xoar8kvWQWDvgP6mfJXipbk0V
+         JfJIT3HpnWWP/khUuVciH0kWltn/LtMKDO0+fWrI=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
         takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
@@ -38,9 +38,9 @@ Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v15 09/10] arm64: Call kmalloc() to allocate DTB buffer
-Date:   Fri, 15 Jan 2021 09:30:16 -0800
-Message-Id: <20210115173017.30617-10-nramas@linux.microsoft.com>
+Subject: [PATCH v15 10/10] arm64: Add IMA log information in kimage used for kexec
+Date:   Fri, 15 Jan 2021 09:30:17 -0800
+Message-Id: <20210115173017.30617-11-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210115173017.30617-1-nramas@linux.microsoft.com>
 References: <20210115173017.30617-1-nramas@linux.microsoft.com>
@@ -50,67 +50,53 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-create_dtb() function allocates kernel virtual memory for
-the device tree blob (DTB).  This is not consistent with other
-architectures, such as powerpc, which calls kmalloc() for allocating
-memory for the DTB.
+Address and size of the buffer containing the IMA measurement log need
+to be passed from the current kernel to the next kernel on kexec.
 
-Call kmalloc() to allocate memory for the DTB, and kfree() to free
-the allocated memory.
+Add address and size fields to "struct kimage_arch" for ARM64 platform
+to hold the address and size of the IMA measurement log buffer.
+
+Update CONFIG_KEXEC_FILE to select CONFIG_HAVE_IMA_KEXEC, if CONFIG_IMA
+is enabled, to indicate that the IMA measurement log information is
+present in the device tree for ARM64.
 
 Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 ---
- arch/arm64/kernel/machine_kexec_file.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ arch/arm64/Kconfig             | 1 +
+ arch/arm64/include/asm/kexec.h | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
-index 7de9c47dee7c..51c40143d6fa 100644
---- a/arch/arm64/kernel/machine_kexec_file.c
-+++ b/arch/arm64/kernel/machine_kexec_file.c
-@@ -29,7 +29,7 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 1d466addb078..ea7f7fe3dccd 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1094,6 +1094,7 @@ config KEXEC
+ config KEXEC_FILE
+ 	bool "kexec file based system call"
+ 	select KEXEC_CORE
++	select HAVE_IMA_KEXEC if IMA
+ 	help
+ 	  This is new version of kexec system call. This system call is
+ 	  file based and takes file descriptors as system call argument
+diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
+index d24b527e8c00..2bd19ccb6c43 100644
+--- a/arch/arm64/include/asm/kexec.h
++++ b/arch/arm64/include/asm/kexec.h
+@@ -100,6 +100,11 @@ struct kimage_arch {
+ 	void *elf_headers;
+ 	unsigned long elf_headers_mem;
+ 	unsigned long elf_headers_sz;
++
++#ifdef CONFIG_IMA_KEXEC
++	phys_addr_t ima_buffer_addr;
++	size_t ima_buffer_size;
++#endif
+ };
  
- int arch_kimage_file_post_load_cleanup(struct kimage *image)
- {
--	vfree(image->arch.dtb);
-+	kfree(image->arch.dtb);
- 	image->arch.dtb = NULL;
- 
- 	vfree(image->arch.elf_headers);
-@@ -59,19 +59,21 @@ static int create_dtb(struct kimage *image,
- 			+ cmdline_len + DTB_EXTRA_SPACE;
- 
- 	for (;;) {
--		buf = vmalloc(buf_size);
-+		buf = kmalloc(buf_size, GFP_KERNEL);
- 		if (!buf)
- 			return -ENOMEM;
- 
- 		/* duplicate a device tree blob */
- 		ret = fdt_open_into(initial_boot_params, buf, buf_size);
--		if (ret)
-+		if (ret) {
-+			kfree(buf);
- 			return -EINVAL;
-+		}
- 
- 		ret = of_kexec_setup_new_fdt(image, buf, initrd_load_addr,
- 					     initrd_len, cmdline);
- 		if (ret) {
--			vfree(buf);
-+			kfree(buf);
- 			if (ret == -ENOMEM) {
- 				/* unlikely, but just in case */
- 				buf_size += DTB_EXTRA_SPACE;
-@@ -217,6 +219,6 @@ int load_other_segments(struct kimage *image,
- 	return 0;
- 
- out_err:
--	vfree(dtb);
-+	kfree(dtb);
- 	return ret;
- }
+ extern const struct kexec_file_ops kexec_image_ops;
 -- 
 2.30.0
 
