@@ -2,123 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B482F89ED
-	for <lists+linux-integrity@lfdr.de>; Sat, 16 Jan 2021 01:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F248D2F8A54
+	for <lists+linux-integrity@lfdr.de>; Sat, 16 Jan 2021 02:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726849AbhAPA2N (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Jan 2021 19:28:13 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:60998 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726176AbhAPA2N (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Jan 2021 19:28:13 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l0ZR2-0002Mr-95; Sat, 16 Jan 2021 00:27:20 +0000
-Date:   Sat, 16 Jan 2021 01:27:18 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        St?phane Graber <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v5 00/42] idmapped mounts
-Message-ID: <20210116002718.jjs6eov65cvwrata@wittgenstein>
-References: <20210112220124.837960-1-christian.brauner@ubuntu.com>
- <20210114171241.GA1164240@magnolia>
- <20210114204334.GK331610@dread.disaster.area>
- <20210115162423.GB2179337@infradead.org>
- <YAHWGMb9rTehRsRz@mit.edu>
+        id S1726204AbhAPBZQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 15 Jan 2021 20:25:16 -0500
+Received: from mout.gmx.net ([212.227.15.18]:45783 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725919AbhAPBZQ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 15 Jan 2021 20:25:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1610760217;
+        bh=xjaNy2jhggcb4Dwq4QKbDLswe0FZxJm5YOihOK0R47Y=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=iINcEsvccuNiMKRkXHjBx5npYtxzX2XeOLhAWu3ep+xk1x4KhpKy6EvRAq47ED61C
+         A0+ST9r28aXGbOe4YUVcoNI9slDRTcmRMP7GOyVcXKWfeNe1AIp3/lfJGM7wQogUhh
+         gcDVVjqUMMccBmZUo3ZmWQk+4VqtE6bFvMCRVDwc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Venus.fritz.box ([78.42.220.31]) by mail.gmx.com (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8ygO-1l5Yel0kgo-0065xX; Sat, 16
+ Jan 2021 02:23:37 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org
+Cc:     jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        LinoSanfilippo@gmx.de, p.rosenberger@kunbus.com
+Subject: [PATCH 0/4] TPM fixes
+Date:   Sat, 16 Jan 2021 02:22:37 +0100
+Message-Id: <1610760161-21982-1-git-send-email-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YAHWGMb9rTehRsRz@mit.edu>
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:LTvCw+DJfok177BhcUpGz04TJV5msyWUJhtqkH5ijX5qIHhP9R3
+ BVApJHWOkN2YxUQoAm77ibAAS6z2ca6pEN5Qdd4x6Os1P06tPBHSS7QcX5PAJv+56210Y9n
+ HaKDF1Cf1weXuIUOtWI2rBageTwYkarDkao4laeFx79wCoWnt0Jq306eQsLOL1/LU9eYtYY
+ P9TQBxru8u7MAMLMUfjew==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5U/8eqHYO1k=:AyVG1umk338o4BAqsDqv59
+ +3R2L0/LNTKwMzC+U3a7hSi5ObB3RBCqIAdwYExY8nmlD3macTv/u/N5htHB8fBkL9f0Y+/E4
+ iVGNgosY78dKYf2odFMcwD7YNR3ln1K+meDkdbYfV3sTOKdEBksuzizReFbh4zVrhHRKcs6yq
+ F05EQiK2F7zOjCOiwoB3Yf5ajvny2f/ufyG9HfdAS+Y7ZCkyTjm8G9Pt67JwmBLS8yk74HeR/
+ 1SbtWtfeqjeXa8Em8ucYmCj21d+dkcP6p62GU33C7DL13J7xxfD+aoxH0PdpJ7CGcQ/KlW8Ew
+ DNyrfzYJk1ri5RJoT4qFtKFSmCKRByXD9Y3WOf4RDXivHmWfYP0rIKqV69DFd1zY+LdgzKVH7
+ OhdRwyndNB/+fUr3gKcE7qEEGHvvJ/2GQ8jF2Q9oUh3h8xp4cpti61fTXwUO9tDP3WehEhGBZ
+ 3ZQNwWzXrElD8CbBpZDO2qryNU67tKzsNoxQJtbE3rGpkZLCHlIUhTdrwVHNmMg9PsiH+jvD4
+ NYK3GLqxnPm8ec+myF7FH9pU/GWmbDPDnoB+ekPU1IYobm6Y1xv9sviUoXZk/vyDvltL/bIvR
+ uFeSG32AWPlP7HkHMma8XzE+/f/qcalwxN+evts+pA9opgFfgI6nABy2sM1EsJKP4gGk1Z1sS
+ a+VBZKeb6QRhHCc7ZbG5RI7piS+6m99QAHTzLh1HHRfVbA4wJA3SYRSHE0mpghstuKc7zdDmy
+ MYIbA9O4Qn7lloN1Bsi7/l/3fJEZ3XHwe5waOgN1RTk7wwR4HQLC+OLIqr2R9yz5a03+3Vgi5
+ /n+tZOLC5NFhAafnsb3m9NEMzPk9CynE0iFcakXhcZoij5xIzElMFdpWsk83CAn3oBg0iXHnt
+ sp0l/0WLA18O86MLNJ1w==
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jan 15, 2021 at 12:51:20PM -0500, Theodore Ts'o wrote:
-> On Fri, Jan 15, 2021 at 04:24:23PM +0000, Christoph Hellwig wrote:
-> > 
-> > That is what the capabilities are designed for and we already check
-> > for them.
-> 
-> So perhaps I'm confused, but my understanding is that in the
-> containers world, capabilities are a lot more complicated.  There is:
-> 
-> 1) The initial namespace capability set
-> 
-> 2) The container's user-namespace capability set
-> 
-> 3) The namespace in which the file system is mounted --- which is
->       "usually, but not necessarily the initial namespace" and
->       presumably could potentially not necessarily be the current
->       container's user name space, is namespaces can be hierarchically
->       arranged.
-> 
-> Is that correct?  If so, how does this patch set change things (if
-> any), and and how does this interact with quota administration
-> operations?
-
-The cases you listed are correct. The patchset doesn't change them.
-Simply put, the patchset doesn't alter capability checking in any way.
-
-> 
-> On a related note, ext4 specifies a "reserved user" or "reserved
-> group" which can access the reserved blocks.  If we have a file system
-> which is mounted in a namespace running a container which is running
-> RHEL or SLES, and in that container, we have a file system mounted (so
-> it was not mounted in the initial namespace), with id-mapping --- and
-> then there is a further sub-container created with its own user
-> sub-namespace further mapping uids/gids --- will the right thing
-> happen?  For that matter, how *is* the "right thing" defined?
-
-In short, nothing changes. Whatever happened before happens now.
-
-Specifically s_resuid/s_resgid are superblock mount options and so never
-change on a per-mount basis and thus also aren't affected by idmapped
-mounts.
-
-> 
-> Sorry if this is a potentially stupid question, but I find user
-> namespaces and id and capability mapping to be hopefully confusing for
-> my tiny brain.  :-)
-
-No, I really appreciate the questions. :) My brain can most likely
-handle less. :)
-
-Christian
+VGhpcyBwYXRjaCBzZXJpZXMgZml4ZXMgc29tZSBmbGF3cyBpbiB0aGUgVFBNIGNvZGUuIE1vc3Qg
+aW1wb3J0YW50bHkgYQpyZWZlcmVuY2UgY291bnQgaXNzdWUgKHBhdGNoIDIpIGFuZCBhIHBvc3Np
+YmxlIE5VTEwgcG9pbnRlciBhY2Nlc3MKKHBhdGNoIDMpLiBQYXRjaCAxIGZpeGVzIHRoZSBlcnJv
+ciBwYXRoIGluIHRwbW1fY2hpcF9hbGxvYygpIGFuZCBpcyBpbgpwcmVwYXJhdGlvbiB0byBwYXRj
+aCAyIHdoaWNoIGV4dGVuZHMgdGhpcyBmdW5jdGlvbi4gUGF0Y2ggNCBpbnRyb2R1Y2VzCmEgbmV3
+IGZ1bmN0aW9uIHRwbV9jaGlwX2ZyZWUoKSB3aGljaCBpcyB1c2VkIGFzIGEgY291bnRlcnBhcnQg
+dG8KdHBtX2NoaXBfYWxsb2MoKS4gVGhlIG1haW4gcmVhc29uIGZvciB0aGlzIGZ1bmN0aW9uIGlz
+IHRvIGhpZGUgdGhlCmludGVybmFscyBvZiB0cG1fY2hpcCBjbGVhbnVwIGJ5IG1lYW5zIG9mIG11
+bHRpcGxlIHJlZmVyZW5jZSBjb3VudApoYW5kbGluZy4KCkxpbm8gU2FuZmlsaXBwbyAoNCk6CiAg
+dHBtOiBpbiBjYXNlIG9mIGVycm9yIHByb3Blcmx5IGNsZWFudXAgaW4gdHBtbV9jaGlwX2FsbG9j
+CiAgdHBtOiBmaXggcmVmZXJlbmNlIGNvdW50aW5nIGZvciBzdHJ1Y3QgdHBtX2NoaXAKICB0cG06
+IGluIHRwbTJfZGVsX3NwYWNlIGNoZWNrIGlmIG9wcyBwb2ludGVyIGlzIHN0aWxsIHZhbGlkCiAg
+dHBtOiBQcm92aWRlIGEgZnVuY3Rpb24gdHBtX2NoaXBfZnJlZSgpIHRvIGZyZWUgdHBtIGNoaXBz
+CgogZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jICAgICAgIHwgMzMgKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbS5oICAgICAgICAgICAgfCAg
+MSArCiBkcml2ZXJzL2NoYXIvdHBtL3RwbTItc3BhY2UuYyAgICAgfCAgMiArLQogZHJpdmVycy9j
+aGFyL3RwbS90cG1fZnRwbV90ZWUuYyAgIHwgIDQgKystLQogZHJpdmVycy9jaGFyL3RwbS90cG1f
+dnRwbV9wcm94eS5jIHwgIDIgKy0KIDUgZmlsZXMgY2hhbmdlZCwgMzUgaW5zZXJ0aW9ucygrKSwg
+NyBkZWxldGlvbnMoLSkKCi0tIAoyLjcuNAoK
