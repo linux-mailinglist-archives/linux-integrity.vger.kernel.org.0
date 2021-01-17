@@ -2,119 +2,170 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C04E22F8A58
-	for <lists+linux-integrity@lfdr.de>; Sat, 16 Jan 2021 02:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA622F9287
+	for <lists+linux-integrity@lfdr.de>; Sun, 17 Jan 2021 14:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727471AbhAPBZS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 15 Jan 2021 20:25:18 -0500
-Received: from mout.gmx.net ([212.227.15.18]:56503 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726194AbhAPBZR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 15 Jan 2021 20:25:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1610760218;
-        bh=F2qbFf9qKdSsBJa23tXe6T1HNDHCDzPhYtNTXVVRWNI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=cGv3Il2tFQ+HsVAoOo36bWX56A+r6RminW/Q8CypSWJvSj2gRxWP9zUgK5oWVT/F7
-         t5NyZ8d4pvcnVclZxPJF/Ws6onII2AOJ4aJLNj8fHJFgReEYno2RE3/udJO8M52orI
-         uuhPPUhcOjeo1OAaj7JnchieBoGLzjfNkVQkllIY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([78.42.220.31]) by mail.gmx.com (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0X8o-1lwyK62LEi-00wXvB; Sat, 16
- Jan 2021 02:23:38 +0100
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org
-Cc:     jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        id S1728131AbhAQN0D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 17 Jan 2021 08:26:03 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:17386 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727480AbhAQN0C (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 17 Jan 2021 08:26:02 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10HD4MVu086084;
+        Sun, 17 Jan 2021 08:24:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=woqyHjUD+Wk6Ib5O7OUBZ1HHzA3VJ6QiDNMM6trQ8E0=;
+ b=tgEQN74HAtITOc3FbpINU+z+YxVXlSnqUggB0OwiPIKC9wCM6Mwp8cjbeNRwU2YHin0i
+ 4yOXlNUvogquWbyZn2U6sxLPttaeVp6rIZPvwRlTEZdPX5hSm+e3IEruuLJOZf8a4mwC
+ XJeuMZRVm0jBM5QDd7NjtdyO7TFbeZeiAC7a68GDMZ/qYljPz/GZoMAKtZnrH8B54erX
+ 8Ri5qdkVUJs/Q8XSucKsT1eq6GEOClJSZJCFwk+edGKwc20Zo32ekfBKhIbQ9sQYF0Nu
+ Zyq0xPV23CVtscYAvB9zJ1qtrv2Ao4dO4aMOX7TWRIjGeyIXbSjv34hF1+qeCP8nwgp9 UQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 364k16b0d9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 17 Jan 2021 08:24:07 -0500
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10HDKrL2160007;
+        Sun, 17 Jan 2021 08:24:06 -0500
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 364k16b0cu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 17 Jan 2021 08:24:06 -0500
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10HDJ04G021917;
+        Sun, 17 Jan 2021 13:24:04 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03fra.de.ibm.com with ESMTP id 363qs88kdn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 17 Jan 2021 13:24:04 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10HDO1hV26804688
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 17 Jan 2021 13:24:01 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C0B7B42041;
+        Sun, 17 Jan 2021 13:24:01 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C64FF4203F;
+        Sun, 17 Jan 2021 13:23:54 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.41.68])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 17 Jan 2021 13:23:54 +0000 (GMT)
+Message-ID: <3c920af2da0d2650bc80bf8099bed7c6c549ca5b.camel@linux.ibm.com>
+Subject: Re: [PATCH v15 09/10] arm64: Call kmalloc() to allocate DTB buffer
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        bauerman@linux.ibm.com, robh@kernel.org,
+        takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
+        will@kernel.org, catalin.marinas@arm.com, mpe@ellerman.id.au,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
+        paulus@samba.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        masahiroy@kernel.org, bhsharma@redhat.com, mbrugger@suse.com,
+        hsinyi@chromium.org, tao.li@vivo.com, christophe.leroy@c-s.fr,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        LinoSanfilippo@gmx.de, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: [PATCH 4/4] tpm: Provide a function tpm_chip_free() to free tpm chips
-Date:   Sat, 16 Jan 2021 02:22:41 +0100
-Message-Id: <1610760161-21982-5-git-send-email-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1610760161-21982-1-git-send-email-LinoSanfilippo@gmx.de>
-References: <1610760161-21982-1-git-send-email-LinoSanfilippo@gmx.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:7LO2kLHLpuJ1Obj7yG/NKIjDEnDYivUDdHMjXgTExtjAzWCbONM
- mTIDxVRb3DLKOuFTtshO/Xwgch1z04dQ4gOlbl6toVDX0FadqCJjQy7N/R21/XWbi2euEwV
- jbxGtsjBnoeq8TbX+fQ4dmuJxEQa3HbuTMQwFxMuREAibhbOr5NjWjU39IviBeQxiVdfsiV
- qDNc/UlcPcGOCFy543LEA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mwMJBVypbFI=:rVDhbqRFT9bOq2TPD8SKJi
- zCHkp9PfQMxP4PWG7uMdIbf32zrVhLl6HfSc55JyR+VuuwEgcML4WOJLzYf4BEa7eDceXBdx1
- 5qa87L/OsSuZeWf2OhF0fxGtnSYo3NbFlDTSFuYz+AzFyXDlFJq9mmdylRf6JWqza5d4iXw1z
- 6c5KHTaZxX5YHQOj8oo+Or6Q+DFXtD6IX2ljkzR6KVCml6h5QfFmJ9DZeU+nELZef5rTqdeHx
- UrBBuwy3WK5DEsHR2+h4laBhpgPBzclvMlogHQ0RIWwao+MZ8IHubH+vx7K4juByaxrQlXapx
- 8CRcBLtWPCEn69BamDDQzQGcmo5H4LlT/vug/rShFFTCu3JquqqI46VqNhuaClc2Oy2EZ7AaC
- C1dqDRrbrhHPTYhk5SgjN3IqvdzBoiTRmjTaA1DqkjvZUdUlzZFmDuvmLh8u4MkiAQ+c7vh85
- /Sh4gIdBUqKXEg5s90GVomkiD2x/KgehYZDOpDu+oqbKlNe0/eQIcPK/2f2835WM4mwvaCCL6
- 4HnM4w6MGTaf6uiY7E9a3/u+Aa1ZBuyKCM4r3BqgD7tCDdnGtOY18FnsfwEltmk9Fy1PxKovR
- TmjEfQ5LS5yu+qs/scaphsxJwtslFhgfOgfSdL5ylJgQ6qt90zzySZl6J0zwJU41sS66coYvu
- QPYC/IYyDId7x5muLSenRAwMbXexo9R81aV+WNf1eynu8BWIvWLuArd3ak9o6qlq3LhqXoD8v
- mq8IUK5uT+v+wvX/njPH4pgutA84pDz5P3B829jy+kFbAMUoqpTR6Ls5RgXFVjJsfsleDRC/7
- gqJgV4yGghwcSKLECuCjFGF2VBJuQ4Zfr2Z49cONNk5SF/zSFizP054C4fvYH5GCLd71G06UV
- 2MUc/hrMg129SN2PcRiA==
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Date:   Sun, 17 Jan 2021 08:23:53 -0500
+In-Reply-To: <20210115173017.30617-10-nramas@linux.microsoft.com>
+References: <20210115173017.30617-1-nramas@linux.microsoft.com>
+         <20210115173017.30617-10-nramas@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-17_06:2021-01-15,2021-01-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 clxscore=1011 mlxscore=0 adultscore=0
+ phishscore=0 mlxlogscore=999 spamscore=0 suspectscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101170082
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClByb3ZpZGUg
-YSBmdW5jdGlvbiB0cG1fY2hpcF9mcmVlKCkgYXMgYSBjb3VudGVycGFydCB0byB0cG1fY2hpcF9h
-bGxvYygpLgpUaGUgZnVuY3Rpb24gaGlkZXMgdGhlIGludGVybmFscyBvZiBmcmVlaW5nIGEgc3Ry
-dWN0IHRwbV9jaGlwIGluc3RhbmNlCmJ5IHB1dHRpbmcgdGhlIGRldmljZSByZWZlcmVuY2VzIHdo
-aWNoIGFyZSBwYXJ0IG9mIHRoaXMgc3RydWN0dXJlLgoKVXNlIHRoZSBuZXcgZnVuY3Rpb24gYXQg
-dGhlIGFwcHJvcHJpYXRlIHBsYWNlcy4KClNpZ25lZC1vZmYtYnk6IExpbm8gU2FuZmlsaXBwbyA8
-bC5zYW5maWxpcHBvQGt1bmJ1cy5jb20+Ci0tLQogZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5j
-ICAgICAgIHwgMTYgKysrKysrKysrKysrKysrKwogZHJpdmVycy9jaGFyL3RwbS90cG0uaCAgICAg
-ICAgICAgIHwgIDEgKwogZHJpdmVycy9jaGFyL3RwbS90cG1fZnRwbV90ZWUuYyAgIHwgIDYgKyst
-LS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV92dHBtX3Byb3h5LmMgfCAgMyArLS0KIDQgZmlsZXMg
-Y2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9k
-cml2ZXJzL2NoYXIvdHBtL3RwbS1jaGlwLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbS1jaGlwLmMK
-aW5kZXggNTk2ODI0Yy4uODVlOTg3YiAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90cG0t
-Y2hpcC5jCisrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtLWNoaXAuYwpAQCAtNDAyLDYgKzQwMiwy
-MiBAQCBzdHJ1Y3QgdHBtX2NoaXAgKnRwbV9jaGlwX2FsbG9jKHN0cnVjdCBkZXZpY2UgKnBkZXYs
-CiBFWFBPUlRfU1lNQk9MX0dQTCh0cG1fY2hpcF9hbGxvYyk7CiAKIC8qKgorICogdHBtX2NoaXBf
-ZnJlZSgpIC0gZnJlZSBhbiBpbnN0YW5jZSBvZiBzdHJ1Y3QgdHBtX2NoaXAgdGhhdCBoYXMgYmVl
-bgorICogYWxsb2NhdGVkIHdpdGggdHBtX2NoaXBfYWxsb2MoKSBiZWZvcmUuCisgKiBAY2hpcDog
-Y2hpcCB0byBmcmVlCisgKgorICogRnJlZXMgYW4gaW5zdGFuY2Ugb2Ygc3RydWN0IHRwbV9jaGlw
-IGJ5IHJlbGVhc2luZyBpbnRlcm5hbCBkZXZpY2UgcmVmZXJlbmNlcy4KKyAqIFRoaXMgZnVuY3Rp
-b24gaXMgdXNlZCB0byBoaWRlIHRoZSBpbnRlcm5hbHMgbmVlZGVkIHRvIGZyZWUgYSBzdHJ1Y3Qg
-dHBtX2NoaXAKKyAqIGluc3RhbmNlIHRoYXMgaGFzIGJlZW4gYWxsb2NhdGVkIHdpdGggdHBtX2No
-aXBfYWxsb2MoKSBiZWZvcmUuCisgKi8KK3ZvaWQgdHBtX2NoaXBfZnJlZShzdHJ1Y3QgdHBtX2No
-aXAgKmNoaXApCit7CisJcHV0X2RldmljZSgmY2hpcC0+ZGV2cyk7CisJcHV0X2RldmljZSgmY2hp
-cC0+ZGV2KTsKK30KK0VYUE9SVF9TWU1CT0xfR1BMKHRwbV9jaGlwX2ZyZWUpOworCisvKioKICAq
-IHRwbW1fY2hpcF9hbGxvYygpIC0gYWxsb2NhdGUgYSBuZXcgc3RydWN0IHRwbV9jaGlwIGluc3Rh
-bmNlCiAgKiBAcGRldjogcGFyZW50IGRldmljZSB0byB3aGljaCB0aGUgY2hpcCBpcyBhc3NvY2lh
-dGVkCiAgKiBAb3BzOiBzdHJ1Y3QgdHBtX2NsYXNzX29wcyBpbnN0YW5jZQpkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9jaGFyL3RwbS90cG0uaCBiL2RyaXZlcnMvY2hhci90cG0vdHBtLmgKaW5kZXggOTQ3
-ZDFkYi4uZTZiYjZhZSAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90cG0uaAorKysgYi9k
-cml2ZXJzL2NoYXIvdHBtL3RwbS5oCkBAIC0xOTksNiArMTk5LDcgQEAgdm9pZCB0cG1fcHV0X29w
-cyhzdHJ1Y3QgdHBtX2NoaXAgKmNoaXApOwogCiBzdHJ1Y3QgdHBtX2NoaXAgKnRwbV9jaGlwX2Fs
-bG9jKHN0cnVjdCBkZXZpY2UgKmRldiwKIAkJCQljb25zdCBzdHJ1Y3QgdHBtX2NsYXNzX29wcyAq
-b3BzKTsKK3ZvaWQgdHBtX2NoaXBfZnJlZShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXApOwogc3RydWN0
-IHRwbV9jaGlwICp0cG1tX2NoaXBfYWxsb2Moc3RydWN0IGRldmljZSAqcGRldiwKIAkJCQkgY29u
-c3Qgc3RydWN0IHRwbV9jbGFzc19vcHMgKm9wcyk7CiBpbnQgdHBtX2NoaXBfcmVnaXN0ZXIoc3Ry
-dWN0IHRwbV9jaGlwICpjaGlwKTsKZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2hhci90cG0vdHBtX2Z0
-cG1fdGVlLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV9mdHBtX3RlZS5jCmluZGV4IDgyODU4YzIu
-LjQ3ZmZhYWUgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvY2hhci90cG0vdHBtX2Z0cG1fdGVlLmMKKysr
-IGIvZHJpdmVycy9jaGFyL3RwbS90cG1fZnRwbV90ZWUuYwpAQCAtMjg1LDggKzI4NSw3IEBAIHN0
-YXRpYyBpbnQgZnRwbV90ZWVfcHJvYmUoc3RydWN0IGRldmljZSAqZGV2KQogCXJldHVybiAwOwog
-CiBvdXRfY2hpcDoKLQlwdXRfZGV2aWNlKCZwdnRfZGF0YS0+Y2hpcC0+ZGV2KTsKLQlwdXRfZGV2
-aWNlKCZwdnRfZGF0YS0+Y2hpcC0+ZGV2cyk7CisJdHBtX2NoaXBfZnJlZShjaGlwKTsKIG91dF9j
-aGlwX2FsbG9jOgogCXRlZV9zaG1fZnJlZShwdnRfZGF0YS0+c2htKTsKIG91dF9zaG1fYWxsb2M6
-CkBAIC0zMTksOCArMzE4LDcgQEAgc3RhdGljIGludCBmdHBtX3RlZV9yZW1vdmUoc3RydWN0IGRl
-dmljZSAqZGV2KQogCXRwbV9jaGlwX3VucmVnaXN0ZXIocHZ0X2RhdGEtPmNoaXApOwogCiAJLyog
-ZnJlZXMgY2hpcCAqLwotCXB1dF9kZXZpY2UoJnB2dF9kYXRhLT5jaGlwLT5kZXZzKTsKLQlwdXRf
-ZGV2aWNlKCZwdnRfZGF0YS0+Y2hpcC0+ZGV2KTsKKwl0cG1fY2hpcF9mcmVlKHB2dF9kYXRhLT5j
-aGlwKTsKIAogCS8qIEZyZWUgdGhlIHNoYXJlZCBtZW1vcnkgcG9vbCAqLwogCXRlZV9zaG1fZnJl
-ZShwdnRfZGF0YS0+c2htKTsKZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2hhci90cG0vdHBtX3Z0cG1f
-cHJveHkuYyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Z0cG1fcHJveHkuYwppbmRleCA5N2I2MGY4
-Li5mODg3YmIzIDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbV92dHBtX3Byb3h5LmMK
-KysrIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdnRwbV9wcm94eS5jCkBAIC01MjAsOCArNTIwLDcg
-QEAgc3RhdGljIHN0cnVjdCBwcm94eV9kZXYgKnZ0cG1fcHJveHlfY3JlYXRlX3Byb3h5X2Rldih2
-b2lkKQogICovCiBzdGF0aWMgaW5saW5lIHZvaWQgdnRwbV9wcm94eV9kZWxldGVfcHJveHlfZGV2
-KHN0cnVjdCBwcm94eV9kZXYgKnByb3h5X2RldikKIHsKLQlwdXRfZGV2aWNlKCZwcm94eV9kZXYt
-PmNoaXAtPmRldnMpOwotCXB1dF9kZXZpY2UoJnByb3h5X2Rldi0+Y2hpcC0+ZGV2KTsgLyogZnJl
-ZXMgY2hpcCAqLworCXRwbV9jaGlwX2ZyZWUocHJveHlfZGV2LT5jaGlwKTsKIAlrZnJlZShwcm94
-eV9kZXYpOwogfQogCi0tIAoyLjcuNAoK
+Hi Ard,
+
+On Fri, 2021-01-15 at 09:30 -0800, Lakshmi Ramasubramanian wrote:
+> create_dtb() function allocates kernel virtual memory for
+> the device tree blob (DTB).  This is not consistent with other
+> architectures, such as powerpc, which calls kmalloc() for allocating
+> memory for the DTB.
+> 
+> Call kmalloc() to allocate memory for the DTB, and kfree() to free
+> the allocated memory.
+
+The vmalloc() function description says, "vmalloc - allocate virtually
+contiguous memory".  I'd appreciate your reviewing this patch, in
+particular, which replaces vmalloc() with kmalloc().
+
+thanks,
+
+Mimi
+
+> 
+> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> ---
+>  arch/arm64/kernel/machine_kexec_file.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+> index 7de9c47dee7c..51c40143d6fa 100644
+> --- a/arch/arm64/kernel/machine_kexec_file.c
+> +++ b/arch/arm64/kernel/machine_kexec_file.c
+> @@ -29,7 +29,7 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
+>  
+>  int arch_kimage_file_post_load_cleanup(struct kimage *image)
+>  {
+> -	vfree(image->arch.dtb);
+> +	kfree(image->arch.dtb);
+>  	image->arch.dtb = NULL;
+>  
+>  	vfree(image->arch.elf_headers);
+> @@ -59,19 +59,21 @@ static int create_dtb(struct kimage *image,
+>  			+ cmdline_len + DTB_EXTRA_SPACE;
+>  
+>  	for (;;) {
+> -		buf = vmalloc(buf_size);
+> +		buf = kmalloc(buf_size, GFP_KERNEL);
+>  		if (!buf)
+>  			return -ENOMEM;
+>  
+>  		/* duplicate a device tree blob */
+>  		ret = fdt_open_into(initial_boot_params, buf, buf_size);
+> -		if (ret)
+> +		if (ret) {
+> +			kfree(buf);
+>  			return -EINVAL;
+> +		}
+>  
+>  		ret = of_kexec_setup_new_fdt(image, buf, initrd_load_addr,
+>  					     initrd_len, cmdline);
+>  		if (ret) {
+> -			vfree(buf);
+> +			kfree(buf);
+>  			if (ret == -ENOMEM) {
+>  				/* unlikely, but just in case */
+>  				buf_size += DTB_EXTRA_SPACE;
+> @@ -217,6 +219,6 @@ int load_other_segments(struct kimage *image,
+>  	return 0;
+>  
+>  out_err:
+> -	vfree(dtb);
+> +	kfree(dtb);
+>  	return ret;
+>  }
+
+
