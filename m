@@ -2,59 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C29FF2FC284
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Jan 2021 22:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F335D2FC43E
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Jan 2021 23:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390191AbhASRtq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 19 Jan 2021 12:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        id S2391820AbhASOZu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 19 Jan 2021 09:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389936AbhASPGh (ORCPT
+        with ESMTP id S1732735AbhASJYB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 19 Jan 2021 10:06:37 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C33EC06179C
-        for <linux-integrity@vger.kernel.org>; Tue, 19 Jan 2021 07:05:29 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id o10so29455157lfl.13
-        for <linux-integrity@vger.kernel.org>; Tue, 19 Jan 2021 07:05:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gOmgvCPsNvi85/TpBsHHlznh/AXeaDwbv8LGPCZK7GU=;
-        b=jHOv7ZfcUJDyBrUH8oJXnGIi8zR/GVQigV9JsU3VOD2zVPzE8Qi8FcxCv3RN2B9A6r
-         xugkjyegXRk25clhQPkHPl6Bgq5is0HjaMKTdere1dxwfXiSoujavM6bCqwMy7DZTLAY
-         XzwyrYIOx+UbZ4taCEFKeVgvzFkPqWMiBrHN0cesc58X2THa+V2gdhqFGvQ0m5hl69PP
-         86p4cNSHXci62Q5bRCDCUjqJlCKurpnZ2KQ8/bUtutXFEHhOZcuBiBOGHUyG7S3P/OJ0
-         UhrskVG5YmmxTBCZMbabr3ZIzMkK81tYRiWGV1k3KMjBXOmM5Zrq6ssCUVgGucgyhjVM
-         mc6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gOmgvCPsNvi85/TpBsHHlznh/AXeaDwbv8LGPCZK7GU=;
-        b=A++OkjQ+aisRe59ABDyNXXCEAuELvzerB9HfOIUEr6aZeCZGitfrgzuja/A6sXRZ7Z
-         OCwCgGeVYkDXf27Q0pTCETg6CwsoBhUG52VJC6pTO3pAM/yOJiwkOVngPPdIu8Hm441h
-         WAoyUxvwY2wiLg2KBpdvW4rB04X1JAB6zT+663xqQIsTjEpgals4LagO+yaEn/4K3o2i
-         6+42wKF4MSRRt2t9ppa0UU44EKOc6BBKjc8xPv10Wb2WeGC7yXVFrI+ce7y0xpz4tbxR
-         FnYR+9NjKUoUOIpJPOyRXiLmCtjE4Yujd/F3EIHxxAdkw51R7uMgdsejL9lzoWw69wZm
-         lnjA==
-X-Gm-Message-State: AOAM5333KNRZv/cjYZ4YN6N9gUUZZb0gvxD/PXY+Ot1acbYfNjMEW5bW
-        36pCQ9ctTeXA5DD0u6s55DWFkZS9QDZ1byUbjoUS7A==
-X-Google-Smtp-Source: ABdhPJxFxS+hG4x6TwLiOwPtHwa+9Zao0MvjeAr8yET1CRB9c/HolYwSYvtkLR07E5CI/h61T92ZT6GwaxlT4i6ykfk=
-X-Received: by 2002:a19:197:: with SMTP id 145mr2043470lfb.352.1611068727150;
- Tue, 19 Jan 2021 07:05:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20210112220124.837960-1-christian.brauner@ubuntu.com> <20210112220124.837960-16-christian.brauner@ubuntu.com>
-In-Reply-To: <20210112220124.837960-16-christian.brauner@ubuntu.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 19 Jan 2021 16:05:00 +0100
-Message-ID: <CAG48ez3Ccr77+zH56YGimESf9jdy_xnQrebypn1TXEP3Q+xw=w@mail.gmail.com>
-Subject: Re: [PATCH v5 15/42] fs: add file_user_ns() helper
+        Tue, 19 Jan 2021 04:24:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F39C061574;
+        Tue, 19 Jan 2021 01:23:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kxnpvdEioqW2SL/zS2zHQR8JutL4B883AHpsl2zQebg=; b=it9Hptg7/g4IK+bZS7OVTPBwvu
+        uEJwSofsw371xci3PeKBU/FjZML7V0mhZqDGM/lGkG2sEfj+XX/v3+r6ucKos47mtHBGfRbdfMl7S
+        mkKi8Qz9aZJcYyRsKs3CCkAXK63lVddcXS3y+EWvEwVQDRWIIC6QPa9t3tWIdAHTiHQYwDv9eLGWR
+        1R5YiOHnEr/nZ/SA58AW5jMykRQpkhcbJSWRZTR9AwuJy05gz+2oKe4MpWZyRaKOG5Xyg2lLZ2iQG
+        o80tSyIExjTsT8UaNxFm8eZuQOOzWCnxZ6GCz3SWZtCIlSZ2x15M2bHcfBr5kdAwznSdV2VpZUcXh
+        yDnrc9Fg==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1l1nEK-00E6t0-Rv; Tue, 19 Jan 2021 09:23:17 +0000
+Date:   Tue, 19 Jan 2021 09:23:16 +0000
+From:   Christoph Hellwig <hch@infradead.org>
 To:     Christian Brauner <christian.brauner@ubuntu.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christoph Hellwig <hch@infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
         John Johansen <john.johansen@canonical.com>,
         James Morris <jmorris@namei.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
@@ -73,47 +51,47 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         David Howells <dhowells@redhat.com>,
         James Bottomley <James.Bottomley@hansenpartnership.com>,
         Seth Forshee <seth.forshee@canonical.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
+        St??phane Graber <stgraber@ubuntu.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Aleksa Sarai <cyphar@cyphar.com>,
         Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Stephen Barber <smbarber@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
         Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
         Kees Cook <keescook@chromium.org>,
         Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-xfs@vger.kernel.org, linux-integrity@vger.kernel.org,
-        SElinux list <selinux@vger.kernel.org>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v5 11/42] namei: make permission helpers idmapped mount
+ aware
+Message-ID: <20210119092316.GC3361757@infradead.org>
+References: <20210112220124.837960-1-christian.brauner@ubuntu.com>
+ <20210112220124.837960-12-christian.brauner@ubuntu.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210112220124.837960-12-christian.brauner@ubuntu.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 1:52 AM Christian Brauner
-<christian.brauner@ubuntu.com> wrote:
-> Add a simple helper to retrieve the user namespace associated with the
-> vfsmount of a file. Christoph correctly points out that this makes
-> codepaths (e.g. ioctls) way easier to follow that would otherwise
-> dereference via mnt_user_ns(file->f_path.mnt).
->
-> In order to make file_user_ns() static inline we'd need to include
-> mount.h in either file.h or fs.h which seems undesirable so let's simply
-> not force file_user_ns() to be inline.
-[...]
-> +struct user_namespace *file_user_ns(struct file *file)
-> +{
-> +       return mnt_user_ns(file->f_path.mnt);
-> +}
+On Tue, Jan 12, 2021 at 11:00:53PM +0100, Christian Brauner wrote:
+> The two helpers inode_permission() and generic_permission() are used by
+> the vfs to perform basic permission checking by verifying that the
+> caller is privileged over an inode. In order to handle idmapped mounts
+> we extend the two helpers with an additional user namespace argument.
+> On idmapped mounts the two helpers will make sure to map the inode
+> according to the mount's user namespace and then peform identical
+> permission checks to inode_permission() and generic_permission(). If the
+> initial user namespace is passed nothing changes so non-idmapped mounts
+> will see identical behavior as before.
 
-That name is confusing to me, because when I think of "the userns of a
-file", it's file->f_cred->user_ns. There are a bunch of places that
-look at that, as you can see from grepping for "f_cred->user_ns".
+More long lines in here.
 
-If you really want this to be a separate helper, can you maybe give it
-a clearer name? file_mnt_user_ns(), or something like that, idk.
+Otherwise looks good:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>
