@@ -2,36 +2,25 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FAC2FB960
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Jan 2021 15:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34FA2FC281
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Jan 2021 22:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405070AbhASO3k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 19 Jan 2021 09:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388605AbhASJse (ORCPT
+        id S2387717AbhASRth (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 19 Jan 2021 12:49:37 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:35725 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726638AbhASO6Y (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 19 Jan 2021 04:48:34 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8613C061573;
-        Tue, 19 Jan 2021 01:47:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KBLdqigwXHa9zb4IKHjzXYIBtipeYgH3IvVF9mKe8Wc=; b=rkMudNvWO66HMSQr1C/riYx6VA
-        ITPbSZKgiBW4KcAtUmJmkUr1dBGlA/LNN3BGZBcxy4D6iuF9UCTZW8+fvX6Fs2HjXaH7Id164/C6p
-        8aX7aQWKUIb43BuHAt825NJDtfHZ03eFtv7j69IJStn2YxsSOCpKR6Ec83TqhIMYX2rT5ua6MVffv
-        dkDjTkT8HY7yNCIjlZIOXXuGVjfTfypwT0jzue7d0zu6Oqjhs9YmICue9ulItMg+VcpccEHVuyhvT
-        Git07uadZsjuEsjKkGCVR9P2D1ctpz0L0F93Xqf5Qcom70CCTkD4H7p/+v1MyKeAUkCnqLSoSIzQN
-        d/kOWGMA==;
-Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1l1nc6-00E8cK-3V; Tue, 19 Jan 2021 09:47:50 +0000
-Date:   Tue, 19 Jan 2021 09:47:50 +0000
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
+        Tue, 19 Jan 2021 09:58:24 -0500
+Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1l1sRR-0006A4-Nk; Tue, 19 Jan 2021 14:57:09 +0000
+Date:   Tue, 19 Jan 2021 15:57:05 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Christoph Hellwig <hch@infradead.org>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
         linux-fsdevel@vger.kernel.org,
         John Johansen <john.johansen@canonical.com>,
         James Morris <jmorris@namei.org>,
@@ -64,21 +53,22 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
         linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Mauricio V??squez Bernal <mauricio@kinvolk.io>
-Subject: Re: [PATCH v5 40/42] fs: introduce MOUNT_ATTR_IDMAP
-Message-ID: <20210119094750.GQ3364550@infradead.org>
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v5 23/42] open: handle idmapped mounts
+Message-ID: <20210119145705.g2je6ec3lq42fffd@wittgenstein>
 References: <20210112220124.837960-1-christian.brauner@ubuntu.com>
- <20210112220124.837960-41-christian.brauner@ubuntu.com>
+ <20210112220124.837960-24-christian.brauner@ubuntu.com>
+ <20210119093848.GH3364550@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210112220124.837960-41-christian.brauner@ubuntu.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20210119093848.GH3364550@infradead.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Generally looks good, but wouldn't it make sense to introduce the
-userns_fd in version 0 of the mount_attr structure instead of having
-two versions from the start?
+On Tue, Jan 19, 2021 at 09:38:48AM +0000, Christoph Hellwig wrote:
+> I think path_permission() and file_persmission() helpers would reduce
+> the clutter a lot here.
+
+Done.
