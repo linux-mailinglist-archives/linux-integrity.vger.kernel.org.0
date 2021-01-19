@@ -2,32 +2,32 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1B02FC42B
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Jan 2021 23:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D6E2FC42F
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Jan 2021 23:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395262AbhASO0c (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 19 Jan 2021 09:26:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        id S2391894AbhASO06 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 19 Jan 2021 09:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387421AbhASJ2M (ORCPT
+        with ESMTP id S2387540AbhASJcz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 19 Jan 2021 04:28:12 -0500
+        Tue, 19 Jan 2021 04:32:55 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4204C061573;
-        Tue, 19 Jan 2021 01:27:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84B8C061574;
+        Tue, 19 Jan 2021 01:32:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Cyfg7cDbWy/IPZ5awSQp2Q1kduN8Yx/DetEnfOJ3/Ps=; b=hgXOWzDXEAqTZlmh2ClzTTHRUY
-        kNqj/YWNpIiNNZI4h7sTjieFjx9mprWMfZnRcp8t7TacpXmDaaQp4cwed1L+LImBNTC7PkR19OlFw
-        l74TZkUfg/yb2+351DtCkqJGjGA//VMbi64D9uMwjjFg6zEbkgDUYAPoWGhYImQW9OYMYb9x33Cok
-        z6ZNSrca6AZn9M8SO/a8rCa6k7GCEA7AJ2cCB+cWjOWTS5FoeF5pVii0a+ABJnK9EaOXngmZLovSz
-        1mUgRxoG8YYjkwysnzGCtHVHdcb4hxB5A6snhHSjwlWoWmZx48iwjn33REIhr4uahIzSn2loXZTeh
-        Ub5giDlg==;
+        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=klmdlbjPa4neptyaD8swknjp/k
+        nbMlLprwFliwRnvcdRaOJYdwGeZbz6Un4IXMUlyocgli46NlrB64Fksx3nkuMgHN6CwkhIZY4Rx9M
+        84U15Jxy0Qq26tk1ZTx7Lh0cBHOZAEDw/Q3B4nBv1ruy13YViq7iU8qvQR8cu5TUTeI2XcBi2Ijzi
+        VWNUP+j4e9Crd9qOY+GJXvOACm2fuEYn624SOwwZn5CcmjS5vvkVTlk1Qd5R/cF7H27qpC9BEnIaQ
+        ldTjngNW+rNIdglgcRAb9VxfSYAUPbaUxS9GYrqRlkjusQd0OelL0jdDG6UzjAtRX6Zhu1dUP8wUF
+        SVWqfaIQ==;
 Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1l1nIL-00E79Y-KZ; Tue, 19 Jan 2021 09:27:25 +0000
-Date:   Tue, 19 Jan 2021 09:27:25 +0000
+        id 1l1nMh-00E7Ri-R3; Tue, 19 Jan 2021 09:31:57 +0000
+Date:   Tue, 19 Jan 2021 09:31:55 +0000
 From:   Christoph Hellwig <hch@infradead.org>
 To:     Christian Brauner <christian.brauner@ubuntu.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -65,31 +65,19 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v5 15/42] fs: add file_user_ns() helper
-Message-ID: <20210119092725.GG3361757@infradead.org>
+Subject: Re: [PATCH v5 17/42] commoncap: handle idmapped mounts
+Message-ID: <20210119093155.GB3364550@infradead.org>
 References: <20210112220124.837960-1-christian.brauner@ubuntu.com>
- <20210112220124.837960-16-christian.brauner@ubuntu.com>
+ <20210112220124.837960-18-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210112220124.837960-16-christian.brauner@ubuntu.com>
+In-Reply-To: <20210112220124.837960-18-christian.brauner@ubuntu.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 11:00:57PM +0100, Christian Brauner wrote:
-> Add a simple helper to retrieve the user namespace associated with the
-> vfsmount of a file. Christoph correctly points out that this makes
-> codepaths (e.g. ioctls) way easier to follow that would otherwise
-> dereference via mnt_user_ns(file->f_path.mnt).
-> 
-> In order to make file_user_ns() static inline we'd need to include
-> mount.h in either file.h or fs.h which seems undesirable so let's simply
-> not force file_user_ns() to be inline.
-
-I'd be tempted to just make this an inline.
-
-Otherwise this looks ok:
+Looks good,
 
 Reviewed-by: Christoph Hellwig <hch@lst.de>
