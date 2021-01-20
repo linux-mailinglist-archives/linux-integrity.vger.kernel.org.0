@@ -2,28 +2,28 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FCC2FE122
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Jan 2021 05:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609022FE305
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Jan 2021 07:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728604AbhAUDxF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 20 Jan 2021 22:53:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51512 "EHLO mail.kernel.org"
+        id S1726159AbhAUGiv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 21 Jan 2021 01:38:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49450 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388702AbhATXt0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 20 Jan 2021 18:49:26 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F0B69221FE;
-        Wed, 20 Jan 2021 23:48:39 +0000 (UTC)
+        id S2387519AbhATXpp (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 20 Jan 2021 18:45:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3FF75221FE;
+        Wed, 20 Jan 2021 23:44:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611186522;
-        bh=2BgVV18n0FiTAx3Ktk2+qq/+MuryRP60T+o5yjWBck4=;
+        s=k20201202; t=1611186302;
+        bh=DtYGGvkksfs7vXommXeJwl91lOsFd1rEuyBTgJv2+l0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tyAPTm4TVc8RBvCmozjOhaqCARYGaelqOnoxhCn1FdCSw3nMaWzQnnJgzAxfpJdL0
-         dNc+PfScLbvgqk7iYIEyRL62sY+wPjr3sKcz+h+iDR/XvyRiQTNOcBM6hRJgjmqsqb
-         sTo7XfeBp57TftPu0R7AvFoQb9+qXgdPmQJXfcrknC2Us2s4aK+5cHLTYFdzpLpfdp
-         OsZP2xBSMEh6M+K/28nNnQPOqfiD0UHTo0LtejjLE5jgGgiswwd6lOxQb3IuL6aAov
-         vJBJlI0N8oUAqe5BYZRr0ixWXSpaC4PcDH7azCxLw/tEztgTAagQoyGO2e2HaDSN2/
-         1cvhhoB9t5TAw==
-Date:   Thu, 21 Jan 2021 01:48:36 +0200
+        b=E70AnGgrCqxaoh1vWdlhGmZ2hd7h/FB84wv2240pZVLQUYmrHgMKATyaqSOkK85F/
+         efCn9nc8j0I9yyif6cEaIBQ+Y8LWSf+T/dqeBGKToiPaLLnNeBV1+7hwW5AxIM/qIi
+         msPEsJTYyd/Wx5bu8Da6KODI7Zbxlq/djYsCS3CT/WKtcjJxGMw81TsvZN0B0zv+fH
+         yq1FOKDdleusG2CT5IJQua2USHSh1tGzSkT6kTlaaNQQJ6+uyly9wZta2XxuOIhExl
+         bu2B36wdUYjoVyWPzvMvz8AUR+XPQHfHGGqkXP6OrYIbAY4z8Hgjlm7KTVPVLiVjYh
+         Vr6VDSf5UWiWw==
+Date:   Thu, 21 Jan 2021 01:44:56 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
 Cc:     David Howells <dhowells@redhat.com>,
@@ -35,41 +35,96 @@ Cc:     David Howells <dhowells@redhat.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         "Serge E . Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 05/10] certs: Replace K{U,G}IDT_INIT() with
- GLOBAL_ROOT_{U,G}ID
-Message-ID: <YAjBVNxsZ7Zn2Ksi@kernel.org>
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Ben Boeckel <mathstuf@gmail.com>
+Subject: Re: [PATCH v3 02/10] certs: Fix blacklisted hexadecimal hash string
+ check
+Message-ID: <YAjAePytNXMC6HqX@kernel.org>
 References: <20210114151909.2344974-1-mic@digikod.net>
- <20210114151909.2344974-6-mic@digikod.net>
- <YAe8cr7bS2Dn0RRn@kernel.org>
- <96550031-5183-e60f-f279-3475ab3851bc@digikod.net>
+ <20210114151909.2344974-3-mic@digikod.net>
+ <YAem+DjBR92WG+bK@kernel.org>
+ <05e3ce56-c27c-877d-8ebe-d088ba95f248@digikod.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <96550031-5183-e60f-f279-3475ab3851bc@digikod.net>
+In-Reply-To: <05e3ce56-c27c-877d-8ebe-d088ba95f248@digikod.net>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 12:17:28PM +0100, Mickaël Salaün wrote:
+On Wed, Jan 20, 2021 at 12:12:50PM +0100, Mickaël Salaün wrote:
 > 
-> On 20/01/2021 06:15, Jarkko Sakkinen wrote:
-> > On Thu, Jan 14, 2021 at 04:19:04PM +0100, Mickaël Salaün wrote:
+> On 20/01/2021 04:43, Jarkko Sakkinen wrote:
+> > On Thu, Jan 14, 2021 at 04:19:01PM +0100, Mickaël Salaün wrote:
 > >> From: Mickaël Salaün <mic@linux.microsoft.com>
 > >>
-> >> Align with the new macros and add appropriate include files.
+> >> When looking for a blacklisted hash, bin2hex() is used to transform a
+> >> binary hash to an ascii (lowercase) hexadecimal string.  This string is
+> >> then search for in the description of the keys from the blacklist
+> >> keyring.  When adding a key to the blacklist keyring,
+> >> blacklist_vet_description() checks the hash prefix and the hexadecimal
+> >> string, but not that this string is lowercase.  It is then valid to set
+> >> hashes with uppercase hexadecimal, which will be silently ignored by the
+> >> kernel.
+> >>
+> >> Add an additional check to blacklist_vet_description() to check that
+> >> hexadecimal strings are in lowercase.
 > >>
 > >> Cc: David Woodhouse <dwmw2@infradead.org>
 > >> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
 > >> Signed-off-by: David Howells <dhowells@redhat.com>
+> >> Reviewed-by: Ben Boeckel <mathstuf@gmail.com>
+> >> ---
+> >>
+> >> Changes since v2:
+> >> * Cherry-pick v1 patch from
+> >>   https://lore.kernel.org/lkml/2659836.1607940186@warthog.procyon.org.uk/
+> >>   to rebase on v5.11-rc3.
+> >> * Rearrange Cc order.
+> >> ---
+> >>  certs/blacklist.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/certs/blacklist.c b/certs/blacklist.c
+> >> index 2719fb2fbc1c..a888b934a1cd 100644
+> >> --- a/certs/blacklist.c
+> >> +++ b/certs/blacklist.c
+> >> @@ -37,7 +37,7 @@ static int blacklist_vet_description(const char *desc)
+> >>  found_colon:
+> >>  	desc++;
+> >>  	for (; *desc; desc++) {
+> >> -		if (!isxdigit(*desc))
+> >> +		if (!isxdigit(*desc) || isupper(*desc))
+> >>  			return -EINVAL;
+> >>  		n++;
+> >>  	}
+> >> -- 
+> >> 2.30.0
+> >>
 > > 
-> > The commit message makes no sense. What you new macros?
+> > Shouldn't this rather convert the upper case to lower case? I don't like
+> > the ABI break that this causes.
 > 
-> What about "Use the new GLOBAL_ROOT_UID and GLOBAL_ROOT_GID definitions,
-> and add appropriate include files."?
+> It doesn't break the ABI because keys loaded in the blacklist keyring
+> can only happen with builtin hashes.  Moreover these builtin hashes will
+> be checked by patch 10/10 at build time.
 
-They were added in 2011 so you could just remove "the new". Otherwise,
-WFM.
+Right the patches are just out of order then.
 
 /Jarkko
+
+> 
+> This patch is also important to remove a false sense of security and
+> warns about mis-blacklisted certificates or binaries:
+> https://lore.kernel.org/lkml/c9664a67-61b7-6b4a-86d7-5aca9ff06fa5@digikod.net/
+> 
+> Hot-patching keys doesn't seem a good idea, especially when these keys
+> are signed. Moreover, it would bring additional complexity and will
+> require to change the core of the key management.
+> 
+> > 
+> > /Jarkko
+> > 
+> 
