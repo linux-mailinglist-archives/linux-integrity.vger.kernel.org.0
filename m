@@ -2,21 +2,21 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 749952FEEBF
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Jan 2021 16:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1680F2FEEC7
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Jan 2021 16:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732242AbhAUP37 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 21 Jan 2021 10:29:59 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:54068 "EHLO
+        id S1732956AbhAUPa3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 21 Jan 2021 10:30:29 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:54090 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730048AbhAUNWN (ORCPT
+        with ESMTP id S1731136AbhAUNWN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Thu, 21 Jan 2021 08:22:13 -0500
 Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l2Ztp-0005g7-Iy; Thu, 21 Jan 2021 13:21:21 +0000
+        id 1l2Ztt-0005g7-Cs; Thu, 21 Jan 2021 13:21:25 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
@@ -52,28 +52,31 @@ Cc:     John Johansen <john.johansen@canonical.com>,
         linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v6 15/40] open: handle idmapped mounts in do_truncate()
-Date:   Thu, 21 Jan 2021 14:19:34 +0100
-Message-Id: <20210121131959.646623-16-christian.brauner@ubuntu.com>
+Subject: [PATCH v6 16/40] open: handle idmapped mounts
+Date:   Thu, 21 Jan 2021 14:19:35 +0100
+Message-Id: <20210121131959.646623-17-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210121131959.646623-1-christian.brauner@ubuntu.com>
 References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-X-Patch-Hashes: v=1; h=sha256; i=luWr+VA/K8XJzgT4gX4nqMzEuQJylBRV32CcnmZlQJ8=; m=XJu4Sx96Qgw5F+dLWfwKUfgcuJm55dwwUprxzq2rY3M=; p=RlnmoKapstAZLJe1gLcqaUTCPfjFgeMKYnLu+MXn0JY=; g=dc5ad43796544c09b03298270d4c6bfc5aba8333
-X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHUEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9pAAKCRCRxhvAZXjcorJkAP9a62J J2k8eV2GeBOzU+3th+V7gqNipGLUMyUlEa/9OrQD/QqERsALVXZ/lkmI6jvBjiJeBhmRMd7zToPe2 VZ19nAc=
+X-Patch-Hashes: v=1; h=sha256; i=YKSd0FdGGLgCSTeDw7b6sTvRU/kXPfMpmc0z0c+ceJs=; m=QtXKH7l01QTmlgDZWGGLs41QsIHJYr2I07NJQrbQhUc=; p=UQ8ZL9iZHePP4j74jgLUJqMxCUpzv40jcAqgWmdc+iM=; g=fc42bb0317f59f78c12f1f5b6f750e685efc9c8e
+X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHQEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9pAAKCRCRxhvAZXjcom58APiYXnz MLA9PdyDTNWHJ1hzxQwmhv0RHo0AradNsIDslAQDIvEnNGlH+yVfr0r/waOULLGeiGRFi0nzVv0+4 7M8YDg==
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When truncating files the vfs will verify that the caller is privileged
-over the inode. Extend it to handle idmapped mounts. If the inode is
-accessed through an idmapped mount it is mapped according to the mount's
-user namespace. Afterwards the permissions checks are identical to
-non-idmapped mounts. If the initial user namespace is passed nothing
-changes so non-idmapped mounts will see identical behavior as before.
+For core file operations such as changing directories or chrooting,
+determining file access, changing mode or ownership the vfs will verify
+that the caller is privileged over the inode. Extend the various helpers
+to handle idmapped mounts. If the inode is accessed through an idmapped
+mount map it into the mount's user namespace. Afterwards the permissions
+checks are identical to non-idmapped mounts. When changing file
+ownership we need to map the uid and gid from the mount's user
+namespace. If the initial user namespace is passed nothing changes so
+non-idmapped mounts will see identical behavior as before.
 
-Link: https://lore.kernel.org/r/20210112220124.837960-23-christian.brauner@ubuntu.com
+Link: https://lore.kernel.org/r/20210112220124.837960-24-christian.brauner@ubuntu.com
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: David Howells <dhowells@redhat.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
@@ -84,7 +87,9 @@ Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 unchanged
 
 /* v3 */
-unchanged
+- David Howells <dhowells@redhat.com>:
+  - Remove mnt_idmapped() check after removing mnt_idmapped() helper in earlier
+    patches.
 
 /* v4 */
 - Serge Hallyn <serge@hallyn.com>:
@@ -92,6 +97,7 @@ unchanged
     terminology consistent.
 
 /* v5 */
+unchanged
 base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
 
 - Christoph Hellwig <hch@lst.de>:
@@ -101,182 +107,63 @@ base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
 base-commit: 19c329f6808995b142b3966301f217c831e7cf31
 
 - Christoph Hellwig <hch@lst.de>:
-  - Remove local mnt_userns variable in favor of calling
-    file_mnt_user_ns() directly.
+  - Make use of new path_permission() helper.
 ---
- fs/coredump.c      | 10 +++++++---
- fs/inode.c         |  7 ++++---
- fs/namei.c         |  2 +-
- fs/open.c          | 16 +++++++++-------
- include/linux/fs.h |  4 ++--
- 5 files changed, 23 insertions(+), 16 deletions(-)
+ fs/open.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index a2f6ecc8e345..ae778937a1ff 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -703,6 +703,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
- 			goto close_fail;
- 		}
- 	} else {
-+		struct user_namespace *mnt_userns;
- 		struct inode *inode;
- 		int open_flags = O_CREAT | O_RDWR | O_NOFOLLOW |
- 				 O_LARGEFILE | O_EXCL;
-@@ -780,13 +781,15 @@ void do_coredump(const kernel_siginfo_t *siginfo)
- 		 * a process dumps core while its cwd is e.g. on a vfat
- 		 * filesystem.
- 		 */
--		if (!uid_eq(inode->i_uid, current_fsuid()))
-+		mnt_userns = file_mnt_user_ns(cprm.file);
-+		if (!uid_eq(i_uid_into_mnt(mnt_userns, inode), current_fsuid()))
- 			goto close_fail;
- 		if ((inode->i_mode & 0677) != 0600)
- 			goto close_fail;
- 		if (!(cprm.file->f_mode & FMODE_CAN_WRITE))
- 			goto close_fail;
--		if (do_truncate(cprm.file->f_path.dentry, 0, 0, cprm.file))
-+		if (do_truncate(mnt_userns, cprm.file->f_path.dentry,
-+				0, 0, cprm.file))
- 			goto close_fail;
- 	}
- 
-@@ -931,7 +934,8 @@ void dump_truncate(struct coredump_params *cprm)
- 	if (file->f_op->llseek && file->f_op->llseek != no_llseek) {
- 		offset = file->f_op->llseek(file, 0, SEEK_CUR);
- 		if (i_size_read(file->f_mapping->host) < offset)
--			do_truncate(file->f_path.dentry, offset, 0, file);
-+			do_truncate(file_mnt_user_ns(file), file->f_path.dentry,
-+				    offset, 0, file);
- 	}
- }
- EXPORT_SYMBOL(dump_truncate);
-diff --git a/fs/inode.c b/fs/inode.c
-index 46116ef44c9f..08151968c9ef 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -1903,7 +1903,8 @@ int dentry_needs_remove_privs(struct dentry *dentry)
- 	return mask;
- }
- 
--static int __remove_privs(struct dentry *dentry, int kill)
-+static int __remove_privs(struct user_namespace *mnt_userns,
-+			  struct dentry *dentry, int kill)
- {
- 	struct iattr newattrs;
- 
-@@ -1912,7 +1913,7 @@ static int __remove_privs(struct dentry *dentry, int kill)
- 	 * Note we call this on write, so notify_change will not
- 	 * encounter any conflicting delegations:
- 	 */
--	return notify_change(&init_user_ns, dentry, &newattrs, NULL);
-+	return notify_change(mnt_userns, dentry, &newattrs, NULL);
- }
- 
- /*
-@@ -1939,7 +1940,7 @@ int file_remove_privs(struct file *file)
- 	if (kill < 0)
- 		return kill;
- 	if (kill)
--		error = __remove_privs(dentry, kill);
-+		error = __remove_privs(file_mnt_user_ns(file), dentry, kill);
- 	if (!error)
- 		inode_has_no_xattr(inode);
- 
-diff --git a/fs/namei.c b/fs/namei.c
-index 5c9f6f8e90c4..c8c083daf368 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3009,7 +3009,7 @@ static int handle_truncate(struct file *filp)
- 	if (!error)
- 		error = security_path_truncate(path);
- 	if (!error) {
--		error = do_truncate(path->dentry, 0,
-+		error = do_truncate(&init_user_ns, path->dentry, 0,
- 				    ATTR_MTIME|ATTR_CTIME|ATTR_OPEN,
- 				    filp);
- 	}
 diff --git a/fs/open.c b/fs/open.c
-index c3e4dc43dd8d..8b3f3eb652d0 100644
+index 8b3f3eb652d0..4ec3979d0466 100644
 --- a/fs/open.c
 +++ b/fs/open.c
-@@ -35,8 +35,8 @@
+@@ -438,7 +438,7 @@ static long do_faccessat(int dfd, const char __user *filename, int mode, int fla
+ 			goto out_path_release;
+ 	}
  
- #include "internal.h"
+-	res = inode_permission(&init_user_ns, inode, mode | MAY_ACCESS);
++	res = inode_permission(mnt_user_ns(path.mnt), inode, mode | MAY_ACCESS);
+ 	/* SuS v2 requires we report a read only fs too */
+ 	if (res || !(mode & S_IWOTH) || special_file(inode->i_mode))
+ 		goto out_path_release;
+@@ -582,8 +582,8 @@ int chmod_common(const struct path *path, umode_t mode)
+ 		goto out_unlock;
+ 	newattrs.ia_mode = (mode & S_IALLUGO) | (inode->i_mode & ~S_IALLUGO);
+ 	newattrs.ia_valid = ATTR_MODE | ATTR_CTIME;
+-	error = notify_change(&init_user_ns, path->dentry, &newattrs,
+-			      &delegated_inode);
++	error = notify_change(mnt_user_ns(path->mnt), path->dentry,
++			      &newattrs, &delegated_inode);
+ out_unlock:
+ 	inode_unlock(inode);
+ 	if (delegated_inode) {
+@@ -644,6 +644,7 @@ SYSCALL_DEFINE2(chmod, const char __user *, filename, umode_t, mode)
  
--int do_truncate(struct dentry *dentry, loff_t length, unsigned int time_attrs,
--	struct file *filp)
-+int do_truncate(struct user_namespace *mnt_userns, struct dentry *dentry,
-+		loff_t length, unsigned int time_attrs, struct file *filp)
- {
- 	int ret;
- 	struct iattr newattrs;
-@@ -61,13 +61,14 @@ int do_truncate(struct dentry *dentry, loff_t length, unsigned int time_attrs,
- 
- 	inode_lock(dentry->d_inode);
- 	/* Note any delegations or leases have already been broken: */
--	ret = notify_change(&init_user_ns, dentry, &newattrs, NULL);
-+	ret = notify_change(mnt_userns, dentry, &newattrs, NULL);
- 	inode_unlock(dentry->d_inode);
- 	return ret;
- }
- 
- long vfs_truncate(const struct path *path, loff_t length)
+ int chown_common(const struct path *path, uid_t user, gid_t group)
  {
 +	struct user_namespace *mnt_userns;
- 	struct inode *inode;
- 	long error;
+ 	struct inode *inode = path->dentry->d_inode;
+ 	struct inode *delegated_inode = NULL;
+ 	int error;
+@@ -654,6 +655,10 @@ int chown_common(const struct path *path, uid_t user, gid_t group)
+ 	uid = make_kuid(current_user_ns(), user);
+ 	gid = make_kgid(current_user_ns(), group);
  
-@@ -83,7 +84,8 @@ long vfs_truncate(const struct path *path, loff_t length)
- 	if (error)
- 		goto out;
- 
--	error = inode_permission(&init_user_ns, inode, MAY_WRITE);
 +	mnt_userns = mnt_user_ns(path->mnt);
-+	error = inode_permission(mnt_userns, inode, MAY_WRITE);
- 	if (error)
- 		goto mnt_drop_write_and_out;
- 
-@@ -107,7 +109,7 @@ long vfs_truncate(const struct path *path, loff_t length)
++	uid = kuid_from_mnt(mnt_userns, uid);
++	gid = kgid_from_mnt(mnt_userns, gid);
++
+ retry_deleg:
+ 	newattrs.ia_valid =  ATTR_CTIME;
+ 	if (user != (uid_t) -1) {
+@@ -674,7 +679,7 @@ int chown_common(const struct path *path, uid_t user, gid_t group)
+ 	inode_lock(inode);
+ 	error = security_path_chown(path, uid, gid);
  	if (!error)
- 		error = security_path_truncate(path);
- 	if (!error)
--		error = do_truncate(path->dentry, length, 0, NULL);
-+		error = do_truncate(mnt_userns, path->dentry, length, 0, NULL);
- 
- put_write_and_out:
- 	put_write_access(inode);
-@@ -186,13 +188,13 @@ long do_sys_ftruncate(unsigned int fd, loff_t length, int small)
- 	/* Check IS_APPEND on real upper inode */
- 	if (IS_APPEND(file_inode(f.file)))
- 		goto out_putf;
--
- 	sb_start_write(inode->i_sb);
- 	error = locks_verify_truncate(inode, f.file, length);
- 	if (!error)
- 		error = security_path_truncate(&f.file->f_path);
- 	if (!error)
--		error = do_truncate(dentry, length, ATTR_MTIME|ATTR_CTIME, f.file);
-+		error = do_truncate(file_mnt_user_ns(f.file), dentry, length,
-+				    ATTR_MTIME | ATTR_CTIME, f.file);
- 	sb_end_write(inode->i_sb);
- out_putf:
- 	fdput(f);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 29d7b2fe7de4..f0601cca1930 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2593,8 +2593,8 @@ static inline struct user_namespace *file_mnt_user_ns(struct file *file)
- 	return mnt_user_ns(file->f_path.mnt);
- }
- extern long vfs_truncate(const struct path *, loff_t);
--extern int do_truncate(struct dentry *, loff_t start, unsigned int time_attrs,
--		       struct file *filp);
-+int do_truncate(struct user_namespace *, struct dentry *, loff_t start,
-+		unsigned int time_attrs, struct file *filp);
- extern int vfs_fallocate(struct file *file, int mode, loff_t offset,
- 			loff_t len);
- extern long do_sys_open(int dfd, const char __user *filename, int flags,
+-		error = notify_change(&init_user_ns, path->dentry, &newattrs,
++		error = notify_change(mnt_userns, path->dentry, &newattrs,
+ 				      &delegated_inode);
+ 	inode_unlock(inode);
+ 	if (delegated_inode) {
 -- 
 2.30.0
 
