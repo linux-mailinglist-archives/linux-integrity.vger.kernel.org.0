@@ -2,21 +2,21 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1680F2FEEC7
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Jan 2021 16:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAFA2FEE59
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Jan 2021 16:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732956AbhAUPa3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 21 Jan 2021 10:30:29 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:54090 "EHLO
+        id S1732803AbhAUPUp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 21 Jan 2021 10:20:45 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:54651 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731136AbhAUNWN (ORCPT
+        with ESMTP id S1732219AbhAUN0O (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 21 Jan 2021 08:22:13 -0500
+        Thu, 21 Jan 2021 08:26:14 -0500
 Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l2Ztt-0005g7-Cs; Thu, 21 Jan 2021 13:21:25 +0000
+        id 1l2Zu9-0005g7-Nn; Thu, 21 Jan 2021 13:21:41 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
@@ -52,31 +52,25 @@ Cc:     John Johansen <john.johansen@canonical.com>,
         linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v6 16/40] open: handle idmapped mounts
-Date:   Thu, 21 Jan 2021 14:19:35 +0100
-Message-Id: <20210121131959.646623-17-christian.brauner@ubuntu.com>
+Subject: [PATCH v6 20/40] init: handle idmapped mounts
+Date:   Thu, 21 Jan 2021 14:19:39 +0100
+Message-Id: <20210121131959.646623-21-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210121131959.646623-1-christian.brauner@ubuntu.com>
 References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-X-Patch-Hashes: v=1; h=sha256; i=YKSd0FdGGLgCSTeDw7b6sTvRU/kXPfMpmc0z0c+ceJs=; m=QtXKH7l01QTmlgDZWGGLs41QsIHJYr2I07NJQrbQhUc=; p=UQ8ZL9iZHePP4j74jgLUJqMxCUpzv40jcAqgWmdc+iM=; g=fc42bb0317f59f78c12f1f5b6f750e685efc9c8e
-X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHQEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9pAAKCRCRxhvAZXjcom58APiYXnz MLA9PdyDTNWHJ1hzxQwmhv0RHo0AradNsIDslAQDIvEnNGlH+yVfr0r/waOULLGeiGRFi0nzVv0+4 7M8YDg==
+X-Patch-Hashes: v=1; h=sha256; i=K1Mmb+2iBnpojBmIU4SJaafXPX8O2CFx1CDw+utpuOU=; m=S5fr/22/m+WbOwFrUpUHXheqOF01JiKNUA5zB/hY/Is=; p=MZSdRyOX771MwH+GLlcjB+0DrEr2A+58o5/RX/qOHFw=; g=45d6fad6f6d32f07d4014060b83492f4e5803561
+X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHUEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9pQAKCRCRxhvAZXjcovuOAQD0vz6 qwrpIJ0cuKYpZaxNYnIKAkRlsiy3S2ImpIjxs5wEAx6MHynYZhSK9hn2FPNdNgboF6ArU1F+IBR0A AU0LGgo=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-For core file operations such as changing directories or chrooting,
-determining file access, changing mode or ownership the vfs will verify
-that the caller is privileged over the inode. Extend the various helpers
-to handle idmapped mounts. If the inode is accessed through an idmapped
-mount map it into the mount's user namespace. Afterwards the permissions
-checks are identical to non-idmapped mounts. When changing file
-ownership we need to map the uid and gid from the mount's user
-namespace. If the initial user namespace is passed nothing changes so
-non-idmapped mounts will see identical behavior as before.
+Enable the init helpers to handle idmapped mounts by passing down the
+mount's user namespace. If the initial user namespace is passed nothing
+changes so non-idmapped mounts will see identical behavior as before.
 
-Link: https://lore.kernel.org/r/20210112220124.837960-24-christian.brauner@ubuntu.com
+Link: https://lore.kernel.org/r/20210112220124.837960-29-christian.brauner@ubuntu.com
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: David Howells <dhowells@redhat.com>
 Cc: Al Viro <viro@zeniv.linux.org.uk>
@@ -84,86 +78,91 @@ Cc: linux-fsdevel@vger.kernel.org
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
 /* v2 */
-unchanged
+patch introduced
 
 /* v3 */
-- David Howells <dhowells@redhat.com>:
-  - Remove mnt_idmapped() check after removing mnt_idmapped() helper in earlier
-    patches.
+unchanged
 
 /* v4 */
-- Serge Hallyn <serge@hallyn.com>:
-  - Use "mnt_userns" to refer to a vfsmount's userns everywhere to make
-    terminology consistent.
+unchanged
 
 /* v5 */
 unchanged
 base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
 
-- Christoph Hellwig <hch@lst.de>:
-  - Use new file_mnt_user_ns() helper.
-
 /* v6 */
 base-commit: 19c329f6808995b142b3966301f217c831e7cf31
 
 - Christoph Hellwig <hch@lst.de>:
-  - Make use of new path_permission() helper.
+  - Use new path_permission() helper.
 ---
- fs/open.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ fs/init.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/fs/open.c b/fs/open.c
-index 8b3f3eb652d0..4ec3979d0466 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -438,7 +438,7 @@ static long do_faccessat(int dfd, const char __user *filename, int mode, int fla
- 			goto out_path_release;
- 	}
- 
--	res = inode_permission(&init_user_ns, inode, mode | MAY_ACCESS);
-+	res = inode_permission(mnt_user_ns(path.mnt), inode, mode | MAY_ACCESS);
- 	/* SuS v2 requires we report a read only fs too */
- 	if (res || !(mode & S_IWOTH) || special_file(inode->i_mode))
- 		goto out_path_release;
-@@ -582,8 +582,8 @@ int chmod_common(const struct path *path, umode_t mode)
- 		goto out_unlock;
- 	newattrs.ia_mode = (mode & S_IALLUGO) | (inode->i_mode & ~S_IALLUGO);
- 	newattrs.ia_valid = ATTR_MODE | ATTR_CTIME;
--	error = notify_change(&init_user_ns, path->dentry, &newattrs,
--			      &delegated_inode);
-+	error = notify_change(mnt_user_ns(path->mnt), path->dentry,
-+			      &newattrs, &delegated_inode);
- out_unlock:
- 	inode_unlock(inode);
- 	if (delegated_inode) {
-@@ -644,6 +644,7 @@ SYSCALL_DEFINE2(chmod, const char __user *, filename, umode_t, mode)
- 
- int chown_common(const struct path *path, uid_t user, gid_t group)
- {
-+	struct user_namespace *mnt_userns;
- 	struct inode *inode = path->dentry->d_inode;
- 	struct inode *delegated_inode = NULL;
- 	int error;
-@@ -654,6 +655,10 @@ int chown_common(const struct path *path, uid_t user, gid_t group)
- 	uid = make_kuid(current_user_ns(), user);
- 	gid = make_kgid(current_user_ns(), group);
- 
-+	mnt_userns = mnt_user_ns(path->mnt);
-+	uid = kuid_from_mnt(mnt_userns, uid);
-+	gid = kgid_from_mnt(mnt_userns, gid);
-+
- retry_deleg:
- 	newattrs.ia_valid =  ATTR_CTIME;
- 	if (user != (uid_t) -1) {
-@@ -674,7 +679,7 @@ int chown_common(const struct path *path, uid_t user, gid_t group)
- 	inode_lock(inode);
- 	error = security_path_chown(path, uid, gid);
+diff --git a/fs/init.c b/fs/init.c
+index e65452750fa5..5c36adaa9b44 100644
+--- a/fs/init.c
++++ b/fs/init.c
+@@ -157,8 +157,8 @@ int __init init_mknod(const char *filename, umode_t mode, unsigned int dev)
+ 		mode &= ~current_umask();
+ 	error = security_path_mknod(&path, dentry, mode, dev);
  	if (!error)
--		error = notify_change(&init_user_ns, path->dentry, &newattrs,
-+		error = notify_change(mnt_userns, path->dentry, &newattrs,
- 				      &delegated_inode);
- 	inode_unlock(inode);
- 	if (delegated_inode) {
+-		error = vfs_mknod(&init_user_ns, path.dentry->d_inode, dentry,
+-				  mode, new_decode_dev(dev));
++		error = vfs_mknod(mnt_user_ns(path.mnt), path.dentry->d_inode,
++				  dentry, mode, new_decode_dev(dev));
+ 	done_path_create(&path, dentry);
+ 	return error;
+ }
+@@ -167,6 +167,7 @@ int __init init_link(const char *oldname, const char *newname)
+ {
+ 	struct dentry *new_dentry;
+ 	struct path old_path, new_path;
++	struct user_namespace *mnt_userns;
+ 	int error;
+ 
+ 	error = kern_path(oldname, 0, &old_path);
+@@ -181,14 +182,15 @@ int __init init_link(const char *oldname, const char *newname)
+ 	error = -EXDEV;
+ 	if (old_path.mnt != new_path.mnt)
+ 		goto out_dput;
+-	error = may_linkat(&init_user_ns, &old_path);
++	mnt_userns = mnt_user_ns(new_path.mnt);
++	error = may_linkat(mnt_userns, &old_path);
+ 	if (unlikely(error))
+ 		goto out_dput;
+ 	error = security_path_link(old_path.dentry, &new_path, new_dentry);
+ 	if (error)
+ 		goto out_dput;
+-	error = vfs_link(old_path.dentry, &init_user_ns,
+-			 new_path.dentry->d_inode, new_dentry, NULL);
++	error = vfs_link(old_path.dentry, mnt_userns, new_path.dentry->d_inode,
++			 new_dentry, NULL);
+ out_dput:
+ 	done_path_create(&new_path, new_dentry);
+ out:
+@@ -207,8 +209,8 @@ int __init init_symlink(const char *oldname, const char *newname)
+ 		return PTR_ERR(dentry);
+ 	error = security_path_symlink(&path, dentry, oldname);
+ 	if (!error)
+-		error = vfs_symlink(&init_user_ns, path.dentry->d_inode, dentry,
+-				    oldname);
++		error = vfs_symlink(mnt_user_ns(path.mnt), path.dentry->d_inode,
++				    dentry, oldname);
+ 	done_path_create(&path, dentry);
+ 	return error;
+ }
+@@ -231,8 +233,8 @@ int __init init_mkdir(const char *pathname, umode_t mode)
+ 		mode &= ~current_umask();
+ 	error = security_path_mkdir(&path, dentry, mode);
+ 	if (!error)
+-		error = vfs_mkdir(&init_user_ns, path.dentry->d_inode, dentry,
+-				  mode);
++		error = vfs_mkdir(mnt_user_ns(path.mnt), path.dentry->d_inode,
++				  dentry, mode);
+ 	done_path_create(&path, dentry);
+ 	return error;
+ }
 -- 
 2.30.0
 
