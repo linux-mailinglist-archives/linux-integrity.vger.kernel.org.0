@@ -2,563 +2,218 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1246A2FEE69
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Jan 2021 16:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6A72FEE11
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Jan 2021 16:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732253AbhAUPUh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 21 Jan 2021 10:20:37 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:54654 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732230AbhAUN0R (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 21 Jan 2021 08:26:17 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l2ZvT-0005g7-6J; Thu, 21 Jan 2021 13:23:03 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
-Cc:     John Johansen <john.johansen@canonical.com>,
+        id S1732265AbhAUPId (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 21 Jan 2021 10:08:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40178 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732605AbhAUPIW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 21 Jan 2021 10:08:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7869C238EC;
+        Thu, 21 Jan 2021 15:07:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611241662;
+        bh=pbpZ27vac5tDANhxM/jbi6FJImiptZMHo/4fRqt5HjI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lFiUcX7p+BSaDDQF3CdVXoU5/n5UFF9uE6XP1npmDV7/oXAgtLlBr+kJbmpbKd1bz
+         IXy0kif5JZWccxS7QESlVpcgD7L+N+hN+nLUxkyiKJ6eImZdAbUrxz8w66bISzjw2j
+         QBYpIpDzIS7BK/qVKnb50CYvMPf607IlYkG0ovUVZkXtKctjhGm12BJL5nm/pRQNG6
+         czaf/JZfGHsDPotBUq378YaIvjhfr7TqTY/MFwjxfQdQ2H4mVBqdnggMi0PdtpKlyg
+         7d5ao2lZKJyjGMQ7/iXcen6F7hIetSKeMHwm2xttpcplaVEwwMQXHjkaxssE6epMlE
+         eBzh7zcPQHP5A==
+Date:   Thu, 21 Jan 2021 17:07:39 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Jerome Forissier <jerome@forissier.org>
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        op-tee@lists.trustedfirmware.org, Jonathan Corbet <corbet@lwn.net>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         James Morris <jmorris@namei.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v6 38/40] ext4: support idmapped mounts
-Date:   Thu, 21 Jan 2021 14:19:57 +0100
-Message-Id: <20210121131959.646623-39-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210121131959.646623-1-christian.brauner@ubuntu.com>
-References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
+        Luke Hinds <lhinds@redhat.com>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        linux-integrity@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH v8 2/4] KEYS: trusted: Introduce TEE based Trusted Keys
+Message-ID: <YAmYu9FxWcLPhBhs@kernel.org>
+References: <1604419306-26105-3-git-send-email-sumit.garg@linaro.org>
+ <X/x+N0fgrzIZTeNi@kernel.org>
+ <CAFA6WYOUvWAZtYfR4q8beZFkX-CtdxqwJaRQM+GHNMDfQiEWOA@mail.gmail.com>
+ <X/+m6+m2/snYj9Vc@kernel.org>
+ <CAFA6WYNyirit_AFhoE+XR9PHw=OjRgEdXDqz1uanj_SN2NXeMw@mail.gmail.com>
+ <YAa0ys4YJcZtKdfF@kernel.org>
+ <YAeH2pb8szQyjusL@kernel.org>
+ <CAFA6WYP5G6NfGk96ePOC+2kpD6B+4hz9nywyUM9Nh=dJDYMiuA@mail.gmail.com>
+ <01000177223f74d3-1eef7685-4a19-40d2-ace6-d4cd7f35579d-000000@email.amazonses.com>
+ <dc3979e8-6bf0-adb7-164d-d50e805a048f@forissier.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=MJ7IH6zKWgQgezyytkJXRKJVy84sQxgK/KhvUxTmNLU=; m=0mqYr+i4xLcHJiWSVb7MKqPI9iiJtdXR9W3Ov8khOaE=; p=G9UvARTRtNwr0hmtrt6LTaOv3lerwgw3xugX0898sTo=; g=84a355fbcdbd9446d25aabb0b95d52f98f02f77d
-X-Patch-Sig: m=pgp; i=christian.brauner@ubuntu.com; s=0x0x91C61BC06578DCA2; b=iHUEABYKAB0WIQRAhzRXHqcMeLMyaSiRxhvAZXjcogUCYAl9pwAKCRCRxhvAZXjcog7ZAP4607C QwcoA3NIiqlA1Aax+BxgQPLW7QV74Ze0A80BQMAEA9E/OZsolFFhSVBuid3h/Zf5JjanenLH18YtC iSldfQw=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <dc3979e8-6bf0-adb7-164d-d50e805a048f@forissier.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Enable idmapped mounts for ext4. All dedicated helpers we need for this
-exist. So this basically just means we're passing down the
-user_namespace argument from the VFS methods to the relevant helpers.
+On Thu, Jan 21, 2021 at 09:44:07AM +0100, Jerome Forissier wrote:
+> 
+> 
+> On 1/21/21 1:02 AM, Jarkko Sakkinen via OP-TEE wrote:
+> > On Wed, Jan 20, 2021 at 12:53:28PM +0530, Sumit Garg wrote:
+> >> On Wed, 20 Jan 2021 at 07:01, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >>>
+> >>> On Tue, Jan 19, 2021 at 12:30:42PM +0200, Jarkko Sakkinen wrote:
+> >>>> On Fri, Jan 15, 2021 at 11:32:31AM +0530, Sumit Garg wrote:
+> >>>>> On Thu, 14 Jan 2021 at 07:35, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >>>>>>
+> >>>>>> On Wed, Jan 13, 2021 at 04:47:00PM +0530, Sumit Garg wrote:
+> >>>>>>> Hi Jarkko,
+> >>>>>>>
+> >>>>>>> On Mon, 11 Jan 2021 at 22:05, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >>>>>>>>
+> >>>>>>>> On Tue, Nov 03, 2020 at 09:31:44PM +0530, Sumit Garg wrote:
+> >>>>>>>>> Add support for TEE based trusted keys where TEE provides the functionality
+> >>>>>>>>> to seal and unseal trusted keys using hardware unique key.
+> >>>>>>>>>
+> >>>>>>>>> Refer to Documentation/tee.txt for detailed information about TEE.
+> >>>>>>>>>
+> >>>>>>>>> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> >>>>>>>>
+> >>>>>>>> I haven't yet got QEMU environment working with aarch64, this produces
+> >>>>>>>> just a blank screen:
+> >>>>>>>>
+> >>>>>>>> ./output/host/usr/bin/qemu-system-aarch64 -M virt -cpu cortex-a53 -smp 1 -kernel output/images/Image -initrd output/images/rootfs.cpio -serial stdio
+> >>>>>>>>
+> >>>>>>>> My BuildRoot fork for TPM and keyring testing is located over here:
+> >>>>>>>>
+> >>>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/buildroot-tpmdd.git/
+> >>>>>>>>
+> >>>>>>>> The "ARM version" is at this point in aarch64 branch. Over time I will
+> >>>>>>>> define tpmdd-x86_64 and tpmdd-aarch64 boards and everything will be then
+> >>>>>>>> in the master branch.
+> >>>>>>>>
+> >>>>>>>> To create identical images you just need to
+> >>>>>>>>
+> >>>>>>>> $ make tpmdd_defconfig && make
+> >>>>>>>>
+> >>>>>>>> Can you check if you see anything obviously wrong? I'm eager to test this
+> >>>>>>>> patch set, and in bigger picture I really need to have ready to run
+> >>>>>>>> aarch64 environment available.
+> >>>>>>>
+> >>>>>>> I would rather suggest you to follow steps listed here [1] as to test
+> >>>>>>> this feature on Qemu aarch64 we need to build firmwares such as TF-A,
+> >>>>>>> OP-TEE, UEFI etc. which are all integrated into OP-TEE Qemu build
+> >>>>>>> system [2]. And then it would be easier to migrate them to your
+> >>>>>>> buildroot environment as well.
+> >>>>>>>
+> >>>>>>> [1] https://lists.trustedfirmware.org/pipermail/op-tee/2020-May/000027.html
+> >>>>>>> [2] https://optee.readthedocs.io/en/latest/building/devices/qemu.html#qemu-v8
+> >>>>>>>
+> >>>>>>> -Sumit
+> >>>>>>
+> >>>>>> Can you provide 'keyctl_change'? Otherwise, the steps are easy to follow.
+> >>>>>>
+> >>>>>
+> >>>>> $ cat keyctl_change
+> >>>>> diff --git a/common.mk b/common.mk
+> >>>>> index aeb7b41..663e528 100644
+> >>>>> --- a/common.mk
+> >>>>> +++ b/common.mk
+> >>>>> @@ -229,6 +229,7 @@ BR2_PACKAGE_OPTEE_TEST_SDK ?= $(OPTEE_OS_TA_DEV_KIT_DIR)
+> >>>>>  BR2_PACKAGE_OPTEE_TEST_SITE ?= $(OPTEE_TEST_PATH)
+> >>>>>  BR2_PACKAGE_STRACE ?= y
+> >>>>>  BR2_TARGET_GENERIC_GETTY_PORT ?= $(if
+> >>>>> $(CFG_NW_CONSOLE_UART),ttyAMA$(CFG_NW_CONSOLE_UART),ttyAMA0)
+> >>>>> +BR2_PACKAGE_KEYUTILS := y
+> >>>>>
+> >>>>>  # All BR2_* variables from the makefile or the environment are appended to
+> >>>>>  # ../out-br/extra.conf. All values are quoted "..." except y and n.
+> >>>>> diff --git a/kconfigs/qemu.conf b/kconfigs/qemu.conf
+> >>>>> index 368c18a..832ab74 100644
+> >>>>> --- a/kconfigs/qemu.conf
+> >>>>> +++ b/kconfigs/qemu.conf
+> >>>>> @@ -20,3 +20,5 @@ CONFIG_9P_FS=y
+> >>>>>  CONFIG_9P_FS_POSIX_ACL=y
+> >>>>>  CONFIG_HW_RANDOM=y
+> >>>>>  CONFIG_HW_RANDOM_VIRTIO=y
+> >>>>> +CONFIG_TRUSTED_KEYS=y
+> >>>>> +CONFIG_ENCRYPTED_KEYS=y
+> >>>>>
+> >>>>>> After I've successfully tested 2/4, I'd suggest that you roll out one more
+> >>>>>> version and CC the documentation patch to Elaine and Mini, and clearly
+> >>>>>> remark in the commit message that TEE is a standard, with a link to the
+> >>>>>> specification.
+> >>>>>>
+> >>>>>
+> >>>>> Sure, I will roll out the next version after your testing.
+> >>>>
+> >>>> Thanks, I'll try this at instant, and give my feedback.
+> >>>
+> >>> I bump into this:
+> >>>
+> >>> $ make run-only
+> >>> ln -sf /home/jarkko/devel/tpm/optee/build/../out-br/images/rootfs.cpio.gz /home/jarkko/devel/tpm/optee/build/../out/bin/
+> >>> ln: failed to create symbolic link '/home/jarkko/devel/tpm/optee/build/../out/bin/': No such file or directory
+> >>> make: *** [Makefile:194: run-only] Error 1
+> >>>
+> >>
+> >> Could you check if the following directory tree is built after
+> >> executing the below command?
+> >>
+> >> $ make -j`nproc`
+> >> CFG_IN_TREE_EARLY_TAS=trusted_keys/f04a0fe7-1f5d-4b9b-abf7-619b85b4ce8c
+> >>
+> >> $ tree out/bin/
+> >> out/bin/
+> >> ├── bl1.bin -> /home/sumit/build/optee/build/../trusted-firmware-a/build/qemu/release/bl1.bin
+> >> ├── bl2.bin -> /home/sumit/build/optee/build/../trusted-firmware-a/build/qemu/release/bl2.bin
+> >> ├── bl31.bin ->
+> >> /home/sumit/build/optee/build/../trusted-firmware-a/build/qemu/release/bl31.bin
+> >> ├── bl32.bin ->
+> >> /home/sumit/build/optee/build/../optee_os/out/arm/core/tee-header_v2.bin
+> >> ├── bl32_extra1.bin ->
+> >> /home/sumit/build/optee/build/../optee_os/out/arm/core/tee-pager_v2.bin
+> >> ├── bl32_extra2.bin ->
+> >> /home/sumit/build/optee/build/../optee_os/out/arm/core/tee-pageable_v2.bin
+> >> ├── bl33.bin ->
+> >> /home/sumit/build/optee/build/../edk2/Build/ArmVirtQemuKernel-AARCH64/RELEASE_GCC49/FV/QEMU_EFI.fd
+> >> ├── Image -> /home/sumit/build/optee/build/../linux/arch/arm64/boot/Image
+> >> └── rootfs.cpio.gz ->
+> >> /home/sumit/build/optee/build/../out-br/images/rootfs.cpio.gz
+> >>
+> >> 0 directories, 9 files
+> >>
+> >> -Sumit
+> > 
+> > I actually spotted a build error that was unnoticed last time:
+> > 
+> > make[2]: Entering directory '/home/jarkko/devel/tpm/optee/edk2/BaseTools/Tests'
+> > /bin/sh: 1: python: not found
+> > 
+> > I'd prefer not to install Python2. It has been EOL over a year.
+> 
+> AFAIK, everything should build fine with Python3. On my Ubuntu 20.04
+> machine, this is accomplished by installing package "python-is-python3"
+> (after uninstalling "python-is-python2" if need be).
+> 
+> $ ls -l /usr/bin/python
+> lrwxrwxrwx 1 root root 7 Apr 15  2020 /usr/bin/python -> python3
 
-Let's create simple example where we idmap an ext4 filesystem:
+Right, just found about this in unrelated context :-) [*]
 
- root@f2-vm:~# truncate -s 5G ext4.img
+Hope this will work out...
 
- root@f2-vm:~# mkfs.ext4 ./ext4.img
- mke2fs 1.45.5 (07-Jan-2020)
- Discarding device blocks: done
- Creating filesystem with 1310720 4k blocks and 327680 inodes
- Filesystem UUID: 3fd91794-c6ca-4b0f-9964-289a000919cf
- Superblock backups stored on blocks:
-         32768, 98304, 163840, 229376, 294912, 819200, 884736
+[*] https://github.com/surge-synthesizer/surge/pull/3655
 
- Allocating group tables: done
- Writing inode tables: done
- Creating journal (16384 blocks): done
- Writing superblocks and filesystem accounting information: done
-
- root@f2-vm:~# losetup -f --show ./ext4.img
- /dev/loop0
-
- root@f2-vm:~# mount /dev/loop0 /mnt
-
- root@f2-vm:~# ls -al /mnt/
- total 24
- drwxr-xr-x  3 root root  4096 Oct 28 13:34 .
- drwxr-xr-x 30 root root  4096 Oct 28 13:22 ..
- drwx------  2 root root 16384 Oct 28 13:34 lost+found
-
- # Let's create an idmapped mount at /idmapped1 where we map uid and gid
- # 0 to uid and gid 1000
- root@f2-vm:/# ./mount-idmapped --map-mount b:0:1000:1 /mnt/ /idmapped1/
-
- root@f2-vm:/# ls -al /idmapped1/
- total 24
- drwxr-xr-x  3 ubuntu ubuntu  4096 Oct 28 13:34 .
- drwxr-xr-x 30 root   root    4096 Oct 28 13:22 ..
- drwx------  2 ubuntu ubuntu 16384 Oct 28 13:34 lost+found
-
- # Let's create an idmapped mount at /idmapped2 where we map uid and gid
- # 0 to uid and gid 2000
- root@f2-vm:/# ./mount-idmapped --map-mount b:0:2000:1 /mnt/ /idmapped2/
-
- root@f2-vm:/# ls -al /idmapped2/
- total 24
- drwxr-xr-x  3 2000 2000  4096 Oct 28 13:34 .
- drwxr-xr-x 31 root root  4096 Oct 28 13:39 ..
- drwx------  2 2000 2000 16384 Oct 28 13:34 lost+found
-
-Let's create another example where we idmap the rootfs filesystem
-without a mapping for uid 0 and gid 0:
-
- # Create an idmapped mount of for a full POSIX range of rootfs under
- # /mnt but without a mapping for uid 0 to reduce attack surface
-
- root@f2-vm:/# ./mount-idmapped --map-mount b:1:1:65536 / /mnt/
-
- # Since we don't have a mapping for uid and gid 0 all files owned by
- # uid and gid 0 should show up as uid and gid 65534:
- root@f2-vm:/# ls -al /mnt/
- total 664
- drwxr-xr-x 31 nobody nogroup   4096 Oct 28 13:39 .
- drwxr-xr-x 31 root   root      4096 Oct 28 13:39 ..
- lrwxrwxrwx  1 nobody nogroup      7 Aug 25 07:44 bin -> usr/bin
- drwxr-xr-x  4 nobody nogroup   4096 Oct 28 13:17 boot
- drwxr-xr-x  2 nobody nogroup   4096 Aug 25 07:48 dev
- drwxr-xr-x 81 nobody nogroup   4096 Oct 28 04:00 etc
- drwxr-xr-x  4 nobody nogroup   4096 Oct 28 04:00 home
- lrwxrwxrwx  1 nobody nogroup      7 Aug 25 07:44 lib -> usr/lib
- lrwxrwxrwx  1 nobody nogroup      9 Aug 25 07:44 lib32 -> usr/lib32
- lrwxrwxrwx  1 nobody nogroup      9 Aug 25 07:44 lib64 -> usr/lib64
- lrwxrwxrwx  1 nobody nogroup     10 Aug 25 07:44 libx32 -> usr/libx32
- drwx------  2 nobody nogroup  16384 Aug 25 07:47 lost+found
- drwxr-xr-x  2 nobody nogroup   4096 Aug 25 07:44 media
- drwxr-xr-x 31 nobody nogroup   4096 Oct 28 13:39 mnt
- drwxr-xr-x  2 nobody nogroup   4096 Aug 25 07:44 opt
- drwxr-xr-x  2 nobody nogroup   4096 Apr 15  2020 proc
- drwx--x--x  6 nobody nogroup   4096 Oct 28 13:34 root
- drwxr-xr-x  2 nobody nogroup   4096 Aug 25 07:46 run
- lrwxrwxrwx  1 nobody nogroup      8 Aug 25 07:44 sbin -> usr/sbin
- drwxr-xr-x  2 nobody nogroup   4096 Aug 25 07:44 srv
- drwxr-xr-x  2 nobody nogroup   4096 Apr 15  2020 sys
- drwxrwxrwt 10 nobody nogroup   4096 Oct 28 13:19 tmp
- drwxr-xr-x 14 nobody nogroup   4096 Oct 20 13:00 usr
- drwxr-xr-x 12 nobody nogroup   4096 Aug 25 07:45 var
-
- # Since we do have a mapping for uid and gid 1000 all files owned by
- # uid and gid 1000 should simply show up as uid and gid 1000:
- root@f2-vm:/# ls -al /mnt/home/ubuntu/
- total 40
- drwxr-xr-x 3 ubuntu ubuntu  4096 Oct 28 00:43 .
- drwxr-xr-x 4 nobody nogroup 4096 Oct 28 04:00 ..
- -rw------- 1 ubuntu ubuntu  2936 Oct 28 12:26 .bash_history
- -rw-r--r-- 1 ubuntu ubuntu   220 Feb 25  2020 .bash_logout
- -rw-r--r-- 1 ubuntu ubuntu  3771 Feb 25  2020 .bashrc
- -rw-r--r-- 1 ubuntu ubuntu   807 Feb 25  2020 .profile
- -rw-r--r-- 1 ubuntu ubuntu     0 Oct 16 16:11 .sudo_as_admin_successful
- -rw------- 1 ubuntu ubuntu  1144 Oct 28 00:43 .viminfo
-
-Link: https://lore.kernel.org/r/20210112220124.837960-37-christian.brauner@ubuntu.com
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-ext4@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* v2 */
-unchanged
-
-/* v3 */
-unchanged
-
-/* v4 */
-- Mauricio Vásquez Bernal <mauricio@kinvolk.io>:
-  - Fix spelling mistake in ext4's new idmapped mount config option.
-
-- Christoph Hellwig <hch@lst.de>:
-  - Drop the config option. If ever want an administrator to disable this
-    feature we can simply introduce a sysctl.
-
-- Serge Hallyn <serge@hallyn.com>:
-  - Use "mnt_userns" to refer to a vfsmount's userns everywhere to make
-    terminology consistent.
-
-/* v5 */
-base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
-
-- Christoph Hellwig <hch@lst.de>:
-  - Use new file_mnt_user_ns() helper.
-
-- Christian Brauner <christian.brauner@ubuntu.com>:
-  - Improve commit message.
-
-/* v6 */
-unchanged
-base-commit: 19c329f6808995b142b3966301f217c831e7cf31
----
- fs/ext4/acl.c    |  3 +--
- fs/ext4/ext4.h   | 13 +++++++------
- fs/ext4/ialloc.c |  7 ++++---
- fs/ext4/inode.c  | 11 ++++++-----
- fs/ext4/ioctl.c  | 19 +++++++++++--------
- fs/ext4/namei.c  | 30 ++++++++++++++++--------------
- fs/ext4/super.c  |  2 +-
- 7 files changed, 46 insertions(+), 39 deletions(-)
-
-diff --git a/fs/ext4/acl.c b/fs/ext4/acl.c
-index 059434e0f36c..c5eaffccecc3 100644
---- a/fs/ext4/acl.c
-+++ b/fs/ext4/acl.c
-@@ -246,8 +246,7 @@ ext4_set_acl(struct user_namespace *mnt_userns, struct inode *inode,
- 	ext4_fc_start_update(inode);
- 
- 	if ((type == ACL_TYPE_ACCESS) && acl) {
--		error = posix_acl_update_mode(&init_user_ns, inode, &mode,
--					      &acl);
-+		error = posix_acl_update_mode(mnt_userns, inode, &mode, &acl);
- 		if (error)
- 			goto out_stop;
- 		if (mode != inode->i_mode)
-diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-index 3c750f5e8ebd..644fd69185d3 100644
---- a/fs/ext4/ext4.h
-+++ b/fs/ext4/ext4.h
-@@ -2755,18 +2755,19 @@ extern int ext4fs_dirhash(const struct inode *dir, const char *name, int len,
- 
- /* ialloc.c */
- extern int ext4_mark_inode_used(struct super_block *sb, int ino);
--extern struct inode *__ext4_new_inode(handle_t *, struct inode *, umode_t,
-+extern struct inode *__ext4_new_inode(struct user_namespace *, handle_t *,
-+				      struct inode *, umode_t,
- 				      const struct qstr *qstr, __u32 goal,
- 				      uid_t *owner, __u32 i_flags,
- 				      int handle_type, unsigned int line_no,
- 				      int nblocks);
- 
--#define ext4_new_inode(handle, dir, mode, qstr, goal, owner, i_flags) \
--	__ext4_new_inode((handle), (dir), (mode), (qstr), (goal), (owner), \
--			 i_flags, 0, 0, 0)
--#define ext4_new_inode_start_handle(dir, mode, qstr, goal, owner, \
-+#define ext4_new_inode(handle, dir, mode, qstr, goal, owner, i_flags)          \
-+	__ext4_new_inode(&init_user_ns, (handle), (dir), (mode), (qstr),       \
-+			 (goal), (owner), i_flags, 0, 0, 0)
-+#define ext4_new_inode_start_handle(mnt_userns, dir, mode, qstr, goal, owner, \
- 				    type, nblocks)		    \
--	__ext4_new_inode(NULL, (dir), (mode), (qstr), (goal), (owner), \
-+	__ext4_new_inode((mnt_userns), NULL, (dir), (mode), (qstr), (goal), (owner), \
- 			 0, (type), __LINE__, (nblocks))
- 
- 
-diff --git a/fs/ext4/ialloc.c b/fs/ext4/ialloc.c
-index 00c1ec6eee16..bf9028950a51 100644
---- a/fs/ext4/ialloc.c
-+++ b/fs/ext4/ialloc.c
-@@ -919,7 +919,8 @@ static int ext4_xattr_credits_for_new_inode(struct inode *dir, mode_t mode,
-  * For other inodes, search forward from the parent directory's block
-  * group to find a free inode.
-  */
--struct inode *__ext4_new_inode(handle_t *handle, struct inode *dir,
-+struct inode *__ext4_new_inode(struct user_namespace *mnt_userns,
-+			       handle_t *handle, struct inode *dir,
- 			       umode_t mode, const struct qstr *qstr,
- 			       __u32 goal, uid_t *owner, __u32 i_flags,
- 			       int handle_type, unsigned int line_no,
-@@ -969,10 +970,10 @@ struct inode *__ext4_new_inode(handle_t *handle, struct inode *dir,
- 		i_gid_write(inode, owner[1]);
- 	} else if (test_opt(sb, GRPID)) {
- 		inode->i_mode = mode;
--		inode->i_uid = current_fsuid();
-+		inode->i_uid = fsuid_into_mnt(mnt_userns);
- 		inode->i_gid = dir->i_gid;
- 	} else
--		inode_init_owner(&init_user_ns, inode, dir, mode);
-+		inode_init_owner(mnt_userns, inode, dir, mode);
- 
- 	if (ext4_has_feature_project(sb) &&
- 	    ext4_test_inode_flag(dir, EXT4_INODE_PROJINHERIT))
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index ce45535336fa..8fbf85b3547e 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -20,6 +20,7 @@
-  */
- 
- #include <linux/fs.h>
-+#include <linux/mount.h>
- #include <linux/time.h>
- #include <linux/highuid.h>
- #include <linux/pagemap.h>
-@@ -5338,7 +5339,7 @@ int ext4_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
- 				  ATTR_GID | ATTR_TIMES_SET))))
- 		return -EPERM;
- 
--	error = setattr_prepare(&init_user_ns, dentry, attr);
-+	error = setattr_prepare(mnt_userns, dentry, attr);
- 	if (error)
- 		return error;
- 
-@@ -5513,7 +5514,7 @@ int ext4_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
- 	}
- 
- 	if (!error) {
--		setattr_copy(&init_user_ns, inode, attr);
-+		setattr_copy(mnt_userns, inode, attr);
- 		mark_inode_dirty(inode);
- 	}
- 
-@@ -5525,7 +5526,7 @@ int ext4_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
- 		ext4_orphan_del(NULL, inode);
- 
- 	if (!error && (ia_valid & ATTR_MODE))
--		rc = posix_acl_chmod(&init_user_ns, inode, inode->i_mode);
-+		rc = posix_acl_chmod(mnt_userns, inode, inode->i_mode);
- 
- err_out:
- 	if  (error)
-@@ -5572,7 +5573,7 @@ int ext4_getattr(struct user_namespace *mnt_userns, const struct path *path,
- 				  STATX_ATTR_NODUMP |
- 				  STATX_ATTR_VERITY);
- 
--	generic_fillattr(&init_user_ns, inode, stat);
-+	generic_fillattr(mnt_userns, inode, stat);
- 	return 0;
- }
- 
-@@ -5583,7 +5584,7 @@ int ext4_file_getattr(struct user_namespace *mnt_userns,
- 	struct inode *inode = d_inode(path->dentry);
- 	u64 delalloc_blocks;
- 
--	ext4_getattr(&init_user_ns, path, stat, request_mask, query_flags);
-+	ext4_getattr(mnt_userns, path, stat, request_mask, query_flags);
- 
- 	/*
- 	 * If there is inline data in the inode, the inode will normally not
-diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
-index ab80e2493fdc..56ad9c4b6350 100644
---- a/fs/ext4/ioctl.c
-+++ b/fs/ext4/ioctl.c
-@@ -107,10 +107,12 @@ void ext4_reset_inode_seed(struct inode *inode)
-  * important fields of the inodes.
-  *
-  * @sb:         the super block of the filesystem
-+ * @mnt_userns:	user namespace of the mount the inode was found from
-  * @inode:      the inode to swap with EXT4_BOOT_LOADER_INO
-  *
-  */
- static long swap_inode_boot_loader(struct super_block *sb,
-+				struct user_namespace *mnt_userns,
- 				struct inode *inode)
- {
- 	handle_t *handle;
-@@ -139,7 +141,7 @@ static long swap_inode_boot_loader(struct super_block *sb,
- 	}
- 
- 	if (IS_RDONLY(inode) || IS_APPEND(inode) || IS_IMMUTABLE(inode) ||
--	    !inode_owner_or_capable(&init_user_ns, inode) ||
-+	    !inode_owner_or_capable(mnt_userns, inode) ||
- 	    !capable(CAP_SYS_ADMIN)) {
- 		err = -EPERM;
- 		goto journal_err_out;
-@@ -815,6 +817,7 @@ static long __ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	struct inode *inode = file_inode(filp);
- 	struct super_block *sb = inode->i_sb;
- 	struct ext4_inode_info *ei = EXT4_I(inode);
-+	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
- 	unsigned int flags;
- 
- 	ext4_debug("cmd = %u, arg = %lu\n", cmd, arg);
-@@ -830,7 +833,7 @@ static long __ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	case FS_IOC_SETFLAGS: {
- 		int err;
- 
--		if (!inode_owner_or_capable(&init_user_ns, inode))
-+		if (!inode_owner_or_capable(mnt_userns, inode))
- 			return -EACCES;
- 
- 		if (get_user(flags, (int __user *) arg))
-@@ -872,7 +875,7 @@ static long __ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 		__u32 generation;
- 		int err;
- 
--		if (!inode_owner_or_capable(&init_user_ns, inode))
-+		if (!inode_owner_or_capable(mnt_userns, inode))
- 			return -EPERM;
- 
- 		if (ext4_has_metadata_csum(inode->i_sb)) {
-@@ -1011,7 +1014,7 @@ static long __ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	case EXT4_IOC_MIGRATE:
- 	{
- 		int err;
--		if (!inode_owner_or_capable(&init_user_ns, inode))
-+		if (!inode_owner_or_capable(mnt_userns, inode))
- 			return -EACCES;
- 
- 		err = mnt_want_write_file(filp);
-@@ -1033,7 +1036,7 @@ static long __ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	case EXT4_IOC_ALLOC_DA_BLKS:
- 	{
- 		int err;
--		if (!inode_owner_or_capable(&init_user_ns, inode))
-+		if (!inode_owner_or_capable(mnt_userns, inode))
- 			return -EACCES;
- 
- 		err = mnt_want_write_file(filp);
-@@ -1052,7 +1055,7 @@ static long __ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 		err = mnt_want_write_file(filp);
- 		if (err)
- 			return err;
--		err = swap_inode_boot_loader(sb, inode);
-+		err = swap_inode_boot_loader(sb, mnt_userns, inode);
- 		mnt_drop_write_file(filp);
- 		return err;
- 	}
-@@ -1218,7 +1221,7 @@ static long __ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 
- 	case EXT4_IOC_CLEAR_ES_CACHE:
- 	{
--		if (!inode_owner_or_capable(&init_user_ns, inode))
-+		if (!inode_owner_or_capable(mnt_userns, inode))
- 			return -EACCES;
- 		ext4_clear_inode_es(inode);
- 		return 0;
-@@ -1264,7 +1267,7 @@ static long __ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 			return -EFAULT;
- 
- 		/* Make sure caller has proper permission */
--		if (!inode_owner_or_capable(&init_user_ns, inode))
-+		if (!inode_owner_or_capable(mnt_userns, inode))
- 			return -EACCES;
- 
- 		if (fa.fsx_xflags & ~EXT4_SUPPORTED_FS_XFLAGS)
-diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
-index 13dff80aedcb..877c602ae063 100644
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -2610,8 +2610,8 @@ static int ext4_create(struct user_namespace *mnt_userns, struct inode *dir,
- 	credits = (EXT4_DATA_TRANS_BLOCKS(dir->i_sb) +
- 		   EXT4_INDEX_EXTRA_TRANS_BLOCKS + 3);
- retry:
--	inode = ext4_new_inode_start_handle(dir, mode, &dentry->d_name, 0,
--					    NULL, EXT4_HT_DIR, credits);
-+	inode = ext4_new_inode_start_handle(mnt_userns, dir, mode, &dentry->d_name,
-+					    0, NULL, EXT4_HT_DIR, credits);
- 	handle = ext4_journal_current_handle();
- 	err = PTR_ERR(inode);
- 	if (!IS_ERR(inode)) {
-@@ -2645,8 +2645,8 @@ static int ext4_mknod(struct user_namespace *mnt_userns, struct inode *dir,
- 	credits = (EXT4_DATA_TRANS_BLOCKS(dir->i_sb) +
- 		   EXT4_INDEX_EXTRA_TRANS_BLOCKS + 3);
- retry:
--	inode = ext4_new_inode_start_handle(dir, mode, &dentry->d_name, 0,
--					    NULL, EXT4_HT_DIR, credits);
-+	inode = ext4_new_inode_start_handle(mnt_userns, dir, mode, &dentry->d_name,
-+					    0, NULL, EXT4_HT_DIR, credits);
- 	handle = ext4_journal_current_handle();
- 	err = PTR_ERR(inode);
- 	if (!IS_ERR(inode)) {
-@@ -2677,7 +2677,7 @@ static int ext4_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
- 		return err;
- 
- retry:
--	inode = ext4_new_inode_start_handle(dir, mode,
-+	inode = ext4_new_inode_start_handle(mnt_userns, dir, mode,
- 					    NULL, 0, NULL,
- 					    EXT4_HT_DIR,
- 			EXT4_MAXQUOTAS_INIT_BLOCKS(dir->i_sb) +
-@@ -2792,7 +2792,7 @@ static int ext4_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 	credits = (EXT4_DATA_TRANS_BLOCKS(dir->i_sb) +
- 		   EXT4_INDEX_EXTRA_TRANS_BLOCKS + 3);
- retry:
--	inode = ext4_new_inode_start_handle(dir, S_IFDIR | mode,
-+	inode = ext4_new_inode_start_handle(mnt_userns, dir, S_IFDIR | mode,
- 					    &dentry->d_name,
- 					    0, NULL, EXT4_HT_DIR, credits);
- 	handle = ext4_journal_current_handle();
-@@ -3335,7 +3335,7 @@ static int ext4_symlink(struct user_namespace *mnt_userns, struct inode *dir,
- 			  EXT4_INDEX_EXTRA_TRANS_BLOCKS + 3;
- 	}
- 
--	inode = ext4_new_inode_start_handle(dir, S_IFLNK|S_IRWXUGO,
-+	inode = ext4_new_inode_start_handle(mnt_userns, dir, S_IFLNK|S_IRWXUGO,
- 					    &dentry->d_name, 0, NULL,
- 					    EXT4_HT_DIR, credits);
- 	handle = ext4_journal_current_handle();
-@@ -3664,7 +3664,8 @@ static void ext4_update_dir_count(handle_t *handle, struct ext4_renament *ent)
- 	}
- }
- 
--static struct inode *ext4_whiteout_for_rename(struct ext4_renament *ent,
-+static struct inode *ext4_whiteout_for_rename(struct user_namespace *mnt_userns,
-+					      struct ext4_renament *ent,
- 					      int credits, handle_t **h)
- {
- 	struct inode *wh;
-@@ -3678,7 +3679,8 @@ static struct inode *ext4_whiteout_for_rename(struct ext4_renament *ent,
- 	credits += (EXT4_MAXQUOTAS_TRANS_BLOCKS(ent->dir->i_sb) +
- 		    EXT4_XATTR_TRANS_BLOCKS + 4);
- retry:
--	wh = ext4_new_inode_start_handle(ent->dir, S_IFCHR | WHITEOUT_MODE,
-+	wh = ext4_new_inode_start_handle(mnt_userns, ent->dir,
-+					 S_IFCHR | WHITEOUT_MODE,
- 					 &ent->dentry->d_name, 0, NULL,
- 					 EXT4_HT_DIR, credits);
- 
-@@ -3705,9 +3707,9 @@ static struct inode *ext4_whiteout_for_rename(struct ext4_renament *ent,
-  * while new_{dentry,inode) refers to the destination dentry/inode
-  * This comes from rename(const char *oldpath, const char *newpath)
-  */
--static int ext4_rename(struct inode *old_dir, struct dentry *old_dentry,
--		       struct inode *new_dir, struct dentry *new_dentry,
--		       unsigned int flags)
-+static int ext4_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
-+		       struct dentry *old_dentry, struct inode *new_dir,
-+		       struct dentry *new_dentry, unsigned int flags)
- {
- 	handle_t *handle = NULL;
- 	struct ext4_renament old = {
-@@ -3791,7 +3793,7 @@ static int ext4_rename(struct inode *old_dir, struct dentry *old_dentry,
- 			goto end_rename;
- 		}
- 	} else {
--		whiteout = ext4_whiteout_for_rename(&old, credits, &handle);
-+		whiteout = ext4_whiteout_for_rename(mnt_userns, &old, credits, &handle);
- 		if (IS_ERR(whiteout)) {
- 			retval = PTR_ERR(whiteout);
- 			whiteout = NULL;
-@@ -4110,7 +4112,7 @@ static int ext4_rename2(struct user_namespace *mnt_userns,
- 					 new_dir, new_dentry);
- 	}
- 
--	return ext4_rename(old_dir, old_dentry, new_dir, new_dentry, flags);
-+	return ext4_rename(mnt_userns, old_dir, old_dentry, new_dir, new_dentry, flags);
- }
- 
- /*
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 9a6f9875aa34..a77fbb79e813 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -6654,7 +6654,7 @@ static struct file_system_type ext4_fs_type = {
- 	.name		= "ext4",
- 	.mount		= ext4_mount,
- 	.kill_sb	= kill_block_super,
--	.fs_flags	= FS_REQUIRES_DEV,
-+	.fs_flags	= FS_REQUIRES_DEV | FS_ALLOW_IDMAP,
- };
- MODULE_ALIAS_FS("ext4");
- 
--- 
-2.30.0
-
+/Jarkko
