@@ -2,100 +2,135 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF3C300FF4
-	for <lists+linux-integrity@lfdr.de>; Fri, 22 Jan 2021 23:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B72301000
+	for <lists+linux-integrity@lfdr.de>; Fri, 22 Jan 2021 23:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729301AbhAVW2D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 22 Jan 2021 17:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728339AbhAVW1P (ORCPT
+        id S1729320AbhAVWbf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 22 Jan 2021 17:31:35 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4386 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728985AbhAVWb2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 22 Jan 2021 17:27:15 -0500
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28C6C0613D6;
-        Fri, 22 Jan 2021 14:26:33 -0800 (PST)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 7A21F6E97; Fri, 22 Jan 2021 17:26:32 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 7A21F6E97
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1611354392;
-        bh=tn+w8soQQzYWtoSEcV96aJkWCYx83kxrSGAkTTiabXA=;
-        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
-        b=X95z07vjZOjjzvjgzPtwDISRZ7bvRExOKROMoiBfzTUzhunQZq5I6fG0Ld2Gva7Mh
-         uhaRbZ9MkPgDEawpF8wGyueWVNQbXPl+6a+P6MAo2vQtm02J9ggMsib5nOD7Na/V0s
-         n9s4jAoDv+n/KWmXQQLflLSFjjV3dqCb/wYkVXv0=
-Date:   Fri, 22 Jan 2021 17:26:32 -0500
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v6 05/39] namei: make permission helpers idmapped mount
- aware
-Message-ID: <20210122222632.GB25405@fieldses.org>
-References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
- <20210121131959.646623-6-christian.brauner@ubuntu.com>
+        Fri, 22 Jan 2021 17:31:28 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10MLhdtX120771;
+        Fri, 22 Jan 2021 17:30:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
+ cc : subject : in-reply-to : date : message-id : mime-version :
+ content-type; s=pp1; bh=7mGn0WYopc0kF7PQBHUjZCd3m9ixqKMBlhNNMjrRDHI=;
+ b=TrJn+c8k3HCYspJpz3IFCBuSgEZnwmOexpqOovSP6HdVaeUmJsHcbpeYw4ju2yJF7Oso
+ TK3MgM6htuJA+PFkPB65Uli1PBPujbfkLLMOMYfUNo1sV+8SXlKHHLiiJdVlRQjY9jEa
+ W3YiA9S7vW6aG8xaZf18FAF8AVAqJv5ngtBlXLk/dI6o1Y+6tbue+CXqdXrvelQuT7vz
+ 8Ho1AJfuAK+y+h+5SWlr6Kpk9WxdbDIUwxOYjr29OewM1q+UQEKW/Su2ymBANmVcIM7+
+ sUwYzejaZnd7jjQFE1uLpLvS5c+TujSXELQMpEX1hvDvrdKl3RC9/W/Y8A/jrBpm6bn9 rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3686vagvr0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jan 2021 17:30:27 -0500
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10MMA1Nj063811;
+        Fri, 22 Jan 2021 17:30:27 -0500
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3686vagvqg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jan 2021 17:30:27 -0500
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10MMQu9Y014868;
+        Fri, 22 Jan 2021 22:30:25 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma04dal.us.ibm.com with ESMTP id 367k0srrua-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jan 2021 22:30:25 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10MMUOUf23069056
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 22 Jan 2021 22:30:24 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6E9FAC064;
+        Fri, 22 Jan 2021 22:30:24 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C814AC059;
+        Fri, 22 Jan 2021 22:30:22 +0000 (GMT)
+Received: from manicouagan.localdomain (unknown [9.80.213.112])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Fri, 22 Jan 2021 22:30:22 +0000 (GMT)
+References: <20210121173003.18324-1-nramas@linux.microsoft.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, gregkh@linuxfoundation.org,
+        sashal@kernel.org, tyhicks@linux.microsoft.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 1/2] ima: Free IMA measurement buffer on error
+In-reply-to: <20210121173003.18324-1-nramas@linux.microsoft.com>
+Date:   Fri, 22 Jan 2021 19:30:20 -0300
+Message-ID: <87eeic1u6b.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210121131959.646623-6-christian.brauner@ubuntu.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-From:   bfields@fieldses.org (J. Bruce Fields)
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-22_15:2021-01-22,2021-01-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ clxscore=1011 phishscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101220112
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-If I NFS-exported an idmapped mount, I think I'd expect idmapped clients
-to see the mapped IDs.
 
-Looks like that means taking the user namespace from the struct
-svc_export everwhere, for example:
+Hi Lakshmi,
 
-On Thu, Jan 21, 2021 at 02:19:24PM +0100, Christian Brauner wrote:
-> index 66f2ef67792a..8d90796e236a 100644
-> --- a/fs/nfsd/nfsfh.c
-> +++ b/fs/nfsd/nfsfh.c
-> @@ -40,7 +40,8 @@ static int nfsd_acceptable(void *expv, struct dentry *dentry)
->  		/* make sure parents give x permission to user */
->  		int err;
->  		parent = dget_parent(tdentry);
-> -		err = inode_permission(d_inode(parent), MAY_EXEC);
-> +		err = inode_permission(&init_user_ns,
-> +				       d_inode(parent), MAY_EXEC);
+Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 
-		err = inode_permission(exp->ex_path.mnt->mnt_userns,
-				      d_inode(parent, MAY_EXEC);
+> IMA allocates kernel virtual memory to carry forward the measurement
+> list, from the current kernel to the next kernel on kexec system call,
+> in ima_add_kexec_buffer() function.  In error code paths this memory
+> is not freed resulting in memory leak.
+>
+> Free the memory allocated for the IMA measurement list in
+> the error code paths in ima_add_kexec_buffer() function.
+>
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Suggested-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> Fixes: 7b8589cc29e7 ("ima: on soft reboot, save the measurement list")
+> ---
+>  security/integrity/ima/ima_kexec.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index 121de3e04af2..212145008a01 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -119,12 +119,14 @@ void ima_add_kexec_buffer(struct kimage *image)
+>  	ret = kexec_add_buffer(&kbuf);
+>  	if (ret) {
+>  		pr_err("Error passing over kexec measurement buffer.\n");
+> +		vfree(kexec_buffer);
+>  		return;
+>  	}
 
-?
+This is a good catch.
 
---b.
+>  
+>  	ret = arch_ima_add_kexec_buffer(image, kbuf.mem, kexec_segment_size);
+>  	if (ret) {
+>  		pr_err("Error passing over kexec measurement buffer.\n");
+> +		vfree(kexec_buffer);
+>  		return;
+>  	}
+
+But this would cause problems, because the buffer is still there in the
+kimage and would cause kimage_load_segment() to access invalid memory.
+
+There's no function to undo a kexec_add_buffer() to avoid this problem,
+so I'd suggest just accepting the leak in this case. Fortunately, the
+current implementations of arch_ima_add_kexec_buffer() are very simple
+and cannot fail, so this is a theoretical problem.
+
+-- 
+Thiago Jung Bauermann
+IBM Linux Technology Center
