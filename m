@@ -2,112 +2,174 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D1B301218
-	for <lists+linux-integrity@lfdr.de>; Sat, 23 Jan 2021 02:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC78301553
+	for <lists+linux-integrity@lfdr.de>; Sat, 23 Jan 2021 14:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726344AbhAWBpL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 22 Jan 2021 20:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726210AbhAWBpI (ORCPT
+        id S1725550AbhAWNLB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 23 Jan 2021 08:11:01 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:45691 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbhAWNK7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 22 Jan 2021 20:45:08 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FDDC06174A
-        for <linux-integrity@vger.kernel.org>; Fri, 22 Jan 2021 17:44:26 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id u11so8619919ljo.13
-        for <linux-integrity@vger.kernel.org>; Fri, 22 Jan 2021 17:44:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3e7pALlOJ19aHX2ythHC5kZ2SsW79vgYjMZJGeJUhKw=;
-        b=uta6t1Z33tI7TQilA8NWV65/K68sgO6oNit9BZE4k+6uvfQaoWfPArI8J22mbdfZnp
-         OWTfh2RpYja+R46GlpykFWKlOlaK2IDOmvyBHpgH1sYzTZOP5ECISowKKIxNJnyqsYGT
-         ksCL15puXcVCRftS7LLNKgV1HdxbECaXS3hM4zqzWgSbJ9H4ukwhFkL44cyn0PEtYG5Z
-         fK2P46SZzR16iNmpX6LCjuBPciQYjOOLgUfoUEvBjY9mzbJPluQCO9VPN0RQ+GzhQhac
-         MhhdxgA6CIa3b9FlE6seigMheYOy6dE5FbjMASBVy9geiaDdaEYeerVck+OWQGxacEhO
-         DQeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3e7pALlOJ19aHX2ythHC5kZ2SsW79vgYjMZJGeJUhKw=;
-        b=DXZdoZYWfxTU+rTJ8pvGy+LnpWSfF+HxbeVWJXYh3hOdtmTNNW5PAHSqZFxNLqFVwR
-         xtf2lVw7kZ6IQYY2zaANU/j6skpA2j59Wh6oCuIC7BE7QoFFJtP4qqzSWnd+NtbepzDK
-         d65ywGOSMqc9kkoAkEJuMUnE1TznHGQfUl3/BAuetSsi0DhjfdUrAe96tRH+H0XnnOYj
-         Sa7DFpNmiDSNKBj9VGLKwVK8+/mXHHqdrnfzodME8/2NgHaVlXozOmPzFbIMQs+1kDUh
-         XyEgcnC8oK81MHSYPNQMdyVG3thAmBRax/9UkichF9VopahdsEMX1ZaUrhgDnMCg1+eL
-         //fQ==
-X-Gm-Message-State: AOAM531LVkdO4kDi9jFcVnXqZSGm0CvAQFful28YmkYioU62/6fEt/8H
-        X/b8JRaxm0mYoMYbu5kKECG45A==
-X-Google-Smtp-Source: ABdhPJz+wZ42Z8uxG3vZyUYvRZ9Voualg1NJScVwKaE9NOzHJg6feRwc+Xqsf7ZAHGroELeGeUB/7g==
-X-Received: by 2002:a05:651c:118a:: with SMTP id w10mr842157ljo.13.1611366264832;
-        Fri, 22 Jan 2021 17:44:24 -0800 (PST)
-Received: from localhost.localdomain (89-70-221-122.dynamic.chello.pl. [89.70.221.122])
-        by smtp.gmail.com with ESMTPSA id m8sm1154147lji.57.2021.01.22.17.44.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 17:44:24 -0800 (PST)
-From:   Lukasz Majczak <lma@semihalf.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Radoslaw Biernacki <rad@semihalf.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Alex Levin <levinale@google.com>
-Subject: [PATCH] tpm_tis: Add missing start/stop_tpm_chip calls
-Date:   Sat, 23 Jan 2021 02:42:47 +0100
-Message-Id: <20210123014247.989368-1-lma@semihalf.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 23 Jan 2021 08:10:59 -0500
+Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1l3Ify-0007vJ-RG; Sat, 23 Jan 2021 13:10:03 +0000
+Date:   Sat, 23 Jan 2021 14:09:58 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     "J. Bruce Fields" <bfields@fieldses.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
+        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Subject: Re: [PATCH v6 05/39] namei: make permission helpers idmapped mount
+ aware
+Message-ID: <20210123130958.3t6kvgkl634njpsm@wittgenstein>
+References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
+ <20210121131959.646623-6-christian.brauner@ubuntu.com>
+ <20210122222632.GB25405@fieldses.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210122222632.GB25405@fieldses.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-There is a missing call to start_tpm_chip before the call to
-the tpm_get_timeouts() and tpm_tis_probe_irq_single(). As the current
-approach maight work for tpm2, it fails for tpm1.x - in that case
-call to tpm_get_timeouts() or tpm_tis_probe_irq_single() tries to
-transmit TPM commands on a disabled chip what what doesn't succeed
-and in turn causes tpm_tis_core_init() to fail.
-Tested on Samsung Chromebook Pro (Caroline).
+On Fri, Jan 22, 2021 at 05:26:32PM -0500, J. Bruce Fields wrote:
+> If I NFS-exported an idmapped mount, I think I'd expect idmapped clients
+> to see the mapped IDs.
+> 
+> Looks like that means taking the user namespace from the struct
+> svc_export everwhere, for example:
+> 
+> On Thu, Jan 21, 2021 at 02:19:24PM +0100, Christian Brauner wrote:
+> > index 66f2ef67792a..8d90796e236a 100644
+> > --- a/fs/nfsd/nfsfh.c
+> > +++ b/fs/nfsd/nfsfh.c
+> > @@ -40,7 +40,8 @@ static int nfsd_acceptable(void *expv, struct dentry *dentry)
+> >  		/* make sure parents give x permission to user */
+> >  		int err;
+> >  		parent = dget_parent(tdentry);
+> > -		err = inode_permission(d_inode(parent), MAY_EXEC);
+> > +		err = inode_permission(&init_user_ns,
+> > +				       d_inode(parent), MAY_EXEC);
+> 
+> 		err = inode_permission(exp->ex_path.mnt->mnt_userns,
+> 				      d_inode(parent, MAY_EXEC);
 
-Signed-off-by: Lukasz Majczak <lma@semihalf.com>
+Hey Bruce, thanks! Imho, the clean approach for now is to not export
+idmapped mounts until we have ported that part of nfs similar to what we
+do for stacking filesystems for now. I've tested and taken this patch
+into my tree:
+
 ---
- drivers/char/tpm/tpm_tis_core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+From 7a6a53bca1ecd8db872de1ee81d1a57e1829e525 Mon Sep 17 00:00:00 2001
+From: Christian Brauner <christian.brauner@ubuntu.com>
+Date: Sat, 23 Jan 2021 12:00:02 +0100
+Subject: [PATCH] nfs: do not export idmapped mounts
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 92c51c6cfd1b..ff0e5fe46a9d 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -1063,12 +1063,16 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 	init_waitqueue_head(&priv->read_queue);
- 	init_waitqueue_head(&priv->int_queue);
- 	if (irq != -1) {
-+		rc = tpm_chip_start(chip);
-+		if (rc)
-+			goto out_err;
- 		/* Before doing irq testing issue a command to the TPM in polling mode
- 		 * to make sure it works. May as well use that command to set the
- 		 * proper timeouts for the driver.
- 		 */
- 		if (tpm_get_timeouts(chip)) {
- 			dev_err(dev, "Could not get TPM timeouts and durations\n");
-+			tpm_chip_stop(chip);
- 			rc = -ENODEV;
- 			goto out_err;
- 		}
-@@ -1085,6 +1089,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 		} else {
- 			tpm_tis_probe_irq(chip, intmask);
- 		}
-+		tpm_chip_stop(chip);
+Prevent nfs from exporting idmapped mounts until we have ported it to
+support exporting idmapped mounts.
+
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: David Howells <dhowells@redhat.com>
+Cc: "J. Bruce Fields" <bfields@redhat.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+/* v2 */
+
+/* v3 */
+
+/* v4 */
+
+/* v5 */
+
+/* v5 */
+patch introduced
+base-commit: 19c329f6808995b142b3966301f217c831e7cf31
+---
+ fs/nfsd/export.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
+index 81e7bb12aca6..e456421f68b4 100644
+--- a/fs/nfsd/export.c
++++ b/fs/nfsd/export.c
+@@ -369,8 +369,9 @@ static struct svc_export *svc_export_update(struct svc_export *new,
+ 					    struct svc_export *old);
+ static struct svc_export *svc_export_lookup(struct svc_export *);
+ 
+-static int check_export(struct inode *inode, int *flags, unsigned char *uuid)
++static int check_export(struct path *path, int *flags, unsigned char *uuid)
+ {
++	struct inode *inode = d_inode(path->dentry);
+ 
+ 	/*
+ 	 * We currently export only dirs, regular files, and (for v4
+@@ -394,6 +395,7 @@ static int check_export(struct inode *inode, int *flags, unsigned char *uuid)
+ 	 *       or an FSID number (so NFSEXP_FSID or ->uuid is needed).
+ 	 * 2:  We must be able to find an inode from a filehandle.
+ 	 *       This means that s_export_op must be set.
++	 * 3: We must not currently be on an idmapped mount.
+ 	 */
+ 	if (!(inode->i_sb->s_type->fs_flags & FS_REQUIRES_DEV) &&
+ 	    !(*flags & NFSEXP_FSID) &&
+@@ -408,6 +410,11 @@ static int check_export(struct inode *inode, int *flags, unsigned char *uuid)
+ 		return -EINVAL;
  	}
  
- 	rc = tpm_chip_register(chip);
++	if (mnt_user_ns(path->mnt) != &init_user_ns) {
++		dprintk("exp_export: export of idmapped mounts not yet supported.\n");
++		return -EINVAL;
++	}
++
+ 	if (inode->i_sb->s_export_op->flags & EXPORT_OP_NOSUBTREECHK &&
+ 	    !(*flags & NFSEXP_NOSUBTREECHECK)) {
+ 		dprintk("%s: %s does not support subtree checking!\n",
+@@ -636,8 +643,7 @@ static int svc_export_parse(struct cache_detail *cd, char *mesg, int mlen)
+ 				goto out4;
+ 		}
+ 
+-		err = check_export(d_inode(exp.ex_path.dentry), &exp.ex_flags,
+-				   exp.ex_uuid);
++		err = check_export(&exp.ex_path, &exp.ex_flags, exp.ex_uuid);
+ 		if (err)
+ 			goto out4;
+ 		/*
 -- 
-2.25.1
+2.30.0
 
