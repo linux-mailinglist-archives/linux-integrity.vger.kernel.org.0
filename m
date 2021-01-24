@@ -2,282 +2,196 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F6D301DD1
-	for <lists+linux-integrity@lfdr.de>; Sun, 24 Jan 2021 18:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02D7301F2C
+	for <lists+linux-integrity@lfdr.de>; Sun, 24 Jan 2021 23:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbhAXRFZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 24 Jan 2021 12:05:25 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:45846 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726175AbhAXRFY (ORCPT
+        id S1726588AbhAXWTl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 24 Jan 2021 17:19:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726023AbhAXWTg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 24 Jan 2021 12:05:24 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 59C4020B7192;
-        Sun, 24 Jan 2021 09:04:41 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 59C4020B7192
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1611507881;
-        bh=jcB5R+Z7AHCeSKNHbj/OIxNmhum9d165W8I2w6xnYAI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=JEKrZpP0OmFSwu4PabCWXgM4f5bJBFm/qlr0x5IxxwklrUJGtUay6ucsezODWuEby
-         P932IxeOttRV5WbwbUKra9ZzB4KkVUB7vOLm/LZ5DyfxJyJvHIqhxBvJZDyNAhD+RA
-         4EldaKwnsRwwnc/uU982cDJkDLwmnAG7umROxO8Y=
-Subject: Re: [PATCH] selinux: measure state and policy capabilities
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, sashal@kernel.org,
+        Sun, 24 Jan 2021 17:19:36 -0500
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E041C061573;
+        Sun, 24 Jan 2021 14:18:56 -0800 (PST)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id 5BB366F0B; Sun, 24 Jan 2021 17:18:54 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 5BB366F0B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1611526734;
+        bh=+WeIqs20uLR2t89mwWhzLJ7HD1CUH+AoqxAA94UkyAw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T3knNZXlNMSdp0ZFF271zh05uh8dHtzIU5n+EpzP+DShDIuwCv24ngiDLH3dX2iVG
+         Q+/8hT7i78v4LjbweP0IxzBfSSQzshrnzEr/vDeCGI1IjRI4h2ck9ommwbgtFT/5jF
+         XuegkZX7zWCzW/QKQGrcLiSurCj4zEDOFTsYQn2c=
+Date:   Sun, 24 Jan 2021 17:18:54 -0500
+From:   "J. Bruce Fields" <bfields@fieldses.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
         James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210121200150.2448-1-nramas@linux.microsoft.com>
- <CAHC9VhT13nhaHY3kJZ6ni4rjUffSG-hD5vOfK-q2KfsVFOtaCg@mail.gmail.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <c61e3ea5-7412-7e39-4d71-945f906d68a3@linux.microsoft.com>
-Date:   Sun, 24 Jan 2021 09:04:40 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
+        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Subject: Re: [PATCH v6 05/39] namei: make permission helpers idmapped mount
+ aware
+Message-ID: <20210124221854.GA1487@fieldses.org>
+References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
+ <20210121131959.646623-6-christian.brauner@ubuntu.com>
+ <20210122222632.GB25405@fieldses.org>
+ <20210123130958.3t6kvgkl634njpsm@wittgenstein>
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhT13nhaHY3kJZ6ni4rjUffSG-hD5vOfK-q2KfsVFOtaCg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210123130958.3t6kvgkl634njpsm@wittgenstein>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 1/22/21 1:21 PM, Paul Moore wrote:
-
-Hi Paul,
-
-Thanks for reviewing the changes.
-
-...
-
->>
->> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
->> Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
->> ---
->> This patch is based on
->> commit e58bb688f2e4 "Merge branch 'measure-critical-data' into next-integrity"
->> in "next-integrity-testing" branch
->>
->>   security/selinux/hooks.c     |  5 +++
->>   security/selinux/ima.c       | 68 ++++++++++++++++++++++++++++++++++++
->>   security/selinux/selinuxfs.c | 10 ++++++
->>   3 files changed, 83 insertions(+)
->>
->> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
->> index 644b17ec9e63..879a0d90615d 100644
->> --- a/security/selinux/hooks.c
->> +++ b/security/selinux/hooks.c
->> @@ -103,6 +103,7 @@
->>   #include "netlabel.h"
->>   #include "audit.h"
->>   #include "avc_ss.h"
->> +#include "ima.h"
->>
->>   struct selinux_state selinux_state;
->>
->> @@ -7407,6 +7408,10 @@ int selinux_disable(struct selinux_state *state)
->>
->>          selinux_mark_disabled(state);
->>
->> +       mutex_lock(&state->policy_mutex);
->> +       selinux_ima_measure_state(state);
->> +       mutex_unlock(&state->policy_mutex);
+On Sat, Jan 23, 2021 at 02:09:58PM +0100, Christian Brauner wrote:
+> On Fri, Jan 22, 2021 at 05:26:32PM -0500, J. Bruce Fields wrote:
+> > If I NFS-exported an idmapped mount, I think I'd expect idmapped clients
+> > to see the mapped IDs.
+> > 
+> > Looks like that means taking the user namespace from the struct
+> > svc_export everwhere, for example:
+> > 
+> > On Thu, Jan 21, 2021 at 02:19:24PM +0100, Christian Brauner wrote:
+> > > index 66f2ef67792a..8d90796e236a 100644
+> > > --- a/fs/nfsd/nfsfh.c
+> > > +++ b/fs/nfsd/nfsfh.c
+> > > @@ -40,7 +40,8 @@ static int nfsd_acceptable(void *expv, struct dentry *dentry)
+> > >  		/* make sure parents give x permission to user */
+> > >  		int err;
+> > >  		parent = dget_parent(tdentry);
+> > > -		err = inode_permission(d_inode(parent), MAY_EXEC);
+> > > +		err = inode_permission(&init_user_ns,
+> > > +				       d_inode(parent), MAY_EXEC);
+> > 
+> > 		err = inode_permission(exp->ex_path.mnt->mnt_userns,
+> > 				      d_inode(parent, MAY_EXEC);
 > 
-> I'm not sure if this affects your decision to include this action in
-> the measurements, but this function is hopefully going away in the not
-> too distant future as we do away with support for disabling SELinux at
-> runtime.
-> 
-> FWIW, I'm not sure it's overly useful anyway; you only get here if you
-> never had any SELinux policy/state configured and you decide to
-> disable SELinux instead of loading a policy.  However, I've got no
-> objection to this code.
-If support for disabling SELinux at runtime will be removed, then I 
-don't see a reason to trigger a measurement here. I'll remove this 
-measurement.
+> Hey Bruce, thanks! Imho, the clean approach for now is to not export
+> idmapped mounts until we have ported that part of nfs similar to what we
+> do for stacking filesystems for now. I've tested and taken this patch
+> into my tree:
+
+Oh good, thanks.  My real fear was that we'd fix this up later and leave
+users in a situation where the server exposes different IDs depending on
+kernel version, which would be a mess.  Looks like this should avoid
+that.
+
+As for making idmapped mounts actually work with nfsd--are you planning
+to do that, or do you need me to?  I hope the patch is straightforward;
+I'm more worried testing it.
+
+--b.
 
 > 
->> diff --git a/security/selinux/ima.c b/security/selinux/ima.c
->> index 03715893ff97..e65d462d2d30 100644
->> --- a/security/selinux/ima.c
->> +++ b/security/selinux/ima.c
->> @@ -12,6 +12,60 @@
->>   #include "security.h"
->>   #include "ima.h"
->>
->> +/*
->> + * read_selinux_state - Read selinux configuration settings
->> + *
->> + * @state_str: Return the configuration settings.
->> + * @state_str_len: Size of the configuration settings string
->> + * @state: selinux_state
->> + *
->> + * Return 0 on success, error code on failure
->> + */
+> ---
+> >From 7a6a53bca1ecd8db872de1ee81d1a57e1829e525 Mon Sep 17 00:00:00 2001
+> From: Christian Brauner <christian.brauner@ubuntu.com>
+> Date: Sat, 23 Jan 2021 12:00:02 +0100
+> Subject: [PATCH] nfs: do not export idmapped mounts
 > 
-> Yes, naming is hard, but let's try to be a bit more consistent within
-> a single file.  The existing function is prefixed with "selinux_ima_"
-> perhaps we can do something similar here?
-> "selinux_ima_collect_state()" or something similar perhaps?
-
-Sure - will rename the function to "selinux_ima_collect_state()"
-
+> Prevent nfs from exporting idmapped mounts until we have ported it to
+> support exporting idmapped mounts.
 > 
-> Perhaps instead of returning zero on success you could return the
-> length of the generated string?  It's not a big deal, but it saves an
-> argument for whatever that is worth these days.  I also might pass the
-> state as the first argument and the generated string pointer as the
-> second argument, but that is pretty nit-picky.
-Sure - will make this change.
-
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: "J. Bruce Fields" <bfields@redhat.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: linux-fsdevel@vger.kernel.org
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> ---
+> /* v2 */
 > 
->> +static int read_selinux_state(char **state_str, int *state_str_len,
->> +                             struct selinux_state *state)
->> +{
->> +       char *buf;
->> +       int i, buf_len, curr;
->> +       bool initialized = selinux_initialized(state);
->> +       bool enabled = !selinux_disabled(state);
->> +       bool enforcing = enforcing_enabled(state);
->> +       bool checkreqprot = checkreqprot_get(state);
->> +
->> +       buf_len = snprintf(NULL, 0, "%s=%d;%s=%d;%s=%d;%s=%d;",
->> +                          "initialized", initialized,
->> +                          "enabled", enabled,
->> +                          "enforcing", enforcing,
->> +                          "checkreqprot", checkreqprot);
->> +
->> +       for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++) {
->> +               buf_len += snprintf(NULL, 0, "%s=%d;",
->> +                                   selinux_policycap_names[i],
->> +                                   state->policycap[i]);
->> +       }
->> +       ++buf_len;
+> /* v3 */
 > 
-> With all of the variables you are measuring being booleans, it seems
-> like using snprintf() is a bit overkill, no?  What about a series of
-> strlen() calls with additional constants for the booleans and extra
-> bits?  For example:
+> /* v4 */
 > 
->    buf_len = 1; // '\0';
->    buf_len += strlen("foo") + 3; // "foo=0;"
->    buf_len += strlen("bar") + 3; // "bar=0;"
+> /* v5 */
 > 
-> Not that it matters a lot here, but the above must be more efficient
-> than calling snprintf().
-
-You are right - using strlen/strcat would be more efficient here. But I 
-feel it is safer to use snprintf() rather than computing the length of 
-each measured entity and concatenating it to the destination buffer.
-
-I'll try strlen/strcat approach.
-
+> /* v5 */
+> patch introduced
+> base-commit: 19c329f6808995b142b3966301f217c831e7cf31
+> ---
+>  fs/nfsd/export.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
->> +       buf = kzalloc(buf_len, GFP_KERNEL);
->> +       if (!buf)
->> +               return -ENOMEM;
->> +
->> +       curr = scnprintf(buf, buf_len, "%s=%d;%s=%d;%s=%d;%s=%d;",
->> +                        "initialized", initialized,
->> +                        "enabled", enabled,
->> +                        "enforcing", enforcing,
->> +                        "checkreqprot", checkreqprot);
->> +
->> +       for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++) {
->> +               curr += scnprintf((buf + curr), (buf_len - curr), "%s=%d;",
->> +                                 selinux_policycap_names[i],
->> +                                 state->policycap[i]);
->> +       }
-> 
-> Similarly, you could probably replace all of this with
-> strcat()/strlcat() calls since you don't have to render an integer
-> into a string.
-Sure - I'll give this a try.
-
-> 
->> +       *state_str = buf;
->> +       *state_str_len = curr;
->> +
->> +       return 0;
->> +}
->> +
->>   /*
->>    * selinux_ima_measure_state - Measure hash of the SELinux policy
->>    *
->> @@ -21,10 +75,24 @@
->>    */
->>   void selinux_ima_measure_state(struct selinux_state *state)
->>   {
->> +       char *state_str = NULL;
->> +       int state_str_len;
->>          void *policy = NULL;
->>          size_t policy_len;
->>          int rc = 0;
->>
->> +       rc = read_selinux_state(&state_str, &state_str_len, state);
->> +       if (rc) {
->> +               pr_err("SELinux: %s: failed to read state %d.\n",
->> +                       __func__, rc);
->> +               return;
->> +       }
->> +
->> +       ima_measure_critical_data("selinux", "selinux-state",
->> +                                 state_str, state_str_len, false);
->> +
->> +       kfree(state_str);
->> +
->>          /*
->>           * Measure SELinux policy only after initialization is completed.
->>           */
->> diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
->> index 4bde570d56a2..8b561e1c2caa 100644
->> --- a/security/selinux/selinuxfs.c
->> +++ b/security/selinux/selinuxfs.c
->> @@ -41,6 +41,7 @@
->>   #include "security.h"
->>   #include "objsec.h"
->>   #include "conditional.h"
->> +#include "ima.h"
->>
->>   enum sel_inos {
->>          SEL_ROOT_INO = 2,
->> @@ -182,6 +183,10 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
->>                  selinux_status_update_setenforce(state, new_value);
->>                  if (!new_value)
->>                          call_blocking_lsm_notifier(LSM_POLICY_CHANGE, NULL);
->> +
->> +               mutex_lock(&state->policy_mutex);
->> +               selinux_ima_measure_state(state);
->> +               mutex_unlock(&state->policy_mutex);
->>          }
->>          length = count;
->>   out:
->> @@ -762,6 +767,11 @@ static ssize_t sel_write_checkreqprot(struct file *file, const char __user *buf,
->>
->>          checkreqprot_set(fsi->state, (new_value ? 1 : 0));
->>          length = count;
->> +
->> +       mutex_lock(&fsi->state->policy_mutex);
->> +       selinux_ima_measure_state(fsi->state);
->> +       mutex_unlock(&fsi->state->policy_mutex);
->> +
-> 
-> The lock-measure-unlock pattern appears enough that I wonder if we
-> should move the lock/unlock into selinux_ima_measure_state() and
-> create a new function, selinux_ima_measure_state_unlocked(), to cover
-> the existing case in selinux_notify_policy_change().  It would have
-> the advantage of not requiring a pointless lock/unlock in the case
-> where CONFIG_IMA=n.
-> 
-
-Agreed.
-
-thanks,
-  -lakshmi
+> diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
+> index 81e7bb12aca6..e456421f68b4 100644
+> --- a/fs/nfsd/export.c
+> +++ b/fs/nfsd/export.c
+> @@ -369,8 +369,9 @@ static struct svc_export *svc_export_update(struct svc_export *new,
+>  					    struct svc_export *old);
+>  static struct svc_export *svc_export_lookup(struct svc_export *);
+>  
+> -static int check_export(struct inode *inode, int *flags, unsigned char *uuid)
+> +static int check_export(struct path *path, int *flags, unsigned char *uuid)
+>  {
+> +	struct inode *inode = d_inode(path->dentry);
+>  
+>  	/*
+>  	 * We currently export only dirs, regular files, and (for v4
+> @@ -394,6 +395,7 @@ static int check_export(struct inode *inode, int *flags, unsigned char *uuid)
+>  	 *       or an FSID number (so NFSEXP_FSID or ->uuid is needed).
+>  	 * 2:  We must be able to find an inode from a filehandle.
+>  	 *       This means that s_export_op must be set.
+> +	 * 3: We must not currently be on an idmapped mount.
+>  	 */
+>  	if (!(inode->i_sb->s_type->fs_flags & FS_REQUIRES_DEV) &&
+>  	    !(*flags & NFSEXP_FSID) &&
+> @@ -408,6 +410,11 @@ static int check_export(struct inode *inode, int *flags, unsigned char *uuid)
+>  		return -EINVAL;
+>  	}
+>  
+> +	if (mnt_user_ns(path->mnt) != &init_user_ns) {
+> +		dprintk("exp_export: export of idmapped mounts not yet supported.\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	if (inode->i_sb->s_export_op->flags & EXPORT_OP_NOSUBTREECHK &&
+>  	    !(*flags & NFSEXP_NOSUBTREECHECK)) {
+>  		dprintk("%s: %s does not support subtree checking!\n",
+> @@ -636,8 +643,7 @@ static int svc_export_parse(struct cache_detail *cd, char *mesg, int mlen)
+>  				goto out4;
+>  		}
+>  
+> -		err = check_export(d_inode(exp.ex_path.dentry), &exp.ex_flags,
+> -				   exp.ex_uuid);
+> +		err = check_export(&exp.ex_path, &exp.ex_flags, exp.ex_uuid);
+>  		if (err)
+>  			goto out4;
+>  		/*
+> -- 
+> 2.30.0
