@@ -2,174 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC78301553
-	for <lists+linux-integrity@lfdr.de>; Sat, 23 Jan 2021 14:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 638C0301C7B
+	for <lists+linux-integrity@lfdr.de>; Sun, 24 Jan 2021 15:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725550AbhAWNLB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 23 Jan 2021 08:11:01 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:45691 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbhAWNK7 (ORCPT
+        id S1725819AbhAXOCx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 24 Jan 2021 09:02:53 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50624 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725779AbhAXOCx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 23 Jan 2021 08:10:59 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l3Ify-0007vJ-RG; Sat, 23 Jan 2021 13:10:03 +0000
-Date:   Sat, 23 Jan 2021 14:09:58 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     "J. Bruce Fields" <bfields@fieldses.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
+        Sun, 24 Jan 2021 09:02:53 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10ODhSh2049852;
+        Sun, 24 Jan 2021 09:02:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=uMFC1xQ6LA1lmz16wBTg03vAR5SUDLhJZCyfpExY7gQ=;
+ b=ltTguhIdzdr7o1JvQxY1OVr09kclRB8xgRhuno/ojN1d/TeWVKa9e8hwDljsKpYOY/fG
+ KINVaG0q9DPdh/BZlLXMm562j3i0hEKliquM6dJOv9s5HIBtxS//3qdp1lqdWVcrkhxR
+ 3HZDmWPSVpZi5LPy3M8I/KJsJbyxho+7R8HPiflJUeROkx3wcBPbdsjHfdy6+V2H3GTf
+ x1uQDs0/8odf18Vkcf8pb+KQk3ky8OBlOBp3SYtRFJjUeaM864bQxSPFhFCM1BaiWQcD
+ UGbMoqRUtJCF5JTcOKmHp/Y2G3/OFemnUmRv2H030L3WdPmIAU0bitSRv5znCQCRFS8n qg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 369a14r8p0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 24 Jan 2021 09:02:07 -0500
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10OE27k0098613;
+        Sun, 24 Jan 2021 09:02:07 -0500
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 369a14r8nb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 24 Jan 2021 09:02:07 -0500
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10OE24aU019585;
+        Sun, 24 Jan 2021 14:02:04 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 368be88hge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 24 Jan 2021 14:02:04 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10OE227o38863348
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 24 Jan 2021 14:02:02 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B928AE053;
+        Sun, 24 Jan 2021 14:02:02 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 10187AE055;
+        Sun, 24 Jan 2021 14:01:59 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.83.155])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 24 Jan 2021 14:01:58 +0000 (GMT)
+Message-ID: <5a151e3ccc1fd041482807f1caa03f1ccabe3080.camel@linux.ibm.com>
+Subject: Re: [PATCH] selinux: include a consumer of the new IMA critical
+ data hook
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, sashal@kernel.org,
         James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v6 05/39] namei: make permission helpers idmapped mount
- aware
-Message-ID: <20210123130958.3t6kvgkl634njpsm@wittgenstein>
-References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
- <20210121131959.646623-6-christian.brauner@ubuntu.com>
- <20210122222632.GB25405@fieldses.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210122222632.GB25405@fieldses.org>
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Date:   Sun, 24 Jan 2021 09:01:58 -0500
+In-Reply-To: <CAHC9VhRyNNHm4RBNFKPyOwQM2W84JFGakDvYcaf1=MeMayAX7g@mail.gmail.com>
+References: <20210114191522.4001-1-nramas@linux.microsoft.com>
+         <CAHC9VhRyNNHm4RBNFKPyOwQM2W84JFGakDvYcaf1=MeMayAX7g@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-24_04:2021-01-22,2021-01-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 phishscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101240085
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 05:26:32PM -0500, J. Bruce Fields wrote:
-> If I NFS-exported an idmapped mount, I think I'd expect idmapped clients
-> to see the mapped IDs.
+On Fri, 2021-01-22 at 15:24 -0500, Paul Moore wrote:
+> On Thu, Jan 14, 2021 at 2:15 PM Lakshmi Ramasubramanian
+> <nramas@linux.microsoft.com> wrote:
+> >
+> > SELinux stores the active policy in memory, so the changes to this data
+> > at runtime would have an impact on the security guarantees provided
+> > by SELinux.  Measuring in-memory SELinux policy through IMA subsystem
+> > provides a secure way for the attestation service to remotely validate
+> > the policy contents at runtime.
+> >
+> > Measure the hash of the loaded policy by calling the IMA hook
+> > ima_measure_critical_data().  Since the size of the loaded policy
+> > can be large (several MB), measure the hash of the policy instead of
+> > the entire policy to avoid bloating the IMA log entry.
+> >
+> > To enable SELinux data measurement, the following steps are required:
+> >
+> > 1, Add "ima_policy=critical_data" to the kernel command line arguments
+> >    to enable measuring SELinux data at boot time.
+> > For example,
+> >   BOOT_IMAGE=/boot/vmlinuz-5.10.0-rc1+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset security=selinux ima_policy=critical_data
+> >
+> > 2, Add the following rule to /etc/ima/ima-policy
+> >    measure func=CRITICAL_DATA label=selinux
+> >
+> > Sample measurement of the hash of SELinux policy:
+> >
+> > To verify the measured data with the current SELinux policy run
+> > the following commands and verify the output hash values match.
+> >
+> >   sha256sum /sys/fs/selinux/policy | cut -d' ' -f 1
+> >
+> >   grep "selinux-policy-hash" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | tail -1 | cut -d' ' -f 6
+> >
+> > Note that the actual verification of SELinux policy would require loading
+> > the expected policy into an identical kernel on a pristine/known-safe
+> > system and run the sha256sum /sys/kernel/selinux/policy there to get
+> > the expected hash.
+> >
+> > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> > Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+> > Acked-by: Paul Moore <paul@paul-moore.com>
+> > Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> > ---
+> >  Documentation/ABI/testing/ima_policy |  3 +-
+> >  security/selinux/Makefile            |  2 +
+> >  security/selinux/ima.c               | 44 +++++++++++++++++++
+> >  security/selinux/include/ima.h       | 24 +++++++++++
+> >  security/selinux/include/security.h  |  3 +-
+> >  security/selinux/ss/services.c       | 64 ++++++++++++++++++++++++----
+> >  6 files changed, 129 insertions(+), 11 deletions(-)
+> >  create mode 100644 security/selinux/ima.c
+> >  create mode 100644 security/selinux/include/ima.h
 > 
-> Looks like that means taking the user namespace from the struct
-> svc_export everwhere, for example:
+> Hi Mimi,
 > 
-> On Thu, Jan 21, 2021 at 02:19:24PM +0100, Christian Brauner wrote:
-> > index 66f2ef67792a..8d90796e236a 100644
-> > --- a/fs/nfsd/nfsfh.c
-> > +++ b/fs/nfsd/nfsfh.c
-> > @@ -40,7 +40,8 @@ static int nfsd_acceptable(void *expv, struct dentry *dentry)
-> >  		/* make sure parents give x permission to user */
-> >  		int err;
-> >  		parent = dget_parent(tdentry);
-> > -		err = inode_permission(d_inode(parent), MAY_EXEC);
-> > +		err = inode_permission(&init_user_ns,
-> > +				       d_inode(parent), MAY_EXEC);
-> 
-> 		err = inode_permission(exp->ex_path.mnt->mnt_userns,
-> 				      d_inode(parent, MAY_EXEC);
+> Just checking as I didn't see a reply to this from you in my inbox,
+> you merged this into the IMA linux-next branch, yes?
 
-Hey Bruce, thanks! Imho, the clean approach for now is to not export
-idmapped mounts until we have ported that part of nfs similar to what we
-do for stacking filesystems for now. I've tested and taken this patch
-into my tree:
+The patches are first staged in the linux-integrity #next-integrity-
+testing branch, before being staged in the #next-integrity branch,
+which is picked up by linux-next.  Sorry, they've been staged in the
+next-integrity-testing branch, but are now next-integrity.
 
----
-From 7a6a53bca1ecd8db872de1ee81d1a57e1829e525 Mon Sep 17 00:00:00 2001
-From: Christian Brauner <christian.brauner@ubuntu.com>
-Date: Sat, 23 Jan 2021 12:00:02 +0100
-Subject: [PATCH] nfs: do not export idmapped mounts
-
-Prevent nfs from exporting idmapped mounts until we have ported it to
-support exporting idmapped mounts.
-
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: David Howells <dhowells@redhat.com>
-Cc: "J. Bruce Fields" <bfields@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* v2 */
-
-/* v3 */
-
-/* v4 */
-
-/* v5 */
-
-/* v5 */
-patch introduced
-base-commit: 19c329f6808995b142b3966301f217c831e7cf31
----
- fs/nfsd/export.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
-index 81e7bb12aca6..e456421f68b4 100644
---- a/fs/nfsd/export.c
-+++ b/fs/nfsd/export.c
-@@ -369,8 +369,9 @@ static struct svc_export *svc_export_update(struct svc_export *new,
- 					    struct svc_export *old);
- static struct svc_export *svc_export_lookup(struct svc_export *);
- 
--static int check_export(struct inode *inode, int *flags, unsigned char *uuid)
-+static int check_export(struct path *path, int *flags, unsigned char *uuid)
- {
-+	struct inode *inode = d_inode(path->dentry);
- 
- 	/*
- 	 * We currently export only dirs, regular files, and (for v4
-@@ -394,6 +395,7 @@ static int check_export(struct inode *inode, int *flags, unsigned char *uuid)
- 	 *       or an FSID number (so NFSEXP_FSID or ->uuid is needed).
- 	 * 2:  We must be able to find an inode from a filehandle.
- 	 *       This means that s_export_op must be set.
-+	 * 3: We must not currently be on an idmapped mount.
- 	 */
- 	if (!(inode->i_sb->s_type->fs_flags & FS_REQUIRES_DEV) &&
- 	    !(*flags & NFSEXP_FSID) &&
-@@ -408,6 +410,11 @@ static int check_export(struct inode *inode, int *flags, unsigned char *uuid)
- 		return -EINVAL;
- 	}
- 
-+	if (mnt_user_ns(path->mnt) != &init_user_ns) {
-+		dprintk("exp_export: export of idmapped mounts not yet supported.\n");
-+		return -EINVAL;
-+	}
-+
- 	if (inode->i_sb->s_export_op->flags & EXPORT_OP_NOSUBTREECHK &&
- 	    !(*flags & NFSEXP_NOSUBTREECHECK)) {
- 		dprintk("%s: %s does not support subtree checking!\n",
-@@ -636,8 +643,7 @@ static int svc_export_parse(struct cache_detail *cd, char *mesg, int mlen)
- 				goto out4;
- 		}
- 
--		err = check_export(d_inode(exp.ex_path.dentry), &exp.ex_flags,
--				   exp.ex_uuid);
-+		err = check_export(&exp.ex_path, &exp.ex_flags, exp.ex_uuid);
- 		if (err)
- 			goto out4;
- 		/*
--- 
-2.30.0
+Mim
 
