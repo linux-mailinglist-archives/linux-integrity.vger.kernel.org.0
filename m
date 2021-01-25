@@ -2,164 +2,182 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA73302328
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Jan 2021 10:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7149230281A
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Jan 2021 17:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbhAYJPz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 25 Jan 2021 04:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725923AbhAYJPV (ORCPT
+        id S1730848AbhAYQlp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 25 Jan 2021 11:41:45 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:55430 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730830AbhAYQld (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 25 Jan 2021 04:15:21 -0500
-X-Greylist: delayed 735 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jan 2021 01:13:12 PST
-Received: from iam.tj (unknown [IPv6:2a01:7e00:e000:151::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D002C0611C1
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Jan 2021 01:13:12 -0800 (PST)
-Received: from [IPv6:2a02:8011:2007:0:8b3e:ff86:373f:70fe] (unknown [IPv6:2a02:8011:2007:0:8b3e:ff86:373f:70fe])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        by iam.tj (Postfix) with ESMTPSA id AEF4A340F6
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Jan 2021 09:00:54 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=elloe.vision; s=2019;
-        t=1611565254; bh=dnzSEHwvW9i2zMFwjapWXv0khnE6AUw8RWb7ge3zJdA=;
-        h=To:From:Subject:Date:From;
-        b=wLbHrYgmSK0jtwIYN5O0zTRAntQ4CsJxejuZBX3WZ8ArW+NO2LheXEsTEcLSb43Ih
-         dAEmg0JIr5wH24fZ1wk1m7aVLQ1IuZGn8/imwT4VWC7yB0IcBkEBpv/OJ179vrJjQY
-         CGrC2XllBBQFnlfrsOs60Vkaj0/OxBBwQHG8uC+jF8AhmRu/oD8MYuUav+JKLp+dXE
-         vGFqrqAKFzGkOgrU6i4Hk7SAC9d37fT08zdWG82jGJziq6e3BWw5QnPJuvsbJjQNmU
-         sAcBEh6hYHF828KTnSz3HYR5BLhU2sopS/PYTtPg2EzLKsl38yKhhFIfiihy5703rB
-         g7g/Ej9/qjW4w==
-To:     linux-integrity@vger.kernel.org
-From:   "Tj (Elloe Linux)" <ml.linux@elloe.vision>
-Subject: Bug: TPM returned invalid status
-Organization: Elloe CIC
-Message-ID: <374e918c-f167-9308-2bea-ae6bc6a3d2e3@elloe.vision>
-Date:   Mon, 25 Jan 2021 09:00:54 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 25 Jan 2021 11:41:33 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1l44ua-000JK6-HB; Mon, 25 Jan 2021 09:40:20 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1l44uY-005na2-OS; Mon, 25 Jan 2021 09:40:20 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Howells <dhowells@redhat.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Seth Forshee <seth.forshee@canonical.com>,
+        =?utf-8?Q?St=C3=A9phane?= Graber <stgraber@ubuntu.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        smbarber@chromium.org, Phil Estes <estesp@gmail.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Kees Cook <keescook@chromium.org>,
+        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        containers@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
+        <20210121131959.646623-24-christian.brauner@ubuntu.com>
+Date:   Mon, 25 Jan 2021 10:39:01 -0600
+In-Reply-To: <20210121131959.646623-24-christian.brauner@ubuntu.com>
+        (Christian Brauner's message of "Thu, 21 Jan 2021 14:19:42 +0100")
+Message-ID: <875z3l0y56.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-XM-SPF: eid=1l44uY-005na2-OS;;;mid=<875z3l0y56.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/xzi6ZD1Y1LahVVXJQCa6ijNXolO+AIc8=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,LotsOfNums_01,T_TM2_M_HEADER_IN_MSG,
+        XM_Multi_Part_URI autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        *  1.2 LotsOfNums_01 BODY: Lots of long strings of numbers
+        *  1.2 XM_Multi_Part_URI URI: Long-Multi-Part URIs
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Christian Brauner <christian.brauner@ubuntu.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1103 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 11 (1.0%), b_tie_ro: 9 (0.8%), parse: 1.03 (0.1%),
+         extract_message_metadata: 24 (2.2%), get_uri_detail_list: 2.3 (0.2%),
+        tests_pri_-1000: 13 (1.2%), tests_pri_-950: 1.30 (0.1%),
+        tests_pri_-900: 1.09 (0.1%), tests_pri_-90: 76 (6.9%), check_bayes: 74
+        (6.7%), b_tokenize: 15 (1.3%), b_tok_get_all: 11 (1.0%), b_comp_prob:
+        3.0 (0.3%), b_tok_touch_all: 42 (3.8%), b_finish: 0.85 (0.1%),
+        tests_pri_0: 662 (60.0%), check_dkim_signature: 0.57 (0.1%),
+        check_dkim_adsp: 19 (1.8%), poll_dns_idle: 292 (26.4%), tests_pri_10:
+        2.0 (0.2%), tests_pri_500: 308 (27.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v6 23/40] exec: handle idmapped mounts
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Seeing this on Lenovo E495's that have:
+Christian Brauner <christian.brauner@ubuntu.com> writes:
 
-AMD Ryzen 7 3700U with Radeon Vega Mobile Gfx
+> When executing a setuid binary the kernel will verify in bprm_fill_uid()
+> that the inode has a mapping in the caller's user namespace before
+> setting the callers uid and gid. Let bprm_fill_uid() handle idmapped
+> mounts. If the inode is accessed through an idmapped mount it is mapped
+> according to the mount's user namespace. Afterwards the checks are
+> identical to non-idmapped mounts. If the initial user namespace is
+> passed nothing changes so non-idmapped mounts will see identical
+> behavior as before.
 
-Linux version 5.11.0-rc4+ (tj@elloe000) (gcc (Ubuntu
-9.3.0-17ubuntu1~20.04) 9.3.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #12
-SMP PREEMPT Sun Jan 24 11:28:01 GMT 2021
-Command line: BOOT_IMAGE=/vmlinuz-5.11.0-rc4+
-root=/dev/mapper/ELLOE000-rootfs ro acpi_osi=! "acpi_osi=Windows 2016"
-systemd.unified_cgroup_hierarchy=1 nosplash
-...
-efi: EFI v2.70 by Lenovo
+This does not handle the v3 capabilites xattr with embeds a uid.
+So at least at that level you are missing some critical conversions.
 
-efi: ACPI=0xbddfd000 ACPI 2.0=0xbddfd014 TPMFinalLog=0xbdc2d000
-SMBIOS=0xba4d7000 SMBIOS 3.0=0xba4ca000 MEMATTR=0xb5611018
-ESRT=0xb9075000 RNG=0xba5c2598 TPMEventLog=0xb13ae
-018
-...
-DMI: LENOVO 20NECTO1WW/20NECTO1WW, BIOS R11ET32W (1.12 ) 12/23/2019
-...
-tpm_tis NTC0702:00: 2.0 TPM (device-id 0xFC, rev-id 1)
-------------[ cut here ]------------
-TPM returned invalid status
-WARNING: CPU: 3 PID: 1 at drivers/char/tpm/tpm_tis_core.c:249
-tpm_tis_status+0x82/0x90
-Modules linked in:
-CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.11.0-rc4+ #12
-Hardware name: LENOVO 20NECTO1WW/20NECTO1WW, BIOS R11ET32W (1.12 )
-12/23/2019
-RIP: 0010:tpm_tis_status+0x82/0x90
-Code: 25 28 00 00 00 75 2b c9 c3 31 c0 80 3d af 14 1d 01 00 75 e4 48 c7
-c7 dc 24 bf ad 88 45 ef c6 05 9c 14 1d 01 01 e8 65 83 3d 00 <0f> 0b 0f b6>
-RSP: 0018:ffffaa40400678d0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff8fb5c844f000 RCX: c0000000ffffdfff
-RDX: ffffaa40400676a8 RSI: 00000000ffffdfff RDI: 0000000000000247
-RBP: ffffaa40400678e8 R08: 0000000000000000 R09: ffffaa40400676a0
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff8fb5c844f000
-R13: ffff8fb5c84bcd98 R14: ffff8fb5c84c5000 R15: 0000000000000016
-FS:  0000000000000000(0000) GS:ffff8fbc5e8c0000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000569e10000 CR4: 00000000003506e0
-Call Trace:
- tpm_tis_send_data+0x41/0x240
- ? register_handler_proc+0xfa/0x120
- tpm_tis_send_main+0x32/0xf0
- tpm_tis_send+0x30/0xa0
- tpm_transmit+0xe4/0x3e0
- tpm_transmit_cmd+0x2a/0x90
- tpm2_get_tpm_pt+0xe9/0x150
- tpm_tis_probe_irq_single+0x16f/0x1e8
- ? ioread8+0xf/0x40
- tpm_tis_core_init.cold+0x2bf/0x455
- tpm_tis_init.part.0+0xa0/0x140
- tpm_tis_plat_probe+0xd4/0x100
- platform_probe+0x45/0xa0
- really_probe+0x1db/0x440
- driver_probe_device+0xe9/0x160
- device_driver_attach+0x5d/0x70
- __driver_attach+0x8f/0x150
- ? device_driver_attach+0x70/0x70
- bus_for_each_dev+0x7e/0xc0
-driver_attach+0x1e/0x20
- bus_add_driver+0x152/0x1f0
- driver_register+0x74/0xd0
- ? tpm_init+0xf6/0xf6
- __platform_driver_register+0x1e/0x20
- init_tis+0x87/0xdd
- ? kobject_uevent+0xb/0x10
- ? driver_register+0xac/0xd0
- ? agp_intel_init+0x2f/0x2f
- ? __pci_register_driver+0x54/0x60
- ? tpm_init+0xf6/0xf6
- do_one_initcall+0x48/0x210
- ? kgdboc_earlycon_late_init+0x25/0x25
- ? do_one_initcall+0x6/0x210
- kernel_init_freeable+0x1ef/0x24d
- ? rest_init+0xd0/0xd0
- kernel_init+0xe/0x110
- ret_from_fork+0x22/0x30
----[ end trace 667721495775f7e0 ]---
-battery: ACPI: Battery Slot [BAT0] (battery present)
-irq 7: nobody cared (try booting with the "irqpoll" option)
-CPU: 3 PID: 0 Comm: swapper/3 Tainted: G        W         5.11.0-rc4+ #12
-Hardware name: LENOVO 20NECTO1WW/20NECTO1WW, BIOS R11ET32W (1.12 )
-12/23/2019
-Call Trace:
- <IRQ>
- dump_stack+0x74/0x92
- __report_bad_irq+0x3a/0xaf
- note_interrupt.cold+0xb/0x60
- handle_irq_event_percpu+0x73/0x80
- handle_irq_event+0x39/0x60
- handle_fasteoi_irq+0x9c/0x150
- asm_call_irq_on_stack+0x12/0x20
- </IRQ>
- common_interrupt+0xbb/0x140
- asm_common_interrupt+0x1e/0x40
-RIP: 0010:tick_nohz_idle_enter+0x47/0x50
-Code: 54 6c 53 48 83 bb b0 00 00 00 00 75 20 80 4b 4c 01 e8 2d 13 ff ff
-80 4b 4c 04 48 89 43 78 e8 c0 21 f9 ff fb 66 0f 1f 44 00 00 <5b> 5d c3 0f>
-RSP: 0018:ffffaa404017feb0 EFLAGS: 00000282
-RAX: 000000006a4e43f7 RBX: ffff8fbc5e8df8c0 RCX: 000000006a4e428f
-RDX: 000000006a5cd015 RSI: 000000006a4e428f RDI: fffffffffff1727a
-RBP: ffffaa404017feb8 R08: 000000006a4e43f7 R09: ffff8fb5c025a840
-R10: 000000000000036d R11: 0000000000000000 R12: 0000000000000091
-R13: ffff8fb5c0924f00 R14: 0000000000000000 R15: 0000000000000000
- do_idle+0x40/0x260
- cpu_startup_entry+0x20/0x30
- start_secondary+0x126/0x160
- secondary_startup_64_no_verify+0xc2/0xcb
-handlers:
-[<00000000aa8f5d3e>] amd_gpio_irq_handler
-Disabling IRQ #7
-tpm tpm0: tpm_try_transmit: send(): error -62
-tpm tpm0: [Firmware Bug]: TPM interrupt not working, polling instead
+Eric
 
-
+> Link: https://lore.kernel.org/r/20210112220124.837960-32-christian.brauner@ubuntu.com
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: linux-fsdevel@vger.kernel.org
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> ---
+> /* v2 */
+> unchanged
+>
+> /* v3 */
+> unchanged
+>
+> /* v4 */
+> - Serge Hallyn <serge@hallyn.com>:
+>   - Use "mnt_userns" to refer to a vfsmount's userns everywhere to make
+>     terminology consistent.
+>
+> /* v5 */
+> unchanged
+> base-commit: 7c53f6b671f4aba70ff15e1b05148b10d58c2837
+>
+> /* v6 */
+> base-commit: 19c329f6808995b142b3966301f217c831e7cf31
+>
+> - Christoph Hellwig <hch@lst.de>:
+>   - Use new file_mnt_user_ns() helper.
+> ---
+>  fs/exec.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/exec.c b/fs/exec.c
+> index d803227805f6..48d1e8b1610b 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1580,6 +1580,7 @@ static void check_unsafe_exec(struct linux_binprm *bprm)
+>  static void bprm_fill_uid(struct linux_binprm *bprm, struct file *file)
+>  {
+>  	/* Handle suid and sgid on files */
+> +	struct user_namespace *mnt_userns;
+>  	struct inode *inode;
+>  	unsigned int mode;
+>  	kuid_t uid;
+> @@ -1596,13 +1597,15 @@ static void bprm_fill_uid(struct linux_binprm *bprm, struct file *file)
+>  	if (!(mode & (S_ISUID|S_ISGID)))
+>  		return;
+>  
+> +	mnt_userns = file_mnt_user_ns(file);
+> +
+>  	/* Be careful if suid/sgid is set */
+>  	inode_lock(inode);
+>  
+>  	/* reload atomically mode/uid/gid now that lock held */
+>  	mode = inode->i_mode;
+> -	uid = inode->i_uid;
+> -	gid = inode->i_gid;
+> +	uid = i_uid_into_mnt(mnt_userns, inode);
+> +	gid = i_gid_into_mnt(mnt_userns, inode);
+>  	inode_unlock(inode);
+>  
+>  	/* We ignore suid/sgid if there are no mappings for them in the ns */
