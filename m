@@ -2,151 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6F83042E1
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Jan 2021 16:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD83F30438B
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Jan 2021 17:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392318AbhAZPrC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 Jan 2021 10:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389107AbhAZPq7 (ORCPT
+        id S2404124AbhAZQPf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 Jan 2021 11:15:35 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44594 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2392809AbhAZQPc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 26 Jan 2021 10:46:59 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F46C0698C1
-        for <linux-integrity@vger.kernel.org>; Tue, 26 Jan 2021 07:46:19 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id j12so10622874pfj.12
-        for <linux-integrity@vger.kernel.org>; Tue, 26 Jan 2021 07:46:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=N52hj6g6rIC9pzwZmjxHFzRAevniWVRNfuFelric0us=;
-        b=V1+GqalLJ3NSkGYkTMKAjHlbUC+VGDyScNgN7GHlACX0UP3WgoTTe8M3tNgVVtik4f
-         zrI0tVRB4F/tV+e18JntF8e0tIvnCApn68xaqOn8s1XcLL4LvHza73C4YYqs/U4fIsvA
-         iw6foExrUPAyTFjb+E376rVNSkQiJgE8s3xYES41HojBc6Qe4IRyJb1+0f3srw5WStM6
-         ysUCwo8Uac0LrUmZSCc1WqFI7bXGhRSu7sZo6tRDkUEAd/Nt8fXdW2WVLmsX361Kj64F
-         WpOCf/sIh0ViRDYlrfh3Z8VFbB6tBunq2HUZTWYnCFmWZj7C+4GDUDdfQO8qiblQ9Fcr
-         mYlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=N52hj6g6rIC9pzwZmjxHFzRAevniWVRNfuFelric0us=;
-        b=to3Spxbg+PJKUSc+FYH7ANHRJ3yTwj+2vdgabybUWzwZ+0+ytZNUFWni5RArsve4Eh
-         N51IO9fgtxhERv/2vQurYI9MHNZqrUi4B08Agary3ucnGCK4T+1RgHBM4PYD9aSrZ2+A
-         vcEsjbj8GLheMFQvx8ABRdOLB2jk+X9LDew3hl2FdUR7dEbYMqlk38GX3q0Qij59Cw72
-         pXGnqrhhWg2OJwi0Zq//6TvphsFGzOtJCaCoiMar9dTTu6o3o5FUNisC9ez51KZpzjul
-         ZC6CAaJEhJ8ZrfiPo5sQYt4Q87+ZJaF0Y/0lZDlG2OLSRMn5oimMurqryB/LeoaI8l4Q
-         lMnQ==
-X-Gm-Message-State: AOAM530J0O/t7b3Geh1kgHNoWNKGc4o1IdaZys9LnWOBq8zC3JX+Hvcd
-        tE5xvTU683BE82BRrFkrdVCtzszhDRVVYHVOrSLakQ==
-X-Google-Smtp-Source: ABdhPJzOsEReVeyf+iZA1Bk7JXLJBk0DKvW/xwox6cZ5LDbvqaLYkGfXAUB/pCbbBN9Kp6+QJq5K/w2vQKW3FKPVqVI=
-X-Received: by 2002:a65:64da:: with SMTP id t26mr6114578pgv.145.1611675978415;
- Tue, 26 Jan 2021 07:46:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20210123014247.989368-1-lma@semihalf.com> <20210125171846.GA31929@roeck-us.net>
-In-Reply-To: <20210125171846.GA31929@roeck-us.net>
-From:   =?UTF-8?Q?=C5=81ukasz_Majczak?= <lma@semihalf.com>
-Date:   Tue, 26 Jan 2021 16:46:07 +0100
-Message-ID: <CAFJ_xboNDcp-XrxfbrBjqTWjLZUdVWe1OJi4KK==ij+yivFeHA@mail.gmail.com>
-Subject: Re: [PATCH] tpm_tis: Add missing start/stop_tpm_chip calls
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Radoslaw Biernacki <rad@semihalf.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Alex Levin <levinale@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 26 Jan 2021 11:15:32 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10QG2iP6120828;
+        Tue, 26 Jan 2021 11:14:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=AhvSL2TAJ80kVGaC+dSvTyUh5/MyoptmSJ6r3fC+XAY=;
+ b=ZTMFb/pHBVMD4wPQ29Cmj/ljFhB+EcSBIxcMTEGkg/i6sTeqXoJhjHhJ19bDQ+VzlpoC
+ t74KowwyAF64Dm+da7cmNzSIYOnAn6r5+wOOoRd5yEikICYN9cYJzdSHceY7winO9Rlu
+ 6XDKU7K6CSsMbz7VeKts4kmzY9aZA/rR0DP/B7pny/je2tAO/h3jqfjonRsR8WIgQ9kE
+ P3wpWEHqyPFPvCYLafIrTDAYB+2GIxuB8enV4SV3rjZI421lN1t6yY/1c+Y9amRNYudP
+ SFXGebDe39D5ynaZga8XSzcAqHl1f1FZEyrPU5zN6gLxSI+6rSrJc2+rQ/XGHoNyo4Fs +A== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36amnaux7c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Jan 2021 11:14:50 -0500
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10QGDB4O023245;
+        Tue, 26 Jan 2021 16:14:48 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 368b2h2y0x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Jan 2021 16:14:48 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10QGEkcm22086112
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Jan 2021 16:14:46 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EB5FA4054;
+        Tue, 26 Jan 2021 16:14:46 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62B02A405C;
+        Tue, 26 Jan 2021 16:14:44 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.59.15])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 26 Jan 2021 16:14:44 +0000 (GMT)
+Message-ID: <1e60a5577d42470e83900de4f8a8c631b0949112.camel@linux.ibm.com>
+Subject: Re: [PATCH v3] IMA: Measure kernel version in early boot
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Raphael Gianotti <raphgi@linux.microsoft.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tusharsu@linux.microsoft.com, nramas@linux.microsoft.com,
+        tyhicks@linux.microsoft.com
+Date:   Tue, 26 Jan 2021 11:14:43 -0500
+In-Reply-To: <20210126005044.2010-1-raphgi@linux.microsoft.com>
+References: <20210126005044.2010-1-raphgi@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-26_08:2021-01-26,2021-01-26 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 suspectscore=0 phishscore=0 impostorscore=0
+ spamscore=0 malwarescore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101260084
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko, Guenter
+On Mon, 2021-01-25 at 16:50 -0800, Raphael Gianotti wrote:
+> The integrity of a kernel can be verified by the boot loader on cold
+> boot, and during kexec, by the current running kernel, before it is
+> loaded. However, it is still possible that the new kernel being
+> loaded is older than the current kernel, and/or has known
+> vulnerabilities. Therefore, it is imperative that an attestation
+> service be able to verify the version of the kernel being loaded on
+> the client, from cold boot and subsequent kexec system calls,
+> ensuring that only kernels with versions known to be good are loaded.
+> 
+> Measure the kernel version using ima_measure_critical_data() early on
+> in the boot sequence, reducing the chances of known kernel
+> vulnerabilities being exploited. With IMA being part of the kernel,
+> this overall approach makes the measurement itself more trustworthy.
+> 
+> To enable measuring the kernel version "ima_policy=critical_data"
+> needs to be added to the kernel command line arguments.
+> For example,
+>         BOOT_IMAGE=/boot/vmlinuz-5.11.0-rc3+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset ima_policy=critical_data
+> 
+> If runtime measurement of the kernel version is ever needed, the
+> following should be added to /etc/ima/ima-policy:
+> 
+>         measure func=CRITICAL_DATA label=kernel_info
+> 
+> To extract the measured data after boot, the following command can be used:
+> 
+>         grep -m 1 "kernel_version" \
+>         /sys/kernel/security/integrity/ima/ascii_runtime_measurements
+> 
+> Sample output from the command above:
+> 
+>         10 a8297d408e9d5155728b619761d0dd4cedf5ef5f ima-buf
+>         sha256:5660e19945be0119bc19cbbf8d9c33a09935ab5d30dad48aa11f879c67d70988
+>         kernel_version 352e31312e302d7263332d31363138372d676564623634666537383234342d6469727479
+> 
+> The above corresponds to the following (decoded) version string:
 
-Yes, here are the logs when failure occurs -
-https://gist.github.com/semihalf-majczak-lukasz/1575461f585f1e7fb1e9366b8ec=
-eaab9
-Look for a phrase "TPM returned invalid status"
+Instead of the above, the following is clearer.
 
-Guenter - good suggestion - I will try to keep it as tight as possible.
+    The above hex-ascii string corresponds to the kernel version
+    (e.g. xxd -r -p):
+> 
+>         5.11.0-rc3-16187-gedb64fe78244-dirty
 
-Best regards,
-Lukasz
+> 
+> Signed-off-by: Raphael Gianotti <raphgi@linux.microsoft.com>
 
-pon., 25 sty 2021 o 18:18 Guenter Roeck <linux@roeck-us.net> napisa=C5=82(a=
-):
->
-> Hi Lukasz,
->
-> On Sat, Jan 23, 2021 at 02:42:47AM +0100, Lukasz Majczak wrote:
-> > There is a missing call to start_tpm_chip before the call to
-> > the tpm_get_timeouts() and tpm_tis_probe_irq_single(). As the current
-> > approach maight work for tpm2, it fails for tpm1.x - in that case
-> > call to tpm_get_timeouts() or tpm_tis_probe_irq_single() tries to
-> > transmit TPM commands on a disabled chip what what doesn't succeed
->
-> s/what what/what/
->
-> > and in turn causes tpm_tis_core_init() to fail.
-> > Tested on Samsung Chromebook Pro (Caroline).
-> >
-> > Signed-off-by: Lukasz Majczak <lma@semihalf.com>
-> > ---
-> >  drivers/char/tpm/tpm_tis_core.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
-_core.c
-> > index 92c51c6cfd1b..ff0e5fe46a9d 100644
-> > --- a/drivers/char/tpm/tpm_tis_core.c
-> > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > @@ -1063,12 +1063,16 @@ int tpm_tis_core_init(struct device *dev, struc=
-t tpm_tis_data *priv, int irq,
-> >       init_waitqueue_head(&priv->read_queue);
-> >       init_waitqueue_head(&priv->int_queue);
-> >       if (irq !=3D -1) {
-> > +             rc =3D tpm_chip_start(chip);
->
-> Unless I am missing something, the underlying problem seems to be
-> the calls to tpm1_getcap(). From other code calling this function,
-> it looks like it may only require tpm_clk_enable() to work.
->
-> With that in mind, would it possibly be better to call tpm_clk_enable()
-> and tpm_clk_disable() around the calls to tpm1_getcap(), ie in
-> tpm1_get_timeouts() and in tpm_tis_gen_interrupt() ?
->
-> This would avoid the unnecessary calls to tpm_chip_start() and
-> tpm_chip_stop() for tpm2 chips.
->
-> Thanks,
-> Guenter
->
->
-> > +             if (rc)
-> > +                     goto out_err;
-> >               /* Before doing irq testing issue a command to the TPM in=
- polling mode
-> >                * to make sure it works. May as well use that command to=
- set the
-> >                * proper timeouts for the driver.
-> >                */
-> >               if (tpm_get_timeouts(chip)) {
-> >                       dev_err(dev, "Could not get TPM timeouts and dura=
-tions\n");
-> > +                     tpm_chip_stop(chip);
-> >                       rc =3D -ENODEV;
-> >                       goto out_err;
-> >               }
-> > @@ -1085,6 +1089,7 @@ int tpm_tis_core_init(struct device *dev, struct =
-tpm_tis_data *priv, int irq,
-> >               } else {
-> >                       tpm_tis_probe_irq(chip, intmask);
-> >               }
-> > +             tpm_chip_stop(chip);
-> >       }
-> >
-> >       rc =3D tpm_chip_register(chip);
+Assuming the above or similar change,
+
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+
