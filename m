@@ -2,94 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A165F303402
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Jan 2021 06:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA2630429B
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Jan 2021 16:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728719AbhAZFLv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 Jan 2021 00:11:51 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:52059 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728867AbhAYRHd (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 25 Jan 2021 12:07:33 -0500
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1l45K7-0006lj-0h; Mon, 25 Jan 2021 17:06:43 +0000
-Date:   Mon, 25 Jan 2021 18:06:40 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        smbarber@chromium.org, Phil Estes <estesp@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v6 23/40] exec: handle idmapped mounts
-Message-ID: <20210125170640.6ycsyod2ftxnzjzy@wittgenstein>
-References: <20210121131959.646623-1-christian.brauner@ubuntu.com>
- <20210121131959.646623-24-christian.brauner@ubuntu.com>
- <875z3l0y56.fsf@x220.int.ebiederm.org>
- <20210125164404.aullgl3vlajgkef3@wittgenstein>
- <20210125170316.GA8345@mail.hallyn.com>
+        id S2406349AbhAZPaL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 Jan 2021 10:30:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43074 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405881AbhAZPaI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 26 Jan 2021 10:30:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 78AD822B51;
+        Tue, 26 Jan 2021 15:29:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611674968;
+        bh=IXgxR80n9iJ/4KZiqA0JVNszP1+TmyfHwJ2kzzmCRq8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=RbtYhbmyTR5MmsmrUlByLQD+cw2nZgA0x7Z7OlD7b6kleyrx5YNODCMbtJB7zOyZf
+         1aURouEKfFkh1LslPKGRdTNwrtDrQHhMof5zMM0FBmRW+ThQOPVT3fEneRLNiS90DF
+         GCECFcnlJ1gUER5NEt6LzYi8RY4+5yY9+6HrUMVpieSQZ1UDj6lBN6oB4nrXmPboRp
+         9smQDVviLVy97LdJlkfhQeLOV8PZn4difT/aym0Mug7Zuva7+eK9cGPWx/UNs6wopu
+         p6C9zMnnw7YhcqDdaruV6NxSHD5uS2e4h+wy/kUuyQwBtyZsCfcIUmeGOAruuZL00f
+         cfx2tJUkCeBAA==
+Message-ID: <a4ecfaf99f322c752d6422056d4ea94f9b3d962b.camel@kernel.org>
+Subject: Re: [PATCH 3/4] tpm: in tpm2_del_space check if ops pointer is
+ still valid
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Date:   Tue, 26 Jan 2021 17:29:23 +0200
+In-Reply-To: <9bb612ef-75be-f8d4-10a6-7ab5869da18f@gmx.de>
+References: <1610760161-21982-1-git-send-email-LinoSanfilippo@gmx.de>
+         <1610760161-21982-4-git-send-email-LinoSanfilippo@gmx.de>
+         <YAR+R0c8HYsVUhZQ@kernel.org> <9bb612ef-75be-f8d4-10a6-7ab5869da18f@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.38.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210125170316.GA8345@mail.hallyn.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 11:03:16AM -0600, Serge Hallyn wrote:
-> On Mon, Jan 25, 2021 at 05:44:04PM +0100, Christian Brauner wrote:
-> > On Mon, Jan 25, 2021 at 10:39:01AM -0600, Eric W. Biederman wrote:
-> > > Christian Brauner <christian.brauner@ubuntu.com> writes:
-> > > 
-> > > > When executing a setuid binary the kernel will verify in bprm_fill_uid()
-> > > > that the inode has a mapping in the caller's user namespace before
-> > > > setting the callers uid and gid. Let bprm_fill_uid() handle idmapped
-> > > > mounts. If the inode is accessed through an idmapped mount it is mapped
-> > > > according to the mount's user namespace. Afterwards the checks are
-> > > > identical to non-idmapped mounts. If the initial user namespace is
-> > > > passed nothing changes so non-idmapped mounts will see identical
-> > > > behavior as before.
-> > > 
-> > > This does not handle the v3 capabilites xattr with embeds a uid.
-> > > So at least at that level you are missing some critical conversions.
-> > 
-> > Thanks for looking. Vfs v3 caps are handled earlier in the series. I'm
-> > not sure what you're referring to here. There are tests in xfstests that
-> > verify vfs3 capability behavior.
-> 
-> *just* to make sure i'm not misunderstanding - s/vfs3/v3/ right?
+On Sun, 2021-01-24 at 17:47 +0100, Lino Sanfilippo wrote:
+>=20
+> Hi Jarkko,
+>=20
+> On 17.01.21 at 19:13, Jarkko Sakkinen wrote:
+> >=20
+> > I have hard time to believe that any of these patches are based on
+> > actual regressions.
+> >=20
+> > /Jarko
+> >=20
+>=20
+> patch 1 is indeed wrong (I oversaw the action call in case of error),
+> so please ignore it.
+>=20
+> However patches 2 and 3 are based on bugs I encountered while working wit=
+h
+> TPM. I am sorry if I did not make the issues clear enough in the patches
+> commit messages. Let me try to explain it in more detail:
+>=20
+> The bugs showed up after unloading the TPM chip driver module while one
+> process still had the /dev/tpmrm device open.
 
-Yes, in my mind it's always as "vfs v3 caps -> vfs3 caps". Sorry for the
-confusion.
+Please refine the patch set, and we will look into that then.
+
+Put fixes tags and logs where appropriate. Thanks.
+
+/Jarkko
