@@ -2,138 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6CD304A36
+	by mail.lfdr.de (Postfix) with ESMTP id 92887304A37
 	for <lists+linux-integrity@lfdr.de>; Tue, 26 Jan 2021 21:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728743AbhAZFLz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 Jan 2021 00:11:55 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:59810 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727010AbhAZBf6 (ORCPT
+        id S1728777AbhAZFL6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 Jan 2021 00:11:58 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44384 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726652AbhAZBuG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 25 Jan 2021 20:35:58 -0500
-Received: from rapha-Virtual-Machine.mshome.net (unknown [131.107.160.57])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8FA7A20B7192;
-        Mon, 25 Jan 2021 16:50:51 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8FA7A20B7192
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1611622251;
-        bh=moqku2tkY4SiJt7zT3t8TjRoMyMCVZ4Ccw5Yo30J5dc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=l+XzbsKo6flGDWVfzzZAlbIENJWyYi8fpNDqCZ4E2cONJFWrUZjjQANMoNiWfEK5x
-         TYsFNrKzHj3cxuHTC6sFqvhIiBtgZXNRDj06oqJIzl5gRH2O6YBQdj6JikZZ2wK4NY
-         bLLi0Eg+FyvhIasc147M/7FBNhhnext5z8Cgo7/E=
-From:   Raphael Gianotti <raphgi@linux.microsoft.com>
-To:     zohar@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tusharsu@linux.microsoft.com, nramas@linux.microsoft.com,
-        tyhicks@linux.microsoft.com
-Subject: [PATCH v3] IMA: Measure kernel version in early boot
-Date:   Mon, 25 Jan 2021 16:50:44 -0800
-Message-Id: <20210126005044.2010-1-raphgi@linux.microsoft.com>
-X-Mailer: git-send-email 2.28.0
+        Mon, 25 Jan 2021 20:50:06 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10Q1WAfm079981;
+        Mon, 25 Jan 2021 20:48:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=qDlLTrJhI9pAWTPZzvEj2myghWfEoN4K/hh1AcU5nnc=;
+ b=A4jcBSUCed/y8O6j82+m2GYzSBr/aUIO0I73UYCGUArwUx0K6/bFzkcfMLmIocKzPkUq
+ Pjeg/MGeo+XSF55PgkgFMmnWYIW5HA5TWW1yvNQN4yWyKuNfnxL/GgGwOd5SbroyMUgg
+ UJjsrzaJvSsOtjfEp2cX6O2HwjykI1FkY7y0XJ7t0pwdwQt9jGmjctaGMACTj0Z3M02B
+ DXYDLrc0axFPvjGSSOtfGyg7bL4DMvtocZ6VF2wK0jdCbNQ83GS2XLVi8JJUYMW7cT4t
+ bjfiMrfljNQnviIi21EAJiAFk1zXPcjwHmhwRyES4BDRIfngTiMSB+CWnydyRKtNEt18 uQ== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36a4ttpfta-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jan 2021 20:48:45 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10Q1kXDu004438;
+        Tue, 26 Jan 2021 01:48:44 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma01wdc.us.ibm.com with ESMTP id 36a8uh09ax-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Jan 2021 01:48:44 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10Q1mhJw17891772
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Jan 2021 01:48:43 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A3AC26A057;
+        Tue, 26 Jan 2021 01:48:43 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 13A986A04F;
+        Tue, 26 Jan 2021 01:48:42 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 26 Jan 2021 01:48:42 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     jarkko@kernel.org, linux-integrity@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Hulk Robot <hulkci@huawei.com>, Wang Hai <wanghai38@huawei.com>
+Subject: [PATCH v2] tpm: ibmvtpm: fix error return code in tpm_ibmvtpm_probe()
+Date:   Mon, 25 Jan 2021 20:47:53 -0500
+Message-Id: <20210126014753.340299-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-25_10:2021-01-25,2021-01-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 clxscore=1011
+ mlxlogscore=999 bulkscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101260002
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The integrity of a kernel can be verified by the boot loader on cold
-boot, and during kexec, by the current running kernel, before it is
-loaded. However, it is still possible that the new kernel being
-loaded is older than the current kernel, and/or has known
-vulnerabilities. Therefore, it is imperative that an attestation
-service be able to verify the version of the kernel being loaded on
-the client, from cold boot and subsequent kexec system calls,
-ensuring that only kernels with versions known to be good are loaded.
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-Measure the kernel version using ima_measure_critical_data() early on
-in the boot sequence, reducing the chances of known kernel
-vulnerabilities being exploited. With IMA being part of the kernel,
-this overall approach makes the measurement itself more trustworthy.
+Return error code -ETIMEDOUT rather than '0' when waiting for the
+rtce_buf to be set has timed out.
 
-To enable measuring the kernel version "ima_policy=critical_data"
-needs to be added to the kernel command line arguments.
-For example,
-        BOOT_IMAGE=/boot/vmlinuz-5.11.0-rc3+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset ima_policy=critical_data
-
-If runtime measurement of the kernel version is ever needed, the
-following should be added to /etc/ima/ima-policy:
-
-        measure func=CRITICAL_DATA label=kernel_info
-
-To extract the measured data after boot, the following command can be used:
-
-        grep -m 1 "kernel_version" \
-        /sys/kernel/security/integrity/ima/ascii_runtime_measurements
-
-Sample output from the command above:
-
-        10 a8297d408e9d5155728b619761d0dd4cedf5ef5f ima-buf
-        sha256:5660e19945be0119bc19cbbf8d9c33a09935ab5d30dad48aa11f879c67d70988
-        kernel_version 352e31312e302d7263332d31363138372d676564623634666537383234342d6469727479
-
-The above corresponds to the following (decoded) version string:
-
-        5.11.0-rc3-16187-gedb64fe78244-dirty
-
-Signed-off-by: Raphael Gianotti <raphgi@linux.microsoft.com>
+Fixes: d8d74ea3c002 ("tpm: ibmvtpm: Wait for buffer to be set before proceeding")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
-Change Log v3:
-        - Updated critical data label as kernel_info in
-          Documentation/ABI/testing/ima_policy
-        - Moved the ima_measure_critical_data() call to ima_init()
+ drivers/char/tpm/tpm_ibmvtpm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Change Log v2:
-        - Changed the measurement to align with the latest version of
-          ima_measure_critical_data(), without the need for queueing
-        - Scoped the measurement to only measure the kernel version,
-          found in UTS_RELEASE, instead of the entire linux_banner
-          string
-
-This patch is based on
-commit e58bb688f2e4 "Merge branch 'measure-critical-data' into next-integrity"
-in "next-integrity-testing" branch
-
- Documentation/ABI/testing/ima_policy | 2 +-
- security/integrity/ima/ima_init.c    | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index 8365596cb42b..bc8e1cbe5e61 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -52,7 +52,7 @@ Description:
- 			template:= name of a defined IMA template type
- 			(eg, ima-ng). Only valid when action is "measure".
- 			pcr:= decimal value
--			label:= [selinux]|[data_label]
-+			label:= [selinux]|[kernel_info]|[data_label]
- 			data_label:= a unique string used for grouping and limiting critical data.
- 			For example, "selinux" to measure critical data for SELinux.
+diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+index 994385bf37c0..813eb2cac0ce 100644
+--- a/drivers/char/tpm/tpm_ibmvtpm.c
++++ b/drivers/char/tpm/tpm_ibmvtpm.c
+@@ -687,6 +687,7 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+ 				ibmvtpm->rtce_buf != NULL,
+ 				HZ)) {
+ 		dev_err(dev, "CRQ response timed out\n");
++		rc = -ETIMEDOUT;
+ 		goto init_irq_cleanup;
+ 	}
  
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 4902fe7bd570..6e8742916d1d 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -15,6 +15,8 @@
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/err.h>
-+#include <linux/ima.h>
-+#include <generated/utsrelease.h>
- 
- #include "ima.h"
- 
-@@ -147,5 +149,8 @@ int __init ima_init(void)
- 
- 	ima_init_key_queue();
- 
-+	ima_measure_critical_data("kernel_info", "kernel_version",
-+				  UTS_RELEASE, strlen(UTS_RELEASE), false);
-+
- 	return rc;
- }
 -- 
-2.28.0
+2.25.4
 
