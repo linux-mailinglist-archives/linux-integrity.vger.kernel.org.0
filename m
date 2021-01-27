@@ -2,147 +2,213 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1C2305F61
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Jan 2021 16:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 337C0306000
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Jan 2021 16:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235761AbhA0PTM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Jan 2021 10:19:12 -0500
-Received: from mail-db8eur05on2050.outbound.protection.outlook.com ([40.107.20.50]:56631
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235662AbhA0PPY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Jan 2021 10:15:24 -0500
+        id S236527AbhA0Poz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Jan 2021 10:44:55 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:36184 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236403AbhA0PnP (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 27 Jan 2021 10:43:15 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10RFOaLm157583;
+        Wed, 27 Jan 2021 15:41:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
+ subject : from : in-reply-to : date : cc : content-transfer-encoding :
+ message-id : references : to : mime-version; s=corp-2020-01-29;
+ bh=eTDeDviNpf4dONWd9b/EujsB896zJyYnCkH7DlTtaeM=;
+ b=ROrCQdfGTBGSGLox4uhgSeeanKBx5+6+MLz6i+mbpqNo0nipq5HyGjrDFU/tTK9+Kvf6
+ pkYo9PDOxMQi19SbpiI/jUTWYdZPb79qRJINbB//SX3DhM+O+8wKHZnvn2ob8xED2EFx
+ yN+jZW5aUwteTdgOuD/o6z3lM0eZGU2cXlwsf29oqr45wFAZIWS2rbAPhARhSqSGVgth
+ My/9kX7zV06T4G0tv+WWLAPRDP+ZjmdUnjFCx3ausM2uI9xG8zwnigxqybTMvznBGgDA
+ tHM+IAVEC06gylqg+oh22w4/SgDcuqtljXp5wRdNBCXpDVV8oi+snHNebO1xc6bW7+sO Ng== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 368brkqs7n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 27 Jan 2021 15:41:37 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10RFKBNo043067;
+        Wed, 27 Jan 2021 15:41:37 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2049.outbound.protection.outlook.com [104.47.66.49])
+        by userp3030.oracle.com with ESMTP id 368wqy0def-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 27 Jan 2021 15:41:36 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dvPZxpzV5GdI7+Ry7We4kDKDZFvI4cFLJIlDlfe/hmi66cht324y5lHb09eKhWEXZL4ywDSrlIXe9LXCkAc8+3BD4QXq2taH6JnLDAAAQjtkgorqo8MCdlihQ4546off9Fjd4kA0n7I3i9ddFqc+0Q8MhinvGjrnemRByUyjv4fG/0cGlWLEFT2kz4NWPk/O250XtjS9ge/6c6DdwHGeIA+tMheql1J4ObO3GljsOJfJkeP18CyQtx1ErlALSraBwlnmwJkwYHeJFdkSF9JW1Hcm2PLtbLIkT79J+0afer5AFGAJX+kyAIgEE9T7Gf5yfmdU5ihIkoZgcTAWKZmImQ==
+ b=fw5z0gnD3G439ZqVRji2zu+1wpm5gjxUwIy9nplRNHueFdFg61Enhh6zqmEEKL1p7Y1GqC/lHa4s8G3NmnZeyWqWfwi285sH6fiyisC6llBxNbEasIL4LcwW30L2DTCm3pCZmdw+AyoY5uEiGAR04vL/pxlPTZKbYIx+/RB6GIT1WgYgC13rqVMIBTXud0ActupJ6P4IJsYp6ZbLcrbAZ+rXNyysFcf0Qx8rOGBDG0im+jqGuCVtnTJh7nvzq4ayd6OvTHD2cAVoXvhIMszs8lxmQPEaZOZFisdPf0TVCgPYd06wHBnrieEU+00u8JduWXQjinkzY62cyyuuON0wmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DFnlbcMcJmmTd0Wpxlgrkg9+r9v63ndBuX4/xp81ZsE=;
- b=X/5jB6PdjYoE0g97Y+n9lkXAw0Xy3wFoX4ubSKqBoqI01zZPOfaBYmBziIqLSCnvnrjLvmeCpLMLoyIBXEunQx87cCie2dm/eEyV4NiuFZ4ph+Yk7kalHK/dwaUg3LpzD+H2dNb0r7MVw+adurDY59u2wKDyJYDTXbTl/J8sO+OXly6mcFfDA4bLZzqx4qrJLBxjxNvpBS3o7sA8iXCopieq+HIroBW1/QT4SpN8WR/RQeqN9pclBQoIfnguX6MF4gUksBwhMrs4JZOSZo00Ctwl2eTqf4aARyKi+Bsb7lU1DBDtGdFhvFFZEdkjE0zZFoRqujFaV6sXxOM+k4Ns9w==
+ bh=eTDeDviNpf4dONWd9b/EujsB896zJyYnCkH7DlTtaeM=;
+ b=VchifSzbs34UDq7WBNDrVgDo8jAolM1mWpj0EZYGHgW5KLAAJ8OcRdzCr0E/o6ofsMnZOzXzJW4qvmjZF1faEjjNtQwan/E1whLERU0Oo/LSVEGMHpjKGb3NbuSXJ7SJRwnQ371OhfTMB6PZ3XoCUVUTEg7Ui83q5DkiNXM7/8asK9sTEYh/pnM6/rBvmqYM0Ce5OUqSd+k5j419RU+Gy64K4hQZRMyNMrHfB/EqZctoszs9EMIDApg3xrc5xkkSooHou3korB4Nmm9ZN6lIRmnRVcLbeaydrIK32K6oVfLe3tsn3kGtBfkBEtOaG3wjGoYgCH96AjfmnAhAUDuzpA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
- dkim=pass header.d=kunbus.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
- s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DFnlbcMcJmmTd0Wpxlgrkg9+r9v63ndBuX4/xp81ZsE=;
- b=KPNytehcd4ER/JxkNXT0zY/JnQq2XuPBewIw7UieOOnh8OZQlZwmc+rAgAMB9Fwtw4wAM3o3l6yRTNMGYAd5BfHsjSDQlrSEFBEOILEGNFhlIJKymhcG8EduQrLh6gFbkEVz5ZvpvCX3mtaXO7j8QNLTftdy5J8J81uteYhfTmo=
-Authentication-Results: kunbus.com; dkim=none (message not signed)
- header.d=none;kunbus.com; dmarc=none action=none header.from=kunbus.com;
-Received: from PR3P193MB0894.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:a0::11)
- by PR3P193MB0619.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:38::23) with
+ bh=eTDeDviNpf4dONWd9b/EujsB896zJyYnCkH7DlTtaeM=;
+ b=YVS66fInkNtgNn+y00Z7VjERUNRf4FX+zvgBynvl082FjPmO007RNK3bUk9hS6IwQM0j2s/bXefrR0BGWWk+evAuIiGu8yru14setCWguSDvPCTEi2VZ8WFqpahWN+T3a4KDpkKOISXIPgqyPDicys3Tac5nUWtm57uoozs6W/Q=
+Authentication-Results: linux.ibm.com; dkim=none (message not signed)
+ header.d=none;linux.ibm.com; dmarc=none action=none header.from=oracle.com;
+Received: from DM6PR10MB3099.namprd10.prod.outlook.com (2603:10b6:5:1ad::18)
+ by DS7PR10MB5200.namprd10.prod.outlook.com (2603:10b6:5:3a6::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.12; Wed, 27 Jan
- 2021 15:14:33 +0000
-Received: from PR3P193MB0894.EURP193.PROD.OUTLOOK.COM
- ([fe80::2839:56c8:759b:73]) by PR3P193MB0894.EURP193.PROD.OUTLOOK.COM
- ([fe80::2839:56c8:759b:73%5]) with mapi id 15.20.3784.019; Wed, 27 Jan 2021
- 15:14:33 +0000
-Subject: Re: [PATCH 3/4] tpm: in tpm2_del_space check if ops pointer is still
- valid
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.rosenberger@kunbus.com
-References: <1610760161-21982-1-git-send-email-LinoSanfilippo@gmx.de>
- <1610760161-21982-4-git-send-email-LinoSanfilippo@gmx.de>
- <YAR+R0c8HYsVUhZQ@kernel.org> <9bb612ef-75be-f8d4-10a6-7ab5869da18f@gmx.de>
- <a4ecfaf99f322c752d6422056d4ea94f9b3d962b.camel@kernel.org>
-From:   Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Message-ID: <75ff3804-7fe5-4eb8-77d3-4400718b3f9d@kunbus.com>
-Date:   Wed, 27 Jan 2021 16:14:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <a4ecfaf99f322c752d6422056d4ea94f9b3d962b.camel@kernel.org>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.13; Wed, 27 Jan
+ 2021 15:41:34 +0000
+Received: from DM6PR10MB3099.namprd10.prod.outlook.com
+ ([fe80::70bf:d626:5218:70e4]) by DM6PR10MB3099.namprd10.prod.outlook.com
+ ([fe80::70bf:d626:5218:70e4%7]) with mapi id 15.20.3784.019; Wed, 27 Jan 2021
+ 15:41:34 +0000
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [87.130.101.138]
-X-ClientProxiedBy: AM9P191CA0011.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:21c::16) To PR3P193MB0894.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:102:a0::11)
+Subject: Re: [PATCH v4] certs: Add EFI_CERT_X509_GUID support for dbx entries
+From:   Eric Snowberg <eric.snowberg@oracle.com>
+In-Reply-To: <61a0420790250807837b5a701bb52f3d63ff0c84.camel@linux.ibm.com>
+Date:   Wed, 27 Jan 2021 08:41:29 -0700
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jmorris@namei.org, serge@hallyn.com,
+        nayna@linux.ibm.com, erichte@linux.ibm.com, mpe@ellerman.id.au,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <86CE3924-E36F-44FD-A259-3CC7E69D3EAC@oracle.com>
+References: <YAjMm9Gq/FFOzQYG@kernel.org>
+ <E090372C-06A3-4991-8FC3-F06A0DA60729@oracle.com>
+ <20200916004927.64276-1-eric.snowberg@oracle.com>
+ <1360578.1607593748@warthog.procyon.org.uk>
+ <2442460.1610463459@warthog.procyon.org.uk>
+ <X/9a8naM8p4tT5sO@linux.intel.com>
+ <A05E3573-B1AF-474B-94A5-779E69E5880A@oracle.com>
+ <YAFdNiYZSWpB9vOw@kernel.org>
+ <CFBF6AEC-2832-44F7-9D7F-F20489498C33@oracle.com>
+ <YAgTawk3EENF/P6j@kernel.org>
+ <D9F5E0BD-E2FC-428F-91B3-35D2750493A0@oracle.com>
+ <3063834.1611747971@warthog.procyon.org.uk>
+ <61a0420790250807837b5a701bb52f3d63ff0c84.camel@linux.ibm.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+X-Mailer: Apple Mail (2.3273)
+X-Originating-IP: [24.52.35.144]
+X-ClientProxiedBy: CH2PR02CA0028.namprd02.prod.outlook.com
+ (2603:10b6:610:4e::38) To DM6PR10MB3099.namprd10.prod.outlook.com
+ (2603:10b6:5:1ad::18)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [172.23.16.111] (87.130.101.138) by AM9P191CA0011.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:21c::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend Transport; Wed, 27 Jan 2021 15:14:33 +0000
+Received: from [172.16.177.128] (24.52.35.144) by CH2PR02CA0028.namprd02.prod.outlook.com (2603:10b6:610:4e::38) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.17 via Frontend Transport; Wed, 27 Jan 2021 15:41:32 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 62441546-c17f-4545-2556-08d8c2d64095
-X-MS-TrafficTypeDiagnostic: PR3P193MB0619:
+X-MS-Office365-Filtering-Correlation-Id: 72d79357-4c37-4aa2-d256-08d8c2da0646
+X-MS-TrafficTypeDiagnostic: DS7PR10MB5200:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <PR3P193MB06198D6EB919ED41F9092337FABB0@PR3P193MB0619.EURP193.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Microsoft-Antispam-PRVS: <DS7PR10MB5200508F9FC633B92AC73EAD87BB9@DS7PR10MB5200.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qNI2J9FQvejY886/ZaGdIzKIGteorrTQAEjhuElh4CliJMatwsHN+OyybxYo4XOVtta0Jk+TiPMd2ysnEpkRJSWjmYsc/1o28PRkwrN4/NxuRoTxkkjEDLvPE1BIkkfmnVipbnLlwOL2Dr2APj+J1zECxcS2o93/dh3KbPeXA0KTcuMB9jTHmth8N3L2CNh+BK/AiGwb07oPwBV1/rtlfBw99DN2s0l9sowVHp1iGEDFvRDyt4doIqB1vc0tJnQMkqeAJk+Ux7K56vmB4wEXJZFeHvX3GEdshdJSa0DhWdgvXozQbRX6H/EmD2274iY/BALZyIKVUexCLYI+UuaSeMcQraqjVABC9aeFFIERgvAUq6/QAvVx0fQIia2wHhrRW98WabtE0/VbmjB0LICZByCkydLswviJZVjNv9jwo2A1811GuCs5tQSPOHK9FtprbooMDrrwit0i6EorXa7U2G1YaoWiEZdiIPfeFOgrt3e5hrTy6U0FHzlCwHDMDOKlk7LCBrHbH+8M+qTtAMx5vT5qlr4EJKdaJ4JGoIS97ha4CeI+aR24DWqViQ5PoBul/2RqXbnQpZ103H4LnwoSPLSq2nHpj/t2MkuKCB8zmYk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR3P193MB0894.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(39830400003)(346002)(366004)(396003)(136003)(376002)(86362001)(316002)(4744005)(16576012)(8676002)(36756003)(66946007)(8936002)(110136005)(31696002)(66476007)(66556008)(53546011)(4326008)(2616005)(5660300002)(107886003)(31686004)(956004)(83380400001)(26005)(478600001)(52116002)(16526019)(2906002)(186003)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?NHZTUHV0Uk04S0VBcnVJWE95eDg0MEVxUVNuMjUvOUVGU21ZTWhFUjVYZnkv?=
- =?utf-8?B?TzJOZnNVNlE1YVNzZzlrQkR2cjBkV041eWR4Y2lJc1A4dFU3RWhQcXNvN2R5?=
- =?utf-8?B?S0QrVXc4Si9FVE43UURTMHVNR3hPcnhuTWp2V2tPWktLdytpaDVOTno1WmRH?=
- =?utf-8?B?bTJPbHZjZ3ZKOXRxb0tsQksvckRnakZ4T0RFUThIejEwcUxFbjlvWTFCTG9M?=
- =?utf-8?B?aVkwMWpQV1FuWjZ3THE5TDBmV2x2bDdPOFJrNXZUbWJnSDBXMDRtZDhoRG5v?=
- =?utf-8?B?Z2d6Vnc0V1Q4MXRLL2xNdDBWRmtodVlROWdjZTVEaDVZelI1Tmx5dmFrN1BS?=
- =?utf-8?B?WTZhZ3V0SnROOW9rOVNjUmZHZG1Hci9YdzcvQ0RxMHBuNEJuR0w3RTNSZjIx?=
- =?utf-8?B?MGErcHFUalN4RFhXZ202WnBEcDFUS2puYnExSkFmdFNWSStUQm5VUWxMQ2tr?=
- =?utf-8?B?UzE5dnpkQWZMS3ZTOFNFdXRiNEN3bWt2VlJraGdKaVNPVis5cnkyYTdUN295?=
- =?utf-8?B?R3pjejNYSUh2UC8zRUpQMHlhbndhOTVWQ0pneWdVWUtGL0ZRYzRwVms1TUs2?=
- =?utf-8?B?aXgxdlB6ZFFySFVwelJZQkVKdFkwK0N0QmZyOTE5bzE4cjkzWm1DRVZjSyt1?=
- =?utf-8?B?R09oalByc2hGMGprd3JYL05wWjhQdG9GVmJUZnVxR2tPOWZQM3BHZUE1SHRD?=
- =?utf-8?B?UUZCSjRyUURXdnpjclh4ekJaaGc4UWtSREVPRkpkQTh4S1dYbUlHaEFqWW1W?=
- =?utf-8?B?TnI5ZS92dFZScXNDMVA5NGRyaTgxLy8vNk82UkFTMzdlWS8vcmdXemZhdndp?=
- =?utf-8?B?c2VOcGwrV3pxN09WT1RkeW9qZ0l5R01lcDRYTVhEL2dsYnpKenovOENvd0xM?=
- =?utf-8?B?bmp2Qkxaa3VYaHE4TmtXaWFRbVlVSWZFdkYyNjdkeTVVUytIdlJKMVkvQXpC?=
- =?utf-8?B?ak9sMmpnUFV3b1dUQ2JUYWFkRENwc2cxTDl1NElpTVpmNmJaNUFvRi9ROHN5?=
- =?utf-8?B?QkJ2WnZmZTZ5dSt2a2xMdU1Cc3hkOE1ZREhGRUFETGVzdDlWL1puRmxDcmVz?=
- =?utf-8?B?cTJvR3NsUzdKUXNnRk1CVmZIRFRSNHJDTjBxSkZVU2dPK3p2N01yN2J0REVU?=
- =?utf-8?B?RUhlS2JhKzRDUmNOVkxKYi9TTnNIMDRJK0hMdVh0QVoyVVRzeUJ4WEN1TS9Y?=
- =?utf-8?B?cG84TXVOTzNuQmRoZTZSUDdhQWNvZ2duNitFckNjN3lXQlZKTE52TGdpdGlv?=
- =?utf-8?B?OGZRUnY1aGlQYVc5TVc3OU00VjN3UndHNFVua29hZmExZkQ5TDFBdkpXOE1R?=
- =?utf-8?B?UHlVNXVuZHhTeTJmQ3l6eEQ2MTJLRUd2czM3b1ZaK1grYmxZSnRlRG5DSlY4?=
- =?utf-8?B?bzd0WUIwd2VJdHpyeFo2ZCtEQWFKK1ZKb2lNeG9FU0kvNU9XMjMrNjViSG8r?=
- =?utf-8?Q?p2NDz3Rl?=
-X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62441546-c17f-4545-2556-08d8c2d64095
-X-MS-Exchange-CrossTenant-AuthSource: PR3P193MB0894.EURP193.PROD.OUTLOOK.COM
+X-Microsoft-Antispam-Message-Info: 1T9zzTWI9NU0i1l8jCzrPki266ZHMzxqHwnAICwikDEMFWH8b34z7Or6F8vXwzdfn4HQHUKa4NjoxwFLC4NatW0mERMsbFY86v+1D0aClQ5wsYMPI/klkC011gZaejAPk0PXonMEUqnSf9P5qU9MBxdzSv9HtO5PXBj0vuyOqTwPzwA81m4j6Ntz0iQBCHvGOUbNwHKccqoApK6BIeOIndtk7JnhRyw7kKbvmaO37RgbPmr4EcEIuL3N56ALARR3iVqdEWpg2cn67n0a0s7R5tCbOrTxaFmu748sGdXhVxL0+gJq/9DJFoxzy4sgEBfX2JYNYsTD64jZPd30FzFP0g6l39+EiFnUyajX4xKEGQIXoSBehzyLYbS8xfGnzPe6ISUho/kgc4oifZZkrF3a82GoorfOWtKn8/yzG2Q0vTNaoKk+fmSSVAs7ROI8ZYqyiVnRuY3p/BrUydhByGQmdSOUbuablnRADk3thWWET+fmH9Xvvfl+uG6za7qp0R4CVfNJ8McseFxPPf/De4PbbJoUgUXlpYegwMbCOEGQOWg8bIWuWJdHfxsfxlRr+ZSVD6Cqx26ENhld+QZ8hXDIHg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB3099.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(39860400002)(396003)(366004)(376002)(346002)(6486002)(54906003)(83380400001)(44832011)(107886003)(16526019)(66476007)(8936002)(956004)(53546011)(186003)(66946007)(6666004)(66556008)(4326008)(36756003)(316002)(7416002)(8676002)(26005)(86362001)(478600001)(2616005)(2906002)(33656002)(16576012)(52116002)(110136005)(5660300002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?S1NvZVdRT3A0c0c4NElwemczTWtrZ1Z2S0xyMDNKalBLaFM4emxRTi9IR3dC?=
+ =?utf-8?B?UFdHb3BLWGJRdzM5TTMwTzZSWk1XaFhLbUNTYSs0b2RwWGxFUXBLamYrZFAr?=
+ =?utf-8?B?YmV6eG5jSU1OdnVtdUk2OWR0ZS9wN3dveUdMNFQ5QTVGYkZPdzRIbmMwV0ZX?=
+ =?utf-8?B?RXpPNzVIc09adlRGbjkwR3J6UTRWVHNpNVkybnFka1huUlBFeWhZa3d6Q0Zy?=
+ =?utf-8?B?S0EvTXpuajhSQ3RXQ0xkb3ZwWHd5SEdOcDh2cHZHd2VWTUl4K1BTK1hNREtw?=
+ =?utf-8?B?cWZsTWJqVXIwTmFvWUI3RTYwZjFhVzlCNUZ6MEsrcDk1N051S1hOWTBVckF3?=
+ =?utf-8?B?cDhsNjhXOHo5U212N3kwRXFGSm1xSzFMVHRLYlZGV0VUU3l4UUVJczhUMzRj?=
+ =?utf-8?B?WjNOVURXVFJldTRwQjdpVk42NHBHM0c1ZDF1R3ZJMlU1Y3RwT01sMk9ucXhs?=
+ =?utf-8?B?VnU3ejV4VmxNK25jeVVPeENBdUkyaEw5eWxIbXg5eG5ZVGk2bWlZTTZmcVND?=
+ =?utf-8?B?Y1l4MEZ2WjhEL0RiZDk3ZHArU1lvRGRUY3BIUlVJV0JjUmYwUnVLMUlEYlZT?=
+ =?utf-8?B?cnBkUkc0TVBnYjl4TDNQYk5VMTJKZE9Fb3NHdW1HNXp4TmZxWUR0NWNLM01B?=
+ =?utf-8?B?MmxRZzFqUEIyWDh3VFZJQ0h1Zm9xTmF3NmZkL3dlT21NYWJFSTBCdzJ5N1hS?=
+ =?utf-8?B?bit0MS8veHBRRS9TTEg0OVRlQmYxMW5nZ2s5bW12WGFWeExQVFo1SGZXWVRV?=
+ =?utf-8?B?bU9oUWtvWXI1bnVEQnpPNm16d3oxYnMwZmNaZ0E1Y3BGMFMrT2xVS3VndGJL?=
+ =?utf-8?B?aXhMYVp1bE9kOGtLZmI4RGNGdVpuWUFFdUpreFhVaVZ2V09EaVBMNzRJN1NS?=
+ =?utf-8?B?N2tmeFJOT1oyRXBqNnhFekxTbmpvTkxVUml5ZzVvOWljbUpMOEhPczN0b2Qr?=
+ =?utf-8?B?d09PZUtvYytWRzJ6RjRVeUNCWTRLL3VGQ2dRZVJVL0FuZm5VL2FiRW1yQlEz?=
+ =?utf-8?B?VlRVOGRKa0ZCS2xSdGdFNEhMbjlQQUp6V2R1UEhWR2NJK2xRVlFadDFxZW5P?=
+ =?utf-8?B?THhRM3lybFFXcUFuUU1mTEVkdi95K0VmUUpxNytYK2NRaUxaMmJ0ZTBUM25S?=
+ =?utf-8?B?aWp2ODlxc3BEUE94RkFxZmRRaFFFRjVkUk1ZK1c5dDRPeUN4SGUyMlV3bTk1?=
+ =?utf-8?B?ZGh6SE90NlI3K2dUZmxQSjhTUVBxNHhpVmhZUkdTcUJKNnBMNDhic3Q3ai9h?=
+ =?utf-8?B?VGRaeHpQeVZlSzBIYklVKzgreHg4T0NDa1lQSTcxN29DMnBJSTBZRU1uYmk5?=
+ =?utf-8?B?YS95ME9mRllnM0s0TDFNYXVPRVB5U0dOZmljdkREbkYvVkRKNFVOYVVUYmhu?=
+ =?utf-8?B?cUlINUc0a0Zib2xBK3plamZFcHBCN0s2SGg3TWZGNGQxMjVNTkdXVHVpQmw5?=
+ =?utf-8?Q?Ag5rgZV9?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72d79357-4c37-4aa2-d256-08d8c2da0646
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB3099.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2021 15:14:33.6804
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2021 15:41:34.2915
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VAVLhlUSMeOIQnyqqTl07jepaSbJFPEE0t/NDZsgkvuJQTx/t3vB6eNs6EKRXyRwLA6PkVcXIEdwmAHO4uGazQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P193MB0619
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZPyTVawr+xTWlDQjbgNIp1KAlJkVpchXwGGdZqLJk9Sn+h7sLRFVyq4SU1qJZ29VHc4FshF08Tw10ZbD0QhdoqbLocuJyh2wTQN6Q2wZmFU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5200
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9877 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 phishscore=0
+ adultscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101270084
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9877 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 impostorscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
+ lowpriorityscore=0 spamscore=0 mlxscore=0 suspectscore=0 malwarescore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101270084
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
 
-On 26.01.21 16:29, Jarkko Sakkinen wrote:
-> On Sun, 2021-01-24 at 17:47 +0100, Lino Sanfilippo wrote:
->> Hi Jarkko,
->>
->> On 17.01.21 at 19:13, Jarkko Sakkinen wrote:
->>> I have hard time to believe that any of these patches are based on
->>> actual regressions.
->>>
->>> /Jarko
->>>
->> patch 1 is indeed wrong (I oversaw the action call in case of error),
->> so please ignore it.
->>
->> However patches 2 and 3 are based on bugs I encountered while working with
->> TPM. I am sorry if I did not make the issues clear enough in the patches
->> commit messages. Let me try to explain it in more detail:
->>
->> The bugs showed up after unloading the TPM chip driver module while one
->> process still had the /dev/tpmrm device open.
-> Please refine the patch set, and we will look into that then.
->
-> Put fixes tags and logs where appropriate. Thanks.
->
-> /Jarkko
+> On Jan 27, 2021, at 7:03 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+>=20
+> [Cc'ing linux-integrity]
+>=20
+> On Wed, 2021-01-27 at 11:46 +0000, David Howells wrote:
+>> Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>>=20
+>>>> I suppose a user space tool could be created. But wouldn=E2=80=99t wha=
+t is
+>>>> currently done in the kernel in this area need to be removed?
+>>>=20
+>>> Right. I don't think this was a great idea in the first place to
+>>> do to the kernel but since it exists, I guess the patch does make
+>>> sense.
+>>=20
+>> This information needs to be loaded from the UEFI tables before the syst=
+em
+>> starts loading any kernel modules or running any programs (if we do
+>> verification of such, which I think IMA can do).
+>=20
+> There needs to a clear distinction between the pre-boot and post-boot
+> keys.  UEFI has its own trust model, which should be limited to UEFI.=20
+> The .platform keyring was upstreamed and limited to verifying the kexec
+> kernel image.   Any other usage of the .platform keyring keys is
+> abusing its intended purpose.
+>=20
+> The cover letter says,   "Anytime the .platform keyring is used, the
+> keys in the .blacklist keyring are referenced, if a matching key is
+> found, the key will be rejected."   I don't have a problem with loading
+> the UEFI X509 dbx entries as long as its usage is limited to verifying
+> the kexec kernel image.
 
-Ok, will do so.
+Correct, with my patch, when EFI_CERT_X509_GUID entries are found in the
+dbx, they will only be used during kexec.  I believe the latest dbx file on=
+=20
+uefi.org contains three of these entires.
 
-Regards,
-Lino
+Based on my understanding of why the platform keyring was introduced,=20
+I intentionally only used these for kexec.  I do question the current=20
+upstream mainline code though.  Currently, when EFI_CERT_X509_SHA256_GUID
+or EFI_CERT_SHA256_GUID entries are found in the dbx, they are applied=20
+everywhere.  It seems like there should be a dbx revocation keyring=20
+equivalent to the current platform keyring that is only used for pre-boot.=
+=20
+
+If that is a direction you would like to see this go in the future, let
+me know, I=E2=80=99d be happy to work on it.
+
