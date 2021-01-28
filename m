@@ -2,68 +2,31 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 423D9306C43
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jan 2021 05:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D3B306C4E
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jan 2021 05:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbhA1EcR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Jan 2021 23:32:17 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34494 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229528AbhA1EcQ (ORCPT
+        id S231158AbhA1Ee2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Jan 2021 23:34:28 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:44294 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229830AbhA1EeQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Jan 2021 23:32:16 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10S3WSkn115533;
-        Wed, 27 Jan 2021 22:53:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
- cc : subject : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=mphtyr7bxoawE01T3pM8T9wObaEFhCrepFpBhh7nMlA=;
- b=k8vWXsAimExK65/25AL1Dx5UF7MqJTHm+v8TStgFR/UD87qFTrqvJzc4nVWSWE+UaabI
- 3s/WiuuQXRwjsxi5spkZ7WPFNFSNIoqHYcX9IC+OGIaSe1E6dPu525gL7T6XBXxef2Ly
- v0PWdLhSwUnG0Vurrg/ExR5Z7REhQNbCiF2ZBTKwI0yAmKiJFiCmv43k9WBKj4dxQMkH
- oX5xXS/Dfw6Mctr0kbsEuEdsRXjoeL2CRCR2RQD/vcGYoIBw/1x7dAJ/fMZr4MO/+bHM
- 81UcobnoR9Xor0jpfbIEPDGRBCDIc931gb6CN/t8ZOUN/yp54TfowrKVlpdS2OQJS41Q NA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36bdh8kq7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Jan 2021 22:53:01 -0500
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10S3qiEH184922;
-        Wed, 27 Jan 2021 22:53:01 -0500
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36bdh8kq72-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Jan 2021 22:53:00 -0500
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10S3VsHp021689;
-        Thu, 28 Jan 2021 03:53:00 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03wdc.us.ibm.com with ESMTP id 36a0t2tua7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Jan 2021 03:53:00 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10S3qxpa19792354
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Jan 2021 03:52:59 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0ABE0BE051;
-        Thu, 28 Jan 2021 03:52:59 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA087BE04F;
-        Thu, 28 Jan 2021 03:52:50 +0000 (GMT)
-Received: from manicouagan.localdomain (unknown [9.85.200.195])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Thu, 28 Jan 2021 03:52:50 +0000 (GMT)
-References: <20210115173017.30617-1-nramas@linux.microsoft.com>
- <20210115173017.30617-10-nramas@linux.microsoft.com>
- <20210127165208.GA358@willie-the-truck>
- <d3330793-6054-6e59-b727-44bf8e5653cd@linux.microsoft.com>
- <20210127184319.GA676@willie-the-truck>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        zohar@linux.ibm.com, robh@kernel.org, takahiro.akashi@linaro.org,
+        Wed, 27 Jan 2021 23:34:16 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7924C20B7192;
+        Wed, 27 Jan 2021 20:33:34 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7924C20B7192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1611808415;
+        bh=o9E1iJqGLbYMxA8FJITsDmvQHrxKyY+EzNtf2a6uCPY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=M9XgATxD92xReOyFPHQjM04uqW/VlHZbqb0u6rkujK69b9fiKe6MMcTtfluhQGH2v
+         TMDXfEoQ0TBdoJ7h9tP5IIY0Kvr4rW4nrPRoPGUnNFe2Bd0+c3dkmL2nvN/kteUv/7
+         0kzkif65D1Mng0Orown7Pa/JrqcYDTqZiimzwibM=
+Subject: Re: [PATCH v15 09/10] arm64: Call kmalloc() to allocate DTB buffer
+To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Cc:     Will Deacon <will@kernel.org>, zohar@linux.ibm.com,
+        robh@kernel.org, takahiro.akashi@linaro.org,
         gregkh@linuxfoundation.org, catalin.marinas@arm.com,
         mpe@ellerman.id.au, james.morse@arm.com, sashal@kernel.org,
         benh@kernel.crashing.org, paulus@samba.org, frowand.list@gmail.com,
@@ -76,91 +39,115 @@ Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v15 09/10] arm64: Call kmalloc() to allocate DTB buffer
-In-reply-to: <20210127184319.GA676@willie-the-truck>
-Date:   Thu, 28 Jan 2021 00:52:48 -0300
-Message-ID: <871re5soof.fsf@manicouagan.localdomain>
+References: <20210115173017.30617-1-nramas@linux.microsoft.com>
+ <20210115173017.30617-10-nramas@linux.microsoft.com>
+ <20210127165208.GA358@willie-the-truck>
+ <d3330793-6054-6e59-b727-44bf8e5653cd@linux.microsoft.com>
+ <20210127184319.GA676@willie-the-truck>
+ <871re5soof.fsf@manicouagan.localdomain>
+ <58d3ffbf-4d80-c893-34d6-366ebfac55bd@linux.microsoft.com>
+ <87y2gdr93p.fsf@manicouagan.localdomain>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <a751409d-aa1c-68ea-f397-ee3bcf2f393d@linux.microsoft.com>
+Date:   Wed, 27 Jan 2021 20:33:34 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-27_10:2021-01-27,2021-01-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- suspectscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101280014
+In-Reply-To: <87y2gdr93p.fsf@manicouagan.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 1/27/21 8:14 PM, Thiago Jung Bauermann wrote:
+> 
+> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+> 
+>> On 1/27/21 7:52 PM, Thiago Jung Bauermann wrote:
+>>> Will Deacon <will@kernel.org> writes:
+>>>
+>>>> On Wed, Jan 27, 2021 at 09:59:38AM -0800, Lakshmi Ramasubramanian wrote:
+>>>>> On 1/27/21 8:52 AM, Will Deacon wrote:
+>>>>>
+>>>>> Hi Will,
+>>>>>
+>>>>>> On Fri, Jan 15, 2021 at 09:30:16AM -0800, Lakshmi Ramasubramanian wrote:
+>>>>>>> create_dtb() function allocates kernel virtual memory for
+>>>>>>> the device tree blob (DTB).  This is not consistent with other
+>>>>>>> architectures, such as powerpc, which calls kmalloc() for allocating
+>>>>>>> memory for the DTB.
+>>>>>>>
+>>>>>>> Call kmalloc() to allocate memory for the DTB, and kfree() to free
+>>>>>>> the allocated memory.
+>>>>>>>
+>>>>>>> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>>>>> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>>>>>> ---
+>>>>>>>     arch/arm64/kernel/machine_kexec_file.c | 12 +++++++-----
+>>>>>>>     1 file changed, 7 insertions(+), 5 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+>>>>>>> index 7de9c47dee7c..51c40143d6fa 100644
+>>>>>>> --- a/arch/arm64/kernel/machine_kexec_file.c
+>>>>>>> +++ b/arch/arm64/kernel/machine_kexec_file.c
+>>>>>>> @@ -29,7 +29,7 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
+>>>>>>>     int arch_kimage_file_post_load_cleanup(struct kimage *image)
+>>>>>>>     {
+>>>>>>> -	vfree(image->arch.dtb);
+>>>>>>> +	kfree(image->arch.dtb);
+>>>>>>>     	image->arch.dtb = NULL;
+>>>>>>>     	vfree(image->arch.elf_headers);
+>>>>>>> @@ -59,19 +59,21 @@ static int create_dtb(struct kimage *image,
+>>>>>>>     			+ cmdline_len + DTB_EXTRA_SPACE;
+>>>>>>>     	for (;;) {
+>>>>>>> -		buf = vmalloc(buf_size);
+>>>>>>> +		buf = kmalloc(buf_size, GFP_KERNEL);
+>>>>>>
+>>>>>> Is there a functional need for this patch? I build the 'dtbs' target just
+>>>>>> now and sdm845-db845c.dtb is approaching 100K, which feels quite large
+>>>>>> for kmalloc().
+>>>>>
+>>>>> Changing the allocation from vmalloc() to kmalloc() would help us further
+>>>>> consolidate the DTB setup code for powerpc and arm64.
+>>>>
+>>>> Ok, but at the risk of allocation failure. Can powerpc use vmalloc()
+>>>> instead?
+>>> I believe this patch stems from this suggestion by Rob Herring:
+>>>
+>>>> This could be taken a step further and do the allocation of the new
+>>>> FDT. The difference is arm64 uses vmalloc and powerpc uses kmalloc. The
+>>>> arm64 version also retries with a bigger allocation. That seems
+>>>> unnecessary.
+>>> in
+>>> https://lore.kernel.org/linux-integrity/20201211221006.1052453-3-robh@kernel.org/
+>>> The problem is that this patch implements only part of the suggestion,
+>>> which isn't useful in itself. So the patch series should either drop
+>>> this patch or consolidate the FDT allocation between the arches.
+>>> I just tested on powernv and pseries platforms and powerpc can use
+>>> vmalloc for the FDT buffer.
+>>>
+>>
+>> Thanks for verifying on powerpc platform Thiago.
+>>
+>> I'll update the patch to do the following:
+>>
+>> => Use vmalloc for FDT buffer allocation on powerpc
+>> => Keep vmalloc for arm64, but remove the retry on allocation.
+>> => Also, there was a memory leak of FDT buffer in the error code path on arm64,
+>> which I'll fix as well.
+>>
+>> Did I miss anything?
+> 
+> Yes, you missed the second part of Rob's suggestion I was mentioning,
+> which is factoring out the code which allocates the new FDT from both
+> arm64 and powerpc.
+> 
 
-Will Deacon <will@kernel.org> writes:
+Sure - I'll address that.
 
-> On Wed, Jan 27, 2021 at 09:59:38AM -0800, Lakshmi Ramasubramanian wrote:
->> On 1/27/21 8:52 AM, Will Deacon wrote:
->> 
->> Hi Will,
->> 
->> > On Fri, Jan 15, 2021 at 09:30:16AM -0800, Lakshmi Ramasubramanian wrote:
->> > > create_dtb() function allocates kernel virtual memory for
->> > > the device tree blob (DTB).  This is not consistent with other
->> > > architectures, such as powerpc, which calls kmalloc() for allocating
->> > > memory for the DTB.
->> > > 
->> > > Call kmalloc() to allocate memory for the DTB, and kfree() to free
->> > > the allocated memory.
->> > > 
->> > > Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
->> > > Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
->> > > Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
->> > > ---
->> > >   arch/arm64/kernel/machine_kexec_file.c | 12 +++++++-----
->> > >   1 file changed, 7 insertions(+), 5 deletions(-)
->> > > 
->> > > diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
->> > > index 7de9c47dee7c..51c40143d6fa 100644
->> > > --- a/arch/arm64/kernel/machine_kexec_file.c
->> > > +++ b/arch/arm64/kernel/machine_kexec_file.c
->> > > @@ -29,7 +29,7 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
->> > >   int arch_kimage_file_post_load_cleanup(struct kimage *image)
->> > >   {
->> > > -	vfree(image->arch.dtb);
->> > > +	kfree(image->arch.dtb);
->> > >   	image->arch.dtb = NULL;
->> > >   	vfree(image->arch.elf_headers);
->> > > @@ -59,19 +59,21 @@ static int create_dtb(struct kimage *image,
->> > >   			+ cmdline_len + DTB_EXTRA_SPACE;
->> > >   	for (;;) {
->> > > -		buf = vmalloc(buf_size);
->> > > +		buf = kmalloc(buf_size, GFP_KERNEL);
->> > 
->> > Is there a functional need for this patch? I build the 'dtbs' target just
->> > now and sdm845-db845c.dtb is approaching 100K, which feels quite large
->> > for kmalloc().
->> 
->> Changing the allocation from vmalloc() to kmalloc() would help us further
->> consolidate the DTB setup code for powerpc and arm64.
->
-> Ok, but at the risk of allocation failure. Can powerpc use vmalloc()
-> instead?
+thanks,
+  -lakshmi
 
-I believe this patch stems from this suggestion by Rob Herring:
-
-> This could be taken a step further and do the allocation of the new
-> FDT. The difference is arm64 uses vmalloc and powerpc uses kmalloc. The
-> arm64 version also retries with a bigger allocation. That seems
-> unnecessary.
-
-in https://lore.kernel.org/linux-integrity/20201211221006.1052453-3-robh@kernel.org/
-
-The problem is that this patch implements only part of the suggestion,
-which isn't useful in itself. So the patch series should either drop
-this patch or consolidate the FDT allocation between the arches.
-
-I just tested on powernv and pseries platforms and powerpc can use
-vmalloc for the FDT buffer.
-
--- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
