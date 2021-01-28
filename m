@@ -2,104 +2,190 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46434306D30
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jan 2021 07:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 315263076CA
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jan 2021 14:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbhA1GBb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 28 Jan 2021 01:01:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229462AbhA1GBb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 28 Jan 2021 01:01:31 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B061961492;
-        Thu, 28 Jan 2021 06:00:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611813650;
-        bh=teUHGyAjCjPfkBxZ3i0lEJwRQIyDMft5Td689zeTnzg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L+/FLBEnsy7zi/vb4OhUiq4SOtifApjlFwsxXY3tb0Qi5Kzui/CjiZsDSUPffQP8z
-         nHv9wXtmRo7prHCPC/rnunZvGW0r9WuCMIr13YIYDT+ZvHCo6h1oHIgfIB8aQMXwvY
-         ARG3t4c45hdCwcYtSxVqFeOC2Y0H9+1eBP8rhn6vxmysoDYe8lv9xtoo6rIzOf/Xz0
-         c8Q2TLhtOG/mzUEfCJ4eehT+WNPEf5nj3Tv1LnSYty1J2+6ma5DqgiMs3IE34bBoyd
-         Bw0nn55UPe6/LYjaoLCTdiVJs6YXI1aN3GccA2Cj1R0ucbnTZCdA4Of71/OJKhCZNd
-         mZLXzyqyVO+8Q==
-Date:   Thu, 28 Jan 2021 08:00:45 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH v15 0/5] TPM 2.0 trusted key rework
-Message-ID: <YBJTDfUCItiuzr08@kernel.org>
-References: <20210127190617.17564-1-James.Bottomley@HansenPartnership.com>
+        id S231935AbhA1NKi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 28 Jan 2021 08:10:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231922AbhA1NKf (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 28 Jan 2021 08:10:35 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28300C061573
+        for <linux-integrity@vger.kernel.org>; Thu, 28 Jan 2021 05:09:55 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id f11so6222791ljm.8
+        for <linux-integrity@vger.kernel.org>; Thu, 28 Jan 2021 05:09:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=d7LZ22+oyphnUi5mVFQCXWwH/H/OEMXyG0FmJuE7rMk=;
+        b=1NaX3Fx5vR3LylPGpehoAVK9/R5LQc1yFDM+xUNseADsOEUXVW5Q9LXSQ2+IdagFWT
+         g17CQRs0VwFP0a2tL1bXhujKOqEM6lkUZDVODU6Hw2R7p2QCqsBUETrCvjQymrwYUahS
+         nfxtjx/NVhn+h5LYjNPtGBROa2P10ty/VpG8g0XIO7HmIXaz6pt1auwsFavdNz/gl79a
+         +tQk2xmBhQw3M0eMvwVbWXv+494isqb6hUZK9WaCrGlqMCdU4c/npKP0+UucOuOWSFce
+         GaLbtmUHIYAlUNkZThHrs9x+SlYFzHSQxudMKdLs5XCeIdBvAboJ1LqE/6aI9N/ud6qf
+         SViA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=d7LZ22+oyphnUi5mVFQCXWwH/H/OEMXyG0FmJuE7rMk=;
+        b=QOj7GGTpIW1R0QZp3aJRxKmIQnDXmamtzTk3VfIgYXzKjs+PtluIXBmxBcu4SA5Vgg
+         zb3ASoEPRySq4iE84ok/67dJ5KH7H2pn+WtV+fful/w5BfV0pX2C7R2rCFGmzSf+lCBS
+         KLWSBDu0761NEtJV+WHwtigRQjYeWKdHfHfQJRu3O7V0kfHdu6WN5JLClU3+XsFU3Bcx
+         3ZdX4LffCyqGkGuF3o7vuer09+x714Fdh+Lho592u27Cht8VzQ9AK7kphezbXyWweiQi
+         jLqNTJdDR/WMevArrfGscAnqmRpkvVSn06UB3qJ0Qm42wPRbIbfUXZH3iZMTw7Xk1Bvl
+         7bww==
+X-Gm-Message-State: AOAM533Nedsb0EoxNbMjBC1enfQk7Bsi+z12LYC7s3XcTj3IHU0saK6l
+        JjhjWw9Q0yeAqAEdj+2dVIVCbw==
+X-Google-Smtp-Source: ABdhPJwX9m/KtjKAA/+SzyVBGo91thnSD/C7o9Qt3wssfmXp+di+H9MEh0o1WqvjA7v9uFmxgxaNPA==
+X-Received: by 2002:a2e:9055:: with SMTP id n21mr4142030ljg.377.1611839393676;
+        Thu, 28 Jan 2021 05:09:53 -0800 (PST)
+Received: from localhost.localdomain (89-70-221-122.dynamic.chello.pl. [89.70.221.122])
+        by smtp.gmail.com with ESMTPSA id m10sm1632458lfk.2.2021.01.28.05.09.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jan 2021 05:09:52 -0800 (PST)
+From:   Lukasz Majczak <lma@semihalf.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Tj <ml.linux@elloe.vision>, Dirk Gouders <dirk@gouders.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Radoslaw Biernacki <rad@semihalf.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Alex Levin <levinale@google.com>
+Subject: [PATCH v2] tpm_tis: Add missing tpm_request/relinquish_locality calls
+Date:   Thu, 28 Jan 2021 14:07:53 +0100
+Message-Id: <20210128130753.1283534-1-lma@semihalf.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210123014247.989368-1-lma@semihalf.com>
+References: <20210123014247.989368-1-lma@semihalf.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210127190617.17564-1-James.Bottomley@HansenPartnership.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 11:06:12AM -0800, James Bottomley wrote:
-> v15: fix 0day sign issue and add reviews and testeds
-> 
-> General cover letter minus policy bit:
-> 
-> This patch updates the trusted key code to export keys in the ASN.1
-> format used by current TPM key tools (openssl_tpm2_engine and
-> openconnect).  The current code will try to load keys containing
-> policy, but being unable to formulate the policy commands necessary to
-> load them, the unseal will always fail unless the policy is executed
-> in user space and a pre-formed policy session passed in.
-> 
-> The key format is designed to be compatible with our two openssl
-> engine implementations as well as with the format used by openconnect.
-> I've added seal/unseal to my engine so I can use it for
-> interoperability testing and I'll later use this for sealed symmetric
-> keys via engine:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/
-> 
-> James
-> 
-> ---
-> 
-> James Bottomley (5):
->   lib: add ASN.1 encoder
->   oid_registry: Add TCG defined OIDS for TPM keys
->   security: keys: trusted: fix TPM2 authorizations
->   security: keys: trusted: use ASN.1 TPM2 key format for the blobs
->   security: keys: trusted: Make sealed key properly interoperable
+There is a missing call to tpm_request_locality before the call to
+the tpm_get_timeouts() and tpm_tis_probe_irq_single(). As the current
+approach might work for tpm2, it fails for tpm1.x - in that case
+call to tpm_get_timeouts() or tpm_tis_probe_irq_single()
+without locality fails and in turn causes tpm_tis_core_init() to fail.
+Tested on Samsung Chromebook Pro (Caroline).
 
-AFAIK, bug fixes should merged before functional changes and migratable
-flag has a regression:
+Signed-off-by: Lukasz Majczak <lma@semihalf.com>
+---
+Jarkko, James, Guenter
 
-https://marc.info/?l=linux-integrity&m=160255753405345
+I’m aware about the other thread, but it seems to be dead for a few months.
+Here is the small patch as fixing this specific issue
+would allow us to unblock the ChromeOs development. 
+We want to upstream all of our patches,
+so the ChromeOs will not diverge even more,
+so I'm hoping this could be applied, if you see it neat enough.
 
-I'll send an update to this series.
+Best regards,
+Lukasz
 
-/Jarkko
+v1 -> v2:
+ - fixed typos
+ - as there is no need to enable clock, switched to
+   use only tpm_request/relinquish_locality calls
+ - narrowed down boundaries of tpm_request/relinquish_locality calls
+ 
+ drivers/char/tpm/tpm-chip.c      |  4 ++--
+ drivers/char/tpm/tpm-interface.c | 11 +++++++++--
+ drivers/char/tpm/tpm.h           |  2 ++
+ drivers/char/tpm/tpm_tis_core.c  | 12 ++++++++++--
+ 4 files changed, 23 insertions(+), 6 deletions(-)
 
-> 
->  .../security/keys/trusted-encrypted.rst       |  58 +++
->  include/keys/trusted-type.h                   |   2 +
->  include/linux/asn1_encoder.h                  |  32 ++
->  include/linux/oid_registry.h                  |   5 +
->  include/linux/tpm.h                           |   2 +
->  lib/Kconfig                                   |   3 +
->  lib/Makefile                                  |   1 +
->  lib/asn1_encoder.c                            | 454 ++++++++++++++++++
->  security/keys/Kconfig                         |   3 +
->  security/keys/trusted-keys/Makefile           |   4 +-
->  security/keys/trusted-keys/tpm2key.asn1       |  11 +
->  security/keys/trusted-keys/trusted_tpm1.c     |  34 +-
->  security/keys/trusted-keys/trusted_tpm2.c     | 269 ++++++++++-
->  13 files changed, 846 insertions(+), 32 deletions(-)
->  create mode 100644 include/linux/asn1_encoder.h
->  create mode 100644 lib/asn1_encoder.c
->  create mode 100644 security/keys/trusted-keys/tpm2key.asn1
-> 
-> -- 
-> 2.26.2
-> 
-> 
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index ddaeceb7e109..5351963a4b19 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -32,7 +32,7 @@ struct class *tpm_class;
+ struct class *tpmrm_class;
+ dev_t tpm_devt;
+ 
+-static int tpm_request_locality(struct tpm_chip *chip)
++int tpm_request_locality(struct tpm_chip *chip)
+ {
+ 	int rc;
+ 
+@@ -47,7 +47,7 @@ static int tpm_request_locality(struct tpm_chip *chip)
+ 	return 0;
+ }
+ 
+-static void tpm_relinquish_locality(struct tpm_chip *chip)
++void tpm_relinquish_locality(struct tpm_chip *chip)
+ {
+ 	int rc;
+ 
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 1621ce818705..69309b2bea6a 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -243,8 +243,15 @@ int tpm_get_timeouts(struct tpm_chip *chip)
+ 
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+ 		return tpm2_get_timeouts(chip);
+-	else
+-		return tpm1_get_timeouts(chip);
++	else {
++		ssize_t ret = tpm_request_locality(chip);
++
++		if (ret)
++			return ret;
++		ret = tpm1_get_timeouts(chip);
++		tpm_relinquish_locality(chip);
++		return ret;
++	}
+ }
+ EXPORT_SYMBOL_GPL(tpm_get_timeouts);
+ 
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 947d1db0a5cc..8c13008437dd 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -193,6 +193,8 @@ static inline void tpm_msleep(unsigned int delay_msec)
+ 
+ int tpm_chip_start(struct tpm_chip *chip);
+ void tpm_chip_stop(struct tpm_chip *chip);
++int tpm_request_locality(struct tpm_chip *chip);
++void tpm_relinquish_locality(struct tpm_chip *chip);
+ struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
+ __must_check int tpm_try_get_ops(struct tpm_chip *chip);
+ void tpm_put_ops(struct tpm_chip *chip);
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 92c51c6cfd1b..0ae675e8cf2f 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -754,9 +754,17 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
+ 
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+ 		return tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+-	else
+-		return tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc,
++	else {
++		ssize_t ret = tpm_request_locality(chip);
++
++		if (ret)
++			return ret;
++		ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc,
+ 				  0);
++		tpm_relinquish_locality(chip);
++		return ret;
++	}
++
+ }
+ 
+ /* Register the IRQ and issue a command that will cause an interrupt. If an
+-- 
+2.25.1
+
