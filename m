@@ -2,158 +2,183 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4BB306C0F
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jan 2021 05:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448B9306C1D
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jan 2021 05:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbhA1EOf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Jan 2021 23:14:35 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:53312 "EHLO
+        id S231428AbhA1EQ3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Jan 2021 23:16:29 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33544 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231247AbhA1EO1 (ORCPT
+        by vger.kernel.org with ESMTP id S231400AbhA1EQM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Jan 2021 23:14:27 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10S42g3c153480;
-        Wed, 27 Jan 2021 23:13:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yuVzlj1KaxSV483KKx6/iP8+B9liUYCdNpO7hs9E9yY=;
- b=I+DXyX1RuBn8aN5ukT7hxEl3AX0MhyTA5GoiZp9DeJxHyjM99abR7lM01Y2bGvB/Fr9h
- MNplPBdiNU2CLDemgBwhg+tY1XOqPbmNNjEcAy1/LTmxAp6wklsETWv6IhXzM06fuOkF
- ondvimUxUeCxF30gujOh7TdPdk3pX4PMT6tVW9levvCk5y7enmEzz9017sf2lALHWBXc
- Ttbx8vKm53wluFpfwgA1zKJuc9OMyB8bJYWVkYHIDbeBvnwscEmCfhicZ6eqGJUcHw9/
- MlBVdWs8wHxHOKAR8mSm13N9gS0TY5e+nNU+gpMy3WhiHF5NN+RV2cHbL2iiQSgAFuZh Zw== 
+        Wed, 27 Jan 2021 23:16:12 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10S41sEk194154;
+        Wed, 27 Jan 2021 23:14:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
+ cc : subject : in-reply-to : date : message-id : mime-version :
+ content-type; s=pp1; bh=rzdWeCeDaDZ75/E3nrAbc0/tPvq1J7TvmXi13WDek9k=;
+ b=ZrfRqqM52DyJ+gPNe88xOWZ5pPCi3RhAnqLFx6ODGpkKfjFMUfHhXa/roKG2/ZVx25f1
+ Ex4Kg3rC2vJyWwl5Yucbkdn8GvCXGv0X3Aesas15EM/79OyGS0fVGV8z1QYkxdWGUEg2
+ lWWszueNUsZYAzdcyPWyI9iydaWXoJ/+hUZWDazKZpmlxWTZOkM3sQaZ/Nm6o3yUeCPS
+ sGeC5OiLGlTfrHoItf6gxuU4STEHSrAwZg3xkUWGC0Qp+ZfLWx8zkJHhlEdHPLjRplz9
+ jA2YxxS5EXpXEK2gaoC1O99JaZzVXoDfbE1Erux0AIIwsbDD0PSvf8tfAkvDyjJioH4s dA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 36b4g9b193-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36becsay0e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Jan 2021 23:13:23 -0500
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10S43P9L157071;
-        Wed, 27 Jan 2021 23:13:22 -0500
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 36b4g9b18u-1
+        Wed, 27 Jan 2021 23:14:48 -0500
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10S42j3X001507;
+        Wed, 27 Jan 2021 23:14:48 -0500
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36becsay07-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Jan 2021 23:13:22 -0500
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10S3vAvU024647;
-        Thu, 28 Jan 2021 04:13:21 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma04dal.us.ibm.com with ESMTP id 36agvf0wx7-1
+        Wed, 27 Jan 2021 23:14:48 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10S3udQb013671;
+        Thu, 28 Jan 2021 04:14:47 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01wdc.us.ibm.com with ESMTP id 36a8uhfy03-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Jan 2021 04:13:21 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10S4DKht35651936
+        Thu, 28 Jan 2021 04:14:46 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10S4EiPM11403618
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Jan 2021 04:13:20 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C48F3124053;
-        Thu, 28 Jan 2021 04:13:20 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 33E0A124052;
-        Thu, 28 Jan 2021 04:13:19 +0000 (GMT)
-Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com (unknown [9.65.198.104])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 28 Jan 2021 04:13:19 +0000 (GMT)
-Subject: Re: [PATCH v4] certs: Add EFI_CERT_X509_GUID support for dbx entries
-To:     Eric Snowberg <eric.snowberg@oracle.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, jmorris@namei.org, serge@hallyn.com,
-        nayna@linux.ibm.com, erichte@linux.ibm.com, mpe@ellerman.id.au,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com
-References: <YAjMm9Gq/FFOzQYG@kernel.org>
- <E090372C-06A3-4991-8FC3-F06A0DA60729@oracle.com>
- <20200916004927.64276-1-eric.snowberg@oracle.com>
- <1360578.1607593748@warthog.procyon.org.uk>
- <2442460.1610463459@warthog.procyon.org.uk>
- <X/9a8naM8p4tT5sO@linux.intel.com>
- <A05E3573-B1AF-474B-94A5-779E69E5880A@oracle.com>
- <YAFdNiYZSWpB9vOw@kernel.org>
- <CFBF6AEC-2832-44F7-9D7F-F20489498C33@oracle.com>
- <YAgTawk3EENF/P6j@kernel.org>
- <D9F5E0BD-E2FC-428F-91B3-35D2750493A0@oracle.com>
- <3063834.1611747971@warthog.procyon.org.uk>
- <61a0420790250807837b5a701bb52f3d63ff0c84.camel@linux.ibm.com>
- <86CE3924-E36F-44FD-A259-3CC7E69D3EAC@oracle.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-Message-ID: <e18675cc-26d2-bfc3-2043-30e4f01b56ce@linux.vnet.ibm.com>
-Date:   Wed, 27 Jan 2021 23:13:18 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Thu, 28 Jan 2021 04:14:44 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 776E47805F;
+        Thu, 28 Jan 2021 04:14:44 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E3B97805C;
+        Thu, 28 Jan 2021 04:14:36 +0000 (GMT)
+Received: from manicouagan.localdomain (unknown [9.85.200.195])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Thu, 28 Jan 2021 04:14:36 +0000 (GMT)
+References: <20210115173017.30617-1-nramas@linux.microsoft.com>
+ <20210115173017.30617-10-nramas@linux.microsoft.com>
+ <20210127165208.GA358@willie-the-truck>
+ <d3330793-6054-6e59-b727-44bf8e5653cd@linux.microsoft.com>
+ <20210127184319.GA676@willie-the-truck>
+ <871re5soof.fsf@manicouagan.localdomain>
+ <58d3ffbf-4d80-c893-34d6-366ebfac55bd@linux.microsoft.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Will Deacon <will@kernel.org>, zohar@linux.ibm.com,
+        robh@kernel.org, takahiro.akashi@linaro.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        mpe@ellerman.id.au, james.morse@arm.com, sashal@kernel.org,
+        benh@kernel.crashing.org, paulus@samba.org, frowand.list@gmail.com,
+        vincenzo.frascino@arm.com, mark.rutland@arm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        pasha.tatashin@soleen.com, allison@lohutok.net,
+        masahiroy@kernel.org, bhsharma@redhat.com, mbrugger@suse.com,
+        hsinyi@chromium.org, tao.li@vivo.com, christophe.leroy@c-s.fr,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v15 09/10] arm64: Call kmalloc() to allocate DTB buffer
+In-reply-to: <58d3ffbf-4d80-c893-34d6-366ebfac55bd@linux.microsoft.com>
+Date:   Thu, 28 Jan 2021 01:14:34 -0300
+Message-ID: <87y2gdr93p.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <86CE3924-E36F-44FD-A259-3CC7E69D3EAC@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2021-01-28_01:2021-01-27,2021-01-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 adultscore=0 mlxlogscore=999 suspectscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0
- clxscore=1011 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=999
+ clxscore=1015 impostorscore=0 bulkscore=0 adultscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2101280017
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 1/27/21 10:41 AM, Eric Snowberg wrote:
->> On Jan 27, 2021, at 7:03 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
->>
->> [Cc'ing linux-integrity]
->>
->> On Wed, 2021-01-27 at 11:46 +0000, David Howells wrote:
->>> Jarkko Sakkinen <jarkko@kernel.org> wrote:
+Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+
+> On 1/27/21 7:52 PM, Thiago Jung Bauermann wrote:
+>> Will Deacon <will@kernel.org> writes:
+>> 
+>>> On Wed, Jan 27, 2021 at 09:59:38AM -0800, Lakshmi Ramasubramanian wrote:
+>>>> On 1/27/21 8:52 AM, Will Deacon wrote:
+>>>>
+>>>> Hi Will,
+>>>>
+>>>>> On Fri, Jan 15, 2021 at 09:30:16AM -0800, Lakshmi Ramasubramanian wrote:
+>>>>>> create_dtb() function allocates kernel virtual memory for
+>>>>>> the device tree blob (DTB).  This is not consistent with other
+>>>>>> architectures, such as powerpc, which calls kmalloc() for allocating
+>>>>>> memory for the DTB.
+>>>>>>
+>>>>>> Call kmalloc() to allocate memory for the DTB, and kfree() to free
+>>>>>> the allocated memory.
+>>>>>>
+>>>>>> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>>>> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>>>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>>>>> ---
+>>>>>>    arch/arm64/kernel/machine_kexec_file.c | 12 +++++++-----
+>>>>>>    1 file changed, 7 insertions(+), 5 deletions(-)
+>>>>>>
+>>>>>> diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+>>>>>> index 7de9c47dee7c..51c40143d6fa 100644
+>>>>>> --- a/arch/arm64/kernel/machine_kexec_file.c
+>>>>>> +++ b/arch/arm64/kernel/machine_kexec_file.c
+>>>>>> @@ -29,7 +29,7 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
+>>>>>>    int arch_kimage_file_post_load_cleanup(struct kimage *image)
+>>>>>>    {
+>>>>>> -	vfree(image->arch.dtb);
+>>>>>> +	kfree(image->arch.dtb);
+>>>>>>    	image->arch.dtb = NULL;
+>>>>>>    	vfree(image->arch.elf_headers);
+>>>>>> @@ -59,19 +59,21 @@ static int create_dtb(struct kimage *image,
+>>>>>>    			+ cmdline_len + DTB_EXTRA_SPACE;
+>>>>>>    	for (;;) {
+>>>>>> -		buf = vmalloc(buf_size);
+>>>>>> +		buf = kmalloc(buf_size, GFP_KERNEL);
+>>>>>
+>>>>> Is there a functional need for this patch? I build the 'dtbs' target just
+>>>>> now and sdm845-db845c.dtb is approaching 100K, which feels quite large
+>>>>> for kmalloc().
+>>>>
+>>>> Changing the allocation from vmalloc() to kmalloc() would help us further
+>>>> consolidate the DTB setup code for powerpc and arm64.
 >>>
->>>>> I suppose a user space tool could be created. But wouldn’t what is
->>>>> currently done in the kernel in this area need to be removed?
->>>> Right. I don't think this was a great idea in the first place to
->>>> do to the kernel but since it exists, I guess the patch does make
->>>> sense.
->>> This information needs to be loaded from the UEFI tables before the system
->>> starts loading any kernel modules or running any programs (if we do
->>> verification of such, which I think IMA can do).
->> There needs to a clear distinction between the pre-boot and post-boot
->> keys.  UEFI has its own trust model, which should be limited to UEFI.
->> The .platform keyring was upstreamed and limited to verifying the kexec
->> kernel image.   Any other usage of the .platform keyring keys is
->> abusing its intended purpose.
->>
->> The cover letter says,   "Anytime the .platform keyring is used, the
->> keys in the .blacklist keyring are referenced, if a matching key is
->> found, the key will be rejected."   I don't have a problem with loading
->> the UEFI X509 dbx entries as long as its usage is limited to verifying
->> the kexec kernel image.
-> Correct, with my patch, when EFI_CERT_X509_GUID entries are found in the
-> dbx, they will only be used during kexec.  I believe the latest dbx file on
-> uefi.org contains three of these entires.
+>>> Ok, but at the risk of allocation failure. Can powerpc use vmalloc()
+>>> instead?
+>> I believe this patch stems from this suggestion by Rob Herring:
+>> 
+>>> This could be taken a step further and do the allocation of the new
+>>> FDT. The difference is arm64 uses vmalloc and powerpc uses kmalloc. The
+>>> arm64 version also retries with a bigger allocation. That seems
+>>> unnecessary.
+>> in
+>> https://lore.kernel.org/linux-integrity/20201211221006.1052453-3-robh@kernel.org/
+>> The problem is that this patch implements only part of the suggestion,
+>> which isn't useful in itself. So the patch series should either drop
+>> this patch or consolidate the FDT allocation between the arches.
+>> I just tested on powernv and pseries platforms and powerpc can use
+>> vmalloc for the FDT buffer.
+>> 
 >
-> Based on my understanding of why the platform keyring was introduced,
-> I intentionally only used these for kexec.  I do question the current
-> upstream mainline code though.  Currently, when EFI_CERT_X509_SHA256_GUID
-> or EFI_CERT_SHA256_GUID entries are found in the dbx, they are applied
-> everywhere.  It seems like there should be a dbx revocation keyring
-> equivalent to the current platform keyring that is only used for pre-boot.
+> Thanks for verifying on powerpc platform Thiago.
 >
-> If that is a direction you would like to see this go in the future, let
-> me know, I’d be happy to work on it.
+> I'll update the patch to do the following:
 >
-Yes, as you said, currently blacklist entries from dbx for 
-EFI_CERT_X509_SHA256_GUID or EFI_CERT_SHA256_GUID are applied 
-everywhere, and does not satisfy the trust model for .platform keyring. 
-We should fix this, but changing now might break some existing systems. 
-Probably it should be discussed as separate thread from this patchset.
+> => Use vmalloc for FDT buffer allocation on powerpc
+> => Keep vmalloc for arm64, but remove the retry on allocation.
+> => Also, there was a memory leak of FDT buffer in the error code path on arm64,
+> which I'll fix as well.
+>
+> Did I miss anything?
 
-Thanks & Regards,
+Yes, you missed the second part of Rob's suggestion I was mentioning,
+which is factoring out the code which allocates the new FDT from both
+arm64 and powerpc.
 
-       - Nayna
-
+-- 
+Thiago Jung Bauermann
+IBM Linux Technology Center
