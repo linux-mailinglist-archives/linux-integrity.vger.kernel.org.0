@@ -2,145 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9908307F43
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jan 2021 21:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC4D308221
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Jan 2021 00:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbhA1ULt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 28 Jan 2021 15:11:49 -0500
-Received: from antares.kleine-koenig.org ([94.130.110.236]:45986 "EHLO
-        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbhA1UJf (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 28 Jan 2021 15:09:35 -0500
-X-Greylist: delayed 80298 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Jan 2021 15:09:34 EST
-Received: from antares.kleine-koenig.org (localhost [127.0.0.1])
-        by antares.kleine-koenig.org (Postfix) with ESMTP id 2969DAE1E57;
-        Thu, 28 Jan 2021 21:08:43 +0100 (CET)
-Received: from antares.kleine-koenig.org ([94.130.110.236])
-        by antares.kleine-koenig.org (antares.kleine-koenig.org [94.130.110.236]) (amavisd-new, port 10024)
-        with ESMTP id NYAo-JJQbWWS; Thu, 28 Jan 2021 21:08:40 +0100 (CET)
-Received: from taurus.defre.kleine-koenig.org (unknown [IPv6:2a02:8071:b5ad:20fc:2b29:ca75:841e:b14c])
-        by antares.kleine-koenig.org (Postfix) with ESMTPSA;
-        Thu, 28 Jan 2021 21:08:40 +0100 (CET)
-Subject: Re: [PATCH] vio: make remove callback return void
-To:     Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jens Axboe <axboe@kernel.dk>, Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Haren Myneni <haren@us.ibm.com>,
-        =?UTF-8?Q?Breno_Leit=c3=a3o?= <leitao@debian.org>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
-        Steven Royer <seroyer@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cristobal Forno <cforno12@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Dany Madden <drt@linux.ibm.com>, Lijun Pan <ljp@linux.ibm.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Michael Cyr <mikecyr@linux.ibm.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-References: <20210127215010.99954-1-uwe@kleine-koenig.org>
- <20210128190750.GA490196@us.ibm.com>
-From:   =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
-Message-ID: <f3655d10-26ba-5f9f-761e-2f48d13d0b11@kleine-koenig.org>
-Date:   Thu, 28 Jan 2021 21:08:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S229786AbhA1X5H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 28 Jan 2021 18:57:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57418 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229530AbhA1X5G (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 28 Jan 2021 18:57:06 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7CC6F64DFD;
+        Thu, 28 Jan 2021 23:56:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611878186;
+        bh=EhGuBnDKNaxrHgKNWWQpNT8NTFDnQMtXzm1iAYTmQJs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=B19c9N+nl1f34HZNJwLBPXwxAD/fmpHIKLEb3Sw+p4zwsVBqi7tKokcI1j+w3+b0v
+         62pgdgaR9ASX3bkz4CmgU6PJXQwXSjsa/7YySXtyoWuWPJLggEqpmYS2k82YXRRauo
+         g+CivWbFDFl9p0fYP+wObTcw0PsaMA25Vv5ZMRvk0x8Magjh2QhPFLy5yJUOkGFy+L
+         kbaMrq4pvi6fMzMG4umo11l4bCJwphWi3r7k8M3n0h2debdTgxIwylHhxq/q1bntPg
+         BLFPTTisHmToUiRdRBlUSEilXKzgwbaky2RAWq2UpBvYISDzDsQL3XngI9GNXLezzf
+         4qBTLwekEVWFg==
+From:   jarkko@kernel.org
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH v5 0/3] KEYS, trusted: a bunch of bug fixes
+Date:   Fri, 29 Jan 2021 01:56:18 +0200
+Message-Id: <20210128235621.127925-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-In-Reply-To: <20210128190750.GA490196@us.ibm.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="0WS2s8Dj7oAQDuvcAexs4Jz4r6U02PT15"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---0WS2s8Dj7oAQDuvcAexs4Jz4r6U02PT15
-Content-Type: multipart/mixed; boundary="C8P4GGVXo3CFpsOyigcYdiPTK9L9mB3i8";
- protected-headers="v1"
-From: =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
-To: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
- Benjamin Herrenschmidt <benh@kernel.crashing.org>,
- Paul Mackerras <paulus@samba.org>, "David S. Miller" <davem@davemloft.net>,
- Jens Axboe <axboe@kernel.dk>, Matt Mackall <mpm@selenic.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, Peter Huewe <peterhuewe@gmx.de>,
- Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Haren Myneni <haren@us.ibm.com>, =?UTF-8?Q?Breno_Leit=c3=a3o?=
- <leitao@debian.org>, Nayna Jain <nayna@linux.ibm.com>,
- Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
- Steven Royer <seroyer@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Cristobal Forno <cforno12@linux.ibm.com>, Jakub Kicinski <kuba@kernel.org>,
- Dany Madden <drt@linux.ibm.com>, Lijun Pan <ljp@linux.ibm.com>,
- Tyrel Datwyler <tyreld@linux.ibm.com>,
- "James E.J. Bottomley" <jejb@linux.ibm.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Michael Cyr <mikecyr@linux.ibm.com>, Jiri Slaby <jirislaby@kernel.org>,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
- linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
- netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org
-Message-ID: <f3655d10-26ba-5f9f-761e-2f48d13d0b11@kleine-koenig.org>
-Subject: Re: [PATCH] vio: make remove callback return void
-References: <20210127215010.99954-1-uwe@kleine-koenig.org>
- <20210128190750.GA490196@us.ibm.com>
-In-Reply-To: <20210128190750.GA490196@us.ibm.com>
+From: Jarkko Sakkinen <jarkko@kernel.org>
 
---C8P4GGVXo3CFpsOyigcYdiPTK9L9mB3i8
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+This patch set contains a bunch of disjoint bug fixes.
 
-Hello Sukadev,
+v5:
+* Call tpm_try_get_ops() and tpm_put_ops() inside tpm2_seal_trusted()
+  and tpm2_unseal_trusted().
+  https://lore.kernel.org/linux-integrity/CAFA6WYO4HJThYHhBxbx0Tr97sF_JFvTBur9uTGSQTtyQaOKpig@mail.gmail.com/
 
-On 1/28/21 8:07 PM, Sukadev Bhattiprolu wrote:
-> Slightly off-topic, should ndo_stop() also return a void? Its return va=
-lue
-> seems to be mostly ignored and [...]
+v4:
+* Do not create stubs for tpm_transmit_cmd(), tpm_try_get_ops() and
+  tpm_put_ops().
+  https://lore.kernel.org/linux-integrity/20201013023927.GA71954@linux.intel.com/
 
-I don't know enough about the network stack to tell. Probably it's a=20
-good idea to start a separate thread for this and address this to the=20
-netdev list only.
+v3:
+* Reordered patches a bit, i.e. trivial fixes in the head and the least
+  trivial in the tail.
+  <no xref>
+* Added the missing "return -ENODEV;" to tpm_transmit_cmd(), when the
+  kernel is compiled without TPM support.
+  https://lore.kernel.org/linux-integrity/202010110927.zsxMpek2-lkp@intel.com/
 
-Best regards
-Uwe
+v2:
+* Fix a kernel test bot warning.
+  https://lore.kernel.org/linux-integrity/202010051152.9kxy43LO-lkp@intel.com/
 
+Jarkko Sakkinen (3):
+  KEYS: trusted: Fix incorrect handling of tpm_get_random()
+  KEYS: trusted: Fix migratable=1 failing
+  KEYS: trusted: Reserve TPM for seal and unseal operations
 
+ drivers/char/tpm/tpm.h                    |  4 ----
+ include/linux/tpm.h                       |  5 ++++-
+ security/keys/trusted-keys/trusted_tpm1.c | 22 +++++++++++++++++----
+ security/keys/trusted-keys/trusted_tpm2.c | 24 ++++++++++++++++++-----
+ 4 files changed, 41 insertions(+), 14 deletions(-)
 
---C8P4GGVXo3CFpsOyigcYdiPTK9L9mB3i8--
+-- 
+2.30.0
 
---0WS2s8Dj7oAQDuvcAexs4Jz4r6U02PT15
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmATGcQACgkQwfwUeK3K
-7AljPggAhaj+JnoGN++1YO/4Nz81FEvRKFR9Eky+A4TCDGs8NvV1eVbhztqchotk
-bm71ZlCLS23+/m5xoA/4bjOHPxc0ETs8V37z86n9Tcf/QTiwI1eN4UYU0l7cPqGO
-cxuT/eLxm7WQ/kKwlJucUUHREWVCXH5NNTw4/zH9r+qc3MVQ++uUrKjtF94cnkGa
-iOO8nW+fhP+e8bVENm+gcTwONaL45UG+qABpFj9mXiWMrA7L0kSEyqG4wUMgeKb3
-YUtPKsAuS8xpUhT5C/zEQJ6qWI3rXkGCPEMUMcpWk+ut4McB9mE+TP6XWC36nfFy
-uq8ofa7nTpO48ZQIj/PU3d+UIzp2eQ==
-=XsiK
------END PGP SIGNATURE-----
-
---0WS2s8Dj7oAQDuvcAexs4Jz4r6U02PT15--
