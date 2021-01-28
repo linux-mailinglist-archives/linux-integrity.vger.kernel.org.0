@@ -2,91 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4216E306D2E
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jan 2021 07:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46434306D30
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Jan 2021 07:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbhA1GA3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 28 Jan 2021 01:00:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37406 "EHLO mail.kernel.org"
+        id S229561AbhA1GBb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 28 Jan 2021 01:01:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37542 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231186AbhA1GAT (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 28 Jan 2021 01:00:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DA4C664DD8;
-        Thu, 28 Jan 2021 05:59:37 +0000 (UTC)
+        id S229462AbhA1GBb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 28 Jan 2021 01:01:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B061961492;
+        Thu, 28 Jan 2021 06:00:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611813578;
-        bh=7ew+zuxpljCmbQtnP0GG0eR+4ZBDfS8L+N7GFr9HejI=;
+        s=k20201202; t=1611813650;
+        bh=teUHGyAjCjPfkBxZ3i0lEJwRQIyDMft5Td689zeTnzg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=muIPRi7P/gxwHftXKemPxajXOSICRoS5VgSttQoGWP9opq4l1wA2Ipxa7CpeAmOFJ
-         p0QZXuMjELKyYAGW2jLc/OVBCV4bLBSiF/DdduDo12UjpnIt77iLxRndL20pzO0PDC
-         IcOvdvD8oaUI5Gm/BT8y6ll2uczkz2wsVVp71Ni7dKXX3nlAxpGbYpvgc60mQ29h1B
-         DyVqTrunFOF41h8GbiSCEEFIsQut8DKOzc9vfSlWBdqaPNmMzWD+8F1LzU2Oe583ar
-         IhLdPoIJWjSFeWgwyWIe8Q2w+MU9gNrQTSiw0ltC7aQqMyZYIPK3jP46P37nVYD+T7
-         +TlbYeKcToZow==
-Date:   Thu, 28 Jan 2021 07:59:34 +0200
+        b=L+/FLBEnsy7zi/vb4OhUiq4SOtifApjlFwsxXY3tb0Qi5Kzui/CjiZsDSUPffQP8z
+         nHv9wXtmRo7prHCPC/rnunZvGW0r9WuCMIr13YIYDT+ZvHCo6h1oHIgfIB8aQMXwvY
+         ARG3t4c45hdCwcYtSxVqFeOC2Y0H9+1eBP8rhn6vxmysoDYe8lv9xtoo6rIzOf/Xz0
+         c8Q2TLhtOG/mzUEfCJ4eehT+WNPEf5nj3Tv1LnSYty1J2+6ma5DqgiMs3IE34bBoyd
+         Bw0nn55UPe6/LYjaoLCTdiVJs6YXI1aN3GccA2Cj1R0ucbnTZCdA4Of71/OJKhCZNd
+         mZLXzyqyVO+8Q==
+Date:   Thu, 28 Jan 2021 08:00:45 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     "Tj (Elloe Linux)" <ml.linux@elloe.vision>,
-        linux-integrity@vger.kernel.org, jsnitsel@redhat.com
-Subject: Re: Bug: TPM returned invalid status
-Message-ID: <YBJSxocry4hn5QV+@kernel.org>
-References: <374e918c-f167-9308-2bea-ae6bc6a3d2e3@elloe.vision>
- <YBGpranyEwXaqAUg@kernel.org>
- <YBGqWp5FqKQJK1is@kernel.org>
- <b1e71d07546ccce7957ead9cc80303734251f6c9.camel@HansenPartnership.com>
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
+Subject: Re: [PATCH v15 0/5] TPM 2.0 trusted key rework
+Message-ID: <YBJTDfUCItiuzr08@kernel.org>
+References: <20210127190617.17564-1-James.Bottomley@HansenPartnership.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b1e71d07546ccce7957ead9cc80303734251f6c9.camel@HansenPartnership.com>
+In-Reply-To: <20210127190617.17564-1-James.Bottomley@HansenPartnership.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 10:11:56AM -0800, James Bottomley wrote:
-> On Wed, 2021-01-27 at 20:00 +0200, Jarkko Sakkinen wrote:
-> > On Wed, Jan 27, 2021 at 07:58:08PM +0200, Jarkko Sakkinen wrote:
-> > > On Mon, Jan 25, 2021 at 09:00:54AM +0000, Tj (Elloe Linux) wrote:
-> > > > Seeing this on Lenovo E495's that have:
-> > > > 
-> > > > AMD Ryzen 7 3700U with Radeon Vega Mobile Gfx
-> > > > 
-> > > > Linux version 5.11.0-rc4+ (tj@elloe000) (gcc (Ubuntu
-> > > > 9.3.0-17ubuntu1~20.04) 9.3.0, GNU ld (GNU Binutils for Ubuntu)
-> > > > 2.34) #12 SMP PREEMPT Sun Jan 24 11:28:01 GMT 2021
-> > > > Command line: BOOT_IMAGE=/vmlinuz-5.11.0-rc4+
-> > > > root=/dev/mapper/ELLOE000-rootfs ro acpi_osi=! "acpi_osi=Windows
-> > > > 2016" systemd.unified_cgroup_hierarchy=1 nosplash
-> > > > ...
-> > > > efi: EFI v2.70 by Lenovo
-> > > > 
-> > > > efi: ACPI=0xbddfd000 ACPI 2.0=0xbddfd014 TPMFinalLog=0xbdc2d000
-> > > > SMBIOS=0xba4d7000 SMBIOS 3.0=0xba4ca000 MEMATTR=0xb5611018
-> > > > ESRT=0xb9075000 RNG=0xba5c2598 TPMEventLog=0xb13ae
-> > > > 018
-> > > > ...
-> > > > DMI: LENOVO 20NECTO1WW/20NECTO1WW, BIOS R11ET32W (1.12 )
-> > > > 12/23/2019
-> > > > ...
-> > > > tpm_tis NTC0702:00: 2.0 TPM (device-id 0xFC, rev-id 1)
-> > > > ------------[ cut here ]------------
-> > > > TPM returned invalid status
-> > > > WARNING: CPU: 3 PID: 1 at drivers/char/tpm/tpm_tis_core.c:249
-> > > 
-> > > There's a patch set in cycle that should fix this:
-> > > 
-> > > https://lore.kernel.org/linux-integrity/20201001180925.13808-1-James.Bottomley@HansenPartnership.com/
-> > > 
-> > > James, where are we at with this?
-> > 
-> > I'm interested because I'm yet to send my pr and this is generating
-> > constantly bug reports.
+On Wed, Jan 27, 2021 at 11:06:12AM -0800, James Bottomley wrote:
+> v15: fix 0day sign issue and add reviews and testeds
 > 
-> It's part of the enable interrupts series, which there's a lot of
-> discussion over.  However, that single patch can be broken out of the
-> series if you like.  The specific blocker was the screaming interrupt
-> on the Lenovo that Jerry was looking at.  He propose a quirk to fix its
-> so perhaps we're now ready to move the entire series forward?
+> General cover letter minus policy bit:
+> 
+> This patch updates the trusted key code to export keys in the ASN.1
+> format used by current TPM key tools (openssl_tpm2_engine and
+> openconnect).  The current code will try to load keys containing
+> policy, but being unable to formulate the policy commands necessary to
+> load them, the unseal will always fail unless the policy is executed
+> in user space and a pre-formed policy session passed in.
+> 
+> The key format is designed to be compatible with our two openssl
+> engine implementations as well as with the format used by openconnect.
+> I've added seal/unseal to my engine so I can use it for
+> interoperability testing and I'll later use this for sealed symmetric
+> keys via engine:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/
+> 
+> James
+> 
+> ---
+> 
+> James Bottomley (5):
+>   lib: add ASN.1 encoder
+>   oid_registry: Add TCG defined OIDS for TPM keys
+>   security: keys: trusted: fix TPM2 authorizations
+>   security: keys: trusted: use ASN.1 TPM2 key format for the blobs
+>   security: keys: trusted: Make sealed key properly interoperable
 
-Why only 1/5 and not 1/5 and 2/5?
+AFAIK, bug fixes should merged before functional changes and migratable
+flag has a regression:
+
+https://marc.info/?l=linux-integrity&m=160255753405345
+
+I'll send an update to this series.
 
 /Jarkko
+
+> 
+>  .../security/keys/trusted-encrypted.rst       |  58 +++
+>  include/keys/trusted-type.h                   |   2 +
+>  include/linux/asn1_encoder.h                  |  32 ++
+>  include/linux/oid_registry.h                  |   5 +
+>  include/linux/tpm.h                           |   2 +
+>  lib/Kconfig                                   |   3 +
+>  lib/Makefile                                  |   1 +
+>  lib/asn1_encoder.c                            | 454 ++++++++++++++++++
+>  security/keys/Kconfig                         |   3 +
+>  security/keys/trusted-keys/Makefile           |   4 +-
+>  security/keys/trusted-keys/tpm2key.asn1       |  11 +
+>  security/keys/trusted-keys/trusted_tpm1.c     |  34 +-
+>  security/keys/trusted-keys/trusted_tpm2.c     | 269 ++++++++++-
+>  13 files changed, 846 insertions(+), 32 deletions(-)
+>  create mode 100644 include/linux/asn1_encoder.h
+>  create mode 100644 lib/asn1_encoder.c
+>  create mode 100644 security/keys/trusted-keys/tpm2key.asn1
+> 
+> -- 
+> 2.26.2
+> 
+> 
