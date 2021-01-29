@@ -2,125 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63233309050
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 Jan 2021 23:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0D4309063
+	for <lists+linux-integrity@lfdr.de>; Sat, 30 Jan 2021 00:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbhA2Wuq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 29 Jan 2021 17:50:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60864 "EHLO mail.kernel.org"
+        id S231367AbhA2W7w (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 29 Jan 2021 17:59:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33536 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231623AbhA2Wuo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 29 Jan 2021 17:50:44 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2256064DE2;
-        Fri, 29 Jan 2021 22:50:02 +0000 (UTC)
+        id S232747AbhA2W7w (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 29 Jan 2021 17:59:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D336264DED;
+        Fri, 29 Jan 2021 22:59:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611960603;
-        bh=zXm0xZuG9OSEEtoZN5Qt00ROf9jG6ey6+nY9VvgoWrQ=;
+        s=k20201202; t=1611961151;
+        bh=RMzrLYS0dhIFza5IZGjzDLcAAAHAc2oc8FO0sqO3xJY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BMhpzb8CfhxkKEC+gxSq0Iymiz08WhyWdMB/VeM+OjVsUzv2kWCo0vcIB1ek8bjhx
-         GJ+sYPdaRMf/0+Qat0fJVOXMJduukJglLfh90+YidwqmkPByeSM1YFxO3jqmhK+PoX
-         dJpuAviGp2pB6NpDNMgSn6Cj14pEhFMUOEZNtUwki1djvXgUVf7ImF0PsXSHSr4988
-         I5u/pTevihPaETPn60QJ5fWPi4zihIy4mu3yuAAW+XqZ9Tyi8WUgRf/wzV3k6JL3Le
-         /4AhjbGCupsZ37h+xEJG2JJN0f8KHeZbOSzt8sCDBfrCVWJgmPoVqRotm1Ya2dpVON
-         MkYdA584TmyEw==
-Date:   Sat, 30 Jan 2021 00:49:58 +0200
+        b=evJaiOBztm/TbR7DtHnUCr6qIvlyko0D3G4vNnVnO7DBrXSaORnY1ZgLAjsKPaKZp
+         AI1QhjWborSuJPu1aQPlJOz6e7MD7NRiv4k3Cf8hRaaYMw0VM6g70vpPg1LlgYgByB
+         OdW0nezuxevHo6/HMHVRHUQDqMGMfFjCrKHHYfgtdMhWL/3hG2YYJme8VeL9ED+K6f
+         57NoS1q8U9gTqKUUqjmQTKjRGg7/pS8KbhgYxFsHzidu06zj4S1Ym8t/SP/YqOHxw2
+         Pm1Inq0FoGk4xcwrjDlfxB2XQzEVZUtNmXTdas5VlyoDWcZTImYdSOJRrSL+y3n+3K
+         XFILrEDCqy8Hg==
+Date:   Sat, 30 Jan 2021 00:59:06 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Lukasz Majczak <lma@semihalf.com>, Peter Huewe <peterhuewe@gmx.de>,
+To:     =?utf-8?Q?=C5=81ukasz?= Majczak <lma@semihalf.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         Radoslaw Biernacki <rad@semihalf.com>,
         Marcin Wojtas <mw@semihalf.com>,
-        Alex Levin <levinale@google.com>
+        Alex Levin <levinale@google.com>,
+        James.Bottomley@hansenpartnership.com
 Subject: Re: [PATCH] tpm_tis: Add missing start/stop_tpm_chip calls
-Message-ID: <YBSRFsTNjadQMndD@kernel.org>
+Message-ID: <YBSTOrlgTPpzoblY@kernel.org>
 References: <20210123014247.989368-1-lma@semihalf.com>
  <20210125171846.GA31929@roeck-us.net>
+ <CAFJ_xboNDcp-XrxfbrBjqTWjLZUdVWe1OJi4KK==ij+yivFeHA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210125171846.GA31929@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFJ_xboNDcp-XrxfbrBjqTWjLZUdVWe1OJi4KK==ij+yivFeHA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 09:18:46AM -0800, Guenter Roeck wrote:
-> Hi Lukasz,
+On Tue, Jan 26, 2021 at 04:46:07PM +0100, Łukasz Majczak wrote:
+> Hi Jarkko, Guenter
 > 
-> On Sat, Jan 23, 2021 at 02:42:47AM +0100, Lukasz Majczak wrote:
-> > There is a missing call to start_tpm_chip before the call to
-> > the tpm_get_timeouts() and tpm_tis_probe_irq_single(). As the current
-> > approach maight work for tpm2, it fails for tpm1.x - in that case
-> > call to tpm_get_timeouts() or tpm_tis_probe_irq_single() tries to
-> > transmit TPM commands on a disabled chip what what doesn't succeed
+> Yes, here are the logs when failure occurs -
+> https://gist.github.com/semihalf-majczak-lukasz/1575461f585f1e7fb1e9366b8eceaab9
+> Look for a phrase "TPM returned invalid status"
 > 
-> s/what what/what/
-
-s/maight/might/
-
-Also, would be nice to have the capatalization of acronyms correct
-and consistent. E.g. tpm1.x should be rather written as "TPM 1.x
-chips".
-
-It's also incorrect to state that something fails for TPM 1.x chips,
-unless you can somehow make a sense that every single TPM 1.x at wild
-fails, which probably is not true.
-
-> > and in turn causes tpm_tis_core_init() to fail.
-> > Tested on Samsung Chromebook Pro (Caroline).
-
-Anyone can tell me what does Caroline mean anyway?
-
-> > 
-> > Signed-off-by: Lukasz Majczak <lma@semihalf.com>
-> > ---
-> >  drivers/char/tpm/tpm_tis_core.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> > index 92c51c6cfd1b..ff0e5fe46a9d 100644
-> > --- a/drivers/char/tpm/tpm_tis_core.c
-> > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > @@ -1063,12 +1063,16 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
-> >  	init_waitqueue_head(&priv->read_queue);
-> >  	init_waitqueue_head(&priv->int_queue);
-> >  	if (irq != -1) {
-> > +		rc = tpm_chip_start(chip);
+> Guenter - good suggestion - I will try to keep it as tight as possible.
 > 
-> Unless I am missing something, the underlying problem seems to be
-> the calls to tpm1_getcap(). From other code calling this function,
-> it looks like it may only require tpm_clk_enable() to work.
+> Best regards,
+> Lukasz
 
-I don't claim to be bus expert but afaik CLKRUN is used with to power
-on/off clock, when using LPC bus.
+Is it possible for you try out with linux-next? Thanks. It's a known
+issue, which ought to be fixed by now.
 
-Also, TPM interface specification speaks about CLKRUN in the section
-6.3 "TPM LPC Hardware Protocol".
-
-> With that in mind, would it possibly be better to call tpm_clk_enable()
-> and tpm_clk_disable() around the calls to tpm1_getcap(), ie in
-> tpm1_get_timeouts() and in tpm_tis_gen_interrupt() ?
-> 
-> This would avoid the unnecessary calls to tpm_chip_start() and
-> tpm_chip_stop() for tpm2 chips.
-
-Not enough information about hardware and no klog. Cannot make much
-conclusions with the information available.
-
-> Thanks,
-> Guenter
-
-Off-topic: I noticed some dumb code in tpm_tis_core.c:
-
-	if (chip->ops->clk_enable != NULL)
-		chip->ops->clk_enable(chip, false);
-
-These should be definitely changed as:
-
-       tpm_tis_clkrun_enable(chip, false);
-
-->clk_enable() should be only used in tpm-interface.c.
-
-Not a bug, just really stupid code (and harder to trace).
+The log message is harmless, it'a warning not panic, and does not
+endanger system stability. WARN()'s always dump stack trace. No oops
+is happening.
 
 /Jarkko
