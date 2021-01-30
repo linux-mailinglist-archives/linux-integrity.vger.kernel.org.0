@@ -2,42 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EB8309867
-	for <lists+linux-integrity@lfdr.de>; Sat, 30 Jan 2021 22:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F78330987B
+	for <lists+linux-integrity@lfdr.de>; Sat, 30 Jan 2021 22:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbhA3VPU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 30 Jan 2021 16:15:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54632 "EHLO mail.kernel.org"
+        id S232013AbhA3V2o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 30 Jan 2021 16:28:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55798 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230036AbhA3VPT (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 30 Jan 2021 16:15:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B713864DE4;
-        Sat, 30 Jan 2021 21:14:38 +0000 (UTC)
+        id S231970AbhA3V2n (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 30 Jan 2021 16:28:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BD36464E15;
+        Sat, 30 Jan 2021 21:28:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612041279;
-        bh=H3Jm+cFVvLLUvGvLepRUBygWjfm1QjCsaCYM3g6rqSE=;
+        s=k20201202; t=1612042083;
+        bh=LWAUUOMJxMF/jjGGiyOe5lWXDEo2fMBk8QuQVYWzdnQ=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Ew+HK7lY9OTnJQQmn1YCp79VzMNdM+PpTs5I6jwxHUaasZ353Aefef7yP8gyYEAot
-         qYF2SPWC9CbV9pIzOiN6WkeXpqjGTyD8T4AvEKJ1+nWyk892NV0cBZsMbsCP+TBIhj
-         MKMHWh7fT+R0lXJU+Mn3GayDW4cLbzSNt1Z2LEMusqZKoDi728OBCwBSSlDpUruGuU
-         CpNSBxpTO/eelhKb70hSuB1s6LzQuVeF+z5ZqsCDNcQyDt8MGH5KDTzq8Bumuy8Nh5
-         l2pSULkm56a7FfCIYdPGAJZ5n6sKscQz2GP4aW+Rmmu+UZYN+qUVYCqXB7lDj/wW6m
-         SmXM0S5wcsDEw==
-Message-ID: <4718c02f91c24085cf0c94290af628c5bc51beab.camel@kernel.org>
-Subject: Re: [PATCH v2] tpm: ibmvtpm: fix error return code in
- tpm_ibmvtpm_probe()
+        b=V6l+T18uJAOQ2eB2aiMhcq6mfHLzuTLqwX8MprZnYP7pbqcikBThmFt1byoTIwQHM
+         Z7YMRldjCyXI1yu7/0QX+YQ5O/ou1PXQ3xm0CzToWNWUR8mbXDZ62gMhBeD/LwWiKX
+         eyPOPg0mRh4FpYhEstc/GruLmRJy9TXLz4zVM/HELNjTTGerNAA9VgqvwHKwxA+Em+
+         rsPK6iaP9O2QVE9h677ZbtaBr/Lb3g3T6oahffFJSmA18xe2e5n0qi/PQi8AoahRHN
+         gdovgP63ckDq388sSoNDJZq3hhA5pNWT7rI1CdsjVeFvPitnDjih9ZLXAtfYRPHiLm
+         8ykeRgX9ns3EQ==
+Message-ID: <1a2bb90a6468093aa128940a52ad8e38ea9538ab.camel@kernel.org>
+Subject: Re: [PATCH v5 3/3] KEYS: trusted: Reserve TPM for seal and unseal
+ operations
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        linux-kernel@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang Hai <wanghai38@huawei.com>
-Date:   Sat, 30 Jan 2021 23:14:34 +0200
-In-Reply-To: <262c3095-d4c0-f124-c8bc-e99685cbe572@linux.ibm.com>
-References: <20210126014753.340299-1-stefanb@linux.vnet.ibm.com>
-         <YBRHfZeqAirQolIN@kernel.org>
-         <262c3095-d4c0-f124-c8bc-e99685cbe572@linux.ibm.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-integrity@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        stable <stable@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        James Bottomley <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Date:   Sat, 30 Jan 2021 23:27:58 +0200
+In-Reply-To: <CAFA6WYOAbHV=sOxuUdJq91sZbKDMbo6D5KXcSp9ix0PWLpSdaA@mail.gmail.com>
+References: <20210128235621.127925-1-jarkko@kernel.org>
+         <20210128235621.127925-4-jarkko@kernel.org>
+         <CAFA6WYOAbHV=sOxuUdJq91sZbKDMbo6D5KXcSp9ix0PWLpSdaA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.38.3 
@@ -46,32 +51,45 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2021-01-29 at 13:57 -0500, Stefan Berger wrote:
-> On 1/29/21 12:35 PM, Jarkko Sakkinen wrote:
-> > On Mon, Jan 25, 2021 at 08:47:53PM -0500, Stefan Berger wrote:
-> > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > >=20
-> > > Return error code -ETIMEDOUT rather than '0' when waiting for the
-> > > rtce_buf to be set has timed out.
-> > >=20
-> > > Fixes: d8d74ea3c002 ("tpm: ibmvtpm: Wait for buffer to be set before =
-proceeding")
-> > > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > > Signed-off-by: Wang Hai <wanghai38@huawei.com>
-> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > ---
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+On Fri, 2021-01-29 at 14:44 +0530, Sumit Garg wrote:
+> On Fri, 29 Jan 2021 at 05:26, <jarkko@kernel.org> wrote:
 > >=20
-> > Thanks! Should I add
+> > From: Jarkko Sakkinen <jarkko@kernel.org>
 > >=20
-> > Cc: stable@vger.kernel.org=C2=A0to this?
+> > When TPM 2.0 trusted keys code was moved to the trusted keys subsystem,
+> > the operations were unwrapped from tpm_try_get_ops() and tpm_put_ops(),
+> > which are used to take temporarily the ownership of the TPM chip. The
+> > ownership is only taken inside tpm_send(), but this is not sufficient,
+> > as in the key load TPM2_CC_LOAD, TPM2_CC_UNSEAL and TPM2_FLUSH_CONTEXT
+> > need to be done as a one single atom.
+> >=20
+> > Take the TPM chip ownership before sending anything with
+> > tpm_try_get_ops() and tpm_put_ops(), and use tpm_transmit_cmd() to send
+> > TPM commands instead of tpm_send(), reverting back to the old behaviour=
+.
+> >=20
+> > Fixes: 2e19e10131a0 ("KEYS: trusted: Move TPM2 trusted keys code")
+> > Reported-by: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.=
+com>
+> > Cc: stable@vger.kernel.org
+> > Cc: David Howells <dhowells@redhat.com>
+> > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > Cc: Sumit Garg <sumit.garg@linaro.org>
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > =C2=A0drivers/char/tpm/tpm.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0 4 ----
+> > =C2=A0include/linux/tpm.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 |=C2=A0 5 ++++-
+> > =C2=A0security/keys/trusted-keys/trusted_tpm2.c | 24 ++++++++++++++++++=
+-----
+> > =C2=A03 files changed, 23 insertions(+), 10 deletions(-)
+> >=20
 >=20
-> Yes, that would be good! Thank you!
+> Acked-by: Sumit Garg <sumit.garg@linaro.org>
 
-
-OK, it's applied.
-
-
-> =C2=A0=C2=A0=C2=A0 Stefan
+Thanks.
 
 /Jarkko
