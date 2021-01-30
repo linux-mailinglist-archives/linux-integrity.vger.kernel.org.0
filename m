@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDFD309122
-	for <lists+linux-integrity@lfdr.de>; Sat, 30 Jan 2021 02:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FCA309437
+	for <lists+linux-integrity@lfdr.de>; Sat, 30 Jan 2021 11:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbhA3A5j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 29 Jan 2021 19:57:39 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:59522 "EHLO
+        id S232072AbhA3KQa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 30 Jan 2021 05:16:30 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:59524 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbhA3A4Q (ORCPT
+        with ESMTP id S232990AbhA3A4Q (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 29 Jan 2021 19:56:16 -0500
 Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 233C620B6C40;
+        by linux.microsoft.com (Postfix) with ESMTPSA id C0E1A20B6C41;
         Fri, 29 Jan 2021 16:45:28 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 233C620B6C40
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C0E1A20B6C41
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1611967528;
-        bh=Qsm5xaSqX4CxWPDSOE+2LngnqgNIktKRGDQRkYEnpr8=;
+        s=default; t=1611967529;
+        bh=2j8Pk/tJozQLAKykulBJht0UA8oi2+j9h5xFmfPQnxI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ODI6B0nKtYsFP1dkXOyNo9r+auY0UYa99sFNj+F4LCA1ImMY1u6W/QnFvC83nQH2L
-         rMyZUdHxfjAIJpuGLZzXCY/XDYZokfCEqJbVTW1w2H1XbPiOMV0ATrrCGp86kutggT
-         yFEzY8bDR59YM60i0bow4720oUw/mwMlm0Pal5UE=
+        b=K2FGOBBrSEL+7wMIhzX9K3uPjaMIbgGqBp4xPb/CEbRgfFmL5Wh7UAQgUpUOXmzAm
+         X6FqnOEZT3yIjMVKU8u+ORxlU2mbFeSVIcO1pGmAnKFIxS7o1LETLhbxKjCxjdont6
+         cgcXMZXYgVRRR12eq21IacrcmYNzVV66wuLOCwlg=
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
 To:     zohar@linux.ibm.com, stephen.smalley.work@gmail.com,
         casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
@@ -31,9 +31,9 @@ Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
         selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, dm-devel@redhat.com
-Subject: [PATCH 1/3] IMA: add policy condition to measure duplicate critical data
-Date:   Fri, 29 Jan 2021 16:45:17 -0800
-Message-Id: <20210130004519.25106-2-tusharsu@linux.microsoft.com>
+Subject: [PATCH 2/3] IMA: update functions to read allow_dup policy condition
+Date:   Fri, 29 Jan 2021 16:45:18 -0800
+Message-Id: <20210130004519.25106-3-tusharsu@linux.microsoft.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210130004519.25106-1-tusharsu@linux.microsoft.com>
 References: <20210130004519.25106-1-tusharsu@linux.microsoft.com>
@@ -41,130 +41,151 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA needs to support duplicate measurements of integrity
-critical data to accurately determine the current state of that data
-on the system.  Further, since measurement of duplicate data is not
-required for all the use cases, it needs to be policy driven.
-
-Define "allow_dup", a new IMA policy condition, for the IMA func
-CRITICAL_DATA to allow duplicate buffer measurement of integrity
+IMA functions ima_get_action() and ima_match_policy() do not consume the
+policy condition to allow measuring duplicate entries for integrity
 critical data.
 
-Limit the ability to measure duplicate buffer data when action is
-"measure" and func is CRITICAL_DATA.
+Update ima_get_action() and ima_match_policy() to consume the IMA policy
+condition to measure duplicate buffer entries for integrity critical
+data.
 
 Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 ---
- Documentation/ABI/testing/ima_policy |  4 +++-
- security/integrity/ima/ima_policy.c  | 24 ++++++++++++++++++++++--
- 2 files changed, 25 insertions(+), 3 deletions(-)
+ security/integrity/ima/ima.h          | 4 ++--
+ security/integrity/ima/ima_api.c      | 6 ++++--
+ security/integrity/ima/ima_appraise.c | 2 +-
+ security/integrity/ima/ima_main.c     | 6 +++---
+ security/integrity/ima/ima_policy.c   | 7 ++++++-
+ 5 files changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index bc8e1cbe5e61..9598287e3bbf 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -27,7 +27,7 @@ Description:
- 			lsm:	[[subj_user=] [subj_role=] [subj_type=]
- 				 [obj_user=] [obj_role=] [obj_type=]]
- 			option:	[[appraise_type=]] [template=] [permit_directio]
--				[appraise_flag=] [keyrings=]
-+				[appraise_flag=] [keyrings=] [allow_dup]
- 		  base:
- 			func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK]MODULE_CHECK]
- 			        [FIRMWARE_CHECK]
-@@ -55,6 +55,8 @@ Description:
- 			label:= [selinux]|[kernel_info]|[data_label]
- 			data_label:= a unique string used for grouping and limiting critical data.
- 			For example, "selinux" to measure critical data for SELinux.
-+			allow_dup allows measurement of duplicate data.  Only valid
-+			when action is "measure" and func is CRITICAL_DATA.
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index aa312472c7c5..59324173497f 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -257,7 +257,7 @@ static inline void ima_process_queued_keys(void) {}
+ int ima_get_action(struct inode *inode, const struct cred *cred, u32 secid,
+ 		   int mask, enum ima_hooks func, int *pcr,
+ 		   struct ima_template_desc **template_desc,
+-		   const char *func_data);
++		   const char *func_data, bool *allow_dup);
+ int ima_must_measure(struct inode *inode, int mask, enum ima_hooks func);
+ int ima_collect_measurement(struct integrity_iint_cache *iint,
+ 			    struct file *file, void *buf, loff_t size,
+@@ -286,7 +286,7 @@ const char *ima_d_path(const struct path *path, char **pathbuf, char *filename);
+ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
+ 		     enum ima_hooks func, int mask, int flags, int *pcr,
+ 		     struct ima_template_desc **template_desc,
+-		     const char *func_data);
++		     const char *func_data, bool *allow_dup);
+ void ima_init_policy(void);
+ void ima_update_policy(void);
+ void ima_update_policy_flag(void);
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index 1dd70dc68ffd..d273373e6be9 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -171,6 +171,8 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
+  * @pcr: pointer filled in if matched measure policy sets pcr=
+  * @template_desc: pointer filled in if matched measure policy sets template=
+  * @func_data: func specific data, may be NULL
++ * @allow_dup: pointer filled in to decide if a duplicate buffer entry
++ *             should be measured
+  *
+  * The policy is defined in terms of keypairs:
+  *		subj=, obj=, type=, func=, mask=, fsmagic=
+@@ -186,14 +188,14 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
+ int ima_get_action(struct inode *inode, const struct cred *cred, u32 secid,
+ 		   int mask, enum ima_hooks func, int *pcr,
+ 		   struct ima_template_desc **template_desc,
+-		   const char *func_data)
++		   const char *func_data, bool *allow_dup)
+ {
+ 	int flags = IMA_MEASURE | IMA_AUDIT | IMA_APPRAISE | IMA_HASH;
  
- 		  default policy:
- 			# PROC_SUPER_MAGIC
+ 	flags &= ima_policy_flag;
+ 
+ 	return ima_match_policy(inode, cred, secid, func, mask, flags, pcr,
+-				template_desc, func_data);
++				template_desc, func_data, allow_dup);
+ }
+ 
+ /*
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index 46ffa38bab12..e317a7698a47 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -77,7 +77,7 @@ int ima_must_appraise(struct inode *inode, int mask, enum ima_hooks func)
+ 
+ 	security_task_getsecid(current, &secid);
+ 	return ima_match_policy(inode, current_cred(), secid, func, mask,
+-				IMA_APPRAISE | IMA_HASH, NULL, NULL, NULL);
++				IMA_APPRAISE | IMA_HASH, NULL, NULL, NULL, NULL);
+ }
+ 
+ static int ima_fix_xattr(struct dentry *dentry,
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 6a429846f90a..2774139845b6 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -219,7 +219,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	 * Included is the appraise submask.
+ 	 */
+ 	action = ima_get_action(inode, cred, secid, mask, func, &pcr,
+-				&template_desc, NULL);
++				&template_desc, NULL, NULL);
+ 	violation_check = ((func == FILE_CHECK || func == MMAP_CHECK) &&
+ 			   (ima_policy_flag & IMA_MEASURE));
+ 	if (!action && !violation_check)
+@@ -432,7 +432,7 @@ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
+ 	security_task_getsecid(current, &secid);
+ 	inode = file_inode(vma->vm_file);
+ 	action = ima_get_action(inode, current_cred(), secid, MAY_EXEC,
+-				MMAP_CHECK, &pcr, &template, 0);
++				MMAP_CHECK, &pcr, &template, 0, NULL);
+ 
+ 	/* Is the mmap'ed file in policy? */
+ 	if (!(action & (IMA_MEASURE | IMA_APPRAISE_SUBMASK)))
+@@ -865,7 +865,7 @@ void process_buffer_measurement(struct inode *inode, const void *buf, int size,
+ 	if (func) {
+ 		security_task_getsecid(current, &secid);
+ 		action = ima_get_action(inode, current_cred(), secid, 0, func,
+-					&pcr, &template, func_data);
++					&pcr, &template, func_data, NULL);
+ 		if (!(action & IMA_MEASURE))
+ 			return;
+ 	}
 diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 9b45d064a87d..b89eb768dd05 100644
+index b89eb768dd05..4147c677eb24 100644
 --- a/security/integrity/ima/ima_policy.c
 +++ b/security/integrity/ima/ima_policy.c
-@@ -35,6 +35,7 @@
- #define IMA_FSNAME	0x0200
- #define IMA_KEYRINGS	0x0400
- #define IMA_LABEL	0x0800
-+#define IMA_ALLOW_DUP	0x1000
+@@ -644,6 +644,8 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
+  * @pcr: set the pcr to extend
+  * @template_desc: the template that should be used for this rule
+  * @func_data: func specific data, may be NULL
++ * @allow_dup: pointer filled in to decide if a duplicate buffer entry
++ *             should be measured
+  *
+  * Measure decision based on func/mask/fsmagic and LSM(subj/obj/type)
+  * conditions.
+@@ -655,7 +657,7 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
+ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
+ 		     enum ima_hooks func, int mask, int flags, int *pcr,
+ 		     struct ima_template_desc **template_desc,
+-		     const char *func_data)
++		     const char *func_data, bool *allow_dup)
+ {
+ 	struct ima_rule_entry *entry;
+ 	int action = 0, actmask = flags | (flags << 1);
+@@ -673,6 +675,9 @@ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
+ 				     func_data))
+ 			continue;
  
- #define UNKNOWN		0
- #define MEASURE		0x0001	/* same as IMA_MEASURE */
-@@ -87,6 +88,7 @@ struct ima_rule_entry {
- 	char *fsname;
- 	struct ima_rule_opt_list *keyrings; /* Measure keys added to these keyrings */
- 	struct ima_rule_opt_list *label; /* Measure data grouped under this label */
-+	bool allow_dup; /* Allow duplicate buffer entry measurement */
- 	struct ima_template_desc *template;
- };
- 
-@@ -942,7 +944,7 @@ enum {
- 	Opt_uid_lt, Opt_euid_lt, Opt_fowner_lt,
- 	Opt_appraise_type, Opt_appraise_flag,
- 	Opt_permit_directio, Opt_pcr, Opt_template, Opt_keyrings,
--	Opt_label, Opt_err
-+	Opt_label, Opt_allow_dup, Opt_err
- };
- 
- static const match_table_t policy_tokens = {
-@@ -980,6 +982,7 @@ static const match_table_t policy_tokens = {
- 	{Opt_template, "template=%s"},
- 	{Opt_keyrings, "keyrings=%s"},
- 	{Opt_label, "label=%s"},
-+	{Opt_allow_dup, "allow_dup"},
- 	{Opt_err, NULL}
- };
- 
-@@ -1148,7 +1151,7 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
- 			return false;
- 
- 		if (entry->flags & ~(IMA_FUNC | IMA_UID | IMA_PCR |
--				     IMA_LABEL))
-+				     IMA_LABEL | IMA_ALLOW_DUP))
- 			return false;
- 
- 		if (ima_rule_contains_lsm_cond(entry))
-@@ -1184,6 +1187,7 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 	entry->uid_op = &uid_eq;
- 	entry->fowner_op = &uid_eq;
- 	entry->action = UNKNOWN;
-+	entry->allow_dup = false;
- 	while ((p = strsep(&rule, " \t")) != NULL) {
- 		substring_t args[MAX_OPT_ARGS];
- 		int token;
-@@ -1375,6 +1379,19 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 
- 			entry->flags |= IMA_LABEL;
- 			break;
-+		case Opt_allow_dup:
-+			ima_log_string(ab, "allow_dup", NULL);
++		if ((allow_dup) && (func == CRITICAL_DATA))
++			*allow_dup = entry->allow_dup;
 +
-+			if ((entry->func != CRITICAL_DATA) ||
-+			    (entry->action != MEASURE)) {
-+				result = -EINVAL;
-+				break;
-+			}
-+
-+			entry->allow_dup = true;
-+
-+			entry->flags |= IMA_ALLOW_DUP;
-+			break;
- 		case Opt_fsuuid:
- 			ima_log_string(ab, "fsuuid", args[0].from);
+ 		action |= entry->flags & IMA_ACTION_FLAGS;
  
-@@ -1761,6 +1778,9 @@ int ima_policy_show(struct seq_file *m, void *v)
- 		seq_puts(m, " ");
- 	}
- 
-+	if (entry->flags & IMA_ALLOW_DUP)
-+		seq_puts(m, "allow_dup");
-+
- 	if (entry->flags & IMA_PCR) {
- 		snprintf(tbuf, sizeof(tbuf), "%d", entry->pcr);
- 		seq_printf(m, pt(Opt_pcr), tbuf);
+ 		action |= entry->action & IMA_DO_MASK;
 -- 
 2.17.1
 
