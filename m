@@ -2,127 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF65309DA6
-	for <lists+linux-integrity@lfdr.de>; Sun, 31 Jan 2021 16:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBDE309D86
+	for <lists+linux-integrity@lfdr.de>; Sun, 31 Jan 2021 16:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbhAaPhJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 31 Jan 2021 10:37:09 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64270 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232246AbhAaM6H (ORCPT
+        id S231618AbhAaPYy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 31 Jan 2021 10:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231625AbhAaOO5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 31 Jan 2021 07:58:07 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10VCZG2a153086;
-        Sun, 31 Jan 2021 07:52:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Q1TSA2RQ0NpJwZDrH5UamqkQnZRNx8wNLMS4Vwwns0o=;
- b=jsdAxKbqMNEphl4HLGZK/d4uyh/olanX7LdgMLHaJeKTxGzrX7zxpXO3WAPVTq2feCBV
- Ao53yNXiA2khAvjldTiffDhioAuQeTPLm3ftAlkTZxK3sYOYoSbyEoeEXXrWFqyyIok4
- tN1nznZfs0ZOHqkMGta/cCNxFSjTyeYDHrk+OX9AmUes2a9SfdvPlimjZTZ5EoMgidfh
- JxQObU3pz2DTElsZ+VYCGxpPaRVFfLjaZIbcTnoTRSa4pP48VT6p0Ns/xkhASpb4+fUb
- aZf3w5/5+upikmZNPKYNjbO7vFC4JKMHkwKvfYRXXCBdHpELQlC37vmS/A60ZbYAIhGF ww== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36dv7h0jtq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 31 Jan 2021 07:52:51 -0500
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10VCnEOf188744;
-        Sun, 31 Jan 2021 07:52:51 -0500
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36dv7h0jtf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 31 Jan 2021 07:52:50 -0500
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10VCqmU0026354;
-        Sun, 31 Jan 2021 12:52:48 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 36cy37rgkb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 31 Jan 2021 12:52:48 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10VCqkSx15794562
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 31 Jan 2021 12:52:46 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4792DA405B;
-        Sun, 31 Jan 2021 12:52:46 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 80323A4054;
-        Sun, 31 Jan 2021 12:52:43 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.28.14])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 31 Jan 2021 12:52:43 +0000 (GMT)
-Message-ID: <f7c48b191cdb549197a51d7e55c63b13c503e182.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 3/3] KEYS: trusted: Reserve TPM for seal and unseal
- operations
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org
-Cc:     "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
+        Sun, 31 Jan 2021 09:14:57 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD16CC06174A
+        for <linux-integrity@vger.kernel.org>; Sun, 31 Jan 2021 06:14:15 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jlu@pengutronix.de>)
+        id 1l6DUK-0003wo-6u; Sun, 31 Jan 2021 15:14:04 +0100
+Received: from localhost ([127.0.0.1])
+        by ptx.hi.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <jlu@pengutronix.de>)
+        id 1l6DUJ-0004cG-5y; Sun, 31 Jan 2021 15:14:03 +0100
+Message-ID: <8b9477e150d7c939dc0def3ebb4443efcc83cd85.camel@pengutronix.de>
+Subject: Re: Migration to trusted keys: sealing user-provided key?
+From:   Jan =?ISO-8859-1?Q?L=FCbbe?= <jlu@pengutronix.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
         James Bottomley <jejb@linux.ibm.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Date:   Sun, 31 Jan 2021 07:52:42 -0500
-In-Reply-To: <fe83527d3745b5f071b2807d724f27f7632ed8cb.camel@kernel.org>
-References: <20210128235621.127925-1-jarkko@kernel.org>
-         <20210128235621.127925-4-jarkko@kernel.org>
-         <6459b955f8cb05dae7d15a233f26ff9c9501b839.camel@linux.ibm.com>
-         <fe83527d3745b5f071b2807d724f27f7632ed8cb.camel@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-01-31_04:2021-01-29,2021-01-31 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501
- adultscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101310068
+        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+        Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, kernel@pengutronix.de
+Date:   Sun, 31 Jan 2021 15:14:02 +0100
+In-Reply-To: <d1bed49f89495ceb529355cb41655a208fdb2197.camel@linux.ibm.com>
+References: <74830d4f-5a76-8ba8-aad0-0d79f7c01af9@pengutronix.de>
+         <6dc99fd9ffbc5f405c5f64d0802d1399fc6428e4.camel@kernel.org>
+         <d1bed49f89495ceb529355cb41655a208fdb2197.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: jlu@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, 2021-01-30 at 23:28 +0200, Jarkko Sakkinen wrote:
-> On Fri, 2021-01-29 at 08:58 -0500, Mimi Zohar wrote:
-> > On Fri, 2021-01-29 at 01:56 +0200, jarkko@kernel.org wrote:
-> > > From: Jarkko Sakkinen <jarkko@kernel.org>
+On Sun, 2021-01-31 at 07:09 -0500, Mimi Zohar wrote:
+> On Sat, 2021-01-30 at 19:53 +0200, Jarkko Sakkinen wrote:
+> > On Thu, 2021-01-28 at 18:31 +0100, Ahmad Fatoum wrote:
+> > > Hello,
 > > > 
-> > > When TPM 2.0 trusted keys code was moved to the trusted keys subsystem,
-> > > the operations were unwrapped from tpm_try_get_ops() and tpm_put_ops(),
-> > > which are used to take temporarily the ownership of the TPM chip. The
-> > > ownership is only taken inside tpm_send(), but this is not sufficient,
-> > > as in the key load TPM2_CC_LOAD, TPM2_CC_UNSEAL and TPM2_FLUSH_CONTEXT
-> > > need to be done as a one single atom.
+> > > I've been looking into how a migration to using trusted/encrypted keys
+> > > would look like (particularly with dm-crypt).
 > > > 
-> > > Take the TPM chip ownership before sending anything with
-> > > tpm_try_get_ops() and tpm_put_ops(), and use tpm_transmit_cmd() to send
-> > > TPM commands instead of tpm_send(), reverting back to the old behaviour.
+> > > Currently, it seems the the only way is to re-encrypt the partitions
+> > > because trusted/encrypted keys always generate their payloads from
+> > > RNG.
 > > > 
-> > > Fixes: 2e19e10131a0 ("KEYS: trusted: Move TPM2 trusted keys code")
-> > > Reported-by: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> > > Cc: stable@vger.kernel.org
-> > > Cc: David Howells <dhowells@redhat.com>
-> > > Cc: Mimi Zohar <zohar@linux.ibm.com>
-> > > Cc: Sumit Garg <sumit.garg@linaro.org>
-> > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > If instead there was a key command to initialize a new trusted/encrypted
+> > > key with a user provided value, users could use whatever mechanism they
+> > > used beforehand to get a plaintext key and use that to initialize a new
+> > > trusted/encrypted key. From there on, the key will be like any other
+> > > trusted/encrypted key and not be disclosed again to userspace.
+> > > 
+> > > What are your thoughts on this? Would an API like
+> > > 
+> > >   keyctl add trusted dmcrypt-key 'set <content>' # user-supplied content
+> > > 
+> > > be acceptable?
 > > 
-> > Tested-by: Mimi Zohar <zohar@linux.ibm.com> (on TPM 1.2 & PTT, discrete
-> > TPM 2.0)
+> > Maybe it's the lack of knowledge with dm-crypt, but why this would be
+> > useful? Just want to understand the bottleneck, that's all.
+
+Our goal in this case is to move away from having the dm-crypt key material
+accessible to user-space on embedded devices. For an existing dm-crypt volume,
+this key is fixed. A key can be loaded into user key type and used by dm-crypt
+(cryptsetup can already do it this way). But at this point, you can still do
+'keyctl read' on that key, exposing the key material to user space.
+
+Currently, with both encrypted and trusted keys, you can only generate new
+random keys, not import existing key material. 
+
+James Bottomley mentioned in the other reply that the key format will become
+compatible with the openssl_tpm2_engine, which would provide a workaround. This
+wouldn't work with OP-TEE-based trusted keys (see Sumit Garg's series), though.
+
+> We upstreamed "trusted" & "encrypted" keys together in order to address
+> this sort of problem.   Instead of directly using a "trusted" key for
+> persistent file signatures being stored as xattrs, the "encrypted" key
+> provides one level of indirection.   The "encrypted" key may be
+> encrypted/decrypted with either a TPM based "trusted" key or with a
+> "user" type symmetric key[1].
 > 
-> Thanks, is it OK to apply the whole series?
+> Instead of modifying "trusted" keys, use a "user" type "encrypted" key.
 
-Yes.  The testing was with the entire patch set, but I didn't
-explicitly test each change.  For the other two patches, please add my
-Reviewed-by.
+I don't see how this would help. When using dm-crypt with an encrypted key, I
+can't use my existing key material.
 
-Mimi
+Except for the migration aspect, trusted keys seem ideal. Only a single exported
+blob needs to be stored and can only be loaded/used again on the same (trusted)
+system. Userspace cannot extract the key material. 
+
+To get to this point on systems in the field without re-encryption of the whole
+storage, only the initial trusted/encrypted key creation would need to allow
+passing in existing key material.
+
+> Mimi
+> 
+> [1] The ima-evm-utils README contains EVM examples of "trusted" and
+> "user" based "encrypted" keys.
+
+I assume you refer to
+https://sourceforge.net/p/linux-ima/ima-evm-utils/ci/master/tree/README#l143
+"Generate EVM encrypted keys" and "Generate EVM trusted keys (TPM based)"?
+
+In both cases, the key used by EVM is a *newly generated* random key. The only
+difference is whether it's encrypted to a user key or a (random) trusted key.
+
+Best regards
+Jan
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
