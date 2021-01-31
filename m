@@ -2,60 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAEF309F04
-	for <lists+linux-integrity@lfdr.de>; Sun, 31 Jan 2021 21:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D70309F14
+	for <lists+linux-integrity@lfdr.de>; Sun, 31 Jan 2021 22:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbhAaUua (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 31 Jan 2021 15:50:30 -0500
-Received: from mail.ipatinga.mg.gov.br ([189.76.226.131]:56598 "EHLO
-        zimbra.ipatinga.mg.gov.br" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbhAaUua (ORCPT
+        id S229534AbhAaV2k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 31 Jan 2021 16:28:40 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:39022 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230129AbhAaV1h (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 31 Jan 2021 15:50:30 -0500
-X-Greylist: delayed 4208 seconds by postgrey-1.27 at vger.kernel.org; Sun, 31 Jan 2021 15:50:29 EST
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.ipatinga.mg.gov.br (Postfix) with ESMTP id D695F1A8F8D;
-        Sun, 31 Jan 2021 15:12:52 -0300 (-03)
-Received: from zimbra.ipatinga.mg.gov.br ([127.0.0.1])
-        by localhost (zimbra.ipatinga.mg.gov.br [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id hOC-AwrK2bAx; Sun, 31 Jan 2021 15:12:52 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.ipatinga.mg.gov.br (Postfix) with ESMTP id A5A0E1A98D7;
-        Sun, 31 Jan 2021 15:12:49 -0300 (-03)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.ipatinga.mg.gov.br A5A0E1A98D7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ipatinga.mg.gov.br;
-        s=76BA0250-521D-11E8-B04D-050F82C736C6; t=1612116771;
-        bh=AdBCjqMGXWfOM2NWEnPK0EeWuqQpsFdfXnu8k1TqAww=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=SAgjQAuitMAPpe8pbURyQYWkAG5QyJLX62A+D+KrSLNcJj/0vnqJAWW5PWJ9FkvYm
-         XO0EoN7RSkYbiLXUvDokkw3fG2yElZqUJ57HAd9TjNTbuWqlGZvs6vBRBU/+f3hvF4
-         w5Irn5Gk8LyJVMSDtYfTvtjcYn/c6VIgGH1+9Rb9d/cCtBdqG2AaEwL7/47lLh571I
-         Q5kcLiwAkjcmBHwj8x3cbGSbMkkaAidkwS5koMjN+qqjEtUSDs2Fa1KcM/hcYxUmvN
-         BC249ZNl/ivMmnIhcXwkkwGafN2jJ8ikN61MBqCagTh9X8Yxk+A1kwD6NVwJlNLFyI
-         iVfeStFKcMIYA==
-X-Virus-Scanned: amavisd-new at ipatinga.mg.gov.br
-Received: from zimbra.ipatinga.mg.gov.br ([127.0.0.1])
-        by localhost (zimbra.ipatinga.mg.gov.br [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Ym_wU-SC5sgB; Sun, 31 Jan 2021 15:12:49 -0300 (-03)
-Received: from DELL-PC.localdomain (unknown [160.152.167.207])
-        by zimbra.ipatinga.mg.gov.br (Postfix) with ESMTPSA id 5F27E1A8F8D;
-        Sun, 31 Jan 2021 15:12:26 -0300 (-03)
-Content-Type: text/plain; charset="iso-8859-1"
+        Sun, 31 Jan 2021 16:27:37 -0500
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 3AD5972C8B1;
+        Sun, 31 Jan 2021 20:48:46 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 2411C4A4712;
+        Sun, 31 Jan 2021 20:48:46 +0300 (MSK)
+Date:   Sun, 31 Jan 2021 20:48:45 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Subject: Re: [PATCH ima-evm-utils] ima-evm-utils: ima_sign supports SM2 and
+ SM3 algorithm combination
+Message-ID: <20210131174845.gbvqd5l5o2tibpbf@altlinux.org>
+References: <20210131032721.79050-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Your $3,000,000.00 USD 
-To:     Recipients <m132918@ipatinga.mg.gov.br>
-From:   "Mr  Stefano Pessina" <m132918@ipatinga.mg.gov.br>
-Date:   Sun, 31 Jan 2021 10:08:47 -0800
-Reply-To: spessina264@gmail.com
-Message-Id: <20210131181228.5F27E1A8F8D@zimbra.ipatinga.mg.gov.br>
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20210131032721.79050-1-tianjia.zhang@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Your $3,000,000.00 USD contact me If you are interested.
+Tianjia,
 
-Warm Regard
-CEO Walgreens Boots Alliance
-Stefano Pessina
+On Sun, Jan 31, 2021 at 11:27:21AM +0800, Tianjia Zhang wrote:
+> The combination of SM2 and SM3 algorithms has been implemented in the
+> kernel. At present, the ima-evm-utils signature tool does not support
+> this combination of algorithms. This is because SM2 sign require a
+> USERID, which requires the use of a higher-level sign functions of
+> OpenSSL. this patch use the EVP_DigestSign series of functions to
+> sign to support various signature algorithm combinations.
+> 
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> ---
+>  src/libimaevm.c | 37 +++++++++++++++++++++++++++++++------
+>  1 file changed, 31 insertions(+), 6 deletions(-)
+> 
+> diff --git a/src/libimaevm.c b/src/libimaevm.c
+> index fa6c278..89b9b88 100644
+> --- a/src/libimaevm.c
+> +++ b/src/libimaevm.c
+> @@ -891,6 +891,7 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+>  	EVP_PKEY *pkey;
+>  	char name[20];
+>  	EVP_PKEY_CTX *ctx = NULL;
+> +	EVP_MD_CTX *mctx = NULL;
+>  	const EVP_MD *md;
+>  	size_t sigsize;
+>  	const char *st;
+> @@ -932,24 +933,47 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+>  		return -1;
+>  	}
+>  
+> +#if OPENSSL_VERSION_NUMBER < 0x30000000
+
+Perhaps, this check is not needed at all if it isn't enabled for new
+openssl?
+
+
+> +	/*
+> +	 * SM2 and SM3 should go together. If SM3 hash algorithm and EC private
+> +	 * key are used at the same time, check whether it is SM2 private key.
+> +	 */
+> +	if (hdr->hash_algo == PKEY_HASH_SM3_256 && EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
+> +		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
+> +		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
+> +		if (curve == NID_sm2)
+> +			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
+> +	}
+> +#endif
+> +
+>  	calc_keyid_v2(&keyid, name, pkey);
+>  	hdr->keyid = keyid;
+>  
+>  	st = "EVP_PKEY_CTX_new";
+>  	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
+>  		goto err;
+> -	st = "EVP_PKEY_sign_init";
+> -	if (!EVP_PKEY_sign_init(ctx))
+> +	st = "EVP_MD_CTX_new";
+> +	if (!(mctx = EVP_MD_CTX_new()))
+>  		goto err;
+> +	if (EVP_PKEY_id(pkey) == EVP_PKEY_SM2) {
+> +		st = "EVP_PKEY_CTX_set1_id";
+> +		/* Set SM2 default userid */
+> +		if (!EVP_PKEY_CTX_set1_id(ctx, "1234567812345678", 16))
+
+You cannot call EVP_PKEY_CTX_set1_id for EVP_PKEY_sign's ctx?
+I don't really get the API change. Can you explain more this
+requirement?
+
+Thanks,
+
+> +			goto err;
+> +	}
+> +	EVP_MD_CTX_set_pkey_ctx(mctx, ctx);
+>  	st = "EVP_get_digestbyname";
+>  	if (!(md = EVP_get_digestbyname(imaevm_params.hash_algo)))
+>  		goto err;
+> -	st = "EVP_PKEY_CTX_set_signature_md";
+> -	if (!EVP_PKEY_CTX_set_signature_md(ctx, md))
+> +	st = "EVP_DigestSignInit";
+> +	if (!EVP_DigestSignInit(mctx, NULL, md, NULL, pkey))
+> +		goto err;
+> +	st = "EVP_DigestSignUpdate";
+> +	if (!EVP_DigestSignUpdate(mctx, hash, size))
+>  		goto err;
+> -	st = "EVP_PKEY_sign";
+> +	st = "EVP_DigestSignFinal";
+>  	sigsize = MAX_SIGNATURE_SIZE - sizeof(struct signature_v2_hdr) - 1;
+> -	if (!EVP_PKEY_sign(ctx, hdr->sig, &sigsize, hash, size))
+> +	if (!EVP_DigestSignFinal(mctx, hdr->sig, &sigsize))
+>  		goto err;
+>  	len = (int)sigsize;
+>  
+> @@ -964,6 +988,7 @@ err:
+>  			ERR_reason_error_string(ERR_peek_error()), st);
+>  		output_openssl_errors();
+>  	}
+> +	EVP_MD_CTX_free(mctx);
+>  	EVP_PKEY_CTX_free(ctx);
+>  	EVP_PKEY_free(pkey);
+>  	return len;
+> -- 
+> 2.19.1.3.ge56e4f7
