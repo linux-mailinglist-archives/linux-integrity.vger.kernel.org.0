@@ -2,197 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2350E30A7AC
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Feb 2021 13:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCB430A839
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Feb 2021 14:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbhBAMcQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Feb 2021 07:32:16 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:49424 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbhBAMcP (ORCPT
+        id S231604AbhBANDK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Feb 2021 08:03:10 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35556 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231407AbhBANDI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Feb 2021 07:32:15 -0500
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id BC39472C8B1;
-        Mon,  1 Feb 2021 15:31:32 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 6DBBE4A4712;
-        Mon,  1 Feb 2021 15:31:32 +0300 (MSK)
-Date:   Mon, 1 Feb 2021 15:31:31 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-Subject: Re: [PATCH ima-evm-utils] ima-evm-utils: ima_sign supports SM2 and
- SM3 algorithm combination
-Message-ID: <20210201123131.vr2s6v7qp7booz3c@altlinux.org>
-References: <20210131032721.79050-1-tianjia.zhang@linux.alibaba.com>
- <20210131174845.gbvqd5l5o2tibpbf@altlinux.org>
- <20210131175623.pbtdmeyvyeoenk3j@altlinux.org>
- <20210131185225.jemxbsyweq4vm7ex@altlinux.org>
- <02410651-5405-d80c-8ae5-b86c435f66b4@linux.alibaba.com>
+        Mon, 1 Feb 2021 08:03:08 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 111D1QCm081851;
+        Mon, 1 Feb 2021 08:02:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ZigMs+1+OGFbFSIyjvMcFvWe6jq3VvhSgTQtQqwSDi0=;
+ b=atNROLZxC41VitSLou85LOJRynReYFXzJYQNGOD2fZv81OTgynnPPA5Xq370d/Alqgr5
+ TDRaKHA3W+9jtFfqYH8hqw8XBPqdrTpCpZL88X0aSEEB6bmuEmkNug++RVXwVJYiEHYP
+ +RXK8t6DbPSnO9ivxzYckpBh62swtsMns1To1HSMgdKXmh/2alty4l/974d6OUYMrK5V
+ 5eOEvUwtHz+J763ZF0iMIyEs5yIJC+nRsi0sYApAnDo75weGEWTx3CHe6aj3k4xvRGYV
+ s3ZcE3kGWgugbrvXVjekDqNIRxadVGmSUEzcjGKZH3u+lm/XmtaukBd9Pkaym+syoUjR ig== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36ehe81bpp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 08:02:24 -0500
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 111D1j6Q083550;
+        Mon, 1 Feb 2021 08:02:22 -0500
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36ehe81bp3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 08:02:22 -0500
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 111Cv49C029932;
+        Mon, 1 Feb 2021 13:02:21 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma05wdc.us.ibm.com with ESMTP id 36cy38pfkf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 13:02:21 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 111D2LoF6882014
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 1 Feb 2021 13:02:21 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69050AC05E;
+        Mon,  1 Feb 2021 13:02:21 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 59DC6AC059;
+        Mon,  1 Feb 2021 13:02:21 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  1 Feb 2021 13:02:21 +0000 (GMT)
+Subject: Re: [PATCH v6 2/4] x509: Detect sm2 keys by their parameters OID
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
+        linux-integrity@vger.kernel.org,
+        David Howells <dhowells@redhat.com>
+References: <20210131233301.1301787-1-stefanb@linux.ibm.com>
+ <20210131233301.1301787-3-stefanb@linux.ibm.com>
+ <75a8ff37-3c23-6cf1-f844-cf692eb8adfc@linux.alibaba.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <ace09744-e6c9-32da-27d8-accadd5d0252@linux.ibm.com>
+Date:   Mon, 1 Feb 2021 08:02:21 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <02410651-5405-d80c-8ae5-b86c435f66b4@linux.alibaba.com>
+In-Reply-To: <75a8ff37-3c23-6cf1-f844-cf692eb8adfc@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-01_05:2021-01-29,2021-02-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ phishscore=0 spamscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
+ adultscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102010065
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 05:10:59PM +0800, Tianjia Zhang wrote:
-> 
-> 
-> On 2/1/21 2:52 AM, Vitaly Chikunov wrote:
-> > Tianjia,
-> > 
-> > On Sun, Jan 31, 2021 at 08:56:23PM +0300, Vitaly Chikunov wrote:
-> > > On Sun, Jan 31, 2021 at 08:48:46PM +0300, Vitaly Chikunov wrote:
-> > > > On Sun, Jan 31, 2021 at 11:27:21AM +0800, Tianjia Zhang wrote:
-> > > > > The combination of SM2 and SM3 algorithms has been implemented in the
-> > > > > kernel. At present, the ima-evm-utils signature tool does not support
-> > > > > this combination of algorithms. This is because SM2 sign require a
-> > > > > USERID, which requires the use of a higher-level sign functions of
-> > > > > OpenSSL. this patch use the EVP_DigestSign series of functions to
-> > > > > sign to support various signature algorithm combinations.
-> > > > > 
-> > > > > Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> > > > > ---
-> > > > >   src/libimaevm.c | 37 +++++++++++++++++++++++++++++++------
-> > > > >   1 file changed, 31 insertions(+), 6 deletions(-)
-> > > > > 
-> > > > > diff --git a/src/libimaevm.c b/src/libimaevm.c
-> > > > > index fa6c278..89b9b88 100644
-> > > > > --- a/src/libimaevm.c
-> > > > > +++ b/src/libimaevm.c
-> > > > > @@ -891,6 +891,7 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
-> > > > >   	EVP_PKEY *pkey;
-> > > > >   	char name[20];
-> > > > >   	EVP_PKEY_CTX *ctx = NULL;
-> > > > > +	EVP_MD_CTX *mctx = NULL;
-> > > > >   	const EVP_MD *md;
-> > > > >   	size_t sigsize;
-> > > > >   	const char *st;
-> > > > > @@ -932,24 +933,47 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
-> > > > >   		return -1;
-> > > > >   	}
-> > > > > +#if OPENSSL_VERSION_NUMBER < 0x30000000
-> > > > 
-> > > > Perhaps, this check is not needed at all if it isn't enabled for new
-> > > > openssl?
-> > > > 
-> > > > 
-> > > > > +	/*
-> > > > > +	 * SM2 and SM3 should go together. If SM3 hash algorithm and EC private
-> > > > > +	 * key are used at the same time, check whether it is SM2 private key.
-> > > > > +	 */
-> > > > > +	if (hdr->hash_algo == PKEY_HASH_SM3_256 && EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
-> > > > > +		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
-> > > > > +		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
-> > > > > +		if (curve == NID_sm2)
-> > 
-> > Also, this patch does not compile on openssl 1.1.0 because
-> > NID_sm2 and EVP_PKEY_SM2 are not defined.
-> > 
-> 
-> OPENSSL 1.1.0 version does not support SM2, the macro detection of
-> OPENSSL_VERSION should be added here.
+On 2/1/21 5:39 AM, Tianjia Zhang wrote:
+>
+>> index f7ad43f28579..508e0b34b5f0 100644
+>> --- a/lib/oid_registry.c
+>> +++ b/lib/oid_registry.c
+>> @@ -11,6 +11,7 @@
+>>   #include <linux/kernel.h>
+>>   #include <linux/errno.h>
+>>   #include <linux/bug.h>
+>> +#include <linux/asn1.h>
+>>   #include "oid_registry_data.c"
+>>     MODULE_DESCRIPTION("OID Registry");
+>> @@ -92,6 +93,18 @@ enum OID look_up_OID(const void *data, size_t 
+>> datasize)
+>>   }
+>>   EXPORT_SYMBOL_GPL(look_up_OID);
+>>   +int parse_OID(const void *data, size_t datasize, enum OID *oid)
+>> +{
+>> +    const unsigned char *v = data;
+>> +
+>> +    if (datasize < 2 || v[0] != ASN1_OID || v[1] != datasize - 2)
+>> +        return -EBADMSG;
+>> +
+>> +    *oid = look_up_OID(data + 2, datasize - 2);
+>> +    return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(parse_OID);
+>> +
+>>   /*
+>>    * sprint_OID - Print an Object Identifier into a buffer
+>>    * @data: The encoded OID to print
+>>
+>
+> Great job, I'm just curious why we need to add a new function, this 
+> seems unnecessary, if possible, please add
 
-Or just #ifdef EVP_PKEY_SM2.
 
-> 
-> > > > > +			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
-> > > > > +	}
-> > > > > +#endif
-> > > > > +
-> > > > >   	calc_keyid_v2(&keyid, name, pkey);
-> > > > >   	hdr->keyid = keyid;
-> > > > >   	st = "EVP_PKEY_CTX_new";
-> > > > >   	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
-> > > > >   		goto err;
-> > > > > -	st = "EVP_PKEY_sign_init";
-> > > > > -	if (!EVP_PKEY_sign_init(ctx))
-> > > > > +	st = "EVP_MD_CTX_new";
-> > > > > +	if (!(mctx = EVP_MD_CTX_new()))
-> > > > >   		goto err;
-> > > > > +	if (EVP_PKEY_id(pkey) == EVP_PKEY_SM2) {
-> > > > > +		st = "EVP_PKEY_CTX_set1_id";
-> > > > > +		/* Set SM2 default userid */
-> > > > > +		if (!EVP_PKEY_CTX_set1_id(ctx, "1234567812345678", 16))
-> > > > 
-> > > > You cannot call EVP_PKEY_CTX_set1_id for EVP_PKEY_sign's ctx?
-> > > > I don't really get the API change. Can you explain more this
-> > > > requirement?
-> > > 
-> > > EVP_PKEY_sign should be able to sign with any algo, unless there is
-> > > openssl bug. Is there bug preventing SM2 signing with EVP_PKEY_sign?
-> > > 
-> The SM2 signature is different from the conventional signature algorithm.
-> For example, to sign a message, not the hash signature of the message, but
-> the hash signature after adding the message to ZA. The ZA value includes the
-> SM3 hash of the following data, including some parameters and public keys of
-> ECC, and the USERID passed in by the user.
-> it also specified in
-> https://tools.ietf.org/html/draft-shen-sm2-ecdsa-02.
+Thanks. I call this function in two places now. I thought it was 'worth it'.
 
-I didn't read the RFC draft yet, but I believe EVP_PKEY_sign should be
-able to sign with any padding scheme (that's why we call
-EVP_PKEY_CTX_set_signature_md, for example, to tell how to encode
-proper padding). Maybe you should ask OpenSSL people for suggestions?
 
-Thanks,
-
-> 
-> It seems that there is no good way. I can only add the calculation of the ZA
-> value when calculating the file hash.
-> 
-> > > > > +			goto err;
-> > > > > +	}
-> > > > > +	EVP_MD_CTX_set_pkey_ctx(mctx, ctx);
-> > > > >   	st = "EVP_get_digestbyname";
-> > > > >   	if (!(md = EVP_get_digestbyname(imaevm_params.hash_algo)))
-> > > > >   		goto err;
-> > > > > -	st = "EVP_PKEY_CTX_set_signature_md";
-> > > > > -	if (!EVP_PKEY_CTX_set_signature_md(ctx, md))
-> > > > > +	st = "EVP_DigestSignInit";
-> > > > > +	if (!EVP_DigestSignInit(mctx, NULL, md, NULL, pkey))
-> > > > > +		goto err;
-> > > > > +	st = "EVP_DigestSignUpdate";
-> > > > > +	if (!EVP_DigestSignUpdate(mctx, hash, size))
-> > > > >   		goto err;
-> > > > > -	st = "EVP_PKEY_sign";
-> > > > > +	st = "EVP_DigestSignFinal";
-> > > > >   	sigsize = MAX_SIGNATURE_SIZE - sizeof(struct signature_v2_hdr) - 1;
-> > > > > -	if (!EVP_PKEY_sign(ctx, hdr->sig, &sigsize, hash, size))
-> > 
-> > Also, this conversion to EVP_DigestSign is incorrect, because
-> > EVP_PKEY_sign does not hash the data (and expected to work over a ready
-> > digest, see man EVP_PKEY_sign). While EVP_DigestSignFinal does hash the
-> > data.
-> > 
-> > You should really try to run `make check` before sending patches.
-> > 
-> > Thanks,
-> > 
-> 
-> This is indeed a problem, thanks for pointing it out. Or to add ZA, I
-> ignored this, maybe I should implement a version that does not support ZA
-> first. Or do you have any better suggestions?
-> 
-> Thanks for your reply.
-> 
+>
+> Reviewed-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>
 > Best regards,
 > Tianjia
-> 
-> > > > > +	if (!EVP_DigestSignFinal(mctx, hdr->sig, &sigsize))
-> > > > >   		goto err;
-> > > > >   	len = (int)sigsize;
-> > > > > @@ -964,6 +988,7 @@ err:
-> > > > >   			ERR_reason_error_string(ERR_peek_error()), st);
-> > > > >   		output_openssl_errors();
-> > > > >   	}
-> > > > > +	EVP_MD_CTX_free(mctx);
-> > > > >   	EVP_PKEY_CTX_free(ctx);
-> > > > >   	EVP_PKEY_free(pkey);
-> > > > >   	return len;
-> > > > > -- 
-> > > > > 2.19.1.3.ge56e4f7
+
+
