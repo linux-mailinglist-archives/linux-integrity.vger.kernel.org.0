@@ -2,75 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E9F30A853
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Feb 2021 14:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD92430A891
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Feb 2021 14:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbhBANJC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Feb 2021 08:09:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32221 "EHLO
+        id S231308AbhBANWP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Feb 2021 08:22:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59202 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229524AbhBANJB (ORCPT
+        by vger.kernel.org with ESMTP id S232131AbhBANVc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Feb 2021 08:09:01 -0500
+        Mon, 1 Feb 2021 08:21:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612184855;
+        s=mimecast20190719; t=1612185606;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=y5Rwaf81e9ocy2MYWY0wjpx5EyFdy6040KY/DyZOVp8=;
-        b=TgRWG6jZZTFO0IhShwWiBJc3WmnXMQ7DNiy4zG+8awL2DklwzY+zIOSV4dAEDa499f+coH
-        GaHcT3Ye+nP+6XhKeAuoGJERaTTzVv1wt9KY4gCnIl42uDXw/OjruTKv1MzRmxt8rlz0Lo
-        iqtOqmRBZyRB40t+KGGrSS7HvFtoyPM=
+        bh=IUHx+ZmyPT9Dyu1dEfWtcZBy3fkG4ai+h8kqNZZO+ns=;
+        b=PBvfeOtRl9J/o6DCF+sp2nL9ZOK1EfFALGecEXkF7WJ5XuURKybLkmfzruIqnDgCPaLanv
+        5WDysWB2kkQLQCEN4dXVWblYv5BBBs/nsGe4TAJZ8J/KXFtJqew5pSUMrKTngMVHTM9InQ
+        0OzUVo+vdv2C0PmK5UIEIG4m3sNDBis=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-543-pfmfFTAqO3euUrWsdsfwvQ-1; Mon, 01 Feb 2021 08:07:31 -0500
-X-MC-Unique: pfmfFTAqO3euUrWsdsfwvQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-518-HCE66KfhPEWQgCyY3tplGA-1; Mon, 01 Feb 2021 08:20:02 -0500
+X-MC-Unique: HCE66KfhPEWQgCyY3tplGA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E0B9D9CC02;
-        Mon,  1 Feb 2021 13:07:28 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D1F181005513;
+        Mon,  1 Feb 2021 13:20:00 +0000 (UTC)
 Received: from warthog.procyon.org.uk (ovpn-115-23.rdu2.redhat.com [10.10.115.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 99176E141;
-        Mon,  1 Feb 2021 13:07:25 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EBDBD5C276;
+        Mon,  1 Feb 2021 13:19:58 +0000 (UTC)
 Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
         Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
         Kingdom.
         Registered in England and Wales under Company Registration No. 3798903
 From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20210128191705.3568820-1-mic@digikod.net>
-References: <20210128191705.3568820-1-mic@digikod.net>
-To:     =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl=3D20Sala=3DC3=3DBCn=3F?=
-         =?us-ascii?Q?=3D?= <mic@digikod.net>
-Cc:     dhowells@redhat.com, David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl?=
-         =?us-ascii?Q?=3D20Sala=3DC3=3DBCn=3F=3D?= 
-        <mic@linux.microsoft.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
+In-Reply-To: <20210129155529.brxbmgzzosvtwrzw@altlinux.org>
+References: <20210129155529.brxbmgzzosvtwrzw@altlinux.org> <20210129150355.850093-1-stefanb@linux.vnet.ibm.com> <20210129150355.850093-5-stefanb@linux.vnet.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     dhowells@redhat.com, Stefan Berger <stefanb@linux.vnet.ibm.com>,
         keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 0/5] Enable root to update the blacklist keyring
+        linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
+        linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: Re: [PATCH v5 4/4] ima: Support EC keys for signature verification
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 01 Feb 2021 13:07:24 +0000
-Message-ID: <4160652.1612184844@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <4162570.1612185598.1@warthog.procyon.org.uk>
+Date:   Mon, 01 Feb 2021 13:19:58 +0000
+Message-ID: <4162571.1612185598@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Vitaly Chikunov <vt@altlinux.org> wrote:
 
-Hi Micka=C3=ABl,
+> > +static inline
+> > +const struct public_key *asymmetric_key_public_key(const struct key *key)
+> > +{
+> > +	return key->payload.data[asym_crypto];
+> > +}
+> 
+> I wonder why use this accessor which does nothing else, because in all
+> other places payload.data[asym_crypto] accessed directly.
 
-Do you have a public branch somewhere I can pull from?
+We should probably move to using wrappers rather than accessing directly for
+type safety.
 
 David
 
