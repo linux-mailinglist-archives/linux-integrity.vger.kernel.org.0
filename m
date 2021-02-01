@@ -2,105 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 758D530A841
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Feb 2021 14:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E9F30A853
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Feb 2021 14:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbhBANFc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Feb 2021 08:05:32 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7096 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231478AbhBANFb (ORCPT
+        id S231997AbhBANJC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Feb 2021 08:09:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32221 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229524AbhBANJB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Feb 2021 08:05:31 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 111D2QKK163281;
-        Mon, 1 Feb 2021 08:04:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hxuRMRBRfXGHt6rA9F92aI19zpjVyYYQdrKgJ+Z9NTE=;
- b=C+yzMtGHCu6djAbMCOeWLIsHagtbR8OKaWCZGNN9OCjvJFFEbgCZrHFvjo8hylh6zicZ
- lhwsj5omQV8WbiitOu7u7n92DO38/JyUBoD0m5qRSejYb8u0qg13f6a7m8Q9GbUyGn5T
- XgB71mn9/1TVb0ce4MewUrQLg5zPUyQWkIjuWwY8ypoLFJOC3xO16zlnCth8X+kXorop
- 4gL6aL+3K3waohc+6zQitVPOYb/TIli8oL05iv1ELG9STZBQVOfeRMUPxAIMTzgoWTCF
- cvqd3XoAhTB0DMi1s0uQ3OEdUAWIuofRGdMpjoiGFnZRUfkvATpr0Jp+4WmJcJaRos4L DQ== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36ej6082kn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 01 Feb 2021 08:04:37 -0500
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 111Cw3v2023924;
-        Mon, 1 Feb 2021 13:04:28 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01dal.us.ibm.com with ESMTP id 36cy3921c2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 01 Feb 2021 13:04:28 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 111D4RPM6881828
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 1 Feb 2021 13:04:27 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8859EAC064;
-        Mon,  1 Feb 2021 13:04:27 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 77A75AC060;
-        Mon,  1 Feb 2021 13:04:27 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  1 Feb 2021 13:04:27 +0000 (GMT)
-Subject: Re: [PATCH v6 1/4] crypto: Add support for ECDSA signature
- verification
-To:     yumeng <yumeng18@huawei.com>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
-        linux-integrity@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-References: <20210131233301.1301787-1-stefanb@linux.ibm.com>
- <20210131233301.1301787-2-stefanb@linux.ibm.com>
- <289ef2ac-d653-47b3-7771-5d8a7342ad21@huawei.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <f7660865-3efc-8425-d494-2e6cc9631cc5@linux.ibm.com>
-Date:   Mon, 1 Feb 2021 08:04:27 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 1 Feb 2021 08:09:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612184855;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y5Rwaf81e9ocy2MYWY0wjpx5EyFdy6040KY/DyZOVp8=;
+        b=TgRWG6jZZTFO0IhShwWiBJc3WmnXMQ7DNiy4zG+8awL2DklwzY+zIOSV4dAEDa499f+coH
+        GaHcT3Ye+nP+6XhKeAuoGJERaTTzVv1wt9KY4gCnIl42uDXw/OjruTKv1MzRmxt8rlz0Lo
+        iqtOqmRBZyRB40t+KGGrSS7HvFtoyPM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-543-pfmfFTAqO3euUrWsdsfwvQ-1; Mon, 01 Feb 2021 08:07:31 -0500
+X-MC-Unique: pfmfFTAqO3euUrWsdsfwvQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E0B9D9CC02;
+        Mon,  1 Feb 2021 13:07:28 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-115-23.rdu2.redhat.com [10.10.115.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 99176E141;
+        Mon,  1 Feb 2021 13:07:25 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20210128191705.3568820-1-mic@digikod.net>
+References: <20210128191705.3568820-1-mic@digikod.net>
+To:     =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl=3D20Sala=3DC3=3DBCn=3F?=
+         =?us-ascii?Q?=3D?= <mic@digikod.net>
+Cc:     dhowells@redhat.com, David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?us-ascii?Q?=3D=3FUTF-8=3Fq=3FMicka=3DC3=3DABl?=
+         =?us-ascii?Q?=3D20Sala=3DC3=3DBCn=3F=3D?= 
+        <mic@linux.microsoft.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] Enable root to update the blacklist keyring
 MIME-Version: 1.0
-In-Reply-To: <289ef2ac-d653-47b3-7771-5d8a7342ad21@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-01_05:2021-01-29,2021-02-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- adultscore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102010065
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 01 Feb 2021 13:07:24 +0000
+Message-ID: <4160652.1612184844@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2/1/21 2:24 AM, yumeng wrote:
->
->
-> 在 2021/2/1 7:32, Stefan Berger 写道:
->> +/**
->> + * ecc_get_curve()  - Get a curve given its curve_id
->> + *
->> + * @curve_id:  Id of the curve
->> + *
->> + * Returns pointer to the curve data, NULL if curve is not available
->> + */
->> +const struct ecc_curve *ecc_get_curve(unsigned int curve_id);
->> +
->>   /**
->>    * ecc_is_key_valid() - Validate a given ECDH private key
->
->
-> Shall we move this definition to 'include/crypto'? Other drivers may 
-> also want to use it.
 
-Maybe the driver that starts using would move it?
+Hi Micka=C3=ABl,
 
+Do you have a public branch somewhere I can pull from?
+
+David
 
