@@ -2,135 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7707A30C470
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Feb 2021 16:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B57AC30C3A0
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Feb 2021 16:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234919AbhBBPwR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Feb 2021 10:52:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235088AbhBBPNI (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Feb 2021 10:13:08 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713A4C061573
-        for <linux-integrity@vger.kernel.org>; Tue,  2 Feb 2021 07:12:28 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1l6xLu-0002oq-Ri; Tue, 02 Feb 2021 16:12:26 +0100
-Subject: Re: [PATCH 2/2] dm crypt: support using trusted keys
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Mike Snitzer <snitzer@redhat.com>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        =?UTF-8?Q?Jan_L=c3=bcbbe?= <jlu@pengutronix.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dmitry Baryshkov <dbaryshkov@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, Song Liu <song@kernel.org>,
-        dm-devel@redhat.com, keyrings@vger.kernel.org,
-        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
-        Alasdair Kergon <agk@redhat.com>
-References: <20210122084321.24012-1-a.fatoum@pengutronix.de>
- <20210122084321.24012-2-a.fatoum@pengutronix.de>
- <YAsT/N8CHHNTZcj3@kernel.org> <YAsW8DAt3vc68rLA@kernel.org>
- <5d44e50e-4309-830b-79f6-f5d888b1ef69@pengutronix.de>
-Message-ID: <8cd946c4-558d-ca66-7026-a574034b4757@pengutronix.de>
-Date:   Tue, 2 Feb 2021 16:12:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S235191AbhBBPYn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Feb 2021 10:24:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39434 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235363AbhBBPQz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 2 Feb 2021 10:16:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21C3464F54;
+        Tue,  2 Feb 2021 15:15:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612278955;
+        bh=9CDdITm+XMBuPvwZUnYLZ4vvX9fQtJebA/oGAu2vTwQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i4uYT7mVUoRAMrFZDSzIwT4fpa+g5HnBHZXoJn4xL11cYAPHIIAppb7q1iQjHTbRm
+         L5lZ1mfZYTJb2BpATrjpWCowqrJLJoOQ11BCUzQ1AmC2NLUVOlobGz2RGMQdhvWAd2
+         HZ7dzM4ITTrvg0VbQ+0YAQCTQHZiGqX3/tjdrTqF5kQXl27zhOXdJ4L+Fh8efj2Osx
+         fWQw8o8ee0bHjUlJfTtLH17HQinIHt5kgud7ixQgauHT1jliK6pcLKSsOZSWZAZ2nq
+         D3tfMEJ2qgvGhI/fzkdIHeCpkzbDWo1Ir0QTrwXwOyiuKe+2gON1oJaz53UwW4TGyX
+         CTzt5m9ivxCiQ==
+Date:   Tue, 2 Feb 2021 17:15:47 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        James Morris James Morris <jmorris@namei.org>,
+        David Howells <dhowells@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [GIT PULL] tpmdd updates for v5.12-rc1
+Message-ID: <YBlso9KxuZxT0P6D@kernel.org>
+References: <YBNcv8jLEDE8C/IW@kernel.org>
+ <CAHk-=wjk7zEOFEjGWZmGF8_dcitBQ_dPUMSkr-g7B7cYcXGvSQ@mail.gmail.com>
+ <YBWUHkbNt6OLoeUq@kernel.org>
+ <CAHk-=whCPotCrco-Q4hUfgoG3+6uNn_CprxbuV1mQtxJHm0gfg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <5d44e50e-4309-830b-79f6-f5d888b1ef69@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whCPotCrco-Q4hUfgoG3+6uNn_CprxbuV1mQtxJHm0gfg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 22.01.21 20:04, Ahmad Fatoum wrote:
-> On 22.01.21 19:18, Jarkko Sakkinen wrote:
->> On Fri, Jan 22, 2021 at 08:05:51PM +0200, Jarkko Sakkinen wrote:
->>> On Fri, Jan 22, 2021 at 09:43:21AM +0100, Ahmad Fatoum wrote:
->>>> Commit 27f5411a718c ("dm crypt: support using encrypted keys") extended
->>>> dm-crypt to allow use of "encrypted" keys along with "user" and "logon".
->>>>
->>>> Along the same lines, teach dm-crypt to support "trusted" keys as well.
+On Sat, Jan 30, 2021 at 10:44:24AM -0800, Linus Torvalds wrote:
+> On Sat, Jan 30, 2021 at 9:15 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > This was meant for 5.12 but the timing was *way* too early. I'll take this
+> > one back. Just to unambiguity reasons I'll use tpmdd-next-v5.12-rc1-v2 tag
+> > for my final v5.12 PR, once I send it.
+> >
+> > I considered a bit, and I really think that it would make a lot of sense
+> > to do a late 5.11 just containing the two commits from James
+> 
+> Ok. I'll ignore this pull request, and will expect the "real" ones later.
 
-Gentle ping.
-Is there anything further you require from me regarding these two patches?
+Alright, thank you.
 
->>>>
->>>> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
->>>> ---
->>>
->>> Is it possible to test run this with tmpfs? Would be a good test
->>> target for Sumit's ARM-TEE trusted keys patches.
+> Thanks,
 > 
-> I tested these on top of Sumit's patches with TPM and a CAAM blobifier
-> backend, I am preparing. The system I am developing these patches against
-> doesn't have a TEE.  Steps to test these changes:
-> 
-> #!/bin/sh
-> 
-> DEV=/dev/loop0
-> ALGO=aes-cbc-essiv:sha256
-> KEYNAME=kmk
-> BLOCKS=20
-> 
-> fallocate -l $((BLOCKS*512)) /tmp/loop0.img
-> losetup -P $DEV /tmp/loop0.img
-> mount -o remount,rw /
-> KEY="$(keyctl add trusted $KEYNAME 'new 32' @s)"
-> keyctl pipe $KEY >$HOME/kmk.blob
-> 
-> TABLE="0 $BLOCKS crypt $ALGO :32:trusted:$KEYNAME 0 $DEV 0 1 allow_discards"
-> echo $TABLE | dmsetup create mydev
-> echo $TABLE | dmsetup load mydev
-> dd if=/dev/zero of=/dev/mapper/mydev
-> echo "It works!" 1<> /dev/mapper/mydev
-> cryptsetup close mydev
-> 
-> reboot
-> 
-> DEV=/dev/loop0
-> ALGO=aes-cbc-essiv:sha256
-> KEYNAME=kmk
-> BLOCKS=20
-> 
-> losetup -P $DEV $HOME/loop0.img
-> keyctl add trusted $KEYNAME "load $(cat $HOME/kmk.blob)" @s
-> TABLE="0 $BLOCKS crypt $ALGO :32:trusted:$KEYNAME 0 $DEV 0 1 allow_discards"
-> echo $TABLE | dmsetup create mydev
-> echo $TABLE | dmsetup load mydev
-> 
-> # should print that It works!
-> hexdump -C /dev/mapper/mydev
-> 
->>> https://lore.kernel.org/linux-integrity/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
->>
->> Also, I would hold merging *this* patch up until we are able to
->> test TEE trusted keys with TEE trusted keys.
-> 
-> Which blocks which? I tested this with TPM-Trusted keys, so it's usable
-> as is. For convenient usage, it would be nice to have cryptsetup
-> support for trusted and encrypted keys. I intended to look at this next week.
-> 
-> Cheers,
-> Ahmad
-> 
->>
->> /Jarkko
->>
-> 
+>              Linus
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+/Jarkko
