@@ -2,94 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E735030C5DD
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Feb 2021 17:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 626C530C5E5
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Feb 2021 17:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbhBBQcV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Feb 2021 11:32:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58356 "EHLO mail.kernel.org"
+        id S236559AbhBBQcn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Feb 2021 11:32:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58496 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236520AbhBBQaI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Feb 2021 11:30:08 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 02F1C64F72;
-        Tue,  2 Feb 2021 16:29:25 +0000 (UTC)
+        id S236460AbhBBQai (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 2 Feb 2021 11:30:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A3B664F77;
+        Tue,  2 Feb 2021 16:29:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612283366;
-        bh=z92uc1/pNzl5ssLYGJk8u4yt8XjE8IF2yKfBafnU9hU=;
+        s=k20201202; t=1612283396;
+        bh=auiylDdvS8zkAtHyDuX8d4D4sgyzTsMkWKW7fagY8nk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NljF1sC/ik29bEZoMBSoxiWfV2tb1C8f5Mvrg7c009Pnmz70bE4RYoWQooGkYqEvt
-         WKXLzyrZefi1C6lURl0wb23et37ZZgh4G9iOWFI4aYqTm+Y59kP7fTb+jJw3r+6Ih5
-         3XOe2vgMBvBsbSKC5sKz6sffDojTAOVLkR58GKokz9bvX5PvGFnrnp/US8n8R8qS4k
-         VV3NtHcatniEpet5bwLu8RosqXju9qg2khN8AzfYNH9jUlJGuCqWaxq5uFelZmnXov
-         GD7Xh9eMK8FY61WYnRhq0BegrORjprDCxVuwQZQ+C54UdWCiE1g5q8RLJ+4azk6Nbo
-         hBnp6Id4RLeYw==
-Date:   Tue, 2 Feb 2021 18:29:19 +0200
+        b=gQdkQ8C1rd1feBhs+1CgzAEmHuNCL1Pdm2risOYalZ1YW7KPVOx5RcZDYZHhzJ1hv
+         uaU4ouB7vymXe504HussybPimhQ/u5+SpmMOTuZOuvr+BskERTl8y1uAKBvyTxSiir
+         EzqaTQ6qfLzSnai272Km6u7UVGDKwVZeBYCf8GPF7eamxyPT+x2iwwKZ1PmaF2rd8f
+         SvD7uHD/lUfn741kxPXkqPIexN+jWxnBkangNyMoqKwvLRM9rQ3sMteXCXQOKTZEw9
+         xdmx8afcHLWxtLwhXSgGHX2FEgxlhU9WE8hTL+yzzK7oZ9jzMMhrrKvy5JQNoNYn09
+         6qAdMEvD6bKoA==
+Date:   Tue, 2 Feb 2021 18:29:49 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dirk Gouders <dirk@gouders.net>
-Cc:     Lukasz Majczak <lma@semihalf.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Tj <ml.linux@elloe.vision>, Peter Huewe <peterhuewe@gmx.de>,
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Radoslaw Biernacki <rad@semihalf.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Alex Levin <levinale@google.com>
-Subject: Re: [PATCH v2] tpm_tis: Add missing tpm_request/relinquish_locality
- calls
-Message-ID: <YBl933XkQimq5elb@kernel.org>
-References: <20210123014247.989368-1-lma@semihalf.com>
- <20210128130753.1283534-1-lma@semihalf.com>
- <464454f440df67d3470e67ff0386bbc306d07dac.camel@kernel.org>
- <ghwnvtwifq.fsf@gouders.net>
+        James Bottomley <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH v5 3/3] KEYS: trusted: Reserve TPM for seal and unseal
+ operations
+Message-ID: <YBl9/V35mwgCWZnl@kernel.org>
+References: <20210128235621.127925-1-jarkko@kernel.org>
+ <20210128235621.127925-4-jarkko@kernel.org>
+ <6459b955f8cb05dae7d15a233f26ff9c9501b839.camel@linux.ibm.com>
+ <fe83527d3745b5f071b2807d724f27f7632ed8cb.camel@kernel.org>
+ <f7c48b191cdb549197a51d7e55c63b13c503e182.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ghwnvtwifq.fsf@gouders.net>
+In-Reply-To: <f7c48b191cdb549197a51d7e55c63b13c503e182.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Jan 31, 2021 at 10:43:05AM +0100, Dirk Gouders wrote:
-> Jarkko Sakkinen <jarkko@kernel.org> writes:
+On Sun, Jan 31, 2021 at 07:52:42AM -0500, Mimi Zohar wrote:
+> On Sat, 2021-01-30 at 23:28 +0200, Jarkko Sakkinen wrote:
+> > On Fri, 2021-01-29 at 08:58 -0500, Mimi Zohar wrote:
+> > > On Fri, 2021-01-29 at 01:56 +0200, jarkko@kernel.org wrote:
+> > > > From: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > 
+> > > > When TPM 2.0 trusted keys code was moved to the trusted keys subsystem,
+> > > > the operations were unwrapped from tpm_try_get_ops() and tpm_put_ops(),
+> > > > which are used to take temporarily the ownership of the TPM chip. The
+> > > > ownership is only taken inside tpm_send(), but this is not sufficient,
+> > > > as in the key load TPM2_CC_LOAD, TPM2_CC_UNSEAL and TPM2_FLUSH_CONTEXT
+> > > > need to be done as a one single atom.
+> > > > 
+> > > > Take the TPM chip ownership before sending anything with
+> > > > tpm_try_get_ops() and tpm_put_ops(), and use tpm_transmit_cmd() to send
+> > > > TPM commands instead of tpm_send(), reverting back to the old behaviour.
+> > > > 
+> > > > Fixes: 2e19e10131a0 ("KEYS: trusted: Move TPM2 trusted keys code")
+> > > > Reported-by: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> > > > Cc: stable@vger.kernel.org
+> > > > Cc: David Howells <dhowells@redhat.com>
+> > > > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > > > Cc: Sumit Garg <sumit.garg@linaro.org>
+> > > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > 
+> > > Tested-by: Mimi Zohar <zohar@linux.ibm.com> (on TPM 1.2 & PTT, discrete
+> > > TPM 2.0)
+> > 
+> > Thanks, is it OK to apply the whole series?
 > 
-> > On Thu, 2021-01-28 at 14:07 +0100, Lukasz Majczak wrote:
-> >> There is a missing call to tpm_request_locality before the call to
-> >> the tpm_get_timeouts() and tpm_tis_probe_irq_single(). As the current
-> >> approach might work for tpm2, it fails for tpm1.x - in that case
-> >> call to tpm_get_timeouts() or tpm_tis_probe_irq_single()
-> >> without locality fails and in turn causes tpm_tis_core_init() to fail.
-> >> Tested on Samsung Chromebook Pro (Caroline).
-> >> 
-> >> Signed-off-by: Lukasz Majczak <lma@semihalf.com>
-> >
-> > Is it possible that you test against linux-next and see if any
-> > problems still arise? I've applied the locality fixes from James.
+> Yes.  The testing was with the entire patch set, but I didn't
+> explicitly test each change.  For the other two patches, please add my
+> Reviewed-by.
 > 
-> I tested current linux-next and the warning still appears,
-> unfortunately.
-> 
-> I then incrementally applied further patches from James' series [1] and
-> after "[PATCH v2 4/5] tpm_tis: fix IRQ probing" the warning has gone:
-> 
-> # dmesg | grep tpm
-> [    7.220410] tpm_tis STM0125:00: 2.0 TPM (device-id 0x0, rev-id 78)
-> [    7.322564] Modules linked in: iwlmvm(+) btusb btrtl btbcm btintel mac80211 amdgpu(+) iwlwifi drm_ttm_helper tpm_crb sdhci_pci ttm cqhci gpu_sched sdhci ccp cfg80211 rng_core tpm_tis tpm_tis_core tpm thinkpad_acpi(+) wmi nvram pinctrl_amd
-> 
-> You might notice there is another warning but that is rtc related and I
-> still have to find out if that is something I should report.
+> Mimi
 
-1/5 and 2/5 are on the other hand unconditionally "right things" to
-do. In your case the resulting state will anyway just result a polling
-driver and the kernel state remains stable.
-
-WARN_ONCE() is clearly an overkill, as kernel does not have inconsistent
-state. Using WARN_ONCE() was a mistake.
-
-I sent this fix: https://lore.kernel.org/linux-integrity/3936843b-c0da-dd8c-8aa9-90aa3b49d525@linux.ibm.com/T/#t
-
-It will turn WARN_ONCE() to pr_warn_once() and also add the status code
-to klog entry. It's sufficient in this case. For 3/5-5/5 we need more
-time.
+Thank you. I will do that.
 
 /Jarkko
