@@ -2,66 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B57AC30C3A0
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Feb 2021 16:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA1930C3F2
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Feb 2021 16:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbhBBPYn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Feb 2021 10:24:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39434 "EHLO mail.kernel.org"
+        id S235205AbhBBPg3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Feb 2021 10:36:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235363AbhBBPQz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Feb 2021 10:16:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 21C3464F54;
-        Tue,  2 Feb 2021 15:15:54 +0000 (UTC)
+        id S235443AbhBBPe0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 2 Feb 2021 10:34:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E697164E9A;
+        Tue,  2 Feb 2021 15:33:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612278955;
-        bh=9CDdITm+XMBuPvwZUnYLZ4vvX9fQtJebA/oGAu2vTwQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i4uYT7mVUoRAMrFZDSzIwT4fpa+g5HnBHZXoJn4xL11cYAPHIIAppb7q1iQjHTbRm
-         L5lZ1mfZYTJb2BpATrjpWCowqrJLJoOQ11BCUzQ1AmC2NLUVOlobGz2RGMQdhvWAd2
-         HZ7dzM4ITTrvg0VbQ+0YAQCTQHZiGqX3/tjdrTqF5kQXl27zhOXdJ4L+Fh8efj2Osx
-         fWQw8o8ee0bHjUlJfTtLH17HQinIHt5kgud7ixQgauHT1jliK6pcLKSsOZSWZAZ2nq
-         D3tfMEJ2qgvGhI/fzkdIHeCpkzbDWo1Ir0QTrwXwOyiuKe+2gON1oJaz53UwW4TGyX
-         CTzt5m9ivxCiQ==
-Date:   Tue, 2 Feb 2021 17:15:47 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        James Morris James Morris <jmorris@namei.org>,
-        David Howells <dhowells@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [GIT PULL] tpmdd updates for v5.12-rc1
-Message-ID: <YBlso9KxuZxT0P6D@kernel.org>
-References: <YBNcv8jLEDE8C/IW@kernel.org>
- <CAHk-=wjk7zEOFEjGWZmGF8_dcitBQ_dPUMSkr-g7B7cYcXGvSQ@mail.gmail.com>
- <YBWUHkbNt6OLoeUq@kernel.org>
- <CAHk-=whCPotCrco-Q4hUfgoG3+6uNn_CprxbuV1mQtxJHm0gfg@mail.gmail.com>
+        s=k20201202; t=1612280025;
+        bh=OAUPds6mAnAwG336U2WKoSVD+QXAp2woeVAgzYyVCXY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QJRVzYNj086qnX5qOwI1vg4NS/gsApKpQdGjx/+m3kUgGAav+NojCS4ebMyM5tZkE
+         dTze50ZXMrpGyCRsbyLWicX8nXOqEwT7Po1Ic3lbZUB25qDyv5bwPzVP1LCs3BAPbK
+         /nn9vmysSd6KiCwM8smJW8maKFwnFoJzLuaVlGDEML4C64W4ZGMFxLpFPq50HaLH/Q
+         Zrp/+WASXvZBJMbTWnrf9/9dnIfvOvRHOglCPJx56x6rXz7SJzJSb5hGCdcfA5geIo
+         2ztQpYCtLMKKALZ0S8TFtHKSTElKtiWkyzLYQ41tG1xZPzEVGxZu0dq7vIU4pcnwQu
+         1ny8YWl2OcF9w==
+From:   jarkko@kernel.org
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Wang Hai <wanghai38@huawei.com>
+Subject: [PATCH] tpm: WARN_ONCE() -> pr_warn_once() in tpm_tis_status()
+Date:   Tue,  2 Feb 2021 17:33:17 +0200
+Message-Id: <20210202153317.57749-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whCPotCrco-Q4hUfgoG3+6uNn_CprxbuV1mQtxJHm0gfg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Jan 30, 2021 at 10:44:24AM -0800, Linus Torvalds wrote:
-> On Sat, Jan 30, 2021 at 9:15 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > This was meant for 5.12 but the timing was *way* too early. I'll take this
-> > one back. Just to unambiguity reasons I'll use tpmdd-next-v5.12-rc1-v2 tag
-> > for my final v5.12 PR, once I send it.
-> >
-> > I considered a bit, and I really think that it would make a lot of sense
-> > to do a late 5.11 just containing the two commits from James
-> 
-> Ok. I'll ignore this pull request, and will expect the "real" ones later.
+From: Jarkko Sakkinen <jarkko@kernel.org>
 
-Alright, thank you.
+An unexpected status from TPM chip is not irrecovable failure of the
+kernel. It's only undesirable situation. Thus, change the WARN_ONCE
+instance inside tpm_tis_status() to pr_warn_once().
 
-> Thanks,
-> 
->              Linus
+In addition: print the status in the log message because it is actually
+useful information lacking from the existing log message.
 
-/Jarkko
+Suggested-by:  Guenter Roeck <linux@roeck-us.net>
+Cc: stable@vger.kernel.org
+Fixes: 6f4f57f0b909 ("tpm: ibmvtpm: fix error return code in tpm_ibmvtpm_probe()")
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/char/tpm/tpm_tis_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 431919d5f48a..21f67c6366cb 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -202,7 +202,7 @@ static u8 tpm_tis_status(struct tpm_chip *chip)
+ 		 * acquired.  Usually because tpm_try_get_ops() hasn't
+ 		 * been called before doing a TPM operation.
+ 		 */
+-		WARN_ONCE(1, "TPM returned invalid status\n");
++		pr_warn_once("TPM returned invalid status: 0x%x\n", status);
+ 		return 0;
+ 	}
+ 
+-- 
+2.30.0
+
