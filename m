@@ -2,56 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9592830B61C
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Feb 2021 04:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7050930B620
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Feb 2021 05:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbhBBD5v (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Feb 2021 22:57:51 -0500
-Received: from helcar.hmeau.com ([216.24.177.18]:43600 "EHLO fornost.hmeau.com"
+        id S231158AbhBBEAO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Feb 2021 23:00:14 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:43614 "EHLO fornost.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231194AbhBBD5v (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Feb 2021 22:57:51 -0500
+        id S230168AbhBBEAM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 1 Feb 2021 23:00:12 -0500
 Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
         by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1l6moB-0000J9-Is; Tue, 02 Feb 2021 14:56:56 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 02 Feb 2021 14:56:55 +1100
-Date:   Tue, 2 Feb 2021 14:56:55 +1100
+        id 1l6mqU-0000MM-FM; Tue, 02 Feb 2021 14:59:19 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 02 Feb 2021 14:59:18 +1100
+Date:   Tue, 2 Feb 2021 14:59:18 +1100
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
-        linux-integrity@vger.kernel.org,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>
-Subject: Re: [PATCH v5 2/4] x509: Detect sm2 keys by their parameters OID
-Message-ID: <20210202035655.GA26997@gondor.apana.org.au>
-References: <58935b00f65e389e9ae3da2425d06bd88d280e43.camel@linux.ibm.com>
- <20210129150355.850093-3-stefanb@linux.vnet.ibm.com>
- <20210129150355.850093-1-stefanb@linux.vnet.ibm.com>
- <4162801.1612185801@warthog.procyon.org.uk>
- <71a77d10-e645-194f-5073-ebf180a8d70e@linux.ibm.com>
- <4170408.1612192055@warthog.procyon.org.uk>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, davem@davemloft.net,
+        zohar@linux.ibm.com, linux-kernel@vger.kernel.org,
+        patrick@puiterwijk.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v7 0/4] Add support for x509 certs with NIST p256 and
+ p192 keys
+Message-ID: <20210202035918.GB26997@gondor.apana.org.au>
+References: <7836898a-0a42-5c9b-3a42-7ff4c7a03ea4@linux.ibm.com>
+ <20210201151910.1465705-1-stefanb@linux.ibm.com>
+ <32177.1612196003@warthog.procyon.org.uk>
+ <33903.1612197412@warthog.procyon.org.uk>
+ <ab3f4f96-6aec-4586-21fa-318fcee997a5@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4170408.1612192055@warthog.procyon.org.uk>
+In-Reply-To: <ab3f4f96-6aec-4586-21fa-318fcee997a5@linux.ibm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 03:07:35PM +0000, David Howells wrote:
+On Mon, Feb 01, 2021 at 11:45:16AM -0500, Stefan Berger wrote:
 >
-> Herbert wants the first patch to go through the crypto tree.  Maybe all of
-> them should proceed by that route if Herbert is willing?
+> With the crypto module missing in the kernel you will get an error trying to
+> load an x509 certificate that needs the algorithm to verify the self-signed
+> signature.
+> 
+> Before I post yet another series I hope that Herbert can say whether option
+> 1) would work for him.
 
-I'm not actually all that fussed about where it goes through.  It's
-just the first patch happens to touch an area that is still under
-discussion for the Crypto API.  So once that's settled I'm more than
-happy for it to go through your tree if that's the easiest way to go.
+Please be patient.  We need to make sure that whatever scheme you
+use for your algorithm also works for the driver authors who are
+working in the same area.  Because if we end up having to change
+the scheme then that'll just create more churn for you and David.
 
-Cheers,
+Thanks,
 -- 
 Email: Herbert Xu <herbert@gondor.apana.org.au>
 Home Page: http://gondor.apana.org.au/~herbert/
