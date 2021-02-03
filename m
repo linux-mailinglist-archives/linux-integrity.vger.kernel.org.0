@@ -2,200 +2,274 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4724930D096
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Feb 2021 02:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884A330D0A1
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Feb 2021 02:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbhBCBDc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Feb 2021 20:03:32 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50004 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229959AbhBCBDb (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Feb 2021 20:03:31 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11311mQL182108;
-        Tue, 2 Feb 2021 20:02:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=SdTGE1PXwbqtlyGJPJvZIfLdihEWZ2Ww9GvaH4mBOts=;
- b=U2H60DHOzLHUrg9moAwd6yVFN8JT3qyLdnrPF/ooTY46oeG5SB0pEv0FUmbOa4nnDnMa
- H+X+SAaN/Jl/qLf9rPHbyHI+e9KxnIAenFpmgMLa0mkXg4qdFFgY3eNZopoN10vR/qBi
- kdg9Rd0KaRbr1z/gtNBlkUHzOZQoKkYjiQ+wjQyS3v2DyDkfAON7B5acKfLQtGABNAUu
- Z3TWHnp0xWJIIX8cGfke3syrptqEnJeAbUYsqEcXXNGgS/CU9fpmpaf2trcHZkwwO1Iw
- 3oLD8JFlZQlVysOnnYBhzpDRlqRpssYmSHcN7YIQT9+o5RtrRjhgFaFmkwyFA2mIrbP8 4g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36fhs7g2f4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Feb 2021 20:02:47 -0500
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11312JCs184970;
-        Tue, 2 Feb 2021 20:02:47 -0500
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36fhs7g2ed-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 Feb 2021 20:02:46 -0500
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 113129m0025015;
-        Wed, 3 Feb 2021 01:02:45 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 36cy381rty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Feb 2021 01:02:44 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11312g5L45678990
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 3 Feb 2021 01:02:42 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8053A5204E;
-        Wed,  3 Feb 2021 01:02:42 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.101.146])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 651FD52051;
-        Wed,  3 Feb 2021 01:02:40 +0000 (GMT)
-Message-ID: <2cab86154362ac145d3749d05a06a2d4340264f6.camel@linux.ibm.com>
-Subject: Re: [RFC] Persist ima logs to disk
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Raphael Gianotti <raphgi@linux.microsoft.com>,
-        Amir Goldstein <amir73il@gmail.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        janne.karhunen@gmail.com,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
-        nramas@linux.microsoft.com, balajib@linux.microsoft.com
-Date:   Tue, 02 Feb 2021 20:02:39 -0500
-In-Reply-To: <169af4d7-9f1a-69c9-44a8-9d30deab80cb@linux.microsoft.com>
-References: <20210105195742.2629-1-raphgi@linux.microsoft.com>
-         <87127d502bcb9707dd4e7a43475ab6bed2fdd421.camel@linux.ibm.com>
-         <715a265180a092754ab9ea8522c39427645b25ad.camel@HansenPartnership.com>
-         <6e28c7a9742131cf508e77448bfee0a03b2c2e5e.camel@linux.ibm.com>
-         <3c50bc449aae2f09bd7d43c401cc9b292f9ec2ae.camel@HansenPartnership.com>
-         <570d54ca679b7a4f786fa65eb78601a2af91c397.camel@linux.ibm.com>
-         <13447f30db609d4bd77d5a826c5102dd5a931a19.camel@HansenPartnership.com>
-         <734adc26-0050-ce8f-4c8c-c8a907b569a6@linux.microsoft.com>
-         <8c78437d0e9a4968996b834030661b6f567f87eb.camel@linux.ibm.com>
-         <fc9a5d48-dc29-0d5d-55dd-bacac346da10@linux.microsoft.com>
-         <3f76d250-6aa7-65c1-b903-5bc82f6f8845@linux.microsoft.com>
-         <CAOQ4uxj4Pv2Wr1wgvBCDR-tnA5dsZT3rvdDzKgAH1aEV_-r9Qg@mail.gmail.com>
-         <3f1571d5b9f2fbb6a8ff9a5fad75b54e2b597904.camel@linux.ibm.com>
-         <169af4d7-9f1a-69c9-44a8-9d30deab80cb@linux.microsoft.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-02_13:2021-02-02,2021-02-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- mlxscore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
- phishscore=0 adultscore=0 spamscore=0 impostorscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102030001
+        id S229572AbhBCBJv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Feb 2021 20:09:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34194 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229570AbhBCBJu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 2 Feb 2021 20:09:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F09F664F59;
+        Wed,  3 Feb 2021 01:09:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612314548;
+        bh=HOgKBBbXaavpK1QmCgpeqtlhU/D1f5hiJDLNDTcIzno=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OM7nlRPP39RoXe0gXaU2XzqknPFJqkgGsOls6H2PXiS0QesK/SSN+tSRSGPp/bTV7
+         A4REv8iO0RHBvVJ76zmq1/t6PE/xTYOAJepSjn7DjjIgB4E/NgcqQY1yPcUyZxCWVE
+         g2bOnk7osRGkV0sY8Iu9c0r5jQAYdQhmvGNrHZCyIPfxNFLD+Im6Z6UmlDeEYx3cCL
+         iKAhAXqsjovxlOE1YpHUix8iBQs/j4UL3QiE1BD6ZFbfyD60F3b+pXXlmBAiMTzVGF
+         QxZ/hPuAIjAOHTz/gF8FP/35ShGRvEx0Hg+wZXypCLqzF0D/1YhiXG6ROO+DlCfHx3
+         ufOzfr69A3yfA==
+Date:   Wed, 3 Feb 2021 03:09:01 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        James.Bottomley@hansenpartnership.com
+Subject: Re: [PATCH v2 1/3] tpm: fix reference counting for struct tpm_chip
+Message-ID: <YBn3rdErdKNAUdgZ@kernel.org>
+References: <1612303743-29017-1-git-send-email-LinoSanfilippo@gmx.de>
+ <1612303743-29017-2-git-send-email-LinoSanfilippo@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1612303743-29017-2-git-send-email-LinoSanfilippo@gmx.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2021-02-02 at 10:14 -0800, Raphael Gianotti wrote:
-> On 2/2/2021 5:07 AM, Mimi Zohar wrote:
-> > On Tue, 2021-02-02 at 07:54 +0200, Amir Goldstein wrote:
-> >> On Tue, Feb 2, 2021 at 12:53 AM Raphael Gianotti
-> >> <raphgi@linux.microsoft.com> wrote:
-> >>>
-> >>> On 1/8/2021 9:58 AM, Raphael Gianotti wrote:
-> >>>> On 1/8/2021 4:38 AM, Mimi Zohar wrote:
-> >>>>> On Thu, 2021-01-07 at 14:57 -0800, Raphael Gianotti wrote:
-> >>>>>>>>>> But this doesn't address where the offloaded measurement list
-> >>>>>>>>>> will be stored, how long the list will be retained, nor who
-> >>>>>>>>>> guarantees the integrity of the offloaded list.  In addition,
-> >>>>>>>>>> different form factors will have different requirements.
-> >>>>>> For how long the list would be retained, or in the case of a log
-> >>>>>> segments, it
-> >>>>>> might make sense to have that be an admin decision, something that
-> >>>>>> can be
-> >>>>>> configured to satisfy the needs of a specific system, as mentioned
-> >>>>>> below by
-> >>>>>> James, does that seem correct?
-> >>>>> For the discussion on exporting and truncating the IMA measurement
-> >>>>> list, refer to:
-> >>>>> https://lore.kernel.org/linux-integrity/1580998432.5585.411.camel@linux.ibm.com/
-> >>>>>
-> >>>>>
-> >>>>>> Given the possibility of keeping the logs around for an indefinite
-> >>>>>> amount of
-> >>>>>> time, would using an expansion of the method present in this RFC be
-> >>>>>> more
-> >>>>>> appropriate than going down the vfs_tmpfile route? Forgive my lack
-> >>>>>> on expertise
-> >>>>>> on mm, but would the vfs_tmpfile approach work for keeping several
-> >>>>>> log segments
-> >>>>>> across multiple kexecs?
-> >>>>> With the "vfs_tmpfile" mechanism, breaking up and saving the log in
-> >>>>> segments isn't needed.  The existing mechanism for carrying the
-> >>>>> measurement list across kexec would still be used.  Currently, if the
-> >>>>> kernel cannot allocate the memory needed for carrying the measurement
-> >>>>> across kexec, it simply emits an error message, but continues with the
-> >>>>> kexec.
-> >>>> In this change I had introduced "exporting" the log to disk when the size
-> >>>> of the measurement list was too large. Given part of the motivation
-> >>>> behind
-> >>>> moving the measurement list is the possibility of it growing too large
-> >>>> and taking up too much of the kernel memory, that case would likely lead
-> >>>> to kexec not being able to carry over the logs. Do you believe it's
-> >>>> better
-> >>>> to use the "vfs_tmpfile" mechanism for moving the logs to disk and worry
-> >>>> about potential issues with kexec not being able to carry over the logs
-> >>>> separately, given the "vfs_tempfile" approach seems to be preferred and
-> >>>> also simplifies worries regarding truncating the logs?
-> >>> After a chat with Mimi I went ahead and did some investigative
-> >>> work in the vfs_tmpfile approach suggested, and I wanted to
-> >>> restart this thread with some thoughts/questions that came up
-> >>> from that.
-> >>> For the work I did I simply created a tmp file during ima's
-> >>> initialization and then tried to use vm_mmap to map it to memory,
-> >>> with the goal of using that memory mapping to generate return
-> >>> pointers to the code that writes the measurement entries to memory.
-> >> I don't understand why you would want to do that. I might have misunderstood
-> >> the requirements, but this was not how I meant for tmpfile to be used.
-> >>
-> >> Mimi explained to me that currently the IMA measurement list is entirely in
-> >> memory and that you are looking for a way to dump it into a file in order to
-> >> free up memory.
-> >>
-> >> What I suggested is this:
-> >>
-> >> - User opens an O_TMPFILE and passes fd to IMA to start export
-> >> - IMA starts writing (exporting) records to that file using *kernel* write API
-> >> - Every record written to the file is removed from the in-memory list
-> >> - While list is being exported, IMA keeps in-memory count of exported entries
-> >> - In ima_measurements_start, if export file exists, start iterator
-> >> starts reading
-> >>    records from the file
-> >> - In ima_measurements_next(), when next iterator reaches the export count,
-> >>    it switches over to iterate in-memory list
-> >>
-> >> This process can:
-> >> 1. Continue forever without maintaining any in-memory list
-> >> 2. Work in the background to periodically flush list to file
-> >> 3. Controlled by explicit user commands
-> >> 4. All of the above
-> >>
-> >> Is that understood? Did I understand the requirements correctly?
+On Tue, Feb 02, 2021 at 11:09:01PM +0100, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > 
-> Thanks for the clarification Amir, I never actually saw your initial mails,
-> I apologize for the confusion, the use of mmap was something the original
-> author of the export ima logs to disk mentioned had been suggested, which
-> is why I went down that route.
-> Given the actual suggestion you originally had given, I believe the coding
-> of it is somewhat to the code I sent in the RFC in terms of approach (if we
-> were to have it do periodic flushes, for example). With the addition of
-> reads to the log starting with the file as the oldest logs will be there.
-> I believe the only difference there is whether the list is kept in a tmp
-> file or not, so with the tmp file approach it would be just to keep the
-> list out of memory (either partially or permanently), where with a permanent
-> file, the list would still be available after a cold boot for instance.
+> The following sequence of operations
+> 
+> 1. open device /dev/tpmrm
+> 2. remove the registered tpm chip driver
 
-With Amir's suggestion, userspace still accesses the entire measurement
-list via the existing securityfs interface.  Only the kernel should be
-able to append or access the file.
+What is "tpm chip driver"? Please just refer to the exact thing
+(e.g. tpm_tis_spi is the one you should refer to in your case).
 
-Mimi
+> 3. perform a write() to /dev/tpmrm
 
+Just a nit: Use capital letter as the first letter in sentences.
+
+If I do "rmmod tpm_tis" the device is gone.
+
+> results in a refcount warning:
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 3 PID: 1161 at lib/refcount.c:25 kobject_get+0xa0/0xa4
+> refcount_t: addition on 0; use-after-free.
+> Modules linked in: tpm_tis_spi tpm_tis_core tpm mdio_bcm_unimac brcmfmac
+> sha256_generic libsha256 sha256_arm hci_uart btbcm bluetooth cfg80211 vc4
+> brcmutil ecdh_generic ecc snd_soc_core crc32_arm_ce libaes
+> raspberrypi_hwmon ac97_bus snd_pcm_dmaengine bcm2711_thermal snd_pcm
+> snd_timer genet snd phy_generic soundcore [last unloaded: spi_bcm2835]
+> CPU: 3 PID: 1161 Comm: hold_open Not tainted 5.10.0ls-main-dirty #2
+> Hardware name: BCM2711
+> [<c0410c3c>] (unwind_backtrace) from [<c040b580>] (show_stack+0x10/0x14)
+> [<c040b580>] (show_stack) from [<c1092174>] (dump_stack+0xc4/0xd8)
+> [<c1092174>] (dump_stack) from [<c0445a30>] (__warn+0x104/0x108)
+> [<c0445a30>] (__warn) from [<c0445aa8>] (warn_slowpath_fmt+0x74/0xb8)
+> [<c0445aa8>] (warn_slowpath_fmt) from [<c08435d0>] (kobject_get+0xa0/0xa4)
+> [<c08435d0>] (kobject_get) from [<bf0a715c>] (tpm_try_get_ops+0x14/0x54 [tpm])
+> [<bf0a715c>] (tpm_try_get_ops [tpm]) from [<bf0a7d6c>] (tpm_common_write+0x38/0x60 [tpm])
+> [<bf0a7d6c>] (tpm_common_write [tpm]) from [<c05a7ac0>] (vfs_write+0xc4/0x3c0)
+> [<c05a7ac0>] (vfs_write) from [<c05a7ee4>] (ksys_write+0x58/0xcc)
+> [<c05a7ee4>] (ksys_write) from [<c04001a0>] (ret_fast_syscall+0x0/0x4c)
+> Exception stack(0xc226bfa8 to 0xc226bff0)
+> bfa0:                   00000000 000105b4 00000003 beafe664 00000014 00000000
+> bfc0: 00000000 000105b4 000103f8 00000004 00000000 00000000 b6f9c000 beafe684
+> bfe0: 0000006c beafe648 0001056c b6eb6944
+> ---[ end trace d4b8409def9b8b1f ]---
+
+I guess this is happening with tpm_tis_spi. Unfortunately I don't have
+anything available that would use it.
+
+I did testing with tpm_tis but so far no success reproducing.
+
+> 
+> The reason is an attempt to get the chip->dev reference (see
+> tpm_try_get_ops()) although the last reference to this device has already
+> been released with the unregistration of the chip driver.
+> 
+> As far as I understand, the history of this bug is as follows:
+
+Generally you don't write in person to a commit message. This not an
+email in that sense. You should write in imperative form.
+
+> Commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
+> introduced the support for /dev/tpmrm. Beside the new device chip->devs
+> this code introduced the taking of an extra reference to chip->dev to
+> ensure that this device is not released as long as /dev/tpmrm is still in
+> use:
+> 
+> +       chip->devs.release = tpm_devs_release;
+> +       /* get extra reference on main device to hold on
+> +        * behalf of devs.  This holds the chip structure
+> +        * while cdevs is in use.  The corresponding put
+> +        * is in the tpm_devs_release
+> +        */
+
+
+Copy pasting this is probably unnecessary.
+
+> The extra reference to chip->dev was supposed to be released as soon as the
+> reference to chip->devs was freed:
+> 
+> +static void tpm_devs_release(struct device *dev)
+> +{
+> +       struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
+> +
+> +       /* release the master device reference */
+> +       put_device(&chip->dev);
+> +}
+
+OK, what you really should explain in the commit message is:
+
+1. Why this function *is not* called.
+2. What your fix does to make things better.
+
+
+
+> However the code did not work as expected, because the reference to
+> chip->devs was never released. Thus tpm_devs_release() was never called
+> which in turn also prevented the extra reference to chip->dev from being
+> released.
+
+If it did not work, it works now :-) So any fix would not be required.
+Just making a point here.
+
+> This led to behaviour which commit 8979b02aaf1d ("tpm: Fix reference count
+> to main device") tried to fix as an excerpt of the commit message shows:
+> 
+> "The main device is currently not properly released due to one additional
+>  reference to the 'devs' device which is only released in case of a TPM 2.
+>  So, also get the additional reference only in case of a TPM2."
+> 
+> Instead of adding the missing put for chip->devs, this patch chose another
+> approach by only taking the reference in case of TPM2:
+> 
+> +       if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> +               get_device(&chip->dev);
+> 
+> This fixed the non-TPM2 case but left the TPM2 case without the required
+> extra reference, since there is no code path that ever sets the flag
+> TPM_CHIP_FLAG_TPM2, which is the situation we have todoay.
+
+You should not need this explanation to explain refcount mismatch. Also
+past tense should not be used.
+
+I appreciate the time taken to write all this but you should just explain
+what you do and why. Let's just say this explanation is very obfuscted and
+hard to follow.
+
+> To fix this
+> 
+> 1. revert commit 8979b02aaf1d ("tpm: Fix reference count to main device")
+> to make sure the extra reference is taken unconditionally as proposed by
+> commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
+> 2. fix commit fdc915f7f719 ("tpm: expose spaces via a device link
+>
+>  /dev/tpmrm<n>") by adding an action handler to do the missing put to
+> chip->devs. This eventually results in the call of function
+> tpm_devs_release() which in turn performs the final put to the extra
+> reference to chip->dev.
+> 
+> Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
+> Fixes: 8979b02aaf1d ("tpm: Fix reference count to main device")
+
+If the fix makes sense a Cc stable is also required.
+
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> ---
+>  drivers/char/tpm/tpm-chip.c       | 18 +++++++++++++++---
+>  drivers/char/tpm/tpm_ftpm_tee.c   |  2 ++
+>  drivers/char/tpm/tpm_vtpm_proxy.c |  1 +
+>  3 files changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index ddaeceb..3ace199 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -360,8 +360,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+>  	 * while cdevs is in use.  The corresponding put
+>  	 * is in the tpm_devs_release (TPM2 only)
+>  	 */
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> -		get_device(&chip->dev);
+> +	get_device(&chip->dev);
+>  
+>  	if (chip->dev_num == 0)
+>  		chip->dev.devt = MKDEV(MISC_MAJOR, TPM_MINOR);
+> @@ -422,8 +421,21 @@ struct tpm_chip *tpmm_chip_alloc(struct device *pdev,
+>  	rc = devm_add_action_or_reset(pdev,
+>  				      (void (*)(void *)) put_device,
+>  				      &chip->dev);
+> -	if (rc)
+> +	if (rc) {
+> +		put_device(&chip->devs);
+>  		return ERR_PTR(rc);
+> +	}
+> +
+> +	rc = devm_add_action_or_reset(pdev,
+> +				      (void (*)(void *)) put_device,
+> +				      &chip->devs);
+> +	if (rc) {
+> +		devm_remove_action(pdev,
+> +				   (void (*)(void *)) put_device,
+> +				   &chip->dev);
+> +		put_device(&chip->dev);
+> +		return ERR_PTR(rc);
+> +	}
+>  
+>  	dev_set_drvdata(pdev, chip);
+>  
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> index 2ccdf8a..82858c2 100644
+> --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -286,6 +286,7 @@ static int ftpm_tee_probe(struct device *dev)
+>  
+>  out_chip:
+>  	put_device(&pvt_data->chip->dev);
+> +	put_device(&pvt_data->chip->devs);
+>  out_chip_alloc:
+>  	tee_shm_free(pvt_data->shm);
+>  out_shm_alloc:
+> @@ -318,6 +319,7 @@ static int ftpm_tee_remove(struct device *dev)
+>  	tpm_chip_unregister(pvt_data->chip);
+>  
+>  	/* frees chip */
+> +	put_device(&pvt_data->chip->devs);
+>  	put_device(&pvt_data->chip->dev);
+>  
+>  	/* Free the shared memory pool */
+> diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+> index 91c772e3..97b60f8 100644
+> --- a/drivers/char/tpm/tpm_vtpm_proxy.c
+> +++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+> @@ -520,6 +520,7 @@ static struct proxy_dev *vtpm_proxy_create_proxy_dev(void)
+>   */
+>  static inline void vtpm_proxy_delete_proxy_dev(struct proxy_dev *proxy_dev)
+>  {
+> +	put_device(&proxy_dev->chip->devs);
+>  	put_device(&proxy_dev->chip->dev); /* frees chip */
+>  	kfree(proxy_dev);
+>  }
+> -- 
+> 2.7.4
+> 
+
+Hope this feedback helps to improve. You really need to rewrite the whole
+commit message. I wonder who could try to reproduce this. With a quick
+skim I get the issue.
+
+Also you don't have James Bottomley in the CC list of the patch who is
+the author of the original commit. Please sort that out too...
+
+/Jarkko
