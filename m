@@ -2,304 +2,200 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3585130D025
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Feb 2021 01:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4724930D096
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Feb 2021 02:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbhBCAH5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Feb 2021 19:07:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56474 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231475AbhBCAH4 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Feb 2021 19:07:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 37C4264F60;
-        Wed,  3 Feb 2021 00:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612310834;
-        bh=SROTpgYa0F+coXs6zUQOP91MvP+Qx/edijGNaux/n/k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MohWxu5t1h/sf9ongd2NPXBhzDeWrRoanTWvaMwa8STQ6Tqf1Fm+oJflUeDrZSZZq
-         jtUH4H7tZndARoLAU9xWAUJEObo0MAaD8PmmS/bzOvEPPkUiSncFCVYrP9Yp4m75k0
-         jZS5odSvohLonM4F3Pt2c9QEc+eQqjibkfhvYgC9A2qPJOX1Frkn7WnC28YibFFydh
-         Wz5j7p+ffuKupuTUO6RoD5QphBuRxgieRhOSVzs7uo9D8ZRhEYPBof+bX49u1SW3Qh
-         s4vsDnzWpHtpfDrqR78UkFoKkbABI9H0fR5QqthT5pt6Yz70w8TRtD0hAdBxkjhgPK
-         U8nYXM+LvuxPA==
-Date:   Wed, 3 Feb 2021 02:07:07 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lukasz Majczak <lma@semihalf.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Dirk Gouders <dirk@gouders.net>, Tj <ml.linux@elloe.vision>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Radoslaw Biernacki <rad@semihalf.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Alex Levin <levinale@google.com>
-Subject: Re: [PATCH v3] tpm_tis: Add missing tpm_request/relinquish_locality
- calls
-Message-ID: <YBnpK/ceo/WD8/vS@kernel.org>
-References: <20210128130753.1283534-1-lma@semihalf.com>
- <20210202155139.521421-1-lma@semihalf.com>
- <YBnI1xHb1Iv6ZlFj@kernel.org>
- <YBnouh06dZZ6vHty@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YBnouh06dZZ6vHty@kernel.org>
+        id S229969AbhBCBDc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Feb 2021 20:03:32 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50004 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229959AbhBCBDb (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 2 Feb 2021 20:03:31 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11311mQL182108;
+        Tue, 2 Feb 2021 20:02:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=SdTGE1PXwbqtlyGJPJvZIfLdihEWZ2Ww9GvaH4mBOts=;
+ b=U2H60DHOzLHUrg9moAwd6yVFN8JT3qyLdnrPF/ooTY46oeG5SB0pEv0FUmbOa4nnDnMa
+ H+X+SAaN/Jl/qLf9rPHbyHI+e9KxnIAenFpmgMLa0mkXg4qdFFgY3eNZopoN10vR/qBi
+ kdg9Rd0KaRbr1z/gtNBlkUHzOZQoKkYjiQ+wjQyS3v2DyDkfAON7B5acKfLQtGABNAUu
+ Z3TWHnp0xWJIIX8cGfke3syrptqEnJeAbUYsqEcXXNGgS/CU9fpmpaf2trcHZkwwO1Iw
+ 3oLD8JFlZQlVysOnnYBhzpDRlqRpssYmSHcN7YIQT9+o5RtrRjhgFaFmkwyFA2mIrbP8 4g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36fhs7g2f4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Feb 2021 20:02:47 -0500
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11312JCs184970;
+        Tue, 2 Feb 2021 20:02:47 -0500
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36fhs7g2ed-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Feb 2021 20:02:46 -0500
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 113129m0025015;
+        Wed, 3 Feb 2021 01:02:45 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 36cy381rty-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Feb 2021 01:02:44 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11312g5L45678990
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 3 Feb 2021 01:02:42 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8053A5204E;
+        Wed,  3 Feb 2021 01:02:42 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.101.146])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 651FD52051;
+        Wed,  3 Feb 2021 01:02:40 +0000 (GMT)
+Message-ID: <2cab86154362ac145d3749d05a06a2d4340264f6.camel@linux.ibm.com>
+Subject: Re: [RFC] Persist ima logs to disk
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Raphael Gianotti <raphgi@linux.microsoft.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        janne.karhunen@gmail.com,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
+        nramas@linux.microsoft.com, balajib@linux.microsoft.com
+Date:   Tue, 02 Feb 2021 20:02:39 -0500
+In-Reply-To: <169af4d7-9f1a-69c9-44a8-9d30deab80cb@linux.microsoft.com>
+References: <20210105195742.2629-1-raphgi@linux.microsoft.com>
+         <87127d502bcb9707dd4e7a43475ab6bed2fdd421.camel@linux.ibm.com>
+         <715a265180a092754ab9ea8522c39427645b25ad.camel@HansenPartnership.com>
+         <6e28c7a9742131cf508e77448bfee0a03b2c2e5e.camel@linux.ibm.com>
+         <3c50bc449aae2f09bd7d43c401cc9b292f9ec2ae.camel@HansenPartnership.com>
+         <570d54ca679b7a4f786fa65eb78601a2af91c397.camel@linux.ibm.com>
+         <13447f30db609d4bd77d5a826c5102dd5a931a19.camel@HansenPartnership.com>
+         <734adc26-0050-ce8f-4c8c-c8a907b569a6@linux.microsoft.com>
+         <8c78437d0e9a4968996b834030661b6f567f87eb.camel@linux.ibm.com>
+         <fc9a5d48-dc29-0d5d-55dd-bacac346da10@linux.microsoft.com>
+         <3f76d250-6aa7-65c1-b903-5bc82f6f8845@linux.microsoft.com>
+         <CAOQ4uxj4Pv2Wr1wgvBCDR-tnA5dsZT3rvdDzKgAH1aEV_-r9Qg@mail.gmail.com>
+         <3f1571d5b9f2fbb6a8ff9a5fad75b54e2b597904.camel@linux.ibm.com>
+         <169af4d7-9f1a-69c9-44a8-9d30deab80cb@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-02_13:2021-02-02,2021-02-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ mlxscore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ phishscore=0 adultscore=0 spamscore=0 impostorscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102030001
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 02:05:17AM +0200, Jarkko Sakkinen wrote:
-> On Tue, Feb 02, 2021 at 11:49:11PM +0200, Jarkko Sakkinen wrote:
-> > On Tue, Feb 02, 2021 at 04:51:39PM +0100, Lukasz Majczak wrote:
-> > > There are missing calls to tpm_request_locality before the calls to
-> > > the tpm_get_timeouts() and tpm_tis_probe_irq_single() - both functions
-> > > internally send commands to the tpm. As the current
-> > > approach might work for tpm2, it fails for tpm1.x - in that case
-> > > call to tpm_get_timeouts() or tpm_tis_probe_irq_single()
-> > > without acquired locality fails and in turn causes tpm_tis_core_init()
-> > > to fail, it can be observed in the log with the following warning
-> > > trace:
-> > 
-> > I said earlier about proper capitalizations of the acronyms.
-> > 
-> > E.g. "tpm1.x" has no meaning. TPM 1.x has. There's also a few other
-> > similar examples.
-> > 
-> > > 
-> > > [    4.324298] TPM returned invalid status
-> > > [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
-> > 
-> > To make the commit message shorter you could snip from here.
-> > 
-> > > [    4.325888] Modules linked in:
-> > > [    4.326287] CPU: 2 PID: 1 Comm: swapper/0 Tainted: G        W         5.11.0-rc6-next-20210201-00003-g214461adb2e8 #43
-> > > [    4.327406] Hardware name: Google Caroline/Caroline, BIOS Google_Caroline.7820.430.0 07/20/2018
-> > > [    4.327918] RIP: 0010:tpm_tis_status+0x86/0x8f
-> > > [    4.328323] Code: 28 00 00 00 48 3b 45 f0 75 24 89 d8 48 83 c4 10 5b 5d c3 c6 05 58 d9 28 01 01 31 db 48 c7 c7 73 52 98 9c 31 c0 e8 c2 17 b0 ff <0f> 0b eb cd e8 cf 4f 55 00 0f 1f 44 00 00 55 48 89 e56
-> > > [    4.330592] RSP: 0000:ffff88810092f7a0 EFLAGS: 00010246
-> > > [    4.331223] RAX: 691ee151166db100 RBX: 0000000000000000 RCX: 0000000000000001
-> > > [    4.331860] RDX: 0000000000000006 RSI: ffffffff9c96d302 RDI: 00000000ffffffff
-> > > [    4.332272] RBP: ffff88810092f7b8 R08: dffffc0000000000 R09: fffffbfff39c96ce
-> > > [    4.332683] R10: fffffbfff39c96ce R11: 0000000000000001 R12: ffff8881053e2000
-> > > [    4.333109] R13: 0000000065000000 R14: ffff888105d71000 R15: ffff888105cd2628
-> > > [    4.333738] FS:  0000000000000000(0000) GS:ffff88842f200000(0000) knlGS:0000000000000000
-> > > [    4.334432] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > [    4.334783] CR2: 0000000000000000 CR3: 0000000037828001 CR4: 00000000003706e0
-> > > [    4.335196] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > [    4.335886] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > [    4.336793] Call Trace:
-> > > [    4.337107]  tpm_tis_send_data+0x3d/0x22f
-> > > [    4.337506]  tpm_tis_send_main+0x30/0xf5
-> > > [    4.337746]  tpm_transmit+0xbf/0x327
-> > > [    4.338042]  ? __alloc_pages_nodemask+0x261/0x36d
-> > > [    4.338615]  tpm_transmit_cmd+0x2c/0x93
-> > > [    4.339109]  tpm1_getcap+0x232/0x285
-> > > [    4.339578]  tpm1_get_timeouts+0x48/0x47d
-> > > [    4.339964]  ? lockdep_init_map_type+0x71/0x257
-> > > [    4.340256]  ? lockdep_init_map_type+0x71/0x257
-> > > [    4.340719]  ? __raw_spin_lock_init+0x40/0x69
-> > > [    4.341208]  tpm_tis_core_init+0x402/0x5ee
-> > > [    4.341629]  tpm_tis_init+0x11d/0x1a2
-> > > [    4.341867]  tpm_tis_pnp_init+0x91/0xb5
-> > > [    4.342101]  ? tis_int_handler+0x15f/0x15f
-> > > [    4.342466]  pnp_device_probe+0x79/0x9f
-> > > [    4.342941]  really_probe+0x149/0x4a8
-> > > [    4.343412]  driver_probe_device+0xd6/0x144
-> > > [    4.343968]  device_driver_attach+0x42/0x5b
-> > > [    4.344382]  __driver_attach+0xca/0x139
-> > > [    4.344617]  ? driver_attach+0x1f/0x1f
-> > > [    4.344860]  bus_for_each_dev+0x85/0xb7
-> > > [    4.345096]  bus_add_driver+0x12b/0x228
-> > > [    4.345330]  driver_register+0x64/0xed
-> > > [    4.345560]  init_tis+0xa5/0xeb
-> > > [    4.345784]  ? lock_is_held_type+0x100/0x141
-> > > [    4.346044]  ? tpm_init+0x106/0x106
-> > > [    4.346259]  ? rcu_read_lock_sched_held+0x41/0x7e
-> > > [    4.346542]  ? tpm_init+0x106/0x106
-> > > [    4.346678] battery: ACPI: Battery Slot [BAT0] (battery present)
-> > > [    4.346754]  do_one_initcall+0x1b9/0x43d
-> > > [    4.346776]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
-> > > [    4.347659]  ? lockdep_hardirqs_on+0x8e/0x12e
-> > > [    4.347937]  ? lock_is_held_type+0x100/0x141
-> > > [    4.348196]  ? rcu_read_lock_sched_held+0x41/0x7e
-> > > [    4.348477]  do_initcall_level+0x99/0xa9
-> > > [    4.348717]  ? kernel_init+0xe/0x10a
-> > > [    4.348954]  do_initcalls+0x4e/0x79
-> > > [    4.349170]  kernel_init_freeable+0x15a/0x1ae
-> > > [    4.349434]  ? rest_init+0x1d6/0x1d6
-> > > [    4.349655]  kernel_init+0xe/0x10a
-> > > [    4.349882]  ret_from_fork+0x22/0x30
-> > > [    4.350103] irq event stamp: 700039
-> > > [    4.350318] hardirqs last  enabled at (700047): [<ffffffff9b735265>] console_unlock+0x4be/0x538
-> > > [    4.350836] hardirqs last disabled at (700056): [<ffffffff9b734e84>] console_unlock+0xdd/0x538
-> > > [    4.351331] softirqs last  enabled at (699522): [<ffffffff9c4004ec>] __do_softirq+0x4ec/0x539
-> > > [    4.351835] softirqs last disabled at (699517): [<ffffffff9c200f62>] asm_call_irq_on_stack+0x12/0x20
-> > > 
-> > > Following the trace one can also notice a comment in the tpm_tis_status():
-> > > 
-> > > 		/*
-> > > 		 * If this trips, the chances are the read is
-> > > 		 * returning 0xff because the locality hasn't been
-> > > 		 * acquired.  Usually because tpm_try_get_ops() hasn't
-> > > 		 * been called before doing a TPM operation.
-> > > 		 */
-> > > In this case we don't have to call tpm_try_get_ops()
-> > 
-> > Do not use "we". Write in imperative term.
-> > 
-> > > as both calls (tpm_get_timeouts() and tpm_tis_probe_irq_single()) are
-> > > in the tpm_tis_core_init function and don't require any locking or clock 
-> > > enablement. Similar usage is in the probe_itpm() function also called
-> > > inside tpm_tis_core_init().
-> > 
-> > You use parentheses incosistently here. E.g. tpm_tis_core_init has them
-> > in some sentences, and in some it doesn't.
-> > 
-> > > Tested on Samsung Chromebook Pro (Caroline).
-> > > 
-> > > Signed-off-by: Lukasz Majczak <lma@semihalf.com>
-> > > ---
-> > > Hi Jarkko
-> > > 
-> > > I have checked the linux-next with James patches, also followed Dirk
-> > > suggestion applying remaining ones, although without any luck -
-> > > a warning trace was still present. As Guneter mentioned earlier, this
-> > > patch[1] doesn't address a lack of acquired locality in the
-> > > tpm_get_timeouts() and does it only for tpm_tis_probe_irq_single() but
-> > > also without a call to tpm_relinquish_locality().
-> > > 
-> > > Here are my logs from the clean linux-next master branch [2]
-> > > (with two James' patches present) and with my
-> > > patch applied[3]
-> > > 
-> > > Best regards,
-> > > Lukasz
-> > 
-> > Ok. Please also take care fixing the cosmetic things, which you
-> > clearly haven't done (like writing acronyms correctly).
-> > 
-> > > [1] https://lore.kernel.org/linux-integrity/20201001180925.13808-5-James.Bottomley@HansenPartnership.com/
-> > > [2] https://gist.github.com/semihalf-majczak-lukasz/f588c0684a6cc7d983bb9c4eb4bda586
-> > > [3] https://gist.github.com/semihalf-majczak-lukasz/88ede933bc7d28d806e3532850a04054
-> > > 
-> > > v2 -> v3:
-> > >  - Added braces around if part of if/else statements
-> > >  - Rebased to linux-next
-> > >  - Updated commit message
-> > >  
-> > >  drivers/char/tpm/tpm-chip.c      |  4 ++--
-> > >  drivers/char/tpm/tpm-interface.c | 13 ++++++++++---
-> > >  drivers/char/tpm/tpm.h           |  2 ++
-> > >  drivers/char/tpm/tpm_tis_core.c  | 14 +++++++++++---
-> > >  4 files changed, 25 insertions(+), 8 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> > > index ddaeceb7e109..5351963a4b19 100644
-> > > --- a/drivers/char/tpm/tpm-chip.c
-> > > +++ b/drivers/char/tpm/tpm-chip.c
-> > > @@ -32,7 +32,7 @@ struct class *tpm_class;
-> > >  struct class *tpmrm_class;
-> > >  dev_t tpm_devt;
-> > >  
-> > > -static int tpm_request_locality(struct tpm_chip *chip)
-> > > +int tpm_request_locality(struct tpm_chip *chip)
-> > >  {
-> > >  	int rc;
-> > >  
-> > > @@ -47,7 +47,7 @@ static int tpm_request_locality(struct tpm_chip *chip)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > -static void tpm_relinquish_locality(struct tpm_chip *chip)
-> > > +void tpm_relinquish_locality(struct tpm_chip *chip)
-> > >  {
-> > >  	int rc;
-> > 
-> > You need to export the symbols.
-> > 
-> > > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> > > index 1621ce818705..2a9001d329f2 100644
-> > > --- a/drivers/char/tpm/tpm-interface.c
-> > > +++ b/drivers/char/tpm/tpm-interface.c
-> > > @@ -241,10 +241,17 @@ int tpm_get_timeouts(struct tpm_chip *chip)
-> > >  	if (chip->flags & TPM_CHIP_FLAG_HAVE_TIMEOUTS)
-> > >  		return 0;
-> > >  
-> > > -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > > +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> > >  		return tpm2_get_timeouts(chip);
-> > > -	else
-> > > -		return tpm1_get_timeouts(chip);
-> > > +	} else {
-> > > +		ssize_t ret = tpm_request_locality(chip);
-> > > +
-> > > +		if (ret)
-> > > +			return ret;
-> > > +		ret = tpm1_get_timeouts(chip);
-> > > +		tpm_relinquish_locality(chip);
-> > > +		return ret;
-> > > +	}
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(tpm_get_timeouts);
-> > >  
-> > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > > index 947d1db0a5cc..8c13008437dd 100644
-> > > --- a/drivers/char/tpm/tpm.h
-> > > +++ b/drivers/char/tpm/tpm.h
-> > > @@ -193,6 +193,8 @@ static inline void tpm_msleep(unsigned int delay_msec)
-> > >  
-> > >  int tpm_chip_start(struct tpm_chip *chip);
-> > >  void tpm_chip_stop(struct tpm_chip *chip);
-> > > +int tpm_request_locality(struct tpm_chip *chip);
-> > > +void tpm_relinquish_locality(struct tpm_chip *chip);
-> > >  struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
-> > >  __must_check int tpm_try_get_ops(struct tpm_chip *chip);
-> > >  void tpm_put_ops(struct tpm_chip *chip);
-> > > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> > > index 431919d5f48a..d4f381d6356e 100644
-> > > --- a/drivers/char/tpm/tpm_tis_core.c
-> > > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > > @@ -708,11 +708,19 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
-> > >  	u32 cap2;
-> > >  	cap_t cap;
-> > >  
-> > > -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > > +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> > >  		return tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
-> > > -	else
-> > > -		return tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc,
-> > > +	} else {
-> > > +		ssize_t ret = tpm_request_locality(chip);
-> > > +
-> > > +		if (ret)
-> > > +			return ret;
-> > > +		ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc,
-> > >  				  0);
-> > > +		tpm_relinquish_locality(chip);
-> > > +		return ret;
-> > > +	}
-> > 
-> > Why this and nost just call tpm_chip_start()?
+On Tue, 2021-02-02 at 10:14 -0800, Raphael Gianotti wrote:
+> On 2/2/2021 5:07 AM, Mimi Zohar wrote:
+> > On Tue, 2021-02-02 at 07:54 +0200, Amir Goldstein wrote:
+> >> On Tue, Feb 2, 2021 at 12:53 AM Raphael Gianotti
+> >> <raphgi@linux.microsoft.com> wrote:
+> >>>
+> >>> On 1/8/2021 9:58 AM, Raphael Gianotti wrote:
+> >>>> On 1/8/2021 4:38 AM, Mimi Zohar wrote:
+> >>>>> On Thu, 2021-01-07 at 14:57 -0800, Raphael Gianotti wrote:
+> >>>>>>>>>> But this doesn't address where the offloaded measurement list
+> >>>>>>>>>> will be stored, how long the list will be retained, nor who
+> >>>>>>>>>> guarantees the integrity of the offloaded list.  In addition,
+> >>>>>>>>>> different form factors will have different requirements.
+> >>>>>> For how long the list would be retained, or in the case of a log
+> >>>>>> segments, it
+> >>>>>> might make sense to have that be an admin decision, something that
+> >>>>>> can be
+> >>>>>> configured to satisfy the needs of a specific system, as mentioned
+> >>>>>> below by
+> >>>>>> James, does that seem correct?
+> >>>>> For the discussion on exporting and truncating the IMA measurement
+> >>>>> list, refer to:
+> >>>>> https://lore.kernel.org/linux-integrity/1580998432.5585.411.camel@linux.ibm.com/
+> >>>>>
+> >>>>>
+> >>>>>> Given the possibility of keeping the logs around for an indefinite
+> >>>>>> amount of
+> >>>>>> time, would using an expansion of the method present in this RFC be
+> >>>>>> more
+> >>>>>> appropriate than going down the vfs_tmpfile route? Forgive my lack
+> >>>>>> on expertise
+> >>>>>> on mm, but would the vfs_tmpfile approach work for keeping several
+> >>>>>> log segments
+> >>>>>> across multiple kexecs?
+> >>>>> With the "vfs_tmpfile" mechanism, breaking up and saving the log in
+> >>>>> segments isn't needed.  The existing mechanism for carrying the
+> >>>>> measurement list across kexec would still be used.  Currently, if the
+> >>>>> kernel cannot allocate the memory needed for carrying the measurement
+> >>>>> across kexec, it simply emits an error message, but continues with the
+> >>>>> kexec.
+> >>>> In this change I had introduced "exporting" the log to disk when the size
+> >>>> of the measurement list was too large. Given part of the motivation
+> >>>> behind
+> >>>> moving the measurement list is the possibility of it growing too large
+> >>>> and taking up too much of the kernel memory, that case would likely lead
+> >>>> to kexec not being able to carry over the logs. Do you believe it's
+> >>>> better
+> >>>> to use the "vfs_tmpfile" mechanism for moving the logs to disk and worry
+> >>>> about potential issues with kexec not being able to carry over the logs
+> >>>> separately, given the "vfs_tempfile" approach seems to be preferred and
+> >>>> also simplifies worries regarding truncating the logs?
+> >>> After a chat with Mimi I went ahead and did some investigative
+> >>> work in the vfs_tmpfile approach suggested, and I wanted to
+> >>> restart this thread with some thoughts/questions that came up
+> >>> from that.
+> >>> For the work I did I simply created a tmp file during ima's
+> >>> initialization and then tried to use vm_mmap to map it to memory,
+> >>> with the goal of using that memory mapping to generate return
+> >>> pointers to the code that writes the measurement entries to memory.
+> >> I don't understand why you would want to do that. I might have misunderstood
+> >> the requirements, but this was not how I meant for tmpfile to be used.
+> >>
+> >> Mimi explained to me that currently the IMA measurement list is entirely in
+> >> memory and that you are looking for a way to dump it into a file in order to
+> >> free up memory.
+> >>
+> >> What I suggested is this:
+> >>
+> >> - User opens an O_TMPFILE and passes fd to IMA to start export
+> >> - IMA starts writing (exporting) records to that file using *kernel* write API
+> >> - Every record written to the file is removed from the in-memory list
+> >> - While list is being exported, IMA keeps in-memory count of exported entries
+> >> - In ima_measurements_start, if export file exists, start iterator
+> >> starts reading
+> >>    records from the file
+> >> - In ima_measurements_next(), when next iterator reaches the export count,
+> >>    it switches over to iterate in-memory list
+> >>
+> >> This process can:
+> >> 1. Continue forever without maintaining any in-memory list
+> >> 2. Work in the background to periodically flush list to file
+> >> 3. Controlled by explicit user commands
+> >> 4. All of the above
+> >>
+> >> Is that understood? Did I understand the requirements correctly?
 > 
-> I.e. see tpm2_probe().
-> 
-> Also, add these  in place:
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
-> 
-> Also a minor rant (appericiate the fix a lot in all cases): please hold on
-> until there's some window to see your patch. I did not understand the
-> reason for all these different versions.
-> 
-> Also remember the fix the minor glitches in the commit message that I
-> pointed out.
-> 
-> And again, thanks for fixing the issue.
+> Thanks for the clarification Amir, I never actually saw your initial mails,
+> I apologize for the confusion, the use of mmap was something the original
+> author of the export ima logs to disk mentioned had been suggested, which
+> is why I went down that route.
+> Given the actual suggestion you originally had given, I believe the coding
+> of it is somewhat to the code I sent in the RFC in terms of approach (if we
+> were to have it do periodic flushes, for example). With the addition of
+> reads to the log starting with the file as the oldest logs will be there.
+> I believe the only difference there is whether the list is kept in a tmp
+> file or not, so with the tmp file approach it would be just to keep the
+> list out of memory (either partially or permanently), where with a permanent
+> file, the list would still be available after a cold boot for instance.
 
-I'll hold on up until I get a new version version before sending my PR
-together with two of James' earlier fixes.
+With Amir's suggestion, userspace still accesses the entire measurement
+list via the existing securityfs interface.  Only the kernel should be
+able to append or access the file.
 
-/Jarkko
+Mimi
+
