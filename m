@@ -2,415 +2,193 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 511B530DB96
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Feb 2021 14:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 383D530DBC2
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Feb 2021 14:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbhBCNoz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 3 Feb 2021 08:44:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbhBCNog (ORCPT
+        id S231880AbhBCNtv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 3 Feb 2021 08:49:51 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:50895 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231750AbhBCNto (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 3 Feb 2021 08:44:36 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FAEC0613ED
-        for <linux-integrity@vger.kernel.org>; Wed,  3 Feb 2021 05:43:56 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id o63so17400405pgo.6
-        for <linux-integrity@vger.kernel.org>; Wed, 03 Feb 2021 05:43:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=q2XZlLhUPLbgRc9RAQu5vyhQo99MI9rW2agNVJUInsc=;
-        b=aHVrRnolaZqm9cUd0lDvVp6+Pmqci2VBjc5vj+jz+YTKcTqy6A1bCAKD9orS/1rLtc
-         dE5tJzhTS83iQFqARkOaQre+lLIUeTN6HwRfc3bGxkVwesqspW3xd6ONUOQOfKtgKRog
-         F4YXSAJAMKZP0rpqcJjfpEKRuwwA3ymJCIOzP00Sp9tRXEA+huR6K9zDiVPz8yqbWJfh
-         bg+LX36uepUmOqTH7OUcYphEOKMXXyhYqyIjFI6S0RisruQ8PBPzhCKZMZFD0nkpYrrk
-         BG6DNuMJFI4jsDzEgMhiooQl7CoyzlmWvrgjSUoQuSsB6QpQ8DrZf5hle6yopyUFw6l9
-         nvAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=q2XZlLhUPLbgRc9RAQu5vyhQo99MI9rW2agNVJUInsc=;
-        b=EymNNhk29WDTZANnmrfXkSVheZrkTfHcw48dL0/Gdc8fmKdlf3LOrpk77zWs+N0kbS
-         B8JBv97KgRp38aAejVt10mkR29ydfaAi7hIH/pA/2+r2CKcc/DsF4B/OvkRhxhL6iXpc
-         eruz7G06uJUi0AIaOkHNXoXJMCcKGVfREL7qWBPKxPs0NXHMu8owCD40Knr6GvBBnyAO
-         mgrxwsgwMwb2fGa5Own85dyH462lKzp15EC0jx9GPTkc0QpcoP8xl7k06e/f2enIkgX1
-         f96l9Hc0tRVlb+qAXR9Bv+/BxRf+I5ZzTXK1eThy1YV8cVNCzn5ujjBRmPtXc7qDirAf
-         d9lg==
-X-Gm-Message-State: AOAM530g/wXcNxdD1ybWv6qVtBWmKUeLJfYKG3ulXPV9TCaTxLFZ28JL
-        bgCzVFAEfS+p5+Aw7PE5gvRKzfl4KxP0pfAz0RXY+W4ePXfRzWYN
-X-Google-Smtp-Source: ABdhPJzxMV5TYBtyfdn7kcceb8j3gtl3yRczOhTOeT4yyI9IHjGNPH5CP/zeT6vgWIo+j+1ZFvi0MZHCdQzeX1o1iKU=
-X-Received: by 2002:a62:7896:0:b029:1b6:7319:52a7 with SMTP id
- t144-20020a6278960000b02901b6731952a7mr3342366pfc.30.1612359835254; Wed, 03
- Feb 2021 05:43:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20210128130753.1283534-1-lma@semihalf.com> <20210202155139.521421-1-lma@semihalf.com>
- <ghh7mu1f3p.fsf@gouders.net> <gh5z39ml0u.fsf@gouders.net>
-In-Reply-To: <gh5z39ml0u.fsf@gouders.net>
-From:   Lukasz Majczak <lma@semihalf.com>
-Date:   Wed, 3 Feb 2021 14:43:44 +0100
-Message-ID: <CAFJ_xbpv3O5f4MPUhZExA3g-4NjPN_vvv7q6Srh1ddqCH4ie9w@mail.gmail.com>
-Subject: Re: [PATCH v3] tpm_tis: Add missing tpm_request/relinquish_locality calls
-To:     Dirk Gouders <dirk@gouders.net>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Tj <ml.linux@elloe.vision>, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Radoslaw Biernacki <rad@semihalf.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Alex Levin <levinale@google.com>
+        Wed, 3 Feb 2021 08:49:44 -0500
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jlu@pengutronix.de>)
+        id 1l7IUR-0001al-FD; Wed, 03 Feb 2021 14:46:39 +0100
+Received: from localhost ([127.0.0.1])
+        by ptx.hi.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <jlu@pengutronix.de>)
+        id 1l7IUQ-0002BD-Dm; Wed, 03 Feb 2021 14:46:38 +0100
+Message-ID: <1310b10eaaf246c326f8d74bd47c91d738ea976b.camel@pengutronix.de>
+Subject: Re: Migration to trusted keys: sealing user-provided key?
+From:   Jan =?ISO-8859-1?Q?L=FCbbe?= <jlu@pengutronix.de>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        David Howells <dhowells@redhat.com>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>, kernel@pengutronix.de,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>
+Date:   Wed, 03 Feb 2021 14:46:37 +0100
+In-Reply-To: <CAFA6WYNbf+Jncj0jF4abLhWH8RUWDORf0kcWi021hxBmq-NK=g@mail.gmail.com>
+References: <74830d4f-5a76-8ba8-aad0-0d79f7c01af9@pengutronix.de>
+         <6dc99fd9ffbc5f405c5f64d0802d1399fc6428e4.camel@kernel.org>
+         <d1bed49f89495ceb529355cb41655a208fdb2197.camel@linux.ibm.com>
+         <8b9477e150d7c939dc0def3ebb4443efcc83cd85.camel@pengutronix.de>
+         <18529562ed71becf21401ec9fd9d95c4ac44fdc0.camel@linux.ibm.com>
+         <CAFA6WYMn519aF=uodjnSUZ+kKaRzdoh6Enu0OsRMge=21iBNBA@mail.gmail.com>
+         <2012751fd653c284679aa2c6ac9a56a5edbf1410.camel@pengutronix.de>
+         <CAFA6WYNbf+Jncj0jF4abLhWH8RUWDORf0kcWi021hxBmq-NK=g@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: jlu@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko, Dirk,
+On Wed, 2021-02-03 at 17:20 +0530, Sumit Garg wrote:
+> On Tue, 2 Feb 2021 at 18:04, Jan Lübbe <jlu@pengutronix.de> wrote:
+> > 
+> > On Tue, 2021-02-02 at 17:45 +0530, Sumit Garg wrote:
+> > > Hi Jan,
+> > > 
+> > > On Sun, 31 Jan 2021 at 23:40, James Bottomley <jejb@linux.ibm.com> wrote:
+> > > > 
+> > > > On Sun, 2021-01-31 at 15:14 +0100, Jan Lübbe wrote:
+> > > > > On Sun, 2021-01-31 at 07:09 -0500, Mimi Zohar wrote:
+> > > > > > On Sat, 2021-01-30 at 19:53 +0200, Jarkko Sakkinen wrote:
+> > > > > > > On Thu, 2021-01-28 at 18:31 +0100, Ahmad Fatoum wrote:
+> > > > > > > > Hello,
+> > > > > > > > 
+> > > > > > > > I've been looking into how a migration to using
+> > > > > > > > trusted/encrypted keys would look like (particularly with dm-
+> > > > > > > > crypt).
+> > > > > > > > 
+> > > > > > > > Currently, it seems the the only way is to re-encrypt the
+> > > > > > > > partitions because trusted/encrypted keys always generate their
+> > > > > > > > payloads from RNG.
+> > > > > > > > 
+> > > > > > > > If instead there was a key command to initialize a new
+> > > > > > > > trusted/encrypted key with a user provided value, users could
+> > > > > > > > use whatever mechanism they used beforehand to get a plaintext
+> > > > > > > > key and use that to initialize a new trusted/encrypted key.
+> > > > > > > > From there on, the key will be like any other trusted/encrypted
+> > > > > > > > key and not be disclosed again to userspace.
+> > > > > > > > 
+> > > > > > > > What are your thoughts on this? Would an API like
+> > > > > > > > 
+> > > > > > > >   keyctl add trusted dmcrypt-key 'set <content>' # user-
+> > > > > > > > supplied content
+> > > > > > > > 
+> > > > > > > > be acceptable?
+> > > > > > > 
+> > > > > > > Maybe it's the lack of knowledge with dm-crypt, but why this
+> > > > > > > would be useful? Just want to understand the bottleneck, that's
+> > > > > > > all.
+> > > > > 
+> > > > > Our goal in this case is to move away from having the dm-crypt key
+> > > > > material accessible to user-space on embedded devices. For an
+> > > > > existing dm-crypt volume, this key is fixed. A key can be loaded into
+> > > > > user key type and used by dm-crypt (cryptsetup can already do it this
+> > > > > way). But at this point, you can still do 'keyctl read' on that key,
+> > > > > exposing the key material to user space.
+> > > > > 
+> > > > > Currently, with both encrypted and trusted keys, you can only
+> > > > > generate new random keys, not import existing key material.
+> > > > > 
+> > > > > James Bottomley mentioned in the other reply that the key format will
+> > > > > become compatible with the openssl_tpm2_engine, which would provide a
+> > > > > workaround. This wouldn't work with OP-TEE-based trusted keys (see
+> > > > > Sumit Garg's series), though.
+> > > > 
+> > > > Assuming OP-TEE has the same use model as the TPM, someone will
+> > > > eventually realise the need for interoperable key formats between key
+> > > > consumers and then it will work in the same way once the kernel gets
+> > > > updated to speak whatever format they come up with.
+> > > 
+> > > IIUC, James re-work for TPM trusted keys is to allow loading of sealed
+> > > trusted keys directly via user-space (with proper authorization) into
+> > > the kernel keyring.
+> > > 
+> > > I think similar should be achievable with OP-TEE (via extending pseudo
+> > > TA [1]) as well to allow restricted user-space access (with proper
+> > > authorization) to generate sealed trusted key blob that should be
+> > > interoperable with the kernel. Currently OP-TEE exposes trusted key
+> > > interfaces for kernel users only.
+> > 
+> > What is the security benefit of having the key blob creation in user-space
+> > instead of in the kernel? Key import is a standard operation in HSMs or PKCS#11
+> > tokens.
+> 
+> User authentication, AFAIK most of the HSMs or PKCS#11 require that
+> for key import. But IIUC, your suggested approach to load plain key
+> into kernel keyring and say it's *trusted* without any user
+> authentication, would it really be a trusted key? What prevents a
+> rogue user from making his key as the dm-crypt trusted key?
 
-Jarkko,
-Thank you for your points - I will try to fix all you have mentioned.
-I think it would be good to clarify a few things, before going with
-the next version. Regarding use tpm_chip_start/stop() around
-tpm2_probe() call - I have followed the similar way it is done in the
-probe_itpm() function, where is also a call to tpm_tis_send_data()
-guarded by request/release_locality(). I have tested it on the Samsung
-Chromebook Pro (which reports TPM 1.2 / Cr50) and it was sufficient
-(e.g. I didn't have to enable the clock) to get rid of a trace
-mentioned in the commit message....but now writing these words I'm
-starting to think that using tpm_chip_start/stop() could be safer from
-a point of view of other TPMs... so if you suggest using
-tpm_chip_start/stop() shall I also add it to the probe_itpm() (instead
-of  request/release_locality()) ?
+There is user authentication at the level of key rings. So an untrusted user
+cannot load or link keys they have no write permission for.
 
-Dirk,
-Thanks for the clarification. Regarding the issue you observe - I
-wanted to address at first the one that is generating the trace
-(please check the commit message) because it was leading to returning
-an error in the tpm_tis_status() function causing TPM module not
-initialized at all in the end - requesting locality before the call to
-the tpm_tis_send_data() has helped in my case (my test environment). I
-am aware of the second issue - "TPM interrupt not working, polling
-instead", but as it is not as critical as the first one, I decided to
-work on it later.
-
-Thank you once again for all your input and sorry for a confusion with
-sending patches.
-
-Best regards,
-Lukasz
+As we already have user type keys, which don't have these restrictions and are
+accepted by most subsystems, any use of kernel keyrings must already make sure
+that the proper keys are used.
 
 
-=C5=9Br., 3 lut 2021 o 12:56 Dirk Gouders <dirk@gouders.net> napisa=C5=82(a=
-):
->
-> Dirk Gouders <dirk@gouders.net> writes:
->
-> > Lukasz Majczak <lma@semihalf.com> writes:
-> >
-> >> There are missing calls to tpm_request_locality before the calls to
-> >> the tpm_get_timeouts() and tpm_tis_probe_irq_single() - both functions
-> >> internally send commands to the tpm. As the current
-> >> approach might work for tpm2, it fails for tpm1.x - in that case
-> >> call to tpm_get_timeouts() or tpm_tis_probe_irq_single()
-> >> without acquired locality fails and in turn causes tpm_tis_core_init()
-> >> to fail, it can be observed in the log with the following warning
-> >> trace:
-> >>
-> >> [    4.324298] TPM returned invalid status
-> >> [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core=
-.c:275 tpm_tis_status+0x86/0x8f
-> >> [    4.325888] Modules linked in:
-> >> [    4.326287] CPU: 2 PID: 1 Comm: swapper/0 Tainted: G        W      =
-   5.11.0-rc6-next-20210201-00003-g214461adb2e8 #43
-> >> [    4.327406] Hardware name: Google Caroline/Caroline, BIOS Google_Ca=
-roline.7820.430.0 07/20/2018
-> >> [    4.327918] RIP: 0010:tpm_tis_status+0x86/0x8f
-> >> [    4.328323] Code: 28 00 00 00 48 3b 45 f0 75 24 89 d8 48 83 c4 10 5=
-b 5d c3 c6 05 58 d9 28 01 01 31 db 48 c7 c7 73 52 98 9c 31 c0 e8 c2 17 b0 f=
-f <0f> 0b eb cd e8 cf 4f 55 00 0f 1f 44 00 00 55 48 89 e56
-> >> [    4.330592] RSP: 0000:ffff88810092f7a0 EFLAGS: 00010246
-> >> [    4.331223] RAX: 691ee151166db100 RBX: 0000000000000000 RCX: 000000=
-0000000001
-> >> [    4.331860] RDX: 0000000000000006 RSI: ffffffff9c96d302 RDI: 000000=
-00ffffffff
-> >> [    4.332272] RBP: ffff88810092f7b8 R08: dffffc0000000000 R09: fffffb=
-fff39c96ce
-> >> [    4.332683] R10: fffffbfff39c96ce R11: 0000000000000001 R12: ffff88=
-81053e2000
-> >> [    4.333109] R13: 0000000065000000 R14: ffff888105d71000 R15: ffff88=
-8105cd2628
-> >> [    4.333738] FS:  0000000000000000(0000) GS:ffff88842f200000(0000) k=
-nlGS:0000000000000000
-> >> [    4.334432] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> [    4.334783] CR2: 0000000000000000 CR3: 0000000037828001 CR4: 000000=
-00003706e0
-> >> [    4.335196] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000=
-0000000000
-> >> [    4.335886] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000000=
-0000000400
-> >> [    4.336793] Call Trace:
-> >> [    4.337107]  tpm_tis_send_data+0x3d/0x22f
-> >> [    4.337506]  tpm_tis_send_main+0x30/0xf5
-> >> [    4.337746]  tpm_transmit+0xbf/0x327
-> >> [    4.338042]  ? __alloc_pages_nodemask+0x261/0x36d
-> >> [    4.338615]  tpm_transmit_cmd+0x2c/0x93
-> >> [    4.339109]  tpm1_getcap+0x232/0x285
-> >> [    4.339578]  tpm1_get_timeouts+0x48/0x47d
-> >> [    4.339964]  ? lockdep_init_map_type+0x71/0x257
-> >> [    4.340256]  ? lockdep_init_map_type+0x71/0x257
-> >> [    4.340719]  ? __raw_spin_lock_init+0x40/0x69
-> >> [    4.341208]  tpm_tis_core_init+0x402/0x5ee
-> >> [    4.341629]  tpm_tis_init+0x11d/0x1a2
-> >> [    4.341867]  tpm_tis_pnp_init+0x91/0xb5
-> >> [    4.342101]  ? tis_int_handler+0x15f/0x15f
-> >> [    4.342466]  pnp_device_probe+0x79/0x9f
-> >> [    4.342941]  really_probe+0x149/0x4a8
-> >> [    4.343412]  driver_probe_device+0xd6/0x144
-> >> [    4.343968]  device_driver_attach+0x42/0x5b
-> >> [    4.344382]  __driver_attach+0xca/0x139
-> >> [    4.344617]  ? driver_attach+0x1f/0x1f
-> >> [    4.344860]  bus_for_each_dev+0x85/0xb7
-> >> [    4.345096]  bus_add_driver+0x12b/0x228
-> >> [    4.345330]  driver_register+0x64/0xed
-> >> [    4.345560]  init_tis+0xa5/0xeb
-> >> [    4.345784]  ? lock_is_held_type+0x100/0x141
-> >> [    4.346044]  ? tpm_init+0x106/0x106
-> >> [    4.346259]  ? rcu_read_lock_sched_held+0x41/0x7e
-> >> [    4.346542]  ? tpm_init+0x106/0x106
-> >> [    4.346678] battery: ACPI: Battery Slot [BAT0] (battery present)
-> >> [    4.346754]  do_one_initcall+0x1b9/0x43d
-> >> [    4.346776]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
-> >> [    4.347659]  ? lockdep_hardirqs_on+0x8e/0x12e
-> >> [    4.347937]  ? lock_is_held_type+0x100/0x141
-> >> [    4.348196]  ? rcu_read_lock_sched_held+0x41/0x7e
-> >> [    4.348477]  do_initcall_level+0x99/0xa9
-> >> [    4.348717]  ? kernel_init+0xe/0x10a
-> >> [    4.348954]  do_initcalls+0x4e/0x79
-> >> [    4.349170]  kernel_init_freeable+0x15a/0x1ae
-> >> [    4.349434]  ? rest_init+0x1d6/0x1d6
-> >> [    4.349655]  kernel_init+0xe/0x10a
-> >> [    4.349882]  ret_from_fork+0x22/0x30
-> >> [    4.350103] irq event stamp: 700039
-> >> [    4.350318] hardirqs last  enabled at (700047): [<ffffffff9b735265>=
-] console_unlock+0x4be/0x538
-> >> [    4.350836] hardirqs last disabled at (700056): [<ffffffff9b734e84>=
-] console_unlock+0xdd/0x538
-> >> [    4.351331] softirqs last  enabled at (699522): [<ffffffff9c4004ec>=
-] __do_softirq+0x4ec/0x539
-> >> [    4.351835] softirqs last disabled at (699517): [<ffffffff9c200f62>=
-] asm_call_irq_on_stack+0x12/0x20
-> >>
-> >> Following the trace one can also notice a comment in the tpm_tis_statu=
-s():
-> >>
-> >>              /*
-> >>               * If this trips, the chances are the read is
-> >>               * returning 0xff because the locality hasn't been
-> >>               * acquired.  Usually because tpm_try_get_ops() hasn't
-> >>               * been called before doing a TPM operation.
-> >>               */
-> >> In this case we don't have to call tpm_try_get_ops()
-> >> as both calls (tpm_get_timeouts() and tpm_tis_probe_irq_single()) are
-> >> in the tpm_tis_core_init function and don't require any locking or clo=
-ck
-> >> enablement. Similar usage is in the probe_itpm() function also called
-> >> inside tpm_tis_core_init().
-> >> Tested on Samsung Chromebook Pro (Caroline).
-> >>
-> >> Signed-off-by: Lukasz Majczak <lma@semihalf.com>
-> >> ---
-> >> Hi Jarkko
-> >>
-> >> I have checked the linux-next with James patches, also followed Dirk
-> >> suggestion applying remaining ones, although without any luck -
-> >> a warning trace was still present. As Guneter mentioned earlier, this
-> >> patch[1] doesn't address a lack of acquired locality in the
-> >> tpm_get_timeouts() and does it only for tpm_tis_probe_irq_single() but
-> >> also without a call to tpm_relinquish_locality().
-> >>
-> >> Here are my logs from the clean linux-next master branch [2]
-> >> (with two James' patches present) and with my
-> >> patch applied[3]
-> >>
-> >> Best regards,
-> >> Lukasz
-> >>
-> >> [1] https://lore.kernel.org/linux-integrity/20201001180925.13808-5-Jam=
-es.Bottomley@HansenPartnership.com/
-> >> [2] https://gist.github.com/semihalf-majczak-lukasz/f588c0684a6cc7d983=
-bb9c4eb4bda586
-> >> [3] https://gist.github.com/semihalf-majczak-lukasz/88ede933bc7d28d806=
-e3532850a04054
-> >>
-> >> v2 -> v3:
-> >>  - Added braces around if part of if/else statements
-> >>  - Rebased to linux-next
-> >>  - Updated commit message
-> >>
-> >>  drivers/char/tpm/tpm-chip.c      |  4 ++--
-> >>  drivers/char/tpm/tpm-interface.c | 13 ++++++++++---
-> >>  drivers/char/tpm/tpm.h           |  2 ++
-> >>  drivers/char/tpm/tpm_tis_core.c  | 14 +++++++++++---
-> >>  4 files changed, 25 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> >> index ddaeceb7e109..5351963a4b19 100644
-> >> --- a/drivers/char/tpm/tpm-chip.c
-> >> +++ b/drivers/char/tpm/tpm-chip.c
-> >> @@ -32,7 +32,7 @@ struct class *tpm_class;
-> >>  struct class *tpmrm_class;
-> >>  dev_t tpm_devt;
-> >>
-> >> -static int tpm_request_locality(struct tpm_chip *chip)
-> >> +int tpm_request_locality(struct tpm_chip *chip)
-> >>  {
-> >>      int rc;
-> >> @@ -47,7 +47,7 @@ static int tpm_request_locality(struct tpm_chip *chi=
-p)
-> >>      return 0;
-> >>  }
-> >>
-> >> -static void tpm_relinquish_locality(struct tpm_chip *chip)
-> >> +void tpm_relinquish_locality(struct tpm_chip *chip)
-> >>  {
-> >>      int rc;
-> >>
-> >
-> > Here, it seems
-> >
-> > +EXPORT_SYMBOL_GPL(tpm_request_locality);
-> >
-> > and
-> >
-> > +EXPORT_SYMBOL_GPL(tpm_relinquish_locality);
-> >
-> > are needed.  Otherwise building tpm* modules fails:
-> >
-> > ERROR: modpost: "tpm_request_locality" [drivers/char/tpm/tpm_tis_core.k=
-o] undefined!
-> > ERROR: modpost: "tpm_relinquish_locality" [drivers/char/tpm/tpm_tis_cor=
-e.ko] undefined!
-> > make[1]: *** [scripts/Makefile.modpost:132: Module.symvers] Error 1
-> > make[1]: *** Deleting file 'Module.symvers'
-> > make: *** [Makefile:1405: modules] Error 2
-> >
-> > Otherwise, testing this patch results in no more warning
-> >
-> > TPM returned invalid status: 0xff
-> >
-> > and also no more warnings:
-> >
-> > tpm tpm0: tpm_try_transmit: send(): error -5
-> > tpm tpm0: [Firmware Bug]: TPM interrupt not working, polling instead
-> >
-> > Dirk
-> >
-> >> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-i=
-nterface.c
-> >> index 1621ce818705..2a9001d329f2 100644
-> >> --- a/drivers/char/tpm/tpm-interface.c
-> >> +++ b/drivers/char/tpm/tpm-interface.c
-> >> @@ -241,10 +241,17 @@ int tpm_get_timeouts(struct tpm_chip *chip)
-> >>      if (chip->flags & TPM_CHIP_FLAG_HAVE_TIMEOUTS)
-> >>              return 0;
-> >>
-> >> -    if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> >> +    if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> >>              return tpm2_get_timeouts(chip);
-> >> -    else
-> >> -            return tpm1_get_timeouts(chip);
-> >> +    } else {
-> >> +            ssize_t ret =3D tpm_request_locality(chip);
-> >> +
-> >> +            if (ret)
-> >> +                    return ret;
-> >> +            ret =3D tpm1_get_timeouts(chip);
-> >> +            tpm_relinquish_locality(chip);
-> >> +            return ret;
-> >> +    }
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(tpm_get_timeouts);
-> >>
-> >> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> >> index 947d1db0a5cc..8c13008437dd 100644
-> >> --- a/drivers/char/tpm/tpm.h
-> >> +++ b/drivers/char/tpm/tpm.h
-> >> @@ -193,6 +193,8 @@ static inline void tpm_msleep(unsigned int delay_m=
-sec)
-> >>
-> >>  int tpm_chip_start(struct tpm_chip *chip);
-> >>  void tpm_chip_stop(struct tpm_chip *chip);
-> >> +int tpm_request_locality(struct tpm_chip *chip);
-> >> +void tpm_relinquish_locality(struct tpm_chip *chip);
-> >>  struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
-> >>  __must_check int tpm_try_get_ops(struct tpm_chip *chip);
-> >>  void tpm_put_ops(struct tpm_chip *chip);
-> >> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_ti=
-s_core.c
-> >> index 431919d5f48a..d4f381d6356e 100644
-> >> --- a/drivers/char/tpm/tpm_tis_core.c
-> >> +++ b/drivers/char/tpm/tpm_tis_core.c
-> >> @@ -708,11 +708,19 @@ static int tpm_tis_gen_interrupt(struct tpm_chip=
- *chip)
-> >>      u32 cap2;
-> >>      cap_t cap;
-> >>
-> >> -    if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> >> +    if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> >>              return tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
-> >> -    else
-> >> -            return tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, =
-desc,
-> >> +    } else {
-> >> +            ssize_t ret =3D tpm_request_locality(chip);
-> >> +
-> >> +            if (ret)
-> >> +                    return ret;
-> >> +            ret =3D tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap,=
- desc,
-> >>                                0);
-> >> +            tpm_relinquish_locality(chip);
-> >> +            return ret;
-> >> +    }
-> >> +
-> >>  }
-> >>
-> >>  /* Register the IRQ and issue a command that will cause an interrupt.=
- If an
->
-> My apologies for just more noise from here.
->
-> But I think it could be important that I withdraw my above statement
-> concerning positive test results on my hardware.
->
-> I was now trying to understand Lukasz' fix and started wondering how
-> changes in the case of !(chip->flags & TPM_CHIP_FLAG_TPM2) could affect
-> my environment: tpm_tis STM0125:00: 2.0 TPM (device-id 0x0, rev-id 78).
->
-> So, I became very nervous and re-did several tests and it
-> (understandably) turned out that Lukasz' patch does not affect my machine
-> at all -- nearly: the only effect I noticed is that tpm_tis doesn't get
-> loaded automatically with his patch applied.  I have to load it manually
-> but then get the familiar log messages.
->
-> But the tests I based my wrong statement on were done with static
-> tpm_tis, because of symbols not having been exported (V3).
-> I now noticed that tpm_tis behaves different depending on if it is built
-> static or as a module (latest tests done with
-> 5.11.0-rc6-next-20210202-x86_64+).
->
-> In the static case, all I see in the logs is:
->
-> [    2.673818] tpm_tis STM0125:00: 2.0 TPM (device-id 0x0, rev-id 78)
->
-> Perhaps there are better ways to access and test TPM but I tested it
-> using getrandom: no further messages in the kernel log were generated.
->
-> If tpm_tis it is built as a module the behavior is the one with warnings
-> and falling back to polling.
->
-> Dirk
+With asymmetric keys we have trusted key *rings*:
+# keyctl show %:.secondary_trusted_keys
+Keyring
+ 638775388 ---lswrv      0     0  keyring: .secondary_trusted_keys
+1071890135 ---lswrv      0     0   \_ keyring: .builtin_trusted_keys
+ 816294887 ---lswrv      0     0       \_ asymmetric: Debian Secure Boot CA: 6ccece7e4c6c0d1f6149f3dd27dfcc5cbb419ea1
+ 630436721 ---lswrv      0     0       \_ asymmetric: Debian Secure Boot Signer 2020: 00b55eb3b9
+Here, a key is trusted because of it's presence in a keyring, not because it has
+a specific type. For example, fs-verity uses this mechanism as well.
+
+
+For the trusted key *type*, my understanding is that trusted refers to only
+being able to load and access them in specific "trusted" system states (via TPM
+PRC, TEE initialization via secure boot or SoC specific hardware status checks).
+So for example protecting against loading a data-encryption key into an unsigned
+kernel.
+
+> > I mainly see the downside of having to add another API to access the underlying
+> > functionality (be it trusted key TA or the NXP CAAM HW *) and requiring
+> > platform-specific userspace code.
+> 
+> I am not sure why you would call the standardized TEE interface [1] to
+> be platform-specific, it is meant to be platform agnostic. And I think
+> we can have openssl_tee_engine on similar lines as the
+> openssl_tpm2_engine.
+
+Sorry, I meant platform-specific in the sense that some platforms use TPMs,
+while others use TEEs. The trusted key type was also suggested several times as
+the correct abstraction for SoC-specific key encapsulation hardware (instead of
+custom interfaces), so there will likely be platforms which don't have a TPM or
+TEE, but still trusted keys.
+
+Regards
+Jan
+
+> [1] https://globalplatform.org/specs-library/tee-client-api-specification/
+> 
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
