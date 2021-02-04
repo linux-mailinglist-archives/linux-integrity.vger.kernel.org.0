@@ -2,278 +2,137 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5791030EC0D
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Feb 2021 06:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD4F30EC2B
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Feb 2021 06:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbhBDFbm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Feb 2021 00:31:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbhBDFbg (ORCPT
+        id S229742AbhBDFoe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Feb 2021 00:44:34 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38284 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229508AbhBDFoc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Feb 2021 00:31:36 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0D3C061786
-        for <linux-integrity@vger.kernel.org>; Wed,  3 Feb 2021 21:30:56 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id r23so24606ljh.1
-        for <linux-integrity@vger.kernel.org>; Wed, 03 Feb 2021 21:30:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2uSRokrJ+R6V6ON0IfFPRQWKuZNn7Av5SOzhnWtouhQ=;
-        b=O2tNeL3LdZ+GRpOnLxKGwG7QQOaZCj9MzitgrUevmXaMNhqN4PNcKxZMu4BuGWy3os
-         M3zx/0XOG/MGkb1FbGeBv2qRzgsGxIRWcCiMTtPjFgZ0UcR3r/YxGTZUUo+pbWw/YVY2
-         y4CHzAjoJSXMN+V5STVWn31P/K7JXEoGr9cPvl0dShrAzqbTMUEYTaRliYNckVUq2J41
-         vnZvwhq/eS6IgDbLXjUYyVeIdI1JBeOQBdUe9xe/Yh8CHlEjF8DpY/NiaFTJ/miCr/OR
-         QiwX+vU9G6yR0vzRcYBH8lPtEp9ahVcl+FIJ7sL5zNHFFVZs+THabzK2rRqG9A3sB5pQ
-         Nw7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2uSRokrJ+R6V6ON0IfFPRQWKuZNn7Av5SOzhnWtouhQ=;
-        b=dTaBZcaLIlqK0JylZVoGkyRNogH4G3q3t8UBlrdddbVabzeanTz6EIpITxqAk/paHg
-         3xxGTnoqjICYIwj7mJvIawXdmQn6j7RZ0OpBHN7oLxDxcw0kCHbweDAjxETE4e9nXomO
-         n4h9XNUtC8/GZzdDAryMNm6OrwhfFGCwQ4/KcmNN7d0WjoHg2dK8VaVp0ks1rbN9anW4
-         w8AsDadBlXaUHb66Uy0/Bxib/Hfx5mUrqaaC4cLxfwWXbqQBdAhCcCnIbZ2C7vFf/TV5
-         hYZsXMAMOdesZ5RBW24V7HI2tCC20s048fuNui8QtfkIF2WkDFVMGHdb40bSwbyzPZRG
-         NiDw==
-X-Gm-Message-State: AOAM533kP4hob6byWzuSJTJvmjO/6XA9K35AY7cXgrX/Bm4JNx49vo0G
-        Ns+z8Js2JpJc4gRKcdaK7OA8mZwn9ULwWEMbYBXRyQ==
-X-Google-Smtp-Source: ABdhPJzsP7qEqW5rTwE/GX3ywp9PCwS0wHO1gQIoUhiXvPxw4thue90Z8q0WVFTbwOYKvwscIkD1CNpkJcS1/bVY+i0=
-X-Received: by 2002:a2e:91d0:: with SMTP id u16mr3828312ljg.480.1612416654551;
- Wed, 03 Feb 2021 21:30:54 -0800 (PST)
+        Thu, 4 Feb 2021 00:44:32 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 1145VwUw161726;
+        Thu, 4 Feb 2021 00:43:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=H1K8keCfYd88y6FeSveP1pC8C27fc39xWe+VR3onYlE=;
+ b=CJEcxLIDhyqyfdt2Jix9eiA87XNU5WkfN0+j22NxH0FBsy0j2cbcUajnfttUTwTXGGZq
+ Nn6Pyleb4h4dnuylf6XjytZw6IOkI9k4d1OR6uB78DmrjD7VvXKPOGF/VODvk6JHvhUI
+ hi7hP+w1wNOqUlNs1TjhcIQBuOY7TzOVGUGCoshj++646AJOfj9oKBp3YP6d6hrSGDyY
+ sBAiXe69Yi+fESxAt6y5BnjTXnzNoj2jXZ+mwxN31NH6qV4/LlrBbbkVVN3042GMtY2w
+ uFBw8P2PPhqteme3WIkN1rOPhgoOenFVdjaN1UIGV553GozY2MLKMDHdz7TWMISqeyMh Gw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36gams0kjq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Feb 2021 00:43:45 -0500
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1145Wx5e165902;
+        Thu, 4 Feb 2021 00:43:44 -0500
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36gams0kje-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Feb 2021 00:43:44 -0500
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 1145SKiv016451;
+        Thu, 4 Feb 2021 05:43:44 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma02wdc.us.ibm.com with ESMTP id 36cy39kxwe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 04 Feb 2021 05:43:44 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1145hhl641550302
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 4 Feb 2021 05:43:43 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A341124054;
+        Thu,  4 Feb 2021 05:43:43 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47CE3124053;
+        Thu,  4 Feb 2021 05:43:43 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu,  4 Feb 2021 05:43:43 +0000 (GMT)
+Subject: Re: [PATCH v7 1/4] crypto: Add support for ECDSA signature
+ verification
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Saulo Alessandre <saulo.alessandre@gmail.com>
+Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        davem@davemloft.net, dhowells@redhat.com, zohar@linux.ibm.com,
+        linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
+        linux-integrity@vger.kernel.org
+References: <20210201151910.1465705-1-stefanb@linux.ibm.com>
+ <20210201151910.1465705-2-stefanb@linux.ibm.com>
+ <20210204052738.GA7086@gondor.apana.org.au>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <652c922b-a231-b1ab-43ce-d4d670c90eef@linux.ibm.com>
+Date:   Thu, 4 Feb 2021 00:43:43 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <74830d4f-5a76-8ba8-aad0-0d79f7c01af9@pengutronix.de>
- <6dc99fd9ffbc5f405c5f64d0802d1399fc6428e4.camel@kernel.org>
- <d1bed49f89495ceb529355cb41655a208fdb2197.camel@linux.ibm.com>
- <8b9477e150d7c939dc0def3ebb4443efcc83cd85.camel@pengutronix.de>
- <18529562ed71becf21401ec9fd9d95c4ac44fdc0.camel@linux.ibm.com>
- <CAFA6WYMn519aF=uodjnSUZ+kKaRzdoh6Enu0OsRMge=21iBNBA@mail.gmail.com>
- <2012751fd653c284679aa2c6ac9a56a5edbf1410.camel@pengutronix.de>
- <CAFA6WYNbf+Jncj0jF4abLhWH8RUWDORf0kcWi021hxBmq-NK=g@mail.gmail.com> <1310b10eaaf246c326f8d74bd47c91d738ea976b.camel@pengutronix.de>
-In-Reply-To: <1310b10eaaf246c326f8d74bd47c91d738ea976b.camel@pengutronix.de>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 4 Feb 2021 11:00:43 +0530
-Message-ID: <CAFA6WYOuG6uy1_T67fvefRaY+YnOz5TDYY9j8fFhM2F=UXmNCg@mail.gmail.com>
-Subject: Re: Migration to trusted keys: sealing user-provided key?
-To:     =?UTF-8?Q?Jan_L=C3=BCbbe?= <jlu@pengutronix.de>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        David Howells <dhowells@redhat.com>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>, kernel@pengutronix.de,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210204052738.GA7086@gondor.apana.org.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-04_02:2021-02-03,2021-02-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ bulkscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 malwarescore=0
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102040029
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 3 Feb 2021 at 19:16, Jan L=C3=BCbbe <jlu@pengutronix.de> wrote:
->
-> On Wed, 2021-02-03 at 17:20 +0530, Sumit Garg wrote:
-> > On Tue, 2 Feb 2021 at 18:04, Jan L=C3=BCbbe <jlu@pengutronix.de> wrote:
-> > >
-> > > On Tue, 2021-02-02 at 17:45 +0530, Sumit Garg wrote:
-> > > > Hi Jan,
-> > > >
-> > > > On Sun, 31 Jan 2021 at 23:40, James Bottomley <jejb@linux.ibm.com> =
-wrote:
-> > > > >
-> > > > > On Sun, 2021-01-31 at 15:14 +0100, Jan L=C3=BCbbe wrote:
-> > > > > > On Sun, 2021-01-31 at 07:09 -0500, Mimi Zohar wrote:
-> > > > > > > On Sat, 2021-01-30 at 19:53 +0200, Jarkko Sakkinen wrote:
-> > > > > > > > On Thu, 2021-01-28 at 18:31 +0100, Ahmad Fatoum wrote:
-> > > > > > > > > Hello,
-> > > > > > > > >
-> > > > > > > > > I've been looking into how a migration to using
-> > > > > > > > > trusted/encrypted keys would look like (particularly with=
- dm-
-> > > > > > > > > crypt).
-> > > > > > > > >
-> > > > > > > > > Currently, it seems the the only way is to re-encrypt the
-> > > > > > > > > partitions because trusted/encrypted keys always generate=
- their
-> > > > > > > > > payloads from RNG.
-> > > > > > > > >
-> > > > > > > > > If instead there was a key command to initialize a new
-> > > > > > > > > trusted/encrypted key with a user provided value, users c=
-ould
-> > > > > > > > > use whatever mechanism they used beforehand to get a plai=
-ntext
-> > > > > > > > > key and use that to initialize a new trusted/encrypted ke=
-y.
-> > > > > > > > > From there on, the key will be like any other trusted/enc=
-rypted
-> > > > > > > > > key and not be disclosed again to userspace.
-> > > > > > > > >
-> > > > > > > > > What are your thoughts on this? Would an API like
-> > > > > > > > >
-> > > > > > > > >   keyctl add trusted dmcrypt-key 'set <content>' # user-
-> > > > > > > > > supplied content
-> > > > > > > > >
-> > > > > > > > > be acceptable?
-> > > > > > > >
-> > > > > > > > Maybe it's the lack of knowledge with dm-crypt, but why thi=
-s
-> > > > > > > > would be useful? Just want to understand the bottleneck, th=
-at's
-> > > > > > > > all.
-> > > > > >
-> > > > > > Our goal in this case is to move away from having the dm-crypt =
-key
-> > > > > > material accessible to user-space on embedded devices. For an
-> > > > > > existing dm-crypt volume, this key is fixed. A key can be loade=
-d into
-> > > > > > user key type and used by dm-crypt (cryptsetup can already do i=
-t this
-> > > > > > way). But at this point, you can still do 'keyctl read' on that=
- key,
-> > > > > > exposing the key material to user space.
-> > > > > >
-> > > > > > Currently, with both encrypted and trusted keys, you can only
-> > > > > > generate new random keys, not import existing key material.
-> > > > > >
-> > > > > > James Bottomley mentioned in the other reply that the key forma=
-t will
-> > > > > > become compatible with the openssl_tpm2_engine, which would pro=
-vide a
-> > > > > > workaround. This wouldn't work with OP-TEE-based trusted keys (=
-see
-> > > > > > Sumit Garg's series), though.
-> > > > >
-> > > > > Assuming OP-TEE has the same use model as the TPM, someone will
-> > > > > eventually realise the need for interoperable key formats between=
- key
-> > > > > consumers and then it will work in the same way once the kernel g=
-ets
-> > > > > updated to speak whatever format they come up with.
-> > > >
-> > > > IIUC, James re-work for TPM trusted keys is to allow loading of sea=
-led
-> > > > trusted keys directly via user-space (with proper authorization) in=
-to
-> > > > the kernel keyring.
-> > > >
-> > > > I think similar should be achievable with OP-TEE (via extending pse=
-udo
-> > > > TA [1]) as well to allow restricted user-space access (with proper
-> > > > authorization) to generate sealed trusted key blob that should be
-> > > > interoperable with the kernel. Currently OP-TEE exposes trusted key
-> > > > interfaces for kernel users only.
-> > >
-> > > What is the security benefit of having the key blob creation in user-=
-space
-> > > instead of in the kernel? Key import is a standard operation in HSMs =
-or PKCS#11
-> > > tokens.
-> >
-> > User authentication, AFAIK most of the HSMs or PKCS#11 require that
-> > for key import. But IIUC, your suggested approach to load plain key
-> > into kernel keyring and say it's *trusted* without any user
-> > authentication, would it really be a trusted key? What prevents a
-> > rogue user from making his key as the dm-crypt trusted key?
->
-> There is user authentication at the level of key rings. So an untrusted u=
-ser
-> cannot load or link keys they have no write permission for.
+On 2/4/21 12:27 AM, Herbert Xu wrote:
+> On Mon, Feb 01, 2021 at 10:19:07AM -0500, Stefan Berger wrote:
+>> Add support for parsing the parameters of a NIST P256 or NIST P192 key.
+>> Enable signature verification using these keys. The new module is
+>> enabled with CONFIG_ECDSA:
+>>    Elliptic Curve Digital Signature Algorithm (NIST P192, P256 etc.)
+>>    is A NIST cryptographic standard algorithm. Only signature verification
+>>    is implemented.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: linux-crypto@vger.kernel.org
+>> ---
+>>   crypto/Kconfig               |  10 +
+>>   crypto/Makefile              |   6 +
+>>   crypto/ecc.c                 |  13 +-
+>>   crypto/ecc.h                 |  28 +++
+>>   crypto/ecdsa.c               | 361 +++++++++++++++++++++++++++++++++++
+>>   crypto/ecdsasignature.asn1   |   4 +
+>>   crypto/testmgr.c             |  12 ++
+>>   crypto/testmgr.h             | 267 ++++++++++++++++++++++++++
+>>   include/linux/oid_registry.h |   4 +
+>>   9 files changed, 694 insertions(+), 11 deletions(-)
+>>   create mode 100644 crypto/ecdsa.c
+>>   create mode 100644 crypto/ecdsasignature.asn1
+> Saulo Alessandre is implementing ecdsa with signing so you two
+> should coordinate on this.
 
-Here, I meant user authentication to the trust source (TPM or a TEE)
-which provides assurance for a key to be trusted. So what happens in
-case of user-space compromises (an untrusted user gaining root
-access)?
+Hello Saulo,
+
+  so this series here supports NIST P256 and NIST P192 for usage by IMA 
+for example. It looks like you want to support more elliptic curves than 
+these: p384 and even p521. Do you have any suggestion on how to proceed? 
+Would you want to add patches with your additional curves on top of this 
+series?
+
+I have a project here with some test scripts that may also be relevant 
+for your case: https://github.com/stefanberger/eckey-testing
+
+
+     Stefan
+
 
 >
-> As we already have user type keys, which don't have these restrictions an=
-d are
-> accepted by most subsystems, any use of kernel keyrings must already make=
- sure
-> that the proper keys are used.
->
+> Thanks,
 
-The major value add of trusted keys over user keys is this trust
-assurance provided by the underlying trust source.
 
->
-> With asymmetric keys we have trusted key *rings*:
-> # keyctl show %:.secondary_trusted_keys
-> Keyring
->  638775388 ---lswrv      0     0  keyring: .secondary_trusted_keys
-> 1071890135 ---lswrv      0     0   \_ keyring: .builtin_trusted_keys
->  816294887 ---lswrv      0     0       \_ asymmetric: Debian Secure Boot =
-CA: 6ccece7e4c6c0d1f6149f3dd27dfcc5cbb419ea1
->  630436721 ---lswrv      0     0       \_ asymmetric: Debian Secure Boot =
-Signer 2020: 00b55eb3b9
-> Here, a key is trusted because of it's presence in a keyring, not because=
- it has
-> a specific type. For example, fs-verity uses this mechanism as well.
->
->
-> For the trusted key *type*, my understanding is that trusted refers to on=
-ly
-> being able to load and access them in specific "trusted" system states (v=
-ia TPM
-> PRC, TEE initialization via secure boot or SoC specific hardware status c=
-hecks).
-> So for example protecting against loading a data-encryption key into an u=
-nsigned
-> kernel.
-
-Along with that trusted keys assures protection against any
-unauthorized user access to plain key payload.
-
->
-> > > I mainly see the downside of having to add another API to access the =
-underlying
-> > > functionality (be it trusted key TA or the NXP CAAM HW *) and requiri=
-ng
-> > > platform-specific userspace code.
-> >
-> > I am not sure why you would call the standardized TEE interface [1] to
-> > be platform-specific, it is meant to be platform agnostic. And I think
-> > we can have openssl_tee_engine on similar lines as the
-> > openssl_tpm2_engine.
->
-> Sorry, I meant platform-specific in the sense that some platforms use TPM=
-s,
-> while others use TEEs. The trusted key type was also suggested several ti=
-mes as
-> the correct abstraction for SoC-specific key encapsulation hardware (inst=
-ead of
-> custom interfaces), so there will likely be platforms which don't have a =
-TPM or
-> TEE, but still trusted keys.
->
-
-Agree and for that particular reason we are trying to add an
-abstraction layer in trusted keys subsystem so that other trust
-sources apart from TPM or TEE can be supported as well.
-
--Sumit
-
-> Regards
-> Jan
->
-> > [1] https://globalplatform.org/specs-library/tee-client-api-specificati=
-on/
-> >
->
->
-> --
-> Pengutronix e.K.                           |                             =
-|
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  =
-|
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
-|
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
-|
->
