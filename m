@@ -2,221 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3653930FCC7
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Feb 2021 20:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C291830FFC0
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Feb 2021 22:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237484AbhBDT2j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Feb 2021 14:28:39 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:52442 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237583AbhBDQmn (ORCPT
+        id S229529AbhBDVzP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Feb 2021 16:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229511AbhBDVzP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Feb 2021 11:42:43 -0500
-Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7CB6C20B6C44;
-        Thu,  4 Feb 2021 08:42:01 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7CB6C20B6C44
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1612456922;
-        bh=Sd8T0e6P8u+loATpNeokWfqgEz2Z/zfdEmJ6vGkoVO0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DsNd3cTcPPuBR1KMib6S01rchtQemZ1WZn4tYKp9V+Gp0sh7NPle1NM6PixWwpGR/
-         xPeo4JFoCubdB2vB9Q46OtsYsnRyVZ0Iv4TiKadk6l/Al1ApVZ1RB8cQazbSviYwwR
-         wuvs3+ZrjZqJYyJsIiTevlfhBdoEqoy1f80bmPos=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
-        takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
-        will@kernel.org, joe@perches.com, catalin.marinas@arm.com,
-        mpe@ellerman.id.au
-Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
-        paulus@samba.org, frowand.list@gmail.com,
-        vincenzo.frascino@arm.com, mark.rutland@arm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        pasha.tatashin@soleen.com, allison@lohutok.net,
-        masahiroy@kernel.org, bhsharma@redhat.com, mbrugger@suse.com,
-        hsinyi@chromium.org, tao.li@vivo.com, christophe.leroy@c-s.fr,
-        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v16 04/12] powerpc: Use common of_kexec_setup_new_fdt()
-Date:   Thu,  4 Feb 2021 08:41:27 -0800
-Message-Id: <20210204164135.29856-5-nramas@linux.microsoft.com>
+        Thu, 4 Feb 2021 16:55:15 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08060C0613D6;
+        Thu,  4 Feb 2021 13:54:34 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id u25so6902676lfc.2;
+        Thu, 04 Feb 2021 13:54:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NAgqYHbywIYs2QshwFgb53FlD6EOq34SaKwHmoFcyVM=;
+        b=lXdPKhc3IDXew+8Sl8q4BmrYbduDfqCk1Mws3R1KsWf0yajkhguDZ7QTNgzRSu6bpF
+         Wu9d4gU2ZYPCxRpnLoszfYEP3lJkNa8NMIwznkV1ncfXvu1oZVqbE8YoolOqzgdSuIvP
+         CHnu2G4Yfp/qIWAdfyNoPEvZnnEazWKWzyo4KbJwVx7YZ2e29fDtCPpylwX31/BPnoDT
+         4eS5dvFtoOQbWKKUHmx1u+IXu0n4ZBwe58e8aZmsh9qyYErQrMlQ4G/g2zLMn3QBO0Gc
+         n/BSHCmNED4sHSAAvRbGYcuXBSUYse6F9+S/pOK9rTd2cFwY9BX3OjqNGmCMZH5ucaBm
+         ZPYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NAgqYHbywIYs2QshwFgb53FlD6EOq34SaKwHmoFcyVM=;
+        b=DUkhdZDRSyTndW+/iJPlEK1RXkDLubV/toj+JBly1UqndB2cMXR/uaLDbqZlmC5yl9
+         xKBxVn2Y/wVwjshiWT7I7Srs+/3aP21CPBFxf83MfzSHHwrw6DmbNEfHvh3qdND6hv9e
+         BMsHWtkhrQ77JQbUYgyZQKIvM6VM0QqI3rjzAsP7BzJ4WRMVfsJ1LlO7AzO8kMSNWKMN
+         chQH1tOc1S1cPk/fdSsK6IMfXADxLDIQAKfAfs7WfNX0zYyRjvKgixFdtx1strcONsbR
+         J85pYHtW1xgUQJmZqqFhDFWzOUg18FHnrIWR68IS5R0QuBdw9oI+9D/4bRIwoHETGvan
+         9RFA==
+X-Gm-Message-State: AOAM531LpMKFFmgv0ll/JZgjivTL5P4n8TmX7r0V7ncKPqQPpx5c70Is
+        rTZF5T6/lM1L1WIUpq2j3t4=
+X-Google-Smtp-Source: ABdhPJwlWUvIhc13/2RbhPaMewunp5RbevdWqUpLZH09DlBVAan2+n6kj6b/WBNtF18AMttZ/4DU1w==
+X-Received: by 2002:a05:6512:4c5:: with SMTP id w5mr753720lfq.92.1612475673375;
+        Thu, 04 Feb 2021 13:54:33 -0800 (PST)
+Received: from localhost.localdomain (h-158-174-22-164.NA.cust.bahnhof.se. [158.174.22.164])
+        by smtp.gmail.com with ESMTPSA id u18sm796647ljl.57.2021.02.04.13.54.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Feb 2021 13:54:32 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] tpm/ppi: Constify static struct attribute_group
+Date:   Thu,  4 Feb 2021 22:54:27 +0100
+Message-Id: <20210204215427.49047-1-rikard.falkeborn@gmail.com>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210204164135.29856-1-nramas@linux.microsoft.com>
-References: <20210204164135.29856-1-nramas@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Rob Herring <robh@kernel.org>
+The only usage of ppi_attr_grp is to put its address in an array of
+pointers to const struct attribute_group. Make it const to allow the
+compiler to put it in read-only memory.
 
-The code for setting up the /chosen node in the device tree
-and updating the memory reservation for the next kernel has been
-moved to of_kexec_setup_new_fdt() defined in "drivers/of/kexec.c".
-
-Use the common of_kexec_setup_new_fdt() to setup the device tree
-and update the memory reservation for kexec for powerpc.
-
-Signed-off-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 ---
- arch/powerpc/kexec/file_load.c | 125 ++-------------------------------
- 1 file changed, 6 insertions(+), 119 deletions(-)
+ drivers/char/tpm/tpm_ppi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kexec/file_load.c b/arch/powerpc/kexec/file_load.c
-index e452b11df631..956bcb2d1ec2 100644
---- a/arch/powerpc/kexec/file_load.c
-+++ b/arch/powerpc/kexec/file_load.c
-@@ -16,6 +16,7 @@
- 
- #include <linux/slab.h>
- #include <linux/kexec.h>
-+#include <linux/of.h>
- #include <linux/of_fdt.h>
- #include <linux/libfdt.h>
- #include <asm/setup.h>
-@@ -156,132 +157,18 @@ int setup_new_fdt(const struct kimage *image, void *fdt,
- 		  unsigned long initrd_load_addr, unsigned long initrd_len,
- 		  const char *cmdline)
- {
--	int ret, chosen_node;
--	const void *prop;
--
--	/* Remove memory reservation for the current device tree. */
--	ret = delete_fdt_mem_rsv(fdt, __pa(initial_boot_params),
--				 fdt_totalsize(initial_boot_params));
--	if (ret == 0)
--		pr_debug("Removed old device tree reservation.\n");
--	else if (ret != -ENOENT)
--		return ret;
--
--	chosen_node = fdt_path_offset(fdt, "/chosen");
--	if (chosen_node == -FDT_ERR_NOTFOUND) {
--		chosen_node = fdt_add_subnode(fdt, fdt_path_offset(fdt, "/"),
--					      "chosen");
--		if (chosen_node < 0) {
--			pr_err("Error creating /chosen.\n");
--			return -EINVAL;
--		}
--	} else if (chosen_node < 0) {
--		pr_err("Malformed device tree: error reading /chosen.\n");
--		return -EINVAL;
--	}
--
--	/* Did we boot using an initrd? */
--	prop = fdt_getprop(fdt, chosen_node, "linux,initrd-start", NULL);
--	if (prop) {
--		uint64_t tmp_start, tmp_end, tmp_size;
--
--		tmp_start = fdt64_to_cpu(*((const fdt64_t *) prop));
--
--		prop = fdt_getprop(fdt, chosen_node, "linux,initrd-end", NULL);
--		if (!prop) {
--			pr_err("Malformed device tree.\n");
--			return -EINVAL;
--		}
--		tmp_end = fdt64_to_cpu(*((const fdt64_t *) prop));
--
--		/*
--		 * kexec reserves exact initrd size, while firmware may
--		 * reserve a multiple of PAGE_SIZE, so check for both.
--		 */
--		tmp_size = tmp_end - tmp_start;
--		ret = delete_fdt_mem_rsv(fdt, tmp_start, tmp_size);
--		if (ret == -ENOENT)
--			ret = delete_fdt_mem_rsv(fdt, tmp_start,
--						 round_up(tmp_size, PAGE_SIZE));
--		if (ret == 0)
--			pr_debug("Removed old initrd reservation.\n");
--		else if (ret != -ENOENT)
--			return ret;
--
--		/* If there's no new initrd, delete the old initrd's info. */
--		if (initrd_len == 0) {
--			ret = fdt_delprop(fdt, chosen_node,
--					  "linux,initrd-start");
--			if (ret) {
--				pr_err("Error deleting linux,initrd-start.\n");
--				return -EINVAL;
--			}
--
--			ret = fdt_delprop(fdt, chosen_node, "linux,initrd-end");
--			if (ret) {
--				pr_err("Error deleting linux,initrd-end.\n");
--				return -EINVAL;
--			}
--		}
--	}
--
--	if (initrd_len) {
--		ret = fdt_setprop_u64(fdt, chosen_node,
--				      "linux,initrd-start",
--				      initrd_load_addr);
--		if (ret < 0)
--			goto err;
--
--		/* initrd-end is the first address after the initrd image. */
--		ret = fdt_setprop_u64(fdt, chosen_node, "linux,initrd-end",
--				      initrd_load_addr + initrd_len);
--		if (ret < 0)
--			goto err;
--
--		ret = fdt_add_mem_rsv(fdt, initrd_load_addr, initrd_len);
--		if (ret) {
--			pr_err("Error reserving initrd memory: %s\n",
--			       fdt_strerror(ret));
--			return -EINVAL;
--		}
--	}
--
--	if (cmdline != NULL) {
--		ret = fdt_setprop_string(fdt, chosen_node, "bootargs", cmdline);
--		if (ret < 0)
--			goto err;
--	} else {
--		ret = fdt_delprop(fdt, chosen_node, "bootargs");
--		if (ret && ret != -FDT_ERR_NOTFOUND) {
--			pr_err("Error deleting bootargs.\n");
--			return -EINVAL;
--		}
--	}
-+	int ret;
- 
--	if (image->type == KEXEC_TYPE_CRASH) {
--		/*
--		 * Avoid elfcorehdr from being stomped on in kdump kernel by
--		 * setting up memory reserve map.
--		 */
--		ret = fdt_add_mem_rsv(fdt, image->arch.elf_headers_mem,
--				      image->arch.elf_headers_sz);
--		if (ret) {
--			pr_err("Error reserving elfcorehdr memory: %s\n",
--			       fdt_strerror(ret));
--			goto err;
--		}
--	}
-+	ret = of_kexec_setup_new_fdt(image, fdt, initrd_load_addr, initrd_len, cmdline);
-+	if (ret)
-+		goto err;
- 
--	ret = setup_ima_buffer(image, fdt, chosen_node);
-+	ret = setup_ima_buffer(image, fdt, fdt_path_offset(fdt, "/chosen"));
- 	if (ret) {
- 		pr_err("Error setting up the new device tree.\n");
- 		return ret;
- 	}
- 
--	ret = fdt_setprop(fdt, chosen_node, "linux,booted-from-kexec", NULL, 0);
--	if (ret)
--		goto err;
--
- 	return 0;
- 
- err:
+diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+index b2dab941cb7f..40018a73b3cb 100644
+--- a/drivers/char/tpm/tpm_ppi.c
++++ b/drivers/char/tpm/tpm_ppi.c
+@@ -358,7 +358,7 @@ static struct attribute *ppi_attrs[] = {
+ 	&dev_attr_tcg_operations.attr,
+ 	&dev_attr_vs_operations.attr, NULL,
+ };
+-static struct attribute_group ppi_attr_grp = {
++static const struct attribute_group ppi_attr_grp = {
+ 	.name = "ppi",
+ 	.attrs = ppi_attrs
+ };
 -- 
 2.30.0
 
