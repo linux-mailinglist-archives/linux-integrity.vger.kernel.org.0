@@ -2,90 +2,261 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C291830FFC0
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Feb 2021 22:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE8E310094
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Feb 2021 00:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbhBDVzP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Feb 2021 16:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbhBDVzP (ORCPT
+        id S230086AbhBDXYg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Feb 2021 18:24:36 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36868 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229977AbhBDXYg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Feb 2021 16:55:15 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08060C0613D6;
-        Thu,  4 Feb 2021 13:54:34 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id u25so6902676lfc.2;
-        Thu, 04 Feb 2021 13:54:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NAgqYHbywIYs2QshwFgb53FlD6EOq34SaKwHmoFcyVM=;
-        b=lXdPKhc3IDXew+8Sl8q4BmrYbduDfqCk1Mws3R1KsWf0yajkhguDZ7QTNgzRSu6bpF
-         Wu9d4gU2ZYPCxRpnLoszfYEP3lJkNa8NMIwznkV1ncfXvu1oZVqbE8YoolOqzgdSuIvP
-         CHnu2G4Yfp/qIWAdfyNoPEvZnnEazWKWzyo4KbJwVx7YZ2e29fDtCPpylwX31/BPnoDT
-         4eS5dvFtoOQbWKKUHmx1u+IXu0n4ZBwe58e8aZmsh9qyYErQrMlQ4G/g2zLMn3QBO0Gc
-         n/BSHCmNED4sHSAAvRbGYcuXBSUYse6F9+S/pOK9rTd2cFwY9BX3OjqNGmCMZH5ucaBm
-         ZPYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NAgqYHbywIYs2QshwFgb53FlD6EOq34SaKwHmoFcyVM=;
-        b=DUkhdZDRSyTndW+/iJPlEK1RXkDLubV/toj+JBly1UqndB2cMXR/uaLDbqZlmC5yl9
-         xKBxVn2Y/wVwjshiWT7I7Srs+/3aP21CPBFxf83MfzSHHwrw6DmbNEfHvh3qdND6hv9e
-         BMsHWtkhrQ77JQbUYgyZQKIvM6VM0QqI3rjzAsP7BzJ4WRMVfsJ1LlO7AzO8kMSNWKMN
-         chQH1tOc1S1cPk/fdSsK6IMfXADxLDIQAKfAfs7WfNX0zYyRjvKgixFdtx1strcONsbR
-         J85pYHtW1xgUQJmZqqFhDFWzOUg18FHnrIWR68IS5R0QuBdw9oI+9D/4bRIwoHETGvan
-         9RFA==
-X-Gm-Message-State: AOAM531LpMKFFmgv0ll/JZgjivTL5P4n8TmX7r0V7ncKPqQPpx5c70Is
-        rTZF5T6/lM1L1WIUpq2j3t4=
-X-Google-Smtp-Source: ABdhPJwlWUvIhc13/2RbhPaMewunp5RbevdWqUpLZH09DlBVAan2+n6kj6b/WBNtF18AMttZ/4DU1w==
-X-Received: by 2002:a05:6512:4c5:: with SMTP id w5mr753720lfq.92.1612475673375;
-        Thu, 04 Feb 2021 13:54:33 -0800 (PST)
-Received: from localhost.localdomain (h-158-174-22-164.NA.cust.bahnhof.se. [158.174.22.164])
-        by smtp.gmail.com with ESMTPSA id u18sm796647ljl.57.2021.02.04.13.54.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 13:54:32 -0800 (PST)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH] tpm/ppi: Constify static struct attribute_group
-Date:   Thu,  4 Feb 2021 22:54:27 +0100
-Message-Id: <20210204215427.49047-1-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.30.0
+        Thu, 4 Feb 2021 18:24:36 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 11B9220202A2;
+        Thu,  4 Feb 2021 15:23:54 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 11B9220202A2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1612481034;
+        bh=OndhVLOBSOlhxfWlUBORpyBHTxhkHChscviUHCrmugg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Pc8u7bQB2zafW4H9OcRXdd4zfCD7etti6D+z/mvcNw790E1OXQcgHp7HB7DoxGo5q
+         HDIdQFcCJ4KVzGQnh7lAemZUn50HwRcbWmYbMb0Ahu04P3IHGhur97lof5rAWYHbyY
+         Ci84szXcAv4hAB34Pzxi+YE/BVgqSJaCdH34lvCE=
+Subject: Re: [PATCH v16 11/12] powerpc: Use OF alloc and free for FDT
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>, Joe Perches <joe@perches.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        James Morse <james.morse@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        vincenzo.frascino@arm.com, Mark Rutland <mark.rutland@arm.com>,
+        dmitry.kasatkin@gmail.com, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Allison Randal <allison@lohutok.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Bhupesh Sharma <bhsharma@redhat.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, tao.li@vivo.com,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        balajib@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <20210204164135.29856-1-nramas@linux.microsoft.com>
+ <20210204164135.29856-12-nramas@linux.microsoft.com>
+ <CAL_JsqK1Pb9nAeL84EP2U3MQgpBsm+E_0QXmzbigWXnS245WPQ@mail.gmail.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <503d42ba-89bf-4ad9-9d4c-acb625580f77@linux.microsoft.com>
+Date:   Thu, 4 Feb 2021 15:23:53 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqK1Pb9nAeL84EP2U3MQgpBsm+E_0QXmzbigWXnS245WPQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The only usage of ppi_attr_grp is to put its address in an array of
-pointers to const struct attribute_group. Make it const to allow the
-compiler to put it in read-only memory.
+On 2/4/21 11:26 AM, Rob Herring wrote:
+> On Thu, Feb 4, 2021 at 10:42 AM Lakshmi Ramasubramanian
+> <nramas@linux.microsoft.com> wrote:
+>>
+>> of_alloc_and_init_fdt() and of_free_fdt() have been defined in
+>> drivers/of/kexec.c to allocate and free memory for FDT.
+>>
+>> Use of_alloc_and_init_fdt() and of_free_fdt() to allocate and
+>> initialize the FDT, and to free the FDT respectively.
+>>
+>> powerpc sets the FDT address in image_loader_data field in
+>> "struct kimage" and the memory is freed in
+>> kimage_file_post_load_cleanup().  This cleanup function uses kfree()
+>> to free the memory. But since of_alloc_and_init_fdt() uses kvmalloc()
+>> for allocation, the buffer needs to be freed using kvfree().
+> 
+> You could just change the kexec core to call kvfree() instead.
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- drivers/char/tpm/tpm_ppi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+>> Define "fdt" field in "struct kimage_arch" for powerpc to store
+>> the address of FDT, and free the memory in powerpc specific
+>> arch_kimage_file_post_load_cleanup().
+> 
+> However, given all the other buffers have an explicit field in kimage
+> or kimage_arch, changing powerpc is to match arm64 is better IMO.
 
-diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-index b2dab941cb7f..40018a73b3cb 100644
---- a/drivers/char/tpm/tpm_ppi.c
-+++ b/drivers/char/tpm/tpm_ppi.c
-@@ -358,7 +358,7 @@ static struct attribute *ppi_attrs[] = {
- 	&dev_attr_tcg_operations.attr,
- 	&dev_attr_vs_operations.attr, NULL,
- };
--static struct attribute_group ppi_attr_grp = {
-+static const struct attribute_group ppi_attr_grp = {
- 	.name = "ppi",
- 	.attrs = ppi_attrs
- };
--- 
-2.30.0
+Just to be clear:
+I'll leave this as is - free FDT buffer in powerpc's 
+arch_kimage_file_post_load_cleanup() to match arm64 behavior.
+
+Will not change "kexec core" to call kvfree() - doing that change would 
+require changing all architectures to use kvmalloc() for 
+image_loader_data allocation.
+
+> 
+>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>> Suggested-by: Rob Herring <robh@kernel.org>
+>> Suggested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+>> ---
+>>   arch/powerpc/include/asm/kexec.h  |  2 ++
+>>   arch/powerpc/kexec/elf_64.c       | 26 ++++++++++++++++----------
+>>   arch/powerpc/kexec/file_load_64.c |  3 +++
+>>   3 files changed, 21 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/arch/powerpc/include/asm/kexec.h b/arch/powerpc/include/asm/kexec.h
+>> index 2c0be93d239a..d7d13cac4d31 100644
+>> --- a/arch/powerpc/include/asm/kexec.h
+>> +++ b/arch/powerpc/include/asm/kexec.h
+>> @@ -111,6 +111,8 @@ struct kimage_arch {
+>>          unsigned long elf_headers_mem;
+>>          unsigned long elf_headers_sz;
+>>          void *elf_headers;
+>> +
+>> +       void *fdt;
+>>   };
+>>
+>>   char *setup_kdump_cmdline(struct kimage *image, char *cmdline,
+>> diff --git a/arch/powerpc/kexec/elf_64.c b/arch/powerpc/kexec/elf_64.c
+>> index d0e459bb2f05..51d2d8eb6c1b 100644
+>> --- a/arch/powerpc/kexec/elf_64.c
+>> +++ b/arch/powerpc/kexec/elf_64.c
+>> @@ -19,6 +19,7 @@
+>>   #include <linux/kexec.h>
+>>   #include <linux/libfdt.h>
+>>   #include <linux/module.h>
+>> +#include <linux/of.h>
+>>   #include <linux/of_fdt.h>
+>>   #include <linux/slab.h>
+>>   #include <linux/types.h>
+>> @@ -32,7 +33,7 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
+>>          unsigned int fdt_size;
+>>          unsigned long kernel_load_addr;
+>>          unsigned long initrd_load_addr = 0, fdt_load_addr;
+>> -       void *fdt;
+>> +       void *fdt = NULL;
+>>          const void *slave_code;
+>>          struct elfhdr ehdr;
+>>          char *modified_cmdline = NULL;
+>> @@ -103,18 +104,12 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
+>>          }
+>>
+>>          fdt_size = fdt_totalsize(initial_boot_params) * 2;
+>> -       fdt = kmalloc(fdt_size, GFP_KERNEL);
+>> +       fdt = of_alloc_and_init_fdt(fdt_size);
+>>          if (!fdt) {
+>>                  pr_err("Not enough memory for the device tree.\n");
+>>                  ret = -ENOMEM;
+>>                  goto out;
+>>          }
+>> -       ret = fdt_open_into(initial_boot_params, fdt, fdt_size);
+>> -       if (ret < 0) {
+>> -               pr_err("Error setting up the new device tree.\n");
+>> -               ret = -EINVAL;
+>> -               goto out;
+>> -       }
+>>
+>>          ret = setup_new_fdt_ppc64(image, fdt, initrd_load_addr,
+> 
+> The first thing this function does is call setup_new_fdt() which first
+> calls of_kexec_setup_new_fdt(). (Note, I really don't understand the
+> PPC code split. It looks like there's a 32-bit and 64-bit split, but
+> 32-bit looks broken to me. Nothing ever calls setup_new_fdt() except
+> setup_new_fdt_ppc64()). The arm64 version is calling
+> of_alloc_and_init_fdt() and then of_kexec_setup_new_fdt() directly.
+> 
+> So we can just make of_alloc_and_init_fdt() also call
+> of_kexec_setup_new_fdt() (really, just tweak of_kexec_setup_new_fdt do
+> the alloc and copy). 
+ok - will move fdt allocation into of_kexec_setup_new_fdt().
+
+I don't think the architecture needs to pick the
+> size either. It's doubtful that either one is that sensitive to the
+> amount of extra space.
+I am not clear about the above comment -
+are you saying the architectures don't need to pass FDT size to the 
+alloc function?
+
+arm64 is adding command line string length and some extra space to the 
+size computed from initial_boot_params for FDT Size:
+
+	buf_size = fdt_totalsize(initial_boot_params)
+			+ cmdline_len + DTB_EXTRA_SPACE;
+
+powerpc is just using twice the size computed from initial_boot_params
+
+	fdt_size = fdt_totalsize(initial_boot_params) * 2;
+
+I think it would be safe to let arm64 and powerpc pass the required FDT 
+size, along with the other params to of_kexec_setup_new_fdt() - and in 
+this function we allocate FDT and set it up.
+
+And, for powerpc leave the remaining code in setup_new_fdt_ppc64().
+
+Would that be ok?
+
+> 
+>>                                    initrd_len, cmdline);
+>> @@ -131,6 +126,10 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
+>>          ret = kexec_add_buffer(&kbuf);
+>>          if (ret)
+>>                  goto out;
+>> +
+>> +       /* FDT will be freed in arch_kimage_file_post_load_cleanup */
+>> +       image->arch.fdt = fdt;
+>> +
+>>          fdt_load_addr = kbuf.mem;
+>>
+>>          pr_debug("Loaded device tree at 0x%lx\n", fdt_load_addr);
+>> @@ -145,8 +144,15 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
+>>          kfree(modified_cmdline);
+>>          kexec_free_elf_info(&elf_info);
+>>
+>> -       /* Make kimage_file_post_load_cleanup free the fdt buffer for us. */
+>> -       return ret ? ERR_PTR(ret) : fdt;
+>> +       /*
+>> +        * Once FDT buffer has been successfully passed to kexec_add_buffer(),
+>> +        * the FDT buffer address is saved in image->arch.fdt. In that case,
+>> +        * the memory cannot be freed here in case of any other error.
+>> +        */
+>> +       if (ret && !image->arch.fdt)
+>> +               of_free_fdt(fdt);
+> 
+> Just call kvfree() directly.
+Sure - will do.
+
+  -lakshmi
+
+> 
+>> +
+>> +       return ret ? ERR_PTR(ret) : NULL;
+>>   }
+>>
+>>   const struct kexec_file_ops kexec_elf64_ops = {
+>> diff --git a/arch/powerpc/kexec/file_load_64.c b/arch/powerpc/kexec/file_load_64.c
+>> index 3cab318aa3b9..d9d5b5569a6d 100644
+>> --- a/arch/powerpc/kexec/file_load_64.c
+>> +++ b/arch/powerpc/kexec/file_load_64.c
+>> @@ -1113,5 +1113,8 @@ int arch_kimage_file_post_load_cleanup(struct kimage *image)
+>>          image->arch.elf_headers = NULL;
+>>          image->arch.elf_headers_sz = 0;
+>>
+>> +       of_free_fdt(image->arch.fdt);
+>> +       image->arch.fdt = NULL;
+>> +
+>>          return kexec_image_post_load_cleanup_default(image);
+>>   }
+>> --
+>> 2.30.0
+>>
 
