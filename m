@@ -2,238 +2,126 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1209F310EAA
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Feb 2021 18:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7EF310F40
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Feb 2021 18:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbhBEPqE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Feb 2021 10:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbhBEPns (ORCPT
+        id S233634AbhBEQPc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Feb 2021 11:15:32 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29986 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233493AbhBEQNR (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Feb 2021 10:43:48 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1C5C06174A
-        for <linux-integrity@vger.kernel.org>; Fri,  5 Feb 2021 09:25:30 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id d85so7643186qkg.5
-        for <linux-integrity@vger.kernel.org>; Fri, 05 Feb 2021 09:25:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gYCWCHzWNYrqUIFpcjQGBigsKmu/xjSezoVKxDf9cQk=;
-        b=C41uh8xblqnUmPuFfn67XLXLGiG2mslENYIXY5IHLMyCqRdBLbD4VPhCgbTBc6TmZv
-         B9cOEfATWuFB4qniCijFLw3ibeOXtSzXA4s7zh9kh4fpUXVTmPF8RccGzlxr14rh1QGG
-         JZnUiWWxbLDfxX6nG2bcyndf7l3FjeS3hEJNSXlY8iHPqYSh8xnIT3pVfn3LSAWXLP7p
-         T1p/e9oLAFRyj+BB8UAjf2v8FFx243OgSxCfXVX2NCUj9L0UPBzb77wV+IFVdFAaHkF9
-         JDXlvyoLdNM6Bq9lMbVdwASTqoy8YQh3oDuNsHbHG9EeteplgoSuBdL0SRClWJTC2FeT
-         uawg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gYCWCHzWNYrqUIFpcjQGBigsKmu/xjSezoVKxDf9cQk=;
-        b=HuZgUC8ghNNMmAZI5NXEfDlVOmMABoe5Rb1WyLwXLeoSWRyLMN/QTrM62ZYtg03O56
-         sNJK1TMvxYi77OUr9EQMfoi0Jnjg7GJwOKO5kt5rfhjLQkU2JybEIZM1vmL4d4T5+0gX
-         pNshCUndnStrzgA2ilUe49mODRN1divTk64jOCmrBFidvbJR5h4fQr/IKMle9cHjhUHB
-         r9b/FWgyPfgnxCeiVrftjPcLP2O1HUnHub9u2Wx2b2hI1B5uP0oCxuUzPgrV5VgpI/QE
-         ruExuXNN2nB6SLYdvAteT0hb3igknXErJrK4lWI77RPzUvu9pV/LnZJa44hs0AmGEOhG
-         pXQw==
-X-Gm-Message-State: AOAM5325VoBPMAB7v2kWqhzOVmGciEMeqTLkQf04VeB9QsVwIbKhenKR
-        3t5HT5FNRoHtqSWkWPlmTGH3JA==
-X-Google-Smtp-Source: ABdhPJxuZFNNv1vLvpgwgRTBZO7AkqN44W+Ag7bzdmAO0tlBCs6gcbIitnVY2IcssYpUSaBMhbi46A==
-X-Received: by 2002:a37:8884:: with SMTP id k126mr5164153qkd.104.1612545929201;
-        Fri, 05 Feb 2021 09:25:29 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
-        by smtp.gmail.com with ESMTPSA id 18sm10015024qkl.20.2021.02.05.09.25.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 09:25:28 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1l84rI-003yPG-5R; Fri, 05 Feb 2021 13:25:28 -0400
-Date:   Fri, 5 Feb 2021 13:25:28 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        stefanb@linux.vnet.ibm.com, stable@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH v3 2/2] tpm: in tpm2_del_space check if ops pointer is
- still valid
-Message-ID: <20210205172528.GP4718@ziepe.ca>
-References: <1612482643-11796-1-git-send-email-LinoSanfilippo@gmx.de>
- <1612482643-11796-3-git-send-email-LinoSanfilippo@gmx.de>
- <7308e5e9f51501bd92cced8f28ff6130c976b3ed.camel@HansenPartnership.com>
- <YByrCnswkIlz1w1t@kernel.org>
- <ee4adfbb99273e1bdceca210bc1fa5f16a50c415.camel@HansenPartnership.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ee4adfbb99273e1bdceca210bc1fa5f16a50c415.camel@HansenPartnership.com>
+        Fri, 5 Feb 2021 11:13:17 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 115Hnk0G016547;
+        Fri, 5 Feb 2021 12:54:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=MkTtb8AxGX0Eg0bz77reDlk0J1S2Tf6kAiFAdoE4lX4=;
+ b=UdKLWkO48alodEvS6p4Gco2/tegZqyk3IDN/2895lEDPKuwQ5PsWfR8i1/EkUi3UsaiS
+ 1FYDnlPnk7M5m0r6x3cpcCXRL4d+oOwVaLI/VVYJinU2UIiu98TiUPC0JbuLqAX+eh/2
+ A1EAmSJ6AUMwBqiW2eo8o+gTqY7aGELCTFZDvR+PaX3RrAC9MEGh36aaLYCFtZG0WHt2
+ /aS3pBkCHo+MKgNK/ciZ2lap9nd7OfEWXb1PEZl8Ip5fJzq+D7ie4M21ONz5x5RxCFrZ
+ K5cqaniuzvdxcKK46HPG5S2ZtMmHkmaPcHZ/+XznJTdXbxudQD/WnmLnHl1B5QHIznWY xA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36haf28mt0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Feb 2021 12:54:50 -0500
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 115HnpoI017387;
+        Fri, 5 Feb 2021 12:54:50 -0500
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36haf28mq3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Feb 2021 12:54:49 -0500
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 115HgZpu016897;
+        Fri, 5 Feb 2021 17:49:46 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 36cy38b7de-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Feb 2021 17:49:46 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 115HniPJ37355996
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 5 Feb 2021 17:49:44 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62C1911C04C;
+        Fri,  5 Feb 2021 17:49:44 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 25C9811C04A;
+        Fri,  5 Feb 2021 17:49:42 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.9.149])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  5 Feb 2021 17:49:41 +0000 (GMT)
+Message-ID: <6a5b7a1767265122d21f185c81399692d12191f4.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 1/2] ima: Free IMA measurement buffer on error
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     bauerman@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, sashal@kernel.org,
+        tyhicks@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Date:   Fri, 05 Feb 2021 12:49:41 -0500
+In-Reply-To: <7000d128-272e-3654-8480-e46bf7dfad74@linux.microsoft.com>
+References: <20210204174951.25771-1-nramas@linux.microsoft.com>
+         <YB0YdqbbdAdbEOQw@kroah.com>
+         <7000d128-272e-3654-8480-e46bf7dfad74@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-05_10:2021-02-05,2021-02-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ spamscore=0 mlxscore=0 clxscore=1011 priorityscore=1501 mlxlogscore=861
+ bulkscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102050107
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 08:48:11AM -0800, James Bottomley wrote:
-> > Thanks for pointing this out. I'd strongly support Jason's proposal:
+On Fri, 2021-02-05 at 09:39 -0800, Lakshmi Ramasubramanian wrote:
+> On 2/5/21 2:05 AM, Greg KH wrote:
+> > On Thu, Feb 04, 2021 at 09:49:50AM -0800, Lakshmi Ramasubramanian wrote:
+> >> IMA allocates kernel virtual memory to carry forward the measurement
+> >> list, from the current kernel to the next kernel on kexec system call,
+> >> in ima_add_kexec_buffer() function.  In error code paths this memory
+> >> is not freed resulting in memory leak.
+> >>
+> >> Free the memory allocated for the IMA measurement list in
+> >> the error code paths in ima_add_kexec_buffer() function.
+> >>
+> >> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> >> Suggested-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> >> Fixes: 7b8589cc29e7 ("ima: on soft reboot, save the measurement list")
+> >> ---
+> >>   security/integrity/ima/ima_kexec.c | 1 +
+> >>   1 file changed, 1 insertion(+)
 > > 
-> > https://lore.kernel.org/linux-integrity/20201215175624.GG5487@ziepe.ca/
+> > <formletter>
 > > 
-> > It's the best long-term way to fix this.
+> > This is not the correct way to submit patches for inclusion in the
+> > stable kernel tree.  Please read:
+> >      https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> > for how to do this properly.
+> > 
+> > </formletter>
+> > 
 > 
-> Really, no it's not.  It introduces extra mechanism we don't need.
+> Thanks for the info Greg.
+> 
+> I will re-submit the two patches in the proper format.
 
-> To recap the issue: character devices already have an automatic
-> mechanism which holds a reference to the struct device while the
-> character node is open so the default is to release resources on final
-> put of the struct device.
+No need.  I'm testing these patches now.  I'm not exactly sure what the
+problem is.  Stable wasn't Cc'ed.  Is it that you sent the patch
+directly to Greg or added "Fixes"?
 
-The refcount on the struct device only keeps the memory alive, it
-doesn't say anything about the ops. We still need to lock and check
-the ops each and every time they are used.
+thanks,
 
-The fact cdev goes all the way till fput means we don't need the extra
-get/put I suggested to Lino at all.
+Mimi
 
-> The practical consequence of this model is that if you allocate a chip
-> structure with tpm_chip_alloc() you have to release it again by doing a
-> put of *both* devices.
-
-The final put of the devs should be directly after the
-cdev_device_del(), not in a devm. This became all confused because the
-devs was created during alloc, not register. Having a device that is
-initialized but will never be added is weird.
-
-See sketch below.
-
-> Stefan noticed the latter, so we got the bogus patch 8979b02aaf1d
-> ("tpm: Fix reference count to main device") applied which simply breaks
-> the master/slave model by not taking a reference on the master for the
-> slave.  I'm not sure why I didn't notice the problem with this fix at
-> the time, but attention must have been elsewhere.
-
-Well, this is sort of OK because we never use the devs in TPM1, so we
-end up freeing the chip with a positive refcount on the devs, which is
-weird but not a functional bug.
-
-Jason
-
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index ddaeceb7e10910..e07193a0dd4438 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -344,7 +344,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
- 	chip->dev_num = rc;
- 
- 	device_initialize(&chip->dev);
--	device_initialize(&chip->devs);
- 
- 	chip->dev.class = tpm_class;
- 	chip->dev.class->shutdown_pre = tpm_class_shutdown;
-@@ -352,29 +351,12 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
- 	chip->dev.parent = pdev;
- 	chip->dev.groups = chip->groups;
- 
--	chip->devs.parent = pdev;
--	chip->devs.class = tpmrm_class;
--	chip->devs.release = tpm_devs_release;
--	/* get extra reference on main device to hold on
--	 * behalf of devs.  This holds the chip structure
--	 * while cdevs is in use.  The corresponding put
--	 * is in the tpm_devs_release (TPM2 only)
--	 */
--	if (chip->flags & TPM_CHIP_FLAG_TPM2)
--		get_device(&chip->dev);
--
- 	if (chip->dev_num == 0)
- 		chip->dev.devt = MKDEV(MISC_MAJOR, TPM_MINOR);
- 	else
- 		chip->dev.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num);
- 
--	chip->devs.devt =
--		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
--
- 	rc = dev_set_name(&chip->dev, "tpm%d", chip->dev_num);
--	if (rc)
--		goto out;
--	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
- 	if (rc)
- 		goto out;
- 
-@@ -382,9 +364,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
- 		chip->flags |= TPM_CHIP_FLAG_VIRTUAL;
- 
- 	cdev_init(&chip->cdev, &tpm_fops);
--	cdev_init(&chip->cdevs, &tpmrm_fops);
- 	chip->cdev.owner = THIS_MODULE;
--	chip->cdevs.owner = THIS_MODULE;
- 
- 	rc = tpm2_init_space(&chip->work_space, TPM2_SPACE_BUFFER_SIZE);
- 	if (rc) {
-@@ -396,7 +376,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
- 	return chip;
- 
- out:
--	put_device(&chip->devs);
- 	put_device(&chip->dev);
- 	return ERR_PTR(rc);
- }
-@@ -445,13 +424,33 @@ static int tpm_add_char_device(struct tpm_chip *chip)
- 	}
- 
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+		device_initialize(&chip->devs);
-+		chip->devs.parent = pdev;
-+		chip->devs.class = tpmrm_class;
-+		rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
-+		if (rc)
-+			goto out_put_devs;
-+
-+		/*
-+                 * get extra reference on main device to hold on behalf of devs.
-+                 * This holds the chip structure while cdevs is in use. The
-+		 * corresponding put is in the tpm_devs_release.
-+		 */
-+		get_device(&chip->dev);
-+		chip->devs.release = tpm_devs_release;
-+
-+		chip->devs.devt =
-+			MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-+		cdev_init(&chip->cdevs, &tpmrm_fops);
-+		chip->cdevs.owner = THIS_MODULE;
-+
- 		rc = cdev_device_add(&chip->cdevs, &chip->devs);
- 		if (rc) {
- 			dev_err(&chip->devs,
- 				"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
- 				dev_name(&chip->devs), MAJOR(chip->devs.devt),
- 				MINOR(chip->devs.devt), rc);
--			return rc;
-+			goto out_put_devs;
- 		}
- 	}
- 
-@@ -460,6 +459,10 @@ static int tpm_add_char_device(struct tpm_chip *chip)
- 	idr_replace(&dev_nums_idr, chip, chip->dev_num);
- 	mutex_unlock(&idr_lock);
- 
-+out_put_devs:
-+	put_device(&chip->devs);
-+out_del_dev:
-+	cdev_device_del(&chip->cdev);
- 	return rc;
- }
- 
-@@ -640,8 +643,10 @@ void tpm_chip_unregister(struct tpm_chip *chip)
- 	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
- 		hwrng_unregister(&chip->hwrng);
- 	tpm_bios_log_teardown(chip);
--	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-+	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
- 		cdev_device_del(&chip->cdevs, &chip->devs);
-+		put_device(&chip->devs);
-+	}
- 	tpm_del_char_device(chip);
- }
- EXPORT_SYMBOL_GPL(tpm_chip_unregister);
