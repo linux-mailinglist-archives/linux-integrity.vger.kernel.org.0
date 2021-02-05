@@ -2,78 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B1331127F
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Feb 2021 21:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A613D3113EA
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Feb 2021 22:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbhBESrq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Feb 2021 13:47:46 -0500
-Received: from services.gouders.net ([141.101.32.176]:55090 "EHLO
-        services.gouders.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233162AbhBESqW (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Feb 2021 13:46:22 -0500
-Received: from lena.gouders.net (ltea-047-066-017-037.pools.arcor-ip.net [47.66.17.37])
-        (authenticated bits=0)
-        by services.gouders.net (8.14.8/8.14.8) with ESMTP id 115KND7P010254
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Fri, 5 Feb 2021 21:23:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gouders.net; s=gnet;
-        t=1612556596; bh=ePhxPehd8NJvb5Bp+taoe4FVpJuQgR2FKjPv9jRtHaU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=WfGCeRbKzBsGWfFTRO0n1/hPgJtjWtofWnDQmOzTldrhUlL7V4LsEe2U8mYjBAqvk
-         4Rn6KsMoCbPvNFalOgWujkJUffjRFv9M2gNCt7AE6tNPfJG4bgETPR4hK5U5M3HnNJ
-         9S10XX0kxHzFX/ZNGSYRBb6sxlq/3as+6F7cq6gI=
-From:   Dirk Gouders <dirk@gouders.net>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Dirk Gouders <dirk@gouders.net>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        id S230332AbhBEVwA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Feb 2021 16:52:00 -0500
+Received: from mout.gmx.net ([212.227.15.15]:38133 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230038AbhBEVv4 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 5 Feb 2021 16:51:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1612561807;
+        bh=ML2q4g4mzki1+bGinziqhHSPPvaG79ZS+7tvrsuX1oI=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=LfIPjfUIHz9GLocJUf0jLFyYjCmkbDrZYEn8UOeegb1yTLiJHAKkgv1Q4/oCI1Vp1
+         NfLqP7xBqU0jKwmEmM58m0VNEQRt5bqv4ofJ+sFu53CvrCMHLo4lf+UMZdU+9m+obm
+         QohcM+ZIF6wM9TT05xu7C0BkFBLIB/26gaXFtNL8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MtwZ4-1lvYiB1kwG-00uGAU; Fri, 05
+ Feb 2021 22:50:07 +0100
+Subject: Re: [PATCH v3 1/2] tpm: fix reference counting for struct tpm_chip
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, stable@vger.kernel.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] tpm_tis: handle -EPROBE_DEFER in tpm_tis_plat_probe()
-Date:   Fri,  5 Feb 2021 21:20:22 +0100
-Message-Id: <20210205202022.4515-2-dirk@gouders.net>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210205202022.4515-1-dirk@gouders.net>
-References: <20210205202022.4515-1-dirk@gouders.net>
+References: <1612482643-11796-1-git-send-email-LinoSanfilippo@gmx.de>
+ <1612482643-11796-2-git-send-email-LinoSanfilippo@gmx.de>
+ <20210205130511.GI4718@ziepe.ca>
+ <3b821bf9-0f54-3473-d934-61c0c29f8957@kunbus.com>
+ <20210205151511.GM4718@ziepe.ca>
+ <f6e5dd7d-30df-26d9-c712-677c127a8026@kunbus.com>
+ <20210205155808.GO4718@ziepe.ca>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <db7c90c3-d86a-65c9-81a2-be1527b47e11@gmx.de>
+Date:   Fri, 5 Feb 2021 22:50:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210205155808.GO4718@ziepe.ca>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Dc+DyMFu83Fre0D6v74WAtZQa6sRGXtjxhfcs6BuCMcFJ4VAv2d
+ 4DhriDvPrW1+ZOyKVRTo2fsxFhwZjC3b7HcDV8ylKpNwrdpqfyMI/w+jQfSWYHp7m0evBUr
+ bLMsdci80ThI8GzE3vijiGfgEpz9PkX0jQmMcnYwcNdPXuWM6uleFCKtJ+yY2tuMyMTxYPP
+ 5tPFakeWEMw8w7b0gmYlg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:R0bB3hGyUPo=:k4HkKdMep4QkVXmo5xW4/o
+ P4WuCtr9KKEe8CZ21M0/grJHF1pwQHg+8T2ADxWicmuJL/PjiAMOynm57BiiDcjJkV7kLF++S
+ aaMCLZ5DNGRcUcgcSL2Yn1PUp1m6yPFkOM7ALbeOVuI103wuL0KhsAtfto57BMkdHY64/OVT2
+ 1VSwGDoHgoZV+I7ehO5RSvE4sRnEhrx0828HMSPnS8mj/OPNQPrZdQTdw2mSw5PztEvbtQU2M
+ V3BOhfL1QPuZpr+TYLf9wGssHMlAF1ICpIRnBQ16EOBV0O3Ls5zJk7DTxwS1Fd1MLEQU4U6p3
+ uv3wDiP/grsMcYhcIYYguLOslSdhjt3mI/YZHUpIBI8GIoO0wD/NwfkWWbbsm8I0jaaM2wJCy
+ hBANeI0Y+q3CWPsZBa0oz13cOagxLtIcz65uWf8V5bJiuuifWow7vMVyXl9a0xLNh0UNTdDeq
+ RN20zEwqOpAE9wd/8hSzU/YOJ6nGi8bWdZ6giKnagn7G7/b3A1Pz1Mz+YGCgJpMKjjbF+0GUO
+ DIzdOFEL4xIKgynVcNEHiDK5ZwGlXU02iKr/9s34rZxzOG6Cgp4c/KpsBVyuiNXzg0GAhtayW
+ 4uHj5Klsl/YZPh7EKxLrkSNg6ciyY8/4dclfPkqAfWqY1+atxK36Ia99pGOYfg1vuoCGvq5ZI
+ OKQBYaTRKjK8Uh6gov3qQns6ilrYuKZQ0xttoJYiOHAzs+o3x9fEqKB+UXe/3Xxu3/UH6Q1qv
+ NX/DghukkKLUolh+Cjckbr31cjhZgdNU87RVG1icQ4tV2pOVEpbx6tSFnMgDDyYNgGEa5vuxi
+ o37aYpS3H3WPi32aoDQJlMAFume0Y7w2WBqpchqNIRjAZDPF5UQIK53EMye9l+yo2Tv04nR9w
+ X7aFUyUSi44wCngC35zA==
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-tpm_tis does not consider -EPROBE_DEFER in tpm_tis_plat_probe().
-Instead, without notification it falls back to polling mode if
-platform_get_irq_optional() returns a negative value.
+On 05.02.21 at 16:58, Jason Gunthorpe wrote:
+eference in the first place).
+>
+> No, they are all chained together because they are all in the same
+> struct:
+>
+> struct tpm_chip {
+> 	struct device dev;
+> 	struct device devs;
+> 	struct cdev cdev;
+> 	struct cdev cdevs;
+>
+> dev holds the refcount on memory, when it goes 0 the whole thing is
+> kfreed.
+>
+> The rule is dev's refcount can't go to zero while any other refcount
+> is !=3D 0.
+>
+> For instance devs holds a get on dev that is put back only when devs
+> goes to 0:
+>
+> static void tpm_devs_release(struct device *dev)
+> {
+> 	struct tpm_chip *chip =3D container_of(dev, struct tpm_chip, devs);
+>
+> 	/* release the master device reference */
+> 	put_device(&chip->dev);
+> }
+>
+> Both cdev elements do something similar inside the cdev layer.
 
-This could lead to different behavior depending on wether tpm_tis was
-compiled builtin or as a module; in the latter case
-platform_get_irq_optional() often if not always returns a valid IRQ
-number on the first attempt.
+Well this chaining is exactly what does not work nowadays and what the pat=
+ch is supposed
+to fix: currently we dont ever take the extra ref (not even in TPM 2 case,=
+ note that
+TPM_CHIP_FLAG_TMP2 is never set), so
 
-Harmonize builtin and module behavior by returning -EPROBE_DEFER,
-effectively putting the device on the deferred probe list for later
-probe attempts.
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+-		get_device(&chip->dev);
++	get_device(&chip->dev);
 
-Signed-off-by: Dirk Gouders <dirk@gouders.net>
----
- drivers/char/tpm/tpm_tis.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index 4ed6e660273a..4cf863704aa1 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -320,6 +320,9 @@ static int tpm_tis_plat_probe(struct platform_device *pdev)
- 
- 	tpm_info.irq = platform_get_irq_optional(pdev, 0);
- 	if (tpm_info.irq <= 0) {
-+                if (tpm_info.irq == -EPROBE_DEFER)
-+                        /* Enter deferred probe list and try again, later. */
-+                        return -EPROBE_DEFER;
- 		if (pdev != force_pdev)
- 			tpm_info.irq = -1;
- 		else
--- 
-2.26.2
+and tpm_devs_release() is never called, since there is nothing that ever p=
+uts devs, so
+
+
++	rc =3D devm_add_action_or_reset(pdev,
++				      (void (*)(void *)) put_device,
++				      &chip->devs);
+
+
+The race with only get_device()/putdevice() in tpm_common_open()/tpm_commo=
+n_release() is:
+
+1. tpm chip is allocated with dev refcount =3D 1, devs refcount =3D 1
+2. /dev/tpmrm is opened but before we get the ref to dev in tpm_common() a=
+nother thread
+rmmmods the chip driver:
+3. the chip is unregistered, dev is put with refcount =3D 0 and the whole =
+chip struct is freed
+3. Now open() proceeds, tries to grab the extra ref chip->dev from a chip =
+that has already
+been deallocated and the system crashes.
+
+As I already wrote, that approach was my first thought, too, but since the=
+ result crashed due to the
+race condition, I chose the approach in patch 1.
+
+Regards,
+Lino
+
+> The net result is during any open() the tpm_chip is guarenteed to have
+> a positive refcount.
+>
+
 
