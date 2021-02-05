@@ -2,118 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 183053102A9
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Feb 2021 03:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3ED3104C9
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Feb 2021 06:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbhBECTl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Feb 2021 21:19:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43350 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229539AbhBECTj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Feb 2021 21:19:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1288764F9C;
-        Fri,  5 Feb 2021 02:18:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612491538;
-        bh=MKW/fYjZaBRm+U5gGYCM1y9kfRgrFjxcJFbjpchOmU4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dnRDqOJq88kswz0BE3ymdbaNOb5uVsM+mw2UZ5vkq2K4aRz7RXrTrRyWExEaGk183
-         ZRd+FVoXnxzoKPVYXRQWsey5YThYLB+l/uL2TIRabMH/qikaW5LeSlq4VX5g2iKi1W
-         bt9F2gNdZ11nthhQe3XjNektq9vQoSK/bbejqrBD9fJaGKzeYFpcCHu85YlP02zzJI
-         Cow3XZwg/xHmivSUBMPmOnhQf++VSAHQmz8fSOgp46wm6BStEoKpjdOHyuuvZTtz97
-         7uxxEzWpk+SbtX2pwNUiNGiCnXGAVZIBMAXGW9YpcW1D4YXAJgo06qYCcbzYNr9fv7
-         IZ80HXnYCibpw==
-Date:   Fri, 5 Feb 2021 04:18:50 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, stefanb@linux.vnet.ibm.com, stable@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH v3 2/2] tpm: in tpm2_del_space check if ops pointer is
- still valid
-Message-ID: <YByrCnswkIlz1w1t@kernel.org>
-References: <1612482643-11796-1-git-send-email-LinoSanfilippo@gmx.de>
- <1612482643-11796-3-git-send-email-LinoSanfilippo@gmx.de>
- <7308e5e9f51501bd92cced8f28ff6130c976b3ed.camel@HansenPartnership.com>
+        id S230296AbhBEF6H (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Feb 2021 00:58:07 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12465 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230258AbhBEF6H (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 5 Feb 2021 00:58:07 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DX4R65g6czjKd5;
+        Fri,  5 Feb 2021 13:56:02 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.498.0; Fri, 5 Feb 2021
+ 13:57:17 +0800
+From:   wanghongzhe <wanghongzhe@huawei.com>
+To:     <peterhuewe@gmx.de>, <jarkko@kernel.org>, <jgg@ziepe.ca>
+CC:     <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] tpm_tis_spi_main: set cs_change = 0 when timesout
+Date:   Fri, 5 Feb 2021 14:42:05 +0800
+Message-ID: <1612507325-2621-1-git-send-email-wanghongzhe@huawei.com>
+X-Mailer: git-send-email 1.7.12.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7308e5e9f51501bd92cced8f28ff6130c976b3ed.camel@HansenPartnership.com>
+Content-Type: text/plain
+X-Originating-IP: [10.175.124.27]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 04, 2021 at 04:34:11PM -0800, James Bottomley wrote:
-> On Fri, 2021-02-05 at 00:50 +0100, Lino Sanfilippo wrote:
-> > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > 
-> > In tpm2_del_space() chip->ops is used for flushing the sessions.
-> > However
-> > this function may be called after tpm_chip_unregister() which sets
-> > the chip->ops pointer to NULL.
-> > Avoid a possible NULL pointer dereference by checking if chip->ops is
-> > still
-> > valid before accessing it.
-> > 
-> > Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of
-> > tpm_transmit()")
-> > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > ---
-> >  drivers/char/tpm/tpm2-space.c | 15 ++++++++++-----
-> >  1 file changed, 10 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-
-> > space.c
-> > index 784b8b3..9a29a40 100644
-> > --- a/drivers/char/tpm/tpm2-space.c
-> > +++ b/drivers/char/tpm/tpm2-space.c
-> > @@ -58,12 +58,17 @@ int tpm2_init_space(struct tpm_space *space,
-> > unsigned int buf_size)
-> >  
-> >  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
-> >  {
-> > -	mutex_lock(&chip->tpm_mutex);
-> > -	if (!tpm_chip_start(chip)) {
-> > -		tpm2_flush_sessions(chip, space);
-> > -		tpm_chip_stop(chip);
-> > +	down_read(&chip->ops_sem);
-> > +	if (chip->ops) {
-> > +		mutex_lock(&chip->tpm_mutex);
-> > +		if (!tpm_chip_start(chip)) {
-> > +			tpm2_flush_sessions(chip, space);
-> > +			tpm_chip_stop(chip);
-> > +		}
-> > +		mutex_unlock(&chip->tpm_mutex);
-> >  	}
-> > -	mutex_unlock(&chip->tpm_mutex);
-> > +	up_read(&chip->ops_sem);
-> > +
-> >  	kfree(space->context_buf);
-> >  	kfree(space->session_buf);
-> >  }
-> 
-> 
-> Actually, this still isn't right.  As I said to the last person who
-> reported this, we should be doing a get/put on the ops, not rolling our
-> own here:
-> 
-> https://lore.kernel.org/linux-integrity/e7566e1e48f5be9dca034b4bfb67683b5d3cb88f.camel@HansenPartnership.com/
-> 
-> The reporter went silent before we could get this tested, but could you
-> try, please, because your patch is still hand rolling the ops get/put,
-> just slightly better than it had been done previously.
-> 
-> James
+when i reach TPM_RETRY, the cs cannot  change back to 'high'.
+So the TPM chips thinks this communication is not over.
+And next times communication cannot be effective because
+the communications mixed up with the last time.
 
-Thanks for pointing this out. I'd strongly support Jason's proposal:
+Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
+---
+ drivers/char/tpm/tpm_tis_spi_main.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-https://lore.kernel.org/linux-integrity/20201215175624.GG5487@ziepe.ca/
+diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+index 3856f6ebcb34..6c52cbb28881 100644
+--- a/drivers/char/tpm/tpm_tis_spi_main.c
++++ b/drivers/char/tpm/tpm_tis_spi_main.c
+@@ -64,8 +64,18 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi_phy *phy,
+ 				break;
+ 		}
+ 
+-		if (i == TPM_RETRY)
++		if (i == TPM_RETRY) {
++			/* change back to 'high',
++			 * So the TPM chips thinks the last communication
++			 * is done.
++			 */
++			spi_xfer.cs_change = 0;
++			spi_xfer->len = 1;
++			spi_message_init(&m);
++			spi_message_add_tail(spi_xfer, &m);
++			ret = spi_sync_locked(phy->spi_device, &m);
+ 			return -ETIMEDOUT;
++		}
+ 	}
+ 
+ 	return 0;
+-- 
+2.19.1
 
-It's the best long-term way to fix this.
-
-Honestly, I have to admit that this thread leaked from me. It happened
-exactly at the time when I was on vacation. Something must have gone wrong
-when I pulled emails after that.
-
-/Jarkko
