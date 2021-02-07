@@ -2,70 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2394311E0F
-	for <lists+linux-integrity@lfdr.de>; Sat,  6 Feb 2021 15:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B9E31286F
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 00:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbhBFOz4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 6 Feb 2021 09:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbhBFOzz (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 6 Feb 2021 09:55:55 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663E3C06178A
-        for <linux-integrity@vger.kernel.org>; Sat,  6 Feb 2021 06:55:15 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id p20so17645279ejb.6
-        for <linux-integrity@vger.kernel.org>; Sat, 06 Feb 2021 06:55:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=sBW6V9Hrb2SVq5rYwKsWZbacr3pcuZJbyTrQAoSbOpScuAB4kEaDUiI2QiX5eUSNvF
-         +dpLFCiLjqakMXH52v82cpQsYE5lFVkB7ixD2vO3mXkOelQjUjvAGQNhA0FS7RlKBq0Z
-         eiNV7/xam17/+hi02flHMdDlkBZtQPrZL2N9zGGha53rBjAy8FhMFMZ1HLZxUsbp94yi
-         5Kf7atGD69xxEl+/zNu4kWvfoeX6kmDI+aS1DBkaEqBPe7EcYM5RtmPJGVk/VokRMK6+
-         6RMvGS61XTV2PIuDsI4GgUyBMzEF8J6RxU6PhAXwtLhjymZonJ71GHW9XkDX5mu41BZx
-         tPog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=sY8L3teJArYS+PIUe30AYIYA4vby7ODFPGw8Y17sFuBa6XTtgkDWJb56H6DHfwtYCS
-         xd5FiRBjYnvve1Hu0RvYlK6ZjI6BMEmk9dUCJvcC1n3IbVsqZePSvkxKrtm3fA3CjJSZ
-         u1WfhZcW3dU5ua0w6AzhEnck58zEEXzyuLF9ZTONbOkjm92AGDs/tqddU4vxIr5T6vQs
-         Sb/MCNLqxrwbIh3yIq/ilyZu4s1mQZUMi+Rv6QEepBuWhhgn1YVRqSICs/fnsBxg7hBk
-         hQ2m6cHbSehRZCxxgvmqkfbNOr0DGjZ2iEJvH53PTNnCYnBZWBUWlkJ5LppGw85UAysr
-         2XOQ==
-X-Gm-Message-State: AOAM532208D/2kMbQ3lWmpIape7e5lSb0c7s7f1aeIXGNE3jCEqtpQlI
-        AyeKzl3qVB2sijT0AfiYm2LdnXGYY1J0dORbi+0=
-X-Google-Smtp-Source: ABdhPJxTH2a/LOeGvTbtXFctiLtCojn7Kl54IErt0v77D9xMX5kMK/IIh7/69weiMuj91CyF1kDOjnjoCe0P/oSPouw=
-X-Received: by 2002:a17:906:408b:: with SMTP id u11mr8880302ejj.299.1612623314201;
- Sat, 06 Feb 2021 06:55:14 -0800 (PST)
+        id S229681AbhBGXm6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 7 Feb 2021 18:42:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38272 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229565AbhBGXm5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 7 Feb 2021 18:42:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7EF8C64DF5;
+        Sun,  7 Feb 2021 23:42:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612741337;
+        bh=Y2a27YQNjg/T/z0OzSCmnPs67jHJx1cU5KZDsx8cByg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KkoEMaPYzT5wN+uYsu6LktK1Ihd32tOs2AcmSv8Id2PvtO9KDEdz5aSNRF58twbEp
+         tNuWVH6cLNnHsub6wDZGAdkMG/Ocyv5KTcTlKy1I0iANOEQzD5USPMaQAcWZZARQPb
+         Ghk+CkaNukQdrKlbyiOE54RcWn009aGz04fdxcQyPa6/PcNonOJUeZ1VWZKHgg05ox
+         jTQd25rTdQFUjhOWEyVEAJvn6yKH2KXhYvGOYgCvHI/PtSVfY5IUfLwbkqp0kwIsLN
+         9tOfAypaaWlsLrIpLwQEkIv6p58Cne8ZUvJrbiR92qLhpw0DmsfqUKL3/pBOw91JCC
+         cyzbs/a4uKhQw==
+Date:   Mon, 8 Feb 2021 01:42:08 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     wanghongzhe <wanghongzhe@huawei.com>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] tpm_tis_spi_main: set cs_change = 0 when timesout
+Message-ID: <YCB60CRpdhb7/HZ+@kernel.org>
+References: <1612507325-2621-1-git-send-email-wanghongzhe@huawei.com>
 MIME-Version: 1.0
-Received: by 2002:a17:906:25d0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:55:13
- -0800 (PST)
-Reply-To: lawyer.nba@gmail.com
-From:   Barrister Daven Bango <stephennbada9@gmail.com>
-Date:   Sat, 6 Feb 2021 15:55:13 +0100
-Message-ID: <CAGSHw-DbF4OYAkLYeS0vfSYxMBb9C=SZYfUukeq39rFo82gsjw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1612507325-2621-1-git-send-email-wanghongzhe@huawei.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---=20
-Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
-ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
-MMF)
-u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
-dodatne informacije
+On Fri, Feb 05, 2021 at 02:42:05PM +0800, wanghongzhe wrote:
+> when i reach TPM_RETRY, the cs cannot  change back to 'high'.
+> So the TPM chips thinks this communication is not over.
+> And next times communication cannot be effective because
+> the communications mixed up with the last time.
+> 
+> Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
+                 ~~~~~~~~~~~
+                 Firstname Lastname
 
-Advokat: Daven Bango
-Telefon: +22891667276
-(URED MMF-a LOME TOGO)
+Please write legit sentences starting with capital letters etc.
+
+Please write the commit message in imperative form. E.g. "Do x because y
+..". I presume that *you* are not an actor in the sequence.
+
+You also would need to have a fixes tag and preferably some description
+of the failing sequence if possible.
+
+/Jarkko
+
+> ---
+>  drivers/char/tpm/tpm_tis_spi_main.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+> index 3856f6ebcb34..6c52cbb28881 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -64,8 +64,18 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi_phy *phy,
+>  				break;
+>  		}
+>  
+> -		if (i == TPM_RETRY)
+> +		if (i == TPM_RETRY) {
+> +			/* change back to 'high',
+> +			 * So the TPM chips thinks the last communication
+> +			 * is done.
+> +			 */
+> +			spi_xfer.cs_change = 0;
+> +			spi_xfer->len = 1;
+> +			spi_message_init(&m);
+> +			spi_message_add_tail(spi_xfer, &m);
+> +			ret = spi_sync_locked(phy->spi_device, &m);
+>  			return -ETIMEDOUT;
+> +		}
+>  	}
+>  
+>  	return 0;
+> -- 
+> 2.19.1
+> 
+> 
