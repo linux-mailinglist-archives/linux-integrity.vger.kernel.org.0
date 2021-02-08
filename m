@@ -2,81 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7BD314224
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 22:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89284314245
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 22:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbhBHVod (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Feb 2021 16:44:33 -0500
-Received: from sonic307-15.consmr.mail.ne1.yahoo.com ([66.163.190.38]:39203
-        "EHLO sonic307-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236671AbhBHVoS (ORCPT
+        id S236989AbhBHVvm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Feb 2021 16:51:42 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47546 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236978AbhBHVvM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Feb 2021 16:44:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1612820612; bh=TdUyvsmMcYpKt/pydEnCyjvPyJgpg13YLDAhqojluG8=; h=To:Cc:From:Subject:Date:References:From:Subject:Reply-To; b=i52H/djrj4bXk6q+yTUFts4nJZZsmdlr9eMsKd62NsOY3BBPFMN6Cnq6Xvy0JA/4uesJiZvNVVO7lx3R++AEFgkd1Bh+x06rMyw9+9IxgAOJPU8yEU0iXl0ZwYGhtUPElg2wQA36/20JlV6aERL2/2FqHYtMiZ5HpvAAI0vOStC7+9u17xZ8vc7y+s5UJ45e9D4WPNzCLfLBfal5OHqLLQUK7q8jxXPGASaRy3WVsVz6WmTWVxvVu0n8GukSPO3IC2e3npJk6I59WuPCd0RdFfU+K4ApCAmqdqRQA8y0hI8snCukJtXzTgJy4IU9MT6bcd4NG5PRtuhJL8YGoph4Pw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1612820612; bh=saQrTdUrBa8n6Ze1Qrc07ilBGnPXyL6rMX9qDfUjcNl=; h=X-Sonic-MF:To:From:Subject:Date:From:Subject; b=f6aVxQ3dEJ9iIoa4PXDPsdRNk5XvkID/m59bbT6xDBVd9A5NcUWcdtcNGXls4kulw690H0cETOc4lG0IRfDgQhV84ubwGBjBVW5zlqmQ/fRsD7XrBElNi5cH3dyCyWmbmH6Pexa156XqR/4kkWJNubbQdDCwt6DH8m9P9u3DfPIFEbMn/hcjw6tACAxoUyaWgZd7ycgVWR7fcNiGNJvIVEuxRQf2SWrccXGESCgwpBCCVCwIXlIvSWBOgwpwSuAWHtMz66uaGqo9RS+ebxtbDjrzAzHIrTnkthY2+1/07R/15j5Q6t0xvls6SFD9goFI2DvuHy4u9Iub9wztxdMVqQ==
-X-YMail-OSG: 2oiOWv0VM1kfflEApYDib8_2sDhUubyA1I6db__LZb48mN0H1b8u9mLSZX3XBPU
- nH6NuS1dfkKJOFzGdhjdqclu7CjTfoe1TNEWg11B3pacLHVUAxCgNMCgcLeWOaX_nj_ANzKrRMID
- LwbQ2gPlQF2TPNzkvko.BRzkMFwphM440b_EpCEnyX8UjVXKG1l3FSwmlP0od6PqB08V6a5AsvgN
- mRPslREdIojszFwLqJM7J_NrjNCBvi4h0m9lC6aoyfxbvnKJ2g8QFK3UnP3Yb3h3._XI5UgBHIej
- sX_uLAwpp2n05F7GR.oBrdGmFofPZ378VtLcO0eFHUUMmxvgH_xry1aJfiEFA7TOBqvEOrSPEgEV
- Qww8uK8xcGh7LzqAiD.iKy1WV7JexAl7oqRfExngNsQxyaWx.CqZ58i8bCUkNxXaGQDVgdKjselP
- iyIzXq22O2Fr3Ah1UDjW0e9xoERxb_4Zt4AspAB0gWFRNiUW81el4jPIhSBcBU7XtuH.sAtkb3NC
- 1gbrC9RwU4psL90Q6sKBMGDLsmtZiSXQUNxPLrdXBXGg19W4bJhkxeDKuGwcYOIrT5UZz6dofG_q
- dU3JFV679xZlT_NTaouy3rZNEHMV4nhYXgzyY8RI_0cQJr_xOBC_7EGA26iJdZNhBUj7VyEARh7L
- JqTT31tFymG37mnji1YUoTSGgeOmn.YAev.bfvoRbILuFjY5Q5V1QYn00eUi2_vBGD7iJaB2Tol2
- 3SpR3VLiEwSTSsOnl3KZSQj3tdvyURyfWUWOhS2w5tJa1zNMXXjV1LokYZA_Zw40ASBjZMcE4YYb
- 8dLZtSDg0dOkkLhUWHqoEBXxsY8dzJqPikY2bLLNtOIH5DrpvEbDWC9bNqLwAUI8sgCb0aVqsgRk
- iqwoXe5AWvq30WTYJQ_XukgbJbvLBhyD801LqysiK6ULOooSE6QqhHHSBVX8gYsbEAlXsaeyszNI
- WVUQV8w3oWtRnnnIChfZTzr1cb4otcVDs_A18IutpvdyZR0zggZcEnQOxjaP0SR3Jh1lRXABPf7R
- lPE6yrIzwid9f.ZM.yOJtIH6NsxtCUN5q2piGZ3pUjN28fWBjUJjVTPugqNC1AkRXvR3abEFHPfI
- hgef8BMUalt2msFG638TiPJXtZVkyj.IaZNhJnNk0DY8aM68WTxukmbgiMB_PuDptSpVPIyd1KZp
- VWUGD25nOfnKASz6J_JJ_FW6ycdQvhSHIbNUYdq116N5KJADOiN7uaBOUp8GSYK8Tx4bAb1WeQ3G
- gVXqDAgDVNvoLawiu6eTDq2cjm6MdtjCYCaUYn83B9zxd45KEg1y77JRroDyWozCOYHl3k5K2RYR
- x3xCHff80yAZ1mscn4Gq4As_kvYQBjBH0xPDIKMYE1ulkkAY8W.P9n5xOUmg1t.wdZxrEO3iDCZg
- t9SbQw9pSQpdDBA8hirne2m5.oZ0my3icB4ViFZYJNJ5cIkpmabB9nSySu8bSTI3Iw5qIyjArvnF
- WoTl2eKAQ6VXGoiPTlWXStMUtJ3Jzcc4e6gPyFyhQGtwvBV101qfTdGQFXAiF5QTkGZ1hCvjGzXw
- T5dIq7Vjk1nNDtdKNKzHrfAMbpfXyi3YLvaHycot4Ld5ONWh.y1zupI8vW1KrvewBKWofOSO5Nsw
- 4KSbjsqrgSZeeYRMwukJCjvoW84Wvc0GNkwxOytLGSmfyBAq2HG20_ApqG.kclCVSPU3KzDmplt9
- c4GWWAzNxmEoXC0CGFsUHZaBnkLX7j2UXUArn.31Z4iOmrkx753ef3rLMgertpRxPWWKTMwlCUfh
- e_2qmAtPI_q5lR1Z6.1r2XC0da5UET_zIM2R00vakicr0Zh2pDwKL2aFyCA.wP7xCrVpqY5FBtZt
- zEJIqB1aGt9_nJz9XfHzY8hpwc9vsNi7EFoWp_w.NFuUJIzfbpGVG9n4I8SpD7mX0zJsOTFy1pAa
- 5XjAq9kvJm0s_pcn3Yytzezu9BzVThUHMiC1z2.q5CRpdx4.omOubAF8_XJPvdEVCdkDMqQxntO1
- fr.1iQ9aRryc3Nuwc9bGgNexXJUw4HOHwPAf.U4I6.8F3cXU14AlpYiTQDmYwjY79Nh6t.0wn0wL
- WflBlOSqmR0.iRalrXrUD11OaxIeMkAtKkj.spToTVZHoL3yjGaHEYRO9HeP6hHengcB8pPqCaNf
- mHDj5f4A7XYgJ13kEY2Xa4IeMR_0zHVumz2IIFpfsCggZxiKNOjIZSTgQYstwnSAxye79AAWpdJO
- izd3U8ZwQxk91sKQ9FwY_wcczkG9nP8tyvnw2TuxFccVBkCr3kvX8k0whl2hiEo_of3UdPlADSsJ
- wRElo8JDS4nCnxk0Jk.FhW3k6yGLA2f6uWfaS7iI6ZthBa34ZZpq36o1Mm654_41uonc4DS9GE6F
- 8FQzJdMiJ8m_cjeYnMqlJGGFQVObDSXcV0U.Vd4s5No2sUQUhHDy3IXgB5bjrW0IwVCI37YdrVXc
- II1ssOK9O8dHIljM1hYGo4s02pTStX0NEBMg0FY1zWuzrpMbDy9D2y0ksrlYdKPQn1JQVfvTYx5w
- KTgX5s3qf1TqydO7aZTeeGuYGycB6XwdWpalq.rk2xF2okG2NPCvmZv8-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Mon, 8 Feb 2021 21:43:32 +0000
-Received: by smtp413.mail.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 3ab884bd755ef28333d2514f7f874e14;
-          Mon, 08 Feb 2021 21:43:28 +0000 (UTC)
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Subject: Reviews on v24 of the security module stacking code.
-Message-ID: <950c6492-bd6e-d5f2-1ec4-86b47c6ea9b7@schaufler-ca.com>
-Date:   Mon, 8 Feb 2021 13:43:27 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-References: <950c6492-bd6e-d5f2-1ec4-86b47c6ea9b7.ref@schaufler-ca.com>
-X-Mailer: WebService/1.1.17648 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/11.0.9.1)
+        Mon, 8 Feb 2021 16:51:12 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 118LWp3f183106;
+        Mon, 8 Feb 2021 16:50:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=ty9/RD73F+2obMKPNYY6TEK+gUiCqlJXpqHfEHG7Kvk=;
+ b=OhAFPu2tI/5jFP80NP4Jfrf+m7bLy1Ha7NthNTsStnMcNFom5hOKCSQI+0gK+i11BLPW
+ nJofii+XZQ+3yDrqz4HNS5zTRdxtWEofRKqEqoJ2iWGDpUMou8XLTqfEioqfkxpUCezy
+ tEAcCAgBhcnBAxeITj1kB6vgofjWTRBLIbFvJ2FhEzn3/ea1tmojFWgM9OzqaG4ykZvk
+ asRT+CRKufCV26gMNRykRtILxH01l4fwtvnhgarYTA2blFibg8oQK70hIdfwEekVfl+P
+ VQOzWIlu6fu22GPb1IlNGSXblFi3mTvzRiecDP1htWMNAGZYEq8Qqo7+2YgNBtUVgtWX cQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36kcx0gvwr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Feb 2021 16:50:21 -0500
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 118LmKBa048415;
+        Mon, 8 Feb 2021 16:50:21 -0500
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36kcx0gvvs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Feb 2021 16:50:20 -0500
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 118LjcUP017414;
+        Mon, 8 Feb 2021 21:50:18 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03fra.de.ibm.com with ESMTP id 36hskb14g7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Feb 2021 21:50:18 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 118LoFfw41877916
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 8 Feb 2021 21:50:15 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E9EBA405C;
+        Mon,  8 Feb 2021 21:50:15 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9619FA405F;
+        Mon,  8 Feb 2021 21:50:13 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.48.239])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  8 Feb 2021 21:50:13 +0000 (GMT)
+Message-ID: <9bd1eaab236f095f1dbdc01752c3c6f487f33525.camel@linux.ibm.com>
+Subject: Re: Migration to trusted keys: sealing user-provided key?
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jan =?ISO-8859-1?Q?L=FCbbe?= <jlu@pengutronix.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        James Bottomley <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+        Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, kernel@pengutronix.de
+Date:   Mon, 08 Feb 2021 16:50:12 -0500
+In-Reply-To: <b6ee219924e7195070062b6453931595faa640af.camel@pengutronix.de>
+References: <74830d4f-5a76-8ba8-aad0-0d79f7c01af9@pengutronix.de>
+         <6dc99fd9ffbc5f405c5f64d0802d1399fc6428e4.camel@kernel.org>
+         <d1bed49f89495ceb529355cb41655a208fdb2197.camel@linux.ibm.com>
+         <8b9477e150d7c939dc0def3ebb4443efcc83cd85.camel@pengutronix.de>
+         <d4eeefa0c13395e91850630e22d0d9e3690f43ac.camel@linux.ibm.com>
+         <64472434a367060ddce6e03425156b8312a5ad6c.camel@pengutronix.de>
+         <bd3246ebb4eae526c84efe2d27c6fadff662b0c8.camel@linux.ibm.com>
+         <0be34899c9686b95cd22aa016f466523579cbeed.camel@pengutronix.de>
+         <e9e7814c35d9ce5a6351a960081bf3c6b90bdca7.camel@linux.ibm.com>
+         <b6ee219924e7195070062b6453931595faa640af.camel@pengutronix.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-08_13:2021-02-08,2021-02-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=972 bulkscore=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 clxscore=1015 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102080122
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The LSM stacking changes have been significantly modified
-to address Mimi's concerns about "label collisions". Would
-you please have a look and see if the issues have been addressed
-to your satisfaction? I have introduced the boot option and
-policy specifier suggested.
+On Mon, 2021-02-08 at 15:38 +0100, Jan Lübbe wrote:
 
-Thank you.
+> As it seems that this feature would not be appropriate for all use-cases and
+> threat models, I wonder if making it optional would be acceptable. Something
+> like:
+> 
+> config TRUSTED_KEYS_IMPORT
+
+To me "IMPORT" implies from a trusted source, which this is not. 
+Perhaps "UNSAFE_IMPORT", "DEBUGGING_IMPORT, "DEVELOPMENT_IMPORT", ...
+
+Defining a Kconfig with any of these names and the other changes below,
+makes it very clear using predefined key data is not recommended.  My
+concern with extending trusted keys to new trust sources is the
+implication that the security/integrity is equivalent to the existing
+discrete TPM.
+
+>         bool "Allow creating TRUSTED KEYS from existing key material"
+>         depends on TRUSTED_KEYS
+
+Missing "default n"
+
+>         help
+>           This option adds support for creating new trusted keys from existing 
+>           key material supplied by userspace, instead of using random numbers.
+>           As with random trusted keys, userspace cannot extract the plain-text 
+
+Once defined, as with random trusted keys, userspace cannot ...
+
+>           key material again and will only ever see encrypted blobs.
+>           
+>           This option should *only* be enabled for use in a trusted
+>           environment (such as during debugging/development or in a secured
+>           factory). Also, consider using 'keyctl padd' instead of 'keyctl add' 
+
+Even the "secured factory" is not a good idea.  Please limit the usage
+to debugging/development.
+
+>           to avoid exposing the plain-text key on the process command line.
+> 
+>           If you are unsure as to whether this is required, answer N.
+
+The above would be fine.
+
+thanks,
+
+Mimi
 
