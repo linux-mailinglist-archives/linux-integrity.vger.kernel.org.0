@@ -2,78 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB1031296A
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 04:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7203129A5
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 05:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbhBHDek (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 7 Feb 2021 22:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbhBHDei (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 7 Feb 2021 22:34:38 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAFAC061756
-        for <linux-integrity@vger.kernel.org>; Sun,  7 Feb 2021 19:33:57 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id E694C128042A;
-        Sun,  7 Feb 2021 19:33:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1612755235;
-        bh=oSlh1Fb2w/TVr+tT8LlPpamG6QfSSAxcTb6S4xc7wJs=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=K/DSYo+l0kB7agxymK5DCO6YsKST79dgntfNQLxKnOnfKtAPiWO9+QfpXDRrdlLEY
-         bq8xW0pGmvOvusR5JSODMi1nzCzTl7Cb6qL+6FBN4nLPzH1Pi5n2oQ4gcwEXQAB+hH
-         4kpUJglDQnselh9mEYZzZDNSw6edZoN2jPk9Agbg=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Qh4i9UzO8lmv; Sun,  7 Feb 2021 19:33:55 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S229581AbhBHENw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 7 Feb 2021 23:13:52 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:41769 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229537AbhBHENv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 7 Feb 2021 23:13:51 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 96AEB1280413;
-        Sun,  7 Feb 2021 19:33:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1612755235;
-        bh=oSlh1Fb2w/TVr+tT8LlPpamG6QfSSAxcTb6S4xc7wJs=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=K/DSYo+l0kB7agxymK5DCO6YsKST79dgntfNQLxKnOnfKtAPiWO9+QfpXDRrdlLEY
-         bq8xW0pGmvOvusR5JSODMi1nzCzTl7Cb6qL+6FBN4nLPzH1Pi5n2oQ4gcwEXQAB+hH
-         4kpUJglDQnselh9mEYZzZDNSw6edZoN2jPk9Agbg=
-Message-ID: <8581ad17cb536c807d8ce781e955de07643aa1f4.camel@HansenPartnership.com>
-Subject: Re: TPM returned invalid status
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Laurent Bigonville <bigon@debian.org>,
-        linux-integrity@vger.kernel.org
-Date:   Sun, 07 Feb 2021 19:33:54 -0800
-In-Reply-To: <ee9c30b0-aff6-b1bd-2830-84b55a53b95e@debian.org>
-References: <ee9c30b0-aff6-b1bd-2830-84b55a53b95e@debian.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DYt0t66nsz9sVF;
+        Mon,  8 Feb 2021 15:13:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1612757588;
+        bh=OO7xGWmsUnuYQgc3bx44I7oadxiJ3c+qloWk8zo8s/E=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=SQsvL45jlKpqUCEP8e1n03m12ASsrcsFM4rulmGn0o0JHZVPyDkisCyaZygcFW+w/
+         o+aNZskRfsTmGwMpW337LVHKl/7fzsO7W/0NkNFfBpab7Nq/iTWuLQYB5o7WrlGlgR
+         vrm9InatVSOATOiUKFPVdFYZ1JXjJqQkTzJjF+50Dkp6/IBYDj8ZWuJoomQ79smix5
+         Jb09M2DIY7piouMND8uNftwaBdOiAx0C8HFgF5ekV/3yH2poxd2WulSITdHQwwW01E
+         tXf52460TJkHIrDDaHHGbop5tjAoaZRaWZb+tWdI8YhTvmkDE9J66esGpcdkyVyXAX
+         oUG7BiZkbIKyw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Rob Herring <robh@kernel.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>, Joe Perches <joe@perches.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        vincenzo.frascino@arm.com, Mark Rutland <mark.rutland@arm.com>,
+        dmitry.kasatkin@gmail.com, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Allison Randal <allison@lohutok.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Bhupesh Sharma <bhsharma@redhat.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, tao.li@vivo.com,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        balajib@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v16 11/12] powerpc: Use OF alloc and free for FDT
+In-Reply-To: <CAL_JsqK1Pb9nAeL84EP2U3MQgpBsm+E_0QXmzbigWXnS245WPQ@mail.gmail.com>
+References: <20210204164135.29856-1-nramas@linux.microsoft.com>
+ <20210204164135.29856-12-nramas@linux.microsoft.com>
+ <CAL_JsqK1Pb9nAeL84EP2U3MQgpBsm+E_0QXmzbigWXnS245WPQ@mail.gmail.com>
+Date:   Mon, 08 Feb 2021 15:12:59 +1100
+Message-ID: <87zh0fnqno.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, 2021-02-06 at 00:31 +0100, Laurent Bigonville wrote:
-> Hello,
-> 
-> I already posted that beginning of January in reply to "tpm_tis:
-> Clean 
-> up locality release", but I didn't really got a reply
-> 
-> With debian unstable (Linux fornost 5.10.0-3-amd64 #1 SMP Debian 
-> 5.10.12-1 (2021-01-30) x86_64 GNU/Linux), I get the following error:
+Rob Herring <robh@kernel.org> writes:
+> On Thu, Feb 4, 2021 at 10:42 AM Lakshmi Ramasubramanian
+> <nramas@linux.microsoft.com> wrote:
+...
+>> diff --git a/arch/powerpc/kexec/elf_64.c b/arch/powerpc/kexec/elf_64.c
+>> index d0e459bb2f05..51d2d8eb6c1b 100644
+>> --- a/arch/powerpc/kexec/elf_64.c
+>> +++ b/arch/powerpc/kexec/elf_64.c
+>> @@ -19,6 +19,7 @@
+>>  #include <linux/kexec.h>
+>>  #include <linux/libfdt.h>
+>>  #include <linux/module.h>
+>> +#include <linux/of.h>
+>>  #include <linux/of_fdt.h>
+>>  #include <linux/slab.h>
+>>  #include <linux/types.h>
+>> @@ -32,7 +33,7 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
+>>         unsigned int fdt_size;
+>>         unsigned long kernel_load_addr;
+>>         unsigned long initrd_load_addr = 0, fdt_load_addr;
+>> -       void *fdt;
+>> +       void *fdt = NULL;
+>>         const void *slave_code;
+>>         struct elfhdr ehdr;
+>>         char *modified_cmdline = NULL;
+>> @@ -103,18 +104,12 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
+>>         }
+>>
+>>         fdt_size = fdt_totalsize(initial_boot_params) * 2;
+>> -       fdt = kmalloc(fdt_size, GFP_KERNEL);
+>> +       fdt = of_alloc_and_init_fdt(fdt_size);
+>>         if (!fdt) {
+>>                 pr_err("Not enough memory for the device tree.\n");
+>>                 ret = -ENOMEM;
+>>                 goto out;
+>>         }
+>> -       ret = fdt_open_into(initial_boot_params, fdt, fdt_size);
+>> -       if (ret < 0) {
+>> -               pr_err("Error setting up the new device tree.\n");
+>> -               ret = -EINVAL;
+>> -               goto out;
+>> -       }
+>>
+>>         ret = setup_new_fdt_ppc64(image, fdt, initrd_load_addr,
+>
+> The first thing this function does is call setup_new_fdt() which first
+> calls of_kexec_setup_new_fdt(). (Note, I really don't understand the
+> PPC code split. It looks like there's a 32-bit and 64-bit split, but
+> 32-bit looks broken to me. Nothing ever calls setup_new_fdt() except
+> setup_new_fdt_ppc64()).
 
-Sorry, forgot to cc you.  We're iterating to this as the fix:
+I think that's because 32-bit doesn't support kexec_file_load().
 
-https://lore.kernel.org/linux-integrity/20201001180925.13808-5-James.Bottomley@HansenPartnership.com/
-
-If you want to test it out.
-
-Thanks,
-
-James
-
-
+cheers
