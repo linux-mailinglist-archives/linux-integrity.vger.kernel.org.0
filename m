@@ -2,177 +2,157 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A6B313560
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 15:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A210313598
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 15:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbhBHOjy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Feb 2021 09:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
+        id S232183AbhBHOuR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Feb 2021 09:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbhBHOjg (ORCPT
+        with ESMTP id S232876AbhBHOtc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Feb 2021 09:39:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CF1C06178A
-        for <linux-integrity@vger.kernel.org>; Mon,  8 Feb 2021 06:38:46 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jlu@pengutronix.de>)
-        id 1l97gU-0008Bl-Bs; Mon, 08 Feb 2021 15:38:38 +0100
-Received: from localhost ([127.0.0.1])
-        by ptx.hi.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <jlu@pengutronix.de>)
-        id 1l97gT-0007SL-Cu; Mon, 08 Feb 2021 15:38:37 +0100
-Message-ID: <b6ee219924e7195070062b6453931595faa640af.camel@pengutronix.de>
-Subject: Re: Migration to trusted keys: sealing user-provided key?
-From:   Jan =?ISO-8859-1?Q?L=FCbbe?= <jlu@pengutronix.de>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        James Bottomley <jejb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-        Sumit Garg <sumit.garg@linaro.org>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kernel@pengutronix.de
-Date:   Mon, 08 Feb 2021 15:38:36 +0100
-In-Reply-To: <e9e7814c35d9ce5a6351a960081bf3c6b90bdca7.camel@linux.ibm.com>
-References: <74830d4f-5a76-8ba8-aad0-0d79f7c01af9@pengutronix.de>
-         <6dc99fd9ffbc5f405c5f64d0802d1399fc6428e4.camel@kernel.org>
-         <d1bed49f89495ceb529355cb41655a208fdb2197.camel@linux.ibm.com>
-         <8b9477e150d7c939dc0def3ebb4443efcc83cd85.camel@pengutronix.de>
-         <d4eeefa0c13395e91850630e22d0d9e3690f43ac.camel@linux.ibm.com>
-         <64472434a367060ddce6e03425156b8312a5ad6c.camel@pengutronix.de>
-         <bd3246ebb4eae526c84efe2d27c6fadff662b0c8.camel@linux.ibm.com>
-         <0be34899c9686b95cd22aa016f466523579cbeed.camel@pengutronix.de>
-         <e9e7814c35d9ce5a6351a960081bf3c6b90bdca7.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 8 Feb 2021 09:49:32 -0500
+Received: from ithil.bigon.be (ithil.bigon.be [IPv6:2001:bc8:25f1:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B71DC061786
+        for <linux-integrity@vger.kernel.org>; Mon,  8 Feb 2021 06:48:53 -0800 (PST)
+Received: from localhost (localhost [IPv6:::1])
+        by ithil.bigon.be (Postfix) with ESMTP id 438FD1FD21;
+        Mon,  8 Feb 2021 15:48:00 +0100 (CET)
+Received: from ithil.bigon.be ([IPv6:::1])
+        by localhost (ithil.bigon.be [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id QweSajy9oUBi; Mon,  8 Feb 2021 15:48:00 +0100 (CET)
+Received: from [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3] (unknown [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bigon@bigon.be)
+        by ithil.bigon.be (Postfix) with ESMTPSA;
+        Mon,  8 Feb 2021 15:48:00 +0100 (CET)
+Subject: Re: TPM returned invalid status
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org
+References: <ee9c30b0-aff6-b1bd-2830-84b55a53b95e@debian.org>
+ <8581ad17cb536c807d8ce781e955de07643aa1f4.camel@HansenPartnership.com>
+From:   Laurent Bigonville <bigon@debian.org>
+Message-ID: <22b860c1-c494-7a4d-73f3-7c9e90ab1ae8@debian.org>
+Date:   Mon, 8 Feb 2021 15:47:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
+In-Reply-To: <8581ad17cb536c807d8ce781e955de07643aa1f4.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: jlu@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-02-01 at 14:46 -0500, Mimi Zohar wrote:
-> On Mon, 2021-02-01 at 17:38 +0100, Jan Lübbe wrote:
-> > On Mon, 2021-02-01 at 11:11 -0500, Mimi Zohar wrote:
-> > > On Mon, 2021-02-01 at 16:31 +0100, Jan Lübbe wrote:
-> > > > On Sun, 2021-01-31 at 09:29 -0500, Mimi Zohar wrote:
-> > <snip>
-> > > > > Usage::
-> > > > > 
-> > > > >     keyctl add encrypted name "new [format] key-type:master-key-name keylen"
-> > > > >         ring
-> > > > >     keyctl add encrypted name "load hex_blob" ring
-> > > > 
-> > > > 'load' (as I understand the code) only accepts an encrypted blob.
-> > > > 
-> > > > So the only way I see to have an encrypted key with a non-random key data would
-> > > > be:
-> > > > - create a random temporary master key and load a copy as a user key
-> > > > - encrypt the chosen key data with the temporary master key (using a new
-> > > > userspace reimplementation of the kernel encrypted key blob format)
-> > > > - use keyctl add encrypted dmcrypt "load <encrypted blob>" <keyring>
-> > > > - create new trusted master key (OP-TEE or CAAM in our case) as 
-> > > > - use keyctl update to switch to the new trusted master key
-> > > > - use keyctl pipe on the trusted and encrypted keys and store both for loading
-> > > > on later boots
-> > > > 
-> > > > If we'd support importing a pre-existing key into a trusted or encrypted key,
-> > > > we'd do instead:
-> > > > - use keyctl add trusted dmcrypt "import <unencrypted key data>"
-> > > > - use keyctl pipe on the trusted key and store it for loading on later boots
-> > > > 
-> > > > This way, users wouldn't need to care which backend is used by trusted keys
-> > > > (TPM/OP-TEE/CAAM/...). That would make use-cases where a random key is not
-> > > > suitable as straight-forward as the those where a random key is OK.
-> > > 
-> > > As I said above, the "encrypted" key update doesn't change the key data
-> > > used for encrypting/decrypting storage in the dm-crypt case, it just
-> > > updates the key under which it is encrypted/signed.
-> > 
-> > Yes, that's clear. I only used it to demonstrate how a workaround for importing
-> > key material into an encrypted key could look like.
-> > 
-> > > Yes, the reason for using an encrypted "trusted" key, as opposed to an
-> > > encrypted "user" key, is that the "trusted" key is encrypted/decrypted
-> > > by the TPM and never exposed to userspace in the clear.
-> > 
-> > Yes, and that's the main reason I'd like to use trusted keys with dm-crypt: a
-> > much lower chance of exposing this key somewhere it could be extracted.
-> > 
-> > > It doesn't sound like you're wanting to update the storage key in the
-> > > field, just the key used to encrypt/decrypt that key.  So I'm still not
-> > > clear as to why you would want an initial non-random encrypted key. 
-> > > Providing that key on the command line certaining isn't a good idea.
-> > 
-> > Some of our customers have systems in the field which use non-mainline patches
-> > for access to the CAAM [1], which also have the downside of exposing the
-> > decrypted key material directly to userspace. In that thread you suggested to
-> > use trusted keys instead. With Sumit's work that rework is finally within reach.
-> > :)
-> > 
-> > 
-> > In those systems, we have data that's encrypted with a pre-existing dm-crypt or
-> > ecryptfs key. As we update those systems in the field to newer kernels, we want
-> > to get rid of those custom patches, but can't reencrypt everything.
-> > 
-> > So the approach would be to perform a one-time migration when updating a device:
-> > - use our old interface to decrypt the key and 'import' it into a trusted key
-> > - use keyctl pipe and save the re-encrypted key to disk
-> > - destroy the old encrypted key
-> > After this migration, the key material is no longer available to userspace (only
-> > to dm-crypt).
-> > 
-> > 
-> > Another use-case for supporting key import that we want to support is  analysis
-> > of broken devices returned from the field:
-> > - generate an encryption key per device in the factory
-> > - encrypt it to a private key in escrow and archive it for later use
-> > - import it into a trusted key on the device
-> > - keyctl pipe it to a file on the device for use on boot
-> > 
-> > Later, when you need to do an analysis, you can get the key from escrow even if
-> > the device cannot boot any longer.
-> 
-> The first use case doesn't sound like a valid reason for upstreaming
-> such support.  It's a one time update to migrate everyone to a newer
-> kernel.  That you can carry independently of upstream.  In terms of the
-> second use case, do you really want the ability and the resulting
-> responsibility of being able to decrypt user's data?   Please think
-> this through carefully, before you decide you really want/need this
-> feature.
+Le 8/02/21 à 04:33, James Bottomley a écrit :
+> On Sat, 2021-02-06 at 00:31 +0100, Laurent Bigonville wrote:
+>> Hello,
+>>
+>> I already posted that beginning of January in reply to "tpm_tis:
+>> Clean
+>> up locality release", but I didn't really got a reply
+>>
+>> With debian unstable (Linux fornost 5.10.0-3-amd64 #1 SMP Debian
+>> 5.10.12-1 (2021-01-30) x86_64 GNU/Linux), I get the following error:
+> Sorry, forgot to cc you.  We're iterating to this as the fix:
+>
+> https://lore.kernel.org/linux-integrity/20201001180925.13808-5-James.Bottomley@HansenPartnership.com/
+>
+> If you want to test it out.
 
-As it seems that this feature would not be appropriate for all use-cases and
-threat models, I wonder if making it optional would be acceptable. Something
-like:
+I recompiled 5.11.0-rc7+ with the patch and I still get the same trace
 
-config TRUSTED_KEYS_IMPORT
-        bool "Allow creating TRUSTED KEYS from existing key material"
-        depends on TRUSTED_KEYS
-        help
-          This option adds support for creating new trusted keys from existing 
-          key material supplied by userspace, instead of using random numbers.
-          As with random trusted keys, userspace cannot extract the plain-text 
-          key material again and will only ever see encrypted blobs.
-          
-          This option should *only* be enabled for use in a trusted
-          environment (such as during debugging/development or in a secured
-          factory). Also, consider using 'keyctl padd' instead of 'keyctl add' 
-          to avoid exposing the plain-text key on the process command line.
+[   13.453169] ------------[ cut here ]------------
+[   13.453174] TPM returned invalid status
+[   13.453193] WARNING: CPU: 0 PID: 447 at 
+drivers/char/tpm/tpm_tis_core.c:249 tpm_tis_status+0x86/0xa0 [tpm_tis_core]
+[   13.453202] Modules linked in: tpm_tis(E+) tpm_tis_core(E) tpm(E) 
+asus_atk0110(E) rng_core(E) evdev(E) fjes(E-) acpi_cpufreq(E-) loop(E+) 
+firewire_sbp2(E) msr(E) parport_pc(E) ppdev(E) lp(E) parport(E) fuse(E) 
+configfs(E) sunrpc(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) 
+crc16(E) mbcache(E) jbd2(E) btrfs(E) blake2b_generic(E) zstd_compress(E) 
+raid10(E) raid456(E) async_raid6_recov(E) async_memcpy(E) async_pq(E) 
+async_xor(E) async_tx(E) xor(E) raid6_pq(E) libcrc32c(E) 
+crc32c_generic(E) raid1(E) raid0(E) multipath(E) linear(E) md_mod(E) 
+dm_mod(E) sr_mod(E) sd_mod(E) cdrom(E) t10_pi(E) hid_generic(E) 
+usbhid(E) hid(E) amdgpu(E) ahci(E) gpu_sched(E) i2c_algo_bit(E) 
+libahci(E) drm_ttm_helper(E) ttm(E) firewire_ohci(E) libata(E) 
+drm_kms_helper(E) crc32c_intel(E) cec(E) i2c_i801(E) uhci_hcd(E) 
+ehci_pci(E) mxm_wmi(E) psmouse(E) ehci_hcd(E) firewire_core(E) 
+scsi_mod(E) i2c_smbus(E) lpc_ich(E) crc_itu_t(E) sky2(E) drm(E) 
+usbcore(E) mfd_core(E) wmi(E) button(E)
+[   13.453285] CPU: 0 PID: 447 Comm: systemd-udevd Tainted: G          I 
+E     5.11.0-rc7+ #2
+[   13.453288] Hardware name: System manufacturer System Product 
+Name/P6T DELUXE V2, BIOS 0406    04/24/2009
+[   13.453291] RIP: 0010:tpm_tis_status+0x86/0xa0 [tpm_tis_core]
+[   13.453297] Code: 00 75 30 48 83 c4 18 c3 31 c0 80 3d e3 48 00 00 00 
+75 e0 48 c7 c7 74 53 28 c1 88 44 24 07 c6 05 cf 48 00 00 01 e8 12 25 db 
+e4 <0f> 0b 0f b6 44 24 07 eb c0 e8 5c 9a de e4 66 66 2e 0f 1f 84 00 00
+[   13.453300] RSP: 0000:ffffc07880d57aa0 EFLAGS: 00010286
+[   13.453303] RAX: 0000000000000000 RBX: ffff9f43cbf2a000 RCX: 
+ffff9f476da18bc8
+[   13.453305] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: 
+ffff9f476da18bc0
+[   13.453307] RBP: 00000000ffff5d35 R08: 0000000000000000 R09: 
+ffffc07880d578c0
+[   13.453310] R10: ffffc07880d578b8 R11: ffffffffa6ac2588 R12: 
+0000000000000016
+[   13.453312] R13: ffff9f43ced90000 R14: 0000000000001000 R15: 
+ffffc07880d57ada
+[   13.453314] FS:  00007f47edbc28c0(0000) GS:ffff9f476da00000(0000) 
+knlGS:0000000000000000
+[   13.453317] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   13.453319] CR2: 00007f47ed30aa86 CR3: 000000010ed02000 CR4: 
+00000000000006f0
+[   13.453322] Call Trace:
+[   13.453326]  tpm_transmit+0x15f/0x3d0 [tpm]
+[   13.453337]  tpm_transmit_cmd+0x25/0x90 [tpm]
+[   13.453345]  tpm2_probe+0xe2/0x140 [tpm]
+[   13.453353]  tpm_tis_core_init+0x1d5/0x2b0 [tpm_tis_core]
+[   13.453359]  ? tpm_tis_init.part.0+0x130/0x130 [tpm_tis]
+[   13.453365]  tpm_tis_pnp_init+0xe1/0x110 [tpm_tis]
+[   13.453371]  pnp_device_probe+0xaf/0x140
+[   13.453378]  really_probe+0xf2/0x440
+[   13.453384]  driver_probe_device+0xe1/0x150
+[   13.453388]  device_driver_attach+0xa1/0xb0
+[   13.453393]  __driver_attach+0x8a/0x150
+[   13.453396]  ? device_driver_attach+0xb0/0xb0
+[   13.453399]  ? device_driver_attach+0xb0/0xb0
+[   13.453403]  bus_for_each_dev+0x78/0xc0
+[   13.453407]  bus_add_driver+0x12b/0x1e0
+[   13.453410]  driver_register+0x8b/0xe0
+[   13.453414]  ? 0xffffffffc12b3000
+[   13.453417]  init_tis+0xa0/0x1000 [tpm_tis]
+[   13.453423]  do_one_initcall+0x44/0x1d0
+[   13.453429]  ? do_init_module+0x23/0x260
+[   13.453433]  ? kmem_cache_alloc_trace+0xf5/0x200
+[   13.453439]  do_init_module+0x5c/0x260
+[   13.453442]  __do_sys_finit_module+0xb1/0x110
+[   13.453447]  do_syscall_64+0x33/0x80
+[   13.453456]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   13.453461] RIP: 0033:0x7f47ee07b9b9
+[   13.453464] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 
+48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 
+05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a7 54 0c 00 f7 d8 64 89 01 48
+[   13.453467] RSP: 002b:00007ffecedfb208 EFLAGS: 00000246 ORIG_RAX: 
+0000000000000139
+[   13.453471] RAX: ffffffffffffffda RBX: 0000562823d17b60 RCX: 
+00007f47ee07b9b9
+[   13.453473] RDX: 0000000000000000 RSI: 00007f47ee206e2d RDI: 
+0000000000000012
+[   13.453475] RBP: 0000000000020000 R08: 0000000000000000 R09: 
+0000562823b53fc0
+[   13.453477] R10: 0000000000000012 R11: 0000000000000246 R12: 
+00007f47ee206e2d
+[   13.453479] R13: 0000000000000000 R14: 0000562823d0c9b0 R15: 
+0000562823d17b60
+[   13.453483] ---[ end trace af2bc5f390f96ecd ]---
+[   13.459546] tpm_tis 00:06: 1.2 TPM (device-id 0x6871, rev-id 1)
 
-          If you are unsure as to whether this is required, answer N.
-
-Best regards,
-Jan
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+But the chip seems to be working event if it's in lockdown again do to 
+the dual boot with windows(?)
 
