@@ -2,92 +2,84 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B9E31286F
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 00:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5C13128A2
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 01:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbhBGXm6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 7 Feb 2021 18:42:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38272 "EHLO mail.kernel.org"
+        id S229615AbhBHAly (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 7 Feb 2021 19:41:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43242 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229565AbhBGXm5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 7 Feb 2021 18:42:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7EF8C64DF5;
-        Sun,  7 Feb 2021 23:42:16 +0000 (UTC)
+        id S229537AbhBHAlx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 7 Feb 2021 19:41:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DEA0464E37;
+        Mon,  8 Feb 2021 00:41:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612741337;
-        bh=Y2a27YQNjg/T/z0OzSCmnPs67jHJx1cU5KZDsx8cByg=;
+        s=k20201202; t=1612744873;
+        bh=pawCFFNuxieuedqkeD8rhslUdcJnXnMbNF7lCMg+Kfw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KkoEMaPYzT5wN+uYsu6LktK1Ihd32tOs2AcmSv8Id2PvtO9KDEdz5aSNRF58twbEp
-         tNuWVH6cLNnHsub6wDZGAdkMG/Ocyv5KTcTlKy1I0iANOEQzD5USPMaQAcWZZARQPb
-         Ghk+CkaNukQdrKlbyiOE54RcWn009aGz04fdxcQyPa6/PcNonOJUeZ1VWZKHgg05ox
-         jTQd25rTdQFUjhOWEyVEAJvn6yKH2KXhYvGOYgCvHI/PtSVfY5IUfLwbkqp0kwIsLN
-         9tOfAypaaWlsLrIpLwQEkIv6p58Cne8ZUvJrbiR92qLhpw0DmsfqUKL3/pBOw91JCC
-         cyzbs/a4uKhQw==
-Date:   Mon, 8 Feb 2021 01:42:08 +0200
+        b=MxgnLAxnhDXpzhWuQaK2mYbkiLgAU9GALMHEpqZMz362Ji/YjF8X5QaYvQmCWHLvH
+         3jAeohdTQM6HDI8Y+NccKCsLhPG2uRtTish8xOzip7v+ySqaVNL/AwDS4MRnGGOouq
+         vBAkzjLQ1AzSbSm78rm16Hjf/WDJ5mNhXjrKEXdJbTZkskVQao+GMM24R1kF/mSwGM
+         I7Xeqk7L3uWvICRuI31uBiNlyT6j0q1BhegwWs/IHCKnLrm4VU9rlPpbwjBQQZbp8s
+         ABeJJZrhNIDYzExLg//3iNTx0eUpMyqrvxCG+/Kk08siW+MD90ogCuZYYwyEb/sSzx
+         lY+hAL+lX/5Ow==
+Date:   Mon, 8 Feb 2021 02:41:04 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     wanghongzhe <wanghongzhe@huawei.com>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] tpm_tis_spi_main: set cs_change = 0 when timesout
-Message-ID: <YCB60CRpdhb7/HZ+@kernel.org>
-References: <1612507325-2621-1-git-send-email-wanghongzhe@huawei.com>
+To:     Dirk Gouders <dirk@gouders.net>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] tpm_tis: handle -EPROBE_DEFER in tpm_tis_plat_probe()
+Message-ID: <YCCIoDc70hHIL6KK@kernel.org>
+References: <20210205202022.4515-1-dirk@gouders.net>
+ <20210205202022.4515-2-dirk@gouders.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1612507325-2621-1-git-send-email-wanghongzhe@huawei.com>
+In-Reply-To: <20210205202022.4515-2-dirk@gouders.net>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 02:42:05PM +0800, wanghongzhe wrote:
-> when i reach TPM_RETRY, the cs cannot  change back to 'high'.
-> So the TPM chips thinks this communication is not over.
-> And next times communication cannot be effective because
-> the communications mixed up with the last time.
+On Fri, Feb 05, 2021 at 09:20:22PM +0100, Dirk Gouders wrote:
+> tpm_tis does not consider -EPROBE_DEFER in tpm_tis_plat_probe().
+> Instead, without notification it falls back to polling mode if
+> platform_get_irq_optional() returns a negative value.
 > 
-> Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
-                 ~~~~~~~~~~~
-                 Firstname Lastname
+> This could lead to different behavior depending on wether tpm_tis was
+> compiled builtin or as a module; in the latter case
+> platform_get_irq_optional() often if not always returns a valid IRQ
+> number on the first attempt.
+> 
+> Harmonize builtin and module behavior by returning -EPROBE_DEFER,
+> effectively putting the device on the deferred probe list for later
+> probe attempts.
+> 
+> Signed-off-by: Dirk Gouders <dirk@gouders.net>
 
-Please write legit sentences starting with capital letters etc.
-
-Please write the commit message in imperative form. E.g. "Do x because y
-..". I presume that *you* are not an actor in the sequence.
-
-You also would need to have a fixes tag and preferably some description
-of the failing sequence if possible.
-
-/Jarkko
+This would be best picked to James' patch set.
 
 > ---
->  drivers/char/tpm/tpm_tis_spi_main.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+>  drivers/char/tpm/tpm_tis.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> index 3856f6ebcb34..6c52cbb28881 100644
-> --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> @@ -64,8 +64,18 @@ static int tpm_tis_spi_flow_control(struct tpm_tis_spi_phy *phy,
->  				break;
->  		}
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index 4ed6e660273a..4cf863704aa1 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -320,6 +320,9 @@ static int tpm_tis_plat_probe(struct platform_device *pdev)
 >  
-> -		if (i == TPM_RETRY)
-> +		if (i == TPM_RETRY) {
-> +			/* change back to 'high',
-> +			 * So the TPM chips thinks the last communication
-> +			 * is done.
-> +			 */
-> +			spi_xfer.cs_change = 0;
-> +			spi_xfer->len = 1;
-> +			spi_message_init(&m);
-> +			spi_message_add_tail(spi_xfer, &m);
-> +			ret = spi_sync_locked(phy->spi_device, &m);
->  			return -ETIMEDOUT;
-> +		}
->  	}
->  
->  	return 0;
+>  	tpm_info.irq = platform_get_irq_optional(pdev, 0);
+>  	if (tpm_info.irq <= 0) {
+> +                if (tpm_info.irq == -EPROBE_DEFER)
+> +                        /* Enter deferred probe list and try again, later. */
+> +                        return -EPROBE_DEFER;
+>  		if (pdev != force_pdev)
+>  			tpm_info.irq = -1;
+>  		else
 > -- 
-> 2.19.1
+> 2.26.2
 > 
 > 
+
+/Jarkko
