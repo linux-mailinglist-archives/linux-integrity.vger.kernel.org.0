@@ -2,125 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7203129A5
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 05:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A5B312BDA
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Feb 2021 09:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbhBHENw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 7 Feb 2021 23:13:52 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41769 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229537AbhBHENv (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 7 Feb 2021 23:13:51 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DYt0t66nsz9sVF;
-        Mon,  8 Feb 2021 15:13:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1612757588;
-        bh=OO7xGWmsUnuYQgc3bx44I7oadxiJ3c+qloWk8zo8s/E=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SQsvL45jlKpqUCEP8e1n03m12ASsrcsFM4rulmGn0o0JHZVPyDkisCyaZygcFW+w/
-         o+aNZskRfsTmGwMpW337LVHKl/7fzsO7W/0NkNFfBpab7Nq/iTWuLQYB5o7WrlGlgR
-         vrm9InatVSOATOiUKFPVdFYZ1JXjJqQkTzJjF+50Dkp6/IBYDj8ZWuJoomQ79smix5
-         Jb09M2DIY7piouMND8uNftwaBdOiAx0C8HFgF5ekV/3yH2poxd2WulSITdHQwwW01E
-         tXf52460TJkHIrDDaHHGbop5tjAoaZRaWZb+tWdI8YhTvmkDE9J66esGpcdkyVyXAX
-         oUG7BiZkbIKyw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Rob Herring <robh@kernel.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>, Joe Perches <joe@perches.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        vincenzo.frascino@arm.com, Mark Rutland <mark.rutland@arm.com>,
-        dmitry.kasatkin@gmail.com, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Allison Randal <allison@lohutok.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Bhupesh Sharma <bhsharma@redhat.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, tao.li@vivo.com,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        balajib@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v16 11/12] powerpc: Use OF alloc and free for FDT
-In-Reply-To: <CAL_JsqK1Pb9nAeL84EP2U3MQgpBsm+E_0QXmzbigWXnS245WPQ@mail.gmail.com>
-References: <20210204164135.29856-1-nramas@linux.microsoft.com>
- <20210204164135.29856-12-nramas@linux.microsoft.com>
- <CAL_JsqK1Pb9nAeL84EP2U3MQgpBsm+E_0QXmzbigWXnS245WPQ@mail.gmail.com>
-Date:   Mon, 08 Feb 2021 15:12:59 +1100
-Message-ID: <87zh0fnqno.fsf@mpe.ellerman.id.au>
+        id S230199AbhBHIak (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Feb 2021 03:30:40 -0500
+Received: from smtp-18d.idc2.mandic.com.br ([177.70.124.135]:21031 "EHLO
+        smtp-18.idc2.mandic.com.br" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229564AbhBHIaK (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 8 Feb 2021 03:30:10 -0500
+Received: by smtp-18.smtp.mandic.prv (Postfix, from userid 491)
+        id 5BC52607E9FB; Mon,  8 Feb 2021 05:29:22 -0300 (-03)
+Received: from smtp-18.idc2.mandic.com.br (ifsmtp2 [192.168.1.38])
+        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPS id C1044607AAA4;
+        Mon,  8 Feb 2021 05:29:16 -0300 (-03)
+Received: from User (unknown [52.235.38.23])
+        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPA id 78375465E268;
+        Mon,  8 Feb 2021 05:26:42 -0300 (-03)
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <stefy@macrometrica.com.br>
+Subject: Re:reply
+Date:   Mon, 8 Feb 2021 08:29:15 -0000
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-Mandic-Auth: DYB6x5JcyVot9snxiAasWC73cfc93V+pC3vUrorm87+eXbqAUeEHL0ZNPgpM50IYQeUbiYx0PkMIK2oavHcOOA==
+X-Mandic-Sender: stefy@macrometrica.com.br
+Message-Id: <20210208082916.C1044607AAA4@smtp-18.smtp.mandic.prv>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Rob Herring <robh@kernel.org> writes:
-> On Thu, Feb 4, 2021 at 10:42 AM Lakshmi Ramasubramanian
-> <nramas@linux.microsoft.com> wrote:
-...
->> diff --git a/arch/powerpc/kexec/elf_64.c b/arch/powerpc/kexec/elf_64.c
->> index d0e459bb2f05..51d2d8eb6c1b 100644
->> --- a/arch/powerpc/kexec/elf_64.c
->> +++ b/arch/powerpc/kexec/elf_64.c
->> @@ -19,6 +19,7 @@
->>  #include <linux/kexec.h>
->>  #include <linux/libfdt.h>
->>  #include <linux/module.h>
->> +#include <linux/of.h>
->>  #include <linux/of_fdt.h>
->>  #include <linux/slab.h>
->>  #include <linux/types.h>
->> @@ -32,7 +33,7 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
->>         unsigned int fdt_size;
->>         unsigned long kernel_load_addr;
->>         unsigned long initrd_load_addr = 0, fdt_load_addr;
->> -       void *fdt;
->> +       void *fdt = NULL;
->>         const void *slave_code;
->>         struct elfhdr ehdr;
->>         char *modified_cmdline = NULL;
->> @@ -103,18 +104,12 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
->>         }
->>
->>         fdt_size = fdt_totalsize(initial_boot_params) * 2;
->> -       fdt = kmalloc(fdt_size, GFP_KERNEL);
->> +       fdt = of_alloc_and_init_fdt(fdt_size);
->>         if (!fdt) {
->>                 pr_err("Not enough memory for the device tree.\n");
->>                 ret = -ENOMEM;
->>                 goto out;
->>         }
->> -       ret = fdt_open_into(initial_boot_params, fdt, fdt_size);
->> -       if (ret < 0) {
->> -               pr_err("Error setting up the new device tree.\n");
->> -               ret = -EINVAL;
->> -               goto out;
->> -       }
->>
->>         ret = setup_new_fdt_ppc64(image, fdt, initrd_load_addr,
->
-> The first thing this function does is call setup_new_fdt() which first
-> calls of_kexec_setup_new_fdt(). (Note, I really don't understand the
-> PPC code split. It looks like there's a 32-bit and 64-bit split, but
-> 32-bit looks broken to me. Nothing ever calls setup_new_fdt() except
-> setup_new_fdt_ppc64()).
+Hello,
 
-I think that's because 32-bit doesn't support kexec_file_load().
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-cheers
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
+
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
+Regards,
+Ms. Reem.
