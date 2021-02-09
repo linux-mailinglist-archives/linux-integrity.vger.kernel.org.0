@@ -2,29 +2,29 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 379DA315635
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Feb 2021 19:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CFB31567D
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Feb 2021 20:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbhBISl4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 9 Feb 2021 13:41:56 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:58564 "EHLO
+        id S233486AbhBITF5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 9 Feb 2021 14:05:57 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:33958 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbhBIS25 (ORCPT
+        with ESMTP id S233441AbhBIS45 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 9 Feb 2021 13:28:57 -0500
+        Tue, 9 Feb 2021 13:56:57 -0500
 Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0BF6520B6C40;
-        Tue,  9 Feb 2021 10:26:14 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0BF6520B6C40
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7089D2020E9E;
+        Tue,  9 Feb 2021 10:31:44 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7089D2020E9E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1612895174;
-        bh=dq6UOkKS3Xk68snOo38h4f+NxwXUE5NpF4jNJTq2thM=;
+        s=default; t=1612895504;
+        bh=wGYdUbhWR5y9KoUnFO9IRu5Hqx5/3X+QjRRHMVd3EHI=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=S9Kbsglb1v8e5ScsIUvmPLI/N4ikPFKsxwn+79ze1n8CaI9gzhaNSC+vBGmkocKvl
-         hKkILnngm7VsuzGwaNTGTsNbSzQfMmX8NaT2E2nZzYevjjhDm9W+NFYzWjXV3M5pEv
-         olZsV7ESuwzfiH9np1Oh5RQ5uO76EJBqiCQS45Qg=
-Subject: Re: [PATCH 1/3] IMA: add policy condition to measure duplicate
- critical data
+        b=bBpT7yfHfMpytdV83pn28BmzOiyTLc1T0B+pzDQ3hBh0YKIATeBHVdzevnaRWHOp/
+         4LayizfSQ7VyW1d6V5S37JjCejSjQ3iyaz9oFGbNChIRMrz8ypKLiVYkU7rg7psdXs
+         8iHk8gRVIzPt36YlYxG/oGKbbj08xHP7pLqS6fl4=
+Subject: Re: [PATCH 3/3] IMA: add support to measure duplicate buffer for
+ critical data hook
 To:     Mimi Zohar <zohar@linux.ibm.com>, stephen.smalley.work@gmail.com,
         casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
         gmazyland@gmail.com, paul@paul-moore.com
@@ -33,15 +33,15 @@ Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
         selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, dm-devel@redhat.com
 References: <20210130004519.25106-1-tusharsu@linux.microsoft.com>
- <20210130004519.25106-2-tusharsu@linux.microsoft.com>
- <059e77ffa861680ccac7fd94251fedc7cffe7a7e.camel@linux.ibm.com>
+ <20210130004519.25106-4-tusharsu@linux.microsoft.com>
+ <158dc2d3398316edefbafdb1cfea5eca840a06e6.camel@linux.ibm.com>
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <0643d35b-b765-0c9f-ffc5-99fb8cd22eb4@linux.microsoft.com>
-Date:   Tue, 9 Feb 2021 10:26:13 -0800
+Message-ID: <8af5bf67-54d3-f358-6cb6-34733fc72df2@linux.microsoft.com>
+Date:   Tue, 9 Feb 2021 10:31:43 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <059e77ffa861680ccac7fd94251fedc7cffe7a7e.camel@linux.ibm.com>
+In-Reply-To: <158dc2d3398316edefbafdb1cfea5eca840a06e6.camel@linux.ibm.com>
 Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -51,59 +51,67 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 
 
-On 2021-02-08 12:45 p.m., Mimi Zohar wrote:
+On 2021-02-08 12:24 p.m., Mimi Zohar wrote:
 > Hi Tushar,
 > 
 > On Fri, 2021-01-29 at 16:45 -0800, Tushar Sugandhi wrote:
->> IMA needs to support duplicate measurements of integrity
->> critical data to accurately determine the current state of that data
->> on the system.  Further, since measurement of duplicate data is not
->> required for all the use cases, it needs to be policy driven.
->>
->> Define "allow_dup", a new IMA policy condition, for the IMA func
->> CRITICAL_DATA to allow duplicate buffer measurement of integrity
->> critical data.
->>
->> Limit the ability to measure duplicate buffer data when action is
->> "measure" and func is CRITICAL_DATA.
 > 
-> Why?!
-> 
-I wasn't sure if it would break any use-case by supporting this for all 
-the files / buffers.  That's why I only wanted to address the scenario 
-that we discussed in the last series (critical data measurement).
-But as you suggested in this series' cover letter response, I am happy 
-to extend it to other scenarios (by disabling "htable" using new Kconfig 
-(e.g. CONFIG_IMA_DISABLE_HTABLE)
+>> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
 >>
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> ---
+>> index c096ef8945c7..fbf359495fa8 100644
+>> --- a/security/integrity/ima/ima_queue.c
+>> +++ b/security/integrity/ima/ima_queue.c
+>> @@ -158,7 +158,7 @@ static int ima_pcr_extend(struct tpm_digest *digests_arg, int pcr)
+>>    */
+>>   int ima_add_template_entry(struct ima_template_entry *entry, int violation,
+>>   			   const char *op, struct inode *inode,
+>> -			   const unsigned char *filename)
+>> +			   const unsigned char *filename, bool allow_dup)
+>>   {
+>>   	u8 *digest = entry->digests[ima_hash_algo_idx].digest;
 >>
->> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->> index 9b45d064a87d..b89eb768dd05 100644
->> --- a/security/integrity/ima/ima_policy.c
->> +++ b/security/integrity/ima/ima_policy.c
->> @@ -35,6 +35,7 @@
->>   #define IMA_FSNAME	0x0200
->>   #define IMA_KEYRINGS	0x0400
->>   #define IMA_LABEL	0x0800
->> +#define IMA_ALLOW_DUP	0x1000
+>   	struct tpm_digestate_entry(struct ima_template_entry *entry, int violation,
+Not sure I understand this.  Maybe a typo?  Could you please explain?
+
 >>   
->>   #define UNKNOWN		0
->>   #define MEASURE		0x0001	/* same as IMA_MEASURE */
->> @@ -87,6 +88,7 @@ struct ima_rule_entry {
->>   	char *fsname;
->>   	struct ima_rule_opt_list *keyrings; /* Measure keys added to these keyrings */
->>   	struct ima_rule_opt_list *label; /* Measure data grouped under this label */
+>>   	mutex_lock(&ima_extend_list_mutex);
+>>   	if (!violation) {
+>> -		if (ima_lookup_digest_entry(digest, entry->pcr)) {
+>> +		if (!allow_dup &&
+>> +		    ima_lookup_digest_entry(digest, entry->pcr)) {
 > 
-> Defining a new boolean entry shouldn't be necessary.    The other
-> boolean values are just stored in "flags".
+> Can't this change be simplified to "if (!violation && !allow_dup)"?
 > 
-Thanks.  Will do the same here.
+Sure.  Will do.
+
+Earlier I wasn't sure if 'violation' would touch any other use-cases 
+inadvertently.  That's why I localized the change as above.
+
+But now since we are supporting other scenarios as well,
+I believe "if (!violation && !allow_dup)" would be cleaner.
+
+> Also perhaps instead of passing another variable "allow_dup" to each of
+> these functions, pass a mask containing violation and allow_dup.
+> 
+There were examples of both approaches in ima_match_policy().
+  - int *pcr/ima_template_desc **template_desc as an out-param;
+  - and various actions as flags in return int.
+
+Earlier I couldn't decide one way or the other, so I picked the 
+out-param approach.
+
+But since allow_dup is just a single bit info, returning it as a bit in 
+the action flag is a cleaner solution.
+Will implement it with flag in the next iteration.
+
+Thanks again for reviewing the series.  Really appreciate it.
+
 Thanks,
 Tushar
->>   	struct ima_template_desc *template;
->>   };
+
+>>   			audit_cause = "hash_exists";
+>>   			result = -EEXIST;
+>>   			goto out;
 > 
 > thanks,
 > 
