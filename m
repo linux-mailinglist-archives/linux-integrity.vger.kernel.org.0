@@ -2,295 +2,225 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E9A314E77
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Feb 2021 12:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE27314EDC
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Feb 2021 13:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbhBILx6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 9 Feb 2021 06:53:58 -0500
-Received: from mail-eopbgr60086.outbound.protection.outlook.com ([40.107.6.86]:51875
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230251AbhBILxJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 9 Feb 2021 06:53:09 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=efjhpSakw//Khj2XNjuGLtcSAnj7q40927PEQUB2M8wX1jcp5lpEjShzzllVOwexPCLtWmiHeFHbORhGWMlEqFa6MD2bD59jPXRsIoLUtfHU3y++DfdTlu9A4id5mvlF59hZdcTEwovrpbT8vwFfhjqaoOHOFEw8NNQZw79YGqWEMCLSV+5nVi5gtZTn3Vtp1qeTyVNI84II0goYKad3NhO5y30UP+9WM+EvDDAGXWeVzQN+IMlCawXQc5nH8ij+rAZJJ14OucWqugYL/BcsCu669j4nLHEQTAlwH4S+GcDIksF+m2WGwCzGbd2U2xqhAxkmMpPL/YkQnhZvDGHd8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1E61/uF+cvLFgeIMSKWoY4XDJl0SI8soanaJXqX80pE=;
- b=KRyje62tu4fUe2dJWlC1AYV4P/WikQnjzeGHRlDSInq1+QL2arz2RbHqxCOAbSZB5YbRUD3nOZhpDrpaFF93RagdLXnjr61NpboTpwo9uyDaUS6+w62dgu9Cxhujcd+Fxlbx9c3GT+qIhjBZFS6L8q0aXVBWDF1W5OGROoaO/e3ph/3589abNrD9cBrW4PKz5NMdUaGZFqsvKH/Jsy5ZRDOLqrv6pidwMUIl78NCeRA5wqi8EuVFtoxIFPod/8e7kR8g/nH7DfckIiQ7VLkXjRp++0ZNidHGqV3BhYSkK975YVPX1k/RsBTCc3LfabZP1GM8D0iu2Hrjq21KVtVupQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
- dkim=pass header.d=kunbus.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1E61/uF+cvLFgeIMSKWoY4XDJl0SI8soanaJXqX80pE=;
- b=j77qi/03awuX1L/VrAOgN2gzxfI82OlLTJuQkW31D5wvAokmyb1dQvso6vYku6zlwFMGoJuCOUiFjcS74bhjwGZd7yDETXopb5lNkcTzVoLOcvhrcgMERp4Lsf98X+ccLKY71yA4r0xeoxGwKEV76RI/jNqClfoYpwl3ZU79iz8=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=kunbus.com;
-Received: from PR3P193MB0894.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:a0::11)
- by PR3P193MB0714.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:31::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25; Tue, 9 Feb
- 2021 11:52:18 +0000
-Received: from PR3P193MB0894.EURP193.PROD.OUTLOOK.COM
- ([fe80::2839:56c8:759b:73]) by PR3P193MB0894.EURP193.PROD.OUTLOOK.COM
- ([fe80::2839:56c8:759b:73%5]) with mapi id 15.20.3784.027; Tue, 9 Feb 2021
- 11:52:18 +0000
-Subject: Re: [PATCH v3 2/2] tpm: in tpm2_del_space check if ops pointer is
- still valid
-To:     Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        stefanb@linux.vnet.ibm.com, stable@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1612482643-11796-1-git-send-email-LinoSanfilippo@gmx.de>
- <1612482643-11796-3-git-send-email-LinoSanfilippo@gmx.de>
- <7308e5e9f51501bd92cced8f28ff6130c976b3ed.camel@HansenPartnership.com>
- <YByrCnswkIlz1w1t@kernel.org>
- <ee4adfbb99273e1bdceca210bc1fa5f16a50c415.camel@HansenPartnership.com>
- <20210205172528.GP4718@ziepe.ca>
-From:   Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Message-ID: <08ce58ab-3513-5d98-16a5-b197276f6bce@kunbus.com>
-Date:   Tue, 9 Feb 2021 12:52:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20210205172528.GP4718@ziepe.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [87.130.101.138]
-X-ClientProxiedBy: AM0PR10CA0015.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:17c::25) To PR3P193MB0894.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:102:a0::11)
+        id S229917AbhBIMWO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 9 Feb 2021 07:22:14 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58776 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229558AbhBIMWM (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 9 Feb 2021 07:22:12 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 119C1CI5111983;
+        Tue, 9 Feb 2021 07:21:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=9yi7Ze6MIUHSALhzhRtn1ExXA8XiiqLaqOn0ofMUnFc=;
+ b=Cqbs6d7RMEAVOS4M7Rfgd/nSjDilbHz6QEquVfUknBwDCNbHZi52uwisSJZI9fWE9fnM
+ qjwXffNXA/v5/mypNcat+aSPLzadPfFGnafmUA2oLDYuKnxjDTOWlPxkaVa2Cmt0ql7m
+ C1Cl8MqECyIbjK/yN37pVvv/0qrf5qSvaGlm+JM3+TnQojhDAEPWwDreRfkqZce5wDWm
+ fY4n1FViUyLV/VDpZPwQy7u5MYzijz9hMP5yS111noY4xD5FQlNtd49EHcMReSAfy/QC
+ VQJDU88Rqp+QARL9CmvIJWIxMUY8MIM6bg4Uw4lLWPXR1ifyC3ptsIjmQ7rbokSbQgtX vA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36ksr995t1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Feb 2021 07:21:23 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 119BwYnX022254;
+        Tue, 9 Feb 2021 12:21:22 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma03dal.us.ibm.com with ESMTP id 36hjr93vm7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Feb 2021 12:21:22 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 119CLL9X36831622
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 9 Feb 2021 12:21:21 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 94BCF124055;
+        Tue,  9 Feb 2021 12:21:21 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7BC3A124053;
+        Tue,  9 Feb 2021 12:21:21 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  9 Feb 2021 12:21:21 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     zohar@linux.ibm.com, vt@altlinux.org,
+        linux-integrity@vger.kernel.org
+Cc:     Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v2] ima-evm-utils: Improve ima_measurement matching on busy system with >1 banks
+Date:   Tue,  9 Feb 2021 07:21:06 -0500
+Message-Id: <20210209122106.870973-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [172.23.16.111] (87.130.101.138) by AM0PR10CA0015.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:17c::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25 via Frontend Transport; Tue, 9 Feb 2021 11:52:18 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ec6970b7-1252-4b7f-204b-08d8ccf126cf
-X-MS-TrafficTypeDiagnostic: PR3P193MB0714:
-X-Microsoft-Antispam-PRVS: <PR3P193MB0714CC936C422E30D9B7CE3AFA8E9@PR3P193MB0714.EURP193.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 94b8ye/CRZacxT90G+4m9PLWD1c1yOiNniuyDkHMHAONYUVeMDwQeoUeCeuOsJWvaoKwmJXWtOn3ngOIDMw2QNkRSMSdz+cR8oDxhwBoK1Swxx09qZj7jvMRQbAKt2Q3Wd0CeU/O2k+VMPuF6OK8pgGxVk2I4N0lCaqy8gJT7sfu2DYA9nC+6AO3L6gLq35Om7VbI42zvBnk1zVSIclG4qli6oEJqMZ/gH1TDwFR/cLnVL/t5DnFGKyf5hpav73109sZoLCDxK3czDgx74Ogot04XFE7vjLtj+ZrnZ3rmo6av+Vrbm+r9OvqoZEXPuHb05D5jYnDlb9cN4X6toJuvp/TNuy7RpB5e0rQBz/2f2FUh1CYikVd6pwQSnBzlBn/N+glKz3aQ8WtZtBFI2CSL9Ec2KijAL0O7r50blWM5MdllTbWkgDamuVfJz6QV/6fk4S6qIFX9V6i7u8oS5lddDchZIFgFYG4wW4ldBsIOVxSAASMuYz996fidQe3JN19gJ2zmXevvqV37oWZSlFwOPXcMAXvf02mBRp+xtsnM0qDhgTsV6GYEGs8BMVC2yx/g0CSNDV99g1LmVE8GY8Ij6POT8fsFE+ifincXqikBd1pfogpBuhsRETrIfnbUtBj9ydvZYTc8MqmIVn/wVipkUYNDwb81U2Nxz/lgey6fPvi0AePW3M4yhDRvjw5Dcej
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR3P193MB0894.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(376002)(366004)(39830400003)(53546011)(66556008)(66476007)(16576012)(66946007)(4326008)(8936002)(8676002)(478600001)(110136005)(6486002)(86362001)(36756003)(54906003)(52116002)(31686004)(31696002)(186003)(16526019)(5660300002)(2616005)(966005)(316002)(26005)(83380400001)(2906002)(956004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?MXovUWJOV0dNWWVYenhDaXlmREtJNnhwdWhYZTlDbnZSMWhKdHFrcW1lN2Vs?=
- =?utf-8?B?ekwvZi84YUllTTc0Sm1YR1JLNERiTjhGbWtiUFYyZmRiaVk3YnhIc0s4ME0x?=
- =?utf-8?B?RzVLWG1BTUhVVWZkY3dpMFNtWlFVYzZXU00zazB0dk9UdFVTYUowSXpndDQ4?=
- =?utf-8?B?V0NTakFkbndvQ2dyT1lrNnV5dmdyRC95VzIreTBBdEl3SVVKVWdMVnZhMjM5?=
- =?utf-8?B?M3RvenM4SkpTd093ZCtPMDFtVlJCL2s1ZFA1cHQ4a2N3S3VHWWo2MFVVMjdv?=
- =?utf-8?B?a2RsU2xrUTE5a0lCY0tRNGpmZk1ZbHhJcDhDTzJwRXl3cTN5UGl4aWUwSVJx?=
- =?utf-8?B?ZG53WHlDV1FSNmxOZkFHME9vN2hGZ0RCM2JwMnNaUVZ2cys4TDBNM0czWHh3?=
- =?utf-8?B?ZmZPNmViSW5pODc4dnErU0w1NzZUV01uWjdyNFFTZFpveSsraGtXWUpFbFZs?=
- =?utf-8?B?NVVaYnJ5em5ReURhaVlvNHN3aHJIWTdUcDVld2hKalEydi9Md3AwS0JqSlRu?=
- =?utf-8?B?bjNiYXFHR0pJSG04WHd4K2lTQllPVWtlT2M5TUdTSGdPMzlqUjNkU3pTZy9a?=
- =?utf-8?B?bXpkU0c5b3orS3czWk4vYmRNNTdLQmdza0FzR3FOS1U5eGx6ZWZMWDBDZ2t3?=
- =?utf-8?B?OCt0OElwUGhHZkNyT1psblk3eVJIc2NQMU9QMjd6b1hlS0JRZVVrbmQ1dnlW?=
- =?utf-8?B?SjcxTmZscFlXWmQ0Z2RKSUl6djh2UXIxbUErVm9IUGZSeWFnZXJNMGl3TXkz?=
- =?utf-8?B?VXRRWkQ4Wm1ISzA5dHZBR1Rid2lzcU9EMmd1L25NRWVnckFMZTZvc2NKZmda?=
- =?utf-8?B?SVhSR0FBdWR4NGdGRjlra1RMQitSU2lTV3NFQnQ5YVB0dUp5Sm1oeXQ5YnN6?=
- =?utf-8?B?VkZmenhvWjFtTEpNOUF2N0xmdW1nQXV4cXJjZ1BweEdaZjU2REwramh4bkY2?=
- =?utf-8?B?eFZybTFSVGwxNjh3NkpBRDhsMkgvYnBGbHFkRTRDQ3c4SE1tTHNsN1JkbWFC?=
- =?utf-8?B?dHo3TmxzNmN2T2FPRVlna3cwWXJpV3JXNXZsSnl5L3Nvc2lpS3JKWWpONStZ?=
- =?utf-8?B?RmtWaW50akpoVmlVS1lvWTZZRlNCYlFyRSs1ZTdaaGxyWVMxMDZoR3pFQUFv?=
- =?utf-8?B?blBwaVl3Z0xHTk9lazd2cVRDa2V2blNMVGtITGp1c1dlcklYVWpnWkxuMnl3?=
- =?utf-8?B?bUZTVG1MMUJoQ3I3Si84OEd5ZFlxUEpsaXoxTHZ0MnFuclhWbGhZNk14bzM4?=
- =?utf-8?B?YUMvK1JjTHJBVXJFeFVzbVM4Nk5ZclhyTElqeW9WWkNoekcySDJ0QVBmSjVj?=
- =?utf-8?B?NzRxbTZCNnJONTdBZ1NCY3JmYjlyaU9BRDVPWDJzYWRWVlVhU1phOU1wUlZF?=
- =?utf-8?B?YXdTSjNyTVlHN1NEejNXRXNta1NIL1l3S0UyM0pvN2k4WndDM3dpQ285Q1M5?=
- =?utf-8?B?dlEySm5FaTBJaDg1QVFQMzZmSys3LzBiRm9NZ1FIa2VZNFcwZXJibXl0WW00?=
- =?utf-8?B?RDBDciszWjFkOEVseFF3bHhlVVpnV29iMGs3VHJRdTZoYWJmNVBTSTc2SkVk?=
- =?utf-8?B?UW8zZXN1RW5jSlZjWjBPdWZUc2Q5WXlpcnBRcmVXQy9PQzdneWRsRllDVDk5?=
- =?utf-8?B?QUliNVhUbStYbGhsL011WDFLaE5HaUROcmwrb2tDQWVyNVlpakV5eGdSOFNr?=
- =?utf-8?B?WkZkeWVFYlh4RTAwZU9GaFowcFFlK2h0dFpJVUpWdC9raXplb044bEQ0Y0Vp?=
- =?utf-8?Q?OMt0nE5XnXvhXkUxJphK10vquVYoR4SdyFTfyFI?=
-X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec6970b7-1252-4b7f-204b-08d8ccf126cf
-X-MS-Exchange-CrossTenant-AuthSource: PR3P193MB0894.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2021 11:52:18.4333
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7BshUWg+dANQyTI+e8Iccj7g73Zu17c0CJwlNal4frvtUCHOBuX54+6qjNO3j5zVOc84LjWCkPVaBtmNQ/qchw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P193MB0714
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-09_03:2021-02-09,2021-02-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ malwarescore=0 clxscore=1015 bulkscore=0 impostorscore=0 mlxlogscore=999
+ adultscore=0 spamscore=0 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102090061
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jason,
+When a system is very busy with IMA taking measurements into more than
+one bank, then we often do not get the PCR 10 values of the sha1 bank
+that represents the same log entry as the reading of the PCR value of
+the sha256 bank. In other words, the reading of the PCR 10 value from
+the sha1 bank may represent the PCR 10 state at the time of the
+n-th entry in the log while the reading of the PCR 10 value from the
+sha256 bank may represent the state at the time of a later-than-n entry.
+The result currently is that the PCR measurements do not match and
+on a busy system the tool may not easily report a successful match.
 
-On 05.02.21 18:25, Jason Gunthorpe wrote:
-> On Fri, Feb 05, 2021 at 08:48:11AM -0800, James Bottomley wrote:
->>> Thanks for pointing this out. I'd strongly support Jason's proposal:
->>>
->>> https://lore.kernel.org/linux-integrity/20201215175624.GG5487@ziepe.ca/
->>>
->>> It's the best long-term way to fix this.
->>
->> Really, no it's not.  It introduces extra mechanism we don't need.
-> 
->> To recap the issue: character devices already have an automatic
->> mechanism which holds a reference to the struct device while the
->> character node is open so the default is to release resources on final
->> put of the struct device.
-> 
-> The refcount on the struct device only keeps the memory alive, it
-> doesn't say anything about the ops. We still need to lock and check
-> the ops each and every time they are used.
-> 
-> The fact cdev goes all the way till fput means we don't need the extra
-> get/put I suggested to Lino at all.
-> 
->> The practical consequence of this model is that if you allocate a chip
->> structure with tpm_chip_alloc() you have to release it again by doing a
->> put of *both* devices.
-> 
-> The final put of the devs should be directly after the
-> cdev_device_del(), not in a devm. This became all confused because the
-> devs was created during alloc, not register. Having a device that is
-> initialized but will never be added is weird.
-> 
-> See sketch below.
-> 
->> Stefan noticed the latter, so we got the bogus patch 8979b02aaf1d
->> ("tpm: Fix reference count to main device") applied which simply breaks
->> the master/slave model by not taking a reference on the master for the
->> slave.  I'm not sure why I didn't notice the problem with this fix at
->> the time, but attention must have been elsewhere.
-> 
-> Well, this is sort of OK because we never use the devs in TPM1, so we
-> end up freeing the chip with a positive refcount on the devs, which is
-> weird but not a functional bug.
-> 
-> Jason
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index ddaeceb7e10910..e07193a0dd4438 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -344,7 +344,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->  	chip->dev_num = rc;
->  
->  	device_initialize(&chip->dev);
-> -	device_initialize(&chip->devs);
->  
->  	chip->dev.class = tpm_class;
->  	chip->dev.class->shutdown_pre = tpm_class_shutdown;
-> @@ -352,29 +351,12 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->  	chip->dev.parent = pdev;
->  	chip->dev.groups = chip->groups;
->  
-> -	chip->devs.parent = pdev;
-> -	chip->devs.class = tpmrm_class;
-> -	chip->devs.release = tpm_devs_release;
-> -	/* get extra reference on main device to hold on
-> -	 * behalf of devs.  This holds the chip structure
-> -	 * while cdevs is in use.  The corresponding put
-> -	 * is in the tpm_devs_release (TPM2 only)
-> -	 */
-> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> -		get_device(&chip->dev);
-> -
->  	if (chip->dev_num == 0)
->  		chip->dev.devt = MKDEV(MISC_MAJOR, TPM_MINOR);
->  	else
->  		chip->dev.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num);
->  
-> -	chip->devs.devt =
-> -		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> -
->  	rc = dev_set_name(&chip->dev, "tpm%d", chip->dev_num);
-> -	if (rc)
-> -		goto out;
-> -	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
->  	if (rc)
->  		goto out;
->  
-> @@ -382,9 +364,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->  		chip->flags |= TPM_CHIP_FLAG_VIRTUAL;
->  
->  	cdev_init(&chip->cdev, &tpm_fops);
-> -	cdev_init(&chip->cdevs, &tpmrm_fops);
->  	chip->cdev.owner = THIS_MODULE;
-> -	chip->cdevs.owner = THIS_MODULE;
->  
->  	rc = tpm2_init_space(&chip->work_space, TPM2_SPACE_BUFFER_SIZE);
->  	if (rc) {
-> @@ -396,7 +376,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
->  	return chip;
->  
->  out:
-> -	put_device(&chip->devs);
->  	put_device(&chip->dev);
->  	return ERR_PTR(rc);
->  }
-> @@ -445,13 +424,33 @@ static int tpm_add_char_device(struct tpm_chip *chip)
->  	}
->  
->  	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> +		device_initialize(&chip->devs);
-> +		chip->devs.parent = pdev;
-> +		chip->devs.class = tpmrm_class;
-> +		rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
-> +		if (rc)
-> +			goto out_put_devs;
-> +
-> +		/*
-> +                 * get extra reference on main device to hold on behalf of devs.
-> +                 * This holds the chip structure while cdevs is in use. The
-> +		 * corresponding put is in the tpm_devs_release.
-> +		 */
-> +		get_device(&chip->dev);
-> +		chip->devs.release = tpm_devs_release;
-> +
-> +		chip->devs.devt =
-> +			MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> +		cdev_init(&chip->cdevs, &tpmrm_fops);
-> +		chip->cdevs.owner = THIS_MODULE;
-> +
->  		rc = cdev_device_add(&chip->cdevs, &chip->devs);
->  		if (rc) {
->  			dev_err(&chip->devs,
->  				"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
->  				dev_name(&chip->devs), MAJOR(chip->devs.devt),
->  				MINOR(chip->devs.devt), rc);
-> -			return rc;
-> +			goto out_put_devs;
->  		}
->  	}
->  
-> @@ -460,6 +459,10 @@ static int tpm_add_char_device(struct tpm_chip *chip)
->  	idr_replace(&dev_nums_idr, chip, chip->dev_num);
->  	mutex_unlock(&idr_lock);
->  
-> +out_put_devs:
-> +	put_device(&chip->devs);
-> +out_del_dev:
-> +	cdev_device_del(&chip->cdev);
->  	return rc;
->  }
->  
-> @@ -640,8 +643,10 @@ void tpm_chip_unregister(struct tpm_chip *chip)
->  	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
->  		hwrng_unregister(&chip->hwrng);
->  	tpm_bios_log_teardown(chip);
-> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
->  		cdev_device_del(&chip->cdevs, &chip->devs);
-> +		put_device(&chip->devs);
-> +	}
->  	tpm_del_char_device(chip);
->  }
->  EXPORT_SYMBOL_GPL(tpm_chip_unregister);
-> 
+This patch fixes this issue by separating the TPM bank comparison for
+each one of the banks being looked and using a bit mask for checking
+which banks have already been matched. Once the mask has become 0
+all PCR banks have been successfully matched.
 
-I tested the solution you scetched and it fixes the issue for me. Will you send a (real) patch for this?
+A run on a busy system may result in the output as follows indicating
+PCR bank matches at the n-th entry for the sha1 bank and at a later
+entry, possibly n + 1 or n + 2 or so, for the sha256 bank. The
+output is interleaved with a match of the sha1 bank against 'padded
+matching'.
 
-Best regards,
-Lino
+$ evmctl ima_measurement --ignore-violations /sys/kernel/security/ima/binary_runtime_measurements -v
+sha1: PCRAgg  10: 381cc6139e2fbda76037ec0946089aeccaaa5374
+sha1: TPM PCR-10: 381cc6139e2fbda76037ec0946089aeccaaa5374
+sha1 PCR-10: succeed at entry 4918
+sha1: PCRAgg  10: 381cc6139e2fbda76037ec0946089aeccaaa5374
+sha1: TPM PCR-10: 381cc6139e2fbda76037ec0946089aeccaaa5374
+sha1 PCR-10: succeed at entry 4918
+[...]
+sha256: PCRAgg  10: c21dcb7098b3d7627f7aaeddf8aff68a65209027274d82af52be2fd302193eb7
+sha256: TPM PCR-10: c21dcb7098b3d7627f7aaeddf8aff68a65209027274d82af52be2fd302193eb7
+sha256 PCR-10: succeed at entry 4922
+Matched per TPM bank calculated digest(s).
+
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+v1->v2:
+ - Reporting entry number that resulted in a match when in verbose mode
+
+---
+ src/evmctl.c | 57 ++++++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 44 insertions(+), 13 deletions(-)
+
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 1815f55..f18eaae 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -1594,10 +1594,15 @@ static struct tpm_bank_info *init_tpm_banks(int *num_banks)
+ 
+ /*
+  * Compare the calculated TPM PCR banks against the PCR values read.
++ * The banks_mask parameter allows to select which banks to consider.
++ * A banks_maks of 0x3 would consider banks 1 and 2, 0x2 would only
++ * consider the 2nd bank, ~0 would consider all banks.
++ *
+  * On failure to match any TPM bank, fail comparison.
+  */
+ static int compare_tpm_banks(int num_banks, struct tpm_bank_info *bank,
+-			     struct tpm_bank_info *tpm_bank)
++			     struct tpm_bank_info *tpm_bank,
++			     unsigned int banks_mask, unsigned long entry_num)
+ {
+ 	int i, j;
+ 	int ret = 0;
+@@ -1605,6 +1610,9 @@ static int compare_tpm_banks(int num_banks, struct tpm_bank_info *bank,
+ 	for (i = 0; i < num_banks; i++) {
+ 		if (!bank[i].supported || !tpm_bank[i].supported)
+ 			continue;
++		/* do we need to look at the n-th bank ? */
++		if ((banks_mask & (1 << i)) == 0)
++			continue;
+ 		for (j = 0; j < NUM_PCRS; j++) {
+ 			if (memcmp(bank[i].pcr[j], zero, bank[i].digest_size)
+ 			    == 0)
+@@ -1625,8 +1633,8 @@ static int compare_tpm_banks(int num_banks, struct tpm_bank_info *bank,
+ 			log_dump(tpm_bank[i].pcr[j], tpm_bank[i].digest_size);
+ 
+ 			if (!ret)
+-				log_info("%s PCR-%d: succeed\n",
+-					 bank[i].algo_name, j);
++				log_info("%s PCR-%d: succeed at entry %lu\n",
++					 bank[i].algo_name, j, entry_num);
+ 			else
+ 				log_info("%s: PCRAgg %d does not match TPM PCR-%d\n",
+ 					 bank[i].algo_name, j, j);
+@@ -1941,6 +1949,9 @@ static int ima_measurement(const char *file)
+ 	int num_banks = 0;
+ 	int tpmbanks = 1;
+ 	int first_record = 1;
++	unsigned int pseudo_padded_banks_mask, pseudo_banks_mask;
++	unsigned long entry_num = 0;
++	int c;
+ 
+ 	struct template_entry entry = { .template = 0 };
+ 	FILE *fp;
+@@ -1974,7 +1985,12 @@ static int ima_measurement(const char *file)
+ 	if (read_tpm_banks(num_banks, tpm_banks) != 0)
+ 		tpmbanks = 0;
+ 
++	/* A mask where each bit represents the banks to check against */
++	pseudo_banks_mask = (1 << num_banks) - 1;
++	pseudo_padded_banks_mask = pseudo_banks_mask;
++
+ 	while (fread(&entry.header, sizeof(entry.header), 1, fp)) {
++		entry_num++;
+ 		if (entry.header.name_len > TCG_EVENT_NAME_LEN_MAX) {
+ 			log_err("%d ERROR: event name too long!\n",
+ 				entry.header.name_len);
+@@ -2086,18 +2102,33 @@ static int ima_measurement(const char *file)
+ 		if (!tpmbanks)
+ 			continue;
+ 
+-		/* The measurement list might contain too many entries,
+-		 * compare the re-calculated TPM PCR values after each
+-		 * extend.
+-		 */
+-		err = compare_tpm_banks(num_banks, pseudo_banks, tpm_banks);
+-		if (!err)
++		for (c = 0; c < num_banks; c++) {
++			if ((pseudo_banks_mask & (1 << c)) == 0)
++				continue;
++			/* The measurement list might contain too many entries,
++			 * compare the re-calculated TPM PCR values after each
++			 * extend.
++			 */
++			err = compare_tpm_banks(num_banks, pseudo_banks,
++						tpm_banks, 1 << c, entry_num);
++			if (!err)
++				pseudo_banks_mask ^= (1 << c);
++		}
++		if (pseudo_banks_mask == 0)
+ 			break;
+ 
+-		/* Compare against original SHA1 zero padded TPM PCR values */
+-		err_padded = compare_tpm_banks(num_banks, pseudo_padded_banks,
+-					       tpm_banks);
+-		if (!err_padded)
++		for (c = 0; c < num_banks; c++) {
++			if ((pseudo_padded_banks_mask & (1 << c)) == 0)
++				continue;
++			/* Compare against original SHA1 zero padded TPM PCR values */
++			err_padded = compare_tpm_banks(num_banks,
++						       pseudo_padded_banks,
++						       tpm_banks,
++						       1 << c, entry_num);
++			if (!err_padded)
++				pseudo_padded_banks_mask ^= (1 << c);
++		}
++		if (pseudo_padded_banks_mask == 0)
+ 			break;
+ 	}
+ 
+-- 
+2.29.2
 
