@@ -2,73 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BBD316AD1
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Feb 2021 17:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0B9316BFF
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Feb 2021 18:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbhBJQND (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Feb 2021 11:13:03 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:33748 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230005AbhBJQNC (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Feb 2021 11:13:02 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C070712800AA;
-        Wed, 10 Feb 2021 08:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1612973540;
-        bh=89lf76edSQmfx/4TxVlRidrOpJvFS3onlWzfpqBsiPM=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Zyt+QRJjdgdfUEKt2ywEb3kDyDNZ1DlOv7i5kySMnghwZa4V4AFXRerhtVhHxGgUL
-         DMlfmEJ2Jy9W120dn9AaWEql/nWmhmajiu2C35nAB8/GalhmVZHKiLMWLsTu9sFBhs
-         lvWHia1rICJd7noNiuA0cpMh0iGh7HXGRG5WYg+M=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2YwBzT0X9qTq; Wed, 10 Feb 2021 08:12:20 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::c447])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5020812800A0;
-        Wed, 10 Feb 2021 08:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1612973540;
-        bh=89lf76edSQmfx/4TxVlRidrOpJvFS3onlWzfpqBsiPM=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Zyt+QRJjdgdfUEKt2ywEb3kDyDNZ1DlOv7i5kySMnghwZa4V4AFXRerhtVhHxGgUL
-         DMlfmEJ2Jy9W120dn9AaWEql/nWmhmajiu2C35nAB8/GalhmVZHKiLMWLsTu9sFBhs
-         lvWHia1rICJd7noNiuA0cpMh0iGh7HXGRG5WYg+M=
-Message-ID: <781858e64422e78d0285c6762470a3ef3b6a114d.camel@HansenPartnership.com>
-Subject: Re: [PATCH v15 3/5] security: keys: trusted: fix TPM2 authorizations
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>, keyrings@vger.kernel.org
-Date:   Wed, 10 Feb 2021 08:12:19 -0800
-In-Reply-To: <1327393.1612972717@warthog.procyon.org.uk>
-References: <20210127190617.17564-4-James.Bottomley@HansenPartnership.com>
-         <20210127190617.17564-1-James.Bottomley@HansenPartnership.com>
-         <1327393.1612972717@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S233042AbhBJRBp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Feb 2021 12:01:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39236 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232159AbhBJRBg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 10 Feb 2021 12:01:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4707564DF6;
+        Wed, 10 Feb 2021 17:00:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612976456;
+        bh=H7GaOW+CiBvaeY1yYaT/BLhAmPmDWl62qWGA8z+LWpE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=moAfNVCjfFxnZKnAhRc+lbDyBoG0CzSSD4svV6t34566SHtjaTQaILzmcSpytKcN6
+         6ZyunSK/Q0VeXwZNg99SMzv4TbQUenOMQ+F2lU+d41OfjFMaMvKYCo0xe/zUdOAOxp
+         aSA6T5N4akhoDz3agOWkj8TtDV9QIL7iUAKGzPY9R2lCbcS9t5bdad5fu9qgKwWjQ1
+         /XtDLtVe7ZjbWJuwuSPvT+JTmZO8w0V9oydRT26oW/RDRzLxxcGGefQKF+CEKtiSbC
+         U0GJpe1dEEhTZ9gLLm8bdLRt1FlI4cnosdVslVSvahasqIQwQffVygPUC9Ec4XVVY0
+         zSbRzHQucknLA==
+Date:   Wed, 10 Feb 2021 19:00:46 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     jarkko.sakkinen@linux.intel.com, zohar@linux.ibm.com,
+        jejb@linux.ibm.com, dhowells@redhat.com, jens.wiklander@linaro.org,
+        corbet@lwn.net, jmorris@namei.org, serge@hallyn.com,
+        casey@schaufler-ca.com, janne.karhunen@gmail.com,
+        daniel.thompson@linaro.org, Markus.Wamser@mixed-mode.de,
+        lhinds@redhat.com, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org
+Subject: Re: [PATCH v8 1/4] KEYS: trusted: Add generic trusted keys framework
+Message-ID: <YCQRPo0o6MZ0pcUa@kernel.org>
+References: <1604419306-26105-1-git-send-email-sumit.garg@linaro.org>
+ <1604419306-26105-2-git-send-email-sumit.garg@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1604419306-26105-2-git-send-email-sumit.garg@linaro.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2021-02-10 at 15:58 +0000, David Howells wrote:
-> James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
-> 
-> > keyctl add trusted kmk "new 32
-> > blobauth=f572d396fae9206628714fb2ce00f72e94f2258fkeyhandle=81000001
-> > " @u
-> 
-> I presume there should be a space in there?
+On Tue, Nov 03, 2020 at 09:31:43PM +0530, Sumit Garg wrote:
+> +	case Opt_new:
+> +		key_len = payload->key_len;
+> +		ret = static_call(trusted_key_get_random)(payload->key,
+> +							  key_len);
+> +		if (ret != key_len) {
+> +			pr_info("trusted_key: key_create failed (%d)\n", ret);
+> +			goto out;
+> +		}
 
-Um, yes.  My screen wraps at 80 characters which has keyhandle=
-conveniently on the next line.
+This repeats a regression in existing code, i.e. does not check
+"ret < 0" condition. I noticed this now when I rebased the code
+on top of my fixes.
 
-James
+I.e. it's fixed in my master branch, which caused a merge conflict,
+and I found this.
 
-
+/Jarkko
