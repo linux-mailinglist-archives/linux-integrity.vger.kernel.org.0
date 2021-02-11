@@ -2,200 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A9B318367
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Feb 2021 03:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DED16318478
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Feb 2021 06:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbhBKCFn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Feb 2021 21:05:43 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:36544 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbhBKCFE (ORCPT
+        id S229501AbhBKFIo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 Feb 2021 00:08:44 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64640 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229499AbhBKFIo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Feb 2021 21:05:04 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 026C520B6C40;
-        Wed, 10 Feb 2021 18:04:21 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 026C520B6C40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1613009062;
-        bh=37UFz6Ghf+G+T4IvQwNmd6crjNckKRJJvv2sj7ZIbXs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=pUpefB0yBI+RA1y6fdGOpp5sJznyho0ZPrLQMRHGNjAEtADFN+Nh3Z8QUAYcPx+KP
-         fHhGfRwPx8Ou29B9YxCgDI3ZqsbqGJfJchsNN3a3mRz0C5kxFggXyNRZYwOFYw4AO8
-         LT+5J0gjGbchmh5NLw1QcxGK6C7AQ6hYmW/DRsu4=
-Subject: Re: [PATCH v2] selinux: measure state and policy capabilities
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, sashal@kernel.org,
-        James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210129164926.3939-1-nramas@linux.microsoft.com>
- <CAHC9VhQR7pq3h2ca28SynkRiT7D-aa=EowPkurci8Nug1W=ySQ@mail.gmail.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <1e92521d-0c5d-6493-74aa-31a187cab4ad@linux.microsoft.com>
-Date:   Wed, 10 Feb 2021 18:04:21 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 11 Feb 2021 00:08:44 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11B535q4050007;
+        Thu, 11 Feb 2021 00:07:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
+ cc : subject : in-reply-to : date : message-id : mime-version :
+ content-type; s=pp1; bh=GeKdXRTnblLQLgKS12NhNK/KcHc7JYx6PvJg6YHGkK8=;
+ b=LD4/C3Ci4f2wLKRjATxW5V16aXB4ZjDLC7zxw6RCQuMPJRChLpdLYa+l8u1h2YyuwR65
+ 14h446q9TbbTEKUlYT2Yt1G8L9VAbzDaxYEsONDvNHdEdtxuhVcNKHYb/wsT5fXIU1BS
+ rlRziEOjEKpe+8ytYZ/ExPMV8JBO9j2C7/A08J96kKRHV7oEdi0v1Vqu/2LumK8mwSuL
+ J0o4+taMvEM1zBwyev+ORrP2G+TXfu4N8gy7qilKTYK4MVj9Zq4DRc9MdZBDHZ3lxoKP
+ 36A9bFnSRhia9/YE1uJNw6yqouRYFelR+z2qxrKSdyGuw9i5kUbRtpfBgeVnK5YN/I6/ EA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36mwsygjad-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Feb 2021 00:07:24 -0500
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11B53ebk053143;
+        Thu, 11 Feb 2021 00:07:23 -0500
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36mwsygj9w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Feb 2021 00:07:23 -0500
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11B53vGC023278;
+        Thu, 11 Feb 2021 05:07:22 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma01wdc.us.ibm.com with ESMTP id 36hjr9k9r4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Feb 2021 05:07:22 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11B57LLW24576256
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 Feb 2021 05:07:21 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A62AABE04F;
+        Thu, 11 Feb 2021 05:07:21 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 724F4BE058;
+        Thu, 11 Feb 2021 05:07:12 +0000 (GMT)
+Received: from manicouagan.localdomain (unknown [9.160.95.194])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Thu, 11 Feb 2021 05:07:12 +0000 (GMT)
+References: <20210209182200.30606-1-nramas@linux.microsoft.com>
+ <20210209182200.30606-8-nramas@linux.microsoft.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, robh@kernel.org, takahiro.akashi@linaro.org,
+        gregkh@linuxfoundation.org, will@kernel.org, joe@perches.com,
+        catalin.marinas@arm.com, mpe@ellerman.id.au, james.morse@arm.com,
+        sashal@kernel.org, benh@kernel.crashing.org, paulus@samba.org,
+        frowand.list@gmail.com, vincenzo.frascino@arm.com,
+        mark.rutland@arm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, pasha.tatashin@soleen.com, allison@lohutok.net,
+        masahiroy@kernel.org, mbrugger@suse.com, hsinyi@chromium.org,
+        tao.li@vivo.com, christophe.leroy@c-s.fr,
+        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v17 07/10] powerpc: Move arch independent ima kexec
+ functions to drivers/of/kexec.c
+In-reply-to: <20210209182200.30606-8-nramas@linux.microsoft.com>
+Date:   Thu, 11 Feb 2021 02:07:09 -0300
+Message-ID: <87lfbvnqf6.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhQR7pq3h2ca28SynkRiT7D-aa=EowPkurci8Nug1W=ySQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-11_04:2021-02-10,2021-02-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 malwarescore=0 clxscore=1015 priorityscore=1501 spamscore=0
+ adultscore=0 phishscore=0 impostorscore=0 mlxlogscore=815 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102110035
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2/10/21 4:25 PM, Paul Moore wrote:
-> On Fri, Jan 29, 2021 at 11:49 AM Lakshmi Ramasubramanian
-> <nramas@linux.microsoft.com> wrote:
->>
->> SELinux stores the configuration state and the policy capabilities
->> in kernel memory.  Changes to this data at runtime would have an impact
->> on the security guarantees provided by SELinux.  Measuring this data
->> through IMA subsystem provides a tamper-resistant way for
->> an attestation service to remotely validate it at runtime.
->>
->> Measure the configuration state and policy capabilities by calling
->> the IMA hook ima_measure_critical_data().
->>
->> To enable SELinux data measurement, the following steps are required:
->>
->>   1, Add "ima_policy=critical_data" to the kernel command line arguments
->>      to enable measuring SELinux data at boot time.
->>      For example,
->>        BOOT_IMAGE=/boot/vmlinuz-5.11.0-rc3+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset security=selinux ima_policy=critical_data
->>
->>   2, Add the following rule to /etc/ima/ima-policy
->>         measure func=CRITICAL_DATA label=selinux
->>
->> Sample measurement of SELinux state and policy capabilities:
->>
->> 10 2122...65d8 ima-buf sha256:13c2...1292 selinux-state 696e...303b
->>
->> Execute the following command to extract the measured data
->> from the IMA's runtime measurements list:
->>
->>    grep "selinux-state" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | tail -1 | cut -d' ' -f 6 | xxd -r -p
->>
->> The output should be a list of key-value pairs. For example,
->>   initialized=1;enforcing=0;checkreqprot=1;network_peer_controls=1;open_perms=1;extended_socket_class=1;always_check_network=0;cgroup_seclabel=1;nnp_nosuid_transition=1;genfs_seclabel_symlinks=0;
->>
->> To verify the measurement is consistent with the current SELinux state
->> reported on the system, compare the integer values in the following
->> files with those set in the IMA measurement (using the following commands):
->>
->>   - cat /sys/fs/selinux/enforce
->>   - cat /sys/fs/selinux/checkreqprot
->>   - cat /sys/fs/selinux/policy_capabilities/[capability_file]
->>
->> Note that the actual verification would be against an expected state
->> and done on a separate system (likely an attestation server) requiring
->> "initialized=1;enforcing=1;checkreqprot=0;"
->> for a secure state and then whatever policy capabilities are actually
->> set in the expected policy (which can be extracted from the policy
->> itself via seinfo, for example).
->>
->> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
->> Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
->> Suggested-by: Paul Moore <paul@paul-moore.com>
->> ---
->>   security/selinux/ima.c         | 77 ++++++++++++++++++++++++++++++++--
->>   security/selinux/include/ima.h |  6 +++
->>   security/selinux/selinuxfs.c   |  6 +++
->>   security/selinux/ss/services.c |  2 +-
->>   4 files changed, 86 insertions(+), 5 deletions(-)
->>
->> diff --git a/security/selinux/ima.c b/security/selinux/ima.c
->> index 03715893ff97..5c7f73cd1117 100644
->> --- a/security/selinux/ima.c
->> +++ b/security/selinux/ima.c
->> @@ -13,18 +13,73 @@
->>   #include "ima.h"
->>
->>   /*
->> - * selinux_ima_measure_state - Measure hash of the SELinux policy
->> + * selinux_ima_collect_state - Read selinux configuration settings
->>    *
->> - * @state: selinux state struct
->> + * @state: selinux_state
->>    *
->> - * NOTE: This function must be called with policy_mutex held.
->> + * On success returns the configuration settings string.
->> + * On error, returns NULL.
->>    */
->> -void selinux_ima_measure_state(struct selinux_state *state)
->> +static char *selinux_ima_collect_state(struct selinux_state *state)
->> +{
->> +       const char *on = "=1;", *off = "=0;";
->> +       char *buf;
->> +       int buf_len, i;
->> +
->> +       /*
->> +        * Size of the following string including the terminating NULL char
->> +        *    initialized=0;enforcing=0;checkreqprot=0;
->> +        */
->> +       buf_len = 42;
-> 
-> It might be safer over the long term, and self-documenting, to do the
-> following instead:
-> 
->    buf_len = strlen("initialized=0;enforcing=0;checkreqprot=0;") + 1;
-Since the string is fixed I hard coded the length to avoid runtime 
-overhead. But I agree on self-documenting and safety. Will update.
 
-> 
->> +       for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++)
->> +               buf_len += strlen(selinux_policycap_names[i]) + 3;
-> 
-> 's/3/strlen(on)/' or is that too much?
-Since this is in a loop, I'll do strlen("on") once outside the loop and 
-use the value instead of hard coded "3".
+Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 
-> 
->> +
->> +       buf = kzalloc(buf_len, GFP_KERNEL);
->> +       if (!buf)
->> +               return NULL;
->> +
->> +       strscpy(buf, "initialized", buf_len);
-> 
-> I wonder if it might be a good idea to add a WARN_ON() to the various
-> copies, e.g.:
-> 
->    rc = strXXX(...);
->    WARN_ON(rc);
+> The functions defined in "arch/powerpc/kexec/ima.c" handle setting up
+> and freeing the resources required to carry over the IMA measurement
+> list from the current kernel to the next kernel across kexec system call.
+> These functions do not have architecture specific code, but are
+> currently limited to powerpc.
+>
+> Move remove_ima_buffer() and setup_ima_buffer() calls into
+> of_kexec_alloc_and_setup_fdt() defined in "drivers/of/kexec.c".
+>
+> Move the remaining architecture independent functions from
+> "arch/powerpc/kexec/ima.c" to "drivers/of/kexec.c".
+> Delete "arch/powerpc/kexec/ima.c" and "arch/powerpc/include/asm/ima.h".
+> Remove references to the deleted files and functions in powerpc and
+> in ima.
+>
+> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> ---
+>  arch/powerpc/include/asm/ima.h    |  27 ----
+>  arch/powerpc/include/asm/kexec.h  |   3 -
+>  arch/powerpc/kexec/Makefile       |   7 -
+>  arch/powerpc/kexec/file_load.c    |  25 ----
+>  arch/powerpc/kexec/file_load_64.c |   4 -
+>  arch/powerpc/kexec/ima.c          | 202 -------------------------
+>  drivers/of/kexec.c                | 239 ++++++++++++++++++++++++++++++
+>  include/linux/of.h                |   2 +
+>  security/integrity/ima/ima.h      |   4 -
+>  9 files changed, 241 insertions(+), 272 deletions(-)
+>  delete mode 100644 arch/powerpc/include/asm/ima.h
+>  delete mode 100644 arch/powerpc/kexec/ima.c
 
-Agreed - will do.
+Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Tested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 
-> The strscpy/strlcat protections should ensure that nothing terrible
-> happens with respect to wandering off the end of the string, or
-> failing to NUL terminate, but they won't catch a logic error where the
-> string is not allocated correctly (resulting in a truncated buffer).
-
-agreed - Will add WARN_ON(rc) for all the str calls.
-
-thanks,
-  -lakshmi
-
-> 
->> +       strlcat(buf, selinux_initialized(state) ? on : off, buf_len);
->> +
->> +       strlcat(buf, "enforcing", buf_len);
->> +       strlcat(buf, enforcing_enabled(state) ? on : off, buf_len);
->> +
->> +       strlcat(buf, "checkreqprot", buf_len);
->> +       strlcat(buf, checkreqprot_get(state) ? on : off, buf_len);
->> +
->> +       for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++) {
->> +               strlcat(buf, selinux_policycap_names[i], buf_len);
->> +               strlcat(buf, state->policycap[i] ? on : off, buf_len);
->> +       }
->> +
->> +       return buf;
->> +}
-> 
-
+-- 
+Thiago Jung Bauermann
+IBM Linux Technology Center
