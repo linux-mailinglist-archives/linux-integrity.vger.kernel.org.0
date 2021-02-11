@@ -2,112 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67372318481
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Feb 2021 06:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A699318498
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Feb 2021 06:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbhBKFPU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 11 Feb 2021 00:15:20 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50376 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229447AbhBKFPT (ORCPT
+        id S229679AbhBKFXZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 Feb 2021 00:23:25 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:44307 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229674AbhBKFXY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 11 Feb 2021 00:15:19 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11B537aM050054;
-        Thu, 11 Feb 2021 00:14:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
- cc : subject : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=9CC5t8mlrCkuptJncg5MpcYUgaVwrBRsUNJCUVnY5Ew=;
- b=Ncn1IH5pZmFpMRtGxe45IIpawGgL0+3VFAFzQMEE7F+nyGN6x2hrZdG0zIzXIPkvTNmT
- YtR5JAn9EGpzdZFkmYXruMhiX7WP2E5MGzqRga62rBoShkKlriZpZDl7sL9ta7gxKvRs
- AcjgOmJ7WFWISkKJOnal1wz/cRKBKzI43lMV8J7uH2tcfFQ+Q+xTxjsZQ9NADDd6/jIx
- jI436p7Xm5KOqvzZvXbl/lXG3od9/4NFx1p3x8BpxcpImO8W/m3E1qdJ1IeixxZYORsO
- OCTb8MoX/a32CNv+M2Bs5yiL9hNZqA0Qb0ux0t+7S+m4hwDo2wCY80SWI7+R8mQxDjBV aA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36mwsygqrx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 00:14:11 -0500
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11B53Hjc050896;
-        Thu, 11 Feb 2021 00:14:10 -0500
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36mwsygqrm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 00:14:10 -0500
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11B5COpS031718;
-        Thu, 11 Feb 2021 05:14:09 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01wdc.us.ibm.com with ESMTP id 36hjr9kaur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 05:14:09 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11B5E8wZ17236284
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Feb 2021 05:14:08 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6EDED7805F;
-        Thu, 11 Feb 2021 05:14:08 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AA8637805C;
-        Thu, 11 Feb 2021 05:13:58 +0000 (GMT)
-Received: from manicouagan.localdomain (unknown [9.160.95.194])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Thu, 11 Feb 2021 05:13:58 +0000 (GMT)
-References: <20210209182200.30606-1-nramas@linux.microsoft.com>
- <20210209182200.30606-11-nramas@linux.microsoft.com>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, robh@kernel.org, takahiro.akashi@linaro.org,
-        gregkh@linuxfoundation.org, will@kernel.org, joe@perches.com,
-        catalin.marinas@arm.com, mpe@ellerman.id.au, james.morse@arm.com,
-        sashal@kernel.org, benh@kernel.crashing.org, paulus@samba.org,
-        frowand.list@gmail.com, vincenzo.frascino@arm.com,
-        mark.rutland@arm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, pasha.tatashin@soleen.com, allison@lohutok.net,
-        masahiroy@kernel.org, mbrugger@suse.com, hsinyi@chromium.org,
-        tao.li@vivo.com, christophe.leroy@c-s.fr,
-        prsriva@linux.microsoft.com, balajib@linux.microsoft.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v17 10/10] arm64: Enable passing IMA log to next kernel
- on kexec
-In-reply-to: <20210209182200.30606-11-nramas@linux.microsoft.com>
-Date:   Thu, 11 Feb 2021 02:13:56 -0300
-Message-ID: <87ft23nq3v.fsf@manicouagan.localdomain>
+        Thu, 11 Feb 2021 00:23:24 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UOOwYsg_1613020961;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UOOwYsg_1613020961)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 11 Feb 2021 13:22:41 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Cc:     tianjia.zhang@linux.alibaba.com
+Subject: [PATCH ima-evm-utils v2] ima-evm-utils: Support SM2 algorithm for sign and verify
+Date:   Thu, 11 Feb 2021 13:22:41 +0800
+Message-Id: <20210211052241.91068-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.3.ge56e4f7
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-11_04:2021-02-10,2021-02-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 malwarescore=0 clxscore=1015 priorityscore=1501 spamscore=0
- adultscore=0 phishscore=0 impostorscore=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102110035
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+The combination of SM2 and SM3 algorithms has been implemented in the
+kernel. At present, the ima-evm-utils signature tool does not support
+this combination of algorithms. Because in the current version of
+OpenSSL 1.1.1, the SM2 algorithm and the public key using the EC
+algorithm share the same ID 'EVP_PKEY_EC', and the specific algorithm
+can only be distinguished by the curve name used. This patch supports
+this feature.
 
-Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ src/libimaevm.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-> Update CONFIG_KEXEC_FILE to select CONFIG_HAVE_IMA_KEXEC, if CONFIG_IMA
-> is enabled, to indicate that the IMA measurement log information is
-> present in the device tree for ARM64.
->
-> Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Suggested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-> ---
->  arch/arm64/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-
-Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index fa6c278..589dd09 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -518,6 +518,16 @@ static int verify_hash_v2(const char *file, const unsigned char *hash, int size,
+ 		return -1;
+ 	}
+ 
++#ifdef EVP_PKEY_SM2
++	/* If EC key are used, check whether it is SM2 key */
++	if (EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
++		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
++		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
++		if (curve == NID_sm2)
++			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
++	}
++#endif
++
+ 	st = "EVP_PKEY_CTX_new";
+ 	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
+ 		goto err;
+@@ -932,6 +942,16 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+ 		return -1;
+ 	}
+ 
++#ifdef EVP_PKEY_SM2
++	/* If EC key are used, check whether it is SM2 key */
++	if (EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
++		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
++		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
++		if (curve == NID_sm2)
++			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
++	}
++#endif
++
+ 	calc_keyid_v2(&keyid, name, pkey);
+ 	hdr->keyid = keyid;
+ 
 -- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
+2.19.1.3.ge56e4f7
+
