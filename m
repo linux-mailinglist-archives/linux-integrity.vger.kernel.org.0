@@ -2,256 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD2D3195DF
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Feb 2021 23:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831EA319689
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Feb 2021 00:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbhBKWc4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 11 Feb 2021 17:32:56 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36004 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229478AbhBKWcz (ORCPT
+        id S229837AbhBKXZ5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 11 Feb 2021 18:25:57 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14750 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229787AbhBKXZ4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 11 Feb 2021 17:32:55 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11BMDpfi148712;
-        Thu, 11 Feb 2021 17:32:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ShQRyD10tU91FvYiAUdM/l349mIMyrxrOieoAPMQ+bA=;
- b=rcTKgtCE2Eco+cbCxG91XKOtcKEY9HBvZzp1n4BCqGladxaEFdL+DFYjYTCWGV/lP8tt
- E1GYPHSve99kLogk8igVEuQLSbgQ0+p+ErcPgGJ46g/+U1sEPS0bi3mti0uSZJ3/q8Ul
- G0tuiYb3FagdrOdTdusqRqrR1IlLwsHkAFl9jtp8sQya3W5PyPl8ExPirXtICQnvrUBI
- t2e/+Z9862QxT4jvqWbDUaIxubmdhhI8sb5F6FsqngXjyPM+MVxnT2UcmWnLWdMdM6fd
- 8I4USNsVHj6ek4b1sjrsel8XyiuJkOtYnJLmI5HVtx0nq4tJL0booeZAC7WTIfoSBf52 zQ== 
+        Thu, 11 Feb 2021 18:25:56 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11BND12T019060;
+        Thu, 11 Feb 2021 18:25:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Q3tZs7Ggda0KW9A1uSBOPNOkPbrNTd7b1dOpH8wmYSM=;
+ b=G6UvrJhxqLulUI+OROj5jeuE1ditML5HmF37CO8sWm8zbo794yHg9zIvNDJPtRmVo5rU
+ 7cyQSHy6fw3TXjVSNG274NPZKFhojq29IA2ARerDE6RX1GnHbk10zVMtGvUZFzvvwDTG
+ 3hpJMb9zDyKTpl52UDS6bSJUWp0g13FSXd8xWZFjVehrrAmYx/3dr2Sf1PdimzKavkTc
+ N1NXZdGqotIpgwbFYMaRFra9dZvzqzKuqCwNy7oYdWpIKedliLeOZc7EvuyWJ/bcoslF
+ RbQ6ij5tcUS3VHMKdj9rcE5rPblCaRmdmtqcyIqG/FE87roRpxgY01AZXOCyzafpMcC/ ZA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36nd6d0gca-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36ne2a86y6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 17:32:12 -0500
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11BMECNR149159;
-        Thu, 11 Feb 2021 17:32:12 -0500
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36nd6d0gbw-1
+        Thu, 11 Feb 2021 18:25:13 -0500
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11BNPDbk067480;
+        Thu, 11 Feb 2021 18:25:13 -0500
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36ne2a86xh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 17:32:12 -0500
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11BMRpab025384;
-        Thu, 11 Feb 2021 22:32:11 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01wdc.us.ibm.com with ESMTP id 36hjr9rwqf-1
+        Thu, 11 Feb 2021 18:25:13 -0500
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11BNDLI4028249;
+        Thu, 11 Feb 2021 23:25:11 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 36hskb33pe-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Feb 2021 22:32:11 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11BMWA3m7275144
+        Thu, 11 Feb 2021 23:25:11 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11BNP8W926345748
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Feb 2021 22:32:10 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BBD1712406C;
-        Thu, 11 Feb 2021 22:32:10 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A864C12406B;
-        Thu, 11 Feb 2021 22:32:10 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 11 Feb 2021 22:32:10 +0000 (GMT)
-Subject: Re: [PATCH 5/5] ima: enable loading of build time generated key to
- .ima keyring
-To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org
+        Thu, 11 Feb 2021 23:25:08 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 48CA54203F;
+        Thu, 11 Feb 2021 23:25:08 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B9E642045;
+        Thu, 11 Feb 2021 23:25:06 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.11.205])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 11 Feb 2021 23:25:06 +0000 (GMT)
+Message-ID: <31d434e0861a02b214e3189f958921384aa75362.camel@linux.ibm.com>
+Subject: Re: [PATCH 4/5] keys: define build time generated ephemeral kernel
+ CA key
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
 Cc:     linux-security-module@vger.kernel.org,
         David Howells <dhowells@redhat.com>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Thu, 11 Feb 2021 18:25:05 -0500
+In-Reply-To: <90213e4d-4c47-aec3-46f2-4b8e4ce0838f@linux.ibm.com>
 References: <20210211195435.135582-1-nayna@linux.ibm.com>
- <20210211195435.135582-6-nayna@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <804e0075-e435-f60b-e0a7-a9b48a76ce72@linux.ibm.com>
-Date:   Thu, 11 Feb 2021 17:32:10 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20210211195435.135582-6-nayna@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+         <20210211195435.135582-5-nayna@linux.ibm.com>
+         <90213e4d-4c47-aec3-46f2-4b8e4ce0838f@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
  definitions=2021-02-11_07:2021-02-11,2021-02-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 clxscore=1015 mlxscore=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 impostorscore=0 phishscore=0 spamscore=0
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102110170
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ phishscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102110175
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2/11/21 2:54 PM, Nayna Jain wrote:
-> The kernel currently only loads the kernel module signing key onto
-> the builtin trusted keyring. To support IMA, load the module signing
-> key selectively either onto builtin or ima keyring based on MODULE_SIG
-> or MODULE_APPRAISE_MODSIG config respectively; and loads the CA kernel
-> key onto builtin trusted keyring.
->
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-> ---
->   certs/system_keyring.c        | 56 +++++++++++++++++++++++++++--------
->   include/keys/system_keyring.h |  9 +++++-
->   security/integrity/digsig.c   |  4 +++
->   3 files changed, 55 insertions(+), 14 deletions(-)
->
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index 798291177186..0bbbe501f8a7 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -26,6 +26,7 @@ static struct key *platform_trusted_keys;
->   
->   extern __initconst const u8 system_certificate_list[];
->   extern __initconst const unsigned long system_certificate_list_size;
-> +extern __initconst const unsigned long module_cert_size;
->   
->   /**
->    * restrict_link_to_builtin_trusted - Restrict keyring addition by built in CA
-> @@ -131,19 +132,12 @@ static __init int system_trusted_keyring_init(void)
->    */
->   device_initcall(system_trusted_keyring_init);
->   
-> -/*
-> - * Load the compiled-in list of X.509 certificates.
-> - */
-> -static __init int load_system_certificate_list(void)
-> +static __init int load_cert(const u8 *p, const u8 *end, struct key *keyring,
-> +			    unsigned long flags)
->   {
->   	key_ref_t key;
-> -	const u8 *p, *end;
->   	size_t plen;
->   
-> -	pr_notice("Loading compiled-in X.509 certificates\n");
-> -
-> -	p = system_certificate_list;
-> -	end = p + system_certificate_list_size;
->   	while (p < end) {
->   		/* Each cert begins with an ASN.1 SEQUENCE tag and must be more
->   		 * than 256 bytes in size.
-> @@ -158,16 +152,15 @@ static __init int load_system_certificate_list(void)
->   		if (plen > end - p)
->   			goto dodgy_cert;
->   
-> -		key = key_create_or_update(make_key_ref(builtin_trusted_keys, 1),
-> +		key = key_create_or_update(make_key_ref(keyring, 1),
->   					   "asymmetric",
->   					   NULL,
->   					   p,
->   					   plen,
->   					   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
->   					   KEY_USR_VIEW | KEY_USR_READ),
-> -					   KEY_ALLOC_NOT_IN_QUOTA |
-> -					   KEY_ALLOC_BUILT_IN |
-> -					   KEY_ALLOC_BYPASS_RESTRICTION);
-> +					   flags);
-> +
->   		if (IS_ERR(key)) {
->   			pr_err("Problem loading in-kernel X.509 certificate (%ld)\n",
->   			       PTR_ERR(key));
-> @@ -185,6 +178,43 @@ static __init int load_system_certificate_list(void)
->   	pr_err("Problem parsing in-kernel X.509 certificate list\n");
->   	return 0;
->   }
-> +
-> +__init int load_module_cert(struct key *keyring, unsigned long flags)
-> +{
-> +	const u8 *p, *end;
-> +
-> +	if (!IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG))
-> +		return 0;
-> +
-> +	pr_notice("Loading compiled-in module X.509 certificates\n");
-> +
-> +	p = system_certificate_list;
-> +	end = p + module_cert_size;
-> +	load_cert(p, end, keyring, flags);
-> +
-> +	return 0;
+On Thu, 2021-02-11 at 17:13 -0500, Stefan Berger wrote:
+> On 2/11/21 2:54 PM, Nayna Jain wrote:
+> > Certificates being loaded onto the IMA trusted keyring must be signed by
+> > a key on either the builtin and secondary trusted keyring.
+> >
+> > This patch creates and includes in the kernel image an ephemeral CA
+> > key, at build time when IMA_APPRAISE_MODSIG is enabled.
+> >
+> > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> > ---
 
-See my comment below.
+<snip>
 
+> > diff --git a/certs/Makefile b/certs/Makefile
+> 
+> > @@ -60,14 +78,23 @@ $(obj)/signing_key.pem: $(obj)/x509.genkey
+> >   	@$(kecho) "### needs to be run as root, and uses a hardware random"
+> >   	@$(kecho) "### number generator if one is available."
+> >   	@$(kecho) "###"
+> > +ifeq ($(CONFIG_IMA_APPRAISE_MODSIG),y)
+> > +	# Generate kernel build time CA Certificate.
+> > +	@$(Q)openssl req -new -nodes -utf8 \
+> > +		-$(CONFIG_MODULE_SIG_HASH) -days 36500 \
+> > +		-subj "/CN=Build time autogenerated kernel CA key" \
+> > +		-batch -x509 -config $(obj)/x509.genkey \
+> > +		-outform PEM -out $(CA_KEY) \
+> > +		-keyout $(CA_KEY) -extensions ca_ext \
+> > +		$($(quiet)redirect_openssl)
+> > +endif # CONFIG_IMA_APPRAISE_MODSIG
+> >   	$(Q)openssl req -new -nodes -utf8 \
+> >   		-batch -config $(obj)/x509.genkey \
+> >   		-outform PEM -out $(obj)/signing_key.csr \
+> >   		-keyout $(obj)/signing_key.key -extensions myexts \
+> >   		$($(quiet)redirect_openssl)
+> >   	$(Q)openssl x509 -req -days 36500 -in $(obj)/signing_key.csr \
+> > -		-outform PEM -out $(obj)/signing_key.crt \
+> > -		-signkey $(obj)/signing_key.key \
+> > +		-outform PEM -out $(obj)/signing_key.crt $(SIGNER) \
+> >   		-$(CONFIG_MODULE_SIG_HASH) -extensions myexts \
+> >   		-extfile $(obj)/x509.genkey \
+> >   		$($(quiet)redirect_openssl)
+> 
+> It may make things easier (also below) if the CA was always created and 
+> the kernel signing key was always signed by that CA rather than doing 
+> this only in the IMA_APPRAISE_MODSIG case. Maybe someone else has an 
+> opinion on that?
 
-> +}
-> +
-> +/*
-> + * Load the compiled-in list of X.509 certificates.
-> + */
-> +static __init int load_system_certificate_list(void)
-> +{
-> +	const u8 *p, *end;
-> +
-> +	pr_notice("Loading compiled-in X.509 certificates\n");
-> +
-> +#ifdef CONFIG_MODULE_SIG
-> +	p = system_certificate_list;
-> +#else
-> +	p = system_certificate_list + module_cert_size;
-> +#endif
-> +	end = p + system_certificate_list_size;
-> +	load_cert(p, end, builtin_trusted_keys, KEY_ALLOC_NOT_IN_QUOTA |
-> +						KEY_ALLOC_BUILT_IN |
-> +						KEY_ALLOC_BYPASS_RESTRICTION);
-> +	return 0;
+Thanks, Stefan.  It would definitely simplify the code.  We wanted to
+minimize the code change and solicit feedback, before making such a
+change.
 
-
-The old  load_system_certificate_list always returned 0 and the new 
-load_cert also does. You could just do 'return load_cert(p, ...)' here 
-and still get the 0.
-
-
-
-> +}
->   late_initcall(load_system_certificate_list);
->   
->   #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.h
-> index fb8b07daa9d1..e91c03376599 100644
-> --- a/include/keys/system_keyring.h
-> +++ b/include/keys/system_keyring.h
-> @@ -16,9 +16,16 @@ extern int restrict_link_by_builtin_trusted(struct key *keyring,
->   					    const struct key_type *type,
->   					    const union key_payload *payload,
->   					    struct key *restriction_key);
-> -
-> +extern __init int load_module_cert(struct key *keyring, unsigned long flags);
->   #else
->   #define restrict_link_by_builtin_trusted restrict_link_reject
-> +
-> +static inline __init int load_module_cert(struct key *keyring,
-> +					  unsigned long flags)
-> +{
-> +	return 0;
-> +}
-> +
->   #endif
->   
->   #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
-> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-> index 0f518dcfde05..4009d1e33fe0 100644
-> --- a/security/integrity/digsig.c
-> +++ b/security/integrity/digsig.c
-> @@ -111,8 +111,12 @@ static int __init __integrity_init_keyring(const unsigned int id,
->   	} else {
->   		if (id == INTEGRITY_KEYRING_PLATFORM)
->   			set_platform_trusted_keys(keyring[id]);
-> +		if (id == INTEGRITY_KEYRING_IMA)
-> +			load_module_cert(keyring[id], KEY_ALLOC_NOT_IN_QUOTA);
->   	}
->   
-> +	pr_info("Loading key to ima keyring\n");
-> +
->   	return err;
->   }
->   
-
-Otherwise lgtm.
-
+Mimi
 
