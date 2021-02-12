@@ -2,85 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C0B31A863
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Feb 2021 00:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6930131A864
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Feb 2021 00:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbhBLXq6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Feb 2021 18:46:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51902 "EHLO mail.kernel.org"
+        id S229798AbhBLXsF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Feb 2021 18:48:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51948 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229497AbhBLXq6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Feb 2021 18:46:58 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5A25F64D9A;
-        Fri, 12 Feb 2021 23:46:17 +0000 (UTC)
+        id S229767AbhBLXsE (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 12 Feb 2021 18:48:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8AB3E64DCF;
+        Fri, 12 Feb 2021 23:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613173577;
-        bh=A+JkqwrwmUynFKQPXSuQrAHNjKCgXWo26xLnZdfjpW0=;
+        s=k20201202; t=1613173644;
+        bh=xKxZHu5u1kUN06z90+05/IXtEvmadhO6jaD+PVJY1RE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fEkKEgQ+mt54ZAE87wJdaroWrXKLx0jd4QhaUHaUFE/HeJNb21uSAq7laCUbq9f37
-         Al0BlwPDZECpzRFgumKMZWDxU7w4i+4a3pz11pHgiVaAVx1Elfh6n8BH02/bfm4R1R
-         evI9gYSA8Qv1eh5Znh4l0aQ7JPR4HhUKSzc4J9vU8pXFb5TizxjfE5KgAsk8ZsD1XK
-         8I29hbb8ueuduKQSfRWtag1t7/1ekJh79GL0B/Tw0HF5S5h+2ItAidn38PJQkEgaYI
-         fWKwlX16wGrSMND4OvH7xM1WTG2wrXgCJIXofXKw1DOnxWW8h0y3qKJRUHYNXhg3e0
-         TH05UIVGmeRKg==
-Date:   Sat, 13 Feb 2021 01:46:08 +0200
+        b=Webl567KKKD+O/EplL47+ZNU0enwE3KwX1dkpf1FNV44XJWUFykJG9txa49s4crVF
+         lMXnrHzc2/6wt3Qw1y4UD/PVNJC0pU00FK6kKo0jDHDP/rBganpLHzvtbIUt2GW+fI
+         O/UPv9Fv6YJS/wdMri6gA8K1YA/5Q4dwjKmoFJkcKPjOrGWVvNk2+7huXPMgBTTrcv
+         6Y5WPRxQ6sy3IpudqHHu5ldHk9DjJgw+p7SsBvYdbnSh6Es2Uh6QxmgQPuTnqKfxeb
+         2/bzdDaS/Vh0hZGqF1Yjx9y1f3p7zKxvbr4BXNBM0rsvSMZIZw/YrCEqhaPF8XiXM1
+         AaoT+Om/goJKA==
+Date:   Sat, 13 Feb 2021 01:47:14 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "florian.manoel@siemens.com" <florian.manoel@siemens.com>,
-        apronin@chromium.org
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "Fuchs, Andreas" <andreas.fuchs@sit.fraunhofer.de>,
-        "Peter.Huewe@infineon.com" <Peter.Huewe@infineon.com>,
-        "joshz@google.com" <joshz@google.com>
-Subject: Re: TPM V2: kernel panic on linux reboot
-Message-ID: <YCcTQFkAy+JMp7a5@kernel.org>
-References: <VI1PR10MB2559EB47FE26FA85EB4B4D4484A70@VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM>
- <VI1PR10MB2559EA5D0EC208129AA503F684A70@VI1PR10MB2559.EURPRD10.PROD.OUTLOOK.COM>
- <YASDd5pphvndrsm+@kernel.org>
- <AM0PR10MB25481FFED2CDFBEC5596098F84BB0@AM0PR10MB2548.EURPRD10.PROD.OUTLOOK.COM>
- <YBSZWPNUV2y09Yg0@kernel.org>
- <AM0PR10MB254856FDA3E44D4373C17451848B9@AM0PR10MB2548.EURPRD10.PROD.OUTLOOK.COM>
+To:     Nayna Jain <nayna@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/5] keys: cleanup build time module signing keys
+Message-ID: <YCcTgh2QimyO13DO@kernel.org>
+References: <20210211195435.135582-1-nayna@linux.ibm.com>
+ <20210211195435.135582-2-nayna@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM0PR10MB254856FDA3E44D4373C17451848B9@AM0PR10MB2548.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <20210211195435.135582-2-nayna@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Feb 12, 2021 at 07:20:02AM +0000, florian.manoel@siemens.com wrote:
-> Hi,
-> 
-> => Last update and happy end
-> 
-> To remember what the issue was : kernel panic on reboot on a custom board equipped with CPU NXP LS1043a and TMP V2.0 Infineon slb9670 (spi interface).
-> What we did but didn't fix the issue : update our kernel to 5.10.8 => panic still occurs
-> What we did and fix the issue => use this patch : https://lkml.org/lkml/2020/7/9/1242
+On Thu, Feb 11, 2021 at 02:54:31PM -0500, Nayna Jain wrote:
+> The "mrproper" target is still looking for build time generated keys
+> in the old path instead of certs/ directory.
+> This patch fixes the path as well removes the names of the files which
+> are no longer generated.
 
-Andrey,
+"Fix the path..."
 
-I re-read the thread, and it's been a while and I'm not sure if
-I fully get my old review comments.
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> Fixes: 28a68f828266 ("modsign: Use single PEM file for autogenerated key")
 
-Your commit message refers to these commits:
-
-A. b4c6230bb0ba spi: Fix controller unregister order
-B. f40913d2dca1 spi: pxa2xx: Fix controller unregister order
-
-So I presume that either A or B causes this sequence to trigger:
-
-1. tpm_class_shutdown()
-2. tpm_del_char_device()
-
-... and either A or B causes this sequence to trigger:
-
-1. tpm_class_shutdown()
-2. tpm_del_char_device()
-
-So:
-
-- Does that fix bundle two separate bug fixes, and if yes, which
-  on is associated with which?
-- Why do they cause the sequences to trigger, and why these sequences
-  did not trigger before?
+Swap the order.
 
 /Jarkko
+
+> ---
+>  Makefile | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index ade44ac4cc2f..af18aab6bbee 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1472,9 +1472,9 @@ MRPROPER_FILES += include/config include/generated          \
+>  		  debian snap tar-install \
+>  		  .config .config.old .version \
+>  		  Module.symvers \
+> -		  signing_key.pem signing_key.priv signing_key.x509	\
+> -		  x509.genkey extra_certificates signing_key.x509.keyid	\
+> -		  signing_key.x509.signer vmlinux-gdb.py \
+> +		  certs/signing_key.pem certs/signing_key.x509 \
+> +		  certs/x509.genkey \
+> +		  vmlinux-gdb.py \
+>  		  *.spec
+>  
+>  # Directories & files removed with 'make distclean'
+> -- 
+> 2.18.1
+> 
+> 
