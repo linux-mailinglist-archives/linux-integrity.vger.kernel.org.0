@@ -2,276 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9B331A2E5
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Feb 2021 17:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB79231A36F
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Feb 2021 18:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbhBLQj4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Feb 2021 11:39:56 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:33330 "EHLO
+        id S229773AbhBLRTp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Feb 2021 12:19:45 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:38426 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbhBLQh7 (ORCPT
+        with ESMTP id S229559AbhBLRTm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Feb 2021 11:37:59 -0500
-Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 976E120B6C40;
-        Fri, 12 Feb 2021 08:37:15 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 976E120B6C40
+        Fri, 12 Feb 2021 12:19:42 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C5C7020B6C40;
+        Fri, 12 Feb 2021 09:19:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C5C7020B6C40
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1613147835;
-        bh=4dYjaGkqbmN5KWpdXHTWdgYhxKJ8p+ZKniaAve3eISc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=c8KR/MyefO0xSn/gK0vb9c5lXr2Y2Fc2bUVYRAa5E5hQNMqtTze1Fo4KWaMtHVLwz
-         qwmWJhWVQ6MEpeCmbVVkoi4fBBOriTYmL7N1fyKHvX6RAE5u+AXIA26HO+0QoOL2gE
-         oMW3pw71C16b0UncxaJLzAMMzgJkPjr1Bit+1Bak=
+        s=default; t=1613150341;
+        bh=ymZC2uSu1WhDmmhzMMk+j693znWvxWsQ0oRGutDXsUU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=UFctr/CjGfWUVNUkmlcZdiSnRimSYXYpf7boiSafTdIohyW4op8aqXiOPIXG7tD9w
+         2+CCCjIQwjmCzRCgCyJOtrEfXaan1toeQ6tewZfvQeoz8k1bHJnQ/MjJqkkzxmgjf+
+         fBeDNBT4ANHJIZyDIIuAoR7Wx92T/5Rbhxu+1Yog=
+Subject: Re: [PATCH v17 02/10] of: Add a common kexec FDT setup function
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>, Joe Perches <joe@perches.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        James Morse <james.morse@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        vincenzo.frascino@arm.com, Mark Rutland <mark.rutland@arm.com>,
+        dmitry.kasatkin@gmail.com, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Allison Randal <allison@lohutok.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, tao.li@vivo.com,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        balajib@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <20210209182200.30606-1-nramas@linux.microsoft.com>
+ <20210209182200.30606-3-nramas@linux.microsoft.com>
+ <87k0reozwh.fsf@manicouagan.localdomain>
+ <8a3aa3d2-2eba-549a-9970-a2b0fe3586c9@linux.microsoft.com>
+ <CAL_JsqJ3sDzjsJXtb6EzE77BL+PhUxDJYUngLTqcm0popd7Ajw@mail.gmail.com>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     zohar@linux.ibm.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com
-Cc:     tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, sashal@kernel.org, jmorris@namei.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] selinux: measure state and policy capabilities
-Date:   Fri, 12 Feb 2021 08:37:09 -0800
-Message-Id: <20210212163709.3139-1-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.30.0
+Message-ID: <55685b61-dac0-2f24-f74a-939acf74a4f2@linux.microsoft.com>
+Date:   Fri, 12 Feb 2021 09:19:00 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqJ3sDzjsJXtb6EzE77BL+PhUxDJYUngLTqcm0popd7Ajw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SELinux stores the configuration state and the policy capabilities
-in kernel memory.  Changes to this data at runtime would have an impact
-on the security guarantees provided by SELinux.  Measuring this data
-through IMA subsystem provides a tamper-resistant way for
-an attestation service to remotely validate it at runtime.
+On 2/12/21 6:38 AM, Rob Herring wrote:
+> On Thu, Feb 11, 2021 at 7:17 PM Lakshmi Ramasubramanian
+> <nramas@linux.microsoft.com> wrote:
+>>
+>> On 2/11/21 5:09 PM, Thiago Jung Bauermann wrote:
+>>>
+>>> There's actually a complication that I just noticed and needs to be
+>>> addressed. More below.
+>>>
+>>
+>> <...>
+>>
+>>>> +
+>>>> +/*
+>>>> + * of_kexec_alloc_and_setup_fdt - Alloc and setup a new Flattened Device Tree
+>>>> + *
+>>>> + * @image:          kexec image being loaded.
+>>>> + * @initrd_load_addr:       Address where the next initrd will be loaded.
+>>>> + * @initrd_len:             Size of the next initrd, or 0 if there will be none.
+>>>> + * @cmdline:                Command line for the next kernel, or NULL if there will
+>>>> + *                  be none.
+>>>> + *
+>>>> + * Return: fdt on success, or NULL errno on error.
+>>>> + */
+>>>> +void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
+>>>> +                               unsigned long initrd_load_addr,
+>>>> +                               unsigned long initrd_len,
+>>>> +                               const char *cmdline)
+>>>> +{
+>>>> +    void *fdt;
+>>>> +    int ret, chosen_node;
+>>>> +    const void *prop;
+>>>> +    unsigned long fdt_size;
+>>>> +
+>>>> +    fdt_size = fdt_totalsize(initial_boot_params) +
+>>>> +               (cmdline ? strlen(cmdline) : 0) +
+>>>> +               FDT_EXTRA_SPACE;
+>>>
+>>> Just adding 4 KB to initial_boot_params won't be enough for crash
+>>> kernels on ppc64. The current powerpc code doubles the size of
+>>> initial_boot_params (which is normally larger than 4 KB) and even that
+>>> isn't enough. A patch was added to powerpc/next today which uses a more
+>>> precise (but arch-specific) formula:
+>>>
+>>> https://lore.kernel.org/linuxppc-dev/161243826811.119001.14083048209224609814.stgit@hbathini/
+>>>
+>>> So I believe we need a hook here where architectures can provide their
+>>> own specific calculation for the size of the fdt. Perhaps a weakly
+>>> defined function providing a default implementation which an
+>>> arch-specific file can override (a la arch_kexec_kernel_image_load())?
+>>>
+>>> Then the powerpc specific hook would be the kexec_fdt_totalsize_ppc64()
+>>> function from the patch I linked above.
+>>>
+>>
+>> Do you think it'd better to add "fdt_size" parameter to
+>> of_kexec_alloc_and_setup_fdt() so that the caller can provide the
+>> desired FDT buffer size?
+> 
+> Yes, I guess so. But please define the param as extra size, not total
+> size. The kernel command line size addition can be in the common code.
 
-Measure the configuration state and policy capabilities by calling
-the IMA hook ima_measure_critical_data().
+Will do. Just to clarify -
 
-To enable SELinux data measurement, the following steps are required:
+The common code will do:
 
- 1, Add "ima_policy=critical_data" to the kernel command line arguments
-    to enable measuring SELinux data at boot time.
-    For example,
-      BOOT_IMAGE=/boot/vmlinuz-5.11.0-rc3+ root=UUID=fd643309-a5d2-4ed3-b10d-3c579a5fab2f ro nomodeset security=selinux ima_policy=critical_data
+fdt_totalsize(initial_boot_params) + strlen(cmdline) + extra_fdt_size
 
- 2, Add the following rule to /etc/ima/ima-policy
-       measure func=CRITICAL_DATA label=selinux
+The caller will pass "extra_fdt_size"
+ARM64 => 4KB
+PPC64 => fdt_totalsize(initial_boot_params) - which will be updated when 
+the patch Thiago had referred to is merged.
 
-Sample measurement of SELinux state and policy capabilities:
+> 
+> The above change is also going to conflict, so I think this may have
+> to wait. Or I'll take the common and arm bits and powerpc can be
+> converted next cycle (or after the merge window).
+> 
 
-10 2122...65d8 ima-buf sha256:13c2...1292 selinux-state 696e...303b
+thanks.
 
-Execute the following command to extract the measured data
-from the IMA's runtime measurements list:
+  -lakshmi
 
-  grep "selinux-state" /sys/kernel/security/integrity/ima/ascii_runtime_measurements | tail -1 | cut -d' ' -f 6 | xxd -r -p
-
-The output should be a list of key-value pairs. For example,
- initialized=1;enforcing=0;checkreqprot=1;network_peer_controls=1;open_perms=1;extended_socket_class=1;always_check_network=0;cgroup_seclabel=1;nnp_nosuid_transition=1;genfs_seclabel_symlinks=0;
-
-To verify the measurement is consistent with the current SELinux state
-reported on the system, compare the integer values in the following
-files with those set in the IMA measurement (using the following commands):
-
- - cat /sys/fs/selinux/enforce
- - cat /sys/fs/selinux/checkreqprot
- - cat /sys/fs/selinux/policy_capabilities/[capability_file]
-
-Note that the actual verification would be against an expected state
-and done on a separate system (likely an attestation server) requiring
-"initialized=1;enforcing=1;checkreqprot=0;"
-for a secure state and then whatever policy capabilities are actually
-set in the expected policy (which can be extracted from the policy
-itself via seinfo, for example).
-
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Suggested-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-Suggested-by: Paul Moore <paul@paul-moore.com>
----
- security/selinux/ima.c         | 87 ++++++++++++++++++++++++++++++++--
- security/selinux/include/ima.h |  6 +++
- security/selinux/selinuxfs.c   |  6 +++
- security/selinux/ss/services.c |  2 +-
- 4 files changed, 96 insertions(+), 5 deletions(-)
-
-diff --git a/security/selinux/ima.c b/security/selinux/ima.c
-index 03715893ff97..34d421861bfc 100644
---- a/security/selinux/ima.c
-+++ b/security/selinux/ima.c
-@@ -13,18 +13,83 @@
- #include "ima.h"
- 
- /*
-- * selinux_ima_measure_state - Measure hash of the SELinux policy
-+ * selinux_ima_collect_state - Read selinux configuration settings
-  *
-- * @state: selinux state struct
-+ * @state: selinux_state
-  *
-- * NOTE: This function must be called with policy_mutex held.
-+ * On success returns the configuration settings string.
-+ * On error, returns NULL.
-  */
--void selinux_ima_measure_state(struct selinux_state *state)
-+static char *selinux_ima_collect_state(struct selinux_state *state)
- {
-+	const char *on = "=1;", *off = "=0;";
-+	char *buf;
-+	int buf_len, len, i, rc;
-+
-+	buf_len = strlen("initialized=0;enforcing=0;checkreqprot=0;") + 1;
-+
-+	len = strlen(on);
-+	for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++)
-+		buf_len += strlen(selinux_policycap_names[i]) + len;
-+
-+	buf = kzalloc(buf_len, GFP_KERNEL);
-+	if (!buf)
-+		return NULL;
-+
-+	rc = strscpy(buf, "initialized", buf_len);
-+	WARN_ON(rc < 0);
-+
-+	rc = strlcat(buf, selinux_initialized(state) ? on : off, buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	rc = strlcat(buf, "enforcing", buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	rc = strlcat(buf, enforcing_enabled(state) ? on : off, buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	rc = strlcat(buf, "checkreqprot", buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	rc = strlcat(buf, checkreqprot_get(state) ? on : off, buf_len);
-+	WARN_ON(rc >= buf_len);
-+
-+	for (i = 0; i < __POLICYDB_CAPABILITY_MAX; i++) {
-+		rc = strlcat(buf, selinux_policycap_names[i], buf_len);
-+		WARN_ON(rc >= buf_len);
-+
-+		rc = strlcat(buf, state->policycap[i] ? on : off, buf_len);
-+		WARN_ON(rc >= buf_len);
-+	}
-+
-+	return buf;
-+}
-+
-+/*
-+ * selinux_ima_measure_state_locked - Measure SELinux state and hash of policy
-+ *
-+ * @state: selinux state struct
-+ */
-+void selinux_ima_measure_state_locked(struct selinux_state *state)
-+{
-+	char *state_str = NULL;
- 	void *policy = NULL;
- 	size_t policy_len;
- 	int rc = 0;
- 
-+	WARN_ON(!mutex_is_locked(&state->policy_mutex));
-+
-+	state_str = selinux_ima_collect_state(state);
-+	if (!state_str) {
-+		pr_err("SELinux: %s: failed to read state.\n", __func__);
-+		return;
-+	}
-+
-+	ima_measure_critical_data("selinux", "selinux-state",
-+				  state_str, strlen(state_str), false);
-+
-+	kfree(state_str);
-+
- 	/*
- 	 * Measure SELinux policy only after initialization is completed.
- 	 */
-@@ -42,3 +107,17 @@ void selinux_ima_measure_state(struct selinux_state *state)
- 
- 	vfree(policy);
- }
-+
-+/*
-+ * selinux_ima_measure_state - Measure SELinux state and hash of policy
-+ *
-+ * @state: selinux state struct
-+ */
-+void selinux_ima_measure_state(struct selinux_state *state)
-+{
-+	WARN_ON(mutex_is_locked(&state->policy_mutex));
-+
-+	mutex_lock(&state->policy_mutex);
-+	selinux_ima_measure_state_locked(state);
-+	mutex_unlock(&state->policy_mutex);
-+}
-diff --git a/security/selinux/include/ima.h b/security/selinux/include/ima.h
-index d69c36611423..75ca92b4a462 100644
---- a/security/selinux/include/ima.h
-+++ b/security/selinux/include/ima.h
-@@ -15,10 +15,16 @@
- 
- #ifdef CONFIG_IMA
- extern void selinux_ima_measure_state(struct selinux_state *selinux_state);
-+extern void selinux_ima_measure_state_locked(
-+			struct selinux_state *selinux_state);
- #else
- static inline void selinux_ima_measure_state(struct selinux_state *selinux_state)
- {
- }
-+static inline void selinux_ima_measure_state_locked(
-+			struct selinux_state *selinux_state)
-+{
-+}
- #endif
- 
- #endif	/* _SELINUX_IMA_H_ */
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index 4bde570d56a2..26ec58593ba1 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -41,6 +41,7 @@
- #include "security.h"
- #include "objsec.h"
- #include "conditional.h"
-+#include "ima.h"
- 
- enum sel_inos {
- 	SEL_ROOT_INO = 2,
-@@ -182,6 +183,8 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
- 		selinux_status_update_setenforce(state, new_value);
- 		if (!new_value)
- 			call_blocking_lsm_notifier(LSM_POLICY_CHANGE, NULL);
-+
-+		selinux_ima_measure_state(state);
- 	}
- 	length = count;
- out:
-@@ -762,6 +765,9 @@ static ssize_t sel_write_checkreqprot(struct file *file, const char __user *buf,
- 
- 	checkreqprot_set(fsi->state, (new_value ? 1 : 0));
- 	length = count;
-+
-+	selinux_ima_measure_state(fsi->state);
-+
- out:
- 	kfree(page);
- 	return length;
-diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-index 2106b5d383e7..cb2866489363 100644
---- a/security/selinux/ss/services.c
-+++ b/security/selinux/ss/services.c
-@@ -2179,7 +2179,7 @@ static void selinux_notify_policy_change(struct selinux_state *state,
- 	selinux_status_update_policyload(state, seqno);
- 	selinux_netlbl_cache_invalidate();
- 	selinux_xfrm_notify_policyload();
--	selinux_ima_measure_state(state);
-+	selinux_ima_measure_state_locked(state);
- }
- 
- void selinux_policy_commit(struct selinux_state *state,
--- 
-2.30.0
 
