@@ -2,208 +2,222 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC24231A86D
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Feb 2021 00:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277DA31A880
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Feb 2021 00:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbhBLXtN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Feb 2021 18:49:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52086 "EHLO mail.kernel.org"
+        id S231200AbhBLX4U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Feb 2021 18:56:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229602AbhBLXtM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Feb 2021 18:49:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 19CD864E2A;
-        Fri, 12 Feb 2021 23:48:30 +0000 (UTC)
+        id S229679AbhBLX4S (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 12 Feb 2021 18:56:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DFA3364E25;
+        Fri, 12 Feb 2021 23:55:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613173711;
-        bh=OAq5dOrNvnWKNrhHL3ue9iqqdD8L+U4dRz2dwfyWJBg=;
+        s=k20201202; t=1613174137;
+        bh=qB6dyxCgCs6hpdMfaqAM+5cZxOG0rVPh2DI+4rxPH7U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YgGj2Ukcpv+DQ5OUqWhyIXB3w3IZsYUlytYZK2OuTayblpjWl3Mvd01gEKaeVD+gh
-         7fzFmh4fFEiYXc0IsWavyYuFV3QQYUh1oqSVyAiSmKSsUnbbdPi7hT62Tb2YG+Klvf
-         8nytsi+6mUd2r11TJminF7fFwYSSD/93G80BIFBiUxYKrC/ioLZi1aOGUnganpEy+w
-         taqQENDxD82CKC2Sp70TDO+gXbvUDb/3ieo3q45kRsmnk0OviPmKNJdBPIQ1tbxe23
-         +SqVmLrTvZlsPfh3YNLOGtm30HuSl95m9iKkz0wtWBKJyEiYnPwgd2Or9P1OFRZeyi
-         FJDzbA1ctIu4w==
-Date:   Sat, 13 Feb 2021 01:48:22 +0200
+        b=BZyoiIUmJE83cjcXVkT2x2L9I+aJLnwkubehxYHjFxjKKutrqtjYlojrVKQgUoIDE
+         jLdcQ/lLzERk+34spSAWv8NFJfj6RCNOf2pA+uGcGv8rPV50tfu4Ydn40skRHi3+Hw
+         WkLc4apR0X0QTBMBeEZCyz/mlBIPWREr2VeahlftsEmfQB3ff94d+hGm5zOe4TQfNq
+         /HOiBjCyf9qDLOijlpkf1k0jYRGKS8jlrQ8/w9Zk/rIRSCFFhm0Q74BOdFH0N5NRW9
+         Np416mQ48jXj4nqFTR6etvjsT2u9WBwBFHKP8hJcRb5RFSBBs9iZnppw1UOy9R/hvT
+         pSO4KaEM5dWbg==
+Date:   Sat, 13 Feb 2021 01:55:28 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Nayna Jain <nayna@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/5] ima: enable loading of build time generated key to
- .ima keyring
-Message-ID: <YCcTxu1r5ABPMLOR@kernel.org>
-References: <20210211195435.135582-1-nayna@linux.ibm.com>
- <20210211195435.135582-6-nayna@linux.ibm.com>
+To:     Lukasz Majczak <lma@semihalf.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Tj <ml.linux@elloe.vision>, Dirk Gouders <dirk@gouders.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Radoslaw Biernacki <rad@semihalf.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Alex Levin <levinale@google.com>, upstream@semihalf.com
+Subject: Re: [PATCH v5] tpm_tis: Add missing
+ tpm_request/relinquish_locality() calls
+Message-ID: <YCcVcA876iJesEW5@kernel.org>
+References: <20210212110600.19216-1-lma@semihalf.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210211195435.135582-6-nayna@linux.ibm.com>
+In-Reply-To: <20210212110600.19216-1-lma@semihalf.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 11, 2021 at 02:54:35PM -0500, Nayna Jain wrote:
-> The kernel currently only loads the kernel module signing key onto
-> the builtin trusted keyring. To support IMA, load the module signing
-> key selectively either onto builtin or ima keyring based on MODULE_SIG
-                                         ~~~
-                                         IMA
-
-
-> or MODULE_APPRAISE_MODSIG config respectively; and loads the CA kernel
-> key onto builtin trusted keyring.
+On Fri, Feb 12, 2021 at 12:06:00PM +0100, Lukasz Majczak wrote:
+> There are missing calls to tpm_request_locality() before the calls to
+> the tpm_get_timeouts() and tpm_tis_probe_irq_single() - both functions
+> internally send commands to the tpm using tpm_tis_send_data()
+> which in turn, at the very beginning, calls the tpm_tis_status().
+> This one tries to read TPM_STS register, what fails and propagates
+> this error upward. The read fails due to lack of acquired locality,
+> as it is described in
+> TCG PC Client Platform TPM Profile (PTP) Specification,
+> paragraph 6.1 FIFO Interface Locality Usage per Register,
+> Table 39 Register Behavior Based on Locality Setting for FIFO
+> - a read attempt to TPM_STS_x Registers returns 0xFF in case of lack
+> of locality. The described situation manifests itself with
+> the following warning trace:
 > 
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> [    4.324298] TPM returned invalid status
+> [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
 
-/Jarkko
+The commit message is has great description  of the background, but
+it does not have description what the commit does. Please describe
+this in imperative form, e.g. "Export tpm_request_locality() and ..."
+and "Call tpm_request_locality() before ...". You get the idea.
+
+It's also lacking expalanation of the implementation path, i.e.
+why you are not using tpm_chip_start() and tpm_chip_stop().
+
+> 
+> Tested on Samsung Chromebook Pro (Caroline), TPM 1.2 (SLB 9670)
+
+Empty line here.
+
+Also, add:
+
+Cc: stable@vger.kernel.org
+
+> Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
+
+Remove empty line.
+
+> Signed-off-by: Lukasz Majczak <lma@semihalf.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 
 > ---
->  certs/system_keyring.c        | 56 +++++++++++++++++++++++++++--------
->  include/keys/system_keyring.h |  9 +++++-
->  security/integrity/digsig.c   |  4 +++
->  3 files changed, 55 insertions(+), 14 deletions(-)
 > 
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index 798291177186..0bbbe501f8a7 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -26,6 +26,7 @@ static struct key *platform_trusted_keys;
+> Hi
+> 
+> I have tried to clean all the pointed issues, but decided to stay with 
+> tpm_request/relinquish_locality() calls instead of using tpm_chip_start/stop(),
+> the rationale behind this is that, in this case only locality is requested, there
+> is no need to enable/disable the clock, the similar case is present in
+> the probe_itpm() function.
+
+I would prefer to use the "same same" if it does not cause any extra harm
+instead of new exports. That will also make the fix more compact. So don't
+agree with this reasoning. Also the commit message lacks *any* reasoning.
+
+> One more clarification is that, the TPM present on my test machine is the SLB 9670
+> (not Cr50).
+> 
+> Best regards,
+> Lukasz
+> 
+> Changes:
+> v4->v5:
+> * Fixed style, typos, clarified commit message
+> 
+>  drivers/char/tpm/tpm-chip.c      |  6 ++++--
+>  drivers/char/tpm/tpm-interface.c | 13 ++++++++++---
+>  drivers/char/tpm/tpm.h           |  2 ++
+>  drivers/char/tpm/tpm_tis_core.c  | 14 +++++++++++---
+>  4 files changed, 27 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index ddaeceb7e109..ce9c2650fbe5 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -32,7 +32,7 @@ struct class *tpm_class;
+>  struct class *tpmrm_class;
+>  dev_t tpm_devt;
 >  
->  extern __initconst const u8 system_certificate_list[];
->  extern __initconst const unsigned long system_certificate_list_size;
-> +extern __initconst const unsigned long module_cert_size;
->  
->  /**
->   * restrict_link_to_builtin_trusted - Restrict keyring addition by built in CA
-> @@ -131,19 +132,12 @@ static __init int system_trusted_keyring_init(void)
->   */
->  device_initcall(system_trusted_keyring_init);
->  
-> -/*
-> - * Load the compiled-in list of X.509 certificates.
-> - */
-> -static __init int load_system_certificate_list(void)
-> +static __init int load_cert(const u8 *p, const u8 *end, struct key *keyring,
-> +			    unsigned long flags)
+> -static int tpm_request_locality(struct tpm_chip *chip)
+> +int tpm_request_locality(struct tpm_chip *chip)
 >  {
->  	key_ref_t key;
-> -	const u8 *p, *end;
->  	size_t plen;
+>  	int rc;
 >  
-> -	pr_notice("Loading compiled-in X.509 certificates\n");
-> -
-> -	p = system_certificate_list;
-> -	end = p + system_certificate_list_size;
->  	while (p < end) {
->  		/* Each cert begins with an ASN.1 SEQUENCE tag and must be more
->  		 * than 256 bytes in size.
-> @@ -158,16 +152,15 @@ static __init int load_system_certificate_list(void)
->  		if (plen > end - p)
->  			goto dodgy_cert;
->  
-> -		key = key_create_or_update(make_key_ref(builtin_trusted_keys, 1),
-> +		key = key_create_or_update(make_key_ref(keyring, 1),
->  					   "asymmetric",
->  					   NULL,
->  					   p,
->  					   plen,
->  					   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
->  					   KEY_USR_VIEW | KEY_USR_READ),
-> -					   KEY_ALLOC_NOT_IN_QUOTA |
-> -					   KEY_ALLOC_BUILT_IN |
-> -					   KEY_ALLOC_BYPASS_RESTRICTION);
-> +					   flags);
-> +
->  		if (IS_ERR(key)) {
->  			pr_err("Problem loading in-kernel X.509 certificate (%ld)\n",
->  			       PTR_ERR(key));
-> @@ -185,6 +178,43 @@ static __init int load_system_certificate_list(void)
->  	pr_err("Problem parsing in-kernel X.509 certificate list\n");
+> @@ -46,8 +46,9 @@ static int tpm_request_locality(struct tpm_chip *chip)
+>  	chip->locality = rc;
 >  	return 0;
 >  }
-> +
-> +__init int load_module_cert(struct key *keyring, unsigned long flags)
-> +{
-> +	const u8 *p, *end;
-> +
-> +	if (!IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG))
-> +		return 0;
-> +
-> +	pr_notice("Loading compiled-in module X.509 certificates\n");
-> +
-> +	p = system_certificate_list;
-> +	end = p + module_cert_size;
-> +	load_cert(p, end, keyring, flags);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Load the compiled-in list of X.509 certificates.
-> + */
-> +static __init int load_system_certificate_list(void)
-> +{
-> +	const u8 *p, *end;
-> +
-> +	pr_notice("Loading compiled-in X.509 certificates\n");
-> +
-> +#ifdef CONFIG_MODULE_SIG
-> +	p = system_certificate_list;
-> +#else
-> +	p = system_certificate_list + module_cert_size;
-> +#endif
-> +	end = p + system_certificate_list_size;
-> +	load_cert(p, end, builtin_trusted_keys, KEY_ALLOC_NOT_IN_QUOTA |
-> +						KEY_ALLOC_BUILT_IN |
-> +						KEY_ALLOC_BYPASS_RESTRICTION);
-> +	return 0;
-> +}
->  late_initcall(load_system_certificate_list);
+> +EXPORT_SYMBOL_GPL(tpm_request_locality);
 >  
->  #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.h
-> index fb8b07daa9d1..e91c03376599 100644
-> --- a/include/keys/system_keyring.h
-> +++ b/include/keys/system_keyring.h
-> @@ -16,9 +16,16 @@ extern int restrict_link_by_builtin_trusted(struct key *keyring,
->  					    const struct key_type *type,
->  					    const union key_payload *payload,
->  					    struct key *restriction_key);
-> -
-> +extern __init int load_module_cert(struct key *keyring, unsigned long flags);
->  #else
->  #define restrict_link_by_builtin_trusted restrict_link_reject
-> +
-> +static inline __init int load_module_cert(struct key *keyring,
-> +					  unsigned long flags)
-> +{
-> +	return 0;
-> +}
-> +
->  #endif
+> -static void tpm_relinquish_locality(struct tpm_chip *chip)
+> +void tpm_relinquish_locality(struct tpm_chip *chip)
+>  {
+>  	int rc;
 >  
->  #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
-> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-> index 0f518dcfde05..4009d1e33fe0 100644
-> --- a/security/integrity/digsig.c
-> +++ b/security/integrity/digsig.c
-> @@ -111,8 +111,12 @@ static int __init __integrity_init_keyring(const unsigned int id,
->  	} else {
->  		if (id == INTEGRITY_KEYRING_PLATFORM)
->  			set_platform_trusted_keys(keyring[id]);
-> +		if (id == INTEGRITY_KEYRING_IMA)
-> +			load_module_cert(keyring[id], KEY_ALLOC_NOT_IN_QUOTA);
->  	}
+> @@ -60,6 +61,7 @@ static void tpm_relinquish_locality(struct tpm_chip *chip)
 >  
-> +	pr_info("Loading key to ima keyring\n");
+>  	chip->locality = -1;
+>  }
+> +EXPORT_SYMBOL_GPL(tpm_relinquish_locality);
+>  
+>  static int tpm_cmd_ready(struct tpm_chip *chip)
+>  {
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 1621ce818705..2a9001d329f2 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -241,10 +241,17 @@ int tpm_get_timeouts(struct tpm_chip *chip)
+>  	if (chip->flags & TPM_CHIP_FLAG_HAVE_TIMEOUTS)
+>  		return 0;
+>  
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+>  		return tpm2_get_timeouts(chip);
+> -	else
+> -		return tpm1_get_timeouts(chip);
+> +	} else {
+> +		ssize_t ret = tpm_request_locality(chip);
 > +
->  	return err;
+> +		if (ret)
+> +			return ret;
+> +		ret = tpm1_get_timeouts(chip);
+> +		tpm_relinquish_locality(chip);
+> +		return ret;
+> +	}
+>  }
+>  EXPORT_SYMBOL_GPL(tpm_get_timeouts);
+>  
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 947d1db0a5cc..8c13008437dd 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -193,6 +193,8 @@ static inline void tpm_msleep(unsigned int delay_msec)
+>  
+>  int tpm_chip_start(struct tpm_chip *chip);
+>  void tpm_chip_stop(struct tpm_chip *chip);
+> +int tpm_request_locality(struct tpm_chip *chip);
+> +void tpm_relinquish_locality(struct tpm_chip *chip);
+>  struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
+>  __must_check int tpm_try_get_ops(struct tpm_chip *chip);
+>  void tpm_put_ops(struct tpm_chip *chip);
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 431919d5f48a..d4f381d6356e 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -708,11 +708,19 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
+>  	u32 cap2;
+>  	cap_t cap;
+>  
+> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+>  		return tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+> -	else
+> -		return tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc,
+> +	} else {
+> +		ssize_t ret = tpm_request_locality(chip);
+> +
+> +		if (ret)
+> +			return ret;
+> +		ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc,
+>  				  0);
+> +		tpm_relinquish_locality(chip);
+> +		return ret;
+> +	}
+> +
 >  }
 >  
+>  /* Register the IRQ and issue a command that will cause an interrupt. If an
 > -- 
-> 2.18.1
+> 2.25.1
 > 
 > 
