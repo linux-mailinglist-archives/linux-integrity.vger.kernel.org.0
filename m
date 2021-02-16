@@ -2,158 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A966131CB79
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 14:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CA031CB99
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 15:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbhBPNw7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Feb 2021 08:52:59 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45598 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230018AbhBPNww (ORCPT
+        id S230117AbhBPOKo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Feb 2021 09:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230080AbhBPOKm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Feb 2021 08:52:52 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11GDW3gF007984;
-        Tue, 16 Feb 2021 08:52:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : mime-version :
- content-transfer-encoding; s=pp1;
- bh=sOLgDYNkVv+hmSQaf8FRmXUqwoLBNq8nnbihEXVtCiM=;
- b=TX7hHkDnhXv/bnvoNDuD3iy1MC5pxbD7rLRlI7IrG3lJgvaZcOpqiC70yDq5ql49sLfM
- GPBsTlOePa1yiz0aK46+/flbPdl5FQ0p6Uom0F5Kzut7rfJqSN3gEiKMo85OGgQiy7As
- 2aDKIq19CHFuz9TO/amcUKKcEWzY7ylzkBMHGl4H9VUKXEdM7yEwdhFLexoM2q+MMYjy
- IKY2zzJERL6jSdNtHt4ul/tyI+X2M/aiNQzlP9QZuM0N2KqLRf7VrxW0sID/6pG43zvK
- ZlIT2A+HpqasWr1UijzfhSLt7FH35zZvs/LuBsI+unRXUGSSmD6d4x5a7BPYG3mww5Le 3w== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36revrrts7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Feb 2021 08:52:07 -0500
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11GDlcwT031410;
-        Tue, 16 Feb 2021 13:52:05 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 36p6d8atje-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Feb 2021 13:52:05 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11GDq3jg48562558
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Feb 2021 13:52:03 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30E97A404D;
-        Tue, 16 Feb 2021 13:52:03 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A27AA4053;
-        Tue, 16 Feb 2021 13:52:02 +0000 (GMT)
-Received: from sig-9-65-197-51.ibm.com (unknown [9.65.197.51])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 16 Feb 2021 13:52:02 +0000 (GMT)
-Message-ID: <d42636f6983ac73e8c36f727225b213688780d14.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity subsystem updates for v5.12
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 16 Feb 2021 08:52:01 -0500
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-16_02:2021-02-16,2021-02-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- phishscore=0 adultscore=0 spamscore=0 clxscore=1011 impostorscore=0
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102160122
+        Tue, 16 Feb 2021 09:10:42 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56696C061574
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Feb 2021 06:10:00 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z6so6213222pfq.0
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Feb 2021 06:10:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lgEmlA9dWiiiJGtV7nbpIDjeizZT09Gj9WrN3WhdD7E=;
+        b=B+xWUsA9NCQiW0swlICckRlhUfjlZhWJ3DnKGfsZlBuwdOTznHPGdn1F4vpFbx1whn
+         zD1taQFlv/oddETFxrqRJXHlvq6pw5NhhxbUkl4nTb8rfEaM1NInvkfQlBOPHOH6TBeG
+         2hvzsucym4bGzSCtBdlFmhnVRHEjUiJ2s51BkDIzVA5I6tiJ4IiTTPfR+NFcTswcGXt/
+         FRuFhqytzfWEVQLfQgzWOr4oOAnaw+ZFEFcjcAEzpYmj1hAJGmdYu8wH3nxqzixqsHB+
+         0Y8CeI29eWV6HqK6DustPiFrPxn4gUmcdslJZZW4hAvoc/Rh92wh3ZAcS9Qj8XGzWUKV
+         M5Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lgEmlA9dWiiiJGtV7nbpIDjeizZT09Gj9WrN3WhdD7E=;
+        b=XVRu+/XtJbPf1jDj1QEpjiZEeYvWcjQYW/JDS7LP/xu6/riFMQYaRmFGTfbFml8xM0
+         UJa0zBbDXCgptHHuplRaF6kSu0ipWZVhpuz5r50xygNUcnJHqUAXFVNDh4v5tU4GxdJt
+         SxcbruaWxY1qp+iZGL/fjl7nj9Uojj1F02p1YSbgBSzxrZJ4auraeLIEDZv5ej8R5tfW
+         xUb0yZKiG28oShHEuY3+aPc1ajJLELOTT5emZnCwVJDLiWuWzxW1FroPgMR8MPkibTv3
+         MJeRT9vg+oJqcKHxRtO6lw95hg6f3zSntKKcHNO/TRt+M8bi9jGOsBGEfF9iFu/9CvKS
+         gMzQ==
+X-Gm-Message-State: AOAM532Pf0TMhz5O9nPbE3/8dozGlxJeggUvF7n7p3qnkblY2Sd5CpVu
+        FfmHVEY6rP8I4KbJCzMiI3xzrYLpx/6UIu1+nel1DQ==
+X-Google-Smtp-Source: ABdhPJwhyEW/HpHykaj5T6FGMDiIANvyUvlpjQDzcYXdXolJ114XEVyreMx9P4I4PMSks6QGKSzaOuB4y9MSrYBOxmI=
+X-Received: by 2002:a63:1843:: with SMTP id 3mr11538913pgy.253.1613484599812;
+ Tue, 16 Feb 2021 06:09:59 -0800 (PST)
+MIME-Version: 1.0
+References: <20210216081750.191250-1-jarkko@kernel.org> <ccb8ff69-5223-c293-bdda-46f041b7b770@debian.org>
+In-Reply-To: <ccb8ff69-5223-c293-bdda-46f041b7b770@debian.org>
+From:   Lukasz Majczak <lma@semihalf.com>
+Date:   Tue, 16 Feb 2021 15:09:49 +0100
+Message-ID: <CAFJ_xbooQp5FqEuSGu3ChqdKj0YfLzfhLYMYUDfOiQ+vaVnOdw@mail.gmail.com>
+Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in tpm_tis_gen_interrupt()
+ and tpm_get_timeouts()
+To:     Laurent Bigonville <bigon@debian.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
-  
-New is IMA support for measuring kernel critical data, as per usual
-based on policy.   The first example measures the in memory SELinux
-policy.  The second example measures the kernel version.
+Hi Laurent,
 
-In addition are four bug fixes to address memory leaks and a missing
-"static"
-function declaration.
+I think your case is different, as the trace shows the issue occurs in
+the place already guarded by tpm_chip_start()/stop() - tpm2_probe().
+Can you paste more dmesg log? (With tpm prefix?). I believe
+tpm_tis_status() might return something different than 0xff here.
+Please ensure you have applied Jarkko's patch that logs status
+(https://patchwork.kernel.org/project/linux-integrity/patch/20210202222150.=
+120664-1-jarkko@kernel.org/)
 
-[FYI: Stephen is carrying a manual merge of the pidfd tree with the
-integrity tree.]
+Best regards
+Lukasz
 
-thanks,
-
-Mimi
-
-
-The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
-
-  Linux 5.11-rc3 (2021-01-10 14:34:50 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.12
-
-for you to fetch changes up to f6692213b5045dc461ce0858fb18cf46f328c202:
-
-  integrity: Make function integrity_add_key() static (2021-02-12 11:11:59 -0500)
-
-----------------------------------------------------------------
-integrity-v5.12
-
-----------------------------------------------------------------
-Dinghao Liu (1):
-      evm: Fix memleak in init_desc
-
-Lakshmi Ramasubramanian (4):
-      IMA: define a builtin critical data measurement policy
-      selinux: include a consumer of the new IMA critical data hook
-      ima: Free IMA measurement buffer on error
-      ima: Free IMA measurement buffer after kexec syscall
-
-Mimi Zohar (2):
-      Merge branch 'measure-critical-data' into next-integrity
-      Merge branch 'ima-kexec-fixes' into next-integrity
-
-Raphael Gianotti (1):
-      IMA: Measure kernel version in early boot
-
-Tushar Sugandhi (6):
-      IMA: generalize keyring specific measurement constructs
-      IMA: add support to measure buffer data hash
-      IMA: define a hook to measure kernel integrity critical data
-      IMA: add policy rule to measure critical data
-      IMA: limit critical data measurement based on a label
-      IMA: extend critical data hook to limit the measurement based on a label
-
-Wei Yongjun (1):
-      integrity: Make function integrity_add_key() static
-
- Documentation/ABI/testing/ima_policy            |   5 +-
- Documentation/admin-guide/kernel-parameters.txt |   5 +-
- include/linux/ima.h                             |  10 +++
- include/linux/kexec.h                           |   5 ++
- kernel/kexec_file.c                             |   5 ++
- security/integrity/digsig.c                     |   4 +-
- security/integrity/evm/evm_crypto.c             |   7 +-
- security/integrity/ima/ima.h                    |   8 +-
- security/integrity/ima/ima_api.c                |   8 +-
- security/integrity/ima/ima_appraise.c           |   2 +-
- security/integrity/ima/ima_asymmetric_keys.c    |   2 +-
- security/integrity/ima/ima_init.c               |   5 ++
- security/integrity/ima/ima_kexec.c              |   3 +
- security/integrity/ima/ima_main.c               |  59 ++++++++++--
- security/integrity/ima/ima_policy.c             | 115 +++++++++++++++++++-----
- security/integrity/ima/ima_queue_keys.c         |   3 +-
- security/selinux/Makefile                       |   2 +
- security/selinux/ima.c                          |  44 +++++++++
- security/selinux/include/ima.h                  |  24 +++++
- security/selinux/include/security.h             |   3 +-
- security/selinux/ss/services.c                  |  64 +++++++++++--
- 21 files changed, 329 insertions(+), 54 deletions(-)
- create mode 100644 security/selinux/ima.c
- create mode 100644 security/selinux/include/ima.h
-
+wt., 16 lut 2021 o 12:02 Laurent Bigonville <bigon@debian.org> napisa=C5=82=
+(a):
+>
+> Le 16/02/21 =C3=A0 09:17, Jarkko Sakkinen a =C3=A9crit :
+> > From: Lukasz Majczak <lma@semihalf.com>
+> >
+> > This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
+> > (SLB 9670):
+> >
+> > [    4.324298] TPM returned invalid status
+> > [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.=
+c:275 tpm_tis_status+0x86/0x8f
+> >
+> > Background
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 F=
+IFO
+> > Interface Locality Usage per Register, Table 39 Register Behavior Based=
+ on
+> > Locality Setting for FIFO - a read attempt to TPM_STS_x Registers retur=
+ns
+> > 0xFF in case of lack of locality. The described situation manifests its=
+elf
+> > with the following warning trace:
+> >
+> > The fix
+> > =3D=3D=3D=3D=3D=3D=3D
+> >
+> > Add the proper decorations to tpm_tis_gen_interrupt() and
+> > tpm_get_timeouts().
+>
+> I tried that patch (alone on the top of the HEAD of Linus master) and I
+> still get the same trace in dmesg
+>
