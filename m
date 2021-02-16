@@ -2,195 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 423C531D0AE
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 20:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944E731D0BA
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 20:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbhBPTG6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Feb 2021 14:06:58 -0500
-Received: from ithil.bigon.be ([163.172.57.153]:60534 "EHLO ithil.bigon.be"
+        id S230006AbhBPTKC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Feb 2021 14:10:02 -0500
+Received: from mout.gmx.net ([212.227.17.20]:54973 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230006AbhBPTGt (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Feb 2021 14:06:49 -0500
-Received: from localhost (localhost [IPv6:::1])
-        by ithil.bigon.be (Postfix) with ESMTP id 5842B1FCDF;
-        Tue, 16 Feb 2021 20:06:05 +0100 (CET)
-Received: from ithil.bigon.be ([IPv6:::1])
-        by localhost (ithil.bigon.be [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id PQFvE3c1lurx; Tue, 16 Feb 2021 20:06:05 +0100 (CET)
-Received: from [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3] (unknown [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bigon@bigon.be)
-        by ithil.bigon.be (Postfix) with ESMTPSA;
-        Tue, 16 Feb 2021 20:06:05 +0100 (CET)
-Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in tpm_tis_gen_interrupt()
- and tpm_get_timeouts()
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, Lukasz Majczak <lma@semihalf.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-References: <20210216081750.191250-1-jarkko@kernel.org>
- <ccb8ff69-5223-c293-bdda-46f041b7b770@debian.org>
- <YCvv9wvj4jUIKpa7@kernel.org> <YCvyS6eVjZCKMAyJ@kernel.org>
- <YCv0KFIdtmG8F1kT@kernel.org>
-From:   Laurent Bigonville <bigon@debian.org>
-Message-ID: <d5fd8a6b-5eb9-0b50-d66c-e9f4cc84b215@debian.org>
-Date:   Tue, 16 Feb 2021 20:06:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S231284AbhBPTJy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Feb 2021 14:09:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1613502491;
+        bh=4ONbLuA4g1cBrBPWkp4wG3Wk4KYO2HWK8en5fKbW724=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=WetCouUcn84mJMADbL5kZ0+2I+s43qqkjGceD6HLNXB9hNEebuOLGo3tVbMRwRGE+
+         EHEuyZ/BvY96R+lnm01PLF/l0IGLyA4Yv/Lx+5hUEOQrUNT6RtAwxUwk/dAB5lWdf+
+         wSZTTSla+Sdf4dC9Q3a1L/SEYdJZOK4vRGnMm/Jc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MBUqF-1l0qlo1Cvv-00Czqa; Tue, 16
+ Feb 2021 20:08:11 +0100
+Subject: Re: [PATCH v4] tpm: fix reference counting for struct tpm_chip
+To:     Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     peterhuewe@gmx.de, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org
+References: <1613435460-4377-1-git-send-email-LinoSanfilippo@gmx.de>
+ <1613435460-4377-2-git-send-email-LinoSanfilippo@gmx.de>
+ <20210216125342.GU4718@ziepe.ca> <YCvtF4qfG35tHM5e@kernel.org>
+ <YCvuS9cIT7umOjhy@kernel.org> <YCvulinbuHWunTqD@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <527e8905-d727-3a45-f542-5827fa0bca47@gmx.de>
+Date:   Tue, 16 Feb 2021 20:08:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <YCv0KFIdtmG8F1kT@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YCvulinbuHWunTqD@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:XXbH05bbQ9Q4ZdsVOQQBkpsUBiB9+tqnOYu/aZOwwHBmdlcJ+Kj
+ abWU/NDTvj22rmfxo9aEOjJT16T+g9YFG8QywCHuJVHG/vNwXmy3upgdenulY9EqUG7xMuY
+ Wjuob5ZssWr9dsi0k6BmvP9emcT+M3JS/Hct5FnASutkx7d6iw+JRIvtiDbOP7igheFBptd
+ 5c/MypfGRZRa/h5IgOAsA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8d2R17VOEOo=:QmDLIMXxBNCLzlCWg1tZo+
+ tdfGfD9v8tRUujNCbrIHNXdv5AMq2SuvCUKJe4Nau6zo/uo5aKLXZfPfO3irva0aArK0zrtoD
+ wHr9A6kA8uEVFQQA/TbZxHN3hDT5+oJBLZ8raYoK+hn8srMNN9lF1IegGXwUiKHqEfRWkY/U7
+ sEbyR8lEw8x8KkbuQW4QNxEydntA6zBZSRCLLC3LObHfbeQPxgk0BUyyrhczLXWQaj2WEOhIe
+ f7AjsqfZqqMf/jysNXxtuhAPn9VDt3MdrowWfx3Q7cLoyMFFdgHvkHC0g3zt29v6lZCVlMGZx
+ pN9KVOG8Y3glJKionLFj85Eo8MkbYGIL9BGMCyG014yUri6vVsJQBj1wuQ+csXmIfb7Plq1xt
+ 7dM7k5a+plGnGnjEpHFvY49NupjDJ7XV3dRsMUWGoyphVozdzCIPX6YFTqGj0Ss0+S3rU5zk8
+ 4/hU2Hmh+VJaSlLVeLlCcHYWK0v2yu/h47qlGZhN4xSVb10pYpBDNx2Fb/wdLfIBJ0zErPBTP
+ J0XQkWCQazTsvF2sSpjRc5KD4c/PDh1vgF6SaxiGBSLeXIJPpHhSHshTx1LYJOp0muO5J3mCf
+ OBnKnnLmg4xqQEBTjD/E76hgEreuIdKaPnFSj/Gma4wGJ6U6RSETRcbNk+5ATwvs/ttfW8FGI
+ Nuc1GceDNtH1R57EiCQ1AZehz130Fj2G/GWTXYBYG0rx0WewA9VL2Nwdzr8VYTkGKxfjt+j2K
+ qYFb+IjRGvIImnTRoYi6A2MtAly8nmTrTyti9lwxLTq8cBD8M9KRriJquofx9g8peU9EveW2v
+ J3s1fwfr7QjQ9rFSrbETbSpmFs2UoxAzy8pjH49FB6xznwU91TlorPD4iKXjB6jTAAZfapQXk
+ K20iMph93AhdXoqb/z7g==
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Le 16/02/21 à 17:34, Jarkko Sakkinen a écrit :
-> On Tue, Feb 16, 2021 at 06:26:54PM +0200, Jarkko Sakkinen wrote:
->> On Tue, Feb 16, 2021 at 06:16:58PM +0200, Jarkko Sakkinen wrote:
->>> On Tue, Feb 16, 2021 at 12:02:24PM +0100, Laurent Bigonville wrote:
->>>> Le 16/02/21 à 09:17, Jarkko Sakkinen a écrit :
->>>>> From: Lukasz Majczak <lma@semihalf.com>
+Hi,
+
+On 16.02.21 at 17:11, Jarkko Sakkinen wrote:
+> On Tue, Feb 16, 2021 at 06:09:50PM +0200, Jarkko Sakkinen wrote:
+>> On Tue, Feb 16, 2021 at 06:04:42PM +0200, Jarkko Sakkinen wrote:
+>>> On Tue, Feb 16, 2021 at 08:53:42AM -0400, Jason Gunthorpe wrote:
+>>>> On Tue, Feb 16, 2021 at 01:31:00AM +0100, Lino Sanfilippo wrote:
 >>>>>
->>>>> This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
->>>>> (SLB 9670):
->>>>>
->>>>> [    4.324298] TPM returned invalid status
->>>>> [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
->>>>>
->>>>> Background
->>>>> ==========
->>>>>
->>>>> TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 FIFO
->>>>> Interface Locality Usage per Register, Table 39 Register Behavior Based on
->>>>> Locality Setting for FIFO - a read attempt to TPM_STS_x Registers returns
->>>>> 0xFF in case of lack of locality. The described situation manifests itself
->>>>> with the following warning trace:
->>>>>
->>>>> The fix
->>>>> =======
->>>>>
->>>>> Add the proper decorations to tpm_tis_gen_interrupt() and
->>>>> tpm_get_timeouts().
->>>> I tried that patch (alone on the top of the HEAD of Linus master) and I
->>>> still get the same trace in dmesg
->>> Can you give a shot to
+>>>>> +static int tpm_add_tpm2_char_device(struct tpm_chip *chip)
 >>>
->>> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+>>> BTW, this naming is crap.
 >>>
->>> It has couple of more fixes, and paste the log.
->> And if possible a full stack trace :-)
-> And apply this patch on top. Cannot apply it there before it's reviewed.
+>>> - 2x tpm
+>>> - char is useless
+>>>
+>>> -> tpm2_add_device
+>>
+>> Actually, tpm2s_add_device() add put it to tpm2-space.c.
 >
-I get the following stacktrace with your branch and the patch here:
+> No, tpms_add_device() :-)
+>
+> (sorry)
+>
+> /Jarkko
+>
 
-[   13.498925] ------------[ cut here ]------------
-[   13.498930] TPM returned invalid status
-[   13.498953] WARNING: CPU: 1 PID: 459 at 
-drivers/char/tpm/tpm_tis_core.c:205 tpm_tis_status+0x86/0xa0 [tpm_tis_core]
-[   13.498963] Modules linked in: libiscsi_tcp(E) tpm_tis(E+) 
-tpm_tis_core(E) libiscsi(E) snd_timer(E) tpm(E) joydev(E) snd(E) 
-scsi_transport_iscsi(E) pcc_cpufreq(E-) fjes(E-) soundcore(E) 
-i7core_edac(E) i5500_temp(E) asus_atk0110(E) rng_core(E) 
-acpi_cpufreq(E-) evdev(E) loop(E) firewire_sbp2(E) msr(E) parport_pc(E) 
-ppdev(E) lp(E) parport(E) fuse(E) configfs(E) sunrpc(E) ip_tables(E) 
-x_tables(E) autofs4(E) ext4(E) crc16(E) mbcache(E) jbd2(E) btrfs(E) 
-blake2b_generic(E) zstd_compress(E) efivars(E) raid10(E) raid456(E) 
-async_raid6_recov(E) async_memcpy(E) async_pq(E) async_xor(E) 
-async_tx(E) xor(E) raid6_pq(E) libcrc32c(E) crc32c_generic(E) raid1(E) 
-raid0(E) multipath(E) linear(E) md_mod(E) dm_mod(E) sr_mod(E) sd_mod(E) 
-cdrom(E) t10_pi(E) hid_generic(E) usbhid(E) hid(E) amdgpu(E) ahci(E) 
-libahci(E) libata(E) gpu_sched(E) i2c_algo_bit(E) drm_ttm_helper(E) 
-ttm(E) uhci_hcd(E) ehci_pci(E) firewire_ohci(E) crc32c_intel(E) 
-ehci_hcd(E) drm_kms_helper(E) firewire_core(E) i2c_i801(E) psmouse(E)
-[   13.499044]  scsi_mod(E) cec(E) i2c_smbus(E) mxm_wmi(E) lpc_ich(E) 
-crc_itu_t(E) sky2(E) usbcore(E) drm(E) mfd_core(E) wmi(E) button(E)
-[   13.499058] CPU: 1 PID: 459 Comm: systemd-udevd Tainted: G          I 
-E     5.11.0+ #4
-[   13.499062] Hardware name: System manufacturer System Product 
-Name/P6T DELUXE V2, BIOS 0406    04/24/2009
-[   13.499064] RIP: 0010:tpm_tis_status+0x86/0xa0 [tpm_tis_core]
-[   13.499069] Code: 00 75 30 48 83 c4 18 c3 31 c0 80 3d 83 48 00 00 00 
-75 e0 48 c7 c7 4c 53 49 c1 88 44 24 07 c6 05 6f 48 00 00 01 e8 b2 24 ba 
-cd <0f> 0b 0f b6 44 24 07 eb c0 e8 fc 99 bd cd 66 66 2e 0f 1f 84 00 00
-[   13.499072] RSP: 0018:ffffbaeb80fb3aa0 EFLAGS: 00010286
-[   13.499075] RAX: 0000000000000000 RBX: ffff9704034e5000 RCX: 
-ffff9707ada58bc8
-[   13.499078] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: 
-ffff9707ada58bc0
-[   13.499080] RBP: 00000000ffff5d40 R08: 0000000000000000 R09: 
-ffffbaeb80fb38c0
-[   13.499082] R10: ffffbaeb80fb38b8 R11: ffffffff8fac2588 R12: 
-0000000000000016
-[   13.499085] R13: ffff97040c38d000 R14: 0000000000001000 R15: 
-ffffbaeb80fb3ada
-[   13.499087] FS:  00007fe1bcfeb8c0(0000) GS:ffff9707ada40000(0000) 
-knlGS:0000000000000000
-[   13.499090] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   13.499092] CR2: 000055e5f7048590 CR3: 00000001084fe000 CR4: 
-00000000000006e0
-[   13.499095] Call Trace:
-[   13.499099]  tpm_transmit+0x15f/0x3d0 [tpm]
-[   13.499113]  tpm_transmit_cmd+0x25/0x90 [tpm]
-[   13.499121]  tpm2_probe+0xe2/0x140 [tpm]
-[   13.499130]  tpm_tis_core_init+0x1d5/0x2b0 [tpm_tis_core]
-[   13.499135]  ? tpm_tis_init.part.0+0x130/0x130 [tpm_tis]
-[   13.499141]  tpm_tis_pnp_init+0xe1/0x110 [tpm_tis]
-[   13.499148]  pnp_device_probe+0xaf/0x140
-[   13.499154]  really_probe+0xf2/0x440
-[   13.499160]  driver_probe_device+0xe1/0x150
-[   13.499163]  device_driver_attach+0xa1/0xb0
-[   13.499167]  __driver_attach+0x8a/0x150
-[   13.499171]  ? device_driver_attach+0xb0/0xb0
-[   13.499174]  ? device_driver_attach+0xb0/0xb0
-[   13.499177]  bus_for_each_dev+0x78/0xc0
-[   13.499181]  bus_add_driver+0x12b/0x1e0
-[   13.499184]  driver_register+0x8b/0xe0
-[   13.499188]  ? 0xffffffffc1413000
-[   13.499191]  init_tis+0xa0/0x1000 [tpm_tis]
-[   13.499197]  do_one_initcall+0x44/0x1d0
-[   13.499202]  ? do_init_module+0x23/0x260
-[   13.499206]  ? kmem_cache_alloc_trace+0xf5/0x200
-[   13.499212]  do_init_module+0x5c/0x260
-[   13.499215]  __do_sys_finit_module+0xb1/0x110
-[   13.499225]  do_syscall_64+0x33/0x80
-[   13.499229]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[   13.499234] RIP: 0033:0x7fe1bd4a49b9
-[   13.499237] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 
-48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 
-05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a7 54 0c 00 f7 d8 64 89 01 48
-[   13.499240] RSP: 002b:00007ffca5bfa108 EFLAGS: 00000246 ORIG_RAX: 
-0000000000000139
-[   13.499243] RAX: ffffffffffffffda RBX: 000055e5f7036920 RCX: 
-00007fe1bd4a49b9
-[   13.499245] RDX: 0000000000000000 RSI: 00007fe1bd62fe2d RDI: 
-0000000000000012
-[   13.499247] RBP: 0000000000020000 R08: 0000000000000000 R09: 
-000055e5f6e7a0b0
-[   13.499249] R10: 0000000000000012 R11: 0000000000000246 R12: 
-00007fe1bd62fe2d
-[   13.499251] R13: 0000000000000000 R14: 000055e5f7033420 R15: 
-000055e5f7036920
-[   13.499255] ---[ end trace 7e963e5c3647102e ]---
+I strongly assume you mean tmp2_add_device() :) I will move and rename the=
+ function
+accordingly.
 
-If I also apply the patch to change the WARN_ONCE in dev_warn_once, and 
-grep on the string "tpm", I get the following:
-
-Feb 16 19:51:22 fornost kernel: tpm tpm0: TPM returned invalid status: 0xa0
-Feb 16 19:51:22 fornost kernel: tpm_tis 00:06: 1.2 TPM (device-id 
-0x6871, rev-id 1)
-Feb 16 19:51:24 fornost kernel: tpm tpm0: tpm_try_transmit: send(): 
-error -62
-Feb 16 19:51:24 fornost kernel: tpm tpm0: A TPM error (-62) occurred 
-attempting to determine the timeouts
-Feb 16 19:51:24 fornost kernel: tpm_tis: probe of 00:06 failed with 
-error -62
-Feb 16 19:51:24 fornost kernel: tpm_inf_pnp 00:06: Found TPM with ID IFX0102
-
+Thanks,
+Lino
