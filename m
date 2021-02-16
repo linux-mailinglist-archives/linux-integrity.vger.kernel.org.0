@@ -2,117 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7634F31CDAD
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 17:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F15631CDC9
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 17:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbhBPQMB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Feb 2021 11:12:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50230 "EHLO mail.kernel.org"
+        id S230498AbhBPQPi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Feb 2021 11:15:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230467AbhBPQLz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Feb 2021 11:11:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3013164DF0;
-        Tue, 16 Feb 2021 16:11:14 +0000 (UTC)
+        id S230446AbhBPQPJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Feb 2021 11:15:09 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0394564E07;
+        Tue, 16 Feb 2021 16:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613491874;
-        bh=BnAwcr4oeUbABUoa/t/lY4qqMdgd+TgxOOqMjppumfQ=;
+        s=k20201202; t=1613492069;
+        bh=WIx1Yk1IheiU5oaRpK6bTqTY9UOifeJJPUUd31D0IOU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SNneJQvQTK0Y5P+nVLp13bNH6IsnsFwcfMK+gdG3kcSC5gYF7q2UhuDZgf3VSGwWq
-         bh3of2l440ECX6dhSrrtcDC9AvBehFUoFgXQklIB/5TZ47d0udcABU1KugyIqQHbaH
-         o7hs925+0VTZljLrWe3DhLCWI10+0AGwVirTDRZaIAKO5UxOl23E+27BvTbLQHXy68
-         6S/n5vRS67HBCqSFk3s7tlCQKzjqaiPl6Sln3ljiDduxzxTvPQVu1ucB5LXyEz+YMc
-         NknEjR0SSS4Oea2qW/27/FtxVmvXZiAbZOv1OWCDUDMrEyvxSPv/lqVKtwbb6gcE6J
-         4rdevL1XLWV6A==
-Date:   Tue, 16 Feb 2021 18:11:02 +0200
+        b=AvCo6Rltn9HJimexRyQvZ15aibjbmd+WxLLy+nfTBvneNymKqxU2Sv5BnOIOs1Tcc
+         V1BQcjFqfeOOpWYLugz1Ugl+GGfsX20UU6KIciimShabaEWdipYOINqSduCUMF0hPA
+         fNVkW1dLkb2jOINfzv2oLJ9dd7K/Wg3Lgad6Z8tD2jSzukdH6dHxQ8NuJPo3MHaUMB
+         r/LmfxK8mdYR++WqqDqk/C/5l0gnWYPgUDXRbLvB+Rwfg/FW3DSR5e8CuCgzaK4Mvm
+         b0cJjcjU53FH2jLB8qimT92Jj/ij2c5GRFsPoHY8+ZroezXVhF00jzvnujdDcKrDHo
+         CriezYLVy8/AA==
+Date:   Tue, 16 Feb 2021 18:14:17 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        stefanb@linux.vnet.ibm.com, James.Bottomley@hansenpartnership.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4] tpm: fix reference counting for struct tpm_chip
-Message-ID: <YCvulinbuHWunTqD@kernel.org>
-References: <1613435460-4377-1-git-send-email-LinoSanfilippo@gmx.de>
- <1613435460-4377-2-git-send-email-LinoSanfilippo@gmx.de>
- <20210216125342.GU4718@ziepe.ca>
- <YCvtF4qfG35tHM5e@kernel.org>
- <YCvuS9cIT7umOjhy@kernel.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-integrity@vger.kernel.org, Lukasz Majczak <lma@semihalf.com>,
+        Laurent Bigonville <bigon@debian.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in
+ tpm_tis_gen_interrupt() and tpm_get_timeouts()
+Message-ID: <YCvvWTq2CaJvEFcJ@kernel.org>
+References: <20210216081750.191250-1-jarkko@kernel.org>
+ <5bd42a4c-56db-3be5-953f-a85336fe0175@molgen.mpg.de>
+ <YCuEwiBmV5067AYj@kernel.org>
+ <bcd119a8-e4e7-395f-f88d-1f4789a13bc1@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YCvuS9cIT7umOjhy@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bcd119a8-e4e7-395f-f88d-1f4789a13bc1@molgen.mpg.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Feb 16, 2021 at 06:09:50PM +0200, Jarkko Sakkinen wrote:
-> On Tue, Feb 16, 2021 at 06:04:42PM +0200, Jarkko Sakkinen wrote:
-> > On Tue, Feb 16, 2021 at 08:53:42AM -0400, Jason Gunthorpe wrote:
-> > > On Tue, Feb 16, 2021 at 01:31:00AM +0100, Lino Sanfilippo wrote:
-> > > >  
-> > > > +static int tpm_add_tpm2_char_device(struct tpm_chip *chip)
-> > 
-> > BTW, this naming is crap.
-> > 
-> > - 2x tpm
-> > - char is useless
-> > 
-> > -> tpm2_add_device
+On Tue, Feb 16, 2021 at 09:50:40AM +0100, Paul Menzel wrote:
+> Dear Jarko,
 > 
-> Actually, tpm2s_add_device() add put it to tpm2-space.c.
+> 
+> Am 16.02.21 um 09:39 schrieb Jarkko Sakkinen:
+> > On Tue, Feb 16, 2021 at 09:26:49AM +0100, Paul Menzel wrote:
+> 
+> > > Am 16.02.21 um 09:17 schrieb Jarkko Sakkinen:
+> > > > From: Lukasz Majczak <lma@semihalf.com>
+> > > > 
+> > > > This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
+> > > > (SLB 9670):
+> > > > 
+> > > > [    4.324298] TPM returned invalid status
+> > > > [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
+> > > > 
+> > > > Background
+> > > > ==========
+> > > > 
+> > > > TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 FIFO
+> > > > Interface Locality Usage per Register, Table 39 Register Behavior Based on
+> > > > Locality Setting for FIFO - a read attempt to TPM_STS_x Registers returns
+> > > > 0xFF in case of lack of locality. The described situation manifests itself
+> > > > with the following warning trace:
+> > > 
+> > > Did you miss to paste the trace?
+> > > 
+> > > […]
+> 
+> > There is partial trace, which I took from the Lukasz patch. IMHO that is
+> > sufficient.
+> 
+> Reading the paragraph with “ with the following warning trace:” (and colon),
+> I would expect to see some trace, and not the next section header *The fix*.
 
-No, tpms_add_device() :-)
 
-(sorry)
+Aah! I took the paragraph from the original commit. So, what if I just
+remove the last sentence? I see what you mean.
+
+> 
+> > And I have no means to generate the full trace anyway.
+> 
+> No problem.
+> 
+> 
+> Kind regards,
+> 
+> Paul
+> 
 
 /Jarkko
-
-> 
-> > > > +{
-> > > > +	int rc;
-> > > > +
-> > > > +	device_initialize(&chip->devs);
-> > > > +	chip->devs.parent = chip->dev.parent;
-> > > > +	chip->devs.class = tpmrm_class;
-> > > > +
-> > > > +	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
-> > > > +	if (rc)
-> > > > +		goto out_put_devs;
-> > 
-> > Right, and empty line missing here.
-> > 
-> > > > +	/*
-> > > > +	 * get extra reference on main device to hold on behalf of devs.
-> > > > +	 * This holds the chip structure while cdevs is in use. The
-> > > > +	 * corresponding put is in the tpm_devs_release.
-> > > > +	 */
-> > > > +	get_device(&chip->dev);
-> > > > +	chip->devs.release = tpm_devs_release;
-> > > > +	chip->devs.devt =
-> > > > +		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> > 
-> > Isn't this less than 100 chars?
-> > 
-> > > > +	cdev_init(&chip->cdevs, &tpmrm_fops);
-> > > > +	chip->cdevs.owner = THIS_MODULE;
-> > > > +
-> > > > +	rc = cdev_device_add(&chip->cdevs, &chip->devs);
-> > > > +	if (rc) {
-> > > > +		dev_err(&chip->devs,
-> > > > +			"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
-> > > > +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
-> > > > +			MINOR(chip->devs.devt), rc);
-> > > > +		goto out_put_devs;
-> > > > +	}
-> > > > +
-> > > > +	return 0;
-> > > > +
-> > > > +out_put_devs:
-> > > > +	put_device(&chip->devs);
-> > > 
-> > > I'd rather you organize this so chip->devs.release and the get_device
-> > > is always sent instead of having the possiblity for a put_device that
-> > > doesn't call release
-> > 
-> > /Jarkko
