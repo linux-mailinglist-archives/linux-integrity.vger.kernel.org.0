@@ -2,116 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CA031CB99
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 15:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB3331CD88
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 17:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbhBPOKo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Feb 2021 09:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbhBPOKm (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Feb 2021 09:10:42 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56696C061574
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Feb 2021 06:10:00 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id z6so6213222pfq.0
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Feb 2021 06:10:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lgEmlA9dWiiiJGtV7nbpIDjeizZT09Gj9WrN3WhdD7E=;
-        b=B+xWUsA9NCQiW0swlICckRlhUfjlZhWJ3DnKGfsZlBuwdOTznHPGdn1F4vpFbx1whn
-         zD1taQFlv/oddETFxrqRJXHlvq6pw5NhhxbUkl4nTb8rfEaM1NInvkfQlBOPHOH6TBeG
-         2hvzsucym4bGzSCtBdlFmhnVRHEjUiJ2s51BkDIzVA5I6tiJ4IiTTPfR+NFcTswcGXt/
-         FRuFhqytzfWEVQLfQgzWOr4oOAnaw+ZFEFcjcAEzpYmj1hAJGmdYu8wH3nxqzixqsHB+
-         0Y8CeI29eWV6HqK6DustPiFrPxn4gUmcdslJZZW4hAvoc/Rh92wh3ZAcS9Qj8XGzWUKV
-         M5Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lgEmlA9dWiiiJGtV7nbpIDjeizZT09Gj9WrN3WhdD7E=;
-        b=XVRu+/XtJbPf1jDj1QEpjiZEeYvWcjQYW/JDS7LP/xu6/riFMQYaRmFGTfbFml8xM0
-         UJa0zBbDXCgptHHuplRaF6kSu0ipWZVhpuz5r50xygNUcnJHqUAXFVNDh4v5tU4GxdJt
-         SxcbruaWxY1qp+iZGL/fjl7nj9Uojj1F02p1YSbgBSzxrZJ4auraeLIEDZv5ej8R5tfW
-         xUb0yZKiG28oShHEuY3+aPc1ajJLELOTT5emZnCwVJDLiWuWzxW1FroPgMR8MPkibTv3
-         MJeRT9vg+oJqcKHxRtO6lw95hg6f3zSntKKcHNO/TRt+M8bi9jGOsBGEfF9iFu/9CvKS
-         gMzQ==
-X-Gm-Message-State: AOAM532Pf0TMhz5O9nPbE3/8dozGlxJeggUvF7n7p3qnkblY2Sd5CpVu
-        FfmHVEY6rP8I4KbJCzMiI3xzrYLpx/6UIu1+nel1DQ==
-X-Google-Smtp-Source: ABdhPJwhyEW/HpHykaj5T6FGMDiIANvyUvlpjQDzcYXdXolJ114XEVyreMx9P4I4PMSks6QGKSzaOuB4y9MSrYBOxmI=
-X-Received: by 2002:a63:1843:: with SMTP id 3mr11538913pgy.253.1613484599812;
- Tue, 16 Feb 2021 06:09:59 -0800 (PST)
+        id S230186AbhBPQFq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Feb 2021 11:05:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49338 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230221AbhBPQFc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Feb 2021 11:05:32 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 679D064D9F;
+        Tue, 16 Feb 2021 16:04:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613491491;
+        bh=z8NrUWd5TbVZgAg2HRWl/KOXL0/wZcaDM0wAN4DfoLE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MLywsHKHdAVaj8YuJrWT0XGGerCvVWPJiExCtVVmcVSjy6cUzdc/Go5X3eGyxlkJD
+         s0XWGvet/nk/Tpq2Pf885GcmXoGr05w7p387dru8Xsq4bqNLeGd8HmiUTOVAKYOi+6
+         MAm/GlFetanh4nPjcNV7ux79/yoWxi/+lWtnyt/nj2s+wJVWqgRksRi05aTu8dGF+b
+         NworuHFIoUbZdduZVVcEyPPOnmX1VaQFU4foTyrMKYnZk0h8TFz1HIo+JvLRTMv8xp
+         P9byXBcYMZLBrCAE9sS4PfTOWqytn+JBbtmD2Ye40j2yC9gSxi4BoQN6xCbu/eNeeW
+         ALN/k8vvDMGRQ==
+Date:   Tue, 16 Feb 2021 18:04:39 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
+        stefanb@linux.vnet.ibm.com, James.Bottomley@hansenpartnership.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v4] tpm: fix reference counting for struct tpm_chip
+Message-ID: <YCvtF4qfG35tHM5e@kernel.org>
+References: <1613435460-4377-1-git-send-email-LinoSanfilippo@gmx.de>
+ <1613435460-4377-2-git-send-email-LinoSanfilippo@gmx.de>
+ <20210216125342.GU4718@ziepe.ca>
 MIME-Version: 1.0
-References: <20210216081750.191250-1-jarkko@kernel.org> <ccb8ff69-5223-c293-bdda-46f041b7b770@debian.org>
-In-Reply-To: <ccb8ff69-5223-c293-bdda-46f041b7b770@debian.org>
-From:   Lukasz Majczak <lma@semihalf.com>
-Date:   Tue, 16 Feb 2021 15:09:49 +0100
-Message-ID: <CAFJ_xbooQp5FqEuSGu3ChqdKj0YfLzfhLYMYUDfOiQ+vaVnOdw@mail.gmail.com>
-Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in tpm_tis_gen_interrupt()
- and tpm_get_timeouts()
-To:     Laurent Bigonville <bigon@debian.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210216125342.GU4718@ziepe.ca>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Laurent,
+On Tue, Feb 16, 2021 at 08:53:42AM -0400, Jason Gunthorpe wrote:
+> On Tue, Feb 16, 2021 at 01:31:00AM +0100, Lino Sanfilippo wrote:
+> >  
+> > +static int tpm_add_tpm2_char_device(struct tpm_chip *chip)
 
-I think your case is different, as the trace shows the issue occurs in
-the place already guarded by tpm_chip_start()/stop() - tpm2_probe().
-Can you paste more dmesg log? (With tpm prefix?). I believe
-tpm_tis_status() might return something different than 0xff here.
-Please ensure you have applied Jarkko's patch that logs status
-(https://patchwork.kernel.org/project/linux-integrity/patch/20210202222150.=
-120664-1-jarkko@kernel.org/)
+BTW, this naming is crap.
 
-Best regards
-Lukasz
+- 2x tpm
+- char is useless
 
-wt., 16 lut 2021 o 12:02 Laurent Bigonville <bigon@debian.org> napisa=C5=82=
-(a):
->
-> Le 16/02/21 =C3=A0 09:17, Jarkko Sakkinen a =C3=A9crit :
-> > From: Lukasz Majczak <lma@semihalf.com>
-> >
-> > This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
-> > (SLB 9670):
-> >
-> > [    4.324298] TPM returned invalid status
-> > [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.=
-c:275 tpm_tis_status+0x86/0x8f
-> >
-> > Background
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 F=
-IFO
-> > Interface Locality Usage per Register, Table 39 Register Behavior Based=
- on
-> > Locality Setting for FIFO - a read attempt to TPM_STS_x Registers retur=
-ns
-> > 0xFF in case of lack of locality. The described situation manifests its=
-elf
-> > with the following warning trace:
-> >
-> > The fix
-> > =3D=3D=3D=3D=3D=3D=3D
-> >
-> > Add the proper decorations to tpm_tis_gen_interrupt() and
-> > tpm_get_timeouts().
->
-> I tried that patch (alone on the top of the HEAD of Linus master) and I
-> still get the same trace in dmesg
->
+-> tpm2_add_device
+
+
+> > +{
+> > +	int rc;
+> > +
+> > +	device_initialize(&chip->devs);
+> > +	chip->devs.parent = chip->dev.parent;
+> > +	chip->devs.class = tpmrm_class;
+> > +
+> > +	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
+> > +	if (rc)
+> > +		goto out_put_devs;
+
+Right, and empty line missing here.
+
+> > +	/*
+> > +	 * get extra reference on main device to hold on behalf of devs.
+> > +	 * This holds the chip structure while cdevs is in use. The
+> > +	 * corresponding put is in the tpm_devs_release.
+> > +	 */
+> > +	get_device(&chip->dev);
+> > +	chip->devs.release = tpm_devs_release;
+> > +	chip->devs.devt =
+> > +		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
+
+Isn't this less than 100 chars?
+
+> > +	cdev_init(&chip->cdevs, &tpmrm_fops);
+> > +	chip->cdevs.owner = THIS_MODULE;
+> > +
+> > +	rc = cdev_device_add(&chip->cdevs, &chip->devs);
+> > +	if (rc) {
+> > +		dev_err(&chip->devs,
+> > +			"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
+> > +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
+> > +			MINOR(chip->devs.devt), rc);
+> > +		goto out_put_devs;
+> > +	}
+> > +
+> > +	return 0;
+> > +
+> > +out_put_devs:
+> > +	put_device(&chip->devs);
+> 
+> I'd rather you organize this so chip->devs.release and the get_device
+> is always sent instead of having the possiblity for a put_device that
+> doesn't call release
+
+/Jarkko
