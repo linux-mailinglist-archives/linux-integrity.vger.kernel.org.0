@@ -2,82 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1E231CE18
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 17:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A0731CE21
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 17:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbhBPQdG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Feb 2021 11:33:06 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:36937 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229722AbhBPQdG (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Feb 2021 11:33:06 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-47-h1rLAFRZMNSVDB9RE5cVhw-1; Tue, 16 Feb 2021 16:31:27 +0000
-X-MC-Unique: h1rLAFRZMNSVDB9RE5cVhw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 16 Feb 2021 16:31:26 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 16 Feb 2021 16:31:26 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jarkko Sakkinen' <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-CC:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "stefanb@linux.vnet.ibm.com" <stefanb@linux.vnet.ibm.com>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v4] tpm: fix reference counting for struct tpm_chip
-Thread-Topic: [PATCH v4] tpm: fix reference counting for struct tpm_chip
-Thread-Index: AQHXBH2yJiAHL3ooWkeUp1zIrnNHeapa+MWQ
-Date:   Tue, 16 Feb 2021 16:31:26 +0000
-Message-ID: <74bbc76260594a8a8f7993ab66cca104@AcuMS.aculab.com>
-References: <1613435460-4377-1-git-send-email-LinoSanfilippo@gmx.de>
- <1613435460-4377-2-git-send-email-LinoSanfilippo@gmx.de>
- <20210216125342.GU4718@ziepe.ca> <YCvtF4qfG35tHM5e@kernel.org>
-In-Reply-To: <YCvtF4qfG35tHM5e@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S230291AbhBPQfm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Feb 2021 11:35:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54412 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230149AbhBPQfk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Feb 2021 11:35:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 842BB64E09;
+        Tue, 16 Feb 2021 16:34:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613493300;
+        bh=ozjE98t3PZ9vMax3kmhOnPl92y2ymIw8L1N3IjQIiio=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bOTFtbiPe7sciAwL2NYe2uTTyekDCUyKMV6aEgTB+fOMSN1Nh5TcTEV6F+ctX9Uwo
+         vlK4qxmrmxx4En7yu4ata7Dmef/oKcmiNdB3pV7jKwYjsRGKt4ppAF3M2MfF3J9xZ/
+         pcv5TqOjwXClQxmzRdmAMGxsUyM/qky2cbIyaJgbXINJZ0K4u6T1fc+loiJBwzEMoe
+         Riavu5QX3SbzBwOjzzBTujDoEmkwkM9NzTLLjPFiqeRUB78ms517mMk+7PQZrUrBMN
+         SciQynNgJwbrhb3ZuzU5MmRC1NdWxs0XNaW0O0DypieH2jGWYMnA9YEKyMwKtRLXpw
+         UWdjhdwazpZrg==
+Date:   Tue, 16 Feb 2021 18:34:48 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Laurent Bigonville <bigon@debian.org>
+Cc:     linux-integrity@vger.kernel.org, Lukasz Majczak <lma@semihalf.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in
+ tpm_tis_gen_interrupt() and tpm_get_timeouts()
+Message-ID: <YCv0KFIdtmG8F1kT@kernel.org>
+References: <20210216081750.191250-1-jarkko@kernel.org>
+ <ccb8ff69-5223-c293-bdda-46f041b7b770@debian.org>
+ <YCvv9wvj4jUIKpa7@kernel.org>
+ <YCvyS6eVjZCKMAyJ@kernel.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YCvyS6eVjZCKMAyJ@kernel.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-...
-> > > +	get_device(&chip->dev);
-> > > +	chip->devs.release = tpm_devs_release;
-> > > +	chip->devs.devt =
-> > > +		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
+On Tue, Feb 16, 2021 at 06:26:54PM +0200, Jarkko Sakkinen wrote:
+> On Tue, Feb 16, 2021 at 06:16:58PM +0200, Jarkko Sakkinen wrote:
+> > On Tue, Feb 16, 2021 at 12:02:24PM +0100, Laurent Bigonville wrote:
+> > > Le 16/02/21 à 09:17, Jarkko Sakkinen a écrit :
+> > > > From: Lukasz Majczak <lma@semihalf.com>
+> > > > 
+> > > > This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
+> > > > (SLB 9670):
+> > > > 
+> > > > [    4.324298] TPM returned invalid status
+> > > > [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
+> > > > 
+> > > > Background
+> > > > ==========
+> > > > 
+> > > > TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 FIFO
+> > > > Interface Locality Usage per Register, Table 39 Register Behavior Based on
+> > > > Locality Setting for FIFO - a read attempt to TPM_STS_x Registers returns
+> > > > 0xFF in case of lack of locality. The described situation manifests itself
+> > > > with the following warning trace:
+> > > > 
+> > > > The fix
+> > > > =======
+> > > > 
+> > > > Add the proper decorations to tpm_tis_gen_interrupt() and
+> > > > tpm_get_timeouts().
+> > > 
+> > > I tried that patch (alone on the top of the HEAD of Linus master) and I
+> > > still get the same trace in dmesg
+> > 
+> > Can you give a shot to
+> > 
+> > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> > 
+> > It has couple of more fixes, and paste the log.
 > 
-> Isn't this less than 100 chars?
+> And if possible a full stack trace :-)
 
-Still best kept under 80 if 'reasonable'?
+And apply this patch on top. Cannot apply it there before it's reviewed.
 
-Really it is just split in the wrong place:
-	chip->devs.devt = MKDEV(MAJOR(tpm_devt),
-					chip->dev_num + TPM_NUM_DEVICES);
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+/Jarkko
