@@ -2,162 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F53D31D0D9
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 20:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F47431D11B
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Feb 2021 20:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbhBPTTk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Feb 2021 14:19:40 -0500
-Received: from mout.gmx.net ([212.227.17.20]:57361 "EHLO mout.gmx.net"
+        id S229806AbhBPTod (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Feb 2021 14:44:33 -0500
+Received: from mout.gmx.net ([212.227.17.22]:52153 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229879AbhBPTTc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Feb 2021 14:19:32 -0500
+        id S229725AbhBPToc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Feb 2021 14:44:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1613503062;
-        bh=GykttgD/ScwH21Rwzt2CmBMPNmJNtJwa1QV9F7Pvq+U=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=h++RhMptxUfRi21wZODUlTRUOuxvZpCOHAIhPaBIsidiRtgFoMNENpYoKti/cab8s
-         XrvSz3JSxA/Vg8tTImPwWZNvvzPaWGGWrP+9/KSJcvo1a30EtCByvCaJpT0s8YwbvS
-         3muB8nFKznlLT4HDO8+L5Rbc96SbOnFzdxRxQrSQ=
+        s=badeba3b8450; t=1613504567;
+        bh=Eqv2QUEAozP3I/FQI3fOmKajoqJINH8Kd4aFH/KVP+Y=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Kmugg4Ea1XthPmOH+6BtSUAoSx7jmt7ihNMw2tsdnI+j8HpQ5F+wR4ZzyvoTam5Xs
+         Pz21INTb3FhNeA5MYqUaH79ehD1og4flBUB53fvsLaI74+Wf1AUWcPEUxrMZ7W3LBK
+         96dLiR6zhPFFGWCD7mk70OcsUilolAsHK5SN8Bl0=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0Fxf-1m7CuP0Qh5-00xMrs; Tue, 16
- Feb 2021 20:17:42 +0100
-Subject: Re: [PATCH v4] tpm: fix reference counting for struct tpm_chip
-To:     Stefan Berger <stefanb@linux.ibm.com>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, James.Bottomley@hansenpartnership.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        stable@vger.kernel.org
-References: <1613435460-4377-1-git-send-email-LinoSanfilippo@gmx.de>
- <1613435460-4377-2-git-send-email-LinoSanfilippo@gmx.de>
- <d36c324d-2f16-ed2a-7507-0d8f52da20ea@linux.ibm.com>
+Received: from Venus.fritz.box ([78.42.220.31]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mq2nK-1lhZQr2ck6-00n73n; Tue, 16
+ Feb 2021 20:42:47 +0100
 From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <5657f8c4-e85e-ad9f-fa1f-ec5d6b659423@gmx.de>
-Date:   Tue, 16 Feb 2021 20:17:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, James.Bottomley@hansenpartnership.com,
+        David.Laight@ACULAB.COM, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, LinoSanfilippo@gmx.de
+Subject: [PATCH v5] TPM fixes
+Date:   Tue, 16 Feb 2021 20:42:11 +0100
+Message-Id: <1613504532-4165-1-git-send-email-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <d36c324d-2f16-ed2a-7507-0d8f52da20ea@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:N9Z020PUwELxIP0h9mVPoTis529QDzCGk6is8644g5qh2yQvxbG
- pbXRWmA7EgOeAGCf+G6OYdtbgcFve2kQekNc3Ka8blxbgX+X3Id/9yL8XByj5165sRvsjiO
- XqVFcaZT2IB+cuXMsvmtWYUksYnBZsUL619RJvBoIxcoZ/Sxs4xTiP433pWnlzrcFJOhhEg
- 0c2sApYfJHquqqD7RCZtw==
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:ES2jq1IW26IylgG+p24A/D6Pg2+XVKkwbMMXdY+ZdLLcY1ZqNVO
+ L31m+XLxsNS6vKHrKoDrTXAhnwDS3fdTOuT85f4J5yQOq1fD4q++HEEFaPLWwl2pSzsqlg9
+ YV8LKkYSLnRydUjhSv0sq+zwFS4Yr4sLLtMaVEUQYDbLuxxC5+XHTahQUGty35kGMaKSucc
+ gh5s7TlpCKI12Hixv/aeA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:W1xwbuXKB94=:sdmSEGYuF66tRYWywMpUD9
- WS5LuohyHI9YKnvsVi0E3e7B7O3dWdZNFZ0YK6HyCG61UtIVDR+fmSgPtscn0WG+M6PvBWUwq
- FJzvBTQ3Nnw1XYPQok9PWbsfj9trrGspCqRP5rqBXHUvLxlHMYuk8tww1JyKnJuypUEoRiMPB
- gYRHBqPceUC4+G9jOCtKaysHC1aj5GwhOlCj5qke1CS3HAJfXDchPBbsqp9ScMF9d5IS5nrOf
- CJuARLaSqr0KHGO1kxVL/LqJZ8AAoBRTaUNKTiYNv2AI689TL3v6EC5xv0yXOt7Q7FXtjPif5
- p5c/Ve9FjEVH1f6TYsLJ1tnqbLD00WazAotQPA3IfIdn8G1Gtv80as+CtaCyy05XW7k+En4kN
- HR82EFDh6wRluDwluXjsSj/DfO4bOookH0jSv+hBfKfr3+c/YR8/h53KhdkW+5CAGHhsMSpvS
- FVPLAWRHuppUGXP1a+MBfi6uUaAt8iSDZ4FLkk0JjjkfmefJEoDa2rgfErNf1vFTbxiovqmeg
- eLs82QMjmImI8a11rhVyPA8ma3NTUZbXg+xQoUqjYG3ZJ+5MUy7l8ASHBc3CRPCT37fUu9Pfb
- oIbG65iBCFTteXvjohuEQd78DnMA0wqVsmlryMrLVc9yXaciilgopRxZz2C37L5FvyE37olt0
- MFIxTRVIwuWWuCBYVNwzCRN9kVOUdNpJ8hMzUIaIBmTJ4oSrc5ZUXhOHqcTrDUPP45kQLlyxh
- LUTM6G2vM4dqQojQwmzmRgXBgCRiBKy4zuqrZoI3dDxoZWrmZII1bqarP5pPpl0DrSOTlGRnp
- u6zbVdPbPgx96OnlNZ2zXQBGcHak/1yozSxQ0GszcoYlb7FBJ5Wa314b2zVlcBWoW/rePjtzt
- qjdNC87alDMcCzLBxAgw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6oYfJCKHi0M=:TP9sY03oElfmXMEsM4Boz1
+ J2r7kVgSvvnavPm+Ro8NGj5MFmvFplTCoMV1DRDleopVL3UWg/eGE22cb+DHnNMCsiZKxyxzU
+ Ghh46mXuEuuhrLG8Rc2cfUSPMF3T+bpF2dVJDKWWSbgP4Q2VpVHdqoGmtA31legA4buMj9kui
+ xSF2ay7NL3DF6zjXniHWbWa1yd4AzH5LMy3YJXlNUviSwFtSWAK2u/Lb+XPmPhx/b2ebYdS0r
+ YsIlSAdqS4D8iZryFoFXq+/ScOZ3nTri2qHDjC2ykxUDDgoGdrszCaX8GqSCV6dX+5Dop2+zj
+ R9stVlBWFrxKdKO4ndoiOVwi84aim2GpLFKeK2lRQKsShaC2DKcr+2O+zkKKEX3JgVTTSn4v9
+ 8AY0UpWnZ5ZUiZZrDjo5xcX2m5PFHbPw0I//2QieVNfFlLiVWj/YXoHmX/vdNHg4HQta46qt+
+ fqlo44LoiMZfrF0lJqfoMlP6YVLfdrKk4ABaZtK3qwz7/QknLWMiJq3KjKH4o4JpdrXBoZKY9
+ Tbw6nlQZ+XC65iVqFV+2T0DhmnS79UWEfuhEhKCjCfFQ3bL3CQyfdV6X3f58QHEIW/Y+7Rrkr
+ IcB6Yq3clHgjA22CTogutch3KXNFEOSs/N+QA2Ekod5nQa8aFk6n7QpkbybkO5zcWiTWdDUrW
+ Lzlwy7z/SS7xfj+6sS0SQvUt1P55JITLKqdWTLqTJJKRo+TY3kNYdfCppUEA5eiWw+qXJSZKP
+ NMpOsA4UI2Le7G/cDEZElNtauHaZgcc4Yi4QvQwVqt0NpVVd9kzAiPOWVmKCWOlLhsdK/dU9a
+ Mz2N6Ix3irdvZS+5WYyIy/Tw3FRQNuUbueE/gQ8a3M3hW4vT9G70i461fxwDFGSBmHJ3hht/I
+ rWgtsDnQZKarKGVtyFJg==
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-Hi Stefan,
-
-On 16.02.21 at 17:52, Stefan Berger wrote:
-> On 2/15/21 7:31 PM, Lino Sanfilippo wrote:
->> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>
->> The following sequence of operations results in a refcount warning:
->>
->> 1. Open device /dev/tpmrm
->> 2. Remove module tpm_tis_spi
->> 3. Write a TPM command to the file descriptor opened at step 1.
->>
->> ------------[ cut here ]------------
->> WARNING: CPU: 3 PID: 1161 at lib/refcount.c:25 kobject_get+0xa0/0xa4
->> refcount_t: addition on 0; use-after-free.
->> Modules linked in: tpm_tis_spi tpm_tis_core tpm mdio_bcm_unimac brcmfma=
-c
->> sha256_generic libsha256 sha256_arm hci_uart btbcm bluetooth cfg80211 v=
-c4
->> brcmutil ecdh_generic ecc snd_soc_core crc32_arm_ce libaes
->> raspberrypi_hwmon ac97_bus snd_pcm_dmaengine bcm2711_thermal snd_pcm
->> snd_timer genet snd phy_generic soundcore [last unloaded: spi_bcm2835]
->> CPU: 3 PID: 1161 Comm: hold_open Not tainted 5.10.0ls-main-dirty #2
->> Hardware name: BCM2711
->> [<c0410c3c>] (unwind_backtrace) from [<c040b580>] (show_stack+0x10/0x14=
-)
->> [<c040b580>] (show_stack) from [<c1092174>] (dump_stack+0xc4/0xd8)
->> [<c1092174>] (dump_stack) from [<c0445a30>] (__warn+0x104/0x108)
->> [<c0445a30>] (__warn) from [<c0445aa8>] (warn_slowpath_fmt+0x74/0xb8)
->> [<c0445aa8>] (warn_slowpath_fmt) from [<c08435d0>] (kobject_get+0xa0/0x=
-a4)
->> [<c08435d0>] (kobject_get) from [<bf0a715c>] (tpm_try_get_ops+0x14/0x54=
- [tpm])
->> [<bf0a715c>] (tpm_try_get_ops [tpm]) from [<bf0a7d6c>] (tpm_common_writ=
-e+0x38/0x60 [tpm])
->> [<bf0a7d6c>] (tpm_common_write [tpm]) from [<c05a7ac0>] (vfs_write+0xc4=
-/0x3c0)
->> [<c05a7ac0>] (vfs_write) from [<c05a7ee4>] (ksys_write+0x58/0xcc)
->> [<c05a7ee4>] (ksys_write) from [<c04001a0>] (ret_fast_syscall+0x0/0x4c)
->> Exception stack(0xc226bfa8 to 0xc226bff0)
->> bfa0:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 00000000 000105b4 00000003 beaf=
-e664 00000014 00000000
->> bfc0: 00000000 000105b4 000103f8 00000004 00000000 00000000 b6f9c000 be=
-afe684
->> bfe0: 0000006c beafe648 0001056c b6eb6944
->> ---[ end trace d4b8409def9b8b1f ]---
->>
->> The reason for this warning is the attempt to get the chip->dev referen=
-ce
->> in tpm_common_write() although the reference counter is already zero.
->>
->> Since commit 8979b02aaf1d ("tpm: Fix reference count to main device") t=
-he
->> extra reference used to prevent a premature zero counter is never taken=
-,
->> because the required TPM_CHIP_FLAG_TPM2 flag is never set.
->>
->> Fix this by moving the TPM 2 character device handling from
->> tpm_chip_alloc() to tpm_add_char_device() which is called at a later po=
-int
->> in time when the flag has been set in case of TPM2.
->>
->> Commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n=
->")
->> already introduced function tpm_devs_release() to release the extra
->> reference but did not implement the required put on chip->devs that res=
-ults
->> in the call of this function.
->>
->> Fix this by putting chip->devs in tpm_chip_unregister().
->>
->> Finally move the new implemenation for the TPM 2 handling into a new
->> function to avoid multiple checks for the TPM_CHIP_FLAG_TPM2 flag in th=
-e
->> good case and error cases.
->>
->> Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n=
->")
->> Fixes: 8979b02aaf1d ("tpm: Fix reference count to main device")
->> Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
->> Signed-off-by: Jason Gunthorpe <jgg@ziepe.ca>
->> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->> Cc: stable@vger.kernel.org
->
->
-> I know you'll post another version, but anyway:
->
-> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
-
-Thank you for testing this, I will send a v5 shortly.
-
-Regards,
-Lino
-
+VGhpcyBwYXRjaCBmaXhlcyBhIHJlZmVyZW5jZSBjb3VudCBpc3N1ZSBpbiB0aGUgVFBNIGNvcmUg
+Y29kZS4KCkNoYW5nZXMgaW4gdjUKLSBtb3ZlIGZ1bmN0aW9uIHRwbV9hZGRfdHBtMl9jaGFyX2Rl
+dmljZSgpIHRvIHRwbTItc3BhY2UuYyBhbmQgcmVuYW1lCml0IHRvIHRwbTJfYWRkX2RldmljZSgp
+IGFzIHJlcXVlc3RlZCBieSBKYXJrbwotIHB1dCAiY2MiIHRhZyBiZWZvcmUgYWxsIG90aGVyIHRh
+Z3MgCi0gZW5zdXJlIHRoYXQgdGhlIGVycm9yIHBhdGggaW4gdHBtMl9hZGRfZGV2aWNlKCkgYWx3
+YXlzIGNhbGxzIAp0aGUgcmVsZWFzZSgpIGZ1bmN0aW9uIG9mIGNoaXAtPmRldnMgYXMgcmVxdWVz
+dGVkIGJ5IEphc29uCi0gcmVmb3JtYXQgYSBjb2RlIGxpbmUgYXMgc3VnZ2VzdGVkIGJ5IERhdmlk
+IExhaWdodAoKQ2hhbmdlcyBpbiB2NAotIGRyb3AgcGF0Y2ggMiAodHBtOiBpbiB0cG0yX2RlbF9z
+cGFjZSBjaGVjayBpZiBvcHMgcG9pbnRlciBpcyBzdGlsbAp2YWxpZCkgc2luY2UgSmFtZXMgQm90
+dG9tbGV5IG9mZmVyZWQgYSBjbGVhbmVyIHNvbHV0aW9uIGZvciB0aGlzCi0gcmVpbXBsZW1lbnQg
+cGF0Y2ggMSB0byBzZXR1cCB0aGUgL2Rldi90cG1ybSBkZXZpY2Ugb25seSBpbiBjYXNlIG9mIFRQ
+TTIKYW5kIGF2b2lkIHRoZSBpbnN0YWxsYXRpb24gb2YgYW5vdGhlciBhY3Rpb24gaGFuZGxlci4g
+VGhpcyBpcyBiYXNlZCBvbiBhCnN1Z2dlc3Rpb24gYW5kIGJhc2ljIGltcGxlbWVudGF0aW9uIGRv
+bmUgYnkgSmFzb24gR3VudGhvcnBlLgotIGFkZGVkIHRhZyB0byBDQyBzdGFibGUKCkNoYW5nZXMg
+aW4gdjMKLSBkcm9wIHRoZSBwYXRjaCB0aGF0IGludHJvZHVjZXMgdGhlIG5ldyBmdW5jdGlvbiB0
+cG1fY2hpcF9mcmVlKCkKLSByZXdvcmsgdGhlIGNvbW1pdCBtZXNzYWdlcyBmb3IgdGhlIHBhdGNo
+ZXMgKHN0eWxlLCB0eXBvcywgZXRjLikKLSBhZGQgZml4ZXMgdGFnIHRvIHBhdGNoIDIKLSBhZGQg
+SmFtZXMgQm90dG9tbGV5IHRvIGNjIGxpc3QKLSBhZGQgc3RhYmxlIG1haWxpbmcgbGlzdCB0byBj
+YyBsaXN0CgpDaGFuZ2VzIGluIHYyOgotIGRyb3AgdGhlIHBhdGNoIHRoYXQgZXJyb25lb3VzbHkg
+Y2xlYW5lZCB1cCBhZnRlciBmYWlsZWQgaW5zdGFsbGF0aW9uIG9mCiAgYW4gYWN0aW9uIGhhbmRs
+ZXIgaW4gdHBtbV9jaGlwX2FsbG9jKCkgKHBvaW50ZWQgb3V0IGJ5IEphcmtrbyBTYWtraW5lbikK
+LSBtYWtlIHRoZSBjb21taXQgbWVzc2FnZSBmb3IgcGF0Y2ggMSBtb3JlIGRldGFpbGVkCi0gYWRk
+IGZpeGVzIHRhZ3MgYW5kIGtlcm5lbCBsb2dzCgoKTGlubyBTYW5maWxpcHBvICgxKToKICBUaGUg
+Zm9sbG93aW5nIHNlcXVlbmNlIG9mIG9wZXJhdGlvbnMgcmVzdWx0cyBpbiBhIHJlZmNvdW50IHdh
+cm5pbmc6CgogZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jICAgfCA0OCArKysrKysrKystLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbS5oICAg
+ICAgICB8ICAxICsKIGRyaXZlcnMvY2hhci90cG0vdHBtMi1zcGFjZS5jIHwgNDggKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogMyBmaWxlcyBjaGFuZ2VkLCA1OSBp
+bnNlcnRpb25zKCspLCAzOCBkZWxldGlvbnMoLSkKCi0tIAoyLjcuNAoK
