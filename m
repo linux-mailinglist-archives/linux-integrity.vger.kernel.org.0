@@ -2,155 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7679131D3CF
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Feb 2021 02:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89FD31D400
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Feb 2021 03:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbhBQBh7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Feb 2021 20:37:59 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38400 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229581AbhBQBh4 (ORCPT
+        id S229993AbhBQCri (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Feb 2021 21:47:38 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36648 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229480AbhBQCrh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Feb 2021 20:37:56 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11H1XWCP044953;
-        Tue, 16 Feb 2021 20:37:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=iCWjSlNcX4UBfFwLG4pDJ/tExgXS2gWvTLfXRETkPkA=;
- b=ptJN+Tpb0gPSTN+P6H4atItw42j/tBEOTGtMGdGmddFnKmfAMSHkTx5c5ztx6aBJmxJN
- LxarRtqTdFT3Z6uEEwfNqsp5XCsu1OE6yEt41wZZlhs3Zj7GpjTq3KJ9BZnTvKI5/dfe
- bZZzRlMbXFsQ6K8wabFDGWA1koscNuSWzY0N9DVIsFEXzadE2flrlul3myArmITjNeSn
- eJsYXS2g0Rk0d/pci2sV3Ur71UUEUU2OUXizrH98/igZ2o8HhW8WNOg6gf0Yxn3qJsmK
- YN6WhNibK8J+yEr7/t9jERiuwY3o+ehaT6+ZHCTwZDE1nDVRB55WdhKCpCUCkRZK+tH5 og== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36rsdvr863-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Feb 2021 20:37:08 -0500
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11H1Y3eS046983;
-        Tue, 16 Feb 2021 20:37:07 -0500
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36rsdvr85h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Feb 2021 20:37:07 -0500
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11H1Vgws007374;
-        Wed, 17 Feb 2021 01:37:06 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma03wdc.us.ibm.com with ESMTP id 36p6d92j87-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Feb 2021 01:37:06 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11H1b6mn11469276
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Feb 2021 01:37:06 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 02BE3124058;
-        Wed, 17 Feb 2021 01:37:06 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9172124055;
-        Wed, 17 Feb 2021 01:37:05 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 17 Feb 2021 01:37:05 +0000 (GMT)
-Subject: Re: [PATCH v5] The following sequence of operations results in a
- refcount warning:
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, James.Bottomley@hansenpartnership.com,
-        David.Laight@ACULAB.COM, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        stable@vger.kernel.org
-References: <1613504532-4165-1-git-send-email-LinoSanfilippo@gmx.de>
- <1613504532-4165-2-git-send-email-LinoSanfilippo@gmx.de>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <c4d81a25-8fa7-93f2-a44a-ad7033553087@linux.ibm.com>
-Date:   Tue, 16 Feb 2021 20:37:05 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <1613504532-4165-2-git-send-email-LinoSanfilippo@gmx.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-16_15:2021-02-16,2021-02-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 clxscore=1011 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102170005
+        Tue, 16 Feb 2021 21:47:37 -0500
+Received: from tusharsu-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 17A9020B6C40;
+        Tue, 16 Feb 2021 18:46:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 17A9020B6C40
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1613530017;
+        bh=H4JU2qfCVJxVHktsTAY9vCsE+wqf20ThHInRYdpff+A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LWKsHCNKSuiuyASRHpZrX7B/JemnJRpWs4OCB+BFRuKZ9ra9AHnwZldoQxBpwpSSR
+         caJcqBszTOWsE3BI0Lcqrn7RBf3XfmaXzIw4IL89I6ifrC8+CaUa3FJVFa6JWyfOap
+         D/KioGHUqcBxG1dLSTDQUI+FK6sM1wmMtW2QrQDE=
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+To:     zohar@linux.ibm.com
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] IMA: support for duplicate data measurement
+Date:   Tue, 16 Feb 2021 18:46:49 -0800
+Message-Id: <20210217024649.23405-1-tusharsu@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2/16/21 2:42 PM, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->
-> 1. Open device /dev/tpmrm.
-> 2. Remove module tpm_tis_spi.
-> 3. Write a TPM command to the file descriptor opened at step 1.
->
-> ------------[ cut here ]------------
-> WARNING: CPU: 3 PID: 1161 at lib/refcount.c:25 kobject_get+0xa0/0xa4
-> refcount_t: addition on 0; use-after-free.
-> Modules linked in: tpm_tis_spi tpm_tis_core tpm mdio_bcm_unimac brcmfmac
-> sha256_generic libsha256 sha256_arm hci_uart btbcm bluetooth cfg80211 vc4
-> brcmutil ecdh_generic ecc snd_soc_core crc32_arm_ce libaes
-> raspberrypi_hwmon ac97_bus snd_pcm_dmaengine bcm2711_thermal snd_pcm
-> snd_timer genet snd phy_generic soundcore [last unloaded: spi_bcm2835]
-> CPU: 3 PID: 1161 Comm: hold_open Not tainted 5.10.0ls-main-dirty #2
-> Hardware name: BCM2711
-> [<c0410c3c>] (unwind_backtrace) from [<c040b580>] (show_stack+0x10/0x14)
-> [<c040b580>] (show_stack) from [<c1092174>] (dump_stack+0xc4/0xd8)
-> [<c1092174>] (dump_stack) from [<c0445a30>] (__warn+0x104/0x108)
-> [<c0445a30>] (__warn) from [<c0445aa8>] (warn_slowpath_fmt+0x74/0xb8)
-> [<c0445aa8>] (warn_slowpath_fmt) from [<c08435d0>] (kobject_get+0xa0/0xa4)
-> [<c08435d0>] (kobject_get) from [<bf0a715c>] (tpm_try_get_ops+0x14/0x54 [tpm])
-> [<bf0a715c>] (tpm_try_get_ops [tpm]) from [<bf0a7d6c>] (tpm_common_write+0x38/0x60 [tpm])
-> [<bf0a7d6c>] (tpm_common_write [tpm]) from [<c05a7ac0>] (vfs_write+0xc4/0x3c0)
-> [<c05a7ac0>] (vfs_write) from [<c05a7ee4>] (ksys_write+0x58/0xcc)
-> [<c05a7ee4>] (ksys_write) from [<c04001a0>] (ret_fast_syscall+0x0/0x4c)
-> Exception stack(0xc226bfa8 to 0xc226bff0)
-> bfa0:                   00000000 000105b4 00000003 beafe664 00000014 00000000
-> bfc0: 00000000 000105b4 000103f8 00000004 00000000 00000000 b6f9c000 beafe684
-> bfe0: 0000006c beafe648 0001056c b6eb6944
-> ---[ end trace d4b8409def9b8b1f ]---
->
-> The reason for this warning is the attempt to get the chip->dev reference
-> in tpm_common_write() although the reference counter is already zero.
->
-> Since commit 8979b02aaf1d ("tpm: Fix reference count to main device") the
-> extra reference used to prevent a premature zero counter is never taken,
-> because the required TPM_CHIP_FLAG_TPM2 flag is never set.
->
-> Fix this by moving the TPM 2 character device handling from
-> tpm_chip_alloc() to tpm_add_char_device() which is called at a later point
-> in time when the flag has been set in case of TPM2.
->
-> Commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
-> already introduced function tpm_devs_release() to release the extra
-> reference but did not implement the required put on chip->devs that results
-> in the call of this function.
->
-> Fix this by putting chip->devs in tpm_chip_unregister().
->
-> Finally move the new implementation for the TPM 2 handling into a new
-> function to avoid multiple checks for the TPM_CHIP_FLAG_TPM2 flag in the
-> good case and error cases.
->
-> Cc: stable@vger.kernel.org
-> Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
-> Fixes: 8979b02aaf1d ("tpm: Fix reference count to main device")
-> Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
-> Signed-off-by: Jason Gunthorpe <jgg@ziepe.ca>
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+IMA does not measure duplicate data since TPM extend is a very expensive
+operation.  However, in some cases, the measurement of duplicate data
+is necessary to accurately determine the current state of the system.
+Eg, SELinux state changing from 'audit', to 'enforcing', and back to
+'audit' again.  In this example, currently, IMA will not measure the
+last state change to 'audit'.  This limits the ability of attestation
+services to accurately determine the current state of the measurements 
+on the system.
 
+Update ima_add_template_entry() to support measurement of duplicate
+data, driven by a Kconfig option - IMA_DISABLE_HTABLE.
 
-Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+---
+Change Log v2:
+ - Incorporated feedback from Mimi on v1.
+ - The fix is not just applicable to measurement of critical data,
+   it now applies to other buffers and file data as well.
+ - the fix is driven by a Kconfig option IMA_DISABLE_HTABLE, rather
+   than a IMA policy condition - allow_dup.
 
+ security/integrity/ima/Kconfig     | 7 +++++++
+ security/integrity/ima/ima_queue.c | 5 +++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index 12e9250c1bec..057c20b46587 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -334,3 +334,10 @@ config IMA_SECURE_AND_OR_TRUSTED_BOOT
+        help
+           This option is selected by architectures to enable secure and/or
+           trusted boot based on IMA runtime policies.
++
++config IMA_DISABLE_HTABLE
++	bool "disable htable to allow measurement of duplicate data"
++	depends on IMA
++	default n
++	help
++	   This option disables htable to allow measurement of duplicate data.
+diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
+index c096ef8945c7..532da87ce519 100644
+--- a/security/integrity/ima/ima_queue.c
++++ b/security/integrity/ima/ima_queue.c
+@@ -168,7 +168,7 @@ int ima_add_template_entry(struct ima_template_entry *entry, int violation,
+ 	int result = 0, tpmresult = 0;
+ 
+ 	mutex_lock(&ima_extend_list_mutex);
+-	if (!violation) {
++	if (!violation && !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE)) {
+ 		if (ima_lookup_digest_entry(digest, entry->pcr)) {
+ 			audit_cause = "hash_exists";
+ 			result = -EEXIST;
+@@ -176,7 +176,8 @@ int ima_add_template_entry(struct ima_template_entry *entry, int violation,
+ 		}
+ 	}
+ 
+-	result = ima_add_digest_entry(entry, 1);
++	result = ima_add_digest_entry(entry,
++				      !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE));
+ 	if (result < 0) {
+ 		audit_cause = "ENOMEM";
+ 		audit_info = 0;
+-- 
+2.17.1
 
