@@ -2,121 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8286831E3DC
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Feb 2021 02:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13A831E48C
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Feb 2021 04:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbhBRB1r (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Feb 2021 20:27:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbhBRB1p (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Feb 2021 20:27:45 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001ABC061788
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Feb 2021 17:27:04 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id v206so719751qkb.3
-        for <linux-integrity@vger.kernel.org>; Wed, 17 Feb 2021 17:27:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WIYnlQd69xhjP1KtpqKWaiv6gup5kuEJgY01j5TiFII=;
-        b=RGT33ivGgyP3f+7nIxfhdZMgSmkX4zKjS6ljUR7Jp1t8fqCxWvc/FNlFBaiVJy5rh1
-         LQz+xzZkl4PpVBfgrBBcY+B/APBQaevBRxNxRTu45gY1lY3KLrNPgyn9bJI8vepnWZ2R
-         +CXSlcwj9BYt+EtSsljX60dxmo0LRJQoWEs//F4smFq6z4R4Ta7B8mX+Arq5EPUiIMD3
-         7bwQ81EMU5hqzDIhbb/8eg+uHHgHq0AlnILlGn7zCu7IxoTzGVBFdWf0cB/7UIRFoMOy
-         oQAEdJ/4yToXyB35zNbbEIL0OFzTs/fVZiLeAuG92cgwaV2+2ELqmK74OEDKeoT1pw4L
-         haRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WIYnlQd69xhjP1KtpqKWaiv6gup5kuEJgY01j5TiFII=;
-        b=MwQhI9j8MIa2gVlGDh+szgjNG6fPCHEDOXrX9GvxBlGl2x+Wb+sVpRxwqwdJwzOmMD
-         zSa+jMQuPQJQ78yReNMedxbHhUcLDAHgY9tCd6FVLXJJ81RemX+NEvPKEjIpfh3efRHa
-         d4JJtdpRpgw/ONpPnQx8j5EDrK9iVnRoSxPvludDVqz5MpQFQk/SbhT8af/MrpQI7fN3
-         Ps5YtmTd5pqwcseix9CeKgHQV9AWKatXUcB/izqQwN0JK8SJYhfVWmcCRPjPvYBd/pfF
-         zwFOxK+pvDC+MckrMTPF3cFezyo9a60e7Epb5Tmpynz6jsqxfVgmXhd658z9lO3uwL4e
-         LkUw==
-X-Gm-Message-State: AOAM530WD6ybnLMwgskWcvC+m+UrypQD+0HyyPcv6W6F3Q/vpTd6SGMt
-        kaSP7mC+szq9BB2J14rtenu+aw==
-X-Google-Smtp-Source: ABdhPJxAl17zqIA9kjH7kORlbxNrQ4Zp5oEk6/EN2OItHfxsXghzUOOOFljISpMc/iKRP55OIkNRHg==
-X-Received: by 2002:a05:620a:2044:: with SMTP id d4mr2147952qka.93.1613611624232;
-        Wed, 17 Feb 2021 17:27:04 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
-        by smtp.gmail.com with ESMTPSA id 76sm2992813qke.95.2021.02.17.17.27.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Feb 2021 17:27:03 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1lCY5u-00AGCk-SA; Wed, 17 Feb 2021 21:27:02 -0400
-Date:   Wed, 17 Feb 2021 21:27:02 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "stefanb@linux.vnet.ibm.com" <stefanb@linux.vnet.ibm.com>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH v4] tpm: fix reference counting for struct tpm_chip
-Message-ID: <20210218012702.GX4718@ziepe.ca>
-References: <1613435460-4377-1-git-send-email-LinoSanfilippo@gmx.de>
- <1613435460-4377-2-git-send-email-LinoSanfilippo@gmx.de>
- <20210216125342.GU4718@ziepe.ca>
- <YCvtF4qfG35tHM5e@kernel.org>
- <74bbc76260594a8a8f7993ab66cca104@AcuMS.aculab.com>
- <YC2VM1JI0tECPs7g@kernel.org>
+        id S230128AbhBRDcX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Feb 2021 22:32:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41628 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229885AbhBRDcW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 17 Feb 2021 22:32:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2104F60C3D;
+        Thu, 18 Feb 2021 03:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613619101;
+        bh=c7ZJ7SvGbLoYA4yllijdf6qOTWsWiQ5Rkd+YYUthhQo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hubX+h+oP6mb2WCOFKZxsAabsFB2DAoaUej6SLrivWfT8AJMx1aq+9rHLC/+mCfon
+         OVwu6B35eGviudUgWdobiC7T1FE1HtG3hYW6X4jArsY3nhwd2UjhN69sbBG6qRhk3+
+         2gWS+DQJYHhzgXedcryXfkjDnCPMgeu5DEwq9id3drWK5c18Fy5uUXKh6VJndRVcpP
+         vufocbL8024qhD+CizlgqIdIIxJCjr1rdgvrOBLRAgX8+YAARsLw/UaYRcmTTd6auf
+         1GqOajlkS0L22aFAFcLxOCutwLXvoKj0uHgMBGs0uPq/sNCBMztUtHVu5ZyvXJANwW
+         NTTvrA7NJj2RA==
+Date:   Thu, 18 Feb 2021 05:31:29 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jmorris@namei.org, dhowells@redhat.com, peterhuewe@gmx.de
+Subject: [GIT PULL] TPM DEVICE DRIVER changes for v5.12
+Message-ID: <YC3fkU2pLncCkeps@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YC2VM1JI0tECPs7g@kernel.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 18, 2021 at 12:14:11AM +0200, Jarkko Sakkinen wrote:
-> On Tue, Feb 16, 2021 at 04:31:26PM +0000, David Laight wrote:
-> > ...
-> > > > > +	get_device(&chip->dev);
-> > > > > +	chip->devs.release = tpm_devs_release;
-> > > > > +	chip->devs.devt =
-> > > > > +		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> > > 
-> > > Isn't this less than 100 chars?
-> > 
-> > Still best kept under 80 if 'reasonable'?
-> > 
-> > Really it is just split in the wrong place:
-> > 	chip->devs.devt = MKDEV(MAJOR(tpm_devt),
-> > 					chip->dev_num + TPM_NUM_DEVICES);
-> 
-> 
-> Well it looks crap IMHO. Would be more reasonable to have it in a single 
-> like. And it is legit too, since it is accepted by checkpatch.
-> 
-> You might break the lines within 80 chars if it is somehow "logically"
-> consistent.
+Hi Linus,
 
-FWIW, I've become kind of tired of the style wishywashyness I've
-mostly been happy to accept anything that clang-format spits out for
-ordinary C constructs.
+This now my "official" first PR for v5.12. There's still some known issues
+in the tpm_tis driver *not& fixed in this first pull request, which trigger a
+warning but do not overally collapse the kernel by any means.
 
-It is good enough and universally usable. If devs don't have it linked
-to their editor to format single expression or format selected blocks,
-they are missing out :)
+The fixes are in good progress, but unfortunately there's still some fine
+tuning required before I can include to a pull request. I'm sure we will
+get them done around rc2/rc3. Better to make sure that the fixes do right
+things right, rather than rush them to a PR.
 
-The community consensus on style is quite unclear. Is 1 or 2 above the
-majority preference? Does this case fall under the new "use more than
-80 cols if it improves readability?" I have no idea.
+That's also the reason why this comes so late. Sorry about that. I have
+also kind of "reorg" going on with my maintainer workflows, given the
+increased review activity in keyrings and SGX, which temporarily causes
+a bit overhead until becoming "status quo".
 
-Frankly, for most people writing driver code, if they consistently use
-clang-format their work will be alot better than if they try to do it
-by hand. It takes a lot of experiance to reliably eyeball something
-close to the kernel style..
+New features
+============
 
-Jason
+1. Cr50 I2C TPM driver.
+2. Sysfs exports of PCR registers in TPM 2.0 chips.
+
+Bug fixes
+=========
+
+*  This contains bug fixes for tpm_tis driver, which had a racy wait for
+   hardware state change to be ready to send a command to the TPM chip. The
+   bug has existed already since 2006, but has only made itself known in
+   recent past. This is the same as the "last time" :-)
+*  Otherwise there's bunch of fixes for not as alarming regressions. I
+   think the list is about the same as last time, except I added fixes for
+   some disjoint bugs in trusted keys that I found some time ago.
+
+/Jarkko
+
+The following changes since commit f40ddce88593482919761f74910f42f4b84c004b:
+
+  Linux 5.11 (2021-02-14 14:32:24 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.12-rc1-v2
+
+for you to fetch changes up to 8c657a0590de585b1115847c17b34a58025f2f4b:
+
+  KEYS: trusted: Reserve TPM for seal and unseal operations (2021-02-16 10:40:28 +0200)
+
+----------------------------------------------------------------
+tpmdd updates for Linux v5.12-rc1
+
+----------------------------------------------------------------
+Andrew Zaborowski (1):
+      keys: Update comment for restrict_link_by_key_or_keyring_chain
+
+Duncan Laurie (1):
+      char: tpm: add i2c driver for cr50
+
+Gustavo A. R. Silva (1):
+      tpm: Fix fall-through warnings for Clang
+
+James Bottomley (4):
+      tpm_tis: Fix check_locality for correct locality acquisition
+      tpm_tis: Clean up locality release
+      tpm: add sysfs exports for all banks of PCR registers
+      ABI: add sysfs description for tpm exports of PCR registers
+
+Jarkko Sakkinen (3):
+      KEYS: trusted: Fix incorrect handling of tpm_get_random()
+      KEYS: trusted: Fix migratable=1 failing
+      KEYS: trusted: Reserve TPM for seal and unseal operations
+
+Rikard Falkeborn (1):
+      tpm/ppi: Constify static struct attribute_group
+
+Sebastian Andrzej Siewior (1):
+      tpm: Remove tpm_dev_wq_lock
+
+ Documentation/ABI/stable/sysfs-class-tpm  |  14 +
+ crypto/asymmetric_keys/restrict.c         |   7 +-
+ drivers/char/tpm/Kconfig                  |  10 +
+ drivers/char/tpm/Makefile                 |   2 +
+ drivers/char/tpm/eventlog/tpm1.c          |   1 +
+ drivers/char/tpm/tpm-chip.c               |   2 +
+ drivers/char/tpm/tpm-dev-common.c         |   1 -
+ drivers/char/tpm/tpm-sysfs.c              | 179 +++++++
+ drivers/char/tpm/tpm.h                    |   4 -
+ drivers/char/tpm/tpm_ppi.c                |   2 +-
+ drivers/char/tpm/tpm_tis_core.c           |  50 +-
+ drivers/char/tpm/tpm_tis_i2c_cr50.c       | 790 ++++++++++++++++++++++++++++++
+ include/linux/tpm.h                       |  14 +-
+ security/keys/trusted-keys/trusted_tpm1.c |  22 +-
+ security/keys/trusted-keys/trusted_tpm2.c |  22 +-
+ 15 files changed, 1054 insertions(+), 66 deletions(-)
+ create mode 100644 drivers/char/tpm/tpm_tis_i2c_cr50.c
