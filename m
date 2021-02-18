@@ -2,132 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D13A831E48C
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Feb 2021 04:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B331731ED56
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Feb 2021 18:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbhBRDcX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Feb 2021 22:32:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41628 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229885AbhBRDcW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Feb 2021 22:32:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2104F60C3D;
-        Thu, 18 Feb 2021 03:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613619101;
-        bh=c7ZJ7SvGbLoYA4yllijdf6qOTWsWiQ5Rkd+YYUthhQo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hubX+h+oP6mb2WCOFKZxsAabsFB2DAoaUej6SLrivWfT8AJMx1aq+9rHLC/+mCfon
-         OVwu6B35eGviudUgWdobiC7T1FE1HtG3hYW6X4jArsY3nhwd2UjhN69sbBG6qRhk3+
-         2gWS+DQJYHhzgXedcryXfkjDnCPMgeu5DEwq9id3drWK5c18Fy5uUXKh6VJndRVcpP
-         vufocbL8024qhD+CizlgqIdIIxJCjr1rdgvrOBLRAgX8+YAARsLw/UaYRcmTTd6auf
-         1GqOajlkS0L22aFAFcLxOCutwLXvoKj0uHgMBGs0uPq/sNCBMztUtHVu5ZyvXJANwW
-         NTTvrA7NJj2RA==
-Date:   Thu, 18 Feb 2021 05:31:29 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        jmorris@namei.org, dhowells@redhat.com, peterhuewe@gmx.de
-Subject: [GIT PULL] TPM DEVICE DRIVER changes for v5.12
-Message-ID: <YC3fkU2pLncCkeps@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        id S231570AbhBRR3T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 Feb 2021 12:29:19 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43554 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233291AbhBROHO (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 18 Feb 2021 09:07:14 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11IE2LlY149221;
+        Thu, 18 Feb 2021 09:06:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=kFkc2BkjITUUVcB3zRSRaU4iPFcuwkbtNUW8tXZ2WIQ=;
+ b=ft+rgwXClHwJztvaqhGVEvJP4IYnFW+y/NxhMURDo6CAWWn/5vS1muU1bFCu75uiedYo
+ +dofguyRzrsEZICP6HMq8rf1K5kksTgFy6pf0E/Osmz0I2S1POlhfEbaKebeEbq7S5wF
+ 5aLPhcD/4Lm2UpiO2UE5Z4XOvf3S+XIoPDrJw3oeFyw1ZvhPMK6zulo2+seV7bs32gJr
+ 8HM51FgoSPF5DbxcWMb1gxAX8oUMzKVXfBHGtYUtCNPrCITzc/O7iyEoCVcgmHP0OLDN
+ rzFGBpjomfxItKKfJhxlqNHulPeQO09JZWokjJ3Q/yjQ+eN1LaVBCfzpBBls1vVV+4Si xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36ssn603ux-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Feb 2021 09:06:20 -0500
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11IE2LUJ149214;
+        Thu, 18 Feb 2021 09:06:20 -0500
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36ssn603ue-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Feb 2021 09:06:20 -0500
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11IE1shW009355;
+        Thu, 18 Feb 2021 14:06:18 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 36p61hcn6y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Feb 2021 14:06:18 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11IE64PF37093884
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Feb 2021 14:06:04 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6782442045;
+        Thu, 18 Feb 2021 14:06:16 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 265FD4203F;
+        Thu, 18 Feb 2021 14:06:15 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.24.199])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 18 Feb 2021 14:06:14 +0000 (GMT)
+Message-ID: <c4c8e4dc150440de6d6b97c8bb06cea367d98bad.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils v2] ima-evm-utils: Support SM2 algorithm
+ for sign and verify
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Date:   Thu, 18 Feb 2021 09:06:13 -0500
+In-Reply-To: <20210211052241.91068-1-tianjia.zhang@linux.alibaba.com>
+References: <20210211052241.91068-1-tianjia.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-18_05:2021-02-18,2021-02-18 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ spamscore=0 clxscore=1011 mlxlogscore=999 mlxscore=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102180120
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
+Hi Tianjia,
 
-This now my "official" first PR for v5.12. There's still some known issues
-in the tpm_tis driver *not& fixed in this first pull request, which trigger a
-warning but do not overally collapse the kernel by any means.
+On Thu, 2021-02-11 at 13:22 +0800, Tianjia Zhang wrote:
+> The combination of SM2 and SM3 algorithms has been implemented in the
+> kernel. At present, the ima-evm-utils signature tool does not support
+> this combination of algorithms. Because in the current version of
+> OpenSSL 1.1.1, the SM2 algorithm and the public key using the EC
+> algorithm share the same ID 'EVP_PKEY_EC', and the specific algorithm
+> can only be distinguished by the curve name used. This patch supports
+> this feature.
+> 
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> ---
+>  src/libimaevm.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/src/libimaevm.c b/src/libimaevm.c
+> index fa6c278..589dd09 100644
+> --- a/src/libimaevm.c
+> +++ b/src/libimaevm.c
+> @@ -518,6 +518,16 @@ static int verify_hash_v2(const char *file, const unsigned char *hash, int size,
+>  		return -1;
+>  	}
+>  
+> +#ifdef EVP_PKEY_SM2
+> +	/* If EC key are used, check whether it is SM2 key */
+> +	if (EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
+> +		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
+> +		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
+> +		if (curve == NID_sm2)
+> +			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
+> +	}
+> +#endif
+> +
 
-The fixes are in good progress, but unfortunately there's still some fine
-tuning required before I can include to a pull request. I'm sure we will
-get them done around rc2/rc3. Better to make sure that the fixes do right
-things right, rather than rush them to a PR.
+Suppose a file is signed on one system and verified on another.  What
+happens if EVP_PKEY_SM2 is defined on one system, but not the other? 
+Since the signing/verifying code do exactly the same thing, a
+sign_verify test wouldn't detect the problem.   In anycase, please
+define a sign_verify test.
 
-That's also the reason why this comes so late. Sorry about that. I have
-also kind of "reorg" going on with my maintainer workflows, given the
-increased review activity in keyrings and SGX, which temporarily causes
-a bit overhead until becoming "status quo".
+thanks,
 
-New features
-============
+Mimi
 
-1. Cr50 I2C TPM driver.
-2. Sysfs exports of PCR registers in TPM 2.0 chips.
 
-Bug fixes
-=========
+>  	st = "EVP_PKEY_CTX_new";
+>  	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
+>  		goto err;
+> @@ -932,6 +942,16 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+>  		return -1;
+>  	}
+>  
+> +#ifdef EVP_PKEY_SM2
+> +	/* If EC key are used, check whether it is SM2 key */
+> +	if (EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
+> +		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
+> +		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
+> +		if (curve == NID_sm2)
+> +			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
+> +	}
+> +#endif
+> +
+>  	calc_keyid_v2(&keyid, name, pkey);
+>  	hdr->keyid = keyid;
+>  
 
-*  This contains bug fixes for tpm_tis driver, which had a racy wait for
-   hardware state change to be ready to send a command to the TPM chip. The
-   bug has existed already since 2006, but has only made itself known in
-   recent past. This is the same as the "last time" :-)
-*  Otherwise there's bunch of fixes for not as alarming regressions. I
-   think the list is about the same as last time, except I added fixes for
-   some disjoint bugs in trusted keys that I found some time ago.
 
-/Jarkko
-
-The following changes since commit f40ddce88593482919761f74910f42f4b84c004b:
-
-  Linux 5.11 (2021-02-14 14:32:24 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.12-rc1-v2
-
-for you to fetch changes up to 8c657a0590de585b1115847c17b34a58025f2f4b:
-
-  KEYS: trusted: Reserve TPM for seal and unseal operations (2021-02-16 10:40:28 +0200)
-
-----------------------------------------------------------------
-tpmdd updates for Linux v5.12-rc1
-
-----------------------------------------------------------------
-Andrew Zaborowski (1):
-      keys: Update comment for restrict_link_by_key_or_keyring_chain
-
-Duncan Laurie (1):
-      char: tpm: add i2c driver for cr50
-
-Gustavo A. R. Silva (1):
-      tpm: Fix fall-through warnings for Clang
-
-James Bottomley (4):
-      tpm_tis: Fix check_locality for correct locality acquisition
-      tpm_tis: Clean up locality release
-      tpm: add sysfs exports for all banks of PCR registers
-      ABI: add sysfs description for tpm exports of PCR registers
-
-Jarkko Sakkinen (3):
-      KEYS: trusted: Fix incorrect handling of tpm_get_random()
-      KEYS: trusted: Fix migratable=1 failing
-      KEYS: trusted: Reserve TPM for seal and unseal operations
-
-Rikard Falkeborn (1):
-      tpm/ppi: Constify static struct attribute_group
-
-Sebastian Andrzej Siewior (1):
-      tpm: Remove tpm_dev_wq_lock
-
- Documentation/ABI/stable/sysfs-class-tpm  |  14 +
- crypto/asymmetric_keys/restrict.c         |   7 +-
- drivers/char/tpm/Kconfig                  |  10 +
- drivers/char/tpm/Makefile                 |   2 +
- drivers/char/tpm/eventlog/tpm1.c          |   1 +
- drivers/char/tpm/tpm-chip.c               |   2 +
- drivers/char/tpm/tpm-dev-common.c         |   1 -
- drivers/char/tpm/tpm-sysfs.c              | 179 +++++++
- drivers/char/tpm/tpm.h                    |   4 -
- drivers/char/tpm/tpm_ppi.c                |   2 +-
- drivers/char/tpm/tpm_tis_core.c           |  50 +-
- drivers/char/tpm/tpm_tis_i2c_cr50.c       | 790 ++++++++++++++++++++++++++++++
- include/linux/tpm.h                       |  14 +-
- security/keys/trusted-keys/trusted_tpm1.c |  22 +-
- security/keys/trusted-keys/trusted_tpm2.c |  22 +-
- 15 files changed, 1054 insertions(+), 66 deletions(-)
- create mode 100644 drivers/char/tpm/tpm_tis_i2c_cr50.c
