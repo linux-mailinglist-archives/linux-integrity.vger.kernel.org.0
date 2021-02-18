@@ -2,163 +2,183 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 400A931F209
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Feb 2021 23:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FEE431F20D
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Feb 2021 23:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbhBRWEA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 Feb 2021 17:04:00 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54318 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229681AbhBRWD6 (ORCPT
+        id S229878AbhBRWFz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 18 Feb 2021 17:05:55 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:40292 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229480AbhBRWFz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 Feb 2021 17:03:58 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11IM3EHb041452;
-        Thu, 18 Feb 2021 17:03:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=rYEWiDhJo8xqBxtCjR7vOI84a6AhNxwReSQB5H6lFk8=;
- b=aBLepCMdtd8aDWCbXa4JTnLXAr4OEs2PFpmX+WScnapFhWPMBUi1BreJ2Oj1k11nG+gk
- RZZYvD8j7I2PnRAjVoYFyJ9jlxVxPVUQAjWlta2vs/mku8cZxuqboxwgTddPAYyoscue
- 7dQkjhPgJNjGyHaDZhSKkAI0EsN02LYvoXsjqK0A1/ZXhNa6m8MNSWeWsFQAeGv6kr9H
- nqFnCtvBteLj5yMP+ozBLUIL3fl6TZrtZjs1PWiaCuEygriRrYyMMNuGDbXf0seWxoq8
- i/7p+U9QyMNehX5j6tOm+3b0F5pzYq/Pu3QTs+P1c6xiF8Ux2F696exADYgS06dhVJKN 2g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36sy3atmpk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Feb 2021 17:03:14 -0500
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11IM3Dk7041347;
-        Thu, 18 Feb 2021 17:03:13 -0500
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36sy3atme8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Feb 2021 17:03:13 -0500
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11ILpqRg006684;
-        Thu, 18 Feb 2021 22:02:55 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma04wdc.us.ibm.com with ESMTP id 36p6d9h5rb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Feb 2021 22:02:55 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11IM2sjI22544720
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Feb 2021 22:02:54 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A8306E05F;
-        Thu, 18 Feb 2021 22:02:54 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7F7F76E05E;
-        Thu, 18 Feb 2021 22:02:53 +0000 (GMT)
-Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com (unknown [9.211.90.194])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Feb 2021 22:02:53 +0000 (GMT)
-Subject: Re: [PATCH 2/5] keys: generate self-signed module signing key using
- CSR
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
-Cc:     linux-security-module@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20210211195435.135582-1-nayna@linux.ibm.com>
- <20210211195435.135582-3-nayna@linux.ibm.com>
- <c9e509fb-59df-28b4-654c-543cd922239c@linux.ibm.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-Message-ID: <92dcd8a4-4cb8-e0d0-56cb-e3c0736278ce@linux.vnet.ibm.com>
-Date:   Thu, 18 Feb 2021 17:02:53 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Thu, 18 Feb 2021 17:05:55 -0500
+Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 761D720B6C40;
+        Thu, 18 Feb 2021 14:05:13 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 761D720B6C40
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1613685913;
+        bh=iEhDQLoIk23OnuNoJgQfmHzfz5ExgtOc2F57YuZszSQ=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=B84+FYV5f+2zn0nr54Gppsw7P7e62d5QiDTR80sHToH6PpHpOKiCwZB8lQni/Y2Oa
+         XzLUOBaXQ/EX98118Hd/LhyWgJlExu6Uh/ZgLJ+WwUcpRIBqFH5ZenjYJfR/4CkJsL
+         kYFoeROt+mNr9WcAOEoRps7ucr6SlWa61ML9YGX4=
+Subject: Re: [PATCH v2] IMA: support for duplicate data measurement
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210217024649.23405-1-tusharsu@linux.microsoft.com>
+ <ab197aa9719b4218ab497b55f0bc78a0dadc83dd.camel@linux.ibm.com>
+ <5236e03f-9be4-f7f3-ec6c-29f00c16dc18@linux.microsoft.com>
+ <bb4356d779720b8fa9c342647132cfeec938c296.camel@linux.ibm.com>
+ <21538a53-0174-e3b4-f1e8-ddb8cc334a79@linux.microsoft.com>
+Message-ID: <6c2d2242-119c-2a8a-8062-6326fed6a45d@linux.microsoft.com>
+Date:   Thu, 18 Feb 2021 14:05:12 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <c9e509fb-59df-28b4-654c-543cd922239c@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <21538a53-0174-e3b4-f1e8-ddb8cc334a79@linux.microsoft.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-18_09:2021-02-18,2021-02-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- adultscore=0 spamscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501
- clxscore=1015 impostorscore=0 suspectscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102180182
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Mimi,
 
-On 2/11/21 5:01 PM, Stefan Berger wrote:
-> On 2/11/21 2:54 PM, Nayna Jain wrote:
->> Loading a key on the IMA trusted keyring requires the key be signed
->> by an existing key on the builtin or secondary trusted keyring.
->> Creating a Certificate Signing Request (CSR) allows the certificate
->> to be self-signed or signed by a CA.
+On 2021-02-17 12:49 p.m., Tushar Sugandhi wrote:
+> 
+> 
+> On 2021-02-17 12:39 p.m., Mimi Zohar wrote:
+>> On Wed, 2021-02-17 at 10:53 -0800, Tushar Sugandhi wrote:
+>>> Thanks for the feedback Mimi.
+>>> Appreciate it.
+>>>
+>>> On 2021-02-17 7:03 a.m., Mimi Zohar wrote:
+>>>> Hi Tushar,
+>>>>
+>>>> The Subject line could be improved.� Perhaps something like - "IMA:
+>>>> support for duplicate measurement records"
+>>>>
+>>> Will do.
+>>>
+>>>> On Tue, 2021-02-16 at 18:46 -0800, Tushar Sugandhi wrote:
+>>>>> IMA does not measure duplicate data since TPM extend is a very 
+>>>>> expensive
+>>>>> operation.� However, in some cases, the measurement of duplicate data
+>>>>> is necessary to accurately determine the current state of the system.
+>>>>> Eg, SELinux state changing from 'audit', to 'enforcing', and back to
+>>>>> 'audit' again.� In this example, currently, IMA will not measure the
+>>>>> last state change to 'audit'.� This limits the ability of attestation
+>>>>> services to accurately determine the current state of the measurements
+>>>>> on the system.
+>>>>
+>>>> This patch description is written from your specific usecase
+>>>> perspective, but it impacts file and buffer data measurements as well,
+>>>> not only critical data measurements.� In all of these situations, with
+>>>> this patch a new measurement record is added/appended to the
+>>>> measurement list.� Please re-write the patch description making it more
+>>>> generic.
+>>>>
+>>>> For example, I would start with something like, "IMA does not include
+>>>> duplicate file, buffer or critical data measurement records ..."
+>>>>
+>>> Agreed.
+>>> I will generalize the description further and send the v3 for review.
 >>
->> This patch generates a self-signed module signing key using CSR.
+>> It would be good to boot with the ima_policy=tcb policy with/without
+>> your patch and account for the different number of measurements.�� Are
+>> all the differences related to duplicate measurements - original file
+>> hash -> new file hash -> original file hash - similar to what you
+>> described.
 >>
->> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
->> ---
->>   Makefile       |  3 ++-
->>   certs/Makefile | 15 +++++++++++----
->>   2 files changed, 13 insertions(+), 5 deletions(-)
+> Thanks for the ima_policy=tcb pointer.
+> 
+> I tested my patch with:
+>  �- duplicate buffer content for "measure func=CRITICAL_DATA"
+>  �- and reading the same file twice with "measure func=FILE_CHECK 
+> mask=MAY_READ"
+> 
+> In both the above use cases, IMA is measuring the duplicate entries with 
+> the patch, and not measuring the duplicate entries w/o the patch.
+> 
+> I will test the "ima_policy=tcb" boot-scenario as you suggested, before 
+> posting the next version.
+> 
+
+I booted the system with "ima_policy=tcb" policy with/without my patch.
+I also removed /etc/ima/ima-policy for testing these use-cases.
+(so that it wouldn't override the policy generated by boot param 
+"ima_policy=tcb").
+
+I double checked the contents of the kernel policy:
+#cat /sys/kernel/security/integrity/ima/policy
+     dont_measure fsmagic=0x9fa0
+     dont_measure fsmagic=0x62656572
+     dont_measure fsmagic=0x64626720
+     dont_measure fsmagic=0x1021994
+     dont_measure fsmagic=0x1cd1
+     dont_measure fsmagic=0x42494e4d
+     dont_measure fsmagic=0x73636673
+     dont_measure fsmagic=0xf97cff8c
+     dont_measure fsmagic=0x43415d53
+     dont_measure fsmagic=0x27e0eb
+     dont_measure fsmagic=0x63677270
+     dont_measure fsmagic=0x6e736673
+     dont_measure fsmagic=0xde5e81e4
+     measure func=MMAP_CHECK mask=MAY_EXEC
+     measure func=BPRM_CHECK mask=MAY_EXEC
+     measure func=FILE_CHECK mask=^MAY_READ euid=0
+     measure func=FILE_CHECK mask=^MAY_READ uid=0
+     measure func=MODULE_CHECK
+     measure func=FIRMWARE_CHECK
+     measure func=POLICY_CHECK
+
+And then I compared the contents of the ascii_runtime_measurements with 
+and without my patch.
+
+And here are my findings:
+
+(1) Files like systemd-udevd, x2go_sessions etc. get measured multiple
+     times with the CONFIG_IMA_DISABLE_HTABLE=y.
+     They only get measured once with the config "=n".
+
+     10 668df8723f5a1f57a0afe3b50d44054d66363f3e ima-ng 
+sha1:51f66e82421b93b21ad1e0a25e5efa4155c6a8e0 /lib/systemd/systemd-udevd
+     10 668df8723f5a1f57a0afe3b50d44054d66363f3e ima-ng 
+sha1:51f66e82421b93b21ad1e0a25e5efa4155c6a8e0 /lib/systemd/systemd-udevd
+
+(2) There are lot more instances of /tmp/<random> measurement records
+     with the CONFIG_IMA_DISABLE_HTABLE=y.
+     Eg,
+
+     10 33515851cfee4acbf24de9482ff018d33def1083 ima-ng 
+sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709 /tmp/oUWCVeypLR
+     10 9d1dc0e1e54ee2e16308a824fc5780bd21b38208 ima-ng 
+sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709 /tmp/etX8dy7qqy
+     10 8643a5543179b86c02d7e3e01e16b3bd2f8dbb9f ima-ng 
+sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709 /tmp/I4zTWEuyMf
+     10 56e9547a4ed39036d2e790cfad78b467aa979e32 ima-ng 
+sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709 /tmp/Lh5wDm6_Ep
+
+I believe both the observations are consistent with the expected outcome 
+of the patch.
+
+Please let me know if I should test any other scenario.
+
+I will shortly post the v3 patch with updates to description and title 
+as you suggested.
+
+Thanks,
+Tushar
+
+> Thanks,
+> Tushar
+> 
+>> thanks,
 >>
->> diff --git a/Makefile b/Makefile
->> index af18aab6bbee..9c87fdd600d8 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -1473,7 +1473,8 @@ MRPROPER_FILES += include/config 
->> include/generated          \
->>             .config .config.old .version \
->>             Module.symvers \
->>             certs/signing_key.pem certs/signing_key.x509 \
->> -          certs/x509.genkey \
->> +          certs/x509.genkey certs/signing_key.key \
->> +          certs/signing_key.crt certs/signing_key.csr \
->>             vmlinux-gdb.py \
->>             *.spec
->>   diff --git a/certs/Makefile b/certs/Makefile
->> index f4c25b67aad9..b2be7eb413d3 100644
->> --- a/certs/Makefile
->> +++ b/certs/Makefile
->> @@ -60,11 +60,18 @@ $(obj)/signing_key.pem: $(obj)/x509.genkey
->>       @$(kecho) "### needs to be run as root, and uses a hardware 
->> random"
->>       @$(kecho) "### number generator if one is available."
->>       @$(kecho) "###"
->> -    $(Q)openssl req -new -nodes -utf8 -$(CONFIG_MODULE_SIG_HASH) 
->> -days 36500 \
->> -        -batch -x509 -config $(obj)/x509.genkey \
->> -        -outform PEM -out $(obj)/signing_key.pem \
->> -        -keyout $(obj)/signing_key.pem \
->> +    $(Q)openssl req -new -nodes -utf8 \
->> +        -batch -config $(obj)/x509.genkey \
->> +        -outform PEM -out $(obj)/signing_key.csr \
->> +        -keyout $(obj)/signing_key.key -extensions myexts \
->>           $($(quiet)redirect_openssl)
->> +    $(Q)openssl x509 -req -days 36500 -in $(obj)/signing_key.csr \
->> +        -outform PEM -out $(obj)/signing_key.crt \
->> +        -signkey $(obj)/signing_key.key \
->> +        -$(CONFIG_MODULE_SIG_HASH) -extensions myexts \
->> +        -extfile $(obj)/x509.genkey \
->> +        $($(quiet)redirect_openssl)
->> +    @cat $(obj)/signing_key.key $(obj)/signing_key.crt >> 
->> $(obj)/signing_key.pem
->
->
-> Could you not just rename signing_key.key to signing_key.pem (as it 
-> was before) and that would be it? Why do you need the .crt in that pem 
-> bundle?
-
-I had also thought so, but the PEM file contains both the private key 
-and the certificate. I found the reasoning in the commit "fb1179499134 
-modsign: Use single PEM file for autogenerated key". I addressed your 
-other feedback in v2, posted just now.
-
-Thanks & Regards,
-
-       - Nayna
-
+>> Mimi
+>>
