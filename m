@@ -2,202 +2,183 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 803DA31FEEA
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 19:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F019931FF10
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 19:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbhBSSo0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Feb 2021 13:44:26 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:48768 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbhBSSoZ (ORCPT
+        id S229607AbhBSS6n (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 13:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229515AbhBSS6m (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Feb 2021 13:44:25 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E64C320B6C40;
-        Fri, 19 Feb 2021 10:43:43 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E64C320B6C40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1613760224;
-        bh=RpoWA2PbFDErkfUWKl6VSFbD3TUWfdKkFK+7BkYE/ys=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=FlbyhI2Xx5mSUqc+dtPCr1ZNHjpTO6Tn25jhljruSYMaU/5beEb3QGpF/DTglDlmI
-         wyLj1wEGIGBXSeFWRo4d74jYBlp7L96wnIZoy2aKaM3fVfYCQe0V06BYJO1kd51IOO
-         DL8EvziJi44wvruN+qwLNb1clHef+A/MMP5m7XCg=
-Subject: Re: [PATCH] of: error: 'const struct kimage' has no member named
- 'arch'
-To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>, Joe Perches <joe@perches.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        James Morse <james.morse@arm.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-integrity@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <20210218223305.2044-1-nramas@linux.microsoft.com>
- <c6490f6a126a2f10e3e3445b51ea552a26f896a9.camel@linux.ibm.com>
- <8b8c0b70-c7ab-33f3-b66c-9ea03388497b@linux.microsoft.com>
- <87k0r4yi4s.fsf@manicouagan.localdomain>
- <3ca0aa87-ca83-8024-4067-c2382a360db9@linux.microsoft.com>
- <CAL_JsqJiRV5xShOgso0PH2pFhv-yozay58i1uGQC0dJCVxkJPA@mail.gmail.com>
- <98a061d1-05ea-eff2-5c5c-a59f491fe924@linux.microsoft.com>
- <CAL_Jsq+R-zOT581_W0Ar5H58rfPnGiWeetoF_b+BaW7er22bPA@mail.gmail.com>
- <6a197963deb8e44c71384ea9b89d7f3f13c947bf.camel@linux.ibm.com>
- <87blcgx72l.fsf@manicouagan.localdomain>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <a683ac0e-5717-d419-7ae2-7cd9f2ec2ffb@linux.microsoft.com>
-Date:   Fri, 19 Feb 2021 10:43:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 19 Feb 2021 13:58:42 -0500
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5C0C061574;
+        Fri, 19 Feb 2021 10:58:02 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id g3so3093715qvl.2;
+        Fri, 19 Feb 2021 10:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KrQXwiQOrYdmdBeohS17LUCH0SNmxvLabDc2BiEUeQw=;
+        b=fH7HKQayIzBQ3LevQNi/ie01oLvIK9J53z57icngzEB7RnMm5HzTYnVM/jnkFZ2s89
+         JiMeFZgID/bPOuqgYqORXMvTzoSLurbsnn9Spz0Nu0iYRJZ1nhzfEJtx0dbzhjF+AUm2
+         LjFFx3Mh52aWOxMf780nOpohF5g8ejzOAXmxa8+XVbu80CssUrUgmAJtc38kTD9WQbzh
+         BdB5lKjN1UxBNC2jOZ/2zV9Vb5xaULDBQzBpBU8qK4yANwEjGFmhzLGGSHyaTXVolvaO
+         +Zk9fy3iU1+j+Hs0TDsccMAgDLzkkdMsw9V30v9JEyB19w33XGh/TEPtMV53A2KCzN0t
+         XGBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KrQXwiQOrYdmdBeohS17LUCH0SNmxvLabDc2BiEUeQw=;
+        b=VRX/Ous1M9kCvL0XEk+HgMDTRj84zlZCFzB165AuzRpcNAJ9xO0FxfJKqLvFtL/TMG
+         bIFUVZ+pHunOEG5DwVy9en8Ex0dHh9XudL4ht623qrjZPgAjzxhj/zQKC6QeBAlJpLbx
+         7DEmPjE1KiyQpPXgfXMdqdde1Bb28/JdkJAu+cYtNhiylt6fWd79knG4NZWJwXZZYKHd
+         T/lkjGoDIueZL29gQS7tXIhS476ydyPMRv0mECQ3fc4drk43o2++X9GRPxujaU+pHvcO
+         NcXvqld4vwIKae2ZkHObHjMYEGckc6R7CIqqMBj8VQYbObVTXyChPYBRMDTkSoGhErqI
+         ZmnQ==
+X-Gm-Message-State: AOAM530rWPiyXBq7NvBR1nh3iftGbnJIQHjX5kqohxPQBzVSyabQHg7U
+        9eTlCvH7FR0Xck9X5dUtijZd4cXxVQPNT6m1
+X-Google-Smtp-Source: ABdhPJyOvUqZuIpoGzXzBjceSpFrDAYTnw3ytIQiq79XOlTVRoBGR1reosVfaA/xvvWa6r4Wp4i5Xg==
+X-Received: by 2002:a05:6214:1a4a:: with SMTP id fi10mr2812078qvb.5.1613761081494;
+        Fri, 19 Feb 2021 10:58:01 -0800 (PST)
+Received: from localhost.localdomain ([189.61.66.20])
+        by smtp.gmail.com with ESMTPSA id p20sm5925216qtx.12.2021.02.19.10.56.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Feb 2021 10:56:30 -0800 (PST)
+From:   Saulo Alessandre <saulo.alessandre@gmail.com>
+To:     stefanb@linux.ibm.com
+Cc:     davem@davemloft.net, dhowells@redhat.com,
+        herbert@gondor.apana.org.au, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
+        zohar@linux.ibm.com, Saulo Alessandre <saulo.alessandre@tse.jus.br>
+Subject: [PATCH 1/3] add params and ids to support nist_p384
+Date:   Fri, 19 Feb 2021 15:56:13 -0300
+Message-Id: <20210219185615.1033593-1-saulo.alessandre@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210215162532.1077098-1-stefanb@linux.ibm.com>
+References: <20210215162532.1077098-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <87blcgx72l.fsf@manicouagan.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2/19/21 10:09 AM, Thiago Jung Bauermann wrote:
-> 
-> Mimi Zohar <zohar@linux.ibm.com> writes:
-> 
->> On Fri, 2021-02-19 at 11:43 -0600, Rob Herring wrote:
->>> On Fri, Feb 19, 2021 at 10:57 AM Lakshmi Ramasubramanian
->>> <nramas@linux.microsoft.com> wrote:
->>>>
->>>> On 2/19/21 6:16 AM, Rob Herring wrote:
->>>>> On Thu, Feb 18, 2021 at 8:53 PM Lakshmi Ramasubramanian
->>>>> <nramas@linux.microsoft.com> wrote:
->>>>>>
->>>>>> On 2/18/21 5:13 PM, Thiago Jung Bauermann wrote:
->>>>>>>
->>>>>>> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
->>>>>>>
->>>>>>>> On 2/18/21 4:07 PM, Mimi Zohar wrote:
->>>>>>>>
->>>>>>>> Hi Mimi,
->>>>>>>>
->>>>>>>>> On Thu, 2021-02-18 at 14:33 -0800, Lakshmi Ramasubramanian wrote:
->>>>>>>>>> of_kexec_alloc_and_setup_fdt() defined in drivers/of/kexec.c builds
->>>>>>>>>> a new device tree object that includes architecture specific data
->>>>>>>>>> for kexec system call.  This should be defined only if the architecture
->>>>>>>>>> being built defines kexec architecture structure "struct kimage_arch".
->>>>>>>>>>
->>>>>>>>>> Define a new boolean config OF_KEXEC that is enabled if
->>>>>>>>>> CONFIG_KEXEC_FILE and CONFIG_OF_FLATTREE are enabled, and
->>>>>>>>>> the architecture is arm64 or powerpc64.  Build drivers/of/kexec.c
->>>>>>>>>> if CONFIG_OF_KEXEC is enabled.
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
->>>>>>>>>> Fixes: 33488dc4d61f ("of: Add a common kexec FDT setup function")
->>>>>>>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>>>>>>> ---
->>>>>>>>>>      drivers/of/Kconfig  | 6 ++++++
->>>>>>>>>>      drivers/of/Makefile | 7 +------
->>>>>>>>>>      2 files changed, 7 insertions(+), 6 deletions(-)
->>>>>>>>>>
->>>>>>>>>> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
->>>>>>>>>> index 18450437d5d5..f2e8fa54862a 100644
->>>>>>>>>> --- a/drivers/of/Kconfig
->>>>>>>>>> +++ b/drivers/of/Kconfig
->>>>>>>>>> @@ -100,4 +100,10 @@ config OF_DMA_DEFAULT_COHERENT
->>>>>>>>>>              # arches should select this if DMA is coherent by default for OF devices
->>>>>>>>>>              bool
->>>>>>>>>>      +config OF_KEXEC
->>>>>>>>>> +  bool
->>>>>>>>>> +  depends on KEXEC_FILE
->>>>>>>>>> +  depends on OF_FLATTREE
->>>>>>>>>> +  default y if ARM64 || PPC64
->>>>>>>>>> +
->>>>>>>>>>      endif # OF
->>>>>>>>>> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
->>>>>>>>>> index c13b982084a3..287579dd1695 100644
->>>>>>>>>> --- a/drivers/of/Makefile
->>>>>>>>>> +++ b/drivers/of/Makefile
->>>>>>>>>> @@ -13,11 +13,6 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
->>>>>>>>>>      obj-$(CONFIG_OF_RESOLVE)  += resolver.o
->>>>>>>>>>      obj-$(CONFIG_OF_OVERLAY) += overlay.o
->>>>>>>>>>      obj-$(CONFIG_OF_NUMA) += of_numa.o
->>>>>>>>>> -
->>>>>>>>>> -ifdef CONFIG_KEXEC_FILE
->>>>>>>>>> -ifdef CONFIG_OF_FLATTREE
->>>>>>>>>> -obj-y     += kexec.o
->>>>>>>>>> -endif
->>>>>>>>>> -endif
->>>>>>>>>> +obj-$(CONFIG_OF_KEXEC) += kexec.o
->>>>>>>>>>        obj-$(CONFIG_OF_UNITTEST) += unittest-data/
->>>>>>>>> Is it possible to reuse CONFIG_HAVE_IMA_KEXEC here?
->>>>>>>>>
->>>>>>>>
->>>>>>>> For ppc64 CONFIG_HAVE_IMA_KEXEC is selected when CONFIG_KEXEC_FILE is enabled.
->>>>>>>> So I don't see a problem in reusing CONFIG_HAVE_IMA_KEXEC for ppc.
->>>>>>>>
->>>>>>>> But for arm64, CONFIG_HAVE_IMA_KEXEC is enabled in the final patch in the patch
->>>>>>>> set (the one for carrying forward IMA log across kexec for arm64). arm64 calls
->>>>>>>> of_kexec_alloc_and_setup_fdt() prior to enabling CONFIG_HAVE_IMA_KEXEC and hence
->>>>>>>> breaks the build for arm64.
->>>>>>>
->>>>>>> One problem is that I believe that this patch won't placate the robot,
->>>>>>> because IIUC it generates config files at random and this change still
->>>>>>> allows hppa and s390 to enable CONFIG_OF_KEXEC.
->>>>>>
->>>>>> I enabled CONFIG_OF_KEXEC for s390. With my patch applied,
->>>>>> CONFIG_OF_KEXEC is removed. So I think the robot enabling this config
->>>>>> would not be a problem.
->>>>>>
->>>>>>>
->>>>>>> Perhaps a new CONFIG_HAVE_KIMAGE_ARCH option? Not having that option
->>>>>>> would still allow building kexec.o, but would be used inside kexec.c to
->>>>>>> avoid accessing kimage.arch members.
->>>>>>>
->>>>>>
->>>>>> I think this is a good idea - a new CONFIG_HAVE_KIMAGE_ARCH, which will
->>>>>> be selected by arm64 and ppc for now. I tried this, and it fixes the
->>>>>> build issue.
->>>>>>
->>>>>> Although, the name for the new config can be misleading since PARISC,
->>>>>> for instance, also defines "struct kimage_arch". Perhaps,
->>>>>> CONFIG_HAVE_ELF_KIMAGE_ARCH since of_kexec_alloc_and_setup_fdt() is
->>>>>> accessing ELF specific fields in "struct kimage_arch"?
->>>>>>
->>>>>> Rob/Mimi - please let us know which approach you think is better.
->>>>>
->>>>> I'd just move the fields to kimage.
->>>>>
->>>>
->>>> I think Mimi's suggestion to use CONFIG_HAVE_IMA_KEXEC for building
->>>> drivers/of/kexec.c would work and also avoid the bisect issue if we do
->>>> the following:
->>>
->>> That seems wrong given only a portion of the file depends on IMA. And
->>> it reduces our compile coverage.
->>   
->> I agree with you this is the wrong solution.  Lakshmi's patch
->> introduced a new option to prevent other arch's from including kexec.o,
->> which is the same functionality as CONFIG_HAVE_IMA_KEXEC.  I'm just not
->> sure what the right solution would be.
-> 
-> I think Rob's suggestion of just moving the elf_load_addr,
-> elf_headers_sz fields (and for consistency, elf_headers as well even though it
-> isn't used in tihs file) from kimage_arch to kimage.
-> 
-> The downside is that these fields will go unused on a number of
-> architectures, but it's not worth complicating the code just because of
-> it.
-> 
-> The patch to do that would have to go before "of: Add a common kexec FDT
-> setup function". That should be enough to preserve bisectability for all arches.
-> 
+From: Saulo Alessandre <saulo.alessandre@tse.jus.br>
 
-Agreed. I'll make this change and update.
+* crypto/asymmetric_keys/x509_cert_parser.c
+  - prepare x509 parser to load nist_secpp384r1
 
-  -lakshmi
+* crypto/ecc_curve_defs.h
+  - add nist_p384 params
+
+* include/crypto/ecdh.h
+  - add ECC_CURVE_NIST_P384
+
+* include/linux/oid_registry.h
+  - reorder OID_id_ecdsa_with_sha1
+  - add OID_id_secp384r1
+---
+ crypto/asymmetric_keys/x509_cert_parser.c |  3 +++
+ crypto/ecc_curve_defs.h                   | 32 +++++++++++++++++++++++
+ include/crypto/ecdh.h                     |  1 +
+ include/linux/oid_registry.h              |  3 ++-
+ 4 files changed, 38 insertions(+), 1 deletion(-)
+
+diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
+index d6d72420307c..03535bd8b8ef 100644
+--- a/crypto/asymmetric_keys/x509_cert_parser.c
++++ b/crypto/asymmetric_keys/x509_cert_parser.c
+@@ -512,6 +512,9 @@ int x509_extract_key_data(void *context, size_t hdrlen,
+ 		case OID_id_prime256v1:
+ 			ctx->cert->pub->pkey_algo = "ecdsa-nist-p256";
+ 			break;
++		case OID_id_secp384r1:
++			ctx->cert->pub->pkey_algo = "ecdsa-nist-p384";
++			break;
+ 		default:
+ 			return -ENOPKG;
+ 		}
+diff --git a/crypto/ecc_curve_defs.h b/crypto/ecc_curve_defs.h
+index 69be6c7d228f..b327732f6ef5 100644
+--- a/crypto/ecc_curve_defs.h
++++ b/crypto/ecc_curve_defs.h
+@@ -54,4 +54,36 @@ static struct ecc_curve nist_p256 = {
+ 	.b = nist_p256_b
+ };
+ 
++/* NIST P-384 */
++static u64 nist_p384_g_x[] = { 0x3A545E3872760AB7ull, 0x5502F25DBF55296Cull,
++				0x59F741E082542A38ull, 0x6E1D3B628BA79B98ull,
++				0x8Eb1C71EF320AD74ull, 0xAA87CA22BE8B0537ull };
++static u64 nist_p384_g_y[] = { 0x7A431D7C90EA0E5Full, 0x0A60B1CE1D7E819Dull,
++				0xE9DA3113B5F0B8C0ull, 0xF8F41DBD289A147Cull,
++				0x5D9E98BF9292DC29ull, 0x3617DE4A96262C6Full };
++static u64 nist_p384_p[] = { 0x00000000FFFFFFFFull, 0xFFFFFFFF00000000ull,
++				0xFFFFFFFFFFFFFFFEull, 0xFFFFFFFFFFFFFFFFull,
++				0xFFFFFFFFFFFFFFFFull, 0xFFFFFFFFFFFFFFFFull };
++static u64 nist_p384_n[] = { 0xECEC196ACCC52973ull, 0x581A0DB248B0A77Aull,
++				0xC7634D81F4372DDFull, 0xFFFFFFFFFFFFFFFFull,
++				0xFFFFFFFFFFFFFFFFull, 0xFFFFFFFFFFFFFFFFull };
++static u64 nist_p384_a[] = { 0x00000000FFFFFFFCull, 0xFFFFFFFF00000000ull,
++				0xFFFFFFFFFFFFFFFEull, 0xFFFFFFFFFFFFFFFFull,
++				0xFFFFFFFFFFFFFFFFull, 0xFFFFFFFFFFFFFFFFull };
++static u64 nist_p384_b[] = { 0x2a85c8edd3ec2aefull, 0xc656398d8a2ed19dull,
++				0x0314088f5013875aull, 0x181d9c6efe814112ull,
++				0x988e056be3f82d19ull, 0xb3312fa7e23ee7e4ull };
++static struct ecc_curve nist_p384 = {
++	.name = "nist_384",
++	.g = {
++		.x = nist_p384_g_x,
++		.y = nist_p384_g_y,
++		.ndigits = 6,
++	},
++	.p = nist_p384_p,
++	.n = nist_p384_n,
++	.a = nist_p384_a,
++	.b = nist_p384_b
++};
++
+ #endif
+diff --git a/include/crypto/ecdh.h b/include/crypto/ecdh.h
+index a5b805b5526d..e4ba1de961e4 100644
+--- a/include/crypto/ecdh.h
++++ b/include/crypto/ecdh.h
+@@ -25,6 +25,7 @@
+ /* Curves IDs */
+ #define ECC_CURVE_NIST_P192	0x0001
+ #define ECC_CURVE_NIST_P256	0x0002
++#define ECC_CURVE_NIST_P384	0x0003
+ 
+ /**
+  * struct ecdh - define an ECDH private key
+diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
+index ff3cad9f8c1f..d656450dfc66 100644
+--- a/include/linux/oid_registry.h
++++ b/include/linux/oid_registry.h
+@@ -19,10 +19,10 @@
+ enum OID {
+ 	OID_id_dsa_with_sha1,		/* 1.2.840.10030.4.3 */
+ 	OID_id_dsa,			/* 1.2.840.10040.4.1 */
+-	OID_id_ecdsa_with_sha1,		/* 1.2.840.10045.4.1 */
+ 	OID_id_ecPublicKey,		/* 1.2.840.10045.2.1 */
+ 	OID_id_prime192v1,		/* 1.2.840.10045.3.1.1 */
+ 	OID_id_prime256v1,		/* 1.2.840.10045.3.1.7 */
++	OID_id_ecdsa_with_sha1,		/* 1.2.840.10045.4.1 */
+ 	OID_id_ecdsa_with_sha224,	/* 1.2.840.10045.4.3.1 */
+ 	OID_id_ecdsa_with_sha256,	/* 1.2.840.10045.4.3.2 */
+ 	OID_id_ecdsa_with_sha384,	/* 1.2.840.10045.4.3.3 */
+@@ -64,6 +64,7 @@ enum OID {
+ 
+ 	OID_certAuthInfoAccess,		/* 1.3.6.1.5.5.7.1.1 */
+ 	OID_sha1,			/* 1.3.14.3.2.26 */
++	OID_id_secp384r1,		/* 1.3.132.0.34 */
+ 	OID_sha256,			/* 2.16.840.1.101.3.4.2.1 */
+ 	OID_sha384,			/* 2.16.840.1.101.3.4.2.2 */
+ 	OID_sha512,			/* 2.16.840.1.101.3.4.2.3 */
+-- 
+2.25.1
+
