@@ -2,108 +2,179 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4AA831FD6A
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 17:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9838C31FD72
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 17:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbhBSQxZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Feb 2021 11:53:25 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8104 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229890AbhBSQxZ (ORCPT
+        id S229868AbhBSQ5o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 11:57:44 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:35020 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229734AbhBSQ5k (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Feb 2021 11:53:25 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11JGYdxj117101;
-        Fri, 19 Feb 2021 11:52:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=kaAqwSwiV9bHR5MZ/ojgaoy1ShCOB01Lxp/uWhkct/8=;
- b=kr+AbqfQfzTQFmwWaRc08BbeXQz306Oo60AzwZVJDBPoaxyhSAqQVeIrJbZcNGjxkl/m
- G/3vOvxqg2HZ0DE25t0LKxWMtbKukp3JePmCh+2Kdp2pjSgud7LP3iHdhxE0xpxXkcYb
- uhlG2eaOhhOS9hIE5u8gK0huaOhfGp1CgdqL3jndRruFVf9bgxZ/aYtarHUfNS/VPfls
- 6Vi/tgxs/dxk/RYOQansX7eaYfsPcGCCZQn+9D+E7f3Rd8GvKxCu3V16+KjrO/ZQo4Wh
- oGFUEr2NQwtgf06lTRBX1Qw0WDtpF3ZhNATzwTvde8Msbala8eOSVfmkLSoky4R3zhak lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36tgna1am2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Feb 2021 11:52:39 -0500
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11JGZHU9120830;
-        Fri, 19 Feb 2021 11:52:39 -0500
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36tgna1ak1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Feb 2021 11:52:39 -0500
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11JGm6c6028923;
-        Fri, 19 Feb 2021 16:52:37 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 36spsn8mk1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Feb 2021 16:52:36 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11JGqYKq48103746
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Feb 2021 16:52:34 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 09EF6AE058;
-        Fri, 19 Feb 2021 16:52:34 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8ED08AE045;
-        Fri, 19 Feb 2021 16:52:31 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.144.116])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 19 Feb 2021 16:52:31 +0000 (GMT)
-Message-ID: <0e2a789456a970ebdde9a65717b15d478af73ae3.camel@linux.ibm.com>
-Subject: Re: [PATCH] certs: Add support for using elliptic curve keys for
- signing modules
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        keyrings@vger.kernel.org, dhowells@redhat.com, dwmw2@infradead.org,
-        linux-security-module@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        nayna@linux.ibm.com, saulo.alessandre@gmail.com,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date:   Fri, 19 Feb 2021 11:52:30 -0500
-In-Reply-To: <20210219154114.2416778-1-stefanb@linux.vnet.ibm.com>
-References: <20210219154114.2416778-1-stefanb@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
+        Fri, 19 Feb 2021 11:57:40 -0500
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E620B209F5B5;
+        Fri, 19 Feb 2021 08:56:58 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E620B209F5B5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1613753819;
+        bh=iTig/qd/QFGUbmMQ2AA/PY/9N+Xj7TcCo65cJbp7QVU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=FYRJuY2OHqIrR9U51vlBnGkozMi+zfs1dCX3syKmF8k70KCXr89Mz9X/88uC4nurX
+         gQZhpy0mo/8eEP4lQ058URkDxHquXDU3/gHWTwtcQXgUKmad/irLGdZH2G+3KwMMrX
+         vGjGjVZUsVqKWYYtQFMVMgIvlba0pV8SHnJRaSBE=
+Subject: Re: [PATCH] of: error: 'const struct kimage' has no member named
+ 'arch'
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>, Joe Perches <joe@perches.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        James Morse <james.morse@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-integrity@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <20210218223305.2044-1-nramas@linux.microsoft.com>
+ <c6490f6a126a2f10e3e3445b51ea552a26f896a9.camel@linux.ibm.com>
+ <8b8c0b70-c7ab-33f3-b66c-9ea03388497b@linux.microsoft.com>
+ <87k0r4yi4s.fsf@manicouagan.localdomain>
+ <3ca0aa87-ca83-8024-4067-c2382a360db9@linux.microsoft.com>
+ <CAL_JsqJiRV5xShOgso0PH2pFhv-yozay58i1uGQC0dJCVxkJPA@mail.gmail.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <98a061d1-05ea-eff2-5c5c-a59f491fe924@linux.microsoft.com>
+Date:   Fri, 19 Feb 2021 08:56:58 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAL_JsqJiRV5xShOgso0PH2pFhv-yozay58i1uGQC0dJCVxkJPA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-19_07:2021-02-18,2021-02-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- phishscore=0 malwarescore=0 impostorscore=0 suspectscore=0 clxscore=1015
- spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2102190126
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2021-02-19 at 10:41 -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
+On 2/19/21 6:16 AM, Rob Herring wrote:
+> On Thu, Feb 18, 2021 at 8:53 PM Lakshmi Ramasubramanian
+> <nramas@linux.microsoft.com> wrote:
+>>
+>> On 2/18/21 5:13 PM, Thiago Jung Bauermann wrote:
+>>>
+>>> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+>>>
+>>>> On 2/18/21 4:07 PM, Mimi Zohar wrote:
+>>>>
+>>>> Hi Mimi,
+>>>>
+>>>>> On Thu, 2021-02-18 at 14:33 -0800, Lakshmi Ramasubramanian wrote:
+>>>>>> of_kexec_alloc_and_setup_fdt() defined in drivers/of/kexec.c builds
+>>>>>> a new device tree object that includes architecture specific data
+>>>>>> for kexec system call.  This should be defined only if the architecture
+>>>>>> being built defines kexec architecture structure "struct kimage_arch".
+>>>>>>
+>>>>>> Define a new boolean config OF_KEXEC that is enabled if
+>>>>>> CONFIG_KEXEC_FILE and CONFIG_OF_FLATTREE are enabled, and
+>>>>>> the architecture is arm64 or powerpc64.  Build drivers/of/kexec.c
+>>>>>> if CONFIG_OF_KEXEC is enabled.
+>>>>>>
+>>>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>>>>> Fixes: 33488dc4d61f ("of: Add a common kexec FDT setup function")
+>>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>>> ---
+>>>>>>     drivers/of/Kconfig  | 6 ++++++
+>>>>>>     drivers/of/Makefile | 7 +------
+>>>>>>     2 files changed, 7 insertions(+), 6 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+>>>>>> index 18450437d5d5..f2e8fa54862a 100644
+>>>>>> --- a/drivers/of/Kconfig
+>>>>>> +++ b/drivers/of/Kconfig
+>>>>>> @@ -100,4 +100,10 @@ config OF_DMA_DEFAULT_COHERENT
+>>>>>>             # arches should select this if DMA is coherent by default for OF devices
+>>>>>>             bool
+>>>>>>     +config OF_KEXEC
+>>>>>> +  bool
+>>>>>> +  depends on KEXEC_FILE
+>>>>>> +  depends on OF_FLATTREE
+>>>>>> +  default y if ARM64 || PPC64
+>>>>>> +
+>>>>>>     endif # OF
+>>>>>> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+>>>>>> index c13b982084a3..287579dd1695 100644
+>>>>>> --- a/drivers/of/Makefile
+>>>>>> +++ b/drivers/of/Makefile
+>>>>>> @@ -13,11 +13,6 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
+>>>>>>     obj-$(CONFIG_OF_RESOLVE)  += resolver.o
+>>>>>>     obj-$(CONFIG_OF_OVERLAY) += overlay.o
+>>>>>>     obj-$(CONFIG_OF_NUMA) += of_numa.o
+>>>>>> -
+>>>>>> -ifdef CONFIG_KEXEC_FILE
+>>>>>> -ifdef CONFIG_OF_FLATTREE
+>>>>>> -obj-y     += kexec.o
+>>>>>> -endif
+>>>>>> -endif
+>>>>>> +obj-$(CONFIG_OF_KEXEC) += kexec.o
+>>>>>>       obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+>>>>> Is it possible to reuse CONFIG_HAVE_IMA_KEXEC here?
+>>>>>
+>>>>
+>>>> For ppc64 CONFIG_HAVE_IMA_KEXEC is selected when CONFIG_KEXEC_FILE is enabled.
+>>>> So I don't see a problem in reusing CONFIG_HAVE_IMA_KEXEC for ppc.
+>>>>
+>>>> But for arm64, CONFIG_HAVE_IMA_KEXEC is enabled in the final patch in the patch
+>>>> set (the one for carrying forward IMA log across kexec for arm64). arm64 calls
+>>>> of_kexec_alloc_and_setup_fdt() prior to enabling CONFIG_HAVE_IMA_KEXEC and hence
+>>>> breaks the build for arm64.
+>>>
+>>> One problem is that I believe that this patch won't placate the robot,
+>>> because IIUC it generates config files at random and this change still
+>>> allows hppa and s390 to enable CONFIG_OF_KEXEC.
+>>
+>> I enabled CONFIG_OF_KEXEC for s390. With my patch applied,
+>> CONFIG_OF_KEXEC is removed. So I think the robot enabling this config
+>> would not be a problem.
+>>
+>>>
+>>> Perhaps a new CONFIG_HAVE_KIMAGE_ARCH option? Not having that option
+>>> would still allow building kexec.o, but would be used inside kexec.c to
+>>> avoid accessing kimage.arch members.
+>>>
+>>
+>> I think this is a good idea - a new CONFIG_HAVE_KIMAGE_ARCH, which will
+>> be selected by arm64 and ppc for now. I tried this, and it fixes the
+>> build issue.
+>>
+>> Although, the name for the new config can be misleading since PARISC,
+>> for instance, also defines "struct kimage_arch". Perhaps,
+>> CONFIG_HAVE_ELF_KIMAGE_ARCH since of_kexec_alloc_and_setup_fdt() is
+>> accessing ELF specific fields in "struct kimage_arch"?
+>>
+>> Rob/Mimi - please let us know which approach you think is better.
 > 
-> This patch adds support for using elliptic curve keys for signing
-> modules. It uses a NIST P256 (prime256v1) key if the user chooses an
-> elliptic curve key.
+> I'd just move the fields to kimage.
 > 
-> A developer choosing an ECDSA key for signing modules has to manually
-> delete the signing key (rm certs/signing_key.*) when falling back to
-> an older version of a kernel that only supports RSA key since otherwise
-> ECDSA-signed modules will not be usable when that older kernel runs.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 
-Thanks, Stefan!
+I think Mimi's suggestion to use CONFIG_HAVE_IMA_KEXEC for building 
+drivers/of/kexec.c would work and also avoid the bisect issue if we do 
+the following:
 
-Tested with this patch applied on top of "[PATCH v8 0/4] Add support
-for x509 certs with NIST p256 and p192" and "[PATCH v2 0/5] ima: kernel
-build support for loading the kernel module" patch sets.
+  - In the patch set for carrying forward the IMA log on kexec, move the 
+following patch to a later point in the set
 
-Tested-by: Mimi Zohar <zohar@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+"[PATCH v18 04/11] arm64: Use common of_kexec_alloc_and_setup_fdt()"
 
+and merge the above patch with the following patch
+"[PATCH v18 11/11] arm64: Enable passing IMA log to next kernel on kexec"
+
+I will try this now, and update.
+
+thanks,
+  -lakshmi
