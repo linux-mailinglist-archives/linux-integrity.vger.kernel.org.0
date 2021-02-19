@@ -2,184 +2,163 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9C231FA59
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 15:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406EA31FA73
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 15:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbhBSOKK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Feb 2021 09:10:10 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16266 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230228AbhBSOKJ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Feb 2021 09:10:09 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11JE1ld1070546;
-        Fri, 19 Feb 2021 09:09:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
- cc : subject : in-reply-to : date : message-id : mime-version :
- content-type; s=pp1; bh=hEiNmOVPSOEglYa38shUn7O7VSY0u7cREb5g4ai2Ocs=;
- b=KdURzBzq4H2nTG+I9QyCHkbqIPuNa5JCdpBTrBKO8IiAlSiz2PUyxXwJTRl4FivsiDLx
- FI5eL2YqxoqOHfGR1uBEeXFa7DqHUCoY7iV1tzwY5M8dWhjjgkEDhdjKy9xreDOyfyJR
- 8B366w0yoEjLLWpoxwUoHW++jK4ejNhBVl0oYsCNsZ2SdLsVHrB1DhigBHrzt4LG3II4
- HU5eGORsBra7GOvDMB92WwcpGOwwr+zJlVn/Eb2038sqXutJaICYHWR8yNftS43nwq9E
- bYQtLXYzetnr/BacC3Nv+hijh9IoGdDq/fMP6t1r9ZdZJYDm0yBgHbYy2Q1Dc6HW3tqb Dw== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36tenqgh49-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Feb 2021 09:09:02 -0500
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11JE7cI1006622;
-        Fri, 19 Feb 2021 14:09:01 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma03dal.us.ibm.com with ESMTP id 36p6da1bb1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Feb 2021 14:09:01 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11JE90Rl9437826
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Feb 2021 14:09:00 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C5252AC05E;
-        Fri, 19 Feb 2021 14:09:00 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24783AC05F;
-        Fri, 19 Feb 2021 14:08:57 +0000 (GMT)
-Received: from manicouagan.localdomain (unknown [9.85.174.98])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Fri, 19 Feb 2021 14:08:56 +0000 (GMT)
+        id S230091AbhBSORx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 09:17:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57854 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229808AbhBSORw (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 19 Feb 2021 09:17:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5D2AC64E46;
+        Fri, 19 Feb 2021 14:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613744231;
+        bh=/+2b2FPgpVlufmh4ou91Mqrxg25dANUoad9GzuPY3QM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hpkdWLkXS4r9zMnMbRgfiAqJUL/KX6NZRfDUz5f24bqhOJAvuNQpG2eR3cqSV4FPP
+         X0+GeMRwnTShjEsTP3+zqR1wrAXn1CNjRGFjK1/zI+wJc3UGOX54Pxat+7NKkWxuUS
+         Ms2w+MsTo3JMUtRhZll9QYsSTorsSO7MOoT4l6DTGTRc+sYLiO3suZYOmK8ktSRz4i
+         9JcuWqm6WZwELL56dxvs54v7F9+UGjNl4nvuy4AlHsgCi18iFryaiBbHaiVK3VuDq1
+         xl8uf2dwcNNrgMNtZ5NpC7Z6bNyqdcSZa24H9G5LXRygMG+ZcaDbgvb5Omvc7rUKIY
+         Yr4w6lIhJdMAQ==
+Received: by mail-ed1-f53.google.com with SMTP id c6so10310845ede.0;
+        Fri, 19 Feb 2021 06:17:11 -0800 (PST)
+X-Gm-Message-State: AOAM530L6OwA0vnSAU//a6Ie5eEQigsoEdLrARfX6ECwk5NnYyi8IBEn
+        km2zkVhTAvLb1Ozkk4/wfXHuDD3NrkAlnwuZvA==
+X-Google-Smtp-Source: ABdhPJy5YMi65AggF+97f34pmKOko3c6auf7j3NtKv4xgM4ETK+XS7z2sblhE2YkPD2nLGwZdf6zqpXv2RkL4KtPM0Y=
+X-Received: by 2002:aa7:c7c8:: with SMTP id o8mr9390177eds.137.1613744229946;
+ Fri, 19 Feb 2021 06:17:09 -0800 (PST)
+MIME-Version: 1.0
 References: <20210218223305.2044-1-nramas@linux.microsoft.com>
  <c6490f6a126a2f10e3e3445b51ea552a26f896a9.camel@linux.ibm.com>
  <8b8c0b70-c7ab-33f3-b66c-9ea03388497b@linux.microsoft.com>
- <87k0r4yi4s.fsf@manicouagan.localdomain>
- <3ca0aa87-ca83-8024-4067-c2382a360db9@linux.microsoft.com>
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+ <87k0r4yi4s.fsf@manicouagan.localdomain> <3ca0aa87-ca83-8024-4067-c2382a360db9@linux.microsoft.com>
+In-Reply-To: <3ca0aa87-ca83-8024-4067-c2382a360db9@linux.microsoft.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 19 Feb 2021 08:16:46 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJiRV5xShOgso0PH2pFhv-yozay58i1uGQC0dJCVxkJPA@mail.gmail.com>
+Message-ID: <CAL_JsqJiRV5xShOgso0PH2pFhv-yozay58i1uGQC0dJCVxkJPA@mail.gmail.com>
+Subject: Re: [PATCH] of: error: 'const struct kimage' has no member named 'arch'
 To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, robh@kernel.org,
-        takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
-        will@kernel.org, joe@perches.com, catalin.marinas@arm.com,
-        mpe@ellerman.id.au, sfr@canb.auug.org.au, james.morse@arm.com,
-        sashal@kernel.org, benh@kernel.crashing.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] of: error: 'const struct kimage' has no member named
- 'arch'
-In-reply-to: <3ca0aa87-ca83-8024-4067-c2382a360db9@linux.microsoft.com>
-Date:   Fri, 19 Feb 2021 11:08:55 -0300
-Message-ID: <87eehcxi88.fsf@manicouagan.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-19_05:2021-02-18,2021-02-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- bulkscore=0 priorityscore=1501 impostorscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102190109
+Cc:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "AKASHI, Takahiro" <takahiro.akashi@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>, Joe Perches <joe@perches.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        James Morse <james.morse@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-integrity@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
-
+On Thu, Feb 18, 2021 at 8:53 PM Lakshmi Ramasubramanian
+<nramas@linux.microsoft.com> wrote:
+>
 > On 2/18/21 5:13 PM, Thiago Jung Bauermann wrote:
->> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
->> 
->>> On 2/18/21 4:07 PM, Mimi Zohar wrote:
->>>
->>> Hi Mimi,
->>>
->>>> On Thu, 2021-02-18 at 14:33 -0800, Lakshmi Ramasubramanian wrote:
->>>>> of_kexec_alloc_and_setup_fdt() defined in drivers/of/kexec.c builds
->>>>> a new device tree object that includes architecture specific data
->>>>> for kexec system call.  This should be defined only if the architecture
->>>>> being built defines kexec architecture structure "struct kimage_arch".
->>>>>
->>>>> Define a new boolean config OF_KEXEC that is enabled if
->>>>> CONFIG_KEXEC_FILE and CONFIG_OF_FLATTREE are enabled, and
->>>>> the architecture is arm64 or powerpc64.  Build drivers/of/kexec.c
->>>>> if CONFIG_OF_KEXEC is enabled.
->>>>>
->>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
->>>>> Fixes: 33488dc4d61f ("of: Add a common kexec FDT setup function")
->>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>> ---
->>>>>    drivers/of/Kconfig  | 6 ++++++
->>>>>    drivers/of/Makefile | 7 +------
->>>>>    2 files changed, 7 insertions(+), 6 deletions(-)
->>>>>
->>>>> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
->>>>> index 18450437d5d5..f2e8fa54862a 100644
->>>>> --- a/drivers/of/Kconfig
->>>>> +++ b/drivers/of/Kconfig
->>>>> @@ -100,4 +100,10 @@ config OF_DMA_DEFAULT_COHERENT
->>>>>    	# arches should select this if DMA is coherent by default for OF devices
->>>>>    	bool
->>>>>    +config OF_KEXEC
->>>>> +	bool
->>>>> +	depends on KEXEC_FILE
->>>>> +	depends on OF_FLATTREE
->>>>> +	default y if ARM64 || PPC64
->>>>> +
->>>>>    endif # OF
->>>>> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
->>>>> index c13b982084a3..287579dd1695 100644
->>>>> --- a/drivers/of/Makefile
->>>>> +++ b/drivers/of/Makefile
->>>>> @@ -13,11 +13,6 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
->>>>>    obj-$(CONFIG_OF_RESOLVE)  += resolver.o
->>>>>    obj-$(CONFIG_OF_OVERLAY) += overlay.o
->>>>>    obj-$(CONFIG_OF_NUMA) += of_numa.o
->>>>> -
->>>>> -ifdef CONFIG_KEXEC_FILE
->>>>> -ifdef CONFIG_OF_FLATTREE
->>>>> -obj-y	+= kexec.o
->>>>> -endif
->>>>> -endif
->>>>> +obj-$(CONFIG_OF_KEXEC) += kexec.o
->>>>>      obj-$(CONFIG_OF_UNITTEST) += unittest-data/
->>>> Is it possible to reuse CONFIG_HAVE_IMA_KEXEC here?
->>>>
->>>
->>> For ppc64 CONFIG_HAVE_IMA_KEXEC is selected when CONFIG_KEXEC_FILE is enabled.
->>> So I don't see a problem in reusing CONFIG_HAVE_IMA_KEXEC for ppc.
->>>
->>> But for arm64, CONFIG_HAVE_IMA_KEXEC is enabled in the final patch in the patch
->>> set (the one for carrying forward IMA log across kexec for arm64). arm64 calls
->>> of_kexec_alloc_and_setup_fdt() prior to enabling CONFIG_HAVE_IMA_KEXEC and hence
->>> breaks the build for arm64.
->> One problem is that I believe that this patch won't placate the robot,
->> because IIUC it generates config files at random and this change still
->> allows hppa and s390 to enable CONFIG_OF_KEXEC.
+> >
+> > Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+> >
+> >> On 2/18/21 4:07 PM, Mimi Zohar wrote:
+> >>
+> >> Hi Mimi,
+> >>
+> >>> On Thu, 2021-02-18 at 14:33 -0800, Lakshmi Ramasubramanian wrote:
+> >>>> of_kexec_alloc_and_setup_fdt() defined in drivers/of/kexec.c builds
+> >>>> a new device tree object that includes architecture specific data
+> >>>> for kexec system call.  This should be defined only if the architecture
+> >>>> being built defines kexec architecture structure "struct kimage_arch".
+> >>>>
+> >>>> Define a new boolean config OF_KEXEC that is enabled if
+> >>>> CONFIG_KEXEC_FILE and CONFIG_OF_FLATTREE are enabled, and
+> >>>> the architecture is arm64 or powerpc64.  Build drivers/of/kexec.c
+> >>>> if CONFIG_OF_KEXEC is enabled.
+> >>>>
+> >>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> >>>> Fixes: 33488dc4d61f ("of: Add a common kexec FDT setup function")
+> >>>> Reported-by: kernel test robot <lkp@intel.com>
+> >>>> ---
+> >>>>    drivers/of/Kconfig  | 6 ++++++
+> >>>>    drivers/of/Makefile | 7 +------
+> >>>>    2 files changed, 7 insertions(+), 6 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> >>>> index 18450437d5d5..f2e8fa54862a 100644
+> >>>> --- a/drivers/of/Kconfig
+> >>>> +++ b/drivers/of/Kconfig
+> >>>> @@ -100,4 +100,10 @@ config OF_DMA_DEFAULT_COHERENT
+> >>>>            # arches should select this if DMA is coherent by default for OF devices
+> >>>>            bool
+> >>>>    +config OF_KEXEC
+> >>>> +  bool
+> >>>> +  depends on KEXEC_FILE
+> >>>> +  depends on OF_FLATTREE
+> >>>> +  default y if ARM64 || PPC64
+> >>>> +
+> >>>>    endif # OF
+> >>>> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> >>>> index c13b982084a3..287579dd1695 100644
+> >>>> --- a/drivers/of/Makefile
+> >>>> +++ b/drivers/of/Makefile
+> >>>> @@ -13,11 +13,6 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
+> >>>>    obj-$(CONFIG_OF_RESOLVE)  += resolver.o
+> >>>>    obj-$(CONFIG_OF_OVERLAY) += overlay.o
+> >>>>    obj-$(CONFIG_OF_NUMA) += of_numa.o
+> >>>> -
+> >>>> -ifdef CONFIG_KEXEC_FILE
+> >>>> -ifdef CONFIG_OF_FLATTREE
+> >>>> -obj-y     += kexec.o
+> >>>> -endif
+> >>>> -endif
+> >>>> +obj-$(CONFIG_OF_KEXEC) += kexec.o
+> >>>>      obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+> >>> Is it possible to reuse CONFIG_HAVE_IMA_KEXEC here?
+> >>>
+> >>
+> >> For ppc64 CONFIG_HAVE_IMA_KEXEC is selected when CONFIG_KEXEC_FILE is enabled.
+> >> So I don't see a problem in reusing CONFIG_HAVE_IMA_KEXEC for ppc.
+> >>
+> >> But for arm64, CONFIG_HAVE_IMA_KEXEC is enabled in the final patch in the patch
+> >> set (the one for carrying forward IMA log across kexec for arm64). arm64 calls
+> >> of_kexec_alloc_and_setup_fdt() prior to enabling CONFIG_HAVE_IMA_KEXEC and hence
+> >> breaks the build for arm64.
+> >
+> > One problem is that I believe that this patch won't placate the robot,
+> > because IIUC it generates config files at random and this change still
+> > allows hppa and s390 to enable CONFIG_OF_KEXEC.
 >
-> I enabled CONFIG_OF_KEXEC for s390. With my patch applied, CONFIG_OF_KEXEC is
-> removed. So I think the robot enabling this config would not be a problem.
+> I enabled CONFIG_OF_KEXEC for s390. With my patch applied,
+> CONFIG_OF_KEXEC is removed. So I think the robot enabling this config
+> would not be a problem.
 >
->> Perhaps a new CONFIG_HAVE_KIMAGE_ARCH option? Not having that option
->> would still allow building kexec.o, but would be used inside kexec.c to
->> avoid accessing kimage.arch members.
->> 
+> >
+> > Perhaps a new CONFIG_HAVE_KIMAGE_ARCH option? Not having that option
+> > would still allow building kexec.o, but would be used inside kexec.c to
+> > avoid accessing kimage.arch members.
+> >
 >
-> I think this is a good idea - a new CONFIG_HAVE_KIMAGE_ARCH, which will be
-> selected by arm64 and ppc for now. I tried this, and it fixes the build issue.
+> I think this is a good idea - a new CONFIG_HAVE_KIMAGE_ARCH, which will
+> be selected by arm64 and ppc for now. I tried this, and it fixes the
+> build issue.
 >
-> Although, the name for the new config can be misleading since PARISC, for
-> instance, also defines "struct kimage_arch". Perhaps,
-> CONFIG_HAVE_ELF_KIMAGE_ARCH since of_kexec_alloc_and_setup_fdt() is 
+> Although, the name for the new config can be misleading since PARISC,
+> for instance, also defines "struct kimage_arch". Perhaps,
+> CONFIG_HAVE_ELF_KIMAGE_ARCH since of_kexec_alloc_and_setup_fdt() is
 > accessing ELF specific fields in "struct kimage_arch"?
-
-Ah, right. I should have digged into the code before making my
-suggestion. CONFIG_HAVE_KIMAGE_ARCH isn't appropriate, indeed.
-
 >
 > Rob/Mimi - please let us know which approach you think is better.
 
-Ah! We can actually use the existing CONFIG_HAVE_IMA_KEXEC, no? I don't
-know why I didn't think of it before.
+I'd just move the fields to kimage.
 
--- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
+Rob
