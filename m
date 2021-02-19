@@ -2,148 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0D131F414
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 03:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE8331F54A
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 08:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbhBSCyJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 18 Feb 2021 21:54:09 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:46946 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbhBSCyI (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 18 Feb 2021 21:54:08 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id EC32F20B6C40;
-        Thu, 18 Feb 2021 18:53:26 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EC32F20B6C40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1613703207;
-        bh=rCbOOt9TGbdpIdg/NY4OSQmhLeB26YL8cZjJbICdaAc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=i2QNptUyIxtzMh1vzNftJJSIDqPg/Rh8WEDNFdN06ErcAtos6xWdOmUlFKoURpATp
-         KA8dtdlqYXaLfnfAHE3i8qpeURTGNoV9Hh98K2MwZhCzywlFMNZPZWRi702dTjwl6S
-         L3LHxZqzFfjG37gk2b8QJikgab6sr51LHF4dw+Lk=
-Subject: Re: [PATCH] of: error: 'const struct kimage' has no member named
- 'arch'
-To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, robh@kernel.org,
-        takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
-        will@kernel.org, joe@perches.com, catalin.marinas@arm.com,
-        mpe@ellerman.id.au, sfr@canb.auug.org.au, james.morse@arm.com,
-        sashal@kernel.org, benh@kernel.crashing.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-References: <20210218223305.2044-1-nramas@linux.microsoft.com>
- <c6490f6a126a2f10e3e3445b51ea552a26f896a9.camel@linux.ibm.com>
- <8b8c0b70-c7ab-33f3-b66c-9ea03388497b@linux.microsoft.com>
- <87k0r4yi4s.fsf@manicouagan.localdomain>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <3ca0aa87-ca83-8024-4067-c2382a360db9@linux.microsoft.com>
-Date:   Thu, 18 Feb 2021 18:53:26 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229524AbhBSHIl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 02:08:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41920 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229498AbhBSHIk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 19 Feb 2021 02:08:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DC9DF64EC7;
+        Fri, 19 Feb 2021 07:07:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613718479;
+        bh=0IwgKLcCN57+liMx+xqKFJRTOI0mvqEbd1JQc1Ng4Aw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t7FLszEWf28OFG18AnvJ567RCAUvF5SnZoFhu2troOhIOEOa4rKOaJ3Ei622scVuH
+         hW/dyQjyhpuHF5xu+AwqRNPpM4IEONKKDf8EQs1B4889LYUj3TsawARZ3LVUC3LKlG
+         +rFUQrnLcEz58J/O5Qcown12I7z2EIPXyVEmETU1APwd+VFxhfOjEjtobbBCo2Z0ez
+         cShQGqBAmfFNLs/PlMw04AciNRIMuvzm+3WZDtlurlZDMxvsZGLp+CkDGipQKosxDW
+         GfQw42j+5Wh8BDiU0Qqwv2jlalrFCWo1RGCECCWIsfTfc6kQVk5vEmkXhnPjvOr8sO
+         6SHeZlZNCWCiA==
+Date:   Fri, 19 Feb 2021 09:07:44 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "stefanb@linux.vnet.ibm.com" <stefanb@linux.vnet.ibm.com>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@hansenpartnership.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: [PATCH v4] tpm: fix reference counting for struct tpm_chip
+Message-ID: <YC9jwIFUzP+aRal0@kernel.org>
+References: <1613435460-4377-1-git-send-email-LinoSanfilippo@gmx.de>
+ <1613435460-4377-2-git-send-email-LinoSanfilippo@gmx.de>
+ <20210216125342.GU4718@ziepe.ca>
+ <YCvtF4qfG35tHM5e@kernel.org>
+ <74bbc76260594a8a8f7993ab66cca104@AcuMS.aculab.com>
+ <YC2VM1JI0tECPs7g@kernel.org>
+ <20210218012702.GX4718@ziepe.ca>
 MIME-Version: 1.0
-In-Reply-To: <87k0r4yi4s.fsf@manicouagan.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210218012702.GX4718@ziepe.ca>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2/18/21 5:13 PM, Thiago Jung Bauermann wrote:
+On Wed, Feb 17, 2021 at 09:27:02PM -0400, Jason Gunthorpe wrote:
+> On Thu, Feb 18, 2021 at 12:14:11AM +0200, Jarkko Sakkinen wrote:
+> > On Tue, Feb 16, 2021 at 04:31:26PM +0000, David Laight wrote:
+> > > ...
+> > > > > > +	get_device(&chip->dev);
+> > > > > > +	chip->devs.release = tpm_devs_release;
+> > > > > > +	chip->devs.devt =
+> > > > > > +		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
+> > > > 
+> > > > Isn't this less than 100 chars?
+> > > 
+> > > Still best kept under 80 if 'reasonable'?
+> > > 
+> > > Really it is just split in the wrong place:
+> > > 	chip->devs.devt = MKDEV(MAJOR(tpm_devt),
+> > > 					chip->dev_num + TPM_NUM_DEVICES);
+> > 
+> > 
+> > Well it looks crap IMHO. Would be more reasonable to have it in a single 
+> > like. And it is legit too, since it is accepted by checkpatch.
+> > 
+> > You might break the lines within 80 chars if it is somehow "logically"
+> > consistent.
 > 
-> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+> FWIW, I've become kind of tired of the style wishywashyness I've
+> mostly been happy to accept anything that clang-format spits out for
+> ordinary C constructs.
+
+A. I would not mind if it was already merged. Since it isn't, I don't
+   see the point not fixing it.
+
+> It is good enough and universally usable. If devs don't have it linked
+> to their editor to format single expression or format selected blocks,
+> they are missing out :)
 > 
->> On 2/18/21 4:07 PM, Mimi Zohar wrote:
->>
->> Hi Mimi,
->>
->>> On Thu, 2021-02-18 at 14:33 -0800, Lakshmi Ramasubramanian wrote:
->>>> of_kexec_alloc_and_setup_fdt() defined in drivers/of/kexec.c builds
->>>> a new device tree object that includes architecture specific data
->>>> for kexec system call.  This should be defined only if the architecture
->>>> being built defines kexec architecture structure "struct kimage_arch".
->>>>
->>>> Define a new boolean config OF_KEXEC that is enabled if
->>>> CONFIG_KEXEC_FILE and CONFIG_OF_FLATTREE are enabled, and
->>>> the architecture is arm64 or powerpc64.  Build drivers/of/kexec.c
->>>> if CONFIG_OF_KEXEC is enabled.
->>>>
->>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
->>>> Fixes: 33488dc4d61f ("of: Add a common kexec FDT setup function")
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>> ---
->>>>    drivers/of/Kconfig  | 6 ++++++
->>>>    drivers/of/Makefile | 7 +------
->>>>    2 files changed, 7 insertions(+), 6 deletions(-)
->>>>
->>>> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
->>>> index 18450437d5d5..f2e8fa54862a 100644
->>>> --- a/drivers/of/Kconfig
->>>> +++ b/drivers/of/Kconfig
->>>> @@ -100,4 +100,10 @@ config OF_DMA_DEFAULT_COHERENT
->>>>    	# arches should select this if DMA is coherent by default for OF devices
->>>>    	bool
->>>>    +config OF_KEXEC
->>>> +	bool
->>>> +	depends on KEXEC_FILE
->>>> +	depends on OF_FLATTREE
->>>> +	default y if ARM64 || PPC64
->>>> +
->>>>    endif # OF
->>>> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
->>>> index c13b982084a3..287579dd1695 100644
->>>> --- a/drivers/of/Makefile
->>>> +++ b/drivers/of/Makefile
->>>> @@ -13,11 +13,6 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
->>>>    obj-$(CONFIG_OF_RESOLVE)  += resolver.o
->>>>    obj-$(CONFIG_OF_OVERLAY) += overlay.o
->>>>    obj-$(CONFIG_OF_NUMA) += of_numa.o
->>>> -
->>>> -ifdef CONFIG_KEXEC_FILE
->>>> -ifdef CONFIG_OF_FLATTREE
->>>> -obj-y	+= kexec.o
->>>> -endif
->>>> -endif
->>>> +obj-$(CONFIG_OF_KEXEC) += kexec.o
->>>>      obj-$(CONFIG_OF_UNITTEST) += unittest-data/
->>> Is it possible to reuse CONFIG_HAVE_IMA_KEXEC here?
->>>
->>
->> For ppc64 CONFIG_HAVE_IMA_KEXEC is selected when CONFIG_KEXEC_FILE is enabled.
->> So I don't see a problem in reusing CONFIG_HAVE_IMA_KEXEC for ppc.
->>
->> But for arm64, CONFIG_HAVE_IMA_KEXEC is enabled in the final patch in the patch
->> set (the one for carrying forward IMA log across kexec for arm64). arm64 calls
->> of_kexec_alloc_and_setup_fdt() prior to enabling CONFIG_HAVE_IMA_KEXEC and hence
->> breaks the build for arm64.
-> 
-> One problem is that I believe that this patch won't placate the robot,
-> because IIUC it generates config files at random and this change still
-> allows hppa and s390 to enable CONFIG_OF_KEXEC.
+> The community consensus on style is quite unclear. Is 1 or 2 above the
+> majority preference? Does this case fall under the new "use more than
+> 80 cols if it improves readability?" I have no idea.
 
-I enabled CONFIG_OF_KEXEC for s390. With my patch applied, 
-CONFIG_OF_KEXEC is removed. So I think the robot enabling this config 
-would not be a problem.
+B. I need to maintain this, once it's merged.
+C. A smaller diff for a critical bug fix. I actually allow style
+   compromises for fixes to be backported *when* it makes the overall
+   diff smaller.
+D. Has more odds to make future changes smaller as the whole thing is
+   in a single code line.
 
-> 
-> Perhaps a new CONFIG_HAVE_KIMAGE_ARCH option? Not having that option
-> would still allow building kexec.o, but would be used inside kexec.c to
-> avoid accessing kimage.arch members.
-> 
+> Frankly, for most people writing driver code, if they consistently use
+> clang-format their work will be alot better than if they try to do it
+> by hand. It takes a lot of experiance to reliably eyeball something
+> close to the kernel style..
 
-I think this is a good idea - a new CONFIG_HAVE_KIMAGE_ARCH, which will 
-be selected by arm64 and ppc for now. I tried this, and it fixes the 
-build issue.
+For me it gives a framework to review patches in multiple subsystems.
+If I have to constantly think whether to allow this and that shift
+from the kernel coding style, it makes the whole process for me more
+fuzzy and chaotic.
 
-Although, the name for the new config can be misleading since PARISC, 
-for instance, also defines "struct kimage_arch". Perhaps, 
-CONFIG_HAVE_ELF_KIMAGE_ARCH since of_kexec_alloc_and_setup_fdt() is 
-accessing ELF specific fields in "struct kimage_arch"?
+As I said (A), it would not be end of the world if this had been
+merged already. I also want to state that I do sometimes make mistakes
+when reviewing code, and am happy to take critique from that :-)
 
-Rob/Mimi - please let us know which approach you think is better.
+> Jason
 
-thanks,
-  -lakshmi
+/Jarkko
