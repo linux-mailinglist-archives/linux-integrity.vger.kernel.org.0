@@ -2,88 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0A931F60A
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 09:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E6E31F645
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 10:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbhBSIt2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Feb 2021 03:49:28 -0500
-Received: from us2-ob3-3.mailhostbox.com ([208.91.199.218]:44415 "EHLO
-        us2-ob3-3.mailhostbox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbhBSItY (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Feb 2021 03:49:24 -0500
-X-Greylist: delayed 464 seconds by postgrey-1.27 at vger.kernel.org; Fri, 19 Feb 2021 03:49:23 EST
-Received: from g3.oswalpalash.com (unknown [49.36.75.42])
-        (Authenticated sender: hello@oswalpalash.com)
-        by us2.outbound.mailhostbox.com (Postfix) with ESMTPA id 18B5ED7950;
-        Fri, 19 Feb 2021 08:40:47 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oswalpalash.com;
-        s=20160715; t=1613724058;
-        bh=w/MXL5PWmCp6/RiRm7vqAcjP+5e8CSmCtNdJkAowHAs=;
-        h=Date:From:To:Subject;
-        b=RUooY/WU58HYaVw2VLZRyGk0gPGIrnWEfh9vecP0GJ+iMAauzMJd/Q8hpLq0a0Wlz
-         RGpymqgRDQqRhd7eLkq2GaGLQsfkaM4hbR6nVBpiAZAWYjbWbV0wMLrLedgt8IAiJS
-         sbxFTnoOpYWp1Egb+dt0czPbuHun3PLDivZl6lsA=
-Date:   Fri, 19 Feb 2021 14:10:38 +0530
-From:   Palash Oswal <hello@oswalpalash.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ima: Replacing deprecated strlcpy with strscpy
-Message-ID: <20210219084038.GA7564@g3.oswalpalash.com>
+        id S230100AbhBSJIv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 04:08:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37646 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229953AbhBSJGu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 19 Feb 2021 04:06:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0B86F64E5C;
+        Fri, 19 Feb 2021 09:06:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613725569;
+        bh=9gCM57rLof4KH7lXmy+UmvuKw9FROg+FI9WlxlntM6k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HF6TCyaLMin7eWw4jcFe+dmeJli3eaPGNiRqFJOdifpw3v3jT+JZYAaUBeXZy74Go
+         aeiwwSMCGDPuDcaeovq08+UTBhBykv6GzjbK79+AN4G3Z294+JgpaFB6c2ldOXfDGH
+         KGoZJ2CBsqQSsqeQ3wVPGEav0wxTPIPxyuxdIew4rJ2erUfLcnJ2GE8PMM1ofzS5dy
+         hqLP0Et4AKssHZqw1fH+RJNZDAe0vFzDiJ91PXDYRg2nSQ/1VkTFxka46a4mvxtP7F
+         OjPhJ+HLcsd7zYl/fiwPqNZft4tb1qzXCfzpUGYAqjgCY16xVibPybPOMfK79UnnCy
+         7B20K57epD1kw==
+Date:   Fri, 19 Feb 2021 11:05:54 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH RESEND v5] tpm: fix reference counting for struct tpm_chip
+Message-ID: <YC9/cr9Km/jWzmon@kernel.org>
+References: <1613505191-4602-1-git-send-email-LinoSanfilippo@gmx.de>
+ <1613505191-4602-2-git-send-email-LinoSanfilippo@gmx.de>
+ <YC2WRJfNbY22yIOn@kernel.org>
+ <5d0f7222-a9ef-809b-cd9a-86bbacb03790@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=R5t95uZX c=1 sm=1 tr=0
-        a=CHsQ1LQruS7B59iI9LpjmQ==:117 a=CHsQ1LQruS7B59iI9LpjmQ==:17
-        a=kj9zAlcOel0A:10 a=xUbBMDKt3BKPAhSvupEA:9 a=CjuIK1q_8ugA:10
+In-Reply-To: <5d0f7222-a9ef-809b-cd9a-86bbacb03790@gmx.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The strlcpy() function is unsafe in that the source buffer length
-is unbounded or possibly be non NULL terminated. This can cause
-memory over-reads, crashes, etc.
+On Thu, Feb 18, 2021 at 08:13:57PM +0100, Lino Sanfilippo wrote:
+> 
+> Hi,
+> 
+> On 17.02.21 at 23:18, Jarkko Sakkinen wrote:
+> 
+> >> +
+> >
+> > /*
+> >  * Please describe what the heck the function does. No need for full on
+> >  * kdoc.
+> >  */
+> 
+> Ok.
+> 
+> >> +int tpm2_add_device(struct tpm_chip *chip)
+> >
+> > Please, rename as tpm_devs_add for coherency sake.
+> >
+> 
+> Sorry I confused this and renamed it wrongly. I will fix it in the next
+> patch version.
+> 
+> >> +{
+> >> +	int rc;
+> >> +
+> >> +	device_initialize(&chip->devs);
+> >> +	chip->devs.parent = chip->dev.parent;
+> >> +	chip->devs.class = tpmrm_class;
+> >
+> > Empty line. Cannot recall, if I stated before.
+> >> +	/* +	 * get extra reference on main device to hold on behalf of devs.
+> >> +	 * This holds the chip structure while cdevs is in use. The
+> >> +	 * corresponding put is in the tpm_devs_release.
+> >> +	 */
+> >> +	get_device(&chip->dev);
+> >> +	chip->devs.release = tpm_devs_release;
+> >> +	chip->devs.devt = MKDEV(MAJOR(tpm_devt),
+> >> +					chip->dev_num + TPM_NUM_DEVICES);
+> >
+> > NAK, same comment as before.
+> >
+> 
+> Thx for the review, I will fix these issues.
 
-Link: https://github.com/KSPP/linux/issues/89
-Signed-off-by: Palash Oswal <hello@oswalpalash.com>
----
- security/integrity/ima/ima_api.c    | 2 +-
- security/integrity/ima/ima_policy.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Yeah, I mean I'm going to collect this fix anyway after rc1 has been
+released so there's a lot of time to polish small details. I.e. I'm
+doing a PR for rc2 with the fix included.
 
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 1dd70dc68ffd..2f3b8257181d 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -399,7 +399,7 @@ const char *ima_d_path(const struct path *path, char **pathbuf, char *namebuf)
- 	}
- 
- 	if (!pathname) {
--		strlcpy(namebuf, path->dentry->d_name.name, NAME_MAX);
-+		strscpy(namebuf, path->dentry->d_name.name, NAME_MAX);
- 		pathname = namebuf;
- 	}
- 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 9b45d064a87d..010839aef6ba 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -791,7 +791,7 @@ static int __init ima_init_arch_policy(void)
- 		char rule[255];
- 		int result;
- 
--		result = strlcpy(rule, *rules, sizeof(rule));
-+		strscpy(rule, *rules, sizeof(rule));
- 
- 		INIT_LIST_HEAD(&arch_policy_entry[i].list);
- 		result = ima_parse_rule(rule, &arch_policy_entry[i]);
+> Regards,
+> Lino
 
-base-commit: f6692213b5045dc461ce0858fb18cf46f328c202
--- 
-2.27.0
-
+/Jarkko
