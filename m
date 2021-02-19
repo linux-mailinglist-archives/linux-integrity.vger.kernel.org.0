@@ -2,324 +2,184 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BDC31F669
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 10:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9C231FA59
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 15:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbhBSJRe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Feb 2021 04:17:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39072 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230124AbhBSJQJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Feb 2021 04:16:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A618764DED;
-        Fri, 19 Feb 2021 09:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613726125;
-        bh=aNg0vsuvUb0LtDI824VmYTwntH+mQFXOQD79zCUOv5M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=en8Ek/Kw4uhKYikR8oywZYN1Eb2txnSYXmyQ6SUJe2U+6No8Q62E7AoHI0khHVs+i
-         BtnY6itoNK+P2g34cb+KYHLJRYDSMMxivbgi+z2EgcYAAYoy59U0dfFbdCsSixdblX
-         P2OSAraBSRH6K8ngf3p1IFG35WrhWA/ju1MT7Df/Uba67SOihQVp+f4rT4xhFivAcO
-         PAb1sAGowXqY3bc8GT34DYHp1+N9jTV8UtrXHTOKc51GUwGy6T/0qFk2GOpUJn77nj
-         BKjPgAP/ilTEfCSOaMxlJppK2b1OTR3e+RPLhCboaRQPvZ7YKOFFrnEXQ29HastR3u
-         zZ2Eud4+11dzQ==
-Date:   Fri, 19 Feb 2021 11:15:10 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
+        id S230421AbhBSOKK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 09:10:10 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16266 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230228AbhBSOKJ (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 19 Feb 2021 09:10:09 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11JE1ld1070546;
+        Fri, 19 Feb 2021 09:09:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
+ cc : subject : in-reply-to : date : message-id : mime-version :
+ content-type; s=pp1; bh=hEiNmOVPSOEglYa38shUn7O7VSY0u7cREb5g4ai2Ocs=;
+ b=KdURzBzq4H2nTG+I9QyCHkbqIPuNa5JCdpBTrBKO8IiAlSiz2PUyxXwJTRl4FivsiDLx
+ FI5eL2YqxoqOHfGR1uBEeXFa7DqHUCoY7iV1tzwY5M8dWhjjgkEDhdjKy9xreDOyfyJR
+ 8B366w0yoEjLLWpoxwUoHW++jK4ejNhBVl0oYsCNsZ2SdLsVHrB1DhigBHrzt4LG3II4
+ HU5eGORsBra7GOvDMB92WwcpGOwwr+zJlVn/Eb2038sqXutJaICYHWR8yNftS43nwq9E
+ bYQtLXYzetnr/BacC3Nv+hijh9IoGdDq/fMP6t1r9ZdZJYDm0yBgHbYy2Q1Dc6HW3tqb Dw== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36tenqgh49-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Feb 2021 09:09:02 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11JE7cI1006622;
+        Fri, 19 Feb 2021 14:09:01 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma03dal.us.ibm.com with ESMTP id 36p6da1bb1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Feb 2021 14:09:01 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11JE90Rl9437826
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Feb 2021 14:09:00 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C5252AC05E;
+        Fri, 19 Feb 2021 14:09:00 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 24783AC05F;
+        Fri, 19 Feb 2021 14:08:57 +0000 (GMT)
+Received: from manicouagan.localdomain (unknown [9.85.174.98])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Fri, 19 Feb 2021 14:08:56 +0000 (GMT)
+References: <20210218223305.2044-1-nramas@linux.microsoft.com>
+ <c6490f6a126a2f10e3e3445b51ea552a26f896a9.camel@linux.ibm.com>
+ <8b8c0b70-c7ab-33f3-b66c-9ea03388497b@linux.microsoft.com>
+ <87k0r4yi4s.fsf@manicouagan.localdomain>
+ <3ca0aa87-ca83-8024-4067-c2382a360db9@linux.microsoft.com>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, robh@kernel.org,
+        takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
+        will@kernel.org, joe@perches.com, catalin.marinas@arm.com,
+        mpe@ellerman.id.au, sfr@canb.auug.org.au, james.morse@arm.com,
+        sashal@kernel.org, benh@kernel.crashing.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v6] tpm: fix reference counting for struct tpm_chip
-Message-ID: <YC+BnlFIfqKEcTh6@kernel.org>
-References: <1613680181-31920-1-git-send-email-LinoSanfilippo@gmx.de>
- <1613680181-31920-2-git-send-email-LinoSanfilippo@gmx.de>
- <YC+BRfvtA3n7yeaR@kernel.org>
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] of: error: 'const struct kimage' has no member named
+ 'arch'
+In-reply-to: <3ca0aa87-ca83-8024-4067-c2382a360db9@linux.microsoft.com>
+Date:   Fri, 19 Feb 2021 11:08:55 -0300
+Message-ID: <87eehcxi88.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YC+BRfvtA3n7yeaR@kernel.org>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-19_05:2021-02-18,2021-02-19 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0
+ bulkscore=0 priorityscore=1501 impostorscore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102190109
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Feb 19, 2021 at 11:13:45AM +0200, Jarkko Sakkinen wrote:
-> On Thu, Feb 18, 2021 at 09:29:41PM +0100, Lino Sanfilippo wrote:
-> > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > 
-> > The following sequence of operations results in a refcount warning:
-> > 
-> > 1. Open device /dev/tpmrm.
-> > 2. Remove module tpm_tis_spi.
-> > 3. Write a TPM command to the file descriptor opened at step 1.
-> > 
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 3 PID: 1161 at lib/refcount.c:25 kobject_get+0xa0/0xa4
-> > refcount_t: addition on 0; use-after-free.
-> > Modules linked in: tpm_tis_spi tpm_tis_core tpm mdio_bcm_unimac brcmfmac
-> > sha256_generic libsha256 sha256_arm hci_uart btbcm bluetooth cfg80211 vc4
-> > brcmutil ecdh_generic ecc snd_soc_core crc32_arm_ce libaes
-> > raspberrypi_hwmon ac97_bus snd_pcm_dmaengine bcm2711_thermal snd_pcm
-> > snd_timer genet snd phy_generic soundcore [last unloaded: spi_bcm2835]
-> > CPU: 3 PID: 1161 Comm: hold_open Not tainted 5.10.0ls-main-dirty #2
-> > Hardware name: BCM2711
-> > [<c0410c3c>] (unwind_backtrace) from [<c040b580>] (show_stack+0x10/0x14)
-> > [<c040b580>] (show_stack) from [<c1092174>] (dump_stack+0xc4/0xd8)
-> > [<c1092174>] (dump_stack) from [<c0445a30>] (__warn+0x104/0x108)
-> > [<c0445a30>] (__warn) from [<c0445aa8>] (warn_slowpath_fmt+0x74/0xb8)
-> > [<c0445aa8>] (warn_slowpath_fmt) from [<c08435d0>] (kobject_get+0xa0/0xa4)
-> > [<c08435d0>] (kobject_get) from [<bf0a715c>] (tpm_try_get_ops+0x14/0x54 [tpm])
-> > [<bf0a715c>] (tpm_try_get_ops [tpm]) from [<bf0a7d6c>] (tpm_common_write+0x38/0x60 [tpm])
-> > [<bf0a7d6c>] (tpm_common_write [tpm]) from [<c05a7ac0>] (vfs_write+0xc4/0x3c0)
-> > [<c05a7ac0>] (vfs_write) from [<c05a7ee4>] (ksys_write+0x58/0xcc)
-> > [<c05a7ee4>] (ksys_write) from [<c04001a0>] (ret_fast_syscall+0x0/0x4c)
-> > Exception stack(0xc226bfa8 to 0xc226bff0)
-> > bfa0:                   00000000 000105b4 00000003 beafe664 00000014 00000000
-> > bfc0: 00000000 000105b4 000103f8 00000004 00000000 00000000 b6f9c000 beafe684
-> > bfe0: 0000006c beafe648 0001056c b6eb6944
-> > ---[ end trace d4b8409def9b8b1f ]---
-> > 
-> > The reason for this warning is the attempt to get the chip->dev reference
-> > in tpm_common_write() although the reference counter is already zero.
-> > 
-> > Since commit 8979b02aaf1d ("tpm: Fix reference count to main device") the
-> > extra reference used to prevent a premature zero counter is never taken,
-> > because the required TPM_CHIP_FLAG_TPM2 flag is never set.
-> > 
-> > Fix this by moving the TPM 2 character device handling from
-> > tpm_chip_alloc() to tpm_add_char_device() which is called at a later point
-> > in time when the flag has been set in case of TPM2.
-> > 
-> > Commit fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
-> > already introduced function tpm_devs_release() to release the extra
-> > reference but did not implement the required put on chip->devs that results
-> > in the call of this function.
-> > 
-> > Fix this by putting chip->devs in tpm_chip_unregister().
-> > 
-> > Finally move the new implementation for the TPM 2 handling into a new
-> > function to avoid multiple checks for the TPM_CHIP_FLAG_TPM2 flag in the
-> > good case and error cases.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: fdc915f7f719 ("tpm: expose spaces via a device link /dev/tpmrm<n>")
-> > Fixes: 8979b02aaf1d ("tpm: Fix reference count to main device")
-> > Co-developed-by: Jason Gunthorpe <jgg@ziepe.ca>
-> > Signed-off-by: Jason Gunthorpe <jgg@ziepe.ca>
-> > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > ---
-> >  drivers/char/tpm/tpm-chip.c   | 48 ++++++++-----------------------------
-> >  drivers/char/tpm/tpm.h        |  1 +
-> >  drivers/char/tpm/tpm2-space.c | 55 +++++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 66 insertions(+), 38 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> > index ddaeceb..ae6e414 100644
-> > --- a/drivers/char/tpm/tpm-chip.c
-> > +++ b/drivers/char/tpm/tpm-chip.c
-> > @@ -274,14 +274,6 @@ static void tpm_dev_release(struct device *dev)
-> >  	kfree(chip);
-> >  }
-> >  
-> > -static void tpm_devs_release(struct device *dev)
-> > -{
-> > -	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
-> > -
-> > -	/* release the master device reference */
-> > -	put_device(&chip->dev);
-> > -}
-> > -
-> >  /**
-> >   * tpm_class_shutdown() - prepare the TPM device for loss of power.
-> >   * @dev: device to which the chip is associated.
-> > @@ -344,7 +336,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
-> >  	chip->dev_num = rc;
-> >  
-> >  	device_initialize(&chip->dev);
-> > -	device_initialize(&chip->devs);
-> >  
-> >  	chip->dev.class = tpm_class;
-> >  	chip->dev.class->shutdown_pre = tpm_class_shutdown;
-> > @@ -352,39 +343,20 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
-> >  	chip->dev.parent = pdev;
-> >  	chip->dev.groups = chip->groups;
-> >  
-> > -	chip->devs.parent = pdev;
-> > -	chip->devs.class = tpmrm_class;
-> > -	chip->devs.release = tpm_devs_release;
-> > -	/* get extra reference on main device to hold on
-> > -	 * behalf of devs.  This holds the chip structure
-> > -	 * while cdevs is in use.  The corresponding put
-> > -	 * is in the tpm_devs_release (TPM2 only)
-> > -	 */
-> > -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > -		get_device(&chip->dev);
-> > -
-> >  	if (chip->dev_num == 0)
-> >  		chip->dev.devt = MKDEV(MISC_MAJOR, TPM_MINOR);
-> >  	else
-> >  		chip->dev.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num);
-> >  
-> > -	chip->devs.devt =
-> > -		MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> > -
-> >  	rc = dev_set_name(&chip->dev, "tpm%d", chip->dev_num);
-> >  	if (rc)
-> >  		goto out;
-> > -	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
-> > -	if (rc)
-> > -		goto out;
-> >  
-> >  	if (!pdev)
-> >  		chip->flags |= TPM_CHIP_FLAG_VIRTUAL;
-> >  
-> >  	cdev_init(&chip->cdev, &tpm_fops);
-> > -	cdev_init(&chip->cdevs, &tpmrm_fops);
-> >  	chip->cdev.owner = THIS_MODULE;
-> > -	chip->cdevs.owner = THIS_MODULE;
-> >  
-> >  	rc = tpm2_init_space(&chip->work_space, TPM2_SPACE_BUFFER_SIZE);
-> >  	if (rc) {
-> > @@ -396,7 +368,6 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
-> >  	return chip;
-> >  
-> >  out:
-> > -	put_device(&chip->devs);
-> >  	put_device(&chip->dev);
-> >  	return ERR_PTR(rc);
-> >  }
-> > @@ -445,14 +416,9 @@ static int tpm_add_char_device(struct tpm_chip *chip)
-> >  	}
-> >  
-> >  	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> > -		rc = cdev_device_add(&chip->cdevs, &chip->devs);
-> > -		if (rc) {
-> > -			dev_err(&chip->devs,
-> > -				"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
-> > -				dev_name(&chip->devs), MAJOR(chip->devs.devt),
-> > -				MINOR(chip->devs.devt), rc);
-> > -			return rc;
-> > -		}
-> > +		rc = tpm_devs_add(chip);
-> > +		if (rc)
-> > +			goto del_cdev;
-> >  	}
-> >  
-> >  	/* Make the chip available. */
-> > @@ -460,6 +426,10 @@ static int tpm_add_char_device(struct tpm_chip *chip)
-> >  	idr_replace(&dev_nums_idr, chip, chip->dev_num);
-> >  	mutex_unlock(&idr_lock);
-> >  
-> > +	return 0;
-> > +
-> > +del_cdev:
-> > +	cdev_device_del(&chip->cdev, &chip->dev);
-> >  	return rc;
-> >  }
-> >  
-> > @@ -640,8 +610,10 @@ void tpm_chip_unregister(struct tpm_chip *chip)
-> >  	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-> >  		hwrng_unregister(&chip->hwrng);
-> >  	tpm_bios_log_teardown(chip);
-> > -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> >  		cdev_device_del(&chip->cdevs, &chip->devs);
-> > +		put_device(&chip->devs);
-> > +	}
-> >  	tpm_del_char_device(chip);
-> >  }
-> >  EXPORT_SYMBOL_GPL(tpm_chip_unregister);
-> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > index 947d1db..ac4b2dc 100644
-> > --- a/drivers/char/tpm/tpm.h
-> > +++ b/drivers/char/tpm/tpm.h
-> > @@ -238,6 +238,7 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
-> >  		       size_t cmdsiz);
-> >  int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
-> >  		      size_t *bufsiz);
-> > +int tpm_devs_add(struct tpm_chip *chip);
-> >  
-> >  void tpm_bios_log_setup(struct tpm_chip *chip);
-> >  void tpm_bios_log_teardown(struct tpm_chip *chip);
-> > diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-> > index 784b8b3..6d17f77 100644
-> > --- a/drivers/char/tpm/tpm2-space.c
-> > +++ b/drivers/char/tpm/tpm2-space.c
-> > @@ -571,3 +571,58 @@ int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space,
-> >  	dev_err(&chip->dev, "%s: error %d\n", __func__, rc);
-> >  	return rc;
-> >  }
-> > +
-> > +/*
-> > + * Put the reference to the main device.
-> > + */
-> > +static void tpm_devs_release(struct device *dev)
-> > +{
-> > +	struct tpm_chip *chip = container_of(dev, struct tpm_chip, devs);
-> > +
-> > +	/* release the master device reference */
-> > +	put_device(&chip->dev);
-> > +}
-> > +
-> > +/*
-> > + * Add a device file to expose TPM spaces. Also take a reference to the
-> > + * main device.
-> > + */
-> > +int tpm_devs_add(struct tpm_chip *chip)
-> > +{
-> > +	int rc;
-> > +
-> > +	device_initialize(&chip->devs);
-> > +	chip->devs.parent = chip->dev.parent;
-> > +	chip->devs.class = tpmrm_class;
-> > +
-> > +	/*
-> > +	 * Get extra reference on main device to hold on behalf of devs.
-> > +	 * This holds the chip structure while cdevs is in use. The
-> > +	 * corresponding put is in the tpm_devs_release.
-> > +	 */
-> > +	get_device(&chip->dev);
-> > +	chip->devs.release = tpm_devs_release;
-> > +	chip->devs.devt = MKDEV(MAJOR(tpm_devt), chip->dev_num + TPM_NUM_DEVICES);
-> > +	cdev_init(&chip->cdevs, &tpmrm_fops);
-> > +	chip->cdevs.owner = THIS_MODULE;
-> > +
-> > +	rc = dev_set_name(&chip->devs, "tpmrm%d", chip->dev_num);
-> > +	if (rc)
-> > +		goto out_put_devs;
-> > +
-> > +	rc = cdev_device_add(&chip->cdevs, &chip->devs);
-> > +	if (rc) {
-> > +		dev_err(&chip->devs,
-> > +			"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
-> > +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
-> > +			MINOR(chip->devs.devt), rc);
-> > +		goto out_put_devs;
-> > +	}
-> > +
-> > +	return 0;
-> > +
-> > +out_put_devs:
-> 
-> A nit:
-> 
-> 1. You have already del_cdev:
-> 2. Here you use a differing convention with out prefix.
-> 
-> I'd suggest that you put err_ to both:
-> 
-> 1. err_del_cdev
-> 2. err_put_devs
-> 
-> It's quite coherent what we have already:
-> 
-> linux-tpmdd on  next took 8s 
-> ❯ git grep "^err_.*" drivers/char/tpm/ |  wc -l
-> 17
 
-I guess there's some ambiguity with this, but IMHO makes a lot of
-sense for code blocks *only* executed as an exception handler.
+Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
 
-/Jarkko
+> On 2/18/21 5:13 PM, Thiago Jung Bauermann wrote:
+>> Lakshmi Ramasubramanian <nramas@linux.microsoft.com> writes:
+>> 
+>>> On 2/18/21 4:07 PM, Mimi Zohar wrote:
+>>>
+>>> Hi Mimi,
+>>>
+>>>> On Thu, 2021-02-18 at 14:33 -0800, Lakshmi Ramasubramanian wrote:
+>>>>> of_kexec_alloc_and_setup_fdt() defined in drivers/of/kexec.c builds
+>>>>> a new device tree object that includes architecture specific data
+>>>>> for kexec system call.  This should be defined only if the architecture
+>>>>> being built defines kexec architecture structure "struct kimage_arch".
+>>>>>
+>>>>> Define a new boolean config OF_KEXEC that is enabled if
+>>>>> CONFIG_KEXEC_FILE and CONFIG_OF_FLATTREE are enabled, and
+>>>>> the architecture is arm64 or powerpc64.  Build drivers/of/kexec.c
+>>>>> if CONFIG_OF_KEXEC is enabled.
+>>>>>
+>>>>> Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>>>>> Fixes: 33488dc4d61f ("of: Add a common kexec FDT setup function")
+>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>> ---
+>>>>>    drivers/of/Kconfig  | 6 ++++++
+>>>>>    drivers/of/Makefile | 7 +------
+>>>>>    2 files changed, 7 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+>>>>> index 18450437d5d5..f2e8fa54862a 100644
+>>>>> --- a/drivers/of/Kconfig
+>>>>> +++ b/drivers/of/Kconfig
+>>>>> @@ -100,4 +100,10 @@ config OF_DMA_DEFAULT_COHERENT
+>>>>>    	# arches should select this if DMA is coherent by default for OF devices
+>>>>>    	bool
+>>>>>    +config OF_KEXEC
+>>>>> +	bool
+>>>>> +	depends on KEXEC_FILE
+>>>>> +	depends on OF_FLATTREE
+>>>>> +	default y if ARM64 || PPC64
+>>>>> +
+>>>>>    endif # OF
+>>>>> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+>>>>> index c13b982084a3..287579dd1695 100644
+>>>>> --- a/drivers/of/Makefile
+>>>>> +++ b/drivers/of/Makefile
+>>>>> @@ -13,11 +13,6 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
+>>>>>    obj-$(CONFIG_OF_RESOLVE)  += resolver.o
+>>>>>    obj-$(CONFIG_OF_OVERLAY) += overlay.o
+>>>>>    obj-$(CONFIG_OF_NUMA) += of_numa.o
+>>>>> -
+>>>>> -ifdef CONFIG_KEXEC_FILE
+>>>>> -ifdef CONFIG_OF_FLATTREE
+>>>>> -obj-y	+= kexec.o
+>>>>> -endif
+>>>>> -endif
+>>>>> +obj-$(CONFIG_OF_KEXEC) += kexec.o
+>>>>>      obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+>>>> Is it possible to reuse CONFIG_HAVE_IMA_KEXEC here?
+>>>>
+>>>
+>>> For ppc64 CONFIG_HAVE_IMA_KEXEC is selected when CONFIG_KEXEC_FILE is enabled.
+>>> So I don't see a problem in reusing CONFIG_HAVE_IMA_KEXEC for ppc.
+>>>
+>>> But for arm64, CONFIG_HAVE_IMA_KEXEC is enabled in the final patch in the patch
+>>> set (the one for carrying forward IMA log across kexec for arm64). arm64 calls
+>>> of_kexec_alloc_and_setup_fdt() prior to enabling CONFIG_HAVE_IMA_KEXEC and hence
+>>> breaks the build for arm64.
+>> One problem is that I believe that this patch won't placate the robot,
+>> because IIUC it generates config files at random and this change still
+>> allows hppa and s390 to enable CONFIG_OF_KEXEC.
+>
+> I enabled CONFIG_OF_KEXEC for s390. With my patch applied, CONFIG_OF_KEXEC is
+> removed. So I think the robot enabling this config would not be a problem.
+>
+>> Perhaps a new CONFIG_HAVE_KIMAGE_ARCH option? Not having that option
+>> would still allow building kexec.o, but would be used inside kexec.c to
+>> avoid accessing kimage.arch members.
+>> 
+>
+> I think this is a good idea - a new CONFIG_HAVE_KIMAGE_ARCH, which will be
+> selected by arm64 and ppc for now. I tried this, and it fixes the build issue.
+>
+> Although, the name for the new config can be misleading since PARISC, for
+> instance, also defines "struct kimage_arch". Perhaps,
+> CONFIG_HAVE_ELF_KIMAGE_ARCH since of_kexec_alloc_and_setup_fdt() is 
+> accessing ELF specific fields in "struct kimage_arch"?
+
+Ah, right. I should have digged into the code before making my
+suggestion. CONFIG_HAVE_KIMAGE_ARCH isn't appropriate, indeed.
+
+>
+> Rob/Mimi - please let us know which approach you think is better.
+
+Ah! We can actually use the existing CONFIG_HAVE_IMA_KEXEC, no? I don't
+know why I didn't think of it before.
+
+-- 
+Thiago Jung Bauermann
+IBM Linux Technology Center
