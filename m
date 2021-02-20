@@ -2,50 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D512320349
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Feb 2021 03:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C330320327
+	for <lists+linux-integrity@lfdr.de>; Sat, 20 Feb 2021 03:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbhBTCsi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Feb 2021 21:48:38 -0500
-Received: from mail.mpcb.gov.in ([125.17.249.59]:50116 "EHLO
-        fortimail.email.mpcb.gov.in" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229796AbhBTCsi (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Feb 2021 21:48:38 -0500
-X-Greylist: delayed 69771 seconds by postgrey-1.27 at vger.kernel.org; Fri, 19 Feb 2021 21:48:31 EST
-Received: from User (rain-197-185-102-182.rain.network [197.185.102.182])
-        (user=feedback.consent@mpcb.gov.in mech=LOGIN bits=0)
-        by fortimail.email.mpcb.gov.in  with ESMTP id 11J7IVmK031284-11J7IVmM031284;
-        Fri, 19 Feb 2021 12:48:34 +0530
-Message-Id: <202102190718.11J7IVmK031284-11J7IVmM031284@fortimail.email.mpcb.gov.in>
-Reply-To: <brightwayfinanceloan01@protonmail.com>
-From:   "Brightway Finance Loan" <brightwayfinanceloan@gmail.com>
-Subject: Apply for loan at 5% interest rate per year
-Date:   Fri, 19 Feb 2021 09:18:30 +0200
+        id S229767AbhBTChn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 21:37:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42692 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229725AbhBTChl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 19 Feb 2021 21:37:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CD88B64E54;
+        Sat, 20 Feb 2021 02:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1613788620;
+        bh=11VjwrLVTaCchWbSZbfpOpPCXvnZn7rLf+bfTZNteK0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=shuls3n1ZfjhymTGI0HzOP4nDn77pgLswngIsQrM/9QfWkOzjJJdpnFmiIvaXzKST
+         eM64BxW7r8sb9di/kYILPup5NHw9PKOvoPmRQizFQRLXCUUOiMLLtpGlLiEjLGWJdT
+         aXgCn7A1yn+E1w2mIgU0KRKXraCuqKJJ3lowS7hQEmaU6VMZrjYW+LuRxGE3o3aCyc
+         IVmTgv5O+EKpgvt2EdGzxgMPpys5DOlk7sAicYOf4myKNmCR60Ugk6hA6Dw/Jjvly4
+         YkA6a3j2LxMEqFVaD7uZvr+nu+cG1CXNgVVDun/lGORtFzrcVdtdiHeRqufnMif2l/
+         LeWU0c2wNQYZA==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Laurent Bigonville <bigon@debian.org>, stable@vger.kernel.org,
+        Lukasz Majczak <lma@semihalf.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH 1/2] tpm, tpm_tis: Decorate tpm_get_timeouts() with request_locality()
+Date:   Sat, 20 Feb 2021 04:36:41 +0200
+Message-Id: <20210220023641.8568-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-FEAS-Auth-User: feedback.consent@mpcb.gov.in
-X-FE-Policy-ID: 0:1:2:SYSTEM
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-BrightWay Finance offers Loans ranging from (R10, 000.00 - R60, 000,000.00). Loan duration is from 1 to 20 years (Maximum) No collateral,
-No ITC CHECK and Blacklisted are welcome. If you wish to apply kindly send your full names, ID number, 
-email address and cellphone number to brightwayfinanceloan01@protonmail.com
+This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
+(SLB 9670):
 
+[    4.324298] TPM returned invalid status
+[    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
 
-Yours in Service,
+Background
+==========
 
-Jane Cooper
-MARKETING TEAM
-Tel No: +27(0)622541582
-BrightWay Finance Loan(PTY) LTD.
-brightwayfinanceloan01@protonmail.com
+TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 FIFO
+Interface Locality Usage per Register, Table 39 Register Behavior Based on
+Locality Setting for FIFO - a read attempt to TPM_STS_x Registers returns
+0xFF in case of lack of locality.
+
+The fix
+=======
+
+Decorate tpm_get_timeouts() with request_locality() and release_locality().
+
+Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
+Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Laurent Bigonville <bigon@debian.org>
+Cc: stable@vger.kernel.org
+Reported-by: Lukasz Majczak <lma@semihalf.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/char/tpm/tpm_tis_core.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 431919d5f48a..30843954aa36 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -1019,11 +1019,21 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	init_waitqueue_head(&priv->read_queue);
+ 	init_waitqueue_head(&priv->int_queue);
+ 	if (irq != -1) {
+-		/* Before doing irq testing issue a command to the TPM in polling mode
++		/*
++		 * Before doing irq testing issue a command to the TPM in polling mode
+ 		 * to make sure it works. May as well use that command to set the
+ 		 * proper timeouts for the driver.
+ 		 */
+-		if (tpm_get_timeouts(chip)) {
++
++		rc = request_locality(chip, 0);
++		if (rc < 0)
++			goto out_err;
++
++		rc = tpm_get_timeouts(chip);
++
++		release_locality(chip, 0);
++
++		if (rc) {
+ 			dev_err(dev, "Could not get TPM timeouts and durations\n");
+ 			rc = -ENODEV;
+ 			goto out_err;
+-- 
+2.30.1
+
