@@ -2,204 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA09331FF70
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Feb 2021 20:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B294320281
+	for <lists+linux-integrity@lfdr.de>; Sat, 20 Feb 2021 02:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbhBST3x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Feb 2021 14:29:53 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55976 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229555AbhBST3v (ORCPT
+        id S229806AbhBTBdr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 20:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229725AbhBTBdr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Feb 2021 14:29:51 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11JJ23RP010339;
-        Fri, 19 Feb 2021 14:29:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=jbg7tAY0gSVy2HLU8E4q9zaIQ/JXVpncfnbKr55IKSg=;
- b=oYWImmtfk/5Fup9b0N6fufOED2AKJZFWAOfnhRnxTEgXEclJvwURMH5nHwGmTGPpwcDd
- /jUhZ87yMvhN14b2J8jfopgL9sUh29t6gLI1ZcJplSTBTSZyZafQqG8RdsGoyu8mJcW4
- am7iUJzBW4XlTga154uz/7bJr0ddaxvQfxv5vxDMpTHLK7qCGMh7Hh4w4YXVlgyzpv+M
- s5uogV8YPkHMbGNeEtd0fujD38kZcGlga9EAw2Ih1+qw/dXLH33+iXgeBrhuK/h4ewIc
- 9Jbigc4EUoFY604leCPISDHk8ORfxhMqC8kW0r4EqaH7dBxV2nSTxqPfUEs5eZGhkhlL VA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 36th49crjc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Feb 2021 14:29:02 -0500
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11JJ2Bqm010975;
-        Fri, 19 Feb 2021 14:29:02 -0500
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 36th49crj1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Feb 2021 14:29:02 -0500
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11JJSfm3025574;
-        Fri, 19 Feb 2021 19:29:01 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma02dal.us.ibm.com with ESMTP id 36p6dakkhm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Feb 2021 19:29:01 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11JJT0fV21627276
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Feb 2021 19:29:00 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F38C4BE04F;
-        Fri, 19 Feb 2021 19:28:59 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 13AD5BE053;
-        Fri, 19 Feb 2021 19:28:59 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 19 Feb 2021 19:28:58 +0000 (GMT)
-Subject: Re: [PATCH 1/3] add params and ids to support nist_p384
-To:     Saulo Alessandre <saulo.alessandre@gmail.com>
-Cc:     davem@davemloft.net, dhowells@redhat.com,
-        herbert@gondor.apana.org.au, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
-        zohar@linux.ibm.com, Saulo Alessandre <saulo.alessandre@tse.jus.br>
-References: <20210215162532.1077098-1-stefanb@linux.ibm.com>
- <20210219185759.1033764-1-saulo.alessandre@gmail.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <7a7606a5-2cea-ed30-5887-69a1546cf2b0@linux.ibm.com>
-Date:   Fri, 19 Feb 2021 14:28:58 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20210219185759.1033764-1-saulo.alessandre@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-19_08:2021-02-18,2021-02-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 impostorscore=0 phishscore=0 clxscore=1015 priorityscore=1501
- mlxscore=0 bulkscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102190144
+        Fri, 19 Feb 2021 20:33:47 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B01DC061574
+        for <linux-integrity@vger.kernel.org>; Fri, 19 Feb 2021 17:33:07 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id v6so8812378ybk.9
+        for <linux-integrity@vger.kernel.org>; Fri, 19 Feb 2021 17:33:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=6CYx/dMpUWhnaBhgXdOPJQFkQW+qYUUCxUHvQTIq/hw=;
+        b=F40eCNyvGJc0EnWR9ZPNcaYJMoCL0Z1saoI2XaNbsnmwP78mHNMnyjTc1ydkyON2zF
+         ACwEAk/BdSP0YuTuiKIIbhg22F2lsxITzu+WCi1SlhmrbxZngG/GX75loKzPncte2Eko
+         dAJ3iM3U2LWh9fYNTMf3YlRj7bQ3sr7crqO9TpBM6sa3ErHEkGd0z24i/RZpllfGu3EH
+         Y5TmoQh/opXSNzp7T44EpPnhsmHpqAijsGWy55sD1E5GOq7B8OmLc4LJjgcGgvZUucze
+         CTtR6x47ChPomKsp/E/L3+fjvKs8bul6A9j0CwH6g/BJ1+wAgxlNop2MCKHBgxERpFku
+         C05A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=6CYx/dMpUWhnaBhgXdOPJQFkQW+qYUUCxUHvQTIq/hw=;
+        b=SpgeDQlabr+do/X3PJx7KIP4yU49L+GlmTsWxymOOQ1DBlbcHpHEpd7X7nVsgNJr+V
+         vM1+Q8YUo4fVrZK8poL4BzAfEEQnEBNOTcidz/dvQlvzY4pAVC/prd33B8obSNjDFcB9
+         2GbfYjEqmcSEnMR6k2nn5u/JeLQd0uQlHvKnPRZddh92rvsSL+8qOn0j4wA4djrAFxqy
+         FMHxsBNKY/6yyKw2fZ9JvKSsZFjpAh3p3et1Y8wp4g4X8rD+sh6jZQEJzM6Nfx92kOYi
+         xd/pY1qIu9e65yyQE9XKm0FG2I1LkjrksZhKmbf9u8O4jZlFdb0s5b0yr36AZv3UWvq4
+         KfyQ==
+X-Gm-Message-State: AOAM5315WAoHcSyOVA8XefaK5f7gXyKuAp7gx8ZxNnd7L5GE+Ie3WAJh
+        l3Nfn5UQJe4Lf3W1iFXj6E7qumO2QV2sYMsNn9VNdA==
+X-Google-Smtp-Source: ABdhPJzUYzQX0oV7fl/lX8syZusalWetijMpmHVZ6iK56cekzBl+wjZ5xZyakjq+gp2/VuCmYC5MLuf8YeNX8AsC7o1luw==
+Sender: "matthewgarrett via sendgmr" 
+        <matthewgarrett@matthewgarrett-tmp.c.googlers.com>
+X-Received: from matthewgarrett-tmp.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1081])
+ (user=matthewgarrett job=sendgmr) by 2002:a25:7d84:: with SMTP id
+ y126mr17691890ybc.179.1613784786198; Fri, 19 Feb 2021 17:33:06 -0800 (PST)
+Date:   Sat, 20 Feb 2021 01:32:46 +0000
+Message-Id: <20210220013255.1083202-1-matthewgarrett@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
+Subject: [PATCH 0/9] Enable hibernation when Lockdown is enabled
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-integrity@vger.kernel.org, linux-pm@vger.kernel.org,
+        keyrings@vger.kernel.org, zohar@linux.ibm.com, jejb@linux.ibm.com,
+        jarkko@kernel.org, corbet@lwn.net, rjw@rjwysocki.net
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2/19/21 1:57 PM, Saulo Alessandre wrote:
-> From: Saulo Alessandre <saulo.alessandre@tse.jus.br>
->
-> * crypto/asymmetric_keys/x509_cert_parser.c
->    - prepare x509 parser to load nist_secpp384r1
->
-> * crypto/ecc_curve_defs.h
->    - add nist_p384 params
->
-> * include/crypto/ecdh.h
->    - add ECC_CURVE_NIST_P384
->
-> * include/linux/oid_registry.h
->    - reorder OID_id_ecdsa_with_sha1
->    - add OID_id_secp384r1
-> ---
->   crypto/asymmetric_keys/x509_cert_parser.c |  3 +++
->   crypto/ecc_curve_defs.h                   | 32 +++++++++++++++++++++++
->   include/crypto/ecdh.h                     |  1 +
->   include/linux/oid_registry.h              |  3 ++-
->   4 files changed, 38 insertions(+), 1 deletion(-)
->
-> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-> index d6d72420307c..03535bd8b8ef 100644
-> --- a/crypto/asymmetric_keys/x509_cert_parser.c
-> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
-> @@ -512,6 +512,9 @@ int x509_extract_key_data(void *context, size_t hdrlen,
->   		case OID_id_prime256v1:
->   			ctx->cert->pub->pkey_algo = "ecdsa-nist-p256";
->   			break;
-> +		case OID_id_secp384r1:
-> +			ctx->cert->pub->pkey_algo = "ecdsa-nist-p384";
-> +			break;
->   		default:
->   			return -ENOPKG;
->   		}
-> diff --git a/crypto/ecc_curve_defs.h b/crypto/ecc_curve_defs.h
-> index 69be6c7d228f..b327732f6ef5 100644
-> --- a/crypto/ecc_curve_defs.h
-> +++ b/crypto/ecc_curve_defs.h
-> @@ -54,4 +54,36 @@ static struct ecc_curve nist_p256 = {
->   	.b = nist_p256_b
->   };
->   
-> +/* NIST P-384 */
-> +static u64 nist_p384_g_x[] = { 0x3A545E3872760AB7ull, 0x5502F25DBF55296Cull,
-> +				0x59F741E082542A38ull, 0x6E1D3B628BA79B98ull,
-> +				0x8Eb1C71EF320AD74ull, 0xAA87CA22BE8B0537ull };
-> +static u64 nist_p384_g_y[] = { 0x7A431D7C90EA0E5Full, 0x0A60B1CE1D7E819Dull,
-> +				0xE9DA3113B5F0B8C0ull, 0xF8F41DBD289A147Cull,
-> +				0x5D9E98BF9292DC29ull, 0x3617DE4A96262C6Full };
-> +static u64 nist_p384_p[] = { 0x00000000FFFFFFFFull, 0xFFFFFFFF00000000ull,
-> +				0xFFFFFFFFFFFFFFFEull, 0xFFFFFFFFFFFFFFFFull,
-> +				0xFFFFFFFFFFFFFFFFull, 0xFFFFFFFFFFFFFFFFull };
-> +static u64 nist_p384_n[] = { 0xECEC196ACCC52973ull, 0x581A0DB248B0A77Aull,
-> +				0xC7634D81F4372DDFull, 0xFFFFFFFFFFFFFFFFull,
-> +				0xFFFFFFFFFFFFFFFFull, 0xFFFFFFFFFFFFFFFFull };
-> +static u64 nist_p384_a[] = { 0x00000000FFFFFFFCull, 0xFFFFFFFF00000000ull,
-> +				0xFFFFFFFFFFFFFFFEull, 0xFFFFFFFFFFFFFFFFull,
-> +				0xFFFFFFFFFFFFFFFFull, 0xFFFFFFFFFFFFFFFFull };
-> +static u64 nist_p384_b[] = { 0x2a85c8edd3ec2aefull, 0xc656398d8a2ed19dull,
-> +				0x0314088f5013875aull, 0x181d9c6efe814112ull,
-> +				0x988e056be3f82d19ull, 0xb3312fa7e23ee7e4ull };
-> +static struct ecc_curve nist_p384 = {
-> +	.name = "nist_384",
-> +	.g = {
-> +		.x = nist_p384_g_x,
-> +		.y = nist_p384_g_y,
-> +		.ndigits = 6,
-> +	},
-> +	.p = nist_p384_p,
-> +	.n = nist_p384_n,
-> +	.a = nist_p384_a,
-> +	.b = nist_p384_b
-> +};
-> +
->   #endif
-> diff --git a/include/crypto/ecdh.h b/include/crypto/ecdh.h
-> index a5b805b5526d..e4ba1de961e4 100644
-> --- a/include/crypto/ecdh.h
-> +++ b/include/crypto/ecdh.h
-> @@ -25,6 +25,7 @@
->   /* Curves IDs */
->   #define ECC_CURVE_NIST_P192	0x0001
->   #define ECC_CURVE_NIST_P256	0x0002
-> +#define ECC_CURVE_NIST_P384	0x0003
->   
->   /**
->    * struct ecdh - define an ECDH private key
-> diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-> index ff3cad9f8c1f..d656450dfc66 100644
-> --- a/include/linux/oid_registry.h
-> +++ b/include/linux/oid_registry.h
-> @@ -19,10 +19,10 @@
->   enum OID {
->   	OID_id_dsa_with_sha1,		/* 1.2.840.10030.4.3 */
->   	OID_id_dsa,			/* 1.2.840.10040.4.1 */
-> -	OID_id_ecdsa_with_sha1,		/* 1.2.840.10045.4.1 */
->   	OID_id_ecPublicKey,		/* 1.2.840.10045.2.1 */
->   	OID_id_prime192v1,		/* 1.2.840.10045.3.1.1 */
->   	OID_id_prime256v1,		/* 1.2.840.10045.3.1.7 */
-> +	OID_id_ecdsa_with_sha1,		/* 1.2.840.10045.4.1 */
->   	OID_id_ecdsa_with_sha224,	/* 1.2.840.10045.4.3.1 */
->   	OID_id_ecdsa_with_sha256,	/* 1.2.840.10045.4.3.2 */
->   	OID_id_ecdsa_with_sha384,	/* 1.2.840.10045.4.3.3 */
-> @@ -64,6 +64,7 @@ enum OID {
->   
->   	OID_certAuthInfoAccess,		/* 1.3.6.1.5.5.7.1.1 */
->   	OID_sha1,			/* 1.3.14.3.2.26 */
-> +	OID_id_secp384r1,		/* 1.3.132.0.34 */
->   	OID_sha256,			/* 2.16.840.1.101.3.4.2.1 */
->   	OID_sha384,			/* 2.16.840.1.101.3.4.2.2 */
->   	OID_sha512,			/* 2.16.840.1.101.3.4.2.3 */
+Lockdown in integrity mode aims to ensure that arbitrary code cannot end
+up in ring 0 without owner approval. The combination of module signing
+and secure boot gets most of the way there, but various other features
+are disabled by lockdown in order to avoid more convoluted approaches
+that would enable unwanted code to end up in kernel space. One of these
+is hibernation, since at present the kernel performs no verification of
+the code it's resuming. If hibernation were permitted, an attacker with
+root (but not kernel) privileges could disable swap, write a valid
+hibernation image containing code of their own choosing to the swap
+partition, and then reboot. On reboot, the kernel would happily resume
+the provided code.
 
+This patchset aims to provide a secure implementation of hibernation. It
+is based on the presumption that simply storing a key in-kernel is
+insufficient, since if Lockdown is merely in integrity (rather than
+confidentiality) mode we assume that root is able to read kernel memory
+and so would be able to obtain these secrets. It also aims to be
+unspoofable - an attacker should not be able to write out a hibernation
+image using cryptographic material under their control.
 
-This patch looks good to me.
+TPMs can be used to generate key material that is encrypted with a key
+that does not leave the TPM. This means that we can generate an AES key,
+encrypt the image hash with it, encrypt it with a TPM-backed key, and store
+the encrypted key in the hibernation image. On resume, we pass the key
+back to the TPM, receive the unencrypted AES key, and use that to
+validate the image.
+
+However, this is insufficient. Nothing prevents anyone else with access
+to the TPM asking it to decrypt the key. We need to be able to
+distinguish between accesses that come from the kernel directly and
+accesses that come from userland.
+
+TPMs have several Platform Configuration Registers (PCRs) which are used
+for different purposes. PCRs are initialised to a known value, and
+cannot be modified directly by the platform. Instead, the platform can
+provide a hash of some data to the TPM. The TPM combines the existing
+PCR value with the new hash, and stores the hash of this combination in
+the PCR. Most PCRs can only be extended, which means that the only way
+to achieve a specific value for a TPM is to perform the same series of
+writes.
+
+When secrets are encrypted by the TPM, they can be accompanied by a
+policy that describes the state the TPM must be in in order for it to
+decrypt them. If the TPM is not in this state, it will refuse to decrypt
+the material even if it is otherwise capable of doing so. This allows
+keys to be tied to specific system state - if the system is not in that
+state, the TPM will not grant access.
+
+PCR 23 is special in that it can be reset on demand. This patchset
+re-purposes PCR 23 and blocks userland's ability to extend or reset it.
+The kernel is then free to impose policy by resetting PCR 23 to a known
+starting point, extending it with a known value, encrypting key material
+with a policy that ties it to PCR 23, and then resetting it. Even if
+userland has access to the encrypted blob, it cannot decrypt it since it
+has no way to force PCR 23 to be in the same state.
+
+So. During hibernation we freeze userland. We then reset PCR 23 and
+extend it to a known value. We generate a key, use it and then encrypt
+it with the TPM. When we encrypt it, we define a policy which states
+that the TPM must have the same PCR 23 value as it presently does. We
+also store the current PCR 23 value in the key metadata. On resume, we
+again freeze userland, reset PCR 23 and extend it to the same value. We
+decrypt the key, and verify from the metadata that it was created when
+PCR 23 had the expected value. If so, we use it to decrypt the hash used
+to verify the hibernation image and ensure that the image matches it. If
+everything looks good, we resume. If not, we return to userland. Either
+way, we reset PCR 23 before any userland code runs again.
+
+This all works on my machine, but it's imperfect - there's a meaningful
+performance hit on resume forced by reading all the blocks in-order, and
+it probably makes more sense to do that after reads are complete instead
+but I wanted to get the other components of this out for review first.
+It's also not ideal from a security perspective until there's more
+ecosystem integration - we need a kernel to be able to assert to a
+signed bootloader that it implements this, since otherwise an attacker
+can simply downgrade to a kernel that doesn't implement this policy and
+gain access to PCR 23 themselves. There's ongoing work in the UEFI
+bootloader space that would make this possible.
+
 
