@@ -2,59 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A95CE320292
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Feb 2021 02:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3004A320293
+	for <lists+linux-integrity@lfdr.de>; Sat, 20 Feb 2021 02:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbhBTBfA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Feb 2021 20:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S229945AbhBTBfB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 20:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbhBTBer (ORCPT
+        with ESMTP id S229947AbhBTBer (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 19 Feb 2021 20:34:47 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95BAC0611BE
-        for <linux-integrity@vger.kernel.org>; Fri, 19 Feb 2021 17:33:18 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id q77so5455392ybq.0
-        for <linux-integrity@vger.kernel.org>; Fri, 19 Feb 2021 17:33:18 -0800 (PST)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316BFC061A2A
+        for <linux-integrity@vger.kernel.org>; Fri, 19 Feb 2021 17:33:20 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id o9so8711613yba.18
+        for <linux-integrity@vger.kernel.org>; Fri, 19 Feb 2021 17:33:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=+fj/Z6ua/xhvW/t0EkMNvoSpSDcWQcmaOe23w27DhCU=;
-        b=tNj9cgZgEKD8n70OZsmqKRRl3GWLRgFQFMJXrCLDOI3GLrM+YESsK63Ocq/x3+Fdoq
-         nCD/3sccAVAjp1dB6HczG/FsyOtZCtDm2eqdOaSQjgNScvpAvUzRn9R3yEuZbaC2Fxze
-         psgUxP1b58V6t9kcxnU1Pd1q3TO0BNdUlwtCsPy67epV5Akx7oJPOPpQg+o9M2/B7cqM
-         VI4zp7Pb7bZv/NY4zD8ZF7G1OtlIp6zLwlOoH2Tk/ZD8yesyDUA0zgZMGeUOcMADwW5v
-         fa9PB5YDdXirQoJSNDMpmpnbyvfw3kmGjnX8TGmLsPSbUs5rHvTSSFp84Kt0/kIvaTEq
-         gNig==
+        bh=Le2xy86M2g7vFjnuX/RXj2Z9OeFij6CrkPXndbL+3YM=;
+        b=mUmzPMLQ2EhM5ohqQmvRX3zzjTI4HWgSEU8OF6ChUOqqCnyRmUWuS7Fg85iVRVC6D0
+         tlS1Qf9auwUtImh2HiRyyIF9zKTBlptAOolf0FoHdiiUmi0OW/MbiiVc5aFxLp0Ixvg1
+         cFeCJz9zZMvDoZq8E4OJNEyCKW06WEsbbi1WGGYwxmWGValJTlOySL2JTQ+lyT9DZEcG
+         H2uY8kjDRo7fTGbtIHU0o77/si0NRfV4D/hT8to4ifU0A4zu8NUO1F1mRowKzzBwornS
+         TsK6HQUR5c3H2o4BOGqBx1XATTaJyYRtgg6nD/nS2R0cTSOvXH5a/+N4HO8Uwo08O0Ik
+         vzfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=+fj/Z6ua/xhvW/t0EkMNvoSpSDcWQcmaOe23w27DhCU=;
-        b=Bb8qA265xT6Jq5YD5u+EHqqNNfPoCBPWn6879cE+3nQN2jqx6x1KM3ZDnZs7oB+nV1
-         XbsX6rDyvuVOn4p+G1LKx/iG1boCVoEZS7EA+xGaA1aGkkeDhUSfipnDcuulSyThH3D9
-         3vDELT04ByiDGuAKnuNcHN0FlGey80J3l5aSWq6XLxrjnTadT6NsnSL5AF8ofMG5C+9o
-         mFEE51+6SxxfEcAHT8LNqB4xkuL1rk8F3eoOIRtQqR6+Ne6Y/GPMVD/1le5kw+k82PSg
-         9NhBighXhrU48Ep+46HbY/pPwpP0kI0Hj3eRFYAOT9FOEDVAG/Qp0/CJvu7BMobpkxeu
-         ds6g==
-X-Gm-Message-State: AOAM532iS+C14TQ3EzlXzl3WzGKMJg0uenUxp5IIuWzb0KV9nlWFksLO
-        HIZNTQATziV8YHl2tjPtsICg7HfCplk4XHpqBRe7OQ==
-X-Google-Smtp-Source: ABdhPJwoq5Xgs9mVLQPRLuL0fs+U1jl6Dz4XXx/0DoMGONnIQm4b8mNyDg4/g6CBwb67UiEgZB39EuO0+kA9Vwt6DawgCQ==
+        bh=Le2xy86M2g7vFjnuX/RXj2Z9OeFij6CrkPXndbL+3YM=;
+        b=SbqYx4eJGOpmnUWnrk4s1jJ1SNziKFxrkGKY67mS7s9ywwcLG+3ioxuQkZwWQvMDY8
+         gIwlbrseWDkl421y15zUzUb5IX10vQCvD+2V0CtbiKiwK4yzcpjzCMJRuuaLAOoxzD7V
+         zXKefaUtqGSgHQELla552Q4HjG+p4Y+gFHEgnQW02blobvLtuN35Zsu9XqTwGgY0J4oc
+         WpCIDaj5TFSvwuFkXD6vdDiJvjVd93J2rEhTRycDzcEDCu7/qJdGFiY99iK/HwmBSk35
+         eSHHSicrof13q8832GTSa1U35oYeUOm6K7c0DOIrqC8F+Lj4+qTGrxyqq6nem0lAuGKj
+         kkKg==
+X-Gm-Message-State: AOAM530mEXbugDVS3/KJw9vndheVRSW7ptYPV/2uoZ2bKNZEsVX3+N3m
+        ou9lXMLK5b8R+NmMKGwGAM/HEnQGGSGs326DsM7Zbw==
+X-Google-Smtp-Source: ABdhPJz+znzmydksCXNSz0qRUgqJOeUsiHxIZRQcS35YoWwljFjdXh5jNWJo2zOzCx4tGEmcAtw9+Y046tcbzA8xOA1QIg==
 Sender: "matthewgarrett via sendgmr" 
         <matthewgarrett@matthewgarrett-tmp.c.googlers.com>
 X-Received: from matthewgarrett-tmp.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1081])
- (user=matthewgarrett job=sendgmr) by 2002:a25:741:: with SMTP id
- 62mr19123176ybh.469.1613784797905; Fri, 19 Feb 2021 17:33:17 -0800 (PST)
-Date:   Sat, 20 Feb 2021 01:32:53 +0000
+ (user=matthewgarrett job=sendgmr) by 2002:a25:a0c9:: with SMTP id
+ i9mr15696415ybm.479.1613784799467; Fri, 19 Feb 2021 17:33:19 -0800 (PST)
+Date:   Sat, 20 Feb 2021 01:32:54 +0000
 In-Reply-To: <20210220013255.1083202-1-matthewgarrett@google.com>
-Message-Id: <20210220013255.1083202-8-matthewgarrett@google.com>
+Message-Id: <20210220013255.1083202-9-matthewgarrett@google.com>
 Mime-Version: 1.0
 References: <20210220013255.1083202-1-matthewgarrett@google.com>
 X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
-Subject: [PATCH 7/9] pm: hibernate: Optionally use TPM-backed keys to protect
- image integrity
+Subject: [PATCH 8/9] pm: hibernate: Verify the digest encryption key
 From:   Matthew Garrett <matthewgarrett@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-integrity@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -67,683 +66,239 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-A plain hash protects the hibernation image against accidental
-modification, but in the face of an active attack the hash can simply be
-updated to match the new image. Generate a random AES key and seal this
-with the TPM, and use it to encrypt the hash. On resume, the key can be
-unsealed and used to decrypt the hash. By setting PCR 23 to a specific
-value we can verify that the key used was generated by the kernel during
-hibernation and prevent an attacker providing their own key.
+We want to ensure that the key used to encrypt the digest was created by
+the kernel during hibernation. To do this we request that the TPM include
+information about the value of PCR 23 at the time of key creation in the
+sealed blob. On resume, we can ask the TPM to certify that the creation
+data is accurate and then make sure that the PCR information in the blob
+corresponds to the expected value. Since only the kernel can touch PCR
+23, if an attacker generates a key themselves the value of PCR 23 will
+have been different, allowing us to reject the key and boot normally
+instead of resuming.
 
 Signed-off-by: Matthew Garrett <mjg59@google.com>
 ---
- kernel/power/Kconfig     |  15 ++
- kernel/power/Makefile    |   1 +
- kernel/power/hibernate.c |  11 +-
- kernel/power/swap.c      |  99 +++----------
- kernel/power/swap.h      |  38 +++++
- kernel/power/tpm.c       | 294 +++++++++++++++++++++++++++++++++++++++
- kernel/power/tpm.h       |  37 +++++
- 7 files changed, 417 insertions(+), 78 deletions(-)
- create mode 100644 kernel/power/swap.h
- create mode 100644 kernel/power/tpm.c
- create mode 100644 kernel/power/tpm.h
+ include/linux/tpm.h |   1 +
+ kernel/power/tpm.c  | 150 +++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 148 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-index a7320f07689d..0279cc10f319 100644
---- a/kernel/power/Kconfig
-+++ b/kernel/power/Kconfig
-@@ -92,6 +92,21 @@ config HIBERNATION_SNAPSHOT_DEV
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index e2075e2242a0..f6970986b097 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -216,6 +216,7 @@ enum tpm2_command_codes {
+ 	TPM2_CC_SELF_TEST	        = 0x0143,
+ 	TPM2_CC_STARTUP		        = 0x0144,
+ 	TPM2_CC_SHUTDOWN	        = 0x0145,
++	TPM2_CC_CERTIFYCREATION	        = 0x014A,
+ 	TPM2_CC_NV_READ                 = 0x014E,
+ 	TPM2_CC_CREATE		        = 0x0153,
+ 	TPM2_CC_LOAD		        = 0x0157,
+diff --git a/kernel/power/tpm.c b/kernel/power/tpm.c
+index 953dcbdc56d8..34e6cfb98ce4 100644
+--- a/kernel/power/tpm.c
++++ b/kernel/power/tpm.c
+@@ -14,6 +14,12 @@ static struct tpm_digest digest = { .alg_id = TPM_ALG_SHA256,
+ 		   0xf1, 0x22, 0x38, 0x6c, 0x33, 0xb1, 0x14, 0xb7, 0xec, 0x05,
+ 		   0x5f, 0x49}};
  
- 	  If in doubt, say Y.
- 
-+config SECURE_HIBERNATION
-+       bool "Implement secure hibernation support"
-+       depends on HIBERNATION && TCG_TPM
-+       select KEYS
-+       select TRUSTED_KEYS
-+       select CRYPTO
-+       select CRYPTO_SHA256
-+       select CRYPTO_AES
-+       select TCG_TPM_RESTRICT_PCR
-+       help
-+         Use a TPM-backed key to securely determine whether a hibernation
-+	 image was written out by the kernel and has not been tampered with.
-+	 This requires a TCG-compliant TPM2 device, which is present on most
-+	 modern hardware.
++/* sha256(sha256(empty_pcr | digest)) */
++static char expected_digest[] = {0x2f, 0x96, 0xf2, 0x1b, 0x70, 0xa9, 0xe8,
++	0x42, 0x25, 0x8e, 0x66, 0x07, 0xbe, 0xbc, 0xe3, 0x1f, 0x2c, 0x84, 0x4a,
++	0x3f, 0x85, 0x17, 0x31, 0x47, 0x9a, 0xa5, 0x53, 0xbb, 0x23, 0x0c, 0x32,
++	0xf3};
 +
- config PM_STD_PARTITION
- 	string "Default resume partition"
- 	depends on HIBERNATION
-diff --git a/kernel/power/Makefile b/kernel/power/Makefile
-index 5899260a8bef..2edfef897607 100644
---- a/kernel/power/Makefile
-+++ b/kernel/power/Makefile
-@@ -12,6 +12,7 @@ obj-$(CONFIG_SUSPEND)		+= suspend.o
- obj-$(CONFIG_PM_TEST_SUSPEND)	+= suspend_test.o
- obj-$(CONFIG_HIBERNATION)	+= hibernate.o snapshot.o swap.o
- obj-$(CONFIG_HIBERNATION_SNAPSHOT_DEV) += user.o
-+obj-$(CONFIG_SECURE_HIBERNATION) += tpm.o
- obj-$(CONFIG_PM_AUTOSLEEP)	+= autosleep.o
- obj-$(CONFIG_PM_WAKELOCKS)	+= wakelock.o
- 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index da0b41914177..608bfbee38f5 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -34,6 +34,7 @@
- #include <trace/events/power.h>
- 
- #include "power.h"
-+#include "tpm.h"
- 
- 
- static int nocompress;
-@@ -81,7 +82,11 @@ void hibernate_release(void)
- 
- bool hibernation_available(void)
- {
--	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
-+	if (security_locked_down(LOCKDOWN_HIBERNATION) &&
-+	    !secure_hibernation_available())
-+		return false;
-+
-+	return nohibernate == 0;
- }
- 
- /**
-@@ -752,7 +757,9 @@ int hibernate(void)
- 			flags |= SF_NOCOMPRESS_MODE;
- 		else
- 		        flags |= SF_CRC32_MODE;
--
-+#ifdef CONFIG_SECURE_HIBERNATION
-+		flags |= SF_VERIFY_IMAGE;
-+#endif
- 		pm_pr_dbg("Writing hibernation image.\n");
- 		error = swsusp_write(flags);
- 		swsusp_free();
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index a13241a20567..eaa585731314 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -32,9 +32,10 @@
- #include <linux/crc32.h>
- #include <linux/ktime.h>
- #include <crypto/hash.h>
--#include <crypto/sha2.h>
- 
- #include "power.h"
-+#include "swap.h"
-+#include "tpm.h"
- 
- #define HIBERNATE_SIG	"S1SUSPEND"
- 
-@@ -89,34 +90,6 @@ struct swap_map_page_list {
- 	struct swap_map_page_list *next;
+ struct skcipher_def {
+ 	struct scatterlist sg;
+ 	struct crypto_skcipher *tfm;
+@@ -21,6 +27,39 @@ struct skcipher_def {
+ 	struct crypto_wait wait;
  };
  
--/**
-- *	The swap_map_handle structure is used for handling swap in
-- *	a file-alike way
-- */
--
--struct swap_map_handle {
--	struct swap_map_page *cur;
--	struct swap_map_page_list *maps;
--	struct shash_desc *desc;
--	sector_t cur_swap;
--	sector_t first_sector;
--	unsigned int k;
--	unsigned long reqd_free_pages;
--	u32 crc32;
--	u8 digest[SHA256_DIGEST_SIZE];
--};
--
--struct swsusp_header {
--	char reserved[PAGE_SIZE - 20 - sizeof(sector_t) - sizeof(int) -
--		      sizeof(u32) - SHA256_DIGEST_SIZE];
--	u32	crc32;
--	u8	digest[SHA256_DIGEST_SIZE];
--	sector_t image;
--	unsigned int flags;	/* Flags to pass to the "boot" kernel */
--	char	orig_sig[10];
--	char	sig[10];
--} __packed;
--
- static struct swsusp_header *swsusp_header;
- 
- /**
-@@ -337,6 +310,9 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
- 			swsusp_header->crc32 = handle->crc32;
- 		memcpy(swsusp_header->digest, handle->digest,
- 		       SHA256_DIGEST_SIZE);
-+		error = swsusp_encrypt_digest(swsusp_header);
-+		if (error)
-+			return error;
- 		error = hib_submit_io(REQ_OP_WRITE, REQ_SYNC,
- 				      swsusp_resume_block, swsusp_header, NULL);
- 	} else {
-@@ -427,7 +403,6 @@ static void release_swap_writer(struct swap_map_handle *handle)
- static int get_swap_writer(struct swap_map_handle *handle)
- {
- 	int ret;
--	struct crypto_shash *tfm;
- 
- 	ret = swsusp_swap_check();
- 	if (ret) {
-@@ -449,27 +424,11 @@ static int get_swap_writer(struct swap_map_handle *handle)
- 	handle->reqd_free_pages = reqd_free_pages();
- 	handle->first_sector = handle->cur_swap;
- 
--	tfm = crypto_alloc_shash("sha256", 0, 0);
--	if (IS_ERR(tfm)) {
--		ret = -EINVAL;
--		goto err_rel;
--	}
--	handle->desc = kmalloc(sizeof(struct shash_desc) +
--			       crypto_shash_descsize(tfm), GFP_KERNEL);
--	if (!handle->desc) {
--		ret = -ENOMEM;
-+	ret = swsusp_digest_setup(handle);
-+	if (ret)
- 		goto err_rel;
--	}
--
--	handle->desc->tfm = tfm;
--
--	ret = crypto_shash_init(handle->desc);
--	if (ret != 0)
--		goto err_free;
- 
- 	return 0;
--err_free:
--	kfree(handle->desc);
- err_rel:
- 	release_swap_writer(handle);
- err_close:
-@@ -486,7 +445,7 @@ static int swap_write_page(struct swap_map_handle *handle, void *buf,
- 	if (!handle->cur)
- 		return -EINVAL;
- 	offset = alloc_swapdev_block(root_swap);
--	crypto_shash_update(handle->desc, buf, PAGE_SIZE);
-+	swsusp_digest_update(handle, buf, PAGE_SIZE);
- 	error = write_page(buf, offset, hb);
- 	if (error)
- 		return error;
-@@ -529,7 +488,7 @@ static int flush_swap_writer(struct swap_map_handle *handle)
- static int swap_writer_finish(struct swap_map_handle *handle,
- 		unsigned int flags, int error)
- {
--	crypto_shash_final(handle->desc, handle->digest);
-+	swsusp_digest_final(handle);
- 	if (!error) {
- 		pr_info("S");
- 		error = mark_swapfiles(handle, flags);
-@@ -1008,7 +967,6 @@ static int get_swap_reader(struct swap_map_handle *handle,
- 	int error;
- 	struct swap_map_page_list *tmp, *last;
- 	sector_t offset;
--	struct crypto_shash *tfm;
- 
- 	*flags_p = swsusp_header->flags;
- 
-@@ -1047,27 +1005,12 @@ static int get_swap_reader(struct swap_map_handle *handle,
- 	handle->k = 0;
- 	handle->cur = handle->maps->map;
- 
--	tfm = crypto_alloc_shash("sha256", 0, 0);
--	if (IS_ERR(tfm)) {
--		error = -EINVAL;
--		goto err_rel;
--	}
--	handle->desc = kmalloc(sizeof(struct shash_desc) +
--			       crypto_shash_descsize(tfm), GFP_KERNEL);
--	if (!handle->desc) {
--		error = -ENOMEM;
--		goto err_rel;
--	}
--
--	handle->desc->tfm = tfm;
-+	error = swsusp_digest_setup(handle);
-+	if (error)
-+		goto err;
- 
--	error = crypto_shash_init(handle->desc);
--	if (error != 0)
--		goto err_free;
- 	return 0;
--err_free:
--	kfree(handle->desc);
--err_rel:
-+err:
- 	release_swap_reader(handle);
- 	return error;
- }
-@@ -1087,7 +1030,7 @@ static int swap_read_page(struct swap_map_handle *handle, void *buf,
- 	error = hib_submit_io(REQ_OP_READ, 0, offset, buf, hb);
- 	if (error)
- 		return error;
--	crypto_shash_update(handle->desc, buf, PAGE_SIZE);
-+	swsusp_digest_update(handle, buf, PAGE_SIZE);
- 	if (++handle->k >= MAP_PAGE_ENTRIES) {
- 		handle->k = 0;
- 		free_page((unsigned long)handle->maps->map);
-@@ -1107,11 +1050,13 @@ static int swap_reader_finish(struct swap_map_handle *handle,
- {
- 	int ret = 0;
- 
--	crypto_shash_final(handle->desc, handle->digest);
--	if (memcmp(handle->digest, swsusp_header->digest,
--		   SHA256_DIGEST_SIZE) != 0) {
--		pr_err("Image digest doesn't match header digest\n");
--		ret = -ENODATA;
-+	swsusp_digest_final(handle);
-+	if (swsusp_header->flags & SF_VERIFY_IMAGE) {
-+		if (memcmp(handle->digest, swsusp_header->digest,
-+			   SHA256_DIGEST_SIZE) != 0) {
-+			pr_err("Image digest doesn't match header digest\n");
-+			ret = -ENODATA;
-+		}
- 	}
- 
- 	release_swap_reader(handle);
-@@ -1630,6 +1575,8 @@ int swsusp_check(void)
- 			error = -EINVAL;
- 		}
- 
-+		if (!error)
-+			error = swsusp_decrypt_digest(swsusp_header);
- put:
- 		if (error)
- 			blkdev_put(hib_resume_bdev, FMODE_READ);
-diff --git a/kernel/power/swap.h b/kernel/power/swap.h
-new file mode 100644
-index 000000000000..342189344f5f
---- /dev/null
-+++ b/kernel/power/swap.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#include <keys/trusted-type.h>
-+#include <crypto/sha2.h>
-+
-+#ifndef _POWER_SWAP_H
-+#define _POWER_SWAP_H 1
-+/**
-+ *	The swap_map_handle structure is used for handling swap in
-+ *	a file-alike way
-+ */
-+
-+struct swap_map_handle {
-+	struct swap_map_page *cur;
-+	struct swap_map_page_list *maps;
-+	struct shash_desc *desc;
-+	sector_t cur_swap;
-+	sector_t first_sector;
-+	unsigned int k;
-+	unsigned long reqd_free_pages;
-+	u32 crc32;
-+	u8 digest[SHA256_DIGEST_SIZE];
-+};
-+
-+struct swsusp_header {
-+	char reserved[PAGE_SIZE - 20 - sizeof(sector_t) - sizeof(int) -
-+		      sizeof(u32) - SHA256_DIGEST_SIZE - MAX_BLOB_SIZE -
-+		      sizeof(u32)];
-+	u32	blob_len;
-+	u8	blob[MAX_BLOB_SIZE];
-+	u8      digest[SHA256_DIGEST_SIZE];
-+	u32     crc32;
-+	sector_t image;
-+	unsigned int flags;     /* Flags to pass to the "boot" kernel */
-+	char    orig_sig[10];
-+	char    sig[10];
-+} __packed;
-+
-+#endif /* _POWER_SWAP_H */
-diff --git a/kernel/power/tpm.c b/kernel/power/tpm.c
-new file mode 100644
-index 000000000000..953dcbdc56d8
---- /dev/null
-+++ b/kernel/power/tpm.c
-@@ -0,0 +1,294 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <crypto/hash.h>
-+#include <crypto/skcipher.h>
-+#include <linux/key-type.h>
-+#include <linux/scatterlist.h>
-+
-+#include "swap.h"
-+#include "tpm.h"
-+
-+/* sha256("To sleep, perchance to dream") */
-+static struct tpm_digest digest = { .alg_id = TPM_ALG_SHA256,
-+	.digest = {0x92, 0x78, 0x3d, 0x79, 0x2d, 0x00, 0x31, 0xb0, 0x55, 0xf9,
-+		   0x1e, 0x0d, 0xce, 0x83, 0xde, 0x1d, 0xc4, 0xc5, 0x8e, 0x8c,
-+		   0xf1, 0x22, 0x38, 0x6c, 0x33, 0xb1, 0x14, 0xb7, 0xec, 0x05,
-+		   0x5f, 0x49}};
-+
-+struct skcipher_def {
-+	struct scatterlist sg;
-+	struct crypto_skcipher *tfm;
-+	struct skcipher_request *req;
-+	struct crypto_wait wait;
-+};
-+
-+static int swsusp_enc_dec(struct trusted_key_payload *payload, char *buf,
-+			  int enc)
-+{
-+	struct skcipher_def sk;
-+	struct crypto_skcipher *skcipher = NULL;
-+	struct skcipher_request *req = NULL;
-+	char *ivdata = NULL;
-+	int ret;
-+
-+	skcipher = crypto_alloc_skcipher("cbc-aes-aesni", 0, 0);
-+	if (IS_ERR(skcipher))
-+		return PTR_ERR(skcipher);
-+
-+	req = skcipher_request_alloc(skcipher, GFP_KERNEL);
-+	if (!req) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	skcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
-+				      crypto_req_done,
-+				      &sk.wait);
-+
-+	/* AES 256 */
-+	if (crypto_skcipher_setkey(skcipher, payload->key, 32)) {
-+		ret = -EAGAIN;
-+		goto out;
-+	}
-+
-+	/* Key will never be re-used, just fix the IV to 0 */
-+	ivdata = kzalloc(16, GFP_KERNEL);
-+	if (!ivdata) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	sk.tfm = skcipher;
-+	sk.req = req;
-+
-+	sg_init_one(&sk.sg, buf, 32);
-+	skcipher_request_set_crypt(req, &sk.sg, &sk.sg, 16, ivdata);
-+	crypto_init_wait(&sk.wait);
-+
-+	/* perform the operation */
-+	if (enc)
-+		ret = crypto_wait_req(crypto_skcipher_encrypt(sk.req),
-+				     &sk.wait);
-+	else
-+		ret = crypto_wait_req(crypto_skcipher_decrypt(sk.req),
-+				     &sk.wait);
-+
-+	if (ret)
-+		pr_info("skcipher encrypt returned with result %d\n", ret);
-+
-+	goto out;
-+
-+out:
-+	if (skcipher)
-+		crypto_free_skcipher(skcipher);
-+	if (req)
-+		skcipher_request_free(req);
-+	kfree(ivdata);
-+	return ret;
-+}
-+
-+int swsusp_encrypt_digest(struct swsusp_header *header)
-+{
-+	const struct cred *cred = current_cred();
-+	struct trusted_key_payload *payload;
-+	struct tpm_digest *digests = NULL;
-+	struct tpm_chip *chip;
-+	struct key *key;
-+	int ret, i;
-+
-+	char *keyinfo = "new\t32\tkeyhandle=0x81000001";
-+
-+	chip = tpm_default_chip();
-+
-+	if (!chip)
-+		return -ENODEV;
-+
-+	if (!(tpm_is_tpm2(chip)))
-+		return -ENODEV;
-+
-+	ret = tpm_pcr_reset(chip, 23);
-+	if (ret != 0)
-+		return ret;
-+
-+	digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
-+			  GFP_KERNEL);
-+	if (!digests) {
-+		ret = -ENOMEM;
-+		goto reset;
-+	}
-+
-+	for (i = 0; i <= chip->nr_allocated_banks; i++) {
-+		digests[i].alg_id = chip->allocated_banks[i].alg_id;
-+		if (digests[i].alg_id == digest.alg_id)
-+			memcpy(&digests[i], &digest, sizeof(digest));
-+	}
-+
-+	ret = tpm_pcr_extend(chip, 23, digests);
-+	if (ret != 0)
-+		goto reset;
-+
-+	key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
-+			GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
-+			NULL);
-+
-+	if (IS_ERR(key)) {
-+		ret = PTR_ERR(key);
-+		goto reset;
-+	}
-+
-+	ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
-+				       NULL);
-+	if (ret < 0)
-+		goto error;
-+
-+	payload = key->payload.data[0];
-+
-+	ret = swsusp_enc_dec(payload, header->digest, 1);
-+	if (ret)
-+		goto error;
-+
-+	memcpy(header->blob, payload->blob, payload->blob_len);
-+	header->blob_len = payload->blob_len;
-+
-+error:
-+	key_revoke(key);
-+	key_put(key);
-+reset:
-+	kfree(digests);
-+	tpm_pcr_reset(chip, 23);
-+	return ret;
-+}
-+
-+int swsusp_decrypt_digest(struct swsusp_header *header)
-+{
-+	const struct cred *cred = current_cred();
-+	char *keytemplate = "load\t%s\tkeyhandle=0x81000001";
-+	struct trusted_key_payload *payload;
-+	struct tpm_digest *digests = NULL;
-+	char *blobstring = NULL;
-+	char *keyinfo = NULL;
-+	struct tpm_chip *chip;
-+	struct key *key;
-+	int i, ret;
-+
-+	chip = tpm_default_chip();
-+
-+	if (!chip)
-+		return -ENODEV;
-+
-+	if (!(tpm_is_tpm2(chip)))
-+		return -ENODEV;
-+
-+	ret = tpm_pcr_reset(chip, 23);
-+	if (ret != 0)
-+		return ret;
-+
-+	digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
-+			  GFP_KERNEL);
-+	if (!digests)
-+		goto reset;
-+
-+	for (i = 0; i <= chip->nr_allocated_banks; i++) {
-+		digests[i].alg_id = chip->allocated_banks[i].alg_id;
-+		if (digests[i].alg_id == digest.alg_id)
-+			memcpy(&digests[i], &digest, sizeof(digest));
-+	}
-+
-+	ret = tpm_pcr_extend(chip, 23, digests);
-+	if (ret != 0)
-+		goto reset;
-+
-+	blobstring = kmalloc(header->blob_len * 2, GFP_KERNEL);
-+	if (!blobstring) {
-+		ret = -ENOMEM;
-+		goto reset;
-+	}
-+
-+	bin2hex(blobstring, header->blob, header->blob_len);
-+
-+	keyinfo = kasprintf(GFP_KERNEL, keytemplate, blobstring);
-+	if (!keyinfo) {
-+		ret = -ENOMEM;
-+		goto reset;
-+	}
-+
-+	key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
-+			GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
-+			NULL);
-+
-+	if (IS_ERR(key)) {
-+		ret = PTR_ERR(key);
-+		goto out;
-+	}
-+
-+	ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
-+				       NULL);
-+	if (ret < 0)
-+		goto out;
-+
-+	payload = key->payload.data[0];
-+
-+	ret = swsusp_enc_dec(payload, header->digest, 0);
-+
-+out:
-+	key_revoke(key);
-+	key_put(key);
-+reset:
-+	kfree(keyinfo);
-+	kfree(blobstring);
-+	kfree(digests);
-+	tpm_pcr_reset(chip, 23);
-+	return ret;
-+}
-+
-+int swsusp_digest_setup(struct swap_map_handle *handle)
++static int sha256_data(char *buf, int size, char *output)
 +{
 +	struct crypto_shash *tfm;
++	struct shash_desc *desc;
 +	int ret;
 +
 +	tfm = crypto_alloc_shash("sha256", 0, 0);
 +	if (IS_ERR(tfm))
 +		return PTR_ERR(tfm);
 +
-+	handle->desc = kmalloc(sizeof(struct shash_desc) +
++	desc = kmalloc(sizeof(struct shash_desc) +
 +			       crypto_shash_descsize(tfm), GFP_KERNEL);
-+	if (!handle->desc) {
++	if (!desc) {
 +		crypto_free_shash(tfm);
 +		return -ENOMEM;
 +	}
 +
-+	handle->desc->tfm = tfm;
-+	ret = crypto_shash_init(handle->desc);
++	desc->tfm = tfm;
++	ret = crypto_shash_init(desc);
 +	if (ret != 0) {
 +		crypto_free_shash(tfm);
-+		kfree(handle->desc);
++		kfree(desc);
 +		return ret;
 +	}
 +
-+	return 0;
-+}
-+
-+void swsusp_digest_update(struct swap_map_handle *handle, char *buf,
-+			  size_t size)
-+{
-+	crypto_shash_update(handle->desc, buf, size);
-+}
-+
-+void swsusp_digest_final(struct swap_map_handle *handle)
-+{
-+	crypto_shash_final(handle->desc, handle->digest);
-+	crypto_free_shash(handle->desc->tfm);
-+	kfree(handle->desc);
-+}
-+
-+int secure_hibernation_available(void)
-+{
-+	struct tpm_chip *chip = tpm_default_chip();
-+
-+	if (!chip)
-+		return -ENODEV;
-+
-+	if (!(tpm_is_tpm2(chip)))
-+		return -ENODEV;
++	crypto_shash_update(desc, buf, size);
++	crypto_shash_final(desc, output);
++	crypto_free_shash(desc->tfm);
++	kfree(desc);
 +
 +	return 0;
 +}
-diff --git a/kernel/power/tpm.h b/kernel/power/tpm.h
-new file mode 100644
-index 000000000000..75b9140e5dc2
---- /dev/null
-+++ b/kernel/power/tpm.h
-@@ -0,0 +1,37 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#include "swap.h"
 +
-+#ifndef _POWER_TPM_H
-+#define _POWER_TPM_H
+ static int swsusp_enc_dec(struct trusted_key_payload *payload, char *buf,
+ 			  int enc)
+ {
+@@ -86,6 +125,58 @@ static int swsusp_enc_dec(struct trusted_key_payload *payload, char *buf,
+ 	return ret;
+ }
+ 
++static int tpm_certify_creationdata(struct tpm_chip *chip,
++				    struct trusted_key_payload *payload)
++{
++	struct tpm_header *head;
++	struct tpm_buf buf;
++	int rc;
 +
-+#ifdef CONFIG_SECURE_HIBERNATION
-+int secure_hibernation_available(void);
-+int swsusp_encrypt_digest(struct swsusp_header *header);
-+int swsusp_decrypt_digest(struct swsusp_header *header);
-+int swsusp_digest_setup(struct swap_map_handle *handle);
-+void swsusp_digest_update(struct swap_map_handle *handle, char *buf,
-+			  size_t size);
-+void swsusp_digest_final(struct swap_map_handle *handle);
-+#else
-+static inline int secure_hibernation_available(void)
-+{
-+	return -ENODEV;
-+};
-+static inline int swsusp_encrypt_digest(struct swsusp_header *header)
-+{
-+	return 0;
-+}
-+static inline int swsusp_decrypt_digest(struct swsusp_header *header)
-+{
-+	return 0;
-+}
-+static inline int swsusp_digest_setup(struct swap_map_handle *handle)
-+{
-+	return 0;
-+}
-+static inline void swsusp_digest_update(struct swap_map_handle *handle,
-+					char *buf, size_t size) {};
-+static inline void swsusp_digest_final(struct swap_map_handle *handle) {};
-+#endif
++	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CERTIFYCREATION);
++	if (rc)
++		return rc;
 +
-+#endif /* _POWER_TPM_H */
++	/* Use TPM_RH_NULL for signHandle */
++	tpm_buf_append_u32(&buf, 0x40000007);
++
++	/* Object handle */
++	tpm_buf_append_u32(&buf, payload->blob_handle);
++
++	/* Auth */
++	tpm_buf_append_u32(&buf, 9);
++	tpm_buf_append_u32(&buf, TPM2_RS_PW);
++	tpm_buf_append_u16(&buf, 0);
++	tpm_buf_append_u8(&buf, 0);
++	tpm_buf_append_u16(&buf, 0);
++
++	/* Qualifying data */
++	tpm_buf_append_u16(&buf, 0);
++
++	/* Creation data hash */
++	tpm_buf_append_u16(&buf, payload->creation_hash_len);
++	tpm_buf_append(&buf, payload->creation_hash,
++		       payload->creation_hash_len);
++
++	/* signature scheme */
++	tpm_buf_append_u16(&buf, TPM_ALG_NULL);
++
++	/* creation ticket */
++	tpm_buf_append(&buf, payload->tk, payload->tk_len);
++
++	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
++	if (rc)
++		goto out;
++
++	head = (struct tpm_header *)buf.data;
++
++	if (head->return_code != 0)
++		rc = -EINVAL;
++out:
++	tpm_buf_destroy(&buf);
++
++	return rc;
++}
++
+ int swsusp_encrypt_digest(struct swsusp_header *header)
+ {
+ 	const struct cred *cred = current_cred();
+@@ -95,7 +186,7 @@ int swsusp_encrypt_digest(struct swsusp_header *header)
+ 	struct key *key;
+ 	int ret, i;
+ 
+-	char *keyinfo = "new\t32\tkeyhandle=0x81000001";
++	char *keyinfo = "new\t32\tkeyhandle=0x81000001\tcreationpcrs=0x00800000";
+ 
+ 	chip = tpm_default_chip();
+ 
+@@ -164,6 +255,7 @@ int swsusp_decrypt_digest(struct swsusp_header *header)
+ 	char *keytemplate = "load\t%s\tkeyhandle=0x81000001";
+ 	struct trusted_key_payload *payload;
+ 	struct tpm_digest *digests = NULL;
++	char certhash[SHA256_DIGEST_SIZE];
+ 	char *blobstring = NULL;
+ 	char *keyinfo = NULL;
+ 	struct tpm_chip *chip;
+@@ -184,8 +276,10 @@ int swsusp_decrypt_digest(struct swsusp_header *header)
+ 
+ 	digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
+ 			  GFP_KERNEL);
+-	if (!digests)
++	if (!digests) {
++		ret = -ENOMEM;
+ 		goto reset;
++	}
+ 
+ 	for (i = 0; i <= chip->nr_allocated_banks; i++) {
+ 		digests[i].alg_id = chip->allocated_banks[i].alg_id;
+@@ -227,8 +321,58 @@ int swsusp_decrypt_digest(struct swsusp_header *header)
+ 
+ 	payload = key->payload.data[0];
+ 
+-	ret = swsusp_enc_dec(payload, header->digest, 0);
++	ret = sha256_data(payload->creation, payload->creation_len, certhash);
++	if (ret < 0)
++		goto out;
++
++	if (memcmp(payload->creation_hash, certhash, SHA256_DIGEST_SIZE) != 0) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	ret = tpm_certify_creationdata(chip, payload);
++	if (ret != 0) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* We now know that the creation data is authentic - parse it */
++
++	/* TPML_PCR_SELECTION.count */
++	if (be32_to_cpu(*(int *)payload->creation) != 1) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	if (be16_to_cpu(*(u16 *)&payload->creation[4]) != TPM_ALG_SHA256) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	if (*(char *)&payload->creation[6] != 3) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	/* PCR 23 selected */
++	if (be32_to_cpu(*(int *)&payload->creation[6]) != 0x03000080) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	if (be16_to_cpu(*(u16 *)&payload->creation[10]) !=
++	    SHA256_DIGEST_SIZE) {
++		ret = -EINVAL;
++		goto out;
++	}
+ 
++	if (memcmp(&payload->creation[12], expected_digest,
++		   SHA256_DIGEST_SIZE) != 0) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	ret = swsusp_enc_dec(payload, header->digest, 0);
+ out:
+ 	key_revoke(key);
+ 	key_put(key);
 -- 
 2.30.0.617.g56c4b15f3c-goog
 
