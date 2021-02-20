@@ -2,106 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C330320327
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Feb 2021 03:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 026FF320330
+	for <lists+linux-integrity@lfdr.de>; Sat, 20 Feb 2021 03:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbhBTChn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 19 Feb 2021 21:37:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42692 "EHLO mail.kernel.org"
+        id S229886AbhBTCko (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 19 Feb 2021 21:40:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42898 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229725AbhBTChl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 19 Feb 2021 21:37:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CD88B64E54;
-        Sat, 20 Feb 2021 02:36:58 +0000 (UTC)
+        id S229725AbhBTCkl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 19 Feb 2021 21:40:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 14FCC64E54;
+        Sat, 20 Feb 2021 02:39:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613788620;
-        bh=11VjwrLVTaCchWbSZbfpOpPCXvnZn7rLf+bfTZNteK0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=shuls3n1ZfjhymTGI0HzOP4nDn77pgLswngIsQrM/9QfWkOzjJJdpnFmiIvaXzKST
-         eM64BxW7r8sb9di/kYILPup5NHw9PKOvoPmRQizFQRLXCUUOiMLLtpGlLiEjLGWJdT
-         aXgCn7A1yn+E1w2mIgU0KRKXraCuqKJJ3lowS7hQEmaU6VMZrjYW+LuRxGE3o3aCyc
-         IVmTgv5O+EKpgvt2EdGzxgMPpys5DOlk7sAicYOf4myKNmCR60Ugk6hA6Dw/Jjvly4
-         YkA6a3j2LxMEqFVaD7uZvr+nu+cG1CXNgVVDun/lGORtFzrcVdtdiHeRqufnMif2l/
-         LeWU0c2wNQYZA==
+        s=k20201202; t=1613788800;
+        bh=ooKzW00f3SI1Zam8q3gu3lwsl6GYn5NRNI8l11jdPfE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nQu695I5upgN13n//hmuAnF+I9q+8+A9v0B0PksNfg3xe7mDKkZL3qvxbsrK4n4Sj
+         xTpp6NVp/6XNCCqZEtNjceoA3bYeqmjBHrT382KR4o0ERg0WAtAZEu2s/7yauX9ApY
+         6CZUieAu8eya6dTm+zRMir+hN3kkAvNARsILruM4qIwQdesJERNr7Yb2OTQ4kNSO30
+         3ilaY8vgLj7c3NKfy4Yvy1u9z5NN27sU/MN9dQ5zzvt0gFjpWJmvaubdP7x8d1V06c
+         S5T7hNMEM9CuvFDe8Py4I6TWxlzxduaCzsu/oJWEECIpjMtPLj8lJ+PR0VPra+Nay3
+         iQ2bBzCmbnypA==
+Date:   Sat, 20 Feb 2021 04:39:45 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Laurent Bigonville <bigon@debian.org>, stable@vger.kernel.org,
-        Lukasz Majczak <lma@semihalf.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH 1/2] tpm, tpm_tis: Decorate tpm_get_timeouts() with request_locality()
-Date:   Sat, 20 Feb 2021 04:36:41 +0200
-Message-Id: <20210220023641.8568-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.30.1
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
+Subject: Re: [PATCH v15 0/5] TPM 2.0 trusted key rework
+Message-ID: <YDB2cdk9mGPaBpdB@kernel.org>
+References: <20210127190617.17564-1-James.Bottomley@HansenPartnership.com>
+ <YDACehLCy4f2sDzo@kernel.org>
+ <17a8229bf8ebc87ad02429643aeee78d803f34f2.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <17a8229bf8ebc87ad02429643aeee78d803f34f2.camel@HansenPartnership.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
-(SLB 9670):
+On Fri, Feb 19, 2021 at 10:35:00AM -0800, James Bottomley wrote:
+> On Fri, 2021-02-19 at 20:24 +0200, Jarkko Sakkinen wrote:
+> > On Wed, Jan 27, 2021 at 11:06:12AM -0800, James Bottomley wrote:
+> > > v15: fix 0day sign issue and add reviews and testeds
+> > > 
+> > > General cover letter minus policy bit:
+> > > 
+> > > This patch updates the trusted key code to export keys in the ASN.1
+> > > format used by current TPM key tools (openssl_tpm2_engine and
+> > > openconnect).  The current code will try to load keys containing
+> > > policy, but being unable to formulate the policy commands necessary
+> > > to
+> > > load them, the unseal will always fail unless the policy is
+> > > executed
+> > > in user space and a pre-formed policy session passed in.
+> > > 
+> > > The key format is designed to be compatible with our two openssl
+> > > engine implementations as well as with the format used by
+> > > openconnect.
+> > > I've added seal/unseal to my engine so I can use it for
+> > > interoperability testing and I'll later use this for sealed
+> > > symmetric
+> > > keys via engine:
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/
+> > > 
+> > > James
+> > > 
+> > > ---
+> > > 
+> > > James Bottomley (5):
+> > >   lib: add ASN.1 encoder
+> > >   oid_registry: Add TCG defined OIDS for TPM keys
+> > >   security: keys: trusted: fix TPM2 authorizations
+> > >   security: keys: trusted: use ASN.1 TPM2 key format for the blobs
+> > >   security: keys: trusted: Make sealed key properly interoperable
+> > 
+> > This is online again in the master branch. 
+> > 
+> > I've mangled the commits as follows:
+> > 
+> > 1. Fixed my emails to jarkko@kernel.org.
+> > 2. Adjusted the Makefile, i.e. separate lines for each entry.
+> > 3. Fixed the checkpatch issues.
+> > 
+> > I guess we could potentially re-consider this to rc2 pull? With all
+> > the mangling required, did not make sense to include this to the
+> > first pull.
+> 
+> The way I usually do this in SCSI, because stuff always happens
+> immediately before the merge window that causes some pull material to
+> be held over, is an early push, which you've done followed by a late
+> push on the Friday before the merge window closes of the rest of the
+> stuff.  This is an example from the last but one merge window:
+> 
+> https://lore.kernel.org/linux-scsi/fdee2336d2a7eada3749e07c3cc6ea682f8200b3.camel@HansenPartnership.com/
+> https://lore.kernel.org/linux-scsi/4affd2a9c347e5f1231485483bf852737ea08151.camel@HansenPartnership.com/
+> 
+> Linus seems to be happy with this pattern as long as it's well
+> explained.
+> 
+> James
 
-[    4.324298] TPM returned invalid status
-[    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
+OK, thanks, I'll keep this in mind.
 
-Background
-==========
-
-TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 FIFO
-Interface Locality Usage per Register, Table 39 Register Behavior Based on
-Locality Setting for FIFO - a read attempt to TPM_STS_x Registers returns
-0xFF in case of lack of locality.
-
-The fix
-=======
-
-Decorate tpm_get_timeouts() with request_locality() and release_locality().
-
-Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
-Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Laurent Bigonville <bigon@debian.org>
-Cc: stable@vger.kernel.org
-Reported-by: Lukasz Majczak <lma@semihalf.com>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- drivers/char/tpm/tpm_tis_core.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 431919d5f48a..30843954aa36 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -1019,11 +1019,21 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 	init_waitqueue_head(&priv->read_queue);
- 	init_waitqueue_head(&priv->int_queue);
- 	if (irq != -1) {
--		/* Before doing irq testing issue a command to the TPM in polling mode
-+		/*
-+		 * Before doing irq testing issue a command to the TPM in polling mode
- 		 * to make sure it works. May as well use that command to set the
- 		 * proper timeouts for the driver.
- 		 */
--		if (tpm_get_timeouts(chip)) {
-+
-+		rc = request_locality(chip, 0);
-+		if (rc < 0)
-+			goto out_err;
-+
-+		rc = tpm_get_timeouts(chip);
-+
-+		release_locality(chip, 0);
-+
-+		if (rc) {
- 			dev_err(dev, "Could not get TPM timeouts and durations\n");
- 			rc = -ENODEV;
- 			goto out_err;
--- 
-2.30.1
-
+/Jarkko
