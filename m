@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A26320C3A
-	for <lists+linux-integrity@lfdr.de>; Sun, 21 Feb 2021 18:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B35320C3D
+	for <lists+linux-integrity@lfdr.de>; Sun, 21 Feb 2021 18:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbhBURvE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 21 Feb 2021 12:51:04 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:45651 "EHLO
+        id S230215AbhBURvG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 21 Feb 2021 12:51:06 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:45650 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbhBURu6 (ORCPT
+        with ESMTP id S230119AbhBURu7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 21 Feb 2021 12:50:58 -0500
+        Sun, 21 Feb 2021 12:50:59 -0500
 Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 10A3520B57AA;
+        by linux.microsoft.com (Postfix) with ESMTPSA id B5B3F20B57AB;
         Sun, 21 Feb 2021 09:49:44 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 10A3520B57AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B5B3F20B57AB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1613929784;
-        bh=O9olzA4F8wOx+jGLw6qdo8GKMGxvb6BX+udmR/nonSA=;
+        s=default; t=1613929785;
+        bh=Q5qP/oeHF3QsP6y24A/ceFIZlcYedcKYuPJE/HPeXkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tE2Do87YmsnzqiU9jjBbsx1Ji8zTOuLkFwj6q0XO71jHqVEusqeSa80K27M9hxhhT
-         QI9HNULJZB9K08wc+NSAExED+UY4GNhNTILzIyrs6bsVXzzaHbC03+/BpNA2eG5Hqz
-         u/ziu6jWcPiqxF3EQ6lM+ZF1cuYcFORY80ea5e8g=
+        b=cmJeUo3UdEcdFU+5E6pDB083u3VZG495WzjNyLF9uiCP8xsioLqgZBh9KJMwtcrTi
+         TFa0zGpyW1sEQBB84PqnyqRzONlT6G7IsrNHumpEf7OOXPpIWQB0b9DZgYXDSSnOTX
+         qsv4vBGOTYYkLikKfE54hpnv+IpnM+b0IWdFYXrM=
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 To:     zohar@linux.ibm.com, bauerman@linux.ibm.com, robh@kernel.org,
         takahiro.akashi@linaro.org, gregkh@linuxfoundation.org,
@@ -39,9 +39,9 @@ Cc:     james.morse@arm.com, sashal@kernel.org, benh@kernel.crashing.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v19 12/13] powerpc: Delete unused function delete_fdt_mem_rsv()
-Date:   Sun, 21 Feb 2021 09:49:29 -0800
-Message-Id: <20210221174930.27324-13-nramas@linux.microsoft.com>
+Subject: [PATCH v19 13/13] arm64: Enable passing IMA log to next kernel on kexec
+Date:   Sun, 21 Feb 2021 09:49:30 -0800
+Message-Id: <20210221174930.27324-14-nramas@linux.microsoft.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210221174930.27324-1-nramas@linux.microsoft.com>
 References: <20210221174930.27324-1-nramas@linux.microsoft.com>
@@ -51,73 +51,31 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-delete_fdt_mem_rsv() defined in "arch/powerpc/kexec/file_load.c"
-has been renamed to fdt_find_and_del_mem_rsv(), and moved to
-"drivers/of/kexec.c".
-
-Remove delete_fdt_mem_rsv() in "arch/powerpc/kexec/file_load.c".
+Update CONFIG_KEXEC_FILE to select CONFIG_HAVE_IMA_KEXEC, if CONFIG_IMA
+is enabled, to indicate that the IMA measurement log information is
+present in the device tree for ARM64.
 
 Co-developed-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Prakhar Srivastava <prsriva@linux.microsoft.com>
 Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Suggested-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 Reviewed-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
 ---
- arch/powerpc/include/asm/kexec.h |  1 -
- arch/powerpc/kexec/file_load.c   | 32 --------------------------------
- 2 files changed, 33 deletions(-)
+ arch/arm64/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/powerpc/include/asm/kexec.h b/arch/powerpc/include/asm/kexec.h
-index 1af7b5962bb9..e881e9d083ce 100644
---- a/arch/powerpc/include/asm/kexec.h
-+++ b/arch/powerpc/include/asm/kexec.h
-@@ -115,7 +115,6 @@ char *setup_kdump_cmdline(struct kimage *image, char *cmdline,
- int setup_purgatory(struct kimage *image, const void *slave_code,
- 		    const void *fdt, unsigned long kernel_load_addr,
- 		    unsigned long fdt_load_addr);
--int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size);
- 
- #ifdef CONFIG_PPC64
- struct kexec_buf;
-diff --git a/arch/powerpc/kexec/file_load.c b/arch/powerpc/kexec/file_load.c
-index dc28cb7813c8..4284f76cbef5 100644
---- a/arch/powerpc/kexec/file_load.c
-+++ b/arch/powerpc/kexec/file_load.c
-@@ -107,35 +107,3 @@ int setup_purgatory(struct kimage *image, const void *slave_code,
- 
- 	return 0;
- }
--
--/**
-- * delete_fdt_mem_rsv - delete memory reservation with given address and size
-- *
-- * Return: 0 on success, or negative errno on error.
-- */
--int delete_fdt_mem_rsv(void *fdt, unsigned long start, unsigned long size)
--{
--	int i, ret, num_rsvs = fdt_num_mem_rsv(fdt);
--
--	for (i = 0; i < num_rsvs; i++) {
--		uint64_t rsv_start, rsv_size;
--
--		ret = fdt_get_mem_rsv(fdt, i, &rsv_start, &rsv_size);
--		if (ret) {
--			pr_err("Malformed device tree.\n");
--			return -EINVAL;
--		}
--
--		if (rsv_start == start && rsv_size == size) {
--			ret = fdt_del_mem_rsv(fdt, i);
--			if (ret) {
--				pr_err("Error deleting device tree reservation.\n");
--				return -EINVAL;
--			}
--
--			return 0;
--		}
--	}
--
--	return -ENOENT;
--}
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 05e17351e4f3..8a93573cebb6 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1093,6 +1093,7 @@ config KEXEC
+ config KEXEC_FILE
+ 	bool "kexec file based system call"
+ 	select KEXEC_CORE
++	select HAVE_IMA_KEXEC if IMA
+ 	help
+ 	  This is new version of kexec system call. This system call is
+ 	  file based and takes file descriptors as system call argument
 -- 
 2.30.0
 
