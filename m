@@ -2,118 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B27320998
-	for <lists+linux-integrity@lfdr.de>; Sun, 21 Feb 2021 11:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D93893209CF
+	for <lists+linux-integrity@lfdr.de>; Sun, 21 Feb 2021 12:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbhBUKVY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 21 Feb 2021 05:21:24 -0500
-Received: from mout.gmx.net ([212.227.17.21]:56465 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229502AbhBUKVW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 21 Feb 2021 05:21:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1613902773;
-        bh=wODiBjnT/f1js89rh/S8lYuasVsARYyh6GdrFA3yrhU=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=A0tIUFTQKnmlPC//r5ZCVnLhq+JDm5bNZWQY7CSZsN+C+YExZcKrxZPTuxA0/Qvi9
-         VwttV24CqfY5di3DH8Rd2aL9D6igzByrkedWEg4HKgEUMm4USjch43YxFfVgt5fwvj
-         NS5AArOIc2pua094vVV1ew/fGzOG7HQMVOR8cH6Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7R1J-1lv6oD3aQv-017j41; Sun, 21
- Feb 2021 11:19:32 +0100
-Subject: Re: [PATCH v6] tpm: fix reference counting for struct tpm_chip
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
+        id S229908AbhBULRe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 21 Feb 2021 06:17:34 -0500
+Received: from smtp-bc0f.mail.infomaniak.ch ([45.157.188.15]:42615 "EHLO
+        smtp-bc0f.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229884AbhBULRc (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 21 Feb 2021 06:17:32 -0500
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Dk2nm4X2pzMqFPR;
+        Sun, 21 Feb 2021 12:16:44 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Dk2nj6xrTzlh8T8;
+        Sun, 21 Feb 2021 12:16:41 +0100 (CET)
+Subject: Re: [PATCH v6 0/5] Enable root to update the blacklist keyring
+To:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        stable@vger.kernel.org
-References: <1613680181-31920-1-git-send-email-LinoSanfilippo@gmx.de>
- <1613680181-31920-2-git-send-email-LinoSanfilippo@gmx.de>
- <YC+BRfvtA3n7yeaR@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <aa2ec878-f8ea-d28b-c7c2-ecdc3d19f71e@gmx.de>
-Date:   Sun, 21 Feb 2021 11:19:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        linux-security-module@vger.kernel.org
+References: <20210210120410.471693-1-mic@digikod.net>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <132a6049-e91b-3922-cd3f-89574dd049fe@digikod.net>
+Date:   Sun, 21 Feb 2021 12:17:54 +0100
+User-Agent: 
 MIME-Version: 1.0
-In-Reply-To: <YC+BRfvtA3n7yeaR@kernel.org>
+In-Reply-To: <20210210120410.471693-1-mic@digikod.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:tDY68+aMWOXi/OV26ccKmpyEOr/TeQn3WoE3bI5N8tH6P/hFuw0
- nQBa5b5JUtPB6b8beQbW5BM7a6Lf4P8KODv3DLspYpwvBQ2nHA38ZUzYk2qHDlPiXMo7q6q
- VPiGouesy5YDeXRxeaLOXIxrqX9ncKu2xzMq1FHUQXgw1llcxF2rrFs/cQo1rh20P5+kc4L
- 1IOxWe+nB03cIua3NlLHA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KgUuKdzeVis=:9KlqlSLf+kq82Xx1ngoruL
- yfyLS72OofET7ldJXf0rHp9MG5HOMnK1/QwXsETWwMJejPjRo3VwHAKJ6Ag4kIrRLOJ6oH1Ls
- 6tEdw4/LVo09swwfHzfmW2doEbxAAKTvWHeNuQuMHYyItzTTRFavKgHWce0VwjZlzCtA6HgRG
- VaRCPw20h+o/Znu5SNp2XkOvXS9f7vPckzSHOI1+CIwp4zE9hB02XDUT2ztZszuZo1zxFlrd6
- dtig4vtr47hefuwa+Qjvv0FW5MtvH1UAPMM7K5OQ0iePSBu+TE2YeeKfpJOYeDNzwfcnxiyre
- aohYaIcbla/CCQegHYNlxS8cOLZqdNQb43UUuWhuDHbPi8LF7pVf7rWyQRcFVTgXvFC3k+3dv
- g4FPoRJB0Ycc/nS750ZRVse3h6HJnDwZ1NwVIJ2Xgio4KfGO8kXguFLFmecgT6gc8Ue3KBZAj
- 3VbX3mSPt6LatXTQr9KbzM0Hr4NbXKItj7pX6qmgyGds0mnDr1KmpL6niTlGMGYw/+FZ7UkS/
- OWrtcR1HmcJr6Nx3GqAENzJXlhv9cAJsraCBf7MyXlJlNXrP/rwt3PlsNcbrrYl25DQw39xK9
- BWh/5HiYhgWNp6xj99mIYA2D1VQrQE2MXuJX2PHW2olmNWuQxNgVzS/KUx3fZpE3eH0Cpvn/3
- TCDOaIpJn5TO3ImCU3B776eWCFc3D2WZHcFL5484A5Lvhfit+tM0PD3bl8424wbGekURtPVYc
- 7xaxeL3npAgtTaitOzvUYv79CDBm+C0e3BzxQJp5S/ABJy2+ccDU6YCX9e5eEmZAMUpi2F2GN
- H/msTBAd8oaznu8Q4we8ZLrqOYKkSs+Otu5Mmr/3kzVs0A5zmmBsbY0YQ4Q+4ka+8k+oB71fN
- gZifhpYTLNHG4K/aj13Q==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+David, Eric, what is the status of this patch series?
 
-Hi,
-
-On 19.02.21 at 10:13, Jarkko Sakkinen wrote:
-
->> +	rc =3D cdev_device_add(&chip->cdevs, &chip->devs);
->> +	if (rc) {
->> +		dev_err(&chip->devs,
->> +			"unable to cdev_device_add() %s, major %d, minor %d, err=3D%d\n",
->> +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
->> +			MINOR(chip->devs.devt), rc);
->> +		goto out_put_devs;
->> +	}
->> +
->> +	return 0;
->> +
->> +out_put_devs:
->
-> A nit:
->
-> 1. You have already del_cdev:
-> 2. Here you use a differing convention with out prefix.
->
-> I'd suggest that you put err_ to both:
->
-> 1. err_del_cdev
-> 2. err_put_devs
->
-> It's quite coherent what we have already:
->
-> linux-tpmdd on =EE=82=A0 next took 8s
-> =E2=9D=AF git grep "^err_.*" drivers/char/tpm/ |  wc -l
-> 17
->
-
-
-The label del_cdev is indeed a bit inconsistent with the rest of the code.
-But AFAICS out_put_devs is not:
-1. all labels in tpm2-space.c start with out_
-2. there are more hits for out_ across the whole TPM code (i.e. with the s=
-ame command
-you used above I get 31 hits for _out) than for err_.
-
-I suggest to rename del_cdev to something like out_del_cdev or maybe out_c=
-dev which
-seems to be even closer to the existing naming scheme for labels.
-
-
-Regards,
-Lino
-
-
+On 10/02/2021 13:04, Mickaël Salaün wrote:
+> This new patch series is a rebase on David Howells's keys-misc branch.
+> This mainly fixes UEFI DBX and the new Eric Snowberg's feature to import
+> asymmetric keys to the blacklist keyring.
+> I successfully tested this patch series with the 186 entries from
+> https://uefi.org/sites/default/files/resources/dbxupdate_x64.bin (184
+> binary hashes and 2 certificates).
+> 
+> The goal of these patches is to add a new configuration option to enable the
+> root user to load signed keys in the blacklist keyring.  This keyring is useful
+> to "untrust" certificates or files.  Enabling to safely update this keyring
+> without recompiling the kernel makes it more usable.
+> 
+> This can be applied on top of David Howells's keys-next branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=keys-next
+> Git commits can be found in https://github.com/l0kod/linux branch
+> dyn-auth-blacklist-v6 commit fcf976b74ffcd4551683e6b70dbf5fb102cf9906 .
+> 
+> Previous patch series:
+> https://lore.kernel.org/lkml/20210128191705.3568820-1-mic@digikod.net/
+> 
+> Regards,
+> 
+> Mickaël Salaün (5):
+>   tools/certs: Add print-cert-tbs-hash.sh
+>   certs: Check that builtin blacklist hashes are valid
+>   certs: Make blacklist_vet_description() more strict
+>   certs: Factor out the blacklist hash creation
+>   certs: Allow root user to append signed hashes to the blacklist
+>     keyring
+> 
+>  MAINTAINERS                                   |   2 +
+>  certs/.gitignore                              |   1 +
+>  certs/Kconfig                                 |  17 +-
+>  certs/Makefile                                |  17 +-
+>  certs/blacklist.c                             | 218 ++++++++++++++----
+>  crypto/asymmetric_keys/x509_public_key.c      |   3 +-
+>  include/keys/system_keyring.h                 |  14 +-
+>  scripts/check-blacklist-hashes.awk            |  37 +++
+>  .../platform_certs/keyring_handler.c          |  26 +--
+>  tools/certs/print-cert-tbs-hash.sh            |  91 ++++++++
+>  10 files changed, 346 insertions(+), 80 deletions(-)
+>  create mode 100755 scripts/check-blacklist-hashes.awk
+>  create mode 100755 tools/certs/print-cert-tbs-hash.sh
+> 
+> 
+> base-commit: 5bcd72358a7d7794ade0452ed12919b8c4d6ffc7
+> 
