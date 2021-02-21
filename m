@@ -2,111 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23312320576
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Feb 2021 13:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B27320998
+	for <lists+linux-integrity@lfdr.de>; Sun, 21 Feb 2021 11:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbhBTM4d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 20 Feb 2021 07:56:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41022 "EHLO mail.kernel.org"
+        id S229519AbhBUKVY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 21 Feb 2021 05:21:24 -0500
+Received: from mout.gmx.net ([212.227.17.21]:56465 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229490AbhBTM4d (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 20 Feb 2021 07:56:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1F19864EDE;
-        Sat, 20 Feb 2021 12:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613825752;
-        bh=K9h9PwzVuFck/DHhyJJBDnkh9g7ovnOcpR87cc2Yuxw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JB7w7aKtndSoF2YCbnKauXDpt6qxCv0c08t34lIgILK/xG4FJ5OXVIETWuIduO7o2
-         jxHKvDypSeu4Xvp+SCXvI2WVUtahehY+1yIABz5UJYHADTt65dNFPr7E1sy7IHvl8Z
-         1ZMRtCnRiKYIdBalQru4TDqLa5Zs9hU3neJ3Cpnard7vNVL+2HD1BMVlxdc+C/kxxh
-         cYeRT6rg3F5GYgLTJF/MHpEULIl7Zwt0cPmyKXstR+wT327PXnYvrcuyCbg/nuFvYi
-         z+alJh9wV4dh36eB4wjPuUNLihjguisv4hdfl7LyvolE0rSjAXxf9f77m/qE4/rQsA
-         lRmRdP4v8jYvg==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-integrity@vger.kernel.org
-Cc:     Lukasz Majczak <lma@semihalf.com>,
-        Laurent Bigonville <bigon@debian.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Subject: [PATCH 2/2] tpm, tpm_tis: Decorate tpm_tis_gen_interrupt() with request_locality()
-Date:   Sat, 20 Feb 2021 14:55:33 +0200
-Message-Id: <20210220125534.20707-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.30.1
+        id S229502AbhBUKVW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 21 Feb 2021 05:21:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1613902773;
+        bh=wODiBjnT/f1js89rh/S8lYuasVsARYyh6GdrFA3yrhU=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=A0tIUFTQKnmlPC//r5ZCVnLhq+JDm5bNZWQY7CSZsN+C+YExZcKrxZPTuxA0/Qvi9
+         VwttV24CqfY5di3DH8Rd2aL9D6igzByrkedWEg4HKgEUMm4USjch43YxFfVgt5fwvj
+         NS5AArOIc2pua094vVV1ew/fGzOG7HQMVOR8cH6Q=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7R1J-1lv6oD3aQv-017j41; Sun, 21
+ Feb 2021 11:19:32 +0100
+Subject: Re: [PATCH v6] tpm: fix reference counting for struct tpm_chip
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org
+References: <1613680181-31920-1-git-send-email-LinoSanfilippo@gmx.de>
+ <1613680181-31920-2-git-send-email-LinoSanfilippo@gmx.de>
+ <YC+BRfvtA3n7yeaR@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <aa2ec878-f8ea-d28b-c7c2-ecdc3d19f71e@gmx.de>
+Date:   Sun, 21 Feb 2021 11:19:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YC+BRfvtA3n7yeaR@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tDY68+aMWOXi/OV26ccKmpyEOr/TeQn3WoE3bI5N8tH6P/hFuw0
+ nQBa5b5JUtPB6b8beQbW5BM7a6Lf4P8KODv3DLspYpwvBQ2nHA38ZUzYk2qHDlPiXMo7q6q
+ VPiGouesy5YDeXRxeaLOXIxrqX9ncKu2xzMq1FHUQXgw1llcxF2rrFs/cQo1rh20P5+kc4L
+ 1IOxWe+nB03cIua3NlLHA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:KgUuKdzeVis=:9KlqlSLf+kq82Xx1ngoruL
+ yfyLS72OofET7ldJXf0rHp9MG5HOMnK1/QwXsETWwMJejPjRo3VwHAKJ6Ag4kIrRLOJ6oH1Ls
+ 6tEdw4/LVo09swwfHzfmW2doEbxAAKTvWHeNuQuMHYyItzTTRFavKgHWce0VwjZlzCtA6HgRG
+ VaRCPw20h+o/Znu5SNp2XkOvXS9f7vPckzSHOI1+CIwp4zE9hB02XDUT2ztZszuZo1zxFlrd6
+ dtig4vtr47hefuwa+Qjvv0FW5MtvH1UAPMM7K5OQ0iePSBu+TE2YeeKfpJOYeDNzwfcnxiyre
+ aohYaIcbla/CCQegHYNlxS8cOLZqdNQb43UUuWhuDHbPi8LF7pVf7rWyQRcFVTgXvFC3k+3dv
+ g4FPoRJB0Ycc/nS750ZRVse3h6HJnDwZ1NwVIJ2Xgio4KfGO8kXguFLFmecgT6gc8Ue3KBZAj
+ 3VbX3mSPt6LatXTQr9KbzM0Hr4NbXKItj7pX6qmgyGds0mnDr1KmpL6niTlGMGYw/+FZ7UkS/
+ OWrtcR1HmcJr6Nx3GqAENzJXlhv9cAJsraCBf7MyXlJlNXrP/rwt3PlsNcbrrYl25DQw39xK9
+ BWh/5HiYhgWNp6xj99mIYA2D1VQrQE2MXuJX2PHW2olmNWuQxNgVzS/KUx3fZpE3eH0Cpvn/3
+ TCDOaIpJn5TO3ImCU3B776eWCFc3D2WZHcFL5484A5Lvhfit+tM0PD3bl8424wbGekURtPVYc
+ 7xaxeL3npAgtTaitOzvUYv79CDBm+C0e3BzxQJp5S/ABJy2+ccDU6YCX9e5eEmZAMUpi2F2GN
+ H/msTBAd8oaznu8Q4we8ZLrqOYKkSs+Otu5Mmr/3kzVs0A5zmmBsbY0YQ4Q+4ka+8k+oB71fN
+ gZifhpYTLNHG4K/aj13Q==
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Lukasz Majczak <lma@semihalf.com>
 
-This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
-(SLB 9670):
+Hi,
 
-[    4.324298] TPM returned invalid status
-[    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
+On 19.02.21 at 10:13, Jarkko Sakkinen wrote:
 
-Background
-==========
+>> +	rc =3D cdev_device_add(&chip->cdevs, &chip->devs);
+>> +	if (rc) {
+>> +		dev_err(&chip->devs,
+>> +			"unable to cdev_device_add() %s, major %d, minor %d, err=3D%d\n",
+>> +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
+>> +			MINOR(chip->devs.devt), rc);
+>> +		goto out_put_devs;
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +out_put_devs:
+>
+> A nit:
+>
+> 1. You have already del_cdev:
+> 2. Here you use a differing convention with out prefix.
+>
+> I'd suggest that you put err_ to both:
+>
+> 1. err_del_cdev
+> 2. err_put_devs
+>
+> It's quite coherent what we have already:
+>
+> linux-tpmdd on =EE=82=A0 next took 8s
+> =E2=9D=AF git grep "^err_.*" drivers/char/tpm/ |  wc -l
+> 17
+>
 
-TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 FIFO
-Interface Locality Usage per Register, Table 39 Register Behavior Based on
-Locality Setting for FIFO - a read attempt to TPM_STS_x Registers returns
-0xFF in case of lack of locality.
 
-The fix
-=======
+The label del_cdev is indeed a bit inconsistent with the rest of the code.
+But AFAICS out_put_devs is not:
+1. all labels in tpm2-space.c start with out_
+2. there are more hits for out_ across the whole TPM code (i.e. with the s=
+ame command
+you used above I get 31 hits for _out) than for err_.
 
-Decorate tpm_tis_gen_interrupt() with request_locality() and
-release_locality().
+I suggest to rename del_cdev to something like out_del_cdev or maybe out_c=
+dev which
+seems to be even closer to the existing naming scheme for labels.
 
-Cc: Laurent Bigonville <bigon@debian.org>
-Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: stable@vger.kernel.org
-Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
-Signed-off-by: Lukasz Majczak <lma@semihalf.com>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- drivers/char/tpm/tpm_tis_core.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 30843954aa36..a2e0395cbe61 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -707,12 +707,22 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
- 	const char *desc = "attempting to generate an interrupt";
- 	u32 cap2;
- 	cap_t cap;
-+	int ret;
- 
-+	/* TPM 2.0 */
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
- 		return tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
--	else
--		return tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc,
--				  0);
-+
-+	/* TPM 1.2 */
-+	ret = request_locality(chip, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc, 0);
-+
-+	release_locality(chip, 0);
-+
-+	return ret;
- }
- 
- /* Register the IRQ and issue a command that will cause an interrupt. If an
--- 
-2.30.1
+Regards,
+Lino
+
 
