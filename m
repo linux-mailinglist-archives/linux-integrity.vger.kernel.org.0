@@ -2,331 +2,221 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CDD320F7B
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Feb 2021 03:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01321320FF8
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Feb 2021 05:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbhBVCiv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 21 Feb 2021 21:38:51 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:52066 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbhBVCiv (ORCPT
+        id S229996AbhBVEN4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 21 Feb 2021 23:13:56 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14180 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229974AbhBVENz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 21 Feb 2021 21:38:51 -0500
-Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8961920B6C40;
-        Sun, 21 Feb 2021 18:38:09 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8961920B6C40
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1613961489;
-        bh=5KvW/s1L3KxjQMGjE8r5fo5XZtEuSl5ktw7ngrqUDIY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=pqtExRAA5Vnm+Gk8wedQQxfVBj9GLrb2dKIOuQ/sTStiMdHOMSFQKntTA7Vj+Sr5q
-         kD4DLP6+kQlcsv2L+z8mhPwoc0z/76FgNfLDaJLfzS6a+w1klFeQmxH5rgOq3m4jnO
-         QNsomi5Rb28Zzkt8zX9zstZ0TOXxxHXj+FVkaqs4=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     pvorel@suse.cz, zohar@linux.ibm.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com
-Cc:     tusharsu@linux.microsoft.com, ltp@lists.linux.it,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: [PATCH] IMA: Add test for selinux measurement
-Date:   Sun, 21 Feb 2021 18:38:05 -0800
-Message-Id: <20210222023805.12846-1-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.30.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 21 Feb 2021 23:13:55 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11M4AEkW130456;
+        Sun, 21 Feb 2021 23:13:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=kpb2TlLhOjclsLeoYqcSuqxpuRn9QHnDDMTb4RlAfUY=;
+ b=Kb6MlIxpl2IJBbkrqcVQpqIo8BO2Qgy8W75dLm8Czlj2vrE+lhW17QX492eLhnY68pKb
+ KHd7JYg8zqkxrKgiBdBSKmu0H/nak/BAmS9iyywyBKd/MISA1elGZ9Wbb2ah7dwKWIyT
+ IEbd1u7K4UDK1SHTLJr9/aYVOFbXnh0gWkW503UsKrTi44zrRi68FLRRB0IZUxLJnklv
+ KxWKBriSVtoeNW9rJ6BazTDS4EOT9DXsHhuqNyijZE9dLDgBlD4OlsY4l+naTbYl0iu8
+ rcCC02TXBQ/O1wvhhwG7u9pOwqwjd768DKhRghSINikqQcOWt6SJdEeLdGV9lCUYvRtd lQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36v5770ad0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 21 Feb 2021 23:13:06 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11M49jbW029391;
+        Mon, 22 Feb 2021 04:11:57 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 36tt2898ja-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Feb 2021 04:11:57 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11M4BsCN41353554
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Feb 2021 04:11:54 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5DC311C050;
+        Mon, 22 Feb 2021 04:11:54 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A956E11C04C;
+        Mon, 22 Feb 2021 04:11:52 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.43.123])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 22 Feb 2021 04:11:52 +0000 (GMT)
+Message-ID: <88affa2e0f4951f4b1b286df50d71a22a9ac1b54.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] IMA: support for duplicate data measurement
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 21 Feb 2021 23:11:51 -0500
+In-Reply-To: <6c2d2242-119c-2a8a-8062-6326fed6a45d@linux.microsoft.com>
+References: <20210217024649.23405-1-tusharsu@linux.microsoft.com>
+         <ab197aa9719b4218ab497b55f0bc78a0dadc83dd.camel@linux.ibm.com>
+         <5236e03f-9be4-f7f3-ec6c-29f00c16dc18@linux.microsoft.com>
+         <bb4356d779720b8fa9c342647132cfeec938c296.camel@linux.ibm.com>
+         <21538a53-0174-e3b4-f1e8-ddb8cc334a79@linux.microsoft.com>
+         <6c2d2242-119c-2a8a-8062-6326fed6a45d@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-21_14:2021-02-18,2021-02-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 impostorscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102220034
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-New functionality has been added in IMA to measure data that is
-critical to the integrity of the system.  SELinux uses this feature
-to measure the hash of the SELinux policy loaded in kernel memory,
-and the current state of various SELinux configuration.  This new
-functionality needs test automation in LTP.
+On Thu, 2021-02-18 at 14:05 -0800, Tushar Sugandhi wrote:
+> On 2021-02-17 12:49 p.m., Tushar Sugandhi wrote:
+> > On 2021-02-17 12:39 p.m., Mimi Zohar wrote:
+> >> On Wed, 2021-02-17 at 10:53 -0800, Tushar Sugandhi wrote:
+> >>> Thanks for the feedback Mimi.
+> >>> Appreciate it.
+> >>>
+> >>> On 2021-02-17 7:03 a.m., Mimi Zohar wrote:
+> >>>> Hi Tushar,
+> >>>>
+> >>>> The Subject line could be improved.  Perhaps something like - "IMA:
+> >>>> support for duplicate measurement records"
+> >>>>
+> >>> Will do.
+> >>>
+> >>>> On Tue, 2021-02-16 at 18:46 -0800, Tushar Sugandhi wrote:
+> >>>>> IMA does not measure duplicate data since TPM extend is a very 
+> >>>>> expensive
+> >>>>> operation.  However, in some cases, the measurement of duplicate data
+> >>>>> is necessary to accurately determine the current state of the system.
+> >>>>> Eg, SELinux state changing from 'audit', to 'enforcing', and back to
+> >>>>> 'audit' again.  In this example, currently, IMA will not measure the
+> >>>>> last state change to 'audit'.  This limits the ability of attestation
+> >>>>> services to accurately determine the current state of the measurements
+> >>>>> on the system.
+> >>>>
+> >>>> This patch description is written from your specific usecase
+> >>>> perspective, but it impacts file and buffer data measurements as well,
+> >>>> not only critical data measurements.  In all of these situations, with
+> >>>> this patch a new measurement record is added/appended to the
+> >>>> measurement list.  Please re-write the patch description making it more
+> >>>> generic.
+> >>>>
+> >>>> For example, I would start with something like, "IMA does not include
+> >>>> duplicate file, buffer or critical data measurement records ..."
+> >>>>
+> >>> Agreed.
+> >>> I will generalize the description further and send the v3 for review.
+> >>
+> >> It would be good to boot with the ima_policy=tcb policy with/without
+> >> your patch and account for the different number of measurements.   Are
+> >> all the differences related to duplicate measurements - original file
+> >> hash -> new file hash -> original file hash - similar to what you
+> >> described.
+> >>
+> > Thanks for the ima_policy=tcb pointer.
+> > 
+> > I tested my patch with:
+> >   - duplicate buffer content for "measure func=CRITICAL_DATA"
+> >   - and reading the same file twice with "measure func=FILE_CHECK 
+> > mask=MAY_READ"
+> > 
+> > In both the above use cases, IMA is measuring the duplicate entries with 
+> > the patch, and not measuring the duplicate entries w/o the patch.
+> > 
+> > I will test the "ima_policy=tcb" boot-scenario as you suggested, before 
+> > posting the next version.
+> > 
+> 
+> I booted the system with "ima_policy=tcb" policy with/without my patch.
+> I also removed /etc/ima/ima-policy for testing these use-cases.
+> (so that it wouldn't override the policy generated by boot param 
+> "ima_policy=tcb").
+> 
+> I double checked the contents of the kernel policy:
+> #cat /sys/kernel/security/integrity/ima/policy
+>      dont_measure fsmagic=0x9fa0
+>      dont_measure fsmagic=0x62656572
+>      dont_measure fsmagic=0x64626720
+>      dont_measure fsmagic=0x1021994
+>      dont_measure fsmagic=0x1cd1
+>      dont_measure fsmagic=0x42494e4d
+>      dont_measure fsmagic=0x73636673
+>      dont_measure fsmagic=0xf97cff8c
+>      dont_measure fsmagic=0x43415d53
+>      dont_measure fsmagic=0x27e0eb
+>      dont_measure fsmagic=0x63677270
+>      dont_measure fsmagic=0x6e736673
+>      dont_measure fsmagic=0xde5e81e4
+>      measure func=MMAP_CHECK mask=MAY_EXEC
+>      measure func=BPRM_CHECK mask=MAY_EXEC
+>      measure func=FILE_CHECK mask=^MAY_READ euid=0
+>      measure func=FILE_CHECK mask=^MAY_READ uid=0
+>      measure func=MODULE_CHECK
+>      measure func=FIRMWARE_CHECK
+>      measure func=POLICY_CHECK
+> 
+> And then I compared the contents of the ascii_runtime_measurements with 
+> and without my patch.
+> 
+> And here are my findings:
+> 
+> (1) Files like systemd-udevd, x2go_sessions etc. get measured multiple
+>      times with the CONFIG_IMA_DISABLE_HTABLE=y.
+>      They only get measured once with the config "=n".
+> 
+>      10 668df8723f5a1f57a0afe3b50d44054d66363f3e ima-ng 
+> sha1:51f66e82421b93b21ad1e0a25e5efa4155c6a8e0 /lib/systemd/systemd-udevd
+>      10 668df8723f5a1f57a0afe3b50d44054d66363f3e ima-ng 
+> sha1:51f66e82421b93b21ad1e0a25e5efa4155c6a8e0 /lib/systemd/systemd-udevd
+> 
+> (2) There are lot more instances of /tmp/<random> measurement records
+>      with the CONFIG_IMA_DISABLE_HTABLE=y.
+>      Eg,
+> 
+>      10 33515851cfee4acbf24de9482ff018d33def1083 ima-ng 
+> sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709 /tmp/oUWCVeypLR
+>      10 9d1dc0e1e54ee2e16308a824fc5780bd21b38208 ima-ng 
+> sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709 /tmp/etX8dy7qqy
+>      10 8643a5543179b86c02d7e3e01e16b3bd2f8dbb9f ima-ng 
+> sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709 /tmp/I4zTWEuyMf
+>      10 56e9547a4ed39036d2e790cfad78b467aa979e32 ima-ng 
+> sha1:da39a3ee5e6b4b0d3255bfef95601890afd80709 /tmp/Lh5wDm6_Ep
+> 
+> I believe both the observations are consistent with the expected outcome 
+> of the patch.
 
-Add test cases which verify that the IMA subsystem correctly
-measures the data provided by SELinux.
+These measurement records are not a result of the scenario described in
+the patch description, but as the result of different inodes being
+measured.   In the first case, the measurement is most likely coming
+from the initramfs, while the second measurement is after pivot root.  
+Without digging, I assume the second example is the file hash of an
+empty file.
 
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
----
-This patch is based on commit c7c4cd5e7f3b
-("tst_security.sh: Add SELinux helpers")
-in https://github.com/pevik/ltp/commits/ima/selinux.v2.draft
-in branch ima/selinux.v2.draft.
+> 
+> Please let me know if I should test any other scenario.
+> 
+> I will shortly post the v3 patch with updates to description and title 
+> as you suggested.
 
- runtest/ima                                   |   1 +
- .../kernel/security/integrity/ima/README.md   |  19 ++
- .../security/integrity/ima/datafiles/Makefile |   2 +-
- .../ima/datafiles/ima_selinux/Makefile        |  11 ++
- .../ima/datafiles/ima_selinux/selinux.policy  |   1 +
- .../integrity/ima/tests/ima_selinux.sh        | 180 ++++++++++++++++++
- 6 files changed, 213 insertions(+), 1 deletion(-)
- create mode 100644 testcases/kernel/security/integrity/ima/datafiles/ima_selinux/Makefile
- create mode 100644 testcases/kernel/security/integrity/ima/datafiles/ima_selinux/selinux.policy
- create mode 100755 testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
+The patch description is much better, but doesn't address the duplicate
+measurements without the file changing in between.   Please really
+compare the before and after measurement record changes, making sure
+you understand the cause for all the duplicate measurement records.  
+Based on the results, please update the patch description
+appropriately.
 
-diff --git a/runtest/ima b/runtest/ima
-index 5f4b4a7a1..29caa034a 100644
---- a/runtest/ima
-+++ b/runtest/ima
-@@ -5,4 +5,5 @@ ima_tpm ima_tpm.sh
- ima_violations ima_violations.sh
- ima_keys ima_keys.sh
- ima_kexec ima_kexec.sh
-+ima_selinux ima_selinux.sh
- evm_overlay evm_overlay.sh
-diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
-index 68d046678..8f2249767 100644
---- a/testcases/kernel/security/integrity/ima/README.md
-+++ b/testcases/kernel/security/integrity/ima/README.md
-@@ -37,6 +37,25 @@ see example in `kexec.policy`.
- The test attempts to kexec the existing running kernel image.
- To kexec a different kernel image export `IMA_KEXEC_IMAGE=<pathname>`.
- 
-+### IMA SELinux test
-+
-+To enable IMA to measure SELinux state and policy, `ima_selinux.sh`
-+requires a readable IMA policy, as well as a loaded measure policy with
-+`measure func=CRITICAL_DATA label=selinux`,
-+see example in `selinux.policy`.
-+
-+As well as what's required for the IMA tests, SELinux tests require reading
-+the IMA policy allowed in the kernel configuration:
-+```
-+CONFIG_IMA_READ_POLICY=y
-+```
-+
-+The following kernel configuration is also required. It enables compiling
-+the Linux Security Module (LSM) namely SELinux.
-+```
-+CONFIG_SECURITY_SELINUX=y
-+```
-+
- ## EVM tests
- 
- `evm_overlay.sh` requires a builtin IMA appraise tcb policy (e.g. `ima_policy=appraise_tcb`
-diff --git a/testcases/kernel/security/integrity/ima/datafiles/Makefile b/testcases/kernel/security/integrity/ima/datafiles/Makefile
-index 47a470416..280175b17 100644
---- a/testcases/kernel/security/integrity/ima/datafiles/Makefile
-+++ b/testcases/kernel/security/integrity/ima/datafiles/Makefile
-@@ -26,6 +26,6 @@ top_srcdir	?= ../../../../../..
- 
- include	$(top_srcdir)/include/mk/env_pre.mk
- 
--SUBDIRS	:= ima_kexec ima_keys ima_policy
-+SUBDIRS	:= ima_kexec ima_keys ima_policy ima_selinux
- 
- include $(top_srcdir)/include/mk/generic_trunk_target.mk
-diff --git a/testcases/kernel/security/integrity/ima/datafiles/ima_selinux/Makefile b/testcases/kernel/security/integrity/ima/datafiles/ima_selinux/Makefile
-new file mode 100644
-index 000000000..35088fdbc
---- /dev/null
-+++ b/testcases/kernel/security/integrity/ima/datafiles/ima_selinux/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (c) Linux Test Project, 2021
-+
-+top_srcdir	?= ../../../../../../..
-+
-+include	$(top_srcdir)/include/mk/env_pre.mk
-+
-+INSTALL_DIR		:= testcases/data/ima_selinux
-+INSTALL_TARGETS	:= *.policy
-+
-+include $(top_srcdir)/include/mk/generic_leaf_target.mk
-diff --git a/testcases/kernel/security/integrity/ima/datafiles/ima_selinux/selinux.policy b/testcases/kernel/security/integrity/ima/datafiles/ima_selinux/selinux.policy
-new file mode 100644
-index 000000000..7cbe9352d
---- /dev/null
-+++ b/testcases/kernel/security/integrity/ima/datafiles/ima_selinux/selinux.policy
-@@ -0,0 +1 @@
-+measure func=CRITICAL_DATA label=selinux
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh b/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
-new file mode 100755
-index 000000000..e5060a5e3
---- /dev/null
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
-@@ -0,0 +1,180 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (c) 2021 Microsoft Corporation
-+# Author: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-+#
-+# Verify measurement of SELinux policy hash and state.
-+
-+TST_NEEDS_CMDS="awk cut grep tail"
-+TST_CNT=2
-+TST_NEEDS_DEVICE=1
-+TST_SETUP="setup"
-+
-+. ima_setup.sh
-+
-+FUNC_CRITICAL_DATA='func=CRITICAL_DATA'
-+REQUIRED_POLICY="^measure.*($FUNC_CRITICAL_DATA)"
-+
-+setup()
-+{
-+	SELINUX_DIR=$(tst_get_selinux_dir)
-+	if [ -z "$SELINUX_DIR" ]; then
-+		tst_brk TCONF "SELinux is not enabled"
-+		return
-+	fi
-+	require_ima_policy_content "$REQUIRED_POLICY" '-E' > $TST_TMPDIR/policy.txt
-+}
-+
-+# Format of the measured SELinux state data.
-+#
-+# initialized=1;enforcing=0;checkreqprot=1;
-+# network_peer_controls=1;open_perms=1;extended_socket_class=1;
-+# always_check_network=0;cgroup_seclabel=1;nnp_nosuid_transition=1;
-+# genfs_seclabel_symlinks=0;
-+validate_policy_capabilities()
-+{
-+	local measured_cap measured_value expected_value
-+	local result=1
-+	local inx=7
-+
-+	# Policy capabilities flags start from "network_peer_controls"
-+	# in the measured SELinux state at offset 7 for 'awk'
-+	while [ $inx -lt 20 ]; do
-+		measured_cap=$(echo $1 | awk -F'[=;]' -v inx="$inx" '{print $inx}')
-+		inx=$(( $inx + 1 ))
-+
-+		measured_value=$(echo $1 | awk -F'[=;]' -v inx="$inx" '{print $inx}')
-+		expected_value=$(cat "$SELINUX_DIR/policy_capabilities/$measured_cap")
-+		if [ "$measured_value" != "$expected_value" ];then
-+			tst_res TWARN "$measured_cap: expected: $expected_value, got: $digest"
-+			result=0
-+		fi
-+
-+		inx=$(( $inx + 1 ))
-+	done
-+
-+	return $result
-+}
-+
-+# Trigger measurement of SELinux constructs and verify that
-+# the measured SELinux policy hash matches the hash of the policy
-+# loaded in kernel memory for SELinux.
-+test1()
-+{
-+	local policy_digest expected_policy_digest algorithm
-+	local data_source_name="selinux"
-+	local pattern="data_sources=[^[:space:]]*$data_source_name"
-+	local tmp_file="$TST_TMPDIR/selinux_policy_tmp_file.txt"
-+
-+	tst_res TINFO "verifying SELinux policy hash measurement"
-+
-+	# Trigger a measurement by changing SELinux state
-+	tst_update_selinux_state
-+
-+	# Verify SELinux policy hash is measured and then validate that
-+	# the measured policy hash matches the hash of the policy currently
-+	# in kernel memory for SELinux
-+	line=$(grep -E "selinux-policy-hash" $ASCII_MEASUREMENTS | tail -1)
-+	if [ -z "$line" ]; then
-+		tst_res TFAIL "SELinux policy hash not measured"
-+		return
-+	fi
-+
-+	algorithm=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f1)
-+	policy_digest=$(echo "$line" | cut -d' ' -f6)
-+
-+	expected_policy_digest="$(compute_digest $algorithm $SELINUX_DIR/policy)" || \
-+		tst_brk TCONF "cannot compute digest for $algorithm"
-+
-+	if [ "$policy_digest" != "$expected_policy_digest" ]; then
-+		tst_res TFAIL "Digest mismatch: expected: $expected_policy_digest, got: $policy_digest"
-+		return
-+	fi
-+
-+	tst_res TPASS "SELinux policy hash measured correctly"
-+}
-+
-+# Trigger measurement of SELinux constructs and verify that
-+# the measured SELinux state matches the current SELinux
-+# configuration.
-+test2()
-+{
-+	tst_check_cmds xxd || return
-+
-+	local measured_data state_file="$TST_TMPDIR/selinux_state.txt"
-+	local data_source_name="selinux"
-+	local pattern="data_sources=[^[:space:]]*$data_source_name"
-+	local tmp_file="$TST_TMPDIR/selinux_state_tmp_file.txt"
-+	local digest expected_digest algorithm
-+	local initialized_value
-+	local enforced_value expected_enforced_value
-+	local checkreqprot_value expected_checkreqprot_value
-+	local result
-+
-+	tst_res TINFO "verifying SELinux state measurement"
-+
-+	# Trigger a measurement by changing SELinux state
-+	tst_update_selinux_state
-+
-+	# Verify SELinux state is measured and then validate the measured
-+	# state matches that currently set for SELinux
-+	line=$(grep -E "selinux-state" $ASCII_MEASUREMENTS | tail -1)
-+	if [ -z "$line" ]; then
-+		tst_res TFAIL "SELinux state not measured"
-+		return
-+	fi
-+
-+	digest=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f2)
-+	algorithm=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f1)
-+
-+	echo "$line" | cut -d' ' -f6 | xxd -r -p > $state_file
-+
-+	expected_digest="$(compute_digest $algorithm $state_file)" || \
-+	tst_brk TCONF "cannot compute digest for $algorithm"
-+
-+	if [ "$digest" != "$expected_digest" ]; then
-+		tst_res TFAIL "digest mismatch: expected: $expected_digest, got: $digest"
-+		return
-+	fi
-+
-+	# SELinux state is measured as the following string
-+	#   initialized=1;enforcing=0;checkreqprot=1;
-+	# Value of 0 indicates the state is ON, and 1 indicates OFF
-+	#
-+	# enforce and checkreqprot measurement can be verified by
-+	# comparing the value of the file "enforce" and "checkreqprot"
-+	# respectively in the SELinux directory.
-+	# "initialized" is an internal state and should be set to 1
-+	# if enforce and checkreqprot are measured correctly.
-+	measured_data=$(cat $state_file)
-+	enforced_value=$(echo $measured_data | awk -F'[=;]' '{print $4}')
-+	expected_enforced_value=$(cat $SELINUX_DIR/enforce)
-+	if [ "$expected_enforced_value" != "$enforced_value" ];then
-+		tst_res TFAIL "enforce: expected: $expected_enforced_value, got: $enforced_value"
-+		return
-+	fi
-+
-+	checkreqprot_value=$(echo $measured_data | awk -F'[=;]' '{print $6}')
-+	expected_checkreqprot_value=$(cat $SELINUX_DIR/checkreqprot)
-+	if [ "$expected_checkreqprot_value" != "$checkreqprot_value" ];then
-+		tst_res TFAIL "checkreqprot: expected: $expected_checkreqprot_value, got: $checkreqprot_value"
-+		return
-+	fi
-+
-+	initialized_value=$(echo $measured_data | awk -F'[=;]' '{print $2}')
-+	if [ "$initialized_value" != "1" ];then
-+		tst_res TFAIL "initialized: expected 1, got: $initialized_value"
-+		return
-+	fi
-+
-+	validate_policy_capabilities $measured_data
-+	result=$?
-+	if [ $result = 0 ]; then
-+		tst_res TFAIL "policy capabilities did not match"
-+		return
-+	fi
-+
-+	tst_res TPASS "SELinux state measured correctly"
-+}
-+
-+tst_run
--- 
-2.30.0
+thanks,
+
+Mimi
 
