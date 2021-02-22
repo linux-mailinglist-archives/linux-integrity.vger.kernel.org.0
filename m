@@ -2,331 +2,340 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEED321EB6
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Feb 2021 19:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D87321F79
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Feb 2021 19:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbhBVR7z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Feb 2021 12:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbhBVR7w (ORCPT
+        id S232203AbhBVS4k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Feb 2021 13:56:40 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:58286 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232210AbhBVSzA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Feb 2021 12:59:52 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEDEC06178A;
-        Mon, 22 Feb 2021 09:59:12 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id dg2so4323874qvb.12;
-        Mon, 22 Feb 2021 09:59:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=l9YLmg7WoD/sXSgKqqmul0S728x4FmeNw1kdYobDOww=;
-        b=CaQ4imczF8gDRBbt5Lquc/aqR+B4Q9FOAihoJrAW2ZByPUwTZp3UZ0x6pQZz7DO7DW
-         V/CJZcnC/Bpl7/hFUc9jdie+vdMgbtZkhyQlPaBv/IO8MbI1g5nXl9Z7CtlMTV9zfMMn
-         7Acfq5LiHpVBZig2Xz7+OKMCymSN6rmabqProlzBEsiOFP7QdeFEtCTWg369FUiLaA83
-         ZQYZFiHu01KnoApBDoIBBg0Xf+iwKWOZfajraiSN4WTDs/AkuPfzdELggp4h+NP8YGfN
-         9R/PZMzXA+r4RHG1mSNywMAKQ3hnBN28qOeNbmWPtIULbD6Rr46AFx+8XHgPrax68zkt
-         YVHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=l9YLmg7WoD/sXSgKqqmul0S728x4FmeNw1kdYobDOww=;
-        b=YrffpW5T0n4IEOXPzfc57RAHbGVeOiU9Xd9CCxoQC/JyyiQQxY+dKNciYAluCq3W3G
-         0YXi1EAjG2flNRrq24mVVTT3iHMqQdrRCykfKRsa4N/wf5JhnCsuBArVG24z1tqOzCfi
-         SfecPkYo8tmseLbCCG/xZ1LyjO5jkk8/TJqy5NBRuq63cCDL6jHvPH6VO67Y1MoJA5d3
-         6e5Fp+gybeCRD6p7Z4EGkQYGCaOBWxOuqyEaYKqVCvD5nGegRGwSz/z/N2rAVbHwL6MP
-         /ZQUTzdS/lHF06Ae/HikqsXU4dZQ+0SdETwG/6qLl27OpmKb3WDBKU+ruBSUpvIxfKF3
-         gjwA==
-X-Gm-Message-State: AOAM533L5iXQ0im51D5ElB6AkmUAryDWPgkMoqo2Nn6uTkVgrEdbk/ZJ
-        mvqhEEAbPePVRrIUp9opKKQ=
-X-Google-Smtp-Source: ABdhPJyldq/rP9cA9QHUGCCSNpLEQcRxfTflnDTXqDdDBCE+pXeGPgHrBI72GOpfvNd4zsnif4nnlw==
-X-Received: by 2002:ad4:5ecc:: with SMTP id jm12mr19318022qvb.33.1614016751822;
-        Mon, 22 Feb 2021 09:59:11 -0800 (PST)
-Received: from localhost.localdomain ([189.61.66.20])
-        by smtp.gmail.com with ESMTPSA id p6sm12686170qkg.36.2021.02.22.09.59.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 09:59:10 -0800 (PST)
-From:   Saulo Alessandre <saulo.alessandre@gmail.com>
-To:     stefanb@linux.ibm.com
-Cc:     davem@davemloft.net, dhowells@redhat.com,
-        herbert@gondor.apana.org.au, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
-        zohar@linux.ibm.com, Saulo Alessandre <saulo.alessandre@tse.jus.br>
-Subject: [PATCH v2 3/3] adds nist_p384 register and unregister to support nist_p384 and tests
-Date:   Mon, 22 Feb 2021 14:58:50 -0300
-Message-Id: <20210222175850.1131780-3-saulo.alessandre@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210222175850.1131780-1-saulo.alessandre@gmail.com>
-References: <20210215162532.1077098-1-stefanb@linux.ibm.com>
- <20210222175850.1131780-1-saulo.alessandre@gmail.com>
+        Mon, 22 Feb 2021 13:55:00 -0500
+Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 254BE20B6C40;
+        Mon, 22 Feb 2021 10:54:18 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 254BE20B6C40
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1614020058;
+        bh=F2Q+wGBpdBRbQLa+Yjt0vgkaEnf0Irr3K423f6dNoP0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Ps/yOWdYkgDYhpSRJjnZ8Fmb+hq+dLEa+J6KYhar4dBjNeN/igRNDKGDRynmgeOAu
+         vjwj5z18OmitPl//Ogi5+3x/qZw0MDRhz4Uej+hsdwBNP1cUcWVEkoWQDC4qfT1Nmd
+         8S8XoExUKRI6xQiD5XAvblSnc6ZxHgGlwMhJRDdM=
+Subject: Re: [PATCH v2 1/2] IMA: generalize key measurement tests
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     zohar@linux.ibm.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, nramas@linux.microsoft.com,
+        linux-integrity@vger.kernel.org, dm-devel@redhat.com,
+        ltp@lists.linux.it
+References: <20200928035605.22701-1-tusharsu@linux.microsoft.com>
+ <20200928035605.22701-2-tusharsu@linux.microsoft.com>
+ <20201221230531.GD4453@pevik>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <28c14c80-660a-0f36-64ca-ae5230992032@linux.microsoft.com>
+Date:   Mon, 22 Feb 2021 10:54:17 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201221230531.GD4453@pevik>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Saulo Alessandre <saulo.alessandre@tse.jus.br>
+Hi Petr,
 
-* crypto/ecdsa.c
-  - add ecdsa_nist_p384_init_tfm
-  - register and unregister p384 tfm
+On 2020-12-21 3:05 p.m., Petr Vorel wrote:
+> Hi Tushar,
+> 
+> I'm very sorry about the delay. I'll finish this review in January,
+> here just some quick thoughts (minor style nits, I'll fix it before merge).
+> 
+> Generally LGTM, thanks for your work.
+> 
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> 
 
-* crypto/testmgr.c
-  - add test vector for p384 on vector of tests
+Thanks for your review.
+My sincere apologies for missing this email and not responding in time.
 
-* crypto/testmgr.h
-  - add test vector params for p384(sha1, sha224, sha256, sha384 and sha512)
+The device mapper measurement work is being revisited - to cover aspects
+like more DM targets (not just dm-crypt), better memory management,
+more relevant attributes from the DM targets, other corner cases etc.
 
-Signed-off-by: Saulo Alessandre <saulo.alessandre@tse.jus.br>
----
- crypto/ecdsa.c   |  30 ++++++++-
- crypto/testmgr.c |   6 ++
- crypto/testmgr.h | 157 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 192 insertions(+), 1 deletion(-)
+Therefore, even though this patch, "1/2: generalize key measurement
+tests", would be useful for other tests; I will have to revisit the
+second patch, "2/2: dm-crypt measurements", to address the DM side 
+changes I mentioned above.
 
-diff --git a/crypto/ecdsa.c b/crypto/ecdsa.c
-index 4b45230276b3..17a95a3bec9a 100644
---- a/crypto/ecdsa.c
-+++ b/crypto/ecdsa.c
-@@ -289,6 +289,28 @@ static unsigned int ecdsa_max_size(struct crypto_akcipher *tfm)
- 	return ctx->pub_key.ndigits << ECC_DIGITS_TO_BYTES_SHIFT;
- }
- 
-+static int ecdsa_nist_p384_init_tfm(struct crypto_akcipher *tfm)
-+{
-+	struct ecc_ctx *ctx = akcipher_tfm_ctx(tfm);
-+
-+	return ecdsa_ecc_ctx_init(ctx, ECC_CURVE_NIST_P384);
-+}
-+
-+static struct akcipher_alg ecdsa_nist_p384 = {
-+	.verify = ecdsa_verify,
-+	.set_pub_key = ecdsa_set_pub_key,
-+	.max_size = ecdsa_max_size,
-+	.init = ecdsa_nist_p384_init_tfm,
-+	.exit = ecdsa_exit_tfm,
-+	.base = {
-+		.cra_name = "ecdsa-nist-p384",
-+		.cra_driver_name = "ecdsa-nist-p384-generic",
-+		.cra_priority = 100,
-+		.cra_module = THIS_MODULE,
-+		.cra_ctxsize = sizeof(struct ecc_ctx),
-+	},
-+};
-+
- static int ecdsa_nist_p256_init_tfm(struct crypto_akcipher *tfm)
- {
- 	struct ecc_ctx *ctx = akcipher_tfm_ctx(tfm);
-@@ -342,7 +364,12 @@ static int ecdsa_init(void)
- 	ret = crypto_register_akcipher(&ecdsa_nist_p192);
- 	ecdsa_nist_p192_registered = ret == 0;
- 
--	return crypto_register_akcipher(&ecdsa_nist_p256);
-+	ret = crypto_register_akcipher(&ecdsa_nist_p256);
-+	if (ret != 0)
-+		return ret;
-+
-+	ret = crypto_register_akcipher(&ecdsa_nist_p384);
-+	return ret;
- }
- 
- static void ecdsa_exit(void)
-@@ -350,6 +377,7 @@ static void ecdsa_exit(void)
- 	if (ecdsa_nist_p192_registered)
- 		crypto_unregister_akcipher(&ecdsa_nist_p192);
- 	crypto_unregister_akcipher(&ecdsa_nist_p256);
-+	crypto_unregister_akcipher(&ecdsa_nist_p384);
- }
- 
- subsys_initcall(ecdsa_init);
-diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-index 67c6c229487c..367aba992548 100644
---- a/crypto/testmgr.c
-+++ b/crypto/testmgr.c
-@@ -4922,6 +4922,12 @@ static const struct alg_test_desc alg_test_descs[] = {
- 		.suite = {
- 			.akcipher = __VECS(ecdsa_nist_p256_tv_template)
- 		}
-+	}, {
-+		.alg = "ecdsa-nist-p384",
-+		.test = alg_test_akcipher,
-+		.suite = {
-+			.akcipher = __VECS(ecdsa_nist_p384_tv_template)
-+		}
- 	}, {
- 		.alg = "ecrdsa",
- 		.test = alg_test_akcipher,
-diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-index a860b669047c..de9bb4226b8b 100644
---- a/crypto/testmgr.h
-+++ b/crypto/testmgr.h
-@@ -833,6 +833,163 @@ static const struct akcipher_testvec ecdsa_nist_p256_tv_template[] = {
- 	},
- };
- 
-+static const struct akcipher_testvec ecdsa_nist_p384_tv_template[] = {
-+	{
-+	.key = /* secp384r1(sha1) */
-+	"\x04\x89\x25\xf3\x97\x88\xcb\xb0\x78\xc5\x72\x9a\x14\x6e\x7a\xb1"
-+	"\x5a\xa5\x24\xf1\x95\x06\x9e\x28\xfb\xc4\xb9\xbe\x5a\x0d\xd9\x9f"
-+	"\xf3\xd1\x4d\x2d\x07\x99\xbd\xda\xa7\x66\xec\xbb\xea\xba\x79\x42"
-+	"\xc9\x34\x89\x6a\xe7\x0b\xc3\xf2\xfe\x32\x30\xbe\xba\xf9\xdf\x7e"
-+	"\x4b\x6a\x07\x8e\x26\x66\x3f\x1d\xec\xa2\x57\x91\x51\xdd\x17\x0e"
-+	"\x0b\x25\xd6\x80\x5c\x3b\xe6\x1a\x98\x48\x91\x45\x7a\x73\xb0\xc3"
-+	"\xf1",
-+	.key_len = 97,
-+	.params =
-+	"\x30\x10\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x05\x2b\x81\x04"
-+	"\x00\x22",
-+	.param_len = 18,
-+	.m =
-+	"\x12\x55\x28\xf0\x77\xd5\xb6\x21\x71\x32\x48\xcd\x28\xa8\x25\x22"
-+	"\x3a\x69\xc1\x93",
-+	.m_size = 20,
-+	.algo = OID_id_ecdsa_with_sha1,
-+	.c =
-+	"\x30\x66\x02\x31\x00\xf5\x0f\x24\x4c\x07\x93\x6f\x21\x57\x55\x07"
-+	"\x20\x43\x30\xde\xa0\x8d\x26\x8e\xae\x63\x3f\xbc\x20\x3a\xc6\xf1"
-+	"\x32\x3c\xce\x70\x2b\x78\xf1\x4c\x26\xe6\x5b\x86\xcf\xec\x7c\x7e"
-+	"\xd0\x87\xd7\xd7\x6e\x02\x31\x00\xcd\xbb\x7e\x81\x5d\x8f\x63\xc0"
-+	"\x5f\x63\xb1\xbe\x5e\x4c\x0e\xa1\xdf\x28\x8c\x1b\xfa\xf9\x95\x88"
-+	"\x74\xa0\x0f\xbf\xaf\xc3\x36\x76\x4a\xa1\x59\xf1\x1c\xa4\x58\x26"
-+	"\x79\x12\x2a\xb7\xc5\x15\x92\xc5",
-+	.c_size = 104,
-+	.public_key_vec = true,
-+	.siggen_sigver_test = true,
-+	}, {
-+	.key = /* secp384r1(sha224) */
-+	"\x04\x69\x6c\xcf\x62\xee\xd0\x0d\xe5\xb5\x2f\x70\x54\xcf\x26\xa0"
-+	"\xd9\x98\x8d\x92\x2a\xab\x9b\x11\xcb\x48\x18\xa1\xa9\x0d\xd5\x18"
-+	"\x3e\xe8\x29\x6e\xf6\xe4\xb5\x8e\xc7\x4a\xc2\x5f\x37\x13\x99\x05"
-+	"\xb6\xa4\x9d\xf9\xfb\x79\x41\xe7\xd7\x96\x9f\x73\x3b\x39\x43\xdc"
-+	"\xda\xf4\x06\xb9\xa5\x29\x01\x9d\x3b\xe1\xd8\x68\x77\x2a\xf4\x50"
-+	"\x6b\x93\x99\x6c\x66\x4c\x42\x3f\x65\x60\x6c\x1c\x0b\x93\x9b\x9d"
-+	"\xe0",
-+	.key_len = 97,
-+	.params =
-+	"\x30\x10\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x05\x2b\x81\x04"
-+	"\x00\x22",
-+	.param_len = 18,
-+	.m =
-+	"\x12\x80\xb6\xeb\x25\xe2\x3d\xf0\x21\x32\x96\x17\x3a\x38\x39\xfd"
-+	"\x1f\x05\x34\x7b\xb8\xf9\x71\x66\x03\x4f\xd5\xe5",
-+	.m_size = 28,
-+	.algo = OID_id_ecdsa_with_sha224,
-+	.c =
-+	"\x30\x66\x02\x31\x00\x8a\x51\x84\xce\x13\x1e\xd2\xdc\xec\xcb\xe4"
-+	"\x89\x47\xb2\xf7\xbc\x97\xf1\xc8\x72\x26\xcf\x5a\x5e\xc5\xda\xb4"
-+	"\xe3\x93\x07\xe0\x99\xc9\x9c\x11\xb8\x10\x01\xc5\x41\x3f\xdd\x15"
-+	"\x1b\x68\x2b\x9d\x8b\x02\x31\x00\x8b\x03\x2c\xfc\x1f\xd1\xa9\xa4"
-+	"\x4b\x00\x08\x31\x6c\xf5\xd5\xf6\xdf\xd8\x68\xa2\x64\x42\x65\xf3"
-+	"\x4d\xd0\xc6\x6e\xb0\xe9\xfc\x14\x9f\x19\xd0\x42\x8b\x93\xc2\x11"
-+	"\x88\x2b\x82\x26\x5e\x1c\xda\xfb",
-+	.c_size = 104,
-+	.public_key_vec = true,
-+	.siggen_sigver_test = true,
-+	}, {
-+	.key = /* secp384r1(sha256) */
-+	"\x04\xee\xd6\xda\x3e\x94\x90\x00\x27\xed\xf8\x64\x55\xd6\x51\x9a"
-+	"\x1f\x52\x00\x63\x78\xf1\xa9\xfd\x75\x4c\x9e\xb2\x20\x1a\x91\x5a"
-+	"\xba\x7a\xa3\xe5\x6c\xb6\x25\x68\x4b\xe8\x13\xa6\x54\x87\x2c\x0e"
-+	"\xd0\x83\x95\xbc\xbf\xc5\x28\x4f\x77\x1c\x46\xa6\xf0\xbc\xd4\xa4"
-+	"\x8d\xc2\x8f\xb3\x32\x37\x40\xd6\xca\xf8\xae\x07\x34\x52\x39\x52"
-+	"\x17\xc3\x34\x29\xd6\x40\xea\x5c\xb9\x3f\xfb\x32\x2e\x12\x33\xbc"
-+	"\xab",
-+	.key_len = 97,
-+	.params =
-+	"\x30\x10\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x05\x2b\x81\x04"
-+	"\x00\x22",
-+	.param_len = 18,
-+	.m =
-+	"\xaa\xe7\xfd\x03\x26\xcb\x94\x71\xe4\xce\x0f\xc5\xff\xa6\x29\xa3"
-+	"\xe1\xcc\x4c\x35\x4e\xde\xca\x80\xab\x26\x0c\x25\xe6\x68\x11\xc2",
-+	.m_size = 32,
-+	.algo = OID_id_ecdsa_with_sha256,
-+	.c =
-+	"\x30\x64\x02\x30\x08\x09\x12\x9d\x6e\x96\x64\xa6\x8e\x3f\x7e\xce"
-+	"\x0a\x9b\xaa\x59\xcc\x47\x53\x87\xbc\xbd\x83\x3f\xaf\x06\x3f\x84"
-+	"\x04\xe2\xf9\x67\xb6\xc6\xfc\x70\x2e\x66\x3c\x77\xc8\x8d\x2c\x79"
-+	"\x3a\x8e\x32\xc4\x02\x30\x40\x34\xb8\x90\xa9\x80\xab\x47\x26\xa2"
-+	"\xb0\x89\x42\x0a\xda\xd9\xdd\xce\xbc\xb2\x97\xf4\x9c\xf3\x15\x68"
-+	"\xc0\x75\x3e\x23\x5e\x36\x4f\x8d\xde\x1e\x93\x8d\x95\xbb\x10\x0e"
-+	"\xf4\x1f\x39\xca\x4d\x43",
-+	.c_size = 102,
-+	.public_key_vec = true,
-+	.siggen_sigver_test = true,
-+	}, {
-+	.key = /* secp384r1(sha384) */
-+	"\x04\x3a\x2f\x62\xe7\x1a\xcf\x24\xd0\x0b\x7c\xe0\xed\x46\x0a\x4f"
-+	"\x74\x16\x43\xe9\x1a\x25\x7c\x55\xff\xf0\x29\x68\x66\x20\x91\xf9"
-+	"\xdb\x2b\xf6\xb3\x6c\x54\x01\xca\xc7\x6a\x5c\x0d\xeb\x68\xd9\x3c"
-+	"\xf1\x01\x74\x1f\xf9\x6c\xe5\x5b\x60\xe9\x7f\x5d\xb3\x12\x80\x2a"
-+	"\xd8\x67\x92\xc9\x0e\x4c\x4c\x6b\xa1\xb2\xa8\x1e\xac\x1c\x97\xd9"
-+	"\x21\x67\xe5\x1b\x5a\x52\x31\x68\xd6\xee\xf0\x19\xb0\x55\xed\x89"
-+	"\x9e",
-+	.key_len = 97,
-+	.params =
-+	"\x30\x10\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x05\x2b\x81\x04"
-+	"\x00\x22",
-+	.param_len = 18,
-+	.m =
-+	"\x8d\xf2\xc0\xe9\xa8\xf3\x8e\x44\xc4\x8c\x1a\xa0\xb8\xd7\x17\xdf"
-+	"\xf2\x37\x1b\xc6\xe3\xf5\x62\xcc\x68\xf5\xd5\x0b\xbf\x73\x2b\xb1"
-+	"\xb0\x4c\x04\x00\x31\xab\xfe\xc8\xd6\x09\xc8\xf2\xea\xd3\x28\xff",
-+	.m_size = 48,
-+	.algo = OID_id_ecdsa_with_sha384,
-+	.c =
-+	"\x30\x66\x02\x31\x00\x9b\x28\x68\xc0\xa1\xea\x8c\x50\xee\x2e\x62"
-+	"\x35\x46\xfa\x00\xd8\x2d\x7a\x91\x5f\x49\x2d\x22\x08\x29\xe6\xfb"
-+	"\xca\x8c\xd6\xb6\xb4\x3b\x1f\x07\x8f\x15\x02\xfe\x1d\xa2\xa4\xc8"
-+	"\xf2\xea\x9d\x11\x1f\x02\x31\x00\xfc\x50\xf6\x43\xbd\x50\x82\x0e"
-+	"\xbf\xe3\x75\x24\x49\xac\xfb\xc8\x71\xcd\x8f\x18\x99\xf0\x0f\x13"
-+	"\x44\x92\x8c\x86\x99\x65\xb3\x97\x96\x17\x04\xc9\x05\x77\xf1\x8e"
-+	"\xab\x8d\x4e\xde\xe6\x6d\x9b\x66",
-+	.c_size = 104,
-+	.public_key_vec = true,
-+	.siggen_sigver_test = true,
-+	}, {
-+	.key = /* secp384r1(sha512) */
-+	"\x04\xb4\xe7\xc1\xeb\x64\x25\x22\x46\xc3\x86\x61\x80\xbe\x1e\x46"
-+	"\xcb\xf6\x05\xc2\xee\x73\x83\xbc\xea\x30\x61\x4d\x40\x05\x41\xf4"
-+	"\x8c\xe3\x0e\x5c\xf0\x50\xf2\x07\x19\xe8\x4f\x25\xbe\xee\x0c\x95"
-+	"\x54\x36\x86\xec\xc2\x20\x75\xf3\x89\xb5\x11\xa1\xb7\xf5\xaf\xbe"
-+	"\x81\xe4\xc3\x39\x06\xbd\xe4\xfe\x68\x1c\x6d\x99\x2b\x1b\x63\xfa"
-+	"\xdf\x42\x5c\xc2\x5a\xc7\x0c\xf4\x15\xf7\x1b\xa3\x2e\xd7\x00\xac"
-+	"\xa3",
-+	.key_len = 97,
-+	.params =
-+	"\x30\x10\x06\x07\x2a\x86\x48\xce\x3d\x02\x01\x06\x05\x2b\x81\x04"
-+	"\x00\x22",
-+	.param_len = 18,
-+	.m =
-+	"\xe8\xb7\x52\x7d\x1a\x44\x20\x05\x53\x6b\x3a\x68\xf2\xe7\x6c\xa1"
-+	"\xae\x9d\x84\xbb\xba\x52\x43\x3e\x2c\x42\x78\x49\xbf\x78\xb2\x71"
-+	"\xeb\xe1\xe0\xe8\x42\x7b\x11\xad\x2b\x99\x05\x1d\x36\xe6\xac\xfc"
-+	"\x55\x73\xf0\x15\x63\x39\xb8\x6a\x6a\xc5\x91\x5b\xca\x6a\xa8\x0e",
-+	.m_size = 64,
-+	.algo = OID_id_ecdsa_with_sha512,
-+	.c =
-+	"\x30\x63\x02\x2f\x1d\x20\x94\x77\xfe\x31\xfa\x4d\xc6\xef\xda\x02"
-+	"\xe7\x0f\x52\x9a\x02\xde\x93\xe8\x83\xe4\x84\x4c\xfc\x6f\x80\xe3"
-+	"\xaf\xb3\xd9\xdc\x2b\x43\x0e\x6a\xb3\x53\x6f\x3e\xb3\xc7\xa8\xb3"
-+	"\x17\x77\xd1\x02\x30\x63\xf6\xf0\x3d\x5f\x5f\x99\x3f\xde\x3a\x3d"
-+	"\x16\xaf\xb4\x52\x6a\xec\x63\xe3\x0c\xec\x50\xdc\xcc\xc4\x6a\x03"
-+	"\x5f\x8d\x7a\xf9\xfb\x34\xe4\x8b\x80\xa5\xb6\xda\x2c\x4e\x45\xcf"
-+	"\x3c\x93\xff\x50\x5d",
-+	.c_size = 101,
-+	.public_key_vec = true,
-+	.siggen_sigver_test = true,
-+	},
-+};
-+
- /*
-  * EC-RDSA test vectors are generated by gost-engine.
-  */
--- 
-2.25.1
+I will revisit this series, esp. testing the DM target measurements
+part, once the kernel work I mentioned above is close to completion.
 
+I will also address your feedback on patch #1 and #2 from v2 iteration
+at that time.
+
+Thanks again for your review and feedback.
+
+Thanks,
+Tushar
+
+>> New functionality is being added in IMA to measure data provided by
+>> kernel components. Tests have to be added in LTP to validate this new
+>> feature. The functionality in ima_keys.sh can be reused to test this new
+>> feature if it is made generic.
+> 
+>> Refactor check_keys_policy() and test1() implemented in ima_keys.sh to
+>> make it generic, and move the functionality to ima_setup.sh as new
+>> functions - check_policy_pattern() and check_ima_ascii_log_for_policy().
+> 
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> ---
+>>   .../security/integrity/ima/tests/ima_keys.sh  | 62 +++------------
+>>   .../security/integrity/ima/tests/ima_setup.sh | 79 +++++++++++++++++++
+>>   2 files changed, 92 insertions(+), 49 deletions(-)
+> 
+>> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+>> index c9eef4b68..c2120358a 100755
+>> --- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+>> +++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+>> @@ -6,7 +6,7 @@
+> 
+>>   # Verify that keys are measured correctly based on policy.
+> 
+>> -TST_NEEDS_CMDS="cmp cut grep sed xxd"
+>> +TST_NEEDS_CMDS="cmp cut grep xxd"
+> It still requires sed, it's just hidden in check_ima_ascii_log_for_policy
+> 
+> Maybe just put at the top of check_ima_ascii_log_for_policy():
+> tst_require_cmds cut grep sed xxd
+> 
+> And here still keep
+> TST_NEEDS_CMDS="cmp cut grep tail xxd"
+> 
+> This leads to duplicity in check, but it will not lead to hidden "command not
+> found".
+> 
+>>   TST_CNT=2
+>>   TST_NEEDS_DEVICE=1
+>>   TST_SETUP=setup
+>> @@ -28,64 +28,28 @@ cleanup()
+>>   	tst_is_num $KEYRING_ID && keyctl clear $KEYRING_ID
+>>   }
+> 
+>> -check_keys_policy()
+>> -{
+>> -	local pattern="$1"
+>> -
+>> -	if ! grep -E "$pattern" $TST_TMPDIR/policy.txt; then
+>> -		tst_res TCONF "IMA policy must specify $pattern, $FUNC_KEYCHECK, $TEMPLATE_BUF"
+>> -		return 1
+>> -	fi
+>> -	return 0
+>> -}
+>> -
+>>   # Based on https://lkml.org/lkml/2019/12/13/564.
+>>   # (450d0fd51564 - "IMA: Call workqueue functions to measure queued keys")
+> OK, it has been merged in v5.6-rc1. Any more relevant commits, changes since
+> then?
+> 
+>>   test1()
+>>   {
+>>   	local keycheck_lines i keyrings templates
+>>   	local pattern='keyrings=[^[:space:]]+'
+>> -	local test_file="file.txt" tmp_file="file2.txt"
+>> +	local policy="keyrings"
+>> +	local tmp_file="$TST_TMPDIR/keycheck_tmp_file.txt"
+>> +	local res
+> Will be unused, see below.
+> 
+>>   	tst_res TINFO "verify key measurement for keyrings and templates specified in IMA policy"
+> 
+>> -	check_keys_policy "$pattern" > $tmp_file || return
+>> -	keycheck_lines=$(cat $tmp_file)
+>> -	keyrings=$(for i in $keycheck_lines; do echo "$i" | grep "keyrings" | \
+>> -		sed "s/\./\\\./g" | cut -d'=' -f2; done | sed ':a;N;$!ba;s/\n/|/g')
+>> -	if [ -z "$keyrings" ]; then
+>> -		tst_res TCONF "IMA policy has a keyring key-value specifier, but no specified keyrings"
+>> -		return
+>> -	fi
+>> -
+>> -	templates=$(for i in $keycheck_lines; do echo "$i" | grep "template" | \
+>> -		cut -d'=' -f2; done | sed ':a;N;$!ba;s/\n/|/g')
+>> -
+>> -	tst_res TINFO "keyrings: '$keyrings'"
+>> -	tst_res TINFO "templates: '$templates'"
+>> -
+>> -	grep -E "($templates).*($keyrings)" $ASCII_MEASUREMENTS | while read line
+>> -	do
+>> -		local digest expected_digest algorithm
+>> -
+>> -		digest=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f2)
+>> -		algorithm=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f1)
+>> -		keyring=$(echo "$line" | cut -d' ' -f5)
+>> +	check_policy_pattern "$pattern" $FUNC_KEYCHECK $TEMPLATE_BUF > $tmp_file || return
+> 
+>> -		echo "$line" | cut -d' ' -f6 | xxd -r -p > $test_file
+>> +	res="$(check_ima_ascii_log_for_policy $policy $tmp_file)"
+> 
+>> -		if ! expected_digest="$(compute_digest $algorithm $test_file)"; then
+>> -			tst_res TCONF "cannot compute digest for $algorithm"
+>> -			return
+>> -		fi
+>> -
+>> -		if [ "$digest" != "$expected_digest" ]; then
+>> -			tst_res TFAIL "incorrect digest was found for $keyring keyring"
+>> -			return
+>> -		fi
+>> -	done
+>> +	if [ "$res" = "0" ]; then
+>> +		tst_res TPASS "specified keyrings were measured correctly"
+>> +	else
+>> +		tst_res TFAIL "failed to measure specified keyrings"
+>> +	fi
+> 
+> Instead of:
+>         res="$(check_ima_ascii_log_for_policy $policy $tmp_file)"
+>         if [ "$res" = "0" ]; then
+> 
+> I'd prefer to have it as:
+>         check_ima_ascii_log_for_policy $policy $tmp_file
+>         if [ $? -eq 0 ]; then
+> 
+> 
+>> -	tst_res TPASS "specified keyrings were measured correctly"
+>>   }
+> 
+>>   # Create a new keyring, import a certificate into it, and verify
+>> @@ -97,11 +61,11 @@ test2()
+>>   	local cert_file="$TST_DATAROOT/x509_ima.der"
+>>   	local keyring_name="key_import_test"
+>>   	local pattern="keyrings=[^[:space:]]*$keyring_name"
+>> -	local temp_file="file.txt"
+>> +	local temp_file="$TST_TMPDIR/key_import_test_file.txt"
+> 
+>>   	tst_res TINFO "verify measurement of certificate imported into a keyring"
+> 
+>> -	check_keys_policy "$pattern" >/dev/null || return
+>> +	check_policy_pattern "$pattern" $FUNC_KEYCHECK $TEMPLATE_BUF >/dev/null || return
+> 
+>>   	KEYRING_ID=$(keyctl newring $keyring_name @s) || \
+>>   		tst_brk TBROK "unable to create a new keyring"
+>> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+>> index 1f17aa707..2841d7df5 100644
+>> --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+>> +++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+>> @@ -54,6 +54,85 @@ compute_digest()
+>>   	return 1
+>>   }
+> 
+>> +check_policy_pattern()
+>> +{
+>> +	local pattern="$1"
+>> +	local func="$2"
+>> +	local template="$3"
+>> +
+>> +	if ! grep -E "$pattern" $TST_TMPDIR/policy.txt; then
+>> +		tst_res TCONF "IMA policy must specify $pattern, $func, $template"
+>> +		return 1
+>> +	fi
+>> +	return 0
+>> +}
+> Probably ok for now (yes, it removes the duplicity with function used in two
+> tests, it's very policy specific).
+> 
+>> +
+>> +check_ima_ascii_log_for_policy()
+>> +{
+>> +	local test_file="$TST_TMPDIR/ascii_log_test_file.txt"
+>> +	local grep_file="$TST_TMPDIR/ascii_log_grep_file.txt"
+> nit: Since the real description is in variable, I'd just use:
+> 
+> local test_file="$TST_TMPDIR/test.txt"
+> local grep_file="$TST_TMPDIR/grep.txt"
+> 
+>> +	local func_lines sources templates i src
+>> +	local input_digest_res=1
+>> +	local policy_option="$1"
+>> +	local input_digest="$3"
+> 
+> tst_require_cmds cut grep sed xxd
+>> +
+>> +	func_lines=$(cat $2)
+>> +
+>> +	sources=$(for i in $func_lines; do echo "$i" | grep "$policy_option" | \
+>> +		sed "s/\./\\\./g" | cut -d'=' -f2; done | sed ':a;N;$!ba;s/\n/|/g')
+>> +	if [ -z "$sources" ]; then
+>> +		tst_res TCONF "IMA policy $policy_option is a key-value specifier, but no values specified"
+>> +		echo "1"
+>> +		return
+>> +	fi
+>> +
+>> +	templates=$(for i in $func_lines; do echo "$i" | grep "template" | \
+>> +		cut -d'=' -f2; done | sed ':a;N;$!ba;s/\n/|/g')
+>> +
+>> +	tst_res TINFO "policy sources: '$sources'"
+>> +	tst_res TINFO "templates: '$templates'"
+>> +
+>> +	grep -E "($templates).*($sources)" $ASCII_MEASUREMENTS > $grep_file
+>> +
+>> +	while read line
+>> +	do
+>> +		local digest expected_digest algorithm
+>> +
+>> +		digest=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f2)
+>> +		algorithm=$(echo "$line" | cut -d' ' -f4 | cut -d':' -f1)
+>> +		src_line=$(echo "$line" | cut -d' ' -f5)
+>> +
+>> +		echo "$line" | cut -d' ' -f6 | xxd -r -p > $test_file
+>> +
+>> +		if ! expected_digest="$(compute_digest $algorithm $test_file)"; then
+>> +			tst_res TCONF "cannot compute digest for $algorithm"
+>> +			echo "1"
+>> +			return
+>> +		fi
+>> +
+>> +		if [ "$digest" != "$expected_digest" ]; then
+>> +			tst_res TINFO "incorrect digest was found for $src_line $policy_option"
+>> +			echo "1"	
+>> +			return
+>> +		fi
+>> +
+>> +		if [ "$input_digest" ]; then
+>> +			if [ "$digest" = "$input_digest" ]; then
+>> +				input_digest_res=0
+>> +			fi
+>> +		fi
+> I'd prefer it as single if:
+>          if [ -n "$input_digest" -a "$digest" = "$input_digest" ]; then
+>              input_digest_res=0
+>          fi
+> 
+>> +
+>> +	done < $grep_file
+>> +
+>> +	if [ "$input_digest" ]; then
+>> +		echo "$input_digest_res"
+>> +		return
+> this return is redundant.
+>> +	else
+>> +		echo "0"
+>> +		return
+> Also this one.
+> 
+>> +	fi
+> 
+> And actually, instead of whole if/else block wouldn't be just this enough?
+> echo "$input_digest_res"
+> 
+> Isn't it the zero value set in the loop at:
+> 
+>          if [ -n "$input_digest" -a "$digest" = "$input_digest" ]; then
+>              input_digest_res=0
+>          fi
+> 
+> Kind regards,
+> Petr
+> 
