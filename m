@@ -2,141 +2,67 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EE53233A1
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Feb 2021 23:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F38C3233E1
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Feb 2021 23:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbhBWWPa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 23 Feb 2021 17:15:30 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41492 "EHLO mx2.suse.de"
+        id S232404AbhBWWmA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 23 Feb 2021 17:42:00 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47744 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230128AbhBWWPa (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 23 Feb 2021 17:15:30 -0500
+        id S233533AbhBWWjf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 23 Feb 2021 17:39:35 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CE642AC69;
-        Tue, 23 Feb 2021 22:14:34 +0000 (UTC)
-Date:   Tue, 23 Feb 2021 23:14:33 +0100
+        by mx2.suse.de (Postfix) with ESMTP id 22E00ACE5;
+        Tue, 23 Feb 2021 22:38:53 +0000 (UTC)
+Date:   Tue, 23 Feb 2021 23:38:51 +0100
 From:   Petr Vorel <pvorel@suse.cz>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     zohar@linux.ibm.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, tusharsu@linux.microsoft.com,
-        ltp@lists.linux.it, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org
-Subject: Re: [PATCH] IMA: Add test for selinux measurement
-Message-ID: <YDV+SdQqGnCoykph@pevik>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, nramas@linux.microsoft.com,
+        linux-integrity@vger.kernel.org, dm-devel@redhat.com,
+        ltp@lists.linux.it
+Subject: Re: [PATCH v2 1/2] IMA: generalize key measurement tests
+Message-ID: <YDWD+9dB8kx0ZPYR@pevik>
 Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20210222023805.12846-1-nramas@linux.microsoft.com>
- <YDVCsNAfn+Ot6QIB@pevik>
- <fdda206c-e156-d66b-7f53-0ee9c1417597@linux.microsoft.com>
+References: <20200928035605.22701-1-tusharsu@linux.microsoft.com>
+ <20200928035605.22701-2-tusharsu@linux.microsoft.com>
+ <20201221230531.GD4453@pevik>
+ <28c14c80-660a-0f36-64ca-ae5230992032@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fdda206c-e156-d66b-7f53-0ee9c1417597@linux.microsoft.com>
+In-Reply-To: <28c14c80-660a-0f36-64ca-ae5230992032@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> On 2/23/21 10:00 AM, Petr Vorel wrote:
+Hi Tushar,
 
+> Thanks for your review.
+> My sincere apologies for missing this email and not responding in time.
 
-> > > +++ b/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
-> > ...
-> > > +validate_policy_capabilities()
-> > > +{
-> > > +	local measured_cap measured_value expected_value
-> > > +	local result=1
-> > > +	local inx=7
-> > > +
-> > > +	# Policy capabilities flags start from "network_peer_controls"
-> > > +	# in the measured SELinux state at offset 7 for 'awk'
-> > > +	while [ $inx -lt 20 ]; do
-> > > +		measured_cap=$(echo $1 | awk -F'[=;]' -v inx="$inx" '{print $inx}')
-> > > +		inx=$(( $inx + 1 ))
-> > > +
-> > > +		measured_value=$(echo $1 | awk -F'[=;]' -v inx="$inx" '{print $inx}')
-> > > +		expected_value=$(cat "$SELINUX_DIR/policy_capabilities/$measured_cap")
-> > > +		if [ "$measured_value" != "$expected_value" ];then
-> > > +			tst_res TWARN "$measured_cap: expected: $expected_value, got: $digest"
-> > We rarely use TWARN in the tests, only when the error is not related to the test result.
-> > Otherwise we use TFAIL.
-> ok - I will change it to TFAIL.
-Thanks!
-But I've noticed that this error is handled twice, first in validate_policy_capabilities()
-as TWARN (or TFAIL) and then in test2(). Let's use TPASS/TFAIL in
-validate_policy_capabilities():
+> The device mapper measurement work is being revisited - to cover aspects
+> like more DM targets (not just dm-crypt), better memory management,
+> more relevant attributes from the DM targets, other corner cases etc.
 
-validate_policy_capabilities()
-{
-	local measured_cap measured_value expected_value
-	local inx=7
+> Therefore, even though this patch, "1/2: generalize key measurement
+> tests", would be useful for other tests; I will have to revisit the
+> second patch, "2/2: dm-crypt measurements", to address the DM side changes I
+> mentioned above.
 
-	# Policy capabilities flags start from "network_peer_controls"
-	# in the measured SELinux state at offset 7 for 'awk'
-	while [ $inx -lt 20 ]; do
-		measured_cap=$(echo $1 | awk -F'[=;]' -v inx="$inx" '{print $inx}')
-		inx=$(($inx + 1))
+> I will revisit this series, esp. testing the DM target measurements
+> part, once the kernel work I mentioned above is close to completion.
 
-		measured_value=$(echo $1 | awk -F'[=;]' -v inx="$inx" '{print $inx}')
-		expected_value=$(cat "$SELINUX_DIR/policy_capabilities/$measured_cap")
-		if [ "$measured_value" != "$expected_value" ]; then
-			tst_res TFAIL "$measured_cap: expected: $expected_value, got: $digest"
-			return
-		fi
+> I will also address your feedback on patch #1 and #2 from v2 iteration
+> at that time.
 
-		inx=$(($inx + 1))
-	done
+> Thanks again for your review and feedback.
 
-	tst_res TPASS "SELinux state measured correctly"
-}
-
-test2()
-{
-	...
-	validate_policy_capabilities $measured_data
-}
-
-...
-> > As we discuss, I'm going tom merge test when patchset is merged in maintainers tree,
-> > please ping me. And ideally we should mention kernel commit hash as a comment in
-> > the test.
-> Will do. Thank you.
-Thanks!
-
-...
-> > +++ testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
-> > @@ -13,16 +13,14 @@ TST_SETUP="setup"
-> >   . ima_setup.sh
-> >   FUNC_CRITICAL_DATA='func=CRITICAL_DATA'
-> > -REQUIRED_POLICY="^measure.*($FUNC_CRITICAL_DATA)"
-> > +REQUIRED_POLICY="^measure.*$FUNC_CRITICAL_DATA"
-> >   setup()
-> >   {
-> > -	SELINUX_DIR=$(tst_get_selinux_dir)
-> > -	if [ -z "$SELINUX_DIR" ]; then
-> > -		tst_brk TCONF "SELinux is not enabled"
-> > -		return
-> > -	fi
-> > +	tst_require_selinux_enabled
-> Please correct me if I have misunderstood this one:
-
-> tst_require_selinux_enabled is checking if SELinux is enabled in "enforce"
-> mode. Would this check fail if SELinux is enabled in "permissive" mode?
-
-> For running the test, we just need SELinux to be enabled. I verify that by
-> checking for the presence of SELINUX_DIR.
-
-Good catch. Your original version is correct (put it back into ima/selinux.v2.fixes).
-I didn't put a helper for it, because you need $SELINUX_DIR anyway.
-Thus removed tst_require_selinux_enabled() as not needed.
-
-I renamed tst_selinux_enabled() to tst_selinux_enforced() to make the purpose clearer
-(commit 82b598ea1 IMA: Add test for selinux measurement).
-
-I've updated branch ima/selinux.v2.fixes with all mentioned changes
-https://github.com/pevik/ltp/commits/ima/selinux.v2.fixes
+I updated your patchset a bit and going to send it to ML.
 
 Kind regards,
 Petr
 
-> thanks,
->  -lakshmi
+> Thanks,
+> Tushar
