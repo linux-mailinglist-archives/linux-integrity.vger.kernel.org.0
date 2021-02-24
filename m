@@ -2,116 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8B43240D8
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Feb 2021 16:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BC3324262
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Feb 2021 17:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbhBXPaD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Feb 2021 10:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238035AbhBXNuF (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Feb 2021 08:50:05 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B58C061574;
-        Wed, 24 Feb 2021 05:35:43 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id t11so3091709ejx.6;
-        Wed, 24 Feb 2021 05:35:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=E35Anx43LiPy05GsYti9BfkgPBUJtvGhlU3qclOt8K4=;
-        b=Qzae4gSdEODSQi/0QwqZBX1N+d+1Ib4hCbF6In4F2pJulVBJpk0rGiziSFVGIdtjk8
-         wPdM97UUjXVmXu7WCjrzvIKG6GNshOfKbNcJHHzjfRFzfNGT9X2/q/vf9s2+HlrMOqtG
-         BKAsdvevRzsxTgebyrfSG50JZtn+SiJa7Oa5ErIyySLihTr1vQzJtYh5/POtBBTwd+85
-         o2lY3ydtCPE6mJIP30PuPJ7rKrPq4If5DKW+e0hJl9iCRuuqwTkg2GD8CjKTj8DZDn4R
-         OJzrmHpNuG6j6SMvPe5VfA0SEZi5ynYd3SbTgN14yt/lxLKM5Y4niPwrdDBGL1axb4Yi
-         lUYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=E35Anx43LiPy05GsYti9BfkgPBUJtvGhlU3qclOt8K4=;
-        b=qLzkaXJT1Mor7hAQzMl/J5vREpManaMonSpZ44uP5Y+to5E6UiTCfKLrxadB2F9cZd
-         JfyY2TqVdfG/P0KJ0D4zllJdffgMCh8kKgWa4YWG0w8jSZEWd1tOdJizJlSaLg71o3tZ
-         FcTYknwwXofAzL94GSlfME/Mksw79Dpc6W7sZvJEzOwvWC31F8z/OWjk3iDdp57dko79
-         J9nvOJ8Y/gq/ikzKufn6bjwn4gkNxCwXI7DQSkosQkb3DGMtiKytXI1bDqGuWQJOnOi+
-         iDySdEwffSlOQm8mKvZEe64wYnpvxYLT0GhfaWs6X9lOxsVGWAI1yLW+pWXOemYQnuOe
-         Ycug==
-X-Gm-Message-State: AOAM533umbrn2hgvSAO8uI3EynAv+s9qtEleFaXQqWd+woufm78n7P7H
-        1HpBZj3ZGaTAgqGr7/rn0flWU5aJwhVRzNn1tfbv49ddzHTlbEEt
-X-Google-Smtp-Source: ABdhPJxdMG2w1tsGLAuwbXPxnUmA4TgmD+z8b3xwM7YVdIXnRFUmhM43Z/M81Vo2uxFwX106MXuGz8xFNSblmgKZlBU=
-X-Received: by 2002:a17:906:e0cb:: with SMTP id gl11mr19893581ejb.87.1614173741708;
- Wed, 24 Feb 2021 05:35:41 -0800 (PST)
+        id S233826AbhBXQqk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Feb 2021 11:46:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37214 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235301AbhBXQqf (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 24 Feb 2021 11:46:35 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A330764F04;
+        Wed, 24 Feb 2021 16:45:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614185153;
+        bh=Isqqlscrz8r/lMK8N8O5Ru369KorfLi3sBZm8ZIdTlM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Uw5dkrtFZ0jP4jQ4UNoVqvYgqsLrjo30okxdOq7fWhz1aMR7uF0zb7tsKp6PC3+x/
+         BAJPAr0RkoYSyNkEDndnF2UM8nWIkDqFAO+lEyUjR6zpqlFFCeRLJqB7COteNjrFI7
+         K5btcsHbhXdlmZJZ503MG79jJrr0dJU5/3L3XjTVj3tWi0ZJVAqAWR6JSB5fTQxvKz
+         10zmqfEOuioJqdVkN6s+KGil6+LnfsIdIAF3L81tg/LpGOIrzLciXf3mS8CF/fOzMX
+         NizMxtt0qKpHBS0OjLJG2Eks3gUp+Qs3r2llf82ObiE3lCGafa0ae/bC0xaSuShFz/
+         bFFMdnA4wp/VA==
+Date:   Wed, 24 Feb 2021 18:45:35 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, David.Laight@aculab.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v6] tpm: fix reference counting for struct tpm_chip
+Message-ID: <YDaCrwnoZZ/b3VmP@kernel.org>
+References: <1613680181-31920-1-git-send-email-LinoSanfilippo@gmx.de>
+ <1613680181-31920-2-git-send-email-LinoSanfilippo@gmx.de>
+ <YC+BRfvtA3n7yeaR@kernel.org>
+ <aa2ec878-f8ea-d28b-c7c2-ecdc3d19f71e@gmx.de>
 MIME-Version: 1.0
-References: <20210215162532.1077098-1-stefanb@linux.ibm.com>
- <20210222175850.1131780-1-saulo.alessandre@gmail.com> <2e829730-bb0c-47eb-70f2-731c184eba33@linux.ibm.com>
-In-Reply-To: <2e829730-bb0c-47eb-70f2-731c184eba33@linux.ibm.com>
-From:   Saulo Alessandre de Lima <saulo.alessandre@gmail.com>
-Date:   Wed, 24 Feb 2021 10:35:30 -0300
-Message-ID: <CABcgGGjc63+b+yp_bsVran5JKTBgLrOh-hoY0zcdoFbr_tTB1g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] add params and ids to support nist_p384
-To:     linux-crypto@vger.kernel.org
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aa2ec878-f8ea-d28b-c7c2-ecdc3d19f71e@gmx.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Em seg., 22 de fev. de 2021 =C3=A0s 17:26, Stefan Berger
-<stefanb@linux.ibm.com> escreveu:
->
-> On 2/22/21 12:58 PM, Saulo Alessandre wrote:
-> > From: Saulo Alessandre <saulo.alessandre@tse.jus.br>
+On Sun, Feb 21, 2021 at 11:19:28AM +0100, Lino Sanfilippo wrote:
+> 
+> Hi,
+> 
+> On 19.02.21 at 10:13, Jarkko Sakkinen wrote:
+> 
+> >> +	rc = cdev_device_add(&chip->cdevs, &chip->devs);
+> >> +	if (rc) {
+> >> +		dev_err(&chip->devs,
+> >> +			"unable to cdev_device_add() %s, major %d, minor %d, err=%d\n",
+> >> +			dev_name(&chip->devs), MAJOR(chip->devs.devt),
+> >> +			MINOR(chip->devs.devt), rc);
+> >> +		goto out_put_devs;
+> >> +	}
+> >> +
+> >> +	return 0;
+> >> +
+> >> +out_put_devs:
 > >
-> > * crypto/asymmetric_keys/x509_cert_parser.c
-> >    - prepare x509 parser to load nist_secp384r1
+> > A nit:
 > >
-> > * crypto/ecc_curve_defs.h
-> >    - add nist_p384 params
+> > 1. You have already del_cdev:
+> > 2. Here you use a differing convention with out prefix.
 > >
-> > * include/crypto/ecdh.h
-> >    - add ECC_CURVE_NIST_P384
+> > I'd suggest that you put err_ to both:
 > >
-> > * include/linux/oid_registry.h
-> >    - reorder OID_id_ecdsa_with_sha1
-> >    - add OID_id_secp384r1
+> > 1. err_del_cdev
+> > 2. err_put_devs
 > >
-> > Signed-off-by: Saulo Alessandre <saulo.alessandre@tse.jus.br>
->
-> I would separate this patch into an x509: and certs: part since it
-> touches two subsystems.
->
-> I can take this series of patches and post my v9 including them at the
-> end. This would make it easier for others to test. I would massage them
-> a bit, including the separation of the 1st patch into 2 patches, if you
-> don't mind, preserving your Signed-off-by. I need to fix something in my
-> v8 regarding registration failure handling. Let me know whether this is
-> fine with you.
+> > It's quite coherent what we have already:
+> >
+> > linux-tpmdd on  next took 8s
+> > ❯ git grep "^err_.*" drivers/char/tpm/ |  wc -l
+> > 17
+> >
+> 
+> 
+> The label del_cdev is indeed a bit inconsistent with the rest of the code.
+> But AFAICS out_put_devs is not:
+> 1. all labels in tpm2-space.c start with out_
+> 2. there are more hits for out_ across the whole TPM code (i.e. with the same command
+> you used above I get 31 hits for _out) than for err_.
+> 
+> I suggest to rename del_cdev to something like out_del_cdev or maybe out_cdev which
+> seems to be even closer to the existing naming scheme for labels.
 
-For me it's ok.
+Generally, I'd prefer the following pattern:
 
->
-> I had tested your patches over the weekend with my endless test tool
-> creating keys in user space and loading them into the kernel. It worked
-> fine for NIST p256 & p384. Also signing kernel modules with NIST p384 is
-> working fine.
->
-> So, for the series:
->
-> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
->
+out: /* out for success path if needed */
+
+        return 0;
+
+err_foo:
+
+err_bar:
+
+        return ret;
+
+Existing naming scheme is not something to hang into, and I don't care
+to preserve it.
+
 > Regards,
->
->      Stefan
->
->
+> Lino
 
-Regards
---=20
-[]'s
------
-Saulo Alessandre <saulo.alessandre@gmail.com>
+/Jarkko
+ 
