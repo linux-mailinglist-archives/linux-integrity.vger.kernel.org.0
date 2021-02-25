@@ -2,230 +2,481 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F111E3257D0
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Feb 2021 21:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526A73258F7
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Feb 2021 22:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233916AbhBYUhA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Feb 2021 15:37:00 -0500
-Received: from mail-eopbgr80077.outbound.protection.outlook.com ([40.107.8.77]:18150
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233960AbhBYUex (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Feb 2021 15:34:53 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G/cush2G0tKU2VFEGBktL4taNn+wn5AUtpI3jflKgyZ7s2PpteS3FWot0aT21Hrq1Sjijv0L+5s5nVWBpp3jhSWsrOl7jQsGzmxHdICka8YL+2yL6da1GzEsS88EdoYsjt28JogZ2twlafwsvCo4Wwb+jmDcSC7it66eBNUe5SL9SuAwEiOf8zoEwFKr+PQzXumChjy3ny72ENxrXVDHUvPniQZuu3kq4mj3cloWPu5bTzbVHFyz9MVVtFdJ/09TE8TQKkw1rSSSbFtaDZjDJM7nmgdvIega56xfhCA7ySTpo7stoQMdqFr8FNGRxmN9+E3bo5+1V8oXTpv4oS/9lA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b5Qpikqg+zpMc3h8h1XLsm2X6/xzWAGKDBk1Uj5LBNk=;
- b=JYC9Fsx8FhgrthGeQ0Dz7qX6VZb0pXyyw0sp2n349GRcxBX2zOpNc4twQ+C+QX+5Gz6ij2qjGDgymC0b4EYg/ZMieVUnRVdVZUBu2KKcL/WKCC1amH7JifsTYryTVseBwya+vyMZOAqJ+BYlCwhlGVahdTjWpdOH3TWlAo/3oZqlX6t8tNcr6SHnRAg4beXZpEdVeOtjofpWLLETOfL3dtMkSVFssJKbWQPfqasbs7MmrFk85/5MfOSMpgqLoK/uWpgJvLrNxkIR9qFyTjquLYjwUzPIhVcnSvnuKs4jafyIoIWEF++M7KuwlyfcoJJ4V8FkaaCtQ3zvmDQ2J2nEQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=puiterwijk.org; dmarc=pass action=none
- header.from=puiterwijk.org; dkim=pass header.d=puiterwijk.org; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=puiterwijk.org;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b5Qpikqg+zpMc3h8h1XLsm2X6/xzWAGKDBk1Uj5LBNk=;
- b=SMW/wEhm4SrR2cIpbvtRCZM5qFK02aN0MqAJ2qKV/66lDuBDmecxlDjJ6Z2l6KJkJEwFDm4NJxFoTlEYjWuCG676zEO7l1JpRrR2n52hOwxDjZ87UjeXtOsZOlRZmZnb7eFbtXj/XWifWUERt3OjtIevQqCJ2GeG+0m+HfBNCVVq31oGVB3ZL8yt+BhvQunrm62oAsCPDdo9D32DjdHT87pTSEvhGZPiVdEpRcNX7FK5TjL6zx7UUlkvADh4KDqbGbHlH4zzgq5Tcu7sFbnPyhywGR+7tJfrJs36dQoR/H0fiqBUZ4NdEy4u+eZhEwQX8KcGAa16//Ou+nZXuTWtrw==
-Authentication-Results: gmx.de; dkim=none (message not signed)
- header.d=none;gmx.de; dmarc=none action=none header.from=puiterwijk.org;
-Received: from AM0P191MB0721.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:15f::13)
- by AM4P191MB0083.EURP191.PROD.OUTLOOK.COM (2603:10a6:200:65::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.29; Thu, 25 Feb
- 2021 20:32:48 +0000
-Received: from AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
- ([fe80::b002:8668:5cfa:a46b]) by AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
- ([fe80::b002:8668:5cfa:a46b%8]) with mapi id 15.20.3890.019; Thu, 25 Feb 2021
- 20:32:48 +0000
-From:   Patrick Uiterwijk <patrick@puiterwijk.org>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        linux-integrity@vger.kernel.org
-Cc:     pbrobinson@gmail.com, stefanb@linux.ibm.com, kgold@linux.ibm.com,
-        Patrick Uiterwijk <patrick@puiterwijk.org>
-Subject: [PATCH 3/3] integrity: Load keys from TPM NV onto IMA keyring
-Date:   Thu, 25 Feb 2021 21:32:29 +0100
-Message-Id: <20210225203229.363302-4-patrick@puiterwijk.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210225203229.363302-1-patrick@puiterwijk.org>
+        id S231335AbhBYVvF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Feb 2021 16:51:05 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28444 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231326AbhBYVvE (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 25 Feb 2021 16:51:04 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11PLX9Ie141464;
+        Thu, 25 Feb 2021 16:50:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=thGox3M7QE5o6ksULSEzekAWf1zqdbQ1tLKaibQ1o+8=;
+ b=hsg+rpema/mBx7wjMj8/ssrVBGllf6vyEd2LFmhI00Mxphi9LGbFOHNs2qQNHAdVySxR
+ WM4NELjwncC4lfxr/MVCLEAAsYw7PeZ2/bZM40Me+y9BoCAwi6vMlQo+DNHWxUO/GGCO
+ IznI1m+FlG4i6pRoRvGLUjqgQZ2ch49ghQQ0iOPfiF5j+p14TFqbSuvqfZocBxl34Ztf
+ CQaeDcumIcpxHtnAWXNOGAo3UVzzgOqzqi8iHadTq4CQskgdhXxdabtJxvUQJS39zXyh
+ fGYGKGDFcSs7uH9TLXFWRqxm4Z/sWta51LXWQY7nEn64HcknsLq/Oif62BMmGaw2PP9t dg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36xfcxh5hn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Feb 2021 16:50:17 -0500
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 11PLY6Rd001533;
+        Thu, 25 Feb 2021 16:50:16 -0500
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36xfcxh5h4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Feb 2021 16:50:16 -0500
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11PLm5Gd009838;
+        Thu, 25 Feb 2021 21:50:15 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma03wdc.us.ibm.com with ESMTP id 36tt29hwmp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Feb 2021 21:50:15 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11PLoEH836962594
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 Feb 2021 21:50:14 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 311386A057;
+        Thu, 25 Feb 2021 21:50:14 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9EE886A04D;
+        Thu, 25 Feb 2021 21:50:13 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 25 Feb 2021 21:50:13 +0000 (GMT)
+Subject: Re: [PATCH 1/3] tpm: Add support for reading a TPM NV Index
+To:     Patrick Uiterwijk <patrick@puiterwijk.org>, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, linux-integrity@vger.kernel.org
+Cc:     pbrobinson@gmail.com, kgold@linux.ibm.com
 References: <20210225203229.363302-1-patrick@puiterwijk.org>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [2a10:3781:662:0:ec87:3741:6e9a:b11e]
-X-ClientProxiedBy: AM0PR03CA0018.eurprd03.prod.outlook.com
- (2603:10a6:208:14::31) To AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:15f::13)
+ <20210225203229.363302-2-patrick@puiterwijk.org>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <cf2339c2-2fed-2cc0-d215-658606abf146@linux.ibm.com>
+Date:   Thu, 25 Feb 2021 16:50:13 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from rowhammer.mgmt.home.puiterwijk.org (2a10:3781:662:0:ec87:3741:6e9a:b11e) by AM0PR03CA0018.eurprd03.prod.outlook.com (2603:10a6:208:14::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20 via Frontend Transport; Thu, 25 Feb 2021 20:32:47 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bbca39a8-af2b-46c2-8870-08d8d9cc8395
-X-MS-TrafficTypeDiagnostic: AM4P191MB0083:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM4P191MB008354EE69203CA4D343C170C89E9@AM4P191MB0083.EURP191.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AnONTjdz3uwWPjeZMA/dx9wlhmW8qp+qPwMD58GFK3XIPCNaKW/p4gg2h/okorhl7G93k3ZuNSki2l6EDNiU6iRuJ9llLKEg8lpIRB96wNMTFoQpzV5HoT0bzKIA4nsnIOOrkcR3wQ7QnzIuL1sWk5FBsbOWHh/1QzU1jOeaS24cuP338MVLvsYEdajjU0DsobizjIdRQWHlziFLhy6YBZk6Tcu0oZi6tqYtK77/HqEt+o33e42zd8HTpRwmWwG7ncVCF0R+t/01lEI+i701TE24kLUVZ9Mtr7dmXuiimmS+vQ4ghRuEuTNK76AcSwVT/IaDcAV125ihkS+QPa3TSRkLR/fLNSsO2c4ymAoxNIGHR4smjK+KFvuBFBkMQkvcDIy7ugnsaLzeOKi5jTpioEhdW4TlEYw80tJQRWdwNbkIVIPlahMJpK3mVn+/oMrCqJYGS7dH1LJ4RZ90pq4tjK93UuIa5Bo2Ue6sM2tBQsDVCuxwdyzrACr8mnbEDDsRkMeNbUFQzONphn32i4ik2Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P191MB0721.EURP191.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(376002)(39830400003)(136003)(346002)(366004)(396003)(2616005)(316002)(186003)(107886003)(6486002)(5660300002)(4326008)(66476007)(1076003)(478600001)(66946007)(6666004)(2906002)(36756003)(7696005)(52116002)(66556008)(83380400001)(8676002)(8936002)(16526019)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?c/q5FMsg1V43GOH+SqYofUWKinkPXpoK46LKfwMDqbIYcZhmKr1J7l4stUGA?=
- =?us-ascii?Q?TSSuFFHlXgRPOzTFubgSNYxe6nFfE0//v9TYylQA0k+y9K4LjwdHcdC5hUxq?=
- =?us-ascii?Q?8wDJDStEfwKGSjSrzbiKknfrUNv7UXWphV3FiGNHhO+9Q5IUB8w04c4peo53?=
- =?us-ascii?Q?FzdidiFpcNRpeadsKBZ2A2/wfxIRF9ct7fhcE8Y9n1bg4rAB1AZ6kVv/y6im?=
- =?us-ascii?Q?lL4xmm8Ke0dVhJmtzVGSpOuu5EbeeMf/exTN8uNt5jJ6B1QU3ygSffemEy4L?=
- =?us-ascii?Q?9gUz38g7orSqoYeq3CtBiLTrPeTiDtIQ+4+ALPr3DaU1jskSs0ilvHwTyjGe?=
- =?us-ascii?Q?EDCNXRzNEN6tO09L2sltl1SNzNGTTc74O+YWolcuQTdGa2QTleRGwe8Kga8I?=
- =?us-ascii?Q?NSAx79/LgtHK9lRTC7lcFfF069tVlMK/2FuR3CWPZofE2y5ERzd34llITNBX?=
- =?us-ascii?Q?E2t91RqWe5wUB91U2RN9Ih8Ny96EmFxSW9OmS4VSEW/0u0e6wS8PEyKZrUyN?=
- =?us-ascii?Q?BQo5Weukncc7KdnYUBFIOXy6GRtxWEWdqbagRfzn+cbf6d9ndMHGfgd1wzID?=
- =?us-ascii?Q?I7qTYE7E/AK32B8I+GhfRBqRvu0gyY5g9r8NeyzIzgxcLiyrdJP0+D5u3ko1?=
- =?us-ascii?Q?gLnpElQ/oJ9n017m4ilRLxtj9YNj3c5xhPWTG6RL96sWfCWIQ4WImlMmEnIX?=
- =?us-ascii?Q?S13A9bM/LhvKL3p4iWtyM9pZIIQm1KmIyf4OUvG6TghRfsz0gY9kWokUmA0j?=
- =?us-ascii?Q?0UwwE0m/XJmwqRDrrtYHOGygHlDQV4BDqVF4m/rwx8AO10rqH57YK6iqNzrJ?=
- =?us-ascii?Q?F2FIo/J4/CJ8/GbwUwPNSNIvn+iSvmUi9DCyxKl/MGIiokpw7BpYEyMLj44G?=
- =?us-ascii?Q?rqe71sDW99toOGJIl3h3axTC5IjinIJYKHG3XtKBzbofXQCZF4WzkIOfzEeJ?=
- =?us-ascii?Q?lBNOT8VyGyjOxwW6iy+4jzyy7FU5jdXnkMaUh81KKyQR0G8y0FXuygSCU2VC?=
- =?us-ascii?Q?3iv1ZBP7Ws6/P1of77EPBJrP+8V43QnB7tcuZ2cM/unaR77U0fyI/Ju1Awt0?=
- =?us-ascii?Q?vMzdWsTK9Mi4hTrdANRSStZ20fZQawJ4FRngJ7iMX318OeJ2fJ1ZpxVx7aMF?=
- =?us-ascii?Q?9ulbmV03lHeW0XXbLIO3s+rIytUowKUh7uVg1RTv+HpmYnwMfdl4ZZBXZO1y?=
- =?us-ascii?Q?Q8zpP9YHKaXHyPWv297PvJzrG1tHxM2PrmS/zH9BM8RaqX8boJNHVCyFF60J?=
- =?us-ascii?Q?E6xa9aNdSMoHqrjSOCb0maNumBc+QCkK2kX+f7PZR9L3Me51cn11dhKPT9cr?=
- =?us-ascii?Q?iZ9bGNfjks9/Akpd5lTniRWogdNC3vdyJodkhgo4ZBxRmLZTSdPK1eTn9M4U?=
- =?us-ascii?Q?Ds1b2ufiiUf8q1s6yslkGRLMi2dA?=
-X-OriginatorOrg: puiterwijk.org
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbca39a8-af2b-46c2-8870-08d8d9cc8395
-X-MS-Exchange-CrossTenant-AuthSource: AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2021 20:32:47.8111
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 963619a5-d7a7-4543-a254-29462dc51fb3
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mFF1WwW5YLnhpZ34tiFe8pXqs88LyU+OFkOH2PYurH9hx90kyIweTaI6P4oh+ExVV63JIEF4N2LSC1axMD9ejA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4P191MB0083
+In-Reply-To: <20210225203229.363302-2-patrick@puiterwijk.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-25_14:2021-02-24,2021-02-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxscore=0 spamscore=0 priorityscore=1501 impostorscore=0 clxscore=1015
+ malwarescore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102250163
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Allows users to enroll their own public key stored in a specific TPM2
-NV Index, requiring the absence of the Platform Create and Platform
-Write attributes on the NV Index, to be loaded on the IMA keyring.
+On 2/25/21 3:32 PM, Patrick Uiterwijk wrote:
+> Add support to read contents from a TPM2 Non-Volatile Index location,
+> allowing the kernel to retrieve contents and attributes of NV indexes.
+>
+> Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
+> ---
+>   drivers/char/tpm/tpm-interface.c |  30 ++++++
+>   drivers/char/tpm/tpm.h           |   5 +
+>   drivers/char/tpm/tpm2-cmd.c      | 163 +++++++++++++++++++++++++++++++
+>   include/linux/tpm.h              |  65 ++++++++++++
+>   4 files changed, 263 insertions(+)
+>
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 1621ce818705..9d81c11181d4 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -342,6 +342,36 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>   }
+>   EXPORT_SYMBOL_GPL(tpm_pcr_extend);
+>   
+> +/**
+> + * tpm_nv_read - Read an NV Index from the TPM
+> + * @chip:	A &struct tpm_chip instance, %NULL for the default chip
+> + * @nv_idx:	The NV Index to be retrieved
+> + * @attr_out:	A place to store returned attributes if a TPM 2 was used
+> + * @out:	A pointer where to store the return buffer
+> + *
+> + * Return: number of bytes read or a negative error value
+> + */
+> +int tpm_nv_read(struct tpm_chip *chip, u32 nv_idx, u32 *attr_out, void **out)
+> +{
+> +	int rc;
+> +
+> +	chip = tpm_find_get_ops(chip);
+> +	if (!chip)
+> +		return -ENODEV;
+> +
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +		rc = tpm2_nv_read(chip, nv_idx, attr_out, out);
+> +		goto out;
+> +	}
+> +
+> +	rc = -ENODEV;
+> +
+> +out:
+> +	tpm_put_ops(chip);
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(tpm_nv_read);
+> +
+>   /**
+>    * tpm_send - send a TPM command
+>    * @chip:	a &struct tpm_chip instance, %NULL for the default chip
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 947d1db0a5cc..d4dfc5148adb 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -56,9 +56,12 @@ enum tpm_addr {
+>   #define TPM_ERR_DEACTIVATED     0x6
+>   #define TPM_ERR_DISABLED        0x7
+>   #define TPM_ERR_INVALID_POSTINIT 38
+> +#define TPM_ERR_INVALID_HANDLE_1 0x18b
+>   
+>   #define TPM_TAG_RQU_COMMAND 193
+>   
+> +#define TPM2_HR_NV_INDEX 0x1000000
+> +
+>   /* TPM2 specific constants. */
+>   #define TPM2_SPACE_BUFFER_SIZE		16384 /* 16 kB */
+>   
+> @@ -224,6 +227,8 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max);
+>   ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
+>   			u32 *value, const char *desc);
+>   
+> +int tpm2_nv_read(struct tpm_chip *chip, u32 nvindex, u32 *attr_out, void **dest);
+> +int tpm2_nv_readpublic(struct tpm_chip *chip, u32 nvindex, struct tpm2_nv_public *info);
+>   ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip);
+>   int tpm2_auto_startup(struct tpm_chip *chip);
+>   void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index eff1f12d981a..ba1026123464 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -269,6 +269,169 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>   	return rc;
+>   }
+>   
+> +struct tpm2_buffer_out {
+> +	__be16	size;
+> +	u8	data[];
+> +} __packed;
+> +
+> +struct tpm2_nv_public_out {
+> +	__be32	nvIndex;
+> +	__be16	nameAlg;
+> +	__be32	attributes;
+> +	__be16	authPolicySize;
+> +	u8	data[];
+> +} __packed;
+> +
+> +int tpm2_nv_readpublic(struct tpm_chip *chip, u32 nvindex, struct tpm2_nv_public *info)
+> +{
+> +	struct tpm_buf buf;
+> +	int rc;
+> +	u16 recd;
+> +	u32 resp_header_length;
+> +	struct tpm2_buffer_out *out;
+> +	struct tpm2_nv_public_out *publicout;
+> +	u32 nvhandle;
+> +	u16 auth_policy_size;
+> +
+> +	if ((nvindex & ~TPM2_HR_NV_INDEX) > 0x00FFFFFF)
+> +		return -EINVAL;
+> +
+> +	/* HR_NV_INDEX = TPM_HT_NV_INDEX << HR_SHIFT */
+> +	nvhandle = TPM2_HR_NV_INDEX | nvindex;
+> +
+> +	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_NV_READPUBLIC);
+> +	if (rc)
+> +		return rc;
+> +	tpm_buf_append_u32(&buf, nvhandle);
+> +	rc = tpm_transmit_cmd(chip, &buf, 0, NULL);
+> +	if (rc) {
+> +		if (rc != TPM_ERR_DISABLED && rc != TPM_ERR_DEACTIVATED
 
-Provides a method for users to load keys without the need to recompile
-the kernel or change the kernel binary, which would require a resign of
-the kernel image.
+These are TPM 1.2 error codes. I don't think TPM 2 returns those, does 
+it? Ah, you took that from tpm_transmit_cmd... I think you can remove those.
 
-Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
----
- security/integrity/ima/Kconfig    | 22 +++++++++++++
- security/integrity/ima/ima_init.c | 53 +++++++++++++++++++++++++++++++
- 2 files changed, 75 insertions(+)
 
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 12e9250c1bec..28424b930c81 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -291,6 +291,28 @@ config IMA_BLACKLIST_KEYRING
- 	   the search is successful the requested operation is rejected and
- 	   an error is returned to the caller.
- 
-+config IMA_LOAD_CERT_NVINDEX
-+	bool "Load certificate from TPM nvindex into '.ima' trusted keyring"
-+	depends on IMA_TRUSTED_KEYRING && TCG_TPM
-+	default n
-+	help
-+	   File signature verification is based on the public keys
-+	   loaded on the .ima trusted keyring. These public keys are
-+	   X509 certificates signed by a trusted key on the
-+	   .system keyring.  This option enables X509 certificate
-+	   loading by the kernel onto the '.ima' trusted keyring
-+	   from a TPM nvindex, bypassing the builtin keyring check.
-+
-+config IMA_LOAD_CERT_NVINDEX_INDEX
-+	hex "The TPM NV Index to load into the '.ima' trusted keyring"
-+	depends on IMA_LOAD_CERT_NVINDEX
-+	default 0x184b520
-+	help
-+	   Defines the index of the NV Index that gets loaded into the
-+	   '.ima' keyring.
-+	   The default is the "0x18" prefix for a non-TCG specified NV Index,
-+	   suffixed with ASCII for "KR" (keyring) and then 0
-+
- config IMA_LOAD_X509
- 	bool "Load X509 certificate onto the '.ima' trusted keyring"
- 	depends on IMA_TRUSTED_KEYRING
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 6e8742916d1d..ea0949e8df12 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -112,6 +112,55 @@ void __init ima_load_x509(void)
- }
- #endif
- 
-+#ifndef CONFIG_IMA_LOAD_CERT_NVINDEX
-+int __init ima_load_key_nvindex(void)
-+{
-+	return 0;
-+}
-+#else
-+int __init ima_load_key_nvindex(void)
-+{
-+	void *cert_buffer;
-+	int rc;
-+	key_perm_t perm;
-+	u32 nvindex_attributes = 0;
-+
-+	rc = tpm_nv_read(tpm_default_chip(),
-+				CONFIG_IMA_LOAD_CERT_NVINDEX_INDEX,
-+				&nvindex_attributes, &cert_buffer);
-+	if (rc < 0) {
-+		if (rc == -ENODEV)  /* No TPM2 */
-+			rc = 0;
-+		if (rc == -ENOENT)  /* No certificate in NV Index */
-+			rc = 0;
-+		goto out;
-+	}
-+
-+	pr_info("Loading IMA key from TPM NV Index 0x%x", CONFIG_IMA_LOAD_CERT_NVINDEX_INDEX);
-+
-+	if (nvindex_attributes & TPM2_ATTR_NV_PLATFORMCREATE) {
-+		pr_err("NV Index has the Platform Create attribute");
-+		rc = -EACCES;
-+		goto out_free;
-+	}
-+	if (nvindex_attributes & TPM2_ATTR_NV_PPWRITE) {
-+		pr_err("NV Index has the Platform Write attribute");
-+		rc = -EACCES;
-+		goto out_free;
-+	}
-+
-+	perm = (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW | KEY_USR_READ;
-+	rc = integrity_load_cert(INTEGRITY_KEYRING_IMA, "TPM NV Index",
-+				 cert_buffer, rc, perm,
-+				 KEY_ALLOC_BYPASS_RESTRICTION);
-+
-+out_free:
-+	kvfree(cert_buffer);
-+out:
-+	return rc;
-+}
-+#endif
-+
- int __init ima_init(void)
- {
- 	int rc;
-@@ -124,6 +173,10 @@ int __init ima_init(void)
- 	if (rc)
- 		return rc;
- 
-+	rc = ima_load_key_nvindex();
-+	if (rc)
-+		pr_info("Failed to load IMA key from TPM NV Index (%d)", rc);
-+
- 	rc = ima_init_crypto();
- 	if (rc)
- 		return rc;
--- 
-2.29.2
+> +		    && rc != TPM2_RC_TESTING && rc != TPM_ERR_INVALID_HANDLE_1)
+> +			dev_err(&chip->dev, "A TPM error (%d) occurred attempting to read an NV Index public\n", rc);
+> +		if (rc == TPM_ERR_INVALID_HANDLE_1)
+> +			rc = -ENOENT;
+> +		else if (rc > 0)
+> +			rc = -EIO;
+> +		goto out;
+> +	}
+> +	resp_header_length = tpm_buf_response_header_length(&buf, 0);
+> +	out = (struct tpm2_buffer_out *)&buf.data[resp_header_length];
+> +	publicout = (struct tpm2_nv_public_out *)&out->data;
+> +	recd = be16_to_cpu(out->size);
+> +
+> +	info->nv_index = be32_to_cpu(publicout->nvIndex);
+> +	info->name_alg = be16_to_cpu(publicout->nameAlg);
+> +	info->attributes = be32_to_cpu(publicout->attributes);
+> +
+> +	/* Determine the size of the authPolicy, so we can skip over that to grab the data size */
+> +	auth_policy_size = be16_to_cpu(publicout->authPolicySize);
+> +
+> +	info->data_size = be16_to_cpu((publicout->data[auth_policy_size]) | (publicout->data[auth_policy_size+1] << 8));
+
+
+I don't think this is correct. The way you read the 2 bytes they are 
+already in native format then due to the shifting. So be16_to_cpu should 
+return the wrong result on little endian machines.
+
+
+> +
+> +out:
+> +	tpm_buf_destroy(&buf);
+> +	return rc;
+> +}
+> +
+> +int tpm2_nv_read(struct tpm_chip *chip, u32 nvindex, u32 *attr_out, void **dest)
+> +{
+> +	struct tpm_buf buf;
+> +	int rc;
+> +	struct tpm2_buffer_out *out;
+> +	u16 recd;
+> +	u16 copied;
+> +	u32 nvhandle;
+> +	u32 resp_header_length;
+> +	struct tpm2_null_auth_area auth_area;
+> +	u16 size;
+> +	struct tpm2_nv_public public;
+> +
+> +	copied = 0;
+> +
+> +	if ((nvindex & ~TPM2_HR_NV_INDEX) > 0x00FFFFFF)
+> +		return -EINVAL;
+> +
+> +	/* HR_NV_INDEX = TPM_HT_NV_INDEX << HR_SHIFT */
+> +	nvhandle = TPM2_HR_NV_INDEX | nvindex;
+> +
+> +	/* Determine the size of the NV Index contents */
+> +	rc = tpm2_nv_readpublic(chip, nvindex, &public);
+> +	if (rc < 0)
+> +		return rc;
+> +	if (attr_out != NULL)
+> +		*attr_out = public.attributes;
+> +	size = public.data_size;
+> +	*dest = kzalloc(size, GFP_KERNEL);
+> +	if (!*dest) {
+> +		rc = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	/* Retrieve the actual NV Index contents */
+> +	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_NV_READ);
+> +	if (rc)
+> +		goto out_free;
+> +
+> +	while (copied < size) {
+> +		tpm_buf_reset(&buf, TPM2_ST_SESSIONS, TPM2_CC_NV_READ);
+> +
+> +		tpm_buf_append_u32(&buf, TPM2_RH_OWNER);
+> +		tpm_buf_append_u32(&buf, nvhandle);
+> +
+> +		auth_area.handle = cpu_to_be32(TPM2_RS_PW);
+> +		auth_area.nonce_size = 0;
+> +		auth_area.attributes = 0;
+> +		auth_area.auth_size = 0;
+> +
+> +		tpm_buf_append_u32(&buf, sizeof(struct tpm2_null_auth_area));
+> +		tpm_buf_append(&buf, (const unsigned char *)&auth_area,
+> +			       sizeof(auth_area));
+> +
+> +		/* Size to request: at most 512 bytes at a time */
+> +		tpm_buf_append_u16(&buf, min_t(u16, 512, size-copied));
+> +		/* Offset: start at where we ended up */
+> +		tpm_buf_append_u16(&buf, copied);
+> +
+> +		rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to read NV index");
+> +		if (rc) {
+> +			if (rc > 0)
+> +				rc = -EIO;
+> +			goto out_free;
+> +		}
+> +		resp_header_length = tpm_buf_response_header_length(&buf, 0);
+> +		out = (struct tpm2_buffer_out *)&buf.data[resp_header_length];
+> +		recd = be16_to_cpu(out->size);
+> +
+> +		if (recd == 0) {
+> +			rc = -EIO;
+> +			goto out_free;
+> +		}
+> +		if (recd > size-copied) {
+> +			rc = -EIO;
+> +			goto out_free;
+> +		}
+
+You could add this to the above.
+
+if (recd == 0 || recd > size - copied) ...
+
+This address the case where the TPM is actually returning more bytes 
+than requested.
+
+> +
+> +		memcpy(*dest + copied, out->data, recd);
+> +		copied += recd;
+> +	};
+> +
+> +out_free:
+> +	if ((rc < 0) || (copied != size)) {
+> +		kvfree(*dest);
+
+
+kfree ?
+
+
+> +		*dest = NULL;
+> +	}
+> +
+> +out:
+> +	tpm_buf_destroy(&buf);
+> +
+> +	if (rc < 0)
+> +		return rc;
+> +	else if (copied != size)
+> +		return -EIO;
+> +	else
+> +		return size;
+> +}
+> +
+>   struct tpm2_get_random_out {
+>   	__be16 size;
+>   	u8 buffer[TPM_MAX_RNG_DATA];
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index 8f4ff39f51e7..b812236b9955 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -53,6 +53,40 @@ struct tpm_bank_info {
+>   	u16 crypto_id;
+>   };
+>   
+> +enum tpm_nv_public_attrs {
+> +	TPM2_ATTR_NV_PPWRITE = 0x00000001,
+> +	TPM2_ATTR_NV_OWNERWRITE = 0x00000002,
+> +	TPM2_ATTR_NV_AUTHWRITE = 0x00000004,
+> +	TPM2_ATTR_NV_POLICYWRITE = 0x00000008,
+> +	/* Bits 4-7 TPM_NT */
+> +	/* Bits 8-9 reserved */
+> +	TPM2_ATTR_NV_POLICY_DELETE = 0x00000400,
+> +	TPM2_ATTR_NV_WRITELOCKED = 0x00000800,
+> +	TPM2_ATTR_NV_WRITEALL = 0x00001000,
+> +	TPM2_ATTR_NV_WRITE_DEFINE = 0x00002000,
+> +	TPM2_ATTR_NV_WRITE_STCLEAR = 0x00004000,
+> +	TPM2_ATTR_NV_GLOBALLOCK = 0x00008000,
+> +	TPM2_ATTR_NV_PPREAD = 0x00010000,
+> +	TPM2_ATTR_NV_OWNERREAD = 0x00020000,
+> +	TPM2_ATTR_NV_AUTHREAD = 0x00040000,
+> +	TPM2_ATTR_NV_POLICYREAD = 0x00080000,
+> +	/* Bits 20-24 reserved */
+> +	TPM2_ATTR_NV_NO_DA = 0x02000000,
+> +	TPM2_ATTR_NV_ORDERLY = 0x04000000,
+> +	TPM2_ATTR_NV_CLEAR_STCLEAR = 0x08000000,
+> +	TPM2_ATTR_NV_READLOCKED = 0x10000000,
+> +	TPM2_ATTR_NV_WRITTEN = 0x20000000,
+> +	TPM2_ATTR_NV_PLATFORMCREATE = 0x40000000,
+> +	TPM2_ATTR_NV_READ_STCLEAR = 0x80000000,
+> +};
+> +
+> +struct tpm2_nv_public {
+> +	u32 nv_index;
+> +	u16 name_alg;
+> +	u32 attributes;
+> +	u16 data_size;
+> +};
+> +
+>   enum TPM_OPS_FLAGS {
+>   	TPM_OPS_AUTO_STARTUP = BIT(0),
+>   };
+> @@ -189,6 +223,10 @@ enum tpm2_structures {
+>   	TPM2_ST_SESSIONS	= 0x8002,
+>   };
+>   
+> +enum tpm2_root_handles {
+> +	TPM2_RH_OWNER		= 0x40000001,
+> +};
+> +
+>   /* Indicates from what layer of the software stack the error comes from */
+>   #define TSS2_RC_LAYER_SHIFT	 16
+>   #define TSS2_RESMGR_TPM_RC_LAYER (11 << TSS2_RC_LAYER_SHIFT)
+> @@ -223,6 +261,7 @@ enum tpm2_command_codes {
+>   	TPM2_CC_CONTEXT_LOAD	        = 0x0161,
+>   	TPM2_CC_CONTEXT_SAVE	        = 0x0162,
+>   	TPM2_CC_FLUSH_CONTEXT	        = 0x0165,
+> +	TPM2_CC_NV_READPUBLIC		= 0x0169,
+>   	TPM2_CC_VERIFY_SIGNATURE        = 0x0177,
+>   	TPM2_CC_GET_CAPABILITY	        = 0x017A,
+>   	TPM2_CC_GET_RANDOM	        = 0x017B,
+> @@ -389,6 +428,21 @@ static inline void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
+>   	tpm_buf_append(buf, (u8 *) &value2, 4);
+>   }
+>   
+> +static inline u32 tpm_buf_response_header_length(struct tpm_buf *buf, bool has_shielded_locations)
+> +{
+> +	u32 header_length = TPM_HEADER_SIZE;
+> +
+> +	/* Possibly a handle for a Shielded Location */
+> +	if (has_shielded_locations)
+> +		header_length += 4;
+> +
+> +	/* Possibly the 32-bit parameter area size */
+> +	if (tpm_buf_tag(buf) == TPM2_ST_SESSIONS)
+> +		header_length += 4;
+> +
+> +	return header_length;
+> +}
+> +
+>   static inline u32 tpm2_rc_value(u32 rc)
+>   {
+>   	return (rc & BIT(7)) ? rc & 0xff : rc;
+> @@ -401,6 +455,7 @@ extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+>   			struct tpm_digest *digest);
+>   extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>   			  struct tpm_digest *digests);
+> +extern int tpm_nv_read(struct tpm_chip *chip, u32 nv_idx, u32 *attrs_out, void **out);
+>   extern int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen);
+>   extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
+>   extern struct tpm_chip *tpm_default_chip(void);
+> @@ -423,6 +478,16 @@ static inline int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>   	return -ENODEV;
+>   }
+>   
+> +static inline int tpm2_nv_readpublic(struct tpm_chip *chip, u32 nvindex, struct tpm2_nv_public *info)
+> +{
+> +	return -ENODEV;
+> +}
+> +
+> +static inline int tpm_nv_read(struct tpm_chip *chip, u32 nv_idx, u8 *out, size_t max)
+> +{
+
+
+tpm2_nv_read
+
+
+> +	return -ENODEV;
+> +}
+> +
+>   static inline int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen)
+>   {
+>   	return -ENODEV;
+
 
