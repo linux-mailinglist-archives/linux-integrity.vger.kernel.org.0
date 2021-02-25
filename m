@@ -2,119 +2,208 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F7F325120
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Feb 2021 15:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1152032531E
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Feb 2021 17:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbhBYOCY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Feb 2021 09:02:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44314 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230467AbhBYOCY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Feb 2021 09:02:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 33D3764F1B;
-        Thu, 25 Feb 2021 14:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614261702;
-        bh=gB6SQ75V2Rk37+UKLUfmsXNjtKCUUEXnmz4FEJPQVQY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iGKh9gRLvR8o04SWuKsCmipjtlzTrYuO47BWoJKHisDTteOpg/JDJDJJNnt+rGTTb
-         0rw4Z/+2u64PifagBhihDsPlyJ67Y3oQmsZn/oOul3KOK4yi2rGalMnkTSGw0hDAQu
-         5UCXh/aLF+AKNOXFFYPj9pbvUcZ+cJQXjOePkvmGZX37GfJUD/b8DZYdke/mmAKvZT
-         fAGvXP4lcs8maCpu0ckyrKPIoHkrpGb6cRtLNo09qQE/bWR08AfpprntjG9xmxGdei
-         eNSETbirr5t3ogcQ9xtRSswYiW1kh8gzy8rrgKIT9HRwylXF4qapcoQRRth0EghGpX
-         ctCpWU8hVtI2A==
-Received: by mail-oo1-f51.google.com with SMTP id x10so1389976oor.3;
-        Thu, 25 Feb 2021 06:01:42 -0800 (PST)
-X-Gm-Message-State: AOAM530YQNSUY6DI1p/w+oMByG+xrschcT2x6xk2C68fFUBMnyNwDQQJ
-        HRKQc6KM13zEsopqRnEASZN4oYZnOLKbfAR4rYM=
-X-Google-Smtp-Source: ABdhPJy0Z8oAC8F3qvd9r/HrjNWv0zSRZwzOF/sqWqHtbHpdIOPcLKBh4nK6FxEKGL+hdddWAENt07LK/yhwcmvgmrE=
-X-Received: by 2002:a4a:870c:: with SMTP id z12mr2391944ooh.15.1614261701193;
- Thu, 25 Feb 2021 06:01:41 -0800 (PST)
+        id S233657AbhBYQJU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Feb 2021 11:09:20 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:6703 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233606AbhBYQJM (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 25 Feb 2021 11:09:12 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11PG5Jg4122439;
+        Thu, 25 Feb 2021 11:08:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=wpz8NHETQCbFhFjtri/D/klfQs3phOaYfi4hlo/KAZ4=;
+ b=o605OWpoTEomoAeEWbp7B3VqRiZkaQPNf0KAcnYwTd0RAuKEaFAQrD8l0C87nOdOpAmn
+ MnbSzAaZT91g8njhyo3SdlwnnFOmmb2ZFt5h3jYyxq7Y+4ggB/GuaJPXdglOc7brLIna
+ efHIQSALoVg2AbwmmDbLIQ3HyqLy1zktQgPbODEYm3Trx0jDUXUt+wxs1GrjnEUtXxjr
+ KkGOPKTOrObLdIjWisK18Is6iydk/4R5LTb+r7dK+x5Lqh2/ALtE8b+uiktCDelu8NuL
+ CwEWxWgK99iZi8wbdPwnnjvXJKx0jAA2n+KlOLrxO7Y1D6lZp2I7Z0n5F/1fBDuROrDj fQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36xf3q843t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Feb 2021 11:08:20 -0500
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 11PG5LNV122527;
+        Thu, 25 Feb 2021 11:08:19 -0500
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36xf3q843a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Feb 2021 11:08:19 -0500
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11PG2BNY026958;
+        Thu, 25 Feb 2021 16:08:19 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04wdc.us.ibm.com with ESMTP id 36tt29yvcq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Feb 2021 16:08:19 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11PG8IWR14287282
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 Feb 2021 16:08:18 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EEAB46E04E;
+        Thu, 25 Feb 2021 16:08:17 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 717506E053;
+        Thu, 25 Feb 2021 16:08:17 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 25 Feb 2021 16:08:17 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        davem@davemloft.net, herbert@gondor.apana.org.au,
+        dhowells@redhat.com, zohar@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
+        linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v9 0/9] Add support for x509 certs with NIST P384/256/192 keys
+Date:   Thu, 25 Feb 2021 11:07:53 -0500
+Message-Id: <20210225160802.2478700-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20210224072516.74696-1-uwe@kleine-koenig.org> <87sg5ks6xp.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87sg5ks6xp.fsf@mpe.ellerman.id.au>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 25 Feb 2021 15:01:25 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1q=zqyOxBgV-nprpN3jBczZWexupkA1Wy6g+AEW6rQqw@mail.gmail.com>
-Message-ID: <CAK8P3a1q=zqyOxBgV-nprpN3jBczZWexupkA1Wy6g+AEW6rQqw@mail.gmail.com>
-Subject: Re: [PATCH v2] vio: make remove callback return void
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jens Axboe <axboe@kernel.dk>, Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Haren Myneni <haren@us.ibm.com>,
-        =?UTF-8?Q?Breno_Leit=C3=A3o?= <leitao@debian.org>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
-        Steven Royer <seroyer@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cristobal Forno <cforno12@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Dany Madden <drt@linux.ibm.com>, Lijun Pan <ljp@linux.ibm.com>,
-        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Michael Cyr <mikecyr@linux.ibm.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>, linux-integrity@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        target-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-25_09:2021-02-24,2021-02-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 bulkscore=0
+ clxscore=1015 suspectscore=0 impostorscore=0 mlxscore=0 phishscore=0
+ spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2102250127
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Feb 25, 2021 at 12:52 PM Michael Ellerman <mpe@ellerman.id.au> wrot=
-e:
->
-> Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org> writes:
-> > The driver core ignores the return value of struct bus_type::remove()
-> > because there is only little that can be done. To simplify the quest to
-> > make this function return void, let struct vio_driver::remove() return
-> > void, too. All users already unconditionally return 0, this commit make=
-s
-> > it obvious that returning an error code is a bad idea and makes it
-> > obvious for future driver authors that returning an error code isn't
-> > intended.
-> >
-> > Note there are two nominally different implementations for a vio bus:
-> > one in arch/sparc/kernel/vio.c and the other in
-> > arch/powerpc/platforms/pseries/vio.c. I didn't care to check which
-> > driver is using which of these busses (or if even some of them can be
-> > used with both) and simply adapt all drivers and the two bus codes in
-> > one go.
->
-> I'm 99% sure there's no connection between the two implementations,
-> other than the name.
->
-> So splitting the patch by arch would make it easier to merge. I'm
-> reluctant to merge changes to sparc code.
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-The sparc subsystem clearly started out as a copy of the powerpc
-version, and serves roughly the same purpose, but the communication
-with the hypervisor is quite different.
+This series of patches adds support for x509 certificates signed by a CA
+that uses NIST P384, P256 or P192 keys for signing. It also adds support for
+certificates where the public key is one of this type of a key. The math
+for ECDSA signature verification is also added as well as the math for fast
+mmod operation for NIST P384.
 
-As there are only four drivers for the sparc vio subsystem:
-drivers/block/sunvdc.c
-drivers/net/ethernet/sun/ldmvsw.c
-drivers/net/ethernet/sun/sunvnet.c
-drivers/tty/vcc.c
-maybe it would make sense to rename those to use distinct
-identifiers now?
+Since self-signed certificates are verified upon loading, the following
+script can be used for testing of NIST P256 keys:
 
-       Arnd
+k=$(keyctl newring test @u)
+
+while :; do
+	for hash in sha1 sha224 sha256 sha384 sha512; do
+		openssl req \
+			-x509 \
+			-${hash} \
+			-newkey ec \
+			-pkeyopt ec_paramgen_curve:prime256v1 \
+			-keyout key.pem \
+			-days 365 \
+			-subj '/CN=test' \
+			-nodes \
+			-outform der \
+			-out cert.der
+		keyctl padd asymmetric testkey $k < cert.der
+		if [ $? -ne 0 ]; then
+			echo "ERROR"
+			exit 1
+		fi
+	done
+done
+
+Ecdsa support also works with restricted keyrings where an RSA key is used
+to sign a NIST P384/256/192 key. Scripts for testing are here:
+
+https://github.com/stefanberger/eckey-testing
+
+The ECDSA signature verification will be used by IMA Appraisal where ECDSA
+file signatures stored in RPM packages will use substantially less space
+than if RSA signatures were to be used.
+
+Further, a patch is added that allows kernel modules to be signed with a NIST
+p384 key.
+
+   Stefan and Saulo
+
+v8->v9:
+  - Appended Saulo's patches
+  - Appended patch to support kernel modules signed with NIST p384 key. This
+    patch requires Nayna's series here: https://lkml.org/lkml/2021/2/18/856
+
+v7->v8:
+  - patch 3/4: Do not determine key algo using parse_OID in public_key.c
+    but do this when parsing the certificate. This addresses an issue
+    with certain build configurations where OID_REGISTRY is not available
+    as 'Reported-by: kernel test robot <lkp@intel.com>'.
+
+v6->v7:
+  - Moved some OID defintions to patch 1 for bisectability
+  - Applied R-b's
+  
+v5->v6:
+  - moved ecdsa code into its own module ecdsa_generic built from ecdsa.c
+  - added script-generated test vectors for NIST P256 & P192 and all hashes
+  - parsing of OID that contain header with new parse_oid()
+
+v4->v5:
+  - registering crypto support under names ecdsa-nist-p256/p192 following
+    Hubert Xu's suggestion in other thread
+  - appended IMA ECDSA support patch
+
+v3->v4:
+  - split off of ecdsa crypto part; registering akcipher as "ecdsa" and
+    deriving used curve from digits in parsed key
+
+v2->v3:
+  - patch 2 now includes linux/scatterlist.h
+
+v1->v2:
+  - using faster vli_sub rather than newly added vli_mod_fast to 'reduce'
+    result
+  - rearranged switch statements to follow after RSA
+  - 3rd patch from 1st posting is now 1st patch
+
+
+
+Saulo Alessandre (4):
+  x509: Add OID for NIST P384 and extend parser for it
+  crypto: Add NIST P384 curve parameters
+  crypto: Add math to support fast NIST P384
+  ecdsa: Register NIST P384 and extend test suite
+
+Stefan Berger (5):
+  crypto: Add support for ECDSA signature verification
+  x509: Detect sm2 keys by their parameters OID
+  x509: Add support for parsing x509 certs with ECDSA keys
+  ima: Support EC keys for signature verification
+  certs: Add support for using elliptic curve keys for signing modules
+
+ certs/Kconfig                             |  22 ++
+ certs/Makefile                            |  14 +
+ crypto/Kconfig                            |  10 +
+ crypto/Makefile                           |   6 +
+ crypto/asymmetric_keys/pkcs7_parser.c     |   4 +
+ crypto/asymmetric_keys/public_key.c       |   4 +-
+ crypto/asymmetric_keys/x509_cert_parser.c |  49 ++-
+ crypto/asymmetric_keys/x509_public_key.c  |   4 +-
+ crypto/ecc.c                              | 281 +++++++++-----
+ crypto/ecc.h                              |  31 +-
+ crypto/ecc_curve_defs.h                   |  32 ++
+ crypto/ecdsa.c                            | 400 ++++++++++++++++++++
+ crypto/ecdsasignature.asn1                |   4 +
+ crypto/testmgr.c                          |  18 +
+ crypto/testmgr.h                          | 424 ++++++++++++++++++++++
+ include/crypto/ecdh.h                     |   1 +
+ include/keys/asymmetric-type.h            |   6 +
+ include/linux/oid_registry.h              |  10 +-
+ lib/oid_registry.c                        |  13 +
+ security/integrity/digsig_asymmetric.c    |  30 +-
+ 20 files changed, 1256 insertions(+), 107 deletions(-)
+ create mode 100644 crypto/ecdsa.c
+ create mode 100644 crypto/ecdsasignature.asn1
+
+-- 
+2.29.2
+
