@@ -2,31 +2,31 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB183257D2
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Feb 2021 21:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456833257CD
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Feb 2021 21:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbhBYUha (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Feb 2021 15:37:30 -0500
-Received: from mail-eopbgr60066.outbound.protection.outlook.com ([40.107.6.66]:56288
+        id S233819AbhBYUgC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Feb 2021 15:36:02 -0500
+Received: from mail-eopbgr60076.outbound.protection.outlook.com ([40.107.6.76]:14296
         "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234392AbhBYUfK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Feb 2021 15:35:10 -0500
+        id S234048AbhBYUd6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 25 Feb 2021 15:33:58 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EnjIBDzgAgmC7Iz/4CTtdCiSc/OpEpTH5PmipSgrJuacOIAlVHi616pMQQChj5t/bbSTdO24wAhhKGNAlyBHH0FAayJhn1y4ljiwLSOXM7V4ALBsk3romV0ESOnFdjwKRByIbKpzR0qbNgkUvpldwD2JYmdkjtaNSFOdx/uvseqFo2hoMhLRSowOqVOtmeFWsd+IuhiNTpoPU5ooNamFnCOV6kqX3wuuC7tLvJIXSQ7OEqRs2KXE93EjA9SbI+YWH8/zZCEZZg5nveMxW7+C0tSUpXjCzjw9grINUUdiGgTfTCvOHmMwnDDhEolc8onfj/SOhVzxJiBjc5PsQOqN0g==
+ b=kEAlozTRf2Xv6T9x4CkVC5ZRDgr6q9yPbwkpf2p/hh9ErZMie+VBdmFIWraXVwd3zxsb8/EZC7uSNX033ihmMuPlfStNKMbcK4heJD/jBhYe3WhzyNbfwRZ4jgI6OCnz5KGc3HfE0MkvNdwkGOrZ6yTpcuUI2vFzEXfJkKMUWDtEbhwaogD1JILSeXAu8dkmSDrBhykydf1hUz37NaP+J4trfTi7GMhkRzEZQV64qD95I0OFcM9DDv5lFyvX06o1jmzb0fAJutAGfl2ir+VZu3xnGeGRCsMFOJOveYNpbIee7E9J8b4VnulyIUPnmFD/dLvfDjZPxDWb3YpDLgxiYw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WJopkiPgeOLXUirdW4cZujCT+zLaZPKKseTrrcsa2YM=;
- b=DO+Eq4b9aV69QYavh++TflXWReN4hGVwjh3IJICHZVOi9MF9I4Xap5X/UCGByjOxjt+i7+tJYxjAhvq8p7ZBQcT40Y046wM+Tj003iQ28tiAEeJens+/xEqoSE850FFJgEurLh0uR1cxGzShGEreuQRuE5m1ga5QX9uVtR2aic9TSYjWG4VGGdp0vQ/ilbZ+71ey6VwswW9WMmbvJW46u5idfyXMnW4XYphbPPNq2Cz0YXNhpse64gnd1X4D+ymEjwb9qwJdHOySUdwdBHs5kGgET+8C4ONZLo7DFOdVbPJABmmFClXEBn0XzKdibHK1qR5Rdoaj4yCq4T+hV+qKsw==
+ bh=jBR19EqEI9KksQW2OroZKYQJM8szH3P30eZIxLDEG7s=;
+ b=oAhY3SjrOptoJFAC4/YBKauJDWWyNBLDVMfEJrWTZyxf6yi7+jtXv+QxkBl3rgOr3m2lWHk6C/PKCpaW8jg/qOb/O/s3qx04fvauqTD5t6m6Mieo/9yeRYbXj7u6OjmFLgQHmtI5LQ79ky8eifGtq8MBGwmpdPM16ScWtcXmOedBeW4kjawJQCjjDf06In9Hu69mHHENp9GQjqxC6ItEKCYXFaLfVoOYU4hfrYcpIHWPehq8Mntlyv38n8T3o/NsLxbRYOjOvxlfOr9XfjxfmTvRHf7ElGFOt+2Kk7V/4Gbs/+pwi/plGnqDcISkBUeIKUOpe3svcRKrSFR1GLlYHQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=puiterwijk.org; dmarc=pass action=none
  header.from=puiterwijk.org; dkim=pass header.d=puiterwijk.org; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=puiterwijk.org;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WJopkiPgeOLXUirdW4cZujCT+zLaZPKKseTrrcsa2YM=;
- b=cmmwKEBTSBvyK12XIbnGiLc5dBkzG6zfiB8TUJ376LFPAV3Axp0zDhVudVoVCIId3M9yYWl10rgmF3Hw0Odsgj1XORVqXJB2xi1ZuvtB/JZYChAfR3pxJ3VJmjm3eXEC+bp5X4YYv6xABMuR+PoUnDh3w8TJpTVtaVWQw+mJhEjfvVkr1xTMP5pHJ/4b89vQOAYKFv+kUihZSrwxqYRWnrohpsxNYnjvV0SbFilsIIvpVAVmyFqhYEOCcz2d30cy72VM9+v2j+hDKdw+wuN1feW0aXBKbKLRz1nSAxggEBXXURkovuSjGoYbGvmNv1ZOn7tBSDQyFZ+0RsrtarArEg==
+ bh=jBR19EqEI9KksQW2OroZKYQJM8szH3P30eZIxLDEG7s=;
+ b=rzyrF1sB3ORqngyJQU6NsXsavJSKzCbNt7Kd3O00BUDbJoAcdcxkQCO3pJK0O/tLA4cMI7GcKY/0/94f66Z0FYcgctPbVTiNjY5buqnOCY0BgUZwcPMK3V81QLJ9Gl9Lu2CYlz7iI805cM4AsQApaFFAObRwbihFSXaE+/3P1oeDXNn7e+k8Svp+SqCgoTtCxGrF6piOy5ygesJ1zDaGqhlOv2uiwOzHXZ/rs8Q7ak0S9Dwqg2oiL9OiEby0nZE1GFVffU5QHpXsrxSF8AWAx/BbdbTbklxDbIV50RHqgovz0oJKn8n1NqdOLw9ASLWbxWc1G7d8ZB/KNJcalcElfg==
 Authentication-Results: gmx.de; dkim=none (message not signed)
  header.d=none;gmx.de; dmarc=none action=none header.from=puiterwijk.org;
 Received: from AM0P191MB0721.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:15f::13)
@@ -44,9 +44,9 @@ To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
         linux-integrity@vger.kernel.org
 Cc:     pbrobinson@gmail.com, stefanb@linux.ibm.com, kgold@linux.ibm.com,
         Patrick Uiterwijk <patrick@puiterwijk.org>
-Subject: [PATCH 1/3] tpm: Add support for reading a TPM NV Index
-Date:   Thu, 25 Feb 2021 21:32:27 +0100
-Message-Id: <20210225203229.363302-2-patrick@puiterwijk.org>
+Subject: [PATCH 2/3] integrity: Allow specifying flags in integrity_load_cert
+Date:   Thu, 25 Feb 2021 21:32:28 +0100
+Message-Id: <20210225203229.363302-3-patrick@puiterwijk.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210225203229.363302-1-patrick@puiterwijk.org>
 References: <20210225203229.363302-1-patrick@puiterwijk.org>
@@ -60,417 +60,146 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 Received: from rowhammer.mgmt.home.puiterwijk.org (2a10:3781:662:0:ec87:3741:6e9a:b11e) by AM0PR03CA0018.eurprd03.prod.outlook.com (2603:10a6:208:14::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20 via Frontend Transport; Thu, 25 Feb 2021 20:32:47 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3dda4fd1-88d8-406d-09f6-08d8d9cc8337
+X-MS-Office365-Filtering-Correlation-Id: 86184aed-e2af-4e97-9700-08d8d9cc8366
 X-MS-TrafficTypeDiagnostic: AM4P191MB0083:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM4P191MB00837D8257249388DF608673C89E9@AM4P191MB0083.EURP191.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-Microsoft-Antispam-PRVS: <AM4P191MB0083E08FE6FFC3091608BE87C89E9@AM4P191MB0083.EURP191.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:171;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K24YtaAJ54ozPXd2QLmI+GTVCzUlqxEp/RaUuhuGtbdqHGDiM/jhJANLtlITn1gQPfvJZlYfdJMmiyVnttYMhMFkZpLnVYmbDR9cz7xT8hY6Tr4gbW/+WtFyOOiXeYaihw6Wt2m+6sr3XfA3u+KeeHkyqr0GfYh3ChuSULK1xGEqoEDG+/0l7vtvs4QiGdLuCbNsxIHJZOrdG/Dn0mzCUmVLXEv/MTR208+p+KXHx8XBkdj3J6GY5Ule6v8XD0l1+IXLUQV+4kYz09qtZGzRiAHEHClykStD6VNFegNVLBpHm5ON7GWhW/36IQnBQzVKAMaZJvNWHyJZWWhuMs2PsvRHNKdohrqrAMT/R5anRxhDtbfJ7RyrXv3dyNzq6X9aYispz02psd+bt4JzSYg8ULXcIclQ9TeqTvd7oM09Q8AMkf9WUaK/TiACZz0LdFYNziYR8R0AG4SFmaFUfSzoYBlJG1ogpACxXB0TEik3TsGndlAnBKDS0GwZmacVxbdS0q16F0jaUr7Nf4FDdDhhGA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P191MB0721.EURP191.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(376002)(39830400003)(136003)(346002)(366004)(396003)(2616005)(316002)(186003)(107886003)(6486002)(30864003)(5660300002)(4326008)(66476007)(1076003)(478600001)(66946007)(6666004)(2906002)(36756003)(7696005)(52116002)(66556008)(83380400001)(8676002)(8936002)(16526019)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?85G8BAC5MDN848wnhINwIYw9Eiko7DU/4nQjDs3k25KtjRV4+XdQXyv0jNjb?=
- =?us-ascii?Q?bEpkGxNR81HKSOPwd+NzP6TkfCgJk9G51ZXls23ts56QNgqPg1WrY27uuEFK?=
- =?us-ascii?Q?ESdKKDqiRfgWkdV2DKFszDoPs18Rs+xyNv3TPBbkpOKs5B/EigHeohwylXt4?=
- =?us-ascii?Q?bnGph9gTVg8dx9LcXpi5naSeW2hRs2Fc/9Nlmu09m91CIaZC5VOUBiBDb/ml?=
- =?us-ascii?Q?Xy+J3k4IK2PXgSR+i08CcHqZrQShwEdFF6S4uYxFzMG8dppSiE0RUhgRkpsM?=
- =?us-ascii?Q?h0SvLDBv6OngbI5H9VnXCjC3lJC6bLpSKpdDMG7Fb7HvcLAftKNyJq6J0Thx?=
- =?us-ascii?Q?lwaYKdxMYqcwGcGS+J6BxiDC5kY6FjU9EMGrf96nbiW5jYbkcBa2UYjN+y5s?=
- =?us-ascii?Q?nVYvva+DJWy73pS5QJKWT5nSnyawCy1TKm56JL+0LUB8dnEyxEUJK03yivRS?=
- =?us-ascii?Q?L7q2QhO9NgCUIRNcs5waXE+aRsfLPUA7JiUTlKfC67tP/cSc//pAl1v+98vv?=
- =?us-ascii?Q?mcBfz3pQWZmHdTiBYJOqeXJYXrJ2CeOjBPwnxBt8cd50XeB9bR1UalWC25dW?=
- =?us-ascii?Q?NEdVgWwTs7x3PMwPmsKco45uKf/NdTuuF9WlyzglypdSejboFOrk7j57va75?=
- =?us-ascii?Q?zquNMLEKj3QIlJyC6UiPv7C1PUof6Z3YtfYr6yWfWDvk5Ouf/VjOeu9Z2NKc?=
- =?us-ascii?Q?dPK0Fplc8sucpaYc+TYVGnBCp7NEweKglc8efJB/YZLsqznegXgjOt0I39Z4?=
- =?us-ascii?Q?9c5ddrtwvDlmq6V0EHcZP1PMXS/RSd/nX1dX4XJkkbwH4oKGfBxhil64vP/e?=
- =?us-ascii?Q?4MN70WGoPQeSTGcBnsBh+cB+hK54NVFYzHJYeqvUWQqQPI3iWz74Oj58yGDg?=
- =?us-ascii?Q?Eyng7XoFZsDNSKePiVYFRRXcZyybXW/j3bCyDi7HVSauaqwUEUC+GOxFHnXc?=
- =?us-ascii?Q?TFE3pNKsbvMLdQiSIVLwjRlAUPs+wWZJv47x/4brAk4+J9I0pyasSIoa4M2h?=
- =?us-ascii?Q?2VN5sGBcKJkeMFthOSsCHrZKBSRAaEiAM6Kru4Ed0u9cnlMLfZMbh+wnI6ZR?=
- =?us-ascii?Q?biHkD1aQieYhej3YIxZPTbtHeFssp1p9rgWeJCQ/vDpv6d1R6wNWnGn1Tz7f?=
- =?us-ascii?Q?OUDUvHKagmVZwKGzt1s/wJuU+UywwUvsBJ8uMqxY0OGAlwJ1jplaYLu2fm9D?=
- =?us-ascii?Q?6Al4AlN41TKiahfs4+Iho+V4W9dobBjjS/qW0EFLCagungoLntgck8ajJb99?=
- =?us-ascii?Q?GJfzUlm+TTSwiZouARYjAcY2vNqOW3rrE2mGfaCgTeAa5fqx/Cof6g2i+tMg?=
- =?us-ascii?Q?svh5oyTvH2NI4I1/7vtwMSvVqjwEMcIVRNwsNEC8NT+jEbIBHxG93sL1CML6?=
- =?us-ascii?Q?lILC6E3IvmkJ+kou8pbtGryNCmsw?=
+X-Microsoft-Antispam-Message-Info: 4mH2DGZxRya3nRjW2nKS6y5d8J+DL8wI+8ALLhxx34QWSynKfJsY3a7x7tM1yqpZF42XS8F8O+DA1NLmRBSacvClcaWjQeCtxZhNPzj2dbwFRWIBIBsT1VZpGBrp4W62vI469PrOq9vYxMoL8WFnJ9Q1NbI1m+81jTNCBrO3I2jXEQ9zzUfUd0x4n0E4fYK50cKasSuY6Vt9OAdP1mEsujs4EFCGTJU9lC6L/K5EDQfXRJKw6ghQFqHu8FxsgaDAAg9PuGnpszcAdzjBgso91sFwDrM+QHlxPRzn5FlwJ5Tldw3junXkB7I/UIFmtl+G3cJPm2djzNZVc+Va3pLHqWlOc855fSnVKe4257wfm02TCX5XoZ2pmarsYa91ptI9nS+caeR+XGjd2aK1itVSOAIpWjKbmTM5Wpf9P6NWUULrEgs2QE+SQoDHJ2YrWeU0eaaqDFtNTND0jOY5ijsJio/gtxkYAR9Cz9C1XxI9Jyycdo9eur/jVqapud2UXJSCBLlz8V29KARQQHOXODyvsw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P191MB0721.EURP191.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(376002)(39830400003)(136003)(346002)(366004)(396003)(2616005)(316002)(186003)(107886003)(6486002)(5660300002)(4326008)(66476007)(1076003)(478600001)(66946007)(6666004)(2906002)(36756003)(7696005)(52116002)(66556008)(83380400001)(8676002)(8936002)(16526019)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?AImM8BEf9QqJpdsnL8yvIJezUYFpbTjXkhWvdq1loqRBSJnonB59sRfoOJbH?=
+ =?us-ascii?Q?wrD9HvT0GI4cjKMAhMSeE3rEZwgA9LuEdQ05czDMf18KFWpXAWVRFw8qdT0e?=
+ =?us-ascii?Q?Izr364CcR9DvCx+6ywDsH647Nomz4dIuoSO7OWxVUqRHPo1dffbeWUTd3Ecm?=
+ =?us-ascii?Q?bxdvrniOE5bc/rYa4lsup6agzukvSR5+cMnZh+rwhnE0FKGFHBv02OMDfA9C?=
+ =?us-ascii?Q?Ynt72kmUJrZ9B0jgukj/jLl/KMt2Un8riQ6ctcND0aKkLfYuW+KNEOV5hoMY?=
+ =?us-ascii?Q?mefTMQKkP9G0o9qodzDYNWPfTs2k+s1shii3EFGF2bkAfqhP2CzZWp19j6c5?=
+ =?us-ascii?Q?T7EsI+Rfj3InUS7daLMmkOdFHL57mJ14+Uf2rvNED8c4KD35g619OKcLiLvC?=
+ =?us-ascii?Q?cXL7rm9fpwKa2CKDsIaAn92DIktuvb8YrHR6Yoxn/QooCnDXOtjllsOjVn0b?=
+ =?us-ascii?Q?0LPY/EMMc2KqwaZmPZAy2sWn2FqHO42RbO583A91xF/IPWPo5wLUJkIU5oYZ?=
+ =?us-ascii?Q?pmwpByYfJu57xAh8PTxR7l+leotysllNo4RhwJjbRwIwSXctre0deszPYwj0?=
+ =?us-ascii?Q?ET6RKm7/amH6syG6J1fAXxNZIH7Xs/7xsjfoWLg4GYZr/8hYn9/Yst7U6UM3?=
+ =?us-ascii?Q?DJs8jFJ2XNRNjfwyaXIqbG7x/0Lu48UMVEuYxD5X6yCKwy+1B3GqddWZ0IpF?=
+ =?us-ascii?Q?xYCYHTGqA60z3wTYbYR45wjZTmC6ck8t+y5mQTC8VvlT8t6c6fDfFE0P4rjW?=
+ =?us-ascii?Q?bi/lxSiNGMkwotuHPp3SFPItYxezCxsoHKwiHVRVFXNw1vuWBBQgVgUhvXg6?=
+ =?us-ascii?Q?YUqmBdA0aD0yzzxTtcUjPgHkxcxnC5k7x18yfAPb4N0fXNaO4qYEyolKC5HD?=
+ =?us-ascii?Q?TIU6n96AZux8So4coBTUNaKFjuwxzDpYwnR4hR735WzTgc1zDfYkpDmVKFTu?=
+ =?us-ascii?Q?TgwnpeZXhAbfNSyyc2SKKuNobablMAR/bLyUM7eQMqJMa/NPqUzq1CaD8lw9?=
+ =?us-ascii?Q?lqqUTvW0QcZTBp2ITd60MKECoN99aDupcpWZtCMvRuguGL2BdDAMG4RV+2qD?=
+ =?us-ascii?Q?EgJ5RC4gX+I7IrkvmGxfwhmsyvN+zhHu+Wvo9EDUHkSUKA1Iz0iGuDHFHhKI?=
+ =?us-ascii?Q?AKCbz0E3+DILYCW5jBKhpsp/4rzaID2b8YECP0fiQ976j5XfVrxRcv9dIjwU?=
+ =?us-ascii?Q?3QGxD9qDrvxU4u5ZMiPo7jwlsUccAvVtfQriQQA33RVVfhIwJ5QTfd0lSUzR?=
+ =?us-ascii?Q?dmbM/Sy8RAm/EhhdrVp1B4CiLjeaD/j9mLBrBdJpKENWuapjREYfqzlsjq6k?=
+ =?us-ascii?Q?6V5tnBzCv/Krm8mVeCup38V2Uay+GyrC3+uinoyg+CBY0g2W2sH0/P/QS0NA?=
+ =?us-ascii?Q?+OzT3Eh1aRK9R/+rw42UKs+i77mf?=
 X-OriginatorOrg: puiterwijk.org
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3dda4fd1-88d8-406d-09f6-08d8d9cc8337
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86184aed-e2af-4e97-9700-08d8d9cc8366
 X-MS-Exchange-CrossTenant-AuthSource: AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2021 20:32:47.2088
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2021 20:32:47.5234
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 963619a5-d7a7-4543-a254-29462dc51fb3
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VFsHGQliXeNZXzmiTiCW/RI7Xi/prsfdz6XGJodBx/vICo26j2Z0oqUQJ3wPe7Ms4XeJMq6nxpQFpNYWKBkkGA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: HtEIAyOKjXnhJl8fIt1r95Eg8hFvUVNstNB5KWEwyb1MlNyI8RxvT2dBx04UHC5THb6iwthNpyCVZpOboGZgbg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4P191MB0083
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add support to read contents from a TPM2 Non-Volatile Index location,
-allowing the kernel to retrieve contents and attributes of NV indexes.
+Allows passing flags for key_create_or_update via
+integrity_load_cert.
 
 Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
 ---
- drivers/char/tpm/tpm-interface.c |  30 ++++++
- drivers/char/tpm/tpm.h           |   5 +
- drivers/char/tpm/tpm2-cmd.c      | 163 +++++++++++++++++++++++++++++++
- include/linux/tpm.h              |  65 ++++++++++++
- 4 files changed, 263 insertions(+)
+ security/integrity/digsig.c                          | 11 ++++++-----
+ security/integrity/integrity.h                       |  6 ++++--
+ security/integrity/platform_certs/platform_keyring.c |  2 +-
+ 3 files changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index 1621ce818705..9d81c11181d4 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -342,6 +342,36 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+index 250fb0836156..93203c767b57 100644
+--- a/security/integrity/digsig.c
++++ b/security/integrity/digsig.c
+@@ -144,7 +144,7 @@ int __init integrity_init_keyring(const unsigned int id)
  }
- EXPORT_SYMBOL_GPL(tpm_pcr_extend);
  
-+/**
-+ * tpm_nv_read - Read an NV Index from the TPM
-+ * @chip:	A &struct tpm_chip instance, %NULL for the default chip
-+ * @nv_idx:	The NV Index to be retrieved
-+ * @attr_out:	A place to store returned attributes if a TPM 2 was used
-+ * @out:	A pointer where to store the return buffer
-+ *
-+ * Return: number of bytes read or a negative error value
-+ */
-+int tpm_nv_read(struct tpm_chip *chip, u32 nv_idx, u32 *attr_out, void **out)
-+{
-+	int rc;
-+
-+	chip = tpm_find_get_ops(chip);
-+	if (!chip)
-+		return -ENODEV;
-+
-+	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+		rc = tpm2_nv_read(chip, nv_idx, attr_out, out);
-+		goto out;
-+	}
-+
-+	rc = -ENODEV;
-+
-+out:
-+	tpm_put_ops(chip);
-+	return rc;
-+}
-+EXPORT_SYMBOL_GPL(tpm_nv_read);
-+
- /**
-  * tpm_send - send a TPM command
-  * @chip:	a &struct tpm_chip instance, %NULL for the default chip
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index 947d1db0a5cc..d4dfc5148adb 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -56,9 +56,12 @@ enum tpm_addr {
- #define TPM_ERR_DEACTIVATED     0x6
- #define TPM_ERR_DISABLED        0x7
- #define TPM_ERR_INVALID_POSTINIT 38
-+#define TPM_ERR_INVALID_HANDLE_1 0x18b
+ static int __init integrity_add_key(const unsigned int id, const void *data,
+-				    off_t size, key_perm_t perm)
++				    off_t size, key_perm_t perm, unsigned long flags)
+ {
+ 	key_ref_t key;
+ 	int rc = 0;
+@@ -154,7 +154,7 @@ static int __init integrity_add_key(const unsigned int id, const void *data,
  
- #define TPM_TAG_RQU_COMMAND 193
+ 	key = key_create_or_update(make_key_ref(keyring[id], 1), "asymmetric",
+ 				   NULL, data, size, perm,
+-				   KEY_ALLOC_NOT_IN_QUOTA);
++				   flags | KEY_ALLOC_NOT_IN_QUOTA);
+ 	if (IS_ERR(key)) {
+ 		rc = PTR_ERR(key);
+ 		pr_err("Problem loading X.509 certificate %d\n", rc);
+@@ -186,18 +186,19 @@ int __init integrity_load_x509(const unsigned int id, const char *path)
+ 	perm = (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW | KEY_USR_READ;
  
-+#define TPM2_HR_NV_INDEX 0x1000000
-+
- /* TPM2 specific constants. */
- #define TPM2_SPACE_BUFFER_SIZE		16384 /* 16 kB */
+ 	pr_info("Loading X.509 certificate: %s\n", path);
+-	rc = integrity_add_key(id, (const void *)data, size, perm);
++	rc = integrity_add_key(id, (const void *)data, size, perm, 0);
  
-@@ -224,6 +227,8 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max);
- ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,
- 			u32 *value, const char *desc);
- 
-+int tpm2_nv_read(struct tpm_chip *chip, u32 nvindex, u32 *attr_out, void **dest);
-+int tpm2_nv_readpublic(struct tpm_chip *chip, u32 nvindex, struct tpm2_nv_public *info);
- ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip);
- int tpm2_auto_startup(struct tpm_chip *chip);
- void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type);
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index eff1f12d981a..ba1026123464 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -269,6 +269,169 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 	vfree(data);
  	return rc;
  }
  
-+struct tpm2_buffer_out {
-+	__be16	size;
-+	u8	data[];
-+} __packed;
-+
-+struct tpm2_nv_public_out {
-+	__be32	nvIndex;
-+	__be16	nameAlg;
-+	__be32	attributes;
-+	__be16	authPolicySize;
-+	u8	data[];
-+} __packed;
-+
-+int tpm2_nv_readpublic(struct tpm_chip *chip, u32 nvindex, struct tpm2_nv_public *info)
-+{
-+	struct tpm_buf buf;
-+	int rc;
-+	u16 recd;
-+	u32 resp_header_length;
-+	struct tpm2_buffer_out *out;
-+	struct tpm2_nv_public_out *publicout;
-+	u32 nvhandle;
-+	u16 auth_policy_size;
-+
-+	if ((nvindex & ~TPM2_HR_NV_INDEX) > 0x00FFFFFF)
-+		return -EINVAL;
-+
-+	/* HR_NV_INDEX = TPM_HT_NV_INDEX << HR_SHIFT */
-+	nvhandle = TPM2_HR_NV_INDEX | nvindex;
-+
-+	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_NV_READPUBLIC);
-+	if (rc)
-+		return rc;
-+	tpm_buf_append_u32(&buf, nvhandle);
-+	rc = tpm_transmit_cmd(chip, &buf, 0, NULL);
-+	if (rc) {
-+		if (rc != TPM_ERR_DISABLED && rc != TPM_ERR_DEACTIVATED
-+		    && rc != TPM2_RC_TESTING && rc != TPM_ERR_INVALID_HANDLE_1)
-+			dev_err(&chip->dev, "A TPM error (%d) occurred attempting to read an NV Index public\n", rc);
-+		if (rc == TPM_ERR_INVALID_HANDLE_1)
-+			rc = -ENOENT;
-+		else if (rc > 0)
-+			rc = -EIO;
-+		goto out;
-+	}
-+	resp_header_length = tpm_buf_response_header_length(&buf, 0);
-+	out = (struct tpm2_buffer_out *)&buf.data[resp_header_length];
-+	publicout = (struct tpm2_nv_public_out *)&out->data;
-+	recd = be16_to_cpu(out->size);
-+
-+	info->nv_index = be32_to_cpu(publicout->nvIndex);
-+	info->name_alg = be16_to_cpu(publicout->nameAlg);
-+	info->attributes = be32_to_cpu(publicout->attributes);
-+
-+	/* Determine the size of the authPolicy, so we can skip over that to grab the data size */
-+	auth_policy_size = be16_to_cpu(publicout->authPolicySize);
-+
-+	info->data_size = be16_to_cpu((publicout->data[auth_policy_size]) | (publicout->data[auth_policy_size+1] << 8));
-+
-+out:
-+	tpm_buf_destroy(&buf);
-+	return rc;
-+}
-+
-+int tpm2_nv_read(struct tpm_chip *chip, u32 nvindex, u32 *attr_out, void **dest)
-+{
-+	struct tpm_buf buf;
-+	int rc;
-+	struct tpm2_buffer_out *out;
-+	u16 recd;
-+	u16 copied;
-+	u32 nvhandle;
-+	u32 resp_header_length;
-+	struct tpm2_null_auth_area auth_area;
-+	u16 size;
-+	struct tpm2_nv_public public;
-+
-+	copied = 0;
-+
-+	if ((nvindex & ~TPM2_HR_NV_INDEX) > 0x00FFFFFF)
-+		return -EINVAL;
-+
-+	/* HR_NV_INDEX = TPM_HT_NV_INDEX << HR_SHIFT */
-+	nvhandle = TPM2_HR_NV_INDEX | nvindex;
-+
-+	/* Determine the size of the NV Index contents */
-+	rc = tpm2_nv_readpublic(chip, nvindex, &public);
-+	if (rc < 0)
-+		return rc;
-+	if (attr_out != NULL)
-+		*attr_out = public.attributes;
-+	size = public.data_size;
-+	*dest = kzalloc(size, GFP_KERNEL);
-+	if (!*dest) {
-+		rc = -ENOMEM;
-+		goto out;
-+	}
-+
-+	/* Retrieve the actual NV Index contents */
-+	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_NV_READ);
-+	if (rc)
-+		goto out_free;
-+
-+	while (copied < size) {
-+		tpm_buf_reset(&buf, TPM2_ST_SESSIONS, TPM2_CC_NV_READ);
-+
-+		tpm_buf_append_u32(&buf, TPM2_RH_OWNER);
-+		tpm_buf_append_u32(&buf, nvhandle);
-+
-+		auth_area.handle = cpu_to_be32(TPM2_RS_PW);
-+		auth_area.nonce_size = 0;
-+		auth_area.attributes = 0;
-+		auth_area.auth_size = 0;
-+
-+		tpm_buf_append_u32(&buf, sizeof(struct tpm2_null_auth_area));
-+		tpm_buf_append(&buf, (const unsigned char *)&auth_area,
-+			       sizeof(auth_area));
-+
-+		/* Size to request: at most 512 bytes at a time */
-+		tpm_buf_append_u16(&buf, min_t(u16, 512, size-copied));
-+		/* Offset: start at where we ended up */
-+		tpm_buf_append_u16(&buf, copied);
-+
-+		rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to read NV index");
-+		if (rc) {
-+			if (rc > 0)
-+				rc = -EIO;
-+			goto out_free;
-+		}
-+		resp_header_length = tpm_buf_response_header_length(&buf, 0);
-+		out = (struct tpm2_buffer_out *)&buf.data[resp_header_length];
-+		recd = be16_to_cpu(out->size);
-+
-+		if (recd == 0) {
-+			rc = -EIO;
-+			goto out_free;
-+		}
-+		if (recd > size-copied) {
-+			rc = -EIO;
-+			goto out_free;
-+		}
-+
-+		memcpy(*dest + copied, out->data, recd);
-+		copied += recd;
-+	};
-+
-+out_free:
-+	if ((rc < 0) || (copied != size)) {
-+		kvfree(*dest);
-+		*dest = NULL;
-+	}
-+
-+out:
-+	tpm_buf_destroy(&buf);
-+
-+	if (rc < 0)
-+		return rc;
-+	else if (copied != size)
-+		return -EIO;
-+	else
-+		return size;
-+}
-+
- struct tpm2_get_random_out {
- 	__be16 size;
- 	u8 buffer[TPM_MAX_RNG_DATA];
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 8f4ff39f51e7..b812236b9955 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -53,6 +53,40 @@ struct tpm_bank_info {
- 	u16 crypto_id;
- };
- 
-+enum tpm_nv_public_attrs {
-+	TPM2_ATTR_NV_PPWRITE = 0x00000001,
-+	TPM2_ATTR_NV_OWNERWRITE = 0x00000002,
-+	TPM2_ATTR_NV_AUTHWRITE = 0x00000004,
-+	TPM2_ATTR_NV_POLICYWRITE = 0x00000008,
-+	/* Bits 4-7 TPM_NT */
-+	/* Bits 8-9 reserved */
-+	TPM2_ATTR_NV_POLICY_DELETE = 0x00000400,
-+	TPM2_ATTR_NV_WRITELOCKED = 0x00000800,
-+	TPM2_ATTR_NV_WRITEALL = 0x00001000,
-+	TPM2_ATTR_NV_WRITE_DEFINE = 0x00002000,
-+	TPM2_ATTR_NV_WRITE_STCLEAR = 0x00004000,
-+	TPM2_ATTR_NV_GLOBALLOCK = 0x00008000,
-+	TPM2_ATTR_NV_PPREAD = 0x00010000,
-+	TPM2_ATTR_NV_OWNERREAD = 0x00020000,
-+	TPM2_ATTR_NV_AUTHREAD = 0x00040000,
-+	TPM2_ATTR_NV_POLICYREAD = 0x00080000,
-+	/* Bits 20-24 reserved */
-+	TPM2_ATTR_NV_NO_DA = 0x02000000,
-+	TPM2_ATTR_NV_ORDERLY = 0x04000000,
-+	TPM2_ATTR_NV_CLEAR_STCLEAR = 0x08000000,
-+	TPM2_ATTR_NV_READLOCKED = 0x10000000,
-+	TPM2_ATTR_NV_WRITTEN = 0x20000000,
-+	TPM2_ATTR_NV_PLATFORMCREATE = 0x40000000,
-+	TPM2_ATTR_NV_READ_STCLEAR = 0x80000000,
-+};
-+
-+struct tpm2_nv_public {
-+	u32 nv_index;
-+	u16 name_alg;
-+	u32 attributes;
-+	u16 data_size;
-+};
-+
- enum TPM_OPS_FLAGS {
- 	TPM_OPS_AUTO_STARTUP = BIT(0),
- };
-@@ -189,6 +223,10 @@ enum tpm2_structures {
- 	TPM2_ST_SESSIONS	= 0x8002,
- };
- 
-+enum tpm2_root_handles {
-+	TPM2_RH_OWNER		= 0x40000001,
-+};
-+
- /* Indicates from what layer of the software stack the error comes from */
- #define TSS2_RC_LAYER_SHIFT	 16
- #define TSS2_RESMGR_TPM_RC_LAYER (11 << TSS2_RC_LAYER_SHIFT)
-@@ -223,6 +261,7 @@ enum tpm2_command_codes {
- 	TPM2_CC_CONTEXT_LOAD	        = 0x0161,
- 	TPM2_CC_CONTEXT_SAVE	        = 0x0162,
- 	TPM2_CC_FLUSH_CONTEXT	        = 0x0165,
-+	TPM2_CC_NV_READPUBLIC		= 0x0169,
- 	TPM2_CC_VERIFY_SIGNATURE        = 0x0177,
- 	TPM2_CC_GET_CAPABILITY	        = 0x017A,
- 	TPM2_CC_GET_RANDOM	        = 0x017B,
-@@ -389,6 +428,21 @@ static inline void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
- 	tpm_buf_append(buf, (u8 *) &value2, 4);
- }
- 
-+static inline u32 tpm_buf_response_header_length(struct tpm_buf *buf, bool has_shielded_locations)
-+{
-+	u32 header_length = TPM_HEADER_SIZE;
-+
-+	/* Possibly a handle for a Shielded Location */
-+	if (has_shielded_locations)
-+		header_length += 4;
-+
-+	/* Possibly the 32-bit parameter area size */
-+	if (tpm_buf_tag(buf) == TPM2_ST_SESSIONS)
-+		header_length += 4;
-+
-+	return header_length;
-+}
-+
- static inline u32 tpm2_rc_value(u32 rc)
+ int __init integrity_load_cert(const unsigned int id, const char *source,
+-			       const void *data, size_t len, key_perm_t perm)
++			       const void *data, size_t len, key_perm_t perm,
++			       unsigned long flags)
  {
- 	return (rc & BIT(7)) ? rc & 0xff : rc;
-@@ -401,6 +455,7 @@ extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
- 			struct tpm_digest *digest);
- extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- 			  struct tpm_digest *digests);
-+extern int tpm_nv_read(struct tpm_chip *chip, u32 nv_idx, u32 *attrs_out, void **out);
- extern int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen);
- extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
- extern struct tpm_chip *tpm_default_chip(void);
-@@ -423,6 +478,16 @@ static inline int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- 	return -ENODEV;
- }
+ 	if (!data)
+ 		return -EINVAL;
  
-+static inline int tpm2_nv_readpublic(struct tpm_chip *chip, u32 nvindex, struct tpm2_nv_public *info)
-+{
-+	return -ENODEV;
-+}
-+
-+static inline int tpm_nv_read(struct tpm_chip *chip, u32 nv_idx, u8 *out, size_t max)
-+{
-+	return -ENODEV;
-+}
-+
- static inline int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen)
+ 	pr_info("Loading X.509 certificate: %s\n", source);
+-	return integrity_add_key(id, data, len, perm);
++	return integrity_add_key(id, data, len, perm, flags);
+ }
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 547425c20e11..1194ff71a1c1 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -166,7 +166,8 @@ int integrity_modsig_verify(unsigned int id, const struct modsig *modsig);
+ int __init integrity_init_keyring(const unsigned int id);
+ int __init integrity_load_x509(const unsigned int id, const char *path);
+ int __init integrity_load_cert(const unsigned int id, const char *source,
+-			       const void *data, size_t len, key_perm_t perm);
++			       const void *data, size_t len, key_perm_t perm,
++			       unsigned long flags);
+ #else
+ 
+ static inline int integrity_digsig_verify(const unsigned int id,
+@@ -190,7 +191,8 @@ static inline int integrity_init_keyring(const unsigned int id)
+ static inline int __init integrity_load_cert(const unsigned int id,
+ 					     const char *source,
+ 					     const void *data, size_t len,
+-					     key_perm_t perm)
++					     key_perm_t perm,
++					     unsigned long flags)
  {
- 	return -ENODEV;
+ 	return 0;
+ }
+diff --git a/security/integrity/platform_certs/platform_keyring.c b/security/integrity/platform_certs/platform_keyring.c
+index bcafd7387729..131462c826b5 100644
+--- a/security/integrity/platform_certs/platform_keyring.c
++++ b/security/integrity/platform_certs/platform_keyring.c
+@@ -32,7 +32,7 @@ void __init add_to_platform_keyring(const char *source, const void *data,
+ 	perm = (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW;
+ 
+ 	rc = integrity_load_cert(INTEGRITY_KEYRING_PLATFORM, source, data, len,
+-				 perm);
++				 perm, 0);
+ 	if (rc)
+ 		pr_info("Error adding keys to platform keyring %s\n", source);
+ }
 -- 
 2.29.2
 
