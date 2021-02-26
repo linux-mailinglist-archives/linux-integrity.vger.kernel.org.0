@@ -2,230 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F573269B4
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Feb 2021 22:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D19C3269BE
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Feb 2021 22:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbhBZVvx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Feb 2021 16:51:53 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44442 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229622AbhBZVvw (ORCPT
+        id S229751AbhBZV46 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Feb 2021 16:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229550AbhBZV45 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Feb 2021 16:51:52 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11QLinKd138580;
-        Fri, 26 Feb 2021 16:51:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : from : to : cc
- : references : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=rGYxE2dB9tPqpjreuNZchKVBV+FyHd+TBX9en/5R1Ec=;
- b=XmGCO78lysdAXVMdwa8GvX6reG7WQRkX4d3d7ntCQJJrToPO8scsLWifTGdfUBsE9k8U
- IHL5KHgyHMPPcq0ArOgyxyo8VuPdRRZpLlc/NIucF++EA+zEIR0OvhSmtj9YpKCE6YTD
- g/WgWkX0PCwUqUyf7cGqSZQJcISiLlRjq79tNWQ/SMGYoWaz2Fs6RSf8mafSDJvW4X+4
- yc2l20qeXW3mqUSkGJAIgDRh/QVbWn2zMJDD9rLvHBLBknAltBQUI4zxb+Buxe2WZbg9
- weZurwsN3bnNYqFitbj0V88FJHCsFsRvbr0P8obCIAJRmboF97h7BXdmoP4WgYzqVJt1 6Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36y95tg4tk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Feb 2021 16:51:09 -0500
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 11QLjKsU146500;
-        Fri, 26 Feb 2021 16:51:08 -0500
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 36y95tg4tc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Feb 2021 16:51:08 -0500
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11QLhY68023261;
-        Fri, 26 Feb 2021 21:51:07 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01dal.us.ibm.com with ESMTP id 36tt2ap73b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Feb 2021 21:51:07 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11QLp7dB6095668
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Feb 2021 21:51:07 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED9C4AC060;
-        Fri, 26 Feb 2021 21:51:06 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9A0FAC05B;
-        Fri, 26 Feb 2021 21:51:06 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 26 Feb 2021 21:51:06 +0000 (GMT)
-Subject: Re: [PATCH 3/3] integrity: Load keys from TPM NV onto IMA keyring
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     Patrick Uiterwijk <patrick@puiterwijk.org>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, linux-integrity@vger.kernel.org
-Cc:     pbrobinson@gmail.com, kgold@linux.ibm.com
-References: <20210225203229.363302-1-patrick@puiterwijk.org>
- <20210225203229.363302-4-patrick@puiterwijk.org>
- <4dcd8fe8-632a-a60b-e502-2185f61529f3@linux.ibm.com>
-Message-ID: <df01935b-4f73-1fdd-787a-e2620fdb082f@linux.ibm.com>
-Date:   Fri, 26 Feb 2021 16:51:06 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 26 Feb 2021 16:56:57 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE9DC061574;
+        Fri, 26 Feb 2021 13:56:16 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b1so5241439lfb.7;
+        Fri, 26 Feb 2021 13:56:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mancjAu+Bc0eVwVmvTP0rgqR/aW6rMYyUOZfbqNyj7M=;
+        b=Ht+2KZzHbQGkOYkLK1GVZ4i0bo08WD/idgMYXk9OA/XdcCGY7IIKIzSHxDssLq+uFH
+         NmEJnVvftuaQNFrMv+Y/14SKZoDgWR/9vPJrY7ZLkKWzt27+fhZORmGeI8OoF3GLo/gJ
+         ddGSsEG3+FCPRVUlKw7XPi01Wq6cZw0BxrlBnl7baqj1tgwwGs5n2L2iz0VHBY5Iiub4
+         EGED/i7C52Rma0HtUnjir/zOYjhfA6xR0XbY8nPGDhrOP9DWCf/G2NsxNLdYQkW1ZcwN
+         6NO/EBOP+ezuFmMPYVJNvxMqA9Ff9EVZJZVwoNwCOZrd2EUFVXcUr1tl2S/w+kLt+2Rg
+         oaXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mancjAu+Bc0eVwVmvTP0rgqR/aW6rMYyUOZfbqNyj7M=;
+        b=k2wUxDB0HMR7penqumK8rY/Xu1YL1U9EOWRXVzqfcDcxaWMNrP05hVwlLOG8pYnShl
+         8KUvbKI6AB99dZvPgsuNYIYfaYFTAri4+nWLEPTY27dQC+gTw0w1E4JpxCSmnDNJl5SG
+         PnL8cJyxBEPtTV83Q9MTRA3KFPXP6tJe5tkmLYlXTeGODBQIZ6qoQ6mUDs6fXFn/VcUD
+         k/uobcXkLSfbPZW6S/C4PmFVcJSuZnHum4rH8m6GRig58eyTHZg/B3rtGkfrAOyxo6qC
+         kXOj3gdWthmibZSDgGJw7HDjlWbixASrN+DK6Du8Aafs/Gbo5nMhhSnYvXlXBO2OE2TB
+         1/ag==
+X-Gm-Message-State: AOAM530SFLRA6UqKte4OWk+6Qwi2gpvh7wEeOADf/cNdkGu9Yh72Iw6O
+        M/tFPsR45P9pBhfe8vBrRCY=
+X-Google-Smtp-Source: ABdhPJwfuaFS/xNOCEF2BQf7IKgZBGoG4uhkxSyNAjLEIg2FhuXW1u1ip7PSh5bQ4BZ+X416hY0fJA==
+X-Received: by 2002:ac2:4349:: with SMTP id o9mr3053275lfl.415.1614376575419;
+        Fri, 26 Feb 2021 13:56:15 -0800 (PST)
+Received: from rikard (h-98-128-229-129.NA.cust.bahnhof.se. [98.128.229.129])
+        by smtp.gmail.com with ESMTPSA id z1sm1576245ljo.134.2021.02.26.13.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Feb 2021 13:56:14 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+X-Google-Original-From: Rikard Falkeborn <rikard.falkeborn>
+Date:   Fri, 26 Feb 2021 22:56:12 +0100
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm/ppi: Constify static struct attribute_group
+Message-ID: <YDlufJLcYN2bzNYV@rikard>
+References: <20210204215427.49047-1-rikard.falkeborn@gmail.com>
+ <YBynopNwhIhGBXv/@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <4dcd8fe8-632a-a60b-e502-2185f61529f3@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-26_09:2021-02-26,2021-02-26 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 suspectscore=0 mlxscore=0 impostorscore=0
- spamscore=0 adultscore=0 mlxlogscore=999 bulkscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102260159
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YBynopNwhIhGBXv/@kernel.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 2/26/21 4:47 PM, Stefan Berger wrote:
-> On 2/25/21 3:32 PM, Patrick Uiterwijk wrote:
->> Allows users to enroll their own public key stored in a specific TPM2
->> NV Index, requiring the absence of the Platform Create and Platform
->> Write attributes on the NV Index, to be loaded on the IMA keyring.
->>
->> Provides a method for users to load keys without the need to recompile
->> the kernel or change the kernel binary, which would require a resign of
->> the kernel image.
->>
->> Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
->> ---
->>   security/integrity/ima/Kconfig    | 22 +++++++++++++
->>   security/integrity/ima/ima_init.c | 53 +++++++++++++++++++++++++++++++
->>   2 files changed, 75 insertions(+)
->>
->> diff --git a/security/integrity/ima/Kconfig 
->> b/security/integrity/ima/Kconfig
->> index 12e9250c1bec..28424b930c81 100644
->> --- a/security/integrity/ima/Kconfig
->> +++ b/security/integrity/ima/Kconfig
->> @@ -291,6 +291,28 @@ config IMA_BLACKLIST_KEYRING
->>          the search is successful the requested operation is rejected 
->> and
->>          an error is returned to the caller.
->>   +config IMA_LOAD_CERT_NVINDEX
->> +    bool "Load certificate from TPM nvindex into '.ima' trusted 
->> keyring"
->> +    depends on IMA_TRUSTED_KEYRING && TCG_TPM
->> +    default n
->> +    help
->> +       File signature verification is based on the public keys
->> +       loaded on the .ima trusted keyring. These public keys are
->> +       X509 certificates signed by a trusted key on the
->> +       .system keyring.  This option enables X509 certificate
->> +       loading by the kernel onto the '.ima' trusted keyring
->> +       from a TPM nvindex, bypassing the builtin keyring check.
->> +
->> +config IMA_LOAD_CERT_NVINDEX_INDEX
->> +    hex "The TPM NV Index to load into the '.ima' trusted keyring"
->> +    depends on IMA_LOAD_CERT_NVINDEX
->> +    default 0x184b520
->> +    help
->> +       Defines the index of the NV Index that gets loaded into the
->> +       '.ima' keyring.
->> +       The default is the "0x18" prefix for a non-TCG specified NV 
->> Index,
->> +       suffixed with ASCII for "KR" (keyring) and then 0
->> +
->>   config IMA_LOAD_X509
->>       bool "Load X509 certificate onto the '.ima' trusted keyring"
->>       depends on IMA_TRUSTED_KEYRING
->> diff --git a/security/integrity/ima/ima_init.c 
->> b/security/integrity/ima/ima_init.c
->> index 6e8742916d1d..ea0949e8df12 100644
->> --- a/security/integrity/ima/ima_init.c
->> +++ b/security/integrity/ima/ima_init.c
->> @@ -112,6 +112,55 @@ void __init ima_load_x509(void)
->>   }
->>   #endif
->>   +#ifndef CONFIG_IMA_LOAD_CERT_NVINDEX
->> +int __init ima_load_key_nvindex(void)
->> +{
->> +    return 0;
->> +}
->> +#else
->> +int __init ima_load_key_nvindex(void)
->> +{
->> +    void *cert_buffer;
->> +    int rc;
->> +    key_perm_t perm;
->> +    u32 nvindex_attributes = 0;
->> +
->> +    rc = tpm_nv_read(tpm_default_chip(),
->
->
-> You should do chip = tpm_default_chip() so that later on you can do 
-> put_device(&chip->dev).
+On Fri, Feb 05, 2021 at 04:04:18AM +0200, Jarkko Sakkinen wrote:
+> On Thu, Feb 04, 2021 at 10:54:27PM +0100, Rikard Falkeborn wrote:
+> > The only usage of ppi_attr_grp is to put its address in an array of
+> > pointers to const struct attribute_group. Make it const to allow the
+> > compiler to put it in read-only memory.
+> > 
+> > Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> 
+> Thanks.
+> 
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> /Jarkko
+> 
 
+Hi Jarkko,
+I saw this was merged as commit
+90cba8d20f8b09d62a25f9864cb8e67722d76c3a, but in the commit, there was an
+additional change where a call to dump_stack() was added in
+drivers/char/tpm/tpm-chip.c, was this intentional?
 
-... or just use ima_tpm_chip if != NULL: 
-https://elixir.bootlin.com/linux/latest/source/security/integrity/ima/ima_init.c#L23
-
-
-
->
->
->> + CONFIG_IMA_LOAD_CERT_NVINDEX_INDEX,
->> +                &nvindex_attributes, &cert_buffer);
->> +    if (rc < 0) {
->> +        if (rc == -ENODEV)  /* No TPM2 */
->> +            rc = 0;
->> +        if (rc == -ENOENT)  /* No certificate in NV Index */
->> +            rc = 0;
->> +        goto out;
->> +    }
->> +
->> +    pr_info("Loading IMA key from TPM NV Index 0x%x", 
->> CONFIG_IMA_LOAD_CERT_NVINDEX_INDEX);
->> +
->> +    if (nvindex_attributes & TPM2_ATTR_NV_PLATFORMCREATE) {
->> +        pr_err("NV Index has the Platform Create attribute");
->> +        rc = -EACCES;
->> +        goto out_free;
->> +    }
->> +    if (nvindex_attributes & TPM2_ATTR_NV_PPWRITE) {
->> +        pr_err("NV Index has the Platform Write attribute");
->> +        rc = -EACCES;
->> +        goto out_free;
->> +    }
->> +
->> +    perm = (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW | 
->> KEY_USR_READ;
->> +    rc = integrity_load_cert(INTEGRITY_KEYRING_IMA, "TPM NV Index",
->> +                 cert_buffer, rc, perm,
->> +                 KEY_ALLOC_BYPASS_RESTRICTION);
->> +
->> +out_free:
->> +    kvfree(cert_buffer);
->
->
-> kfree?
->
->
->> +out:
->> +    return rc;
->> +}
->> +#endif
->> +
->>   int __init ima_init(void)
->>   {
->>       int rc;
->> @@ -124,6 +173,10 @@ int __init ima_init(void)
->>       if (rc)
->>           return rc;
->>   +    rc = ima_load_key_nvindex();
->> +    if (rc)
->> +        pr_info("Failed to load IMA key from TPM NV Index (%d)", rc);
->> +
->>       rc = ima_init_crypto();
->>       if (rc)
->>           return rc;
-
-
+/Rikard
