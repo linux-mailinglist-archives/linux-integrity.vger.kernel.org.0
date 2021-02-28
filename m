@@ -2,81 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A6632717E
-	for <lists+linux-integrity@lfdr.de>; Sun, 28 Feb 2021 09:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEBF3271BD
+	for <lists+linux-integrity@lfdr.de>; Sun, 28 Feb 2021 10:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbhB1H7r (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 28 Feb 2021 02:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbhB1H7q (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 28 Feb 2021 02:59:46 -0500
-Received: from cavan.codon.org.uk (cavan.codon.org.uk [IPv6:2a00:1098:84:22e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18070C06174A;
-        Sat, 27 Feb 2021 23:59:05 -0800 (PST)
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 1B1A540A0A; Sun, 28 Feb 2021 07:59:02 +0000 (UTC)
-Date:   Sun, 28 Feb 2021 07:59:02 +0000
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Matthew Garrett <matthewgarrett@google.com>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-pm@vger.kernel.org, keyrings@vger.kernel.org,
-        zohar@linux.ibm.com, jarkko@kernel.org, corbet@lwn.net,
-        rjw@rjwysocki.net, Matthew Garrett <mjg59@google.com>
-Subject: Re: [PATCH 2/9] tpm: Allow PCR 23 to be restricted to kernel-only use
-Message-ID: <20210228075902.GA9183@codon.org.uk>
-References: <20210220013255.1083202-1-matthewgarrett@google.com>
- <20210220013255.1083202-3-matthewgarrett@google.com>
- <b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S230424AbhB1Jdf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 28 Feb 2021 04:33:35 -0500
+Received: from spam.zju.edu.cn ([61.164.42.155]:31184 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230125AbhB1Jde (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 28 Feb 2021 04:33:34 -0500
+Received: from localhost.localdomain (unknown [10.192.85.18])
+        by mail-app3 (Coremail) with SMTP id cC_KCgDnPdgvYztgVk3ZAQ--.62003S4;
+        Sun, 28 Feb 2021 17:32:34 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm: Add missing check in tpm_inf_recv
+Date:   Sun, 28 Feb 2021 17:32:30 +0800
+Message-Id: <20210228093230.5676-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgDnPdgvYztgVk3ZAQ--.62003S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrurW3AFW5Wr48uFyDCw1rZwb_yoW3CFb_C3
+        W8Jwn3C340vFy8CF1UJwn7Xa43Xws5uF1v93WUtay3Z34vkrW5W3yrZry3Zr18Gr4UtFsF
+        9a93XFWfAF1SkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
+        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgQGBlZdtSfEeAAQsz
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 10:00:53AM -0800, James Bottomley wrote:
-> On Sat, 2021-02-20 at 01:32 +0000, Matthew Garrett wrote:
-> > Under certain circumstances it might be desirable to enable the
-> > creation of TPM-backed secrets that are only accessible to the
-> > kernel. In an ideal world this could be achieved by using TPM
-> > localities, but these don't appear to be available on consumer
-> > systems.
-> 
-> I don't understand this ... the localities seem to work fine on all the
-> systems I have ... is this some embedded thing?
+The use of wait() in tpm_inf_recv() is almost the same. It's odd that
+we only check the return value and terminate execution flow of one call.
 
-I haven't made it work on an HP Z440 or a Lenovo P520. So now I'm
-wondering whether having chipsets with TXT support (even if it's turned
-off) confuse this point. Sigh. I'd really prefer to use localities than
-a PCR, so if it works on client platforms I'd be inclined to say we'll
-do a self-test and go for that, and workstation vendors can just
-recommend their customers use UPSes or something.
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+---
+ drivers/char/tpm/tpm_infineon.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> >  An alternative is to simply block userland from modifying one of the
-> > resettable PCRs, leaving it available to the kernel. If the kernel
-> > ensures that no userland can access the TPM while it is carrying out
-> > work, it can reset PCR 23, extend it to an arbitrary value, create or
-> > load a secret, and then reset the PCR again. Even if userland somehow
-> > obtains the sealed material, it will be unable to unseal it since PCR
-> > 23 will never be in the appropriate state.
-> 
-> This seems a bit arbitrary: You're removing this PCR from user space
-> accessibility, but PCR 23 is defined as "Application Support" how can
-> we be sure no application will actually want to use it (and then fail)?
+diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
+index 9c924a1440a9..abe00f45aa45 100644
+--- a/drivers/char/tpm/tpm_infineon.c
++++ b/drivers/char/tpm/tpm_infineon.c
+@@ -263,7 +263,9 @@ static int tpm_inf_recv(struct tpm_chip *chip, u8 * buf, size_t count)
+ 		size = ((buf[2] << 8) | buf[3]);
+ 
+ 		for (i = 0; i < size; i++) {
+-			wait(chip, STAT_RDA);
++			ret = wait(chip, STAT_RDA);
++			if (ret)
++				return -EIO;
+ 			buf[i] = tpm_data_in(RDFIFO);
+ 		}
+ 
+-- 
+2.17.1
 
-Absolutely no way of guaranteeing that, and enabling this option is
-certainly an ABI break.
-
-> Since PCRs are very scarce, why not use a NV index instead.  They're
-> still a bounded resource, but most TPMs have far more of them than they
-> do PCRs, and the address space is much bigger so picking a nice
-> arbitrary 24 bit value reduces the chance of collisions.
-
-How many write cycles do we expect the NV to survive? But I'll find a
-client system with a TPM and play with locality support there - maybe we
-can just avoid this problem anyway.
