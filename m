@@ -2,127 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F7032B30E
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Mar 2021 04:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A5332B328
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Mar 2021 04:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbhCCB3P (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Mar 2021 20:29:15 -0500
-Received: from us2-ob1-2.mailhostbox.com ([162.210.70.53]:59773 "EHLO
-        us2-ob1-2.mailhostbox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242293AbhCBIYB (ORCPT
+        id S233751AbhCCB3n (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Mar 2021 20:29:43 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39664 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351091AbhCBNbd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Mar 2021 03:24:01 -0500
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: hello@oswalpalash.com)
-        by us2.outbound.mailhostbox.com (Postfix) with ESMTPSA id 0A033182368;
-        Tue,  2 Mar 2021 07:52:32 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oswalpalash.com;
-        s=20160715; t=1614671552;
-        bh=YKuKXn7CtU6RhyLQwQluFj130cGpc9IGAnjZZJFeVVE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=Lfo10Fxoj4Txyqp5sG0f65YzV8ZfBgebaECWow+ymbWhoR20ZppHtLqqAT9Xblyb4
-         irTD9rU1ihF/EYvgqqYIZvj9BCNvPPaB+TNvsjaFAHzsmI0tTrXAUGs6WLzH232mZ/
-         smrrbth05VC7l/e0UF64+1rBUq7VpXaq22m5iK+k=
-Received: by mail-lf1-f52.google.com with SMTP id f1so29848632lfu.3;
-        Mon, 01 Mar 2021 23:52:31 -0800 (PST)
-X-Gm-Message-State: AOAM532l5VBwgkorHS/jrdX95qyv8gDkk9PqLVPi9W8letE31qBywysL
-        Np3BozAvvwBnRzhVRNeZW3QDC8XdJKZ0j7d4oc4=
-X-Google-Smtp-Source: ABdhPJxY6cyizpRdsLSaQCkJcStJRYN3Q+Hpq26TtcHaPZNqeqn8edElaDBFE65cAzpurPBt3srBdHzYvresyCXBIqg=
-X-Received: by 2002:a19:7ed6:: with SMTP id z205mr11535045lfc.12.1614671550346;
- Mon, 01 Mar 2021 23:52:30 -0800 (PST)
-MIME-Version: 1.0
-References: <YC/3n585TNJ500Ps@kernel.org>
-In-Reply-To: <YC/3n585TNJ500Ps@kernel.org>
-From:   Palash Oswal <hello@oswalpalash.com>
-Date:   Tue, 2 Mar 2021 13:22:18 +0530
-X-Gmail-Original-Message-ID: <CAGyP=7eV=CfgCp1OKt1mDN0erz5Zq40ePapJvF0wCnHfzOR=Xg@mail.gmail.com>
-Message-ID: <CAGyP=7eV=CfgCp1OKt1mDN0erz5Zq40ePapJvF0wCnHfzOR=Xg@mail.gmail.com>
-Subject: Re: [PATCH] ima: Replacing deprecated strlcpy with strscpy ~~~~~~~~~ Replace
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=ermhMbhX c=1 sm=1 tr=0
-        a=Lq6r7wnCGV6iLQba78UrEg==:117 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10
-        a=8_4whJBMvIpeHjROzMMA:9 a=QEXdDO2ut3YA:10 a=gME-wNpD-40A:10
+        Tue, 2 Mar 2021 08:31:33 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 122DLAnh019792;
+        Tue, 2 Mar 2021 08:30:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=o5Z9y33maAEhv+LN3/ehy6YtXs7A81xGJs4Xc3UM8Us=;
+ b=VllA/SWXS8Sfpw7ry0WweQ6x2ljzTXD9dvJJsPlz0KSxXOSfY+Uho2M+xcWUKj0KbYcv
+ Je18Btazt5UU0K7v4heRYP/YDmKTbEdyOOFa6TgZFSxCxG/uGMYs6AgQ5wBiTnOrnTSF
+ A8vxDGAYnfPPusHCvTh5YBj0VGg0fXp/4ZumJ9ZfA/3R26tilmfxt0sJFGiOgE3Ck5NG
+ D5G/UQGJjr0ozrBlHNiJ6h2k14U7Hf1Rjg9EcO9Eqquorm9m3v9KJrXJqEp3d6ljEzHP
+ ofuw5Rpi5Royrs/OuxMsuB1fig89tQwCKN5N8tE9jmEb4PYDHIQSVPw6oF7kY1YdUqiz 7Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 371p5yg6v5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Mar 2021 08:30:07 -0500
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 122DMnWF023013;
+        Tue, 2 Mar 2021 08:30:06 -0500
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 371p5yg6sy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Mar 2021 08:30:06 -0500
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 122DMuc2031303;
+        Tue, 2 Mar 2021 13:30:04 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 370c59sx1t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 Mar 2021 13:30:03 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 122DU1wl50856288
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 Mar 2021 13:30:01 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AFC94AE058;
+        Tue,  2 Mar 2021 13:30:01 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 12BDBAE051;
+        Tue,  2 Mar 2021 13:30:00 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.103.165])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  2 Mar 2021 13:29:59 +0000 (GMT)
+Message-ID: <1a679c59345b02f10e425c8c5c55efd901dc714d.camel@linux.ibm.com>
+Subject: Re: [PATCH 06/20] ima: Manual replacement of the deprecated
+ strlcpy() with return values
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Romain Perier <romain.perier@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        kernel-hardening@lists.openwall.com,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 02 Mar 2021 08:29:58 -0500
+In-Reply-To: <20210222151231.22572-7-romain.perier@gmail.com>
+References: <20210222151231.22572-1-romain.perier@gmail.com>
+         <20210222151231.22572-7-romain.perier@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-02_06:2021-03-01,2021-03-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ clxscore=1011 lowpriorityscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 bulkscore=0 mlxscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103020107
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Apologies for the in-accurate description. This patch is covered under
-the patch-set by Romain Perier ( https://lkml.org/lkml/2021/2/22/739 )
-and can be disregarded.
+On Mon, 2021-02-22 at 16:12 +0100, Romain Perier wrote:
+> The strlcpy() reads the entire source buffer first, it is dangerous if
+> the source buffer lenght is unbounded or possibility non NULL-terminated.
 
-Best Regards,
-Palash
+As other's have pointed out, "lenght" -> length.
 
-On Fri, Feb 19, 2021 at 11:09 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> Reply-To:
-> In-Reply-To: <20210219084038.GA7564@g3.oswalpalash.com>
->
-> On Fri, Feb 19, 2021 at 02:10:38PM +0530, Palash Oswal wrote:
-> > The strlcpy() function is unsafe in that the source buffer length
-> > is unbounded or possibly be non NULL terminated. This can cause
-> > memory over-reads, crashes, etc.
-> >
-> > Link: https://github.com/KSPP/linux/issues/89
-> > Signed-off-by: Palash Oswal <hello@oswalpalash.com>
->
-> The long description does not explain what the commit does, and
-> does not include any details about deprecation of strlcpy(), which
-> at least I'm not aware of.
->
-> I don't think *length* ever is NULL terminated. The first sentence
-> is somewhat weird. Also strlcpy() does have a bounds check.
->
-> Generally, the description and reasoning is sloppy to say the
-> least.
->
-> /Jarkko
->
->
-> > ---
-> >  security/integrity/ima/ima_api.c    | 2 +-
-> >  security/integrity/ima/ima_policy.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-> > index 1dd70dc68ffd..2f3b8257181d 100644
-> > --- a/security/integrity/ima/ima_api.c
-> > +++ b/security/integrity/ima/ima_api.c
-> > @@ -399,7 +399,7 @@ const char *ima_d_path(const struct path *path, char **pathbuf, char *namebuf)
-> >       }
-> >
-> >       if (!pathname) {
-> > -             strlcpy(namebuf, path->dentry->d_name.name, NAME_MAX);
-> > +             strscpy(namebuf, path->dentry->d_name.name, NAME_MAX);
-> >               pathname = namebuf;
-> >       }
-> >
-> > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> > index 9b45d064a87d..010839aef6ba 100644
-> > --- a/security/integrity/ima/ima_policy.c
-> > +++ b/security/integrity/ima/ima_policy.c
-> > @@ -791,7 +791,7 @@ static int __init ima_init_arch_policy(void)
-> >               char rule[255];
-> >               int result;
-> >
-> > -             result = strlcpy(rule, *rules, sizeof(rule));
-> > +             strscpy(rule, *rules, sizeof(rule));
-> >
-> >               INIT_LIST_HEAD(&arch_policy_entry[i].list);
-> >               result = ima_parse_rule(rule, &arch_policy_entry[i]);
-> >
-> > base-commit: f6692213b5045dc461ce0858fb18cf46f328c202
-> > --
-> > 2.27.0
-> >
-> >
+> It can lead to linear read overflows, crashes, etc...
+> 
+> As recommended in the deprecated interfaces [1], it should be replaced
+> by strscpy.
+> 
+> This commit replaces all calls to strlcpy that handle the return values
+> by the corresponding strscpy calls with new handling of the return
+> values (as it is quite different between the two functions).
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> 
+> Signed-off-by: Romain Perier <romain.perier@gmail.com>
+> ---
+>  security/integrity/ima/ima_policy.c |    8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 9b45d064a87d..1a905b8b064f 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -790,8 +790,14 @@ static int __init ima_init_arch_policy(void)
+>  	for (rules = arch_rules, i = 0; *rules != NULL; rules++) {
+>  		char rule[255];
+>  		int result;
+> +		ssize_t len;
+>  
+> -		result = strlcpy(rule, *rules, sizeof(rule));
+> +		len = strscpy(rule, *rules, sizeof(rule));
+> +		if (len == -E2BIG) {
+> +			pr_warn("Internal copy of architecture policy rule '%s' "
+> +				"failed. Skipping.\n", *rules);
+
+"arch_rules" is an array of hard coded strings.   The generic reason
+for replacing strlcpy with strscpy doesn't seem applicable; however,
+the additonal warning is appropriate.
+
+(User-visible strings are not bound to the 80 column length.  Breaking
+up the line like this is fine, but unnecessary.)
+
+Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+
+thanks,
+
+Mimi
+
+> +			continue;
+> +		}
+>  
+>  		INIT_LIST_HEAD(&arch_policy_entry[i].list);
+>  		result = ima_parse_rule(rule, &arch_policy_entry[i]);
+> 
+
+
+
