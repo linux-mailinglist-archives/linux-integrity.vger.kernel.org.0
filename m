@@ -2,85 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7B032C3BD
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Mar 2021 01:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D0F32C3BC
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Mar 2021 01:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbhCCX7j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        id S231161AbhCCX7j (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Wed, 3 Mar 2021 18:59:39 -0500
-Received: from verein.lst.de ([213.95.11.211]:35428 "EHLO verein.lst.de"
+Received: from mail.kernel.org ([198.145.29.99]:53352 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355863AbhCCHCF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 3 Mar 2021 02:02:05 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 16AAD68CFC; Wed,  3 Mar 2021 08:01:06 +0100 (CET)
-Date:   Wed, 3 Mar 2021 08:01:03 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Theodore Tso <tytso@mit.edu>, Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
-        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, smbarber@chromium.org,
-        Phil Estes <estesp@gmail.com>, Serge Hallyn <serge@hallyn.com>,
-        Kees Cook <keescook@chromium.org>,
-        Todd Kjos <tkjos@google.com>, Paul Moore <paul@paul-moore.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        containers@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v6 39/40] xfs: support idmapped mounts
-Message-ID: <20210303070103.GA7866@lst.de>
-References: <20210121131959.646623-1-christian.brauner@ubuntu.com> <20210121131959.646623-40-christian.brauner@ubuntu.com> <20210301200520.GK7272@magnolia>
+        id S231377AbhCCPxm (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 3 Mar 2021 10:53:42 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D605064EDB;
+        Wed,  3 Mar 2021 15:52:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614786780;
+        bh=Qir6h85tLUNfIn6uJz8Y84MHbyM/X4B4pLrnZucP8gU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=khjcIyCotfWfzxI9bMEDhiLsdxUCLpaTUGCExZSZA2JgUxc4RyOoBGpV9jZ63TxgF
+         GuTHbad7alv97mC7ZEOrSX10ZVWRDE+GiXjAFcfq9+j9bvQi9aRR/lURr1dUNUoNoh
+         Sbpqr+P3fIEtUX5tkK5zyuupToCZZ59IfBxWJTkPxnxmqDuCMLZJJo1WBrXX+7phG2
+         lMnLMT0slzrjl9Ahd/m/m0IIxAMydpCXcw9lXKb632IDj47QDzH0Iy7E2llRrZAINa
+         mU3d1LxPEgIhNbdgHoFC2mJmQptcj641i0jQA+o56Nq6KN64RlYj4GmMwA8om28kqw
+         ahb0AZVCOgKLA==
+Date:   Wed, 3 Mar 2021 17:52:40 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jmorris@namei.org, dhowells@redhat.com, peterhuewe@gmx.de
+Subject: [GIT PULL] TPM DEVICE DRIVER changes for v5.12-rc2
+Message-ID: <YD+wyJzpguBWP33i@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210301200520.GK7272@magnolia>
-User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Mar 01, 2021 at 12:05:20PM -0800, Darrick J. Wong wrote:
-> > +	if (breq->mnt_userns != &init_user_ns) {
-> > +		xfs_warn_ratelimited(breq->mp,
-> > +			"bulkstat not supported inside of idmapped mounts.");
-> > +		return -EINVAL;
-> 
-> Shouldn't this be -EPERM?
-> 
-> Or -EOPNOTSUPP?
+Hi Linus,
 
--EINVAL is what we return for all our nor suppored ioctls, so I think it
-is the right choice here, and should generally trigger the right
-fallbacks.
+Three urgent fixes for rc2.
 
-> Also, I'm not sure why bulkstat won't work in an idmapped mount but
-> bulkstat_single does?  You can use the singleton version to stat inodes
-> that aren't inside the submount.
+/Jarkko
 
-Looking at it again I think we should fail BULKSTAT_SINGLE as well.
-I had somehow assumed BULKSTAT_SINGLE would operate on the inode of
-the open file, in which case it would be fine.  But it doesn't so that
-argument doesn't count.
+The following changes since commit c03c21ba6f4e95e406a1a7b4c34ef334b977c194:
+
+  Merge tag 'keys-misc-20210126' of git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs (2021-02-23 16:09:23 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.12-rc2
+
+for you to fetch changes up to 232a37ea3aee9cb37bbc154fb1440a66ae4743f4:
+
+  tpm: Remove unintentional dump_stack() call (2021-03-03 17:43:52 +0200)
+
+----------------------------------------------------------------
+tpmdd updates for Linux v5.12-rc2
+
+----------------------------------------------------------------
+Jarkko Sakkinen (2):
+      tpm, tpm_tis: Decorate tpm_get_timeouts() with request_locality()
+      tpm: Remove unintentional dump_stack() call
+
+Lukasz Majczak (1):
+      tpm, tpm_tis: Decorate tpm_tis_gen_interrupt() with request_locality()
+
+ drivers/char/tpm/tpm-chip.c     |  2 --
+ drivers/char/tpm/tpm_tis_core.c | 30 +++++++++++++++++++++++++-----
+ 2 files changed, 25 insertions(+), 7 deletions(-)
