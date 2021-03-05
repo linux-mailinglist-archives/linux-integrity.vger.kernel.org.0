@@ -2,72 +2,70 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A7732F4F4
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 22:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4E132F506
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 22:01:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbhCEVA0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Mar 2021 16:00:26 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40772 "EHLO
+        id S230161AbhCEVAz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Mar 2021 16:00:55 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64146 "EHLO
         mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229697AbhCEVAT (ORCPT
+        by vger.kernel.org with ESMTP id S229651AbhCEVAV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Mar 2021 16:00:19 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 125KXLht106243;
-        Fri, 5 Mar 2021 16:00:11 -0500
+        Fri, 5 Mar 2021 16:00:21 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 125KXLkM182717;
+        Fri, 5 Mar 2021 16:00:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=MXfCX1wk9BIZ68gGWhcDaFwNYVRHvKY3ZF4SIXiWy20=;
- b=FY7YV2vFs89mzhDHL1LAHoYTJ596KLRBS7L7B8E20nCxCa7dG1BIwa9vEpQ+IkQOWuhQ
- K7akISMo/V2+M6vyej7HSde156UZx4iDyW/lWPeLJMy4pzs9tHBXRJiyqCRBE3WXBgJk
- lRvsUHjNm3SUDE71HprdfcY76Tc6DuRefD9+gzXoLoOCqcHBsX3nLekzmMThu/c4tbKP
- 5mlfkWyxfIEjWU7XVE/uHX23u4XVJNdQZsP36Kfb772mIEskggFXuP2aMIjRVEzXeEvT
- wGjRaeq2Qb58jpsbfFZEWhW0ed5OpiI20P5J4NFLv4qCAf60zX58yqE3kJyr3tr/CX2Z ng== 
+ bh=fiZsSRFRiO57Q/ctX3IRQ7U1I0yk/Kl43WdugbbhNts=;
+ b=s4JUuqhZ52rROvXmYWHv35ke54KHCQagPEaosLZyBeNRZJ+lKYSnSFbkIerKvIqny1XA
+ NT+cApoYyFQmYdneIjTmgiNchk4l4tl9jJdTRzY8oJxa/c034fLTKxq8Cod93nBg4U+p
+ QeGpWG2WsalzQRn6KgZyyZwHG69aStvj09gj6WPeOq0eK/EUYLc8uQ9g3KwLYeaziJiu
+ GsJZ8tiHADLHj2WoRSk/FMpCO/wqgyoTzucMkjmoksifSWSziPTHqM8ah1sdfeO2vpoF
+ s3owc/gNEzZF5+XwqEtu/aGPxckANunHqvJrAD7Wa1uky+RNLZW4wGEzBysTUHBFh/yG hA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 373u6e9ccw-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 373usj0h0c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Mar 2021 16:00:10 -0500
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 125KXVIf106918;
-        Fri, 5 Mar 2021 16:00:10 -0500
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 373u6e9ccb-1
+        Fri, 05 Mar 2021 16:00:12 -0500
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 125KYCOa184670;
+        Fri, 5 Mar 2021 16:00:11 -0500
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 373usj0gyg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Mar 2021 16:00:10 -0500
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 125KqNRx014061;
-        Fri, 5 Mar 2021 21:00:09 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma03dal.us.ibm.com with ESMTP id 3720r14beg-1
+        Fri, 05 Mar 2021 16:00:11 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 125KqhX2014298;
+        Fri, 5 Mar 2021 21:00:10 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma02dal.us.ibm.com with ESMTP id 3710srkqs1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Mar 2021 21:00:09 +0000
+        Fri, 05 Mar 2021 21:00:10 +0000
 Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 125L07n019988988
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 125L08Y828443120
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 5 Mar 2021 21:00:07 GMT
+        Fri, 5 Mar 2021 21:00:08 GMT
 Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8ECE2BE054;
+        by IMSVA (Postfix) with ESMTP id 72345BE061;
+        Fri,  5 Mar 2021 21:00:08 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AA2D5BE05D;
         Fri,  5 Mar 2021 21:00:07 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2347BE05B;
-        Fri,  5 Mar 2021 21:00:06 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  5 Mar 2021 21:00:06 +0000 (GMT)
+        Fri,  5 Mar 2021 21:00:07 +0000 (GMT)
 From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
 To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
         davem@davemloft.net, herbert@gondor.apana.org.au,
         dhowells@redhat.com, zohar@linux.ibm.com, jarkko@kernel.org
 Cc:     linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
         linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v11 08/10] ima: Support EC keys for signature verification
-Date:   Fri,  5 Mar 2021 15:59:54 -0500
-Message-Id: <20210305205956.3594375-9-stefanb@linux.vnet.ibm.com>
+        Saulo Alessandre <saulo.alessandre@tse.jus.br>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v11 09/10] x509: Add OID for NIST P384 and extend parser for it
+Date:   Fri,  5 Mar 2021 15:59:55 -0500
+Message-Id: <20210305205956.3594375-10-stefanb@linux.vnet.ibm.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210305205956.3594375-1-stefanb@linux.vnet.ibm.com>
 References: <20210305205956.3594375-1-stefanb@linux.vnet.ibm.com>
@@ -76,108 +74,66 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-05_14:2021-03-03,2021-03-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- impostorscore=0 malwarescore=0 phishscore=0 priorityscore=1501
- adultscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxscore=0 clxscore=1015 spamscore=0 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2103050103
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+From: Saulo Alessandre <saulo.alessandre@tse.jus.br>
 
-Add support for IMA signature verification for EC keys. Since SHA type
-of hashes can be used by RSA and ECDSA signature schemes we need to
-look at the key and derive from the key which signature scheme to use.
-Since this can be applied to all types of keys, we change the selection
-of the encoding type to be driven by the key's signature scheme rather
-than by the hash type.
+Prepare the x509 parser to accept NIST P384 certificates and add the
+OID for ansip384r1, which is the identifier for NIST P384.
 
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: linux-integrity@vger.kernel.org
-Cc: David Howells <dhowells@redhat.com>
-Cc: keyrings@vger.kernel.org
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Reviewed-by: Vitaly Chikunov <vt@altlinux.org>
-Reviewed-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+Summary of changes:
+
+* crypto/asymmetric_keys/x509_cert_parser.c
+  - prepare x509 parser to load NIST P384
+
+* include/linux/oid_registry.h
+  - add OID_ansip384r1
+
+Signed-off-by: Saulo Alessandre <saulo.alessandre@tse.jus.br>
+Tested-by: Stefan Berger <stefanb@linux.ibm.com>
 
 ---
-v7->v8:
-  - use strncmp to check for 'ecdsa-' to match 'ecdsa-nist-p192' and
-    'ecdsa-nist-p256' key types; previously they were just 'ecdsa'
----
- include/keys/asymmetric-type.h         |  6 ++++++
- security/integrity/digsig_asymmetric.c | 30 ++++++++++++--------------
- 2 files changed, 20 insertions(+), 16 deletions(-)
 
-diff --git a/include/keys/asymmetric-type.h b/include/keys/asymmetric-type.h
-index a29d3ff2e7e8..c432fdb8547f 100644
---- a/include/keys/asymmetric-type.h
-+++ b/include/keys/asymmetric-type.h
-@@ -72,6 +72,12 @@ const struct asymmetric_key_ids *asymmetric_key_ids(const struct key *key)
- 	return key->payload.data[asym_key_ids];
- }
+v10->v11:
+ - renamed OID_id_secp384r1 to OID_id_ansip384r1 (spec name)
+---
+ crypto/asymmetric_keys/x509_cert_parser.c | 3 +++
+ include/linux/oid_registry.h              | 1 +
+ 2 files changed, 4 insertions(+)
+
+diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
+index f5d547c6dfb5..6d003096b5bc 100644
+--- a/crypto/asymmetric_keys/x509_cert_parser.c
++++ b/crypto/asymmetric_keys/x509_cert_parser.c
+@@ -510,6 +510,9 @@ int x509_extract_key_data(void *context, size_t hdrlen,
+ 		case OID_id_prime256v1:
+ 			ctx->cert->pub->pkey_algo = "ecdsa-nist-p256";
+ 			break;
++		case OID_id_ansip384r1:
++			ctx->cert->pub->pkey_algo = "ecdsa-nist-p384";
++			break;
+ 		default:
+ 			return -ENOPKG;
+ 		}
+diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
+index 3583908cf1ca..cc64d9419746 100644
+--- a/include/linux/oid_registry.h
++++ b/include/linux/oid_registry.h
+@@ -64,6 +64,7 @@ enum OID {
  
-+static inline
-+const struct public_key *asymmetric_key_public_key(const struct key *key)
-+{
-+	return key->payload.data[asym_crypto];
-+}
-+
- extern struct key *find_asymmetric_key(struct key *keyring,
- 				       const struct asymmetric_key_id *id_0,
- 				       const struct asymmetric_key_id *id_1,
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index a662024b4c70..23240d793b07 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -84,6 +84,7 @@ int asymmetric_verify(struct key *keyring, const char *sig,
- {
- 	struct public_key_signature pks;
- 	struct signature_v2_hdr *hdr = (struct signature_v2_hdr *)sig;
-+	const struct public_key *pk;
- 	struct key *key;
- 	int ret;
- 
-@@ -105,23 +106,20 @@ int asymmetric_verify(struct key *keyring, const char *sig,
- 	memset(&pks, 0, sizeof(pks));
- 
- 	pks.hash_algo = hash_algo_name[hdr->hash_algo];
--	switch (hdr->hash_algo) {
--	case HASH_ALGO_STREEBOG_256:
--	case HASH_ALGO_STREEBOG_512:
--		/* EC-RDSA and Streebog should go together. */
--		pks.pkey_algo = "ecrdsa";
--		pks.encoding = "raw";
--		break;
--	case HASH_ALGO_SM3_256:
--		/* SM2 and SM3 should go together. */
--		pks.pkey_algo = "sm2";
--		pks.encoding = "raw";
--		break;
--	default:
--		pks.pkey_algo = "rsa";
-+
-+	pk = asymmetric_key_public_key(key);
-+	pks.pkey_algo = pk->pkey_algo;
-+	if (!strcmp(pk->pkey_algo, "rsa"))
- 		pks.encoding = "pkcs1";
--		break;
--	}
-+	else if (!strncmp(pk->pkey_algo, "ecdsa-", 6))
-+		/* edcsa-nist-p192 etc. */
-+		pks.encoding = "x962";
-+	else if (!strcmp(pk->pkey_algo, "ecrdsa") ||
-+		   !strcmp(pk->pkey_algo, "sm2"))
-+		pks.encoding = "raw";
-+	else
-+		return -ENOPKG;
-+
- 	pks.digest = (u8 *)data;
- 	pks.digest_size = datalen;
- 	pks.s = hdr->sig;
+ 	OID_certAuthInfoAccess,		/* 1.3.6.1.5.5.7.1.1 */
+ 	OID_sha1,			/* 1.3.14.3.2.26 */
++	OID_id_ansip384r1,		/* 1.3.132.0.34 */
+ 	OID_sha256,			/* 2.16.840.1.101.3.4.2.1 */
+ 	OID_sha384,			/* 2.16.840.1.101.3.4.2.2 */
+ 	OID_sha512,			/* 2.16.840.1.101.3.4.2.3 */
 -- 
 2.29.2
 
