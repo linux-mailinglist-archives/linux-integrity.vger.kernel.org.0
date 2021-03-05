@@ -2,59 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDE232F4E3
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 22:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2326032F4EA
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 22:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbhCEVAX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        id S229898AbhCEVAX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Fri, 5 Mar 2021 16:00:23 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26134 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229616AbhCEVAP (ORCPT
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12154 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229672AbhCEVAQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Mar 2021 16:00:15 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 125KY0Z8119862;
-        Fri, 5 Mar 2021 16:00:06 -0500
+        Fri, 5 Mar 2021 16:00:16 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 125KWqM7056739;
+        Fri, 5 Mar 2021 16:00:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=KyrLnGpXvjPR/2F0kE/Rgfg3iTmEUTS7wtNH+ZMgZmE=;
- b=lNt5zs+BWJ+5lP1tQaMJUvakjaM0pR8Z7uaAEMuaTMHJnkx2Nwsgn3wsOi64HoWltf96
- ncRHU1WNvckSoH+JQRQit0iu8FomaHla6tOL0/VPKshA630zC7wTv0du2oWtPg/H3w1s
- XZWMfyFOhNLE9yN1IYO8kL+pMzd+y5ASXJtoj7hC06b4PDUsl5fp9DN8yRWSBbhoj3GB
- 1o7yGVxeKfQtUoBQ3CxGKFqAd2gZoknAvOOlBTo4u2s0d+oJvTqMgXhTFhshNHd9pi+/
- Kk4sZ6Mke5K6Hpimnwl3EowgWixMMSNKJqnbZt8xoU3o7aksMeb0y9v5HujoNZ0M4HiL /g== 
+ content-type : content-transfer-encoding; s=pp1;
+ bh=c5ecV+gdKAPFDR0PGPtBDmUgBZsDSgeAshQZmG4c/LM=;
+ b=ssreo+9u6FB1TLu0U6a6Lq/U/D22DzDrV7tzuHApAhXuaFLdgP6OFfvgsOoFpNHfValM
+ wyMypm9xHHDgrBIIc3AggCgj6H264kC9ENuHpk5uItEYPm7gLcHeTu7OWe7F8vdSs033
+ xhkmPXLyON6WMDQTeG4bCG4KfOyK/mlMCtfI2T8fetvugogAMyLiiIzd59bCKOe8XQxb
+ /hAzA4sJKZorfaRGqT0mt3bpwcKmUeanUAERgRQkclC5K88QvP811+K8g8h+0/y33mVz
+ UrcdbwJK+vTSEFajU7A6/+XsTm77/6nijPkjpe2SVIaW9zl2I/mGjemD9YRKAg1Wa+QM fA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 373umu0pbw-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 373sjs42vt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Mar 2021 16:00:07 -0500
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 125KaOA0068757;
+        Fri, 5 Mar 2021 16:00:06 -0500
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 373sjs42v2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 05 Mar 2021 16:00:06 -0500
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 125KY38r120819;
-        Fri, 5 Mar 2021 16:00:05 -0500
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 373umu0pbb-1
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 125KqvOY019592;
+        Fri, 5 Mar 2021 21:00:05 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04dal.us.ibm.com with ESMTP id 36ydqa6kb9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Mar 2021 16:00:05 -0500
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 125Kr78t024288;
-        Fri, 5 Mar 2021 21:00:04 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03wdc.us.ibm.com with ESMTP id 37128h2am8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Mar 2021 21:00:04 +0000
+        Fri, 05 Mar 2021 21:00:05 +0000
 Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 125L02Oq23724364
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 125L03su12976728
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 5 Mar 2021 21:00:02 GMT
+        Fri, 5 Mar 2021 21:00:04 GMT
 Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C7F97BE06A;
-        Fri,  5 Mar 2021 21:00:02 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id C3427BE069;
+        Fri,  5 Mar 2021 21:00:03 +0000 (GMT)
 Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B021BE075;
+        by IMSVA (Postfix) with ESMTP id EDBABBE056;
         Fri,  5 Mar 2021 21:00:02 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  5 Mar 2021 21:00:01 +0000 (GMT)
+        Fri,  5 Mar 2021 21:00:02 +0000 (GMT)
 From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
 To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
         davem@davemloft.net, herbert@gondor.apana.org.au,
@@ -63,116 +63,580 @@ Cc:     linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
         linux-integrity@vger.kernel.org,
         Saulo Alessandre <saulo.alessandre@tse.jus.br>,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v11 03/10] crypto: Add NIST P384 curve parameters
-Date:   Fri,  5 Mar 2021 15:59:49 -0500
-Message-Id: <20210305205956.3594375-4-stefanb@linux.vnet.ibm.com>
+Subject: [PATCH v11 04/10] crypto: Add math to support fast NIST P384
+Date:   Fri,  5 Mar 2021 15:59:50 -0500
+Message-Id: <20210305205956.3594375-5-stefanb@linux.vnet.ibm.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210305205956.3594375-1-stefanb@linux.vnet.ibm.com>
 References: <20210305205956.3594375-1-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-05_14:2021-03-03,2021-03-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- clxscore=1015 mlxlogscore=999 malwarescore=0 lowpriorityscore=0
- bulkscore=0 suspectscore=0 impostorscore=0 adultscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103050103
+ definitions=2021-03-05_13:2021-03-03,2021-03-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
+ lowpriorityscore=0 suspectscore=0 mlxscore=0 impostorscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2103050102
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Saulo Alessandre <saulo.alessandre@tse.jus.br>
 
-Add the parameters for the NIST P384 curve and define a new curve ID
-for it. Make the curve available in ecc_get_curve.
+Add the math needed for NIST P384 and adapt certain functions'
+parameters so that the ecc_curve is passed to vli_mmod_fast. This
+allows to identify the curve by its name prefix and the appropriate
+function for fast mmod calculation can be used.
 
 Summary of changes:
 
-* crypto/ecc_curve_defs.h
-  - add nist_p384 params
-
-* include/crypto/ecdh.h
-  - add ECC_CURVE_NIST_P384
-
 * crypto/ecc.c
-  - change ecc_get_curve to accept nist_p384
+  - add vli_mmod_fast_384
+  - change some routines to pass ecc_curve forward until vli_mmod_fast
+
+* crypto/ecc.h
+  - add ECC_CURVE_NIST_P384_DIGITS
+  - change ECC_MAX_DIGITS to P384 size
 
 Signed-off-by: Saulo Alessandre <saulo.alessandre@tse.jus.br>
 Tested-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- crypto/ecc.c            |  2 ++
- crypto/ecc_curve_defs.h | 32 ++++++++++++++++++++++++++++++++
- include/crypto/ecdh.h   |  1 +
- 3 files changed, 35 insertions(+)
+ crypto/ecc.c | 266 +++++++++++++++++++++++++++++++++++++--------------
+ crypto/ecc.h |   3 +-
+ 2 files changed, 194 insertions(+), 75 deletions(-)
 
 diff --git a/crypto/ecc.c b/crypto/ecc.c
-index 25e79fd70566..f6cef5a7942d 100644
+index f6cef5a7942d..589831d82063 100644
 --- a/crypto/ecc.c
 +++ b/crypto/ecc.c
-@@ -50,6 +50,8 @@ const struct ecc_curve *ecc_get_curve(unsigned int curve_id)
- 		return fips_enabled ? NULL : &nist_p192;
- 	case ECC_CURVE_NIST_P256:
- 		return &nist_p256;
-+	case ECC_CURVE_NIST_P384:
-+		return &nist_p384;
- 	default:
- 		return NULL;
+@@ -778,18 +778,133 @@ static void vli_mmod_fast_256(u64 *result, const u64 *product,
  	}
-diff --git a/crypto/ecc_curve_defs.h b/crypto/ecc_curve_defs.h
-index 69be6c7d228f..b327732f6ef5 100644
---- a/crypto/ecc_curve_defs.h
-+++ b/crypto/ecc_curve_defs.h
-@@ -54,4 +54,36 @@ static struct ecc_curve nist_p256 = {
- 	.b = nist_p256_b
- };
+ }
  
-+/* NIST P-384 */
-+static u64 nist_p384_g_x[] = { 0x3A545E3872760AB7ull, 0x5502F25DBF55296Cull,
-+				0x59F741E082542A38ull, 0x6E1D3B628BA79B98ull,
-+				0x8Eb1C71EF320AD74ull, 0xAA87CA22BE8B0537ull };
-+static u64 nist_p384_g_y[] = { 0x7A431D7C90EA0E5Full, 0x0A60B1CE1D7E819Dull,
-+				0xE9DA3113B5F0B8C0ull, 0xF8F41DBD289A147Cull,
-+				0x5D9E98BF9292DC29ull, 0x3617DE4A96262C6Full };
-+static u64 nist_p384_p[] = { 0x00000000FFFFFFFFull, 0xFFFFFFFF00000000ull,
-+				0xFFFFFFFFFFFFFFFEull, 0xFFFFFFFFFFFFFFFFull,
-+				0xFFFFFFFFFFFFFFFFull, 0xFFFFFFFFFFFFFFFFull };
-+static u64 nist_p384_n[] = { 0xECEC196ACCC52973ull, 0x581A0DB248B0A77Aull,
-+				0xC7634D81F4372DDFull, 0xFFFFFFFFFFFFFFFFull,
-+				0xFFFFFFFFFFFFFFFFull, 0xFFFFFFFFFFFFFFFFull };
-+static u64 nist_p384_a[] = { 0x00000000FFFFFFFCull, 0xFFFFFFFF00000000ull,
-+				0xFFFFFFFFFFFFFFFEull, 0xFFFFFFFFFFFFFFFFull,
-+				0xFFFFFFFFFFFFFFFFull, 0xFFFFFFFFFFFFFFFFull };
-+static u64 nist_p384_b[] = { 0x2a85c8edd3ec2aefull, 0xc656398d8a2ed19dull,
-+				0x0314088f5013875aull, 0x181d9c6efe814112ull,
-+				0x988e056be3f82d19ull, 0xb3312fa7e23ee7e4ull };
-+static struct ecc_curve nist_p384 = {
-+	.name = "nist_384",
-+	.g = {
-+		.x = nist_p384_g_x,
-+		.y = nist_p384_g_y,
-+		.ndigits = 6,
-+	},
-+	.p = nist_p384_p,
-+	.n = nist_p384_n,
-+	.a = nist_p384_a,
-+	.b = nist_p384_b
-+};
++#define SL32OR32(x32, y32) (((u64)x32 << 32) | y32)
++#define AND64H(x64)  (x64 & 0xffFFffFF00000000ull)
++#define AND64L(x64)  (x64 & 0x00000000ffFFffFFull)
 +
- #endif
-diff --git a/include/crypto/ecdh.h b/include/crypto/ecdh.h
-index a5b805b5526d..e4ba1de961e4 100644
---- a/include/crypto/ecdh.h
-+++ b/include/crypto/ecdh.h
-@@ -25,6 +25,7 @@
- /* Curves IDs */
- #define ECC_CURVE_NIST_P192	0x0001
- #define ECC_CURVE_NIST_P256	0x0002
-+#define ECC_CURVE_NIST_P384	0x0003
++/* Computes result = product % curve_prime
++ * from "Mathematical routines for the NIST prime elliptic curves"
++ */
++static void vli_mmod_fast_384(u64 *result, const u64 *product,
++				const u64 *curve_prime, u64 *tmp)
++{
++	int carry;
++	const unsigned int ndigits = 6;
++
++	/* t */
++	vli_set(result, product, ndigits);
++
++	/* s1 */
++	tmp[0] = 0;		// 0 || 0
++	tmp[1] = 0;		// 0 || 0
++	tmp[2] = SL32OR32(product[11], (product[10]>>32));	//a22||a21
++	tmp[3] = product[11]>>32;	// 0 ||a23
++	tmp[4] = 0;		// 0 || 0
++	tmp[5] = 0;		// 0 || 0
++	carry = vli_lshift(tmp, tmp, 1, ndigits);
++	carry += vli_add(result, result, tmp, ndigits);
++
++	/* s2 */
++	tmp[0] = product[6];	//a13||a12
++	tmp[1] = product[7];	//a15||a14
++	tmp[2] = product[8];	//a17||a16
++	tmp[3] = product[9];	//a19||a18
++	tmp[4] = product[10];	//a21||a20
++	tmp[5] = product[11];	//a23||a22
++	carry += vli_add(result, result, tmp, ndigits);
++
++	/* s3 */
++	tmp[0] = SL32OR32(product[11], (product[10]>>32));	//a22||a21
++	tmp[1] = SL32OR32(product[6], (product[11]>>32));	//a12||a23
++	tmp[2] = SL32OR32(product[7], (product[6])>>32);	//a14||a13
++	tmp[3] = SL32OR32(product[8], (product[7]>>32));	//a16||a15
++	tmp[4] = SL32OR32(product[9], (product[8]>>32));	//a18||a17
++	tmp[5] = SL32OR32(product[10], (product[9]>>32));	//a20||a19
++	carry += vli_add(result, result, tmp, ndigits);
++
++	/* s4 */
++	tmp[0] = AND64H(product[11]);	//a23|| 0
++	tmp[1] = (product[10]<<32);	//a20|| 0
++	tmp[2] = product[6];	//a13||a12
++	tmp[3] = product[7];	//a15||a14
++	tmp[4] = product[8];	//a17||a16
++	tmp[5] = product[9];	//a19||a18
++	carry += vli_add(result, result, tmp, ndigits);
++
++	/* s5 */
++	tmp[0] = 0;		//  0|| 0
++	tmp[1] = 0;		//  0|| 0
++	tmp[2] = product[10];	//a21||a20
++	tmp[3] = product[11];	//a23||a22
++	tmp[4] = 0;		//  0|| 0
++	tmp[5] = 0;		//  0|| 0
++	carry += vli_add(result, result, tmp, ndigits);
++
++	/* s6 */
++	tmp[0] = AND64L(product[10]);	// 0 ||a20
++	tmp[1] = AND64H(product[10]);	//a21|| 0
++	tmp[2] = product[11];	//a23||a22
++	tmp[3] = 0;		// 0 || 0
++	tmp[4] = 0;		// 0 || 0
++	tmp[5] = 0;		// 0 || 0
++	carry += vli_add(result, result, tmp, ndigits);
++
++	/* d1 */
++	tmp[0] = SL32OR32(product[6], (product[11]>>32));	//a12||a23
++	tmp[1] = SL32OR32(product[7], (product[6]>>32));	//a14||a13
++	tmp[2] = SL32OR32(product[8], (product[7]>>32));	//a16||a15
++	tmp[3] = SL32OR32(product[9], (product[8]>>32));	//a18||a17
++	tmp[4] = SL32OR32(product[10], (product[9]>>32));	//a20||a19
++	tmp[5] = SL32OR32(product[11], (product[10]>>32));	//a22||a21
++	carry -= vli_sub(result, result, tmp, ndigits);
++
++	/* d2 */
++	tmp[0] = (product[10]<<32);	//a20|| 0
++	tmp[1] = SL32OR32(product[11], (product[10]>>32));	//a22||a21
++	tmp[2] = (product[11]>>32);	// 0 ||a23
++	tmp[3] = 0;		// 0 || 0
++	tmp[4] = 0;		// 0 || 0
++	tmp[5] = 0;		// 0 || 0
++	carry -= vli_sub(result, result, tmp, ndigits);
++
++	/* d3 */
++	tmp[0] = 0;		// 0 || 0
++	tmp[1] = AND64H(product[11]);	//a23|| 0
++	tmp[2] = product[11]>>32;	// 0 ||a23
++	tmp[3] = 0;		// 0 || 0
++	tmp[4] = 0;		// 0 || 0
++	tmp[5] = 0;		// 0 || 0
++	carry -= vli_sub(result, result, tmp, ndigits);
++
++	if (carry < 0) {
++		do {
++			carry += vli_add(result, result, curve_prime, ndigits);
++		} while (carry < 0);
++	} else {
++		while (carry || vli_cmp(curve_prime, result, ndigits) != 1)
++			carry -= vli_sub(result, result, curve_prime, ndigits);
++	}
++
++}
++
++#undef SL32OR32
++#undef AND64H
++#undef AND64L
++
+ /* Computes result = product % curve_prime for different curve_primes.
+  *
+  * Note that curve_primes are distinguished just by heuristic check and
+  * not by complete conformance check.
+  */
+ static bool vli_mmod_fast(u64 *result, u64 *product,
+-			  const u64 *curve_prime, unsigned int ndigits)
++			  const struct ecc_curve *curve)
+ {
+ 	u64 tmp[2 * ECC_MAX_DIGITS];
++	const u64 *curve_prime = curve->p;
++	const unsigned int ndigits = curve->g.ndigits;
  
- /**
-  * struct ecdh - define an ECDH private key
+-	/* Currently, both NIST primes have -1 in lowest qword. */
+-	if (curve_prime[0] != -1ull) {
++	/* All NIST curves have name prefix 'nist_' */
++	if (strncmp(curve->name, "nist_", 5) != 0) {
+ 		/* Try to handle Pseudo-Marsenne primes. */
+ 		if (curve_prime[ndigits - 1] == -1ull) {
+ 			vli_mmod_special(result, product, curve_prime,
+@@ -812,6 +927,9 @@ static bool vli_mmod_fast(u64 *result, u64 *product,
+ 	case 4:
+ 		vli_mmod_fast_256(result, product, curve_prime, tmp);
+ 		break;
++	case 6:
++		vli_mmod_fast_384(result, product, curve_prime, tmp);
++		break;
+ 	default:
+ 		pr_err_ratelimited("ecc: unsupported digits size!\n");
+ 		return false;
+@@ -835,22 +953,22 @@ EXPORT_SYMBOL(vli_mod_mult_slow);
+ 
+ /* Computes result = (left * right) % curve_prime. */
+ static void vli_mod_mult_fast(u64 *result, const u64 *left, const u64 *right,
+-			      const u64 *curve_prime, unsigned int ndigits)
++			      const struct ecc_curve *curve)
+ {
+ 	u64 product[2 * ECC_MAX_DIGITS];
+ 
+-	vli_mult(product, left, right, ndigits);
+-	vli_mmod_fast(result, product, curve_prime, ndigits);
++	vli_mult(product, left, right, curve->g.ndigits);
++	vli_mmod_fast(result, product, curve);
+ }
+ 
+ /* Computes result = left^2 % curve_prime. */
+ static void vli_mod_square_fast(u64 *result, const u64 *left,
+-				const u64 *curve_prime, unsigned int ndigits)
++				const struct ecc_curve *curve)
+ {
+ 	u64 product[2 * ECC_MAX_DIGITS];
+ 
+-	vli_square(product, left, ndigits);
+-	vli_mmod_fast(result, product, curve_prime, ndigits);
++	vli_square(product, left, curve->g.ndigits);
++	vli_mmod_fast(result, product, curve);
+ }
+ 
+ #define EVEN(vli) (!(vli[0] & 1))
+@@ -948,25 +1066,27 @@ static bool ecc_point_is_zero(const struct ecc_point *point)
+ 
+ /* Double in place */
+ static void ecc_point_double_jacobian(u64 *x1, u64 *y1, u64 *z1,
+-				      u64 *curve_prime, unsigned int ndigits)
++					const struct ecc_curve *curve)
+ {
+ 	/* t1 = x, t2 = y, t3 = z */
+ 	u64 t4[ECC_MAX_DIGITS];
+ 	u64 t5[ECC_MAX_DIGITS];
++	const u64 *curve_prime = curve->p;
++	const unsigned int ndigits = curve->g.ndigits;
+ 
+ 	if (vli_is_zero(z1, ndigits))
+ 		return;
+ 
+ 	/* t4 = y1^2 */
+-	vli_mod_square_fast(t4, y1, curve_prime, ndigits);
++	vli_mod_square_fast(t4, y1, curve);
+ 	/* t5 = x1*y1^2 = A */
+-	vli_mod_mult_fast(t5, x1, t4, curve_prime, ndigits);
++	vli_mod_mult_fast(t5, x1, t4, curve);
+ 	/* t4 = y1^4 */
+-	vli_mod_square_fast(t4, t4, curve_prime, ndigits);
++	vli_mod_square_fast(t4, t4, curve);
+ 	/* t2 = y1*z1 = z3 */
+-	vli_mod_mult_fast(y1, y1, z1, curve_prime, ndigits);
++	vli_mod_mult_fast(y1, y1, z1, curve);
+ 	/* t3 = z1^2 */
+-	vli_mod_square_fast(z1, z1, curve_prime, ndigits);
++	vli_mod_square_fast(z1, z1, curve);
+ 
+ 	/* t1 = x1 + z1^2 */
+ 	vli_mod_add(x1, x1, z1, curve_prime, ndigits);
+@@ -975,7 +1095,7 @@ static void ecc_point_double_jacobian(u64 *x1, u64 *y1, u64 *z1,
+ 	/* t3 = x1 - z1^2 */
+ 	vli_mod_sub(z1, x1, z1, curve_prime, ndigits);
+ 	/* t1 = x1^2 - z1^4 */
+-	vli_mod_mult_fast(x1, x1, z1, curve_prime, ndigits);
++	vli_mod_mult_fast(x1, x1, z1, curve);
+ 
+ 	/* t3 = 2*(x1^2 - z1^4) */
+ 	vli_mod_add(z1, x1, x1, curve_prime, ndigits);
+@@ -992,7 +1112,7 @@ static void ecc_point_double_jacobian(u64 *x1, u64 *y1, u64 *z1,
+ 	/* t1 = 3/2*(x1^2 - z1^4) = B */
+ 
+ 	/* t3 = B^2 */
+-	vli_mod_square_fast(z1, x1, curve_prime, ndigits);
++	vli_mod_square_fast(z1, x1, curve);
+ 	/* t3 = B^2 - A */
+ 	vli_mod_sub(z1, z1, t5, curve_prime, ndigits);
+ 	/* t3 = B^2 - 2A = x3 */
+@@ -1000,7 +1120,7 @@ static void ecc_point_double_jacobian(u64 *x1, u64 *y1, u64 *z1,
+ 	/* t5 = A - x3 */
+ 	vli_mod_sub(t5, t5, z1, curve_prime, ndigits);
+ 	/* t1 = B * (A - x3) */
+-	vli_mod_mult_fast(x1, x1, t5, curve_prime, ndigits);
++	vli_mod_mult_fast(x1, x1, t5, curve);
+ 	/* t4 = B * (A - x3) - y1^4 = y3 */
+ 	vli_mod_sub(t4, x1, t4, curve_prime, ndigits);
+ 
+@@ -1010,23 +1130,22 @@ static void ecc_point_double_jacobian(u64 *x1, u64 *y1, u64 *z1,
+ }
+ 
+ /* Modify (x1, y1) => (x1 * z^2, y1 * z^3) */
+-static void apply_z(u64 *x1, u64 *y1, u64 *z, u64 *curve_prime,
+-		    unsigned int ndigits)
++static void apply_z(u64 *x1, u64 *y1, u64 *z, const struct ecc_curve *curve)
+ {
+ 	u64 t1[ECC_MAX_DIGITS];
+ 
+-	vli_mod_square_fast(t1, z, curve_prime, ndigits);    /* z^2 */
+-	vli_mod_mult_fast(x1, x1, t1, curve_prime, ndigits); /* x1 * z^2 */
+-	vli_mod_mult_fast(t1, t1, z, curve_prime, ndigits);  /* z^3 */
+-	vli_mod_mult_fast(y1, y1, t1, curve_prime, ndigits); /* y1 * z^3 */
++	vli_mod_square_fast(t1, z, curve);		/* z^2 */
++	vli_mod_mult_fast(x1, x1, t1, curve);	/* x1 * z^2 */
++	vli_mod_mult_fast(t1, t1, z, curve);	/* z^3 */
++	vli_mod_mult_fast(y1, y1, t1, curve);	/* y1 * z^3 */
+ }
+ 
+ /* P = (x1, y1) => 2P, (x2, y2) => P' */
+ static void xycz_initial_double(u64 *x1, u64 *y1, u64 *x2, u64 *y2,
+-				u64 *p_initial_z, u64 *curve_prime,
+-				unsigned int ndigits)
++				u64 *p_initial_z, const struct ecc_curve *curve)
+ {
+ 	u64 z[ECC_MAX_DIGITS];
++	const unsigned int ndigits = curve->g.ndigits;
+ 
+ 	vli_set(x2, x1, ndigits);
+ 	vli_set(y2, y1, ndigits);
+@@ -1037,35 +1156,37 @@ static void xycz_initial_double(u64 *x1, u64 *y1, u64 *x2, u64 *y2,
+ 	if (p_initial_z)
+ 		vli_set(z, p_initial_z, ndigits);
+ 
+-	apply_z(x1, y1, z, curve_prime, ndigits);
++	apply_z(x1, y1, z, curve);
+ 
+-	ecc_point_double_jacobian(x1, y1, z, curve_prime, ndigits);
++	ecc_point_double_jacobian(x1, y1, z, curve);
+ 
+-	apply_z(x2, y2, z, curve_prime, ndigits);
++	apply_z(x2, y2, z, curve);
+ }
+ 
+ /* Input P = (x1, y1, Z), Q = (x2, y2, Z)
+  * Output P' = (x1', y1', Z3), P + Q = (x3, y3, Z3)
+  * or P => P', Q => P + Q
+  */
+-static void xycz_add(u64 *x1, u64 *y1, u64 *x2, u64 *y2, u64 *curve_prime,
+-		     unsigned int ndigits)
++static void xycz_add(u64 *x1, u64 *y1, u64 *x2, u64 *y2,
++			const struct ecc_curve *curve)
+ {
+ 	/* t1 = X1, t2 = Y1, t3 = X2, t4 = Y2 */
+ 	u64 t5[ECC_MAX_DIGITS];
++	const u64 *curve_prime = curve->p;
++	const unsigned int ndigits = curve->g.ndigits;
+ 
+ 	/* t5 = x2 - x1 */
+ 	vli_mod_sub(t5, x2, x1, curve_prime, ndigits);
+ 	/* t5 = (x2 - x1)^2 = A */
+-	vli_mod_square_fast(t5, t5, curve_prime, ndigits);
++	vli_mod_square_fast(t5, t5, curve);
+ 	/* t1 = x1*A = B */
+-	vli_mod_mult_fast(x1, x1, t5, curve_prime, ndigits);
++	vli_mod_mult_fast(x1, x1, t5, curve);
+ 	/* t3 = x2*A = C */
+-	vli_mod_mult_fast(x2, x2, t5, curve_prime, ndigits);
++	vli_mod_mult_fast(x2, x2, t5, curve);
+ 	/* t4 = y2 - y1 */
+ 	vli_mod_sub(y2, y2, y1, curve_prime, ndigits);
+ 	/* t5 = (y2 - y1)^2 = D */
+-	vli_mod_square_fast(t5, y2, curve_prime, ndigits);
++	vli_mod_square_fast(t5, y2, curve);
+ 
+ 	/* t5 = D - B */
+ 	vli_mod_sub(t5, t5, x1, curve_prime, ndigits);
+@@ -1074,11 +1195,11 @@ static void xycz_add(u64 *x1, u64 *y1, u64 *x2, u64 *y2, u64 *curve_prime,
+ 	/* t3 = C - B */
+ 	vli_mod_sub(x2, x2, x1, curve_prime, ndigits);
+ 	/* t2 = y1*(C - B) */
+-	vli_mod_mult_fast(y1, y1, x2, curve_prime, ndigits);
++	vli_mod_mult_fast(y1, y1, x2, curve);
+ 	/* t3 = B - x3 */
+ 	vli_mod_sub(x2, x1, t5, curve_prime, ndigits);
+ 	/* t4 = (y2 - y1)*(B - x3) */
+-	vli_mod_mult_fast(y2, y2, x2, curve_prime, ndigits);
++	vli_mod_mult_fast(y2, y2, x2, curve);
+ 	/* t4 = y3 */
+ 	vli_mod_sub(y2, y2, y1, curve_prime, ndigits);
+ 
+@@ -1089,22 +1210,24 @@ static void xycz_add(u64 *x1, u64 *y1, u64 *x2, u64 *y2, u64 *curve_prime,
+  * Output P + Q = (x3, y3, Z3), P - Q = (x3', y3', Z3)
+  * or P => P - Q, Q => P + Q
+  */
+-static void xycz_add_c(u64 *x1, u64 *y1, u64 *x2, u64 *y2, u64 *curve_prime,
+-		       unsigned int ndigits)
++static void xycz_add_c(u64 *x1, u64 *y1, u64 *x2, u64 *y2,
++			const struct ecc_curve *curve)
+ {
+ 	/* t1 = X1, t2 = Y1, t3 = X2, t4 = Y2 */
+ 	u64 t5[ECC_MAX_DIGITS];
+ 	u64 t6[ECC_MAX_DIGITS];
+ 	u64 t7[ECC_MAX_DIGITS];
++	const u64 *curve_prime = curve->p;
++	const unsigned int ndigits = curve->g.ndigits;
+ 
+ 	/* t5 = x2 - x1 */
+ 	vli_mod_sub(t5, x2, x1, curve_prime, ndigits);
+ 	/* t5 = (x2 - x1)^2 = A */
+-	vli_mod_square_fast(t5, t5, curve_prime, ndigits);
++	vli_mod_square_fast(t5, t5, curve);
+ 	/* t1 = x1*A = B */
+-	vli_mod_mult_fast(x1, x1, t5, curve_prime, ndigits);
++	vli_mod_mult_fast(x1, x1, t5, curve);
+ 	/* t3 = x2*A = C */
+-	vli_mod_mult_fast(x2, x2, t5, curve_prime, ndigits);
++	vli_mod_mult_fast(x2, x2, t5, curve);
+ 	/* t4 = y2 + y1 */
+ 	vli_mod_add(t5, y2, y1, curve_prime, ndigits);
+ 	/* t4 = y2 - y1 */
+@@ -1113,29 +1236,29 @@ static void xycz_add_c(u64 *x1, u64 *y1, u64 *x2, u64 *y2, u64 *curve_prime,
+ 	/* t6 = C - B */
+ 	vli_mod_sub(t6, x2, x1, curve_prime, ndigits);
+ 	/* t2 = y1 * (C - B) */
+-	vli_mod_mult_fast(y1, y1, t6, curve_prime, ndigits);
++	vli_mod_mult_fast(y1, y1, t6, curve);
+ 	/* t6 = B + C */
+ 	vli_mod_add(t6, x1, x2, curve_prime, ndigits);
+ 	/* t3 = (y2 - y1)^2 */
+-	vli_mod_square_fast(x2, y2, curve_prime, ndigits);
++	vli_mod_square_fast(x2, y2, curve);
+ 	/* t3 = x3 */
+ 	vli_mod_sub(x2, x2, t6, curve_prime, ndigits);
+ 
+ 	/* t7 = B - x3 */
+ 	vli_mod_sub(t7, x1, x2, curve_prime, ndigits);
+ 	/* t4 = (y2 - y1)*(B - x3) */
+-	vli_mod_mult_fast(y2, y2, t7, curve_prime, ndigits);
++	vli_mod_mult_fast(y2, y2, t7, curve);
+ 	/* t4 = y3 */
+ 	vli_mod_sub(y2, y2, y1, curve_prime, ndigits);
+ 
+ 	/* t7 = (y2 + y1)^2 = F */
+-	vli_mod_square_fast(t7, t5, curve_prime, ndigits);
++	vli_mod_square_fast(t7, t5, curve);
+ 	/* t7 = x3' */
+ 	vli_mod_sub(t7, t7, t6, curve_prime, ndigits);
+ 	/* t6 = x3' - B */
+ 	vli_mod_sub(t6, t7, x1, curve_prime, ndigits);
+ 	/* t6 = (y2 + y1)*(x3' - B) */
+-	vli_mod_mult_fast(t6, t6, t5, curve_prime, ndigits);
++	vli_mod_mult_fast(t6, t6, t5, curve);
+ 	/* t2 = y3' */
+ 	vli_mod_sub(y1, t6, y1, curve_prime, ndigits);
+ 
+@@ -1165,41 +1288,37 @@ static void ecc_point_mult(struct ecc_point *result,
+ 	vli_set(rx[1], point->x, ndigits);
+ 	vli_set(ry[1], point->y, ndigits);
+ 
+-	xycz_initial_double(rx[1], ry[1], rx[0], ry[0], initial_z, curve_prime,
+-			    ndigits);
++	xycz_initial_double(rx[1], ry[1], rx[0], ry[0], initial_z, curve);
+ 
+ 	for (i = num_bits - 2; i > 0; i--) {
+ 		nb = !vli_test_bit(scalar, i);
+-		xycz_add_c(rx[1 - nb], ry[1 - nb], rx[nb], ry[nb], curve_prime,
+-			   ndigits);
+-		xycz_add(rx[nb], ry[nb], rx[1 - nb], ry[1 - nb], curve_prime,
+-			 ndigits);
++		xycz_add_c(rx[1 - nb], ry[1 - nb], rx[nb], ry[nb], curve);
++		xycz_add(rx[nb], ry[nb], rx[1 - nb], ry[1 - nb], curve);
+ 	}
+ 
+ 	nb = !vli_test_bit(scalar, 0);
+-	xycz_add_c(rx[1 - nb], ry[1 - nb], rx[nb], ry[nb], curve_prime,
+-		   ndigits);
++	xycz_add_c(rx[1 - nb], ry[1 - nb], rx[nb], ry[nb], curve);
+ 
+ 	/* Find final 1/Z value. */
+ 	/* X1 - X0 */
+ 	vli_mod_sub(z, rx[1], rx[0], curve_prime, ndigits);
+ 	/* Yb * (X1 - X0) */
+-	vli_mod_mult_fast(z, z, ry[1 - nb], curve_prime, ndigits);
++	vli_mod_mult_fast(z, z, ry[1 - nb], curve);
+ 	/* xP * Yb * (X1 - X0) */
+-	vli_mod_mult_fast(z, z, point->x, curve_prime, ndigits);
++	vli_mod_mult_fast(z, z, point->x, curve);
+ 
+ 	/* 1 / (xP * Yb * (X1 - X0)) */
+ 	vli_mod_inv(z, z, curve_prime, point->ndigits);
+ 
+ 	/* yP / (xP * Yb * (X1 - X0)) */
+-	vli_mod_mult_fast(z, z, point->y, curve_prime, ndigits);
++	vli_mod_mult_fast(z, z, point->y, curve);
+ 	/* Xb * yP / (xP * Yb * (X1 - X0)) */
+-	vli_mod_mult_fast(z, z, rx[1 - nb], curve_prime, ndigits);
++	vli_mod_mult_fast(z, z, rx[1 - nb], curve);
+ 	/* End 1/Z calculation */
+ 
+-	xycz_add(rx[nb], ry[nb], rx[1 - nb], ry[1 - nb], curve_prime, ndigits);
++	xycz_add(rx[nb], ry[nb], rx[1 - nb], ry[1 - nb], curve);
+ 
+-	apply_z(rx[0], ry[0], z, curve_prime, ndigits);
++	apply_z(rx[0], ry[0], z, curve);
+ 
+ 	vli_set(result->x, rx[0], ndigits);
+ 	vli_set(result->y, ry[0], ndigits);
+@@ -1220,9 +1339,9 @@ static void ecc_point_add(const struct ecc_point *result,
+ 	vli_mod_sub(z, result->x, p->x, curve->p, ndigits);
+ 	vli_set(px, p->x, ndigits);
+ 	vli_set(py, p->y, ndigits);
+-	xycz_add(px, py, result->x, result->y, curve->p, ndigits);
++	xycz_add(px, py, result->x, result->y, curve);
+ 	vli_mod_inv(z, z, curve->p, ndigits);
+-	apply_z(result->x, result->y, z, curve->p, ndigits);
++	apply_z(result->x, result->y, z, curve);
+ }
+ 
+ /* Computes R = u1P + u2Q mod p using Shamir's trick.
+@@ -1251,8 +1370,7 @@ void ecc_point_mult_shamir(const struct ecc_point *result,
+ 	points[2] = q;
+ 	points[3] = &sum;
+ 
+-	num_bits = max(vli_num_bits(u1, ndigits),
+-		       vli_num_bits(u2, ndigits));
++	num_bits = max(vli_num_bits(u1, ndigits), vli_num_bits(u2, ndigits));
+ 	i = num_bits - 1;
+ 	idx = (!!vli_test_bit(u1, i)) | ((!!vli_test_bit(u2, i)) << 1);
+ 	point = points[idx];
+@@ -1263,7 +1381,7 @@ void ecc_point_mult_shamir(const struct ecc_point *result,
+ 	z[0] = 1;
+ 
+ 	for (--i; i >= 0; i--) {
+-		ecc_point_double_jacobian(rx, ry, z, curve->p, ndigits);
++		ecc_point_double_jacobian(rx, ry, z, curve);
+ 		idx = (!!vli_test_bit(u1, i)) | ((!!vli_test_bit(u2, i)) << 1);
+ 		point = points[idx];
+ 		if (point) {
+@@ -1273,14 +1391,14 @@ void ecc_point_mult_shamir(const struct ecc_point *result,
+ 
+ 			vli_set(tx, point->x, ndigits);
+ 			vli_set(ty, point->y, ndigits);
+-			apply_z(tx, ty, z, curve->p, ndigits);
++			apply_z(tx, ty, z, curve);
+ 			vli_mod_sub(tz, rx, tx, curve->p, ndigits);
+-			xycz_add(tx, ty, rx, ry, curve->p, ndigits);
+-			vli_mod_mult_fast(z, z, tz, curve->p, ndigits);
++			xycz_add(tx, ty, rx, ry, curve);
++			vli_mod_mult_fast(z, z, tz, curve);
+ 		}
+ 	}
+ 	vli_mod_inv(z, z, curve->p, ndigits);
+-	apply_z(rx, ry, z, curve->p, ndigits);
++	apply_z(rx, ry, z, curve);
+ }
+ EXPORT_SYMBOL(ecc_point_mult_shamir);
+ 
+@@ -1434,10 +1552,10 @@ int ecc_is_pubkey_valid_partial(const struct ecc_curve *curve,
+ 		return -EINVAL;
+ 
+ 	/* Check 3: Verify that y^2 == (x^3 + a·x + b) mod p */
+-	vli_mod_square_fast(yy, pk->y, curve->p, pk->ndigits); /* y^2 */
+-	vli_mod_square_fast(xxx, pk->x, curve->p, pk->ndigits); /* x^2 */
+-	vli_mod_mult_fast(xxx, xxx, pk->x, curve->p, pk->ndigits); /* x^3 */
+-	vli_mod_mult_fast(w, curve->a, pk->x, curve->p, pk->ndigits); /* a·x */
++	vli_mod_square_fast(yy, pk->y, curve); /* y^2 */
++	vli_mod_square_fast(xxx, pk->x, curve); /* x^2 */
++	vli_mod_mult_fast(xxx, xxx, pk->x, curve); /* x^3 */
++	vli_mod_mult_fast(w, curve->a, pk->x, curve); /* a·x */
+ 	vli_mod_add(w, w, curve->b, curve->p, pk->ndigits); /* a·x + b */
+ 	vli_mod_add(w, w, xxx, curve->p, pk->ndigits); /* x^3 + a·x + b */
+ 	if (vli_cmp(yy, w, pk->ndigits) != 0) /* Equation */
+diff --git a/crypto/ecc.h b/crypto/ecc.h
+index 0bc2a33033c9..65c3864dc56e 100644
+--- a/crypto/ecc.h
++++ b/crypto/ecc.h
+@@ -29,7 +29,8 @@
+ /* One digit is u64 qword. */
+ #define ECC_CURVE_NIST_P192_DIGITS  3
+ #define ECC_CURVE_NIST_P256_DIGITS  4
+-#define ECC_MAX_DIGITS             (512 / 64)
++#define ECC_CURVE_NIST_P384_DIGITS  6
++#define ECC_MAX_DIGITS              (512 / 64) /* due to ecrdsa */
+ 
+ #define ECC_DIGITS_TO_BYTES_SHIFT 3
+ 
 -- 
 2.29.2
 
