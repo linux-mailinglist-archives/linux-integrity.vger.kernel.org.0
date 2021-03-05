@@ -2,228 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1619432DEA9
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 01:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D7532DF34
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 02:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbhCEAy3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Mar 2021 19:54:29 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24458 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229813AbhCEAy2 (ORCPT
+        id S229538AbhCEBpz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Mar 2021 20:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229512AbhCEBpz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Mar 2021 19:54:28 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1250XV2Q074732;
-        Thu, 4 Mar 2021 19:53:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=QjoT81Wn3yRWvpjwuWUjGZfM3Z0jFdVtPmyURAKHe10=;
- b=VErkfFtf9aclGVqzlDva4eZv+B4cbxn/3kqIoNnBt1zUcP8mGjaoo+scKS8JsEawkwdF
- 5d74qEnisv48YmT4TS9rpyYseyl+3FkTRiwoJJaSVFTgrkpyabIjbUPZ3NdbsgBwHgkA
- qKRH4oiBIuCCOTpX+9O+6i+p7bP2LDnJZvofGRMl9a34eT1ncdOj0UPpfu6vjnSyXDww
- xt/OpZvDNuo82B39OVIb8MKsd4e/w5Ezw9f31uZBpfjlhh2PGJQby66ZA6Hka1srq3O4
- ZOISYyUQyrOegh4ntwumKMCJxWpm9B/fPZjIgx/2b5+SIuPZhVv+mJIB5WiL2KLGdcG8 YQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 373a2crk4t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Mar 2021 19:53:51 -0500
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1250XWdO074898;
-        Thu, 4 Mar 2021 19:53:50 -0500
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 373a2crk4k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 04 Mar 2021 19:53:50 -0500
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 1250ql4L027558;
-        Fri, 5 Mar 2021 00:53:49 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma04dal.us.ibm.com with ESMTP id 36ydq9xrta-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Mar 2021 00:53:49 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1250rme528115448
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 5 Mar 2021 00:53:48 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D9272AE062;
-        Fri,  5 Mar 2021 00:53:48 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6051AE05F;
-        Fri,  5 Mar 2021 00:53:48 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  5 Mar 2021 00:53:48 +0000 (GMT)
-Subject: Re: [PATCH v10 0/9] Add support for x509 certs with NIST P384/256/192
- keys
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        davem@davemloft.net, herbert@gondor.apana.org.au,
-        dhowells@redhat.com, zohar@linux.ibm.com,
-        David Woodhouse <dwmw2@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
-        linux-integrity@vger.kernel.org
-References: <20210305005203.3547587-1-stefanb@linux.vnet.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <11bd603d-56ca-b974-98e1-bc51238ea4af@linux.ibm.com>
-Date:   Thu, 4 Mar 2021 19:53:48 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 4 Mar 2021 20:45:55 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE65C061574
+        for <linux-integrity@vger.kernel.org>; Thu,  4 Mar 2021 17:45:54 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id mj10so422175ejb.5
+        for <linux-integrity@vger.kernel.org>; Thu, 04 Mar 2021 17:45:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2jQAAzkMyDz9j2A6XfWMQGCSaoR8rT2Fso6F62ldjHg=;
+        b=bDqeNAH84+nJyInnN4WTMsRnjdw75/XreazONyhpvGLex+Q0RCII/NWn7wzQUSAu8j
+         lfJAChB1VzlvI1Q739ir64e7tn437yxHNo41Jf5+Cne7k/vtuDrE15H749xSV7gv3Gji
+         jaKUTTrWzJbIGqtcEOn0/3BBNGIQe6dvikIdNltDqGUVCYq0hyuxcaRZj9WQw/AIjL3s
+         2AAz66ATU1T1wKPv/kTZKpbtcfeIfJHwZmmcxmBOssF5QwXTO6Prq1yh6i4/+WNJZIAm
+         E6IfP/BFcuPxGprkW96zr4IHthYoFJETpE+7jIu5SpHvE1gJ9i87BH7TZ1tEpTTB63Vi
+         Vyww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2jQAAzkMyDz9j2A6XfWMQGCSaoR8rT2Fso6F62ldjHg=;
+        b=HdPNDKpQHwqk88kRxOQ//6X+ahMyAAvGRnW9Jk6Jre9NrD1/2e8ZuZ83i+crXIQZB0
+         pyJtR/DfA+4DaZhsoLuhUwLOZteImv4NOiyhFLpE17gsiMDPsG6l4swBiJU2uCbiMi5m
+         C3JW5mCwIRt8FPeKOEPO5UUX1FI6hUaDKi0ukixAshpudgsN1c0G1zfGNvt0e4z+532A
+         txWqBDgZfUM/gR68Dr3xH58oLqkBlvM38TsQTApoZK7vFlUJ20O29RVXk7lsdpvRD9Fb
+         uMdjEbgi8vcxmWPbYuJrn8pmo8N8Cf2CTGnorwbfNk1QkKiE/9I4fmnN0wR1jTQMK8gP
+         udww==
+X-Gm-Message-State: AOAM533hC1C2rNRGsIwNQdNCigLGbPAEsLuLLGvHiEEavjHyuBK5YZLP
+        Txd1+ehBkSNiTkOAjQmSdbRrOps2WICZLVVHRi/e
+X-Google-Smtp-Source: ABdhPJzL6KN7ohNuopHXUHTY5N50drq9D6Opy/MeC8ZA8MApREWAtEryhlz7TohVEuG0EtSlBqyZ1X6NbT5qGO133Ls=
+X-Received: by 2002:a17:906:2bd6:: with SMTP id n22mr271467ejg.91.1614908752118;
+ Thu, 04 Mar 2021 17:45:52 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210305005203.3547587-1-stefanb@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-04_09:2021-03-03,2021-03-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- adultscore=0 spamscore=0 clxscore=1015 mlxlogscore=999 phishscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103050001
+References: <20210212163709.3139-1-nramas@linux.microsoft.com> <87273030-2303-e791-4e5d-25373faf0880@linux.microsoft.com>
+In-Reply-To: <87273030-2303-e791-4e5d-25373faf0880@linux.microsoft.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 4 Mar 2021 20:45:41 -0500
+Message-ID: <CAHC9VhT4pnsFTL3N8pZgrgpqzgCU+Odd4V=SGvTA9QcKAGwasw@mail.gmail.com>
+Subject: Re: [PATCH v3] selinux: measure state and policy capabilities
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     zohar@linux.ibm.com,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
+        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
+        gmazyland@gmail.com, sashal@kernel.org,
+        James Morris <jmorris@namei.org>,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Herbert,
+On Thu, Mar 4, 2021 at 2:20 PM Lakshmi Ramasubramanian
+<nramas@linux.microsoft.com> wrote:
+> On 2/12/21 8:37 AM, Lakshmi Ramasubramanian wrote:
+>
+> Hi Paul,
+>
+> > SELinux stores the configuration state and the policy capabilities
+> > in kernel memory.  Changes to this data at runtime would have an impact
+> > on the security guarantees provided by SELinux.  Measuring this data
+> > through IMA subsystem provides a tamper-resistant way for
+> > an attestation service to remotely validate it at runtime.
+> >
+> > Measure the configuration state and policy capabilities by calling
+> > the IMA hook ima_measure_critical_data().
+> >
+>
+> I have addressed your comments on the v2 patch for selinux measurement
+> using IMA. Could you please let me know if there are any other comments
+> that I need to address in this patch?
 
-    you can take patches 1-8. 9 will not apply without Nayna's series as 
-mentioned in the patch.
+The merge window just closed earlier this week, and there were a
+handful of bugs that needed to be addressed before I could look at
+this patch.  If I don't get a chance to review this patch tonight, I
+will try to get to it this weekend or early next week.
 
-Regards,
-    Stefan
-
-
-On 3/4/21 7:51 PM, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
->
-> This series of patches adds support for x509 certificates signed by a CA
-> that uses NIST P384, P256 or P192 keys for signing. It also adds support for
-> certificates where the public key is one of this type of a key. The math
-> for ECDSA signature verification is also added as well as the math for fast
-> mmod operation for NIST P384.
->
-> Since self-signed certificates are verified upon loading, the following
-> script can be used for testing of NIST P256 keys:
->
-> k=$(keyctl newring test @u)
->
-> while :; do
-> 	for hash in sha1 sha224 sha256 sha384 sha512; do
-> 		openssl req \
-> 			-x509 \
-> 			-${hash} \
-> 			-newkey ec \
-> 			-pkeyopt ec_paramgen_curve:prime256v1 \
-> 			-keyout key.pem \
-> 			-days 365 \
-> 			-subj '/CN=test' \
-> 			-nodes \
-> 			-outform der \
-> 			-out cert.der
-> 		keyctl padd asymmetric testkey $k < cert.der
-> 		if [ $? -ne 0 ]; then
-> 			echo "ERROR"
-> 			exit 1
-> 		fi
-> 	done
-> done
->
-> Ecdsa support also works with restricted keyrings where an RSA key is used
-> to sign a NIST P384/256/192 key. Scripts for testing are here:
->
-> https://github.com/stefanberger/eckey-testing
->
-> The ECDSA signature verification will be used by IMA Appraisal where ECDSA
-> file signatures stored in RPM packages will use substantially less space
-> than if RSA signatures were to be used.
->
-> Further, a patch is added that allows kernel modules to be signed with a NIST
-> p384 key.
->
->     Stefan and Saulo
->
-> v9->v10:
->    - rearranged order of patches to have crypto patches first
->    - moved hunk from patch 3 to patch 2 to avoid compilation warning due to
->      unused symbol
->
-> v8->v9:
->    - Appended Saulo's patches
->    - Appended patch to support kernel modules signed with NIST p384 key. This
->      patch requires Nayna's series here: https://lkml.org/lkml/2021/2/18/856
->
-> v7->v8:
->    - patch 3/4: Do not determine key algo using parse_OID in public_key.c
->      but do this when parsing the certificate. This addresses an issue
->      with certain build configurations where OID_REGISTRY is not available
->      as 'Reported-by: kernel test robot <lkp@intel.com>'.
->
-> v6->v7:
->    - Moved some OID defintions to patch 1 for bisectability
->    - Applied R-b's
->    
-> v5->v6:
->    - moved ecdsa code into its own module ecdsa_generic built from ecdsa.c
->    - added script-generated test vectors for NIST P256 & P192 and all hashes
->    - parsing of OID that contain header with new parse_oid()
->
-> v4->v5:
->    - registering crypto support under names ecdsa-nist-p256/p192 following
->      Hubert Xu's suggestion in other thread
->    - appended IMA ECDSA support patch
->
-> v3->v4:
->    - split off of ecdsa crypto part; registering akcipher as "ecdsa" and
->      deriving used curve from digits in parsed key
->
-> v2->v3:
->    - patch 2 now includes linux/scatterlist.h
->
-> v1->v2:
->    - using faster vli_sub rather than newly added vli_mod_fast to 'reduce'
->      result
->    - rearranged switch statements to follow after RSA
->    - 3rd patch from 1st posting is now 1st patch
->
->
-> Saulo Alessandre (4):
->    crypto: Add NIST P384 curve parameters
->    crypto: Add math to support fast NIST P384
->    ecdsa: Register NIST P384 and extend test suite
->    x509: Add OID for NIST P384 and extend parser for it
->
-> Stefan Berger (5):
->    crypto: Add support for ECDSA signature verification
->    x509: Detect sm2 keys by their parameters OID
->    x509: Add support for parsing x509 certs with ECDSA keys
->    ima: Support EC keys for signature verification
->    certs: Add support for using elliptic curve keys for signing modules
->
->   certs/Kconfig                             |  22 ++
->   certs/Makefile                            |  14 +
->   crypto/Kconfig                            |  10 +
->   crypto/Makefile                           |   6 +
->   crypto/asymmetric_keys/pkcs7_parser.c     |   4 +
->   crypto/asymmetric_keys/public_key.c       |   4 +-
->   crypto/asymmetric_keys/x509_cert_parser.c |  49 ++-
->   crypto/asymmetric_keys/x509_public_key.c  |   4 +-
->   crypto/ecc.c                              | 281 +++++++++-----
->   crypto/ecc.h                              |  31 +-
->   crypto/ecc_curve_defs.h                   |  32 ++
->   crypto/ecdsa.c                            | 400 ++++++++++++++++++++
->   crypto/ecdsasignature.asn1                |   4 +
->   crypto/testmgr.c                          |  18 +
->   crypto/testmgr.h                          | 424 ++++++++++++++++++++++
->   include/crypto/ecdh.h                     |   1 +
->   include/keys/asymmetric-type.h            |   6 +
->   include/linux/oid_registry.h              |  10 +-
->   lib/oid_registry.c                        |  13 +
->   security/integrity/digsig_asymmetric.c    |  30 +-
->   20 files changed, 1256 insertions(+), 107 deletions(-)
->   create mode 100644 crypto/ecdsa.c
->   create mode 100644 crypto/ecdsasignature.asn1
->
-
+-- 
+paul moore
+www.paul-moore.com
