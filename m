@@ -2,164 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7A332F403
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 20:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB88932F434
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 20:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbhCETgz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Mar 2021 14:36:55 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:52774 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbhCETgw (ORCPT
+        id S229488AbhCETrS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Mar 2021 14:47:18 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:51486 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229719AbhCETqm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Mar 2021 14:36:52 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B84F620B83EA;
-        Fri,  5 Mar 2021 11:36:51 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B84F620B83EA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1614973011;
-        bh=4XfKI01xCGDF7/kmNKwFpOEKuZ6joFfuhk32D0n4kn8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=GUC8b22xykyN8ATFMSP79Z8qSm/7lsAlL1fP4qUW7TuWpAnOv8h+aM2jGoSrACexA
-         8UxZToa4s5zOA0PAMI47ELxwMSqCqLCb5BCUWRjheJPKW9xZAY1OQNgphHMCis93DK
-         7y8ZzT37JqcdBJguCstuU1jTUe1a8t9D3yevWkJQ=
-Subject: Re: [PATCH] IMA: Allow only ima-buf template for key measurement
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     zohar@linux.ibm.com, tusharsu@linux.microsoft.com,
-        ltp@lists.linux.it, linux-integrity@vger.kernel.org
-References: <20210303203254.12856-1-nramas@linux.microsoft.com>
- <YEJZIQqa1arYKwK+@pevik>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <466bc969-977f-e843-1f90-711a6d1193e0@linux.microsoft.com>
-Date:   Fri, 5 Mar 2021 11:36:51 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 5 Mar 2021 14:46:42 -0500
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 5F25A72C8B8;
+        Fri,  5 Mar 2021 22:46:40 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 490AE4A4737;
+        Fri,  5 Mar 2021 22:46:40 +0300 (MSK)
+Date:   Fri, 5 Mar 2021 22:46:40 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        davem@davemloft.net, herbert@gondor.apana.org.au,
+        dhowells@redhat.com, zohar@linux.ibm.com,
+        linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
+        linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v10 1/9] crypto: Add support for ECDSA signature
+ verification
+Message-ID: <20210305194640.nnerhdadoczqyta3@altlinux.org>
+References: <20210305005203.3547587-1-stefanb@linux.vnet.ibm.com>
+ <20210305005203.3547587-2-stefanb@linux.vnet.ibm.com>
+ <YEJk44FXEl0+mEPr@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <YEJZIQqa1arYKwK+@pevik>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YEJk44FXEl0+mEPr@kernel.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/5/21 8:15 AM, Petr Vorel wrote:
+Jarkko,
 
-Hi Petr,
+On Fri, Mar 05, 2021 at 07:05:39PM +0200, Jarkko Sakkinen wrote:
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Copyright (c) 2021 IBM Corporation
+> > + *
+> > + * Redistribution and use in source and binary forms, with or without
+> > + * modification, are permitted provided that the following conditions are
+> > + * met:
+> > + *  * Redistributions of source code must retain the above copyright
+> > + *   notice, this list of conditions and the following disclaimer.
+> > + *  * Redistributions in binary form must reproduce the above copyright
+> > + *    notice, this list of conditions and the following disclaimer in the
+> > + *    documentation and/or other materials provided with the distribution.
+> > + *
+> > + * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+> > + * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+> > + * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+> > + * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+> > + * HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+> > + * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+> > + * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+> > + * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+> > + * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+> > + * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+> > + * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+> > + */
+> 
+> This license platter is redundant, given SPDX.
 
-> 
-> for my record: previous version was
-> https://patchwork.ozlabs.org/project/ltp/patch/20210222023421.12576-1-nramas@linux.microsoft.com/
-> 
->> ima-buf is the default IMA template used for all buffer measurements.
->> Therefore, IMA policy rule for measuring keys need not specify
->> an IMA template.  But if a template is specified for key measurement
->> rule then it must be only ima-buf.
-> 
->> Update keys tests to not require a template to be specified for
->> key measurement rule, but if a template is specified verify it is
->> only ima-buf.
-> Good, but there are some issues, see below.
-> 
-> ...
->> +++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-> ...
->> +	check_policy_template "template=ima-buf" $FUNC_KEYCHECK || return
->> +
->>   	check_keys_policy "$pattern" > $tmp_file || return
->>   	keycheck_lines=$(cat $tmp_file)
->>   	keyrings=$(for i in $keycheck_lines; do echo "$i" | grep "keyrings" | \
->> @@ -101,6 +103,8 @@ test2()
-> 
->>   	tst_res TINFO "verify measurement of certificate imported into a keyring"
-> 
->> +	check_policy_template "template=ima-buf" $FUNC_KEYCHECK || return
->> +
->>   	check_keys_policy "$pattern" >/dev/null || return
-> 
->>   	KEYRING_ID=$(keyctl newring $keyring_name @s) || \
->> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
->> index 59a7ffeac..01ebec2b6 100644
->> --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
->> +++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
->> @@ -107,6 +107,22 @@ check_ima_policy_cmdline()
->>   	return 1
->>   }
-> 
->> +check_policy_template()
->> +{
->> +	local template="$1"
->> +	local func="$2"
->> +	grep -E "template=" $TST_TMPDIR/policy.txt | while read line
->> +	do
->> +		ima_template=$(echo $line | grep $template)
->> +		if [ -z "$ima_template" ]; then
-> instead of putting it into variable, why not just using grep?
-> if ! echo $line | grep -q $template; then
-> 
-Sure - will make this change.
+I think SPDX identifier supplements license plate and is machine readable
+identifier, but it does not replace or making adding of license plate
+redundant.
 
->> +			tst_res TCONF "Only $template can be specified for $func"
->> +			return 1
-> Have you test it? This will not work. There is ${PIPESTATUS[@]} bash/zsh
-> array, thus 1 is in $pipestatus[1]. But that's bashism, which will not work on
-> dash busybox ash, ...
-> 
+- Quoting https://spdx.dev/ids/
 
-I tested it by running "/opt/ltp/run -f ima -s keys" to run the keys 
-test in IMA. I followed the pattern in check_keys_policy() to check for 
-the template and validate the change. I will check this again and 
-update. Sorry about that.
+  "When a license defines a recommended notice to attach to files under
+  that license (sometimes called a “standard header”), the SPDX project
+  recommends that the standard header be included in the files, in
+  addition to an SPDX ID.
 
-> You need to do:
-> while read line; do
-> 	if ! echo $line | grep -q $template; then
-> 		tst_res TCONF "only $template can be specified for $func"
-> 		return 1
-> 	fi
-> done < $TST_TMPDIR/policy.txt
-> return 0
+  Additionally, when a file already contains a standard header or other
+  license notice, the SPDX project recommends that those existing
+  notices should not be removed. The SPDX ID is recommended to be used
+  to supplement, not replace, existing notices in files."
 
-Sure - will make this change.
+- GPL license text have section on "How to Apply These Terms to Your New
+  Programs" which says to add license boilerplate text and it does not
+  say SPDX identifier is enough.
 
-> 
-> *BUT* on vanilla 5.11 with and SLES 5.3.18-47-default with many backports when
-> testing with this wrong policy:
-> measure func=KEY_CHECK keyrings=.ima|.evm|.builtin_trusted_keys|.blacklist|key_import_test template=ima-ng
-> 
-> 
-> ima_keys 1 TINFO: verify key measurement for keyrings and templates specified in IMA policy
-> ima_keys 1 TCONF: Only template=ima-buf can be specified for func=KEY_CHECK
-> ima_keys 1 TINFO: keyrings: '\.ima|\.evm|\.builtin_trusted_keys|\.blacklist|key_import_test'
-> ima_keys 1 TINFO: templates: 'ima-ng'
-> ima_keys 1 TPASS: specified keyrings were measured correctly
->             ^
-> first test passes. Why? Is that correct?
-> I haven't tested any other templates.
-No - the test should not pass if an incorrect template is specified. I 
-will check this again and update.
+- Also, page https://www.kernel.org/doc/html/latest/process/license-rules.html
+  does not forbid adding license plate text. (Even though it misguidedly
+  says "alternative to boilerplate text" is the use of SPDX.)
 
-> 
-> ima_keys 2 TINFO: verify measurement of certificate imported into a keyring
-> ima_keys 2 TCONF: Only template=ima-buf can be specified for func=KEY_CHECK
-> errno: No such file or directory (2)
-> ima_keys 2 TBROK: unable to import a certificate into key_import_test keyring
-> 
->> +		fi
->> +	done
-> 
-> Besides that, I'd like to put check_policy_template() into ima_keys.sh because
-> 1) is so far needed only in ima_keys.sh 2) it expects $TST_TMPDIR/policy.txt.
-> Functions in ima_setup.sh which are used for more tests should not expect any
-> function was called before.
-Agreed. I'll move check_policy_template() to ima_keys.sh.
+- License text is a readable text and not just identifier.
+  I think SPDX tag could be not legally binding in all jurisdictions.
 
-> 
-> dm-crypt measurement tests from Tushar Sugandhi will require these, I'll put it
-> into ima_setup.sh during rebase and probably add policy file as a function parameter.
-That sounds good.
+By there reasons I believe you cannot request removing license platter
+from the source and this should be author's decision.
 
-Thanks a lot Petr.
-
-  -lakshmi
+Thanks,
 
