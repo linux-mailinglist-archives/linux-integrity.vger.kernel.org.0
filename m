@@ -2,49 +2,40 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C36C32F3E2
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 20:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7A332F403
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Mar 2021 20:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbhCET37 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Mar 2021 14:29:59 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:51860 "EHLO
+        id S229642AbhCETgz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 5 Mar 2021 14:36:55 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:52774 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbhCET3s (ORCPT
+        with ESMTP id S229562AbhCETgw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Mar 2021 14:29:48 -0500
+        Fri, 5 Mar 2021 14:36:52 -0500
 Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1457220B83EA;
-        Fri,  5 Mar 2021 11:29:48 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1457220B83EA
+        by linux.microsoft.com (Postfix) with ESMTPSA id B84F620B83EA;
+        Fri,  5 Mar 2021 11:36:51 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B84F620B83EA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1614972588;
-        bh=C6yfakTHu6d1eI3TYLCRPkMg4Ti+vegwEX0NiykQuoU=;
+        s=default; t=1614973011;
+        bh=4XfKI01xCGDF7/kmNKwFpOEKuZ6joFfuhk32D0n4kn8=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Hpln3CAQrwyY4794PdvobdjJXJrkT6Eaw6MshSYNHF8DUz7yfgY07jS7s3sQw2ZQt
-         pPPyNSZFBliuZqe1SAFGEDkRlcS18BPnWTHN+dSjR9s5SV9clJYzievx8zSb7UM8Rc
-         /iTnm8a2bMK+Rb4/Rie+s1UND0o8IMxncfyejL1E=
-Subject: Re: [PATCH v3] selinux: measure state and policy capabilities
-To:     Paul Moore <paul@paul-moore.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     zohar@linux.ibm.com,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, sashal@kernel.org,
-        James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210212163709.3139-1-nramas@linux.microsoft.com>
- <CAHC9VhSMz8FtK5HMPA1+FMeU0cs4vfCCaimxb-J+VDj_Dyk-nA@mail.gmail.com>
- <af0f2d60c6584b613172b08e4fcea4119e231e93.camel@HansenPartnership.com>
- <CAHC9VhRBdJ9Vh1ESezim129OEf1UJ-Mxm1g9FpxEJmt-PUSLjg@mail.gmail.com>
+        b=GUC8b22xykyN8ATFMSP79Z8qSm/7lsAlL1fP4qUW7TuWpAnOv8h+aM2jGoSrACexA
+         8UxZToa4s5zOA0PAMI47ELxwMSqCqLCb5BCUWRjheJPKW9xZAY1OQNgphHMCis93DK
+         7y8ZzT37JqcdBJguCstuU1jTUe1a8t9D3yevWkJQ=
+Subject: Re: [PATCH] IMA: Allow only ima-buf template for key measurement
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     zohar@linux.ibm.com, tusharsu@linux.microsoft.com,
+        ltp@lists.linux.it, linux-integrity@vger.kernel.org
+References: <20210303203254.12856-1-nramas@linux.microsoft.com>
+ <YEJZIQqa1arYKwK+@pevik>
 From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <9170636f-1793-2272-e3fe-1551c18edeb9@linux.microsoft.com>
-Date:   Fri, 5 Mar 2021 11:29:47 -0800
+Message-ID: <466bc969-977f-e843-1f90-711a6d1193e0@linux.microsoft.com>
+Date:   Fri, 5 Mar 2021 11:36:51 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhRBdJ9Vh1ESezim129OEf1UJ-Mxm1g9FpxEJmt-PUSLjg@mail.gmail.com>
+In-Reply-To: <YEJZIQqa1arYKwK+@pevik>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -52,41 +43,123 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/5/21 11:22 AM, Paul Moore wrote:
+On 3/5/21 8:15 AM, Petr Vorel wrote:
 
-Hi Paul,
+Hi Petr,
 
-> On Fri, Mar 5, 2021 at 12:57 PM James Bottomley
-> <James.Bottomley@hansenpartnership.com> wrote:
->> On Fri, 2021-03-05 at 12:52 -0500, Paul Moore wrote:
->> [...]
->>> This draft seems fine to me, but there is a small logistical blocker
->>> at the moment which means I can't merge this until -rc2 is released,
->>> which likely means this coming Monday.  The problem is that this
->>> patch relies on code that went upstream via in the last merge window
->>> via the IMA tree, not the SELinux tree; normally that wouldn't be a
->>> problem as I typically rebase the selinux/next to Linus' -rc1 tag
->>> once the merge window is closed, but in this particular case the -rc1
->>> tag is dangerously broken for some system configurations (the tag has
->>> since been renamed) so I'm not rebasing onto -rc1 this time around.
->>>
->>> Assuming that -rc2 fixes the swapfile/fs-corruption problem, early
->>> next week I'll rebase selinux/next to -rc2 and merge this patch.
->>> However, if the swapfile bug continues past -rc2 we can consider
->>> merging this via the IMA tree, but I'd assume not do that if possible
->>> due to merge conflict and testing reasons.
->>
->> If it helps, we rebased the SCSI tree on top of the merge for the
->> swapfile fix which is this one, without waiting for -rc2:
 > 
-> Considering that -rc2 is only two days away I'm not going to lose a
-> lot of sleep over it.
+> for my record: previous version was
+> https://patchwork.ozlabs.org/project/ltp/patch/20210222023421.12576-1-nramas@linux.microsoft.com/
+> 
+>> ima-buf is the default IMA template used for all buffer measurements.
+>> Therefore, IMA policy rule for measuring keys need not specify
+>> an IMA template.  But if a template is specified for key measurement
+>> rule then it must be only ima-buf.
+> 
+>> Update keys tests to not require a template to be specified for
+>> key measurement rule, but if a template is specified verify it is
+>> only ima-buf.
+> Good, but there are some issues, see below.
+> 
+> ...
+>> +++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
+> ...
+>> +	check_policy_template "template=ima-buf" $FUNC_KEYCHECK || return
+>> +
+>>   	check_keys_policy "$pattern" > $tmp_file || return
+>>   	keycheck_lines=$(cat $tmp_file)
+>>   	keyrings=$(for i in $keycheck_lines; do echo "$i" | grep "keyrings" | \
+>> @@ -101,6 +103,8 @@ test2()
+> 
+>>   	tst_res TINFO "verify measurement of certificate imported into a keyring"
+> 
+>> +	check_policy_template "template=ima-buf" $FUNC_KEYCHECK || return
+>> +
+>>   	check_keys_policy "$pattern" >/dev/null || return
+> 
+>>   	KEYRING_ID=$(keyctl newring $keyring_name @s) || \
+>> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+>> index 59a7ffeac..01ebec2b6 100644
+>> --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+>> +++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+>> @@ -107,6 +107,22 @@ check_ima_policy_cmdline()
+>>   	return 1
+>>   }
+> 
+>> +check_policy_template()
+>> +{
+>> +	local template="$1"
+>> +	local func="$2"
+>> +	grep -E "template=" $TST_TMPDIR/policy.txt | while read line
+>> +	do
+>> +		ima_template=$(echo $line | grep $template)
+>> +		if [ -z "$ima_template" ]; then
+> instead of putting it into variable, why not just using grep?
+> if ! echo $line | grep -q $template; then
+> 
+Sure - will make this change.
+
+>> +			tst_res TCONF "Only $template can be specified for $func"
+>> +			return 1
+> Have you test it? This will not work. There is ${PIPESTATUS[@]} bash/zsh
+> array, thus 1 is in $pipestatus[1]. But that's bashism, which will not work on
+> dash busybox ash, ...
 > 
 
-Thanks for reviewing the patch.
+I tested it by running "/opt/ltp/run -f ima -s keys" to run the keys 
+test in IMA. I followed the pattern in check_keys_policy() to check for 
+the template and validate the change. I will check this again and 
+update. Sorry about that.
 
-I can wait until the swapfile issue is resolved (in rc2 or later) and 
-you are able to merge this patch. Please take your time.
+> You need to do:
+> while read line; do
+> 	if ! echo $line | grep -q $template; then
+> 		tst_res TCONF "only $template can be specified for $func"
+> 		return 1
+> 	fi
+> done < $TST_TMPDIR/policy.txt
+> return 0
 
-thanks,
-   -lakshmi
+Sure - will make this change.
+
+> 
+> *BUT* on vanilla 5.11 with and SLES 5.3.18-47-default with many backports when
+> testing with this wrong policy:
+> measure func=KEY_CHECK keyrings=.ima|.evm|.builtin_trusted_keys|.blacklist|key_import_test template=ima-ng
+> 
+> 
+> ima_keys 1 TINFO: verify key measurement for keyrings and templates specified in IMA policy
+> ima_keys 1 TCONF: Only template=ima-buf can be specified for func=KEY_CHECK
+> ima_keys 1 TINFO: keyrings: '\.ima|\.evm|\.builtin_trusted_keys|\.blacklist|key_import_test'
+> ima_keys 1 TINFO: templates: 'ima-ng'
+> ima_keys 1 TPASS: specified keyrings were measured correctly
+>             ^
+> first test passes. Why? Is that correct?
+> I haven't tested any other templates.
+No - the test should not pass if an incorrect template is specified. I 
+will check this again and update.
+
+> 
+> ima_keys 2 TINFO: verify measurement of certificate imported into a keyring
+> ima_keys 2 TCONF: Only template=ima-buf can be specified for func=KEY_CHECK
+> errno: No such file or directory (2)
+> ima_keys 2 TBROK: unable to import a certificate into key_import_test keyring
+> 
+>> +		fi
+>> +	done
+> 
+> Besides that, I'd like to put check_policy_template() into ima_keys.sh because
+> 1) is so far needed only in ima_keys.sh 2) it expects $TST_TMPDIR/policy.txt.
+> Functions in ima_setup.sh which are used for more tests should not expect any
+> function was called before.
+Agreed. I'll move check_policy_template() to ima_keys.sh.
+
+> 
+> dm-crypt measurement tests from Tushar Sugandhi will require these, I'll put it
+> into ima_setup.sh during rebase and probably add policy file as a function parameter.
+That sounds good.
+
+Thanks a lot Petr.
+
+  -lakshmi
+
