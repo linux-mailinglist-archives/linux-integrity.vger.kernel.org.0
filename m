@@ -2,102 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D74331BE1
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Mar 2021 01:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA97331D5A
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Mar 2021 04:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbhCIAoX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Mar 2021 19:44:23 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:49586 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbhCIAnw (ORCPT
+        id S229611AbhCIDUS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Mar 2021 22:20:18 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56148 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229379AbhCIDUE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Mar 2021 19:43:52 -0500
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 69CFE20B26C5;
-        Mon,  8 Mar 2021 16:43:51 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 69CFE20B26C5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1615250631;
-        bh=qgaj09GY0V5g5L11vCqpuOi8J3NxP8iccGBcpg9RWe4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KD6L5+yWewUpFeYSraIxQcly6ei8jpbMo9FKd/W/v2pVAaJTBqsFDkKFtcA1ODpL4
-         t+xlMoFQxtGunzKXXQKEwFW4AkeozO60wp0u+jI65oc7Yh4kSe0Sv9hiubqfV090F/
-         ZAXmkT3HL3nB6wOJLWqS40FtTzr/acGRqCgu5WsM=
-Subject: Re: [PATCH v3] selinux: measure state and policy capabilities
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        zohar@linux.ibm.com,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        tusharsu@linux.microsoft.com, tyhicks@linux.microsoft.com,
-        casey@schaufler-ca.com, agk@redhat.com, snitzer@redhat.com,
-        gmazyland@gmail.com, sashal@kernel.org,
-        James Morris <jmorris@namei.org>,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210212163709.3139-1-nramas@linux.microsoft.com>
- <CAHC9VhSMz8FtK5HMPA1+FMeU0cs4vfCCaimxb-J+VDj_Dyk-nA@mail.gmail.com>
- <af0f2d60c6584b613172b08e4fcea4119e231e93.camel@HansenPartnership.com>
- <CAHC9VhRBdJ9Vh1ESezim129OEf1UJ-Mxm1g9FpxEJmt-PUSLjg@mail.gmail.com>
- <9170636f-1793-2272-e3fe-1551c18edeb9@linux.microsoft.com>
- <CAHC9VhQEAPB_kQFxBrJWtsL8wP9YoQkCzXnXmaD5gm9duBzYcQ@mail.gmail.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <af3b4070-7474-984b-72a1-be7db736cc47@linux.microsoft.com>
-Date:   Mon, 8 Mar 2021 16:43:50 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 8 Mar 2021 22:20:04 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12933P4I035048;
+        Mon, 8 Mar 2021 22:20:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=xwuhBfjJgysHEK4duPU09vbuwPn5ZvItwHvLHoyabjo=;
+ b=ZtLPy+UTj1aUsk0I5NkKc8UtZotxy7vo4ENAuRV9gOmK4X0uFBY5zq2H34XLG8erI9cl
+ m9NYDuBHmjMg0Kxrs3ej85Mp6bDKQTea0cKLBFRM+FC60gkHFwai7LJTgxKpm/ygoltw
+ jzJxbl/rvY/1hcqyS5fdoO7NsyBEb3HvOmXPP6aQ2kP1nqMg6YBY4yvc0Ey6hmuOAGD2
+ 3tUApDwnFnItuKI87VNNdouLNREs9RQfQ6RmpctP2fyet+Hn0emdzqPGCCw8MtUqfgda
+ +5KWcY6ZUKzCPfYTmVqganuQ3K77UExxyqcVktcwbjF8ngAJBFlAD/AcVVlJuKUJ+j3P 8w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 375whqcej1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Mar 2021 22:20:02 -0500
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12936pb5043839;
+        Mon, 8 Mar 2021 22:20:02 -0500
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 375whqceh9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 Mar 2021 22:20:02 -0500
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 1293CXDS012370;
+        Tue, 9 Mar 2021 03:20:01 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma04wdc.us.ibm.com with ESMTP id 3741c9kayx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Mar 2021 03:20:01 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1293K0p534472330
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 9 Mar 2021 03:20:00 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B163BE065;
+        Tue,  9 Mar 2021 03:20:00 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9282CBE05F;
+        Tue,  9 Mar 2021 03:19:59 +0000 (GMT)
+Received: from sbct-2.pok.ibm.com (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  9 Mar 2021 03:19:59 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     peterhuewe@gmx.de, jarkko@kernel.org
+Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH 0/3] Fix bugs related to TPM2 event log
+Date:   Mon,  8 Mar 2021 22:19:51 -0500
+Message-Id: <20210309031954.6232-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <CAHC9VhQEAPB_kQFxBrJWtsL8wP9YoQkCzXnXmaD5gm9duBzYcQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-08_22:2021-03-08,2021-03-08 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 impostorscore=0 malwarescore=0
+ mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103090014
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/8/21 4:42 PM, Paul Moore wrote:
-> On Fri, Mar 5, 2021 at 2:29 PM Lakshmi Ramasubramanian
-> <nramas@linux.microsoft.com> wrote:
->> On 3/5/21 11:22 AM, Paul Moore wrote:
->>
->> Hi Paul,
->>
->>> On Fri, Mar 5, 2021 at 12:57 PM James Bottomley
->>> <James.Bottomley@hansenpartnership.com> wrote:
->>>> On Fri, 2021-03-05 at 12:52 -0500, Paul Moore wrote:
->>>> [...]
->>>>> This draft seems fine to me, but there is a small logistical blocker
->>>>> at the moment which means I can't merge this until -rc2 is released,
->>>>> which likely means this coming Monday.  The problem is that this
->>>>> patch relies on code that went upstream via in the last merge window
->>>>> via the IMA tree, not the SELinux tree; normally that wouldn't be a
->>>>> problem as I typically rebase the selinux/next to Linus' -rc1 tag
->>>>> once the merge window is closed, but in this particular case the -rc1
->>>>> tag is dangerously broken for some system configurations (the tag has
->>>>> since been renamed) so I'm not rebasing onto -rc1 this time around.
->>>>>
->>>>> Assuming that -rc2 fixes the swapfile/fs-corruption problem, early
->>>>> next week I'll rebase selinux/next to -rc2 and merge this patch.
->>>>> However, if the swapfile bug continues past -rc2 we can consider
->>>>> merging this via the IMA tree, but I'd assume not do that if possible
->>>>> due to merge conflict and testing reasons.
->>>>
->>>> If it helps, we rebased the SCSI tree on top of the merge for the
->>>> swapfile fix which is this one, without waiting for -rc2:
->>>
->>> Considering that -rc2 is only two days away I'm not going to lose a
->>> lot of sleep over it.
->>>
->>
->> Thanks for reviewing the patch.
->>
->> I can wait until the swapfile issue is resolved (in rc2 or later) and
->> you are able to merge this patch. Please take your time.
-> 
-> Thanks for your patience Lakshmi, I just merged this into my local
-> selinux/next branch and will be pushing it up to kernel.org later
-> tonight - thank you!
-> 
+This series of patches fixes a couple of issues related to TPM2
+event logs, such as the disappearance of the TPM2 log on QEMU machines
+running with UEFI (my fault) and a kernel fault due to an integer under-
+flow when reading the TPM 2 log multiple times.
 
-Thanks Paul.
+Regards,
+   Stefan
 
-  -lakshmi
+Stefan Berger (3):
+  tpm: efi: Use local variable for calculating final log size
+  tpm: acpi: Check eventlog signature before using it
+  tpm: vtpm_proxy: Avoid reading host log when using a virtual device
+
+ drivers/char/tpm/eventlog/acpi.c   | 31 +++++++++++++++++++++++++++++-
+ drivers/char/tpm/eventlog/common.c |  3 +++
+ drivers/char/tpm/eventlog/efi.c    | 10 ++++++----
+ 3 files changed, 39 insertions(+), 5 deletions(-)
+
+-- 
+2.29.2
+
