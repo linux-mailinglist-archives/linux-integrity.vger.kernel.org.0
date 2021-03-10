@@ -2,141 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA787334856
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Mar 2021 20:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD16334864
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Mar 2021 20:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbhCJTwP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Mar 2021 14:52:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51612 "EHLO mail.kernel.org"
+        id S233007AbhCJT5D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Mar 2021 14:57:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52242 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233777AbhCJTwF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Mar 2021 14:52:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1A4D764FBB;
-        Wed, 10 Mar 2021 19:52:04 +0000 (UTC)
+        id S230183AbhCJT4g (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 10 Mar 2021 14:56:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C48BC64FBB;
+        Wed, 10 Mar 2021 19:56:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615405925;
-        bh=GZ5OFZ8M2S6Yq9NYIS2ZSVYVl+keV4Ek6HWIupTvzJ4=;
+        s=k20201202; t=1615406196;
+        bh=hwRJ4cG4gqJew/418K/AK/eJ2RNvo2awfPKya7n8mDg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M9spjTGwEG1TJx2rU4Tet6X7QzZZnz7k0WfZ2oboeRpygnNBhsC1G32EEjjLyOhgw
-         bNAfIGxNGZxrzdRBdI/Lh0uaYDIZEez46tfJbenPMojvZFeJ/a1pVCxcJmna7gE+9Y
-         AtKU2mquCjnFu+WFw9PsOoylEMsKnAB+Xs3R/rhSUTn6zmxAxEsg3HACGLYIOrvkWP
-         DAFTr8fSYUOL6pVwOLtjDdgkm4UNBMesXiLoIv41lGLZsyKVVHHZv7p1YvPZI7mED+
-         ADTM7c0YwBJEdGrec+jEJgXaCGYiDAbtjNCnbJVtOzhJAqaM+HFz0jXyvfjSIaNvzK
-         nIIkyulfby/oQ==
-Date:   Wed, 10 Mar 2021 21:51:42 +0200
+        b=XtllEriXv8/gtCDkxJYIV7SDLDwu7sw9sOKCVkXgOTUMdivht+ZtVq4PCt+TAfFeS
+         u28LRMoaTpINTeO1/Hx7YceweS9U+4Crn369Yz9oMfBz5oiBZOL8aYKxeTNbVGvMBh
+         FHFDLqPWtJ/mS+EGZzUMs+3YyAzmgV+cq0sZABuPdR1kuff2p48tjR/EnCpIC33YfV
+         Z4mkyZ4AeH9a4PsWoRw7wbDb8DkmRSIMUk5trAMAgPAal+G7E/sGoqnKSb/xjIvfp6
+         nD7WDa8pqaKTJq7Yxpjm5mdFTAy7oHD3o1m896WQLcQ+8MmN0Uc9A5RESRoLVCROoC
+         g3jqIaUCZmoOQ==
+Date:   Wed, 10 Mar 2021 21:56:13 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] tpm: acpi: Check eventlog signature before using it
-Message-ID: <YEkjTim/800967kS@kernel.org>
-References: <20210309031954.6232-1-stefanb@linux.ibm.com>
- <20210309031954.6232-3-stefanb@linux.ibm.com>
+To:     Sumit Garg <sumit.garg@linaro.org>, jejb@linux.ibm.com
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Janne Karhunen <janne.karhunen@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Markus Wamser <Markus.Wamser@mixed-mode.de>,
+        Luke Hinds <lhinds@redhat.com>,
+        Elaine Palmer <erpalmer@us.ibm.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        op-tee@lists.trustedfirmware.org
+Subject: Re: [PATCH v9 0/4] Introduce TEE based Trusted Keys support
+Message-ID: <YEkkXbWrYBTcGXEd@kernel.org>
+References: <20210301131127.793707-1-sumit.garg@linaro.org>
+ <CAFA6WYO4HHhtymaUzmkuaCZybTAWBQ=4K9Dez1pe1kqo3AJhuA@mail.gmail.com>
+ <YEEANW+khw3nJtcQ@kernel.org>
+ <CAFA6WYOxsYin8wBB_yU=S-bnqM-g5TFnTU_KXxc3wSBfx_N_6A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210309031954.6232-3-stefanb@linux.ibm.com>
+In-Reply-To: <CAFA6WYOxsYin8wBB_yU=S-bnqM-g5TFnTU_KXxc3wSBfx_N_6A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Mar 08, 2021 at 10:19:53PM -0500, Stefan Berger wrote:
-> Check the eventlog signature before using it. This avoids using an
-> empty log, as may be the case when QEMU created the ACPI tables,
-> rather than probing the EFI log next. This resolves an issue where
-> the EFI log was empty since an empty ACPI log was used.
+On Tue, Mar 09, 2021 at 02:40:07PM +0530, Sumit Garg wrote:
+> On Thu, 4 Mar 2021 at 21:14, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Thu, Mar 04, 2021 at 03:30:18PM +0530, Sumit Garg wrote:
+> > > Hi Jarkko,
+> > >
+> > > On Mon, 1 Mar 2021 at 18:41, Sumit Garg <sumit.garg@linaro.org> wrote:
+> > > >
+> > > > Add support for TEE based trusted keys where TEE provides the functionality
+> > > > to seal and unseal trusted keys using hardware unique key. Also, this is
+> > > > an alternative in case platform doesn't possess a TPM device.
+> > > >
+> > > > This patch-set has been tested with OP-TEE based early TA which is already
+> > > > merged in upstream [1].
+> > > >
+> > > > [1] https://github.com/OP-TEE/optee_os/commit/f86ab8e7e0de869dfa25ca05a37ee070d7e5b86b
+> > > >
+> > > > Changes in v9:
+> > > > 1. Rebased to latest tpmdd/master.
+> > > > 2. Defined pr_fmt() and removed redundant tags.
+> > > > 3. Patch #2: incorporated misc. comments.
+> > > > 4. Patch #3: incorporated doc changes from Elaine and misc. comments
+> > > >    from Randy.
+> > > > 5. Patch #4: reverted to separate maintainer entry as per request from
+> > > >    Jarkko.
+> > > > 6. Added Jarkko's Tested-by: tag on patch #2.
+> > >
+> > > It looks like we don't have any further comments on this patch-set. So
+> > > would you be able to pick up this patch-set?
+> >
+> > I'm cool with that - I can pick this for 5.13.
+> >
 > 
-> Fixes: 85467f63a05c ("tpm: Add support for event log pointer found in TPM2 ACPI table")
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  drivers/char/tpm/eventlog/acpi.c | 31 ++++++++++++++++++++++++++++++-
->  1 file changed, 30 insertions(+), 1 deletion(-)
+> Thanks.
 > 
-> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-> index 3633ed70f48f..b6bfd22e4a2f 100644
-> --- a/drivers/char/tpm/eventlog/acpi.c
-> +++ b/drivers/char/tpm/eventlog/acpi.c
-> @@ -41,6 +41,25 @@ struct acpi_tcpa {
->  	};
->  };
->  
-> +/* check that the given log is indeed a TPM2 log */
+> -Sumit
 
-/* Check that the given log is indeed a TPM2 log. */
+I'll make it available soon'ish.
 
-> +static int tpm_check_tpm2_log_header(void *bios_event_log, u64 len)
+I also need to apply 
 
-Just by this name does not give any clue what the function does.
-"check" can refer to almost anything.
+https://lore.kernel.org/linux-integrity/20210127190617.17564-1-James.Bottomley@HansenPartnership.com/
 
-Perhaps just tpm_is_tpm2_log()?
+and I would like to do both while I'm at it.
 
-> +{
-> +	struct tcg_efi_specid_event_head *efispecid;
-> +	struct tcg_pcr_event *event_header = bios_event_log;
-
-Please, reorder these declarations (reverse christmas tree).
-
-> +
-> +	if (len < sizeof(*event_header))
-> +		return 1;
-> +	len -= sizeof(*event_header);
-> +
-> +	efispecid = (struct tcg_efi_specid_event_head *)event_header->event;
-> +	if (len < sizeof(*efispecid) ||
-> +	    memcmp(efispecid->signature, TCG_SPECID_SIG,
-> +		   sizeof(TCG_SPECID_SIG)))
-
-Please never put memcmp() inside a conditional statement.
-
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
->  /* read binary bios log */
->  int tpm_read_log_acpi(struct tpm_chip *chip)
->  {
-> @@ -52,6 +71,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	struct acpi_table_tpm2 *tbl;
->  	struct acpi_tpm2_phy *tpm2_phy;
->  	int format;
-> +	int ret;
->  
->  	log = &chip->log;
->  
-> @@ -112,6 +132,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  
->  	log->bios_event_log_end = log->bios_event_log + len;
->  
-> +	ret = -EIO;
->  	virt = acpi_os_map_iomem(start, len);
->  	if (!virt)
->  		goto err;
-> @@ -119,11 +140,19 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	memcpy_fromio(log->bios_event_log, virt, len);
->  
->  	acpi_os_unmap_iomem(virt, len);
-> +
-> +	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
-> +	    tpm_check_tpm2_log_header(log->bios_event_log, len)) {
-> +		/* try EFI log next */
-> +		ret = -ENODEV;
-> +		goto err;
-> +	}
-> +
->  	return format;
->  
->  err:
->  	kfree(log->bios_event_log);
->  	log->bios_event_log = NULL;
-> -	return -EIO;
-> +	return ret;
->  
->  }
-> -- 
-> 2.29.2
-> 
-> 
+James, there was one patch that needed fixing but I cannot find
+lore.kernel.org link. Can you point me to that so that we
+can proceed?
 
 /Jarkko
