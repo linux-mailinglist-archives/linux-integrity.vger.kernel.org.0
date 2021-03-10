@@ -2,114 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD16334864
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Mar 2021 20:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285003349EF
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Mar 2021 22:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbhCJT5D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Mar 2021 14:57:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52242 "EHLO mail.kernel.org"
+        id S231805AbhCJVlp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Mar 2021 16:41:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42990 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230183AbhCJT4g (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Mar 2021 14:56:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C48BC64FBB;
-        Wed, 10 Mar 2021 19:56:35 +0000 (UTC)
+        id S231911AbhCJVlh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 10 Mar 2021 16:41:37 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 77CDE64FC4;
+        Wed, 10 Mar 2021 21:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615406196;
-        bh=hwRJ4cG4gqJew/418K/AK/eJ2RNvo2awfPKya7n8mDg=;
+        s=k20201202; t=1615412497;
+        bh=7L66YLf+ed4bmAJ64a+z2Rfb2jejvrDUJlt5flDQSzc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XtllEriXv8/gtCDkxJYIV7SDLDwu7sw9sOKCVkXgOTUMdivht+ZtVq4PCt+TAfFeS
-         u28LRMoaTpINTeO1/Hx7YceweS9U+4Crn369Yz9oMfBz5oiBZOL8aYKxeTNbVGvMBh
-         FHFDLqPWtJ/mS+EGZzUMs+3YyAzmgV+cq0sZABuPdR1kuff2p48tjR/EnCpIC33YfV
-         Z4mkyZ4AeH9a4PsWoRw7wbDb8DkmRSIMUk5trAMAgPAal+G7E/sGoqnKSb/xjIvfp6
-         nD7WDa8pqaKTJq7Yxpjm5mdFTAy7oHD3o1m896WQLcQ+8MmN0Uc9A5RESRoLVCROoC
-         g3jqIaUCZmoOQ==
-Date:   Wed, 10 Mar 2021 21:56:13 +0200
+        b=WeHJlZUUXjhMzB0/88zdlqbvsiS1W0n+3Ir0GWVoZi3fNsOyyoW1K3k/zkXzce+2B
+         kupH6bNM25jf4p0/6AONLd4Tb60fLXSIGH33Vu77s5EbxeT2gKCEAln9hjc+ckfsCI
+         EF1Tzwn+e/C5pQ3AF/jHVKyi6+lO2sGXakUAZ1LYm1Q96gRIJcKo6IY/xtNOTaiGb1
+         VGTre1rlahv2JZ25OXfgztv0cnsflZLbrpm0pCjPgOWdAMddR4+lNMBxZaQXfsGE2Z
+         AoSAT0O1ZMxAC9jtlOQ0QSs+QMDopV7VanzXKNotQ+W7ezAKH+528KIWoQR4cIEZC3
+         R7xW0yDIFDmBQ==
+Date:   Wed, 10 Mar 2021 23:41:12 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sumit Garg <sumit.garg@linaro.org>, jejb@linux.ibm.com
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Markus Wamser <Markus.Wamser@mixed-mode.de>,
-        Luke Hinds <lhinds@redhat.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: Re: [PATCH v9 0/4] Introduce TEE based Trusted Keys support
-Message-ID: <YEkkXbWrYBTcGXEd@kernel.org>
-References: <20210301131127.793707-1-sumit.garg@linaro.org>
- <CAFA6WYO4HHhtymaUzmkuaCZybTAWBQ=4K9Dez1pe1kqo3AJhuA@mail.gmail.com>
- <YEEANW+khw3nJtcQ@kernel.org>
- <CAFA6WYOxsYin8wBB_yU=S-bnqM-g5TFnTU_KXxc3wSBfx_N_6A@mail.gmail.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        davem@davemloft.net, herbert@gondor.apana.org.au,
+        dhowells@redhat.com, zohar@linux.ibm.com,
+        linux-kernel@vger.kernel.org, patrick@puiterwijk.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v11 01/10] oid_registry: Add OIDs for ECDSA with
+ sha224/256/384/512
+Message-ID: <YEk8+OwwVJbXIb9+@kernel.org>
+References: <20210305205956.3594375-1-stefanb@linux.vnet.ibm.com>
+ <20210305205956.3594375-2-stefanb@linux.vnet.ibm.com>
+ <YEjnPZOVit+U9YcG@kernel.org>
+ <b2672c92-ddf5-51ba-bb4c-f3aadee26daf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAFA6WYOxsYin8wBB_yU=S-bnqM-g5TFnTU_KXxc3wSBfx_N_6A@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b2672c92-ddf5-51ba-bb4c-f3aadee26daf@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Mar 09, 2021 at 02:40:07PM +0530, Sumit Garg wrote:
-> On Thu, 4 Mar 2021 at 21:14, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Thu, Mar 04, 2021 at 03:30:18PM +0530, Sumit Garg wrote:
-> > > Hi Jarkko,
-> > >
-> > > On Mon, 1 Mar 2021 at 18:41, Sumit Garg <sumit.garg@linaro.org> wrote:
-> > > >
-> > > > Add support for TEE based trusted keys where TEE provides the functionality
-> > > > to seal and unseal trusted keys using hardware unique key. Also, this is
-> > > > an alternative in case platform doesn't possess a TPM device.
-> > > >
-> > > > This patch-set has been tested with OP-TEE based early TA which is already
-> > > > merged in upstream [1].
-> > > >
-> > > > [1] https://github.com/OP-TEE/optee_os/commit/f86ab8e7e0de869dfa25ca05a37ee070d7e5b86b
-> > > >
-> > > > Changes in v9:
-> > > > 1. Rebased to latest tpmdd/master.
-> > > > 2. Defined pr_fmt() and removed redundant tags.
-> > > > 3. Patch #2: incorporated misc. comments.
-> > > > 4. Patch #3: incorporated doc changes from Elaine and misc. comments
-> > > >    from Randy.
-> > > > 5. Patch #4: reverted to separate maintainer entry as per request from
-> > > >    Jarkko.
-> > > > 6. Added Jarkko's Tested-by: tag on patch #2.
-> > >
-> > > It looks like we don't have any further comments on this patch-set. So
-> > > would you be able to pick up this patch-set?
-> >
-> > I'm cool with that - I can pick this for 5.13.
-> >
+On Wed, Mar 10, 2021 at 01:38:12PM -0500, Stefan Berger wrote:
 > 
-> Thanks.
+> On 3/10/21 10:35 AM, Jarkko Sakkinen wrote:
+> > On Fri, Mar 05, 2021 at 03:59:47PM -0500, Stefan Berger wrote:
+> > > From: Stefan Berger <stefanb@linux.ibm.com>
+> > > 
+> > > Add OIDs for ECDSA with sha224/256/384/512.
+> > Nit: SHA224/256/384/512 (sorry cannot help myself with these, have been
+> > doing this way too much, consider me as a bot :-) )
+> > 
+> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 > 
-> -Sumit
+> Jarrko,
+> 
+>   I applied the nit and the 4 Acked-by's.
+> 
+> Thank you!
+> 
+> 
+>    Stefan
 
-I'll make it available soon'ish.
-
-I also need to apply 
-
-https://lore.kernel.org/linux-integrity/20210127190617.17564-1-James.Bottomley@HansenPartnership.com/
-
-and I would like to do both while I'm at it.
-
-James, there was one patch that needed fixing but I cannot find
-lore.kernel.org link. Can you point me to that so that we
-can proceed?
+Cool, thank you :-)
 
 /Jarkko
