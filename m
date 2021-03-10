@@ -2,35 +2,35 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C523334C4C
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Mar 2021 00:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1412334C70
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Mar 2021 00:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbhCJXPV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Mar 2021 18:15:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36168 "EHLO mail.kernel.org"
+        id S233157AbhCJXWU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Mar 2021 18:22:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38008 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232087AbhCJXO5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Mar 2021 18:14:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 318DE64FC1;
-        Wed, 10 Mar 2021 23:14:56 +0000 (UTC)
+        id S231964AbhCJXWI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 10 Mar 2021 18:22:08 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1297664FC1;
+        Wed, 10 Mar 2021 23:22:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615418096;
-        bh=VV1Hk83YpU+e/U1m1d0D0iRQbk4XUKZnQHDWAneQ+4A=;
+        s=k20201202; t=1615418528;
+        bh=Evfm0oY+kQII8STajQrZwgNaNVf5h9GRc794NeHNvSU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aA2KvH0uRoFzGQ0u+B4NTFrcXGlrM3QwPwYC8CuqtlN3SbYmGVCGdGC/NT2swLfQ2
-         O1bB3QU3vGC0pE2vTitMP3YwW/gk+KjaxTYiiGYWtWEUFU3eeSm8KH3izcD7/WzzZO
-         SxW5u7NvEG0g2ITNWI8ABfflOosSo3NawC2Aen7j6nHxgg249g5hCXD5O8FtPWm6je
-         9n38c+rZosJwFidHiroAXtXI9tjZSScVWt415qug2FbY0IeIEEFdQW1Y1eGzCZkTOv
-         k4319KXGqafHTSzxGZ9yj2O3OWfTQAVtnLBZP7xK3skBERXXGdijb/zWJTbnkdCQOj
-         rlLRjvCFmfozg==
-Date:   Thu, 11 Mar 2021 01:14:32 +0200
+        b=KFxceItnGCWtp3Vx8KcoDEykaDsQDKp+TS0QG5+xRQw+ESDssx8pWm1krtwK7t+Qe
+         NF3QOQwroFwblfVmjVNyj5UPEhrOUEIuTdJ907wnxdX1qw4WERtQh/3oGMd07BTSWX
+         U7QCihg3hYUW5h7+hQCEnMNhlM1C7bKrxGFszo7sjUdmYme78FyNP4sw/v9EGO5ETJ
+         nR4xLBhtaR/eJTG1+tEijaZJL9HDDwt8LpHtz+aqOn2HIJ/s/UludMg+0qJC9Dg8Sr
+         zdCkiuGaP46KOs1z/KZjicc4Jw6VJKPNrd7cA5gOVpzqEQH+LInk/9gV5YPoofxN4M
+         geNgYJiEy3NdQ==
+Date:   Thu, 11 Mar 2021 01:21:44 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Stefan Berger <stefanb@linux.ibm.com>
 Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 1/3] tpm: efi: Use local variable for calculating
  final log size
-Message-ID: <YElS2By8CXCOWody@kernel.org>
+Message-ID: <YElUiIFkyf6txZoV@kernel.org>
 References: <20210310221916.356716-1-stefanb@linux.ibm.com>
  <20210310221916.356716-2-stefanb@linux.ibm.com>
 MIME-Version: 1.0
@@ -73,6 +73,11 @@ On Wed, Mar 10, 2021 at 05:19:14PM -0500, Stefan Berger wrote:
 > Mar  8 15:35:12 hibinst kernel: ? process_one_work+0x370/0x370
 > 
 > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+
+Fixes tag for this one? 
+
+/Jarkko
+
 > ---
 >  drivers/char/tpm/eventlog/efi.c | 29 +++++++++++++++++++++--------
 >  1 file changed, 21 insertions(+), 8 deletions(-)
@@ -153,12 +158,3 @@ On Wed, Mar 10, 2021 at 05:19:14PM -0500, Stefan Berger wrote:
 > 2.29.2
 > 
 > 
-
-Hey, thanks a lot for that documentation!
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-I applied these to my master, planning to squeeze in 5.12 (if Linus accepts
-them).
-
-/Jarkko
