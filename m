@@ -2,131 +2,163 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B205F334C45
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Mar 2021 00:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C523334C4C
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Mar 2021 00:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbhCJXOR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Mar 2021 18:14:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36016 "EHLO mail.kernel.org"
+        id S231964AbhCJXPV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Mar 2021 18:15:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36168 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232181AbhCJXNz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Mar 2021 18:13:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0222264FC1;
-        Wed, 10 Mar 2021 23:13:54 +0000 (UTC)
+        id S232087AbhCJXO5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 10 Mar 2021 18:14:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 318DE64FC1;
+        Wed, 10 Mar 2021 23:14:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615418035;
-        bh=9tF20wf+zLJcX7h7mHIULvFDAmy09SQE7kJ+VmzQ9kE=;
+        s=k20201202; t=1615418096;
+        bh=VV1Hk83YpU+e/U1m1d0D0iRQbk4XUKZnQHDWAneQ+4A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G2bcNmRwZmhiPBUzM6e3vBhO4HkeTA4r10O6E812v9b+JggFD65FAoskjfbdebvaA
-         6obZDMnNFIs4QgNAxxEGoKxcmdxZuEeUWDrV3G8qBi1rqCoKNosGoGrONkVnWA+KMc
-         Yr8XXMSz5gMCR1Wb5his6LtP308VT7RsLxO7uf45d7DAYgNezlYn4C96x+1Xdv+BxU
-         jpoN8CwRsorVWRg2LwZOc6AvqPNpQHhFBgjuiMHiapgR4w0uVBDcghj11xG6HuJqkL
-         0bg0y/PT8ftnI3ePWCLosK1d8gwh34206dJjOprt88QgtOXBTpP7/3SnUcEMhE8sxb
-         c4t4FxcXY2Wyg==
-Date:   Thu, 11 Mar 2021 01:13:31 +0200
+        b=aA2KvH0uRoFzGQ0u+B4NTFrcXGlrM3QwPwYC8CuqtlN3SbYmGVCGdGC/NT2swLfQ2
+         O1bB3QU3vGC0pE2vTitMP3YwW/gk+KjaxTYiiGYWtWEUFU3eeSm8KH3izcD7/WzzZO
+         SxW5u7NvEG0g2ITNWI8ABfflOosSo3NawC2Aen7j6nHxgg249g5hCXD5O8FtPWm6je
+         9n38c+rZosJwFidHiroAXtXI9tjZSScVWt415qug2FbY0IeIEEFdQW1Y1eGzCZkTOv
+         k4319KXGqafHTSzxGZ9yj2O3OWfTQAVtnLBZP7xK3skBERXXGdijb/zWJTbnkdCQOj
+         rlLRjvCFmfozg==
+Date:   Thu, 11 Mar 2021 01:14:32 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Stefan Berger <stefanb@linux.ibm.com>
 Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] tpm: acpi: Check eventlog signature before using
- it
-Message-ID: <YElSm4UchdU+W7D7@kernel.org>
+Subject: Re: [PATCH v2 1/3] tpm: efi: Use local variable for calculating
+ final log size
+Message-ID: <YElS2By8CXCOWody@kernel.org>
 References: <20210310221916.356716-1-stefanb@linux.ibm.com>
- <20210310221916.356716-3-stefanb@linux.ibm.com>
+ <20210310221916.356716-2-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210310221916.356716-3-stefanb@linux.ibm.com>
+In-Reply-To: <20210310221916.356716-2-stefanb@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 05:19:15PM -0500, Stefan Berger wrote:
-> Check the eventlog signature before using it. This avoids using an
-> empty log, as may be the case when QEMU created the ACPI tables,
-> rather than probing the EFI log next. This resolves an issue where
-> the EFI log was empty since an empty ACPI log was used.
+On Wed, Mar 10, 2021 at 05:19:14PM -0500, Stefan Berger wrote:
+> When tpm_read_log_efi is called multiple times, which happens when
+> one loads and unloads a TPM2 driver multiple times, then the global
+> variable efi_tpm_final_log_size will at some point become a negative
+> number due to the subtraction of final_events_preboot_size occurring
+> each time. Use a local variable to avoid this integer underflow.
 > 
-> Fixes: 85467f63a05c ("tpm: Add support for event log pointer found in TPM2 ACPI table")
+> The following issue is now resolved:
+> 
+> Mar  8 15:35:12 hibinst kernel: Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+> Mar  8 15:35:12 hibinst kernel: Workqueue: tpm-vtpm vtpm_proxy_work [tpm_vtpm_proxy]
+> Mar  8 15:35:12 hibinst kernel: RIP: 0010:__memcpy+0x12/0x20
+> Mar  8 15:35:12 hibinst kernel: Code: 00 b8 01 00 00 00 85 d2 74 0a c7 05 44 7b ef 00 0f 00 00 00 c3 cc cc cc 66 66 90 66 90 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 <f3> 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 f3 a4
+> Mar  8 15:35:12 hibinst kernel: RSP: 0018:ffff9ac4c0fcfde0 EFLAGS: 00010206
+> Mar  8 15:35:12 hibinst kernel: RAX: ffff88f878cefed5 RBX: ffff88f878ce9000 RCX: 1ffffffffffffe0f
+> Mar  8 15:35:12 hibinst kernel: RDX: 0000000000000003 RSI: ffff9ac4c003bff9 RDI: ffff88f878cf0e4d
+> Mar  8 15:35:12 hibinst kernel: RBP: ffff9ac4c003b000 R08: 0000000000001000 R09: 000000007e9d6073
+> Mar  8 15:35:12 hibinst kernel: R10: ffff9ac4c003b000 R11: ffff88f879ad3500 R12: 0000000000000ed5
+> Mar  8 15:35:12 hibinst kernel: R13: ffff88f878ce9760 R14: 0000000000000002 R15: ffff88f77de7f018
+> Mar  8 15:35:12 hibinst kernel: FS:  0000000000000000(0000) GS:ffff88f87bd00000(0000) knlGS:0000000000000000
+> Mar  8 15:35:12 hibinst kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> Mar  8 15:35:12 hibinst kernel: CR2: ffff9ac4c003c000 CR3: 00000001785a6004 CR4: 0000000000060ee0
+> Mar  8 15:35:12 hibinst kernel: Call Trace:
+> Mar  8 15:35:12 hibinst kernel: tpm_read_log_efi+0x152/0x1a7
+> Mar  8 15:35:12 hibinst kernel: tpm_bios_log_setup+0xc8/0x1c0
+> Mar  8 15:35:12 hibinst kernel: tpm_chip_register+0x8f/0x260
+> Mar  8 15:35:12 hibinst kernel: vtpm_proxy_work+0x16/0x60 [tpm_vtpm_proxy]
+> Mar  8 15:35:12 hibinst kernel: process_one_work+0x1b4/0x370
+> Mar  8 15:35:12 hibinst kernel: worker_thread+0x53/0x3e0
+> Mar  8 15:35:12 hibinst kernel: ? process_one_work+0x370/0x370
+> 
 > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 > ---
->  drivers/char/tpm/eventlog/acpi.c | 33 +++++++++++++++++++++++++++++++-
->  1 file changed, 32 insertions(+), 1 deletion(-)
+>  drivers/char/tpm/eventlog/efi.c | 29 +++++++++++++++++++++--------
+>  1 file changed, 21 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-> index 3633ed70f48f..1b18ce5ebab1 100644
-> --- a/drivers/char/tpm/eventlog/acpi.c
-> +++ b/drivers/char/tpm/eventlog/acpi.c
-> @@ -41,6 +41,27 @@ struct acpi_tcpa {
->  	};
->  };
->  
-> +/* Check that the given log is indeed a TPM2 log. */
-> +static bool tpm_is_tpm2_log(void *bios_event_log, u64 len)
-> +{
-> +	struct tcg_efi_specid_event_head *efispecid;
-> +	struct tcg_pcr_event *event_header;
-> +	int n;
-> +
-> +	if (len < sizeof(*event_header))
-> +		return false;
-> +	len -= sizeof(*event_header);
-> +	event_header = bios_event_log;
-> +
-> +	if (len < sizeof(*efispecid))
-> +		return false;
-> +	efispecid = (struct tcg_efi_specid_event_head *)event_header->event;
-> +
-> +	n = memcmp(efispecid->signature, TCG_SPECID_SIG,
-> +		   sizeof(TCG_SPECID_SIG));
-> +	return n == 0;
-> +}
-> +
->  /* read binary bios log */
->  int tpm_read_log_acpi(struct tpm_chip *chip)
+> diff --git a/drivers/char/tpm/eventlog/efi.c b/drivers/char/tpm/eventlog/efi.c
+> index 35229e5143ca..e6cb9d525e30 100644
+> --- a/drivers/char/tpm/eventlog/efi.c
+> +++ b/drivers/char/tpm/eventlog/efi.c
+> @@ -17,6 +17,7 @@ int tpm_read_log_efi(struct tpm_chip *chip)
 >  {
-> @@ -52,6 +73,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	struct acpi_table_tpm2 *tbl;
->  	struct acpi_tpm2_phy *tpm2_phy;
->  	int format;
-> +	int ret;
 >  
->  	log = &chip->log;
+>  	struct efi_tcg2_final_events_table *final_tbl = NULL;
+> +	int final_events_log_size = efi_tpm_final_log_size;
+>  	struct linux_efi_tpm_eventlog *log_tbl;
+>  	struct tpm_bios_log *log;
+>  	u32 log_size;
+> @@ -66,12 +67,12 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+>  	ret = tpm_log_version;
 >  
-> @@ -112,6 +134,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+>  	if (efi.tpm_final_log == EFI_INVALID_TABLE_ADDR ||
+> -	    efi_tpm_final_log_size == 0 ||
+> +	    final_events_log_size == 0 ||
+>  	    tpm_log_version != EFI_TCG2_EVENT_LOG_FORMAT_TCG_2)
+>  		goto out;
 >  
->  	log->bios_event_log_end = log->bios_event_log + len;
+>  	final_tbl = memremap(efi.tpm_final_log,
+> -			     sizeof(*final_tbl) + efi_tpm_final_log_size,
+> +			     sizeof(*final_tbl) + final_events_log_size,
+>  			     MEMREMAP_WB);
+>  	if (!final_tbl) {
+>  		pr_err("Could not map UEFI TPM final log\n");
+> @@ -80,10 +81,18 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+>  		goto out;
+>  	}
 >  
-> +	ret = -EIO;
->  	virt = acpi_os_map_iomem(start, len);
->  	if (!virt)
->  		goto err;
-> @@ -119,11 +142,19 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	memcpy_fromio(log->bios_event_log, virt, len);
+> -	efi_tpm_final_log_size -= log_tbl->final_events_preboot_size;
+> +	/*
+> +	 * The 'final events log' size excludes the 'final events preboot log'
+> +	 * at its beginning.
+> +	 */
+> +	final_events_log_size -= log_tbl->final_events_preboot_size;
 >  
->  	acpi_os_unmap_iomem(virt, len);
-> +
-> +	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
-> +	    !tpm_is_tpm2_log(log->bios_event_log, len)) {
-> +		/* try EFI log next */
-> +		ret = -ENODEV;
-> +		goto err;
-> +	}
-> +
->  	return format;
+> +	/*
+> +	 * Allocate memory for the 'combined log' where we will append the
+> +	 * 'final events log' to.
+> +	 */
+>  	tmp = krealloc(log->bios_event_log,
+> -		       log_size + efi_tpm_final_log_size,
+> +		       log_size + final_events_log_size,
+>  		       GFP_KERNEL);
+>  	if (!tmp) {
+>  		kfree(log->bios_event_log);
+> @@ -94,15 +103,19 @@ int tpm_read_log_efi(struct tpm_chip *chip)
+>  	log->bios_event_log = tmp;
 >  
->  err:
->  	kfree(log->bios_event_log);
->  	log->bios_event_log = NULL;
-> -	return -EIO;
-> +	return ret;
+>  	/*
+> -	 * Copy any of the final events log that didn't also end up in the
+> -	 * main log. Events can be logged in both if events are generated
+> +	 * Append any of the 'final events log' that didn't also end up in the
+> +	 * 'main log'. Events can be logged in both if events are generated
+>  	 * between GetEventLog() and ExitBootServices().
+>  	 */
+>  	memcpy((void *)log->bios_event_log + log_size,
+>  	       final_tbl->events + log_tbl->final_events_preboot_size,
+> -	       efi_tpm_final_log_size);
+> +	       final_events_log_size);
+> +	/*
+> +	 * The size of the 'combined log' is the size of the 'main log' plus
+> +	 * the size of the 'final events log'.
+> +	 */
+>  	log->bios_event_log_end = log->bios_event_log +
+> -		log_size + efi_tpm_final_log_size;
+> +		log_size + final_events_log_size;
 >  
->  }
+>  out:
+>  	memunmap(final_tbl);
 > -- 
 > 2.29.2
 > 
 > 
 
+Hey, thanks a lot for that documentation!
+
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+I applied these to my master, planning to squeeze in 5.12 (if Linus accepts
+them).
 
 /Jarkko
