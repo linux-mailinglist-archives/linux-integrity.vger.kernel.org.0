@@ -2,123 +2,232 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4513339DA5
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Mar 2021 11:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E66433A015
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Mar 2021 19:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233220AbhCMKpV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 13 Mar 2021 05:45:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41850 "EHLO mail.kernel.org"
+        id S234244AbhCMSy1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 13 Mar 2021 13:54:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40474 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233155AbhCMKpV (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 13 Mar 2021 05:45:21 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1B10564F1B;
-        Sat, 13 Mar 2021 10:45:20 +0000 (UTC)
+        id S234010AbhCMSyB (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 13 Mar 2021 13:54:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B6A864E54;
+        Sat, 13 Mar 2021 18:54:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615632320;
-        bh=Uhy5dEacUbBiUn386NQTz78v2sd2V04Ad12yd4wbvEU=;
+        s=k20201202; t=1615661640;
+        bh=dtTTV+VVbKloOkZi/YJoe4WeJyqRG9Bw5zr3PMuCf2k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ay6p0+ZYtwNhEep6crBrqspBKNqkh0R9ePYUUtSgJ0efW6xUMKbuV8OacPEQsDkri
-         BGLK8OMxihBxTZcsRZTgoyIxB/6v0oWjK+wiSsZ3hL0BJMnGnR6azUP9rZYSwv9L4m
-         Ho6volvT38PYrLAFj+mqc0ODICyuKXo+zSadMS04F0CRUB8XBnkO5vboCLB2i00hCp
-         RtuTx2Ppus8u7VYor+EGBOC9svjuC9KZKxcsMi0xRKQofkVtMwKoeqPOVNinDVnnCp
-         pXzTVWazbBSKI4L6rf6ZR9GVd34/f0dZVSjcloa6uB7cD81woJ/17telQJjEU/atF7
-         bAgIGf8ISYd4Q==
-Date:   Sat, 13 Mar 2021 12:44:55 +0200
+        b=IZKVF2ZTvqaXPVO9xoRKUDha4Q9Fa8/b+TFPAaJZrOKHKK4iclg77Dw4PO/cogJrl
+         /VfWLz7xGjCe2AXfWj3sySxd8mGAj7PP7ctGTq9nBOzI8pPDlzAOd4i0Y+yqDflLKg
+         d99e+UEezv72vzIOKNzzp74JnTGA7MgEOLhQ6KfOTeTaeFMdzqpUb7y3wDxENTSNZ9
+         aYVyP1titZNsGoDxY42JQg59EGkPxChohkL2riQtMZ70gnOLqc99uTXNozirs6jtwf
+         ND+1OgU/SRCpU24nWV3MDJqWxQlnSeF9QWZXBbLDARm8rHvam5FL2QOU1qZ0NUq9+N
+         XgObzYwYt9Abg==
+Date:   Sat, 13 Mar 2021 20:53:36 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Janne Karhunen <janne.karhunen@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Markus Wamser <Markus.Wamser@mixed-mode.de>,
-        Luke Hinds <lhinds@redhat.com>,
-        Elaine Palmer <erpalmer@us.ibm.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: Re: [PATCH v9 0/4] Introduce TEE based Trusted Keys support
-Message-ID: <YEyXpwilJq8DR7vI@kernel.org>
-References: <20210301131127.793707-1-sumit.garg@linaro.org>
- <CAFA6WYO4HHhtymaUzmkuaCZybTAWBQ=4K9Dez1pe1kqo3AJhuA@mail.gmail.com>
- <YEEANW+khw3nJtcQ@kernel.org>
- <CAFA6WYOxsYin8wBB_yU=S-bnqM-g5TFnTU_KXxc3wSBfx_N_6A@mail.gmail.com>
- <YEkkXbWrYBTcGXEd@kernel.org>
- <9aa3173ab46b0aa7edb8146ffd3df05c1f74207e.camel@linux.ibm.com>
- <YEuWTet0wr5DuDy/@kernel.org>
- <5dfe8f6b5f25cc38c8410b849aaef2c3dbed7f65.camel@linux.ibm.com>
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v7 2/5] certs: Check that builtin blacklist hashes are
+ valid
+Message-ID: <YE0KMGjI+L6elHF2@kernel.org>
+References: <20210312171232.2681989-1-mic@digikod.net>
+ <20210312171232.2681989-3-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <5dfe8f6b5f25cc38c8410b849aaef2c3dbed7f65.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210312171232.2681989-3-mic@digikod.net>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Mar 12, 2021 at 08:30:36AM -0800, James Bottomley wrote:
-> On Fri, 2021-03-12 at 18:26 +0200, Jarkko Sakkinen wrote:
-> > On Wed, Mar 10, 2021 at 02:26:27PM -0800, James Bottomley wrote:
-> > > On Wed, 2021-03-10 at 21:56 +0200, Jarkko Sakkinen wrote:
-> > > [...]
-> > > > I also need to apply 
-> > > > 
-> > > > https://lore.kernel.org/linux-integrity/20210127190617.17564-1-James.Bottomley@HansenPartnership.com/
-> > > > 
-> > > > and I would like to do both while I'm at it.
-> > > > 
-> > > > James, there was one patch that needed fixing but I cannot find
-> > > > lore.kernel.org link. Can you point me to that so that we
-> > > > can proceed?
-> > > 
-> > > I think you mean this one observing a missing space in the commit
-> > > message:
-> > > 
-> > > https://lore.kernel.org/keyrings/1327393.1612972717@warthog.procyon.org.uk/
-> > > 
-> > > James
-> > 
-> > Makefile needed fixing (separate lines), and spaces where missing
-> > between
-> > commas in one file (checkpatch complained).
-> > 
-> > I digged a version from my reflog but as I noted privately it's
-> > missing one
-> > file.
-> > 
-> > Either provide that file or send a new version of the full patch set.
+On Fri, Mar 12, 2021 at 06:12:29PM +0100, Mickaël Salaün wrote:
+> From: Mickaël Salaün <mic@linux.microsoft.com>
 > 
-> This is the file that got lost
+> Add and use a check-blacklist-hashes.awk script to make sure that the
+> builtin blacklist hashes set with CONFIG_SYSTEM_BLACKLIST_HASH_LIST will
+> effectively be taken into account as blacklisted hashes.  This is useful
+> to debug invalid hash formats, and it make sure that previous hashes
+> which could have been loaded in the kernel, but silently ignored, are
+> now noticed and deal with by the user at kernel build time.
 > 
-> James
+> This also prevent stricter blacklist key description checking (provided
+> by following commits) to failed for builtin hashes.
 > 
+> Update CONFIG_SYSTEM_BLACKLIST_HASH_LIST help to explain the content of
+> a hash string and how to generate certificate ones.
+> 
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: David Woodhouse <dwmw2@infradead.org>
+> Cc: Eric Snowberg <eric.snowberg@oracle.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20210312171232.2681989-3-mic@digikod.net
 
-> ---
-> --- ASN.1 for TPM 2.0 keys
-> ---
-> 
-> TPMKey ::= SEQUENCE {
-> 	type		OBJECT IDENTIFIER ({tpm2_key_type}),
-> 	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
-> 	parent		INTEGER ({tpm2_key_parent}),
-> 	pubkey		OCTET STRING ({tpm2_key_pub}),
-> 	privkey		OCTET STRING ({tpm2_key_priv})
-> 	}
 
-Thanks, NP, I amended the commit.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 /Jarkko
 
-
-/Jarkko
+> ---
+> 
+> Changes since v5:
+> * Rebase on keys-next and fix conflict as previously done by David
+>   Howells.
+> * Enable to use a file path relative to the kernel source directory.
+>   This align with the handling of CONFIG_SYSTEM_TRUSTED_KEYS,
+>   CONFIG_MODULE_SIG_KEY and CONFIG_SYSTEM_REVOCATION_KEYS.
+> 
+> Changes since v3:
+> * Improve commit description.
+> * Update CONFIG_SYSTEM_BLACKLIST_HASH_LIST help.
+> * Remove Acked-by Jarkko Sakkinen because of the above changes.
+> 
+> Changes since v2:
+> * Add Jarkko's Acked-by.
+> 
+> Changes since v1:
+> * Prefix script path with $(scrtree)/ (suggested by David Howells).
+> * Fix hexadecimal number check.
+> ---
+>  MAINTAINERS                        |  1 +
+>  certs/.gitignore                   |  1 +
+>  certs/Kconfig                      |  7 ++++--
+>  certs/Makefile                     | 17 +++++++++++++-
+>  scripts/check-blacklist-hashes.awk | 37 ++++++++++++++++++++++++++++++
+>  5 files changed, 60 insertions(+), 3 deletions(-)
+>  create mode 100755 scripts/check-blacklist-hashes.awk
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 773a362e807f..a18fd3d283c6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4118,6 +4118,7 @@ L:	keyrings@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/admin-guide/module-signing.rst
+>  F:	certs/
+> +F:	scripts/check-blacklist-hashes.awk
+>  F:	scripts/extract-cert.c
+>  F:	scripts/sign-file.c
+>  F:	tools/certs/
+> diff --git a/certs/.gitignore b/certs/.gitignore
+> index 2a2483990686..42cc2ac24b93 100644
+> --- a/certs/.gitignore
+> +++ b/certs/.gitignore
+> @@ -1,2 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> +blacklist_hashes_checked
+>  x509_certificate_list
+> diff --git a/certs/Kconfig b/certs/Kconfig
+> index ab88d2a7f3c7..cf3740c1b22b 100644
+> --- a/certs/Kconfig
+> +++ b/certs/Kconfig
+> @@ -80,8 +80,11 @@ config SYSTEM_BLACKLIST_HASH_LIST
+>  	help
+>  	  If set, this option should be the filename of a list of hashes in the
+>  	  form "<hash>", "<hash>", ... .  This will be included into a C
+> -	  wrapper to incorporate the list into the kernel.  Each <hash> should
+> -	  be a string of hex digits.
+> +	  wrapper to incorporate the list into the kernel.  Each <hash> must be a
+> +	  string starting with a prefix ("tbs" or "bin"), then a colon (":"), and
+> +	  finally an even number of hexadecimal lowercase characters (up to 128).
+> +	  Certificate hashes can be generated with
+> +	  tools/certs/print-cert-tbs-hash.sh .
+>  
+>  config SYSTEM_REVOCATION_LIST
+>  	bool "Provide system-wide ring of revocation certificates"
+> diff --git a/certs/Makefile b/certs/Makefile
+> index b6db52ebf0be..61e82b8eacd2 100644
+> --- a/certs/Makefile
+> +++ b/certs/Makefile
+> @@ -7,7 +7,22 @@ obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o c
+>  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
+>  obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
+>  ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),"")
+> +
+> +quiet_cmd_check_blacklist_hashes = CHECK   $(patsubst "%",%,$(2))
+> +      cmd_check_blacklist_hashes = $(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(2); touch $@
+> +
+> +$(eval $(call config_filename,SYSTEM_BLACKLIST_HASH_LIST))
+> +
+> +$(obj)/blacklist_hashes.o: $(obj)/blacklist_hashes_checked
+> +
+> +CFLAGS_blacklist_hashes.o += -I$(srctree)
+> +
+> +targets += blacklist_hashes_checked
+> +$(obj)/blacklist_hashes_checked: $(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(SYSTEM_BLACKLIST_HASH_LIST_FILENAME) scripts/check-blacklist-hashes.awk FORCE
+> +	$(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
+> +
+>  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_hashes.o
+> +
+>  else
+>  obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_nohashes.o
+>  endif
+> @@ -30,7 +45,7 @@ $(obj)/x509_certificate_list: scripts/extract-cert $(SYSTEM_TRUSTED_KEYS_SRCPREF
+>  	$(call if_changed,extract_certs,$(SYSTEM_TRUSTED_KEYS_SRCPREFIX)$(CONFIG_SYSTEM_TRUSTED_KEYS))
+>  endif # CONFIG_SYSTEM_TRUSTED_KEYRING
+>  
+> -clean-files := x509_certificate_list .x509.list x509_revocation_list
+> +clean-files := x509_certificate_list .x509.list x509_revocation_list blacklist_hashes_checked
+>  
+>  ifeq ($(CONFIG_MODULE_SIG),y)
+>  ###############################################################################
+> diff --git a/scripts/check-blacklist-hashes.awk b/scripts/check-blacklist-hashes.awk
+> new file mode 100755
+> index 000000000000..107c1d3204d4
+> --- /dev/null
+> +++ b/scripts/check-blacklist-hashes.awk
+> @@ -0,0 +1,37 @@
+> +#!/usr/bin/awk -f
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Copyright © 2020, Microsoft Corporation. All rights reserved.
+> +#
+> +# Author: Mickaël Salaün <mic@linux.microsoft.com>
+> +#
+> +# Check that a CONFIG_SYSTEM_BLACKLIST_HASH_LIST file contains a valid array of
+> +# hash strings.  Such string must start with a prefix ("tbs" or "bin"), then a
+> +# colon (":"), and finally an even number of hexadecimal lowercase characters
+> +# (up to 128).
+> +
+> +BEGIN {
+> +	RS = ","
+> +}
+> +{
+> +	if (!match($0, "^[ \t\n\r]*\"([^\"]*)\"[ \t\n\r]*$", part1)) {
+> +		print "Not a string (item " NR "):", $0;
+> +		exit 1;
+> +	}
+> +	if (!match(part1[1], "^(tbs|bin):(.*)$", part2)) {
+> +		print "Unknown prefix (item " NR "):", part1[1];
+> +		exit 1;
+> +	}
+> +	if (!match(part2[2], "^([0-9a-f]+)$", part3)) {
+> +		print "Not a lowercase hexadecimal string (item " NR "):", part2[2];
+> +		exit 1;
+> +	}
+> +	if (length(part3[1]) > 128) {
+> +		print "Hash string too long (item " NR "):", part3[1];
+> +		exit 1;
+> +	}
+> +	if (length(part3[1]) % 2 == 1) {
+> +		print "Not an even number of hexadecimal characters (item " NR "):", part3[1];
+> +		exit 1;
+> +	}
+> +}
+> -- 
+> 2.30.2
+> 
+> 
