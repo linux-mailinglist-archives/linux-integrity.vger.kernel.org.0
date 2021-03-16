@@ -2,70 +2,157 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E46D933DAD2
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Mar 2021 18:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1113133DC02
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Mar 2021 19:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238844AbhCPRVh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Mar 2021 13:21:37 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54608 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239228AbhCPRV1 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Mar 2021 13:21:27 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B47D3AE78;
-        Tue, 16 Mar 2021 17:21:25 +0000 (UTC)
-Date:   Tue, 16 Mar 2021 18:21:24 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, tusharsu@linux.microsoft.com,
-        ltp@lists.linux.it, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v2] IMA: Allow only ima-buf template for key measurement
-Message-ID: <YFDpFL3CSwMfZ6wo@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20210314233646.2925-1-nramas@linux.microsoft.com>
- <YFC7j4+wA8xorNgu@pevik>
- <deeb4320-a064-fd0f-bc1e-8e52be079ff9@linux.microsoft.com>
+        id S239870AbhCPSDQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Mar 2021 14:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237562AbhCPRCN (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Mar 2021 13:02:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8FBC061764
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Mar 2021 10:02:07 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1lMD4c-0000Nr-4C; Tue, 16 Mar 2021 18:01:38 +0100
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1lMD4Y-0000VZ-G5; Tue, 16 Mar 2021 18:01:34 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     kernel@pengutronix.de, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Udit Agarwal <udit.agarwal@nxp.com>,
+        Jan Luebbe <j.luebbe@penutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v1 0/3] KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+Date:   Tue, 16 Mar 2021 18:01:15 +0100
+Message-Id: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <deeb4320-a064-fd0f-bc1e-8e52be079ff9@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Lakshmi,
+The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+built into many newer i.MX and QorIQ SoCs by NXP.
 
-> > Just a double check does it always work without template=ima-buf for all kernel versions?
-> > Or only for kernels with dea87d0889dd ("ima: select ima-buf template for buffer measurement")
-> > i.e. v5.11-rc1 or backport?
-> The above change is required. Prior to this change, template has to be
-> specified in the policy, otherwise the default template would be used.
-The default template is ima-ng, right?
-From what you write I understand that "measure func=KEY_CHECK
-keyrings=.ima|.evm" will work only on newer kernel, thus we should always use
-template=ima-buf as the policy example so that it's working also on that few
-kernels between <v5.6,v5.10> (which have IMA key functionality, but not
-dea87d0889dd), right?
+Its blob mechanism can AES encrypt/decrypt user data using a unique
+never-disclosed device-specific key. There has been multiple
+discussions on how to represent this within the kernel:
 
-But we should mention that in the README.md.
+ - [RFC] crypto: caam - add red blobifier
+   Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
+   best integrate the blob mechanism.
+   Mimi suggested that it could be used to implement trusted keys.
+   Trusted keys back then were a TPM-only feature.
 
-Kind regards,
-Petr
+ - security/keys/secure_key: Adds the secure key support based on CAAM.
+   Udit added[2] a new "secure" key type with the CAAM as backend. The key
+   material stays within the kernel only.
+   Mimi and James agreed that this needs a generic interface, not specific
+   to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
+   basis for TEE-backed keys.
 
-> > Also, don't we want to change also keycheck.policy?
-> > Currently it contains:
-> > measure func=KEY_CHECK keyrings=.ima|.evm|.builtin_trusted_keys|.blacklist|key_import_test template=ima-buf
-> > Do we want to drop template=ima-buf to test the default value? Or have two rules
-> > (one with template=ima-buf, other w/a?)
-> Good point.
+ - [RFC] drivers: crypto: caam: key: Add caam_tk key type
+   Franck added[3] a new "caam_tk" key type based on Udit's work. The key
+   material stays within the kernel only, but can optionally be user-set
+   instead of coming from RNG. James voiced the opinion that there should
+   be just one user-facing generic wrap/unwrap key type with multiple
+   possible handlers. David suggested trusted keys.
 
-> I will send you the v3 patch - with two rules: one with template=buf and
-> other without a template, like the following example:
+ - Introduce TEE based Trusted Keys support
+   Sumit reworked[4] trusted keys to support multiple possible backends with
+   one chosen at boot time and added a new TEE backend along with TPM.
+   This now sits in Jarkko's master branch to be sent out for v5.13
 
-> measure func=KEY_CHECK
-> keyrings=.builtin_trusted_keys|.blacklist|key_import_test template=ima-buf
+This patch series builds on top of Sumit's rework to have the CAAM as yet another
+trusted key backend.
 
-> measure func=KEY_CHECK keyrings=.ima|.evm
+The CAAM bits are based on Steffen's initial patch from 2015. His work had been
+used in the field for some years now, so I preferred not to deviate too much from it.
 
->  -lakshmi
+This series has been tested with dmcrypt[5] on an i.MX6DL.
+
+Looking forward to your feedback.
+
+Cheers,
+Ahmad
+
+ [1]: https://lore.kernel.org/linux-crypto/1447082306-19946-2-git-send-email-s.trumtrar@pengutronix.de/
+ [2]: https://lore.kernel.org/linux-integrity/20180723111432.26830-1-udit.agarwal@nxp.com/
+ [3]: https://lore.kernel.org/lkml/1551456599-10603-2-git-send-email-franck.lenormand@nxp.com/
+ [4]: https://lore.kernel.org/lkml/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
+ [5]: https://lore.kernel.org/linux-integrity/20210122084321.24012-2-a.fatoum@pengutronix.de/
+
+---
+To: Jarkko Sakkinen <jarkko@kernel.org>
+To: "Horia Geantă" <horia.geanta@nxp.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+To: Aymen Sghaier <aymen.sghaier@nxp.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+To: "David S. Miller" <davem@davemloft.net>
+To: James Bottomley <jejb@linux.ibm.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Cc: Udit Agarwal <udit.agarwal@nxp.com>
+Cc: Jan Luebbe <j.luebbe@penutronix.de>
+Cc: David Gstir <david@sigma-star.at>
+Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+Cc: Sumit Garg <sumit.garg@linaro.org>
+Cc: linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+
+Ahmad Fatoum (3):
+  crypto: caam - add in-kernel interface for blob generator
+  KEYS: trusted: implement fallback to kernel RNG
+  KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+
+ Documentation/admin-guide/kernel-parameters.txt |   1 +-
+ drivers/crypto/caam/Kconfig                     |   4 +-
+ drivers/crypto/caam/Makefile                    |   1 +-
+ drivers/crypto/caam/blob_gen.c                  | 230 +++++++++++++++++-
+ include/keys/trusted-type.h                     |   2 +-
+ include/keys/trusted_caam.h                     |  11 +-
+ include/soc/fsl/caam-blob.h                     |  54 ++++-
+ security/keys/trusted-keys/Makefile             |   1 +-
+ security/keys/trusted-keys/trusted_caam.c       |  74 +++++-
+ security/keys/trusted-keys/trusted_core.c       |  17 +-
+ 10 files changed, 392 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/crypto/caam/blob_gen.c
+ create mode 100644 include/keys/trusted_caam.h
+ create mode 100644 include/soc/fsl/caam-blob.h
+ create mode 100644 security/keys/trusted-keys/trusted_caam.c
+
+base-commit: 8a3fa8ade8a35d8f7c178f5680f07f223da41b87
+-- 
+git-series 0.9.1
