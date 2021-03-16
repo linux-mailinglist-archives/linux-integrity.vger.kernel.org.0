@@ -2,73 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B951033DCE7
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Mar 2021 19:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB9233DD3E
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Mar 2021 20:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbhCPSvC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Mar 2021 14:51:02 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:57650 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240170AbhCPSum (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Mar 2021 14:50:42 -0400
-Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4ED2C209C349;
-        Tue, 16 Mar 2021 11:50:42 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4ED2C209C349
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1615920642;
-        bh=qZXvyF9z8cK+AXTYqRjmf2/evfbpSRHkkFrN82m3Fek=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=e86hwaU7ikakOjNPp9/hz0fx2LchoHIZ+MXkd6Auadd0dtYhbgKpb9HUQVyIkqzAo
-         T3yH/JWBjKhKOUjB9KR3MrjmD8RtACzlBIAm/BsmqhsUXqwIdmeq7MRvKdhFPtS/nf
-         m3PRAmHjfqECWRRvsYcRIMYrLyKCb/cChqQ0HyeU=
-Subject: Re: [PATCH v2] IMA: Allow only ima-buf template for key measurement
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, tusharsu@linux.microsoft.com,
-        ltp@lists.linux.it, linux-integrity@vger.kernel.org
-References: <20210314233646.2925-1-nramas@linux.microsoft.com>
- <YFC7j4+wA8xorNgu@pevik>
- <deeb4320-a064-fd0f-bc1e-8e52be079ff9@linux.microsoft.com>
- <YFDpFL3CSwMfZ6wo@pevik>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <5cbe66e7-aebf-e75a-cd9a-d0a69e8a1edd@linux.microsoft.com>
-Date:   Tue, 16 Mar 2021 11:50:41 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S236531AbhCPTSc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Mar 2021 15:18:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57062 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236567AbhCPTS2 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Mar 2021 15:18:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AE9F66507D;
+        Tue, 16 Mar 2021 19:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615922308;
+        bh=ooYQMkFoVvHvnTFUcEjo25lP505q1slZTAneNKYMA0Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XRqVtm2tDQKcvW+oVzph4R90TqOhivv8TpkE8ZQamjBNrLPZK/tee3RcEQbcMiz/S
+         3qWGs0EsNpb5lhdV6/+9/FvVoRtrBRNx0Xg+j8QqRVE3fMl6DxFWTBPAAYKYMHcIqw
+         HbiQMTAefFKv4PeR75m3NHi8o5sKqZRHqGbNmJ7hqqY0U/abK7Wtk6bn+gsCCYsCQ+
+         YkfZc8+pI+kpc8l3/bCSLcu5ZcQsYuJujndDXk3Eq5jX259zCMR9HUYgr1QQkA8m0e
+         YjPOw2hnoNZrdaHBo61+1M1r7vGv34S3MWSx14ES/xwR0egpOFVox2g0mtIR20qRfN
+         vaFfAY+NnnTNg==
+Date:   Tue, 16 Mar 2021 21:18:02 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Subject: Re: Recent tpm_tis IRQ handling changes are causing kernel backtraces
+Message-ID: <YFEEas6kH3FUoKJe@kernel.org>
+References: <34442b17-c8e6-9d33-831f-fcbf3a38552b@redhat.com>
+ <e4afc566-0114-c5a3-ebda-a775132e999d@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YFDpFL3CSwMfZ6wo@pevik>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4afc566-0114-c5a3-ebda-a775132e999d@redhat.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 3/16/21 10:21 AM, Petr Vorel wrote:
-Hi Petr,
-
+On Tue, Mar 16, 2021 at 04:34:01PM +0100, Hans de Goede wrote:
+> Hi,
 > 
->>> Just a double check does it always work without template=ima-buf for all kernel versions?
->>> Or only for kernels with dea87d0889dd ("ima: select ima-buf template for buffer measurement")
->>> i.e. v5.11-rc1 or backport?
->> The above change is required. Prior to this change, template has to be
->> specified in the policy, otherwise the default template would be used.
-> The default template is ima-ng, right?
-Yes: ima-ng is the default template.
-
->>From what you write I understand that "measure func=KEY_CHECK
-> keyrings=.ima|.evm" will work only on newer kernel, thus we should always use
-> template=ima-buf as the policy example so that it's working also on that few
-> kernels between <v5.6,v5.10> (which have IMA key functionality, but not
-> dea87d0889dd), right?
-Yes: In the kernels between v5.6 and v5.10, ima-buf template needs to be 
-specified in the policy for KEY_CHECK.
-
+> On 2/11/21 2:09 PM, Hans de Goede wrote:
+> > Hi Jerry,
+> > 
+> > It looks like there still is an issue with the recent changes to the tpm_tis IRQ
+> > handling. At least I think those are the cause I did not dive any deeper,
+> > I just noticed that we (Fedora) have been receiving an aweful lot of
+> > kernel tpm_tis_send_data backtraces with most starting with tpm_tis_probe_irq_...
+> > 
+> > See for example:
+> > https://bugzilla.redhat.com/show_bug.cgi?id=1912167
+> > https://bugzilla.redhat.com/show_bug.cgi?id=1927610
+> > 
+> > Those are just the 3 which landed in my inbox today, for much more see:
+> > https://bugzilla.redhat.com/buglist.cgi?quicksearch=tpm_tis_send_data
+> > (this shows 18 bugs atm).
+> > 
+> > These were reported through the Fedora ABRT tools which automatically
+> > collects backtraces, the bugs have links to the ABRT reports, e.g. :
+> > https://retrace.fedoraproject.org/faf/reports/28155/
+> > https://retrace.fedoraproject.org/faf/reports/37107/
+> > 
+> > The 28155 report says that so far there have been 308,412 (ouch) automatic
+> > uploads of that particular variant of these backtraces
+> > 
+> > Note the second (37107) retrace report is about this happening
+> > on resume, rather then on probe/tpm_tis_probe_irq_... time.
+> > 
+> > Did your work on this work land in 5.10 ? Or could it be that the
+> > issue is an incomplete backport to the 5.10.y stable series ?
 > 
-> But we should mention that in the README.md.
+> Ping ?
 > 
-Agreed - will update the README.md
+> It is raining bug-reports about this:
+> 
+> https://bugzilla.redhat.com/buglist.cgi?quicksearch=tpm_tis_send_data
+> 
+> Currently lists 25 bugs and that is excluding bugs which have already
+> been marked as a duplicate.
+> 
+> Can someone involved in the patch-series which is causing this regression
+> please take a look at these kernel backtraces ?
+> 
+> Regards,
+> 
+> Hans
 
-thanks,
-  -lakshmi
+I incorporated two fixes to this issue to my last PR, which were taken
+to the mainline. What is the situation with the mainline?
+
+/Jarkko
