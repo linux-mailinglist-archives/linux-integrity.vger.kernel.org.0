@@ -2,123 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6932333D7AD
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Mar 2021 16:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0488233D946
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Mar 2021 17:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238043AbhCPPe3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Mar 2021 11:34:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53041 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238191AbhCPPeI (ORCPT
+        id S238662AbhCPQYF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Mar 2021 12:24:05 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:38518 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236527AbhCPQYD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Mar 2021 11:34:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615908847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vaXCCvAlIgPCMP0NubPFqcsgaZ/djj633OL9Iqy0B3E=;
-        b=Gsv4VZ43+5Vp6nG5PQ47bsHpnZ1tV1Ivkb5TMbSPuQ6PEYzyx+U4zjdMdV4t9wNPGZ/uxi
-        1WiGZx3QvwIs5bB97IRD3de732bfZPJMTGkgEyRtrbPFd0kzSUX4575ocKn4M+1fYyUCC2
-        kN32MRHqcSgU5tsc4TYbO41m5+Fkxik=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-585-lMcIQ2ipOzeXEYBxciLtog-1; Tue, 16 Mar 2021 11:34:03 -0400
-X-MC-Unique: lMcIQ2ipOzeXEYBxciLtog-1
-Received: by mail-ed1-f72.google.com with SMTP id t27so17793994edi.2
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Mar 2021 08:34:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vaXCCvAlIgPCMP0NubPFqcsgaZ/djj633OL9Iqy0B3E=;
-        b=KdqJ+MMT5Dd9SnL+ihDCXOWOWk8CXzCu0z33t/heuKoc7FznvnFzRICns5ZJ6b6Ihv
-         MdDhEuZ4WV0CWfuVVUcM3QGYBzjvGtZc9xQN9gBw+Ar87u/WQI+K2vNH3PvK/6/yiqky
-         L9B2pQwAhQMR9iz0m/cpPpHfSRSEpldqfpHDle35IUT1+KEwWy3n2ko2B8BjxuYvREoW
-         /eW6kt2gk5i8pyzM5F7gPthDgq1wBYwv/nrDLXAgj1DsCF0gwVfwYJoPfEuJGld36+0B
-         B9kVMcxfWQX7KIGNyU+/ZI9dr+wjmOxFDRmA/7W2EsdNIETQ8cdX2Enc3earxMGR4+xa
-         /8Ng==
-X-Gm-Message-State: AOAM531otlINNIfZSHzbv7SWiitSR62/e1zl4Jk13TpCnE6OTnTHxWh6
-        IO133oQx6543FYFpMJRc62yb6z2sMEFNf1rEVa7E3OGSpzKRlw8Uz3sm/1iK0ENEKZM1itfjIE2
-        tfqbRtQmOv5jGg06/PszpxxE4/xYZXcK7UN1BRKO8kjPxibqfrYKfrJkXt7qfgwaX6BizSP58RB
-        K0WPuz
-X-Received: by 2002:a05:6402:32d:: with SMTP id q13mr36937799edw.17.1615908842648;
-        Tue, 16 Mar 2021 08:34:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwmW4iLSBrT8PiyQThS8JsXj7bwtKzzDR61is3C+nlp5UklH5LVfWvn1AnqkufbZvroK0c0xA==
-X-Received: by 2002:a05:6402:32d:: with SMTP id q13mr36937775edw.17.1615908842413;
-        Tue, 16 Mar 2021 08:34:02 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id bh4sm3086869ejb.24.2021.03.16.08.34.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Mar 2021 08:34:02 -0700 (PDT)
-Subject: Re: Recent tpm_tis IRQ handling changes are causing kernel backtraces
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Matthew Garrett <mjg59@google.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>
-References: <34442b17-c8e6-9d33-831f-fcbf3a38552b@redhat.com>
-Message-ID: <e4afc566-0114-c5a3-ebda-a775132e999d@redhat.com>
-Date:   Tue, 16 Mar 2021 16:34:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Tue, 16 Mar 2021 12:24:03 -0400
+Received: from [192.168.0.104] (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1561F20B26E1;
+        Tue, 16 Mar 2021 09:24:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1561F20B26E1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1615911842;
+        bh=y4Z7ovh3h5VbNC+wfzD4pyuYxRSzFDGiST75RbHzIT0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=DoQ0y8Cs5W8kpKV0mV4+wDWxncdLEk+RHTrrnfrLh6pJkBtJHqsJdm2k08GDsQ6Zn
+         IrjvWmfn16DSGrUb0H5IHP0ENmRa/ejNKXgbdGd4nDfjJnCJOux8mkDs4BTAy5Fk4y
+         O9BD84yQu960er7bqEc0xOp8qYtsh+NmVf4wTLW0=
+Subject: Re: [PATCH v2] IMA: Allow only ima-buf template for key measurement
+To:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     tusharsu@linux.microsoft.com, ltp@lists.linux.it,
+        linux-integrity@vger.kernel.org
+References: <20210314233646.2925-1-nramas@linux.microsoft.com>
+ <YFC7j4+wA8xorNgu@pevik>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <deeb4320-a064-fd0f-bc1e-8e52be079ff9@linux.microsoft.com>
+Date:   Tue, 16 Mar 2021 09:23:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <34442b17-c8e6-9d33-831f-fcbf3a38552b@redhat.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <YFC7j4+wA8xorNgu@pevik>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
-
-On 2/11/21 2:09 PM, Hans de Goede wrote:
-> Hi Jerry,
+On 3/16/21 7:07 AM, Petr Vorel wrote:
+> Hi Lakshmi, Mimi,
 > 
-> It looks like there still is an issue with the recent changes to the tpm_tis IRQ
-> handling. At least I think those are the cause I did not dive any deeper,
-> I just noticed that we (Fedora) have been receiving an aweful lot of
-> kernel tpm_tis_send_data backtraces with most starting with tpm_tis_probe_irq_...
+>> ima-buf is the default IMA template used for all buffer measurements.
+>> Therefore, IMA policy rule for measuring keys need not specify
+>> an IMA template.  But if a template is specified for key measurement
+>> rule then it must be only ima-buf.
 > 
-> See for example:
-> https://bugzilla.redhat.com/show_bug.cgi?id=1912167
-> https://bugzilla.redhat.com/show_bug.cgi?id=1927610
+>> Update keys tests to not require a template to be specified for
+>> key measurement rule, but if a template is specified verify it is
+>> only ima-buf.
 > 
-> Those are just the 3 which landed in my inbox today, for much more see:
-> https://bugzilla.redhat.com/buglist.cgi?quicksearch=tpm_tis_send_data
-> (this shows 18 bugs atm).
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+Thanks Petr.
+
 > 
-> These were reported through the Fedora ABRT tools which automatically
-> collects backtraces, the bugs have links to the ABRT reports, e.g. :
-> https://retrace.fedoraproject.org/faf/reports/28155/
-> https://retrace.fedoraproject.org/faf/reports/37107/
+> Just a double check does it always work without template=ima-buf for all kernel versions?
+> Or only for kernels with dea87d0889dd ("ima: select ima-buf template for buffer measurement")
+> i.e. v5.11-rc1 or backport?
+The above change is required. Prior to this change, template has to be 
+specified in the policy, otherwise the default template would be used.
+
 > 
-> The 28155 report says that so far there have been 308,412 (ouch) automatic
-> uploads of that particular variant of these backtraces
+> Also, don't we want to change also keycheck.policy?
+> Currently it contains:
+> measure func=KEY_CHECK keyrings=.ima|.evm|.builtin_trusted_keys|.blacklist|key_import_test template=ima-buf
+> Do we want to drop template=ima-buf to test the default value? Or have two rules
+> (one with template=ima-buf, other w/a?)
+Good point.
+
+I will send you the v3 patch - with two rules: one with template=buf and 
+other without a template, like the following example:
+
+measure func=KEY_CHECK 
+keyrings=.builtin_trusted_keys|.blacklist|key_import_test template=ima-buf
+
+measure func=KEY_CHECK keyrings=.ima|.evm
+
+  -lakshmi
+
 > 
-> Note the second (37107) retrace report is about this happening
-> on resume, rather then on probe/tpm_tis_probe_irq_... time.
+> Mimi, any comment on this?
 > 
-> Did your work on this work land in 5.10 ? Or could it be that the
-> issue is an incomplete backport to the 5.10.y stable series ?
-
-Ping ?
-
-It is raining bug-reports about this:
-
-https://bugzilla.redhat.com/buglist.cgi?quicksearch=tpm_tis_send_data
-
-Currently lists 25 bugs and that is excluding bugs which have already
-been marked as a duplicate.
-
-Can someone involved in the patch-series which is causing this regression
-please take a look at these kernel backtraces ?
-
-Regards,
-
-Hans
+> Kind regards,
+> Petr
+> 
 
