@@ -2,133 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBB7344D83
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Mar 2021 18:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AE8344E09
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Mar 2021 19:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbhCVRhY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Mar 2021 13:37:24 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:47844 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbhCVRhW (ORCPT
+        id S229840AbhCVSDG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Mar 2021 14:03:06 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:11170 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231278AbhCVSCq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Mar 2021 13:37:22 -0400
-Received: from localhost.localdomain (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D7F1820B5680;
-        Mon, 22 Mar 2021 10:37:21 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D7F1820B5680
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1616434642;
-        bh=tdGJSpOdd+gNYUBE8bMuVd7jMmyGBCn5ESFEGuTl1p4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oirmxqTOkw5+q4GobYuRoKIm0QQv3qx6zGhzLn9hgM8NzcVt864Nd3LA4raCAnmkj
-         9rvfliNq/P9TKZgRl2RpW8L4Vz8JDTUbaTxCh/9WNhHyi8bMH0JvD3ZMU/OQoezO5s
-         WkAu8LSRDnghrPBAGP6Z9oh7sGH6/B74N8Oyz1w4=
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-To:     pvorel@suse.cz, zohar@linux.ibm.com
-Cc:     tusharsu@linux.microsoft.com, ltp@lists.linux.it,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH v4] IMA: Allow only ima-buf template for key measurement
-Date:   Mon, 22 Mar 2021 10:37:09 -0700
-Message-Id: <20210322173709.22150-1-nramas@linux.microsoft.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 22 Mar 2021 14:02:46 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12MHXUVC189913;
+        Mon, 22 Mar 2021 14:02:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=5BgpEm/KgpyLlQ/FXu7QQDWMHNtP+UQkOBNYj4Q1nkI=;
+ b=P2Nfq0QnqP/Xa0G5kouusJ8r7yFLFiq5IxBVkbSWTZkUYRE2rF1X019U/JSvlterYdJD
+ ZXd9OTB/f+y4XTOj7KZr9j/E58OFE2vQNoxnipzQzASvg7KMzE1gAmf05qRZYvltqQfY
+ 9izA2dTuLjr1Js4ZUc3WS8qcvsiIN0PNIkEHX+DWgQjA8uza59djTAT5Htjvd0VzoItV
+ d8VBPKpxRDxIQVGajgC0ns8d+czZc7cBGLtVg+Jy3bMmTkotrhllkUM5C0zI81pcFC8d
+ 9BkAcnE8bZGwfCBTrr8PJlV5m4THl7c4oGTPsPF88Ue7VwwvFLVQaTEH1Wp5sdsU8MSJ fQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37dx9xsevm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Mar 2021 14:02:35 -0400
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12MHXbdC190233;
+        Mon, 22 Mar 2021 14:02:35 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37dx9xsev0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Mar 2021 14:02:34 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12MHwwXX021270;
+        Mon, 22 Mar 2021 18:02:33 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 37d99rakbu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Mar 2021 18:02:33 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12MI2Va138994384
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Mar 2021 18:02:31 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E51DE4C040;
+        Mon, 22 Mar 2021 18:02:30 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C35084C04A;
+        Mon, 22 Mar 2021 18:02:28 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.152.56])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 22 Mar 2021 18:02:28 +0000 (GMT)
+Message-ID: <92d2e1860d209fe22f8ae5696fc9496e15dd2b31.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/2] ima: don't access a file's integrity status before
+ an IMA policy is loaded
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Date:   Mon, 22 Mar 2021 14:02:27 -0400
+In-Reply-To: <YFjLG7+mhDgsQOYu@gmail.com>
+References: <20210322154207.6802-1-zohar@linux.ibm.com>
+         <YFjLG7+mhDgsQOYu@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-22_09:2021-03-22,2021-03-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ priorityscore=1501 spamscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
+ adultscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2103220127
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-ima-buf is the default IMA template used for all buffer measurements.
-Therefore, IMA policy rule for measuring keys need not specify
-an IMA template.  But if a template is specified for key measurement
-rule then it must be only ima-buf.
+On Mon, 2021-03-22 at 09:51 -0700, Eric Biggers wrote:
+> On Mon, Mar 22, 2021 at 11:42:06AM -0400, Mimi Zohar wrote:
+> > Only after an IMA policy is loaded, check, save, or update the cached
+> > file's integrity status.
+> > 
+> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> 
+> This commit message doesn't describe what the actual effect of this change is.
+> Is it fixing something?
 
-Update keys tests to not require a template to be specified for
-key measurement rule, but if a template is specified verify it is
-only ima-buf.
+No, it's just short circuiting out even earlier, but isn't needed.
 
-Signed-off-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
----
- .../kernel/security/integrity/ima/README.md   |  9 +++++++++
- .../security/integrity/ima/tests/ima_keys.sh  | 20 ++++++++++++++++---
- 2 files changed, 26 insertions(+), 3 deletions(-)
+Mimi
 
-diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
-index 8f2249767..1aaa734a3 100644
---- a/testcases/kernel/security/integrity/ima/README.md
-+++ b/testcases/kernel/security/integrity/ima/README.md
-@@ -28,6 +28,15 @@ policy allowed in the kernel configuration:
- ```
- CONFIG_IMA_READ_POLICY=y
- ```
-+If the IMA key tests are executed on Linux kernel v5.6 through v5.10,
-+`ima-buf` template should be specified in the IMA policy rule for
-+key measurement. For example,
-+`measure func=KEY_CHECK keyrings=key_import_test template=ima-buf`
-+
-+If the IMA key tests are executed on Linux kernel v5.11 or later,
-+`template=ima-buf` is optional in the IMA policy rule for key measurement.
-+For example,
-+`measure func=KEY_CHECK keyrings=key_import_test`
- 
- ### IMA kexec test
- 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-index c9eef4b68..b9bef4feb 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_keys.sh
-@@ -15,8 +15,7 @@ TST_CLEANUP=cleanup
- . ima_setup.sh
- 
- FUNC_KEYCHECK='func=KEY_CHECK'
--TEMPLATE_BUF='template=ima-buf'
--REQUIRED_POLICY="^measure.*($FUNC_KEYCHECK.*$TEMPLATE_BUF|$TEMPLATE_BUF.*$FUNC_KEYCHECK)"
-+REQUIRED_POLICY="^measure.*$FUNC_KEYCHECK"
- 
- setup()
- {
-@@ -28,12 +27,23 @@ cleanup()
- 	tst_is_num $KEYRING_ID && keyctl clear $KEYRING_ID
- }
- 
-+check_policy_template()
-+{
-+	while read line; do
-+	if ( echo $line | grep -q 'template=') && ( ! echo $line | grep -q 'template=ima-buf' ); then
-+		tst_res TCONF "only template=ima-buf can be specified for KEY_CHECK"
-+		return 1
-+	fi
-+	done < $TST_TMPDIR/policy.txt
-+	return 0
-+}
-+
- check_keys_policy()
- {
- 	local pattern="$1"
- 
- 	if ! grep -E "$pattern" $TST_TMPDIR/policy.txt; then
--		tst_res TCONF "IMA policy must specify $pattern, $FUNC_KEYCHECK, $TEMPLATE_BUF"
-+		tst_res TCONF "IMA policy must specify $pattern, $FUNC_KEYCHECK"
- 		return 1
- 	fi
- 	return 0
-@@ -49,6 +59,8 @@ test1()
- 
- 	tst_res TINFO "verify key measurement for keyrings and templates specified in IMA policy"
- 
-+	check_policy_template || return
-+
- 	check_keys_policy "$pattern" > $tmp_file || return
- 	keycheck_lines=$(cat $tmp_file)
- 	keyrings=$(for i in $keycheck_lines; do echo "$i" | grep "keyrings" | \
-@@ -101,6 +113,8 @@ test2()
- 
- 	tst_res TINFO "verify measurement of certificate imported into a keyring"
- 
-+	check_policy_template || return
-+
- 	check_keys_policy "$pattern" >/dev/null || return
- 
- 	KEYRING_ID=$(keyctl newring $keyring_name @s) || \
--- 
-2.30.2
+
 
