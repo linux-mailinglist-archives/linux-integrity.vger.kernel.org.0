@@ -2,100 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3099344E0D
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Mar 2021 19:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CC9345151
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Mar 2021 22:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbhCVSDh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Mar 2021 14:03:37 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50070 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230206AbhCVSDM (ORCPT
+        id S231448AbhCVVCF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Mar 2021 17:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231592AbhCVVBX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Mar 2021 14:03:12 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12MHYYKt178034;
-        Mon, 22 Mar 2021 14:03:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=c3+BGgZgKKiwANiQao9FjerOxBTPM22Sqz4L/kuRF6E=;
- b=qXHn4hfWwn/UDBTP50DPRHNY6u9PI5pi3NxrvQyAQfNZsmDx1vp9kEEzn27unLR8l34K
- BYJyPX2d9pI04opdw2HHW+0Sa0ftKwKlclcntptBsarNQCabO12HYrnCRZ/a0axcNxp1
- XbfLW9WJfBJ7I7Tt5Dw954K0Eru3KecEUMl9AKLdfKOxgrd8FpAU7/g691KVoaHNuAeC
- uj8O3xwhIv5eHMzecHvWbZ+xIdpxUuj03/teBYzCTf4XZIHlQL4LJq7sb1AEBXGZGH1T
- SeWgF299WV8+TvA7M+dkEwXu0cPUu2ignFzP8VbKYdpqFihL94axQG9XjLy8N6iGEzVL 0A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37dxjw17gs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Mar 2021 14:03:07 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12MHYsmU179251;
-        Mon, 22 Mar 2021 14:03:06 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37dxjw17fk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Mar 2021 14:03:06 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12MI2i4l024169;
-        Mon, 22 Mar 2021 18:03:04 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04fra.de.ibm.com with ESMTP id 37d9by9b8h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Mar 2021 18:03:03 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12MI2hBn27132352
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Mar 2021 18:02:44 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9449B42041;
-        Mon, 22 Mar 2021 18:03:01 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D9D7542047;
-        Mon, 22 Mar 2021 18:02:59 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.152.56])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 22 Mar 2021 18:02:59 +0000 (GMT)
-Message-ID: <4a60c669e4b3b9fc75470a2a7e7ec5b4768152cd.camel@linux.ibm.com>
-Subject: Re: [PATCH 2/2] integrity: double check iint_cache was initialized
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Date:   Mon, 22 Mar 2021 14:02:58 -0400
-In-Reply-To: <YFjLWywyF8TYZHxP@gmail.com>
-References: <20210322154207.6802-1-zohar@linux.ibm.com>
-         <20210322154207.6802-2-zohar@linux.ibm.com> <YFjLWywyF8TYZHxP@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-22_09:2021-03-22,2021-03-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=608 spamscore=0
- impostorscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- suspectscore=0 malwarescore=0 mlxscore=0 bulkscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103220127
+        Mon, 22 Mar 2021 17:01:23 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AD7C061756
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Mar 2021 14:01:22 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u21so5607071ejo.13
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Mar 2021 14:01:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=lUBeViwY4puqOiiihs5kvZT9Ntf6WJDisEmVoNCxiaQ=;
+        b=ZQZPasAvRYi43vi26qkJ9JFk6wNADOGbzbgCIyeQjlerF+A5KJmxm58S4G+FxbnsrR
+         yustYrQEzXjtmkmC+rH4mSbBGiWh8JQkPesRqy6pwxOY6I/QRWvC6pptgHgFmyddOcDj
+         kyzmetBjDEPi7OEUAGCk/XHledOpdvGNbJIe2vYDZ2jjO50Gm2eZEyv//gJOci9+OFja
+         X9jscjMJZo4w94nB+T38zC8KA0GljzaQzlj2r5rZYe2lM3+uhbm3QqL7Rj64nyK4ooqR
+         9tgOA8SFFzRI2rGYOToaFSSZXwSoLNBkgE1hIxZeKjs8A8kk9obenCIMSjpreTxz2J0t
+         IZeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=lUBeViwY4puqOiiihs5kvZT9Ntf6WJDisEmVoNCxiaQ=;
+        b=pVfDw4SARPD6kiwCobHIXc8eUxKjPRx883i8Lw/X8yW6VgxDk7CMxU2PkVCCy/o6Kd
+         gD+1ZHFy0L/3oAaWC5dND0GLbeYV5o9ookTidt51nBrvPKMFgczkNzlGPV5A8dcdpE7J
+         JAoKEhrCUyLWY29B6FIJAzQJxtvLpQy96cD/Zdkzt2cdvgdhEbDjIzo27FTtxi1BoQRd
+         EKqLSdk3kHqkJzaGboL6HklSggUB/fPAST5Wdes21JEaiDXpgorYbtvEv1q8HnDXZuZ/
+         iVHJlNZJZELD8khKba/hRLv/tKOzEDo15pUSs2r5OH3iM4ng+VMB/bdh8n4zYLp8212s
+         QBlA==
+X-Gm-Message-State: AOAM533Fpkfrh/+W2DwVDROJjyJvwYRnhHdN77WbyABqngyLdf9qvyHA
+        qJTKOwQbmlihCooANXEKYoHbU9NJCVzZCkldzmb52tYy
+X-Google-Smtp-Source: ABdhPJyY+5VZ0jDxpwpl94zdQMI44AtrR2c1pkL70kmhHgwI6Pb2PIA0oABBZX3F7giSs1TwTN5/AZUPJic82dTDZ7E=
+X-Received: by 2002:a17:906:b318:: with SMTP id n24mr1605184ejz.372.1616446881352;
+ Mon, 22 Mar 2021 14:01:21 -0700 (PDT)
+MIME-Version: 1.0
+References: CAEjsYA5ipyJsyDMk=HO+V8c-8Cfu2+yfKaJbmaq4moF4BAA8xQ@mail.gmail.com <20210322205720.12F8CC061756@lindbergh.monkeyblade.net>
+In-Reply-To: <20210322205720.12F8CC061756@lindbergh.monkeyblade.net>
+From:   Paul Enuta <paulenuta@gmail.com>
+Date:   Mon, 22 Mar 2021 23:01:09 +0200
+Message-ID: <CAEjsYA4vSatmpK7dExmK=+-21xEfv01diTSxUUj4EZW5tAVb_w@mail.gmail.com>
+Subject: 5.10.y Kernel Panic while poweroff and reboot - Null Pointer
+ Exception - with TPM-Module SLB 9670
+To:     linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-03-22 at 09:52 -0700, Eric Biggers wrote:
-> On Mon, Mar 22, 2021 at 11:42:07AM -0400, Mimi Zohar wrote:
-> > 
-> > Reported-by: Dmitry Vyukov <dvyukov@google.com>
-> > Fixes: 79f7865d844c ("LSM: Introduce "lsm=" for boottime LSM selection")
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> Missing Cc stable?
+Dear all,
 
-Yes, I was waiting for some comments/review/tags, before adding it.
+As described in the issue here:
+ https://github.com/raspberrypi/linux/issues/4228
+and here:
+ https://www.raspberrypi.org/forums/viewtopic.php?f=75&t=303564&p=1817702#p1839351
+starting with kernel 5.10.XX we encounter a system hang with kernel
+panic at poweroff or reboot if we have dtoverlay=tpm-slb9670 loaded.
+Applying the patch proposed here:
+https://github.com/raspberrypi/linux/issues/4228#issuecomment-804081079
+and rebuilding the kernel solves the issue.
 
-Mimi
+Please review the issue and provide guidance finding the cause and solving.
 
+Kind regards,
+Paul Enuta
