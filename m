@@ -2,74 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CC9345151
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Mar 2021 22:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B7D345516
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Mar 2021 02:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbhCVVCF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 22 Mar 2021 17:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbhCVVBX (ORCPT
+        id S231429AbhCWBrP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 22 Mar 2021 21:47:15 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:54767 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231476AbhCWBrO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 22 Mar 2021 17:01:23 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AD7C061756
-        for <linux-integrity@vger.kernel.org>; Mon, 22 Mar 2021 14:01:22 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id u21so5607071ejo.13
-        for <linux-integrity@vger.kernel.org>; Mon, 22 Mar 2021 14:01:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=lUBeViwY4puqOiiihs5kvZT9Ntf6WJDisEmVoNCxiaQ=;
-        b=ZQZPasAvRYi43vi26qkJ9JFk6wNADOGbzbgCIyeQjlerF+A5KJmxm58S4G+FxbnsrR
-         yustYrQEzXjtmkmC+rH4mSbBGiWh8JQkPesRqy6pwxOY6I/QRWvC6pptgHgFmyddOcDj
-         kyzmetBjDEPi7OEUAGCk/XHledOpdvGNbJIe2vYDZ2jjO50Gm2eZEyv//gJOci9+OFja
-         X9jscjMJZo4w94nB+T38zC8KA0GljzaQzlj2r5rZYe2lM3+uhbm3QqL7Rj64nyK4ooqR
-         9tgOA8SFFzRI2rGYOToaFSSZXwSoLNBkgE1hIxZeKjs8A8kk9obenCIMSjpreTxz2J0t
-         IZeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=lUBeViwY4puqOiiihs5kvZT9Ntf6WJDisEmVoNCxiaQ=;
-        b=pVfDw4SARPD6kiwCobHIXc8eUxKjPRx883i8Lw/X8yW6VgxDk7CMxU2PkVCCy/o6Kd
-         gD+1ZHFy0L/3oAaWC5dND0GLbeYV5o9ookTidt51nBrvPKMFgczkNzlGPV5A8dcdpE7J
-         JAoKEhrCUyLWY29B6FIJAzQJxtvLpQy96cD/Zdkzt2cdvgdhEbDjIzo27FTtxi1BoQRd
-         EKqLSdk3kHqkJzaGboL6HklSggUB/fPAST5Wdes21JEaiDXpgorYbtvEv1q8HnDXZuZ/
-         iVHJlNZJZELD8khKba/hRLv/tKOzEDo15pUSs2r5OH3iM4ng+VMB/bdh8n4zYLp8212s
-         QBlA==
-X-Gm-Message-State: AOAM533Fpkfrh/+W2DwVDROJjyJvwYRnhHdN77WbyABqngyLdf9qvyHA
-        qJTKOwQbmlihCooANXEKYoHbU9NJCVzZCkldzmb52tYy
-X-Google-Smtp-Source: ABdhPJyY+5VZ0jDxpwpl94zdQMI44AtrR2c1pkL70kmhHgwI6Pb2PIA0oABBZX3F7giSs1TwTN5/AZUPJic82dTDZ7E=
-X-Received: by 2002:a17:906:b318:: with SMTP id n24mr1605184ejz.372.1616446881352;
- Mon, 22 Mar 2021 14:01:21 -0700 (PDT)
+        Mon, 22 Mar 2021 21:47:14 -0400
+Received: from fsav104.sakura.ne.jp (fsav104.sakura.ne.jp [27.133.134.231])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 12N1kuPx046795;
+        Tue, 23 Mar 2021 10:46:56 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav104.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav104.sakura.ne.jp);
+ Tue, 23 Mar 2021 10:46:56 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav104.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 12N1kt3L046787
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 23 Mar 2021 10:46:55 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [RFC PATCH 2/2] integrity: double check iint_cache was
+ initialized
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>
+References: <20210319200358.22816-1-zohar@linux.ibm.com>
+ <20210319200358.22816-2-zohar@linux.ibm.com>
+ <8450c80a-104a-3f36-0963-0ae8fa69e0f2@i-love.sakura.ne.jp>
+ <CACT4Y+bvakfNhVs29QvbY6Z8Pw0zmAUKGWM-DD5DcPZW5ny90A@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <1a2245c6-3cab-7085-83d3-55b083619303@i-love.sakura.ne.jp>
+Date:   Tue, 23 Mar 2021 10:46:52 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: CAEjsYA5ipyJsyDMk=HO+V8c-8Cfu2+yfKaJbmaq4moF4BAA8xQ@mail.gmail.com <20210322205720.12F8CC061756@lindbergh.monkeyblade.net>
-In-Reply-To: <20210322205720.12F8CC061756@lindbergh.monkeyblade.net>
-From:   Paul Enuta <paulenuta@gmail.com>
-Date:   Mon, 22 Mar 2021 23:01:09 +0200
-Message-ID: <CAEjsYA4vSatmpK7dExmK=+-21xEfv01diTSxUUj4EZW5tAVb_w@mail.gmail.com>
-Subject: 5.10.y Kernel Panic while poweroff and reboot - Null Pointer
- Exception - with TPM-Module SLB 9670
-To:     linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CACT4Y+bvakfNhVs29QvbY6Z8Pw0zmAUKGWM-DD5DcPZW5ny90A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dear all,
+On 2021/03/20 5:03, Mimi Zohar wrote:
+> The integrity's "iint_cache" is initialized at security_init().  Only
+> after an IMA policy is loaded, which is initialized at late_initcall,
+> is a file's integrity status stored in the "iint_cache".
+> 
+> All integrity_inode_get() callers first verify that the IMA policy has
+> been loaded, before calling it.  Yet for some reason, it is still being
+> called, causing a NULL pointer dereference.
+> 
+> qemu-system-x86_64 (...snipped...) lsm=smack (...snipped...)
 
-As described in the issue here:
- https://github.com/raspberrypi/linux/issues/4228
-and here:
- https://www.raspberrypi.org/forums/viewtopic.php?f=75&t=303564&p=1817702#p1839351
-starting with kernel 5.10.XX we encounter a system hang with kernel
-panic at poweroff or reboot if we have dtoverlay=tpm-slb9670 loaded.
-Applying the patch proposed here:
-https://github.com/raspberrypi/linux/issues/4228#issuecomment-804081079
-and rebuilding the kernel solves the issue.
+Hmm, why are you using lsm=smack instead of security=smack ?
+Since use of lsm= overrides CONFIG_LSM="lockdown,yama,safesetid,integrity,tomoyo,smack,bpf" settings,
+only smack is activated, which means that integrity_iintcache_init() will not be called by
 
-Please review the issue and provide guidance finding the cause and solving.
+  DEFINE_LSM(integrity) = {
+  	.name = "integrity",
+  	.init = integrity_iintcache_init,
+  };
 
-Kind regards,
-Paul Enuta
+declaration. That's the reason iint_cache == NULL when integrity_inode_get() is called.
+
