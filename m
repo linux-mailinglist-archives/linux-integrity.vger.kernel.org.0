@@ -2,115 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD5E347196
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Mar 2021 07:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6017C347414
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Mar 2021 10:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbhCXGYd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Mar 2021 02:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235502AbhCXGYK (ORCPT
+        id S234202AbhCXJBG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Mar 2021 05:01:06 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:3384 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231583AbhCXJAf (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Mar 2021 02:24:10 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C0EC0613DC
-        for <linux-integrity@vger.kernel.org>; Tue, 23 Mar 2021 23:24:10 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id i26so14387564lfl.1
-        for <linux-integrity@vger.kernel.org>; Tue, 23 Mar 2021 23:24:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=91gjQEIhYRpIwdrlAB3Zu/S2nP17uZud9Feh2dBN07U=;
-        b=gNIKNEr3KsNITZziqCwsa5Z7lse71dcG+0BTeE9/Ek71ioXa3pZdVeH0Ll0Wlm9DU7
-         KNzaQEGsPdm3N4BHNqwOiFAQiaFvJop8pXRF+G7sBdIYJ1lumkBkllLlDxo2rWXbzgu+
-         3vXw57dW2/h1AJAE1pSS5mkVXS/0L/YeDnt6+frkXhNB2+WYiFw2n3Iow13Np6ABmvPJ
-         Uza12nOoaGTppCYkwvwjYyafCd/Q7rXiadv3BgZP+Prua7u2145HHe2r3DVYvFWGCeQ7
-         IOUccxnxWCOPHtIi4kDIZmm0Zjo4fRvOJrWUxc6I04aXPhhmu2Ti5vWtOZKHTOCpvvEk
-         xvNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=91gjQEIhYRpIwdrlAB3Zu/S2nP17uZud9Feh2dBN07U=;
-        b=jIEPH408kVqZrDoM+txWPuKS6+5nrtHJfwWHzOFTmzEMfPmnzM076ED18UTbUwysPQ
-         NNal8DaM4mdPkFt2Q/T6eiW/LTdMYuIAX4OKcOVETdAR4mqM+cmzxJjc0xE7hjQUshvH
-         yHGumGzEy9a5rGkxi3d9WsIPbnu500w0ZxvzLsTAvCaqwToQxcO+GY8HTxn96XOiXrtl
-         a6rgCBBITw4kVOtjmfY4+QFjUagvBE3a3Pl8iT1GnOWU/AexsAtDYgsBYZ2PLcS+pVWp
-         uHGhyXAIj8AGR2jFJMcQOqvGVDCW21eMEOVrkXE6aL/NYCFk+De0fl/qSbYNh3Zc95LR
-         pBvg==
-X-Gm-Message-State: AOAM532U23Uh3SdyHegXUJV7VavZB9ChONlVqC6XuJ0+T0uH7EAhpnN9
-        sqkPa4ncoy+/U4rmk8R0P0+BCuUcM1sOxVmjWtRroA==
-X-Google-Smtp-Source: ABdhPJxIIMd/c0aL0BXBbBT8gbEyXiKm+E34v5FP6ythJ1yP+S65b48zqE2oFdc800/mKt6OeYj1gK1sUSIdMN96RGw=
-X-Received: by 2002:ac2:5509:: with SMTP id j9mr1035675lfk.302.1616567048746;
- Tue, 23 Mar 2021 23:24:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
- <f0f43b30-3dfb-c2a0-7f69-6e5488f871cd@nxp.com> <8b72335f-6ecd-3683-af82-ab5ca96d9528@pengutronix.de>
-In-Reply-To: <8b72335f-6ecd-3683-af82-ab5ca96d9528@pengutronix.de>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 24 Mar 2021 11:53:57 +0530
-Message-ID: <CAFA6WYPfOuerX0Q5HizARfdYFOQa5gUrpHt7bN9==aaV1Tka9A@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
+        Wed, 24 Mar 2021 05:00:35 -0400
+Received: from DGGEML402-HUB.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4F52FK70T5z5g3B;
+        Wed, 24 Mar 2021 16:57:57 +0800 (CST)
+Received: from dggema751-chm.china.huawei.com (10.1.198.193) by
+ DGGEML402-HUB.china.huawei.com (10.3.17.38) with Microsoft SMTP Server (TLS)
+ id 14.3.498.0; Wed, 24 Mar 2021 17:00:28 +0800
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ dggema751-chm.china.huawei.com (10.1.198.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2106.2; Wed, 24 Mar 2021 17:00:27 +0800
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2106.013;
+ Wed, 24 Mar 2021 10:00:25 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     lihuafei <lihuafei1@huawei.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        yangjihong <yangjihong1@huawei.com>,
+        Zhangjinhao <zhangjinhao2@huawei.com>
+Subject: RE: [PATCH] ima: Fix the error code for restoring the PCR value
+Thread-Topic: [PATCH] ima: Fix the error code for restoring the PCR value
+Thread-Index: AQHXD91Wj9SbBJTtDEeMf5FsP/azT6qRo7OAgAFTVaA=
+Date:   Wed, 24 Mar 2021 09:00:25 +0000
+Message-ID: <0764ed04a7e84546a8b31fc13b264c47@huawei.com>
+References: <20210303032824.124112-1-lihuafei1@huawei.com>
+ <9df8d712-0e58-f95d-8f95-5feae2150b42@huawei.com>
+In-Reply-To: <9df8d712-0e58-f95d-8f95-5feae2150b42@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.47.9.172]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 23 Mar 2021 at 22:04, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->
-> Hello Horia,
->
-> On 21.03.21 21:01, Horia Geant=C4=83 wrote:
-> > On 3/16/2021 7:02 PM, Ahmad Fatoum wrote:
-> >> This patch series builds on top of Sumit's rework to have the CAAM as =
-yet another
-> >> trusted key backend.
-> >>
-> > Shouldn't the description under TRUSTED_KEYS (in security/keys/Kconfig)
-> > be updated to reflect the availability of multiple backends?
->
-> This is indeed no longer correct. It also depends on TCG_TPM, which AFAIU
-> is not really needed for the new TEE backend.
->
-> @Sumit, can you confirm?
->
-
-Yes, that's correct. Let me share a separate patch to fix that.
-
--Sumit
-
-> --
-> Pengutronix e.K.                           |                             =
-|
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  =
-|
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
-|
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
-|
+PiBGcm9tOiBsaWh1YWZlaQ0KPiBTZW50OiBUdWVzZGF5LCBNYXJjaCAyMywgMjAyMSAyOjQxIFBN
+DQo+IHBpbmcuIDotKQ0KPiANCj4gT24gMjAyMS8zLzMgMTE6MjgsIExpIEh1YWZlaSB3cm90ZToN
+Cj4gPiBJbiBpbWFfcmVzdG9yZV9tZWFzdXJlbWVudF9saXN0KCksIGhkcltIRFJfUENSXS5kYXRh
+IGlzIHBvaW50aW5nIHRvIGENCj4gPiBidWZmZXIgb2YgdHlwZSB1OCwgd2hpY2ggY29udGFpbnMg
+dGhlIGR1bXBlZCAzMi1iaXQgcGNyIHZhbHVlLg0KPiA+IEN1cnJlbnRseSwgb25seSB0aGUgbGVh
+c3Qgc2lnbmlmaWNhbnQgYnl0ZSBpcyB1c2VkIHRvIHJlc3RvcmUgdGhlIHBjcg0KPiA+IHZhbHVl
+LiBXZSBzaG91bGQgY29udmVydCBoZHJbSERSX1BDUl0uZGF0YSB0byBhIHBvaW50ZXIgb2YgdHlw
+ZSB1MzINCj4gPiBiZWZvcmUgZmV0Y2hpbmcgdGhlIHZhbHVlIHRvIHJlc3RvcmUgdGhlIGNvcnJl
+Y3QgcGNyIHZhbHVlLg0KPiA+DQo+ID4gRml4ZXM6IDQ3ZmRlZTYwYjQ3ZiAoImltYTogdXNlIGlt
+YV9wYXJzZV9idWYoKSB0byBwYXJzZSBtZWFzdXJlbWVudHMNCj4gaGVhZGVycyIpDQo+ID4gU2ln
+bmVkLW9mZi1ieTogTGkgSHVhZmVpIDxsaWh1YWZlaTFAaHVhd2VpLmNvbT4NCg0KSGkgTGkgSHVh
+ZmVpDQoNCnllcywgY29ycmVjdC4gVGhhbmtzIGZvciB0aGUgcGF0Y2guDQoNClJldmlld2VkLWJ5
+OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+DQoNClJvYmVydG8NCg0K
+SFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5n
+IERpcmVjdG9yOiBMaSBQZW5nLCBMaSBKaWFuLCBTaGkgWWFubGkNCg0KPiA+IC0tLQ0KPiA+ICAg
+c2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfdGVtcGxhdGUuYyB8IDQgKystLQ0KPiA+ICAgMSBm
+aWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRp
+ZmYgLS1naXQgYS9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV90ZW1wbGF0ZS5jDQo+IGIvc2Vj
+dXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfdGVtcGxhdGUuYw0KPiA+IGluZGV4IGUyMmU1MTBhZTky
+ZC4uNGUwODFlNjUwMDQ3IDEwMDY0NA0KPiA+IC0tLSBhL3NlY3VyaXR5L2ludGVncml0eS9pbWEv
+aW1hX3RlbXBsYXRlLmMNCj4gPiArKysgYi9zZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV90ZW1w
+bGF0ZS5jDQo+ID4gQEAgLTQ5NCw4ICs0OTQsOCBAQCBpbnQgaW1hX3Jlc3RvcmVfbWVhc3VyZW1l
+bnRfbGlzdChsb2ZmX3Qgc2l6ZSwgdm9pZA0KPiAqYnVmKQ0KPiA+ICAgCQkJfQ0KPiA+ICAgCQl9
+DQo+ID4NCj4gPiAtCQllbnRyeS0+cGNyID0gIWltYV9jYW5vbmljYWxfZm10ID8gKihoZHJbSERS
+X1BDUl0uZGF0YSkgOg0KPiA+IC0JCQkgICAgIGxlMzJfdG9fY3B1KCooaGRyW0hEUl9QQ1JdLmRh
+dGEpKTsNCj4gPiArCQllbnRyeS0+cGNyID0gIWltYV9jYW5vbmljYWxfZm10ID8gKih1MzINCj4g
+KikoaGRyW0hEUl9QQ1JdLmRhdGEpIDoNCj4gPiArCQkJICAgICBsZTMyX3RvX2NwdSgqKHUzMiAq
+KShoZHJbSERSX1BDUl0uZGF0YSkpOw0KPiA+ICAgCQlyZXQgPSBpbWFfcmVzdG9yZV9tZWFzdXJl
+bWVudF9lbnRyeShlbnRyeSk7DQo+ID4gICAJCWlmIChyZXQgPCAwKQ0KPiA+ICAgCQkJYnJlYWs7
+DQo+ID4NCg==
