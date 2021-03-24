@@ -2,115 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A701034748E
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Mar 2021 10:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 520A1347585
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Mar 2021 11:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234737AbhCXJ0b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Mar 2021 05:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234741AbhCXJ0Z (ORCPT
+        id S229666AbhCXKLB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Mar 2021 06:11:01 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:56163 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236326AbhCXKKj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Mar 2021 05:26:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6ADC061763
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Mar 2021 02:26:25 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1lOzmP-0001bV-VY; Wed, 24 Mar 2021 10:26:22 +0100
-Subject: Re: [PATCH v1 3/3] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>
-Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
- <319e558e1bd19b80ad6447c167a2c3942bdafea2.1615914058.git-series.a.fatoum@pengutronix.de>
- <01e6e13d-2968-0aa5-c4c8-7458b7bde462@nxp.com>
- <45a9e159-2dcb-85bf-02bd-2993d50b5748@pengutronix.de>
- <f9c0087d299be1b9b91b242f41ac6ef7b9ee3ef7.camel@linux.ibm.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <63dd7d4b-4729-9e03-cd8f-956b94eab0d9@pengutronix.de>
-Date:   Wed, 24 Mar 2021 10:26:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Wed, 24 Mar 2021 06:10:39 -0400
+Received: from fsav405.sakura.ne.jp (fsav405.sakura.ne.jp [133.242.250.104])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 12OAAJeu030968;
+        Wed, 24 Mar 2021 19:10:19 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav405.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav405.sakura.ne.jp);
+ Wed, 24 Mar 2021 19:10:19 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav405.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 12OAAJhC030965
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 24 Mar 2021 19:10:19 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [RFC PATCH 2/2] integrity: double check iint_cache was
+ initialized
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+References: <20210319200358.22816-1-zohar@linux.ibm.com>
+ <20210319200358.22816-2-zohar@linux.ibm.com>
+ <8450c80a-104a-3f36-0963-0ae8fa69e0f2@i-love.sakura.ne.jp>
+ <CACT4Y+bvakfNhVs29QvbY6Z8Pw0zmAUKGWM-DD5DcPZW5ny90A@mail.gmail.com>
+ <1a2245c6-3cab-7085-83d3-55b083619303@i-love.sakura.ne.jp>
+ <8039976be3df9bd07374fe4f1931b8ce28b89dab.camel@linux.ibm.com>
+ <cde00350-2a18-1759-d53b-2e7489b6cc0e@i-love.sakura.ne.jp>
+ <8a8763a7-eeeb-3578-d50c-c15919fbe1f9@i-love.sakura.ne.jp>
+ <3ed2004413e0ac07c7bd6f10294d6b6fac6fdbf3.camel@linux.ibm.com>
+ <cc01e7b7-d685-289c-a792-fc76fabba807@i-love.sakura.ne.jp>
+ <721b4f8d38b014babb0f4ae829d76014bbf7734e.camel@linux.ibm.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <0a0c5cc5-0e1b-ef01-60c4-5247af2124f4@i-love.sakura.ne.jp>
+Date:   Wed, 24 Mar 2021 19:10:19 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <f9c0087d299be1b9b91b242f41ac6ef7b9ee3ef7.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <721b4f8d38b014babb0f4ae829d76014bbf7734e.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Mimi,
-
-On 23.03.21 19:07, Mimi Zohar wrote:
-> On Tue, 2021-03-23 at 17:35 +0100, Ahmad Fatoum wrote:
->> On 21.03.21 21:48, Horia Geantă wrote:
->>> caam has random number generation capabilities, so it's worth using that
->>> by implementing .get_random.
+On 2021/03/24 1:13, Mimi Zohar wrote:
+> On Wed, 2021-03-24 at 00:14 +0900, Tetsuo Handa wrote:
+>> On 2021/03/23 23:47, Mimi Zohar wrote:
+>>> Initially I also questioned making "integrity" an LSM.  Perhaps it's
+>>> time to reconsider.   For now, it makes sense to just fix the NULL
+>>> pointer dereferencing.
 >>
->> If the CAAM HWRNG is already seeding the kernel RNG, why not use the kernel's?
->>
->> Makes for less code duplication IMO.
+>> Do we think calling panic() as "fix the NULL pointer dereferencing" ?
 > 
-> Using kernel RNG, in general, for trusted keys has been discussed
-> before.   Please refer to Dave Safford's detailed explanation for not
-> using it [1].
+> Not supplying "integrity" as an "lsm=" option is a user error.  There
+> are only two options - allow or deny the caller to proceed.   If the
+> user is expecting the integrity subsystem to be properly working,
+> returning a NULL and allowing the system to boot (RFC patch version)
+> does not make sense.   Better to fail early.
 
-The argument seems to boil down to:
+What does the "user" mean? Those who load the vmlinux?
+Only the "root" user (so called administrators)?
+Any users including other than "root" user?
 
- - TPM RNG are known to be of good quality
- - Trusted keys always used it so far
+If the user means those who load the vmlinux, that user is explicitly asking
+for disabling "integrity" for some reason. In that case, it is a bug if
+booting with "integrity" disabled is impossible.
 
-Both are fine by me for TPMs, but the CAAM backend is new code and neither point
-really applies.
+If the user means something other than those who load the vmlinux,
+is there a possibility that that user (especially non "root" users) is
+allowed to try to use "integrity" ? If processes other than global init
+process can try to use "integrity", wouldn't it be a DoS attack vector?
+Please explain in the descripotion why calling panic() does not cause
+DoS attack vector.
 
-get_random_bytes_wait is already used for generating key material elsewhere.
-Why shouldn't new trusted key backends be able to do the same thing?
-
-Cheers,
-Ahmad
-
-> 
-> thanks,
-> 
-> Mimi
-> 
-> [1] 
-> https://lore.kernel.org/linux-integrity/BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com/
->  
-> 
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
