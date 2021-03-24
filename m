@@ -2,156 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C13347678
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Mar 2021 11:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D513476D8
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Mar 2021 12:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbhCXKsM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Mar 2021 06:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233769AbhCXKrf (ORCPT
+        id S232107AbhCXLKt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Mar 2021 07:10:49 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:53634 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232017AbhCXLKp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Mar 2021 06:47:35 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0517C0613E1
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Mar 2021 03:47:34 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id b4so7291459lfi.6
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Mar 2021 03:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Ey+2292BkH6x041fX3yRwofo+kD7iZk7X6ckEEcQYiM=;
-        b=wOpDYenTLNC5o8Rarb2OFmUczdkjNuWqZymzj6lBygep5Yd7GB2gh5V4iK5s09JlP6
-         yrGBhqkmBeK5d1pbDMSFFgsrPAZy3mE0skMAgab3K7copJacg2MO/0lfbvDl9pLGn5rr
-         5BkjddszhsrZCY3P2ZyhvTQ+//m8JOKbckvDK71Eu14aDkiGUgwPFlFcornRoc+Ut2sS
-         IBrxfX8eCVRlKa3D+BsNyrmFNi03KIH29UMMMiW0maebcG2AFLrpZ0LZPWWclW6Act8s
-         pyXZxz3WbZAIogJ0uMjCxkqr5kHcJOrQ6xsvKobcwu0WDXurBq/B0FmwrxLO73e2b0Nh
-         HeYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Ey+2292BkH6x041fX3yRwofo+kD7iZk7X6ckEEcQYiM=;
-        b=SrN77mY0mB39FMGzILQLbT+nh/aWVcmouuvxYKNg7r1GJQokbA3l3AkiBsT7mngFXy
-         O/qSUoA+5JjWp6vYvnp/DTC15aGTeWO99vMnvkXMzW3hA+emW4CPRqoOFKxj3sICTLTo
-         CrDE1Zjul7Kbk5H0SXYqmujHcJ7woewmRN1SWv+aD0lkPhRx+yYKrdzlqNjb8JyH/KNS
-         CSgO2LvqIkKqoMV9a3BtAe6WglOBWA/blxzfFYWkCkAEQpEBP5TfqyQ7T1canH0tUU/E
-         wcbDGQgm4tgwXYG8Y8DvkK+B/0/ZTASNT6kJXRQEKaSQzZy/pBQ3eXl9jfGfpC6RP736
-         hNqA==
-X-Gm-Message-State: AOAM532dawleGGLe1/2CTUvmcJ20DS7Le+jVraDXu4vBljt6l4BUzOrr
-        2ezEwKTts9o5YI+z0oEaYITa1JB2jMjmWikct7lvEg==
-X-Google-Smtp-Source: ABdhPJzmEK8UFfoOBxPtEBmqPf6Hoc+0fs0j6LtMLq04iyal514Inhwtzy/LLK66UpNucjWsaSeaq6z/MCalVaqGZrM=
-X-Received: by 2002:a19:6109:: with SMTP id v9mr1632879lfb.546.1616582853107;
- Wed, 24 Mar 2021 03:47:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
- <319e558e1bd19b80ad6447c167a2c3942bdafea2.1615914058.git-series.a.fatoum@pengutronix.de>
- <01e6e13d-2968-0aa5-c4c8-7458b7bde462@nxp.com> <45a9e159-2dcb-85bf-02bd-2993d50b5748@pengutronix.de>
- <f9c0087d299be1b9b91b242f41ac6ef7b9ee3ef7.camel@linux.ibm.com> <63dd7d4b-4729-9e03-cd8f-956b94eab0d9@pengutronix.de>
-In-Reply-To: <63dd7d4b-4729-9e03-cd8f-956b94eab0d9@pengutronix.de>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 24 Mar 2021 16:17:21 +0530
-Message-ID: <CAFA6WYOw_mQwOUN=onhzb7zCTyYDBrcx0E7C3LRk6nPLAVCWEQ@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 24 Mar 2021 07:10:45 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12OB2mPT117581;
+        Wed, 24 Mar 2021 07:10:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=2xYKT+731g7y7pKjpQPb01g3VmzYzx1sM8tZwxETRFM=;
+ b=n0RV+gyW+7YI2O13pgPiwiTjeBbTjuhIOTx7gqfa8r7SgLG3+ZmkpBeEubjM/d3n/Q2b
+ R41wTIl1vILgSFLD/C3pSOAZYoNqd9rU9drATj9+hDy11jJp9MUYrXV8ai1ppx+UvBlo
+ pPhXnVXJr1yAXv1EkV9QrJ9w5C/3MoK8sIy3BUfcAa2gCr6FqS2+QWaTSAbCRsen6du8
+ 0VT6fEiB98l5Mqp3pznPyNLMOOy7NQ85ZHbbeEetIXbd+2xOjkjUn2YRCsTPTWyzfcsY
+ DT49nyLGqVrRG/93oZGzZcgFTuqPnZ0MI2QHO2H9VS+2Ab6L7NKKFUa9AjkT7nAmmdWJ EA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37g0dgeuxr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Mar 2021 07:10:32 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12OB3CDx119950;
+        Wed, 24 Mar 2021 07:10:32 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37g0dgeuwp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Mar 2021 07:10:32 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12OB37Xg015122;
+        Wed, 24 Mar 2021 11:10:30 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 37d9bmm8p6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Mar 2021 11:10:30 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12OBAS1T918186
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Mar 2021 11:10:28 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 04A0FA4051;
+        Wed, 24 Mar 2021 11:10:28 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D347CA4040;
+        Wed, 24 Mar 2021 11:10:25 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.72.148])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 24 Mar 2021 11:10:25 +0000 (GMT)
+Message-ID: <37aeaf361bfbd800e29db761f5160f2ce1869298.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH 2/2] integrity: double check iint_cache was
+ initialized
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     linux-integrity@vger.kernel.org, James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 24 Mar 2021 07:10:24 -0400
+In-Reply-To: <0a0c5cc5-0e1b-ef01-60c4-5247af2124f4@i-love.sakura.ne.jp>
+References: <20210319200358.22816-1-zohar@linux.ibm.com>
+         <20210319200358.22816-2-zohar@linux.ibm.com>
+         <8450c80a-104a-3f36-0963-0ae8fa69e0f2@i-love.sakura.ne.jp>
+         <CACT4Y+bvakfNhVs29QvbY6Z8Pw0zmAUKGWM-DD5DcPZW5ny90A@mail.gmail.com>
+         <1a2245c6-3cab-7085-83d3-55b083619303@i-love.sakura.ne.jp>
+         <8039976be3df9bd07374fe4f1931b8ce28b89dab.camel@linux.ibm.com>
+         <cde00350-2a18-1759-d53b-2e7489b6cc0e@i-love.sakura.ne.jp>
+         <8a8763a7-eeeb-3578-d50c-c15919fbe1f9@i-love.sakura.ne.jp>
+         <3ed2004413e0ac07c7bd6f10294d6b6fac6fdbf3.camel@linux.ibm.com>
+         <cc01e7b7-d685-289c-a792-fc76fabba807@i-love.sakura.ne.jp>
+         <721b4f8d38b014babb0f4ae829d76014bbf7734e.camel@linux.ibm.com>
+         <0a0c5cc5-0e1b-ef01-60c4-5247af2124f4@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-24_08:2021-03-24,2021-03-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ suspectscore=0 clxscore=1015 adultscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103240085
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 24 Mar 2021 at 14:56, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->
-> Hello Mimi,
->
-> On 23.03.21 19:07, Mimi Zohar wrote:
-> > On Tue, 2021-03-23 at 17:35 +0100, Ahmad Fatoum wrote:
-> >> On 21.03.21 21:48, Horia Geant=C4=83 wrote:
-> >>> caam has random number generation capabilities, so it's worth using t=
-hat
-> >>> by implementing .get_random.
+On Wed, 2021-03-24 at 19:10 +0900, Tetsuo Handa wrote:
+> On 2021/03/24 1:13, Mimi Zohar wrote:
+> > On Wed, 2021-03-24 at 00:14 +0900, Tetsuo Handa wrote:
+> >> On 2021/03/23 23:47, Mimi Zohar wrote:
+> >>> Initially I also questioned making "integrity" an LSM.  Perhaps it's
+> >>> time to reconsider.   For now, it makes sense to just fix the NULL
+> >>> pointer dereferencing.
 > >>
-> >> If the CAAM HWRNG is already seeding the kernel RNG, why not use the k=
-ernel's?
-> >>
-> >> Makes for less code duplication IMO.
-> >
-> > Using kernel RNG, in general, for trusted keys has been discussed
-> > before.   Please refer to Dave Safford's detailed explanation for not
-> > using it [1].
->
-> The argument seems to boil down to:
->
->  - TPM RNG are known to be of good quality
->  - Trusted keys always used it so far
->
-> Both are fine by me for TPMs, but the CAAM backend is new code and neithe=
-r point
-> really applies.
->
-> get_random_bytes_wait is already used for generating key material elsewhe=
-re.
-> Why shouldn't new trusted key backends be able to do the same thing?
->
+> >> Do we think calling panic() as "fix the NULL pointer dereferencing" ?
+> > 
+> > Not supplying "integrity" as an "lsm=" option is a user error.  There
+> > are only two options - allow or deny the caller to proceed.   If the
+> > user is expecting the integrity subsystem to be properly working,
+> > returning a NULL and allowing the system to boot (RFC patch version)
+> > does not make sense.   Better to fail early.
+> 
+> What does the "user" mean? Those who load the vmlinux?
+> Only the "root" user (so called administrators)?
+> Any users including other than "root" user?
+> 
+> If the user means those who load the vmlinux, that user is explicitly asking
+> for disabling "integrity" for some reason. In that case, it is a bug if
+> booting with "integrity" disabled is impossible.
+> 
+> If the user means something other than those who load the vmlinux,
+> is there a possibility that that user (especially non "root" users) is
+> allowed to try to use "integrity" ? If processes other than global init
+> process can try to use "integrity", wouldn't it be a DoS attack vector?
+> Please explain in the descripotion why calling panic() does not cause
+> DoS attack vector.
 
-Please refer to documented trusted keys behaviour here [1]. New
-trusted key backends should align to this behaviour and in your case
-CAAM offers HWRNG so we should be better using that.
+User in this case, is anyone rebooting the system and is intentionally
+changing the default values, dropping the "integrity" option on the
+boot command line.
 
-Also, do update documentation corresponding to CAAM as a trusted keys backe=
-nd.
+Mimi
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/=
-tree/Documentation/security/keys/trusted-encrypted.rst#n87
-
--Sumit
-
-> Cheers,
-> Ahmad
->
-> >
-> > thanks,
-> >
-> > Mimi
-> >
-> > [1]
-> > https://lore.kernel.org/linux-integrity/BCA04D5D9A3B764C9B7405BBA4D4A3C=
-035F2A38B@ALPMBAPA12.e2k.ad.ge.com/
-> >
-> >
-> >
->
-> --
-> Pengutronix e.K.                           |                             =
-|
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  =
-|
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
-|
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
-|
