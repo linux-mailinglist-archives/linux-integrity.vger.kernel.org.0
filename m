@@ -2,166 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3BC349237
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Mar 2021 13:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A487A3494FE
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Mar 2021 16:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbhCYMkY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Mar 2021 08:40:24 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2742 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbhCYMkL (ORCPT
+        id S230377AbhCYPKa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Mar 2021 11:10:30 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63178 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230512AbhCYPKJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Mar 2021 08:40:11 -0400
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4F5kzj43rfz6822r;
-        Thu, 25 Mar 2021 20:33:37 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Thu, 25 Mar 2021 13:40:08 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2106.013;
- Thu, 25 Mar 2021 13:40:08 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "mjg59@google.com" <mjg59@google.com>,
-        "agruenba@redhat.com" <agruenba@redhat.com>,
+        Thu, 25 Mar 2021 11:10:09 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12PF5NOS076836;
+        Thu, 25 Mar 2021 11:09:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=rravADpvfL0QIpujNbNT4TsZjUwxpTDGUfrXBRxDamg=;
+ b=CqxNirFAAmoKb+ExR3AYjFmjJ1aO9lcbYCUlvTdRD/5Ba2upzBGtIAAFrwvWN7mB9/lh
+ 1yKnhebjCl78NkELKLmRqp8p6xssl3K85c/W/ZevnxtdZ0pmdDhI77bqe0w2LkksnhkZ
+ Ky4TP9on1jSrJECfQpXN14BZR+WlcMOrRiHh1Wvw+hojC65HqDf6sFH858BSdkANaCCi
+ 2YtQBH0umOzTlBeOGfD2onttusZ040LMUuZnNawhEgMpZIvlMK8WUsUezuH6sQ8hF6+7
+ QVCGRH8nDlz5Ks1mtE6AURhWFe8HHznidnU7/DrJki5aGRaa/V/eQeId9zXpkKdjS20o AA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37gvavhb3y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Mar 2021 11:09:41 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12PF5YeG077253;
+        Thu, 25 Mar 2021 11:09:40 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37gvavhb0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Mar 2021 11:09:39 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12PEvhBg027442;
+        Thu, 25 Mar 2021 15:09:34 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 37d9bptvqs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Mar 2021 15:09:34 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12PF9V3N38142278
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 Mar 2021 15:09:31 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BBA6C52050;
+        Thu, 25 Mar 2021 15:09:31 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.11.141])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 44CBD5204F;
+        Thu, 25 Mar 2021 15:09:29 +0000 (GMT)
+Message-ID: <39af167527d6478f86431c2ce29f68177700e82d.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fix the error code for restoring the PCR value
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        lihuafei <lihuafei1@huawei.com>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4 08/11] evm: Allow setxattr() and setattr() for
- unmodified metadata
-Thread-Topic: [PATCH v4 08/11] evm: Allow setxattr() and setattr() for
- unmodified metadata
-Thread-Index: AQHXEdMs3dcvjnFQvUyUTwTeWmdH4qqTStlAgAFhU4CAAAIZAIAAFakw
-Date:   Thu, 25 Mar 2021 12:40:08 +0000
-Message-ID: <5e724bfe526f4069ba4cb7b99e538856@huawei.com>
-References: <20210305151923.29039-1-roberto.sassu@huawei.com>
- <20210305151923.29039-9-roberto.sassu@huawei.com>
- <ad33c998ee834a588e0ca1a31ee2a530@huawei.com>
- <20210325121341.q2ufjhnqe3osjc7c@wittgenstein>
- <20210325122112.htkwkt3emura5day@wittgenstein>
-In-Reply-To: <20210325122112.htkwkt3emura5day@wittgenstein>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.4.143]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        yangjihong <yangjihong1@huawei.com>,
+        Zhangjinhao <zhangjinhao2@huawei.com>
+Date:   Thu, 25 Mar 2021 11:09:27 -0400
+In-Reply-To: <0764ed04a7e84546a8b31fc13b264c47@huawei.com>
+References: <20210303032824.124112-1-lihuafei1@huawei.com>
+         <9df8d712-0e58-f95d-8f95-5feae2150b42@huawei.com>
+         <0764ed04a7e84546a8b31fc13b264c47@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-25_04:2021-03-24,2021-03-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 clxscore=1011 malwarescore=0
+ phishscore=0 impostorscore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2103250110
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBDaHJpc3RpYW4gQnJhdW5lciBbbWFpbHRvOmNocmlzdGlhbi5icmF1bmVyQHVidW50
-dS5jb21dDQo+IFNlbnQ6IFRodXJzZGF5LCBNYXJjaCAyNSwgMjAyMSAxOjIxIFBNDQo+IE9uIFRo
-dSwgTWFyIDI1LCAyMDIxIGF0IDAxOjEzOjQxUE0gKzAxMDAsIENocmlzdGlhbiBCcmF1bmVyIHdy
-b3RlOg0KPiA+IE9uIFRodSwgTWFyIDI1LCAyMDIxIGF0IDEwOjUzOjQzQU0gKzAwMDAsIFJvYmVy
-dG8gU2Fzc3Ugd3JvdGU6DQo+ID4gPiA+IEZyb206IFJvYmVydG8gU2Fzc3UNCj4gPiA+ID4gU2Vu
-dDogRnJpZGF5LCBNYXJjaCA1LCAyMDIxIDQ6MTkgUE0NCj4gPiA+ID4gV2l0aCB0aGUgcGF0Y2gg
-dG8gYWxsb3cgeGF0dHIvYXR0ciBvcGVyYXRpb25zIGlmIGEgcG9ydGFibGUgc2lnbmF0dXJlDQo+
-ID4gPiA+IHZlcmlmaWNhdGlvbiBmYWlscywgY3AgYW5kIHRhciBjYW4gY29weSBhbGwgeGF0dHJz
-L2F0dHJzIHNvIHRoYXQgYXQgdGhlDQo+ID4gPiA+IGVuZCBvZiB0aGUgcHJvY2VzcyB2ZXJpZmlj
-YXRpb24gc3VjY2VlZHMuDQo+ID4gPiA+DQo+ID4gPiA+IEhvd2V2ZXIsIGl0IG1pZ2h0IGhhcHBl
-biB0aGF0IHRoZSB4YXR0cnMvYXR0cnMgYXJlIGFscmVhZHkgc2V0IHRvIHRoZQ0KPiA+ID4gPiBj
-b3JyZWN0IHZhbHVlICh0YWtlbiBhdCBzaWduaW5nIHRpbWUpIGFuZCBzaWduYXR1cmUgdmVyaWZp
-Y2F0aW9uDQo+IHN1Y2NlZWRzDQo+ID4gPiA+IGJlZm9yZSB0aGUgY29weSBoYXMgY29tcGxldGVk
-LiBGb3IgZXhhbXBsZSwgYW4gYXJjaGl2ZSBtaWdodA0KPiBjb250YWlucyBmaWxlcw0KPiA+ID4g
-PiBvd25lZCBieSByb290IGFuZCB0aGUgYXJjaGl2ZSBpcyBleHRyYWN0ZWQgYnkgcm9vdC4NCj4g
-PiA+ID4NCj4gPiA+ID4gVGhlbiwgc2luY2UgcG9ydGFibGUgc2lnbmF0dXJlcyBhcmUgaW1tdXRh
-YmxlLCBhbGwgc3Vic2VxdWVudA0KPiBvcGVyYXRpb25zDQo+ID4gPiA+IGZhaWwgKGUuZy4gZmNo
-b3duKCkpLCBldmVuIGlmIHRoZSBvcGVyYXRpb24gaXMgbGVnaXRpbWF0ZSAoZG9lcyBub3QgYWx0
-ZXINCj4gPiA+ID4gdGhlIGN1cnJlbnQgdmFsdWUpLg0KPiA+ID4gPg0KPiA+ID4gPiBUaGlzIHBh
-dGNoIGF2b2lkcyB0aGlzIHByb2JsZW0gYnkgcmVwb3J0aW5nIHN1Y2Nlc3NmdWwgb3BlcmF0aW9u
-IHRvDQo+IHVzZXINCj4gPiA+ID4gc3BhY2Ugd2hlbiB0aGF0IG9wZXJhdGlvbiBkb2VzIG5vdCBh
-bHRlciB0aGUgY3VycmVudCB2YWx1ZSBvZg0KPiB4YXR0cnMvYXR0cnMuDQo+ID4gPiA+DQo+ID4g
-PiA+IFNpZ25lZC1vZmYtYnk6IFJvYmVydG8gU2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNv
-bT4NCj4gPiA+ID4gLS0tDQo+ID4gPiA+ICBzZWN1cml0eS9pbnRlZ3JpdHkvZXZtL2V2bV9tYWlu
-LmMgfCA5Ng0KPiA+ID4gPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gPiA+
-ICAxIGZpbGUgY2hhbmdlZCwgOTYgaW5zZXJ0aW9ucygrKQ0KPiA+ID4gPg0KPiA+ID4gPiBkaWZm
-IC0tZ2l0IGEvc2VjdXJpdHkvaW50ZWdyaXR5L2V2bS9ldm1fbWFpbi5jDQo+ID4gPiA+IGIvc2Vj
-dXJpdHkvaW50ZWdyaXR5L2V2bS9ldm1fbWFpbi5jDQo+ID4gPiA+IGluZGV4IGVhYjUzNmZhMjYw
-Zi4uYTA3NTE2ZGNiOTIwIDEwMDY0NA0KPiA+ID4gPiAtLS0gYS9zZWN1cml0eS9pbnRlZ3JpdHkv
-ZXZtL2V2bV9tYWluLmMNCj4gPiA+ID4gKysrIGIvc2VjdXJpdHkvaW50ZWdyaXR5L2V2bS9ldm1f
-bWFpbi5jDQo+ID4gPiA+IEBAIC0xOCw2ICsxOCw3IEBADQo+ID4gPiA+ICAjaW5jbHVkZSA8bGlu
-dXgvaW50ZWdyaXR5Lmg+DQo+ID4gPiA+ICAjaW5jbHVkZSA8bGludXgvZXZtLmg+DQo+ID4gPiA+
-ICAjaW5jbHVkZSA8bGludXgvbWFnaWMuaD4NCj4gPiA+ID4gKyNpbmNsdWRlIDxsaW51eC9wb3Np
-eF9hY2xfeGF0dHIuaD4NCj4gPiA+ID4NCj4gPiA+ID4gICNpbmNsdWRlIDxjcnlwdG8vaGFzaC5o
-Pg0KPiA+ID4gPiAgI2luY2x1ZGUgPGNyeXB0by9oYXNoX2luZm8uaD4NCj4gPiA+ID4gQEAgLTMy
-OCw2ICszMjksNzkgQEAgc3RhdGljIGVudW0gaW50ZWdyaXR5X3N0YXR1cw0KPiA+ID4gPiBldm1f
-dmVyaWZ5X2N1cnJlbnRfaW50ZWdyaXR5KHN0cnVjdCBkZW50cnkgKmRlbnRyeSkNCj4gPiA+ID4g
-IAlyZXR1cm4gZXZtX3ZlcmlmeV9obWFjKGRlbnRyeSwgTlVMTCwgTlVMTCwgMCwgTlVMTCk7DQo+
-ID4gPiA+ICB9DQo+ID4gPiA+DQo+ID4gPiA+ICsvKg0KPiA+ID4gPiArICogZXZtX3hhdHRyX2Fj
-bF9jaGFuZ2UgLSBjaGVjayBpZiBwYXNzZWQgQUNMIGNoYW5nZXMgdGhlIGlub2RlDQo+IG1vZGUN
-Cj4gPiA+ID4gKyAqIEBkZW50cnk6IHBvaW50ZXIgdG8gdGhlIGFmZmVjdGVkIGRlbnRyeQ0KPiA+
-ID4gPiArICogQHhhdHRyX25hbWU6IHJlcXVlc3RlZCB4YXR0cg0KPiA+ID4gPiArICogQHhhdHRy
-X3ZhbHVlOiByZXF1ZXN0ZWQgeGF0dHIgdmFsdWUNCj4gPiA+ID4gKyAqIEB4YXR0cl92YWx1ZV9s
-ZW46IHJlcXVlc3RlZCB4YXR0ciB2YWx1ZSBsZW5ndGgNCj4gPiA+ID4gKyAqDQo+ID4gPiA+ICsg
-KiBDaGVjayBpZiBwYXNzZWQgQUNMIGNoYW5nZXMgdGhlIGlub2RlIG1vZGUsIHdoaWNoIGlzIHBy
-b3RlY3RlZA0KPiBieQ0KPiA+ID4gPiBFVk0uDQo+ID4gPiA+ICsgKg0KPiA+ID4gPiArICogUmV0
-dXJucyAxIGlmIHBhc3NlZCBBQ0wgY2F1c2VzIGlub2RlIG1vZGUgY2hhbmdlLCAwIG90aGVyd2lz
-ZS4NCj4gPiA+ID4gKyAqLw0KPiA+ID4gPiArc3RhdGljIGludCBldm1feGF0dHJfYWNsX2NoYW5n
-ZShzdHJ1Y3QgZGVudHJ5ICpkZW50cnksIGNvbnN0IGNoYXINCj4gPiA+ID4gKnhhdHRyX25hbWUs
-DQo+ID4gPiA+ICsJCQkJY29uc3Qgdm9pZCAqeGF0dHJfdmFsdWUsIHNpemVfdA0KPiA+ID4gPiB4
-YXR0cl92YWx1ZV9sZW4pDQo+ID4gPiA+ICt7DQo+ID4gPiA+ICsJdW1vZGVfdCBtb2RlOw0KPiA+
-ID4gPiArCXN0cnVjdCBwb3NpeF9hY2wgKmFjbCA9IE5VTEwsICphY2xfcmVzOw0KPiA+ID4gPiAr
-CXN0cnVjdCBpbm9kZSAqaW5vZGUgPSBkX2JhY2tpbmdfaW5vZGUoZGVudHJ5KTsNCj4gPiA+ID4g
-KwlpbnQgcmM7DQo+ID4gPiA+ICsNCj4gPiA+ID4gKwkvKiBVSUQvR0lEIGluIEFDTCBoYXZlIGJl
-ZW4gYWxyZWFkeSBjb252ZXJ0ZWQgZnJvbSB1c2VyIHRvIGluaXQgbnMNCj4gPiA+ID4gKi8NCj4g
-PiA+ID4gKwlhY2wgPSBwb3NpeF9hY2xfZnJvbV94YXR0cigmaW5pdF91c2VyX25zLCB4YXR0cl92
-YWx1ZSwNCj4gPiA+ID4geGF0dHJfdmFsdWVfbGVuKTsNCj4gPiA+ID4gKwlpZiAoIWFjbCkNCj4g
-PiA+DQo+ID4gPiBCYXNlZCBvbiBNaW1pJ3MgcmV2aWV3LCBJIHdpbGwgY2hhbmdlIHRoaXMgdG86
-DQo+ID4gPg0KPiA+ID4gaWYgKElTX0VSUl9PUl9OVUxMKGFjbCkpDQo+ID4gPg0KPiA+ID4gPiAr
-CQlyZXR1cm4gMTsNCj4gPiA+ID4gKw0KPiA+ID4gPiArCWFjbF9yZXMgPSBhY2w7DQo+ID4gPiA+
-ICsJcmMgPSBwb3NpeF9hY2xfdXBkYXRlX21vZGUoJmluaXRfdXNlcl9ucywgaW5vZGUsICZtb2Rl
-LA0KPiA+ID4gPiAmYWNsX3Jlcyk7DQo+ID4gPg0KPiA+ID4gQWJvdXQgdGhpcyBwYXJ0LCBwcm9i
-YWJseSBpdCBpcyBub3QgY29ycmVjdC4NCj4gPiA+DQo+ID4gPiBJJ20gd3JpdGluZyBhIHRlc3Qg
-Zm9yIHRoaXMgcGF0Y2ggdGhhdCBjaGVja3MgaWYgb3BlcmF0aW9ucw0KPiA+ID4gdGhhdCBkb24n
-dCBjaGFuZ2UgdGhlIGZpbGUgbW9kZSBzdWNjZWVkIGFuZCB0aG9zZSB0aGF0DQo+ID4gPiBkbyBm
-YWlsLg0KPiA+ID4NCj4gPiA+IG1vdW50LWlkbWFwcGVkIC0tbWFwLW1vdW50IGI6MzAwMTowOjEg
-L21udCAvbW50LWlkbWFwcGVkDQo+ID4gPiBwdXNoZCAvbW50DQo+ID4gPiBlY2hvICJ0ZXN0IiA+
-IHRlc3QtZmlsZQ0KPiA+ID4gY2hvd24gMzAwMSB0ZXN0LWZpbGUNCj4gPiA+IGNoZ3JwIDMwMDEg
-dGVzdC1maWxlDQo+ID4gPiBjaG1vZCAyNjQ0IHRlc3QtZmlsZQ0KPiA+ID4gPGNoZWNrIGVuYWJs
-ZWQ+DQo+ID4gPiBzZXRmYWNsIC0tc2V0IHU6OnJ3LGc6OnIsbzo6cixtOnIgdGVzdC1maWxlIChl
-eHBlY3RlZCB0byBzdWNjZWVkLCBjYWxsZXIgaGFzDQo+IENBUF9GU0VUSUQsIHNvIFNfSVNHSUQg
-aXMgbm90IGRyb3BwZWQpDQo+ID4gPiBzZXRmYWNsIC0tc2V0IHU6OnJ3LGc6OnIsbzo6cixtOnJ3
-IHRlc3QtZmlsZSAoZXhwZWN0ZWQgdG8gZmFpbCkNCj4gPiA+IHB1c2hkIC9tbnQtaWRtYXBwZWQN
-Cj4gPiA+IGNhcHNoIC0tZHJvcD1jYXBfZnNldGlkIC0tIC1jIHNldGZhY2wgLS1zZXQgdTo6cncs
-Zzo6cixvOjpyIHRlc3QtZmlsZQ0KPiAoZXhwZWN0ZWQgdG8gc3VjY2VlZCwgY2FsbGVyIGlzIGlu
-IHRoZSBvd25pbmcgZ3JvdXAgb2YgdGVzdC1maWxlLCBzbyBTX0lTR0lEIGlzDQo+IG5vdCBkcm9w
-cGVkKQ0KPiA+ID4NCj4gPiA+IEFmdGVyIGFkZGluZyBhIGRlYnVnIGxpbmUgaW4gcG9zaXhfYWNs
-X3VwZGF0ZV9tb2RlKCk6DQo+ID4gPiBwcmludGsoIiVzOiAlZCglZCkgJWRcbiIsIF9fZnVuY19f
-LA0KPiBpbl9ncm91cF9wKGlfZ2lkX2ludG9fbW50KG1udF91c2VybnMsIGlub2RlKSksDQo+IF9f
-a2dpZF92YWwoaV9naWRfaW50b19tbnQobW50X3VzZXJucywgaW5vZGUpKSwNCj4gY2FwYWJsZV93
-cnRfaW5vZGVfdWlkZ2lkKG1udF91c2VybnMsIGlub2RlLCBDQVBfRlNFVElEKSk7DQo+ID4gPg0K
-PiA+ID4gd2l0aG91dCBwYXNzaW5nIG1udF91c2VybnM6DQo+ID4gPiBbICA3NDguMjYyNTgyXSBz
-ZXRmYWNsIC0tc2V0IHU6OnJ3LGc6OnIsbzo6cixtOnIgdGVzdC1maWxlDQo+ID4gPiBbICA3NDgu
-MjY4MDIxXSBwb3NpeF9hY2xfdXBkYXRlX21vZGU6IDAoMzAwMSkgMQ0KPiA+ID4gWyAgNzQ4LjI2
-ODAzNV0gcG9zaXhfYWNsX3VwZGF0ZV9tb2RlOiAwKDMwMDEpIDENCj4gPiA+IFsgIDc0OC4yNjg1
-NzBdIHNldGZhY2wgLS1zZXQgdTo6cncsZzo6cixvOjpyLG06cncgdGVzdC1maWxlDQo+ID4gPiBb
-ICA3NDguMjc0MTkzXSBwb3NpeF9hY2xfdXBkYXRlX21vZGU6IDAoMzAwMSkgMQ0KPiA+ID4gWyAg
-NzQ4LjI3OTE5OF0gY2Fwc2ggLS1kcm9wPWNhcF9mc2V0aWQgLS0gLWMgc2V0ZmFjbCAtLXNldCB1
-OjpydyxnOjpyLG86OnINCj4gdGVzdC1maWxlDQo+ID4gPiBbICA3NDguMjg3ODk0XSBwb3NpeF9h
-Y2xfdXBkYXRlX21vZGU6IDAoMzAwMSkgMA0KPiA+ID4NCj4gPiA+IHBhc3NpbmcgbW50X3VzZXJu
-czoNCj4gPiA+IFsgICA4MS4xNTk3NjZdIHNldGZhY2wgLS1zZXQgdTo6cncsZzo6cixvOjpyLG06
-ciB0ZXN0LWZpbGUNCj4gPiA+IFsgICA4MS4xNjUyMDddIHBvc2l4X2FjbF91cGRhdGVfbW9kZTog
-MCgzMDAxKSAxDQo+ID4gPiBbICAgODEuMTY1MjI2XSBwb3NpeF9hY2xfdXBkYXRlX21vZGU6IDAo
-MzAwMSkgMQ0KPiA+ID4gWyAgIDgxLjE2NTczMl0gc2V0ZmFjbCAtLXNldCB1OjpydyxnOjpyLG86
-OnIsbTpydyB0ZXN0LWZpbGUNCj4gPiA+IFsgICA4MS4xNzA5NzhdIHBvc2l4X2FjbF91cGRhdGVf
-bW9kZTogMCgzMDAxKSAxDQo+ID4gPiBbICAgODEuMTc2MDE0XSBjYXBzaCAtLWRyb3A9Y2FwX2Zz
-ZXRpZCAtLSAtYyBzZXRmYWNsIC0tc2V0IHU6OnJ3LGc6OnIsbzo6cg0KPiB0ZXN0LWZpbGUNCj4g
-PiA+IFsgICA4MS4xODQ2NDhdIHBvc2l4X2FjbF91cGRhdGVfbW9kZTogMSgwKSAwDQo+ID4gPiBb
-ICAgODEuMTg0NjYzXSBwb3NpeF9hY2xfdXBkYXRlX21vZGU6IDEoMCkgMA0KPiA+ID4NCj4gPiA+
-IFRoZSBkaWZmZXJlbmNlIGlzIHRoYXQsIGJ5IHBhc3NpbmcgbW50X3VzZXJucywgdGhlIGNhbGxl
-ciAocm9vdCkgaXMNCj4gPiA+IGluIHRoZSBvd25pbmcgZ3JvdXAgb2YgdGhlIGZpbGUgKDMwMDEg
-LT4gMCkuIFdpdGhvdXQgcGFzc2luZyBtbnRfdXNlcm5zLA0KPiA+ID4gaXQgaXMgbm90ICgzMDAx
-IC0+IDMwMDEpLg0KPiA+ID4NCj4gPiA+IENocmlzdGlhbiwgQW5kcmVhcywgY291bGQgeW91IGNv
-bmZpcm0gdGhhdCB0aGlzIGlzIGNvcnJlY3Q/DQo+ID4NCj4gPiBIZXkgUm9iZXJ0LA0KPiANCj4g
-cy9Sb2JlcnQvUm9iZXJ0by8NCj4gDQo+IFNvcnJ5IGZvciB0aGUgdHlwby4NCg0KTm8gd29ycmll
-cyENCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhS
-QiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIExpIEppYW4sIFNoaSBZYW5saQ0K
+On Wed, 2021-03-24 at 09:00 +0000, Roberto Sassu wrote:
+> > From: lihuafei
+> > Sent: Tuesday, March 23, 2021 2:41 PM
+> > ping. :-)
+> > 
+> > On 2021/3/3 11:28, Li Huafei wrote:
+> > > In ima_restore_measurement_list(), hdr[HDR_PCR].data is pointing to a
+> > > buffer of type u8, which contains the dumped 32-bit pcr value.
+> > > Currently, only the least significant byte is used to restore the pcr
+> > > value. We should convert hdr[HDR_PCR].data to a pointer of type u32
+> > > before fetching the value to restore the correct pcr value.
+> > >
+> > > Fixes: 47fdee60b47f ("ima: use ima_parse_buf() to parse measurements
+> > headers")
+> > > Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> 
+> Hi Li Huafei
+> 
+> yes, correct. Thanks for the patch.
+> 
+> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+The patch set is now queued in next-integrity-testing.
+
+thanks,
+
+Mimi
+
