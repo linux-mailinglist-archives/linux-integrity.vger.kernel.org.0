@@ -2,116 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A487A3494FE
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Mar 2021 16:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDDA349CA3
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Mar 2021 00:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbhCYPKa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 25 Mar 2021 11:10:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63178 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230512AbhCYPKJ (ORCPT
+        id S231352AbhCYXBx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 25 Mar 2021 19:01:53 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19454 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231310AbhCYXBo (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 25 Mar 2021 11:10:09 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12PF5NOS076836;
-        Thu, 25 Mar 2021 11:09:43 -0400
+        Thu, 25 Mar 2021 19:01:44 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12PMX4u6039549;
+        Thu, 25 Mar 2021 19:01:43 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=rravADpvfL0QIpujNbNT4TsZjUwxpTDGUfrXBRxDamg=;
- b=CqxNirFAAmoKb+ExR3AYjFmjJ1aO9lcbYCUlvTdRD/5Ba2upzBGtIAAFrwvWN7mB9/lh
- 1yKnhebjCl78NkELKLmRqp8p6xssl3K85c/W/ZevnxtdZ0pmdDhI77bqe0w2LkksnhkZ
- Ky4TP9on1jSrJECfQpXN14BZR+WlcMOrRiHh1Wvw+hojC65HqDf6sFH858BSdkANaCCi
- 2YtQBH0umOzTlBeOGfD2onttusZ040LMUuZnNawhEgMpZIvlMK8WUsUezuH6sQ8hF6+7
- QVCGRH8nDlz5Ks1mtE6AURhWFe8HHznidnU7/DrJki5aGRaa/V/eQeId9zXpkKdjS20o AA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 37gvavhb3y-1
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=zxF/XDKGFeP4ewBd/n0tLOOKs681BRXZ/yDahaLJnuY=;
+ b=U852/r0YlzwlnZzAgR1pibwbA5wEDu3QprEtyhzY3nRTUT3pSTDMsBHDUtiaIrr2059z
+ skxlFUj5htfg6EgDHZXCrMErMa/FChV2TYBKX+6zaJM4TO6pRfXoE1XA332NsF8F/5vu
+ I7vwxi7AzReCjTpw36sPYXrF6hCNypdpUkgV+QFshk50g7ENXTcyJ2zfcV9WDANIIV5n
+ q2l/z7anWGEo6k1+meUcs2QAkJ55GhSJBqE35L14qZ3Y62vD8/EPXOSPQ6Bii6V2Geg0
+ Byadk9pNB/vzfqVCOe7GMpHmF+r78kbvUNdYo2VQb+Q0+pBdiUUjnwVKIonRbfhpNw+O qQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37h17n3xnv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Mar 2021 11:09:41 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12PF5YeG077253;
-        Thu, 25 Mar 2021 11:09:40 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 37gvavhb0h-1
+        Thu, 25 Mar 2021 19:01:42 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12PMw7do027130;
+        Thu, 25 Mar 2021 23:01:40 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 37h15103km-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Mar 2021 11:09:39 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12PEvhBg027442;
-        Thu, 25 Mar 2021 15:09:34 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 37d9bptvqs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 Mar 2021 15:09:34 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12PF9V3N38142278
+        Thu, 25 Mar 2021 23:01:40 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12PN1JEM30933278
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Mar 2021 15:09:31 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BBA6C52050;
-        Thu, 25 Mar 2021 15:09:31 +0000 (GMT)
+        Thu, 25 Mar 2021 23:01:19 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D731C4C052;
+        Thu, 25 Mar 2021 23:01:37 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7635D4C058;
+        Thu, 25 Mar 2021 23:01:36 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.163.11.141])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 44CBD5204F;
-        Thu, 25 Mar 2021 15:09:29 +0000 (GMT)
-Message-ID: <39af167527d6478f86431c2ce29f68177700e82d.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Fix the error code for restoring the PCR value
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 25 Mar 2021 23:01:36 +0000 (GMT)
+Message-ID: <98cd4b74a0658c14acc0071349122b13e7238a53.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity subsystem fix for v5.12
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        lihuafei <lihuafei1@huawei.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        yangjihong <yangjihong1@huawei.com>,
-        Zhangjinhao <zhangjinhao2@huawei.com>
-Date:   Thu, 25 Mar 2021 11:09:27 -0400
-In-Reply-To: <0764ed04a7e84546a8b31fc13b264c47@huawei.com>
-References: <20210303032824.124112-1-lihuafei1@huawei.com>
-         <9df8d712-0e58-f95d-8f95-5feae2150b42@huawei.com>
-         <0764ed04a7e84546a8b31fc13b264c47@huawei.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Thu, 25 Mar 2021 19:01:34 -0400
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: cpmpSSkpYhZhTg8n3OAoi61RjdnqhXT3
+X-Proofpoint-GUID: cpmpSSkpYhZhTg8n3OAoi61RjdnqhXT3
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-25_04:2021-03-24,2021-03-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- mlxlogscore=999 adultscore=0 suspectscore=0 clxscore=1011 malwarescore=0
- phishscore=0 impostorscore=0 spamscore=0 priorityscore=1501 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2103250110
+ definitions=2021-03-25_10:2021-03-25,2021-03-25 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ clxscore=1011 adultscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=999 spamscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2103250000
+ definitions=main-2103250166
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2021-03-24 at 09:00 +0000, Roberto Sassu wrote:
-> > From: lihuafei
-> > Sent: Tuesday, March 23, 2021 2:41 PM
-> > ping. :-)
-> > 
-> > On 2021/3/3 11:28, Li Huafei wrote:
-> > > In ima_restore_measurement_list(), hdr[HDR_PCR].data is pointing to a
-> > > buffer of type u8, which contains the dumped 32-bit pcr value.
-> > > Currently, only the least significant byte is used to restore the pcr
-> > > value. We should convert hdr[HDR_PCR].data to a pointer of type u32
-> > > before fetching the value to restore the correct pcr value.
-> > >
-> > > Fixes: 47fdee60b47f ("ima: use ima_parse_buf() to parse measurements
-> > headers")
-> > > Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> 
-> Hi Li Huafei
-> 
-> yes, correct. Thanks for the patch.
-> 
-> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+Hi Linus,
 
-The patch set is now queued in next-integrity-testing.
+Here's just one patch to address a NULL ptr dereferencing when there is
+a mismatch between the user enabled LSMs and IMA/EVM.
 
 thanks,
 
 Mimi
+
+The following changes since commit 1e28eed17697bcf343c6743f0028cc3b5dd88bf0:
+  
+  Linux 5.12-rc3 (2021-03-14 14:41:02 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.12-fix
+
+for you to fetch changes up to 92063f3ca73aab794bd5408d3361fd5b5ea33079:
+
+  integrity: double check iint_cache was initialized (2021-03-22 14:54:11 -0400)
+
+----------------------------------------------------------------
+integrity-v5.12-fix
+
+----------------------------------------------------------------
+Mimi Zohar (1):
+      integrity: double check iint_cache was initialized
+
+ security/integrity/iint.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
