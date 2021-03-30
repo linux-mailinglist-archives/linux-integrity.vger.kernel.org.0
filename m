@@ -2,165 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECAA34CDB9
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Mar 2021 12:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1C034DDF7
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Mar 2021 04:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232770AbhC2KLo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 Mar 2021 06:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
+        id S230307AbhC3CE6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 Mar 2021 22:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232469AbhC2KLf (ORCPT
+        with ESMTP id S230418AbhC3CE2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 Mar 2021 06:11:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52F9C061574
-        for <linux-integrity@vger.kernel.org>; Mon, 29 Mar 2021 03:11:34 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1lQorr-00056a-FI; Mon, 29 Mar 2021 12:11:31 +0200
-Subject: Re: [PATCH v1 3/3] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Gstir <david@sigma-star.at>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
- <319e558e1bd19b80ad6447c167a2c3942bdafea2.1615914058.git-series.a.fatoum@pengutronix.de>
- <01e6e13d-2968-0aa5-c4c8-7458b7bde462@nxp.com>
- <45a9e159-2dcb-85bf-02bd-2993d50b5748@pengutronix.de>
- <f9c0087d299be1b9b91b242f41ac6ef7b9ee3ef7.camel@linux.ibm.com>
- <63dd7d4b-4729-9e03-cd8f-956b94eab0d9@pengutronix.de>
- <CAFA6WYOw_mQwOUN=onhzb7zCTyYDBrcx0E7C3LRk6nPLAVCWEQ@mail.gmail.com>
- <557b92d2-f3b8-d136-7431-419429f0e059@pengutronix.de>
- <CAFA6WYNE44=Y7Erfc-xNtOrf7TkJjh+odmYH5vzhEHR6KqBfeQ@mail.gmail.com>
- <6F812C20-7585-4718-997E-0306C4118468@sigma-star.at>
- <YGDpA4yPWmTWEyx+@kernel.org>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <1171de9c-97b9-3936-707b-16ec34cf94d5@pengutronix.de>
-Date:   Mon, 29 Mar 2021 12:11:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Mon, 29 Mar 2021 22:04:28 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D79BC061762
+        for <linux-integrity@vger.kernel.org>; Mon, 29 Mar 2021 19:04:26 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id e14so5340873plj.2
+        for <linux-integrity@vger.kernel.org>; Mon, 29 Mar 2021 19:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Q2pSsnic3t/qGHVZmhzTPe6d1qA6lfThi4vK5Z5MUNk=;
+        b=g2vPNCR6AEsS8QXm+Fbl8xBe9cz0bJb8iwIFY43x+hRgr9YgOrJIbQ59xc4ojMNj2T
+         VSBdyPA81jO2vI7VyDK2oOZ5tfBZL3T89IRY9lJzXbQ55j3297Mo06J0Blle0xqIkjqR
+         lbjHKdUzQCKjmwW4C87kW20zNQGmfuWLGohjY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q2pSsnic3t/qGHVZmhzTPe6d1qA6lfThi4vK5Z5MUNk=;
+        b=ryeugmJkjLWOVaT4dH8RkpiotXlafBpWtVbEsHaLNLMDLNuu8ZD8Uedf6AYaKpMd+J
+         G4htCNAfOMbcUl25O2kEm206nJgT7As+Zp03PT4hkIa3ZYrh2CWehFnQdTJjI+zCbjgC
+         QIKStB0N9V9xZFQOSJTW5RyGTHpmJ4A1qHapwyIi0fhkmRR3Y8ZULnI59CbNy63cS3hq
+         CcgNp+4oBuTmsH+cWlj7e3Am9e+t/hFel/bbe9RbtLkFM9dhkOs05JfN8ccnlNYaKXol
+         qRzQMC4H7QnztY11NVc0nekrLoiqSg21RnPtI4C07wJ5UBKtskLJ9zSS8SmgQNxOwHcm
+         u6sw==
+X-Gm-Message-State: AOAM531n2vUaLas0Q09JlqTCiVBPS7Y8X+q9nfvg8HqvGHPWoRJnNWjS
+        Im0fFJIQZ4G2jh3Ek6eDezZNLyClEwWc8A==
+X-Google-Smtp-Source: ABdhPJxvqJeDIiYANXuKL76YY9Wp+k9x0HzuW1YdJuxGRlC4gAUXjKXKIsT6kP9DBFUkZ2eGdgUCUQ==
+X-Received: by 2002:a17:90b:ed0:: with SMTP id gz16mr1967962pjb.106.1617069866065;
+        Mon, 29 Mar 2021 19:04:26 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x3sm13591741pfn.181.2021.03.29.19.04.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Mar 2021 19:04:25 -0700 (PDT)
+Date:   Mon, 29 Mar 2021 19:04:23 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        "Tj (Elloe Linux)" <ml.linux@elloe.vision>,
+        linux-integrity@vger.kernel.org, jsnitsel@redhat.com,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Subject: Re: Bug: TPM returned invalid status
+Message-ID: <202103291901.F15EA83FB6@keescook>
+References: <374e918c-f167-9308-2bea-ae6bc6a3d2e3@elloe.vision>
+ <YBGpranyEwXaqAUg@kernel.org>
+ <YBGqWp5FqKQJK1is@kernel.org>
+ <b1e71d07546ccce7957ead9cc80303734251f6c9.camel@HansenPartnership.com>
 MIME-Version: 1.0
-In-Reply-To: <YGDpA4yPWmTWEyx+@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1e71d07546ccce7957ead9cc80303734251f6c9.camel@HansenPartnership.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Jarkko,
-
-On 28.03.21 22:37, Jarkko Sakkinen wrote:
-> On Sat, Mar 27, 2021 at 01:41:24PM +0100, David Gstir wrote:
->> Generally speaking, I’d say trusting the CAAM RNG and trusting in it’s
->> other features are two separate things. However, reading through the CAAM
->> key blob spec I’ve got here, CAAM key blob keys (the keys that secure a blob’s
->> content) are generated using its internal RNG. So I’d save if the CAAM RNG
->> is insecure, so are generated key blobs. Maybe somebody with more insight
->> into the CAAM internals can verify that, but I don’t see any point in using
->> the kernel’s RNG as long as we let CAAM generate the key blob keys for us.
+On Wed, Jan 27, 2021 at 10:11:56AM -0800, James Bottomley wrote:
+> On Wed, 2021-01-27 at 20:00 +0200, Jarkko Sakkinen wrote:
+> > On Wed, Jan 27, 2021 at 07:58:08PM +0200, Jarkko Sakkinen wrote:
+> > > On Mon, Jan 25, 2021 at 09:00:54AM +0000, Tj (Elloe Linux) wrote:
+> > > > Seeing this on Lenovo E495's that have:
+> > > > 
+> > > > AMD Ryzen 7 3700U with Radeon Vega Mobile Gfx
+> > > > 
+> > > > Linux version 5.11.0-rc4+ (tj@elloe000) (gcc (Ubuntu
+> > > > 9.3.0-17ubuntu1~20.04) 9.3.0, GNU ld (GNU Binutils for Ubuntu)
+> > > > 2.34) #12 SMP PREEMPT Sun Jan 24 11:28:01 GMT 2021
+> > > > Command line: BOOT_IMAGE=/vmlinuz-5.11.0-rc4+
+> > > > root=/dev/mapper/ELLOE000-rootfs ro acpi_osi=! "acpi_osi=Windows
+> > > > 2016" systemd.unified_cgroup_hierarchy=1 nosplash
+> > > > ...
+> > > > efi: EFI v2.70 by Lenovo
+> > > > 
+> > > > efi: ACPI=0xbddfd000 ACPI 2.0=0xbddfd014 TPMFinalLog=0xbdc2d000
+> > > > SMBIOS=0xba4d7000 SMBIOS 3.0=0xba4ca000 MEMATTR=0xb5611018
+> > > > ESRT=0xb9075000 RNG=0xba5c2598 TPMEventLog=0xb13ae
+> > > > 018
+> > > > ...
+> > > > DMI: LENOVO 20NECTO1WW/20NECTO1WW, BIOS R11ET32W (1.12 )
+> > > > 12/23/2019
+> > > > ...
+> > > > tpm_tis NTC0702:00: 2.0 TPM (device-id 0xFC, rev-id 1)
+> > > > ------------[ cut here ]------------
+> > > > TPM returned invalid status
+> > > > WARNING: CPU: 3 PID: 1 at drivers/char/tpm/tpm_tis_core.c:249
+> > > 
+> > > There's a patch set in cycle that should fix this:
+> > > 
+> > > https://lore.kernel.org/linux-integrity/20201001180925.13808-1-James.Bottomley@HansenPartnership.com/
+> > > 
+> > > James, where are we at with this?
+> > 
+> > I'm interested because I'm yet to send my pr and this is generating
+> > constantly bug reports.
 > 
-> Here's my long'ish analysis. Please read it to the end if by ever means
-> possible, and apologies, I usually try to keep usually my comms short, but
-> this requires some more meat than the usual.
+> It's part of the enable interrupts series, which there's a lot of
+> discussion over.  However, that single patch can be broken out of the
+> series if you like.  The specific blocker was the screaming interrupt
+> on the Lenovo that Jerry was looking at.  He propose a quirk to fix its
+> so perhaps we're now ready to move the entire series forward?
 
-Thanks for the write-up!
+Does this series solve the issue too?
 
-> The Bad News
-> ============
-> 
-> Now that we add multiple hardware trust sources for trusted keys, will
-> there ever be a scenario where a trusted key is originally sealed with a
-> backing hardware A, unsealed, and resealed with hardware B?
-> 
-> The hardware and vendor neutral way to generate the key material would be
-> unconditionally always just the kernel RNG.
-> 
-> CAAM is actually worse than TCG because it's not even a standards body, if
-> I got it right. Not a lot but at least a tiny fraction.
+https://lore.kernel.org/linux-integrity/1613955394-13152-1-git-send-email-LinoSanfilippo@gmx.de/
 
-CAAM is how NXP calls the crypto accelerator built into some of its SoCs.
-
-> This brings an open item in TEE patches: trusted_tee_get_random() is an
-> issue in generating kernel material. I would rather replace that with
-> kernel RNG *for now*, because the same open question applies also to ARM
-> TEE. It's also a single company controlled backing technology.
-> 
-> By all practical means, I do trust ARM TEE in my personal life but this is
-> not important.
-> 
-> CAAM *and* TEE backends break the golden rule of putting as little trust as
-> possible to anything, even not anything weird is clear at sight, as
-> security is essentially a game of known unknowns and unknown unknowns.
-
-Agreed.
-
-> The GOOD News
-> =============
-> 
-> So there's actually option (C) that also fixes the TPM trustd keys issue:
-> 
-> Add a new kernel patch, which:
-> 
-> 1. Adds the use of kernel RNG as a boot option.
-> 2. If this boot option is not active, the subsystem will print a warning
->    to klog denoting this.
-> 3. Default is of course vendor RNG given the bad design issue in the TPM
->    trusted keys, but the warning in klog will help to address it at least
->    a bit.
-
-Why should the TPM backend's choice influence later backends? We could add
-a new option for key creation time, e.g.:
-
-   keyctl add trusted kmk "new keylen rng=kernel" @s
-
-The default would be rng=vendor if available with a fallback to rng=kernel,
-which should always be available.
-
-> 4. Document all this to Documentation/security/keys/trusted-encrypted.rst.
-
-Yes, backends would then document whether they support a rng=vendor or not.
-
-> I'd prefer the choice between A, B and C be concluded rather sooner than
-> later.
-
-FWIW, my vote is for option C, with the change described above.
-
-Cheers,
-Ahmad
-
-> 
-> /Jarkko
-> 
+(I haven't had a chance to test either series with my TPM, but I see the
+same "TPM returned invalid status" errors recently.)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Kees Cook
