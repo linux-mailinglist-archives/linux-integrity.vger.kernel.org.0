@@ -2,85 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D710D34F3B6
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Mar 2021 23:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E771434F3BF
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Mar 2021 23:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232686AbhC3Vra (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Mar 2021 17:47:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48592 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232554AbhC3VrZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Mar 2021 17:47:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 42C3361969;
-        Tue, 30 Mar 2021 21:47:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617140841;
-        bh=efZTSeZg5XZdPMKissn/jqo8tvlWQesdN6Iq75XHvfI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EE+/eIjWBtwuci++W9gjw+1hfjkCUOFnCek0S7tGuoWziUmlBjPnnpm164rZwfDBY
-         OETzBbgFsd4ArFeux8BOHcSaFjhgoKtxe/qad/6J515m8BJgZkS1YcysvKmP3YKncx
-         8zt6vjxgVBaG0PcEmKS/g2hq2rI50hR3FPOrHFo2OGMXjiaJ8ey50NjyxyMdSnHT+L
-         JIyEytj9VSwvDsaDn5VwomZafE9p8mhiavJyKbOggr7x4oKSarCey3IdRTKN9GotAj
-         UtMWIgxM7oa8aOBV6W1A57KLOx0kB2JZpXr1bkUDSjG3DQCRC59nKBaNJmmTPYAacD
-         d4ZR6Vnd6a7UQ==
-Date:   Tue, 30 Mar 2021 14:47:18 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     David Gstir <david@sigma-star.at>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        id S232533AbhC3VvQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Mar 2021 17:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230125AbhC3VvE (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 30 Mar 2021 17:51:04 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67095C061574;
+        Tue, 30 Mar 2021 14:51:04 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id cx5so8961070qvb.10;
+        Tue, 30 Mar 2021 14:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+K4nfDlNqS+buaOaVq0AwqLIJ0qhfMJqcEYS+OVTapc=;
+        b=NDqsZVY+29ySsRg/3HK1AA9ORV4ajVk3u617yrGmsZWxFWcoaAYGq23GczTy0umqTH
+         zbXaf9OVWiu4k1LhyQJVkrAiM/MoA0COtEgwl/dMRGUTGnDkmq6gwsdcB771g4tFCljH
+         kQ3GH6/35vFXENrtuus3SAZ08usNE50+792tG7PfsyK7dvTRmdQeq9MXS0tcx9T0WgYy
+         Zsv1nC2/iKlh50dieaiECdA/DZTmSORJRjmK8233DGdyXd7o4kiI9iiTfuxcf38Rpxtt
+         Q9Txi/rmBlh5W9mSla1tJWDeLLfKG0USMfQlMXWS74O2US11V9sk26jcukF5Q7gPj5kD
+         1IfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+K4nfDlNqS+buaOaVq0AwqLIJ0qhfMJqcEYS+OVTapc=;
+        b=KSTZi/AMVFLr18G1q7C23TRYLo3xSiucZ7YkjnaK7etCb4N+R68cWroTmr6LEKUBki
+         10YY4A5ov7927g35oPJK+oUP17yMV74y647l52jZJCPWkiQpx7x9jKEAdzrw6JpsduOP
+         weSVxTXOBWLR8/ivgCXtbBjrjZY2aOhQrbskWrac3OhGS1lS6g4lNjwAyt4Ad+8se5EW
+         P5hsAv2meKfkyRn4RlcmhHUwAiDI/U+qzT2zbg2Y6oNrmr+VUV9B6y4fCEk/3ic/9dji
+         AkUCg2KfBwMCYXmZztnh1flpY6fHZXWvwR9MDbBPkkGd7jsWFkwUcmLELAfqJWGerDq7
+         33Qw==
+X-Gm-Message-State: AOAM5304/aDWEgAG4NKcTpgHTzfusD5x7erYtevhwRcd2WIy/xm5OQYW
+        F79lg9EOhly25ZkXcfIN3bX8FAkP6xX0uVSseME=
+X-Google-Smtp-Source: ABdhPJyslbdbjpfFB3Lq8Z40X1hr6APZEGUsaFpYs3kEAQ437pGTOonhltLSjPHd1MsDmKhxXgHtxg3plK2vT4EC3XE=
+X-Received: by 2002:ad4:57a5:: with SMTP id g5mr215200qvx.60.1617141063684;
+ Tue, 30 Mar 2021 14:51:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
+ <CAFLxGvzWLje+_HFeb+hKNch4U1f5uypVUOuP=QrEPn_JNM+scg@mail.gmail.com> <ca2a7c17-3ed0-e52f-2e2f-c0f8bbe10323@pengutronix.de>
+In-Reply-To: <ca2a7c17-3ed0-e52f-2e2f-c0f8bbe10323@pengutronix.de>
+From:   Richard Weinberger <richard.weinberger@gmail.com>
+Date:   Tue, 30 Mar 2021 23:50:52 +0200
+Message-ID: <CAFLxGvyj1aZ_3MuxJC6onejchV_6A8WbNR1vTLpSBF5QTxvLyQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
         Aymen Sghaier <aymen.sghaier@nxp.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>, kernel@pengutronix.de,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
         Udit Agarwal <udit.agarwal@nxp.com>,
         Jan Luebbe <j.luebbe@pengutronix.de>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v1 3/3] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-Message-ID: <YGOcZtkw3ZM5kvl6@gmail.com>
-References: <319e558e1bd19b80ad6447c167a2c3942bdafea2.1615914058.git-series.a.fatoum@pengutronix.de>
- <01e6e13d-2968-0aa5-c4c8-7458b7bde462@nxp.com>
- <45a9e159-2dcb-85bf-02bd-2993d50b5748@pengutronix.de>
- <f9c0087d299be1b9b91b242f41ac6ef7b9ee3ef7.camel@linux.ibm.com>
- <63dd7d4b-4729-9e03-cd8f-956b94eab0d9@pengutronix.de>
- <CAFA6WYOw_mQwOUN=onhzb7zCTyYDBrcx0E7C3LRk6nPLAVCWEQ@mail.gmail.com>
- <557b92d2-f3b8-d136-7431-419429f0e059@pengutronix.de>
- <CAFA6WYNE44=Y7Erfc-xNtOrf7TkJjh+odmYH5vzhEHR6KqBfeQ@mail.gmail.com>
- <6F812C20-7585-4718-997E-0306C4118468@sigma-star.at>
- <YGDpA4yPWmTWEyx+@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YGDpA4yPWmTWEyx+@kernel.org>
+        David Gstir <david@sigma-star.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Mar 28, 2021 at 11:37:23PM +0300, Jarkko Sakkinen wrote:
-> 
-> Unfortunately, TPM trusted keys started this bad security practice, and
-> obviously it cannot be fixed without breaking uapi backwards compatibility.
-> 
+Ahmad,
 
-The whole point of a randomness source is that it is random.  So userspace can't
-be depending on any particular output, and the randomness source can be changed
-without breaking backwards compatibility.
+On Wed, Mar 17, 2021 at 3:08 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
 
-So IMO, trusted keys should simply be fixed to use get_random_bytes().
+>     TABLE="0 $BLOCKS crypt $ALGO :32:trusted:$KEYNAME 0 $DEV 0 1 allow_discards"
+>     echo $TABLE | dmsetup create mydev
+>     echo $TABLE | dmsetup load mydev
 
-- Eric
+Do you also plan to add support for this to cryptsetup?
+
+David and I have added (rough) support for our CAAM/DCP based keyrings
+to cryptsetup:
+https://github.com/sigma-star/cryptsetup/tree/rw/plain
+
+I'm pretty sure with minimal changes it will work with your recent approach too.
+
+-- 
+Thanks,
+//richard
