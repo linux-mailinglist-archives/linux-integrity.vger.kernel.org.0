@@ -2,55 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E771434F3BF
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Mar 2021 23:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679CC34F3F1
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Mar 2021 00:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbhC3VvQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Mar 2021 17:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
+        id S232889AbhC3WEp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Mar 2021 18:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbhC3VvE (ORCPT
+        with ESMTP id S232869AbhC3WEa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Mar 2021 17:51:04 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67095C061574;
-        Tue, 30 Mar 2021 14:51:04 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id cx5so8961070qvb.10;
-        Tue, 30 Mar 2021 14:51:04 -0700 (PDT)
+        Tue, 30 Mar 2021 18:04:30 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC600C061574;
+        Tue, 30 Mar 2021 15:04:29 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id g15so17462199qkl.4;
+        Tue, 30 Mar 2021 15:04:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+K4nfDlNqS+buaOaVq0AwqLIJ0qhfMJqcEYS+OVTapc=;
-        b=NDqsZVY+29ySsRg/3HK1AA9ORV4ajVk3u617yrGmsZWxFWcoaAYGq23GczTy0umqTH
-         zbXaf9OVWiu4k1LhyQJVkrAiM/MoA0COtEgwl/dMRGUTGnDkmq6gwsdcB771g4tFCljH
-         kQ3GH6/35vFXENrtuus3SAZ08usNE50+792tG7PfsyK7dvTRmdQeq9MXS0tcx9T0WgYy
-         Zsv1nC2/iKlh50dieaiECdA/DZTmSORJRjmK8233DGdyXd7o4kiI9iiTfuxcf38Rpxtt
-         Q9Txi/rmBlh5W9mSla1tJWDeLLfKG0USMfQlMXWS74O2US11V9sk26jcukF5Q7gPj5kD
-         1IfQ==
+        bh=rsLcyiUdjDO/JwPlLGDRZPqtjPzq/FefLI/0r769QmU=;
+        b=fnuxO4RjIrvHDZ5iK/ytdE3WACshx3AxcJyhSkUNgT5Y1FXc3gOgTDdoJHClzNggxh
+         iBcHnl50i/gHSU03HQHZcr2at0f8vJWJC2ryWdkE/legp7YM+7Cc+w4qIw2ze7JvdgS8
+         kr4xPTw9Q6xckiwKtC0aSq7ixuiTlyvMuV8hjkJ1BjMKVggsEVmv5luUT0Cn8YZgK6nI
+         4z5cjIBXh6Fy5c81Do2qyeUharaKX0PPoD2uCClNIjW7dgU2X3eeOiqyqIRzdmzP6+eP
+         HVWAut/yxf7qZBNvpQthz9Abq+MqEixM2r0eskkznkRJOYfnrgMHPhBYpL+NTCz7W1VX
+         OzFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+K4nfDlNqS+buaOaVq0AwqLIJ0qhfMJqcEYS+OVTapc=;
-        b=KSTZi/AMVFLr18G1q7C23TRYLo3xSiucZ7YkjnaK7etCb4N+R68cWroTmr6LEKUBki
-         10YY4A5ov7927g35oPJK+oUP17yMV74y647l52jZJCPWkiQpx7x9jKEAdzrw6JpsduOP
-         weSVxTXOBWLR8/ivgCXtbBjrjZY2aOhQrbskWrac3OhGS1lS6g4lNjwAyt4Ad+8se5EW
-         P5hsAv2meKfkyRn4RlcmhHUwAiDI/U+qzT2zbg2Y6oNrmr+VUV9B6y4fCEk/3ic/9dji
-         AkUCg2KfBwMCYXmZztnh1flpY6fHZXWvwR9MDbBPkkGd7jsWFkwUcmLELAfqJWGerDq7
-         33Qw==
-X-Gm-Message-State: AOAM5304/aDWEgAG4NKcTpgHTzfusD5x7erYtevhwRcd2WIy/xm5OQYW
-        F79lg9EOhly25ZkXcfIN3bX8FAkP6xX0uVSseME=
-X-Google-Smtp-Source: ABdhPJyslbdbjpfFB3Lq8Z40X1hr6APZEGUsaFpYs3kEAQ437pGTOonhltLSjPHd1MsDmKhxXgHtxg3plK2vT4EC3XE=
-X-Received: by 2002:ad4:57a5:: with SMTP id g5mr215200qvx.60.1617141063684;
- Tue, 30 Mar 2021 14:51:03 -0700 (PDT)
+        bh=rsLcyiUdjDO/JwPlLGDRZPqtjPzq/FefLI/0r769QmU=;
+        b=MuPOq0qhzQHV2vY3kHuzhum1pa+kZs2s1gHlXDQAuPsS0v3cxIZMpwlN4GbNViSS5I
+         Pj8GqO4dm9MyuKOJVCSaI/Y7DmrOpRAYK1ZycpeYifwSju0yNae9GyveEcSiDp1Z0ODR
+         OxA4MVWTsylZLbifmP/vtJ/T9u+nkuiJUFI/DdDdFSkrmbVJGi3ujH/qk+UhHgtf/UFO
+         U89b2f4c0JwiRruHiGRtDhY4YE5esabKT9/R6laCiW+HEp2O+zzjtYVou8MZ1Bzke3OJ
+         xJ8DhtmEH5I+Hnnc9CManyzGvznshg9fcr6NbzyRYDNjS2Y+qQIAjIHsN6kaTj+xulAt
+         hE7w==
+X-Gm-Message-State: AOAM5309oLqb2f5yCkWpDqdm8mKXG9wv9psNMq/rdJEcRaVKVBMDmuEE
+        5AiWaEUnJbwKQSgsxU+n98pVJIJBitIz9x7OVs4=
+X-Google-Smtp-Source: ABdhPJzDPkf/1Aa4r0AHY7myn8WGS18l9zpACXjvhATeiELfuLBPTtt7chiH9HTWcsTFt6EdhCgi+k0trKe9U+QYL30=
+X-Received: by 2002:a05:620a:14ae:: with SMTP id x14mr364123qkj.237.1617141869090;
+ Tue, 30 Mar 2021 15:04:29 -0700 (PDT)
 MIME-Version: 1.0
 References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
  <CAFLxGvzWLje+_HFeb+hKNch4U1f5uypVUOuP=QrEPn_JNM+scg@mail.gmail.com> <ca2a7c17-3ed0-e52f-2e2f-c0f8bbe10323@pengutronix.de>
 In-Reply-To: <ca2a7c17-3ed0-e52f-2e2f-c0f8bbe10323@pengutronix.de>
 From:   Richard Weinberger <richard.weinberger@gmail.com>
-Date:   Tue, 30 Mar 2021 23:50:52 +0200
-Message-ID: <CAFLxGvyj1aZ_3MuxJC6onejchV_6A8WbNR1vTLpSBF5QTxvLyQ@mail.gmail.com>
+Date:   Wed, 31 Mar 2021 00:04:17 +0200
+Message-ID: <CAFLxGvwNomKOo3mQLMxYGDA8T8zN=Szpo2q5jrp4D1CaMHydWA@mail.gmail.com>
 Subject: Re: [PATCH v1 0/3] KEYS: trusted: Introduce support for NXP
  CAAM-based trusted keys
 To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
@@ -82,18 +82,12 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 Ahmad,
 
 On Wed, Mar 17, 2021 at 3:08 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+>     keyctl add trusted $KEYNAME "load $(cat ~/kmk.blob)" @s
 
->     TABLE="0 $BLOCKS crypt $ALGO :32:trusted:$KEYNAME 0 $DEV 0 1 allow_discards"
->     echo $TABLE | dmsetup create mydev
->     echo $TABLE | dmsetup load mydev
-
-Do you also plan to add support for this to cryptsetup?
-
-David and I have added (rough) support for our CAAM/DCP based keyrings
-to cryptsetup:
-https://github.com/sigma-star/cryptsetup/tree/rw/plain
-
-I'm pretty sure with minimal changes it will work with your recent approach too.
+Is there a reason why we can't pass the desired backend name in the
+trusted key parameters?
+e.g.
+keyctl add trusted $KEYNAME "backendtype caam load $(cat ~/kmk.blob)" @s
 
 -- 
 Thanks,
