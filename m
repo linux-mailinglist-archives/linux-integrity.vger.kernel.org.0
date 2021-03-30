@@ -2,59 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6C934E8C3
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Mar 2021 15:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F08034E8C7
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Mar 2021 15:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbhC3NRc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Mar 2021 09:17:32 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42716 "EHLO
+        id S232105AbhC3NRd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Mar 2021 09:17:33 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64836 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232147AbhC3NRD (ORCPT
+        by vger.kernel.org with ESMTP id S232166AbhC3NRF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 30 Mar 2021 09:17:05 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12UD3uiG053284;
         Tue, 30 Mar 2021 09:17:03 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12UD5cBN063901;
-        Tue, 30 Mar 2021 09:16:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=ZQkd2Ct+Icr0gv9shTuyQc3B/gEceCSmgfsacoNIPEg=;
- b=eg6/N2ttOYu697NKHgAEGv73sY9MmHPt8Ip3P5IVr4fUEy8zSBLEsqcm8WtyQljUEbCj
- EagM/QzMBPPtcT/XCKFaNfYqHD7eYF5JP7e0uQKqT2HId6nbxIDZKoylWJicKEknPjlR
- 0cZ9DBGNTqLynwpYSkjfG/tus+T8tkpsu5dLlAhN9OvY/64VmGRkc6Q/B5syZMTwWVUO
- R4PoRe/mZXGGzeyAAN8Cl74C+cq1dFXeyNF9cDZNof9IES3sqmY8L/DCElwl8ujzoaye
- b636GIOI/NFuDlnorbXC+oQ9opqiXi8KclZOw84SBCCghDnjCO74zKW84/C+ivLauiWw 4Q== 
+ bh=0FE6QV8fRwrto/suhw4y73defG5u+8c9hKcbJaEbyyM=;
+ b=lhU81LIq8icTk8qyR9137L8l2nuEq1Kpnd5e6b0pACJQg9IHy9C4qjFIPxeccPVGCiJD
+ G1abhSTc3dxj3gdMVFvt8MFEjGoNIJQ7NHsIt0Sh7lgO0YbJ1UJ43ZoLNfND7nBWCsHO
+ R+Xb8vlBhaqrWCs7nSeD/S/Js59lNHiggGIZlge2saVmxr0XudxK6W3/fCuHb8AJpwCz
+ PTFxSA2jrEvk/8T1JNQFXinEEGYcY+yr0hdSBpgC1oDt/odsoXXEGFSzVs/GDg8cvEDO
+ ROe7fwwp1LVpZTldFsD1Fu2V3sO8QJ0M9ZGd5VOodMv2ecM2dHONhOg0vW1E+jH16/wC VA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37jhsss0f9-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37juyp12u6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Mar 2021 09:16:58 -0400
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12UD5nkW064549;
-        Tue, 30 Mar 2021 09:16:58 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37jhsss0dy-1
+        Tue, 30 Mar 2021 09:17:02 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12UD4DaL056983;
+        Tue, 30 Mar 2021 09:17:02 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37juyp12s9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Mar 2021 09:16:58 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12UDCgZx027242;
-        Tue, 30 Mar 2021 13:16:56 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 37hvb8ar9f-1
+        Tue, 30 Mar 2021 09:17:02 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12UDBr50012208;
+        Tue, 30 Mar 2021 13:16:58 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 37hvb8jqqu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Mar 2021 13:16:55 +0000
+        Tue, 30 Mar 2021 13:16:58 +0000
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12UDGrXH42533284
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12UDGtSo35389714
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Mar 2021 13:16:53 GMT
+        Tue, 30 Mar 2021 13:16:55 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 16E3F4C040;
+        by IMSVA (Postfix) with ESMTP id A72194C05A;
+        Tue, 30 Mar 2021 13:16:55 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B9E04C046;
         Tue, 30 Mar 2021 13:16:53 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B51F34C044;
-        Tue, 30 Mar 2021 13:16:50 +0000 (GMT)
 Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com.com (unknown [9.211.103.158])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 30 Mar 2021 13:16:50 +0000 (GMT)
+        Tue, 30 Mar 2021 13:16:53 +0000 (GMT)
 From:   Nayna Jain <nayna@linux.ibm.com>
 To:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
 Cc:     linux-security-module@vger.kernel.org,
@@ -65,57 +65,102 @@ Cc:     linux-security-module@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         David Woodhouse <dwmw2@infradead.org>,
         Nayna Jain <nayna@linux.ibm.com>
-Subject: [PATCH v3 1/3] keys: cleanup build time module signing keys
-Date:   Tue, 30 Mar 2021 09:16:34 -0400
-Message-Id: <20210330131636.21711-2-nayna@linux.ibm.com>
+Subject: [PATCH v3 2/3] ima: enable signing of modules with build time generated key
+Date:   Tue, 30 Mar 2021 09:16:35 -0400
+Message-Id: <20210330131636.21711-3-nayna@linux.ibm.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210330131636.21711-1-nayna@linux.ibm.com>
 References: <20210330131636.21711-1-nayna@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GxdNIn23z6Q5Qju96rqU2xb8QCLJxsjQ
-X-Proofpoint-ORIG-GUID: DV7vImdVqXsffT1PYROL9no5OKHhBo3n
+X-Proofpoint-ORIG-GUID: nhSccJ3rEukCWVDcnSo8xLhS8QVIo_BL
+X-Proofpoint-GUID: PjWfczEbCaQWISztLEhlnAiokKJw8qXe
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-30_04:2021-03-30,2021-03-30 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- phishscore=0 impostorscore=0 bulkscore=0 suspectscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 mlxlogscore=999 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2021-03-30_03:2021-03-30,2021-03-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ phishscore=0 spamscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
+ bulkscore=0 mlxlogscore=999 lowpriorityscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2103250000 definitions=main-2103300094
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The "mrproper" target is still looking for build time generated keys in
-the kernel root directory instead of certs directory. Fix the path and
-remove the names of the files which are no longer generated.
+The kernel build process currently only signs kernel modules when
+MODULE_SIG is enabled. Also, sign the kernel modules at build time when
+IMA_APPRAISE_MODSIG is enabled.
 
-Fixes: cfc411e7fff3 ("Move certificate handling to its own directory")
 Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ certs/Kconfig  | 2 +-
+ certs/Makefile | 8 ++++++++
+ init/Kconfig   | 6 +++---
+ 3 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d4784d181123..b7c2ed2a8684 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1523,9 +1523,9 @@ MRPROPER_FILES += include/config include/generated          \
- 		  debian snap tar-install \
- 		  .config .config.old .version \
- 		  Module.symvers \
--		  signing_key.pem signing_key.priv signing_key.x509	\
--		  x509.genkey extra_certificates signing_key.x509.keyid	\
--		  signing_key.x509.signer vmlinux-gdb.py \
-+		  certs/signing_key.pem certs/signing_key.x509 \
-+		  certs/x509.genkey \
-+		  vmlinux-gdb.py \
- 		  *.spec
+diff --git a/certs/Kconfig b/certs/Kconfig
+index c94e93d8bccf..48675ad319db 100644
+--- a/certs/Kconfig
++++ b/certs/Kconfig
+@@ -4,7 +4,7 @@ menu "Certificates for signature checking"
+ config MODULE_SIG_KEY
+ 	string "File name or PKCS#11 URI of module signing key"
+ 	default "certs/signing_key.pem"
+-	depends on MODULE_SIG
++	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+ 	help
+          Provide the file name of a private key/certificate in PEM format,
+          or a PKCS#11 URI according to RFC7512. The file should contain, or
+diff --git a/certs/Makefile b/certs/Makefile
+index f4c25b67aad9..e3185c57fbd8 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -32,6 +32,14 @@ endif # CONFIG_SYSTEM_TRUSTED_KEYRING
+ clean-files := x509_certificate_list .x509.list
  
- # Directories & files removed with 'make distclean'
+ ifeq ($(CONFIG_MODULE_SIG),y)
++	SIGN_KEY = y
++endif
++
++ifeq ($(CONFIG_IMA_APPRAISE_MODSIG),y)
++	SIGN_KEY = y
++endif
++
++ifdef SIGN_KEY
+ ###############################################################################
+ #
+ # If module signing is requested, say by allyesconfig, but a key has not been
+diff --git a/init/Kconfig b/init/Kconfig
+index 5f5c776ef192..85e48a578f90 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2164,7 +2164,7 @@ config MODULE_SIG_FORCE
+ config MODULE_SIG_ALL
+ 	bool "Automatically sign all modules"
+ 	default y
+-	depends on MODULE_SIG
++	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+ 	help
+ 	  Sign all modules during make modules_install. Without this option,
+ 	  modules must be signed manually, using the scripts/sign-file tool.
+@@ -2174,7 +2174,7 @@ comment "Do not forget to sign required modules with scripts/sign-file"
+ 
+ choice
+ 	prompt "Which hash algorithm should modules be signed with?"
+-	depends on MODULE_SIG
++	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+ 	help
+ 	  This determines which sort of hashing algorithm will be used during
+ 	  signature generation.  This algorithm _must_ be built into the kernel
+@@ -2206,7 +2206,7 @@ endchoice
+ 
+ config MODULE_SIG_HASH
+ 	string
+-	depends on MODULE_SIG
++	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+ 	default "sha1" if MODULE_SIG_SHA1
+ 	default "sha224" if MODULE_SIG_SHA224
+ 	default "sha256" if MODULE_SIG_SHA256
 -- 
 2.29.2
 
