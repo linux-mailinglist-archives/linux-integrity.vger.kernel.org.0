@@ -2,24 +2,31 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D80E350BBF
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Apr 2021 03:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3C7350E8B
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Apr 2021 07:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233076AbhDABMp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 31 Mar 2021 21:12:45 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:37150 "EHLO fornost.hmeau.com"
+        id S232585AbhDAFqi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 1 Apr 2021 01:46:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44980 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230284AbhDABMM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 31 Mar 2021 21:12:12 -0400
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1lRlrx-0007Nz-AT; Thu, 01 Apr 2021 12:11:34 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Thu, 01 Apr 2021 12:11:32 +1100
-Date:   Thu, 1 Apr 2021 12:11:32 +1100
-From:   Herbert Xu <herbert@gondor.apana.org.au>
+        id S229459AbhDAFqS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 1 Apr 2021 01:46:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C465061105;
+        Thu,  1 Apr 2021 05:46:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617255978;
+        bh=gxlixb9ixquq1ytVeiB0zWryyTuL9Sy+kKcjFn97ypc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DJuDKPMURR1uM8Jva7ld8d3o1JQmXobSSyzpuhX17V1zmixlgUMSqI89FoUzr627J
+         zuWG9c6TjUdH1avGicc8aiQ660VrJKuvqT6FhxGWVsnd40sSxddxKHlwjgKdHKInYG
+         YsMHr+D8kTvE9/Dw7sUIjFi+2yvJD0aIqfsCSiqoSd6HTA6AX/jPR8iwMywSfOqu0s
+         aaHKat+asI7ZAmwTKFI8P+OE/2nPqCUZp7tD8DitfRaH79OJ696D5uDYIkvnR/ydXZ
+         g1KzVW3HnNolU9EKka11lTfR0roEffxv+rLyr3XTTwwm7P0AjAbWOeZxSh7QG5qA69
+         22El4veFSw2Yg==
+Date:   Thu, 1 Apr 2021 08:46:16 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Gstir <david@sigma-star.at>,
+Cc:     David Gstir <david@sigma-star.at>,
         Sumit Garg <sumit.garg@linaro.org>,
         Ahmad Fatoum <a.fatoum@pengutronix.de>,
         Mimi Zohar <zohar@linux.ibm.com>,
@@ -31,6 +38,7 @@ Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
         Udit Agarwal <udit.agarwal@nxp.com>,
         Jan Luebbe <j.luebbe@pengutronix.de>,
@@ -44,7 +52,7 @@ Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
         <linux-security-module@vger.kernel.org>
 Subject: Re: [PATCH v1 3/3] KEYS: trusted: Introduce support for NXP
  CAAM-based trusted keys
-Message-ID: <20210401011132.GB4349@gondor.apana.org.au>
+Message-ID: <YGVeKPcrySJCJfhp@kernel.org>
 References: <f9c0087d299be1b9b91b242f41ac6ef7b9ee3ef7.camel@linux.ibm.com>
  <63dd7d4b-4729-9e03-cd8f-956b94eab0d9@pengutronix.de>
  <CAFA6WYOw_mQwOUN=onhzb7zCTyYDBrcx0E7C3LRk6nPLAVCWEQ@mail.gmail.com>
@@ -59,7 +67,6 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <YGUHBelwhvJDhKoo@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -70,13 +77,13 @@ On Wed, Mar 31, 2021 at 04:34:29PM -0700, Eric Biggers wrote:
 > > It's a bummer but uapi is the god in the end. Since TPM does not do it
 > > today, that behaviour must be supported forever. That's why a boot option
 > > AND a warning would be the best compromise.
+> > 
 > 
 > It's not UAPI if there is no way for userspace to tell if it changed.
+> 
+> - Eric
 
-Exactly.  UAPI is only an issue if something *breaks*.
+It's enough uapi for me. People might assume that the entropy source is
+TPM for this, since it has been so far.
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+/Jarkko
