@@ -2,129 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25080352547
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Apr 2021 03:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A373352A3A
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Apr 2021 13:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233870AbhDBB6V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 1 Apr 2021 21:58:21 -0400
-Received: from mail.hallyn.com ([178.63.66.53]:40296 "EHLO mail.hallyn.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233258AbhDBB6U (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 1 Apr 2021 21:58:20 -0400
-X-Greylist: delayed 505 seconds by postgrey-1.27 at vger.kernel.org; Thu, 01 Apr 2021 21:58:18 EDT
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id F246D774; Thu,  1 Apr 2021 20:49:50 -0500 (CDT)
-Date:   Thu, 1 Apr 2021 20:49:50 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        id S235176AbhDBL1i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Apr 2021 07:27:38 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17352 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235170AbhDBL1h (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 2 Apr 2021 07:27:37 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 132B4K7S176199;
+        Fri, 2 Apr 2021 07:27:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=GXI532RUtUF0I/TkqNc22FCXRKltQLqudGyKbkMAYuI=;
+ b=iYAOLNbz8MADkV7F0/6GAMDhzuNki/WllObrXA6OJhiGDG9y84oAxIlpN/1q2V6AQtB1
+ O7lAMrwI9lTWL6kJBDTvSgSWRv33lK1U614TolSUSAAY+8/pe+RRdnTGTrObDxI7cOZd
+ NcSjoIWn+dRhJBE+N8UGn8LsBxVZ2gSbsoCexOy2bQYMsKPrTLzY7ks1R0BebpA/DAro
+ 4wR8qGszobtNVt8ZJ0L/mp30+x/KDhV7hF4G9Dq/Ut5KeCr5K0zrjQZpyWbNEdCSkgwS
+ oBSUq5jCH32YbBlfjU/zIEK/qEIsaT+XLQHjfxELLAN72XElCrRUP5OJZ8XIvM0a/7tC hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37nbtcj459-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Apr 2021 07:27:27 -0400
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 132B4mvu177316;
+        Fri, 2 Apr 2021 07:27:27 -0400
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37nbtcj43y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Apr 2021 07:27:27 -0400
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 132BLpFJ030833;
+        Fri, 2 Apr 2021 11:27:21 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02wdc.us.ibm.com with ESMTP id 37n2942qt5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Apr 2021 11:27:21 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 132BRKxk10093148
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 2 Apr 2021 11:27:20 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB4AFC6059;
+        Fri,  2 Apr 2021 11:27:19 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 326BBC6055;
+        Fri,  2 Apr 2021 11:27:19 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  2 Apr 2021 11:27:18 +0000 (GMT)
+Subject: Re: [PATCH v3 2/3] ima: enable signing of modules with build time
+ generated key
+To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org
+Cc:     linux-security-module@vger.kernel.org,
         David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v1 3/3] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-Message-ID: <20210402014950.GA6897@mail.hallyn.com>
-References: <cover.56fff82362af6228372ea82e6bd7e586e23f0966.1615914058.git-series.a.fatoum@pengutronix.de>
- <319e558e1bd19b80ad6447c167a2c3942bdafea2.1615914058.git-series.a.fatoum@pengutronix.de>
- <01e6e13d-2968-0aa5-c4c8-7458b7bde462@nxp.com>
- <45a9e159-2dcb-85bf-02bd-2993d50b5748@pengutronix.de>
- <f9c0087d299be1b9b91b242f41ac6ef7b9ee3ef7.camel@linux.ibm.com>
- <9ba89168d8c4f1e3d6797a0b3713e152ac6388fd.camel@linux.ibm.com>
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>
+References: <20210330131636.21711-1-nayna@linux.ibm.com>
+ <20210330131636.21711-3-nayna@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <c0df8b07-79de-80cb-9eaa-ed70fbf8414b@linux.ibm.com>
+Date:   Fri, 2 Apr 2021 07:27:18 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9ba89168d8c4f1e3d6797a0b3713e152ac6388fd.camel@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210330131636.21711-3-nayna@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bB_Cg1RSifXY98ku04wXcNMmgrKSnXr7
+X-Proofpoint-GUID: NGAkoLW4r8Gt0EZTS08vedNqU9BIE09U
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-04-02_07:2021-04-01,2021-04-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1011 adultscore=0 priorityscore=1501 impostorscore=0
+ suspectscore=0 spamscore=0 phishscore=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2103310000 definitions=main-2104020080
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 09:14:02AM -0700, James Bottomley wrote:
-> On Tue, 2021-03-23 at 14:07 -0400, Mimi Zohar wrote:
-> > On Tue, 2021-03-23 at 17:35 +0100, Ahmad Fatoum wrote:
-> > > Hello Horia,
-> > > 
-> > > On 21.03.21 21:48, Horia Geantă wrote:
-> > > > On 3/16/2021 7:02 PM, Ahmad Fatoum wrote:
-> > > > [...]
-> > > > > +struct trusted_key_ops caam_trusted_key_ops = {
-> > > > > +	.migratable = 0, /* non-migratable */
-> > > > > +	.init = trusted_caam_init,
-> > > > > +	.seal = trusted_caam_seal,
-> > > > > +	.unseal = trusted_caam_unseal,
-> > > > > +	.exit = trusted_caam_exit,
-> > > > > +};
-> > > > caam has random number generation capabilities, so it's worth
-> > > > using that
-> > > > by implementing .get_random.
-> > > 
-> > > If the CAAM HWRNG is already seeding the kernel RNG, why not use
-> > > the kernel's?
-> > > 
-> > > Makes for less code duplication IMO.
-> > 
-> > Using kernel RNG, in general, for trusted keys has been discussed
-> > before.   Please refer to Dave Safford's detailed explanation for not
-> > using it [1].
-> > 
-> > thanks,
-> > 
-> > Mimi
-> > 
-> > [1] 
-> > https://lore.kernel.org/linux-integrity/BCA04D5D9A3B764C9B7405BBA4D4A3C035F2A38B@ALPMBAPA12.e2k.ad.ge.com/
-> 
-> I still don't think relying on one source of randomness to be
-> cryptographically secure is a good idea.  The fear of bugs in the
-> kernel entropy pool is reasonable, but since it's widely used they're
-> unlikely to persist very long.
 
-I'm not sure I agree - remember
-https://www.schneier.com/blog/archives/2008/05/random_number_b.html ?  You'd
-surely expect that to have been found quickly.
-
->   Studies have shown that some TPMs
-> (notably the chinese manufactured ones) have suspicious failures in
-> their RNGs:
-> 
-> https://www.researchgate.net/publication/45934562_Benchmarking_the_True_Random_Number_Generator_of_TPM_Chips
-> 
-> And most cryptograhpers recommend using a TPM for entropy mixing rather
-> than directly:
-> 
-> https://blog.cryptographyengineering.com/category/rngs/
-> 
-> The TPMFail paper also shows that in spite of NIST certification
-> things can go wrong with a TPM:
-> 
-> https://tpm.fail/
-
-In this thread I've seen argument over "which is better" and "which is user api",
-but noone's mentioned fips.  Unfortunately, so long as kernel rng refuses to be
-fips-friendly (cf https://lkml.org/lkml/2020/9/21/157), making CAAM based trusted
-keys depend on kernel rng would make them impossible to use in fips certified
-applications without a forked kernel.
-
-So I definitely am in favor of a config or kernel command line option to drive
-which rng to use.
+On 3/30/21 9:16 AM, Nayna Jain wrote:
+> The kernel build process currently only signs kernel modules when
+> MODULE_SIG is enabled. Also, sign the kernel modules at build time when
+> IMA_APPRAISE_MODSIG is enabled.
+>
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+Acked-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>   certs/Kconfig  | 2 +-
+>   certs/Makefile | 8 ++++++++
+>   init/Kconfig   | 6 +++---
+>   3 files changed, 12 insertions(+), 4 deletions(-)
+>
+> diff --git a/certs/Kconfig b/certs/Kconfig
+> index c94e93d8bccf..48675ad319db 100644
+> --- a/certs/Kconfig
+> +++ b/certs/Kconfig
+> @@ -4,7 +4,7 @@ menu "Certificates for signature checking"
+>   config MODULE_SIG_KEY
+>   	string "File name or PKCS#11 URI of module signing key"
+>   	default "certs/signing_key.pem"
+> -	depends on MODULE_SIG
+> +	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+>   	help
+>            Provide the file name of a private key/certificate in PEM format,
+>            or a PKCS#11 URI according to RFC7512. The file should contain, or
+> diff --git a/certs/Makefile b/certs/Makefile
+> index f4c25b67aad9..e3185c57fbd8 100644
+> --- a/certs/Makefile
+> +++ b/certs/Makefile
+> @@ -32,6 +32,14 @@ endif # CONFIG_SYSTEM_TRUSTED_KEYRING
+>   clean-files := x509_certificate_list .x509.list
+>   
+>   ifeq ($(CONFIG_MODULE_SIG),y)
+> +	SIGN_KEY = y
+> +endif
+> +
+> +ifeq ($(CONFIG_IMA_APPRAISE_MODSIG),y)
+> +	SIGN_KEY = y
+> +endif
+> +
+> +ifdef SIGN_KEY
+>   ###############################################################################
+>   #
+>   # If module signing is requested, say by allyesconfig, but a key has not been
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 5f5c776ef192..85e48a578f90 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -2164,7 +2164,7 @@ config MODULE_SIG_FORCE
+>   config MODULE_SIG_ALL
+>   	bool "Automatically sign all modules"
+>   	default y
+> -	depends on MODULE_SIG
+> +	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+>   	help
+>   	  Sign all modules during make modules_install. Without this option,
+>   	  modules must be signed manually, using the scripts/sign-file tool.
+> @@ -2174,7 +2174,7 @@ comment "Do not forget to sign required modules with scripts/sign-file"
+>   
+>   choice
+>   	prompt "Which hash algorithm should modules be signed with?"
+> -	depends on MODULE_SIG
+> +	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+>   	help
+>   	  This determines which sort of hashing algorithm will be used during
+>   	  signature generation.  This algorithm _must_ be built into the kernel
+> @@ -2206,7 +2206,7 @@ endchoice
+>   
+>   config MODULE_SIG_HASH
+>   	string
+> -	depends on MODULE_SIG
+> +	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+>   	default "sha1" if MODULE_SIG_SHA1
+>   	default "sha224" if MODULE_SIG_SHA224
+>   	default "sha256" if MODULE_SIG_SHA256
