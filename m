@@ -2,59 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 334B03554A2
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Apr 2021 15:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589063554A4
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Apr 2021 15:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243565AbhDFNMS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Apr 2021 09:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S1344323AbhDFNMW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Apr 2021 09:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243549AbhDFNMR (ORCPT
+        with ESMTP id S1344319AbhDFNMV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Apr 2021 09:12:17 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932A2C06174A;
-        Tue,  6 Apr 2021 06:12:09 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id a12so10397174pfc.7;
-        Tue, 06 Apr 2021 06:12:09 -0700 (PDT)
+        Tue, 6 Apr 2021 09:12:21 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33867C06174A;
+        Tue,  6 Apr 2021 06:12:12 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id s21so7913288pjq.1;
+        Tue, 06 Apr 2021 06:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=4855aNw2LatAHXTXuzuJc1nAQQQ5xJZ+1xXY2jTJQsE=;
-        b=XXZGmLcVT68sBY3mzO2g0lCHyn+uHYijiqN0FsTYMbKR7OwptN+Xb2dLC635oWHPO+
-         yCbIy2vCr8RbCFO/wF94xUUJQxqJaFaFc4TuOnB5nUHY4X19Iy6oHoHxJZIBu6JULYlZ
-         0F6yBjGRLKgoerSnlGu3V+x3DOEeHW1+WgtQ9XylrDoIYaPYVE3MbyGJr10RPBdW7IND
-         2sizdCUmFjJAH7zRAhEvt5GTMuHaArxblA0FH9tXsSSUfvm1Onsng7blkTIvj09rHHqF
-         0FtPttOAehjdf9x97p9mZh2BEQ4UhtNobNcBXxjWrl2aYyXMsFOmL0zTA/Q4PpVB0jxO
-         mPjw==
+        bh=Vs7NkNIIWAH+X7S5dhBQ1PMADJghgtBVvUas6htUFM8=;
+        b=gBTeedT926R1O3DnoGzPGearcxDpMEMVUPmMWGvQhIgUDjO8UQ8MkVKo3JqxdywIXR
+         d6zl3J5B+qRt5mLBn3KKAZxBwRCez7yO5U8y1xG8zCNyPe55yaiu0xrfnS1DrZHCq1u3
+         wbKIRkmplxwOsunYhv3zUIXVBFUfQgdSPwG9O7iizlmhYCn+yd6Pt7XhfwNftOwUxhh0
+         Vk6C1KmgWUE1UM34yzQGMY9/hJar3pMxmJ+BoUtSWHwix1rfhY8n0NI2Cygm7UNua5rJ
+         IYNf11s2L+575fIr5reM+tmBK3fK1iZ0cXW0aTzAWfrcdEumllng0wjc21lNFhenU01B
+         eqQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=4855aNw2LatAHXTXuzuJc1nAQQQ5xJZ+1xXY2jTJQsE=;
-        b=q91IwXh7/cNx+QTYrEdZO9ogozQEvH+9Rvk0n0kr1twi5yOCPWfpunYxRHgeetoZhc
-         ZYp9JQV4wtJPTD1KelcfWHnXMRoXwp1oVAW6EIDVqw58n6PS+GuiGPAYVmY37LvYPX+r
-         PdHgYXETqFXwVtcRNhZop0mlXuAW/q14U4zPe92y/PlCnbALru6jMRttp6Mloit8O32b
-         6eNXenygKYl48N4PNTZMou2t065F9GUePhkNMAT6+kxV8glJCDFUYWRSm5HQgDwFh5VS
-         1D6H3QovnaenqQRldf88H4a+SiFs4iEKywHEPWkHnszCAdhQdBk8zL9NBwNMFyuyenOi
-         ibKg==
-X-Gm-Message-State: AOAM533Z6djdhHoEDpp7O7ZbqWlaLcqzEYPoxKkSf9ueSsVAHbXxAEBK
-        bjWtCeFsu0ISk3RvW6s8gzjRe/QtPkygPQ==
-X-Google-Smtp-Source: ABdhPJxXjgT+ZSCUEazm+W2pAtrVbVyGAT4XZO5RsU2AI+6/F3+eOMRHjn2PSM3IkG728+8F4dsD3w==
-X-Received: by 2002:a63:4944:: with SMTP id y4mr27461331pgk.9.1617714728748;
-        Tue, 06 Apr 2021 06:12:08 -0700 (PDT)
+        bh=Vs7NkNIIWAH+X7S5dhBQ1PMADJghgtBVvUas6htUFM8=;
+        b=LVDmejEEFDmgYwjXHq61sYHCoL1ChOJyVTLZ0gG2au7HLD4Xl8J/Zit2gRjVi5SlON
+         ObGSjazJBeigAKlJNfnQyducNmcAMwlkmv870GEdLpUJjHV9exf9Gw11HYZutXjrJUzB
+         e/C1wwmmR76+87E/Ed+e99UVZxXAUKjtOXTOozqmJfeKPJZEf4jGZWnVKcfzzTBeM8S+
+         LfChO9IPBk7SMkA3wnDNVGp0Sjhjoedv/HFl/0f5O5nYSDUXSZLWoLOyTXUjsYOuH2jR
+         qbvvfvNiq00bALRupG9Z8xaKT7BKnXCN8SFZwUdZ9MjAJN+nOQIb50QPxv1rm359rT8G
+         juNg==
+X-Gm-Message-State: AOAM533vC5i7IeGNfkm4HR/mLwD48CLavotkmdy6gA1QYou2L28mzNVv
+        qeCI1yHVquSKBx4p8GLFh5Il2PvKcs0XYw==
+X-Google-Smtp-Source: ABdhPJzOzzw9gsQrG0KeEnriZrmtL2DgZk168ESLJDvyZxsyFK5stMROcW247DX/9agc8GKbQKcEvg==
+X-Received: by 2002:a17:90a:1502:: with SMTP id l2mr4246626pja.149.1617714731367;
+        Tue, 06 Apr 2021 06:12:11 -0700 (PDT)
 Received: from localhost.localdomain ([203.205.141.39])
-        by smtp.gmail.com with ESMTPSA id i73sm13801351pgc.9.2021.04.06.06.12.06
+        by smtp.gmail.com with ESMTPSA id i73sm13801351pgc.9.2021.04.06.06.12.09
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Apr 2021 06:12:08 -0700 (PDT)
+        Tue, 06 Apr 2021 06:12:10 -0700 (PDT)
 From:   Hongbo Li <herbert.tencent@gmail.com>
 To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
         herbert@gondor.apana.org.au, dhowells@redhat.com,
         zohar@linux.ibm.com, jarkko@kernel.org, herberthbli@tencent.com
 Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: [PATCH 1/5] x509: add support for rsa-pss
-Date:   Tue,  6 Apr 2021 21:11:22 +0800
-Message-Id: <1617714686-25754-2-git-send-email-herbert.tencent@gmail.com>
+Subject: [PATCH 2/5] crypto: support rsa-pss encoding
+Date:   Tue,  6 Apr 2021 21:11:23 +0800
+Message-Id: <1617714686-25754-3-git-send-email-herbert.tencent@gmail.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1617714686-25754-1-git-send-email-herbert.tencent@gmail.com>
 References: <1617714686-25754-1-git-send-email-herbert.tencent@gmail.com>
@@ -64,166 +64,177 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Hongbo Li <herberthbli@tencent.com>
 
-This patch make x509 support rsa-pss, because the sha algo is
-in signature, so we need to parse the sha parameter, and skip
-other params.
+This patch add the support of rsa-pss encoding which is described
+rfc8017.
+Similar to rsa-pkcs1, we create a pss template.
 
 Signed-off-by: Hongbo Li <herberthbli@tencent.com>
 ---
- crypto/asymmetric_keys/Makefile           |  7 ++-
- crypto/asymmetric_keys/public_key.c       |  5 +++
- crypto/asymmetric_keys/x509_cert_parser.c | 71 +++++++++++++++++++++++++++++--
- include/linux/oid_registry.h              |  2 +
- 4 files changed, 80 insertions(+), 5 deletions(-)
+ crypto/Makefile               |   7 ++-
+ crypto/rsa.c                  |  14 ++---
+ crypto/rsa_helper.c           | 127 ++++++++++++++++++++++++++++++++++++++++++
+ include/crypto/internal/rsa.h |  25 ++++++++-
+ 4 files changed, 164 insertions(+), 9 deletions(-)
 
-diff --git a/crypto/asymmetric_keys/Makefile b/crypto/asymmetric_keys/Makefile
-index 28b91ad..9092de7 100644
---- a/crypto/asymmetric_keys/Makefile
-+++ b/crypto/asymmetric_keys/Makefile
-@@ -20,15 +20,20 @@ obj-$(CONFIG_X509_CERTIFICATE_PARSER) += x509_key_parser.o
- x509_key_parser-y := \
- 	x509.asn1.o \
- 	x509_akid.asn1.o \
-+	x509_rsapss_params.asn1.o \
- 	x509_cert_parser.o \
- 	x509_public_key.o
+diff --git a/crypto/Makefile b/crypto/Makefile
+index cf23aff..025a425 100644
+--- a/crypto/Makefile
++++ b/crypto/Makefile
+@@ -33,13 +33,18 @@ obj-$(CONFIG_CRYPTO_DH) += dh_generic.o
  
- $(obj)/x509_cert_parser.o: \
- 	$(obj)/x509.asn1.h \
--	$(obj)/x509_akid.asn1.h
-+	$(obj)/x509_akid.asn1.h \
-+	$(obj)/x509_rsapss_params.asn1.h
-+
+ $(obj)/rsapubkey.asn1.o: $(obj)/rsapubkey.asn1.c $(obj)/rsapubkey.asn1.h
+ $(obj)/rsaprivkey.asn1.o: $(obj)/rsaprivkey.asn1.c $(obj)/rsaprivkey.asn1.h
+-$(obj)/rsa_helper.o: $(obj)/rsapubkey.asn1.h $(obj)/rsaprivkey.asn1.h
++$(obj)/rsapss_params.asn1.o: $(obj)/rsapss_params.asn1.c \
++			     $(obj)/rsapss_params.asn1.h
++$(obj)/rsa_helper.o: $(obj)/rsapubkey.asn1.h $(obj)/rsaprivkey.asn1.h \
++		     $(obj)/rsapss_params.asn1.h
  
- $(obj)/x509.asn1.o: $(obj)/x509.asn1.c $(obj)/x509.asn1.h
- $(obj)/x509_akid.asn1.o: $(obj)/x509_akid.asn1.c $(obj)/x509_akid.asn1.h
-+$(obj)/x509_rsapss_params.asn1.o: \
-+	$(obj)/x509_rsapss_params.asn1.c $(obj)/x509_rsapss_params.asn1.h
+ rsa_generic-y := rsapubkey.asn1.o
+ rsa_generic-y += rsaprivkey.asn1.o
++rsa_generic-y += rsapss_params.asn1.o
+ rsa_generic-y += rsa.o
+ rsa_generic-y += rsa_helper.o
+ rsa_generic-y += rsa-pkcs1pad.o
++rsa_generic-y += rsa-psspad.o
+ obj-$(CONFIG_CRYPTO_RSA) += rsa_generic.o
  
- #
- # PKCS#8 private key handling
-diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-index 788a4ba..cf049fd 100644
---- a/crypto/asymmetric_keys/public_key.c
-+++ b/crypto/asymmetric_keys/public_key.c
-@@ -83,6 +83,11 @@ int software_key_determine_akcipher(const char *encoding,
- 				     "pkcs1pad(%s,%s)",
- 				     pkey->pkey_algo, hash_algo);
- 		return n >= CRYPTO_MAX_ALG_NAME ? -EINVAL : 0;
-+	} else if (strcmp(encoding, "pss") == 0) {
-+		n = snprintf(alg_name, CRYPTO_MAX_ALG_NAME,
-+			     "psspad(%s)",
-+			     pkey->pkey_algo);
-+		return n >= CRYPTO_MAX_ALG_NAME ? -EINVAL : 0;
+ $(obj)/sm2signature.asn1.o: $(obj)/sm2signature.asn1.c $(obj)/sm2signature.asn1.h
+diff --git a/crypto/rsa.c b/crypto/rsa.c
+index 4cdbec9..adc9b2d2 100644
+--- a/crypto/rsa.c
++++ b/crypto/rsa.c
+@@ -6,18 +6,11 @@
+  */
+ 
+ #include <linux/module.h>
+-#include <linux/mpi.h>
+ #include <crypto/internal/rsa.h>
+ #include <crypto/internal/akcipher.h>
+ #include <crypto/akcipher.h>
+ #include <crypto/algapi.h>
+ 
+-struct rsa_mpi_key {
+-	MPI n;
+-	MPI e;
+-	MPI d;
+-};
+-
+ /*
+  * RSAEP function [RFC3447 sec 5.1.1]
+  * c = m^e mod n;
+@@ -269,12 +262,19 @@ static int rsa_init(void)
+ 		return err;
  	}
  
- 	if (strcmp(encoding, "raw") == 0) {
-diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-index 52c9b45..ec3428d 100644
---- a/crypto/asymmetric_keys/x509_cert_parser.c
-+++ b/crypto/asymmetric_keys/x509_cert_parser.c
-@@ -15,6 +15,7 @@
- #include "x509_parser.h"
- #include "x509.asn1.h"
- #include "x509_akid.asn1.h"
-+#include "x509_rsapss_params.asn1.h"
- 
- struct x509_parse_context {
- 	struct x509_certificate	*cert;		/* Certificate being constructed */
-@@ -115,6 +116,17 @@ struct x509_certificate *x509_cert_parse(const void *data, size_t datalen)
- 	cert->pub->paramlen = ctx->params_size;
- 	cert->pub->algo = ctx->key_algo;
- 
-+	if (!strcmp(cert->sig->pkey_algo, "rsa") &&
-+	    !strcmp(cert->sig->encoding, "pss") &&
-+	    cert->pub->paramlen) {
-+		ret = asn1_ber_decoder(&x509_rsapss_params_decoder, ctx,
-+				       cert->pub->params, cert->pub->paramlen);
-+		if (ret < 0) {
-+			pr_warn("Couldn't decode rsapss params\n");
-+			goto error_decode;
-+		}
++	err = crypto_register_template(&rsa_psspad_tmpl);
++	if (err) {
++		crypto_unregister_akcipher(&rsa);
++		return err;
 +	}
 +
- 	/* Grab the signature bits */
- 	ret = x509_get_sig_params(cert);
- 	if (ret < 0)
-@@ -211,6 +223,10 @@ int x509_note_pkey_algo(void *context, size_t hdrlen,
- 		ctx->cert->sig->hash_algo = "sha1";
- 		goto rsa_pkcs1;
- 
-+	case OID_rsa_pss:
-+		ctx->cert->sig->hash_algo = "sha1";
-+		goto rsa_pss;
-+
- 	case OID_sha256WithRSAEncryption:
- 		ctx->cert->sig->hash_algo = "sha256";
- 		goto rsa_pkcs1;
-@@ -245,6 +261,11 @@ int x509_note_pkey_algo(void *context, size_t hdrlen,
- 	ctx->cert->sig->encoding = "pkcs1";
- 	ctx->algo_oid = ctx->last_oid;
- 	return 0;
-+rsa_pss:
-+	ctx->cert->sig->pkey_algo = "rsa";
-+	ctx->cert->sig->encoding = "pss";
-+	ctx->algo_oid = ctx->last_oid;
-+	return 0;
- ecrdsa:
- 	ctx->cert->sig->pkey_algo = "ecrdsa";
- 	ctx->cert->sig->encoding = "raw";
-@@ -440,17 +461,59 @@ int x509_note_params(void *context, size_t hdrlen,
- 	struct x509_parse_context *ctx = context;
- 
- 	/*
--	 * AlgorithmIdentifier is used three times in the x509, we should skip
--	 * first and ignore third, using second one which is after subject and
--	 * before subjectPublicKey.
-+	 * AlgorithmIdentifier is used three times in the x509,
-+	 * rsapss:
-+	 * we skip first(same as third) and second(may omit params).
-+	 * others:
-+	 * we should skip first and ignore third, using second one
-+	 * which is after subject and before subjectPublicKey.
- 	 */
--	if (!ctx->cert->raw_subject || ctx->key)
-+	if (!ctx->cert->raw_subject) {
-+		return 0;
-+	} else if (strcmp(ctx->cert->sig->pkey_algo, "rsa") ||
-+		   strcmp(ctx->cert->sig->encoding, "pss")) {
-+		if (ctx->key)
-+			return 0;
-+	} else if (!ctx->key) {
- 		return 0;
-+	}
-+
- 	ctx->params = value - hdrlen;
- 	ctx->params_size = vlen + hdrlen;
  	return 0;
  }
  
-+int x509_note_rsapss_hash(void *context, size_t hdrlen,
-+			  unsigned char tag,
-+			  const void *value, size_t vlen)
+ static void rsa_exit(void)
+ {
+ 	crypto_unregister_template(&rsa_pkcs1pad_tmpl);
++	crypto_unregister_template(&rsa_psspad_tmpl);
+ 	crypto_unregister_akcipher(&rsa);
+ }
+ 
+diff --git a/crypto/rsa_helper.c b/crypto/rsa_helper.c
+index 94266f2..912d975 100644
+--- a/crypto/rsa_helper.c
++++ b/crypto/rsa_helper.c
+@@ -12,6 +12,7 @@
+ #include <crypto/internal/rsa.h>
+ #include "rsapubkey.asn1.h"
+ #include "rsaprivkey.asn1.h"
++#include "rsapss_params.asn1.h"
+ 
+ int rsa_get_n(void *context, size_t hdrlen, unsigned char tag,
+ 	      const void *value, size_t vlen)
+@@ -148,6 +149,115 @@ int rsa_get_qinv(void *context, size_t hdrlen, unsigned char tag,
+ 	return 0;
+ }
+ 
++int rsa_get_pss_hash(void *context, size_t hdrlen, unsigned char tag,
++		     const void *value, size_t vlen)
 +{
-+	struct x509_parse_context *ctx = context;
++	struct rsa_pss_ctx *ctx = context;
 +	enum OID oid;
++
++	if (!value || !vlen)
++		return -EINVAL;
 +
 +	oid = look_up_OID(value, vlen);
 +	switch (oid) {
 +	case OID_sha1:
-+		ctx->cert->sig->hash_algo = "sha1";
++		ctx->hash_algo = "sha1";
 +		break;
 +	case OID_sha224:
-+		ctx->cert->sig->hash_algo = "sha224";
++		ctx->hash_algo = "sha224";
 +		break;
 +	case OID_sha256:
-+		ctx->cert->sig->hash_algo = "sha256";
++		ctx->hash_algo = "sha256";
 +		break;
 +	case OID_sha384:
-+		ctx->cert->sig->hash_algo = "sha384";
++		ctx->hash_algo = "sha384";
 +		break;
 +	case OID_sha512:
-+		ctx->cert->sig->hash_algo = "sha512";
++		ctx->hash_algo = "sha512";
++		break;
++	default:
++		return -ENOPKG;
++
++	}
++
++	return 0;
++}
++
++int rsa_get_pss_mgf(void *context, size_t hdrlen, unsigned char tag,
++		    const void *value, size_t vlen)
++{
++	struct rsa_pss_ctx *ctx = context;
++	enum OID oid;
++
++	if (!value || !vlen)
++		return -EINVAL;
++
++	oid = look_up_OID(value, vlen);
++	if (oid != OID_rsa_mgf1)
++		return -ENOPKG;
++	ctx->mgf_algo = "mgf1";
++
++	return 0;
++}
++
++int rsa_get_pss_mgf_hash(void *context, size_t hdrlen, unsigned char tag,
++			 const void *value, size_t vlen)
++{
++	struct rsa_pss_ctx *ctx = context;
++	enum OID oid;
++
++	if (!value || !vlen)
++		return -EINVAL;
++	/* todo, merge with get_pss_hash */
++	oid = look_up_OID(value, vlen);
++	switch (oid) {
++	case OID_sha1:
++		ctx->mgf_hash_algo = "sha1";
++		break;
++	case OID_sha224:
++		ctx->mgf_hash_algo = "sha224";
++		break;
++	case OID_sha256:
++		ctx->mgf_hash_algo = "sha256";
++		break;
++	case OID_sha384:
++		ctx->mgf_hash_algo = "sha384";
++		break;
++	case OID_sha512:
++		ctx->mgf_hash_algo = "sha512";
 +		break;
 +	default:
 +		return -ENOPKG;
@@ -232,22 +243,102 @@ index 52c9b45..ec3428d 100644
 +	return 0;
 +}
 +
- /*
-  * Extract the data for the public key algorithm
-  */
-diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-index 4462ed2..bb22b84 100644
---- a/include/linux/oid_registry.h
-+++ b/include/linux/oid_registry.h
-@@ -28,6 +28,8 @@ enum OID {
- 	OID_md3WithRSAEncryption,	/* 1.2.840.113549.1.1.3 */
- 	OID_md4WithRSAEncryption,	/* 1.2.840.113549.1.1.4 */
- 	OID_sha1WithRSAEncryption,	/* 1.2.840.113549.1.1.5 */
-+	OID_rsa_mgf1,			/* 1.2.840.113549.1.1.8 */
-+	OID_rsa_pss,			/* 1.2.840.113549.1.1.10 */
- 	OID_sha256WithRSAEncryption,	/* 1.2.840.113549.1.1.11 */
- 	OID_sha384WithRSAEncryption,	/* 1.2.840.113549.1.1.12 */
- 	OID_sha512WithRSAEncryption,	/* 1.2.840.113549.1.1.13 */
++int rsa_get_pss_saltlen(void *context, size_t hdrlen, unsigned char tag,
++			const void *value, size_t vlen)
++{
++	struct rsa_pss_ctx *ctx = context;
++
++	if (!value || vlen < 1 || vlen > 2)
++		return -EINVAL;
++
++	if (vlen == 1)
++		ctx->salt_len = *(u8 *)value;
++	else if (vlen == 2)
++		ctx->salt_len = ntohs(*(u16 *)value);
++
++	return 0;
++}
++
++int rsa_get_pss_trailerfield(void *context, size_t hdrlen, unsigned char tag,
++			     const void *value, size_t vlen)
++{
++	if (!value || !vlen || *(u8 *)value != 1)
++		return -EINVAL;
++
++	return 0;
++}
++
+ /**
+  * rsa_parse_pub_key() - decodes the BER encoded buffer and stores in the
+  *                       provided struct rsa_key, pointers to the raw key as is,
+@@ -184,3 +294,20 @@ int rsa_parse_priv_key(struct rsa_key *rsa_key, const void *key,
+ 	return asn1_ber_decoder(&rsaprivkey_decoder, rsa_key, key, key_len);
+ }
+ EXPORT_SYMBOL_GPL(rsa_parse_priv_key);
++
++/**
++ * rsa_parse_pss_params() - decodes the BER encoded pss padding params
++ *
++ * @ctx:	struct rsa_pss_ctx, pss padding context
++ * @params:	params in BER format
++ * @params_len:	length of params
++ *
++ * Return:	0 on success or error code in case of error
++ */
++int rsa_parse_pss_params(struct rsa_pss_ctx *ctx, const void *params,
++			 unsigned int params_len)
++{
++	return asn1_ber_decoder(&rsapss_params_decoder, ctx, params,
++				params_len);
++}
++EXPORT_SYMBOL_GPL(rsa_parse_pss_params);
+diff --git a/include/crypto/internal/rsa.h b/include/crypto/internal/rsa.h
+index e870133..cfb0801 100644
+--- a/include/crypto/internal/rsa.h
++++ b/include/crypto/internal/rsa.h
+@@ -8,6 +8,12 @@
+ #ifndef _RSA_HELPER_
+ #define _RSA_HELPER_
+ #include <linux/types.h>
++#include <linux/mpi.h>
++#include <linux/oid_registry.h>
++#include <crypto/sha2.h>
++
++#define RSA_MAX_DIGEST_SIZE		SHA512_DIGEST_SIZE
++#define RSA_PSS_DEFAULT_SALT_LEN	20
+ 
+ /**
+  * rsa_key - RSA key structure
+@@ -47,11 +53,28 @@ struct rsa_key {
+ 	size_t qinv_sz;
+ };
+ 
++struct rsa_mpi_key {
++	MPI n;
++	MPI e;
++	MPI d;
++};
++
++struct rsa_pss_ctx {
++	struct crypto_akcipher *child;
++	unsigned int key_size;
++	const char *hash_algo;
++	const char *mgf_algo;
++	const char *mgf_hash_algo;
++	u32 salt_len;
++};
++
+ int rsa_parse_pub_key(struct rsa_key *rsa_key, const void *key,
+ 		      unsigned int key_len);
+ 
+ int rsa_parse_priv_key(struct rsa_key *rsa_key, const void *key,
+ 		       unsigned int key_len);
+-
++int rsa_parse_pss_params(struct rsa_pss_ctx *ctx, const void *params,
++			 unsigned int params_len);
+ extern struct crypto_template rsa_pkcs1pad_tmpl;
++extern struct crypto_template rsa_psspad_tmpl;
+ #endif
 -- 
 1.8.3.1
 
