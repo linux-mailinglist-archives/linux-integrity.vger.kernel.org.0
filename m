@@ -2,179 +2,137 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 280B5356774
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 Apr 2021 11:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BD0356A5C
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Apr 2021 12:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349806AbhDGJA2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 7 Apr 2021 05:00:28 -0400
-Received: from mail4.tencent.com ([183.57.53.109]:33402 "EHLO
-        mail4.tencent.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233848AbhDGJA0 (ORCPT
+        id S1351593AbhDGKxS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 7 Apr 2021 06:53:18 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2784 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351592AbhDGKxP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 7 Apr 2021 05:00:26 -0400
-X-Greylist: delayed 331 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Apr 2021 05:00:24 EDT
-Received: from EX-SZ018.tencent.com (unknown [10.28.6.39])
-        by mail4.tencent.com (Postfix) with ESMTP id AAED0C603A;
-        Wed,  7 Apr 2021 16:54:39 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tencent.com;
-        s=s202002; t=1617785679;
-        bh=wLcs5HJdPsEd0/IyfrDDCKbFAHmSbXPOqJcaEwkWK3E=;
-        h=From:To:CC:Subject:Date:References;
-        b=AugilU0ymKTimol2k6kO2rdx5e2VYD3PeWsrHSBjZ005D0JaJZjxaqBeFMq8/CSXc
-         Xu8+EyJd26vbVFxm/FAL/X8m5W5VD63abI4C7GT9ObhKwM1OQaRXyZELEX1z1cPAII
-         LNS0As8ZCRwOwhmmEukv0fzXTwmCJAg006ge1Yos=
-Received: from EX-SZ013.tencent.com (10.28.6.37) by EX-SZ018.tencent.com
- (10.28.6.39) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Wed, 7 Apr 2021
- 16:54:39 +0800
-Received: from EX-SZ003.tencent.com (10.28.6.15) by EX-SZ013.tencent.com
- (10.28.6.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Wed, 7 Apr 2021
- 16:54:39 +0800
-Received: from EX-SZ003.tencent.com ([fe80::d568:905c:3bcd:8f1f]) by
- EX-SZ003.tencent.com ([fe80::d568:905c:3bcd:8f1f%12]) with mapi id
- 15.01.2106.013; Wed, 7 Apr 2021 16:54:39 +0800
-From:   =?iso-2022-jp?B?aGVyYmVydGhibGkoGyRCTXs5MEduGyhCKQ==?= 
-        <herberthbli@tencent.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Hongbo Li <herbert.tencent@gmail.com>
-CC:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH 0/5] crypto: add rsa pss support for x509(Internet mail)
-Thread-Topic: [PATCH 0/5] crypto: add rsa pss support for x509(Internet mail)
-Thread-Index: AQHXKuZ2jiQgEg4HGkWw/fvJB5257A==
-Date:   Wed, 7 Apr 2021 08:54:39 +0000
-Message-ID: <0115cbd5a3154e8d868e98d564eba997@tencent.com>
-References: <1617714686-25754-1-git-send-email-herbert.tencent@gmail.com>
- <YG1vakmzanwPGsvU@kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.14.87.198]
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 7 Apr 2021 06:53:15 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FFh1p1dL2z686qw;
+        Wed,  7 Apr 2021 18:47:58 +0800 (CST)
+Received: from fraphisprd00473.huawei.com (7.182.8.141) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Wed, 7 Apr 2021 12:53:03 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <mjg59@google.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v5 00/12] evm: Improve usability of portable signatures
+Date:   Wed, 7 Apr 2021 12:52:40 +0200
+Message-ID: <20210407105252.30721-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [7.182.8.141]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-=1B$B:_=1B(B 2021/4/7 16:38, Jarkko Sakkinen =1B$B<LF;=1B(B:=0A=
-> On Tue, Apr 06, 2021 at 09:11:21PM +0800, Hongbo Li wrote:=0A=
->> From: Hongbo Li <herberthbli@tencent.com>=0A=
->>=0A=
->> This series of patches adds support for x509 cert signed by RSA=0A=
->> with PSS encoding method. RSA PSS is described in rfc8017.=0A=
-> Please also briefly describe it here AND also provide link to the=0A=
-> RFC. In the way this currently is, it is too time consuming to=0A=
-> review the patch set.=0A=
->=0A=
-> /Jarkko=0A=
-=0A=
-Thanks, will add that in the following patches.=0A=
-=0A=
-=0A=
->> This series of patches adds support for x509 cert signed by RSA=0A=
->> with PSS encoding method. RSA PSS is described in rfc8017.=0A=
->>=0A=
->> Patch1 make x509 support rsa pss algo and parse hash parameter.=0A=
->>=0A=
->> Patch2 add rsa pss template.=0A=
->>=0A=
->> Patch3 add test vector for rsa pss.=0A=
->>=0A=
->> Patch4 is the ecdsa ima patch borrowed from Stefan Berge's ecdsa=0A=
->>        patch series, rsa-pss's ima patch is made on top of this patch.=
-=0A=
->>=0A=
->> Patch5 is the rsa-pss's ima patch.=0A=
->>=0A=
->> Test by the following script, it tests different saltlen, hash, mgfhash.=
-=0A=
->>=0A=
->> keyctl newring test @u=0A=
->>=0A=
->> while :; do=0A=
->>     for modbits in 1024 2048 4096; do=0A=
->> 	if [ $modbits -eq 1024 ]; then=0A=
->> 	    saltlen=3D(-1 -2 0 20 32 48 64 94)=0A=
->> 	elif [ $modbits -eq 2048 ]; then=0A=
->> 	    saltlen=3D(-1 -2 0 20 32 48 64 222)=0A=
->> 	else=0A=
->> 	    saltlen=3D(-1 -2 0 20 32 48 64 478)=0A=
->> 	fi=0A=
->>=0A=
->> 	for slen in ${saltlen[@]}; do=0A=
->> 	    for hash in sha1 sha224 sha256 sha384 sha512; do=0A=
->> 		for mgfhash in sha1 sha224 sha256 sha384 sha512; do=0A=
->> 		    certfile=3D"cert.der"=0A=
->> 		    echo slen $slen=0A=
->> 		    openssl req \=0A=
->> 			    -x509 \=0A=
->> 			    -${hash} \=0A=
->> 			    -newkey rsa:$modbits \=0A=
->> 			    -keyout key.pem \=0A=
->> 			    -days 365 \=0A=
->> 			    -subj '/CN=3Dtest' \=0A=
->> 			    -nodes \=0A=
->> 			    -sigopt rsa_padding_mode:pss \=0A=
->> 			    -sigopt rsa_mgf1_md:$mgfhash \=0A=
->> 			    -sigopt rsa_pss_saltlen:${slen} \=0A=
->> 			    -outform der \=0A=
->> 			    -out ${certfile} 2>/dev/null=0A=
->>=0A=
->> 		    exp=3D0=0A=
->> 		    id=3D$(keyctl padd asymmetric testkey %keyring:test < "${certfile}=
-")=0A=
->> 		    rc=3D$?=0A=
->> 		    if [ $rc -ne $exp ]; then=0A=
->> 			case "$exp" in=0A=
->> 			    0) echo "Error: Could not load rsa-pss certificate!";;=0A=
->> 			esac=0A=
->> 			echo "modbits $modbits sha: $hash mgfhash $mgfhash saltlen: $slen"=0A=
->> 			exit 1=0A=
->> 		    else=0A=
->> 			case "$rc" in=0A=
->> 			    0) echo "load cert: keyid: $id modbits $modbits hash: $hash mgfha=
-sh $mgfhash saltlen $slen"=0A=
->> 			esac=0A=
->> 		    fi=0A=
->> 		done=0A=
->> 	    done=0A=
->> 	done=0A=
->>     done=0A=
->> done=0A=
->>=0A=
->> Hongbo Li (5):=0A=
->>   x509: add support for rsa-pss=0A=
->>   crypto: support rsa-pss encoding=0A=
->>   crypto: add rsa pss test vector=0A=
->>   crypto: ecdsa ima support=0A=
->>   ima: add support for rsa pss verification=0A=
->>=0A=
->>  crypto/Makefile                           |   7 +-=0A=
->>  crypto/asymmetric_keys/Makefile           |   7 +-=0A=
->>  crypto/asymmetric_keys/public_key.c       |   5 ++=0A=
->>  crypto/asymmetric_keys/x509_cert_parser.c |  71 ++++++++++++++++-=0A=
->>  crypto/rsa.c                              |  14 ++--=0A=
->>  crypto/rsa_helper.c                       | 127 +++++++++++++++++++++++=
-+++++++=0A=
->>  crypto/testmgr.c                          |   7 ++=0A=
->>  crypto/testmgr.h                          |  87 ++++++++++++++++++++=0A=
->>  include/crypto/internal/rsa.h             |  25 +++++-=0A=
->>  include/keys/asymmetric-type.h            |   6 ++=0A=
->>  include/linux/oid_registry.h              |   2 +=0A=
->>  security/integrity/digsig_asymmetric.c    |  34 ++++----=0A=
->>  12 files changed, 363 insertions(+), 29 deletions(-)=0A=
->>=0A=
->> -- =0A=
->> 1.8.3.1=0A=
->>=0A=
->>=0A=
->=0A=
-=0A=
+EVM portable signatures are particularly suitable for the protection of
+metadata of immutable files where metadata is signed by a software vendor.
+They can be used for example in conjunction with an IMA policy that
+appraises only executed and memory mapped files.
+
+However, some usability issues are still unsolved, especially when EVM is
+used without loading an HMAC key. This patch set attempts to fix the open
+issues.
+
+Patch 1 allows EVM to be used without loading an HMAC key. Patch 2 avoids
+appraisal verification of public keys (they are already verified by the key
+subsystem).
+
+Patches 3-5 allow metadata verification to be turned off when no HMAC key
+is loaded and to use this mode in a safe way (by ensuring that IMA
+revalidates metadata when there is a change).
+
+Patches 6-9 make portable signatures more usable if metadata verification
+is not turned off, by ignoring the INTEGRITY_NOLABEL and INTEGRITY_NOXATTS
+errors when possible, by accepting any metadata modification until
+signature verification succeeds (useful when xattrs/attrs are copied
+sequentially from a source) and by allowing operations that don't change
+metadata.
+
+Patch 10 makes it possible to use portable signatures when the IMA policy
+requires file signatures and patch 11 shows portable signatures in the
+measurement list when the ima-sig template is selected.
+
+Lastly, patch 12 avoids undesired removal of security.ima when a file is
+not selected by the IMA policy.
+
+Changelog
+
+v4:
+- add patch to pass mnt_userns to EVM inode set/remove xattr hooks
+  (suggested by Christian Brauner)
+- pass mnt_userns to posix_acl_update_mode()
+- use IS_ERR_OR_NULL() in evm_xattr_acl_change() (suggested by Mimi)
+
+v3:
+- introduce evm_ignore_error_safe() to correctly ignore INTEGRITY_NOLABEL
+  and INTEGRITY_NOXATTRS errors
+- fix an error in evm_xattr_acl_change()
+- replace #ifndef with !IS_ENABLED() in integrity_load_keys()
+- reintroduce ima_inode_removexattr()
+- adapt patches to apply on top of the idmapped mounts patch set
+
+v2:
+- replace EVM_RESET_STATUS flag with evm_status_revalidate()
+- introduce IMA post hooks ima_inode_post_setxattr() and
+  ima_inode_post_removexattr()
+- remove ima_inode_removexattr()
+- ignore INTEGRITY_NOLABEL error if the HMAC key is not loaded
+
+v1:
+- introduce EVM_RESET_STATUS integrity flag instead of clearing IMA flag
+- introduce new template field evmsig
+- add description of evm_xattr_acl_change() and evm_xattr_change()
+
+Roberto Sassu (12):
+  evm: Execute evm_inode_init_security() only when an HMAC key is loaded
+  evm: Load EVM key in ima_load_x509() to avoid appraisal
+  evm: Refuse EVM_ALLOW_METADATA_WRITES only if an HMAC key is loaded
+  ima: Move ima_reset_appraise_flags() call to post hooks
+  evm: Introduce evm_status_revalidate()
+  evm: Ignore INTEGRITY_NOLABEL/INTEGRITY_NOXATTRS if conditions are
+    safe
+  evm: Allow xattr/attr operations for portable signatures
+  evm: Pass user namespace to set/remove xattr hooks
+  evm: Allow setxattr() and setattr() for unmodified metadata
+  ima: Allow imasig requirement to be satisfied by EVM portable
+    signatures
+  ima: Introduce template field evmsig and write to field sig as
+    fallback
+  ima: Don't remove security.ima if file must not be appraised
+
+ Documentation/ABI/testing/evm             |   5 +-
+ Documentation/security/IMA-templates.rst  |   4 +-
+ fs/xattr.c                                |   2 +
+ include/linux/evm.h                       |  18 +-
+ include/linux/ima.h                       |  18 ++
+ include/linux/integrity.h                 |   1 +
+ security/integrity/evm/evm_main.c         | 216 ++++++++++++++++++++--
+ security/integrity/evm/evm_secfs.c        |   4 +-
+ security/integrity/iint.c                 |   4 +-
+ security/integrity/ima/ima_appraise.c     |  55 ++++--
+ security/integrity/ima/ima_init.c         |   4 +
+ security/integrity/ima/ima_template.c     |   2 +
+ security/integrity/ima/ima_template_lib.c |  33 +++-
+ security/integrity/ima/ima_template_lib.h |   2 +
+ security/security.c                       |   5 +-
+ 15 files changed, 329 insertions(+), 44 deletions(-)
+
+-- 
+2.26.2
+
