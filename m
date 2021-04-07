@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0537A356D95
+	by mail.lfdr.de (Postfix) with ESMTP id 97364356D97
 	for <lists+linux-integrity@lfdr.de>; Wed,  7 Apr 2021 15:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245333AbhDGNmk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 7 Apr 2021 09:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
+        id S1347520AbhDGNmq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 7 Apr 2021 09:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347453AbhDGNmh (ORCPT
+        with ESMTP id S1347489AbhDGNmk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 7 Apr 2021 09:42:37 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B57C061756;
-        Wed,  7 Apr 2021 06:42:28 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id a12so12936547pfc.7;
-        Wed, 07 Apr 2021 06:42:28 -0700 (PDT)
+        Wed, 7 Apr 2021 09:42:40 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBEDC061760;
+        Wed,  7 Apr 2021 06:42:30 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id 11so11224730pfn.9;
+        Wed, 07 Apr 2021 06:42:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=EsKCb+rhAYt6Up6vVPXMuPyNkrancdbPg36I5kk1aPQ=;
-        b=FDgdXZYDIb3W0JEJSPZJOEw5Xo7PESKgUqpB8VJyScMlZceQfXFmiekWuJfyU/Kq0Q
-         wXBTg7Z4D3qv+Ze0h5AFQ7Tc4P3/o/F2o96TBYxeSuGIJzXBXHGEsODezEOY4zgOOAPR
-         B9XZsInziJpoGsUI5Fw3Rayf8Wl/ujfbO/MkDaZRAsXcxB0s57FG14x1vOViFkUPJvHA
-         6VmaX/sUhM+y+k3SKi9yquGFcj2g9vJgqR4GMSAJkoxwn4AlN/vEZnIxgTBgC2ps+qrP
-         OiJ1tawiXO/PYp+I3b2s+GXHh/gsgH81W6qi+iIDtv0s+w3idC3ybClik+5tQqacwHJr
-         q1qQ==
+        bh=ztE8qT8e6O4CDJPAUaT71ExQjqGpntsdd1ACIw09PwM=;
+        b=B9akvE7V7RvDxD8uOtDr+pQVUOy1KilhAFnbXfwQRIVeP6CCrA1dNp2sovAWG2ajpk
+         wwKLlrfc99PND5vaDUCU5k3LmJ6dBzhvRX0CyN359H5lwFrQpyZ1G5mxmgQtSUaFuGc7
+         oF7+k/hp12G2CdK732xWVi054AxIK6RzDSzt01RkO5kpj4YATCWCr9lkzlfobJu98FQ6
+         Suro6nqpoYnm24RHth4YTTfCCsjWVudfck//UoDpQfSgLekjf0Idi3AowuupdBBljbTr
+         9B5DoNMGYnT02T0KdERO7wvyc2WDdlx9dRU4xgJ0zdlFC7jXAWuMBBcn6/MVxCPNOo6m
+         3Pwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=EsKCb+rhAYt6Up6vVPXMuPyNkrancdbPg36I5kk1aPQ=;
-        b=SYPDOGQzqME0VbNiMuvNPjtoMz/0u6v+mryUvIZXpx0UJRbr0FM7fGg7k0eOFcLBIG
-         31LJ9MB0Rv9ixK2FaWXNF/5cdY6HtohGtk3Zy+DUF3IHlx7Vsd7Gdxe1kN+OHOoYaLUb
-         dIS2pSqWUSx5HpVUg32JOrrhepFPIo6gukPjso4I51iO692BCLLcbl82YfVPLLBpWSbK
-         7Nv8Pdz6frEJ798FzTLsns/KhyFI+IPAwo/MWZPOHHpYzrO5V8AIOk+52PidgK5Yydp3
-         2ceZEWnUwAktuJj/dDSPxRfsClL+wNU/l/gCSp5do4qVv3AvsbfVww59wTUDGGH4VtkD
-         hvow==
-X-Gm-Message-State: AOAM532IKh3pUOCfAUHU5MdZ0Vlf0Y6igpqebwGFipxRI1/Cx8UrPvmL
-        vQnXmh5AsBFbuHQQEXq+XlpSUdgHjFRJnQ==
-X-Google-Smtp-Source: ABdhPJzYRO+HsX86nrSbaCStYrcjvGAyt88EkG7o1lMxY7SZNz8NXwZ2FowstBTXf+HkKdalOl9Ynw==
-X-Received: by 2002:a63:f40b:: with SMTP id g11mr3489288pgi.133.1617802947467;
-        Wed, 07 Apr 2021 06:42:27 -0700 (PDT)
+        bh=ztE8qT8e6O4CDJPAUaT71ExQjqGpntsdd1ACIw09PwM=;
+        b=LUGpkvnS+EfHD3NYrQyw9OvTuLHClObSq4r77/GnzOWaegXLLLrtk7ImdDnXAvAk3H
+         g5vUGLyGFdKZAcKxDgAKjeGCgpcZX2IvoczXedlrb3Xi3rrt4Hz4xId0t8RwFfkqJGVY
+         qf82I/D4f5QzD/yOnWrYhLcFzIfv0t+lMXo+8g+tLVvAf+3+TEpl8keyZz6QY+gPYToW
+         Pi2YS8/cOOKoC/c11vxl0/uqX+yq0DwNG9RukjAhTtFxU27ls8isK/IZQO5YO6whNkPT
+         ENLvjsruXaS6bT9K43ZQb6yFRjPtQPNyd5leLIb+qnUeAR1H3tD9a3DJ0f1Zb6EOv7Ay
+         qOqw==
+X-Gm-Message-State: AOAM532KsZD0HnyFa1gQS6s0/97gq7SBN0c9jcO6OavEigQw77zAyCrg
+        mCZ0vYoyAKk1nv6EY/JKB7X96Cr73tZzpw==
+X-Google-Smtp-Source: ABdhPJx97lK4bJfEbNT31jufXVUr6+pOY/DUH2AkYheG7TwkF1u66s2izqUnkAzEB1d0Cw1Q+tB08Q==
+X-Received: by 2002:a63:5322:: with SMTP id h34mr3447571pgb.182.1617802949682;
+        Wed, 07 Apr 2021 06:42:29 -0700 (PDT)
 Received: from localhost.localdomain ([203.205.141.39])
-        by smtp.gmail.com with ESMTPSA id t65sm1547350pfd.5.2021.04.07.06.42.25
+        by smtp.gmail.com with ESMTPSA id t65sm1547350pfd.5.2021.04.07.06.42.27
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Apr 2021 06:42:27 -0700 (PDT)
+        Wed, 07 Apr 2021 06:42:29 -0700 (PDT)
 From:   Hongbo Li <herbert.tencent@gmail.com>
 To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
         herbert@gondor.apana.org.au, dhowells@redhat.com,
         zohar@linux.ibm.com, jarkko@kernel.org, herberthbli@tencent.com
 Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         herbert.tencent@gmail.com
-Subject: [PATCH v4 2/4] crypto: support rsa-pss encoding
-Date:   Wed,  7 Apr 2021 21:41:44 +0800
-Message-Id: <1617802906-30513-3-git-send-email-herbert.tencent@gmail.com>
+Subject: [PATCH v4 3/4] crypto: add rsa pss test vector
+Date:   Wed,  7 Apr 2021 21:41:45 +0800
+Message-Id: <1617802906-30513-4-git-send-email-herbert.tencent@gmail.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1617802906-30513-1-git-send-email-herbert.tencent@gmail.com>
 References: <1617802906-30513-1-git-send-email-herbert.tencent@gmail.com>
@@ -63,721 +63,133 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch add the support of rsa-pss encoding which is described in
-RFC8017 section 8.1 and section 9.1.
-
-Similar to rsa-pkcs1, we create a pss template. Parse pss related params
-mgfhash and saltlen in set_pub_key.
-
-Implement a mgf function according to RFC8017 section B.2.
-Implement the verification according to RFC8017 section 8.1.2 and 9.1.2
+This patch adds the test vector for rsa with pss encoding.
 
 Signed-off-by: Hongbo Li <herbert.tencent@gmail.com>
 ---
- crypto/Makefile               |   7 +-
- crypto/rsa-psspad.c           | 398 ++++++++++++++++++++++++++++++++++++++++++
- crypto/rsa.c                  |  14 +-
- crypto/rsa_helper.c           | 127 ++++++++++++++
- crypto/rsapss_params.asn1     |  21 +++
- include/crypto/internal/rsa.h |  25 ++-
- 6 files changed, 583 insertions(+), 9 deletions(-)
- create mode 100644 crypto/rsa-psspad.c
- create mode 100644 crypto/rsapss_params.asn1
+ crypto/testmgr.c |  7 +++++
+ crypto/testmgr.h | 90 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 97 insertions(+)
 
-diff --git a/crypto/Makefile b/crypto/Makefile
-index 10526d4..2c65744 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -33,13 +33,18 @@ obj-$(CONFIG_CRYPTO_DH) += dh_generic.o
- 
- $(obj)/rsapubkey.asn1.o: $(obj)/rsapubkey.asn1.c $(obj)/rsapubkey.asn1.h
- $(obj)/rsaprivkey.asn1.o: $(obj)/rsaprivkey.asn1.c $(obj)/rsaprivkey.asn1.h
--$(obj)/rsa_helper.o: $(obj)/rsapubkey.asn1.h $(obj)/rsaprivkey.asn1.h
-+$(obj)/rsapss_params.asn1.o: $(obj)/rsapss_params.asn1.c \
-+			     $(obj)/rsapss_params.asn1.h
-+$(obj)/rsa_helper.o: $(obj)/rsapubkey.asn1.h $(obj)/rsaprivkey.asn1.h \
-+		     $(obj)/rsapss_params.asn1.h
- 
- rsa_generic-y := rsapubkey.asn1.o
- rsa_generic-y += rsaprivkey.asn1.o
-+rsa_generic-y += rsapss_params.asn1.o
- rsa_generic-y += rsa.o
- rsa_generic-y += rsa_helper.o
- rsa_generic-y += rsa-pkcs1pad.o
-+rsa_generic-y += rsa-psspad.o
- obj-$(CONFIG_CRYPTO_RSA) += rsa_generic.o
- 
- $(obj)/sm2signature.asn1.o: $(obj)/sm2signature.asn1.c $(obj)/sm2signature.asn1.h
-diff --git a/crypto/rsa-psspad.c b/crypto/rsa-psspad.c
-new file mode 100644
-index 0000000..342c4cc
---- /dev/null
-+++ b/crypto/rsa-psspad.c
-@@ -0,0 +1,398 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * RSA PSS padding templates.
-+ *
-+ * Copyright (c) 2021 Hongbo Li <herberthbli@tencent.com>
-+ *
-+ * This program is free software; you can redistribute it and/or modify it
-+ * under the terms of the GNU General Public License as published by the Free
-+ * Software Foundation; either version 2 of the License, or (at your option)
-+ * any later version.
-+ */
-+
-+#include <crypto/hash.h>
-+#include <crypto/internal/rsa.h>
-+#include <crypto/internal/akcipher.h>
-+
-+struct psspad_inst_ctx {
-+	struct crypto_akcipher_spawn spawn;
-+};
-+
-+struct psspad_request {
-+	struct scatterlist out_sg[1];
-+	uint8_t *out_buf;
-+	struct akcipher_request child_req;
-+};
-+
-+static const u8 *psspad_unpack(void *dst, const void *src, size_t sz)
-+{
-+	memcpy(dst, src, sz);
-+	return src + sz;
-+}
-+
-+static int psspad_set_pub_key(struct crypto_akcipher *tfm, const void *key,
-+			      unsigned int keylen)
-+{
-+	struct rsa_pss_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	const u8 *ptr;
-+	u32 algo, paramlen;
-+	int err;
-+
-+	ctx->key_size = 0;
-+
-+	err = crypto_akcipher_set_pub_key(ctx->child, key, keylen);
-+	if (err)
-+		return err;
-+
-+	/* Find out new modulus size from rsa implementation */
-+	err = crypto_akcipher_maxsize(ctx->child);
-+	if (err > PAGE_SIZE)
-+		return -EOPNOTSUPP;
-+
-+	ctx->key_size = err;
-+
-+	ptr = key + keylen;
-+	ptr = psspad_unpack(&algo, ptr, sizeof(algo));
-+	ptr = psspad_unpack(&paramlen, ptr, sizeof(paramlen));
-+	err = rsa_parse_pss_params(ctx, ptr, paramlen);
-+	if (err < 0)
-+		return err;
-+
-+	if (!ctx->hash_algo)
-+		ctx->hash_algo = "sha1";
-+	if (!ctx->mgf_algo)
-+		ctx->mgf_algo = "mgf1";
-+	if (!ctx->mgf_hash_algo)
-+		ctx->mgf_hash_algo = "sha1";
-+	if (!ctx->salt_len)
-+		ctx->salt_len = RSA_PSS_DEFAULT_SALT_LEN;
-+
-+	return 0;
-+}
-+
-+static int psspad_mgf1(const char *hash_algo, u8 *seed, u32 seed_len, u8 *mask,
-+		       u32 masklen)
-+{
-+	struct crypto_shash *tfm = NULL;
-+	u32 hlen, cnt, tlen;
-+	u8 c[4], digest[RSA_MAX_DIGEST_SIZE], buf[RSA_MAX_DIGEST_SIZE + 4];
-+	int i, err = 0;
-+	SHASH_DESC_ON_STACK(desc, tfm);
-+
-+	tfm = crypto_alloc_shash(hash_algo, 0, 0);
-+	if (IS_ERR(tfm)) {
-+		err = PTR_ERR(tfm);
-+		return err;
-+	}
-+	desc->tfm = tfm;
-+	hlen = crypto_shash_digestsize(tfm);
-+	cnt = DIV_ROUND_UP(masklen, hlen);
-+	tlen = 0;
-+	for (i = 0; i < cnt; i++) {
-+		/* C = I2OSP (counter, 4) */
-+		c[0] = (i >> 24) & 0xff;
-+		c[1] = (i >> 16) & 0xff;
-+		c[2] = (i >> 8) & 0xff;
-+		c[3] = i & 0xff;
-+
-+		memcpy(buf, seed, seed_len);
-+		memcpy(buf + seed_len, c, 4);
-+		err = crypto_shash_digest(desc, buf,
-+					  seed_len + 4, digest);
-+		if (err < 0)
-+			goto free;
-+
-+		/* T = T || Hash(mgfSeed || C) */
-+		tlen = i * hlen;
-+		if (i == cnt - 1)
-+			memcpy(mask + tlen, digest, masklen - tlen);
-+		else
-+			memcpy(mask + tlen, digest, hlen);
-+	}
-+free:
-+	crypto_free_shash(tfm);
-+	return err;
-+}
-+
-+/* EMSA-PSS-VERIFY (M, EM, emBits) */
-+static int psspad_verify_complete(struct akcipher_request *req, int err)
-+{
-+	struct crypto_akcipher *ak_tfm = crypto_akcipher_reqtfm(req);
-+	struct rsa_pss_ctx *ctx = akcipher_tfm_ctx(ak_tfm);
-+	struct psspad_request *req_ctx = akcipher_request_ctx(req);
-+	struct crypto_akcipher *rsa_tfm;
-+	struct rsa_mpi_key *mpi_key;
-+	struct crypto_shash *tfm = NULL;
-+	u32 i, hlen, slen, modbits, embits, emlen, masklen, buflen;
-+	u8 *em, *h, *maskeddb, *dbmask, *db, *salt;
-+	u8 mhash[RSA_MAX_DIGEST_SIZE], digest[RSA_MAX_DIGEST_SIZE];
-+	u8 *buf = NULL;
-+	SHASH_DESC_ON_STACK(desc, tfm);
-+
-+	if (err)
-+		goto free;
-+
-+	tfm = crypto_alloc_shash(ctx->hash_algo, 0, 0);
-+	if (IS_ERR(tfm)) {
-+		err = PTR_ERR(tfm);
-+		tfm = NULL;
-+		goto free;
-+	}
-+	desc->tfm = tfm;
-+	hlen = crypto_shash_digestsize(tfm);
-+
-+	/* mhash */
-+	sg_pcopy_to_buffer(req->src,
-+			   sg_nents_for_len(req->src,
-+					    req->src_len + req->dst_len),
-+			   mhash, hlen, req->src_len);
-+
-+	err = -EINVAL;
-+
-+	/* section 8.1.2. emLen = \ceil ((modBits - 1)/8) */
-+	rsa_tfm = crypto_akcipher_reqtfm(&req_ctx->child_req);
-+	mpi_key = akcipher_tfm_ctx(rsa_tfm);
-+	modbits = mpi_get_nbits(mpi_key->n);
-+	embits = modbits - 1;
-+	emlen = DIV_ROUND_UP(embits, 8);
-+
-+	/* 3. If emLen < hLen + sLen + 2, output "inconsistent" and stop. */
-+	slen = ctx->salt_len;
-+	if (emlen < hlen + slen + 2)
-+		goto free;
-+
-+	/* 4. If the rightmost octet of EM does not have hexadecimal value
-+	 * 0xbc, output "inconsistent" and stop.
-+	 */
-+	em = req_ctx->out_buf;
-+	if (em[emlen - 1] != 0xbc)
-+		goto free;
-+
-+
-+	/* 5. Let maskedDB be the leftmost emLen - hLen - 1 octets of EM,
-+	 * and let H be the next hLen octets.
-+	 */
-+	maskeddb = em;
-+	masklen = emlen - hlen - 1;
-+	h = em + masklen;
-+
-+	/* 6. If the leftmost 8emLen - emBits bits of the leftmost octet in
-+	 * maskedDB are not all equal to zero, output "inconsistent" and
-+	 * stop.
-+	 */
-+	if (maskeddb[0] & ~(0xff >> (8 * emlen - embits)))
-+		goto free;
-+
-+	/* 7. Let dbMask = MGF(H, emLen - hLen - 1). */
-+	buflen = max_t(u32, masklen, 8 + hlen + slen);
-+	buf = kmalloc(buflen, GFP_KERNEL);
-+	if (!buf) {
-+		err = -ENOMEM;
-+		goto free;
-+	}
-+	dbmask = buf;
-+	err = psspad_mgf1(ctx->mgf_hash_algo, h, hlen, dbmask, masklen);
-+	if (err)
-+		goto free;
-+
-+	/* 8. Let DB = maskedDB \xor dbMask. */
-+	db = maskeddb;
-+	for (i = 0; i < masklen; i++)
-+		db[i] = maskeddb[i] ^ dbmask[i];
-+
-+	/* 9. Set the leftmost 8emLen - emBits bits of the leftmost octet
-+	 * in DB to zero.
-+	 */
-+	db[0] &= 0xff >> (8 * emlen - embits);
-+
-+	/* 10. If the emLen - hLen - sLen - 2 leftmost octets of DB are not
-+	 * zero or if the octet at position emLen - hLen - sLen - 1 (the
-+	 * leftmost position is "position 1") does not have hexadecimal
-+	 * value 0x01, output "inconsistent" and stop.
-+	 */
-+	for (i = 0; i < emlen - hlen - slen - 2; i++) {
-+		if (db[i]) {
-+			err = -EINVAL;
-+			goto free;
+diff --git a/crypto/testmgr.c b/crypto/testmgr.c
+index 10c5b3b..2b07fdb 100644
+--- a/crypto/testmgr.c
++++ b/crypto/testmgr.c
+@@ -5216,6 +5216,13 @@ static int alg_test_null(const struct alg_test_desc *desc,
+ 		.test = alg_test_null,
+ 		.fips_allowed = 1,
+ 	}, {
++		.alg = "psspad(rsa)",
++		.test = alg_test_akcipher,
++		.fips_allowed = 1,
++		.suite = {
++			.akcipher = __VECS(psspad_rsa_tv_template)
 +		}
-+	}
-+	if (db[i] != 1)
-+		goto free;
-+
-+	/* 11. Let salt be the last sLen octets of DB. */
-+	salt = db + masklen - slen;
-+
-+	/* 12. M' = (0x)00 00 00 00 00 00 00 00 || mHash || salt ; */
-+	memset(buf, 0, 8);
-+	memcpy(buf + 8, mhash, hlen);
-+	memcpy(buf + 8 + hlen, salt, slen);
-+
-+	/* 13. Let H' = Hash(M'), an octet string of length hLen. */
-+	err = crypto_shash_digest(desc, buf, 8 + hlen + slen, digest);
-+	if (err < 0)
-+		goto free;
-+
-+	/* 14. If H = H', output "consistent". Otherwise, output
-+	 * "inconsistent".
-+	 */
-+	if (memcmp(h, digest, hlen))
-+		err = -EKEYREJECTED;
-+
-+free:
-+	if (tfm)
-+		crypto_free_shash(tfm);
-+	kfree_sensitive(req_ctx->out_buf);
-+	kfree(buf);
-+	return err;
-+}
-+
-+static void psspad_verify_complete_cb(
-+	struct crypto_async_request *child_async_req, int err)
-+{
-+	struct akcipher_request *req = child_async_req->data;
-+	struct crypto_async_request async_req;
-+
-+	if (err == -EINPROGRESS)
-+		return;
-+
-+	async_req.data = req->base.data;
-+	async_req.tfm = crypto_akcipher_tfm(crypto_akcipher_reqtfm(req));
-+	async_req.flags = child_async_req->flags;
-+	req->base.complete(&async_req, psspad_verify_complete(req, err));
-+}
-+
-+static int psspad_verify(struct akcipher_request *req)
-+{
-+	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
-+	struct rsa_pss_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	struct psspad_request *req_ctx = akcipher_request_ctx(req);
-+	int err;
-+
-+	if (WARN_ON(req->dst) ||
-+	    WARN_ON(!req->dst_len) ||
-+	    !ctx->key_size || req->src_len < ctx->key_size)
-+		return -EINVAL;
-+
-+	req_ctx->out_buf = kmalloc(ctx->key_size + req->dst_len, GFP_KERNEL);
-+	if (!req_ctx->out_buf)
-+		return -ENOMEM;
-+
-+	sg_init_table(req_ctx->out_sg, 1);
-+	sg_set_buf(req_ctx->out_sg, req_ctx->out_buf, ctx->key_size);
-+
-+	akcipher_request_set_tfm(&req_ctx->child_req, ctx->child);
-+	akcipher_request_set_callback(&req_ctx->child_req, req->base.flags,
-+				      psspad_verify_complete_cb, req);
-+
-+	/* Reuse input buffer, output to a new buffer */
-+	akcipher_request_set_crypt(&req_ctx->child_req, req->src,
-+				   req_ctx->out_sg, req->src_len,
-+				   ctx->key_size);
-+
-+	err = crypto_akcipher_encrypt(&req_ctx->child_req);
-+	if (err != -EINPROGRESS && err != -EBUSY)
-+		return psspad_verify_complete(req, err);
-+
-+	return err;
-+}
-+
-+static unsigned int psspad_get_max_size(struct crypto_akcipher *tfm)
-+{
-+	struct rsa_pss_ctx *ctx = akcipher_tfm_ctx(tfm);
-+
-+	return ctx->key_size;
-+}
-+
-+static int psspad_init_tfm(struct crypto_akcipher *tfm)
-+{
-+	struct akcipher_instance *inst = akcipher_alg_instance(tfm);
-+	struct psspad_inst_ctx *ictx = akcipher_instance_ctx(inst);
-+	struct rsa_pss_ctx *ctx = akcipher_tfm_ctx(tfm);
-+	struct crypto_akcipher *child_tfm;
-+
-+	child_tfm = crypto_spawn_akcipher(&ictx->spawn);
-+	if (IS_ERR(child_tfm))
-+		return PTR_ERR(child_tfm);
-+
-+	ctx->child = child_tfm;
-+	return 0;
-+}
-+
-+static void psspad_exit_tfm(struct crypto_akcipher *tfm)
-+{
-+	struct rsa_pss_ctx *ctx = akcipher_tfm_ctx(tfm);
-+
-+	crypto_free_akcipher(ctx->child);
-+}
-+
-+static void psspad_free(struct akcipher_instance *inst)
-+{
-+	struct psspad_inst_ctx *ctx = akcipher_instance_ctx(inst);
-+	struct crypto_akcipher_spawn *spawn = &ctx->spawn;
-+
-+	crypto_drop_akcipher(spawn);
-+	kfree(inst);
-+}
-+
-+static int psspad_create(struct crypto_template *tmpl, struct rtattr **tb)
-+{
-+	u32 mask;
-+	struct akcipher_instance *inst;
-+	struct psspad_inst_ctx *ctx;
-+	struct akcipher_alg *rsa_alg;
-+	int err;
-+
-+	err = crypto_check_attr_type(tb, CRYPTO_ALG_TYPE_AKCIPHER, &mask);
-+	if (err)
-+		return err;
-+
-+	inst = kzalloc(sizeof(*inst) + sizeof(*ctx), GFP_KERNEL);
-+	if (!inst)
-+		return -ENOMEM;
-+
-+	ctx = akcipher_instance_ctx(inst);
-+
-+	err = crypto_grab_akcipher(&ctx->spawn, akcipher_crypto_instance(inst),
-+				   crypto_attr_alg_name(tb[1]), 0, mask);
-+	if (err)
-+		goto err_free_inst;
-+
-+	rsa_alg = crypto_spawn_akcipher_alg(&ctx->spawn);
-+
-+	err = -ENAMETOOLONG;
-+	if (snprintf(inst->alg.base.cra_name,
-+		     CRYPTO_MAX_ALG_NAME, "psspad(%s)",
-+		     rsa_alg->base.cra_name) >= CRYPTO_MAX_ALG_NAME)
-+		goto err_free_inst;
-+
-+	if (snprintf(inst->alg.base.cra_driver_name,
-+		     CRYPTO_MAX_ALG_NAME, "psspad(%s)",
-+		     rsa_alg->base.cra_driver_name) >=
-+	    CRYPTO_MAX_ALG_NAME)
-+		goto err_free_inst;
-+
-+	inst->alg.base.cra_priority = rsa_alg->base.cra_priority;
-+	inst->alg.base.cra_ctxsize = sizeof(struct rsa_pss_ctx);
-+
-+	inst->alg.init = psspad_init_tfm;
-+	inst->alg.exit = psspad_exit_tfm;
-+	inst->alg.verify = psspad_verify;
-+	inst->alg.set_pub_key = psspad_set_pub_key;
-+	inst->alg.max_size = psspad_get_max_size;
-+	inst->alg.reqsize = sizeof(struct psspad_request) + rsa_alg->reqsize;
-+
-+	inst->free = psspad_free;
-+
-+	err = akcipher_register_instance(tmpl, inst);
-+	if (err) {
-+err_free_inst:
-+		psspad_free(inst);
-+	}
-+	return err;
-+}
-+
-+struct crypto_template rsa_psspad_tmpl = {
-+	.name = "psspad",
-+	.create = psspad_create,
-+	.module = THIS_MODULE,
-+};
-diff --git a/crypto/rsa.c b/crypto/rsa.c
-index 4cdbec9..adc9b2d2 100644
---- a/crypto/rsa.c
-+++ b/crypto/rsa.c
-@@ -6,18 +6,11 @@
-  */
- 
- #include <linux/module.h>
--#include <linux/mpi.h>
- #include <crypto/internal/rsa.h>
- #include <crypto/internal/akcipher.h>
- #include <crypto/akcipher.h>
- #include <crypto/algapi.h>
- 
--struct rsa_mpi_key {
--	MPI n;
--	MPI e;
--	MPI d;
--};
--
- /*
-  * RSAEP function [RFC3447 sec 5.1.1]
-  * c = m^e mod n;
-@@ -269,12 +262,19 @@ static int rsa_init(void)
- 		return err;
++	}, {
+ 		.alg = "poly1305",
+ 		.test = alg_test_hash,
+ 		.suite = {
+diff --git a/crypto/testmgr.h b/crypto/testmgr.h
+index 34e4a3d..0402db5 100644
+--- a/crypto/testmgr.h
++++ b/crypto/testmgr.h
+@@ -1239,6 +1239,96 @@ struct kpp_testvec {
  	}
- 
-+	err = crypto_register_template(&rsa_psspad_tmpl);
-+	if (err) {
-+		crypto_unregister_akcipher(&rsa);
-+		return err;
-+	}
-+
- 	return 0;
- }
- 
- static void rsa_exit(void)
- {
- 	crypto_unregister_template(&rsa_pkcs1pad_tmpl);
-+	crypto_unregister_template(&rsa_psspad_tmpl);
- 	crypto_unregister_akcipher(&rsa);
- }
- 
-diff --git a/crypto/rsa_helper.c b/crypto/rsa_helper.c
-index 94266f2..912d975 100644
---- a/crypto/rsa_helper.c
-+++ b/crypto/rsa_helper.c
-@@ -12,6 +12,7 @@
- #include <crypto/internal/rsa.h>
- #include "rsapubkey.asn1.h"
- #include "rsaprivkey.asn1.h"
-+#include "rsapss_params.asn1.h"
- 
- int rsa_get_n(void *context, size_t hdrlen, unsigned char tag,
- 	      const void *value, size_t vlen)
-@@ -148,6 +149,115 @@ int rsa_get_qinv(void *context, size_t hdrlen, unsigned char tag,
- 	return 0;
- }
- 
-+int rsa_get_pss_hash(void *context, size_t hdrlen, unsigned char tag,
-+		     const void *value, size_t vlen)
-+{
-+	struct rsa_pss_ctx *ctx = context;
-+	enum OID oid;
-+
-+	if (!value || !vlen)
-+		return -EINVAL;
-+
-+	oid = look_up_OID(value, vlen);
-+	switch (oid) {
-+	case OID_sha1:
-+		ctx->hash_algo = "sha1";
-+		break;
-+	case OID_sha224:
-+		ctx->hash_algo = "sha224";
-+		break;
-+	case OID_sha256:
-+		ctx->hash_algo = "sha256";
-+		break;
-+	case OID_sha384:
-+		ctx->hash_algo = "sha384";
-+		break;
-+	case OID_sha512:
-+		ctx->hash_algo = "sha512";
-+		break;
-+	default:
-+		return -ENOPKG;
-+
-+	}
-+
-+	return 0;
-+}
-+
-+int rsa_get_pss_mgf(void *context, size_t hdrlen, unsigned char tag,
-+		    const void *value, size_t vlen)
-+{
-+	struct rsa_pss_ctx *ctx = context;
-+	enum OID oid;
-+
-+	if (!value || !vlen)
-+		return -EINVAL;
-+
-+	oid = look_up_OID(value, vlen);
-+	if (oid != OID_rsa_mgf1)
-+		return -ENOPKG;
-+	ctx->mgf_algo = "mgf1";
-+
-+	return 0;
-+}
-+
-+int rsa_get_pss_mgf_hash(void *context, size_t hdrlen, unsigned char tag,
-+			 const void *value, size_t vlen)
-+{
-+	struct rsa_pss_ctx *ctx = context;
-+	enum OID oid;
-+
-+	if (!value || !vlen)
-+		return -EINVAL;
-+	/* todo, merge with get_pss_hash */
-+	oid = look_up_OID(value, vlen);
-+	switch (oid) {
-+	case OID_sha1:
-+		ctx->mgf_hash_algo = "sha1";
-+		break;
-+	case OID_sha224:
-+		ctx->mgf_hash_algo = "sha224";
-+		break;
-+	case OID_sha256:
-+		ctx->mgf_hash_algo = "sha256";
-+		break;
-+	case OID_sha384:
-+		ctx->mgf_hash_algo = "sha384";
-+		break;
-+	case OID_sha512:
-+		ctx->mgf_hash_algo = "sha512";
-+		break;
-+	default:
-+		return -ENOPKG;
-+	}
-+
-+	return 0;
-+}
-+
-+int rsa_get_pss_saltlen(void *context, size_t hdrlen, unsigned char tag,
-+			const void *value, size_t vlen)
-+{
-+	struct rsa_pss_ctx *ctx = context;
-+
-+	if (!value || vlen < 1 || vlen > 2)
-+		return -EINVAL;
-+
-+	if (vlen == 1)
-+		ctx->salt_len = *(u8 *)value;
-+	else if (vlen == 2)
-+		ctx->salt_len = ntohs(*(u16 *)value);
-+
-+	return 0;
-+}
-+
-+int rsa_get_pss_trailerfield(void *context, size_t hdrlen, unsigned char tag,
-+			     const void *value, size_t vlen)
-+{
-+	if (!value || !vlen || *(u8 *)value != 1)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- /**
-  * rsa_parse_pub_key() - decodes the BER encoded buffer and stores in the
-  *                       provided struct rsa_key, pointers to the raw key as is,
-@@ -184,3 +294,20 @@ int rsa_parse_priv_key(struct rsa_key *rsa_key, const void *key,
- 	return asn1_ber_decoder(&rsaprivkey_decoder, rsa_key, key, key_len);
- }
- EXPORT_SYMBOL_GPL(rsa_parse_priv_key);
-+
-+/**
-+ * rsa_parse_pss_params() - decodes the BER encoded pss padding params
-+ *
-+ * @ctx:	struct rsa_pss_ctx, pss padding context
-+ * @params:	params in BER format
-+ * @params_len:	length of params
-+ *
-+ * Return:	0 on success or error code in case of error
-+ */
-+int rsa_parse_pss_params(struct rsa_pss_ctx *ctx, const void *params,
-+			 unsigned int params_len)
-+{
-+	return asn1_ber_decoder(&rsapss_params_decoder, ctx, params,
-+				params_len);
-+}
-+EXPORT_SYMBOL_GPL(rsa_parse_pss_params);
-diff --git a/crypto/rsapss_params.asn1 b/crypto/rsapss_params.asn1
-new file mode 100644
-index 0000000..4d6b0ba
---- /dev/null
-+++ b/crypto/rsapss_params.asn1
-@@ -0,0 +1,21 @@
-+-- rfc4055 section 3.1.
-+
-+RSAPSS_Params ::= SEQUENCE {
-+	hashAlgorithm		[0] HashAlgorithm OPTIONAL,
-+	maskGenAlgorithm	[1] MaskGenAlgorithm OPTIONAL,
-+	saltLen			[2] INTEGER OPTIONAL ({ rsa_get_pss_saltlen }),
-+	trailerField		[3] INTEGER OPTIONAL ({ rsa_get_pss_trailerfield })
-+	}
-+
-+HashAlgorithm ::= SEQUENCE {
-+	algorithm		OBJECT IDENTIFIER ({ rsa_get_pss_hash })
-+	}
-+
-+MaskGenAlgorithm ::= SEQUENCE {
-+	algorithm	OBJECT IDENTIFIER  ({ rsa_get_pss_mgf }),
-+	hashAlgorithm	MgfHashAlgorithm
-+	}
-+
-+MgfHashAlgorithm ::= SEQUENCE {
-+	algorithm	OBJECT IDENTIFIER ({ rsa_get_pss_mgf_hash })
-+	}
-diff --git a/include/crypto/internal/rsa.h b/include/crypto/internal/rsa.h
-index e870133..cfb0801 100644
---- a/include/crypto/internal/rsa.h
-+++ b/include/crypto/internal/rsa.h
-@@ -8,6 +8,12 @@
- #ifndef _RSA_HELPER_
- #define _RSA_HELPER_
- #include <linux/types.h>
-+#include <linux/mpi.h>
-+#include <linux/oid_registry.h>
-+#include <crypto/sha2.h>
-+
-+#define RSA_MAX_DIGEST_SIZE		SHA512_DIGEST_SIZE
-+#define RSA_PSS_DEFAULT_SALT_LEN	20
- 
- /**
-  * rsa_key - RSA key structure
-@@ -47,11 +53,28 @@ struct rsa_key {
- 	size_t qinv_sz;
  };
  
-+struct rsa_mpi_key {
-+	MPI n;
-+	MPI e;
-+	MPI d;
++/*
++ * RSA PSS test vectors. Obtained from 186-3rsatestvectors.zip
++ */
++static const struct akcipher_testvec psspad_rsa_tv_template[] = {
++	{
++	.key =
++	/* Sequence of n , e */
++	"\x30\x82\x02\x09"
++	/* n */
++	"\x02\x82\x01\x01\x00"
++	"\xc5\x06\x2b\x58\xd8\x53\x9c\x76\x5e\x1e\x5d\xba\xf1\x4c\xf7\x5d"
++	"\xd5\x6c\x2e\x13\x10\x5f\xec\xfd\x1a\x93\x0b\xbb\x59\x48\xff\x32"
++	"\x8f\x12\x6a\xbe\x77\x93\x59\xca\x59\xbc\xa7\x52\xc3\x08\xd2\x81"
++	"\x57\x3b\xc6\x17\x8b\x6c\x0f\xef\x7d\xc4\x45\xe4\xf8\x26\x43\x04"
++	"\x37\xb9\xf9\xd7\x90\x58\x1d\xe5\x74\x9c\x2c\xb9\xcb\x26\xd4\x2b"
++	"\x2f\xee\x15\xb6\xb2\x6f\x09\xc9\x96\x70\x33\x64\x23\xb8\x6b\xc5"
++	"\xbe\xc7\x11\x13\x15\x7b\xe2\xd9\x44\xd7\xff\x3e\xeb\xff\xb2\x84"
++	"\x13\x14\x3e\xa3\x67\x55\xdb\x0a\xe6\x2f\xf5\xb7\x24\xee\xcb\x3d"
++	"\x31\x6b\x6b\xac\x67\xe8\x9c\xac\xd8\x17\x19\x37\xe2\xab\x19\xbd"
++	"\x35\x3a\x89\xac\xea\x8c\x36\xf8\x1c\x89\xa6\x20\xd5\xfd\x2e\xff"
++	"\xea\x89\x66\x01\xc7\xf9\xda\xca\x7f\x03\x3f\x63\x5a\x3a\x94\x33"
++	"\x31\xd1\xb1\xb4\xf5\x28\x87\x90\xb5\x3a\xf3\x52\xf1\x12\x1c\xa1"
++	"\xbe\xf2\x05\xf4\x0d\xc0\x12\xc4\x12\xb4\x0b\xdd\x27\x58\x5b\x94"
++	"\x64\x66\xd7\x5f\x7e\xe0\xa7\xf9\xd5\x49\xb4\xbe\xce\x6f\x43\xac"
++	"\x3e\xe6\x5f\xe7\xfd\x37\x12\x33\x59\xd9\xf1\xa8\x50\xad\x45\x0a"
++	"\xaf\x5c\x94\xeb\x11\xde\xa3\xfc\x0f\xc6\xe9\x85\x6b\x18\x05\xef"
++	/* e */
++	"\x02\x82\x01\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
++	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x86\xc9\x4f",
++	.key_len = 525,
++	.params =
++	"\x30\x30"
++	"\xa0\x0d\x30\x0b\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\xa1"
++	"\x1a\x30\x18\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01\x01\x08\x30\x0b"
++	"\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\xa2\x03\x02\x01\x20",
++	.param_len = 50,
++	/*
++	 * m is SHA256 hash of following message:
++	 * "\xdf\xc2\x26\x04\xb9\x5d\x15\x32\x80\x59\x74\x5c\x6c\x98\xeb"
++	 * "\x9d\xfb\x34\x7c\xf9\xf1\x70\xaf\xf1\x9d\xee\xec\x55\x5f\x22"
++	 * "\x28\x5a\x67\x06\xc4\xec\xbf\x0f\xb1\x45\x8c\x60\xd9\xbf\x91"
++	 * "\x3f\xba\xe6\xf4\xc5\x54\xd2\x45\xd9\x46\xb4\xbc\x5f\x34\xae"
++	 * "\xc2\xac\x6b\xe8\xb3\x3d\xc8\xe0\xe3\xa9\xd6\x01\xdf\xd5\x36"
++	 * "\x78\xf5\x67\x44\x43\xf6\x7d\xf7\x8a\x3a\x9e\x09\x33\xe5\xf1"
++	 * "\x58\xb1\x69\xac\x8d\x1c\x4c\xd0\xfb\x87\x2c\x14\xca\x8e\x00"
++	 * "\x1e\x54\x2e\xa0\xf9\xcf\xda\x88\xc4\x2d\xca\xd8\xa7\x40\x97"
++	 * "\xa0\x0c\x22\x05\x5b\x0b\xd4\x1f"
++	 */
++	.m =
++	"\xb9\x8a\x0d\x22\xe8\x37\xb1\x01\x87\x4a\x5f\x0d\x7a\xd4\x98\x36"
++	"\xe6\x27\x3f\xc7\x5c\xd2\xd0\x73\xdc\x81\xd9\x6f\x05\xf5\x8f\x3c",
++	.m_size = 32,
++	.c =
++	"\x8b\x46\xf2\xc8\x89\xd8\x19\xf8\x60\xaf\x0a\x6c\x4c\x88\x9e\x4d"
++	"\x14\x36\xc6\xca\x17\x44\x64\xd2\x2a\xe1\x1b\x9c\xcc\x26\x5d\x74"
++	"\x3c\x67\xe5\x69\xac\xcb\xc5\xa8\x0d\x4d\xd5\xf1\xbf\x40\x39\xe2"
++	"\x3d\xe5\x2a\xec\xe4\x02\x91\xc7\x5f\x89\x36\xc5\x8c\x9a\x2f\x77"
++	"\xa7\x80\xbb\xe7\xad\x31\xeb\x76\x74\x2f\x7b\x2b\x8b\x14\xca\x1a"
++	"\x71\x96\xaf\x7e\x67\x3a\x3c\xfc\x23\x7d\x50\xf6\x15\xb7\x5c\xf4"
++	"\xa7\xea\x78\xa9\x48\xbe\xda\xf9\x24\x24\x94\xb4\x1e\x1d\xb5\x1f"
++	"\x43\x7f\x15\xfd\x25\x51\xbb\x5d\x24\xee\xfb\x1c\x3e\x60\xf0\x36"
++	"\x94\xd0\x03\x3a\x1e\x0a\x9b\x9f\x5e\x4a\xb9\x7d\x45\x7d\xff\x9b"
++	"\x9d\xa5\x16\xdc\x22\x6d\x6d\x65\x29\x50\x03\x08\xed\x74\xa2\xe6"
++	"\xd9\xf3\xc1\x05\x95\x78\x8a\x52\xa1\xbc\x06\x64\xae\xdf\x33\xef"
++	"\xc8\xba\xdd\x03\x7e\xb7\xb8\x80\x77\x2b\xdb\x04\xa6\x04\x6e\x9e"
++	"\xde\xee\x41\x97\xc2\x55\x07\xfb\x0f\x11\xab\x1c\x9f\x63\xf5\x3c"
++	"\x88\x20\xea\x84\x05\xcf\xd7\x72\x16\x92\x47\x5b\x4d\x72\x35\x5f"
++	"\xa9\xa3\x80\x4f\x29\xe6\xb6\xa7\xb0\x59\xc4\x44\x1d\x54\xb2\x8e"
++	"\x4e\xed\x25\x29\xc6\x10\x3b\x54\x32\xc7\x13\x32\xce\x74\x2b\xcc",
++	.c_size = 256,
++	.public_key_vec = true,
++	.siggen_sigver_test = true,
++	}
 +};
 +
-+struct rsa_pss_ctx {
-+	struct crypto_akcipher *child;
-+	unsigned int key_size;
-+	const char *hash_algo;
-+	const char *mgf_algo;
-+	const char *mgf_hash_algo;
-+	u32 salt_len;
-+};
-+
- int rsa_parse_pub_key(struct rsa_key *rsa_key, const void *key,
- 		      unsigned int key_len);
- 
- int rsa_parse_priv_key(struct rsa_key *rsa_key, const void *key,
- 		       unsigned int key_len);
--
-+int rsa_parse_pss_params(struct rsa_pss_ctx *ctx, const void *params,
-+			 unsigned int params_len);
- extern struct crypto_template rsa_pkcs1pad_tmpl;
-+extern struct crypto_template rsa_psspad_tmpl;
- #endif
+ static const struct kpp_testvec dh_tv_template[] = {
+ 	{
+ 	.secret =
 -- 
 1.8.3.1
 
