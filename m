@@ -2,56 +2,25 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E8735A33E
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Apr 2021 18:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E3535A473
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Apr 2021 19:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbhDIQ1I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Apr 2021 12:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233824AbhDIQ1H (ORCPT
+        id S234049AbhDIRO0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Apr 2021 13:14:26 -0400
+Received: from smtp-42ab.mail.infomaniak.ch ([84.16.66.171]:46137 "EHLO
+        smtp-42ab.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234175AbhDIROZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Apr 2021 12:27:07 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B88C061760;
-        Fri,  9 Apr 2021 09:26:53 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id y124-20020a1c32820000b029010c93864955so5045461wmy.5;
-        Fri, 09 Apr 2021 09:26:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:references:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=Phuwohh2HbCcjFvp4UIIQp3Pa48Fgzncr9mTT74dDuc=;
-        b=OrDC9KNIV2KoycO1UJbjgt3dS7Zq2KuRnckwcv/US0NFH4y5p75lCVm23WaG0rVojv
-         HeCavVxA+Ac3nwNniNDRjJlmFDlnmdgTPgutRu8juSbyZercO77k+ZH4K/xP8mSbGVW1
-         G++R4TWtflixrhcsAfXommXjVB6yQiFu5TxHopFnit0aQNYVGcJrLop+n3PsSErczidr
-         y/BmGlelv/wJ2dwQIZ2BoB9crvw7/JOCylrmSKctjliDydy1Zqwnxq9epeI68cv8qBo7
-         aVl4QC/KAnohy1n6qqYkh6J0d4Hco/WOB13ML9dE/SxBO3Wsvj7W0s+HSYU6g8xU0NgX
-         fkxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Phuwohh2HbCcjFvp4UIIQp3Pa48Fgzncr9mTT74dDuc=;
-        b=fL1l5XONfIzbAb70Vh+472VsFdLwObfk0tfGwWG4JXtZzxVqrc1JORfM/zGCe375JT
-         i/5YdfiW/S/niWnd8EPH/BY7BeateYeHwWjspqebt60JMiFEoyiFbpbT5jFWOJTN+T4m
-         KxItQo/DZ51NgupBlb9UZOYLw5feItjEKR6xgdVso3+PRZMA0QWLjst9jBZxhulTqP3V
-         9Z1YyixImJtO8z6h30iJQgAxIQjZX246e8mRthzjccjt+Ct/+LUgbwO+xP70Q+O40Fnb
-         ulZFTluPU6uz6c1BFnOMb+sClueWpOoo3qQ4j8QqJZdf7ouNmn6AbBudNTQpHc0s+LGD
-         yr7Q==
-X-Gm-Message-State: AOAM532CuHT204bIpRl8FESUb09gdCo6s1h7AX9k4XCo5MBrMb20DRVk
-        6tYS8p8soOjRvSqGjQQaLu0=
-X-Google-Smtp-Source: ABdhPJwEELsjjLV+hBsfJiej4imi1ND7VZLuZxQpk+R/tkx/cwIMM3GphnH/4bn5zw34pvgfQlwTVg==
-X-Received: by 2002:a1c:9853:: with SMTP id a80mr14414819wme.44.1617985611974;
-        Fri, 09 Apr 2021 09:26:51 -0700 (PDT)
-Received: from ?IPv6:2001:a61:3552:9e01:f394:4bd9:fa87:7527? ([2001:a61:3552:9e01:f394:4bd9:fa87:7527])
-        by smtp.gmail.com with ESMTPSA id a7sm5648045wrn.50.2021.04.09.09.26.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Apr 2021 09:26:51 -0700 (PDT)
-From:   bauen1 <j2468h@googlemail.com>
-X-Google-Original-From: bauen1 <j2468h@gmail.com>
-To:     mic@digikod.net
+        Fri, 9 Apr 2021 13:14:25 -0400
+X-Greylist: delayed 172466 seconds by postgrey-1.27 at vger.kernel.org; Fri, 09 Apr 2021 13:14:25 EDT
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FH4VT1gsRzMqjJ5;
+        Fri,  9 Apr 2021 19:14:09 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4FH4VN3Z5Yzlh8T2;
+        Fri,  9 Apr 2021 19:14:04 +0200 (CEST)
+Subject: Re: [PATCH v12 0/3] Add trusted_for(2) (was O_MAYEXEC)
+To:     bauen1 <j2468h@googlemail.com>
 Cc:     akpm@linux-foundation.org, arnd@arndb.de, casey@schaufler-ca.com,
         christian.brauner@ubuntu.com, christian@python.org, corbet@lwn.net,
         cyphar@cyphar.com, deven.desai@linux.microsoft.com,
@@ -70,27 +39,38 @@ Cc:     akpm@linux-foundation.org, arnd@arndb.de, casey@schaufler-ca.com,
         thibaut.sautereau@clip-os.org, vincent.strubel@ssi.gouv.fr,
         viro@zeniv.linux.org.uk, willy@infradead.org, zohar@linux.ibm.com
 References: <20201203173118.379271-1-mic@digikod.net>
-Subject: Re: [PATCH v12 0/3] Add trusted_for(2) (was O_MAYEXEC)
-Message-ID: <d3b0da18-d0f6-3f72-d3ab-6cf19acae6eb@gmail.com>
-Date:   Fri, 9 Apr 2021 18:26:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+ <d3b0da18-d0f6-3f72-d3ab-6cf19acae6eb@gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <2a4cf50c-7e79-75d1-7907-8218e669f7fa@digikod.net>
+Date:   Fri, 9 Apr 2021 19:15:42 +0200
+User-Agent: 
 MIME-Version: 1.0
-In-Reply-To: <20201203173118.379271-1-mic@digikod.net>
+In-Reply-To: <d3b0da18-d0f6-3f72-d3ab-6cf19acae6eb@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello,
+Hi,
 
-As a user of SELinux I'm quite interested in the trusted_for / O_MAYEXEC changes in the kernel and userspace.
-However the last activity on this patch seems to be this email from 2020-12-03 with no replies, so what is the status of this patchset or is there something that I'm missing ?
+There was no new reviews, probably because the FS maintainers were busy,
+and I was focused on Landlock (which is now in -next), but I plan to
+send a new patch series for trusted_for(2) soon.
 
-https://patchwork.kernel.org/project/linux-security-module/list/?series=395617
+Thanks for letting know your interest,
+ Mickaël
 
-https://lore.kernel.org/linux-security-module/20201203173118.379271-1-mic@digikod.net/
 
-
+On 09/04/2021 18:26, bauen1 wrote:
+> Hello,
+> 
+> As a user of SELinux I'm quite interested in the trusted_for / O_MAYEXEC changes in the kernel and userspace.
+> However the last activity on this patch seems to be this email from 2020-12-03 with no replies, so what is the status of this patchset or is there something that I'm missing ?
+> 
+> https://patchwork.kernel.org/project/linux-security-module/list/?series=395617
+> 
+> https://lore.kernel.org/linux-security-module/20201203173118.379271-1-mic@digikod.net/
+> 
+> 
