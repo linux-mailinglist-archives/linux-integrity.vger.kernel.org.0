@@ -2,131 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C70B359DAF
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Apr 2021 13:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BA035A128
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Apr 2021 16:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbhDILpL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Apr 2021 07:45:11 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2825 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbhDILpK (ORCPT
+        id S233657AbhDIOfl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Apr 2021 10:35:41 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5002 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232990AbhDIOfl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Apr 2021 07:45:10 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FGwzX2wvKz682sM;
-        Fri,  9 Apr 2021 19:35:20 +0800 (CST)
-Received: from fraphisprd00473.huawei.com (7.182.8.141) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 9 Apr 2021 13:44:56 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 7/7] evm: Extend evm= with allow_metadata_writes and complete values
-Date:   Fri, 9 Apr 2021 13:43:13 +0200
-Message-ID: <20210409114313.4073-8-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210409114313.4073-1-roberto.sassu@huawei.com>
-References: <20210409114313.4073-1-roberto.sassu@huawei.com>
+        Fri, 9 Apr 2021 10:35:41 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 139EXaI0085427;
+        Fri, 9 Apr 2021 10:35:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=oj488HEf7RPPYjulmvJ2vG21D298AQH7SaGsElt1NvY=;
+ b=IeQQcV5xXmmpHOOLkbdVAdJpbTdFJD/+bORZdab2P3jdYJWEtLjaQKUwr30jKCNJfMPw
+ R6Px7emagEopHDvrg+6PKKCs7uQJJ/GC3S27gF5IGhGU1loCiEfJmOcPVwSEeq5uemlU
+ a94V5PJJVf3YZC+LOx8iFh+MTt21NUscW7iC4mD9W7TQAzv2SaO2yLifghJPPMjVS+Od
+ jx6EcA+bFGYGMPHrABcOcsrp+A+2lYZWkdT07aDINEq73FGABB2VR91wsSp4D8+ZhHmM
+ +rukwZoha+LNmyw9+wenIq57FflCXugmDlnjrTYKoYLvCq6Lc+I1MzUpt92WwsqiiJg9 Pg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37trdq8t3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Apr 2021 10:35:20 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 139EZGO4094867;
+        Fri, 9 Apr 2021 10:35:19 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37trdq8t1m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Apr 2021 10:35:19 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 139EXj0j022369;
+        Fri, 9 Apr 2021 14:35:17 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 37rvbwahfu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Apr 2021 14:35:17 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 139EZEmo45154730
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Apr 2021 14:35:14 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8EDD94C046;
+        Fri,  9 Apr 2021 14:35:14 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4E17C4C059;
+        Fri,  9 Apr 2021 14:35:12 +0000 (GMT)
+Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com.com (unknown [9.211.63.3])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  9 Apr 2021 14:35:12 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
+Cc:     linux-security-module@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Nayna Jain <nayna@linux.ibm.com>
+Subject: [PATCH v4 0/3] ima: kernel build support for loading the kernel module signing key
+Date:   Fri,  9 Apr 2021 10:35:04 -0400
+Message-Id: <20210409143507.191443-1-nayna@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [7.182.8.141]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: m9hJgK75bCvlDCQEcTTShVGaAQQdyQX1
+X-Proofpoint-GUID: q488RcEmc2np1Skacn4GiR-D3S_ezGPJ
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-09_06:2021-04-09,2021-04-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ bulkscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0
+ mlxscore=0 suspectscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104090110
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-With the patch 'evm: Ignore INTEGRITY_NOLABEL/INTEGRITY_NOXATTRS if
-conditions are safe', the INTEGRITY_NOLABEL and INTEGRITY_NOXATTRS errors
-can be ignored by setting the EVM_SETUP_COMPLETE flag. Also, the same
-errors can be avoided by disabling EVM verification completely with the
-EVM_ALLOW_METADATA_WRITES flag.
+Kernel modules are currently only signed when CONFIG_MODULE_SIG is enabled.
+The kernel module signing key is a self-signed CA only loaded onto the
+.builtin_trusted_key keyring.  On secure boot enabled systems with an arch
+specific IMA policy enabled, but without MODULE_SIG enabled, kernel modules
+are not signed, nor is the kernel module signing public key loaded onto the
+IMA keyring.
 
-This patch makes it possible to set these initialization flags directly in
-the kernel command line, so that no additional setup is required from the
-initial ram disk. The new allowed values for evm= are:
+In order to load the the kernel module signing key onto the IMA trusted
+keyring ('.ima'), the certificate needs to be signed by a CA key either on
+the builtin or secondary keyrings. The original version of this patch set
+created and loaded a kernel-CA key onto the builtin keyring. The kernel-CA
+key signed the kernel module signing key, allowing it to be loaded onto the
+IMA trusted keyring.
 
-allow_metadata_writes: permit metadata modificatons;
-complete: don't allow further changes of the EVM mode.
+However, missing from this version was support for the kernel-CA to sign the
+hardware token certificate. Adding that support would add additional
+complexity.
 
-While EVM_ALLOW_METADATA_WRITES will be applied directly by the kernel at
-setup time, EVM_SETUP_COMPLETE will be applied only if a public key is
-loaded by evm_load_x509().
+Since the kernel module signing key is embedded into the Linux kernel at
+build time, instead of creating and loading a kernel-CA onto the builtin
+trusted keyring, this version makes an exception and allows the 
+self-signed kernel module signing key to be loaded directly onto the 
+trusted IMA keyring.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- Documentation/admin-guide/kernel-parameters.txt |  8 +++++---
- security/integrity/evm/evm_main.c               | 16 ++++++++++++----
- 2 files changed, 17 insertions(+), 7 deletions(-)
+v4:
+* Updated Jarkko's Reviewed-by and Stefan's Ack-by. 
+* Fixed a bug where size was miscalculated for the case when only
+IMA_APPRAISE_MODSIG is enabled. Thanks Mimi for noticing it.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f61ce44c5d8e..eaf08095df43 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1339,9 +1339,11 @@
- 			has equivalent usage. See its documentation for details.
- 
- 	evm=		[EVM]
--			Format: { "fix" }
--			Permit 'security.evm' to be updated regardless of
--			current integrity status.
-+			Format: { "fix" | "allow_metadata_writes" | "complete" }
-+			fix: permit 'security.evm' to be updated regardless of
-+			current integrity status;
-+			allow_metadata_writes: permit metadata modificatons;
-+			complete: don't allow further changes of the EVM mode.
- 
- 	evm_hash=	[EVM] Hash algorithm used to calculate the HMAC.
- 			Format: { md5 | sha1 | rmd160 | sha256 | sha384
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index cb3754e0cc60..84a9b7a69b1f 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -56,17 +56,22 @@ static struct xattr_list evm_config_default_xattrnames[] = {
- 
- LIST_HEAD(evm_config_xattrnames);
- 
--static int evm_fixmode;
--static int __init evm_set_fixmode(char *str)
-+static int evm_fixmode __ro_after_init;
-+static int evm_complete __ro_after_init;
-+static int __init evm_set_param(char *str)
- {
- 	if (strncmp(str, "fix", 3) == 0)
- 		evm_fixmode = 1;
-+	else if (strncmp(str, "allow_metadata_writes", 21) == 0)
-+		evm_initialized |= EVM_ALLOW_METADATA_WRITES;
-+	else if (strncmp(str, "complete", 8) == 0)
-+		evm_complete = 1;
- 	else
- 		pr_err("invalid \"%s\" mode", str);
- 
- 	return 0;
- }
--__setup("evm=", evm_set_fixmode);
-+__setup("evm=", evm_set_param);
- 
- static void __init evm_init_config(void)
- {
-@@ -737,8 +742,11 @@ void __init evm_load_x509(void)
- 	int rc;
- 
- 	rc = integrity_load_x509(INTEGRITY_KEYRING_EVM, CONFIG_EVM_X509_PATH);
--	if (!rc)
-+	if (!rc) {
- 		evm_initialized |= EVM_INIT_X509;
-+		if (evm_complete)
-+			evm_initialized |= EVM_SETUP_COMPLETE;
-+	}
- }
- #endif
- 
+v3:
+
+* Fix the "Fixes" tag as suggested by Stefan for Patch 1/3.
+* Revert back the CA signed module signing key to only self-signed.
+* Allow self signed key as exception only for build time generated
+module signing key onto .ima keyring.
+
+v2:
+
+* Include feedback from Stefan - corrected the Fixes commit id in Patch 1
+and cleaned Patch 5/5.
+* Fix the issue reported by kernel test bot.
+* Include Jarkko's feedback on patch description.
+
+Nayna Jain (3):
+  keys: cleanup build time module signing keys
+  ima: enable signing of modules with build time generated key
+  ima: enable loading of build time generated key on .ima keyring
+
+ Makefile                      |  6 ++---
+ certs/Kconfig                 |  2 +-
+ certs/Makefile                |  8 ++++++
+ certs/system_certificates.S   | 13 ++++++++-
+ certs/system_keyring.c        | 50 ++++++++++++++++++++++++++++-------
+ include/keys/system_keyring.h |  7 +++++
+ init/Kconfig                  |  6 ++---
+ security/integrity/digsig.c   |  2 ++
+ 8 files changed, 76 insertions(+), 18 deletions(-)
+
 -- 
-2.26.2
-
+2.29.2
