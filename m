@@ -2,125 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6F7359A14
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Apr 2021 11:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558F7359D9C
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Apr 2021 13:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbhDIJz6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Apr 2021 05:55:58 -0400
-Received: from mout.gmx.net ([212.227.17.21]:33415 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233483AbhDIJz2 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Apr 2021 05:55:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1617962105;
-        bh=NaXATgTlSvZYeQCNcC5dpiVSGZEVmP6jxVk1PkPfcQc=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=YrX9h8ylb1wBf3aKE73Ua6016HX35JQF3cStRtF46tamqVy81bPMJudhmGnHkMbfE
-         Jdj5/viaWNHwqsBFS04pc5aBVtxAn28/0e4b5qfOiV9DICjTNEZMOGEIt4A3TM5ISM
-         9LMxReTBGgvtT5aRumjl37TtIjmPFMWJr8iypEcs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [87.130.101.138] ([87.130.101.138]) by web-mail.gmx.net
- (3c-app-gmx-bs15.server.lan [172.19.170.67]) (via HTTP); Fri, 9 Apr 2021
- 11:55:05 +0200
+        id S232087AbhDILn6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Apr 2021 07:43:58 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2818 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231370AbhDILn5 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 9 Apr 2021 07:43:57 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FGx1305h1z687PM;
+        Fri,  9 Apr 2021 19:36:39 +0800 (CST)
+Received: from fraphisprd00473.huawei.com (7.182.8.141) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Fri, 9 Apr 2021 13:43:42 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 0/7] ima/evm: Small enhancements
+Date:   Fri, 9 Apr 2021 13:43:06 +0200
+Message-ID: <20210409114313.4073-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Message-ID: <trinity-7c4b1b78-7c33-480e-a8bd-0536a4c67599-1617962105587@3c-app-gmx-bs15>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     "Tj (Elloe Linux)" <ml.linux@elloe.vision>
-Cc:     Kees Cook <keescook@chromium.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org, jsnitsel@redhat.com
-Subject: Aw: Re: Bug: TPM returned invalid status
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 9 Apr 2021 11:55:05 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <5e48c9ad-9e53-c079-83d1-7fea50412142@elloe.vision>
-References: <374e918c-f167-9308-2bea-ae6bc6a3d2e3@elloe.vision>
- <YBGpranyEwXaqAUg@kernel.org> <YBGqWp5FqKQJK1is@kernel.org>
- <b1e71d07546ccce7957ead9cc80303734251f6c9.camel@HansenPartnership.com>
- <202103291901.F15EA83FB6@keescook>
- <5e48c9ad-9e53-c079-83d1-7fea50412142@elloe.vision>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:hi+WRi5d9iXr3Pa9zekE/nBw4Rgt7B7Frf8UNpHtEaHBsICqejmcUmziC67telgcwOYbS
- 8ptHnvawEZWAt0MjVWZwrZlZk8pgewQk6LOMUQWubcmYcEbec9kndg1/x/7Pr2CB851XlOloMquI
- IO4D8Wvt4ITHDi7qBqZsNIn++NTzsRE67geLxo5mNkH7YVnPBbWoHnwsg1RYzWoLi8fIHnkVwVL+
- HDChucLLlEIt56nAnfUDHxZ4tmwxH0uQjMsPodUgCHIOmNLASPGnwXxUjKNl/My/rVBKpZYS0+BU
- lY=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SrNh8/bNofs=:0JhxFKWHLf73WCEuErMSoW
- ZwSg0PsIoDaM+Ln5VjcorLKHoYhy+kAitE212NrXpG0zAHHAhQVR078yJKpZphGonhJu47WKJ
- M1LPNJMntGfzS4zBAeLh/0u1t3lXVez2sxKSUm0olK9ua4mJKOPnQ1yU9pMiZL2jjIt6+B4EK
- Gd1KEHSFUzOl9hMVcEcWQI6L9MFbWWItpJrYJXkmZB/uddLzfvae/gfyOFYEyatRTcehYhums
- APhFSsAY5Vdv0BV+iB/gLIPpDRuIV1tOAVAwuu0jQcf2GZWksJ/CQOwUf3E3z793NUjeU2sdS
- Z2BTloGHqoQRiBRjRM88i5A5J0/PqiKuJYlsTVLZFpiJiiSZX02crBh9QrulJeJQ+4aM64+pL
- UeBaUE76J13QMx1Kn1Du3PfBJtTbgUpM+GDtTJpZbNxAS9PvHEqpwKXsXd+qxjLyeF1bxatEU
- wfbW/W34Ga5h4T3TFqNaEQm/SqePJejApyy3HhDCZZzW2TYdM2Cjc9/pr/WEDiEkA4UeASj67
- FMYPGXq/KK+oKaIuOrF3gG3M4NSRmCJ/wLUZEYOMYAur/pEaKB3ahXJN2gcSgvH1CQmO2AT1p
- 7LkW80JwI9tgos9KTmz/UjZTKSH71vaMNzJEOe8OA73XTJ7qyhYujBKpcYSbMfa1sMUCPDIJd
- RwY8HCyqXUCMK+83b9ED/ZCGz9hLt8A3+ZgYgOP9GeYxRbJ/5cBVj9HR/kYosM8uULgUQ+ifn
- 1xzrVpvcl4DkCFkbdJ52S1jc/d3YKSvqTXwCBiXGsngwLwJQAiKYxg01SCrcdTyFQgAMmdrp7
- t6WGkTQamPUwVsO7MwOj1V6fWnkcae3y5pWKKDPeZurZGX7JnZaaEsDa3RMHp4UR8/vLjffLw
- nr6v05FZUCQqW1xZUmRDPuIE9oL7DjND3QOkc1YFmwX3yIvkNeYx/sdlMxCbZOpLjukCokdBA
- wlaLelq0xaA==
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [7.182.8.141]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+This patch set provides some small enhancements for IMA and EVM.
 
-Hi,
+Patch 1 avoids measurement and audit when access to the file will be denied
+by IMA itself.
 
->
-> On 30/03/2021 03:04, Kees Cook wrote:
-> >
-> > Does this series solve the issue too?
-> >
-> > https://lore.kernel.org/linux-integrity/1613955394-13152-1-git-send-em=
-ail-LinoSanfilippo@gmx.de/
-> >
-> > (I haven't had a chance to test either series with my TPM, but I see t=
-he
-> > same "TPM returned invalid status" errors recently.)
-> >
->
-> Unfortunately no. I tested it immediately but forgot to let you know.
->
->
-> kernel: Linux version 5.12.0-rc5tpm-fix+ (tj@elloe000) (gcc (Ubuntu
-> 9.3.0-17ubuntu1~20.04) 9.3.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #29
-> SMP PREEMPT Tue Mar 30 09:05:15 BST 2021
-> ...
+Patch 2 introduces a new policy keyword meta_immutable to protect the label
+transition during binary execution.
 
-Well you tested the series with 5.12-rc5 while it was based on 5.11. Patch=
- 2
-in the series is supposed to fix the "invalid status" warning by making su=
-re
-that the required locality has been requested before.
-To avoid such issues at all and to simplify the whole locality handling (a=
-nd
-also to be prepared for interrupt handling which also requires locality ma=
-nagement)
-that patch furthermore ensures that the locality is requested only once at=
- driver
-startup and not released until driver shutdown.
+Patch 3-5 add new hard-coded policies aiming at producing measurement or
+enforcing access to files that likely are provided by software vendors.
 
-However between 5.11 and 5.12-rc5 there have been at least two patches tha=
-t
-again introduced a locality request/release combo (d53a6adfb553 "tpm, tpm_=
-tis:
-Decorate tpm_tis_gen_interrupt() with request_locality()" and a5665ec2affd
-"tpm, tpm_tis: Decorate tpm_get_timeouts() with request_locality()").
+Patch 6 increases the crypto resistance of EVM by allowing the choice of
+the hash algorithm for the HMAC.
 
-The latter results in the locality being released again before tpm_tis_sta=
-tus()
-is called and thus reintroduced the issue patch 2 fixed.
+Patch 7 adds two new values for the evm= option in the kernel command line
+to facilitate the setup of EVM.
 
-I will prepare another series based on the latest kernel but at least for =
-5.11
-the series should fix the issue (and also make interrupts working).
+Roberto Sassu (7):
+  ima: Avoid measurement and audit if access to the file will be denied
+  ima: Add meta_immutable appraisal type
+  ima: Introduce exec_tcb and tmpfs policies
+  ima: Introduce appraise_exec_tcb and appraise_tmpfs policies
+  ima: Introduce appraise_exec_immutable policy
+  evm: Allow choice of hash algorithm for HMAC
+  evm: Extend evm= with allow_metadata_writes and complete values
 
-Best regards,
-Lino
+ Documentation/ABI/testing/ima_policy          |  2 +-
+ .../admin-guide/kernel-parameters.txt         | 36 +++++++-
+ security/integrity/evm/Kconfig                | 34 +++++++
+ security/integrity/evm/evm.h                  |  2 +
+ security/integrity/evm/evm_crypto.c           | 55 ++++++++++--
+ security/integrity/evm/evm_main.c             | 29 ++++--
+ security/integrity/ima/ima_appraise.c         |  9 ++
+ security/integrity/ima/ima_main.c             | 20 +++--
+ security/integrity/ima/ima_policy.c           | 90 ++++++++++++++-----
+ security/integrity/integrity.h                |  4 +-
+ 10 files changed, 232 insertions(+), 49 deletions(-)
+
+-- 
+2.26.2
 
