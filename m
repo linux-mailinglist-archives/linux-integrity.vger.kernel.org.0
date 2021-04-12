@@ -2,123 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E82C335AA7A
-	for <lists+linux-integrity@lfdr.de>; Sat, 10 Apr 2021 05:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC04135C5FB
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Apr 2021 14:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbhDJDTt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Apr 2021 23:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhDJDTs (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Apr 2021 23:19:48 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D14CC061762;
-        Fri,  9 Apr 2021 20:19:35 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id m18so1439245plc.13;
-        Fri, 09 Apr 2021 20:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=FuDb4XqUMe9TU7/4yVIm0WIy1Jl3xWNbvk7QdIOf26Q=;
-        b=k/ie8mfKXozaPOxCOdJJQ2mBuu/6dyJYHXrhscpGC0VIIna+olep/MXSJXii+SZDP+
-         Rn314TLsda3nSrP8YrGr+LvtNHv4WHIt5OtR547J6IBtBECC2MazDiY3KGzsEuX7yvk1
-         jKUN2ynCrlitLfF/4vUl8MaisEhglwFamz9CVwGRlFJRzY0BFpo4fXFKOHDbkl/FSZEE
-         ynsFejZTR0kfgDuT4QPsDeql84d4ZEl3QbvBSWpqlhfNqJQGWS4DglvJyd0MMLBct9hg
-         y5dMOvBnwQVxpqxeb2RehXQDfUtSCfYOrCxGQ+SP1vFmXjPm0mOvoqiMka700bmMp7RV
-         SkDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=FuDb4XqUMe9TU7/4yVIm0WIy1Jl3xWNbvk7QdIOf26Q=;
-        b=Ll1GZelE8pqc5T/xiwk1s4WFBwhUll9VFqDRoeB+C5r3C1qRDXxeSjoCOhOSLk9HQo
-         lml2Ru6rK9dADTUmKddWJuKbGH3iN1n51TG7TNuPsIG5ifR4F+YQsLK4NvzGUs4aN5sq
-         /+B7IBSU4BylRqaLrh59KXDqyU/v29RwGqVrCjUYUZGn3wbWnU9xqUckWjn0KdsrLU7l
-         DDnuNSrfu2mWnlc1zeAjp9GPsBsa3sfJeYp130m2vz1Xq5cPtva86e3HCz55MshvpHm4
-         58Eyl5YzeTJutWA1vXBCyUBZhvFsMUI0VmYCtvT5vE33RZ3MD7l2LONif0SK4RFJMaOC
-         cHkw==
-X-Gm-Message-State: AOAM533sM7yxpzB24jY9SjDFXQtKPxb2ssxclS/BcNjzfvTP19ZTgPjY
-        unE953/YpOc+8Gp5Ape2d/xVxK5HtW33/g==
-X-Google-Smtp-Source: ABdhPJwFAl99Oh5SmbbDo6TIxx9vPTPUoYlUfxcVE7x2YoPSJuIF+aCDO31zbZ/8E2WrbCuLiqLJZQ==
-X-Received: by 2002:a17:90b:b09:: with SMTP id bf9mr16459246pjb.17.1618024774291;
-        Fri, 09 Apr 2021 20:19:34 -0700 (PDT)
-Received: from [10.43.90.134] ([103.114.158.1])
-        by smtp.gmail.com with ESMTPSA id s2sm3951482pjs.49.2021.04.09.20.19.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Apr 2021 20:19:33 -0700 (PDT)
-Subject: Re: [PATCH v2] integrity: Add declarations to init_once void
- arguments.
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     jmorris@namei.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-References: <20210407014438.39516-1-unclexiaole@gmail.com>
- <cb640adf4fe93e054d7a8c148fea601048bfd562.camel@linux.ibm.com>
-From:   Jiele Zhao <unclexiaole@gmail.com>
-Message-ID: <48cf65b2-8dd8-4ceb-15a8-9aedecbcca75@gmail.com>
-Date:   Sat, 10 Apr 2021 11:19:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S238732AbhDLMQT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Apr 2021 08:16:19 -0400
+Received: from mgw-02.mpynet.fi ([82.197.21.91]:59198 "EHLO mgw-02.mpynet.fi"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237283AbhDLMQS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 12 Apr 2021 08:16:18 -0400
+X-Greylist: delayed 598 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Apr 2021 08:16:16 EDT
+Received: from pps.filterd (mgw-02.mpynet.fi [127.0.0.1])
+        by mgw-02.mpynet.fi (8.16.0.43/8.16.0.43) with SMTP id 13CBuj4R036297;
+        Mon, 12 Apr 2021 15:05:00 +0300
+Received: from ex13.tuxera.com (ex13.tuxera.com [178.16.184.72])
+        by mgw-02.mpynet.fi with ESMTP id 37vmqsr2ph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 12 Apr 2021 15:05:00 +0300
+Received: from tuxera-exch.ad.tuxera.com (10.20.48.11) by
+ tuxera-exch.ad.tuxera.com (10.20.48.11) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 12 Apr 2021 15:04:59 +0300
+Received: from tuxera-exch.ad.tuxera.com ([fe80::552a:f9f0:68c3:d789]) by
+ tuxera-exch.ad.tuxera.com ([fe80::552a:f9f0:68c3:d789%12]) with mapi id
+ 15.00.1497.012; Mon, 12 Apr 2021 15:04:59 +0300
+From:   Anton Altaparmakov <anton@tuxera.com>
+To:     "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>
+CC:     "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@hansenpartnership.com>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "alban@kinvolk.io" <alban@kinvolk.io>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
+        "containers@lists.linux-foundation.org" 
+        <containers@lists.linux-foundation.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "cyphar@cyphar.com" <cyphar@cyphar.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "geofft@ldpreload.com" <geofft@ldpreload.com>,
+        "hch@lst.de" <hch@lst.de>,
+        "hirofumi@mail.parknet.co.jp" <hirofumi@mail.parknet.co.jp>,
+        "john.johansen@canonical.com" <john.johansen@canonical.com>,
+        "josh@joshtriplett.org" <josh@joshtriplett.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "lennart@poettering.net" <lennart@poettering.net>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mpatel@redhat.com" <mpatel@redhat.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "seth.forshee@canonical.com" <seth.forshee@canonical.com>,
+        "smbarber@chromium.org" <smbarber@chromium.org>,
+        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
+        "tkjos@google.com" <tkjos@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "tycho@tycho.ws" <tycho@tycho.ws>, "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+Subject: Re: [PATCH v6 24/40] fs: make helpers idmap mount aware
+Thread-Topic: [PATCH v6 24/40] fs: make helpers idmap mount aware
+Thread-Index: AQHXL5QPJZ+OaKJz8USD3Dodtq0P1w==
+Date:   Mon, 12 Apr 2021 12:04:59 +0000
+Message-ID: <E901E25F-41FA-444D-B3C7-A7A786DDD5D5@tuxera.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [109.145.212.130]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <BA514E4FAABFD8498C8B1419EB26396B@ex13.tuxera.com>
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-In-Reply-To: <cb640adf4fe93e054d7a8c148fea601048bfd562.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: Vd5127wVnEcv9vrUnKYvowNFSa7J_xlE
+X-Proofpoint-ORIG-GUID: Vd5127wVnEcv9vrUnKYvowNFSa7J_xlE
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-12_09:2021-04-12,2021-04-12 signatures=0
+X-Proofpoint-Spam-Details: rule=mpy_notspam policy=mpy score=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 malwarescore=0 spamscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104120082
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Okay, thank you. I'll keep an eye on that !
+Hi,
 
-On 2021/4/10 2:55, Mimi Zohar wrote:
-> Hi Jiele,
->
-> On Wed, 2021-04-07 at 01:44 +0000, Jiele Zhao wrote:
->> init_once is a callback to kmem_cache_create. The parameter
->> type of this function is void *, so it's better to give a
->> explicit cast here.
->>
->> Signed-off-by: Jiele Zhao <unclexiaole@gmail.com>
->> ---
->>   security/integrity/iint.c         | 2 +-
->>   security/integrity/ima/ima_main.c | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
->> index 0ba01847e836..fca8a9409e4a 100644
->> --- a/security/integrity/iint.c
->> +++ b/security/integrity/iint.c
->> @@ -160,7 +160,7 @@ void integrity_inode_free(struct inode *inode)
->>   
->>   static void init_once(void *foo)
->>   {
->> -	struct integrity_iint_cache *iint = foo;
->> +	struct integrity_iint_cache *iint = (struct integrity_iint_cache *) foo;
->>   
->>   	memset(iint, 0, sizeof(*iint));
->>   	iint->ima_file_status = INTEGRITY_UNKNOWN;
->> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
->> index 9ef748ea829f..03bef720ab44 100644
->> --- a/security/integrity/ima/ima_main.c
->> +++ b/security/integrity/ima/ima_main.c
->> @@ -482,7 +482,7 @@ int ima_bprm_check(struct linux_binprm *bprm)
->>   }
->>   
->>   /**
->> - * ima_path_check - based on policy, collect/store measurement.
->> + * ima_file_check - based on policy, collect/store measurement.
->>    * @file: pointer to the file to be measured
->>    * @mask: contains MAY_READ, MAY_WRITE, MAY_EXEC or MAY_APPEND
->>    *
-> This change was already posted as "ima: Fix function name error in
-> comment".  I've dropped this hunk.  In the future, please review your
-> patch line by line before posting.
->
-> Applied to
-> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
-> next-integrity
->
-> thanks,
->
-> Mimi
->
+I noticed this patch got merged into mainline and looking through the HFS+ changes, I noticed something that struck me as odd.  I am not familiar with this patch set so perhaps it is the intention but I wanted to ask you because it just seems strange thing to do.
+
+So you are adding a new argument of "struct user_namespace *mnt_userns" to lots of functions but then inside the functions when they call another function you often make that use "&init_user_ns" instead of the passed in "mnt_userns" which kind of defeats the point of having the new "mnt_userns" argument altogether, doesn't it?
+
+Example after this chunk:
+
+diff --git a/fs/hfsplus/inode.c b/fs/hfsplus/inode.c
+index 642e067d8fe8..7a937de9b2ad 100644
+--- a/fs/hfsplus/inode.c
++++ b/fs/hfsplus/inode.c
+@@ -241,7 +241,8 @@ static int hfsplus_file_release(struct inode *inode, struct file *file)
+        return 0;
+ }
+
+-static int hfsplus_setattr(struct dentry *dentry, struct iattr *attr)
++static int hfsplus_setattr(struct user_namespace *mnt_userns,
++                    struct dentry *dentry, struct iattr *attr)
+ {
+        struct inode *inode = d_inode(dentry);
+        int error;
+
+The code now looks like this:
+
+static int hfsplus_setattr(struct user_namespace *mnt_userns,
+                           struct dentry *dentry, struct iattr *attr)
+{
+        struct inode *inode = d_inode(dentry);
+        int error;
+
+        error = setattr_prepare(&init_user_ns, dentry, attr);
+        if (error)
+                return error;
+[...]
+        setattr_copy(&init_user_ns, inode, attr);
+        mark_inode_dirty(inode);
+
+        return 0;
+}
+
+Shouldn't that be using mnt_userns instead of &init_user_ns both for the setattr_prepare() and setattr_copy() calls?
+
+Please note this is just one example - it seems the kernel is now littered with such examples in current mainline and I don't mean just HFS+ - this is now all over the place...
+
+Best regards,
+
+	Anton
+-- 
+Anton Altaparmakov <anton at tuxera.com> (replace at with @)
+Lead in File System Development, Tuxera Inc., http://www.tuxera.com/
+Linux NTFS maintainer
+
