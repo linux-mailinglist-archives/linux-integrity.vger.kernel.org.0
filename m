@@ -2,181 +2,175 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEE435D75D
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Apr 2021 07:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5255135DA06
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Apr 2021 10:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243397AbhDMFmk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 13 Apr 2021 01:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245405AbhDMFmh (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 13 Apr 2021 01:42:37 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FDFC061756
-        for <linux-integrity@vger.kernel.org>; Mon, 12 Apr 2021 22:42:17 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id x13so15216156lfr.2
-        for <linux-integrity@vger.kernel.org>; Mon, 12 Apr 2021 22:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MITjT2ay51KOcdM71HVFO+ySm3JooSqiJI3Cb7Ri/aQ=;
-        b=on4KYu7s8YlB0xwBDXTiFFbdyzkvcU7IAPfyGWXq5powKidROTOJGmYgHpqcw41WBk
-         LKpnOH6b+gid2kUOFlDS9dLSbLUnXOhlFRgMmQBNx+hlvAIRZtZ07ga9CeO/UbifKU1F
-         k7bY/jo0BhF5LCfDddP8BLCX368gJlErfsjpgCrp3qE9NdnNmtf2G+6Eg2SdPpJoGmtF
-         IIkg9jc4Me4BMMIgM5CJEzPfYIECwFOi2unjFtYwX2tBiRT7FxVTQv2i2lnTZqAD00ZB
-         plosOla9KJY3ZZTEUXfgwMTXbWAQ2jUh9L3av/iP1JtGxs75TTJ+qEV2j1rvPxBSr0vi
-         ytpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MITjT2ay51KOcdM71HVFO+ySm3JooSqiJI3Cb7Ri/aQ=;
-        b=pUSFPREFmjUtF489M9ciG//A7ZuncnrCYlYdzYFj5sVe+5V1BMXQ5m4Irx8/+jum1U
-         utdPRW3GTkAGk/fgeaUV84y0qXQia56KnHWnSg/YCE2Tq+TfDeXH5MVOJCevCdgkKRUI
-         AVaNSY5dqAth/nP82Hl6yk3F7yzRyTjMQFQUpmz+0pLC6KNqDa1btHotiUTmuIpzGOBw
-         CXQswqEa+9AuXQ+2oQimiHHNzSwgDRAf3bwpHarrYbLAQIW08QFxWeL5Oytt6jf/1jKE
-         WpejwY0eZJ1ZWWy8idPmWupXUrqDczczi65JbrtLPInjwLAnOmXiRFwGODEIPJaEZG6V
-         G44w==
-X-Gm-Message-State: AOAM532nIOVdv2s0oMzSkvSY/Fru21XV3W88QU3x8oz4rkWz6DW75K5L
-        kcelD/1uyJ0urAaUK5cW4gATcntGvFf8r/PMzNExow==
-X-Google-Smtp-Source: ABdhPJyMKOQIyeojpXPuo0SSdzWliMMkGmlkNBcznqsQM2TOrLpFA1+nvOPmwAotZazrF73OIccOTqzdFp3YLO7vuwY=
-X-Received: by 2002:a05:6512:3c8e:: with SMTP id h14mr3031818lfv.113.1618292535723;
- Mon, 12 Apr 2021 22:42:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210412160101.1627882-1-colin.king@canonical.com>
- <adeb7c73d0bb354f04f8117c5ccf6b006dfc15de.camel@linux.ibm.com> <53fef8cf-0dd4-e4fe-260b-0f5ad25d9014@canonical.com>
-In-Reply-To: <53fef8cf-0dd4-e4fe-260b-0f5ad25d9014@canonical.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 13 Apr 2021 11:12:04 +0530
-Message-ID: <CAFA6WYPt97daNPQ+tWpFunTK77Q-vP=sdya7k+bUEJ9YHDq-Jg@mail.gmail.com>
-Subject: Re: [PATCH][next] KEYS: trusted: Fix missing null return from kzalloc call
-To:     Colin Ian King <colin.king@canonical.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
+        id S242878AbhDMI1M (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 13 Apr 2021 04:27:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50806 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229794AbhDMI1L (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 13 Apr 2021 04:27:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7981161242;
+        Tue, 13 Apr 2021 08:26:43 +0000 (UTC)
+Date:   Tue, 13 Apr 2021 10:26:40 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Anton Altaparmakov <anton@tuxera.com>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@hansenpartnership.com>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "alban@kinvolk.io" <alban@kinvolk.io>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
+        "containers@lists.linux-foundation.org" 
+        <containers@lists.linux-foundation.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "cyphar@cyphar.com" <cyphar@cyphar.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "geofft@ldpreload.com" <geofft@ldpreload.com>,
+        "hch@lst.de" <hch@lst.de>,
+        "hirofumi@mail.parknet.co.jp" <hirofumi@mail.parknet.co.jp>,
+        "john.johansen@canonical.com" <john.johansen@canonical.com>,
+        "josh@joshtriplett.org" <josh@joshtriplett.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "lennart@poettering.net" <lennart@poettering.net>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mpatel@redhat.com" <mpatel@redhat.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "seth.forshee@canonical.com" <seth.forshee@canonical.com>,
+        "smbarber@chromium.org" <smbarber@chromium.org>,
+        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
+        "tkjos@google.com" <tkjos@google.com>,
+        "tycho@tycho.ws" <tycho@tycho.ws>, "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+Subject: Re: [PATCH v6 24/40] fs: make helpers idmap mount aware
+Message-ID: <20210413082640.krcmqac6y2esuz24@wittgenstein>
+References: <E901E25F-41FA-444D-B3C7-A7A786DDD5D5@tuxera.com>
+ <CAHk-=wiXqbSgqzv53C98sbaHVqpc+c8NZTpXC7bBMQT3OznE4g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiXqbSgqzv53C98sbaHVqpc+c8NZTpXC7bBMQT3OznE4g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 12 Apr 2021 at 22:34, Colin Ian King <colin.king@canonical.com> wrote:
->
-> On 12/04/2021 17:48, James Bottomley wrote:
-> > On Mon, 2021-04-12 at 17:01 +0100, Colin King wrote:
-> >> From: Colin Ian King <colin.king@canonical.com>
-> >>
-> >> The kzalloc call can return null with the GFP_KERNEL flag so
-> >> add a null check and exit via a new error exit label. Use the
-> >> same exit error label for another error path too.
-> >>
-> >> Addresses-Coverity: ("Dereference null return value")
-> >> Fixes: 830027e2cb55 ("KEYS: trusted: Add generic trusted keys
-> >> framework")
-> >> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> >> ---
-> >>  security/keys/trusted-keys/trusted_core.c | 6 ++++--
-> >>  1 file changed, 4 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/security/keys/trusted-keys/trusted_core.c
-> >> b/security/keys/trusted-keys/trusted_core.c
-> >> index ec3a066a4b42..90774793f0b1 100644
-> >> --- a/security/keys/trusted-keys/trusted_core.c
-> >> +++ b/security/keys/trusted-keys/trusted_core.c
-> >> @@ -116,11 +116,13 @@ static struct trusted_key_payload
-> >> *trusted_payload_alloc(struct key *key)
-> >>
-> >>      ret = key_payload_reserve(key, sizeof(*p));
-> >>      if (ret < 0)
-> >> -            return p;
-> >> +            goto err;
-> >>      p = kzalloc(sizeof(*p), GFP_KERNEL);
-> >> +    if (!p)
-> >> +            goto err;
-> >>
-> >>      p->migratable = migratable;
-> >> -
-> >> +err:
-> >>      return p;
+On Mon, Apr 12, 2021 at 09:23:38AM -0700, Linus Torvalds wrote:
+> On Mon, Apr 12, 2021 at 5:05 AM Anton Altaparmakov <anton@tuxera.com> wrote:
 > >
-> > This is clearly a code migration bug in
-> >
-> > commit 251c85bd106099e6f388a89e88e12d14de2c9cda
-> > Author: Sumit Garg <sumit.garg@linaro.org>
-> > Date:   Mon Mar 1 18:41:24 2021 +0530
-> >
-> >     KEYS: trusted: Add generic trusted keys framework
-> >
-> > Which has for addition to trusted_core.c:
-> >
-> > +static struct trusted_key_payload *trusted_payload_alloc(struct key
-> > *key)
-> > +{
-> > +       struct trusted_key_payload *p = NULL;
-> > +       int ret;
-> > +
-> > +       ret = key_payload_reserve(key, sizeof(*p));
-> > +       if (ret < 0)
-> > +               return p;
-> > +       p = kzalloc(sizeof(*p), GFP_KERNEL);
-> > +
-> > +       p->migratable = migratable;
-> > +
-> > +       return p;
-> > +}
-> >
-> > And for trusted_tpm1.c:
-> >
-> > -static struct trusted_key_payload *trusted_payload_alloc(struct key
-> > *key)
-> > -{
-> > -       struct trusted_key_payload *p = NULL;
-> > -       int ret;
-> > -
-> > -       ret = key_payload_reserve(key, sizeof *p);
-> > -       if (ret < 0)
-> > -               return p;
-> > -       p = kzalloc(sizeof *p, GFP_KERNEL);
-> > -       if (p)
-> > -               p->migratable = 1; /* migratable by default */
-> > -       return p;
-> > -}
-> >
-> > The trusted_tpm1.c code was correct and we got this bug introduced by
-> > what should have been a simple cut and paste ... how did that happen?
+> > Shouldn't that be using mnt_userns instead of &init_user_ns both for the setattr_prepare() and setattr_copy() calls?
+> 
+> It doesn't matter for a filesystem that hasn't marked itself as
+> supporting idmaps.
+> 
+> If the filesystem doesn't set FS_ALLOW_IDMAP, then mnt_userns is
+> always going to be &init_user_ns.
+> 
+> That said, I don't think you are wrong - it would probably be a good
+> idea to pass down the 'mnt_userns' argument just to avoid confusion.
+> But if you look at the history, you'll see that adding the mount
+> namespace argument to the helper functions (like setattr_copy())
+> happened before the actual "switch the filesystem setattr() function
+> over to get the namespace argument".
+> 
+> So the current situation is partly an artifact of how the incremental
+> filesystem changes were done.
 
-It was a little more than just cut and paste where I did generalized
-"migratable" flag to be provided by the corresponding trust source's
-ops struct.
+I'm not so sure the complaint in the original mail is obviously valid.
+Passing down mnt_userns through all filesystem codepaths at once
+would've caused way more churn. There are filesystems that e.g. do stuff
+like this:
 
-> > And therefore, how safe is the rest of the extraction into
-> > trusted_core.c?
-> >
->
-> fortunately it gets caught by static analysis, but it does make me also
-> concerned about what else has changed and how this gets through review.
->
+<fstype>_create()
+-> __<fstype>_internal_create()
+<fstype>_mknod()
+-> __<fstype>_internal_create()
+<fstype>_rmdir()
+-> __<fstype>_internal_create()
 
-I agree that extraction into trusted_core.c was a complex change but
-this patch has been up for review for almost 2 years [1]. And
-extensive testing can't catch this sort of bug as allocation wouldn't
-normally fail.
+where __<fstype>_internal_create() was additionally called in a few
+other places.
+So instead of only changing <fstype>_<i_op> we would've now also have to
+change __<fstype>_internal_create() which would've caused the fs
+specific change to be more invasive than it needed to be. The way we
+did it allowed us to keep the change legible.
 
-[1] https://lwn.net/Articles/795416/
+And that's just a simple example.
+There are fses that have more convoluted callpaths:
+- an internal helper used additionally as a callback in a custom ops
+  struct
+- or most i_ops boiling down to a single internal function
+So the choice was also deliberate.
 
--Sumit
+We've also tried to be consistent when we actually pass down mnt_userns
+further within the filesystem and when we simply use init_user_ns in
+general. Just looking at setattr_copy() which was in the example:
 
-> > James
-> >
-> >
->
+                   attr.c:void setattr_copy(struct user_namespace *mnt_userns, struct inode *inode,
+                   attr.c:EXPORT_SYMBOL(setattr_copy);
+                   btrfs/inode.c:          setattr_copy(&init_user_ns, inode, attr);
+                   cifs/inode.c:   setattr_copy(&init_user_ns, inode, attrs);
+                   cifs/inode.c:   setattr_copy(&init_user_ns, inode, attrs);
+                   exfat/file.c:   setattr_copy(&init_user_ns, inode, attr);
+                   ext2/inode.c:   setattr_copy(&init_user_ns, inode, iattr);
+**FS_ALLOW_IDMAP** ext4/inode.c:           setattr_copy(mnt_userns, inode, attr);
+                   f2fs/file.c:static void __setattr_copy(struct user_namespace *mnt_userns,
+                   f2fs/file.c:#define __setattr_copy setattr_copy
+                   f2fs/file.c:    __setattr_copy(&init_user_ns, inode, attr);
+                   fat/file.c:      * setattr_copy can't truncate these appropriately, so we'll
+**FS_ALLOW_IDMAP** fat/file.c:     setattr_copy(mnt_userns, inode, attr);
+                   gfs2/inode.c:   setattr_copy(&init_user_ns, inode, attr);
+                   hfs/inode.c:    setattr_copy(&init_user_ns, inode, attr);
+                   hfsplus/inode.c:        setattr_copy(&init_user_ns, inode, attr);
+                   hostfs/hostfs_kern.c:   setattr_copy(&init_user_ns, inode, attr);
+                   hpfs/inode.c:   setattr_copy(&init_user_ns, inode, attr);
+                   hugetlbfs/inode.c:      setattr_copy(&init_user_ns, inode, attr);
+                   jfs/file.c:     setattr_copy(&init_user_ns, inode, iattr);
+                   kernfs/inode.c: setattr_copy(&init_user_ns, inode, iattr);
+**helper library** libfs.c:        setattr_copy(mnt_userns, inode, iattr);
+                   minix/file.c:   setattr_copy(&init_user_ns, inode, attr);
+                   nilfs2/inode.c: setattr_copy(&init_user_ns, inode, iattr);
+                   ocfs2/dlmfs/dlmfs.c:    setattr_copy(&init_user_ns, inode, attr);
+                   ocfs2/file.c:   setattr_copy(&init_user_ns, inode, attr);
+                   omfs/file.c:    setattr_copy(&init_user_ns, inode, attr);
+                   orangefs/inode.c:       setattr_copy(&init_user_ns, inode, iattr);
+                   proc/base.c:    setattr_copy(&init_user_ns, inode, attr);
+                   proc/generic.c: setattr_copy(&init_user_ns, inode, iattr);
+                   proc/proc_sysctl.c:     setattr_copy(&init_user_ns, inode, attr);
+                   ramfs/file-nommu.c:     setattr_copy(&init_user_ns, inode, ia);
+                   reiserfs/inode.c:               setattr_copy(&init_user_ns, inode, attr);
+                   sysv/file.c:    setattr_copy(&init_user_ns, inode, attr);
+                   udf/file.c:     setattr_copy(&init_user_ns, inode, attr);
+                   ufs/inode.c:    setattr_copy(&init_user_ns, inode, attr);
+                   zonefs/super.c: setattr_copy(&init_user_ns, inode, iattr);
+
+so we pass mnt_userns further down for all fses that have FS_ALLOW_IDMAP
+set or where it's located in a helper library like libfs whose helpers
+might be called by an idmapped mount aware fs.
+
+When an fs is made aware of idmapped mounts the mnt_userns will
+naturally be passed down further at which point the relevant fs
+developer can decide how to restructure their own internal helpers
+instead of vfs developers deciding these internals for them.
+
+The xfs port is a good example where the xfs developers had - rightly so
+- opinions on how they wanted the calling conventions for their internal
+helpers to look like and how they wanted to pass around mnt_userns. I
+don't feel in a position to mandate this from a vfs developers
+perspective. I will happily provide input and express my opinion but the
+authority of the vfs-calling-convention police mostly ends at the i_op
+level.
+
+Christian
