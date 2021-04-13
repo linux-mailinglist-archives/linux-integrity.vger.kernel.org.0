@@ -2,175 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5255135DA06
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Apr 2021 10:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0E035DE33
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Apr 2021 14:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242878AbhDMI1M (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 13 Apr 2021 04:27:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50806 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229794AbhDMI1L (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 13 Apr 2021 04:27:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7981161242;
-        Tue, 13 Apr 2021 08:26:43 +0000 (UTC)
-Date:   Tue, 13 Apr 2021 10:26:40 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Anton Altaparmakov <anton@tuxera.com>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "alban@kinvolk.io" <alban@kinvolk.io>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
-        "containers@lists.linux-foundation.org" 
-        <containers@lists.linux-foundation.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "cyphar@cyphar.com" <cyphar@cyphar.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "geofft@ldpreload.com" <geofft@ldpreload.com>,
-        "hch@lst.de" <hch@lst.de>,
-        "hirofumi@mail.parknet.co.jp" <hirofumi@mail.parknet.co.jp>,
-        "john.johansen@canonical.com" <john.johansen@canonical.com>,
-        "josh@joshtriplett.org" <josh@joshtriplett.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "lennart@poettering.net" <lennart@poettering.net>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mpatel@redhat.com" <mpatel@redhat.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "seth.forshee@canonical.com" <seth.forshee@canonical.com>,
-        "smbarber@chromium.org" <smbarber@chromium.org>,
-        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "tkjos@google.com" <tkjos@google.com>,
-        "tycho@tycho.ws" <tycho@tycho.ws>, "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-Subject: Re: [PATCH v6 24/40] fs: make helpers idmap mount aware
-Message-ID: <20210413082640.krcmqac6y2esuz24@wittgenstein>
-References: <E901E25F-41FA-444D-B3C7-A7A786DDD5D5@tuxera.com>
- <CAHk-=wiXqbSgqzv53C98sbaHVqpc+c8NZTpXC7bBMQT3OznE4g@mail.gmail.com>
+        id S1344109AbhDMMDE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 13 Apr 2021 08:03:04 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34082 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238034AbhDMMDD (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 13 Apr 2021 08:03:03 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13DBX5Mv086301;
+        Tue, 13 Apr 2021 08:02:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=ifkBprtyWUXYfCOYa4U7gvP05gYG3xnjYflTQTMmyXM=;
+ b=YttfGevvlGgLSo2wYxoQeWUUd9ULgp2VJ8ETl9qfLSikfUM84rKmkAzTLxbWJvhDlCOL
+ RNKYkzA+XioKtZBTaqeG7RujvDjZPh4qxMW0ItXdajHz8Qn/Z+/FrM0V8G4GRG0bGpPu
+ GkeO7Wt8NhmOuIiTyUxt7Wkn5FZ4TQFPFxv4Li5H02fGSNEZwju05SwmxlNVXk/6rWFo
+ JOAjo9yBurjsvvcQ//lsvtdhGzicmRqOdBhv7ogWVzj4dYWxji42jCXcPZSPPTu8V/SB
+ jExRjwgTO8O6gDIplBpRe2F8Tahlr7WQjAcGO2G7VnqAOU/eEa65szqGhfhbk4ac7q6L YQ== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37vjtu8k2j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Apr 2021 08:02:41 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13DBxNgg024352;
+        Tue, 13 Apr 2021 12:02:39 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 37u3n89d24-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Apr 2021 12:02:39 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13DC2b8u37421448
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Apr 2021 12:02:37 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 06B3752057;
+        Tue, 13 Apr 2021 12:02:37 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.135.168])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E25545204E;
+        Tue, 13 Apr 2021 12:02:35 +0000 (GMT)
+Message-ID: <b65400f3c4c54f74724247d111c46fbfea3183d4.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils] travis: Fix openSUSE Tumbleweed
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Petr Vorel <pvorel@suse.cz>, linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>
+Date:   Tue, 13 Apr 2021 08:02:34 -0400
+In-Reply-To: <20210312114152.20475-1-pvorel@suse.cz>
+References: <20210312114152.20475-1-pvorel@suse.cz>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Y2azSG4ytf68yPSNkTasY9eYwYhBCVS3
+X-Proofpoint-ORIG-GUID: Y2azSG4ytf68yPSNkTasY9eYwYhBCVS3
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiXqbSgqzv53C98sbaHVqpc+c8NZTpXC7bBMQT3OznE4g@mail.gmail.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-13_04:2021-04-13,2021-04-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 bulkscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=999 clxscore=1015 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104130081
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Apr 12, 2021 at 09:23:38AM -0700, Linus Torvalds wrote:
-> On Mon, Apr 12, 2021 at 5:05 AM Anton Altaparmakov <anton@tuxera.com> wrote:
-> >
-> > Shouldn't that be using mnt_userns instead of &init_user_ns both for the setattr_prepare() and setattr_copy() calls?
+Hi Petr,
+
+On Fri, 2021-03-12 at 12:41 +0100, Petr Vorel wrote:
+> openSUSE Tumbleweed build fails due broken permission detection due
+> faccessat2() incompatibility in libseccomp/runc used in old docker with
+> old kernel on Ubuntu Focal on hosts in Travis CI together with guests
+> with the newest glibc 2.33.
 > 
-> It doesn't matter for a filesystem that hasn't marked itself as
-> supporting idmaps.
+> Fixing Tumbleweed required switch to podman and downloading newest runc
+> release (v1.0.0-rc93) which contains the fix [1], because proposed glibc
+> fix [2] aren't going to merged to upstream [3] nor to Tumbleweed
+> downstream glibc [4].
 > 
-> If the filesystem doesn't set FS_ALLOW_IDMAP, then mnt_userns is
-> always going to be &init_user_ns.
+> Using podman requires --no-same-owner tar option to workaround
+> running out of subuids/subgids:
+> tar: ./LICENSE: Cannot change ownership to uid 339315, gid 578953: Invalid argument
+> (sudo would also work)
 > 
-> That said, I don't think you are wrong - it would probably be a good
-> idea to pass down the 'mnt_userns' argument just to avoid confusion.
-> But if you look at the history, you'll see that adding the mount
-> namespace argument to the helper functions (like setattr_copy())
-> happened before the actual "switch the filesystem setattr() function
-> over to get the namespace argument".
+> Sooner or later it will be required for more distros (Fedora, Debian
+> Ubuntu), but don't waste build time until required.
 > 
-> So the current situation is partly an artifact of how the incremental
-> filesystem changes were done.
+> [1] https://github.com/opencontainers/runc/pull/2750
+> [2] https://sourceware.org/pipermail/libc-alpha/2020-November/119955.html
+> [3] https://sourceware.org/pipermail/libc-alpha/2020-November/119978.html
+> [4] https://bugzilla.opensuse.org/1182451
+> 
+> Signed-off-by: Petr Vorel <pvorel@suse.cz>
 
-I'm not so sure the complaint in the original mail is obviously valid.
-Passing down mnt_userns through all filesystem codepaths at once
-would've caused way more churn. There are filesystems that e.g. do stuff
-like this:
+The mismatch seems to be when compiling with clang, at least on our
+internal travis.  Compiling opensuse/tumbleweed with gcc works
+fine.  Compiling opensuse/leap with clang is fine too.  Does that make
+sense?
 
-<fstype>_create()
--> __<fstype>_internal_create()
-<fstype>_mknod()
--> __<fstype>_internal_create()
-<fstype>_rmdir()
--> __<fstype>_internal_create()
+Mimi
 
-where __<fstype>_internal_create() was additionally called in a few
-other places.
-So instead of only changing <fstype>_<i_op> we would've now also have to
-change __<fstype>_internal_create() which would've caused the fs
-specific change to be more invasive than it needed to be. The way we
-did it allowed us to keep the change legible.
 
-And that's just a simple example.
-There are fses that have more convoluted callpaths:
-- an internal helper used additionally as a callback in a custom ops
-  struct
-- or most i_ops boiling down to a single internal function
-So the choice was also deliberate.
 
-We've also tried to be consistent when we actually pass down mnt_userns
-further within the filesystem and when we simply use init_user_ns in
-general. Just looking at setattr_copy() which was in the example:
-
-                   attr.c:void setattr_copy(struct user_namespace *mnt_userns, struct inode *inode,
-                   attr.c:EXPORT_SYMBOL(setattr_copy);
-                   btrfs/inode.c:          setattr_copy(&init_user_ns, inode, attr);
-                   cifs/inode.c:   setattr_copy(&init_user_ns, inode, attrs);
-                   cifs/inode.c:   setattr_copy(&init_user_ns, inode, attrs);
-                   exfat/file.c:   setattr_copy(&init_user_ns, inode, attr);
-                   ext2/inode.c:   setattr_copy(&init_user_ns, inode, iattr);
-**FS_ALLOW_IDMAP** ext4/inode.c:           setattr_copy(mnt_userns, inode, attr);
-                   f2fs/file.c:static void __setattr_copy(struct user_namespace *mnt_userns,
-                   f2fs/file.c:#define __setattr_copy setattr_copy
-                   f2fs/file.c:    __setattr_copy(&init_user_ns, inode, attr);
-                   fat/file.c:      * setattr_copy can't truncate these appropriately, so we'll
-**FS_ALLOW_IDMAP** fat/file.c:     setattr_copy(mnt_userns, inode, attr);
-                   gfs2/inode.c:   setattr_copy(&init_user_ns, inode, attr);
-                   hfs/inode.c:    setattr_copy(&init_user_ns, inode, attr);
-                   hfsplus/inode.c:        setattr_copy(&init_user_ns, inode, attr);
-                   hostfs/hostfs_kern.c:   setattr_copy(&init_user_ns, inode, attr);
-                   hpfs/inode.c:   setattr_copy(&init_user_ns, inode, attr);
-                   hugetlbfs/inode.c:      setattr_copy(&init_user_ns, inode, attr);
-                   jfs/file.c:     setattr_copy(&init_user_ns, inode, iattr);
-                   kernfs/inode.c: setattr_copy(&init_user_ns, inode, iattr);
-**helper library** libfs.c:        setattr_copy(mnt_userns, inode, iattr);
-                   minix/file.c:   setattr_copy(&init_user_ns, inode, attr);
-                   nilfs2/inode.c: setattr_copy(&init_user_ns, inode, iattr);
-                   ocfs2/dlmfs/dlmfs.c:    setattr_copy(&init_user_ns, inode, attr);
-                   ocfs2/file.c:   setattr_copy(&init_user_ns, inode, attr);
-                   omfs/file.c:    setattr_copy(&init_user_ns, inode, attr);
-                   orangefs/inode.c:       setattr_copy(&init_user_ns, inode, iattr);
-                   proc/base.c:    setattr_copy(&init_user_ns, inode, attr);
-                   proc/generic.c: setattr_copy(&init_user_ns, inode, iattr);
-                   proc/proc_sysctl.c:     setattr_copy(&init_user_ns, inode, attr);
-                   ramfs/file-nommu.c:     setattr_copy(&init_user_ns, inode, ia);
-                   reiserfs/inode.c:               setattr_copy(&init_user_ns, inode, attr);
-                   sysv/file.c:    setattr_copy(&init_user_ns, inode, attr);
-                   udf/file.c:     setattr_copy(&init_user_ns, inode, attr);
-                   ufs/inode.c:    setattr_copy(&init_user_ns, inode, attr);
-                   zonefs/super.c: setattr_copy(&init_user_ns, inode, iattr);
-
-so we pass mnt_userns further down for all fses that have FS_ALLOW_IDMAP
-set or where it's located in a helper library like libfs whose helpers
-might be called by an idmapped mount aware fs.
-
-When an fs is made aware of idmapped mounts the mnt_userns will
-naturally be passed down further at which point the relevant fs
-developer can decide how to restructure their own internal helpers
-instead of vfs developers deciding these internals for them.
-
-The xfs port is a good example where the xfs developers had - rightly so
-- opinions on how they wanted the calling conventions for their internal
-helpers to look like and how they wanted to pass around mnt_userns. I
-don't feel in a position to mandate this from a vfs developers
-perspective. I will happily provide input and express my opinion but the
-authority of the vfs-calling-convention police mostly ends at the i_op
-level.
-
-Christian
