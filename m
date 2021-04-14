@@ -2,94 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C55435F1DC
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Apr 2021 13:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A157435F1E6
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Apr 2021 13:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232993AbhDNLFi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 14 Apr 2021 07:05:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40360 "EHLO mail.kernel.org"
+        id S1344220AbhDNLII (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 14 Apr 2021 07:08:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40728 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231764AbhDNLFg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 14 Apr 2021 07:05:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F13361249;
-        Wed, 14 Apr 2021 11:05:15 +0000 (UTC)
+        id S239428AbhDNLII (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 14 Apr 2021 07:08:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7BD1A6103D;
+        Wed, 14 Apr 2021 11:07:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618398315;
-        bh=mZpKNAhEho5Ixyv0/V5hyPgR75cXSvs6lqr/DX83MyU=;
+        s=k20201202; t=1618398467;
+        bh=fp4lQztsNG/Z1CQUfIxUw9+Sv3sdaVopx3+oJQp1PI0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=boH6KcAymj7C5bfct3z+C1+DrUvLGVH341IyeI4yvIBPMmoBhWvyCGPOrHxOUgiQq
-         iCANAL/FW1hYD0AqsVfrCv+IeedPbodVMKc+2lwWcM7Q21ST5WGFdkHYueRmFy2SDM
-         xhG0tY+TVmmuujerWGnFhMlueD8JPui54tDTtzQzbPAIyJpfifOUhq0ur2en2a1cED
-         587jDmgNOh9yJ9Qc5YmtSBlv+wNSLz9alrnC8GMhE22n2BiAznjq2h0FadpPTIjgxR
-         AmoVSzunYbjnP+vRXycgLkvd6+SK+Mp/0OMpWFGMDcksPOGkibN67kbR5smnxJYFoW
-         Y7N0cRTqULfEw==
-Date:   Wed, 14 Apr 2021 14:05:12 +0300
+        b=O7mb4fLhexO3tpqRmWk/PqQWFURwVwFN08AAHLoYUaWG5sb5LssosCnbTBULY/MaW
+         uL8Q5PHDdrrlFlGCUfVnG/UCEfaGZNx15PblylhNI7hiw55Td4coLqKxOUVj7uu2QL
+         s1rUd21wp1e+t0cF/Znox/UttPff54wY0vjW2WEkYI9nAA432tNu97PknXUlLSsmVI
+         afIv7tGOioWiBjFOrX0j/ylSitsd9zPRbdyxbKT9H2JxYTbFf+Cxtu58JWkZYkkXRA
+         aRQslMoQRozJZjcDkOqkLatVFQXH6QssLSHOOp/RHO8I+JQfFaGp0NWeu9Rj3uzFY8
+         hoCfwPeOqkcFg==
+Date:   Wed, 14 Apr 2021 14:07:44 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     "Tj (Elloe Linux)" <ml.linux@elloe.vision>,
-        Kees Cook <keescook@chromium.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity@vger.kernel.org, jsnitsel@redhat.com
-Subject: Re: Re: Bug: TPM returned invalid status
-Message-ID: <YHbMaDfHTdE1s32l@kernel.org>
-References: <374e918c-f167-9308-2bea-ae6bc6a3d2e3@elloe.vision>
- <YBGpranyEwXaqAUg@kernel.org>
- <YBGqWp5FqKQJK1is@kernel.org>
- <b1e71d07546ccce7957ead9cc80303734251f6c9.camel@HansenPartnership.com>
- <202103291901.F15EA83FB6@keescook>
- <5e48c9ad-9e53-c079-83d1-7fea50412142@elloe.vision>
- <trinity-7c4b1b78-7c33-480e-a8bd-0536a4c67599-1617962105587@3c-app-gmx-bs15>
+To:     Colin King <colin.king@canonical.com>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] KEYS: trusted: Fix missing null return from
+ kzalloc call
+Message-ID: <YHbNAFMdQO0/ugHE@kernel.org>
+References: <20210412160101.1627882-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <trinity-7c4b1b78-7c33-480e-a8bd-0536a4c67599-1617962105587@3c-app-gmx-bs15>
+In-Reply-To: <20210412160101.1627882-1-colin.king@canonical.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Apr 09, 2021 at 11:55:05AM +0200, Lino Sanfilippo wrote:
+On Mon, Apr 12, 2021 at 05:01:01PM +0100, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> Hi,
+> The kzalloc call can return null with the GFP_KERNEL flag so
+> add a null check and exit via a new error exit label. Use the
+> same exit error label for another error path too.
 > 
-> >
-> > On 30/03/2021 03:04, Kees Cook wrote:
-> > >
-> > > Does this series solve the issue too?
-> > >
-> > > https://lore.kernel.org/linux-integrity/1613955394-13152-1-git-send-email-LinoSanfilippo@gmx.de/
-> > >
-> > > (I haven't had a chance to test either series with my TPM, but I see the
-> > > same "TPM returned invalid status" errors recently.)
-> > >
-> >
-> > Unfortunately no. I tested it immediately but forgot to let you know.
-> >
-> >
-> > kernel: Linux version 5.12.0-rc5tpm-fix+ (tj@elloe000) (gcc (Ubuntu
-> > 9.3.0-17ubuntu1~20.04) 9.3.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #29
-> > SMP PREEMPT Tue Mar 30 09:05:15 BST 2021
-> > ...
-> 
-> Well you tested the series with 5.12-rc5 while it was based on 5.11. Patch 2
-> in the series is supposed to fix the "invalid status" warning by making sure
-> that the required locality has been requested before.
-> To avoid such issues at all and to simplify the whole locality handling (and
-> also to be prepared for interrupt handling which also requires locality management)
-> that patch furthermore ensures that the locality is requested only once at driver
-> startup and not released until driver shutdown.
-> 
-> However between 5.11 and 5.12-rc5 there have been at least two patches that
-> again introduced a locality request/release combo (d53a6adfb553 "tpm, tpm_tis:
-> Decorate tpm_tis_gen_interrupt() with request_locality()" and a5665ec2affd
-> "tpm, tpm_tis: Decorate tpm_get_timeouts() with request_locality()").
-> 
-> The latter results in the locality being released again before tpm_tis_status()
-> is called and thus reintroduced the issue patch 2 fixed.
-> 
-> I will prepare another series based on the latest kernel but at least for 5.11
-> the series should fix the issue (and also make interrupts working).
+> Addresses-Coverity: ("Dereference null return value")
+> Fixes: 830027e2cb55 ("KEYS: trusted: Add generic trusted keys framework")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
  
-Thanks, I can review patches after coming from two week leave and include
-them to 5.13-rcX. Add stable cc in addition to the fixes tag.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 /Jarkko
