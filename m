@@ -2,142 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A791D360687
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Apr 2021 12:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCA736081D
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Apr 2021 13:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231919AbhDOKG2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Apr 2021 06:06:28 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2865 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbhDOKG1 (ORCPT
+        id S232422AbhDOLVD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Apr 2021 07:21:03 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:56853 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231549AbhDOLVD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Apr 2021 06:06:27 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FLZVJ3cf5z689tm;
-        Thu, 15 Apr 2021 17:56:08 +0800 (CST)
-Received: from fraphisprd00473.huawei.com (7.182.8.141) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Thu, 15 Apr 2021 12:06:02 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <jmorris@namei.org>, <paul@paul-moore.com>,
-        <casey@schaufler-ca.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <selinux@vger.kernel.org>,
-        <reiserfs-devel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 5/5] evm: Support multiple LSMs providing an xattr
-Date:   Thu, 15 Apr 2021 12:04:35 +0200
-Message-ID: <20210415100435.18619-6-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210415100435.18619-1-roberto.sassu@huawei.com>
+        Thu, 15 Apr 2021 07:21:03 -0400
+Received: from fsav402.sakura.ne.jp (fsav402.sakura.ne.jp [133.242.250.101])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 13FBKFtS085702;
+        Thu, 15 Apr 2021 20:20:15 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav402.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav402.sakura.ne.jp);
+ Thu, 15 Apr 2021 20:20:15 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav402.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 13FBKET4085693
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 15 Apr 2021 20:20:15 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH 1/5] xattr: Complete constify ->name member of "struct
+ xattr"
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Jeff Mahoney <jeffm@suse.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, stable@vger.kernel.org,
+        zohar@linux.ibm.com, jmorris@namei.org, paul@paul-moore.com,
+        casey@schaufler-ca.com
 References: <20210415100435.18619-1-roberto.sassu@huawei.com>
+ <20210415100435.18619-2-roberto.sassu@huawei.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <164b0933-0917-457e-4dad-245ea13cbe52@i-love.sakura.ne.jp>
+Date:   Thu, 15 Apr 2021 20:20:15 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [7.182.8.141]
-X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+In-Reply-To: <20210415100435.18619-2-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Currently, evm_inode_init_security() takes as input a single LSM xattr,
-passed by security_inode_init_security(), and calculates the HMAC on it and
-other inode metadata.
+On 2021/04/15 19:04, Roberto Sassu wrote:
+> This patch completes commit 9548906b2bb7 ('xattr: Constify ->name member of
+> "struct xattr"'). It fixes the documentation of the inode_init_security
+> hook, by removing the xattr name from the objects that are expected to be
+> allocated by LSMs (only the value is allocated). Also, it removes the
+> kfree() of name and setting it to NULL in the reiserfs code.
 
-Given that initxattrs(), called by security_inode_init_security(), expects
-that this array is terminated when the xattr name is set to NULL, this
-patch reuses the same assumption for evm_inode_init_security() to scan all
-xattrs and to calculate the HMAC on all of them.
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/evm/evm.h        |  2 ++
- security/integrity/evm/evm_crypto.c |  9 ++++++++-
- security/integrity/evm/evm_main.c   | 15 +++++++++++----
- 3 files changed, 21 insertions(+), 5 deletions(-)
-
-diff --git a/security/integrity/evm/evm.h b/security/integrity/evm/evm.h
-index ae590f71ce7d..24eac42b9f32 100644
---- a/security/integrity/evm/evm.h
-+++ b/security/integrity/evm/evm.h
-@@ -49,6 +49,8 @@ struct evm_digest {
- 	char digest[IMA_MAX_DIGEST_SIZE];
- } __packed;
- 
-+int evm_protected_xattr(const char *req_xattr_name);
-+
- int evm_init_key(void);
- int __init evm_init_crypto(void);
- int evm_update_evmxattr(struct dentry *dentry,
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index b66264b53d5d..35c5eec0517d 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -358,6 +358,7 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		  char *hmac_val)
- {
- 	struct shash_desc *desc;
-+	const struct xattr *xattr;
- 
- 	desc = init_desc(EVM_XATTR_HMAC, evm_hash_algo);
- 	if (IS_ERR(desc)) {
-@@ -365,7 +366,13 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		return PTR_ERR(desc);
- 	}
- 
--	crypto_shash_update(desc, lsm_xattr->value, lsm_xattr->value_len);
-+	for (xattr = lsm_xattr; xattr->name != NULL; xattr++) {
-+		if (!evm_protected_xattr(xattr->name))
-+			continue;
-+
-+		crypto_shash_update(desc, xattr->value, xattr->value_len);
-+	}
-+
- 	hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
- 	kfree(desc);
- 	return 0;
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index a5069d69a893..fde366149499 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -260,7 +260,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
- 	return evm_status;
- }
- 
--static int evm_protected_xattr(const char *req_xattr_name)
-+int evm_protected_xattr(const char *req_xattr_name)
- {
- 	int namelen;
- 	int found = 0;
-@@ -712,14 +712,21 @@ int evm_inode_init_security(struct inode *inode, struct inode *dir,
- 			    void **value, size_t *len,
- 			    struct xattr *lsm_xattrs)
- {
-+	struct xattr *xattr;
- 	struct evm_xattr *xattr_data;
--	int rc;
-+	int rc, evm_protected_xattrs = 0;
- 
- 	if (!name || !value || !len || !lsm_xattrs)
- 		return 0;
- 
--	if (!(evm_initialized & EVM_INIT_HMAC) ||
--	    !evm_protected_xattr(lsm_xattrs->name))
-+	if (!(evm_initialized & EVM_INIT_HMAC))
-+		return -EOPNOTSUPP;
-+
-+	for (xattr = lsm_xattrs; xattr && xattr->name != NULL; xattr++)
-+		if (evm_protected_xattr(xattr->name))
-+			evm_protected_xattrs++;
-+
-+	if (!evm_protected_xattrs)
- 		return -EOPNOTSUPP;
- 
- 	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
--- 
-2.26.2
-
+Good catch, but well, grep does not find any reiserfs_security_free() callers.
+Is reiserfs_security_free() a dead code?
