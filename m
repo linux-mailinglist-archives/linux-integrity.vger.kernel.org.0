@@ -2,65 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD6636083D
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Apr 2021 13:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD4C360958
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Apr 2021 14:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbhDOL17 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Apr 2021 07:27:59 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51624 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231549AbhDOL17 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Apr 2021 07:27:59 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 663EEAE20;
-        Thu, 15 Apr 2021 11:27:35 +0000 (UTC)
-From:   Petr Vorel <pvorel@suse.cz>
-To:     linux-integrity@vger.kernel.org
-Cc:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.vnet.ibm.com>
-Subject: [PATCH v3 2/2] tests/install-swtpm.sh: Add tar option --no-same-owner
-Date:   Thu, 15 Apr 2021 13:27:28 +0200
-Message-Id: <20210415112728.9307-2-pvorel@suse.cz>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210415112728.9307-1-pvorel@suse.cz>
-References: <20210415112728.9307-1-pvorel@suse.cz>
+        id S232981AbhDOM0S (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Apr 2021 08:26:18 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2867 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232975AbhDOM0Q (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 15 Apr 2021 08:26:16 -0400
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FLdbb1Rksz68BPR;
+        Thu, 15 Apr 2021 20:15:55 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 15 Apr 2021 14:25:50 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2106.013;
+ Thu, 15 Apr 2021 14:25:50 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Jeff Mahoney <jeffm@suse.com>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "reiserfs-devel@vger.kernel.org" <reiserfs-devel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "casey@schaufler-ca.com" <casey@schaufler-ca.com>
+Subject: RE: [PATCH 1/5] xattr: Complete constify ->name member of "struct
+ xattr"
+Thread-Topic: [PATCH 1/5] xattr: Complete constify ->name member of "struct
+ xattr"
+Thread-Index: AQHXMd7FDBbRfOc0Vkms8LxU+cs6Xqq1TVmAgAAzkSA=
+Date:   Thu, 15 Apr 2021 12:25:49 +0000
+Message-ID: <eedc6f82d59b4084b529788efd43e10b@huawei.com>
+References: <20210415100435.18619-1-roberto.sassu@huawei.com>
+ <20210415100435.18619-2-roberto.sassu@huawei.com>
+ <164b0933-0917-457e-4dad-245ea13cbe52@i-love.sakura.ne.jp>
+In-Reply-To: <164b0933-0917-457e-4dad-245ea13cbe52@i-love.sakura.ne.jp>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.215.118]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-to workaround running out of subuids/subgids when using podman:
-tar: ./LICENSE: Cannot change ownership to uid 339315, gid 578953: Invalid argument
-
-(run script under sudo would also work, but this does not require it)
-
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
-Changes v2->v3:
-* new commit
-
-Feel free to squash it to the previous commit.
-
-Kind regards,
-Petr
-
- tests/install-swtpm.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tests/install-swtpm.sh b/tests/install-swtpm.sh
-index 2d8293a..2666748 100755
---- a/tests/install-swtpm.sh
-+++ b/tests/install-swtpm.sh
-@@ -6,7 +6,7 @@ version=1637
- wget --no-check-certificate https://sourceforge.net/projects/ibmswtpm2/files/ibmtpm${version}.tar.gz/download
- mkdir ibmtpm$version
- cd ibmtpm$version
--tar -xvzf ../download
-+tar --no-same-owner -xvzf ../download
- cd src
- make -j$(nproc)
- sudo cp tpm_server /usr/local/bin/
--- 
-2.31.1
-
+PiBGcm9tOiBUZXRzdW8gSGFuZGEgW21haWx0bzpwZW5ndWluLWtlcm5lbEBpLWxvdmUuc2FrdXJh
+Lm5lLmpwXQ0KPiBTZW50OiBUaHVyc2RheSwgQXByaWwgMTUsIDIwMjEgMToyMCBQTQ0KPiBPbiAy
+MDIxLzA0LzE1IDE5OjA0LCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+IFRoaXMgcGF0Y2ggY29t
+cGxldGVzIGNvbW1pdCA5NTQ4OTA2YjJiYjcgKCd4YXR0cjogQ29uc3RpZnkgLT5uYW1lDQo+IG1l
+bWJlciBvZg0KPiA+ICJzdHJ1Y3QgeGF0dHIiJykuIEl0IGZpeGVzIHRoZSBkb2N1bWVudGF0aW9u
+IG9mIHRoZSBpbm9kZV9pbml0X3NlY3VyaXR5DQo+ID4gaG9vaywgYnkgcmVtb3ZpbmcgdGhlIHhh
+dHRyIG5hbWUgZnJvbSB0aGUgb2JqZWN0cyB0aGF0IGFyZSBleHBlY3RlZCB0bw0KPiBiZQ0KPiA+
+IGFsbG9jYXRlZCBieSBMU01zIChvbmx5IHRoZSB2YWx1ZSBpcyBhbGxvY2F0ZWQpLiBBbHNvLCBp
+dCByZW1vdmVzIHRoZQ0KPiA+IGtmcmVlKCkgb2YgbmFtZSBhbmQgc2V0dGluZyBpdCB0byBOVUxM
+IGluIHRoZSByZWlzZXJmcyBjb2RlLg0KPiANCj4gR29vZCBjYXRjaCwgYnV0IHdlbGwsIGdyZXAg
+ZG9lcyBub3QgZmluZCBhbnkgcmVpc2VyZnNfc2VjdXJpdHlfZnJlZSgpIGNhbGxlcnMuDQo+IElz
+IHJlaXNlcmZzX3NlY3VyaXR5X2ZyZWUoKSBhIGRlYWQgY29kZT8NCg0KVWhtLCBJIGFsc28gZG9u
+J3Qgc2VlIGl0Lg0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1
+ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIExp
+IEppYW4sIFNoaSBZYW5saQ0K
