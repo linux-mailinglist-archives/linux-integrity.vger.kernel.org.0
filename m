@@ -2,212 +2,283 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C4F36755B
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Apr 2021 00:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7629A367590
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Apr 2021 01:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343587AbhDUWxN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 21 Apr 2021 18:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbhDUWxM (ORCPT
+        id S1343661AbhDUXK2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 21 Apr 2021 19:10:28 -0400
+Received: from sonic309-27.consmr.mail.ne1.yahoo.com ([66.163.184.153]:44146
+        "EHLO sonic309-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234826AbhDUXK1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 21 Apr 2021 18:53:12 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75860C06174A;
-        Wed, 21 Apr 2021 15:52:38 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 383E8128017B;
-        Wed, 21 Apr 2021 15:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1619045558;
-        bh=65pamZPNVatXTCiWrNHPd8mAhwMvTJEFQ1K830XlC7A=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=c80xcgH6ARPu7HkHLebeNzNL0vyA6szp57Xl3H1GnrqMumPaJ+8PogU93LS68cJ/R
-         jeURXg7nysGSYhhuPyohaG/Yh9fVe0Ft6SstuHqwzM47gxdlgHhPNlVhKok+aWKttU
-         av7VlK4AVzDWxubPT4PQ4OZHVx18+UXiACiZStfs=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id StQDnBVK16O5; Wed, 21 Apr 2021 15:52:38 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C72EF1280165;
-        Wed, 21 Apr 2021 15:52:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1619045558;
-        bh=65pamZPNVatXTCiWrNHPd8mAhwMvTJEFQ1K830XlC7A=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=c80xcgH6ARPu7HkHLebeNzNL0vyA6szp57Xl3H1GnrqMumPaJ+8PogU93LS68cJ/R
-         jeURXg7nysGSYhhuPyohaG/Yh9fVe0Ft6SstuHqwzM47gxdlgHhPNlVhKok+aWKttU
-         av7VlK4AVzDWxubPT4PQ4OZHVx18+UXiACiZStfs=
-Message-ID: <c1b82b603a28934cc45b9dc486688c306aab644e.camel@HansenPartnership.com>
-Subject: [PATCH] KEYS: trusted: fix TPM trusted keys for generic framework
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
-Cc:     jarkko@kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 21 Apr 2021 15:52:37 -0700
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Wed, 21 Apr 2021 19:10:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1619046594; bh=J26x1w023ecUL/6MxhVFKfp+hf3nFHwJodfkAA19G0w=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=YTJ9PAE/K0UMwdsKfarpJNRp2LIrpfxSra5knvIk0Y6uUvjmJToV55tQOERp5C1fUEw5Qa4nK4IR0U2JFwqFMRwhgJrr+gWMaD2P1jM82tItJiz5BoaS2Cj+8MkMX1zLiQibgXenOa+4j9/YU/Cl8wNMpiXsxqLrrP+2AScjvNXgzu/H3nMVmP6X1oWkIqD67rHQXsLIrZSUQ+6RXQv8zSlFmqUXiNLLkJSEL/R+CTtTZwPRPpQauP2Ix6REBkm4nrzF8/X7aTgJHJBc32XL6EZ7f0/u0kksASm2fb9YC906qFS43Tt6CiLlP65F/yCSAk17sGaPGENnZ1ZU9pVQKg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1619046594; bh=dy4g19nJy8tRXIFC1dOJdAPjB4HnQ3cd1ymhu/c4h3N=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=aU6aW73BO7HKSa50BO34Hz5vAbtR3QMqDVdHnqw0xq20aku2wyJ07gwLIRYfq0s8FsKOM+QT96G8s0fN08kucpma5FEk0+Yqd3/b1hRgh58oZwK1VAt3SlNVenL5q82xrh8ZTs36bgjIBzTP9dGxEJeT+BZr0geS8bTkIY9JkRXSIoMopoX2HhmFTpuF7vhVIhzdKXJPW0ywmUkvVu6ixXn8egI3sk30/hsxt0fQQ9epjNEX67IwpjQOulKyfzpNgLrRxX93oD0GUZf0dbxzxuXK1sE8NhcJaKI8hb0cu5thaGheZvCrwf+tLPav8DaHZrnFIWhkwLDs7fOYGRYDPg==
+X-YMail-OSG: p3RZ69cVM1n88lcPqyFCaYMHahk2R4YbMbx4kxTKY8IqYnupybXy86jWAJ4YZfS
+ Z1JiYLave0Txk14KBCWcsfis_S5J8U0.oymh.VC9DzySxn4xs2ZMZgafnUVgH6SxrkzFM7HsUCdv
+ UDeB1uzMz28aTgrmh4zdZp0kkPME1gjPG.y9RW258no4TLKGaSrw13dRXUzajoSCjw0wP4gWrs_C
+ QDKuWv9BzZS3V_5R1EmwD4ghCdHn0T4n7EvGnj5i7LlhLZGw3NnjgzZjK5.fH6jBHnKSG7bVzNJP
+ aT.qGusRJCGbOm8rgySx36l3NCGGsws2su1nQxFkqToba0jEqVzoDh3u9u.q5M3NAnY9c.SIH8sk
+ 7AgwIQRd0K21HS6doJQAmgiEJx0q5rgUtcyF5K0.XkCsY74oesvow7VbXmle7wlHKNNcfUZh7onS
+ 9TObajLQ2DIkdJrq5to_08pxX4s978JgjORJmxwsqKgDE7CRvEtzaqKZkIlYjHzSydW8MORsd8rK
+ LH0aAv6cutQnCykHIy1vLIcArcsnutA6Rzgld5JiqjgrQfqLJXyoPS8.lHnKDiTNovpKaNBLXPvX
+ mV2A_Rtu8sFXVEgjNewnYm5WeyRa8bIKglI4k2wA2qQgHhEA5keGydnSI9gIHaekalBshxmRJwCn
+ b6m8pjmb9DNjw_wDgt4W3YdL0NKEsa44wRZBYbqf_7QaF7n1Nezg9W4Ybslk7nlQqr._0Ib4Iz.z
+ pF.WFNUFiwFM8WjS1Xr4e0kyLkR_WThRibvrDSlxUbqgEuvhKlFGllmxexwG9WuCZ.IDBDKSYvEf
+ TKn_4KpKrvG4c.atN3JoGPBZHmHDFxcO0S3SdXWq1ck1CeIrYM1cqw1z01EOl_sKjgQvgH2cjB5o
+ x_3xdGkxvNKi4yDwEK2ZxmrWkUaPj07y4qzz0..LgcqWonvbuOJvRb_aAFbljkj.ESQtX5bYn6kb
+ F528q4nBi9.RHTqo2GdR6BxPGmFe0pvRhehiTbMt1.zP0sUhYdfjlPw5wrPQcBX_ZUWbZeqzMsjG
+ pVjHLf0ej_V3xoR0yV21xUXeEJm0IIrt8kuZUc32s849xxew7pU4kcOLNTmlv8FTRL4Qx33rEjBi
+ vxefl_B70b4TDPYyoHI8OaJ3zWTdbm88iuG2hwI8RA9WTe3RNmvXWQRrjNi.XywmRuTPEypEYyN7
+ s7dw8P6berUTdlqOvVb.70xLRXxyNe_xWI7h.O3ARy1XZRvSW5kSLD.u1lrNgUqfAXW.hh8ikpkm
+ dY.YU.Y2ccEhf3dZxb2d0MaRGgoVF9YYQDLi.HRQhOWV5ju1_VkUgCuLvUTWw380ZV_6qNcnYcTM
+ 9bIaPMrXtyuDhUVsJ0xkwbn9ab_4U3o7tG_xmZcCS5q_wlPtNM7VRIj4lPnyKHQd1Tsp8LlhddAz
+ QK2c4VBLfMmnAT9Xf0DHnfUA9rGdPObJZ2U5KOX7u7pHIMGFguqfs2wYillDAq0z70qKDzvE6Zf3
+ 2.75xV9WFsY75xM3t0vIMO9O8TrgAzfgN_vUzj0FH7gj80iCwkdta4ZM28bUOhPGiGc9kFOEBI7e
+ 4VGpMlGhimiktVhPjVC8b5Y4RR8AiSPlwEzbRScTrR_taDrkqb7D1.nJbFyRyZp2LHCsfrfoO0xf
+ N3nLp_PBBSlsXjIyYeqKCfIS_JioRodskz6uo9CVTxTMz7Fg5AW4OoAliQD4DHN1NwJPeW.I_F.s
+ mfHLZi3ir8SfqDRrpqFSk4ZnmkaUPhq4VV22OFPRuXvd0jNMqeSmVBJ7FhMReMdqj.cblygheq8o
+ CqU_RLWBPc3OlMbtPeUIiaJq8PC38aOLNAx6AtYRmCJpG6yZCEAvfsMIjaXU_XmTjlOaCsk5HvLl
+ L89_9blE1QV8KVq6YqvOSuF797emDliaYNtW_IbAPu.JxCzibZ6htCyccJLtqMNE1sDljaaFcw9R
+ 0VFUoSML0arFrKT6gl8JPBwtkAQpUfW4HZf5jrAa4tNyXeDoxMz2RGmiefaV8teu04sNjSaGEISB
+ CSC_oIxfy4AO3nqxUaY67yQsNioJ9La3Aj9qVcNt9ZAT4opZABEKmeoFf9G9aLzYCa9uR_bUCzgj
+ 2YrusVVbjvLU07kijHXhqTse4URNw9O2iC9wa0oUYKpvhiujSqqjh8RN0ZRfnSqVvpku8YbApE0G
+ sF2Eb_RehTLLxWo_VCUJDBINvG69YZMTaVCm.uxx.yF6_OFm6NuaBQECGfI7zEnG6Vp9cI1aauG8
+ R.dxR4_J6fNSE28VmJh5EwsZnRyMuJNMvRFdlkzBmcwAXVNhNo4xfoISOpsewbNp8VWUP4r1b5iU
+ mTG8pytkIbATS8cW6s17TfbgE23mSd1li7afDG_0nE1qbrBlnUhQceuPpioGs0VLZ0fQeKsmChJg
+ koVe3pgdl1.DtPCp.PgZFSDt4nzqYIY0JrH0nN1q_B.XMwd7pnC5WEcfzYW.Njk2ryaSXP9USRVq
+ ggEJs15aL_7WpAugwyZRWtN075VtotUO57dVXJtMPQlikm1VHD5jbCKQ8roa3HIylLqWlM6iGV05
+ rWVsMFs50Fg5S1zhv4MEEGEPDT4etM4YmefbUBU7ARHQvCK5z0qQ3yUGeSriSQ9R9tLDrQNmAKDs
+ aQQoIk2Yrs0nCmU8tPYoPoTeQ.RH4GBE0QL5LsFUE1xtl7XwaSQZcVrH4msuE9KY0nDPGQ7pJrRz
+ OhOBVqYGoKIqcPdBGegmWX_yx45Z_uupsLgDFwMr0jhOG0Xj.rlRfhh8UB.mGYrelyj8AM.bx00l
+ amogdA5r4ut.e77_ZwEYur_8BN1zIOxzMuWQjTQiydaz5G6BPwdD5gBIjDA.gRl9HQVUfgJ0lbiR
+ n45yHUERgeCufhUmhoOc1cjzdQfVOBpX5p5fxAuRXZbzQ6BFDvbVsIhpiM4sG0frDST1pOfZ9Fkq
+ j1JVAK_Pqax3XXwXI5KFgxTYMxMOMqPfWiGF8MrGbhS426kJVY93EfEpZf4tfqtX.fRGCSk0Q7PA
+ zigUFFfgiYH5h7WoYILBBPukA_8YBv4RsF0TBpECBUgiY9Hq0lVYr7_Y_QP_UfwftDJmVpKKWQAy
+ d6TXPPJIcRQo5ZyvAulkon.gIe1OdzKcHak.W7PkqNyKOSpKhSA_BIF9o_ElcvGwFXmmRH1Q-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Wed, 21 Apr 2021 23:09:54 +0000
+Received: by kubenode542.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID b3571271959590a36da338570ed6e49f;
+          Wed, 21 Apr 2021 23:09:51 +0000 (UTC)
+Subject: Re: [PATCH v2 4/6] security: Support multiple LSMs implementing the
+ inode_init_security hook
+To:     Roberto Sassu <roberto.sassu@huawei.com>, zohar@linux.ibm.com,
+        jmorris@namei.org, paul@paul-moore.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20210421161925.968825-1-roberto.sassu@huawei.com>
+ <20210421161925.968825-5-roberto.sassu@huawei.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Message-ID: <e888aa66-25d3-f72c-1aa9-cd5bc6df3789@schaufler-ca.com>
+Date:   Wed, 21 Apr 2021 16:09:51 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20210421161925.968825-5-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Mailer: WebService/1.1.18121 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/16)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The generic framework patch broke the current TPM trusted keys because
-it doesn't correctly remove the values consumed by the generic parser
-before passing them on to the implementation specific parser.  Fix
-this by having the generic parser return the string minus the consumed
-tokens.
+On 4/21/2021 9:19 AM, Roberto Sassu wrote:
+> The current implementation of security_inode_init_security() is capable=20
+of
+> handling only one LSM providing an xattr to be set at inode creation. T=
+hat
+> xattr is then passed to EVM to calculate the HMAC.
+>
+> To support multiple LSMs, each providing an xattr, this patch makes the=
 
-Additionally, there may be no tokens left for the implementation
-specific parser, so make it handle the NULL case correctly and finally
-fix a TPM 1.2 specific check for no keyhandle.
+> following modifications:
+>
+> security_inode_init_security():
+> - dynamically allocates new_xattrs, based on the number of
+>   inode_init_security hooks registered by LSMs;
+> - replaces the call_int_hook() macro with its definition, to correctly
+>   handle the case of an LSM returning -EOPNOTSUPP (the loop should not =
+be
+>   stopped).
+>
+> security_old_inode_init_security():
+> - replaces the call_int_hook() macro with its definition, to stop the l=
+oop
+>   at the first LSM providing an xattr, to avoid a memory leak (due to
+>   overwriting the *value pointer).
+>
+> The modifications necessary for EVM to calculate the HMAC on all xattrs=
 
-Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
-Tested-by: Sumit Garg <sumit.garg@linaro.org>
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- security/keys/trusted-keys/trusted_core.c | 24 +++++++++++------------
- security/keys/trusted-keys/trusted_tpm1.c |  5 ++++-
- 2 files changed, 16 insertions(+), 13 deletions(-)
+> will be done in a separate patch.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/security.c | 93 +++++++++++++++++++++++++++++++++++++++------=
 
-diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-index 90774793f0b1..d5c891d8d353 100644
---- a/security/keys/trusted-keys/trusted_core.c
-+++ b/security/keys/trusted-keys/trusted_core.c
-@@ -62,7 +62,7 @@ static const match_table_t key_tokens = {
-  *
-  * On success returns 0, otherwise -EINVAL.
-  */
--static int datablob_parse(char *datablob, struct trusted_key_payload *p)
-+static int datablob_parse(char **datablob, struct trusted_key_payload *p)
- {
- 	substring_t args[MAX_OPT_ARGS];
- 	long keylen;
-@@ -71,14 +71,14 @@ static int datablob_parse(char *datablob, struct trusted_key_payload *p)
- 	char *c;
- 
- 	/* main command */
--	c = strsep(&datablob, " \t");
-+	c = strsep(datablob, " \t");
- 	if (!c)
- 		return -EINVAL;
- 	key_cmd = match_token(c, key_tokens, args);
- 	switch (key_cmd) {
- 	case Opt_new:
- 		/* first argument is key size */
--		c = strsep(&datablob, " \t");
-+		c = strsep(datablob, " \t");
- 		if (!c)
- 			return -EINVAL;
- 		ret = kstrtol(c, 10, &keylen);
-@@ -89,7 +89,7 @@ static int datablob_parse(char *datablob, struct trusted_key_payload *p)
- 		break;
- 	case Opt_load:
- 		/* first argument is sealed blob */
--		c = strsep(&datablob, " \t");
-+		c = strsep(datablob, " \t");
- 		if (!c)
- 			return -EINVAL;
- 		p->blob_len = strlen(c) / 2;
-@@ -140,7 +140,7 @@ static int trusted_instantiate(struct key *key,
- {
- 	struct trusted_key_payload *payload = NULL;
- 	size_t datalen = prep->datalen;
--	char *datablob;
-+	char *datablob, *orig_datablob;
- 	int ret = 0;
- 	int key_cmd;
- 	size_t key_len;
-@@ -148,7 +148,7 @@ static int trusted_instantiate(struct key *key,
- 	if (datalen <= 0 || datalen > 32767 || !prep->data)
- 		return -EINVAL;
- 
--	datablob = kmalloc(datalen + 1, GFP_KERNEL);
-+	orig_datablob = datablob = kmalloc(datalen + 1, GFP_KERNEL);
- 	if (!datablob)
- 		return -ENOMEM;
- 	memcpy(datablob, prep->data, datalen);
-@@ -160,7 +160,7 @@ static int trusted_instantiate(struct key *key,
- 		goto out;
- 	}
- 
--	key_cmd = datablob_parse(datablob, payload);
-+	key_cmd = datablob_parse(&datablob, payload);
- 	if (key_cmd < 0) {
- 		ret = key_cmd;
- 		goto out;
-@@ -196,7 +196,7 @@ static int trusted_instantiate(struct key *key,
- 		ret = -EINVAL;
- 	}
- out:
--	kfree_sensitive(datablob);
-+	kfree_sensitive(orig_datablob);
- 	if (!ret)
- 		rcu_assign_keypointer(key, payload);
- 	else
-@@ -220,7 +220,7 @@ static int trusted_update(struct key *key, struct key_preparsed_payload *prep)
- 	struct trusted_key_payload *p;
- 	struct trusted_key_payload *new_p;
- 	size_t datalen = prep->datalen;
--	char *datablob;
-+	char *datablob, *orig_datablob;
- 	int ret = 0;
- 
- 	if (key_is_negative(key))
-@@ -231,7 +231,7 @@ static int trusted_update(struct key *key, struct key_preparsed_payload *prep)
- 	if (datalen <= 0 || datalen > 32767 || !prep->data)
- 		return -EINVAL;
- 
--	datablob = kmalloc(datalen + 1, GFP_KERNEL);
-+	orig_datablob = datablob = kmalloc(datalen + 1, GFP_KERNEL);
- 	if (!datablob)
- 		return -ENOMEM;
- 
-@@ -243,7 +243,7 @@ static int trusted_update(struct key *key, struct key_preparsed_payload *prep)
- 
- 	memcpy(datablob, prep->data, datalen);
- 	datablob[datalen] = '\0';
--	ret = datablob_parse(datablob, new_p);
-+	ret = datablob_parse(&datablob, new_p);
- 	if (ret != Opt_update) {
- 		ret = -EINVAL;
- 		kfree_sensitive(new_p);
-@@ -267,7 +267,7 @@ static int trusted_update(struct key *key, struct key_preparsed_payload *prep)
- 	rcu_assign_keypointer(key, new_p);
- 	call_rcu(&p->rcu, trusted_rcu_free);
- out:
--	kfree_sensitive(datablob);
-+	kfree_sensitive(orig_datablob);
- 	return ret;
- }
- 
-diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index 798dc7820084..469394550801 100644
---- a/security/keys/trusted-keys/trusted_tpm1.c
-+++ b/security/keys/trusted-keys/trusted_tpm1.c
-@@ -747,6 +747,9 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 
- 	opt->hash = tpm2 ? HASH_ALGO_SHA256 : HASH_ALGO_SHA1;
- 
-+	if (!c)
-+		return 0;
-+
- 	while ((p = strsep(&c, " \t"))) {
- 		if (*p == '\0' || *p == ' ' || *p == '\t')
- 			continue;
-@@ -944,7 +947,7 @@ static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
- 		goto out;
- 	dump_options(options);
- 
--	if (!options->keyhandle) {
-+	if (!options->keyhandle && !tpm2) {
- 		ret = -EINVAL;
- 		goto out;
- 	}
--- 
-2.26.2
+>  1 file changed, 82 insertions(+), 11 deletions(-)
+>
+> diff --git a/security/security.c b/security/security.c
+> index 2c1fe1496069..2ab67fa4422e 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -30,8 +30,6 @@
+>  #include <linux/msg.h>
+>  #include <net/flow.h>
+> =20
+> -#define MAX_LSM_EVM_XATTR	2
+> -
+>  /* How many LSMs were built into the kernel? */
+>  #define LSM_COUNT (__end_lsm_info - __start_lsm_info)
+> =20
+> @@ -1028,9 +1026,10 @@ int security_inode_init_security(struct inode *i=
+node, struct inode *dir,
+>  				 const struct qstr *qstr,
+>  				 const initxattrs initxattrs, void *fs_data)
+>  {
+> -	struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+> +	struct xattr *new_xattrs;
+>  	struct xattr *lsm_xattr, *evm_xattr, *xattr;
+> -	int ret;
+> +	struct security_hook_list *P;
+> +	int ret, max_new_xattrs =3D 0;
+> =20
+>  	if (unlikely(IS_PRIVATE(inode)))
+>  		return 0;
+> @@ -1038,14 +1037,52 @@ int security_inode_init_security(struct inode *=
+inode, struct inode *dir,
+>  	if (!initxattrs)
+>  		return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
+>  				     dir, qstr, NULL, fs_data);
+> -	memset(new_xattrs, 0, sizeof(new_xattrs));
+> +
+> +	/* Determine at run-time the max number of xattr structs to allocate.=20
+*/
+> +	hlist_for_each_entry(P, &security_hook_heads.inode_init_security, lis=
+t)
+> +		max_new_xattrs++;
 
+Don't do this here! You can count the number of modules providing inode_i=
+nit_security
+hooks when the modules register and save the value for use here. It's not=20
+going to
+change.
+
+> +
+> +	if (!max_new_xattrs)
+> +		return 0;
+> +
+> +	/* Allocate +1 for EVM and +1 as terminator. */
+> +	new_xattrs =3D kcalloc(max_new_xattrs + 2, sizeof(*new_xattrs), GFP_N=
+OFS);
+> +	if (!new_xattrs)
+> +		return -ENOMEM;
+> +
+>  	lsm_xattr =3D new_xattrs;
+> -	ret =3D call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, q=
+str,
+> -			    lsm_xattr, fs_data);
+> -	if (ret)
+> +	hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
+> +			     list) {
+> +		ret =3D P->hook.inode_init_security(inode, dir, qstr, new_xattrs,
+> +						  fs_data);
+> +		if (ret) {
+> +			if (ret !=3D -EOPNOTSUPP)
+> +				goto out;
+> +
+> +			continue;
+> +		}
+> +
+> +		/* LSM implementation error. */
+> +		if (lsm_xattr->name =3D=3D NULL || lsm_xattr->value =3D=3D NULL) {
+> +			WARN_ONCE(
+> +				"LSM %s: ret =3D 0 but xattr name/value =3D NULL\n",
+> +				P->lsm);
+> +			ret =3D -ENOENT;
+> +			goto out;
+> +		}
+> +
+> +		lsm_xattr++;
+> +
+> +		if (!--max_new_xattrs)
+> +			break;
+> +	}
+> +
+> +	if (!new_xattrs->name) {
+> +		ret =3D -EOPNOTSUPP;
+>  		goto out;
+> +	}
+> =20
+> -	evm_xattr =3D lsm_xattr + 1;
+> +	evm_xattr =3D lsm_xattr;
+>  	ret =3D evm_inode_init_security(inode, new_xattrs, evm_xattr);
+
+ +	ret =3D evm_inode_init_security(inode, new_xattrs, lsm_xattr);
+
+then you don't need evm_xattr at all.
+
+>  	if (ret)
+>  		goto out;
+> @@ -1053,6 +1090,7 @@ int security_inode_init_security(struct inode *in=
+ode, struct inode *dir,
+>  out:
+>  	for (xattr =3D new_xattrs; xattr->value !=3D NULL; xattr++)
+>  		kfree(xattr->value);
+> +	kfree(new_xattrs);
+>  	return (ret =3D=3D -EOPNOTSUPP) ? 0 : ret;
+>  }
+>  EXPORT_SYMBOL(security_inode_init_security);
+> @@ -1071,11 +1109,44 @@ int security_old_inode_init_security(struct ino=
+de *inode, struct inode *dir,
+>  {
+>  	struct xattr xattr =3D { .name =3D NULL, .value =3D NULL, .value_len =
+=3D 0 };
+>  	struct xattr *lsm_xattr =3D (name && value && len) ? &xattr : NULL;
+> +	struct security_hook_list *P;
+> +	int ret;
+> =20
+>  	if (unlikely(IS_PRIVATE(inode)))
+>  		return -EOPNOTSUPP;
+> -	return call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir,
+> -			     qstr, lsm_xattr, NULL);
+> +
+> +	hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
+> +			     list) {
+> +		ret =3D P->hook.inode_init_security(inode, dir, qstr, lsm_xattr,
+> +						  NULL);
+> +		if (ret) {
+> +			if (ret !=3D -EOPNOTSUPP)
+> +				return ret;
+> +
+> +			continue;
+> +		}
+> +
+> +		if (!lsm_xattr)
+> +			continue;
+> +
+> +		/* LSM implementation error. */
+> +		if (lsm_xattr->name =3D=3D NULL || lsm_xattr->value =3D=3D NULL) {
+> +			WARN_ONCE(
+> +				"LSM %s: ret =3D 0 but xattr name/value =3D NULL\n",
+> +				P->lsm);
+> +
+> +			/* Callers should do the cleanup. */
+> +			return -ENOENT;
+> +		}
+> +
+> +		*name =3D lsm_xattr->name;
+> +		*value =3D lsm_xattr->value;
+> +		*len =3D lsm_xattr->value_len;
+> +
+> +		return ret;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+>  }
+>  EXPORT_SYMBOL(security_old_inode_init_security);
+> =20
 
