@@ -2,237 +2,381 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 954913681C4
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Apr 2021 15:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1ACD36841C
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Apr 2021 17:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbhDVNqu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Apr 2021 09:46:50 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2906 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236344AbhDVNqt (ORCPT
+        id S236485AbhDVPq6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Apr 2021 11:46:58 -0400
+Received: from sonic311-30.consmr.mail.ne1.yahoo.com ([66.163.188.211]:36203
+        "EHLO sonic311-30.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236571AbhDVPq5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Apr 2021 09:46:49 -0400
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FQz2g47lCz680Y4;
-        Thu, 22 Apr 2021 21:35:55 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 22 Apr 2021 15:46:12 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Thu, 22 Apr 2021 15:46:12 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Thu, 22 Apr 2021 11:46:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1619106382; bh=UkCXK1QR81Y+wUBBsIECzyf3fHkMEHIz6oyKrszYCLw=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=XdIWTjdLinm7tygufPd9U9D47z15qW0CYsGuOkY+EIFUYNUgwoO3/ifdyZV4J0Iux/6TmV1ishJSdPOLf65ZjtPSFM0H1L5eEKCB8W5lumwfdf2pJqohaab5Yn2hPw+08+hDDdUq+dnLuD5WQEGDkC7r20jsYKvU0MY3HtuZcEZ6Lj6dpyj7PMpJ2VTfwu9DXq3tlzhP4TY92qtrhx7F3q/xmeX5euIWgUSdU2g0358byHwCV2vQBl/8dLEIgl3/s9SNzSkPAwTskRd1qTvMbapE4WwPBQYra3K7fUfX9h7uFa5/MI1YG0QSUKgM5nh6nic28gVni22IkXWhvnxomQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1619106382; bh=DxGkQOBmA5ReLu8Ucogr5a2dHtQiPc2hDsinlPW+9E9=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=fjMYpURNFyT4RIM4YUTO0NV+fpgjERjrbmdvMp23FW0puP8row5PHgVx6+CoHpRUs8TiymBfeoGEk7mhzbOjSYVYchi3FnBV4cLHXj8yUO9VJuVgwB8GUojeAWdWdYJ4yVgTYOdBeFTY3tQS3BbgTtPS+JCACHp0h0fzhxHQujBPfWRUtVv/669NJVob30MhS/essxjiQGdSd16yz1FJNT3i7bXf3ZTM4GjlHRSJopQpEW9Uvu8gdco8O/S2SYUGOuuHnDNfaSZ4nwSvzeosDu+/K/TelS3AMZ2sRoZmn2nLzcekCf6hMraa3+J/W9ktXL//NnR6LB2L+/07ejHwnQ==
+X-YMail-OSG: ajU57xwVM1l_NVOkNrGKOtYd1U316VNSTctfTvTzv1.ulh7gx64_ftjslXVsmyL
+ hgoRGzm2oH09hN.ITqHIHJETuejnrs1zVYkCRnrLqocceB1nMbBCDdx7dvhmwHzcyCGXOjGRdLpV
+ ZBjPz6X994IfOMEeprW2iHFNI2122YJufLyW0BHAgpzcCs8rj_yCTGuAktaO0VRxC7wdMxBH6vb_
+ HX9VBQzzGrRDVV4nbwzx5Y7dc3TE8doJzet6rIlBPCjexF1z.xXyY37YZGHwhsIpNefUfzxb2arZ
+ fVeXpg_DJmgxw9gIkN1pat0Mv_CwpvgFpD4qgzDsZmSV_C7MbGKK3dLVC6A85j9u0r3xs8YOqFvg
+ v3bwpxNeiA9ob106mIYXjWT6ueUyg9P4rrEKS77dnYA6VWKCzWftQQ8RoWfw3iFX2aGye3Ln50LJ
+ R6NxpZVKk4qB.n_moABYaVBeUdiROK0Hq6b7WMkf4NNAxqs_x128HREw0FhHpxtvBTHPXaA.9fNx
+ eAPfqSwL5GFGQi5zU8yUmVlEGXqBFEKymgWZWiISyudeVlnD2MYbUkafq4Xf9gtQezDkYJOKf_mz
+ G_jMEpCROEbYyt28kimXZNk38leRGwgoAwPLE8NsZ48axib7tlcp8cWQSc0IPrvnQ8Ivi4TBwCQ.
+ mUOlj0xg8HadqoWHlRpJ8GYz8Me_I4mka3OJgScJUQb95TpLELEv9KzhWQodZyn_xIuPHdibNcvw
+ sgiG.SmfpqK2sFN.ajno.PuceS3zg10YFBwsetBjeiX6v3XkgQPF1hkq.fOoTh0tE5dUOqFlaROn
+ 6H3HbShOT1NDbqso5QoN4SiP9j1KphHTsmI7NTL5zuzTx_ERM68PNLby9KCtBSmaE0HnzXaLUbF0
+ sWgoEpupwNa6axuJ7e25xjT28ACI34lKgfOe.GGIYbSeleIxM5hKHDprZ5mvbt1STdavgb2xkzwP
+ lwGv1uB7PKTYTxzxEWtoWdlJUnBEhdW2BZivtaMYQ9PRq_C_ji_SO.1N8_sn_vImYzgk9q_TZsIK
+ ugLAUOqIj_43E2d4_Qlpr3i3fiFoRY1MPkM6LpGP6hlY33XMXM1.ag.0XOc.gTk4xFdQ_v90zrnT
+ 8GpO1ZoE7mw71hbbuyM5fX1PCUkDWKNDMmkBN1J0B5LhbAPUcQq8zYRSO2hSd4ZBNrs.nft0utyL
+ CydlAERqe.iZXZ8BFm.YiuCgz6qiopM4hVU1WQJXZ6Zc0lCg_TU0MqJbkh7UUfe3n6iYwrhf7kpj
+ yAawpNVFBfkZIJXo9bmCAE_jssrE05sUYhI9dgB0eglVDkRZiWHmQrv_wvcXqMLFyiTdr4XZg5xc
+ jX3y52fuG0noEuegGTvJ5a5oSNQo47Yz677O3_3tfjMvm7inswUOR359I19_dnbWG_mJD5rgwW6U
+ _l4YgCkW3AmEQnnVwfM7sdByyYptRF6.IUlChpAkLMUvOko1czrnTSJlYM8xC47pJj1BcbDsIklW
+ k1mEShN6MddeMRq_gZUmEjK8oZAxEW09Fw_O88gV5a3Oqy_1x9BEtSlVWbm3.enedUVFpGtrlvoP
+ PcVqS5DGCp9oW3Pa8Q8G7cM5Y_fowkf8nlR2Xc5FbXNoyggv7aNQfQjSFqbKl1fL31YCy3wEtjCc
+ _IAFaX3eOJL.vpodFJ98gEyrQSwV4huuFTs949G7dJsQSx.tJ66VpUiUYDTEFBDjCvI4u6oTezJL
+ qMTgT_gwyA2R2H.U6GrwjIjy0gDp5QSlB0D5NtMo.gUZhpWTSlGP5y8O_ptoiCCQGJY0ZcBtadJY
+ bjdlSwGTR9PVLk8Duvrd_L93e5Cl8c.dY4OzOILh72hZhqFA3uAO4Y3WLnt8GhD7KeysJ35tTX.N
+ v9bSXEFZsU1vTHDO._UziRc7F3d2qLKlCEXbaDNjvZFem0j9nr1aF6pips.Tjc.07VxgpNU_HMhX
+ w69vx5uSGgSG5YYBRlxA1GRero6WYtmHdaaktgf.kLVD1YK1zsP.5cgqZwC9r2HIt6G7retBhJ6J
+ tWINbAvtX777bISTXvy2eqdYcKBbI1tPC7tI2hryHVUKmo.Wt9D6S8.NDooD7.KlvJkXHdY3v41A
+ OLbLhE_kC5ezWPrbvt3ej5YIF.SURGoaYw1yPGsy2un_0qKSzfIGi.XLWqS2i3BwErEYdtwVr22.
+ o8deWymFaH57rWVEGNqsypN.08GR5grgc_mQ.uMz_6E4zARA9WsXINIRHnyLWqXkkv2E_3HMHy97
+ UbhFplqe_Tkjt76bPYKti0d5LqFWqRiqBepZCOL._4FCKUzieR16LZo.coOyVXRKZfbqGyhVYUli
+ uESAFvs1OX4Tjhg1vQfMZG0fWqxevne_c86PYL_2Cwj5GTgdLovkuEW2xSEJFOUa4RV4D6YDWy_e
+ CVjNFWWL0YqkBVw1osFVHxdWF9B8yZAF1tgubS971Rz301AAHwGED24GdNdn4ULezN.dcPlibczW
+ fMAsOJaPrI8OcgOg0..bWEN8QUbEWCkgNFkawfHTLDObnQtufJqgjvC72uQ_xeLbnwivO1AEj0Es
+ udSYiUw0wOHywDpkCv2ysz2OVi6LnHZm7enUrs.WEhYbImZIHHLr8Lya7xAtcnD4UIDGhqeFlCxI
+ dk8d.7HZVIHBVe0DxNmugM7i9RKW9ucnGIBhs5vVslyEZW2defU.ZMTCrQGd0TdqebPReVkaZQEZ
+ Wpmt72NOmungsxSqEx0ph_XbiQAk3o2LNSaB4VQErNlhKoPOK9wrXAir3uKQdPrL8kgB_HY56MR.
+ xi8ffAK4xSm0lPOb4UejAHqeK3tgA14wDpuwh16peyDOVIv2QOQoqQhkQTjASl2p1YulPCJkIChi
+ vngWO2onFYP.YXxFfwpUDIp0wohnPG7vFOWWPe7QhOH94JjgXvWFUzA7kR6CQOOHzqUY8jtZgSYp
+ crQPjNPP59kqfQ809M37MU3quBJHRnyDzTj8EMK7zYL6pdqNHr.loiulrgYk.cndTUV13c8HUoS3
+ EmsbpRhjwsm80C_V1voaYR2aiVhaVoV4UCTqnVdV5MPR48GVQzq24U7fdCYLJhH3pbC8FIKWxjZn
+ Mh2P4dRjH2WhtboPpB.InawRTTd8I.5tmJcvWOyWc4VVhm.XgyjWf0FOpyvJZQ3.UDH3kiMvFfUR
+ sxjv0Ae8Y8G55XKJQBF6EU10YLqT0UUPU71bgzAoDQJxruMC1m3yZd0cCF39dJinZZQcOYTOGMa5
+ enL5skDA3WAIQgMWweTZvKTSeo1Fs7dO50gwqsd9dTj3aRn8p55p8fd11Gvv1y9ax.lBFzks6UUb
+ HRtPtO0Yx
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Thu, 22 Apr 2021 15:46:22 +0000
+Received: by kubenode533.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 8c99ac3b8b3ac92e5023df89796bef93;
+          Thu, 22 Apr 2021 15:46:21 +0000 (UTC)
+Subject: Re: [PATCH v2 3/6] security: Pass xattrs allocated by LSMs to the
+ inode_init_security hook
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
         "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         "jmorris@namei.org" <jmorris@namei.org>,
         "paul@paul-moore.com" <paul@paul-moore.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "reiserfs-devel@vger.kernel.org" <reiserfs-devel@vger.kernel.org>
-Subject: RE: [PATCH v2 3/6] security: Pass xattrs allocated by LSMs to the
- inode_init_security hook
-Thread-Topic: [PATCH v2 3/6] security: Pass xattrs allocated by LSMs to the
- inode_init_security hook
-Thread-Index: AQHXNsotY/K28wHuekOIDth+NQB1IKq/cHuAgAEcEXA=
-Date:   Thu, 22 Apr 2021 13:46:12 +0000
-Message-ID: <406d450699034f54b6c184f286acccfe@huawei.com>
+        "reiserfs-devel@vger.kernel.org" <reiserfs-devel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
 References: <20210421161925.968825-1-roberto.sassu@huawei.com>
  <20210421161925.968825-4-roberto.sassu@huawei.com>
  <0caf1e58-1e2d-c781-3f71-18aaf55cada2@schaufler-ca.com>
-In-Reply-To: <0caf1e58-1e2d-c781-3f71-18aaf55cada2@schaufler-ca.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <406d450699034f54b6c184f286acccfe@huawei.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Message-ID: <37460a6a-da6c-3fdc-7460-0cec024e49db@schaufler-ca.com>
+Date:   Thu, 22 Apr 2021 08:46:20 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+In-Reply-To: <406d450699034f54b6c184f286acccfe@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Mailer: WebService/1.1.18121 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/16)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBDYXNleSBTY2hhdWZsZXIgW21haWx0bzpjYXNleUBzY2hhdWZsZXItY2EuY29tXQ0K
-PiBTZW50OiBUaHVyc2RheSwgQXByaWwgMjIsIDIwMjEgMTI6NDQgQU0NCj4gT24gNC8yMS8yMDIx
-IDk6MTkgQU0sIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4gSW4gcHJlcGFyYXRpb24gZm9yIG1v
-dmluZyBFVk0gdG8gdGhlIExTTSBpbmZyYXN0cnVjdHVyZSwgdGhpcyBwYXRjaA0KPiA+IHJlcGxh
-Y2VzIHRoZSBuYW1lLCB2YWx1ZSwgbGVuIHRyaXBsZSB3aXRoIHRoZSB4YXR0ciBhcnJheSBwb2lu
-dGVyIHByb3ZpZGVkDQo+ID4gYnkgc2VjdXJpdHlfaW5vZGVfaW5pdF9zZWN1cml0eSgpLiBMU01z
-IGFyZSBleHBlY3RlZCB0byBjYWxsIHRoZSBuZXcNCj4gPiBmdW5jdGlvbiBsc21fZmluZF94YXR0
-cl9zbG90KCkgdG8gZmluZCB0aGUgZmlyc3QgdW51c2VkIHNsb3Qgb2YgdGhlIGFycmF5DQo+ID4g
-d2hlcmUgdGhlIHhhdHRyIHNob3VsZCBiZSB3cml0dGVuLg0KPiA+DQo+ID4gVGhpcyBwYXRjaCBt
-b2RpZmllcyBhbHNvIFNFTGludXggYW5kIFNtYWNrIHRvIHNlYXJjaCBmb3IgYW4gdW51c2VkIHNs
-b3QsIHRvDQo+ID4gaGF2ZSBhIGNvbnNpc3RlbnQgYmVoYXZpb3IgYWNyb3NzIExTTXMgKHRoZSB1
-bm1vZGlmaWVkIHZlcnNpb24gd291bGQNCj4gPiBvdmVyd3JpdGUgdGhlIHhhdHRyIHNldCBieSB0
-aGUgZmlyc3QgTFNNIGluIHRoZSBjaGFpbikuIEl0IGlzIGFsc28NCj4gPiBkZXNpcmFibGUgdG8g
-aGF2ZSB0aGUgbW9kaWZpY2F0aW9uIGluIHRob3NlIExTTXMsIGFzIHRoZXkgYXJlIGxpa2VseSB1
-c2VkDQo+ID4gYXMgYSByZWZlcmVuY2UgZm9yIHRoZSBkZXZlbG9wbWVudCBvZiBuZXcgTFNNcy4N
-Cj4gDQo+IFRoaXMgbG9va3MgYmV0dGVyIHRoYW4gVjEuIE9uZSBzYWZldHkgY29tbWVudCBiZWxv
-dy4NCj4gDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNh
-c3N1QGh1YXdlaS5jb20+DQo+ID4gLS0tDQo+ID4gIGluY2x1ZGUvbGludXgvbHNtX2hvb2tfZGVm
-cy5oIHwgIDQgKystLQ0KPiA+ICBpbmNsdWRlL2xpbnV4L2xzbV9ob29rcy5oICAgICB8IDE4ICsr
-KysrKysrKysrKysrKy0tLQ0KPiA+ICBzZWN1cml0eS9zZWN1cml0eS5jICAgICAgICAgICB8IDEz
-ICsrKysrKystLS0tLS0NCj4gPiAgc2VjdXJpdHkvc2VsaW51eC9ob29rcy5jICAgICAgfCAxMyAr
-KysrKystLS0tLS0tDQo+ID4gIHNlY3VyaXR5L3NtYWNrL3NtYWNrX2xzbS5jICAgIHwgMjAgKysr
-KysrKysrLS0tLS0tLS0tLS0NCj4gPiAgNSBmaWxlcyBjaGFuZ2VkLCAzOSBpbnNlcnRpb25zKCsp
-LCAyOSBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2xz
-bV9ob29rX2RlZnMuaCBiL2luY2x1ZGUvbGludXgvbHNtX2hvb2tfZGVmcy5oDQo+ID4gaW5kZXgg
-NDc3YTU5N2RiMDEzLi5hZmI5ZGQxMjJmNjAgMTAwNjQ0DQo+ID4gLS0tIGEvaW5jbHVkZS9saW51
-eC9sc21faG9va19kZWZzLmgNCj4gPiArKysgYi9pbmNsdWRlL2xpbnV4L2xzbV9ob29rX2RlZnMu
-aA0KPiA+IEBAIC0xMTEsOCArMTExLDggQEAgTFNNX0hPT0soaW50LCAwLCBwYXRoX25vdGlmeSwg
-Y29uc3Qgc3RydWN0IHBhdGgNCj4gKnBhdGgsIHU2NCBtYXNrLA0KPiA+ICBMU01fSE9PSyhpbnQs
-IDAsIGlub2RlX2FsbG9jX3NlY3VyaXR5LCBzdHJ1Y3QgaW5vZGUgKmlub2RlKQ0KPiA+ICBMU01f
-SE9PSyh2b2lkLCBMU01fUkVUX1ZPSUQsIGlub2RlX2ZyZWVfc2VjdXJpdHksIHN0cnVjdCBpbm9k
-ZSAqaW5vZGUpDQo+ID4gIExTTV9IT09LKGludCwgMCwgaW5vZGVfaW5pdF9zZWN1cml0eSwgc3Ry
-dWN0IGlub2RlICppbm9kZSwNCj4gPiAtCSBzdHJ1Y3QgaW5vZGUgKmRpciwgY29uc3Qgc3RydWN0
-IHFzdHIgKnFzdHIsIGNvbnN0IGNoYXIgKipuYW1lLA0KPiA+IC0JIHZvaWQgKip2YWx1ZSwgc2l6
-ZV90ICpsZW4pDQo+ID4gKwkgc3RydWN0IGlub2RlICpkaXIsIGNvbnN0IHN0cnVjdCBxc3RyICpx
-c3RyLCBzdHJ1Y3QgeGF0dHIgKnhhdHRycywNCj4gPiArCSB2b2lkICpmc19kYXRhKQ0KPiA+ICBM
-U01fSE9PSyhpbnQsIDAsIGlub2RlX2luaXRfc2VjdXJpdHlfYW5vbiwgc3RydWN0IGlub2RlICpp
-bm9kZSwNCj4gPiAgCSBjb25zdCBzdHJ1Y3QgcXN0ciAqbmFtZSwgY29uc3Qgc3RydWN0IGlub2Rl
-ICpjb250ZXh0X2lub2RlKQ0KPiA+ICBMU01fSE9PSyhpbnQsIDAsIGlub2RlX2NyZWF0ZSwgc3Ry
-dWN0IGlub2RlICpkaXIsIHN0cnVjdCBkZW50cnkgKmRlbnRyeSwNCj4gPiBkaWZmIC0tZ2l0IGEv
-aW5jbHVkZS9saW51eC9sc21faG9va3MuaCBiL2luY2x1ZGUvbGludXgvbHNtX2hvb2tzLmgNCj4g
-PiBpbmRleCBjNTQ5OGY1MTc0Y2UuLmU4YzliYWMyOWI5ZCAxMDA2NDQNCj4gPiAtLS0gYS9pbmNs
-dWRlL2xpbnV4L2xzbV9ob29rcy5oDQo+ID4gKysrIGIvaW5jbHVkZS9saW51eC9sc21faG9va3Mu
-aA0KPiA+IEBAIC0yNyw2ICsyNyw3IEBADQo+ID4NCj4gPiAgI2luY2x1ZGUgPGxpbnV4L3NlY3Vy
-aXR5Lmg+DQo+ID4gICNpbmNsdWRlIDxsaW51eC9pbml0Lmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51
-eC94YXR0ci5oPg0KPiA+ICAjaW5jbHVkZSA8bGludXgvcmN1bGlzdC5oPg0KPiA+DQo+ID4gIC8q
-Kg0KPiA+IEBAIC0yMjcsOSArMjI4LDExIEBADQo+ID4gICAqCUBpbm9kZSBjb250YWlucyB0aGUg
-aW5vZGUgc3RydWN0dXJlIG9mIHRoZSBuZXdseSBjcmVhdGVkIGlub2RlLg0KPiA+ICAgKglAZGly
-IGNvbnRhaW5zIHRoZSBpbm9kZSBzdHJ1Y3R1cmUgb2YgdGhlIHBhcmVudCBkaXJlY3RvcnkuDQo+
-ID4gICAqCUBxc3RyIGNvbnRhaW5zIHRoZSBsYXN0IHBhdGggY29tcG9uZW50IG9mIHRoZSBuZXcg
-b2JqZWN0DQo+ID4gLSAqCUBuYW1lIHdpbGwgYmUgc2V0IHRvIHRoZSBhbGxvY2F0ZWQgbmFtZSBz
-dWZmaXggKGUuZy4gc2VsaW51eCkuDQo+ID4gLSAqCUB2YWx1ZSB3aWxsIGJlIHNldCB0byB0aGUg
-YWxsb2NhdGVkIGF0dHJpYnV0ZSB2YWx1ZS4NCj4gPiAtICoJQGxlbiB3aWxsIGJlIHNldCB0byB0
-aGUgbGVuZ3RoIG9mIHRoZSB2YWx1ZS4NCj4gPiArICoJQHhhdHRycyBjb250YWlucyB0aGUgZnVs
-bCBhcnJheSBvZiB4YXR0cnMgYWxsb2NhdGVkIGJ5IExTTXMgd2hlcmUNCj4gPiArICoJLT5uYW1l
-IHdpbGwgYmUgc2V0IHRvIHRoZSBhbGxvY2F0ZWQgbmFtZSBzdWZmaXggKGUuZy4gc2VsaW51eCku
-DQo+ID4gKyAqCS0+dmFsdWUgd2lsbCBiZSBzZXQgdG8gdGhlIGFsbG9jYXRlZCBhdHRyaWJ1dGUg
-dmFsdWUuDQo+ID4gKyAqCS0+bGVuIHdpbGwgYmUgc2V0IHRvIHRoZSBsZW5ndGggb2YgdGhlIHZh
-bHVlLg0KPiA+ICsgKglAZnNfZGF0YSBjb250YWlucyBmaWxlc3lzdGVtLXNwZWNpZmljIGRhdGEu
-DQo+ID4gICAqCVJldHVybnMgMCBpZiBAbmFtZSBhbmQgQHZhbHVlIGhhdmUgYmVlbiBzdWNjZXNz
-ZnVsbHkgc2V0LA0KPiA+ICAgKgktRU9QTk9UU1VQUCBpZiBubyBzZWN1cml0eSBhdHRyaWJ1dGUg
-aXMgbmVlZGVkLCBvcg0KPiA+ICAgKgktRU5PTUVNIG9uIG1lbW9yeSBhbGxvY2F0aW9uIGZhaWx1
-cmUuDQo+ID4gQEAgLTE2NjEsNCArMTY2NCwxMyBAQCBzdGF0aWMgaW5saW5lIHZvaWQgc2VjdXJp
-dHlfZGVsZXRlX2hvb2tzKHN0cnVjdA0KPiBzZWN1cml0eV9ob29rX2xpc3QgKmhvb2tzLA0KPiA+
-DQo+ID4gIGV4dGVybiBpbnQgbHNtX2lub2RlX2FsbG9jKHN0cnVjdCBpbm9kZSAqaW5vZGUpOw0K
-PiA+DQo+IA0KPiBTb21lICJzZWN1cml0eSByZXNlYXJjaGVyIiB3aXRoIGEgZnV6eiB0ZXN0ZXIg
-aXMgZ29pbmcgdG8gbWFuYWdlIHRvIGR1bXAganVuaw0KPiBpbnRvIHRoZSBzbG90cyBhbmQgcnVp
-biB5b3VyIHdlZWsuIEkgc3VnZ2VzdCBhIHNpbXBsZSBjaGFuZ2UgdG8gbWFrZSBib3VuZHMNCj4g
-Y2hlY2tpbmcNCj4gcG9zc2libGUuIEl0IHNob3VsZCBuZXZlciBoYXBwZW4sIGJ1dCBpZiB0aGF0
-IHdhcyBzdWZmaWNpZW50IHBlb3BsZSB3b3VsZA0KPiBsb3ZlIEMNCj4gc3RyaW5nIHByb2Nlc3Np
-bmcgYmV0dGVyLg0KPiANCj4gPiArc3RhdGljIGlubGluZSBzdHJ1Y3QgeGF0dHIgKmxzbV9maW5k
-X3hhdHRyX3Nsb3Qoc3RydWN0IHhhdHRyICp4YXR0cnMpDQo+IA0KPiArc3RhdGljIGlubGluZSBz
-dHJ1Y3QgeGF0dHIgKmxzbV9maW5kX3hhdHRyX3Nsb3Qoc3RydWN0IHhhdHRyICp4YXR0cnMsIGlu
-dCBhdmFpbGFibGUpDQoNCk9rLiBJIGxvb2tlZCBhdCBob3cgSSBzaG91bGQgZG8gdGhhdC4gSW5p
-dGlhbGx5LCBJIHRob3VnaHQgdGhhdCBJIGNvdWxkDQp1c2UgYSBnbG9iYWwgdmFyaWFibGUgc3Rv
-cmluZyB0aGUgbnVtYmVyIG9mIGlub2RlX2luaXRfc2VjdXJpdHkNCmltcGxlbWVudGF0aW9ucywg
-ZGV0ZXJtaW5lZCBhdCBMU00gcmVnaXN0cmF0aW9uIHRpbWUuIFRoZW4sDQpJIHJlYWxpemVkIHRo
-YXQgdGhpcyB3b3VsZCBub3Qgd29yaywgYXMgdGhlIG51bWJlciBvZiBhcnJheSBlbGVtZW50cw0K
-d2hlbiBzZWN1cml0eV9vbGRfaW5vZGVfaW5pdF9zZWN1cml0eSgpIGlzIGNhbGxlZCBpcyAxLg0K
-DQpJIG1vZGlmaWVkIHRoZSBwYXRjaCBzZXQgdG8gcGFzcyBhbHNvIHRoZSBudW1iZXIgb2YgYXJy
-YXkgZWxlbWVudHMuDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9y
-ZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5nLCBMaSBKaWFuLCBT
-aGkgWWFubGkNCg0KPiA+ICt7DQo+ID4gKwlzdHJ1Y3QgeGF0dHIgKnNsb3Q7DQo+ID4gKw0KPiA+
-ICsJZm9yIChzbG90ID0geGF0dHJzOyBzbG90ICYmIHNsb3QtPm5hbWUgIT0gTlVMTDsgc2xvdCsr
-KQ0KPiANCj4gKwlmb3IgKHNsb3QgPSB4YXR0cnM7IHNsb3QgJiYgc2xvdC0+bmFtZSAhPSBOVUxM
-OyBzbG90KyspDQo+ICAJCWlmIChXQVJOX09OKHNsb3QgPiB4YXR0cnNbYXZhaWxhYmxlXSkpDQo+
-IAkJCXJldHVybiBOVUxMOw0KPiANCj4gPiArCQk7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIHNsb3Q7
-DQo+ID4gK30NCj4gPiAgI2VuZGlmIC8qICEgX19MSU5VWF9MU01fSE9PS1NfSCAqLw0KPiA+IGRp
-ZmYgLS1naXQgYS9zZWN1cml0eS9zZWN1cml0eS5jIGIvc2VjdXJpdHkvc2VjdXJpdHkuYw0KPiA+
-IGluZGV4IDdmMTRlNTljNGY4ZS4uMmMxZmUxNDk2MDY5IDEwMDY0NA0KPiA+IC0tLSBhL3NlY3Vy
-aXR5L3NlY3VyaXR5LmMNCj4gPiArKysgYi9zZWN1cml0eS9zZWN1cml0eS5jDQo+ID4gQEAgLTEw
-MzcsMTggKzEwMzcsMTYgQEAgaW50IHNlY3VyaXR5X2lub2RlX2luaXRfc2VjdXJpdHkoc3RydWN0
-IGlub2RlDQo+ICppbm9kZSwgc3RydWN0IGlub2RlICpkaXIsDQo+ID4NCj4gPiAgCWlmICghaW5p
-dHhhdHRycykNCj4gPiAgCQlyZXR1cm4gY2FsbF9pbnRfaG9vayhpbm9kZV9pbml0X3NlY3VyaXR5
-LCAtRU9QTk9UU1VQUCwNCj4gaW5vZGUsDQo+ID4gLQkJCQkgICAgIGRpciwgcXN0ciwgTlVMTCwg
-TlVMTCwgTlVMTCk7DQo+ID4gKwkJCQkgICAgIGRpciwgcXN0ciwgTlVMTCwgZnNfZGF0YSk7DQo+
-ID4gIAltZW1zZXQobmV3X3hhdHRycywgMCwgc2l6ZW9mKG5ld194YXR0cnMpKTsNCj4gPiAgCWxz
-bV94YXR0ciA9IG5ld194YXR0cnM7DQo+ID4gIAlyZXQgPSBjYWxsX2ludF9ob29rKGlub2RlX2lu
-aXRfc2VjdXJpdHksIC1FT1BOT1RTVVBQLCBpbm9kZSwgZGlyLCBxc3RyLA0KPiA+IC0JCQkJCQkm
-bHNtX3hhdHRyLT5uYW1lLA0KPiA+IC0JCQkJCQkmbHNtX3hhdHRyLT52YWx1ZSwNCj4gPiAtCQkJ
-CQkJJmxzbV94YXR0ci0+dmFsdWVfbGVuKTsNCj4gPiArCQkJICAgIGxzbV94YXR0ciwgZnNfZGF0
-YSk7DQo+ID4gIAlpZiAocmV0KQ0KPiA+ICAJCWdvdG8gb3V0Ow0KPiA+DQo+ID4gIAlldm1feGF0
-dHIgPSBsc21feGF0dHIgKyAxOw0KPiA+IC0JcmV0ID0gZXZtX2lub2RlX2luaXRfc2VjdXJpdHko
-aW5vZGUsIGxzbV94YXR0ciwgZXZtX3hhdHRyKTsNCj4gPiArCXJldCA9IGV2bV9pbm9kZV9pbml0
-X3NlY3VyaXR5KGlub2RlLCBuZXdfeGF0dHJzLCBldm1feGF0dHIpOw0KPiA+ICAJaWYgKHJldCkN
-Cj4gPiAgCQlnb3RvIG91dDsNCj4gPiAgCXJldCA9IGluaXR4YXR0cnMoaW5vZGUsIG5ld194YXR0
-cnMsIGZzX2RhdGEpOw0KPiA+IEBAIC0xMDcxLDEwICsxMDY5LDEzIEBAIGludCBzZWN1cml0eV9v
-bGRfaW5vZGVfaW5pdF9zZWN1cml0eShzdHJ1Y3QgaW5vZGUNCj4gKmlub2RlLCBzdHJ1Y3QgaW5v
-ZGUgKmRpciwNCj4gPiAgCQkJCSAgICAgY29uc3Qgc3RydWN0IHFzdHIgKnFzdHIsIGNvbnN0IGNo
-YXIgKipuYW1lLA0KPiA+ICAJCQkJICAgICB2b2lkICoqdmFsdWUsIHNpemVfdCAqbGVuKQ0KPiA+
-ICB7DQo+ID4gKwlzdHJ1Y3QgeGF0dHIgeGF0dHIgPSB7IC5uYW1lID0gTlVMTCwgLnZhbHVlID0g
-TlVMTCwgLnZhbHVlX2xlbiA9IDAgfTsNCj4gPiArCXN0cnVjdCB4YXR0ciAqbHNtX3hhdHRyID0g
-KG5hbWUgJiYgdmFsdWUgJiYgbGVuKSA/ICZ4YXR0ciA6IE5VTEw7DQo+ID4gKw0KPiA+ICAJaWYg
-KHVubGlrZWx5KElTX1BSSVZBVEUoaW5vZGUpKSkNCj4gPiAgCQlyZXR1cm4gLUVPUE5PVFNVUFA7
-DQo+ID4gIAlyZXR1cm4gY2FsbF9pbnRfaG9vayhpbm9kZV9pbml0X3NlY3VyaXR5LCAtRU9QTk9U
-U1VQUCwgaW5vZGUsIGRpciwNCj4gPiAtCQkJICAgICBxc3RyLCBuYW1lLCB2YWx1ZSwgbGVuKTsN
-Cj4gPiArCQkJICAgICBxc3RyLCBsc21feGF0dHIsIE5VTEwpOw0KPiA+ICB9DQo+ID4gIEVYUE9S
-VF9TWU1CT0woc2VjdXJpdHlfb2xkX2lub2RlX2luaXRfc2VjdXJpdHkpOw0KPiA+DQo+ID4gZGlm
-ZiAtLWdpdCBhL3NlY3VyaXR5L3NlbGludXgvaG9va3MuYyBiL3NlY3VyaXR5L3NlbGludXgvaG9v
-a3MuYw0KPiA+IGluZGV4IGRkZDA5Nzc5MGQ0Ny4uODA2ODI3ZWIxMzJhIDEwMDY0NA0KPiA+IC0t
-LSBhL3NlY3VyaXR5L3NlbGludXgvaG9va3MuYw0KPiA+ICsrKyBiL3NlY3VyaXR5L3NlbGludXgv
-aG9va3MuYw0KPiA+IEBAIC0yOTE2LDExICsyOTE2LDExIEBAIHN0YXRpYyBpbnQgc2VsaW51eF9k
-ZW50cnlfY3JlYXRlX2ZpbGVzX2FzKHN0cnVjdA0KPiBkZW50cnkgKmRlbnRyeSwgaW50IG1vZGUs
-DQo+ID4NCj4gPiAgc3RhdGljIGludCBzZWxpbnV4X2lub2RlX2luaXRfc2VjdXJpdHkoc3RydWN0
-IGlub2RlICppbm9kZSwgc3RydWN0IGlub2RlICpkaXIsDQo+ID4gIAkJCQkgICAgICAgY29uc3Qg
-c3RydWN0IHFzdHIgKnFzdHIsDQo+ID4gLQkJCQkgICAgICAgY29uc3QgY2hhciAqKm5hbWUsDQo+
-ID4gLQkJCQkgICAgICAgdm9pZCAqKnZhbHVlLCBzaXplX3QgKmxlbikNCj4gPiArCQkJCSAgICAg
-ICBzdHJ1Y3QgeGF0dHIgKnhhdHRycywgdm9pZCAqZnNfZGF0YSkNCj4gPiAgew0KPiA+ICAJY29u
-c3Qgc3RydWN0IHRhc2tfc2VjdXJpdHlfc3RydWN0ICp0c2VjID0gc2VsaW51eF9jcmVkKGN1cnJl
-bnRfY3JlZCgpKTsNCj4gPiAgCXN0cnVjdCBzdXBlcmJsb2NrX3NlY3VyaXR5X3N0cnVjdCAqc2Jz
-ZWM7DQo+ID4gKwlzdHJ1Y3QgeGF0dHIgKnhhdHRyID0gbHNtX2ZpbmRfeGF0dHJfc2xvdCh4YXR0
-cnMpOw0KPiA+ICAJdTMyIG5ld3NpZCwgY2xlbjsNCj4gPiAgCWludCByYzsNCj4gPiAgCWNoYXIg
-KmNvbnRleHQ7DQo+ID4gQEAgLTI5NDcsMTYgKzI5NDcsMTUgQEAgc3RhdGljIGludCBzZWxpbnV4
-X2lub2RlX2luaXRfc2VjdXJpdHkoc3RydWN0DQo+IGlub2RlICppbm9kZSwgc3RydWN0IGlub2Rl
-ICpkaXIsDQo+ID4gIAkgICAgIShzYnNlYy0+ZmxhZ3MgJiBTQkxBQkVMX01OVCkpDQo+ID4gIAkJ
-cmV0dXJuIC1FT1BOT1RTVVBQOw0KPiA+DQo+ID4gLQlpZiAobmFtZSkNCj4gPiAtCQkqbmFtZSA9
-IFhBVFRSX1NFTElOVVhfU1VGRklYOw0KPiA+ICsJaWYgKHhhdHRyKSB7DQo+ID4gKwkJeGF0dHIt
-Pm5hbWUgPSBYQVRUUl9TRUxJTlVYX1NVRkZJWDsNCj4gPg0KPiA+IC0JaWYgKHZhbHVlICYmIGxl
-bikgew0KPiA+ICAJCXJjID0gc2VjdXJpdHlfc2lkX3RvX2NvbnRleHRfZm9yY2UoJnNlbGludXhf
-c3RhdGUsIG5ld3NpZCwNCj4gPiAgCQkJCQkJICAgJmNvbnRleHQsICZjbGVuKTsNCj4gPiAgCQlp
-ZiAocmMpDQo+ID4gIAkJCXJldHVybiByYzsNCj4gPiAtCQkqdmFsdWUgPSBjb250ZXh0Ow0KPiA+
-IC0JCSpsZW4gPSBjbGVuOw0KPiA+ICsJCXhhdHRyLT52YWx1ZSA9IGNvbnRleHQ7DQo+ID4gKwkJ
-eGF0dHItPnZhbHVlX2xlbiA9IGNsZW47DQo+ID4gIAl9DQo+ID4NCj4gPiAgCXJldHVybiAwOw0K
-PiA+IGRpZmYgLS1naXQgYS9zZWN1cml0eS9zbWFjay9zbWFja19sc20uYyBiL3NlY3VyaXR5L3Nt
-YWNrL3NtYWNrX2xzbS5jDQo+ID4gaW5kZXggMTJhNDVlNjFjMWE1Li5hZjdlZWUwZmVlNTIgMTAw
-NjQ0DQo+ID4gLS0tIGEvc2VjdXJpdHkvc21hY2svc21hY2tfbHNtLmMNCj4gPiArKysgYi9zZWN1
-cml0eS9zbWFjay9zbWFja19sc20uYw0KPiA+IEBAIC05NjIsMjYgKzk2MiwyNCBAQCBzdGF0aWMg
-aW50IHNtYWNrX2lub2RlX2FsbG9jX3NlY3VyaXR5KHN0cnVjdCBpbm9kZQ0KPiAqaW5vZGUpDQo+
-ID4gICAqIEBpbm9kZTogdGhlIG5ld2x5IGNyZWF0ZWQgaW5vZGUNCj4gPiAgICogQGRpcjogY29u
-dGFpbmluZyBkaXJlY3Rvcnkgb2JqZWN0DQo+ID4gICAqIEBxc3RyOiB1bnVzZWQNCj4gPiAtICog
-QG5hbWU6IHdoZXJlIHRvIHB1dCB0aGUgYXR0cmlidXRlIG5hbWUNCj4gPiAtICogQHZhbHVlOiB3
-aGVyZSB0byBwdXQgdGhlIGF0dHJpYnV0ZSB2YWx1ZQ0KPiA+IC0gKiBAbGVuOiB3aGVyZSB0byBw
-dXQgdGhlIGxlbmd0aCBvZiB0aGUgYXR0cmlidXRlDQo+ID4gKyAqIEB4YXR0cnM6IHdoZXJlIHRv
-IHB1dCB0aGUgYXR0cmlidXRlDQo+ID4gICAqDQo+ID4gICAqIFJldHVybnMgMCBpZiBpdCBhbGwg
-d29ya3Mgb3V0LCAtRU5PTUVNIGlmIHRoZXJlJ3Mgbm8gbWVtb3J5DQo+ID4gICAqLw0KPiA+ICBz
-dGF0aWMgaW50IHNtYWNrX2lub2RlX2luaXRfc2VjdXJpdHkoc3RydWN0IGlub2RlICppbm9kZSwg
-c3RydWN0IGlub2RlDQo+ICpkaXIsDQo+ID4gLQkJCQkgICAgIGNvbnN0IHN0cnVjdCBxc3RyICpx
-c3RyLCBjb25zdCBjaGFyICoqbmFtZSwNCj4gPiAtCQkJCSAgICAgdm9pZCAqKnZhbHVlLCBzaXpl
-X3QgKmxlbikNCj4gPiArCQkJCSAgICAgY29uc3Qgc3RydWN0IHFzdHIgKnFzdHIsDQo+ID4gKwkJ
-CQkgICAgIHN0cnVjdCB4YXR0ciAqeGF0dHJzLCB2b2lkICpmc19kYXRhKQ0KPiA+ICB7DQo+ID4g
-IAlzdHJ1Y3QgaW5vZGVfc21hY2sgKmlzc3AgPSBzbWFja19pbm9kZShpbm9kZSk7DQo+ID4gIAlz
-dHJ1Y3Qgc21hY2tfa25vd24gKnNrcCA9IHNta19vZl9jdXJyZW50KCk7DQo+ID4gIAlzdHJ1Y3Qg
-c21hY2tfa25vd24gKmlzcCA9IHNta19vZl9pbm9kZShpbm9kZSk7DQo+ID4gIAlzdHJ1Y3Qgc21h
-Y2tfa25vd24gKmRzcCA9IHNta19vZl9pbm9kZShkaXIpOw0KPiA+ICsJc3RydWN0IHhhdHRyICp4
-YXR0ciA9IGxzbV9maW5kX3hhdHRyX3Nsb3QoeGF0dHJzKTsNCj4gPiAgCWludCBtYXk7DQo+ID4N
-Cj4gPiAtCWlmIChuYW1lKQ0KPiA+IC0JCSpuYW1lID0gWEFUVFJfU01BQ0tfU1VGRklYOw0KPiA+
-ICsJaWYgKHhhdHRyKSB7DQo+ID4gKwkJeGF0dHItPm5hbWUgPSBYQVRUUl9TTUFDS19TVUZGSVg7
-DQo+ID4NCj4gPiAtCWlmICh2YWx1ZSAmJiBsZW4pIHsNCj4gPiAgCQlyY3VfcmVhZF9sb2NrKCk7
-DQo+ID4gIAkJbWF5ID0gc21rX2FjY2Vzc19lbnRyeShza3AtPnNta19rbm93biwgZHNwLT5zbWtf
-a25vd24sDQo+ID4gIAkJCQkgICAgICAgJnNrcC0+c21rX3J1bGVzKTsNCj4gPiBAQCAtOTk5LDEx
-ICs5OTcsMTEgQEAgc3RhdGljIGludCBzbWFja19pbm9kZV9pbml0X3NlY3VyaXR5KHN0cnVjdCBp
-bm9kZQ0KPiAqaW5vZGUsIHN0cnVjdCBpbm9kZSAqZGlyLA0KPiA+ICAJCQlpc3NwLT5zbWtfZmxh
-Z3MgfD0gU01LX0lOT0RFX0NIQU5HRUQ7DQo+ID4gIAkJfQ0KPiA+DQo+ID4gLQkJKnZhbHVlID0g
-a3N0cmR1cChpc3AtPnNta19rbm93biwgR0ZQX05PRlMpOw0KPiA+IC0JCWlmICgqdmFsdWUgPT0g
-TlVMTCkNCj4gPiArCQl4YXR0ci0+dmFsdWUgPSBrc3RyZHVwKGlzcC0+c21rX2tub3duLCBHRlBf
-Tk9GUyk7DQo+ID4gKwkJaWYgKHhhdHRyLT52YWx1ZSA9PSBOVUxMKQ0KPiA+ICAJCQlyZXR1cm4g
-LUVOT01FTTsNCj4gPg0KPiA+IC0JCSpsZW4gPSBzdHJsZW4oaXNwLT5zbWtfa25vd24pOw0KPiA+
-ICsJCXhhdHRyLT52YWx1ZV9sZW4gPSBzdHJsZW4oaXNwLT5zbWtfa25vd24pOw0KPiA+ICAJfQ0K
-PiA+DQo+ID4gIAlyZXR1cm4gMDsNCg0K
+On 4/22/2021 6:46 AM, Roberto Sassu wrote:
+>> From: Casey Schaufler [mailto:casey@schaufler-ca.com]
+>> Sent: Thursday, April 22, 2021 12:44 AM
+>> On 4/21/2021 9:19 AM, Roberto Sassu wrote:
+>>> In preparation for moving EVM to the LSM infrastructure, this patch
+>>> replaces the name, value, len triple with the xattr array pointer pro=
+vided
+>>> by security_inode_init_security(). LSMs are expected to call the new
+>>> function lsm_find_xattr_slot() to find the first unused slot of the a=
+rray
+>>> where the xattr should be written.
+>>>
+>>> This patch modifies also SELinux and Smack to search for an unused sl=
+ot, to
+>>> have a consistent behavior across LSMs (the unmodified version would
+>>> overwrite the xattr set by the first LSM in the chain). It is also
+>>> desirable to have the modification in those LSMs, as they are likely =
+used
+>>> as a reference for the development of new LSMs.
+>> This looks better than V1. One safety comment below.
+>>
+>>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+>>> ---
+>>>  include/linux/lsm_hook_defs.h |  4 ++--
+>>>  include/linux/lsm_hooks.h     | 18 +++++++++++++++---
+>>>  security/security.c           | 13 +++++++------
+>>>  security/selinux/hooks.c      | 13 ++++++-------
+>>>  security/smack/smack_lsm.c    | 20 +++++++++-----------
+>>>  5 files changed, 39 insertions(+), 29 deletions(-)
+>>>
+>>> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_d=
+efs.h
+>>> index 477a597db013..afb9dd122f60 100644
+>>> --- a/include/linux/lsm_hook_defs.h
+>>> +++ b/include/linux/lsm_hook_defs.h
+>>> @@ -111,8 +111,8 @@ LSM_HOOK(int, 0, path_notify, const struct path
+>> *path, u64 mask,
+>>>  LSM_HOOK(int, 0, inode_alloc_security, struct inode *inode)
+>>>  LSM_HOOK(void, LSM_RET_VOID, inode_free_security, struct inode *inod=
+e)
+>>>  LSM_HOOK(int, 0, inode_init_security, struct inode *inode,
+>>> -	 struct inode *dir, const struct qstr *qstr, const char **name,
+>>> -	 void **value, size_t *len)
+>>> +	 struct inode *dir, const struct qstr *qstr, struct xattr *xattrs,
+>>> +	 void *fs_data)
+>>>  LSM_HOOK(int, 0, inode_init_security_anon, struct inode *inode,
+>>>  	 const struct qstr *name, const struct inode *context_inode)
+>>>  LSM_HOOK(int, 0, inode_create, struct inode *dir, struct dentry *den=
+try,
+>>> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+>>> index c5498f5174ce..e8c9bac29b9d 100644
+>>> --- a/include/linux/lsm_hooks.h
+>>> +++ b/include/linux/lsm_hooks.h
+>>> @@ -27,6 +27,7 @@
+>>>
+>>>  #include <linux/security.h>
+>>>  #include <linux/init.h>
+>>> +#include <linux/xattr.h>
+>>>  #include <linux/rculist.h>
+>>>
+>>>  /**
+>>> @@ -227,9 +228,11 @@
+>>>   *	@inode contains the inode structure of the newly created inode.
+>>>   *	@dir contains the inode structure of the parent directory.
+>>>   *	@qstr contains the last path component of the new object
+>>> - *	@name will be set to the allocated name suffix (e.g. selinux).
+>>> - *	@value will be set to the allocated attribute value.
+>>> - *	@len will be set to the length of the value.
+>>> + *	@xattrs contains the full array of xattrs allocated by LSMs where=
+
+>>> + *	->name will be set to the allocated name suffix (e.g. selinux).
+>>> + *	->value will be set to the allocated attribute value.
+>>> + *	->len will be set to the length of the value.
+>>> + *	@fs_data contains filesystem-specific data.
+>>>   *	Returns 0 if @name and @value have been successfully set,
+>>>   *	-EOPNOTSUPP if no security attribute is needed, or
+>>>   *	-ENOMEM on memory allocation failure.
+>>> @@ -1661,4 +1664,13 @@ static inline void security_delete_hooks(struc=
+t
+>> security_hook_list *hooks,
+>>>  extern int lsm_inode_alloc(struct inode *inode);
+>>>
+>> Some "security researcher" with a fuzz tester is going to manage to du=
+mp junk
+>> into the slots and ruin your week. I suggest a simple change to make b=
+ounds
+>> checking
+>> possible. It should never happen, but if that was sufficient people wo=
+uld
+>> love C
+>> string processing better.
+>>
+>>> +static inline struct xattr *lsm_find_xattr_slot(struct xattr *xattrs=
+)
+>> +static inline struct xattr *lsm_find_xattr_slot(struct xattr *xattrs,=20
+int available)
+> Ok. I looked at how I should do that. Initially, I thought that I could=
+
+> use a global variable storing the number of inode_init_security
+> implementations, determined at LSM registration time. Then,
+> I realized that this would not work, as the number of array elements
+> when security_old_inode_init_security() is called is 1.
+
+You can address that by expanding the call_int_hook MACRO in
+security_old_inode_init_security() in place and change it to stop
+after the first call. The two callers of security_old_inode_init_security=
+()
+are going to need to be converted to security_inode_init_security()
+when the "complete" stacking (i.e. SELinux + Smack) anyway, so I don't
+see that as an issue.
+
+Is anyone concerned that ocfs2 and reiserfs aren't EVM capable?
+
+>
+> I modified the patch set to pass also the number of array elements.
+>
+> Roberto
+>
+> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> Managing Director: Li Peng, Li Jian, Shi Yanli
+>
+>>> +{
+>>> +	struct xattr *slot;
+>>> +
+>>> +	for (slot =3D xattrs; slot && slot->name !=3D NULL; slot++)
+>> +	for (slot =3D xattrs; slot && slot->name !=3D NULL; slot++)
+>>  		if (WARN_ON(slot > xattrs[available]))
+>> 			return NULL;
+>>
+>>> +		;
+>>> +
+>>> +	return slot;
+>>> +}
+>>>  #endif /* ! __LINUX_LSM_HOOKS_H */
+>>> diff --git a/security/security.c b/security/security.c
+>>> index 7f14e59c4f8e..2c1fe1496069 100644
+>>> --- a/security/security.c
+>>> +++ b/security/security.c
+>>> @@ -1037,18 +1037,16 @@ int security_inode_init_security(struct inode=
+
+>> *inode, struct inode *dir,
+>>>  	if (!initxattrs)
+>>>  		return call_int_hook(inode_init_security, -EOPNOTSUPP,
+>> inode,
+>>> -				     dir, qstr, NULL, NULL, NULL);
+>>> +				     dir, qstr, NULL, fs_data);
+>>>  	memset(new_xattrs, 0, sizeof(new_xattrs));
+>>>  	lsm_xattr =3D new_xattrs;
+>>>  	ret =3D call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir,=20
+qstr,
+>>> -						&lsm_xattr->name,
+>>> -						&lsm_xattr->value,
+>>> -						&lsm_xattr->value_len);
+>>> +			    lsm_xattr, fs_data);
+>>>  	if (ret)
+>>>  		goto out;
+>>>
+>>>  	evm_xattr =3D lsm_xattr + 1;
+>>> -	ret =3D evm_inode_init_security(inode, lsm_xattr, evm_xattr);
+>>> +	ret =3D evm_inode_init_security(inode, new_xattrs, evm_xattr);
+>>>  	if (ret)
+>>>  		goto out;
+>>>  	ret =3D initxattrs(inode, new_xattrs, fs_data);
+>>> @@ -1071,10 +1069,13 @@ int security_old_inode_init_security(struct i=
+node
+>> *inode, struct inode *dir,
+>>>  				     const struct qstr *qstr, const char **name,
+>>>  				     void **value, size_t *len)
+>>>  {
+>>> +	struct xattr xattr =3D { .name =3D NULL, .value =3D NULL, .value_le=
+n =3D 0 };
+>>> +	struct xattr *lsm_xattr =3D (name && value && len) ? &xattr : NULL;=
+
+>>> +
+>>>  	if (unlikely(IS_PRIVATE(inode)))
+>>>  		return -EOPNOTSUPP;
+>>>  	return call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir,
+>>> -			     qstr, name, value, len);
+>>> +			     qstr, lsm_xattr, NULL);
+>>>  }
+>>>  EXPORT_SYMBOL(security_old_inode_init_security);
+>>>
+>>> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+>>> index ddd097790d47..806827eb132a 100644
+>>> --- a/security/selinux/hooks.c
+>>> +++ b/security/selinux/hooks.c
+>>> @@ -2916,11 +2916,11 @@ static int selinux_dentry_create_files_as(str=
+uct
+>> dentry *dentry, int mode,
+>>>  static int selinux_inode_init_security(struct inode *inode, struct i=
+node *dir,
+>>>  				       const struct qstr *qstr,
+>>> -				       const char **name,
+>>> -				       void **value, size_t *len)
+>>> +				       struct xattr *xattrs, void *fs_data)
+>>>  {
+>>>  	const struct task_security_struct *tsec =3D selinux_cred(current_cr=
+ed());
+>>>  	struct superblock_security_struct *sbsec;
+>>> +	struct xattr *xattr =3D lsm_find_xattr_slot(xattrs);
+>>>  	u32 newsid, clen;
+>>>  	int rc;
+>>>  	char *context;
+>>> @@ -2947,16 +2947,15 @@ static int selinux_inode_init_security(struct=
+
+>> inode *inode, struct inode *dir,
+>>>  	    !(sbsec->flags & SBLABEL_MNT))
+>>>  		return -EOPNOTSUPP;
+>>>
+>>> -	if (name)
+>>> -		*name =3D XATTR_SELINUX_SUFFIX;
+>>> +	if (xattr) {
+>>> +		xattr->name =3D XATTR_SELINUX_SUFFIX;
+>>>
+>>> -	if (value && len) {
+>>>  		rc =3D security_sid_to_context_force(&selinux_state, newsid,
+>>>  						   &context, &clen);
+>>>  		if (rc)
+>>>  			return rc;
+>>> -		*value =3D context;
+>>> -		*len =3D clen;
+>>> +		xattr->value =3D context;
+>>> +		xattr->value_len =3D clen;
+>>>  	}
+>>>
+>>>  	return 0;
+>>> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+>>> index 12a45e61c1a5..af7eee0fee52 100644
+>>> --- a/security/smack/smack_lsm.c
+>>> +++ b/security/smack/smack_lsm.c
+>>> @@ -962,26 +962,24 @@ static int smack_inode_alloc_security(struct in=
+ode
+>> *inode)
+>>>   * @inode: the newly created inode
+>>>   * @dir: containing directory object
+>>>   * @qstr: unused
+>>> - * @name: where to put the attribute name
+>>> - * @value: where to put the attribute value
+>>> - * @len: where to put the length of the attribute
+>>> + * @xattrs: where to put the attribute
+>>>   *
+>>>   * Returns 0 if it all works out, -ENOMEM if there's no memory
+>>>   */
+>>>  static int smack_inode_init_security(struct inode *inode, struct ino=
+de
+>> *dir,
+>>> -				     const struct qstr *qstr, const char **name,
+>>> -				     void **value, size_t *len)
+>>> +				     const struct qstr *qstr,
+>>> +				     struct xattr *xattrs, void *fs_data)
+>>>  {
+>>>  	struct inode_smack *issp =3D smack_inode(inode);
+>>>  	struct smack_known *skp =3D smk_of_current();
+>>>  	struct smack_known *isp =3D smk_of_inode(inode);
+>>>  	struct smack_known *dsp =3D smk_of_inode(dir);
+>>> +	struct xattr *xattr =3D lsm_find_xattr_slot(xattrs);
+>>>  	int may;
+>>>
+>>> -	if (name)
+>>> -		*name =3D XATTR_SMACK_SUFFIX;
+>>> +	if (xattr) {
+>>> +		xattr->name =3D XATTR_SMACK_SUFFIX;
+>>>
+>>> -	if (value && len) {
+>>>  		rcu_read_lock();
+>>>  		may =3D smk_access_entry(skp->smk_known, dsp->smk_known,
+>>>  				       &skp->smk_rules);
+>>> @@ -999,11 +997,11 @@ static int smack_inode_init_security(struct ino=
+de
+>> *inode, struct inode *dir,
+>>>  			issp->smk_flags |=3D SMK_INODE_CHANGED;
+>>>  		}
+>>>
+>>> -		*value =3D kstrdup(isp->smk_known, GFP_NOFS);
+>>> -		if (*value =3D=3D NULL)
+>>> +		xattr->value =3D kstrdup(isp->smk_known, GFP_NOFS);
+>>> +		if (xattr->value =3D=3D NULL)
+>>>  			return -ENOMEM;
+>>>
+>>> -		*len =3D strlen(isp->smk_known);
+>>> +		xattr->value_len =3D strlen(isp->smk_known);
+>>>  	}
+>>>
+>>>  	return 0;
+
