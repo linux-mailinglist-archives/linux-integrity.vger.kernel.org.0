@@ -2,128 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E54B368B58
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Apr 2021 04:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BDA3695D2
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Apr 2021 17:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbhDWDAR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Apr 2021 23:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbhDWDAQ (ORCPT
+        id S243021AbhDWPNe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Apr 2021 11:13:34 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1548 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242829AbhDWPNd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Apr 2021 23:00:16 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0B6C061574;
-        Thu, 22 Apr 2021 19:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=HBOB9+1dQZ8HFU8hecdF0SodpayfgYp4Mp4najr3kSE=; b=oqKeppikN9fTMjnZzq/QQSTrf6
-        Z4pGMfDHMCuabnPTp3IZg9IBXBZzuPVbEjeJmfbhWi3/J72wwvGyk8XMaByqYC27wguHrh3wiUxj0
-        x75yfjxnc3FlYdGd01WeK+1mglxBMcHoQJIio+fAJEQNC0uKbsKqJR9HzKd1wkyGp3rAgT27M6a6x
-        4USbHXwTFJMp1IBk8feE8bvliGs+w1/JXrk8mJr6BAWNwmONEkQsHMNG+/hLbZAQKFi3iU2itW0AI
-        I5T9BXSjPLa21V0jzyeO1NBqOouVpX7z8PP6nujB1nHNqXMUqdMPWspAb2sIYtc0uk6QzDXQx15S/
-        qpMbfOow==;
-Received: from [2601:1c0:6280:3f0::df68]
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lZm0k-000Piv-2k; Fri, 23 Apr 2021 02:58:17 +0000
-Subject: Re: [PATCH] ima: ensure IMA_APPRAISE_MODSIG has necessary
- dependencies
-To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org
-Cc:     linux-security-module@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20210423011602.138946-1-nayna@linux.ibm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <24feb895-eae1-5b9e-47d8-9ee9851710cc@infradead.org>
-Date:   Thu, 22 Apr 2021 19:57:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        Fri, 23 Apr 2021 11:13:33 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13NF3nNB176430;
+        Fri, 23 Apr 2021 11:12:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=LG6EJsspN0xFsaGsQWZaOBJblkgxt0683z6zahBn1As=;
+ b=Vg3wdxbZPJATu36lQ+rc8Dfn9SRTRaNw+BiRCbOpKS//406+oNsUIwO+OcLGWiagrtHD
+ z/OVBqVY7YGGW4pyjoQsio1NzbZ9/Kszkp4YMUjNZjmkRuRjvCZMX6NjJGs0IC4V3cc/
+ TMGsvxDTNVT29IVvwSuKbKIKdwC+YoFU/Zz1tzy4ABZtQmfsvJNp0nxfzmhXbIYH1Tz2
+ 0j/bUwEsVViIKGeQI0lWev7S81yj5ZspeBFYRvE4om/2DTpRQkoJUk64RJRUyb806snJ
+ KfXmiJE6QlIJPKMgiUlE1lqoLfTXoNuPmug9aD94iUY8VPi3H0U5i4fxpiVwQMfNfDfw nQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3838hmdfxr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Apr 2021 11:12:55 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13NF4BJ0177686;
+        Fri, 23 Apr 2021 11:12:55 -0400
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3838hmdfx1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Apr 2021 11:12:55 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13NF8vf9022737;
+        Fri, 23 Apr 2021 15:12:53 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02dal.us.ibm.com with ESMTP id 37yqab608a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Apr 2021 15:12:53 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13NFCqQ149742162
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 23 Apr 2021 15:12:52 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02ACA6A047;
+        Fri, 23 Apr 2021 15:12:52 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4FE3E6A054;
+        Fri, 23 Apr 2021 15:12:51 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.47.158.152])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 23 Apr 2021 15:12:51 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
+        zohar@linux.ibm.com, jarkko@kernel.org
+Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v4 0/2] Add support for ECDSA-signed kernel modules
+Date:   Fri, 23 Apr 2021 11:12:45 -0400
+Message-Id: <20210423151247.1517808-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.30.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7G0SZ7zPPPMVkRFCz80gYPxP2DwOK-1v
+X-Proofpoint-GUID: GoWDdKadZhkikM8HM_GKK1gFsB5YXfB4
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-In-Reply-To: <20210423011602.138946-1-nayna@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-23_07:2021-04-23,2021-04-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ suspectscore=0 phishscore=0 clxscore=1015 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104230098
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 4/22/21 6:16 PM, Nayna Jain wrote:
-> IMA_APPRAISE_MODSIG is used for verifying the integrity of both kernel
-> and modules. Enabling IMA_APPRAISE_MODSIG without MODULES causes a build
-> break.
-> 
-> Ensure the build time kernel signing key is only generated if both
-> IMA_APPRAISE_MODSIG and MODULES are enabled.
-> 
-> Fixes: 0165f4ca223b ("ima: enable signing of modules with build time generated key") 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+This series adds support for ECDSA-signed kernel modules. It also
+attempts to address a kbuild issue where a developer created an ECDSA
+key for signing kernel modules and then builds an older version of the
+kernel, when bisecting the kernel for example, that does not support
+ECDSA keys.
 
-Works For Me. Thanks.
+The first patch addresses the kbuild issue of needing to delete that
+ECDSA key if it is in certs/signing_key.pem and trigger the creation
+of an RSA key. However, for this to work this patch would have to be
+backported to previous versions of the kernel but would also only work
+for the developer if he/she used a stable version of the kernel to which
+this patch was applied. So whether this patch actually achieves the
+wanted effect is not always guaranteed.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+The 2nd patch adds the support for the ECSDA-signed kernel modules.
 
-> ---
->  certs/Kconfig               | 2 +-
->  certs/Makefile              | 2 ++
->  certs/system_certificates.S | 3 ++-
->  3 files changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/certs/Kconfig b/certs/Kconfig
-> index 48675ad319db..e4d00348fd73 100644
-> --- a/certs/Kconfig
-> +++ b/certs/Kconfig
-> @@ -4,7 +4,7 @@ menu "Certificates for signature checking"
->  config MODULE_SIG_KEY
->  	string "File name or PKCS#11 URI of module signing key"
->  	default "certs/signing_key.pem"
-> -	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
-> +	depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
->  	help
->           Provide the file name of a private key/certificate in PEM format,
->           or a PKCS#11 URI according to RFC7512. The file should contain, or
-> diff --git a/certs/Makefile b/certs/Makefile
-> index e3185c57fbd8..2f369d6aa494 100644
-> --- a/certs/Makefile
-> +++ b/certs/Makefile
-> @@ -36,8 +36,10 @@ ifeq ($(CONFIG_MODULE_SIG),y)
->  endif
->  
->  ifeq ($(CONFIG_IMA_APPRAISE_MODSIG),y)
-> +ifeq ($(CONFIG_MODULES),y)
->  	SIGN_KEY = y
->  endif
-> +endif
->  
->  ifdef SIGN_KEY
->  ###############################################################################
-> diff --git a/certs/system_certificates.S b/certs/system_certificates.S
-> index dcad27ea8527..e1645e6f4d97 100644
-> --- a/certs/system_certificates.S
-> +++ b/certs/system_certificates.S
-> @@ -9,7 +9,8 @@
->  system_certificate_list:
->  __cert_list_start:
->  __module_cert_start:
-> -#if defined(CONFIG_MODULE_SIG) || defined(CONFIG_IMA_APPRAISE_MODSIG)
-> +#if defined(CONFIG_MODULE_SIG) || (defined(CONFIG_IMA_APPRAISE_MODSIG) \
-> +			       && defined(CONFIG_MODULES))
->  	.incbin "certs/signing_key.x509"
->  #endif
->  __module_cert_end:
-> 
+This patch depends on the ECDSA support series currently queued here:
+https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git/log/?h=ecc
 
+  Stefan
+
+v4:
+  - extending 'depends on' with MODULES to (IMA_APPRAISE_MODSIG && MODULES)
+  
+v3:
+  - added missing OIDs for ECDSA signed hashes to pkcs7_sig_note_pkey_algo
+  - added recommendation to use string hash to Kconfig help text
+
+v2:
+  - Adjustment to ECDSA key detector string in 2/2
+  - Rephrased cover letter and patch descriptions with Mimi
+
+
+Stefan Berger (2):
+  certs: Trigger creation of RSA module signing key if it's not an RSA
+    key
+  certs: Add support for using elliptic curve keys for signing modules
+
+ certs/Kconfig                         | 26 ++++++++++++++++++++++++++
+ certs/Makefile                        | 14 ++++++++++++++
+ crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
+ 3 files changed, 48 insertions(+)
 
 -- 
-~Randy
+2.29.2
 
