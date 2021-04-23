@@ -2,200 +2,226 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD5F3695D4
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Apr 2021 17:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159E6369D17
+	for <lists+linux-integrity@lfdr.de>; Sat, 24 Apr 2021 01:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243049AbhDWPNf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Apr 2021 11:13:35 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37742 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243005AbhDWPNe (ORCPT
+        id S244182AbhDWXFO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Apr 2021 19:05:14 -0400
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:39416 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243236AbhDWXFF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Apr 2021 11:13:34 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13NF4FXt151520;
-        Fri, 23 Apr 2021 11:12:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=qUw0lW0dXNuL7WfQ7hZ1LPj+CCjq9zNz/LszVkgFJhA=;
- b=QQhaAQY4QWUmto+rwpgGBRmcCr0e7BOUo6epnfSIw0qfMsEFYVmsjlvl+dPrP8ewC57c
- 7Zu5uTy0zPVi/X4N03UsqxSUmYoWRfjD/nsDo7akyG0Ki1yCd+5xswmkKLTQGqZSQlwt
- Hpz430cH6fhVZoplWAxRKoyNnZtPIS7zWnW6w/7a/k6dd6oUFbTLh4vYg7GtM9ITO0zx
- 89MmHqVx9ydGhvltP0KxSxdtw4zslMfCITB8/LZd9TIgLPuPhYfcFG7Rkjw5SI402V3S
- I6q6HsUn6vlN58EtKkxNSiV9DpT+NHDhez6Uam4AmqrU9oFzNy/cW3oKI4jpN17Ew4R9 9w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 383ywhhn5v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Apr 2021 11:12:56 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13NF5lN7159734;
-        Fri, 23 Apr 2021 11:12:56 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 383ywhhn5k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Apr 2021 11:12:56 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13NFConH001053;
-        Fri, 23 Apr 2021 15:12:55 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma04dal.us.ibm.com with ESMTP id 37yqaap37p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Apr 2021 15:12:55 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13NFCrmX15663442
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 23 Apr 2021 15:12:53 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 972036A051;
-        Fri, 23 Apr 2021 15:12:53 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E4EE46A054;
-        Fri, 23 Apr 2021 15:12:52 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 23 Apr 2021 15:12:52 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
-        zohar@linux.ibm.com, jarkko@kernel.org
-Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v4 2/2] certs: Add support for using elliptic curve keys for signing modules
-Date:   Fri, 23 Apr 2021 11:12:47 -0400
-Message-Id: <20210423151247.1517808-3-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210423151247.1517808-1-stefanb@linux.ibm.com>
-References: <20210423151247.1517808-1-stefanb@linux.ibm.com>
+        Fri, 23 Apr 2021 19:05:05 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CCCC912805E0;
+        Fri, 23 Apr 2021 16:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1619219067;
+        bh=EvcwOC67P8i6xhWNY2Fy8D2fKnBdoTZv+6sSfbs3CrQ=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=d00lOxF65Lf0SpGPeD5wW/xQZ+FPHDvpGsRyBYDY33wHl5DwPc8WKv6OHywnwao0e
+         ZU5wiWvXFaEoJYs9mO9OAWMoKzZsgF9YViRODnBRM/cXbK3sB+cW5aP608vHAs+Bup
+         D+zDlQE67u3+uKesK5gjnx3TAV7ouckwAk6OAHSs=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id O5SHQ4Iy6raj; Fri, 23 Apr 2021 16:04:27 -0700 (PDT)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 51C3212805D3;
+        Fri, 23 Apr 2021 16:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1619219067;
+        bh=EvcwOC67P8i6xhWNY2Fy8D2fKnBdoTZv+6sSfbs3CrQ=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=d00lOxF65Lf0SpGPeD5wW/xQZ+FPHDvpGsRyBYDY33wHl5DwPc8WKv6OHywnwao0e
+         ZU5wiWvXFaEoJYs9mO9OAWMoKzZsgF9YViRODnBRM/cXbK3sB+cW5aP608vHAs+Bup
+         D+zDlQE67u3+uKesK5gjnx3TAV7ouckwAk6OAHSs=
+Message-ID: <52f4810fbcdb3a118b7126e2497ae384016c9004.camel@HansenPartnership.com>
+Subject: [GIT PULL] TPM DEVICE DRIVER updates for v5.13 (updated)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        dhowells@redhat.com, Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Date:   Fri, 23 Apr 2021 16:04:26 -0700
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1hltd47NsCraGJjuZjQxg-vdsU14SO8p
-X-Proofpoint-ORIG-GUID: 0t0yBPYixbPWqL1aldmDqIZs5RqYWi-t
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-23_07:2021-04-23,2021-04-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxlogscore=999 mlxscore=0 spamscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 phishscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104230098
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add support for using elliptic curve keys for signing modules. It uses
-a NIST P384 (secp384r1) key if the user chooses an elliptic curve key
-and will have ECDSA support built into the kernel.
+Fix a regression in the TPM trusted keys caused by the generic rework
+to add ARM TEE based trusted keys.  Without this fix, the TPM trusted
+key subsystem fails to add or load any keys.
 
-Note: A developer choosing an ECDSA key for signing modules should still
-delete the signing key (rm certs/signing_key.*) when building an older
-version of a kernel that only supports RSA keys. Unless kbuild automati-
-cally detects and generates a new kernel module key, ECDSA-signed kernel
-modules will fail signature verification.
+This is an incremental update to Jarkko's previous pull request (which
+contains the regression):
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+https://lore.kernel.org/linux-integrity/YHb06P4IOGV7eoiJ@kernel.org/
+
+So if you could pull both in succession to minimize the bisection
+problem, I'd be grateful (it's only a functional regression not a
+compile one so the bisection problem would only impact someone
+bisecting trusted keys).
+
+There's also a minor conflict caused by the previous urgent fix I sent,
+but the resolution is obvious.
+
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/tpmdd.git queue
+
+The short changelog is:
+
+James Bottomley (1):
+      KEYS: trusted: fix TPM trusted keys for generic framework
+
+And the diffstat:
+
+ security/keys/trusted-keys/trusted_core.c | 24 ++++++++++++------------
+ security/keys/trusted-keys/trusted_tpm1.c |  5 ++++-
+ 2 files changed, 16 insertions(+), 13 deletions(-)
+
+With full diff below.
+
+James
 
 ---
-v4:
-  - extending 'depends on' with MODULES to (IMA_APPRAISE_MODSIG && MODULES)
 
-v3:
-  - added missing OIDs for ECDSA signed hashes to pkcs7_sig_note_pkey_algo
-  - added recommendation to use string hash to Kconfig help text
-
-v2:
-  - check for ECDSA key by id-ecPublicKey from output line
-    'Public Key Algorithm: id-ecPublicKey'.
----
- certs/Kconfig                         | 26 ++++++++++++++++++++++++++
- certs/Makefile                        |  9 +++++++++
- crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
- 3 files changed, 43 insertions(+)
-
-diff --git a/certs/Kconfig b/certs/Kconfig
-index 48675ad319db..4c0e6113c710 100644
---- a/certs/Kconfig
-+++ b/certs/Kconfig
-@@ -15,6 +15,32 @@ config MODULE_SIG_KEY
-          then the kernel will automatically generate the private key and
-          certificate as described in Documentation/admin-guide/module-signing.rst
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index 90774793f0b1..d5c891d8d353 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -62,7 +62,7 @@ static const match_table_t key_tokens = {
+  *
+  * On success returns 0, otherwise -EINVAL.
+  */
+-static int datablob_parse(char *datablob, struct trusted_key_payload *p)
++static int datablob_parse(char **datablob, struct trusted_key_payload *p)
+ {
+ 	substring_t args[MAX_OPT_ARGS];
+ 	long keylen;
+@@ -71,14 +71,14 @@ static int datablob_parse(char *datablob, struct trusted_key_payload *p)
+ 	char *c;
  
-+choice
-+	prompt "Type of module signing key to be generated"
-+	default MODULE_SIG_KEY_TYPE_RSA
-+	help
-+	 The type of module signing key type to generate. This option
-+	 does not apply if a #PKCS11 URI is used.
-+
-+config MODULE_SIG_KEY_TYPE_RSA
-+	bool "RSA"
-+	depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
-+	help
-+	 Use an RSA key for module signing.
-+
-+config MODULE_SIG_KEY_TYPE_ECDSA
-+	bool "ECDSA"
-+	select CRYPTO_ECDSA
-+	depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
-+	help
-+	 Use an elliptic curve key (NIST P384) for module signing. Consider
-+	 using a strong hash like sha256 or sha384 for hashing modules.
-+
-+	 Note: Remove all ECDSA signing keys, e.g. certs/signing_key.pem,
-+	 when falling back to building Linux 5.11 and older kernels.
-+
-+endchoice
-+
- config SYSTEM_TRUSTED_KEYRING
- 	bool "Provide system-wide ring of trusted keys"
- 	depends on KEYS
-diff --git a/certs/Makefile b/certs/Makefile
-index f64bc89ccbf1..c2fabc288550 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -62,7 +62,15 @@ ifeq ($(CONFIG_MODULE_SIG_KEY),"certs/signing_key.pem")
- 
- X509TEXT=$(shell openssl x509 -in $(CONFIG_MODULE_SIG_KEY) -text)
- 
-+# Support user changing key type
-+ifdef CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
-+keytype_openssl = -newkey ec -pkeyopt ec_paramgen_curve:secp384r1
-+$(if $(findstring id-ecPublicKey,$(X509TEXT)),,$(shell rm -f $(CONFIG_MODULE_SIG_KEY)))
-+endif
-+
-+ifdef CONFIG_MODULE_SIG_KEY_TYPE_RSA
- $(if $(findstring rsaEncryption,$(X509TEXT)),,$(shell rm -f $(CONFIG_MODULE_SIG_KEY)))
-+endif
- 
- $(obj)/signing_key.pem: $(obj)/x509.genkey
- 	@$(kecho) "###"
-@@ -77,6 +85,7 @@ $(obj)/signing_key.pem: $(obj)/x509.genkey
- 		-batch -x509 -config $(obj)/x509.genkey \
- 		-outform PEM -out $(obj)/signing_key.pem \
- 		-keyout $(obj)/signing_key.pem \
-+		$(keytype_openssl) \
- 		$($(quiet)redirect_openssl)
- 	@$(kecho) "###"
- 	@$(kecho) "### Key pair generated."
-diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_keys/pkcs7_parser.c
-index 967329e0a07b..6592279d839a 100644
---- a/crypto/asymmetric_keys/pkcs7_parser.c
-+++ b/crypto/asymmetric_keys/pkcs7_parser.c
-@@ -269,6 +269,14 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t hdrlen,
- 		ctx->sinfo->sig->pkey_algo = "rsa";
- 		ctx->sinfo->sig->encoding = "pkcs1";
+ 	/* main command */
+-	c = strsep(&datablob, " \t");
++	c = strsep(datablob, " \t");
+ 	if (!c)
+ 		return -EINVAL;
+ 	key_cmd = match_token(c, key_tokens, args);
+ 	switch (key_cmd) {
+ 	case Opt_new:
+ 		/* first argument is key size */
+-		c = strsep(&datablob, " \t");
++		c = strsep(datablob, " \t");
+ 		if (!c)
+ 			return -EINVAL;
+ 		ret = kstrtol(c, 10, &keylen);
+@@ -89,7 +89,7 @@ static int datablob_parse(char *datablob, struct trusted_key_payload *p)
  		break;
-+	case OID_id_ecdsa_with_sha1:
-+	case OID_id_ecdsa_with_sha224:
-+	case OID_id_ecdsa_with_sha256:
-+	case OID_id_ecdsa_with_sha384:
-+	case OID_id_ecdsa_with_sha512:
-+		ctx->sinfo->sig->pkey_algo = "ecdsa";
-+		ctx->sinfo->sig->encoding = "x962";
-+		break;
- 	default:
- 		printk("Unsupported pkey algo: %u\n", ctx->last_oid);
- 		return -ENOPKG;
--- 
-2.29.2
+ 	case Opt_load:
+ 		/* first argument is sealed blob */
+-		c = strsep(&datablob, " \t");
++		c = strsep(datablob, " \t");
+ 		if (!c)
+ 			return -EINVAL;
+ 		p->blob_len = strlen(c) / 2;
+@@ -140,7 +140,7 @@ static int trusted_instantiate(struct key *key,
+ {
+ 	struct trusted_key_payload *payload = NULL;
+ 	size_t datalen = prep->datalen;
+-	char *datablob;
++	char *datablob, *orig_datablob;
+ 	int ret = 0;
+ 	int key_cmd;
+ 	size_t key_len;
+@@ -148,7 +148,7 @@ static int trusted_instantiate(struct key *key,
+ 	if (datalen <= 0 || datalen > 32767 || !prep->data)
+ 		return -EINVAL;
+ 
+-	datablob = kmalloc(datalen + 1, GFP_KERNEL);
++	orig_datablob = datablob = kmalloc(datalen + 1, GFP_KERNEL);
+ 	if (!datablob)
+ 		return -ENOMEM;
+ 	memcpy(datablob, prep->data, datalen);
+@@ -160,7 +160,7 @@ static int trusted_instantiate(struct key *key,
+ 		goto out;
+ 	}
+ 
+-	key_cmd = datablob_parse(datablob, payload);
++	key_cmd = datablob_parse(&datablob, payload);
+ 	if (key_cmd < 0) {
+ 		ret = key_cmd;
+ 		goto out;
+@@ -196,7 +196,7 @@ static int trusted_instantiate(struct key *key,
+ 		ret = -EINVAL;
+ 	}
+ out:
+-	kfree_sensitive(datablob);
++	kfree_sensitive(orig_datablob);
+ 	if (!ret)
+ 		rcu_assign_keypointer(key, payload);
+ 	else
+@@ -220,7 +220,7 @@ static int trusted_update(struct key *key, struct key_preparsed_payload *prep)
+ 	struct trusted_key_payload *p;
+ 	struct trusted_key_payload *new_p;
+ 	size_t datalen = prep->datalen;
+-	char *datablob;
++	char *datablob, *orig_datablob;
+ 	int ret = 0;
+ 
+ 	if (key_is_negative(key))
+@@ -231,7 +231,7 @@ static int trusted_update(struct key *key, struct key_preparsed_payload *prep)
+ 	if (datalen <= 0 || datalen > 32767 || !prep->data)
+ 		return -EINVAL;
+ 
+-	datablob = kmalloc(datalen + 1, GFP_KERNEL);
++	orig_datablob = datablob = kmalloc(datalen + 1, GFP_KERNEL);
+ 	if (!datablob)
+ 		return -ENOMEM;
+ 
+@@ -243,7 +243,7 @@ static int trusted_update(struct key *key, struct key_preparsed_payload *prep)
+ 
+ 	memcpy(datablob, prep->data, datalen);
+ 	datablob[datalen] = '\0';
+-	ret = datablob_parse(datablob, new_p);
++	ret = datablob_parse(&datablob, new_p);
+ 	if (ret != Opt_update) {
+ 		ret = -EINVAL;
+ 		kfree_sensitive(new_p);
+@@ -267,7 +267,7 @@ static int trusted_update(struct key *key, struct key_preparsed_payload *prep)
+ 	rcu_assign_keypointer(key, new_p);
+ 	call_rcu(&p->rcu, trusted_rcu_free);
+ out:
+-	kfree_sensitive(datablob);
++	kfree_sensitive(orig_datablob);
+ 	return ret;
+ }
+ 
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index 798dc7820084..469394550801 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -747,6 +747,9 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+ 
+ 	opt->hash = tpm2 ? HASH_ALGO_SHA256 : HASH_ALGO_SHA1;
+ 
++	if (!c)
++		return 0;
++
+ 	while ((p = strsep(&c, " \t"))) {
+ 		if (*p == '\0' || *p == ' ' || *p == '\t')
+ 			continue;
+@@ -944,7 +947,7 @@ static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
+ 		goto out;
+ 	dump_options(options);
+ 
+-	if (!options->keyhandle) {
++	if (!options->keyhandle && !tpm2) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
 
