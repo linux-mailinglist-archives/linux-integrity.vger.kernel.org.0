@@ -2,115 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F8736C9BA
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Apr 2021 18:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3863336CA92
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Apr 2021 19:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238769AbhD0Qt3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Apr 2021 12:49:29 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47454 "EHLO
+        id S235647AbhD0Rrw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Apr 2021 13:47:52 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29888 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S237539AbhD0QtF (ORCPT
+        by vger.kernel.org with ESMTP id S230219AbhD0Rru (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Apr 2021 12:49:05 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13RGXXVQ072052;
-        Tue, 27 Apr 2021 12:48:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=sK/kfEPDNAy/W73TYtW08cQTH0f6vXPcMHahw7XFPGQ=;
- b=q9hf4jtJPWAD4PwYjyX+inldY407WIvN5ME0pnurEhWmSwcj+ytMEF7yXyBr2w6lvSOt
- ep+Owe6YYqXXYOeNbYQ+c/Hb+RLWFUi41JcvEivBwAwHM4JyD+6FBikcIFQBqaZfFCDJ
- TgSmF+zEejm8QRTTs1cekLzdxo1Bj1ZH9H5jSvXlwgtcPMHq7bldgmt0vMVAnzz1/Sjx
- NL6syw7nG4p7SFrZyOtBr9SIm1nENh40sGwGS259Xi2vCMaH4qDpO3wjQbLfoh2z6V7b
- /tBYLIGUK5aOn3Sjfh5AsJZiDzDz3U4LMd/v67E67gFTLzl/e9KORD6IhQtiLTsQp5b9 NA== 
+        Tue, 27 Apr 2021 13:47:50 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13RHYJS8030811;
+        Tue, 27 Apr 2021 13:47:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=qIhsawBM6mKruLARllAlg9Yx7YxFPpr373XCBESRen0=;
+ b=dqlZ+MXx2qndqSf5TIYifKltkJe7snqgK7Z/8lFsuSHfAobyGvtrWW7hO6r/tobwQqXR
+ q/tlSqqUup1xSKkXFC38XSAgo9AUGUY+fCdyPcJyzD7YSQWWRY/YZZpzlrrLbfn7XVRf
+ zmfpDk6b8XA989+3Z/AFPMbWKfU6JxMAdB+0WddeZUoaubgQwu8yUINft+728CC3rZKL
+ /9XmZ8BpsKKjARy/05yFmh3v4yZN/a66BVJuhbo/1i2QoNxirv0ZNgMGmENlThf/AULp
+ zfGhNzTTRyJFhifTs5oWSlfxlNWYugvvv/ZOqfNHkqSrt80LkwmRNnwzA6qfhUakIwQ+ yg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 386muqubkg-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 386kec08kc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Apr 2021 12:48:09 -0400
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13RGXe8k072967;
-        Tue, 27 Apr 2021 12:48:09 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 386muqubk1-1
+        Tue, 27 Apr 2021 13:47:03 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13RHZNAf033572;
+        Tue, 27 Apr 2021 13:47:03 -0400
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 386kec08k4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Apr 2021 12:48:08 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13RGidOK023537;
-        Tue, 27 Apr 2021 16:48:07 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 384ay8rtjc-1
+        Tue, 27 Apr 2021 13:47:03 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13RHhJrW018403;
+        Tue, 27 Apr 2021 17:47:03 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma05wdc.us.ibm.com with ESMTP id 384ay9f3nm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Apr 2021 16:48:06 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13RGm3Ec30933496
+        Tue, 27 Apr 2021 17:47:03 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13RHl2V029753698
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Apr 2021 16:48:03 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C29EC42045;
-        Tue, 27 Apr 2021 16:48:03 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E86414203F;
-        Tue, 27 Apr 2021 16:48:01 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.36.231])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Apr 2021 16:48:01 +0000 (GMT)
-Message-ID: <2c4baf092a11eadfc589ca2a314bcbf689284b0a.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 04/11] ima: Move ima_reset_appraise_flags() call to
- post hooks
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "mjg59@google.com" <mjg59@google.com>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Tue, 27 Apr 2021 12:48:00 -0400
-In-Reply-To: <3354e1a0-bca2-2cb9-6e82-7209b9106008@schaufler-ca.com>
-References: <20210305151923.29039-1-roberto.sassu@huawei.com>
-         <20210305151923.29039-5-roberto.sassu@huawei.com>
-         <c3bb1069-c732-d3cf-0dde-7a83b3f31871@schaufler-ca.com>
-         <93858a47a29831ca782c8388faaa43c8ffc3f5cd.camel@linux.ibm.com>
-         <7a39600c24a740838dca24c20af92c1a@huawei.com>
-         <d047d1347e7104162e0e36eb57ade6bba914ea2d.camel@linux.ibm.com>
-         <d783e2703248463f9af68e155ee65c38@huawei.com>
-         <3354e1a0-bca2-2cb9-6e82-7209b9106008@schaufler-ca.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Tue, 27 Apr 2021 17:47:02 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0A2C06E05D;
+        Tue, 27 Apr 2021 17:47:02 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B22556E04C;
+        Tue, 27 Apr 2021 17:47:01 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 27 Apr 2021 17:47:01 +0000 (GMT)
+Subject: Re: [PATCH 1/3] libimaevm: Implement imaevm_create_ima_signature
+To:     Colin Walters <walters@verbum.org>, linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+References: <20210420183015.861644-1-stefanb@linux.ibm.com>
+ <20210420183015.861644-2-stefanb@linux.ibm.com>
+ <4a4d068b-569c-4ffd-ba32-8656f761a3b5@www.fastmail.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <1add81aa-85e6-68b1-4a48-b19ad33683c6@linux.ibm.com>
+Date:   Tue, 27 Apr 2021 13:47:01 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+In-Reply-To: <4a4d068b-569c-4ffd-ba32-8656f761a3b5@www.fastmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UQxgqS5tfaz7u6xEhw6-mov5dXxGuI3Q
-X-Proofpoint-ORIG-GUID: BhALz2mzO1A0UFYjsNFOhf10bxTXbPKE
+X-Proofpoint-GUID: gBm9enjdatBiFVFWQHyof8I0gw7eMzk4
+X-Proofpoint-ORIG-GUID: P8RQ0KV_xUO2ct6TAd76YnMQvVxktNcn
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-04-27_10:2021-04-27,2021-04-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 mlxlogscore=999 bulkscore=0 phishscore=0
- impostorscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104270112
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=999 phishscore=0 spamscore=0 mlxscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1011
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104270119
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Casey,
 
-On Tue, 2021-04-27 at 09:39 -0700, Casey Schaufler wrote:
-> >> That ship sailed when "security=" was deprecated in favor of "lsm="
-> >> support, which dynamically enables/disables LSMs at runtime.
-> 
-> security= is still supported and works the same as ever. lsm= is
-> more powerful than security= but also harder to use.
+On 4/26/21 8:02 PM, Colin Walters wrote:
+>
+> On Tue, Apr 20, 2021, at 2:30 PM, Stefan Berger wrote:
+>
+>> + fd = open(filename, O_RDONLY);
+> Missing O_CLOEXEC.
 
-I understand that it still exists, but the documentation says it's been
-deprecated.
-From Documentation/admin-guide/kernel-parameters.txt:
 
-        security=  [SECURITY] Choose a legacy "major" security module to
-                        enable at boot. This has been deprecated by the
-                        "lsm=" parameter.
+Will do.
 
-Mimi
+>
+>> +int imaevm_create_ima_signature(const char *filename, EVP_PKEY *pkey,
+> It'd maximize flexibility for the caller to pass a file descriptor, and not a file name.
+
+
+We could do this with a callback where the user implements the callback 
+function and providers buffer, size of buffer, and eof indicator, and 
+gets called for providing the data to hash. That would maybe be even 
+more flexible..
+
+
+>
+>> +	if (statbuf.st_size > 0) {
+>> +		addr = mmap(NULL, statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
+>> +		if (addr == MAP_FAILED) {
+>> +			asprintf(error, "Failed to mmap file: %s", strerror(errno));
+>> +			goto err_close;
+>> +		}
+>> +	}
+> Tangentially related to this, I think we should consider doing the same optimization here:
+> https://github.com/ostreedev/ostree/blob/36693f064c63dad550ebcfed33bf9b95806ddef9/src/libotutil/ot-fs-utils.c#L171
+>
+> Or alternatively, just have the caller provide a (mmap'd or copied-via-read()) buffer?
+>
+> Though clearly the most flexible is a streaming API.  But eh, I am not really concerned about that level of performance.
+
+
+I think using a callback would allow for the streaming as well...
+
+    Stefan
+
 
