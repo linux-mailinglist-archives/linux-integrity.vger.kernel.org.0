@@ -2,56 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A203B36CBB0
+	by mail.lfdr.de (Postfix) with ESMTP id DCAD636CBB1
 	for <lists+linux-integrity@lfdr.de>; Tue, 27 Apr 2021 21:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236934AbhD0TcW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Apr 2021 15:32:22 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52914 "EHLO
+        id S237840AbhD0TcX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Apr 2021 15:32:23 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:17862 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238041AbhD0TcW (ORCPT
+        by vger.kernel.org with ESMTP id S238041AbhD0TcX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Apr 2021 15:32:22 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13RJ4A5Y130970
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Apr 2021 15:31:38 -0400
+        Tue, 27 Apr 2021 15:32:23 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13RJ2ap9165879
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Apr 2021 15:31:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=LDKkOg/Fk2QpDkpYT73sJMf9NcWBkYigjl+7a2zRCBI=;
- b=nLAASJY0OoV4GVY8sjtfuLQWrG+ucvKc6Beyza96VbtGvVoQrZeJouuNF8MyroNwhn9s
- oN7N7RapatUjXLrtTa79/rY4noUt1gQiUw9IX2hmLr5DvaEZnW4xfksh5qqvttDQcZGS
- scuvn6znNgAiGb4r7PFScAcA49Bnn0bbsWSipIXp9IPNhk4aefbyTgd6gc19g56N+Cpy
- 82OKy8Hb62A+fZGQp4VD1fWKI2AirN0Roed0jEylJ/glA6XA3jnZf4p1N149ajIqRj6I
- mudQHaJu8G9VuJYtbMsPDU/ahjfio4BEWpz00ZTCmO71q2R97+p98P8iiOcVG78PYn2g AQ== 
+ : date : message-id : in-reply-to : references : content-transfer-encoding
+ : mime-version; s=pp1; bh=N1Hv30sxCEOeV9BxrzVVRvhXDa/DNH00ZYS4W5qY0Wg=;
+ b=Xh1rd+rcgQf9zWvqIpaC9wFdAx/mBv62JSvqpnF0JC+mUwEexvlLzvyK8iAaaExAFEEG
+ GJbaZ8EcZfpV5r5OmTdNC6aRJG57UxqCIOTEWogxXriAzHEFuyE/Tpmgzc4zWT1k/oRN
+ afmHMZ0nwnshT8gOVbOSDxzssrmzHT47GTzp7czj54JMYJCPcFx+TteKlXxBKgwGjioc
+ phu4Bd4rmzXmZ3UXC6R2YbvMK+43Gn+BOMUewkgkxqbdmTFlNRkajJ9VmQFfQV+kLvUc
+ s6hpC/jssnv73yeJm4N3hBwYJ0yzpiGoXoQrS5o94Vr3EEp/XD6nNAiMxjSRcNm8Zu+0 /w== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 386qursm70-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 386qyghf7e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Apr 2021 15:31:39 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13RJ3VAa175146
         for <linux-integrity@vger.kernel.org>; Tue, 27 Apr 2021 15:31:38 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 13RJ4ivg133046
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Apr 2021 15:31:38 -0400
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 386qursm6m-1
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 386qyghf6y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 27 Apr 2021 15:31:38 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13RJNIpV018317;
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13RJN2LM003962;
         Tue, 27 Apr 2021 19:31:37 GMT
 Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma02dal.us.ibm.com with ESMTP id 384qdj1h40-1
+        by ppma04wdc.us.ibm.com with ESMTP id 384ay9fne7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Apr 2021 19:31:36 +0000
+        Tue, 27 Apr 2021 19:31:37 +0000
 Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13RJVaZE32702766
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13RJVaE634865432
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 27 Apr 2021 19:31:36 GMT
 Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 077C6AE064;
+        by IMSVA (Postfix) with ESMTP id 248E7AE068;
         Tue, 27 Apr 2021 19:31:36 +0000 (GMT)
 Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EC8DAAE063;
-        Tue, 27 Apr 2021 19:31:35 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 0CB68AE05F;
+        Tue, 27 Apr 2021 19:31:36 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.47.158.155])
         by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
         Tue, 27 Apr 2021 19:31:35 +0000 (GMT)
@@ -59,252 +58,222 @@ From:   Stefan Berger <stefanb@linux.ibm.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v2 1/3] libimaevm: Implement imaevm_create_ima_signature
-Date:   Tue, 27 Apr 2021 15:31:31 -0400
-Message-Id: <20210427193133.1718367-2-stefanb@linux.ibm.com>
+Subject: [PATCH v2 2/3] tests: Add program to create IMA signature with new API call
+Date:   Tue, 27 Apr 2021 15:31:32 -0400
+Message-Id: <20210427193133.1718367-3-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210427193133.1718367-1-stefanb@linux.ibm.com>
 References: <20210427193133.1718367-1-stefanb@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: DCSBiRV8O1q5xyoXBSnWUhUVB0tvbmOk
-X-Proofpoint-GUID: ZhCc-Em4YoN9YIrlhzIHkbwIwolofISe
+X-Proofpoint-GUID: umukgnwoYigynLNVFUCCfdarRgRrMz78
+X-Proofpoint-ORIG-GUID: JZ5lM7mNNGZJMZpW0U8QCM_GMuvHf29N
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-27_11:2021-04-27,2021-04-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- spamscore=0 clxscore=1015 mlxlogscore=999 impostorscore=0 adultscore=0
- priorityscore=1501 suspectscore=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2021-04-27_10:2021-04-27,2021-04-27 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 clxscore=1015 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=999 impostorscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2104060000 definitions=main-2104270126
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Implement imaevm_create_ima_signature that creates an IMA V2 signature
-with a given private key and without writing the signature into an
-extended attribute. This allows a caller to provide a single key for
-creating a signature on multiple files without having to read the key
-every time. It also allows the caller to store the signature wherever
-it wants, which may not necessarily be an extended attribute.
+Since the new API call is not used by evmctl, implement a test program
+'create_ima_signature' to use it. Extend _evmctl_sign to also created
+IMA v2 signatures with RSA keys using this test program and compare the
+results.
+
+Evmctl's signature creation path is unmodified at this point, so the tests
+ensure that the existing sign_hash_v2 and the new sign_hash_v2_pkey create
+identical (RSA) signatures.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-
 ---
+ tests/Makefile.am            |   6 ++
+ tests/create_ima_signature.c | 111 +++++++++++++++++++++++++++++++++++
+ tests/sign_verify.test       |  21 ++++++-
+ 3 files changed, 136 insertions(+), 2 deletions(-)
+ create mode 100644 tests/create_ima_signature.c
 
-v2:
- - use imaevm_calc_hash to also cover hash calculations of links,
-   directories etc.
----
- src/imaevm.h    |   2 +
- src/libimaevm.c | 143 ++++++++++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 141 insertions(+), 4 deletions(-)
-
-diff --git a/src/imaevm.h b/src/imaevm.h
-index 4503919..fc4536b 100644
---- a/src/imaevm.h
-+++ b/src/imaevm.h
-@@ -225,5 +225,7 @@ int ima_verify_signature(const char *file, unsigned char *sig, int siglen, unsig
- void init_public_keys(const char *keyfiles);
- int imaevm_hash_algo_from_sig(unsigned char *sig);
- const char *imaevm_hash_algo_by_id(int algo);
-+int imaevm_create_ima_signature(const char *filename, EVP_PKEY *pkey, const char *algo,
-+                                unsigned char *sig, size_t siglen, char **error);
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index ff928e1..5e255b1 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -3,6 +3,12 @@ TESTS = $(check_SCRIPTS)
  
- #endif
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index fa6c278..c4841c5 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -44,9 +44,11 @@
- #include <sys/types.h>
- #include <sys/param.h>
- #include <sys/stat.h>
-+#include <sys/mman.h>
- #include <asm/byteorder.h>
- #include <unistd.h>
- #include <dirent.h>
-+#include <fcntl.h>
- #include <string.h>
- #include <stdio.h>
- #include <assert.h>
-@@ -238,7 +240,7 @@ static int add_dev_hash(struct stat *st, EVP_MD_CTX *ctx)
- 	return !EVP_DigestUpdate(ctx, &dev, sizeof(dev));
- }
+ check_SCRIPTS += ima_hash.test sign_verify.test boot_aggregate.test
  
--int ima_calc_hash(const char *file, uint8_t *hash)
-+static int imaevm_calc_hash(const char *file, uint8_t *hash, const char *hash_algo)
- {
- 	const EVP_MD *md;
- 	struct stat st;
-@@ -259,10 +261,9 @@ int ima_calc_hash(const char *file, uint8_t *hash)
- 		goto err;
- 	}
++check_PROGRAMS = \
++	create_ima_signature
++
++create_ima_signature_CFLAGS = -I$(top_srcdir)/src
++create_ima_signature_LDFLAGS = -lcrypto -L$(top_builddir)/src/.libs -limaevm
++
+ clean-local:
+ 	-rm -f *.txt *.out *.sig *.sig2
  
--	md = EVP_get_digestbyname(imaevm_params.hash_algo);
-+	md = EVP_get_digestbyname(hash_algo);
- 	if (!md) {
--		log_err("EVP_get_digestbyname(%s) failed\n",
--			imaevm_params.hash_algo);
-+		log_err("EVP_get_digestbyname(%s) failed\n", hash_algo);
- 		err = 1;
- 		goto err;
- 	}
-@@ -313,6 +314,10 @@ err:
- 	return err;
- }
- 
-+int ima_calc_hash(const char *file, uint8_t *hash) {
-+	return imaevm_calc_hash(file, hash, imaevm_params.hash_algo);
-+}
-+
- EVP_PKEY *read_pub_pkey(const char *keyfile, int x509)
- {
- 	FILE *fp;
-@@ -879,6 +884,109 @@ out:
- 	return len;
- }
- 
-+/* Sign a hash with the given private key.
-+ *
-+ * @algo: Name of the algorithm that was used to compute the hash, e.g. "sha256"
-+ * @hash: The hash
-+ * @size: Size of the hash
-+ * @pkey: Private key to use for signing
-+ * @sig: Buffer for the signature; it is assumed to be of (MAX_SIGNATURE_SIZE - 1) size
-+ * @siglen: Length of the signature buffer; it must be at least (MAX_SIGNATURE_SIZE - 1)
-+ *          to be accepted
-+ * @error: Pointer where a buffer with the error to report can be returned
-+ *
-+ * Returns -1 on error, the length of the signature, including header, otherwise
-+ */
-+static int sign_hash_v2_pkey(const char *algo, const unsigned char *hash,
-+			     int size, EVP_PKEY *pkey, unsigned char *sig, size_t siglen,
-+			     char **error)
-+{
-+	struct signature_v2_hdr *hdr;
-+	EVP_PKEY_CTX *ctx = NULL;
-+	const char *st = NULL;
-+	const EVP_MD *md;
-+	size_t sigsize;
-+	uint32_t keyid;
-+	char name[20];
-+	int len = -1;
-+
-+	if (!hash) {
-+		asprintf(error, "sign_hash_v2_pkey: hash is null");
-+		return -1;
-+	}
-+
-+	if (size < 0) {
-+		asprintf(error, "sign_hash_v2_pkey: size is negative: %d", size);
-+		return -1;
-+	}
-+
-+	if (!pkey) {
-+		asprintf(error, "sign_hash_v2_pkey: pkey is null");
-+		return -1;
-+	}
-+
-+	if (!sig) {
-+		asprintf(error, "sign_hash_v2_pkey: sig is null");
-+		return -1;
-+	}
-+
-+	if (siglen < MAX_SIGNATURE_SIZE - 1) {
-+		asprintf(error, "sign_hash_v2_pkey: siglen must be at least %d bytes\n",
-+		         MAX_SIGNATURE_SIZE - 1);
-+		return -1;
-+	}
-+
-+	if (!algo) {
-+		asprintf(error, "sign_hash_v2_pkey: algo is null");
-+		return -1;
-+	}
-+
-+	hdr = (struct signature_v2_hdr *)sig;
-+	hdr->version = (uint8_t) DIGSIG_VERSION_2;
-+
-+	hdr->hash_algo = imaevm_get_hash_algo(algo);
-+	if (hdr->hash_algo == (uint8_t)-1) {
-+		asprintf(error, "sign_hash_v2_pkey: hash algo is unknown: %s", algo);
-+		return -1;
-+	}
-+
-+	calc_keyid_v2(&keyid, name, pkey);
-+	hdr->keyid = keyid;
-+
-+	st = "EVP_PKEY_CTX_new";
-+	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
-+		goto err;
-+	st = "EVP_PKEY_sign_init";
-+	if (!EVP_PKEY_sign_init(ctx))
-+		goto err;
-+	st = "EVP_get_digestbyname";
-+	if (!(md = EVP_get_digestbyname(algo)))
-+		goto err;
-+	st = "EVP_PKEY_CTX_set_signature_md";
-+	if (!EVP_PKEY_CTX_set_signature_md(ctx, md))
-+		goto err;
-+	st = "EVP_PKEY_sign";
-+	sigsize = MAX_SIGNATURE_SIZE - sizeof(struct signature_v2_hdr) - 1;
-+	if (!EVP_PKEY_sign(ctx, hdr->sig, &sigsize, hash, size))
-+		goto err;
-+	st = NULL;
-+
-+	len = (int)sigsize;
-+
-+	/* we add bit length of the signature to make it gnupg compatible */
-+	hdr->sig_size = __cpu_to_be16(len);
-+	len += sizeof(*hdr);
-+
-+err:
-+	if (len == -1 && st != NULL) {
-+		asprintf(error, "sign_hash_v2_pkey: signing failed: (%s) in %s",
-+			ERR_reason_error_string(ERR_peek_error()), st);
-+	}
-+	EVP_PKEY_CTX_free(ctx);
-+
-+	return len;
-+}
-+
- /*
-  * @sig is assumed to be of (MAX_SIGNATURE_SIZE - 1) size
-  * Return: -1 signing error, >0 length of signature
-@@ -980,6 +1088,33 @@ int sign_hash(const char *hashalgo, const unsigned char *hash, int size, const c
- 		sign_hash_v1(hashalgo, hash, size, keyfile, sig);
- }
- 
+diff --git a/tests/create_ima_signature.c b/tests/create_ima_signature.c
+new file mode 100644
+index 0000000..649efcf
+--- /dev/null
++++ b/tests/create_ima_signature.c
+@@ -0,0 +1,111 @@
 +/*
-+ * Create an IMA signature for a given file using a given private key for signing
++ * create_ima_signature - Test program for imaevm_create_ima_signature
 + *
-+ * @filename: Name of the file to sign
-+ * @pkey: Private key to use for signing
-+ * @hash_algo: Name of the algorithm to use to compute the hash, e.g. "sha256"
-+ * @sig: Buffer for the signature; it is assumed to be of (MAX_SIGNATURE_SIZE - 1) size
-+ * @siglen: Length of the signature buffer; it must be at least (MAX_SIGNATURE_SIZE - 1)
-+ *          to be accepted
-+ * @error: Pointer where a buffer with the error to report can be returned
++ * Copyright (C) 2021 IBM Corporation
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * version 2 as published by the Free Software Foundation.
 + *
-+ * Returns -1 on error, the length of the signature, including header, otherwise
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * As a special exception, the copyright holders give permission to link the
++ * code of portions of this program with the OpenSSL library under certain
++ * conditions as described in each individual source file and distribute
++ * linked combinations including the program with the OpenSSL library. You
++ * must comply with the GNU General Public License in all respects
++ * for all of the code used other than as permitted herein. If you modify
++ * file(s) with this exception, you may extend this exception to your
++ * version of the file(s), but you are not obligated to do so. If you do not
++ * wish to do so, delete this exception statement from your version. If you
++ * delete this exception statement from all source files in the program,
++ * then also delete it in the license file.
++ *
 + */
-+int imaevm_create_ima_signature(const char *filename, EVP_PKEY *pkey, const char *hash_algo,
-+                                unsigned char *sig, size_t siglen, char **error)
-+{
-+	unsigned char hash[MAX_DIGEST_SIZE];
-+	int hashlen;
 +
-+	hashlen = imaevm_calc_hash(filename, hash, hash_algo);
-+	if (hashlen <= 1)
-+		return hashlen;
-+	assert(hashlen <= sizeof(hash));
++#include <getopt.h>
++#include <stdio.h>
++#include <string.h>
 +
-+	return sign_hash_v2_pkey(hash_algo, hash, hashlen, pkey, sig, siglen, error);
++#include <openssl/pem.h>
++
++#include "imaevm.h"
++
++int main(int argc, char *argv[]) {
++	unsigned char ima_signature[MAX_SIGNATURE_SIZE];
++	static struct option long_options[] = {
++		{"key", required_argument, NULL, 'k'},
++		{"hashalgo", required_argument, NULL, 'a'},
++		{NULL, 0, NULL, 0}
++	};
++	const char *hash_algo = "sha1";
++	const char *keyfile = NULL;
++	const char *file_to_sign;
++	EVP_PKEY *pkey = NULL;
++	char *error = NULL;
++	int option_index;
++	int siglen;
++	size_t i;
++	FILE *fp;
++	int opt;
++
++	while ((opt = getopt_long_only(argc, argv, "", long_options, &option_index)) != -1) {
++		switch (opt) {
++		case 'k':
++			keyfile = optarg;
++			break;
++		case 'a':
++			hash_algo = optarg;
++			break;
++		default:
++			fprintf(stderr, "Unhandled option %d.\n", opt);
++			return 1;
++		}
++	}
++	if (keyfile == NULL) {
++		fprintf(stderr, "Missing --key option.\n");
++		return 1;
++	}
++
++	if (optind == argc) {
++		fprintf(stderr, "Missing filename for file to sign.");
++	}
++
++	file_to_sign = argv[optind];
++
++	fp = fopen(keyfile, "r");
++	if (fp == NULL) {
++		fprintf(stderr, "Could not open private key file: %s\n", strerror(errno));
++		return 1;
++	}
++
++	pkey = PEM_read_PrivateKey(fp, NULL, NULL, NULL);
++	fclose(fp);
++	if (pkey == NULL) {
++		fprintf(stderr, "Could not read private key!\n");
++		return 1;
++	}
++
++	/* the library doesn't prepend this! */
++	ima_signature[0] = EVM_IMA_XATTR_DIGSIG;
++	siglen = imaevm_create_ima_signature(file_to_sign, pkey, hash_algo, &ima_signature[1],
++	                                     sizeof(ima_signature) - 1, &error);
++	if (siglen < 0) {
++		fprintf(stderr, "Failed to created IMA signature: %s\n", error);
++	} else {
++		fprintf(stdout, "Successfully created IMA signature!\n");
++		for (i = 0; i < siglen + 1; i++)
++			fprintf(stdout, "%02x", ima_signature[i]);
++		fprintf(stdout, "\n");
++	}
++
++	free(error);
++	EVP_PKEY_free(pkey);
++
++	return siglen < 0;
 +}
-+
- static void libinit()
- {
+diff --git a/tests/sign_verify.test b/tests/sign_verify.test
+index 288e133..14964ec 100755
+--- a/tests/sign_verify.test
++++ b/tests/sign_verify.test
+@@ -16,10 +16,10 @@
+ # GNU General Public License for more details.
  
+ cd "$(dirname "$0")" || exit 1
+-PATH=../src:$PATH
++PATH=../src:.:$PATH
+ source ./functions.sh
+ 
+-_require cmp evmctl getfattr openssl xxd
++_require cmp evmctl getfattr openssl xxd create_ima_signature
+ 
+ if cmp -b 2>&1 | grep -q "invalid option"; then
+ 	echo "cmp does not support -b (cmp from busybox?) Use cmp from diffutils"
+@@ -118,7 +118,24 @@ _evmctl_sign() {
+ 
+   if [ "$type" = ima ]; then
+     _test_sigfile "$file" "$(_xattr "$type")" "$file.sig" "$file.sig2"
++    if [ $? -ne $OK ]; then
++        return "$FAIL"
++    fi
++  fi
++  # Compare evmctl IMA v2 signatures with RSA keys versus those from create_ima_signature
++  if [ "$type" = ima ] && [[ $key =~ rsa ]] && ! [[ $opts =~ --rsa ]] ; then
++    create_ima_signature --key "${key}" --hashalgo "${alg}" "${file}" |
++      sed -n 's/^03.*/\0/p' |
++      xxd -r -p > "$file.sig2"
++
++    if ! cmp -bl "$file.sig" "$file.sig2"; then
++      color_red
++      echo "evmctl vs. create_ima_signature: signatures on $file differ"
++      color_restore
++      return "$FAIL"
++    fi
+   fi
++  return $OK
+ }
+ 
+ # Run and test {ima_,}sign operation
 -- 
 2.30.2
 
