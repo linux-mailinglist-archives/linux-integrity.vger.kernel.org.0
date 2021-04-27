@@ -2,91 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC6436BC6E
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Apr 2021 02:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E2236C1AC
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Apr 2021 11:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbhD0AED (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Apr 2021 20:04:03 -0400
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:42753 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232295AbhD0AED (ORCPT
+        id S232896AbhD0JZz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Apr 2021 05:25:55 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2921 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229938AbhD0JZy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Apr 2021 20:04:03 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id A17A45C0181;
-        Mon, 26 Apr 2021 20:03:20 -0400 (EDT)
-Received: from imap10 ([10.202.2.60])
-  by compute1.internal (MEProxy); Mon, 26 Apr 2021 20:03:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=/0Nvjt
-        qhDxXexWpJ5EuXl0/0v1eHkBPodoAEvwe222o=; b=dzTYfyVNkYtHbQhDtoR88l
-        cgZTVAwGXkFV0YmKIVZQG8WNQeCETcRjNg4iGc/lBp3AUawpAa6BITU0WTZcJqHd
-        hf3FfEhizc6wQmLiSyBx6ar8NdvKBbTYkzDx0pmk7JjUXofR2vYeBSo68+tGpfgh
-        dU/dYpTL+nbicxyaaIzMaTEoQQBszQFauJwbf18K/JgRjs5z7FqBMJ+jT9+OLN32
-        oIinmoKgADNkdWNTY43gDQ81myzlT3Wi56+Y6W5V/ahjTfjpOun3uodD0l2TY9d/
-        0c7QqmjfDosDAm+HhGLcxmsm8xU1S8GwPEGS5w1/0IZAe18YHpPIRDs6fAR8B/Sg
-        ==
-X-ME-Sender: <xms:yFSHYPLF7dkB_UrV6c_RxxyhREi5jBawO8sLoYDWQoHKju8YO0BPjg>
-    <xme:yFSHYDLQIgk0Ctfe5xIdlSX76e8IAHIymzGoMlOV71P8tBFBPvQwi-l0Wabm0gUT7
-    kWCRjHu7zE8_YkU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdduledgheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdevohhl
-    ihhnucghrghlthgvrhhsfdcuoeifrghlthgvrhhssehvvghrsghumhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepheeuveetkeelfffgfeeukeelueethfdvheetfeeftdfftdegtddt
-    heeiudefuedunecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeifrghlthgvrhhssehvvghrsghu
-    mhdrohhrgh
-X-ME-Proxy: <xmx:yFSHYHvpV2z-RNI4MpXfhkH2O64mrgyGWU18oEyf0LRjlaQiTl-83Q>
-    <xmx:yFSHYIZXekkkptTFBYuHljRrj6nCsA5O6ulAKt3kYhWOjdZjZTv61g>
-    <xmx:yFSHYGZshVORK5WAKL9aY-J5py6oThlUU-H7EPCR9RAte7Hf191t_g>
-    <xmx:yFSHYPCabN0Ym49Z1eWBYW0PZFqVJzrSoiRGgXeY_GZwH9tWpzFMlw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5C8AF4E0091; Mon, 26 Apr 2021 20:03:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-403-gbc3c488b23-fm-20210419.005-gbc3c488b
-Mime-Version: 1.0
-Message-Id: <4a4d068b-569c-4ffd-ba32-8656f761a3b5@www.fastmail.com>
-In-Reply-To: <20210420183015.861644-2-stefanb@linux.ibm.com>
-References: <20210420183015.861644-1-stefanb@linux.ibm.com>
- <20210420183015.861644-2-stefanb@linux.ibm.com>
-Date:   Mon, 26 Apr 2021 20:02:59 -0400
-From:   "Colin Walters" <walters@verbum.org>
-To:     "Stefan Berger" <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>
-Subject: Re: [PATCH 1/3] libimaevm: Implement imaevm_create_ima_signature
-Content-Type: text/plain
+        Tue, 27 Apr 2021 05:25:54 -0400
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FTx0s5fX5z77b5Y;
+        Tue, 27 Apr 2021 17:14:37 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 27 Apr 2021 11:25:09 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Tue, 27 Apr 2021 11:25:09 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "mjg59@google.com" <mjg59@google.com>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 04/11] ima: Move ima_reset_appraise_flags() call to
+ post hooks
+Thread-Topic: [PATCH v4 04/11] ima: Move ima_reset_appraise_flags() call to
+ post hooks
+Thread-Index: AQHXEdMA2oN9D131skWV9JJ8Z5VEUap1limAgFHPEQCAAOj3gA==
+Date:   Tue, 27 Apr 2021 09:25:09 +0000
+Message-ID: <7a39600c24a740838dca24c20af92c1a@huawei.com>
+References: <20210305151923.29039-1-roberto.sassu@huawei.com>
+         <20210305151923.29039-5-roberto.sassu@huawei.com>
+         <c3bb1069-c732-d3cf-0dde-7a83b3f31871@schaufler-ca.com>
+ <93858a47a29831ca782c8388faaa43c8ffc3f5cd.camel@linux.ibm.com>
+In-Reply-To: <93858a47a29831ca782c8388faaa43c8ffc3f5cd.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Monday, April 26, 2021 9:49 PM
+> On Fri, 2021-03-05 at 09:30 -0800, Casey Schaufler wrote:
+> > On 3/5/2021 7:19 AM, Roberto Sassu wrote:
+> > > ima_inode_setxattr() and ima_inode_removexattr() hooks are called before
+> an
+> > > operation is performed. Thus, ima_reset_appraise_flags() should not be
+> > > called there, as flags might be unnecessarily reset if the operation is
+> > > denied.
+> > >
+> > > This patch introduces the post hooks ima_inode_post_setxattr() and
+> > > ima_inode_post_removexattr(), and adds the call to
+> > > ima_reset_appraise_flags() in the new functions.
+> >
+> > I don't see anything wrong with this patch in light of the way
+> > IMA and EVM have been treated to date.
+> >
+> > However ...
+> >
+> > The special casing of IMA and EVM in security.c is getting out of
+> > hand, and appears to be unnecessary. By my count there are 9 IMA
+> > hooks and 5 EVM hooks that have been hard coded. Adding this IMA
+> > hook makes 10. It would be really easy to register IMA and EVM as
+> > security modules. That would remove the dependency they currently
+> > have on security sub-system approval for changes like this one.
+> > I know there has been resistance to "IMA as an LSM" in the past,
+> > but it's pretty hard to see how it wouldn't be a win.
+> 
+> Somehow I missed the new "lsm=" boot command line option, which
+> dynamically allows enabling/disabling LSMs, being upstreamed.  This
+> would be one of the reasons for not making IMA/EVM full LSMs.
 
+Hi Mimi
 
-On Tue, Apr 20, 2021, at 2:30 PM, Stefan Berger wrote:
+one could argue why IMA/EVM should receive a special
+treatment. I understand that this was a necessity without
+LSM stacking. Now that LSM stacking is available, I don't
+see any valid reason why IMA/EVM should not be managed
+by the LSM infrastructure.
 
-> + fd = open(filename, O_RDONLY);
+> Both IMA and EVM file data/metadata is persistent across boots.  If
+> either one or the other is not enabled the file data hash or file
+> metadata HMAC will not properly be updated, potentially preventing the
+> system from booting when re-enabled.  Re-enabling IMA and EVM would
+> require "fixing" the mutable file data hash and HMAC, without any
+> knowledge of what the "fixed" values should be.  Dave Safford referred
+> to this as "blessing" the newly calculated values.
 
-Missing O_CLOEXEC.
+IMA/EVM can be easily disabled in other ways, for example
+by moving the IMA policy or the EVM keys elsewhere.
 
-> +int imaevm_create_ima_signature(const char *filename, EVP_PKEY *pkey, 
+Also other LSMs rely on a dynamic and persistent state
+(for example for file transitions in SELinux), which cannot be
+trusted anymore if LSMs are even temporarily disabled.
 
-It'd maximize flexibility for the caller to pass a file descriptor, and not a file name.
+If IMA/EVM have to be enabled to prevent misconfiguration,
+I think the same can be achieved if they are full LSMs, for
+example by preventing that the list of enabled LSMs changes
+at run-time.
 
-> +	if (statbuf.st_size > 0) {
-> +		addr = mmap(NULL, statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
-> +		if (addr == MAP_FAILED) {
-> +			asprintf(error, "Failed to mmap file: %s", strerror(errno));
-> +			goto err_close;
-> +		}
-> +	}
+Roberto
 
-Tangentially related to this, I think we should consider doing the same optimization here:
-https://github.com/ostreedev/ostree/blob/36693f064c63dad550ebcfed33bf9b95806ddef9/src/libotutil/ot-fs-utils.c#L171
-
-Or alternatively, just have the caller provide a (mmap'd or copied-via-read()) buffer?
-
-Though clearly the most flexible is a streaming API.  But eh, I am not really concerned about that level of performance.
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
