@@ -2,69 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 362CB36E1CC
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Apr 2021 01:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5646836E1D7
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Apr 2021 01:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234383AbhD1Win (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Apr 2021 18:38:43 -0400
-Received: from mout.gmx.net ([212.227.17.22]:33045 "EHLO mout.gmx.net"
+        id S231400AbhD1WpS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Apr 2021 18:45:18 -0400
+Received: from mout.gmx.net ([212.227.17.20]:45645 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231400AbhD1Wim (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Apr 2021 18:38:42 -0400
+        id S231161AbhD1WpR (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 28 Apr 2021 18:45:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1619649462;
-        bh=7lUAX4Vgd7j9+ARRccRvC/EruImvMWRCxOk8mt6CLi8=;
+        s=badeba3b8450; t=1619649860;
+        bh=lfM0b86QVJIiTK94KUkJxH14cAx67lUsiW8iyt1m8tc=;
         h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=IRGNDKwKJ/X4fNK+GOWqz9oXsA/DgGCL2v8y4W5+ma6rpadPt+QFcUkJBHqHBlo0D
-         gXDwK7x5r2MFK2NaDBnTeIIoAIVnqjsGMTKOi/Z5PY22kYP8xk6/j41GcpiJjl28vC
-         5cJ+tTeTLwwlKMvqKLWm6fFn1jf12vuOqc5Kt5NM=
+        b=kYF8wFz3BKylx31jyeBXSgedk0wvSNApEIkkmfm2xaeAStFz+ZFZYswD0mJfHtEO9
+         CpzwlaRFcC7x6MBzOipbyDxokM8xBNPufXH31dIJ2cnpIVo0t53uCB4jTyDyys68wg
+         TiC2pPjJX5h/voLHERYbcFGOPsmJras7z45ybYjg=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXXyJ-1m5mQ51BYV-00YvKK; Thu, 29
- Apr 2021 00:37:42 +0200
-Subject: Re: [PATCH v2 1/4] tpm: Use a threaded interrupt handler
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2V4J-1lS1e72tTT-013sbV; Thu, 29
+ Apr 2021 00:44:20 +0200
+Subject: Re: [PATCH v2 2/4] tpm: Simplify locality handling
 To:     Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
         James.Bottomley@hansenpartnership.com, keescook@chromium.org,
         jsnitsel@redhat.com, ml.linux@elloe.vision,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1619394440-30646-1-git-send-email-LinoSanfilippo@gmx.de>
- <1619394440-30646-2-git-send-email-LinoSanfilippo@gmx.de>
- <YIikDCTBcMMxjots@kernel.org>
+ <1619394440-30646-3-git-send-email-LinoSanfilippo@gmx.de>
+ <YIii8RQR/Mcc7PKJ@kernel.org>
 From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <495e816a-afba-4ea0-560c-bc748df26337@gmx.de>
-Date:   Thu, 29 Apr 2021 00:37:40 +0200
+Message-ID: <bfad2da7-dd4a-4d63-88cd-6b752265b736@gmx.de>
+Date:   Thu, 29 Apr 2021 00:44:20 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <YIikDCTBcMMxjots@kernel.org>
+In-Reply-To: <YIii8RQR/Mcc7PKJ@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:VRjLLgx1jMPG5HHqpGMzBJHdHG6JdqBiP+7diHvO2FfohPbpOyv
- zLzpt1Y9FKbY3S0DHIKZyO7qsY6Vbdt08wfJON7VltJFJCZ40fwPWOPPcmRXGbpHEwS8vbh
- 1t3/s27OouD/qQdlFk4Y4R9S0omxbgnV8qhtNtXPlKDeTLSSAKGCm+OSZh1OibCQcYgc7DL
- 1X3I/zD1Y5cV9GUxzc1cw==
+X-Provags-ID: V03:K1:uPlEDioHHNt1K5vd/2y57LTMHv1gbS4MxIM55pC21O6l4O3XQIu
+ C3Xt5eBYZ/uwkedGTGWwEOXw8h4rzyayHMz6KXNgpgAWbdIe1s4b9IP3hsHv4up3LaDq7+3
+ B70onVyk1djhadkjwcye4mWwb0RZIJipoqbnFUYKo9EPQFlFzZ/hLlmVdzn9X8PdRhqcSdk
+ d8AhbhDrhdp7cBqbfHVVw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JMTQeTgh6nA=:/1JolsotzXliCXPpmkxh9b
- H7g4STFEX5ZioVWP6VvNt4BbxwIQPbDh9vQrwBmYNg+N+aRv7GMZrFCRkRDuPZZuOGC98/+i3
- uQErDulMpjVptdGzOQhtvCgNRKrBs1VQQ3a4nF+LKZ3WDF2AdmYbrXr3wbmkwulUQEy1wzKYj
- mq41kverx0Wg3xTF5OF3oWOpxS8CACvdDrWXI4yZuP9rdwSmG0TFzrZekBWUuh+7xYHCtY/M7
- rGOz4pYCANnPMtCHLRNyzfu2G9kIQmUxMVgG66hwZY1VFQJX5aXBsj4rpYIhKSH8QJEqQFM55
- JACJehG4dCRfpMlcX3XXjWUFXVvTE+tJ+c/S3jzRFKfWvKB5NdkyFVcZGsZFjFdidYo2Qx6c/
- R+LkUudMb9295awf7L0oIES7HwuhjMnL5MoqaNR0ympdu8TFHM1ZNCA4Yy17PJLKIwh0+3f7U
- CdGmzQDzWU4Q4U3txeYEZ9dJPtypXGcdbPGNqww7NEiBrNVevQgn+1aX/BTR1UxXxvUUUCGJL
- zOD4HK744YE3zD48CapWnxUofdhJ04CrufBloWXqFGjADUJr6rqQgeEvPURW+Xuc6PlC6Irry
- 2GS/gDJAtglcMF9sc5ULiF9B7Kk31xr+la+WqdGk8Tz3wesWZBNfBKn4JRVvZeHmblevAoZoF
- 2OP4EUjKeLjaQSzRE4vglUT+RH27ti5LtFgbLtlata6vx4K2/Iz5FH2V3xojKcDMXsqWr6UDh
- 35k1GffRx05w8VRQEF3y00TAiDK4Nze/b1IrGz+76351j5qOLF8UByPX0Ua3nHBifybWtEglE
- m1+vOCcJ1DNFiNdCqpZhF46FGLNCji4gc9G7ZWUvlNPsbmL4vVslZ25lGemH9i+IQ5xees9IO
- 3UWBNnLHHbzLOPssAn29KnVliTiDLkl66n8NWQoHFL7r6Y2i+LOn16ZJ3W7fpMud4wR2HjGL9
- eTzs9DPDu0EyP2z0R+ZwQY2Mi5tPmgBQQZbhv/fxIcbFuctvYhtQMakSGzDv9miTsfMJ+qcj1
- znSDfSCngnXfLW3jWMlHTcSCZoXrp+ZZm4T5nUJiR4O/Hhe5UykE17l4HPVB0qDIT6Wq+Pex2
- IMX1fkY8a4bswO0cgp7pHetFBSLuCG9XzkM355h/xtX295LwGmLUgn4h/cOgrUFia49lRRWhw
- Lg0wFdQcBbTTN+XkOIGUFVpVJt491YGyEMVKqrBuG3E+7e7GYUiKW3mjVvy5aS9hWNkXCgnYp
- Kdy7GpiVXu2XcZBV4
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qS5vj4p5im8=:anq5/meDncc3PHRrphEGoJ
+ BEZU95dPs989SBa6GpI3Xq+eRxZyQBCcrQLxBg/ywBd7XZQGVpOkbxEVm/LutylR+Rxn7jykK
+ EB77tltVgKH2edofrBXtyT9+/v2pfbiKMk9mlwbqCuGeoj1IYwHIhZLqqlZYH0lny9DfEYG6D
+ RRYq5D8axUczt/ZRLkgEuTrPGg+cIuifXrgKhdVKEgehwoFFm3oyzEn2TRSdQix7ea/tAojQW
+ BOQbPLcQT/r6K7rfxkP7bSnAgff+rXmTMoeDiyXAwHKItXOdN8yubfZiqvnIZ8lCj/us8h6u2
+ hIvNdVS5OerAcadgZKWjrtS/nchqkp7GEEqpofKaZ0v9CZ3XvK8FDZrPrB8Nd3zuqtJ/rKRkQ
+ pCnbLRJJSalHlsDGihqr/fbotS0FnfiTJQi2lIacjkWK6VIbmVvk0L5Kqlv+wv19MBdnE9h/s
+ ZD8IHAbF6rEmoPSOne+K/ix13xL/ZJAIFWjmdlOIDSmHI21fxu/1An1ZtHAPLxKMe9kZH8cGL
+ TOD/zrVS0utmiXNb2VGPS15iJH21svcK/JKH76oBDBsU6QDdQ6wMfkwjulUMt+Dklc0MZdMxs
+ w+padv/QKMLI1K3ieECUxBI3cNlLNEm103C7l4C9Lja35LMP9UFiFR4Svq3FqsVs8SxNRT9aM
+ hSyurcW5aknigtzI9NLHV/OxBoHKRl82v1q2Kp51r/bFFIHho2qiaSMO5bA4V1Zu8BsVe5F8n
+ 8/zzQgphzjSunysqpYWp7f4a4LJ7ICnE4Bs7LWfYWOEVF3PDRfTYGiHEm+7zWD0NIf8sqDSwY
+ 9rASgsUJkUDMtNBKlYJgDx+iwy8aegeK5UypaMOWansPBB+lMN5bk0UHll1DmoAb148IO4+Gd
+ 4sDinpIXxkZ/u2we8bjHBtGj9MubOCU0kRZS/Y4nF63jydtjbwYz5Y8enpm8eszArNqAOIjau
+ 25vDW4uVWQ7dkiGQSBz4BHEn/jDP7VBcDFpqQ2czrtonqRj9ZWbesl3atcFvi90ZjTEvRHNu8
+ RQ4Lhd/jY3CarmnlT+RC196g7e/L3DujqBmQ8GhVFhOtrp8kKboG/NZFp7VpSwJ1gYWB/+dlB
+ 7PbSV/L0yTrlXMWW9BGofQVYh8Nwq996GNc1LOf3IUft421XcdaCKfcrSA2CQ//28NakGGSzd
+ lvvyVLS2s0jpWLSmqzZf18g4h+HSW0F81/JX3LxBA5x99us8Dw2Wmfl03ZC+YhQZETKHxNXA/
+ /qmkBkabxJBDbxw55
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -72,67 +72,17 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Hi,
 
-On 28.04.21 at 01:53, Jarkko Sakkinen wrote:
-> On Mon, Apr 26, 2021 at 01:47:17AM +0200, Lino Sanfilippo wrote:
->> Interrupt handling at least includes reading and writing the interrupt
->> status register from the interrupt routine. However over SPI those acce=
-sses
->> require a sleepable context, since a mutex is used in the concerning
->> functions.
->> For this reason request a threaded interrupt handler which is running i=
-n
->> (sleepable) process context.
->>
+On 28.04.21 at 01:49, Jarkko Sakkinen wrote:
+>> Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transm=
+it()")
 >> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
->> ---
->>  drivers/char/tpm/tpm_tis_core.c | 6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
-_core.c
->> index e7d1eab..0959559 100644
->> --- a/drivers/char/tpm/tpm_tis_core.c
->> +++ b/drivers/char/tpm/tpm_tis_core.c
->> @@ -781,8 +781,10 @@ static int tpm_tis_probe_irq_single(struct tpm_chi=
-p *chip, u32 intmask,
->>  	int rc;
->>  	u32 int_status;
->>
->> -	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
->> -			     dev_name(&chip->dev), chip) !=3D 0) {
->> +
->> +	if (devm_request_threaded_irq(chip->dev.parent, irq, NULL,
->> +				      tis_int_handler, IRQF_ONESHOT | flags,
->> +				      dev_name(&chip->dev), chip) !=3D 0) {
->>  		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
->>  			 irq);
->>  		return -1;
->> --
->> 2.7.4
->>
->
-> Why?
->
-> https://elixir.bootlin.com/linux/v5.12/source/drivers/char/tpm/tpm_tis_c=
-ore.c#L670
->
-> I don't see anything that sleeps there.
->
-> /Jarkko1
+> Hi, what hardware? Just if I could find something comparable lying aroun=
+d.
 >
 
-The problem are the register read/write functions which we use to access t=
-he status register in
-the interrupt handler. In case of SPI they result in taking the spi_bus_lo=
-ck which is a mutex.
-
-E.g tpm_tis_spi_read32: tpm_tis_spi_read_bytes->tpm_tis_spi_transfer->spi_=
-bus_lock->mutex_lock
-
-Using a threaded interrupt handler seemed to me the easiest way to avoid t=
-his issue.
+I tested these patches on an Infineon OPTIGA SLB 9670. This is an SPI devi=
+ce with
+TPM 2.0 support.
 
 Regards,
 Lino
-
-
