@@ -2,69 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E737436E15F
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Apr 2021 00:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362CB36E1CC
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Apr 2021 01:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbhD1WO0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Apr 2021 18:14:26 -0400
-Received: from mout.gmx.net ([212.227.17.20]:33903 "EHLO mout.gmx.net"
+        id S234383AbhD1Win (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Apr 2021 18:38:43 -0400
+Received: from mout.gmx.net ([212.227.17.22]:33045 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230218AbhD1WOZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Apr 2021 18:14:25 -0400
+        id S231400AbhD1Wim (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 28 Apr 2021 18:38:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1619648005;
-        bh=VgbcSvcR1Ml6fja7kcjG7CS9QgO8edE4Ivt1dg5dXOk=;
+        s=badeba3b8450; t=1619649462;
+        bh=7lUAX4Vgd7j9+ARRccRvC/EruImvMWRCxOk8mt6CLi8=;
         h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=SfzHNMxm2KZJHKxtF0nQ2n/klF3LBuD1QEZLuE9/vPmgmyH0ajrt0oYWe52VYio/B
-         qnFPkZ/7QqGXukRSu4voz86dB9h92FM5XusRyVFXy1WcdKgGj6QmiBRGz2eLtHpxy+
-         UsEol2uLgbQylcW4X2bqb3EIpoMewPoM0DY1FhfI=
+        b=IRGNDKwKJ/X4fNK+GOWqz9oXsA/DgGCL2v8y4W5+ma6rpadPt+QFcUkJBHqHBlo0D
+         gXDwK7x5r2MFK2NaDBnTeIIoAIVnqjsGMTKOi/Z5PY22kYP8xk6/j41GcpiJjl28vC
+         5cJ+tTeTLwwlKMvqKLWm6fFn1jf12vuOqc5Kt5NM=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M2O6Y-1lbJP90jp0-003ty3; Thu, 29
- Apr 2021 00:13:25 +0200
-Subject: Re: [PATCH v2 3/4] tpm: Fix test for interrupts
-To:     Stefan Berger <stefanb@linux.ibm.com>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, James.Bottomley@hansenpartnership.com,
-        keescook@chromium.org, jsnitsel@redhat.com, ml.linux@elloe.vision,
+Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXXyJ-1m5mQ51BYV-00YvKK; Thu, 29
+ Apr 2021 00:37:42 +0200
+Subject: Re: [PATCH v2 1/4] tpm: Use a threaded interrupt handler
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, keescook@chromium.org,
+        jsnitsel@redhat.com, ml.linux@elloe.vision,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1619394440-30646-1-git-send-email-LinoSanfilippo@gmx.de>
- <1619394440-30646-4-git-send-email-LinoSanfilippo@gmx.de>
- <e0b34384-d286-2251-bc43-0ee3083672b3@linux.ibm.com>
+ <1619394440-30646-2-git-send-email-LinoSanfilippo@gmx.de>
+ <YIikDCTBcMMxjots@kernel.org>
 From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <b9ccf9df-2b0a-5bff-d38f-bad05cad9896@gmx.de>
-Date:   Thu, 29 Apr 2021 00:13:23 +0200
+Message-ID: <495e816a-afba-4ea0-560c-bc748df26337@gmx.de>
+Date:   Thu, 29 Apr 2021 00:37:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <e0b34384-d286-2251-bc43-0ee3083672b3@linux.ibm.com>
+In-Reply-To: <YIikDCTBcMMxjots@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:815WgyqZhVu2kkp9EwZEODigR0/YyvsGaPFMjrAjar6H4C+1h/6
- P4M+7mPK/Xte91ZwiPW5ZAbZeTAYKrX+cgDQS6hml4WQ1tA7p/FvNMzfiTf8Dzxy9uTLH4/
- 7Xsi5WQVBv8liP9w6LJVBEQG+WfgHVY8zhhDbDWloqeJKHoNN5u3fOGxxp8ERwjnLEg5u3k
- Y02M/DgUBJ2/zVco2dM/A==
+X-Provags-ID: V03:K1:VRjLLgx1jMPG5HHqpGMzBJHdHG6JdqBiP+7diHvO2FfohPbpOyv
+ zLzpt1Y9FKbY3S0DHIKZyO7qsY6Vbdt08wfJON7VltJFJCZ40fwPWOPPcmRXGbpHEwS8vbh
+ 1t3/s27OouD/qQdlFk4Y4R9S0omxbgnV8qhtNtXPlKDeTLSSAKGCm+OSZh1OibCQcYgc7DL
+ 1X3I/zD1Y5cV9GUxzc1cw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:E1YwGNTCWCI=:oFgcvmvS4cAqQjFntDfWiF
- 4CqSn6BEpyND+owTJPXr2Uga9QDBe79cSBZvYMpGFjvqroYlHyqvvCtSK6F9/G8yaupKsRFP+
- YhW3NM0+J2JsqEAvUi1qJLo+jJFsiB9Zr5TaJ1H2lV9xzvOp7EqXPJeoeMzRvMzUDvm0Pt9MA
- r352h7rSc6bY6wZLVGE9l6+TBPueuGZtdWgD4GPDPEr8IoMJ/LA1XY0ifO4DET0vtJlas5Pb1
- L23JE94vf/7FzRSSEcbA65Lmr0+7hlmiQy9qQCWkwM7+ZYRQLEDTSkKf/V64SPqru9Lxz95nm
- qrhj5wqXiwwtBaRmKoHW5vM6DWyk2c0EMSOrgc+71XwG9m6CCE8IFaMfRl0mRJ+JC6tS33kQy
- 2aZbsR5w+cL/060qYGAyf0NJ5WI0kym/fuzReIluXN8/D9IlP8v2vK6pIzvw17ur01JORsiQE
- n1rG31Dx4VyrllNLxRgrolS75fi7e9gkMn62gcK6quYqcXBB0zsYfJy+VdRPhOtFt69iee59E
- lmApWTtPGLs2589RS/+ylWywNRplrWG79SPkdWickcgi6oizvzs54EkKLAcnOLvvV2V6jCAzF
- 9FEqKF2TVwORee7EVX4RMComWF68lrkWbP6kp67hYVP0RDowuF5u51Y8QIk2JDcSWwbYYr/ao
- 0Wwu50cZB8NwZ2zU7qvA7lK+jYR2M5a13M5rLZo8Uq/RkXYCnGXUrauUtEKLIwfidNIdxMl4L
- aIR5fVjyBCxxG3r/rDmWCf3UuueJgpie8ZIIqONMjBUBXOYxdOe7TMANNqdySPQT+9jhZ/L59
- E+RHfg0gC31I3RO5kmgePW7qj04xJbJd/aWQwaaFJrRZ3baAM5Uio2gLv+dkFnrNHI94cpF6k
- SEgKG8x3qqHl8QOYP6gLB8VX0lCUIku72FBml5XJrMxYeiuLSpFIi0gVv1lQuXB674sPRRRHE
- MA6qgAtdToPGdZAu1XkTTkFrUAA+BzC67ckbPAQ7ioyPlG69NLwNoIdDelVn2KJu1qzStXQOg
- KOjbVvasbV438FCOWfhRltu1xUnqFPOH8So6b8bKdrAh4MpUsexQX0QD78GUMDpBpx7u6gVbu
- O+Ob9ljCcv+EXH+Rn6uRimqDZeGUn3IuQzzaUCfOB/xnUySAxjNEJPT0vb8hnTvghtgYO81al
- xhUFEAfbs1dKJijFvVWCuUC0UjwTdSbOBY/sT8af5U4uijfMO/k1JYl38OBZW5D04ng8t6PlU
- UNUGSLg7JfPrnRiVc
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JMTQeTgh6nA=:/1JolsotzXliCXPpmkxh9b
+ H7g4STFEX5ZioVWP6VvNt4BbxwIQPbDh9vQrwBmYNg+N+aRv7GMZrFCRkRDuPZZuOGC98/+i3
+ uQErDulMpjVptdGzOQhtvCgNRKrBs1VQQ3a4nF+LKZ3WDF2AdmYbrXr3wbmkwulUQEy1wzKYj
+ mq41kverx0Wg3xTF5OF3oWOpxS8CACvdDrWXI4yZuP9rdwSmG0TFzrZekBWUuh+7xYHCtY/M7
+ rGOz4pYCANnPMtCHLRNyzfu2G9kIQmUxMVgG66hwZY1VFQJX5aXBsj4rpYIhKSH8QJEqQFM55
+ JACJehG4dCRfpMlcX3XXjWUFXVvTE+tJ+c/S3jzRFKfWvKB5NdkyFVcZGsZFjFdidYo2Qx6c/
+ R+LkUudMb9295awf7L0oIES7HwuhjMnL5MoqaNR0ympdu8TFHM1ZNCA4Yy17PJLKIwh0+3f7U
+ CdGmzQDzWU4Q4U3txeYEZ9dJPtypXGcdbPGNqww7NEiBrNVevQgn+1aX/BTR1UxXxvUUUCGJL
+ zOD4HK744YE3zD48CapWnxUofdhJ04CrufBloWXqFGjADUJr6rqQgeEvPURW+Xuc6PlC6Irry
+ 2GS/gDJAtglcMF9sc5ULiF9B7Kk31xr+la+WqdGk8Tz3wesWZBNfBKn4JRVvZeHmblevAoZoF
+ 2OP4EUjKeLjaQSzRE4vglUT+RH27ti5LtFgbLtlata6vx4K2/Iz5FH2V3xojKcDMXsqWr6UDh
+ 35k1GffRx05w8VRQEF3y00TAiDK4Nze/b1IrGz+76351j5qOLF8UByPX0Ua3nHBifybWtEglE
+ m1+vOCcJ1DNFiNdCqpZhF46FGLNCji4gc9G7ZWUvlNPsbmL4vVslZ25lGemH9i+IQ5xees9IO
+ 3UWBNnLHHbzLOPssAn29KnVliTiDLkl66n8NWQoHFL7r6Y2i+LOn16ZJ3W7fpMud4wR2HjGL9
+ eTzs9DPDu0EyP2z0R+ZwQY2Mi5tPmgBQQZbhv/fxIcbFuctvYhtQMakSGzDv9miTsfMJ+qcj1
+ znSDfSCngnXfLW3jWMlHTcSCZoXrp+ZZm4T5nUJiR4O/Hhe5UykE17l4HPVB0qDIT6Wq+Pex2
+ IMX1fkY8a4bswO0cgp7pHetFBSLuCG9XzkM355h/xtX295LwGmLUgn4h/cOgrUFia49lRRWhw
+ Lg0wFdQcBbTTN+XkOIGUFVpVJt491YGyEMVKqrBuG3E+7e7GYUiKW3mjVvy5aS9hWNkXCgnYp
+ Kdy7GpiVXu2XcZBV4
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -72,39 +72,67 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Hi,
 
-On 26.04.21 at 16:49, Stefan Berger wrote:
-
->> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
->> index 55debe6..e9882acf 100644
->> --- a/include/linux/tpm.h
->> +++ b/include/linux/tpm.h
->> @@ -126,7 +126,7 @@ struct tpm_chip {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct tpm_chip_seqops bin_log_seqops;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct tpm_chip_seqops ascii_log_seqops;
->> =C2=A0 -=C2=A0=C2=A0=C2=A0 unsigned int flags;
->> +=C2=A0=C2=A0=C2=A0 unsigned long flags;
+On 28.04.21 at 01:53, Jarkko Sakkinen wrote:
+> On Mon, Apr 26, 2021 at 01:47:17AM +0200, Lino Sanfilippo wrote:
+>> Interrupt handling at least includes reading and writing the interrupt
+>> status register from the interrupt routine. However over SPI those acce=
+sses
+>> require a sleepable context, since a mutex is used in the concerning
+>> functions.
+>> For this reason request a threaded interrupt handler which is running i=
+n
+>> (sleepable) process context.
+>>
+>> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+>> ---
+>>  drivers/char/tpm/tpm_tis_core.c | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
+_core.c
+>> index e7d1eab..0959559 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.c
+>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>> @@ -781,8 +781,10 @@ static int tpm_tis_probe_irq_single(struct tpm_chi=
+p *chip, u32 intmask,
+>>  	int rc;
+>>  	u32 int_status;
+>>
+>> -	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
+>> -			     dev_name(&chip->dev), chip) !=3D 0) {
+>> +
+>> +	if (devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+>> +				      tis_int_handler, IRQF_ONESHOT | flags,
+>> +				      dev_name(&chip->dev), chip) !=3D 0) {
+>>  		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
+>>  			 irq);
+>>  		return -1;
+>> --
+>> 2.7.4
+>>
 >
+> Why?
 >
-> This doesn't seem to be necessary.
+> https://elixir.bootlin.com/linux/v5.12/source/drivers/char/tpm/tpm_tis_c=
+ore.c#L670
 >
-
-The bitop makros require an unsigned long, leaving it as unsigned int resu=
-lts in
-a compiler error:
-
-error: passing argument 2 of =E2=80=98test_bit=E2=80=99 from incompatible =
-pointer type [-Werror=3Dincompatible-pointer-types]
-
-> The rest looks good to me. I remember that last time I had tried to acti=
-vate it some laptop didn't cooperate and we ended up reverting some code, =
-but maybe your changes fixed all of that now. Though you may want to 'prep=
-are for unforseen consequences' :-).
+> I don't see anything that sleeps there.
+>
+> /Jarkko1
 >
 
-You may be right with your concerns and I will try to find some more hardw=
-are to test the patches.
+The problem are the register read/write functions which we use to access t=
+he status register in
+the interrupt handler. In case of SPI they result in taking the spi_bus_lo=
+ck which is a mutex.
 
-Thanks for the review(s).
+E.g tpm_tis_spi_read32: tpm_tis_spi_read_bytes->tpm_tis_spi_transfer->spi_=
+bus_lock->mutex_lock
+
+Using a threaded interrupt handler seemed to me the easiest way to avoid t=
+his issue.
 
 Regards,
 Lino
+
+
