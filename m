@@ -2,103 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEFB36F05D
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Apr 2021 21:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AE536F074
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Apr 2021 21:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbhD2TSm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Apr 2021 15:18:42 -0400
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:34908 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238738AbhD2TJW (ORCPT
+        id S231964AbhD2TYx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Apr 2021 15:24:53 -0400
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:39661 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235573AbhD2TWu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Apr 2021 15:09:22 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id B4D6B128060F;
-        Thu, 29 Apr 2021 12:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1619723315;
-        bh=Wr5b4YST9tl/BuuCQuNcLA2CvwkZHmyGHlsVuX6DZQ8=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=l73StIMHozzf/YnymVM3GIVZyJdmOM4eJ9AR5UhAIUp9LATjTdvU1Vp863KHVixDP
-         tr5Dn0mIkExYdmXbNdjwTbBH9OdJIfGgeL5eUFOKegKs7HXOrdUazUeAdR9m0fSBgT
-         I29v9viBAFrF3o7nqoTDFRpSJZC6MlXt0UBnHe5U=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ST3JDx_pPKLa; Thu, 29 Apr 2021 12:08:35 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 4465612805FA;
-        Thu, 29 Apr 2021 12:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1619723315;
-        bh=Wr5b4YST9tl/BuuCQuNcLA2CvwkZHmyGHlsVuX6DZQ8=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=l73StIMHozzf/YnymVM3GIVZyJdmOM4eJ9AR5UhAIUp9LATjTdvU1Vp863KHVixDP
-         tr5Dn0mIkExYdmXbNdjwTbBH9OdJIfGgeL5eUFOKegKs7HXOrdUazUeAdR9m0fSBgT
-         I29v9viBAFrF3o7nqoTDFRpSJZC6MlXt0UBnHe5U=
-Message-ID: <08179943c02b0952546d01713e24ccba62d1a566.camel@HansenPartnership.com>
-Subject: Re: [PATCH 1/1] trusted-keys: match tpm_get_ops on all return paths
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Ben Boeckel <me@benboeckel.net>
-Cc:     keyrings@vger.kernel.org, Ben Boeckel <mathstuf@gmail.com>,
+        Thu, 29 Apr 2021 15:22:50 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2BBC65C0093;
+        Thu, 29 Apr 2021 15:22:03 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 29 Apr 2021 15:22:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+         h=from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=wPWSE6YsU7+OxY2Ql0tz4qGnr1
+        C7tgpgSds6zQk9ug4=; b=EBBzdTgdzhRUTOCqVknvSxRhCjjKOmbLieusbsEFqB
+        6CnIXN8Y6qyrBVM2fOW/LrGpNQf4yYfsF4VZwsTVT09veFCvV8/iQduShP5OEh0y
+        mpU1ljo9a+uqRk8k2bXhehfuFymE9VtdmokeThR4pkFUmMfZKpZtH3aRoYAkvgTu
+        0DSS9WORrs3jPOe1v2sAW3vJWGXcbNjEst443cGt075VAl2pPtTi4wRf6/Fyc0Bx
+        grzMZZYf04RCs884OwX+RtvPQxV5AP9d5b0/ahrhpZKhYJ1j9eJD3mUJCoEzS1K/
+        caDwCIZQ2aewNSRUuBnE1aUfFeF1m2NyHSeROsZBWoag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=wPWSE6YsU7+OxY2Ql
+        0tz4qGnr1C7tgpgSds6zQk9ug4=; b=uEy1u13oUBeIZrTo6rqM8vsDqUcgGLwhk
+        NqTN+jXQrl7rZ/1EpCI9bsC4FS9gFcQIxw7P+f3jWWzxMYdV6+dAvw/9CVN8F1bd
+        a1jpZBcwr2KJfepr9uNjOe0q+Fphxd9wgEa2vbvNn58k7+ujNPSME6FAlLybp7oE
+        bWl8wPNPggX02nvwFIFuQ6kzymEq9I2iJlFMvgd9aZsBXPt50OAHJ6dsIIxXj8YV
+        XyIPZ24Xx7CRlzof/VdgukYBeSKP5t7cCNNz1ZwkAaRtXO7Y5eYrk66N1nN3cFcF
+        XeQH0S2Ek23H34Hh8agp2Sff2OcM4UH4oTTGVkeMm30suOCNhsavQ==
+X-ME-Sender: <xms:WgeLYP3zkALd4rqdQvF5B4p7yIW6ucW2bejSMH3-oybqo5a4YUBJ4Q>
+    <xme:WgeLYOFMH-42aLVmo1gu-Db6hfKPIrJ210zwFhROnnpuybqXdRuCpixrbeC9hSRcP
+    4fNcHjjJJ1laglCzwI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvddvgedgudefkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepuegvnhcuueho
+    vggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrghtthgvrh
+    hnpedttedvgedvtedugeeikeejfeetueekfefhueeugfekheegjeeuffegfeffgefgueen
+    ucfkphepvdegrdduieelrddvtddrvdehheenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehmvgessggvnhgsohgvtghkvghlrdhnvght
+X-ME-Proxy: <xmx:WgeLYP45MncfaMPUqZCQNi8Q7_lrQw6zvldEgIBEBQ-_moSQTzN54A>
+    <xmx:WgeLYE1RiN9JfkEyG_ai-kGa1FLp9hM7b8f-6nMfCxAGD4oLxpnwjw>
+    <xmx:WgeLYCGQVZue-k0lelDCfa7qR_0pNBtFtGnRtG99Lbzt1lf_8b65Kg>
+    <xmx:WweLYOASEQIjGY8A-HHzwzM4oN4U9z4Oo6qw7THo7Si08e3WASDOXA>
+Received: from localhost (unknown [24.169.20.255])
+        by mail.messagingengine.com (Postfix) with ESMTPA;
+        Thu, 29 Apr 2021 15:22:02 -0400 (EDT)
+From:   Ben Boeckel <me@benboeckel.net>
+To:     keyrings@vger.kernel.org
+Cc:     Ben Boeckel <mathstuf@gmail.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
         linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Date:   Thu, 29 Apr 2021 12:08:34 -0700
-In-Reply-To: <YIsC9mT8XmIi/fbB@erythro>
-References: <20210429183742.756766-1-list.lkml.keyrings@me.benboeckel.net>
-         <20210429183742.756766-2-list.lkml.keyrings@me.benboeckel.net>
-         <9eea988ff637af57511107c6c0941bff2aa7c6c5.camel@HansenPartnership.com>
-         <YIsC9mT8XmIi/fbB@erythro>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v2 0/1] trusted-keys: match tpm_get_ops on all return paths
+Date:   Thu, 29 Apr 2021 15:21:55 -0400
+Message-Id: <20210429192156.770145-1-list.lkml.keyrings@me.benboeckel.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2021-04-29 at 15:03 -0400, Ben Boeckel wrote:
-> On Thu, Apr 29, 2021 at 11:50:50 -0700, James Bottomley wrote:
-> > Actually, I think this is a better fix to avoid multiple put and
-> > returns.
-> > 
-> > James
-> > 
-> > ---
-> > 
-> > diff --git a/security/keys/trusted-keys/trusted_tpm2.c
-> > b/security/keys/trusted-keys/trusted_tpm2.c
-> > index d225ad140960..cbf2a932577b 100644
-> > --- a/security/keys/trusted-keys/trusted_tpm2.c
-> > +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> > @@ -336,9 +336,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
-> >  			rc = -EPERM;
-> >  	}
-> >  	if (blob_len < 0)
-> > -		return blob_len;
-> > -
-> > -	payload->blob_len = blob_len;
-> > +		rc = blob_len;
-> > +	else
-> > +		payload->blob_len = blob_len;
-> >  
-> >  	tpm_put_ops(chip);
-> >  	return rc;
-> 
-> Ah, that does look better. I had first added a new label, but that
-> didn't seem like an improvement in readability. I grabbed this
-> pattern from an early return earlier in the function. But given that
-> this is the end (and appears to be unlikely to have more logic
-> inserted in the future), this seems more reasonable to me as well. Do
-> you want me to respin or just let it up to you at this point?
+From: Ben Boeckel <mathstuf@gmail.com>
 
-Can you respin? ... I'm a bit lossy at the moment due to pressure of
-work.
+Bug report thread Message-Id: <YIpV9pcyM9/rWqEt@mwanda>
 
-Thanks,
+---
+v1 -> v2:
+  - simplify the return path since we're at the end of the function
+    anyways
 
-James
+Ben Boeckel (1):
+  trusted-keys: match tpm_get_ops on all return paths
 
+ security/keys/trusted-keys/trusted_tpm2.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+
+base-commit: 3644286f6cbcea86f6fa4d308e7ac06bf2a3715a
+-- 
+2.30.2
 
