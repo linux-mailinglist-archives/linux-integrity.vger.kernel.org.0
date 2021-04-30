@@ -2,122 +2,159 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A38C3701A8
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Apr 2021 22:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF5E3701E4
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Apr 2021 22:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbhD3T5O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Apr 2021 15:57:14 -0400
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:45389 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233671AbhD3T5L (ORCPT
+        id S231266AbhD3UOl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Apr 2021 16:14:41 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:34564 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231250AbhD3UOl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Apr 2021 15:57:11 -0400
-X-Greylist: delayed 356 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Apr 2021 15:57:11 EDT
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 139241EAC;
-        Fri, 30 Apr 2021 15:50:22 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Fri, 30 Apr 2021 15:50:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=PtajBDBgytedXM7xt9/aNsUr4Q+
-        i946QjqQp1VhqJa0=; b=mJJOo7rS8hXM00Wzh05jeER5Vf3Ld3NnGG9ASX9Do7n
-        MTQnxS+peMdL2PAAmeXBAnOliWXZLjWbVORnHc2tZ+zdVAq+FrrjQrRghZYGMNsu
-        C5jiv/W4NiHy73v+9zORRbE5bfhqAdk5uMGH7iHztDco185BwAgjLaJJCbwi4b/U
-        +DRbmVu/soNpkYIzA8wVINuZJKBdidbNeTXZP9HYSSqPTSM4v7SgmCy3MMqW1r6K
-        zBNCCqC0o+QorvcPBEjr4IsTgkh3AQxYBi/khA8kYojegwY2uDp47E9ITbTJAS7w
-        0Af8o5u0sHR27UR4Y5ePJFGpY3WQmaLs0QrzcYlYjSQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=PtajBD
-        BgytedXM7xt9/aNsUr4Q+i946QjqQp1VhqJa0=; b=CQw2WcmK0fpUBvOrNdkrDt
-        AAWM/QVfy+qlNpPT+VPwx9PNzbCCq6ePBp+b4Q6Wl4hI/bAsqgRjZ8DFUSC9fizQ
-        vhVXOsCZzuvOq9dpF0s9UpB6oo4tuMcm1jvtFdkegkhtFMwLRKeyjLkQlVsuk7Tf
-        113wZGyzLKai5j5g8jRONyowqb0RWqak+oaGvlNW4fpWE42y8S3ikxlUp/cVgSi4
-        DlGTd/JD3/4/Ogcf4sFEGhFVlH9jlAziHaYdXSg3v5cJhEn4s27xBB52ZCuAqtgq
-        nYhZGf5ybpWEpS3ddGuvLxz4raHynVZmOj+jy7n6qQ2cndY0uVaABLoQj7PUzbmA
-        ==
-X-ME-Sender: <xms:fV-MYGCuNY33RtIZbJ2dAPFK-P6e3VGSCt-Qz7WlOG0ov0WXdKygwQ>
-    <xme:fV-MYAib-6LePyxvkfHUzCAv0PJnkZ9MgCo72TC797hKCm5nhhNnE9_dhkA_80FKW
-    cQclyz51QwWwlVkpZ0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvddviedgudegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtreejnecuhfhrohhmpeeuvghn
-    uceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlhdrnhgvtheqnecuggftrfgrth
-    htvghrnhepvefftdettefgtddtkeeufeegtddttdeuueegkeegteffueetffejudeihefh
-    kedtnecukfhppedvgedrudeiledrvddtrddvheehnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepmhgvsegsvghnsghovggtkhgvlhdrnhgvth
-X-ME-Proxy: <xmx:fV-MYJmKKkUaZ3Vg6hQeQFv6z0sonlUX9aZ6s_HkpIQ4Iqvw1acM_A>
-    <xmx:fV-MYEzlkWO2rbOYKSWEGCIc0TwEtVU7W6_Fz3V-YsQKTFki7ArI7g>
-    <xmx:fV-MYLStdP-ko4iAxttjv0Qh8tF8vO1MUVQH82APFsVxUDNIfv4oGw>
-    <xmx:fV-MYA_xWu_ni5RFR_Vbc-9xPIpzruTB8Xs3eqDeuNBkSKU6b0r3VDOOCBo>
-Received: from localhost (unknown [24.169.20.255])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Fri, 30 Apr 2021 15:50:20 -0400 (EDT)
-Date:   Fri, 30 Apr 2021 15:50:18 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     trix@redhat.com
-Cc:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
-        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Colin King <colin.king@canonical.com>
-Subject: Re: [PATCH] KEYS: trusted: fix memory leak
-Message-ID: <YIxfehTLhWe58sNE@erythro>
-References: <20210430185810.3331311-1-trix@redhat.com>
+        Fri, 30 Apr 2021 16:14:41 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 5B1BF72C8B0;
+        Fri, 30 Apr 2021 23:13:51 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [193.43.10.250])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 324D74A46E8;
+        Fri, 30 Apr 2021 23:13:51 +0300 (MSK)
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: [RFC PATCH] ima-evm-utils: Allow manual setting keyid for signing
+Date:   Fri, 30 Apr 2021 23:13:34 +0300
+Message-Id: <20210430201334.3643230-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210430185810.3331311-1-trix@redhat.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 11:58:10 -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Static analysis reports this problem
-> trusted-keys/trusted_tpm1.c:496:10: warning: Potential memory leak
->   return ret;
->          ^~~
-> 
-> In tpm_seal() some failure handling returns directly, without
-> freeing memory.
-> 
-> Fixes: 5df16caada3f ("KEYS: trusted: Fix incorrect handling of tpm_get_random()")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  security/keys/trusted-keys/trusted_tpm1.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-> index 469394550801..aa108bea6739 100644
-> --- a/security/keys/trusted-keys/trusted_tpm1.c
-> +++ b/security/keys/trusted-keys/trusted_tpm1.c
-> @@ -493,10 +493,12 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
->  
->  	ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
->  	if (ret < 0)
-> -		return ret;
-> +		goto out;
->  
-> -	if (ret != TPM_NONCE_SIZE)
-> -		return -EIO;
-> +	if (ret != TPM_NONCE_SIZE) {
-> +		ret = -EIO;
-> +		goto out;
-> +	}
->  
->  	ordinal = htonl(TPM_ORD_SEAL);
->  	datsize = htonl(datalen);
+Allow user to set signature's keyid using `--keyid' option. Keyid should
+correspond to SKID in certificate, when keyid is calculated using SHA-1
+in libimaevm it may mismatch keyid extracted by the kernel from SKID of
+certificate (the way public key is presented to the kernel), thus making
+signatures not verifiable. This may happen when certificate is using non
+SHA-1 SKID (see rfc7093) or just 'unique number' (see rfc5280 4.2.1.2).
+As a last resort user may specify arbitrary keyid using the new option.
 
-I see this patch also submitted by Colin (Cc'd) in Message-Id:
+This commit creates backward compatible ABI change for libimaevm,
+because of adding additional parameter to imaevm_params - older
+libimaevm can work with newer client.
 
-    <20210430113724.110746-1-colin.king@canonical.com>
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+---
+ README          |  1 +
+ src/evmctl.c    | 15 +++++++++++++++
+ src/imaevm.h    |  1 +
+ src/libimaevm.c |  7 ++++---
+ 4 files changed, 21 insertions(+), 3 deletions(-)
 
-To my eyes, the commit message seems a bit better over there.
+diff --git a/README b/README
+index 321045d..8cd66e0 100644
+--- a/README
++++ b/README
+@@ -48,6 +48,7 @@ OPTIONS
+       --xattr-user   store xattrs in user namespace (for testing purposes)
+       --rsa          use RSA key type and signing scheme v1
+   -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)
++      --keyid val    overwrite signature keyid with a value (for signing)
+   -o, --portable     generate portable EVM signatures
+   -p, --pass         password for encrypted signing key
+   -r, --recursive    recurse into directories (sign)
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 1815f55..83b228a 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -42,6 +42,7 @@
+ #include <sys/param.h>
+ #include <sys/stat.h>
+ #include <sys/ioctl.h>
++#include <arpa/inet.h>
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <stdlib.h>
+@@ -2446,6 +2447,7 @@ static void usage(void)
+ 		"      --xattr-user   store xattrs in user namespace (for testing purposes)\n"
+ 		"      --rsa          use RSA key type and signing scheme v1\n"
+ 		"  -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)\n"
++		"      --keyid val    overwrite signature keyid with a value (for signing)\n"
+ 		"  -o, --portable     generate portable EVM signatures\n"
+ 		"  -p, --pass         password for encrypted signing key\n"
+ 		"  -r, --recursive    recurse into directories (sign)\n"
+@@ -2525,6 +2527,7 @@ static struct option opts[] = {
+ 	{"xattr-user", 0, 0, 140},
+ 	{"ignore-violations", 0, 0, 141},
+ 	{"pcrs", 1, 0, 142},
++	{"keyid", 1, 0, 143},
+ 	{}
+ 
+ };
+@@ -2569,6 +2572,8 @@ int main(int argc, char *argv[])
+ {
+ 	int err = 0, c, lind;
+ 	ENGINE *eng = NULL;
++	unsigned long int keyid;
++	char *eptr;
+ 
+ #if !(OPENSSL_VERSION_NUMBER < 0x10100000)
+ 	OPENSSL_init_crypto(
+@@ -2713,6 +2718,16 @@ int main(int argc, char *argv[])
+ 			}
+ 			pcrfile[npcrfile++] = optarg;
+ 			break;
++		case 143:
++			errno = 0;
++			keyid = strtoul(optarg, &eptr, 16);
++			if (errno || eptr - optarg != strlen(optarg) ||
++			    keyid > UINT_MAX || keyid == 0) {
++				log_err("Invalid keyid value.\n");
++				exit(1);
++			}
++			imaevm_params.keyid = htonl(keyid);
++			break;
+ 		case '?':
+ 			exit(1);
+ 			break;
+diff --git a/src/imaevm.h b/src/imaevm.h
+index 4503919..9f38059 100644
+--- a/src/imaevm.h
++++ b/src/imaevm.h
+@@ -196,6 +196,7 @@ struct libimaevm_params {
+ 	const char *hash_algo;
+ 	const char *keyfile;
+ 	const char *keypass;
++	uint32_t keyid;		/* keyid overriding value, unless 0. */
+ };
+ 
+ struct RSA_ASN1_template {
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index fa6c278..070cd97 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -894,7 +894,6 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+ 	const EVP_MD *md;
+ 	size_t sigsize;
+ 	const char *st;
+-	uint32_t keyid;
+ 
+ 	if (!hash) {
+ 		log_err("sign_hash_v2: hash is null\n");
+@@ -932,8 +931,10 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+ 		return -1;
+ 	}
+ 
+-	calc_keyid_v2(&keyid, name, pkey);
+-	hdr->keyid = keyid;
++	if (imaevm_params.keyid)
++		hdr->keyid = imaevm_params.keyid;
++	else
++		calc_keyid_v2(&hdr->keyid, name, pkey);
+ 
+ 	st = "EVP_PKEY_CTX_new";
+ 	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
+-- 
+2.11.0
 
---Ben
