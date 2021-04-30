@@ -2,95 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9477A370091
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Apr 2021 20:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0133700DA
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Apr 2021 20:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbhD3SeG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Apr 2021 14:34:06 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:43632 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbhD3SeA (ORCPT
+        id S231214AbhD3S7I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Apr 2021 14:59:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56280 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230356AbhD3S7G (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Apr 2021 14:34:00 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 69D7172C8B0;
-        Fri, 30 Apr 2021 21:33:09 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id F24114A46E8;
-        Fri, 30 Apr 2021 21:33:08 +0300 (MSK)
-Date:   Fri, 30 Apr 2021 21:33:08 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Subject: Re: calc_keyid_v2 producing different keyid for non-sha1 SKIDs
-Message-ID: <20210430183308.mfdffqq2osbrqm5e@altlinux.org>
-References: <20210426193723.rfar32ft3iptorii@altlinux.org>
- <738bff9b-5cde-4f06-3e54-4d6eebcf9383@linux.ibm.com>
- <20210426220148.nqncx5734dfj5qyx@altlinux.org>
- <20210426221433.mqrtmkpw6fletgmh@altlinux.org>
- <d563ee36-8aad-0497-dc12-f4b06f7f0f6f@linux.ibm.com>
+        Fri, 30 Apr 2021 14:59:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619809097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=k42L3xryaez+oSKmSu1QdAMryLEAIpMx64ypVwr/urA=;
+        b=HSCfNmcC5FNNo0sClUmd7Qv56qS+P6IBK7c2S84PLUFA2CtCYPAVlNIlBQe/TYGH6KRh+3
+        A5TpflRhccUa2yx20sbmKW1p56t9ewBTFZdVjOWoCRhNNHhCyRAkK1EC4XEfy38ZZbiQ6J
+        CiqdsDsoNnHH7fxHVqbBQV3FYoZNhTQ=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-225-YraDYJYiME6vIJ-uRN4tnw-1; Fri, 30 Apr 2021 14:58:15 -0400
+X-MC-Unique: YraDYJYiME6vIJ-uRN4tnw-1
+Received: by mail-qt1-f197.google.com with SMTP id i7-20020ac84f470000b02901b944d49e13so21975222qtw.7
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Apr 2021 11:58:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k42L3xryaez+oSKmSu1QdAMryLEAIpMx64ypVwr/urA=;
+        b=EoAXcMS9rTcywF6kfol23/OMlWbqzJNp3ILKDfdW7MT4IVjogAEOTteK1Sjusa/wvI
+         GYdUNIAw3/vE+h4rBustNiCPVWNdL/nxoPX9eFRfwkJ1lXPRA90tdqptYIeJ3/Bh123h
+         mP8ncC3wHSMHxywRu6Ch/FRIrJ6sFKAROe+0E3SzqcZKT9jAu0xk7ehEn1nLdnNU4kML
+         VTjcJcKZRucbqYfuafonq4wsizCPgJNt5EYxBbyooBEAVEEnFJRQBsFKylpckFutaJjM
+         jAuTbwN+aFxZ3r8hB2bhC17GQVGQ1vpBvtIhbbNTUvTjpfMxk2tnbFBjV8cvencGgAkH
+         zHcg==
+X-Gm-Message-State: AOAM531fc4fsoJTBEEc8d+0ztq4SyjP94etP1TamP2ZIEibMLzz+Teyj
+        B2Zx6d5zsTZfDfY6AbidGDbGsePDbHQrKw8nl9r6Hgw03k4CAs6IbqfWV8+yvz3ENQQ8fl2WDU9
+        FeJbKcfySINSHpXIR5wBfhKgNz4jT
+X-Received: by 2002:ae9:f205:: with SMTP id m5mr6950979qkg.101.1619809095101;
+        Fri, 30 Apr 2021 11:58:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyR2o64jnSyLn3IiYpCSQfqm0Tweb+Lrh1Ejl4G4c7Bimvr+FTabvOuLg5CiYAx+Ty5nMnEEg==
+X-Received: by 2002:ae9:f205:: with SMTP id m5mr6950963qkg.101.1619809094911;
+        Fri, 30 Apr 2021 11:58:14 -0700 (PDT)
+Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id b17sm2802557qto.88.2021.04.30.11.58.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Apr 2021 11:58:14 -0700 (PDT)
+From:   trix@redhat.com
+To:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] KEYS: trusted: fix memory leak
+Date:   Fri, 30 Apr 2021 11:58:10 -0700
+Message-Id: <20210430185810.3331311-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <d563ee36-8aad-0497-dc12-f4b06f7f0f6f@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Stefan,
+From: Tom Rix <trix@redhat.com>
 
-On Fri, Apr 30, 2021 at 01:19:02PM -0400, Stefan Berger wrote:
-> 
-> On 4/26/21 6:14 PM, Vitaly Chikunov wrote:
-> > On Tue, Apr 27, 2021 at 01:01:48AM +0300, Vitaly Chikunov wrote:
-> > > Stefan,
-> > > 
-> > > https://tools.ietf.org/html/rfc7093
-> > > 
-> > > On Mon, Apr 26, 2021 at 04:21:26PM -0400, Stefan Berger wrote:
-> > > > On 4/26/21 3:37 PM, Vitaly Chikunov wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > I am reported that IMA signatures where SKID is not just sha1 of the
-> > > > > public key (but something different, for example different hash algo,
-> > > > > such as Streebog) have "wrong" keyid in the signature. This is because
-> > > > > a) kernel extracting keyid from the cert's subjectKeyIdentifier (SKID)
-> > > > > x509 extension, (or if this fails it takes just serial, perhaps, we can
-> > > > > disregard this corner case), it never does sha1 over the public key).
-> > > > 
-> > > > Is it wrong for ecrdsa keys? What is the spec?
-> > > It seems, some CA provide by default certs with Streebog-256 hash as
-> > > drop-in replacement for SHA1, so their users forced to (re-)request the
-> > > certs with a compatible SHA1 SKID.
-> > > 
-> > > > Here's the spec that describes using sha1 for the skid which seems to work
-> > > > like this for RSA and ECDSA keys from what I can tell:
-> > > > 
-> > > > https://tools.ietf.org/html/rfc3280#section-4.2.1.2
-> > > Perhaps, you meant https://tools.ietf.org/html/rfc5280#section-4.2.1.2
-> > > 
-> > >    "Other methods of generating unique numbers are also acceptable."
-> > > 
-> > > Also, see https://tools.ietf.org/html/rfc7093
-> > And, I think all v2 signatures potentially affected.
-> 
-> I have been using evmctl successfully with RSA and ECDSA keys now and
-> certificates created by **OpenSSL**. Problems may occur if the
-> certificate-generating tool uses something else than a sha1 to calculate the
-> subject key identifier (skid) and therefore the key id calculated by evmctl
-> (with a sha1) does not match. For the non-working case one could pass in a
-> keyidv2 that the user would have to determine from the certificate's subject
-> key identifier's last 4 bytes.
-> 
-> It would be interesting to know which tools do not use a sha1 to calculate
-> the subject key identifier or what types of keys those are so that one could
-> give recommendations for tools to use. GnuTLS's certtool for example does
-> not seem to use the same algorithm to calculate the skid, so I would not
-> recommend using it for generating the certs to be used in conjunction with
-> evmctl and IMA signatures.
+Static analysis reports this problem
+trusted-keys/trusted_tpm1.c:496:10: warning: Potential memory leak
+  return ret;
+         ^~~
 
-You can also reproduce non-sha1 skid with openssl using subjectKeyIdentifier=
-config option, see x509v3_config(5).
+In tpm_seal() some failure handling returns directly, without
+freeing memory.
 
-Thanks,
+Fixes: 5df16caada3f ("KEYS: trusted: Fix incorrect handling of tpm_get_random()")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ security/keys/trusted-keys/trusted_tpm1.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index 469394550801..aa108bea6739 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -493,10 +493,12 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
+ 
+ 	ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
+ 	if (ret < 0)
+-		return ret;
++		goto out;
+ 
+-	if (ret != TPM_NONCE_SIZE)
+-		return -EIO;
++	if (ret != TPM_NONCE_SIZE) {
++		ret = -EIO;
++		goto out;
++	}
+ 
+ 	ordinal = htonl(TPM_ORD_SEAL);
+ 	datsize = htonl(datalen);
+-- 
+2.26.3
 
