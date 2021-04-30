@@ -2,125 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D3B370122
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Apr 2021 21:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A38C3701A8
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Apr 2021 22:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbhD3TZp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Apr 2021 15:25:45 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58902 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229990AbhD3TZo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Apr 2021 15:25:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 35049B025;
-        Fri, 30 Apr 2021 19:24:55 +0000 (UTC)
-Date:   Fri, 30 Apr 2021 21:24:53 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Stefan Berger <stefanb@us.ibm.com>
-Subject: Re: [PATCH 1/1] travis: Fix Fedora
-Message-ID: <YIxZhRcN4fbZ6Xjy@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20210429053918.10240-1-pvorel@suse.cz>
- <07d6895b02ea3818b0687d79f66575fc08ff6c97.camel@linux.ibm.com>
- <YIwFFwf80Hj178zK@pevik>
- <a3db607d43565699e3d08c941161d1cfa69f28ac.camel@linux.ibm.com>
- <YIxW/h41HTozljSo@pevik>
+        id S233753AbhD3T5O (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Apr 2021 15:57:14 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:45389 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233671AbhD3T5L (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 30 Apr 2021 15:57:11 -0400
+X-Greylist: delayed 356 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Apr 2021 15:57:11 EDT
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 139241EAC;
+        Fri, 30 Apr 2021 15:50:22 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Fri, 30 Apr 2021 15:50:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+         h=date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=PtajBDBgytedXM7xt9/aNsUr4Q+
+        i946QjqQp1VhqJa0=; b=mJJOo7rS8hXM00Wzh05jeER5Vf3Ld3NnGG9ASX9Do7n
+        MTQnxS+peMdL2PAAmeXBAnOliWXZLjWbVORnHc2tZ+zdVAq+FrrjQrRghZYGMNsu
+        C5jiv/W4NiHy73v+9zORRbE5bfhqAdk5uMGH7iHztDco185BwAgjLaJJCbwi4b/U
+        +DRbmVu/soNpkYIzA8wVINuZJKBdidbNeTXZP9HYSSqPTSM4v7SgmCy3MMqW1r6K
+        zBNCCqC0o+QorvcPBEjr4IsTgkh3AQxYBi/khA8kYojegwY2uDp47E9ITbTJAS7w
+        0Af8o5u0sHR27UR4Y5ePJFGpY3WQmaLs0QrzcYlYjSQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=PtajBD
+        BgytedXM7xt9/aNsUr4Q+i946QjqQp1VhqJa0=; b=CQw2WcmK0fpUBvOrNdkrDt
+        AAWM/QVfy+qlNpPT+VPwx9PNzbCCq6ePBp+b4Q6Wl4hI/bAsqgRjZ8DFUSC9fizQ
+        vhVXOsCZzuvOq9dpF0s9UpB6oo4tuMcm1jvtFdkegkhtFMwLRKeyjLkQlVsuk7Tf
+        113wZGyzLKai5j5g8jRONyowqb0RWqak+oaGvlNW4fpWE42y8S3ikxlUp/cVgSi4
+        DlGTd/JD3/4/Ogcf4sFEGhFVlH9jlAziHaYdXSg3v5cJhEn4s27xBB52ZCuAqtgq
+        nYhZGf5ybpWEpS3ddGuvLxz4raHynVZmOj+jy7n6qQ2cndY0uVaABLoQj7PUzbmA
+        ==
+X-ME-Sender: <xms:fV-MYGCuNY33RtIZbJ2dAPFK-P6e3VGSCt-Qz7WlOG0ov0WXdKygwQ>
+    <xme:fV-MYAib-6LePyxvkfHUzCAv0PJnkZ9MgCo72TC797hKCm5nhhNnE9_dhkA_80FKW
+    cQclyz51QwWwlVkpZ0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvddviedgudegfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtreejnecuhfhrohhmpeeuvghn
+    uceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlhdrnhgvtheqnecuggftrfgrth
+    htvghrnhepvefftdettefgtddtkeeufeegtddttdeuueegkeegteffueetffejudeihefh
+    kedtnecukfhppedvgedrudeiledrvddtrddvheehnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepmhgvsegsvghnsghovggtkhgvlhdrnhgvth
+X-ME-Proxy: <xmx:fV-MYJmKKkUaZ3Vg6hQeQFv6z0sonlUX9aZ6s_HkpIQ4Iqvw1acM_A>
+    <xmx:fV-MYEzlkWO2rbOYKSWEGCIc0TwEtVU7W6_Fz3V-YsQKTFki7ArI7g>
+    <xmx:fV-MYLStdP-ko4iAxttjv0Qh8tF8vO1MUVQH82APFsVxUDNIfv4oGw>
+    <xmx:fV-MYA_xWu_ni5RFR_Vbc-9xPIpzruTB8Xs3eqDeuNBkSKU6b0r3VDOOCBo>
+Received: from localhost (unknown [24.169.20.255])
+        by mail.messagingengine.com (Postfix) with ESMTPA;
+        Fri, 30 Apr 2021 15:50:20 -0400 (EDT)
+Date:   Fri, 30 Apr 2021 15:50:18 -0400
+From:   Ben Boeckel <me@benboeckel.net>
+To:     trix@redhat.com
+Cc:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Colin King <colin.king@canonical.com>
+Subject: Re: [PATCH] KEYS: trusted: fix memory leak
+Message-ID: <YIxfehTLhWe58sNE@erythro>
+References: <20210430185810.3331311-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YIxW/h41HTozljSo@pevik>
+In-Reply-To: <20210430185810.3331311-1-trix@redhat.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+On Fri, Apr 30, 2021 at 11:58:10 -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Static analysis reports this problem
+> trusted-keys/trusted_tpm1.c:496:10: warning: Potential memory leak
+>   return ret;
+>          ^~~
+> 
+> In tpm_seal() some failure handling returns directly, without
+> freeing memory.
+> 
+> Fixes: 5df16caada3f ("KEYS: trusted: Fix incorrect handling of tpm_get_random()")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  security/keys/trusted-keys/trusted_tpm1.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+> index 469394550801..aa108bea6739 100644
+> --- a/security/keys/trusted-keys/trusted_tpm1.c
+> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+> @@ -493,10 +493,12 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
+>  
+>  	ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
+>  	if (ret < 0)
+> -		return ret;
+> +		goto out;
+>  
+> -	if (ret != TPM_NONCE_SIZE)
+> -		return -EIO;
+> +	if (ret != TPM_NONCE_SIZE) {
+> +		ret = -EIO;
+> +		goto out;
+> +	}
+>  
+>  	ordinal = htonl(TPM_ORD_SEAL);
+>  	datsize = htonl(datalen);
 
-> > [Cc'ing Stefan]
+I see this patch also submitted by Colin (Cc'd) in Message-Id:
 
-> > Hi Petr,
+    <20210430113724.110746-1-colin.king@canonical.com>
 
-> > On Fri, 2021-04-30 at 15:24 +0200, Petr Vorel wrote:
-> > > > On Thu, 2021-04-29 at 07:39 +0200, Petr Vorel wrote:
-> > > > > Fedora recently got 2.33, which requires on Travis CI to use podman.
+To my eyes, the commit message seems a bit better over there.
 
-> > > > > Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> > > > > ---
-> > > > > Hi Mimi,
-
-> > > > > Tested [1].
-
-> > > > > Previously Fedora fails on autoconf issue [2], which is caused by
-> > > > > faccessat2 incompatibility on glibc 2.33:
-
-> > > > > /usr/bin/autoconf: This script requires a shell more modern than all
-> > > > > /usr/bin/autoconf: the shells that I found on your system.
-> > > > > /usr/bin/autoconf: Please tell bug-autoconf@gnu.org about your system,
-> > > > > /usr/bin/autoconf: including any error possibly output before this
-> > > > > /usr/bin/autoconf: message. Then install a modern shell, or manually run
-> > > > > /usr/bin/autoconf: the script under such a shell if you do have one.
-> > > > > autoreconf: /usr/bin/autoconf failed with exit status: 1
-
-> > > > > [1] https://travis-ci.org/github/pevik/ima-evm-utils/builds/768789641
-> > > > > [2] https://travis-ci.org/github/pevik/ima-evm-utils/jobs/767259578
-
-> > > > The "boot_aggregate" test should succeed, but for some reason is now
-> > > > being skipped.
-
-> > > > PASS: ima_hash.test
-> > > > PASS: sign_verify.test
-> > > > SKIP: boot_aggregate.test
-> > > Not sure why, I'll try to have look. Maybe missing dependencies?
-> > > I suppose this is not related to the patch at all.
-
-> > The boot_aggregate test has a dependency on a software TPM.  From the
-> > end of the log, there's problems communicating with the swtpm.
-
-> > which: no tpm_server in (../src:/root/ima-evm-utils-install/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin)
-> > INFO: Starting software TPM: /usr/bin/swtpm
-> > INFO: Sending software TPM startup
-> > TSS_Socket_Open: Error on connect to localhost:2321
-> > TSS_Socket_Open: client connect: error 111 Connection refused
-> > startup: failed, rc 000b0008
-> > TSS_RC_NO_CONNECTION - Failure connecting to lower layer
-> > INFO: Retry sending software TPM startup
-> > TSS_Socket_Open: Error on connect to localhost:2321
-> > TSS_Socket_Open: client connect: error 111 Connection refused
-> > startup: failed, rc 000b0008
-> > TSS_RC_NO_CONNECTION - Failure connecting to lower layer
-> > INFO: Software TPM startup failed
-> Hm, testing if sudo is needed for podman to be able to the container run swtpm.
-OK, sudo didn't help:
-https://travis-ci.org/github/pevik/ima-evm-utils/jobs/769054065
-
-I have no idea what's wrong.
-
-Kind regards,
-Petr
-
-> > > > I tested with/without this patch on our internal travis.   I was seeing
-> > > > the Tumbleweed problem, but am not seeing this problem with Fedora
-> > > > latest yet.  Both with/without the patch, Fedora latest works properly
-> > > "not yet" => if you check glibc package update for the version. I bet it's still
-> > > 2.32. Thanks for testing it.
-
-> > From the local raw log:
-> >   glibc-devel-2.33-
-> > 5.fc34.x86_64
-> >   glibc-headers-x86-2.33-5.fc34.noarch
-
-> OK, if your internal travis is working with 2.33 maybe the rest of the setup is
-> different (different docker and/or runc), because this patch is really needed on
-> public Travis.
-
-> Kind regards,
-> Petr
-
-> > thanks,
-
-> > Mimi
-
-> > > > on our internal travis.
-
+--Ben
