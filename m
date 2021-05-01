@@ -2,129 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 969313703EE
-	for <lists+linux-integrity@lfdr.de>; Sat,  1 May 2021 01:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CB3370449
+	for <lists+linux-integrity@lfdr.de>; Sat,  1 May 2021 02:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbhD3XJw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Apr 2021 19:09:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:51508 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231265AbhD3XJv (ORCPT
+        id S233102AbhEAAD0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Apr 2021 20:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232893AbhEAADZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Apr 2021 19:09:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619824142;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QSMo0z9Rxmagh5nEn6Z1ZpHmqk1+UCu4svG3FgyyVgw=;
-        b=USa43/mK5ohfKubVrmCB9uAykKLHftzkTof4hywWa+oLbHKJuAbf51YLXeVpRcqIGYl6+G
-        yLmED5L+laguulbpGQmEx2Cp8kwRs+eM2C/+iSi2eD9n2ZYHPNeF3vRZEd807aTmwYm05g
-        kGclFpZUrc7gjr9zpZGjYcJdZbgn/rU=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-409-JCeqZ4bsOdOcU9HqtTTQSQ-1; Fri, 30 Apr 2021 19:09:00 -0400
-X-MC-Unique: JCeqZ4bsOdOcU9HqtTTQSQ-1
-Received: by mail-qt1-f198.google.com with SMTP id k13-20020ac8140d0000b02901bad0e39d8fso6356390qtj.6
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Apr 2021 16:09:00 -0700 (PDT)
+        Fri, 30 Apr 2021 20:03:25 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603B4C06138B
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Apr 2021 17:02:36 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 124so31604136lff.5
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Apr 2021 17:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KBoeQcMdIXHbrr5qlPjaHe4/MPMag2oC2aXYy4bOLac=;
+        b=fk2hsfuYfGs/AoLeyHdX2NoIlNk1zaTNJSnZt4pQHFSjPY8+WK1Ez5pMSN7OadFDIK
+         PQWtOfGaP0cSwvYOBouQBV07RiMzKNvCstfdLwcPGUP9NlCAGsoxZcfkbkj0YM1QHsT4
+         l/SLhvHV+mO9i7xpOl0NZJ2mHSkzDYhP9qiK2LIwM+mAC/ZUUDTGbralv7SUh0lgEb4E
+         WAEPMUk4VLx1EgNA5K8LgO+MqjjiBGrM8ssKRV0BzLgPAyvJgJqAgqHHzcFY1c/hzG/B
+         yo3KM2oDiGv0jAJYXGmIsm9fgrrruGghiwRacICmGk5Gu3SSd1POZcKwuO+NFW0fAQqX
+         TiIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=QSMo0z9Rxmagh5nEn6Z1ZpHmqk1+UCu4svG3FgyyVgw=;
-        b=CeChzDqn9tp46WTRlQgni5fMRvhJfCK4DCYVPB+YDYq0HWx/xf6l683vIcQAN1y+nK
-         oko5qAAhkVtCtdCc9vvFCvCjPw2YjBC6O2B4/PexVVpR493OCWzPFeyIDnf6wOf8OSYV
-         dDt90OV0iec2s5M+EKTTh2hLx3c8BIFhKtNPOdsikDeZQd3skqxaUImn9Z5q97mABKVV
-         4SLNxMRkZOJ40sJ2wZH36VMWCZXrXRtYX1lAjf0sxIsLhTX1d4/kZi3duMvSK3Mt/gUt
-         wZm8a25yHhIHx5hCWPqhg7ipSu9usgGz9EYC7TZ5rYqzimJTmPIzp8zyCb6Jzg4gqhzh
-         bMOQ==
-X-Gm-Message-State: AOAM531gbqtuqmTD3Q+tqw4e5IjwjEPIHY140TGm2XEn1JfwbYwxlZlK
-        gU/GHQ6qvnHKf8HHMGOys1GG6X8JqxUwhUJRZeyHM5BFlmkjDdONyxzOnekOM+B50X4G/8L0o67
-        pNuaIwORlNkTKhlOOrXBabvUkHSar
-X-Received: by 2002:ac8:5704:: with SMTP id 4mr6367238qtw.379.1619824140096;
-        Fri, 30 Apr 2021 16:09:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxxRQVIutmu1/MxdsrOTKOKa2+oNtKY7kpqCZNcAy9Dt75nhfoypX4piStjUJwls24KKPWrfw==
-X-Received: by 2002:ac8:5704:: with SMTP id 4mr6367210qtw.379.1619824139909;
-        Fri, 30 Apr 2021 16:08:59 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id v65sm2624530qkc.125.2021.04.30.16.08.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Apr 2021 16:08:59 -0700 (PDT)
-Subject: Re: [PATCH] KEYS: trusted: fix memory leak
-To:     Ben Boeckel <me@benboeckel.net>
-Cc:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
-        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KBoeQcMdIXHbrr5qlPjaHe4/MPMag2oC2aXYy4bOLac=;
+        b=ngli3vwCEHsQMYBEc9fBVerv57l8axCBp9plRV+QcyXzGYqalP01RzD8Dmqt3EKut6
+         S/wWPvrwtZZqvVRAAIGCtVuFM/HJj4vlZoNLeOpZ+GdMPEZ2BbBD90M5Am3V8EMva8vX
+         lwOlRtTlgXLtPs1ybB9ksbV3TSclqdwlb09pMBnRnXgnMwSa3DskCTNWwdMKL6poAKoO
+         TaT4Nopy88DdBggDb7Sjttq0uRdUqFmrWQoph5kvKzFW+9E4112wWlHhSuZuMVHGrDT4
+         Vaa08pdsQ7O54Jt0KC26uHQXs9H0RyYxW1gnSvXyu/lSm1CT9Lohjc7pQ3/FOrjWFFae
+         17lg==
+X-Gm-Message-State: AOAM533wJbOZijaB/Y2z2SeOjkju+VIDKcZCY2EguRnvXQ+NtcbWl/v0
+        pfDNs2hQzUqpJvSvgPObGIA2kpxcRYMKdgmBoR7ZLw==
+X-Google-Smtp-Source: ABdhPJyeDYxpSSUN00ffOc9Ev/oEZsLPNT6O5Ku56l9FwpBGbOHdogzMKnpaHlpw9hwA/PJ9RkDVNEjOFLQTUl8qHbE=
+X-Received: by 2002:a05:6512:2190:: with SMTP id b16mr4995671lft.122.1619827354571;
+ Fri, 30 Apr 2021 17:02:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210430113724.110746-1-colin.king@canonical.com>
+In-Reply-To: <20210430113724.110746-1-colin.king@canonical.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 30 Apr 2021 17:02:23 -0700
+Message-ID: <CAKwvOdkN3cDof=aEwRRuSEghTZt57TuZucP=pGvpmUXiPSYTWQ@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: trusted: Fix memory leak on object td
+To:     Colin King <colin.king@canonical.com>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Nathan Chancellor <nathan@kernel.org>,
         linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Colin King <colin.king@canonical.com>
-References: <20210430185810.3331311-1-trix@redhat.com>
- <YIxfehTLhWe58sNE@erythro>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <baecdb22-6433-7ad0-6c9e-75f4c5d1201d@redhat.com>
-Date:   Fri, 30 Apr 2021 16:08:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <YIxfehTLhWe58sNE@erythro>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-On 4/30/21 12:50 PM, Ben Boeckel wrote:
-> On Fri, Apr 30, 2021 at 11:58:10 -0700, trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> Static analysis reports this problem
->> trusted-keys/trusted_tpm1.c:496:10: warning: Potential memory leak
->>    return ret;
->>           ^~~
->>
->> In tpm_seal() some failure handling returns directly, without
->> freeing memory.
->>
->> Fixes: 5df16caada3f ("KEYS: trusted: Fix incorrect handling of tpm_get_random()")
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>   security/keys/trusted-keys/trusted_tpm1.c | 8 +++++---
->>   1 file changed, 5 insertions(+), 3 deletions(-)
->>
->> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
->> index 469394550801..aa108bea6739 100644
->> --- a/security/keys/trusted-keys/trusted_tpm1.c
->> +++ b/security/keys/trusted-keys/trusted_tpm1.c
->> @@ -493,10 +493,12 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
->>   
->>   	ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
->>   	if (ret < 0)
->> -		return ret;
->> +		goto out;
->>   
->> -	if (ret != TPM_NONCE_SIZE)
->> -		return -EIO;
->> +	if (ret != TPM_NONCE_SIZE) {
->> +		ret = -EIO;
->> +		goto out;
->> +	}
->>   
->>   	ordinal = htonl(TPM_ORD_SEAL);
->>   	datsize = htonl(datalen);
-> I see this patch also submitted by Colin (Cc'd) in Message-Id:
+On Fri, Apr 30, 2021 at 4:37 AM Colin King <colin.king@canonical.com> wrote:
 >
->      <20210430113724.110746-1-colin.king@canonical.com>
-
-Let's use Colin's.
-
-Tom
-
+> From: Colin Ian King <colin.king@canonical.com>
 >
-> To my eyes, the commit message seems a bit better over there.
+> Two error return paths are neglecting to free allocated object td,
+> causing a memory leak. Fix this by returning via the error return
+> path that securely kfree's td.
 >
-> --Ben
+> Fixes clang scan-build warning:
+> security/keys/trusted-keys/trusted_tpm1.c:496:10: warning: Potential
+> memory leak [unix.Malloc]
+>
+> Fixes: 5df16caada3f ("KEYS: trusted: Fix incorrect handling of tpm_get_random()")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+>  security/keys/trusted-keys/trusted_tpm1.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+> index 469394550801..aa108bea6739 100644
+> --- a/security/keys/trusted-keys/trusted_tpm1.c
+> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+> @@ -493,10 +493,12 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
+>
+>         ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
+>         if (ret < 0)
+> -               return ret;
+> +               goto out;
+>
+> -       if (ret != TPM_NONCE_SIZE)
+> -               return -EIO;
+> +       if (ret != TPM_NONCE_SIZE) {
+> +               ret = -EIO;
+> +               goto out;
+> +       }
+>
+>         ordinal = htonl(TPM_ORD_SEAL);
+>         datsize = htonl(datalen);
+> --
+> 2.30.2
 >
 
+
+-- 
+Thanks,
+~Nick Desaulniers
