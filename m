@@ -2,120 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CB3370449
-	for <lists+linux-integrity@lfdr.de>; Sat,  1 May 2021 02:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9197370683
+	for <lists+linux-integrity@lfdr.de>; Sat,  1 May 2021 11:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbhEAAD0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Apr 2021 20:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232893AbhEAADZ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Apr 2021 20:03:25 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603B4C06138B
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Apr 2021 17:02:36 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 124so31604136lff.5
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Apr 2021 17:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KBoeQcMdIXHbrr5qlPjaHe4/MPMag2oC2aXYy4bOLac=;
-        b=fk2hsfuYfGs/AoLeyHdX2NoIlNk1zaTNJSnZt4pQHFSjPY8+WK1Ez5pMSN7OadFDIK
-         PQWtOfGaP0cSwvYOBouQBV07RiMzKNvCstfdLwcPGUP9NlCAGsoxZcfkbkj0YM1QHsT4
-         l/SLhvHV+mO9i7xpOl0NZJ2mHSkzDYhP9qiK2LIwM+mAC/ZUUDTGbralv7SUh0lgEb4E
-         WAEPMUk4VLx1EgNA5K8LgO+MqjjiBGrM8ssKRV0BzLgPAyvJgJqAgqHHzcFY1c/hzG/B
-         yo3KM2oDiGv0jAJYXGmIsm9fgrrruGghiwRacICmGk5Gu3SSd1POZcKwuO+NFW0fAQqX
-         TiIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KBoeQcMdIXHbrr5qlPjaHe4/MPMag2oC2aXYy4bOLac=;
-        b=ngli3vwCEHsQMYBEc9fBVerv57l8axCBp9plRV+QcyXzGYqalP01RzD8Dmqt3EKut6
-         S/wWPvrwtZZqvVRAAIGCtVuFM/HJj4vlZoNLeOpZ+GdMPEZ2BbBD90M5Am3V8EMva8vX
-         lwOlRtTlgXLtPs1ybB9ksbV3TSclqdwlb09pMBnRnXgnMwSa3DskCTNWwdMKL6poAKoO
-         TaT4Nopy88DdBggDb7Sjttq0uRdUqFmrWQoph5kvKzFW+9E4112wWlHhSuZuMVHGrDT4
-         Vaa08pdsQ7O54Jt0KC26uHQXs9H0RyYxW1gnSvXyu/lSm1CT9Lohjc7pQ3/FOrjWFFae
-         17lg==
-X-Gm-Message-State: AOAM533wJbOZijaB/Y2z2SeOjkju+VIDKcZCY2EguRnvXQ+NtcbWl/v0
-        pfDNs2hQzUqpJvSvgPObGIA2kpxcRYMKdgmBoR7ZLw==
-X-Google-Smtp-Source: ABdhPJyeDYxpSSUN00ffOc9Ev/oEZsLPNT6O5Ku56l9FwpBGbOHdogzMKnpaHlpw9hwA/PJ9RkDVNEjOFLQTUl8qHbE=
-X-Received: by 2002:a05:6512:2190:: with SMTP id b16mr4995671lft.122.1619827354571;
- Fri, 30 Apr 2021 17:02:34 -0700 (PDT)
+        id S231846AbhEAJC1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 1 May 2021 05:02:27 -0400
+Received: from mout.gmx.net ([212.227.15.18]:55959 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230117AbhEAJC0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 1 May 2021 05:02:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1619859683;
+        bh=PBKnn869NbbFhapUKErGOasK17EN1C5xgem9fGghJpM=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=kPpBybbb3OesfHBkL+LWVhc38wAGpcuJfs/tWDm5As1P2aDw5xYYVrr5HZnVlxPju
+         va/3hERzzxx+p989cqQk97F55qr6kcFSbab4ZNiiLxAdPJT07ujV27oAu+Iq8TZ2hW
+         CVvUVZDg/psBh9DZI0h9ovSqdqQu6ymqh6a4scA4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJmKh-1lrwyI1YiX-00KBoQ; Sat, 01
+ May 2021 11:01:23 +0200
+Subject: Re: [PATCH v2 1/4] tpm: Use a threaded interrupt handler
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, keescook@chromium.org,
+        jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1619394440-30646-1-git-send-email-LinoSanfilippo@gmx.de>
+ <1619394440-30646-2-git-send-email-LinoSanfilippo@gmx.de>
+ <YIikDCTBcMMxjots@kernel.org> <495e816a-afba-4ea0-560c-bc748df26337@gmx.de>
+ <YIpZH5TtEDA071EE@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <024acf60-47cd-5558-93d8-dcea9f063b83@gmx.de>
+Date:   Sat, 1 May 2021 11:01:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20210430113724.110746-1-colin.king@canonical.com>
-In-Reply-To: <20210430113724.110746-1-colin.king@canonical.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 30 Apr 2021 17:02:23 -0700
-Message-ID: <CAKwvOdkN3cDof=aEwRRuSEghTZt57TuZucP=pGvpmUXiPSYTWQ@mail.gmail.com>
-Subject: Re: [PATCH] KEYS: trusted: Fix memory leak on object td
-To:     Colin King <colin.king@canonical.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YIpZH5TtEDA071EE@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:4Wh1ARpQ2IOq9+Qbk3nBaPUf61Y0lkijlQ5IVidZ+2VG7wdJCbu
+ dxvSGiBqNzeaFs2CrwDveNsF5g9fyCe7dOqS5XJsWwQQId3qs6fJbyqw0z6u2C4j2hMe45n
+ g6Nha5/R7t852ryZNVlrA2iP5XRV6EIEkc+SPApOPJb+tf0cH8VKjDcclVzwjeGoGDMNXEa
+ 6sZdnBLJoA2QPLQK2f5yw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vGNUkOTiDT0=:sI+qlAr/5K1B76rdXjG/Gn
+ nlA5ZSAlDemHKxwDJhODz8e9CDD6pITOmgQyZG7HdZQ1mNKOzK6UAPcz021GFYSjSqawtYU5l
+ f1VojoLyEzrVyQ+uolw9ipeac6M10AzQIiIC7x616kg7++yNgF6uoBtbojWPbhUUDLw7SGvBo
+ KzZFL00YIUtJVWQZsuTcMrddphiJgWHacLXJp+4bxB6q4aHVRNyFaK3tV5tD91ctMtuWSAaXB
+ /AoUVJGnwzS967gxofOYB/vlXTtuvdhDca72THYfZR+M8Wk0jnPTKJZtueknoAMTpo2EhGzCb
+ Xg7/E2Fs+XvBkyIpiknUhDM0KiJjrD0tr4ymVOerhQ8sZADSSFfKgPWTyCMD3xy1Mv6lMZKDV
+ ahPEktdAGWG2rbN9kQsaRvOJkB6ry/Xd1NYU9YBAHUka/M4Tna0ckVTxJRhawXWxF17htZkt8
+ fdLM8fu3YtuC6gTXMjmg7s3594podpefADTXeqXNXCFFFnCR/aOdrvNM8d5733PF1Qjhx0bOS
+ zx8yTcjfDXx5SlAvUi6NMGwAxkQg8IGhyYLuwRdMJU0VYypIAcmxEXTHZqQBjopBeUHcurwtQ
+ LesDvDcvJOcicmKsjI00DArADA3lZ026Z8GYfD9WFIzygqrscU/KEKnLds4tewkiyYsVc8fBM
+ I2xz507dSKMAOidLMIye2lpZV6vrKkdsODQztQvY7fyU0ct6r+q3y+RVHTWVvinz9Ft4+FwEl
+ N3jvA86PQ21Xk7K/4zo/d/XUCyK4CaIwqVUgOYNfvVJ2kH8LXY4HeLX3NxRPY8kOi9NRDMvPo
+ CCiJCFGhNOqo2ksQy27ebT+NveqbMqUoy15ePEu8wb00KR9WndKAkvrWDjVTZUvHc+ks0V3El
+ lgr6/WcANk/LB9Fa83ZQvPttITkQTgO4Nl8MPeyfbYIgUm7oIR6IxOA6a3hbTPx2AkyohHSxe
+ HZj6Vq40GEyzb0NR6D23ztOinIrYVjdDzZH9EBFT9AdC6dXCJERlodnI1c3Bs6XivuHDIT6aO
+ Ma25U1r48TadsGvpasmO7cvdLpGwA0AYBX3/+Hir06vQcZDQbcGRovahZ8vobN2uCBq/mFuTV
+ XPY7K/1RpBxYAAUHlF4yakHU/rPJ3XyCb0vLQ+VCWuKCitR6P3ruJEzfKy+cd06MkQl2usE5E
+ VVryZkO4i0EZ+GWniEs/F90fqWSsJNLPvDl8DHiSJ86uLFiS9WdwtOocSTlBNuH4oMjN6x1QG
+ 8ojDyv6QOtDpt+85U
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 4:37 AM Colin King <colin.king@canonical.com> wrote:
->
-> From: Colin Ian King <colin.king@canonical.com>
->
-> Two error return paths are neglecting to free allocated object td,
-> causing a memory leak. Fix this by returning via the error return
-> path that securely kfree's td.
->
-> Fixes clang scan-build warning:
-> security/keys/trusted-keys/trusted_tpm1.c:496:10: warning: Potential
-> memory leak [unix.Malloc]
->
-> Fixes: 5df16caada3f ("KEYS: trusted: Fix incorrect handling of tpm_get_random()")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->  security/keys/trusted-keys/trusted_tpm1.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-> index 469394550801..aa108bea6739 100644
-> --- a/security/keys/trusted-keys/trusted_tpm1.c
-> +++ b/security/keys/trusted-keys/trusted_tpm1.c
-> @@ -493,10 +493,12 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
->
->         ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
->         if (ret < 0)
-> -               return ret;
-> +               goto out;
->
-> -       if (ret != TPM_NONCE_SIZE)
-> -               return -EIO;
-> +       if (ret != TPM_NONCE_SIZE) {
-> +               ret = -EIO;
-> +               goto out;
-> +       }
->
->         ordinal = htonl(TPM_ORD_SEAL);
->         datsize = htonl(datalen);
-> --
-> 2.30.2
->
 
 
--- 
-Thanks,
-~Nick Desaulniers
+Hi,
+
+
+On 29.04.21 at 08:58, Jarkko Sakkinen wrote:
+>
+> This is a sentence that you should delete:
+>
+> "However over SPI those accesses require a sleepable context, since a
+> mutex is used in the concerning functions.  "
+>
+> It neither explains anything who and why sort of stuff.
+>
+> Why don't you put intead something like
+>
+> "Inside tpm_int_handler(), tpm_tis_read32() and tpm_tis_write32() are
+> invoked. The SPI subsystem requires mutex for I/O, which means that the
+> calls ought not to be used inside interrupt context."
+>
+> (I did not check typos). Generally speaking, commit message is as, if no=
+t
+> more important than the code change.
+>
+> /Jarkko
+>
+
+ok, I will rephrase this in the next patch version.
+
+Regards,
+Lino
