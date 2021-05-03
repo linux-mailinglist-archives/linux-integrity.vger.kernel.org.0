@@ -2,134 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D3037179F
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 May 2021 17:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A0E3717A9
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 May 2021 17:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbhECPOd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 May 2021 11:14:33 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:10630 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229717AbhECPOc (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 May 2021 11:14:32 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 143F48st116650;
-        Mon, 3 May 2021 11:13:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=eDaj1jhHxQmBJpYcYXGZmB0FUavn6iXflGZ8LWwhdYw=;
- b=H493hy7LW/Y5Pb7XwZCWR4m+ONi6RANVJH1DiJIs/Y1aE7K2pcvFzRIFEHglyPj/Gx+3
- biMVVDqyyyRBTGD230hoIdb1UIeFvoQC/f2J2wW8oxBu60h4R3E9At0+Nsg3bAlGoh4X
- qnFxKkD+tQy+gC/Ol5lnKzZ2uSUnfBx9a8822K+58M3yTOrue/ZmyhqT9okvmsTD5CIq
- MYxeol2Nq+QmFkKnAF4jg8yyzoXHZJ58PfADHf4lUj4gG6xt5oXxMgHB0OkOGSRLxxHT
- rEakgxLq8z4C5mE+jPTjUQYIR4hYOgDTOqKQBA8Q8Lf5Y5wkLKQe2g/O7FdJIlSvT2XX cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 38ahy4uavm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 May 2021 11:13:33 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 143F4hx2120473;
-        Mon, 3 May 2021 11:13:32 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 38ahy4uaun-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 May 2021 11:13:32 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 143FCr7Z000398;
-        Mon, 3 May 2021 15:13:31 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 388x8hgs8v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 May 2021 15:13:30 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 143FDSU527853092
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 May 2021 15:13:28 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 907695205F;
-        Mon,  3 May 2021 15:13:28 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.45.89])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 6067552052;
-        Mon,  3 May 2021 15:13:26 +0000 (GMT)
-Message-ID: <33ddeb6108699f47ba47d5f002403ffeca5f9531.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 09/12] evm: Allow setxattr() and setattr() for
- unmodified metadata
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "mjg59@google.com" <mjg59@google.com>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Mon, 03 May 2021 11:13:25 -0400
-In-Reply-To: <06edfc9f779447b9b93f26628327d1e5@huawei.com>
-References: <20210407105252.30721-1-roberto.sassu@huawei.com>
-         <20210407105252.30721-10-roberto.sassu@huawei.com>
-         <8493d7e2b0fefa4cd3861bd6b7ee6f2340aa7434.camel@linux.ibm.com>
-         <06edfc9f779447b9b93f26628327d1e5@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NX_CnYn1o6Hj1UvnM9Aqd-BiXjSLY9I2
-X-Proofpoint-GUID: ysFaGwSzJmublxH3DOS1djooJuMuKeF-
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S230296AbhECPPJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 3 May 2021 11:15:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55118 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230334AbhECPPI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 3 May 2021 11:15:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 78C4661244;
+        Mon,  3 May 2021 15:14:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620054855;
+        bh=l/oW44h3R465Lu0dfjfqdreggvzt5yyu9gr3b7Ukl8g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VYjgs/I+MALOqkwkZ61dV5jreY1ObtB9q1kjCfSVVVV2f2o5uHhYt+vbmJkw35Ibd
+         NVttw/rz4YoZ0fbwQcJstY2st9UMIkXL1pTtB10MTPm//eY6R8hZcoIXR3SuW3gXTY
+         5hoLtIkNrJ7nvjDXbcws5Ni5KdFAlW8HRCNL66az+Afek4M/tajVJ857tMXPmtKlXJ
+         JkiLbmtc9TAZ8n6LxMneOB1xaK050PO89WkYShdU0u04y8sXfZl8NBCRjFrJPn+CpB
+         pMKNM13HVyRsqJBFQpQaPFztaKZQ3r8E44EgFIk2i3L/tnJRyqnldBeOCyiNhJgy1a
+         CX9gzyz+ddzkA==
+Date:   Mon, 3 May 2021 18:14:12 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, keescook@chromium.org,
+        jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+Message-ID: <YJATRNMqzyAprCbL@kernel.org>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+ <20210501135727.17747-2-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-03_10:2021-05-03,2021-05-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 mlxlogscore=999 phishscore=0 adultscore=0 clxscore=1015
- impostorscore=0 spamscore=0 suspectscore=0 mlxscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2105030104
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210501135727.17747-2-LinoSanfilippo@gmx.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-05-03 at 14:48 +0000, Roberto Sassu wrote:
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Monday, May 3, 2021 3:00 PM
-> > On Wed, 2021-04-07 at 12:52 +0200, Roberto Sassu wrote:
-> > 
-> > > diff --git a/security/integrity/evm/evm_main.c
-> > b/security/integrity/evm/evm_main.c
-> > > @@ -389,6 +473,11 @@ static int evm_protect_xattr(struct
-> > user_namespace *mnt_userns,
-> > >  	if (evm_status == INTEGRITY_FAIL_IMMUTABLE)
-> > >  		return 0;
-> > >
-> > > +	if (evm_status == INTEGRITY_PASS_IMMUTABLE &&
-> > > +	    !evm_xattr_change(mnt_userns, dentry, xattr_name, xattr_value,
-> > > +			      xattr_value_len))
-> > > +		return 0;
-> > > +
-> > 
-> > If the purpose of evm_protect_xattr() is to prevent allowing an invalid
-> > security.evm xattr from being re-calculated and updated, making it
-> > valid, INTEGRITY_PASS_IMMUTABLE shouldn't need to be conditional.  Any
-> > time there is an attr or xattr change, including setting it to the
-> > existing value, the status flag should be reset.
+On Sat, May 01, 2021 at 03:57:24PM +0200, Lino Sanfilippo wrote:
+> The interrupt handler uses tpm_tis_read32() and tpm_tis_write32() to access
+> the interrupt status register. In case of SPI those accesses are done with
+> the spi_bus_lock mutex held. This means that the status register cannot
+> be read or written in interrupt context.
 > 
-> The status is always reset if evm_protect_xattr() returns 0. This does not
-> change.
+> For this reason request a threaded interrupt handler so that the required
+> accesses can be done in process context.
 > 
-> Not making INTEGRITY_PASS_IMMUTABLE conditional would cause issues.
-> Suppose that the status is INTEGRITY_FAIL. Writing the same xattr would
-> cause evm_protect_xattr() to return 0 and the HMAC to be updated.
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
 
-This example is mixing security.evm types.  Please clarify.
+No fixes tag.
 
-> > I'm wondering if making INTEGRITY_PASS_IMMUTABLE conditional would
-> > prevent the file from being resigned.
-> 
-> INTEGRITY_FAIL_IMMUTABLE should be enough to continue the
-> operation.
+The short summary scopes now the whole TPM subsystem ("tpm:"), but the fix
+is targetted *only* for tpm_tis_spi. How about "tpm, tpm_tis_spi: Allow to
+sleep in the interrupt handler"?
 
-Agreed.
+This also changes the semantics tpm_tis_*, not just tpm_tis_spi, which is
+not acceptable. We cannot backport a fix like this.
 
-Mimi
+Probably you should just add a parameter to tpm_tis_core_init() to hint
+that threaded IRQ is required, and then only conditionally do so.
 
+/Jarkko
