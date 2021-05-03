@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 729DE371808
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 May 2021 17:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5961371811
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 May 2021 17:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbhECPbo convert rfc822-to-8bit (ORCPT
+        id S230403AbhECPdt convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 3 May 2021 11:31:44 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2989 "EHLO
+        Mon, 3 May 2021 11:33:49 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2990 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbhECPbo (ORCPT
+        with ESMTP id S230396AbhECPdr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 3 May 2021 11:31:44 -0400
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FYmty2rZMz6snwb;
-        Mon,  3 May 2021 23:22:50 +0800 (CST)
+        Mon, 3 May 2021 11:33:47 -0400
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FYmxL2qmLz6snwd;
+        Mon,  3 May 2021 23:24:54 +0800 (CST)
 Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 3 May 2021 17:30:48 +0200
+ 15.1.2176.2; Mon, 3 May 2021 17:32:52 +0200
 Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
  fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Mon, 3 May 2021 17:30:48 +0200
+ Mon, 3 May 2021 17:32:52 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>,
         "mjg59@google.com" <mjg59@google.com>
@@ -37,15 +37,15 @@ Subject: RE: [PATCH v5 09/12] evm: Allow setxattr() and setattr() for
  unmodified metadata
 Thread-Topic: [PATCH v5 09/12] evm: Allow setxattr() and setattr() for
  unmodified metadata
-Thread-Index: AQHXK5xeSg6sM/30eEKbqlkQ5rVFkKrRv8yAgAAwwJD///RugIAAImfA
-Date:   Mon, 3 May 2021 15:30:48 +0000
-Message-ID: <d599ddac80a94e4bbcd7973d1fa32235@huawei.com>
+Thread-Index: AQHXK5xeSg6sM/30eEKbqlkQ5rVFkKrRv8yAgABEE/D//+S7AIAAIuSw
+Date:   Mon, 3 May 2021 15:32:52 +0000
+Message-ID: <b0bfaf2352b045dfaf443ae3af73b60e@huawei.com>
 References: <20210407105252.30721-1-roberto.sassu@huawei.com>
          <20210407105252.30721-10-roberto.sassu@huawei.com>
          <8493d7e2b0fefa4cd3861bd6b7ee6f2340aa7434.camel@linux.ibm.com>
-         <06edfc9f779447b9b93f26628327d1e5@huawei.com>
- <33ddeb6108699f47ba47d5f002403ffeca5f9531.camel@linux.ibm.com>
-In-Reply-To: <33ddeb6108699f47ba47d5f002403ffeca5f9531.camel@linux.ibm.com>
+         <fcd2932bc2a841c2aa7fcbdaee94e0a5@huawei.com>
+ <cf12878833c82710ad4356e7d023cf51241f3cc8.camel@linux.ibm.com>
+In-Reply-To: <cf12878833c82710ad4356e7d023cf51241f3cc8.camel@linux.ibm.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -60,8 +60,8 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> Sent: Monday, May 3, 2021 5:13 PM
-> On Mon, 2021-05-03 at 14:48 +0000, Roberto Sassu wrote:
+> Sent: Monday, May 3, 2021 5:26 PM
+> On Mon, 2021-05-03 at 15:11 +0000, Roberto Sassu wrote:
 > > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
 > > > Sent: Monday, May 3, 2021 3:00 PM
 > > > On Wed, 2021-04-07 at 12:52 +0200, Roberto Sassu wrote:
@@ -85,38 +85,33 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 > Any
 > > > time there is an attr or xattr change, including setting it to the
 > > > existing value, the status flag should be reset.
+> > >
+> > > I'm wondering if making INTEGRITY_PASS_IMMUTABLE conditional would
+> > > prevent the file from being resigned.
+> > >
+> > > >  	if (evm_status != INTEGRITY_PASS)
+> > > >  		integrity_audit_msg(AUDIT_INTEGRITY_METADATA,
+> > > d_backing_inode(dentry),
+> > > >  				    dentry->d_name.name,
+> > > "appraise_metadata",
+> > >
+> > > This would then be updated to if not INTEGRITY_PASS or
+> > > INTEGRITY_PASS_IMMUTABLE.  The subsequent "return" would need to
+> be
+> > > updated as well.
 > >
-> > The status is always reset if evm_protect_xattr() returns 0. This does not
-> > change.
-> >
-> > Not making INTEGRITY_PASS_IMMUTABLE conditional would cause issues.
-> > Suppose that the status is INTEGRITY_FAIL. Writing the same xattr would
-> > cause evm_protect_xattr() to return 0 and the HMAC to be updated.
+> > I agree on the first suggestion, to reduce the number of log messages.
+> > For the second, if you meant that we should return 0 if the status is
+> > INTEGRITY_PASS_IMMUTABLE, I thought we wanted to deny xattr
+> > changes when there is an EVM portable signature.
 > 
-> This example is mixing security.evm types.  Please clarify.
+> Why?  I must be missing something.  As long as we're not relying on the
+> cached status, allowing the file metadata to be updated shouldn't be an
+> issue.
 
-What I meant is that returning 0 when the xattr does not change should
-be done only in the positive cases: for INTEGRITY_PASS it is not needed,
-for INTEGRITY_PASS_IMMUTABLE it is needed as otherwise
-evm_protect_xattr() would return -EPERM.
-
-If your proposal was to return 0 only when the xattr does not change,
-without checking the current status, we risk that someone does an
-offline attack to corrupt xattrs and when the system is online, he simply
-rewrites the same corrupted xattrs to obtain a valid HMAC.
+We may want to prevent accidental changes, for example.
 
 Roberto
 
 HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
 Managing Director: Li Peng, Li Jian, Shi Yanli
-
-> > > I'm wondering if making INTEGRITY_PASS_IMMUTABLE conditional would
-> > > prevent the file from being resigned.
-> >
-> > INTEGRITY_FAIL_IMMUTABLE should be enough to continue the
-> > operation.
-> 
-> Agreed.
-> 
-> Mimi
-
