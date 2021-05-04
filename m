@@ -2,30 +2,30 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6C0372522
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 May 2021 06:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EE7372523
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 May 2021 06:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbhEDEgE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 May 2021 00:36:04 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:35578 "EHLO
+        id S229742AbhEDEgK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 May 2021 00:36:10 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:35652 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbhEDEgD (ORCPT
+        with ESMTP id S229715AbhEDEgK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 May 2021 00:36:03 -0400
+        Tue, 4 May 2021 00:36:10 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 08F3E72C8BA;
-        Tue,  4 May 2021 07:35:08 +0300 (MSK)
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 4067F72C8BA;
+        Tue,  4 May 2021 07:35:15 +0300 (MSK)
 Received: from beacon.altlinux.org (unknown [193.43.10.250])
-        by imap.altlinux.org (Postfix) with ESMTPSA id C85B94A46E8;
-        Tue,  4 May 2021 07:35:07 +0300 (MSK)
+        by imap.altlinux.org (Postfix) with ESMTPSA id 24D404A46E8;
+        Tue,  4 May 2021 07:35:15 +0300 (MSK)
 From:   Vitaly Chikunov <vt@altlinux.org>
 To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
 Cc:     Elvira Khabirova <lineprinter0@gmail.com>
-Subject: [PATCH v2 2/3] ima-evm-utils: Allow manual setting keyid from a cert file
-Date:   Tue,  4 May 2021 07:33:56 +0300
-Message-Id: <20210504043357.4093409-3-vt@altlinux.org>
+Subject: [PATCH v2 3/3] ima-evm-utils: Read keyid from the cert appended to the key file
+Date:   Tue,  4 May 2021 07:33:57 +0300
+Message-Id: <20210504043357.4093409-4-vt@altlinux.org>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20210504043357.4093409-1-vt@altlinux.org>
 References: <20210504043357.4093409-1-vt@altlinux.org>
@@ -33,176 +33,107 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Allow user to specify `--keyid @/path/to/cert.pem' to extract keyid from
-SKID of the certificate file. PEM or DER format is auto-detected.
-
-`--keyid' option is reused instead of adding a new option (like possible
-`--cert') to signify to the user it's only keyid extraction and nothing
-more.
+Allow to have certificate appended to the private key of `--key'
+specified (PEM) file (for v2 signing) to facilitate reading of keyid
+from the associated cert. This will allow users to have private and
+public key as a single file. There is no check that public key form the
+cert matches associated private key.
 
 Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
 ---
- README                 |  1 +
- src/evmctl.c           | 82 +++++++++++++++++++++++++++++++++++++++++++++++---
- tests/sign_verify.test |  1 +
- 3 files changed, 79 insertions(+), 5 deletions(-)
+ README          |  2 ++
+ src/libimaevm.c | 50 +++++++++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 49 insertions(+), 3 deletions(-)
 
 diff --git a/README b/README
-index 8cd66e0..0e1f6ba 100644
+index 0e1f6ba..2c21ba6 100644
 --- a/README
 +++ b/README
-@@ -49,6 +49,7 @@ OPTIONS
-       --rsa          use RSA key type and signing scheme v1
-   -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)
-       --keyid val    overwrite signature keyid with a value (for signing)
-+                     val is a x509 cert file if prefixed with '@'
-   -o, --portable     generate portable EVM signatures
-   -p, --pass         password for encrypted signing key
-   -r, --recursive    recurse into directories (sign)
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 7983299..fdb0fb3 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -42,6 +42,7 @@
- #include <sys/param.h>
- #include <sys/stat.h>
- #include <sys/ioctl.h>
-+#include <arpa/inet.h>
- #include <fcntl.h>
- #include <unistd.h>
- #include <stdlib.h>
-@@ -57,12 +58,14 @@
- #include <termios.h>
- #include <assert.h>
+@@ -127,6 +127,8 @@ for signing and importing the key.
+ Second key format uses X509 DER encoded public key certificates and uses asymmetric key support
+ in the kernel (since kernel 3.9). CONFIG_INTEGRITY_ASYMMETRIC_KEYS must be enabled (default).
  
-+#include <openssl/asn1.h>
- #include <openssl/sha.h>
++For v2 signatures x509 certificate with the public key could be appended to the private
++key (both are in PEM format) to properly determine its Subject Key Identifier SKID.
+ 
+ Integrity keyrings
+ ----------------
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index 481d29d..3607a76 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -57,6 +57,7 @@
  #include <openssl/pem.h>
- #include <openssl/hmac.h>
- #include <openssl/err.h>
- #include <openssl/rsa.h>
- #include <openssl/engine.h>
+ #include <openssl/evp.h>
+ #include <openssl/x509.h>
 +#include <openssl/x509v3.h>
- #include "hash_info.h"
- #include "pcr.h"
- #include "utils.h"
-@@ -2447,6 +2450,7 @@ static void usage(void)
- 		"      --rsa          use RSA key type and signing scheme v1\n"
- 		"  -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)\n"
- 		"      --keyid val    overwrite signature keyid with a value (for signing)\n"
-+		"                     val is a x509 cert file if prefixed with '@'\n"
- 		"  -o, --portable     generate portable EVM signatures\n"
- 		"  -p, --pass         password for encrypted signing key\n"
- 		"  -r, --recursive    recurse into directories (sign)\n"
-@@ -2567,12 +2571,71 @@ static char *get_password(void)
- 	return pwd;
+ #include <openssl/err.h>
+ 
+ #include "imaevm.h"
+@@ -748,6 +749,47 @@ void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey)
+ 	X509_PUBKEY_free(pk);
  }
  
-+/* Return true if FILE is possibly PEM encoded (otherwise DER). */
-+static int is_encoding_pem(FILE *in)
++/* Try to read keyid from key file (in case it have appended cert). */
++static int read_keyid(const char *keyfile, uint32_t *keyid)
 +{
-+	char buf[6]; /* Room for the 5 minus signs and '\0'. */
-+	int pem = 0;
-+
-+	if (fgets(buf, sizeof(buf), in) &&
-+	    strspn(buf, "-") == sizeof(buf) - 1)
-+		pem = 1;
-+	rewind(in);
-+	return pem;
-+}
-+
-+/* Extract keyid from SKID of the cert. No return on error. */
-+static unsigned long int extract_keyid(const char *certfile)
-+{
-+	uint32_t keyid_raw;
-+	const ASN1_OCTET_STRING *skid;
 +	int skid_len;
++	const ASN1_OCTET_STRING *skid;
 +	X509 *x = NULL;
-+	int pem;
-+	FILE *in;
++	FILE *fp;
 +
-+	if (!(in = fopen(certfile, "r"))) {
-+		log_err("Cannot open cert file %s: %s\n", certfile,
-+			strerror(errno));
-+		exit(1);
++	fp = fopen(keyfile, "r");
++	if (!fp) {
++		log_err("Failed to open keyfile: %s\n", keyfile);
++		return 0;
 +	}
-+	if ((pem = is_encoding_pem(in)))
-+		x = PEM_read_X509(in, &x, NULL, NULL);
-+	else
-+		x = d2i_X509_fp(in, &x);
-+	if (!x) {
-+		ERR_print_errors_fp(stderr);
-+		log_err("Cannot read x509 cert from %s file %s\n",
-+			pem? "PEM" : "DER", certfile);
-+		fclose(in);
-+		exit(1);
-+	}
-+	fclose(in);
++	if (!PEM_read_X509(fp, &x, NULL, NULL)) {
++		long error = ERR_GET_REASON(ERR_peek_last_error());
 +
-+	if (!(skid = X509_get0_subject_key_id(x))) {
-+		log_err("%s: SKID not found\n", certfile);
-+		goto err_free;
++		if (error == PEM_R_NO_START_LINE) {
++			log_debug("No cert in keyfile %s\n", keyfile);
++			ERR_clear_error();
++		} else {
++			log_err("Error reading cert from keyfile %s: %s\n",
++				keyfile, ERR_reason_error_string(error));
++		}
++		fclose(fp);
++		return 0;
 +	}
++	fclose(fp);
++	if (!(skid = X509_get0_subject_key_id(x)))
++		return 0;
 +	skid_len = ASN1_STRING_length(skid);
-+	if (skid_len < sizeof(keyid_raw)) {
-+		log_err("%s: SKID too short (len %d)\n", certfile, skid_len);
-+		goto err_free;
-+	}
-+	memcpy(&keyid_raw, ASN1_STRING_get0_data(skid) + skid_len
-+	       - sizeof(keyid_raw), sizeof(keyid_raw));
-+	log_info("keyid %04x (from %s)\n", ntohl(keyid_raw), certfile);
-+	return ntohl(keyid_raw);
++	if (skid_len < sizeof(keyid))
++		return 0;
++	/* keyid is the last 4 bytes of SKID. */
++	memcpy(keyid, ASN1_STRING_get0_data(skid) + skid_len - sizeof(*keyid),
++	       sizeof(*keyid));
++	log_debug("keyid: ");
++	log_debug_dump(keyid, 4);
++	return 1;
 +
-+err_free:
-+	X509_free(x);
-+	exit(1);
 +}
 +
- int main(int argc, char *argv[])
+ static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
  {
- 	int err = 0, c, lind;
- 	ENGINE *eng = NULL;
- 	unsigned long int keyid;
--	char *eptr;
+ 	FILE *fp;
+@@ -932,10 +974,12 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+ 		return -1;
+ 	}
  
- #if !(OPENSSL_VERSION_NUMBER < 0x10100000)
- 	OPENSSL_init_crypto(
-@@ -2718,10 +2781,19 @@ int main(int argc, char *argv[])
- 			pcrfile[npcrfile++] = optarg;
- 			break;
- 		case 143:
--			errno = 0;
--			keyid = strtoul(optarg, &eptr, 16);
--			if (errno || eptr - optarg != strlen(optarg) ||
--			    keyid > UINT_MAX || keyid == 0) {
-+			if (optarg[0] == '@') {
-+				keyid = extract_keyid(optarg + 1);
-+			} else {
-+				char *eptr;
-+
-+				errno = 0;
-+				keyid = strtoul(optarg, &eptr, 16);
-+				if (eptr - optarg != strlen(optarg) || errno) {
-+					log_err("Invalid keyid value.\n");
-+					exit(1);
-+				}
-+			}
-+			if (keyid > UINT_MAX || keyid == 0) {
- 				log_err("Invalid keyid value.\n");
- 				exit(1);
- 			}
-diff --git a/tests/sign_verify.test b/tests/sign_verify.test
-index 2c21812..52ea33a 100755
---- a/tests/sign_verify.test
-+++ b/tests/sign_verify.test
-@@ -360,6 +360,7 @@ sign_verify  rsa1024  md5     0x030201:K:0080
- sign_verify  rsa1024  sha1    0x030202:K:0080
- sign_verify  rsa1024  sha224  0x030207:K:0080
- expect_pass check_sign TYPE=ima KEY=rsa1024 ALG=sha256 PREFIX=0x030204aabbccdd0080 OPTS=--keyid=aabbccdd
-+expect_pass check_sign TYPE=ima KEY=rsa1024 ALG=sha256 PREFIX=0x030204:K:0080 OPTS=--keyid=@test-rsa1024.cer
- sign_verify  rsa1024  sha256  0x030204:K:0080
-   try_different_keys
-   try_different_sigs
+-	if (imaevm_params.keyid)
++	if (imaevm_params.keyid) {
+ 		hdr->keyid = htonl(imaevm_params.keyid);
+-	else
+-		calc_keyid_v2(&hdr->keyid, name, pkey);
++	} else {
++		if (!read_keyid(keyfile, &hdr->keyid))
++			calc_keyid_v2(&hdr->keyid, name, pkey);
++	}
+ 
+ 	st = "EVP_PKEY_CTX_new";
+ 	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
 -- 
 2.11.0
 
