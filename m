@@ -2,103 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BB237324C
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 May 2021 00:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C8037328E
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 May 2021 00:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232941AbhEDW2U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 May 2021 18:28:20 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:38310 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232667AbhEDW2U (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 May 2021 18:28:20 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id DDFF772C8B5;
-        Wed,  5 May 2021 01:27:23 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id C3D3D4A46E8;
-        Wed,  5 May 2021 01:27:23 +0300 (MSK)
-Date:   Wed, 5 May 2021 01:27:23 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        Elvira Khabirova <lineprinter0@gmail.com>
-Subject: Re: [PATCH v2 3/3] ima-evm-utils: Read keyid from the cert appended
- to the key file
-Message-ID: <20210504222723.wirqlwsz2xtnfqz7@altlinux.org>
-References: <20210504043357.4093409-1-vt@altlinux.org>
- <20210504043357.4093409-4-vt@altlinux.org>
- <1b5d6c49-c080-76e9-66e1-2db19bfee2c9@linux.ibm.com>
+        id S231280AbhEDWzt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 May 2021 18:55:49 -0400
+Received: from mout.gmx.net ([212.227.17.22]:49837 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229617AbhEDWzs (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 4 May 2021 18:55:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1620168879;
+        bh=UGACqj9zwLpHiYaYzndwkzcnLYYo8OQpEl5bpb03nUY=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=QrzkwocH1shzHdAziK/FiWMv5dXNeARanAK8KOPiiaOtuy77LPSguGAHtmN3O+0pJ
+         cSQRin5GdhE2m0c0xQ6S+PV9bnTooy1Petyx2P8pPmfmZEYrvz1xvkPaH+lT+C0pNs
+         7Xv1pheu6X8e/L9DK6+KEuxG/IwS1k7g9UyS6xrk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MpDNf-1lCjar3tzr-00qjG8; Wed, 05
+ May 2021 00:54:39 +0200
+Subject: Re: [PATCH v3 1/4] tpm: Use a threaded interrupt handler
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com, keescook@chromium.org,
+        jsnitsel@redhat.com, ml.linux@elloe.vision,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+References: <20210501135727.17747-1-LinoSanfilippo@gmx.de>
+ <20210501135727.17747-2-LinoSanfilippo@gmx.de> <YJATRNMqzyAprCbL@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <1364a268-7173-7253-543e-792ff2104e98@gmx.de>
+Date:   Wed, 5 May 2021 00:54:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <1b5d6c49-c080-76e9-66e1-2db19bfee2c9@linux.ibm.com>
+In-Reply-To: <YJATRNMqzyAprCbL@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:/Yi5u3KSyC43Lm8q9HAiLF27ChgGz89lz/ljAulxigSKRjU8k5A
+ 3TTWVb+7xOOVpuvnk1vvSY51dODT2dIvggDWE27SqOvF7DBN0TyKu9ZooVRN3ZjEuCdIpIM
+ EPBQximc3ZwX8/VdsN+uQFuiEIJQhb9XQeq3RZ/o0tYWySqRmZMVQC/VZfhiCpdcoktnH1I
+ pqsfQbb/4kdpxIvBS+v4w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vNv6U7rmw98=:wPkkAypu6Ivl3IX4nzNzyT
+ eRZEtnQ1wSi7MRdcVtgskiXXzGoPuPBsxLeIFvdvMEy/PDCPPvOHTUDHmQjTNc83gmXKXgsJR
+ nCQuImCeoftz0ZO34yNS9Lji/eBLJcwFeayCeA3zD2MXlkKrNCKRIQT55dfdk7FftsDEgm05G
+ BHzhmESPeQthBODzrzR5BxUfC90r+8jznl2wItFXA13RyBvS02jMWUGOVJ4IC5UFBJrEA6sym
+ bRYb+am4WSnlWHl83g+X2oil1PUlZ0Fzg8C688032UksTyy8PfSDJIhqKiUL2D+KDslseXW3n
+ jruwmTQj/Ox6zCJu8Q81u3zKpNVIfwQ4NA2HFMEYsjXu2S8PDOSUWylZdtf4RtwtnTAnk6Pxy
+ Y1DXZY6DN9ullIcM53/E/zTntwD76KMzzzQUqA3EVuhlA8wSmlTXzl1/8AZuOv4J808lTVXU8
+ URnGHVeHvWNHICQtRMGXm87uaNVRcKaXVXg9Sj+046wAqAl88zzYQ6sZO0+porERn3eke8i+M
+ ckisbyk1ewk8iDUrZVLBPHEfi25OS0hUBzPUPV946+u7oFrwqUR8gwDnbFOCv2YYZEcLBCj1m
+ CD7cIpVdxHCDeo7m7jeBlnKoIKHeshGZRJw9P3izIxzxNxp0hycAU+sD9RALTNfIX9rOcAQ9l
+ B3bnSv8ikFa/Ua5N+qwMRH5BtrGIWMrOvR290r3AKd8QPCAwXmrBJ8mH4cgIS1jgFeRoeeA1M
+ QCVTBsqISkj6QlbBGcP/4E4AqS0pukTQAVsl+jWQbyGzKLE7DmyZgOX/hQaSBVKfTiPv8Wj+7
+ pq2ruLJWfRCSeg/ZP614hpsa7D5ryFtpzHabZIjnR9K6d4BwmvJIhPJNp7LA0sQgPXnUcX0/a
+ Qi9KNJqvrlMmg5IIFepcHskkNHp5QJOrvx3nhSOnLwUkC0Zg4EzL5syHLAWa/NQq1FB5+eZW5
+ 0c+4LxW+RpHGsSNsXe+IY3O1XeMY3oKS+aE7Ji2vTZP9qXT8t+5LXwRx55czH4r/+kixQ7XCr
+ PFI+kAtoDPx0XuY+1YX/kC6W0mNnnF2cJQRt02gUcEp9mpVnY7we/5hjpXnpcANSQvluuKz5a
+ 2SnDYp0ruTiThaP7LX05tew7X7jxI+D4rs3qfL1k9bZuDAySaUevI+O3GMPXZuV+wbwcQC2Kb
+ 3BiPb7jimX5zzqkQCKdNHf1fsGHistkFmQsyl+gUDN/Uciba02lOu+SIDt/u7ZyO2eYkw8UBj
+ 4to91MpQ9J5tbazHY
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Stefan,
 
-On Tue, May 04, 2021 at 09:38:06AM -0400, Stefan Berger wrote:
-> On 5/4/21 12:33 AM, Vitaly Chikunov wrote:
-> > Allow to have certificate appended to the private key of `--key'
-> > specified (PEM) file (for v2 signing) to facilitate reading of keyid
-> > from the associated cert. This will allow users to have private and
-> > public key as a single file. There is no check that public key form the
-> > cert matches associated private key.
-> > 
-> > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> > ---
-> >   README          |  2 ++
-> >   src/libimaevm.c | 50 +++++++++++++++++++++++++++++++++++++++++++++++---
-> >   2 files changed, 49 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/README b/README
-> > index 0e1f6ba..2c21ba6 100644
-> > --- a/README
-> > +++ b/README
-> > @@ -127,6 +127,8 @@ for signing and importing the key.
-> >   Second key format uses X509 DER encoded public key certificates and uses asymmetric key support
-> >   in the kernel (since kernel 3.9). CONFIG_INTEGRITY_ASYMMETRIC_KEYS must be enabled (default).
-> > +For v2 signatures x509 certificate with the public key could be appended to the private
-> > +key (both are in PEM format) to properly determine its Subject Key Identifier SKID.
-> >   Integrity keyrings
-> >   ----------------
-> > diff --git a/src/libimaevm.c b/src/libimaevm.c
-> > index 481d29d..3607a76 100644
-> > --- a/src/libimaevm.c
-> > +++ b/src/libimaevm.c
-> > @@ -57,6 +57,7 @@
-> >   #include <openssl/pem.h>
-> >   #include <openssl/evp.h>
-> >   #include <openssl/x509.h>
-> > +#include <openssl/x509v3.h>
-> >   #include <openssl/err.h>
-> >   #include "imaevm.h"
-> > @@ -748,6 +749,47 @@ void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey)
-> >   	X509_PUBKEY_free(pk);
-> >   }
-> > +/* Try to read keyid from key file (in case it have appended cert). */
-> > +static int read_keyid(const char *keyfile, uint32_t *keyid)
-> > +{
-> 
-> So the private key is assumed to be in PEM format.
+Hi,
 
-Yes, even though README says something different.
 
-> I suppose if there's an
-> appended X509 in the private key file as well then only one function should
-> be necessary to extract the x509 cert from the files. That function should
-> be able to handle PEM and DER format at the same time. Have you tried
-> extracting the x509 cert from the private key file using that other function
-> in 2/3 yet?
+On 03.05.21 at 17:14, Jarkko Sakkinen wrote:
+> On Sat, May 01, 2021 at 03:57:24PM +0200, Lino Sanfilippo wrote:
+>> The interrupt handler uses tpm_tis_read32() and tpm_tis_write32() to ac=
+cess
+>> the interrupt status register. In case of SPI those accesses are done w=
+ith
+>> the spi_bus_lock mutex held. This means that the status register cannot
+>> be read or written in interrupt context.
+>>
+>> For this reason request a threaded interrupt handler so that the requir=
+ed
+>> accesses can be done in process context.
+>>
+>> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+>
+> No fixes tag.
+>
+> The short summary scopes now the whole TPM subsystem ("tpm:"), but the f=
+ix
+> is targetted *only* for tpm_tis_spi. How about "tpm, tpm_tis_spi: Allow =
+to
+> sleep in the interrupt handler"?
+>
+> This also changes the semantics tpm_tis_*, not just tpm_tis_spi, which i=
+s
+> not acceptable. We cannot backport a fix like this.
+>
+> Probably you should just add a parameter to tpm_tis_core_init() to hint
+> that threaded IRQ is required, and then only conditionally do so.
+>
 
-Excuse me, I don't understand what you talking about in this note.
+Sure, this is doable although to be honest I dont see the issue with also =
+the
+non-SPI code running in the threaded interrupt handler. The functionality =
+should
+not change (especially since interrupts are not even working right now) an=
+d it would
+save us a special treatment of the SPI case.
 
-2/3 does not read private keys. Where and why should be one function?
-And what other function?
 
-Thanks,
-
+Regards,
+Lino
