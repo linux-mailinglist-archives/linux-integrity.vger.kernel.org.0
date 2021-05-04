@@ -2,138 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EE7372523
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 May 2021 06:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFE3372913
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 May 2021 12:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbhEDEgK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 May 2021 00:36:10 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:35652 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbhEDEgK (ORCPT
+        id S230262AbhEDKb7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 May 2021 06:31:59 -0400
+Received: from smtp-42af.mail.infomaniak.ch ([84.16.66.175]:33573 "EHLO
+        smtp-42af.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230202AbhEDKb5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 May 2021 00:36:10 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 4067F72C8BA;
-        Tue,  4 May 2021 07:35:15 +0300 (MSK)
-Received: from beacon.altlinux.org (unknown [193.43.10.250])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 24D404A46E8;
-        Tue,  4 May 2021 07:35:15 +0300 (MSK)
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Elvira Khabirova <lineprinter0@gmail.com>
-Subject: [PATCH v2 3/3] ima-evm-utils: Read keyid from the cert appended to the key file
-Date:   Tue,  4 May 2021 07:33:57 +0300
-Message-Id: <20210504043357.4093409-4-vt@altlinux.org>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20210504043357.4093409-1-vt@altlinux.org>
-References: <20210504043357.4093409-1-vt@altlinux.org>
+        Tue, 4 May 2021 06:31:57 -0400
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4FZGMn6ZThzMqPTp;
+        Tue,  4 May 2021 12:31:01 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4FZGMl3dv5zlh8TS;
+        Tue,  4 May 2021 12:30:59 +0200 (CEST)
+Subject: Re: [PATCH v7 0/5] Enable root to update the blacklist keyring
+To:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        David Woodhouse <dwmw2@infradead.org>
+References: <20210312171232.2681989-1-mic@digikod.net>
+ <52f54ebb-6ac7-4d68-f97a-74219ed88d0b@digikod.net>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <ef2f9a31-e01f-2443-08a0-c78dd3750cbb@digikod.net>
+Date:   Tue, 4 May 2021 12:31:43 +0200
+User-Agent: 
+MIME-Version: 1.0
+In-Reply-To: <52f54ebb-6ac7-4d68-f97a-74219ed88d0b@digikod.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Allow to have certificate appended to the private key of `--key'
-specified (PEM) file (for v2 signing) to facilitate reading of keyid
-from the associated cert. This will allow users to have private and
-public key as a single file. There is no check that public key form the
-cert matches associated private key.
+Are you waiting for the end of the merge window to push to linux-next?
 
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
----
- README          |  2 ++
- src/libimaevm.c | 50 +++++++++++++++++++++++++++++++++++++++++++++++---
- 2 files changed, 49 insertions(+), 3 deletions(-)
-
-diff --git a/README b/README
-index 0e1f6ba..2c21ba6 100644
---- a/README
-+++ b/README
-@@ -127,6 +127,8 @@ for signing and importing the key.
- Second key format uses X509 DER encoded public key certificates and uses asymmetric key support
- in the kernel (since kernel 3.9). CONFIG_INTEGRITY_ASYMMETRIC_KEYS must be enabled (default).
- 
-+For v2 signatures x509 certificate with the public key could be appended to the private
-+key (both are in PEM format) to properly determine its Subject Key Identifier SKID.
- 
- Integrity keyrings
- ----------------
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index 481d29d..3607a76 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -57,6 +57,7 @@
- #include <openssl/pem.h>
- #include <openssl/evp.h>
- #include <openssl/x509.h>
-+#include <openssl/x509v3.h>
- #include <openssl/err.h>
- 
- #include "imaevm.h"
-@@ -748,6 +749,47 @@ void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey)
- 	X509_PUBKEY_free(pk);
- }
- 
-+/* Try to read keyid from key file (in case it have appended cert). */
-+static int read_keyid(const char *keyfile, uint32_t *keyid)
-+{
-+	int skid_len;
-+	const ASN1_OCTET_STRING *skid;
-+	X509 *x = NULL;
-+	FILE *fp;
-+
-+	fp = fopen(keyfile, "r");
-+	if (!fp) {
-+		log_err("Failed to open keyfile: %s\n", keyfile);
-+		return 0;
-+	}
-+	if (!PEM_read_X509(fp, &x, NULL, NULL)) {
-+		long error = ERR_GET_REASON(ERR_peek_last_error());
-+
-+		if (error == PEM_R_NO_START_LINE) {
-+			log_debug("No cert in keyfile %s\n", keyfile);
-+			ERR_clear_error();
-+		} else {
-+			log_err("Error reading cert from keyfile %s: %s\n",
-+				keyfile, ERR_reason_error_string(error));
-+		}
-+		fclose(fp);
-+		return 0;
-+	}
-+	fclose(fp);
-+	if (!(skid = X509_get0_subject_key_id(x)))
-+		return 0;
-+	skid_len = ASN1_STRING_length(skid);
-+	if (skid_len < sizeof(keyid))
-+		return 0;
-+	/* keyid is the last 4 bytes of SKID. */
-+	memcpy(keyid, ASN1_STRING_get0_data(skid) + skid_len - sizeof(*keyid),
-+	       sizeof(*keyid));
-+	log_debug("keyid: ");
-+	log_debug_dump(keyid, 4);
-+	return 1;
-+
-+}
-+
- static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
- {
- 	FILE *fp;
-@@ -932,10 +974,12 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
- 		return -1;
- 	}
- 
--	if (imaevm_params.keyid)
-+	if (imaevm_params.keyid) {
- 		hdr->keyid = htonl(imaevm_params.keyid);
--	else
--		calc_keyid_v2(&hdr->keyid, name, pkey);
-+	} else {
-+		if (!read_keyid(keyfile, &hdr->keyid))
-+			calc_keyid_v2(&hdr->keyid, name, pkey);
-+	}
- 
- 	st = "EVP_PKEY_CTX_new";
- 	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
--- 
-2.11.0
-
+On 07/04/2021 19:21, Mickaël Salaün wrote:
+> Hi David and Jarkko,
+> 
+> What is the status of this patchset? Could someone take it to -next?
+> 
+> Regards,
+>  Mickaël
+> 
+> 
+> On 12/03/2021 18:12, Mickaël Salaün wrote:
+>> This new patch series is a rebase on David Howells's and Eric Snowberg's
+>> keys-cve-2020-26541-v3.
+>>
+>> I successfully tested this patch series with the 186 entries from
+>> https://uefi.org/sites/default/files/resources/dbxupdate_x64.bin (184
+>> binary hashes and 2 certificates).
+>>
+>> The goal of these patches is to add a new configuration option to enable the
+>> root user to load signed keys in the blacklist keyring.  This keyring is useful
+>> to "untrust" certificates or files.  Enabling to safely update this keyring
+>> without recompiling the kernel makes it more usable.
+>>
+>> This can be applied on top of David Howells's keys-cve-2020-26541-branch:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=keys-cve-2020-26541-branch
+>>
+>> Previous patch series:
+>> https://lore.kernel.org/lkml/20210210120410.471693-1-mic@digikod.net/
+>>
+>> Regards,
+>>
+>> Mickaël Salaün (5):
+>>   tools/certs: Add print-cert-tbs-hash.sh
+>>   certs: Check that builtin blacklist hashes are valid
+>>   certs: Make blacklist_vet_description() more strict
+>>   certs: Factor out the blacklist hash creation
+>>   certs: Allow root user to append signed hashes to the blacklist
+>>     keyring
+>>
+>>  MAINTAINERS                                   |   2 +
+>>  certs/.gitignore                              |   1 +
+>>  certs/Kconfig                                 |  17 +-
+>>  certs/Makefile                                |  17 +-
+>>  certs/blacklist.c                             | 218 ++++++++++++++----
+>>  crypto/asymmetric_keys/x509_public_key.c      |   3 +-
+>>  include/keys/system_keyring.h                 |  14 +-
+>>  scripts/check-blacklist-hashes.awk            |  37 +++
+>>  .../platform_certs/keyring_handler.c          |  26 +--
+>>  tools/certs/print-cert-tbs-hash.sh            |  91 ++++++++
+>>  10 files changed, 346 insertions(+), 80 deletions(-)
+>>  create mode 100755 scripts/check-blacklist-hashes.awk
+>>  create mode 100755 tools/certs/print-cert-tbs-hash.sh
+>>
+>>
+>> base-commit: ebd9c2ae369a45bdd9f8615484db09be58fc242b
+>>
