@@ -2,144 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C50FD372B2E
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 May 2021 15:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BD5372B46
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 May 2021 15:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbhEDNjF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 May 2021 09:39:05 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56644 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230478AbhEDNjE (ORCPT
+        id S231216AbhEDNrH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 May 2021 09:47:07 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38476 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230478AbhEDNrH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 May 2021 09:39:04 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 144DYQKr056784;
-        Tue, 4 May 2021 09:38:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=wltGETnf3vbl0pxHPyRst2y1SSz1U+6i+JDEOkdhoKY=;
- b=mVw5szB2IxGZcUl+uR0QnsDFvW+StdmqgdTPaUGs0sFU765ZwwCfRUg3ayoXHr2F/iW/
- DllFFXdw+N06+CaNPD8A9Bkcwgc+Pz5FKgPegVGT6HrMtph1rwuM9oFRxmswXurwks6R
- hFCQAYSbjrUztpuCs5U+WQnlrLupNMcsbvez04v1tP1EtqgYor2qiooPjNB3stbBUtuS
- mhQrAS0trBOZ3yQ8kK3c28Y5w6YHcK9v8ZZYKo48ulm+HQbWTTb8hLIRMxa3xXQszdHn
- 4gMNeV/SVoHiD7gP2pMfKUjMU+6ixusGJmoYp71QTM11ozbY4VHThg946S2L3VigJdHp Tw== 
+        Tue, 4 May 2021 09:47:07 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 144DiPCN007508;
+        Tue, 4 May 2021 09:46:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=USYFsrusWFxT3Qxhq4iFumDkqaNvL/dcdiSFURy7vwk=;
+ b=HJpGo/AYQyTWjvaxeFr0ue7JEMRWBXqgTP9GZsBDEM+KQ8yP6NO4LpdgitvEtpFet4yZ
+ T4WVIcIsqZX5Ybq+r4e5pAQR2ZdC8np1klqpZqs+Wc+xu1e54VlVaRkGzMRqx/Qm4Tku
+ Hjh0KUI0Epd6cijXX6ZNMhcKfqNORZ8Ax5WtbM22BUD7QcY0oSBuu4n3GwMrPfUrXrop
+ tZeQIth/Ea6PCAeF7HLHlvHqhic091YHt8nyJIld+Qxqe6AbU/XFM+KSKU0YnHnrbQwj
+ h5PGZfbx2xB9H1ak9J1Ffrac/G7B7DqpB6lzynW6iBY4vFY7e0oqyR5B3hrxKMy5ggK2 pA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 38b5a4kx30-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38b7dn81ep-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 May 2021 09:38:08 -0400
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 144DYaWF057637;
-        Tue, 4 May 2021 09:38:08 -0400
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 38b5a4kx2r-1
+        Tue, 04 May 2021 09:46:07 -0400
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 144DiIt5007378;
+        Tue, 4 May 2021 09:46:07 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38b7dn81dd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 May 2021 09:38:08 -0400
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 144DXpJ0019742;
-        Tue, 4 May 2021 13:38:07 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma05wdc.us.ibm.com with ESMTP id 38a9xfsv05-1
+        Tue, 04 May 2021 09:46:06 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 144DitvQ023463;
+        Tue, 4 May 2021 13:46:04 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 388xm8gpew-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 May 2021 13:38:07 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 144Dc71p32440688
+        Tue, 04 May 2021 13:46:04 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 144Dk1kk31457602
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 May 2021 13:38:07 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F196A112062;
-        Tue,  4 May 2021 13:38:06 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E31DB112061;
-        Tue,  4 May 2021 13:38:06 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  4 May 2021 13:38:06 +0000 (GMT)
-Subject: Re: [PATCH v2 3/3] ima-evm-utils: Read keyid from the cert appended
- to the key file
-To:     Vitaly Chikunov <vt@altlinux.org>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Elvira Khabirova <lineprinter0@gmail.com>
-References: <20210504043357.4093409-1-vt@altlinux.org>
- <20210504043357.4093409-4-vt@altlinux.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <1b5d6c49-c080-76e9-66e1-2db19bfee2c9@linux.ibm.com>
-Date:   Tue, 4 May 2021 09:38:06 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20210504043357.4093409-4-vt@altlinux.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        Tue, 4 May 2021 13:46:01 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C68652051;
+        Tue,  4 May 2021 13:46:01 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.38.211])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A2C1252050;
+        Tue,  4 May 2021 13:45:59 +0000 (GMT)
+Message-ID: <02426b1486616544230d0804de21cd9e78a0a00e.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 06/12] evm: Ignore
+ INTEGRITY_NOLABEL/INTEGRITY_NOXATTRS if conditions are safe
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "mjg59@google.com" <mjg59@google.com>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 04 May 2021 09:45:58 -0400
+In-Reply-To: <1869963c94574fd1b026b304acdd308e@huawei.com>
+References: <20210407105252.30721-1-roberto.sassu@huawei.com>
+         <20210407105252.30721-7-roberto.sassu@huawei.com>
+         <b8790b57e289980d4fe1133d15203ce016d2319d.camel@linux.ibm.com>
+         <c12f18094cc0479faa3f0f152b4964de@huawei.com>
+         <33cad84d2f894ed5a05a3bd6854f73a0@huawei.com>
+         <a2ca7317b672c63a40743268b641dd73661c3329.camel@linux.ibm.com>
+         <1869963c94574fd1b026b304acdd308e@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: YaF6-RcSSMu7Z70a26-nwTMX199GAs0B
-X-Proofpoint-ORIG-GUID: cJ4B_o77X3ektg9c8czApyumKW_8-bJV
+X-Proofpoint-GUID: we5ICwBpig5bvP9a2bZCG3O26IgnNOk8
+X-Proofpoint-ORIG-GUID: q0uot74SQAkCwksYxzBNaRI42DYE6IYi
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-05-04_07:2021-05-04,2021-05-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- clxscore=1015 lowpriorityscore=0 malwarescore=0 phishscore=0
- impostorscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
- adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104060000 definitions=main-2105040101
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=999 suspectscore=0 phishscore=0 mlxscore=0
+ priorityscore=1501 clxscore=1015 malwarescore=0 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2105040101
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Tue, 2021-05-04 at 13:16 +0000, Roberto Sassu wrote:
+> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > Sent: Monday, May 3, 2021 4:35 PM
+> > On Mon, 2021-05-03 at 14:15 +0000, Roberto Sassu wrote:
+> > 
+> > > > > >  	if (evm_status != INTEGRITY_PASS)
+> > > > > >  		integrity_audit_msg(AUDIT_INTEGRITY_METADATA,
+> > > > > d_backing_inode(dentry),
+> > > > > >  				    dentry->d_name.name,
+> > > > > "appraise_metadata",
+> > > > > > @@ -515,7 +535,8 @@ int evm_inode_setattr(struct dentry *dentry,
+> > > > struct
+> > > > > iattr *attr)
+> > > > > >  		return 0;
+> > > > > >  	evm_status = evm_verify_current_integrity(dentry);
+> > > > > >  	if ((evm_status == INTEGRITY_PASS) ||
+> > > > > > -	    (evm_status == INTEGRITY_NOXATTRS))
+> > > > > > +	    (evm_status == INTEGRITY_NOXATTRS) ||
+> > > > > > +	    (evm_ignore_error_safe(evm_status)))
+> > > > >
+> > > > > It would also remove the INTEGRITY_NOXATTRS test duplication here.
+> > > >
+> > > > Ok.
+> > >
+> > > Actually, it does not seem a duplication. Currently, INTEGRITY_NOXATTRS
+> > > is ignored also when the HMAC key is loaded.
+> > 
+> > The existing INTEGRITY_NOXATTRS exemption is more general and includes
+> > the new case of when EVM HMAC is disabled.  The additional exemption is
+> > only needed for INTEGRITY_NOLABEL, when EVM HMAC is disabled.
+> 
+> Unfortunately, evm_ignore_error_safe() is called by both evm_protect_xattr()
+> and evm_inode_setattr(). The former requires an exemption also for
+> INTEGRITY_NOXATTRS.
+> 
+> I would keep the function as it is. In the worst case, when the status is
+> INTEGRITY_NOXATTRS in evm_inode_setattr(), the function will not
+> be called.
 
-On 5/4/21 12:33 AM, Vitaly Chikunov wrote:
-> Allow to have certificate appended to the private key of `--key'
-> specified (PEM) file (for v2 signing) to facilitate reading of keyid
-> from the associated cert. This will allow users to have private and
-> public key as a single file. There is no check that public key form the
-> cert matches associated private key.
->
-> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> ---
->   README          |  2 ++
->   src/libimaevm.c | 50 +++++++++++++++++++++++++++++++++++++++++++++++---
->   2 files changed, 49 insertions(+), 3 deletions(-)
->
-> diff --git a/README b/README
-> index 0e1f6ba..2c21ba6 100644
-> --- a/README
-> +++ b/README
-> @@ -127,6 +127,8 @@ for signing and importing the key.
->   Second key format uses X509 DER encoded public key certificates and uses asymmetric key support
->   in the kernel (since kernel 3.9). CONFIG_INTEGRITY_ASYMMETRIC_KEYS must be enabled (default).
->   
-> +For v2 signatures x509 certificate with the public key could be appended to the private
-> +key (both are in PEM format) to properly determine its Subject Key Identifier SKID.
->   
->   Integrity keyrings
->   ----------------
-> diff --git a/src/libimaevm.c b/src/libimaevm.c
-> index 481d29d..3607a76 100644
-> --- a/src/libimaevm.c
-> +++ b/src/libimaevm.c
-> @@ -57,6 +57,7 @@
->   #include <openssl/pem.h>
->   #include <openssl/evp.h>
->   #include <openssl/x509.h>
-> +#include <openssl/x509v3.h>
->   #include <openssl/err.h>
->   
->   #include "imaevm.h"
-> @@ -748,6 +749,47 @@ void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey)
->   	X509_PUBKEY_free(pk);
->   }
->   
-> +/* Try to read keyid from key file (in case it have appended cert). */
-> +static int read_keyid(const char *keyfile, uint32_t *keyid)
-> +{
+Right, which is another reason for replacing evm_ignore_eror_safe()
+with (is_)evm_hmac_disabled() and inlining the error tests.
 
-So the private key is assumed to be in PEM format. I suppose if there's 
-an appended X509 in the private key file as well then only one function 
-should be necessary to extract the x509 cert from the files. That 
-function should be able to handle PEM and DER format at the same time. 
-Have you tried extracting the x509 cert from the private key file using 
-that other function in 2/3 yet?
+thanks,
 
+Mimi
 
