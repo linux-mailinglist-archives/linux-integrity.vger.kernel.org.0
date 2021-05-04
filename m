@@ -2,73 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66ED737321A
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 May 2021 23:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BB237324C
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 May 2021 00:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232944AbhEDV6K (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 May 2021 17:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbhEDV6I (ORCPT
+        id S232941AbhEDW2U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 May 2021 18:28:20 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:38310 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232667AbhEDW2U (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 4 May 2021 17:58:08 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A4DC061574
-        for <linux-integrity@vger.kernel.org>; Tue,  4 May 2021 14:57:13 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id i81so304001oif.6
-        for <linux-integrity@vger.kernel.org>; Tue, 04 May 2021 14:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h6nDWrO9L8CxbAXjtDgqv4B1xC4L9HAr7ltSEuwJLk8=;
-        b=lp8Ds+q4uHoTq/2xNdc6nB8zMv9+EVRduoGZhmPcTiX40X3BRyVq20/wmbznOaJKXk
-         48InIae6D+ySRAWfUzgcwxVE0xLGPx4ZpJGtdte6bTc/hYHkp3FD8UDSB6B4obl0gPal
-         6Anx4jvxkyiRcU36eEj3cO21HPg5+rRJm7jyA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h6nDWrO9L8CxbAXjtDgqv4B1xC4L9HAr7ltSEuwJLk8=;
-        b=svJCrRCltsF4iZeHRQ/2LLRWsremlBF2AxLjTKe2UGrsjWCIvZ11JqNTvpkzp1cNde
-         TNPrX9LPOiiuWBf+QZLkE9072fLoOfVlvjRDMpQgBkUoT7nzKfd52MWyvxCClbJreX5Q
-         bme1NNzgbpR4wHt4qQU2vkYabbgLzTv9HA039Hp6OxlP5Vy+NbPoIaE1IuMXJI39eQ1p
-         WW72hdVNewNrzoIs9P5/H57sk36r+FSC/bJeXXdYxb9lWjEE1O6zRNeaWn7qJXx6v2DG
-         mGpIdRKY8FraxNYcqmaRd735DCiZs/LrTvaZeD9koLpOFX1MPa97XoA5K0oWf72hDo39
-         GI4g==
-X-Gm-Message-State: AOAM5331Q9cZoTVWh7x9tERctwetiRXIxl6yJgQBYHiiVTSRSL2IiUCF
-        kGip61XE3z7+UxUQ/NUyrnqGoLyie5E14uFv
-X-Google-Smtp-Source: ABdhPJxjTEuEZ5mv+BE61rtfvEtE59iJGF6eq3LRTIb9+CEumkQVKLs4Di5Wr3nfRKnFVWMeNAn7Ew==
-X-Received: by 2002:a05:6808:117:: with SMTP id b23mr9446217oie.7.1620165432687;
-        Tue, 04 May 2021 14:57:12 -0700 (PDT)
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
-        by smtp.gmail.com with ESMTPSA id q1sm1129677otc.21.2021.05.04.14.57.11
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 May 2021 14:57:12 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id g15-20020a9d128f0000b02902a7d7a7bb6eso2921761otg.9
-        for <linux-integrity@vger.kernel.org>; Tue, 04 May 2021 14:57:11 -0700 (PDT)
-X-Received: by 2002:a05:6830:a:: with SMTP id c10mr21052802otp.21.1620165431621;
- Tue, 04 May 2021 14:57:11 -0700 (PDT)
+        Tue, 4 May 2021 18:28:20 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id DDFF772C8B5;
+        Wed,  5 May 2021 01:27:23 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id C3D3D4A46E8;
+        Wed,  5 May 2021 01:27:23 +0300 (MSK)
+Date:   Wed, 5 May 2021 01:27:23 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        Elvira Khabirova <lineprinter0@gmail.com>
+Subject: Re: [PATCH v2 3/3] ima-evm-utils: Read keyid from the cert appended
+ to the key file
+Message-ID: <20210504222723.wirqlwsz2xtnfqz7@altlinux.org>
+References: <20210504043357.4093409-1-vt@altlinux.org>
+ <20210504043357.4093409-4-vt@altlinux.org>
+ <1b5d6c49-c080-76e9-66e1-2db19bfee2c9@linux.ibm.com>
 MIME-Version: 1.0
-References: <20210220013255.1083202-1-matthewgarrett@google.com>
-In-Reply-To: <20210220013255.1083202-1-matthewgarrett@google.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Tue, 4 May 2021 14:56:35 -0700
-X-Gmail-Original-Message-ID: <CAE=gft4HnQKP3RK1hOGpThccLPanQzWpssCsEyUQGLbTMpzrFw@mail.gmail.com>
-Message-ID: <CAE=gft4HnQKP3RK1hOGpThccLPanQzWpssCsEyUQGLbTMpzrFw@mail.gmail.com>
-Subject: Re: [PATCH 0/9] Enable hibernation when Lockdown is enabled
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     linux-integrity@vger.kernel.org, linux-pm@vger.kernel.org,
-        keyrings@vger.kernel.org, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>, jarkko@kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, rjw@rjwysocki.net
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <1b5d6c49-c080-76e9-66e1-2db19bfee2c9@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Does anyone know if this series is abandoned, or is Matthew planning
-to do another spin? Email to matthewgarrett@google.com bounces.
+Stefan,
 
--Evan
+On Tue, May 04, 2021 at 09:38:06AM -0400, Stefan Berger wrote:
+> On 5/4/21 12:33 AM, Vitaly Chikunov wrote:
+> > Allow to have certificate appended to the private key of `--key'
+> > specified (PEM) file (for v2 signing) to facilitate reading of keyid
+> > from the associated cert. This will allow users to have private and
+> > public key as a single file. There is no check that public key form the
+> > cert matches associated private key.
+> > 
+> > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+> > ---
+> >   README          |  2 ++
+> >   src/libimaevm.c | 50 +++++++++++++++++++++++++++++++++++++++++++++++---
+> >   2 files changed, 49 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/README b/README
+> > index 0e1f6ba..2c21ba6 100644
+> > --- a/README
+> > +++ b/README
+> > @@ -127,6 +127,8 @@ for signing and importing the key.
+> >   Second key format uses X509 DER encoded public key certificates and uses asymmetric key support
+> >   in the kernel (since kernel 3.9). CONFIG_INTEGRITY_ASYMMETRIC_KEYS must be enabled (default).
+> > +For v2 signatures x509 certificate with the public key could be appended to the private
+> > +key (both are in PEM format) to properly determine its Subject Key Identifier SKID.
+> >   Integrity keyrings
+> >   ----------------
+> > diff --git a/src/libimaevm.c b/src/libimaevm.c
+> > index 481d29d..3607a76 100644
+> > --- a/src/libimaevm.c
+> > +++ b/src/libimaevm.c
+> > @@ -57,6 +57,7 @@
+> >   #include <openssl/pem.h>
+> >   #include <openssl/evp.h>
+> >   #include <openssl/x509.h>
+> > +#include <openssl/x509v3.h>
+> >   #include <openssl/err.h>
+> >   #include "imaevm.h"
+> > @@ -748,6 +749,47 @@ void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey)
+> >   	X509_PUBKEY_free(pk);
+> >   }
+> > +/* Try to read keyid from key file (in case it have appended cert). */
+> > +static int read_keyid(const char *keyfile, uint32_t *keyid)
+> > +{
+> 
+> So the private key is assumed to be in PEM format.
+
+Yes, even though README says something different.
+
+> I suppose if there's an
+> appended X509 in the private key file as well then only one function should
+> be necessary to extract the x509 cert from the files. That function should
+> be able to handle PEM and DER format at the same time. Have you tried
+> extracting the x509 cert from the private key file using that other function
+> in 2/3 yet?
+
+Excuse me, I don't understand what you talking about in this note.
+
+2/3 does not read private keys. Where and why should be one function?
+And what other function?
+
+Thanks,
+
