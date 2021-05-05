@@ -2,208 +2,330 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A503747E8
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 May 2021 20:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62397374BC2
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 May 2021 01:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbhEESTw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 5 May 2021 14:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233794AbhEESTv (ORCPT
+        id S230437AbhEEXOn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 5 May 2021 19:14:43 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27166 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229465AbhEEXOm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 5 May 2021 14:19:51 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAAAC061761
-        for <linux-integrity@vger.kernel.org>; Wed,  5 May 2021 11:18:54 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id d21so2998344oic.11
-        for <linux-integrity@vger.kernel.org>; Wed, 05 May 2021 11:18:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+IwZXLRXE7YG5YvYLQLnS3XtjuwltWw/8OV4sZc7FtQ=;
-        b=cYMtDHKCglXEKCG8XFCDw0mo6ut3vuH0OSwu3mg8bbcS7aam9fkng1amjKuyWy10gd
-         pkqctId/qGP2+eknKgPx5r2246N18DmMuTnicvkkmVtsBT1oL6PveOm2wAvFLXjhYPlA
-         gSMZ4vYuD/VbxHvkEziYMpUWpKR8r79Q+Xdgc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+IwZXLRXE7YG5YvYLQLnS3XtjuwltWw/8OV4sZc7FtQ=;
-        b=o1NaOH/VbWlKZ+dKoEogtUqChNTK0/i0Mf6OK2LpGe5KmM4v63uOUvXykJRdudBhp9
-         Qe/r65jcYQ6RY1OX3s4DY6qBaEeEJGpJuW7aF61YwswX9v8HvtzYO7KOhJTG/FXDgQFs
-         lzSvrv0RHhRGwzmfOvGBfqqy39nMVI3itIr1VwffEaot1x5Wp/Du6Z2LkCIrdNrt1p0c
-         OwJNM7DxbbOL1I0HLnldhmdb2WTIf0yNb1L5xv3QBMB/pxn8wohbO2wc2GJV5u8NpoKy
-         EEwCR4rrKdL5n62lTRAg7zqsOIYd9ywKQN4wtxbAOQZQBHrsKGk7tzxJD3ldSQ+5is4S
-         5e4Q==
-X-Gm-Message-State: AOAM533JvvvRYIZBe5mjJrHnekb8DLbMI9Rusj++CpL8yx3DlzFwgCeJ
-        W2gcAIUz1Q1gIKM6FTzlcK5W8qFnZ16Iig==
-X-Google-Smtp-Source: ABdhPJxMCJob5IpoxmcH5IY3DGXe2sdAkuzc+0slL5B2Pty8mN7Xv908E/FxuspMCPnD48GGyiRb7w==
-X-Received: by 2002:aca:2b16:: with SMTP id i22mr6829656oik.162.1620238733717;
-        Wed, 05 May 2021 11:18:53 -0700 (PDT)
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com. [209.85.210.53])
-        by smtp.gmail.com with ESMTPSA id r14sm56095oth.3.2021.05.05.11.18.52
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 May 2021 11:18:53 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id r26-20020a056830121ab02902a5ff1c9b81so2521371otp.11
-        for <linux-integrity@vger.kernel.org>; Wed, 05 May 2021 11:18:52 -0700 (PDT)
-X-Received: by 2002:a9d:425:: with SMTP id 34mr25334436otc.25.1620238732448;
- Wed, 05 May 2021 11:18:52 -0700 (PDT)
+        Wed, 5 May 2021 19:14:42 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 145N3cgT056370;
+        Wed, 5 May 2021 19:13:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=zFk1WImFzRgie2JdWdewXOfGt2cRqQkUOaOzkku4/aQ=;
+ b=kLg5xKzaZMVYk1S2oISLkwijbKku4CDINu3N+aO96p5SBdbbOZ+cxumP6+SvmfDzS4QK
+ Wctm2zJPJKaLV1sW9X0wNasUTIu4SBXZne7Psq56uph4yL2ekryeEZIPDWhWPLxfT43U
+ XJOHQ1koTqi+9a03Yn6608ruJXjNmxMxTVXtS+kKPo/XQs5YdzRpDShoImakAz05meYh
+ axL7wQ4xTWH+g30RfMKv2mGvfxD2rOj/6pn/i+Ce1PQdWuSCyCfxV3e+CUJLqWxs4h1w
+ 2t+YcUYekiuSH/bhC6gtUBWvYKRBCuw09/XziE8wmzuyjmRpUMvBfrDUOQqgTcln32Tg XA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38c2ngax2f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 May 2021 19:13:43 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 145N49UY062110;
+        Wed, 5 May 2021 19:13:42 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38c2ngax26-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 May 2021 19:13:42 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 145N8AYT001739;
+        Wed, 5 May 2021 23:13:42 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma01dal.us.ibm.com with ESMTP id 38bee0shws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 May 2021 23:13:41 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 145NDeSu26739170
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 May 2021 23:13:40 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C9266136053;
+        Wed,  5 May 2021 23:13:40 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 72AF313604F;
+        Wed,  5 May 2021 23:13:40 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  5 May 2021 23:13:40 +0000 (GMT)
+Subject: Re: [PATCH v4 2/3] ima-evm-utils: Allow manual setting keyid from a
+ cert file
+To:     Vitaly Chikunov <vt@altlinux.org>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+References: <20210505064843.111900-1-vt@altlinux.org>
+ <20210505064843.111900-3-vt@altlinux.org>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <ed882d26-47a8-9b45-6c96-83d2f64982f2@linux.ibm.com>
+Date:   Wed, 5 May 2021 19:13:39 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210220013255.1083202-1-matthewgarrett@google.com> <20210220013255.1083202-7-matthewgarrett@google.com>
-In-Reply-To: <20210220013255.1083202-7-matthewgarrett@google.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Wed, 5 May 2021 11:18:16 -0700
-X-Gmail-Original-Message-ID: <CAE=gft76T7tgvd51e1Wzo6LN9afCLLkjGtN7xDbb6yq=CzbjHA@mail.gmail.com>
-Message-ID: <CAE=gft76T7tgvd51e1Wzo6LN9afCLLkjGtN7xDbb6yq=CzbjHA@mail.gmail.com>
-Subject: Re: [PATCH 6/9] pm: hibernate: Optionally store and verify a hash of
- the image
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org, linux-pm@vger.kernel.org,
-        keyrings@vger.kernel.org, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, rjw@rjwysocki.net,
-        Matthew Garrett <mjg59@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210505064843.111900-3-vt@altlinux.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Cs1Snbck5U55GcEn-eW7Ht4aWEObTnmu
+X-Proofpoint-ORIG-GUID: Ye96nccRDvLMEuXHHoL_t9AL1viCXOjI
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-05_11:2021-05-05,2021-05-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 bulkscore=0 clxscore=1015 priorityscore=1501
+ suspectscore=0 impostorscore=0 phishscore=0 spamscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2105050159
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Feb 19, 2021 at 5:36 PM Matthew Garrett
-<matthewgarrett@google.com> wrote:
->
-> Calculate and store a cryptographically secure hash of the hibernation
-> image if SF_VERIFY_IMAGE is set in the hibernation flags. This allows
-> detection of a corrupt image, but has the disadvantage that it requires
-> the blocks be read in in linear order.
->
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> ---
->  kernel/power/power.h |   1 +
->  kernel/power/swap.c  | 131 +++++++++++++++++++++++++++++++++++--------
->  2 files changed, 110 insertions(+), 22 deletions(-)
->
-> diff --git a/kernel/power/power.h b/kernel/power/power.h
-> index 778bf431ec02..b8e00b9dcee8 100644
-> --- a/kernel/power/power.h
-> +++ b/kernel/power/power.h
-> @@ -168,6 +168,7 @@ extern int swsusp_swap_in_use(void);
->  #define SF_PLATFORM_MODE       1
->  #define SF_NOCOMPRESS_MODE     2
->  #define SF_CRC32_MODE          4
-> +#define SF_VERIFY_IMAGE         8
->
->  /* kernel/power/hibernate.c */
->  extern int swsusp_check(void);
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 72e33054a2e1..a13241a20567 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -31,6 +31,8 @@
->  #include <linux/kthread.h>
->  #include <linux/crc32.h>
->  #include <linux/ktime.h>
-> +#include <crypto/hash.h>
-> +#include <crypto/sha2.h>
->
->  #include "power.h"
->
-> @@ -95,17 +97,20 @@ struct swap_map_page_list {
->  struct swap_map_handle {
->         struct swap_map_page *cur;
->         struct swap_map_page_list *maps;
-> +       struct shash_desc *desc;
->         sector_t cur_swap;
->         sector_t first_sector;
->         unsigned int k;
->         unsigned long reqd_free_pages;
->         u32 crc32;
-> +       u8 digest[SHA256_DIGEST_SIZE];
->  };
->
->  struct swsusp_header {
->         char reserved[PAGE_SIZE - 20 - sizeof(sector_t) - sizeof(int) -
-> -                     sizeof(u32)];
-> +                     sizeof(u32) - SHA256_DIGEST_SIZE];
->         u32     crc32;
-> +       u8      digest[SHA256_DIGEST_SIZE];
->         sector_t image;
->         unsigned int flags;     /* Flags to pass to the "boot" kernel */
->         char    orig_sig[10];
-> @@ -305,6 +310,9 @@ static blk_status_t hib_wait_io(struct hib_bio_batch *hb)
->          * We are relying on the behavior of blk_plug that a thread with
->          * a plug will flush the plug list before sleeping.
->          */
-> +       if (!hb)
-> +               return 0;
-> +
->         wait_event(hb->wait, atomic_read(&hb->count) == 0);
->         return blk_status_to_errno(hb->error);
->  }
-> @@ -327,6 +335,8 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
->                 swsusp_header->flags = flags;
->                 if (flags & SF_CRC32_MODE)
->                         swsusp_header->crc32 = handle->crc32;
-> +               memcpy(swsusp_header->digest, handle->digest,
-> +                      SHA256_DIGEST_SIZE);
->                 error = hib_submit_io(REQ_OP_WRITE, REQ_SYNC,
->                                       swsusp_resume_block, swsusp_header, NULL);
->         } else {
-> @@ -417,6 +427,7 @@ static void release_swap_writer(struct swap_map_handle *handle)
->  static int get_swap_writer(struct swap_map_handle *handle)
->  {
->         int ret;
-> +       struct crypto_shash *tfm;
->
->         ret = swsusp_swap_check();
->         if (ret) {
-> @@ -437,7 +448,28 @@ static int get_swap_writer(struct swap_map_handle *handle)
->         handle->k = 0;
->         handle->reqd_free_pages = reqd_free_pages();
->         handle->first_sector = handle->cur_swap;
-> +
-> +       tfm = crypto_alloc_shash("sha256", 0, 0);
-> +       if (IS_ERR(tfm)) {
-> +               ret = -EINVAL;
-> +               goto err_rel;
-> +       }
-> +       handle->desc = kmalloc(sizeof(struct shash_desc) +
-> +                              crypto_shash_descsize(tfm), GFP_KERNEL);
-> +       if (!handle->desc) {
-> +               ret = -ENOMEM;
-> +               goto err_rel;
-> +       }
-> +
-> +       handle->desc->tfm = tfm;
-> +
-> +       ret = crypto_shash_init(handle->desc);
-> +       if (ret != 0)
-> +               goto err_free;
-> +
->         return 0;
-> +err_free:
-> +       kfree(handle->desc);
->  err_rel:
->         release_swap_writer(handle);
->  err_close:
-> @@ -446,7 +478,7 @@ static int get_swap_writer(struct swap_map_handle *handle)
->  }
->
->  static int swap_write_page(struct swap_map_handle *handle, void *buf,
-> -               struct hib_bio_batch *hb)
-> +                          struct hib_bio_batch *hb, bool hash)
->  {
->         int error = 0;
->         sector_t offset;
-> @@ -454,6 +486,7 @@ static int swap_write_page(struct swap_map_handle *handle, void *buf,
->         if (!handle->cur)
->                 return -EINVAL;
->         offset = alloc_swapdev_block(root_swap);
-> +       crypto_shash_update(handle->desc, buf, PAGE_SIZE);
 
-Was this supposed to be conditionalized behind the new parameter, ie:
-if (hash) crypto_shash_update()? If so, the same comment would apply
-to the read as well.
+On 5/5/21 2:48 AM, Vitaly Chikunov wrote:
+> Allow user to specify `--keyid @/path/to/cert.pem' to extract keyid from
+> SKID of the certificate file. PEM or DER format is auto-detected.
+>
+> `--keyid' option is reused instead of adding a new option (like possible
+> `--cert') to signify to the user it's only keyid extraction and nothing
+> more.
+>
+> This commit creates ABI change for libimaevm, due to adding new function
+> ima_read_keyid(). Newer clients cannot work with older libimaevm.
+> Together with previous commit it creates backward-incompatible ABI
+> change, thus soname should be incremented on release.
+>
+> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+> ---
+>   README                 |  1 +
+>   src/evmctl.c           | 22 ++++++++++---
+>   src/imaevm.h           |  1 +
+>   src/libimaevm.c        | 85 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>   tests/sign_verify.test |  1 +
+>   5 files changed, 105 insertions(+), 5 deletions(-)
+>
+> diff --git a/README b/README
+> index 8cd66e0..0e1f6ba 100644
+> --- a/README
+> +++ b/README
+> @@ -49,6 +49,7 @@ OPTIONS
+>         --rsa          use RSA key type and signing scheme v1
+>     -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)
+>         --keyid val    overwrite signature keyid with a value (for signing)
+> +                     val is a x509 cert file if prefixed with '@'
+>     -o, --portable     generate portable EVM signatures
+>     -p, --pass         password for encrypted signing key
+>     -r, --recursive    recurse into directories (sign)
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index 8ae5488..6a60599 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -42,6 +42,7 @@
+>   #include <sys/param.h>
+>   #include <sys/stat.h>
+>   #include <sys/ioctl.h>
+> +#include <arpa/inet.h>
+>   #include <fcntl.h>
+>   #include <unistd.h>
+>   #include <stdlib.h>
+> @@ -57,12 +58,14 @@
+>   #include <termios.h>
+>   #include <assert.h>
+>   
+> +#include <openssl/asn1.h>
+>   #include <openssl/sha.h>
+>   #include <openssl/pem.h>
+>   #include <openssl/hmac.h>
+>   #include <openssl/err.h>
+>   #include <openssl/rsa.h>
+>   #include <openssl/engine.h>
+> +#include <openssl/x509v3.h>
+>   #include "hash_info.h"
+>   #include "pcr.h"
+>   #include "utils.h"
+> @@ -2447,6 +2450,7 @@ static void usage(void)
+>   		"      --rsa          use RSA key type and signing scheme v1\n"
+>   		"  -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)\n"
+>   		"      --keyid val    overwrite signature keyid with a value (for signing)\n"
+> +		"                     val is a x509 cert file if prefixed with '@'\n"
+>   		"  -o, --portable     generate portable EVM signatures\n"
+>   		"  -p, --pass         password for encrypted signing key\n"
+>   		"  -r, --recursive    recurse into directories (sign)\n"
+> @@ -2572,7 +2576,6 @@ int main(int argc, char *argv[])
+>   	int err = 0, c, lind;
+>   	ENGINE *eng = NULL;
+>   	unsigned long keyid;
+> -	char *eptr;
+>   
+>   #if !(OPENSSL_VERSION_NUMBER < 0x10100000)
+>   	OPENSSL_init_crypto(
+> @@ -2718,10 +2721,19 @@ int main(int argc, char *argv[])
+>   			pcrfile[npcrfile++] = optarg;
+>   			break;
+>   		case 143:
+> -			errno = 0;
+> -			keyid = strtoul(optarg, &eptr, 16);
+> -			if (errno || eptr - optarg != strlen(optarg) ||
+> -			    keyid == ULONG_MAX || keyid > UINT_MAX ||
+> +			if (optarg[0] == '@') {
+> +				keyid = ima_read_keyid(optarg + 1, NULL);
+> +			} else {
+> +				char *eptr;
+> +
+> +				errno = 0;
+> +				keyid = strtoul(optarg, &eptr, 16);
+> +				if (eptr - optarg != strlen(optarg) || errno) {
+> +					log_err("Invalid keyid value.\n");
+> +					exit(1);
+> +				}
+> +			}
+> +			if (keyid == ULONG_MAX || keyid > UINT_MAX ||
+>   			    keyid == 0) {
+>   				log_err("Invalid keyid value.\n");
+>   				exit(1);
+> diff --git a/src/imaevm.h b/src/imaevm.h
+> index 9f38059..eab7f32 100644
+> --- a/src/imaevm.h
+> +++ b/src/imaevm.h
+> @@ -219,6 +219,7 @@ EVP_PKEY *read_pub_pkey(const char *keyfile, int x509);
+>   void calc_keyid_v1(uint8_t *keyid, char *str, const unsigned char *pkey, int len);
+>   void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey);
+>   int key2bin(RSA *key, unsigned char *pub);
+> +unsigned long ima_read_keyid(const char *certfile, uint32_t *keyid);
+>   
+>   int sign_hash(const char *algo, const unsigned char *hash, int size, const char *keyfile, const char *keypass, unsigned char *sig);
+>   int verify_hash(const char *file, const unsigned char *hash, int size, unsigned char *sig, int siglen);
+> diff --git a/src/libimaevm.c b/src/libimaevm.c
+> index 481d29d..a22d9bb 100644
+> --- a/src/libimaevm.c
+> +++ b/src/libimaevm.c
+> @@ -57,6 +57,7 @@
+>   #include <openssl/pem.h>
+>   #include <openssl/evp.h>
+>   #include <openssl/x509.h>
+> +#include <openssl/x509v3.h>
+>   #include <openssl/err.h>
+>   
+>   #include "imaevm.h"
+> @@ -748,6 +749,90 @@ void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey)
+>   	X509_PUBKEY_free(pk);
+>   }
+>   
+> +enum keyid_file_type {
+> +	KEYID_FILE_PEM_KEY = 0,
+> +	KEYID_FILE_UNK_CERT,
+> +};
+> +
+> +/*
+> + * @is_cert: 1 - this is a x509 cert file (maybe PEM, maybe DER encoded);
+This probably change since you wrote it. Is this file_type now?
+> + *           0 - this is a PEM encoded private key file with possible appended
+> + *           x509 cert.
+> + */
+> +static unsigned long _ima_read_keyid(const char *certfile, uint32_t *keyid,
+> +				     enum keyid_file_type file_type)
+> +{
+> +	uint32_t keyid_raw;
+> +	const ASN1_OCTET_STRING *skid;
+> +	int skid_len;
+> +	X509 *x = NULL;
+> +	FILE *fp;
+> +
+> +	if (!(fp = fopen(certfile, "r"))) {
+> +		log_err("read keyid: %s: Cannot open: %s\n", certfile,
+> +			strerror(errno));
+> +		return -1;
+> +	}
+> +	if (!PEM_read_X509(fp, &x, NULL, NULL)) {
+> +		if (ERR_GET_REASON(ERR_peek_last_error()) == PEM_R_NO_START_LINE) {
+> +			ERR_clear_error();
+> +			if (file_type == KEYID_FILE_PEM_KEY) {
+> +				log_debug("%s: x509 certificate not found\n",
+> +					  certfile);
+> +				fclose(fp);
+> +				return -1;
+> +			}
+> +			rewind(fp);
+> +			d2i_X509_fp(fp, &x);
+> +		}
+> +		if (!x) {
+> +			ERR_print_errors_fp(stderr);
+> +			log_err("read keyid: %s: Error reading x509 certificate\n",
+> +				certfile);
+> +			fclose(fp);
+> +			return -1;
+> +		}
+> +	}
+> +	fclose(fp);
+> +
+> +	if (!(skid = X509_get0_subject_key_id(x))) {
+> +		log_err("read keyid: %s: SKID not found\n", certfile);
+> +		goto err_free;
+> +	}
+> +	skid_len = ASN1_STRING_length(skid);
+> +	if (skid_len < sizeof(keyid_raw)) {
+> +		log_err("read keyid: %s: SKID too short (len %d)\n", certfile,
+> +			skid_len);
+> +		goto err_free;
+> +	}
+> +	memcpy(&keyid_raw, ASN1_STRING_get0_data(skid) + skid_len
+> +	       - sizeof(keyid_raw), sizeof(keyid_raw));
+> +	if (keyid)
+> +		memcpy(keyid, &keyid_raw, sizeof(*keyid));
+
+
+If keyid is supposed to be in native format then you have to apply 
+ntohl() to it..
+
+
+> +	log_info("keyid %04x (from %s)\n", ntohl(keyid_raw), certfile);
+> +	return ntohl(keyid_raw);
+
+I thought this should return 0  ?
+
+
+> +
+> +err_free:
+> +	X509_free(x);
+> +	return -1;
+> +}
+> +
+> +/**
+> + * ima_read_keyid() - Read 32-bit keyid from the cert file.
+> + * @certfile:	File possibly containing certificate in DER/PEM format.
+> + * @keyid:	Output keyid in network order.
+> + *
+> + * Try to read keyid from Subject Key Identifier (SKID) of certificate.
+> + * Autodetect if cert is in PEM or DER encoding.
+> + *
+> + * Return: -1 (ULONG_MAX) on error;
+> + *         32-bit keyid as unsigned integer in host order.
+That's confusing, two times the same result, one time in host order, on 
+time in network order. Why not just one return value in host order?
+> + */
+> +unsigned long ima_read_keyid(const char *certfile, uint32_t *keyid)
+> +{
+> +	return _ima_read_keyid(certfile, keyid, KEYID_FILE_UNK_CERT);
+> +}
+> +
+>   static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
+>   {
+>   	FILE *fp;
+> diff --git a/tests/sign_verify.test b/tests/sign_verify.test
+> index 2c21812..52ea33a 100755
+> --- a/tests/sign_verify.test
+> +++ b/tests/sign_verify.test
+> @@ -360,6 +360,7 @@ sign_verify  rsa1024  md5     0x030201:K:0080
+>   sign_verify  rsa1024  sha1    0x030202:K:0080
+>   sign_verify  rsa1024  sha224  0x030207:K:0080
+>   expect_pass check_sign TYPE=ima KEY=rsa1024 ALG=sha256 PREFIX=0x030204aabbccdd0080 OPTS=--keyid=aabbccdd
+> +expect_pass check_sign TYPE=ima KEY=rsa1024 ALG=sha256 PREFIX=0x030204:K:0080 OPTS=--keyid=@test-rsa1024.cer
+>   sign_verify  rsa1024  sha256  0x030204:K:0080
+>     try_different_keys
+>     try_different_sigs
