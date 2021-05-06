@@ -2,122 +2,303 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A772D374C85
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 May 2021 02:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3B8374C87
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 May 2021 02:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbhEFAyQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 5 May 2021 20:54:16 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:55830 "EHLO
+        id S229603AbhEFAzw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 5 May 2021 20:55:52 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:56730 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbhEFAyQ (ORCPT
+        with ESMTP id S229602AbhEFAzv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 5 May 2021 20:54:16 -0400
+        Wed, 5 May 2021 20:55:51 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 95C2372C8B5;
-        Thu,  6 May 2021 03:53:17 +0300 (MSK)
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 5875172C8B5;
+        Thu,  6 May 2021 03:54:53 +0300 (MSK)
 Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 527044A46E8;
-        Thu,  6 May 2021 03:53:17 +0300 (MSK)
-Date:   Thu, 6 May 2021 03:53:17 +0300
+        by imap.altlinux.org (Postfix) with ESMTPSA id 4321A4A46E8;
+        Thu,  6 May 2021 03:54:53 +0300 (MSK)
+Date:   Thu, 6 May 2021 03:54:53 +0300
 From:   Vitaly Chikunov <vt@altlinux.org>
 To:     Stefan Berger <stefanb@linux.ibm.com>
 Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] ima-evm-utils: Read keyid from the cert appended
- to the key file
-Message-ID: <20210506005317.olcsehs4ou26gwjg@altlinux.org>
+Subject: Re: [PATCH v4 2/3] ima-evm-utils: Allow manual setting keyid from a
+ cert file
+Message-ID: <20210506005453.6czsllqawzye4pzb@altlinux.org>
 References: <20210505064843.111900-1-vt@altlinux.org>
- <20210505064843.111900-4-vt@altlinux.org>
- <2209bd5d-9255-4954-2a61-2d2e7f23a433@linux.ibm.com>
- <20210506002932.zt4mcihtl4v2yfxo@altlinux.org>
+ <20210505064843.111900-3-vt@altlinux.org>
+ <ed882d26-47a8-9b45-6c96-83d2f64982f2@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210506002932.zt4mcihtl4v2yfxo@altlinux.org>
+In-Reply-To: <ed882d26-47a8-9b45-6c96-83d2f64982f2@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 Stefan,
 
-On Thu, May 06, 2021 at 03:29:32AM +0300, Vitaly Chikunov wrote:
-> On Wed, May 05, 2021 at 07:29:17PM -0400, Stefan Berger wrote:
-> > 
-> > On 5/5/21 2:48 AM, Vitaly Chikunov wrote:
-> > > Allow to have certificate appended to the private key of `--key'
-> > > specified (PEM) file (for v2 signing) to facilitate reading of keyid
-> > > from the associated cert. This will allow users to have private and
-> > > public key as a single file. There is no check that public key form the
-> > > cert matches associated private key.
-> > > 
-> > > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> > > ---
-> > >   README          | 3 +++
-> > >   src/libimaevm.c | 8 +++++---
-> > >   2 files changed, 8 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/README b/README
-> > > index 0e1f6ba..ea11bde 100644
-> > > --- a/README
-> > > +++ b/README
-> > > @@ -127,6 +127,9 @@ for signing and importing the key.
-> > >   Second key format uses X509 DER encoded public key certificates and uses asymmetric key support
-> > >   in the kernel (since kernel 3.9). CONFIG_INTEGRITY_ASYMMETRIC_KEYS must be enabled (default).
-> > > +For v2 signatures x509 certificate with the public key could be appended to the private
-> > > +key (both are in PEM format) to properly determine its Subject Key Identifier (SKID).
-> > > +
-> > >   Integrity keyrings
-> > >   ----------------
-> > > diff --git a/src/libimaevm.c b/src/libimaevm.c
-> > > index a22d9bb..ac4bb46 100644
-> > > --- a/src/libimaevm.c
-> > > +++ b/src/libimaevm.c
-> > > @@ -1017,10 +1017,12 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
-> > >   		return -1;
-> > >   	}
-> > > -	if (imaevm_params.keyid)
-> > > +	if (imaevm_params.keyid) {
-> > >   		hdr->keyid = htonl(imaevm_params.keyid);
-> > > -	else
-> > > -		calc_keyid_v2(&hdr->keyid, name, pkey);
-> > > +	} else {
-> > > +		if (_ima_read_keyid(keyfile, &hdr->keyid, KEYID_FILE_PEM_KEY) == ULONG_MAX)
-> > > +			calc_keyid_v2(&hdr->keyid, name, pkey);
-> > > +	}
-> > 
-> > It might be convenient here to just write the result in network byte order
-> > into the header but for a library API I find it not so nice, but then
-> > there's calc_keyid_v2 that does that already... I just wouldn't expect that
-> > these parameter are in big endian order already, I would expect them in
-> > native order. 
+On Wed, May 05, 2021 at 07:13:39PM -0400, Stefan Berger wrote:
 > 
-> I expect them in network order, similar to how calc_keyid_v2() already
-> writes it one line below. So, why should we mix orders? Both functions
-> write keyids, so it's not like completely different parts of API. Also,
-> it's documented that ima_read_keyid() writes to the pointer in network
-> order (and returns integer in host order), so I don't see the
-> problem. Thus, I would prefer not to follow this suggestion.
+> On 5/5/21 2:48 AM, Vitaly Chikunov wrote:
+> > Allow user to specify `--keyid @/path/to/cert.pem' to extract keyid from
+> > SKID of the certificate file. PEM or DER format is auto-detected.
+> > 
+> > `--keyid' option is reused instead of adding a new option (like possible
+> > `--cert') to signify to the user it's only keyid extraction and nothing
+> > more.
+> > 
+> > This commit creates ABI change for libimaevm, due to adding new function
+> > ima_read_keyid(). Newer clients cannot work with older libimaevm.
+> > Together with previous commit it creates backward-incompatible ABI
+> > change, thus soname should be incremented on release.
+> > 
+> > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+> > ---
+> >   README                 |  1 +
+> >   src/evmctl.c           | 22 ++++++++++---
+> >   src/imaevm.h           |  1 +
+> >   src/libimaevm.c        | 85 ++++++++++++++++++++++++++++++++++++++++++++++++++
+> >   tests/sign_verify.test |  1 +
+> >   5 files changed, 105 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/README b/README
+> > index 8cd66e0..0e1f6ba 100644
+> > --- a/README
+> > +++ b/README
+> > @@ -49,6 +49,7 @@ OPTIONS
+> >         --rsa          use RSA key type and signing scheme v1
+> >     -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)
+> >         --keyid val    overwrite signature keyid with a value (for signing)
+> > +                     val is a x509 cert file if prefixed with '@'
+> >     -o, --portable     generate portable EVM signatures
+> >     -p, --pass         password for encrypted signing key
+> >     -r, --recursive    recurse into directories (sign)
+> > diff --git a/src/evmctl.c b/src/evmctl.c
+> > index 8ae5488..6a60599 100644
+> > --- a/src/evmctl.c
+> > +++ b/src/evmctl.c
+> > @@ -42,6 +42,7 @@
+> >   #include <sys/param.h>
+> >   #include <sys/stat.h>
+> >   #include <sys/ioctl.h>
+> > +#include <arpa/inet.h>
+> >   #include <fcntl.h>
+> >   #include <unistd.h>
+> >   #include <stdlib.h>
+> > @@ -57,12 +58,14 @@
+> >   #include <termios.h>
+> >   #include <assert.h>
+> > +#include <openssl/asn1.h>
+> >   #include <openssl/sha.h>
+> >   #include <openssl/pem.h>
+> >   #include <openssl/hmac.h>
+> >   #include <openssl/err.h>
+> >   #include <openssl/rsa.h>
+> >   #include <openssl/engine.h>
+> > +#include <openssl/x509v3.h>
+> >   #include "hash_info.h"
+> >   #include "pcr.h"
+> >   #include "utils.h"
+> > @@ -2447,6 +2450,7 @@ static void usage(void)
+> >   		"      --rsa          use RSA key type and signing scheme v1\n"
+> >   		"  -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)\n"
+> >   		"      --keyid val    overwrite signature keyid with a value (for signing)\n"
+> > +		"                     val is a x509 cert file if prefixed with '@'\n"
+> >   		"  -o, --portable     generate portable EVM signatures\n"
+> >   		"  -p, --pass         password for encrypted signing key\n"
+> >   		"  -r, --recursive    recurse into directories (sign)\n"
+> > @@ -2572,7 +2576,6 @@ int main(int argc, char *argv[])
+> >   	int err = 0, c, lind;
+> >   	ENGINE *eng = NULL;
+> >   	unsigned long keyid;
+> > -	char *eptr;
+> >   #if !(OPENSSL_VERSION_NUMBER < 0x10100000)
+> >   	OPENSSL_init_crypto(
+> > @@ -2718,10 +2721,19 @@ int main(int argc, char *argv[])
+> >   			pcrfile[npcrfile++] = optarg;
+> >   			break;
+> >   		case 143:
+> > -			errno = 0;
+> > -			keyid = strtoul(optarg, &eptr, 16);
+> > -			if (errno || eptr - optarg != strlen(optarg) ||
+> > -			    keyid == ULONG_MAX || keyid > UINT_MAX ||
+> > +			if (optarg[0] == '@') {
+> > +				keyid = ima_read_keyid(optarg + 1, NULL);
+> > +			} else {
+> > +				char *eptr;
+> > +
+> > +				errno = 0;
+> > +				keyid = strtoul(optarg, &eptr, 16);
+> > +				if (eptr - optarg != strlen(optarg) || errno) {
+> > +					log_err("Invalid keyid value.\n");
+> > +					exit(1);
+> > +				}
+> > +			}
+> > +			if (keyid == ULONG_MAX || keyid > UINT_MAX ||
+> >   			    keyid == 0) {
+> >   				log_err("Invalid keyid value.\n");
+> >   				exit(1);
+> > diff --git a/src/imaevm.h b/src/imaevm.h
+> > index 9f38059..eab7f32 100644
+> > --- a/src/imaevm.h
+> > +++ b/src/imaevm.h
+> > @@ -219,6 +219,7 @@ EVP_PKEY *read_pub_pkey(const char *keyfile, int x509);
+> >   void calc_keyid_v1(uint8_t *keyid, char *str, const unsigned char *pkey, int len);
+> >   void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey);
+> >   int key2bin(RSA *key, unsigned char *pub);
+> > +unsigned long ima_read_keyid(const char *certfile, uint32_t *keyid);
+> >   int sign_hash(const char *algo, const unsigned char *hash, int size, const char *keyfile, const char *keypass, unsigned char *sig);
+> >   int verify_hash(const char *file, const unsigned char *hash, int size, unsigned char *sig, int siglen);
+> > diff --git a/src/libimaevm.c b/src/libimaevm.c
+> > index 481d29d..a22d9bb 100644
+> > --- a/src/libimaevm.c
+> > +++ b/src/libimaevm.c
+> > @@ -57,6 +57,7 @@
+> >   #include <openssl/pem.h>
+> >   #include <openssl/evp.h>
+> >   #include <openssl/x509.h>
+> > +#include <openssl/x509v3.h>
+> >   #include <openssl/err.h>
+> >   #include "imaevm.h"
+> > @@ -748,6 +749,90 @@ void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey)
+> >   	X509_PUBKEY_free(pk);
+> >   }
+> > +enum keyid_file_type {
+> > +	KEYID_FILE_PEM_KEY = 0,
+> > +	KEYID_FILE_UNK_CERT,
+> > +};
+> > +
+> > +/*
+> > + * @is_cert: 1 - this is a x509 cert file (maybe PEM, maybe DER encoded);
+>
+> This probably change since you wrote it. Is this file_type now?
+
+Yes. (This is a consequence of making generic function out of N smaller
+functions- it's very hard to invent distinguisher that user could easily
+or understand at all.)
+
+> > + *           0 - this is a PEM encoded private key file with possible appended
+> > + *           x509 cert.
+> > + */
+> > +static unsigned long _ima_read_keyid(const char *certfile, uint32_t *keyid,
+> > +				     enum keyid_file_type file_type)
+> > +{
+> > +	uint32_t keyid_raw;
+> > +	const ASN1_OCTET_STRING *skid;
+> > +	int skid_len;
+> > +	X509 *x = NULL;
+> > +	FILE *fp;
+> > +
+> > +	if (!(fp = fopen(certfile, "r"))) {
+> > +		log_err("read keyid: %s: Cannot open: %s\n", certfile,
+> > +			strerror(errno));
+> > +		return -1;
+> > +	}
+> > +	if (!PEM_read_X509(fp, &x, NULL, NULL)) {
+> > +		if (ERR_GET_REASON(ERR_peek_last_error()) == PEM_R_NO_START_LINE) {
+> > +			ERR_clear_error();
+> > +			if (file_type == KEYID_FILE_PEM_KEY) {
+> > +				log_debug("%s: x509 certificate not found\n",
+> > +					  certfile);
+> > +				fclose(fp);
+> > +				return -1;
+> > +			}
+> > +			rewind(fp);
+> > +			d2i_X509_fp(fp, &x);
+> > +		}
+> > +		if (!x) {
+> > +			ERR_print_errors_fp(stderr);
+> > +			log_err("read keyid: %s: Error reading x509 certificate\n",
+> > +				certfile);
+> > +			fclose(fp);
+> > +			return -1;
+> > +		}
+> > +	}
+> > +	fclose(fp);
+> > +
+> > +	if (!(skid = X509_get0_subject_key_id(x))) {
+> > +		log_err("read keyid: %s: SKID not found\n", certfile);
+> > +		goto err_free;
+> > +	}
+> > +	skid_len = ASN1_STRING_length(skid);
+> > +	if (skid_len < sizeof(keyid_raw)) {
+> > +		log_err("read keyid: %s: SKID too short (len %d)\n", certfile,
+> > +			skid_len);
+> > +		goto err_free;
+> > +	}
+> > +	memcpy(&keyid_raw, ASN1_STRING_get0_data(skid) + skid_len
+> > +	       - sizeof(keyid_raw), sizeof(keyid_raw));
+> > +	if (keyid)
+> > +		memcpy(keyid, &keyid_raw, sizeof(*keyid));
 > 
-> Thanks,
 > 
-> > So maybe ima_read_keyid should just return ULONG_MAX or the
-> > keyid in host order and it call _ima_read_keyid() with a NULL pointer or a
-> > dummy variable as keyid that the library API caller doesn't see.
+> If keyid is supposed to be in native format then you have to apply ntohl()
+> to it..
 
-So there will be exported
-   uint32_t ima_read_keyid(char *certfile);
-and internal
-   static bool _read_keyid(char *certfile, uint32_t *keyid)
+Keyid is supposed to be in network order, it's documented (for
+ima_read_keyid which is just a wrapper for _ima_read_keyid).
+> 
+> 
+> > +	log_info("keyid %04x (from %s)\n", ntohl(keyid_raw), certfile);
+> > +	return ntohl(keyid_raw);
+> 
+> I thought this should return 0š ?
 
-ima_read_keyid will wrap read_keyid and return keyid via intermediate
-variable. Right?
+Why you thought so? It's documented for ima_read_keyid() return value is
+-1 or 32-bit keyid.
 
+> 
+> 
+> > +
+> > +err_free:
+> > +	X509_free(x);
+> > +	return -1;
+> > +}
+> > +
+> > +/**
+> > + * ima_read_keyid() - Read 32-bit keyid from the cert file.
+> > + * @certfile:	File possibly containing certificate in DER/PEM format.
+> > + * @keyid:	Output keyid in network order.
+> > + *
+> > + * Try to read keyid from Subject Key Identifier (SKID) of certificate.
+> > + * Autodetect if cert is in PEM or DER encoding.
+> > + *
+> > + * Return: -1 (ULONG_MAX) on error;
+> > + *         32-bit keyid as unsigned integer in host order.
+> That's confusing, two times the same result, one time in host order, on time
+> in network order. Why not just one return value in host order?
 
-> > 
-> > šš Stefan
-> > 
-> > 
-> > >   	st = "EVP_PKEY_CTX_new";
-> > >   	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
+Pointer API is similar to calc_keyid_v2().
+
+Do you sugegst to change calc_keyid_v2() API too?
+
+To introduce non-confusing API that contradict other parts of API would
+be more confusing than it already is.
+
+Thanks,
+
+> > + */
+> > +unsigned long ima_read_keyid(const char *certfile, uint32_t *keyid)
+> > +{
+> > +	return _ima_read_keyid(certfile, keyid, KEYID_FILE_UNK_CERT);
+> > +}
+> > +
+> >   static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
+> >   {
+> >   	FILE *fp;
+> > diff --git a/tests/sign_verify.test b/tests/sign_verify.test
+> > index 2c21812..52ea33a 100755
+> > --- a/tests/sign_verify.test
+> > +++ b/tests/sign_verify.test
+> > @@ -360,6 +360,7 @@ sign_verify  rsa1024  md5     0x030201:K:0080
+> >   sign_verify  rsa1024  sha1    0x030202:K:0080
+> >   sign_verify  rsa1024  sha224  0x030207:K:0080
+> >   expect_pass check_sign TYPE=ima KEY=rsa1024 ALG=sha256 PREFIX=0x030204aabbccdd0080 OPTS=--keyid=aabbccdd
+> > +expect_pass check_sign TYPE=ima KEY=rsa1024 ALG=sha256 PREFIX=0x030204:K:0080 OPTS=--keyid=@test-rsa1024.cer
+> >   sign_verify  rsa1024  sha256  0x030204:K:0080
+> >     try_different_keys
+> >     try_different_sigs
