@@ -2,125 +2,82 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F148F374D86
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 May 2021 04:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6723A374E1F
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 May 2021 05:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbhEFCaA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 5 May 2021 22:30:00 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:56564 "EHLO
+        id S229735AbhEFDsL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 5 May 2021 23:48:11 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:49690 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbhEFC37 (ORCPT
+        with ESMTP id S230073AbhEFDsL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 5 May 2021 22:29:59 -0400
+        Wed, 5 May 2021 23:48:11 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id EDF8D72C8B5;
-        Thu,  6 May 2021 05:29:00 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id D562C4A46E8;
-        Thu,  6 May 2021 05:29:00 +0300 (MSK)
-Date:   Thu, 6 May 2021 05:29:00 +0300
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 4568F72C8B5;
+        Thu,  6 May 2021 06:47:12 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [193.43.10.250])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 1FC6E4A46E8;
+        Thu,  6 May 2021 06:47:12 +0300 (MSK)
 From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] ima-evm-utils: Allow manual setting keyid from a
- cert file
-Message-ID: <20210506022900.cxvvlszet45r2scq@altlinux.org>
-References: <20210505064843.111900-1-vt@altlinux.org>
- <20210505064843.111900-3-vt@altlinux.org>
- <ed882d26-47a8-9b45-6c96-83d2f64982f2@linux.ibm.com>
- <20210506005453.6czsllqawzye4pzb@altlinux.org>
- <20210506010753.eqbrr42ltk2eh6hs@altlinux.org>
- <db89901d-cb0a-60ff-f6e6-d5719186dfba@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <db89901d-cb0a-60ff-f6e6-d5719186dfba@linux.ibm.com>
+Subject: [PATCH v5 0/3] ima-evm-utils: Add --keyid option
+Date:   Thu,  6 May 2021 06:46:59 +0300
+Message-Id: <20210506034702.216842-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Stefan,
+Allow user to set signature's keyid using `--keyid' option. Keyid should
+correspond to SKID in certificate. When keyid is calculated using SHA-1
+in libimaevm it may mismatch keyid extracted by the kernel from SKID of
+certificate (the way public key is presented to the kernel), thus making
+signatures not verifiable. This may happen when certificate is using non
+SHA-1 SKID (see rfc7093) or just 'unique number' (see rfc5280 4.2.1.2).
+As a last resort user may specify arbitrary keyid using the new option.
+Certificate @filename could be used instead of the hex number. And,
+third option is to read keyid from the cert appended to the key file.
 
-On Wed, May 05, 2021 at 10:24:48PM -0400, Stefan Berger wrote:
-> On 5/5/21 9:07 PM, Vitaly Chikunov wrote:
-> > On Thu, May 06, 2021 at 03:54:53AM +0300, Vitaly Chikunov wrote:
-> > > On Wed, May 05, 2021 at 07:13:39PM -0400, Stefan Berger wrote:
-> > > > On 5/5/21 2:48 AM, Vitaly Chikunov wrote:
-> > > > > Allow user to specify `--keyid @/path/to/cert.pem' to extract keyid from
-> > > > > SKID of the certificate file. PEM or DER format is auto-detected.
-> > > > > 
-> > > > > `--keyid' option is reused instead of adding a new option (like possible
-> > > > > `--cert') to signify to the user it's only keyid extraction and nothing
-> > > > > more.
-> > > > > 
-> > > > > This commit creates ABI change for libimaevm, due to adding new function
-> > > > > ima_read_keyid(). Newer clients cannot work with older libimaevm.
-> > > > > Together with previous commit it creates backward-incompatible ABI
-> > > > > change, thus soname should be incremented on release.
-> > > > > 
-> > > > > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> > > > > ---
-> > > > >    README                 |  1 +
-> > > > >    src/evmctl.c           | 22 ++++++++++---
-> > > > >    src/imaevm.h           |  1 +
-> > > > >    src/libimaevm.c        | 85 ++++++++++++++++++++++++++++++++++++++++++++++++++
-> > > > >    tests/sign_verify.test |  1 +
-> > > > >    5 files changed, 105 insertions(+), 5 deletions(-)
-> > > > > 
-> > > > > +/**
-> > > > > + * ima_read_keyid() - Read 32-bit keyid from the cert file.
-> > > > > + * @certfile:	File possibly containing certificate in DER/PEM format.
-> > > > > + * @keyid:	Output keyid in network order.
-> > > > > + *
-> > > > > + * Try to read keyid from Subject Key Identifier (SKID) of certificate.
-> > > > > + * Autodetect if cert is in PEM or DER encoding.
-> > > > > + *
-> > > > > + * Return: -1 (ULONG_MAX) on error;
-> > > > > + *         32-bit keyid as unsigned integer in host order.
-> > > > That's confusing, two times the same result, one time in host order, on time
-> > > > in network order. Why not just one return value in host order?
-> > > Pointer API is similar to calc_keyid_v2().
-> > > 
-> > > Do you sugegst to change calc_keyid_v2() API too?
-> > > 
-> > > To introduce non-confusing API that contradict other parts of API would
-> > > be more confusing than it already is.
-> > Maybe we could change this libimaevm API:
-> > 
-> >    void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey);
-> > 
-> > to
-> > 
-> >    void calc_keyid_v2(uint8_t *keyid, char *str, EVP_PKEY *pkey);
-> 
-> 
-> I think it's better to leave it... :-(
+These commits create backward incompatible ABI change for libimaevm,
+ thus soname should be incremented on release.
 
-OK.
+Changes from v4:
+- ima_read_keyid() API changed. As suggested by Stefan Berger.
 
-> 
-> > 
-> > To signal to the user that there it's not just uint32_t, but some byte
-> > array (possible in network order). This would not even break ABI, only
-> > API. (But, we breaking ABI with this patch set anyway.)
-> 
-> You mean we are breaking it by introducing this extensions here?
+Changes from v3:
+- ima_read_keyid() is improved to better support both use cases.
 
-As described in commit messages - adding new API function breaks
-compatibility of new clients with old lib, and adding keyid into
-libimaevm_params breaks compatibility of new lib with old clients.
-Thus, major ABI change.
+Changes from v2:
+- Add ima_read_keyid() function to libemaevm and use it in both evmctl
+  (for --keyid) and sign_hash_v2() (for concatenated PEMs). Suggested
+  by Stefan Berger.
+- Autodetect PEM by openssl reading it instead of magic string.
+  Suggested by Stefan Berger.
+- Trivial change: s/unsigned long int/unsigned long/ for keyid type.
 
-> 
-> @ -196,6 +196,7 @@ struct libimaevm_params {
->  	const char *hash_algo;
->  	const char *keyfile;
->  	const char *keypass;
-> +	uint32_t keyid;		/* keyid overriding value, unless 0. */
->  };
-> 
-> > 
-> > Thanks,
-> > 
+Changes from v1:
+- Extract keyid from cert associated to key file.
+- Use sizeof instead of constant.
+
+Changes since rfc version:
+- `imaevm_params.keyid' now stored as native integer (instead of network
+  order). Suggested by Stefan Berger.
+- Added support for `--keyid=@filename'.
+
+Vitaly Chikunov (3):
+  ima-evm-utils: Allow manual setting keyid for signing
+  ima-evm-utils: Allow manual setting keyid from a cert file
+  ima-evm-utils: Read keyid from the cert appended to the key file
+
+ README                 |  5 +++
+ src/evmctl.c           | 27 ++++++++++++++
+ src/imaevm.h           |  2 +
+ src/libimaevm.c        | 99 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ tests/sign_verify.test |  2 +
+ 5 files changed, 132 insertions(+), 3 deletions(-)
+
+-- 
+2.11.0
+
