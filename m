@@ -2,66 +2,164 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86148375E7E
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 May 2021 03:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44CA376631
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 May 2021 15:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbhEGBod (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 6 May 2021 21:44:33 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:33858 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbhEGBod (ORCPT
+        id S235930AbhEGNcb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 May 2021 09:32:31 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3041 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234545AbhEGNca (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 6 May 2021 21:44:33 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id E7C8372C8B4;
-        Fri,  7 May 2021 04:43:32 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id AD88A4A46E8;
-        Fri,  7 May 2021 04:43:32 +0300 (MSK)
-Date:   Fri, 7 May 2021 04:43:32 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] ima-evm-utils: Add --keyid option
-Message-ID: <20210507014332.qrgvzaana53yzp4g@altlinux.org>
-References: <20210506034702.216842-1-vt@altlinux.org>
- <a187174e-9a57-9aad-790b-41eaca424e35@linux.ibm.com>
+        Fri, 7 May 2021 09:32:30 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Fc9zr6sxGz6wkgY;
+        Fri,  7 May 2021 21:20:24 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 7 May 2021 15:31:28 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <mjg59@google.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RESEND][PATCH v6 05/11] evm: Introduce evm_hmac_disabled() to safely ignore verification errors
+Date:   Fri, 7 May 2021 15:31:14 +0200
+Message-ID: <20210507133114.2138653-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210505113329.1410943-1-roberto.sassu@huawei.com>
+References: <20210505113329.1410943-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <a187174e-9a57-9aad-790b-41eaca424e35@linux.ibm.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.62.217]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Stefan,
+When a file is being created, LSMs can set the initial label with the
+inode_init_security hook. If no HMAC key is loaded, the new file will have
+LSM xattrs but not the HMAC. It is also possible that the file remains
+without protected xattrs after creation if no active LSM provided it.
 
-On Thu, May 06, 2021 at 04:10:25PM -0400, Stefan Berger wrote:
-> On 5/5/21 11:46 PM, Vitaly Chikunov wrote:
-> > Allow user to set signature's keyid using `--keyid' option. Keyid should
-> > correspond to SKID in certificate. When keyid is calculated using SHA-1
-> > in libimaevm it may mismatch keyid extracted by the kernel from SKID of
-> > certificate (the way public key is presented to the kernel), thus making
-> > signatures not verifiable. This may happen when certificate is using non
-> > SHA-1 SKID (see rfc7093) or just 'unique number' (see rfc5280 4.2.1.2).
-> > As a last resort user may specify arbitrary keyid using the new option.
-> > Certificate @filename could be used instead of the hex number. And,
-> > third option is to read keyid from the cert appended to the key file.
-> > 
-> > These commits create backward incompatible ABI change for libimaevm,
-> >   thus soname should be incremented on release.
-> 
-> I hope this will not be forgotten about. Maybe it should be part of this
-> series here?
+Unfortunately, EVM will deny any further metadata operation on new files,
+as evm_protect_xattr() will always return the INTEGRITY_NOLABEL error, or
+INTEGRITY_NOXATTRS if no protected xattrs exist. This would limit the
+usability of EVM when only a public key is loaded, as commands such as cp
+or tar with the option to preserve xattrs won't work.
 
-https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
+This patch introduces the evm_hmac_disabled() function to determine whether
+or not it is safe to ignore verification errors, based on the ability of
+EVM to calculate HMACs. If the HMAC key is not loaded, and it cannot be
+loaded in the future due to the EVM_SETUP_COMPLETE initialization flag,
+allowing an operation despite the attrs/xattrs being found invalid will not
+make them valid.
 
-  "Update the version information only immediately before a public
-  release of your software."
+Since the post hooks can be executed even when the HMAC key is not loaded,
+this patch also ensures that the EVM_INIT_HMAC initialization flag is set
+before the post hooks call evm_update_evmxattr().
 
-I believe we should follow this.
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/evm/evm_main.c | 37 ++++++++++++++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
-Thanks,
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 998818283fda..940e5f0a5f93 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -90,6 +90,24 @@ static bool evm_key_loaded(void)
+ 	return (bool)(evm_initialized & EVM_KEY_MASK);
+ }
+ 
++/*
++ * This function determines whether or not it is safe to ignore verification
++ * errors, based on the ability of EVM to calculate HMACs. If the HMAC key
++ * is not loaded, and it cannot be loaded in the future due to the
++ * EVM_SETUP_COMPLETE initialization flag, allowing an operation despite the
++ * attrs/xattrs being found invalid will not make them valid.
++ */
++static bool evm_hmac_disabled(void)
++{
++	if (evm_initialized & EVM_INIT_HMAC)
++		return false;
++
++	if (!(evm_initialized & EVM_SETUP_COMPLETE))
++		return false;
++
++	return true;
++}
++
+ static int evm_find_protected_xattrs(struct dentry *dentry)
+ {
+ 	struct inode *inode = d_backing_inode(dentry);
+@@ -338,6 +356,10 @@ static int evm_protect_xattr(struct dentry *dentry, const char *xattr_name,
+ 	if (evm_status == INTEGRITY_NOXATTRS) {
+ 		struct integrity_iint_cache *iint;
+ 
++		/* Exception if the HMAC is not going to be calculated. */
++		if (evm_hmac_disabled())
++			return 0;
++
+ 		iint = integrity_iint_find(d_backing_inode(dentry));
+ 		if (iint && (iint->flags & IMA_NEW_FILE))
+ 			return 0;
+@@ -354,6 +376,9 @@ static int evm_protect_xattr(struct dentry *dentry, const char *xattr_name,
+ 				    -EPERM, 0);
+ 	}
+ out:
++	/* Exception if the HMAC is not going to be calculated. */
++	if (evm_hmac_disabled() && evm_status == INTEGRITY_NOLABEL)
++		return 0;
+ 	if (evm_status != INTEGRITY_PASS)
+ 		integrity_audit_msg(AUDIT_INTEGRITY_METADATA, d_backing_inode(dentry),
+ 				    dentry->d_name.name, "appraise_metadata",
+@@ -470,6 +495,9 @@ void evm_inode_post_setxattr(struct dentry *dentry, const char *xattr_name,
+ 
+ 	evm_reset_status(dentry->d_inode);
+ 
++	if (!(evm_initialized & EVM_INIT_HMAC))
++		return;
++
+ 	evm_update_evmxattr(dentry, xattr_name, xattr_value, xattr_value_len);
+ }
+ 
+@@ -490,6 +518,9 @@ void evm_inode_post_removexattr(struct dentry *dentry, const char *xattr_name)
+ 
+ 	evm_reset_status(dentry->d_inode);
+ 
++	if (!(evm_initialized & EVM_INIT_HMAC))
++		return;
++
+ 	evm_update_evmxattr(dentry, xattr_name, NULL, 0);
+ }
+ 
+@@ -515,7 +546,8 @@ int evm_inode_setattr(struct dentry *dentry, struct iattr *attr)
+ 		return 0;
+ 	evm_status = evm_verify_current_integrity(dentry);
+ 	if ((evm_status == INTEGRITY_PASS) ||
+-	    (evm_status == INTEGRITY_NOXATTRS))
++	    (evm_status == INTEGRITY_NOXATTRS) ||
++	    (evm_hmac_disabled() && evm_status == INTEGRITY_NOLABEL))
+ 		return 0;
+ 	integrity_audit_msg(AUDIT_INTEGRITY_METADATA, d_backing_inode(dentry),
+ 			    dentry->d_name.name, "appraise_metadata",
+@@ -541,6 +573,9 @@ void evm_inode_post_setattr(struct dentry *dentry, int ia_valid)
+ 
+ 	evm_reset_status(dentry->d_inode);
+ 
++	if (!(evm_initialized & EVM_INIT_HMAC))
++		return;
++
+ 	if (ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID))
+ 		evm_update_evmxattr(dentry, NULL, NULL, 0);
+ }
+-- 
+2.25.1
 
