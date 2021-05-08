@@ -2,82 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7A9376CAF
-	for <lists+linux-integrity@lfdr.de>; Sat,  8 May 2021 00:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AD8376E53
+	for <lists+linux-integrity@lfdr.de>; Sat,  8 May 2021 04:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbhEGW1h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 May 2021 18:27:37 -0400
-Received: from bosmailout01.eigbox.net ([66.96.190.1]:36027 "EHLO
-        bosmailout01.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhEGW1h (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 May 2021 18:27:37 -0400
-X-Greylist: delayed 1929 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 18:27:30 EDT
-Received: from bosmailscan09.eigbox.net ([10.20.15.9])
-        by bosmailout01.eigbox.net with esmtp (Exim)
-        id 1lf8QO-00068o-JJ; Fri, 07 May 2021 17:54:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=godsofu4.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aM9bUFGSTpfnep8zAVAJMnojqhcwpuHDFPgQnPqW4M4=; b=bjgKomV6NO5Eg5D3qsCBps1llx
-        tj4k2teSfIdfo/duBtOSoC/FW1+C1nXiYJbrvf2JDobx8fDCsgnxHFoPWOCb5eI+OJOIgvnnfKlpl
-        ZqidIuDnjEPTMao1vFwrg6M9FUKU/cz6TT5/KN4ccsk+aQli3Wgs3G1cQz5vdbC1Y2SXULFY8Mu2t
-        1PShwmiDRn71EPzgUHUVu0GG39z6uSTEuRgOXhiNl9ekuZ5QXUAEykoocvC5/DkORRmERAA91o1HY
-        Sl76pPWw9UBVGbuFbfdVPfVcFxJM5xZDrmgt6uCf9J+dn/n7LFOSOxBaL9svxxYdhOkJwdz4uh075
-        2gI+xJSw==;
-Received: from [10.115.3.32] (helo=bosimpout12)
-        by bosmailscan09.eigbox.net with esmtp (Exim)
-        id 1lf8QO-0003aD-AI; Fri, 07 May 2021 17:54:20 -0400
-Received: from boswebmail06.eigbox.net ([10.20.16.6])
-        by bosimpout12 with 
-        id 1xuH2500407qujN01xuLVi; Fri, 07 May 2021 17:54:20 -0400
-X-EN-SP-DIR: OUT
-X-EN-SP-SQ: 1
-Received: from [127.0.0.1] (helo=homestead)
-        by boswebmail06.eigbox.net with esmtp (Exim)
-        id 1lf8QL-0006fx-UG; Fri, 07 May 2021 17:54:17 -0400
-Received: from [197.239.81.229]
- by emailmg.homestead.com
- with HTTP (HTTP/1.1 POST); Fri, 07 May 2021 17:54:17 -0400
+        id S229836AbhEHCCz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 May 2021 22:02:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49370 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229775AbhEHCCy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 7 May 2021 22:02:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BC740611CA;
+        Sat,  8 May 2021 02:01:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620439314;
+        bh=2Ed/Cd2G9iaVVcr9VK9H7/YA80GAkjazsqK7Fk6/HY4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qGLHX2pFRuP4G8/+GTibOTHKjl/DdDRn6K9TeRZM+crrMI+9NZTlP2gY4WFETexpc
+         X/JovFmdCiw00sF2a4ARDKkdKoShTk5BuOHnxnCeDKZv7JD5qLtBSXcQekOv3Jwo9h
+         MHoWQYcJryyG+7wrj2kymuseI6v8mJZB6VuZqMCgb/tPh91iieCymQXF8TrovjW7JJ
+         qoK+GDm9NmdlwFnv3Ei/CSfO5JFMaUfCfTo0wO1xRkKvU4zTcZRDIq4rPpwOv0FCaE
+         GEWvzLwXn0b+RSu2BVOhpMzPulmln9NqP6/4SmvqaU5YokTyr0A0khAnWXK3EODBWO
+         fN+EgDI+5cPvA==
+Date:   Sat, 8 May 2021 05:01:51 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Liguang Zhang <zhangliguang@linux.alibaba.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm_tis_spi: set default probe function if device id not
+ match
+Message-ID: <YJXxDzougt3ZC01q@kernel.org>
+References: <20210507145255.44033-1-zhangliguang@linux.alibaba.com>
 MIME-Version: 1.0
-Date:   Fri, 07 May 2021 21:54:17 +0000
-From:   Mrs Suzara Maling Wan <fast65@godsofu4.com>
-To:     undisclosed-recipients:;
-Subject: URGENT REPLY NEEDED
-Reply-To: suzara2017malingwan@gmail.com
-Mail-Reply-To: suzara2017malingwan@gmail.com
-Message-ID: <36acfe805efde59f3f399df1324ce6b9@godsofu4.com>
-X-Sender: fast65@godsofu4.com
-User-Agent: Roundcube Webmail/1.3.14
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-EN-AuthUser: fast65@godsofu4.com
-Sender:  Mrs Suzara Maling Wan <fast65@godsofu4.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210507145255.44033-1-zhangliguang@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, May 07, 2021 at 10:52:55PM +0800, Liguang Zhang wrote:
+> In DSDT table, TPM _CID was SMO0768, and no _HID definition. After a
+> kernel upgrade from 4.19 to 5.10, TPM probe function was changed which
+> causes device probe fails. In order to make newer kernel to be
+> compatible with the older acpi definition, it would be best set default
+> probe function.
+> 
+> Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
+> ---
+>  drivers/char/tpm/tpm_tis_spi_main.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+> index 3856f6ebcb34..da632a582621 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -240,10 +240,14 @@ static int tpm_tis_spi_driver_probe(struct spi_device *spi)
+>  	tpm_tis_spi_probe_func probe_func;
+>  
+>  	probe_func = of_device_get_match_data(&spi->dev);
+> -	if (!probe_func && spi_dev_id)
+> -		probe_func = (tpm_tis_spi_probe_func)spi_dev_id->driver_data;
+> -	if (!probe_func)
+> -		return -ENODEV;
+> +	if (!probe_func) {
+> +		if (spi_dev_id) {
+> +			probe_func = (tpm_tis_spi_probe_func)spi_dev_id->driver_data;
+> +			if (!probe_func)
+> +				return -ENODEV;
 
+Perhaps also hear fallback to tpm_tis_spi_probe?
 
-My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
-of the Philippine presently base in West Africa B/F, dealing with
-exportation of Gold, I was diagnose of blood Causal decease, and my
-doctor have announce to me that I have few days to leave due to the
-condition of my sickness.
+> +		} else
+> +			probe_func = tpm_tis_spi_probe;
+> +	}
+>  
+>  	return probe_func(spi);
+>  }
+> -- 
+> 2.19.1.6.gb485710b
+> 
+> 
 
-I have a desire to build an orphanage home in your country of which i
-cannot execute the project myself due to my present health condition,
-I am willing to hand over the project under your care for you to help
-me fulfill my dreams and desire of building an orphanage home in your
-country.
-
-Reply in you are will to help so that I can direct you to my bank for
-the urgent transfer of the fund/money require for the project to your
-account as I have already made the fund/money available.
-
-With kind regards
-Mrs Suzara Maling Wan
+/Jarkko
