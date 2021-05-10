@@ -2,82 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D88037979D
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 May 2021 21:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897563798BB
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 May 2021 23:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbhEJTXx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 May 2021 15:23:53 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:47815 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233208AbhEJTXt (ORCPT
+        id S230185AbhEJVFq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 May 2021 17:05:46 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:44985 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230165AbhEJVFq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 May 2021 15:23:49 -0400
-Received: from cwcc.thunk.org (pool-72-74-133-215.bstnma.fios.verizon.net [72.74.133.215])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 14AJM3dI013584
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 May 2021 15:22:05 -0400
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id F267215C3CD9; Mon, 10 May 2021 15:22:02 -0400 (EDT)
-Date:   Mon, 10 May 2021 15:22:02 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
-Message-ID: <YJmH2irxoRsyNudb@mit.edu>
-References: <cover.1620641727.git.mchehab+huawei@kernel.org>
- <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
- <20210510135518.305cc03d@coco.lan>
- <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
+        Mon, 10 May 2021 17:05:46 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 463445C004F;
+        Mon, 10 May 2021 17:04:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 10 May 2021 17:04:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+         h=date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=b+B/Ao5TBLbn8YtT21sbRFDG8ts
+        Ssyhgsy6rowzSCO8=; b=iFZ2Hrvxjx+zZkLTKCjSMtsUAvMgvSOiqGpIyAMCdCn
+        7//m6GaTjkoIdvzqZDdIpAVkcQMlvCIAzK3yu/Dk2FMasgkr8BCV+edU6hkjXtsY
+        aTf7Dw7PV3epQNz9PES8WumbNqFIVxtmvc9Q02ZbiNPTPZd19BtAKK7kGRP2PPsU
+        F4r2svNX59SQu2Iz/pMrbYfjMK9yZPNcPq274JbGkjxI3bHqjigbDvO6/yIIf52v
+        /HhCIMuJVBPhI3i9lgHIsLvjEeQq/GmY/MwWuRgR5PGgBt0mQ4Kt1b5ogsdPVZQZ
+        s549O5y35DEHrPbz7PF92M5kxBrJMmVdkwAr9TqmiSg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=b+B/Ao
+        5TBLbn8YtT21sbRFDG8tsSsyhgsy6rowzSCO8=; b=Uci6YFmok17WNk7jqxrnKX
+        KXS9dQeGedD0sYZJazlhh3LbN3dvi/j5QecsUh7Y+OBjHI9WmK4tjgN52D+0hWY+
+        AgYvISA7Rhpq4evPc831YZz9xEUGnDt+jBPmullaHqgSZCTMA/VG9TkCgTsCKZvI
+        VqvG9L4fJB2yT9+WxNib7wM2VUZ/asDy20PU5h+q60oInIk3A0CMU+U29mtEgr5O
+        yWmjjPDu3i3BXHMY34lM2HPB5PS8JsCP540SnGD8RCUwZ6bKNZ0wkuQ1WOVHLQjF
+        e09AH4UJW7ypLFz06pyyxl8IDj/7s10Ln7bFw/0mz3BsPHCru0caaOGiDmQJm93g
+        ==
+X-ME-Sender: <xms:45-ZYE1KqrRSWHuBSacsn2R2KmU8jnwNQWXkldS22XwxqRl0OKY68A>
+    <xme:45-ZYPHsNHh7J5waVoc9wpH9Twbv3BYPHQsEQsnPwmUJG3Id-j_XJz9XU8VIHA9oh
+    AgSOXwl2o5yPQL8oOk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdegkedgudehkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtreejnecuhfhrohhmpeeuvghn
+    uceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlhdrnhgvtheqnecuggftrfgrth
+    htvghrnhepvefftdettefgtddtkeeufeegtddttdeuueegkeegteffueetffejudeihefh
+    kedtnecukfhppedvgedrudeiledrvddtrddvheehnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepmhgvsegsvghnsghovggtkhgvlhdrnhgvth
+X-ME-Proxy: <xmx:45-ZYM7A9R5Jt2884Wp-wnpKOdJ7Twu5t9g8IG7DuYKUg3n8lu3uHA>
+    <xmx:45-ZYN2Xp6CeEy5PSwod02rub18zFMmwz7RbKIuvGS54fey7QdUvGA>
+    <xmx:45-ZYHH7y9uu0mR82EeCRA906xVt8_91KEgHNO1kcJaBJmKodtrzgw>
+    <xmx:5J-ZYLi2w64bLuN-O1vT7gak7sK-d9Kfpx36F0KpvufnaZo_O4-JmA>
+Received: from localhost (unknown [24.169.20.255])
+        by mail.messagingengine.com (Postfix) with ESMTPA;
+        Mon, 10 May 2021 17:04:35 -0400 (EDT)
+Date:   Mon, 10 May 2021 17:04:33 -0400
+From:   Ben Boeckel <me@benboeckel.net>
+To:     keyrings@vger.kernel.org
+Cc:     Ben Boeckel <mathstuf@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH v2 1/1] trusted-keys: match tpm_get_ops on all return
+ paths
+Message-ID: <YJmf4Q0l+MTFEaEo@erythro.dev.benboeckel.internal>
+References: <20210429192156.770145-1-list.lkml.keyrings@me.benboeckel.net>
+ <20210429192156.770145-2-list.lkml.keyrings@me.benboeckel.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
+In-Reply-To: <20210429192156.770145-2-list.lkml.keyrings@me.benboeckel.net>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, May 10, 2021 at 02:49:44PM +0100, David Woodhouse wrote:
-> On Mon, 2021-05-10 at 13:55 +0200, Mauro Carvalho Chehab wrote:
-> > This patch series is doing conversion only when using ASCII makes
-> > more sense than using UTF-8. 
-> > 
-> > See, a number of converted documents ended with weird characters
-> > like ZERO WIDTH NO-BREAK SPACE (U+FEFF) character. This specific
-> > character doesn't do any good.
-> > 
-> > Others use NO-BREAK SPACE (U+A0) instead of 0x20. Harmless, until
-> > someone tries to use grep[1].
+On Thu, Apr 29, 2021 at 15:21:56 -0400, Ben Boeckel wrote:
+> From: Ben Boeckel <mathstuf@gmail.com>
 > 
-> Replacing those makes sense. But replacing emdashes — which are a
-> distinct character that has no direct replacement in ASCII and which
-> people do *deliberately* use instead of hyphen-minus — does not.
+> The `tpm_get_ops` call at the beginning of the function is not paired
+> with a `tpm_put_ops` on this return path.
+> 
+> Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key format for the blobs")
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+> ---
+>  security/keys/trusted-keys/trusted_tpm2.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 617fabd4d913..0165da386289 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -336,9 +336,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  			rc = -EPERM;
+>  	}
+>  	if (blob_len < 0)
+> -		return blob_len;
+> -
+> -	payload->blob_len = blob_len;
+> +		rc = blob_len;
+> +	else
+> +		payload->blob_len = blob_len;
+>  
+>  	tpm_put_ops(chip);
+>  	return rc;
 
-I regularly use --- for em-dashes and -- for en-dashes.  Markdown will
-automatically translate 3 ASCII hypens to em-dashes, and 2 ASCII
-hyphens to en-dashes.  It's much, much easier for me to type 2 or 3
-hypens into my text editor of choice than trying to enter the UTF-8
-characters.  If we can make sphinx do this translation, maybe that's
-the best way of dealing with these two characters?
+Ping? Is this going to make 5.13? This fixes an issue that is in
+5.13-rc1.
 
-Cheers,
-
-					- Ted
+--Ben
