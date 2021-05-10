@@ -2,132 +2,110 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E08379A7C
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 May 2021 01:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03D3379AAC
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 May 2021 01:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbhEJXK6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 May 2021 19:10:58 -0400
-Received: from mout.gmx.net ([212.227.17.22]:55661 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229561AbhEJXK5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 May 2021 19:10:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1620688177;
-        bh=eMqhC2oMTqWtYVoIPiJOZD27KLY0FWTsD7z9V/P+6LM=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=JPylW/VbSUDyswUOKrahirMeFRQNN2kXLI4taUzrIofkvhJn9K3NdMNzZjiP+mk4W
-         PVlfIaQ9wY3cB4OpHG5Xv1a4zBgnSCzZsiqotlPU/HT1XNyHS5/vPp3n+sfRn6DbOz
-         3Sz4LcH3BiNp+A/cLutdHRuiLs4P4bfzFmCC/gqI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.51] ([78.42.220.31]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MqJqN-1lBWy33b51-00nRXB; Tue, 11
- May 2021 01:09:36 +0200
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Extend locality handling to TPM2 in
- tpm_tis_gen_interrupt()
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>, stable@vger.kernel.org,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-References: <20210510122831.409608-1-jarkko@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <daf823b3-522c-6c9a-984b-0ca849512a54@gmx.de>
-Date:   Tue, 11 May 2021 01:09:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229986AbhEJXUI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 May 2021 19:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229661AbhEJXUI (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 10 May 2021 19:20:08 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E03C061574;
+        Mon, 10 May 2021 16:19:02 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 1AC04128053C;
+        Mon, 10 May 2021 16:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1620688742;
+        bh=f905pQyWkLsAp05euszWRJr8cxZx1j0A/Ts4bKkRP00=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=XQZ17b4EHOcvNHKQV/G8NkHCK5QxyRs75nHIZ+NU2BwsXSjaecY1bVumMHyAck4Wn
+         60U7vbdMuochf82VrqCSIZzrzb0HDq1OX4D9waKUC7aDU346wWkTEZyCcN94BvGdPG
+         T2MCS1JMSBSLHu7/ngRue3NnMf4vLfNdlxA5OMAY=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id EwNIEwqsrRQ2; Mon, 10 May 2021 16:19:02 -0700 (PDT)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9AA13128053B;
+        Mon, 10 May 2021 16:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1620688741;
+        bh=f905pQyWkLsAp05euszWRJr8cxZx1j0A/Ts4bKkRP00=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=QOWswFUiFRIpMgsESW8uArfM77pN5AYcAO2vNZYwPyon+5xq+UNgc3VSaym99y43n
+         G44OYK1QAH17v4gZWWBel6GKTmDHsW/kpEtQ5eJsLjQd4bhsCFo4HLnFcIkpFHFsiT
+         GUvttcLwC7WAA882wwkHuxKDCYo3LsEQNdrM9oMM=
+Message-ID: <c896e4fd24aa649081cb0ce712580a8400ab36d6.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 1/1] trusted-keys: match tpm_get_ops on all return
+ paths
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Ben Boeckel <me@benboeckel.net>, keyrings@vger.kernel.org
+Cc:     Ben Boeckel <mathstuf@gmail.com>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Date:   Mon, 10 May 2021 16:19:00 -0700
+In-Reply-To: <YJmf4Q0l+MTFEaEo@erythro.dev.benboeckel.internal>
+References: <20210429192156.770145-1-list.lkml.keyrings@me.benboeckel.net>
+         <20210429192156.770145-2-list.lkml.keyrings@me.benboeckel.net>
+         <YJmf4Q0l+MTFEaEo@erythro.dev.benboeckel.internal>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <20210510122831.409608-1-jarkko@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:YshV3KIeC+zguZvJB0wqK5CRyMyLWaVtTQwSgVJdxR/84mirp4t
- kH6kX5oZE/wWxfl+8BMJcDa/XHMs7SBoKHIW1AW/8YB72l0j18wZ06bnBsRqbt1gLmaH+yo
- fsjEl+2DzY8sNoAlIIHfLZ8NGJosNh+F1xWS13qrYSzvHCjKclD69QlwKtI80SCSlCTsmsD
- 67rQlZG4Xi5GGay5THr4w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yXNHML4dHQI=:nYfrTOyg9+gHFdVRLOgtSv
- bKZ06cqbU6B+l/wmsqYBG9lkRmCEdybhMeFiTI5VyBx3C3hMPH+Zll7HoW6Ze/VevA4wKFZkF
- QOsiRMTR1Rf1zh4PuRarDkwGkfbIwRrWL7oeSqGFdd+miN2wYuVVRaRg3+4bgzGO4BWc1oZoh
- X4NtiRChWDHEi6jRsxOKS/JNpmpkXCE0oDZDfxTUbDDZe40Hs+xHhPmmxQhyqbWSAuCEvaOiD
- rOF10D+G0MVmVhZ4vpNVeyhBCe9Njq1LzeHsAHOFUNdX+SC7IP2Mcj0XJw7ZgK5rrsD6o31+A
- bXEX1zIQIr82ugXx0UrnkoNnlmWXPVm/PQpIQriOoqMDsVFkudoOY7KXf+NqbTTCxIFLg+/BY
- c3pulkIz8ImX5IgasvndatinIfwa0YzKDMQ8Nkj1tnfdoCsw7gSgC8QBfrYrT0cJArpltrOPN
- 8KQO8wNosK00+1AJKXCaygRh3AnKbZmgyTMqrEbCE0zFlXRibBR6Xu2HpwjxGCGxbQ8l9UG4M
- 2/4kkFQIghiwT/HdJjKGjGnXtjDHHwu7d28nd87hD1qg6VeXycMD99WDEzdbAgVjE59yXtnri
- s53fMfUwWBGNsfq/TjFcfhvg1z9koqmIHgWyOWDMfDJ0Dj2oAmWMIth/0Q66eyweXvkyySFtJ
- L2Ag8dlp1iYHjovhycXny71syOyDf2T3A9op5xN2neAY8m8anisRCwILv/Q2EIv/sTuUNJRbF
- 1LR5totFoH9BUCPL83ELOo21YFV5umONBCBDICaMcvktcUfnxSbDFl2xpX5TqM15+Zwg8alvD
- fOaVn1j/48mlnuruiuUIJTFsZhYoungzBR/Alput1r3VwA3GmyAOYSljVVLmEsZAbwUacIQYw
- vVODExKOUo2DhTdhls1SxYNPV5IHLOHGeAnEEYEr1MlEWqZnMslUTTd6LWSVe8zqKv9SaPhiW
- xRpA6Rz+t7vVBZW1hn7W/zaj6ZZjOgTfuRftYwVgnwna6fZHOYplkyCQFXvxJHjpWI4837BFG
- u/PGe49sZ1I89mMI3K+5QmCZldtJmU9kW1T8i5H//6wN1bpKh6feBQ7u2G0dndpW4XwdG6YWd
- xHHsllKaVGbTOhIaJev6Ib5PzKI1keLEYxz0gydsojEHXwxCYIZsGi1b4RSHHOWOfDzn5ZkMt
- 0UI42/+IZj94jnNwjLaDpOYlHKy4+oU6BzjrHfWGlYd7FSLpr7FQkE35Hts+ECJORkV7hIvTO
- 3Ujm4BrRmYnaPaJa6
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+On Mon, 2021-05-10 at 17:04 -0400, Ben Boeckel wrote:
+> On Thu, Apr 29, 2021 at 15:21:56 -0400, Ben Boeckel wrote:
+> > From: Ben Boeckel <mathstuf@gmail.com>
+> > 
+> > The `tpm_get_ops` call at the beginning of the function is not
+> > paired
+> > with a `tpm_put_ops` on this return path.
+> > 
+> > Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key
+> > format for the blobs")
+> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+> > ---
+> >  security/keys/trusted-keys/trusted_tpm2.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/security/keys/trusted-keys/trusted_tpm2.c
+> > b/security/keys/trusted-keys/trusted_tpm2.c
+> > index 617fabd4d913..0165da386289 100644
+> > --- a/security/keys/trusted-keys/trusted_tpm2.c
+> > +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> > @@ -336,9 +336,9 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+> >  			rc = -EPERM;
+> >  	}
+> >  	if (blob_len < 0)
+> > -		return blob_len;
+> > -
+> > -	payload->blob_len = blob_len;
+> > +		rc = blob_len;
+> > +	else
+> > +		payload->blob_len = blob_len;
+> >  
+> >  	tpm_put_ops(chip);
+> >  	return rc;
+> 
+> Ping? Is this going to make 5.13? This fixes an issue that is in
+> 5.13-rc1.
 
-On 10.05.21 at 14:28, Jarkko Sakkinen wrote:
-> The earlier fix (linked) only partially fixed the locality handling bug
-> in tpm_tis_gen_interrupt(), i.e. only for TPM 1.x.
->
-> Extend the locality handling to cover TPM2.
->
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: stable@vger.kernel.org
-> Link: https://lore.kernel.org/linux-integrity/20210220125534.20707-1-jar=
-kko@kernel.org/
-> Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmi=
-t()")
-> Reported-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
->
-> v1:
-> * Testing done with Intel NUC5i5MYHE with SLB9665 TPM2 chip.
->
->  drivers/char/tpm/tpm_tis_core.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_=
-core.c
-> index a2e0395cbe61..6fa150a3b75e 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -709,16 +709,14 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *=
-chip)
->  	cap_t cap;
->  	int ret;
->
-> -	/* TPM 2.0 */
-> -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> -		return tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
-> -
-> -	/* TPM 1.2 */
->  	ret =3D request_locality(chip, 0);
->  	if (ret < 0)
->  		return ret;
->
-> -	ret =3D tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc, 0);
-> +	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> +		ret =3D tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
-> +	else
-> +		ret =3D tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc, 0);
->
->  	release_locality(chip, 0);
->
->
+It's not urgent, since it's in an error in the ASN.1 encoder, the only
+real way to produce it is if the system runs out of memory, which is
+highly unlikely since the allocations are all GFP_KERNEL.  We've also
+got another 8 or so weeks before 5.13 so there's time for this to go
+through the normal review process.
 
-This fix works for me. Tested on a SLB9670vq2.0 and the warning message is=
- gone.
+James
 
-Tested-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
 
-Regards,
-Lino
