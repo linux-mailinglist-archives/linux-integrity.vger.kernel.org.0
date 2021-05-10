@@ -2,181 +2,187 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D52F2378E61
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 May 2021 15:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF14378E62
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 May 2021 15:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235077AbhEJNQU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 May 2021 09:16:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44172 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243600AbhEJL4e (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 May 2021 07:56:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 383C061260;
-        Mon, 10 May 2021 11:55:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620647729;
-        bh=dyIPtb49LgFnCoKazyq+bQhPSj3PCobNssG21KHdoK4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S4cpkndG9UuTYGkhKfO3hJLbYIHDWve5Su3QQFRXInDkMRoAu9bVjsNPKBQQExFiA
-         MH/LvEqboPFe5Mg323DsrqgW7WJPZfjJ5OWh3KcGd7Kzb/Ed/OuhsjfzebDsCLf+jo
-         Z2y3h21hX1f0r0znndE/gsvI3+7MfvcFNE3R9vJ3F6eSaoK3rYc9HAxpysQKCzq2nw
-         XliTZNXkMCNQpYy6ormSrp00pDOW21OImF+xXBpjWC/JIXAZfq/wrXo3rh38peS5/g
-         BQeri8Wl+fs0ihvm/Fcaw0vxpMvqk7Fkm7kctYIMuGKithMKv3Kd8J2NMAGsk2M1IJ
-         Z8/9XzwZufeKA==
-Date:   Mon, 10 May 2021 13:55:18 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as
- ASCII
-Message-ID: <20210510135518.305cc03d@coco.lan>
-In-Reply-To: <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
-References: <cover.1620641727.git.mchehab+huawei@kernel.org>
-        <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S233312AbhEJNQ1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 May 2021 09:16:27 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:43914 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344801AbhEJMUX (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 10 May 2021 08:20:23 -0400
+Received: by mail-il1-f200.google.com with SMTP id l7-20020a9229070000b0290164314f61f5so13554355ilg.10
+        for <linux-integrity@vger.kernel.org>; Mon, 10 May 2021 05:19:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=LIsysw+22kJoVtdEn0ARG+JVEdMdBtBx51RjL3I2/Tk=;
+        b=oMHYXxx2/EOVZFMakHdtl/3Ies8cwGyVw4zETHr7TUyLpLSndxWCANTHPhKCjue+dt
+         /uIz3lrfQSYxU+KgDsOLKxI1kE3mviZfyurQc3z5y00Cslhqqg1wufow/dZyi0BhV8Ov
+         usVvn6qWAqjXxJxHRik3MmN1YbIwPHNJgkbVBZJmN3H1d/tOK1wy8vkjLCRMbwLLKDLy
+         5XmqCzSls6Tq2U/pd1yE9ia4Jeg+v68PepAgRRl98XJPWKlshBfu0SmggNFk65dWdC8G
+         wG+fkagVg2/Lkan/k1D5svKzlA+gJ1JcJk+z5wS/klHuFSxJN3NsuVdR5cej8pgsT4er
+         ZpEg==
+X-Gm-Message-State: AOAM531wr4pJeVF4sHk0n89afTRyjMqPfUHau60s3oWIZbkWcXwjgh78
+        NQ2bWPYOM7jt0wWBNeJ6xbQ0NVjS3fQ2C6IDPJ7J7JJlDd2u
+X-Google-Smtp-Source: ABdhPJwiqnW7Qb1We7cNl8N28tyshNYYabZIjlibGO6iNBPyJmQU/lUn76wY7epMNeYvZ48V9/OSJgb7NToOHS37ma24vqhZuAHn
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a92:2a0a:: with SMTP id r10mr21447954ile.274.1620649158133;
+ Mon, 10 May 2021 05:19:18 -0700 (PDT)
+Date:   Mon, 10 May 2021 05:19:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000604ea605c1f8c9af@google.com>
+Subject: [syzbot] possible deadlock in process_measurement (3)
+From:   syzbot <syzbot+ccfcdc8958f74084f16d@syzkaller.appspotmail.com>
+To:     dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi David,
+Hello,
 
-Em Mon, 10 May 2021 11:54:02 +0100
-David Woodhouse <dwmw2@infradead.org> escreveu:
+syzbot found the following issue on:
 
-> On Mon, 2021-05-10 at 12:26 +0200, Mauro Carvalho Chehab wrote:
-> > There are several UTF-8 characters at the Kernel's documentation.
-> >=20
-> > Several of them were due to the process of converting files from
-> > DocBook, LaTeX, HTML and Markdown. They were probably introduced
-> > by the conversion tools used on that time.
-> >=20
-> > Other UTF-8 characters were added along the time, but they're easily
-> > replaceable by ASCII chars.
-> >=20
-> > As Linux developers are all around the globe, and not everybody has UTF=
--8
-> > as their default charset, better to use UTF-8 only on cases where it is=
- really
-> > needed. =20
->=20
-> No, that is absolutely the wrong approach.
->=20
-> If someone has a local setup which makes bogus assumptions about text
-> encodings, that is their own mistake.
->=20
-> We don't do them any favours by trying to *hide* it in the common case
-> so that they don't notice it for longer.
->=20
-> There really isn't much excuse for such brokenness, this far into the
-> 21st century.
->=20
-> Even *before* UTF-8 came along in the final decade of the last
-> millennium, it was important to know which character set a given piece
-> of text was encoded in.
->=20
-> In fact it was even *more* important back then, we couldn't just assume
-> UTF-8 everywhere like we can in modern times.
->=20
-> Git can already do things like CRLF conversion on checking files out to
-> match local conventions; if you want to teach it to do character set
-> conversions too then I suppose that might be useful to a few developers
-> who've fallen through a time warp and still need it. But nobody's ever
-> bothered before because it just isn't necessary these days.
->=20
-> Please *don't* attempt to address this anachronistic and esoteric
-> "requirement" by dragging the kernel source back in time by three
-> decades.
+HEAD commit:    d2b6f8a1 Merge tag 'xfs-5.13-merge-3' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15f425b3d00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=65c207250bba4efe
+dashboard link: https://syzkaller.appspot.com/bug?extid=ccfcdc8958f74084f16d
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16079d1ed00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12280d95d00000
 
-No. The idea is not to go back three decades ago.=20
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ccfcdc8958f74084f16d@syzkaller.appspotmail.com
 
-The goal is just to avoid use UTF-8 where it is not needed. See, the vast
-majority of UTF-8 chars are kept:
+======================================================
+WARNING: possible circular locking dependency detected
+5.12.0-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor167/10873 is trying to acquire lock:
+ffff8880162d0bc0 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x3a8/0x17e0 security/integrity/ima/ima_main.c:253
 
-	- Non-ASCII Latin and Greek chars;
-	- Box drawings;
-	- arrows;
-	- most symbols.
+but task is already holding lock:
+ffff888147e2e460 (sb_writers#5){.+.+}-{0:0}, at: do_open fs/namei.c:3354 [inline]
+ffff888147e2e460 (sb_writers#5){.+.+}-{0:0}, at: path_openat+0x1ad9/0x27e0 fs/namei.c:3494
 
-There, it makes perfect sense to keep using UTF-8.
+which lock already depends on the new lock.
 
-We should keep using UTF-8 on Kernel. This is something that it shouldn't
-be changed.
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (sb_writers#5){.+.+}-{0:0}:
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1765 [inline]
+       sb_start_write include/linux/fs.h:1835 [inline]
+       mnt_want_write+0x6e/0x3e0 fs/namespace.c:375
+       ovl_maybe_copy_up+0x11f/0x190 fs/overlayfs/copy_up.c:995
+       ovl_open+0xba/0x270 fs/overlayfs/file.c:149
+       do_dentry_open+0x4b9/0x11b0 fs/open.c:826
+       vfs_open fs/open.c:940 [inline]
+       dentry_open+0x132/0x1d0 fs/open.c:956
+       ima_calc_file_hash+0x2d2/0x4b0 security/integrity/ima/ima_crypto.c:557
+       ima_collect_measurement+0x4ca/0x570 security/integrity/ima/ima_api.c:252
+       process_measurement+0xd1c/0x17e0 security/integrity/ima/ima_main.c:330
+       ima_file_check+0xb9/0x100 security/integrity/ima/ima_main.c:499
+       do_open fs/namei.c:3363 [inline]
+       path_openat+0x15b5/0x27e0 fs/namei.c:3494
+       do_filp_open+0x190/0x3d0 fs/namei.c:3521
+       do_sys_openat2+0x16d/0x420 fs/open.c:1187
+       do_sys_open fs/open.c:1203 [inline]
+       __do_sys_open fs/open.c:1211 [inline]
+       __se_sys_open fs/open.c:1207 [inline]
+       __x64_sys_open+0x119/0x1c0 fs/open.c:1207
+       do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+-> #0 (&iint->mutex){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:2938 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3061 [inline]
+       validate_chain kernel/locking/lockdep.c:3676 [inline]
+       __lock_acquire+0x2a17/0x5230 kernel/locking/lockdep.c:4902
+       lock_acquire kernel/locking/lockdep.c:5512 [inline]
+       lock_acquire+0x1ab/0x740 kernel/locking/lockdep.c:5477
+       __mutex_lock_common kernel/locking/mutex.c:949 [inline]
+       __mutex_lock+0x139/0x1120 kernel/locking/mutex.c:1096
+       process_measurement+0x3a8/0x17e0 security/integrity/ima/ima_main.c:253
+       ima_file_check+0xb9/0x100 security/integrity/ima/ima_main.c:499
+       do_open fs/namei.c:3363 [inline]
+       path_openat+0x15b5/0x27e0 fs/namei.c:3494
+       do_filp_open+0x190/0x3d0 fs/namei.c:3521
+       do_sys_openat2+0x16d/0x420 fs/open.c:1187
+       do_sys_open fs/open.c:1203 [inline]
+       __do_sys_open fs/open.c:1211 [inline]
+       __se_sys_open fs/open.c:1207 [inline]
+       __x64_sys_open+0x119/0x1c0 fs/open.c:1207
+       do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(sb_writers#5);
+                               lock(&iint->mutex);
+                               lock(sb_writers#5);
+  lock(&iint->mutex);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor167/10873:
+ #0: ffff888147e2e460 (sb_writers#5){.+.+}-{0:0}, at: do_open fs/namei.c:3354 [inline]
+ #0: ffff888147e2e460 (sb_writers#5){.+.+}-{0:0}, at: path_openat+0x1ad9/0x27e0 fs/namei.c:3494
+
+stack backtrace:
+CPU: 1 PID: 10873 Comm: syz-executor167 Not tainted 5.12.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:79 [inline]
+ dump_stack+0x141/0x1d7 lib/dump_stack.c:120
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2129
+ check_prev_add kernel/locking/lockdep.c:2938 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3061 [inline]
+ validate_chain kernel/locking/lockdep.c:3676 [inline]
+ __lock_acquire+0x2a17/0x5230 kernel/locking/lockdep.c:4902
+ lock_acquire kernel/locking/lockdep.c:5512 [inline]
+ lock_acquire+0x1ab/0x740 kernel/locking/lockdep.c:5477
+ __mutex_lock_common kernel/locking/mutex.c:949 [inline]
+ __mutex_lock+0x139/0x1120 kernel/locking/mutex.c:1096
+ process_measurement+0x3a8/0x17e0 security/integrity/ima/ima_main.c:253
+ ima_file_check+0xb9/0x100 security/integrity/ima/ima_main.c:499
+ do_open fs/namei.c:3363 [inline]
+ path_openat+0x15b5/0x27e0 fs/namei.c:3494
+ do_filp_open+0x190/0x3d0 fs/namei.c:3521
+ do_sys_openat2+0x16d/0x420 fs/open.c:1187
+ do_sys_open fs/open.c:1203 [inline]
+ __do_sys_open fs/open.c:1211 [inline]
+ __se_sys_open fs/open.c:1207 [inline]
+ __x64_sys_open+0x119/0x1c0 fs/open.c:1207
+ do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x446119
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ff688b472f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00000000004cb4c0 RCX: 0000000000446119
+RDX: 0000000000000000 RSI: 0000000000000300 RDI: 0000000020000040
+RBP: 000000000049b06c R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 3d72696472657070 R14: 0079616c7265766f R15: 00000000004cb4c8
+
 
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-This patch series is doing conversion only when using ASCII makes
-more sense than using UTF-8.=20
-
-See, a number of converted documents ended with weird characters
-like ZERO WIDTH NO-BREAK SPACE (U+FEFF) character. This specific
-character doesn't do any good.
-
-Others use NO-BREAK SPACE (U+A0) instead of 0x20. Harmless, until
-someone tries to use grep[1].
-
-[1] try to run:
-
-    $ git grep "CPU 0 has been" Documentation/RCU/
-
-    it will return nothing with current upstream.
-
-    But it will work fine after the series is applied:
-
-    $ git grep "CPU 0 has been" Documentation/RCU/
-      Documentation/RCU/Design/Data-Structures/Data-Structures.rst:| #. CPU=
- 0 has been in dyntick-idle mode for quite some time. When it   |
-      Documentation/RCU/Design/Data-Structures/Data-Structures.rst:|    not=
-ices that CPU 0 has been in dyntick idle mode, which qualifies  |
-
-The main point on this series is to replace just the occurrences
-where ASCII represents the symbol equally well, e. g. it is limited
-for those chars:
-
-	- U+2010 ('=E2=80=90'): HYPHEN
-	- U+00ad ('=C2=AD'): SOFT HYPHEN
-	- U+2013 ('=E2=80=93'): EN DASH
-	- U+2014 ('=E2=80=94'): EM DASH
-
-	- U+2018 ('=E2=80=98'): LEFT SINGLE QUOTATION MARK
-	- U+2019 ('=E2=80=99'): RIGHT SINGLE QUOTATION MARK
-	- U+00b4 ('=C2=B4'): ACUTE ACCENT
-
-	- U+201c ('=E2=80=9C'): LEFT DOUBLE QUOTATION MARK
-	- U+201d ('=E2=80=9D'): RIGHT DOUBLE QUOTATION MARK
-
-	- U+00d7 ('=C3=97'): MULTIPLICATION SIGN
-	- U+2212 ('=E2=88=92'): MINUS SIGN
-
-	- U+2217 ('=E2=88=97'): ASTERISK OPERATOR
-	  (this one used as a pointer reference like "*foo" on C code
-	   example inside a document converted from LaTeX)
-
-	- U+00bb ('=C2=BB'): RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-	  (this one also used wrongly on an ABI file, meaning '>')
-
-	- U+00a0 ('=C2=A0'): NO-BREAK SPACE
-	- U+feff ('=EF=BB=BF'): ZERO WIDTH NO-BREAK SPACE
-
-Using the above symbols will just trick tools like grep for no good
-reason.
-
-Thanks,
-Mauro
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
