@@ -2,119 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E879379003
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 May 2021 16:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80617379020
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 May 2021 16:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235754AbhEJN6q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 May 2021 09:58:46 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1242 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244102AbhEJN4g (ORCPT
+        id S233560AbhEJOIb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 May 2021 10:08:31 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37919 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235412AbhEJOBt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 May 2021 09:56:36 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14ADXJqx154680
-        for <linux-integrity@vger.kernel.org>; Mon, 10 May 2021 09:55:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=2ARlfodn+/148kjUH89DjNnQdRVXIE995CiC2CslLJI=;
- b=jg6/FLV+HvPJWNGXH+VPAc8l+6yq+uVfai1syqxGpIMz4BRPXBFvKmk19mLtDj0Ms0XR
- TJ+gbpRRh7s/wJCcn5Sv7zsoF4aUy3ckXVGKLNmmE0CpyLqxhK1LwSpNliVv+XvraIFJ
- W8tisCeb+tValhmAVJ+4n4cD37G4D3W88eAhAwtrhXYHynFE4LlLN1fnuy84+/L/xQ4q
- Y2OtKWhQ07FZn+BPBYXdNHPFMMk/w6d/dx9DOqOvkN7ASctttdJMUG68G2Z0KrznhlUE
- IQ8A5Bc/HMReKhrrvwOkBc9LEa7k0aqHQiiE1JjUQJLRwgpAASVmQsOoRlBoOe3K4KXM mA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38f3scw2vs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Mon, 10 May 2021 09:55:31 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 14ADXoQ9158608
-        for <linux-integrity@vger.kernel.org>; Mon, 10 May 2021 09:55:31 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38f3scw2vc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 May 2021 09:55:31 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14ADq4Ge021167;
-        Mon, 10 May 2021 13:55:30 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma04dal.us.ibm.com with ESMTP id 38dj99a785-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 10 May 2021 13:55:30 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14ADtTxG22413610
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 May 2021 13:55:29 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7A43A112067;
-        Mon, 10 May 2021 13:55:29 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6DDB5112066;
-        Mon, 10 May 2021 13:55:29 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 10 May 2021 13:55:29 +0000 (GMT)
-Subject: Re: [PATCH v2 0/3] ima-evm-utils: Implement function to only create
- IMA signature
-To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com
-References: <20210427193133.1718367-1-stefanb@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <94771a1d-c48e-3773-8f1f-282519648a73@linux.ibm.com>
-Date:   Mon, 10 May 2021 09:55:29 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 10 May 2021 10:01:49 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 14AAD5807B2;
+        Mon, 10 May 2021 10:00:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 10 May 2021 10:00:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+         h=date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=fwXudyHn8IUNsmfHA12W5pUxFzr
+        IcUsJJs6niPOOwGc=; b=gQh6u0zhPsG//1fbjCgHH3SUq5OZEixVi+ckcNcOvNr
+        8f8S6u6OqczboxIeZQzxpdw3AUy1t45vyyuSQKDA1+yJJEqv0Na0yFB8YXQoxGQa
+        A5mz/uekXLKQlXSBVpDzZgWHaTwxLQ8cfd/84Seg6MJA86M+DwrG/rxkfmjHnsDx
+        Vsn+We4G3Oh5Yvv4HNwlluWEHPMQsGoYqOZqIpzyUGPfcSXaDfcxgaoBasafO20O
+        Nia4uZb9+lsHdBKwEogjjnykkTJJzKThWOeq3e2hyjT/F/nLvkiGpnFJ0uMYCJ5w
+        yhbph4b45d/9JdizeckN5aTq6WAACtGxOiZQK1Svtuw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=fwXudy
+        Hn8IUNsmfHA12W5pUxFzrIcUsJJs6niPOOwGc=; b=FkYLunR8+bNyojGntZzlTv
+        lNhoU5Ih8GFYdgqBiM9GEeBgkR7PC0rd49vKxgNK2oVHYiwvnJ0pFHee6wyNEefG
+        07iyoKlPp2/47lNX2/0a3w6XYC3Muan3VrHn9DIyh2AJDD/sq19lwcD+nClmgOGW
+        3kjTJut/WH9S1nO20R6vTeVSVeiFhLK/oh1ul5trEQZynTCu46HI2dcf9dXPVKk9
+        sOjDpOdiQFUH6B6gq1Emr8rDL+S3scV3gAHdetS1J2hIDO0dgu0hscWNc8fHxaey
+        25F3JvGPZJisNAQmAtq62YqH7TCAIzVvBqJwx8rI9Oyho2YDtxrFPxf1S0VsKOTA
+        ==
+X-ME-Sender: <xms:hDyZYCqZ48w__j-3J2DdcFFyCNO8Px1wZAdweI2vgyXQ5g_1A_avfw>
+    <xme:hDyZYAoPMp-2hhXE5dIuFZVKJLDFR-LeVjsu56BtdhTJGnUi8Md4Pqb1pnf9Vqqdn
+    t02Gw-Ku9S6gnwxX4I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdegkedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegvnhcu
+    uehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrghtth
+    gvrhhnpeevffdtteetgfdttdekueefgedttddtueeugeekgeetffeuteffjeduieehhfek
+    tdenucfkphepvdegrdduieelrddvtddrvdehheenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehmvgessggvnhgsohgvtghkvghlrdhnvght
+X-ME-Proxy: <xmx:hDyZYHO7a0I2ObO3iNQCJFMynfyvzQSxH3x8A4ShPc13xjvG6wh63A>
+    <xmx:hDyZYB6OL9_iqJiCXEkFvw1uMnu0UHjkSyxn6Irx0qOidEFWAmkwbA>
+    <xmx:hDyZYB472gSq8MYTawlNh6oofIzwaZQvJxltEegElvbnNVF17UiCaA>
+    <xmx:hjyZYNFuZhUi4dOrdPamnliiTh3owe6Tf-ewK9C2k9SXGvHlGfVlTg>
+Received: from localhost (unknown [24.169.20.255])
+        by mail.messagingengine.com (Postfix) with ESMTPA;
+        Mon, 10 May 2021 10:00:35 -0400 (EDT)
+Date:   Mon, 10 May 2021 10:00:34 -0400
+From:   Ben Boeckel <me@benboeckel.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
+Message-ID: <YJk8gkMlk8dtaEsz@erythro.dev.benboeckel.internal>
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
+ <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
+ <20210510135518.305cc03d@coco.lan>
 MIME-Version: 1.0
-In-Reply-To: <20210427193133.1718367-1-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3i9T5NHUbpGOCD5rqkG7Uw9m8gBBxL_u
-X-Proofpoint-GUID: JNXdf0H1iUrG7jf9DPvCy9SpQ8a2zLgE
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-10_07:2021-05-10,2021-05-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- malwarescore=0 clxscore=1015 mlxlogscore=999 spamscore=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 mlxscore=0
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2105100096
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210510135518.305cc03d@coco.lan>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-I will rebase this series of patches on Vitaly's keyid-related changes, 
-which are good to have 'underneath'.
+On Mon, May 10, 2021 at 13:55:18 +0200, Mauro Carvalho Chehab wrote:
+>     $ git grep "CPU 0 has been" Documentation/RCU/
+>       Documentation/RCU/Design/Data-Structures/Data-Structures.rst:| #. CPU 0 has been in dyntick-idle mode for quite some time. When it   |
+>       Documentation/RCU/Design/Data-Structures/Data-Structures.rst:|    notices that CPU 0 has been in dyntick idle mode, which qualifies  |
 
-   Stefan
+The kernel documentation uses hard line wraps, so such a naive grep is
+going to always fail unless such line wraps are taken into account. Not
+saying this isn't an improvement in and of itself, but smarter searching
+strategies are likely needed anyways.
 
-
-On 4/27/21 3:31 PM, Stefan Berger wrote:
-> This series of patches implements imaevm_create_ima_signature, a function that
-> only creates an IMA v2 signature but does not write it into an xattr. This API
-> fullfills a requirement of rpm-ostree where a tool is being built to sign all
-> files from something similar to a tar byte stream, though where files are written
-> to temporary files for signing purpose but the signature itself should not be
-> written into the filesystem's xattr but simply returned via the API.
->
->    Stefan
->
-> v2:
->   - use imaevm_calc_hash to also cover hash calculations of links,
->     directories etc.
->    
-> Stefan Berger (3):
->    libimaevm: Implement imaevm_create_ima_signature
->    tests: Add program to create IMA signature with new API call
->    libimaevm: Have sign_hash_v2 call sign_hash_v2_pkey after reading key
->      file
->
->   src/imaevm.h                 |   2 +
->   src/libimaevm.c              | 148 ++++++++++++++++++++++++++++-------
->   tests/Makefile.am            |   6 ++
->   tests/create_ima_signature.c | 111 ++++++++++++++++++++++++++
->   tests/sign_verify.test       |  21 ++++-
->   5 files changed, 257 insertions(+), 31 deletions(-)
->   create mode 100644 tests/create_ima_signature.c
->
+--Ben
