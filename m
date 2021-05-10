@@ -2,305 +2,346 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 436D7377A6C
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 May 2021 05:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963D7378289
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 May 2021 12:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbhEJDQr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 9 May 2021 23:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbhEJDQr (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 9 May 2021 23:16:47 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72922C061573
-        for <linux-integrity@vger.kernel.org>; Sun,  9 May 2021 20:15:43 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id gc22-20020a17090b3116b02901558435aec1so9455323pjb.4
-        for <linux-integrity@vger.kernel.org>; Sun, 09 May 2021 20:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rubrik.com; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ZUZ01O/CisukJ4iqDEmCqqJ33VpNXN5rK5L3Xq8fQ+Q=;
-        b=AzGKBTi2qzTo+G8Gd+0sZuIyWlguc98ROXJmtJniaIUYpnEhVmR5ry/lS6AjBM4QWA
-         hu2+fWqZ2gKBvKu0oGKz5Ly2P43xctgTsu76AnRAt2GK1noeAPc+Crvo9a98nQ3i+MjR
-         Pl0prk9GPMxDJNwt+YWzdkHw9H+yTQV1oKcHU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ZUZ01O/CisukJ4iqDEmCqqJ33VpNXN5rK5L3Xq8fQ+Q=;
-        b=qj4br97iScy4ogforvAoh/vcY+QL5OMC/tdsvYktBWsjsPkGsnC19O47aVAOCryyv7
-         E/cfItQsIPHHs9g6F86POL0G/mtyc0AHNZOZUJaXp8CFjOaz7Cc47GwR3vcgPI6LdfLE
-         Wf8CT5HeFVaBPrxttrPIodI53usgIJTu5gJrViu3I/I+LCyXiQP95zzfkC7MYWmiTIYA
-         Rz4J63FznVDGLa73jiuADXU8ZcKlAYcakOOkktav9ilKbo0x1grs8dI82cWoSbzTeuj7
-         Im7OPHQk5Zv6YYPweFBCPW0pADZBemufQ9q0aq5wpa1fcux4q04TR3NbSKjtfYSM2H88
-         7TJQ==
-X-Gm-Message-State: AOAM531e360K7YN3S9kQiDo2eF9lkm4OR6LvCYG/dlF2bQBSKejWlILY
-        FFd+p90FTeyPw5ItD5k81Hf3lA==
-X-Google-Smtp-Source: ABdhPJwf6TktVF7wA4oabg7MirZlNW4z2o2RwyZYyfZIs1NVRdIZtV7eOgkzPhYbOT3V0W9k5Nswbw==
-X-Received: by 2002:a17:902:e74b:b029:ed:8636:c532 with SMTP id p11-20020a170902e74bb02900ed8636c532mr22989565plf.51.1620616542635;
-        Sun, 09 May 2021 20:15:42 -0700 (PDT)
-Received: from [10.0.0.7] (c-73-231-56-47.hsd1.ca.comcast.net. [73.231.56.47])
-        by smtp.gmail.com with ESMTPSA id c6sm17287194pjs.11.2021.05.09.20.15.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 09 May 2021 20:15:42 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
-Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
-From:   Hao Wu <hao.wu@rubrik.com>
-In-Reply-To: <5d51e7ef87b4a622e1d64c3ff14f267328a0ee5e.camel@linux.ibm.com>
-Date:   Sun, 9 May 2021 20:15:32 -0700
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        peterhuewe@gmx.de, jgg@ziepe.ca, Nayna <nayna@linux.vnet.ibm.com>,
-        arnd@arndb.de, gregkh@linuxfoundation.org,
-        Hamza Attak <hamza@hpe.com>, why2jjj.linux@gmail.com,
-        zohar@linux.vnet.ibm.com, linux-integrity@vger.kernel.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Ken Goldman <kgold@linux.ibm.com>,
-        Seungyeop Han <seungyeop.han@rubrik.com>,
-        Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
-        Anish Jhaveri <anish.jhaveri@rubrik.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <99191A44-334F-4A62-9CC9-90FB28C76F0F@rubrik.com>
-References: <6e7b54c268d25a86f8f969bcc01729eaadef6530.camel@HansenPartnership.com>
- <20201001015051.GA5971@linux.intel.com>
- <1aed1b0734435959d5e53b8a4b3c18558243e6b8.camel@HansenPartnership.com>
- <19de5527-2d56-6a07-3ce7-ba216b208090@linux.vnet.ibm.com>
- <38e165055bae62d4e97f702c05e3a76ccdeeac0f.camel@HansenPartnership.com>
- <20201001230426.GA26517@linux.intel.com>
- <FCA90A49-CCE3-4DDF-A876-230C42744D2A@rubrik.com>
- <20201018050951.GL68722@linux.intel.com>
- <53B75B06-FD89-4B00-BC3F-46C5B28DC201@rubrik.com>
- <9E249567-4901-4FA4-BA89-EF6DE51F7E7A@rubrik.com>
- <20201118211134.GA5034@linux.intel.com>
- <B55FCFAC-BFBD-4568-AB2F-45DD7BE10D6D@rubrik.com>
- <12157F1B-93CC-4991-813D-B78A608D1C4F@rubrik.com>
- <5d51e7ef87b4a622e1d64c3ff14f267328a0ee5e.camel@linux.ibm.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, jarkko@kernel.org
-X-Mailer: Apple Mail (2.3654.60.0.2.21)
+        id S231752AbhEJKgG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 10 May 2021 06:36:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41508 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232056AbhEJKca (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 10 May 2021 06:32:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B8B7061864;
+        Mon, 10 May 2021 10:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620642444;
+        bh=ecNT6Qkny310TF2Gc5f4rT75sPCp5MHYtIZGEKTj06Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UcevxFcEh3Li+i6O96esjAQwtO4uSF7OkmnaXbUGuKrV8uvn5D3YHrYAkQ2/PUQ+H
+         W9TvnHIXs+6PuDeS1sySVDl5b+kZJLJNiKWzOaT28OTrcYXd41BcTT/W/xmDMiDYJc
+         NXMcl5dkZF+skL/ecPvA5wTdK4o4x+GnunjH/NmxR/yJu8E4pznFJs+xWcx2gEwfA4
+         XCBkfBQ0zIGZl9DOMzQHk7sBS5W6Hlu9kth9XR129w1/oLPDA2JZ/64ZgwSblnTghd
+         iot0AnPlhuAm6nY73Msiw7+8VeDC0SCv/fIeb4QX1qF678zB0I6rD9S2HSN+p78ETw
+         VllHul+Znpi9A==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lg38C-000UOL-8L; Mon, 10 May 2021 12:27:20 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
+Date:   Mon, 10 May 2021 12:26:12 +0200
+Message-Id: <cover.1620641727.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> On May 9, 2021, at 7:17 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
->=20
-> [Cc'ing Jarkko Sakkinen <jarkko@kernel.org>]
->=20
-> On Sat, 2021-05-08 at 23:31 -0700, Hao Wu wrote:
->>> On May 8, 2021, at 11:18 PM, Hao Wu <hao.wu@rubrik.com> wrote:
->>>=20
->>>> On Nov 18, 2020, at 1:11 PM, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->>>>=20
->>>> On Fri, Nov 13, 2020 at 08:39:28PM -0800, Hao Wu wrote:
->>>>>> On Oct 17, 2020, at 10:20 PM, Hao Wu <hao.wu@rubrik.com> wrote:
->>>>>>=20
->>>>>>> On Oct 17, 2020, at 10:09 PM, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->>>>>>>=20
->>>>>>> On Fri, Oct 16, 2020 at 11:11:37PM -0700, Hao Wu wrote:
->>>>>>>>> On Oct 1, 2020, at 4:04 PM, Jarkko Sakkinen =
-<jarkko.sakkinen@linux.intel.com> wrote:
->>>>>>>>>=20
->>>>>>>>> On Thu, Oct 01, 2020 at 11:32:59AM -0700, James Bottomley =
-wrote:
->>>>>>>>>> On Thu, 2020-10-01 at 14:15 -0400, Nayna wrote:
->>>>>>>>>>> On 10/1/20 12:53 AM, James Bottomley wrote:
->>>>>>>>>>>> On Thu, 2020-10-01 at 04:50 +0300, Jarkko Sakkinen wrote:
->>>>>>>>>>>>> On Wed, Sep 30, 2020 at 03:31:20PM -0700, James Bottomley =
-wrote:
->>>>>>>>>>>>>> On Thu, 2020-10-01 at 00:09 +0300, Jarkko Sakkinen wrote:
->>>>>>>>>> [...]
->>>>>>>>>>>>>>> I also wonder if we could adjust the frequency =
-dynamically.
->>>>>>>>>>>>>>> I.e. start with optimistic value and lower it until =
-finding
->>>>>>>>>>>>>>> the sweet spot.
->>>>>>>>>>>>>>=20
->>>>>>>>>>>>>> The problem is the way this crashes: the TPM seems to be
->>>>>>>>>>>>>> unrecoverable. If it were recoverable without a hard =
-reset of
->>>>>>>>>>>>>> the entire machine, we could certainly play around with =
-it.  I
->>>>>>>>>>>>>> can try alternative mechanisms to see if anything's =
-viable, but
->>>>>>>>>>>>>> to all intents and purposes, it looks like my TPM simply =
-stops
->>>>>>>>>>>>>> responding to the TIS interface.
->>>>>>>>>>>>>=20
->>>>>>>>>>>>> A quickly scraped idea probably with some holes in it but =
-I was
->>>>>>>>>>>>> thinking something like
->>>>>>>>>>>>>=20
->>>>>>>>>>>>> 1. Initially set slow value for latency, this could be the
->>>>>>>>>>>>> original 15 ms.
->>>>>>>>>>>>> 2. Use this to read TPM_PT_VENDOR_STRING_*.
->>>>>>>>>>>>> 3. Lookup based vendor string from a fixup table a latency =
-that
->>>>>>>>>>>>> works
->>>>>>>>>>>>> (the fallback latency could be the existing latency).
->>>>>>>>>>>>=20
->>>>>>>>>>>> Well, yes, that was sort of what I was thinking of doing =
-for the
->>>>>>>>>>>> Atmel ... except I was thinking of using the TIS VID (16 =
-byte
->>>>>>>>>>>> assigned vendor ID) which means we can get the information =
-to set
->>>>>>>>>>>> the timeout before we have to do any TPM operations.
->>>>>>>>>>>=20
->>>>>>>>>>> I wonder if the timeout issue exists for all TPM commands =
-for the
->>>>>>>>>>> same manufacturer.  For example, does the ATMEL TPM also =
-crash when=20
->>>>>>>>>>> extending  PCRs ?
->>>>>>>>>>>=20
->>>>>>>>>>> In addition to defining a per TPM vendor based lookup table =
-for
->>>>>>>>>>> timeout, would it be a good idea to also define a =
-Kconfig/boot param
->>>>>>>>>>> option to allow timeout setting.  This will enable to set =
-the timeout
->>>>>>>>>>> based on the specific use.
->>>>>>>>>>=20
->>>>>>>>>> I don't think we need go that far (yet).  The timing change =
-has been in
->>>>>>>>>> upstream since:
->>>>>>>>>>=20
->>>>>>>>>> commit 424eaf910c329ab06ad03a527ef45dcf6a328f00
->>>>>>>>>> Author: Nayna Jain <nayna@linux.vnet.ibm.com>
->>>>>>>>>> Date:   Wed May 16 01:51:25 2018 -0400
->>>>>>>>>>=20
->>>>>>>>>> tpm: reduce polling time to usecs for even finer granularity
->>>>>>>>>>=20
->>>>>>>>>> Which was in the released kernel 4.18: over two years ago.  =
-In all that
->>>>>>>>>> time we've discovered two problems: mine which looks to be an =
-artifact
->>>>>>>>>> of an experimental upgrade process in a new nuvoton and the =
-Atmel.=20
->>>>>>>>>> That means pretty much every other TPM simply works with the =
-existing
->>>>>>>>>> timings
->>>>>>>>>>=20
->>>>>>>>>>> I was also thinking how will we decide the lookup table =
-values for
->>>>>>>>>>> each vendor ?
->>>>>>>>>>=20
->>>>>>>>>> I wasn't thinking we would.  I was thinking I'd do a simple =
-exception
->>>>>>>>>> for the Atmel and nothing else.  I don't think my Nuvoton is =
-in any way
->>>>>>>>>> characteristic.  Indeed my pluggable TPM rainbow bridge =
-system works
->>>>>>>>>> just fine with a Nuvoton and the current timings.
->>>>>>>>>>=20
->>>>>>>>>> We can add additional exceptions if they actually turn up.
->>>>>>>>>=20
->>>>>>>>> I'd add a table and fallback.
->>>>>>>>>=20
->>>>>>>>=20
->>>>>>>> Hi folks,
->>>>>>>>=20
->>>>>>>> I want to follow up this a bit and check whether we reached a =
-consensus=20
->>>>>>>> on how to fix the timeout issue for Atmel chip.
->>>>>>>>=20
->>>>>>>> Should we revert the changes or introduce the lookup table for =
-chips.
->>>>>>>>=20
->>>>>>>> Is there anything I can help from Rubrik side.
->>>>>>>>=20
->>>>>>>> Thanks
->>>>>>>> Hao
->>>>>>>=20
->>>>>>> There is nothing to revert as the previous was not applied but =
-I'm
->>>>>>> of course ready to review any new attempts.
->>>>>>>=20
->>>>>>=20
->>>>>> Hi Jarkko,
->>>>>>=20
->>>>>> By =E2=80=9Crevert=E2=80=9D I meant we revert the timeout value =
-changes by applying
->>>>>> the patch I proposed, as the timeout value discussed does cause =
-issues.
->>>>>>=20
->>>>>> Why don=E2=80=99t we apply the patch and improve the perf in the =
-way of not
->>>>>> breaking TPMs ?=20
->>>>>>=20
->>>>>> Hao
->>>>>=20
->>>>> Hi Jarkko and folks,
->>>>>=20
->>>>> It=E2=80=99s being a while since our last discussion. I want to =
-push a fix in the upstream for ateml chip.=20
->>>>> It looks like we currently have following choices:
->>>>> 1.  generic fix for all vendors: have a lookup table for sleep =
-time of wait_for_tpm_stat=20
->>>>> (i.e. TPM_TIMEOUT_WAIT_STAT in my proposed patch)=20
->>>>> 2.  quick fix for the regression: change the sleep time of =
-wait_for_tpm_stat back to 15ms.
->>>>> It is the current proposed patch
->>>>> 3. Fix regression by making exception for ateml chip. =20
->>>>>=20
->>>>> Should we reach consensus on which one we want to pursue before =
-dig
->>>>> into implementation of the patch? In my opinion, I prefer to fix =
-the
->>>>> regression with 2, and then pursue 1 as long-term solution. 3 is
->>>>> hacky.
->>>>=20
->>>> What does option 1 fix for *all* vendors?
->>>>=20
->>>>> Let me know what do you guys think
->>>>>=20
->>>>> Hao
->>>>=20
->>>> /Jarkko
->>>=20
->>> Hi Jarkko and folks,
->>>=20
->>> It has been a while again. In my previous message I answered =
-Jarkko=E2=80=99s question about the option 1.
->>> Jarkko, let me know if it is clear to you or you have further =
-questions and suggestions on next to do.
->>> Somehow I couldn=E2=80=99t found the last message I sent but it is =
-in=20
->>> =
-https://patchwork.kernel.org/project/linux-integrity/patch/20200926223150.=
-109645-1-hao.wu@rubrik.com/
->>>=20
->>> In high-level, the option 1 is to add a timing lookup table for each =
-manufacture, hence we can
->>> configure timing for each chip respectively. Then we don=E2=80=99t =
-need to worry about fixing ATMEL
->>> timing may cause performance degradation for other chips.
->>>=20
->>> I do want to push the fix in TPM driver, which is likely to be hit =
-going forward again when people are doing
->>> refactoring without testing chips from all manufacturing.
->>>=20
->>> Let me know how should I push this forward.
->>>=20
->>> Thanks
->>> Hao
->>>=20
->> It looks like Jarkko=E2=80=99s email address =
-(jarkko.sakkinen@linux.intel.com) is unreachable now,
->> can other TPM maintainer / reviewer help make a call and unblock this =
-?=20
->=20
-> A while ago Jarkko asked everyone to use his kernel.org address.
->=20
-> Mimi
+There are several UTF-8 characters at the Kernel's documentation.
 
-Ah thanks Mimi, just found Jarkko=E2=80=99s address.
+Several of them were due to the process of converting files from
+DocBook, LaTeX, HTML and Markdown. They were probably introduced
+by the conversion tools used on that time.
 
-Jarkko please check the message above when you have a chance.
+Other UTF-8 characters were added along the time, but they're easily
+replaceable by ASCII chars.
 
-Hao
+As Linux developers are all around the globe, and not everybody has UTF-8
+as their default charset, better to use UTF-8 only on cases where it is really
+needed.
+
+The first 3 patches on this series were manually written, in order to solve
+a few special cases.
+
+The remaining patches on series address such cases on *.rst files and 
+inside the Documentation/ABI, using this perl map table in order to do the
+charset conversion:
+
+my %char_map = (
+	0x2010 => '-',		# HYPHEN
+	0xad   => '-',		# SOFT HYPHEN
+	0x2013 => '-',		# EN DASH
+	0x2014 => '-',		# EM DASH
+
+	0x2018 => "'",		# LEFT SINGLE QUOTATION MARK
+	0x2019 => "'",		# RIGHT SINGLE QUOTATION MARK
+	0xb4   => "'",		# ACUTE ACCENT
+
+	0x201c => '"',		# LEFT DOUBLE QUOTATION MARK
+	0x201d => '"',		# RIGHT DOUBLE QUOTATION MARK
+
+	0x2212 => '-',		# MINUS SIGN
+	0x2217 => '*',		# ASTERISK OPERATOR
+	0xd7   => 'x',		# MULTIPLICATION SIGN
+
+	0xbb   => '>',		# RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+
+	0xa0   => ' ',		# NO-BREAK SPACE
+	0xfeff => '',		# ZERO WIDTH NO-BREAK SPACE
+);
+
+After the conversion, those UTF-8 chars will be kept:
+
+	- U+00a9 ('©'): COPYRIGHT SIGN
+	- U+00ac ('¬'): NOT SIGN		# only at Documentation/powerpc/transactional_memory.rst
+	- U+00ae ('®'): REGISTERED SIGN
+	- U+00b0 ('°'): DEGREE SIGN
+	- U+00b1 ('±'): PLUS-MINUS SIGN
+	- U+00b2 ('²'): SUPERSCRIPT TWO
+	- U+00b5 ('µ'): MICRO SIGN
+	- U+00b7 ('·'): MIDDLE DOT		# See below
+	- U+00bd ('½'): VULGAR FRACTION ONE HALF
+	- U+00c7 ('Ç'): LATIN CAPITAL LETTER C WITH CEDILLA
+	- U+00df ('ß'): LATIN SMALL LETTER SHARP S
+	- U+00e1 ('á'): LATIN SMALL LETTER A WITH ACUTE
+	- U+00e4 ('ä'): LATIN SMALL LETTER A WITH DIAERESIS
+	- U+00e6 ('æ'): LATIN SMALL LETTER AE
+	- U+00e7 ('ç'): LATIN SMALL LETTER C WITH CEDILLA
+	- U+00e9 ('é'): LATIN SMALL LETTER E WITH ACUTE
+	- U+00ea ('ê'): LATIN SMALL LETTER E WITH CIRCUMFLEX
+	- U+00eb ('ë'): LATIN SMALL LETTER E WITH DIAERESIS
+	- U+00f3 ('ó'): LATIN SMALL LETTER O WITH ACUTE
+	- U+00f4 ('ô'): LATIN SMALL LETTER O WITH CIRCUMFLEX
+	- U+00f6 ('ö'): LATIN SMALL LETTER O WITH DIAERESIS
+	- U+00f8 ('ø'): LATIN SMALL LETTER O WITH STROKE
+	- U+00fa ('ú'): LATIN SMALL LETTER U WITH ACUTE
+	- U+00fc ('ü'): LATIN SMALL LETTER U WITH DIAERESIS
+	- U+00fd ('ý'): LATIN SMALL LETTER Y WITH ACUTE
+	- U+011f ('ğ'): LATIN SMALL LETTER G WITH BREVE
+	- U+0142 ('ł'): LATIN SMALL LETTER L WITH STROKE
+	- U+03bc ('μ'): GREEK SMALL LETTER MU
+	- U+2026 ('…'): HORIZONTAL ELLIPSIS
+	- U+2122 ('™'): TRADE MARK SIGN
+	- U+2191 ('↑'): UPWARDS ARROW
+	- U+2192 ('→'): RIGHTWARDS ARROW
+	- U+2193 ('↓'): DOWNWARDS ARROW
+	- U+2264 ('≤'): LESS-THAN OR EQUAL TO
+	- U+2265 ('≥'): GREATER-THAN OR EQUAL TO
+	- U+2500 ('─'): BOX DRAWINGS LIGHT HORIZONTAL
+	- U+2502 ('│'): BOX DRAWINGS LIGHT VERTICAL
+	- U+2514 ('└'): BOX DRAWINGS LIGHT UP AND RIGHT
+	- U+251c ('├'): BOX DRAWINGS LIGHT VERTICAL AND RIGHT
+	- U+2b0d ('⬍'): UP DOWN BLACK ARROW
+
+PS.: maintainers were bcc on patch 00/53, in order to reduce the
+risk of patch 00 to be rejected by list servers.
+
+-
+
+For U+00b7 ('·'): MIDDLE DOT, I opted to keep it on a few places:
+
+- Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
+
+  As this file will be some day converted to yaml, where the 
+  MIDDLE DOT will be removed, I guess it is not worth touching it.
+
+- Documentation/scheduler/sched-deadline.rst
+
+  There, it is used on a math expressions. So, better to keep.
+
+- Documentation/devicetree/bindings/media/video-interface-devices.yaml
+
+  There, it part of an ASCII artwork.
+
+- translations/zh_CN
+
+  I prefer not touching it, as it might have some special meaning in Simplified Chinese.
+
+Mauro Carvalho Chehab (53):
+  docs: cdrom-standard.rst: get rid of uneeded UTF-8 chars
+  docs: ABI: remove a meaningless UTF-8 character
+  docs: ABI: remove some spurious characters
+  docs: index.rst: avoid using UTF-8 chars
+  docs: hwmon: avoid using UTF-8 chars
+  docs: admin-guide: avoid using UTF-8 chars
+  docs: admin-guide: media: ipu3.rst: avoid using UTF-8 chars
+  docs: admin-guide: sysctl: kernel.rst: avoid using UTF-8 chars
+  docs: admin-guide: perf: imx-ddr.rst: avoid using UTF-8 chars
+  docs: admin-guide: pm: avoid using UTF-8 chars
+  docs: trace: coresight: coresight-etm4x-reference.rst: avoid using
+    UTF-8 chars
+  docs: driver-api: avoid using UTF-8 chars
+  docs: driver-api: fpga: avoid using UTF-8 chars
+  docs: driver-api: iio: avoid using UTF-8 chars
+  docs: driver-api: thermal: avoid using UTF-8 chars
+  docs: driver-api: media: drivers: avoid using UTF-8 chars
+  docs: driver-api: firmware: other_interfaces.rst: avoid using UTF-8
+    chars
+  docs: driver-api: nvdimm: btt.rst: avoid using UTF-8 chars
+  docs: fault-injection: nvme-fault-injection.rst: avoid using UTF-8
+    chars
+  docs: usb: avoid using UTF-8 chars
+  docs: process: avoid using UTF-8 chars
+  docs: block: data-integrity.rst: avoid using UTF-8 chars
+  docs: userspace-api: media: fdl-appendix.rst: avoid using UTF-8 chars
+  docs: userspace-api: media: v4l: avoid using UTF-8 chars
+  docs: userspace-api: media: dvb: avoid using UTF-8 chars
+  docs: vm: zswap.rst: avoid using UTF-8 chars
+  docs: filesystems: f2fs.rst: avoid using UTF-8 chars
+  docs: filesystems: ext4: avoid using UTF-8 chars
+  docs: kernel-hacking: avoid using UTF-8 chars
+  docs: hid: avoid using UTF-8 chars
+  docs: security: tpm: avoid using UTF-8 chars
+  docs: security: keys: trusted-encrypted.rst: avoid using UTF-8 chars
+  docs: riscv: vm-layout.rst: avoid using UTF-8 chars
+  docs: networking: scaling.rst: avoid using UTF-8 chars
+  docs: networking: devlink: devlink-dpipe.rst: avoid using UTF-8 chars
+  docs: networking: device_drivers: avoid using UTF-8 chars
+  docs: x86: avoid using UTF-8 chars
+  docs: scheduler: sched-deadline.rst: avoid using UTF-8 chars
+  docs: dev-tools: testing-overview.rst: avoid using UTF-8 chars
+  docs: power: powercap: powercap.rst: avoid using UTF-8 chars
+  docs: ABI: avoid using UTF-8 chars
+  docs: doc-guide: contributing.rst: avoid using UTF-8 chars
+  docs: PCI: acpi-info.rst: avoid using UTF-8 chars
+  docs: gpu: avoid using UTF-8 chars
+  docs: sound: kernel-api: writing-an-alsa-driver.rst: avoid using UTF-8
+    chars
+  docs: arm64: arm-acpi.rst: avoid using UTF-8 chars
+  docs: infiniband: tag_matching.rst: avoid using UTF-8 chars
+  docs: timers: no_hz.rst: avoid using UTF-8 chars
+  docs: misc-devices: ibmvmc.rst: avoid using UTF-8 chars
+  docs: firmware-guide: acpi: lpit.rst: avoid using UTF-8 chars
+  docs: firmware-guide: acpi: dsd: graph.rst: avoid using UTF-8 chars
+  docs: virt: kvm: avoid using UTF-8 chars
+  docs: RCU: avoid using UTF-8 chars
+
+ .../obsolete/sysfs-kernel-fadump_registered   |   2 +-
+ .../obsolete/sysfs-kernel-fadump_release_mem  |   2 +-
+ ...sfs-class-chromeos-driver-cros-ec-lightbar |   2 +-
+ .../ABI/testing/sysfs-class-net-cdc_ncm       |   2 +-
+ .../ABI/testing/sysfs-devices-platform-ipmi   |   2 +-
+ .../testing/sysfs-devices-platform-trackpoint |   2 +-
+ Documentation/ABI/testing/sysfs-devices-soc   |   4 +-
+ Documentation/ABI/testing/sysfs-module        |   4 +-
+ Documentation/PCI/acpi-info.rst               |  26 +-
+ .../Data-Structures/Data-Structures.rst       |  52 ++--
+ .../Expedited-Grace-Periods.rst               |  40 +--
+ .../Tree-RCU-Memory-Ordering.rst              |  10 +-
+ .../RCU/Design/Requirements/Requirements.rst  | 126 ++++-----
+ Documentation/admin-guide/index.rst           |   2 +-
+ Documentation/admin-guide/media/ipu3.rst      |   2 +-
+ Documentation/admin-guide/module-signing.rst  |   4 +-
+ Documentation/admin-guide/perf/imx-ddr.rst    |   2 +-
+ Documentation/admin-guide/pm/intel_idle.rst   |   4 +-
+ Documentation/admin-guide/pm/intel_pstate.rst |   4 +-
+ Documentation/admin-guide/ras.rst             |  94 +++----
+ .../admin-guide/reporting-issues.rst          |  12 +-
+ Documentation/admin-guide/sysctl/kernel.rst   |   2 +-
+ Documentation/arm64/arm-acpi.rst              |   8 +-
+ Documentation/block/data-integrity.rst        |   2 +-
+ Documentation/cdrom/cdrom-standard.rst        |  30 +--
+ Documentation/dev-tools/testing-overview.rst  |   4 +-
+ Documentation/doc-guide/contributing.rst      |   2 +-
+ .../driver-api/firmware/other_interfaces.rst  |   2 +-
+ Documentation/driver-api/fpga/fpga-bridge.rst |  10 +-
+ Documentation/driver-api/fpga/fpga-mgr.rst    |  12 +-
+ .../driver-api/fpga/fpga-programming.rst      |   8 +-
+ Documentation/driver-api/fpga/fpga-region.rst |  20 +-
+ Documentation/driver-api/iio/buffers.rst      |   8 +-
+ Documentation/driver-api/iio/hw-consumer.rst  |  10 +-
+ .../driver-api/iio/triggered-buffers.rst      |   6 +-
+ Documentation/driver-api/iio/triggers.rst     |  10 +-
+ Documentation/driver-api/index.rst            |   2 +-
+ Documentation/driver-api/ioctl.rst            |   8 +-
+ .../media/drivers/sh_mobile_ceu_camera.rst    |   8 +-
+ .../driver-api/media/drivers/vidtv.rst        |   4 +-
+ .../driver-api/media/drivers/zoran.rst        |   2 +-
+ Documentation/driver-api/nvdimm/btt.rst       |   2 +-
+ .../driver-api/thermal/cpu-idle-cooling.rst   |  14 +-
+ .../driver-api/thermal/intel_powerclamp.rst   |   6 +-
+ .../thermal/x86_pkg_temperature_thermal.rst   |   2 +-
+ .../fault-injection/nvme-fault-injection.rst  |   2 +-
+ Documentation/filesystems/ext4/attributes.rst |  20 +-
+ Documentation/filesystems/ext4/bigalloc.rst   |   6 +-
+ Documentation/filesystems/ext4/blockgroup.rst |   8 +-
+ Documentation/filesystems/ext4/blocks.rst     |   2 +-
+ Documentation/filesystems/ext4/directory.rst  |  16 +-
+ Documentation/filesystems/ext4/eainode.rst    |   2 +-
+ Documentation/filesystems/ext4/inlinedata.rst |   6 +-
+ Documentation/filesystems/ext4/inodes.rst     |   6 +-
+ Documentation/filesystems/ext4/journal.rst    |   8 +-
+ Documentation/filesystems/ext4/mmp.rst        |   2 +-
+ .../filesystems/ext4/special_inodes.rst       |   4 +-
+ Documentation/filesystems/ext4/super.rst      |  10 +-
+ Documentation/filesystems/f2fs.rst            |   6 +-
+ .../firmware-guide/acpi/dsd/graph.rst         |   2 +-
+ Documentation/firmware-guide/acpi/lpit.rst    |   2 +-
+ Documentation/gpu/i915.rst                    |   2 +-
+ Documentation/gpu/komeda-kms.rst              |   2 +-
+ Documentation/hid/hid-sensor.rst              |  70 ++---
+ Documentation/hid/intel-ish-hid.rst           | 246 +++++++++---------
+ Documentation/hwmon/ir36021.rst               |   2 +-
+ Documentation/hwmon/ltc2992.rst               |   2 +-
+ Documentation/hwmon/pm6764tr.rst              |   2 +-
+ Documentation/hwmon/tmp103.rst                |   4 +-
+ Documentation/index.rst                       |   4 +-
+ Documentation/infiniband/tag_matching.rst     |   8 +-
+ Documentation/kernel-hacking/hacking.rst      |   2 +-
+ Documentation/kernel-hacking/locking.rst      |   2 +-
+ Documentation/misc-devices/ibmvmc.rst         |   8 +-
+ .../device_drivers/ethernet/intel/i40e.rst    |  12 +-
+ .../device_drivers/ethernet/intel/iavf.rst    |   6 +-
+ .../device_drivers/ethernet/netronome/nfp.rst |  12 +-
+ .../networking/devlink/devlink-dpipe.rst      |   2 +-
+ Documentation/networking/scaling.rst          |  18 +-
+ Documentation/power/powercap/powercap.rst     | 210 +++++++--------
+ Documentation/process/code-of-conduct.rst     |   2 +-
+ .../process/kernel-enforcement-statement.rst  |   2 +-
+ Documentation/riscv/vm-layout.rst             |   2 +-
+ Documentation/scheduler/sched-deadline.rst    |   4 +-
+ .../security/keys/trusted-encrypted.rst       |   4 +-
+ Documentation/security/tpm/tpm_event_log.rst  |   2 +-
+ Documentation/security/tpm/xen-tpmfront.rst   |   2 +-
+ .../kernel-api/writing-an-alsa-driver.rst     |  68 ++---
+ Documentation/timers/no_hz.rst                |   2 +-
+ .../coresight/coresight-etm4x-reference.rst   |  16 +-
+ Documentation/usb/ehci.rst                    |   2 +-
+ Documentation/usb/gadget_printer.rst          |   2 +-
+ Documentation/usb/mass-storage.rst            |  36 +--
+ Documentation/usb/mtouchusb.rst               |   2 +-
+ Documentation/usb/usb-serial.rst              |   2 +-
+ .../media/dvb/audio-set-bypass-mode.rst       |   2 +-
+ .../userspace-api/media/dvb/audio.rst         |   2 +-
+ .../userspace-api/media/dvb/dmx-fopen.rst     |   2 +-
+ .../userspace-api/media/dvb/dmx-fread.rst     |   2 +-
+ .../media/dvb/dmx-set-filter.rst              |   2 +-
+ .../userspace-api/media/dvb/intro.rst         |   6 +-
+ .../userspace-api/media/dvb/video.rst         |   2 +-
+ .../userspace-api/media/fdl-appendix.rst      |  64 ++---
+ .../userspace-api/media/v4l/biblio.rst        |   8 +-
+ .../userspace-api/media/v4l/crop.rst          |  16 +-
+ .../userspace-api/media/v4l/dev-decoder.rst   |   6 +-
+ .../userspace-api/media/v4l/diff-v4l.rst      |   2 +-
+ .../userspace-api/media/v4l/open.rst          |   2 +-
+ .../media/v4l/vidioc-cropcap.rst              |   4 +-
+ Documentation/virt/kvm/api.rst                |  28 +-
+ .../virt/kvm/running-nested-guests.rst        |  12 +-
+ Documentation/vm/zswap.rst                    |   4 +-
+ Documentation/x86/resctrl.rst                 |   2 +-
+ Documentation/x86/sgx.rst                     |   4 +-
+ 114 files changed, 807 insertions(+), 807 deletions(-)
+
+-- 
+2.30.2
+
 
