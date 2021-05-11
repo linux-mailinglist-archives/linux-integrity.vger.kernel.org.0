@@ -2,108 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B874037B174
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 May 2021 00:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB9837B2AA
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 May 2021 01:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbhEKWNl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 May 2021 18:13:41 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31856 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229736AbhEKWNl (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 May 2021 18:13:41 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14BM3qJX013071;
-        Tue, 11 May 2021 18:12:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=t3LKdFuRFzAxYNFSKSFqcjKDsEQ3jHHlgnRe5mxjDTY=;
- b=YTld7HOCvPo9BzMZymJ2fMVP2may5cS28pg9xMTdOnPZDxTRHUn7yU9SAMXHTdtjEbid
- hUUnHjqdwDJiqlqYITQrhautOGkNj7NYSEdySDZxxptCDDdUV44mDJccoi48YdciG34g
- 2sBIzvmiADvjZNuR1vxEl6kJ0FgHLwP6/TuH43rhbTxXSHtZVpfqdQ7pqQUSV8qgWWuW
- kOezcGwCEdUDJF0symDqgbpjcPWypggajmQGuKXN1DO33E5aLmr8LVXiOwz2PegcsQVB
- 4UYGCqBkK5UcBIDTM6Zvcw+EkNRvSaP+K1FCkracXtuBVtIHbbv4UgbUIlbixQFk+rMG lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38g23v0kmy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 May 2021 18:12:30 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 14BM3xRv013519;
-        Tue, 11 May 2021 18:12:30 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38g23v0kmd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 May 2021 18:12:30 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14BMCSEZ016694;
-        Tue, 11 May 2021 22:12:28 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 38dhwh9vd9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 May 2021 22:12:27 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14BMCPD132309568
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 May 2021 22:12:25 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A0BF54203F;
-        Tue, 11 May 2021 22:12:25 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 99C2A42045;
-        Tue, 11 May 2021 22:12:24 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.116.76])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 11 May 2021 22:12:24 +0000 (GMT)
-Message-ID: <f1e16fe91bd80437ea2cf9ed60c40a3687fa0e40.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 10/11] ima: Introduce template field evmsig and write
- to field sig as fallback
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@google.com
+        id S229920AbhEKXh3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 May 2021 19:37:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56742 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229637AbhEKXh2 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 11 May 2021 19:37:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 39C796162B;
+        Tue, 11 May 2021 23:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620776181;
+        bh=0kddMno8L9vTWGOafdeTWibFtrcMKYCj9uXKnKrzec8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uMgaCy0tzlycndd4vmEWxzT+gQb2yfTZi/i7jdJ9EXEIe3h10vTneAA/I92P+XkSX
+         yU0IUkIjhwOs89AC/yuOiOCxLyDQwohpiXQwtViceLNSZJErrlq4x2lU3Z8r8vPQO0
+         UBPX4GpBABPdtBrFp6W3Wsw/Uay2a2+TnGP3HCT4ooGREHaerTZGGgGcRucqvjwx8S
+         DFNAD9lfaG9B3Eu9eSwrmM7H6/5QLv4YZk7VcVT3yJCyoRMARpxMrL04gPO6ppoNGw
+         uF9Xjh89Td9AVawxzN8h5MIsRmdkdixcWTSYJCj5FQtf49r1qSGjsG97x+98kkue+A
+         SK38YyxcSxADw==
+Date:   Wed, 12 May 2021 02:36:18 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
 Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 11 May 2021 18:12:23 -0400
-In-Reply-To: <20210505113329.1410943-6-roberto.sassu@huawei.com>
-References: <20210505112935.1410679-1-roberto.sassu@huawei.com>
-         <20210505113329.1410943-6-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: IB94wreSnh83ny7E9fTm1tYMmlSkKC_W
-X-Proofpoint-ORIG-GUID: x8W11_q3a1dFYaT3I_aG-LvbEVYDfSNl
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-11_04:2021-05-11,2021-05-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxscore=0 adultscore=0 priorityscore=1501 spamscore=0 bulkscore=0
- malwarescore=0 impostorscore=0 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2105110148
+        Hans de Goede <hdegoede@redhat.com>, stable@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Extend locality handling to TPM2 in
+ tpm_tis_gen_interrupt()
+Message-ID: <YJsU8m0WddX/9+H9@kernel.org>
+References: <20210510122831.409608-1-jarkko@kernel.org>
+ <daf823b3-522c-6c9a-984b-0ca849512a54@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <daf823b3-522c-6c9a-984b-0ca849512a54@gmx.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Roberto,
-
-On Wed, 2021-05-05 at 13:33 +0200, Roberto Sassu wrote:
-> With the patch to accept EVM portable signatures when the
-> appraise_type=imasig requirement is specified in the policy, appraisal can
-> be successfully done even if the file does not have an IMA signature.
+On Tue, May 11, 2021 at 01:09:35AM +0200, Lino Sanfilippo wrote:
+> Hi,
 > 
-> However, remote attestation would not see that a different signature type
-> was used, as only IMA signatures can be included in the measurement list.
-> This patch solves the issue by introducing the new template field 'evmsig'
-> to show EVM portable signatures and by including its value in the existing
-> field 'sig' if the IMA signature is not found.
+> On 10.05.21 at 14:28, Jarkko Sakkinen wrote:
+> > The earlier fix (linked) only partially fixed the locality handling bug
+> > in tpm_tis_gen_interrupt(), i.e. only for TPM 1.x.
+> >
+> > Extend the locality handling to cover TPM2.
+> >
+> > Cc: Hans de Goede <hdegoede@redhat.com>
+> > Cc: stable@vger.kernel.org
+> > Link: https://lore.kernel.org/linux-integrity/20210220125534.20707-1-jarkko@kernel.org/
+> > Fixes: a3fbfae82b4c ("tpm: take TPM chip power gating out of tpm_transmit()")
+> > Reported-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >
+> > v1:
+> > * Testing done with Intel NUC5i5MYHE with SLB9665 TPM2 chip.
+> >
+> >  drivers/char/tpm/tpm_tis_core.c | 10 ++++------
+> >  1 file changed, 4 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> > index a2e0395cbe61..6fa150a3b75e 100644
+> > --- a/drivers/char/tpm/tpm_tis_core.c
+> > +++ b/drivers/char/tpm/tpm_tis_core.c
+> > @@ -709,16 +709,14 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
+> >  	cap_t cap;
+> >  	int ret;
+> >
+> > -	/* TPM 2.0 */
+> > -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> > -		return tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+> > -
+> > -	/* TPM 1.2 */
+> >  	ret = request_locality(chip, 0);
+> >  	if (ret < 0)
+> >  		return ret;
+> >
+> > -	ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc, 0);
+> > +	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+> > +		ret = tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+> > +	else
+> > +		ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc, 0);
+> >
+> >  	release_locality(chip, 0);
+> >
+> >
+> 
+> This fix works for me. Tested on a SLB9670vq2.0 and the warning message is gone.
+> 
+> Tested-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> 
+> Regards,
+> Lino
 
-With this patch, instead of storing the file data signature, the file
-metadata signature is stored in the IMA measurement list, as designed. 
-There's a minor problem.  Unlike the file data signature, the
-measurement list record does not contain all the information needed to
-verify the file metadata signature.
+Thanks a lot, I'll add your tag.
 
-thanks,
-
-Mimi
-
+/Jarkko
