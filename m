@@ -2,115 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8B137A3D9
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 May 2021 11:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F61537A621
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 May 2021 13:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbhEKJij (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 May 2021 05:38:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52066 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230434AbhEKJif (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 May 2021 05:38:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A14E161925;
-        Tue, 11 May 2021 09:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620725848;
-        bh=6o759ShUxJ4M0iPoewavcBs0joP5lvg0/UyuatoupKw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VmShZQzrJkNUYpzDiT8lkPsxOAMSd9Mve7i5gQll5qndGWVpx/umg+CXxAKGpoNMA
-         r3FMkUmVknRLOM40Or9NWwNOL92NSwkHrq/d0ndNeQRTu32uCCDHx2IbSd5VG2b4ul
-         nosZAixjCj57nhk32NpeqSVxAJnPk2eny4EB88KTc/gQGnVuXNqo0yWlzvNXSmu4ZF
-         mRycl9aLbRnBPpCgKOBrtmqpOvb6P16yZBfRn67Vau0A0Tq2FleVuS/QpC4INaUcg7
-         P/ifJQg2MpIKloJneBuh4wLQ19EHMgDmJrDBTumwAHsRVeIkB/VjkEIaNgqi+q08au
-         3pae3xKzjvu8Q==
-Date:   Tue, 11 May 2021 11:37:17 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as
- ASCII
-Message-ID: <20210511113717.5c8b68f7@coco.lan>
-In-Reply-To: <YJmH2irxoRsyNudb@mit.edu>
-References: <cover.1620641727.git.mchehab+huawei@kernel.org>
-        <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
-        <20210510135518.305cc03d@coco.lan>
-        <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
-        <YJmH2irxoRsyNudb@mit.edu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        id S231338AbhEKL5x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 May 2021 07:57:53 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:58768 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231336AbhEKL5w (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 11 May 2021 07:57:52 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id F15BE72C8B4;
+        Tue, 11 May 2021 14:56:44 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [193.43.10.250])
+        by imap.altlinux.org (Postfix) with ESMTPSA id CB3704A46E8;
+        Tue, 11 May 2021 14:56:44 +0300 (MSK)
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH v6 0/3] ima-evm-utils: Add --keyid option
+Date:   Tue, 11 May 2021 14:56:27 +0300
+Message-Id: <20210511115630.795208-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Em Mon, 10 May 2021 15:22:02 -0400
-"Theodore Ts'o" <tytso@mit.edu> escreveu:
+Allow user to set signature's keyid using `--keyid' option. Keyid should
+correspond to SKID in certificate. When keyid is calculated using SHA-1
+in libimaevm it may mismatch keyid extracted by the kernel from SKID of
+certificate (the way public key is presented to the kernel), thus making
+signatures not verifiable. This may happen when certificate is using non
+SHA-1 SKID (see rfc7093) or just 'unique number' (see rfc5280 4.2.1.2).
+As a last resort user may specify arbitrary keyid using the new option.
+Certificate @filename could be used instead of the hex number. And,
+third option is to read keyid from the cert appended to the key file.
 
-> On Mon, May 10, 2021 at 02:49:44PM +0100, David Woodhouse wrote:
-> > On Mon, 2021-05-10 at 13:55 +0200, Mauro Carvalho Chehab wrote: =20
-> > > This patch series is doing conversion only when using ASCII makes
-> > > more sense than using UTF-8.=20
-> > >=20
-> > > See, a number of converted documents ended with weird characters
-> > > like ZERO WIDTH NO-BREAK SPACE (U+FEFF) character. This specific
-> > > character doesn't do any good.
-> > >=20
-> > > Others use NO-BREAK SPACE (U+A0) instead of 0x20. Harmless, until
-> > > someone tries to use grep[1]. =20
-> >=20
-> > Replacing those makes sense. But replacing emdashes =E2=80=94 which are=
- a
-> > distinct character that has no direct replacement in ASCII and which
-> > people do *deliberately* use instead of hyphen-minus =E2=80=94 does not=
-. =20
->=20
-> I regularly use --- for em-dashes and -- for en-dashes.  Markdown will
-> automatically translate 3 ASCII hypens to em-dashes, and 2 ASCII
-> hyphens to en-dashes.  It's much, much easier for me to type 2 or 3
-> hypens into my text editor of choice than trying to enter the UTF-8
-> characters.=20
+These commits create backward incompatible ABI change for libimaevm,
+ thus soname should be incremented on release.
 
-Yeah, typing those UTF-8 chars are a lot harder than typing -- and ---
-on several text editors ;-)
+Changes from v5:
+- ima_read_keyid renamed to imaevm_read_keyid and its return value
+  inverted to match other API functions. Suggested by Stefan Berger
+- Rebased over next-testing. Noticed by Mimi Zohar.
 
-Here, I only type UTF-8 chars for accents (my US-layout keyboards are=20
-all set to US international, so typing those are easy).
+Changes from v4:
+- ima_read_keyid() API changed. As suggested by Stefan Berger.
 
-> If we can make sphinx do this translation, maybe that's
-> the best way of dealing with these two characters?
+Changes from v3:
+- ima_read_keyid() is improved to better support both use cases.
 
-Sphinx already does that by default[1], using smartquotes:
+Changes from v2:
+- Add ima_read_keyid() function to libemaevm and use it in both evmctl
+  (for --keyid) and sign_hash_v2() (for concatenated PEMs). Suggested
+  by Stefan Berger.
+- Autodetect PEM by openssl reading it instead of magic string.
+  Suggested by Stefan Berger.
+- Trivial change: s/unsigned long int/unsigned long/ for keyid type.
 
-	https://docutils.sourceforge.io/docs/user/smartquotes.html
+Changes from v1:
+- Extract keyid from cert associated to key file.
+- Use sizeof instead of constant.
 
-Those are the conversions that are done there:
+Changes since rfc version:
+- `imaevm_params.keyid' now stored as native integer (instead of network
+  order). Suggested by Stefan Berger.
+- Added support for `--keyid=@filename'.
 
-      - Straight quotes (" and ') turned into "curly" quote characters;
-      - dashes (-- and ---) turned into en- and em-dash entities;
-      - three consecutive dots (... or . . .) turned into an ellipsis char.
+Vitaly Chikunov (3):
+  ima-evm-utils: Allow manual setting keyid for signing
+  ima-evm-utils: Allow manual setting keyid from a cert file
+  ima-evm-utils: Read keyid from the cert appended to the key file
 
-So, we can simply use single/double commas, hyphens and dots for
-curly commas and ellipses.
+ README                 |  5 +++
+ src/evmctl.c           | 27 ++++++++++++++
+ src/imaevm.h           |  2 +
+ src/libimaevm.c        | 99 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ tests/sign_verify.test |  2 +
+ 5 files changed, 132 insertions(+), 3 deletions(-)
 
-[1] There's a way to disable it at conf.py, but at the Kernel this is
-    kept on its default: to automatically do such conversions.=20
+-- 
+2.11.0
 
-Thanks,
-Mauro
