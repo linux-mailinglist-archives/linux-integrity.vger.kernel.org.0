@@ -2,217 +2,180 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F0F37A24B
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 May 2021 10:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF9437A2CF
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 May 2021 11:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbhEKIiw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 May 2021 04:38:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33182 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229995AbhEKIiw (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 May 2021 04:38:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620722265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8c09aiHUCyiT7mt/5iPMlq0VEJGHMx0WdaN3n9zR6DU=;
-        b=gE6mx3Zb+zMidw1tD75P5t2scuja6r3cFBSrfxzDhDSU75WDyKbt5N/KdBtk4EsXHvhOt0
-        FSK217jdpIK9XlRifoOD1iPOEKJPt0zdN0rq1yjjMJBQf7tYKOONBfF9kDFmdzP55kABH6
-        7QqqoIeqlCoz0tnH65xNppRbHeVsuHM=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-550-vIU_bCA-M1GpfAJ7CNmv6w-1; Tue, 11 May 2021 04:37:43 -0400
-X-MC-Unique: vIU_bCA-M1GpfAJ7CNmv6w-1
-Received: by mail-ej1-f69.google.com with SMTP id nd10-20020a170907628ab02903a324b229bfso5690846ejc.7
-        for <linux-integrity@vger.kernel.org>; Tue, 11 May 2021 01:37:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8c09aiHUCyiT7mt/5iPMlq0VEJGHMx0WdaN3n9zR6DU=;
-        b=RM3rAjREfwF+ow7v+QI0zrDq8sdBxbSmxXPZKYyKY4HYfIg/xn6biTKvoWQGSKoM8M
-         AM5+eUHGikiiboQGAZ/Z02hDvNYl+8/D7bganPODr5qwBd3wg8awoUgobUwT2g+uiSqu
-         zOT1IsZS1rMMGG/jKT+c5g52LTtVEhErX0/HmZpIquEEKMMs0ZYzNvVcSl4fgqy0Weje
-         OhuTtzsDPRnej5KdrdFeimXHo8g/ZnbVuvaYXxaYsA1SBiDgXwiIrpOuDHv1QHtih3qy
-         ju5H2UiJI/EgRXPVd4dJdXlK36PGiVMAQe1HhOR6w8E6Wk6xj/JAxnQdhQgSOCbQvhoX
-         jzqQ==
-X-Gm-Message-State: AOAM5335tu5ZrZfbjA980JKQtJ3p6YFjw6rhThznlGuk7imwaaGGuUC3
-        +j6C/xclgu0SFXwOse57iGYbEC2SYNowPbmthDsXu5pQZSHpKY4nW3dxwmx0jY/6CUOJBmZylxj
-        GtVqoOR9SXdxzS2nXYdwLxE8ueBsw5fIOHgSMgkc+G+35BRk4lIf88QeD6mb4zXK7H9b9hAXx+3
-        p+Q/QJ
-X-Received: by 2002:a05:6402:c94:: with SMTP id cm20mr1844837edb.323.1620722261833;
-        Tue, 11 May 2021 01:37:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwWGR3KC5TbNjV9F+zoMr+jPqpOiod+fvjnVeWQbM63kk7O5sSYZMo896jGNiZKrrMtL/dIHw==
-X-Received: by 2002:a05:6402:c94:: with SMTP id cm20mr1844809edb.323.1620722261614;
-        Tue, 11 May 2021 01:37:41 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id um2sm11210668ejb.4.2021.05.11.01.37.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 May 2021 01:37:41 -0700 (PDT)
-Subject: Re: Recent tpm_tis IRQ handling changes are causing kernel backtraces
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>
-References: <34442b17-c8e6-9d33-831f-fcbf3a38552b@redhat.com>
- <e4afc566-0114-c5a3-ebda-a775132e999d@redhat.com>
- <YFEEas6kH3FUoKJe@kernel.org>
- <8b592417-dc1d-a7f8-0e17-09b6bb1df33a@redhat.com>
- <YJlsdgxPIm5I6Jk8@kernel.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <4f525bca-3836-7f5c-7913-e54d620473aa@redhat.com>
-Date:   Tue, 11 May 2021 10:37:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231181AbhEKJBW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 May 2021 05:01:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57216 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230439AbhEKJBU (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 11 May 2021 05:01:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E709E611F1;
+        Tue, 11 May 2021 09:00:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620723613;
+        bh=ETvFtPpZWz6DN3iWb3G2WAPhojmYo6ps7EuchaChQ+E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PLGy/1LSbmraLJz9I+ZFpgkDxkCfvpVNiHxpQ06jZIl8i8GhyxDYM7Gy1/DkHiCt5
+         klo7h/HCiZCdE58jLyhFWvaAVP5oc9x+G/BoSRcOX7C3Tl/sTRBZmSPn8j1vcyPJNt
+         mRJS0yxqm/yCxF+CPVj6SxA/ae6jVWIEkJrXhN8oiyzJkjvRZFRVAZch9kSHP1iP93
+         oW7IG29Utyoqz+QwiX4h4Rg5Qegv470eEj7pH0f2MN9paDsUyx4y03dGzSMfb4uf2a
+         FDLqKCDGwM78HAqr/sdfeYExPB7ah8JOeYwd9qD22mRbJt8d7NaYnvORLTCVIJ25K4
+         6sDaroZmf8XGQ==
+Date:   Tue, 11 May 2021 11:00:02 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Edward Cree <ecree.xilinx@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as
+ ASCII
+Message-ID: <20210511110002.2f187f01@coco.lan>
+In-Reply-To: <ed65025c-1087-9672-7451-6d28e7ab8f92@gmail.com>
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
+        <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
+        <20210510135518.305cc03d@coco.lan>
+        <df6b4567-030c-a480-c5a6-fe579830e8c0@gmail.com>
+        <YJk8LMFViV7Z3Uu7@casper.infradead.org>
+        <ed65025c-1087-9672-7451-6d28e7ab8f92@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <YJlsdgxPIm5I6Jk8@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+Em Mon, 10 May 2021 15:33:47 +0100
+Edward Cree <ecree.xilinx@gmail.com> escreveu:
 
-On 5/10/21 7:25 PM, Jarkko Sakkinen wrote:
-> On Sat, May 08, 2021 at 11:07:43AM +0200, Hans de Goede wrote:
->> Hi Jarko,
->>
->> On 3/16/21 8:18 PM, Jarkko Sakkinen wrote:
->>> On Tue, Mar 16, 2021 at 04:34:01PM +0100, Hans de Goede wrote:
->>>> Hi,
->>>>
->>>> On 2/11/21 2:09 PM, Hans de Goede wrote:
->>>>> Hi Jerry,
->>>>>
->>>>> It looks like there still is an issue with the recent changes to the tpm_tis IRQ
->>>>> handling. At least I think those are the cause I did not dive any deeper,
->>>>> I just noticed that we (Fedora) have been receiving an aweful lot of
->>>>> kernel tpm_tis_send_data backtraces with most starting with tpm_tis_probe_irq_...
->>>>>
->>>>> See for example:
->>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1912167
->>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1927610
->>>>>
->>>>> Those are just the 3 which landed in my inbox today, for much more see:
->>>>> https://bugzilla.redhat.com/buglist.cgi?quicksearch=tpm_tis_send_data
->>>>> (this shows 18 bugs atm).
->>>>>
->>>>> These were reported through the Fedora ABRT tools which automatically
->>>>> collects backtraces, the bugs have links to the ABRT reports, e.g. :
->>>>> https://retrace.fedoraproject.org/faf/reports/28155/
->>>>> https://retrace.fedoraproject.org/faf/reports/37107/
->>>>>
->>>>> The 28155 report says that so far there have been 308,412 (ouch) automatic
->>>>> uploads of that particular variant of these backtraces
->>>>>
->>>>> Note the second (37107) retrace report is about this happening
->>>>> on resume, rather then on probe/tpm_tis_probe_irq_... time.
->>>>>
->>>>> Did your work on this work land in 5.10 ? Or could it be that the
->>>>> issue is an incomplete backport to the 5.10.y stable series ?
->>>>
->>>> Ping ?
->>>>
->>>> It is raining bug-reports about this:
->>>>
->>>> https://bugzilla.redhat.com/buglist.cgi?quicksearch=tpm_tis_send_data
->>>>
->>>> Currently lists 25 bugs and that is excluding bugs which have already
->>>> been marked as a duplicate.
->>>>
->>>> Can someone involved in the patch-series which is causing this regression
->>>> please take a look at these kernel backtraces ?
->>>>
->>>> Regards,
->>>>
->>>> Hans
->>>
->>> I incorporated two fixes to this issue to my last PR, which were taken
->>> to the mainline. What is the situation with the mainline?
->>
->> Thank you for your reply and sorry for being slow to respond.
->>
->> Is this expected to be fixed in 5.11, or when you say mainline you
->> main Linus' master branch / so the fixes are in 5.12 only ?
->>
->> The reason I'm asking is because we just received another bugreport
->> about this against 5.11.17. The bug is marked private (our tool to
->> automatically file bugs for kernel backtraces does this) so let me
->> just copy and paste the trace here:
->>
->> WARNING: CPU: 0 PID: 3060 at drivers/char/tpm/tpm_tis_core.c:205
->> tpm_tis_status+0x66/0x70
->>
->> CPU: 0 PID: 3060 Comm: systemd-sleep Not tainted 5.11.17-200.fc33.x86_64 #1
->> Hardware name: Hewlett-Packard HP ProBook 6460b/161D, BIOS 68SCE Ver. F.63
->> 05/27/2016
->> RIP: 0010:tpm_tis_status+0x66/0x70
->> Code: 23 75 05 48 83 c4 10 c3 31 c0 80 3d 38 02 56 01 00 75 f0 48 c7 c7 94 67
->> 43 96 88 44 24 07 c6 05 24 02 56 01 01 e8 4a 53 3c 00 <0f> 0b 0f b6 44 24 07 eb
->> d0 90 66 66 66 66 90 41 57 41 56 41 55 41
->> RSP: 0018:ffffaac581427b10 EFLAGS: 00010282
->> RAX: 000000000000001b RBX: ffff9dc800b93000 RCX: ffff9dc83b418ac8
->> RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff9dc83b418ac0
->> RBP: ffff9dc800b93000 R08: ffffffff96a64ec0 R09: ffffaac581427ab0
->> R10: 0000000000000001 R11: 000000002d2d2d2d R12: ffff9dc80667c268
->> R13: ffff9dc801fd1000 R14: 0000000000000000 R15: ffffaac581427bca
->> FS:  00007f8f0f32c000(0000) GS:ffff9dc83b400000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 0000557044ec6c86 CR3: 0000000062e92001 CR4: 00000000000606f0
->> Call Trace:
->>  tpm_tis_send_data+0x2b/0x230
->>  tpm_tis_send_main+0x1e/0xe0
->>  tpm_transmit+0xd8/0x3d0
->>  tpm_transmit_cmd+0x25/0x90
->>  tpm1_do_selftest+0x88/0x130
->>  ? _cond_resched+0x16/0x40
->>  tpm_tis_resume+0x4d/0x120
->>  ? pnpacpi_resume+0x1b/0xa0
->>  ? pnp_bus_suspend+0x10/0x10
->>  pnp_bus_resume+0x63/0x90
->>  dpm_run_callback+0x4c/0x120
->>  device_resume+0xa7/0x200
->>  dpm_resume+0xce/0x2c0
->>  dpm_resume_end+0xd/0x20
->>  suspend_devices_and_enter+0x195/0x750
->>  pm_suspend.cold+0x329/0x374
->>  state_store+0x71/0xd0
->>  kernfs_fop_write_iter+0x124/0x1b0
->>  new_sync_write+0x108/0x180
->>  vfs_write+0x1bc/0x270
->>  ksys_write+0x4f/0xc0
->>  do_syscall_64+0x33/0x40
->>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
->> RIP: 0033:0x7f8f102ec4e7
->> Code: 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64
->> 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51
->> c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
->> RSP: 002b:00007ffe87216bf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
->> RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f8f102ec4e7
->> RDX: 0000000000000004 RSI: 00007ffe87216ce0 RDI: 0000000000000004
->> RBP: 00007ffe87216ce0 R08: 000055c485d835e0 R09: 00007f8f103830c0
->> R10: 00007f8f10382fc0 R11: 0000000000000246 R12: 0000000000000004
->> R13: 000055c485d7f650 R14: 0000000000000004 R15: 00007f8f103bf720
->>
->> Regards,
->>
->> Hans
-> 
-> I sent a couple fixes (cc'd to you).
+> On 10/05/2021 14:59, Matthew Wilcox wrote:
+> > Most of these
+> > UTF-8 characters come from latex conversions and really aren't
+> > necessary (and are being used incorrectly). =20
+> I fully agree with fixing those.
+> The cover-letter, however, gave the impression that that was not the
+>  main purpose of this series; just, perhaps, a happy side-effect.
 
-I've seen the fixes, thank you.
+Sorry for the mess. The main reason why I wrote this series is because
+there are lots of UTF-8 left-over chars from the ReST conversion.
+See:
+  - https://lore.kernel.org/linux-doc/20210507100435.3095f924@coco.lan/
 
-I'll probably add these as downstream patches to the Fedora 5.12 kernels for now
-and see if that helps.
+A large set of the UTF-8 letf-over chars were due to my conversion work,
+so I feel personally responsible to fix those ;-)
 
-Regards,
+Yet, this series has two positive side effects:
 
-Hans
+ - it helps people needing to touch the documents using non-utf8 locales[1];
+ - it makes easier to grep for a text;
 
+[1] There are still some widely used distros nowadays (LTS ones?) that
+    don't set UTF-8 as default. Last time I installed a Debian machine
+    I had to explicitly set UTF-8 charset after install as the default
+    were using ASCII encoding (can't remember if it was Debian 10 or an
+    older version).
+
+Unintentionally, I ended by giving emphasis to the non-utf8 instead of
+giving emphasis to the conversion left-overs.
+
+FYI, this patch series originated from a discussion at linux-doc,
+reporting that Sphinx breaks when LANG is not set to utf-8[2]. That's
+why I probably ended giving the wrong emphasis at the cover letter.
+
+[2] See https://lore.kernel.org/linux-doc/20210506103913.GE6564@kitsune.sus=
+e.cz/
+    for the original report. I strongly suspect that the VM set by Michal=20
+    to build the docs was using a distro that doesn't set UTF-8 as default.
+
+    PS.:=20
+      I intend to prepare afterwards a separate fix to avoid Sphinx
+      logger to crash during Kernel doc builds when the locale charset
+      is not UTF-8, but I'm not too fluent in python. So, I need some
+      time to check if are there a way to just avoid python log crashes
+      without touching Sphinx code and without needing to trick it to=20
+      think that the machine's locale is UTF-8.
+
+See: while there was just a single document originally stored at the
+Kernel tree as a LaTeX document during the time we did the conversion
+(cdrom-standard.tex), there are several other documents stored as=20
+text that seemed to be generated by some tool like LaTeX, whose the
+original version were not preserved.=20
+
+Also, there were other documents using different markdown dialects=20
+that were converted via pandoc (and/or other similar tools). That's=20
+not to mention the ones that were converted from DocBook. Such
+tools tend to use some logic to use "neat" versions of some ASCII
+characters, like what this tool does:
+
+	https://daringfireball.net/projects/smartypants/
+
+(Sphinx itself seemed to use this tool on its early versions)
+
+All tool-converted documents can carry UTF-8 on unexpected places. See,
+on this series, a large amount of patches deal with U+A0 (NO-BREAK SPACE)
+chars. I can't see why someone writing a plain text document (or a ReST
+one) would type a NO-BREAK SPACE instead of a normal white space.
+
+The same applies, up to some sort, to curly commas: usually people just=20
+write ASCII "commas" on their documents, and use some tool like LaTeX
+or a text editor like libreoffice in order to convert them into
+ =E2=80=9Cutf-8 curly commas=E2=80=9D[3].
+
+[3] Sphinx will do such things at the produced output, doing something=20
+    similar to what smartypants does, nowadays using this:
+
+	https://docutils.sourceforge.io/docs/user/smartquotes.html
+
+    E. g.:
+      - Straight quotes (" and ') turned into "curly" quote characters;
+      - dashes (-- and ---) turned into en- and em-dash entities;
+      - three consecutive dots (... or . . .) turned into an ellipsis char.
+
+> > You seem quite knowedgeable about the various differences.  Perhaps
+> > you'd be willing to write a document for Documentation/doc-guide/
+> > that provides guidance for when to use which kinds of horizontal
+> > line?
+> I have Opinions about the proper usage of punctuation, but I also know =20
+>  that other people have differing opinions.  For instance, I place
+>  spaces around an em dash, which is nonstandard according to most
+>  style guides.  Really this is an individual enough thing that I'm not
+>  sure we could have a "kernel style guide" that would be more useful
+>  than general-purpose guidance like the page you linked.
+
+> Moreover, such a guide could make non-native speakers needlessly self-
+>  conscious about their writing and discourage them from contributing
+>  documentation at all.
+
+I don't think so. In a matter of fact, as a non-native speaker, I guess
+this can actually help people willing to write documents.
+
+>  I'm not advocating here for trying to push
+>  kernel developers towards an eats-shoots-and-leaves level of
+>  linguistic pedantry; rather, I merely think that existing correct
+>  usages should be left intact (and therefore, excising incorrect usage
+>  should only be attempted by someone with both the expertise and time
+>  to check each case).
+>=20
+> But if you really want such a doc I wouldn't mind contributing to it.
+
+IMO, a document like that can be helpful. I can help reviewing it.
+
+Thanks,
+Mauro
