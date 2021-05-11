@@ -2,113 +2,164 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC00A37A9F7
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 May 2021 16:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A80F37AFB7
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 May 2021 21:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbhEKO4P convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 May 2021 10:56:15 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3062 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbhEKO4L (ORCPT
+        id S229968AbhEKTys (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 May 2021 15:54:48 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:2172 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229920AbhEKTyr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 May 2021 10:56:11 -0400
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ffgf63p4gz6wkjh;
-        Tue, 11 May 2021 22:43:42 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 11 May 2021 16:54:58 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Tue, 11 May 2021 16:54:58 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Tue, 11 May 2021 15:54:47 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14BJYnAc044402;
+        Tue, 11 May 2021 15:53:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=uwIX+a9AmDwK0Whw4IZJuRNHjaUD+3bsa0lcZexzn4Q=;
+ b=rruHaDCRRf3HsPdbX76G8oJr++qlISVDIEuLgBFWPs0sxXVsh78ZRp7t0w8zXavK6+1H
+ YfFfj5VoEpymbd4CC6AxB9M2GtaBrBLH2B71TSeB/WyryEOVdOZEvSLwHV2EAC44ej0d
+ Kc3W7Pnj+JI6Zshv/1g8jURWl2tEADt8V/MVnpzoMXBRXK/BlkGp1iNW11DmhdSwO7fj
+ vKY9ektWG/liyu1E+klKuhTUU66+IPtRkaZ0ULYwThWKpwlD+g9xiYxcoyltl0S8EmzR
+ WrZ5z3DzyAOJroWRvUwQRJ77gmy18r9f1MjiX/spS8RX2geuTKtoWbwaBdM/h2AQ68fL BQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38fyng9b26-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 May 2021 15:53:35 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 14BJYqG8044680;
+        Tue, 11 May 2021 15:53:35 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38fyng9b1x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 May 2021 15:53:34 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14BJkqRx026071;
+        Tue, 11 May 2021 19:53:33 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 38dhwh10gx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 May 2021 19:53:33 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14BJr4gZ31981934
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 May 2021 19:53:04 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A8CE15204E;
+        Tue, 11 May 2021 19:53:30 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.116.76])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 4B05852050;
+        Tue, 11 May 2021 19:53:29 +0000 (GMT)
+Message-ID: <c0d393c4c8e676ea1423b6abfbaa6418a12f10f0.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 03/11] evm: Refuse EVM_ALLOW_METADATA_WRITES only if
+ an HMAC key is loaded
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
         "mjg59@google.com" <mjg59@google.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Subject: RE: [PATCH v6 08/11] evm: Allow setxattr() and setattr() for
- unmodified metadata
-Thread-Topic: [PATCH v6 08/11] evm: Allow setxattr() and setattr() for
- unmodified metadata
-Thread-Index: AQHXQaKHvFPvOA7oV0m5qAvk17yFuareOl6AgAAjMeD//+TqAIAAInMw
-Date:   Tue, 11 May 2021 14:54:58 +0000
-Message-ID: <0d0fcd3619e64bb9aaf1656ef066d043@huawei.com>
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Date:   Tue, 11 May 2021 15:53:28 -0400
+In-Reply-To: <1f0530bc9b974951ae0bb1e2beb02422@huawei.com>
 References: <20210505112935.1410679-1-roberto.sassu@huawei.com>
-         <20210505113329.1410943-4-roberto.sassu@huawei.com>
-         <735bae46f0772b40ef6ecfb3c6fe0267b3ebbee8.camel@linux.ibm.com>
-         <c281b39bdbaa4b5ab921a2e9cece83b4@huawei.com>
- <1a5d2a37be31f7971374c01ed8e799e003c96f9d.camel@linux.ibm.com>
-In-Reply-To: <1a5d2a37be31f7971374c01ed8e799e003c96f9d.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+         <20210505112935.1410679-4-roberto.sassu@huawei.com>
+         <6f5603489b16918de5d3cbb73c1a7c0e835f0671.camel@linux.ibm.com>
+         <1f0530bc9b974951ae0bb1e2beb02422@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OiEadkjEZY-psod8V59iJYsAziHwSPp6
+X-Proofpoint-ORIG-GUID: klQcZJ7zyaf0V3HOJQdanH3yRk1fem3p
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-11_04:2021-05-11,2021-05-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2105110130
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> Sent: Tuesday, May 11, 2021 4:41 PM
-> On Tue, 2021-05-11 at 14:21 +0000, Roberto Sassu wrote:
+On Tue, 2021-05-11 at 14:12 +0000, Roberto Sassu wrote:
+> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > Sent: Tuesday, May 11, 2021 3:42 PM
+> > On Wed, 2021-05-05 at 13:29 +0200, Roberto Sassu wrote:
+> > > EVM_ALLOW_METADATA_WRITES is an EVM initialization flag that can be
+> > set to
+> > > temporarily disable metadata verification until all xattrs/attrs necessary
+> > > to verify an EVM portable signature are copied to the file. This flag is
+> > > cleared when EVM is initialized with an HMAC key, to avoid that the HMAC is
+> > > calculated on unverified xattrs/attrs.
 > > >
-> > > On Wed, 2021-05-05 at 13:33 +0200, Roberto Sassu wrote:
-> > > > With the patch to allow xattr/attr operations if a portable signature
-> > > > verification fails, cp and tar can copy all xattrs/attrs so that at the
-> > > > end of the process verification succeeds.
-> > > >
-> > > > However, it might happen that the xattrs/attrs are already set to the
-> > > > correct value (taken at signing time) and signature verification succeeds
-> > > > before the copy has completed. For example, an archive might contains
-> files
-> > > > owned by root and the archive is extracted by root.
-> > > >
-> > > > Then, since portable signatures are immutable, all subsequent operations
-> > > > fail (e.g. fchown()), even if the operation is legitimate (does not alter
-> > > > the current value).
-> > > >
-> > > > This patch avoids this problem by reporting successful operation to user
-> > > > space when that operation does not alter the current value of
-> xattrs/attrs.
+> > > Currently EVM unnecessarily denies setting this flag if EVM is initialized
+> > > with a public key, which is not a concern as it cannot be used to trust
+> > > xattrs/attrs updates. This patch removes this limitation.
 > > >
-> > > I must be missing something.  If both the IMA and EVM status flags are
-> > > reset after xattr or attr modification, do we really need to prevent
-> > > any metadata - same or different - changes?  Both evm_protect_xattr()
-> > > and evm_inode_setattr() would need to be modified to allow
-> > > INTEGRITY_PASS_IMMUTABLE.
-> >
-> > yes, given that the IMA and EVM flags are reset, it should not be
-> > a problem to allow changes. However, I think it is useful to keep
-> > the current behavior. For example, it would prevent an accidental
-> > change of the SELinux label during the relabeling process.
+> > > Cc: stable@vger.kernel.org # 4.16.x
+> > > Fixes: ae1ba1676b88e ("EVM: Allow userland to permit modification of EVM-
+> > protected metadata")
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Once the comments below are addressed,
+> > 
+> > Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
+> > 
+> > > ---
+> > >  Documentation/ABI/testing/evm      | 5 +++--
+> > >  security/integrity/evm/evm_secfs.c | 5 ++---
+> > >  2 files changed, 5 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/Documentation/ABI/testing/evm
+> > b/Documentation/ABI/testing/evm
+> > > index 3c477ba48a31..eb6d70fd6fa2 100644
+> > > --- a/Documentation/ABI/testing/evm
+> > > +++ b/Documentation/ABI/testing/evm
+> > > @@ -49,8 +49,9 @@ Description:
+> > >  		modification of EVM-protected metadata and
+> > >  		disable all further modification of policy
+> > >
+> > > -		Note that once a key has been loaded, it will no longer be
+> > > -		possible to enable metadata modification.
+> > > +		Note that once an HMAC key has been loaded, it will no longer
+> > > +		be possible to enable metadata modification and, if it is
+> > > +		already enabled, it will be disabled.
+> > 
+> > It's worth mentioning that echo'ing a new value is additive.  Once EVM
+> > metadata modification is enabled, the only way of disabling it is by
+> > enabling an HMAC key.  It's also worth mentioning that metadata writes
+> > are only permitted once further changes to the EVM policy are disabled.
 > 
-> I understand we might want to prevent accidental or malicious changes,
-> but that isn't the purpose of this patch set.  The patch description
-> would also need to be updated to reflect the real purpose.
+> If I'm not wrong, it is not required to set EVM_SETUP_COMPLETE to allow
+> metadata writes.
 
-We would be changing the expectation that metadata changes
-are denied, which was defined with the original patches.
+Agreed, EVM_SETUP_COMPLETE is not needed to allow metadata writes. 
+Once EVM_ALLOW_METADATA_WRITES is enabled, however, there is no way of
+unsetting it without loading the HMAC key.
 
-I would prefer to keep the current behavior, but if your suggestion
-is to allow metadata changes, I will modify the patch set.
+> I think the original idea was to boot a system in a way
+> that portable signatures can be written, and then to enable enforcement.
 
-Roberto
+Nothing special is needed to write portable signatures.  Based on the
+documentation, I think the original intention supports three modes:
+- only enable HMAC validation  (1)
+- enable both HMAC and digital signature validation (3)
+- only enable digital signature validation and allow modification of
+EVM-protected metadata (6)
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
+The third example is enabled using "0x80000006", which also prevents
+enabling HMAC verification.  Leaving out the example of enabling just
+digital signature validation without modification of EVM protected
+metadata seems to have been intentional.
 
-> thanks,
-> 
-> Mimi
+thanks,
+
+Mimi
 
