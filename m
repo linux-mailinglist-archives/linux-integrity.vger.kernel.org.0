@@ -2,73 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B1337B369
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 May 2021 03:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B7137BB5A
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 May 2021 12:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbhELBXA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 May 2021 21:23:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36742 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229954AbhELBW7 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 May 2021 21:22:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D91A6191D;
-        Wed, 12 May 2021 01:21:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620782512;
-        bh=Y80GLNJoGPtq0jASDC6QC2X7eZgo2bdGjTqkSYP0pNA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lNqmtuazkC32aJEPueGyekKLzfkwyq9zC8oDaUpYvD4LAwNU/sdkoHuEtsElikULC
-         Vpb08vVEstRzUzVvcniPL5UNXeP6d98gf7z5KQmOzOsQetIIvjpTryVUhKQ6LkUqnl
-         D76x6uiPYDz/B2oHeI4W4UyiS80MSp1dVbGn3KYaeLCDtOMG5o3IxxUCjyE2Pho18i
-         fnjIk6nbelrkhnl2ZoFfMbEV4ARkr7CCBUvoiT7rdV8rN4D3OKQ0K2BGwr4K4gdlxD
-         1ENQp96Mr/3yH9vbZn0Sk6iQZ/fIg3DE87HAFgPmFkuiRSwu1Sxiih0tinBGJ549Bu
-         F8t6/e4yoSG1Q==
-Date:   Wed, 12 May 2021 04:21:50 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] tpm: fix error return code in tpm2_get_cc_attrs_tbl()
-Message-ID: <YJstroyoV5KfEh/m@kernel.org>
-References: <20210508025444.1977-1-thunder.leizhen@huawei.com>
- <YJhI+lIt4devpAoS@kernel.org>
- <b79b306a-71da-f655-3e68-11f1c9df4115@huawei.com>
+        id S230115AbhELK4m convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 May 2021 06:56:42 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3065 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230096AbhELK4l (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 12 May 2021 06:56:41 -0400
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FgBLl6p5Tz6ppQ3;
+        Wed, 12 May 2021 18:47:11 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 12 May 2021 12:55:29 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Wed, 12 May 2021 12:55:29 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "mjg59@google.com" <mjg59@google.com>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v6 10/11] ima: Introduce template field evmsig and write
+ to field sig as fallback
+Thread-Topic: [PATCH v6 10/11] ima: Introduce template field evmsig and write
+ to field sig as fallback
+Thread-Index: AQHXQaK0P4hV9Rbe4USY0rnHgJAPHarewKKAgAD2aHA=
+Date:   Wed, 12 May 2021 10:55:29 +0000
+Message-ID: <cca5e15939cc46b39d436cb7578c26e3@huawei.com>
+References: <20210505112935.1410679-1-roberto.sassu@huawei.com>
+         <20210505113329.1410943-6-roberto.sassu@huawei.com>
+ <f1e16fe91bd80437ea2cf9ed60c40a3687fa0e40.camel@linux.ibm.com>
+In-Reply-To: <f1e16fe91bd80437ea2cf9ed60c40a3687fa0e40.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b79b306a-71da-f655-3e68-11f1c9df4115@huawei.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 12, 2021 at 09:12:26AM +0800, Leizhen (ThunderTown) wrote:
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Wednesday, May 12, 2021 12:12 AM
+> Hi Roberto,
 > 
+> On Wed, 2021-05-05 at 13:33 +0200, Roberto Sassu wrote:
+> > With the patch to accept EVM portable signatures when the
+> > appraise_type=imasig requirement is specified in the policy, appraisal can
+> > be successfully done even if the file does not have an IMA signature.
+> >
+> > However, remote attestation would not see that a different signature type
+> > was used, as only IMA signatures can be included in the measurement list.
+> > This patch solves the issue by introducing the new template field 'evmsig'
+> > to show EVM portable signatures and by including its value in the existing
+> > field 'sig' if the IMA signature is not found.
 > 
-> On 2021/5/10 4:41, Jarkko Sakkinen wrote:
-> > On Sat, May 08, 2021 at 10:54:44AM +0800, Zhen Lei wrote:
-> >> Fix to return a negative error code from the error handling
-> >> case instead of 0, as done elsewhere in this function.
-> >>
-> >> Fixes: 58472f5cd4f6("tpm: validate TPM 2.0 commands")
-> >> Reported-by: Hulk Robot <hulkci@huawei.com>
-> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> > 
-> > In the commit message:
-> > 
-> > 1. Instead of writing "a negative error code", write -EFAULT.
-> OK, I will change it.
-> 
-> > 2. Some explanation of the choice.
-> Do you mean why I choice error code -EFAULT? There's a similar one above this branch.
-> 
->         if (nr_commands > 0xFFFFF) {
->                 rc = -EFAULT;
->                 goto out;
->         }
+> With this patch, instead of storing the file data signature, the file
+> metadata signature is stored in the IMA measurement list, as designed.
+> There's a minor problem.  Unlike the file data signature, the
+> measurement list record does not contain all the information needed to
+> verify the file metadata signature.
 
-I mean that the commit message must rationalize whatever the commit does,
-and choices made.
+Ok, we could add new template fields later.
 
-/Jarkko
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
+
+> thanks,
+> 
+> Mimi
+
