@@ -2,33 +2,32 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8E1380CED
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 May 2021 17:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B46380CEE
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 May 2021 17:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234705AbhENP3Z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 May 2021 11:29:25 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3071 "EHLO
+        id S234707AbhENP30 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 May 2021 11:29:26 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3072 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbhENP3Y (ORCPT
+        with ESMTP id S234680AbhENP3Y (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 14 May 2021 11:29:24 -0400
 Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FhXM45GSlz6cw6f;
-        Fri, 14 May 2021 23:22:08 +0800 (CST)
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FhXDs5kNSz6qmjn;
+        Fri, 14 May 2021 23:16:45 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 14 May 2021 17:28:10 +0200
+ 15.1.2176.2; Fri, 14 May 2021 17:28:11 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>, <mjg59@srcf.ucam.org>
 CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v7 03/12] evm: Refuse EVM_ALLOW_METADATA_WRITES only if an HMAC key is loaded
-Date:   Fri, 14 May 2021 17:27:44 +0200
-Message-ID: <20210514152753.982958-4-roberto.sassu@huawei.com>
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v7 04/12] evm: Introduce evm_revalidate_status()
+Date:   Fri, 14 May 2021 17:27:45 +0200
+Message-ID: <20210514152753.982958-5-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210514152753.982958-1-roberto.sassu@huawei.com>
 References: <20210514152753.982958-1-roberto.sassu@huawei.com>
@@ -43,83 +42,181 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-EVM_ALLOW_METADATA_WRITES is an EVM initialization flag that can be set to
-temporarily disable metadata verification until all xattrs/attrs necessary
-to verify an EVM portable signature are copied to the file. This flag is
-cleared when EVM is initialized with an HMAC key, to avoid that the HMAC is
-calculated on unverified xattrs/attrs.
+When EVM_ALLOW_METADATA_WRITES is set, EVM allows any operation on
+metadata. Its main purpose is to allow users to freely set metadata when it
+is protected by a portable signature, until an HMAC key is loaded.
 
-Currently EVM unnecessarily denies setting this flag if EVM is initialized
-with a public key, which is not a concern as it cannot be used to trust
-xattrs/attrs updates. This patch removes this limitation.
+However, callers of evm_verifyxattr() are not notified about metadata
+changes and continue to rely on the last status returned by the function.
+For example IMA, since it caches the appraisal result, will not call again
+evm_verifyxattr() until the appraisal flags are cleared, and will grant
+access to the file even if there was a metadata operation that made the
+portable signature invalid.
 
-Cc: stable@vger.kernel.org # 4.16.x
-Fixes: ae1ba1676b88e ("EVM: Allow userland to permit modification of EVM-protected metadata")
+This patch introduces evm_revalidate_status(), which callers of
+evm_verifyxattr() can use in their xattr hooks to determine whether
+re-validation is necessary and to do the proper actions. IMA calls it in
+its xattr hooks to reset the appraisal flags, so that the EVM status is
+re-evaluated after a metadata operation.
+
+Lastly, this patch also adds a call to evm_reset_status() in
+evm_inode_post_setattr() to invalidate the cached EVM status after a
+setattr operation.
+
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- Documentation/ABI/testing/evm      | 26 ++++++++++++++++++++++++--
- security/integrity/evm/evm_secfs.c |  8 ++++----
- 2 files changed, 28 insertions(+), 6 deletions(-)
+ include/linux/evm.h                   |  6 ++++
+ security/integrity/evm/evm_main.c     | 40 ++++++++++++++++++++++++---
+ security/integrity/ima/ima_appraise.c | 15 ++++++----
+ 3 files changed, 52 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/ABI/testing/evm b/Documentation/ABI/testing/evm
-index 3c477ba48a31..2243b72e4110 100644
---- a/Documentation/ABI/testing/evm
-+++ b/Documentation/ABI/testing/evm
-@@ -49,8 +49,30 @@ Description:
- 		modification of EVM-protected metadata and
- 		disable all further modification of policy
+diff --git a/include/linux/evm.h b/include/linux/evm.h
+index 8302bc29bb35..39bb17a8236b 100644
+--- a/include/linux/evm.h
++++ b/include/linux/evm.h
+@@ -35,6 +35,7 @@ extern void evm_inode_post_removexattr(struct dentry *dentry,
+ extern int evm_inode_init_security(struct inode *inode,
+ 				   const struct xattr *xattr_array,
+ 				   struct xattr *evm);
++extern bool evm_revalidate_status(const char *xattr_name);
+ #ifdef CONFIG_FS_POSIX_ACL
+ extern int posix_xattr_acl(const char *xattrname);
+ #else
+@@ -104,5 +105,10 @@ static inline int evm_inode_init_security(struct inode *inode,
+ 	return 0;
+ }
  
--		Note that once a key has been loaded, it will no longer be
--		possible to enable metadata modification.
-+		Echoing a value is additive, the new value is added to the
-+		existing initialization flags.
++static inline bool evm_revalidate_status(const char *xattr_name)
++{
++	return false;
++}
 +
-+		For example, after::
-+
-+		  echo 2 ><securityfs>/evm
-+
-+		another echo can be performed::
-+
-+		  echo 1 ><securityfs>/evm
-+
-+		and the resulting value will be 3.
-+
-+		Note that once an HMAC key has been loaded, it will no longer
-+		be possible to enable metadata modification. Signaling that an
-+		HMAC key has been loaded will clear the corresponding flag.
-+		For example, if the current value is 6 (2 and 4 set)::
-+
-+		  echo 1 ><securityfs>/evm
-+
-+		will set the new value to 3 (4 cleared).
-+
-+		Loading an HMAC key is the only way to disable metadata
-+		modification.
+ #endif /* CONFIG_EVM */
+ #endif /* LINUX_EVM_H */
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 7ac5204c8d1f..782915117175 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -425,6 +425,31 @@ static void evm_reset_status(struct inode *inode)
+ 		iint->evm_status = INTEGRITY_UNKNOWN;
+ }
  
- 		Until key loading has been signaled EVM can not create
- 		or validate the 'security.evm' xattr, but returns
-diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
-index bbc85637e18b..c175e2b659e4 100644
---- a/security/integrity/evm/evm_secfs.c
-+++ b/security/integrity/evm/evm_secfs.c
-@@ -80,12 +80,12 @@ static ssize_t evm_write_key(struct file *file, const char __user *buf,
- 	if (!i || (i & ~EVM_INIT_MASK) != 0)
- 		return -EINVAL;
++/**
++ * evm_revalidate_status - report whether EVM status re-validation is necessary
++ * @xattr_name: pointer to the affected extended attribute name
++ *
++ * Report whether callers of evm_verifyxattr() should re-validate the
++ * EVM status.
++ *
++ * Return true if re-validation is necessary, false otherwise.
++ */
++bool evm_revalidate_status(const char *xattr_name)
++{
++	if (!evm_key_loaded())
++		return false;
++
++	/* evm_inode_post_setattr() passes NULL */
++	if (!xattr_name)
++		return true;
++
++	if (!evm_protected_xattr(xattr_name) && !posix_xattr_acl(xattr_name) &&
++	    strcmp(xattr_name, XATTR_NAME_EVM))
++		return false;
++
++	return true;
++}
++
+ /**
+  * evm_inode_post_setxattr - update 'security.evm' to reflect the changes
+  * @dentry: pointer to the affected dentry
+@@ -441,12 +466,14 @@ static void evm_reset_status(struct inode *inode)
+ void evm_inode_post_setxattr(struct dentry *dentry, const char *xattr_name,
+ 			     const void *xattr_value, size_t xattr_value_len)
+ {
+-	if (!evm_key_loaded() || (!evm_protected_xattr(xattr_name)
+-				  && !posix_xattr_acl(xattr_name)))
++	if (!evm_revalidate_status(xattr_name))
+ 		return;
  
--	/* Don't allow a request to freshly enable metadata writes if
--	 * keys are loaded.
-+	/*
-+	 * Don't allow a request to enable metadata writes if
-+	 * an HMAC key is loaded.
- 	 */
- 	if ((i & EVM_ALLOW_METADATA_WRITES) &&
--	    ((evm_initialized & EVM_KEY_MASK) != 0) &&
--	    !(evm_initialized & EVM_ALLOW_METADATA_WRITES))
-+	    (evm_initialized & EVM_INIT_HMAC) != 0)
- 		return -EPERM;
+ 	evm_reset_status(dentry->d_inode);
  
- 	if (i & EVM_INIT_HMAC) {
++	if (!strcmp(xattr_name, XATTR_NAME_EVM))
++		return;
++
+ 	evm_update_evmxattr(dentry, xattr_name, xattr_value, xattr_value_len);
+ }
+ 
+@@ -462,11 +489,14 @@ void evm_inode_post_setxattr(struct dentry *dentry, const char *xattr_name,
+  */
+ void evm_inode_post_removexattr(struct dentry *dentry, const char *xattr_name)
+ {
+-	if (!evm_key_loaded() || !evm_protected_xattr(xattr_name))
++	if (!evm_revalidate_status(xattr_name))
+ 		return;
+ 
+ 	evm_reset_status(dentry->d_inode);
+ 
++	if (!strcmp(xattr_name, XATTR_NAME_EVM))
++		return;
++
+ 	evm_update_evmxattr(dentry, xattr_name, NULL, 0);
+ }
+ 
+@@ -513,9 +543,11 @@ int evm_inode_setattr(struct dentry *dentry, struct iattr *attr)
+  */
+ void evm_inode_post_setattr(struct dentry *dentry, int ia_valid)
+ {
+-	if (!evm_key_loaded())
++	if (!evm_revalidate_status(NULL))
+ 		return;
+ 
++	evm_reset_status(dentry->d_inode);
++
+ 	if (ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID))
+ 		evm_update_evmxattr(dentry, NULL, NULL, 0);
+ }
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index 4e5eb0236278..03894769dffa 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -570,6 +570,7 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
+ 		       const void *xattr_value, size_t xattr_value_len)
+ {
+ 	const struct evm_ima_xattr_data *xvalue = xattr_value;
++	int digsig = 0;
+ 	int result;
+ 
+ 	result = ima_protect_xattr(dentry, xattr_name, xattr_value,
+@@ -577,9 +578,12 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
+ 	if (result == 1) {
+ 		if (!xattr_value_len || (xvalue->type >= IMA_XATTR_LAST))
+ 			return -EINVAL;
+-		ima_reset_appraise_flags(d_backing_inode(dentry),
+-			xvalue->type == EVM_IMA_XATTR_DIGSIG);
+-		result = 0;
++		digsig = (xvalue->type == EVM_IMA_XATTR_DIGSIG);
++	}
++	if (result == 1 || evm_revalidate_status(xattr_name)) {
++		ima_reset_appraise_flags(d_backing_inode(dentry), digsig);
++		if (result == 1)
++			result = 0;
+ 	}
+ 	return result;
+ }
+@@ -589,9 +593,10 @@ int ima_inode_removexattr(struct dentry *dentry, const char *xattr_name)
+ 	int result;
+ 
+ 	result = ima_protect_xattr(dentry, xattr_name, NULL, 0);
+-	if (result == 1) {
++	if (result == 1 || evm_revalidate_status(xattr_name)) {
+ 		ima_reset_appraise_flags(d_backing_inode(dentry), 0);
+-		result = 0;
++		if (result == 1)
++			result = 0;
+ 	}
+ 	return result;
+ }
 -- 
 2.25.1
 
