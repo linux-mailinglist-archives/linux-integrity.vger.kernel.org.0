@@ -2,86 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C82DE38B44C
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 May 2021 18:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C457F38B472
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 May 2021 18:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbhETQfX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 May 2021 12:35:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35634 "EHLO mail.kernel.org"
+        id S231827AbhETQk6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 May 2021 12:40:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39306 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231354AbhETQfW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 May 2021 12:35:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CF7CE61019;
-        Thu, 20 May 2021 16:34:00 +0000 (UTC)
+        id S231856AbhETQk5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 20 May 2021 12:40:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D46B66101E;
+        Thu, 20 May 2021 16:39:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621528441;
-        bh=TvE839XGTfNdzX55ui/8Y/X6ItchS3tDQWpwAo6ko3Y=;
+        s=k20201202; t=1621528776;
+        bh=mObjZUvojMIcttlGVKOdPZNIC+72oRM77+VaW6oOZtg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g3Ggt+l2pbFCV00QXfMZuwkUi7v1myn0KUqph2UqddROC2p3GHOhaC4EYGS2YXXUq
-         PT+3/lV9ZRE9gB/tfWXC4/0/Dy+bcQ21/b3T1WKcywunNOozDfB3xuL/0ZRe2so1Ih
-         zKYzb5R4SGPEdh3wBRi2e1G56OQc+DuWT/TEhNzPSro5cVyZWn0XXaD0ACIh1dWI68
-         6IOlDhlc71ByNdnfb+aalpO3FwaYjfaqkRKYVwvf2YDT29+zWAboEqQwRzibuk9tUN
-         5NIRg+MUbJ92w4oVvB8FmVchWzWmfIpWcR/lIwMRxemjoyPgglPvgTlZHheB7K/b0Z
-         jz2Cv89JKeh5Q==
-Date:   Thu, 20 May 2021 19:33:58 +0300
+        b=MQi0wcQ1KfRkkfbfZ5gRHrmfWXI55F+viWrMSvvcblM6Q84GAa7VZvS454pH8Q8x2
+         8LhEm6jxEYwNGN+pPkQXm7+dUPkRH9NfrKYntzmhc4f38r6fmxNgMmr0QYxQ7FD6Nj
+         FLNC+2+Q1HoywJ6WuKgl6KOdrK9okB2QXjNVcVxQ7TR213QrY5Q9zP10QNHEIJaQSE
+         pXETGFqaj9FbLL4cS7obTSt8IpfwGoWsccXv9UKawEt3/TYu0X/DjMhaHRRpG6+G1n
+         RiocVzBx9UcRr7+pa4GtdtsdpBGw5f7uBB1x1TwCvzxiNz947Oa3Jpe6qmcgYNiVzD
+         nIrA5jQyUOu+w==
+Date:   Thu, 20 May 2021 19:39:33 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tian Tao <tiantao6@hisilicon.com>
-Cc:     peterhuewe@gmx.de, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v3] char: tpm: move to use request_irq by IRQF_NO_AUTOEN
- flag
-Message-ID: <YKaPdtwAG+IgAZZO@kernel.org>
-References: <1621406999-16816-1-git-send-email-tiantao6@hisilicon.com>
+To:     amirmizi6@gmail.com
+Cc:     Eyal.Cohen@nuvoton.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
+Subject: Re: [PATCH v2] tpm2: add longer timeout for verify signature command
+Message-ID: <YKaQxV4wzZ/UYrdu@kernel.org>
+References: <20210519140059.85919-1-amirmizi6@gmail.com>
+ <20210519140059.85919-2-amirmizi6@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1621406999-16816-1-git-send-email-tiantao6@hisilicon.com>
+In-Reply-To: <20210519140059.85919-2-amirmizi6@gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 19, 2021 at 02:49:59PM +0800, Tian Tao wrote:
-> disable_irq() after request_irq() still has a time gap in which
-> interrupts can come. request_irq() with IRQF_NO_AUTOEN flag will
-> disable IRQ auto-enable because of requesting.
+On Wed, May 19, 2021 at 05:00:59PM +0300, amirmizi6@gmail.com wrote:
+> From: Amir Mizinski <amirmizi6@gmail.com>
 > 
-> Link: https://lore.kernel.org/patchwork/patch/1388765/
-> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
-> ---
-> v2: add the Link.
-> v3: put sob last.
-> ---
->  drivers/char/tpm/tpm_tis_i2c_cr50.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> While running a TPM2_CC_VERIFY_SIGNATURE(0x177) operation with RSA 3070-bit
+
+The hexcode for the TPM command is absoulutely irrelevant detail.
+
+AFAIK, 3070-bit does not exist. It's 3072-bit.
+
+> keys the TPM driver fails with the following error:
+
+Empty line here.
+
+> "kernel: [ 2416.187522] tpm tpm0: Operation Timed out"
 > 
-> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> index f19c227..44dde2f 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> @@ -706,14 +706,14 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client,
+> Since a) the TPM PC Client specification does not specify a number for
+
+Remove "a)".
+> verify signature operation timeout, and b) the duration of
+
+Remove "b)".
+
+> TPM2_CC_VERIFY_SIGNATURE with RSA 3070-bit keys exceeds the current timeout
+> of TPM_LONG (2 seconds), it is preferable to pick the longest timeout
+> possible.
+
+Empty line here.
+
+> Therefore, set the duration for TPM2_CC_VERIFY_SIGNATUE to TPM_LONG_LONG
+> (5 minutes).
+> 
+Add here:
+
+Link: https://trustedcomputinggroup.org/resource/pc-client-specific-platform-firmware-profile-specification/
+
+> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+
+
+> ---
+>  drivers/char/tpm/tpm2-cmd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index 7603295..e71154b 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -87,7 +87,7 @@ static u8 tpm2_ordinal_duration_index(u32 ordinal)
+>  		return TPM_MEDIUM;
 >  
->  	if (client->irq > 0) {
->  		rc = devm_request_irq(dev, client->irq, tpm_cr50_i2c_int_handler,
-> -				      IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> +				      IRQF_TRIGGER_FALLING | IRQF_ONESHOT |
-> +				      IRQF_NO_AUTOEN,
->  				      dev->driver->name, chip);
->  		if (rc < 0) {
->  			dev_err(dev, "Failed to probe IRQ %d\n", client->irq);
->  			return rc;
->  		}
+>  	case TPM2_CC_VERIFY_SIGNATURE:        /* 177 */
+> -		return TPM_LONG;
+> +		return TPM_LONG_LONG;
 >  
-> -		disable_irq(client->irq);
->  		priv->irq = client->irq;
->  	} else {
->  		dev_warn(dev, "No IRQ, will use %ums delay for TPM ready\n",
+>  	case TPM2_CC_PCR_EXTEND:              /* 182 */
+>  		return TPM_MEDIUM;
 > -- 
 > 2.7.4
 > 
 > 
-
-How does this differ from
-
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=da2f0c7b46171175ab54da248752b1139c42fee4
-?
 
 /Jarkko
