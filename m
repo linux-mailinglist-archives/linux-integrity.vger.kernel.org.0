@@ -2,103 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C457F38B472
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 May 2021 18:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C4838B47E
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 May 2021 18:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbhETQk6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 May 2021 12:40:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39306 "EHLO mail.kernel.org"
+        id S234293AbhETQmr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 May 2021 12:42:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39952 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231856AbhETQk5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 May 2021 12:40:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D46B66101E;
-        Thu, 20 May 2021 16:39:35 +0000 (UTC)
+        id S234282AbhETQmq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 20 May 2021 12:42:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C528C6101E;
+        Thu, 20 May 2021 16:41:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621528776;
-        bh=mObjZUvojMIcttlGVKOdPZNIC+72oRM77+VaW6oOZtg=;
+        s=k20201202; t=1621528885;
+        bh=jHaZ9/+rDGFnf5r8VoX0d3+e+OVFelwHxFJgzMpRDpc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MQi0wcQ1KfRkkfbfZ5gRHrmfWXI55F+viWrMSvvcblM6Q84GAa7VZvS454pH8Q8x2
-         8LhEm6jxEYwNGN+pPkQXm7+dUPkRH9NfrKYntzmhc4f38r6fmxNgMmr0QYxQ7FD6Nj
-         FLNC+2+Q1HoywJ6WuKgl6KOdrK9okB2QXjNVcVxQ7TR213QrY5Q9zP10QNHEIJaQSE
-         pXETGFqaj9FbLL4cS7obTSt8IpfwGoWsccXv9UKawEt3/TYu0X/DjMhaHRRpG6+G1n
-         RiocVzBx9UcRr7+pa4GtdtsdpBGw5f7uBB1x1TwCvzxiNz947Oa3Jpe6qmcgYNiVzD
-         nIrA5jQyUOu+w==
-Date:   Thu, 20 May 2021 19:39:33 +0300
+        b=tauIHfSFa45basZoUKC+9D34NYCmpVHLTmeSb1soQ9M0/0YFrfBUcKGhzHJWULY/v
+         JKOoL67xyyKneNRmMNwTLaAMr9j5U6oX2xpy5L0yGPJlgVNRgFk5nZeAlSaobmk0me
+         WVdEaNw0QycdOc2kftxFzS0PLTjppqG+kDoPlKea9Tfj+c4TDbKvbvmT899PVkD3zz
+         JN2R5YjhasY6hMbrpT1h48yDQa3YpAhzjRxUPb5nTBuBajcP3ALWNy8Yx9byUXe4tc
+         t3zpUeakrNX9ULuWS7JkJH0hU6zjAIJZoevDtxrE/x2LCbbY5x2nePOzJpHuDMZGhn
+         AJrI1xOyDGSCg==
+Date:   Thu, 20 May 2021 19:41:23 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     amirmizi6@gmail.com
-Cc:     Eyal.Cohen@nuvoton.com, peterhuewe@gmx.de, jgg@ziepe.ca,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
-        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
-Subject: Re: [PATCH v2] tpm2: add longer timeout for verify signature command
-Message-ID: <YKaQxV4wzZ/UYrdu@kernel.org>
-References: <20210519140059.85919-1-amirmizi6@gmail.com>
- <20210519140059.85919-2-amirmizi6@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        van Doorn <leendert@watson.ibm.com>,
+        Dave Safford <safford@watson.ibm.com>,
+        Reiner Sailer <sailer@watson.ibm.com>,
+        Kylene Hall <kjhall@us.ibm.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 07/16] char: tpm: tpm1-cmd: Fix a couple of misnamed
+ functions
+Message-ID: <YKaRM2ANJ5yflidJ@kernel.org>
+References: <20210520121347.3467794-1-lee.jones@linaro.org>
+ <20210520121347.3467794-8-lee.jones@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210519140059.85919-2-amirmizi6@gmail.com>
+In-Reply-To: <20210520121347.3467794-8-lee.jones@linaro.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, May 19, 2021 at 05:00:59PM +0300, amirmizi6@gmail.com wrote:
-> From: Amir Mizinski <amirmizi6@gmail.com>
+On Thu, May 20, 2021 at 01:13:38PM +0100, Lee Jones wrote:
+> Fixes the following W=1 kernel build warning(s):
 > 
-> While running a TPM2_CC_VERIFY_SIGNATURE(0x177) operation with RSA 3070-bit
-
-The hexcode for the TPM command is absoulutely irrelevant detail.
-
-AFAIK, 3070-bit does not exist. It's 3072-bit.
-
-> keys the TPM driver fails with the following error:
-
-Empty line here.
-
-> "kernel: [ 2416.187522] tpm tpm0: Operation Timed out"
+>  drivers/char/tpm/tpm1-cmd.c:325: warning: expecting prototype for tpm_startup(). Prototype was for tpm1_startup() instead
+>  drivers/char/tpm/tpm1-cmd.c:621: warning: expecting prototype for tpm_continue_selftest(). Prototype was for tpm1_continue_selftest() instead
 > 
-> Since a) the TPM PC Client specification does not specify a number for
+> Cc: Peter Huewe <peterhuewe@gmx.de>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: van Doorn <leendert@watson.ibm.com>
+> Cc: Dave Safford <safford@watson.ibm.com>
+> Cc: Reiner Sailer <sailer@watson.ibm.com>
+> Cc: Kylene Hall <kjhall@us.ibm.com>
+> Cc: linux-integrity@vger.kernel.org
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 
-Remove "a)".
-> verify signature operation timeout, and b) the duration of
 
-Remove "b)".
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-> TPM2_CC_VERIFY_SIGNATURE with RSA 3070-bit keys exceeds the current timeout
-> of TPM_LONG (2 seconds), it is preferable to pick the longest timeout
-> possible.
-
-Empty line here.
-
-> Therefore, set the duration for TPM2_CC_VERIFY_SIGNATUE to TPM_LONG_LONG
-> (5 minutes).
-> 
-Add here:
-
-Link: https://trustedcomputinggroup.org/resource/pc-client-specific-platform-firmware-profile-specification/
-
-> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
-
+Thanks, I'll apply this.
 
 > ---
->  drivers/char/tpm/tpm2-cmd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/char/tpm/tpm1-cmd.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 7603295..e71154b 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -87,7 +87,7 @@ static u8 tpm2_ordinal_duration_index(u32 ordinal)
->  		return TPM_MEDIUM;
+> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> index ca7158fa6e6cd..f7dc986fa4a0a 100644
+> --- a/drivers/char/tpm/tpm1-cmd.c
+> +++ b/drivers/char/tpm/tpm1-cmd.c
+> @@ -312,7 +312,7 @@ unsigned long tpm1_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
+>  #define TPM_ST_CLEAR 1
 >  
->  	case TPM2_CC_VERIFY_SIGNATURE:        /* 177 */
-> -		return TPM_LONG;
-> +		return TPM_LONG_LONG;
+>  /**
+> - * tpm_startup() - turn on the TPM
+> + * tpm1_startup() - turn on the TPM
+>   * @chip: TPM chip to use
+>   *
+>   * Normally the firmware should start the TPM. This function is provided as a
+> @@ -611,7 +611,7 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
 >  
->  	case TPM2_CC_PCR_EXTEND:              /* 182 */
->  		return TPM_MEDIUM;
+>  #define TPM_ORD_CONTINUE_SELFTEST 83
+>  /**
+> - * tpm_continue_selftest() - run TPM's selftest
+> + * tpm1_continue_selftest() - run TPM's selftest
+>   * @chip: TPM chip to use
+>   *
+>   * Returns 0 on success, < 0 in case of fatal error or a value > 0 representing
 > -- 
-> 2.7.4
+> 2.31.1
 > 
 > 
 
