@@ -2,99 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 367AF38BB0C
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 May 2021 02:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53BA38C05F
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 May 2021 09:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235587AbhEUAyY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 May 2021 20:54:24 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:4775 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbhEUAyY (ORCPT
+        id S235353AbhEUHI7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 21 May 2021 03:08:59 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3092 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235326AbhEUHIv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 May 2021 20:54:24 -0400
-Received: from dggems702-chm.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FmSfw4ZrWzqVHV;
-        Fri, 21 May 2021 08:49:28 +0800 (CST)
-Received: from dggeme759-chm.china.huawei.com (10.3.19.105) by
- dggems702-chm.china.huawei.com (10.3.19.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Fri, 21 May 2021 08:52:59 +0800
-Received: from [127.0.0.1] (10.40.188.144) by dggeme759-chm.china.huawei.com
- (10.3.19.105) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 21
- May 2021 08:52:59 +0800
-Subject: Re: [PATCH v3] char: tpm: move to use request_irq by IRQF_NO_AUTOEN
- flag
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Tian Tao <tiantao6@hisilicon.com>
-CC:     <peterhuewe@gmx.de>, <linux-integrity@vger.kernel.org>
-References: <1621406999-16816-1-git-send-email-tiantao6@hisilicon.com>
- <YKaPdtwAG+IgAZZO@kernel.org>
-From:   "tiantao (H)" <tiantao6@huawei.com>
-Message-ID: <22af90d0-347b-9caf-5941-a966d03f8fcc@huawei.com>
-Date:   Fri, 21 May 2021 08:52:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 21 May 2021 03:08:51 -0400
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FmcnD1ghMz6842m;
+        Fri, 21 May 2021 14:55:28 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 21 May 2021 09:07:14 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Fri, 21 May 2021 09:07:14 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "mjg59@srcf.ucam.org" <mjg59@srcf.ucam.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v7 00/12] evm: Improve usability of portable signatures
+Thread-Topic: [PATCH v7 00/12] evm: Improve usability of portable signatures
+Thread-Index: AQHXSNW+s9pGdic160Kc6WkU36Axf6rsoEOAgADsKvA=
+Date:   Fri, 21 May 2021 07:07:14 +0000
+Message-ID: <a316bc5ec316446c8b07134c33b06d77@huawei.com>
+References: <20210514152753.982958-1-roberto.sassu@huawei.com>
+ <2804f10fa77b58b4992f56ea36a36d4f1e3f4b24.camel@linux.ibm.com>
+In-Reply-To: <2804f10fa77b58b4992f56ea36a36d4f1e3f4b24.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-In-Reply-To: <YKaPdtwAG+IgAZZO@kernel.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.188.144]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggeme759-chm.china.huawei.com (10.3.19.105)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Thursday, May 20, 2021 8:56 PM
+> On Fri, 2021-05-14 at 17:27 +0200, Roberto Sassu wrote:
+> > EVM portable signatures are particularly suitable for the protection of
+> > metadata of immutable files where metadata is signed by a software vendor.
+> > They can be used for example in conjunction with an IMA policy that
+> > appraises only executed and memory mapped files.
+> >
+> > However, until now portable signatures can be properly installed only if
+> > the EVM_ALLOW_METADATA_WRITES initialization flag is also set, which
+> > disables metadata verification until an HMAC key is loaded. This will cause
+> > metadata writes to be allowed even in the situations where they shouldn't
+> > (metadata protected by a portable signature is immutable).
+> >
+> > The main reason why setting the flag is necessary is that the operations
+> > necessary to install portable signatures and protected metadata would be
+> > otherwise denied, despite being legitimate, due to the fact that the
+> > decision logic has to avoid an unsafe recalculation of the HMAC that would
+> > make the unsuccessfully verified metadata valid. However, the decision
+> > logic is too coarse, and does not fully take into account all the possible
+> > situations where metadata operations could be allowed.
+> >
+> > For example, if the HMAC key is not loaded and it cannot be loaded in the
+> > future due the EVM_SETUP_COMPLETE flag being set, it wouldn't be a
+> problem
+> > to allow metadata operations, as they wouldn't result in an HMAC being
+> > recalculated.
+> >
+> > This patch set extends the decision logic and adds the necessary exceptions
+> > to use portable signatures without turning off metadata verification and
+> > deprecates the EVM_ALLOW_METADATA_WRITES flag.
+> 
+> Thanks, Roberto.
+> 
+> Applied to: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-
+> integrity.git
+> next-integrity-testing
 
-ÔÚ 2021/5/21 0:33, Jarkko Sakkinen Ð´µÀ:
-> On Wed, May 19, 2021 at 02:49:59PM +0800, Tian Tao wrote:
->> disable_irq() after request_irq() still has a time gap in which
->> interrupts can come. request_irq() with IRQF_NO_AUTOEN flag will
->> disable IRQ auto-enable because of requesting.
->>
->> Link: https://lore.kernel.org/patchwork/patch/1388765/
->> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
->> ---
->> v2: add the Link.
->> v3: put sob last.
->> ---
->>   drivers/char/tpm/tpm_tis_i2c_cr50.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
->> index f19c227..44dde2f 100644
->> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
->> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
->> @@ -706,14 +706,14 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client,
->>   
->>   	if (client->irq > 0) {
->>   		rc = devm_request_irq(dev, client->irq, tpm_cr50_i2c_int_handler,
->> -				      IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
->> +				      IRQF_TRIGGER_FALLING | IRQF_ONESHOT |
->> +				      IRQF_NO_AUTOEN,
->>   				      dev->driver->name, chip);
->>   		if (rc < 0) {
->>   			dev_err(dev, "Failed to probe IRQ %d\n", client->irq);
->>   			return rc;
->>   		}
->>   
->> -		disable_irq(client->irq);
->>   		priv->irq = client->irq;
->>   	} else {
->>   		dev_warn(dev, "No IRQ, will use %ums delay for TPM ready\n",
->> -- 
->> 2.7.4
->>
->>
-> How does this differ from
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=da2f0c7b46171175ab54da248752b1139c42fee4
-> ?
-There is no difference, except that this patch was not merged into 5.12, 
-so it was resent once in 5.13
-> /Jarkko
-> .
->
+Hi Mimi
 
+could you please take the newer version of patch 5/12, which also adds
+an exception for the INTEGRITY_UNKNOWN error (it occurs when xattrs
+are not supported)?
+
+https://lore.kernel.org/linux-integrity/6d7e059876b64f249b9a01d8b7696e29@huawei.com/T/#m58442ec12e47d9d457bef9b438809a6a132b7512
+
+Thanks
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
