@@ -2,99 +2,134 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA2038CAD4
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 May 2021 18:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028E638CC34
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 May 2021 19:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbhEUQTV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 21 May 2021 12:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbhEUQTU (ORCPT
+        id S233414AbhEURd0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 21 May 2021 13:33:26 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58102 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233220AbhEURdZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 21 May 2021 12:19:20 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842C9C061574;
-        Fri, 21 May 2021 09:17:57 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 261EA1280200;
-        Fri, 21 May 2021 09:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1621613877;
-        bh=Oais6YJwVYhdqdoC7WH95gn3lhhc7UB2zycxHVUAlwg=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Rve+hgfVCsCKJoFvPtrUPsPVGmHo592uCxszWndxCg5TJB+wgcFxUZkWyBKFIhOUh
-         IIYZmH7zzAJECG1PLOAIkND4KA4RMON5NqJiLer5vZ2z88IwXuNgz5qwyBKk+i8vF/
-         uSsOlPgBQ1OxUAyc+S4Nz601sf6ER4XPZ/SR/VLk=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wOIM1MqAhv9C; Fri, 21 May 2021 09:17:57 -0700 (PDT)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id AD3E912801E6;
-        Fri, 21 May 2021 09:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1621613877;
-        bh=Oais6YJwVYhdqdoC7WH95gn3lhhc7UB2zycxHVUAlwg=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Rve+hgfVCsCKJoFvPtrUPsPVGmHo592uCxszWndxCg5TJB+wgcFxUZkWyBKFIhOUh
-         IIYZmH7zzAJECG1PLOAIkND4KA4RMON5NqJiLer5vZ2z88IwXuNgz5qwyBKk+i8vF/
-         uSsOlPgBQ1OxUAyc+S4Nz601sf6ER4XPZ/SR/VLk=
-Message-ID: <9244313e34910f17664a6a0320e5b96b4e80d56d.camel@HansenPartnership.com>
-Subject: Re: [PATCH 0/4] Trusted Key policy for TPM 2.0
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     David Woodhouse <dwmw2@infradead.org>,
-        linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        David Howells <dhowells@redhat.com>
-Date:   Fri, 21 May 2021 09:17:56 -0700
-In-Reply-To: <d440aa20d268b1a231d9a6ba641b23aa45ae7cb6.camel@infradead.org>
-References: <20210521004401.4167-1-James.Bottomley@HansenPartnership.com>
-         <49bf69d011373f339a21bb61183b135babb6edc8.camel@infradead.org>
-         <57728f2272f26b8ca9e58a8fdac112ec0440e9f6.camel@HansenPartnership.com>
-         <646c272b64912d9d5c9c3c7fdc304ad01772365c.camel@infradead.org>
-         <25e874bfd1d33ebd2dc774b9ab2d47285a2f4d07.camel@HansenPartnership.com>
-         <d440aa20d268b1a231d9a6ba641b23aa45ae7cb6.camel@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
-MIME-Version: 1.0
+        Fri, 21 May 2021 13:33:25 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14LH47Iv033808;
+        Fri, 21 May 2021 13:31:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=L5aXyblV4MweJE7kliRjqe7BHKoS8cOQrVYDSV0UtSs=;
+ b=n1/9CKvD0UU+OSGRXsf782Sb1jT//72bWMwiZ12djVIIYNjSu60Gi9qKbDE6HM1MweP6
+ 8xwoSyuE9i9lKdK0Qe7hiBk0x+/F6K0OhP0XLBJwcjC1BHhu3uebKhoVESde/3dVtKsD
+ fNnJAbV7ZCPERQXNvNWT+a30suHPYL55uLLts0xk13uau7+3GZBD4fZcYQVVT60SNThs
+ nGVGXSwOWK/MjnlKuuhiUsi5lhhxFEPK02ls1QYpqW8Vh7qoSGdYjjuJR28/tgjrsiX0
+ NwwapRaRM/9+Oq3yzZZlyOMlPzTjI3ZSfjYL5DZHgQfdD5FGgtLJeNbil3dU/B46bNTT Wg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38pgwv0p9q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 May 2021 13:31:52 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14LHSHXa006975;
+        Fri, 21 May 2021 17:31:51 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 38j5x8b96s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 May 2021 17:31:50 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14LHVm9933227098
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 May 2021 17:31:48 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 65CC811C058;
+        Fri, 21 May 2021 17:31:48 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1319F11C04C;
+        Fri, 21 May 2021 17:31:47 +0000 (GMT)
+Received: from sig-9-65-215-195.ibm.com (unknown [9.65.215.195])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 21 May 2021 17:31:46 +0000 (GMT)
+Message-ID: <7a52753c709499edbdf755abcd55a4ddf98503f1.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 00/12] evm: Improve usability of portable signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "mjg59@srcf.ucam.org" <mjg59@srcf.ucam.org>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Fri, 21 May 2021 13:31:46 -0400
+In-Reply-To: <a316bc5ec316446c8b07134c33b06d77@huawei.com>
+References: <20210514152753.982958-1-roberto.sassu@huawei.com>
+         <2804f10fa77b58b4992f56ea36a36d4f1e3f4b24.camel@linux.ibm.com>
+         <a316bc5ec316446c8b07134c33b06d77@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 59QOAR-obJ1YIk9sNTw3UuSxgGTKQjfG
+X-Proofpoint-GUID: 59QOAR-obJ1YIk9sNTw3UuSxgGTKQjfG
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-21_07:2021-05-20,2021-05-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxlogscore=999 spamscore=0 bulkscore=0 impostorscore=0
+ malwarescore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2105210090
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2021-05-21 at 17:12 +0100, David Woodhouse wrote:
-> On Fri, 2021-05-21 at 08:55 -0700, James Bottomley wrote:
-> > On Fri, 2021-05-21 at 16:22 +0100, David Woodhouse wrote:
-[...]
-> > > We should probably define not just the ASN.1 format but also a
-> > > URI scheme for referencing objects in NVRAM. A TPMv2 version of 
-> > > https://datatracker.ietf.org/doc/html/draft-mavrogiannopoulos-tpmuri-01
-> > > might be a good idea.
+On Fri, 2021-05-21 at 07:07 +0000, Roberto Sassu wrote:
+> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > Sent: Thursday, May 20, 2021 8:56 PM
+> > On Fri, 2021-05-14 at 17:27 +0200, Roberto Sassu wrote:
+> > > EVM portable signatures are particularly suitable for the protection of
+> > > metadata of immutable files where metadata is signed by a software vendor.
+> > > They can be used for example in conjunction with an IMA policy that
+> > > appraises only executed and memory mapped files.
+> > >
+> > > However, until now portable signatures can be properly installed only if
+> > > the EVM_ALLOW_METADATA_WRITES initialization flag is also set, which
+> > > disables metadata verification until an HMAC key is loaded. This will cause
+> > > metadata writes to be allowed even in the situations where they shouldn't
+> > > (metadata protected by a portable signature is immutable).
+> > >
+> > > The main reason why setting the flag is necessary is that the operations
+> > > necessary to install portable signatures and protected metadata would be
+> > > otherwise denied, despite being legitimate, due to the fact that the
+> > > decision logic has to avoid an unsafe recalculation of the HMAC that would
+> > > make the unsuccessfully verified metadata valid. However, the decision
+> > > logic is too coarse, and does not fully take into account all the possible
+> > > situations where metadata operations could be allowed.
+> > >
+> > > For example, if the HMAC key is not loaded and it cannot be loaded in the
+> > > future due the EVM_SETUP_COMPLETE flag being set, it wouldn't be a
+> > problem
+> > > to allow metadata operations, as they wouldn't result in an HMAC being
+> > > recalculated.
+> > >
+> > > This patch set extends the decision logic and adds the necessary exceptions
+> > > to use portable signatures without turning off metadata verification and
+> > > deprecates the EVM_ALLOW_METADATA_WRITES flag.
 > > 
-> > I'm not so sure ... the keys are files not tokens and the pkcs11
-> > URI doesn't have a file pointer.  I suspect the correct way to
-> > represent them would be to fully represent the key in the URI,
-> > which sounds like a length explosion.
+> > Thanks, Roberto.
+> > 
+> > Applied to: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-
+> > integrity.git
+> > next-integrity-testing
 > 
-> Not files, and definitely nothing to do with PKCS#11.
+> Hi Mimi
 > 
-> I meant a URI for referring to keys which are in NVRAM. The kind you
-> currently use the '//nvkey:' prefix for.
-> 
-> We should standardise that form, as a URI, so that users can take
-> that same URI to *any* application and expect it to work. That's
-> what https://tools.ietf.org/html/draft-mavrogiannopoulos-tpmuri-01
-> was doing, for TPMv1.2.
+> could you please take the newer version of patch 5/12, which also adds
+> an exception for the INTEGRITY_UNKNOWN error (it occurs when xattrs
+> are not supported)?
 
-I'm not so sure we want to encourage that.  The persistent handle space
-is really limited in TPM 2.0.  We just ran into a real world situation
-where the TPM ran out after a handful.  It was an application that
-loaded files into persistent handles ("because it's easier") and then
-made use of them ... we're currently fixing it not to use persistent
-handles because it doesn't need to.
+Thank you for catching it.  I'd appreciate your checking once more. 
+FYI, get-lore-mbox.py moved "Cc: stable" to the end.
 
-James
+thanks,
 
+Mimi
 
