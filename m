@@ -2,44 +2,41 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEC138BAF5
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 May 2021 02:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30E638BAF7
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 May 2021 02:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235175AbhEUAqn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 20 May 2021 20:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234062AbhEUAqm (ORCPT
+        id S235356AbhEUArB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 20 May 2021 20:47:01 -0400
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:46950 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234062AbhEUArA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 20 May 2021 20:46:42 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B20C061574;
-        Thu, 20 May 2021 17:45:20 -0700 (PDT)
+        Thu, 20 May 2021 20:47:00 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id B8E6512806BA;
-        Thu, 20 May 2021 17:45:20 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 865A712806BA;
+        Thu, 20 May 2021 17:45:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1621557920;
-        bh=g7Pav1Z/93yPRlFkuBLtk0OlOKI5UY3aQypTQCuxC38=;
+        d=hansenpartnership.com; s=20151216; t=1621557938;
+        bh=VvyxQjcDUACEkbKQIFQodsbnA7yfgHSn4PF/wgzsl7M=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-        b=AdrmgmaNz8AuCEWX4Exzeel0b7QUZF6coIoJ3sTPirtiHSVGx2WYCFZSIHVT+F54s
-         qbUeoumWgxfgRu6A/xssRGSVWUF09TZO+HHomKW/5ro6cxmfTizRlX4lpQHgzwn6Qd
-         tkuzXrukMCIO/IhZeFHzSFVK4r+S1a649hRQs2+g=
+        b=wXMUYvSi6LBvnR5iDghG4Dq5/XpougAmTajfW5xSxiGqgHTPlOj2ICECrp9g9oEJW
+         qUrB9SH1tUWiKkvRGWaWFfJym2VFo1ho05gmw67S2l8kx7LFCJX7VNIQ14n+bZVAAZ
+         6Ckn3ZKrH/Q6uG8Zw/DKuWYmE8xiFt5O8AyOCxAQ=
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4OyU3DdHZOvE; Thu, 20 May 2021 17:45:20 -0700 (PDT)
+        with ESMTP id 9fE2aTIOZXT1; Thu, 20 May 2021 17:45:38 -0700 (PDT)
 Received: from jarvis.int.hansenpartnership.com (jarvis.ext.hansenpartnership.com [153.66.160.226])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 22D7D12806B1;
-        Thu, 20 May 2021 17:45:20 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 1000212806B1;
+        Thu, 20 May 2021 17:45:38 -0700 (PDT)
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     Mimi Zohar <zohar@linux.ibm.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         David Woodhouse <dwmw2@infradead.org>,
         keyrings@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: [PATCH 2/4] security: keys: trusted: add ability to specify arbitrary policy
-Date:   Thu, 20 May 2021 17:43:59 -0700
-Message-Id: <20210521004401.4167-3-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH 3/4] security: keys: trusted: implement counter/timer policy
+Date:   Thu, 20 May 2021 17:44:00 -0700
+Message-Id: <20210521004401.4167-4-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210521004401.4167-1-James.Bottomley@HansenPartnership.com>
 References: <20210521004401.4167-1-James.Bottomley@HansenPartnership.com>
@@ -49,200 +46,186 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch adds a policy= argument to key creation.  The policy is the
-standard tss policymaker format and each separate policy line must
-have a newline after it.
+This is actually a generic policy allowing a range of comparisons
+against any value set in the TPM Clock, which includes things like the
+reset count, a monotonic millisecond count and the restart count.  The
+most useful comparison is against the millisecond count for expiring
+keys.  However, you have to remember that currently Linux doesn't try
+to sync the epoch timer with the TPM, so the expiration is actually
+measured in how long the TPM itself has been powered on ... the TPM
+timer doesn't count while the system is powered down.  The millisecond
+counter is a u64 quantity found at offset 8 in the timer structure,
+and the <= comparision operand is 9, so a policy set to expire after the
+TPM has been up for 100 seconds would look like
 
-Thus to construct a policy requiring authorized value and pcr 16
-locking using a sha256 hash, the policy (policy.txt) file would be two
-lines:
+0000016d00000000000f424000080009
 
-0000017F00000001000B03000001303095B49BE85E381E5B20E557E46363EF55B0F43B132C2D8E3DE9AC436656F2
-0000016b
-
-This can be inserted into the key with
-
-keyctl add trusted kmk "new 32 policy=`cat policy.txt` keyhandle=0x81000001 hash=sha256" @u
-
-Note that although a few policies work like this, most require special
-handling which must be added to the kernel policy construction
-routine.
+Where 0x16d is the counter timer policy code and 0xf4240 is 100 000 in
+hex.
 
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
- .../security/keys/trusted-encrypted.rst       | 16 ++++++
- security/keys/trusted-keys/tpm2-policy.c      | 53 +++++++++++++++++++
- security/keys/trusted-keys/tpm2-policy.h      |  1 +
- security/keys/trusted-keys/trusted_tpm1.c     | 15 ++++++
- security/keys/trusted-keys/trusted_tpm2.c     |  4 ++
- 5 files changed, 89 insertions(+)
+ .../security/keys/trusted-encrypted.rst       | 31 +++++++++++++-
+ include/linux/tpm.h                           |  1 +
+ security/keys/trusted-keys/tpm2-policy.c      | 42 +++++++++++++++++++
+ security/keys/trusted-keys/trusted_tpm2.c     |  3 +-
+ 4 files changed, 75 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-index 5c66f29b7a1c..883844c95e91 100644
+index 883844c95e91..c40e38200c1e 100644
 --- a/Documentation/security/keys/trusted-encrypted.rst
 +++ b/Documentation/security/keys/trusted-encrypted.rst
-@@ -172,6 +172,9 @@ Usage::
-        policyhandle= handle to an authorization policy session that defines the
-                      same policy and with the same hash algorithm as was used to
-                      seal the key.
-+       policy=       specify an arbitrary set of policies.  These must
-+                     be in policymaker format with each separate
-+                     policy line newline terminated.
+@@ -346,7 +346,6 @@ Another new format 'enc32' has been defined in order to support encrypted keys
+ with payload size of 32 bytes. This will initially be used for nvdimm security
+ but may expand to other usages that require 32 bytes payload.
  
- "keyctl print" returns an ascii hex copy of the sealed key, which is in standard
- TPM_STORED_DATA format.  The key length for new keys are always in bytes.
-@@ -271,6 +274,19 @@ zeros (the value of PCR 16)::
-     $ dd if=/dev/zero bs=1 count=20 2>/dev/null|sha1sum
-     6768033e216468247bd031a0a2d9876d79818f8f
+-
+ TPM 2.0 ASN.1 Key Format
+ ------------------------
  
-+You can also specify arbitrary policy in policymaker format, so a two
-+value policy (the pcr example above and authvalue) would look like
-+this in policymaker format::
+@@ -420,3 +419,33 @@ string length.
+ privkey is the binary representation of TPM2B_PUBLIC excluding the
+ initial TPM2B header which can be reconstructed from the ASN.1 octed
+ string length.
 +
-+    0000017F000000010004030000016768033e216468247bd031a0a2d9876d79818f8f
-+    0000016b
 +
-+This can be placed in a file (say policy.txt) and then added to the key as::
++Appendix
++--------
 +
-+    $ keyctl add trusted kmk "new 32 keyhandle=0x81000001 hash=sha1 policy=`cat policy.txt`" @u
++TPM 2.0 Policies
++----------------
 +
-+The newlines in the file policy.txt will be automatically processed.
++The current TPM supports PCR lock policies as documented above and
++CounterTimer policies which can be used to create expiring keys.  One
++caveat with expiring keys is that the TPM millisecond counter does not
++update while a system is powered off and Linux does not sync the TPM
++millisecond count with its internal clock, so the best you can expire
++in is in terms of how long any given TPM has been powered on.  (FIXME:
++Linux should simply update the millisecond clock to the current number
++of seconds past the epoch on boot).
 +
- Reseal (TPM specific) a trusted key under new PCR values::
- 
-     $ keyctl update 268728824 "update pcrinfo=`cat pcr.blob`"
++A CounterTimer policy is expressed in terms of length and offset
++against the TPM clock structure (TPMS_TIME_INFO), which looks like the
++packed structure::
++
++    struct tpms_time_info {
++            u64 uptime;       /* time in ms since last start or reset */
++	    u64 clock;        /* cumulative uptime in ms */
++	    u32 resetcount;   /* numer of times the TPM has been reset */
++	    u32 restartcount; /* number of times the TPM has been restarted */
++	    u8  safe          /* time was safely loaded from NVRam */
++    };
++
++The usual comparison for expiring keys is against clock, at offset 8.
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 298321fe07ee..85e167ae2c65 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -230,6 +230,7 @@ enum tpm2_command_codes {
+ 	TPM2_CC_CONTEXT_LOAD	        = 0x0161,
+ 	TPM2_CC_CONTEXT_SAVE	        = 0x0162,
+ 	TPM2_CC_FLUSH_CONTEXT	        = 0x0165,
++	TPM2_CC_POLICY_COUNTER_TIMER	= 0x016D,
+ 	TPM2_CC_START_AUTH_SESS		= 0x0176,
+ 	TPM2_CC_VERIFY_SIGNATURE        = 0x0177,
+ 	TPM2_CC_GET_CAPABILITY	        = 0x017A,
 diff --git a/security/keys/trusted-keys/tpm2-policy.c b/security/keys/trusted-keys/tpm2-policy.c
-index b05b2953d5ea..bb28c864fa9b 100644
+index bb28c864fa9b..21bfeb686287 100644
 --- a/security/keys/trusted-keys/tpm2-policy.c
 +++ b/security/keys/trusted-keys/tpm2-policy.c
-@@ -357,3 +357,56 @@ int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols,
+@@ -65,6 +65,7 @@ static int tpm2_validate_policy(struct tpm2_policies *pols)
  
- 	return 0;
- }
+ 	for (i = 0; i < pols->count; i++) {
+ 		switch (pols->code[i]) {
++		case TPM2_CC_POLICY_COUNTER_TIMER:
+ 		case TPM2_CC_POLICY_PCR:
+ 			break;
+ 		default:
+@@ -168,6 +169,7 @@ int tpm2_generate_policy_digest(struct tpm2_policies *pols,
+ 		u8 *policy = pols->policies[i];
+ 		int len = pols->len[i];
+ 		u32 cmd = pols->code[i];
++		u8 digest[MAX_DIGEST_SIZE];
+ 		u8 code[4];
+ 		SHASH_DESC_ON_STACK(sdesc, tfm);
+ 
+@@ -183,6 +185,19 @@ int tpm2_generate_policy_digest(struct tpm2_policies *pols,
+ 		put_unaligned_be32(cmd, code);
+ 		crypto_shash_update(sdesc, code, 4);
+ 
++		/* commands that need special handling */
++		if (cmd == TPM2_CC_POLICY_COUNTER_TIMER) {
++			SHASH_DESC_ON_STACK(sdesc1, tfm);
 +
-+int tpm2_parse_policies(struct tpm2_policies **ppols, char *str)
-+{
-+	struct tpm2_policies *pols;
-+	char *p;
-+	u8 *ptr;
-+	int i = 0, left = PAGE_SIZE, res;
++			sdesc1->tfm = tfm;
 +
-+	pols = kmalloc(left, GFP_KERNEL);
-+	if (!pols)
-+		return -ENOMEM;
-+
-+	ptr = (u8 *)(pols + 1);
-+	left -= ptr - (u8 *)pols;
-+
-+	while ((p = strsep(&str, "\n"))) {
-+		if (*p == '\0' || *p == '\n')
-+			continue;
-+
-+		pols->len[i] = strlen(p)/2;
-+		if (pols->len[i] > left) {
-+			res = -E2BIG;
-+			goto err;
++			/* counter timer policies are double hashed */
++			crypto_shash_digest(sdesc1, policy, len,
++					    digest);
++			policy = digest;
++			len = *plen;
 +		}
 +
-+		res = hex2bin(ptr, p, pols->len[i]);
-+		if (res)
-+			goto err;
-+
-+		/* get command code and skip past */
-+		pols->code[i] = get_unaligned_be32(ptr);
-+		pols->policies[i] = ptr + 4;
-+		ptr += pols->len[i];
-+		left -= pols->len[i];
-+		pols->len[i] -= 4;
-+
-+		/*
-+		 * FIXME: this does leave the code embedded in dead
-+		 * regions of the memory, but it's easier than
-+		 * hexdumping to a temporary or copying over
-+		 */
-+		i++;
-+	}
-+
-+	pols->count = i;
-+	*ppols = pols;
-+
-+	return 0;
-+
-+ err:
-+	kfree(pols);
-+	return res;
-+}
-diff --git a/security/keys/trusted-keys/tpm2-policy.h b/security/keys/trusted-keys/tpm2-policy.h
-index 46bf1f0a9325..0da013116c1c 100644
---- a/security/keys/trusted-keys/tpm2-policy.h
-+++ b/security/keys/trusted-keys/tpm2-policy.h
-@@ -28,3 +28,4 @@ int tpm2_generate_policy_digest(struct tpm2_policies *pols, u32 hash,
- int tpm2_encode_policy(struct tpm2_policies *pols, u8 **data, u32 *len);
- int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols,
- 			    u32 *handle);
-+int tpm2_parse_policies(struct tpm2_policies **ppols, char *str);
-diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index aa108bea6739..6ed7303e36b5 100644
---- a/security/keys/trusted-keys/trusted_tpm1.c
-+++ b/security/keys/trusted-keys/trusted_tpm1.c
-@@ -22,6 +22,8 @@
+ 		crypto_shash_update(sdesc, policy, len);
  
- #include <keys/trusted_tpm.h>
- 
-+#include "tpm2-policy.h"
-+
- static const char hmac_alg[] = "hmac(sha1)";
- static const char hash_alg[] = "sha1";
- static struct tpm_chip *chip;
-@@ -713,6 +715,7 @@ enum {
- 	Opt_hash,
- 	Opt_policydigest,
- 	Opt_policyhandle,
-+	Opt_policy,
- };
- 
- static const match_table_t key_tokens = {
-@@ -725,6 +728,7 @@ static const match_table_t key_tokens = {
- 	{Opt_hash, "hash=%s"},
- 	{Opt_policydigest, "policydigest=%s"},
- 	{Opt_policyhandle, "policyhandle=%s"},
-+	{Opt_policy, "policy=%s"},
- 	{Opt_err, NULL}
- };
- 
-@@ -858,6 +862,17 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 				return -EINVAL;
- 			opt->policyhandle = handle;
+ 		/* now output the intermediate to the policydigest */
+@@ -339,8 +354,35 @@ int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols,
+ 			tpm_buf_append(&buf, pols->policies[i],
+ 				       pols->len[i] - pols->hash_size);
  			break;
 +
-+		case Opt_policy:
-+			if (pay->policies)
++		case TPM2_CC_POLICY_COUNTER_TIMER: {
++			/*
++			 * the format of this is the last two u16
++			 * quantities are the offset and operation
++			 * respectively.  The rest is operandB which
++			 * must be zero padded in a hash digest
++			 */
++			u16 opb_len = pols->len[i] - 4;
++
++			if (opb_len > pols->hash_size)
 +				return -EINVAL;
-+			if (!tpm2)
-+				return -EINVAL;
-+			res = tpm2_parse_policies(&pay->policies, args[0].from);
-+			if (res)
-+				return res;
++
++			tpm_buf_append_u16(&buf, opb_len);
++			tpm_buf_append(&buf, pols->policies[i], opb_len);
++
++			/* offset and operand*/
++			tpm_buf_append(&buf, pols->policies[i] + opb_len, 4);
++			failure = "Counter Timer";
++
 +			break;
++		}
 +
  		default:
- 			return -EINVAL;
+ 			failure = "unknown policy";
++			if (pols->len[i])
++				tpm_buf_append(&buf, pols->policies[i],
++					       pols->len[i]);
++
+ 			break;
  		}
+ 
 diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index a218f982fef5..afe9cc41885e 100644
+index afe9cc41885e..b7eb919de8ef 100644
 --- a/security/keys/trusted-keys/trusted_tpm2.c
 +++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -268,6 +268,10 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		/* 4 array len, 2 hash alg */
- 		const int len = 4 + 2 + options->pcrinfo_len;
+@@ -248,6 +248,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 	u32 flags;
+ 	int i;
+ 	int rc;
++	static const int POLICY_SIZE = 2 * PAGE_SIZE;
  
-+		if (payload->policies)
-+			/* can't specify pcr and general policy */
-+			return -EINVAL;
-+
- 		pols = kmalloc(sizeof(*pols) + len, GFP_KERNEL);
+ 	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+ 		if (options->hash == tpm2_hash_map[i].crypto_id) {
+@@ -272,7 +273,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 			/* can't specify pcr and general policy */
+ 			return -EINVAL;
+ 
+-		pols = kmalloc(sizeof(*pols) + len, GFP_KERNEL);
++		pols = kmalloc(POLICY_SIZE, GFP_KERNEL);
  		if (!pols)
  			return -ENOMEM;
+ 
 -- 
 2.26.2
 
