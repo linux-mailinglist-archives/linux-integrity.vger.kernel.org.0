@@ -2,163 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3B938C11F
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 May 2021 09:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7C238C5F2
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 May 2021 13:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbhEUH6C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 21 May 2021 03:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbhEUH6B (ORCPT
+        id S232483AbhEULq7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 21 May 2021 07:46:59 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14202 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232499AbhEULq4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 21 May 2021 03:58:01 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA65C061574
-        for <linux-integrity@vger.kernel.org>; Fri, 21 May 2021 00:56:37 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id i17so20046908wrq.11
-        for <linux-integrity@vger.kernel.org>; Fri, 21 May 2021 00:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ZBzGJGY3Lfdn2lNHI2teoZpXLD66Uih3j/hx8ThIHi4=;
-        b=DYK4allmsvbOxhLePej2gQFrRaKHJlch3k0v7mM00MGfmxSAWTMg/3INJhD+1Rc3tU
-         9mOKiKUjmwPEf4GRDSP8kNtQuJDR5Y+ZpoiZMFHtiReax+43X/DrDH7OYo0+/5D7/STR
-         uRRZGHQQgnENF2IGZZW38nUi3XD0QEUGfclsvQs5VCyM5/Kb9GX/SnyiQU+Y6BIvzFQf
-         GX0L5Sgxj9RvgHFJFANgnVk4UYQvTAYi5z4Q5wXF1c4tRGb1sqe9ZeDJ0vXhwCiuZvQK
-         yYqwZDP6IcXMQDVHvaLwSV915BV14jdKWLHO0eqPTq1w1tXxRe249C+gWXeC+7JSej3I
-         vO8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZBzGJGY3Lfdn2lNHI2teoZpXLD66Uih3j/hx8ThIHi4=;
-        b=AjP5u3TgtymFJctkVn4NZ/JTE/TdvUysG+Vxtzkd2PntPLiTCDohBOXstQgj4V5mwM
-         TJnTGiCvJUigPub5uoQoAP+BdiqLlu6OzVv2EK5RerazPbwS16+fUa2NgVs+9s1M3aK3
-         UFvk9UfzcMs5YmfUxMTJUj2z9YXkTweLoh4h95YFwWzM5w3hNb4ZmQQTE4a/gXIveTUE
-         0Rk75UYbr8gjqIEZcl2IrU0ysQCzwwt1arBgdwR+xJ7aZ4OAaBuR2QaJ/Edqhx8PPDOq
-         Nw/ceEohNvd99DcOKWZv+6ZuIJYDMkF6lXDPMxhhSLaREOOt9SHcDlAJcss50y/vJugg
-         qGbA==
-X-Gm-Message-State: AOAM532VM7XZOSZEFocYRMU6IDxG4PYZtJaTxfqUa/SebOY4ap6plGkV
-        ZWgjXWMZUqWiq2slEujnID2zVg==
-X-Google-Smtp-Source: ABdhPJwx8/gIMGjk4t/5kik01FomXtSQYBs+juxRo4HxzZoCKemokseJo7KzkcOXTh/L7jhS9L6uHA==
-X-Received: by 2002:adf:f109:: with SMTP id r9mr8360005wro.251.1621583796406;
-        Fri, 21 May 2021 00:56:36 -0700 (PDT)
-Received: from dell ([91.110.221.215])
-        by smtp.gmail.com with ESMTPSA id g11sm1133714wri.59.2021.05.21.00.56.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 May 2021 00:56:35 -0700 (PDT)
-Date:   Fri, 21 May 2021 08:56:33 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bob Picco <robert.picco@hp.com>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        "C. Scott Ananian" <cananian@alumni.princeton.edu>,
-        "cs.c" <support.linux@omnikey.com>,
-        Dave Safford <safford@watson.ibm.com>,
-        David Airlie <airlied@linux.ie>,
+        Fri, 21 May 2021 07:46:56 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14LBYGi7030377;
+        Fri, 21 May 2021 07:45:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=63ZT8sa41e7r+0vT3qTkmsUgDavSFDDoI2d81uQ2iMY=;
+ b=L9hSyLAje48wYxW3XW+8ES3yr7V8wd6tVNIGWlhhBKVSzXWQfWbGOrOqdDQAGPc+xF8B
+ 0TOk2Sj1hFs4U8ngOXS+DBS8VeJXX/KVaT8jESAOqlGnYTb8S191nLdWIry4hA9i+Fcn
+ YYT6hUZI7zgDY8x9CohTVg8kwXNCIdAKBRiACkZOYmqWE+/PjQgvDrDZU9U/G6plMPWW
+ EEhc2TvDAzupZBGaBAzBi8B1yXf9NM349P9W8A2IqneONV5hiJ+eKrqOW1dntt2Zrkl9
+ OACz+sPX1Ka/Yl30N1ohAruJYanL+NDzIiyqpC1sC1wipuif19C0QjQkZLmEkvCZrM1G Yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38pbek19e8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 May 2021 07:45:02 -0400
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 14LBYx1u035761;
+        Fri, 21 May 2021 07:45:02 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38pbek19da-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 May 2021 07:45:02 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 14LBS1p1016558;
+        Fri, 21 May 2021 11:45:00 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 38j5x8b48p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 May 2021 11:44:59 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14LBiTTG22544752
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 May 2021 11:44:29 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 608B952050;
+        Fri, 21 May 2021 11:44:57 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.6.127])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id BB0145204F;
+        Fri, 21 May 2021 11:44:53 +0000 (GMT)
+Message-ID: <fd0e91c43cf0dc14aeeda4e7095416c77df0d0cc.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH 0/3] Add additional MOK vars
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
         David Woodhouse <dwmw2@infradead.org>,
-        Harald Welte <laforge@gnumonks.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        dmitry.kasatkin@gmail.com, James Morris <jmorris@namei.org>,
         Jarkko Sakkinen <jarkko@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jerome Glisse <j.glisse@gmail.com>,
-        Kanoj Sarcar <kanoj@sgi.com>, Kylene Hall <kjhall@us.ibm.com>,
-        Lijun Pan <ljp@linux.ibm.com>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>, linux-integrity@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Neuling <mikey@neuling.org>,
-        Paul Fulghum <paulkf@microgate.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Reiner Sailer <sailer@watson.ibm.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        van Doorn <leendert@watson.ibm.com>
-Subject: Re: [PATCH 00/16] Rid W=1 warnings from Char
-Message-ID: <20210521075633.GB2549456@dell>
-References: <20210520121347.3467794-1-lee.jones@linaro.org>
- <CAK8P3a0VujuG8eU_CEVSvzbk4nAJz8fStedM5eMUrLAr9EJxDQ@mail.gmail.com>
- <20210521072236.GX2549456@dell>
- <YKdkZdvN+uu6lu0g@kroah.com>
- <YKdk2NYHysgTGlRt@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        torvalds@linux-foundation.org,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        pjones@redhat.com, glin@suse.com,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        Patrick Uiterwijk <patrick@puiterwijk.org>
+Date:   Fri, 21 May 2021 07:44:52 -0400
+In-Reply-To: <4A887886-BDB2-4F88-9D83-73B9BC9E641F@oracle.com>
+References: <20210517225714.498032-1-eric.snowberg@oracle.com>
+         <fdb42621e7145ce81a34840cbcf0914874c78913.camel@linux.ibm.com>
+         <7F861393-7971-43AB-A741-223B8A50FFA0@oracle.com>
+         <c134ad45d924e8b719f8abb6d36b426b889e9394.camel@linux.ibm.com>
+         <4A887886-BDB2-4F88-9D83-73B9BC9E641F@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: MUe8apbdE6APMT7MJ6YxnSMPparGVqMz
+X-Proofpoint-GUID: ZBXZkRp-Z9LqJLD5ntEtu9DO5rW3R11j
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YKdk2NYHysgTGlRt@kroah.com>
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-21_04:2021-05-20,2021-05-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ mlxlogscore=999 spamscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ bulkscore=0 impostorscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2105210071
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 21 May 2021, Greg Kroah-Hartman wrote:
+[Cc'ing Patrick Uiterwijk]
 
-> On Fri, May 21, 2021 at 09:42:29AM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, May 21, 2021 at 08:22:36AM +0100, Lee Jones wrote:
-> > > On Thu, 20 May 2021, Arnd Bergmann wrote:
-> > > 
-> > > > On Thu, May 20, 2021 at 2:13 PM Lee Jones <lee.jones@linaro.org> wrote:
-> > > > >
-> > > > > This set is part of a larger effort attempting to clean-up W=1
-> > > > > kernel builds, which are currently overwhelmingly riddled with
-> > > > > niggly little warnings.
-> > > > >
-> > > > > Lee Jones (16):
-> > > > >   char: pcmcia: cm4000_cs: Remove unused variable 'tmp'
-> > > > >   char: pcmcia: cm4040_cs: Remove unused variable 'uc'
-> > > > >   char: random: Include header containing our prototypes
-> > > > >   char: pcmcia: synclink_cs: Fix a bunch of kernel-doc issues
-> > > > >   char: pcmcia: synclink_cs: Fix a bunch of kernel-doc issues
-> > > > >   char: applicom: Remove 3 unused variables 'ret' and 2 instances of
-> > > > >     'byte_reset_it'
-> > > > >   char: tpm: tpm1-cmd: Fix a couple of misnamed functions
-> > > > >   char: tpm: tpm_ftpm_tee: Fix a couple of kernel-doc misdemeanours
-> > > > >   char: agp: backend: Demote some non-conformant kernel-doc headers
-> > > > >   char: agp: frontend: Include header file containing our prototypes
-> > > > >   char: agp: via-agp: Remove unused variable 'current_size'
-> > > > >   char: hpet: Remove unused variable 'm'
-> > > > >   char: agp: generic: Place braces around optimised out function in if()
-> > > > >   char: agp: uninorth-agp: Remove unused variable 'size'
-> > > > >   char: hw_random: pseries-rng: Demote non-conformant kernel-doc header
-> > > > >   char: mem: Provide local prototype for non-static function
-> > > > 
-> > > > Thanks a lot!
-> > > > 
-> > > > I've looked all the patches now and commented on patches 6 and 16.
-> > > > With my comments addressed
-> > > > 
-> > > > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> > > 
-> > > Thanks Arnd.
-> > > 
-> > > Would it be possible for the remaining 14 patches to be taken in
-> > > please?  I will work on the 2 Arnd commented on in due course and
-> > > resubmit them independently.
-> > 
-> > Yes, I can queue them up, thanks.
+On Thu, 2021-05-20 at 14:37 -0600, Eric Snowberg wrote:
+> > On May 20, 2021, at 6:22 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+
+> > I really do understand the need for extending the root of trust beyond
+> > the builtin keys and allowing end user keys to be loaded onto a kernel
+> > keyring, but it needs to be done safely.  The first step might include
+> > locally signing the MOK keys being loaded onto the secondary keyring
+> > and then somehow safely providing the local-CA key id to the kernel.
 > 
-> Wait, I can take the ones for code that I maintain, not for others.
-> drivers/char/ is "fun" in that some subdirs have active
-> trees/maintainers that are not me and Arnd so they go to Linus through
-> other ways.  I'll queue up the ones that I am "allowed" to and you will
-> get the emails from that.
+> If the machine owner and Linux distributor are independent of one another,
+> I don’t see how MOK key signing could work.  There wouldn’t be a way for
+> the kernel to verify the end-user supplied signed MOK key.  An end-user 
+> choosing a Linux distro is trusting the company/organization building the 
+> kernel, but the trust doesn’t go the other way.  Do you have a solution 
+> in mind on how this would be possible? If you do, I’m happy to move in
+> a different direction to solve this problem.
 
-Understood, thanks.
+We are working with the distros to address this problem.  The first
+attempt at extending the secondary keyring's root of trust relied on a
+TPM2 NV Index[1].
 
-Hopefully the other maintainers will be as on the ball as you are.
+Using MOK is a possible alternative, if it can be done safely.  For
+example, if the boot command line could be protected from modification,
+the end-user could enroll a key in MOK and identify the specific MOK
+key on the boot command line[2].  The boot command line would then
+become an additional root of trust source.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+The root of trust for loading keys on the different trusted keyrings
+are self documenting -  restrict_link_by_builtin_trusted,
+restrict_link_by_builtin_and_secondary_trusted().  A new function would
+need to be defined to include the boot command line as a new or
+additional root of trust source.
+ 
+thanks,
+
+Mimi
+
+[1] https://lore.kernel.org/linux-integrity/20210225203229.363302-1-patrick@puiterwijk.org/
+[2] Perhaps extend the existing "ca_keys" boot command line option.
+
