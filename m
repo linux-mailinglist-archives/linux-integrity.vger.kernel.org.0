@@ -2,127 +2,71 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F7B38FDD8
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 May 2021 11:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632D238FFD1
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 May 2021 13:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbhEYJbC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 May 2021 05:31:02 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3093 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbhEYJaz (ORCPT
+        id S231132AbhEYLP1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 May 2021 07:15:27 -0400
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:60797 "EHLO
+        herzl.nuvoton.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230252AbhEYLPX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 May 2021 05:30:55 -0400
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Fq7l82j3xz6T0s3;
-        Tue, 25 May 2021 17:17:24 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 25 May 2021 11:29:23 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Tue, 25 May 2021 11:29:23 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Bighead Wang <ex200208049@gmail.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: EVM gives no_label error due to security_kernfs_init_security
-Thread-Topic: EVM gives no_label error due to security_kernfs_init_security
-Thread-Index: AQHXUUc0KpPQcZofIk6SqEiHrt07sarz7awg
-Date:   Tue, 25 May 2021 09:29:23 +0000
-Message-ID: <b348c8687d5b40919d8625f4c096d4e2@huawei.com>
-References: <CADG95vuR1=dvgsf6bvNCRNsvDEJ=YwFgfvqJWRkNvD=rrYUaYA@mail.gmail.com>
-In-Reply-To: <CADG95vuR1=dvgsf6bvNCRNsvDEJ=YwFgfvqJWRkNvD=rrYUaYA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 25 May 2021 07:15:23 -0400
+Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 14PBDd2Q004241;
+        Tue, 25 May 2021 14:13:39 +0300
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
+        id 679A563A19; Tue, 25 May 2021 14:13:45 +0300 (IDT)
+From:   amirmizi6@gmail.com
+To:     Eyal.Cohen@nuvoton.com, jarkko@kernel.org, peterhuewe@gmx.de,
+        jgg@ziepe.ca
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: [PATCH v4] add longer timeout for verify signature command
+Date:   Tue, 25 May 2021 14:13:24 +0300
+Message-Id: <20210525111325.158790-1-amirmizi6@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBCaWdoZWFkIFdhbmcgW21haWx0bzpleDIwMDIwODA0OUBnbWFpbC5jb21dDQo+IFNl
-bnQ6IFR1ZXNkYXksIE1heSAyNSwgMjAyMSAxMToxOSBBTQ0KPiBJbiBjZ3JvdXAgZmlsZXN5c3Rl
-bSwgc2VjdXJpdHlfa2VybmZzX2luaXRfc2VjdXJpdHkoKSB3aWxsIGluaXRpYWxpemUNCj4gdGhl
-IHNlY3VyaXR5IGRhdGEgZm9yIG5ld2x5IGNyZWF0ZWQga2VybmZzIG5vZGUgYWZ0ZXIga2VybmVs
-IDUuMi4sDQo+IGhvd2V2ZXIsIG5ldyBFVk0geGF0dHIgdmFsdWUgaXMgbm90IGluaXRpYWxpemVk
-LCBhbmQgdGhlIG5vX2xhYmVsDQo+IGVycm9yIGFwcGVhcnMgd2hlbiBldm1fdmVyaWZ5X2htYWMo
-KSBpcyB0cmlnZ2VyZWQuDQo+IA0KPiANCj4gVGhlIGRldGFpbGVkIGRlc2NyaXB0aW9uOg0KPiBX
-aGVuIHN5c3RlbSBib290cyB1cCB3aXRoIElNQS9FVk0gYW5kIFNFTGludXggZW5hYmxlZCwgd2Ug
-Z2V0Og0KPiAiIE1heSAyNSAxNDoxMzowMSByYXNwYmVycnlwaSBhdWRpdFsxMjEyXTogSU5URUdS
-SVRZX01FVEFEQVRBIHBpZD0xMjEyDQo+IHVpZD0wIGF1aWQ9NDI5NDk2NzI5NSBzZXM9NDI5NDk2
-NzI5NSBzdWJqPXN5c3RlbV91OnN5c3RlbV9yOmluaXRfdA0KPiBvcD1hcHByYWlzZV9tZXRhZGF0
-YSBjYXVzZT1ub19sYWJlbCBjb21tPSIoc3lzdGVtZCkiDQo+IG5hbWU9ImNncm91cC5wcm9jcyIg
-ZGV2PSJjZ3JvdXAyIiBpbm89MTM2MCByZXM9MCBlcnJubz0wICINCj4gDQo+IFRoZSByb290IGNh
-dXNlIGlzIHRoYXQgb3VyIGN1c3RvbWl6ZWQgU0VMaW51eCBmaWxlX2NvbnRleHRzIGZpbGUgZG9l
-cw0KPiBub3QgY29udGFpbiB0aGUgbGluZSAiL3N5cy9mcy9jZ3JvdXAvLiogICAgIDw8bm9uZT4+
-Ii4NCj4gV2hlbiBzeXN0ZW1kIHJlbGFiZWxzIGRpcmVjdG9yaWVzIHVuZGVyIC9zeXMvZnMvY2dy
-b3VwLyBkdXJpbmcNCj4gYm9vdGluZywgaXQgd2lsbCBzZXQgU0VMaW51eCBsYWJlbCBpbnNpZGUg
-dGhlIGlhdHRyIG1lbWJlciBvZiBrZXJuZnMNCj4gbm9kZSwgYW5kIHRoZW4gc2VjdXJpdHlfa2Vy
-bmZzX2luaXRfc2VjdXJpdHkoKSB3aWxsIGluaXRpYWxpemUgdGhlDQo+IHNlY3VyaXR5IGRhdGEg
-YXQgdGhlIHRpbWUgbmV3IGtlcm5mcyBub2RlIGNyZWF0ZWQuDQo+IEFmdGVyIHN5c3RlbWQgZXhl
-Y3V0ZXMgc29tZXRoaW5nIHRvIHRyaWdnZXIgZXZtX3ZlcmlmeV9obWFjKCksIHdlIGdldA0KPiB0
-aGlzIG5vX2xhYmVsIGVycm9yLg0KPiANCj4gSW4gZXZtX3ZlcmlmeV9obWFjKCksIGlmIHRoZXJl
-IGlzIG5vIEVWTSB4YXR0ciB2YWx1ZSwgaXQgd2lsbCBjaGVjaw0KPiBhbnkgb3RoZXIgeGF0dHIg
-dmFsdWVzIHByb3RlY3RlZCBieSBFVk0gZXhpc3Qgb3Igbm90Lg0KPiBJbiB0aGlzIHNpdHVhdGlv
-biwgdGhlcmUgaXMgbm8gRVZNIHhhdHRyIHZhbHVlIChnb3QgZnJvbSB0aGUgaWF0dHINCj4gbWVt
-YmVyIG9mIGtlcm5mcyBub2RlIGluIGNncm91cCBmaWxlc3lzdGVtKSwgYnV0IFNFTGludXggbGFi
-ZWwgKGFsc28NCj4gZ290IGZyb20gdGhlIGlhdHRyIG1lbWJlciBvZiBrZXJuZnMgbm9kZSBpbnN0
-ZWFkIG9mIGZyb20gaW5vZGUpDQo+IGV4aXN0cy4NCj4gVG8gc3VtIHVwLCB0aGUgZXJyb3Igc2Vl
-bXMgdG8gbWUgaXMgRVZNIG1lY2hhbmlzbSBkb2Vzbid0IGluaXRpYWxpemUNCj4gRVZNIHhhdHRy
-IHZhbHVlIGluIGtlcm5mcyBub2RlLg0KDQpIaSBIYW5rDQoNCnRoaXMgcGF0Y2ggc2hvdWxkIGhl
-bHA6DQoNCmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3pv
-aGFyL2xpbnV4LWludGVncml0eS5naXQvY29tbWl0Lz9oPW5leHQtaW50ZWdyaXR5LXRlc3Rpbmcm
-aWQ9NGE4MDRiOGE0NTcyZGZjODFjM2E1OTcwOWQ0OWFlMjA2ZTQzNzBiYQ0KDQpDb3VsZCB5b3Ug
-cGxlYXNlIHRyeSBpdD8NCg0KVGhhbmtzDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xPR0lF
-UyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5n
-LCBMaSBKaWFuLCBTaGkgWWFubGkNCg0KPiBUaGUgZW52aXJvbm1lbnQ6DQo+IC9wcm9jL3ZlcnNp
-b246IExpbnV4IHZlcnNpb24gNS4xMy4wLXJjMy12N2wrIChiaWdoZWFkQDUyLTA0NTM0NjMtMDIp
-DQo+IChhcm0tbGludXgtZ251ZWFiaS1nY2MgKEdDQykgOS4xLjAsIEdOVSBsZCAoR05VIEJpbnV0
-aWxzKSAyLjMyKSAjMSBTTVANCj4gVHVlIE1heSAyNSAxMjozMzowMSBDU1QgMjAyMQ0KPiAvcHJv
-Yy9zeXMva2VybmVsL3RhaW50ZWQ6IDANCj4gT3BlcmF0aW5nIFN5c3RlbTogUmFzcGJpYW4gR05V
-L0xpbnV4IDEwIChidXN0ZXIpDQo+IEFyY2hpdGVjdHVyZTogYXJtdjdsDQo+IHN5c3RlbWQgdmVy
-c2lvbjogc3lzdGVtZCAyNDEgKDI0MSkgK1BBTSArQVVESVQgK1NFTElOVVggK0lNQQ0KPiArQVBQ
-QVJNT1INCj4gK1NNQUNLICtTWVNWSU5JVCArVVRNUCArTElCQ1JZUFRTRVRVUCArR0NSWVBUICtH
-TlVUTFMgK0FDTCArWFoNCj4gK0xaNA0KPiArU0VDQ09NUCArQkxLSUQgK0VMRlVUSUxTICtLTU9E
-IC1JRE4yICtJRE4gLVBDUkUyDQo+IGRlZmF1bHQtaGllcmFyY2h5PWh5YnJpZA0KPiBJTUEvRVZN
-IGtlcm5lbCBwYXJhbWV0ZXI6IGltYV9wb2xpY3k9YXBwcmFpc2VfdGNiIGltYV9hcHByYWlzZT1m
-aXgNCj4gU0VMaW51eCBrZXJuZWwgcGFyYW1ldGVyOiBzZWN1cml0eT1zZWxpbnV4IHNlbGludXg9
-MSAocGVybWlzc2l2ZSBtb2RlKQ0KPiANCj4gSG93IHRvIHJlcHJvZHVjZSB0aGUgZXJyb3IgaW4g
-UmFzcGJpYW46DQo+IDEuIFByZXBhcmUgYW4gZW52aXJvbm1lbnQgd2hpY2ggU0VMaW51eCBhbmQg
-SU1BL0VWTSBhcmUgZW5hYmxlZCBhbmQNCj4gYm9vdCB1cCB3aXRoIGtlcm5lbCBwYXJhbWV0ZXJz
-OiBzZWN1cml0eT1zZWxpbnV4IHNlbGludXg9MQ0KPiBpbWFfcG9saWN5PWFwcHJhaXNlX3RjYiBp
-bWFfYXBwcmFpc2U9Zml4IGV2bT1maXgNCj4gMi4gUmVtb3ZlIHRoZSBsaW5lICIvc3lzL2ZzL2Nn
-cm91cC8uKiAgICAgPDxub25lPj4iIGluIGZpbGVfY29udGV4dHMNCj4gZmlsZSwgYW5kIGZ1bGx5
-IHJlbGFiZWwgYWxsIHN5c3RlbSB3aXRoIFNFTGludXggb2ZmaWNpYWwgcmVmZXJlbmNlDQo+IHBv
-bGljeQ0KPiAzLiBXYWxrIHRocm91Z2ggYWxsIHJlZ3VsYXIgZmlsZXMgYW5kIGdlbmVyYXRlIGlt
-YS9ldm0gaGFzaDoNCj4gL3Vzci9iaW4vZmluZCAvIC10eXBlIGYgLXVpZCAwIC1leGVjIHNoIC1j
-ICI8ICd7fSciIFw7DQo+IDQuIFJlYm9vdCB3aXRoIGtlcm5lbCBwYXJhbWV0ZXJzOiBzZWN1cml0
-eT1zZWxpbnV4IHNlbGludXg9MQ0KPiBpbWFfcG9saWN5PWFwcHJhaXNlX3RjYiBpbWFfYXBwcmFp
-c2U9Zml4DQo+IDUuIEFmdGVyIGJvb3QgdXAsIHlvdSB3aWxsIGdldCB0aGlzIEVWTSBub19sYWJl
-bCBlcnJvciBtZXNzYWdlDQo+IA0KPiBSZXByb2R1Y2UgdGhlIGVycm9yIGRpcmVjdGx5Og0KPiAx
-LiBQcmVwYXJlIGFuIGVudmlyb25tZW50IHdoaWNoIFNFTGludXggYW5kIElNQS9FVk0gYXJlIGVu
-YWJsZWQgYW5kDQo+IGJvb3QgdXAgd2l0aCBrZXJuZWwgcGFyYW1ldGVyczogc2VjdXJpdHk9c2Vs
-aW51eCBzZWxpbnV4PTENCj4gaW1hX3BvbGljeT1hcHByYWlzZV90Y2IgaW1hX2FwcHJhaXNlPWZp
-eCBldm09Zml4DQo+IDIuIEZ1bGx5IHJlbGFiZWwgYWxsIHN5c3RlbSB3aXRoIFNFTGludXggb2Zm
-aWNpYWwgcmVmZXJlbmNlIHBvbGljeQ0KPiAzLiBXYWxrIHRocm91Z2ggYWxsIHJlZ3VsYXIgZmls
-ZXMgYW5kIGdlbmVyYXRlIGltYS9ldm0gaGFzaDoNCj4gL3Vzci9iaW4vZmluZCAvIC10eXBlIGYg
-LXVpZCAwIC1leGVjIHNoIC1jICI8ICd7fSciIFw7DQo+IDQuIFJlYm9vdCB3aXRoIGtlcm5lbCBw
-YXJhbWV0ZXJzOiBzZWN1cml0eT1zZWxpbnV4IHNlbGludXg9MQ0KPiBpbWFfcG9saWN5PWFwcHJh
-aXNlX3RjYiBpbWFfYXBwcmFpc2U9Zml4DQo+IDUuIHN1ZG8gc2V0ZmF0dHIgLW4gc2VjdXJpdHku
-c2VsaW51eCAtdiBzeXN0ZW1fdTpvYmplY3RfcjpjZ3JvdXBfdA0KPiAvc3lzL2ZzL2Nncm91cC91
-bmlmaWVkDQo+IDYuIHN1ZG8gbWtkaXIgL3N5cy9mcy9jZ3JvdXAvdW5pZmllZC90ZXN0ZXZtDQo+
-IDcuIHN1ZG8gY2htb2QgK3ggL3N5cy9mcy9jZ3JvdXAvdW5pZmllZC90ZXN0ZXZtL2Nncm91cC5w
-cm9jczogeW91IHdpbGwNCj4gZ2V0IHRoaXMgRVZNIGVycm9yIG1lc3NhZ2UNCj4gDQo+IFJlZmVy
-ZW5jZToNCj4gS2VybmVsIGNvbmZpZzogaHR0cHM6Ly8xNDAuOTYuMTU0Ljc6NTAwMS9zaGFyaW5n
-LzljUE5vd21oSw0KPiBKb3VybmFsIGxvZzogaHR0cHM6Ly8xNDAuOTYuMTU0Ljc6NTAwMS9zaGFy
-aW5nL3NSSVN6NklQdA0KPiBQYXRjaCBmb3Igc2VjdXJpdHlfa2VybmZzX2luaXRfc2VjdXJpdHko
-KSA6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3NlbGludXgvMjAxOTAxMzAxMTQxNTAuMjc4
-MDctMS0NCj4gb21vc25hY2VAcmVkaGF0LmNvbS8NCj4gDQo+IC0tDQo+IEJlc3QgUmVnYXJkcywN
-Cj4gSGFuayBXYW5nDQo=
+From: Amir Mizinski <amirmizi6@gmail.com>
+
+while testing TPM2_CC_VERIFY_SIGNATURE with usage of RSA 3072-bit keys i
+encountered a timeout error. it seems current values do not support this case
+as described in ptp 1.05 6.5.1.3:
+https://trustedcomputinggroup.org/wp-content/uploads/PC_Client_Specific-Platform_TPM_Profile_for-PTP_2p0-v1p05p_r14_pub.pdf
+
+The patch was tested on Raspberry-Pie 3, using Nuvoton NPCT75X TPM.
+
+Changes since version 1:
+-"tpm2: add longer timout for verify signature command"
+                - Fixed and extended commit description.
+Addressed comments from:
+ - Jarkko Sakkinen: https://lore.kernel.org/patchwork/patch/1424664/
+
+Changes since version 2:
+-"tpm2: add longer timout for verify signature command"
+                - Fixed commit description.
+Addressed comments from:
+ - Jarkko Sakkinen: https://lore.kernel.org/patchwork/patch/1431866/
+Changes since version 3:
+-"tpm2: add longer timout for verify signature command"
+                - Fixed Link tag in commit description.
+Addressed comments from:
+ - Jarkko Sakkinen: https://lore.kernel.org/patchwork/patch/1434828/
+
+
+Amir Mizinski (1):
+  tpm2: add longer timeout for verify signature command
+
+ drivers/char/tpm/tpm2-cmd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+-- 
+2.7.4
+
