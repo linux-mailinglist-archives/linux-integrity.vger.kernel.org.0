@@ -2,137 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 905BE38FD9C
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 May 2021 11:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F7B38FDD8
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 May 2021 11:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbhEYJVM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 May 2021 05:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbhEYJVL (ORCPT
+        id S232618AbhEYJbC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 May 2021 05:31:02 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3093 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232620AbhEYJaz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 May 2021 05:21:11 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA78C061574;
-        Tue, 25 May 2021 02:19:41 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 27so20945586pgy.3;
-        Tue, 25 May 2021 02:19:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=jqgS5hOOCnrxfxw3txYWGbPk+A9RnEI7ms619U7Wij0=;
-        b=jVoleAI93hCi7j69YiQhtqOpswmx2gRSpBdXQxoPQowE3LY/6n7+YVPmkjkDrKkY4H
-         dHzKlTN2jx+kGoPTJiRzOm7IZbJtkN15dqiUZEEtgPWTzC9+05de4QhflqsZitbwbtQv
-         hWxCe0QzeZvpjoXuojNngJ+ejql4KOIgohmcXt3Rwj44VMliduQuflFu7lQPlIZgckba
-         psEacD7bT+TeQi+ctVI5YYKZSvqRJhO+jGc54xA1rKNNf95Qi/+70Oj65TaVmEoFjsES
-         yuMsK8ri+OR6HDUUZFsZ6hLolnbIKEd+UjAskH4A/tmslk/8l5hbHF5Kda/RTYBjobah
-         b/Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=jqgS5hOOCnrxfxw3txYWGbPk+A9RnEI7ms619U7Wij0=;
-        b=Gy8NzzUD42TxRZtmj0Dt/VQZGC0D/SDbepHj1p6e9LHZGqiS4hS+r3Cd9JypdyYteP
-         9A/uDmBMjuxWB60mcYXxCrd/5xrVoQHXcffvIDJmSIohbcQ7uxox7AnuXdNCo1h6w3Ot
-         KQ5JhYVqe66hTGzIbwGs8xmP65RjkwLkIol7wETM4KYC3YQrRscLBQ6hth8m+/9mgkS4
-         YE12DmcOlDVNYDqp4hjCbqgO9Hmha3a2VF70GuMlcxAGsuXQvsIVyY8/4MfpOMOYFEjP
-         B0rdpmTgt+eITNrJ9LDoLqLAqQlWe3IgmLbv5nl7ylA2HeuFXHXpdn+xuG8u7G/8a27n
-         guKA==
-X-Gm-Message-State: AOAM531XH9Jxkqr9WSZ3SvPg3/welWIauAfjXAHdaMzDRap0AL0jdbeO
-        rpJZx4IXV4FIoiy/7m/wSjFlb8QVtnbimRfg86k40LK6/0g=
-X-Google-Smtp-Source: ABdhPJxarqaelTslui5sKiyGR3I3pCxPz/ELOR3Um3XyzH/wKqfcvDWv8s18Iu+FPTyJbXZeFMQnT0p5vzVNP9gqkk8=
-X-Received: by 2002:a65:564c:: with SMTP id m12mr18657193pgs.298.1621934380529;
- Tue, 25 May 2021 02:19:40 -0700 (PDT)
+        Tue, 25 May 2021 05:30:55 -0400
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Fq7l82j3xz6T0s3;
+        Tue, 25 May 2021 17:17:24 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 25 May 2021 11:29:23 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Tue, 25 May 2021 11:29:23 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Bighead Wang <ex200208049@gmail.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: EVM gives no_label error due to security_kernfs_init_security
+Thread-Topic: EVM gives no_label error due to security_kernfs_init_security
+Thread-Index: AQHXUUc0KpPQcZofIk6SqEiHrt07sarz7awg
+Date:   Tue, 25 May 2021 09:29:23 +0000
+Message-ID: <b348c8687d5b40919d8625f4c096d4e2@huawei.com>
+References: <CADG95vuR1=dvgsf6bvNCRNsvDEJ=YwFgfvqJWRkNvD=rrYUaYA@mail.gmail.com>
+In-Reply-To: <CADG95vuR1=dvgsf6bvNCRNsvDEJ=YwFgfvqJWRkNvD=rrYUaYA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-From:   Bighead Wang <ex200208049@gmail.com>
-Date:   Tue, 25 May 2021 17:19:29 +0800
-Message-ID: <CADG95vuR1=dvgsf6bvNCRNsvDEJ=YwFgfvqJWRkNvD=rrYUaYA@mail.gmail.com>
-Subject: EVM gives no_label error due to security_kernfs_init_security
-To:     zohar@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-In cgroup filesystem, security_kernfs_init_security() will initialize
-the security data for newly created kernfs node after kernel 5.2.,
-however, new EVM xattr value is not initialized, and the no_label
-error appears when evm_verify_hmac() is triggered.
-
-
-The detailed description:
-When system boots up with IMA/EVM and SELinux enabled, we get:
-" May 25 14:13:01 raspberrypi audit[1212]: INTEGRITY_METADATA pid=1212
-uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t
-op=appraise_metadata cause=no_label comm="(systemd)"
-name="cgroup.procs" dev="cgroup2" ino=1360 res=0 errno=0 "
-
-The root cause is that our customized SELinux file_contexts file does
-not contain the line "/sys/fs/cgroup/.*     <<none>>".
-When systemd relabels directories under /sys/fs/cgroup/ during
-booting, it will set SELinux label inside the iattr member of kernfs
-node, and then security_kernfs_init_security() will initialize the
-security data at the time new kernfs node created.
-After systemd executes something to trigger evm_verify_hmac(), we get
-this no_label error.
-
-In evm_verify_hmac(), if there is no EVM xattr value, it will check
-any other xattr values protected by EVM exist or not.
-In this situation, there is no EVM xattr value (got from the iattr
-member of kernfs node in cgroup filesystem), but SELinux label (also
-got from the iattr member of kernfs node instead of from inode)
-exists.
-To sum up, the error seems to me is EVM mechanism doesn't initialize
-EVM xattr value in kernfs node.
-
-The environment:
-/proc/version: Linux version 5.13.0-rc3-v7l+ (bighead@52-0453463-02)
-(arm-linux-gnueabi-gcc (GCC) 9.1.0, GNU ld (GNU Binutils) 2.32) #1 SMP
-Tue May 25 12:33:01 CST 2021
-/proc/sys/kernel/tainted: 0
-Operating System: Raspbian GNU/Linux 10 (buster)
-Architecture: armv7l
-systemd version: systemd 241 (241) +PAM +AUDIT +SELINUX +IMA +APPARMOR
-+SMACK +SYSVINIT +UTMP +LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4
-+SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 +IDN -PCRE2
-default-hierarchy=hybrid
-IMA/EVM kernel parameter: ima_policy=appraise_tcb ima_appraise=fix
-SELinux kernel parameter: security=selinux selinux=1 (permissive mode)
-
-How to reproduce the error in Raspbian:
-1. Prepare an environment which SELinux and IMA/EVM are enabled and
-boot up with kernel parameters: security=selinux selinux=1
-ima_policy=appraise_tcb ima_appraise=fix evm=fix
-2. Remove the line "/sys/fs/cgroup/.*     <<none>>" in file_contexts
-file, and fully relabel all system with SELinux official reference
-policy
-3. Walk through all regular files and generate ima/evm hash:
-/usr/bin/find / -type f -uid 0 -exec sh -c "< '{}'" \;
-4. Reboot with kernel parameters: security=selinux selinux=1
-ima_policy=appraise_tcb ima_appraise=fix
-5. After boot up, you will get this EVM no_label error message
-
-Reproduce the error directly:
-1. Prepare an environment which SELinux and IMA/EVM are enabled and
-boot up with kernel parameters: security=selinux selinux=1
-ima_policy=appraise_tcb ima_appraise=fix evm=fix
-2. Fully relabel all system with SELinux official reference policy
-3. Walk through all regular files and generate ima/evm hash:
-/usr/bin/find / -type f -uid 0 -exec sh -c "< '{}'" \;
-4. Reboot with kernel parameters: security=selinux selinux=1
-ima_policy=appraise_tcb ima_appraise=fix
-5. sudo setfattr -n security.selinux -v system_u:object_r:cgroup_t
-/sys/fs/cgroup/unified
-6. sudo mkdir /sys/fs/cgroup/unified/testevm
-7. sudo chmod +x /sys/fs/cgroup/unified/testevm/cgroup.procs: you will
-get this EVM error message
-
-Reference:
-Kernel config: https://140.96.154.7:5001/sharing/9cPNowmhK
-Journal log: https://140.96.154.7:5001/sharing/sRISz6IPt
-Patch for security_kernfs_init_security() :
-https://lore.kernel.org/selinux/20190130114150.27807-1-omosnace@redhat.com/
-
--- 
-Best Regards,
-Hank Wang
+PiBGcm9tOiBCaWdoZWFkIFdhbmcgW21haWx0bzpleDIwMDIwODA0OUBnbWFpbC5jb21dDQo+IFNl
+bnQ6IFR1ZXNkYXksIE1heSAyNSwgMjAyMSAxMToxOSBBTQ0KPiBJbiBjZ3JvdXAgZmlsZXN5c3Rl
+bSwgc2VjdXJpdHlfa2VybmZzX2luaXRfc2VjdXJpdHkoKSB3aWxsIGluaXRpYWxpemUNCj4gdGhl
+IHNlY3VyaXR5IGRhdGEgZm9yIG5ld2x5IGNyZWF0ZWQga2VybmZzIG5vZGUgYWZ0ZXIga2VybmVs
+IDUuMi4sDQo+IGhvd2V2ZXIsIG5ldyBFVk0geGF0dHIgdmFsdWUgaXMgbm90IGluaXRpYWxpemVk
+LCBhbmQgdGhlIG5vX2xhYmVsDQo+IGVycm9yIGFwcGVhcnMgd2hlbiBldm1fdmVyaWZ5X2htYWMo
+KSBpcyB0cmlnZ2VyZWQuDQo+IA0KPiANCj4gVGhlIGRldGFpbGVkIGRlc2NyaXB0aW9uOg0KPiBX
+aGVuIHN5c3RlbSBib290cyB1cCB3aXRoIElNQS9FVk0gYW5kIFNFTGludXggZW5hYmxlZCwgd2Ug
+Z2V0Og0KPiAiIE1heSAyNSAxNDoxMzowMSByYXNwYmVycnlwaSBhdWRpdFsxMjEyXTogSU5URUdS
+SVRZX01FVEFEQVRBIHBpZD0xMjEyDQo+IHVpZD0wIGF1aWQ9NDI5NDk2NzI5NSBzZXM9NDI5NDk2
+NzI5NSBzdWJqPXN5c3RlbV91OnN5c3RlbV9yOmluaXRfdA0KPiBvcD1hcHByYWlzZV9tZXRhZGF0
+YSBjYXVzZT1ub19sYWJlbCBjb21tPSIoc3lzdGVtZCkiDQo+IG5hbWU9ImNncm91cC5wcm9jcyIg
+ZGV2PSJjZ3JvdXAyIiBpbm89MTM2MCByZXM9MCBlcnJubz0wICINCj4gDQo+IFRoZSByb290IGNh
+dXNlIGlzIHRoYXQgb3VyIGN1c3RvbWl6ZWQgU0VMaW51eCBmaWxlX2NvbnRleHRzIGZpbGUgZG9l
+cw0KPiBub3QgY29udGFpbiB0aGUgbGluZSAiL3N5cy9mcy9jZ3JvdXAvLiogICAgIDw8bm9uZT4+
+Ii4NCj4gV2hlbiBzeXN0ZW1kIHJlbGFiZWxzIGRpcmVjdG9yaWVzIHVuZGVyIC9zeXMvZnMvY2dy
+b3VwLyBkdXJpbmcNCj4gYm9vdGluZywgaXQgd2lsbCBzZXQgU0VMaW51eCBsYWJlbCBpbnNpZGUg
+dGhlIGlhdHRyIG1lbWJlciBvZiBrZXJuZnMNCj4gbm9kZSwgYW5kIHRoZW4gc2VjdXJpdHlfa2Vy
+bmZzX2luaXRfc2VjdXJpdHkoKSB3aWxsIGluaXRpYWxpemUgdGhlDQo+IHNlY3VyaXR5IGRhdGEg
+YXQgdGhlIHRpbWUgbmV3IGtlcm5mcyBub2RlIGNyZWF0ZWQuDQo+IEFmdGVyIHN5c3RlbWQgZXhl
+Y3V0ZXMgc29tZXRoaW5nIHRvIHRyaWdnZXIgZXZtX3ZlcmlmeV9obWFjKCksIHdlIGdldA0KPiB0
+aGlzIG5vX2xhYmVsIGVycm9yLg0KPiANCj4gSW4gZXZtX3ZlcmlmeV9obWFjKCksIGlmIHRoZXJl
+IGlzIG5vIEVWTSB4YXR0ciB2YWx1ZSwgaXQgd2lsbCBjaGVjaw0KPiBhbnkgb3RoZXIgeGF0dHIg
+dmFsdWVzIHByb3RlY3RlZCBieSBFVk0gZXhpc3Qgb3Igbm90Lg0KPiBJbiB0aGlzIHNpdHVhdGlv
+biwgdGhlcmUgaXMgbm8gRVZNIHhhdHRyIHZhbHVlIChnb3QgZnJvbSB0aGUgaWF0dHINCj4gbWVt
+YmVyIG9mIGtlcm5mcyBub2RlIGluIGNncm91cCBmaWxlc3lzdGVtKSwgYnV0IFNFTGludXggbGFi
+ZWwgKGFsc28NCj4gZ290IGZyb20gdGhlIGlhdHRyIG1lbWJlciBvZiBrZXJuZnMgbm9kZSBpbnN0
+ZWFkIG9mIGZyb20gaW5vZGUpDQo+IGV4aXN0cy4NCj4gVG8gc3VtIHVwLCB0aGUgZXJyb3Igc2Vl
+bXMgdG8gbWUgaXMgRVZNIG1lY2hhbmlzbSBkb2Vzbid0IGluaXRpYWxpemUNCj4gRVZNIHhhdHRy
+IHZhbHVlIGluIGtlcm5mcyBub2RlLg0KDQpIaSBIYW5rDQoNCnRoaXMgcGF0Y2ggc2hvdWxkIGhl
+bHA6DQoNCmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3pv
+aGFyL2xpbnV4LWludGVncml0eS5naXQvY29tbWl0Lz9oPW5leHQtaW50ZWdyaXR5LXRlc3Rpbmcm
+aWQ9NGE4MDRiOGE0NTcyZGZjODFjM2E1OTcwOWQ0OWFlMjA2ZTQzNzBiYQ0KDQpDb3VsZCB5b3Ug
+cGxlYXNlIHRyeSBpdD8NCg0KVGhhbmtzDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xPR0lF
+UyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5n
+LCBMaSBKaWFuLCBTaGkgWWFubGkNCg0KPiBUaGUgZW52aXJvbm1lbnQ6DQo+IC9wcm9jL3ZlcnNp
+b246IExpbnV4IHZlcnNpb24gNS4xMy4wLXJjMy12N2wrIChiaWdoZWFkQDUyLTA0NTM0NjMtMDIp
+DQo+IChhcm0tbGludXgtZ251ZWFiaS1nY2MgKEdDQykgOS4xLjAsIEdOVSBsZCAoR05VIEJpbnV0
+aWxzKSAyLjMyKSAjMSBTTVANCj4gVHVlIE1heSAyNSAxMjozMzowMSBDU1QgMjAyMQ0KPiAvcHJv
+Yy9zeXMva2VybmVsL3RhaW50ZWQ6IDANCj4gT3BlcmF0aW5nIFN5c3RlbTogUmFzcGJpYW4gR05V
+L0xpbnV4IDEwIChidXN0ZXIpDQo+IEFyY2hpdGVjdHVyZTogYXJtdjdsDQo+IHN5c3RlbWQgdmVy
+c2lvbjogc3lzdGVtZCAyNDEgKDI0MSkgK1BBTSArQVVESVQgK1NFTElOVVggK0lNQQ0KPiArQVBQ
+QVJNT1INCj4gK1NNQUNLICtTWVNWSU5JVCArVVRNUCArTElCQ1JZUFRTRVRVUCArR0NSWVBUICtH
+TlVUTFMgK0FDTCArWFoNCj4gK0xaNA0KPiArU0VDQ09NUCArQkxLSUQgK0VMRlVUSUxTICtLTU9E
+IC1JRE4yICtJRE4gLVBDUkUyDQo+IGRlZmF1bHQtaGllcmFyY2h5PWh5YnJpZA0KPiBJTUEvRVZN
+IGtlcm5lbCBwYXJhbWV0ZXI6IGltYV9wb2xpY3k9YXBwcmFpc2VfdGNiIGltYV9hcHByYWlzZT1m
+aXgNCj4gU0VMaW51eCBrZXJuZWwgcGFyYW1ldGVyOiBzZWN1cml0eT1zZWxpbnV4IHNlbGludXg9
+MSAocGVybWlzc2l2ZSBtb2RlKQ0KPiANCj4gSG93IHRvIHJlcHJvZHVjZSB0aGUgZXJyb3IgaW4g
+UmFzcGJpYW46DQo+IDEuIFByZXBhcmUgYW4gZW52aXJvbm1lbnQgd2hpY2ggU0VMaW51eCBhbmQg
+SU1BL0VWTSBhcmUgZW5hYmxlZCBhbmQNCj4gYm9vdCB1cCB3aXRoIGtlcm5lbCBwYXJhbWV0ZXJz
+OiBzZWN1cml0eT1zZWxpbnV4IHNlbGludXg9MQ0KPiBpbWFfcG9saWN5PWFwcHJhaXNlX3RjYiBp
+bWFfYXBwcmFpc2U9Zml4IGV2bT1maXgNCj4gMi4gUmVtb3ZlIHRoZSBsaW5lICIvc3lzL2ZzL2Nn
+cm91cC8uKiAgICAgPDxub25lPj4iIGluIGZpbGVfY29udGV4dHMNCj4gZmlsZSwgYW5kIGZ1bGx5
+IHJlbGFiZWwgYWxsIHN5c3RlbSB3aXRoIFNFTGludXggb2ZmaWNpYWwgcmVmZXJlbmNlDQo+IHBv
+bGljeQ0KPiAzLiBXYWxrIHRocm91Z2ggYWxsIHJlZ3VsYXIgZmlsZXMgYW5kIGdlbmVyYXRlIGlt
+YS9ldm0gaGFzaDoNCj4gL3Vzci9iaW4vZmluZCAvIC10eXBlIGYgLXVpZCAwIC1leGVjIHNoIC1j
+ICI8ICd7fSciIFw7DQo+IDQuIFJlYm9vdCB3aXRoIGtlcm5lbCBwYXJhbWV0ZXJzOiBzZWN1cml0
+eT1zZWxpbnV4IHNlbGludXg9MQ0KPiBpbWFfcG9saWN5PWFwcHJhaXNlX3RjYiBpbWFfYXBwcmFp
+c2U9Zml4DQo+IDUuIEFmdGVyIGJvb3QgdXAsIHlvdSB3aWxsIGdldCB0aGlzIEVWTSBub19sYWJl
+bCBlcnJvciBtZXNzYWdlDQo+IA0KPiBSZXByb2R1Y2UgdGhlIGVycm9yIGRpcmVjdGx5Og0KPiAx
+LiBQcmVwYXJlIGFuIGVudmlyb25tZW50IHdoaWNoIFNFTGludXggYW5kIElNQS9FVk0gYXJlIGVu
+YWJsZWQgYW5kDQo+IGJvb3QgdXAgd2l0aCBrZXJuZWwgcGFyYW1ldGVyczogc2VjdXJpdHk9c2Vs
+aW51eCBzZWxpbnV4PTENCj4gaW1hX3BvbGljeT1hcHByYWlzZV90Y2IgaW1hX2FwcHJhaXNlPWZp
+eCBldm09Zml4DQo+IDIuIEZ1bGx5IHJlbGFiZWwgYWxsIHN5c3RlbSB3aXRoIFNFTGludXggb2Zm
+aWNpYWwgcmVmZXJlbmNlIHBvbGljeQ0KPiAzLiBXYWxrIHRocm91Z2ggYWxsIHJlZ3VsYXIgZmls
+ZXMgYW5kIGdlbmVyYXRlIGltYS9ldm0gaGFzaDoNCj4gL3Vzci9iaW4vZmluZCAvIC10eXBlIGYg
+LXVpZCAwIC1leGVjIHNoIC1jICI8ICd7fSciIFw7DQo+IDQuIFJlYm9vdCB3aXRoIGtlcm5lbCBw
+YXJhbWV0ZXJzOiBzZWN1cml0eT1zZWxpbnV4IHNlbGludXg9MQ0KPiBpbWFfcG9saWN5PWFwcHJh
+aXNlX3RjYiBpbWFfYXBwcmFpc2U9Zml4DQo+IDUuIHN1ZG8gc2V0ZmF0dHIgLW4gc2VjdXJpdHku
+c2VsaW51eCAtdiBzeXN0ZW1fdTpvYmplY3RfcjpjZ3JvdXBfdA0KPiAvc3lzL2ZzL2Nncm91cC91
+bmlmaWVkDQo+IDYuIHN1ZG8gbWtkaXIgL3N5cy9mcy9jZ3JvdXAvdW5pZmllZC90ZXN0ZXZtDQo+
+IDcuIHN1ZG8gY2htb2QgK3ggL3N5cy9mcy9jZ3JvdXAvdW5pZmllZC90ZXN0ZXZtL2Nncm91cC5w
+cm9jczogeW91IHdpbGwNCj4gZ2V0IHRoaXMgRVZNIGVycm9yIG1lc3NhZ2UNCj4gDQo+IFJlZmVy
+ZW5jZToNCj4gS2VybmVsIGNvbmZpZzogaHR0cHM6Ly8xNDAuOTYuMTU0Ljc6NTAwMS9zaGFyaW5n
+LzljUE5vd21oSw0KPiBKb3VybmFsIGxvZzogaHR0cHM6Ly8xNDAuOTYuMTU0Ljc6NTAwMS9zaGFy
+aW5nL3NSSVN6NklQdA0KPiBQYXRjaCBmb3Igc2VjdXJpdHlfa2VybmZzX2luaXRfc2VjdXJpdHko
+KSA6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3NlbGludXgvMjAxOTAxMzAxMTQxNTAuMjc4
+MDctMS0NCj4gb21vc25hY2VAcmVkaGF0LmNvbS8NCj4gDQo+IC0tDQo+IEJlc3QgUmVnYXJkcywN
+Cj4gSGFuayBXYW5nDQo=
