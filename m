@@ -2,157 +2,173 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F5439285B
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 May 2021 09:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F97639302C
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 May 2021 15:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbhE0HT7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 May 2021 03:19:59 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3094 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbhE0HT7 (ORCPT
+        id S236641AbhE0N4B (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 May 2021 09:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236616AbhE0N4B (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 May 2021 03:19:59 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FrJsb3FD6z6Q3WZ;
-        Thu, 27 May 2021 15:12:03 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 27 May 2021 09:18:24 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Thu, 27 May 2021 09:18:24 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Bighead Wang <ex200208049@gmail.com>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: EVM gives no_label error due to security_kernfs_init_security
-Thread-Topic: EVM gives no_label error due to security_kernfs_init_security
-Thread-Index: AQHXUUc0KpPQcZofIk6SqEiHrt07sarz7awggAKnr4CAAFchAA==
-Date:   Thu, 27 May 2021 07:18:24 +0000
-Message-ID: <70eb9e60133c4210bd5e67ec2658b971@huawei.com>
-References: <CADG95vuR1=dvgsf6bvNCRNsvDEJ=YwFgfvqJWRkNvD=rrYUaYA@mail.gmail.com>
- <b348c8687d5b40919d8625f4c096d4e2@huawei.com>
- <CADG95vuTMGQY1HbPuHhD9kTEegUBFf75Nen2jPRZq4Xp_51wZw@mail.gmail.com>
-In-Reply-To: <CADG95vuTMGQY1HbPuHhD9kTEegUBFf75Nen2jPRZq4Xp_51wZw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+        Thu, 27 May 2021 09:56:01 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7641EC061574;
+        Thu, 27 May 2021 06:54:28 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id g18so645194pfr.2;
+        Thu, 27 May 2021 06:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=LR6D5K3uAI+YCRmgnJRZEuK6Dn6CALSy8IeIHX8nBa4=;
+        b=poOiwLvNz1oNH1mN/IOC18I0gbkaEmZaSw/u6eJjwlJapDkW6gCbF/hyXclcjnDRmS
+         qNK1UbXZDXY+Mh8ep9U7fc4WbL9qDwIJdv0R+tnGydlnq5717DARIcGkjgv2nU8+QJXy
+         i8DCw0TszjvCWro0La1Ngw+vlBT5UjUIekzXDeUeOEfcgc09DKJEjGBcOof16YyBE00T
+         c7y5KuJPsrcP3Rcn3qXM5cSgjuzt1MUSEvalsukUjVx4snQnwR/2VcSOvXJgR790yS8Y
+         4UNYRLoacbKFsrwLJOeXuLfE8vmNBAGyY2oPbbPdzPmOf4sdXp3WjmHYY7+jQG8HVDBw
+         KbGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=LR6D5K3uAI+YCRmgnJRZEuK6Dn6CALSy8IeIHX8nBa4=;
+        b=E6qnEOUzaFHMZwAZ0shPAf/fqNcfFxNuZfH/ISJcjRgH5huQeUWHGXNBka1gjqEtc2
+         fV1m2cvG2hP8UHKLtgc9ZBVah8/UT58IhIsCfk3vqkx9AAL1ks0dqarMWgkinBOgE06G
+         8PeJjqtrLz8SM7cSEGk6L1/LoH3cvCAYt1PPeZ9Nyt1H1cH3ydF/cLh/JSeCyTBNjhkO
+         qf3z5ZToUXmpPgDTN0YhUL0O09wg/VpWBFwv1VLkLUttrBS6QC49vBkKmsBtLiKou1Fa
+         +dIJ6GESDBZdUrVkTWJsBCHQoxrQl7kOuagr/iCf2nXTAL/PiUFjPoG9T81EtgRGoLDr
+         kNjg==
+X-Gm-Message-State: AOAM531oFebpAVA9R9To6ZP5u7oGTyH+6QYP4+15maSF/5pugS6IOA9X
+        mzh+7f5FluWSt2N5EGVXtum5umv8PvE=
+X-Google-Smtp-Source: ABdhPJxRRHW6DmbG3lK+mQLgTmkdC5dMuTV8JWB+J6eaJpTzYoRkr4gJTz29JnqgpbIk1BMYlzjzpQ==
+X-Received: by 2002:a05:6a00:1992:b029:2df:b93b:49a with SMTP id d18-20020a056a001992b02902dfb93b049amr3439399pfl.11.1622123667633;
+        Thu, 27 May 2021 06:54:27 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.39])
+        by smtp.gmail.com with ESMTPSA id 10sm2163387pgl.39.2021.05.27.06.54.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 27 May 2021 06:54:27 -0700 (PDT)
+From:   Hongbo Li <herbert.tencent@gmail.com>
+To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        herbert@gondor.apana.org.au, ebiggers@kernel.org,
+        dhowells@redhat.com, jarkko@kernel.org,
+        tianjia.zhang@linux.alibaba.com, herberthbli@tencent.com
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: [PATCH v2 0/7] crypto: add eddsa support for x509
+Date:   Thu, 27 May 2021 21:53:28 +0800
+Message-Id: <1622123615-15517-1-git-send-email-herbert.tencent@gmail.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBCaWdoZWFkIFdhbmcgW21haWx0bzpleDIwMDIwODA0OUBnbWFpbC5jb21dDQo+IFNl
-bnQ6IFRodXJzZGF5LCBNYXkgMjcsIDIwMjEgNjowMCBBTQ0KPiBIaSBSb2JlcnRvDQo+IFRoYW5r
-IHlvdSBmb3IgdGhlIHJlcGx5DQo+IA0KPiBCZWZvcmUgSSB0cnkgdGhpcyBwYXRjaCwgSSBhbSBz
-b3JyeSB0aGF0IEkgZm9yZ2V0IHRvIG1lbnRpb24gdGhhdCBJDQo+IGhhdmUgbG9hZGVkIHRoZSBF
-Vk0gSE1BQyBrZXkgaW4gaW5pdHJhbWZzIGR1cmluZyBzeXN0ZW0gYm9vdHVwLg0KPiBUaGVyZWZv
-cmUsIEkgZG9uJ3QgdGhpbmsgdGhpcyBwYXRjaCB3aWxsIGZpeCB0aGlzIGlzc3VlIGFsdGhvdWdo
-IEkNCj4gd2lsbCBnaXZlIGl0IGEgdHJ5LiBCZWNhdXNlIHdoZW4gaXNzdWUgaGFwcGVucywgdGhl
-IGtleSBoYXMgYWxyZWFkeQ0KPiBsb2FkZWQuDQoNCkhpIEhhbmsNCg0KY29ycmVjdCwgbXkgcGF0
-Y2ggd291bGRuJ3Qgc29sdmUgdGhlIGlzc3VlLiBJdCBpZ25vcmVzIHRoZQ0KSU5URUdSSVRZX05P
-TEFCRUwgZXJyb3Igb25seSBpZiB0aGUgSE1BQyBrZXkgaXMgbm90IGxvYWRlZC4NCg0KVG8gc29s
-dmUgdGhpcywgaXQgaXMgbmVjZXNzYXJ5IHRvIGltcGxlbWVudCBhIG1vcmUgY29tcGxpY2F0ZWQN
-CnNvbHV0aW9uIHdoZXJlIHRoZSByZXN1bHQgb2YgdGhlIHZlcmlmaWNhdGlvbiBpcyBwYXNzZWQg
-ZnJvbSB0aGUNCnByZSBob29rIHRvIHRoZSBwb3N0IGhvb2ssIHNvIHRoYXQgYWxsb3dpbmcgYW4g
-b3BlcmF0aW9uIGZyb20NCnRoZSBwcmUgaG9vayB3b3VsZG4ndCBjYXVzZSB0aGUgSE1BQyB0byBi
-ZSBjYWxjdWxhdGVkIG9uDQp1bnN1Y2Nlc3NmdWxseSB2ZXJpZmllZCBtZXRhZGF0YSAodGhlIHBv
-c3QgaG9vayB3b3VsZCBzdG9wDQppZiB0aGUgcmVzdWx0IG9mIHRoZSB2ZXJpZmljYXRpb24gZnJv
-bSB0aGUgcHJlIGhvb2sgaXMgbm90DQpJTlRFR1JJVFlfUEFTUykuDQoNClJvYmVydG8NCg0KSFVB
-V0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERp
-cmVjdG9yOiBMaSBQZW5nLCBMaSBKaWFuLCBTaGkgWWFubGkNCg0KPiBUaGFua3MgIQ0KPiANCj4g
-Um9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPiDmlrwgMjAyMeW5tDXmnIgy
-NeaXpSDpgLHkuowg5LiL5Y2IDQo+IDU6Mjnlr6vpgZPvvJoNCj4gPg0KPiA+ID4gRnJvbTogQmln
-aGVhZCBXYW5nIFttYWlsdG86ZXgyMDAyMDgwNDlAZ21haWwuY29tXQ0KPiA+ID4gU2VudDogVHVl
-c2RheSwgTWF5IDI1LCAyMDIxIDExOjE5IEFNDQo+ID4gPiBJbiBjZ3JvdXAgZmlsZXN5c3RlbSwg
-c2VjdXJpdHlfa2VybmZzX2luaXRfc2VjdXJpdHkoKSB3aWxsIGluaXRpYWxpemUNCj4gPiA+IHRo
-ZSBzZWN1cml0eSBkYXRhIGZvciBuZXdseSBjcmVhdGVkIGtlcm5mcyBub2RlIGFmdGVyIGtlcm5l
-bCA1LjIuLA0KPiA+ID4gaG93ZXZlciwgbmV3IEVWTSB4YXR0ciB2YWx1ZSBpcyBub3QgaW5pdGlh
-bGl6ZWQsIGFuZCB0aGUgbm9fbGFiZWwNCj4gPiA+IGVycm9yIGFwcGVhcnMgd2hlbiBldm1fdmVy
-aWZ5X2htYWMoKSBpcyB0cmlnZ2VyZWQuDQo+ID4gPg0KPiA+ID4NCj4gPiA+IFRoZSBkZXRhaWxl
-ZCBkZXNjcmlwdGlvbjoNCj4gPiA+IFdoZW4gc3lzdGVtIGJvb3RzIHVwIHdpdGggSU1BL0VWTSBh
-bmQgU0VMaW51eCBlbmFibGVkLCB3ZSBnZXQ6DQo+ID4gPiAiIE1heSAyNSAxNDoxMzowMSByYXNw
-YmVycnlwaSBhdWRpdFsxMjEyXTogSU5URUdSSVRZX01FVEFEQVRBDQo+IHBpZD0xMjEyDQo+ID4g
-PiB1aWQ9MCBhdWlkPTQyOTQ5NjcyOTUgc2VzPTQyOTQ5NjcyOTUgc3Viaj1zeXN0ZW1fdTpzeXN0
-ZW1fcjppbml0X3QNCj4gPiA+IG9wPWFwcHJhaXNlX21ldGFkYXRhIGNhdXNlPW5vX2xhYmVsIGNv
-bW09IihzeXN0ZW1kKSINCj4gPiA+IG5hbWU9ImNncm91cC5wcm9jcyIgZGV2PSJjZ3JvdXAyIiBp
-bm89MTM2MCByZXM9MCBlcnJubz0wICINCj4gPiA+DQo+ID4gPiBUaGUgcm9vdCBjYXVzZSBpcyB0
-aGF0IG91ciBjdXN0b21pemVkIFNFTGludXggZmlsZV9jb250ZXh0cyBmaWxlIGRvZXMNCj4gPiA+
-IG5vdCBjb250YWluIHRoZSBsaW5lICIvc3lzL2ZzL2Nncm91cC8uKiAgICAgPDxub25lPj4iLg0K
-PiA+ID4gV2hlbiBzeXN0ZW1kIHJlbGFiZWxzIGRpcmVjdG9yaWVzIHVuZGVyIC9zeXMvZnMvY2dy
-b3VwLyBkdXJpbmcNCj4gPiA+IGJvb3RpbmcsIGl0IHdpbGwgc2V0IFNFTGludXggbGFiZWwgaW5z
-aWRlIHRoZSBpYXR0ciBtZW1iZXIgb2Yga2VybmZzDQo+ID4gPiBub2RlLCBhbmQgdGhlbiBzZWN1
-cml0eV9rZXJuZnNfaW5pdF9zZWN1cml0eSgpIHdpbGwgaW5pdGlhbGl6ZSB0aGUNCj4gPiA+IHNl
-Y3VyaXR5IGRhdGEgYXQgdGhlIHRpbWUgbmV3IGtlcm5mcyBub2RlIGNyZWF0ZWQuDQo+ID4gPiBB
-ZnRlciBzeXN0ZW1kIGV4ZWN1dGVzIHNvbWV0aGluZyB0byB0cmlnZ2VyIGV2bV92ZXJpZnlfaG1h
-YygpLCB3ZSBnZXQNCj4gPiA+IHRoaXMgbm9fbGFiZWwgZXJyb3IuDQo+ID4gPg0KPiA+ID4gSW4g
-ZXZtX3ZlcmlmeV9obWFjKCksIGlmIHRoZXJlIGlzIG5vIEVWTSB4YXR0ciB2YWx1ZSwgaXQgd2ls
-bCBjaGVjaw0KPiA+ID4gYW55IG90aGVyIHhhdHRyIHZhbHVlcyBwcm90ZWN0ZWQgYnkgRVZNIGV4
-aXN0IG9yIG5vdC4NCj4gPiA+IEluIHRoaXMgc2l0dWF0aW9uLCB0aGVyZSBpcyBubyBFVk0geGF0
-dHIgdmFsdWUgKGdvdCBmcm9tIHRoZSBpYXR0cg0KPiA+ID4gbWVtYmVyIG9mIGtlcm5mcyBub2Rl
-IGluIGNncm91cCBmaWxlc3lzdGVtKSwgYnV0IFNFTGludXggbGFiZWwgKGFsc28NCj4gPiA+IGdv
-dCBmcm9tIHRoZSBpYXR0ciBtZW1iZXIgb2Yga2VybmZzIG5vZGUgaW5zdGVhZCBvZiBmcm9tIGlu
-b2RlKQ0KPiA+ID4gZXhpc3RzLg0KPiA+ID4gVG8gc3VtIHVwLCB0aGUgZXJyb3Igc2VlbXMgdG8g
-bWUgaXMgRVZNIG1lY2hhbmlzbSBkb2Vzbid0IGluaXRpYWxpemUNCj4gPiA+IEVWTSB4YXR0ciB2
-YWx1ZSBpbiBrZXJuZnMgbm9kZS4NCj4gPg0KPiA+IEhpIEhhbmsNCj4gPg0KPiA+IHRoaXMgcGF0
-Y2ggc2hvdWxkIGhlbHA6DQo+ID4NCj4gPiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20v
-bGludXgva2VybmVsL2dpdC96b2hhci9saW51eC0NCj4gaW50ZWdyaXR5LmdpdC9jb21taXQvP2g9
-bmV4dC1pbnRlZ3JpdHktDQo+IHRlc3RpbmcmaWQ9NGE4MDRiOGE0NTcyZGZjODFjM2E1OTcwOWQ0
-OWFlMjA2ZTQzNzBiYQ0KPiA+DQo+ID4gQ291bGQgeW91IHBsZWFzZSB0cnkgaXQ/DQo+ID4NCj4g
-PiBUaGFua3MNCj4gPg0KPiA+IFJvYmVydG8NCj4gPg0KPiA+IEhVQVdFSSBURUNITk9MT0dJRVMg
-RHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQo+ID4gTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBl
-bmcsIExpIEppYW4sIFNoaSBZYW5saQ0KPiA+DQo+ID4gPiBUaGUgZW52aXJvbm1lbnQ6DQo+ID4g
-PiAvcHJvYy92ZXJzaW9uOiBMaW51eCB2ZXJzaW9uIDUuMTMuMC1yYzMtdjdsKyAoYmlnaGVhZEA1
-Mi0wNDUzNDYzLTAyKQ0KPiA+ID4gKGFybS1saW51eC1nbnVlYWJpLWdjYyAoR0NDKSA5LjEuMCwg
-R05VIGxkIChHTlUgQmludXRpbHMpIDIuMzIpICMxIFNNUA0KPiA+ID4gVHVlIE1heSAyNSAxMjoz
-MzowMSBDU1QgMjAyMQ0KPiA+ID4gL3Byb2Mvc3lzL2tlcm5lbC90YWludGVkOiAwDQo+ID4gPiBP
-cGVyYXRpbmcgU3lzdGVtOiBSYXNwYmlhbiBHTlUvTGludXggMTAgKGJ1c3RlcikNCj4gPiA+IEFy
-Y2hpdGVjdHVyZTogYXJtdjdsDQo+ID4gPiBzeXN0ZW1kIHZlcnNpb246IHN5c3RlbWQgMjQxICgy
-NDEpICtQQU0gK0FVRElUICtTRUxJTlVYICtJTUENCj4gPiA+ICtBUFBBUk1PUg0KPiA+ID4gK1NN
-QUNLICtTWVNWSU5JVCArVVRNUCArTElCQ1JZUFRTRVRVUCArR0NSWVBUICtHTlVUTFMgK0FDTCAr
-WFoNCj4gPiA+ICtMWjQNCj4gPiA+ICtTRUNDT01QICtCTEtJRCArRUxGVVRJTFMgK0tNT0QgLUlE
-TjIgK0lETiAtUENSRTINCj4gPiA+IGRlZmF1bHQtaGllcmFyY2h5PWh5YnJpZA0KPiA+ID4gSU1B
-L0VWTSBrZXJuZWwgcGFyYW1ldGVyOiBpbWFfcG9saWN5PWFwcHJhaXNlX3RjYiBpbWFfYXBwcmFp
-c2U9Zml4DQo+ID4gPiBTRUxpbnV4IGtlcm5lbCBwYXJhbWV0ZXI6IHNlY3VyaXR5PXNlbGludXgg
-c2VsaW51eD0xIChwZXJtaXNzaXZlIG1vZGUpDQo+ID4gPg0KPiA+ID4gSG93IHRvIHJlcHJvZHVj
-ZSB0aGUgZXJyb3IgaW4gUmFzcGJpYW46DQo+ID4gPiAxLiBQcmVwYXJlIGFuIGVudmlyb25tZW50
-IHdoaWNoIFNFTGludXggYW5kIElNQS9FVk0gYXJlIGVuYWJsZWQgYW5kDQo+ID4gPiBib290IHVw
-IHdpdGgga2VybmVsIHBhcmFtZXRlcnM6IHNlY3VyaXR5PXNlbGludXggc2VsaW51eD0xDQo+ID4g
-PiBpbWFfcG9saWN5PWFwcHJhaXNlX3RjYiBpbWFfYXBwcmFpc2U9Zml4IGV2bT1maXgNCj4gPiA+
-IDIuIFJlbW92ZSB0aGUgbGluZSAiL3N5cy9mcy9jZ3JvdXAvLiogICAgIDw8bm9uZT4+IiBpbiBm
-aWxlX2NvbnRleHRzDQo+ID4gPiBmaWxlLCBhbmQgZnVsbHkgcmVsYWJlbCBhbGwgc3lzdGVtIHdp
-dGggU0VMaW51eCBvZmZpY2lhbCByZWZlcmVuY2UNCj4gPiA+IHBvbGljeQ0KPiA+ID4gMy4gV2Fs
-ayB0aHJvdWdoIGFsbCByZWd1bGFyIGZpbGVzIGFuZCBnZW5lcmF0ZSBpbWEvZXZtIGhhc2g6DQo+
-ID4gPiAvdXNyL2Jpbi9maW5kIC8gLXR5cGUgZiAtdWlkIDAgLWV4ZWMgc2ggLWMgIjwgJ3t9JyIg
-XDsNCj4gPiA+IDQuIFJlYm9vdCB3aXRoIGtlcm5lbCBwYXJhbWV0ZXJzOiBzZWN1cml0eT1zZWxp
-bnV4IHNlbGludXg9MQ0KPiA+ID4gaW1hX3BvbGljeT1hcHByYWlzZV90Y2IgaW1hX2FwcHJhaXNl
-PWZpeA0KPiA+ID4gNS4gQWZ0ZXIgYm9vdCB1cCwgeW91IHdpbGwgZ2V0IHRoaXMgRVZNIG5vX2xh
-YmVsIGVycm9yIG1lc3NhZ2UNCj4gPiA+DQo+ID4gPiBSZXByb2R1Y2UgdGhlIGVycm9yIGRpcmVj
-dGx5Og0KPiA+ID4gMS4gUHJlcGFyZSBhbiBlbnZpcm9ubWVudCB3aGljaCBTRUxpbnV4IGFuZCBJ
-TUEvRVZNIGFyZSBlbmFibGVkIGFuZA0KPiA+ID4gYm9vdCB1cCB3aXRoIGtlcm5lbCBwYXJhbWV0
-ZXJzOiBzZWN1cml0eT1zZWxpbnV4IHNlbGludXg9MQ0KPiA+ID4gaW1hX3BvbGljeT1hcHByYWlz
-ZV90Y2IgaW1hX2FwcHJhaXNlPWZpeCBldm09Zml4DQo+ID4gPiAyLiBGdWxseSByZWxhYmVsIGFs
-bCBzeXN0ZW0gd2l0aCBTRUxpbnV4IG9mZmljaWFsIHJlZmVyZW5jZSBwb2xpY3kNCj4gPiA+IDMu
-IFdhbGsgdGhyb3VnaCBhbGwgcmVndWxhciBmaWxlcyBhbmQgZ2VuZXJhdGUgaW1hL2V2bSBoYXNo
-Og0KPiA+ID4gL3Vzci9iaW4vZmluZCAvIC10eXBlIGYgLXVpZCAwIC1leGVjIHNoIC1jICI8ICd7
-fSciIFw7DQo+ID4gPiA0LiBSZWJvb3Qgd2l0aCBrZXJuZWwgcGFyYW1ldGVyczogc2VjdXJpdHk9
-c2VsaW51eCBzZWxpbnV4PTENCj4gPiA+IGltYV9wb2xpY3k9YXBwcmFpc2VfdGNiIGltYV9hcHBy
-YWlzZT1maXgNCj4gPiA+IDUuIHN1ZG8gc2V0ZmF0dHIgLW4gc2VjdXJpdHkuc2VsaW51eCAtdiBz
-eXN0ZW1fdTpvYmplY3RfcjpjZ3JvdXBfdA0KPiA+ID4gL3N5cy9mcy9jZ3JvdXAvdW5pZmllZA0K
-PiA+ID4gNi4gc3VkbyBta2RpciAvc3lzL2ZzL2Nncm91cC91bmlmaWVkL3Rlc3Rldm0NCj4gPiA+
-IDcuIHN1ZG8gY2htb2QgK3ggL3N5cy9mcy9jZ3JvdXAvdW5pZmllZC90ZXN0ZXZtL2Nncm91cC5w
-cm9jczogeW91IHdpbGwNCj4gPiA+IGdldCB0aGlzIEVWTSBlcnJvciBtZXNzYWdlDQo+ID4gPg0K
-PiA+ID4gUmVmZXJlbmNlOg0KPiA+ID4gS2VybmVsIGNvbmZpZzogaHR0cHM6Ly8xNDAuOTYuMTU0
-Ljc6NTAwMS9zaGFyaW5nLzljUE5vd21oSw0KPiA+ID4gSm91cm5hbCBsb2c6IGh0dHBzOi8vMTQw
-Ljk2LjE1NC43OjUwMDEvc2hhcmluZy9zUklTejZJUHQNCj4gPiA+IFBhdGNoIGZvciBzZWN1cml0
-eV9rZXJuZnNfaW5pdF9zZWN1cml0eSgpIDoNCj4gPiA+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
-L3NlbGludXgvMjAxOTAxMzAxMTQxNTAuMjc4MDctMS0NCj4gPiA+IG9tb3NuYWNlQHJlZGhhdC5j
-b20vDQo+ID4gPg0KPiA+ID4gLS0NCj4gPiA+IEJlc3QgUmVnYXJkcywNCj4gPiA+IEhhbmsgV2Fu
-Zw0KPiANCj4gDQo+IA0KPiAtLQ0KPiBCZXN0IFJlZ2FyZHMsDQo+IOeOi+emuei7kiBIYW5rDQo=
+From: Hongbo Li <herberthbli@tencent.com>
+
+This series of patches add support for x509 cert signed by eddsa,
+which is described in RFC8032 [1], currently ed25519 only.
+
+Curve25519 is an elliptic curve used for key agreement(ECDH).
+It is a Montgomery curve.
+
+Edwards25519 is a twisted Edwards curve and birationally equivalent
+to Curve25519, the birational maps are described in rfc7748 section 4.1.[2]
+Ed25519 is a Digital Signature Algorithm over Edwards25519.
+
+The kernel's curve25519 code is used for ECDH, such as set_secret(),
+generate_public_key() and compute_shared_secret(), these are useless
+for eddsa, and can not be reused, eddsa do the verification on the
+given public key and signature.
+
+According to RFC8032 section 4 [3], there're two variants: PureEdDSA and
+HashEdDSA. These patches support PureEdDSA which named Ed25519.
+
+Patch1 fix a memory leak bug in sm2.
+
+Patch2 fix a mpi_resize bug, this bug will cause eddsa verification failed.
+
+Patch3 exports some mpi common functions.
+
+Patch4 makes x509 layer support eddsa.
+
+Patch5 moves some common code in sm2 to separate files. These code is also
+       used by eddsa.
+
+Patch6 is the implementation of eddsa verification according to RFC8032
+       section 5.1.7 [4].
+
+Patch7 adds test vector for eddsa.
+
+Test by the following script:
+
+keyctl newring test @u
+
+while :; do
+    certfile="cert.der"
+
+    openssl req \
+            -x509 \
+            -newkey ED25519 \
+            -keyout key.pem \
+            -days 365 \
+            -subj '/CN=test' \
+            -nodes \
+            -outform der \
+            -out ${certfile} 2>/dev/null
+
+    exp=0
+    id=$(keyctl padd asymmetric testkey %keyring:test < "${certfile}")
+    rc=$?
+    if [ $rc -ne $exp ]; then
+        case "$exp" in
+            0) echo "Error: Could not load ed25519 certificate $certfile!";
+        esac
+        exit 1
+    else
+        case "$rc" in
+            0) printf "load ed25519 cert keyid: %-10s\n" $id;
+        esac
+    fi
+done
+
+Best Regards
+Hongbo
+
+[1] https://datatracker.ietf.org/doc/html/rfc8032
+[2] https://datatracker.ietf.org/doc/html/rfc7748#section-4.1
+[3] https://datatracker.ietf.org/doc/html/rfc8032#section-4
+[4] https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.7
+
+v1->v2:
+  -fix the warning "warning: no previous prototype"
+   reported-by: kernel test robot <lkp@intel.com>
+  -add more comments about these patches
+
+Hongbo Li (7):
+  crypto: fix a memory leak in sm2
+  lib/mpi: use kcalloc in mpi_resize
+  lib/mpi: export some common function
+  x509: add support for eddsa
+  crypto: move common code in sm2 to ec_mpi.c and ec_mpi.h
+  crypto: ed25519 cert verification
+  crypto: add eddsa test vector
+
+ crypto/Kconfig                            |  15 +
+ crypto/Makefile                           |   4 +
+ crypto/asymmetric_keys/public_key.c       |  73 ++++-
+ crypto/asymmetric_keys/x509_cert_parser.c |  14 +-
+ crypto/asymmetric_keys/x509_public_key.c  |   4 +-
+ crypto/ec_mpi.c                           |  82 ++++++
+ crypto/ec_mpi.h                           |  37 +++
+ crypto/eddsa.c                            | 326 ++++++++++++++++++++++
+ crypto/sm2.c                              | 104 +------
+ crypto/testmgr.c                          |   6 +
+ crypto/testmgr.h                          |  32 +++
+ include/linux/oid_registry.h              |   1 +
+ lib/mpi/mpi-add.c                         |   4 +-
+ lib/mpi/mpiutil.c                         |   2 +-
+ 14 files changed, 591 insertions(+), 113 deletions(-)
+ create mode 100644 crypto/ec_mpi.c
+ create mode 100644 crypto/ec_mpi.h
+ create mode 100644 crypto/eddsa.c
+
+-- 
+2.27.0
+
