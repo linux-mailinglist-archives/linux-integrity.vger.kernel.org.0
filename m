@@ -2,60 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52506393039
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 May 2021 15:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F102639303D
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 May 2021 15:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236695AbhE0N4U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 May 2021 09:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
+        id S236701AbhE0N4W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 May 2021 09:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236653AbhE0N4N (ORCPT
+        with ESMTP id S236678AbhE0N4P (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 May 2021 09:56:13 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BD7C061763;
-        Thu, 27 May 2021 06:54:39 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id lx17-20020a17090b4b11b029015f3b32b8dbso2450645pjb.0;
-        Thu, 27 May 2021 06:54:39 -0700 (PDT)
+        Thu, 27 May 2021 09:56:15 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EABC0613CE;
+        Thu, 27 May 2021 06:54:41 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id t21so24068plo.2;
+        Thu, 27 May 2021 06:54:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=2T7+K8oGUO1T079bIkP0Tplou2479bflLyNKtimMMrA=;
-        b=f2tKuN9iN7vY1nctTMdWbdYog8r6y2QuGDtmIgB8+0KOEvCTCybN6zHkHNUJkMO/h/
-         S7DXSrBUGCPP9IvjFkja54THd473mX3Rpvs4QrrR2LugEhTsDHfdejwtaj0LmxIehjUM
-         U4ceTebypn7ByLRgZ0vb5BeWTaHD/j1FFUXxitXJjZPhIgphGsAw5C31ZNR8hAV3Ii4d
-         1H/dPbYG53/m6EnI1Dr4FQZx1oI/EDhulpUbcuvoSEFGvkz4HqbPZwCxeM6GPsYk/3/U
-         89IINeMln6T6RpGcH0PbywegHL24thotqZoDx7vllLBGamhpLDPaqQ/xDkMXyVXLNw45
-         5PHQ==
+        bh=4n6zz9KSKw8/sugGUm2oSKx88caKtNeXkpuRKrDlH1M=;
+        b=eyjPwFuC0WY1LPpbFF1t6hkHwjFsKaI5REAE9TugeO98o7Ham+iog3Epy7Ux9QrPe4
+         k2IONP15HCDGBdsdUcXTC4IRgtTVu1HHiKDnjHhmqDLrAkdDq1GRWXeMg+bWhybh/HK8
+         X9iq0cTeGdW/lJhTkvVwAxiXC0oh0PW5XGZMwMnkP6zeads15g/IU6PepVMryK7Dl6n8
+         WloWxAjGHjAB3ZnXKQ8BdYLASz8SX69kRvj9GMxgVh1JSczafdHZl9Pz8GjKCVADDOqH
+         C0eKlJkP7+Vwo2WzouhNC9UWeOrKvJBCnrkghK68E+DvTxAZ5NCDfo2qbFe+gDtWZ1ou
+         e+Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=2T7+K8oGUO1T079bIkP0Tplou2479bflLyNKtimMMrA=;
-        b=P4tE4ULw+EVu7+eZN7/VLCXZeUScaIVxydML1pebImWa3BJXBEYfQKoUu/DmLh+GO5
-         8n/1w81aeTeI8nunIwYHBhXBEMx6uk7zlBRnDq1CwGo/xdz/tPo4ef1mElk9xJgvmiOv
-         cgJS9H3IKg1w7eBXE5cE3qfooAuK+QTN/ggHT7hHiH5s60w6dfhwsZ0qga4XQB8c1uaa
-         HrcuXc1ePWdne7qmQnYPPpBVLwZNlxohYMbojK0zTrt+2m11/TkzANa74F5J64KWzAXn
-         3ykWflJE+3gAglSPOLjFxZv7Q+KCUREU3yvYqPazsUhuarNzX5NXidX2xTuYgGx2AfMg
-         Epqw==
-X-Gm-Message-State: AOAM5302ScChAnlY57U3kz4msNIWYz14RfiixOSGCLnPMIR33GmVvX43
-        E4PYVSelwl0viN/WS9u9S1cY51P0PR8=
-X-Google-Smtp-Source: ABdhPJzPI2YwmaBgn4CNijVJcLS8ptspZ4fF3jgQ3fEEAnRHRG5LF3JDnk1CKHCmRKCtqjBFr2Cjxg==
-X-Received: by 2002:a17:902:d4c4:b029:f7:af18:2bd9 with SMTP id o4-20020a170902d4c4b02900f7af182bd9mr3337677plg.75.1622123678359;
-        Thu, 27 May 2021 06:54:38 -0700 (PDT)
+        bh=4n6zz9KSKw8/sugGUm2oSKx88caKtNeXkpuRKrDlH1M=;
+        b=oO3P0R/qOjkZVqeIF4cLi0Or+MODB8bVmQ6v+X/THAuvyBqQoyzeXNrFqhQY+aHbZH
+         PpN5G4xZ28JB+QU7vuepbqlQ/ryBWJFbpwd3OSC+enGm5qcbNxcr5OezjseHgf0eq5DY
+         r6ZD5JFBhhqD/CESq9tD2nOA6jc609Ok/3XP+dFzVn/MOQlnWiNEWlRmF5fIKtUH1Pwp
+         tWNh561ZEG5OFcfkVDcC23uyOVsPRgk1dsTd3rjJLAfk0vjo3gqifuKnN4yHCbw3Soa1
+         XFTyFlD5rp3w0mac3Ee5z6AI0N9X1xP6lgZdtYoZ8WJ3+j08VlWRqzcnptm1NDCbrLwd
+         Pp0g==
+X-Gm-Message-State: AOAM532HywZyiNMEswHC1+EZQWo/1T4FQwzvUJe12l05heA0rPD9GtZk
+        vg39uhGajgTcWusbNGX6pnlb3h/LtSw=
+X-Google-Smtp-Source: ABdhPJz/8Z/X5254r+Cza4yavOkHrT9GiI9pX20ue+cLJ+z2zMPsA7MLrgANhRwVEicE7TGhpckjFQ==
+X-Received: by 2002:a17:90a:28a6:: with SMTP id f35mr3307959pjd.1.1622123681023;
+        Thu, 27 May 2021 06:54:41 -0700 (PDT)
 Received: from localhost.localdomain ([203.205.141.39])
-        by smtp.gmail.com with ESMTPSA id 10sm2163387pgl.39.2021.05.27.06.54.35
+        by smtp.gmail.com with ESMTPSA id 10sm2163387pgl.39.2021.05.27.06.54.38
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 May 2021 06:54:38 -0700 (PDT)
+        Thu, 27 May 2021 06:54:40 -0700 (PDT)
 From:   Hongbo Li <herbert.tencent@gmail.com>
 To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
         herbert@gondor.apana.org.au, ebiggers@kernel.org,
         dhowells@redhat.com, jarkko@kernel.org,
         tianjia.zhang@linux.alibaba.com, herberthbli@tencent.com
 Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: [PATCH v2 4/7] x509: add support for eddsa
-Date:   Thu, 27 May 2021 21:53:32 +0800
-Message-Id: <1622123615-15517-5-git-send-email-herbert.tencent@gmail.com>
+Subject: [PATCH v2 5/7] crypto: move common code in sm2 to ec_mpi.c and ec_mpi.h
+Date:   Thu, 27 May 2021 21:53:33 +0800
+Message-Id: <1622123615-15517-6-git-send-email-herbert.tencent@gmail.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1622123615-15517-1-git-send-email-herbert.tencent@gmail.com>
 References: <1622123615-15517-1-git-send-email-herbert.tencent@gmail.com>
@@ -65,199 +65,325 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Hongbo Li <herberthbli@tencent.com>
 
-This patch make x509 support eddsa(currently ed25519). According to
-RFC8032 section 5.1.7[1], the digest is not on the original message,
-but on a special formated message string:
-	SHA512(dom2(F, C) || R || A || PH(M))
-
-[1]: https://tools.ietf.org/html/rfc8032#section-5.1.7
+Some structs and functions in sm2 are common codes, and could be
+used by the following eddsa patch. So move them to common files:
+ec_mpi.c and ec_mpi.h.
 
 Signed-off-by: Hongbo Li <herberthbli@tencent.com>
 ---
- crypto/asymmetric_keys/public_key.c       | 73 ++++++++++++++++++++---
- crypto/asymmetric_keys/x509_cert_parser.c | 14 ++++-
- crypto/asymmetric_keys/x509_public_key.c  |  4 +-
- include/linux/oid_registry.h              |  1 +
- 4 files changed, 82 insertions(+), 10 deletions(-)
+ crypto/Kconfig  |  4 ++
+ crypto/Makefile |  1 +
+ crypto/ec_mpi.c | 82 +++++++++++++++++++++++++++++++++++++++++
+ crypto/ec_mpi.h | 37 +++++++++++++++++++
+ crypto/sm2.c    | 98 ++-----------------------------------------------
+ 5 files changed, 127 insertions(+), 95 deletions(-)
+ create mode 100644 crypto/ec_mpi.c
+ create mode 100644 crypto/ec_mpi.h
 
-diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-index 4fefb219bfdc..c1236a8fb38e 100644
---- a/crypto/asymmetric_keys/public_key.c
-+++ b/crypto/asymmetric_keys/public_key.c
-@@ -251,8 +251,8 @@ static int software_key_eds_op(struct kernel_pkey_params *params,
- }
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index 4a0d1876aadb..75ae7d3f6f92 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -265,6 +265,9 @@ config CRYPTO_ECRDSA
+ 	  standard algorithms (called GOST algorithms). Only signature verification
+ 	  is implemented.
  
- #if IS_REACHABLE(CONFIG_CRYPTO_SM2)
--static int cert_sig_digest_update(const struct public_key_signature *sig,
--				  struct crypto_akcipher *tfm_pkey)
-+static int sm2_cert_sig_digest_update(const struct public_key_signature *sig,
-+				      struct crypto_akcipher *tfm_pkey)
- {
- 	struct crypto_shash *tfm;
- 	struct shash_desc *desc;
-@@ -297,7 +297,7 @@ static int cert_sig_digest_update(const struct public_key_signature *sig,
- 	return ret;
- }
- #else
--static inline int cert_sig_digest_update(
-+static inline int sm2_cert_sig_digest_update(
- 	const struct public_key_signature *sig,
- 	struct crypto_akcipher *tfm_pkey)
- {
-@@ -305,6 +305,58 @@ static inline int cert_sig_digest_update(
- }
- #endif /* ! IS_REACHABLE(CONFIG_CRYPTO_SM2) */
++config CRYPTO_EC_MPI
++	tristate
++
+ config CRYPTO_SM2
+ 	tristate "SM2 algorithm"
+ 	select CRYPTO_SM3
+@@ -272,6 +275,7 @@ config CRYPTO_SM2
+ 	select CRYPTO_MANAGER
+ 	select MPILIB
+ 	select ASN1
++	select CRYPTO_EC_MPI
+ 	help
+ 	  Generic implementation of the SM2 public key algorithm. It was
+ 	  published by State Encryption Management Bureau, China.
+diff --git a/crypto/Makefile b/crypto/Makefile
+index 10526d4559b8..8afb39359776 100644
+--- a/crypto/Makefile
++++ b/crypto/Makefile
+@@ -177,6 +177,7 @@ obj-$(CONFIG_CRYPTO_OFB) += ofb.o
+ obj-$(CONFIG_CRYPTO_ECC) += ecc.o
+ obj-$(CONFIG_CRYPTO_ESSIV) += essiv.o
+ obj-$(CONFIG_CRYPTO_CURVE25519) += curve25519-generic.o
++obj-$(CONFIG_CRYPTO_EC_MPI) += ec_mpi.o
  
-+static int eddsa_cert_sig_digest_update(const struct public_key *pub,
-+					const struct public_key_signature *sig)
+ ecdh_generic-y += ecdh.o
+ ecdh_generic-y += ecdh_helper.o
+diff --git a/crypto/ec_mpi.c b/crypto/ec_mpi.c
+new file mode 100644
+index 000000000000..a537e6fc713f
+--- /dev/null
++++ b/crypto/ec_mpi.c
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * EC MPI common functions.
++ *
++ * Copyright (c) 2020, Alibaba Group.
++ * Authors: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
++ */
++
++#include <linux/module.h>
++#include <linux/mpi.h>
++#include "ec_mpi.h"
++
++int ec_mpi_ctx_init(struct mpi_ec_ctx *ec, const struct ecc_domain_parms *ecp)
 +{
-+	struct crypto_shash *tfm = NULL;
-+	struct shash_desc *desc = NULL;
-+	int key_size, ret = 0;
++	MPI p, a, b;
++	MPI x, y;
++	int rc = -EINVAL;
 +
-+	if (strcmp(pub->pkey_algo, "eddsa-25519"))
-+		return -ENOPKG;
++	p = mpi_scanval(ecp->p);
++	a = mpi_scanval(ecp->a);
++	b = mpi_scanval(ecp->b);
++	if (!p || !a || !b)
++		goto free_p;
 +
-+	tfm = crypto_alloc_shash(sig->hash_algo, 0, 0);
-+	if (IS_ERR(tfm))
-+		return PTR_ERR(tfm);
++	x = mpi_scanval(ecp->g_x);
++	y = mpi_scanval(ecp->g_y);
++	if (!x || !y)
++		goto free;
 +
-+	desc = kzalloc(sizeof(*desc) + crypto_shash_descsize(tfm), GFP_KERNEL);
-+	if (!desc) {
-+		ret = -ENOMEM;
++	rc = -ENOMEM;
++
++	ec->Q = mpi_point_new(0);
++	if (!ec->Q)
++		goto free;
++
++	/* mpi_ec_setup_elliptic_curve */
++	ec->G = mpi_point_new(0);
++	if (!ec->G) {
++		mpi_point_release(ec->Q);
 +		goto free;
 +	}
 +
-+	desc->tfm = tfm;
++	mpi_set(ec->G->x, x);
++	mpi_set(ec->G->y, y);
++	mpi_set_ui(ec->G->z, 1);
 +
-+	/* RFC8032 section 5.1.7
-+	 * step 2. SHA512(dom2(F, C) || R || A || PH(M))
-+	 */
-+	key_size = 32;
-+	if (sig->s_size != key_size * 2 ||
-+	    pub->keylen != key_size) {
-+		ret = -EINVAL;
++	rc = -EINVAL;
++	ec->n = mpi_scanval(ecp->n);
++	if (!ec->n) {
++		mpi_point_release(ec->Q);
++		mpi_point_release(ec->G);
 +		goto free;
 +	}
 +
-+	ret = crypto_shash_init(desc);
-+	if (ret < 0)
-+		goto free;
++	ec->h = ecp->h;
++	ec->name = ecp->desc;
++	mpi_ec_init(ec, ecp->model, ecp->dialect, 0, p, a, b);
 +
-+	ret = crypto_shash_update(desc, sig->s, key_size);
-+	if (ret < 0)
-+		goto free;
-+
-+	ret = crypto_shash_update(desc, pub->key, key_size);
-+	if (ret < 0)
-+		goto free;
-+
-+	ret = crypto_shash_finup(desc, sig->data, sig->data_size, sig->digest);
++	rc = 0;
 +
 +free:
-+	kfree(desc);
-+	crypto_free_shash(tfm);
-+	return ret;
-+}
++	mpi_free(x);
++	mpi_free(y);
++free_p:
++	mpi_free(p);
++	mpi_free(a);
++	mpi_free(b);
 +
- /*
-  * Verify a signature using a public key.
++	return rc;
++}
++EXPORT_SYMBOL(ec_mpi_ctx_init);
++
++void ec_mpi_ctx_deinit(struct mpi_ec_ctx *ec)
++{
++	mpi_ec_deinit(ec);
++
++	memset(ec, 0, sizeof(*ec));
++}
++EXPORT_SYMBOL(ec_mpi_ctx_deinit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Tianjia Zhang <tianjia.zhang@linux.alibaba.com>");
+diff --git a/crypto/ec_mpi.h b/crypto/ec_mpi.h
+new file mode 100644
+index 000000000000..e1f6d3aaeef9
+--- /dev/null
++++ b/crypto/ec_mpi.h
+@@ -0,0 +1,37 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * EC MPI common structs.
++ *
++ * Copyright (c) 2020, Alibaba Group.
++ * Authors: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
++ */
++
++#include <linux/mpi.h>
++
++struct ecc_domain_parms {
++	const char *desc;           /* Description of the curve.  */
++	unsigned int nbits;         /* Number of bits.  */
++	unsigned int fips:1; /* True if this is a FIPS140-2 approved curve */
++
++	/* The model describing this curve.  This is mainly used to select
++	 * the group equation.
++	 */
++	enum gcry_mpi_ec_models model;
++
++	/* The actual ECC dialect used.  This is used for curve specific
++	 * optimizations and to select encodings etc.
++	 */
++	enum ecc_dialects dialect;
++
++	const char *p;              /* The prime defining the field.  */
++	const char *a, *b;          /* The coefficients.  For Twisted Edwards
++				     * Curves b is used for d.  For Montgomery
++				     * Curves (a,b) has ((A-2)/4,B^-1).
++				     */
++	const char *n;              /* The order of the base point.  */
++	const char *g_x, *g_y;      /* Base point.  */
++	unsigned int h;             /* Cofactor.  */
++};
++
++int ec_mpi_ctx_init(struct mpi_ec_ctx *ec, const struct ecc_domain_parms *ecp);
++void ec_mpi_ctx_deinit(struct mpi_ec_ctx *ec);
+diff --git a/crypto/sm2.c b/crypto/sm2.c
+index db8a4a265669..ea1676ba1a9a 100644
+--- a/crypto/sm2.c
++++ b/crypto/sm2.c
+@@ -9,42 +9,17 @@
   */
-@@ -358,11 +410,16 @@ int public_key_verify_signature(const struct public_key *pkey,
- 	if (ret)
- 		goto error_free_key;
  
--	if (sig->pkey_algo && strcmp(sig->pkey_algo, "sm2") == 0 &&
--	    sig->data_size) {
--		ret = cert_sig_digest_update(sig, tfm);
--		if (ret)
--			goto error_free_key;
-+	if (sig->pkey_algo && sig->data_size) {
-+		if (strcmp(sig->pkey_algo, "sm2") == 0) {
-+			ret = sm2_cert_sig_digest_update(sig, tfm);
-+			if (ret)
-+				goto error_free_key;
-+		} else if (strcmp(sig->pkey_algo, "eddsa") == 0) {
-+			ret = eddsa_cert_sig_digest_update(pkey, sig);
-+			if (ret)
-+				goto error_free_key;
-+		}
- 	}
+ #include <linux/module.h>
+-#include <linux/mpi.h>
+ #include <crypto/internal/akcipher.h>
+ #include <crypto/akcipher.h>
+ #include <crypto/hash.h>
+ #include <crypto/sm3_base.h>
+ #include <crypto/rng.h>
+ #include <crypto/sm2.h>
++#include "ec_mpi.h"
+ #include "sm2signature.asn1.h"
  
- 	sg_init_table(src_sg, 2);
-diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-index 6d003096b5bc..3f60c57d8d76 100644
---- a/crypto/asymmetric_keys/x509_cert_parser.c
-+++ b/crypto/asymmetric_keys/x509_cert_parser.c
-@@ -258,6 +258,9 @@ int x509_note_pkey_algo(void *context, size_t hdrlen,
- 	case OID_SM2_with_SM3:
- 		ctx->cert->sig->hash_algo = "sm3";
- 		goto sm2;
-+	case OID_ed25519:
-+		ctx->cert->sig->hash_algo = "sha512";
-+		goto eddsa;
- 	}
+ #define MPI_NBYTES(m)   ((mpi_get_nbits(m) + 7) / 8)
  
- rsa_pkcs1:
-@@ -280,6 +283,11 @@ int x509_note_pkey_algo(void *context, size_t hdrlen,
- 	ctx->cert->sig->encoding = "x962";
- 	ctx->algo_oid = ctx->last_oid;
- 	return 0;
-+eddsa:
-+	ctx->cert->sig->pkey_algo = "eddsa";
-+	ctx->cert->sig->encoding = "raw";
-+	ctx->algo_oid = ctx->last_oid;
-+	return 0;
+-struct ecc_domain_parms {
+-	const char *desc;           /* Description of the curve.  */
+-	unsigned int nbits;         /* Number of bits.  */
+-	unsigned int fips:1; /* True if this is a FIPS140-2 approved curve */
+-
+-	/* The model describing this curve.  This is mainly used to select
+-	 * the group equation.
+-	 */
+-	enum gcry_mpi_ec_models model;
+-
+-	/* The actual ECC dialect used.  This is used for curve specific
+-	 * optimizations and to select encodings etc.
+-	 */
+-	enum ecc_dialects dialect;
+-
+-	const char *p;              /* The prime defining the field.  */
+-	const char *a, *b;          /* The coefficients.  For Twisted Edwards
+-				     * Curves b is used for d.  For Montgomery
+-				     * Curves (a,b) has ((A-2)/4,B^-1).
+-				     */
+-	const char *n;              /* The order of the base point.  */
+-	const char *g_x, *g_y;      /* Base point.  */
+-	unsigned int h;             /* Cofactor.  */
+-};
+-
+ static const struct ecc_domain_parms sm2_ecp = {
+ 	.desc = "sm2p256v1",
+ 	.nbits = 256,
+@@ -60,73 +35,6 @@ static const struct ecc_domain_parms sm2_ecp = {
+ 	.h = 1
+ };
+ 
+-static int sm2_ec_ctx_init(struct mpi_ec_ctx *ec)
+-{
+-	const struct ecc_domain_parms *ecp = &sm2_ecp;
+-	MPI p, a, b;
+-	MPI x, y;
+-	int rc = -EINVAL;
+-
+-	p = mpi_scanval(ecp->p);
+-	a = mpi_scanval(ecp->a);
+-	b = mpi_scanval(ecp->b);
+-	if (!p || !a || !b)
+-		goto free_p;
+-
+-	x = mpi_scanval(ecp->g_x);
+-	y = mpi_scanval(ecp->g_y);
+-	if (!x || !y)
+-		goto free;
+-
+-	rc = -ENOMEM;
+-
+-	ec->Q = mpi_point_new(0);
+-	if (!ec->Q)
+-		goto free;
+-
+-	/* mpi_ec_setup_elliptic_curve */
+-	ec->G = mpi_point_new(0);
+-	if (!ec->G) {
+-		mpi_point_release(ec->Q);
+-		goto free;
+-	}
+-
+-	mpi_set(ec->G->x, x);
+-	mpi_set(ec->G->y, y);
+-	mpi_set_ui(ec->G->z, 1);
+-
+-	rc = -EINVAL;
+-	ec->n = mpi_scanval(ecp->n);
+-	if (!ec->n) {
+-		mpi_point_release(ec->Q);
+-		mpi_point_release(ec->G);
+-		goto free;
+-	}
+-
+-	ec->h = ecp->h;
+-	ec->name = ecp->desc;
+-	mpi_ec_init(ec, ecp->model, ecp->dialect, 0, p, a, b);
+-
+-	rc = 0;
+-
+-free:
+-	mpi_free(x);
+-	mpi_free(y);
+-free_p:
+-	mpi_free(p);
+-	mpi_free(a);
+-	mpi_free(b);
+-
+-	return rc;
+-}
+-
+-static void sm2_ec_ctx_deinit(struct mpi_ec_ctx *ec)
+-{
+-	mpi_ec_deinit(ec);
+-
+-	memset(ec, 0, sizeof(*ec));
+-}
+-
+ /* RESULT must have been initialized and is set on success to the
+  * point given by VALUE.
+  */
+@@ -416,14 +324,14 @@ static int sm2_init_tfm(struct crypto_akcipher *tfm)
+ {
+ 	struct mpi_ec_ctx *ec = akcipher_tfm_ctx(tfm);
+ 
+-	return sm2_ec_ctx_init(ec);
++	return ec_mpi_ctx_init(ec, &sm2_ecp);
  }
  
- /*
-@@ -302,7 +310,8 @@ int x509_note_signature(void *context, size_t hdrlen,
- 	if (strcmp(ctx->cert->sig->pkey_algo, "rsa") == 0 ||
- 	    strcmp(ctx->cert->sig->pkey_algo, "ecrdsa") == 0 ||
- 	    strcmp(ctx->cert->sig->pkey_algo, "sm2") == 0 ||
--	    strcmp(ctx->cert->sig->pkey_algo, "ecdsa") == 0) {
-+	    strcmp(ctx->cert->sig->pkey_algo, "ecdsa") == 0 ||
-+	    strcmp(ctx->cert->sig->pkey_algo, "eddsa") == 0) {
- 		/* Discard the BIT STRING metadata */
- 		if (vlen < 1 || *(const u8 *)value != 0)
- 			return -EBADMSG;
-@@ -517,6 +526,9 @@ int x509_extract_key_data(void *context, size_t hdrlen,
- 			return -ENOPKG;
- 		}
- 		break;
-+	case OID_ed25519:
-+		ctx->cert->pub->pkey_algo = "eddsa-25519";
-+		break;
- 	default:
- 		return -ENOPKG;
- 	}
-diff --git a/crypto/asymmetric_keys/x509_public_key.c b/crypto/asymmetric_keys/x509_public_key.c
-index 3d45161b271a..a8fd3682695f 100644
---- a/crypto/asymmetric_keys/x509_public_key.c
-+++ b/crypto/asymmetric_keys/x509_public_key.c
-@@ -131,7 +131,9 @@ int x509_check_for_self_signed(struct x509_certificate *cert)
- 	ret = -EKEYREJECTED;
- 	if (strcmp(cert->pub->pkey_algo, cert->sig->pkey_algo) != 0 &&
- 	    (strncmp(cert->pub->pkey_algo, "ecdsa-", 6) != 0 ||
--	     strcmp(cert->sig->pkey_algo, "ecdsa") != 0))
-+	     strcmp(cert->sig->pkey_algo, "ecdsa") != 0) &&
-+	    (strncmp(cert->pub->pkey_algo, "eddsa-", 6) != 0 ||
-+	     strcmp(cert->sig->pkey_algo, "eddsa") != 0))
- 		goto out;
+ static void sm2_exit_tfm(struct crypto_akcipher *tfm)
+ {
+ 	struct mpi_ec_ctx *ec = akcipher_tfm_ctx(tfm);
  
- 	ret = public_key_verify_signature(cert->pub, cert->sig);
-diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-index cc64d9419746..d84bb867a1f9 100644
---- a/include/linux/oid_registry.h
-+++ b/include/linux/oid_registry.h
-@@ -64,6 +64,7 @@ enum OID {
+-	sm2_ec_ctx_deinit(ec);
++	ec_mpi_ctx_deinit(ec);
+ }
  
- 	OID_certAuthInfoAccess,		/* 1.3.6.1.5.5.7.1.1 */
- 	OID_sha1,			/* 1.3.14.3.2.26 */
-+	OID_ed25519,			/* 1.3.101.112 */
- 	OID_id_ansip384r1,		/* 1.3.132.0.34 */
- 	OID_sha256,			/* 2.16.840.1.101.3.4.2.1 */
- 	OID_sha384,			/* 2.16.840.1.101.3.4.2.2 */
+ static struct akcipher_alg sm2 = {
 -- 
 2.27.0
 
