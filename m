@@ -2,140 +2,311 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EB9393045
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 May 2021 15:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DB239305C
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 May 2021 16:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236678AbhE0N4d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 May 2021 09:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236696AbhE0N4U (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 May 2021 09:56:20 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AA6C06138D;
-        Thu, 27 May 2021 06:54:47 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id t21so24188plo.2;
-        Thu, 27 May 2021 06:54:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=e2Q9Fi4+Y3HDr0p6x7AzX3U4YPXNdxuFZ7l9M0bi/AI=;
-        b=qnB5RTc/6YtVrmIAgqR+Rr40dJeVcNVXbAQZVC8mLbmSj015v7oAcLdkklaMEt0zEa
-         CkL1MEkQA5E38KMEYXb8XIz/6CY2KwU+3bqo1pu06CINeMlOz4LOQ9+lF1D+IV7hcGEx
-         n9OUpJs4nr78QHJ06woTHGZahnmlfxZRAykB5wA8yJaG3GhPRRhoh56g+iN7J0szLGB6
-         slPwUQY+Wf7VzsFyPE80N7QqOfkXzI+w5o+no6YCFa5HSfQuACesMYWvq32xirStu1YX
-         iJWeLm1dT/pXwEsSZ6Twb8mMGpCftmw4ezSB30i7gvkieGakCIg23Bt83L06mdjzV5sk
-         cbNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=e2Q9Fi4+Y3HDr0p6x7AzX3U4YPXNdxuFZ7l9M0bi/AI=;
-        b=f2qrdaGap/BXqZ7i2sCKmLnVC8GOlaZ3xSHWiXaBQcZqqtcVMMsMKBdHMGsVtWyLCc
-         Ua7hnrlzKwBftutRi+3jBR/ayHY1gj0Wae6jddfmrpS0r6dFzEYYjJOg4RQuLwSx/PSa
-         fVQa6UMMyJrNoOWxvXok+Ww0QtUgnBWGEiUguK/uep5BydOPp8qgk4eNKx7mCW9NWWk6
-         fK4T4IbAG3QhWu49R3h+pweQiGxqrCznrzWtyAxvJy+nxV8EoMP+OVFrxwmJN8Zp+H9o
-         3Y36CJIvKOYQIAJGOkmcfXcRVwilDcXrGczI+sTfKMdvYESfg2dOywqQpyLm6PZLTMLS
-         Bi+A==
-X-Gm-Message-State: AOAM533P6afiH0o+ARUDHGJ8du+sm2c6FYqDPUc/sHjOMfl7ukvmFA32
-        NMmW0tIfNvGrj/WQ9UxClXBBYIZaIy4=
-X-Google-Smtp-Source: ABdhPJyQUMsBrYjMTZ9of8jWYyYdJXwXhPAvB1qiqKeQreJ0Iw3GmWjgpd3Mi4dsoJyq8wiUlxPWpg==
-X-Received: by 2002:a17:90a:5309:: with SMTP id x9mr9483917pjh.111.1622123686351;
-        Thu, 27 May 2021 06:54:46 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.39])
-        by smtp.gmail.com with ESMTPSA id 10sm2163387pgl.39.2021.05.27.06.54.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 May 2021 06:54:46 -0700 (PDT)
-From:   Hongbo Li <herbert.tencent@gmail.com>
-To:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        herbert@gondor.apana.org.au, ebiggers@kernel.org,
-        dhowells@redhat.com, jarkko@kernel.org,
-        tianjia.zhang@linux.alibaba.com, herberthbli@tencent.com
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: [PATCH v2 7/7] crypto: add eddsa test vector
-Date:   Thu, 27 May 2021 21:53:35 +0800
-Message-Id: <1622123615-15517-8-git-send-email-herbert.tencent@gmail.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1622123615-15517-1-git-send-email-herbert.tencent@gmail.com>
-References: <1622123615-15517-1-git-send-email-herbert.tencent@gmail.com>
+        id S235729AbhE0OCE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 May 2021 10:02:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49474 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235576AbhE0OCB (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 27 May 2021 10:02:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 86CA7613C5;
+        Thu, 27 May 2021 14:00:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622124028;
+        bh=lSfedWmvyieJC6BY45B5z5QTVyXZITChULVOeKfzcBA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L/4JTBBoWrR87PwQ7MH4GHT6fPHaACZNBvuQBH7V2PkWg+oXAjHpqovS8Y3g06gGE
+         qGoTY9mfygOYCymKJR0e2uFZ5EBY3do+xnaTFAgJCG7ZLKCXnlfAEUv9gm4vmzVsZ8
+         KYVGQN/c9hSqYWbdZGy6QweGwDEwf0ORmL6X6ot3sHh/eOG/54CiI1QrwHlMvccBRc
+         SVFHCmbyjdmHd06TspNdLtYaGbHiAYgJL9lglnc7FH2ykg6AZfOeJfNmMdNtAztnBr
+         mK+ffa83pS27KesQNM9mGWS/ukGWxRV/3NTM0S6Q+iiDBGhvxEANLlgQo4x8fl7Rsc
+         okLA3MyQknrRg==
+Date:   Thu, 27 May 2021 17:00:25 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Subject: Re: Recent tpm_tis IRQ handling changes are causing kernel backtraces
+Message-ID: <20210527140025.vl3ply6wnn7rsygg@kernel.org>
+References: <34442b17-c8e6-9d33-831f-fcbf3a38552b@redhat.com>
+ <e4afc566-0114-c5a3-ebda-a775132e999d@redhat.com>
+ <YFEEas6kH3FUoKJe@kernel.org>
+ <8b592417-dc1d-a7f8-0e17-09b6bb1df33a@redhat.com>
+ <YJlsdgxPIm5I6Jk8@kernel.org>
+ <4f525bca-3836-7f5c-7913-e54d620473aa@redhat.com>
+ <81aa6340-f854-8f26-f599-03b116cc3c29@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <81aa6340-f854-8f26-f599-03b116cc3c29@redhat.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Hongbo Li <herberthbli@tencent.com>
+On Wed, May 26, 2021 at 09:03:26PM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 5/11/21 10:37 AM, Hans de Goede wrote:
+> > Hi,
+> > 
+> > On 5/10/21 7:25 PM, Jarkko Sakkinen wrote:
+> >> On Sat, May 08, 2021 at 11:07:43AM +0200, Hans de Goede wrote:
+> >>> Hi Jarko,
+> >>>
+> >>> On 3/16/21 8:18 PM, Jarkko Sakkinen wrote:
+> >>>> On Tue, Mar 16, 2021 at 04:34:01PM +0100, Hans de Goede wrote:
+> >>>>> Hi,
+> >>>>>
+> >>>>> On 2/11/21 2:09 PM, Hans de Goede wrote:
+> >>>>>> Hi Jerry,
+> >>>>>>
+> >>>>>> It looks like there still is an issue with the recent changes to the tpm_tis IRQ
+> >>>>>> handling. At least I think those are the cause I did not dive any deeper,
+> >>>>>> I just noticed that we (Fedora) have been receiving an aweful lot of
+> >>>>>> kernel tpm_tis_send_data backtraces with most starting with tpm_tis_probe_irq_...
+> >>>>>>
+> >>>>>> See for example:
+> >>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1912167
+> >>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1927610
+> >>>>>>
+> >>>>>> Those are just the 3 which landed in my inbox today, for much more see:
+> >>>>>> https://bugzilla.redhat.com/buglist.cgi?quicksearch=tpm_tis_send_data
+> >>>>>> (this shows 18 bugs atm).
+> >>>>>>
+> >>>>>> These were reported through the Fedora ABRT tools which automatically
+> >>>>>> collects backtraces, the bugs have links to the ABRT reports, e.g. :
+> >>>>>> https://retrace.fedoraproject.org/faf/reports/28155/
+> >>>>>> https://retrace.fedoraproject.org/faf/reports/37107/
+> >>>>>>
+> >>>>>> The 28155 report says that so far there have been 308,412 (ouch) automatic
+> >>>>>> uploads of that particular variant of these backtraces
+> >>>>>>
+> >>>>>> Note the second (37107) retrace report is about this happening
+> >>>>>> on resume, rather then on probe/tpm_tis_probe_irq_... time.
+> >>>>>>
+> >>>>>> Did your work on this work land in 5.10 ? Or could it be that the
+> >>>>>> issue is an incomplete backport to the 5.10.y stable series ?
+> >>>>>
+> >>>>> Ping ?
+> >>>>>
+> >>>>> It is raining bug-reports about this:
+> >>>>>
+> >>>>> https://bugzilla.redhat.com/buglist.cgi?quicksearch=tpm_tis_send_data
+> >>>>>
+> >>>>> Currently lists 25 bugs and that is excluding bugs which have already
+> >>>>> been marked as a duplicate.
+> >>>>>
+> >>>>> Can someone involved in the patch-series which is causing this regression
+> >>>>> please take a look at these kernel backtraces ?
+> >>>>>
+> >>>>> Regards,
+> >>>>>
+> >>>>> Hans
+> >>>>
+> >>>> I incorporated two fixes to this issue to my last PR, which were taken
+> >>>> to the mainline. What is the situation with the mainline?
+> >>>
+> >>> Thank you for your reply and sorry for being slow to respond.
+> >>>
+> >>> Is this expected to be fixed in 5.11, or when you say mainline you
+> >>> main Linus' master branch / so the fixes are in 5.12 only ?
+> >>>
+> >>> The reason I'm asking is because we just received another bugreport
+> >>> about this against 5.11.17. The bug is marked private (our tool to
+> >>> automatically file bugs for kernel backtraces does this) so let me
+> >>> just copy and paste the trace here:
+> >>>
+> >>> WARNING: CPU: 0 PID: 3060 at drivers/char/tpm/tpm_tis_core.c:205
+> >>> tpm_tis_status+0x66/0x70
+> >>>
+> >>> CPU: 0 PID: 3060 Comm: systemd-sleep Not tainted 5.11.17-200.fc33.x86_64 #1
+> >>> Hardware name: Hewlett-Packard HP ProBook 6460b/161D, BIOS 68SCE Ver. F.63
+> >>> 05/27/2016
+> >>> RIP: 0010:tpm_tis_status+0x66/0x70
+> >>> Code: 23 75 05 48 83 c4 10 c3 31 c0 80 3d 38 02 56 01 00 75 f0 48 c7 c7 94 67
+> >>> 43 96 88 44 24 07 c6 05 24 02 56 01 01 e8 4a 53 3c 00 <0f> 0b 0f b6 44 24 07 eb
+> >>> d0 90 66 66 66 66 90 41 57 41 56 41 55 41
+> >>> RSP: 0018:ffffaac581427b10 EFLAGS: 00010282
+> >>> RAX: 000000000000001b RBX: ffff9dc800b93000 RCX: ffff9dc83b418ac8
+> >>> RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff9dc83b418ac0
+> >>> RBP: ffff9dc800b93000 R08: ffffffff96a64ec0 R09: ffffaac581427ab0
+> >>> R10: 0000000000000001 R11: 000000002d2d2d2d R12: ffff9dc80667c268
+> >>> R13: ffff9dc801fd1000 R14: 0000000000000000 R15: ffffaac581427bca
+> >>> FS:  00007f8f0f32c000(0000) GS:ffff9dc83b400000(0000) knlGS:0000000000000000
+> >>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >>> CR2: 0000557044ec6c86 CR3: 0000000062e92001 CR4: 00000000000606f0
+> >>> Call Trace:
+> >>>  tpm_tis_send_data+0x2b/0x230
+> >>>  tpm_tis_send_main+0x1e/0xe0
+> >>>  tpm_transmit+0xd8/0x3d0
+> >>>  tpm_transmit_cmd+0x25/0x90
+> >>>  tpm1_do_selftest+0x88/0x130
+> >>>  ? _cond_resched+0x16/0x40
+> >>>  tpm_tis_resume+0x4d/0x120
+> >>>  ? pnpacpi_resume+0x1b/0xa0
+> >>>  ? pnp_bus_suspend+0x10/0x10
+> >>>  pnp_bus_resume+0x63/0x90
+> >>>  dpm_run_callback+0x4c/0x120
+> >>>  device_resume+0xa7/0x200
+> >>>  dpm_resume+0xce/0x2c0
+> >>>  dpm_resume_end+0xd/0x20
+> >>>  suspend_devices_and_enter+0x195/0x750
+> >>>  pm_suspend.cold+0x329/0x374
+> >>>  state_store+0x71/0xd0
+> >>>  kernfs_fop_write_iter+0x124/0x1b0
+> >>>  new_sync_write+0x108/0x180
+> >>>  vfs_write+0x1bc/0x270
+> >>>  ksys_write+0x4f/0xc0
+> >>>  do_syscall_64+0x33/0x40
+> >>>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >>> RIP: 0033:0x7f8f102ec4e7
+> >>> Code: 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64
+> >>> 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51
+> >>> c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
+> >>> RSP: 002b:00007ffe87216bf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+> >>> RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f8f102ec4e7
+> >>> RDX: 0000000000000004 RSI: 00007ffe87216ce0 RDI: 0000000000000004
+> >>> RBP: 00007ffe87216ce0 R08: 000055c485d835e0 R09: 00007f8f103830c0
+> >>> R10: 00007f8f10382fc0 R11: 0000000000000246 R12: 0000000000000004
+> >>> R13: 000055c485d7f650 R14: 0000000000000004 R15: 00007f8f103bf720
+> >>>
+> >>> Regards,
+> >>>
+> >>> Hans
+> >>
+> >> I sent a couple fixes (cc'd to you).
+> > 
+> > I've seen the fixes, thank you.
+> > 
+> > I'll probably add these as downstream patches to the Fedora 5.12 kernels for now
+> > and see if that helps.
+> 
+> I'm afraid that we are still getting tpm irq kernel-backtrace reports with
+> 5.12.6 which has the 2 fixes (AFAICT), here are 2 of them:
+> 
+> WARNING: CPU: 5 PID: 142 at drivers/char/tpm/tpm_tis_core.c:205
+> tpm_tis_status+0x66/0x70
+> Modules linked in: uinput rfcomm snd_seq_dummy snd_hrtimer xt_CHECKSUM
+> xt_MASQUERADE xt_conntrack ipt_REJECT nf_nat_tftp nf_conntrack_tftp bridge stp
+> llc ccm michael_mic nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast
+> nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4
+> nf_reject_ipv6 nft_reject nft_ct cmac nft_chain_nat ip6table_nat
+> ip6table_mangle ip6table_raw ip6table_security iptable_nat nf_nat nf_conntrack
+> nf_defrag_ipv6 nf_defrag_ipv4 iptable_mangle iptable_raw iptable_security
+> ip_set nf_tables nfnetlink ip6table_filter ip6_tables iptable_filter
+> snd_soc_skl_hda_dsp snd_soc_hdac_hdmi qrtr_mhi bnep snd_hda_codec_hdmi
+> snd_hda_codec_realtek snd_hda_codec_generic snd_soc_dmic snd_sof_pci_intel_tgl
+> snd_sof_intel_hda_common soundwire_intel soundwire_generic_allocation
+> soundwire_cadence sunrpc snd_sof_intel_hda snd_sof_pci iTCO_wdt snd_sof
+> intel_pmc_bxt iTCO_vendor_support snd_sof_xtensa_dsp snd_soc_hdac_hda
+> snd_hda_ext_core
+>  snd_soc_acpi_intel_match snd_soc_acpi snd_soc_core mei_hdcp
+> x86_pkg_temp_thermal qrtr snd_compress intel_pmt_telemetry intel_powerclamp
+> intel_rapl_msr ns snd_pcm_dmaengine intel_pmt_class ac97_bus dell_laptop
+> ath11k_pci coretemp ledtrig_audio ath11k dell_smm_hwmon kvm_intel snd_hda_intel
+> snd_intel_dspcfg snd_intel_sdw_acpi qmi_helpers kvm snd_hda_codec mac80211
+> snd_hda_core snd_hwdep snd_seq snd_seq_device irqbypass intel_cstate dell_wmi
+> intel_uncore snd_pcm dell_smbios dcdbas cfg80211 snd_timer pcspkr snd wmi_bmof
+> dell_wmi_sysman dell_wmi_descriptor i2c_i801 soundcore i2c_smbus mhi uvcvideo
+> libarc4 hci_uart videobuf2_vmalloc videobuf2_memops mei_me videobuf2_v4l2 vfat
+> mei videobuf2_common fat btqca joydev hid_sensor_als btrtl idma64 btbcm
+> hid_sensor_trigger videodev hid_sensor_iio_common processor_thermal_device
+> btintel industrialio_triggered_buffer processor_thermal_rfim kfifo_buf
+> processor_thermal_mbox mc industrialio processor_thermal_rapl bluetooth
+> thunderbolt
+>  intel_rapl_common intel_pmt intel_soc_dts_iosf ecdh_generic ucsi_acpi rfkill
+> typec_ucsi typec ecc int3403_thermal intel_hid int340x_thermal_zone
+> sparse_keymap int3400_thermal acpi_pad acpi_tad acpi_thermal_rel zram ip_tables
+> dm_crypt trusted hid_sensor_hub intel_ishtp_loader intel_ishtp_hid
+> hid_multitouch i915 i2c_algo_bit rtsx_pci_sdmmc nvme drm_kms_helper mmc_core
+> nvme_core crct10dif_pclmul crc32_pclmul crc32c_intel cec drm
+> ghash_clmulni_intel rtsx_pci serio_raw intel_ish_ipc intel_ishtp vmd
+> i2c_hid_acpi i2c_hid wmi video pinctrl_tigerlake fuse
+> CPU: 5 PID: 142 Comm: kworker/5:1 Not tainted 5.12.6-300.fc34.x86_64 #1
+> Hardware name: Dell Inc. XPS 13 9310/0MRT12, BIOS 2.2.0 04/06/2021
+> Workqueue: tpm_dev_wq tpm_dev_async_work
+> RIP: 0010:tpm_tis_status+0x66/0x70
+> Code: 23 75 05 48 83 c4 10 c3 31 c0 80 3d ca a0 55 01 00 75 f0 48 c7 c7 b4 1c
+> 44 a6 88 44 24 07 c6 05 b6 a0 55 01 01 e8 6b f3 3c 00 <0f> 0b 0f b6 44 24 07 eb
+> d0 90 0f 1f 44 00 00 41 57 41 56 41 55 41
+> RSP: 0018:ffffafc80037bd40 EFLAGS: 00010286
+> RAX: 000000000000001b RBX: ffff9c8c47cff000 RCX: 0000000000000027
+> RDX: ffff9c93af7585c8 RSI: 0000000000000001 RDI: ffff9c93af7585c0
+> RBP: ffff9c8c47cff000 R08: 0000000000000000 R09: ffffafc80037bb70
+> R10: ffffafc80037bb68 R11: ffffffffa6b45f28 R12: ffff9c8c47df5aa8
+> R13: ffff9c8c4d14e0ba R14: 0000000000000000 R15: ffffafc80037bdf2
+> FS:  0000000000000000(0000) GS:ffff9c93af740000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fadaa0bd490 CR3: 0000000170c42005 CR4: 0000000000770ee0
+> PKRU: 55555554
+> Call Trace:
+>  tpm_tis_send_data+0x2b/0x230
+>  ? tpm_tcg_read_bytes+0x30/0x50
+>  tpm_tis_send_main+0x1e/0xe0
+>  tpm_transmit+0xd6/0x3d0WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:205
+> tpm_tis_status+0x66/0x70
 
-This patch adds the test vector for ed25519.
-The test vector is from RFC8032 section 7.1 [1]
+Does the stack trace stop here for the first one?
 
-[1]https://datatracker.ietf.org/doc/html/rfc8032#section-7.1
+> Modules linked in:
+> CPU: 2 PID: 1 Comm: swapper/0 Not tainted 5.12.6-300.fc34.x86_64 #1
+> Hardware name: Dell Inc. XPS 13 9310/0GG9PT, BIOS 2.2.0 04/06/2021
+> RIP: 0010:tpm_tis_status+0x66/0x70
+> Code: 23 75 05 48 83 c4 10 c3 31 c0 80 3d ca a0 55 01 00 75 f0 48 c7 c7 b4 1c
+> 44 a6 88 44 24 07 c6 05 b6 a0 55 01 01 e8 6b f3 3c 00 <0f> 0b 0f b6 44 24 07 eb
+> d0 90 0f 1f 44 00 00 41 57 41 56 41 55 41
+> RSP: 0018:ffffad554006bae0 EFLAGS: 00010282
+> RAX: 000000000000001b RBX: ffff96bf471d5000 RCX: ffffffffa6b15ee8
+> RDX: c0000000ffffdfff RSI: 00000000ffffdfff RDI: ffffffffa752ec6c
+> RBP: ffff96bf471d5000 R08: 0000000000000000 R09: ffffad554006b910
+> R10: ffffad554006b908 R11: ffffffffa6b45f28 R12: ffff96bf472f61a8
+> R13: ffff96bf47d87000 R14: 0000000000000000 R15: ffffad554006bb92
+> FS:  0000000000000000(0000) GS:ffff96c2bf680000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ff201c82958 CR3: 0000000010a10001 CR4: 0000000000770ee0
+> PKRU: 55555554
+> Call Trace:
+>  tpm_tis_send_data+0x2b/0x230
+>  tpm_tis_send_main+0x1e/0xe0
+>  tpm_transmit+0xd6/0x3d0
+>  tpm_transmit_cmd+0x25/0x90
+>  tpm2_pcr_extend+0x1f9/0x240
+>  tpm_pcr_extend+0xa1/0xb0
+>  ima_add_template_entry+0x16e/0x220
+>  ? ima_store_template+0x3a/0xb0
+>  ? hash_setup+0xc5/0xc5
+>  ima_add_boot_aggregate+0xd4/0x13e
+>  ima_init+0x51/0x94
+>  init_ima+0x23/0xb5
+>  ? hash_setup+0xc5/0xc5
+>  do_one_initcall+0x44/0x1d0
+>  kernel_init_freeable+0x1da/0x221
+>  ? rest_init+0xb4/0xb4
+>  kernel_init+0xa/0x11c
+>  ret_from_fork+0x1f/0x30
+> 
+>  tpm_dev_transmit.constprop.0+0x47/0xa0
+>  tpm_dev_async_work+0x62/0x90
+>  process_one_work+0x1ec/0x380
+>  worker_thread+0x53/0x3e0
+>  ? process_one_work+0x380/0x380
+>  kthread+0x11b/0x140
+>  ? kthread_associate_blkcg+0xa0/0xa0
+>  ret_from_fork+0x1f/0x30
+> 
+> 
+> Regards,
+> 
+> Hans
 
-Signed-off-by: Hongbo Li <herberthbli@tencent.com>
----
- crypto/testmgr.c |  6 ++++++
- crypto/testmgr.h | 32 ++++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
+OK, this is a weird one, and *might* be something unrelated, even though
+it triggers the warning. tpm_pcr_extend() does pin the TPM chip and request
+the locality.
 
-diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-index 10c5b3b01ec4..498d1866ef77 100644
---- a/crypto/testmgr.c
-+++ b/crypto/testmgr.c
-@@ -4938,6 +4938,12 @@ static const struct alg_test_desc alg_test_descs[] = {
- 		.suite = {
- 			.akcipher = __VECS(ecrdsa_tv_template)
- 		}
-+	}, {
-+		.alg = "eddsa-25519",
-+		.test = alg_test_akcipher,
-+		.suite = {
-+			.akcipher = __VECS(eddsa_25519_tv_template)
-+		}
- 	}, {
- 		.alg = "essiv(authenc(hmac(sha256),cbc(aes)),sha256)",
- 		.test = alg_test_aead,
-diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-index 34e4a3db3991..11807a308ef9 100644
---- a/crypto/testmgr.h
-+++ b/crypto/testmgr.h
-@@ -1144,6 +1144,38 @@ static const struct akcipher_testvec ecrdsa_tv_template[] = {
- 	},
- };
- 
-+/*
-+ * EDDSA test vectors.
-+ * From RFC8032 section 7.1
-+ */
-+static const struct akcipher_testvec eddsa_25519_tv_template[] = {
-+	{
-+	.key =
-+	"\x3d\x40\x17\xc3\xe8\x43\x89\x5a\x92\xb7\x0a\xa7\x4d\x1b\x7e\xbc"
-+	"\x9c\x98\x2c\xcf\x2e\xc4\x96\x8c\xc0\xcd\x55\xf1\x2a\xf4\x66\x0c",
-+	.key_len = 32,
-+	/*
-+	 * RFC8032 section 5.1.7. m is SHA512(dom2(F, C) || R || A || PH(M))
-+	 * M is 0x72
-+	 */
-+	.m =
-+	"\xa2\x71\xdf\x0d\x2b\x0d\x03\xbd\x17\xb4\xed\x9a\x4b\x6a\xfd\xdf"
-+	"\x2e\x73\x28\x7f\xd6\x30\xf1\xa1\x37\xd8\x7c\xe8\x73\xa5\x91\xcc"
-+	"\x31\xb6\xdd\x85\x2a\x98\xb5\xdd\x12\x26\xfe\x99\x3d\x82\x28\x27"
-+	"\x8c\xeb\xa2\x1f\x80\xb8\xfc\x95\x98\x6a\x70\xd7\x1e\xdf\x3f\xaf",
-+	.m_size = 64,
-+	.c =
-+	"\x92\xa0\x09\xa9\xf0\xd4\xca\xb8\x72\x0e\x82\x0b\x5f\x64\x25\x40"
-+	"\xa2\xb2\x7b\x54\x16\x50\x3f\x8f\xb3\x76\x22\x23\xeb\xdb\x69\xda"
-+	"\x08\x5a\xc1\xe4\x3e\x15\x99\x6e\x45\x8f\x36\x13\xd0\xf1\x1d\x8c"
-+	"\x38\x7b\x2e\xae\xb4\x30\x2a\xee\xb0\x0d\x29\x16\x12\xbb\x0c\x00",
-+	.c_size = 64,
-+	.algo = OID_ed25519,
-+	.public_key_vec = true,
-+	.siggen_sigver_test = true,
-+	}
-+};
-+
- /*
-  * PKCS#1 RSA test vectors. Obtained from CAVS testing.
-  */
--- 
-2.27.0
+For the 2nd one I'd be interested about the hardware specifics.
 
+/Jarkko
