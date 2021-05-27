@@ -2,81 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A1C393342
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 May 2021 18:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4668D393389
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 May 2021 18:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbhE0QNe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 27 May 2021 12:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbhE0QNc (ORCPT
+        id S233750AbhE0QVU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 27 May 2021 12:21:20 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:52750 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232891AbhE0QVU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 27 May 2021 12:13:32 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42725C061574
-        for <linux-integrity@vger.kernel.org>; Thu, 27 May 2021 09:11:59 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id 76so1136852qkn.13
-        for <linux-integrity@vger.kernel.org>; Thu, 27 May 2021 09:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1DCYsxPcwgz6wGBXKddPfgeFqjOqmPMV5wFOCxRJ+3A=;
-        b=PngmZ1AInSHpKNoMvNBtIfyeQ/6Llk/gXeRI9Pd0xGn54rwNOD/XdwequEEpKUbM53
-         6VlYrgeQs1Wi1y9TNmxlBivIkc8Si+ODQGVBXt+Ie0XI6nBRrOqUSTLPB2U83Sk0pWju
-         4Rzy6Q6+G5uqk1pkzlP2nb9SxHeLPmPRRS2IsmZT/Yg/cCbcMzATIstA5PS9jp/YNwFb
-         kfvokaxjIB6487ZnmGgCD2xOLe54oPJmjKTpqFjrBnf6WMAhBE3kXD7F6XmsGPQlXIik
-         VmLapHyeddMc5C2ybH8Jcd/IrWAI3N8u6eOXcKxlYY1qIaFgqRT/MiFqZQmMOGuJWA9U
-         zGzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1DCYsxPcwgz6wGBXKddPfgeFqjOqmPMV5wFOCxRJ+3A=;
-        b=KWUH0n5KRffMa8xjolQfRzkMb5Xll0RwizRizySqA/paU2fRoWhgFuJfHXnsd/prRw
-         z/ALfdF3e9PWDHER1LVV6T1e/ZYrAVkVossAtk2IhS21lkhs33PjjU744LpwS9jxCe/k
-         5yyihSRiA+A/4NzVmhUSL4x9uzCBf8wj6E5Iq5V+Cf9NV+Z2RjIMQ9V/GD9VqHGt1CPP
-         8EM2LVK2PxjqJipJ5jn3p5Pvi7tswOWttYrtHOTYBwGbuOXcO/tC1Z3zFa40XIoWICs3
-         5DaYV4gdwJt6PWpLcTx76SP0EkqXtJZ5onS6xi1ekq4w9PIZCWzpTnkvDlAw9G9blsoL
-         HyCQ==
-X-Gm-Message-State: AOAM533vXtUxhpijUncfQEnPMJcPnxwVGEoBBwtqhnpUO4wPgLA2fwQv
-        6uhxTP4W1MzBBrQ1XwnhR/b+ew==
-X-Google-Smtp-Source: ABdhPJxSGGCq2RcvTVfyqdH4MeLuYORIVug/LGCAqFWth8scx61JtGxD+Zd0VUKM5Xo7RbDMK1wHOQ==
-X-Received: by 2002:a37:6645:: with SMTP id a66mr4272666qkc.314.1622131918489;
-        Thu, 27 May 2021 09:11:58 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id x9sm1587665qto.33.2021.05.27.09.11.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 May 2021 09:11:57 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1lmIc0-00Fc4q-Ni; Thu, 27 May 2021 13:11:56 -0300
-Date:   Thu, 27 May 2021 13:11:56 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Wellbrock <a.wellbrock@mailbox.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] tpm_tis_spi: add missing SPI device ID entries
-Message-ID: <20210527161156.GH1096940@ziepe.ca>
-References: <20210527152352.3835076-1-javierm@redhat.com>
+        Thu, 27 May 2021 12:21:20 -0400
+Received: from [192.168.86.31] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 87CE320B8006;
+        Thu, 27 May 2021 09:19:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 87CE320B8006
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1622132386;
+        bh=iaY2kkULryKMnFojuv9SqYYAR272Ejf87xXgilf1xvw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Fohw0RTIEfzZGNNgDiBhvAMN0CmRNfAB41R+f7e336Koqjt+wXMMPNjhGDGQzcmjH
+         n6x7HsRsbJjE0mMwXQagYkPGPhWpw+WAar9ZJlWcbqoJ5Qhlp+Mtjox5W8ekSybF7b
+         riHgvwT+iZCMDO0EUvUe73FzRFeEToeSdc9J8lbw=
+Subject: Re: [PATCH v4] IMA: support for duplicate measurement records
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     tyhicks@linux.microsoft.com, sashal@kernel.org, jmorris@namei.org,
+        nramas@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pvorel@suse.cz
+References: <20210510190939.28279-1-tusharsu@linux.microsoft.com>
+ <4b21151fc53855049c8a452339be88be2e26f53c.camel@linux.ibm.com>
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Message-ID: <5daedb73-6c42-d556-2090-25d08f536ff1@linux.microsoft.com>
+Date:   Thu, 27 May 2021 09:19:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210527152352.3835076-1-javierm@redhat.com>
+In-Reply-To: <4b21151fc53855049c8a452339be88be2e26f53c.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, May 27, 2021 at 05:23:52PM +0200, Javier Martinez Canillas wrote:
-> The SPI core always reports a "MODALIAS=spi:<foo>", even if the device was
-> registered via OF. This means that this module won't auto-load if a DT has
-> for example has a node with a compatible "infineon,slb9670" string.
+Hi Mimi,
+Sorry for the late response.
+I wanted to spend some time thinking what other scenarios I could test.
+Responses below.
 
-Really? Then why do we have of_tis_spi_match and why does spi have an
-of_match_table?
+On 2021-05-20 1:35 p.m., Mimi Zohar wrote:
+> Hi Tushar,
+> 
+> On Mon, 2021-05-10 at 12:09 -0700, Tushar Sugandhi wrote:
+>> IMA measures contents of a given file/buffer/critical-data record,
+>> and properly re-measures it on change.  However, IMA does not measure
+>> the duplicate value for a given record, since TPM extend is a very
+>> expensive operation.  For example, if the record changes from value
+>> 'v#1' to 'v#2', and then back to 'v#1', IMA will not measure and log
+>> the last change to 'v#1', since the hash of 'v#1' for that record is
+>> already present in the IMA htable.  This limits the ability of an
+>> external attestation service to accurately determine the current state
+>> of the system.  The service would incorrectly conclude that the latest
+>> value of the given record on the system is 'v#2', and act accordingly.
+>>
+>> Define and use a new Kconfig option IMA_DISABLE_HTABLE to permit
+>> duplicate records in the IMA measurement list.
+>>
+>> In addition to the duplicate measurement records described above,
+>> other duplicate file measurement records may be included in the log,
+>> when CONFIG_IMA_DISABLE_HTABLE=y.
+>> For example,
+>>      - i_version is not enabled,
+>>      - i_generation changed,
+>>      - an inode is evicted from dcache etc.
+> 
+> Missing from this list are the same file, perhaps on different
+> filesystmes, such as initramfs and real root.  These can be identified
+> by the different i_ino.  Is there anything else?
+> 
+> thanks,
+> 
+> Mimi
+> 
+Sure, I can add the 4th line to the list:
 
-Jason
+For example,
+     - i_version is not enabled,
+     - i_generation changed,
+     - an inode is evicted from dcache,
+     - same file present on different filesystems, with different i_ino
+       etc.
+
+Should I spin up v5 of this patch with the updated patch description?
+
+I was also thinking if I should cover any other scenarios, and
+soft-links/hard-links seemed like a good scenario to test - so I went
+ahead and tested it. And it looks like the patch is working as expected
+in this scenario.
+
+Here are the detailed findings:
+
+If I have a file original.txt, and create a soft-link file -
+softlink.txt,
+
+(1) only original.txt is reported in IMA log, regardless if I touch
+     original.txt or softlink.txt.
+     This is true in both cases - when allow_dup is turned on or off.
+     (i.e. with or without this patch)
+(2) duplicate entries are measured only when allow_dup is turned on.
+
+If I have a file original.txt, and create a hard-link file -
+hardlink.txt,
+(1) whichever file I touch first, either original.txt or hardlink.txt,
+     gets measured in IMA log, both when allow_dup is turned on or off.
+     (i.e. with or without this patch)
+(2) duplicate entries are measured only when allow_dup is turned on.
+
+Since the the observed behavior is identical in both cases,
+soft-links and hard-links (1), and duplicates are measured only when
+allow_dup is turned on as expected (2), I don't believe we should call
+out soft-links/hard-links in the list above. It is not a special case
+like ones mentioned in the list.
+
+Please let me know if you think otherwise.
+
+Thanks,
+Tushar
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> Reviewed-by: Petr Vorel <pvorel@suse.cz>
