@@ -2,150 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CD8393EB6
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 May 2021 10:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE9339461C
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 May 2021 18:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236344AbhE1I0u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 May 2021 04:26:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47636 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236190AbhE1I0r (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 May 2021 04:26:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9955F613E3;
-        Fri, 28 May 2021 08:25:11 +0000 (UTC)
-Date:   Fri, 28 May 2021 10:25:08 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     zohar@linux.ibm.com, mjg59@srcf.ucam.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/7] ima: Define new template fields iuid and igid
-Message-ID: <20210528082508.lqolb3r2oepf3god@wittgenstein>
-References: <20210528073812.407936-1-roberto.sassu@huawei.com>
- <20210528073812.407936-3-roberto.sassu@huawei.com>
+        id S229949AbhE1Q6d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 May 2021 12:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235453AbhE1Q6a (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 28 May 2021 12:58:30 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37A2C06174A
+        for <linux-integrity@vger.kernel.org>; Fri, 28 May 2021 09:54:44 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id j189so4741185qkf.2
+        for <linux-integrity@vger.kernel.org>; Fri, 28 May 2021 09:54:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=u5n6FAe1v4UAJsByHudl5A+mBMcdBJxk3zfDYSRF99Y=;
+        b=jFLeqpfeWkzr1ATFdlIGUWyBh2/6QQc1YtPVe8quqe7PH0ppWYHDHf75EOn0U5y1l7
+         gsaFXz/cONNT0PhJINKo85unmp4DSUrAdIKKLTuqlWuzp+NA55nHX1AUKY3ljymss1d+
+         3zXh3+ACYoq2tGsRyvszxBskNcO+LLG9LHEzzaCIJt84KvI6Y8BDLPoF6b1sfyHiGTOm
+         MmwAZR9BAWh6OQ8TCMUeg65vaDVnm8vx79y50R7mLdi8cBRYGS8pRqBnyV+cmuNtaoVZ
+         +Hbpzyl5YX3cIQFTajZlQ4K2dudgi4O9C1RSwMqFfLNUi9s4R5y8glrIR4WtSOy07JQ7
+         Es3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=u5n6FAe1v4UAJsByHudl5A+mBMcdBJxk3zfDYSRF99Y=;
+        b=p8uSLlgHJ4JQwMKq3dmoXmk9PlgxjUp32C6KwTbmf/KQQ0N1OGmU9BHUs37n4hok5S
+         UanZQRVJvAip6yLKYgzYga2egHep1dgjJ4BccVkgycs75xMY/mrHBiB2A9x4PozOqFjH
+         T0mMCtSLZslvsylY0ejWMEyElqMWRuk2eNwZs5kVuRNyUgipQFf+8uHzUWA8BJTQ7BAx
+         /stEXhoQcS7+H0SrpHK59OsMjMdog5bmuZKThRJ9MTPH9SpVNfgTPUK4NjQP921jgD6h
+         ZdN9uoPYDYD3ViuwoIPz50D5J2DZvBoKyTIlOeLIG69PXfql20EkgWkq3CgO6m2+nwGb
+         yClw==
+X-Gm-Message-State: AOAM532N5UOJ3Jju+krxVpQHnzy1QW7Xq3S10hwJ77iQJDAs0JiA9WGN
+        1JEqfD+TwrBTBX8HNizRTGRFMA==
+X-Google-Smtp-Source: ABdhPJw9y0vly2p2+Ces1zMO0fCsYFxZ7usZ/Alf/KGodiWhC9SDIqIgZS9UY/gM1syptqb7/pktJQ==
+X-Received: by 2002:a05:620a:b09:: with SMTP id t9mr4956512qkg.17.1622220884079;
+        Fri, 28 May 2021 09:54:44 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-47-55-113-94.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.113.94])
+        by smtp.gmail.com with ESMTPSA id 7sm3868806qkd.20.2021.05.28.09.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 May 2021 09:54:43 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1lmfkw-00G0fm-On; Fri, 28 May 2021 13:54:42 -0300
+Date:   Fri, 28 May 2021 13:54:42 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Wellbrock <a.wellbrock@mailbox.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] tpm_tis_spi: add missing SPI device ID entries
+Message-ID: <20210528165442.GJ1096940@ziepe.ca>
+References: <20210527152352.3835076-1-javierm@redhat.com>
+ <20210527161156.GH1096940@ziepe.ca>
+ <f0afae88-419f-6792-c795-b15e724ba739@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210528073812.407936-3-roberto.sassu@huawei.com>
+In-Reply-To: <f0afae88-419f-6792-c795-b15e724ba739@redhat.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, May 28, 2021 at 09:38:07AM +0200, Roberto Sassu wrote:
-> This patch defines the new template fields iuid and igid, which include
-> respectively the inode UID and GID. For idmapped mounts, still the original
-> UID and GID are provided.
-> 
-> These fields can be used to verify the EVM portable signature, if it was
-> included with the template fields sig or evmsig.
-> 
-> Cc: Christian Brauner <christian.brauner@ubuntu.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
+On Thu, May 27, 2021 at 06:42:25PM +0200, Javier Martinez Canillas wrote:
 
-That's fine with me. Thanks, Robert!
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Fixing the spi_uevent() function would be pretty trivial but that
+> would break all the drivers and platforms that are relying on the
+> current behaviour.
 
->  Documentation/security/IMA-templates.rst  |  2 +
->  security/integrity/ima/ima_template.c     |  4 ++
->  security/integrity/ima/ima_template_lib.c | 45 +++++++++++++++++++++++
->  security/integrity/ima/ima_template_lib.h |  4 ++
->  4 files changed, 55 insertions(+)
-> 
-> diff --git a/Documentation/security/IMA-templates.rst b/Documentation/security/IMA-templates.rst
-> index 9f3e86ab028a..bf8ce4cf5878 100644
-> --- a/Documentation/security/IMA-templates.rst
-> +++ b/Documentation/security/IMA-templates.rst
-> @@ -75,6 +75,8 @@ descriptors by adding their identifier to the format string
->   - 'modsig' the appended file signature;
->   - 'buf': the buffer data that was used to generate the hash without size limitations;
->   - 'evmsig': the EVM portable signature;
-> + - 'iuid': the inode UID;
-> + - 'igid': the inode GID;
->  
->  
->  Below, there is the list of defined template descriptors:
-> diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-> index 7a60848c04a5..a5ecd9e2581b 100644
-> --- a/security/integrity/ima/ima_template.c
-> +++ b/security/integrity/ima/ima_template.c
-> @@ -47,6 +47,10 @@ static const struct ima_template_field supported_fields[] = {
->  	 .field_show = ima_show_template_sig},
->  	{.field_id = "evmsig", .field_init = ima_eventevmsig_init,
->  	 .field_show = ima_show_template_sig},
-> +	{.field_id = "iuid", .field_init = ima_eventinodeuid_init,
-> +	 .field_show = ima_show_template_uint},
-> +	{.field_id = "igid", .field_init = ima_eventinodegid_init,
-> +	 .field_show = ima_show_template_uint},
->  };
->  
->  /*
-> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-> index f23296c33da1..87b40f391739 100644
-> --- a/security/integrity/ima/ima_template_lib.c
-> +++ b/security/integrity/ima/ima_template_lib.c
-> @@ -551,3 +551,48 @@ int ima_eventevmsig_init(struct ima_event_data *event_data,
->  	kfree(xattr_data);
->  	return rc;
->  }
-> +
-> +static int ima_eventinodedac_init_common(struct ima_event_data *event_data,
-> +					 struct ima_field_data *field_data,
-> +					 bool get_uid)
-> +{
-> +	unsigned int id;
-> +
-> +	if (!event_data->file)
-> +		return 0;
-> +
-> +	if (get_uid)
-> +		id = i_uid_read(file_inode(event_data->file));
-> +	else
-> +		id = i_gid_read(file_inode(event_data->file));
-> +
-> +	if (ima_canonical_fmt) {
-> +		if (sizeof(id) == sizeof(u16))
-> +			id = cpu_to_le16(id);
-> +		else
-> +			id = cpu_to_le32(id);
-> +	}
-> +
-> +	return ima_write_template_field_data((void *)&id, sizeof(id),
-> +					     DATA_FMT_UINT, field_data);
-> +}
-> +
-> +/*
-> + *  ima_eventinodeuid_init - include the inode UID as part of the template
-> + *  data
-> + */
-> +int ima_eventinodeuid_init(struct ima_event_data *event_data,
-> +			   struct ima_field_data *field_data)
-> +{
-> +	return ima_eventinodedac_init_common(event_data, field_data, true);
-> +}
-> +
-> +/*
-> + *  ima_eventinodegid_init - include the inode GID as part of the template
-> + *  data
-> + */
-> +int ima_eventinodegid_init(struct ima_event_data *event_data,
-> +			   struct ima_field_data *field_data)
-> +{
-> +	return ima_eventinodedac_init_common(event_data, field_data, false);
-> +}
-> diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
-> index 54b67c80b315..b0aaf109f386 100644
-> --- a/security/integrity/ima/ima_template_lib.h
-> +++ b/security/integrity/ima/ima_template_lib.h
-> @@ -50,4 +50,8 @@ int ima_eventmodsig_init(struct ima_event_data *event_data,
->  			 struct ima_field_data *field_data);
->  int ima_eventevmsig_init(struct ima_event_data *event_data,
->  			 struct ima_field_data *field_data);
-> +int ima_eventinodeuid_init(struct ima_event_data *event_data,
-> +			   struct ima_field_data *field_data);
-> +int ima_eventinodegid_init(struct ima_event_data *event_data,
-> +			   struct ima_field_data *field_data);
->  #endif /* __LINUX_IMA_TEMPLATE_LIB_H */
-> -- 
-> 2.25.1
-> 
+Oh this makes me sad to read after all these years :(
+
+It shure would be nice if multiple modaliases could be reported for
+situations like this.
+
+Jason
