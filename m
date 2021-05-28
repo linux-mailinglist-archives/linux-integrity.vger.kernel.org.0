@@ -2,33 +2,35 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D01393E0B
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 May 2021 09:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5817393E09
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 May 2021 09:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbhE1HkQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 May 2021 03:40:16 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3097 "EHLO
+        id S235154AbhE1HkK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 May 2021 03:40:10 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3098 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbhE1HkG (ORCPT
+        with ESMTP id S233653AbhE1HkG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 28 May 2021 03:40:06 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FrxGG23y4z6N46l;
-        Fri, 28 May 2021 15:32:06 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Frx7d2ctjz6P33T;
+        Fri, 28 May 2021 15:26:21 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 28 May 2021 09:38:28 +0200
+ 15.1.2176.2; Fri, 28 May 2021 09:38:29 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>, <mjg59@srcf.ucam.org>
 CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 0/7] ima: Add template fields to verify EVM portable signatures
-Date:   Fri, 28 May 2021 09:38:05 +0200
-Message-ID: <20210528073812.407936-1-roberto.sassu@huawei.com>
+Subject: [PATCH v2 1/7] ima: Add ima_show_template_uint() template library function
+Date:   Fri, 28 May 2021 09:38:06 +0200
+Message-ID: <20210528073812.407936-2-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210528073812.407936-1-roberto.sassu@huawei.com>
+References: <20210528073812.407936-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -40,92 +42,97 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The recent patch set 'evm: Improve usability of portable signatures' added
-the possibility to include EVM portable signatures in the IMA measurement
-list.
+This patch introduces the new function ima_show_template_uint(). This can
+be used for showing integers of different sizes in ASCII format. The
+function ima_show_template_data_ascii() automatically determines how to
+print a stored integer by checking the integer size.
 
-However, the information necessary to verify the signature were not
-included in the IMA measurement list. This patch set introduces new
-template fields to accomplish this goal:
+If integers have been written in canonical format,
+ima_show_template_data_ascii() calls the appropriate leXX_to_cpu() function
+to correctly display the value.
 
-- 'iuid': the inode UID;
-- 'igid': the inode GID;
-- 'imode': the inode mode;
-- 'xattrnames': a list of xattr names (separated by |), only if the xattr is
-  present;
-- 'xattrlengths': a list of xattr lengths (u32), only if the xattr is present;
-- 'xattrvalues': a list of xattr values;
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima_template_lib.c | 38 ++++++++++++++++++++++-
+ security/integrity/ima/ima_template_lib.h |  2 ++
+ 2 files changed, 39 insertions(+), 1 deletion(-)
 
-Patch 1 adds an helper function to show integers in the measurement list.
-Patches 2, 3 and 5 introduce new template fields. Patch 4 make it possible
-to verify EVM portable signatures which protect xattrs belonging to LSMs
-not enabled in the target platform. Patch 6 introduces the new IMA template
-evm-sig. Patch 7 fixes a small issue in evm_write_xattrs() when audit is
-not enabled.
-
-This patch set has been tested with:
-
-https://github.com/robertosassu/ima-evm-utils/blob/ima-template-fields-v2-devel-v5/tests/verify_evmsig.test
-https://github.com/robertosassu/ima-evm-utils/blob/ima-template-fields-v2-devel-v5/tests/evm_hmac_non_enabled_xattrs.test
-
-The first test aims at checking whether the EVM portable signature included
-in the measurement list can be verified with the information also in the
-measurement list.
-
-It uses two methods for the verification: the first creates a copy of a
-measured file, sets metadata parsed from the measurement list to that copy
-and calls evmctl to verify the signature; the second lets evmctl verify the
-measurement list directly.
-
-The test is performed without and with an idmapped mount. Given that IMA
-always provides the original UID and GID, no more actions are needed in the
-second case.
-
-The second test verifies that setting a non-enabled xattr does not change
-the HMAC.
-
-The test results are available at:
-
-https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/508604164
-https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/508604168
-
-This patch set has been also tested on s390x, with and without the
-canonical format enabled (the test results are not shown, as the UML kernel
-used in Travis is not available for this architecture).
-
-Changelog
-
-v1:
-- remove the mntuidmap and mntgidmap template fields and always display the
-  original inode UID and GID (suggested by Christian Brauner)
-- replace the evmxattrs template field with xattrnames, xattrlengths and
-  xattrvalues (suggested by Mimi)
-- introduce the new IMA template evm-sig (suggested by Mimi)
-- use only one variable in ima_eventinodedac_init_common() (suggested by
-  Mimi)
-
-Roberto Sassu (7):
-  ima: Add ima_show_template_uint() template library function
-  ima: Define new template fields iuid and igid
-  ima: Define new template field imode
-  evm: Verify portable signatures against all protected xattrs
-  ima: Define new template fields xattrnames, xattrlengths and
-    xattrvalues
-  ima: Define new template evm-sig
-  evm: Don't return an error in evm_write_xattrs() if audit is not
-    enabled
-
- Documentation/security/IMA-templates.rst  |   8 +
- include/linux/evm.h                       |  16 ++
- security/integrity/evm/evm.h              |   1 +
- security/integrity/evm/evm_crypto.c       |   7 +
- security/integrity/evm/evm_main.c         | 125 ++++++++++++++--
- security/integrity/evm/evm_secfs.c        |  18 ++-
- security/integrity/ima/ima_template.c     |  18 +++
- security/integrity/ima/ima_template_lib.c | 169 +++++++++++++++++++++-
- security/integrity/ima/ima_template_lib.h |  14 ++
- 9 files changed, 362 insertions(+), 14 deletions(-)
-
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index 4314d9a3514c..f23296c33da1 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -24,7 +24,8 @@ enum data_formats {
+ 	DATA_FMT_DIGEST = 0,
+ 	DATA_FMT_DIGEST_WITH_ALGO,
+ 	DATA_FMT_STRING,
+-	DATA_FMT_HEX
++	DATA_FMT_HEX,
++	DATA_FMT_UINT
+ };
+ 
+ static int ima_write_template_field_data(const void *data, const u32 datalen,
+@@ -88,6 +89,35 @@ static void ima_show_template_data_ascii(struct seq_file *m,
+ 	case DATA_FMT_STRING:
+ 		seq_printf(m, "%s", buf_ptr);
+ 		break;
++	case DATA_FMT_UINT:
++		switch (field_data->len) {
++		case sizeof(u8):
++			seq_printf(m, "%u", *(u8 *)buf_ptr);
++			break;
++		case sizeof(u16):
++			if (ima_canonical_fmt)
++				seq_printf(m, "%u",
++					   le16_to_cpu(*(u16 *)buf_ptr));
++			else
++				seq_printf(m, "%u", *(u16 *)buf_ptr);
++			break;
++		case sizeof(u32):
++			if (ima_canonical_fmt)
++				seq_printf(m, "%u",
++					   le32_to_cpu(*(u32 *)buf_ptr));
++			else
++				seq_printf(m, "%u", *(u32 *)buf_ptr);
++			break;
++		case sizeof(u64):
++			if (ima_canonical_fmt)
++				seq_printf(m, "%llu",
++					   le64_to_cpu(*(u64 *)buf_ptr));
++			else
++				seq_printf(m, "%llu", *(u64 *)buf_ptr);
++			break;
++		default:
++			break;
++		}
+ 	default:
+ 		break;
+ 	}
+@@ -163,6 +193,12 @@ void ima_show_template_buf(struct seq_file *m, enum ima_show_type show,
+ 	ima_show_template_field_data(m, show, DATA_FMT_HEX, field_data);
+ }
+ 
++void ima_show_template_uint(struct seq_file *m, enum ima_show_type show,
++			    struct ima_field_data *field_data)
++{
++	ima_show_template_field_data(m, show, DATA_FMT_UINT, field_data);
++}
++
+ /**
+  * ima_parse_buf() - Parses lengths and data from an input buffer
+  * @bufstartp:       Buffer start address.
+diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
+index f4b2a2056d1d..54b67c80b315 100644
+--- a/security/integrity/ima/ima_template_lib.h
++++ b/security/integrity/ima/ima_template_lib.h
+@@ -27,6 +27,8 @@ void ima_show_template_sig(struct seq_file *m, enum ima_show_type show,
+ 			   struct ima_field_data *field_data);
+ void ima_show_template_buf(struct seq_file *m, enum ima_show_type show,
+ 			   struct ima_field_data *field_data);
++void ima_show_template_uint(struct seq_file *m, enum ima_show_type show,
++			    struct ima_field_data *field_data);
+ int ima_parse_buf(void *bufstartp, void *bufendp, void **bufcurp,
+ 		  int maxfields, struct ima_field_data *fields, int *curfields,
+ 		  unsigned long *len_mask, int enforce_mask, char *bufname);
 -- 
 2.25.1
 
