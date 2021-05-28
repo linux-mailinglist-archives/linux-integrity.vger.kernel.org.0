@@ -2,69 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC95393D13
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 May 2021 08:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D01393E0B
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 May 2021 09:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbhE1G3U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 May 2021 02:29:20 -0400
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:38192 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229753AbhE1G3T (ORCPT
+        id S236064AbhE1HkQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 May 2021 03:40:16 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3097 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229835AbhE1HkG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 May 2021 02:29:19 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R521e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0UaLIcr6_1622183262;
-Received: from B-455UMD6M-2027.local(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UaLIcr6_1622183262)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 28 May 2021 14:27:42 +0800
-Subject: Re: [PATCH v2 1/7] crypto: fix a memory leak in sm2
-To:     Hongbo Li <herbert.tencent@gmail.com>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, herbert@gondor.apana.org.au,
-        ebiggers@kernel.org, dhowells@redhat.com, jarkko@kernel.org,
-        herberthbli@tencent.com
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-References: <1622123615-15517-1-git-send-email-herbert.tencent@gmail.com>
- <1622123615-15517-2-git-send-email-herbert.tencent@gmail.com>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Message-ID: <47cf4353-b4bb-3907-6017-60bf87805d0c@linux.alibaba.com>
-Date:   Fri, 28 May 2021 14:27:41 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.2
+        Fri, 28 May 2021 03:40:06 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FrxGG23y4z6N46l;
+        Fri, 28 May 2021 15:32:06 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 28 May 2021 09:38:28 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <mjg59@srcf.ucam.org>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 0/7] ima: Add template fields to verify EVM portable signatures
+Date:   Fri, 28 May 2021 09:38:05 +0200
+Message-ID: <20210528073812.407936-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1622123615-15517-2-git-send-email-herbert.tencent@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.62.217]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Herbert, Hongbo,
+The recent patch set 'evm: Improve usability of portable signatures' added
+the possibility to include EVM portable signatures in the IMA measurement
+list.
 
-On 5/27/21 9:53 PM, Hongbo Li wrote:
-> From: Hongbo Li <herberthbli@tencent.com>
-> 
-> SM2 module alloc ec->Q in sm2_set_pub_key(), when doing alg test in
-> test_akcipher_one(), it will set public key for every test vector,
-> and don't free ec->Q. This will cause a memory leak.
-> 
-> This patch alloc ec->Q in sm2_ec_ctx_init().
-> 
-> Fixes: ea7ecb66440b ("crypto: sm2 - introduce OSCCA SM2 asymmetric cipher algorithm")
-> Signed-off-by: Hongbo Li <herberthbli@tencent.com>
-> Reviewed-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->   crypto/sm2.c | 24 ++++++++++--------------
->   1 file changed, 10 insertions(+), 14 deletions(-)
-> 
+However, the information necessary to verify the signature were not
+included in the IMA measurement list. This patch set introduces new
+template fields to accomplish this goal:
 
-Patch 1/7 is an independent bugfix patch. If possible, consider applying 
-it first.
+- 'iuid': the inode UID;
+- 'igid': the inode GID;
+- 'imode': the inode mode;
+- 'xattrnames': a list of xattr names (separated by |), only if the xattr is
+  present;
+- 'xattrlengths': a list of xattr lengths (u32), only if the xattr is present;
+- 'xattrvalues': a list of xattr values;
 
-The commit message header should start with: crypto: sm2 -
+Patch 1 adds an helper function to show integers in the measurement list.
+Patches 2, 3 and 5 introduce new template fields. Patch 4 make it possible
+to verify EVM portable signatures which protect xattrs belonging to LSMs
+not enabled in the target platform. Patch 6 introduces the new IMA template
+evm-sig. Patch 7 fixes a small issue in evm_write_xattrs() when audit is
+not enabled.
 
-Also added:
+This patch set has been tested with:
 
-Cc: stable@vger.kernel.org # v5.10+
+https://github.com/robertosassu/ima-evm-utils/blob/ima-template-fields-v2-devel-v5/tests/verify_evmsig.test
+https://github.com/robertosassu/ima-evm-utils/blob/ima-template-fields-v2-devel-v5/tests/evm_hmac_non_enabled_xattrs.test
 
-Best regards,
-Tianjia
+The first test aims at checking whether the EVM portable signature included
+in the measurement list can be verified with the information also in the
+measurement list.
+
+It uses two methods for the verification: the first creates a copy of a
+measured file, sets metadata parsed from the measurement list to that copy
+and calls evmctl to verify the signature; the second lets evmctl verify the
+measurement list directly.
+
+The test is performed without and with an idmapped mount. Given that IMA
+always provides the original UID and GID, no more actions are needed in the
+second case.
+
+The second test verifies that setting a non-enabled xattr does not change
+the HMAC.
+
+The test results are available at:
+
+https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/508604164
+https://travis-ci.com/github/robertosassu/ima-evm-utils/jobs/508604168
+
+This patch set has been also tested on s390x, with and without the
+canonical format enabled (the test results are not shown, as the UML kernel
+used in Travis is not available for this architecture).
+
+Changelog
+
+v1:
+- remove the mntuidmap and mntgidmap template fields and always display the
+  original inode UID and GID (suggested by Christian Brauner)
+- replace the evmxattrs template field with xattrnames, xattrlengths and
+  xattrvalues (suggested by Mimi)
+- introduce the new IMA template evm-sig (suggested by Mimi)
+- use only one variable in ima_eventinodedac_init_common() (suggested by
+  Mimi)
+
+Roberto Sassu (7):
+  ima: Add ima_show_template_uint() template library function
+  ima: Define new template fields iuid and igid
+  ima: Define new template field imode
+  evm: Verify portable signatures against all protected xattrs
+  ima: Define new template fields xattrnames, xattrlengths and
+    xattrvalues
+  ima: Define new template evm-sig
+  evm: Don't return an error in evm_write_xattrs() if audit is not
+    enabled
+
+ Documentation/security/IMA-templates.rst  |   8 +
+ include/linux/evm.h                       |  16 ++
+ security/integrity/evm/evm.h              |   1 +
+ security/integrity/evm/evm_crypto.c       |   7 +
+ security/integrity/evm/evm_main.c         | 125 ++++++++++++++--
+ security/integrity/evm/evm_secfs.c        |  18 ++-
+ security/integrity/ima/ima_template.c     |  18 +++
+ security/integrity/ima/ima_template_lib.c | 169 +++++++++++++++++++++-
+ security/integrity/ima/ima_template_lib.h |  14 ++
+ 9 files changed, 362 insertions(+), 14 deletions(-)
+
+-- 
+2.25.1
+
