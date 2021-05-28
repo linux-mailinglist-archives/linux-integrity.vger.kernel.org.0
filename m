@@ -2,19 +2,19 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E84B7393E18
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 May 2021 09:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA94393E1A
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 May 2021 09:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234892AbhE1Hl3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 May 2021 03:41:29 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3102 "EHLO
+        id S236132AbhE1Hla (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 May 2021 03:41:30 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3103 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234430AbhE1Hl3 (ORCPT
+        with ESMTP id S234485AbhE1Hl3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 28 May 2021 03:41:29 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Frx9F0DwLz6P348;
-        Fri, 28 May 2021 15:27:45 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FrxHv0MHgz6N47p;
+        Fri, 28 May 2021 15:33:31 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -25,9 +25,9 @@ CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 5/7] ima: Define new template fields xattrnames, xattrlengths and xattrvalues
-Date:   Fri, 28 May 2021 09:38:10 +0200
-Message-ID: <20210528073812.407936-6-roberto.sassu@huawei.com>
+Subject: [PATCH v2 6/7] ima: Define new template evm-sig
+Date:   Fri, 28 May 2021 09:38:11 +0200
+Message-ID: <20210528073812.407936-7-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210528073812.407936-1-roberto.sassu@huawei.com>
 References: <20210528073812.407936-1-roberto.sassu@huawei.com>
@@ -42,257 +42,57 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This patch defines the new template fields xattrnames, xattrlengths and
-xattrvalues, which contain respectively a list of xattr names (strings,
-separated by |), lengths (u32, hex) and values (hex). If an xattr is not
-present, the name and length are not displayed in the measurement list.
+With the recent introduction of the evmsig template field, remote verifiers
+can obtain the EVM portable signature instead of the IMA signature, to
+verify file metadata.
+
+After introducing the new fields to include file metadata in the
+measurement list, this patch finally defines the evm-sig template, whose
+format is:
+
+d-ng|n-ng|evmsig|xattrnames|xattrlengths|xattrvalues|iuid|igid|imode
+
+xattrnames, xattrlengths and xattrvalues are populated only from defined
+EVM protected xattrs, i.e. the ones that EVM considers to verify the
+portable signature. xattrnames and xattrlengths are populated only if the
+xattr is present.
+
+xattrnames and xattrlengths are not necessary for verifying the EVM
+portable signature, but they are included for completeness of information,
+if a remote verifier wants to infer more from file metadata.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- Documentation/security/IMA-templates.rst  |  4 ++
- include/linux/evm.h                       | 10 ++++
- security/integrity/evm/evm_main.c         | 69 +++++++++++++++++++++++
- security/integrity/ima/ima_template.c     |  9 +++
- security/integrity/ima/ima_template_lib.c | 64 +++++++++++++++++++++
- security/integrity/ima/ima_template_lib.h |  6 ++
- 6 files changed, 162 insertions(+)
+ Documentation/security/IMA-templates.rst | 1 +
+ security/integrity/ima/ima_template.c    | 3 +++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/Documentation/security/IMA-templates.rst b/Documentation/security/IMA-templates.rst
-index 65c1ce451d08..6a58760a0a35 100644
+index 6a58760a0a35..5adc22f99496 100644
 --- a/Documentation/security/IMA-templates.rst
 +++ b/Documentation/security/IMA-templates.rst
-@@ -78,6 +78,10 @@ descriptors by adding their identifier to the format string
-  - 'iuid': the inode UID;
-  - 'igid': the inode GID;
-  - 'imode': the inode mode;
-+ - 'xattrnames': a list of xattr names (separated by |), only if the xattr is
-+    present;
-+ - 'xattrlengths': a list of xattr lengths (u32), only if the xattr is present;
-+ - 'xattrvalues': a list of xattr values;
+@@ -91,6 +91,7 @@ Below, there is the list of defined template descriptors:
+  - "ima-sig": its format is ``d-ng|n-ng|sig``;
+  - "ima-buf": its format is ``d-ng|n-ng|buf``;
+  - "ima-modsig": its format is ``d-ng|n-ng|sig|d-modsig|modsig``;
++ - "evm-sig": its format is ``d-ng|n-ng|evmsig|xattrnames|xattrlengths|xattrvalues|iuid|igid|imode``;
  
  
- Below, there is the list of defined template descriptors:
-diff --git a/include/linux/evm.h b/include/linux/evm.h
-index 5011a299c251..4c374be70247 100644
---- a/include/linux/evm.h
-+++ b/include/linux/evm.h
-@@ -39,6 +39,9 @@ extern int evm_inode_init_security(struct inode *inode,
- 				   struct xattr *evm);
- extern bool evm_revalidate_status(const char *xattr_name);
- extern int evm_protected_xattr_if_enabled(const char *req_xattr_name);
-+extern int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
-+				     int buffer_size, char type,
-+				     bool canonical_fmt);
- #ifdef CONFIG_FS_POSIX_ACL
- extern int posix_xattr_acl(const char *xattrname);
- #else
-@@ -120,5 +123,12 @@ static inline int evm_protected_xattr_if_enabled(const char *req_xattr_name)
- 	return false;
- }
- 
-+static inline int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
-+					    int buffer_size, char type,
-+					    bool canonical_fmt)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- #endif /* CONFIG_EVM */
- #endif /* LINUX_EVM_H */
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index ee4e17a790fb..2c226e634ae9 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -317,6 +317,75 @@ int evm_protected_xattr_if_enabled(const char *req_xattr_name)
- 	return evm_protected_xattr_common(req_xattr_name, true);
- }
- 
-+/**
-+ * evm_read_protected_xattrs - read EVM protected xattr names, lengths, values
-+ * @dentry: dentry of the read xattrs
-+ * @inode: inode of the read xattrs
-+ * @buffer: buffer xattr names, lengths or values are copied to
-+ * @buffer_size: size of buffer
-+ * @type: n: names, l: lengths, v: values
-+ * @canonical_fmt: data format (true: little endian, false: native format)
-+ *
-+ * Read protected xattr names (separated by |), lengths (u32) or values for a
-+ * given dentry and return the total size of copied data. If buffer is NULL,
-+ * just return the total size.
-+ *
-+ * Returns the total size on success, a negative value on error.
-+ */
-+int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
-+			      int buffer_size, char type, bool canonical_fmt)
-+{
-+	struct xattr_list *xattr;
-+	int rc, size, total_size = 0;
-+
-+	list_for_each_entry_lockless(xattr, &evm_config_xattrnames, list) {
-+		rc = __vfs_getxattr(dentry, d_backing_inode(dentry),
-+				    xattr->name, NULL, 0);
-+		if (rc < 0 && rc == -ENODATA)
-+			continue;
-+		else if (rc < 0)
-+			return rc;
-+
-+		switch (type) {
-+		case 'n':
-+			size = strlen(xattr->name) + 1;
-+			if (buffer) {
-+				if (total_size)
-+					*(buffer + total_size - 1) = '|';
-+
-+				memcpy(buffer + total_size, xattr->name, size);
-+			}
-+			break;
-+		case 'l':
-+			size = sizeof(u32);
-+			if (buffer) {
-+				if (canonical_fmt)
-+					rc = cpu_to_le32(rc);
-+
-+				*(u32 *)(buffer + total_size) = rc;
-+			}
-+			break;
-+		case 'v':
-+			size = rc;
-+			if (buffer) {
-+				rc = __vfs_getxattr(dentry,
-+					d_backing_inode(dentry), xattr->name,
-+					buffer + total_size,
-+					buffer_size - total_size);
-+				if (rc < 0)
-+					return rc;
-+			}
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+
-+		total_size += size;
-+	}
-+
-+	return total_size;
-+}
-+
- /**
-  * evm_verifyxattr - verify the integrity of the requested xattr
-  * @dentry: object of the verify xattr
+ Use
 diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 43784f2bf8bd..159a31d2fcdf 100644
+index 159a31d2fcdf..be435efe6122 100644
 --- a/security/integrity/ima/ima_template.c
 +++ b/security/integrity/ima/ima_template.c
-@@ -53,6 +53,15 @@ static const struct ima_template_field supported_fields[] = {
- 	 .field_show = ima_show_template_uint},
- 	{.field_id = "imode", .field_init = ima_eventinodemode_init,
- 	 .field_show = ima_show_template_uint},
-+	{.field_id = "xattrnames",
-+	 .field_init = ima_eventinodexattrnames_init,
-+	 .field_show = ima_show_template_string},
-+	{.field_id = "xattrlengths",
-+	 .field_init = ima_eventinodexattrlengths_init,
-+	 .field_show = ima_show_template_sig},
-+	{.field_id = "xattrvalues",
-+	 .field_init = ima_eventinodexattrvalues_init,
-+	 .field_show = ima_show_template_sig},
+@@ -22,6 +22,9 @@ static struct ima_template_desc builtin_templates[] = {
+ 	{.name = "ima-sig", .fmt = "d-ng|n-ng|sig"},
+ 	{.name = "ima-buf", .fmt = "d-ng|n-ng|buf"},
+ 	{.name = "ima-modsig", .fmt = "d-ng|n-ng|sig|d-modsig|modsig"},
++	{.name = "evm-sig",
++	 .fmt = "d-ng|n-ng|evmsig|"
++		"xattrnames|xattrlengths|xattrvalues|iuid|igid|imode"},
+ 	{.name = "", .fmt = ""},	/* placeholder for a custom format */
  };
  
- /*
-diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-index 3156fb34b1af..10a1349542e6 100644
---- a/security/integrity/ima/ima_template_lib.c
-+++ b/security/integrity/ima/ima_template_lib.c
-@@ -11,6 +11,7 @@
- 
- #include "ima_template_lib.h"
- #include <linux/xattr.h>
-+#include <linux/evm.h>
- 
- static bool ima_template_hash_algo_allowed(u8 algo)
- {
-@@ -618,3 +619,66 @@ int ima_eventinodemode_init(struct ima_event_data *event_data,
- 	return ima_write_template_field_data((char *)&mode, sizeof(mode),
- 					     DATA_FMT_UINT, field_data);
- }
-+
-+int ima_eventinodexattrs_init_common(struct ima_event_data *event_data,
-+				     struct ima_field_data *field_data,
-+				     char type)
-+{
-+	u8 *buffer = NULL;
-+	int rc;
-+
-+	if (!event_data->file)
-+		return 0;
-+
-+	rc = evm_read_protected_xattrs(file_dentry(event_data->file), NULL, 0,
-+				       type, ima_canonical_fmt);
-+	if (rc < 0)
-+		return 0;
-+
-+	buffer = kmalloc(rc, GFP_KERNEL);
-+	if (!buffer)
-+		return 0;
-+
-+	rc = evm_read_protected_xattrs(file_dentry(event_data->file), buffer,
-+				       rc, type, ima_canonical_fmt);
-+	if (rc < 0) {
-+		rc = 0;
-+		goto out;
-+	}
-+
-+	rc = ima_write_template_field_data((char *)buffer, rc, DATA_FMT_HEX,
-+					   field_data);
-+out:
-+	kfree(buffer);
-+	return rc;
-+}
-+
-+/*
-+ *  ima_eventinodexattrnames_init - include a list of xattr names as part of the
-+ *  template data
-+ */
-+int ima_eventinodexattrnames_init(struct ima_event_data *event_data,
-+				  struct ima_field_data *field_data)
-+{
-+	return ima_eventinodexattrs_init_common(event_data, field_data, 'n');
-+}
-+
-+/*
-+ *  ima_eventinodexattrlengths_init - include a list of xattr lengths as part of
-+ *  the template data
-+ */
-+int ima_eventinodexattrlengths_init(struct ima_event_data *event_data,
-+				    struct ima_field_data *field_data)
-+{
-+	return ima_eventinodexattrs_init_common(event_data, field_data, 'l');
-+}
-+
-+/*
-+ *  ima_eventinodexattrvalues_init - include a list of xattr values as part of
-+ *  the template data
-+ */
-+int ima_eventinodexattrvalues_init(struct ima_event_data *event_data,
-+				   struct ima_field_data *field_data)
-+{
-+	return ima_eventinodexattrs_init_common(event_data, field_data, 'v');
-+}
-diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
-index 6509af4a97ee..c71f1de95753 100644
---- a/security/integrity/ima/ima_template_lib.h
-+++ b/security/integrity/ima/ima_template_lib.h
-@@ -56,4 +56,10 @@ int ima_eventinodegid_init(struct ima_event_data *event_data,
- 			   struct ima_field_data *field_data);
- int ima_eventinodemode_init(struct ima_event_data *event_data,
- 			    struct ima_field_data *field_data);
-+int ima_eventinodexattrnames_init(struct ima_event_data *event_data,
-+				  struct ima_field_data *field_data);
-+int ima_eventinodexattrlengths_init(struct ima_event_data *event_data,
-+				    struct ima_field_data *field_data);
-+int ima_eventinodexattrvalues_init(struct ima_event_data *event_data,
-+				   struct ima_field_data *field_data);
- #endif /* __LINUX_IMA_TEMPLATE_LIB_H */
 -- 
 2.25.1
 
