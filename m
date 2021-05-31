@@ -2,137 +2,194 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F4D395520
-	for <lists+linux-integrity@lfdr.de>; Mon, 31 May 2021 07:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE133956E1
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 May 2021 10:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbhEaFw0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 31 May 2021 01:52:26 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:44741 "EHLO
-        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229730AbhEaFw0 (ORCPT
+        id S230384AbhEaIZ7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 31 May 2021 04:25:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55346 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230424AbhEaIZt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 31 May 2021 01:52:26 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 600BE12AA;
-        Mon, 31 May 2021 01:50:45 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 31 May 2021 01:50:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=lWcs2qTRorJqQWXwm3bg063UJS2
-        ScsXhxsOZBMFwDHw=; b=Kb1kImAL4quY5QabD8G9MizMLF0OE8EIznco4oqAoC2
-        KPlbZHxAac3xb0My+2krGELq/9vSrtVlDvSOUh6pabrqzsoScQwe+g876+8riv1V
-        zpyf7MxD4up22kkp4YfNng12iGqaOwSZwmAxSvBPKXHmMBGQwmfvFhmg0z/kFN6S
-        y6bMHpr8MhZhVCdnkP0bvHWKrcSafKPZqA7NdfXrWYLWXPW25NljKuNUb5Pf4/rP
-        cmnjETMzrsPHRfuyfSFlZuyke0S82YkJsHNEjOpmQ1IveEBv9w706vovNPeywdaG
-        AuMKSQblqP5VBqKGwz7VJJ0pNdZkd9QaJe22FfmBh0Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=lWcs2q
-        TRorJqQWXwm3bg063UJS2ScsXhxsOZBMFwDHw=; b=DjKlygQVQNg7wy6L7rcWiX
-        yzUAeh252NP2iqTyW5Xn8F/4762rhr5sninB5ft89Xmpuh44hB2Ia2BOUOt7aUVx
-        K5JiIoW6sXUvIByg6TKKuK6TpdbusgnegT/kf9pochQyUk4oANygigygefXt/mBN
-        lzEVIEu2ZT8A3VEm6ybU7MOsluUSJHQAk8l9IjjgSsAMiza6x27lHY7cOnhU0scn
-        lVifro4QuXHSEuys/E/hCNezZ7m5QkUHiqjeXZ+IC92i0axAAIFb9hrSzJyF2oDj
-        ajRcxAVVRcTCahs8wkRROf6QyUATjhpx5Wu5gG3M0hy46+BVyE0fYXVDg8rUA2vQ
-        ==
-X-ME-Sender: <xms:NHm0YHOVzEglZ-3Lu2iDC6GRlfSnYZDoTVpjo2g8_7Y0GIyUA3jEKg>
-    <xme:NHm0YB8QW5VavC2wq5NbdvbOpC6qGvvTAMgpC1Qz4ict9Yb4usJVhWP5O_ATnNNGO
-    -mTPALloPIg-w>
-X-ME-Received: <xmr:NHm0YGQPNh6rjwiPnA2cJNYA5xQMcWVZIB7_HSh4X6iVj0I5czZEsBP6qQLJvg0kBJZ5FFrRIr9eCfrXKne2BsCcl4e6TnKc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdelvddgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeuleeltd
-    ehkeeltefhleduuddvhfffuedvffduveegheekgeeiffevheegfeetgfenucffohhmrghi
-    nhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:NHm0YLvR65sO5SOwC9S-oIUlFlEI0F9xISiSAivLPpIiB8CbfgLQsg>
-    <xmx:NHm0YPcSfgDMqJzPbIM7U7jQ4UorwqyZ5hoKVwp100sEgDYkcTAFQA>
-    <xmx:NHm0YH2ZUqk8g42LpaVHLnfFJkEheBga_pBLIFYDnlk10aZnbuZrdw>
-    <xmx:NHm0YN0nZWiruU3griH-ciYcTrZgZJI5idsIYyKLz56Ud-IU0balnYeP8v8>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 31 May 2021 01:50:44 -0400 (EDT)
-Date:   Mon, 31 May 2021 07:50:41 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
+        Mon, 31 May 2021 04:25:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1622449449;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fXjydIuPLasc98t5ZRJ2Ggut8vJHEkKuJARXoS1eQrE=;
+        b=IO11y9Pkda62uLZOUHNYkJ9i2xHxjLqZKNV909HQVapKKVskrc+YNDr49rjSDR6uFQ5daY
+        AwbLb2qu7ua3eLrkt6hF9VFNTw1dE/8vElzHAkpd/XmjQnhr1oP/id2fvyN+6lFTOEuya0
+        jZcle63XpWDu3WMuPf0zb6qX9hEcIf0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-589-_l0MfklcPg-D6Mi6XdCrGw-1; Mon, 31 May 2021 04:24:07 -0400
+X-MC-Unique: _l0MfklcPg-D6Mi6XdCrGw-1
+Received: by mail-ed1-f70.google.com with SMTP id c24-20020aa7c7580000b029038fd7468047so2537788eds.20
+        for <linux-integrity@vger.kernel.org>; Mon, 31 May 2021 01:24:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fXjydIuPLasc98t5ZRJ2Ggut8vJHEkKuJARXoS1eQrE=;
+        b=DSiaoIPBMVPTUVfNL30erWipQKCadIeo6lJ9QakVHYYdzuVw3V2EO37N+RC+MCROA+
+         6S3NxrIw8dL6/F7KuvLeIxkxk+P0F6iPqTOLdhKribPO0o0iLoZcXr3AcKxU7jgrwmbC
+         rQY2F56AN6mdf1nzx8Ogzrl5Sei3vf1y6B1CZxEzii2trMntGwZA2AeIxh4civ4a6/Mj
+         G0dma9928Vj3X5ZKpIv7wELLTem8WrTmcna4kVuH9onRsMd477n41Ka4ZQlAkVNyP2S/
+         Q3ZvUL9Pbpla7E5umUgBJ7VDarFIVKYTg2YKsek/tT8E5t/gaARjkRYGj3GsuLgQf3Hl
+         d7Tw==
+X-Gm-Message-State: AOAM530gTuxemYwujjkszIHO8K7PcqOZkQnq5vrt+o75u8f+7+rIGZM/
+        92fTKJcujvUbwnNQDtMHZkmdkEqdKxWgDq4AzK/psWHZZ7HEb0I9WmGsPyyLH8XZ6WNaQ5VM7U/
+        Vpf+2nDsOz2cpTVeCE1RQlk1pFMhe
+X-Received: by 2002:a05:6402:2049:: with SMTP id bc9mr4318049edb.298.1622449446310;
+        Mon, 31 May 2021 01:24:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJztB5YugpLYrPo+8XwU5l1yxIN1gCVwYv3J4LZ7tC4K4dCN3aQqIUfMb1VZwhYkit4bfwvalA==
+X-Received: by 2002:a05:6402:2049:: with SMTP id bc9mr4318039edb.298.1622449446163;
+        Mon, 31 May 2021 01:24:06 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id d24sm2369056ejr.51.2021.05.31.01.24.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 May 2021 01:24:05 -0700 (PDT)
+Subject: Re: Recent tpm_tis IRQ handling changes are causing kernel backtraces
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
         James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH v2] tpm: Replace WARN_ONCE() with dev_err_once() in
- tpm_tis_status()
-Message-ID: <YLR5MSiVpv52FcZe@kroah.com>
-References: <20210531053427.118552-1-jarkko@kernel.org>
+References: <34442b17-c8e6-9d33-831f-fcbf3a38552b@redhat.com>
+ <e4afc566-0114-c5a3-ebda-a775132e999d@redhat.com>
+ <YFEEas6kH3FUoKJe@kernel.org>
+ <8b592417-dc1d-a7f8-0e17-09b6bb1df33a@redhat.com>
+ <YJlsdgxPIm5I6Jk8@kernel.org>
+ <4f525bca-3836-7f5c-7913-e54d620473aa@redhat.com>
+ <81aa6340-f854-8f26-f599-03b116cc3c29@redhat.com>
+ <20210527140025.vl3ply6wnn7rsygg@kernel.org>
+ <27d71b81-1e89-1b5d-ddaf-a8928bac90fd@redhat.com>
+ <20210531043616.u3v25qzkkrik5apq@kernel.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <df7bcbfa-1706-1b8f-f32e-01c2d5e4ac7c@redhat.com>
+Date:   Mon, 31 May 2021 10:24:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210531053427.118552-1-jarkko@kernel.org>
+In-Reply-To: <20210531043616.u3v25qzkkrik5apq@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, May 31, 2021 at 08:34:27AM +0300, Jarkko Sakkinen wrote:
-> Do not torn down the system when getting invalid status from a TPM chip.
-> This can happen when panic-on-warn is used.
+Hi,
+
+On 5/31/21 6:36 AM, Jarkko Sakkinen wrote:
+> On Thu, May 27, 2021 at 05:27:49PM +0200, Hans de Goede wrote:
+>> This is from:
+>> https://retrace.fedoraproject.org/faf/reports/74723/  (public)
 > 
-> In addition, print out the value of TPM_STS.x instead of "invalid
-> status". In order to get the earlier benefits for forensics, also call
-> dump_stack().
+> I wonder if this occurs only with O_NONBLOCK.
 > 
-> Link: https://lore.kernel.org/keyrings/YKzlTR1AzUigShtZ@kroah.com/
-> Fixes: 55707d531af6 ("tpm_tis: Add a check for invalid status")
-> Cc: stable@vger.kernel.org
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Greg KH <greg@kroah.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
+> Any chances to get the output of
 > 
-> v2:
-> Dump also stack only once.
-
-Huh?
-
+>   sudo tools/testing/selftests/tpm2/test_smoke.sh
 > 
->  drivers/char/tpm/tpm_tis_core.c | 28 ++++++++++++++++++++--------
->  1 file changed, 20 insertions(+), 8 deletions(-)
+> ?
 > 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 55b9d3965ae1..ce410f19eff2 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -188,21 +188,33 @@ static int request_locality(struct tpm_chip *chip, int l)
->  static u8 tpm_tis_status(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> -	int rc;
-> +	static unsigned long klog_once;
->  	u8 status;
-> +	int rc;
->  
->  	rc = tpm_tis_read8(priv, TPM_STS(priv->locality), &status);
->  	if (rc < 0)
->  		return 0;
->  
->  	if (unlikely((status & TPM_STS_READ_ZERO) != 0)) {
-> -		/*
-> -		 * If this trips, the chances are the read is
-> -		 * returning 0xff because the locality hasn't been
-> -		 * acquired.  Usually because tpm_try_get_ops() hasn't
-> -		 * been called before doing a TPM operation.
-> -		 */
-> -		WARN_ONCE(1, "TPM returned invalid status\n");
-> +		if  (!test_and_set_bit(BIT(0), &klog_once)) {
+> It's obvious that there is some sort of bug, but it's not yet obvious that
+> this bug is connected to the locality issue yet, as in this case locality
+> is successfully reserved by tpm_try_get_ops() in tpm_dev_async_work()
+> (driver/chars/tpm/tpm-dev-common.c).
 
-Odd whitespace...
+As mentioned I've asked the user to try with tpm_tis.interrupts=0 and see
+if that makes a difference. I got a reply that the user only hit this
+once and that this is not (easily) reproducible :|
 
-Anyway, why?  Isn't this what the ratelimit stuff should give you?  How
-badly is this being tripped so much so that you need to only do this
-once per entire system and not per-device?
+"looks like a spurious problem that may already be solved."
 
-thanks,
+I did get permission to open up the bug (make it public) so if you want
+more info it is probably easiest if you interact directly with the
+reporter here:
 
-greg k-h
+https://bugzilla.redhat.com/show_bug.cgi?id=1964974
+
+If you don't already have a bugzilla.redhat.com account, creating one
+is super easy, you only need to enter your email address and pick a
+password.
+
+
+>> The second backtrace is from:
+>>
+>> https://bugzilla.redhat.com/show_bug.cgi?id=1964735  (private)
+>> https://retrace.fedoraproject.org/faf/reports/38209/ (public)
+> 
+> This must have a successful tpm_try_get_ops() for ima_tpm_chip
+> (map_tpm_chip == tpm_default_chip()).
+> 
+> Would also be interesting to see the status code, i.e. TPM_STS_0
+> register value, but these are completely lacking the warning
+> message, and the warning message apparently does not have the
+> information printed.
+> 
+> I'll send a patch that updates the warning, and also retract
+> of using WARN() given panic-on-warn is commonly set [*]. It's
+> not right thing to do to torn down the machine because of invalid
+> status code.
+> 
+> So, I'll fix that by instead:
+> 
+>   dev_err_once(&chip->dev, "invalid status: 0x%02x\n", status);
+>   dump_stack();
+> 
+> Should be visible enough to get notified, and provides the important
+> stack dump to quickly find possible impairment of tpm_try_get_ops(),
+> and also contains the missing status code printout.
+
+Sounds good, thanks.
+
+>> Note there is public bugzilla, with dmesg with the same backtrace
+>> (on the same laptop), but then with 5.12.5 here:
+>>
+>> https://bugzilla.redhat.com/show_bug.cgi?id=1963712
+>>
+>> There are also 2 interesting comments on the public bugzilla:
+>>
+>> "updated to linux kernel 5.12.5 performed 
+>> sudo shutdown -r now"
+>>
+>> "I installed Fedora 34 UEFI from USB on a Dell XPS 13 Developer Edition"
+>>
+>> So it seems this is happening on the "Dell XPS 13 Developer
+>> Edition".
+>>
+>> I've also checked the BIOS versions involved in the 2 different
+>> bugs and 1964735 has "BIOS 1.2.5 12/10/2020" where as
+>> 1963712 has "BIOS 2.2.0 04/06/2021" so this seems to be
+>> independent of the BIOS version.
+>>
+>> ###
+>>
+>> Interestingly enough the first backtrace is also happening on a:
+>> "Dell Inc. XPS 13 9310/0MRT12, BIOS 2.2.0 04/06/2021"
+>>
+>> So it seems that at least with 5.12.6 (which has the last 2 fixes)
+>> all reports are about the XPS 13 9310. I wonder if there is an
+>> issue with the TPM interrupt line on the XPS 13 9310; I've asked the
+>> reporters to try adding tpm_tis.interrupts=0 to their kernel commandline.
+> 
+> This is helpful for sure that these all are happening on matching hardware.
+
+Ack, I'm still waiting to hear back from reporters of the second
+backtrace, wrt tpm_tis.interrupts=0.
+
+I've marked a couple of reports of the second backtrace as duplicates of:
+https://bugzilla.redhat.com/show_bug.cgi?id=1963712
+
+So all reporters of this are now following this public bug, so if you want
+to reach out to them with questions that is probably the easiest way.
+
+Regards,
+
+Hans
+
