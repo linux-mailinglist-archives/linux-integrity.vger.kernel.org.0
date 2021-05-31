@@ -2,109 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE695395ACD
-	for <lists+linux-integrity@lfdr.de>; Mon, 31 May 2021 14:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DD8396488
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 May 2021 18:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbhEaMpH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 31 May 2021 08:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbhEaMo4 (ORCPT
+        id S233210AbhEaQDA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 31 May 2021 12:03:00 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54104 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230308AbhEaQAw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 31 May 2021 08:44:56 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73812C061574;
-        Mon, 31 May 2021 05:43:16 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id v5so14794776ljg.12;
-        Mon, 31 May 2021 05:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=A73j5gfyhf0kaSot1r4cuCgREnISlDQgXL2RSfW904E=;
-        b=TVlblWlh307l5p4aWPY8vA4Jihb6CDsGKAr/G9XH/4AqnapaTB3R8huPmSNsVuZx+b
-         yzZQ6MSRCncH+7IfjCpYfXUi/XG1Hx9688sqFNArkPEJ5ENbWc6qwmhUTA/IjPpsoLPp
-         HpAjNodzljr0vbzRT/h+74w0sYtsbLEMRzfwUtbmKKSo000u8gFjaWHpmPgtvRA90448
-         MwO6NsxsLtK1K7xgKubwjGjmC6dpBehlXoufd6CSSV8pHfgzX7ejSedvRUshZ/gk4Xio
-         YhWmLxdPe50XPrm6qkLfCFAhaCucxbRuu/CExBhxC+IL+8M7AyUMCBbDQgGl2NvuS90A
-         XxNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=A73j5gfyhf0kaSot1r4cuCgREnISlDQgXL2RSfW904E=;
-        b=mT2c6HA6UXIB/BXe0Y1cLbUkhICXvHgcYYQ6ywKVIOSS+H6PvDTrGxGX1rvlKSrhmm
-         z9DY9x4obZP+y7TKglMUHDbp77xvhH0xWPBid2dzrfU28yHGLNZE6b+e6X1DTzFVVdce
-         RB2eKMIYdPmJ931d0PgISyuLsWDv2E/g4HDEroO+Bk4ecKAR4I4LM3H9jen5xi4zG6ND
-         hvB+kMeavQlBqx1Iw2e719/gvbjBW7gio8SmEIVhcIFtMejMbzrQybc4R2qMYjKfVyHd
-         Sq54qkK4msT3Uciq4m/jvkrROMD73VmFaihze6UcqU6Cbb89MzZyIsTp7Ic2XO6jTjCm
-         QUoQ==
-X-Gm-Message-State: AOAM531chcPriWG+y/ZkWrSmy33ZTDDVu/dVryh0EnNg8pSsj6uuCHwF
-        E/XjnQOz5UeIsf/54VvmcsB1Ln2NR4kCazAIGzfALnjU
-X-Google-Smtp-Source: ABdhPJy2wSR7fuTYBXX5HkgOt6f7QpRaKy1VKFMom6FmaoLaw15313yuwsmOlRJhDm2tsCT3+gTuNcPONDo5b05HaMQ=
-X-Received: by 2002:a2e:b80b:: with SMTP id u11mr16911734ljo.94.1622464994778;
- Mon, 31 May 2021 05:43:14 -0700 (PDT)
+        Mon, 31 May 2021 12:00:52 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14VFcFIL088905;
+        Mon, 31 May 2021 11:58:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=MbQJoW+uSYC3MhQzAUeotJa8WDXDGWMqBHniGRV0EI4=;
+ b=Pefz5wmSHm7OQ3z76C2DQTjK8HN1ppm/pfk+cm/WG3fDD2mXcJm9ZEEEgWcGYYgI47tD
+ /ECWtfXZhaH5vfES2foyby84ZPLQvcsCRpQiTGrmvH4UfN+DBRnaTJqcg70Gmx59Magb
+ t38qrICJgsADOUYqMaTrlsn+YfPPWNxIf51qGzSaSoUlmtMDk4gnR4rAY+aLA5yCfuow
+ 2wiHfTgnaetzjELFfvV1VRWKf3oR5UgjupQ9I8p9HDoBm1OKYFHvvndpkUDTYWgaK1ob
+ FDiSjIaGlARRxkPtsXgR3IuKu3Jo7QV5hKsYAolV3zrvYoH9NOqynHFnPmibaDLGgRX3 Tw== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38w11uk0sp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 May 2021 11:58:28 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 14VFwNUn002969;
+        Mon, 31 May 2021 15:58:27 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 38ucvh8me8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 May 2021 15:58:26 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 14VFvrOX35979670
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 May 2021 15:57:53 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 652A542042;
+        Mon, 31 May 2021 15:58:24 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 310424203F;
+        Mon, 31 May 2021 15:58:23 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.84.117])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 31 May 2021 15:58:23 +0000 (GMT)
+Message-ID: <73739875882e9f7416f0958f8589a09089e53d9e.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 0/7] ima: Add template fields to verify EVM portable
+ signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@srcf.ucam.org
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 31 May 2021 11:58:20 -0400
+In-Reply-To: <20210528073812.407936-1-roberto.sassu@huawei.com>
+References: <20210528073812.407936-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: lRxu8V3qGNS4nn_Tn_5W4pqZHjQYYytD
+X-Proofpoint-ORIG-GUID: lRxu8V3qGNS4nn_Tn_5W4pqZHjQYYytD
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <1622123615-15517-1-git-send-email-herbert.tencent@gmail.com>
- <1622123615-15517-2-git-send-email-herbert.tencent@gmail.com> <47cf4353-b4bb-3907-6017-60bf87805d0c@linux.alibaba.com>
-In-Reply-To: <47cf4353-b4bb-3907-6017-60bf87805d0c@linux.alibaba.com>
-From:   hongbo li <herbert.tencent@gmail.com>
-Date:   Mon, 31 May 2021 20:43:04 +0800
-Message-ID: <CABpmuwLUZY=aPjeH=AdPvP2jq2+jnTyUyLLOoAwCg+hBZJB2Xg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] crypto: fix a memory leak in sm2
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Eric Biggers <ebiggers@kernel.org>,
-        David Howells <dhowells@redhat.com>, jarkko@kernel.org,
-        =?UTF-8?B?aGVyYmVydGhibGko5p2O5byY5Y2aKQ==?= 
-        <herberthbli@tencent.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-31_08:2021-05-31,2021-05-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 mlxscore=0
+ adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2105310114
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Tianjia Zhang <tianjia.zhang@linux.alibaba.com> =E4=BA=8E2021=E5=B9=B45=E6=
-=9C=8828=E6=97=A5=E5=91=A8=E4=BA=94 =E4=B8=8B=E5=8D=882:27=E5=86=99=E9=81=
-=93=EF=BC=9A
->
-> Hi Herbert, Hongbo,
->
-> On 5/27/21 9:53 PM, Hongbo Li wrote:
-> > From: Hongbo Li <herberthbli@tencent.com>
-> >
-> > SM2 module alloc ec->Q in sm2_set_pub_key(), when doing alg test in
-> > test_akcipher_one(), it will set public key for every test vector,
-> > and don't free ec->Q. This will cause a memory leak.
-> >
-> > This patch alloc ec->Q in sm2_ec_ctx_init().
-> >
-> > Fixes: ea7ecb66440b ("crypto: sm2 - introduce OSCCA SM2 asymmetric ciph=
-er algorithm")
-> > Signed-off-by: Hongbo Li <herberthbli@tencent.com>
-> > Reviewed-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> > ---
-> >   crypto/sm2.c | 24 ++++++++++--------------
-> >   1 file changed, 10 insertions(+), 14 deletions(-)
-> >
->
-> Patch 1/7 is an independent bugfix patch. If possible, consider applying
-> it first.
->
-> The commit message header should start with: crypto: sm2 -
->
-> Also added:
->
-> Cc: stable@vger.kernel.org # v5.10+
->
-> Best regards,
-> Tianjia
+On Fri, 2021-05-28 at 09:38 +0200, Roberto Sassu wrote:
+> The recent patch set 'evm: Improve usability of portable signatures' added
+> the possibility to include EVM portable signatures in the IMA measurement
+> list.
+> 
+> However, the information necessary to verify the signature were not
+> included in the IMA measurement list. This patch set introduces new
+> template fields to accomplish this goal:
+> 
+> - 'iuid': the inode UID;
+> - 'igid': the inode GID;
+> - 'imode': the inode mode;
+> - 'xattrnames': a list of xattr names (separated by |), only if the xattr is
+>   present;
+> - 'xattrlengths': a list of xattr lengths (u32), only if the xattr is present;
+> - 'xattrvalues': a list of xattr values;
+> 
+> Patch 1 adds an helper function to show integers in the measurement list.
+> Patches 2, 3 and 5 introduce new template fields. Patch 4 make it possible
+> to verify EVM portable signatures which protect xattrs belonging to LSMs
+> not enabled in the target platform. Patch 6 introduces the new IMA template
+> evm-sig. Patch 7 fixes a small issue in evm_write_xattrs() when audit is
+> not enabled.
 
-OK, will send this patch later.
+Thanks, Roberto. 
 
-Regards,
-Hongbo
+Applied to: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+next-integrity-testing branch.
+
+Mimi
+
