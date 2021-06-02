@@ -2,54 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAED398D23
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jun 2021 16:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC13398D2C
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jun 2021 16:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbhFBOhv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Jun 2021 10:37:51 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54990 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230462AbhFBOhq (ORCPT
+        id S231838AbhFBOhz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 2 Jun 2021 10:37:55 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5814 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230246AbhFBOht (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Jun 2021 10:37:46 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 152EWgZR017523;
+        Wed, 2 Jun 2021 10:37:49 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 152EYRKN180000;
         Wed, 2 Jun 2021 10:35:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=fbGuDVrQjyoYAum2TK48412eeGbx6tBnf9gQhkNmQ14=;
- b=hAAVa3/TxqtLqICwYxIH+0drY2tclk6HBpo3/zH9LN8EBe6eBR+AtIGNa8xq95RFHptQ
- d/5Jb5En+CUT+LE+vExch7+NfNV9oqBra/Xq6bHFaLyFkgPZFtBWLNuoybJmaNDlhAMV
- jCSrgQcZhPasQ8W7cX7N3dlO3T1eLT1ggS7K7QXtkzI4F8aCPN5Wdy7Qwjl/WQZMvxiD
- t+ANrF/AJi9yhuV4tI1XLIEbZYD4HLUImXEE+udVfX+S6UFwRmeuhQOCSyNhxkRuASQL
- jWUOUiPEmW4ZQsk9IEjBpEpNSwzKmnW13KSx3EHaq11nOa9menbwcGyaGUBqHvfNw8s1 tQ== 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=yzKYYNpLgG6WmVN4s1YaU80LkoAUSa953OPh2XdLe3o=;
+ b=pKC924DBY6ItA5zT30vrxs989JmgQ4ZoM76kZeNUs9fQA7ayj0FX4m+wK6IkDV3j74Iy
+ JrMWxybNP2zsRYynNmXONLLBnTUCodFIsUm6SlQCooJGNF+GvWzVLnIrNmpwKYU9C4jz
+ Khdue9+CaPl684EWQDZ5pp530phMSEhPbxcBfxLHk9yODSUTuVuZ261XtrTTn1oUo3gu
+ hrQ04p6ZAtzhLNqnxbnXhtZMoQN12Ph9KgJpIlT7PFUihM3lLyGqSHY8vgZdmlzl3+Bf
+ 8kFq2Trqon4X6Lp0EEajdEaplSra4McWD4H1WFCPaQ6dEGz1DrFU2zO1DSPdja4Q4j9N 4g== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38xasrac2p-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38xbpdgcm8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 02 Jun 2021 10:35:56 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 152EZfB6032720;
-        Wed, 2 Jun 2021 10:35:56 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38xasrac2b-1
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 152EYVGE180733;
+        Wed, 2 Jun 2021 10:35:55 -0400
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 38xbpdgckr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Jun 2021 10:35:56 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 152EX9ET026318;
+        Wed, 02 Jun 2021 10:35:55 -0400
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 152EWjXt028477;
         Wed, 2 Jun 2021 14:35:55 GMT
 Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma04dal.us.ibm.com with ESMTP id 38ud8a06ca-1
+        by ppma02wdc.us.ibm.com with ESMTP id 38ud89r65f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 02 Jun 2021 14:35:55 +0000
 Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 152EZs8F27328936
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 152EZsDK6554052
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 2 Jun 2021 14:35:54 GMT
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 82C9412405A;
+        by IMSVA (Postfix) with ESMTP id 9277E124052;
         Wed,  2 Jun 2021 14:35:54 +0000 (GMT)
 Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 728CF124052;
+        by IMSVA (Postfix) with ESMTP id 8373312405B;
         Wed,  2 Jun 2021 14:35:54 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.47.158.152])
         by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
@@ -60,74 +61,67 @@ To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
 Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v5 0/2] Add support for ECDSA-signed kernel modules
-Date:   Wed,  2 Jun 2021 10:35:35 -0400
-Message-Id: <20210602143537.545132-1-stefanb@linux.ibm.com>
+Subject: [PATCH v5 1/2] certs: Trigger creation of RSA module signing key if it's not an RSA key
+Date:   Wed,  2 Jun 2021 10:35:36 -0400
+Message-Id: <20210602143537.545132-2-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: J7JqYtna1i-R0euklFNysD3am0wazT0P
-X-Proofpoint-ORIG-GUID: dxrR5DERw3OztB_rOshppdtd0jAhzNeB
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20210602143537.545132-1-stefanb@linux.ibm.com>
+References: <20210602143537.545132-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4VDGT5O215iy2H-2IdxaSy1f5KpVy-lN
+X-Proofpoint-GUID: fonAFhyLmM8nqiBDPD27yIE5sMjaIEHD
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-06-02_07:2021-06-02,2021-06-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- adultscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 phishscore=0
- spamscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106020095
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
+ spamscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104190000 definitions=main-2106020095
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This series adds support for ECDSA-signed kernel modules. It also
-attempts to address a kbuild issue where a developer created an ECDSA
-key for signing kernel modules and then builds an older version of the
-kernel, when bisecting the kernel for example, that does not support
-ECDSA keys.
+Address a kbuild issue where a developer created an ECDSA key for signing
+kernel modules and then builds an older version of the kernel, when bi-
+secting the kernel for example, that does not support ECDSA keys.
 
-The first patch addresses the kbuild issue of needing to delete that
-ECDSA key if it is in certs/signing_key.pem and trigger the creation
-of an RSA key. However, for this to work this patch would have to be
-backported to previous versions of the kernel but would also only work
-for the developer if he/she used a stable version of the kernel to which
-this patch was applied. So whether this patch actually achieves the
-wanted effect is not always guaranteed.
+If openssl is installed, trigger the creation of an RSA module signing
+key if it is not an RSA key.
 
-The 2nd patch adds the support for the ECSDA-signed kernel modules.
+Fixes: cfc411e7fff3 ("Move certificate handling to its own directory")
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
+---
+ certs/Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-This patch depends on the ECDSA support series currently queued here:
-https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git/log/?h=ecc
-
-  Stefan
-
-v5:
-  - do not touch the key files if openssl is not installed; likely
-    addresses an issue pointed out by kernel test robot
-
-v4:
-  - extending 'depends on' with MODULES to (IMA_APPRAISE_MODSIG && MODULES)
-  
-v3:
-  - added missing OIDs for ECDSA signed hashes to pkcs7_sig_note_pkey_algo
-  - added recommendation to use string hash to Kconfig help text
-
-v2:
-  - Adjustment to ECDSA key detector string in 2/2
-  - Rephrased cover letter and patch descriptions with Mimi
-
-
-Stefan Berger (2):
-  certs: Trigger creation of RSA module signing key if it's not an RSA
-    key
-  certs: Add support for using elliptic curve keys for signing modules
-
- certs/Kconfig                         | 26 ++++++++++++++++++++++++++
- certs/Makefile                        | 21 +++++++++++++++++++++
- crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
- 3 files changed, 55 insertions(+)
-
+diff --git a/certs/Makefile b/certs/Makefile
+index 359239a0ee9e..72758684d254 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -57,11 +57,19 @@ endif
+ redirect_openssl	= 2>&1
+ quiet_redirect_openssl	= 2>&1
+ silent_redirect_openssl = 2>/dev/null
++openssl_available       = $(shell openssl help 2>/dev/null && echo yes)
+ 
+ # We do it this way rather than having a boolean option for enabling an
+ # external private key, because 'make randconfig' might enable such a
+ # boolean option and we unfortunately can't make it depend on !RANDCONFIG.
+ ifeq ($(CONFIG_MODULE_SIG_KEY),"certs/signing_key.pem")
++
++ifeq ($(openssl_available),yes)
++X509TEXT=$(shell openssl x509 -in $(CONFIG_MODULE_SIG_KEY) -text)
++
++$(if $(findstring rsaEncryption,$(X509TEXT)),,$(shell rm -f $(CONFIG_MODULE_SIG_KEY)))
++endif
++
+ $(obj)/signing_key.pem: $(obj)/x509.genkey
+ 	@$(kecho) "###"
+ 	@$(kecho) "### Now generating an X.509 key pair to be used for signing modules."
 -- 
 2.29.2
 
