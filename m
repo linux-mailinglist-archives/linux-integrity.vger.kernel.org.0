@@ -2,196 +2,212 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D60398D26
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jun 2021 16:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1751A3999F8
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jun 2021 07:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbhFBOhw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 2 Jun 2021 10:37:52 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26042 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230239AbhFBOhs (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 2 Jun 2021 10:37:48 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 152EWmIU147158;
-        Wed, 2 Jun 2021 10:35:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=7qm+iXaeo85lDNxRFciM0bRslS+Wns07kIdl2CR3Gpo=;
- b=OqhBkA/BtlLMBIUWPcDIftQThEvCwVJyE8SBf9ODEof3E7/PzWeTyzPaDdvsErIyTNkS
- O1lByUvK6KWdJcE/0L1VBr7J3VurCE0uogiBGmo23PK6JeXu+zB5LXn1h/FmGohRcyRF
- x4/fk0/zlue9qnxfU+jtWB7ifWJwTRxagE1ScP+tijXkeAp5UBTFlA4/1e+Cj42t5uGu
- DjmUxVKGeszFXbUtaBHxrPSxxaaIzRRzDbVhCq3mQ7kzO2EZZnCh5t6MlzMiltlNNJ+0
- NYzGMq1ru1lRm2B4t55CWZ5C0OAGChIhkFc29kfgSR3IOAhljMLa1zZB+1olIyACxNMg Gw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38x7kr88wr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Jun 2021 10:35:56 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 152EYAGH152920;
-        Wed, 2 Jun 2021 10:35:55 -0400
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38x7kr88wc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Jun 2021 10:35:55 -0400
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 152EVMS2011586;
-        Wed, 2 Jun 2021 14:35:55 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma05wdc.us.ibm.com with ESMTP id 38ud8986ew-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Jun 2021 14:35:55 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 152EZs6e19333602
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Jun 2021 14:35:54 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AC95B124053;
-        Wed,  2 Jun 2021 14:35:54 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93164124060;
-        Wed,  2 Jun 2021 14:35:54 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.47.158.152])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Jun 2021 14:35:54 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
-        dwmw2@infradead.org, zohar@linux.ibm.com, jarkko@kernel.org
-Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v5 2/2] certs: Add support for using elliptic curve keys for signing modules
-Date:   Wed,  2 Jun 2021 10:35:37 -0400
-Message-Id: <20210602143537.545132-3-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210602143537.545132-1-stefanb@linux.ibm.com>
-References: <20210602143537.545132-1-stefanb@linux.ibm.com>
+        id S229682AbhFCFap (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Jun 2021 01:30:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54318 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229661AbhFCFao (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 3 Jun 2021 01:30:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E9E5B613B4;
+        Thu,  3 Jun 2021 05:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622698140;
+        bh=xAfiOACfB1lhCFWBAbjR2amL5bfa3cVGV0Qv44oLCQI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gVATAidVIa1CXqniX77RP7CCUpjM+nCPdhS/RnPuTZK0YEHvLXwbR5zfis1c7sHGA
+         4OS305blMJ6pSypDbfQmy1XMgmXEmJvEAfCsW8XIsghhfedr4crZo5KpO+IqdROVjR
+         +sqa1/9Ii7u13RYCrUGHNj3Ihr3Qm2UMQFrolTwQHGJt4H9p/XRBPD4Cvu+Bwpi/wC
+         b5HF1umI0qGg7nAhGgL+Mg6eI4xKp7/DnUZjqmSWzItcqYAh+Kdw0Ee6WMG+wZHD7z
+         TGPtFgdviEIug680e9cUaAiEyY1lTYtswmJu/yXY73DH4uNa80rhGtvdv9L2x+6x2H
+         1XlW5FYgyVHHw==
+Date:   Thu, 3 Jun 2021 08:28:57 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Laurent Bigonville <bigon@debian.org>
+Cc:     linux-integrity@vger.kernel.org, Lukasz Majczak <lma@semihalf.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in
+ tpm_tis_gen_interrupt() and tpm_get_timeouts()
+Message-ID: <20210603052857.44zppwdfz4aror34@kernel.org>
+References: <20210216081750.191250-1-jarkko@kernel.org>
+ <ccb8ff69-5223-c293-bdda-46f041b7b770@debian.org>
+ <YCvv9wvj4jUIKpa7@kernel.org>
+ <YCvyS6eVjZCKMAyJ@kernel.org>
+ <YCv0KFIdtmG8F1kT@kernel.org>
+ <d5fd8a6b-5eb9-0b50-d66c-e9f4cc84b215@debian.org>
+ <YC2YyO7mJ7E73Voy@kernel.org>
+ <ed73c137-373d-9767-25e6-309534652354@debian.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: DiQoddKUzYVWdIosZUMvTxfH5KW99swC
-X-Proofpoint-ORIG-GUID: Bh1DcqbXKBRhbVoFb4pKVm4QTd164kC5
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-02_07:2021-06-02,2021-06-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 bulkscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 suspectscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106020095
+In-Reply-To: <ed73c137-373d-9767-25e6-309534652354@debian.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add support for using elliptic curve keys for signing modules. It uses
-a NIST P384 (secp384r1) key if the user chooses an elliptic curve key
-and will have ECDSA support built into the kernel.
+On Tue, Jun 01, 2021 at 11:17:14PM +0200, Laurent Bigonville wrote:
+> Le 17/02/21 à 23:29, Jarkko Sakkinen a écrit :
+> > On Tue, Feb 16, 2021 at 08:06:04PM +0100, Laurent Bigonville wrote:
+> > > Le 16/02/21 à 17:34, Jarkko Sakkinen a écrit :
+> > > > On Tue, Feb 16, 2021 at 06:26:54PM +0200, Jarkko Sakkinen wrote:
+> > > > > On Tue, Feb 16, 2021 at 06:16:58PM +0200, Jarkko Sakkinen wrote:
+> > > > > > On Tue, Feb 16, 2021 at 12:02:24PM +0100, Laurent Bigonville wrote:
+> > > > > > > Le 16/02/21 à 09:17, Jarkko Sakkinen a écrit :
+> > > > > > > > From: Lukasz Majczak <lma@semihalf.com>
+> > > > > > > > 
+> > > > > > > > This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
+> > > > > > > > (SLB 9670):
+> > > > > > > > 
+> > > > > > > > [    4.324298] TPM returned invalid status
+> > > > > > > > [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
+> > > > > > > > 
+> > > > > > > > Background
+> > > > > > > > ==========
+> > > > > > > > 
+> > > > > > > > TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 FIFO
+> > > > > > > > Interface Locality Usage per Register, Table 39 Register Behavior Based on
+> > > > > > > > Locality Setting for FIFO - a read attempt to TPM_STS_x Registers returns
+> > > > > > > > 0xFF in case of lack of locality. The described situation manifests itself
+> > > > > > > > with the following warning trace:
+> > > > > > > > 
+> > > > > > > > The fix
+> > > > > > > > =======
+> > > > > > > > 
+> > > > > > > > Add the proper decorations to tpm_tis_gen_interrupt() and
+> > > > > > > > tpm_get_timeouts().
+> > > > > > > I tried that patch (alone on the top of the HEAD of Linus master) and I
+> > > > > > > still get the same trace in dmesg
+> > > > > > Can you give a shot to
+> > > > > > 
+> > > > > > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> > > > > > 
+> > > > > > It has couple of more fixes, and paste the log.
+> > > > > And if possible a full stack trace :-)
+> > > > And apply this patch on top. Cannot apply it there before it's reviewed.
+> > > > 
+> > > I get the following stacktrace with your branch and the patch here:
+> > > 
+> > > [   13.498925] ------------[ cut here ]------------
+> > > [   13.498930] TPM returned invalid status
+> > > [   13.498953] WARNING: CPU: 1 PID: 459 at
+> > > drivers/char/tpm/tpm_tis_core.c:205 tpm_tis_status+0x86/0xa0 [tpm_tis_core]
+> > > [   13.498963] Modules linked in: libiscsi_tcp(E) tpm_tis(E+)
+> > > tpm_tis_core(E) libiscsi(E) snd_timer(E) tpm(E) joydev(E) snd(E)
+> > > scsi_transport_iscsi(E) pcc_cpufreq(E-) fjes(E-) soundcore(E) i7core_edac(E)
+> > > i5500_temp(E) asus_atk0110(E) rng_core(E) acpi_cpufreq(E-) evdev(E) loop(E)
+> > > firewire_sbp2(E) msr(E) parport_pc(E) ppdev(E) lp(E) parport(E) fuse(E)
+> > > configfs(E) sunrpc(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) crc16(E)
+> > > mbcache(E) jbd2(E) btrfs(E) blake2b_generic(E) zstd_compress(E) efivars(E)
+> > > raid10(E) raid456(E) async_raid6_recov(E) async_memcpy(E) async_pq(E)
+> > > async_xor(E) async_tx(E) xor(E) raid6_pq(E) libcrc32c(E) crc32c_generic(E)
+> > > raid1(E) raid0(E) multipath(E) linear(E) md_mod(E) dm_mod(E) sr_mod(E)
+> > > sd_mod(E) cdrom(E) t10_pi(E) hid_generic(E) usbhid(E) hid(E) amdgpu(E)
+> > > ahci(E) libahci(E) libata(E) gpu_sched(E) i2c_algo_bit(E) drm_ttm_helper(E)
+> > > ttm(E) uhci_hcd(E) ehci_pci(E) firewire_ohci(E) crc32c_intel(E) ehci_hcd(E)
+> > > drm_kms_helper(E) firewire_core(E) i2c_i801(E) psmouse(E)
+> > > [   13.499044]  scsi_mod(E) cec(E) i2c_smbus(E) mxm_wmi(E) lpc_ich(E)
+> > > crc_itu_t(E) sky2(E) usbcore(E) drm(E) mfd_core(E) wmi(E) button(E)
+> > > [   13.499058] CPU: 1 PID: 459 Comm: systemd-udevd Tainted: G          I
+> > > E     5.11.0+ #4
+> > > [   13.499062] Hardware name: System manufacturer System Product Name/P6T
+> > > DELUXE V2, BIOS 0406    04/24/2009
+> > > [   13.499064] RIP: 0010:tpm_tis_status+0x86/0xa0 [tpm_tis_core]
+> > > [   13.499069] Code: 00 75 30 48 83 c4 18 c3 31 c0 80 3d 83 48 00 00 00 75
+> > > e0 48 c7 c7 4c 53 49 c1 88 44 24 07 c6 05 6f 48 00 00 01 e8 b2 24 ba cd <0f>
+> > > 0b 0f b6 44 24 07 eb c0 e8 fc 99 bd cd 66 66 2e 0f 1f 84 00 00
+> > > [   13.499072] RSP: 0018:ffffbaeb80fb3aa0 EFLAGS: 00010286
+> > > [   13.499075] RAX: 0000000000000000 RBX: ffff9704034e5000 RCX:
+> > > ffff9707ada58bc8
+> > > [   13.499078] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI:
+> > > ffff9707ada58bc0
+> > > [   13.499080] RBP: 00000000ffff5d40 R08: 0000000000000000 R09:
+> > > ffffbaeb80fb38c0
+> > > [   13.499082] R10: ffffbaeb80fb38b8 R11: ffffffff8fac2588 R12:
+> > > 0000000000000016
+> > > [   13.499085] R13: ffff97040c38d000 R14: 0000000000001000 R15:
+> > > ffffbaeb80fb3ada
+> > > [   13.499087] FS:  00007fe1bcfeb8c0(0000) GS:ffff9707ada40000(0000)
+> > > knlGS:0000000000000000
+> > > [   13.499090] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > [   13.499092] CR2: 000055e5f7048590 CR3: 00000001084fe000 CR4:
+> > > 00000000000006e0
+> > > [   13.499095] Call Trace:
+> > > [   13.499099]  tpm_transmit+0x15f/0x3d0 [tpm]
+> > > [   13.499113]  tpm_transmit_cmd+0x25/0x90 [tpm]
+> > > [   13.499121]  tpm2_probe+0xe2/0x140 [tpm]
+> > > [   13.499130]  tpm_tis_core_init+0x1d5/0x2b0 [tpm_tis_core]
+> > > [   13.499135]  ? tpm_tis_init.part.0+0x130/0x130 [tpm_tis]
+> > > [   13.499141]  tpm_tis_pnp_init+0xe1/0x110 [tpm_tis]
+> > > [   13.499148]  pnp_device_probe+0xaf/0x140
+> > > [   13.499154]  really_probe+0xf2/0x440
+> > > [   13.499160]  driver_probe_device+0xe1/0x150
+> > > [   13.499163]  device_driver_attach+0xa1/0xb0
+> > > [   13.499167]  __driver_attach+0x8a/0x150
+> > > [   13.499171]  ? device_driver_attach+0xb0/0xb0
+> > > [   13.499174]  ? device_driver_attach+0xb0/0xb0
+> > > [   13.499177]  bus_for_each_dev+0x78/0xc0
+> > > [   13.499181]  bus_add_driver+0x12b/0x1e0
+> > > [   13.499184]  driver_register+0x8b/0xe0
+> > > [   13.499188]  ? 0xffffffffc1413000
+> > > [   13.499191]  init_tis+0xa0/0x1000 [tpm_tis]
+> > > [   13.499197]  do_one_initcall+0x44/0x1d0
+> > > [   13.499202]  ? do_init_module+0x23/0x260
+> > > [   13.499206]  ? kmem_cache_alloc_trace+0xf5/0x200
+> > > [   13.499212]  do_init_module+0x5c/0x260
+> > > [   13.499215]  __do_sys_finit_module+0xb1/0x110
+> > > [   13.499225]  do_syscall_64+0x33/0x80
+> > > [   13.499229]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> > > [   13.499234] RIP: 0033:0x7fe1bd4a49b9
+> > > [   13.499237] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48
+> > > 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48>
+> > > 3d 01 f0 ff ff 73 01 c3 48 8b 0d a7 54 0c 00 f7 d8 64 89 01 48
+> > > [   13.499240] RSP: 002b:00007ffca5bfa108 EFLAGS: 00000246 ORIG_RAX:
+> > > 0000000000000139
+> > > [   13.499243] RAX: ffffffffffffffda RBX: 000055e5f7036920 RCX:
+> > > 00007fe1bd4a49b9
+> > > [   13.499245] RDX: 0000000000000000 RSI: 00007fe1bd62fe2d RDI:
+> > > 0000000000000012
+> > > [   13.499247] RBP: 0000000000020000 R08: 0000000000000000 R09:
+> > > 000055e5f6e7a0b0
+> > > [   13.499249] R10: 0000000000000012 R11: 0000000000000246 R12:
+> > > 00007fe1bd62fe2d
+> > > [   13.499251] R13: 0000000000000000 R14: 000055e5f7033420 R15:
+> > > 000055e5f7036920
+> > > [   13.499255] ---[ end trace 7e963e5c3647102e ]---
+> > > 
+> > > If I also apply the patch to change the WARN_ONCE in dev_warn_once, and grep
+> > > on the string "tpm", I get the following:
+> > > 
+> > > Feb 16 19:51:22 fornost kernel: tpm tpm0: TPM returned invalid status: 0xa0
+> > > Feb 16 19:51:22 fornost kernel: tpm_tis 00:06: 1.2 TPM (device-id 0x6871,
+> > > rev-id 1)
+> > > Feb 16 19:51:24 fornost kernel: tpm tpm0: tpm_try_transmit: send(): error
+> > > -62
+> > > Feb 16 19:51:24 fornost kernel: tpm tpm0: A TPM error (-62) occurred
+> > > attempting to determine the timeouts
+> > > Feb 16 19:51:24 fornost kernel: tpm_tis: probe of 00:06 failed with error
+> > > -62
+> > > Feb 16 19:51:24 fornost kernel: tpm_inf_pnp 00:06: Found TPM with ID IFX0102
+> > > 
+> > > 
+> > No immediate idea why this happens as the code should take locality.
+> > 
+> > I noticed that the original patch bundles incorrectly two fixes, so I
+> > send mu PT without the current fix and turn into a patch set. Let's
+> > try to debug this for rc2/rc3.
+> Hey, I'm coming back regarding this issue, I'm running 5.10 (from debian
+> unstable) and still getting this issue
 
-Note: A developer choosing an ECDSA key for signing modules should still
-delete the signing key (rm certs/signing_key.*) when building an older
-version of a kernel that only supports RSA keys. Unless kbuild automati-
-cally detects and generates a new kernel module key, ECDSA-signed kernel
-modules will fail signature verification.
+Many of the fixes are landing to 5.13, stable kernels do not acquire
+out-of-tree fixes unless downstream maintainers decide to apply them
+by hand.
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
----
- certs/Kconfig                         | 26 ++++++++++++++++++++++++++
- certs/Makefile                        | 13 +++++++++++++
- crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
- 3 files changed, 47 insertions(+)
-
-diff --git a/certs/Kconfig b/certs/Kconfig
-index f4e61116f94e..916cbb1af928 100644
---- a/certs/Kconfig
-+++ b/certs/Kconfig
-@@ -15,6 +15,32 @@ config MODULE_SIG_KEY
-          then the kernel will automatically generate the private key and
-          certificate as described in Documentation/admin-guide/module-signing.rst
- 
-+choice
-+	prompt "Type of module signing key to be generated"
-+	default MODULE_SIG_KEY_TYPE_RSA
-+	help
-+	 The type of module signing key type to generate. This option
-+	 does not apply if a #PKCS11 URI is used.
-+
-+config MODULE_SIG_KEY_TYPE_RSA
-+	bool "RSA"
-+	depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
-+	help
-+	 Use an RSA key for module signing.
-+
-+config MODULE_SIG_KEY_TYPE_ECDSA
-+	bool "ECDSA"
-+	select CRYPTO_ECDSA
-+	depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
-+	help
-+	 Use an elliptic curve key (NIST P384) for module signing. Consider
-+	 using a strong hash like sha256 or sha384 for hashing modules.
-+
-+	 Note: Remove all ECDSA signing keys, e.g. certs/signing_key.pem,
-+	 when falling back to building Linux 5.11 and older kernels.
-+
-+endchoice
-+
- config SYSTEM_TRUSTED_KEYRING
- 	bool "Provide system-wide ring of trusted keys"
- 	depends on KEYS
-diff --git a/certs/Makefile b/certs/Makefile
-index 72758684d254..4eb69bdadc79 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -66,9 +66,21 @@ ifeq ($(CONFIG_MODULE_SIG_KEY),"certs/signing_key.pem")
- 
- ifeq ($(openssl_available),yes)
- X509TEXT=$(shell openssl x509 -in $(CONFIG_MODULE_SIG_KEY) -text)
-+endif
- 
-+# Support user changing key type
-+ifdef CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
-+keytype_openssl = -newkey ec -pkeyopt ec_paramgen_curve:secp384r1
-+ifeq ($(openssl_available),yes)
-+$(if $(findstring id-ecPublicKey,$(X509TEXT)),,$(shell rm -f $(CONFIG_MODULE_SIG_KEY)))
-+endif
-+endif # CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
-+
-+ifdef CONFIG_MODULE_SIG_KEY_TYPE_RSA
-+ifeq ($(openssl_available),yes)
- $(if $(findstring rsaEncryption,$(X509TEXT)),,$(shell rm -f $(CONFIG_MODULE_SIG_KEY)))
- endif
-+endif # CONFIG_MODULE_SIG_KEY_TYPE_RSA
- 
- $(obj)/signing_key.pem: $(obj)/x509.genkey
- 	@$(kecho) "###"
-@@ -83,6 +95,7 @@ $(obj)/signing_key.pem: $(obj)/x509.genkey
- 		-batch -x509 -config $(obj)/x509.genkey \
- 		-outform PEM -out $(obj)/signing_key.pem \
- 		-keyout $(obj)/signing_key.pem \
-+		$(keytype_openssl) \
- 		$($(quiet)redirect_openssl)
- 	@$(kecho) "###"
- 	@$(kecho) "### Key pair generated."
-diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_keys/pkcs7_parser.c
-index 967329e0a07b..6592279d839a 100644
---- a/crypto/asymmetric_keys/pkcs7_parser.c
-+++ b/crypto/asymmetric_keys/pkcs7_parser.c
-@@ -269,6 +269,14 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t hdrlen,
- 		ctx->sinfo->sig->pkey_algo = "rsa";
- 		ctx->sinfo->sig->encoding = "pkcs1";
- 		break;
-+	case OID_id_ecdsa_with_sha1:
-+	case OID_id_ecdsa_with_sha224:
-+	case OID_id_ecdsa_with_sha256:
-+	case OID_id_ecdsa_with_sha384:
-+	case OID_id_ecdsa_with_sha512:
-+		ctx->sinfo->sig->pkey_algo = "ecdsa";
-+		ctx->sinfo->sig->encoding = "x962";
-+		break;
- 	default:
- 		printk("Unsupported pkey algo: %u\n", ctx->last_oid);
- 		return -ENOPKG;
--- 
-2.29.2
-
+/Jarkko
