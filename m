@@ -2,103 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8721039A103
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jun 2021 14:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A85A39A157
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jun 2021 14:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhFCMex (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Jun 2021 08:34:53 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29920 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229876AbhFCMex (ORCPT
+        id S230316AbhFCMqf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 3 Jun 2021 08:46:35 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16518 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229966AbhFCMqe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Jun 2021 08:34:53 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 153C4AJP095306;
-        Thu, 3 Jun 2021 08:33:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Hwq66EGg2XWj2KdlQHVnfsT2F/0lkUQs+MW4ZqGdRA4=;
- b=laXiT9UoghEtzk1UZPSouu9/kvpQMQDYtbULJGs07q8d0BilLR7VdiMHJcZBBV2fnznA
- hZM3XHb5fjMumDKkMzpZmnP14T2DAP9NKnKvEDon/GUN7/o0mKX95QZ1jYGSk6SBSjSt
- hxSOo39mD5ZlumAs5CB3b2H/cSqMMvJa+ycPa/CPMWcFPkpDrj3AEhJ4+W5M4wjIGSKJ
- RZJcHnmcNsmMSkV3b3H2e4Kx22TbCuzIR7w7KTuj9aQreFD4bd11Emr78N3vWR5whypt
- U7a5qt2XxGSxH8/bej/0y6itqNW5TZcihyOk4klec1V/aiCsh0PYkr1iIRsOvHL4MEqA qw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38xxfqsftp-1
+        Thu, 3 Jun 2021 08:46:34 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 153Cb2UZ043771;
+        Thu, 3 Jun 2021 08:44:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=oGrl/dxatTV8oTyTC4Z4yYBQXQWCw7AGoOuMKI4J2eE=;
+ b=BQOpPFkDuot4FJ+wlGbim3wAZ84W+l+VFxYGGVzLr/Kkpr0sEH8ICnnTJgBnDY8XpXMa
+ oCWG2SNCzgA1cTyEJVYhvxhiwOVOpKJzNXznf+YS2aaQ5ssDOUOTOCt8klTPD1Ahmf+X
+ aGpCqFGohZthBYVWcXdXRulw0JHNQ6oq6J2FjniZvaNuFqSN2V8OcblUl5myNUaiHS0w
+ LfNOuzDoI895/Z6ILwfSW2OhmohfP5o9LJd9desS6rcwtU6YCDshnRCCyAtWMc7rtYAi
+ A5hUfjTGygQmIraJg9eDCrn4Q3/g59psuiP/lg3G+89ZFS/EHo6Z180z9w9OisLnEZI/ DA== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38xy85872v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Jun 2021 08:33:02 -0400
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 153C4KLl096737;
-        Thu, 3 Jun 2021 08:33:02 -0400
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 38xxfqsftc-1
+        Thu, 03 Jun 2021 08:44:42 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 153Cd6Sv012236;
+        Thu, 3 Jun 2021 12:44:40 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06fra.de.ibm.com with ESMTP id 38ucvh9nbx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Jun 2021 08:33:02 -0400
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 153CWx3C007336;
-        Thu, 3 Jun 2021 12:33:01 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02wdc.us.ibm.com with ESMTP id 38ud89yn7e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Jun 2021 12:33:01 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 153CX0Kj20513066
+        Thu, 03 Jun 2021 12:44:40 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 153Ci3dD33685930
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Jun 2021 12:33:00 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7351478064;
-        Thu,  3 Jun 2021 12:33:00 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE93878063;
-        Thu,  3 Jun 2021 12:32:59 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Jun 2021 12:32:59 +0000 (GMT)
-Subject: Re: [PATCH v5 0/2] Add support for ECDSA-signed kernel modules
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
-        dwmw2@infradead.org, zohar@linux.ibm.com, nayna@linux.ibm.com,
-        linux-integrity@vger.kernel.org,
+        Thu, 3 Jun 2021 12:44:03 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E165611C058;
+        Thu,  3 Jun 2021 12:44:37 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1312411C04A;
+        Thu,  3 Jun 2021 12:44:36 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.13.122])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Jun 2021 12:44:35 +0000 (GMT)
+Message-ID: <9e5f5ddca94fb1915fb15302e2b7b5f2bf4a68a7.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 6/7] ima: Define new template evm-sig
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, mjg59@srcf.ucam.org
+Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210602143537.545132-1-stefanb@linux.ibm.com>
- <20210603064738.pwfq3n7erzmncdmw@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <8b79651b-1fe4-48c0-3498-529344ac6243@linux.ibm.com>
-Date:   Thu, 3 Jun 2021 08:32:59 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <20210603064738.pwfq3n7erzmncdmw@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Date:   Thu, 03 Jun 2021 08:44:35 -0400
+In-Reply-To: <20210528073812.407936-7-roberto.sassu@huawei.com>
+References: <20210528073812.407936-1-roberto.sassu@huawei.com>
+         <20210528073812.407936-7-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BZYzHRmbjzbEdXfphBXsqbIrb3K_9DcV
-X-Proofpoint-ORIG-GUID: TvOPFa_85iNyyTwlcLODZfjyx3dfeXLe
+X-Proofpoint-GUID: K_vGcFicJc80uRntXPnB2i8tkMIQCBxf
+X-Proofpoint-ORIG-GUID: K_vGcFicJc80uRntXPnB2i8tkMIQCBxf
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-06-03_08:2021-06-02,2021-06-03 signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 phishscore=0 clxscore=1015 mlxscore=0 priorityscore=1501
- malwarescore=0 mlxlogscore=919 impostorscore=0 bulkscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106030082
+ mlxlogscore=999 spamscore=0 clxscore=1015 phishscore=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 bulkscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106030085
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, 2021-05-28 at 09:38 +0200, Roberto Sassu wrote:
+> With the recent introduction of the evmsig template field, remote verifiers
+> can obtain the EVM portable signature instead of the IMA signature, to
+> verify file metadata.
+> 
+> After introducing the new fields to include file metadata in the
+> measurement list, this patch finally defines the evm-sig template, whose
+> format is:
+> 
+> d-ng|n-ng|evmsig|xattrnames|xattrlengths|xattrvalues|iuid|igid|imode
+> 
+> xattrnames, xattrlengths and xattrvalues are populated only from defined
+> EVM protected xattrs, i.e. the ones that EVM considers to verify the
+> portable signature. xattrnames and xattrlengths are populated only if the
+> xattr is present.
+> 
+> xattrnames and xattrlengths are not necessary for verifying the EVM
+> portable signature, but they are included for completeness of information,
+> if a remote verifier wants to infer more from file metadata.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  Documentation/security/IMA-templates.rst | 1 +
+>  security/integrity/ima/ima_template.c    | 3 +++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/security/IMA-templates.rst b/Documentation/security/IMA-templates.rst
+> index 6a58760a0a35..5adc22f99496 100644
+> --- a/Documentation/security/IMA-templates.rst
+> +++ b/Documentation/security/IMA-templates.rst
+> @@ -91,6 +91,7 @@ Below, there is the list of defined template descriptors:
+>   - "ima-sig": its format is ``d-ng|n-ng|sig``;
+>   - "ima-buf": its format is ``d-ng|n-ng|buf``;
+>   - "ima-modsig": its format is ``d-ng|n-ng|sig|d-modsig|modsig``;
+> + - "evm-sig": its format is ``d-ng|n-ng|evmsig|xattrnames|xattrlengths|xattrvalues|iuid|igid|imode``;
+>  
+>  
+>  Use
+> diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+> index 159a31d2fcdf..be435efe6122 100644
+> --- a/security/integrity/ima/ima_template.c
+> +++ b/security/integrity/ima/ima_template.c
+> @@ -22,6 +22,9 @@ static struct ima_template_desc builtin_templates[] = {
+>  	{.name = "ima-sig", .fmt = "d-ng|n-ng|sig"},
+>  	{.name = "ima-buf", .fmt = "d-ng|n-ng|buf"},
+>  	{.name = "ima-modsig", .fmt = "d-ng|n-ng|sig|d-modsig|modsig"},
+> +	{.name = "evm-sig",
+> +	 .fmt = "d-ng|n-ng|evmsig|"
+> +		"xattrnames|xattrlengths|xattrvalues|iuid|igid|imode"},
 
-On 6/3/21 2:47 AM, Jarkko Sakkinen wrote:
->
->> -- 
->> 2.29.2
->>
->>
-> Please instead send a fix.
+checkpatch is complaining "WARNING: quoted string split across lines".
 
-We have a Fixes tag in 1/2, so we want this to propagate to older 
-kernels and need the fix in 1/2 for that reason.
+>  	{.name = "", .fmt = ""},	/* placeholder for a custom format */
+>  };
+>  
 
-    Stefan
+The MAX_TEMPLATE_NAME_LEN needs to be updated.
 
+thanks,
+
+Mimi
 
