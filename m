@@ -2,85 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DAD39A989
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jun 2021 19:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4271D39B2B6
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jun 2021 08:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbhFCRuA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 3 Jun 2021 13:50:00 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37362 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbhFCRt7 (ORCPT
+        id S229826AbhFDGjE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Jun 2021 02:39:04 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3152 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229844AbhFDGjD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 3 Jun 2021 13:49:59 -0400
-Received: from nramas-ThinkStation-P520 (c-73-42-176-67.hsd1.wa.comcast.net [73.42.176.67])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C024620B7178;
-        Thu,  3 Jun 2021 10:48:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C024620B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1622742494;
-        bh=/O+3cuUTwyhVTBRpRJNun3gW8d6RZECOYc6LABWyTOM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=sR0EiqivNr6/CHvpvyEaC0bb4nYshSaC7upldcWL9S0Mm74+dPRhcpfohglhJWniy
-         OtEfViVOC1d6wRNBDeLqlyWcyYdELLwmAaFFUdvu8uKqRK3AQK7ujuxajecmjzRbLi
-         65H77bmVpXgS8c+1FPgzYpvECX1gIZ8+cXisMsGk=
-Message-ID: <dcfa5b43436be61d79c5c3d842a147d01f896bbb.camel@linux.microsoft.com>
-Subject: Re: [RFC PATCH 2/2] evm: output EVM digest calculation info needed
- for debugging
-From:   nramas <nramas@linux.microsoft.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
+        Fri, 4 Jun 2021 02:39:03 -0400
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FxCZB5g6kz6F84K;
+        Fri,  4 Jun 2021 14:30:42 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 4 Jun 2021 08:37:16 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Fri, 4 Jun 2021 08:37:16 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+CC:     Stefan Berger <stefanb@linux.ibm.com>,
         Russell Coker <russell@coker.com.au>
-Date:   Thu, 03 Jun 2021 10:48:14 -0700
-In-Reply-To: <f29c8302fbb83fa05cf4cddb48144e32b14a6851.camel@linux.ibm.com>
+Subject: RE: [RFC PATCH 1/2] ima: differentiate between EVM failures in the
+ audit log
+Thread-Topic: [RFC PATCH 1/2] ima: differentiate between EVM failures in the
+ audit log
+Thread-Index: AQHXWIvE7svTuhbfo0y1Vg5X80B3bqsDZmSg
+Date:   Fri, 4 Jun 2021 06:37:16 +0000
+Message-ID: <9b88066d72c64117a923acafca62db72@huawei.com>
 References: <20210603151819.242247-1-zohar@linux.ibm.com>
-         <20210603151819.242247-3-zohar@linux.ibm.com>
-         <a994cedd0b2a07faf8d1949448ec9c14b3dba34c.camel@linux.microsoft.com>
-         <f29c8302fbb83fa05cf4cddb48144e32b14a6851.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+ <20210603151819.242247-2-zohar@linux.ibm.com>
+In-Reply-To: <20210603151819.242247-2-zohar@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.212.129]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2021-06-03 at 12:55 -0400, Mimi Zohar wrote:
-> 
-> On Thu, 2021-06-03 at 09:34 -0700, nramas wrote:
-> > > +void evm_bin2hex_print(const char *prefix, const void *src,
-> > > size_t
-> > > count);
-> > >  
-> > 
-> > For evm_bin2hex_print() can we could do the following in evm.h?
-> > 
-> > #ifdef DEBUG
-> > void evm_bin2hex_print(const char *prefix, const void *src, size_t
-> > count);
-> > #else
-> > void evm_bin2hex_print(const char *prefix, const void *src, size_t
-> > count) {}
-> > #endif /* DEBUG */
-> 
-> Yes, if we decide that it needs to be based on DEBUG, this would be
-> the
-> proper way of doing it.  However, since there's nothing really
-> private
-> here, it's just displaying the security xattrs and other file
-> metadata,
-> should enabling/disabling the debugging be runtime
-> configurable?   Kind
-> of like how print_hex_dump() relies on loglevel.  Or should it be
-> more
-> granular?
-> 
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Thursday, June 3, 2021 5:18 PM
+> Differenatiate between an invalid EVM portable signature failure
 
-I read "Documentation/admin-guide/dynamic-debug-howto.rst". I think
-dynamically enabling/disabling, like how print_hex_dump() does, would
-be better for evm_bin2hex_print() as well.
+Typo.
 
-thanks,
- -lakshmi
- 
+> from other EVM HMAC/signature failures.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+
+Thanks, looks good.
+
+Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
+
+> ---
+>  security/integrity/ima/ima_appraise.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/ima/ima_appraise.c
+> b/security/integrity/ima/ima_appraise.c
+> index 940695e7b535..ef9dcfce45d4 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -422,7 +422,8 @@ int ima_appraise_measurement(enum ima_hooks
+> func,
+>  		goto out;
+>  	case INTEGRITY_FAIL_IMMUTABLE:
+>  		set_bit(IMA_DIGSIG, &iint->atomic_flags);
+> -		fallthrough;
+> +		cause = "invalid-fail-immutable";
+> +		goto out;
+>  	case INTEGRITY_FAIL:		/* Invalid HMAC/signature. */
+>  		cause = "invalid-HMAC";
+>  		goto out;
+> --
+> 2.27.0
 
