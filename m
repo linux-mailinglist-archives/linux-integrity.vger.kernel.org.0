@@ -2,43 +2,43 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5B839B3FA
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jun 2021 09:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C3039B4CC
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jun 2021 10:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbhFDHgE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Jun 2021 03:36:04 -0400
-Received: from mga02.intel.com ([134.134.136.20]:63214 "EHLO mga02.intel.com"
+        id S230035AbhFDI0F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Jun 2021 04:26:05 -0400
+Received: from mga02.intel.com ([134.134.136.20]:55719 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229925AbhFDHgD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Jun 2021 03:36:03 -0400
-IronPort-SDR: whC316iA4L7tRuhY8XkVQCjy6TE8amRF+oHkXKz0jO5SslTtvmLmtOVdOr11sM1x1cKXatVURK
- sfsRJOEDiG4g==
-X-IronPort-AV: E=McAfee;i="6200,9189,10004"; a="191350902"
+        id S229983AbhFDI0F (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 4 Jun 2021 04:26:05 -0400
+IronPort-SDR: JyDPt8r5NjAFLlHks2N6asPvIO4gu5//FV/Ear1sYsasvR4CWU2k7NSkASN4fCWKAkK6A2io9F
+ WgnpIH/RZjMA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10004"; a="191358063"
 X-IronPort-AV: E=Sophos;i="5.83,247,1616482800"; 
-   d="gz'50?scan'50,208,50";a="191350902"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2021 00:34:17 -0700
-IronPort-SDR: vyXsr3Vu8Z480J+xQJfC5u9DLfe/KvOVabemIlESXqx9TlL3iHaYGPhIQRhBfSAtd4vf7LNFqd
- V0Jzeu8O3xTg==
+   d="gz'50?scan'50,208,50";a="191358063"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2021 01:24:19 -0700
+IronPort-SDR: 3pshfFmhGBh/Ck5PwAB0oAseoxkVkLvR3i3EwKLPKFgQK9KVB8CSdiPhZ/HJ9YswXPqwBTbb7K
+ 6R8CcRt9kdGA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,247,1616482800"; 
-   d="gz'50?scan'50,208,50";a="636499712"
+   d="gz'50?scan'50,208,50";a="550459523"
 Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Jun 2021 00:34:10 -0700
+  by orsmga004.jf.intel.com with ESMTP; 04 Jun 2021 01:24:17 -0700
 Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lp4LK-0006mN-73; Fri, 04 Jun 2021 07:34:10 +0000
-Date:   Fri, 4 Jun 2021 15:33:42 +0800
+        id 1lp57o-0006or-K6; Fri, 04 Jun 2021 08:24:16 +0000
+Date:   Fri, 4 Jun 2021 16:23:13 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Roberto Sassu <roberto.sassu@huawei.com>
 Cc:     kbuild-all@lists.01.org, linux-integrity@vger.kernel.org,
         Mimi Zohar <zohar@linux.ibm.com>
-Subject: [integrity:next-integrity-testing 4/9]
- security/integrity/ima/ima_template_lib.c:571:28: sparse: sparse: incorrect
+Subject: [integrity:next-integrity-testing 5/9]
+ security/integrity/ima/ima_template_lib.c:616:22: sparse: sparse: incorrect
  type in assignment (different base types)
-Message-ID: <202106041539.U04QXEXV-lkp@intel.com>
+Message-ID: <202106041605.ujAVeENC-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="9jxsPFA5p3P2qPhR"
+Content-Type: multipart/mixed; boundary="8t9RHnE3ZwKMSgU+"
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -46,13 +46,13 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
---9jxsPFA5p3P2qPhR
+--8t9RHnE3ZwKMSgU+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity-testing
 head:   d721c15fd519c08819fbc6de39b713e2ed1d9894
-commit: 7dcfeacc5a9d0c130160b86de23279793a8732c8 [4/9] ima: Define new template fields iuid and igid
+commit: f8216f6b957f5657c5f4c97f4b037120c6f236bc [5/9] ima: Define new template field imode
 config: nios2-randconfig-s031-20210604 (attached as .config)
 compiler: nios2-linux-gcc (GCC) 9.3.0
 reproduce:
@@ -60,10 +60,10 @@ reproduce:
         chmod +x ~/bin/make.cross
         # apt-get install sparse
         # sparse version: v0.6.3-341-g8af24329-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/commit/?id=7dcfeacc5a9d0c130160b86de23279793a8732c8
+        # https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/commit/?id=f8216f6b957f5657c5f4c97f4b037120c6f236bc
         git remote add integrity https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
         git fetch --no-tags integrity next-integrity-testing
-        git checkout 7dcfeacc5a9d0c130160b86de23279793a8732c8
+        git checkout f8216f6b957f5657c5f4c97f4b037120c6f236bc
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' W=1 ARCH=nios2 
 
@@ -77,52 +77,47 @@ sparse warnings: (new ones prefixed by >>)
    security/integrity/ima/ima_template_lib.c:114:44: sparse: sparse: cast to restricted __le64
    security/integrity/ima/ima_template_lib.c:135:60: sparse: sparse: restricted __le32 degrades to integer
    security/integrity/ima/ima_template_lib.c:230:49: sparse: sparse: cast to restricted __le32
->> security/integrity/ima/ima_template_lib.c:571:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [assigned] id @@     got restricted __le16 [usertype] @@
+   security/integrity/ima/ima_template_lib.c:571:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [assigned] id @@     got restricted __le16 [usertype] @@
    security/integrity/ima/ima_template_lib.c:571:28: sparse:     expected unsigned int [assigned] id
    security/integrity/ima/ima_template_lib.c:571:28: sparse:     got restricted __le16 [usertype]
->> security/integrity/ima/ima_template_lib.c:573:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [assigned] id @@     got restricted __le32 [usertype] @@
+   security/integrity/ima/ima_template_lib.c:573:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [assigned] id @@     got restricted __le32 [usertype] @@
    security/integrity/ima/ima_template_lib.c:573:28: sparse:     expected unsigned int [assigned] id
    security/integrity/ima/ima_template_lib.c:573:28: sparse:     got restricted __le32 [usertype]
+>> security/integrity/ima/ima_template_lib.c:616:22: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [assigned] [usertype] mode @@     got restricted __le16 [usertype] @@
+   security/integrity/ima/ima_template_lib.c:616:22: sparse:     expected unsigned short [assigned] [usertype] mode
+   security/integrity/ima/ima_template_lib.c:616:22: sparse:     got restricted __le16 [usertype]
 
-vim +571 security/integrity/ima/ima_template_lib.c
+vim +616 security/integrity/ima/ima_template_lib.c
 
-   554	
-   555	static int ima_eventinodedac_init_common(struct ima_event_data *event_data,
-   556						 struct ima_field_data *field_data,
-   557						 bool get_uid)
-   558	{
-   559		unsigned int id;
-   560	
-   561		if (!event_data->file)
-   562			return 0;
-   563	
-   564		if (get_uid)
-   565			id = i_uid_read(file_inode(event_data->file));
-   566		else
-   567			id = i_gid_read(file_inode(event_data->file));
-   568	
-   569		if (ima_canonical_fmt) {
-   570			if (sizeof(id) == sizeof(u16))
- > 571				id = cpu_to_le16(id);
-   572			else
- > 573				id = cpu_to_le32(id);
-   574		}
-   575	
-   576		return ima_write_template_field_data((void *)&id, sizeof(id),
-   577						     DATA_FMT_UINT, field_data);
-   578	}
-   579	
+   599	
+   600	/*
+   601	 *  ima_eventinodemode_init - include the inode mode as part of the template
+   602	 *  data
+   603	 */
+   604	int ima_eventinodemode_init(struct ima_event_data *event_data,
+   605				    struct ima_field_data *field_data)
+   606	{
+   607		struct inode *inode;
+   608		umode_t mode;
+   609	
+   610		if (!event_data->file)
+   611			return 0;
+   612	
+   613		inode = file_inode(event_data->file);
+   614		mode = inode->i_mode;
+   615		if (ima_canonical_fmt)
+ > 616			mode = cpu_to_le16(mode);
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---9jxsPFA5p3P2qPhR
+--8t9RHnE3ZwKMSgU+
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICI3SuWAAAy5jb25maWcAnDzbbuM4su/zFUIPcLD70NOWbCcODvJAU5TFsW4jUo6dF8Hj
+H4sICH3duWAAAy5jb25maWcAnDzbbuM4su/zFUIPcLD70NOWbCcODvJAU5TFsW4jUo6dF8Hj
 uLuNTeys7cxM//0pkrqQEpU0zgLT3a4qksWqYt1I7a+//Oqgt+vpZXs97LbPzz+cb/vj/ry9
 7p+cr4fn/f86fuokKXeIT/lvQBwdjm//fDkeThfPmf7mjn8bfT7vPGe5Px/3zw4+Hb8evr3B
 +MPp+Muvv+A0CeiixLhckZzRNCk5WfP7T3L852cx1+dvu53zrwXG/3bufoPpPmmDKCsBcf+j
@@ -520,4 +515,4 @@ TfMS5AWzkRKg5ox8pKjwtjlIwcI7NQQUDlmHcpEyHdibXYl6XipAAPpLKTmUHiYP35bC3CUT
 FsV5zMbkV1GsRFDH/uAUZ/pYW+WCGgXc+PftMbUTWzIDeYynt2pfVZl1HytAC0FzNo4Lnhxu
 MlHXf5GeSM/JUdka/gdrJnHwAkMBAA==
 
---9jxsPFA5p3P2qPhR--
+--8t9RHnE3ZwKMSgU+--
