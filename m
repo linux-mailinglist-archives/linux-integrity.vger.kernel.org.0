@@ -2,207 +2,73 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AB839B92D
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jun 2021 14:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4825839E8B3
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Jun 2021 22:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbhFDMt3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Jun 2021 08:49:29 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3155 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbhFDMt2 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Jun 2021 08:49:28 -0400
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FxMnb1tWrz6R20Q;
-        Fri,  4 Jun 2021 20:41:07 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 4 Jun 2021 14:47:41 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Fri, 4 Jun 2021 14:47:41 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        kernel test robot <lkp@intel.com>
-CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "Mimi Zohar" <zohar@linux.ibm.com>
-Subject: RE: [integrity:next-integrity-testing 5/9]
- security/integrity/ima/ima_template_lib.c:616:22: sparse: sparse: incorrect
- type in assignment (different base types)
-Thread-Topic: [integrity:next-integrity-testing 5/9]
- security/integrity/ima/ima_template_lib.c:616:22: sparse: sparse: incorrect
- type in assignment (different base types)
-Thread-Index: AQHXWRsJfgQoclYuG0mUhYWGxeRPJasDvx7wgAAFNGA=
-Date:   Fri, 4 Jun 2021 12:47:41 +0000
-Message-ID: <b42bb6974eb748adafb7934cffb4bfc1@huawei.com>
-References: <202106041605.ujAVeENC-lkp@intel.com>
- <860a7b2810ad425cb1175b6ea2f76c08@huawei.com>
-In-Reply-To: <860a7b2810ad425cb1175b6ea2f76c08@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.48.212.129]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S230251AbhFGUuJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Jun 2021 16:50:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34718 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230209AbhFGUuJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 7 Jun 2021 16:50:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DF14E61139;
+        Mon,  7 Jun 2021 20:48:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623098897;
+        bh=0Uu85hNllNvsWDHLgq688UcbjPL6TiTRY2bV7a76cWU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KVK5+llGnjv9NuHyJne9Bor9u8aK/MI8MXgKCySUCnnNo69xjXI1hzlnaJwgV+9fM
+         ZxA8qt9/mGcHQ6eyvJsnFyHFWdriCsUw6hV6pc4t1cpmtMVUI6hgcfsop9GYtIh+AF
+         +pDj49cdbmsCrKKO7k0s13Wk63vnRW22hWEyBEsNVS6klpr6LS/gULtlLcCxU1FCbj
+         1cv1wCESkXy+poh0o77cvcqCIH3skj42YwkKkROZWD0BIm6sWl1By11sa72a8PQ7Jt
+         Zk5KgkkgusQw9OVFqVsfIRXYMMyhnIxUdHP5yeCBiNt1jPbwK3kkT8AzP7DWwMKH4l
+         o7TjqjO7LqDXA==
+Date:   Mon, 7 Jun 2021 15:49:34 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: [PATCH][next] ima: Fix fall-through warning for Clang
+Message-ID: <20210607204934.GA63263@embeddedor>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
-> Sent: Friday, June 4, 2021 2:00 PM
-> > From: kernel test robot [mailto:lkp@intel.com]
-> > Sent: Friday, June 4, 2021 10:23 AM
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-
-> > integrity.git next-integrity-testing
-> > head:   d721c15fd519c08819fbc6de39b713e2ed1d9894
-> > commit: f8216f6b957f5657c5f4c97f4b037120c6f236bc [5/9] ima: Define new
-> > template field imode
-> > config: nios2-randconfig-s031-20210604 (attached as .config)
-> > compiler: nios2-linux-gcc (GCC) 9.3.0
-> > reproduce:
-> >         wget https://raw.githubusercontent.com/intel/lkp-
-> > tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # apt-get install sparse
-> >         # sparse version: v0.6.3-341-g8af24329-dirty
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-
-> > integrity.git/commit/?id=f8216f6b957f5657c5f4c97f4b037120c6f236bc
-> >         git remote add integrity
-> > https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
-> >         git fetch --no-tags integrity next-integrity-testing
-> >         git checkout f8216f6b957f5657c5f4c97f4b037120c6f236bc
-> >         # save the attached .config to linux build tree
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0
-> > make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' W=1
-> > ARCH=nios2
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> >
-> > sparse warnings: (new ones prefixed by >>)
-> >    security/integrity/ima/ima_template_lib.c:100:44: sparse: sparse: cast to
-> > restricted __le16
-> >    security/integrity/ima/ima_template_lib.c:107:44: sparse: sparse: cast to
-> > restricted __le32
-> >    security/integrity/ima/ima_template_lib.c:114:44: sparse: sparse: cast to
-> > restricted __le64
-> >    security/integrity/ima/ima_template_lib.c:135:60: sparse: sparse:
-> restricted
-> > __le32 degrades to integer
-> >    security/integrity/ima/ima_template_lib.c:230:49: sparse: sparse: cast to
-> > restricted __le32
-> >    security/integrity/ima/ima_template_lib.c:571:28: sparse: sparse:
-> incorrect
-> > type in assignment (different base types) @@     expected unsigned int
-> > [assigned] id @@     got restricted __le16 [usertype] @@
-> >    security/integrity/ima/ima_template_lib.c:571:28: sparse:     expected
-> > unsigned int [assigned] id
-> >    security/integrity/ima/ima_template_lib.c:571:28: sparse:     got restricted
-> > __le16 [usertype]
-> >    security/integrity/ima/ima_template_lib.c:573:28: sparse: sparse:
-> incorrect
-> > type in assignment (different base types) @@     expected unsigned int
-> > [assigned] id @@     got restricted __le32 [usertype] @@
-> >    security/integrity/ima/ima_template_lib.c:573:28: sparse:     expected
-> > unsigned int [assigned] id
-> >    security/integrity/ima/ima_template_lib.c:573:28: sparse:     got restricted
-> > __le32 [usertype]
-> > >> security/integrity/ima/ima_template_lib.c:616:22: sparse: sparse:
-> > incorrect type in assignment (different base types) @@     expected
-> unsigned
-> > short [assigned] [usertype] mode @@     got restricted __le16 [usertype]
-> > @@
-> >    security/integrity/ima/ima_template_lib.c:616:22: sparse:     expected
-> > unsigned short [assigned] [usertype] mode
-> >    security/integrity/ima/ima_template_lib.c:616:22: sparse:     got restricted
-> > __le16 [usertype]
-> >
-> > vim +616 security/integrity/ima/ima_template_lib.c
-> >
-> >    599
-> >    600	/*
-> >    601	 *  ima_eventinodemode_init - include the inode mode as part of the
-> > template
-> >    602	 *  data
-> >    603	 */
-> >    604	int ima_eventinodemode_init(struct ima_event_data *event_data,
-> >    605				    struct ima_field_data *field_data)
-> >    606	{
-> >    607		struct inode *inode;
-> >    608		umode_t mode;
-> >    609
-> >    610		if (!event_data->file)
-> >    611			return 0;
-> >    612
-> >    613		inode = file_inode(event_data->file);
-> >    614		mode = inode->i_mode;
-> >    615		if (ima_canonical_fmt)
-> >  > 616			mode = cpu_to_le16(mode);
-> 
-> int ima_eventinodemode_init(struct ima_event_data *event_data,
-> 			    struct ima_field_data *field_data)
-> {
-> 	struct inode *inode;
-> 	__le16 mode;
-> 
-> 	if (!event_data->file)
-> 		return 0;
-> 
-> 	inode = file_inode(event_data->file);
-> 	if (ima_canonical_fmt)
-> 		mode = cpu_to_le16(inode->i_mode);
-> 	else
-> 		mode = (__force __le16)inode->i_mode;
-> 
-> 	return ima_write_template_field_data((char *)&mode,
-> sizeof(mode),
-> 					     DATA_FMT_UINT, field_data);
-> }
-> 
-> Is this correct?
+In preparation to enable -Wimplicit-fallthrough for Clang, fix a
+fall-through warning by explicitly adding a break statement instead
+of just letting the code fall through to the next case.
 
-Actually not, if ima_canonical_fmt is false, we could still have a big-endian
-machine.
+Link: https://github.com/KSPP/linux/issues/115
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+JFYI: We had thousands of these sorts of warnings and now we are down
+      to just 13 in linux-next(20210607). This is one of those last
+      remaining warnings. :)
 
-It seems that the warning disappears if I do instead:
+ security/integrity/ima/ima_template_lib.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-int ima_eventinodemode_init(struct ima_event_data *event_data,
-			    struct ima_field_data *field_data)
-{
-	struct inode *inode;
-	umode_t mode;
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index 518fd50ea48a..8f96247b4a5c 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -119,6 +119,7 @@ static void ima_show_template_data_ascii(struct seq_file *m,
+ 		default:
+ 			break;
+ 		}
++		break;
+ 	default:
+ 		break;
+ 	}
+-- 
+2.27.0
 
-	if (!event_data->file)
-		return 0;
-
-	inode = file_inode(event_data->file);
-	mode = inode->i_mode;
-	if (ima_canonical_fmt)
-		cpu_to_le16s(&mode);
-
-	return ima_write_template_field_data((char *)&mode, sizeof(mode),
-					     DATA_FMT_UINT, field_data);
-}
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
-
-> Thanks
-> 
-> Roberto
-> 
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Li Peng, Li Jian, Shi Yanli
-> 
-> > ---
-> > 0-DAY CI Kernel Test Service, Intel Corporation
-> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
