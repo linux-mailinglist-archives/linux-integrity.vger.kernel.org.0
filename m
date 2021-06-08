@@ -2,73 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4825839E8B3
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Jun 2021 22:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC5639F6AF
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Jun 2021 14:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbhFGUuJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Jun 2021 16:50:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230209AbhFGUuJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Jun 2021 16:50:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DF14E61139;
-        Mon,  7 Jun 2021 20:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623098897;
-        bh=0Uu85hNllNvsWDHLgq688UcbjPL6TiTRY2bV7a76cWU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KVK5+llGnjv9NuHyJne9Bor9u8aK/MI8MXgKCySUCnnNo69xjXI1hzlnaJwgV+9fM
-         ZxA8qt9/mGcHQ6eyvJsnFyHFWdriCsUw6hV6pc4t1cpmtMVUI6hgcfsop9GYtIh+AF
-         +pDj49cdbmsCrKKO7k0s13Wk63vnRW22hWEyBEsNVS6klpr6LS/gULtlLcCxU1FCbj
-         1cv1wCESkXy+poh0o77cvcqCIH3skj42YwkKkROZWD0BIm6sWl1By11sa72a8PQ7Jt
-         Zk5KgkkgusQw9OVFqVsfIRXYMMyhnIxUdHP5yeCBiNt1jPbwK3kkT8AzP7DWwMKH4l
-         o7TjqjO7LqDXA==
-Date:   Mon, 7 Jun 2021 15:49:34 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: [PATCH][next] ima: Fix fall-through warning for Clang
-Message-ID: <20210607204934.GA63263@embeddedor>
+        id S232682AbhFHMdz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Jun 2021 08:33:55 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3168 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232531AbhFHMdz (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 8 Jun 2021 08:33:55 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Fzq6Y1YHhz6G862;
+        Tue,  8 Jun 2021 20:19:17 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 8 Jun 2021 14:32:00 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <sfr@canb.auug.org.au>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-next@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 1/5] doc: Fix warning in Documentation/security/IMA-templates.rst
+Date:   Tue, 8 Jun 2021 14:31:20 +0200
+Message-ID: <20210608123124.335868-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.62.217]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-In preparation to enable -Wimplicit-fallthrough for Clang, fix a
-fall-through warning by explicitly adding a break statement instead
-of just letting the code fall through to the next case.
+This patch fixes the warning:
 
-Link: https://github.com/KSPP/linux/issues/115
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Documentation/security/IMA-templates.rst:81: WARNING: Inline
+substitution_reference start-string without end-string.
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
-JFYI: We had thousands of these sorts of warnings and now we are down
-      to just 13 in linux-next(20210607). This is one of those last
-      remaining warnings. :)
+ Documentation/security/IMA-templates.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- security/integrity/ima/ima_template_lib.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-index 518fd50ea48a..8f96247b4a5c 100644
---- a/security/integrity/ima/ima_template_lib.c
-+++ b/security/integrity/ima/ima_template_lib.c
-@@ -119,6 +119,7 @@ static void ima_show_template_data_ascii(struct seq_file *m,
- 		default:
- 			break;
- 		}
-+		break;
- 	default:
- 		break;
- 	}
+diff --git a/Documentation/security/IMA-templates.rst b/Documentation/security/IMA-templates.rst
+index 5adc22f99496..1a91d92950a7 100644
+--- a/Documentation/security/IMA-templates.rst
++++ b/Documentation/security/IMA-templates.rst
+@@ -78,7 +78,7 @@ descriptors by adding their identifier to the format string
+  - 'iuid': the inode UID;
+  - 'igid': the inode GID;
+  - 'imode': the inode mode;
+- - 'xattrnames': a list of xattr names (separated by |), only if the xattr is
++ - 'xattrnames': a list of xattr names (separated by ``|``), only if the xattr is
+     present;
+  - 'xattrlengths': a list of xattr lengths (u32), only if the xattr is present;
+  - 'xattrvalues': a list of xattr values;
 -- 
-2.27.0
+2.25.1
 
