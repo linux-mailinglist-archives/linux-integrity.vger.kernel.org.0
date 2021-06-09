@@ -2,63 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B063A14BD
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Jun 2021 14:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B05243A1591
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Jun 2021 15:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbhFIMqJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 9 Jun 2021 08:46:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53084 "EHLO mail.kernel.org"
+        id S236388AbhFIN2U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 9 Jun 2021 09:28:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44032 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229588AbhFIMqJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 9 Jun 2021 08:46:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 266616128A;
-        Wed,  9 Jun 2021 12:44:13 +0000 (UTC)
+        id S232946AbhFIN2U (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 9 Jun 2021 09:28:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1CB31613AE;
+        Wed,  9 Jun 2021 13:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623242654;
-        bh=We1DBBAALTBp1bajPkqkYTVL2X6KZ1QbIzNi3rCtTOo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b2JSYgx5ai8OmKZ3iST6pbh269okTzcQCA2nj4UsFejbeMS+2lSeE6da2FW5/iXe2
-         RSXi+KW8qE+1hT9Gi1H0YVfCdAfEY6GpBkDyu6PX8zPIBdXL38P9fyVLifiWvsVMRe
-         xUNzmAE43WmPzqedAsGp2DZql3yiJPj3FO5+yMEiZhqqkg+tk5JcnkHWuWdGr42UrV
-         s4nJYWAU/dxrv8svsYRLjp0OfZ7t9Kwv8odPwx6SN8wL5mH8MbkPtBuGC+uMfxPQXh
-         UolVHFSs9JJqsj7ocpYZoqGAp0CqVKMOdBgltCaf5dpCoYfIrLSmQ+CAb+w0vz/qgF
-         6Apa06G9BgpLg==
-Date:   Wed, 9 Jun 2021 15:44:12 +0300
+        s=k20201202; t=1623245185;
+        bh=szkmgf2zz14SCvlEGt46o1NLfvJbSEwtD4TkOmAowYU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=se8StkjQwiJAZBzBDDeMVE7E3x1Y6MHeX44ztPnGN52jxo5vWIMYXGmapgxymaYxL
+         FIavw3NvoHvAXfFj/S96ZuFO+woO+heY5rsLJDd/1jCDXSRSNnC7sxnLsOYxHHMX+g
+         H8YXxReoPlq4ot8AVWh1o3u85FRhKsegtVm/V+LPbT4zXIm5/66OMm02x9ldFK0AoR
+         RJVUu1C+/f8JH822joi156XN1hJKbLKFTWRjg5W/w9trfNz1Jg/+0cZ7tk61lpMP9x
+         4rLPglT+BcbzQ2UYc4ZJDh0h7w5rhY8nYrV9sKvh9Vxhud3soJ5XmNg3wkI6T7KXVF
+         f19kjbjZFjuMw==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
-        dwmw2@infradead.org, zohar@linux.ibm.com, nayna@linux.ibm.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/2] Add support for ECDSA-signed kernel modules
-Message-ID: <20210609124412.engcrbo3fezuzyoq@kernel.org>
-References: <20210602143537.545132-1-stefanb@linux.ibm.com>
- <20210603064738.pwfq3n7erzmncdmw@kernel.org>
- <8b79651b-1fe4-48c0-3498-529344ac6243@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, stable@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Greg KH <greg@kroah.com>, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v3] tpm: Replace WARN_ONCE() with dev_err_once() in tpm_tis_status()
+Date:   Wed,  9 Jun 2021 16:26:19 +0300
+Message-Id: <20210609132619.45017-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8b79651b-1fe4-48c0-3498-529344ac6243@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 03, 2021 at 08:32:59AM -0400, Stefan Berger wrote:
-> 
-> On 6/3/21 2:47 AM, Jarkko Sakkinen wrote:
-> > 
-> > > -- 
-> > > 2.29.2
-> > > 
-> > > 
-> > Please instead send a fix.
-> 
-> We have a Fixes tag in 1/2, so we want this to propagate to older kernels
-> and need the fix in 1/2 for that reason.
-> 
->    Stefan
+Do not tear down the system when getting invalid status from a TPM chip.
+This can happen when panic-on-warn is used.
 
-So please do an additional fix and send it.
+Instead, introduce TPM_TIS_INVALID_STATUS bitflag and use it to trigger
+once the error reporting per chip. In addition, print out the value of
+TPM_STS for improved forensics.
 
-/Jarkko
+Link: https://lore.kernel.org/keyrings/YKzlTR1AzUigShtZ@kroah.com/
+Fixes: 55707d531af6 ("tpm_tis: Add a check for invalid status")
+Cc: stable@vger.kernel.org
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Greg KH <greg@kroah.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+
+v3:
+* torn -> tear
+* A per chip flag TPM_TIS_INVALID_STATUS.
+
+v2:
+Dump also stack only once.
+
+ drivers/char/tpm/tpm_tis_core.c | 25 ++++++++++++++++++-------
+ drivers/char/tpm/tpm_tis_core.h |  3 ++-
+ 2 files changed, 20 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 55b9d3965ae1..69579efb247b 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -196,13 +196,24 @@ static u8 tpm_tis_status(struct tpm_chip *chip)
+ 		return 0;
+ 
+ 	if (unlikely((status & TPM_STS_READ_ZERO) != 0)) {
+-		/*
+-		 * If this trips, the chances are the read is
+-		 * returning 0xff because the locality hasn't been
+-		 * acquired.  Usually because tpm_try_get_ops() hasn't
+-		 * been called before doing a TPM operation.
+-		 */
+-		WARN_ONCE(1, "TPM returned invalid status\n");
++		if  (!test_and_set_bit(TPM_TIS_INVALID_STATUS, &priv->flags)) {
++			/*
++			 * If this trips, the chances are the read is
++			 * returning 0xff because the locality hasn't been
++			 * acquired.  Usually because tpm_try_get_ops() hasn't
++			 * been called before doing a TPM operation.
++			 */
++			dev_err(&chip->dev, "invalid TPM_STS.x 0x%02x, dumping stack for forensics\n",
++				status);
++
++			/*
++			 * Dump stack for forensics, as invalid TPM_STS.x could be
++			 * potentially triggered by impaired tpm_try_get_ops() or
++			 * tpm_find_get_ops().
++			 */
++			dump_stack();
++		}
++
+ 		return 0;
+ 	}
+ 
+diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+index 9b2d32a59f67..b2a3c6c72882 100644
+--- a/drivers/char/tpm/tpm_tis_core.h
++++ b/drivers/char/tpm/tpm_tis_core.h
+@@ -83,6 +83,7 @@ enum tis_defaults {
+ 
+ enum tpm_tis_flags {
+ 	TPM_TIS_ITPM_WORKAROUND		= BIT(0),
++	TPM_TIS_INVALID_STATUS		= BIT(1),
+ };
+ 
+ struct tpm_tis_data {
+@@ -90,7 +91,7 @@ struct tpm_tis_data {
+ 	int locality;
+ 	int irq;
+ 	bool irq_tested;
+-	unsigned int flags;
++	unsigned long flags;
+ 	void __iomem *ilb_base_addr;
+ 	u16 clkrun_enabled;
+ 	wait_queue_head_t int_queue;
+-- 
+2.31.1
+
