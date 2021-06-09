@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A943A0851
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Jun 2021 02:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF983A0854
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Jun 2021 02:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbhFIA1q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Jun 2021 20:27:46 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55132 "EHLO
+        id S234433AbhFIA1r (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Jun 2021 20:27:47 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55168 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbhFIA1p (ORCPT
+        with ESMTP id S234383AbhFIA1r (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Jun 2021 20:27:45 -0400
+        Tue, 8 Jun 2021 20:27:47 -0400
 Received: from sequoia.work.tihix.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id C50EE20B83C2;
-        Tue,  8 Jun 2021 17:25:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C50EE20B83C2
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6EE7E20B7188;
+        Tue,  8 Jun 2021 17:25:52 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6EE7E20B7188
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1623198351;
-        bh=PSTUxwpuCGKszi5NwhqCU2uRZ8ekFlqcbG+Gt351jK0=;
+        s=default; t=1623198353;
+        bh=mq0Ck7yTh8+8Nc2IyYejRlg2QHkP5yZIAoGTsSGCLHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bMwbnw190SextzsTuVx9otUsb+GBoKHFvmGEG5lAfThCehsZaEMOo+kafl1lV4qcg
-         YU4kj//eUjqL7cfLVMzzd4abIHdNN8S0euTVo+Tj4v/MMWhWS7lAfQdzgCeULDveID
-         hazc/v4ZkiJZC747QNeCJMl0LD/lJ4IbX9/ojEI8=
+        b=rJwJbyxbwDFqm67NB51vHnxXDycoYK//AcJVhdncqTNKMN8B+c+tQoSOjlgAYneQc
+         zkYF5TKa5YQnUDr/2aPcJyYcsDzHTjl3Er0j+Kt+tW3zXvlnKBgLK+wQaqNrYdPY3+
+         bqiLjyzgie/2yeGotgMlJ77nB81J8yCRJJUeSkKw=
 From:   Tyler Hicks <tyhicks@linux.microsoft.com>
 To:     Jens Wiklander <jens.wiklander@linaro.org>,
         Allen Pais <apais@linux.microsoft.com>,
@@ -37,9 +37,9 @@ Cc:     Thirupathaiah Annapureddy <thiruan@microsoft.com>,
         op-tee@lists.trustedfirmware.org, linux-integrity@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/7] tee: Support shm registration without dma-buf backing
-Date:   Tue,  8 Jun 2021 19:23:24 -0500
-Message-Id: <20210609002326.210024-6-tyhicks@linux.microsoft.com>
+Subject: [PATCH v3 6/7] tpm_ftpm_tee: Free and unregister dynamic shared memory during kexec
+Date:   Tue,  8 Jun 2021 19:23:25 -0500
+Message-Id: <20210609002326.210024-7-tyhicks@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210609002326.210024-1-tyhicks@linux.microsoft.com>
 References: <20210609002326.210024-1-tyhicks@linux.microsoft.com>
@@ -49,84 +49,43 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Uncouple the registration of dynamic shared memory buffers from the
-TEE_SHM_DMA_BUF flag. Drivers may wish to allocate dynamic shared memory
-regions but do not need them to be backed by a dma-buf when the memory
-region is private to the driver.
+dma-buf backed shared memory cannot be reliably freed and unregistered
+during a kexec operation even when tee_shm_free() is called on the shm
+from a .shutdown hook. The problem occurs because dma_buf_put() calls
+fput() which then uses task_work_add(), with the TWA_RESUME parameter,
+to queue tee_shm_release() to be called before the current task returns
+to user mode. However, the current task never returns to user mode
+before the kexec completes so the memory is never freed nor
+unregistered.
 
-Allow callers of tee_shm_alloc() to specify the TEE_SHM_REGISTER flag to
-request registration. If the TEE implementation does not require dynamic
-shared memory to be registered, clear the flag prior to calling the
-corresponding pool alloc function. Update the OP-TEE driver to respect
-TEE_SHM_REGISTER, rather than TEE_SHM_DMA_BUF, when deciding whether to
-(un)register on alloc/free operations. The AMD-TEE driver continues to
-ignore the TEE_SHM_REGISTER flag.
+Don't use dma-buf backed shared memory for a multi-page dynamic shm
+that's private to the driver. Not using a dma-buf backed shm will allow
+tee_shm_free() to directly call tee_shm_release() so that the shared
+memory can be freed and unregistered during a kexec operation.
 
+Continue to register the multi-page dynamic shm with the TEE so that all
+4K chunks can be used.
+
+Fixes: 09e574831b27 ("tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE")
+Fixes: 1760eb689ed6 ("tpm/tpm_ftpm_tee: add shutdown call back")
 Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 ---
- drivers/tee/optee/shm_pool.c |  5 ++---
- drivers/tee/tee_shm.c        | 11 ++++++++++-
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tee/optee/shm_pool.c b/drivers/tee/optee/shm_pool.c
-index da06ce9b9313..6054343a29fb 100644
---- a/drivers/tee/optee/shm_pool.c
-+++ b/drivers/tee/optee/shm_pool.c
-@@ -27,7 +27,7 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
- 	shm->paddr = page_to_phys(page);
- 	shm->size = PAGE_SIZE << order;
- 
--	if (shm->flags & TEE_SHM_DMA_BUF) {
-+	if (shm->flags & TEE_SHM_REGISTER) {
- 		unsigned int nr_pages = 1 << order, i;
- 		struct page **pages;
- 
-@@ -42,7 +42,6 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
- 			page++;
- 		}
- 
--		shm->flags |= TEE_SHM_REGISTER;
- 		rc = optee_shm_register(shm->ctx, shm, pages, nr_pages,
- 					(unsigned long)shm->kaddr);
- 		kfree(pages);
-@@ -60,7 +59,7 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
- static void pool_op_free(struct tee_shm_pool_mgr *poolm,
- 			 struct tee_shm *shm)
- {
--	if (shm->flags & TEE_SHM_DMA_BUF)
-+	if (shm->flags & TEE_SHM_REGISTER)
- 		optee_shm_unregister(shm->ctx, shm);
- 
- 	free_pages((unsigned long)shm->kaddr, get_order(shm->size));
-diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-index 00472f5ce22e..1c0176550b9c 100644
---- a/drivers/tee/tee_shm.c
-+++ b/drivers/tee/tee_shm.c
-@@ -117,7 +117,7 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF))) {
-+	if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF | TEE_SHM_REGISTER))) {
- 		dev_err(teedev->dev.parent, "invalid shm flags 0x%x", flags);
- 		return ERR_PTR(-EINVAL);
- 	}
-@@ -137,6 +137,15 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
- 		goto err_dev_put;
- 	}
- 
-+	if (!teedev->desc->ops->shm_register ||
-+	    !teedev->desc->ops->shm_unregister) {
-+		/* registration is not required by the TEE implementation */
-+		flags &= ~TEE_SHM_REGISTER;
-+	} else if (flags & TEE_SHM_DMA_BUF) {
-+		/* all dma-buf backed shm allocations are registered */
-+		flags |= TEE_SHM_REGISTER;
-+	}
-+
- 	shm->flags = flags | TEE_SHM_POOL;
- 	shm->ctx = ctx;
- 	if (flags & TEE_SHM_DMA_BUF)
+diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+index 2ccdf8ac6994..8f1155227506 100644
+--- a/drivers/char/tpm/tpm_ftpm_tee.c
++++ b/drivers/char/tpm/tpm_ftpm_tee.c
+@@ -256,7 +256,7 @@ static int ftpm_tee_probe(struct device *dev)
+ 	/* Allocate dynamic shared memory with fTPM TA */
+ 	pvt_data->shm = tee_shm_alloc(pvt_data->ctx,
+ 				      MAX_COMMAND_SIZE + MAX_RESPONSE_SIZE,
+-				      TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
++				      TEE_SHM_MAPPED | TEE_SHM_REGISTER);
+ 	if (IS_ERR(pvt_data->shm)) {
+ 		dev_err(dev, "%s: tee_shm_alloc failed\n", __func__);
+ 		rc = -ENOMEM;
 -- 
 2.25.1
 
