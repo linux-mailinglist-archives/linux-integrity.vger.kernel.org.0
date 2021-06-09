@@ -2,27 +2,27 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 208C63A084E
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Jun 2021 02:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A943A0851
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Jun 2021 02:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbhFIA1o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Jun 2021 20:27:44 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55108 "EHLO
+        id S232302AbhFIA1q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Jun 2021 20:27:46 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55132 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234207AbhFIA1n (ORCPT
+        with ESMTP id S234292AbhFIA1p (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Jun 2021 20:27:43 -0400
+        Tue, 8 Jun 2021 20:27:45 -0400
 Received: from sequoia.work.tihix.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 172BE20B83C5;
-        Tue,  8 Jun 2021 17:25:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 172BE20B83C5
+        by linux.microsoft.com (Postfix) with ESMTPSA id C50EE20B83C2;
+        Tue,  8 Jun 2021 17:25:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C50EE20B83C2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1623198350;
-        bh=lofS09cFjt2gMLe3PpZAwsHKE9enmufslzb5/Qk49r0=;
+        s=default; t=1623198351;
+        bh=PSTUxwpuCGKszi5NwhqCU2uRZ8ekFlqcbG+Gt351jK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UawExBB/BhWl4jWGfzA9Xrg6JcZ2w9ZwnygdbIEui88c6ctXCJkiVvuv/yd4iygEW
-         Xct9kvw4ObpNAxy+vdu9vOdPsjs6pD6+2X+Rt55CG2YCxTPIN1ONqpGXbgtf9JSaDg
-         rjCWrwjD2+YNKoUiURDDPoEe9xlCUiMJA6O1Mhnw=
+        b=bMwbnw190SextzsTuVx9otUsb+GBoKHFvmGEG5lAfThCehsZaEMOo+kafl1lV4qcg
+         YU4kj//eUjqL7cfLVMzzd4abIHdNN8S0euTVo+Tj4v/MMWhWS7lAfQdzgCeULDveID
+         hazc/v4ZkiJZC747QNeCJMl0LD/lJ4IbX9/ojEI8=
 From:   Tyler Hicks <tyhicks@linux.microsoft.com>
 To:     Jens Wiklander <jens.wiklander@linaro.org>,
         Allen Pais <apais@linux.microsoft.com>,
@@ -37,9 +37,9 @@ Cc:     Thirupathaiah Annapureddy <thiruan@microsoft.com>,
         op-tee@lists.trustedfirmware.org, linux-integrity@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/7] optee: Clear stale cache entries during initialization
-Date:   Tue,  8 Jun 2021 19:23:23 -0500
-Message-Id: <20210609002326.210024-5-tyhicks@linux.microsoft.com>
+Subject: [PATCH v3 5/7] tee: Support shm registration without dma-buf backing
+Date:   Tue,  8 Jun 2021 19:23:24 -0500
+Message-Id: <20210609002326.210024-6-tyhicks@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210609002326.210024-1-tyhicks@linux.microsoft.com>
 References: <20210609002326.210024-1-tyhicks@linux.microsoft.com>
@@ -49,105 +49,84 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The shm cache could contain invalid addresses if
-optee_disable_shm_cache() was not called from the .shutdown hook of the
-previous kernel before a kexec. These addresses could be unmapped or
-they could point to mapped but unintended locations in memory.
+Uncouple the registration of dynamic shared memory buffers from the
+TEE_SHM_DMA_BUF flag. Drivers may wish to allocate dynamic shared memory
+regions but do not need them to be backed by a dma-buf when the memory
+region is private to the driver.
 
-Clear the shared memory cache, while being careful to not translate the
-addresses returned from OPTEE_SMC_DISABLE_SHM_CACHE, during driver
-initialization. Once all pre-cache shm objects are removed, proceed with
-enabling the cache so that we know that we can handle cached shm objects
-with confidence later in the .shutdown hook.
+Allow callers of tee_shm_alloc() to specify the TEE_SHM_REGISTER flag to
+request registration. If the TEE implementation does not require dynamic
+shared memory to be registered, clear the flag prior to calling the
+corresponding pool alloc function. Update the OP-TEE driver to respect
+TEE_SHM_REGISTER, rather than TEE_SHM_DMA_BUF, when deciding whether to
+(un)register on alloc/free operations. The AMD-TEE driver continues to
+ignore the TEE_SHM_REGISTER flag.
 
 Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 ---
- drivers/tee/optee/call.c          | 11 ++++++++++-
- drivers/tee/optee/core.c          | 13 +++++++++++--
- drivers/tee/optee/optee_private.h |  2 +-
- 3 files changed, 22 insertions(+), 4 deletions(-)
+ drivers/tee/optee/shm_pool.c |  5 ++---
+ drivers/tee/tee_shm.c        | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-index 6e6eb836e9b6..5dcba6105ed7 100644
---- a/drivers/tee/optee/call.c
-+++ b/drivers/tee/optee/call.c
-@@ -419,8 +419,10 @@ void optee_enable_shm_cache(struct optee *optee)
-  * optee_disable_shm_cache() - Disables caching of some shared memory allocation
-  *			      in OP-TEE
-  * @optee:	main service struct
-+ * @is_mapped:	true if the cached shared memory addresses were mapped by this
-+ *		kernel, are safe to dereference, and should be freed
-  */
--void optee_disable_shm_cache(struct optee *optee)
-+void optee_disable_shm_cache(struct optee *optee, bool is_mapped)
+diff --git a/drivers/tee/optee/shm_pool.c b/drivers/tee/optee/shm_pool.c
+index da06ce9b9313..6054343a29fb 100644
+--- a/drivers/tee/optee/shm_pool.c
++++ b/drivers/tee/optee/shm_pool.c
+@@ -27,7 +27,7 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
+ 	shm->paddr = page_to_phys(page);
+ 	shm->size = PAGE_SIZE << order;
+ 
+-	if (shm->flags & TEE_SHM_DMA_BUF) {
++	if (shm->flags & TEE_SHM_REGISTER) {
+ 		unsigned int nr_pages = 1 << order, i;
+ 		struct page **pages;
+ 
+@@ -42,7 +42,6 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
+ 			page++;
+ 		}
+ 
+-		shm->flags |= TEE_SHM_REGISTER;
+ 		rc = optee_shm_register(shm->ctx, shm, pages, nr_pages,
+ 					(unsigned long)shm->kaddr);
+ 		kfree(pages);
+@@ -60,7 +59,7 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
+ static void pool_op_free(struct tee_shm_pool_mgr *poolm,
+ 			 struct tee_shm *shm)
  {
- 	struct optee_call_waiter w;
+-	if (shm->flags & TEE_SHM_DMA_BUF)
++	if (shm->flags & TEE_SHM_REGISTER)
+ 		optee_shm_unregister(shm->ctx, shm);
  
-@@ -439,6 +441,13 @@ void optee_disable_shm_cache(struct optee *optee)
- 		if (res.result.status == OPTEE_SMC_RETURN_OK) {
- 			struct tee_shm *shm;
+ 	free_pages((unsigned long)shm->kaddr, get_order(shm->size));
+diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+index 00472f5ce22e..1c0176550b9c 100644
+--- a/drivers/tee/tee_shm.c
++++ b/drivers/tee/tee_shm.c
+@@ -117,7 +117,7 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+ 		return ERR_PTR(-EINVAL);
+ 	}
  
-+			/*
-+			 * Shared memory references that were not mapped by
-+			 * this kernel must be ignored to prevent a crash.
-+			 */
-+			if (!is_mapped)
-+				continue;
+-	if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF))) {
++	if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF | TEE_SHM_REGISTER))) {
+ 		dev_err(teedev->dev.parent, "invalid shm flags 0x%x", flags);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+@@ -137,6 +137,15 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+ 		goto err_dev_put;
+ 	}
+ 
++	if (!teedev->desc->ops->shm_register ||
++	    !teedev->desc->ops->shm_unregister) {
++		/* registration is not required by the TEE implementation */
++		flags &= ~TEE_SHM_REGISTER;
++	} else if (flags & TEE_SHM_DMA_BUF) {
++		/* all dma-buf backed shm allocations are registered */
++		flags |= TEE_SHM_REGISTER;
++	}
 +
- 			shm = reg_pair_to_ptr(res.result.shm_upper32,
- 					      res.result.shm_lower32);
- 			tee_shm_free(shm);
-diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
-index 0987074d7ed0..6974e1104bd4 100644
---- a/drivers/tee/optee/core.c
-+++ b/drivers/tee/optee/core.c
-@@ -589,7 +589,7 @@ static int optee_remove(struct platform_device *pdev)
- 	 * reference counters and also avoid wild pointers in secure world
- 	 * into the old shared memory range.
- 	 */
--	optee_disable_shm_cache(optee);
-+	optee_disable_shm_cache(optee, true);
- 
- 	/*
- 	 * The two devices have to be unregistered before we can free the
-@@ -619,7 +619,7 @@ static int optee_remove(struct platform_device *pdev)
-  */
- static void optee_shutdown(struct platform_device *pdev)
- {
--	optee_disable_shm_cache(platform_get_drvdata(pdev));
-+	optee_disable_shm_cache(platform_get_drvdata(pdev), true);
- }
- 
- static int optee_probe(struct platform_device *pdev)
-@@ -716,6 +716,15 @@ static int optee_probe(struct platform_device *pdev)
- 	optee->memremaped_shm = memremaped_shm;
- 	optee->pool = pool;
- 
-+	/*
-+	 * Ensure that there are no pre-existing shm objects before enabling
-+	 * the shm cache so that there's no chance of receiving an invalid
-+	 * address during shutdown. This could occur, for example, if we're
-+	 * kexec booting from an older kernel that did not properly cleanup the
-+	 * shm cache.
-+	 */
-+	optee_disable_shm_cache(optee, false);
-+
- 	optee_enable_shm_cache(optee);
- 
- 	if (optee->sec_caps & OPTEE_SMC_SEC_CAP_DYNAMIC_SHM)
-diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-index e25b216a14ef..16d8c82213e7 100644
---- a/drivers/tee/optee/optee_private.h
-+++ b/drivers/tee/optee/optee_private.h
-@@ -158,7 +158,7 @@ int optee_invoke_func(struct tee_context *ctx, struct tee_ioctl_invoke_arg *arg,
- int optee_cancel_req(struct tee_context *ctx, u32 cancel_id, u32 session);
- 
- void optee_enable_shm_cache(struct optee *optee);
--void optee_disable_shm_cache(struct optee *optee);
-+void optee_disable_shm_cache(struct optee *optee, bool is_mapped);
- 
- int optee_shm_register(struct tee_context *ctx, struct tee_shm *shm,
- 		       struct page **pages, size_t num_pages,
+ 	shm->flags = flags | TEE_SHM_POOL;
+ 	shm->ctx = ctx;
+ 	if (flags & TEE_SHM_DMA_BUF)
 -- 
 2.25.1
 
