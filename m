@@ -2,115 +2,137 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE153A2DF9
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 16:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEDA3A2F2E
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 17:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbhFJOWP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Jun 2021 10:22:15 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45268 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230267AbhFJOWN (ORCPT
+        id S231374AbhFJPVB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Jun 2021 11:21:01 -0400
+Received: from mail-wm1-f43.google.com ([209.85.128.43]:46904 "EHLO
+        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230445AbhFJPVA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Jun 2021 10:22:13 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15AEENVB055864;
-        Thu, 10 Jun 2021 10:20:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=f+GezljSdiJkbrktAHsZueMoVCCsL7CmeGI26dX+WHM=;
- b=dDXd2IQPWrl0IYR+bMqeHQOz2uCKga9izEsuCWjDu81+gjvVRPAGk0Ft/fpT1rKtXuh1
- thpcpJBgg/2HgHqzTPQ4pOnaoxAMwOpy229ksySXnu/DzjYVQKpMeO3Rpa6UA96AU/nU
- rpjkXVEmrIYJrITYRQ+9e6X8NAYJopIkyaSXt7My+CssWWO2B3zeljbW+sNU4K94kHda
- cICxFaayG8prY23cHSaJxh92HXDOvucV5C68Q03YhA3iabdUyMlirhhsPevFJiculFNY
- FKWVusxiaO3jqE01HtfUZqpQbULiJr3DXyoyyQh8TgqYxpFei/XT1rEt8BIpSNBJL5Hv CA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 393man86yc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Jun 2021 10:20:07 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15AEFNvM062503;
-        Thu, 10 Jun 2021 10:20:06 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 393man86xf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Jun 2021 10:20:06 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15AEG7Ds013524;
-        Thu, 10 Jun 2021 14:20:05 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3900w8avdm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Jun 2021 14:20:05 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15AEJBRe26739060
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Jun 2021 14:19:11 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4BA6D4C05A;
-        Thu, 10 Jun 2021 14:20:01 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 410024C058;
-        Thu, 10 Jun 2021 14:19:59 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.91.59])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 10 Jun 2021 14:19:59 +0000 (GMT)
-Message-ID: <b3c1f5a0a37419fac51d570cd1c8e521f59cee14.camel@linux.ibm.com>
-Subject: Re: ima - wait for tpm load
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
+        Thu, 10 Jun 2021 11:21:00 -0400
+Received: by mail-wm1-f43.google.com with SMTP id h22-20020a05600c3516b02901a826f84095so6657343wmq.5
+        for <linux-integrity@vger.kernel.org>; Thu, 10 Jun 2021 08:19:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=foundries.io; s=google;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QEizWV9pqKWtA3I5Lx6+foWFKHfovLYz8YJh/nQGyU4=;
+        b=TFqIO+3MbdpOkGxMHxhf2SMlQfMu8eqMvfqrW1sYdwpXawEhQH5qQtIWG2wJ+NtGOZ
+         +GLTcPsWzCM9GbR48Q0mfrkrlulZmsBB0hA4rIQoX8JG7heVNOK6M7+by/eWfKjZaBh0
+         JiQhpN2tJ02ztr3eq3TnHdM/r8TLl5blt/S5wRdb1E1wI/UzvzNOgCl/HQXLmC+a4Qgd
+         K9eYU4gvoJXUpNroAn3DU+nFDM188KF+CJvS8vUNlqtYJWao4KPfiwaVRpPoQS+49kI2
+         rZ2EzPEsGsKRzd2083lRUCIPP35YD3UOKqx3ecQ2dIkZxoscTkkKqPEjGfduyjLtGbvh
+         Tuog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QEizWV9pqKWtA3I5Lx6+foWFKHfovLYz8YJh/nQGyU4=;
+        b=No2jMHzcqGzbqbW6AaSrwUnVzozOYAlkc5Dfh/5gWtpq7Oea+G4dzYrqKYx72ZxS75
+         cjeCkduPVUBxekgkfmhhE6QfzsTn1szUKslX7bfFR0ol/j6xDymStF9ElpNJP1SVEi5S
+         0eGc2Wy6ZJo4khCeOElT6Ehfsl0MKPixOLiMX/wKeusr5WZdVsGS83HHo9eLsHjkjUEH
+         SDKuYTYwQDvirpGnbIw8go2EvVfKZ6xPLdN3v5T+m+ZgZoFnNX+DlUpE3usZSnBnkicz
+         xLto7I57UVP4saJDtnyzMeHnNRUqGJ7ZEoQh8QP6DK8bPl+YYm6b3EocLGnOP0AtusCs
+         RyJg==
+X-Gm-Message-State: AOAM533KNIMHPr4TbJlZx+xAJEeriAlvWmVjD0Jz3rsHJLiYs1OVOS/+
+        /I8dawCTQA7g6n0HBGA1tYk4W+JuxmcX/A==
+X-Google-Smtp-Source: ABdhPJzynRmYYLsE07cE4IrH1eJB2NV4sziNEvi4rO5rP72ty1783TeIcwOygbWysK8ka+DMFrBoOw==
+X-Received: by 2002:a05:600c:5112:: with SMTP id o18mr5396432wms.15.1623338283125;
+        Thu, 10 Jun 2021 08:18:03 -0700 (PDT)
+Received: from trex (138.red-79-146-80.dynamicip.rima-tde.net. [79.146.80.138])
+        by smtp.gmail.com with ESMTPSA id n18sm3584960wmq.41.2021.06.10.08.18.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 10 Jun 2021 08:18:02 -0700 (PDT)
+From:   "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
+X-Google-Original-From: "Jorge Ramirez-Ortiz, Foundries" <JorgeRamirez-Ortiz>
+Date:   Thu, 10 Jun 2021 17:18:01 +0200
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>
-Date:   Thu, 10 Jun 2021 10:19:58 -0400
-In-Reply-To: <20210610071633.GA30216@trex>
+Subject: Re: ima - wait for tpm load
+Message-ID: <20210610151801.GA19687@trex>
 References: <20210610071633.GA30216@trex>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0U3gc6pr1KzWqWTNLPRcz7M3gCbXPNHb
-X-Proofpoint-GUID: rlXwXebxr61XdBXnHvUQfvIM0CGIRX5e
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-10_07:2021-06-10,2021-06-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 spamscore=0 priorityscore=1501
- bulkscore=0 impostorscore=0 clxscore=1011 suspectscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106100091
+ <b3c1f5a0a37419fac51d570cd1c8e521f59cee14.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b3c1f5a0a37419fac51d570cd1c8e521f59cee14.camel@linux.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Cc'ing Jarkko]
-
-On Thu, 2021-06-10 at 09:16 +0200, Jorge Ramirez-Ortiz, Foundries
-wrote:
-> I am enabling IMA on a ZynqMP based platform using an SPI based TPM
-> from Infineon.
+On 10/06/21, Mimi Zohar wrote:
+> [Cc'ing Jarkko]
 > 
-> The SPI TPM driver is built-in but since the IMA is initalized from a
-> late_initcall, IMA never finds the TPM.
+> On Thu, 2021-06-10 at 09:16 +0200, Jorge Ramirez-Ortiz, Foundries
+> wrote:
+> > I am enabling IMA on a ZynqMP based platform using an SPI based TPM
+> > from Infineon.
+> > 
+> > The SPI TPM driver is built-in but since the IMA is initalized from a
+> > late_initcall, IMA never finds the TPM.
+> > 
+> > Is there a recomended way to work around this issue?
+> > 
+> > fio@uz3cg-dwg:~$ dmesg | grep tpm
+> > [    3.381181] tpm_tis_spi spi1.1: 2.0 TPM (device-id 0x1B, rev-id 22)
+> > [    3.423608] tpm tpm0: A TPM error (256) occurred attempting the self test
+> > [    3.430406] tpm tpm0: starting up the TPM manually
+> > 
+> > fio@uz3cg-dwg:~$ dmesg | grep ima
+> > [    3.525741] ima: No TPM chip found, activating TPM-bypass!
+> > [    3.531233] ima: Allocated hash algorithm: sha1
 > 
-> Is there a recomended way to work around this issue?
+> Lengthening the TPM timeout, executing the TPM self test have been past
+> reasons for the TPM not to initialize prior to IMA.
+
+right, I can understand this.
+
+The problem in this case is that tpm_chip_register() is taking too
+long so by the time it executes tpm_add_char_device(chip) is called,
+ima has already given up.
+
+The way I am working around this is just by adding a new flag and
+providing the chip in idr_alloc (so ima can find it).
+
+Then add an 'enable' flag to the chip structure that ima can use to
+wait on.
+
+@@ -333,8 +345,13 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+
+        chip->ops = ops;
+
++ if (ops->flags & TPM_OPS_SLOW_STARTUP)
++         chip->flags |= TPM_CHIP_FLAG_SLOW_STARTUP;
++
+        mutex_lock(&idr_lock);
+-   rc = idr_alloc(&dev_nums_idr, NULL, 0, TPM_NUM_DEVICES, GFP_KERNEL);
++ rc = idr_alloc(&dev_nums_idr,
++                chip->flags & TPM_CHIP_FLAG_SLOW_STARTUP ? chip : NULL,
++                0, TPM_NUM_DEVICES, GFP_KERNEL);
+        mutex_unlock(&idr_lock);
+        if (rc < 0) {
+                dev_err(pdev, "No available tpm device numbers\n");
+
+
 > 
-> fio@uz3cg-dwg:~$ dmesg | grep tpm
-> [    3.381181] tpm_tis_spi spi1.1: 2.0 TPM (device-id 0x1B, rev-id 22)
-> [    3.423608] tpm tpm0: A TPM error (256) occurred attempting the self test
-> [    3.430406] tpm tpm0: starting up the TPM manually
+> (Missing from this bug report is the kernel version.)
+
+um, didnt think of it as a bug report - the feature is clearly not
+synchronized so there can be no guarantees about available TPMs being
+used. 
+
+but yes, this is happening on 5.10.42 using tpm_tis_spi to connect to
+infineon SLM9670
+
 > 
-> fio@uz3cg-dwg:~$ dmesg | grep ima
-> [    3.525741] ima: No TPM chip found, activating TPM-bypass!
-> [    3.531233] ima: Allocated hash algorithm: sha1
-
-Lengthening the TPM timeout, executing the TPM self test have been past
-reasons for the TPM not to initialize prior to IMA.
-
-(Missing from this bug report is the kernel version.)
-
-thanks,
-
-Mimi
-
+> thanks,
+> 
+> Mimi
+> 
