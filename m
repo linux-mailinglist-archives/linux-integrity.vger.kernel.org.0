@@ -2,127 +2,204 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCC73A2AB2
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 13:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B2A3A2B33
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 14:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbhFJLwF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Jun 2021 07:52:05 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5228 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230215AbhFJLwF (ORCPT
+        id S230130AbhFJMRG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Jun 2021 08:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229935AbhFJMRF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Jun 2021 07:52:05 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15ABXaLF183501;
-        Thu, 10 Jun 2021 07:50:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=sOsx0by8qj910X989Lv9ljQz1oCfdyYidDzCaLjOnTg=;
- b=ijtqNJmOo2TDpS0meMgb+r59PqcV9M6g+HpaZPdIMEwipmECcEOZl/aVRUR/6vj5JPRI
- vW1gaVxWSLaDxLkQDvGeIIJ3ZCDnOIWtUvMfBZbZi0pUqBf4mkmCXElxg22HMx9sPx7c
- VQ9HzmWlTh6hfl7YPrK7GmH7XKBd0/RGJMij1BTUrPt7g3GxtCWA/uLFKyJuEUaiEcc8
- sbvo+OgOTySTqLMBlxVNkbeqXQr1TvT0KvGJCluAYHEoBldzvh7kPrUBPCA1tJY5Q9J1
- lG3w5Tj9w6y8jE1VUNgOrngbDlhnvxoZcoj8AWdjJc+eni8xgAvbt00RYWluQYMo4Itu 7g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 393guhah2s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Jun 2021 07:50:03 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15ABYetF187223;
-        Thu, 10 Jun 2021 07:50:03 -0400
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 393guhah22-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Jun 2021 07:50:03 -0400
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15ABlZDQ027823;
-        Thu, 10 Jun 2021 11:50:01 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma03wdc.us.ibm.com with ESMTP id 3900wa7qrj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Jun 2021 11:50:01 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15ABo1SM38273324
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Jun 2021 11:50:01 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E4F9AE063;
-        Thu, 10 Jun 2021 11:50:01 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 58FBCAE060;
-        Thu, 10 Jun 2021 11:50:01 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 10 Jun 2021 11:50:01 +0000 (GMT)
-Subject: Re: [PATCH v5 0/2] Add support for ECDSA-signed kernel modules
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
-        dwmw2@infradead.org, zohar@linux.ibm.com, nayna@linux.ibm.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210602143537.545132-1-stefanb@linux.ibm.com>
- <20210603064738.pwfq3n7erzmncdmw@kernel.org>
- <8b79651b-1fe4-48c0-3498-529344ac6243@linux.ibm.com>
- <20210609124412.engcrbo3fezuzyoq@kernel.org>
- <f22e7ae1-8779-e995-091c-8a899fd7fd76@linux.ibm.com>
- <20210610090323.f7b47xqxbkwnm5cx@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <66d4a4be-c01c-7f33-9a7f-20cfdb5dcf96@linux.ibm.com>
-Date:   Thu, 10 Jun 2021 07:50:01 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 10 Jun 2021 08:17:05 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928A5C061574
+        for <linux-integrity@vger.kernel.org>; Thu, 10 Jun 2021 05:15:09 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id r198so2878933lff.11
+        for <linux-integrity@vger.kernel.org>; Thu, 10 Jun 2021 05:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BEHGV38tYEPn87F7ElGb2eufRjx+4X3yWFCCfxgeqDk=;
+        b=Ln6RW2k/ezYgUxzfevzOB7aA62Gl4OBWbiCqXt7hsqErTgvEh4iYeu8GBZbc5xLP6W
+         xW2NA29qk/4xxoHrXYO9DH/A8JKq1XANimnfGoicLulDRjN7ZD5gBPiZ/LtF0L6t7J+r
+         J6VT/I9oxzSCnmzVM/dZWH1CHRQxRZBS7gcF4EPn+OGtzngGBFvJdJB+YUJ1xZZLSB/a
+         pXa9ju508CJ/8yjqly2u5tGrLQRcvfRWY8lIf7TZpzIWiu/B/c8i/5q/9oJNWsQSUWmW
+         azX1kTMRL/AdnvdLCmoeA1fUZYlJ1yydIoL8dc5r3IuI3dZGrRYGpHIQSLGIdOp77cwy
+         ZkEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BEHGV38tYEPn87F7ElGb2eufRjx+4X3yWFCCfxgeqDk=;
+        b=samogxri+yQxjIt31fZSGtp+Soy+5jKTRiXDNeUTlfk4Ke2jKmIkf4fxpGMdS+10+W
+         a+zMlVWIzjpyWv7HqvWG4Lp1/lDrmpqjgwuUA/jjUodTx7e1Kg5re/9vBqbd3HN5qgmH
+         IcXvxuBS6XaT8lzdNjufzdFCLZYbhjAnz1KdyVr3jW9IZNVisMo9Cjz+x7+W3G6UwGSl
+         gc/845UK4h11ob/zcsu3Fv3R5ZuCpXmBE16XRI2/9z19pgubu5ig50lsyg2yK43B9iz3
+         5bOoZmipr0/9MlMnY2/283kgFaY7XZyUdygZifidBNBnAdvmCY7pVkwN9nmYfMp+Afsq
+         Phyw==
+X-Gm-Message-State: AOAM532k1pW1BKL05vY8JtIY/zIqaYTZulA8O5DPYQdcif2+SvB0cUXr
+        Dq7Bwsl+h1zM+NpTNhlRPKD2OkVcNm8G32UJV8RMiQ==
+X-Google-Smtp-Source: ABdhPJyMCbkh9CFAVVhBBJsx2k/zNGlXYWTroK3U0XkVnEVH3PrhM6l6hkBIxL2RP+m0uiesanfs7OadlWe6WPxkz9Q=
+X-Received: by 2002:a19:7d89:: with SMTP id y131mr1714908lfc.108.1623327307719;
+ Thu, 10 Jun 2021 05:15:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210610090323.f7b47xqxbkwnm5cx@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: dlR1wW0VT6VLBzpDlzMqUeHn6uKE9cdf
-X-Proofpoint-ORIG-GUID: FL6cxQpNyhmm27US8oOx8axdF_GmBkMr
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-10_07:2021-06-10,2021-06-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 spamscore=0 phishscore=0 mlxscore=0 priorityscore=1501
- adultscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106100072
+References: <20210609002326.210024-1-tyhicks@linux.microsoft.com>
+ <20210609002326.210024-6-tyhicks@linux.microsoft.com> <CAFA6WYOZC0iHzZm6pOxz31eW_=8g2wyJdm4wiOGKggO6-a9MdA@mail.gmail.com>
+ <20210609054621.GB4910@sequoia> <CAFA6WYOYt2vcQ4ng=Nwu2R7d6=R=DGXQKpQ-+UiENerEtQRKWg@mail.gmail.com>
+ <20210610071812.GA2753553@jade>
+In-Reply-To: <20210610071812.GA2753553@jade>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 10 Jun 2021 17:44:56 +0530
+Message-ID: <CAFA6WYMXPHvm1tGcCJkTejAa23WCz=_D3E69-i-5+9A8sydE3g@mail.gmail.com>
+Subject: Re: [PATCH v3 5/7] tee: Support shm registration without dma-buf backing
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Rijo-john.Thomas@amd.com, Allen Pais <apais@linux.microsoft.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Vikas Gupta <vikas.gupta@broadcom.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        op-tee@lists.trustedfirmware.org,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Jens,
 
-On 6/10/21 5:03 AM, Jarkko Sakkinen wrote:
-> On Wed, Jun 09, 2021 at 09:58:29AM -0400, Stefan Berger wrote:
->> On 6/9/21 8:44 AM, Jarkko Sakkinen wrote:
->>> On Thu, Jun 03, 2021 at 08:32:59AM -0400, Stefan Berger wrote:
->>>> On 6/3/21 2:47 AM, Jarkko Sakkinen wrote:
->>>>>> -- 
->>>>>> 2.29.2
->>>>>>
->>>>>>
->>>>> Please instead send a fix.
->>>> We have a Fixes tag in 1/2, so we want this to propagate to older kernels
->>>> and need the fix in 1/2 for that reason.
->>>>
->>>>      Stefan
->>> So please do an additional fix and send it.
->> 1/2 is supposed to propagate to older kernels and needs to change as posted
->> here in v5 (assuming that this does indeed fix what the build bot was
->> complaining about). 2/2 also changes. A fix on top of v4 would fix 2/2 but
->> won't apply cleanly to 1/2 as cannot easily propagate to older kernels. Is
->> that what we want? Why can you not remove v4 from your queue and replace it
->> with v5?
->>
->>     Stefan
-> What you can do is to send fix or fixes with appropriate fixes tags and
-> I can then squash them for appropriate patches. That's less work for me.
+On Thu, 10 Jun 2021 at 12:48, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+>
+> On Wed, Jun 09, 2021 at 04:22:49PM +0530, Sumit Garg wrote:
+> > + Rijo
+> >
+> > On Wed, 9 Jun 2021 at 11:16, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
+> [snip]
+> >
+> > > - tee_shm_alloc() performs allocations using contiguous pages
+> > >   from alloc_pages() while tee_shm_register() performs non-contiguous
+> > >   allocations with kcalloc(). I suspect this would be fine but I don't
+> > >   know the secure world side of these things well enough to assess the
+> > >   risk involved with such a change on the kernel side.
+> > >
+> >
+> > I don't think that would make any difference.
+>
+> Agree.
+>
+> >
+> > > I should have mentioned this in the cover letter but my hope was that
+> > > these minimal changes would be accepted and then additional work could
+> > > be done to merge tee_shm_alloc() and tee_shm_register() in a way that
+> > > would allow the caller to request contiguous or non-contiguous pages,
+> > > fix up the additional issues mentioned above, and then adjust the
+> > > call sites in ftpm and tee_bnxt_fw as appropriate.
+> > >
+> > > I think that's a bigger set of changes because there are several things
+> > > that still confuse/concern me:
+> > >
+> > > - Why does tee_shm_alloc() use TEE_SHM_MAPPED while tee_shm_register()
+> > >   uses TEE_SHM_KERNEL_MAPPED or TEE_SHM_USER_MAPPED? Why do all three
+> > >   exist?
+> >
+> > AFAIK, its due the the inherent nature of tee_shm_alloc() and
+> > tee_shm_register() where tee_shm_alloc() doesn't need to know whether
+> > its a kernel or user-space memory since it is the one that allocates
+> > whereas tee_shm_register() need to know that since it has to register
+> > pre-allocated client memory.
+> >
+> > > - Why does tee_shm_register() unconditionally use non-contiguous
+> > >   allocations without ever taking into account whether or not
+> > >   OPTEE_SMC_SEC_CAP_DYNAMIC_SHM was set? It sounds like that's required
+> > >   from my reading of https://optee.readthedocs.io/en/latest/architecture/core.html#noncontiguous-shared-buffers.
+> >
+> > Yeah, but do we have platforms in OP-TEE that don't support dynamic
+> > shared memory? I guess it has become the sane default which is a
+> > mandatory requirement when it comes to OP-TEE driver in u-boot.
+> >
+> > > - Why is TEE_SHM_REGISTER implemented at the TEE driver level when it is
+> > >   specific to OP-TEE? How to better abstract that away?
+> > >
+> >
+> > I would like you to go through Section "3.2.4. Shared Memory" in TEE
+> > Client API Specification. There are two standard ways for shared
+> > memory approach with TEE:
+> >
+> > 1. A Shared Memory block can either be existing Client Application
+> > memory (kernel driver in our case) which is subsequently registered
+> > with the TEE Client API (using tee_shm_register() in our case).
+> >
+> > 2. Or memory which is allocated on behalf of the Client Application
+> > using the TEE
+> > Client API (using tee_shm_alloc() in our case).
+> >
+> > > Let me know if you agree with the more minimal approach that I took for
+> > > these bug fix series or still feel like tee_shm_register() should be
+> > > fixed up so that it is usable. Thanks!
+> >
+> > From drivers perspective I think the change should be:
+> >
+> > tee_shm_alloc()
+> >
+> > to
+> >
+> > kcalloc()
+> > tee_shm_register()
+>
+> I had another approach in mind in "[PATCH 0/7] tee: shared memory updates",
+> https://lore.kernel.org/lkml/20210609102324.2222332-1-jens.wiklander@linaro.org/
+>
+> The flags needed by tee_shm_alloc() and tee_shm_register() aren't
+> very intuitive and in fact only accept quite few combinations. So my
+> idea was to hide those flags from callers outside of the TEE subsystem
+> with tee_shm_alloc_kernel_buf().
+>
 
+That looks like a good idea to hide flags from users. BTW, my only
+objection earlier with Tyler's and your patch-set is the usage of
+TEE_SHM_REGISTER flag in generic TEE methods: tee_shm_alloc*. AFAIU,
+the only reason for such an additional flag is in case of OP-TEE only
+because the OP-TEE driver could implement allocated shared memory via
+re-using dynamic shared memory approach as well. And that additional
+flag is only needed to differentiate that OP-TEE driver's private
+memory shouldn't be registered with OP-TEE. If this understanding is
+correct then we should introduce a separate flag as TEE_SHM_PRIV that
+should only be set inside tee_shm_alloc_anon_kernel_buf().
 
-Once you squash a fix on top of existing 1/2 , existing 2/2 will not 
-apply anymore. I am not sure what to send you. I think it would take 
-less time to remove the existing 2 patches and replace them with v5.
+As otherwise passing TEE_SHM_REGISTER flag for shared memory alloc API
+for other TEEs like AMD-TEE etc. would be useless.
 
-    Stefan
+> The approach with tee_shm_register() you suggest above has the drawback
+> that the TEE driver is forced to be able to handle any kernel memory.
 
+That's the value-add in the problem that Tyler is trying to resolve
+that driver should be able to free up the memory as needed as a
+private buffer.
 
+> This is OK with OP-TEE and dynamic shared memory enabled, but there are
+> platforms where dynamic shared memory isn't enabled. In those case must
+> the memory be allocated from a special pool.
+
+Is there any limitation for those platforms to not support dynamic
+shared memory in OP-TEE? If there isn't then we should able to handle
+this via match for TEE_GEN_CAP_REG_MEM in the ftpm_tee_match() and
+optee_ctx_match() APIs.
+
+>
+> Do you see any problem with instead replacing tee_shm_alloc()
+> with tee_shm_alloc_kernel_buf()?
+
+I don't see any problems apart from one mentioned above.
+
+-Sumit
+
+>
+> Cheers,
+> Jens
