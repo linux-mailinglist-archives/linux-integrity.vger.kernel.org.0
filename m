@@ -2,124 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B513A2B92
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 14:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815093A2C1F
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 14:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbhFJMbJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Jun 2021 08:31:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53750 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230267AbhFJMbI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Jun 2021 08:31:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 69049613BC;
-        Thu, 10 Jun 2021 12:29:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623328152;
-        bh=NQNebRqVIJ+EEveLxSKjiJxW1a0VmjQLVCzTrdNA3W8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dur6OsGvxwrqFq3vo0cVzHnqQxU0NtYhq2rYcgm9XWL78lwdhzZ08l10ZZNf+CNUj
-         oG/yQWnQWKK3cEVM64h9+DaeKuXS7vNtZUpYpW2d23/NhyAmFmoTO4TG5AZlH19xwe
-         Npou6BRlI3WrW80e+9xvu8eOqByy0vU8ErmBJ3i/cjGsFM52IxapOq0k/nJhecty7k
-         p5yH0uMu/sIYaGXF9I1e2fuMTiUo8ppNfPK+38PiLUX4a7c169hHy9sBC2Ry3tKX9d
-         PaqzUhGFommotfVbqSwS5UI7oa8Xuj004VTkYkx/5nsXH4tnbr+tehDh+iQbRV8GrD
-         iCNAHI4USM01Q==
-Date:   Thu, 10 Jun 2021 15:29:09 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Laurent Bigonville <bigon@debian.org>
-Cc:     linux-integrity@vger.kernel.org, Lukasz Majczak <lma@semihalf.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in
- tpm_tis_gen_interrupt() and tpm_get_timeouts()
-Message-ID: <20210610122909.qaczp6nbish6wzbt@kernel.org>
-References: <YCvv9wvj4jUIKpa7@kernel.org>
- <YCvyS6eVjZCKMAyJ@kernel.org>
- <YCv0KFIdtmG8F1kT@kernel.org>
- <d5fd8a6b-5eb9-0b50-d66c-e9f4cc84b215@debian.org>
- <YC2YyO7mJ7E73Voy@kernel.org>
- <ed73c137-373d-9767-25e6-309534652354@debian.org>
- <20210603052857.44zppwdfz4aror34@kernel.org>
- <07fb4429-d0cc-c471-1baa-a1a1eb2e8ae6@debian.org>
- <20210609124327.xkaf3bkcvyw2yxkn@kernel.org>
- <bfb9fdc7-668a-ff9c-1f5d-152df2ca106e@debian.org>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="vyklwdvksnkra3qg"
-Content-Disposition: inline
+        id S230336AbhFJM6e (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Jun 2021 08:58:34 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5418 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230230AbhFJM6d (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 10 Jun 2021 08:58:33 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15ACXH1P018120;
+        Thu, 10 Jun 2021 08:56:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=5x40kqRWwepV3BV+Cer52V1hRoTHTzXvBj4e9C41Z4s=;
+ b=plHqlt2TA35rmJQDIbOh2kA2aUMtRwqMCPkvj2wLU+qbZzu8LrKTkhQeq27KZ3ug2jZy
+ vwFFzpiFeTbkdJiSnC9NLgX5ABr3bjTZ2tHveBam9bV7xGwkWz9M5zQpd2zggMQtwbhP
+ WlBOs/LEXCGAraTd4FX9IqI+YtEfvlhrU3YtphzRC63X89SfL9hpCCEvuTwiQ/s/xtTa
+ eQXhTB8YrUTvvYFfe9Zz/nOjDu/nbyq2D3WvNEo4LBdJHemWJx3A2Xo6u0Cs0a/loSd7
+ EUMyhzVckIJiO2mN3HMZB/FIBM/iDH1HpEnW3kgUGdSUC4pe/g2eWrETO6fiQZhW0VNh FA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 393gujvffv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Jun 2021 08:56:32 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15ACY8Mv021142;
+        Thu, 10 Jun 2021 08:56:32 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 393gujvffc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Jun 2021 08:56:32 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15ACh39i018727;
+        Thu, 10 Jun 2021 12:56:30 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma01wdc.us.ibm.com with ESMTP id 3900w9g3ap-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Jun 2021 12:56:30 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15ACuUHE36700534
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Jun 2021 12:56:30 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C0BB112065;
+        Thu, 10 Jun 2021 12:56:30 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E73E4112063;
+        Thu, 10 Jun 2021 12:56:29 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.47.158.152])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Jun 2021 12:56:29 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
+        dwmw2@infradead.org, zohar@linux.ibm.com, jarkko@kernel.org
+Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v6 0/4] Add support for ECDSA-signed kernel modules
+Date:   Thu, 10 Jun 2021 08:56:19 -0400
+Message-Id: <20210610125623.1553792-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1zgUTIvqevtXceP5emHJioNOfQ_A970s
+X-Proofpoint-ORIG-GUID: uqZih1eoH0XXgO7Mh3TqFkYUQvfRTdj6
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <bfb9fdc7-668a-ff9c-1f5d-152df2ca106e@debian.org>
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-10_07:2021-06-10,2021-06-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 adultscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106100081
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+This series adds support for ECDSA-signed kernel modules. It also
+attempts to address a kbuild issue where a developer created an ECDSA
+key for signing kernel modules and then builds an older version of the
+kernel, when bisecting the kernel for example, that does not support
+ECDSA keys.
 
---vyklwdvksnkra3qg
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+The first patch addresses the kbuild issue of needing to delete that
+ECDSA key if it is in certs/signing_key.pem and trigger the creation
+of an RSA key. However, for this to work this patch would have to be
+backported to previous versions of the kernel but would also only work
+for the developer if he/she used a stable version of the kernel to which
+this patch was applied. So whether this patch actually achieves the
+wanted effect is not always guaranteed.
 
-On Thu, Jun 10, 2021 at 01:35:47PM +0200, Laurent Bigonville wrote:
-> # dmesg |grep -i tpm
-> 
-> [   13.019986] tpm_tis 00:06: 1.2 TPM (device-id 0x6871, rev-id 1)
-> [   15.016198] tpm tpm0: tpm_try_transmit: send(): error -62
-> [   15.016208] tpm tpm0: A TPM error (-62) occurred attempting to determine
-> the timeouts
-> [   15.016239] tpm_tis: probe of 00:06 failed with error -62
-> [   15.053255] tpm_inf_pnp 00:06: Found TPM with ID IFX0102
+The 2nd patch adds the support for the ECSDA-signed kernel modules.
 
-If possible, can you check what happens when you apply the attached patch.
-I'm not proposing it as a bug fix but it just simplifies the flow a lot,
-and might help to observe something.
+This patch depends on the ECDSA support series currently queued here:
+https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git/log/?h=ecc
 
-/Jarkko
+  Stefan
 
---vyklwdvksnkra3qg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-tpm_tis-Use-request_locality-before-calling-tpm2_pro.patch"
+v6:
+  - Patch 2/4 is fixing V4's 1/2 and 4/4 is fixing V4's 2/2. Both fixup
+    patches to be squashed.
 
-From 0b0dfc48b47e44d547282b20f6d8c97103fadbe6 Mon Sep 17 00:00:00 2001
-From: Jarkko Sakkinen <jarkko@kernel.org>
-Date: Thu, 10 Jun 2021 15:24:49 +0300
-Subject: [PATCH] tpm_tis: Use request_locality() before calling tpm2_probe()
+v5:
+  - do not touch the key files if openssl is not installed; likely
+    addresses an issue pointed out by kernel test robot
 
-Avoid unnecessary round-tripping in and out of the TIS driver by calling
-request_locality() directly, instead of going through tpm_chip_start(), and
-for the consistency sake (other sites in initialization code work this
-way).
+v4:
+  - extending 'depends on' with MODULES to (IMA_APPRAISE_MODSIG && MODULES)
+  
+v3:
+  - added missing OIDs for ECDSA signed hashes to pkcs7_sig_note_pkey_algo
+  - added recommendation to use string hash to Kconfig help text
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- drivers/char/tpm/tpm_tis_core.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+v2:
+  - Adjustment to ECDSA key detector string in 2/2
+  - Rephrased cover letter and patch descriptions with Mimi
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 69579efb247b..3b5a03f9efce 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -980,13 +980,11 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 	intmask &= ~TPM_GLOBAL_INT_ENABLE;
- 	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
- 
--	rc = tpm_chip_start(chip);
--	if (rc)
-+	rc = request_locality(chip, 0);
-+	if (rc < 0)
- 		goto out_err;
- 	rc = tpm2_probe(chip);
--	tpm_chip_stop(chip);
--	if (rc)
--		goto out_err;
-+	release_locality(chip, 0);
- 
- 	rc = tpm_tis_read32(priv, TPM_DID_VID(0), &vendor);
- 	if (rc < 0)
+
+Stefan Berger (4):
+  certs: Trigger creation of RSA module signing key if it's not an RSA
+    key
+  certs: Check whether openssl tool is available
+  certs: Add support for using elliptic curve keys for signing modules
+  certs: Adjustment due to 'Check whether openssl tool is available'
+
+ certs/Kconfig                         | 26 ++++++++++++++++++++++++++
+ certs/Makefile                        | 21 +++++++++++++++++++++
+ crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
+ 3 files changed, 55 insertions(+)
+
 -- 
-2.31.1
+2.29.2
 
-
---vyklwdvksnkra3qg--
