@@ -2,157 +2,324 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D4E3A28B7
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 11:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E38F3A2A5D
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 13:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbhFJJwU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Jun 2021 05:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
+        id S230153AbhFJLhu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Jun 2021 07:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbhFJJwU (ORCPT
+        with ESMTP id S230389AbhFJLht (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Jun 2021 05:52:20 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142D7C061574;
-        Thu, 10 Jun 2021 02:50:10 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id a20so1569929wrc.0;
-        Thu, 10 Jun 2021 02:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ttr6YN1lz3HlA7JpnhNQqRjKhBQi4menpBStyTqJFI0=;
-        b=aGFtsBpo7/zgt1hm3mMxBXTN35Ob9QVJ3Fd+e5btkS8d483FCslcwRhZ60IbIvhVdh
-         pGslzkesy3RQy6tCeMeA7eO5NsC5ovqRb6eI7XhxYOCXVRt1xt9f418vLf1l79SzJE1I
-         i9QNUlD71x+LD1PqXVMcTL+ffKk5hkSsVvKMRdzxAX8IrMbXsugWsSqotEQ7apMPZS2h
-         T7cwH4VkKb/8dzCHoBbZ9GTvD4qbx1Lkyy0EUIDEt6CDuu00xvVlTqLyFTqmrNMLES4h
-         0vxZAadPBsMGRYzj1ZBFq3kw73ZPb6dzZXUgI6gM9svc6WxTbSem4pq/kyRpkwqECQqo
-         JxqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ttr6YN1lz3HlA7JpnhNQqRjKhBQi4menpBStyTqJFI0=;
-        b=acKyN/YXysmQLiSw3YW+Mbv+oatEnnk92h6HvZw7fWo8WMjOrO4ktEMWpD5IUYc51z
-         MpGb6wFbMUB95N77GERxCATxCAPCiMO+noLw+gwh+SvLPjSyhUPs7hjTwduk/p5GtUt2
-         iocAW4i7DpkQmTuWQ0TPSCqTddtFLGgEvKfGOuKi7keTwm5JzGKiwdd1lYA5UTOkdr3E
-         f/ZvlOqvd+a+bUtNPkfk0ko9iZK33PbyZ+uS6/bTM8SJbD6fmBUu1yPmyLK0AzvSPqOj
-         a7ofZsFHWKwB4k9AmEzKszUDzlYRv8elmutziuNwM7ySXypn2/AflumrKCy2uXtdigVu
-         fx2A==
-X-Gm-Message-State: AOAM531IQO2lOGSMxbLv2poiGKb+C7FmGAVU501OONRpcymwTU5F4Sqv
-        r0SgFTL9ENCbMm4reA49M/iZJ8rEXA6XKQ==
-X-Google-Smtp-Source: ABdhPJyIfVDgdrW8pz+W8ACyqC9SBgmnQiwZRDdDgVt0vwXbQaoWTl5RrGgiyzkeIthPX1tcF2l75A==
-X-Received: by 2002:a05:6000:1563:: with SMTP id 3mr4325714wrz.59.1623318608487;
-        Thu, 10 Jun 2021 02:50:08 -0700 (PDT)
-Received: from localhost.localdomain (190.1.93.209.dyn.plus.net. [209.93.1.190])
-        by smtp.gmail.com with ESMTPSA id p16sm3006200wrs.52.2021.06.10.02.50.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Jun 2021 02:50:08 -0700 (PDT)
-From:   Dhiraj Shah <find.dhiraj@gmail.com>
-Cc:     find.dhiraj@gmail.com, James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm2_load_command leaks memory
-Date:   Thu, 10 Jun 2021 10:49:51 +0100
-Message-Id: <20210610094952.17068-1-find.dhiraj@gmail.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Thu, 10 Jun 2021 07:37:49 -0400
+Received: from ithil.bigon.be (ithil.bigon.be [IPv6:2001:bc8:25f1:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA680C0617AD
+        for <linux-integrity@vger.kernel.org>; Thu, 10 Jun 2021 04:35:52 -0700 (PDT)
+Received: from localhost (localhost [IPv6:::1])
+        by ithil.bigon.be (Postfix) with ESMTP id 861301FD2E;
+        Thu, 10 Jun 2021 13:35:48 +0200 (CEST)
+Received: from ithil.bigon.be ([IPv6:::1])
+        by localhost (ithil.bigon.be [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id qbhe24ReXm4t; Thu, 10 Jun 2021 13:35:48 +0200 (CEST)
+Received: from [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3] (unknown [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bigon@bigon.be)
+        by ithil.bigon.be (Postfix) with ESMTPSA;
+        Thu, 10 Jun 2021 13:35:48 +0200 (CEST)
+Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in tpm_tis_gen_interrupt()
+ and tpm_get_timeouts()
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, Lukasz Majczak <lma@semihalf.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+References: <20210216081750.191250-1-jarkko@kernel.org>
+ <ccb8ff69-5223-c293-bdda-46f041b7b770@debian.org>
+ <YCvv9wvj4jUIKpa7@kernel.org> <YCvyS6eVjZCKMAyJ@kernel.org>
+ <YCv0KFIdtmG8F1kT@kernel.org>
+ <d5fd8a6b-5eb9-0b50-d66c-e9f4cc84b215@debian.org>
+ <YC2YyO7mJ7E73Voy@kernel.org>
+ <ed73c137-373d-9767-25e6-309534652354@debian.org>
+ <20210603052857.44zppwdfz4aror34@kernel.org>
+ <07fb4429-d0cc-c471-1baa-a1a1eb2e8ae6@debian.org>
+ <20210609124327.xkaf3bkcvyw2yxkn@kernel.org>
+From:   Laurent Bigonville <bigon@debian.org>
+Message-ID: <bfb9fdc7-668a-ff9c-1f5d-152df2ca106e@debian.org>
+Date:   Thu, 10 Jun 2021 13:35:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <20210609124327.xkaf3bkcvyw2yxkn@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Language: fr
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-tpm2_key_decode allocates memory which is stored in blob and it's not freed.
+Le 9/06/21 à 14:43, Jarkko Sakkinen a écrit :
+> On Thu, Jun 03, 2021 at 11:42:15AM +0200, Laurent Bigonville wrote:
+>> Le 3/06/21 à 07:28, Jarkko Sakkinen a écrit :
+>>> On Tue, Jun 01, 2021 at 11:17:14PM +0200, Laurent Bigonville wrote:
+>>>> Le 17/02/21 à 23:29, Jarkko Sakkinen a écrit :
+>>>>> On Tue, Feb 16, 2021 at 08:06:04PM +0100, Laurent Bigonville wrote:
+>>>>>> Le 16/02/21 à 17:34, Jarkko Sakkinen a écrit :
+>>>>>>> On Tue, Feb 16, 2021 at 06:26:54PM +0200, Jarkko Sakkinen wrote:
+>>>>>>>> On Tue, Feb 16, 2021 at 06:16:58PM +0200, Jarkko Sakkinen wrote:
+>>>>>>>>> On Tue, Feb 16, 2021 at 12:02:24PM +0100, Laurent Bigonville wrote:
+>>>>>>>>>> Le 16/02/21 à 09:17, Jarkko Sakkinen a écrit :
+>>>>>>>>>>> From: Lukasz Majczak <lma@semihalf.com>
+>>>>>>>>>>>
+>>>>>>>>>>> This is shown with Samsung Chromebook Pro (Caroline) with TPM 1.2
+>>>>>>>>>>> (SLB 9670):
+>>>>>>>>>>>
+>>>>>>>>>>> [    4.324298] TPM returned invalid status
+>>>>>>>>>>> [    4.324806] WARNING: CPU: 2 PID: 1 at drivers/char/tpm/tpm_tis_core.c:275 tpm_tis_status+0x86/0x8f
+>>>>>>>>>>>
+>>>>>>>>>>> Background
+>>>>>>>>>>> ==========
+>>>>>>>>>>>
+>>>>>>>>>>> TCG PC Client Platform TPM Profile (PTP) Specification, paragraph 6.1 FIFO
+>>>>>>>>>>> Interface Locality Usage per Register, Table 39 Register Behavior Based on
+>>>>>>>>>>> Locality Setting for FIFO - a read attempt to TPM_STS_x Registers returns
+>>>>>>>>>>> 0xFF in case of lack of locality. The described situation manifests itself
+>>>>>>>>>>> with the following warning trace:
+>>>>>>>>>>>
+>>>>>>>>>>> The fix
+>>>>>>>>>>> =======
+>>>>>>>>>>>
+>>>>>>>>>>> Add the proper decorations to tpm_tis_gen_interrupt() and
+>>>>>>>>>>> tpm_get_timeouts().
+>>>>>>>>>> I tried that patch (alone on the top of the HEAD of Linus master) and I
+>>>>>>>>>> still get the same trace in dmesg
+>>>>>>>>> Can you give a shot to
+>>>>>>>>>
+>>>>>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+>>>>>>>>>
+>>>>>>>>> It has couple of more fixes, and paste the log.
+>>>>>>>> And if possible a full stack trace :-)
+>>>>>>> And apply this patch on top. Cannot apply it there before it's reviewed.
+>>>>>>>
+>>>>>> I get the following stacktrace with your branch and the patch here:
+>>>>>>
+>>>>>> [   13.498925] ------------[ cut here ]------------
+>>>>>> [   13.498930] TPM returned invalid status
+>>>>>> [   13.498953] WARNING: CPU: 1 PID: 459 at
+>>>>>> drivers/char/tpm/tpm_tis_core.c:205 tpm_tis_status+0x86/0xa0 [tpm_tis_core]
+>>>>>> [   13.498963] Modules linked in: libiscsi_tcp(E) tpm_tis(E+)
+>>>>>> tpm_tis_core(E) libiscsi(E) snd_timer(E) tpm(E) joydev(E) snd(E)
+>>>>>> scsi_transport_iscsi(E) pcc_cpufreq(E-) fjes(E-) soundcore(E) i7core_edac(E)
+>>>>>> i5500_temp(E) asus_atk0110(E) rng_core(E) acpi_cpufreq(E-) evdev(E) loop(E)
+>>>>>> firewire_sbp2(E) msr(E) parport_pc(E) ppdev(E) lp(E) parport(E) fuse(E)
+>>>>>> configfs(E) sunrpc(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) crc16(E)
+>>>>>> mbcache(E) jbd2(E) btrfs(E) blake2b_generic(E) zstd_compress(E) efivars(E)
+>>>>>> raid10(E) raid456(E) async_raid6_recov(E) async_memcpy(E) async_pq(E)
+>>>>>> async_xor(E) async_tx(E) xor(E) raid6_pq(E) libcrc32c(E) crc32c_generic(E)
+>>>>>> raid1(E) raid0(E) multipath(E) linear(E) md_mod(E) dm_mod(E) sr_mod(E)
+>>>>>> sd_mod(E) cdrom(E) t10_pi(E) hid_generic(E) usbhid(E) hid(E) amdgpu(E)
+>>>>>> ahci(E) libahci(E) libata(E) gpu_sched(E) i2c_algo_bit(E) drm_ttm_helper(E)
+>>>>>> ttm(E) uhci_hcd(E) ehci_pci(E) firewire_ohci(E) crc32c_intel(E) ehci_hcd(E)
+>>>>>> drm_kms_helper(E) firewire_core(E) i2c_i801(E) psmouse(E)
+>>>>>> [   13.499044]  scsi_mod(E) cec(E) i2c_smbus(E) mxm_wmi(E) lpc_ich(E)
+>>>>>> crc_itu_t(E) sky2(E) usbcore(E) drm(E) mfd_core(E) wmi(E) button(E)
+>>>>>> [   13.499058] CPU: 1 PID: 459 Comm: systemd-udevd Tainted: G          I
+>>>>>> E     5.11.0+ #4
+>>>>>> [   13.499062] Hardware name: System manufacturer System Product Name/P6T
+>>>>>> DELUXE V2, BIOS 0406    04/24/2009
+>>>>>> [   13.499064] RIP: 0010:tpm_tis_status+0x86/0xa0 [tpm_tis_core]
+>>>>>> [   13.499069] Code: 00 75 30 48 83 c4 18 c3 31 c0 80 3d 83 48 00 00 00 75
+>>>>>> e0 48 c7 c7 4c 53 49 c1 88 44 24 07 c6 05 6f 48 00 00 01 e8 b2 24 ba cd <0f>
+>>>>>> 0b 0f b6 44 24 07 eb c0 e8 fc 99 bd cd 66 66 2e 0f 1f 84 00 00
+>>>>>> [   13.499072] RSP: 0018:ffffbaeb80fb3aa0 EFLAGS: 00010286
+>>>>>> [   13.499075] RAX: 0000000000000000 RBX: ffff9704034e5000 RCX:
+>>>>>> ffff9707ada58bc8
+>>>>>> [   13.499078] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI:
+>>>>>> ffff9707ada58bc0
+>>>>>> [   13.499080] RBP: 00000000ffff5d40 R08: 0000000000000000 R09:
+>>>>>> ffffbaeb80fb38c0
+>>>>>> [   13.499082] R10: ffffbaeb80fb38b8 R11: ffffffff8fac2588 R12:
+>>>>>> 0000000000000016
+>>>>>> [   13.499085] R13: ffff97040c38d000 R14: 0000000000001000 R15:
+>>>>>> ffffbaeb80fb3ada
+>>>>>> [   13.499087] FS:  00007fe1bcfeb8c0(0000) GS:ffff9707ada40000(0000)
+>>>>>> knlGS:0000000000000000
+>>>>>> [   13.499090] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>>> [   13.499092] CR2: 000055e5f7048590 CR3: 00000001084fe000 CR4:
+>>>>>> 00000000000006e0
+>>>>>> [   13.499095] Call Trace:
+>>>>>> [   13.499099]  tpm_transmit+0x15f/0x3d0 [tpm]
+>>>>>> [   13.499113]  tpm_transmit_cmd+0x25/0x90 [tpm]
+>>>>>> [   13.499121]  tpm2_probe+0xe2/0x140 [tpm]
+>>>>>> [   13.499130]  tpm_tis_core_init+0x1d5/0x2b0 [tpm_tis_core]
+>>>>>> [   13.499135]  ? tpm_tis_init.part.0+0x130/0x130 [tpm_tis]
+>>>>>> [   13.499141]  tpm_tis_pnp_init+0xe1/0x110 [tpm_tis]
+>>>>>> [   13.499148]  pnp_device_probe+0xaf/0x140
+>>>>>> [   13.499154]  really_probe+0xf2/0x440
+>>>>>> [   13.499160]  driver_probe_device+0xe1/0x150
+>>>>>> [   13.499163]  device_driver_attach+0xa1/0xb0
+>>>>>> [   13.499167]  __driver_attach+0x8a/0x150
+>>>>>> [   13.499171]  ? device_driver_attach+0xb0/0xb0
+>>>>>> [   13.499174]  ? device_driver_attach+0xb0/0xb0
+>>>>>> [   13.499177]  bus_for_each_dev+0x78/0xc0
+>>>>>> [   13.499181]  bus_add_driver+0x12b/0x1e0
+>>>>>> [   13.499184]  driver_register+0x8b/0xe0
+>>>>>> [   13.499188]  ? 0xffffffffc1413000
+>>>>>> [   13.499191]  init_tis+0xa0/0x1000 [tpm_tis]
+>>>>>> [   13.499197]  do_one_initcall+0x44/0x1d0
+>>>>>> [   13.499202]  ? do_init_module+0x23/0x260
+>>>>>> [   13.499206]  ? kmem_cache_alloc_trace+0xf5/0x200
+>>>>>> [   13.499212]  do_init_module+0x5c/0x260
+>>>>>> [   13.499215]  __do_sys_finit_module+0xb1/0x110
+>>>>>> [   13.499225]  do_syscall_64+0x33/0x80
+>>>>>> [   13.499229]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>>>>>> [   13.499234] RIP: 0033:0x7fe1bd4a49b9
+>>>>>> [   13.499237] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48
+>>>>>> 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48>
+>>>>>> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a7 54 0c 00 f7 d8 64 89 01 48
+>>>>>> [   13.499240] RSP: 002b:00007ffca5bfa108 EFLAGS: 00000246 ORIG_RAX:
+>>>>>> 0000000000000139
+>>>>>> [   13.499243] RAX: ffffffffffffffda RBX: 000055e5f7036920 RCX:
+>>>>>> 00007fe1bd4a49b9
+>>>>>> [   13.499245] RDX: 0000000000000000 RSI: 00007fe1bd62fe2d RDI:
+>>>>>> 0000000000000012
+>>>>>> [   13.499247] RBP: 0000000000020000 R08: 0000000000000000 R09:
+>>>>>> 000055e5f6e7a0b0
+>>>>>> [   13.499249] R10: 0000000000000012 R11: 0000000000000246 R12:
+>>>>>> 00007fe1bd62fe2d
+>>>>>> [   13.499251] R13: 0000000000000000 R14: 000055e5f7033420 R15:
+>>>>>> 000055e5f7036920
+>>>>>> [   13.499255] ---[ end trace 7e963e5c3647102e ]---
+>>>>>>
+>>>>>> If I also apply the patch to change the WARN_ONCE in dev_warn_once, and grep
+>>>>>> on the string "tpm", I get the following:
+>>>>>>
+>>>>>> Feb 16 19:51:22 fornost kernel: tpm tpm0: TPM returned invalid status: 0xa0
+>>>>>> Feb 16 19:51:22 fornost kernel: tpm_tis 00:06: 1.2 TPM (device-id 0x6871,
+>>>>>> rev-id 1)
+>>>>>> Feb 16 19:51:24 fornost kernel: tpm tpm0: tpm_try_transmit: send(): error
+>>>>>> -62
+>>>>>> Feb 16 19:51:24 fornost kernel: tpm tpm0: A TPM error (-62) occurred
+>>>>>> attempting to determine the timeouts
+>>>>>> Feb 16 19:51:24 fornost kernel: tpm_tis: probe of 00:06 failed with error
+>>>>>> -62
+>>>>>> Feb 16 19:51:24 fornost kernel: tpm_inf_pnp 00:06: Found TPM with ID IFX0102
+>>>>>>
+>>>>>>
+>>>>> No immediate idea why this happens as the code should take locality.
+>>>>>
+>>>>> I noticed that the original patch bundles incorrectly two fixes, so I
+>>>>> send mu PT without the current fix and turn into a patch set. Let's
+>>>>> try to debug this for rc2/rc3.
+>>>> Hey, I'm coming back regarding this issue, I'm running 5.10 (from debian
+>>>> unstable) and still getting this issue
+>>> Many of the fixes are landing to 5.13, stable kernels do not acquire
+>>> out-of-tree fixes unless downstream maintainers decide to apply them
+>>> by hand.
+>> OK I tried again with linus master branch (5.13.0-rc4+) and your linux-tpmdd
+>> branch and the problem persists
+> Do have a klog for this?
 
-Signed-off-by: Dhiraj Shah <find.dhiraj@gmail.com>
----
- security/keys/trusted-keys/trusted_tpm2.c | 41 +++++++++++++++--------
- 1 file changed, 27 insertions(+), 14 deletions(-)
+In dmesg I see the following:
 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 0165da386289..52dd43bb8cdb 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -378,22 +378,31 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 	}
- 
- 	/* new format carries keyhandle but old format doesn't */
--	if (!options->keyhandle)
--		return -EINVAL;
-+	if (!options->keyhandle) {
-+		rc = -EINVAL;
-+		goto err;
-+	}
- 
- 	/* must be big enough for at least the two be16 size counts */
--	if (payload->blob_len < 4)
--		return -EINVAL;
-+	if (payload->blob_len < 4) {
-+		rc = -EINVAL;
-+		goto err;
-+	}
- 
- 	private_len = get_unaligned_be16(blob);
- 
- 	/* must be big enough for following public_len */
--	if (private_len + 2 + 2 > (payload->blob_len))
--		return -E2BIG;
-+	if (private_len + 2 + 2 > (payload->blob_len)) {
-+		rc = -E2BIG;
-+		goto err;
-+	}
- 
- 	public_len = get_unaligned_be16(blob + 2 + private_len);
--	if (private_len + 2 + public_len + 2 > payload->blob_len)
--		return -E2BIG;
-+
-+	if (private_len + 2 + public_len + 2 > payload->blob_len) {
-+		rc = -E2BIG;
-+		goto err;
-+	}
- 
- 	pub = blob + 2 + private_len + 2;
- 	/* key attributes are always at offset 4 */
-@@ -406,13 +415,16 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 		payload->migratable = 1;
- 
- 	blob_len = private_len + public_len + 4;
--	if (blob_len > payload->blob_len)
--		return -E2BIG;
- 
--	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_LOAD);
--	if (rc)
--		return rc;
-+	if (blob_len > payload->blob_len) {
-+		rc = -E2BIG;
-+		goto err;
-+	}
- 
-+	if (tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_LOAD) != 0)
-+		rc = -ENOMEM;
-+		goto out;
-+	}
- 	tpm_buf_append_u32(&buf, options->keyhandle);
- 	tpm2_buf_append_auth(&buf, TPM2_RS_PW,
- 			     NULL /* nonce */, 0,
-@@ -433,9 +445,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
- 
- out:
-+	tpm_buf_destroy(&buf);
-+err:
- 	if (blob != payload->blob)
- 		kfree(blob);
--	tpm_buf_destroy(&buf);
- 
- 	if (rc > 0)
- 		rc = -EPERM;
--- 
-2.30.1 (Apple Git-130)
+[   13.018702] ------------[ cut here ]------------
+[   13.018706] TPM returned invalid status
+[   13.018720] WARNING: CPU: 1 PID: 450 at 
+drivers/char/tpm/tpm_tis_core.c:205 tpm_tis_status+0x86/0xa0 [tpm_tis_core]
+[   13.018728] Modules linked in: tpm_tis(E+) tpm_tis_core(E) tpm(E) 
+asus_atk0110(E) rng_core(E) fjes(E-) evdev(E) acpi_cpufreq(E-) loop(E+) 
+firewire_sbp2(E) msr(E) parport_pc(E) ppdev(E) lp(E) parport(E) fuse(E) 
+configfs(E) sunrpc(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) 
+crc16(E) mbcache(E) jbd2(E) btrfs(E) blake2b_generic(E) zstd_compress(E) 
+efivars(E) raid10(E) raid456(E) async_raid6_recov(E) async_memcpy(E) 
+async_pq(E) async_xor(E) async_tx(E) xor(E) raid6_pq(E) libcrc32c(E) 
+crc32c_generic(E) raid1(E) raid0(E) multipath(E) linear(E) md_mod(E) 
+dm_mod(E) sr_mod(E) sd_mod(E) cdrom(E) t10_pi(E) hid_generic(E) 
+usbhid(E) hid(E) amdgpu(E) gpu_sched(E) i2c_algo_bit(E) 
+drm_ttm_helper(E) ahci(E) ttm(E) libahci(E) firewire_ohci(E) i2c_i801(E) 
+libata(E) drm_kms_helper(E) uhci_hcd(E) ehci_pci(E) cec(E) 
+crc32c_intel(E) firewire_core(E) mxm_wmi(E) psmouse(E) ehci_hcd(E) 
+crc_itu_t(E) i2c_smbus(E) scsi_mod(E) lpc_ich(E) sky2(E) usbcore(E) 
+drm(E) mfd_core(E) wmi(E) button(E)
+[   13.018782] CPU: 1 PID: 450 Comm: systemd-udevd Tainted: G          I 
+E     5.13.0-rc4+ #6
+[   13.018784] Hardware name: System manufacturer System Product 
+Name/P6T DELUXE V2, BIOS 0406    04/24/2009
+[   13.018786] RIP: 0010:tpm_tis_status+0x86/0xa0 [tpm_tis_core]
+[   13.018790] Code: 00 75 30 48 83 c4 18 c3 31 c0 80 3d c3 49 00 00 00 
+75 e0 48 c7 c7 64 03 4d c1 88 44 24 07 c6 05 af 49 00 00 01 e8 42 ab b8 
+f0 <0f> 0b 0f b6 44 24 07 eb c0 e8 9c 36 bc f0 66 66 2e 0f 1f 84 00 00
+[   13.018792] RSP: 0000:ffffae84807f3a98 EFLAGS: 00010282
+[   13.018794] RAX: 0000000000000000 RBX: ffff96e5491b9000 RCX: 
+ffff96e8eda58788
+[   13.018795] RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: 
+ffff96e8eda58780
+[   13.018797] RBP: 00000000ffff5cf4 R08: 0000000000000000 R09: 
+ffffae84807f38c0
+[   13.018798] R10: ffffae84807f38b8 R11: ffffffffb2ac3888 R12: 
+0000000000000016
+[   13.018800] R13: ffff96e550d1e000 R14: 0000000000001000 R15: 
+ffffae84807f3ad2
+[   13.018801] FS:  00007f75db70e8c0(0000) GS:ffff96e8eda40000(0000) 
+knlGS:0000000000000000
+[   13.018803] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   13.018805] CR2: 00007f75da19d077 CR3: 000000010675e000 CR4: 
+00000000000006e0
+[   13.018807] Call Trace:
+[   13.018810]  tpm_transmit+0x15f/0x3d0 [tpm]
+[   13.018818]  tpm_transmit_cmd+0x25/0x90 [tpm]
+[   13.018824]  tpm2_probe+0xe2/0x140 [tpm]
+[   13.018830]  tpm_tis_core_init+0x1d5/0x2aa [tpm_tis_core]
+[   13.018834]  ? tpm_tis_init.part.0+0x130/0x130 [tpm_tis]
+[   13.018838]  tpm_tis_pnp_init+0xe1/0x110 [tpm_tis]
+[   13.018843]  pnp_device_probe+0xaf/0x140
+[   13.018847]  really_probe+0xf2/0x460
+[   13.018852]  driver_probe_device+0xe8/0x160
+[   13.018854]  device_driver_attach+0xa1/0xb0
+[   13.018866]  __driver_attach+0x8f/0x150
+[   13.018869]  ? device_driver_attach+0xb0/0xb0
+[   13.018871]  ? device_driver_attach+0xb0/0xb0
+[   13.018873]  bus_for_each_dev+0x78/0xc0
+[   13.018876]  bus_add_driver+0x12b/0x1e0
+[   13.018879]  driver_register+0x8b/0xe0
+[   13.018881]  ? 0xffffffffc14de000
+[   13.018883]  init_tis+0xa0/0x1000 [tpm_tis]
+[   13.018888]  do_one_initcall+0x44/0x1d0
+[   13.018892]  ? kmem_cache_alloc_trace+0x119/0x240
+[   13.018896]  do_init_module+0x5c/0x260
+[   13.018900]  __do_sys_finit_module+0xb1/0x110
+[   13.018904]  do_syscall_64+0x40/0xb0
+[   13.018908]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   13.018911] RIP: 0033:0x7f75dbbc79b9
+[   13.018913] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 
+48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 
+05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a7 54 0c 00 f7 d8 64 89 01 48
+[   13.018926] RSP: 002b:00007ffe79a15068 EFLAGS: 00000246 ORIG_RAX: 
+0000000000000139
+[   13.018929] RAX: ffffffffffffffda RBX: 0000555b250d19a0 RCX: 
+00007f75dbbc79b9
+[   13.018930] RDX: 0000000000000000 RSI: 00007f75dbd52e2d RDI: 
+0000000000000012
+[   13.018936] RBP: 0000000000020000 R08: 0000000000000000 R09: 
+0000555b250d0060
+[   13.018938] R10: 0000000000000012 R11: 0000000000000246 R12: 
+00007f75dbd52e2d
+[   13.018939] R13: 0000000000000000 R14: 0000555b250d1420 R15: 
+0000555b250d19a0
+[   13.018944] ---[ end trace 6abb891c8492a76e ]---
+
+And
+
+# dmesg |grep -i tpm
+
+[   13.019986] tpm_tis 00:06: 1.2 TPM (device-id 0x6871, rev-id 1)
+[   15.016198] tpm tpm0: tpm_try_transmit: send(): error -62
+[   15.016208] tpm tpm0: A TPM error (-62) occurred attempting to 
+determine the timeouts
+[   15.016239] tpm_tis: probe of 00:06 failed with error -62
+[   15.053255] tpm_inf_pnp 00:06: Found TPM with ID IFX0102
 
