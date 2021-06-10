@@ -2,139 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDDE3A2DA2
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 16:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE153A2DF9
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 16:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbhFJOCa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Jun 2021 10:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbhFJOCa (ORCPT
+        id S231355AbhFJOWP (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Jun 2021 10:22:15 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45268 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230267AbhFJOWN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Jun 2021 10:02:30 -0400
-Received: from ithil.bigon.be (ithil.bigon.be [IPv6:2001:bc8:25f1:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689F6C061574
-        for <linux-integrity@vger.kernel.org>; Thu, 10 Jun 2021 07:00:32 -0700 (PDT)
-Received: from localhost (localhost [IPv6:::1])
-        by ithil.bigon.be (Postfix) with ESMTP id B54E01FD2E;
-        Thu, 10 Jun 2021 16:00:28 +0200 (CEST)
-Received: from ithil.bigon.be ([IPv6:::1])
-        by localhost (ithil.bigon.be [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id tqqOoOKVLgfy; Thu, 10 Jun 2021 16:00:28 +0200 (CEST)
-Received: from [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3] (unknown [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bigon@bigon.be)
-        by ithil.bigon.be (Postfix) with ESMTPSA;
-        Thu, 10 Jun 2021 16:00:28 +0200 (CEST)
-Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in tpm_tis_gen_interrupt()
- and tpm_get_timeouts()
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, Lukasz Majczak <lma@semihalf.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-References: <YCvv9wvj4jUIKpa7@kernel.org> <YCvyS6eVjZCKMAyJ@kernel.org>
- <YCv0KFIdtmG8F1kT@kernel.org>
- <d5fd8a6b-5eb9-0b50-d66c-e9f4cc84b215@debian.org>
- <YC2YyO7mJ7E73Voy@kernel.org>
- <ed73c137-373d-9767-25e6-309534652354@debian.org>
- <20210603052857.44zppwdfz4aror34@kernel.org>
- <07fb4429-d0cc-c471-1baa-a1a1eb2e8ae6@debian.org>
- <20210609124327.xkaf3bkcvyw2yxkn@kernel.org>
- <bfb9fdc7-668a-ff9c-1f5d-152df2ca106e@debian.org>
- <20210610122909.qaczp6nbish6wzbt@kernel.org>
-From:   Laurent Bigonville <bigon@debian.org>
-Message-ID: <48721227-6518-779e-c6f2-692c4d7b5c92@debian.org>
-Date:   Thu, 10 Jun 2021 16:00:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210610122909.qaczp6nbish6wzbt@kernel.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: fr
+        Thu, 10 Jun 2021 10:22:13 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15AEENVB055864;
+        Thu, 10 Jun 2021 10:20:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=f+GezljSdiJkbrktAHsZueMoVCCsL7CmeGI26dX+WHM=;
+ b=dDXd2IQPWrl0IYR+bMqeHQOz2uCKga9izEsuCWjDu81+gjvVRPAGk0Ft/fpT1rKtXuh1
+ thpcpJBgg/2HgHqzTPQ4pOnaoxAMwOpy229ksySXnu/DzjYVQKpMeO3Rpa6UA96AU/nU
+ rpjkXVEmrIYJrITYRQ+9e6X8NAYJopIkyaSXt7My+CssWWO2B3zeljbW+sNU4K94kHda
+ cICxFaayG8prY23cHSaJxh92HXDOvucV5C68Q03YhA3iabdUyMlirhhsPevFJiculFNY
+ FKWVusxiaO3jqE01HtfUZqpQbULiJr3DXyoyyQh8TgqYxpFei/XT1rEt8BIpSNBJL5Hv CA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 393man86yc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Jun 2021 10:20:07 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15AEFNvM062503;
+        Thu, 10 Jun 2021 10:20:06 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 393man86xf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Jun 2021 10:20:06 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15AEG7Ds013524;
+        Thu, 10 Jun 2021 14:20:05 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3900w8avdm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Jun 2021 14:20:05 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15AEJBRe26739060
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Jun 2021 14:19:11 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4BA6D4C05A;
+        Thu, 10 Jun 2021 14:20:01 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 410024C058;
+        Thu, 10 Jun 2021 14:19:59 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.91.59])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Jun 2021 14:19:59 +0000 (GMT)
+Message-ID: <b3c1f5a0a37419fac51d570cd1c8e521f59cee14.camel@linux.ibm.com>
+Subject: Re: ima - wait for tpm load
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>
+Date:   Thu, 10 Jun 2021 10:19:58 -0400
+In-Reply-To: <20210610071633.GA30216@trex>
+References: <20210610071633.GA30216@trex>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0U3gc6pr1KzWqWTNLPRcz7M3gCbXPNHb
+X-Proofpoint-GUID: rlXwXebxr61XdBXnHvUQfvIM0CGIRX5e
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-10_07:2021-06-10,2021-06-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 spamscore=0 priorityscore=1501
+ bulkscore=0 impostorscore=0 clxscore=1011 suspectscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106100091
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Le 10/06/21 à 14:29, Jarkko Sakkinen a écrit :
-> On Thu, Jun 10, 2021 at 01:35:47PM +0200, Laurent Bigonville wrote:
->> # dmesg |grep -i tpm
->>
->> [   13.019986] tpm_tis 00:06: 1.2 TPM (device-id 0x6871, rev-id 1)
->> [   15.016198] tpm tpm0: tpm_try_transmit: send(): error -62
->> [   15.016208] tpm tpm0: A TPM error (-62) occurred attempting to determine
->> the timeouts
->> [   15.016239] tpm_tis: probe of 00:06 failed with error -62
->> [   15.053255] tpm_inf_pnp 00:06: Found TPM with ID IFX0102
-> If possible, can you check what happens when you apply the attached patch.
-> I'm not proposing it as a bug fix but it just simplifies the flow a lot,
-> and might help to observe something.
->
-With the patch on the top of HEAD of master and the patch from your 
-branch, I'm getting this:
+[Cc'ing Jarkko]
 
-[   13.140548] tpm tpm0: invalid TPM_STS.x 0xa0, dumping stack for forensics
-[   13.140617] CPU: 4 PID: 462 Comm: systemd-udevd Tainted: G          I 
-E     5.13.0-rc5+ #7
-[   13.140621] Hardware name: System manufacturer System Product 
-Name/P6T DELUXE V2, BIOS 0406    04/24/2009
-[   13.140623] Call Trace:
-[   13.140628]  dump_stack+0x76/0x94
-[   13.140637]  tpm_tis_status.cold+0x19/0x20 [tpm_tis_core]
-[   13.140643]  tpm_transmit+0x15f/0x3d0 [tpm]
-[   13.140657]  tpm_transmit_cmd+0x25/0x90 [tpm]
-[   13.140666]  tpm2_probe+0xe2/0x140 [tpm]
-[   13.140676]  tpm_tis_core_init+0x1d7/0x2ba [tpm_tis_core]
-[   13.140681]  ? tpm_tis_init.part.0+0x130/0x130 [tpm_tis]
-[   13.140688]  tpm_tis_pnp_init+0xe1/0x110 [tpm_tis]
-[   13.140695]  pnp_device_probe+0xaf/0x140
-[   13.140702]  really_probe+0xf2/0x460
-[   13.140708]  driver_probe_device+0xe8/0x160
-[   13.140712]  device_driver_attach+0xa1/0xb0
-[   13.140716]  __driver_attach+0x8f/0x150
-[   13.140720]  ? device_driver_attach+0xb0/0xb0
-[   13.140723]  ? device_driver_attach+0xb0/0xb0
-[   13.140726]  bus_for_each_dev+0x78/0xc0
-[   13.140730]  bus_add_driver+0x12b/0x1e0
-[   13.140734]  driver_register+0x8b/0xe0
-[   13.140738]  ? 0xffffffffc11c4000
-[   13.140741]  init_tis+0xa0/0x1000 [tpm_tis]
-[   13.140748]  do_one_initcall+0x44/0x1d0
-[   13.140754]  ? kmem_cache_alloc_trace+0x119/0x240
-[   13.140759]  do_init_module+0x5c/0x260
-[   13.140764]  __do_sys_finit_module+0xb1/0x110
-[   13.140769]  do_syscall_64+0x40/0xb0
-[   13.140775]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   13.140780] RIP: 0033:0x7f082957b9b9
-[   13.140783] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 
-48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 
-05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a7 54 0c 00 f7 d8 64 89 01 48
-[   13.140786] RSP: 002b:00007fffd1b5a048 EFLAGS: 00000246 ORIG_RAX: 
-0000000000000139
-[   13.140791] RAX: ffffffffffffffda RBX: 000055bd4f3f6960 RCX: 
-00007f082957b9b9
-[   13.140793] RDX: 0000000000000000 RSI: 00007f0829706e2d RDI: 
-0000000000000012
-[   13.140796] RBP: 0000000000020000 R08: 0000000000000000 R09: 
-000055bd4f238350
-[   13.140798] R10: 0000000000000012 R11: 0000000000000246 R12: 
-00007f0829706e2d
-[   13.140800] R13: 0000000000000000 R14: 000055bd4f2381c0 R15: 
-000055bd4f3f6960
-[   13.141844] tpm_tis 00:06: 1.2 TPM (device-id 0x6871, rev-id 1)
+On Thu, 2021-06-10 at 09:16 +0200, Jorge Ramirez-Ortiz, Foundries
+wrote:
+> I am enabling IMA on a ZynqMP based platform using an SPI based TPM
+> from Infineon.
+> 
+> The SPI TPM driver is built-in but since the IMA is initalized from a
+> late_initcall, IMA never finds the TPM.
+> 
+> Is there a recomended way to work around this issue?
+> 
+> fio@uz3cg-dwg:~$ dmesg | grep tpm
+> [    3.381181] tpm_tis_spi spi1.1: 2.0 TPM (device-id 0x1B, rev-id 22)
+> [    3.423608] tpm tpm0: A TPM error (256) occurred attempting the self test
+> [    3.430406] tpm tpm0: starting up the TPM manually
+> 
+> fio@uz3cg-dwg:~$ dmesg | grep ima
+> [    3.525741] ima: No TPM chip found, activating TPM-bypass!
+> [    3.531233] ima: Allocated hash algorithm: sha1
 
-# dmesg |grep -i tpm
+Lengthening the TPM timeout, executing the TPM self test have been past
+reasons for the TPM not to initialize prior to IMA.
 
-[...]
-[   15.140121] tpm tpm0: tpm_try_transmit: send(): error -62
-[   15.141852] tpm tpm0: A TPM error (-62) occurred attempting to 
-determine the timeouts
-[   15.143596] tpm_tis: probe of 00:06 failed with error -62
-[   15.185451] tpm_inf_pnp 00:06: Found TPM with ID IFX0102
+(Missing from this bug report is the kernel version.)
+
+thanks,
+
+Mimi
 
