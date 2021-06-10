@@ -2,204 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B2A3A2B33
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 14:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B513A2B92
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 14:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbhFJMRG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Jun 2021 08:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbhFJMRF (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Jun 2021 08:17:05 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928A5C061574
-        for <linux-integrity@vger.kernel.org>; Thu, 10 Jun 2021 05:15:09 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id r198so2878933lff.11
-        for <linux-integrity@vger.kernel.org>; Thu, 10 Jun 2021 05:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BEHGV38tYEPn87F7ElGb2eufRjx+4X3yWFCCfxgeqDk=;
-        b=Ln6RW2k/ezYgUxzfevzOB7aA62Gl4OBWbiCqXt7hsqErTgvEh4iYeu8GBZbc5xLP6W
-         xW2NA29qk/4xxoHrXYO9DH/A8JKq1XANimnfGoicLulDRjN7ZD5gBPiZ/LtF0L6t7J+r
-         J6VT/I9oxzSCnmzVM/dZWH1CHRQxRZBS7gcF4EPn+OGtzngGBFvJdJB+YUJ1xZZLSB/a
-         pXa9ju508CJ/8yjqly2u5tGrLQRcvfRWY8lIf7TZpzIWiu/B/c8i/5q/9oJNWsQSUWmW
-         azX1kTMRL/AdnvdLCmoeA1fUZYlJ1yydIoL8dc5r3IuI3dZGrRYGpHIQSLGIdOp77cwy
-         ZkEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BEHGV38tYEPn87F7ElGb2eufRjx+4X3yWFCCfxgeqDk=;
-        b=samogxri+yQxjIt31fZSGtp+Soy+5jKTRiXDNeUTlfk4Ke2jKmIkf4fxpGMdS+10+W
-         a+zMlVWIzjpyWv7HqvWG4Lp1/lDrmpqjgwuUA/jjUodTx7e1Kg5re/9vBqbd3HN5qgmH
-         IcXvxuBS6XaT8lzdNjufzdFCLZYbhjAnz1KdyVr3jW9IZNVisMo9Cjz+x7+W3G6UwGSl
-         gc/845UK4h11ob/zcsu3Fv3R5ZuCpXmBE16XRI2/9z19pgubu5ig50lsyg2yK43B9iz3
-         5bOoZmipr0/9MlMnY2/283kgFaY7XZyUdygZifidBNBnAdvmCY7pVkwN9nmYfMp+Afsq
-         Phyw==
-X-Gm-Message-State: AOAM532k1pW1BKL05vY8JtIY/zIqaYTZulA8O5DPYQdcif2+SvB0cUXr
-        Dq7Bwsl+h1zM+NpTNhlRPKD2OkVcNm8G32UJV8RMiQ==
-X-Google-Smtp-Source: ABdhPJyMCbkh9CFAVVhBBJsx2k/zNGlXYWTroK3U0XkVnEVH3PrhM6l6hkBIxL2RP+m0uiesanfs7OadlWe6WPxkz9Q=
-X-Received: by 2002:a19:7d89:: with SMTP id y131mr1714908lfc.108.1623327307719;
- Thu, 10 Jun 2021 05:15:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210609002326.210024-1-tyhicks@linux.microsoft.com>
- <20210609002326.210024-6-tyhicks@linux.microsoft.com> <CAFA6WYOZC0iHzZm6pOxz31eW_=8g2wyJdm4wiOGKggO6-a9MdA@mail.gmail.com>
- <20210609054621.GB4910@sequoia> <CAFA6WYOYt2vcQ4ng=Nwu2R7d6=R=DGXQKpQ-+UiENerEtQRKWg@mail.gmail.com>
- <20210610071812.GA2753553@jade>
-In-Reply-To: <20210610071812.GA2753553@jade>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 10 Jun 2021 17:44:56 +0530
-Message-ID: <CAFA6WYMXPHvm1tGcCJkTejAa23WCz=_D3E69-i-5+9A8sydE3g@mail.gmail.com>
-Subject: Re: [PATCH v3 5/7] tee: Support shm registration without dma-buf backing
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Rijo-john.Thomas@amd.com, Allen Pais <apais@linux.microsoft.com>,
+        id S230313AbhFJMbJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Jun 2021 08:31:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53750 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230267AbhFJMbI (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 10 Jun 2021 08:31:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 69049613BC;
+        Thu, 10 Jun 2021 12:29:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623328152;
+        bh=NQNebRqVIJ+EEveLxSKjiJxW1a0VmjQLVCzTrdNA3W8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dur6OsGvxwrqFq3vo0cVzHnqQxU0NtYhq2rYcgm9XWL78lwdhzZ08l10ZZNf+CNUj
+         oG/yQWnQWKK3cEVM64h9+DaeKuXS7vNtZUpYpW2d23/NhyAmFmoTO4TG5AZlH19xwe
+         Npou6BRlI3WrW80e+9xvu8eOqByy0vU8ErmBJ3i/cjGsFM52IxapOq0k/nJhecty7k
+         p5yH0uMu/sIYaGXF9I1e2fuMTiUo8ppNfPK+38PiLUX4a7c169hHy9sBC2Ry3tKX9d
+         PaqzUhGFommotfVbqSwS5UI7oa8Xuj004VTkYkx/5nsXH4tnbr+tehDh+iQbRV8GrD
+         iCNAHI4USM01Q==
+Date:   Thu, 10 Jun 2021 15:29:09 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Laurent Bigonville <bigon@debian.org>
+Cc:     linux-integrity@vger.kernel.org, Lukasz Majczak <lma@semihalf.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
-        Vikas Gupta <vikas.gupta@broadcom.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        op-tee@lists.trustedfirmware.org,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in
+ tpm_tis_gen_interrupt() and tpm_get_timeouts()
+Message-ID: <20210610122909.qaczp6nbish6wzbt@kernel.org>
+References: <YCvv9wvj4jUIKpa7@kernel.org>
+ <YCvyS6eVjZCKMAyJ@kernel.org>
+ <YCv0KFIdtmG8F1kT@kernel.org>
+ <d5fd8a6b-5eb9-0b50-d66c-e9f4cc84b215@debian.org>
+ <YC2YyO7mJ7E73Voy@kernel.org>
+ <ed73c137-373d-9767-25e6-309534652354@debian.org>
+ <20210603052857.44zppwdfz4aror34@kernel.org>
+ <07fb4429-d0cc-c471-1baa-a1a1eb2e8ae6@debian.org>
+ <20210609124327.xkaf3bkcvyw2yxkn@kernel.org>
+ <bfb9fdc7-668a-ff9c-1f5d-152df2ca106e@debian.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="vyklwdvksnkra3qg"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bfb9fdc7-668a-ff9c-1f5d-152df2ca106e@debian.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jens,
 
-On Thu, 10 Jun 2021 at 12:48, Jens Wiklander <jens.wiklander@linaro.org> wrote:
->
-> On Wed, Jun 09, 2021 at 04:22:49PM +0530, Sumit Garg wrote:
-> > + Rijo
-> >
-> > On Wed, 9 Jun 2021 at 11:16, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
-> [snip]
-> >
-> > > - tee_shm_alloc() performs allocations using contiguous pages
-> > >   from alloc_pages() while tee_shm_register() performs non-contiguous
-> > >   allocations with kcalloc(). I suspect this would be fine but I don't
-> > >   know the secure world side of these things well enough to assess the
-> > >   risk involved with such a change on the kernel side.
-> > >
-> >
-> > I don't think that would make any difference.
->
-> Agree.
->
-> >
-> > > I should have mentioned this in the cover letter but my hope was that
-> > > these minimal changes would be accepted and then additional work could
-> > > be done to merge tee_shm_alloc() and tee_shm_register() in a way that
-> > > would allow the caller to request contiguous or non-contiguous pages,
-> > > fix up the additional issues mentioned above, and then adjust the
-> > > call sites in ftpm and tee_bnxt_fw as appropriate.
-> > >
-> > > I think that's a bigger set of changes because there are several things
-> > > that still confuse/concern me:
-> > >
-> > > - Why does tee_shm_alloc() use TEE_SHM_MAPPED while tee_shm_register()
-> > >   uses TEE_SHM_KERNEL_MAPPED or TEE_SHM_USER_MAPPED? Why do all three
-> > >   exist?
-> >
-> > AFAIK, its due the the inherent nature of tee_shm_alloc() and
-> > tee_shm_register() where tee_shm_alloc() doesn't need to know whether
-> > its a kernel or user-space memory since it is the one that allocates
-> > whereas tee_shm_register() need to know that since it has to register
-> > pre-allocated client memory.
-> >
-> > > - Why does tee_shm_register() unconditionally use non-contiguous
-> > >   allocations without ever taking into account whether or not
-> > >   OPTEE_SMC_SEC_CAP_DYNAMIC_SHM was set? It sounds like that's required
-> > >   from my reading of https://optee.readthedocs.io/en/latest/architecture/core.html#noncontiguous-shared-buffers.
-> >
-> > Yeah, but do we have platforms in OP-TEE that don't support dynamic
-> > shared memory? I guess it has become the sane default which is a
-> > mandatory requirement when it comes to OP-TEE driver in u-boot.
-> >
-> > > - Why is TEE_SHM_REGISTER implemented at the TEE driver level when it is
-> > >   specific to OP-TEE? How to better abstract that away?
-> > >
-> >
-> > I would like you to go through Section "3.2.4. Shared Memory" in TEE
-> > Client API Specification. There are two standard ways for shared
-> > memory approach with TEE:
-> >
-> > 1. A Shared Memory block can either be existing Client Application
-> > memory (kernel driver in our case) which is subsequently registered
-> > with the TEE Client API (using tee_shm_register() in our case).
-> >
-> > 2. Or memory which is allocated on behalf of the Client Application
-> > using the TEE
-> > Client API (using tee_shm_alloc() in our case).
-> >
-> > > Let me know if you agree with the more minimal approach that I took for
-> > > these bug fix series or still feel like tee_shm_register() should be
-> > > fixed up so that it is usable. Thanks!
-> >
-> > From drivers perspective I think the change should be:
-> >
-> > tee_shm_alloc()
-> >
-> > to
-> >
-> > kcalloc()
-> > tee_shm_register()
->
-> I had another approach in mind in "[PATCH 0/7] tee: shared memory updates",
-> https://lore.kernel.org/lkml/20210609102324.2222332-1-jens.wiklander@linaro.org/
->
-> The flags needed by tee_shm_alloc() and tee_shm_register() aren't
-> very intuitive and in fact only accept quite few combinations. So my
-> idea was to hide those flags from callers outside of the TEE subsystem
-> with tee_shm_alloc_kernel_buf().
->
+--vyklwdvksnkra3qg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-That looks like a good idea to hide flags from users. BTW, my only
-objection earlier with Tyler's and your patch-set is the usage of
-TEE_SHM_REGISTER flag in generic TEE methods: tee_shm_alloc*. AFAIU,
-the only reason for such an additional flag is in case of OP-TEE only
-because the OP-TEE driver could implement allocated shared memory via
-re-using dynamic shared memory approach as well. And that additional
-flag is only needed to differentiate that OP-TEE driver's private
-memory shouldn't be registered with OP-TEE. If this understanding is
-correct then we should introduce a separate flag as TEE_SHM_PRIV that
-should only be set inside tee_shm_alloc_anon_kernel_buf().
+On Thu, Jun 10, 2021 at 01:35:47PM +0200, Laurent Bigonville wrote:
+> # dmesg |grep -i tpm
+> 
+> [   13.019986] tpm_tis 00:06: 1.2 TPM (device-id 0x6871, rev-id 1)
+> [   15.016198] tpm tpm0: tpm_try_transmit: send(): error -62
+> [   15.016208] tpm tpm0: A TPM error (-62) occurred attempting to determine
+> the timeouts
+> [   15.016239] tpm_tis: probe of 00:06 failed with error -62
+> [   15.053255] tpm_inf_pnp 00:06: Found TPM with ID IFX0102
 
-As otherwise passing TEE_SHM_REGISTER flag for shared memory alloc API
-for other TEEs like AMD-TEE etc. would be useless.
+If possible, can you check what happens when you apply the attached patch.
+I'm not proposing it as a bug fix but it just simplifies the flow a lot,
+and might help to observe something.
 
-> The approach with tee_shm_register() you suggest above has the drawback
-> that the TEE driver is forced to be able to handle any kernel memory.
+/Jarkko
 
-That's the value-add in the problem that Tyler is trying to resolve
-that driver should be able to free up the memory as needed as a
-private buffer.
+--vyklwdvksnkra3qg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-tpm_tis-Use-request_locality-before-calling-tpm2_pro.patch"
 
-> This is OK with OP-TEE and dynamic shared memory enabled, but there are
-> platforms where dynamic shared memory isn't enabled. In those case must
-> the memory be allocated from a special pool.
+From 0b0dfc48b47e44d547282b20f6d8c97103fadbe6 Mon Sep 17 00:00:00 2001
+From: Jarkko Sakkinen <jarkko@kernel.org>
+Date: Thu, 10 Jun 2021 15:24:49 +0300
+Subject: [PATCH] tpm_tis: Use request_locality() before calling tpm2_probe()
 
-Is there any limitation for those platforms to not support dynamic
-shared memory in OP-TEE? If there isn't then we should able to handle
-this via match for TEE_GEN_CAP_REG_MEM in the ftpm_tee_match() and
-optee_ctx_match() APIs.
+Avoid unnecessary round-tripping in and out of the TIS driver by calling
+request_locality() directly, instead of going through tpm_chip_start(), and
+for the consistency sake (other sites in initialization code work this
+way).
 
->
-> Do you see any problem with instead replacing tee_shm_alloc()
-> with tee_shm_alloc_kernel_buf()?
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/char/tpm/tpm_tis_core.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-I don't see any problems apart from one mentioned above.
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 69579efb247b..3b5a03f9efce 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -980,13 +980,11 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	intmask &= ~TPM_GLOBAL_INT_ENABLE;
+ 	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+ 
+-	rc = tpm_chip_start(chip);
+-	if (rc)
++	rc = request_locality(chip, 0);
++	if (rc < 0)
+ 		goto out_err;
+ 	rc = tpm2_probe(chip);
+-	tpm_chip_stop(chip);
+-	if (rc)
+-		goto out_err;
++	release_locality(chip, 0);
+ 
+ 	rc = tpm_tis_read32(priv, TPM_DID_VID(0), &vendor);
+ 	if (rc < 0)
+-- 
+2.31.1
 
--Sumit
 
->
-> Cheers,
-> Jens
+--vyklwdvksnkra3qg--
