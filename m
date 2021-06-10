@@ -2,99 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D499F3A2C4C
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 15:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDDE3A2DA2
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Jun 2021 16:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbhFJNCQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Jun 2021 09:02:16 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:1292 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230526AbhFJNCP (ORCPT
+        id S230343AbhFJOCa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Jun 2021 10:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230311AbhFJOCa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Jun 2021 09:02:15 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15ACY8Iu102396;
-        Thu, 10 Jun 2021 09:00:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=eaoMWKibC48ywMBBJLm1Ve95rH5kpz0SL62FgerNIi4=;
- b=dm/W68RURyeUskWx4PLUG5VZiaizheaMVkMyUZ3ubC1RyNb5w2JWctVxqH6Ct5iUnM+T
- uRvTybpKcvHr6ANptGZtB6q0k8ncsdD4k/xOjpgPvHFcPmrtcbdTXOtT2rnMd+SUa+VQ
- NVGvwGa0/tfpeCouhoSMuTTU/083pi+uLUf1+8FaoaL0FsVGzZmB1XGS+6DZyQYOdVBD
- MlS0HsgsDX5ol0OvWNlDCk1McaXc+ZrVmV7Jp49JeUU2AZWfre5bMHZSLbn2jkk7F+oE
- XMejNo+J+Xe8X7CSHAjYxOErLjXUveY7dz42bPu8pv4T/BPqZ7RlXyzr5wuvm5i4G2Kp YQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 393j8f9x66-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Jun 2021 09:00:14 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15ACY9Ir104320;
-        Thu, 10 Jun 2021 09:00:14 -0400
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 393j8f9x56-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Jun 2021 09:00:14 -0400
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15ACvYfA013223;
-        Thu, 10 Jun 2021 12:59:23 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma03wdc.us.ibm.com with ESMTP id 3900wa8588-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Jun 2021 12:59:23 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15ACxNe56226718
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Jun 2021 12:59:23 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 319F1112075;
-        Thu, 10 Jun 2021 12:59:23 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1C0C811206F;
-        Thu, 10 Jun 2021 12:59:23 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 10 Jun 2021 12:59:23 +0000 (GMT)
-Subject: Re: [PATCH v6 0/4] Add support for ECDSA-signed kernel modules
-To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
-        dwmw2@infradead.org, zohar@linux.ibm.com, jarkko@kernel.org
-Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210610125623.1553792-1-stefanb@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <81ab17a5-1b35-17a0-e7c9-102df873ef70@linux.ibm.com>
-Date:   Thu, 10 Jun 2021 08:59:22 -0400
+        Thu, 10 Jun 2021 10:02:30 -0400
+Received: from ithil.bigon.be (ithil.bigon.be [IPv6:2001:bc8:25f1:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689F6C061574
+        for <linux-integrity@vger.kernel.org>; Thu, 10 Jun 2021 07:00:32 -0700 (PDT)
+Received: from localhost (localhost [IPv6:::1])
+        by ithil.bigon.be (Postfix) with ESMTP id B54E01FD2E;
+        Thu, 10 Jun 2021 16:00:28 +0200 (CEST)
+Received: from ithil.bigon.be ([IPv6:::1])
+        by localhost (ithil.bigon.be [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id tqqOoOKVLgfy; Thu, 10 Jun 2021 16:00:28 +0200 (CEST)
+Received: from [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3] (unknown [IPv6:2a02:a03f:65b8:4300:de23:9854:338b:84b3])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bigon@bigon.be)
+        by ithil.bigon.be (Postfix) with ESMTPSA;
+        Thu, 10 Jun 2021 16:00:28 +0200 (CEST)
+Subject: Re: [PATCH] tpm, tpm_tis: Acquire locality in tpm_tis_gen_interrupt()
+ and tpm_get_timeouts()
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, Lukasz Majczak <lma@semihalf.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+References: <YCvv9wvj4jUIKpa7@kernel.org> <YCvyS6eVjZCKMAyJ@kernel.org>
+ <YCv0KFIdtmG8F1kT@kernel.org>
+ <d5fd8a6b-5eb9-0b50-d66c-e9f4cc84b215@debian.org>
+ <YC2YyO7mJ7E73Voy@kernel.org>
+ <ed73c137-373d-9767-25e6-309534652354@debian.org>
+ <20210603052857.44zppwdfz4aror34@kernel.org>
+ <07fb4429-d0cc-c471-1baa-a1a1eb2e8ae6@debian.org>
+ <20210609124327.xkaf3bkcvyw2yxkn@kernel.org>
+ <bfb9fdc7-668a-ff9c-1f5d-152df2ca106e@debian.org>
+ <20210610122909.qaczp6nbish6wzbt@kernel.org>
+From:   Laurent Bigonville <bigon@debian.org>
+Message-ID: <48721227-6518-779e-c6f2-692c4d7b5c92@debian.org>
+Date:   Thu, 10 Jun 2021 16:00:27 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210610125623.1553792-1-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210610122909.qaczp6nbish6wzbt@kernel.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Cq_DAdgiB_feTJN5nYJ0Ml92zkLF_cEh
-X-Proofpoint-GUID: qRJ5koOk8i0St5gTnEG9eo_Xk_vBHBj4
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-10_07:2021-06-10,2021-06-10 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 adultscore=0 spamscore=0
- malwarescore=0 mlxlogscore=965 mlxscore=0 lowpriorityscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2106100081
+Content-Language: fr
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-On 6/10/21 8:56 AM, Stefan Berger wrote:
+Le 10/06/21 à 14:29, Jarkko Sakkinen a écrit :
+> On Thu, Jun 10, 2021 at 01:35:47PM +0200, Laurent Bigonville wrote:
+>> # dmesg |grep -i tpm
+>>
+>> [   13.019986] tpm_tis 00:06: 1.2 TPM (device-id 0x6871, rev-id 1)
+>> [   15.016198] tpm tpm0: tpm_try_transmit: send(): error -62
+>> [   15.016208] tpm tpm0: A TPM error (-62) occurred attempting to determine
+>> the timeouts
+>> [   15.016239] tpm_tis: probe of 00:06 failed with error -62
+>> [   15.053255] tpm_inf_pnp 00:06: Found TPM with ID IFX0102
+> If possible, can you check what happens when you apply the attached patch.
+> I'm not proposing it as a bug fix but it just simplifies the flow a lot,
+> and might help to observe something.
 >
-> v6:
->    - Patch 2/4 is fixing V4's 1/2 and 4/4 is fixing V4's 2/2. Both fixup
->      patches to be squashed.
+With the patch on the top of HEAD of master and the patch from your 
+branch, I'm getting this:
 
+[   13.140548] tpm tpm0: invalid TPM_STS.x 0xa0, dumping stack for forensics
+[   13.140617] CPU: 4 PID: 462 Comm: systemd-udevd Tainted: G          I 
+E     5.13.0-rc5+ #7
+[   13.140621] Hardware name: System manufacturer System Product 
+Name/P6T DELUXE V2, BIOS 0406    04/24/2009
+[   13.140623] Call Trace:
+[   13.140628]  dump_stack+0x76/0x94
+[   13.140637]  tpm_tis_status.cold+0x19/0x20 [tpm_tis_core]
+[   13.140643]  tpm_transmit+0x15f/0x3d0 [tpm]
+[   13.140657]  tpm_transmit_cmd+0x25/0x90 [tpm]
+[   13.140666]  tpm2_probe+0xe2/0x140 [tpm]
+[   13.140676]  tpm_tis_core_init+0x1d7/0x2ba [tpm_tis_core]
+[   13.140681]  ? tpm_tis_init.part.0+0x130/0x130 [tpm_tis]
+[   13.140688]  tpm_tis_pnp_init+0xe1/0x110 [tpm_tis]
+[   13.140695]  pnp_device_probe+0xaf/0x140
+[   13.140702]  really_probe+0xf2/0x460
+[   13.140708]  driver_probe_device+0xe8/0x160
+[   13.140712]  device_driver_attach+0xa1/0xb0
+[   13.140716]  __driver_attach+0x8f/0x150
+[   13.140720]  ? device_driver_attach+0xb0/0xb0
+[   13.140723]  ? device_driver_attach+0xb0/0xb0
+[   13.140726]  bus_for_each_dev+0x78/0xc0
+[   13.140730]  bus_add_driver+0x12b/0x1e0
+[   13.140734]  driver_register+0x8b/0xe0
+[   13.140738]  ? 0xffffffffc11c4000
+[   13.140741]  init_tis+0xa0/0x1000 [tpm_tis]
+[   13.140748]  do_one_initcall+0x44/0x1d0
+[   13.140754]  ? kmem_cache_alloc_trace+0x119/0x240
+[   13.140759]  do_init_module+0x5c/0x260
+[   13.140764]  __do_sys_finit_module+0xb1/0x110
+[   13.140769]  do_syscall_64+0x40/0xb0
+[   13.140775]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   13.140780] RIP: 0033:0x7f082957b9b9
+[   13.140783] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 
+48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 
+05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a7 54 0c 00 f7 d8 64 89 01 48
+[   13.140786] RSP: 002b:00007fffd1b5a048 EFLAGS: 00000246 ORIG_RAX: 
+0000000000000139
+[   13.140791] RAX: ffffffffffffffda RBX: 000055bd4f3f6960 RCX: 
+00007f082957b9b9
+[   13.140793] RDX: 0000000000000000 RSI: 00007f0829706e2d RDI: 
+0000000000000012
+[   13.140796] RBP: 0000000000020000 R08: 0000000000000000 R09: 
+000055bd4f238350
+[   13.140798] R10: 0000000000000012 R11: 0000000000000246 R12: 
+00007f0829706e2d
+[   13.140800] R13: 0000000000000000 R14: 000055bd4f2381c0 R15: 
+000055bd4f3f6960
+[   13.141844] tpm_tis 00:06: 1.2 TPM (device-id 0x6871, rev-id 1)
 
-Jarkko, take 2/4 and 4/4 and squash them into the respective queued 
-patches. 1/4 and 3/4 are untouched other than what the rebase did to 3/4.
+# dmesg |grep -i tpm
 
- Â  Stefan
+[...]
+[   15.140121] tpm tpm0: tpm_try_transmit: send(): error -62
+[   15.141852] tpm tpm0: A TPM error (-62) occurred attempting to 
+determine the timeouts
+[   15.143596] tpm_tis: probe of 00:06 failed with error -62
+[   15.185451] tpm_inf_pnp 00:06: Found TPM with ID IFX0102
 
