@@ -2,103 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E3A3A3F4A
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Jun 2021 11:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBEB3A426E
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Jun 2021 14:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbhFKJqE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Jun 2021 05:46:04 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3206 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbhFKJqD (ORCPT
+        id S231196AbhFKMz1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Jun 2021 08:55:27 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:38666 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230233AbhFKMz1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Jun 2021 05:46:03 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4G1bKC0QxMz6L777;
-        Fri, 11 Jun 2021 17:34:39 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 11 Jun 2021 11:44:03 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Fri, 11 Jun 2021 11:44:03 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "Stephen Smalley" <stephen.smalley.work@gmail.com>,
-        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>
-Subject: Size mismatch between vfs_getxattr_alloc() and vfs_getxattr()
-Thread-Topic: Size mismatch between vfs_getxattr_alloc() and vfs_getxattr()
-Thread-Index: AddepfVXRzZV65zDQYWfY30E1Ui8ng==
-Date:   Fri, 11 Jun 2021 09:44:03 +0000
-Message-ID: <ee75bde9a17f418984186caa70abd33b@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 11 Jun 2021 08:55:27 -0400
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1E38A20B7178;
+        Fri, 11 Jun 2021 05:53:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1E38A20B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1623416009;
+        bh=/cTsy8OGaEU/zCQc9L/8YrQzHcLViQBgidbXiYXlsFI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g5OiGVB4m3mJcPxTG/Y/h4H/AIbequvqN042kTAxfzpbO/RnN+S9jdNuq7YXQf3SS
+         cGp+pUj2THgiOumGn+Mf2YQ+kUp7ONyzL8mvLHKelSMNmh68wcE4E1CXBSupnVDbVZ
+         SpvH/9rwBxHKKlNq5zxb+ZTeGAEod6vShaKQYbdU=
+Date:   Fri, 11 Jun 2021 07:53:26 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     Allen Pais <apais@linux.microsoft.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Vikas Gupta <vikas.gupta@broadcom.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 3/8] optee: fix tee out of memory failure seen during
+ kexec reboot
+Message-ID: <20210611125326.GQ4910@sequoia>
+References: <20210610210913.536081-1-tyhicks@linux.microsoft.com>
+ <20210610210913.536081-4-tyhicks@linux.microsoft.com>
+ <CAHUa44H=vJrkYYTb2T8WPfy6TznQyO8a8wnLCbJUuSE8QO4iuw@mail.gmail.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHUa44H=vJrkYYTb2T8WPfy6TznQyO8a8wnLCbJUuSE8QO4iuw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello
+On 2021-06-11 11:11:33, Jens Wiklander wrote:
+> On Thu, Jun 10, 2021 at 11:09 PM Tyler Hicks
+> <tyhicks@linux.microsoft.com> wrote:
+> >
+> > From: Allen Pais <apais@linux.microsoft.com>
+> >
+> > The following out of memory errors are seen on kexec reboot
+> > from the optee core.
+> >
+> > [    0.368428] tee_bnxt_fw optee-clnt0: tee_shm_alloc failed
+> > [    0.368461] tee_bnxt_fw: probe of optee-clnt0 failed with error -22
+> >
+> > tee_shm_release() is not invoked on dma shm buffer.
+> >
+> > Implement .shutdown() method to handle the release of the buffers
+> > correctly.
+> >
+> > More info:
+> > https://github.com/OP-TEE/optee_os/issues/3637
+> >
+> > Signed-off-by: Allen Pais <apais@linux.microsoft.com>
+> > Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> 
+> Do we really need this considering the patch "optee: Refuse to load
+> the driver under the kdump kernel"?
 
-the ima-evm-utils tool discovered an issue doing signature
-verification of xattrs.
+Yes. That patch fixes boot hangs when all of the OP-TEE threads were in
+the suspended state at the time of a kernel panic. The kexec into the
+kdump kernel after a panic is an "emergency" kexec that doesn't even
+call .shutdown hooks. There's no way for the OP-TEE driver to clean up
+after itself.
 
-On kernel side, EVM reads the xattr value with
-vfs_getxattr_alloc(), which gets the value directly from the
-xattr handler.
+This patch disables the shm cache (and unregisters the shm buffers)
+during a normal kexec from one perfectly working kernel into a new
+kernel. This is required because the new kernel will not be able to
+handle the virtual addresses that were cached under the old kernel. The
+new kernel has an entirely different memory layout and the old addresses
+point to unmapped memory or memory that's mapped but probably not a TEE
+shm.
 
-On user side, ima-evm-utils reads the value with the
-lgetxattr() system call, which gets the value from LSMs.
+Tyler
 
-There is a corner case, where security.selinux is set directly
-with setfattr without adding \0 at the end.
-
-In this case, the kernel and the user see different values
-due to the fact that the former gets the raw value from the
-xattr handler, and the latter gets the value normalized by
-SELinux (which adds \0).
-
-I found that originally also lgetxattr() was getting the value
-from the xattr handler. This changed with:
-
-commit 4bea58053f206be9a89ca35850f9ad295dac2042
-Author: David P. Quigley <dpquigl@tycho.nsa.gov>
-Date:   Mon Feb 4 22:29:40 2008 -0800
-
-    VFS: Reorder vfs_getxattr to avoid unnecessary calls to the LSM
-
-which directly calls LSMs for security.* xattrs.
-
-Given that this patch is there for a long time, I would ask
-if it makes sense to fix this issue. The way I would do it
-is to check if the size returned by the xattr handler is the
-same of the size returned by LSMs. If not, I would get
-the value from the xattr handler.
-
-Although this change does not check the xattr content,
-it is sufficient to fix the issue.
-
-Any opinion?
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
-
+> 
+> Jens
+> 
