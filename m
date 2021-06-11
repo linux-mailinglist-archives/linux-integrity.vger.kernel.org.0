@@ -2,98 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8974B3A3EC4
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Jun 2021 11:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E3A3A3F4A
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Jun 2021 11:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbhFKJNo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 11 Jun 2021 05:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbhFKJNn (ORCPT
+        id S230370AbhFKJqE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Jun 2021 05:46:04 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3206 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230356AbhFKJqD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 11 Jun 2021 05:13:43 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9656DC0617AF
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Jun 2021 02:11:45 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id z8so5234697wrp.12
-        for <linux-integrity@vger.kernel.org>; Fri, 11 Jun 2021 02:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YElcP8wY/ItH22s2CX3Yk/qIGr089Bxcg+NXSKlpwwM=;
-        b=woZ9K25EeoLQgFPoZVy3NGyq6fwzaVKAJZhft3QVaaHAwjel+T2FHYXKeJVF0dq4IV
-         KT4si0PHrixQw5HW0jmWLmRYpEtsp3/eZfK1U1nrDfC+VhljAejz/6LwRdKB8Bvb2tMa
-         H8J9YWPe2MRbFZbJXcHP9jn7fySM4WPSRK7A5F8GgRiy8AGIsgp23zFDTlJdWTDgJ7cW
-         xXmc3PcmEMqJbvIehCJmyyOqmCmZDswRrH03zxLaBPaRmV2V5yqUL83Ikt6z3g2y/aXt
-         ybc6xsaj2MgpPjXFU9ob9H9own759QmqW4hygFJqr/9Sgi2hbAlnjJGYMW/I5iO5C/CZ
-         ycXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YElcP8wY/ItH22s2CX3Yk/qIGr089Bxcg+NXSKlpwwM=;
-        b=ZBLIuLt0dpHewZnBTMHXSZGmtT1yVq6zin46I/LeGcSMuI49CH4jURjhzJJ1eS0ZsC
-         BkHxdZh+gN/l3KQdzLRm8dqhv8dOaBRzcQwdemppCSIpTgG5x2vC6PNZPhgM8/v8mgpG
-         PDGVb9wEqHPJhcrD/dKY+oZsHJ2pTIe6I2HMcxHVqncCIHoLCY9OWo1mJtEV9UkIJxBF
-         ZIPpyD2TtxK+ePuJXqJbDlAEAscNcLwRkGDKuPsykmFuTxQjrl+OLaS44fF7Q1Z3Z7NA
-         hxhf9xAmQeD0Y5YmcUPU2NWEI+ZFg1U6oAggtcQENlsrF9S0UO28EuOlz5DfWYOYb9DT
-         Z+Lw==
-X-Gm-Message-State: AOAM533cIpY7DSmP70jXk7ZkT316MXQHaBeXBmx/9Yq4e1raf8BvxeL5
-        Fr6QhEmyiRTbNP8iZxLWLW3+GjRA9QulULmg/EE/og==
-X-Google-Smtp-Source: ABdhPJygoquYofYpaeSWf98r/mIW7k2U9CQBWHXDLqMaKoPkUUyF4l08eSJo3Yli8sYbBlkW2zzw2hVNtPKpLBXGTGc=
-X-Received: by 2002:a05:6000:229:: with SMTP id l9mr2803707wrz.43.1623402704237;
- Fri, 11 Jun 2021 02:11:44 -0700 (PDT)
+        Fri, 11 Jun 2021 05:46:03 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4G1bKC0QxMz6L777;
+        Fri, 11 Jun 2021 17:34:39 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 11 Jun 2021 11:44:03 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Fri, 11 Jun 2021 11:44:03 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "Stephen Smalley" <stephen.smalley.work@gmail.com>,
+        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>
+Subject: Size mismatch between vfs_getxattr_alloc() and vfs_getxattr()
+Thread-Topic: Size mismatch between vfs_getxattr_alloc() and vfs_getxattr()
+Thread-Index: AddepfVXRzZV65zDQYWfY30E1Ui8ng==
+Date:   Fri, 11 Jun 2021 09:44:03 +0000
+Message-ID: <ee75bde9a17f418984186caa70abd33b@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20210610210913.536081-1-tyhicks@linux.microsoft.com> <20210610210913.536081-4-tyhicks@linux.microsoft.com>
-In-Reply-To: <20210610210913.536081-4-tyhicks@linux.microsoft.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Fri, 11 Jun 2021 11:11:33 +0200
-Message-ID: <CAHUa44H=vJrkYYTb2T8WPfy6TznQyO8a8wnLCbJUuSE8QO4iuw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/8] optee: fix tee out of memory failure seen during
- kexec reboot
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Allen Pais <apais@linux.microsoft.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Vikas Gupta <vikas.gupta@broadcom.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 11:09 PM Tyler Hicks
-<tyhicks@linux.microsoft.com> wrote:
->
-> From: Allen Pais <apais@linux.microsoft.com>
->
-> The following out of memory errors are seen on kexec reboot
-> from the optee core.
->
-> [    0.368428] tee_bnxt_fw optee-clnt0: tee_shm_alloc failed
-> [    0.368461] tee_bnxt_fw: probe of optee-clnt0 failed with error -22
->
-> tee_shm_release() is not invoked on dma shm buffer.
->
-> Implement .shutdown() method to handle the release of the buffers
-> correctly.
->
-> More info:
-> https://github.com/OP-TEE/optee_os/issues/3637
->
-> Signed-off-by: Allen Pais <apais@linux.microsoft.com>
-> Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Hello
 
-Do we really need this considering the patch "optee: Refuse to load
-the driver under the kdump kernel"?
+the ima-evm-utils tool discovered an issue doing signature
+verification of xattrs.
 
-Jens
+On kernel side, EVM reads the xattr value with
+vfs_getxattr_alloc(), which gets the value directly from the
+xattr handler.
+
+On user side, ima-evm-utils reads the value with the
+lgetxattr() system call, which gets the value from LSMs.
+
+There is a corner case, where security.selinux is set directly
+with setfattr without adding \0 at the end.
+
+In this case, the kernel and the user see different values
+due to the fact that the former gets the raw value from the
+xattr handler, and the latter gets the value normalized by
+SELinux (which adds \0).
+
+I found that originally also lgetxattr() was getting the value
+from the xattr handler. This changed with:
+
+commit 4bea58053f206be9a89ca35850f9ad295dac2042
+Author: David P. Quigley <dpquigl@tycho.nsa.gov>
+Date:   Mon Feb 4 22:29:40 2008 -0800
+
+    VFS: Reorder vfs_getxattr to avoid unnecessary calls to the LSM
+
+which directly calls LSMs for security.* xattrs.
+
+Given that this patch is there for a long time, I would ask
+if it makes sense to fix this issue. The way I would do it
+is to check if the size returned by the xattr handler is the
+same of the size returned by LSMs. If not, I would get
+the value from the xattr handler.
+
+Although this change does not check the xattr content,
+it is sufficient to fix the issue.
+
+Any opinion?
+
+Thanks
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
+
