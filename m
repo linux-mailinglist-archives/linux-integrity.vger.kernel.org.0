@@ -2,50 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6AC3A5DA6
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Jun 2021 09:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCB13A5E61
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Jun 2021 10:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbhFNH0C (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 14 Jun 2021 03:26:02 -0400
-Received: from mail-lf1-f51.google.com ([209.85.167.51]:36547 "EHLO
-        mail-lf1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232475AbhFNHZ6 (ORCPT
+        id S232602AbhFNIaU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 14 Jun 2021 04:30:20 -0400
+Received: from mail-lf1-f43.google.com ([209.85.167.43]:39547 "EHLO
+        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232594AbhFNIaU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 14 Jun 2021 03:25:58 -0400
-Received: by mail-lf1-f51.google.com with SMTP id v22so19461103lfa.3
-        for <linux-integrity@vger.kernel.org>; Mon, 14 Jun 2021 00:23:55 -0700 (PDT)
+        Mon, 14 Jun 2021 04:30:20 -0400
+Received: by mail-lf1-f43.google.com with SMTP id p17so19705973lfc.6
+        for <linux-integrity@vger.kernel.org>; Mon, 14 Jun 2021 01:28:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=TuRZz017BBgAVMKoaGy8N3HYwV0bwLZwAUPuHJ32orA=;
-        b=j3sOCJmU0K3TcI1KaLS+R0w+7P4R3fFjhK6QrhK/0X3pmdqGTXcLOu9Mh+/PRHiVjp
-         ng8pGzd/d32BjnDvgz6z8K4NIdl6EGusDd9sTUM093jnnIl6qvkKH2Ska/1JVnQ5QSvP
-         g4sBX5WqMiYo3up8gTRaq9Qk3U1/Qdqyx7dfO39kNGcg7OHhT916iippBIYouH9gKV+h
-         OcvehJpHou6mwIp9dmXDM6GxIG05eKdOJnvYX0Ojkc45xTt2BB6mzP3+7QELscdwKobF
-         AJLVee+P8OlUIGuy3x/mFcZm6E5dfkT4graQf5gbDGqgxzRopeT2tj51qBCyhMJc2/E3
-         9V5Q==
+        bh=lKShWs6TAgVDNzfvLDvoWvURVhGxJq2LT0tIZHvVVo0=;
+        b=tN6TUcF1TaNeAv5IgKoqjQFB0qVI0cHpgVdomlqe+8Pj3SSETdMRfS7bj0kO71T7C9
+         On/qnrk8Yi6Rp9P9MPKQejEJj+M1+uvKuBgoUmmyegx3spH/RDiAgP/ruvV1HVaD5kDS
+         fEUhLAISCUTrPZm3WmOjpufgAiCbN5S5ZAlaN1wnCVZAW3JGI8n7uzr8GibXmqzYaOQ3
+         i8XiNp07KWXX8VbPtK6W6qWbomiNDwD173c6milPN/HNRDRy/4FTU45XIH6/QRThKsiq
+         oiZwJVAjcdLM2GSF2v63/zDQh3yDPINJ8QiyerHYl98+6nxfL6KB8TXJrDRCEo/y2IHC
+         LGJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=TuRZz017BBgAVMKoaGy8N3HYwV0bwLZwAUPuHJ32orA=;
-        b=C963FskcGfCjBtrjaGfl/ed+efsQuFqUO3UGKguc0tdTmr5vFlnug6MunUs2j44qKS
-         qsL1lqLxzKfQI3ZJvgeuzvbacTHgF19aO/SRHAqldx1ggsb2hcSlNBlBMS2OkiKJeVw8
-         YV55bLIZ+6fdFRBCTl90//+MoZ08Rs+MM4+uVektfV8zRP8AAnmkHSZZDCpoKJNOQ9vM
-         v7eRBbQuwGbwMXPs2SHkXXeXwqxJCDHvmDvaM9h9jB9u1G0D/naOooTY8rWO/9OFTJIl
-         cmM84a/yUp7lB7ksFKFjhRlwbeNkaziRNCPgR9wN3RU0F7VFoUDbzJ8HINeIjxRbjeHH
-         bWWw==
-X-Gm-Message-State: AOAM532c8IlOT2jsl3alGk5L1psTFVSMx+AQNPdJ9hWpf2JIGvmr89hm
-        3vnlLO8G1v488KNoLkDhgWuS9A==
-X-Google-Smtp-Source: ABdhPJyqZXHBxomzhuOZfIuf8Zs1x2UeitiGj4p9X56ysLMGca0c8XfXDemfx0jK2rmoRfMdEvLh9w==
-X-Received: by 2002:a19:5e5b:: with SMTP id z27mr7650041lfi.403.1623655374886;
-        Mon, 14 Jun 2021 00:22:54 -0700 (PDT)
+        bh=lKShWs6TAgVDNzfvLDvoWvURVhGxJq2LT0tIZHvVVo0=;
+        b=IIQoq6uXrJvodDKMHUZGF5JxDsGHvjfbllDm3vjQQgHW6hWktTz4BrL/POp0uJKS0F
+         9bIDX0hqLl397m54Lv0fYMgOeDi0COY8udrbAw6rnjv5Z6bbZUdxKBzNjOxGAsMUUoUe
+         yyBfbjQV63jH2c5EMmgrwllLDjuZEBXR/kGmLX0vQ1G7iN+L8bG2DW2udJgo/mxdxV3B
+         clC+JCKl2Mwop6Id+1LfTMu+tpIqisKCFqbueTET9aj6ye7auE5Y8bUa9/VY0k9FPtpm
+         eTQOckFCrxnzMCS/8a1zpwiq0KjERvtC7/VNcf7k4r5ZnrJxwYx45g+VgJgwwR6sfNFd
+         x2ZQ==
+X-Gm-Message-State: AOAM533nLjxIEannHgg1bzyI72wySKv4F0G0Qg3g6aPxK5nDi6LNKW5z
+        zwAxUYpvkj0zAbyIxmVe553DFQ==
+X-Google-Smtp-Source: ABdhPJz42E9QOqr7X/zeify/amV4v5uusvVtstK1olJuD9DDoUwb8Z/vy6Y/+TZYLNLJI9S0U9Lmng==
+X-Received: by 2002:a05:6512:398a:: with SMTP id j10mr11424003lfu.636.1623659237016;
+        Mon, 14 Jun 2021 01:27:17 -0700 (PDT)
 Received: from jade (h-79-136-85-3.A175.priv.bahnhof.se. [79.136.85.3])
-        by smtp.gmail.com with ESMTPSA id v2sm1390309lfi.115.2021.06.14.00.22.54
+        by smtp.gmail.com with ESMTPSA id a1sm1406066lfu.45.2021.06.14.01.27.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jun 2021 00:22:54 -0700 (PDT)
-Date:   Mon, 14 Jun 2021 09:22:52 +0200
+        Mon, 14 Jun 2021 01:27:16 -0700 (PDT)
+Date:   Mon, 14 Jun 2021 10:27:15 +0200
 From:   Jens Wiklander <jens.wiklander@linaro.org>
 To:     Tyler Hicks <tyhicks@linux.microsoft.com>
 Cc:     Allen Pais <apais@linux.microsoft.com>,
@@ -60,40 +60,128 @@ Cc:     Allen Pais <apais@linux.microsoft.com>,
         op-tee@lists.trustedfirmware.org, linux-integrity@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/8] optee: fix tee out of memory failure seen during
- kexec reboot
-Message-ID: <20210614072252.GB1033436@jade>
+Subject: Re: [PATCH v4 4/8] optee: Clear stale cache entries during
+ initialization
+Message-ID: <20210614082715.GC1033436@jade>
 References: <20210610210913.536081-1-tyhicks@linux.microsoft.com>
- <20210610210913.536081-4-tyhicks@linux.microsoft.com>
+ <20210610210913.536081-5-tyhicks@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210610210913.536081-4-tyhicks@linux.microsoft.com>
+In-Reply-To: <20210610210913.536081-5-tyhicks@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 04:09:08PM -0500, Tyler Hicks wrote:
-> From: Allen Pais <apais@linux.microsoft.com>
+On Thu, Jun 10, 2021 at 04:09:09PM -0500, Tyler Hicks wrote:
+> The shm cache could contain invalid addresses if
+> optee_disable_shm_cache() was not called from the .shutdown hook of the
+> previous kernel before a kexec. These addresses could be unmapped or
+> they could point to mapped but unintended locations in memory.
 > 
-> The following out of memory errors are seen on kexec reboot
-> from the optee core.
+> Clear the shared memory cache, while being careful to not translate the
+> addresses returned from OPTEE_SMC_DISABLE_SHM_CACHE, during driver
+> initialization. Once all pre-cache shm objects are removed, proceed with
+> enabling the cache so that we know that we can handle cached shm objects
+> with confidence later in the .shutdown hook.
 > 
-> [    0.368428] tee_bnxt_fw optee-clnt0: tee_shm_alloc failed
-> [    0.368461] tee_bnxt_fw: probe of optee-clnt0 failed with error -22
-> 
-> tee_shm_release() is not invoked on dma shm buffer.
-> 
-> Implement .shutdown() method to handle the release of the buffers
-> correctly.
-> 
-> More info:
-> https://github.com/OP-TEE/optee_os/issues/3637
-> 
-> Signed-off-by: Allen Pais <apais@linux.microsoft.com>
-> Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 > ---
->  drivers/tee/optee/core.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+>  drivers/tee/optee/call.c          | 11 ++++++++++-
+>  drivers/tee/optee/core.c          | 13 +++++++++++--
+>  drivers/tee/optee/optee_private.h |  2 +-
+>  3 files changed, 22 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
+> index 6e6eb836e9b6..5dcba6105ed7 100644
+> --- a/drivers/tee/optee/call.c
+> +++ b/drivers/tee/optee/call.c
+> @@ -419,8 +419,10 @@ void optee_enable_shm_cache(struct optee *optee)
+>   * optee_disable_shm_cache() - Disables caching of some shared memory allocation
+>   *			      in OP-TEE
+>   * @optee:	main service struct
+> + * @is_mapped:	true if the cached shared memory addresses were mapped by this
+> + *		kernel, are safe to dereference, and should be freed
+>   */
+> -void optee_disable_shm_cache(struct optee *optee)
+> +void optee_disable_shm_cache(struct optee *optee, bool is_mapped)
+>  {
+>  	struct optee_call_waiter w;
+>  
+> @@ -439,6 +441,13 @@ void optee_disable_shm_cache(struct optee *optee)
+>  		if (res.result.status == OPTEE_SMC_RETURN_OK) {
+>  			struct tee_shm *shm;
+>  
+> +			/*
+> +			 * Shared memory references that were not mapped by
+> +			 * this kernel must be ignored to prevent a crash.
+> +			 */
+> +			if (!is_mapped)
+> +				continue;
+> +
+>  			shm = reg_pair_to_ptr(res.result.shm_upper32,
+>  					      res.result.shm_lower32);
+>  			tee_shm_free(shm);
+> diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
+> index 0987074d7ed0..6974e1104bd4 100644
+> --- a/drivers/tee/optee/core.c
+> +++ b/drivers/tee/optee/core.c
+> @@ -589,7 +589,7 @@ static int optee_remove(struct platform_device *pdev)
+>  	 * reference counters and also avoid wild pointers in secure world
+>  	 * into the old shared memory range.
+>  	 */
+> -	optee_disable_shm_cache(optee);
+> +	optee_disable_shm_cache(optee, true);
 
-Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+Naked "true" or "false" parameters are normally not very descriptive.
+Would it make sense to write this as:
+optee_disable_shm_cache(optee, true /*is_mapped*/);
+instead (same for the other call sites in this patch)? That way it would
+be easier to see what it is that is true or false.
+
+/Jens
+
+>  
+>  	/*
+>  	 * The two devices have to be unregistered before we can free the
+> @@ -619,7 +619,7 @@ static int optee_remove(struct platform_device *pdev)
+>   */
+>  static void optee_shutdown(struct platform_device *pdev)
+>  {
+> -	optee_disable_shm_cache(platform_get_drvdata(pdev));
+> +	optee_disable_shm_cache(platform_get_drvdata(pdev), true);
+>  }
+>  
+>  static int optee_probe(struct platform_device *pdev)
+> @@ -716,6 +716,15 @@ static int optee_probe(struct platform_device *pdev)
+>  	optee->memremaped_shm = memremaped_shm;
+>  	optee->pool = pool;
+>  
+> +	/*
+> +	 * Ensure that there are no pre-existing shm objects before enabling
+> +	 * the shm cache so that there's no chance of receiving an invalid
+> +	 * address during shutdown. This could occur, for example, if we're
+> +	 * kexec booting from an older kernel that did not properly cleanup the
+> +	 * shm cache.
+> +	 */
+> +	optee_disable_shm_cache(optee, false);
+> +
+>  	optee_enable_shm_cache(optee);
+>  
+>  	if (optee->sec_caps & OPTEE_SMC_SEC_CAP_DYNAMIC_SHM)
+> diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+> index e25b216a14ef..16d8c82213e7 100644
+> --- a/drivers/tee/optee/optee_private.h
+> +++ b/drivers/tee/optee/optee_private.h
+> @@ -158,7 +158,7 @@ int optee_invoke_func(struct tee_context *ctx, struct tee_ioctl_invoke_arg *arg,
+>  int optee_cancel_req(struct tee_context *ctx, u32 cancel_id, u32 session);
+>  
+>  void optee_enable_shm_cache(struct optee *optee);
+> -void optee_disable_shm_cache(struct optee *optee);
+> +void optee_disable_shm_cache(struct optee *optee, bool is_mapped);
+>  
+>  int optee_shm_register(struct tee_context *ctx, struct tee_shm *shm,
+>  		       struct page **pages, size_t num_pages,
+> -- 
+> 2.25.1
+> 
