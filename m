@@ -2,118 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 731F23A7EA1
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Jun 2021 15:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585893A7EA8
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Jun 2021 15:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbhFONHN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 15 Jun 2021 09:07:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55034 "EHLO mail.kernel.org"
+        id S229977AbhFONIh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 15 Jun 2021 09:08:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229977AbhFONHL (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 15 Jun 2021 09:07:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC38B61001;
-        Tue, 15 Jun 2021 13:05:06 +0000 (UTC)
+        id S229943AbhFONIg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 15 Jun 2021 09:08:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9148C61001;
+        Tue, 15 Jun 2021 13:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623762307;
-        bh=aGEKMIS0PUOJ/1fjleH9M9mgh0PdhlRGN7kd+G3Hjn0=;
+        s=k20201202; t=1623762392;
+        bh=8Ie42VGSzlRGizs8Gli2qgnyA71uXtJOdxHq6eTlgzQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rt6yV4rsIBq+vFZL/WT3d87b3ZpHqar7FYyuZyzWmzguq4QfJNHOs2SproeQ1wkyp
-         ZRlKQrJKpH0BIgx/+A45LTmp2KU8BFiz73xjtzL3PUDdQ0C5GmBN8Z9Y2PV4SfwzzN
-         HF4U1V7AoIVsUEEYGkh1xXzo8pjy842YZTws+xyVNLZDCmYRfz/KLcm6RczPB6m7WF
-         6Ft5DzhvjopxvbTpw4oUorTWHeEqRM4efJ4BDLqv50cul+C27tI93CPFiNCHiZY+wv
-         SNzT4EAHQoTuzoWg7E9MfUMzJP1uRYslNjakaC8N+gYZjS0cfjDUTYVdV07ox1PQgG
-         qWyqVCjdSUhYw==
-Date:   Tue, 15 Jun 2021 16:05:04 +0300
+        b=D0eBgYiSj+ZiAAE5NdBYEecYDbnGdr6lop+2HZ7LAoitIM4gSq9hBpww3WcLOus7H
+         ZyV2UU4WSKvBzMFUNWCrxbOKuzctvx9mEUTqRXkJABWHUkKbyiR2I30So+80cuMige
+         0Z+phiYlO/TjNJetY0+fLJZNGxaDEkM7GMhBsLWX4rxrEokFN/afXMvM0laR51KIUi
+         Q5JA6vVRuqahiJVlAuq4esqD1IY+QUi3w9/KKdadicMDUavgYJkz+GfdSsu8oVMzVf
+         oeerS5R0/pRJZ+GM2AXmcJXDRNNx4rfUV2s7TrIyhUWrmoCuXrDzk9LUkZBxLrU4Cz
+         7kttonOhNo5lA==
+Date:   Tue, 15 Jun 2021 16:06:29 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Stefan Berger <stefanb@linux.ibm.com>
 Cc:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
         dwmw2@infradead.org, zohar@linux.ibm.com, nayna@linux.ibm.com,
         linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/4] Add support for ECDSA-signed kernel modules
-Message-ID: <20210615130504.ngizto6nv33qqirf@kernel.org>
+Subject: Re: [PATCH v6 4/4] certs: Adjustment due to 'Check whether openssl
+ tool is available'
+Message-ID: <20210615130629.doay3piolfjcg6ss@kernel.org>
 References: <20210610125623.1553792-1-stefanb@linux.ibm.com>
- <20210614191948.io4waff5aisah36q@kernel.org>
- <95fac042-d348-91d9-f6d0-6a1ec21cebe4@linux.ibm.com>
+ <20210610125623.1553792-5-stefanb@linux.ibm.com>
+ <20210614192329.dhhahvi5gtnlgbln@kernel.org>
+ <b355a2f2-78e7-61b4-2040-9ea3f8de0f73@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <95fac042-d348-91d9-f6d0-6a1ec21cebe4@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b355a2f2-78e7-61b4-2040-9ea3f8de0f73@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jun 14, 2021 at 03:20:43PM -0400, Stefan Berger wrote:
+On Mon, Jun 14, 2021 at 03:28:56PM -0400, Stefan Berger wrote:
 > 
-> On 6/14/21 3:19 PM, Jarkko Sakkinen wrote:
-> > On Thu, Jun 10, 2021 at 08:56:19AM -0400, Stefan Berger wrote:
-> > > This series adds support for ECDSA-signed kernel modules. It also
-> > > attempts to address a kbuild issue where a developer created an ECDSA
-> > > key for signing kernel modules and then builds an older version of the
-> > > kernel, when bisecting the kernel for example, that does not support
-> > > ECDSA keys.
+> On 6/14/21 3:23 PM, Jarkko Sakkinen wrote:
+> > On Thu, Jun 10, 2021 at 08:56:23AM -0400, Stefan Berger wrote:
+> > > Adjust the previous patch due to fixes applied to the first patch
+> > > in the series.
 > > > 
-> > > The first patch addresses the kbuild issue of needing to delete that
-> > > ECDSA key if it is in certs/signing_key.pem and trigger the creation
-> > > of an RSA key. However, for this to work this patch would have to be
-> > > backported to previous versions of the kernel but would also only work
-> > > for the developer if he/she used a stable version of the kernel to which
-> > > this patch was applied. So whether this patch actually achieves the
-> > > wanted effect is not always guaranteed.
+> > > Fixes: 46449892e6e5 ("certs: Add support for using elliptic curve keys for signing modules")
+> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > ---
+> > >   certs/Makefile | 5 +++++
+> > >   1 file changed, 5 insertions(+)
 > > > 
-> > > The 2nd patch adds the support for the ECSDA-signed kernel modules.
-> > > 
-> > > This patch depends on the ECDSA support series currently queued here:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git/log/?h=ecc
-> > > 
-> > >    Stefan
-> > > 
-> > > v6:
-> > >    - Patch 2/4 is fixing V4's 1/2 and 4/4 is fixing V4's 2/2. Both fixup
-> > >      patches to be squashed.
-> > > 
-> > > v5:
-> > >    - do not touch the key files if openssl is not installed; likely
-> > >      addresses an issue pointed out by kernel test robot
-> > > 
-> > > v4:
-> > >    - extending 'depends on' with MODULES to (IMA_APPRAISE_MODSIG && MODULES)
-> > > v3: - added missing OIDs for ECDSA signed hashes to pkcs7_sig_note_pkey_algo
-> > >    - added recommendation to use string hash to Kconfig help text
-> > > 
-> > > v2:
-> > >    - Adjustment to ECDSA key detector string in 2/2
-> > >    - Rephrased cover letter and patch descriptions with Mimi
-> > > 
-> > > 
-> > > Stefan Berger (4):
-> > >    certs: Trigger creation of RSA module signing key if it's not an RSA
-> > >      key
-> > >    certs: Check whether openssl tool is available
-> > >    certs: Add support for using elliptic curve keys for signing modules
-> > >    certs: Adjustment due to 'Check whether openssl tool is available'
-> > > 
-> > >   certs/Kconfig                         | 26 ++++++++++++++++++++++++++
-> > >   certs/Makefile                        | 21 +++++++++++++++++++++
-> > >   crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
-> > >   3 files changed, 55 insertions(+)
-> > > 
+> > > diff --git a/certs/Makefile b/certs/Makefile
+> > > index dc9f354dd5f8..4eb69bdadc79 100644
+> > > --- a/certs/Makefile
+> > > +++ b/certs/Makefile
+> > > @@ -66,16 +66,21 @@ ifeq ($(CONFIG_MODULE_SIG_KEY),"certs/signing_key.pem")
+> > >   ifeq ($(openssl_available),yes)
+> > >   X509TEXT=$(shell openssl x509 -in $(CONFIG_MODULE_SIG_KEY) -text)
+> > > +endif
+> > >   # Support user changing key type
+> > >   ifdef CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
+> > >   keytype_openssl = -newkey ec -pkeyopt ec_paramgen_curve:secp384r1
+> > > +ifeq ($(openssl_available),yes)
+> > >   $(if $(findstring id-ecPublicKey,$(X509TEXT)),,$(shell rm -f $(CONFIG_MODULE_SIG_KEY)))
+> > >   endif
+> > > +endif # CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
+> > >   ifdef CONFIG_MODULE_SIG_KEY_TYPE_RSA
+> > > +ifeq ($(openssl_available),yes)
+> > >   $(if $(findstring rsaEncryption,$(X509TEXT)),,$(shell rm -f $(CONFIG_MODULE_SIG_KEY)))
+> > >   endif
+> > > +endif # CONFIG_MODULE_SIG_KEY_TYPE_RSA
+> > >   $(obj)/signing_key.pem: $(obj)/x509.genkey
+> > >   	@$(kecho) "###"
 > > > -- 
 > > > 2.29.2
 > > > 
 > > > 
-> > Since you know the commit ID's in
-> > 
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-> > 
-> > you could just use fixes-tags and send exactly two patch series. Works
-> > better with various tools (e.g. https://pypi.org/project/b4/)
-> > 
-> > /Jarkko
+> > Please check that they are applied correctly, thanks.
+> 
+> No, they are not applied correctly. 2/2 shows this here:
 > 
 > 
-> So you are not taking v6's 2/4 and 4/4 ?
+>  ifeq ($(openssl_available),yes)
+>  X509TEXT=$(shell openssl x509 -in $(CONFIG_MODULE_SIG_KEY) -text)
+> +endif
+> +
+> 
+> 
+> This endif is in 2/4 in v6 and should appear on your git in 1/2. How did it
+> get into 2/2?
+> 
+> https://lkml.org/lkml/2021/6/10/493
 
-I applied the fixes and squashed them to appriopriate commits.
+I assumed that the two other commits are exact same as in v4 because
+appropriate tags were mssing.
 
 /Jarkko
