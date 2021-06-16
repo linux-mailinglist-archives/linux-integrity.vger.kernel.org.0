@@ -2,154 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7923A9EAD
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Jun 2021 17:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572453AA39A
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Jun 2021 20:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234489AbhFPPOr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 16 Jun 2021 11:14:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44886 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234537AbhFPPOk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 16 Jun 2021 11:14:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5478361166;
-        Wed, 16 Jun 2021 15:12:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623856354;
-        bh=79yfQdKxv3qf+Uv+p6L1hNCWKPz5Fwg5T6U9zNgNXKw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BqW78zvfiJFX1WM3aDIknqlHXv25abiaKRQGWflPbVe5mHb8O9l3o/637flx39WEV
-         cxE5w+ImnzJWcupRqiIlSCdWw3mWk3Cx9zyVndQ6dkPj5t43AKjeBGVfcpsgenW4vb
-         OtKupuD0Ntu2vsfS9jGRg8LEs4BP2xDparQODe4NbrpL5Ifi5OWG2B4/P9HW70cQ+p
-         X/YEaHt+LUkVEt4USF3AMG74opsi25veGHPjoUFr0Y86T4K0ypaX1XE8w1CW0XHn0r
-         M7bIYHn+eSLwn7g9EpX8Xjv0jQ72wzH8eddElWFaUDVLoyT0S+osdrecHy6yxIijoO
-         vHMYPlo4SyQqg==
-Received: by mail-ed1-f53.google.com with SMTP id s15so3141786edt.13;
-        Wed, 16 Jun 2021 08:12:34 -0700 (PDT)
-X-Gm-Message-State: AOAM532lCtCMzVKAZETEBvNqLjW+kwqaIONtY78GGoD/rm4MyUFmoZhU
-        cQUSrR8lEzHQcUxRceMGzKqrL9sRZpb2GOWMHw==
-X-Google-Smtp-Source: ABdhPJxABYnhsAzimi3nTGL6QdJk0DeFkDzt1g0oue+DKcU8vorHRba5UMSdbzxFOM1x2Zy6FOyPf8RPn7FkPhkqUPU=
-X-Received: by 2002:a05:6402:cb0:: with SMTP id cn16mr69518edb.165.1623856342407;
- Wed, 16 Jun 2021 08:12:22 -0700 (PDT)
+        id S232157AbhFPSzM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 16 Jun 2021 14:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232159AbhFPSzL (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 16 Jun 2021 14:55:11 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE47C06175F
+        for <linux-integrity@vger.kernel.org>; Wed, 16 Jun 2021 11:53:04 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id u13so259049qvt.7
+        for <linux-integrity@vger.kernel.org>; Wed, 16 Jun 2021 11:53:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Bi8dbucrJcy0W1D0dg2PU0hOFJEuVy1iH+Z01lR7RNU=;
+        b=Po/xUUsHLApF2WJxJQfD/YuH91EnTAYSVD1+At+SSHlxCPOKFaw9xtnwZTdsdk+DFK
+         BayPMchZJUB930+dPPSSh6lWVh5oNdEfz0ZlYGrkMYI+kXaq2wTWBOJrrBOC9k4PWSr1
+         8hIkaUTo/FBInVYQX6XbTssCK+3z++KEDgkUq5wSDCT9uzsyBZTJsCc3z2wfo0Rp4Gy2
+         4cbslr3Il3c2If01RtYElCx2dZ910hiCKH1YNGwB9F2N7sVsv3uHa+qdu+OMxzoNAf87
+         opIFJMYgELd/xKzFT3icow5eXFKEouovuysAXmGye9Pr/YeSiYq+hnD5pV2l7lnxmNoA
+         Yhog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Bi8dbucrJcy0W1D0dg2PU0hOFJEuVy1iH+Z01lR7RNU=;
+        b=DI/lDo9mb0O2pBHbc+jQjVxyGyibtjO35nRA7fCEQMWN1QqkwuapurUxcrELaG2LVe
+         DCPfDdeHABQGlUYWFaMe0wd4v2eMY/X9+4NB/tUBoW/8gYdrCWVMnpWDAjtBkOIrfnrH
+         Oom+c4rcsTt94c29niV4P3Rwnsqix6A4zVs6u0376OzPyahHRvExCivRqLO+kBwRTLGb
+         Le8w8zb9L/a+bSq7gNCB3LI+Qt7lGOwffAEERh4SRlV0QqQEmlj78YiqUlvGc4ggeYw/
+         y+RyeYzM9ZbLDVWyD7n1hYgRvRnbpj+LtQ0kNqd7Bl0zmF2hspjn75uFTGYRrN34+n27
+         dPYw==
+X-Gm-Message-State: AOAM532tM3zvBYXZ1fxNinD2hXkrkq4l/Uc2xwrxTaxbWGGMiLaLzlkP
+        h+yHjWMNfWOB1asJX+fZZxShaQ==
+X-Google-Smtp-Source: ABdhPJzkiKO6DN9zp2TAQ51SVCuXD9hc0JgggsuuhG7gouo0zcIq4LwmfpdPN8lJmIm+C4xh7+Ci1g==
+X-Received: by 2002:a0c:8563:: with SMTP id n90mr1504110qva.41.1623869583161;
+        Wed, 16 Jun 2021 11:53:03 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-47-55-113-94.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.113.94])
+        by smtp.gmail.com with ESMTPSA id i11sm61968qkl.95.2021.06.16.11.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Jun 2021 11:53:02 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1ltaes-007kLT-09; Wed, 16 Jun 2021 15:53:02 -0300
+Date:   Wed, 16 Jun 2021 15:53:01 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>, kernel@axis.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] tpm: Fix tpmrm reference counting
+Message-ID: <20210616185301.GV1096940@ziepe.ca>
+References: <20210615091410.17007-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-References: <20210221174930.27324-1-nramas@linux.microsoft.com>
- <20210221174930.27324-6-nramas@linux.microsoft.com> <CAMuHMdVSuNS4edh-zM0_sbC0i1AAjQ9Y0n_8Mjz=3CALkW4pgg@mail.gmail.com>
- <CAL_JsqJ2x7zbyP3fAacdfHOWjCVjg6XhraV2YkoBJdZ2jXAMEA@mail.gmail.com>
- <54efb4fce5aac7efbd0b1b3885e9098b1d4ea745.camel@linux.microsoft.com>
- <CAL_JsqJEucP043eViq0Y1kAeqWNTqP5fLjfjz7+ksYx7QP_V5w@mail.gmail.com> <87y2basg27.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87y2basg27.fsf@mpe.ellerman.id.au>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 16 Jun 2021 09:12:10 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+6bKsEBLoUXDBXM3FyYoBxmVzg8divwhayVGmHbHLhFQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+6bKsEBLoUXDBXM3FyYoBxmVzg8divwhayVGmHbHLhFQ@mail.gmail.com>
-Subject: Re: [PATCH v19 05/13] of: Add a common kexec FDT setup function
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     nramas <nramas@linux.microsoft.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>, Joe Perches <joe@perches.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        James Morse <james.morse@arm.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, dmitry.kasatkin@gmail.com,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Allison Randal <allison@lohutok.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, tao.li@vivo.com,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        balajib@linux.microsoft.com,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210615091410.17007-1-vincent.whitchurch@axis.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 8:23 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> Rob Herring <robh@kernel.org> writes:
-> > On Tue, Jun 15, 2021 at 10:13 AM nramas <nramas@linux.microsoft.com> wrote:
-> >>
-> >> On Tue, 2021-06-15 at 08:01 -0600, Rob Herring wrote:
-> >> > On Tue, Jun 15, 2021 at 6:18 AM Geert Uytterhoeven <
-> >> > geert@linux-m68k.org> wrote:
-> >> > >
-> >> > > > +void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
-> >> > > > +                                  unsigned long
-> >> > > > initrd_load_addr,
-> >> > > > +                                  unsigned long initrd_len,
-> >> > > > +                                  const char *cmdline, size_t
-> >> > > > extra_fdt_size)
-> >> > > > +{
-> >> > > > +       /* Did we boot using an initrd? */
-> >> > > > +       prop = fdt_getprop(fdt, chosen_node, "linux,initrd-
-> >> > > > start", NULL);
-> >> > > > +       if (prop) {
-> >> > > > +               u64 tmp_start, tmp_end, tmp_size;
-> >> > > > +
-> >> > > > +               tmp_start = fdt64_to_cpu(*((const fdt64_t *)
-> >> > > > prop));
-> >> > > > +
-> >> > > > +               prop = fdt_getprop(fdt, chosen_node,
-> >> > > > "linux,initrd-end", NULL);
-> >> > > > +               if (!prop) {
-> >> > > > +                       ret = -EINVAL;
-> >> > > > +                       goto out;
-> >> > > > +               }
-> >> > > > +
-> >> > > > +               tmp_end = fdt64_to_cpu(*((const fdt64_t *)
-> >> > > > prop));
-> >> > >
-> >> > > Some kernel code assumes "linux,initrd-{start,end}" are 64-bit,
-> >> > > other code assumes 32-bit.
-> >> >
-> >> > It can be either. The above code was a merge of arm64 and powerpc >> > both
-> >> > of which use 64-bit and still only runs on those arches. It looks >> > like
-> >> > some powerpc platforms may use 32-bit, but this would have been >> > broken
-> >> > before.
->
-> >> of_kexec_alloc_and_setup_fdt() is called from elf_64.c (in
-> >> arch/powerpc/kexec) which is for 64-bit powerpc platform only.
-> >
-> > 64-bit PPC could be writing 32-bit property values. The architecture
-> > size doesn't necessarily matter. And if the values came from the
-> > bootloader, who knows what size it used.
-> >
-> > This code is 32-bit powerpc only?:
-> >
-> > arch/powerpc/boot/main.c-       /* Tell the kernel initrd address via device tree */
-> > arch/powerpc/boot/main.c:       setprop_val(chosen, "linux,initrd-start", (u32)(initrd_addr));
-> > arch/powerpc/boot/main.c-       setprop_val(chosen, "linux,initrd-end", (u32)(initrd_addr+initrd_size));
->
-> Historically that code was always built 32-bit, even when used with a
-> 64-bit kernel.
->
-> These days it is also built 64-bit (for ppc64le).
+On Tue, Jun 15, 2021 at 11:14:08AM +0200, Vincent Whitchurch wrote:
+> The code added by commit 8979b02aaf1d6de8 ("tpm: Fix reference count to
+> main device") tries to take an extra reference to the main device only
+> for TPM2 by looking at the flags, but the flags are actually not set
+> at the time when tpm_chip_alloc() is called, so no extra reference is
+> ever taken, leading to a use-after-free if the TPM modules are removed
+> when the tpmrm device is in use.
 
-How it is built is immaterial. It's always writing a 32-bit value due
-to the u32 cast.
+Please read this
 
-> It looks like the drivers/of/fdt.c code can handle either 64 or 32-bit,
-> so I guess that's why it seems to be working.
+https://lore.kernel.org/linux-integrity/20210205172528.GP4718@ziepe.ca/
 
-Yes, that works, but that's not the issue. The question is does the
-main.c code run in combination with kexec. The kexec code above
-(copied straight from PPC code) would not work if linux,initrd-* are
-written by the main.c code.
-
-Rob
+Jason
