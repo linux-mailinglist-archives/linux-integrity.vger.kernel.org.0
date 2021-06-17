@@ -2,138 +2,148 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AE03AAD1C
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Jun 2021 09:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF92B3AB778
+	for <lists+linux-integrity@lfdr.de>; Thu, 17 Jun 2021 17:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbhFQHMF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Jun 2021 03:12:05 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3258 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbhFQHME (ORCPT
+        id S232289AbhFQPaZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Jun 2021 11:30:25 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42652 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232257AbhFQPaW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Jun 2021 03:12:04 -0400
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4G5CXF1GJCz6K6J6;
-        Thu, 17 Jun 2021 14:56:45 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 17 Jun 2021 09:09:54 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Thu, 17 Jun 2021 09:09:54 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Thu, 17 Jun 2021 11:30:22 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15HF3HfG023885;
+        Thu, 17 Jun 2021 11:28:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=B5VyyTlpO5CWTD+3XudEaDgMMTv1yACF6z5CahQ2DIU=;
+ b=gQT7QubTv+Ka2B7ACzCO4BYwZhvt7AberwLPhzS6ajKIx+qJVAGPO+7hGgWQ7qq6PEFL
+ 9dZsleclcluVIS2mn3IUE8fBWHmJfsqomT5D5tVP5SIu1aDaiSvsalW/nRo6KN0/2gXj
+ EPMMPAZDhI6KRc8h/3G6NwM8l5iPG36M1dcnjCV5YtFQVlbDBO9mEvqjarIcUjTBNcD/
+ f42Ebk+xJn3RPOJYc6BS43F8O4712+l6SenLtkWTSaiZuLxbj82R+WkqFH5tBXv704QR
+ PyCQez73mwj+vzfLKTe9XeLzWO+InecUrh0gY2EhZpWKWy/8S+6KYn6dFjyFG7EkZ0yj cQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3987hkbws2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Jun 2021 11:28:07 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15HF3eIv029293;
+        Thu, 17 Jun 2021 11:28:07 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3987hkbwr0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Jun 2021 11:28:07 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15HFRZoH013773;
+        Thu, 17 Jun 2021 15:28:04 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03fra.de.ibm.com with ESMTP id 394mj91j61-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Jun 2021 15:28:04 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15HFS2WG30212590
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Jun 2021 15:28:02 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 53B7711C052;
+        Thu, 17 Jun 2021 15:28:02 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 58EE811C04A;
+        Thu, 17 Jun 2021 15:28:00 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.34.125])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Jun 2021 15:28:00 +0000 (GMT)
+Message-ID: <d822efcc0bb05178057ab2f52293575124cde1fc.camel@linux.ibm.com>
+Subject: Re: [PATCH] fs: Return raw xattr for security.* if there is size
+ disagreement with LSMs
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
         "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         "paul@paul-moore.com" <paul@paul-moore.com>,
         "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
         "casey@schaufler-ca.com" <casey@schaufler-ca.com>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "selinux@vger.kernel.org" <selinux@vger.kernel.org>
-Subject: RE: [PATCH] fs: Return raw xattr for security.* if there is size
- disagreement with LSMs
-Thread-Topic: [PATCH] fs: Return raw xattr for security.* if there is size
- disagreement with LSMs
-Thread-Index: AQHXYrKvlTGLZUZH2kigEMb4WxB9T6sWlCeAgAExqRA=
-Date:   Thu, 17 Jun 2021 07:09:54 +0000
-Message-ID: <9cb676de40714d0288f85292c1f1a430@huawei.com>
+Date:   Thu, 17 Jun 2021 11:27:59 -0400
+In-Reply-To: <9cb676de40714d0288f85292c1f1a430@huawei.com>
 References: <ee75bde9a17f418984186caa70abd33b@huawei.com>
- <20210616132227.999256-1-roberto.sassu@huawei.com>
- <6e1c9807-d7e8-7c26-e0ee-975afa4b9515@linux.ibm.com>
-In-Reply-To: <6e1c9807-d7e8-7c26-e0ee-975afa4b9515@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+         <20210616132227.999256-1-roberto.sassu@huawei.com>
+         <6e1c9807-d7e8-7c26-e0ee-975afa4b9515@linux.ibm.com>
+         <9cb676de40714d0288f85292c1f1a430@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: lRZmVtAh7jKl-0j2JO-JPd-N0B_lzhWX
+X-Proofpoint-ORIG-GUID: t0JJjBXIxLsvFzMMht6ohgmQa3Iwa8OC
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-17_13:2021-06-15,2021-06-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1011 priorityscore=1501 mlxscore=0 suspectscore=0
+ impostorscore=0 adultscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106170096
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBTdGVmYW4gQmVyZ2VyIFttYWlsdG86c3RlZmFuYkBsaW51eC5pYm0uY29tXQ0KPiBT
-ZW50OiBXZWRuZXNkYXksIEp1bmUgMTYsIDIwMjEgNDo0MCBQTQ0KPiBPbiA2LzE2LzIxIDk6MjIg
-QU0sIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4gdmZzX2dldHhhdHRyKCkgZGlmZmVycyBmcm9t
-IHZmc19zZXR4YXR0cigpIGluIHRoZSB3YXkgaXQgb2J0YWlucyB0aGUgeGF0dHINCj4gPiB2YWx1
-ZS4gVGhlIGZvcm1lciBnaXZlcyBwcmVjZWRlbmNlIHRvIHRoZSBMU01zLCBhbmQgaWYgdGhlIExT
-TXMgZG9uJ3QNCj4gPiBwcm92aWRlIGEgdmFsdWUsIG9idGFpbnMgaXQgZnJvbSB0aGUgZmlsZXN5
-c3RlbSBoYW5kbGVyLiBUaGUgbGF0dGVyIGRvZXMNCj4gPiB0aGUgb3Bwb3NpdGUsIGZpcnN0IGlu
-dm9rZXMgdGhlIGZpbGVzeXN0ZW0gaGFuZGxlciwgYW5kIGlmIHRoZSBmaWxlc3lzdGVtDQo+ID4g
-ZG9lcyBub3Qgc3VwcG9ydCB4YXR0cnMsIHBhc3NlcyB0aGUgeGF0dHIgdmFsdWUgdG8gdGhlIExT
-TXMuDQo+ID4NCj4gPiBUaGUgcHJvYmxlbSBpcyB0aGF0IG5vdCBuZWNlc3NhcmlseSB0aGUgdXNl
-ciBnZXRzIHRoZSBzYW1lIHhhdHRyIHZhbHVlIHRoYXQNCj4gPiBoZSBzZXQuIEZvciBleGFtcGxl
-LCBpZiBoZSBzZXRzIHNlY3VyaXR5LnNlbGludXggd2l0aCBhIHZhbHVlIG5vdA0KPiA+IHRlcm1p
-bmF0ZWQgd2l0aCAnXDAnLCBoZSBnZXRzIGEgdmFsdWUgdGVybWluYXRlZCB3aXRoICdcMCcgYmVj
-YXVzZSBTRUxpbnV4DQo+ID4gYWRkcyBpdCBkdXJpbmcgdGhlIHRyYW5zbGF0aW9uIGZyb20geGF0
-dHIgdG8gaW50ZXJuYWwgcmVwcmVzZW50YXRpb24NCj4gPiAodmZzX3NldHhhdHRyKCkpIGFuZCBm
-cm9tIGludGVybmFsIHJlcHJlc2VudGF0aW9uIHRvIHhhdHRyDQo+ID4gKHZmc19nZXR4YXR0cigp
-KS4NCj4gPg0KPiA+IE5vcm1hbGx5LCB0aGlzIGRvZXMgbm90IGhhdmUgYW4gaW1wYWN0IHVubGVz
-cyB0aGUgaW50ZWdyaXR5IG9mIHhhdHRycyBpcw0KPiA+IHZlcmlmaWVkIHdpdGggRVZNLiBUaGUg
-a2VybmVsIGFuZCB0aGUgdXNlciBzZWUgZGlmZmVyZW50IHZhbHVlcyBkdWUgdG8gdGhlDQo+ID4g
-ZGlmZmVyZW50IGZ1bmN0aW9ucyB1c2VkIHRvIG9idGFpbiB0aGVtOg0KPiA+DQo+ID4ga2VybmVs
-IChFVk0pOiB1c2VzIHZmc19nZXR4YXR0cl9hbGxvYygpIHdoaWNoIG9idGFpbnMgdGhlIHhhdHRy
-IHZhbHVlIGZyb20NCj4gPiAgICAgICAgICAgICAgICB0aGUgZmlsZXN5c3RlbSBoYW5kbGVyIChy
-YXcgdmFsdWUpOw0KPiA+DQo+ID4gdXNlciAoaW1hLWV2bS11dGlscyk6IHVzZXMgdmZzX2dldHhh
-dHRyKCkgd2hpY2ggb2J0YWlucyB0aGUgeGF0dHIgdmFsdWUNCj4gPiAgICAgICAgICAgICAgICAg
-ICAgICAgIGZyb20gdGhlIExTTXMgKG5vcm1hbGl6ZWQgdmFsdWUpLg0KPiANCj4gTWF5YmUgdGhl
-cmUgc2hvdWxkIGJlIGFub3RoZXIgaW1wbGVtZW50YXRpb24gc2ltaWxhciB0bw0KPiB2ZnNfZ2V0
-eGF0dHJfYWxsb2MoKSAob3IgbW9kaWZ5IGl0KSB0byBiZWhhdmUgbGlrZSB2ZnNfZ2V0eGF0dHIo
-KSBidXQgZG8NCj4gdGhlIG1lbW9yeSBhbGxvY2F0aW9uIHBhcnQgc28gdGhhdCB0aGUga2VybmVs
-IHNlZXMgd2hhdCB1c2VyIHNwYWNlIHNlZQ0KPiByYXRoZXIgdGhhbiBtb2RpZnlpbmcgaXQgd2l0
-aCB5b3VyIHBhdGNoIHNvIHRoYXQgdXNlciBzcGFjZSBub3cgc2Vlcw0KPiBzb21ldGhpbmcgZGlm
-ZmVyZW50IHRoYW4gd2hhdCBpdCBoYXMgYmVlbiBmb3IgeWVhcnMgKHByZXZpb3VzDQo+IE5VTC10
-ZXJtaW5hdGVkIFNFTGludXggeGF0dHIgbWF5IG5vdCBiZSBOVUwtdGVybWluYXRlZCBhbnltb3Jl
-KT8NCg0KSSdtIGNvbmNlcm5lZCB0aGF0IHRoaXMgd291bGQgYnJlYWsgSE1BQ3MvZGlnaXRhbCBz
-aWduYXR1cmVzDQpjYWxjdWxhdGVkIHdpdGggcmF3IHZhbHVlcy4NCg0KQW4gYWx0ZXJuYXRpdmUg
-d291bGQgYmUgdG8gZG8gdGhlIEVWTSB2ZXJpZmljYXRpb24gdHdpY2UgaWYgdGhlDQpmaXJzdCB0
-aW1lIGRpZG4ndCBzdWNjZWVkICh3aXRoIHZmc19nZXR4YXR0cl9hbGxvYygpIGFuZCB3aXRoIHRo
-ZQ0KbmV3IGZ1bmN0aW9uIHRoYXQgYmVoYXZlcyBsaWtlIHZmc19nZXR4YXR0cigpKS4NCg0KUm9i
-ZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0K
-TWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIExpIEppYW4sIFNoaSBZYW5saQ0KDQo+ICDCoMKg
-wqAgU3RlZmFuDQo+IA0KPiANCj4gDQo+IA0KPiA+DQo+ID4gR2l2ZW4gdGhhdCB0aGUgZGlmZmVy
-ZW5jZSBiZXR3ZWVuIHRoZSByYXcgdmFsdWUgYW5kIHRoZSBub3JtYWxpemVkIHZhbHVlDQo+ID4g
-c2hvdWxkIGJlIGp1c3QgdGhlIGFkZGl0aW9uYWwgJ1wwJyBub3QgdGhlIHJlc3Qgb2YgdGhlIGNv
-bnRlbnQsIHRoaXMgcGF0Y2gNCj4gPiBtb2RpZmllcyB2ZnNfZ2V0eGF0dHIoKSB0byBjb21wYXJl
-IHRoZSBzaXplIG9mIHRoZSB4YXR0ciB2YWx1ZSBvYnRhaW5lZA0KPiA+IGZyb20gdGhlIExTTXMg
-dG8gdGhlIHNpemUgb2YgdGhlIHJhdyB4YXR0ciB2YWx1ZS4gSWYgdGhlcmUgaXMgYSBtaXNtYXRj
-aA0KPiA+IGFuZCB0aGUgZmlsZXN5c3RlbSBoYW5kbGVyIGRvZXMgbm90IHJldHVybiBhbiBlcnJv
-ciwgdmZzX2dldHhhdHRyKCkgcmV0dXJucw0KPiA+IHRoZSByYXcgdmFsdWUuDQo+ID4NCj4gPiBU
-aGlzIHBhdGNoIHNob3VsZCBoYXZlIGEgbWluaW1hbCBpbXBhY3Qgb24gZXhpc3Rpbmcgc3lzdGVt
-cywgYmVjYXVzZSBpZiB0aGUNCj4gPiBTRUxpbnV4IGxhYmVsIGlzIHdyaXR0ZW4gd2l0aCB0aGUg
-YXBwcm9wcmlhdGUgdG9vbHMgc3VjaCBhcyBzZXRmaWxlcyBvcg0KPiA+IHJlc3RvcmVjb24sIHRo
-ZXJlIHdpbGwgbm90IGJlIGEgbWlzbWF0Y2ggKGJlY2F1c2UgdGhlIHJhdyB2YWx1ZSBhbHNvIGhh
-cw0KPiA+ICdcMCcpLg0KPiA+DQo+ID4gSW4gdGhlIGNhc2Ugd2hlcmUgdGhlIFNFTGludXggbGFi
-ZWwgaXMgd3JpdHRlbiBkaXJlY3RseSB3aXRoIHNldGZhdHRyIGFuZA0KPiA+IHdpdGhvdXQgJ1ww
-JywgdGhpcyBwYXRjaCBoZWxwcyB0byBhbGlnbiBFVk0gYW5kIGltYS1ldm0tdXRpbHMgaW4gdGVy
-bXMgb2YNCj4gPiByZXN1bHQgcHJvdmlkZWQgKGR1ZSB0byB0aGUgZmFjdCB0aGF0IHRoZXkgYm90
-aCB2ZXJpZnkgdGhlIGludGVncml0eSBvZg0KPiA+IHhhdHRycyBmcm9tIHJhdyB2YWx1ZXMpLg0K
-PiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3
-ZWkuY29tPg0KPiA+IFRlc3RlZC1ieTogTWltaSBab2hhciA8em9oYXJAbGludXguaWJtLmNvbT4N
-Cj4gPiAtLS0NCj4gPiAgIGZzL3hhdHRyLmMgfCAxNSArKysrKysrKysrKysrKysNCj4gPiAgIDEg
-ZmlsZSBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZnMv
-eGF0dHIuYyBiL2ZzL3hhdHRyLmMNCj4gPiBpbmRleCA1YzhjNTE3NWIzODUuLjQxMmVjODc1YWEw
-NyAxMDA2NDQNCj4gPiAtLS0gYS9mcy94YXR0ci5jDQo+ID4gKysrIGIvZnMveGF0dHIuYw0KPiA+
-IEBAIC00MjAsMTIgKzQyMCwyNyBAQCB2ZnNfZ2V0eGF0dHIoc3RydWN0IHVzZXJfbmFtZXNwYWNl
-ICptbnRfdXNlcm5zLA0KPiBzdHJ1Y3QgZGVudHJ5ICpkZW50cnksDQo+ID4gICAJCWNvbnN0IGNo
-YXIgKnN1ZmZpeCA9IG5hbWUgKyBYQVRUUl9TRUNVUklUWV9QUkVGSVhfTEVOOw0KPiA+ICAgCQlp
-bnQgcmV0ID0geGF0dHJfZ2V0c2VjdXJpdHkobW50X3VzZXJucywgaW5vZGUsIHN1ZmZpeCwgdmFs
-dWUsDQo+ID4gICAJCQkJCSAgICBzaXplKTsNCj4gPiArCQlpbnQgcmV0X3JhdzsNCj4gPiArDQo+
-ID4gICAJCS8qDQo+ID4gICAJCSAqIE9ubHkgb3ZlcndyaXRlIHRoZSByZXR1cm4gdmFsdWUgaWYg
-YSBzZWN1cml0eSBtb2R1bGUNCj4gPiAgIAkJICogaXMgYWN0dWFsbHkgYWN0aXZlLg0KPiA+ICAg
-CQkgKi8NCj4gPiAgIAkJaWYgKHJldCA9PSAtRU9QTk9UU1VQUCkNCj4gPiAgIAkJCWdvdG8gbm9s
-c207DQo+ID4gKw0KPiA+ICsJCWlmIChyZXQgPCAwKQ0KPiA+ICsJCQlyZXR1cm4gcmV0Ow0KPiA+
-ICsNCj4gPiArCQkvKg0KPiA+ICsJCSAqIFJlYWQgcmF3IHhhdHRyIGlmIHRoZSBzaXplIGZyb20g
-dGhlIGZpbGVzeXN0ZW0gaGFuZGxlcg0KPiA+ICsJCSAqIGRpZmZlcnMgZnJvbSB0aGF0IHJldHVy
-bmVkIGJ5IHhhdHRyX2dldHNlY3VyaXR5KCkgYW5kIGlzDQo+ID4gKwkJICogZXF1YWwgb3IgZ3Jl
-YXRlciB0aGFuIHplcm8uDQo+ID4gKwkJICovDQo+ID4gKwkJcmV0X3JhdyA9IF9fdmZzX2dldHhh
-dHRyKGRlbnRyeSwgaW5vZGUsIG5hbWUsIE5VTEwsIDApOw0KPiA+ICsJCWlmIChyZXRfcmF3ID49
-IDAgJiYgcmV0X3JhdyAhPSByZXQpDQo+ID4gKwkJCWdvdG8gbm9sc207DQo+ID4gKw0KPiA+ICAg
-CQlyZXR1cm4gcmV0Ow0KPiA+ICAgCX0NCj4gPiAgIG5vbHNtOg0K
+On Thu, 2021-06-17 at 07:09 +0000, Roberto Sassu wrote:
+> > From: Stefan Berger [mailto:stefanb@linux.ibm.com]
+> > Sent: Wednesday, June 16, 2021 4:40 PM
+> > On 6/16/21 9:22 AM, Roberto Sassu wrote:
+> > > vfs_getxattr() differs from vfs_setxattr() in the way it obtains the xattr
+> > > value. The former gives precedence to the LSMs, and if the LSMs don't
+> > > provide a value, obtains it from the filesystem handler. The latter does
+> > > the opposite, first invokes the filesystem handler, and if the filesystem
+> > > does not support xattrs, passes the xattr value to the LSMs.
+> > >
+> > > The problem is that not necessarily the user gets the same xattr value that
+> > > he set. For example, if he sets security.selinux with a value not
+> > > terminated with '\0', he gets a value terminated with '\0' because SELinux
+> > > adds it during the translation from xattr to internal representation
+> > > (vfs_setxattr()) and from internal representation to xattr
+> > > (vfs_getxattr()).
+> > >
+> > > Normally, this does not have an impact unless the integrity of xattrs is
+> > > verified with EVM. The kernel and the user see different values due to the
+> > > different functions used to obtain them:
+> > >
+> > > kernel (EVM): uses vfs_getxattr_alloc() which obtains the xattr value from
+> > >                the filesystem handler (raw value);
+> > >
+> > > user (ima-evm-utils): uses vfs_getxattr() which obtains the xattr value
+> > >                        from the LSMs (normalized value).
+> > 
+> > Maybe there should be another implementation similar to
+> > vfs_getxattr_alloc() (or modify it) to behave like vfs_getxattr() but do
+> > the memory allocation part so that the kernel sees what user space see
+> > rather than modifying it with your patch so that user space now sees
+> > something different than what it has been for years (previous
+> > NUL-terminated SELinux xattr may not be NUL-terminated anymore)?
+> 
+> I'm concerned that this would break HMACs/digital signatures
+> calculated with raw values.
+
+Which would happen if the LSM is not enabled (e.g. "lsm=" boot command
+line option).
+
+> 
+> An alternative would be to do the EVM verification twice if the
+> first time didn't succeed (with vfs_getxattr_alloc() and with the
+> new function that behaves like vfs_getxattr()).
+
+Unfortunately, I don't see an alternative.
+
+thanks,
+
+Mimi
+
