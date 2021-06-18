@@ -2,132 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EADC3AB87A
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Jun 2021 18:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CBD3AC139
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Jun 2021 05:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbhFQQIR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 17 Jun 2021 12:08:17 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3263 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbhFQQIG (ORCPT
+        id S231441AbhFRDUr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 17 Jun 2021 23:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230484AbhFRDUq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 17 Jun 2021 12:08:06 -0400
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4G5RQj1tPMz6K6XT;
-        Thu, 17 Jun 2021 23:52:45 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 17 Jun 2021 18:05:55 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Thu, 17 Jun 2021 18:05:55 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Thu, 17 Jun 2021 23:20:46 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1057C061574
+        for <linux-integrity@vger.kernel.org>; Thu, 17 Jun 2021 20:18:37 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id dm5so1024912ejc.9
+        for <linux-integrity@vger.kernel.org>; Thu, 17 Jun 2021 20:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zLggwlEz9KvaqTsvD1N67bjXjYEPfw0xJN+eofsbIEg=;
+        b=LeS2JjPwBohnWSN3UMBVdfjycTPlOisHQcuIJVwOlO9eR1p8p0xWOrm91+3FZl6C97
+         G1rwNnlyYPzxy4McN2Y037p0crdsF8/zAOMC2sXR+QxnLekiwdb2BA+MMd4JepSPJy4j
+         CtB3r+X1EkC31clb9Iw+5PQUXoOjC9nRmepkaZcWiAgX1oufedkU7HIKEpZokMf2qH7H
+         RoEZKXdE3J0HnWEGuz8BKlTKHms1uoIqXENdI0+x5J0wBZHBJ74G78bGhvGT5wvq2Etw
+         VAuHVTYtD4nanHpASudOb+OmfBfxWJlFH8e/oxrCBqWm+l60T8FlLlDOj+Nq6rDyxqaA
+         a1kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zLggwlEz9KvaqTsvD1N67bjXjYEPfw0xJN+eofsbIEg=;
+        b=dlKb2zTzMRubTzDNRuD+ph61yD3W7YJhZsrgt3ldurYA840MWqqRxQKTAuWuiUdO1S
+         YVa0NCQ/RMz8gckq6ZCUQM9HHymZw/agE4L4qRrpD/7pyTc9JRYdsb7ecF5WSrbsX5sN
+         2831uPtFCZRBB3VBhsnDX4++janjN/4m3SUUsDD4Qn6bWun/xbRyA4wBarKxZSntdklQ
+         n6MFTguGnQOkcSqt2auZwRtpzGfnwUkJWrfdtj6XQ6bgD8P0KULrpM+4nsSj14mhWDeX
+         ky5jGnd5mA8ee4SEmiFULMu/Hh2ChGUv61gDgfQcAscDNrvoCZyJXF9B1wN/Tp0qOYBd
+         wb4A==
+X-Gm-Message-State: AOAM533hopEgX6P872rAnQuaqQpL2SluqCY+hZnuYay0YcHqzQq4LJvA
+        nBJK24ZfqlqNZbTBayOiRz//emeKUjuWb07aP59V
+X-Google-Smtp-Source: ABdhPJzN+mYgtC0eBkhZhzGJhLQjFCbBuFlJghEgoQO/wcTYdvnFAIXrjFWrVDier3cOEKa4xAydvckxOEAYsT5C+1Y=
+X-Received: by 2002:a17:907:a8f:: with SMTP id by15mr8609968ejc.91.1623986316521;
+ Thu, 17 Jun 2021 20:18:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <ee75bde9a17f418984186caa70abd33b@huawei.com> <20210616132227.999256-1-roberto.sassu@huawei.com>
+ <6e1c9807-d7e8-7c26-e0ee-975afa4b9515@linux.ibm.com> <9cb676de40714d0288f85292c1f1a430@huawei.com>
+ <d822efcc0bb05178057ab2f52293575124cde1fc.camel@linux.ibm.com>
+In-Reply-To: <d822efcc0bb05178057ab2f52293575124cde1fc.camel@linux.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 17 Jun 2021 23:18:25 -0400
+Message-ID: <CAHC9VhTv6Zn8gYaB6cG4wPzy_Ty0XjOM-QL4cZ525RnhFY4bTQ@mail.gmail.com>
+Subject: Re: [PATCH] fs: Return raw xattr for security.* if there is size
+ disagreement with LSMs
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
         Stefan Berger <stefanb@linux.ibm.com>,
         "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
         "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "casey@schaufler-ca.com" <casey@schaufler-ca.com>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "selinux@vger.kernel.org" <selinux@vger.kernel.org>
-Subject: RE: [PATCH] fs: Return raw xattr for security.* if there is size
- disagreement with LSMs
-Thread-Topic: [PATCH] fs: Return raw xattr for security.* if there is size
- disagreement with LSMs
-Thread-Index: AQHXYrKvlTGLZUZH2kigEMb4WxB9T6sWlCeAgAExqRCAAG34gIAAI+uA
-Date:   Thu, 17 Jun 2021 16:05:55 +0000
-Message-ID: <9e2d4091e6604077aad1225afa5b9805@huawei.com>
-References: <ee75bde9a17f418984186caa70abd33b@huawei.com>
-         <20210616132227.999256-1-roberto.sassu@huawei.com>
-         <6e1c9807-d7e8-7c26-e0ee-975afa4b9515@linux.ibm.com>
-         <9cb676de40714d0288f85292c1f1a430@huawei.com>
- <d822efcc0bb05178057ab2f52293575124cde1fc.camel@linux.ibm.com>
-In-Reply-To: <d822efcc0bb05178057ab2f52293575124cde1fc.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> Sent: Thursday, June 17, 2021 5:28 PM
+On Thu, Jun 17, 2021 at 11:28 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
 > On Thu, 2021-06-17 at 07:09 +0000, Roberto Sassu wrote:
-> > > From: Stefan Berger [mailto:stefanb@linux.ibm.com]
-> > > Sent: Wednesday, June 16, 2021 4:40 PM
-> > > On 6/16/21 9:22 AM, Roberto Sassu wrote:
-> > > > vfs_getxattr() differs from vfs_setxattr() in the way it obtains the xattr
-> > > > value. The former gives precedence to the LSMs, and if the LSMs don't
-> > > > provide a value, obtains it from the filesystem handler. The latter does
-> > > > the opposite, first invokes the filesystem handler, and if the filesystem
-> > > > does not support xattrs, passes the xattr value to the LSMs.
-> > > >
-> > > > The problem is that not necessarily the user gets the same xattr value
-> that
-> > > > he set. For example, if he sets security.selinux with a value not
-> > > > terminated with '\0', he gets a value terminated with '\0' because
-> SELinux
-> > > > adds it during the translation from xattr to internal representation
-> > > > (vfs_setxattr()) and from internal representation to xattr
-> > > > (vfs_getxattr()).
-> > > >
-> > > > Normally, this does not have an impact unless the integrity of xattrs is
-> > > > verified with EVM. The kernel and the user see different values due to
-> the
-> > > > different functions used to obtain them:
-> > > >
-> > > > kernel (EVM): uses vfs_getxattr_alloc() which obtains the xattr value
-> from
-> > > >                the filesystem handler (raw value);
-> > > >
-> > > > user (ima-evm-utils): uses vfs_getxattr() which obtains the xattr value
-> > > >                        from the LSMs (normalized value).
-> > >
-> > > Maybe there should be another implementation similar to
-> > > vfs_getxattr_alloc() (or modify it) to behave like vfs_getxattr() but do
-> > > the memory allocation part so that the kernel sees what user space see
-> > > rather than modifying it with your patch so that user space now sees
-> > > something different than what it has been for years (previous
-> > > NUL-terminated SELinux xattr may not be NUL-terminated anymore)?
-> >
-> > I'm concerned that this would break HMACs/digital signatures
-> > calculated with raw values.
-> 
-> Which would happen if the LSM is not enabled (e.g. "lsm=" boot command
-> line option).
 
-For files created after switching to the new behavior, yes, because
-EVM could eventually get the label without '\0' from the filesystem
-handler.
-
-However, it would happen also for files created before switching to
-the new behavior, since the HMAC could have been calculated without
-'\0' and after switching it would be calculated with '\0'.
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
+...
 
 > > An alternative would be to do the EVM verification twice if the
 > > first time didn't succeed (with vfs_getxattr_alloc() and with the
 > > new function that behaves like vfs_getxattr()).
-> 
+>
 > Unfortunately, I don't see an alternative.
-> 
-> thanks,
-> 
-> Mimi
 
+... and while unfortunate, the impact should be non-existant if you
+are using the right tools to label files or ensuring that you are
+formatting labels properly if doing it by hand.
+
+Handling a corner case is good, but I wouldn't add a lot of code
+complexity trying to optimize it.
+
+-- 
+paul moore
+www.paul-moore.com
