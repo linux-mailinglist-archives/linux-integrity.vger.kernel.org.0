@@ -2,172 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F2D3ADC5B
-	for <lists+linux-integrity@lfdr.de>; Sun, 20 Jun 2021 04:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25313ADEBF
+	for <lists+linux-integrity@lfdr.de>; Sun, 20 Jun 2021 15:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbhFTCiK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 19 Jun 2021 22:38:10 -0400
-Received: from mout.gmx.net ([212.227.15.15]:40459 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230236AbhFTCiJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 19 Jun 2021 22:38:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1624156553;
-        bh=kvfPbNBSnMkWHBdMxo/TBW9AayZJVdLROfZh2QX8248=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=Ewl5xTJuZrYg4Pd4sKVB8OoyttMWpuODsNr/L3P1teUbvdOp+SBKs6ziXEWAYPr05
-         jiDlJZeXdHt8gCVQIfARryZK9DaOJgekCkglgnuL3MhKp7XDCIZhkJcSZS7nJeLqKz
-         Az9P0CBYy8YYEuSxKOQS51HungpiJ5j2IjjL1HrM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([149.172.234.120]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N3KTo-1lC97b28qw-010LwK; Sun, 20
- Jun 2021 04:35:53 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org
-Cc:     jgg@ziepe.ca, linus.walleij@linaro.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>, stable@vger.kernel.org
-Subject: [PATCH v2] tpm, tpm_tis_spi: Allow to sleep in the interrupt handler
-Date:   Sun, 20 Jun 2021 04:34:44 +0200
-Message-Id: <20210620023444.14684-1-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.31.1
+        id S229877AbhFTNiU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 20 Jun 2021 09:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229750AbhFTNiK (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 20 Jun 2021 09:38:10 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F86C061787
+        for <linux-integrity@vger.kernel.org>; Sun, 20 Jun 2021 06:35:57 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id a11so6073250ilf.2
+        for <linux-integrity@vger.kernel.org>; Sun, 20 Jun 2021 06:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=sec9fLKaTeyUvI3U/9cH5uXh5khwaRmiJ3Slq1YZSCexwKlBLvi58L8DBu55CdJDji
+         U+HuEZd9onOgJ+OTF2rj1+rkaNRkmc9mUKozs32zG54utaQ749Tn8dwDfGRCa86Y13h3
+         aTPzQqGcbZM/EAbe2+YYkP8IzEtm7OFmKWqXTdVfNhb2VSah4cfQXUGVQ0X59BkXxqUT
+         4pZGErCa13JdLdCIRor4r89BUHwblkmYb4cwi8/7Nzr0zyCOHjauEmAl4PRZ8S1C6dv6
+         acCJLW1ZaLruky9plyyHKip4E8d31xV8uUpmSHsk2ZsjBfcQBVTL2OilqasULeboqC8n
+         0h/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=h/5vk2w66D3dzi0WEOAXvAexXS32ANYM3QH5M1e+hsKITqaO6IWL4xIj1aM8kcaj71
+         1g5Wl7CQSbTW6/BrSkG0dzZmITnTOV9gZiWICQU6zhSFIf9t+tR7u0seJJRwJWDKBz5Q
+         ATctUnFBsri2QkaMNpnFxJKIOvTlFkw9g1rMPZy9LvutrgWeDHgbWS2zK0vQQC2fNVCh
+         KXIQFn45UZAoeYz536IBy79ArfXJtA91G4KK+UVK3PH9C31EMa7atkntVFLi13KilXZu
+         AI2EqQ7S7spU6SQr9roKRTJP9Z1mIYsU+R+gizR3/1xOxpLR8rU/V+C9cub3M6iHjW3p
+         8BdQ==
+X-Gm-Message-State: AOAM5326TdLNvJnUTkqCMrqhPpSuPUY0XYhl0ccE0ibdm+XckAFLW8xh
+        BiPGTQW357lK8o/WOW8Hf/Hgr6hO9pGnUqJL73ES5L2M2J0=
+X-Google-Smtp-Source: ABdhPJwO76FoleXtHusTIesxM2cuIvE9VdIlMyNt5WPTfvQkSUUR8O1MTtP/waIv/m9vsUoacT9Q2gT5SJ41poXCB/Q=
+X-Received: by 2002:a05:6602:1810:: with SMTP id t16mr15654363ioh.48.1624196145888;
+ Sun, 20 Jun 2021 06:35:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:NDQzXvb6/eZ2jUNdvGsI7megvl14n3dJOXmkMuZSBJAWeZRIbyh
- GfXZxUtNxSDMbYkufD7sJ+q9+/myCvZ2EEyP0DSgDcbfSGe0nxAHsQc8wBfoWfV0Yx6JPsP
- 3tm8viTlRg1b26GqSfGG/Hry6JYzlrK0lV2pzxXvmQHlw8dhQ6vnj+ts5tqdKftglu2aBy8
- r8hz+7+ydJqPTv9JxE4ag==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zJPor6yO/LI=:iI8FChg8JKRIh5qisFKNvX
- et7KEfvQ0Shs3LVQWRRS4F9vi/pbZCIs2lO+MnlSvJyGnTVKe465yMX1pFK3EUsWKMZAFIXdE
- bZMCuql+LABBb1KfUiX0zbaDxja3+O9YQ+huBu/c+tM8mENi3COs6N8D+BabOp2dN1hDlxZgO
- yZEviNjBC1fRUywKgujqTOwpMFV9IvJIbKHIvxbuZCmVZHdBT9ND5gA36eWq6LUurSF4LYwQj
- PBxR08jKI8CEkiv6f6zZrABcFh6nc5BlCtTLTEYR5xSH3BBtAzqM+c8+FTk1A8lKGr4RlE2pX
- BH0HdmgvjaT2uRJNpsP7i22UTBHcsuJcJuWQAms8xcO3rgk0cBYgxtu5X9vsWUYd/ToRJ/jvW
- SeeORNMZDt6DmAn5cjHvDdkQGevXm8lL9Htg5TVuBbj+u0cqLQkalUIPUV05M2ozLy1Sxa4A0
- OTw4obpmnTzLD3b0wN3fE0Zxe7lr3YiwNCNO2kddbuGNfadzJH9v/re6BO7PQbmumDGLLZOaO
- HnDTSNxZEhCDnWySZFe1EBtybn6DYX9Jcz/Ul7a121YF4BTbO43sMCPi3Z79UJeEPtE39ZYv4
- +0ES0WEWrj/B+1c4h06ug0hWtmBGdfNWH1eFTQZfqDmXoAsSeJ3Qwf7Y2v0EOMH/yC36yYGu1
- 5TJ7vd8HGSF/NoF14PhvnFZYkXTug92c7sGy4m6PaPd4l+t+sg4S2ux9Q6b5G3ovlYphlc5K+
- GoqRHahai0riI2KfWJaIR1xP5cTiTUJXbZUWHddaQm7NO2yW8DjEfZ7oq9kitmbKKJEihpl6I
- Vhs810wnuRqa4ZkukDuwEjMq6i73qQPHlOH0BkQlUWYO8Ay/okDiEEoA3JFR4y5SHeKgLsFfd
- h2Te6/wIF1VxbkHmSeChb6rzZ0H4iP09RL7Ex2fQJ/feqyE3Fg77KMlmJlW7xYlxLRjwma+wm
- CoKlSH3VTbzPbyh7VV2Vyc9FOwwmZwE4etS1O4EjGV/zbGSY+tmb6tKLScHLk/RSwk7oCoqTW
- 6dRBvvfaHz86UNeJqwf0fLlCYZ9rLwfWRK00w9SJwdz6X3C4TEtAtGV0UKF7+7cWq8MOLW7Qn
- ctwS/QNZT+n0aq4s36Oy0txkuwt7qoaqHY+A63ZKMDQwtzMv9Wz/5AuAA==
+Received: by 2002:a05:6e02:1baf:0:0:0:0 with HTTP; Sun, 20 Jun 2021 06:35:45
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <sarah.koffi101@gmail.com>
+Date:   Sun, 20 Jun 2021 15:35:45 +0200
+Message-ID: <CA+ifgLGSH5KW9J+Z85axgUznJEQcab5mED6rZZnS3OBzXTnaxw@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SW50ZXJydXB0IGhhbmRsaW5nIGF0IGxlYXN0IGluY2x1ZGVzIHJlYWRpbmcgYW5kIHdyaXRpbmcg
-dGhlIGludGVycnVwdApzdGF0dXMgcmVnaXN0ZXIgd2l0aGluIHRoZSBpbnRlcnJ1cHQgcm91dGlu
-ZS4gRm9yIGFjY2Vzc2VzIG92ZXIgU1BJIGEgbXV0ZXgKaXMgdXNlZCBpbiB0aGUgY29uY2Vybmlu
-ZyBmdW5jdGlvbnMuIFNpbmNlIHRoaXMgcmVxdWlyZXMgYSBzbGVlcGFibGUKY29udGV4dCByZXF1
-ZXN0IGEgdGhyZWFkZWQgaW50ZXJydXB0IGhhbmRsZXIgZm9yIHRoaXMgY2FzZS4KCkNjOiBzdGFi
-bGVAdmdlci5rZXJuZWwub3JnCkZpeGVzOiAxYTMzOWI2NThkOWQgKCJ0cG1fdGlzX3NwaTogUGFz
-cyB0aGUgU1BJIElSUSBkb3duIHRvIHRoZSBkcml2ZXIiKQpTaWduZWQtb2ZmLWJ5OiBMaW5vIFNh
-bmZpbGlwcG8gPExpbm9TYW5maWxpcHBvQGdteC5kZT4KLS0tClRoaXMgcGF0Y2ggaGFzIGJlZW4g
-dGVzdGVkIG9uIGEgU0xCOTY3MHZxMi4wLgpUaGUgZmlyc3QgdmVyc2lvbiBvZiB0aGlzIHBhdGNo
-IHdhcyBwYXJ0IG9mIHBhdGNoIHNlcmllcyAoc2VlCmh0dHBzOi8vbWFyYy5pbmZvLz9sPWxpbnV4
-LWludGVncml0eSZtPTE2MjAxNjg4ODAyMDA0NCZ3PTIpCgp2MjoKLSByZXF1ZXN0IHRocmVhZGVk
-IGlycSBoYW5kbGVyIG9ubHkgaW4gY2FzZSBvZiBTUEkgYXMgcmVxdWVzdGVkIGJ5IEphcmtrbwog
-IFNha2tpbmVuCi0gYWRkICJGaXhlcyIgdGFnCi0gYWRkIHN0YWJsZQotIGNvcnJlY3Qgc2hvcnQg
-c3VtbWFyeQoKIGRyaXZlcnMvY2hhci90cG0vdHBtX3Rpcy5jICAgICAgICAgICB8ICAyICstCiBk
-cml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jICAgICAgfCAzMiArKysrKysrKysrKysrKysr
-KysrKy0tLS0tLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5oICAgICAgfCAgMiAr
-LQogZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX3NwaV9tYWluLmMgIHwgIDMgKystCiBkcml2ZXJz
-L2NoYXIvdHBtL3RwbV90aXNfc3lucXVhY2VyLmMgfCAgMiArLQogNSBmaWxlcyBjaGFuZ2VkLCAy
-OCBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL2No
-YXIvdHBtL3RwbV90aXMuYyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpcy5jCmluZGV4IDRlZDZl
-NjYwMjczYS4uZDI3MDA5Yjk4OWZlIDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbV90
-aXMuYworKysgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXMuYwpAQCAtMjM2LDcgKzIzNiw3IEBA
-IHN0YXRpYyBpbnQgdHBtX3Rpc19pbml0KHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IHRwbV9p
-bmZvICp0cG1faW5mbykKIAkJcGh5LT5wcml2LmZsYWdzIHw9IFRQTV9USVNfSVRQTV9XT1JLQVJP
-VU5EOwogCiAJcmV0dXJuIHRwbV90aXNfY29yZV9pbml0KGRldiwgJnBoeS0+cHJpdiwgaXJxLCAm
-dHBtX3RjZywKLQkJCQkgQUNQSV9IQU5ETEUoZGV2KSk7CisJCQkJIEFDUElfSEFORExFKGRldiks
-IGZhbHNlKTsKIH0KIAogc3RhdGljIFNJTVBMRV9ERVZfUE1fT1BTKHRwbV90aXNfcG0sIHRwbV9w
-bV9zdXNwZW5kLCB0cG1fdGlzX3Jlc3VtZSk7CmRpZmYgLS1naXQgYS9kcml2ZXJzL2NoYXIvdHBt
-L3RwbV90aXNfY29yZS5jIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuYwppbmRleCA1
-NWI5ZDM5NjVhZTEuLjIxYWJjMjE2OGQwNyAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90
-cG1fdGlzX2NvcmUuYworKysgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCkBAIC03
-MjgsMTkgKzcyOCwzMSBAQCBzdGF0aWMgaW50IHRwbV90aXNfZ2VuX2ludGVycnVwdChzdHJ1Y3Qg
-dHBtX2NoaXAgKmNoaXApCiAgKiBldmVyeXRoaW5nIGFuZCBsZWF2ZSBpbiBwb2xsaW5nIG1vZGUu
-IFJldHVybnMgMCBvbiBzdWNjZXNzLgogICovCiBzdGF0aWMgaW50IHRwbV90aXNfcHJvYmVfaXJx
-X3NpbmdsZShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAsIHUzMiBpbnRtYXNrLAotCQkJCSAgICBpbnQg
-ZmxhZ3MsIGludCBpcnEpCisJCQkJICAgIGludCBmbGFncywgaW50IGlycSwgYm9vbCB0aHJlYWRl
-ZF9pcnEpCiB7CiAJc3RydWN0IHRwbV90aXNfZGF0YSAqcHJpdiA9IGRldl9nZXRfZHJ2ZGF0YSgm
-Y2hpcC0+ZGV2KTsKIAl1OCBvcmlnaW5hbF9pbnRfdmVjOwogCWludCByYzsKIAl1MzIgaW50X3N0
-YXR1czsKIAotCWlmIChkZXZtX3JlcXVlc3RfaXJxKGNoaXAtPmRldi5wYXJlbnQsIGlycSwgdGlz
-X2ludF9oYW5kbGVyLCBmbGFncywKLQkJCSAgICAgZGV2X25hbWUoJmNoaXAtPmRldiksIGNoaXAp
-ICE9IDApIHsKKworCWlmICh0aHJlYWRlZF9pcnEpIHsKKwkJcmMgPSBkZXZtX3JlcXVlc3RfdGhy
-ZWFkZWRfaXJxKGNoaXAtPmRldi5wYXJlbnQsIGlycSwgTlVMTCwKKwkJCQkJICAgICAgIHRpc19p
-bnRfaGFuZGxlciwKKwkJCQkJICAgICAgIElSUUZfT05FU0hPVCB8IGZsYWdzLAorCQkJCQkgICAg
-ICAgZGV2X25hbWUoJmNoaXAtPmRldiksCisJCQkJCSAgICAgICBjaGlwKTsKKwl9IGVsc2Ugewor
-CQlyYyA9IGRldm1fcmVxdWVzdF9pcnEoY2hpcC0+ZGV2LnBhcmVudCwgaXJxLCB0aXNfaW50X2hh
-bmRsZXIsCisJCQkJICAgICAgZmxhZ3MsIGRldl9uYW1lKCZjaGlwLT5kZXYpLCBjaGlwKTsKKwl9
-CisKKwlpZiAocmMpIHsKIAkJZGV2X2luZm8oJmNoaXAtPmRldiwgIlVuYWJsZSB0byByZXF1ZXN0
-IGlycTogJWQgZm9yIHByb2JlXG4iLAogCQkJIGlycSk7CiAJCXJldHVybiAtMTsKIAl9CisKIAlw
-cml2LT5pcnEgPSBpcnE7CiAKIAlyYyA9IHRwbV90aXNfcmVhZDgocHJpdiwgVFBNX0lOVF9WRUNU
-T1IocHJpdi0+bG9jYWxpdHkpLApAQCAtNzk1LDcgKzgwNyw4IEBAIHN0YXRpYyBpbnQgdHBtX3Rp
-c19wcm9iZV9pcnFfc2luZ2xlKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCwgdTMyIGludG1hc2ssCiAg
-KiBkbyBub3QgaGF2ZSBBQ1BJL2V0Yy4gV2UgdHlwaWNhbGx5IGV4cGVjdCB0aGUgaW50ZXJydXB0
-IHRvIGJlIGRlY2xhcmVkIGlmCiAgKiBwcmVzZW50LgogICovCi1zdGF0aWMgdm9pZCB0cG1fdGlz
-X3Byb2JlX2lycShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAsIHUzMiBpbnRtYXNrKQorc3RhdGljIHZv
-aWQgdHBtX3Rpc19wcm9iZV9pcnEoc3RydWN0IHRwbV9jaGlwICpjaGlwLCB1MzIgaW50bWFzaywK
-KwkJCSAgICAgIGJvb2wgdGhyZWFkZWRfaXJxKQogewogCXN0cnVjdCB0cG1fdGlzX2RhdGEgKnBy
-aXYgPSBkZXZfZ2V0X2RydmRhdGEoJmNoaXAtPmRldik7CiAJdTggb3JpZ2luYWxfaW50X3ZlYzsK
-QEAgLTgxMCwxMCArODIzLDExIEBAIHN0YXRpYyB2b2lkIHRwbV90aXNfcHJvYmVfaXJxKHN0cnVj
-dCB0cG1fY2hpcCAqY2hpcCwgdTMyIGludG1hc2spCiAJCWlmIChJU19FTkFCTEVEKENPTkZJR19Y
-ODYpKQogCQkJZm9yIChpID0gMzsgaSA8PSAxNTsgaSsrKQogCQkJCWlmICghdHBtX3Rpc19wcm9i
-ZV9pcnFfc2luZ2xlKGNoaXAsIGludG1hc2ssIDAsCi0JCQkJCQkJICAgICAgaSkpCisJCQkJCQkJ
-ICAgICAgaSwgdGhyZWFkZWRfaXJxKSkKIAkJCQkJcmV0dXJuOwogCX0gZWxzZSBpZiAoIXRwbV90
-aXNfcHJvYmVfaXJxX3NpbmdsZShjaGlwLCBpbnRtYXNrLCAwLAotCQkJCQkgICAgIG9yaWdpbmFs
-X2ludF92ZWMpKQorCQkJCQkgICAgIG9yaWdpbmFsX2ludF92ZWMsCisJCQkJCSAgICAgdGhyZWFk
-ZWRfaXJxKSkKIAkJcmV0dXJuOwogfQogCkBAIC05MDksNyArOTIzLDcgQEAgc3RhdGljIGNvbnN0
-IHN0cnVjdCB0cG1fY2xhc3Nfb3BzIHRwbV90aXMgPSB7CiAKIGludCB0cG1fdGlzX2NvcmVfaW5p
-dChzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYsIGludCBpcnEs
-CiAJCSAgICAgIGNvbnN0IHN0cnVjdCB0cG1fdGlzX3BoeV9vcHMgKnBoeV9vcHMsCi0JCSAgICAg
-IGFjcGlfaGFuZGxlIGFjcGlfZGV2X2hhbmRsZSkKKwkJICAgICAgYWNwaV9oYW5kbGUgYWNwaV9k
-ZXZfaGFuZGxlLCBib29sIHRocmVhZGVkX2lycSkKIHsKIAl1MzIgdmVuZG9yOwogCXUzMiBpbnRm
-Y2FwczsKQEAgLTEwNDksNyArMTA2Myw3IEBAIGludCB0cG1fdGlzX2NvcmVfaW5pdChzdHJ1Y3Qg
-ZGV2aWNlICpkZXYsIHN0cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYsIGludCBpcnEsCiAKIAkJaWYg
-KGlycSkgewogCQkJdHBtX3Rpc19wcm9iZV9pcnFfc2luZ2xlKGNoaXAsIGludG1hc2ssIElSUUZf
-U0hBUkVELAotCQkJCQkJIGlycSk7CisJCQkJCQkgaXJxLCB0aHJlYWRlZF9pcnEpOwogCQkJaWYg
-KCEoY2hpcC0+ZmxhZ3MgJiBUUE1fQ0hJUF9GTEFHX0lSUSkpIHsKIAkJCQlkZXZfZXJyKCZjaGlw
-LT5kZXYsIEZXX0JVRwogCQkJCQkiVFBNIGludGVycnVwdCBub3Qgd29ya2luZywgcG9sbGluZyBp
-bnN0ZWFkXG4iKTsKQEAgLTEwNTcsNyArMTA3MSw3IEBAIGludCB0cG1fdGlzX2NvcmVfaW5pdChz
-dHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYsIGludCBpcnEsCiAJ
-CQkJZGlzYWJsZV9pbnRlcnJ1cHRzKGNoaXApOwogCQkJfQogCQl9IGVsc2UgewotCQkJdHBtX3Rp
-c19wcm9iZV9pcnEoY2hpcCwgaW50bWFzayk7CisJCQl0cG1fdGlzX3Byb2JlX2lycShjaGlwLCBp
-bnRtYXNrLCB0aHJlYWRlZF9pcnEpOwogCQl9CiAJfQogCmRpZmYgLS1naXQgYS9kcml2ZXJzL2No
-YXIvdHBtL3RwbV90aXNfY29yZS5oIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuaApp
-bmRleCA5YjJkMzJhNTlmNjcuLjMyZDM2ZTUzODIwOCAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFy
-L3RwbS90cG1fdGlzX2NvcmUuaAorKysgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5o
-CkBAIC0xNjEsNyArMTYxLDcgQEAgc3RhdGljIGlubGluZSBib29sIGlzX2Jzdyh2b2lkKQogdm9p
-ZCB0cG1fdGlzX3JlbW92ZShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXApOwogaW50IHRwbV90aXNfY29y
-ZV9pbml0KHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IHRwbV90aXNfZGF0YSAqcHJpdiwgaW50
-IGlycSwKIAkJICAgICAgY29uc3Qgc3RydWN0IHRwbV90aXNfcGh5X29wcyAqcGh5X29wcywKLQkJ
-ICAgICAgYWNwaV9oYW5kbGUgYWNwaV9kZXZfaGFuZGxlKTsKKwkJICAgICAgYWNwaV9oYW5kbGUg
-YWNwaV9kZXZfaGFuZGxlLCBib29sIHVzZV90aHJlYWRlZF9pcnEpOwogCiAjaWZkZWYgQ09ORklH
-X1BNX1NMRUVQCiBpbnQgdHBtX3Rpc19yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2KTsKZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19zcGlfbWFpbi5jIGIvZHJpdmVycy9jaGFy
-L3RwbS90cG1fdGlzX3NwaV9tYWluLmMKaW5kZXggMzg1NmY2ZWJjYjM0Li4yZWI1N2MxY2Y5YmEg
-MTAwNjQ0Ci0tLSBhL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19zcGlfbWFpbi5jCisrKyBiL2Ry
-aXZlcnMvY2hhci90cG0vdHBtX3Rpc19zcGlfbWFpbi5jCkBAIC0xOTksNyArMTk5LDggQEAgaW50
-IHRwbV90aXNfc3BpX2luaXQoc3RydWN0IHNwaV9kZXZpY2UgKnNwaSwgc3RydWN0IHRwbV90aXNf
-c3BpX3BoeSAqcGh5LAogCiAJcGh5LT5zcGlfZGV2aWNlID0gc3BpOwogCi0JcmV0dXJuIHRwbV90
-aXNfY29yZV9pbml0KCZzcGktPmRldiwgJnBoeS0+cHJpdiwgaXJxLCBwaHlfb3BzLCBOVUxMKTsK
-KwlyZXR1cm4gdHBtX3Rpc19jb3JlX2luaXQoJnNwaS0+ZGV2LCAmcGh5LT5wcml2LCBpcnEsIHBo
-eV9vcHMsIE5VTEwsCisJCQkJIHRydWUpOwogfQogCiBzdGF0aWMgY29uc3Qgc3RydWN0IHRwbV90
-aXNfcGh5X29wcyB0cG1fc3BpX3BoeV9vcHMgPSB7CmRpZmYgLS1naXQgYS9kcml2ZXJzL2NoYXIv
-dHBtL3RwbV90aXNfc3lucXVhY2VyLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfc3lucXVh
-Y2VyLmMKaW5kZXggZTQ3YmRkMjcyNzA0Li42ZWU1OWExZmRmMDggMTAwNjQ0Ci0tLSBhL2RyaXZl
-cnMvY2hhci90cG0vdHBtX3Rpc19zeW5xdWFjZXIuYworKysgYi9kcml2ZXJzL2NoYXIvdHBtL3Rw
-bV90aXNfc3lucXVhY2VyLmMKQEAgLTEyNyw3ICsxMjcsNyBAQCBzdGF0aWMgaW50IHRwbV90aXNf
-c3lucXVhY2VyX2luaXQoc3RydWN0IGRldmljZSAqZGV2LAogCQlyZXR1cm4gUFRSX0VSUihwaHkt
-PmlvYmFzZSk7CiAKIAlyZXR1cm4gdHBtX3Rpc19jb3JlX2luaXQoZGV2LCAmcGh5LT5wcml2LCB0
-cG1faW5mby0+aXJxLCAmdHBtX3RjZ19idywKLQkJCQkgQUNQSV9IQU5ETEUoZGV2KSk7CisJCQkJ
-IEFDUElfSEFORExFKGRldiksIGZhbHNlKTsKIH0KIAogc3RhdGljIFNJTVBMRV9ERVZfUE1fT1BT
-KHRwbV90aXNfc3lucXVhY2VyX3BtLCB0cG1fcG1fc3VzcGVuZCwgdHBtX3Rpc19yZXN1bWUpOwoK
-YmFzZS1jb21taXQ6IDkxM2VjM2MyMmVmNDI1ZDYzZGQwYmM4MWZiMDA4Y2U3ZjliY2IwN2IKLS0g
-CjIuMzEuMQoK
+Greetings From Mrs. Sarah Koffi
+
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
+
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
+
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
+
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
+
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
+
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
+
+I will wait to hear from you so as to give you details.With love from
+
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
+
+Mrs. Sarah Koffi
