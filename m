@@ -2,183 +2,187 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A04AD3AE115
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Jun 2021 01:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493803AE139
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Jun 2021 03:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbhFTXUy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 20 Jun 2021 19:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbhFTXUx (ORCPT
+        id S229905AbhFUBGG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 20 Jun 2021 21:06:06 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:59552 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229872AbhFUBGG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 20 Jun 2021 19:20:53 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFF7C061574
-        for <linux-integrity@vger.kernel.org>; Sun, 20 Jun 2021 16:18:39 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id h16so8862737pjv.2
-        for <linux-integrity@vger.kernel.org>; Sun, 20 Jun 2021 16:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rubrik.com; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qzWFN6djd8850raIpH/pfqfQct+h95LasOhjwz0ae94=;
-        b=PTIbkZSafwRqUqd1xn2/G38ZokJXP36/Ltq4MpCW7AbZ3wHg+dbgQ8ebbJ1dPcsOhw
-         KtlPWtDuFX1eFnLXuRdSvW3wxzriBXphDpRcXCET85BdWfkPVt1xqyc4P5YMbk/+qyuj
-         WrE00eo4eLjJwFmPFi51hyVWuFVm0GQmDNimM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qzWFN6djd8850raIpH/pfqfQct+h95LasOhjwz0ae94=;
-        b=De/L1qpIHkwpBZVRzQ39ixonl9csHR4X6SevV0Rzn90oPgxhBqoVtl2f3ZA/Mq9lLT
-         Z3jZz7Og4YWwfSVOiZ5E4mADZDxc5VCl9oY4eEyLqiN7o74t7AfJhTfZv5yrFk87YoQy
-         LAId1WPSoS5eG8ora4navUP4V6GhXaG0DpVXeMATj/pjfwrM3jIIE81Y5P71Rq1ewqSv
-         eXIpoq69m5P+B4xmzGjGgQvD3HdqS/V1c7CqScpeCYJHOSoU2E3qu3G5pdrJX5wgpEIm
-         npfv8ii3JxmFuUHQSlL/cdZPmbpQkYDUcm9LP6mBYrbg5slc3nSnL4usoQeWRhU2z3ZL
-         MkPw==
-X-Gm-Message-State: AOAM532TSaKm70K/SSJ9KtQP64SKJrP4Kcnq/y8YzdBKM4QKoc7i5lal
-        POT+ZVGTFrzQNz7BXyndtudNjQ==
-X-Google-Smtp-Source: ABdhPJyB2dZiixMnB7m3C6jBYxbD83BShY0GA2AlyVmNlLsRHKrI9LZGyXKEBqouiSC1Oqw4Baoing==
-X-Received: by 2002:a17:902:d101:b029:121:9fa2:969e with SMTP id w1-20020a170902d101b02901219fa2969emr12886867plw.23.1624231119085;
-        Sun, 20 Jun 2021 16:18:39 -0700 (PDT)
-Received: from hao-wu-dev.colo.rubrik.com ([104.171.196.14])
-        by smtp.gmail.com with ESMTPSA id z23sm137888pjn.2.2021.06.20.16.18.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Jun 2021 16:18:38 -0700 (PDT)
-From:   Hao Wu <hao.wu@rubrik.com>
-To:     hao.wu@rubrik.com, shrihari.kalkar@rubrik.com,
-        seungyeop.han@rubrik.com, anish.jhaveri@rubrik.com,
-        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de,
-        kgold@linux.ibm.com, zohar@linux.vnet.ibm.com,
-        why2jjj.linux@gmail.com, hamza@hpe.com, gregkh@linuxfoundation.org,
-        arnd@arndb.de, nayna@linux.vnet.ibm.com,
-        James.Bottomley@hansenpartnership.com
-Subject: [PATCH] Fix Atmel TPM crash caused by too frequent queries
-Date:   Sun, 20 Jun 2021 16:18:09 -0700
-Message-Id: <20210620231809.21101-1-hao.wu@rubrik.com>
-X-Mailer: git-send-email 2.29.0.vfs.0.0
+        Sun, 20 Jun 2021 21:06:06 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15L0Y40N162549;
+        Sun, 20 Jun 2021 21:03:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=A06ITPhiDkryY96IgAHJbnxPNgUsULHu/KQlJkXt7AM=;
+ b=PNFj6to1Iid23+JnPwc4gKN/DoI/ONZxn0bVN68qjlsmR+rqlmx+xWXJs0f9Q4rUOASG
+ hD60q+ciewSIJPyMTlztjMXalVglwEe8Up/0n9rVMUWZj3fS0PsiH3ax/ZAt4CXJovlL
+ 5ys6Ihg9uGDUvy6tyB0lv3WGMNx7gnL71+73L0nHK4VyfJL0IWDevxko9o6eFRN4xwXd
+ KHRGzya0UvXiwxOk/eOepliM2awA6YbB1RDI1zfYUlV+x9iTdx8w1rwDbtGu8gEa0CKO
+ l3l1xgc2sSMuiEjCFI1ivxxaG2T8Dv5pBAqGItHcVY7nqVBbyDI8uQZmwS9eYw1yfBDf ug== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39aer2a7ce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Jun 2021 21:03:45 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15L0wtM4000532;
+        Mon, 21 Jun 2021 01:03:43 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3997uh8kbd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Jun 2021 01:03:42 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15L13dwV28705102
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Jun 2021 01:03:39 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1AA0452051;
+        Mon, 21 Jun 2021 01:03:39 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.160.17.97])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 812F65204F;
+        Mon, 21 Jun 2021 01:03:37 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] evm: output EVM digest calculation info
+Date:   Sun, 20 Jun 2021 21:03:27 -0400
+Message-Id: <20210621010327.467523-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Uu4mICs5-xTGD17OYN2VR8Ec6JP-nUWg
+X-Proofpoint-ORIG-GUID: Uu4mICs5-xTGD17OYN2VR8Ec6JP-nUWg
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-20_14:2021-06-20,2021-06-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106210001
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-This is a fix for the ATMEL TPM crash bug reported in
-https://patchwork.kernel.org/project/linux-integrity/patch/20200926223150.109645-1-hao.wu@rubrik.com/
+Output the data used in calculating the EVM digest and the resulting
+digest as ascii hexadecimal strings.
 
-According to the discussions in the original thread,
-we don't want to revert the timeout of wait_for_tpm_stat
-for non-ATMEL chips, which brings back the performance cost.
-For investigation and analysis of why wait_for_tpm_stat
-caused the issue, and how the regression was introduced,
-please read the original thread above.
-
-Thus the proposed fix here is to only revert the timeout
-for ATMEL chips by checking the vendor ID.
-
-Test Plan:
-- Run fixed kernel with ATMEL TPM chips and see crash
-  has been fixed.
-- Run fixed kernel with non-ATMEL TPM chips, and confirm
-  the timeout has not been changed.
+Suggested-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com> (CONFIG_DYNAMIC_DEBUG)
+Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Reported-by: kernel test robot <lkp@intel.com> (Use %zu for size_t)
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- drivers/char/tpm/tpm.h          |  9 ++++++++-
- drivers/char/tpm/tpm_tis_core.c | 19 +++++++++++++++++--
- include/linux/tpm.h             |  2 ++
- 3 files changed, 27 insertions(+), 3 deletions(-)
+Changelog v1:
+- Use %zu for size_t
 
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index 283f78211c3a..bc6aa7f9e119 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -42,7 +42,9 @@ enum tpm_timeout {
- 	TPM_TIMEOUT_RANGE_US = 300,	/* usecs */
- 	TPM_TIMEOUT_POLL = 1,	/* msecs */
- 	TPM_TIMEOUT_USECS_MIN = 100,      /* usecs */
--	TPM_TIMEOUT_USECS_MAX = 500      /* usecs */
-+	TPM_TIMEOUT_USECS_MAX = 500,	/* usecs */
-+	TPM_TIMEOUT_WAIT_STAT = 500,	/* usecs */
-+	TPM_ATML_TIMEOUT_WAIT_STAT = 15000	/* usecs */
- };
+ security/integrity/evm/evm_crypto.c | 43 +++++++++++++++++++++++++++++
+ security/integrity/evm/evm_main.c   |  4 +++
+ 2 files changed, 47 insertions(+)
+
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index 1628e2ca9862..bebe160c57b9 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -10,6 +10,8 @@
+  *	 Using root's kernel master key (kmk), calculate the HMAC
+  */
  
- /* TPM addresses */
-@@ -189,6 +191,11 @@ static inline void tpm_msleep(unsigned int delay_msec)
- 		     delay_msec * 1000);
- };
- 
-+static inline void tpm_usleep(unsigned int delay_usec)
++#define pr_fmt(fmt) "EVM: "fmt
++
+ #include <linux/export.h>
+ #include <linux/crypto.h>
+ #include <linux/xattr.h>
+@@ -175,6 +177,30 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
+ 	    type != EVM_XATTR_PORTABLE_DIGSIG)
+ 		crypto_shash_update(desc, (u8 *)&inode->i_sb->s_uuid, UUID_SIZE);
+ 	crypto_shash_final(desc, digest);
++
++	pr_debug("hmac_misc: (%zu) [%*phN]\n", sizeof(struct h_misc),
++		 (int)sizeof(struct h_misc), &hmac_misc);
++}
++
++/*
++ * Dump large security xattr values as a continuous ascii hexademical string.
++ * (pr_debug is limited to 64 bytes.)
++ */
++static void dump_security_xattr(const char *prefix, const void *src,
++				size_t count)
 +{
-+	usleep_range(delay_usec - TPM_TIMEOUT_RANGE_US, delay_usec);
-+};
++#if defined(DEBUG) || defined(CONFIG_DYNAMIC_DEBUG)
++	char *asciihex, *p;
 +
- int tpm_chip_start(struct tpm_chip *chip);
- void tpm_chip_stop(struct tpm_chip *chip);
- struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 55b9d3965ae1..9ddd4edfe1c2 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -80,8 +80,12 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
++	p = asciihex = kmalloc(count * 2 + 1, GFP_KERNEL);
++	if (!asciihex)
++		return;
++
++	p = bin2hex(p, src, count);
++	*p = 0;
++	pr_debug("%s: (%zu) %.*s\n", prefix, count, (int)count * 2, asciihex);
++	kfree(asciihex);
++#endif
+ }
+ 
+ /*
+@@ -230,6 +256,16 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 					     req_xattr_value_len);
+ 			if (is_ima)
+ 				ima_present = true;
++
++			if (req_xattr_value_len < 64)
++				pr_debug("%s: (%zu) [%*phN]\n", req_xattr_name,
++					 req_xattr_value_len,
++					 (int)req_xattr_value_len,
++					 req_xattr_value);
++			else
++				dump_security_xattr(req_xattr_name,
++						    req_xattr_value,
++						    req_xattr_value_len);
+ 			continue;
  		}
- 	} else {
- 		do {
--			usleep_range(TPM_TIMEOUT_USECS_MIN,
--				     TPM_TIMEOUT_USECS_MAX);
-+			if (chip->timeout_wait_stat && 
-+				chip->timeout_wait_stat >= TPM_TIMEOUT_WAIT_STAT) {
-+				tpm_usleep((unsigned int)(chip->timeout_wait_stat));
-+			} else {
-+				tpm_usleep((unsigned int)(TPM_TIMEOUT_WAIT_STAT));
-+			}
- 			status = chip->ops->status(chip);
- 			if ((status & mask) == mask)
- 				return 0;
-@@ -934,6 +938,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 	chip->timeout_b = msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
- 	chip->timeout_c = msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
- 	chip->timeout_d = msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
-+	/* init timeout for wait_for_tpm_stat */
-+	chip->timeout_wait_stat = TPM_TIMEOUT_WAIT_STAT;
- 	priv->phy_ops = phy_ops;
- 	dev_set_drvdata(&chip->dev, priv);
- 
-@@ -983,6 +989,15 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 
- 	priv->manufacturer_id = vendor;
- 
-+	switch (priv->manufacturer_id) {
-+	case TPM_VID_ATML:
-+        /* ATMEL chip needs longer timeout to avoid crash */
-+		chip->timeout_wait_stat = TPM_ATML_TIMEOUT_WAIT_STAT;
-+		break;
-+	default:
-+		chip->timeout_wait_stat = TPM_TIMEOUT_WAIT_STAT;
-+	}
+ 		size = vfs_getxattr_alloc(&init_user_ns, dentry, xattr->name,
+@@ -246,6 +282,13 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 		crypto_shash_update(desc, (const u8 *)xattr_value, xattr_size);
+ 		if (is_ima)
+ 			ima_present = true;
 +
- 	rc = tpm_tis_read8(priv, TPM_RID(0), &rid);
- 	if (rc < 0)
- 		goto out_err;
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index aa11fe323c56..35f2a0260d76 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -150,6 +150,7 @@ struct tpm_chip {
- 	bool timeout_adjusted;
- 	unsigned long duration[TPM_NUM_DURATIONS]; /* jiffies */
- 	bool duration_adjusted;
-+	unsigned long timeout_wait_stat; /* usecs */
++		if (xattr_size < 64)
++			pr_debug("%s: (%zu) [%*phN]", xattr->name, xattr_size,
++				 (int)xattr_size, xattr_value);
++		else
++			dump_security_xattr(xattr->name, xattr_value,
++					    xattr_size);
+ 	}
+ 	hmac_add_misc(desc, inode, type, data->digest);
  
- 	struct dentry *bios_dir[TPM_NUM_EVENT_LOG_FILES];
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 977208aecd06..1c8435dfabee 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -11,6 +11,8 @@
+  *	evm_inode_removexattr, and evm_verifyxattr
+  */
  
-@@ -269,6 +270,7 @@ enum tpm2_cc_attrs {
- #define TPM_VID_INTEL    0x8086
- #define TPM_VID_WINBOND  0x1050
- #define TPM_VID_STM      0x104A
-+#define TPM_VID_ATML     0x1114
- 
- enum tpm_chip_flags {
- 	TPM_CHIP_FLAG_TPM2		= BIT(1),
++#define pr_fmt(fmt) "EVM: "fmt
++
+ #include <linux/init.h>
+ #include <linux/crypto.h>
+ #include <linux/audit.h>
+@@ -272,6 +274,8 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+ 		else
+ 			evm_status = INTEGRITY_FAIL;
+ 	}
++	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
++		  digest.digest);
+ out:
+ 	if (iint)
+ 		iint->evm_status = evm_status;
 -- 
-2.29.0.vfs.0.0
+2.27.0
 
