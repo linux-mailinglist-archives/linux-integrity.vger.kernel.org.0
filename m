@@ -2,125 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC6C3AE901
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Jun 2021 14:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161273AE911
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Jun 2021 14:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbhFUMYw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 21 Jun 2021 08:24:52 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7424 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229623AbhFUMYv (ORCPT
+        id S229727AbhFUMbr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 21 Jun 2021 08:31:47 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3295 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229695AbhFUMbq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 21 Jun 2021 08:24:51 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15LC4NTl052750;
-        Mon, 21 Jun 2021 08:22:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=IYERda7V9jupEutV03ty9nGHGJaU/FjhK4q2mqcW/nk=;
- b=MgTTupRBljhMWIG7g6hsrosN/yn7I5rApcFPMOsZ9WYsK15hMWbx3h4xIGJC0AJF/GA+
- b6hnm/+I4mMT9zjqE9lI4Tk+J7uhxkkfWc0SxCoWnBg5+WXdVqfb/BxsfUalhOQCZUXT
- XQ3quk4qG3lQIVhdgAGZt96DFySC60l30Zyzs6EipoLm7FJfRSi3FD6NxOx33hAIBgEO
- UGw5PB/mU769wHCSBmk/SYEDXw/GPv4c1+32ctMmel3erzFCeK9FYDXt1qyqXBLV2Q7y
- 6/MD/Gu5dCU17dc3r6rxTIsy0c4pft6eBDfzbZRskfFDpofwAPXzWzapNqngCR53qC8Z zg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39atbxgs4w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Jun 2021 08:22:25 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15LC6TmD069897;
-        Mon, 21 Jun 2021 08:22:25 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39atbxgs40-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Jun 2021 08:22:25 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15LCDE8r019771;
-        Mon, 21 Jun 2021 12:22:23 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3998788g25-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Jun 2021 12:22:23 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15LCMKBG16974082
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Jun 2021 12:22:20 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BADFE42049;
-        Mon, 21 Jun 2021 12:22:20 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C7A9E42045;
-        Mon, 21 Jun 2021 12:22:18 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.107.100])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Jun 2021 12:22:18 +0000 (GMT)
-Message-ID: <073e829709dcbfb19244b1b1df2c39461297f337.camel@linux.ibm.com>
-Subject: Re: [PATCH] evm: Check xattr size misalignment between kernel and
- user
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, casey@schaufler-ca.com,
-        stefanb@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, selinux@vger.kernel.org
-Date:   Mon, 21 Jun 2021 08:22:17 -0400
-In-Reply-To: <20210621093923.1456675-1-roberto.sassu@huawei.com>
-References: <20210621093923.1456675-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-14.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LWDLUyTVs_Qs2YEhYrKeYB2iivM6QOQX
-X-Proofpoint-ORIG-GUID: EzZM2YeLBFkhysI5Xpsv8iDCVisCwiRL
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-21_05:2021-06-21,2021-06-21 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- clxscore=1015 malwarescore=0 mlxlogscore=999 suspectscore=0
- priorityscore=1501 bulkscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2106210072
+        Mon, 21 Jun 2021 08:31:46 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4G7pQw6HZLz6H8DN;
+        Mon, 21 Jun 2021 20:16:08 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 21 Jun 2021 14:29:29 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <paul@paul-moore.com>,
+        <stephen.smalley.work@gmail.com>, <casey@schaufler-ca.com>,
+        <stefanb@linux.ibm.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <selinux@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2] evm: Check xattr size discrepancy between kernel and user
+Date:   Mon, 21 Jun 2021 14:29:12 +0200
+Message-ID: <20210621122912.1472470-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.62.217]
+X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-06-21 at 11:39 +0200, Roberto Sassu wrote:
-> The kernel and the user obtain an xattr value in two different ways:
-> 
-> kernel (EVM): uses vfs_getxattr_alloc() which obtains the xattr value from
->               the filesystem handler (raw value);
-> 
-> user (ima-evm-utils): uses vfs_getxattr() which obtains the xattr value
->                       from the LSMs (normalized value).
-> 
-> Normally, this does not have an impact unless security.selinux is set with
-> setfattr, with a value not terminated by '\0' (this is not the recommended
-> way, security.selinux should be set with the appropriate tools such as
-> chcon and restorecon).
-> 
-> In this case, the kernel and the user see two different xattr values: the
-> former sees the xattr value without '\0' (raw value), the latter sees the
-> value with '\0' (value normalized by SELinux).
-> 
-> This could result in two different verification outcomes from EVM and
-> ima-evm-utils, if a signature was calculated with a security.selinux value
-> terminated by '\0' and the value set in the filesystem is not terminated by
-> '\0'. The former would report verification failure due to the missing '\0',
-> while the latter would report verification success (because it gets the
-> normalized value with '\0').
-> 
-> This patch mitigates this issue by comparing in evm_calc_hmac_or_hash() the
-> size of the xattr returned by the two xattr functions and by warning the
-> user if there is a misalignment.
+The kernel and the user obtain an xattr value in two different ways:
 
-Instead of "misalignment" how about using the word "discrepancy" here
-and in the Subject line?
+kernel (EVM): uses vfs_getxattr_alloc() which obtains the xattr value from
+              the filesystem handler (raw value);
 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+user (ima-evm-utils): uses vfs_getxattr() which obtains the xattr value
+                      from the LSMs (normalized value).
 
-Otherwise, 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Normally, this does not have an impact unless security.selinux is set with
+setfattr, with a value not terminated by '\0' (this is not the recommended
+way, security.selinux should be set with the appropriate tools such as
+chcon and restorecon).
+
+In this case, the kernel and the user see two different xattr values: the
+former sees the xattr value without '\0' (raw value), the latter sees the
+value with '\0' (value normalized by SELinux).
+
+This could result in two different verification outcomes from EVM and
+ima-evm-utils, if a signature was calculated with a security.selinux value
+terminated by '\0' and the value set in the filesystem is not terminated by
+'\0'. The former would report verification failure due to the missing '\0',
+while the latter would report verification success (because it gets the
+normalized value with '\0').
+
+This patch mitigates this issue by comparing in evm_calc_hmac_or_hash() the
+size of the xattr returned by the two xattr functions and by warning the
+user if there is a discrepancy.
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/evm/evm_crypto.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index 96b22f2ac27a..462c5258322a 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -221,7 +221,7 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 	size_t xattr_size = 0;
+ 	char *xattr_value = NULL;
+ 	int error;
+-	int size;
++	int size, user_space_size;
+ 	bool ima_present = false;
+ 
+ 	if (!(inode->i_opflags & IOP_XATTR) ||
+@@ -276,6 +276,12 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 		if (size < 0)
+ 			continue;
+ 
++		user_space_size = vfs_getxattr(&init_user_ns, dentry,
++					       xattr->name, NULL, 0);
++		if (user_space_size != size)
++			pr_debug("file %s: xattr %s size mismatch (kernel: %d, user: %d)\n",
++				 dentry->d_name.name, xattr->name, size,
++				 user_space_size);
+ 		error = 0;
+ 		xattr_size = size;
+ 		crypto_shash_update(desc, (const u8 *)xattr_value, xattr_size);
+-- 
+2.25.1
 
