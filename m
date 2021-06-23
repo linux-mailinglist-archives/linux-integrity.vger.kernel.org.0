@@ -2,223 +2,172 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 715A03B1B3B
-	for <lists+linux-integrity@lfdr.de>; Wed, 23 Jun 2021 15:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0D53B1B3D
+	for <lists+linux-integrity@lfdr.de>; Wed, 23 Jun 2021 15:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbhFWNgl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 23 Jun 2021 09:36:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44318 "EHLO mail.kernel.org"
+        id S230263AbhFWNhi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 23 Jun 2021 09:37:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44712 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230182AbhFWNgk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 23 Jun 2021 09:36:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F0EE61075;
-        Wed, 23 Jun 2021 13:34:22 +0000 (UTC)
+        id S230225AbhFWNhi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 23 Jun 2021 09:37:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 328A961075;
+        Wed, 23 Jun 2021 13:35:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624455262;
-        bh=Ub/TeUhtbPOhJNeYUKp0O0qQF4nnkFy8gy1hyv/hJaE=;
+        s=k20201202; t=1624455320;
+        bh=cWGflcAnJWvdc4QH8AEbyuoShGTRkNWNUXa3p3os9ec=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pKQ+MQAvO81uOvzBNPKBu9URkI0cbs9KOqEsG5pVEBeoRTOehlg7GL9ScNLVi3Lc1
-         LWry5eLQ5A+cslz0Fk2b0wNala1GOpi0hW2FLGydYj+C+FcTjaqmlOUUJm2bcQ/sI3
-         w1GZbztqrIpWa5h2yBqBdyghzI+U2VKrmD6UMAe6TUKYWSPA7RNWWUC2oTk98r2cUk
-         cZ5tO+/823tWRdZhlh14IhxcRcjaAd9Dzep2fvBqFNmr/cwnDzTpsRAXc4bkzaRgYo
-         wKZEPtW0vvFShXPhDhtWq2tMJ3gVSP24hs12IME7iJr7nFXO/VR0qG5hvpWAJ8NS5p
-         EtIW0YrsCRUHQ==
-Date:   Wed, 23 Jun 2021 16:34:20 +0300
+        b=iRO1j4lGoHPYXAp3+uQkEmuZE2jnkj4G4M/1o9WM2I6SlntWQ07/ulD4/yL7mCw5O
+         yQgIvbW/G3T9ZAt+ETxOPENB8cNMjDzzTYy0PZB50gQJ9oJHmZ5g/WcUoZZkwTirUy
+         cny/iDtBaSLpAitImUtraV+bjJHTHOhCD3yAE9WbVrP4ZBvPriDWcDbIXFp8Sj7GA/
+         zN61YNguYdISYd3UMUaTGay1UR9PdaP7hHnhpiFvSgvjRsv6bByeUVfewTK8Up9FEl
+         79ApLXKHLIehhCBVaz5g4UnayIjUkBUvDl5kaHdHkK47xZs8YV2vDytyYmZYpOQRFY
+         vEgBvev3thq2w==
+Date:   Wed, 23 Jun 2021 16:35:18 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linus.walleij@linaro.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] tpm, tpm_tis_spi: Allow to sleep in the interrupt
- handler
-Message-ID: <20210623133420.gw2lziue5nkvjtps@kernel.org>
-References: <20210620023444.14684-1-LinoSanfilippo@gmx.de>
+To:     Hao Wu <hao.wu@rubrik.com>
+Cc:     shrihari.kalkar@rubrik.com, seungyeop.han@rubrik.com,
+        anish.jhaveri@rubrik.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de,
+        kgold@linux.ibm.com, zohar@linux.vnet.ibm.com,
+        why2jjj.linux@gmail.com, hamza@hpe.com, gregkh@linuxfoundation.org,
+        arnd@arndb.de, nayna@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com
+Subject: Re: [PATCH] Fix Atmel TPM crash caused by too frequent queries
+Message-ID: <20210623133518.5vykitqsdwtfqzd6@kernel.org>
+References: <20210620231809.21101-1-hao.wu@rubrik.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210620023444.14684-1-LinoSanfilippo@gmx.de>
+In-Reply-To: <20210620231809.21101-1-hao.wu@rubrik.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Jun 20, 2021 at 04:34:44AM +0200, Lino Sanfilippo wrote:
-> Interrupt handling at least includes reading and writing the interrupt
-> status register within the interrupt routine. For accesses over SPI a mutex
-> is used in the concerning functions. Since this requires a sleepable
-> context request a threaded interrupt handler for this case.
+On Sun, Jun 20, 2021 at 04:18:09PM -0700, Hao Wu wrote:
+> This is a fix for the ATMEL TPM crash bug reported in
+> https://patchwork.kernel.org/project/linux-integrity/patch/20200926223150.109645-1-hao.wu@rubrik.com/
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver")
-> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> According to the discussions in the original thread,
+> we don't want to revert the timeout of wait_for_tpm_stat
+> for non-ATMEL chips, which brings back the performance cost.
+> For investigation and analysis of why wait_for_tpm_stat
+> caused the issue, and how the regression was introduced,
+> please read the original thread above.
+> 
+> Thus the proposed fix here is to only revert the timeout
+> for ATMEL chips by checking the vendor ID.
+> 
+> Test Plan:
+> - Run fixed kernel with ATMEL TPM chips and see crash
+>   has been fixed.
+> - Run fixed kernel with non-ATMEL TPM chips, and confirm
+>   the timeout has not been changed.
 
-I'll test this after rc1 PR (I have one NUC which uses tpm_tis_spi).
+Please move test plan right before diffstat if you wan to include such,
+so that it does not go into the commit log.
 
-/Jarkko
 
 > ---
-> This patch has been tested on a SLB9670vq2.0.
-> The first version of this patch was part of patch series (see
-> https://marc.info/?l=linux-integrity&m=162016888020044&w=2)
+>  drivers/char/tpm/tpm.h          |  9 ++++++++-
+>  drivers/char/tpm/tpm_tis_core.c | 19 +++++++++++++++++--
+>  include/linux/tpm.h             |  2 ++
+>  3 files changed, 27 insertions(+), 3 deletions(-)
 > 
-> v2:
-> - request threaded irq handler only in case of SPI as requested by Jarkko
->   Sakkinen
-> - add "Fixes" tag
-> - add stable
-> - correct short summary
-> 
->  drivers/char/tpm/tpm_tis.c           |  2 +-
->  drivers/char/tpm/tpm_tis_core.c      | 32 ++++++++++++++++++++--------
->  drivers/char/tpm/tpm_tis_core.h      |  2 +-
->  drivers/char/tpm/tpm_tis_spi_main.c  |  3 ++-
->  drivers/char/tpm/tpm_tis_synquacer.c |  2 +-
->  5 files changed, 28 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index 4ed6e660273a..d27009b989fe 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -236,7 +236,7 @@ static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
->  		phy->priv.flags |= TPM_TIS_ITPM_WORKAROUND;
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 283f78211c3a..bc6aa7f9e119 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -42,7 +42,9 @@ enum tpm_timeout {
+>  	TPM_TIMEOUT_RANGE_US = 300,	/* usecs */
+>  	TPM_TIMEOUT_POLL = 1,	/* msecs */
+>  	TPM_TIMEOUT_USECS_MIN = 100,      /* usecs */
+> -	TPM_TIMEOUT_USECS_MAX = 500      /* usecs */
+> +	TPM_TIMEOUT_USECS_MAX = 500,	/* usecs */
+> +	TPM_TIMEOUT_WAIT_STAT = 500,	/* usecs */
+> +	TPM_ATML_TIMEOUT_WAIT_STAT = 15000	/* usecs */
+>  };
 >  
->  	return tpm_tis_core_init(dev, &phy->priv, irq, &tpm_tcg,
-> -				 ACPI_HANDLE(dev));
-> +				 ACPI_HANDLE(dev), false);
->  }
+>  /* TPM addresses */
+> @@ -189,6 +191,11 @@ static inline void tpm_msleep(unsigned int delay_msec)
+>  		     delay_msec * 1000);
+>  };
 >  
->  static SIMPLE_DEV_PM_OPS(tpm_tis_pm, tpm_pm_suspend, tpm_tis_resume);
+> +static inline void tpm_usleep(unsigned int delay_usec)
+> +{
+> +	usleep_range(delay_usec - TPM_TIMEOUT_RANGE_US, delay_usec);
+> +};
+> +
+>  int tpm_chip_start(struct tpm_chip *chip);
+>  void tpm_chip_stop(struct tpm_chip *chip);
+>  struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
 > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 55b9d3965ae1..21abc2168d07 100644
+> index 55b9d3965ae1..9ddd4edfe1c2 100644
 > --- a/drivers/char/tpm/tpm_tis_core.c
 > +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -728,19 +728,31 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
->   * everything and leave in polling mode. Returns 0 on success.
->   */
->  static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
-> -				    int flags, int irq)
-> +				    int flags, int irq, bool threaded_irq)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  	u8 original_int_vec;
->  	int rc;
->  	u32 int_status;
+> @@ -80,8 +80,12 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+>  		}
+>  	} else {
+>  		do {
+> -			usleep_range(TPM_TIMEOUT_USECS_MIN,
+> -				     TPM_TIMEOUT_USECS_MAX);
+> +			if (chip->timeout_wait_stat && 
+> +				chip->timeout_wait_stat >= TPM_TIMEOUT_WAIT_STAT) {
+> +				tpm_usleep((unsigned int)(chip->timeout_wait_stat));
+> +			} else {
+> +				tpm_usleep((unsigned int)(TPM_TIMEOUT_WAIT_STAT));
+> +			}
+>  			status = chip->ops->status(chip);
+>  			if ((status & mask) == mask)
+>  				return 0;
+> @@ -934,6 +938,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  	chip->timeout_b = msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
+>  	chip->timeout_c = msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
+>  	chip->timeout_d = msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
+> +	/* init timeout for wait_for_tpm_stat */
+> +	chip->timeout_wait_stat = TPM_TIMEOUT_WAIT_STAT;
+>  	priv->phy_ops = phy_ops;
+>  	dev_set_drvdata(&chip->dev, priv);
 >  
-> -	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
-> -			     dev_name(&chip->dev), chip) != 0) {
-> +
-> +	if (threaded_irq) {
-> +		rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
-> +					       tis_int_handler,
-> +					       IRQF_ONESHOT | flags,
-> +					       dev_name(&chip->dev),
-> +					       chip);
-> +	} else {
-> +		rc = devm_request_irq(chip->dev.parent, irq, tis_int_handler,
-> +				      flags, dev_name(&chip->dev), chip);
+> @@ -983,6 +989,15 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  
+>  	priv->manufacturer_id = vendor;
+>  
+> +	switch (priv->manufacturer_id) {
+> +	case TPM_VID_ATML:
+> +        /* ATMEL chip needs longer timeout to avoid crash */
+> +		chip->timeout_wait_stat = TPM_ATML_TIMEOUT_WAIT_STAT;
+> +		break;
+> +	default:
+> +		chip->timeout_wait_stat = TPM_TIMEOUT_WAIT_STAT;
 > +	}
 > +
-> +	if (rc) {
->  		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
->  			 irq);
->  		return -1;
->  	}
-> +
->  	priv->irq = irq;
+>  	rc = tpm_tis_read8(priv, TPM_RID(0), &rid);
+>  	if (rc < 0)
+>  		goto out_err;
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index aa11fe323c56..35f2a0260d76 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -150,6 +150,7 @@ struct tpm_chip {
+>  	bool timeout_adjusted;
+>  	unsigned long duration[TPM_NUM_DURATIONS]; /* jiffies */
+>  	bool duration_adjusted;
+> +	unsigned long timeout_wait_stat; /* usecs */
 >  
->  	rc = tpm_tis_read8(priv, TPM_INT_VECTOR(priv->locality),
-> @@ -795,7 +807,8 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->   * do not have ACPI/etc. We typically expect the interrupt to be declared if
->   * present.
->   */
-> -static void tpm_tis_probe_irq(struct tpm_chip *chip, u32 intmask)
-> +static void tpm_tis_probe_irq(struct tpm_chip *chip, u32 intmask,
-> +			      bool threaded_irq)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  	u8 original_int_vec;
-> @@ -810,10 +823,11 @@ static void tpm_tis_probe_irq(struct tpm_chip *chip, u32 intmask)
->  		if (IS_ENABLED(CONFIG_X86))
->  			for (i = 3; i <= 15; i++)
->  				if (!tpm_tis_probe_irq_single(chip, intmask, 0,
-> -							      i))
-> +							      i, threaded_irq))
->  					return;
->  	} else if (!tpm_tis_probe_irq_single(chip, intmask, 0,
-> -					     original_int_vec))
-> +					     original_int_vec,
-> +					     threaded_irq))
->  		return;
->  }
+>  	struct dentry *bios_dir[TPM_NUM_EVENT_LOG_FILES];
 >  
-> @@ -909,7 +923,7 @@ static const struct tpm_class_ops tpm_tis = {
+> @@ -269,6 +270,7 @@ enum tpm2_cc_attrs {
+>  #define TPM_VID_INTEL    0x8086
+>  #define TPM_VID_WINBOND  0x1050
+>  #define TPM_VID_STM      0x104A
+> +#define TPM_VID_ATML     0x1114
 >  
->  int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  		      const struct tpm_tis_phy_ops *phy_ops,
-> -		      acpi_handle acpi_dev_handle)
-> +		      acpi_handle acpi_dev_handle, bool threaded_irq)
->  {
->  	u32 vendor;
->  	u32 intfcaps;
-> @@ -1049,7 +1063,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  
->  		if (irq) {
->  			tpm_tis_probe_irq_single(chip, intmask, IRQF_SHARED,
-> -						 irq);
-> +						 irq, threaded_irq);
->  			if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
->  				dev_err(&chip->dev, FW_BUG
->  					"TPM interrupt not working, polling instead\n");
-> @@ -1057,7 +1071,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  				disable_interrupts(chip);
->  			}
->  		} else {
-> -			tpm_tis_probe_irq(chip, intmask);
-> +			tpm_tis_probe_irq(chip, intmask, threaded_irq);
->  		}
->  	}
->  
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> index 9b2d32a59f67..32d36e538208 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -161,7 +161,7 @@ static inline bool is_bsw(void)
->  void tpm_tis_remove(struct tpm_chip *chip);
->  int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  		      const struct tpm_tis_phy_ops *phy_ops,
-> -		      acpi_handle acpi_dev_handle);
-> +		      acpi_handle acpi_dev_handle, bool use_threaded_irq);
->  
->  #ifdef CONFIG_PM_SLEEP
->  int tpm_tis_resume(struct device *dev);
-> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> index 3856f6ebcb34..2eb57c1cf9ba 100644
-> --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> @@ -199,7 +199,8 @@ int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
->  
->  	phy->spi_device = spi;
->  
-> -	return tpm_tis_core_init(&spi->dev, &phy->priv, irq, phy_ops, NULL);
-> +	return tpm_tis_core_init(&spi->dev, &phy->priv, irq, phy_ops, NULL,
-> +				 true);
->  }
->  
->  static const struct tpm_tis_phy_ops tpm_spi_phy_ops = {
-> diff --git a/drivers/char/tpm/tpm_tis_synquacer.c b/drivers/char/tpm/tpm_tis_synquacer.c
-> index e47bdd272704..6ee59a1fdf08 100644
-> --- a/drivers/char/tpm/tpm_tis_synquacer.c
-> +++ b/drivers/char/tpm/tpm_tis_synquacer.c
-> @@ -127,7 +127,7 @@ static int tpm_tis_synquacer_init(struct device *dev,
->  		return PTR_ERR(phy->iobase);
->  
->  	return tpm_tis_core_init(dev, &phy->priv, tpm_info->irq, &tpm_tcg_bw,
-> -				 ACPI_HANDLE(dev));
-> +				 ACPI_HANDLE(dev), false);
->  }
->  
->  static SIMPLE_DEV_PM_OPS(tpm_tis_synquacer_pm, tpm_pm_suspend, tpm_tis_resume);
-> 
-> base-commit: 913ec3c22ef425d63dd0bc81fb008ce7f9bcb07b
+>  enum tpm_chip_flags {
+>  	TPM_CHIP_FLAG_TPM2		= BIT(1),
 > -- 
-> 2.31.1
+> 2.29.0.vfs.0.0
 > 
+> 
+
+/Jarkko
