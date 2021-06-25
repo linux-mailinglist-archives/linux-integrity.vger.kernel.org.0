@@ -2,91 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA4D3B3A19
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jun 2021 02:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEB23B3C87
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jun 2021 08:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbhFYAUY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Jun 2021 20:20:24 -0400
-Received: from mout.gmx.net ([212.227.15.18]:50913 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229521AbhFYAUY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Jun 2021 20:20:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1624580280;
-        bh=swjWUhJ7ti4wOo9q/TLpVinRb1Z0wsQCkXa7GXKM7Pw=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=lJEtIVn2kqP8E9SR2FEf8KnQz+6kcxjydfyBSBl5xwXyp6QQBoLYZ+PILl6DcnHN5
-         0uTyxsbqc/b3LEyPjeXntZHBygYQ5QxHMXIX0skcJ0SDgbgMKhN5llODFQ/uct+5aw
-         WuHgBBRdbwd9ZOhvmIhJLKTj+6uprrSjrlFv/5wc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.51] ([149.172.234.120]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MeU4s-1lMPqN3yJI-00aTzd; Fri, 25
- Jun 2021 02:18:00 +0200
-Subject: Re: [PATCH v2] tpm, tpm_tis_spi: Allow to sleep in the interrupt
- handler
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linus.walleij@linaro.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20210620023444.14684-1-LinoSanfilippo@gmx.de>
- <20210623133420.gw2lziue5nkvjtps@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <5fbe3f44-8c0d-f185-45fd-fcaa7af3657d@gmx.de>
-Date:   Fri, 25 Jun 2021 02:17:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230386AbhFYGPS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 25 Jun 2021 02:15:18 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:54314 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230192AbhFYGPR (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 25 Jun 2021 02:15:17 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7BCAB21BB4;
+        Fri, 25 Jun 2021 06:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1624601576;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dRJ6f8gqDaV4JAqhjhALrNNyJBU1UH8z5EvvhIWOsPU=;
+        b=0Wn20p4Lc1W9/u2HaOvhZULHdQ5dy4PASPZBXNihsi7T9eFt6/VHrcC87RMwAwBOXKMix1
+        fKhhALAr/zmkpI7hWmXB8JC6np+r6DQyF8sRtrJNLS5/YZuEFxa9yKdS3WLzlosd1n1Ggh
+        2OnGRPn4Epw01M0ixpWR0obZxIExNms=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1624601576;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dRJ6f8gqDaV4JAqhjhALrNNyJBU1UH8z5EvvhIWOsPU=;
+        b=3iEUfMM/9R2HiW+NhBaO7oNckWbe8NpRaYDsfEvqs5IRati6K0kq8loyUdl7yGj+fq9UYw
+        N3OD54ts0cN61/Aw==
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id 443EB11A97;
+        Fri, 25 Jun 2021 06:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1624601576;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dRJ6f8gqDaV4JAqhjhALrNNyJBU1UH8z5EvvhIWOsPU=;
+        b=0Wn20p4Lc1W9/u2HaOvhZULHdQ5dy4PASPZBXNihsi7T9eFt6/VHrcC87RMwAwBOXKMix1
+        fKhhALAr/zmkpI7hWmXB8JC6np+r6DQyF8sRtrJNLS5/YZuEFxa9yKdS3WLzlosd1n1Ggh
+        2OnGRPn4Epw01M0ixpWR0obZxIExNms=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1624601576;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dRJ6f8gqDaV4JAqhjhALrNNyJBU1UH8z5EvvhIWOsPU=;
+        b=3iEUfMM/9R2HiW+NhBaO7oNckWbe8NpRaYDsfEvqs5IRati6K0kq8loyUdl7yGj+fq9UYw
+        N3OD54ts0cN61/Aw==
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id c0RnDuhz1WAREQAALh3uQQ
+        (envelope-from <pvorel@suse.cz>); Fri, 25 Jun 2021 06:12:56 +0000
+Date:   Fri, 25 Jun 2021 08:12:54 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>
+Subject: Re: [PATCH 0/3] Add GitHub Actions support
+Message-ID: <YNVz5s36fsRZGEUc@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20210622141224.25006-1-pvorel@suse.cz>
+ <c88c3a1e20242d4f42eea275a174f4b375e203bb.camel@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20210623133420.gw2lziue5nkvjtps@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:BpmE95Wz/wro0J6PeKv1BJFP5+cb7QlgHSxV6ggbmZlD8k8/pHD
- Br7wsTabWG4goyqNdHv7ZvKp/NvmJcAYXmO2MyFwPom4FEU0Bk5F7nMolL1XAV+Rfnm+9ZY
- U/nZuSW+0VZQ2HHwlb6ohwjNImWP/nmY4R5CfrExzGZKPLeJmgBohVXu+WCbjUcgDku9DSd
- ao0W+BTrtUI+Brz6/2XyQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3PmWfYZqWHQ=:Eei6EZGPIT8eAOSXRj5g6l
- M03hkwEZ/08UCZi7364D+HUcqz3E1PakHXJd4UXmEWhiOwY+/PJCGpg6GoYrF2I4pT6ckRAL8
- r+HwblBj+IIeacDMKuYO0T24HTukehNe7pgsYEq+wHIFk3lfDhfSR+dgpkdMGPOKIMxDeMqd1
- jt6WN6ZD0r+Ht4TTMq34yafywK0vngLgsIR4HywaHdazNFdSYMRQ2IKjz/xz3cYYvTNu2WXOA
- gxxHvW4mj3AKMc4Bt3AXcti/0L8jvJyy7oWNUUXYoR30iYBAhUyUUeKLYAhQnfoARmS8PNQ55
- p4aqjBACmzKkgzWeWRe67BoVjF14GL3U8kJuAUPl6TR1nA7aHY0UVQN07E8vrllh55oDTrcBn
- 8dcT4PE1ZAtrU1If2LRp50Ad2XHGYmduS3gUEWmuPekOleuUHy3nocX0sRAZcysL7erDqDZbg
- XaNZteoA7/gkSiDx2z9BFjgxEad/6nutRmzezUKVcpk7dCr8+05Uko8mQgZsQxJIn8PoRhPjZ
- J40GuhGHDrxpXrElo8bYhaZEUio0kekoAXE7YeWNPu1SftC0ST+QY5gL8D0rYzZsKIXLTWDnD
- JfjoGyyKa8RUoTe5Imguu/OmdiRq949SouT/diThJRhNKWXLJkkvKtKSCqT1knBHKRWoMsNZC
- WbqmhrY8VEBh0sTXCqBL88rL0qYtfwjIJ+tWMXAC8AiQ0zv0WvHeiGyo9wjt4gepes2I6sxSo
- C/BAJuQzqCiG4etmYFX+F7HmVt9gvtql+6csfVtKaJQyBlIc0GTdG9axBjR63Pwefnw4TwXF9
- WTXL+UomFRf8hneWDw6LP1R4FOhdq9aXB7rWqQGjkN53Gi5ULQfvfsdxnHOlCSwqkEboupcI4
- yz9m6aiwS18p5VzJ4n2W1ErjpXGu7XjEk5ESUkps/ruVfxsjCtkoKxXAPAb6E5Qa1DjeiGE5B
- 3Kfv82EZUGEff7w8jDMCCQAZbIXvYGh+/mlF40EcJlaqyfGGZb0UpC7E6vpPplueNI03gS962
- hZ4lelosdoDyf6R+toP83B34dRE9ntn/RNeNwXrhM60iPrjoJE+4/oYuLNu5brc0WQVfntnbS
- hMQrIwDKGaW1KvWOhcZ3503kQmjF/0WZaPkI3qRgdcOotx02Us55+yh3A==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c88c3a1e20242d4f42eea275a174f4b375e203bb.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+> On Tue, 2021-06-22 at 16:12 +0200, Petr Vorel wrote:
+> > Hi Mimi,
 
-On 23.06.21 at 15:34, Jarkko Sakkinen wrote:
-> On Sun, Jun 20, 2021 at 04:34:44AM +0200, Lino Sanfilippo wrote:
->> Interrupt handling at least includes reading and writing the interrupt
->> status register within the interrupt routine. For accesses over SPI a m=
-utex
->> is used in the concerning functions. Since this requires a sleepable
->> context request a threaded interrupt handler for this case.
->>
->> Cc: stable@vger.kernel.org
->> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver"=
-)
->> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
->
-> I'll test this after rc1 PR (I have one NUC which uses tpm_tis_spi).
->
-> /Jarkko
->
+> > Travis is unreliable due "pull rate limit" issue, workaround does not
+> > work any more. Also GitHub Actions is a recommended way for projects
+> > hosted on GitHub.
 
-Sounds great, thank you!
+> > Nice bonus is that manual podman activation for distros using glibc >=
+> > 2.33 (e.g. openSUSE Tumbleweed, Fedora) it's not needed in GitHub.
 
-Regards,
-Lino
+> > Unlike LTP, where I removed Travis CI support, I kept it for
+> > ima-evm-utils, because you use it.
+
+> Thanks, Petr.  I appreciate your not removing Travis CI.
+
+> I've pushed out the changes to next-testing.
+Thanks!
+
+Kind regards,
+Petr
+
+> Mimi
+
