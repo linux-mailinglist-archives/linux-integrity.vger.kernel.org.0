@@ -2,83 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A93CC3B36FF
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Jun 2021 21:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA4D3B3A19
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jun 2021 02:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbhFXTbZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 24 Jun 2021 15:31:25 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:30326 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232029AbhFXTbZ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 24 Jun 2021 15:31:25 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15OJ3ZYj006990;
-        Thu, 24 Jun 2021 15:29:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=2alq+xPrCz2378F/yOYmBqAXfR2E6sSn8LhBlefpEKA=;
- b=aIX20DT0WCl/OJM1BDlxMuGe5Z4ocO4994J+55Wq+WTlLrC2KuybEVbV+opDqKyHekyg
- nVDd5AszBza63BOoO9LIANJmODG2IAzef8K0CmLe0nXzjGKgLW5GNDoE3azxZZTbFe8M
- fihd3RT7gfUUplcjEnXYqBppzniuSrEhaBnUJ0+avQPb5ZRyVZWEKhFtOUZ6cymZV/uP
- hkpNCBVDwdvVkW5ZVmFO/REHHOkc8aw0H1v9ilH5vpjfOwsGOViV8Juwre+XCJXgSfst
- 17YYOMAk3AV69GRaKJvaZ2kriH5avGqpdh/rTE5F3eH7+SjCXCpgnHYttavYl8KktG4j OA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39cy75t0qa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Jun 2021 15:29:03 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15OJSDCS024623;
-        Thu, 24 Jun 2021 19:29:01 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 399878aq3b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Jun 2021 19:29:00 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15OJSwJd31129948
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Jun 2021 19:28:58 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 849FB4C044;
-        Thu, 24 Jun 2021 19:28:58 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A3EF54C040;
-        Thu, 24 Jun 2021 19:28:57 +0000 (GMT)
-Received: from sig-9-65-196-119.ibm.com (unknown [9.65.196.119])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 24 Jun 2021 19:28:57 +0000 (GMT)
-Message-ID: <ba047a635f5f9a2db14e3496eafcf194ad9058cd.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/3] Add GitHub Actions support
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>, linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>
-Date:   Thu, 24 Jun 2021 15:28:56 -0400
-In-Reply-To: <YNHv/oTp7/8rH7sc@pevik>
-References: <20210622141224.25006-1-pvorel@suse.cz> <YNHv/oTp7/8rH7sc@pevik>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Zd2nucFp86uRYzYRLL8crD3KryoYSqqS
-X-Proofpoint-GUID: Zd2nucFp86uRYzYRLL8crD3KryoYSqqS
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S229585AbhFYAUY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 24 Jun 2021 20:20:24 -0400
+Received: from mout.gmx.net ([212.227.15.18]:50913 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229521AbhFYAUY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 24 Jun 2021 20:20:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1624580280;
+        bh=swjWUhJ7ti4wOo9q/TLpVinRb1Z0wsQCkXa7GXKM7Pw=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=lJEtIVn2kqP8E9SR2FEf8KnQz+6kcxjydfyBSBl5xwXyp6QQBoLYZ+PILl6DcnHN5
+         0uTyxsbqc/b3LEyPjeXntZHBygYQ5QxHMXIX0skcJ0SDgbgMKhN5llODFQ/uct+5aw
+         WuHgBBRdbwd9ZOhvmIhJLKTj+6uprrSjrlFv/5wc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.51] ([149.172.234.120]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MeU4s-1lMPqN3yJI-00aTzd; Fri, 25
+ Jun 2021 02:18:00 +0200
+Subject: Re: [PATCH v2] tpm, tpm_tis_spi: Allow to sleep in the interrupt
+ handler
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linus.walleij@linaro.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20210620023444.14684-1-LinoSanfilippo@gmx.de>
+ <20210623133420.gw2lziue5nkvjtps@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <5fbe3f44-8c0d-f185-45fd-fcaa7af3657d@gmx.de>
+Date:   Fri, 25 Jun 2021 02:17:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-24_12:2021-06-24,2021-06-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- clxscore=1015 impostorscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0
- spamscore=0 priorityscore=1501 phishscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106240105
+In-Reply-To: <20210623133420.gw2lziue5nkvjtps@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:BpmE95Wz/wro0J6PeKv1BJFP5+cb7QlgHSxV6ggbmZlD8k8/pHD
+ Br7wsTabWG4goyqNdHv7ZvKp/NvmJcAYXmO2MyFwPom4FEU0Bk5F7nMolL1XAV+Rfnm+9ZY
+ U/nZuSW+0VZQ2HHwlb6ohwjNImWP/nmY4R5CfrExzGZKPLeJmgBohVXu+WCbjUcgDku9DSd
+ ao0W+BTrtUI+Brz6/2XyQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3PmWfYZqWHQ=:Eei6EZGPIT8eAOSXRj5g6l
+ M03hkwEZ/08UCZi7364D+HUcqz3E1PakHXJd4UXmEWhiOwY+/PJCGpg6GoYrF2I4pT6ckRAL8
+ r+HwblBj+IIeacDMKuYO0T24HTukehNe7pgsYEq+wHIFk3lfDhfSR+dgpkdMGPOKIMxDeMqd1
+ jt6WN6ZD0r+Ht4TTMq34yafywK0vngLgsIR4HywaHdazNFdSYMRQ2IKjz/xz3cYYvTNu2WXOA
+ gxxHvW4mj3AKMc4Bt3AXcti/0L8jvJyy7oWNUUXYoR30iYBAhUyUUeKLYAhQnfoARmS8PNQ55
+ p4aqjBACmzKkgzWeWRe67BoVjF14GL3U8kJuAUPl6TR1nA7aHY0UVQN07E8vrllh55oDTrcBn
+ 8dcT4PE1ZAtrU1If2LRp50Ad2XHGYmduS3gUEWmuPekOleuUHy3nocX0sRAZcysL7erDqDZbg
+ XaNZteoA7/gkSiDx2z9BFjgxEad/6nutRmzezUKVcpk7dCr8+05Uko8mQgZsQxJIn8PoRhPjZ
+ J40GuhGHDrxpXrElo8bYhaZEUio0kekoAXE7YeWNPu1SftC0ST+QY5gL8D0rYzZsKIXLTWDnD
+ JfjoGyyKa8RUoTe5Imguu/OmdiRq949SouT/diThJRhNKWXLJkkvKtKSCqT1knBHKRWoMsNZC
+ WbqmhrY8VEBh0sTXCqBL88rL0qYtfwjIJ+tWMXAC8AiQ0zv0WvHeiGyo9wjt4gepes2I6sxSo
+ C/BAJuQzqCiG4etmYFX+F7HmVt9gvtql+6csfVtKaJQyBlIc0GTdG9axBjR63Pwefnw4TwXF9
+ WTXL+UomFRf8hneWDw6LP1R4FOhdq9aXB7rWqQGjkN53Gi5ULQfvfsdxnHOlCSwqkEboupcI4
+ yz9m6aiwS18p5VzJ4n2W1ErjpXGu7XjEk5ESUkps/ruVfxsjCtkoKxXAPAb6E5Qa1DjeiGE5B
+ 3Kfv82EZUGEff7w8jDMCCQAZbIXvYGh+/mlF40EcJlaqyfGGZb0UpC7E6vpPplueNI03gS962
+ hZ4lelosdoDyf6R+toP83B34dRE9ntn/RNeNwXrhM60iPrjoJE+4/oYuLNu5brc0WQVfntnbS
+ hMQrIwDKGaW1KvWOhcZ3503kQmjF/0WZaPkI3qRgdcOotx02Us55+yh3A==
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2021-06-22 at 16:13 +0200, Petr Vorel wrote:
-> Hi Mimi,
-> 
-> Tested: https://github.com/pevik/ima-evm-utils/actions/runs/960841012
+Hi,
 
-Thanks!
+On 23.06.21 at 15:34, Jarkko Sakkinen wrote:
+> On Sun, Jun 20, 2021 at 04:34:44AM +0200, Lino Sanfilippo wrote:
+>> Interrupt handling at least includes reading and writing the interrupt
+>> status register within the interrupt routine. For accesses over SPI a m=
+utex
+>> is used in the concerning functions. Since this requires a sleepable
+>> context request a threaded interrupt handler for this case.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver"=
+)
+>> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+>
+> I'll test this after rc1 PR (I have one NUC which uses tpm_tis_spi).
+>
+> /Jarkko
+>
 
+Sounds great, thank you!
+
+Regards,
+Lino
