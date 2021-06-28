@@ -2,86 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED593B6AC8
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Jun 2021 00:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B003B6AEF
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Jun 2021 00:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233976AbhF1WG6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Jun 2021 18:06:58 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43732 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234255AbhF1WG4 (ORCPT
+        id S232433AbhF1WYr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Jun 2021 18:24:47 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9230 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232124AbhF1WYq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Jun 2021 18:06:56 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15SM3nl3077878;
-        Mon, 28 Jun 2021 18:04:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type; s=pp1; bh=/j/I9RNOSJVzxhIpCwjAFlqFGV/o4jH+HkdfSVk0oRs=;
- b=VHX35BWMKJE46mFBEzeY9NIe272c6E4ctZnMo2aKFyI6Yn3PU4NMqleotH6DSECKuMlY
- uwzjl4XSjXJchssXoThLnD/Sz0Sr4OCkUw0mKP8bLfynwCZeRkFTkb1MluDwhuMC0o2k
- DzW7wcaMQU/kGGSEi/kAbkzhUkN7VgY1oYA8dpIX6a8aMFlg7/F8nWOSU3f0oUKNg1lC
- Q59XMZoZlsE7YoJX3TfyQZ2XL+wdi5UkFJ40uEM1R2G0YXumk6ZMiPOndGPSlVgo3EWc
- lrroMSxPTjt6zV/BbuX9pgyN6n2EPq0fUmWB5T9C68S2vXIrVBne/bSRpG5oXXrsZ0qT lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39fm5jbyhs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Jun 2021 18:04:24 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15SM4NE6079429;
-        Mon, 28 Jun 2021 18:04:24 -0400
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39fm5jbyhm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Jun 2021 18:04:23 -0400
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15SM2JmB014275;
-        Mon, 28 Jun 2021 22:04:23 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma04dal.us.ibm.com with ESMTP id 39ekxaknep-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Jun 2021 22:04:23 +0000
+        Mon, 28 Jun 2021 18:24:46 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15SM2vQ9086795
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 18:22:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=to : from : subject :
+ message-id : date : mime-version : content-type; s=pp1;
+ bh=ib6D+pS8INSXaDemFOyr+gThOj5wqqJDlrmX+Xssfhw=;
+ b=HrChjHNt0DCHYbV58+eFX23pUffAw8kSi4QXZiECm5wzIDRpvraBRYzXiej5U3Tn+0Gj
+ i+AJW6WmM33Sz+dytHXOTebChXcIswp7lZi5PV0Ni/M8l+BtHI7TKW0zCmmvtar5T2Xq
+ UdWa7qO+aUULOquMOvJcNWB9kfFCN6fVE1whWeOHwYFiZb3kMvDd3ntN3FwUZ6H47f2D
+ oVAa3Ub81MV0Rh/URD71GAbWx4m41+3Ze69RTjJ6buO3cU+7rjDiN7PxFFEO2jnnJ/v7
+ 8bu3ylMVSDJXBMS2BvgKgq3Q/M/srBtjfeGl8clstkqb/PHUKegEVcuXa4rs5NMrGU3p Zw== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39fk2wp85y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 18:22:20 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15SMICfv014938
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 22:22:19 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma02dal.us.ibm.com with ESMTP id 39duvbf1a8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 22:22:19 +0000
 Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15SM4LrE32440662
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Jun 2021 22:04:21 GMT
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15SMMIZK31850838
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 22:22:18 GMT
 Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0A24136074;
-        Mon, 28 Jun 2021 22:04:21 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 67184136067
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 22:22:18 +0000 (GMT)
 Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C41421360BD;
-        Mon, 28 Jun 2021 22:04:20 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id DBA0D13604F
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 22:22:17 +0000 (GMT)
 Received: from [9.65.68.196] (unknown [9.65.68.196])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Jun 2021 22:04:20 +0000 (GMT)
-Subject: Re: ima - wait for tpm load
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Jorge Ramirez-Ortiz, Foundries" <jorge@foundries.io>
-Cc:     dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>
-References: <20210610071633.GA30216@trex>
- <b3c1f5a0a37419fac51d570cd1c8e521f59cee14.camel@linux.ibm.com>
- <20210610151801.GA19687@trex>
- <f0c6ab70093eb9e360232482ce415e9863a8699c.camel@linux.ibm.com>
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 22:22:17 +0000 (GMT)
+To:     Linux Integrity <linux-integrity@vger.kernel.org>
 From:   Ken Goldman <kgold@linux.ibm.com>
-Message-ID: <1341c53c-1aa7-62dc-db9f-b58dcb8b7906@linux.ibm.com>
-Date:   Mon, 28 Jun 2021 18:04:19 -0400
+Subject: /dev/tpmrm0 session handling
+Message-ID: <4b47a04b-0a1e-15d1-fccc-938e0fdfc19f@linux.ibm.com>
+Date:   Mon, 28 Jun 2021 18:22:17 -0400
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <f0c6ab70093eb9e360232482ce415e9863a8699c.camel@linux.ibm.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms080705080204090202070806"
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms090801020100020805040500"
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: txPh4_nK0mImkWhg8ohXwBEDR4iPEaK8
-X-Proofpoint-GUID: tY3nhzrRKFuX2nJjQ89ggPMGIIrkYmcW
+X-Proofpoint-ORIG-GUID: 42C_K5S7eCMY03rRl-36XtTkitQNWAHr
+X-Proofpoint-GUID: 42C_K5S7eCMY03rRl-36XtTkitQNWAHr
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-06-28_14:2021-06-25,2021-06-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 adultscore=0 mlxscore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 clxscore=1011 malwarescore=0 suspectscore=0
- priorityscore=1501 impostorscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=784 mlxscore=0
+ lowpriorityscore=0 phishscore=0 spamscore=0 adultscore=0 bulkscore=0
+ clxscore=1015 malwarescore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2104190000 definitions=main-2106280143
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
@@ -89,36 +72,43 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 This is a cryptographically signed message in MIME format.
 
---------------ms080705080204090202070806
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
+--------------ms090801020100020805040500
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 6/10/2021 4:31 PM, Mimi Zohar wrote:
-> As I recall "extend" works pretty much from the beginning.  There's no
-> need to wait for the self test to complete.   Registering the TPM early=
+Two questions:
 
-> might be enough without having to wait.  Or maybe check the selftest
-> result.
+1 - I create a session in one process and context save it.  In another
+process, I flushcontext, and it flushes the saved context.
 
-TPM 2.0 depends somewhat on the type of self test - there are several
-options.  They will in some sense block other commands that use
-the angorithm.
+I would not have expected a process to be able to flush another
+process' context.  Is this working as designed?
 
-The TPM is permitted to do an extend before the hash algorithm is
-tested (just not return a result) but I don't think it's required.
+2 - This is a more basic question.
 
-So:
+One process creates a session, context saves it, and then exits -
+maliciously or due to a bug.  This saved session will be there
+until eventually startauthsession fails due to the context
+gap issue.
 
-- self test
-- extend
+Or an errant process starts and context saves 64 sessions,
+which blocks any process from starting a session.
 
-may permit the extend to proceed while the self test is
-happening, but it may not.
+The new process can recover by picking some session and flushing
+it (which works due to #1) but that breaks another process.
+
+What I expected - perhaps worth discussing:
+
+Save and load context would be used solely by the resource manager
+to swap.  The RM, upon detecting a close() or an exiting process,
+would flush all resources associated with that process, including
+active sessions.
+
+(The Windows resource manager blocks context save and load.)
 
 
-
---------------ms080705080204090202070806
+--------------ms090801020100020805040500
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -192,8 +182,8 @@ b2Z+40UNtMF4MTK7zTGCA/MwggPvAgEBMIGWMIGBMQswCQYDVQQGEwJJVDEQMA4GA1UECAwH
 QmVyZ2FtbzEZMBcGA1UEBwwQUG9udGUgU2FuIFBpZXRybzEXMBUGA1UECgwOQWN0YWxpcyBT
 LnAuQS4xLDAqBgNVBAMMI0FjdGFsaXMgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIENBIEczAhBt
 lC9msSpKrr0rmsrvlS70MA0GCWCGSAFlAwQCAQUAoIICLTAYBgkqhkiG9w0BCQMxCwYJKoZI
-hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMTA2MjgyMjA0MjBaMC8GCSqGSIb3DQEJBDEiBCAr
-mk+Y5ezDx714eoOEdPVRP189hIVXWimQD1Y613kMaTBsBgkqhkiG9w0BCQ8xXzBdMAsGCWCG
+hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMTA2MjgyMjIyMTdaMC8GCSqGSIb3DQEJBDEiBCBZ
+sp4GF/jTkSM210foz5qdp8K4n8/wF8yab3czzDw59DBsBgkqhkiG9w0BCQ8xXzBdMAsGCWCG
 SAFlAwQBKjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwDgYIKoZIhvcNAwICAgCAMA0GCCqG
 SIb3DQMCAgFAMAcGBSsOAwIHMA0GCCqGSIb3DQMCAgEoMIGnBgkrBgEEAYI3EAQxgZkwgZYw
 gYExCzAJBgNVBAYTAklUMRAwDgYDVQQIDAdCZXJnYW1vMRkwFwYDVQQHDBBQb250ZSBTYW4g
@@ -202,11 +192,11 @@ bnQgQXV0aGVudGljYXRpb24gQ0EgRzMCEG2UL2axKkquvSuayu+VLvQwgakGCyqGSIb3DQEJ
 EAILMYGZoIGWMIGBMQswCQYDVQQGEwJJVDEQMA4GA1UECAwHQmVyZ2FtbzEZMBcGA1UEBwwQ
 UG9udGUgU2FuIFBpZXRybzEXMBUGA1UECgwOQWN0YWxpcyBTLnAuQS4xLDAqBgNVBAMMI0Fj
 dGFsaXMgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIENBIEczAhBtlC9msSpKrr0rmsrvlS70MA0G
-CSqGSIb3DQEBAQUABIIBAFbCpNH0x9gMUO7pWQ3Ca2TNTZfu4k0suoBgESNuBJQR6f5cjBpT
-tcJE9t0alwWCUSW4nc5DU3oHm/Rmbk1BFV00C16mXSI/y9ThOB1M9S0NbiWSlylB7cxD2H/p
-0Gb+xFYJ8WyrsxN+c6BGKdltjaHyoFJ7pA26sA5fG7/0A9Np0FGTie/ly9AL3VyNbx0pxOGX
-QAi9hfNwjUKe+01BeQtOb2EdUhMyFDUSP1nsFNq9yOmpGM44zrJ/x/DkNojQAPw71Te97lW+
-YCV0acIz4Bob4CyUwVzBD+L+E4kvUbHsmWGRWLY5olNeif5fE6PwKuf8ddgdmk+sXvnXlcEa
-6ZcAAAAAAAA=
---------------ms080705080204090202070806--
+CSqGSIb3DQEBAQUABIIBAHjLQi4Pr9l/d9MnFW1tI5houLmTfHMYNEvGkbIoDum3unUhSjnT
+VZnAo+4qodeMlDflkUpkIcCOVa4cYestKa8gdvm28GeSmrFuYwo+POjgLpR/9uTpgwOH9YGL
++VGCuBr5asw/sdChAN19Zk7eydPWygAjdimRh5a/QHwH7UL0i8IKpf3L0aU8wJL8NKZrq1QX
+Q0iN0uTfemKJ1THEz0sTO9AP2yiJIuhsrMFxVuqrjS6O8N3J7BFhf5fCt+hRuwdllU+jjz/h
+FSZ8nq5TBD9KhpzJTxgQpPdQE1sDDwxJNg+FPrYL7zKbR6KniVmzxQIDRyuqWOxqzCiWTtdr
+9a0AAAAAAAA=
+--------------ms090801020100020805040500--
 
