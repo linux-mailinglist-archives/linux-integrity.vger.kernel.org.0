@@ -2,124 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C5D3B5BA2
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Jun 2021 11:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58E23B67BA
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Jun 2021 19:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbhF1JyS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Jun 2021 05:54:18 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3325 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbhF1JyR (ORCPT
+        id S232544AbhF1RhL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Jun 2021 13:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232266AbhF1RhL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Jun 2021 05:54:17 -0400
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GD2gH5Vd0z6N4QG;
-        Mon, 28 Jun 2021 17:41:31 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 28 Jun 2021 11:51:49 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Mon, 28 Jun 2021 11:51:49 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC][PATCH 03/12] digest_lists: Basic definitions
-Thread-Topic: [RFC][PATCH 03/12] digest_lists: Basic definitions
-Thread-Index: AQHXaeMP1hrQEcpfKUiTvUrYdI7FlqsnkBuAgAGHhID//+c5gIAAIpgw///qPACAACIkMA==
-Date:   Mon, 28 Jun 2021 09:51:49 +0000
-Message-ID: <ae8418b544884467bbc5f7b4664b7e42@huawei.com>
-References: <20210625165614.2284243-1-roberto.sassu@huawei.com>
- <20210625165614.2284243-4-roberto.sassu@huawei.com>
- <YNhYu3BXh7f9GkVk@kroah.com> <860717cce60f47abb3c9dc3c1bd32ab7@huawei.com>
- <YNmMX4EODT0c4zqk@kroah.com> <4acc7e8f15834b83b310b9e2ff9ba3d2@huawei.com>
- <YNmXIk7orQavkEME@kroah.com>
-In-Reply-To: <YNmXIk7orQavkEME@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 28 Jun 2021 13:37:11 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0160BC061574
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 10:34:45 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id q16so19839451lfr.4
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 10:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HJDbCx+qi4xW555r0qRFKAgiEIbkRlABSN+3WwDGl3k=;
+        b=Q6k+QvZ0eciuIKA/C8b0AX6T6lJtu9hoWk6TJBvASBRaCclEZBY9DzvAkNdv8DtHxA
+         9nUE5g6ZRWzitkvPxQhbeN114x21BfWIDIM3OCz3wmqOhePIIq/qJHoERvi5s1IATprq
+         hAb1fofRdlQMGhGRb4hfi96qWpWlCMpkOvsco=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HJDbCx+qi4xW555r0qRFKAgiEIbkRlABSN+3WwDGl3k=;
+        b=MfV3E4NDXGg2x+2y9vgsC409Bjunk9NfR+qVsDZAje8ZDTTH5FT1asCoJMvQpOscTO
+         npoc6vhb1tl+ZH2tjDr8Bg4KUGNEyahpScEIt00BE7+gJzhUsYdMCxEwPZuIKVYwzQIe
+         zt49iEubQoNL61ZcArJ1DHQOJBgWOqMGoRP2Q7wcCIFqM/JVfpXLWNFpuI/TrOwM98iO
+         xjII8aH1yzz8p12qZ4EK4EDjsrqwHx33ND6heydVKsIuTCw92X0yjJ2oxCAXIWsGhDAf
+         9MogRYOzL/fQPveqbUN94IJzcJj1IHXROf9n34Lgi+r6IYwPAz/y645bY4ZE0ZDw4Gm1
+         2jUw==
+X-Gm-Message-State: AOAM53313VrOnS0R2RQIhKCsNQrXRxQ6ZBuYPMKXCaGXKkAEq/f2PScH
+        ifbgRDDpUsmVp5fKbZoVf9k9MTA0Br7BdkuG
+X-Google-Smtp-Source: ABdhPJy09ODYdO2JQ7Wf58C7H1HP6RXstNHL2sVYEmzHvxMLxXVlCb+Th2GlY+kKTUk5BoW3Y+ApVw==
+X-Received: by 2002:a05:6512:3b98:: with SMTP id g24mr3978886lfv.659.1624901683104;
+        Mon, 28 Jun 2021 10:34:43 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id y33sm182995lje.19.2021.06.28.10.34.42
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Jun 2021 10:34:42 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id a15so26176829lfr.6
+        for <linux-integrity@vger.kernel.org>; Mon, 28 Jun 2021 10:34:42 -0700 (PDT)
+X-Received: by 2002:a05:6512:374b:: with SMTP id a11mr19235333lfs.377.1624901682120;
+ Mon, 28 Jun 2021 10:34:42 -0700 (PDT)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+References: <20210623135600.n343aglmvu272fsg@kernel.org>
+In-Reply-To: <20210623135600.n343aglmvu272fsg@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 28 Jun 2021 10:34:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whhEf=xJz=rdcLWNnRU1uR6Ft-mn6xNrOg3OcQ=5cX6BQ@mail.gmail.com>
+Message-ID: <CAHk-=whhEf=xJz=rdcLWNnRU1uR6Ft-mn6xNrOg3OcQ=5cX6BQ@mail.gmail.com>
+Subject: Re: [GIT PULL] TPM DEVICE DRIVER changes for v5.14
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        James Morris James Morris <jmorris@namei.org>,
+        David Howells <dhowells@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> Sent: Monday, June 28, 2021 11:32 AM
-> On Mon, Jun 28, 2021 at 09:27:05AM +0000, Roberto Sassu wrote:
-> > > From: Greg KH [mailto:gregkh@linuxfoundation.org]
-> > > Sent: Monday, June 28, 2021 10:46 AM
-> > > On Mon, Jun 28, 2021 at 08:30:32AM +0000, Roberto Sassu wrote:
-> > > > > > +struct compact_list_hdr {
-> > > > > > +	__u8 version;
-> > > > >
-> > > > > You should never need a version, that way lies madness.
-> > > >
-> > > > We wanted to have a way to switch to a new format, if necessary.
-> > >
-> > > Then just add a new ioctl if you need that in the future, no need to try
-> > > to cram it into this one.
-> >
-> > Given that digest lists are generated elsewhere, it would be still
-> > unclear when the ioctl() would be issued. Maybe the kernel needs
-> > to parse both v1 and v2 digest lists (I expect that v1 cannot be easily
-> > converted to v2, if they are signed).
-> >
-> >  It would be also unpractical if digest lists are loaded at kernel
-> > initialization time (I didn't send the patch yet).
-> 
-> Then that is up to your api design, I do not know.  But note that
-> "version" fields almost always never work, so be careful about assuming
-> that this will solve any future issues.
-> 
-> > > > > > +	__le16 type;
-> > > > > > +	__le16 modifiers;
-> > > > > > +	__le16 algo;
-> > > > > > +	__le32 count;
-> > > > > > +	__le32 datalen;
-> > > > >
-> > > > > Why are user/kernel apis specified in little endian format?  Why would
-> > > > > that matter?  Shouldn't they just be "native" endian?
-> > > >
-> > > > I thought this would make it clear that the kernel always expects the
-> > > > digest lists to be in little endian.
-> > >
-> > > Why would a big endian system expect the data from userspace to be in
-> > > little endian?  Shouldn't this always just be "native" endian given that
-> > > this is not something that is being sent to hardware?
-> >
-> > The digest list might come from a system with different endianness.
-> 
-> Ok, I have no idea what digests really are used for then.  So stick with
-> little endian and be sure to properly convert within the kernel as
-> needed.
+On Wed, Jun 23, 2021 at 6:56 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> Contains bug fixes for TPM, and support for signing modules using elliptic
+> curve keys, which I promised to pick up to my tree.
 
-The most intuitive use case is to extend secure boot to the OS.
+I pulled this, but then I looked at the key type changes, and that
+made me so scared that I unpulled it again.
 
-The kernel might be configured to accept only digest lists signed
-with a trusted key.
+In particular, that code will do
 
-Once the database is populated, execution and mmap can be denied
-if the calculated file or metadata digest is not found in the database
-(the file has not been released by the vendor).
+    shell rm -f $(CONFIG_MODULE_SIG_KEY)
 
-Roberto
+from the Makefile if some config options have changed.
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
+That just seems too broken for words. Maybe I misunderstand this, but
+this really seems like an easy mistake might cause the kernel build to
+actively start removing some random user key files that the user
+pointed at previously.
 
-> thanks,
-> 
-> greg k-h
+                  Linus
