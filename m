@@ -2,112 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 802783B69E8
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Jun 2021 22:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D353B6A89
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Jun 2021 23:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236264AbhF1UxS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Jun 2021 16:53:18 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41032 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235419AbhF1UxS (ORCPT
+        id S234885AbhF1Vpv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Jun 2021 17:45:51 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:61452 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232143AbhF1Vpt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Jun 2021 16:53:18 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15SKXmq5107963;
-        Mon, 28 Jun 2021 16:50:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=dMUtZOFGFK5gHPQELIyLmBwfjmZY+eHlIQuqemhGzuM=;
- b=PaOaHnVs/CIN4QejbPZDBdyCnGZgLK/74q+QwLEhnVqN4Niieo49NUJdLoN3uJGzaoo/
- tl/ksTDCctHLB2SVdHue0oJ/UxmX01PopLDWSClammH9sV+BLNoFfqJINYgYgef5Qx+H
- CM7LIkUpPFZ/SCUx6lcG9GVF88M65FhjmMIKTlgAft02JJ6Ac2C89cLoYTXbKs5HqOoi
- Jji9GtRJmIkYihDXKdSmPQ3+jHt7+qDSHqqLxHOJQeu6/apms6aAvLYtJeC49bJWYB5i
- o+RmhgJ79oUtpOEgRxENXTPYfketo0THDlJMRVMyp3vxjLjzCn6GPBYjr7te3pNA1fYm pQ== 
+        Mon, 28 Jun 2021 17:45:49 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15SLYNiw022330;
+        Mon, 28 Jun 2021 17:43:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Amd8PSGivbCw1qlikicw4t27JAQ5ZzwLjDdgFyDAvgA=;
+ b=TyGLQ0gDnuMW3x82DJgf7VP1AtKMI0gsVYRC7yg/Mky34EwFeXlIXMm158sjG/nePZJM
+ JGuK1O0zHKWesYb9plAs3pmSsWrgJlJG6F5z4nGt/tjfUMjJr0wRd6WkTjcKGu3FDTiG
+ 3852Am8Z9NrFWy/nASGFsLLBVu+KSpjc7eODFqoStDiO1qLSM7+bVJqRgUCGG3HN0hrO
+ cXS0ghhJ9s/ldhqemNhkaAD2OY/w3Jahq/1fgDEFzpo12bayDOcG1jIScwlD6G5sAHE9
+ LxxGeWmhGXpD5I/w7edi/ytvGQR/XbJAYWBU5WpwtDHHxCBwdEJicUJ4g5jr0g4yCzTz UA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39fm5jaej7-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39fd08ht66-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Jun 2021 16:50:49 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15SKYtwi114078;
-        Mon, 28 Jun 2021 16:50:49 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39fm5jaehc-1
+        Mon, 28 Jun 2021 17:43:15 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15SLZjoo025216;
+        Mon, 28 Jun 2021 17:43:14 -0400
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39fd08ht5u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Jun 2021 16:50:49 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15SKmweC011079;
-        Mon, 28 Jun 2021 20:50:47 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 39duv8gycn-1
+        Mon, 28 Jun 2021 17:43:14 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15SLcDD7031404;
+        Mon, 28 Jun 2021 21:43:14 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma02dal.us.ibm.com with ESMTP id 39duvbe0bg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Jun 2021 20:50:47 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15SKojsZ19202546
+        Mon, 28 Jun 2021 21:43:14 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15SLhD8B38863318
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Jun 2021 20:50:45 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 58E705206B;
-        Mon, 28 Jun 2021 20:50:44 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.112.169])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 20A055204E;
-        Mon, 28 Jun 2021 20:50:42 +0000 (GMT)
-Message-ID: <f2355538832153c82c866d1e779b128a9612b6cc.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 1/3] ima-evm-utils: Allow manual setting keyid for
- signing
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        "Dmitry V. Levin" <ldv@altlinux.org>
-Date:   Mon, 28 Jun 2021 16:50:42 -0400
-In-Reply-To: <20210626004241.wkkjsbbesakszfkj@altlinux.org>
-References: <20210511115630.795208-1-vt@altlinux.org>
-         <20210511115630.795208-2-vt@altlinux.org>
-         <004b55594ab1d944e42dd7fd0d87df47b3c09114.camel@linux.ibm.com>
-         <20210626004241.wkkjsbbesakszfkj@altlinux.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Mon, 28 Jun 2021 21:43:13 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4E7A0124054;
+        Mon, 28 Jun 2021 21:43:13 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 33547124053;
+        Mon, 28 Jun 2021 21:43:13 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.47.158.152])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 28 Jun 2021 21:43:13 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
+        dwmw2@infradead.org, zohar@linux.ibm.com, jarkko@kernel.org
+Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v7 0/2] Add support for ECDSA-signed kernel modules
+Date:   Mon, 28 Jun 2021 17:43:02 -0400
+Message-Id: <20210628214304.4165769-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kLSPRRwmr-UweUGzbd4jaWN7UUB0_8e1
-X-Proofpoint-GUID: uqnUaJpIOtjWk0pUvNBR-hP1AaoN1Utn
+X-Proofpoint-GUID: SULidijcSYsGqoL3jJGOgnVY7QONAe2u
+X-Proofpoint-ORIG-GUID: S07y7ZN4v3heSAkXtMMS87vdaQtaU4L5
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-06-28_14:2021-06-25,2021-06-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 adultscore=0 mlxscore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 clxscore=1011 malwarescore=0 suspectscore=0
- priorityscore=1501 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2106280132
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
+ priorityscore=1501 mlxscore=0 adultscore=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104190000 definitions=main-2106280140
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Vitaly,
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-Thank you for the detailed explanation.
+This series adds support for ECDSA-signed kernel modules. It also
+attempts to address a kbuild issue where a developer created an ECDSA
+key for signing kernel modules and then builds an older version of the
+kernel, when bisecting the kernel for example, that does not support
+ECDSA keys.
 
-On Sat, 2021-06-26 at 03:42 +0300, Vitaly Chikunov wrote:
+The first patch addresses the kbuild issue of needing to delete that
+ECDSA key if it is in certs/signing_key.pem and trigger the creation
+of an RSA key. However, for this to work this patch would have to be
+backported to previous versions of the kernel but would also only work
+for the developer if he/she used a stable version of the kernel to which
+this patch was applied. So whether this patch actually achieves the
+wanted effect is not always guaranteed.
 
-> > Requiring the optarg value to be prefixed with "0x" would
-> > simplify the strlen test.
-> > (The subsequent patch wouldn't need a contrived prefix.)
-> 
-> (I do not understand this remark at the moment.)
-> 
-> Base 16 will let user pass keyid just as a string, copy-pasting from
-> somewhere else.
+The 2nd patch adds the support for the ECSDA-signed kernel modules.
 
-strtoul() supports prefixing the ascii-hex string with "0x".  To
-differentiate between a keyid and pathname, why not require the keyid
-be prefixed with "0x", as opposed to requiring the pathname to be
-prefixed with '@', like "--keyid @/path/to/cert.pem".
+  Stefan
 
-The new test would be "OPTS=--keyid=0xaabbccdd"
+v7:
+  - Changed Kconfig reference to kernel version from 5.11 to 5.13
+  - Redirecting stderr of openssl to NULL device to address kernel robot
+    detected issue
+  - Replaced $(CONFIG_MODULE_SIG_KEY) with "certs/signing_key.pem" following
+    Linus's suggestion
 
-thanks,
+v6:
+  - Patch 2/4 is fixing V4's 1/2 and 4/4 is fixing V4's 2/2. Both fixup
+    patches to be squashed.
 
-Mimi
+v5:
+  - do not touch the key files if openssl is not installed; likely
+    addresses an issue pointed out by kernel test robot
+
+v4:
+  - extending 'depends on' with MODULES to (IMA_APPRAISE_MODSIG && MODULES)
+  
+v3:
+  - added missing OIDs for ECDSA signed hashes to pkcs7_sig_note_pkey_algo
+  - added recommendation to use string hash to Kconfig help text
+
+v2:
+  - Adjustment to ECDSA key detector string in 2/2
+  - Rephrased cover letter and patch descriptions with Mimi
+
+
+Stefan Berger (2):
+  certs: Trigger creation of RSA module signing key if it's not an RSA
+    key
+  certs: Add support for using elliptic curve keys for signing modules
+
+ certs/Kconfig                         | 26 ++++++++++++++++++++++++++
+ certs/Makefile                        | 21 +++++++++++++++++++++
+ crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
+ 3 files changed, 55 insertions(+)
+
+-- 
+2.31.1
 
