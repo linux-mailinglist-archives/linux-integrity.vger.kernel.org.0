@@ -2,60 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E123B6B64
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Jun 2021 01:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9163B6C0F
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Jun 2021 03:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbhF1XjL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 28 Jun 2021 19:39:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47530 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233942AbhF1XjD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 28 Jun 2021 19:39:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 571CB61D00;
-        Mon, 28 Jun 2021 23:36:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624923392;
-        bh=/hO/oZb2mVuBmkscgzTpx+bEkYMl6dXUAjL3aylUMAw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=FpnDsQkXrZ9AkdNeYnbTNfGlMaTBXcuABDHG3z6UGtOjh9KK1kkRoW9QJLss9hMJE
-         7eI/t0Uk48dr6u/J1pio/AHVLOWeZwWxO5WWsl2LGnskweXOpRTZJcgXbqF9LzepfD
-         Izy1kDDZoTzR6ljr5v/aSxgXP4cH22GzvUxtVdkcl0RLmwGK1lxIxmkMk9DEybdQ1B
-         Cxy5fxqZq1CPgfDkk825mM08JLhbr+33e3ow/q0ysvxAzAB1360SrC3wNBSyW7VimX
-         zZG2U/7HHkkG6RzJ4Hvw6vPnEOkDtDHrRUvg67qvzcLLjJXjqnFf3ZlXfvk3G7wMuz
-         xrg+hOa+AzDfQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 52A0260A3A;
-        Mon, 28 Jun 2021 23:36:32 +0000 (UTC)
-Subject: Re: [GIT PULL] integrity subsystem updates for v5.14
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <12f950a86631e83e9af52faa843cd335ac867af8.camel@linux.ibm.com>
-References: <12f950a86631e83e9af52faa843cd335ac867af8.camel@linux.ibm.com>
-X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
-X-PR-Tracked-Message-Id: <12f950a86631e83e9af52faa843cd335ac867af8.camel@linux.ibm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.14
-X-PR-Tracked-Commit-Id: 907a399de7b0566236c480d0c01ff52220532fb1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a60c538ed2ff9d084544a894219eed9c5ab980e5
-Message-Id: <162492339233.13806.2146751465335123896.pr-tracker-bot@kernel.org>
-Date:   Mon, 28 Jun 2021 23:36:32 +0000
+        id S231980AbhF2Bea (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 28 Jun 2021 21:34:30 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:42458 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231947AbhF2Be3 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 28 Jun 2021 21:34:29 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id CAC9172C8B4;
+        Tue, 29 Jun 2021 04:32:01 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 9A86F4A46EC;
+        Tue, 29 Jun 2021 04:32:01 +0300 (MSK)
+Date:   Tue, 29 Jun 2021 04:32:01 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
 To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        "Dmitry V. Levin" <ldv@altlinux.org>
+Subject: Re: [PATCH v6 1/3] ima-evm-utils: Allow manual setting keyid for
+ signing
+Message-ID: <20210629013201.xelhje2hmiuqybrt@altlinux.org>
+References: <20210511115630.795208-1-vt@altlinux.org>
+ <20210511115630.795208-2-vt@altlinux.org>
+ <004b55594ab1d944e42dd7fd0d87df47b3c09114.camel@linux.ibm.com>
+ <20210626004241.wkkjsbbesakszfkj@altlinux.org>
+ <f2355538832153c82c866d1e779b128a9612b6cc.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <f2355538832153c82c866d1e779b128a9612b6cc.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The pull request you sent on Mon, 28 Jun 2021 14:10:52 -0400:
+Mimi,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.14
+On Mon, Jun 28, 2021 at 04:50:42PM -0400, Mimi Zohar wrote:
+> 
+> Thank you for the detailed explanation.
+> 
+> On Sat, 2021-06-26 at 03:42 +0300, Vitaly Chikunov wrote:
+> 
+> > > Requiring the optarg value to be prefixed with "0x" would
+> > > simplify the strlen test.
+> > > (The subsequent patch wouldn't need a contrived prefix.)
+> > 
+> > (I do not understand this remark at the moment.)
+> > 
+> > Base 16 will let user pass keyid just as a string, copy-pasting from
+> > somewhere else.
+> 
+> strtoul() supports prefixing the ascii-hex string with "0x".  To
+> differentiate between a keyid and pathname, why not require the keyid
+> be prefixed with "0x", as opposed to requiring the pathname to be
+> prefixed with '@', like "--keyid @/path/to/cert.pem".
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a60c538ed2ff9d084544a894219eed9c5ab980e5
+I wanted to avoid (filename vs keyid) ambiguity of the argument to
+`--keyid' - if user have file named "0x00112233" they would have hard
+time passing it to `--keyid'. But, it's impossible to have keyid string
+starting with "@". So, "@" perfectly distinguish type of `--keyid'
+argument but "0x" isn't.
 
-Thank you!
+Also, in some software (zip, rar) "@" is common prefix meaning value
+should be taken from the specified file. But, yes, "@" is not common
+in Unix environments. Do you want me to create separate option like
+`--keyid-from-file'?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+
+> 
+> The new test would be "OPTS=--keyid=0xaabbccdd"
+> 
+> thanks,
+> 
+> Mimi
