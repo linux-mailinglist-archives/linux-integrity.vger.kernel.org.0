@@ -2,199 +2,185 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E903B79E8
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Jun 2021 23:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751A53B7A40
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Jun 2021 00:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235394AbhF2VhC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Jun 2021 17:37:02 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16698 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235071AbhF2VhB (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Jun 2021 17:37:01 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15TLX1mV050992;
-        Tue, 29 Jun 2021 17:34:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Q1lXpYraVtwjfvdbQr6ogMCgErTtRUfs0JYxQqtCkOk=;
- b=cb/olTXkv+o0gahsHLErs+bkR7aqKNw5m16Sl/nyPxoWPcTJeV6gPYX4mLdm3DBP+GFS
- x308wALo95PrRkYz0GM8RAyfZUhiVlRXdWwF/If/DsmmE6ktet9Qg7Lug4GjtKl60I3q
- aU9NejipOPux5xKNo+8jc+/61weNculsRYfvo19ynoF4zxM54mN+xP0YvJ8bslpViZJC
- dowiq8DJTTmCtatSWwBt2gR5iOWQPFPD7kAKbR0ofIUukrwS4zrQurDOljeye1JTEIqn
- XRJbmK5p1VX4Y/FsxIEed6+DxQ5yYezmh+FiwWh34lDI2yEu/Kc/3d2TmNdd/0ZgbbUA 6w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39g8nkch80-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Jun 2021 17:34:29 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15TLYTxT057646;
-        Tue, 29 Jun 2021 17:34:29 -0400
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39g8nkch7m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Jun 2021 17:34:29 -0400
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15TLVNmU003540;
-        Tue, 29 Jun 2021 21:34:28 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma01dal.us.ibm.com with ESMTP id 39duvdau3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Jun 2021 21:34:27 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15TLYR2j34931104
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Jun 2021 21:34:27 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 02AB0AC05B;
-        Tue, 29 Jun 2021 21:34:27 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DBBC3AC068;
-        Tue, 29 Jun 2021 21:34:26 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.47.158.152])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 29 Jun 2021 21:34:26 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
-To:     jeyu@kernel.org, keyrings@vger.kernel.org, dhowells@redhat.com,
-        dwmw2@infradead.org, zohar@linux.ibm.com, jarkko@kernel.org
-Cc:     nayna@linux.ibm.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v8 2/2] certs: Add support for using elliptic curve keys for signing modules
-Date:   Tue, 29 Jun 2021 17:34:21 -0400
-Message-Id: <20210629213421.60320-3-stefanb@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210629213421.60320-1-stefanb@linux.vnet.ibm.com>
-References: <20210629213421.60320-1-stefanb@linux.vnet.ibm.com>
+        id S235335AbhF2WHr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Jun 2021 18:07:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42650 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234953AbhF2WHq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 29 Jun 2021 18:07:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C26D61DA0;
+        Tue, 29 Jun 2021 22:05:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625004318;
+        bh=wL4QubpVslVkyqpPYOVGapr51ugDCN40mrI1cMYOd3s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mHZD86XEw5OblpWiif0Ap7A/Rozq76oL+oSo8bdhOjX1xlrdGZhDkIDrLnp9y0qtF
+         VhOhnhxocUVjv1E4NAmyY4tY7v/iD+GO99jFNcEmhKQ7gfmTm+go9p56vBJHmVTmQF
+         4Ah+0bebDFVY4HIgmLVrEbT5ZiyFsSNB4saAbTamM+91fc/NM//5qVQKVTCTSczcSa
+         NeRJZUkNrj2AMKY4TrGvBM4uulEd6CLGFL8eBLWdjnzR8fDHxMe+kjs3S9rlJoI3aS
+         m2cm+RR7t4ZJZPR+gWH51pagUajDvtesIYOertvk8Mf623uHNR4NKYDURXnUqaeEes
+         kKkXcnQnfr6FQ==
+Date:   Wed, 30 Jun 2021 01:05:16 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: Recent tpm_tis IRQ handling changes are causing kernel
+ backtraces]
+Message-ID: <20210629220516.xm3jvjy7v2uw3fvz@kernel.org>
+References: <20210527140025.vl3ply6wnn7rsygg@kernel.org>
+ <27d71b81-1e89-1b5d-ddaf-a8928bac90fd@redhat.com>
+ <20210531043616.u3v25qzkkrik5apq@kernel.org>
+ <89d5b891-97d8-caed-4eb1-6d4d485a2fd1@redhat.com>
+ <5680899e-9040-7641-e6ac-23edd2d988cf@redhat.com>
+ <49bfb4a7-eb3c-77f9-ff8e-b37617a26195@redhat.com>
+ <20210623134054.45gjj2wbgz7jpjmy@kernel.org>
+ <90ed51b4-66d4-fb10-ca8e-d99532028fab@redhat.com>
+ <20210629180445.oind62rsktevm45q@kernel.org>
+ <b4398c5b-38dc-d511-ea29-0847bfca60b4@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: dwcQcJfBWFPQKuYUqvfnpPFFbMd7i64F
-X-Proofpoint-ORIG-GUID: 4NNNhVFhaYsfCI1CZu5nip-u0a9hSDUv
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-29_14:2021-06-29,2021-06-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0 spamscore=0
- adultscore=0 clxscore=1015 mlxlogscore=999 phishscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106290132
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4398c5b-38dc-d511-ea29-0847bfca60b4@redhat.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+On Tue, Jun 29, 2021 at 09:14:39PM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 6/29/21 8:04 PM, Jarkko Sakkinen wrote:
+> > On Wed, Jun 23, 2021 at 03:54:59PM +0200, Hans de Goede wrote:
+> >> Hi,
+> >>
+> >> On 6/23/21 3:40 PM, Jarkko Sakkinen wrote:
+> >>> On Mon, Jun 21, 2021 at 02:04:52PM +0200, Hans de Goede wrote:
+> >>>> Hi,
+> >>>>
+> >>>> On 6/14/21 3:33 PM, Hans de Goede wrote:
+> >>>>> Hi,
+> >>>>>
+> >>>>> On 6/1/21 6:04 PM, Hans de Goede wrote:
+> >>>>>> Hi,
+> >>>>>>
+> >>>>>> On 5/31/21 6:36 AM, Jarkko Sakkinen wrote:
+> >>>>>>>> Interestingly enough the first backtrace is also happening on a:
+> >>>>>>>> "Dell Inc. XPS 13 9310/0MRT12, BIOS 2.2.0 04/06/2021"
+> >>>>>>>>
+> >>>>>>>> So it seems that at least with 5.12.6 (which has the last 2 fixes)
+> >>>>>>>> all reports are about the XPS 13 9310. I wonder if there is an
+> >>>>>>>> issue with the TPM interrupt line on the XPS 13 9310; I've asked the
+> >>>>>>>> reporters to try adding tpm_tis.interrupts=0 to their kernel commandline.
+> >>>>>>>
+> >>>>>>> This is helpful for sure that these all are happening on matching hardware.
+> >>>>>>
+> >>>>>> So our kernel-backtrace tracking info (ABRT) just recorded a third backtrace
+> >>>>>> with a kernel >= 5.12.6, again on the XPS 13 9310, so now we have 3 variants:
+> >>>>>>
+> >>>>>> 1. Backtrace starting with a call to ima_add_boot_aggregate
+> >>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1963712
+> >>>>>>
+> >>>>>> 2. Backtrace starting with a call to tpm_dev_async_work:
+> >>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1964974
+> >>>>>> (note this one is not easily reproducible)
+> >>>>>>
+> >>>>>> 3. Backtrace starting with a call to rng_dev_read:
+> >>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1920510
+> >>>>>>
+> >>>>>> 3. is the new one. All bugs linked above are public, all 3 backtraces
+> >>>>>> so far have only been reported on the XPS 13 9310 (with kernel >= 5.12.6)
+> >>>>>> and I've asked all the reporters to check if tpm_tis.interrupts=0 helps.
+> >>>>>
+> >>>>> Quick status update, I've got a response from a XPS 13 9310 user in:
+> >>>>>
+> >>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1920510
+> >>>>>
+> >>>>> Indicating that a. he can reproduce this with the latest >= 5.12.6 kernels;
+> >>>>> and b. it goes away when specifying tpm_tis.interrupts=0 as I expected
+> >>>>> (I expected this because all the bug-reports started when the interrupt
+> >>>>> code got fixed/re-enabled a while ago).
+> >>>>
+> >>>> One more status update.
+> >>>>
+> >>>> - A new 4th variant of the backtrace has been spotted, where the problem hits
+> >>>> when called from probe() -> tpm2_auto_startup -> tpm2_do_selftest, see:
+> >>>> https://bugzilla.redhat.com/show_bug.cgi?id=1958381
+> >>>>
+> >>>> - So far all reports with kernel >= 5.12.6 have been on a Dell XPS 13 9310
+> >>>> models. But the new variant is happening on a Dell XPS 15 9500 and the
+> >>>> backtrace starting at ima_add_boot_aggregate is also being reported on
+> >>>> a Dell XPS 15 9500 (as well as on the XPS 13 9310).
+> >>>>
+> >>>> Regards,
+> >>>>
+> >>>> Hans
+> >>>
+> >>> OK, I'll have to query if I could borrow that laptop from someone. It's
+> >>> fairly common laptop, i.e. might be possible.
+> >>
+> >> In the mean time I've also got a report that this variant of the backtrace:
+> >>
+> >> 1. Backtrace starting with a call to ima_add_boot_aggregate
+> >> https://bugzilla.redhat.com/show_bug.cgi?id=1963712
+> >>
+> >> Is also still happening with recent 5.12.y kernels on
+> >> Dell Precision 7750 laptops. Both the Precision 7750 and the XPS 9500 use
+> >> 10th gen comet lake processors (i7-10750H), where as the XPS 9310 is using
+> >> an icelake processor. So the common denominator seems to be that they are
+> >> all 2020 Dell laptop models using the latest Intel CPUs.
+> >>
+> >> FYI the complete list of models on which some of the 4 backtrace variants
+> >> are still seen on recent 5.12.y kernels is now:
+> >>
+> >> Dell XPS 13 9310
+> >> Dell XPS 15 9500
+> >> Dell Precision 7750
+> >>
+> >> Regards,
+> >>
+> >> Hans
+> > 
+> > Does "tpm_tis.interrupts=0" uniformly workaround the issue?
+> 
+> I unfortunately have not gotten much replies to my request to test with
+> tpm_tis.interrupts=0, but for those people who have bothered to test
+> (2 reporters IIRC) using tpm_tis.interrupts=0 does avoid the issue.
 
-Add support for using elliptic curve keys for signing modules. It uses
-a NIST P384 (secp384r1) key if the user chooses an elliptic curve key
-and will have ECDSA support built into the kernel.
+So we see this in dmesg as first anything from TPM:
 
-Note: A developer choosing an ECDSA key for signing modules should still
-delete the signing key (rm certs/signing_key.*) when building an older
-version of a kernel that only supports RSA keys. Unless kbuild automati-
-cally detects and generates a new kernel module key, ECDSA-signed kernel
-modules will fail signature verification.
+[    0.904572] tpm_tis STM0125:00: 2.0 TPM (device-id 0x0, rev-id 78)
 
-Cc: David Howells <dhowells@redhat.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- certs/Kconfig                         | 26 ++++++++++++++++++++++++++
- certs/Makefile                        | 13 +++++++++++++
- crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
- 3 files changed, 47 insertions(+)
+This means that one command is successfully processed by the TPM, i.e.
+tpm2_probe() in tpm_tis_core_init().
 
-diff --git a/certs/Kconfig b/certs/Kconfig
-index f4e61116f94e..7d38d65e2128 100644
---- a/certs/Kconfig
-+++ b/certs/Kconfig
-@@ -15,6 +15,32 @@ config MODULE_SIG_KEY
-          then the kernel will automatically generate the private key and
-          certificate as described in Documentation/admin-guide/module-signing.rst
- 
-+choice
-+	prompt "Type of module signing key to be generated"
-+	default MODULE_SIG_KEY_TYPE_RSA
-+	help
-+	 The type of module signing key type to generate. This option
-+	 does not apply if a #PKCS11 URI is used.
-+
-+config MODULE_SIG_KEY_TYPE_RSA
-+	bool "RSA"
-+	depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
-+	help
-+	 Use an RSA key for module signing.
-+
-+config MODULE_SIG_KEY_TYPE_ECDSA
-+	bool "ECDSA"
-+	select CRYPTO_ECDSA
-+	depends on MODULE_SIG || (IMA_APPRAISE_MODSIG && MODULES)
-+	help
-+	 Use an elliptic curve key (NIST P384) for module signing. Consider
-+	 using a strong hash like sha256 or sha384 for hashing modules.
-+
-+	 Note: Remove all ECDSA signing keys, e.g. certs/signing_key.pem,
-+	 when falling back to building Linux 5.13 and older kernels.
-+
-+endchoice
-+
- config SYSTEM_TRUSTED_KEYRING
- 	bool "Provide system-wide ring of trusted keys"
- 	depends on KEYS
-diff --git a/certs/Makefile b/certs/Makefile
-index f9344e52ecda..279433783b10 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -66,9 +66,21 @@ ifeq ($(CONFIG_MODULE_SIG_KEY),"certs/signing_key.pem")
- 
- ifeq ($(openssl_available),yes)
- X509TEXT=$(shell openssl x509 -in "certs/signing_key.pem" -text 2>/dev/null)
-+endif
- 
-+# Support user changing key type
-+ifdef CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
-+keytype_openssl = -newkey ec -pkeyopt ec_paramgen_curve:secp384r1
-+ifeq ($(openssl_available),yes)
-+$(if $(findstring id-ecPublicKey,$(X509TEXT)),,$(shell rm -f "certs/signing_key.pem"))
-+endif
-+endif # CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
-+
-+ifdef CONFIG_MODULE_SIG_KEY_TYPE_RSA
-+ifeq ($(openssl_available),yes)
- $(if $(findstring rsaEncryption,$(X509TEXT)),,$(shell rm -f "certs/signing_key.pem"))
- endif
-+endif # CONFIG_MODULE_SIG_KEY_TYPE_RSA
- 
- $(obj)/signing_key.pem: $(obj)/x509.genkey
- 	@$(kecho) "###"
-@@ -83,6 +95,7 @@ $(obj)/signing_key.pem: $(obj)/x509.genkey
- 		-batch -x509 -config $(obj)/x509.genkey \
- 		-outform PEM -out $(obj)/signing_key.pem \
- 		-keyout $(obj)/signing_key.pem \
-+		$(keytype_openssl) \
- 		$($(quiet)redirect_openssl)
- 	@$(kecho) "###"
- 	@$(kecho) "### Key pair generated."
-diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_keys/pkcs7_parser.c
-index 967329e0a07b..6592279d839a 100644
---- a/crypto/asymmetric_keys/pkcs7_parser.c
-+++ b/crypto/asymmetric_keys/pkcs7_parser.c
-@@ -269,6 +269,14 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t hdrlen,
- 		ctx->sinfo->sig->pkey_algo = "rsa";
- 		ctx->sinfo->sig->encoding = "pkcs1";
- 		break;
-+	case OID_id_ecdsa_with_sha1:
-+	case OID_id_ecdsa_with_sha224:
-+	case OID_id_ecdsa_with_sha256:
-+	case OID_id_ecdsa_with_sha384:
-+	case OID_id_ecdsa_with_sha512:
-+		ctx->sinfo->sig->pkey_algo = "ecdsa";
-+		ctx->sinfo->sig->encoding = "x962";
-+		break;
- 	default:
- 		printk("Unsupported pkey algo: %u\n", ctx->last_oid);
- 		return -ENOPKG;
--- 
-2.31.1
+My first *guess*  was that IRQ is given by ACPI, would need ACPI dump to
+confirm (e.g. sudo acpidump > acpi.dump). It cannot be so because otherwise
+this code path would be executed:
 
+        if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+                dev_err(&chip->dev, FW_BUG
+                        "TPM interrupt not working, polling instead\n");
+
+                disable_interrupts(chip);
+        }
+
+TPM_CHIP_FLAG_IRQ is never set, so you should see this message in dmesg if
+a legit value is given to IRQ by ACPI.  We are probably planning re-enable
+IRQ code after these type of issues are fully resolved, but right now you
+should not end up having it enabled (see tpm_tis_send() function).
+
+To put this together "if (irq != -1) {" path in tpm_tis_core_init() is
+never executed. And early in the same function the interrupt hardware is
+*explicitly* disabled.
+
+For me this looks like a hardware bug right now: interrupts stay enabled
+for some reason.
+
+ACPI dump would be useful to verify some of the assumptions in this.
+
+/Jarkko
