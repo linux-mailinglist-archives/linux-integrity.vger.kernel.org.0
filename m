@@ -2,148 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA68C3B71A8
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Jun 2021 13:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0811A3B737D
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Jun 2021 15:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbhF2L6d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 29 Jun 2021 07:58:33 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4644 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232556AbhF2L6c (ORCPT
+        id S234129AbhF2NxW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 29 Jun 2021 09:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233050AbhF2NxW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 29 Jun 2021 07:58:32 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15TBXpkC096694
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Jun 2021 07:56:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=oMvxX33o9/gJz3ypwdKDVde5R/B5eE5sjn/YI6jhTzE=;
- b=NMCZnPD2OXXjVYTHOhoA9JWREPEZLm7BnwLU5t9m331ZwdEw5YNL+jsDxW/ns9zgetfY
- ZtYNiaqkEk/X7vurPjexmbhmI9pkvQztTPIUCD0pDoaffuU0wXDlmOJZhKNeDnBU/s2s
- iqLy+AHRyk7Un53Fj/GR+PIOI2k0zH0TlyKIocSSprpPZxN/qxIKXN9M56lXhOFiYBrL
- tb38TOuq9wPtRREuCch7PTwa/eizB/CFxwFVcquU6FVuZniu5NJsSO9H9c5OEQgJnvG0
- Oylx/B9kD9UwoR9y/SxVdwTmNUwRqXzU3pXp2NBYPA/brwyvk6f3vUVIVurvH7fvgD4j eA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39g19cty18-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Jun 2021 07:56:05 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15TBZdPn100898
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Jun 2021 07:56:05 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39g19cty0b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Jun 2021 07:56:04 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15TBsUu7029089;
-        Tue, 29 Jun 2021 11:56:02 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 39duv8h8qa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Jun 2021 11:56:02 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15TBsQWE24117554
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Jun 2021 11:54:26 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 246F2A4072;
-        Tue, 29 Jun 2021 11:56:00 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 51F1DA4093;
-        Tue, 29 Jun 2021 11:55:59 +0000 (GMT)
-Received: from sig-9-65-193-149.ibm.com (unknown [9.65.193.149])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 29 Jun 2021 11:55:59 +0000 (GMT)
-Message-ID: <f316fc7329dadffd84a393e4e4d10d62f84e9712.camel@linux.ibm.com>
-Subject: Re: [RFC] ima: check ima-policy's path
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tianxing Zhang <anakinzhang96@gmail.com>
-Cc:     linux-integrity@vger.kernel.org
-Date:   Tue, 29 Jun 2021 07:55:58 -0400
-In-Reply-To: <20210629063843.18499-1-anakinzhang96@gmail.com>
-References: <20210629063843.18499-1-anakinzhang96@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xpRN1G-ZQJyQ56Li98QfrG30KWTCeaKF
-X-Proofpoint-ORIG-GUID: HR2iejNDZPuJ6mzazSnyOVsqgGxtibt3
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-29_06:2021-06-28,2021-06-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 phishscore=0
- impostorscore=0 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=999
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106290079
+        Tue, 29 Jun 2021 09:53:22 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA2FC061760;
+        Tue, 29 Jun 2021 06:50:55 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id e33so18559784pgm.3;
+        Tue, 29 Jun 2021 06:50:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding:user-agent;
+        bh=NVE/yWmG13Srx+k1GcLPqraZFRtg51oSQRZanYNNkUA=;
+        b=VIFvQyHPYh23zuWVsCyyFUcNrJ/3dFcxDbFMj2Fn0Om7lzOlVqk4qQ/dSZAW8Xm0Hq
+         Oee5pq6NoIX0+OsyydHRUqfsy4SFZ33hCg/+eyx3Ja9A0Zl9LYQ/poqLnfqpt1JVhBt+
+         /8ZZ1+LvFHv94StQNO6Y1vO8CmTsb58RL2r9MNwmSm8ho7m6yx6LDXhX1nrrsC4jtX1/
+         5iw/tC5NHYWGMRAMf4V8a6p2mnTht23DoAeDWTVabp5Bm+9LCeo7zrwfVd4FMw0dD1/D
+         r8LEXFtCZ+8DATirZy4A9YgJcePV+rfwVIfVAT8u6ni71Dgyub6Ad85T1JewkCXUsR8C
+         dQjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding:user-agent;
+        bh=NVE/yWmG13Srx+k1GcLPqraZFRtg51oSQRZanYNNkUA=;
+        b=R3HNJt3BQ6Q33WS4tTBVM0RyUF9rWdYE0Ow9Kh7WhnISr76bsTMnfzs3DbHDQFphzV
+         Gb9JecTe9BkOKMvS50PlkJylc0yMY/fEnojO8tUiL6hAWfDMXIh6Mpg5DRZUKh4VBtmV
+         rJZ8z3PkYesmm5AE3tWJTqgs6FU8u0S/XeCTTUq+D9qd40uhZ2C0dlJuQi/o7GU5EFb7
+         8AgHermbhDaO+dAMJC72V2919ppPsW7q91Nxpyg4rr5bxRhuS2AfjdzOBPbz77r0DLVY
+         wYoTc0KXuBAcDtIx20gmucPrrHmwxys8y6w/clP3SauCKN8t7XLLciZp0nmd28E9MdzM
+         AuHg==
+X-Gm-Message-State: AOAM5308Dp4NTDojWW36kH4S5FQRoofAvzFaoBbXuZrmG0zWNh4bQXUc
+        0yBqH87b/DKvC/gpvKlmkI0=
+X-Google-Smtp-Source: ABdhPJwspCAT3P99G3AiRVnyDOfH56x5L7uz7zqufnDraLp7J8M5RmBzZn7hn0awoFBJ6zhjBnJHcw==
+X-Received: by 2002:aa7:900f:0:b029:306:24ca:108f with SMTP id m15-20020aa7900f0000b029030624ca108fmr30110894pfo.77.1624974655153;
+        Tue, 29 Jun 2021 06:50:55 -0700 (PDT)
+Received: from raspberrypi ([125.141.84.155])
+        by smtp.gmail.com with ESMTPSA id b9sm16774593pfm.124.2021.06.29.06.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Jun 2021 06:50:54 -0700 (PDT)
+Date:   Tue, 29 Jun 2021 14:50:50 +0100
+From:   Austin Kim <austindh.kim@gmail.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, austin.kim@lge.com,
+        austindh.kim@gmail.com
+Subject: [PATCH] IMA: remove -Wmissing-prototypes warning
+Message-ID: <20210629135050.GA1373@raspberrypi>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2021-06-29 at 14:38 +0800, Tianxing Zhang wrote:
-> Hi, I was reading the function ima_write_policy in ima/ima_fs.c when
-> I find the issue:
-> 
-> > static ssize_t ima_write_policy(struct file *file, const char
-> __user *buf,
-> >                                              size_t datalen, loff_t
-> *ppos)
-> > {
-> >         ...
-> >
-> >         if (data[0] == '/') {
-> >                 result = ima_read_policy(data);
-> >         } else if (ima_appraise & IMA_APPRAISE_POLICY) {
-> >                 pr_err("signed policy file (specified as an
-> absolute pathname) required\n");
-> >                 integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL,
-> NULL,
-> >                                              "policy_update",
-> "signed policy required",
-> >                                              1, 0);
-> >         ...
-> >         return result;
-> > }
-> 
-> For the absolute path written by the user, we only check the prefix
-> "/". Actually, we can echo an illegal path to the
-> /sys/kernel/security/ima/policy, e.g. "/\rtest: ddddddddddddddddddd"
-> to inject some logs into dmesg.
-> 
-> Then ima_read_policy is called to return error:
-> 
-> > static ssize_t ima_read_policy(char *path)
-> > {
-> >         ...
-> >         rc = kernel_read_file_from_path(path, 0, &data, INT_MAX,
-> NULL,
-> >                                                      
-> READING_POLICY);
-> >         if (rc < 0) {
-> >                 pr_err("Unable to open file: %s (%d)", path, rc);
-> >                 return rc;
-> >         }
-> >         ...
-> > }
-> 
-> In ima_read_policy, the illegal path would be logged into dmesg like
-> this:
-> 
-> > ...
-> > test: ddddddddddddddddddd (-2)/
-> > test: ddddddddddddddddddd (-2)/
-> > test: ddddddddddddddddddd (-2)/
-> > test: ddddddddddddddddddd (-2)/
-> 
-> I suggest that we should check the path in ima_write_policy to make
-> sure it's a valid one, at least literally.
+From: Austin Kim <austin.kim@lge.com>
 
-Sure.  In the case that the path isn't valid, perhaps instead of
-removing the message entirely, limit the number of messages emitted
-using pr_err_once().
+With W=1 build, the compiler throws warning message as below:
 
-thanks,
+   security/integrity/ima/ima_mok.c:24:12: warning:
+   no previous prototype for ‘ima_mok_init’ [-Wmissing-prototypes]
+       __init int ima_mok_init(void)
 
-Mimi
+Silence the warning by adding static keyword to ima_mok_init().
+
+Signed-off-by: Austin Kim <austin.kim@lge.com>
+---
+ security/integrity/ima/ima_mok.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/integrity/ima/ima_mok.c b/security/integrity/ima/ima_mok.c
+index 1e5c01916173..95cc31525c57 100644
+--- a/security/integrity/ima/ima_mok.c
++++ b/security/integrity/ima/ima_mok.c
+@@ -21,7 +21,7 @@ struct key *ima_blacklist_keyring;
+ /*
+  * Allocate the IMA blacklist keyring
+  */
+-__init int ima_mok_init(void)
++static __init int ima_mok_init(void)
+ {
+ 	struct key_restriction *restriction;
+ 
+-- 
+2.20.1
 
