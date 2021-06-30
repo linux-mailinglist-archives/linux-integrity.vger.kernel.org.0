@@ -2,150 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FA53B85CC
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Jun 2021 17:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019923B872D
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Jun 2021 18:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbhF3PMI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Jun 2021 11:12:08 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3336 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235417AbhF3PMI (ORCPT
+        id S229529AbhF3Qlm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Jun 2021 12:41:42 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9472 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229510AbhF3Qlm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Jun 2021 11:12:08 -0400
-Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GFPcv70JTz6K9HN;
-        Wed, 30 Jun 2021 22:59:11 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 30 Jun 2021 17:09:37 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Wed, 30 Jun 2021 17:09:37 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>
-CC:     "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "prsriva02@gmail.com" <prsriva02@gmail.com>,
-        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>
-Subject: RE: [PATCH 3/3] ima: Add digest parameter to the functions to measure
- a buffer
-Thread-Topic: [PATCH 3/3] ima: Add digest parameter to the functions to
- measure a buffer
-Thread-Index: AQHXbbqSPTqY0Ld1JU6eOssEbBfEiqssgzQAgAAkqvA=
-Date:   Wed, 30 Jun 2021 15:09:36 +0000
-Message-ID: <9d374fab15c8451f8e1ab024412de937@huawei.com>
-References: <20210630141635.2862222-1-roberto.sassu@huawei.com>
- <20210630141635.2862222-4-roberto.sassu@huawei.com>
- <e34639b4-145a-05a0-5ab4-ea51f9093e90@linux.microsoft.com>
-In-Reply-To: <e34639b4-145a-05a0-5ab4-ea51f9093e90@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+        Wed, 30 Jun 2021 12:41:42 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15UG4H0p138965;
+        Wed, 30 Jun 2021 12:39:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=IpAhwd0fY0MtyP7awHsLBfOd5agd+KKtdAFMAFCFlG0=;
+ b=TBBKS8X669I/Xh35/smzUcCqagMPNgtOoSmJ/qLdXxqh5jk0Nc8g789EJr3ZulhXBy6N
+ RtimpreqejcYZH0aVapgWsDsI9UjB9RH19oTICiyqAttvPojMuBquvQh4IRKuooWKeik
+ zK09SVh3BVDyYfXXpp2Ijfa0NcYlVdj0+zWGuEwEZVpQGIgiT2RDSIWUvssomzp7pWSv
+ FMp7BRgj7VCWr4LKaIOAo1OKkzEJ89cYfksT2f0cO0+A2cVwwNfB4CbtwfxGnGEBlHFp
+ KSKSVgvIxc1o6LLAdd1iKL+Hy/8lIt6vGomSyxnmN+5AKYapqLsiqD4u7eSS1Cug/Uvr +Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39gtxf2wfe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Jun 2021 12:39:11 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15UG5w0r151403;
+        Wed, 30 Jun 2021 12:39:10 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39gtxf2weu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Jun 2021 12:39:10 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15UGN7FC024533;
+        Wed, 30 Jun 2021 16:39:07 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma05fra.de.ibm.com with ESMTP id 39ft8ere8j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Jun 2021 16:39:07 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15UGbTl337224898
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Jun 2021 16:37:29 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2FC8A4062;
+        Wed, 30 Jun 2021 16:39:04 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A9824A407D;
+        Wed, 30 Jun 2021 16:39:03 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.114.126])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 30 Jun 2021 16:39:03 +0000 (GMT)
+Message-ID: <2f494e1d5c2c99a4b7c0912faa4c3be3de682afc.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 1/3] ima-evm-utils: Allow manual setting keyid for
+ signing
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        "Dmitry V. Levin" <ldv@altlinux.org>
+Date:   Wed, 30 Jun 2021 12:39:02 -0400
+In-Reply-To: <20210629013201.xelhje2hmiuqybrt@altlinux.org>
+References: <20210511115630.795208-1-vt@altlinux.org>
+         <20210511115630.795208-2-vt@altlinux.org>
+         <004b55594ab1d944e42dd7fd0d87df47b3c09114.camel@linux.ibm.com>
+         <20210626004241.wkkjsbbesakszfkj@altlinux.org>
+         <f2355538832153c82c866d1e779b128a9612b6cc.camel@linux.ibm.com>
+         <20210629013201.xelhje2hmiuqybrt@altlinux.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UNHMxzkTs7KOxL8EFe_nQJbX7C7GtWv6
+X-Proofpoint-ORIG-GUID: KTJBGKplsZNGj6QN2FF_uor06liNWllS
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-30_08:2021-06-30,2021-06-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 impostorscore=0 mlxlogscore=999
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106300092
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBMYWtzaG1pIFJhbWFzdWJyYW1hbmlhbiBbbWFpbHRvOm5yYW1hc0BsaW51eC5taWNy
-b3NvZnQuY29tXQ0KPiBTZW50OiBXZWRuZXNkYXksIEp1bmUgMzAsIDIwMjEgNDo1NiBQTQ0KPiBP
-biA2LzMwLzIwMjEgNzoxNiBBTSwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gDQo+IEhpIFJvYmVy
-dG8sDQo+IA0KPiA+IFRoaXMgcGF0Y2ggYWRkcyB0aGUgJ2RpZ2VzdCcgcGFyYW1ldGVyIHRvIGlt
-YV9tZWFzdXJlX2NyaXRpY2FsX2RhdGEoKSBhbmQNCj4gPiBwcm9jZXNzX2J1ZmZlcl9tZWFzdXJl
-bWVudCgpLCBzbyB0aGF0IGNhbGxlcnMgY2FuIGdldCB0aGUgZGlnZXN0IG9mIHRoZQ0KPiA+IHBh
-c3NlZCBidWZmZXIuDQo+ID4NCj4gPiBUaGVzZSBmdW5jdGlvbnMgY2FsY3VsYXRlIHRoZSBkaWdl
-c3QgZXZlbiBpZiB0aGVyZSBpcyBubyBzdWl0YWJsZSBydWxlIGluDQo+ID4gdGhlIElNQSBwb2xp
-Y3kgYW5kLCBpbiB0aGlzIGNhc2UsIHRoZXkgc2ltcGx5IHJldHVybiAxIGJlZm9yZSBnZW5lcmF0
-aW5nIGENCj4gPiBuZXcgbWVhc3VyZW1lbnQgZW50cnkuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5
-OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+DQo+ID4gLS0tDQo+ID4g
-ICBpbmNsdWRlL2xpbnV4L2ltYS5oICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0ICstLQ0K
-PiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWEuaCAgICAgICAgICAgICAgICAgfCAgMiAr
-LQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfYXBwcmFpc2UuYyAgICAgICAgfCAg
-MiArLQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfYXN5bW1ldHJpY19rZXlzLmMg
-fCAgMiArLQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfaW5pdC5jICAgICAgICAg
-ICAgfCAgMiArLQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfbWFpbi5jICAgICAg
-ICAgICAgfCAzMSArKysrKysrKysrKysrLS0tLS0tLQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5
-L2ltYS9pbWFfcXVldWVfa2V5cy5jICAgICAgfCAgMiArLQ0KPiA+ICAgc2VjdXJpdHkvc2VsaW51
-eC9pbWEuYyAgICAgICAgICAgICAgICAgICAgICAgfCAgNCArLS0NCj4gPiAgIDggZmlsZXMgY2hh
-bmdlZCwgMzAgaW5zZXJ0aW9ucygrKSwgMTkgZGVsZXRpb25zKC0pDQo+ID4NCj4gDQo+ID4NCj4g
-PiArCWlmIChkaWdlc3QpDQo+ID4gKwkJbWVtY3B5KGRpZ2VzdCwgaWludC5pbWFfaGFzaC0+ZGln
-ZXN0LA0KPiA+ICsJCSAgICAgICBoYXNoX2RpZ2VzdF9zaXplW2ltYV9oYXNoX2FsZ29dKTsNCj4g
-DQo+IEkgdGhpbmsgdGhlIGNhbGxlciBzaG91bGQgYWxzbyBwYXNzIHRoZSBzaXplIG9mIHRoZSBi
-dWZmZXIgYWxsb2NhdGVkIHRvDQo+IHJlY2VpdmUgdGhlIGNhbGN1bGF0ZWQgZGlnZXN0LiBBbmQs
-IGhlcmUgY29weSBvbmx5IHVwIHRvIHRoYXQgbWFueSBieXRlcw0KPiBzbyB3ZSBkb24ndCBhY2Np
-ZGVudGFsbHkgY2F1c2UgYnVmZmVyIG92ZXJydW4uDQoNCkhpIExha3NobWkNCg0KeWVzLCBJIGFn
-cmVlLiBJIHdpbGwgYWRkIGl0IGluIHRoZSBuZXh0IHZlcnNpb24gb2YgdGhlIHBhdGNoIHNldC4N
-Cg0KVGhhbmtzDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9yZiBH
-bWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5nLCBMaSBKaWFuLCBTaGkg
-WWFubGkNCg0KPiAgIC1sYWtzaG1pDQo+IA0KPiA+ICsNCj4gPiArCWlmICghaW1hX3BvbGljeV9m
-bGFnIHx8IChmdW5jICYmICEoYWN0aW9uICYgSU1BX01FQVNVUkUpKSkNCj4gPiArCQlyZXR1cm4g
-MTsNCj4gPiArDQo+ID4gICAJcmV0ID0gaW1hX2FsbG9jX2luaXRfdGVtcGxhdGUoJmV2ZW50X2Rh
-dGEsICZlbnRyeSwgdGVtcGxhdGUpOw0KPiA+ICAgCWlmIChyZXQgPCAwKSB7DQo+ID4gICAJCWF1
-ZGl0X2NhdXNlID0gImFsbG9jX2VudHJ5IjsNCj4gPiBAQCAtOTY2LDcgKzk3NSw3IEBAIHZvaWQg
-aW1hX2tleGVjX2NtZGxpbmUoaW50IGtlcm5lbF9mZCwgY29uc3Qgdm9pZA0KPiAqYnVmLCBpbnQg
-c2l6ZSkNCj4gPiAgIAlyZXQgPSBwcm9jZXNzX2J1ZmZlcl9tZWFzdXJlbWVudChmaWxlX21udF91
-c2VyX25zKGYuZmlsZSksDQo+ID4gICAJCQkJCSBmaWxlX2lub2RlKGYuZmlsZSksIGJ1Ziwgc2l6
-ZSwNCj4gPiAgIAkJCQkJICJrZXhlYy1jbWRsaW5lIiwgS0VYRUNfQ01ETElORSwgMCwNCj4gPiAt
-CQkJCQkgTlVMTCwgZmFsc2UpOw0KPiA+ICsJCQkJCSBOVUxMLCBmYWxzZSwgTlVMTCk7DQo+ID4g
-ICAJZmRwdXQoZik7DQo+ID4gICB9DQo+ID4NCj4gPiBAQCAtOTc3LDI2ICs5ODYsMjggQEAgdm9p
-ZCBpbWFfa2V4ZWNfY21kbGluZShpbnQga2VybmVsX2ZkLCBjb25zdCB2b2lkDQo+ICpidWYsIGlu
-dCBzaXplKQ0KPiA+ICAgICogQGJ1ZjogcG9pbnRlciB0byBidWZmZXIgZGF0YQ0KPiA+ICAgICog
-QGJ1Zl9sZW46IGxlbmd0aCBvZiBidWZmZXIgZGF0YSAoaW4gYnl0ZXMpDQo+ID4gICAgKiBAaGFz
-aDogbWVhc3VyZSBidWZmZXIgZGF0YSBoYXNoDQo+ID4gKyAqIEBkaWdlc3Q6IGJ1ZmZlciBkaWdl
-c3Qgd2lsbCBiZSB3cml0dGVuIHRvDQo+ID4gICAgKg0KPiA+ICAgICogTWVhc3VyZSBkYXRhIGNy
-aXRpY2FsIHRvIHRoZSBpbnRlZ3JpdHkgb2YgdGhlIGtlcm5lbCBpbnRvIHRoZSBJTUEgbG9nDQo+
-ID4gICAgKiBhbmQgZXh0ZW5kIHRoZSBwY3IuICBFeGFtcGxlcyBvZiBjcml0aWNhbCBkYXRhIGNv
-dWxkIGJlIHZhcmlvdXMgZGF0YQ0KPiA+ICAgICogc3RydWN0dXJlcywgcG9saWNpZXMsIGFuZCBz
-dGF0ZXMgc3RvcmVkIGluIGtlcm5lbCBtZW1vcnkgdGhhdCBjYW4NCj4gPiAgICAqIGltcGFjdCB0
-aGUgaW50ZWdyaXR5IG9mIHRoZSBzeXN0ZW0uDQo+ID4gICAgKg0KPiA+IC0gKiBSZXR1cm5zIDAg
-aWYgdGhlIGJ1ZmZlciBoYXMgYmVlbiBzdWNjZXNzZnVsbHkgbWVhc3VyZWQsIGEgbmVnYXRpdmUg
-dmFsdWUNCj4gPiAtICogb3RoZXJ3aXNlLg0KPiA+ICsgKiBSZXR1cm5zIDAgaWYgdGhlIGJ1ZmZl
-ciBoYXMgYmVlbiBzdWNjZXNzZnVsbHkgbWVhc3VyZWQsIDEgaWYgdGhlIGRpZ2VzdA0KPiA+ICsg
-KiBoYXMgYmVlbiB3cml0dGVuIHRvIHRoZSBwYXNzZWQgbG9jYXRpb24gYnV0IG5vdCBhZGRlZCB0
-byBhIG1lYXN1cmVtZW50DQo+IGVudHJ5LA0KPiA+ICsgKiBhIG5lZ2F0aXZlIHZhbHVlIG90aGVy
-d2lzZS4NCj4gPiAgICAqLw0KPiA+ICAgaW50IGltYV9tZWFzdXJlX2NyaXRpY2FsX2RhdGEoY29u
-c3QgY2hhciAqZXZlbnRfbGFiZWwsDQo+ID4gICAJCQkgICAgICBjb25zdCBjaGFyICpldmVudF9u
-YW1lLA0KPiA+ICAgCQkJICAgICAgY29uc3Qgdm9pZCAqYnVmLCBzaXplX3QgYnVmX2xlbiwNCj4g
-PiAtCQkJICAgICAgYm9vbCBoYXNoKQ0KPiA+ICsJCQkgICAgICBib29sIGhhc2gsIHU4ICpkaWdl
-c3QpDQo+ID4gICB7DQo+ID4gICAJaWYgKCFldmVudF9uYW1lIHx8ICFldmVudF9sYWJlbCB8fCAh
-YnVmIHx8ICFidWZfbGVuKQ0KPiA+ICAgCQlyZXR1cm4gLUVOT1BBUkFNOw0KPiA+DQo+ID4gICAJ
-cmV0dXJuIHByb2Nlc3NfYnVmZmVyX21lYXN1cmVtZW50KCZpbml0X3VzZXJfbnMsIE5VTEwsIGJ1
-ZiwNCj4gYnVmX2xlbiwNCj4gPiAgIAkJCQkJICBldmVudF9uYW1lLCBDUklUSUNBTF9EQVRBLCAw
-LA0KPiA+IC0JCQkJCSAgZXZlbnRfbGFiZWwsIGhhc2gpOw0KPiA+ICsJCQkJCSAgZXZlbnRfbGFi
-ZWwsIGhhc2gsIGRpZ2VzdCk7DQo+ID4gICB9DQo+ID4NCj4gPiAgIHN0YXRpYyBpbnQgX19pbml0
-IGluaXRfaW1hKHZvaWQpDQo+ID4gZGlmZiAtLWdpdCBhL3NlY3VyaXR5L2ludGVncml0eS9pbWEv
-aW1hX3F1ZXVlX2tleXMuYw0KPiBiL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX3F1ZXVlX2tl
-eXMuYw0KPiA+IGluZGV4IGUzMDQ3Y2U2NGYzOS4uYWMwMGE0Nzc4YTkxIDEwMDY0NA0KPiA+IC0t
-LSBhL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX3F1ZXVlX2tleXMuYw0KPiA+ICsrKyBiL3Nl
-Y3VyaXR5L2ludGVncml0eS9pbWEvaW1hX3F1ZXVlX2tleXMuYw0KPiA+IEBAIC0xNjYsNyArMTY2
-LDcgQEAgdm9pZCBpbWFfcHJvY2Vzc19xdWV1ZWRfa2V5cyh2b2lkKQ0KPiA+ICAgCQkJCQkJCSBl
-bnRyeS0NCj4gPmtleXJpbmdfbmFtZSwNCj4gPiAgIAkJCQkJCQkgS0VZX0NIRUNLLCAwLA0KPiA+
-ICAgCQkJCQkJCSBlbnRyeS0NCj4gPmtleXJpbmdfbmFtZSwNCj4gPiAtCQkJCQkJCSBmYWxzZSk7
-DQo+ID4gKwkJCQkJCQkgZmFsc2UsIE5VTEwpOw0KPiA+ICAgCQlsaXN0X2RlbCgmZW50cnktPmxp
-c3QpOw0KPiA+ICAgCQlpbWFfZnJlZV9rZXlfZW50cnkoZW50cnkpOw0KPiA+ICAgCX0NCj4gPiBk
-aWZmIC0tZ2l0IGEvc2VjdXJpdHkvc2VsaW51eC9pbWEuYyBiL3NlY3VyaXR5L3NlbGludXgvaW1h
-LmMNCj4gPiBpbmRleCA0ZGI5ZmEyMTE2MzguLjk2YmQ3ZWFkODA4MSAxMDA2NDQNCj4gPiAtLS0g
-YS9zZWN1cml0eS9zZWxpbnV4L2ltYS5jDQo+ID4gKysrIGIvc2VjdXJpdHkvc2VsaW51eC9pbWEu
-Yw0KPiA+IEBAIC04OCw3ICs4OCw3IEBAIHZvaWQgc2VsaW51eF9pbWFfbWVhc3VyZV9zdGF0ZV9s
-b2NrZWQoc3RydWN0DQo+IHNlbGludXhfc3RhdGUgKnN0YXRlKQ0KPiA+DQo+ID4gICAJbWVhc3Vy
-ZV9yYyA9IGltYV9tZWFzdXJlX2NyaXRpY2FsX2RhdGEoInNlbGludXgiLCAic2VsaW51eC1zdGF0
-ZSIsDQo+ID4gICAJCQkJCSAgICAgICBzdGF0ZV9zdHIsIHN0cmxlbihzdGF0ZV9zdHIpLA0KPiA+
-IC0JCQkJCSAgICAgICBmYWxzZSk7DQo+ID4gKwkJCQkJICAgICAgIGZhbHNlLCBOVUxMKTsNCj4g
-Pg0KPiA+ICAgCWtmcmVlKHN0YXRlX3N0cik7DQo+ID4NCj4gPiBAQCAtMTA1LDcgKzEwNSw3IEBA
-IHZvaWQgc2VsaW51eF9pbWFfbWVhc3VyZV9zdGF0ZV9sb2NrZWQoc3RydWN0DQo+IHNlbGludXhf
-c3RhdGUgKnN0YXRlKQ0KPiA+ICAgCX0NCj4gPg0KPiA+ICAgCW1lYXN1cmVfcmMgPSBpbWFfbWVh
-c3VyZV9jcml0aWNhbF9kYXRhKCJzZWxpbnV4IiwgInNlbGludXgtcG9saWN5LQ0KPiBoYXNoIiwN
-Cj4gPiAtCQkJCQkgICAgICAgcG9saWN5LCBwb2xpY3lfbGVuLCB0cnVlKTsNCj4gPiArCQkJCQkg
-ICAgICAgcG9saWN5LCBwb2xpY3lfbGVuLCB0cnVlLCBOVUxMKTsNCj4gPg0KPiA+ICAgCXZmcmVl
-KHBvbGljeSk7DQo+ID4gICB9DQo+ID4NCg==
+Hi Vitaly,
+
+On Tue, 2021-06-29 at 04:32 +0300, Vitaly Chikunov wrote:
+> Mimi,
+> 
+> On Mon, Jun 28, 2021 at 04:50:42PM -0400, Mimi Zohar wrote:
+> > 
+> > Thank you for the detailed explanation.
+> > 
+> > On Sat, 2021-06-26 at 03:42 +0300, Vitaly Chikunov wrote:
+> > 
+> > > > Requiring the optarg value to be prefixed with "0x" would
+> > > > simplify the strlen test.
+> > > > (The subsequent patch wouldn't need a contrived prefix.)
+> > > 
+> > > (I do not understand this remark at the moment.)
+> > > 
+> > > Base 16 will let user pass keyid just as a string, copy-pasting from
+> > > somewhere else.
+> > 
+> > strtoul() supports prefixing the ascii-hex string with "0x".  To
+> > differentiate between a keyid and pathname, why not require the keyid
+> > be prefixed with "0x", as opposed to requiring the pathname to be
+> > prefixed with '@', like "--keyid @/path/to/cert.pem".
+> 
+> I wanted to avoid (filename vs keyid) ambiguity of the argument to
+> `--keyid' - if user have file named "0x00112233" they would have hard
+> time passing it to `--keyid'. But, it's impossible to have keyid string
+> starting with "@". So, "@" perfectly distinguish type of `--keyid'
+> argument but "0x" isn't.
+> 
+> Also, in some software (zip, rar) "@" is common prefix meaning value
+> should be taken from the specified file. But, yes, "@" is not common
+> in Unix environments. Do you want me to create separate option like
+> `--keyid-from-file'?
+
+It's highly unlikely that both the filename and pathname would be
+prefixed with "0x".  Defining a new option might be a good idea. 
+Possibly naming it --extract-cert-keyid,  ---cert-keyid, or --keyid-
+from-cert.  
+
+thanks,
+
+Mimi
+
