@@ -2,169 +2,150 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 593313B857C
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Jun 2021 16:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FA53B85CC
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Jun 2021 17:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235396AbhF3O46 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Jun 2021 10:56:58 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:44510 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235177AbhF3O45 (ORCPT
+        id S235542AbhF3PMI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Jun 2021 11:12:08 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3336 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235417AbhF3PMI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Jun 2021 10:56:57 -0400
-Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 28F6D20B7178;
-        Wed, 30 Jun 2021 07:54:28 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 28F6D20B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1625064868;
-        bh=HGkchr0rJ6ttGuCa+aJ+yp5Pb+8sfjGJgBKBkdQo8rE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=jFdIK0OYuWvmfpON7YXsGTq8lvdrfknvK9jHcnGh/nDEtvBLgkEnT1fm+9p65Aq1z
-         Gb+NDtnzY8Rnj9tq19A1ox0h6apcDqApr/R9MQGsIxJdWzW/NYv5enJveYHVuu6VXo
-         IuMEPeZRUuYERxfS0bXy3o9MfQtfD7aENjE6nO4g=
-Subject: Re: [PATCH 3/3] ima: Add digest parameter to the functions to measure
+        Wed, 30 Jun 2021 11:12:08 -0400
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GFPcv70JTz6K9HN;
+        Wed, 30 Jun 2021 22:59:11 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 30 Jun 2021 17:09:37 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Wed, 30 Jun 2021 17:09:37 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>
+CC:     "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
+        "prsriva02@gmail.com" <prsriva02@gmail.com>,
+        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>
+Subject: RE: [PATCH 3/3] ima: Add digest parameter to the functions to measure
  a buffer
-To:     Roberto Sassu <roberto.sassu@huawei.com>, zohar@linux.ibm.com,
-        paul@paul-moore.com
-Cc:     stephen.smalley.work@gmail.com, prsriva02@gmail.com,
-        tusharsu@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, selinux@vger.kernel.org
+Thread-Topic: [PATCH 3/3] ima: Add digest parameter to the functions to
+ measure a buffer
+Thread-Index: AQHXbbqSPTqY0Ld1JU6eOssEbBfEiqssgzQAgAAkqvA=
+Date:   Wed, 30 Jun 2021 15:09:36 +0000
+Message-ID: <9d374fab15c8451f8e1ab024412de937@huawei.com>
 References: <20210630141635.2862222-1-roberto.sassu@huawei.com>
  <20210630141635.2862222-4-roberto.sassu@huawei.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <e34639b4-145a-05a0-5ab4-ea51f9093e90@linux.microsoft.com>
-Date:   Wed, 30 Jun 2021 07:56:24 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210630141635.2862222-4-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ <e34639b4-145a-05a0-5ab4-ea51f9093e90@linux.microsoft.com>
+In-Reply-To: <e34639b4-145a-05a0-5ab4-ea51f9093e90@linux.microsoft.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/30/2021 7:16 AM, Roberto Sassu wrote:
-
-Hi Roberto,
-
-> This patch adds the 'digest' parameter to ima_measure_critical_data() and
-> process_buffer_measurement(), so that callers can get the digest of the
-> passed buffer.
-> 
-> These functions calculate the digest even if there is no suitable rule in
-> the IMA policy and, in this case, they simply return 1 before generating a
-> new measurement entry.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->   include/linux/ima.h                          |  4 +--
->   security/integrity/ima/ima.h                 |  2 +-
->   security/integrity/ima/ima_appraise.c        |  2 +-
->   security/integrity/ima/ima_asymmetric_keys.c |  2 +-
->   security/integrity/ima/ima_init.c            |  2 +-
->   security/integrity/ima/ima_main.c            | 31 +++++++++++++-------
->   security/integrity/ima/ima_queue_keys.c      |  2 +-
->   security/selinux/ima.c                       |  4 +--
->   8 files changed, 30 insertions(+), 19 deletions(-)
-> 
-
->   
-> +	if (digest)
-> +		memcpy(digest, iint.ima_hash->digest,
-> +		       hash_digest_size[ima_hash_algo]);
-
-I think the caller should also pass the size of the buffer allocated to 
-receive the calculated digest. And, here copy only up to that many bytes 
-so we don't accidentally cause buffer overrun.
-
-  -lakshmi
-
-> +
-> +	if (!ima_policy_flag || (func && !(action & IMA_MEASURE)))
-> +		return 1;
-> +
->   	ret = ima_alloc_init_template(&event_data, &entry, template);
->   	if (ret < 0) {
->   		audit_cause = "alloc_entry";
-> @@ -966,7 +975,7 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
->   	ret = process_buffer_measurement(file_mnt_user_ns(f.file),
->   					 file_inode(f.file), buf, size,
->   					 "kexec-cmdline", KEXEC_CMDLINE, 0,
-> -					 NULL, false);
-> +					 NULL, false, NULL);
->   	fdput(f);
->   }
->   
-> @@ -977,26 +986,28 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
->    * @buf: pointer to buffer data
->    * @buf_len: length of buffer data (in bytes)
->    * @hash: measure buffer data hash
-> + * @digest: buffer digest will be written to
->    *
->    * Measure data critical to the integrity of the kernel into the IMA log
->    * and extend the pcr.  Examples of critical data could be various data
->    * structures, policies, and states stored in kernel memory that can
->    * impact the integrity of the system.
->    *
-> - * Returns 0 if the buffer has been successfully measured, a negative value
-> - * otherwise.
-> + * Returns 0 if the buffer has been successfully measured, 1 if the digest
-> + * has been written to the passed location but not added to a measurement entry,
-> + * a negative value otherwise.
->    */
->   int ima_measure_critical_data(const char *event_label,
->   			      const char *event_name,
->   			      const void *buf, size_t buf_len,
-> -			      bool hash)
-> +			      bool hash, u8 *digest)
->   {
->   	if (!event_name || !event_label || !buf || !buf_len)
->   		return -ENOPARAM;
->   
->   	return process_buffer_measurement(&init_user_ns, NULL, buf, buf_len,
->   					  event_name, CRITICAL_DATA, 0,
-> -					  event_label, hash);
-> +					  event_label, hash, digest);
->   }
->   
->   static int __init init_ima(void)
-> diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
-> index e3047ce64f39..ac00a4778a91 100644
-> --- a/security/integrity/ima/ima_queue_keys.c
-> +++ b/security/integrity/ima/ima_queue_keys.c
-> @@ -166,7 +166,7 @@ void ima_process_queued_keys(void)
->   							 entry->keyring_name,
->   							 KEY_CHECK, 0,
->   							 entry->keyring_name,
-> -							 false);
-> +							 false, NULL);
->   		list_del(&entry->list);
->   		ima_free_key_entry(entry);
->   	}
-> diff --git a/security/selinux/ima.c b/security/selinux/ima.c
-> index 4db9fa211638..96bd7ead8081 100644
-> --- a/security/selinux/ima.c
-> +++ b/security/selinux/ima.c
-> @@ -88,7 +88,7 @@ void selinux_ima_measure_state_locked(struct selinux_state *state)
->   
->   	measure_rc = ima_measure_critical_data("selinux", "selinux-state",
->   					       state_str, strlen(state_str),
-> -					       false);
-> +					       false, NULL);
->   
->   	kfree(state_str);
->   
-> @@ -105,7 +105,7 @@ void selinux_ima_measure_state_locked(struct selinux_state *state)
->   	}
->   
->   	measure_rc = ima_measure_critical_data("selinux", "selinux-policy-hash",
-> -					       policy, policy_len, true);
-> +					       policy, policy_len, true, NULL);
->   
->   	vfree(policy);
->   }
-> 
+PiBGcm9tOiBMYWtzaG1pIFJhbWFzdWJyYW1hbmlhbiBbbWFpbHRvOm5yYW1hc0BsaW51eC5taWNy
+b3NvZnQuY29tXQ0KPiBTZW50OiBXZWRuZXNkYXksIEp1bmUgMzAsIDIwMjEgNDo1NiBQTQ0KPiBP
+biA2LzMwLzIwMjEgNzoxNiBBTSwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gDQo+IEhpIFJvYmVy
+dG8sDQo+IA0KPiA+IFRoaXMgcGF0Y2ggYWRkcyB0aGUgJ2RpZ2VzdCcgcGFyYW1ldGVyIHRvIGlt
+YV9tZWFzdXJlX2NyaXRpY2FsX2RhdGEoKSBhbmQNCj4gPiBwcm9jZXNzX2J1ZmZlcl9tZWFzdXJl
+bWVudCgpLCBzbyB0aGF0IGNhbGxlcnMgY2FuIGdldCB0aGUgZGlnZXN0IG9mIHRoZQ0KPiA+IHBh
+c3NlZCBidWZmZXIuDQo+ID4NCj4gPiBUaGVzZSBmdW5jdGlvbnMgY2FsY3VsYXRlIHRoZSBkaWdl
+c3QgZXZlbiBpZiB0aGVyZSBpcyBubyBzdWl0YWJsZSBydWxlIGluDQo+ID4gdGhlIElNQSBwb2xp
+Y3kgYW5kLCBpbiB0aGlzIGNhc2UsIHRoZXkgc2ltcGx5IHJldHVybiAxIGJlZm9yZSBnZW5lcmF0
+aW5nIGENCj4gPiBuZXcgbWVhc3VyZW1lbnQgZW50cnkuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+DQo+ID4gLS0tDQo+ID4g
+ICBpbmNsdWRlL2xpbnV4L2ltYS5oICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA0ICstLQ0K
+PiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWEuaCAgICAgICAgICAgICAgICAgfCAgMiAr
+LQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfYXBwcmFpc2UuYyAgICAgICAgfCAg
+MiArLQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfYXN5bW1ldHJpY19rZXlzLmMg
+fCAgMiArLQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfaW5pdC5jICAgICAgICAg
+ICAgfCAgMiArLQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfbWFpbi5jICAgICAg
+ICAgICAgfCAzMSArKysrKysrKysrKysrLS0tLS0tLQ0KPiA+ICAgc2VjdXJpdHkvaW50ZWdyaXR5
+L2ltYS9pbWFfcXVldWVfa2V5cy5jICAgICAgfCAgMiArLQ0KPiA+ICAgc2VjdXJpdHkvc2VsaW51
+eC9pbWEuYyAgICAgICAgICAgICAgICAgICAgICAgfCAgNCArLS0NCj4gPiAgIDggZmlsZXMgY2hh
+bmdlZCwgMzAgaW5zZXJ0aW9ucygrKSwgMTkgZGVsZXRpb25zKC0pDQo+ID4NCj4gDQo+ID4NCj4g
+PiArCWlmIChkaWdlc3QpDQo+ID4gKwkJbWVtY3B5KGRpZ2VzdCwgaWludC5pbWFfaGFzaC0+ZGln
+ZXN0LA0KPiA+ICsJCSAgICAgICBoYXNoX2RpZ2VzdF9zaXplW2ltYV9oYXNoX2FsZ29dKTsNCj4g
+DQo+IEkgdGhpbmsgdGhlIGNhbGxlciBzaG91bGQgYWxzbyBwYXNzIHRoZSBzaXplIG9mIHRoZSBi
+dWZmZXIgYWxsb2NhdGVkIHRvDQo+IHJlY2VpdmUgdGhlIGNhbGN1bGF0ZWQgZGlnZXN0LiBBbmQs
+IGhlcmUgY29weSBvbmx5IHVwIHRvIHRoYXQgbWFueSBieXRlcw0KPiBzbyB3ZSBkb24ndCBhY2Np
+ZGVudGFsbHkgY2F1c2UgYnVmZmVyIG92ZXJydW4uDQoNCkhpIExha3NobWkNCg0KeWVzLCBJIGFn
+cmVlLiBJIHdpbGwgYWRkIGl0IGluIHRoZSBuZXh0IHZlcnNpb24gb2YgdGhlIHBhdGNoIHNldC4N
+Cg0KVGhhbmtzDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9yZiBH
+bWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5nLCBMaSBKaWFuLCBTaGkg
+WWFubGkNCg0KPiAgIC1sYWtzaG1pDQo+IA0KPiA+ICsNCj4gPiArCWlmICghaW1hX3BvbGljeV9m
+bGFnIHx8IChmdW5jICYmICEoYWN0aW9uICYgSU1BX01FQVNVUkUpKSkNCj4gPiArCQlyZXR1cm4g
+MTsNCj4gPiArDQo+ID4gICAJcmV0ID0gaW1hX2FsbG9jX2luaXRfdGVtcGxhdGUoJmV2ZW50X2Rh
+dGEsICZlbnRyeSwgdGVtcGxhdGUpOw0KPiA+ICAgCWlmIChyZXQgPCAwKSB7DQo+ID4gICAJCWF1
+ZGl0X2NhdXNlID0gImFsbG9jX2VudHJ5IjsNCj4gPiBAQCAtOTY2LDcgKzk3NSw3IEBAIHZvaWQg
+aW1hX2tleGVjX2NtZGxpbmUoaW50IGtlcm5lbF9mZCwgY29uc3Qgdm9pZA0KPiAqYnVmLCBpbnQg
+c2l6ZSkNCj4gPiAgIAlyZXQgPSBwcm9jZXNzX2J1ZmZlcl9tZWFzdXJlbWVudChmaWxlX21udF91
+c2VyX25zKGYuZmlsZSksDQo+ID4gICAJCQkJCSBmaWxlX2lub2RlKGYuZmlsZSksIGJ1Ziwgc2l6
+ZSwNCj4gPiAgIAkJCQkJICJrZXhlYy1jbWRsaW5lIiwgS0VYRUNfQ01ETElORSwgMCwNCj4gPiAt
+CQkJCQkgTlVMTCwgZmFsc2UpOw0KPiA+ICsJCQkJCSBOVUxMLCBmYWxzZSwgTlVMTCk7DQo+ID4g
+ICAJZmRwdXQoZik7DQo+ID4gICB9DQo+ID4NCj4gPiBAQCAtOTc3LDI2ICs5ODYsMjggQEAgdm9p
+ZCBpbWFfa2V4ZWNfY21kbGluZShpbnQga2VybmVsX2ZkLCBjb25zdCB2b2lkDQo+ICpidWYsIGlu
+dCBzaXplKQ0KPiA+ICAgICogQGJ1ZjogcG9pbnRlciB0byBidWZmZXIgZGF0YQ0KPiA+ICAgICog
+QGJ1Zl9sZW46IGxlbmd0aCBvZiBidWZmZXIgZGF0YSAoaW4gYnl0ZXMpDQo+ID4gICAgKiBAaGFz
+aDogbWVhc3VyZSBidWZmZXIgZGF0YSBoYXNoDQo+ID4gKyAqIEBkaWdlc3Q6IGJ1ZmZlciBkaWdl
+c3Qgd2lsbCBiZSB3cml0dGVuIHRvDQo+ID4gICAgKg0KPiA+ICAgICogTWVhc3VyZSBkYXRhIGNy
+aXRpY2FsIHRvIHRoZSBpbnRlZ3JpdHkgb2YgdGhlIGtlcm5lbCBpbnRvIHRoZSBJTUEgbG9nDQo+
+ID4gICAgKiBhbmQgZXh0ZW5kIHRoZSBwY3IuICBFeGFtcGxlcyBvZiBjcml0aWNhbCBkYXRhIGNv
+dWxkIGJlIHZhcmlvdXMgZGF0YQ0KPiA+ICAgICogc3RydWN0dXJlcywgcG9saWNpZXMsIGFuZCBz
+dGF0ZXMgc3RvcmVkIGluIGtlcm5lbCBtZW1vcnkgdGhhdCBjYW4NCj4gPiAgICAqIGltcGFjdCB0
+aGUgaW50ZWdyaXR5IG9mIHRoZSBzeXN0ZW0uDQo+ID4gICAgKg0KPiA+IC0gKiBSZXR1cm5zIDAg
+aWYgdGhlIGJ1ZmZlciBoYXMgYmVlbiBzdWNjZXNzZnVsbHkgbWVhc3VyZWQsIGEgbmVnYXRpdmUg
+dmFsdWUNCj4gPiAtICogb3RoZXJ3aXNlLg0KPiA+ICsgKiBSZXR1cm5zIDAgaWYgdGhlIGJ1ZmZl
+ciBoYXMgYmVlbiBzdWNjZXNzZnVsbHkgbWVhc3VyZWQsIDEgaWYgdGhlIGRpZ2VzdA0KPiA+ICsg
+KiBoYXMgYmVlbiB3cml0dGVuIHRvIHRoZSBwYXNzZWQgbG9jYXRpb24gYnV0IG5vdCBhZGRlZCB0
+byBhIG1lYXN1cmVtZW50DQo+IGVudHJ5LA0KPiA+ICsgKiBhIG5lZ2F0aXZlIHZhbHVlIG90aGVy
+d2lzZS4NCj4gPiAgICAqLw0KPiA+ICAgaW50IGltYV9tZWFzdXJlX2NyaXRpY2FsX2RhdGEoY29u
+c3QgY2hhciAqZXZlbnRfbGFiZWwsDQo+ID4gICAJCQkgICAgICBjb25zdCBjaGFyICpldmVudF9u
+YW1lLA0KPiA+ICAgCQkJICAgICAgY29uc3Qgdm9pZCAqYnVmLCBzaXplX3QgYnVmX2xlbiwNCj4g
+PiAtCQkJICAgICAgYm9vbCBoYXNoKQ0KPiA+ICsJCQkgICAgICBib29sIGhhc2gsIHU4ICpkaWdl
+c3QpDQo+ID4gICB7DQo+ID4gICAJaWYgKCFldmVudF9uYW1lIHx8ICFldmVudF9sYWJlbCB8fCAh
+YnVmIHx8ICFidWZfbGVuKQ0KPiA+ICAgCQlyZXR1cm4gLUVOT1BBUkFNOw0KPiA+DQo+ID4gICAJ
+cmV0dXJuIHByb2Nlc3NfYnVmZmVyX21lYXN1cmVtZW50KCZpbml0X3VzZXJfbnMsIE5VTEwsIGJ1
+ZiwNCj4gYnVmX2xlbiwNCj4gPiAgIAkJCQkJICBldmVudF9uYW1lLCBDUklUSUNBTF9EQVRBLCAw
+LA0KPiA+IC0JCQkJCSAgZXZlbnRfbGFiZWwsIGhhc2gpOw0KPiA+ICsJCQkJCSAgZXZlbnRfbGFi
+ZWwsIGhhc2gsIGRpZ2VzdCk7DQo+ID4gICB9DQo+ID4NCj4gPiAgIHN0YXRpYyBpbnQgX19pbml0
+IGluaXRfaW1hKHZvaWQpDQo+ID4gZGlmZiAtLWdpdCBhL3NlY3VyaXR5L2ludGVncml0eS9pbWEv
+aW1hX3F1ZXVlX2tleXMuYw0KPiBiL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX3F1ZXVlX2tl
+eXMuYw0KPiA+IGluZGV4IGUzMDQ3Y2U2NGYzOS4uYWMwMGE0Nzc4YTkxIDEwMDY0NA0KPiA+IC0t
+LSBhL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX3F1ZXVlX2tleXMuYw0KPiA+ICsrKyBiL3Nl
+Y3VyaXR5L2ludGVncml0eS9pbWEvaW1hX3F1ZXVlX2tleXMuYw0KPiA+IEBAIC0xNjYsNyArMTY2
+LDcgQEAgdm9pZCBpbWFfcHJvY2Vzc19xdWV1ZWRfa2V5cyh2b2lkKQ0KPiA+ICAgCQkJCQkJCSBl
+bnRyeS0NCj4gPmtleXJpbmdfbmFtZSwNCj4gPiAgIAkJCQkJCQkgS0VZX0NIRUNLLCAwLA0KPiA+
+ICAgCQkJCQkJCSBlbnRyeS0NCj4gPmtleXJpbmdfbmFtZSwNCj4gPiAtCQkJCQkJCSBmYWxzZSk7
+DQo+ID4gKwkJCQkJCQkgZmFsc2UsIE5VTEwpOw0KPiA+ICAgCQlsaXN0X2RlbCgmZW50cnktPmxp
+c3QpOw0KPiA+ICAgCQlpbWFfZnJlZV9rZXlfZW50cnkoZW50cnkpOw0KPiA+ICAgCX0NCj4gPiBk
+aWZmIC0tZ2l0IGEvc2VjdXJpdHkvc2VsaW51eC9pbWEuYyBiL3NlY3VyaXR5L3NlbGludXgvaW1h
+LmMNCj4gPiBpbmRleCA0ZGI5ZmEyMTE2MzguLjk2YmQ3ZWFkODA4MSAxMDA2NDQNCj4gPiAtLS0g
+YS9zZWN1cml0eS9zZWxpbnV4L2ltYS5jDQo+ID4gKysrIGIvc2VjdXJpdHkvc2VsaW51eC9pbWEu
+Yw0KPiA+IEBAIC04OCw3ICs4OCw3IEBAIHZvaWQgc2VsaW51eF9pbWFfbWVhc3VyZV9zdGF0ZV9s
+b2NrZWQoc3RydWN0DQo+IHNlbGludXhfc3RhdGUgKnN0YXRlKQ0KPiA+DQo+ID4gICAJbWVhc3Vy
+ZV9yYyA9IGltYV9tZWFzdXJlX2NyaXRpY2FsX2RhdGEoInNlbGludXgiLCAic2VsaW51eC1zdGF0
+ZSIsDQo+ID4gICAJCQkJCSAgICAgICBzdGF0ZV9zdHIsIHN0cmxlbihzdGF0ZV9zdHIpLA0KPiA+
+IC0JCQkJCSAgICAgICBmYWxzZSk7DQo+ID4gKwkJCQkJICAgICAgIGZhbHNlLCBOVUxMKTsNCj4g
+Pg0KPiA+ICAgCWtmcmVlKHN0YXRlX3N0cik7DQo+ID4NCj4gPiBAQCAtMTA1LDcgKzEwNSw3IEBA
+IHZvaWQgc2VsaW51eF9pbWFfbWVhc3VyZV9zdGF0ZV9sb2NrZWQoc3RydWN0DQo+IHNlbGludXhf
+c3RhdGUgKnN0YXRlKQ0KPiA+ICAgCX0NCj4gPg0KPiA+ICAgCW1lYXN1cmVfcmMgPSBpbWFfbWVh
+c3VyZV9jcml0aWNhbF9kYXRhKCJzZWxpbnV4IiwgInNlbGludXgtcG9saWN5LQ0KPiBoYXNoIiwN
+Cj4gPiAtCQkJCQkgICAgICAgcG9saWN5LCBwb2xpY3lfbGVuLCB0cnVlKTsNCj4gPiArCQkJCQkg
+ICAgICAgcG9saWN5LCBwb2xpY3lfbGVuLCB0cnVlLCBOVUxMKTsNCj4gPg0KPiA+ICAgCXZmcmVl
+KHBvbGljeSk7DQo+ID4gICB9DQo+ID4NCg==
