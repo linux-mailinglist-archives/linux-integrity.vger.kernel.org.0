@@ -2,84 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B2F3B8905
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Jun 2021 21:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85E63B8917
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Jun 2021 21:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbhF3TN0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Jun 2021 15:13:26 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:49510 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233152AbhF3TN0 (ORCPT
+        id S233675AbhF3TU3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Jun 2021 15:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233536AbhF3TU2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Jun 2021 15:13:26 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 985E072C8B4;
-        Wed, 30 Jun 2021 22:10:55 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 7CA714A46ED;
-        Wed, 30 Jun 2021 22:10:55 +0300 (MSK)
-Date:   Wed, 30 Jun 2021 22:10:55 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] ima-evm-utils: Read keyid from the cert appended
- to the key file
-Message-ID: <20210630191055.xpjsooduv7dfo6vc@altlinux.org>
-References: <20210511115630.795208-1-vt@altlinux.org>
- <20210511115630.795208-4-vt@altlinux.org>
- <9e3eff6a1aecbf609bf3759addf32848177a08d9.camel@linux.ibm.com>
+        Wed, 30 Jun 2021 15:20:28 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59E0C0617AD
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Jun 2021 12:17:58 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id p24so4839507ljj.1
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Jun 2021 12:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4T+GID+oMnIZlCqDCJF0ldXeQDAkPgspY/ySOTASFzI=;
+        b=OsGeYpUKTFPyN5n360XNZX8s/aqdMHN9tQztcumkZMUEG0EKEgHA2J/bHBhbdu8wiR
+         ClWnoPCQmYWxP2n/dlnN1fE0QB/HOvPEfl0TYUAdfEux0/vvSPpQzzuxcD9wpjOUwDnm
+         ODKvHI15ym8cJPnCdDXTIIdO883VCyNE7rJaA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4T+GID+oMnIZlCqDCJF0ldXeQDAkPgspY/ySOTASFzI=;
+        b=Aouul9CnAF+IZx8xKTzLs9ZH+mib+Xb5DNTdA0AJjVYjRaLS1zdJPqlvTKsRokMZFF
+         CHNERtMlXj5uRa8GOjPdkRwFtqjxTQi+/ZtlkAcg3r2HryD+efW0SaS1WTRytZt39ghJ
+         ggIreJoQzOPsUgn1HoxoTZ1W2xMVWCmfcIupvUYx9psJVSn8KtoIGcyG3eLSviInx8gY
+         ZjB1bhb+LR0mwU2hDckXNbkSNeOuFZXyQbfdbcAzL648P3M3saZWyjoVqz9T5SdXBlUc
+         lPMeHL47Acqe2sr9Tm3MOtgRfiY98wBll5YydTMMdZUxqp66dz95FnbhDQvwJ6C3NuSF
+         dHlw==
+X-Gm-Message-State: AOAM531aAB0MHwmEFGrkMKe36tqjzpH/zcD4jeZMV2XdAsnB7yVqpRGj
+        0QHIpKX1viH3j7jxanBLIge066Gkb3VcLy9eZfg=
+X-Google-Smtp-Source: ABdhPJyuuftIy+oqxHCXs5wUKVN+lGKfM7YLp0dUjD9HRalpINiQJyyVnei6ZB5rhkQHptXpPL+qBg==
+X-Received: by 2002:a05:651c:1695:: with SMTP id bd21mr8861844ljb.316.1625080676730;
+        Wed, 30 Jun 2021 12:17:56 -0700 (PDT)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id o142sm1996164lfa.299.2021.06.30.12.17.55
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Jun 2021 12:17:56 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id t17so7219343lfq.0
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Jun 2021 12:17:55 -0700 (PDT)
+X-Received: by 2002:a19:7d04:: with SMTP id y4mr27583898lfc.201.1625080675538;
+ Wed, 30 Jun 2021 12:17:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <9e3eff6a1aecbf609bf3759addf32848177a08d9.camel@linux.ibm.com>
+References: <20210629213421.60320-1-stefanb@linux.vnet.ibm.com> <20210629213421.60320-2-stefanb@linux.vnet.ibm.com>
+In-Reply-To: <20210629213421.60320-2-stefanb@linux.vnet.ibm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 30 Jun 2021 12:17:38 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgVZ6PUJ6Q=vqnhSkHnE2Rvr72xPFjoRU4=HHn-Rqxu4w@mail.gmail.com>
+Message-ID: <CAHk-=wgVZ6PUJ6Q=vqnhSkHnE2Rvr72xPFjoRU4=HHn-Rqxu4w@mail.gmail.com>
+Subject: Re: [PATCH v8 1/2] certs: Trigger creation of RSA module signing key
+ if it's not an RSA key
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     Jessica Yu <jeyu@kernel.org>, keyrings@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi,
+On Tue, Jun 29, 2021 at 2:34 PM Stefan Berger
+<stefanb@linux.vnet.ibm.com> wrote:
+>
+> Address a kbuild issue where a developer created an ECDSA key for signing
+> kernel modules and then builds an older version of the kernel, when bi-
+> secting the kernel for example, that does not support ECDSA keys.
 
-On Wed, Jun 30, 2021 at 01:38:02PM -0400, Mimi Zohar wrote:
-> On Tue, 2021-05-11 at 14:56 +0300, Vitaly Chikunov wrote:
-> > 
-> > diff --git a/src/libimaevm.c b/src/libimaevm.c
-> > index 1c03768..bfce7ef 100644
-> > --- a/src/libimaevm.c
-> > +++ b/src/libimaevm.c
-> > @@ -1021,10 +1021,12 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
-> >  		return -1;
-> >  	}
-> > 
-> > -	if (imaevm_params.keyid)
-> > +	if (imaevm_params.keyid) {
-> >  		hdr->keyid = htonl(imaevm_params.keyid);
-> > -	else
-> > -		calc_keyid_v2(&hdr->keyid, name, pkey);
-> > +	} else {
-> > +		if (__read_keyid(&hdr->keyid, keyfile, KEYID_FILE_PEM_KEY))
-> > +			calc_keyid_v2(&hdr->keyid, name, pkey);
-> > +	}
-> 
-> If the call to  __read_keyid() was independent of the test and call to
-> calc_keyid_v2(), it would make reading code the easier to understand.
-> 
-> result = __read_keyid(...);
-> if (result  < 0)
->     calc_keyid_v2(...);
+Thanks, these two don't confuse me any more.
 
-No problem to add additional variable and check __read_keyid indirectly.
-But, how is this independent? Call to calc_keyid_v2 is dependent to
-__read_keyid result.
-
-Thanks,
-
-> 
-> thanks,
-> 
-> Mimi
-> 
-> > 
-> >  	st = "EVP_PKEY_CTX_new";
-> >  	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
-> 
+                Linus
