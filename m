@@ -2,91 +2,89 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C64103B8922
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Jun 2021 21:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA9C3B8931
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Jun 2021 21:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233675AbhF3T3I (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 30 Jun 2021 15:29:08 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:60834 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233583AbhF3T3H (ORCPT
+        id S233749AbhF3Tg3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 30 Jun 2021 15:36:29 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50734 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229700AbhF3Tg3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 30 Jun 2021 15:29:07 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 90B9E72C8B4;
-        Wed, 30 Jun 2021 22:26:37 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 5D28E4A46ED;
-        Wed, 30 Jun 2021 22:26:37 +0300 (MSK)
-Date:   Wed, 30 Jun 2021 22:26:37 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] ima-evm-utils: Read keyid from the cert appended
- to the key file
-Message-ID: <20210630192637.tkphs22d4yljgepu@altlinux.org>
-References: <20210511115630.795208-1-vt@altlinux.org>
- <20210511115630.795208-4-vt@altlinux.org>
- <9e3eff6a1aecbf609bf3759addf32848177a08d9.camel@linux.ibm.com>
- <20210630191055.xpjsooduv7dfo6vc@altlinux.org>
+        Wed, 30 Jun 2021 15:36:29 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15UJ7KOS088961
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Jun 2021 15:34:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=a7epItxTWm7lcypRbb3j0rpdBBTOFAcikuVW2QOUxj0=;
+ b=I8tXRN6RyaRQrPM9Z8jIabj2MC5CFn99H94pSy90YTVPe8OYZm5mYAShn6g5jbLIpro7
+ 8r+JWLHTjw0BIg4usjMZUEdff9aqLRZ+c8JNIlRVCBEA+rsyk2AS2Bp8e4YdYUiFmdqJ
+ +myGRYw8E9jFWcHnZ01rFy3lEfKDIqI/sOfY3CceH6eaSv0JSMbunPe7jt0h2DBUmSwP
+ S84Og3uZYV8XGH+UYeDpMM4S5EU+WGh2+tY9AaTpz4DCjjoSSabaG9bLBZhsF7akqnH2
+ C0fdnMokE7eixF2Mt9OgY8vZQHTuKMLeudixLFOROxFMqlsZHwLy7B8e9iDXFEkDzwQC yw== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39gtqmr19c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Jun 2021 15:34:00 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15UJXnGL030376
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Jun 2021 19:33:59 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma03dal.us.ibm.com with ESMTP id 39duve1d0s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Jun 2021 19:33:54 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15UJXBrm33620472
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Jun 2021 19:33:11 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8A47AC05B;
+        Wed, 30 Jun 2021 19:33:10 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DA17BAC059;
+        Wed, 30 Jun 2021 19:33:10 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.47.158.155])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 30 Jun 2021 19:33:10 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH ima-evm-utils 0/3] libimaevm: Remove digest calculations not supported by IMA
+Date:   Wed, 30 Jun 2021 15:33:00 -0400
+Message-Id: <20210630193303.2531284-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <20210630191055.xpjsooduv7dfo6vc@altlinux.org>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: y2pzzytU3tQin7QiIQFET2wPiSSZ5ZdT
+X-Proofpoint-ORIG-GUID: y2pzzytU3tQin7QiIQFET2wPiSSZ5ZdT
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-30_11:2021-06-30,2021-06-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 bulkscore=0 spamscore=0 suspectscore=0
+ phishscore=0 malwarescore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ mlxlogscore=779 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106300106
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Mimi,
+Remove digest calculations over directories, symbolic links, and device files
+since those and related signature verifications are not supported by IMA in
+the kernel.
 
-On Wed, Jun 30, 2021 at 10:10:55PM +0300, Vitaly Chikunov wrote:
-> On Wed, Jun 30, 2021 at 01:38:02PM -0400, Mimi Zohar wrote:
-> > On Tue, 2021-05-11 at 14:56 +0300, Vitaly Chikunov wrote:
-> > > 
-> > > diff --git a/src/libimaevm.c b/src/libimaevm.c
-> > > index 1c03768..bfce7ef 100644
-> > > --- a/src/libimaevm.c
-> > > +++ b/src/libimaevm.c
-> > > @@ -1021,10 +1021,12 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
-> > >  		return -1;
-> > >  	}
-> > > 
-> > > -	if (imaevm_params.keyid)
-> > > +	if (imaevm_params.keyid) {
-> > >  		hdr->keyid = htonl(imaevm_params.keyid);
-> > > -	else
-> > > -		calc_keyid_v2(&hdr->keyid, name, pkey);
-> > > +	} else {
-> > > +		if (__read_keyid(&hdr->keyid, keyfile, KEYID_FILE_PEM_KEY))
-> > > +			calc_keyid_v2(&hdr->keyid, name, pkey);
-> > > +	}
-> > 
-> > If the call to  __read_keyid() was independent of the test and call to
-> > calc_keyid_v2(), it would make reading code the easier to understand.
-> > 
-> > result = __read_keyid(...);
-> > if (result  < 0)
-> >     calc_keyid_v2(...);
-> 
-> No problem to add additional variable and check __read_keyid indirectly.
-> But, how is this independent? Call to calc_keyid_v2 is dependent to
-> __read_keyid result.
+Regards,
+   Stefan
 
-I think I understood what you meant.
+Stefan Berger (3):
+  libimaevm: Remove calculation of a digest over a device file
+  libimaevm: Remove calculation of a digest over a directory
+  libimaevm: Remove calculation of a digest over a symbolic link
 
-Thanks,
+ src/libimaevm.c | 68 -------------------------------------------------
+ 1 file changed, 68 deletions(-)
 
-> 
-> Thanks,
-> 
-> > 
-> > thanks,
-> > 
-> > Mimi
-> > 
-> > > 
-> > >  	st = "EVP_PKEY_CTX_new";
-> > >  	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
-> > 
+-- 
+2.31.1
+
