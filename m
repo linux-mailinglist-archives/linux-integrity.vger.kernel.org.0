@@ -2,187 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E78023BA01F
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Jul 2021 13:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2160A3BA08E
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Jul 2021 14:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbhGBL7u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 2 Jul 2021 07:59:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53518 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231956AbhGBL7u (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 2 Jul 2021 07:59:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E8A2F6141D;
-        Fri,  2 Jul 2021 11:57:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625227038;
-        bh=VlIqcg4eZrvt1YEEJOeAcdXh9hGltDK283qbsdMCAE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=elS7eWnh5rGuo19siFj1TZ5jl3y91lFAtciBOnK8TgQEhRQ2HxkYJe/OiQf5RfOVM
-         rrO/aKhJRie7ceOsWqn+JEkBH5j6IIuJMUrYIt7tlW6vxsJWMDJfFShi9AQTYVOGgK
-         iei8jY44cosFsJrZswiVI4bR7E+N18XSB7gcGnHj26ErfbX+CGb4YV1v5Y9KQISVHI
-         /jqiVM+dCB2LhZ90CuT7w5rfuX0u29um1p8xKJUfkDMQpvGLfYSZdpFMUP1g/MfSRO
-         i2ixjS93GOUfLdflrsWRy078gf/T99/0JvLdxVKLIBm6d8TN4yoQfqXmcaw/p3c8Sj
-         JZlytHfoqry0A==
-Date:   Fri, 2 Jul 2021 14:57:15 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Hao Wu <hao.wu@rubrik.com>
-Cc:     Shrihari Kalkar <shrihari.kalkar@rubrik.com>,
-        Seungyeop Han <seungyeop.han@rubrik.com>,
-        Anish Jhaveri <anish.jhaveri@rubrik.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Ken Goldman <kgold@linux.ibm.com>, zohar@linux.vnet.ibm.com,
-        why2jjj.linux@gmail.com, Hamza Attak <hamza@hpe.com>,
-        gregkh@linuxfoundation.org, arnd@arndb.de,
-        Nayna <nayna@linux.vnet.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH] tpm: fix ATMEL TPM crash caused by too frequent queries
-Message-ID: <20210702115715.gyqfdk6ksgqzeenm@kernel.org>
-References: <20210624053321.861-1-hao.wu@rubrik.com>
- <20210630042205.30051-1-hao.wu@rubrik.com>
- <20210702063555.q2phirfv7wxc6axu@kernel.org>
- <939BC11F-0905-4777-9DD7-630FC28ED205@rubrik.com>
- <20210702074518.64gyockmqrphbkqx@kernel.org>
- <559CEFEB-EE60-464B-A847-9E1C3B5F5BC4@rubrik.com>
- <20210702084239.svkmfw7r3y5auus3@kernel.org>
+        id S232597AbhGBMgh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Jul 2021 08:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232602AbhGBMgg (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 2 Jul 2021 08:36:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DF6C061764
+        for <linux-integrity@vger.kernel.org>; Fri,  2 Jul 2021 05:34:04 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1lzIMq-0003K9-Jc; Fri, 02 Jul 2021 14:34:00 +0200
+Subject: Re: [PATCH v2 6/6] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+To:     Richard Weinberger <richard@nod.at>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        kernel <kernel@pengutronix.de>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        horia geanta <horia.geanta@nxp.com>,
+        aymen sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        davem <davem@davemloft.net>, Udit Agarwal <udit.agarwal@nxp.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        david <david@sigma-star.at>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        "open list, ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>
+References: <cover.1dfbb73645d917b3c76d01290804a3410bd9932e.1624364386.git-series.a.fatoum@pengutronix.de>
+ <39e6d65ca5d2a0a35fb71d6c1f85add8ee489a19.1624364386.git-series.a.fatoum@pengutronix.de>
+ <1850833581.13438.1625172175436.JavaMail.zimbra@nod.at>
+ <2f608e5a-5a12-6db1-b9bd-a2cd9e3e3671@pengutronix.de>
+ <783613027.15909.1625223222889.JavaMail.zimbra@nod.at>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <ac8ef66f-4d57-ead0-d1b3-e97220463241@pengutronix.de>
+Date:   Fri, 2 Jul 2021 14:33:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <783613027.15909.1625223222889.JavaMail.zimbra@nod.at>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210702084239.svkmfw7r3y5auus3@kernel.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 02, 2021 at 11:42:39AM +0300, Jarkko Sakkinen wrote:
-> On Fri, Jul 02, 2021 at 12:59:18AM -0700, Hao Wu wrote:
-> > > On Jul 2, 2021, at 12:45 AM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > 
-> > > On Fri, Jul 02, 2021 at 12:33:15AM -0700, Hao Wu wrote:
-> > >> 
-> > >> 
-> > >>> On Jul 1, 2021, at 11:35 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > >>> 
-> > >>> On Tue, Jun 29, 2021 at 09:22:05PM -0700, Hao Wu wrote:
-> > >>>> This is a fix for the ATMEL TPM crash bug reported in
-> > >>>> https://patchwork.kernel.org/project/linux-integrity/patch/20200926223150.109645-1-hao.wu@rubrik.com/
-> > >>>> 
-> > >>>> According to the discussions in the original thread,
-> > >>>> we don't want to revert the timeout of wait_for_tpm_stat
-> > >>>> for non-ATMEL chips, which brings back the performance cost.
-> > >>>> For investigation and analysis of why wait_for_tpm_stat
-> > >>>> caused the issue, and how the regression was introduced,
-> > >>>> please read the original thread above.
-> > >>>> 
-> > >>>> Thus the proposed fix here is to only revert the timeout
-> > >>>> for ATMEL chips by checking the vendor ID.
-> > >>>> 
-> > >>>> Signed-off-by: Hao Wu <hao.wu@rubrik.com>
-> > >>>> Fixes: 9f3fc7bcddcb ("tpm: replace msleep() with usleep_range() in TPM 1.2/2.0 generic drivers")
-> > >>> 
-> > >>> Fixes tag should be before SOB.
-> > >>> 
-> > >>>> ---
-> > >>>> Test Plan:
-> > >>>> - Run fixed kernel with ATMEL TPM chips and see crash
-> > >>>> has been fixed.
-> > >>>> - Run fixed kernel with non-ATMEL TPM chips, and confirm
-> > >>>> the timeout has not been changed.
-> > >>>> 
-> > >>>> drivers/char/tpm/tpm.h          |  9 ++++++++-
-> > >>>> drivers/char/tpm/tpm_tis_core.c | 19 +++++++++++++++++--
-> > >>>> include/linux/tpm.h             |  2 ++
-> > >>>> 3 files changed, 27 insertions(+), 3 deletions(-)
-> > >>>> 
-> > >>>> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > >>>> index 283f78211c3a..bc6aa7f9e119 100644
-> > >>>> --- a/drivers/char/tpm/tpm.h
-> > >>>> +++ b/drivers/char/tpm/tpm.h
-> > >>>> @@ -42,7 +42,9 @@ enum tpm_timeout {
-> > >>>> 	TPM_TIMEOUT_RANGE_US = 300,	/* usecs */
-> > >>>> 	TPM_TIMEOUT_POLL = 1,	/* msecs */
-> > >>>> 	TPM_TIMEOUT_USECS_MIN = 100,      /* usecs */
-> > >>>> -	TPM_TIMEOUT_USECS_MAX = 500      /* usecs */
-> > >>>> +	TPM_TIMEOUT_USECS_MAX = 500,	/* usecs */
-> > >>> 
-> > >>> What is this change?
-> > >> Need to add the tailing comma
-> > >> 
-> > >>> 
-> > >>>> +	TPM_TIMEOUT_WAIT_STAT = 500,	/* usecs */
-> > >>>> +	TPM_ATML_TIMEOUT_WAIT_STAT = 15000	/* usecs */
-> > >>>> };
-> > >>>> 
-> > >>>> /* TPM addresses */
-> > >>>> @@ -189,6 +191,11 @@ static inline void tpm_msleep(unsigned int delay_msec)
-> > >>>> 		     delay_msec * 1000);
-> > >>>> };
-> > >>>> 
-> > >>>> +static inline void tpm_usleep(unsigned int delay_usec)
-> > >>>> +{
-> > >>>> +	usleep_range(delay_usec - TPM_TIMEOUT_RANGE_US, delay_usec);
-> > >>>> +};
-> > >>> 
-> > >>> Please remove this, and open code.
-> > >> Ok, will do
-> > >> 
-> > >>>> +
-> > >>>> int tpm_chip_start(struct tpm_chip *chip);
-> > >>>> void tpm_chip_stop(struct tpm_chip *chip);
-> > >>>> struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
-> > >>>> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> > >>>> index 55b9d3965ae1..9ddd4edfe1c2 100644
-> > >>>> --- a/drivers/char/tpm/tpm_tis_core.c
-> > >>>> +++ b/drivers/char/tpm/tpm_tis_core.c
-> > >>>> @@ -80,8 +80,12 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
-> > >>>> 		}
-> > >>>> 	} else {
-> > >>>> 		do {
-> > >>>> -			usleep_range(TPM_TIMEOUT_USECS_MIN,
-> > >>>> -				     TPM_TIMEOUT_USECS_MAX);
-> > >>>> +			if (chip->timeout_wait_stat && 
-> > >>>> +				chip->timeout_wait_stat >= TPM_TIMEOUT_WAIT_STAT) {
-> > >>>> +				tpm_usleep((unsigned int)(chip->timeout_wait_stat));
-> > >>>> +			} else {
-> > >>>> +				tpm_usleep((unsigned int)(TPM_TIMEOUT_WAIT_STAT));
-> > >>>> +			}
-> > >>> 
-> > >>> Invalid use of braces. Please read
-> > >>> 
-> > >>> https://www.kernel.org/doc/html/v5.13/process/coding-style.html
-> > >>> 
-> > >>> Why do you have to use this field conditionally anyway? Why doesn't
-> > >>> it always contain a legit value?
-> > >> The field is legit now, but doesn’t hurt to do addition check for robustness 
-> > >> to ensure no crash ? Just in case the value is updated below TPM_TIMEOUT_WAIT_STAT ? 
-> > >> 
-> > >> Can remove if we think it is not needed.
-> > > 
-> > > A simple question: why you use it conditionally? Can the field contain invalid value?
-> > > 
-> > There are two checks
-> > - chip->timeout_wait_stat >= TPM_TIMEOUT_WAIT_STAT
-> > It could be invalid when future developer set it to some value less than `TPM_TIMEOUT_USECS_MIN`,
-> > and crash the usleep 
+On 02.07.21 12:53, Richard Weinberger wrote:
+> Ahmad,
 > 
-> I don't understand this. Why you don't set to appropriate value?
+> ----- Ursprüngliche Mail -----
+>> Von: "Ahmad Fatoum" <a.fatoum@pengutronix.de>
+>>> I'm still think that hard coding the key modifier is not wise.
+>>> As I said[0], there are folks out there that want to provide their own modifier,
+>>> so it is not only about being binary compatible with other CAAM blob patches in
+>>> the wild.
+>>
+>> I don't think the characterization as a salt is accurate. AFAIU it's more
+>> of a namespace, so blobs being loaded are "type-checked" against the modifier.
+> 
+> Well, the CAAM programmer's reference manual states that the blob key is a 128 bit modifier
+> and has two purposes:
+> 1. It can be used as tag to provide separation between blobs to detect accidental replacement of blobs.
+> 2. But it can also be treated as secret to provide additional protection. Because the blob encryption
+> key derivation includes the key modifier.
+> 
+> While you have case 1 in mind, I care about case 2. :-)
 
-What you should do, is to define two fields:
+Ah, using the key modifier as a passphrase didn't occur to me.
 
-- tpm_timeout_min
-- tpm_timeout_max
+>>> I'll happily implement that feature after your patches got merged but IMHO we
+>>> should first agree on an interface.
+>>> How about allowing another optional parameter to Opt_new and Opt_load
+>>
+>> Sound good to me. pcrlock for TPM trusted keys has the same interface.
+>>
+>> I'd prefer the new option to accept strings, not hex though.
+> 
+> Both is possible. If the string starts with "0x" it needs to be decoded to a
+> 128 bit key. Otherwise it has to be a up to 16 byte string.
 
-And initialize these to TPM_TIMEOUT_USECS_MIN and TPM_TIMEOUT_USECS_MAX.
+Fine by me. Looking forward to your patches. :-)
 
-Then fixup those for Atmel (with a simple if-statement, switch-case is
-overkill).
 
-The way you work out things right now is broken:
+Cheers,
+Ahmad
 
-1. Before for non-Atmel: usleep_range(100, 500)
-2. After for non-Atmel: usleep_range(200, 500)
+> 
+> Thanks,
+> //richard
+> 
 
-I.e. the patch changes code semantically that it should not touch in the
-first place.
-
-/Jarkko
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
