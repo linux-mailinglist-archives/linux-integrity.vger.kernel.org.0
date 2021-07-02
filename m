@@ -2,119 +2,66 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6C53B9C3C
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Jul 2021 08:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC1B3B9C5C
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Jul 2021 08:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbhGBGl1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 2 Jul 2021 02:41:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40986 "EHLO mail.kernel.org"
+        id S230123AbhGBGwN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 2 Jul 2021 02:52:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41794 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229542AbhGBGl1 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 2 Jul 2021 02:41:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E08A613FB;
-        Fri,  2 Jul 2021 06:38:55 +0000 (UTC)
+        id S230026AbhGBGwM (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 2 Jul 2021 02:52:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 836A861413;
+        Fri,  2 Jul 2021 06:49:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625207936;
-        bh=JyTuKCLD1I+mEBP/UUmCbI9VqTb4ZjTS2241I8Zw7m8=;
+        s=k20201202; t=1625208581;
+        bh=mo46QY2t5vhAtKI/bBVodYsVpTI5odDwqCU6VrYAZFo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cEZKplZtL8srXuLJGv/iX8oV+tZDjo1cheBCKnXUX++bzqX7mZnYYaWm8Jm8hvWx5
-         L54VLWSk/tMt/F29Pv77LKoK+9GGTpBqW583/Gks9PiZXUhuQN9j6zAZFwz8cAllFC
-         zGzuIqJqVKUcAMstY6P8eT3alh2rj8DEdquTIjRcbg+UYA3QeYpG6D68J4FhBIS2E6
-         5oRneLbF1t9VIC5b+FSnEFqCnEcHVED638x+FJmWdDN9cOgJJGeAtiyxJpNWBpZTzy
-         uEzM+IYnsMcREGx8DZ47EzTMJEMt1NFY0Z5c2qSS//pkUguHD2SVUZTnES+Uf0vXjo
-         JD2PpjKD5QdEQ==
-Date:   Fri, 2 Jul 2021 09:38:53 +0300
+        b=inf79rYfYqGyUdMLlMUOuzH0M3QBSdYreJqZXaAAs8xgITxMzfan7F6DWYKFpz0HN
+         nepBs1nOvzl/fadqk3LzBMej+2vsgSUPKBpxQg8ugE//KLl/gAjAuQQXWwjupPZmn2
+         oJY5tP4H3SGIQq9h7C6JLNlO8GtrMO1vovtCFso+TQr947UYR+BahTrZTE3179QqeE
+         jIJ9aiaFa9hUkIQgVtTHeMGzFqCKiD5G5F6BIClaEJKE8GV1AO3kkURA0tMOTmHQtk
+         f8auKwxgvmu8dXbrVihbCKpSndQJ8BvdtwbZy12jsgSvJ6iu/Hcxt8Q88YfNAm6qgF
+         0HBhlA2qMIpjQ==
+Date:   Fri, 2 Jul 2021 09:49:38 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Saubhik Mukherjee <saubhik.mukherjee@gmail.com>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org,
-        andrianov@ispras.ru
-Subject: Re: [PATCH] char: tpm: vtpm_proxy: Fix race in init
-Message-ID: <20210702063853.x27z6yzsdxp7u4y6@kernel.org>
-References: <20210623132226.140341-1-saubhik.mukherjee@gmail.com>
- <20210629172700.yxqnedbayumo5f24@kernel.org>
- <20210629210524.hze6yb23pps3flnv@kernel.org>
- <2b7d8d44-791e-284a-a700-5465fbc2c100@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, keyrings@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v8 1/2] certs: Trigger creation of RSA module signing key
+ if it's not an RSA key
+Message-ID: <20210702064938.k2xr2cdtj2oybenc@kernel.org>
+References: <20210629213421.60320-1-stefanb@linux.vnet.ibm.com>
+ <20210629213421.60320-2-stefanb@linux.vnet.ibm.com>
+ <CAHk-=wgVZ6PUJ6Q=vqnhSkHnE2Rvr72xPFjoRU4=HHn-Rqxu4w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2b7d8d44-791e-284a-a700-5465fbc2c100@gmail.com>
+In-Reply-To: <CAHk-=wgVZ6PUJ6Q=vqnhSkHnE2Rvr72xPFjoRU4=HHn-Rqxu4w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 12:54:30PM +0530, Saubhik Mukherjee wrote:
-> On 6/30/21 2:35 AM, Jarkko Sakkinen wrote:
-> > On Tue, Jun 29, 2021 at 08:27:00PM +0300, Jarkko Sakkinen wrote:
-> > > On Wed, Jun 23, 2021 at 06:52:26PM +0530, Saubhik Mukherjee wrote:
-> > > > vtpm_module_init calls vtpmx_init which calls misc_register. The file
-> > > > operations callbacks are registered. So, vtpmx_fops_ioctl can execute in
-> > > > parallel with rest of vtpm_module_init. vtpmx_fops_ioctl calls
-> > > > vtpmx_ioc_new_dev, which calls vtpm_proxy_create_device, which calls
-> > > > vtpm_proxy_work_start, which could read uninitialized workqueue.
-> > > > 
-> > > > To avoid this, create workqueue before vtpmx init.
-> > > > 
-> > > > Found by Linux Driver Verification project (linuxtesting.org).
-> > > > 
-> > > > Signed-off-by: Saubhik Mukherjee <saubhik.mukherjee@gmail.com>
-> > > > ---
-> > > >   drivers/char/tpm/tpm_vtpm_proxy.c | 19 +++++++++----------
-> > > >   1 file changed, 9 insertions(+), 10 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-> > > > index 91c772e38bb5..225dfa026a8f 100644
-> > > > --- a/drivers/char/tpm/tpm_vtpm_proxy.c
-> > > > +++ b/drivers/char/tpm/tpm_vtpm_proxy.c
-> > > > @@ -697,23 +697,22 @@ static int __init vtpm_module_init(void)
-> > > >   {
-> > > >   	int rc;
-> > > > -	rc = vtpmx_init();
-> > > > -	if (rc) {
-> > > > -		pr_err("couldn't create vtpmx device\n");
-> > > > -		return rc;
-> > > > -	}
-> > > > -
-> > > >   	workqueue = create_workqueue("tpm-vtpm");
-> > > >   	if (!workqueue) {
-> > > >   		pr_err("couldn't create workqueue\n");
-> > > > -		rc = -ENOMEM;
-> > > > -		goto err_vtpmx_cleanup;
-> > > > +		return -ENOMEM;
-> > > > +	}
-> > > > +
-> > > > +	rc = vtpmx_init();
-> > > > +	if (rc) {
-> > > > +		pr_err("couldn't create vtpmx device\n");
-> > > > +		goto err_destroy_workqueue;
-> > > >   	}
-> > > >   	return 0;
-> > > > -err_vtpmx_cleanup:
-> > > > -	vtpmx_cleanup();
-> > > > +err_destroy_workqueue:
-> > > > +	destroy_workqueue(workqueue);
-> > > >   	return rc;
-> > > >   }
-> > > > -- 
-> > > > 2.30.2
-> > > > 
-> > > > 
-> > > 
-> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > 
-> > Taking reviewed-by back.
-> > 
-> > You're lacking fixes tag. Please re-send with one.
-> > 
-> > /Jarkko
-> > 
+On Wed, Jun 30, 2021 at 12:17:38PM -0700, Linus Torvalds wrote:
+> On Tue, Jun 29, 2021 at 2:34 PM Stefan Berger
+> <stefanb@linux.vnet.ibm.com> wrote:
+> >
+> > Address a kbuild issue where a developer created an ECDSA key for signing
+> > kernel modules and then builds an older version of the kernel, when bi-
+> > secting the kernel for example, that does not support ECDSA keys.
 > 
-> Thank you for noticing. I sent the patch containing the Fixes tag in reply
-> to your last message. (https://lkml.org/lkml/2021/6/30/104)
+> Thanks, these two don't confuse me any more.
+> 
+>                 Linus
 
-Please do not do that. Instead, version your patches (git format-patch -vX)
-and send them as separate threads.
-
-It's all documented: https://www.kernel.org/doc/html/v5.13/process/submitting-patches.html
+I'll (re-)test the changes, and make a PR after rc1 out.
 
 /Jarkko
