@@ -2,31 +2,31 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A82C63BC149
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jul 2021 17:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2ED73BC148
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Jul 2021 17:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbhGEQA7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 5 Jul 2021 12:00:59 -0400
+        id S230330AbhGEQA5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 5 Jul 2021 12:00:57 -0400
 Received: from mail-eopbgr20055.outbound.protection.outlook.com ([40.107.2.55]:55374
         "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230307AbhGEQA6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 5 Jul 2021 12:00:58 -0400
+        id S230305AbhGEQA5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 5 Jul 2021 12:00:57 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QYZj8YbdjTxBb8yycnjFjpf24gxLlk2VeUnfuaYTFBElCf+9mTJLF6tPHSmRv1LRZ2mlKVI44sg2fWrBynqcWZkF8k54CzPcX9dGg3EL3xmVZGbZIw3JvCT4dYkzScjy7WWZPzfAQWUJxYdA9EOzeDm/elzcPuoqcg0R07OTOZgUN2+RXaLeym0YYip34oaNQxlj7fsOqCUmvtLe4ODicEhYqHkXIQWfXzCigqGfJMm+xsMDCbtsK3hMiPPtjR5wLPuN5UBgxfdOoTXf8NVEF3sw0oQtMBXtNQnFXseZLPpi2PoiSnkmYt3oNPQevIzCAGzYJKoKUE1vpMhn304eMQ==
+ b=eRZN43sggVsJMbfxVxuTtFMBYZQld0sU5J1dp7ZDfQ3TX8KtRurHz0vuCndspnnptr+xd8Y+DRW8CXsv5qIO6QKMhGaOxhhra0cvGQrrSG8fGeSbEb86KFTLfK6r3bkA6miNmPxqQU/UamzlUK6+WEZG6FAMiNp04fZjjo5n6kGV/AM1y4zwe/IMVyUgkX0hguvc1bWzH8AxqmCV7k+sITyGL9BNBYD3VSPcGuwXlhSZKKB5s53nz9KbjvIP5jzP9kTT1p5ug+yiCVfcaR5vP69YcyAmaM7Nmvgcwo1ycHbSps0OwzpknvJNLc9fP4trgO9rI7dQUnluoicmUcZMcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rd6uhFPre6l0Zv/YRuE6xnDcG8GztabtYSj9FqUiTfI=;
- b=R2LEdrNJpW99bb4rso6bMibF1dBH+hzFyaX7Mfq1eM/2HcuXUtjph72f4vXlGkpXikSsR+4WSUoUHe4xtarINQ/Uck6pkaYTF/0oWcyGgn93YZTjO27ujJXu0GCv08iiV5Yf9L3/ULHHQTw3ESDg9fjIGvXw6kR/6ceg95jI+9e4kV9RgM+WQG65c8SzKicS6ToVXZWjh/k3QRw8WeJtlw6Gf1r0usiN7+G+GVVgjL4OsnKJRylQ/rZ0SkR73H2TXaAYA4ruoDm75Pg/+y6HET7WbtLc+ofQJ1HeL7odBQHZxmzOVsQJPE636Fu4UTaii31hdQvkojsyX+X87Mwe0A==
+ bh=IvfL+dx/ZpGSeTjhJ6vQ0fBW1PCpHR1ufFoTnSy5ZL8=;
+ b=TvYmTr+WKUASlOZ6TGbfI+NkeS4CEfj9M+2tV8G8xS1Rcl8RVFCF2L/jVi6KJ5J5d4KS7cig+MEl/+JRI0lUL/IMub7ifAOeWH7JRiKQINMaMuqGEqZu6EaK4ih58yIYSXcI6cq5Slh81dMSTknkfHZppFqXznPXFNgTVRCR92KKuBqSEllgcwqLivgOgUGLKmBcf0wyHTl4svhj8X53fobRcrPwqnatn8WP+9ugg95Cqy4QqF5bMVyr1Ewu40+4vpD7pC9lXMKO/Pxqv1kBqdXavSN88fA+8wadazJNm29zeGY8/HREjYXVzOL0TuT2GxmzZyAzWglXQljiPee1/Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=puiterwijk.org; dmarc=pass action=none
  header.from=puiterwijk.org; dkim=pass header.d=puiterwijk.org; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=puiterwijk.org;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rd6uhFPre6l0Zv/YRuE6xnDcG8GztabtYSj9FqUiTfI=;
- b=VXvvrIzpVma43ZEp8sOCqDV/VNATXUvgfd/tsT1BMnR23+Dis4wcXLVpQuaw7RPvadci8cQQ2XEoJ8MyEQTqFW97NYmvPhEAdSPVuneDIvA/DqEyOxHZL+B5NLZ4KXV7gO5pHOw6oQZwhi/he+1WNj7z6WcVvevO3+aqeC1f+BOT6nyFCmGayhZ/Jd4gqkPaJp9c7vnPQ2VvlTfV268rdcQd5QGmU4aK2i+dPSPmaYgJuTbUuLpg66JcykT5KKQ1p5yQOJrkMPb792Ynaowa08oV68AjTnr8kJM0PM90A9T6hLlRlmaBfop/dck80pHNnX0jKTstKjm9ecgfR/973g==
+ bh=IvfL+dx/ZpGSeTjhJ6vQ0fBW1PCpHR1ufFoTnSy5ZL8=;
+ b=KOq/7mma2+E4BLuUGJypBnK9iYYd/h67Uj/4ZFf5K4nv+8c1DHvWfymMF7Q88qZsYVH13a/Ecw1Yejlvk3IlkFpivioR885VL81Q36MajwweojRQkesNXMDmeqqxsptehEynFV+cidQRXcKYi77HPjssL6gLcdLy30+y+rHeVNYRMeYiKeoOqhDftLLFTq3YHpfW3+fBFKWp5RYH9RDQ1kg9ZlA5x8oIjZV/B72cnEirsAOT9ANQ9rNDFkelOZQfeCBrU9VARGeehoofJ9GCx56oRLoQR+ivvCOQHn2O2ANd8QxSV1vVeDbAfRYOVZr7fJRlS5b8yVKxremQUMJ5+A==
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none
  header.from=puiterwijk.org;
@@ -42,12 +42,13 @@ Received: from AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
 From:   Patrick Uiterwijk <patrick@puiterwijk.org>
 To:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com
 Cc:     pbrobinson@redhat.com, patrick@puiterwijk.org
-Subject: [PATCH ima-evm-utils v2 0/2] Fix use of sign_hash via API
-Date:   Mon,  5 Jul 2021 17:49:48 +0200
-Message-Id: <20210705154950.497359-1-patrick@puiterwijk.org>
+Subject: [PATCH ima-evm-utils v2 1/2] Fix sign_hash not observing the hashalgo argument
+Date:   Mon,  5 Jul 2021 17:49:49 +0200
+Message-Id: <20210705154950.497359-2-patrick@puiterwijk.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210106094335.3178261-1-patrick@puiterwijk.org>
+In-Reply-To: <20210705154950.497359-1-patrick@puiterwijk.org>
 References: <20210106094335.3178261-1-patrick@puiterwijk.org>
+ <20210705154950.497359-1-patrick@puiterwijk.org>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [45.148.140.78]
@@ -55,82 +56,87 @@ X-ClientProxiedBy: AM0PR03CA0063.eurprd03.prod.outlook.com (2603:10a6:208::40)
  To AM0P191MB0721.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:15f::13)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from fedora.patrick.home.puiterwijk.org (45.148.140.78) by AM0PR03CA0063.eurprd03.prod.outlook.com (2603:10a6:208::40) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22 via Frontend Transport; Mon, 5 Jul 2021 15:58:17 +0000
+Received: from fedora.patrick.home.puiterwijk.org (45.148.140.78) by AM0PR03CA0063.eurprd03.prod.outlook.com (2603:10a6:208::40) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22 via Frontend Transport; Mon, 5 Jul 2021 15:58:18 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ff807631-d2de-4692-43b3-08d93fcdb470
+X-MS-Office365-Filtering-Correlation-Id: 89a7bbd5-5b9f-42b2-a9d4-08d93fcdb49f
 X-MS-TrafficTypeDiagnostic: AM0P191MB0276:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM0P191MB02766989F7E8EA23F51EE9FBC81C9@AM0P191MB0276.EURP191.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-Microsoft-Antispam-PRVS: <AM0P191MB02764776A7D24ECDDD1F2358C81C9@AM0P191MB0276.EURP191.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:534;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nCM/1FyLAL/jWBNtdISyKtLew1agxz1BT0BZh+0iiw2xAUGEzxGwJTTH3/J8HhCiRoEwNJtXlQK76UDzRc0h3SfeWMQ3L13r1VOnJQUsUgKaBJY1MEMfIxUStT8bkVXfTH6G1msQ7sgMXdGnnxARU1SonYqSyjnlAlAGmhO64adsDSBf4BZHeaRWIyg/8vDyoTqcoMT9qEIagPWYLYGYM8mW1NXbESBKekJQC/AebmbOU1gYPqT0p8NhNIcz/VLrp9Gv33IuffiQyz0vx/IkQtdFBiO7uC/d6+osnbW6hb1DFqz+03Ksd+HH1twmILIWofOlkNzAmAMOi7Jr/e0Q+C+exMjVRhD5yt22Xg/KhNssvipuPYrqtFRLSFiBaxesjvtGE/u9pxKNnIaC2OnCTb4xiMKe0KHm+7Xwsm1eumhu2OAXCqohMOe2WEfvoVNWLp0bX9jareOZm22Qw+F4Jqdo6b185b3oLSljoxF1guc1k9IesV70OY0BP/fFEomIxLA2BEzhlSLp8Erta8z3sjLZyz2ScJjpYolMNNALAmzPnDexb9ruV9OEtLSKqha9Hj7JFEY6ceFmIlwna/1ARswtO2enmGnijAv04EJJunnmPoFwa0A0hNMBROZCJCjxqVTumX3PamYljCvbzYFQ2/sUNnrYG9uVNNXew+3mxezlWz0A/ebJN0ZTIHgImSHe
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P191MB0721.EURP191.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(136003)(366004)(396003)(39830400003)(376002)(346002)(6666004)(956004)(52116002)(7696005)(316002)(36756003)(2616005)(66946007)(66476007)(66556008)(6486002)(26005)(186003)(8936002)(38100700002)(38350700002)(478600001)(1076003)(86362001)(16526019)(2906002)(83380400001)(8676002)(4326008)(4744005)(107886003)(5660300002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: +cHDgIINGfY5POopEOUWzCvJxzP9FiuhIBsOsOWB8Z45o1jNm/37HkhblS7MrmZS3uX1gGB3CrvmiIxnB2RO69LuMfATcwzm6sWQ4SdLNKbvphbwFnCRSmV4oDAGWt5B4ReSxbPuvVK1Mi0iaJi7tcIgbpFdkJY7qO6E6TgBvt3rtXgMnr+j81SWWJ366TKSTKbB0AtEIwcGWmWFPbAJ18WY7lLKgWI7o0Wfm4Iz9r63lKdFvjWMPZw6bFZlvxz2bn7kYBCb2xX8p8IFHmM/Ic2Io5ar1wmrEO3nPc8Ln99nY/kOgv3Nas8E1QZd5KQlb7VSVnghnuPCc+kzTRMJjmT6Y2Y0HESDwRXJomqLuWcdRAzFOFlE2QXL7OZHk0YaeWLr5lNBz+QqGtzr/43FKYjSETO1OypAP5j2ku0/EIvN2++l1kb4wBw8/kHpOMdg/l9AORlmuQSusdhjEE/YNGCa7D9sjIu5M6xe8nPJTVD0SIVp3hFUR1HwzXHHYgER1USZYjJwV+I7ezFout974jqkGIjQHBYnQiq/kGdkXtXXwNU2vNc+prDYcRVAlPdoh3bhpna0OxnyJKkuww9pRf9h8TX6gb+FKQ5n5mT18tpwvfykIIU+OjolG8PF7fe+2NxDEUWMsHVQl2zX7mSyNkcKXK3uDtcJNgbiSzlWGoo6lZboaqIRnWqJAscpvBrBowI+cjKagoVNYL/WIAIFdA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0P191MB0721.EURP191.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(136003)(366004)(396003)(39830400003)(376002)(346002)(6666004)(956004)(52116002)(7696005)(316002)(36756003)(2616005)(66946007)(66476007)(66556008)(6486002)(26005)(186003)(8936002)(38100700002)(38350700002)(478600001)(1076003)(86362001)(16526019)(2906002)(83380400001)(8676002)(4326008)(107886003)(5660300002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7Az/W6jcdcEuDPxLtn979noUpNhfOfv2pPWj1dViFsK3Yknysd4KYwLXSaW3?=
- =?us-ascii?Q?vRtmMpvYJBUyMSNy5duGajqQSp5bX8eA+aSfgEXZjTg7cmf88LaXa5Za7w1o?=
- =?us-ascii?Q?afGz4djAOUVhedpahsUklZhAQTkn3A21WQ0hu6q7mFuSf4vVzjXr1wrBKcjC?=
- =?us-ascii?Q?BFcqRuA0mitkYrkTNnFyF2YDnmc/FzdYXxecjUzDeAYXsNCj4CubITJgFX2J?=
- =?us-ascii?Q?aytdGyv19AseAUZ3hKhxntBG1e8Ac2c3zMR89hZ8u0ZKiInm1rzKcnwU1nBv?=
- =?us-ascii?Q?G5NmT/r0SpUpOIPgqYHkR/CItA9pTE92b+Dh9d/7KsebrNS+YWJiaGXT1fo1?=
- =?us-ascii?Q?bbmgklV3ZczlpDv/EYiRkanaWdBozdgLk7fL4sOEDazyka4HTZ7gEzdYXvxw?=
- =?us-ascii?Q?dEm+Bg7K8YlT/wCjMljFglyU7jMwAoSO+BG1UjarlJubstJrLT/4Qb6ABYEH?=
- =?us-ascii?Q?u2NsBTccgjVBxIhglqbxX11YMyMvQX0KBncY2f00SzDrbWy/CQOaJHj8YJmg?=
- =?us-ascii?Q?4EmbP/iS3gfUNH6wldXgXBPcYiikZHoCoo1BdQp8/JEJ1ZfljaxSlCB06xVt?=
- =?us-ascii?Q?g2/1/K2ZSXzhfRoqbA6NmLItych3djhWZcZ0cuIoITfEMwj6ON1R9QNJXYa9?=
- =?us-ascii?Q?cd46xHjFGk46gK4yCTUhz+XeiDhIoPK6t49eZbMnNyYj4xZYBHGiZ15r8dqZ?=
- =?us-ascii?Q?NOIw0QWTRkMkWvErtmiwn80+a6NQ56Dm0eZSiyW9jA05BbZk2Xp+XEVxqpQS?=
- =?us-ascii?Q?J7qvB6wCBOZ4Nk+sDsK2UejaL7Xmj8Hz2dCaTE1pBVOS4AgYXbpPjSl3qwe0?=
- =?us-ascii?Q?10vV1mXIKL3MkgTmVZNb2HxJrxBw9JrRhe6TIE0uXBjCqGQyEAcqzElwasry?=
- =?us-ascii?Q?iHbnUy3cnb6rGwF6pyMq8zE3NjhwkuOQ7Khj0B7nEqtGkWw/B9074GBiO9/m?=
- =?us-ascii?Q?mTMwzcxZl5tOYzETFWmFLtOt17IPkrl06YutPHXJgtrEn3rEeL6heYJ4ZauO?=
- =?us-ascii?Q?ZYBvZfol1X6Nd7rxFk3SfaLBaqg7SGtAXSMy7NEMYLwsAMvaI/bBlKjl6Rlb?=
- =?us-ascii?Q?+AVnXPsSRD9kudKPwHQqsAG7hZJoKRUlZXYhZqtFZhToeQR6HuAg28x4dwuk?=
- =?us-ascii?Q?TtiCscc2CnySO5GLnruhE9GhbDklVAynvidIYgpOaSRHPYEKd9nUpmZME9wG?=
- =?us-ascii?Q?fO7LU2MNzi4zryjf8i71XSn4dnBxaJAj9oyd+yOlnVQNKmR5P2pXWD5ImYbh?=
- =?us-ascii?Q?Og+4Tp9nBzlcj4wcFE5/ZlBmGa4bXRO1Tn1/idrQmlOV6G+O6ktMsdytgxj2?=
- =?us-ascii?Q?ES6KhRKSFcKreeVDqQ8JmlXc?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LjUq6rbknUxbsu4xIDGGAgjOIrZ8f5du7cM+Uwy3ZoU/dngUMQCgswChto6g?=
+ =?us-ascii?Q?tNk3ZA9iW4BWgfSA6yEnCwS6Bo+uaSw5cVox36Sr+4eQ4DrpalRb0Ro67UUN?=
+ =?us-ascii?Q?HaiGnLAuywlDdZ7VwAPmyNJqFBexAKrp+Rzu248d1xKd5gzm/8R4QaQY58ID?=
+ =?us-ascii?Q?Zm5zesl3lSfhbY4y44ixIXfkGNUsu1SNCE3J2hxLNX97eMfdjQz7Ck/r/lwy?=
+ =?us-ascii?Q?Kim5+c/MwUxG8RpHhbqrPUslKOThh9OnwfNpwyjZdQm1DAFgLHKrfedkrvTd?=
+ =?us-ascii?Q?j1xIGaymtIQvTqHXOucvrHd9nkME5KWd1/c2ox3PqYQI0+ZY+v+yRXqnfjI7?=
+ =?us-ascii?Q?n0/9HoJ1C0c7u4A7Sl6J6Xfy6IBoyA4AmsNiRX6/VpfRUv3cPAw1hpNqnf8a?=
+ =?us-ascii?Q?SZ1xvcSwYbLMf+xuCgN7JTwg0M+ntodXlVdAWFivU8yll5+84mp26ZFtumMN?=
+ =?us-ascii?Q?RAmC/ktyZUS7bp1mW4HFHXbDcKuvg2D8EgJtVVPl+tkHjDwTBbcJbXhCSFrU?=
+ =?us-ascii?Q?TIx2Qn+uN4IFYMyG19qEhDzZ7Qnrg/5zjSW3HlJZ9olFlvc3vO/tJ3rr4Nfh?=
+ =?us-ascii?Q?w3TFIznzazd2cJ/R5y0errxAR6lQf1P/wRI+My9d+DlAaxWwO9aw6+WAHe8h?=
+ =?us-ascii?Q?IhvC9c5mMJBPWE5FhFVz0eqgE9ogav1vj+Fe8ZboWYcNh9z8eiSZ0mimBEDm?=
+ =?us-ascii?Q?Fdwy6fCewRyjNnzwQYe8rCGFAA8unz918bTgnP0o07cGDACgUXJblwy8AEGb?=
+ =?us-ascii?Q?kNm3ta4a8e5vyeLHQbmC2WiKOQsvj4hMRbiP80n4zI+cr4QLAH8py2QpXGjL?=
+ =?us-ascii?Q?tV/7kHUDOy2BFWzyXXHah+gGPrlL7siUgvQKbxoncaA+/AKfjHEGRf940+M2?=
+ =?us-ascii?Q?8uulBplUvTwjYoGpTwbmHDsxaqG3qiltkk4V0f5FQKq/MGg1eq9omZHeVJvt?=
+ =?us-ascii?Q?ivqobvgxEHrEiFQfdtpo0HC8qv0mcWQpRgOjwnY1mMVGbHOXPH4Dse3Lfnw8?=
+ =?us-ascii?Q?47IFA8+ImYuHiW7X3GegjSszXduvYwpHl2EXy2S1PdrSasbaqcKXy4/TsEMU?=
+ =?us-ascii?Q?HckSuc3U4fr+AerMXvzPTA4RkRDPEbFPfWHzWwRCpVfWvdOzpL/VprRuep4N?=
+ =?us-ascii?Q?Ueg5IG8XJ3VI46NGuz9vkFpl01i2tJ7UkCI1eOH7xO/B5Q1caZbTQjG8GcWV?=
+ =?us-ascii?Q?gVaPsERvNljKz+MbawLNeNiuaDAnwq3LQapYxm/Vci8NoTGou4hww7Yd7SLt?=
+ =?us-ascii?Q?8f+rqk5GyAuOAMfFRxdZ9mPUdzRQpXJp86RUVYzVQIJ/NY8h4CuDDtyZEDSI?=
+ =?us-ascii?Q?ntg1PSt6dsub8VLEDsZqNxJ6?=
 X-OriginatorOrg: puiterwijk.org
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff807631-d2de-4692-43b3-08d93fcdb470
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89a7bbd5-5b9f-42b2-a9d4-08d93fcdb49f
 X-MS-Exchange-CrossTenant-AuthSource: AM0P191MB0721.EURP191.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2021 15:58:17.9041
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2021 15:58:18.2088
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 963619a5-d7a7-4543-a254-29462dc51fb3
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1Tp5ktEGQHXf/mN26m1EdTyDDGzABGDL0IExv16T+a6onNBJF0levPm58u5ZC4zNWgUjw7cf0+lgS1Z1P6w9eg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: dvTsF4wXoipYGoHcJxTq6YGFjajbggFyzFnE9sg5KLOFTgBqxfp0r5tVrSJXq7+z6gaZOSfD3TPjpMpsdEIOeA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0P191MB0276
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When using sign_hash, the resulting signature is incorrect if any hash
-algorithm other than sha1 is used.
-This is because while the sign_hash function has a hashalgo argument,
-the sign_hash_v2 function does not actually use this argument for
-anything except setting the hash_algo value in the header.
-This patch makes sure it uses the algo variable consistently.
+This fixes sign_hash not using the correct algorithm for creating the
+signature, by ensuring it uses the passed in variable value.
 
-Changes since v1:
-  - Using sys/xattr.h
-  - Removed copyright line for sign_ima
+Fixes: 07e623b60848 ("ima-evm-utils: Convert sign_hash_v2 to EVP_PKEY API").
+Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
+---
+ src/libimaevm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Patrick Uiterwijk (2):
-  Fix sign_hash not observing the hashalgo argument
-  Add test for using sign_hash API
-
- src/evmctl.c                | 23 ----------------
- src/libimaevm.c             |  4 +--
- src/utils.c                 | 20 ++++++++++++++
- src/utils.h                 |  1 +
- tests/.gitignore            |  2 ++
- tests/Makefile.am           |  5 ++++
- tests/sign_verify.apitest.c | 55 +++++++++++++++++++++++++++++++++++++
- tests/sign_verify.test      | 30 ++++++++++++++++----
- 8 files changed, 109 insertions(+), 31 deletions(-)
- create mode 100644 tests/sign_verify.apitest.c
-
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index 06f1063..2856270 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -913,7 +913,7 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+ 		return -1;
+ 	}
+ 
+-	log_info("hash(%s): ", imaevm_params.hash_algo);
++	log_info("hash(%s): ", algo);
+ 	log_dump(hash, size);
+ 
+ 	pkey = read_priv_pkey(keyfile, imaevm_params.keypass);
+@@ -939,7 +939,7 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+ 	if (!EVP_PKEY_sign_init(ctx))
+ 		goto err;
+ 	st = "EVP_get_digestbyname";
+-	if (!(md = EVP_get_digestbyname(imaevm_params.hash_algo)))
++	if (!(md = EVP_get_digestbyname(algo)))
+ 		goto err;
+ 	st = "EVP_PKEY_CTX_set_signature_md";
+ 	if (!EVP_PKEY_CTX_set_signature_md(ctx, md))
 -- 
 2.31.1
 
