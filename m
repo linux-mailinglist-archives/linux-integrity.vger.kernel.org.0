@@ -2,136 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 191C93BDB4C
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jul 2021 18:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969D43BDDA9
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jul 2021 20:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbhGFQ0P (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Jul 2021 12:26:15 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:59388 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229999AbhGFQ0O (ORCPT
+        id S231438AbhGFSyw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Jul 2021 14:54:52 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42958 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231556AbhGFSyw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Jul 2021 12:26:14 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 166G7D01006902;
-        Tue, 6 Jul 2021 12:23:34 -0400
+        Tue, 6 Jul 2021 14:54:52 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 166InI1Z177281
+        for <linux-integrity@vger.kernel.org>; Tue, 6 Jul 2021 14:52:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : date : in-reply-to : references : content-type : mime-version
  : content-transfer-encoding; s=pp1;
- bh=GsRC6B2uZ7A6WvUnuicRfnlEhv7A1WBcW3gHKAqYmdk=;
- b=oyQco61RTy90ks6IACGdI39gF2jgm7RCKwVu4m5xEEoJ+k8WIOg2JtXvhNcVUZNAKBwi
- 6rdeDMUtOZkxU0h+ZOvIy2D7Z856UkT1b/kwnrsovjtt3KU/mf7VvZf7xWptIUKGUI6/
- WwMgcz0/RMJOpPzCoeHTz4yNisjiD1cHsGNL0lLIJ9Z7BTdcNo6VtQZblhwsUH+xxxKw
- bAaq0rCQyDEXQ2v09qqI+FZupZf6cuV1fBCJR6mn6TFtYmxyXVTR1sGHgHb3UcNfXVsB
- XKH3Ho8E22pDpJoQgxIq1nUEtlxiKyMlu0z879e5UY+PNY1jDY00uLNVXritj/a4Lf04 7A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39m8bmcfcj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jul 2021 12:23:33 -0400
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 166G7fSR008631;
-        Tue, 6 Jul 2021 12:23:33 -0400
+ bh=L2F2x7+ywK240E2E32V8jrsQ933KG/cKDt2IIDmru4c=;
+ b=SXs+6WSyjvnQf0NrICj/NTPPcPXLJh93Pwrhyg9DGE6HWglugwfLBMwgZkyJoaNwZGsM
+ xbMV88oQ9epD9PqCnY2CNbHjIxtZCEIAhvS3Os9ozc2YgJVCFJ07TtdVekVrJ81GAoFg
+ Q2MYESfOE3oTeIa7oRM/KI/AqPB5LjhfxO3wIgQJFDzMPiEUX90GP3sJMEOOVhR1xLLV
+ M9Zke2++RoXDKoghy4GvPgIvw0I+LGq8c9NpShVmgXIswYevifcckgrMiak0XdgI4Ww2
+ I2Fc5XAq2ScXICjtzGgfybeh5MenSXGaVx58FEIo/Ek5rcQcQZSZweFlQBuxpH/3gN0Y 1g== 
 Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39m8bmcfbs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jul 2021 12:23:33 -0400
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39me2bfee2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 06 Jul 2021 14:52:12 -0400
 Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 166GIOWh019224;
-        Tue, 6 Jul 2021 16:23:31 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 39jfh8sbqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jul 2021 16:23:30 +0000
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 166ITC5q019145
+        for <linux-integrity@vger.kernel.org>; Tue, 6 Jul 2021 18:52:11 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 39jfh8sd34-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Tue, 06 Jul 2021 18:52:11 +0000
 Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 166GNSeD34603406
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 166IoFbF25821586
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 6 Jul 2021 16:23:28 GMT
+        Tue, 6 Jul 2021 18:50:15 GMT
 Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9DC0CA4040;
-        Tue,  6 Jul 2021 16:23:28 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id E1379A404D;
+        Tue,  6 Jul 2021 18:52:07 +0000 (GMT)
 Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 97453A404D;
-        Tue,  6 Jul 2021 16:23:27 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 21225A405B;
+        Tue,  6 Jul 2021 18:52:07 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.34.2])
         by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  6 Jul 2021 16:23:27 +0000 (GMT)
-Message-ID: <7d201d4724e7399f87c0cc2f7291cfd13351d156.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 0/3] ima-evm-utils: Add --keyid option
+        Tue,  6 Jul 2021 18:52:06 +0000 (GMT)
+Message-ID: <de2a25ccff2d33015df0efebddf6df98fd5ceeb5.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils 0/3] libimaevm: Remove digest calculations
+ not supported by IMA
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+To:     Stefan Berger <stefanb@linux.ibm.com>,
         linux-integrity@vger.kernel.org
-Date:   Tue, 06 Jul 2021 12:23:26 -0400
-In-Reply-To: <20210701011323.2377251-1-vt@altlinux.org>
-References: <20210701011323.2377251-1-vt@altlinux.org>
+Date:   Tue, 06 Jul 2021 14:52:05 -0400
+In-Reply-To: <20210630193303.2531284-1-stefanb@linux.ibm.com>
+References: <20210630193303.2531284-1-stefanb@linux.ibm.com>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aOTqpP0hnBaHoukfoNJ29siyPSW_Ko6o
-X-Proofpoint-ORIG-GUID: 7uXGJYgFhUX-tY1l-DQ7Ld9sGGycu7SB
+X-Proofpoint-ORIG-GUID: BmJOBK58XP0UGdiQS0c8NuCPShzjKO6q
+X-Proofpoint-GUID: BmJOBK58XP0UGdiQS0c8NuCPShzjKO6q
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-06_09:2021-07-06,2021-07-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 impostorscore=0 clxscore=1015 spamscore=0 mlxscore=0
- bulkscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999 adultscore=0
+ definitions=2021-07-06_10:2021-07-06,2021-07-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 adultscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ mlxscore=0 phishscore=0 priorityscore=1501 clxscore=1015 malwarescore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107060075
+ engine=8.12.0-2104190000 definitions=main-2107060087
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Vitaly,
+Hi Stefan,
 
-On Thu, 2021-07-01 at 04:13 +0300, Vitaly Chikunov wrote:
-> Allow user to set signature's keyid using `--keyid' option. Keyid should
-> correspond to SKID in certificate. When keyid is calculated using SHA-1
-> in libimaevm it may mismatch keyid extracted by the kernel from SKID of
-> certificate (the way public key is presented to the kernel), thus making
-> signatures not verifiable. This may happen when certificate is using non
-> SHA-1 SKID (see rfc7093) or just 'unique number' (see rfc5280 4.2.1.2).
-> As a last resort user may specify arbitrary keyid using the new option.
-> Certificate filename could be used instead of the hex number with
-> `--keyid-from-cert' option. And, third option is to read keyid from the
-> cert appended to the key file.
+On Wed, 2021-06-30 at 15:33 -0400, Stefan Berger wrote:
+> Remove digest calculations over directories, symbolic links, and device files
+> since those and related signature verifications are not supported by IMA in
+> the kernel.
 > 
-> These commits create backward incompatible ABI change for libimaevm,
-> thus soname should be incremented on release.
+> Regards,
+>    Stefan
 
-I haven't started using Github actions.  Here are some new Travis
-complaints:
+Thanks, Stefan.  Other than removing the related features from the
+README, it looks good.
 
-Alpine:
-libimaevm.c: In function 'sign_hash_v2':
-libimaevm.c:996:47: warning: taking address of packed member of 'struct
-signature_v2_hdr' may result in an unaligned pointer value [-Waddress-
-of-packed-member]
-  996 |   int keyid_read_failed = read_keyid_from_key(&hdr->keyid,
-keyfile);
-      |                                               ^~~~~~~~~~~
-libimaevm.c:999:18: warning: taking address of packed member of 'struct
-signature_v2_hdr' may result in an unaligned pointer value [-Waddress-
-of-packed-member]
-  999 |    calc_keyid_v2(&hdr->keyid, name, pkey);
-      |                  ^~~~~~~~~~~
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-centos:
-./.libs/libimaevm.so: undefined reference to `X509_get0_subject_key_id'
-./.libs/libimaevm.so: undefined reference to `ASN1_STRING_get0_data'
 
-xenial:
-libimaevm.c: In function 'extract_keyid':
-libimaevm.c:695:2: warning: implicit declaration of function
-'X509_get0_subject_key_id' [-Wimplicit-function-declaration]
-  if (!(skid = X509_get0_subject_key_id(x))) {
-  ^
-libimaevm.c:695:13: warning: assignment makes pointer from integer
-without a cast [enabled by default]
-  if (!(skid = X509_get0_subject_key_id(x))) {
+> Stefan Berger (3):
+>   libimaevm: Remove calculation of a digest over a device file
+>   libimaevm: Remove calculation of a digest over a directory
+>   libimaevm: Remove calculation of a digest over a symbolic link
+> 
+>  src/libimaevm.c | 68 -------------------------------------------------
+>  1 file changed, 68 deletions(-)
+> 
 
-thanks,
-
-Mimi
 
