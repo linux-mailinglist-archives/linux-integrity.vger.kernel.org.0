@@ -2,102 +2,219 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 969D43BDDA9
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jul 2021 20:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63B03BDDF1
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jul 2021 21:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbhGFSyw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Jul 2021 14:54:52 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42958 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231556AbhGFSyw (ORCPT
+        id S231872AbhGFTVt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Jul 2021 15:21:49 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:41376 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231774AbhGFTVt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Jul 2021 14:54:52 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 166InI1Z177281
-        for <linux-integrity@vger.kernel.org>; Tue, 6 Jul 2021 14:52:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=L2F2x7+ywK240E2E32V8jrsQ933KG/cKDt2IIDmru4c=;
- b=SXs+6WSyjvnQf0NrICj/NTPPcPXLJh93Pwrhyg9DGE6HWglugwfLBMwgZkyJoaNwZGsM
- xbMV88oQ9epD9PqCnY2CNbHjIxtZCEIAhvS3Os9ozc2YgJVCFJ07TtdVekVrJ81GAoFg
- Q2MYESfOE3oTeIa7oRM/KI/AqPB5LjhfxO3wIgQJFDzMPiEUX90GP3sJMEOOVhR1xLLV
- M9Zke2++RoXDKoghy4GvPgIvw0I+LGq8c9NpShVmgXIswYevifcckgrMiak0XdgI4Ww2
- I2Fc5XAq2ScXICjtzGgfybeh5MenSXGaVx58FEIo/Ek5rcQcQZSZweFlQBuxpH/3gN0Y 1g== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 39me2bfee2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 06 Jul 2021 14:52:12 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 166ITC5q019145
-        for <linux-integrity@vger.kernel.org>; Tue, 6 Jul 2021 18:52:11 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 39jfh8sd34-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Tue, 06 Jul 2021 18:52:11 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 166IoFbF25821586
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 6 Jul 2021 18:50:15 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E1379A404D;
-        Tue,  6 Jul 2021 18:52:07 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 21225A405B;
-        Tue,  6 Jul 2021 18:52:07 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.34.2])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  6 Jul 2021 18:52:06 +0000 (GMT)
-Message-ID: <de2a25ccff2d33015df0efebddf6df98fd5ceeb5.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils 0/3] libimaevm: Remove digest calculations
- not supported by IMA
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Date:   Tue, 06 Jul 2021 14:52:05 -0400
-In-Reply-To: <20210630193303.2531284-1-stefanb@linux.ibm.com>
-References: <20210630193303.2531284-1-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
+        Tue, 6 Jul 2021 15:21:49 -0400
+Received: from [10.137.112.111] (unknown [131.107.147.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4E1F320B7188;
+        Tue,  6 Jul 2021 12:19:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4E1F320B7188
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1625599150;
+        bh=HAyiPMPlknf585eyjiByUkZYMcEfesGAqJ5IRtDhZNY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=cw2ZMpdXbJc2YaqalFiZFCL2zmBUDnNh/RiSOFP2Wggm2eE5TVzXqFerw1CYvhy+/
+         eM0D7iqhnJp4l+wiiEIS643DB+s02Ry+iUnZuuvIAZWpprtuo1IQsAaTcaUnoEgaiZ
+         0zAPn4Sm907XkbmpCgwGjJNxKOgAohrkVfrMmvgs=
+Subject: Re: [PATCH v3 2/3] ima: Return int in the functions to measure a
+ buffer
+To:     Roberto Sassu <roberto.sassu@huawei.com>, zohar@linux.ibm.com,
+        paul@paul-moore.com
+Cc:     stephen.smalley.work@gmail.com, prsriva02@gmail.com,
+        tusharsu@linux.microsoft.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, selinux@vger.kernel.org
+References: <20210705090922.3321178-1-roberto.sassu@huawei.com>
+ <20210705090922.3321178-3-roberto.sassu@huawei.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <5bc9d707-b193-6111-fea6-50c70e6f2245@linux.microsoft.com>
+Date:   Tue, 6 Jul 2021 12:21:04 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210705090922.3321178-3-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: BmJOBK58XP0UGdiQS0c8NuCPShzjKO6q
-X-Proofpoint-GUID: BmJOBK58XP0UGdiQS0c8NuCPShzjKO6q
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-06_10:2021-07-06,2021-07-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 adultscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
- mlxscore=0 phishscore=0 priorityscore=1501 clxscore=1015 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107060087
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Stefan,
-
-On Wed, 2021-06-30 at 15:33 -0400, Stefan Berger wrote:
-> Remove digest calculations over directories, symbolic links, and device files
-> since those and related signature verifications are not supported by IMA in
-> the kernel.
+On 7/5/2021 2:09 AM, Roberto Sassu wrote:
+> ima_measure_critical_data() and process_buffer_measurement() currently
+> don't return a result. A caller wouldn't be able to know whether those
+> functions were executed successfully.
 > 
-> Regards,
->    Stefan
-
-Thanks, Stefan.  Other than removing the related features from the
-README, it looks good.
-
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-
-
-> Stefan Berger (3):
->   libimaevm: Remove calculation of a digest over a device file
->   libimaevm: Remove calculation of a digest over a directory
->   libimaevm: Remove calculation of a digest over a symbolic link
+> This patch modifies the return type from void to int, and returns 0 if the
+> buffer has been successfully measured, a negative value otherwise.
 > 
->  src/libimaevm.c | 68 -------------------------------------------------
->  1 file changed, 68 deletions(-)
+> Also, this patch does not modify the behavior of existing callers by
+> processing the returned value. For those, the return value is ignored.
 > 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>   include/linux/ima.h               | 15 +++++++-----
+>   security/integrity/ima/ima.h      | 10 ++++----
+>   security/integrity/ima/ima_main.c | 40 ++++++++++++++++++-------------
+>   3 files changed, 37 insertions(+), 28 deletions(-)
 
+Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
+  -lakshmi
+
+> 
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 81e830d01ced..60492263aa64 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -35,10 +35,10 @@ extern void ima_post_path_mknod(struct user_namespace *mnt_userns,
+>   extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
+>   extern int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size);
+>   extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
+> -extern void ima_measure_critical_data(const char *event_label,
+> -				      const char *event_name,
+> -				      const void *buf, size_t buf_len,
+> -				      bool hash);
+> +extern int ima_measure_critical_data(const char *event_label,
+> +				     const char *event_name,
+> +				     const void *buf, size_t buf_len,
+> +				     bool hash);
+>   
+>   #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
+>   extern void ima_appraise_parse_cmdline(void);
+> @@ -144,10 +144,13 @@ static inline int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size
+>   
+>   static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
+>   
+> -static inline void ima_measure_critical_data(const char *event_label,
+> +static inline int ima_measure_critical_data(const char *event_label,
+>   					     const char *event_name,
+>   					     const void *buf, size_t buf_len,
+> -					     bool hash) {}
+> +					     bool hash)
+> +{
+> +	return -ENOENT;
+> +}
+>   
+>   #endif /* CONFIG_IMA */
+>   
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index f0e448ed1f9f..03db221324c3 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -264,11 +264,11 @@ void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
+>   			   struct evm_ima_xattr_data *xattr_value,
+>   			   int xattr_len, const struct modsig *modsig, int pcr,
+>   			   struct ima_template_desc *template_desc);
+> -void process_buffer_measurement(struct user_namespace *mnt_userns,
+> -				struct inode *inode, const void *buf, int size,
+> -				const char *eventname, enum ima_hooks func,
+> -				int pcr, const char *func_data,
+> -				bool buf_hash);
+> +int process_buffer_measurement(struct user_namespace *mnt_userns,
+> +			       struct inode *inode, const void *buf, int size,
+> +			       const char *eventname, enum ima_hooks func,
+> +			       int pcr, const char *func_data,
+> +			       bool buf_hash);
+>   void ima_audit_measurement(struct integrity_iint_cache *iint,
+>   			   const unsigned char *filename);
+>   int ima_alloc_init_template(struct ima_event_data *event_data,
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 8ef1fa357e0c..b512c06d8ee1 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -827,7 +827,7 @@ int ima_post_load_data(char *buf, loff_t size,
+>   	return 0;
+>   }
+>   
+> -/*
+> +/**
+>    * process_buffer_measurement - Measure the buffer or the buffer data hash
+>    * @mnt_userns:	user namespace of the mount the inode was found from
+>    * @inode: inode associated with the object being measured (NULL for KEY_CHECK)
+> @@ -840,12 +840,15 @@ int ima_post_load_data(char *buf, loff_t size,
+>    * @buf_hash: measure buffer data hash
+>    *
+>    * Based on policy, either the buffer data or buffer data hash is measured
+> + *
+> + * Return: 0 if the buffer has been successfully measured, a negative value
+> + * otherwise.
+>    */
+> -void process_buffer_measurement(struct user_namespace *mnt_userns,
+> -				struct inode *inode, const void *buf, int size,
+> -				const char *eventname, enum ima_hooks func,
+> -				int pcr, const char *func_data,
+> -				bool buf_hash)
+> +int process_buffer_measurement(struct user_namespace *mnt_userns,
+> +			       struct inode *inode, const void *buf, int size,
+> +			       const char *eventname, enum ima_hooks func,
+> +			       int pcr, const char *func_data,
+> +			       bool buf_hash)
+>   {
+>   	int ret = 0;
+>   	const char *audit_cause = "ENOMEM";
+> @@ -867,7 +870,7 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
+>   	u32 secid;
+>   
+>   	if (!ima_policy_flag)
+> -		return;
+> +		return -ENOENT;
+>   
+>   	template = ima_template_desc_buf();
+>   	if (!template) {
+> @@ -889,7 +892,7 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
+>   					secid, 0, func, &pcr, &template,
+>   					func_data);
+>   		if (!(action & IMA_MEASURE))
+> -			return;
+> +			return -ENOENT;
+>   	}
+>   
+>   	if (!pcr)
+> @@ -937,7 +940,7 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
+>   					func_measure_str(func),
+>   					audit_cause, ret, 0, ret);
+>   
+> -	return;
+> +	return ret;
+>   }
+>   
+>   /**
+> @@ -977,18 +980,21 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+>    * and extend the pcr.  Examples of critical data could be various data
+>    * structures, policies, and states stored in kernel memory that can
+>    * impact the integrity of the system.
+> + *
+> + * Return: 0 if the buffer has been successfully measured, a negative value
+> + * otherwise.
+>    */
+> -void ima_measure_critical_data(const char *event_label,
+> -			       const char *event_name,
+> -			       const void *buf, size_t buf_len,
+> -			       bool hash)
+> +int ima_measure_critical_data(const char *event_label,
+> +			      const char *event_name,
+> +			      const void *buf, size_t buf_len,
+> +			      bool hash)
+>   {
+>   	if (!event_name || !event_label || !buf || !buf_len)
+> -		return;
+> +		return -ENOPARAM;
+>   
+> -	process_buffer_measurement(&init_user_ns, NULL, buf, buf_len, event_name,
+> -				   CRITICAL_DATA, 0, event_label,
+> -				   hash);
+> +	return process_buffer_measurement(&init_user_ns, NULL, buf, buf_len,
+> +					  event_name, CRITICAL_DATA, 0,
+> +					  event_label, hash);
+>   }
+>   
+>   static int __init init_ima(void)
+> 
