@@ -2,99 +2,94 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F923BDE08
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jul 2021 21:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBDC3BDEC9
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jul 2021 23:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbhGFTac (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 6 Jul 2021 15:30:32 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:42450 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbhGFTac (ORCPT
+        id S229935AbhGFVQE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 6 Jul 2021 17:16:04 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:33278 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229781AbhGFVQD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 6 Jul 2021 15:30:32 -0400
-Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5BA5B20B7188;
-        Tue,  6 Jul 2021 12:27:53 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5BA5B20B7188
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1625599673;
-        bh=ryjydfJPAKvDWqmnuLYjXsYmMMZaDBUiObj4MocZElo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Bl/TCf9udxXUZhstiHlaeRDUFCZ+x9yZkTseKahwkqNkCPu9eTn70a9zS2+PfqBe5
-         ZPoxQQLbJfnkr0fVeWG91ywfhnkWdkWbalTRWq2OanCt2MCm/6Sdu2IWO5e52bV/6L
-         9IRgfMuZoPYkOZKjok7EtGaffZzRWZJixbKIwDCY=
-Subject: Re: [PATCH] ima: Support euid keyword for buffer measurement
-To:     Roberto Sassu <roberto.sassu@huawei.com>, zohar@linux.ibm.com
-Cc:     tusharsu@linux.microsoft.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210705115650.3373599-1-roberto.sassu@huawei.com>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <2996f5ae-d76f-5fc9-bf90-857d4fc6644a@linux.microsoft.com>
-Date:   Tue, 6 Jul 2021 12:29:47 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Tue, 6 Jul 2021 17:16:03 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 1BC9872C8B4;
+        Wed,  7 Jul 2021 00:13:23 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 09BFC4A46ED;
+        Wed,  7 Jul 2021 00:13:23 +0300 (MSK)
+Date:   Wed, 7 Jul 2021 00:13:22 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v7 0/3] ima-evm-utils: Add --keyid option
+Message-ID: <20210706211322.wmw5w3loysyvbryl@altlinux.org>
+References: <20210701011323.2377251-1-vt@altlinux.org>
+ <7d201d4724e7399f87c0cc2f7291cfd13351d156.camel@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20210705115650.3373599-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <7d201d4724e7399f87c0cc2f7291cfd13351d156.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/5/2021 4:56 AM, Roberto Sassu wrote:
+Mimi,
 
-Hi Roberto,
-
-> This patch makes the 'euid' keyword available for buffer measurement rules,
-> in the same way as for other rules. Currently, there is only support for
-> the 'uid' keyword.
+On Tue, Jul 06, 2021 at 12:23:26PM -0400, Mimi Zohar wrote:
+> On Thu, 2021-07-01 at 04:13 +0300, Vitaly Chikunov wrote:
+> > Allow user to set signature's keyid using `--keyid' option. Keyid should
+> > correspond to SKID in certificate. When keyid is calculated using SHA-1
+> > in libimaevm it may mismatch keyid extracted by the kernel from SKID of
+> > certificate (the way public key is presented to the kernel), thus making
+> > signatures not verifiable. This may happen when certificate is using non
+> > SHA-1 SKID (see rfc7093) or just 'unique number' (see rfc5280 4.2.1.2).
+> > As a last resort user may specify arbitrary keyid using the new option.
+> > Certificate filename could be used instead of the hex number with
+> > `--keyid-from-cert' option. And, third option is to read keyid from the
+> > cert appended to the key file.
+> > 
+> > These commits create backward incompatible ABI change for libimaevm,
+> > thus soname should be incremented on release.
 > 
-> With this change, buffer measurement (or non-measurement) can depend also
-> on the process effective UID.
+> I haven't started using Github actions.
 
-Who (kernel component) will be using this?
+Will you create repo there?
 
-Maybe you could make this change as part of the patch set in which the 
-above "euid" support will be used.
+> Here are some new Travis complaints:
+> 
+> Alpine:
+> libimaevm.c: In function 'sign_hash_v2':
+> libimaevm.c:996:47: warning: taking address of packed member of 'struct
+> signature_v2_hdr' may result in an unaligned pointer value [-Waddress-
+> of-packed-member]
+>   996 |   int keyid_read_failed = read_keyid_from_key(&hdr->keyid,
+> keyfile);
+>       |                                               ^~~~~~~~~~~
+> libimaevm.c:999:18: warning: taking address of packed member of 'struct
+> signature_v2_hdr' may result in an unaligned pointer value [-Waddress-
+> of-packed-member]
+>   999 |    calc_keyid_v2(&hdr->keyid, name, pkey);
+>       |                  ^~~~~~~~~~~
+> 
+> centos:
+> ./.libs/libimaevm.so: undefined reference to `X509_get0_subject_key_id'
+> ./.libs/libimaevm.so: undefined reference to `ASN1_STRING_get0_data'
+> 
+> xenial:
+> libimaevm.c: In function 'extract_keyid':
+> libimaevm.c:695:2: warning: implicit declaration of function
+> 'X509_get0_subject_key_id' [-Wimplicit-function-declaration]
+>   if (!(skid = X509_get0_subject_key_id(x))) {
+>   ^
+> libimaevm.c:695:13: warning: assignment makes pointer from integer
+> without a cast [enabled by default]
+>   if (!(skid = X509_get0_subject_key_id(x))) {
 
-thanks,
-  -lakshmi
+Thanks!
 
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->   security/integrity/ima/ima_policy.c | 12 +++++++++++-
->   1 file changed, 11 insertions(+), 1 deletion(-)
+> thanks,
 > 
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index fd5d46e511f1..fdaa030fb04b 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -480,6 +480,16 @@ static bool ima_match_rule_data(struct ima_rule_entry *rule,
->   	if ((rule->flags & IMA_UID) && !rule->uid_op(cred->uid, rule->uid))
->   		return false;
->   
-> +	if (rule->flags & IMA_EUID) {
-> +		if (has_capability_noaudit(current, CAP_SETUID)) {
-> +			if (!rule->uid_op(cred->euid, rule->uid)
-> +			    && !rule->uid_op(cred->suid, rule->uid)
-> +			    && !rule->uid_op(cred->uid, rule->uid))
-> +				return false;
-> +		} else if (!rule->uid_op(cred->euid, rule->uid))
-> +			return false;
-> +	}
-> +
->   	switch (rule->func) {
->   	case KEY_CHECK:
->   		if (!rule->keyrings)
-> @@ -1153,7 +1163,7 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
->   		if (entry->action & ~(MEASURE | DONT_MEASURE))
->   			return false;
->   
-> -		if (entry->flags & ~(IMA_FUNC | IMA_UID | IMA_PCR |
-> +		if (entry->flags & ~(IMA_FUNC | IMA_UID | IMA_EUID | IMA_PCR |
->   				     IMA_LABEL))
->   			return false;
->   
-> 
+> Mimi
