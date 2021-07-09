@@ -2,165 +2,104 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 349B03C28B6
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Jul 2021 19:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F7A3C28F3
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Jul 2021 20:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbhGIRty (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Jul 2021 13:49:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43392 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229832AbhGIRty (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Jul 2021 13:49:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E37D56139A;
-        Fri,  9 Jul 2021 17:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625852830;
-        bh=Cu7uGkjSDf0GRtCrMC9tjnhok58w2PHZcd93MdQ+PBo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ylb1kkr4wD/vrAPg+u+TKNdZBJPzeTAy4BOfyc+VuoQta6WWaIw/fFmQ74FRbhr8L
-         bgfh/dWcK3X4S2JeBb7DghldMeW76bLJxjdpoUX5wG59BO9GfYW8NizqN830otK3D5
-         z8qlbWDlWTkArUrBHKpfV6VQUtJg8VtcASaJKpJY5mG+nnDefGJeSpLDKk8UIsTMwg
-         k8uraLorKjZFPcJOWi7dgLts1ldCL4QmTJpIHKrQeXivaZg7Inqvg2tvWR4YiNn8Io
-         fng73sH3DbhDTbB5E2Cqj3BsR8mzoHh4LOOx075xISjLsiOEcT56M+oxXJgmaQHEB+
-         XLHYNhsbekRfQ==
-Date:   Fri, 9 Jul 2021 20:47:07 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Hao Wu <hao.wu@rubrik.com>
-Cc:     shrihari.kalkar@rubrik.com, seungyeop.han@rubrik.com,
-        anish.jhaveri@rubrik.com, peterhuewe@gmx.de, jgg@ziepe.ca,
-        linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de,
-        kgold@linux.ibm.com, zohar@linux.vnet.ibm.com,
-        why2jjj.linux@gmail.com, hamza@hpe.com, gregkh@linuxfoundation.org,
-        arnd@arndb.de, nayna@linux.vnet.ibm.com,
-        James.Bottomley@hansenpartnership.com
-Subject: Re: [PATCH v2] tpm: fix Atmel TPM crash caused by too frequent
- queries
-Message-ID: <20210709174707.z2ap7czu2lldeavw@kernel.org>
-References: <20210630042205.30051-1-hao.wu@rubrik.com>
- <20210709044028.77278-1-hao.wu@rubrik.com>
+        id S229503AbhGISVm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Jul 2021 14:21:42 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:19528 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229499AbhGISVm (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 9 Jul 2021 14:21:42 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 169I3WeW019644;
+        Fri, 9 Jul 2021 14:18:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=cFcgBIMjRZFExSLu1MOUcIIL2PdkFtlHRsVx5aIYk4A=;
+ b=Ze1+9MfImnDYfZOS6IQLTqz/XdEFFRTzGg9ECjwZwQ6lF7G1zBDhLlzgLuduRQ292Wph
+ 3GI07EUNXvHX+A5fgDLtdhTlGfj8ibM+hy/CtIm1IKvsTXn84BKL6wOW6Ettxz7E6dIN
+ dBZCBNLuqyStkgbEeb08XfGZQStVqe6+dLdFEE4PE3f00GJAVxH0qjdSbgzoT/2GBr8P
+ +GGGX12JVAgiuBr6nm/7ntCABMjPmMC6RKDYKPtqqFJ7kAX0923yWTuWPzRGug7I0Sgn
+ 1ZsyellWfMqBeJ9/vVb0GpABEei9erAKJfAftW6aYIRVxtyyEtnfZhPNIloCJJ4Y7XF/ 0w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39p1yctjna-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jul 2021 14:18:52 -0400
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 169I6dDi030341;
+        Fri, 9 Jul 2021 14:18:52 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39p1yctjn5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jul 2021 14:18:52 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 169HvGOq010236;
+        Fri, 9 Jul 2021 18:18:51 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma01wdc.us.ibm.com with ESMTP id 39jfhdqn5m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jul 2021 18:18:51 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 169IIpjJ40042774
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Jul 2021 18:18:51 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 419DB112062;
+        Fri,  9 Jul 2021 18:18:51 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 31442112061;
+        Fri,  9 Jul 2021 18:18:51 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri,  9 Jul 2021 18:18:51 +0000 (GMT)
+Subject: Re: [PATCH v2] char: tpm: vtpm_proxy: Fix race in init
+To:     Saubhik Mukherjee <saubhik.mukherjee@gmail.com>, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org, andrianov@ispras.ru
+References: <20210708095259.27915-1-saubhik.mukherjee@gmail.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <86011d11-522d-a686-b360-43d19366cab7@linux.ibm.com>
+Date:   Fri, 9 Jul 2021 14:18:50 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210709044028.77278-1-hao.wu@rubrik.com>
+In-Reply-To: <20210708095259.27915-1-saubhik.mukherjee@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vOZgn4vSeRLUVMMW_qNnd3QKtwH8SYls
+X-Proofpoint-ORIG-GUID: qr1nPttsjHrQNoZNJCTYs43asoNwpa3h
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-09_12:2021-07-09,2021-07-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ malwarescore=0 impostorscore=0 bulkscore=0 mlxlogscore=999
+ priorityscore=1501 adultscore=0 mlxscore=0 spamscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107090088
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 08, 2021 at 09:40:28PM -0700, Hao Wu wrote:
-> The Atmel TPM 1.2 chips crash with error
-> `tpm_try_transmit: send(): error -62` since kernel 4.14.
-> It is observed from the kernel log after running `tpm_sealdata -z`.
-> The error thrown from the command is as follows
-> ```
-> $ tpm_sealdata -z
-> Tspi_Key_LoadKey failed: 0x00001087 - layer=tddl,
-> code=0087 (135), I/O error
-> ```
-> 
-> The issue was reproduced with the following Atmel TPM chip:
-> ```
-> $ tpm_version
-> T0  TPM 1.2 Version Info:
->   Chip Version:        1.2.66.1
->   Spec Level:          2
->   Errata Revision:     3
->   TPM Vendor ID:       ATML
->   TPM Version:         01010000
->   Manufacturer Info:   41544d4c
-> ```
-> 
-> The root cause of the issue is due to the TPM calls to msleep()
-> were replaced with usleep_range() [1], which reduces
-> the actual timeout. Via experiments, it is observed that
-> the original msleep(5) actually sleeps for 15ms.
-> Because of a known timeout issue in Atmel TPM 1.2 chip,
-> the shorter timeout than 15ms can cause the error described above.
-> 
-> A few further changes in kernel 4.16 [2] and 4.18 [3, 4] further
-> reduced the timeout to less than 1ms. With experiments,
-> the problematic timeout in the latest kernel is the one
-> for `wait_for_tpm_stat`.
-> 
-> To fix it, the patch reverts the timeout of `wait_for_tpm_stat`
-> to 15ms for all Atmel TPM 1.2 chips, but leave it untouched
-> for Ateml TPM 2.0 chip, and chips from other vendors.
-> As explained above, the chosen 15ms timeout is
-> the actual timeout before this issue introduced,
-> thus the old value is used here.
-> Particularly, TPM_ATML_TIMEOUT_WAIT_STAT_MIN is set to 14700us,
-> TPM_ATML_TIMEOUT_WAIT_STAT_MIN is set to 15000us according to
-> the existing TPM_TIMEOUT_RANGE_US (300us).
-> The fixed has been tested in the system with the affected Atmel chip
-> with no issues observed after boot up.
-> 
-> References:
-> [1] 9f3fc7bcddcb tpm: replace msleep() with usleep_range() in TPM
-> 1.2/2.0 generic drivers
-> [2] cf151a9a44d5 tpm: reduce tpm polling delay in tpm_tis_core
-> [3] 59f5a6b07f64 tpm: reduce poll sleep time in tpm_transmit()
-> [4] 424eaf910c32 tpm: reduce polling time to usecs for even finer
-> granularity
-> 
-> Fixes: 9f3fc7bcddcb ("tpm: replace msleep() with usleep_range() in TPM 1.2/2.0 generic drivers")
-> Link: https://patchwork.kernel.org/project/linux-integrity/patch/20200926223150.109645-1-hao.wu@rubrik.com/
-> Signed-off-by: Hao Wu <hao.wu@rubrik.com>
-> ---
-> This version (v2) has following changes on top of the last (v1):
-> - follow the existing way to define two timeouts (min and max)
->   for ATMEL chip, thus keep the exact timeout logic for 
->   non-ATEML chips.
-> - limit the timeout increase to only ATMEL TPM 1.2 chips,
->   because it is not an issue for TPM 2.0 chips yet.
-> 
-> Test Plan:
-> - Run fixed kernel with ATMEL TPM chips and see crash has been fixed.
-> - Run fixed kernel with non-ATMEL TPM chips, and confirm
->   the timeout has not been changed.
-> 
->  drivers/char/tpm/tpm.h          |  6 ++++--
->  drivers/char/tpm/tpm_tis_core.c | 23 +++++++++++++++++++++--
->  include/linux/tpm.h             |  3 +++
->  3 files changed, 28 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 283f78211c3a..6de1b44c4aab 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -41,8 +41,10 @@ enum tpm_timeout {
->  	TPM_TIMEOUT_RETRY = 100, /* msecs */
->  	TPM_TIMEOUT_RANGE_US = 300,	/* usecs */
->  	TPM_TIMEOUT_POLL = 1,	/* msecs */
-> -	TPM_TIMEOUT_USECS_MIN = 100,      /* usecs */
-> -	TPM_TIMEOUT_USECS_MAX = 500      /* usecs */
-> +	TPM_TIMEOUT_USECS_MIN = 100,	/* usecs */
-> +	TPM_TIMEOUT_USECS_MAX = 500,	/* usecs */
-> +	TPM_ATML_TIMEOUT_WAIT_STAT_MIN = 14700,	/* usecs */
-> +	TPM_ATML_TIMEOUT_WAIT_STAT_MAX = 15000	/* usecs */
->  };
->  
->  /* TPM addresses */
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 55b9d3965ae1..ae27d66fdd94 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -80,8 +80,17 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
->  		}
->  	} else {
->  		do {
-> -			usleep_range(TPM_TIMEOUT_USECS_MIN,
-> -				     TPM_TIMEOUT_USECS_MAX);
-> +			/* this code path could be executed before
-> +			 * timeouts initialized in chip instance.
-> +			 */
-> +			if (chip->timeout_wait_stat_min &&
-> +			    chip->timeout_wait_stat_max)
-> +				usleep_range(chip->timeout_wait_stat_min,
-> +					     chip->timeout_wait_stat_max);
-> +			else
-> +				usleep_range(TPM_TIMEOUT_USECS_MIN,
-> +					     TPM_TIMEOUT_USECS_MAX);
 
-This starts to look otherwise fine but you don't need this condition.
-Just initialize variables to TPM_TIMEOUT_USECS_{MIN, MAX} for non-Atmel.
+On 7/8/21 5:52 AM, Saubhik Mukherjee wrote:
+> vtpm_module_init calls vtpmx_init which calls misc_register. The file
+> operations callbacks are registered. So, vtpmx_fops_ioctl can execute in
+> parallel with rest of vtpm_module_init. vtpmx_fops_ioctl calls
+> vtpmx_ioc_new_dev, which calls vtpm_proxy_create_device, which calls
+> vtpm_proxy_work_start, which could read uninitialized workqueue.
+>
+> To avoid this, create workqueue before vtpmx init.
+>
+> Found by Linux Driver Verification project (linuxtesting.org).
+>
+> Fixes: 6f99612e2500 ("tpm: Proxy driver for supporting multiple emulated TPMs")
+> Signed-off-by: Saubhik Mukherjee <saubhik.mukherjee@gmail.com>
 
-/Jarkko
+Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+
+
