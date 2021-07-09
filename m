@@ -2,123 +2,231 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0864A3C1CF4
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Jul 2021 03:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EAB3C1E8A
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Jul 2021 06:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbhGIBOI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 8 Jul 2021 21:14:08 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29998 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229637AbhGIBOG (ORCPT
+        id S229610AbhGIEne (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Jul 2021 00:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229576AbhGIEnd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 8 Jul 2021 21:14:06 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16913lvR179385;
-        Thu, 8 Jul 2021 21:11:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=FI1qzW9vg11HTR0gAlwlHCY0vo4meaCwC4bF1sUyszc=;
- b=QX3q5U2wrRa+C87k+scNfpcRlsHOkg2p1NA7GtPj0rSkVkL/b1Zbw4mmGBK+LVzItuPd
- izMijkJWK+3UAAMGLpHj1PUXcdB00EZOVNBjPDDdt+KmL0XhBNZGpM5i+PdJSfZxdY14
- hpR6WG8oD7FLbYgOs/B4Zjic/JkEiAq7ZoZwGvoShjHA7cau8sPoM2bjgaZwJ2WsaSaF
- n1vtYQ1BB8KIvri+xM8dUh/le70HXj1FLP0lgsNdlMTInUBlg6jY+OFuPAd+Ox5qNOYK
- MtOdJnWOx+gcCtpzxQOTvg2ndWFrV/bugKfeXhEu0wLPD1yLD88ixNYlNbCOCD2+qc5D 7g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39n287x0cy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jul 2021 21:11:00 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16919xLj196388;
-        Thu, 8 Jul 2021 21:10:59 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39n287x0ca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jul 2021 21:10:59 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1691Av0W032007;
-        Fri, 9 Jul 2021 01:10:57 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 39jfh8h9ys-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jul 2021 01:10:56 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1691AsJB31326546
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 9 Jul 2021 01:10:54 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4F4A642041;
-        Fri,  9 Jul 2021 01:10:54 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C8C74203F;
-        Fri,  9 Jul 2021 01:10:48 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.81.156])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  9 Jul 2021 01:10:48 +0000 (GMT)
-Message-ID: <ef480c8f83780eea4ff8fdcd35c6208760b5e1d7.camel@linux.ibm.com>
-Subject: Re: [PATCH RFC 00/12] Enroll kernel keys thru MOK
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     keyrings@vger.kernel.org,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>, keescook@chromium.org,
-        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
-        scott.branden@broadcom.com, weiyongjun1@huawei.com,
-        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
-        nramas@linux.microsoft.com, lszubowi@redhat.com,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
-        glin@suse.com, "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>
-Date:   Thu, 08 Jul 2021 21:10:47 -0400
-In-Reply-To: <839EF700-7A2C-4282-AF97-768FAD1A9957@oracle.com>
-References: <20210707024403.1083977-1-eric.snowberg@oracle.com>
-         <42b787dd3a20fe37c4de60daf75db06e409cfb6d.camel@linux.ibm.com>
-         <5BFB3C52-36D4-47A5-B1B8-977717C555A0@oracle.com>
-         <886f30dcf7b3d48644289acc3601c2f0207b19b6.camel@linux.ibm.com>
-         <D34A6328-91CA-4E1E-845C-FAC9B424819B@oracle.com>
-         <c0cf7f883a9252c17427f1f992e4973e78481304.camel@linux.ibm.com>
-         <21EFCB58-2D89-4D30-8DA2-B952A7E1B1BD@oracle.com>
-         <490941a5197bf4bcf0d6f95610085ee4d46ed9bb.camel@linux.ibm.com>
-         <839EF700-7A2C-4282-AF97-768FAD1A9957@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FMn_hX5NZ_CCLtfcgqQvPGUn7SHHsF0z
-X-Proofpoint-ORIG-GUID: CZDy5YSAnV3UvrlJeOGW1sSUTSKHEugt
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-08_14:2021-07-08,2021-07-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxscore=0 priorityscore=1501 malwarescore=0 suspectscore=0 spamscore=0
- phishscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107090003
+        Fri, 9 Jul 2021 00:43:33 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2551AC061574
+        for <linux-integrity@vger.kernel.org>; Thu,  8 Jul 2021 21:40:51 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id i16-20020a17090acf90b02901736d9d2218so378307pju.1
+        for <linux-integrity@vger.kernel.org>; Thu, 08 Jul 2021 21:40:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rubrik.com; s=google;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=56aVWSWfOHKsKJPA6NCmOjtMU3YQ6mTSJtwY537TrQI=;
+        b=Kt09sRC4qc48Ie9+s4qct2Ddi84MxE3n9vkyub9b+63jkcPWL8c3KQPotPQuXgQ4/Q
+         +M4aARGGgaLab8YjbWuQnHiRFvw6izJmMxjsNUl/Ku4K6L4cYFUm5XNlEjZXhQPs6hjS
+         bZNswGaPTEhVZcsZnU9nztXGPQ/rrC5/gWYQE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=56aVWSWfOHKsKJPA6NCmOjtMU3YQ6mTSJtwY537TrQI=;
+        b=PT/EV8RGSvn5E/qZAzZO7R6C0KXyEHxLnZZV/ndDacL/eB7sukzyCVFrXhNHr8ZKBb
+         R2o1ypvFh0diHFW7gCKLhKPl97DFIxaorHUW+/Dchorea0N1X5U1N8z9B5b7Ja1Cb6oo
+         gcHphjBgExkjcJ43ZowRL1jKWDGWob8E7iuKpYnyCm7XTUZjSmKALc/9xoDNFEbrOsTU
+         y95si2iTXH5yaL8ihTMUC8Z6bjxIglnKUoHC/01y6bE+K07aRyI+uW3zFTziTkXcMhKH
+         had3bH3euh3O0CQMuGSCxqn8OMc41YyTIB4mJK4oRoyrr4V1XvpL1Jbeib5DMSewNkCl
+         YwdA==
+X-Gm-Message-State: AOAM530MOVJQO5M+rTp8OKhCkyGFw8CaFCsR6c8B+TrA2NOvf2I5m06z
+        jxX5jyjBrb4RdEig84dpKBbX/A==
+X-Google-Smtp-Source: ABdhPJwlB7NRlH+yJPKUQimSHAjXEA8po0grcKYiMJusWq/VSocZQHERZh6+skZbhucY/JF8jpCdCw==
+X-Received: by 2002:a17:90a:d301:: with SMTP id p1mr8450833pju.45.1625805650530;
+        Thu, 08 Jul 2021 21:40:50 -0700 (PDT)
+Received: from hao-wu-dev.colo.rubrik.com ([104.171.196.14])
+        by smtp.gmail.com with ESMTPSA id g141sm4410924pfb.210.2021.07.08.21.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jul 2021 21:40:50 -0700 (PDT)
+From:   Hao Wu <hao.wu@rubrik.com>
+To:     hao.wu@rubrik.com, shrihari.kalkar@rubrik.com,
+        seungyeop.han@rubrik.com, anish.jhaveri@rubrik.com,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de,
+        kgold@linux.ibm.com, zohar@linux.vnet.ibm.com,
+        why2jjj.linux@gmail.com, hamza@hpe.com, gregkh@linuxfoundation.org,
+        arnd@arndb.de, nayna@linux.vnet.ibm.com,
+        James.Bottomley@hansenpartnership.com
+Subject: [PATCH v2] tpm: fix Atmel TPM crash caused by too frequent queries
+Date:   Thu,  8 Jul 2021 21:40:28 -0700
+Message-Id: <20210709044028.77278-1-hao.wu@rubrik.com>
+X-Mailer: git-send-email 2.29.0.vfs.0.0
+In-Reply-To: <20210630042205.30051-1-hao.wu@rubrik.com>
+References: <20210630042205.30051-1-hao.wu@rubrik.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2021-07-08 at 17:17 -0600, Eric Snowberg wrote:
-> > Once all the CA keys in the MOK db are loaded onto the MOK keyring,
-> 
-> To avoid confusion with the new keyring name, would it be more appropriate 
-> to change what we are calling the .mok keyring to the .trusted_platform 
-> keyring instead? Or just leave it as .mok?
+The Atmel TPM 1.2 chips crash with error
+`tpm_try_transmit: send(): error -62` since kernel 4.14.
+It is observed from the kernel log after running `tpm_sealdata -z`.
+The error thrown from the command is as follows
+```
+$ tpm_sealdata -z
+Tspi_Key_LoadKey failed: 0x00001087 - layer=tddl,
+code=0087 (135), I/O error
+```
 
-Definitely not ".trusted_platform" keyring, as it would be too
-confusing with the existing "trusted" key type [1].  At least for now,
-leave it as ".mok".
+The issue was reproduced with the following Atmel TPM chip:
+```
+$ tpm_version
+T0  TPM 1.2 Version Info:
+  Chip Version:        1.2.66.1
+  Spec Level:          2
+  Errata Revision:     3
+  TPM Vendor ID:       ATML
+  TPM Version:         01010000
+  Manufacturer Info:   41544d4c
+```
 
-thanks,
+The root cause of the issue is due to the TPM calls to msleep()
+were replaced with usleep_range() [1], which reduces
+the actual timeout. Via experiments, it is observed that
+the original msleep(5) actually sleeps for 15ms.
+Because of a known timeout issue in Atmel TPM 1.2 chip,
+the shorter timeout than 15ms can cause the error described above.
 
-Mimi
+A few further changes in kernel 4.16 [2] and 4.18 [3, 4] further
+reduced the timeout to less than 1ms. With experiments,
+the problematic timeout in the latest kernel is the one
+for `wait_for_tpm_stat`.
 
-[1] Documentation/security/keys/trusted-encrypted.rst
+To fix it, the patch reverts the timeout of `wait_for_tpm_stat`
+to 15ms for all Atmel TPM 1.2 chips, but leave it untouched
+for Ateml TPM 2.0 chip, and chips from other vendors.
+As explained above, the chosen 15ms timeout is
+the actual timeout before this issue introduced,
+thus the old value is used here.
+Particularly, TPM_ATML_TIMEOUT_WAIT_STAT_MIN is set to 14700us,
+TPM_ATML_TIMEOUT_WAIT_STAT_MIN is set to 15000us according to
+the existing TPM_TIMEOUT_RANGE_US (300us).
+The fixed has been tested in the system with the affected Atmel chip
+with no issues observed after boot up.
+
+References:
+[1] 9f3fc7bcddcb tpm: replace msleep() with usleep_range() in TPM
+1.2/2.0 generic drivers
+[2] cf151a9a44d5 tpm: reduce tpm polling delay in tpm_tis_core
+[3] 59f5a6b07f64 tpm: reduce poll sleep time in tpm_transmit()
+[4] 424eaf910c32 tpm: reduce polling time to usecs for even finer
+granularity
+
+Fixes: 9f3fc7bcddcb ("tpm: replace msleep() with usleep_range() in TPM 1.2/2.0 generic drivers")
+Link: https://patchwork.kernel.org/project/linux-integrity/patch/20200926223150.109645-1-hao.wu@rubrik.com/
+Signed-off-by: Hao Wu <hao.wu@rubrik.com>
+---
+This version (v2) has following changes on top of the last (v1):
+- follow the existing way to define two timeouts (min and max)
+  for ATMEL chip, thus keep the exact timeout logic for 
+  non-ATEML chips.
+- limit the timeout increase to only ATMEL TPM 1.2 chips,
+  because it is not an issue for TPM 2.0 chips yet.
+
+Test Plan:
+- Run fixed kernel with ATMEL TPM chips and see crash has been fixed.
+- Run fixed kernel with non-ATMEL TPM chips, and confirm
+  the timeout has not been changed.
+
+ drivers/char/tpm/tpm.h          |  6 ++++--
+ drivers/char/tpm/tpm_tis_core.c | 23 +++++++++++++++++++++--
+ include/linux/tpm.h             |  3 +++
+ 3 files changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 283f78211c3a..6de1b44c4aab 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -41,8 +41,10 @@ enum tpm_timeout {
+ 	TPM_TIMEOUT_RETRY = 100, /* msecs */
+ 	TPM_TIMEOUT_RANGE_US = 300,	/* usecs */
+ 	TPM_TIMEOUT_POLL = 1,	/* msecs */
+-	TPM_TIMEOUT_USECS_MIN = 100,      /* usecs */
+-	TPM_TIMEOUT_USECS_MAX = 500      /* usecs */
++	TPM_TIMEOUT_USECS_MIN = 100,	/* usecs */
++	TPM_TIMEOUT_USECS_MAX = 500,	/* usecs */
++	TPM_ATML_TIMEOUT_WAIT_STAT_MIN = 14700,	/* usecs */
++	TPM_ATML_TIMEOUT_WAIT_STAT_MAX = 15000	/* usecs */
+ };
+ 
+ /* TPM addresses */
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 55b9d3965ae1..ae27d66fdd94 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -80,8 +80,17 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+ 		}
+ 	} else {
+ 		do {
+-			usleep_range(TPM_TIMEOUT_USECS_MIN,
+-				     TPM_TIMEOUT_USECS_MAX);
++			/* this code path could be executed before
++			 * timeouts initialized in chip instance.
++			 */
++			if (chip->timeout_wait_stat_min &&
++			    chip->timeout_wait_stat_max)
++				usleep_range(chip->timeout_wait_stat_min,
++					     chip->timeout_wait_stat_max);
++			else
++				usleep_range(TPM_TIMEOUT_USECS_MIN,
++					     TPM_TIMEOUT_USECS_MAX);
++
+ 			status = chip->ops->status(chip);
+ 			if ((status & mask) == mask)
+ 				return 0;
+@@ -934,6 +943,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	chip->timeout_b = msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
+ 	chip->timeout_c = msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
+ 	chip->timeout_d = msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
++	/* init timeouts for wait_for_tpm_stat */
++	chip->timeout_wait_stat_min = TPM_TIMEOUT_USECS_MIN;
++	chip->timeout_wait_stat_max = TPM_TIMEOUT_USECS_MAX;
+ 	priv->phy_ops = phy_ops;
+ 	dev_set_drvdata(&chip->dev, priv);
+ 
+@@ -983,6 +995,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 
+ 	priv->manufacturer_id = vendor;
+ 
++	if (priv->manufacturer_id == TPM_VID_ATML &&
++		!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
++		/* If TPM chip is 1.2 ATMEL chip, timeout need to be relaxed*/
++		chip->timeout_wait_stat_min = TPM_ATML_TIMEOUT_WAIT_STAT_MIN;
++		chip->timeout_wait_stat_max = TPM_ATML_TIMEOUT_WAIT_STAT_MAX;
++	}
++
+ 	rc = tpm_tis_read8(priv, TPM_RID(0), &rid);
+ 	if (rc < 0)
+ 		goto out_err;
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index aa11fe323c56..171b9102c976 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -150,6 +150,8 @@ struct tpm_chip {
+ 	bool timeout_adjusted;
+ 	unsigned long duration[TPM_NUM_DURATIONS]; /* jiffies */
+ 	bool duration_adjusted;
++	unsigned int timeout_wait_stat_min; /* usecs */
++	unsigned int timeout_wait_stat_max; /* usecs */
+ 
+ 	struct dentry *bios_dir[TPM_NUM_EVENT_LOG_FILES];
+ 
+@@ -269,6 +271,7 @@ enum tpm2_cc_attrs {
+ #define TPM_VID_INTEL    0x8086
+ #define TPM_VID_WINBOND  0x1050
+ #define TPM_VID_STM      0x104A
++#define TPM_VID_ATML     0x1114
+ 
+ enum tpm_chip_flags {
+ 	TPM_CHIP_FLAG_TPM2		= BIT(1),
+-- 
+2.29.0.vfs.0.0
 
