@@ -2,104 +2,269 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F7A3C28F3
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Jul 2021 20:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48223C291F
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Jul 2021 20:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbhGISVm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Jul 2021 14:21:42 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:19528 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229499AbhGISVm (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Jul 2021 14:21:42 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 169I3WeW019644;
-        Fri, 9 Jul 2021 14:18:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=cFcgBIMjRZFExSLu1MOUcIIL2PdkFtlHRsVx5aIYk4A=;
- b=Ze1+9MfImnDYfZOS6IQLTqz/XdEFFRTzGg9ECjwZwQ6lF7G1zBDhLlzgLuduRQ292Wph
- 3GI07EUNXvHX+A5fgDLtdhTlGfj8ibM+hy/CtIm1IKvsTXn84BKL6wOW6Ettxz7E6dIN
- dBZCBNLuqyStkgbEeb08XfGZQStVqe6+dLdFEE4PE3f00GJAVxH0qjdSbgzoT/2GBr8P
- +GGGX12JVAgiuBr6nm/7ntCABMjPmMC6RKDYKPtqqFJ7kAX0923yWTuWPzRGug7I0Sgn
- 1ZsyellWfMqBeJ9/vVb0GpABEei9erAKJfAftW6aYIRVxtyyEtnfZhPNIloCJJ4Y7XF/ 0w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39p1yctjna-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jul 2021 14:18:52 -0400
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 169I6dDi030341;
-        Fri, 9 Jul 2021 14:18:52 -0400
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39p1yctjn5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jul 2021 14:18:52 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 169HvGOq010236;
-        Fri, 9 Jul 2021 18:18:51 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma01wdc.us.ibm.com with ESMTP id 39jfhdqn5m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jul 2021 18:18:51 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 169IIpjJ40042774
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 9 Jul 2021 18:18:51 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 419DB112062;
-        Fri,  9 Jul 2021 18:18:51 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 31442112061;
-        Fri,  9 Jul 2021 18:18:51 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  9 Jul 2021 18:18:51 +0000 (GMT)
-Subject: Re: [PATCH v2] char: tpm: vtpm_proxy: Fix race in init
-To:     Saubhik Mukherjee <saubhik.mukherjee@gmail.com>, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org, andrianov@ispras.ru
-References: <20210708095259.27915-1-saubhik.mukherjee@gmail.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <86011d11-522d-a686-b360-43d19366cab7@linux.ibm.com>
-Date:   Fri, 9 Jul 2021 14:18:50 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S229491AbhGISrN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Jul 2021 14:47:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49536 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229459AbhGISrN (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 9 Jul 2021 14:47:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5D1F613B7;
+        Fri,  9 Jul 2021 18:44:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625856269;
+        bh=Hx33oy7SmzJkXnkh3Nxdn7sykWsDtaIyTALwHVM9uPg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EK9DrUsxSMKahEzp234evqwp1KkcEuQnigCCnFALNZ1fH9P/gRS7GvZRvLlwWwfb8
+         BJCDN2lZqrwaB5Bu0Z+VUGbdgVKLCJDvFsXgn2XxfZeCq7hHh+Gphjh7MF9c/dnJ95
+         1QcZtdS11EpIwE3Igew6ZCsNSfFiVjJFjIwwcmnL+nxEU+canxoM63cmaTPhk5r5XP
+         PlYEPXf7THa7FGx91uuxN1cucTCnlTwz3rGnKjz9QyDcnxu8R9AaqNeLyRJwyHVF9C
+         JU+RPnfz/9pLuswvRg3ID63qDj8ly+8WUrwHm+m4nkQiwAq+P5EhueZp/RkqkM8bv+
+         Pgw8MO2uRjZHA==
+Date:   Fri, 9 Jul 2021 21:44:26 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: Recent tpm_tis IRQ handling changes are causing kernel
+ backtraces]
+Message-ID: <20210709184426.7yftmufrmw3tp24s@kernel.org>
+References: <89d5b891-97d8-caed-4eb1-6d4d485a2fd1@redhat.com>
+ <5680899e-9040-7641-e6ac-23edd2d988cf@redhat.com>
+ <49bfb4a7-eb3c-77f9-ff8e-b37617a26195@redhat.com>
+ <20210623134054.45gjj2wbgz7jpjmy@kernel.org>
+ <90ed51b4-66d4-fb10-ca8e-d99532028fab@redhat.com>
+ <20210629180445.oind62rsktevm45q@kernel.org>
+ <b4398c5b-38dc-d511-ea29-0847bfca60b4@redhat.com>
+ <20210629220516.xm3jvjy7v2uw3fvz@kernel.org>
+ <29e72255-b995-9ffe-f379-5e9e349bee07@redhat.com>
+ <8819200d-e468-7b09-2e08-e44f5f2ed59f@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20210708095259.27915-1-saubhik.mukherjee@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vOZgn4vSeRLUVMMW_qNnd3QKtwH8SYls
-X-Proofpoint-ORIG-GUID: qr1nPttsjHrQNoZNJCTYs43asoNwpa3h
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-09_12:2021-07-09,2021-07-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- malwarescore=0 impostorscore=0 bulkscore=0 mlxlogscore=999
- priorityscore=1501 adultscore=0 mlxscore=0 spamscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107090088
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8819200d-e468-7b09-2e08-e44f5f2ed59f@redhat.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Wed, Jun 30, 2021 at 03:36:55PM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 6/30/21 2:47 PM, Hans de Goede wrote:
+> > Hi,
+> > 
+> > On 6/30/21 12:05 AM, Jarkko Sakkinen wrote:
+> >> On Tue, Jun 29, 2021 at 09:14:39PM +0200, Hans de Goede wrote:
+> >>> Hi,
+> >>>
+> >>> On 6/29/21 8:04 PM, Jarkko Sakkinen wrote:
+> >>>> On Wed, Jun 23, 2021 at 03:54:59PM +0200, Hans de Goede wrote:
+> >>>>> Hi,
+> >>>>>
+> >>>>> On 6/23/21 3:40 PM, Jarkko Sakkinen wrote:
+> >>>>>> On Mon, Jun 21, 2021 at 02:04:52PM +0200, Hans de Goede wrote:
+> >>>>>>> Hi,
+> >>>>>>>
+> >>>>>>> On 6/14/21 3:33 PM, Hans de Goede wrote:
+> >>>>>>>> Hi,
+> >>>>>>>>
+> >>>>>>>> On 6/1/21 6:04 PM, Hans de Goede wrote:
+> >>>>>>>>> Hi,
+> >>>>>>>>>
+> >>>>>>>>> On 5/31/21 6:36 AM, Jarkko Sakkinen wrote:
+> >>>>>>>>>>> Interestingly enough the first backtrace is also happening on a:
+> >>>>>>>>>>> "Dell Inc. XPS 13 9310/0MRT12, BIOS 2.2.0 04/06/2021"
+> >>>>>>>>>>>
+> >>>>>>>>>>> So it seems that at least with 5.12.6 (which has the last 2 fixes)
+> >>>>>>>>>>> all reports are about the XPS 13 9310. I wonder if there is an
+> >>>>>>>>>>> issue with the TPM interrupt line on the XPS 13 9310; I've asked the
+> >>>>>>>>>>> reporters to try adding tpm_tis.interrupts=0 to their kernel commandline.
+> >>>>>>>>>>
+> >>>>>>>>>> This is helpful for sure that these all are happening on matching hardware.
+> >>>>>>>>>
+> >>>>>>>>> So our kernel-backtrace tracking info (ABRT) just recorded a third backtrace
+> >>>>>>>>> with a kernel >= 5.12.6, again on the XPS 13 9310, so now we have 3 variants:
+> >>>>>>>>>
+> >>>>>>>>> 1. Backtrace starting with a call to ima_add_boot_aggregate
+> >>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1963712
+> >>>>>>>>>
+> >>>>>>>>> 2. Backtrace starting with a call to tpm_dev_async_work:
+> >>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1964974
+> >>>>>>>>> (note this one is not easily reproducible)
+> >>>>>>>>>
+> >>>>>>>>> 3. Backtrace starting with a call to rng_dev_read:
+> >>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1920510
+> >>>>>>>>>
+> >>>>>>>>> 3. is the new one. All bugs linked above are public, all 3 backtraces
+> >>>>>>>>> so far have only been reported on the XPS 13 9310 (with kernel >= 5.12.6)
+> >>>>>>>>> and I've asked all the reporters to check if tpm_tis.interrupts=0 helps.
+> >>>>>>>>
+> >>>>>>>> Quick status update, I've got a response from a XPS 13 9310 user in:
+> >>>>>>>>
+> >>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1920510
+> >>>>>>>>
+> >>>>>>>> Indicating that a. he can reproduce this with the latest >= 5.12.6 kernels;
+> >>>>>>>> and b. it goes away when specifying tpm_tis.interrupts=0 as I expected
+> >>>>>>>> (I expected this because all the bug-reports started when the interrupt
+> >>>>>>>> code got fixed/re-enabled a while ago).
+> >>>>>>>
+> >>>>>>> One more status update.
+> >>>>>>>
+> >>>>>>> - A new 4th variant of the backtrace has been spotted, where the problem hits
+> >>>>>>> when called from probe() -> tpm2_auto_startup -> tpm2_do_selftest, see:
+> >>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1958381
+> >>>>>>>
+> >>>>>>> - So far all reports with kernel >= 5.12.6 have been on a Dell XPS 13 9310
+> >>>>>>> models. But the new variant is happening on a Dell XPS 15 9500 and the
+> >>>>>>> backtrace starting at ima_add_boot_aggregate is also being reported on
+> >>>>>>> a Dell XPS 15 9500 (as well as on the XPS 13 9310).
+> >>>>>>>
+> >>>>>>> Regards,
+> >>>>>>>
+> >>>>>>> Hans
+> >>>>>>
+> >>>>>> OK, I'll have to query if I could borrow that laptop from someone. It's
+> >>>>>> fairly common laptop, i.e. might be possible.
+> >>>>>
+> >>>>> In the mean time I've also got a report that this variant of the backtrace:
+> >>>>>
+> >>>>> 1. Backtrace starting with a call to ima_add_boot_aggregate
+> >>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1963712
+> >>>>>
+> >>>>> Is also still happening with recent 5.12.y kernels on
+> >>>>> Dell Precision 7750 laptops. Both the Precision 7750 and the XPS 9500 use
+> >>>>> 10th gen comet lake processors (i7-10750H), where as the XPS 9310 is using
+> >>>>> an icelake processor. So the common denominator seems to be that they are
+> >>>>> all 2020 Dell laptop models using the latest Intel CPUs.
+> >>>>>
+> >>>>> FYI the complete list of models on which some of the 4 backtrace variants
+> >>>>> are still seen on recent 5.12.y kernels is now:
+> >>>>>
+> >>>>> Dell XPS 13 9310
+> >>>>> Dell XPS 15 9500
+> >>>>> Dell Precision 7750
+> >>>>>
+> >>>>> Regards,
+> >>>>>
+> >>>>> Hans
+> >>>>
+> >>>> Does "tpm_tis.interrupts=0" uniformly workaround the issue?
+> >>>
+> >>> I unfortunately have not gotten much replies to my request to test with
+> >>> tpm_tis.interrupts=0, but for those people who have bothered to test
+> >>> (2 reporters IIRC) using tpm_tis.interrupts=0 does avoid the issue.
+> >>
+> >> So we see this in dmesg as first anything from TPM:
+> >>
+> >> [    0.904572] tpm_tis STM0125:00: 2.0 TPM (device-id 0x0, rev-id 78)
+> >>
+> >> This means that one command is successfully processed by the TPM, i.e.
+> >> tpm2_probe() in tpm_tis_core_init().
+> >>
+> >> My first *guess*  was that IRQ is given by ACPI, would need ACPI dump to
+> >> confirm (e.g. sudo acpidump > acpi.dump). It cannot be so because otherwise
+> >> this code path would be executed:
+> >>
+> >>         if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+> >>                 dev_err(&chip->dev, FW_BUG
+> >>                         "TPM interrupt not working, polling instead\n");
+> >>
+> >>                 disable_interrupts(chip);
+> >>         }
+> >>
+> >> TPM_CHIP_FLAG_IRQ is never set, so you should see this message in dmesg if
+> >> a legit value is given to IRQ by ACPI.  We are probably planning re-enable
+> >> IRQ code after these type of issues are fully resolved, but right now you
+> >> should not end up having it enabled (see tpm_tis_send() function).
+> >>
+> >> To put this together "if (irq != -1) {" path in tpm_tis_core_init() is
+> >> never executed. And early in the same function the interrupt hardware is
+> >> *explicitly* disabled.
+> >>
+> >> For me this looks like a hardware bug right now: interrupts stay enabled
+> >> for some reason.
+> >>
+> >> ACPI dump would be useful to verify some of the assumptions in this.
+> > 
+> > Ok, I've added a comment to the Fedora bugs for the 4 different backtrace
+> > variants asking for acpidumps for the Dell XPS 13 9310, Dell XPS 15 9500
+> > and Dell Precision 7750 laptops.
+> 
+> 2 XPS 9310 acpidumps have been attached to:
+> 
+> https://bugzilla.redhat.com/show_bug.cgi?id=1920510
+> https://bugzilla.redhat.com/show_bug.cgi?id=1964974
+> 
+> Note the reporter of the first bug mentions that he is no longer having
+> this issue, but we are definitely still getting reports for kernel version
+> > 5.12.6 (which has the last 2 fixes) from XPS 9310 users...
+> 
+> Maybe there are different BIOS versions in play ? It might be interesting
+> to compare the 2 acpidumps...
 
-On 7/8/21 5:52 AM, Saubhik Mukherjee wrote:
-> vtpm_module_init calls vtpmx_init which calls misc_register. The file
-> operations callbacks are registered. So, vtpmx_fops_ioctl can execute in
-> parallel with rest of vtpm_module_init. vtpmx_fops_ioctl calls
-> vtpmx_ioc_new_dev, which calls vtpm_proxy_create_device, which calls
-> vtpm_proxy_work_start, which could read uninitialized workqueue.
->
-> To avoid this, create workqueue before vtpmx init.
->
-> Found by Linux Driver Verification project (linuxtesting.org).
->
-> Fixes: 6f99612e2500 ("tpm: Proxy driver for supporting multiple emulated TPMs")
-> Signed-off-by: Saubhik Mukherjee <saubhik.mukherjee@gmail.com>
+❯ diff -u ../tmp/ssdt7.dsl ../tmp2/ssdt7.dsl
+--- ../tmp/ssdt7.dsl	2021-07-09 21:32:06.473166420 +0300
++++ ../tmp2/ssdt7.dsl	2021-07-09 21:33:45.065934469 +0300
+@@ -5,7 +5,7 @@
+  * 
+  * Disassembling to symbolic ASL+ operators
+  *
+- * Disassembly of ssdt7.dat, Fri Jul  9 21:32:06 2021
++ * Disassembly of ssdt7.dat, Fri Jul  9 21:33:45 2021
+  *
+  * Original Table Header:
+  *     Signature        "SSDT"
+@@ -121,7 +121,7 @@
+                     0xFED40000,         // Address Base
+                     0x00005000,         // Address Length
+                     )
+-                Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y58)
++                Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y55)
+                 {
+                     0x0000000C,
+                 }
+@@ -141,7 +141,7 @@
+                 }
+                 Else
+                 {
+-                    CreateDWordField (RES0, \_SB.TPM._Y58._INT, LIRQ)  // _INT: Interrupts
++                    CreateDWordField (RES0, \_SB.TPM._Y55._INT, LIRQ)  // _INT: Interrupts
+                     LIRQ = IRQN /* \_SB_.TPM_.IRQN */
+                     Return (RES0) /* \_SB_.TPM_.RES0 */
+                 }
+@@ -152,14 +152,14 @@
+                 If ((IRQN != Zero))
+                 {
+                     CreateDWordField (Arg0, 0x11, IRQ0)
+-                    CreateDWordField (RES0, \_SB.TPM._Y58._INT, LIRQ)  // _INT: Interrupts
++                    CreateDWordField (RES0, \_SB.TPM._Y55._INT, LIRQ)  // _INT: Interrupts
+                     LIRQ = IRQ0 /* \_SB_.TPM_._SRS.IRQ0 */
+                     IRQN = IRQ0 /* \_SB_.TPM_._SRS.IRQ0 */
+                     CreateBitField (Arg0, 0x79, ITRG)
+-                    CreateBitField (RES0, \_SB.TPM._Y58._HE, LTRG)  // _HE_: High-Edge
++                    CreateBitField (RES0, \_SB.TPM._Y55._HE, LTRG)  // _HE_: High-Edge
+                     LTRG = ITRG /* \_SB_.TPM_._SRS.ITRG */
+                     CreateBitField (Arg0, 0x7A, ILVL)
+-                    CreateBitField (RES0, \_SB.TPM._Y58._LL, LLVL)  // _LL_: Low Level
++                    CreateBitField (RES0, \_SB.TPM._Y55._LL, LLVL)  // _LL_: Low Level
+                     LLVL = ILVL /* \_SB_.TPM_._SRS.ILVL */
+                     If ((((TID0 & 0x0F) == Zero) || ((TID0 & 0x0F
+                         ) == 0x0F)))
 
-Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+This delta from "acpidump for Dell XPS 9310 (with Qualcomm QCA6390)" to
+"acpidump output from a Dell XPS 13 9310 that no longer has a problem"
+in SSDT7. The bug I'm referring to is
 
+https://bugzilla.redhat.com/show_bug.cgi?id=1920510
 
+Looks to me just using a different label.
+
+What if we just set "interrupts=0" explicitly for STM0125 HID since the
+workaround seems to work according to the report?
+
+/Jarkko
