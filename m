@@ -2,85 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD2A3C27AD
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Jul 2021 18:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D473C2884
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Jul 2021 19:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbhGIQlc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 9 Jul 2021 12:41:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59742 "EHLO mail.kernel.org"
+        id S229503AbhGIRkS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 9 Jul 2021 13:40:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229685AbhGIQlc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 9 Jul 2021 12:41:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 48B74613B4;
-        Fri,  9 Jul 2021 16:38:48 +0000 (UTC)
+        id S229459AbhGIRkS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 9 Jul 2021 13:40:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 66141613C1;
+        Fri,  9 Jul 2021 17:37:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625848728;
-        bh=a1GISkv/+pWga0fuN5hJ5ZjRXhhLHwqNa2THjWIVVyU=;
+        s=k20201202; t=1625852254;
+        bh=qOOAAdhQ1intYRWW/AffL+13hLjsPs0v5MNLdeXti60=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Iuk9WFJR/gnoHhhLixZZL1Qt8UMWvT704PCJFZaW9jX0oREYzGgmYNk2oAyCs1iZq
-         w1JFvLRVPZxmEpB+ttMRLb/1zUOhvk0rx3fzG6MIDJOF24q7KEt5D50OZs6Z2k6v/B
-         eMWGKaVcWEYVmQ3ZdHL3yxxu1JMBjbtBq8Pc2rpakCD6hOQrmD5IWR3f9FjuUVXLg1
-         Wa9ZoYZT9cARhFYknnYfIeLNBhSDe7yl4DlfeafStJLHpP00T9FN9FGs/kzBtdJhuc
-         ABel8KIJCbbBKJ5GUbLO9Ewacy0QO1ErxyXy5SYz7puEd5ZSaFfhaKcqobj9duT/9a
-         zYobmtu/RH1LA==
-Date:   Fri, 9 Jul 2021 19:38:46 +0300
+        b=JD9fWf1C61xVXTZ0R/Bnsntvp8kRogDb6GmW5t+2GThXtoHcZ4vVm8LmNJGVZ/9W/
+         79k8f2bS740ipgLU5xbKRBZmxanpis95oT6Z96yAobMSkuBB1YnC6Mu1c9LSZOS5OI
+         mvmJKO7DWuHK3eKuhy9iaiyoPEIi5hDQ/Jq4uZT46NyUvGrQ7TGu1SROCz7iwtdtJs
+         9ffaBXFw9GwO2h81pBnTpxSo+vH3arRBDT2DZ6tjTzSjA9PS5NeUB+TcdW8HeLbj1j
+         2lE8szpY+4BmANn6nKUPq1yoA+SqsU8QBei8W1Xv8tasOf8dV25Y7tQx6IbEAb+MlU
+         1sBrt02lSWH0A==
+Date:   Fri, 9 Jul 2021 20:37:32 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Michal Suchanek <msuchanek@suse.de>
-Cc:     linux-integrity@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?utf-8?B?TG/Dr2M=?= Yhuel <loic.yhuel@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        Matthew Garrett <mjg59@google.com>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] efi/tpm: Differentiate missing and invalid final event
- log table.
-Message-ID: <20210709163846.3e753oectgbt7wh7@kernel.org>
-References: <20210708094654.4157-1-msuchanek@suse.de>
+To:     Saubhik Mukherjee <saubhik.mukherjee@gmail.com>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org,
+        andrianov@ispras.ru
+Subject: Re: [PATCH v2] char: tpm: vtpm_proxy: Fix race in init
+Message-ID: <20210709173732.tr6bdiesnqg22xro@kernel.org>
+References: <20210708095259.27915-1-saubhik.mukherjee@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210708094654.4157-1-msuchanek@suse.de>
+In-Reply-To: <20210708095259.27915-1-saubhik.mukherjee@gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Jul 08, 2021 at 11:46:54AM +0200, Michal Suchanek wrote:
-> Missing TPM final event log table is not a firmware bug.
+On Thu, Jul 08, 2021 at 03:22:59PM +0530, Saubhik Mukherjee wrote:
+> vtpm_module_init calls vtpmx_init which calls misc_register. The file
+> operations callbacks are registered. So, vtpmx_fops_ioctl can execute in
+> parallel with rest of vtpm_module_init. vtpmx_fops_ioctl calls
+> vtpmx_ioc_new_dev, which calls vtpm_proxy_create_device, which calls
+> vtpm_proxy_work_start, which could read uninitialized workqueue.
 > 
-> Clearly if providing event log in the old format makes the final event
-> log invalid it should not be provided at least in that case.
+> To avoid this, create workqueue before vtpmx init.
 > 
-> Fixes: b4f1874c6216 ("tpm: check event log version before reading final events")
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> Found by Linux Driver Verification project (linuxtesting.org).
+> 
+> Fixes: 6f99612e2500 ("tpm: Proxy driver for supporting multiple emulated TPMs")
+> Signed-off-by: Saubhik Mukherjee <saubhik.mukherjee@gmail.com>
 > ---
->  drivers/firmware/efi/tpm.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
-> index c1955d320fec..8f665678e9e3 100644
-> --- a/drivers/firmware/efi/tpm.c
-> +++ b/drivers/firmware/efi/tpm.c
-> @@ -62,9 +62,11 @@ int __init efi_tpm_eventlog_init(void)
->  	tbl_size = sizeof(*log_tbl) + log_tbl->size;
->  	memblock_reserve(efi.tpm_log, tbl_size);
+> Changes since v1 ([0]):
+> - Add Fixes tag to commit message, as requested by Jarkko in [1].
+> 
+> [0]: https://lkml.org/lkml/2021/6/23/572
+> [1]: https://lkml.org/lkml/2021/6/29/695
+> 
+>  drivers/char/tpm/tpm_vtpm_proxy.c | 19 +++++++++----------
+>  1 file changed, 9 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+> index 91c772e38bb5..225dfa026a8f 100644
+> --- a/drivers/char/tpm/tpm_vtpm_proxy.c
+> +++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+> @@ -697,23 +697,22 @@ static int __init vtpm_module_init(void)
+>  {
+>  	int rc;
 >  
-> -	if (efi.tpm_final_log == EFI_INVALID_TABLE_ADDR ||
-> -	    log_tbl->version != EFI_TCG2_EVENT_LOG_FORMAT_TCG_2) {
-> -		pr_warn(FW_BUG "TPM Final Events table missing or invalid\n");
-> +	if (efi.tpm_final_log == EFI_INVALID_TABLE_ADDR) {
-> +		pr_info("TPM Final Events table not present\n");
-> +		goto out;
-> +	} else if (log_tbl->version != EFI_TCG2_EVENT_LOG_FORMAT_TCG_2) {
-> +		pr_warn(FW_BUG "TPM Final Events table invalid\n");
->  		goto out;
+> -	rc = vtpmx_init();
+> -	if (rc) {
+> -		pr_err("couldn't create vtpmx device\n");
+> -		return rc;
+> -	}
+> -
+>  	workqueue = create_workqueue("tpm-vtpm");
+>  	if (!workqueue) {
+>  		pr_err("couldn't create workqueue\n");
+> -		rc = -ENOMEM;
+> -		goto err_vtpmx_cleanup;
+> +		return -ENOMEM;
+> +	}
+> +
+> +	rc = vtpmx_init();
+> +	if (rc) {
+> +		pr_err("couldn't create vtpmx device\n");
+> +		goto err_destroy_workqueue;
 >  	}
 >  
+>  	return 0;
+>  
+> -err_vtpmx_cleanup:
+> -	vtpmx_cleanup();
+> +err_destroy_workqueue:
+> +	destroy_workqueue(workqueue);
+>  
+>  	return rc;
+>  }
 > -- 
-> 2.26.2
+> 2.30.2
 > 
 > 
+
+Thanks, I applied this.
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
