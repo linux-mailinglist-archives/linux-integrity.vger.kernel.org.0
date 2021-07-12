@@ -2,91 +2,168 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C38783C5C90
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Jul 2021 14:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C68B3C606F
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Jul 2021 18:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233898AbhGLMsm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 12 Jul 2021 08:48:42 -0400
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:40714 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230361AbhGLMsm (ORCPT
+        id S233739AbhGLQ2A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Jul 2021 12:28:00 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36276 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233719AbhGLQ17 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 12 Jul 2021 08:48:42 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UfYaYs._1626093952;
-Received: from B-455UMD6M-2027.local(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UfYaYs._1626093952)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 12 Jul 2021 20:45:52 +0800
-Subject: Re: [PATCH ima-evm-utils v3] ima-evm-utils: Support SM2 algorithm for
- sign and verify
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-References: <20210526084455.56705-1-tianjia.zhang@linux.alibaba.com>
- <d7526f84-f7c9-cbc6-c4a5-3e8b8d78fb60@linux.alibaba.com>
- <10f55257f543cc1d63e7a8ae36cbf2433a01c30b.camel@linux.ibm.com>
- <bb6afba7-255f-5254-5ac7-e793c24d56d3@linux.alibaba.com>
- <5f61f4b0f305a26df0346524e4999c5bbb66571f.camel@linux.ibm.com>
- <4f4a220d-23c5-dbf4-ac57-0ce16ecff2a7@linux.alibaba.com>
- <d1b072c36b4d3770d6b7385836fbed2ec23be349.camel@linux.ibm.com>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Message-ID: <3b5aea51-c82c-70f3-d41e-d615bc14823a@linux.alibaba.com>
-Date:   Mon, 12 Jul 2021 20:45:52 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.11.0
+        Mon, 12 Jul 2021 12:27:59 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16CG3m2t172344;
+        Mon, 12 Jul 2021 12:25:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=UROfSqQwvdh21eBG4v+9kqE03iACV/yRY/pRhj07gTU=;
+ b=RBENKBE1nduXCNo5kVKcr/rf3w5EQTp+o9E21ubvz4aO1WBWQsEOD6ZXYYpZ1sRSXSNt
+ YtP/wnNOJgkXVtLoj6rAmqeqFjC5kRJyXcrkDehA7H2MBDpCT7Ut9PUHIA5DvUBAPdzg
+ GR7B/7RQPChWmjlLO5xF4vcyA3NIQLOym37rQg5yRz3rHRoe1ZpeW9u0DEMO8ohIGXfg
+ ssNV1xdwdESG1vlNiXsQribi9cRfKF2cyM2lkBdHKP2CFW3+O2Ao5LIg7HxXulhEv1Tj
+ dK5hzU2yVv12SBKtzQ7vKMzIVIXjE8zwCo5QegelkJD/lJTTUtOdufvLclMVWuClCUvc kA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39qrf78259-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jul 2021 12:25:10 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16CG4Djs174082;
+        Mon, 12 Jul 2021 12:25:09 -0400
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39qrf7824g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jul 2021 12:25:09 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16CGHOBb015811;
+        Mon, 12 Jul 2021 16:25:08 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma05wdc.us.ibm.com with ESMTP id 39q36b97y4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jul 2021 16:25:08 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16CGP7Pv40632654
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Jul 2021 16:25:07 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9C429112065;
+        Mon, 12 Jul 2021 16:25:07 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8CFEB112062;
+        Mon, 12 Jul 2021 16:25:07 +0000 (GMT)
+Received: from sbct-2.. (unknown [9.47.158.152])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 12 Jul 2021 16:25:07 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     peterhuewe@gmx.de, jarkko@kernel.org
+Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>
+Subject: [PATCH] tpm: ibmvtpm: Avoid error message when process gets signal while waiting
+Date:   Mon, 12 Jul 2021 12:25:05 -0400
+Message-Id: <20210712162505.205943-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: KqhbcAIHfhqht3bpdAe-BA8-bSBCTZLz
+X-Proofpoint-GUID: -xxLZQg3vsEtGn4ehvzhCPK2AVYLno5t
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-In-Reply-To: <d1b072c36b4d3770d6b7385836fbed2ec23be349.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-12_09:2021-07-12,2021-07-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ adultscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107120122
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+From: Stefan Berger <stefanb@linux.ibm.com>
 
+When rngd is run as root then lots of these types of message will appear
+in the kernel log if the TPM has been configure to provide random bytes:
 
-On 7/12/21 8:35 PM, Mimi Zohar wrote:
-> On Mon, 2021-07-12 at 20:12 +0800, Tianjia Zhang wrote:
->>
->> On 7/9/21 8:05 PM, Mimi Zohar wrote:
->>> On Fri, 2021-07-09 at 17:06 +0800, Tianjia Zhang wrote:
->>>> On 7/7/21 10:28 AM, Mimi Zohar wrote:
->>>
->>>
->>>>> I'm also seeing:
->>>>> - openssl req -verbose -new -nodes -utf8 -days 10000 -batch -x509 -sm3
->>>>> -sigopt distid:1234567812345678 -config test-ca.conf -copy_extensions
->>>>> copyall -newkey sm2 -out test-sm2.cer -outform DER -keyout test-sm2.key
->>>>> req: Unrecognized flag copy_extensions
->>>>>
->>>>
->>>> This command is for openssl 3.0, and '-copy_extensions copyall' is also
->>>> a parameter supported on 3.0. At present, the mainstream version of
->>>> openssl 1.1.1 only partially supports SM2 signatures. For example, the
->>>> USERID in the SM2 specification cannot be used, and the certificate
->>>> cannot be operated in the command using the SM2/3 algorithm combination,
->>>> just like the modification of libimaevm.c in this patch, this cannot be
->>>> done directly through the openssl command, even if the '-copy_extensions
->>>> copyall' parameter is deleted, this command will be failed on openssl
->>>> 1.1.1. The final solution may be openssl 3.0.
->>>>
->>>> On openssl 1.1.1, there is no problem to operate the signature of the
->>>> SM2/3 algorithm combination through the API. If it is possible, the
->>>> sign_verify test of sm2/3 is not required. What is your opinion?
->>>
->>> Instead of dropping the test altogether, add an openssl version
->>> dependency.
->>
->> Great. will do in next version patch.
-> 
-> Please consider adding a new CI distro matrix rule that includes the
-> needed openssl version.  Another option would be to define a new script
-> in the tests directory to install openssl from the git repo.  Please
-> limit using that script to a single distro matrix rule.
-> 
+[ 7406.275163] tpm tpm0: tpm_transmit: tpm_recv: error -4
 
-Got it, thanks for your suggestion. It seems that the second method is 
-more suitable.
+The issue is caused by the following call that is interrupted while
+waiting for the TPM's response.
 
-Thanks,
-Tianjia
+sig = wait_event_interruptible(ibmvtpm->wq,
+                               !ibmvtpm->tpm_processing_cmd);
+
+The solution is to use wait_event() instead.
+
+To recreat the issue start rngd like this:
+
+sudo rngd -r /dev/hwrng -t
+
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=1981473
+Fixes: 6674ff145eef ("tpm_ibmvtpm: properly handle interrupted packet receptions")
+Cc: Nayna Jain <nayna@linux.ibm.com>
+Cc: George Wilson <gcwilson@linux.ibm.com>
+Reported-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+ drivers/char/tpm/tpm_ibmvtpm.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+index 903604769de9..99b0442a5fdf 100644
+--- a/drivers/char/tpm/tpm_ibmvtpm.c
++++ b/drivers/char/tpm/tpm_ibmvtpm.c
+@@ -106,16 +106,13 @@ static int tpm_ibmvtpm_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ {
+ 	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
+ 	u16 len;
+-	int sig;
+ 
+ 	if (!ibmvtpm->rtce_buf) {
+ 		dev_err(ibmvtpm->dev, "ibmvtpm device is not ready\n");
+ 		return 0;
+ 	}
+ 
+-	sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
+-	if (sig)
+-		return -EINTR;
++	wait_event(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
+ 
+ 	len = ibmvtpm->res_len;
+ 
+@@ -206,7 +203,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ {
+ 	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
+ 	bool retry = true;
+-	int rc, sig;
++	int rc;
+ 
+ 	if (!ibmvtpm->rtce_buf) {
+ 		dev_err(ibmvtpm->dev, "ibmvtpm device is not ready\n");
+@@ -224,9 +221,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ 		dev_info(ibmvtpm->dev,
+ 		         "Need to wait for TPM to finish\n");
+ 		/* wait for previous command to finish */
+-		sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
+-		if (sig)
+-			return -EINTR;
++		wait_event(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
+ 	}
+ 
+ 	spin_lock(&ibmvtpm->rtce_lock);
+@@ -551,7 +546,7 @@ static void ibmvtpm_crq_process(struct ibmvtpm_crq *crq,
+ 			/* len of the data in rtce buffer */
+ 			ibmvtpm->res_len = be16_to_cpu(crq->len);
+ 			ibmvtpm->tpm_processing_cmd = false;
+-			wake_up_interruptible(&ibmvtpm->wq);
++			wake_up(&ibmvtpm->wq);
+ 			return;
+ 		default:
+ 			return;
+-- 
+2.31.1
+
