@@ -2,108 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66ABA3C64AE
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Jul 2021 22:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4453C64F8
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Jul 2021 22:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233686AbhGLUH2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 12 Jul 2021 16:07:28 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:21458 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233299AbhGLUH1 (ORCPT
+        id S235446AbhGLUaN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Jul 2021 16:30:13 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:50726 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234982AbhGLUaM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 12 Jul 2021 16:07:27 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16CK3xDI017522;
-        Mon, 12 Jul 2021 16:04:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=OqvVUjngvShKdsSy4qHCHrp6wWSaZa76CtkQynx/fx8=;
- b=JRU17Y1E5RnZYC9VY4HFjZJbLMBBVxmDEMjb7r7ACqJ1lLrSvL60HTjBvNfgF7raPzGb
- YG8JMTQljGiQtSZAv8teupWwzaq55dn0U9sgTAN0aETUhHLTDK1I7BZY8XmLKvTQ0dmK
- bfIBQsH2UEgJabWe9r/QqNSxg1GNa1zBXawtTQep1KiRdTEh38DxRCg8cb7o94OzRcAC
- 6BzShQIz8WHvp9EBokFQCjaKVcQzv3VLk/w5qbk+2XHPcQ5/RTw5j85m7XTKS0lV7CL0
- UiwB5dhi/LBaUzCSEIsD00ZOy23cavnIABdCzfmYBAgfIFBr5vVhAbc4Gy3RAw+Rt14s vw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39qrkw4jts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jul 2021 16:04:37 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16CK4Bnv018514;
-        Mon, 12 Jul 2021 16:04:36 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39qrkw4js8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jul 2021 16:04:36 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16CK3OcV000954;
-        Mon, 12 Jul 2021 20:04:34 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 39q2th8xkf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jul 2021 20:04:33 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16CK2RRT28508566
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jul 2021 20:02:28 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8E7E1AE051;
-        Mon, 12 Jul 2021 20:04:31 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F00BAE04D;
-        Mon, 12 Jul 2021 20:04:30 +0000 (GMT)
-Received: from sig-9-65-203-86.ibm.com (unknown [9.65.203.86])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Jul 2021 20:04:30 +0000 (GMT)
-Message-ID: <b2dab0c5a7f67f337257ddf63dc58134c36ca4f9.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v8 0/3] ima-evm-utils: Add --keyid option
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Date:   Mon, 12 Jul 2021 16:04:29 -0400
-In-Reply-To: <20210712054448.2471236-1-vt@altlinux.org>
-References: <20210712054448.2471236-1-vt@altlinux.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: s5bhyYcitCF7d6A2t6VQhBG-4RB8NiP5
-X-Proofpoint-ORIG-GUID: QeTV-X7O08pPn5bEnCujAb_G34w8pbWb
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-12_11:2021-07-12,2021-07-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 malwarescore=0 suspectscore=0
- impostorscore=0 phishscore=0 priorityscore=1501 spamscore=0
- mlxlogscore=999 bulkscore=0 adultscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107120139
+        Mon, 12 Jul 2021 16:30:12 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2CA0020002;
+        Mon, 12 Jul 2021 20:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1626121643;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ExQVv7YzlvAzz8rjNDW2kvbTr0Eh6ukFZioBM9EorCU=;
+        b=DDAbmMAYPWkAt4QFsCJFwE5U2ua+l8EPR5s9NjvsKLXGFapsGP27dvDokJcrp7pMEAja8U
+        ZmXtO6jaIC8loIQ75+ECPzQ8zvvxcv5ULbTd+eLCXNDX3HavVr5Mw56H26lOlw0baiHLUc
+        ucBfkiCF1GA5VhFdpmSFyQdG/t4tfK0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1626121643;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ExQVv7YzlvAzz8rjNDW2kvbTr0Eh6ukFZioBM9EorCU=;
+        b=YPUyB9qDb/QX1siWAYgM2rxl0Cvf2l282ZpFQA0OMSJAtycFY9GWkPheNP0CiysS0BwK3l
+        Yz63x6BVYIn79jAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E517613BBA;
+        Mon, 12 Jul 2021 20:27:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gpxANqql7GDxSwAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Mon, 12 Jul 2021 20:27:22 +0000
+Date:   Mon, 12 Jul 2021 22:27:21 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Subject: Re: [PATCH ima-evm-utils v3] ima-evm-utils: Support SM2 algorithm
+ for sign and verify
+Message-ID: <YOylqbuLL4gj0yTF@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20210526084455.56705-1-tianjia.zhang@linux.alibaba.com>
+ <d7526f84-f7c9-cbc6-c4a5-3e8b8d78fb60@linux.alibaba.com>
+ <10f55257f543cc1d63e7a8ae36cbf2433a01c30b.camel@linux.ibm.com>
+ <bb6afba7-255f-5254-5ac7-e793c24d56d3@linux.alibaba.com>
+ <5f61f4b0f305a26df0346524e4999c5bbb66571f.camel@linux.ibm.com>
+ <4f4a220d-23c5-dbf4-ac57-0ce16ecff2a7@linux.alibaba.com>
+ <d1b072c36b4d3770d6b7385836fbed2ec23be349.camel@linux.ibm.com>
+ <3b5aea51-c82c-70f3-d41e-d615bc14823a@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b5aea51-c82c-70f3-d41e-d615bc14823a@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-07-12 at 08:44 +0300, Vitaly Chikunov wrote:
-> Allow user to set signature's keyid using `--keyid' option. Keyid should
-> correspond to SKID in certificate. When keyid is calculated using SHA-1
-> in libimaevm it may mismatch keyid extracted by the kernel from SKID of
-> certificate (the way public key is presented to the kernel), thus making
-> signatures not verifiable. This may happen when certificate is using non
-> SHA-1 SKID (see rfc7093) or just 'unique number' (see rfc5280 4.2.1.2).
-> As a last resort user may specify arbitrary keyid using the new option.
-> Certificate filename could be used instead of the hex number with
-> `--keyid-from-cert' option. And, third option is to read keyid from the
-> cert appended to the key file.
-> 
-> These commits create backward incompatible ABI change for libimaevm,
-> thus soname should be incremented on release.
+Hi Tianjia, Mimi,
 
-I can't seem to apply either of your patch sets using "git am", only
-manually using "patch -p0 <  <mbox>".    This hasn't been a problem in
-the past.  Did you do something differently?
+> On 7/12/21 8:35 PM, Mimi Zohar wrote:
+> > On Mon, 2021-07-12 at 20:12 +0800, Tianjia Zhang wrote:
 
-thanks,
+> > > On 7/9/21 8:05 PM, Mimi Zohar wrote:
+> > > > On Fri, 2021-07-09 at 17:06 +0800, Tianjia Zhang wrote:
+> > > > > On 7/7/21 10:28 AM, Mimi Zohar wrote:
 
-Mimi
 
+> > > > > > I'm also seeing:
+> > > > > > - openssl req -verbose -new -nodes -utf8 -days 10000 -batch -x509 -sm3
+> > > > > > -sigopt distid:1234567812345678 -config test-ca.conf -copy_extensions
+> > > > > > copyall -newkey sm2 -out test-sm2.cer -outform DER -keyout test-sm2.key
+> > > > > > req: Unrecognized flag copy_extensions
+
+
+> > > > > This command is for openssl 3.0, and '-copy_extensions copyall' is also
+> > > > > a parameter supported on 3.0. At present, the mainstream version of
+> > > > > openssl 1.1.1 only partially supports SM2 signatures. For example, the
+> > > > > USERID in the SM2 specification cannot be used, and the certificate
+> > > > > cannot be operated in the command using the SM2/3 algorithm combination,
+> > > > > just like the modification of libimaevm.c in this patch, this cannot be
+> > > > > done directly through the openssl command, even if the '-copy_extensions
+> > > > > copyall' parameter is deleted, this command will be failed on openssl
+> > > > > 1.1.1. The final solution may be openssl 3.0.
+
+> > > > > On openssl 1.1.1, there is no problem to operate the signature of the
+> > > > > SM2/3 algorithm combination through the API. If it is possible, the
+> > > > > sign_verify test of sm2/3 is not required. What is your opinion?
+
+> > > > Instead of dropping the test altogether, add an openssl version
+> > > > dependency.
+
+> > > Great. will do in next version patch.
+
+> > Please consider adding a new CI distro matrix rule that includes the
+> > needed openssl version.  Another option would be to define a new script
+> > in the tests directory to install openssl from the git repo.  Please
+> > limit using that script to a single distro matrix rule.
+
+
+> Got it, thanks for your suggestion. It seems that the second method is more
+> suitable.
+Although it appears there is no distro which would have openssl 3.0 [1],
+Debian actually have 3.0.0~~beta1-1 in experimental [2]. openSUSE has slightly
+older version openssl-3.0.0-alpha16 [3]. I suppose we update soon to beta1 as
+well.
+
+Using distro packages would be probably faster to run in CI than install from git.
+
+Kind regards,
+Petr
+
+[1] https://pkgs.org/download/openssl
+[2] https://tracker.debian.org/pkg/openssl
+[3] https://build.opensuse.org/package/show/security:tls/openssl-3
+
+> Thanks,
+> Tianjia
