@@ -2,384 +2,295 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 932A63C67A6
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jul 2021 02:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E773C67D2
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jul 2021 03:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbhGMAwD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 12 Jul 2021 20:52:03 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:53390 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233778AbhGMAwD (ORCPT
+        id S232887AbhGMBJH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Jul 2021 21:09:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36978 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229993AbhGMBJG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 12 Jul 2021 20:52:03 -0400
-Received: from Lenovo-Legion-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 49B5720B83FC;
-        Mon, 12 Jul 2021 17:49:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 49B5720B83FC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1626137354;
-        bh=SU//hBzMUkk+Q1PURhM7dihSkjJiuMVhggj6Kv2tVo4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qJEZzJxOTdEvcVFZ+Q0Ek/dPaBUPbC+JdZfBxGilA8kDr6TUvrkIRxBViMuTfxZDW
-         hCOfiJrg5w9XIHNA9dAznGIXpF84u2ZS2Po8ug/hALwW8lFkWV9Xssj4ESN8A+sB7B
-         jBGkNrObna7JrVzSsLGmJ5u0pc0QvEzKBOeXtP9g=
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-To:     dm-devel@redhat.com, agk@redhat.com, snitzer@redhat.com
-Cc:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        nramas@linux.microsoft.com, tusharsu@linux.microsoft.com
-Subject: [PATCH 7/7] dm: add documentation for IMA measurement support
-Date:   Mon, 12 Jul 2021 17:49:04 -0700
-Message-Id: <20210713004904.8808-8-tusharsu@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210713004904.8808-1-tusharsu@linux.microsoft.com>
+        Mon, 12 Jul 2021 21:09:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1626138376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=834tHJn/XSDAQMOhFSWGXlwwvsiD3jRi3pgOiTjctok=;
+        b=cD4ziRagtByv6twBDJZaZmSsoHMhSHVHdTbRHxU/bywhf0XkoQDHqJGfBvG3W9jd/94KHy
+        K9k/K6qSTi6qEKdRQEN/D0pju6lGfD4f7xY7goEXTIfDnRKKAjXb79BYFeqVsZ5GAIaY9F
+        mqs1lKjXwCjriypmAH1XJEJwA/9MovQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-7-hY1-_D4dOmKZzxbOKt-aig-1; Mon, 12 Jul 2021 21:06:13 -0400
+X-MC-Unique: hY1-_D4dOmKZzxbOKt-aig-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7987F804301;
+        Tue, 13 Jul 2021 01:06:12 +0000 (UTC)
+Received: from agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (agk-cloud1.hosts.prod.upshift.rdu2.redhat.com [10.0.13.154])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 539AF5C1D1;
+        Tue, 13 Jul 2021 01:06:01 +0000 (UTC)
+Received: by agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (Postfix, from userid 3883)
+        id 48B204187D73; Tue, 13 Jul 2021 02:06:04 +0100 (BST)
+Date:   Tue, 13 Jul 2021 02:06:04 +0100
+From:   Alasdair G Kergon <agk@redhat.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        dm-devel@redhat.com, agk@redhat.com, snitzer@redhat.com,
+        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        nramas@linux.microsoft.com
+Subject: Re: [PATCH 6/7] dm: update target specific status functions to
+ measure data
+Message-ID: <20210713010604.GA6990@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
+Mail-Followup-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        dm-devel@redhat.com, agk@redhat.com, snitzer@redhat.com,
+        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        nramas@linux.microsoft.com
 References: <20210713004904.8808-1-tusharsu@linux.microsoft.com>
+ <20210713004904.8808-7-tusharsu@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210713004904.8808-7-tusharsu@linux.microsoft.com>
+Organization: Red Hat UK Ltd. Registered in England and Wales, number
+ 03798903. Registered Office: Amberley Place, 107-111 Peascod Street,
+ Windsor, Berkshire, SL4 1TE.
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-To interpret various DM target measurement data in IMA logs,
-a separate documentation page is needed under
-Documentation/admin-guide/device-mapper.
+On Mon, Jul 12, 2021 at 05:49:03PM -0700, Tushar Sugandhi wrote:
+> The DM target data measured by IMA subsystem can alternatively
+> be queried from userspace by setting DM_IMA_MEASUREMENT_FLAG with
+> DM_TABLE_STATUS_CMD.
 
-Add documentation to help system administrators and attestation
-client/server component owners to interpret the measurement
-data generated by various DM targets, on various device/table state
-changes.
+I was able to try this out - as 'dmsetup measure' - by applying the quick
+patch below to the upstream LVM2 tree.
+ 
+Alasdair
 
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
----
- .../admin-guide/device-mapper/dm-ima.rst      | 306 ++++++++++++++++++
- .../admin-guide/device-mapper/index.rst       |   1 +
- 2 files changed, 307 insertions(+)
- create mode 100644 Documentation/admin-guide/device-mapper/dm-ima.rst
 
-diff --git a/Documentation/admin-guide/device-mapper/dm-ima.rst b/Documentation/admin-guide/device-mapper/dm-ima.rst
+diff --git a/libdm/.exported_symbols.DM_1_02_179 b/libdm/.exported_symbols.DM_1_02_179
 new file mode 100644
-index 000000000000..1be2da7c6b6b
+index 000000000..4ab603b68
 --- /dev/null
-+++ b/Documentation/admin-guide/device-mapper/dm-ima.rst
-@@ -0,0 +1,306 @@
-+======
-+dm-ima
-+======
++++ b/libdm/.exported_symbols.DM_1_02_179
+@@ -0,0 +1 @@
++dm_task_ima_measurement
+diff --git a/libdm/dm-tools/dmsetup.c b/libdm/dm-tools/dmsetup.c
+index a3d1248bc..3e5983fef 100644
+--- a/libdm/dm-tools/dmsetup.c
++++ b/libdm/dm-tools/dmsetup.c
+@@ -2446,6 +2446,9 @@ static int _status(CMD_ARGS)
+ 	if (_switches[NOFLUSH_ARG] && !dm_task_no_flush(dmt))
+ 		goto_out;
+ 
++	if (!dm_task_ima_measurement(dmt))
++		goto_out;
 +
-+For a given system, various external services/infrastructure tools
-+(including the attestation service) interact with it - both during the
-+setup and during rest of the system run-time.  They share sensitive data
-+and/or execute critical workload on that system.  The external services
-+may want to verify the current run-time state of the relevant kernel
-+subsystems before fully trusting the system with business-critical
-+data/workload.
+ 	if (!_task_run(dmt))
+ 		goto_out;
+ 
+@@ -6262,6 +6265,7 @@ static struct command _dmsetup_commands[] = {
+ 	{"stats", "<command> [<options>] [<device>...]", 1, -1, 1, 1, _stats},
+ 	{"status", "[<device>...] [--noflush] [--target <target_type>]", 0, -1, 2, 0, _status},
+ 	{"table", "[<device>...] [--concise] [--target <target_type>] [--showkeys]", 0, -1, 2, 0, _status},
++	{"measure", "[<device>...]", 0, -1, 2, 0, _status},
+ 	{"wait", "<device> [<event_nr>] [--noflush]", 0, 2, 0, 0, _wait},
+ 	{"mknodes", "[<device>...]", 0, -1, 1, 0, _mknodes},
+ 	{"mangle", "[<device>...]", 0, -1, 1, 0, _mangle},
+diff --git a/libdm/ioctl/libdm-iface.c b/libdm/ioctl/libdm-iface.c
+index 47f14398c..22cce8e76 100644
+--- a/libdm/ioctl/libdm-iface.c
++++ b/libdm/ioctl/libdm-iface.c
+@@ -929,6 +929,13 @@ int dm_task_secure_data(struct dm_task *dmt)
+ 	return 1;
+ }
+ 
++int dm_task_ima_measurement(struct dm_task *dmt)
++{
++	dmt->ima_measurement = 1;
 +
-+Device mapper plays a critical role on a given system by providing
-+various important functionalities to the block devices using various
-+target types like crypt, verity, integrity etc.  Each of these target
-+types’ functionalities can be configured with various attributes.
-+The attributes chosen to configure these target types can significantly
-+impact the security profile of the block device, and in-turn, of the
-+system itself.  For instance, the type of encryption algorithm and the
-+key size determines the strength of encryption for a given block device.
++	return 1;
++}
 +
-+Therefore, verifying the current state of various block devices as well
-+as their various target attributes is crucial for external services before
-+fully trusting the system with business-critical data/workload.
+ int dm_task_retry_remove(struct dm_task *dmt)
+ {
+ 	dmt->retry_remove = 1;
+@@ -1286,7 +1293,14 @@ static struct dm_ioctl *_flatten(struct dm_task *dmt, unsigned repeat_count)
+ 		}
+ 		dmi->flags |= DM_UUID_FLAG;
+ 	}
+-
++	if (dmt->ima_measurement) {
++		if (_dm_version_minor < 45) {
++			log_error("WARNING: IMA measurement unsupported by "
++				  "kernel.  Aborting operation.");
++			goto bad;
++		}
++		dmi->flags |= DM_IMA_MEASUREMENT_FLAG;
++	}
+ 	dmi->target_count = count;
+ 	dmi->event_nr = dmt->event_nr;
+ 
+@@ -1487,6 +1501,7 @@ static int _create_and_load_v4(struct dm_task *dmt)
+ 	task->head = dmt->head;
+ 	task->tail = dmt->tail;
+ 	task->secure_data = dmt->secure_data;
++	task->ima_measurement = dmt->ima_measurement;
+ 
+ 	r = dm_task_run(task);
+ 
+@@ -1875,7 +1890,7 @@ static struct dm_ioctl *_do_dm_ioctl(struct dm_task *dmt, unsigned command,
+ 	}
+ 
+ 	log_debug_activation("dm %s %s%s %s%s%s %s%.0d%s%.0d%s"
+-			     "%s[ %s%s%s%s%s%s%s%s%s] %.0" PRIu64 " %s [%u] (*%u)",
++			     "%s[ %s%s%s%s%s%s%s%s%s%s] %.0" PRIu64 " %s [%u] (*%u)",
+ 			     _cmd_data_v4[dmt->type].name,
+ 			     dmt->new_uuid ? "UUID " : "",
+ 			     dmi->name, dmi->uuid, dmt->newname ? " " : "",
+@@ -1893,6 +1908,7 @@ static struct dm_ioctl *_do_dm_ioctl(struct dm_task *dmt, unsigned command,
+ 			     dmt->retry_remove ? "retryremove " : "",
+ 			     dmt->deferred_remove ? "deferredremove " : "",
+ 			     dmt->secure_data ? "securedata " : "",
++			     dmt->ima_measurement ? "ima_measurement " : "",
+ 			     dmt->query_inactive_table ? "inactive " : "",
+ 			     dmt->enable_checks ? "enablechecks " : "",
+ 			     dmt->sector, _sanitise_message(dmt->message),
+diff --git a/libdm/ioctl/libdm-targets.h b/libdm/ioctl/libdm-targets.h
+index 294210d2b..022b02c72 100644
+--- a/libdm/ioctl/libdm-targets.h
++++ b/libdm/ioctl/libdm-targets.h
+@@ -69,6 +69,7 @@ struct dm_task {
+ 	int enable_checks;
+ 	int expected_errno;
+ 	int ioctl_errno;
++	int ima_measurement;
+ 
+ 	int record_timestamp;
+ 
+diff --git a/libdm/libdevmapper.h b/libdm/libdevmapper.h
+index ac31b59da..e9412da7d 100644
+--- a/libdm/libdevmapper.h
++++ b/libdm/libdevmapper.h
+@@ -235,6 +235,7 @@ int dm_task_suppress_identical_reload(struct dm_task *dmt);
+ int dm_task_secure_data(struct dm_task *dmt);
+ int dm_task_retry_remove(struct dm_task *dmt);
+ int dm_task_deferred_remove(struct dm_task *dmt);
++int dm_task_ima_measurement(struct dm_task *dmt);
+ 
+ /*
+  * Record timestamp immediately after the ioctl returns.
+diff --git a/libdm/libdm-common.c b/libdm/libdm-common.c
+index 708414676..d123e3ddf 100644
+--- a/libdm/libdm-common.c
++++ b/libdm/libdm-common.c
+@@ -336,6 +336,7 @@ struct dm_task *dm_task_create(int type)
+ 	dmt->new_uuid = 0;
+ 	dmt->secure_data = 0;
+ 	dmt->record_timestamp = 0;
++	dmt->ima_measurement = 0;
+ 
+ 	return dmt;
+ }
+diff --git a/libdm/misc/dm-ioctl.h b/libdm/misc/dm-ioctl.h
+index 55dee2148..2b442ab70 100644
+--- a/libdm/misc/dm-ioctl.h
++++ b/libdm/misc/dm-ioctl.h
+@@ -1,6 +1,7 @@
++/* SPDX-License-Identifier: LGPL-2.0+ WITH Linux-syscall-note */
+ /*
+  * Copyright (C) 2001 - 2003 Sistina Software (UK) Limited.
+- * Copyright (C) 2004 - 2017 Red Hat, Inc. All rights reserved.
++ * Copyright (C) 2004 - 2021 Red Hat, Inc. All rights reserved.
+  *
+  * This file is released under the LGPL.
+  */
+@@ -183,7 +184,7 @@ struct dm_target_spec {
+ struct dm_target_deps {
+ 	uint32_t count;	/* Array size */
+ 	uint32_t padding;	/* unused */
+-	uint64_t dev[];		/* out */
++	uint64_t dev[0];	/* out */
+ };
+ 
+ /*
+@@ -193,9 +194,23 @@ struct dm_name_list {
+ 	uint64_t dev;
+ 	uint32_t next;		/* offset to the next record from
+ 				   the _start_ of this */
+-	char name[];
++	char name[0];
 +
-+IMA kernel subsystem provides the necessary functionality for
-+device mapper to measure the state and configuration of
-+various block devices -
-+  - BY device mapper itself, from within the kernel,
-+  - in a tamper resistant way,
-+  - and re-measured - triggered on state/configuration change.
++	/*
++	 * The following members can be accessed by taking a pointer that
++	 * points immediately after the terminating zero character in "name"
++	 * and aligning this pointer to next 8-byte boundary.
++	 * Uuid is present if the flag DM_NAME_LIST_FLAG_HAS_UUID is set.
++	 *
++	 * uint32_t event_nr;
++	 * uint32_t flags;
++	 * char uuid[0];
++	 */
+ };
+ 
++#define DM_NAME_LIST_FLAG_HAS_UUID		1
++#define DM_NAME_LIST_FLAG_DOESNT_HAVE_UUID	2
 +
-+Setting the IMA Policy:
-+=======================
-+For IMA to measure the data on a given system, the IMA policy on the
-+system needs to be updated to have following line, and the system needs
-+to be restarted for the measurements to take effect.
+ /*
+  * Used to retrieve the target versions
+  */
+@@ -203,7 +218,7 @@ struct dm_target_versions {
+         uint32_t next;
+         uint32_t version[3];
+ 
+-        char name[];
++        char name[0];
+ };
+ 
+ /*
+@@ -212,7 +227,7 @@ struct dm_target_versions {
+ struct dm_target_msg {
+ 	uint64_t sector;	/* Device sector */
+ 
+-	char message[];
++	char message[0];
+ };
+ 
+ /*
+@@ -267,15 +282,15 @@ enum {
+ #define DM_TABLE_STATUS  _IOWR(DM_IOCTL, DM_TABLE_STATUS_CMD, struct dm_ioctl)
+ 
+ #define DM_LIST_VERSIONS _IOWR(DM_IOCTL, DM_LIST_VERSIONS_CMD, struct dm_ioctl)
++#define DM_GET_TARGET_VERSION _IOWR(DM_IOCTL, DM_GET_TARGET_VERSION_CMD, struct dm_ioctl)
+ 
+ #define DM_TARGET_MSG	 _IOWR(DM_IOCTL, DM_TARGET_MSG_CMD, struct dm_ioctl)
+ #define DM_DEV_SET_GEOMETRY	_IOWR(DM_IOCTL, DM_DEV_SET_GEOMETRY_CMD, struct dm_ioctl)
+-#define DM_GET_TARGET_VERSION	_IOWR(DM_IOCTL, DM_GET_TARGET_VERSION_CMD, struct dm_ioctl)
+ 
+ #define DM_VERSION_MAJOR	4
+-#define DM_VERSION_MINOR	36
++#define DM_VERSION_MINOR	45
+ #define DM_VERSION_PATCHLEVEL	0
+-#define DM_VERSION_EXTRA	"-ioctl (2017-06-09)"
++#define DM_VERSION_EXTRA	"-ioctl (2021-03-22)"
+ 
+ /* Status bits */
+ #define DM_READONLY_FLAG	(1 << 0) /* In/Out */
+@@ -363,4 +378,10 @@ enum {
+  */
+ #define DM_INTERNAL_SUSPEND_FLAG	(1 << 18) /* Out */
+ 
++/*
++ * If set, returns in the in buffer passed by UM, the raw table information
++ * that would be measured by IMA subsystem on device state change.
++ */
++#define DM_IMA_MEASUREMENT_FLAG	(1 << 19) /* In */
 +
-+/etc/ima/ima-policy
-+ measure func=CRITICAL_DATA label=device-mapper template=ima-buf
-+
-+The measurements will be reflected in the IMA logs, which are located at:
-+
-+/sys/kernel/security/integrity/ima/ascii_runtime_measurements
-+/sys/kernel/security/integrity/ima/binary_runtime_measurements
-+
-+Then IMA ASCII measurement log has the following format:
-+PCR TEMPLATE_DIGEST TEMPLATE ALG:EVENT_DIGEST EVENT_NAME EVENT_DATA
-+
-+PCR := Platform Configuration Register, in which the values are registered.
-+       This is applicable if TPM chip is in use.
-+TEMPLATE_DIGEST := Template digest of the IMA record.
-+TEMPLATE := Template that registered the integrity value (e.g. ima-buf).
-+ALG:EVENT_DIGEST = Algorithm to compute event digest, followed by digest of event data
-+EVENT_NAME := Description of the event (e.g. 'table_load').
-+EVENT_DATA := The event data to be measured.
-+
-+The DM target data measured by IMA subsystem can alternatively
-+be queried from userspace by setting DM_IMA_MEASUREMENT_FLAG with
-+DM_TABLE_STATUS_CMD.
-+
-+Supported Device States:
-+========================
-+Following device state changes will trigger IMA measurements.
-+01. Table load
-+02. Device resume
-+03. Device remove
-+04. Table clear
-+05. Device rename
-+
-+01. Table load:
-+---------------
-+When a new table is loaded in a device's inactive table slot,
-+the device information and target specific details from the
-+targets in the table are measured.
-+
-+For instance, if a linear device is created with the following table entries,
-+# dmsetup create linear1
-+0 2 linear /dev/loop0 512
-+2 2 linear /dev/loop0 512
-+4 2 linear /dev/loop0 512
-+6 2 linear /dev/loop0 512
-+
-+Then IMA ASCII measurement log will have an entry with:
-+EVENT_NAME := table_load
-+EVENT_DATA := [device_data];[target_data_row_1];[target_data_row_2];...[target_data_row_n];
-+
-+E.g.
-+(converted from ASCII to text for readability)
-+10 a8c5ff755561c7a28146389d1514c318592af49a ima-buf sha256:4d73481ecce5eadba8ab084640d85bb9ca899af4d0a122989252a76efadc5b72
-+table_load
-+name=linear1,uuid=,major=253,minor=0,minor_count=1,num_targets=4;
-+target_index=0,target_begin=0,target_len=2,target_type_name=linear,target_type_version=1.4.0,device_name=7:0,start=512;
-+target_index=1,target_begin=2,target_len=2,target_type_name=linear,target_type_version=1.4.0,device_name=7:0,start=512;
-+target_index=2,target_begin=4,target_len=2,target_type_name=linear,target_type_version=1.4.0,device_name=7:0,start=512;
-+target_index=3,target_begin=6,target_len=2,target_type_name=linear,target_type_version=1.4.0,device_name=7:0,start=512;
-+
-+02. Device resume:
-+------------------
-+When a suspended device is resumed, the device information and a sha256 hash of the
-+data from previous load of an active table are measured.
-+
-+For instance, if a linear device is resumed with the following command,
-+#dmsetup resume linear1
-+
-+Then IMA ASCII measurement log will have an entry with:
-+EVENT_NAME := device_resume
-+EVENT_DATA := [device_data];active_table_hash=(sha256hash([device_data];[target_data_row_1];...[target_data_row_n]);
-+              current_device_capacity=<N>;
-+
-+E.g.
-+(converted from ASCII to text for readability)
-+10 56c00cc062ffc24ccd9ac2d67d194af3282b934e ima-buf sha256:e7d12c03b958b4e0e53e7363a06376be88d98a1ac191fdbd3baf5e4b77f329b6
-+device_resume
-+name=linear1,uuid=,major=253,minor=0,minor_count=1,num_targets=4;
-+active_table_hash=4d73481ecce5eadba8ab084640d85bb9ca899af4d0a122989252a76efadc5b72;current_device_capacity=8;
-+
-+03. Device remove:
-+------------------
-+When a device is removed, the device information and a sha256 hash of the
-+data from an active and inactive table are measured.
-+
-+For instance, if a linear device is removed with the following command,
-+# dmsetup remove linear1
-+
-+Then IMA ASCII measurement log will have an entry with:
-+EVENT_NAME := device_remove
-+EVENT_DATA := [device_active_metadata];[device_inactive_metadata];
-+              [active_table_hash=(sha256hash([device_active_metadata];[active_table_row_1];...[active_table_row_n]),
-+              [inactive_table_hash=(sha256hash([device_inactive_metadata];[inactive_table_row_1];...[inactive_table_row_n]),
-+              remove_all=[y|n];current_device_capacity=<N>;
-+
-+E.g
-+(converted from ASCII to text for readability)
-+10 499812b621b705061c4514d643894483e16d2619 ima-buf sha256:c3f26b02f09bf5b464925589454bdd4d354077ce430fd1e75c9e96ce29cd1cad
-+device_remove
-+device_active_metadata=name=linear1,uuid=,major=253,minor=0,minor_count=1,num_targets=4;
-+device_inactive_metadata=name=linear1,uuid=,major=253,minor=0,minor_count=1,num_targets=2;
-+active_table_hash=4d73481ecce5eadba8ab084640d85bb9ca899af4d0a122989252a76efadc5b72,
-+inactive_table_hash=5596cc857b0e887fd0c5d58dc6382513284596b07f09fd37efae2da224bd521d,remove_all=n;
-+current_device_capacity=8;
-+
-+
-+04. Table clear:
-+----------------
-+When an inactive table is cleared from the device, the device information and a sha256 hash of the
-+data from an inactive table are measured.
-+
-+For instance, if a linear device's inactive table is cleared with the following command,
-+
-+# dmsetup clear linear1
-+
-+Then IMA ASCII measurement log will have an entry with:
-+EVENT_NAME := table_clear
-+EVENT_DATA := [device_data];inactive_table_hash=(sha256hash([device_data];[inactive_table_row_1];...[inactive_table_row_n]);
-+current_device_capacity=<N>;
-+
-+E.g.
-+(converted from ASCII to text for readability)
-+10 9c11e284d792875352d51c09f6643c96649484be ima-buf sha256:84b22b364ea4d8264fa33c38635c18ef448fa9077731fa7e5f969b1da2003ea4
-+table_clear
-+name=linear1,uuid=,major=253,minor=0,minor_count=1,num_targets=2;
-+inactive_table_hash=5596cc857b0e887fd0c5d58dc6382513284596b07f09fd37efae2da224bd521d;current_device_capacity=0;
-+
-+
-+05. Device rename:
-+------------------
-+When an device's NAME or UUID is changed, the device information and the new NAME and UUID
-+are measured.
-+
-+For instance, if a linear device's name is changed with the following command,
-+
-+#dmsetup rename linear1 linear=2
-+Then IMA ASCII measurement log will have an entry with:
-+EVENT_NAME := device_rename
-+EVENT_DATA := [current_device_data];new_name=<new_name_value>;new_uuid=<new_uuid_value>;current_device_capacity=<N>;
-+
-+E.g 1:
-+#dmsetup rename linear1 --setuuid 1234-5678
-+
-+IMA Log entry:
-+(converted from ASCII to text for readability)
-+10 7380ef4d1349fe1ebd74affa54e9fcc960e3cbf5 ima-buf sha256:9759e36a17a967ea43c1bf3455279395a40bd0401105ec5ad8edb9a52054efc7
-+device_rename
-+name=linear1,uuid=,major=253,minor=0,minor_count=1,num_targets=1;new_name=linear1,new_uuid=1234-5678;current_device_capacity=2;
-+
-+E.g 2:
-+# dmsetup rename linear1 linear=2
-+10 092c8266fc36e44f74c59f123ecfe15310f249f4 ima-buf sha256:4cf8b85c81fa6fedaeb602b05019124dbbb0605dce58fcdeea56887a8a3874cd
-+device_rename
-+name=linear1,uuid=1234-5678,major=253,minor=0,minor_count=1,num_targets=1;new_name=linear\=2,new_uuid=1234-5678;current_device_capacity=2;
-+
-+
-+Supported targets:
-+==================
-+Following targets are supported to measure their data using IMA.
-+
-+01. cache
-+02. crypt
-+03. integrity
-+04. linear
-+05. mirror
-+06. multipath
-+07. raid
-+08. snapshot
-+09. striped
-+10. verity
-+
-+01. cache
-+---------
-+<<documenatation in progress>>
-+
-+02. crypt
-+-----
-+When a crypt target is loaded, then IMA ASCII measurement log will have an entry
-+similar to the following, depicting what crypt attributes are measured in EVENT_DATA.
-+
-+(converted from ASCII to text for readability)
-+10 fe3b80a35b155bd282df778e2625066c05fc068c ima-buf sha256:2d86ce9d6f16a4a97607318aa123ae816e0ceadefeea7903abf7f782f2cb78ad
-+table_load
-+name=test-crypt,uuid=,major=253,minor=0,minor_count=1,num_targets=1;
-+target_index=0,target_begin=0,target_len=1953125,target_type_name=crypt,target_type_version=1.23.0,
-+allow_discards=y,same_cpu=n,submit_from_crypt_cpus=n,no_read_workqueue=n,no_write_workqueue=n,
-+iv_large_sectors=n,cipher_string=aes-xts-plain64,key_size=32,key_parts=1,key_extra_size=0,key_mac_size=0;
-+
-+03. integrity
-+-------------
-+<<documenatation in progress>>
-+
-+
-+04. linear
-+----------
-+When a linear target is loaded, then IMA ASCII measurement log will have an entry
-+similar to the following, depicting what linear attributes are measured in EVENT_DATA.
-+
-+(converted from ASCII to text for readability)
-+10 a8c5ff755561c7a28146389d1514c318592af49a ima-buf sha256:4d73481ecce5eadba8ab084640d85bb9ca899af4d0a122989252a76efadc5b72
-+table_load
-+name=linear1,uuid=,major=253,minor=0,minor_count=1,num_targets=4;
-+target_index=0,target_begin=0,target_len=2,target_type_name=linear,target_type_version=1.4.0,device_name=7:0,start=512;
-+target_index=1,target_begin=2,target_len=2,target_type_name=linear,target_type_version=1.4.0,device_name=7:0,start=512;
-+target_index=2,target_begin=4,target_len=2,target_type_name=linear,target_type_version=1.4.0,device_name=7:0,start=512;
-+target_index=3,target_begin=6,target_len=2,target_type_name=linear,target_type_version=1.4.0,device_name=7:0,start=512;
-+
-+05. mirror
-+----------
-+When a mirror target is loaded, then IMA ASCII measurement log will have an entry
-+similar to the following, depicting what mirror attributes are measured in EVENT_DATA.
-+
-+(converted from ASCII to text for readability)
-+10 90ff9113a00c367df823595dc347425ce3bfc50a ima-buf sha256:8da0678ed3bf616533573d9e61e5342f2bd16cb0b3145a08262641a743806c2e
-+table_load
-+name=test-mirror,uuid=,major=253,minor=4,minor_count=1,num_targets=1;
-+target_index=0,target_begin=0,target_len=1953125,target_type_name=mirror,target_type_version=1.14.0,
-+mirrors=2,mirror_device_0=253:2,mirror_device_0_status=A,mirror_device_1=253:3,mirror_device_1_status=A,
-+handle_errors=y,keep_log=n,log_type_status=;
-+
-+06. multipath
-+-------------
-+<<documenatation in progress>>
-+
-+07. raid
-+--------
-+When a raid target is loaded, then IMA ASCII measurement log will have an entry
-+similar to the following, depicting what raid attributes are measured in EVENT_DATA.
-+
-+(converted from ASCII to text for readability)
-+10 76cb30d0cd0fe099966f20f5c82e3a2ac29b21a0 ima-buf sha256:52250f20b27376fcfb348bdfa1e1cf5acfd6646e0f3ad1a72952cffd9f818753
-+table_load
-+name=test-raid1,uuid=,major=253,minor=2,minor_count=1,num_targets=1;
-+target_index=0,target_begin=0,target_len=1953125,target_type_name=raid,target_type_version=1.15.1,
-+raid_type=raid1,raid_disks=2,raid_state=idle,raid_device_0_status=A,raid_device_1_status=A;
-+
-+08. snapshot
-+------------
-+<<documenatation in progress>>
-+
-+09. striped
-+----------
-+When a linear target is loaded, then IMA ASCII measurement log will have an entry
-+similar to the following, depicting what linear attributes are measured in EVENT_DATA.
-+
-+(converted from ASCII to text for readability)
-+10 7bd94fa8f799169b9f12d97b9dbdce4dc5509233 ima-buf sha256:0d148eda69887f7833f1a6042767b54359cd23b64fa941b9e1856879eee1f778
-+table_load
-+name=test-raid0,uuid=,major=253,minor=8,minor_count=1,num_targets=1;
-+target_index=0,target_begin=0,target_len=7812096,target_type_name=striped,target_type_version=1.6.0,stripes=4,chunk_size=128,
-+stripe_0_device_name=253:1,stripe_0_physical_start=0,stripe_0_status=A,
-+stripe_1_device_name=253:3,stripe_1_physical_start=0,stripe_1_status=A,
-+stripe_2_device_name=253:5,stripe_2_physical_start=0,stripe_2_status=A,
-+stripe_3_device_name=253:7,stripe_3_physical_start=0,stripe_3_status=A;
-+
-+10. verity
-+----------
-+When a verity target is loaded, then IMA ASCII measurement log will have an entry
-+similar to the following, depicting what verity attributes are measured in EVENT_DATA.
-+
-+(converted from ASCII to text for readability)
-+10 fced5f575b140fc0efac302c88a635174cd663da ima-buf sha256:021370c1cc93929460b06922c606334fb1d7ea5ecf04f2384f3157a446894283
-+table_load
-+name=test-verity,uuid=,major=253,minor=2,minor_count=1,num_targets=1;
-+target_index=0,target_begin=0,target_len=1953120,target_type_name=verity,target_type_version=1.8.0,hash_failed=V,
-+verity_version=1,data_device_name=253:1,hash_device_name=253:0,verity_algorithm=sha256,
-+root_digest=29cb87e60ce7b12b443ba6008266f3e41e93e403d7f298f8e3f316b29ff89c5e,
-+salt=e48da609055204e89ae53b655ca2216dd983cf3cb829f34f63a297d106d53e2d,
-+ignore_zero_blocks=n,check_at_most_once=n;
-diff --git a/Documentation/admin-guide/device-mapper/index.rst b/Documentation/admin-guide/device-mapper/index.rst
-index 6cf8adc86fa8..cde52cc09645 100644
---- a/Documentation/admin-guide/device-mapper/index.rst
-+++ b/Documentation/admin-guide/device-mapper/index.rst
-@@ -13,6 +13,7 @@ Device Mapper
-     dm-dust
-     dm-ebs
-     dm-flakey
-+    dm-ima
-     dm-init
-     dm-integrity
-     dm-io
--- 
-2.25.1
+ #endif				/* _LINUX_DM_IOCTL_H */
 
