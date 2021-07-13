@@ -2,153 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F293C6680
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jul 2021 00:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39763C679F
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jul 2021 02:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbhGLWsA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 12 Jul 2021 18:48:00 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7976 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229931AbhGLWsA (ORCPT
+        id S233610AbhGMAwB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 12 Jul 2021 20:52:01 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:53334 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233505AbhGMAwB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 12 Jul 2021 18:48:00 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16CMXma5002998;
-        Mon, 12 Jul 2021 18:45:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=NGlTYBJGMqCyEAmKkiQZNloDrvxCE6TSdJnmqBOO8vM=;
- b=iPJ90cG/o0cAcZRGHbm4nSFWqC/zfBnwAckZ5j/neFbgsv531CgT9Lhl/KVIrHo60lYg
- MuqJSMeM7Lwq1iC6u8PQ+9XAuTD3BafjzvGjWNfgzB6ki0JbSkNCrolDiWgN4dWWm88Y
- 9S/BfS7wYFim3fmf5snTCD55kEDOsNWbeuZpWDmf6pQI6aP5kqgbzVTQIlboAyaIjkQR
- TpSUFAQIs5PC0EJsMwmhxHB3M0mQdnSJyMEzjBIrfeKSZ3d1sopefGSHRQg9mQxb2ZWD
- xReSLb3EbwatWA9WEpfn59/3yySuP58HHwx0sHErgTWAdcx5iJa+7cs58iOmokHCeTlP zw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39qrkw7wuf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jul 2021 18:45:07 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16CMiFTg033533;
-        Mon, 12 Jul 2021 18:45:06 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39qrkw7wtw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jul 2021 18:45:06 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16CMdfaD005015;
-        Mon, 12 Jul 2021 22:45:04 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 39q368ggwx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jul 2021 22:45:04 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16CMj1QS23068964
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jul 2021 22:45:01 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBDA711C0B5;
-        Mon, 12 Jul 2021 22:45:01 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83E3911C0BA;
-        Mon, 12 Jul 2021 22:45:00 +0000 (GMT)
-Received: from sig-9-65-203-86.ibm.com (unknown [9.65.203.86])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Jul 2021 22:45:00 +0000 (GMT)
-Message-ID: <611f4c83d27d4c7360e3d9041fdce859577cc7cc.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v3] ima-evm-utils: Support SM2 algorithm
- for sign and verify
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-Date:   Mon, 12 Jul 2021 18:44:59 -0400
-In-Reply-To: <YOylqbuLL4gj0yTF@pevik>
-References: <20210526084455.56705-1-tianjia.zhang@linux.alibaba.com>
-         <d7526f84-f7c9-cbc6-c4a5-3e8b8d78fb60@linux.alibaba.com>
-         <10f55257f543cc1d63e7a8ae36cbf2433a01c30b.camel@linux.ibm.com>
-         <bb6afba7-255f-5254-5ac7-e793c24d56d3@linux.alibaba.com>
-         <5f61f4b0f305a26df0346524e4999c5bbb66571f.camel@linux.ibm.com>
-         <4f4a220d-23c5-dbf4-ac57-0ce16ecff2a7@linux.alibaba.com>
-         <d1b072c36b4d3770d6b7385836fbed2ec23be349.camel@linux.ibm.com>
-         <3b5aea51-c82c-70f3-d41e-d615bc14823a@linux.alibaba.com>
-         <YOylqbuLL4gj0yTF@pevik>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: y_1Kys0g0zA6DXNCoTCJeoMsmTBsbxHn
-X-Proofpoint-ORIG-GUID: rc7w5T7xkd8hzhKGIY9jb828LEn_kHsc
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-12_14:2021-07-12,2021-07-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 malwarescore=0 suspectscore=0
- impostorscore=0 phishscore=0 priorityscore=1501 spamscore=0
- mlxlogscore=999 bulkscore=0 adultscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107120154
+        Mon, 12 Jul 2021 20:52:01 -0400
+Received: from Lenovo-Legion-Ubuntu.lan (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E8A3620B6C50;
+        Mon, 12 Jul 2021 17:49:11 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E8A3620B6C50
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1626137352;
+        bh=4qGGRzN0D7FTQ/1ChCiZ6HBr23/qrNg8xeM7B/SY+3o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sTeWRcRtFlGgNEbe5dDZvQvkoEAdhhyIQSWOwFZ2TPhUkppbZ0o2po8v7DdA9tPZ5
+         6jW1vxkXxWdOMdo6X7QnqYOnHvhs8QxhtfMxbtvzK8dYDlIUcJuA+5mdpJSM5rqLJM
+         HQdsYH3/kZfn7iRIqCzOR8oBQltQNY+7K1Yqllu8=
+From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
+To:     dm-devel@redhat.com, agk@redhat.com, snitzer@redhat.com
+Cc:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        nramas@linux.microsoft.com, tusharsu@linux.microsoft.com
+Subject: [PATCH 0/7] device mapper target measurements using IMA
+Date:   Mon, 12 Jul 2021 17:48:57 -0700
+Message-Id: <20210713004904.8808-1-tusharsu@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-07-12 at 22:27 +0200, Petr Vorel wrote:
-> Hi Tianjia, Mimi,
-> 
-> > On 7/12/21 8:35 PM, Mimi Zohar wrote:
-> > > On Mon, 2021-07-12 at 20:12 +0800, Tianjia Zhang wrote:
-> 
-> > > > On 7/9/21 8:05 PM, Mimi Zohar wrote:
-> > > > > On Fri, 2021-07-09 at 17:06 +0800, Tianjia Zhang wrote:
-> > > > > > On 7/7/21 10:28 AM, Mimi Zohar wrote:
-> 
-> 
-> > > > > > > I'm also seeing:
-> > > > > > > - openssl req -verbose -new -nodes -utf8 -days 10000 -batch -x509 -sm3
-> > > > > > > -sigopt distid:1234567812345678 -config test-ca.conf -copy_extensions
-> > > > > > > copyall -newkey sm2 -out test-sm2.cer -outform DER -keyout test-sm2.key
-> > > > > > > req: Unrecognized flag copy_extensions
-> 
-> 
-> > > > > > This command is for openssl 3.0, and '-copy_extensions copyall' is also
-> > > > > > a parameter supported on 3.0. At present, the mainstream version of
-> > > > > > openssl 1.1.1 only partially supports SM2 signatures. For example, the
-> > > > > > USERID in the SM2 specification cannot be used, and the certificate
-> > > > > > cannot be operated in the command using the SM2/3 algorithm combination,
-> > > > > > just like the modification of libimaevm.c in this patch, this cannot be
-> > > > > > done directly through the openssl command, even if the '-copy_extensions
-> > > > > > copyall' parameter is deleted, this command will be failed on openssl
-> > > > > > 1.1.1. The final solution may be openssl 3.0.
-> 
-> > > > > > On openssl 1.1.1, there is no problem to operate the signature of the
-> > > > > > SM2/3 algorithm combination through the API. If it is possible, the
-> > > > > > sign_verify test of sm2/3 is not required. What is your opinion?
-> 
-> > > > > Instead of dropping the test altogether, add an openssl version
-> > > > > dependency.
-> 
-> > > > Great. will do in next version patch.
-> 
-> > > Please consider adding a new CI distro matrix rule that includes the
-> > > needed openssl version.  Another option would be to define a new script
-> > > in the tests directory to install openssl from the git repo.  Please
-> > > limit using that script to a single distro matrix rule.
-> 
-> 
-> > Got it, thanks for your suggestion. It seems that the second method is more
-> > suitable.
-> Although it appears there is no distro which would have openssl 3.0 [1],
-> Debian actually have 3.0.0~~beta1-1 in experimental [2]. openSUSE has slightly
-> older version openssl-3.0.0-alpha16 [3]. I suppose we update soon to beta1 as
-> well.
-> 
-> Using distro packages would be probably faster to run in CI than install from git.
+For a given system, various external services/infrastructure tools
+(including the attestation service) interact with it - both during the
+setup and during rest of the system run-time.  They share sensitive data
+and/or execute critical workload on that system.  The external services
+may want to verify the current run-time state of the relevant kernel
+subsystems before fully trusting the system with business-critical
+data/workload.
 
-Definitely!
+Device mapper is one such kernel subsystem that plays a critical role on
+a given system by providing various important functionalities to the
+block devices with various target types like crypt, verity, integrity 
+etc.  Each of these target types’ functionalities can be configured with
+various attributes.  The attributes chosen to configure these target types
+can significantly impact the security profile of the block device,
+and in-turn, of the system itself.  For instance, the type of encryption
+algorithm and the key size determines the strength of encryption for a
+given block device.
 
-thanks,
+Therefore, verifying the current state of various block devices as well
+as their various target attributes is crucial for external services
+before fully trusting the system with business-critical data/workload.
 
-Mimi
+IMA provides the necessary functionality for device mapper to measure the
+state and configuration of various block devices -
+  - BY device mapper itself, from within the kernel,
+  - in a tamper resistant way,
+  - and re-measured - triggered on state/configuration change.
 
+This patch series uses this IMA functionality, by calling the function
+ima_measure_critical_data(), when a block device state is changed (e.g.
+on device create, resume, rename, remove etc.)  It measures the device
+state and configuration and stores it in IMA logs, so that it can be
+used by external services for managing the system.
+
+
+Tushar Sugandhi (7):
+  dm: measure data on table load
+  dm: measure data on device resume
+  dm: measure data on device remove
+  dm: measure data on table clear
+  dm: measure data on device rename
+  dm: update target specific status functions to measure data
+  dm: add documentation for IMA measurement support
+
+ .../admin-guide/device-mapper/dm-ima.rst      | 306 ++++++++
+ .../admin-guide/device-mapper/index.rst       |   1 +
+ drivers/md/Makefile                           |   2 +
+ drivers/md/dm-cache-target.c                  |  24 +
+ drivers/md/dm-clone-target.c                  |   7 +
+ drivers/md/dm-core.h                          |   5 +
+ drivers/md/dm-crypt.c                         |  29 +
+ drivers/md/dm-delay.c                         |   4 +
+ drivers/md/dm-dust.c                          |   4 +
+ drivers/md/dm-ebs-target.c                    |   3 +
+ drivers/md/dm-era-target.c                    |   4 +
+ drivers/md/dm-flakey.c                        |   4 +
+ drivers/md/dm-ima.c                           | 725 ++++++++++++++++++
+ drivers/md/dm-ima.h                           |  56 ++
+ drivers/md/dm-integrity.c                     |  24 +
+ drivers/md/dm-ioctl.c                         |  24 +-
+ drivers/md/dm-linear.c                        |   8 +
+ drivers/md/dm-log-userspace-base.c            |   3 +
+ drivers/md/dm-log-writes.c                    |   4 +
+ drivers/md/dm-log.c                           |  10 +
+ drivers/md/dm-mpath.c                         |  29 +
+ drivers/md/dm-ps-historical-service-time.c    |   3 +
+ drivers/md/dm-ps-io-affinity.c                |   3 +
+ drivers/md/dm-ps-queue-length.c               |   3 +
+ drivers/md/dm-ps-round-robin.c                |   4 +
+ drivers/md/dm-ps-service-time.c               |   3 +
+ drivers/md/dm-raid.c                          |  39 +
+ drivers/md/dm-raid1.c                         |  18 +
+ drivers/md/dm-snap-persistent.c               |   4 +
+ drivers/md/dm-snap-transient.c                |   4 +
+ drivers/md/dm-snap.c                          |  13 +
+ drivers/md/dm-stripe.c                        |  16 +
+ drivers/md/dm-switch.c                        |   4 +
+ drivers/md/dm-thin.c                          |   8 +
+ drivers/md/dm-unstripe.c                      |   4 +
+ drivers/md/dm-verity-target.c                 |  45 ++
+ drivers/md/dm-writecache.c                    |   3 +
+ drivers/md/dm-zoned-target.c                  |   3 +
+ drivers/md/dm.c                               |   3 +
+ include/linux/device-mapper.h                 |   6 +-
+ include/uapi/linux/dm-ioctl.h                 |   6 +
+ 41 files changed, 1464 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/admin-guide/device-mapper/dm-ima.rst
+ create mode 100644 drivers/md/dm-ima.c
+ create mode 100644 drivers/md/dm-ima.h
+
+-- 
+2.25.1
 
