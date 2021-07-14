@@ -2,115 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 033743C84FA
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jul 2021 15:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA03E3C8884
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jul 2021 18:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbhGNNKy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 14 Jul 2021 09:10:54 -0400
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:56217 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231338AbhGNNKy (ORCPT
+        id S230427AbhGNQT7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 14 Jul 2021 12:19:59 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48115 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229897AbhGNQT6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 14 Jul 2021 09:10:54 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R701e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Ufmrjfj_1626268078;
-Received: from B-455UMD6M-2027.local(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Ufmrjfj_1626268078)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 14 Jul 2021 21:07:59 +0800
-Subject: Re: [PATCH ima-evm-utils v3] ima-evm-utils: Support SM2 algorithm for
- sign and verify
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-References: <20210526084455.56705-1-tianjia.zhang@linux.alibaba.com>
- <d7526f84-f7c9-cbc6-c4a5-3e8b8d78fb60@linux.alibaba.com>
- <10f55257f543cc1d63e7a8ae36cbf2433a01c30b.camel@linux.ibm.com>
- <bb6afba7-255f-5254-5ac7-e793c24d56d3@linux.alibaba.com>
- <5f61f4b0f305a26df0346524e4999c5bbb66571f.camel@linux.ibm.com>
- <4f4a220d-23c5-dbf4-ac57-0ce16ecff2a7@linux.alibaba.com>
- <d1b072c36b4d3770d6b7385836fbed2ec23be349.camel@linux.ibm.com>
- <3b5aea51-c82c-70f3-d41e-d615bc14823a@linux.alibaba.com>
- <YOylqbuLL4gj0yTF@pevik>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Message-ID: <1f57de3a-2887-6894-dc4a-1ca73bac549e@linux.alibaba.com>
-Date:   Wed, 14 Jul 2021 21:07:58 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <YOylqbuLL4gj0yTF@pevik>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Wed, 14 Jul 2021 12:19:58 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16EG4Wxw098252;
+        Wed, 14 Jul 2021 12:17:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=vgLx/IZLsmyIQmpkfUW+j00TP0Owi5TcQedtgRGQb2o=;
+ b=GffcsbjYBoF2ZazyxPdQJB3TmTmmlpuL1NjedPRGWzQBwTayYPrY3+ddz2SfruvBeX5g
+ seENwIkpsF3CQFmIeaB/QlsPbZVgOjzaZnx0kzNFiVREbvPgq0WisGlYJBlCcHu6v+fb
+ Lzw51xKtjoyk17q9+E4oqAHXo011zpfcgVG51tzfue8VDueS7L0KvnCdn6Kr7gpVBJcN
+ Ot+2iAZYjsBFLF/QjOPhynFJVLgYqImkXcF/ZzfocgVEbKrmgagjGIPb/+y8d1yq7HOd
+ /2x73KpvFOpM7oUr9ar78HBrc7osspfQV5yQc/0C6GQ+t+E1UrOwPt29cgDaFCmBbzQd Eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39sdy6jn5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jul 2021 12:17:04 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16EG5fWd105908;
+        Wed, 14 Jul 2021 12:17:04 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 39sdy6jn4j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jul 2021 12:17:03 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16EGGkbl007537;
+        Wed, 14 Jul 2021 16:17:02 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 39q368gyv6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jul 2021 16:17:02 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16EGGxTf23003646
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Jul 2021 16:16:59 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A541FAE057;
+        Wed, 14 Jul 2021 16:16:59 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 768D8AE05A;
+        Wed, 14 Jul 2021 16:16:58 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.127.85])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 14 Jul 2021 16:16:58 +0000 (GMT)
+Message-ID: <2d54bb0340e2971234084db68cc00e27089388a8.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils v8 3/3] Read keyid from the cert appended
+ to the key file
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Date:   Wed, 14 Jul 2021 12:16:57 -0400
+In-Reply-To: <20210712054448.2471236-4-vt@altlinux.org>
+References: <20210712054448.2471236-1-vt@altlinux.org>
+         <20210712054448.2471236-4-vt@altlinux.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: o9cA-Iha4Y2AHv7xr5C_Ukou5wlOAulk
+X-Proofpoint-GUID: vVJbKG-e5PxVZHWsTEuGWRAZAgpM642Y
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-14_08:2021-07-14,2021-07-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ impostorscore=0 suspectscore=0 mlxlogscore=999 lowpriorityscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107140096
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Vitaly,
+
+On Mon, 2021-07-12 at 08:44 +0300, Vitaly Chikunov wrote:
+> 
+> @@ -43,26 +43,43 @@ cat > test-ca.conf <<- EOF
+>  	basicConstraints=CA:TRUE
+>  	subjectKeyIdentifier=hash
+>  	authorityKeyIdentifier=keyid:always,issuer
+> +
+> +	[ skid ]
+> +	basicConstraints=CA:TRUE
+> +	subjectKeyIdentifier=12345678
+> +	authorityKeyIdentifier=keyid:always,issuer
+>  EOF
+>  fi
+
+On my system:
+$ openssl version
+OpenSSL 1.1.1g FIPS  21 Apr 2020
+
+Not sure this has anything to do with the reason that "skid" is not
+supported.   The resulting files are empty.
+
+ls -lat *skid*
+-rw-rw-r--. 1 mimi mimi 0 Jul 14 12:02 test-rsa1024_skid.key
+-rw-rw-r--. 1 mimi mimi 0 Jul 14 12:02 test-rsa1024_skid.pub
+
+- openssl pkey -in test-rsa1024.key -out test-rsa1024.pub -pubout
+- openssl req -verbose -new -nodes -utf8 -sha1 -days 10000 -batch -x509
+-extensions skid -config test-ca.conf -newkey rsa:1024 -out test-
+rsa1024_skid.cer -outform DER -keyout test-rsa1024_skid.key
+Using configuration from test-ca.conf
+Error Loading extension section skid   <===
 
 
-On 7/13/21 4:27 AM, Petr Vorel wrote:
-> Hi Tianjia, Mimi,
-> 
->> On 7/12/21 8:35 PM, Mimi Zohar wrote:
->>> On Mon, 2021-07-12 at 20:12 +0800, Tianjia Zhang wrote:
-> 
->>>> On 7/9/21 8:05 PM, Mimi Zohar wrote:
->>>>> On Fri, 2021-07-09 at 17:06 +0800, Tianjia Zhang wrote:
->>>>>> On 7/7/21 10:28 AM, Mimi Zohar wrote:
-> 
-> 
->>>>>>> I'm also seeing:
->>>>>>> - openssl req -verbose -new -nodes -utf8 -days 10000 -batch -x509 -sm3
->>>>>>> -sigopt distid:1234567812345678 -config test-ca.conf -copy_extensions
->>>>>>> copyall -newkey sm2 -out test-sm2.cer -outform DER -keyout test-sm2.key
->>>>>>> req: Unrecognized flag copy_extensions
-> 
-> 
->>>>>> This command is for openssl 3.0, and '-copy_extensions copyall' is also
->>>>>> a parameter supported on 3.0. At present, the mainstream version of
->>>>>> openssl 1.1.1 only partially supports SM2 signatures. For example, the
->>>>>> USERID in the SM2 specification cannot be used, and the certificate
->>>>>> cannot be operated in the command using the SM2/3 algorithm combination,
->>>>>> just like the modification of libimaevm.c in this patch, this cannot be
->>>>>> done directly through the openssl command, even if the '-copy_extensions
->>>>>> copyall' parameter is deleted, this command will be failed on openssl
->>>>>> 1.1.1. The final solution may be openssl 3.0.
-> 
->>>>>> On openssl 1.1.1, there is no problem to operate the signature of the
->>>>>> SM2/3 algorithm combination through the API. If it is possible, the
->>>>>> sign_verify test of sm2/3 is not required. What is your opinion?
-> 
->>>>> Instead of dropping the test altogether, add an openssl version
->>>>> dependency.
-> 
->>>> Great. will do in next version patch.
-> 
->>> Please consider adding a new CI distro matrix rule that includes the
->>> needed openssl version.  Another option would be to define a new script
->>> in the tests directory to install openssl from the git repo.  Please
->>> limit using that script to a single distro matrix rule.
-> 
-> 
->> Got it, thanks for your suggestion. It seems that the second method is more
->> suitable.
-> Although it appears there is no distro which would have openssl 3.0 [1],
-> Debian actually have 3.0.0~~beta1-1 in experimental [2]. openSUSE has slightly
-> older version openssl-3.0.0-alpha16 [3]. I suppose we update soon to beta1 as
-> well.
-> 
-> Using distro packages would be probably faster to run in CI than install from git.
-> 
-> Kind regards,
-> Petr
-> 
-> [1] https://pkgs.org/download/openssl
-> [2] https://tracker.debian.org/pkg/openssl
-> [3] https://build.opensuse.org/package/show/security:tls/openssl-3
-> 
+Then the rest of the tests fail.  Probably should check not only if the
+file exists, but the size of the file as well.
 
-Thanks for your suggestion. I used the release package of beta1 on 
-github, which has been implemented in the patch of v4. Please also help 
-review it.
+- openssl pkey -in test-rsa1024_skid.key -out test-rsa1024_skid.pub
+-pubout
+Can't open test-rsa1024_skid.key for reading, No such file or directory
+140493815547712:error:02001002:system library:fopen:No such file or
+directory:crypto/bio/bss_file.c:69:fopen('test-rsa1024_skid.key','r')
+140493815547712:error:2006D080:BIO routines:BIO_new_file:no such
+file:crypto/bio/bss_file.c:76:
+unable to load key
 
-Best regards,
-Tianjia
+
+- openssl x509 -inform DER -in test-rsa1024_skid.cer
+Can't open test-rsa1024_skid.cer for reading, No such file or directory
+139636313208640:error:02001002:system library:fopen:No such file or
+directory:crypto/bio/bss_file.c:69:fopen('test-rsa1024_skid.cer','rb')
+139636313208640:error:2006D080:BIO routines:BIO_new_file:no such
+file:crypto/bio/bss_file.c:76:
+unable to load certificate
+
+Mimi
+
