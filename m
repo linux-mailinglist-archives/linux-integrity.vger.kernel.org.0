@@ -2,261 +2,150 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8B53C81A0
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jul 2021 11:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4F03C8309
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jul 2021 12:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238827AbhGNJfS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 14 Jul 2021 05:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238821AbhGNJfQ (ORCPT
+        id S232171AbhGNKmi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 14 Jul 2021 06:42:38 -0400
+Received: from lithops.sigma-star.at ([195.201.40.130]:38512 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229518AbhGNKmi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 14 Jul 2021 05:35:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C264CC06175F
-        for <linux-integrity@vger.kernel.org>; Wed, 14 Jul 2021 02:32:24 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1m3bFY-0008WH-W8; Wed, 14 Jul 2021 11:32:17 +0200
-Subject: Re: [PATCH 3/3] doc: trusted-encrypted: add DCP as new trust source
-To:     Richard Weinberger <richard@nod.at>, keyrings@vger.kernel.org
-Cc:     David Gstir <david@sigma-star.at>,
-        David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Fabio Estevam <festevam@gmail.com>,
+        Wed, 14 Jul 2021 06:42:38 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 3D1A9606BA4F;
+        Wed, 14 Jul 2021 12:39:44 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id rV1lZ2SKB4Ku; Wed, 14 Jul 2021 12:39:43 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id A9DA86169BC8;
+        Wed, 14 Jul 2021 12:39:43 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id AP29PNq9W7qd; Wed, 14 Jul 2021 12:39:43 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 6D52F6169BC1;
+        Wed, 14 Jul 2021 12:39:43 +0200 (CEST)
+Date:   Wed, 14 Jul 2021 12:39:43 +0200 (CEST)
+From:   Richard Weinberger <richard@nod.at>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     "open list, ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        david <david@sigma-star.at>, David Howells <dhowells@redhat.com>,
+        davem <davem@davemloft.net>, festevam <festevam@gmail.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         James Bottomley <jejb@linux.ibm.com>,
         James Morris <jmorris@namei.org>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-imx <linux-imx@nxp.com>, kernel <kernel@pengutronix.de>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        Shawn Guo <shawnguo@kernel.org>
-References: <20210614201620.30451-1-richard@nod.at>
- <20210614201620.30451-4-richard@nod.at>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <b420c8a7-e6d0-88ac-1215-5ac53487fb4e@pengutronix.de>
-Date:   Wed, 14 Jul 2021 11:32:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        shawnguo <shawnguo@kernel.org>
+Message-ID: <1409091619.25467.1626259183269.JavaMail.zimbra@nod.at>
+In-Reply-To: <76db3736-5a5f-bf7b-3b52-62d01a84ee2d@pengutronix.de>
+References: <20210614201620.30451-1-richard@nod.at> <20210614201620.30451-2-richard@nod.at> <76db3736-5a5f-bf7b-3b52-62d01a84ee2d@pengutronix.de>
+Subject: Re: [PATCH 1/3] crypto: mxs-dcp: Add support for hardware provided
+ keys
 MIME-Version: 1.0
-In-Reply-To: <20210614201620.30451-4-richard@nod.at>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF78 (Linux)/8.8.12_GA_3809)
+Thread-Topic: crypto: mxs-dcp: Add support for hardware provided keys
+Thread-Index: NDot3bI3Q+rKmPD/+NEwkrQ8VTnhRw==
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Richard,
-Hello David,
+Ahmad,
 
-On 14.06.21 22:16, Richard Weinberger wrote:
-> From: David Gstir <david@sigma-star.at>
+----- Ursprüngliche Mail -----
+> Von: "Ahmad Fatoum" <a.fatoum@pengutronix.de>
+> Let's trade reviews to get the ball rolling?
+
+Sounds like a fair deal. :-)
+
+[...]
+
+>> --- a/drivers/crypto/mxs-dcp.c
+>> +++ b/drivers/crypto/mxs-dcp.c
+>> @@ -15,6 +15,7 @@
+>>  #include <linux/platform_device.h>
+>>  #include <linux/stmp_device.h>
+>>  #include <linux/clk.h>
+>> +#include <linux/mxs-dcp.h>
 > 
-> Update the documentation for trusted and encrypted KEYS with DCP as new
-> trust source:
+> The CAAM specific headers are in <soc/fsl/*.h>.
+> Should this be done likewise here as well?
+
+I have no preferences. If soc/fsl/ is the way to go, fine by me.
+
+[...]
+
+>> @@ -219,15 +224,18 @@ static int mxs_dcp_run_aes(struct dcp_async_ctx *actx,
+>>  	struct dcp *sdcp = global_sdcp;
+>>  	struct dcp_dma_desc *desc = &sdcp->coh->desc[actx->chan];
+>>  	struct dcp_aes_req_ctx *rctx = skcipher_request_ctx(req);
+>> +	dma_addr_t src_phys, dst_phys, key_phys = {0};
 > 
-> - Describe security properties of DCP trust source
-> - Describe key usage
-> - Document blob format
+> Why = {0}; ? dma_addr_t is a scalar type and the value is always
+> written here before access.
+
+Initializing a scalar with {} is allowed in C, the braces are optional.
+I like the braces because it works even when the underlaying type changes.
+But that's just a matter of taste.
+
+key_phys is initialized because it triggered a false positive gcc warning
+on one of my targets. Let me re-run again to be sure, the code saw a lot of
+refactoring since that.
+ 
+[...]
+  
+>> +static int mxs_dcp_aes_setrefkey(struct crypto_skcipher *tfm, const u8 *key,
+>> +				 unsigned int len)
+>> +{
+>> +	struct dcp_async_ctx *actx = crypto_skcipher_ctx(tfm);
+>> +	int ret = -EINVAL;
+>> +
+>> +	if (len != DCP_PAES_KEYSIZE)
+>> +		goto out;
 > 
-> Cc: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> Cc: David Gstir <david@sigma-star.at>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: James Bottomley <jejb@linux.ibm.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: keyrings@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-integrity@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Co-developed-by: Richard Weinberger <richard@nod.at>
-> Signed-off-by: David Gstir <david@sigma-star.at>
-> ---
->  .../security/keys/trusted-encrypted.rst       | 84 ++++++++++++++++++-
->  1 file changed, 83 insertions(+), 1 deletion(-)
+> Nitpick: there is no cleanup, so why not return -EINVAL here
+> and unconditionally return 0 below?
+
+What is the benefit?
+Usually I try to use goto to have a single exit point of a function
+but I don't have a strong preference...
+
+>> +
+>> +	actx->key_len = len;
+>> +	actx->refkey = true;
+>> +
+>> +	switch (key[0]) {
+>> +	case DCP_PAES_KEY_SLOT0:
+>> +	case DCP_PAES_KEY_SLOT1:
+>> +	case DCP_PAES_KEY_SLOT2:
+>> +	case DCP_PAES_KEY_SLOT3:
+>> +	case DCP_PAES_KEY_UNIQUE:
+>> +	case DCP_PAES_KEY_OTP:
+>> +		memcpy(actx->key, key, len);
+>> +		ret = 0;
+>> +	}
 > 
-> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
-> index 80d5a5af62a1..e8413122e4bc 100644
-> --- a/Documentation/security/keys/trusted-encrypted.rst
-> +++ b/Documentation/security/keys/trusted-encrypted.rst
-> @@ -35,6 +35,11 @@ safe.
->           Rooted to Hardware Unique Key (HUK) which is generally burnt in on-chip
->           fuses and is accessible to TEE only.
->  
-> +     (3) DCP (Data Co-Processor: crypto accelerator of various i.MX SoCs)
-> +
-> +         Rooted to a one-time programmable key (OTP) that is generally burnt in
-> +         the on-chip fuses and is accessbile to the DCP encryption engine only.
+> In the error case you return -EINVAL below, but you still write
+> into actx. Is that intentional?
 
-s/accessbile/accessible/ . In the code you differentiate between UNIQUE and OTP.
-Here you use OTP to mean both. Perhaps explicitly mention this?
+You mean acts->key_len and actk->refkey?
+Is this a problem?
 
-> +
->    *  Execution isolation
->  
->       (1) TPM
-> @@ -46,6 +51,12 @@ safe.
->           Customizable set of operations running in isolated execution
->           environment verified via Secure/Trusted boot process.
->  
-> +     (3) DCP
-> +
-> +         Fixed set of cryptographic operations running in isolated execution
-> +         environment. Only basic blob key encryption is executed there.
-> +         The actual key sealing/unsealing is done on main processor/kernel space.
-> +
->    * Optional binding to platform integrity state
->  
->       (1) TPM
-> @@ -63,6 +74,11 @@ safe.
->           Relies on Secure/Trusted boot process for platform integrity. It can
->           be extended with TEE based measured boot process.
->  
-> +     (3) DCP
-> +
-> +         Relies on Secure/Trusted boot process (called HAB by vendor) for
-> +         platform integrity.
-> +
->    *  Interfaces and APIs
->  
->       (1) TPM
-> @@ -74,10 +90,14 @@ safe.
->           TEEs have well-documented, standardized client interface and APIs. For
->           more details refer to ``Documentation/staging/tee.rst``.
->  
-> +     (3) DCP
-> +
-> +         Vendor-specific API that is implemented as part of the DCP crypto driver in
-> +         ``drivers/crypto/mxs-dcp.c``.
->  
->    *  Threat model
->  
-> -     The strength and appropriateness of a particular TPM or TEE for a given
-> +     The strength and appropriateness of a particular TPM, TEE or DCP for a given
->       purpose must be assessed when using them to protect security-relevant data.
->  
->  
-> @@ -103,6 +123,14 @@ access control policy within the trust source.
->       from platform specific hardware RNG or a software based Fortuna CSPRNG
->       which can be seeded via multiple entropy sources.
->  
-> +  * DCP (Data Co-Processor: crypto accelerator of various i.MX SoCs)
-> +
-> +     The DCP hardware device itself does not provide a dedicated RNG interface,
-> +     so the kernel default RNG is used. SoCs with DCP like the i.MX6ULL do have
-> +     a dedicated hardware RNG that is independent from DCP which can be enabled
-> +     to back the kernel RNG.
-> +
-> +
->  Encrypted Keys
->  --------------
->  
-> @@ -188,6 +216,19 @@ Usage::
->  specific to TEE device implementation.  The key length for new keys is always
->  in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
->  
-> +Trusted Keys usage: DCP
-> +-----------------------
-> +
-> +Usage::
-> +
-> +    keyctl add trusted name "new keylen" ring
-> +    keyctl add trusted name "load hex_blob" ring
-> +    keyctl print keyid
-> +
-> +"keyctl print" returns an ASCII hex copy of the sealed key, which is in format
-> +specific to this DCP key-blob implementation.  The key length for new keys is
-> +always in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-> +
->  Encrypted Keys usage
->  --------------------
->  
-> @@ -370,3 +411,44 @@ string length.
->  privkey is the binary representation of TPM2B_PUBLIC excluding the
->  initial TPM2B header which can be reconstructed from the ASN.1 octed
->  string length.
-> +
-> +DCP Blob Format
-> +---------------
-> +
-> +The Data Co-Processor (DCP) provides hardware-bound AES keys using its
-> +AES encryption engine only. It does not provide direct key sealing/unsealing.
-> +To make DCP hardware encryption keys usable as trust source, we define
-> +our own custom format that uses a hardware-bound key to secure the sealing
-> +key stored in the key blob.
-> +
-> +Whenever a new tusted key using DCP is generated, we generate a random 128-bit
-
-s/tusted/trusted/
-
-> +blob encryption key (BEK) and 128-bit nonce. The BEK and nonce are used to
-> +encrypt the trusted key payload using AES-128-GCM.
-> +
-> +The BEK itself is encrypted using the hardware-bound key using the DCP's AES
-> +encryption engine with AES-128-ECB. The encrypted BEK, generated nonce,
-> +BEK-encrypted payload and authentication tag make up the blob format together
-> +with a version number, payload length and authentication tag::
-> +
-> +    /*
-> +     * struct dcp_blob_fmt - DCP BLOB format.
-> +     *
-> +     * @fmt_version: Format version, currently being %1
-> +     * @blob_key: Random AES 128 key which is used to encrypt @payload,
-> +     *            @blob_key itself is encrypted with OTP or UNIQUE device key in
-> +     *            AES-128-ECB mode by DCP.
-> +     * @nonce: Random nonce used for @payload encryption.
-> +     * @payload_len: Length of the plain text @payload.
-> +     * @payload: The payload itself, encrypted using AES-128-GCM and @blob_key,
-> +     *           GCM auth tag of size AES_BLOCK_SIZE is attached at the end of it.
-> +     *
-> +     * The total size of a DCP BLOB is sizeof(struct dcp_blob_fmt) + @payload_len +
-> +     * AES_BLOCK_SIZE.
-> +     */
-> +    struct dcp_blob_fmt {
-> +            __u8 fmt_version;
-> +            __u8 blob_key[AES_KEYSIZE_128];
-> +            __u8 nonce[AES_KEYSIZE_128];
-> +            __le32 payload_len;
-> +            __u8 payload[0];
-
-[] ?
-
-> +    } __packed;
-> 
-
-Cheers,
-Ahmad
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Thanks,
+//richard
