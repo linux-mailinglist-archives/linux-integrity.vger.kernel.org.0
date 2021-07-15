@@ -2,97 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E0F3CA057
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jul 2021 16:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C633CA432
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jul 2021 19:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbhGOOQf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Jul 2021 10:16:35 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64058 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229457AbhGOOQf (ORCPT
+        id S235573AbhGOR2g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Jul 2021 13:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229789AbhGOR2g (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Jul 2021 10:16:35 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16FE6ZgG138562;
-        Thu, 15 Jul 2021 10:13:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=fLMXWAaB59YHfbyl/hONrFMCEGIxYm9MagYmNOoRkMM=;
- b=bCSqKA7MZ+dp1xIMuit7IBDfM9SUAwJI6nxVOSoT8W6LrfAtUNaou7yKxa5mTPBB3jTA
- 1uq8nofDA6Ssd50hsO+6LzElz5osesWzjTVfVuCb5dt5uAIAA3rz+7w9AyrL0BtPWm55
- VFRpsBu34ec8IS6kq6BSvkGnMirNH+bvVc/lHyw2bIxqWak1O0hLEiUYl9c/1D2IUZDh
- 7G6hK9TPpidJdaqtaM5ux3Jkp4MX7W7o5h0QbXwIm9hJlO0OB7+UYOpxwTQPJ9LWjx6g
- chgnKwA9pw9XIYPA8mVoOs5JDbKU2xzIHbdlFXeQX8XpeIQSFFoqnzgfiMGZU71dDC32 QA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39sc3065j9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jul 2021 10:13:39 -0400
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16FE6jT1139599;
-        Thu, 15 Jul 2021 10:13:39 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39sc3065he-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jul 2021 10:13:39 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16FEAFLC032426;
-        Thu, 15 Jul 2021 14:13:37 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03fra.de.ibm.com with ESMTP id 39q36897gb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jul 2021 14:13:37 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16FEDZQl24052064
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jul 2021 14:13:35 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40D4AAE053;
-        Thu, 15 Jul 2021 14:13:35 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53299AE04D;
-        Thu, 15 Jul 2021 14:13:34 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.117.215])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 15 Jul 2021 14:13:34 +0000 (GMT)
-Message-ID: <61ae65878d75abb64d0b7e24e8d6a93ecb00f6fa.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v2] CI: Add support for ALT Linux
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Date:   Thu, 15 Jul 2021 10:13:33 -0400
-In-Reply-To: <20210715124334.3319281-1-vt@altlinux.org>
-References: <20210715124334.3319281-1-vt@altlinux.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0VNM7kMRwj_Ds9fptnoulWXUqU7CthIo
-X-Proofpoint-ORIG-GUID: swxQqUgDgnLjlVa1jPEugjz1yImeIhSz
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-15_10:2021-07-14,2021-07-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- spamscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 suspectscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107150100
+        Thu, 15 Jul 2021 13:28:36 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C77C061767
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Jul 2021 10:25:42 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id b12so3754826plh.10
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Jul 2021 10:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=A07qw47jpyx7/pJf1ZS9aQv4pD7PiHBZWlsl9UoiurRqqc+7ZndQI51YdaaD0nkecu
+         Qd4i+G02coH8O2I/r6ZupOF8oYSIAoIwVq4zkuCtuhDJYsbynWGQdegcG7aq+QxGg/bp
+         poyp2DbaibSeABlojQr/pIAqMWExNaHg4RIE+IQzBlXdCiQq16Yp/UqkBXwITYu4DgIP
+         XTs1gXkC7Br62pPmJXs/2nF+jRhXCAs3iAxTxuy51YthTghMWE/kONdSGZKCG8sWM+Ev
+         WU1ATEDaIH5W63c7UQCvZTdM21+mq9I9FOl7BCTb650pCRFEJMZ521zklByg85zlNwmj
+         7b/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=pcoe/zVByL9EaaOiMZhJt1vPyoR6Tvby011JGJPjCAfl9MnLaX58XWDSxChd2UgP4f
+         +YdvQmHJJrfkmhWuJxRlRIHv3qlOoIYg+hG9IHjdAbaDp5heVA1Pd1w2ZEw2tFFN1rhY
+         9ocCaQAuTwwuKQNBnFCuo9xQkHGR6bl0wsOoSji2ZjgOksy5ursgdDFUqo32DBUFHb6w
+         sr77KC27exlwNer3x7DbAzeEvYeg9wMAh/nNnOPDjwxg95700EoskcVbKJPqhDlzDve3
+         srvplp7dYDXqKjFrOiEGXm/jSq+2YB+Ly2qlH6B7peaWXqSjCMmiPFZM4fr0DVAc9ur4
+         TxKg==
+X-Gm-Message-State: AOAM53315dhPcfP0sblimHyH8lE6ZCwu2G4WegK9fi9GuvH68Ec7l1UC
+        8cvSNZTHo+ZugRemBBeKPCkcz4Hfe09k5GaainY=
+X-Google-Smtp-Source: ABdhPJyZMrq1Z7I3pjjmyAtUHW3ABh0oEghTe77F5dAxRk/llsByjQhtZ30eIUOoh7sIooPsLTy5+nPJ1BCNgIavtsM=
+X-Received: by 2002:a17:90b:d8f:: with SMTP id bg15mr10963237pjb.152.1626369941880;
+ Thu, 15 Jul 2021 10:25:41 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6a10:fc85:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:41
+ -0700 (PDT)
+Reply-To: faty.muhamad@gmail.com
+From:   Ms Fatima Muhammad <general.infofederalreserve@gmail.com>
+Date:   Thu, 15 Jul 2021 17:25:41 +0000
+Message-ID: <CAJzJz_Dwu6rUxmnqq1QV9qD4hugxutFJZuENGUwx7RamXm5txA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2021-07-15 at 15:43 +0300, Vitaly Chikunov wrote:
-> Build on Sisyphus branch which is bleeding edge repository.
-> Package manager is apt-rpm (not APT as it may look from the scripts).
-> 
-> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> ---
-> Chnges from v1:
-> - Fix skipping of gost algo tests.
+Hello Dear,
 
-Thanks, now in next-testing.
+My name is Ms.Fatima Muhammad., Please forgive me for stressing you
+with my predicaments and I sorry to approach you through this media
+because is serves the fastest means of  my communication right now,
 
-Mimi
+I came across your Email from my personal search and I decided to
+contact you believing you will be honest to fulfill my business
+proposal which I believe that will be a very good opportunity for both
+of us. Please it is my pleasure to contact you today for a business
+partnership investments projects worth $4.6 million USD which I intend
+to establish in your country..
 
+Pls If this business proposal offends your moral and ethic values do
+accept my apology. therefore kindly contact me immediately if you are
+interested for more details.
+
+Thank you for your wiliness to help me
+Yours Sincerely Fatima Muhammad
