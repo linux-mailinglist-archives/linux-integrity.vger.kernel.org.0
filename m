@@ -2,77 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C633CA432
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jul 2021 19:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171733CAE20
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jul 2021 22:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235573AbhGOR2g (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 15 Jul 2021 13:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbhGOR2g (ORCPT
+        id S234967AbhGOUub (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 15 Jul 2021 16:50:31 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:57478 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231896AbhGOUub (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 15 Jul 2021 13:28:36 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C77C061767
-        for <linux-integrity@vger.kernel.org>; Thu, 15 Jul 2021 10:25:42 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id b12so3754826plh.10
-        for <linux-integrity@vger.kernel.org>; Thu, 15 Jul 2021 10:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=A07qw47jpyx7/pJf1ZS9aQv4pD7PiHBZWlsl9UoiurRqqc+7ZndQI51YdaaD0nkecu
-         Qd4i+G02coH8O2I/r6ZupOF8oYSIAoIwVq4zkuCtuhDJYsbynWGQdegcG7aq+QxGg/bp
-         poyp2DbaibSeABlojQr/pIAqMWExNaHg4RIE+IQzBlXdCiQq16Yp/UqkBXwITYu4DgIP
-         XTs1gXkC7Br62pPmJXs/2nF+jRhXCAs3iAxTxuy51YthTghMWE/kONdSGZKCG8sWM+Ev
-         WU1ATEDaIH5W63c7UQCvZTdM21+mq9I9FOl7BCTb650pCRFEJMZ521zklByg85zlNwmj
-         7b/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=pcoe/zVByL9EaaOiMZhJt1vPyoR6Tvby011JGJPjCAfl9MnLaX58XWDSxChd2UgP4f
-         +YdvQmHJJrfkmhWuJxRlRIHv3qlOoIYg+hG9IHjdAbaDp5heVA1Pd1w2ZEw2tFFN1rhY
-         9ocCaQAuTwwuKQNBnFCuo9xQkHGR6bl0wsOoSji2ZjgOksy5ursgdDFUqo32DBUFHb6w
-         sr77KC27exlwNer3x7DbAzeEvYeg9wMAh/nNnOPDjwxg95700EoskcVbKJPqhDlzDve3
-         srvplp7dYDXqKjFrOiEGXm/jSq+2YB+Ly2qlH6B7peaWXqSjCMmiPFZM4fr0DVAc9ur4
-         TxKg==
-X-Gm-Message-State: AOAM53315dhPcfP0sblimHyH8lE6ZCwu2G4WegK9fi9GuvH68Ec7l1UC
-        8cvSNZTHo+ZugRemBBeKPCkcz4Hfe09k5GaainY=
-X-Google-Smtp-Source: ABdhPJyZMrq1Z7I3pjjmyAtUHW3ABh0oEghTe77F5dAxRk/llsByjQhtZ30eIUOoh7sIooPsLTy5+nPJ1BCNgIavtsM=
-X-Received: by 2002:a17:90b:d8f:: with SMTP id bg15mr10963237pjb.152.1626369941880;
- Thu, 15 Jul 2021 10:25:41 -0700 (PDT)
+        Thu, 15 Jul 2021 16:50:31 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id E9ED672C8B4;
+        Thu, 15 Jul 2021 23:47:35 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [193.43.10.9])
+        by imap.altlinux.org (Postfix) with ESMTPSA id C33BE4A46E9;
+        Thu, 15 Jul 2021 23:47:35 +0300 (MSK)
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH ima-evm-utils v3] CI: Add support for ALT Linux
+Date:   Thu, 15 Jul 2021 23:47:28 +0300
+Message-Id: <20210715204728.3472552-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.29.3
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:fc85:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:41
- -0700 (PDT)
-Reply-To: faty.muhamad@gmail.com
-From:   Ms Fatima Muhammad <general.infofederalreserve@gmail.com>
-Date:   Thu, 15 Jul 2021 17:25:41 +0000
-Message-ID: <CAJzJz_Dwu6rUxmnqq1QV9qD4hugxutFJZuENGUwx7RamXm5txA@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Dear,
+Build on Sisyphus branch which is bleeding edge repository.
+Package manager is apt-rpm (not APT as it may look from the scripts).
 
-My name is Ms.Fatima Muhammad., Please forgive me for stressing you
-with my predicaments and I sorry to approach you through this media
-because is serves the fastest means of  my communication right now,
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+---
+Changes from v2:
+- Fix typo s/envirenment/environment/.
 
-I came across your Email from my personal search and I decided to
-contact you believing you will be honest to fulfill my business
-proposal which I believe that will be a very good opportunity for both
-of us. Please it is my pleasure to contact you today for a business
-partnership investments projects worth $4.6 million USD which I intend
-to establish in your country..
+Chnges from v1:
+- Fix skipping of gost algo tests.
 
-Pls If this business proposal offends your moral and ethic values do
-accept my apology. therefore kindly contact me immediately if you are
-interested for more details.
 
-Thank you for your wiliness to help me
-Yours Sincerely Fatima Muhammad
+ .github/workflows/ci.yml |  5 +++++
+ .travis.yml              |  4 ++++
+ ci/alt.sh                | 24 ++++++++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+ create mode 100755 ci/alt.sh
+
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 2e0b1b0..088c041 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -92,6 +92,11 @@ jobs:
+               CC: clang
+               TSS: ibmtss
+ 
++          - container: "alt:sisyphus"
++            env:
++              CC: gcc
++              TSS: libtpm2-tss-devel
++
+     container:
+       image: ${{ matrix.container }}
+       env: ${{ matrix.env }}
+diff --git a/.travis.yml b/.travis.yml
+index 94fbb94..7a76273 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -67,6 +67,10 @@ matrix:
+           env: DISTRO=debian:stable TSS=ibmtss
+           compiler: gcc
+ 
++        - os: linux
++          env: DISTRO=alt:sisyphus TSS=libtpm2-tss-devel
++          compiler: gcc
++
+ before_install:
+     # Tumbleweed requires podman and newest runc due docker incompatible with glibc 2.33 (faccessat2)
+     - CONTAINER="${CONTAINER:-docker}"
+diff --git a/ci/alt.sh b/ci/alt.sh
+new file mode 100755
+index 0000000..884c995
+--- /dev/null
++++ b/ci/alt.sh
+@@ -0,0 +1,24 @@
++#!/bin/sh -ex
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Install build env for ALT Linux
++
++apt-get update -y
++
++# rpm-build brings basic build environment with gcc, make, autotools, etc.
++apt-get install -y \
++		$CC \
++		$TSS \
++		asciidoc \
++		attr \
++		docbook-style-xsl \
++		libattr-devel \
++		libkeyutils-devel \
++		libssl-devel \
++		openssl \
++		openssl-gost-engine \
++		rpm-build \
++		wget \
++		xsltproc \
++		xxd \
++	&& control openssl-gost enabled
+-- 
+2.29.3
+
