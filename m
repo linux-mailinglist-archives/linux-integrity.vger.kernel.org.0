@@ -2,30 +2,34 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E043CB981
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jul 2021 17:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556E03CB982
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jul 2021 17:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240251AbhGPPTE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 16 Jul 2021 11:19:04 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:57192 "EHLO
+        id S240625AbhGPPTM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 16 Jul 2021 11:19:12 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:57264 "EHLO
         vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237326AbhGPPTE (ORCPT
+        with ESMTP id S237326AbhGPPTM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 16 Jul 2021 11:19:04 -0400
+        Fri, 16 Jul 2021 11:19:12 -0400
 Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 7684E72C8B4;
-        Fri, 16 Jul 2021 18:16:08 +0300 (MSK)
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 1242F72C8B4;
+        Fri, 16 Jul 2021 18:16:16 +0300 (MSK)
 Received: from beacon.altlinux.org (unknown [193.43.10.9])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 5AFD04A46E9;
-        Fri, 16 Jul 2021 18:16:08 +0300 (MSK)
+        by imap.altlinux.org (Postfix) with ESMTPSA id ED2484A46E9;
+        Fri, 16 Jul 2021 18:16:15 +0300 (MSK)
 From:   Vitaly Chikunov <vt@altlinux.org>
 To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         linux-integrity@vger.kernel.org
-Subject: [PATCH ima-evm-utils v9 0/3] ima-evm-utils: Add --keyid option
-Date:   Fri, 16 Jul 2021 18:15:59 +0300
-Message-Id: <20210716151602.3575106-1-vt@altlinux.org>
+Cc:     Elvira Khabirova <lineprinter0@gmail.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH ima-evm-utils v9 1/3] Allow manual setting keyid for signing
+Date:   Fri, 16 Jul 2021 18:16:00 +0300
+Message-Id: <20210716151602.3575106-2-vt@altlinux.org>
 X-Mailer: git-send-email 2.29.3
+In-Reply-To: <20210716151602.3575106-1-vt@altlinux.org>
+References: <20210716151602.3575106-1-vt@altlinux.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -33,76 +37,140 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 Allow user to set signature's keyid using `--keyid' option. Keyid should
-correspond to SKID in certificate. When keyid is calculated using SHA-1
+correspond to SKID in certificate, when keyid is calculated using SHA-1
 in libimaevm it may mismatch keyid extracted by the kernel from SKID of
 certificate (the way public key is presented to the kernel), thus making
 signatures not verifiable. This may happen when certificate is using non
 SHA-1 SKID (see rfc7093) or just 'unique number' (see rfc5280 4.2.1.2).
 As a last resort user may specify arbitrary keyid using the new option.
-Certificate filename could be used instead of the hex number with
-`--keyid-from-cert' option. And, third option is to read keyid from the
-cert appended to the key file.
 
-These commits create backward incompatible ABI change for libimaevm,
-thus soname should be incremented on release.
+This commit creates ABI change for libimaevm, because of adding
+additional parameter to imaevm_params - newer libimaevm cannot work
+with older clients.
 
-Changes from v8:
-- Regenerate test's keys & openssl conf on gen-keys.sh update.
-- Fix noprefix git setting that was broken in v8.
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+Reported-by: Elvira Khabirova <lineprinter0@gmail.com>
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+ README                 |  1 +
+ src/evmctl.c           | 20 ++++++++++++++++++++
+ src/imaevm.h           |  1 +
+ src/libimaevm.c        |  6 +++++-
+ tests/sign_verify.test |  1 +
+ 5 files changed, 28 insertions(+), 1 deletion(-)
 
-Changes from v7:
-- Multiple functions are merged back into read_keyid_from_cert().
-- OpenSSL portable way of reading of SKID.
-- Fixed 'unaligned pointer' access bug (introduced in v7).
-- Fixed incorrect return value of imaevm_read_keyid() (in v7).
-- Remove kerneldoc markers from comments.
-- Tested on GA CI.
-
-Changes from v6:
-- Applied changes requested by Mimi Zohar (intermediate variable for if,
-  annotation update, new option '--keyid-from-cert' instead of '@').
-  Added more comments for questioned cases.
-- Read_keyid functions are reworked in hopefully more understandable way
-  (two new static functions: extract_keyid and read_cert).
-- Test for key+cert case added.
-
-Changes from v5:
-- ima_read_keyid renamed to imaevm_read_keyid and its return value
-  inverted to match other API functions. Suggested by Stefan Berger
-- Rebased over next-testing. Noticed by Mimi Zohar.
-
-Changes from v4:
-- ima_read_keyid() API changed. As suggested by Stefan Berger.
-
-Changes from v3:
-- ima_read_keyid() is improved to better support both use cases.
-
-Changes from v2:
-- Add ima_read_keyid() function to libemaevm and use it in both evmctl
-  (for --keyid) and sign_hash_v2() (for concatenated PEMs). Suggested
-  by Stefan Berger.
-- Autodetect PEM by openssl reading it instead of magic string.
-  Suggested by Stefan Berger.
-- Trivial change: s/unsigned long int/unsigned long/ for keyid type.
-
-Changes from v1:
-- Extract keyid from cert associated to key file.
-- Use sizeof instead of constant.
-
-
-Vitaly Chikunov (3):
-  Allow manual setting keyid for signing
-  Allow manual setting keyid from a cert file
-  Read keyid from the cert appended to the key file
-
- README                 |   6 ++
- src/evmctl.c           |  34 +++++++++++
- src/imaevm.h           |   2 +
- src/libimaevm.c        | 124 ++++++++++++++++++++++++++++++++++++++++-
- tests/gen-keys.sh      |  31 +++++++++--
- tests/sign_verify.test |   3 +
- 6 files changed, 193 insertions(+), 7 deletions(-)
-
+diff --git a/README b/README
+index 321045d..20fa009 100644
+--- a/README
++++ b/README
+@@ -48,6 +48,7 @@ OPTIONS
+       --xattr-user   store xattrs in user namespace (for testing purposes)
+       --rsa          use RSA key type and signing scheme v1
+   -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)
++      --keyid n      overwrite signature keyid with a 32-bit value in hex (for signing)
+   -o, --portable     generate portable EVM signatures
+   -p, --pass         password for encrypted signing key
+   -r, --recursive    recurse into directories (sign)
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 7a6f202..f272250 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -2514,6 +2514,7 @@ static void usage(void)
+ 		"      --xattr-user   store xattrs in user namespace (for testing purposes)\n"
+ 		"      --rsa          use RSA key type and signing scheme v1\n"
+ 		"  -k, --key          path to signing key (default: /etc/keys/{privkey,pubkey}_evm.pem)\n"
++		"      --keyid n      overwrite signature keyid with a 32-bit value in hex (for signing)\n"
+ 		"  -o, --portable     generate portable EVM signatures\n"
+ 		"  -p, --pass         password for encrypted signing key\n"
+ 		"  -r, --recursive    recurse into directories (sign)\n"
+@@ -2594,6 +2595,7 @@ static struct option opts[] = {
+ 	{"ignore-violations", 0, 0, 141},
+ 	{"pcrs", 1, 0, 142},
+ 	{"verify-bank", 2, 0, 143},
++	{"keyid", 1, 0, 144},
+ 	{}
+ 
+ };
+@@ -2638,6 +2640,8 @@ int main(int argc, char *argv[])
+ {
+ 	int err = 0, c, lind;
+ 	ENGINE *eng = NULL;
++	unsigned long keyid;
++	char *eptr;
+ 
+ #if !(OPENSSL_VERSION_NUMBER < 0x10100000)
+ 	OPENSSL_init_crypto(
+@@ -2785,6 +2789,22 @@ int main(int argc, char *argv[])
+ 		case 143:
+ 			verify_bank = optarg;
+ 			break;
++		case 144:
++			errno = 0;
++			keyid = strtoul(optarg, &eptr, 16);
++			/*
++			 * ULONG_MAX is error from strtoul(3),
++			 * UINT_MAX is `imaevm_params.keyid' maximum value,
++			 * 0 is reserved for keyid being unset.
++			 */
++			if (errno || eptr - optarg != strlen(optarg) ||
++			    keyid == ULONG_MAX || keyid > UINT_MAX ||
++			    keyid == 0) {
++				log_err("Invalid keyid value.\n");
++				exit(1);
++			}
++			imaevm_params.keyid = keyid;
++			break;
+ 		case '?':
+ 			exit(1);
+ 			break;
+diff --git a/src/imaevm.h b/src/imaevm.h
+index 4503919..fe244f1 100644
+--- a/src/imaevm.h
++++ b/src/imaevm.h
+@@ -196,6 +196,7 @@ struct libimaevm_params {
+ 	const char *hash_algo;
+ 	const char *keyfile;
+ 	const char *keypass;
++	uint32_t keyid;		/* keyid overriding value, unless 0. (Host order.) */
+ };
+ 
+ struct RSA_ASN1_template {
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index 2856270..c59082b 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -45,6 +45,7 @@
+ #include <sys/param.h>
+ #include <sys/stat.h>
+ #include <asm/byteorder.h>
++#include <arpa/inet.h>
+ #include <unistd.h>
+ #include <dirent.h>
+ #include <string.h>
+@@ -929,7 +930,10 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+ 		return -1;
+ 	}
+ 
+-	calc_keyid_v2(&keyid, name, pkey);
++	if (imaevm_params.keyid)
++		keyid = htonl(imaevm_params.keyid);
++	else
++		calc_keyid_v2(&keyid, name, pkey);
+ 	hdr->keyid = keyid;
+ 
+ 	st = "EVP_PKEY_CTX_new";
+diff --git a/tests/sign_verify.test b/tests/sign_verify.test
+index 3d7aa51..eccf5fa 100755
+--- a/tests/sign_verify.test
++++ b/tests/sign_verify.test
+@@ -365,6 +365,7 @@ sign_verify  rsa1024  sha256  0x0301 --rsa
+ sign_verify  rsa1024  md5     0x030201:K:0080
+ sign_verify  rsa1024  sha1    0x030202:K:0080
+ sign_verify  rsa1024  sha224  0x030207:K:0080
++expect_pass check_sign TYPE=ima KEY=rsa1024 ALG=sha256 PREFIX=0x030204aabbccdd0080 OPTS=--keyid=aabbccdd
+ sign_verify  rsa1024  sha256  0x030204:K:0080
+   try_different_keys
+   try_different_sigs
 -- 
 2.29.3
 
