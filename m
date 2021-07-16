@@ -2,168 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D51723CB984
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jul 2021 17:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B1B3CBA42
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jul 2021 18:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240673AbhGPPT2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 16 Jul 2021 11:19:28 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:57430 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237326AbhGPPT1 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 16 Jul 2021 11:19:27 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id DE63172C8B4;
-        Fri, 16 Jul 2021 18:16:30 +0300 (MSK)
-Received: from beacon.altlinux.org (unknown [193.43.10.9])
-        by imap.altlinux.org (Postfix) with ESMTPSA id A6C324A46E9;
-        Fri, 16 Jul 2021 18:16:30 +0300 (MSK)
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH ima-evm-utils v9 3/3] Read keyid from the cert appended to the key file
-Date:   Fri, 16 Jul 2021 18:16:02 +0300
-Message-Id: <20210716151602.3575106-4-vt@altlinux.org>
-X-Mailer: git-send-email 2.29.3
-In-Reply-To: <20210716151602.3575106-1-vt@altlinux.org>
-References: <20210716151602.3575106-1-vt@altlinux.org>
+        id S240551AbhGPQHU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 16 Jul 2021 12:07:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36346 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236232AbhGPQHU (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 16 Jul 2021 12:07:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D5FC361164;
+        Fri, 16 Jul 2021 16:04:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626451464;
+        bh=qt751I4RwKqXaHuRncO99dJuNHhGZqBke83Px+pHWDU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=X4jjLqQCObWspZhSMwq/05luguE+nCMH7oakcTaWVg93BBYyh2XtZTITjnqmhksXK
+         4B/Frbb4BABVGqu1Jg0knj9NRO6ewf4XszPZGCtFRUqRfRR80DVnGzUTATtN44GSJH
+         FlXvf93ptBza8SFolcFD6MUzXlDNWc7wZWnixXAvRnv805BcujvaBuQBjL4S84hJ7K
+         dvf0iRAO7X0K6g/MejxUgcRsbe1c80SbBUa6DD6tb85DghNYw+ePKUONQzkzC3E6f0
+         3rD0rws4AEt73L13NCWyn7kvwq/y4jytygsSK44gulD0UUS8jt0qxtLj+PZgRBV3hw
+         i73FXrei+xoQQ==
+Received: by mail-oo1-f44.google.com with SMTP id i11-20020a4adf0b0000b0290263e1ba7ff9so24673oou.2;
+        Fri, 16 Jul 2021 09:04:24 -0700 (PDT)
+X-Gm-Message-State: AOAM533fPMA+PTy+DoIfCTkf3VKrVKZab32L+zU/YU1ZVLHHxlvIXixq
+        QRYBz8oyYyapiR7MKSVVz9zW5+jwrTp0iLkMJTk=
+X-Google-Smtp-Source: ABdhPJw6aBdbGdXwxfDQhL0w2B1aHgkbeA26YHrDT96N1lBUoVHBtFzZH4O8KumXoz02zE8L0djrhZ4+udbc5OXhjfA=
+X-Received: by 2002:a4a:e923:: with SMTP id a3mr8143205ooe.45.1626451464224;
+ Fri, 16 Jul 2021 09:04:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210708094654.4157-1-msuchanek@suse.de> <20210709163846.3e753oectgbt7wh7@kernel.org>
+In-Reply-To: <20210709163846.3e753oectgbt7wh7@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 16 Jul 2021 18:04:13 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEDa4pzBjQ8hzipOY=VbErvELLyiU7z_SGy_Bd9OKxcYw@mail.gmail.com>
+Message-ID: <CAMj1kXEDa4pzBjQ8hzipOY=VbErvELLyiU7z_SGy_Bd9OKxcYw@mail.gmail.com>
+Subject: Re: [PATCH] efi/tpm: Differentiate missing and invalid final event
+ log table.
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Michal Suchanek <msuchanek@suse.de>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Lo=C3=AFc_Yhuel?= <loic.yhuel@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Allow to have certificate appended to the private key of `--key'
-specified (PEM) file (for v2 signing) to facilitate reading of keyid
-from the associated cert. This will allow users to have private and
-public key as a single file and avoid the need of manually specifying
-keyid. There is no check that public key form the cert matches
-associated private key.
+On Fri, 9 Jul 2021 at 18:38, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Thu, Jul 08, 2021 at 11:46:54AM +0200, Michal Suchanek wrote:
+> > Missing TPM final event log table is not a firmware bug.
+> >
+> > Clearly if providing event log in the old format makes the final event
+> > log invalid it should not be provided at least in that case.
+> >
+> > Fixes: b4f1874c6216 ("tpm: check event log version before reading final events")
+> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > ---
+> >  drivers/firmware/efi/tpm.c | 8 +++++---
+> >  1 file changed, 5 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/firmware/efi/tpm.c b/drivers/firmware/efi/tpm.c
+> > index c1955d320fec..8f665678e9e3 100644
+> > --- a/drivers/firmware/efi/tpm.c
+> > +++ b/drivers/firmware/efi/tpm.c
+> > @@ -62,9 +62,11 @@ int __init efi_tpm_eventlog_init(void)
+> >       tbl_size = sizeof(*log_tbl) + log_tbl->size;
+> >       memblock_reserve(efi.tpm_log, tbl_size);
+> >
+> > -     if (efi.tpm_final_log == EFI_INVALID_TABLE_ADDR ||
+> > -         log_tbl->version != EFI_TCG2_EVENT_LOG_FORMAT_TCG_2) {
+> > -             pr_warn(FW_BUG "TPM Final Events table missing or invalid\n");
+> > +     if (efi.tpm_final_log == EFI_INVALID_TABLE_ADDR) {
+> > +             pr_info("TPM Final Events table not present\n");
+> > +             goto out;
+> > +     } else if (log_tbl->version != EFI_TCG2_EVENT_LOG_FORMAT_TCG_2) {
+> > +             pr_warn(FW_BUG "TPM Final Events table invalid\n");
+> >               goto out;
+> >       }
+> >
+> > --
+> > 2.26.2
+> >
+> >
+>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>
 
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
----
- README                 |  3 +++
- src/libimaevm.c        |  8 ++++++--
- tests/gen-keys.sh      | 31 +++++++++++++++++++++++++------
- tests/sign_verify.test |  1 +
- 4 files changed, 35 insertions(+), 8 deletions(-)
-
-diff --git a/README b/README
-index a130519..23e7d17 100644
---- a/README
-+++ b/README
-@@ -128,6 +128,9 @@ for signing and importing the key.
- Second key format uses X509 DER encoded public key certificates and uses asymmetric key support
- in the kernel (since kernel 3.9). CONFIG_INTEGRITY_ASYMMETRIC_KEYS must be enabled (default).
- 
-+For v2 signatures x509 certificate (containing the public key) could be appended to the
-+private key (they both are in PEM format) to automatically extract keyid from its Subject
-+Key Identifier (SKID).
- 
- Integrity keyrings
- ----------------
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index ce1e276..7d5cbe0 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -1046,8 +1046,12 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
- 
- 	if (imaevm_params.keyid)
- 		keyid = htonl(imaevm_params.keyid);
--	else
--		calc_keyid_v2(&keyid, name, pkey);
-+	else {
-+		int keyid_read_failed = read_keyid_from_cert(&keyid, keyfile, false);
-+
-+		if (keyid_read_failed)
-+			calc_keyid_v2(&keyid, name, pkey);
-+	}
- 	hdr->keyid = keyid;
- 
- 	st = "EVP_PKEY_CTX_new";
-diff --git a/tests/gen-keys.sh b/tests/gen-keys.sh
-index 46130cf..d2c2f80 100755
---- a/tests/gen-keys.sh
-+++ b/tests/gen-keys.sh
-@@ -20,13 +20,14 @@ PATH=../src:$PATH
- type openssl
- 
- log() {
--  echo - "$*"
-+  echo >&2 - "$*"
-   eval "$@"
- }
- 
- if [ "$1" = clean ]; then
-   rm -f test-ca.conf
--elif [ "$1" = force ] || [ ! -e test-ca.conf ]; then
-+elif [ "$1" = force ] || [ ! -e test-ca.conf ] \
-+	|| [ gen-keys.sh -nt test-ca.conf ]; then
- cat > test-ca.conf <<- EOF
- 	[ req ]
- 	distinguished_name = req_distinguished_name
-@@ -43,26 +44,44 @@ cat > test-ca.conf <<- EOF
- 	basicConstraints=CA:TRUE
- 	subjectKeyIdentifier=hash
- 	authorityKeyIdentifier=keyid:always,issuer
-+
-+	[ skid ]
-+	basicConstraints=CA:TRUE
-+	subjectKeyIdentifier=12345678
-+	authorityKeyIdentifier=keyid:always,issuer
- EOF
- fi
- 
- # RSA
- # Second key will be used for wrong key tests.
--for m in 1024 2048; do
--  if [ "$1" = clean ] || [ "$1" = force ]; then
-+for m in 1024 1024_skid 2048; do
-+  if [ "$1" = clean ] || [ "$1" = force ] \
-+	  || [ gen-keys.sh -nt test-rsa$m.key ]; then
-     rm -f test-rsa$m.cer test-rsa$m.key test-rsa$m.pub
-   fi
-   if [ "$1" = clean ]; then
-     continue
-   fi
-+  if [ -z "${m%%*_*}" ]; then
-+    # Add named extension.
-+    bits=${m%_*}
-+    ext="-extensions ${m#*_}"
-+  else
-+    bits=$m
-+    ext=
-+  fi
-   if [ ! -e test-rsa$m.key ]; then
--    log openssl req -verbose -new -nodes -utf8 -sha1 -days 10000 -batch -x509 \
-+    log openssl req -verbose -new -nodes -utf8 -sha1 -days 10000 -batch -x509 $ext \
-       -config test-ca.conf \
--      -newkey rsa:$m \
-+      -newkey rsa:$bits \
-       -out test-rsa$m.cer -outform DER \
-       -keyout test-rsa$m.key
-     # for v1 signatures
-     log openssl pkey -in test-rsa$m.key -out test-rsa$m.pub -pubout
-+    if [ $m = 1024_skid ]; then
-+      # Create combined key+cert.
-+      log openssl x509 -inform DER -in test-rsa$m.cer >> test-rsa$m.key
-+    fi
-   fi
- done
- 
-diff --git a/tests/sign_verify.test b/tests/sign_verify.test
-index 1fdd786..df4304a 100755
---- a/tests/sign_verify.test
-+++ b/tests/sign_verify.test
-@@ -367,6 +367,7 @@ sign_verify  rsa1024  sha1    0x030202:K:0080
- sign_verify  rsa1024  sha224  0x030207:K:0080
- expect_pass check_sign TYPE=ima KEY=rsa1024 ALG=sha256 PREFIX=0x030204aabbccdd0080 OPTS=--keyid=aabbccdd
- expect_pass check_sign TYPE=ima KEY=rsa1024 ALG=sha256 PREFIX=0x030204:K:0080 OPTS=--keyid-from-cert=test-rsa1024.cer
-+expect_pass check_sign TYPE=ima KEY=rsa1024_skid ALG=sha256 PREFIX=0x030204123456780080
- sign_verify  rsa1024  sha256  0x030204:K:0080
-   try_different_keys
-   try_different_sigs
--- 
-2.29.3
-
+Queued as a fix, thanks
