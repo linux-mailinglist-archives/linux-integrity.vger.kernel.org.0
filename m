@@ -2,95 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F37B3CB868
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jul 2021 16:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A57D3CB86D
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jul 2021 16:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240071AbhGPOIm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 16 Jul 2021 10:08:42 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29812 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232808AbhGPOIl (ORCPT
+        id S240308AbhGPOKl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 16 Jul 2021 10:10:41 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:51238 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240259AbhGPOKj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 16 Jul 2021 10:08:41 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GE4Bpo077732
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jul 2021 10:05:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=qYPgEZPqwTCCMUFMpiyJc1dz88+EcRE48GzLcnLvHh4=;
- b=sTQ7UzODBkJzvqU2BGPPwcSxML7eVL74+S1/ZThOnM7fPPo606M2LximUBl9iSHSFSZV
- eO5RL7vT3rwikJ5QKlPuR1iM3gytpf0jmqb+aHpz9DMTk1/7cq8Poc/ApKZMZftvwrdj
- ErJkgPeB5E6aCTuU6vZXTrOthzKCNT8JPx9fJPvgUVorBt8+RrSwMQWtYPkEsIOD/3K6
- WOqAncoNGAisAIRQCg8JRccbkwPrfRClnW90ulcu/rbqDP9ZLdvG5z5P2Nj5NmkNgyF0
- SGSn74KWOj+MB9W92LCqMzB6NKW/Y/m7zrD/KnPQrWmycC8i4hbm9YHt7u0FvO69BS5h Vw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 39tw2rxhgx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jul 2021 10:05:46 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16GE4Nkx017074
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jul 2021 14:05:44 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 39q368asap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jul 2021 14:05:44 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16GE5fbK13041972
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jul 2021 14:05:41 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D00E5204F;
-        Fri, 16 Jul 2021 14:05:41 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.160.55.33])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 42CF652054;
-        Fri, 16 Jul 2021 14:05:40 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH ima-evm-utils 3/3] Remove unnecessary NULL pointer test
-Date:   Fri, 16 Jul 2021 10:05:31 -0400
-Message-Id: <20210716140531.945013-3-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210716140531.945013-1-zohar@linux.ibm.com>
-References: <20210716140531.945013-1-zohar@linux.ibm.com>
+        Fri, 16 Jul 2021 10:10:39 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id B7BEA72C8B4;
+        Fri, 16 Jul 2021 17:07:43 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 1D8604A46E9;
+        Fri, 16 Jul 2021 17:07:43 +0300 (MSK)
+Date:   Fri, 16 Jul 2021 17:07:43 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH ima-evm-utils v8 3/3] Read keyid from the cert appended
+ to the key file
+Message-ID: <20210716140743.ct3sxyi5luhqechz@altlinux.org>
+References: <20210712054448.2471236-1-vt@altlinux.org>
+ <20210712054448.2471236-4-vt@altlinux.org>
+ <2d54bb0340e2971234084db68cc00e27089388a8.camel@linux.ibm.com>
+ <20210716135030.tc3fe3rmjmci2e4x@altlinux.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2iwl7EZCcimy-kqh6nWpU-ymmlVJvWcS
-X-Proofpoint-ORIG-GUID: 2iwl7EZCcimy-kqh6nWpU-ymmlVJvWcS
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-16_04:2021-07-16,2021-07-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 spamscore=0 bulkscore=0 clxscore=1015 malwarescore=0
- mlxscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2107160086
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20210716135030.tc3fe3rmjmci2e4x@altlinux.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Remove the "Logically dead code (DEADCODE)" as reported by Coverity.
+On Fri, Jul 16, 2021 at 04:50:30PM +0300, Vitaly Chikunov wrote:
+> Mimi,
+> 
+> On Wed, Jul 14, 2021 at 12:16:57PM -0400, Mimi Zohar wrote:
+> > On Mon, 2021-07-12 at 08:44 +0300, Vitaly Chikunov wrote:
+> > > 
+> > > @@ -43,26 +43,43 @@ cat > test-ca.conf <<- EOF
+> > >  	basicConstraints=CA:TRUE
+> > >  	subjectKeyIdentifier=hash
+> > >  	authorityKeyIdentifier=keyid:always,issuer
+> > > +
+> > > +	[ skid ]
+> > > +	basicConstraints=CA:TRUE
+> > > +	subjectKeyIdentifier=12345678
+> > > +	authorityKeyIdentifier=keyid:always,issuer
+> > >  EOF
+> > >  fi
+> > 
+> > On my system:
+> > $ openssl version
+> > OpenSSL 1.1.1g FIPS  21 Apr 2020
+> > 
+> > Not sure this has anything to do with the reason that "skid" is not
+> > supported.   The resulting files are empty.
+> > 
+> > ls -lat *skid*
+> > -rw-rw-r--. 1 mimi mimi 0 Jul 14 12:02 test-rsa1024_skid.key
+> > -rw-rw-r--. 1 mimi mimi 0 Jul 14 12:02 test-rsa1024_skid.pub
+> > 
+> > - openssl pkey -in test-rsa1024.key -out test-rsa1024.pub -pubout
+> > - openssl req -verbose -new -nodes -utf8 -sha1 -days 10000 -batch -x509
+> > -extensions skid -config test-ca.conf -newkey rsa:1024 -out test-
+> > rsa1024_skid.cer -outform DER -keyout test-rsa1024_skid.key
+> > Using configuration from test-ca.conf
+> > Error Loading extension section skid   <===
+> 
+> How `test-ca.conf' looked like? Maybe it's not updated?
+> Try to run ./gen-keys.sh clean (which is called from make distclean).
 
-Fixes: 9c79b7de7231 ("ima-evm-utils: support verifying the measurement list using multiple keys")
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- src/libimaevm.c | 2 --
- 1 file changed, 2 deletions(-)
+Perhaps, this is the case. I will add `test -nt' check in
+gen-keys.sh, so that test-ca.conf and keys are regenerated when
+gen-keys.sh is updated. This should solve that problem for users.
 
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index 261712717368..925c3cccf964 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -392,8 +392,6 @@ void init_public_keys(const char *keyfiles)
- 	keyfiles_free = tmp_keyfiles;
+diff --git a/tests/gen-keys.sh b/tests/gen-keys.sh
+index d604c96..d2c2f80 100755
+--- a/tests/gen-keys.sh
++++ b/tests/gen-keys.sh
+@@ -26,7 +26,8 @@ log() {
  
- 	while ((keyfile = strsep(&tmp_keyfiles, ", \t")) != NULL) {
--		if (!keyfile)
--			break;
- 		if ((*keyfile == '\0') || (*keyfile == ' ') ||
- 		    (*keyfile == '\t'))
- 			continue;
--- 
-2.27.0
+ if [ "$1" = clean ]; then
+   rm -f test-ca.conf
+-elif [ "$1" = force ] || [ ! -e test-ca.conf ]; then
++elif [ "$1" = force ] || [ ! -e test-ca.conf ] \
++       || [ gen-keys.sh -nt test-ca.conf ]; then
+ cat > test-ca.conf <<- EOF
+        [ req ]
+        distinguished_name = req_distinguished_name
+@@ -54,7 +55,8 @@ fi
+ # RSA
+ # Second key will be used for wrong key tests.
+ for m in 1024 1024_skid 2048; do
+-  if [ "$1" = clean ] || [ "$1" = force ]; then
++  if [ "$1" = clean ] || [ "$1" = force ] \
++         || [ gen-keys.sh -nt test-rsa$m.key ]; then
+     rm -f test-rsa$m.cer test-rsa$m.key test-rsa$m.pub
+   fi
+   if [ "$1" = clean ]; then
+
+Thanks,
+
 
