@@ -2,203 +2,298 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 810E03CB52B
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jul 2021 11:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00F53CB538
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jul 2021 11:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbhGPJVh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 16 Jul 2021 05:21:37 -0400
-Received: from mail-eopbgr00133.outbound.protection.outlook.com ([40.107.0.133]:4160
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230287AbhGPJVg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 16 Jul 2021 05:21:36 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KZUZfr6MvkT9OT7Fb3dT3AQzEw28t1RJRPzcHP8lLG8jqeXVAETQ+sF02A7rGGBWnb0fg33YF+cpzWLrKXlMgBDHKmkyi5RVcvkfLP9zI4WwIME4EqGE/uYTa4halFltFJLR8/ojMW8OxCJnPy1uroek+BSruWwqb6KTX58pfa5ZE5bt4fUQ5N910eB3IvZzQarehbuGJ1dnvH+2oQdOlqr7JjvTEHst08pf558k2szwvCfbM3mgUZfvLvsiH2fz+cJcx8zTRIDkyYYsyx3fPZQQcfycD7LjC9QIhxaWvcz36KVSiubenHPJohG3yKCyssziZFrCJU/NAbRFo7vSdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HaPtrf44iCwEUso3YIfgmLRrdmW96qjvM/fHDnYA5zg=;
- b=Zmg7M+Ufu20fDBgWEIELNSBV2R7XvkC2JCHASIEpcrRWbA+uw8p06Q4rEP/0QPesy7ga05F9H6S7BB8Hw8LzekHU5Vi9NZC9e/zR0d5q/0iai0fIL5UKRh4v3iKr4jB+AUsIse6GfUc+JsPV4AONHWdistkvZq4n32xbABcBlGi2GWSWtsWBEXflbagq7wecO2lxs3jwFwp1tQV/C0qiFBCeBQ/q7MP6YoWALeXq+uyMr4YRg4DKshNCq4owIiXU2JwOumhAPTnyCvysLDGyxLMJ51Bt6uu6N9Jce9yEZGBRQJsgC2nb5Jne/LJnilLjmq3WN9lDgo5/19Pn39/9OQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
- dkim=pass header.d=viveris.fr; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=viverislicensing.onmicrosoft.com;
- s=selector2-viverislicensing-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HaPtrf44iCwEUso3YIfgmLRrdmW96qjvM/fHDnYA5zg=;
- b=CPLK56Y22s7KcwkqBwUy9SN6VueK4wLtnnnps8fNnhcDY1UgTIEJXkWrd9YKhaHWzyfCwHYwQpKHMJeEUxz8so+KIgbdsPGPZXIS7LfaDDoW3fwhKnmESkABupLnf19NSsuR8Y9JFfE+bI3CB0CiGND6MQKL83nHocUkFcOxvic=
-Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
- (2603:10a6:200:96::21) by AM0PR09MB4259.eurprd09.prod.outlook.com
- (2603:10a6:20b:148::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Fri, 16 Jul
- 2021 09:18:40 +0000
-Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
- ([fe80::1d19:ecb0:b073:df73]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
- ([fe80::1d19:ecb0:b073:df73%12]) with mapi id 15.20.4331.024; Fri, 16 Jul
- 2021 09:18:40 +0000
-From:   THOBY Simon <Simon.THOBY@viveris.fr>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>,
-        "nramas@linux.microsoft.com" <nramas@linux.microsoft.com>
-Subject: Re: [PATCH] IMA: add an option to restrict the accepted hash
- algorithms
-Thread-Topic: [PATCH] IMA: add an option to restrict the accepted hash
- algorithms
-Thread-Index: AQHXd/YemsJUD9k54EOGKAGhOUDuFqtD+VyAgAFd14A=
-Date:   Fri, 16 Jul 2021 09:18:40 +0000
-Message-ID: <42353811-d8b1-0093-333a-3ca20bcf4861@viveris.fr>
-References: <1fcf5b7f-00bc-7963-cb9e-c7e7e8278c9b@viveris.fr>
- <5dd1cc267f4b820c115e85210e1137c73c4e2562.camel@linux.ibm.com>
-In-Reply-To: <5dd1cc267f4b820c115e85210e1137c73c4e2562.camel@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linux.ibm.com; dkim=none (message not signed)
- header.d=none;linux.ibm.com; dmarc=none action=none header.from=viveris.fr;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1d36b9f4-35e4-48c9-cc50-08d9483ab341
-x-ms-traffictypediagnostic: AM0PR09MB4259:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR09MB4259C4FDC6E7F7EB0B0A80CC94119@AM0PR09MB4259.eurprd09.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pXNb3zjeK9n4NIQJoodkDHXT+g1GjJ/PZbjwHoEQInf+a3Sj5/l2G0H0LH9XDJb2zi1V12YMme39gq8kADKuIExTb1yBqnfYOnfbDP+gvpiBUlXicKRZOP5SfQNMPISoLBgVE6i20/9a5VnBxOfG1EVu28GunVmT/Vp3lQ1yUzXZr+hACcRoSO41wg6cqLO3gDd5jF5FU+8/45AYHnHwZqQGmXIjDwGdur3W12L3I8rD8IuSleRXuBFtxQcDzoK6766IWbKOjroyezrHTVyeaE11AEtIIcvda1fabrap67p7f04aGunv5mr4o/P0tT63mpyjx0pwYiGGBzwlZcxkkqRca0JUpRJt+oUXRW4Yy0SToLjrQA9QrNJvjoE4KvMs5ftM6nbWBo5etQ1kOAkuE/I29RMd6nry/ey2nMhaP8l9b5aMRRgcPReUIAigXHx9MV+0GYAwooki1wk6TjhF/qvU1m+SqkUQ/btRNzn9u0R4+a9ixEgUhy6WQKjArCPkOcvuZau/O+kTkuADvRgv8mgzu1iXqPC+I84v/zenKcEg7nkWJugGsghiwcBZBtMPJ8FF60yH2kZhDPDCkn8V1q7KAvAnTnT1BmDEFgGTJaq5NGBNmyOxxJ49rbUuJL4Fr7fcKt0ZpCe0n5apdxHUjG30v3+P5I488fsEGOB0YITWphSxZommZOU63bUnUF2K02RFnoKWYBPtnFxqsupBDyMuRW59zSB39CoGEvS5Hf4RpNtwPNYTPSDFTc/WUSE82QmsjWlgm7aG7rm8wrDDCc/t9BaCu0MHF7sZiKc5ybTAhixGKPJcyMGp3VIAPXwjWovp4xZe1l6soRYFZ9k0/w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(366004)(346002)(396003)(39840400004)(38100700002)(186003)(83380400001)(122000001)(86362001)(53546011)(6506007)(26005)(31696002)(2616005)(478600001)(91956017)(66476007)(66946007)(66556008)(966005)(6486002)(66446008)(64756008)(76116006)(71200400001)(316002)(36756003)(6512007)(31686004)(2906002)(5660300002)(8676002)(110136005)(8936002)(45980500001)(38070700004);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MkRsU1l2RXk3cktyVTlaazRqRnY2L1FsZ3lwUW1KME1hbFJNdHc4eTdCZ1cx?=
- =?utf-8?B?dFJ0U1h4c3hycGJqeW1JOXBBWmpjeUNrNS8rNWxCWGVBU0lKalVoWGVXWVhH?=
- =?utf-8?B?eVFZNm04Y29uU0Zjb1ZUUmN4ejduaXRzbldzUlRydmYwMzdPRnNVME9oQ0Nq?=
- =?utf-8?B?aS9LbGgwQlU3bkJubWJxYVBhaGZjbFBlTHJnZzcxaDU2WEJRMWlOVnRRNVkw?=
- =?utf-8?B?enFGTnEvMytPWVVtVjVzbVc2UG5uZC9ydGVQckZKTSt6YzVDOHUvamttVjNP?=
- =?utf-8?B?UnhGU0grZDI4eDhoZFdlU1QzUklqZzlUS1N3S1ZHUGNPYnN6RlBhVm9hSk5k?=
- =?utf-8?B?NDdpbTBYbThaN0Rya1h3aHZSRm9GT0VoS3ZYRXFreUZwOFFpcEtiR1M2SjEw?=
- =?utf-8?B?ZHR2V2lmOUdwYjNVWTNJWlhIYm9JUzZFdHVNMDFLTlR5ZHFkTUNGRTYrVU9M?=
- =?utf-8?B?cXBadXBkZFgrazhOdHhURjkybG41R1dDRU9HTnFBUHFwRzJyRDRkaklBL1R5?=
- =?utf-8?B?YkRmZ21PMVgxQk1ZZW40NzYwdGxuSjBMK28rbVFKRnMwQlFYdFhDNjRkMDJR?=
- =?utf-8?B?RlNFbUNUVk84T2pkcEZ1WEUzV0R0T0U0SERMdjlkWStzaHVlVDZSWFBZS3Zy?=
- =?utf-8?B?VlMyU084U1B4ZkIwdzF3WUdsTFg1UTBzRzIrRTNGOWloZmxIZktTOHVxYlNF?=
- =?utf-8?B?YWZMbWtKa0ZIVmVpQml1VkQ2M2ZTQ2I2K0U5N2lyamZPcHd6Z0VoVW5udUsv?=
- =?utf-8?B?VzlXTzZKWlBQYVNvY2J2SWNmNWpkbk1LS2MvYnBmWFRadmJRYnFpbGJtTG9w?=
- =?utf-8?B?SWtZUXdMQ2lnTEluTWNDdHU2ZnRuNWlodUtrYnhSMnM1NzNqclV3ZzBmVGJv?=
- =?utf-8?B?M0NLdEZvOFUydzRzdjBEUG9temhhNU5rY0ovMkxWTDBhOVd6dUd4SW5BYVo1?=
- =?utf-8?B?UkhFb0hTUk5DeWZ5SVBmSXltT0NEdHZ2NHRzdGEzNkQweW5VNWNpTWJpZ0Ex?=
- =?utf-8?B?Y1pnZHRoaDdxS0cwWnZGMnN0M2NIbWpqQ013Rms2KzhYa3dpVDhucVJtUDZQ?=
- =?utf-8?B?bENDdGwvQXlKSGp4bE5JL1BTc1J2SVRERnpyS3ZnamFCQ3NnTFRRYjhRSW5H?=
- =?utf-8?B?enMyMXcvd2l5WTRWL3VHS1JtaFhBbzVybW1sNE95a0dQR3AxU2tJZGhqNFg2?=
- =?utf-8?B?RFQ2WjlBN012K2JuNW1FTm0zZU5Bc3hoc25Ga090S3RRdHNBU0FKWTY2Ny9p?=
- =?utf-8?B?dndBM1dqdjltOVlGYW12U0x6eVdyVEZVUXd4aUF2TXNwMnd2anpFcFMrckll?=
- =?utf-8?B?RzBKK216ekhQMUdxR2E1UlY1U3RGazFpM0U1VHVwVEYvTndRdkpXbk1tS1Fx?=
- =?utf-8?B?RW1FMXlRMnZYamtVdHl0NzFzVkxCcm5IZE9QT1dyWDUvQy9GZWF3UUF1d3Z2?=
- =?utf-8?B?dGlENkhkeldoQUNPVTAvYmZKZTZSQlVDUDZEaXJVMm5zbTJkSmZaeUZjK2g5?=
- =?utf-8?B?NTRzQmpBWkdTaHpqV2dzaXd5YlNnMDJzbmZMV1RDL1hsNGlxVnhuWkwxTEdj?=
- =?utf-8?B?VS9lUnQ0T1JFdGtxd2xmcnJBQ0V5em9uTDFYbmo0ZzFoMnNjaWYvc2t3S0tF?=
- =?utf-8?B?WUV4eUoycFZSekRieXRkMkFzSFUrL2JxamNyZlk2MTNNTmlESnJyVlFEd3h1?=
- =?utf-8?B?SkJpRy9Tc2pVNVRiYTJmdm5NNitTVW1HTEFOQzBiMjBpNTlkQSsrNmdwQ0d0?=
- =?utf-8?Q?qlxeAGKQlx3AAnAdZcx5cBrTEvadgHzum6ViB4B?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D306B4EAF9D7024EAF25E8CEAAE909D6@eurprd09.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S232690AbhGPJZe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 16 Jul 2021 05:25:34 -0400
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:36630 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232743AbhGPJZe (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 16 Jul 2021 05:25:34 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R351e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0UfxpCpK_1626427357;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UfxpCpK_1626427357)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 16 Jul 2021 17:22:37 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>,
+        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH ima-evm-utils v5] ima-evm-utils: Support SM2/3 algorithm for sign and verify
+Date:   Fri, 16 Jul 2021 17:22:37 +0800
+Message-Id: <20210716092237.17153-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.3.ge56e4f7
 MIME-Version: 1.0
-X-OriginatorOrg: viveris.fr
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d36b9f4-35e4-48c9-cc50-08d9483ab341
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jul 2021 09:18:40.1533
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aFUinitawdE+qpvqnPA+31wjlTRWVmFqWACUJqv4mZxiAQChbYuN3qJ7VxpsqZ2ZxqvKxMB0o12vUQYaAiH9LQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR09MB4259
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SGkgTWltaSwNCg0KT24gNy8xNS8yMSAyOjI2IFBNLCBNaW1pIFpvaGFyIHdyb3RlOg0KPiBIaSBT
-aW1vbiwNCj4gDQo+IE9uIFR1ZSwgMjAyMS0wNy0xMyBhdCAxNDo0OCArMDAwMCwgVEhPQlkgU2lt
-b24gd3JvdGU6DQo+PiBTb3JyeSBpdCB0b29rIG1lIHNvbWUgdGltZSBiZWZvcmUgSSBjb3VsZCB3
-cml0ZSBhIHBhdGNoIChpbiBhZGRpdGlvbiBpdCdzIG15DQpbc25pcF0NCj4+IAktIHdpdGggaW1h
-X2FjY2VwdF9hbnlfaGFzaDogcGVybWl0cyBhY2Nlc3MsIG5vIHdhcm5pbmdzIHdoYXRzb2V2ZXIN
-Cj4+IERvIHlvdSB3YW50IGlkZWFzIG9mIG90aGVyIGNvbmZpZ3VyYXRpb25zIHRoYXQgSSBjb3Vs
-ZCB0ZXN0Pw0KPj4NCj4+IEkgd291bGQgYWxzbyBsaWtlIHRvIHBvaW50IG91dCB0aGF0IEknbSBt
-b3JlIHRoYW4gb3BlbiB0byBzdWdnZXN0aW9ucyBmb3INCj4+IGNoYW5naW5nIHRoZSBuYW1lcyBv
-ZiB0aGUgcGFyYW1ldGVycyAoYGltYV9hbGxvd2VkX2hhc2hlc2AgYW5kDQo+PiBgaW1hX2FjY2Vw
-dF9hbnlfaGFzaGApIGFuZCB0aGUgImNhdXNlIiBpbiB0aGUgYXVkaXQgbG9nIChjdXJyZW50bHkg
-DQo+PiBmb3JiaWRkZW4taGFzaC1hbGdvcml0aG0iKSwgYmVjYXVzZSBhcyB5b3Uga25vdywgIm5h
-bWluZyB0aGluZ3MgaXMgaGFyZCIuDQo+Pg0KPj4NCj4+IElNQTogYWRkIGFuIG9wdGlvbiB0byBy
-ZXN0cmljdCB0aGUgYWNjZXB0ZWQgaGFzaCBhbGdvcml0aG1zDQo+Pg0KPj4gQWRkcyB0d28gY29t
-bWFuZC1saW5lIHBhcmFtZXRlcnMgdG8gbGltaXQgdGhlIGhhc2ggYWxnb3JpdGhtcw0KPj4gYWxs
-b3dlZCBmb3IgdGhlIHNlY3VyaXR5LmltYSB4YXR0ci4gDQo+IA0KPiBIYXZpbmcgdHdvIGJvb3Qg
-Y29tbWFuZCBsaW5lIHBhcmFtYXRlcnMgaXMgYSBnb29kIGluZGljYXRpb24gdGhhdCB0aGlzDQo+
-IHBhdGNoIG5lZWRzIHRvIGJlIGJyb2tlbiB1cC4gIFBsZWFzZSByZWZlciB0byB0aGUgc2VjdGlv
-biAiU2VwYXJhdGUNCj4geW91ciBjaGFuZ2VzIiBpbiBEb2N1bWVudGF0aW9uL3Byb2Nlc3Mvc3Vi
-bWl0dGluZy1wYXRjaGVzLnJzdC4gIFRoZQ0KPiBjb3ZlciBsZXR0ZXIgcHJvdmlkZXMgdGhlIG1v
-dGl2YXRpb24gZm9yIHRoZSBwYXRjaCBzZXQuDQo+IA0KDQpUaGFua3MgZm9yIHRoZSBjbGFyaWZp
-Y2F0aW9uLCBJIHdpbGwgc3BsaXQgdXAgdGhlIHBhdGNoIGlmIGEgc2ltaWxhciBmb3JtDQp3aXRo
-IHR3byBkaWZmZXJlbnQgb3B0aW9ucyBpcyBrZXB0Lg0KDQo+PiBUaGlzIGdpdmVzIHVzZXJzIHRo
-ZQ0KPj4gYWJpbGl0eSB0byBlbnN1cmUgdGhlaXIgc3lzdGVtcyB3aWxsIG5vdCBhY2NlcHQgd2Vh
-ayBoYXNoZXMsDQo+PiBhbmQgcG90ZW50aWFsbHkgaW5jcmVhc2UgdXNlcnMgdHJ1c3QgaW4gdGhl
-aXIgSU1BIGNvbmZpZ3VyYXRpb24sDQo+PiBiZWNhdXNlIHRoZXkgY2FuIGVuc3VyZSBvbmx5IHN0
-cm9uZyBjb2xsaXNpb24tcmVzaXN0YW50IGhhc2hlcw0KPj4gYXJlIGVtcGxveWVkIGFuZCBmaWxl
-cyBnZW5lcmF0ZWQgb3RoZXJ3aXNlIHdpbGwgbm90IGJlIGFjY2VwdGVkLg0KPiANCj4gQm9vdCBj
-b21tYW5kIGxpbmUgb3B0aW9ucyBzaG91bGQgYmUgbWluaW1pemVkIGFzIG11Y2ggYXMgcG9zc2li
-bGUuIA0KPiBQZXJoYXBzIHdpdGhvdXQgZGVmaW5pbmcgbmV3IGtlcm5lbCBib290IHBhcmFtYXRl
-cnMgdGhlcmUgYXJlIHNvbWUNCj4gYWRkaXRpb25hbCBjaGVja3MgdGhhdCBjb3VsZCBiZSBhZGRl
-ZC4gIEZvciBleGFtcGxlLCBvbiBhIEZJUFMgZW5hYmxlZA0KPiBzeXN0ZW0sIHByZXZlbnQgd3Jp
-dGluZyBub24gRklQUyBhbGxvd2VkIGZpbGUgc2lnbmF0dXJlcywgbGltaXQgZmlsZQ0KPiBzaWdu
-YXR1cmUgYWxnb3JpdGhtcyB0byB0aG9zZSBlbmFibGVkIG9uIHRoZSBzeXN0ZW0sIGRlZmluZSBu
-ZXcgcG9saWN5DQo+IHJ1bGVzIHRvIGxpbWl0IHRoZSBwZXJtaXR0ZWQgaGFzaCBhbGdvcml0aG1z
-Lg0KDQpJIHVuZGVyc3RhbmQgdGhlIGRlc2lyZSB0byBrZWVwIHRoZSBrZXJuZWwgcGFyYW1ldGVy
-IGxpc3QgYXMgbWluaW1hbCBhcw0KcG9zc2libGUsIHlldCBJJ20gbm90IHN1cmUgRklQUyBjb21w
-bGlhbmNlIHRhcmdldHMgdGhlIHNhbWUgdXNlIGNhc2UuDQpJIHNlZSB0aGlzIHBhdGNoIGFzIHBv
-dGVudGlhbGx5IG9mIGludGVyZXN0IGZvciBlbWJlZGRlZCBwcm9kdWN0cyB3aXRoDQpjdXN0b20g
-a2VybmVscyAod2hlcmUgImN1c3RvbSIgaGVyZSBtZWFucyBhIG1haW5saW5lIGtlcm5lbCB3aXRo
-IG1vcmUNCnNlY3VyaXR5IG9wdGlvbnMgZW5hYmxlZCB0aGFuIGluIHRoZSBrZXJuZWxzIG9mIG1v
-c3QgZGlzdHJvcyksIGFuZCB0aGVzZQ0Kc3lzdGVtcyBkbyBub3QgbmVjZXNzYXJpbHkgdGFyZ2V0
-IEZJUFMgY29tcGxpYW5jZS4gSW4gYWRkaXRpb24sIEZJUFMgMTQwLTINCmlzIHRoZSBsYXRlc3Qg
-cmVsZWFzZWQgdmVyc2lvbiBvZiBGSVBTIDE0MCBmcm9tIHdoYXQgSSBjb3VsZCBnYXRoZXIgLSBJ
-DQpkaWRuJ3QgcXVpdGUgdW5kZXJzdGFuZCBob3cgZmFyIGluIHRoZSBzdGFuZGFyZGl6YXRpb24g
-cHJvY2VzcyBGSVBTIDE0MC0zDQp3YXMsIGJ1dCBpdCBkb2Vzbid0IHNlZW0gdG90YWxseSBwdWJs
-aWMgYW5kL29yIGRlcGxveWVkIGluIHRoZSB3aWxkIHlldC4NCkFuZCBGSVBTIDE0MC0yIHN0aWxs
-IHBlcm1pdHMgdXNlIG9mIFNIQTEgKG5vdCBqdXN0IEhNQUMtU0hBLCBidXQgdGhlIGRpZ2VzdA0K
-YWxnb3JpdGhtIHRvbywgc2VlIGh0dHBzOi8vZG9jcy5vcmFjbGUuY29tL2NkL0U1MzM5NF8wMS9o
-dG1sL0U1NDk2Ni9maXBzLXJlZnMuaHRtbCkNCmJ1dCBvbmUgb2YgdGhlIHBvaW50cyBvZiB0aGlz
-IHBhdGNoc2V0IHdhcyB0byBhbGxvdyBwZW9wbGUgdG8gZW5mb3JjZQ0Kc3Ryb25nZXIgYWxnb3Jp
-dGhtcyB0aGFuIFNIQTEgZm9yIElNQS4gVGhpcyBpcyB3aHkgSSBhbSB1bnN1cmUgdGhhdCByZXN0
-cmljdGluZw0KdGhpcyBtZWNoYW5pc20gdG8gRklQUy1lbmFibGVkIHN5c3RlbXMgaXMgdGhlIGJl
-c3QgYXBwcm9hY2guIEhvd2V2ZXIsIGl0DQpjb3VsZCBzdGlsbCBiZSBpbnRlcmVzdGluZyB0byBl
-bmZvcmNlIEZJUFMgMTQwLTIgYXV0aG9yaXplZCBhbGdvcml0aG1zIGluDQpJTUEsIHNvIG1heWJl
-IHRoYXQgY291bGQgYmUgYSBmb2xsb3d1cCBwYXRjaCA/IEJUVywgdGhhdCBtYXkgcmVxdWlyZQ0K
-YWRkaW5nIGEgbGlzdCBvZiB0aGUgRklQUyBhbGxvd2VkIGFsZ29yaXRobXMgdG8gdGhlIGtlcm5l
-bCwgYXMgSSBoYXZlbid0DQpmb3VuZCBzdWNoIGEgbGlzdCB3aGVuIGdyZXBwaW5nICJmaXBzIiB0
-aHJvdWdoIHRoZSBrZXJuZWwgY29kZWJhc2UuDQoNCk9mZiB0aGUgdG9wIG9mIG15IGhlYWQsIEkg
-c2VlIHRocmVlIG1haW4gYWx0ZXJuYXRpdmVzIHRvIGV4cG9zZSB0aGlzDQpmdW5jdGlvbmFsaXR5
-Og0KMSkgSW5zdGVhZCBvZiBzdXBwbHlpbmcgdGhlbSBhdCBydW50aW1lIGluIHRoZSBrZXJuZWwg
-Y21kbGluZSwgYWRkIGNvbXBpbGUtdGltZQ0KdG9nZ2xlcyB0aGF0IGhhcmRjb2RlIGluIHRoZSBr
-ZXJuZWwgdGhlIGxpc3Qgb2YgYXV0aG9yaXplZCBhbGdvcml0aG1zIGFuZCB0aGUNCmV4cGVjdGVk
-IGJlaGF2aW9yICh2ZXJpZnlpbmcgb24gd3JpdGUgYW5kL29yIHZlcmlmeWluZyBvbiBhcHByYWlz
-YWwpLiBJdCB3b3VsZA0KYmFzaWNhbGx5IGJlIHRoZSBzYW1lIHRoaW5nIGFzIHRoZSBwcm9wb3Nl
-ZCBwYXRjaCwgYnV0IHdpdGhvdXQgaW52b2x2aW5nIG5ldw0KY29tbWFuZCBsaW5lIHBhcmFtZXRl
-cnMuIA0KMikgVXNlIHRoZSBpbWFfaGFzaCBwYXJhbXRlciBhcyB0aGUgc29sZSBhdXRob3JpemVk
-IGFsZ29yaXRobS4gSSBzdXBwb3NlIHRoaXMNCmlzIHdoYXQgeW91IG1lYW50IGJ5ICJsaW1pdCBm
-aWxlIHNpZ25hdHVyZSBhbGdvcml0aG1zIHRvIHRob3NlIGVuYWJsZWQgb24gdGhlDQpzeXN0ZW0s
-IHVubGVzcyB5b3UgbWVhbnQgdGhlIGFsZ29yaXRobXMgYnVpbHQgaW4gdGhlIGtlcm5lbCB3aXRo
-IHRoZQ0KQ1JZUFRPXyogY29tcGlsZSBvcHRpb25zID8NCjMpIEFzIHlvdSBzdWdnZXN0ZWQsIGV4
-dGVuZCB0aGUgcG9saWN5IERTTCB0byBsaW1pdCB0aGUgcGVybWl0dGVkIGhhc2gNCmFsZ29yaXRo
-bXMuIFRoaXMgeWllbGRzIHRoZSBhZGRlZCBhZHZhbnRhZ2Ugb2YgZmxleGliaWxpdHk6IHlvdSBj
-YW4gZGVjaWRlDQp0byByZXN0cmljdCBoYXNoZXMgZm9yIG9ubHkgc29tZSBjYXRlZ29yeSBvZiBm
-aWxlcy9maWxlIHN5c3RlbXMsIGV2ZW4gdGhvdWdoDQpJJ20gZG9uJ3Qgc2VlIG1hbnkgdXNlIGNh
-c2VzIGZvciBzdWNoIGZsZXhpYmlsaXR5IChidXQgSSBob2xkIG5vIGRvdWJ0DQpzb21lb25lIHNv
-bWV3aGVyZSB3b3VsZCBmaW5kIHNvbWUgdXNlIHRvIGl0KS4NCg0KSSB3b3VsZCBsb3ZlIHRvIGtu
-b3cgaWYgeW91IHRoaW5rIG9uZSBvZiB0aG9zZSBhbHRlcm5hdGl2ZXMgd291bGQgYmUgYmV0dGVy
-DQpzdWl0ZWQgdGhhdCB0aGUgb3RoZXJzIGZvciBJTUEsIG9yIGlmIHlvdSB0aG91Z2h0IG9mIGFu
-b3RoZXIgb3B0aW9uLg0KDQpBcyBhIHNpZGUgbm90ZSwgSSB3b3VsZCBhbHNvIGxpa2UgdG8gdGhh
-bmsgcHJvZnVzZWx5IExha3NobWkgZm9yIGhpcyByZW1hcmtzDQpvbiB0aGUgcGF0Y2ggIGRlc2Ny
-aXB0aW9uIGFuZCB0aGUgcHJvY2VzcyBpdHNlbGYsIGFzIHRoZXkgd2lsbCBwcm92ZSBxdWl0ZQ0K
-dmFsdWFibGUgd2hlbiBzdWJtaXR0aW5nIG5ldyByZXZpc2lvbnMgb2YgdGhpcyBwYXRjaCENCg0K
-DQpUaGFua3MsDQpTaW1vbg0K
+Keep in sync with the kernel IMA, IMA signature tool supports SM2/3
+algorithm combination. Because in the current version of OpenSSL 1.1.1,
+the SM2 algorithm and the public key using the EC algorithm share the
+same ID 'EVP_PKEY_EC', and the specific algorithm can only be
+distinguished by the curve name used. This patch supports this feature.
+
+Secondly, the openssl 1.1.1 tool does not fully support the signature
+of SM2/3 algorithm combination, so the openssl3 tool is used in the
+test case, and there is no this problem with directly calling the
+openssl 1.1.1 API in evmctl.
+
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ .github/workflows/ci.yml  |  7 +++++++
+ .travis.yml               |  8 ++++----
+ ci/fedora.sh              |  4 +++-
+ src/libimaevm.c           | 20 ++++++++++++++++++++
+ tests/gen-keys.sh         | 25 +++++++++++++++++++++++++
+ tests/ima_hash.test       |  3 +--
+ tests/install-openssl3.sh | 17 +++++++++++++++++
+ tests/sign_verify.test    | 10 ++++++++++
+ 8 files changed, 87 insertions(+), 7 deletions(-)
+ create mode 100755 tests/install-openssl3.sh
+
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 088c041..17407ff 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -17,6 +17,7 @@ jobs:
+               ARCH: i386
+               TSS: tpm2-tss
+               VARIANT: i386
++              OPENSSL3: true
+ 
+           # cross compilation builds
+           - container: "debian:stable"
+@@ -51,6 +52,7 @@ jobs:
+             env:
+               CC: clang
+               TSS: ibmtss
++              OPENSSL3: true
+ 
+           - container: "opensuse/leap"
+             env:
+@@ -61,6 +63,7 @@ jobs:
+             env:
+               CC: gcc
+               TSS: ibmtss
++              OPENSSL3: true
+ 
+           - container: "ubuntu:xenial"
+             env:
+@@ -115,6 +118,7 @@ jobs:
+         INSTALL="${INSTALL%%/*}"
+         if [ "$VARIANT" ]; then ARCH="$ARCH" ./ci/$INSTALL.$VARIANT.sh; fi
+         ARCH="$ARCH" CC="$CC" TSS="$TSS" ./ci/$INSTALL.sh
++        if [ "$OPENSSL3" ]; then ./tests/install-openssl3.sh; fi
+ 
+     - name: Build swtpm
+       run: |
+@@ -128,5 +132,8 @@ jobs:
+     - name: Compiler version
+       run: $CC --version
+ 
++    - name: Default OpenSSL version
++      run: openssl version
++
+     - name: Compile
+       run: CC="$CC" VARIANT="$VARIANT" ./build.sh
+diff --git a/.travis.yml b/.travis.yml
+index 7a76273..2dab231 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -9,7 +9,7 @@ matrix:
+     include:
+         # 32 bit build
+         - os: linux
+-          env: DISTRO=debian:stable VARIANT=i386 ARCH=i386 TSS=tpm2-tss
++          env: DISTRO=debian:stable VARIANT=i386 ARCH=i386 TSS=tpm2-tss OPENSSL3=true
+           compiler: gcc
+ 
+         # cross compilation builds
+@@ -32,7 +32,7 @@ matrix:
+ 
+         # glibc (gcc/clang)
+         - os: linux
+-          env: DISTRO=opensuse/tumbleweed TSS=ibmtss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/runc --network=host"
++          env: DISTRO=opensuse/tumbleweed TSS=ibmtss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/runc --network=host" OPENSSL3=true
+           compiler: clang
+ 
+         - os: linux
+@@ -40,7 +40,7 @@ matrix:
+           compiler: gcc
+ 
+         - os: linux
+-          env: DISTRO=ubuntu:groovy TSS=ibmtss
++          env: DISTRO=ubuntu:groovy TSS=ibmtss OPENSSL3=true
+           compiler: gcc
+ 
+         - os: linux
+@@ -97,4 +97,4 @@ before_install:
+ script:
+     - INSTALL="${DISTRO%%:*}"
+     - INSTALL="${INSTALL%%/*}"
+-    - $CONTAINER run $CONTAINER_ARGS -t ima-evm-utils /bin/sh -c "if [ \"$VARIANT\" ]; then ARCH=\"$ARCH\" ./ci/$INSTALL.$VARIANT.sh; fi && ARCH=\"$ARCH\" CC=\"$CC\" TSS=\"$TSS\" ./ci/$INSTALL.sh && if [ ! \"$VARIANT\" ]; then which tpm_server || which swtpm || if which tssstartup; then ./tests/install-swtpm.sh; fi; fi && CC=\"$CC\" VARIANT=\"$VARIANT\" ./build.sh"
++    - $CONTAINER run $CONTAINER_ARGS -t ima-evm-utils /bin/sh -c "if [ \"$VARIANT\" ]; then ARCH=\"$ARCH\" ./ci/$INSTALL.$VARIANT.sh; fi && ARCH=\"$ARCH\" CC=\"$CC\" TSS=\"$TSS\" ./ci/$INSTALL.sh && if [ "$OPENSSL3" ]; then ./tests/install-openssl3.sh; fi && if [ ! \"$VARIANT\" ]; then which tpm_server || which swtpm || if which tssstartup; then ./tests/install-swtpm.sh; fi; fi && CC=\"$CC\" VARIANT=\"$VARIANT\" ./build.sh"
+diff --git a/ci/fedora.sh b/ci/fedora.sh
+index 2d80915..898d614 100755
+--- a/ci/fedora.sh
++++ b/ci/fedora.sh
+@@ -38,7 +38,9 @@ yum -y install \
+ 	sudo \
+ 	vim-common \
+ 	wget \
+-	which
++	which \
++	perl \
++	perl-IPC-Cmd
+ 
+ yum -y install docbook5-style-xsl || true
+ yum -y install swtpm || true
+diff --git a/src/libimaevm.c b/src/libimaevm.c
+index 6591d20..f18c016 100644
+--- a/src/libimaevm.c
++++ b/src/libimaevm.c
+@@ -447,6 +447,16 @@ static int verify_hash_v2(const char *file, const unsigned char *hash, int size,
+ 		return -1;
+ 	}
+ 
++#if defined(EVP_PKEY_SM2) && OPENSSL_VERSION_NUMBER < 0x30000000
++	/* If EC key are used, check whether it is SM2 key */
++	if (EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
++		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
++		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
++		if (curve == NID_sm2)
++			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
++	}
++#endif
++
+ 	st = "EVP_PKEY_CTX_new";
+ 	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
+ 		goto err;
+@@ -861,6 +871,16 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+ 		return -1;
+ 	}
+ 
++#if defined(EVP_PKEY_SM2) && OPENSSL_VERSION_NUMBER < 0x30000000
++	/* If EC key are used, check whether it is SM2 key */
++	if (EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
++		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
++		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
++		if (curve == NID_sm2)
++			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
++	}
++#endif
++
+ 	calc_keyid_v2(&keyid, name, pkey);
+ 	hdr->keyid = keyid;
+ 
+diff --git a/tests/gen-keys.sh b/tests/gen-keys.sh
+index 46130cf..dbc1a0d 100755
+--- a/tests/gen-keys.sh
++++ b/tests/gen-keys.sh
+@@ -112,6 +112,31 @@ for m in \
+     fi
+ done
+ 
++# SM2, If openssl 3.0 is installed, gen SM2 keys using
++if [ -x /opt/openssl3/bin/openssl ]; then
++  (PATH=/opt/openssl3/bin:$PATH LD_LIBRARY_PATH=/opt/openssl3/lib
++  for curve in sm2; do
++    if [ "$1" = clean ] || [ "$1" = force ]; then
++      rm -f test-$curve.cer test-$curve.key test-$curve.pub
++    fi
++    if [ "$1" = clean ]; then
++      continue
++    fi
++    if [ ! -e test-$curve.key ]; then
++      log openssl req -verbose -new -nodes -utf8 -days 10000 -batch -x509 \
++        -sm3 -sigopt "distid:1234567812345678" \
++        -config test-ca.conf \
++        -copy_extensions copyall \
++        -newkey $curve \
++        -out test-$curve.cer -outform DER \
++        -keyout test-$curve.key
++      if [ -s test-$curve.key ]; then
++        log openssl pkey -in test-$curve.key -out test-$curve.pub -pubout
++      fi
++    fi
++  done)
++fi
++
+ # This script leaves test-ca.conf, *.cer, *.pub, *.key files for sing/verify tests.
+ # They are never deleted except by `make distclean'.
+ 
+diff --git a/tests/ima_hash.test b/tests/ima_hash.test
+index 8d66e59..6e0e463 100755
+--- a/tests/ima_hash.test
++++ b/tests/ima_hash.test
+@@ -70,8 +70,7 @@ expect_pass check  sha256     0x0404 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649
+ expect_pass check  sha384     0x0405 38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b
+ expect_pass check  sha512     0x0406 cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e
+ expect_pass check  rmd160     0x0403 9c1185a5c5e9fc54612808977ee8f548b2258d31
+-expect_fail check  sm3        0x01
+-expect_fail check  sm3-256    0x01
++expect_pass check  sm3        0x0411 1ab21d8355cfa17f8e61194831e81a8f22bec8c728fefb747ed035eb5082aa2b
+ _enable_gost_engine
+ expect_pass check  md_gost12_256 0x0412 3f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
+ expect_pass check  streebog256   0x0412 3f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
+diff --git a/tests/install-openssl3.sh b/tests/install-openssl3.sh
+new file mode 100755
+index 0000000..3fd8842
+--- /dev/null
++++ b/tests/install-openssl3.sh
+@@ -0,0 +1,17 @@
++#!/bin/sh
++
++set -ex
++
++# The latest version in July 2021
++wget --no-check-certificate https://github.com/openssl/openssl/archive/refs/tags/openssl-3.0.0-beta1.tar.gz
++tar --no-same-owner -xzf openssl-3.0.0-beta1.tar.gz
++cd openssl-openssl-3.0.0-beta1
++
++./Configure --prefix=/opt/openssl3 --openssldir=/opt/openssl3/ssl
++make -j$(nproc)
++# only install apps and library
++sudo make install_sw
++
++cd ..
++rm -rf openssl-3.0.0-beta1.tar.gz
++rm -rf openssl-openssl-3.0.0-beta1
+diff --git a/tests/sign_verify.test b/tests/sign_verify.test
+index 3d7aa51..3ea551b 100755
+--- a/tests/sign_verify.test
++++ b/tests/sign_verify.test
+@@ -199,6 +199,10 @@ check_sign() {
+   # This is all we can do for evm.
+   [[ "$TYPE" =~ evm ]] && return "$OK"
+ 
++  # When using the SM2/3 algorithm, the openssl tool uses USERID for verify,
++  # which is incompatible with calling API directly, so skip it.
++  [[ "$ALG" == sm3 ]] && return "$OK"
++
+   # Extract signature to a file
+   _extract_xattr "$FILE" "$(_xattr "$TYPE")" "$FILE.sig2" "$PREFIX"
+ 
+@@ -387,6 +391,12 @@ sign_verify  prime256v1 sha256 0x030204:K:004[345678]
+ sign_verify  prime256v1 sha384 0x030205:K:004[345678]
+ sign_verify  prime256v1 sha512 0x030206:K:004[345678]
+ 
++# If openssl 3.0 is installed, test the SM2/3 algorithm combination
++if [ -x /opt/openssl3/bin/openssl ]; then
++  PATH=/opt/openssl3/bin:$PATH LD_LIBRARY_PATH=/opt/openssl3/lib \
++    sign_verify  sm2    sm3    0x030211:K:004[345678]
++fi
++
+ # Test v2 signatures with EC-RDSA
+ _enable_gost_engine
+ sign_verify  gost2012_256-A md_gost12_256 0x030212:K:0040
+-- 
+2.19.1.3.ge56e4f7
+
