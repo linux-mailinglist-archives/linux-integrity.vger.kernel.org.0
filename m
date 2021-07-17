@@ -2,87 +2,77 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEB63CBED2
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Jul 2021 23:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469823CC0A2
+	for <lists+linux-integrity@lfdr.de>; Sat, 17 Jul 2021 03:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236997AbhGPWCG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 16 Jul 2021 18:02:06 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:17740 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236935AbhGPWB7 (ORCPT
+        id S235303AbhGQBvT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 16 Jul 2021 21:51:19 -0400
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:35228 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232090AbhGQBvT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 16 Jul 2021 18:01:59 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GLXkoP167426
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jul 2021 17:59:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=eVM0sggVe4cwBb/p3OkbF9d6TT6BigiKS7T0Uw40DTw=;
- b=f6JunvJ5Cg/QWJhZ5GNlPsEC63JZ4qsTCWG0A6ZR95FjseQ9TM/OBiXCptaPiYxieQr/
- QAzYydAStiVQ7FK7plxxxi+AjyOADd4+dmnBjyFbo/IYcv0cIQzv/cBKdQtNOpCblDzw
- ETQak98hXj6ct4AMCmFDftssu3mP58G76eGZjZYRErFFHINNL5GVbwu/mpyTMwD68wGE
- eahza6J104WmSZVxHSPiMAmYjsKAtpnvZtMzaKB4RMQ4+L6veVxnI1b8xkcwWjH4dEBH
- uHEfF8hJTKOdMmRXcV5jjEuAkTGsl8ZW5Jf9JwFRlxutUlnEcVk6dOTajq7rBedeGvZ/ rA== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39uhxjgmcf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jul 2021 17:59:02 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16GLx0JK007862
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jul 2021 21:59:00 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 39q3689j0g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-integrity@vger.kernel.org>; Fri, 16 Jul 2021 21:59:00 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16GLwvMd21299570
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jul 2021 21:58:57 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 472C1AE04D;
-        Fri, 16 Jul 2021 21:58:57 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A6CBAE045;
-        Fri, 16 Jul 2021 21:58:56 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.55.33])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 16 Jul 2021 21:58:56 +0000 (GMT)
-Message-ID: <dad1c6c6fd8900d890c737d1f1291a5c0941d819.camel@linux.ibm.com>
-Subject: Re: [PATCH] evmctl: Remove left-over check S_ISDIR() for directory
- signing
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Date:   Fri, 16 Jul 2021 17:58:55 -0400
-In-Reply-To: <20210716193300.135084-1-stefanb@linux.ibm.com>
-References: <20210716193300.135084-1-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
+        Fri, 16 Jul 2021 21:51:19 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Ug.jG7a_1626486491;
+Received: from 30.27.231.245(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Ug.jG7a_1626486491)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 17 Jul 2021 09:48:12 +0800
+Subject: Re: [PATCH ima-evm-utils v5] ima-evm-utils: Support SM2/3 algorithm
+ for sign and verify
+To:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>,
+        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
+References: <20210716092237.17153-1-tianjia.zhang@linux.alibaba.com>
+ <f7c05b2618125cb0887ee0302c1197a8c8f49864.camel@linux.ibm.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <7921ca60-8818-b641-3e28-6ffd957f8a1b@linux.alibaba.com>
+Date:   Sat, 17 Jul 2021 09:48:10 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
+MIME-Version: 1.0
+In-Reply-To: <f7c05b2618125cb0887ee0302c1197a8c8f49864.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5nu1POFkmeWu6LgjbBFhStHaOSO4PmIb
-X-Proofpoint-GUID: 5nu1POFkmeWu6LgjbBFhStHaOSO4PmIb
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-16_10:2021-07-16,2021-07-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- adultscore=0 suspectscore=0 mlxscore=0 phishscore=0 clxscore=1015
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107160136
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2021-07-16 at 15:33 -0400, Stefan Berger wrote:
-> Since we are not signing directory entries, remove the left-over check
-> with S_ISDIR().
+Hi Mimi,
+
+On 7/17/21 12:39 AM, Mimi Zohar wrote:
+> Hi Tianjia,
 > 
-> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> On Fri, 2021-07-16 at 17:22 +0800, Tianjia Zhang wrote:
+>> diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+>> index 088c041..17407ff 100644
+>> --- a/.github/workflows/ci.yml
+>> +++ b/.github/workflows/ci.yml
+>> @@ -17,6 +17,7 @@ jobs:
+>>                 ARCH: i386
+>>                 TSS: tpm2-tss
+>>                 VARIANT: i386
+>> +              OPENSSL3: true
+>>   
+>>             # cross compilation builds
+>>             - container: "debian:stable"
+>> @@ -51,6 +52,7 @@ jobs:
+>>               env:
+>>                 CC: clang
+>>                 TSS: ibmtss
+>> +              OPENSSL3: true
+> 
+> I haven't had a chance to look at the entire patch, but defining
+> OPENSSL3 kind of stood out.  Just as "CC" and "TSS" are generic, I'd
+> prefer something more generic here.   In the past there was a request
+> to support Libressl, which never materialized.
+> 
 
-Thanks, applied to next-integrity.
+I agree that it is appropriate to use a generic variable name. I am 
+thinking of 'CRYPTOGRAPHY' or 'CRYPPTO_LIBRARY'. Are there any better 
+suggestions?
 
-Mimi
-
+Best regards,
+Tianjia
