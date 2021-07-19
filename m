@@ -2,110 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1B63CC94F
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Jul 2021 15:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB4D3CCDE2
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Jul 2021 08:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233665AbhGRNXG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 18 Jul 2021 09:23:06 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:33716 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbhGRNXG (ORCPT
+        id S234492AbhGSG37 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Jul 2021 02:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234425AbhGSG36 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 18 Jul 2021 09:23:06 -0400
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 95473220E7;
-        Sun, 18 Jul 2021 13:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1626614407;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ai3s7IDK1deNKqu8yK/lPXHb/YiSx+uXQSI0Ype86JU=;
-        b=oMXcdP/Qla7ScLm4aF+AABfm/UUoAguZfz5OpW9GNj37iW4HKW7E2eDAxCeugsOZAOaX6Z
-        Vor5KRLMnovAuwuyNl3zM4hx1Fqw2N4DCkYV5HRp+2ZR/qGccPBvuIK5LRvI1KPmrafDLd
-        qcg2rruSoDndAXBZ5k+AQZGHPKFFd7Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1626614407;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ai3s7IDK1deNKqu8yK/lPXHb/YiSx+uXQSI0Ype86JU=;
-        b=af1nZTyfJnghCgmo5FaoqLu8P+wwVs7SpvFqvR/HyqoM/erGhci+U9+8pgDB7uVmQ5S7kc
-        Q6OIvvxprXuG04Ag==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 401431332A;
-        Sun, 18 Jul 2021 13:20:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id nt0cDYcq9GBPRAAAGKfGzw
-        (envelope-from <pvorel@suse.cz>); Sun, 18 Jul 2021 13:20:07 +0000
-Date:   Sun, 18 Jul 2021 15:20:05 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>,
-        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
-Subject: Re: [PATCH ima-evm-utils v5] ima-evm-utils: Support SM2/3 algorithm
- for sign and verify
-Message-ID: <YPQqhTPLTafjLCXP@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20210716092237.17153-1-tianjia.zhang@linux.alibaba.com>
- <f7c05b2618125cb0887ee0302c1197a8c8f49864.camel@linux.ibm.com>
- <7921ca60-8818-b641-3e28-6ffd957f8a1b@linux.alibaba.com>
+        Mon, 19 Jul 2021 02:29:58 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434A6C061762
+        for <linux-integrity@vger.kernel.org>; Sun, 18 Jul 2021 23:26:58 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id u13so28278786lfs.11
+        for <linux-integrity@vger.kernel.org>; Sun, 18 Jul 2021 23:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3lPCqQljJf2IbScxAFf1031HOfRkixI8y+inmwaEQLU=;
+        b=z2jvnSeXzDI9LPibiAzjKQbSIyzToX8RVGLxm1q6JUMlUH1kl0pL+3wgTp6oW882g1
+         xyogIuA7XaCw1fRG5z7RhOMgH7biVV5AJlOQdCUiWu3H+tGYqv9Tt7WoqluESFL1MZMM
+         OHBSr0ZQ02dme41z/gRxG57q+hi8wfHMVnKtqMsq3xhqnqG/s2gfePY6gNoS7TLPCo6k
+         tke5hJgz9GFURVOKSr8GxysmbIi3gC/Mv9BHcGYzVkYS5BQUlGSei4TOQO5jBnXilObb
+         DdjvuG4IVAo/JDgW2wnUXhK6joE88nG97kREx8s15jqnx1MJVFWv4ljjNeTnvwnZfN6v
+         zioQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3lPCqQljJf2IbScxAFf1031HOfRkixI8y+inmwaEQLU=;
+        b=NhUyjpdKxocb9Ss8V4BW8VkRsRfnbTUHx7uqeC8qPa23SaHv9VeA/E93I65Nskaynr
+         GFYpTim8FMgjsTR5Ai8Z3mYMymwv9dMKXvFAAVs9f5XYXUgCP2kj2C4HwgL5r3fB1Fcf
+         n3MzPJqajO52gTAXWK1cPU6PM1Q6EvDytUhhRhWIZB6HMGk7q6ttIke1JJOgunmKtWvJ
+         oQ1LCJnXW++2qWRjGVySRTytS25BcfgS/GpwNRN1dX7uWElH3k1lAqw0fhNcci2/hkUX
+         8m/3AIH/xKJ8y+f4jXntXTuR0WLMQ49LdTiogVhLPggaYApnw4SVWa9ny65BHrqEf9Cp
+         nx7Q==
+X-Gm-Message-State: AOAM5301CiFjvUQZ6r0jU/lwGFtdiFIvzhK1q61qfOuZRaTQXcoeA1Bn
+        HKqTICN5aogEF0h2mU6lZ6bgjaeOt8Gym/nqVDuvSJ6XcxCpyA==
+X-Google-Smtp-Source: ABdhPJwcVB5VSPOP+/OH08BW5Jay0hN57oGFKlGhOhwsFjFhAJ5AjL1LvhtxB4k5IkyqvZfHbetmuyk5aibT9lfPDQ0=
+X-Received: by 2002:a19:c757:: with SMTP id x84mr17381730lff.302.1626676016627;
+ Sun, 18 Jul 2021 23:26:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7921ca60-8818-b641-3e28-6ffd957f8a1b@linux.alibaba.com>
+References: <20210716081722.4130161-1-andreas@rammhold.de>
+In-Reply-To: <20210716081722.4130161-1-andreas@rammhold.de>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 19 Jul 2021 11:56:45 +0530
+Message-ID: <CAFA6WYNu+XxESXKLUQ8k3TDY18n1Y-R7m9=iTp-BerU69wLWdg@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: trusted: Fix trusted key backends when building as module
+To:     Andreas Rammhold <andreas@rammhold.de>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi all,
+On Fri, 16 Jul 2021 at 13:54, Andreas Rammhold <andreas@rammhold.de> wrote:
+>
+> Before this commit the kernel could end up with no trusted key sources
+> even thought both of the currently supported backends (tpm & tee) were
 
-> Hi Mimi,
+s/thought/though/
 
-> On 7/17/21 12:39 AM, Mimi Zohar wrote:
-> > Hi Tianjia,
+> compoiled as modules. This manifested in the trusted key type not being
 
-> > On Fri, 2021-07-16 at 17:22 +0800, Tianjia Zhang wrote:
-> > > diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
-> > > index 088c041..17407ff 100644
-> > > --- a/.github/workflows/ci.yml
-> > > +++ b/.github/workflows/ci.yml
-> > > @@ -17,6 +17,7 @@ jobs:
-> > >                 ARCH: i386
-> > >                 TSS: tpm2-tss
-> > >                 VARIANT: i386
-> > > +              OPENSSL3: true
-> > >             # cross compilation builds
-> > >             - container: "debian:stable"
-> > > @@ -51,6 +52,7 @@ jobs:
-> > >               env:
-> > >                 CC: clang
-> > >                 TSS: ibmtss
-> > > +              OPENSSL3: true
+s/compoiled/compiled/
 
-> > I haven't had a chance to look at the entire patch, but defining
-> > OPENSSL3 kind of stood out.  Just as "CC" and "TSS" are generic, I'd
-> > prefer something more generic here.   In the past there was a request
-> > to support Libressl, which never materialized.
+> registered at all.
+>
+> When checking if a CONFIG_=E2=80=A6 preprocessor variable is defined we o=
+nly
+> test for the builtin (=3Dy) case and not the module (=3Dm) case. By using
+> the IS_ENABLE(=E2=80=A6) macro we to test for both cases.
+>
 
+s/to/do/
 
-> I agree that it is appropriate to use a generic variable name. I am thinking
-> of 'CRYPTOGRAPHY' or 'CRYPPTO_LIBRARY'. Are there any better suggestions?
-How about COMPILE_OPENSSL? Because that's the current purpose.
+> Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+> ---
+>  security/keys/trusted-keys/trusted_core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
 
-Kind regards,
-Petr
+Apart from minor nits above, add a corresponding fixes tag. With that:
 
-> Best regards,
-> Tianjia
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+
+-Sumit
+
+> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/tr=
+usted-keys/trusted_core.c
+> index d5c891d8d353..fd640614b168 100644
+> --- a/security/keys/trusted-keys/trusted_core.c
+> +++ b/security/keys/trusted-keys/trusted_core.c
+> @@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp,=
+ 0);
+>  MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+>
+>  static const struct trusted_key_source trusted_key_sources[] =3D {
+> -#if defined(CONFIG_TCG_TPM)
+> +#if IS_ENABLED(CONFIG_TCG_TPM)
+>         { "tpm", &trusted_key_tpm_ops },
+>  #endif
+> -#if defined(CONFIG_TEE)
+> +#if IS_ENABLED(CONFIG_TEE)
+>         { "tee", &trusted_key_tee_ops },
+>  #endif
+>  };
+> --
+> 2.32.0
+>
