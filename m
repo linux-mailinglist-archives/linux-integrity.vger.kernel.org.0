@@ -2,143 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0836F3CD0C5
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Jul 2021 11:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BAB3CD042
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Jul 2021 11:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235530AbhGSIrW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Jul 2021 04:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
+        id S235676AbhGSIc7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Jul 2021 04:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235578AbhGSIrF (ORCPT
+        with ESMTP id S235150AbhGSIc6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Jul 2021 04:47:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551B9C061767
-        for <linux-integrity@vger.kernel.org>; Mon, 19 Jul 2021 01:29:00 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1m5PHJ-0006Ck-GR; Mon, 19 Jul 2021 11:09:33 +0200
-Subject: Re: [PATCH v2 1/6] KEYS: trusted: allow use of TEE as backend without
- TCG_TPM support
-To:     Sumit Garg <sumit.garg@linaro.org>
+        Mon, 19 Jul 2021 04:32:58 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A62C061767
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Jul 2021 01:14:42 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id r11so21090350wro.9
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Jul 2021 02:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rammhold-de.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=GeYs5mUjYDt0F2pt9uFHOrxKHtsEsE7bcDIp+B4aHvo=;
+        b=bhk6S9NOUkSPKEjpHWFtoWIrtMtNdrMDrY5331MwknZwHcBc/vMseahQRkTCnlR9A2
+         6EKlOTD94+BUjmtwWwufy845nmzbvkGyuoJ6R5OL7MizcQXw4FwX282tzMZBmYl1+zU6
+         jBfoOBB4/QBA7a2XetktBSzCym1/4KiHpdkG6+gbCCnQ3GeJ8+3rWey5LWuhUZQdZLp0
+         tZ5NamtSPFmX+ROipJX5O2h5Nq5iZEAEUtC+OyeEvwRnVqtd1Mz0HrAhJ88f54T4x8X8
+         R0ostqChH3EE4MFoUylTYQUf00mCBjbG+mmlsas0blGJu2KCLyHiTHlHGa/a6HbY/jh4
+         RwVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GeYs5mUjYDt0F2pt9uFHOrxKHtsEsE7bcDIp+B4aHvo=;
+        b=HzleZhD33NdiGMDwGyCUuJ8AmyXAkh4fQSA8rE5mj7u+R9V/sPTw69HMBaLUGtCu8z
+         sGOtmjB6eSRK+iFb8bSb+bi/tp4ctaXWhLKp6P42uoRhmGNIiK4MnZDIMjuWReQztYCg
+         qNru3ZL0gDpi3VURSKgr3RZvcLJZbXOiiFqf4sEVzZKWprsk2Bl7pdx4sMz6SdGFGmSv
+         4YDAbOFMmHcYLyjAAqDPllPderKE4OnfnqCwfMzRe5EJ7OqGwiKhHhdn/lvPBRisYSJ6
+         jC29FGH2SYtCcJDT86mOywXFCxZpY8mH0SO68pcppFjt2jfrLeIt+ZF70+gfz1QopZ04
+         a9oQ==
+X-Gm-Message-State: AOAM531kF4lX9m6Gx77bvg7a3EEzjGO8/Tskcw1iOtx7OIRjTCpTdayC
+        /A/rLWD6OxxzjQAmlLSlGe/fdw==
+X-Google-Smtp-Source: ABdhPJzMCiKr5hj44zPyPDDx5BtCn4p8iU7luZUs62uKGnRmZidwZz3cAr2zupNUfWNosVeWl1wRwQ==
+X-Received: by 2002:a5d:464b:: with SMTP id j11mr28745704wrs.356.1626686016925;
+        Mon, 19 Jul 2021 02:13:36 -0700 (PDT)
+Received: from localhost ([2a00:e67:1fd:a:4af1:ba6e:49d3:2e89])
+        by smtp.gmail.com with ESMTPSA id r18sm19820621wrt.96.2021.07.19.02.13.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jul 2021 02:13:36 -0700 (PDT)
+Date:   Mon, 19 Jul 2021 11:13:35 +0200
+From:   andreas@rammhold.de
+To:     Sumit Garg <sumit.garg@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
 Cc:     James Bottomley <jejb@linux.ibm.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
         David Howells <dhowells@redhat.com>,
-        kernel <kernel@pengutronix.de>, James Morris <jmorris@namei.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
         linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
         "open list:SECURITY SUBSYSTEM" 
         <linux-security-module@vger.kernel.org>,
-        Andreas Rammhold <andreas@rammhold.de>
-References: <cover.1dfbb73645d917b3c76d01290804a3410bd9932e.1624364386.git-series.a.fatoum@pengutronix.de>
- <f8285eb0135ba30c9d846cf9dd395d1f5f8b1efc.1624364386.git-series.a.fatoum@pengutronix.de>
- <CAFA6WYMJp5u_+3bNc0ykFzveakOS4nqJfPvSoaFGQApFctL47A@mail.gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <6003f9a3-1588-c317-4eeb-889d8e6c40e3@pengutronix.de>
-Date:   Mon, 19 Jul 2021 11:09:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [PATCH] KEYS: trusted: Fix trusted key backends when building as
+ module
+Message-ID: <20210719091335.vwfebcpkf4pag3wm@wrt>
+References: <20210716081722.4130161-1-andreas@rammhold.de>
+ <0a684d56-66d0-184e-4853-9faafa2d243d@pengutronix.de>
+ <CAFA6WYNC2xasX4uKmgcK+ZmA4HUh5PhCci+e12VFWPfF0b0eWQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAFA6WYMJp5u_+3bNc0ykFzveakOS4nqJfPvSoaFGQApFctL47A@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFA6WYNC2xasX4uKmgcK+ZmA4HUh5PhCci+e12VFWPfF0b0eWQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Sumit,
-
-On 19.07.21 10:04, Sumit Garg wrote:
-> Hi Ahmad,
+On 13:36 19.07.21, Sumit Garg wrote:
+> On Mon, 19 Jul 2021 at 12:40, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+> >
+> > Hello Andreas,
+> >
+> > On 16.07.21 10:17, Andreas Rammhold wrote:
+> > > Before this commit the kernel could end up with no trusted key sources
+> > > even thought both of the currently supported backends (tpm & tee) were
+> > > compoiled as modules. This manifested in the trusted key type not being
+> > > registered at all.
+> >
+> > I assume (TPM) trusted key module use worked before the TEE rework? If so,
+> >
+> > an appropriate Fixes: Tag would then be in order.
+> >
+> > > When checking if a CONFIG_… preprocessor variable is defined we only
+> > > test for the builtin (=y) case and not the module (=m) case. By using
+> > > the IS_ENABLE(…) macro we to test for both cases.
+> >
+> > It looks to me like you could now provoke a link error if TEE is a module
+> > and built-in trusted key core tries to link against trusted_key_tee_ops.
+> >
 > 
-> On Tue, 22 Jun 2021 at 18:08, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->>
->> With recent rework, trusted keys are no longer limited to TPM as trust
->> source. The Kconfig symbol is unchanged however leading to a few issues:
->>
->>  - TCG_TPM is required, even if only TEE is to be used
->>  - Enabling TCG_TPM, but excluding it from available trusted sources
->>    is not possible
->>  - TEE=m && TRUSTED_KEYS=y will lead to TEE support being silently
->>    dropped, which is not the best user experience
->>
->> Remedy these issues by introducing two new Kconfig symbols:
->> TRUSTED_KEYS_TPM and TRUSTED_KEYS_TEE with the appropriate
->> dependencies.
->>
+> That's true.
 > 
-> This should include a fixes tag to the rework commit.
-
-Yes. I wasn't aware of the regression that Andreas (CC'd) recently
-reported. Knowing, it now indeed warrants a backport. Will add in v2.
-
->> diff --git a/security/keys/Kconfig b/security/keys/Kconfig
->> index 64b81abd087e..6fdb953b319f 100644
->> --- a/security/keys/Kconfig
->> +++ b/security/keys/Kconfig
->> @@ -70,23 +70,23 @@ config BIG_KEYS
->>
->>  config TRUSTED_KEYS
->>         tristate "TRUSTED KEYS"
->> -       depends on KEYS && TCG_TPM
->> +       depends on KEYS
+> > One solution for that IS_REACHABLE(). Another is to address the root cause,
+> > which is the inflexible trusted keys Kconfig description:
+> >
+> > - Trusted keys despite TEE support can still only be built when TCG_TPM is enabled
+> > - There is no support to have TEE or TPM enabled without using those for
+> >   enabled trusted keys as well
+> > - As you noticed, module build of the backend has issues
+> >
+> > I addressed these three issues in a patch[1], a month ago, but have yet to
+> > receive feedback.
 > 
->>         select CRYPTO
->>         select CRYPTO_HMAC
->>         select CRYPTO_SHA1
->>         select CRYPTO_HASH_INFO
-> 
-> Should move these as well to TRUSTED_KEYS_TPM as the core code doesn't
-> mandate their need.
+> That's an oversight on my part since this patch was part of the new
+> CAAM trust source patch-set. Although I do admit that it was on my
+> TODO list. So I have provided some feedback on that patch. Can you
+> post the next version as an independent fix patch?
 
-Ok, will test and change appropriately.
+Thank you both for the feedback. In light of thes feedback and the
+patchset that Ahmad posted I'll not address the issue and not send a v2
+of this.
 
-> 
->> -       select ASN1_ENCODER
->> -       select OID_REGISTRY
->> -       select ASN1
+I'll try to squeeze in some time to test the other patch and provide
+feedback.
 
->>  $(obj)/trusted_tpm2.o: $(obj)/tpm2key.asn1.h
->> -trusted-y += trusted_tpm2.o
->> -trusted-y += tpm2key.asn1.o
->> +trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm2.o
->> +trusted-$(CONFIG_TRUSTED_KEYS_TPM) += tpm2key.asn1.o
->> +
->> +trusted-$(CONFIG_TRUSTED_KEYS_TEE) += trusted_tee.o
->>
->>  trusted-$(CONFIG_TEE) += trusted_tee.o
-> 
-> This should be dropped.
-
-Right..
-
-Thanks for the review. I'll isolate this patch for v2.
-
-Cheers,
-Ahmad
-
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Andi
