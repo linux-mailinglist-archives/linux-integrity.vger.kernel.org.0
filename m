@@ -2,131 +2,160 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3311F3CD51B
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Jul 2021 14:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A299C3CD5C8
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Jul 2021 15:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbhGSMKl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Jul 2021 08:10:41 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8888 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231282AbhGSMKk (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Jul 2021 08:10:40 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16JCYQ9n037487;
-        Mon, 19 Jul 2021 08:51:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=tfE8wmSDPQ9K9riQZVWaO/TgxQUQS8wGGK2q5yCAWBY=;
- b=D7lTv/TAtdvv6KJZ/Qfa7ohgPox/yz0T5hXjnpIyL8o3nnIzBU8cZi7efKbkY8QNxxZp
- FdbuKBGrvRv3KDG920vyMqjPv1M8C9SsgKburSTi7kPVwxn4Edp0FPTOg/2gTT74uoGB
- mq/bFNrLFuBLGAkpn3d5JhyI/Jnunw+tPQi0MGTDR3huBKcK2U/Xo8SQcGXaK9AqmOde
- IV91WtCC9NvPMBJKvjY5GuLVuqY1uv9mVU6xN7DHscsIl93a5OdSMqmDmU+2+GeHGibT
- Ckh+6ylbyo4e4m+41bMo2WaTTBVOyvencUUzy2EEQqTM8dztrBV+q6y7admqh/2xkkt8 1g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39w97v92hm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jul 2021 08:51:16 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16JCZCwb041057;
-        Mon, 19 Jul 2021 08:51:15 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39w97v92gv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jul 2021 08:51:15 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16JCilgF012748;
-        Mon, 19 Jul 2021 12:51:13 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 39upu88qa8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jul 2021 12:51:13 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16JCmqGr19726698
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Jul 2021 12:48:52 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D9BD952051;
-        Mon, 19 Jul 2021 12:51:10 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.28.163])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 4BAE95204F;
-        Mon, 19 Jul 2021 12:51:09 +0000 (GMT)
-Message-ID: <1aa1a53101d9eeb6c358bb65677a8b733c19e663.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v5] ima-evm-utils: Support SM2/3 algorithm
- for sign and verify
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <pvorel@suse.cz>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Vitaly Chikunov <vt@altlinux.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>,
-        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
-Date:   Mon, 19 Jul 2021 08:51:08 -0400
-In-Reply-To: <YPQqhTPLTafjLCXP@pevik>
-References: <20210716092237.17153-1-tianjia.zhang@linux.alibaba.com>
-         <f7c05b2618125cb0887ee0302c1197a8c8f49864.camel@linux.ibm.com>
-         <7921ca60-8818-b641-3e28-6ffd957f8a1b@linux.alibaba.com>
-         <YPQqhTPLTafjLCXP@pevik>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -BEDXqgBxzLc2B1assKUfpAky0kKal1K
-X-Proofpoint-ORIG-GUID: wqHy0sdILRDJocCD7B6SdtHxTcbEJats
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-19_05:2021-07-19,2021-07-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 impostorscore=0 clxscore=1015 mlxscore=0
- suspectscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107190072
+        id S238936AbhGSMzZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Jul 2021 08:55:25 -0400
+Received: from smtp1.axis.com ([195.60.68.17]:51429 "EHLO smtp1.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238910AbhGSMzZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 19 Jul 2021 08:55:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1626701765;
+  x=1658237765;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rG79cmaur5aZ2uT+KGBQlc1kQUYbY7EHtaaEJwD1afE=;
+  b=Fz/kwcYY00mcIqLrVq5yL14NszIC8uRGLZnZ4QyCGQMQqVbQYA+BLt2Y
+   hzDNuJI+lMJWwcyRGKFEfyYlLIJ8WZxOuVSO6+Gnpm24+E/o8vSGorzFk
+   wCwIOgW6bfX1HdRSWA6GTQThpq0jSEUn1kei03k9WvXVf1ZnU6qGk4pwt
+   A+wioB/JEMjuicb1mdNKRmVXKD2XUngyRjEidQRbeH4jKRVKM6/plWkA5
+   EkKg9blimR488NrMXAw9zlrjZx7I6F5u6evh1oxYplDhpHQglY10MKgI4
+   vMp6aXqPs9eMKj0gJeGRefVy3kNJAyr2shXBTtBeJgRxEDm8O7DbTUFrJ
+   A==;
+From:   Borys Movchan <borysmn@axis.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+CC:     <kernel@axis.com>, Borys Movchan <borysmn@axis.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] tpm: Add Upgrade/Reduced mode support for TPM2 modules
+Date:   Mon, 19 Jul 2021 15:37:17 +0200
+Message-ID: <20210719133717.18797-1-borysmn@axis.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail03w.axis.com (10.20.40.9) To XBOX07.axis.com
+ (10.0.15.177)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi - 
+On some systems, especially embedded, TPM might start in
+Upgrade/Reduced mode due to the previous failure of a firmware
+upgrade process. Allow the TPM driver to handle such situations
+properly. Enables a possibility for userspace application to
+finalize TPM upgrade or recovery if required.
 
-On Sun, 2021-07-18 at 15:20 +0200, Petr Vorel wrote:
-> > On 7/17/21 12:39 AM, Mimi Zohar wrote:
-> > > On Fri, 2021-07-16 at 17:22 +0800, Tianjia Zhang wrote:
-> > > > diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
-> > > > index 088c041..17407ff 100644
-> > > > --- a/.github/workflows/ci.yml
-> > > > +++ b/.github/workflows/ci.yml
-> > > > @@ -17,6 +17,7 @@ jobs:
-> > > >                 ARCH: i386
-> > > >                 TSS: tpm2-tss
-> > > >                 VARIANT: i386
-> > > > +              OPENSSL3: true
-> > > >             # cross compilation builds
-> > > >             - container: "debian:stable"
-> > > > @@ -51,6 +52,7 @@ jobs:
-> > > >               env:
-> > > >                 CC: clang
-> > > >                 TSS: ibmtss
-> > > > +              OPENSSL3: true
-> 
-> > > I haven't had a chance to look at the entire patch, but defining
-> > > OPENSSL3 kind of stood out.  Just as "CC" and "TSS" are generic, I'd
-> > > prefer something more generic here.   In the past there was a request
-> > > to support Libressl, which never materialized.
-> 
-> 
-> > I agree that it is appropriate to use a generic variable name. I am thinking
-> > of 'CRYPTOGRAPHY' or 'CRYPPTO_LIBRARY'. Are there any better suggestions?
-> How about COMPILE_OPENSSL? Because that's the current purpose.
+Signed-off-by: Borys Movchan <borysmn@axis.com>
+---
+ drivers/char/tpm/tpm-chip.c | 23 +++++++++++++++--------
+ drivers/char/tpm/tpm2-cmd.c | 12 ++++++++++--
+ include/linux/tpm.h         |  1 +
+ 3 files changed, 26 insertions(+), 10 deletions(-)
 
-Hm, wondering if it makes sense to generalize this further, including
-Vitaly's suggestion?
-
-In this case, the generic name would be "SSL"  (e.g. "SSL=openssl"). 
-Prefixing a generic name with "COMPILE_[TSS|CC|SSL]=<tag|commit>" would
-indicate compiling the application from source.
-
-thanks,
-
-Mimi
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index ddaeceb7e109..ff2367c447fb 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -574,20 +574,25 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
+ int tpm_chip_register(struct tpm_chip *chip)
+ {
+ 	int rc;
++	bool limited_mode = false;
+ 
+ 	rc = tpm_chip_start(chip);
+ 	if (rc)
+ 		return rc;
+ 	rc = tpm_auto_startup(chip);
+-	if (rc) {
++	if (rc == -EIO) {
++		limited_mode = true;
++	} else if (rc) {
+ 		tpm_chip_stop(chip);
+ 		return rc;
+ 	}
+ 
+-	rc = tpm_get_pcr_allocation(chip);
+-	tpm_chip_stop(chip);
+-	if (rc)
+-		return rc;
++	if (!limited_mode) {
++		rc = tpm_get_pcr_allocation(chip);
++		tpm_chip_stop(chip);
++		if (rc)
++			return rc;
++	}
+ 
+ 	tpm_sysfs_add_device(chip);
+ 
+@@ -595,9 +600,11 @@ int tpm_chip_register(struct tpm_chip *chip)
+ 
+ 	tpm_add_ppi(chip);
+ 
+-	rc = tpm_add_hwrng(chip);
+-	if (rc)
+-		goto out_ppi;
++	if (!limited_mode) {
++		rc = tpm_add_hwrng(chip);
++		if (rc)
++			goto out_ppi;
++	}
+ 
+ 	rc = tpm_add_char_device(chip);
+ 	if (rc)
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index a25815a6f625..7468353ed67d 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -718,7 +718,8 @@ static int tpm2_startup(struct tpm_chip *chip)
+  *                     sequence
+  * @chip: TPM chip to use
+  *
+- * Returns 0 on success, < 0 in case of fatal error.
++ * Returns 0 on success, -ENODEV in case of fatal error,
++ *	    -EIO in case of Reduced/Upgrade mode
+  */
+ int tpm2_auto_startup(struct tpm_chip *chip)
+ {
+@@ -729,7 +730,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+ 		goto out;
+ 
+ 	rc = tpm2_do_selftest(chip);
+-	if (rc && rc != TPM2_RC_INITIALIZE)
++	if (rc == TPM2_RC_UPGRADE) {
++		rc = -EIO;
++		goto out;
++	} else if (rc && rc != TPM2_RC_INITIALIZE)
+ 		goto out;
+ 
+ 	if (rc == TPM2_RC_INITIALIZE) {
+@@ -743,6 +747,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+ 	}
+ 
+ 	rc = tpm2_get_cc_attrs_tbl(chip);
++	if (rc) { /* Succeeded until here, but failed -> reduced mode */
++		rc = -EIO;
++		goto out;
++	}
+ 
+ out:
+ 	if (rc > 0)
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index aa11fe323c56..e873c42907f0 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -207,6 +207,7 @@ enum tpm2_return_codes {
+ 	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
+ 	TPM2_RC_FAILURE		= 0x0101,
+ 	TPM2_RC_DISABLED	= 0x0120,
++	TPM2_RC_UPGRADE		= 0x012D,
+ 	TPM2_RC_COMMAND_CODE    = 0x0143,
+ 	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
+ 	TPM2_RC_REFERENCE_H0	= 0x0910,
+-- 
+2.20.1
 
