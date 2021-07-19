@@ -2,130 +2,168 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BAB3CD042
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Jul 2021 11:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0649D3CD2C4
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Jul 2021 12:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235676AbhGSIc7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Jul 2021 04:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S236501AbhGSKJY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 19 Jul 2021 06:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235150AbhGSIc6 (ORCPT
+        with ESMTP id S236330AbhGSKJX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Jul 2021 04:32:58 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A62C061767
-        for <linux-integrity@vger.kernel.org>; Mon, 19 Jul 2021 01:14:42 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id r11so21090350wro.9
-        for <linux-integrity@vger.kernel.org>; Mon, 19 Jul 2021 02:13:38 -0700 (PDT)
+        Mon, 19 Jul 2021 06:09:23 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76F5C061762
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Jul 2021 02:58:08 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id l7so21439378wrv.7
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Jul 2021 03:50:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rammhold-de.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=GeYs5mUjYDt0F2pt9uFHOrxKHtsEsE7bcDIp+B4aHvo=;
-        b=bhk6S9NOUkSPKEjpHWFtoWIrtMtNdrMDrY5331MwknZwHcBc/vMseahQRkTCnlR9A2
-         6EKlOTD94+BUjmtwWwufy845nmzbvkGyuoJ6R5OL7MizcQXw4FwX282tzMZBmYl1+zU6
-         jBfoOBB4/QBA7a2XetktBSzCym1/4KiHpdkG6+gbCCnQ3GeJ8+3rWey5LWuhUZQdZLp0
-         tZ5NamtSPFmX+ROipJX5O2h5Nq5iZEAEUtC+OyeEvwRnVqtd1Mz0HrAhJ88f54T4x8X8
-         R0ostqChH3EE4MFoUylTYQUf00mCBjbG+mmlsas0blGJu2KCLyHiTHlHGa/a6HbY/jh4
-         RwVg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=izuO6gvI65i5N9voqwWRAxIjJnPgY0dtLzVTkR8nBPo=;
+        b=k6FvzoDAJSW94zB39kfmFHDISI3yFTMUzn1gC61Vx6eoZyCD6lYdg1wA9VAdTUifZT
+         CaTyfzOWFktyxbYqVOfyWBbqdlSR+JtngddRYbSNz2/nMqfNEY0my6w93kOIwwTrt3UY
+         /trq4vQrsfCpKxbM9uTjxbp5UpdgKPdg2pBENE1o2WfluC0kfHVKlrdMZKHtxpC46B8+
+         C8IQKJL5iQIL8V/jdUf+bRjXSZs0n+C1W2iBe/byxnB/MzDJwTlU/rWJR+jqOZ0AU7yv
+         nyaUrtXPCPcr3JYHaxkSZKrLUBwWVqRrnNhxJAuOBgehnCcKVu4jfuZAoJ6NZHmP7aO0
+         2P+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GeYs5mUjYDt0F2pt9uFHOrxKHtsEsE7bcDIp+B4aHvo=;
-        b=HzleZhD33NdiGMDwGyCUuJ8AmyXAkh4fQSA8rE5mj7u+R9V/sPTw69HMBaLUGtCu8z
-         sGOtmjB6eSRK+iFb8bSb+bi/tp4ctaXWhLKp6P42uoRhmGNIiK4MnZDIMjuWReQztYCg
-         qNru3ZL0gDpi3VURSKgr3RZvcLJZbXOiiFqf4sEVzZKWprsk2Bl7pdx4sMz6SdGFGmSv
-         4YDAbOFMmHcYLyjAAqDPllPderKE4OnfnqCwfMzRe5EJ7OqGwiKhHhdn/lvPBRisYSJ6
-         jC29FGH2SYtCcJDT86mOywXFCxZpY8mH0SO68pcppFjt2jfrLeIt+ZF70+gfz1QopZ04
-         a9oQ==
-X-Gm-Message-State: AOAM531kF4lX9m6Gx77bvg7a3EEzjGO8/Tskcw1iOtx7OIRjTCpTdayC
-        /A/rLWD6OxxzjQAmlLSlGe/fdw==
-X-Google-Smtp-Source: ABdhPJzMCiKr5hj44zPyPDDx5BtCn4p8iU7luZUs62uKGnRmZidwZz3cAr2zupNUfWNosVeWl1wRwQ==
-X-Received: by 2002:a5d:464b:: with SMTP id j11mr28745704wrs.356.1626686016925;
-        Mon, 19 Jul 2021 02:13:36 -0700 (PDT)
-Received: from localhost ([2a00:e67:1fd:a:4af1:ba6e:49d3:2e89])
-        by smtp.gmail.com with ESMTPSA id r18sm19820621wrt.96.2021.07.19.02.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jul 2021 02:13:36 -0700 (PDT)
-Date:   Mon, 19 Jul 2021 11:13:35 +0200
-From:   andreas@rammhold.de
-To:     Sumit Garg <sumit.garg@linaro.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH] KEYS: trusted: Fix trusted key backends when building as
- module
-Message-ID: <20210719091335.vwfebcpkf4pag3wm@wrt>
-References: <20210716081722.4130161-1-andreas@rammhold.de>
- <0a684d56-66d0-184e-4853-9faafa2d243d@pengutronix.de>
- <CAFA6WYNC2xasX4uKmgcK+ZmA4HUh5PhCci+e12VFWPfF0b0eWQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=izuO6gvI65i5N9voqwWRAxIjJnPgY0dtLzVTkR8nBPo=;
+        b=ArQQ+EsUCm6ExbuSqDG34JbNpdRc9f8lufeDZTX9l/pSSxfppA+6D5hSS1zsEcnRly
+         l+CIP4nmfrcpIeHWLns7izq0rWKHOSqUk+mIR4a74i1d0XpBw8jylFDB1mI+MhPfsb4b
+         +oFEfxBW6bDlaNUDc8xitQ7dhgRLTLmA+wUBT66N2mTDtGsygOrH8ywFs6PX9DkzCgaz
+         3RitGMgQnHO4LSk4cIo+zAUFWAdP7QzMqR9WRBdVCbp1izCA/9lIC1dBiECkQKvHrCmk
+         lx5zLqiCUKoqanXlbcx+hK8Lhr9dQhJYiyRZBdjWdqhSd/iOE/ngMf6cUjVHVBi80IBr
+         7rpw==
+X-Gm-Message-State: AOAM533QCsQmI9TR0t7oLJaM9D1r5wWQzuj7VlwjOBJ8vlKLEEltZ1Jk
+        p8QLzxHXwwAkOYz3MX72LRPBbPMUWii7o1WhR9VSKQ==
+X-Google-Smtp-Source: ABdhPJzUf1fsMNWHyhn42FHVh+pZyHssv36+V+/tCuvZ0KcZxOo+8M2I8EX37UE2nFduQe5u0Lrwyhm610xT5QNXuiw=
+X-Received: by 2002:a5d:6da9:: with SMTP id u9mr28517634wrs.7.1626691801564;
+ Mon, 19 Jul 2021 03:50:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFA6WYNC2xasX4uKmgcK+ZmA4HUh5PhCci+e12VFWPfF0b0eWQ@mail.gmail.com>
+References: <20210716022332.GC3232@sequoia> <CAHLZf_t5U1bh1H8sULbJz7xrZ-r3Dcmxuw9MMmG2fehS3C72uQ@mail.gmail.com>
+In-Reply-To: <CAHLZf_t5U1bh1H8sULbJz7xrZ-r3Dcmxuw9MMmG2fehS3C72uQ@mail.gmail.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Mon, 19 Jul 2021 12:49:51 +0200
+Message-ID: <CAHUa44EetPuA_5+UQLW-c=-_OApiRoiq+YjeFs6TRPj6=AJfHw@mail.gmail.com>
+Subject: Re: [PATCH v5 8/8] firmware: tee_bnxt: Release TEE shm, session, and
+ context during kexec
+To:     Vikas Gupta <vikas.gupta@broadcom.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Allen Pais <apais@linux.microsoft.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 13:36 19.07.21, Sumit Garg wrote:
-> On Mon, 19 Jul 2021 at 12:40, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
-> >
-> > Hello Andreas,
-> >
-> > On 16.07.21 10:17, Andreas Rammhold wrote:
-> > > Before this commit the kernel could end up with no trusted key sources
-> > > even thought both of the currently supported backends (tpm & tee) were
-> > > compoiled as modules. This manifested in the trusted key type not being
-> > > registered at all.
-> >
-> > I assume (TPM) trusted key module use worked before the TEE rework? If so,
-> >
-> > an appropriate Fixes: Tag would then be in order.
-> >
-> > > When checking if a CONFIG_… preprocessor variable is defined we only
-> > > test for the builtin (=y) case and not the module (=m) case. By using
-> > > the IS_ENABLE(…) macro we to test for both cases.
-> >
-> > It looks to me like you could now provoke a link error if TEE is a module
-> > and built-in trusted key core tries to link against trusted_key_tee_ops.
-> >
-> 
-> That's true.
-> 
-> > One solution for that IS_REACHABLE(). Another is to address the root cause,
-> > which is the inflexible trusted keys Kconfig description:
-> >
-> > - Trusted keys despite TEE support can still only be built when TCG_TPM is enabled
-> > - There is no support to have TEE or TPM enabled without using those for
-> >   enabled trusted keys as well
-> > - As you noticed, module build of the backend has issues
-> >
-> > I addressed these three issues in a patch[1], a month ago, but have yet to
-> > receive feedback.
-> 
-> That's an oversight on my part since this patch was part of the new
-> CAAM trust source patch-set. Although I do admit that it was on my
-> TODO list. So I have provided some feedback on that patch. Can you
-> post the next version as an independent fix patch?
+Hi,
 
-Thank you both for the feedback. In light of thes feedback and the
-patchset that Ahmad posted I'll not address the issue and not send a v2
-of this.
+On Fri, Jul 16, 2021 at 4:48 AM Vikas Gupta <vikas.gupta@broadcom.com> wrote:
+>
+> Hi Allen/Tyler,
+>  The patch looks good to me.
 
-I'll try to squeeze in some time to test the other patch and provide
-feedback.
+Thanks.
 
-Andi
+Rafal, is it OK if I include this patch together with the rest of the
+patches in this patch set in a pull request to arm-soc?
+
+Thanks,
+Jens
+
+>
+> Thanks,
+> Vikas
+>
+>>
+>> > From: Allen Pais <apais@linux.microsoft.com>
+>> >
+>> > Implement a .shutdown hook that will be called during a kexec operation
+>> > so that the TEE shared memory, session, and context that were set up
+>> > during .probe can be properly freed/closed.
+>> >
+>> > Additionally, don't use dma-buf backed shared memory for the
+>> > fw_shm_pool. dma-buf backed shared memory cannot be reliably freed and
+>> > unregistered during a kexec operation even when tee_shm_free() is called
+>> > on the shm from a .shutdown hook. The problem occurs because
+>> > dma_buf_put() calls fput() which then uses task_work_add(), with the
+>> > TWA_RESUME parameter, to queue tee_shm_release() to be called before the
+>> > current task returns to user mode. However, the current task never
+>> > returns to user mode before the kexec completes so the memory is never
+>> > freed nor unregistered.
+>> >
+>> > Use tee_shm_alloc_kernel_buf() to avoid dma-buf backed shared memory
+>> > allocation so that tee_shm_free() can directly call tee_shm_release().
+>> > This will ensure that the shm can be freed and unregistered during a
+>> > kexec operation.
+>> >
+>> > Fixes: 246880958ac9 ("firmware: broadcom: add OP-TEE based BNXT f/w manager")
+>> > Cc: stable@vger.kernel.org
+>> > Signed-off-by: Allen Pais <apais@linux.microsoft.com>
+>> > Co-developed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+>> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+>> > ---
+>> >  drivers/firmware/broadcom/tee_bnxt_fw.c | 14 +++++++++++---
+>> >  1 file changed, 11 insertions(+), 3 deletions(-)
+>> >
+>> > diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
+>> > index ed10da5313e8..a5bf4c3f6dc7 100644
+>> > --- a/drivers/firmware/broadcom/tee_bnxt_fw.c
+>> > +++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
+>> > @@ -212,10 +212,9 @@ static int tee_bnxt_fw_probe(struct device *dev)
+>> >
+>> >       pvt_data.dev = dev;
+>> >
+>> > -     fw_shm_pool = tee_shm_alloc(pvt_data.ctx, MAX_SHM_MEM_SZ,
+>> > -                                 TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
+>> > +     fw_shm_pool = tee_shm_alloc_kernel_buf(pvt_data.ctx, MAX_SHM_MEM_SZ);
+>> >       if (IS_ERR(fw_shm_pool)) {
+>> > -             dev_err(pvt_data.dev, "tee_shm_alloc failed\n");
+>> > +             dev_err(pvt_data.dev, "tee_shm_alloc_kernel_buf failed\n");
+>> >               err = PTR_ERR(fw_shm_pool);
+>> >               goto out_sess;
+>> >       }
+>> > @@ -242,6 +241,14 @@ static int tee_bnxt_fw_remove(struct device *dev)
+>> >       return 0;
+>> >  }
+>> >
+>> > +static void tee_bnxt_fw_shutdown(struct device *dev)
+>> > +{
+>> > +     tee_shm_free(pvt_data.fw_shm_pool);
+>> > +     tee_client_close_session(pvt_data.ctx, pvt_data.session_id);
+>> > +     tee_client_close_context(pvt_data.ctx);
+>> > +     pvt_data.ctx = NULL;
+>> > +}
+>> > +
+>> >  static const struct tee_client_device_id tee_bnxt_fw_id_table[] = {
+>> >       {UUID_INIT(0x6272636D, 0x2019, 0x0716,
+>> >                   0x42, 0x43, 0x4D, 0x5F, 0x53, 0x43, 0x48, 0x49)},
+>> > @@ -257,6 +264,7 @@ static struct tee_client_driver tee_bnxt_fw_driver = {
+>> >               .bus            = &tee_bus_type,
+>> >               .probe          = tee_bnxt_fw_probe,
+>> >               .remove         = tee_bnxt_fw_remove,
+>> > +             .shutdown       = tee_bnxt_fw_shutdown,
+>> >       },
+>> >  };
+>> >
+>> > --
+>> > 2.25.1
+>> >
+>>
+>> ----- End forwarded message -----
