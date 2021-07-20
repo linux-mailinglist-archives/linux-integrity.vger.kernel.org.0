@@ -2,282 +2,195 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F64C3CF597
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Jul 2021 09:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D093CF6C6
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Jul 2021 11:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbhGTHMs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Jul 2021 03:12:48 -0400
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:58667 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230404AbhGTHLQ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Jul 2021 03:11:16 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R491e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0UgPI4F._1626767513;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UgPI4F._1626767513)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 20 Jul 2021 15:51:53 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>,
-        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH ima-evm-utils v6] ima-evm-utils: Support SM2/3 algorithm for sign and verify
-Date:   Tue, 20 Jul 2021 15:51:53 +0800
-Message-Id: <20210720075153.17158-1-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.3.ge56e4f7
+        id S235368AbhGTIoi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Jul 2021 04:44:38 -0400
+Received: from mail-eopbgr150093.outbound.protection.outlook.com ([40.107.15.93]:57312
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232017AbhGTIoh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 20 Jul 2021 04:44:37 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l0xtJDyXcuc7t8GgjOaF5dk4QoobyNgiPeeUT4SEhK4sshtLCEpbynTTKZSWdEOkL743TTGI9Hee4S3TQCAHy09FdcKJ+QMfBQnRCaSC7nsCBOW4MahWhVYqbvmHtlBRebKYWzGjiBelFKn6x+tSsqDf3AcyUp3dPkkCKEfiL1eHNxCT8fMmD8vOjnfGSdbx7kNc7/AQBGx3hgIlsRXxF9ZiQ4XAV9634QaDcbAke9rMMieUNHYLPKruM7O6VjpnMl24K6RpC81ElZEjiLHVpmPs6AF+4hP6aP5M77Po+1aDCk4JfciIZK5VtWGFiHPhnh5P8s4CVporb/UHZeRt3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dWHd25uY8MqD8m5WFizaLraSH2daPfc9/Ay9GvjbkGw=;
+ b=D+4TDJvMM9gCFwm14N7WxYbWMdmOuDCBHQerGuqabmNaCsFNblVe406P0ybefR6pDd/NZ+uE+yGHpXY1fR6YmpeZnzCo7Cq91i5Dy9u50/bs4qGCVnHt/XUQnC5epp5XZqIqOYAAczHuV0fPw+4W8hWALi1UCdQxkieT66ukrPyBfIQb/CCQDhgfmiud6igUUxhR3im2chlvNlVN7UoO0LZRNEDwWvq1O2PVpWew2kE/cXZLw+lxzXp+Uwa4AbbWqt45rSOQm4LZ5yS6n+rmLoAm3kPNm8ZqUspLK97RXj7v15sf2aF+ut3jdbEKNFIU3onWHALrAaxXR+sd5X/Svg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
+ dkim=pass header.d=viveris.fr; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=viverislicensing.onmicrosoft.com;
+ s=selector2-viverislicensing-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dWHd25uY8MqD8m5WFizaLraSH2daPfc9/Ay9GvjbkGw=;
+ b=pYrUxDpgyPjtT5nwFsvcJUrW/JnD57SbJ55zFMaDOkUHXNjmvtNNnnmvdIN5GKvQG2KdeXuuy73Br/Kr1cdrMHzBtO+p7KRyUJKjjzD2ks1ZCk4E++/2l3htRlMj/Y62ylyiJt4F05X4Co2oy0zsbEys+qUKZMVtIFItYflCqmQ=
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ (2603:10a6:200:96::21) by AM0PR09MB4193.eurprd09.prod.outlook.com
+ (2603:10a6:208:194::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.23; Tue, 20 Jul
+ 2021 09:25:14 +0000
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::1d19:ecb0:b073:df73]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::1d19:ecb0:b073:df73%12]) with mapi id 15.20.4331.034; Tue, 20 Jul
+ 2021 09:25:14 +0000
+From:   THOBY Simon <Simon.THOBY@viveris.fr>
+To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
+CC:     THOBY Simon <Simon.THOBY@viveris.fr>
+Subject: [PATCH v2 0/3] IMA: restrict the accepted digest algorithms
+Thread-Topic: [PATCH v2 0/3] IMA: restrict the accepted digest algorithms
+Thread-Index: AQHXfUklgzXbxfssQUiTBueqTjZnfg==
+Date:   Tue, 20 Jul 2021 09:25:14 +0000
+Message-ID: <20210720092404.120172-1-simon.thoby@viveris.fr>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.ibm.com; dkim=none (message not signed)
+ header.d=none;linux.ibm.com; dmarc=none action=none header.from=viveris.fr;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ea6046c2-f48f-40b1-2f32-08d94b6047e6
+x-ms-traffictypediagnostic: AM0PR09MB4193:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR09MB41936EFD4A32B8541B12B92C94E29@AM0PR09MB4193.eurprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8MpIvUYflf4dBH/WAzSVmwcV14Yq7pbGHiIrMW7caVCi/o4EoTHjuSzaWl8u5Z3SY9ugeTEGUq99ze+6lymdBAla4OTMmyYKMQhRSsE+VaA9LtBwR8NPwff/ffTEmZsaAlf1313CMf2nb6lqgWhLy/SGNaWwsfgso2Fl9/aK2Hu6Jbvkzm7RCqyIjOGDmMlKiSMVzdiKj0xX+KF4ZLe4xXD5niNb0Tjy/SS5GuQ5ikeFBj85/WrGYscvzmeKukWPJr/MjplieeVNeEkXYnjM+ayiNKWlCiWYAflTa0mdHfDYdpouY5bfdm+ZbHZYDkSn0IMx6hElnvGZfJFJC1i/6mcZA3bH6gxpbXgsZ20XY06dGuwjC5fXWcMcW75Gcwxe0tjhVh3VLIy9660GQCfjTHUDnLGzb1J+LKdGQLqHaHICGv0M2L/L3+uziigqZanGE4D8p7L2wt5ZkQqleWb7o9RZZ+7CgK8ukKYwcZ7n0X/6lFgGvitHHfYn8+2sCN2fGQgwvjOAdfe86dXslNoSLXjYzY6Gp9Ic+t7CpStdAo2wMkm+5WALnCk2QaHItRzN3r9B0kXwpwH+F93eRQNRqv/W8Bc6R9yxDBEtR2S19TedGWQ21kLF5MZUz3pbZG7CAGBDLIqCh8+ylMstjKlMKN5DjxNLHJiqstg+uVVc0O3ExMOns0uCZQyaUE/YzVMq+vfkhhjrMaWRNK0ALqI0Oic1ZSGA8zkyemxKBbMTslK0eSB0OvDNerX/YHCyZSb5Ex55g6DkC06DszJN9g8cb7qDARTMhn0Uc7x0/IWzELI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(376002)(39840400004)(396003)(366004)(966005)(26005)(4326008)(71200400001)(6636002)(316002)(110136005)(6506007)(2616005)(1076003)(122000001)(107886003)(6486002)(2906002)(478600001)(38100700002)(86362001)(8676002)(186003)(36756003)(5660300002)(66946007)(91956017)(76116006)(66476007)(64756008)(66446008)(66556008)(83380400001)(6512007)(8936002)(38070700004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?WkBnkWrHWLmIt38c2f6cL9HJU0In9rdDOjRV7+/s72VW6/YaFystgkXrCM?=
+ =?iso-8859-1?Q?eSxrJ8ITk10YrAfrnPMie2j7fh2w5dVeabLklK1q/Pj9NGwyd4SpPeG8EH?=
+ =?iso-8859-1?Q?cenKe6GfBQNUW5JfOwp72T3ISjhPL3+hwX830SxCJ7QX80A79SHW2quq1Y?=
+ =?iso-8859-1?Q?aNU6ITy5qLRNDvW908sxCQaWRAhMZR3XFWGVz/AQ3eX8rk4sQi4bhKxMb+?=
+ =?iso-8859-1?Q?e0nm28RELwtZVu2/9AwqlBUpDjqrOZmfweugFsFXLIz+ScjTh3+IVBH4YJ?=
+ =?iso-8859-1?Q?hocwy9FIEtozQAElsv/tC30NKuxspxoq6zK8MfqOwZlumjZPpC27zjAzxF?=
+ =?iso-8859-1?Q?5JjGCQpVzwHmmQoWZpLkyhmOLXFP0AvSkUay9m37/IdMZONW5n83jtS3tv?=
+ =?iso-8859-1?Q?6CQrNQLZApN6Pwvc2GxTijgeZ2iGQ7mzBy5TsU5W6NXN4dlm+xGJOQENFW?=
+ =?iso-8859-1?Q?+3xERPZHouwkndtfUn4km7A2Xwr9jjbk6iqFZLQO8SdgejLZPWA9s1oS6/?=
+ =?iso-8859-1?Q?IuKoVLa9mlOrSrTYwGq9jhi19sdTKQsIvBZJ1qtHN/uqS2+gNT77SxE2aV?=
+ =?iso-8859-1?Q?/p6LpKmGNZkt47CtOndWaifsSqtQtde/bQbyjRP5YwZM5+Zn3lEjzCuSS3?=
+ =?iso-8859-1?Q?uy6udlbDinFlqN+Y9mAdWhEGpJ1PPV4ZYmCmoBl1/bFKSkn/t8eoWENn7n?=
+ =?iso-8859-1?Q?A3xckMY0Lfld7uzt0kbebtgtFoLizNEX6MBmqp/o/FJ+LrqgRlYjK2jpk/?=
+ =?iso-8859-1?Q?u88rMIefEFx86wCboZK1ANRTm4rGCNEPbsuDlmS9kJs/r0Yi5x6CYy+6qQ?=
+ =?iso-8859-1?Q?yDsB+kpZXCMQJmRnvqy3P03mXBNUtJL8aZCbV76QZtVVSRvJDksYrOJtoo?=
+ =?iso-8859-1?Q?1QIbUSrejU15ef0AdL1pbff+3b2KTGJbjyoGHcATb+snJM1Mio16GvOs3o?=
+ =?iso-8859-1?Q?PvyxuEmuswTtk2KT7ObA4IOWvoOCqcTky8dUIB0AAziDi1PiuZ4BJtbxL8?=
+ =?iso-8859-1?Q?yuXggorpC9NprPGyZG66ZzOvO5l9F9I9b6nFEk/DobNl2NuxIFZLPrpfB1?=
+ =?iso-8859-1?Q?AF/HMbQdx0GnjExYrktxzmBjnoUu8wfCapD0e+EEJJnh4g9igwO4JZpcJh?=
+ =?iso-8859-1?Q?HXdELleyOTaBr0c2/UQt1IUdYKTD1FeMfNiKyjiPNP6MPwm4UC6nQiEF3q?=
+ =?iso-8859-1?Q?brLUNh0mdVTLH/b1SoT2s9j1gVpxA2y9/WBhFeQOFpjcFgLErdmV1VRDwI?=
+ =?iso-8859-1?Q?gBvDEgqMdPx/Ro1ys6UN2f+KiSuiTO4Vg2hQVQIercS4AEpNHX094R9klq?=
+ =?iso-8859-1?Q?gpvYOmFMozds2LQm1iVlQJ0tH+/Zrwspj2mA9EYzZHhQ5dSZP6GasVRIO6?=
+ =?iso-8859-1?Q?P+3C0JHAUe?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: viveris.fr
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea6046c2-f48f-40b1-2f32-08d94b6047e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2021 09:25:14.3927
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZPE1c3jFx/QpZi6mx4pxayzINkPLgJnXDvLuDFALao7Lg6XDwSDNr+qQOqBZ933JX4wKXwgxe7CLEkvGXptmow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR09MB4193
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Keep in sync with the kernel IMA, IMA signature tool supports SM2/3
-algorithm combination. Because in the current version of OpenSSL 1.1.1,
-the SM2 algorithm and the public key using the EC algorithm share the
-same ID 'EVP_PKEY_EC', and the specific algorithm can only be
-distinguished by the curve name used. This patch supports this feature.
+IMA protects files by storing a hash (or a signature thereof) of their
+content in the security.ima xattr. While the security.ima xattr itself
+is protected by EVM with either a HMAC or a digital signature, no
+mechanism is currently in place to ensure that the security.ima xattr
+was generated with a strong digest algorithm, as was outlined in
+https://lore.kernel.org/linux-integrity/10dde047d76b447f32ca91356599be679b8=
+a76e5.camel@linux.ibm.com/t/#m0f8127c6982ef94aa42f5cc13ea83b9f9000917e
 
-Secondly, the openssl 1.1.1 tool does not fully support the signature
-of SM2/3 algorithm combination, so the openssl3 tool is used in the
-test case, and there is no this problem with directly calling the
-openssl 1.1.1 API in evmctl.
+One important point is safeguarding users from mislabelling their
+files when using userland utilities to update their files, as this
+is the kind of behavior one can observe with evmctl (`evmctl ima_hash`
+defaults to sha1). Another group that may be interested is those
+that have deployed IMA years ago, possibly using algorithms that
+was then deemed sufficiently collision-resistant, but that proved
+to be weak with the passage of time (note that this could also
+happen in the future with algorithms considered safe today).
+This patch provides a migration path of sorts for these users.
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- .github/workflows/ci.yml  |  7 +++++++
- .travis.yml               |  8 ++++----
- src/libimaevm.c           | 20 ++++++++++++++++++++
- tests/gen-keys.sh         | 25 +++++++++++++++++++++++++
- tests/ima_hash.test       |  3 +--
- tests/install-openssl3.sh | 17 +++++++++++++++++
- tests/sign_verify.test    | 10 ++++++++++
- 7 files changed, 84 insertions(+), 6 deletions(-)
- create mode 100755 tests/install-openssl3.sh
+This patch series gives users the ability to restrict the algorithms
+accepted by their system, both when writing/updating xattrs, and
+when appraising files, while retaining a permissive behavior by default
+to preserve backward compatibility.
 
-diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
-index 088c041..b890481 100644
---- a/.github/workflows/ci.yml
-+++ b/.github/workflows/ci.yml
-@@ -17,6 +17,7 @@ jobs:
-               ARCH: i386
-               TSS: tpm2-tss
-               VARIANT: i386
-+              COMPILE_SSL: openssl-3
- 
-           # cross compilation builds
-           - container: "debian:stable"
-@@ -51,6 +52,7 @@ jobs:
-             env:
-               CC: clang
-               TSS: ibmtss
-+              COMPILE_SSL: openssl-3
- 
-           - container: "opensuse/leap"
-             env:
-@@ -61,6 +63,7 @@ jobs:
-             env:
-               CC: gcc
-               TSS: ibmtss
-+              COMPILE_SSL: openssl-3
- 
-           - container: "ubuntu:xenial"
-             env:
-@@ -115,6 +118,7 @@ jobs:
-         INSTALL="${INSTALL%%/*}"
-         if [ "$VARIANT" ]; then ARCH="$ARCH" ./ci/$INSTALL.$VARIANT.sh; fi
-         ARCH="$ARCH" CC="$CC" TSS="$TSS" ./ci/$INSTALL.sh
-+        if [ "$COMPILE_SSL" ]; then ./tests/install-openssl3.sh; fi
- 
-     - name: Build swtpm
-       run: |
-@@ -128,5 +132,8 @@ jobs:
-     - name: Compiler version
-       run: $CC --version
- 
-+    - name: Default OpenSSL version
-+      run: openssl version
-+
-     - name: Compile
-       run: CC="$CC" VARIANT="$VARIANT" ./build.sh
-diff --git a/.travis.yml b/.travis.yml
-index 7a76273..a73f20e 100644
---- a/.travis.yml
-+++ b/.travis.yml
-@@ -9,7 +9,7 @@ matrix:
-     include:
-         # 32 bit build
-         - os: linux
--          env: DISTRO=debian:stable VARIANT=i386 ARCH=i386 TSS=tpm2-tss
-+          env: DISTRO=debian:stable VARIANT=i386 ARCH=i386 TSS=tpm2-tss COMPILE_SSL: openssl-3
-           compiler: gcc
- 
-         # cross compilation builds
-@@ -32,7 +32,7 @@ matrix:
- 
-         # glibc (gcc/clang)
-         - os: linux
--          env: DISTRO=opensuse/tumbleweed TSS=ibmtss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/runc --network=host"
-+          env: DISTRO=opensuse/tumbleweed TSS=ibmtss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/runc --network=host" COMPILE_SSL: openssl-3
-           compiler: clang
- 
-         - os: linux
-@@ -40,7 +40,7 @@ matrix:
-           compiler: gcc
- 
-         - os: linux
--          env: DISTRO=ubuntu:groovy TSS=ibmtss
-+          env: DISTRO=ubuntu:groovy TSS=ibmtss COMPILE_SSL: openssl-3
-           compiler: gcc
- 
-         - os: linux
-@@ -97,4 +97,4 @@ before_install:
- script:
-     - INSTALL="${DISTRO%%:*}"
-     - INSTALL="${INSTALL%%/*}"
--    - $CONTAINER run $CONTAINER_ARGS -t ima-evm-utils /bin/sh -c "if [ \"$VARIANT\" ]; then ARCH=\"$ARCH\" ./ci/$INSTALL.$VARIANT.sh; fi && ARCH=\"$ARCH\" CC=\"$CC\" TSS=\"$TSS\" ./ci/$INSTALL.sh && if [ ! \"$VARIANT\" ]; then which tpm_server || which swtpm || if which tssstartup; then ./tests/install-swtpm.sh; fi; fi && CC=\"$CC\" VARIANT=\"$VARIANT\" ./build.sh"
-+    - $CONTAINER run $CONTAINER_ARGS -t ima-evm-utils /bin/sh -c "if [ \"$VARIANT\" ]; then ARCH=\"$ARCH\" ./ci/$INSTALL.$VARIANT.sh; fi && ARCH=\"$ARCH\" CC=\"$CC\" TSS=\"$TSS\" ./ci/$INSTALL.sh && if [ "$COMPILE_SSL" ]; then ./tests/install-openssl3.sh; fi && if [ ! \"$VARIANT\" ]; then which tpm_server || which swtpm || if which tssstartup; then ./tests/install-swtpm.sh; fi; fi && CC=\"$CC\" VARIANT=\"$VARIANT\" ./build.sh"
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index 19f1041..8e96157 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -448,6 +448,16 @@ static int verify_hash_v2(const char *file, const unsigned char *hash, int size,
- 		return -1;
- 	}
- 
-+#if defined(EVP_PKEY_SM2) && OPENSSL_VERSION_NUMBER < 0x30000000
-+	/* If EC key are used, check whether it is SM2 key */
-+	if (EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
-+		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
-+		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
-+		if (curve == NID_sm2)
-+			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
-+	}
-+#endif
-+
- 	st = "EVP_PKEY_CTX_new";
- 	if (!(ctx = EVP_PKEY_CTX_new(pkey, NULL)))
- 		goto err;
-@@ -974,6 +984,16 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
- 		return -1;
- 	}
- 
-+#if defined(EVP_PKEY_SM2) && OPENSSL_VERSION_NUMBER < 0x30000000
-+	/* If EC key are used, check whether it is SM2 key */
-+	if (EVP_PKEY_id(pkey) == EVP_PKEY_EC) {
-+		EC_KEY *ec = EVP_PKEY_get0_EC_KEY(pkey);
-+		int curve = EC_GROUP_get_curve_name(EC_KEY_get0_group(ec));
-+		if (curve == NID_sm2)
-+			EVP_PKEY_set_alias_type(pkey, EVP_PKEY_SM2);
-+	}
-+#endif
-+
- 	if (imaevm_params.keyid)
- 		keyid = htonl(imaevm_params.keyid);
- 	else {
-diff --git a/tests/gen-keys.sh b/tests/gen-keys.sh
-index d2c2f80..1a6c22a 100755
---- a/tests/gen-keys.sh
-+++ b/tests/gen-keys.sh
-@@ -131,6 +131,31 @@ for m in \
-     fi
- done
- 
-+# SM2, If openssl 3.0 is installed, gen SM2 keys using
-+if [ -x /opt/openssl3/bin/openssl ]; then
-+  (PATH=/opt/openssl3/bin:$PATH LD_LIBRARY_PATH=/opt/openssl3/lib
-+  for curve in sm2; do
-+    if [ "$1" = clean ] || [ "$1" = force ]; then
-+      rm -f test-$curve.cer test-$curve.key test-$curve.pub
-+    fi
-+    if [ "$1" = clean ]; then
-+      continue
-+    fi
-+    if [ ! -e test-$curve.key ]; then
-+      log openssl req -verbose -new -nodes -utf8 -days 10000 -batch -x509 \
-+        -sm3 -sigopt "distid:1234567812345678" \
-+        -config test-ca.conf \
-+        -copy_extensions copyall \
-+        -newkey $curve \
-+        -out test-$curve.cer -outform DER \
-+        -keyout test-$curve.key
-+      if [ -s test-$curve.key ]; then
-+        log openssl pkey -in test-$curve.key -out test-$curve.pub -pubout
-+      fi
-+    fi
-+  done)
-+fi
-+
- # This script leaves test-ca.conf, *.cer, *.pub, *.key files for sing/verify tests.
- # They are never deleted except by `make distclean'.
- 
-diff --git a/tests/ima_hash.test b/tests/ima_hash.test
-index 8d66e59..6e0e463 100755
---- a/tests/ima_hash.test
-+++ b/tests/ima_hash.test
-@@ -70,8 +70,7 @@ expect_pass check  sha256     0x0404 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649
- expect_pass check  sha384     0x0405 38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b
- expect_pass check  sha512     0x0406 cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e
- expect_pass check  rmd160     0x0403 9c1185a5c5e9fc54612808977ee8f548b2258d31
--expect_fail check  sm3        0x01
--expect_fail check  sm3-256    0x01
-+expect_pass check  sm3        0x0411 1ab21d8355cfa17f8e61194831e81a8f22bec8c728fefb747ed035eb5082aa2b
- _enable_gost_engine
- expect_pass check  md_gost12_256 0x0412 3f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
- expect_pass check  streebog256   0x0412 3f539a213e97c802cc229d474c6aa32a825a360b2a933a949fd925208d9ce1bb
-diff --git a/tests/install-openssl3.sh b/tests/install-openssl3.sh
-new file mode 100755
-index 0000000..d460b47
---- /dev/null
-+++ b/tests/install-openssl3.sh
-@@ -0,0 +1,17 @@
-+#!/bin/sh
-+
-+set -ex
-+
-+# 3.0.0-beta1 is the latest version in July 2021
-+wget --no-check-certificate https://github.com/openssl/openssl/archive/refs/tags/openssl-3.0.0-beta1.tar.gz
-+tar --no-same-owner -xzf openssl-3.0.0-beta1.tar.gz
-+cd openssl-openssl-3.0.0-beta1
-+
-+./Configure --prefix=/opt/openssl3 --openssldir=/opt/openssl3/ssl
-+make -j$(nproc)
-+# only install apps and library
-+sudo make install_sw
-+
-+cd ..
-+rm -rf openssl-3.0.0-beta1.tar.gz
-+rm -rf openssl-openssl-3.0.0-beta1
-diff --git a/tests/sign_verify.test b/tests/sign_verify.test
-index df4304a..3b42eec 100755
---- a/tests/sign_verify.test
-+++ b/tests/sign_verify.test
-@@ -199,6 +199,10 @@ check_sign() {
-   # This is all we can do for evm.
-   [[ "$TYPE" =~ evm ]] && return "$OK"
- 
-+  # When using the SM2/3 algorithm, the openssl tool uses USERID for verify,
-+  # which is incompatible with calling API directly, so skip it.
-+  [[ "$ALG" == sm3 ]] && return "$OK"
-+
-   # Extract signature to a file
-   _extract_xattr "$FILE" "$(_xattr "$TYPE")" "$FILE.sig2" "$PREFIX"
- 
-@@ -390,6 +394,12 @@ sign_verify  prime256v1 sha256 0x030204:K:004[345678]
- sign_verify  prime256v1 sha384 0x030205:K:004[345678]
- sign_verify  prime256v1 sha512 0x030206:K:004[345678]
- 
-+# If openssl 3.0 is installed, test the SM2/3 algorithm combination
-+if [ -x /opt/openssl3/bin/openssl ]; then
-+  PATH=/opt/openssl3/bin:$PATH LD_LIBRARY_PATH=/opt/openssl3/lib \
-+    sign_verify  sm2    sm3    0x030211:K:004[345678]
-+fi
-+
- # Test v2 signatures with EC-RDSA
- _enable_gost_engine
- sign_verify  gost2012_256-A md_gost12_256 0x030212:K:0040
--- 
-2.19.1.3.ge56e4f7
+To provide these features, alter the behavior of setxattr to
+only accept hashes built in the kernel, instead of any hash listed
+in the kernel (complete list crypto/hash_info.c). In addition, if
+secure boot is enabled, assume the system settings must be enforced
+(as IMA already does for the ima_appraise boot parameter) and only
+accept writes that uses the same digest the kernel uses (the
+'ima_hash' kernel parameter).
+In addition, users may opt-in to whitelisting the accepted hash
+algorithms with the new "appraise_hash" IMA policy option.
+By default IMA will keep accepting any hash algorithm, but specifying
+that option will make appraisal of files hash with another algorithm
+fail.
 
+
+Even when using this option to restrict accepted hashes, migrations
+to a new algorithm are still possible. Suppose your policy states you
+must migrate from 'old_algo' (e.g. sha1) to 'new_algo' (e.g. one of
+sha256/384/512). You can upgrade without relaxing the hash requirements:
+alter your policy rules from 'appraise_hash=3Dold_algo' to
+'appraise_hash=3Dold_algo,new_algo', update the "ima_hash" parameter to
+'new_algo', reboot, relabel all your files with 'new_algo', alter your
+policy_rule from 'appraise_hash=3Dold_algo,new_algo' to
+'appraise_hash=3Dnew_algo', reboot again and you're done.
+Agreed, it's quite a lot of churn - I don't know if this can be reduced -
+but this is technically doable.
+
+
+Note that the secure boot restriction is not backward compatible, so
+maybe this cannot be merged as-is. Yet this only applies to new
+hash/signatures performed from userspace, and does not impact the
+appraisal of existing files, so this will probably not break systems on
+upgrade either.
+
+This series is based on the following repo/branch:
+ repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+ branch: master
+ commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c ("Linux 5.14-rc2")
+
+Changelog since v1:
+- Remove the two boot parameters
+- filter out hash algorithms nto compiled in the kernel
+  on xattr writes
+- add a special case when secure boot is enabled: only the
+  ima_hash algorithm is accepted on userland writes
+- add a policy option to opt-in to restricting digest algorithms
+  at a per-rule granularity
+
+
+Simon Thoby (3):
+  IMA: block writes of the security.ima xattr with weak hash algorithms
+  IMA: add policy support for restricting the accepted hash algorithms
+  IMA: honor the appraise_hash policy option
+
+ Documentation/ABI/testing/ima_policy  |  6 +-
+ security/integrity/ima/ima.h          |  6 +-
+ security/integrity/ima/ima_api.c      |  6 +-
+ security/integrity/ima/ima_appraise.c | 59 +++++++++++++++++-
+ security/integrity/ima/ima_main.c     | 22 ++++++-
+ security/integrity/ima/ima_policy.c   | 90 +++++++++++++++++++++++++--
+ 6 files changed, 173 insertions(+), 16 deletions(-)
+
+--=20
+2.31.1
