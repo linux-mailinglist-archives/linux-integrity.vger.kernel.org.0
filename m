@@ -2,105 +2,91 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F4B3CF225
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Jul 2021 04:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754853CF50B
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Jul 2021 09:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345413AbhGTCBf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 19 Jul 2021 22:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344729AbhGTBvl (ORCPT
+        id S232606AbhGTG07 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Jul 2021 02:26:59 -0400
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:36306 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240156AbhGTG0N (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 19 Jul 2021 21:51:41 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5643C061574;
-        Mon, 19 Jul 2021 19:32:20 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id j4so4502248pgk.5;
-        Mon, 19 Jul 2021 19:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NqBs+GBsePvxuJ7T8oHVXE+0kUbw069/LeZuzlfCcZ4=;
-        b=Y8rwWbhutI/72cKs7u3tfozo23N3gKPMg7M7gXJxUUL05fnTor/0vMW8ITphOZ07di
-         t1ufc7bEALcX29N5gjnfrr5+6IkuHSU+BwG0NLp0dxVHA4tRhfnRuEURjo3Y8FnPLvMo
-         ECw05xbWVF3VgTroOacoQa5xRo1j7P/m9cGc3VAQycZjy4WQnh1WkZyrQgBAsUvjFqOZ
-         WcHjzeD5eKDIandf518ZhU263ot2QuZvn+2ztZl7zYOBeZQiU52unpSewO9Mqy6V8a9r
-         6W7x8uxCXgN+mHusr3BagM4mujAsfh+OhDS64ZZK1RhRrKkSMYYrvzF49Sbk2aHMkKLt
-         jC5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NqBs+GBsePvxuJ7T8oHVXE+0kUbw069/LeZuzlfCcZ4=;
-        b=ROKJcOui9FhSwu9GZg28gKjwQ2233vWEZA/xAVT0TWQorFVyJVrMYZIsRxp9O0x9ag
-         crnZJi+mfv4hadQ3EnxkOyCDXa5O1iqMPbbNvwoUf2ZfK6KSmUiPb/7QUN0OEnbsLptC
-         6m3VTzMKxctG1LXSL9Qc1MF/pNABCpyk59dlz7eIL38Q1FNGKiFFUa/BE9BuhIO4qUyZ
-         WQxw4Zk2/Bj0qi4waWBaW5lpWt6MLgaV7CEnzns/IIf8XU76V+vTG/5yGeOXTcuAEn4g
-         XAFrMZfGRdEj2F7jJBeEyxs2bIvPCgDmIinO9/UCOnTmLF1uQzA266UgPBpEa+xE7vIs
-         gaew==
-X-Gm-Message-State: AOAM532xeQ4PAn648yYxh98ROLYBz5RlIqnqo1BLupdx+jTmPL7z7TJ6
-        8MRuheyYI2SnFGMxR33njgav+rL3vLJm+g==
-X-Google-Smtp-Source: ABdhPJw8ChIR3kg8fmYEnI2nUmPF2K/iGGfyPWq7h36woPrYS3chjEBD9WWev0KDp2gqdtGrUu1oDg==
-X-Received: by 2002:a62:584:0:b029:32e:3b57:a1c6 with SMTP id 126-20020a6205840000b029032e3b57a1c6mr28529616pff.13.1626748339693;
-        Mon, 19 Jul 2021 19:32:19 -0700 (PDT)
-Received: from [10.230.31.46] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id t26sm23317435pgu.35.2021.07.19.19.32.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jul 2021 19:32:18 -0700 (PDT)
-Subject: Re: [PATCH v5 8/8] firmware: tee_bnxt: Release TEE shm, session, and
- context during kexec
-To:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Vikas Gupta <vikas.gupta@broadcom.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Allen Pais <apais@linux.microsoft.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20210716022332.GC3232@sequoia>
- <CAHLZf_t5U1bh1H8sULbJz7xrZ-r3Dcmxuw9MMmG2fehS3C72uQ@mail.gmail.com>
- <CAHUa44EetPuA_5+UQLW-c=-_OApiRoiq+YjeFs6TRPj6=AJfHw@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <903824a6-7a2b-1514-5b71-a2db634e9abf@gmail.com>
-Date:   Mon, 19 Jul 2021 19:32:01 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Tue, 20 Jul 2021 02:26:13 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0UgOhiuI_1626764809;
+Received: from B-455UMD6M-2027.local(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UgOhiuI_1626764809)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 20 Jul 2021 15:06:50 +0800
+Subject: Re: [PATCH ima-evm-utils v5] ima-evm-utils: Support SM2/3 algorithm
+ for sign and verify
+To:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>
+Cc:     Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>,
+        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
+References: <20210716092237.17153-1-tianjia.zhang@linux.alibaba.com>
+ <f7c05b2618125cb0887ee0302c1197a8c8f49864.camel@linux.ibm.com>
+ <7921ca60-8818-b641-3e28-6ffd957f8a1b@linux.alibaba.com>
+ <YPQqhTPLTafjLCXP@pevik>
+ <1aa1a53101d9eeb6c358bb65677a8b733c19e663.camel@linux.ibm.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <fb2ca393-64e9-b709-456e-a3e28e9de0a1@linux.alibaba.com>
+Date:   Tue, 20 Jul 2021 15:06:48 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAHUa44EetPuA_5+UQLW-c=-_OApiRoiq+YjeFs6TRPj6=AJfHw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <1aa1a53101d9eeb6c358bb65677a8b733c19e663.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Mimi, Petr,
 
-
-On 7/19/2021 3:49 AM, Jens Wiklander wrote:
-> Hi,
+On 7/19/21 8:51 PM, Mimi Zohar wrote:
+> Hi -
 > 
-> On Fri, Jul 16, 2021 at 4:48 AM Vikas Gupta <vikas.gupta@broadcom.com> wrote:
+> On Sun, 2021-07-18 at 15:20 +0200, Petr Vorel wrote:
+>>> On 7/17/21 12:39 AM, Mimi Zohar wrote:
+>>>> On Fri, 2021-07-16 at 17:22 +0800, Tianjia Zhang wrote:
+>>>>> diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+>>>>> index 088c041..17407ff 100644
+>>>>> --- a/.github/workflows/ci.yml
+>>>>> +++ b/.github/workflows/ci.yml
+>>>>> @@ -17,6 +17,7 @@ jobs:
+>>>>>                  ARCH: i386
+>>>>>                  TSS: tpm2-tss
+>>>>>                  VARIANT: i386
+>>>>> +              OPENSSL3: true
+>>>>>              # cross compilation builds
+>>>>>              - container: "debian:stable"
+>>>>> @@ -51,6 +52,7 @@ jobs:
+>>>>>                env:
+>>>>>                  CC: clang
+>>>>>                  TSS: ibmtss
+>>>>> +              OPENSSL3: true
 >>
->> Hi Allen/Tyler,
->>   The patch looks good to me.
+>>>> I haven't had a chance to look at the entire patch, but defining
+>>>> OPENSSL3 kind of stood out.  Just as "CC" and "TSS" are generic, I'd
+>>>> prefer something more generic here.   In the past there was a request
+>>>> to support Libressl, which never materialized.
+>>
+>>
+>>> I agree that it is appropriate to use a generic variable name. I am thinking
+>>> of 'CRYPTOGRAPHY' or 'CRYPPTO_LIBRARY'. Are there any better suggestions?
+>> How about COMPILE_OPENSSL? Because that's the current purpose.
 > 
-> Thanks.
+> Hm, wondering if it makes sense to generalize this further, including
+> Vitaly's suggestion?
 > 
-> Rafal, is it OK if I include this patch together with the rest of the
-> patches in this patch set in a pull request to arm-soc?
+> In this case, the generic name would be "SSL"  (e.g. "SSL=openssl").
+> Prefixing a generic name with "COMPILE_[TSS|CC|SSL]=<tag|commit>" would
+> indicate compiling the application from source.
+> 
 
-I can take those patches through the Broadcom ARM SoC pull request, 
-Rafal would that work for you? We seem to have a bit of a maintainer 
-coverage blind spot for that directory.
--- 
-Florian
+I will take this suggestion, thanks for your comment.
+
+Cheers,
+Tianjia
