@@ -2,129 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAF83D01FD
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Jul 2021 20:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EED3D021F
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Jul 2021 21:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbhGTSSk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Jul 2021 14:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S230345AbhGTSkf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Jul 2021 14:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbhGTSSb (ORCPT
+        with ESMTP id S232735AbhGTSjg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Jul 2021 14:18:31 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D42BC061574;
-        Tue, 20 Jul 2021 11:59:05 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id b2so7323020plx.1;
-        Tue, 20 Jul 2021 11:59:05 -0700 (PDT)
+        Tue, 20 Jul 2021 14:39:36 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F374C061574;
+        Tue, 20 Jul 2021 12:20:08 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d15so293672qte.13;
+        Tue, 20 Jul 2021 12:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IAhbRYwjMmEqu25LoPbZlAoP67lU12MvAIcvWLy3jNU=;
-        b=pjU9fse7Cs6N7xm64l6i3UqU3PXkF0PDd8K7KKfftjfhl1E9Hp9iQDl0yWHTJ1llzf
-         PomNS4XmRllC50yH5TSb76JdWvCBQhzCc3ej4Lop+CP00z0Hc5HTU65LWGxD6V/+WiNi
-         gaaaqXI0NdL4g+RbqUzOM/ajTFR/FsJ6VI5L97Tv0GuzSdSjYexORn6yfAeN3dBHCvhS
-         7/wscvBAQ4awUYv+cuii+4ONBc4FEVNj59B92coJfANU6ufPoB1Wit+UxoP96KLc5EH4
-         i+MsJyqMKoYXHXmTG7fbGGNZYR7ncGSmpUAYg3/Q1mZ9m6un38iGfVY5gOLEEPEA1G2/
-         ZyGg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zFuzNBIJ3SOuNszQPtdyxiTi9yoIw9/CFgzpID1S2XU=;
+        b=gp7M1QghoO41WNBVmXuuTneI1Vq3cIRZrRygM7/0rnzOtNhjGFBpPckaBnDsYpz2/J
+         uQOZ9shSUn/+MPbMg3ZzbO2VD77Pt1tcALFBRn12Uwh7wHtAD3sWOhaQYgAUkhDzb2W7
+         kV8KK10Wz9W/YsAXeAShXJlQVRowN33Tyd03Nfz2ud3LllXPJ4zFmFhduNExqhAz2UY3
+         u6yLQnJWJDZbUsOt+NbQP/V+hM/YYvVt1ycnQJB1oGKnFSLCu4U1MYawVnfCjTl8yQfZ
+         g3ixrsadSGTvcu8Wk9XVHeLXMPf9llKChDxC7aW0Zy3pVty51zt6w/HY0j1t12BQGUbs
+         b5Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IAhbRYwjMmEqu25LoPbZlAoP67lU12MvAIcvWLy3jNU=;
-        b=PvjIKdqO1no3OMo8lNvvMV9LqCz9GxZ2uDVMoGJITwn8PU7gt4ZWJeBG74Jwq6EmKF
-         Z3C/hFVsGVOPq2PVvSp4prOUsuMTFgJYPcgsI60YJ74NGoiyaW+Qbqz9No7EzO5S1IbM
-         XHo7ORHw3FD9Op/AgZ/VJuXXRvR3PrSsHQv7TmZ0M8rfQmMjFSPKQLAMmd6K5pVPjwAO
-         av6xgRoOx1dGypzCnvJc9S+VJYtwz0iix0pbjpu6TU6NsZzN/xN3OThloyCqGDl6obXV
-         C+oOO0hvxTLcK1mP3luUt2eb7882QkvEoW3Qx1LIWVCDbkolaZp2iizPLhp00AnTAIpd
-         qzhA==
-X-Gm-Message-State: AOAM5315jYqmjaBB8lLTKBML6mizRWMaSwhsO/ktYxnfYSSyLJbAMSBd
-        8UJ4T9kwkAlp9DGxZ2IqQujxJKJew6VuZQ==
-X-Google-Smtp-Source: ABdhPJxAHOcEC2LyEECia9/kIZZivpfGTz+7IMZioqtyWrdCy9leyuIrUrLKKhjhl8+AQjH6Hgd6ig==
-X-Received: by 2002:a17:90b:1294:: with SMTP id fw20mr37237488pjb.100.1626807543849;
-        Tue, 20 Jul 2021 11:59:03 -0700 (PDT)
-Received: from [10.67.49.104] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id v15sm8758993pff.105.2021.07.20.11.59.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jul 2021 11:59:03 -0700 (PDT)
-Subject: Re: [PATCH v5 8/8] firmware: tee_bnxt: Release TEE shm, session, and
- context during kexec
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Vikas Gupta <vikas.gupta@broadcom.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Allen Pais <apais@linux.microsoft.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20210716022332.GC3232@sequoia>
- <CAHLZf_t5U1bh1H8sULbJz7xrZ-r3Dcmxuw9MMmG2fehS3C72uQ@mail.gmail.com>
- <CAHUa44EetPuA_5+UQLW-c=-_OApiRoiq+YjeFs6TRPj6=AJfHw@mail.gmail.com>
- <903824a6-7a2b-1514-5b71-a2db634e9abf@gmail.com>
- <bc3f4bdd-b833-d58c-f7d7-6670bcbd8ef8@gmail.com>
- <20210720181517.GF3232@sequoia>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <22e55ae6-3ecb-4f54-b9e6-1b902d4d4e20@gmail.com>
-Date:   Tue, 20 Jul 2021 11:59:00 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zFuzNBIJ3SOuNszQPtdyxiTi9yoIw9/CFgzpID1S2XU=;
+        b=BMygT8rqHUeqRWOmwYncvq7du60Vxu8O2yC9xV4Q2jWs9qZNWZUs9YKaFp3YXI8eZK
+         MARrgB3XO8nI9grGoRPqUWNLU5E668QUSZy9n0H5gz6pjMbklI9dO2WgKo050wAVKEms
+         EyyV0J3YTkSorfvu0GyQ7I/GOijK2CR8Rx8RjVwjNAihCMsbnYv2Xmzc9D3vNXlTZCT6
+         RGI/KqhDenBYxrbZ86mJJK/EnwKIdJoJMv0di27S7PvDRWL2dNpu+Mif5QwXQSMeGBRQ
+         B3uqoVBltaI3XFnENr0wYhSfSYkTxLb5vsNtYlg+7A1iURCPUnYuGttDQQCjA4g7jCRo
+         QXaQ==
+X-Gm-Message-State: AOAM532TJ+WFy5yTcu3BsbYnZ9AuULpZnVJZqKqqZSW8fq+NYYD5JrDf
+        /1cFA1ZSISJLZJOojq7mXhKaT7X7VMUznuHNn6aigh166l8=
+X-Google-Smtp-Source: ABdhPJyjmHyDnctsEMKBkZr9phS/9jJZ60CBbfNFwXeQRHc/Wl9jbZ6ktVF6XY6s6JAzaTOSk28akcrADfNwmOUSenM=
+X-Received: by 2002:a05:622a:138d:: with SMTP id o13mr27796695qtk.245.1626808807804;
+ Tue, 20 Jul 2021 12:20:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210720181517.GF3232@sequoia>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <cover.1dfbb73645d917b3c76d01290804a3410bd9932e.1624364386.git-series.a.fatoum@pengutronix.de>
+ <39e6d65ca5d2a0a35fb71d6c1f85add8ee489a19.1624364386.git-series.a.fatoum@pengutronix.de>
+ <1850833581.13438.1625172175436.JavaMail.zimbra@nod.at> <2f608e5a-5a12-6db1-b9bd-a2cd9e3e3671@pengutronix.de>
+ <783613027.15909.1625223222889.JavaMail.zimbra@nod.at> <ac8ef66f-4d57-ead0-d1b3-e97220463241@pengutronix.de>
+In-Reply-To: <ac8ef66f-4d57-ead0-d1b3-e97220463241@pengutronix.de>
+From:   Richard Weinberger <richard.weinberger@gmail.com>
+Date:   Tue, 20 Jul 2021 21:19:56 +0200
+Message-ID: <CAFLxGvxr94apP2jaT0tB6JRDtv_ivrguXK2Ykd3zer_4xtJ+2w@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        kernel <kernel@pengutronix.de>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        horia geanta <horia.geanta@nxp.com>,
+        aymen sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        davem <davem@davemloft.net>, Udit Agarwal <udit.agarwal@nxp.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        david <david@sigma-star.at>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        "open list, ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 7/20/21 11:15 AM, Tyler Hicks wrote:
-> On 2021-07-20 10:57:18, Florian Fainelli wrote:
->>
->>
->> On 7/19/2021 7:32 PM, Florian Fainelli wrote:
->>>
->>>
->>> On 7/19/2021 3:49 AM, Jens Wiklander wrote:
->>>> Hi,
->>>>
->>>> On Fri, Jul 16, 2021 at 4:48 AM Vikas Gupta
->>>> <vikas.gupta@broadcom.com> wrote:
->>>>>
->>>>> Hi Allen/Tyler,
->>>>>   The patch looks good to me.
->>>>
->>>> Thanks.
->>>>
->>>> Rafal, is it OK if I include this patch together with the rest of the
->>>> patches in this patch set in a pull request to arm-soc?
->>>
->>> I can take those patches through the Broadcom ARM SoC pull request,
->>> Rafal would that work for you? We seem to have a bit of a maintainer
->>> coverage blind spot for that directory.
->>
->> Applied to drivers/fixes: https://github.com/Broadcom/stblinux/commit/4ecd797b7e16eb7f1b86fbfd7e4a7887b192535b
-> 
-> Thanks, Florian, but note that you won't be able to build that branch
-> since the commit uses a new function (tee_shm_alloc_kernel_buf()) that's
-> added earlier in the full series. It seems like it is going to be easier
-> for this to all go through Jens.
+On Fri, Jul 2, 2021 at 2:37 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+> > Both is possible. If the string starts with "0x" it needs to be decoded to a
+> > 128 bit key. Otherwise it has to be a up to 16 byte string.
+>
+> Fine by me. Looking forward to your patches. :-)
 
-I was grepping for the new functions added and could find all
-references, though it looks like I missed tee_shm_alloc_kernel_buf()
-somehow, so yes, having Jens merge that series all together would make
-more sense here. If you need it:
+I'm not sure how to proceed.  Should I base my changes on this series
+or do you plan to send an updated
+version soon?
+Maybe it makes also sense to base my DCP patch set on yours.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Trusted Keys maintainers, what do you prefer?
+
 -- 
-Florian
+Thanks,
+//richard
