@@ -2,137 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 368053D03DA
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Jul 2021 23:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD783D06A2
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Jul 2021 04:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233467AbhGTUrJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 20 Jul 2021 16:47:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35382 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231751AbhGTUqu (ORCPT
+        id S231255AbhGUBcA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 20 Jul 2021 21:32:00 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38386 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230514AbhGUBbw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 20 Jul 2021 16:46:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626816447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=13FGH9IcdsNGls40eCSMkR2G2llimRJCFlJpfj0drAA=;
-        b=cYI0SzoTnadZnN7Wi/RlkmO1ITesuLeRcbj4sDcr8cLoakq4SFNQIYMV3t1NIaHrMCf5Wy
-        4vQ2WEPSEjHySSyp2kmydmVayGTotkBSVDF5TVIXB+7raDVv9/vwCGj8yn0i6aam40oLJ9
-        Of3ywYzUSVJl/eE0FGq8ngcwgTa1fok=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-167-sAO7k9F8NAW8lj4VH4CVuw-1; Tue, 20 Jul 2021 17:27:26 -0400
-X-MC-Unique: sAO7k9F8NAW8lj4VH4CVuw-1
-Received: by mail-qk1-f199.google.com with SMTP id y3-20020ae9f4030000b02903b916ae903fso135436qkl.6
-        for <linux-integrity@vger.kernel.org>; Tue, 20 Jul 2021 14:27:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=13FGH9IcdsNGls40eCSMkR2G2llimRJCFlJpfj0drAA=;
-        b=Mama/HZy60zttfHgQuyiLW0vbg8gWlKekP+7pFaVTvDUXv5utUNEf6ZX7Tk2Ku2qLt
-         VCxabHIqW7PiXlqMrpk+D1UyqkAs5YWjVOtpKQ5/+Zf/tOoTXTxTvkXAsPMFU5ekstp2
-         a7VWu4t561HPFXGFp1ex7pOkdh5LkYStV4M+Emx3xgS339uo35zdy5DXb4Y5cXEV+9H2
-         WGC3j/OsGUnsx2ISx1HgPqDdoBAlUXFnkr96omevmsmXB6z3rMd5fsTRaCOoQ/2y2Yjt
-         YLr8kLt+jgmd67LFknTeJ8nGR7YuNPDuX+uUVuOtHUPdhd2GTo9FNeITNoTF6ociWAFr
-         2TLg==
-X-Gm-Message-State: AOAM532j3Qi0ELaV4C1BsO+LH7+LjrfJg8DEBLCrJhkEOHyEvqYyyrPa
-        rR9/ShY42O7ILW/lD35X762uj02aH+NTZcJocrsHuACI7NuFoVO9/0hl3EN3m4NIDgoWG70SCXH
-        0zwGu3Wj9EFiTc5++5BUG+xmMvks=
-X-Received: by 2002:a37:aa8f:: with SMTP id t137mr30800502qke.277.1626816446231;
-        Tue, 20 Jul 2021 14:27:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx5ADkrHKUctkZSNxUAO8CeOCIjalPS9tqXHZEs8CzCNQ9nrPOPek18HNDy4oe1aXRTVECpGQ==
-X-Received: by 2002:a37:aa8f:: with SMTP id t137mr30800488qke.277.1626816445958;
-        Tue, 20 Jul 2021 14:27:25 -0700 (PDT)
-Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
-        by smtp.gmail.com with ESMTPSA id u19sm2816359qtx.48.2021.07.20.14.27.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jul 2021 14:27:25 -0700 (PDT)
-Date:   Tue, 20 Jul 2021 17:27:24 -0400
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Cc:     dm-devel@redhat.com, agk@redhat.com, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org, nramas@linux.microsoft.com
-Subject: Re: [PATCH 0/7] device mapper target measurements using IMA
-Message-ID: <YPc/vON2qvwjfvTe@redhat.com>
+        Tue, 20 Jul 2021 21:31:52 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16L24oDg166484;
+        Tue, 20 Jul 2021 22:12:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=DLA+4vJu2NlMTDPO7BjLz+9YiYRGdEgiUlTZTgykOQA=;
+ b=PHLJjE7C2ZOi9vs++OvbfVIeG4LRNCW33MgwY6zjgL2uXUhi5eIm2NHwxXWNHwEzRHkb
+ 8NnfN7gGm0k5CWauaCP+Yrd2FC0/AHKlYq31HcgK9mpKH/327V9zX4MZ1k/hXJu4ApTf
+ KX8jsHAHAnCh0Khnax7wk/debKg5Mi6SWkN+5cbpBACku3cb7Rt7udvci5AsMg40BSDt
+ y0OG8nfVPLYlO8MAFLNa43c9ufHqHAMPFNX0Rsc5RofI2wrUgJ7Rq08ZhPEHTVCmo0Ft
+ D32OyujiY+DAIVACff3abuWwGi3FF6vj8u3LB8mNwzDonmwJE84iNcmvxihkXSBswiLB kA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39x9qt90wu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jul 2021 22:12:23 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16L24rQn166933;
+        Tue, 20 Jul 2021 22:12:23 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39x9qt90wc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jul 2021 22:12:23 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16L26nwS030998;
+        Wed, 21 Jul 2021 02:12:21 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 39upu89m1n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jul 2021 02:12:21 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16L29rnT33292672
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jul 2021 02:09:54 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 201A642047;
+        Wed, 21 Jul 2021 02:12:19 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B2144203F;
+        Wed, 21 Jul 2021 02:12:17 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.1.44])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 21 Jul 2021 02:12:17 +0000 (GMT)
+Message-ID: <713d22788b678c612c5b18edfb8cf849af61ace5.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/7] dm: measure data on table load
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        dm-devel@redhat.com, agk@redhat.com, snitzer@redhat.com
+Cc:     linux-integrity@vger.kernel.org, nramas@linux.microsoft.com
+Date:   Tue, 20 Jul 2021 22:12:16 -0400
+In-Reply-To: <20210713004904.8808-2-tusharsu@linux.microsoft.com>
 References: <20210713004904.8808-1-tusharsu@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210713004904.8808-1-tusharsu@linux.microsoft.com>
+         <20210713004904.8808-2-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 79jdo0nO-QNTfHHtwpfqzOtWJRvrHkbh
+X-Proofpoint-GUID: a9h3mcYU3RRcY7Fgn9Iyp6s8axWn3N5-
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-20_15:2021-07-19,2021-07-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 adultscore=0
+ impostorscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107210010
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jul 12 2021 at  8:48P -0400,
-Tushar Sugandhi <tusharsu@linux.microsoft.com> wrote:
+Hi Tushar, Mike, 
 
-> For a given system, various external services/infrastructure tools
-> (including the attestation service) interact with it - both during the
-> setup and during rest of the system run-time.  They share sensitive data
-> and/or execute critical workload on that system.  The external services
-> may want to verify the current run-time state of the relevant kernel
-> subsystems before fully trusting the system with business-critical
-> data/workload.
-> 
-> Device mapper is one such kernel subsystem that plays a critical role on
-> a given system by providing various important functionalities to the
-> block devices with various target types like crypt, verity, integrity 
-> etc.  Each of these target types’ functionalities can be configured with
-> various attributes.  The attributes chosen to configure these target types
-> can significantly impact the security profile of the block device,
-> and in-turn, of the system itself.  For instance, the type of encryption
-> algorithm and the key size determines the strength of encryption for a
-> given block device.
-> 
-> Therefore, verifying the current state of various block devices as well
-> as their various target attributes is crucial for external services
-> before fully trusting the system with business-critical data/workload.
-> 
-> IMA provides the necessary functionality for device mapper to measure the
-> state and configuration of various block devices -
->   - BY device mapper itself, from within the kernel,
->   - in a tamper resistant way,
->   - and re-measured - triggered on state/configuration change.
-> 
-> This patch series uses this IMA functionality, by calling the function
-> ima_measure_critical_data(), when a block device state is changed (e.g.
-> on device create, resume, rename, remove etc.)  It measures the device
-> state and configuration and stores it in IMA logs, so that it can be
-> used by external services for managing the system.
+On Mon, 2021-07-12 at 17:48 -0700, Tushar Sugandhi wrote:
+> +struct dm_ima_device_table_metadata {
+> +       /*
+> +        * Contains data specific to the device which is common across
+> +        * all the targets in the table.e.g. name, uuid, major, minor etc.
+> +        * The values are stored in comma separated list of key1=val1,key2=val2; pairs
+> +        * delimited by a semicolon at the end of the list.
+> +        */
+> +       char *device_metadata;
+> +       unsigned int device_metadata_len;
+> +       unsigned int num_targets;
+> +
+> +       /*
+> +        * Contains the sha256 hashs of the IMA measurements of the
+> +        * target attributes key-value pairs from the active/inactive tables.
+> +        */
 
-I needed to EXPORT_SYMBOL_GPL(ima_measure_critical_data); otherwise I
-couldn't compile.. not sure but I can only imagine you compile DM
-(and all targets) to be builtin?
+From past experience hard coding the hash algorithm is really not a
+good idea.
 
-In addition to fixing that (in first table load patch) I changed
-various things along the way while I reviewed each patch.
+Mimi
 
-Things that I recall are:
-- moved #ifdef CONFIG_IMA from dm-ima.c to dm-ima.h
-- fixed various typos and whitespace
-- consistently prepend "," in STATUSTYPE_IMA's DMEMIT()s as opposed to
-  having a mix or pre and postfix throughout targets
-- fixed what seemed like malformed STATUSTYPE_IMA handling for
-  dm-multipath -- it was DMEMIT(";") for each dm-mpath's pathgroup
-- added some fields to dm-mpath, renamed some IMA names in name=value
-  pairs to be more clear.
+> +       char *hash;
+> +       unsigned int hash_len;
+> +
+> +};
 
-I've staged the result in linux-next via linux-dm.git's dm-5.15
-branch, see:
-https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/log/?h=dm-5.15
-
-I've compiled tested both with and without CONFIG_IMA set.  But
-haven't actually tested the code.
-
-Please send any incremental fixes relative to the dm-5.15 branch and
-I'll get them folded in where appropriate.
-
-Thanks,
-Mike
 
