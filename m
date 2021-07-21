@@ -2,66 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F853D14C4
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Jul 2021 19:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6633D14F5
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Jul 2021 19:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbhGUQWM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 21 Jul 2021 12:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S233195AbhGUQhe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 21 Jul 2021 12:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236338AbhGUQWJ (ORCPT
+        with ESMTP id S231687AbhGUQhe (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 21 Jul 2021 12:22:09 -0400
+        Wed, 21 Jul 2021 12:37:34 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DFBC061575
-        for <linux-integrity@vger.kernel.org>; Wed, 21 Jul 2021 10:02:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDECC061757
+        for <linux-integrity@vger.kernel.org>; Wed, 21 Jul 2021 10:18:10 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <a.fatoum@pengutronix.de>)
-        id 1m6FcI-0006k1-92; Wed, 21 Jul 2021 19:02:42 +0200
-Subject: Re: [PATCH v2 6/6] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-To:     Richard Weinberger <richard.weinberger@gmail.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        kernel <kernel@pengutronix.de>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        horia geanta <horia.geanta@nxp.com>,
-        aymen sghaier <aymen.sghaier@nxp.com>,
+        id 1m6FrA-0008OQ-Fm; Wed, 21 Jul 2021 19:18:04 +0200
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH 2/3] KEYS: trusted: Introduce support for NXP DCP-based
+ trusted keys
+To:     Richard Weinberger <richard@nod.at>
+Cc:     "open list, ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        david <david@sigma-star.at>, David Howells <dhowells@redhat.com>,
+        davem <davem@davemloft.net>, festevam <festevam@gmail.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
-        davem <davem@davemloft.net>, Udit Agarwal <udit.agarwal@nxp.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        david <david@sigma-star.at>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        "open list, ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
         Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         linux-integrity <linux-integrity@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>
-References: <cover.1dfbb73645d917b3c76d01290804a3410bd9932e.1624364386.git-series.a.fatoum@pengutronix.de>
- <39e6d65ca5d2a0a35fb71d6c1f85add8ee489a19.1624364386.git-series.a.fatoum@pengutronix.de>
- <1850833581.13438.1625172175436.JavaMail.zimbra@nod.at>
- <2f608e5a-5a12-6db1-b9bd-a2cd9e3e3671@pengutronix.de>
- <783613027.15909.1625223222889.JavaMail.zimbra@nod.at>
- <ac8ef66f-4d57-ead0-d1b3-e97220463241@pengutronix.de>
- <CAFLxGvxr94apP2jaT0tB6JRDtv_ivrguXK2Ykd3zer_4xtJ+2w@mail.gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <879d4cda-2ac1-d81b-7f4d-c08261e0aa0c@pengutronix.de>
-Date:   Wed, 21 Jul 2021 19:02:38 +0200
+        LSM <linux-security-module@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-imx <linux-imx@nxp.com>, kernel <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        shawnguo <shawnguo@kernel.org>
+References: <20210614201620.30451-1-richard@nod.at>
+ <20210614201620.30451-3-richard@nod.at>
+ <714571a1-e8dd-3417-b5ab-2a6d611fb3ee@pengutronix.de>
+ <2032322938.25484.1626259466410.JavaMail.zimbra@nod.at>
+Message-ID: <5c381015-64dc-039f-8bc2-3109dd3b9bf4@pengutronix.de>
+Date:   Wed, 21 Jul 2021 19:17:59 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <CAFLxGvxr94apP2jaT0tB6JRDtv_ivrguXK2Ykd3zer_4xtJ+2w@mail.gmail.com>
+In-Reply-To: <2032322938.25484.1626259466410.JavaMail.zimbra@nod.at>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -70,36 +63,147 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+Hello Richard,
 
-On 20.07.21 21:19, Richard Weinberger wrote:
-> On Fri, Jul 2, 2021 at 2:37 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->>> Both is possible. If the string starts with "0x" it needs to be decoded to a
->>> 128 bit key. Otherwise it has to be a up to 16 byte string.
+On 14.07.21 12:44, Richard Weinberger wrote:
+> Ahmad,
+> 
+> ----- Ursprüngliche Mail -----
+>> Von: "Ahmad Fatoum" <a.fatoum@pengutronix.de>
+> 
+> [...]
+> 
+> Sure, why not? It shows that you will also in future take care of it.
+
+Good point. I did that for v3.
+
+> 
+> [...]
+> 
+>>> +} __packed;
+>>> +
+>>> +static bool use_otp_key;
+>>> +module_param_named(dcp_use_otp_key, use_otp_key, bool, 0);
+>>> +MODULE_PARM_DESC(dcp_use_otp_key, "Use OTP instead of UNIQUE key for sealing");
 >>
->> Fine by me. Looking forward to your patches. :-)
+>> Shouldn't these be documented in admin-guide/kernel-parameters.txt as well?
 > 
-> I'm not sure how to proceed.  Should I base my changes on this series
-> or do you plan to send an updated
-> version soon?
-> Maybe it makes also sense to base my DCP patch set on yours.
+> Yes. Will do.
 > 
-> Trusted Keys maintainers, what do you prefer?
+>>> +static bool skip_zk_test;
+>>> +module_param_named(dcp_skip_zk_test, skip_zk_test, bool, 0);
+>>> +MODULE_PARM_DESC(dcp_skip_zk_test, "Don't test whether device keys are
+>>> zero'ed");
+>>
+>> Does this need to be configurible? I'd assume this can only happen when using an
+>> unfused OTP. In such a case, it's ok to always warn, so you don't need to make
+>> this configurible.
+> 
+> We found such a setting super useful while working with targets where the keys are
+> zero'ed for various reasons.
+> There are cases where you want to use/test trusted keys even when the master key
+> is void. Our detection logic does not only print a warning, it refuses to load
+> blobs. So IMHO the config knob makes sense.
 
-I sent out v3 despite the name (of course forgot that git-send-email -vX is silently
-dropped when sending patch files directly..):
+Ah, I missed that it refuses to continue in that case.
 
-https://lore.kernel.org/linux-integrity/cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de/T/#t
+> 
+>>> +
+>>> +static unsigned int calc_blob_len(unsigned int payload_len) 
+>>> +{
+>>> +	return sizeof(struct dcp_blob_fmt) + payload_len + DCP_BLOB_AUTHLEN;
+>>> +}
+>>> +
+>>> +static int do_dcp_crypto(u8 *in, u8 *out, bool is_encrypt)
+>>
+>> I assume in can't be const because the use with sg APIs?
+> 
+> I'm pretty sure this was the main reason, but I can check again.
+> 
+>>> +{
+>>> +	int res = 0;
+>>> +	struct skcipher_request *req = NULL;
+>>> +	DECLARE_CRYPTO_WAIT(wait);
+>>> +	struct scatterlist src_sg, dst_sg;
+>>> +	struct crypto_skcipher *tfm;
+>>> +	u8 paes_key[DCP_PAES_KEYSIZE];
+>>> +
+>>> +	if (!use_otp_key)
+>>
+>> I'd invert this. Makes code easier to read.
+> 
+> Ok. :-)
+> 
+>>> +		paes_key[0] = DCP_PAES_KEY_UNIQUE;
+>>> +	else
+>>> +		paes_key[0] = DCP_PAES_KEY_OTP;
+>>> +
+>>> +	tfm = crypto_alloc_skcipher("ecb-paes-dcp", CRYPTO_ALG_INTERNAL,
+>>> +				    CRYPTO_ALG_INTERNAL);
+>>> +	if (IS_ERR(tfm)) {
+>>> +		res = PTR_ERR(tfm);
+>>> +		pr_err("Unable to request DCP pAES-ECB cipher: %i\n", res);
+>>
+>> Can you define pr_fmt above? There's also %pe now that can directly print out an
+>> error pointer.
+> 
+> pr_fmt is not defined on purpose. include/keys/trusted-type.h defines already one
+> and I assumed "trusted_key:" is the desired prefix for all kinds of trusted keys.
 
-I'd advise you base your changes on the first two patches there as well as the Kconfig fix/enhancement
-I sent out separately:
-https://lore.kernel.org/linux-integrity/20210721160258.7024-1-a.fatoum@pengutronix.de/T/#u
+Ah, all good then. I didn't define it for CAAM either, but forgot why I didn't
+along the way. May've been the same reason.
 
-Those are relevant for you as well and I assume they should be good to be merged even if the
-CAAM series turns out to need some more love.
+> [...]
+> 
+>> - payload_len is at offset 33, but MIN_KEY_SIZE == 32 and there are no minimum
+>>   size checks. Couldn't you read beyond the buffer this way?
+> 
+> The key has a minimum size of MIN_KEY_SIZE, but p->blob (being struct trusted_key_payload->blob[MAX_BLOB_SIZE])
+> is much larger.
+> So the assumption is that a DCP blob will always be smaller than MAX_BLOB_SIZE.
+> 
+>> - offset 33 is unaligned for payload_len. Please use get_unaligned_le32 here.
+> 
+> Oh yes. Makes sense!
+> 
+> [...]
+> 
+>>
+>> jfyi, in the prelude of my CAAM series, I made this the default
+>> when .get_random == NULL.
+> 
+> Right. :-)
+> 
+> [...]
+> 
+>>> +	ret = do_dcp_crypto(buf, buf, true);
+>>> +	if (ret)
+>>> +		goto out;
+>>> +
+>>> +	if (memcmp(buf, bad, AES_BLOCK_SIZE) == 0) {
+>>> +		pr_err("Device neither in secure nor trusted mode!\n");
+>>
+>> What's the difference between secure and trusted? Can't this test be skipped
+>> if use_otp_key == false?
+> 
+> DCP has many modes of operation. Secure is one level above trusted.
+> For the gory details see "Security Reference Manual for the i.MX 6ULL Applications Processor".
+> I'm not sure whether all information my manual describes is publicly available so I
+> don't dare to copy&paste from it.
+> 
+> As David and I understood the logic, both OTP and UNIQUE keys can be zero'ed.
+> It is also possible that DCP has no support at all for these keys,
+> then you'll also get a zero key. That's why we have this check here.
+
+Thanks for the clarification.
 
 Cheers,
 Ahmad
+
+> 
+> Thanks,
+> //richard
+> 
 
 
 -- 
