@@ -2,128 +2,98 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEED3D24DA
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Jul 2021 15:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561913D2B3B
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Jul 2021 19:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbhGVNJn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Jul 2021 09:09:43 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39162 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231925AbhGVNJn (ORCPT
+        id S229591AbhGVQyO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Jul 2021 12:54:14 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3451 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230035AbhGVQyJ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Jul 2021 09:09:43 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16MDX0E3128636;
-        Thu, 22 Jul 2021 09:50:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=kos3FVmTd7oXvlZ3XCZRWpWrBVMFG6Ui1FBGEyaRtbM=;
- b=DAyvb9xvFE2UQS0Zg29ILghYMai1hPTyTS1IjqmMirx29XIBVi16ARu24ieY7aMdoZ/U
- LT8kv5W08Yl0FhygOB9/wJSDgUtTBB2rPmMrrv3OTsCQrtVAx8tzbxVocRekDFegYoUR
- rOilz2tiKreRQJbwnQFnbQXfyVSYnys6kvnyMlqeIwh6QGaXmeYUQGxJ3h2BbyhOnJfN
- 6Xlubt9owPftU0vPOHKrnutK9JaxxwSHSoaXn5D8hrZi53EjvPwuwUh0BpO+QlODWDyP
- rfoxXyzLKTpo9tWb0PSPjesK7ApBo5KdrVDRkmtvrMb0oPtAo9QnxqYV+WyrwIoUn0D7 0A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39y8xahu24-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jul 2021 09:50:15 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16MDXeMb136193;
-        Thu, 22 Jul 2021 09:50:15 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 39y8xahtyw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jul 2021 09:50:15 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16MDlGuG008371;
-        Thu, 22 Jul 2021 13:50:12 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 39vng724gw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jul 2021 13:50:12 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16MDlfMx23921074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 22 Jul 2021 13:47:41 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E0D3D11C054;
-        Thu, 22 Jul 2021 13:50:09 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3B6B11C04A;
-        Thu, 22 Jul 2021 13:50:07 +0000 (GMT)
-Received: from sig-9-65-201-143.ibm.com (unknown [9.65.201.143])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 22 Jul 2021 13:50:07 +0000 (GMT)
-Message-ID: <decadc5869f3de0bc78f783703e5ca9286f42522.camel@linux.ibm.com>
-Subject: Re: [syzbot] possible deadlock in mnt_want_write (2)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>,
-        syzbot <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com>,
-        Hillf Danton <hdanton@sina.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-integrity <linux-integrity@vger.kernel.org>
-Date:   Thu, 22 Jul 2021 09:50:06 -0400
-In-Reply-To: <CAJfpegsYNcv+mEVpLBxVGSQhXr0Q_UnOUC1VkYuYB=xzRt+f-A@mail.gmail.com>
-References: <00000000000067d24205c4d0e599@google.com>
-         <CAJfpegsYNcv+mEVpLBxVGSQhXr0Q_UnOUC1VkYuYB=xzRt+f-A@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jNI6zunxBaehC_v-7eAEcm_fNZPdIjc1
-X-Proofpoint-ORIG-GUID: v1AYLtooOcVymVRZmDtX_OfRce_DyXX7
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 22 Jul 2021 12:54:09 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GVzmr1w3Mz6H7N6;
+        Fri, 23 Jul 2021 01:23:08 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 22 Jul 2021 19:34:42 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>
+CC:     <pvorel@suse.cz>, <vt@altlinux.org>,
+        <linux-integrity@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH ima-evm-utils 0/7] ima-evm-utils: Add UML support and tests for EVM portable signatures
+Date:   Thu, 22 Jul 2021 19:34:07 +0200
+Message-ID: <20210722173414.1738041-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-22_07:2021-07-22,2021-07-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 clxscore=1011 mlxlogscore=930 mlxscore=0 spamscore=0
- malwarescore=0 bulkscore=0 priorityscore=1501 adultscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107220091
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[CC'ing Hillf Danton <hdanton@sina.com>]
+During the development of the tests for the 'evm: Improve usability of
+portable signatures' patch set, it became clear that a testing environment
+available to a regular user was not sufficient. First, because some
+operations needs to be executed with the privileges of the root user (for
+example, writing to securityfs), which not always is available (for example
+in a public testing plaform). Second, because some configuration steps
+performed on the kernel cannot be undone.
 
-Hi Miklos,
+The first goal of this patch set is to overcome these limitations by
+adding support for running tests with a UML (User Mode Linux) kernel. In
+this environment, a test script might operate as root with the objects
+created in the new environment. It still has the limitations of the user
+that launched the UML kernel, if the test script interacts with the rest of
+the system.
 
-On Mon, 2021-07-19 at 17:11 +0200, Miklos Szeredi wrote:
-> [CC: linux-intergrity]
-> 
-> On Tue, 15 Jun 2021 at 18:59, syzbot
-> <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    06af8679 coredump: Limit what can interrupt coredumps
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=162f99afd00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=547a5e42ca601229
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=b42fe626038981fb7bfa
-> > compiler:       Debian clang version 11.0.1-2
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
+The second goal of this patch set is to introduce the tests for the 'evm:
+Improve usability of portable signatures' patch set.
 
-There was a similar syzbot report and followup discussion [1].  
-According to Amir Goldstein,  it's a false positive lockdep warning.  
-At this point we understand how to fix the problem, but are waiting for
-a reproducer.
+Patches 1-2 download the UML kernel, its signing key and mount-idmapped (to
+perform the tests on an idmapped mount). Patch 3 adds additional options
+for the container engine to execute the UML kernel. Patch 4-5 adds the
+infrastructure necessary to launch the UML kernel. Patch 6 adds the
+possibility of executing tests individually and, lastly, Patch 7 adds the
+tests for the 'evm: Improve usability of portable signatures' patch set.
 
-thanks,
+To test this patch set, a new workflow for Github Actions has been defined
+in the kernel repository. The patches to introduce it and the UML kernel
+configuration are available at:
 
-Mimi
+https://github.com/robertosassu/linux/commit/b3122b23a1e5f3ef5e3f1932204da39974a50257
+https://github.com/robertosassu/linux/commit/9ccb667217fd1fdd933a5d6816ba0281a09bf980
 
-[1] Message-Id: <20210616090142.734-1-hdanton@sina.com>
+Roberto Sassu (7):
+  Download UML kernel and signing key
+  Download mount-idmapped
+  Add additional options to the container engine
+  Add functions to the testing library to run a test script with UML
+  Signal failures of tests executed by UML kernel with unclean shutdown
+  Introduce TST_LIST variable to select a test to execute
+  Add tests for EVM portable signatures
 
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com
+ .github/workflows/ci.yml       |   21 +
+ .travis.yml                    |   19 +-
+ build.sh                       |    1 +
+ ci/alpine.sh                   |    8 +-
+ ci/alt.sh                      |    1 +
+ ci/debian.sh                   |    8 +
+ ci/fedora.sh                   |   16 +-
+ ci/tumbleweed.sh               |    9 +-
+ tests/Makefile.am              |    3 +-
+ tests/functions.sh             |   67 ++
+ tests/portable_signatures.test | 1157 ++++++++++++++++++++++++++++++++
+ 11 files changed, 1305 insertions(+), 5 deletions(-)
+ create mode 100755 tests/portable_signatures.test
 
+-- 
+2.25.1
 
