@@ -2,76 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 113813D2460
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Jul 2021 15:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEED3D24DA
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Jul 2021 15:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbhGVM3h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Jul 2021 08:29:37 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:42616 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbhGVM3h (ORCPT
+        id S232064AbhGVNJn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Jul 2021 09:09:43 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39162 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231925AbhGVNJn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Jul 2021 08:29:37 -0400
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A6B402261C;
-        Thu, 22 Jul 2021 13:10:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1626959411;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9RLZBDzrlhwClLH14d41Og+ohd8t/ev9k3JcougZeZA=;
-        b=pU5mNF5NlrxxyFxYK3pX3LJgLmkKaCEj8++Ryqw7rs6hoU34PMPeEMIum02AQyM6I2Fl/j
-        udUnIU9/Vx+yaOaYYsBpwiHYfQPLooqi8xlEdF9IGItseQ3sI9Yxcese3jlt+UYYq1Geei
-        iOF6m1PB8VWa7SGaCfX/I1BdTDiSPGs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1626959411;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9RLZBDzrlhwClLH14d41Og+ohd8t/ev9k3JcougZeZA=;
-        b=abYG99bC9EmrvGMRgM1i0mYaR+rhYy8M3fEGT30/K2jC+3mTB+bXH4kqpXuHhuISlg1T/e
-        zXzipErUfx8EUBCg==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 63475139A1;
-        Thu, 22 Jul 2021 13:10:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id NTCCFjNu+WDTcwAAGKfGzw
-        (envelope-from <pvorel@suse.cz>); Thu, 22 Jul 2021 13:10:11 +0000
-Date:   Thu, 22 Jul 2021 15:10:09 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>,
-        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
-Subject: Re: [PATCH ima-evm-utils] ima-evm-utils: Fix incorrect algorithm
- name in hash_info.gen
-Message-ID: <YPluMV2uUhela5hN@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20210722052704.11031-1-tianjia.zhang@linux.alibaba.com>
+        Thu, 22 Jul 2021 09:09:43 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16MDX0E3128636;
+        Thu, 22 Jul 2021 09:50:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=kos3FVmTd7oXvlZ3XCZRWpWrBVMFG6Ui1FBGEyaRtbM=;
+ b=DAyvb9xvFE2UQS0Zg29ILghYMai1hPTyTS1IjqmMirx29XIBVi16ARu24ieY7aMdoZ/U
+ LT8kv5W08Yl0FhygOB9/wJSDgUtTBB2rPmMrrv3OTsCQrtVAx8tzbxVocRekDFegYoUR
+ rOilz2tiKreRQJbwnQFnbQXfyVSYnys6kvnyMlqeIwh6QGaXmeYUQGxJ3h2BbyhOnJfN
+ 6Xlubt9owPftU0vPOHKrnutK9JaxxwSHSoaXn5D8hrZi53EjvPwuwUh0BpO+QlODWDyP
+ rfoxXyzLKTpo9tWb0PSPjesK7ApBo5KdrVDRkmtvrMb0oPtAo9QnxqYV+WyrwIoUn0D7 0A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39y8xahu24-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jul 2021 09:50:15 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16MDXeMb136193;
+        Thu, 22 Jul 2021 09:50:15 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39y8xahtyw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jul 2021 09:50:15 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16MDlGuG008371;
+        Thu, 22 Jul 2021 13:50:12 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 39vng724gw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jul 2021 13:50:12 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16MDlfMx23921074
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jul 2021 13:47:41 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E0D3D11C054;
+        Thu, 22 Jul 2021 13:50:09 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D3B6B11C04A;
+        Thu, 22 Jul 2021 13:50:07 +0000 (GMT)
+Received: from sig-9-65-201-143.ibm.com (unknown [9.65.201.143])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 22 Jul 2021 13:50:07 +0000 (GMT)
+Message-ID: <decadc5869f3de0bc78f783703e5ca9286f42522.camel@linux.ibm.com>
+Subject: Re: [syzbot] possible deadlock in mnt_want_write (2)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        syzbot <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+Date:   Thu, 22 Jul 2021 09:50:06 -0400
+In-Reply-To: <CAJfpegsYNcv+mEVpLBxVGSQhXr0Q_UnOUC1VkYuYB=xzRt+f-A@mail.gmail.com>
+References: <00000000000067d24205c4d0e599@google.com>
+         <CAJfpegsYNcv+mEVpLBxVGSQhXr0Q_UnOUC1VkYuYB=xzRt+f-A@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jNI6zunxBaehC_v-7eAEcm_fNZPdIjc1
+X-Proofpoint-ORIG-GUID: v1AYLtooOcVymVRZmDtX_OfRce_DyXX7
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210722052704.11031-1-tianjia.zhang@linux.alibaba.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-22_07:2021-07-22,2021-07-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1011 mlxlogscore=930 mlxscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 adultscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107220091
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Tianjia,
+[CC'ing Hillf Danton <hdanton@sina.com>]
 
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
+Hi Miklos,
 
-Agree with Mimi to update the comment associated with this change.
+On Mon, 2021-07-19 at 17:11 +0200, Miklos Szeredi wrote:
+> [CC: linux-intergrity]
+> 
+> On Tue, 15 Jun 2021 at 18:59, syzbot
+> <syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    06af8679 coredump: Limit what can interrupt coredumps
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=162f99afd00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=547a5e42ca601229
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=b42fe626038981fb7bfa
+> > compiler:       Debian clang version 11.0.1-2
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
 
-Kind regards,
-Petr
+There was a similar syzbot report and followup discussion [1].  
+According to Amir Goldstein,  it's a false positive lockdep warning.  
+At this point we understand how to fix the problem, but are waiting for
+a reproducer.
+
+thanks,
+
+Mimi
+
+[1] Message-Id: <20210616090142.734-1-hdanton@sina.com>
+
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+b42fe626038981fb7bfa@syzkaller.appspotmail.com
+
+
