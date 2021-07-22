@@ -2,167 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 625E83D20B1
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Jul 2021 11:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D543D2351
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Jul 2021 14:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbhGVIiE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Jul 2021 04:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbhGVIh6 (ORCPT
+        id S231789AbhGVLsC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 22 Jul 2021 07:48:02 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9428 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231772AbhGVLsC (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Jul 2021 04:37:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0B6C0613C1
-        for <linux-integrity@vger.kernel.org>; Thu, 22 Jul 2021 02:18:33 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1m6UqF-0001NO-DL; Thu, 22 Jul 2021 11:18:07 +0200
-Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1m6UqC-0001D1-HE; Thu, 22 Jul 2021 11:18:04 +0200
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        Song Liu <song@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-raid@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-mtd@lists.infradead.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: [RFC PATCH v1 4/4] ubifs: auth: consult encrypted and trusted keys if no logon key was found
-Date:   Thu, 22 Jul 2021 11:18:02 +0200
-Message-Id: <f5891611f329583baef32089c8b322850d81166a.1626945419.git-series.a.fatoum@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.b2fdd70b830d12853b12a12e32ceb0c8162c1346.1626945419.git-series.a.fatoum@pengutronix.de>
-References: <cover.b2fdd70b830d12853b12a12e32ceb0c8162c1346.1626945419.git-series.a.fatoum@pengutronix.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: afa@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+        Thu, 22 Jul 2021 07:48:02 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16MC5UHD167297;
+        Thu, 22 Jul 2021 08:28:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=ZnQxz/2pCHWa04niLAMnLAINUmWogN3eROPizQ9ia2s=;
+ b=gNzXUDecHgZ0iGaMiDIYZZATPyicshKq9cP6El8vKKQZJiM4r09NE0fR7KM5Y0YVMezc
+ GVKSZ1UaCL1WUL4nOziFLvnpK8EUQ79TjB09Swtw3HmzNgPUwchRSou8Oq/YcYDd0Big
+ DLGAcJGYKqzvf8rl/8WAJTv1bOsVlu6c2eEn13fzyyWuf/c83/cwwuEJ4q2BIDA2s5J/
+ /c1Q9ssKAGX+Nw9waZ16oLyB3U1fdUD/wXw9iw5h2Qea7klEwuXSFYGAE/0pQZ9IizIU
+ VnRKP5UFzMXvLDtncll3JhurThViHXges5jY8UIE+Zj2C3SH/2e/WwDWoGIMUj8en7rK Ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39y7wrhfut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jul 2021 08:28:29 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16MC6JuX171569;
+        Thu, 22 Jul 2021 08:28:29 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39y7wrhfts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jul 2021 08:28:29 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16MCCQnu004739;
+        Thu, 22 Jul 2021 12:28:27 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 39upu89fxt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jul 2021 12:28:26 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16MCSOes30998864
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jul 2021 12:28:24 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F0FFFA4057;
+        Thu, 22 Jul 2021 12:28:23 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 44ABFA4059;
+        Thu, 22 Jul 2021 12:28:22 +0000 (GMT)
+Received: from sig-9-65-201-143.ibm.com (unknown [9.65.201.143])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 22 Jul 2021 12:28:22 +0000 (GMT)
+Message-ID: <22d8ae657783ae11ad5bb0cca8346d45d1011733.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils] ima-evm-utils: Fix incorrect algorithm
+ name in hash_info.gen
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Petr Vorel <pvorel@suse.cz>, Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>,
+        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
+Date:   Thu, 22 Jul 2021 08:28:21 -0400
+In-Reply-To: <20210722052704.11031-1-tianjia.zhang@linux.alibaba.com>
+References: <20210722052704.11031-1-tianjia.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: JHh5RnmPW9p31jbE5u6b95aroYFqfc1A
+X-Proofpoint-ORIG-GUID: JFFEa365ynn1guD4zGEL_WXm5TCTNJt-
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-22_04:2021-07-22,2021-07-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 bulkscore=0 mlxscore=0 priorityscore=1501
+ malwarescore=0 adultscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107220081
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Currently, UBIFS auth_key can only be a logon key: This is a user key
-that's provided to the kernel in plaintext and that then remains within
-the kernel. Linux also supports trusted and encrypted keys, which have
-stronger guarantees: They are only exposed to userspace in encrypted
-form and, in the case of trusted keys, can be directly rooted to a trust
-source like a TPM chip.
+Hi Tianjia,
 
-Add support for auth_key to be either a logon, encrypted or trusted key.
-At mount time, the keyring will be searched for a key with the supplied
-name in that order.
+On Thu, 2021-07-22 at 13:27 +0800, Tianjia Zhang wrote:
+> There is no such an algorithm name as sm3-256. This is an ambiguity
+> caused by the definition of the macro HASH_ALGO_SM3_256. The sed
+> command is only a special case of sm3, so sm3 is used to replace
+> the sm3-256 algorithm name.
+> 
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> ---
+>  src/.gitignore    | 1 +
+>  src/hash_info.gen | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/src/.gitignore b/src/.gitignore
+> index 38e8e3c..69d2988 100644
+> --- a/src/.gitignore
+> +++ b/src/.gitignore
+> @@ -1 +1,2 @@
+>  hash_info.h
+> +tmp_hash_info.h
+> diff --git a/src/hash_info.gen b/src/hash_info.gen
+> index 5f7a97f..f72db37 100755
+> --- a/src/hash_info.gen
+> +++ b/src/hash_info.gen
+> @@ -86,7 +86,7 @@ sed -n 's/HASH_ALGO_\(.*\),/\1 \L\1\E/p' $HASH_INFO | \
+>    while read a b; do
+>      # Normalize text hash name: if it contains underscore between
+>      # digits replace it with a dash, other underscores are removed.
+> -    b=$(echo "$b" | sed "s/\([0-9]\)_\([0-9]\)/\1-\2/g;s/_//g")
+> +    b=$(echo "$b" | sed "s/sm3_256/sm3/g;s/_//g")
 
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
-To: David Howells <dhowells@redhat.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-To: James Morris <jmorris@namei.org>
-To: "Serge E. Hallyn" <serge@hallyn.com>
-To: Alasdair Kergon <agk@redhat.com>
-To: Mike Snitzer <snitzer@redhat.com>
-To: dm-devel@redhat.com
-To: Song Liu <song@kernel.org>
-To: Richard Weinberger <richard@nod.at>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-raid@vger.kernel.org
-Cc: keyrings@vger.kernel.org
-Cc: linux-mtd@lists.infradead.org
-Cc: linux-security-module@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
----
- Documentation/filesystems/ubifs.rst |  2 +-
- fs/ubifs/auth.c                     | 19 ++++++++++++-------
- 2 files changed, 13 insertions(+), 8 deletions(-)
+Please update the comment associated with this change.
 
-diff --git a/Documentation/filesystems/ubifs.rst b/Documentation/filesystems/ubifs.rst
-index e6ee99762534..12d08458b3d7 100644
---- a/Documentation/filesystems/ubifs.rst
-+++ b/Documentation/filesystems/ubifs.rst
-@@ -101,7 +101,7 @@ compr=zlib              override default compressor and set it to "zlib"
- auth_key=		specify the key used for authenticating the filesystem.
- 			Passing this option makes authentication mandatory.
- 			The passed key must be present in the kernel keyring
--			and must be of type 'logon'
-+			and must be of type 'logon', 'encrypted' or 'trusted'.
- auth_hash_name=		The hash algorithm used for authentication. Used for
- 			both hashing and for creating HMACs. Typical values
- 			include "sha256" or "sha512"
-diff --git a/fs/ubifs/auth.c b/fs/ubifs/auth.c
-index 6a0b8d858d81..af8e9eb58a60 100644
---- a/fs/ubifs/auth.c
-+++ b/fs/ubifs/auth.c
-@@ -14,6 +14,8 @@
- #include <crypto/hash.h>
- #include <crypto/algapi.h>
- #include <keys/user-type.h>
-+#include <keys/trusted-type.h>
-+#include <keys/encrypted-type.h>
- #include <keys/asymmetric-type.h>
- 
- #include "ubifs.h"
-@@ -256,9 +258,10 @@ out_destroy:
- int ubifs_init_authentication(struct ubifs_info *c)
- {
- 	struct key *keyring_key;
--	const struct user_key_payload *ukp;
- 	int err;
-+	unsigned int len;
- 	char hmac_name[CRYPTO_MAX_ALG_NAME];
-+	const void *key_material;
- 
- 	if (!c->auth_hash_name) {
- 		ubifs_err(c, "authentication hash name needed with authentication");
-@@ -277,6 +280,10 @@ int ubifs_init_authentication(struct ubifs_info *c)
- 		 c->auth_hash_name);
- 
- 	keyring_key = request_key(&key_type_logon, c->auth_key_name, NULL);
-+	if (IS_ERR(keyring_key) && IS_REACHABLE(CONFIG_ENCRYPTED_KEYS))
-+		keyring_key = request_key(&key_type_encrypted, c->auth_key_name, NULL);
-+	if (IS_ERR(keyring_key) && IS_REACHABLE(CONFIG_TRUSTED_KEYS))
-+		keyring_key = request_key(&key_type_trusted, c->auth_key_name, NULL);
- 
- 	if (IS_ERR(keyring_key)) {
- 		ubifs_err(c, "Failed to request key: %ld",
-@@ -286,12 +293,10 @@ int ubifs_init_authentication(struct ubifs_info *c)
- 
- 	down_read(&keyring_key->sem);
- 
--	ukp = user_key_payload_locked(keyring_key);
--	if (!ukp) {
--		/* key was revoked before we acquired its semaphore */
--		err = -EKEYREVOKED;
-+	key_material = key_extract_material(keyring_key, &len);
-+	err = PTR_ERR_OR_ZERO(key_material);
-+	if (err < 0)
- 		goto out;
--	}
- 
- 	c->hash_tfm = crypto_alloc_shash(c->auth_hash_name, 0, 0);
- 	if (IS_ERR(c->hash_tfm)) {
-@@ -324,7 +329,7 @@ int ubifs_init_authentication(struct ubifs_info *c)
- 		goto out_free_hmac;
- 	}
- 
--	err = crypto_shash_setkey(c->hmac_tfm, ukp->data, ukp->datalen);
-+	err = crypto_shash_setkey(c->hmac_tfm, key_material, len);
- 	if (err)
- 		goto out_free_hmac;
- 
--- 
-git-series 0.9.1
+thanks,
+
+Mimi
+
+>      printf '\t%-26s = "%s",\n' "[HASH_ALGO_$a]" "$b"
+>    done
+>  echo "};
+
+
+
+
