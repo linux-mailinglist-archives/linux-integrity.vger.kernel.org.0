@@ -2,23 +2,23 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 050783D3719
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jul 2021 10:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DD43D3717
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jul 2021 10:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234517AbhGWINC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Jul 2021 04:13:02 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3461 "EHLO
+        id S234519AbhGWINB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Jul 2021 04:13:01 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3462 "EHLO
         frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234105AbhGWIM7 (ORCPT
+        with ESMTP id S234355AbhGWIM7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Fri, 23 Jul 2021 04:12:59 -0400
 Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GWN5C5QKLz6D8Vw;
-        Fri, 23 Jul 2021 16:38:39 +0800 (CST)
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GWN5D53L8z6D8m0;
+        Fri, 23 Jul 2021 16:38:40 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 23 Jul 2021 10:53:30 +0200
+ 15.1.2176.2; Fri, 23 Jul 2021 10:53:31 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <zohar@linux.ibm.com>, <paul@paul-moore.com>
 CC:     <stephen.smalley.work@gmail.com>, <prsriva02@gmail.com>,
@@ -27,9 +27,9 @@ CC:     <stephen.smalley.work@gmail.com>, <prsriva02@gmail.com>,
         <linux-security-module@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <selinux@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4 2/3] ima: Return int in the functions to measure a buffer
-Date:   Fri, 23 Jul 2021 10:53:03 +0200
-Message-ID: <20210723085304.1760138-3-roberto.sassu@huawei.com>
+Subject: [PATCH v4 3/3] ima: Add digest and digest_len params to the functions to measure a buffer
+Date:   Fri, 23 Jul 2021 10:53:04 +0200
+Message-ID: <20210723085304.1760138-4-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210723085304.1760138-1-roberto.sassu@huawei.com>
 References: <20210723085304.1760138-1-roberto.sassu@huawei.com>
@@ -44,181 +44,245 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-ima_measure_critical_data() and process_buffer_measurement() currently
-don't return a result as, unlike appraisal-related functions, the result is
-not used by callers to deny an operation. Measurement-related functions
-instead rely on the audit subsystem to notify the system administrator when
-an error occurs.
+This patch performs the final modification necessary to pass the buffer
+measurement to callers, so that they provide a functionality similar to
+ima_file_hash(). It adds the 'digest' and 'digest_len' parameters to
+ima_measure_critical_data() and process_buffer_measurement().
 
-However, ima_measure_critical_data() and process_buffer_measurement() are a
-special case, as these are the only functions that can return a buffer
-measurement (for files, there is ima_file_hash()). In a subsequent patch,
-they will be modified to return the calculated digest.
-
-In preparation to return the result of the digest calculation, this patch
-modifies the return type from void to int, and returns 0 if the buffer has
-been successfully measured, a negative value otherwise.
-
-Given that the result of the measurement is still not necessary, this patch
-does not modify the behavior of existing callers by processing the returned
-value. For those, the return value is ignored.
+These functions calculate the digest even if there is no suitable rule in
+the IMA policy and, in this case, they simply return 1 before generating a
+new measurement entry.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Acked-by: Paul Moore <paul@paul-moore.com> (for the SELinux bits)
 ---
- include/linux/ima.h               | 15 +++++++-----
- security/integrity/ima/ima.h      | 10 ++++----
- security/integrity/ima/ima_main.c | 40 ++++++++++++++++++-------------
- 3 files changed, 37 insertions(+), 28 deletions(-)
+ include/linux/ima.h                          |  5 +--
+ security/integrity/ima/ima.h                 |  2 +-
+ security/integrity/ima/ima_appraise.c        |  2 +-
+ security/integrity/ima/ima_asymmetric_keys.c |  2 +-
+ security/integrity/ima/ima_init.c            |  3 +-
+ security/integrity/ima/ima_main.c            | 36 ++++++++++++++------
+ security/integrity/ima/ima_queue_keys.c      |  2 +-
+ security/selinux/ima.c                       |  6 ++--
+ 8 files changed, 39 insertions(+), 19 deletions(-)
 
 diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 81e830d01ced..60492263aa64 100644
+index 60492263aa64..b6ab66a546ae 100644
 --- a/include/linux/ima.h
 +++ b/include/linux/ima.h
-@@ -35,10 +35,10 @@ extern void ima_post_path_mknod(struct user_namespace *mnt_userns,
- extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
- extern int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size);
- extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
--extern void ima_measure_critical_data(const char *event_label,
--				      const char *event_name,
--				      const void *buf, size_t buf_len,
--				      bool hash);
-+extern int ima_measure_critical_data(const char *event_label,
-+				     const char *event_name,
-+				     const void *buf, size_t buf_len,
-+				     bool hash);
+@@ -38,7 +38,7 @@ extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
+ extern int ima_measure_critical_data(const char *event_label,
+ 				     const char *event_name,
+ 				     const void *buf, size_t buf_len,
+-				     bool hash);
++				     bool hash, u8 *digest, size_t digest_len);
  
  #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
  extern void ima_appraise_parse_cmdline(void);
-@@ -144,10 +144,13 @@ static inline int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size
- 
- static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
- 
--static inline void ima_measure_critical_data(const char *event_label,
-+static inline int ima_measure_critical_data(const char *event_label,
+@@ -147,7 +147,8 @@ static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {
+ static inline int ima_measure_critical_data(const char *event_label,
  					     const char *event_name,
  					     const void *buf, size_t buf_len,
--					     bool hash) {}
-+					     bool hash)
-+{
-+	return -ENOENT;
-+}
- 
- #endif /* CONFIG_IMA */
- 
+-					     bool hash)
++					     bool hash, u8 *digest,
++					     size_t digest_len)
+ {
+ 	return -ENOENT;
+ }
 diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index f0e448ed1f9f..03db221324c3 100644
+index 03db221324c3..2f4c20b16ad7 100644
 --- a/security/integrity/ima/ima.h
 +++ b/security/integrity/ima/ima.h
-@@ -264,11 +264,11 @@ void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
- 			   struct evm_ima_xattr_data *xattr_value,
- 			   int xattr_len, const struct modsig *modsig, int pcr,
- 			   struct ima_template_desc *template_desc);
--void process_buffer_measurement(struct user_namespace *mnt_userns,
--				struct inode *inode, const void *buf, int size,
--				const char *eventname, enum ima_hooks func,
--				int pcr, const char *func_data,
--				bool buf_hash);
-+int process_buffer_measurement(struct user_namespace *mnt_userns,
-+			       struct inode *inode, const void *buf, int size,
-+			       const char *eventname, enum ima_hooks func,
-+			       int pcr, const char *func_data,
-+			       bool buf_hash);
+@@ -268,7 +268,7 @@ int process_buffer_measurement(struct user_namespace *mnt_userns,
+ 			       struct inode *inode, const void *buf, int size,
+ 			       const char *eventname, enum ima_hooks func,
+ 			       int pcr, const char *func_data,
+-			       bool buf_hash);
++			       bool buf_hash, u8 *digest, size_t digest_len);
  void ima_audit_measurement(struct integrity_iint_cache *iint,
  			   const unsigned char *filename);
  int ima_alloc_init_template(struct ima_event_data *event_data,
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index ef9dcfce45d4..63bec42c353f 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -357,7 +357,7 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
+ 		if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
+ 			process_buffer_measurement(&init_user_ns, NULL, digest, digestsize,
+ 						   "blacklisted-hash", NONE,
+-						   pcr, NULL, false);
++						   pcr, NULL, false, NULL, 0);
+ 	}
+ 
+ 	return rc;
+diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
+index c985418698a4..f6aa0b47a772 100644
+--- a/security/integrity/ima/ima_asymmetric_keys.c
++++ b/security/integrity/ima/ima_asymmetric_keys.c
+@@ -62,5 +62,5 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+ 	 */
+ 	process_buffer_measurement(&init_user_ns, NULL, payload, payload_len,
+ 				   keyring->description, KEY_CHECK, 0,
+-				   keyring->description, false);
++				   keyring->description, false, NULL, 0);
+ }
+diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+index 5076a7d9d23e..b26fa67476b4 100644
+--- a/security/integrity/ima/ima_init.c
++++ b/security/integrity/ima/ima_init.c
+@@ -154,7 +154,8 @@ int __init ima_init(void)
+ 	ima_init_key_queue();
+ 
+ 	ima_measure_critical_data("kernel_info", "kernel_version",
+-				  UTS_RELEASE, strlen(UTS_RELEASE), false);
++				  UTS_RELEASE, strlen(UTS_RELEASE), false,
++				  NULL, 0);
+ 
+ 	return rc;
+ }
 diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 8ef1fa357e0c..b512c06d8ee1 100644
+index b512c06d8ee1..360266da5a10 100644
 --- a/security/integrity/ima/ima_main.c
 +++ b/security/integrity/ima/ima_main.c
-@@ -827,7 +827,7 @@ int ima_post_load_data(char *buf, loff_t size,
- 	return 0;
- }
- 
--/*
-+/**
-  * process_buffer_measurement - Measure the buffer or the buffer data hash
-  * @mnt_userns:	user namespace of the mount the inode was found from
-  * @inode: inode associated with the object being measured (NULL for KEY_CHECK)
-@@ -840,12 +840,15 @@ int ima_post_load_data(char *buf, loff_t size,
+@@ -838,17 +838,20 @@ int ima_post_load_data(char *buf, loff_t size,
+  * @pcr: pcr to extend the measurement
+  * @func_data: func specific data, may be NULL
   * @buf_hash: measure buffer data hash
++ * @digest: buffer digest will be written to
++ * @digest_len: buffer length
   *
   * Based on policy, either the buffer data or buffer data hash is measured
-+ *
-+ * Return: 0 if the buffer has been successfully measured, a negative value
-+ * otherwise.
+  *
+- * Return: 0 if the buffer has been successfully measured, a negative value
+- * otherwise.
++ * Return: 0 if the buffer has been successfully measured, 1 if the digest
++ * has been written to the passed location but not added to a measurement entry,
++ * a negative value otherwise.
   */
--void process_buffer_measurement(struct user_namespace *mnt_userns,
--				struct inode *inode, const void *buf, int size,
--				const char *eventname, enum ima_hooks func,
--				int pcr, const char *func_data,
--				bool buf_hash)
-+int process_buffer_measurement(struct user_namespace *mnt_userns,
-+			       struct inode *inode, const void *buf, int size,
-+			       const char *eventname, enum ima_hooks func,
-+			       int pcr, const char *func_data,
-+			       bool buf_hash)
+ int process_buffer_measurement(struct user_namespace *mnt_userns,
+ 			       struct inode *inode, const void *buf, int size,
+ 			       const char *eventname, enum ima_hooks func,
+ 			       int pcr, const char *func_data,
+-			       bool buf_hash)
++			       bool buf_hash, u8 *digest, size_t digest_len)
  {
  	int ret = 0;
  	const char *audit_cause = "ENOMEM";
-@@ -867,7 +870,7 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
+@@ -869,7 +872,10 @@ int process_buffer_measurement(struct user_namespace *mnt_userns,
+ 	int action = 0;
  	u32 secid;
  
- 	if (!ima_policy_flag)
--		return;
-+		return -ENOENT;
+-	if (!ima_policy_flag)
++	if (digest && digest_len < digest_hash_len)
++		return -EINVAL;
++
++	if (!ima_policy_flag && !digest)
+ 		return -ENOENT;
  
  	template = ima_template_desc_buf();
- 	if (!template) {
-@@ -889,7 +892,7 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
+@@ -891,7 +897,7 @@ int process_buffer_measurement(struct user_namespace *mnt_userns,
+ 		action = ima_get_action(mnt_userns, inode, current_cred(),
  					secid, 0, func, &pcr, &template,
  					func_data);
- 		if (!(action & IMA_MEASURE))
--			return;
-+			return -ENOENT;
+-		if (!(action & IMA_MEASURE))
++		if (!(action & IMA_MEASURE) && !digest)
+ 			return -ENOENT;
  	}
  
- 	if (!pcr)
-@@ -937,7 +940,7 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
- 					func_measure_str(func),
- 					audit_cause, ret, 0, ret);
+@@ -922,6 +928,12 @@ int process_buffer_measurement(struct user_namespace *mnt_userns,
+ 		event_data.buf_len = digest_hash_len;
+ 	}
  
--	return;
-+	return ret;
++	if (digest)
++		memcpy(digest, iint.ima_hash->digest, digest_hash_len);
++
++	if (!ima_policy_flag || (func && !(action & IMA_MEASURE)))
++		return 1;
++
+ 	ret = ima_alloc_init_template(&event_data, &entry, template);
+ 	if (ret < 0) {
+ 		audit_cause = "alloc_entry";
+@@ -964,7 +976,7 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+ 
+ 	process_buffer_measurement(file_mnt_user_ns(f.file), file_inode(f.file),
+ 				   buf, size, "kexec-cmdline", KEXEC_CMDLINE, 0,
+-				   NULL, false);
++				   NULL, false, NULL, 0);
+ 	fdput(f);
  }
  
- /**
-@@ -977,18 +980,21 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+@@ -975,26 +987,30 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
+  * @buf: pointer to buffer data
+  * @buf_len: length of buffer data (in bytes)
+  * @hash: measure buffer data hash
++ * @digest: buffer digest will be written to
++ * @digest_len: buffer length
+  *
+  * Measure data critical to the integrity of the kernel into the IMA log
   * and extend the pcr.  Examples of critical data could be various data
   * structures, policies, and states stored in kernel memory that can
   * impact the integrity of the system.
-+ *
-+ * Return: 0 if the buffer has been successfully measured, a negative value
-+ * otherwise.
+  *
+- * Return: 0 if the buffer has been successfully measured, a negative value
+- * otherwise.
++ * Return: 0 if the buffer has been successfully measured, 1 if the digest
++ * has been written to the passed location but not added to a measurement entry,
++ * a negative value otherwise.
   */
--void ima_measure_critical_data(const char *event_label,
--			       const char *event_name,
--			       const void *buf, size_t buf_len,
--			       bool hash)
-+int ima_measure_critical_data(const char *event_label,
-+			      const char *event_name,
-+			      const void *buf, size_t buf_len,
-+			      bool hash)
+ int ima_measure_critical_data(const char *event_label,
+ 			      const char *event_name,
+ 			      const void *buf, size_t buf_len,
+-			      bool hash)
++			      bool hash, u8 *digest, size_t digest_len)
  {
  	if (!event_name || !event_label || !buf || !buf_len)
--		return;
-+		return -ENOPARAM;
+ 		return -ENOPARAM;
  
--	process_buffer_measurement(&init_user_ns, NULL, buf, buf_len, event_name,
--				   CRITICAL_DATA, 0, event_label,
--				   hash);
-+	return process_buffer_measurement(&init_user_ns, NULL, buf, buf_len,
-+					  event_name, CRITICAL_DATA, 0,
-+					  event_label, hash);
+ 	return process_buffer_measurement(&init_user_ns, NULL, buf, buf_len,
+ 					  event_name, CRITICAL_DATA, 0,
+-					  event_label, hash);
++					  event_label, hash, digest,
++					  digest_len);
  }
  
  static int __init init_ima(void)
+diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
+index 979ef6c71f3d..93056c03bf5a 100644
+--- a/security/integrity/ima/ima_queue_keys.c
++++ b/security/integrity/ima/ima_queue_keys.c
+@@ -165,7 +165,7 @@ void ima_process_queued_keys(void)
+ 						   entry->keyring_name,
+ 						   KEY_CHECK, 0,
+ 						   entry->keyring_name,
+-						   false);
++						   false, NULL, 0);
+ 		list_del(&entry->list);
+ 		ima_free_key_entry(entry);
+ 	}
+diff --git a/security/selinux/ima.c b/security/selinux/ima.c
+index 34d421861bfc..727c4e43219d 100644
+--- a/security/selinux/ima.c
++++ b/security/selinux/ima.c
+@@ -86,7 +86,8 @@ void selinux_ima_measure_state_locked(struct selinux_state *state)
+ 	}
+ 
+ 	ima_measure_critical_data("selinux", "selinux-state",
+-				  state_str, strlen(state_str), false);
++				  state_str, strlen(state_str), false,
++				  NULL, 0);
+ 
+ 	kfree(state_str);
+ 
+@@ -103,7 +104,8 @@ void selinux_ima_measure_state_locked(struct selinux_state *state)
+ 	}
+ 
+ 	ima_measure_critical_data("selinux", "selinux-policy-hash",
+-				  policy, policy_len, true);
++				  policy, policy_len, true,
++				  NULL, 0);
+ 
+ 	vfree(policy);
+ }
 -- 
 2.25.1
 
