@@ -2,106 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B52D3D3ADF
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jul 2021 15:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6BA83D3E6D
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jul 2021 19:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbhGWM0u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Jul 2021 08:26:50 -0400
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:48358 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234998AbhGWM0u (ORCPT
+        id S231313AbhGWQkx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Jul 2021 12:40:53 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:51134
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231166AbhGWQkx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Jul 2021 08:26:50 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Ugj-SkL_1627045641;
-Received: from B-455UMD6M-2027.local(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Ugj-SkL_1627045641)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 23 Jul 2021 21:07:22 +0800
-Subject: Re: [PATCH ima-evm-utils v2] ima-evm-utils: Fix incorrect algorithm
- name in hash_info.gen
-To:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Vitaly Chikunov <vt@altlinux.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>,
-        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
-References: <20210723064108.14681-1-tianjia.zhang@linux.alibaba.com>
- <4b3c3c5e26e3f64bd3c0cea5eca6b7e515f58627.camel@linux.ibm.com>
- <YPqvqoyM0lpiH4R5@pevik>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Message-ID: <d6ba47d1-595d-3deb-765e-71e31c332d0a@linux.alibaba.com>
-Date:   Fri, 23 Jul 2021 21:07:21 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
+        Fri, 23 Jul 2021 12:40:53 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id AC9073F325;
+        Fri, 23 Jul 2021 17:21:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1627060884;
+        bh=7FQD/B711wUP78UGWXd/xXfRyIQyD6tfXLIddfxdlcc=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=MIpg2zVyane9SunkaQ6m9KeX6+ptvvm8nBjPPToZ+jE+O8Udpx2/Hbt3KIM9AsnKT
+         15av06BGurLcNcGDj6vbShhx7AEj2S5U1YUJVBo9G4n5qkVO+o03wYR+ClVinO47rd
+         YMzTHOBW3XCPNf1b6cwBNLfQTObnplThPTRn+cf7LMBC9zC8dIWVJNMT5cCleyilum
+         +jYVy0XJ0ILlsAQMEspBu4tpIAeQsH2wBw3i+HsmtuGkTjr3kJUlkfl4wsxcDgIDcY
+         /D1H9HfoBkcbFQEKQWuVU5VAosMEY1/JylzJ5x8vS2kVVbFDoK7MVAjg+GNLXzAPKS
+         yPzFytvYsyq/g==
+From:   Colin King <colin.king@canonical.com>
+To:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] security: keys: trusted: Fix memory leaks on allocated blob
+Date:   Fri, 23 Jul 2021 18:21:21 +0100
+Message-Id: <20210723172121.156687-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <YPqvqoyM0lpiH4R5@pevik>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi, Petr,
+From: Colin Ian King <colin.king@canonical.com>
 
-On 7/23/21 8:01 PM, Petr Vorel wrote:
-> Hi Tianjia, Mimi,
-> 
->> Hi Tianjia,
-> 
->> On Fri, 2021-07-23 at 14:41 +0800, Tianjia Zhang wrote:
->>> There is no such an algorithm name as sm3-256. This is an ambiguity
->>> caused by the definition of the macro HASH_ALGO_SM3_256. The sed
->>> command is only a special case of sm3, so sm3 is used to replace
->>> the sm3-256 algorithm name.
-> 
->>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
->>> Reviewed-by: Petr Vorel <pvorel@suse.cz>
->>> ---
->>>   src/.gitignore    | 1 +
->>>   src/hash_info.gen | 7 ++++---
->>>   2 files changed, 5 insertions(+), 3 deletions(-)
-> 
->>> diff --git a/src/.gitignore b/src/.gitignore
->>> index 38e8e3c..69d2988 100644
->>> --- a/src/.gitignore
->>> +++ b/src/.gitignore
->>> @@ -1 +1,2 @@
->>>   hash_info.h
->>> +tmp_hash_info.h
->>> diff --git a/src/hash_info.gen b/src/hash_info.gen
->>> index 5f7a97f..f52bb4d 100755
->>> --- a/src/hash_info.gen
->>> +++ b/src/hash_info.gen
->>> @@ -84,9 +84,10 @@ echo "};"
->>>   echo "const char *const hash_algo_name[HASH_ALGO__LAST] = {"
->>>   sed -n 's/HASH_ALGO_\(.*\),/\1 \L\1\E/p' $HASH_INFO | \
->>>     while read a b; do
->>> -    # Normalize text hash name: if it contains underscore between
->>> -    # digits replace it with a dash, other underscores are removed.
->>> -    b=$(echo "$b" | sed "s/\([0-9]\)_\([0-9]\)/\1-\2/g;s/_//g")
->>> +    # Normalize text hash name: sm3 algorithm name is different from
->>> +    # the macro definition, which is also the only special case, and
->>> +    # underscores are removed.
-> 
->> Thank you for updating the comment.  Do you mind if I tweak it a bit:
-> 
->> ^which is also the only special case of an underscore between digits.
->> Remove all other underscores.
-> +1
-> 
+There are several error return paths that don't kfree the allocated
+blob, leading to memory leaks. Ensure blob is initialized to null as
+some of the error return paths in function tpm2_key_decode do not
+change blob. Add an error return path to kfree blob and use this on
+the current leaky returns.
 
-I'm glad you can tweak it, I'm sorry I didn't express it clarity.
+Addresses-Coverity: ("Resource leak")
+Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key format for the blobs")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ security/keys/trusted-keys/trusted_tpm2.c | 30 ++++++++++++++++-------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
 
-Cheers,
-Tianjia
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 0165da386289..930c67f98611 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -366,7 +366,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 	unsigned int private_len;
+ 	unsigned int public_len;
+ 	unsigned int blob_len;
+-	u8 *blob, *pub;
++	u8 *blob = NULL, *pub;
+ 	int rc;
+ 	u32 attrs;
+ 
+@@ -378,22 +378,30 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 	}
+ 
+ 	/* new format carries keyhandle but old format doesn't */
+-	if (!options->keyhandle)
+-		return -EINVAL;
++	if (!options->keyhandle) {
++		rc = -EINVAL;
++		goto err;
++	}
+ 
+ 	/* must be big enough for at least the two be16 size counts */
+-	if (payload->blob_len < 4)
+-		return -EINVAL;
++	if (payload->blob_len < 4) {
++		rc = -EINVAL;
++		goto err;
++	}
+ 
+ 	private_len = get_unaligned_be16(blob);
+ 
+ 	/* must be big enough for following public_len */
+-	if (private_len + 2 + 2 > (payload->blob_len))
+-		return -E2BIG;
++	if (private_len + 2 + 2 > (payload->blob_len)) {
++		rc = -E2BIG;
++		goto err;
++	}
+ 
+ 	public_len = get_unaligned_be16(blob + 2 + private_len);
+-	if (private_len + 2 + public_len + 2 > payload->blob_len)
+-		return -E2BIG;
++	if (private_len + 2 + public_len + 2 > payload->blob_len) {
++		rc = -E2BIG;
++		goto err;
++	}
+ 
+ 	pub = blob + 2 + private_len + 2;
+ 	/* key attributes are always at offset 4 */
+@@ -441,6 +449,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 		rc = -EPERM;
+ 
+ 	return rc;
++
++err:
++	kfree(blob);
++	return rc;
+ }
+ 
+ /**
+-- 
+2.31.1
 
-> Kind regards,
-> Petr
-> 
->> Mimi
-> 
->>> +    b=$(echo "$b" | sed "s/sm3_256/sm3/g;s/_//g")
->>>       printf '\t%-26s = "%s",\n' "[HASH_ALGO_$a]" "$b"
->>>     done
->>>   echo "};"
-> 
