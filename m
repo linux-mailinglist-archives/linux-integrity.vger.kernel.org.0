@@ -2,75 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 788833D34C5
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jul 2021 08:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B011B3D3711
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jul 2021 10:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbhGWGAg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 23 Jul 2021 02:00:36 -0400
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:39228 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233973AbhGWGAg (ORCPT
+        id S229949AbhGWIM5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Jul 2021 04:12:57 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3459 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229492AbhGWIM5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 23 Jul 2021 02:00:36 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0UgghMOM_1627022468;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UgghMOM_1627022468)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 23 Jul 2021 14:41:08 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>,
-        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH ima-evm-utils v2] ima-evm-utils: Fix incorrect algorithm name in hash_info.gen
-Date:   Fri, 23 Jul 2021 14:41:08 +0800
-Message-Id: <20210723064108.14681-1-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.3.ge56e4f7
+        Fri, 23 Jul 2021 04:12:57 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GWN8w5q2yz6H8Fs;
+        Fri, 23 Jul 2021 16:41:52 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 23 Jul 2021 10:53:28 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <paul@paul-moore.com>
+CC:     <stephen.smalley.work@gmail.com>, <prsriva02@gmail.com>,
+        <tusharsu@linux.microsoft.com>, <nramas@linux.microsoft.com>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <selinux@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v4 0/3] ima: Provide more info about buffer measurement
+Date:   Fri, 23 Jul 2021 10:53:01 +0200
+Message-ID: <20210723085304.1760138-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-There is no such an algorithm name as sm3-256. This is an ambiguity
-caused by the definition of the macro HASH_ALGO_SM3_256. The sed
-command is only a special case of sm3, so sm3 is used to replace
-the sm3-256 algorithm name.
+This patch set provides more information about buffer measurement. It
+requires the modification of the existing functions
+ima_measure_critical_data() and process_buffer_measurement() as, unlike
+for files, there is no integrity_iint_cache structure that can be used to
+store and retrieve at a later time the buffer measurement (there is no
+index, for files it is the inode number).
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
----
- src/.gitignore    | 1 +
- src/hash_info.gen | 7 ++++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+First, this patch set introduces the new function
+ima_get_current_hash_algo(), to obtain the algorithm used to calculate the
+buffer digest (patch 1).
 
-diff --git a/src/.gitignore b/src/.gitignore
-index 38e8e3c..69d2988 100644
---- a/src/.gitignore
-+++ b/src/.gitignore
-@@ -1 +1,2 @@
- hash_info.h
-+tmp_hash_info.h
-diff --git a/src/hash_info.gen b/src/hash_info.gen
-index 5f7a97f..f52bb4d 100755
---- a/src/hash_info.gen
-+++ b/src/hash_info.gen
-@@ -84,9 +84,10 @@ echo "};"
- echo "const char *const hash_algo_name[HASH_ALGO__LAST] = {"
- sed -n 's/HASH_ALGO_\(.*\),/\1 \L\1\E/p' $HASH_INFO | \
-   while read a b; do
--    # Normalize text hash name: if it contains underscore between
--    # digits replace it with a dash, other underscores are removed.
--    b=$(echo "$b" | sed "s/\([0-9]\)_\([0-9]\)/\1-\2/g;s/_//g")
-+    # Normalize text hash name: sm3 algorithm name is different from
-+    # the macro definition, which is also the only special case, and
-+    # underscores are removed.
-+    b=$(echo "$b" | sed "s/sm3_256/sm3/g;s/_//g")
-     printf '\t%-26s = "%s",\n' "[HASH_ALGO_$a]" "$b"
-   done
- echo "};"
+Second, it changes the type of return value of ima_measure_critical_data()
+and process_buffer_measurement() from void to int, to signal to the callers
+whether or not the buffer has been measured, or just the digest has been
+calculated and written to the supplied location (patch 2).
+
+Lastly, it adds two new parameters to the functions above ('digest' and
+'digest_len'), so that those functions can write the buffer digest to the
+location supplied by the callers (patch 3).
+
+This patch set replaces the patch 'ima: Add digest, algo, measured
+parameters to ima_measure_critical_data()' in:
+
+https://lore.kernel.org/linux-integrity/20210625165614.2284243-1-roberto.sassu@huawei.com/
+
+Changelog
+
+v3:
+- explain better the motivation for the patches (suggested by Mimi)
+
+v2:
+- remove assignments of ima_measure_critical_data() and
+  process_buffer_measurement() return values (suggested by Lakshmi)
+
+v1:
+- add digest_len parameter to ima_measure_critical_data() and
+  process_buffer_measurement() (suggested by Lakshmi)
+- fix doc formatting issues
+
+Huawei Digest Lists patch set:
+- introduce ima_get_current_hash_algo() (suggested by Mimi)
+- remove algo and measured parameters from ima_measure_critical_data() and
+  process_buffer_measurement() (suggested by Mimi)
+- return an integer from ima_measure_critical_data() and
+  process_buffer_measurement() (suggested by Mimi)
+- correctly check when process_buffer_measurement() should return earlier
+
+Roberto Sassu (3):
+  ima: Introduce ima_get_current_hash_algo()
+  ima: Return int in the functions to measure a buffer
+  ima: Add digest and digest_len params to the functions to measure a
+    buffer
+
+ include/linux/ima.h                          | 23 +++++--
+ security/integrity/ima/ima.h                 | 10 +--
+ security/integrity/ima/ima_appraise.c        |  2 +-
+ security/integrity/ima/ima_asymmetric_keys.c |  2 +-
+ security/integrity/ima/ima_init.c            |  3 +-
+ security/integrity/ima/ima_main.c            | 67 ++++++++++++++------
+ security/integrity/ima/ima_queue_keys.c      |  2 +-
+ security/selinux/ima.c                       |  6 +-
+ 8 files changed, 78 insertions(+), 37 deletions(-)
+
 -- 
-2.19.1.3.ge56e4f7
+2.25.1
 
