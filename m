@@ -2,45 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FE13D2D42
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Jul 2021 22:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353873D34C1
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Jul 2021 08:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbhGVT3D (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 22 Jul 2021 15:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbhGVT3C (ORCPT
+        id S234113AbhGWF4J (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 23 Jul 2021 01:56:09 -0400
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:38910 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234058AbhGWF4J (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 22 Jul 2021 15:29:02 -0400
-Received: from 68-252-206-104.staticrdns.eonix.net (unknown [IPv6:2607:ff28:b005:2a:ec52:75ff:fe50:d321])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E586C06175F;
-        Thu, 22 Jul 2021 13:09:36 -0700 (PDT)
-Received: from User (localhost [IPv6:::1])
-        by 68-252-206-104.staticrdns.eonix.net (Postfix) with SMTP id D84C38F1F50;
-        Mon, 19 Jul 2021 22:13:39 -0400 (EDT)
-Reply-To: <mrs_hannah@rediffmail.com>
-From:   "Mrs. Hajia Hannah Ahmed" <info@247vidz.com>
-Subject: Re: I WANT TO INVESTMENT IN YOUR COUNTRY?
-Date:   Tue, 20 Jul 2021 05:13:12 -0700
+        Fri, 23 Jul 2021 01:56:09 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0UgggCV9_1627022200;
+Received: from B-455UMD6M-2027.local(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UgggCV9_1627022200)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 23 Jul 2021 14:36:41 +0800
+Subject: Re: [PATCH ima-evm-utils] ima-evm-utils: Fix incorrect algorithm name
+ in hash_info.gen
+To:     Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>,
+        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
+References: <20210722052704.11031-1-tianjia.zhang@linux.alibaba.com>
+ <YPluMV2uUhela5hN@pevik>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <ae7bc0d4-ac9e-5bd2-3c55-c56885c68864@linux.alibaba.com>
+Date:   Fri, 23 Jul 2021 14:36:40 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
+In-Reply-To: <YPluMV2uUhela5hN@pevik>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20210720021340.D84C38F1F50@68-252-206-104.staticrdns.eonix.net>
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Attn:
- 
-I am Mrs. Hajia Hannah Ahmed I am a Widow and member of the contract award committee and 14 project allocation manager, of the Department of Minerals and Natural Resources in Syria;
- 
-Due to the war in Syria, I am in search of an agent or company to assist me to invest my fund  (USD$35Million) and subsequent investment in properties in your country. You will be required to. If you decide to render your service to me in this regard, 30% of the total sum of USD$35M will be given to you for your service. 
- 
-Yours Faithfully,
-Mrs. Hajia Hannah Ahmed
+Hi Petr, Mimi,
+
+On 7/22/21 9:10 PM, Petr Vorel wrote:
+> Hi Tianjia,
+> 
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> 
+> Agree with Mimi to update the comment associated with this change.
+> 
+> Kind regards,
+> Petr
+> 
+
+thanks, will update it soon.
+
+Best regards,
+Tianjia
