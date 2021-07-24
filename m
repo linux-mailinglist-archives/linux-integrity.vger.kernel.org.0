@@ -2,113 +2,75 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 770593D45C5
-	for <lists+linux-integrity@lfdr.de>; Sat, 24 Jul 2021 09:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC903D46FF
+	for <lists+linux-integrity@lfdr.de>; Sat, 24 Jul 2021 11:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234353AbhGXGpW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 24 Jul 2021 02:45:22 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:40758 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234227AbhGXGpW (ORCPT
+        id S235063AbhGXJQR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 24 Jul 2021 05:16:17 -0400
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:49749 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234993AbhGXJQQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 24 Jul 2021 02:45:22 -0400
-Received: from [192.168.86.34] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A9EFB20B7178;
-        Sat, 24 Jul 2021 00:25:54 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A9EFB20B7178
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1627111554;
-        bh=j9sc3SI4YPKysNT1r2bWbGxdQtuDDb0QU/B2MwlJsIM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=aJ9nyHURWGjXG+gabAK7E4DlgnV7X5d8Y+/gTnHYEpTMdCmSUWagcfZDMxayBHFPK
-         8YnH90gTCOaTgnjIld5gClA1FhZaQ/2piNuHZ0NStJz+CBJT2+kfgH3iGrn4a4Oi+l
-         6+1oZOt+zsJPC5xjdgzvG0crhkbIeO1S7sztf78M=
-Subject: Re: [PATCH 7/7] dm: add documentation for IMA measurement support
-To:     Mimi Zohar <zohar@linux.ibm.com>, dm-devel@redhat.com,
-        agk@redhat.com, snitzer@redhat.com
-Cc:     linux-integrity@vger.kernel.org, nramas@linux.microsoft.com
-References: <20210713004904.8808-1-tusharsu@linux.microsoft.com>
- <20210713004904.8808-8-tusharsu@linux.microsoft.com>
- <205b5336d60aee6b3f33ad67b2d0250e104d6779.camel@linux.ibm.com>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <6b81b92f-7d7b-d198-5056-bab1bcbac522@linux.microsoft.com>
-Date:   Sat, 24 Jul 2021 00:25:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Sat, 24 Jul 2021 05:16:16 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0UgnI38y_1627120607;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UgnI38y_1627120607)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 24 Jul 2021 17:56:47 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>,
+        "YiLin . Li" <YiLin.Li@linux.alibaba.com>
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH ima-evm-utils v3] ima-evm-utils: Fix incorrect algorithm name in hash_info.gen
+Date:   Sat, 24 Jul 2021 17:56:47 +0800
+Message-Id: <20210724095647.79718-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.3.ge56e4f7
 MIME-Version: 1.0
-In-Reply-To: <205b5336d60aee6b3f33ad67b2d0250e104d6779.camel@linux.ibm.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+There is no such an algorithm name as sm3-256. This is an ambiguity
+caused by the definition of the macro HASH_ALGO_SM3_256. The sed
+command is only a special case of sm3, so sm3 is used to replace
+the sm3-256 algorithm name.
 
-On 7/20/21 7:33 PM, Mimi Zohar wrote:
-> Hi Tushar, Mike,
-> 
-> On Mon, 2021-07-12 at 17:49 -0700, Tushar Sugandhi wrote:
->> +Then IMA ASCII measurement log has the following format:
->> +PCR TEMPLATE_DIGEST TEMPLATE ALG:EVENT_DIGEST EVENT_NAME EVENT_DATA
->> +
->> +PCR := Platform Configuration Register, in which the values are registered.
->> +       This is applicable if TPM chip is in use.
->> +TEMPLATE_DIGEST := Template digest of the IMA record.
-> 
-> ^TEMPLATE_DATA_DIGEST
-> 
-Will do.
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
+---
+ src/.gitignore    | 1 +
+ src/hash_info.gen | 7 ++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
->> +TEMPLATE := Template that registered the integrity value (e.g. ima-buf).
-> 
-> ^TEMPLATE_NAME
->
-Will do.
+diff --git a/src/.gitignore b/src/.gitignore
+index 38e8e3c..69d2988 100644
+--- a/src/.gitignore
++++ b/src/.gitignore
+@@ -1 +1,2 @@
+ hash_info.h
++tmp_hash_info.h
+diff --git a/src/hash_info.gen b/src/hash_info.gen
+index 5f7a97f..08d4a94 100755
+--- a/src/hash_info.gen
++++ b/src/hash_info.gen
+@@ -84,9 +84,10 @@ echo "};"
+ echo "const char *const hash_algo_name[HASH_ALGO__LAST] = {"
+ sed -n 's/HASH_ALGO_\(.*\),/\1 \L\1\E/p' $HASH_INFO | \
+   while read a b; do
+-    # Normalize text hash name: if it contains underscore between
+-    # digits replace it with a dash, other underscores are removed.
+-    b=$(echo "$b" | sed "s/\([0-9]\)_\([0-9]\)/\1-\2/g;s/_//g")
++    # Normalize text hash name: sm3 algorithm name is different from
++    # the macro definition, which is also the only special case of an
++    # underscore between digits. Remove all other underscores.
++    b=$(echo "$b" | sed "s/sm3_256/sm3/g;s/_//g")
+     printf '\t%-26s = "%s",\n' "[HASH_ALGO_$a]" "$b"
+   done
+ echo "};"
+-- 
+2.19.1.3.ge56e4f7
 
-> The template data format consists of:
->> +ALG:EVENT_DIGEST = Algorithm to compute event digest, followed by digest of event data
->> +EVENT_NAME := Description of the event (e.g. 'table_load').
->> +EVENT_DATA := The event data to be measured.
-> 
-Thanks. I will add this to the dm-ima documentation.
-
-> Missing from the document is a way of validating the template data.
-> For example, in the original case of file measurements, the template
-> data contains the file hash, which can be recalculated or verified
-> against an allow list.
-> 
-> Other than re-calculating the template data digest based on the
-> template data, and verifying it against the template data digest in the
-> measurement list, would an attestation server be able to verify the
-> template data itself?
->
-Yes.
-In the context of device-mapper, EVENT_DATA for 'table_load' would
-contain the key-value pairs for various targets in the table
-(crypt, verity, integrity etc.) which the attestation servers
-should be able to verify against the allowed/expected
-key-value pairs specified in the attestation policy.
-
-To avoid bloating the IMA log with same data from table_load again,
-we only measure hash of the loaded table in the EVENT_DATA -
-when there is a state change for DM device.
-e.g. when EVENT_NAME is 'device_resume', 'table_clear',
-'device_remove' etc.
-
-Since the table clear-text is already present in the EVENT_DATA
-buffer for 'table_load', and is available to attestation servers,
-verifying the corresponding hash values in the
-EVENT_DATA in the subsequent DM events should be possible for
-the attestation servers.
-
-Please let us know if you need further info.
-
-Thanks,
-Tushar
-
-> thanks,
-> 
-> Mimi
-> 
