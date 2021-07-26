@@ -2,150 +2,158 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5023D57DB
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Jul 2021 12:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8275A3D58B0
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Jul 2021 13:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbhGZKQQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Jul 2021 06:16:16 -0400
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:57330
+        id S233521AbhGZLEH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Jul 2021 07:04:07 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:34996
         "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231792AbhGZKQP (ORCPT
+        by vger.kernel.org with ESMTP id S233371AbhGZLEH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Jul 2021 06:16:15 -0400
-Received: from [10.172.193.212] (1.general.cking.uk.vpn [10.172.193.212])
+        Mon, 26 Jul 2021 07:04:07 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 858E73F342;
-        Mon, 26 Jul 2021 10:56:36 +0000 (UTC)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 258C13F357;
+        Mon, 26 Jul 2021 11:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1627297003;
-        bh=E8Bl7iWZmRi4QYo4RVKeJYrZa1hIqawSMitAIqqPS4k=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=FI5rCvpfr6YTlZdQedosfpBaL27ZxWPeTr8BwlAJAXi0KxqXAqp+c6Frkstg6ZiMb
-         8hb+bAccpPc+s5gTJDunt9esZuGXnPNpKjWcNfAxEf5NHXv8nu/ECaOnTcS4wHACkL
-         NrIowWZLkIWjpxY/MmuKm5OtVnlLl0sHoL6O363fgKhMMSY2S/qlNYv3VCoKN1FpoX
-         kbUN9j3n0tPuxlrdVAW7PzUSVbUBButMsLSLyYgchu8ZeFk/VliCFEfKqka85u8XXJ
-         fO+rqPXv1cgUhMEb08naQED90J7qQNd8lDWz4MpQJ5rpRkXPlE7556cdAmHoiIAfiN
-         bPggbCtU57IJQ==
-Subject: Re: [PATCH] security: keys: trusted: Fix memory leaks on allocated
- blob
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
+        s=20210705; t=1627299874;
+        bh=k6BQBYMxs42A0l5eZc18V3p4ovBk2bBgUoL8N/8VpPs=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=V2nQr5gmN7GdiofCc/F5kLnGNPeOGwMBcaYD1biglTrOmrJsYIq5zmQnR+LmgMNrf
+         cCGd7RgAZio8T68t6nuVKyurJxYN+ilV/VTW4GLT/KSc4NJUsFBaghNxm7dIdFouua
+         sz2ViYIijWuj9uJu7rjJael6ydRxKxHAGJJkapeIgwk9FqxmMYYkUpRH2ZJVwlVxtu
+         adTVR8yaHVxkse/obCsQUoyAWShCH/Zl2Yk2cGx9qV8SUKXj6ec4A7luXgfR6ZHyZQ
+         9LfCTrc0S9CWu3Dh1BU166jFe7E4xY5v/YjdE/v29u4l4AbG1a5xxgTP5bY8zln1lZ
+         JDXp37hlebV0A==
+From:   Colin King <colin.king@canonical.com>
+To:     James Bottomley <jejb@linux.ibm.com>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
         David Howells <dhowells@redhat.com>,
         James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
         linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210723172121.156687-1-colin.king@canonical.com>
- <20210726085051.GG1931@kadam>
-From:   Colin Ian King <colin.king@canonical.com>
-Message-ID: <4f200a4d-75ee-99c8-dc16-3626df7e6ff3@canonical.com>
-Date:   Mon, 26 Jul 2021 11:56:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        linux-security-module@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][V2] security: keys: trusted: Fix memory leaks on allocated blob
+Date:   Mon, 26 Jul 2021 12:44:31 +0100
+Message-Id: <20210726114431.18042-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210726085051.GG1931@kadam>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 26/07/2021 09:50, Dan Carpenter wrote:
-> On Fri, Jul 23, 2021 at 06:21:21PM +0100, Colin King wrote:
->> @@ -441,6 +449,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
->>  		rc = -EPERM;
->>  
->>  	return rc;
->> +
->> +err:
->> +	kfree(blob);
-> 
-> This needs to be:
-> 
-> 	if (blob != payload->blob)
-> 		kfree(blob);
+From: Colin Ian King <colin.king@canonical.com>
 
-Good spot! Thanks Dan.
+There are several error return paths that don't kfree the allocated
+blob, leading to memory leaks. Ensure blob is initialized to null as
+some of the error return paths in function tpm2_key_decode do not
+change blob. Add an error return path to kfree blob and use this on
+the current leaky returns.
 
-> 
-> Otherwise it leads to a use after free.
-> 
->> +	return rc;
->>  }
-> 
-> How this is allocated is pretty scary looking!
+Addresses-Coverity: ("Resource leak")
+Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key format for the blobs")
+Acked-by: Sumit Garg <sumit.garg@linaro.org>
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-it is kinda mind bending.
+---
 
-Colin
+V2: Add a couple more leaky return path fixes as noted by Sumit Garg
+    Add the if (blob != payload->blob) check on the kfree as
+    noted by Dan Carpenter
 
-> 
-> security/keys/trusted-keys/trusted_tpm2.c
->     96  static int tpm2_key_decode(struct trusted_key_payload *payload,
->     97                             struct trusted_key_options *options,
->     98                             u8 **buf)
->     99  {
->    100          int ret;
->    101          struct tpm2_key_context ctx;
->    102          u8 *blob;
->    103  
->    104          memset(&ctx, 0, sizeof(ctx));
->    105  
->    106          ret = asn1_ber_decoder(&tpm2key_decoder, &ctx, payload->blob,
->    107                                 payload->blob_len);
->    108          if (ret < 0)
->    109                  return ret;
-> 
-> Old form?
-> 
->    110  
->    111          if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
->    112                  return -EINVAL;
-> 
-> It's really scary to me that if the lengths are too large for kmalloc()
-> then we just use "payload->blob".
-> 
->    113  
->    114          blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
-> 
-> blob is allocated here.
-> 
->    115          if (!blob)
->    116                  return -ENOMEM;
->    117  
->    118          *buf = blob;
->    119          options->keyhandle = ctx.parent;
->    120  
->    121          memcpy(blob, ctx.priv, ctx.priv_len);
->    122          blob += ctx.priv_len;
->    123  
->    124          memcpy(blob, ctx.pub, ctx.pub_len);
->    125  
->    126          return 0;
->    127  }
-> 
-> [ snip ]
-> 
->    371          u32 attrs;
->    372  
->    373          rc = tpm2_key_decode(payload, options, &blob);
->    374          if (rc) {
->    375                  /* old form */
->    376                  blob = payload->blob;
->                         ^^^^^^^^^^^^^^^^^^^^
-> 
->    377                  payload->old_format = 1;
->    378          }
->    379  
-> 
-> regards,
-> dan carpenter
-> 
+---
+ security/keys/trusted-keys/trusted_tpm2.c | 39 ++++++++++++++++-------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
+
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 0165da386289..a2cfdfdf17fa 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -366,7 +366,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 	unsigned int private_len;
+ 	unsigned int public_len;
+ 	unsigned int blob_len;
+-	u8 *blob, *pub;
++	u8 *blob = NULL, *pub;
+ 	int rc;
+ 	u32 attrs;
+ 
+@@ -378,22 +378,30 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 	}
+ 
+ 	/* new format carries keyhandle but old format doesn't */
+-	if (!options->keyhandle)
+-		return -EINVAL;
++	if (!options->keyhandle) {
++		rc = -EINVAL;
++		goto err;
++	}
+ 
+ 	/* must be big enough for at least the two be16 size counts */
+-	if (payload->blob_len < 4)
+-		return -EINVAL;
++	if (payload->blob_len < 4) {
++		rc = -EINVAL;
++		goto err;
++	}
+ 
+ 	private_len = get_unaligned_be16(blob);
+ 
+ 	/* must be big enough for following public_len */
+-	if (private_len + 2 + 2 > (payload->blob_len))
+-		return -E2BIG;
++	if (private_len + 2 + 2 > (payload->blob_len)) {
++		rc = -E2BIG;
++		goto err;
++	}
+ 
+ 	public_len = get_unaligned_be16(blob + 2 + private_len);
+-	if (private_len + 2 + public_len + 2 > payload->blob_len)
+-		return -E2BIG;
++	if (private_len + 2 + public_len + 2 > payload->blob_len) {
++		rc = -E2BIG;
++		goto err;
++	}
+ 
+ 	pub = blob + 2 + private_len + 2;
+ 	/* key attributes are always at offset 4 */
+@@ -406,12 +414,14 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 		payload->migratable = 1;
+ 
+ 	blob_len = private_len + public_len + 4;
+-	if (blob_len > payload->blob_len)
+-		return -E2BIG;
++	if (blob_len > payload->blob_len) {
++		rc = -E2BIG;
++		goto err;
++	}
+ 
+ 	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_LOAD);
+ 	if (rc)
+-		return rc;
++		goto err;
+ 
+ 	tpm_buf_append_u32(&buf, options->keyhandle);
+ 	tpm2_buf_append_auth(&buf, TPM2_RS_PW,
+@@ -441,6 +451,11 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 		rc = -EPERM;
+ 
+ 	return rc;
++
++err:
++	if (blob != payload->blob)
++		kfree(blob);
++	return rc;
+ }
+ 
+ /**
+-- 
+2.31.1
 
