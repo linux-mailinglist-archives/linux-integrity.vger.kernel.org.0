@@ -2,269 +2,157 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1273D78C3
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 16:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20AC3D79CD
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 17:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237008AbhG0Ooi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Jul 2021 10:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232552AbhG0Oog (ORCPT
+        id S237078AbhG0P3l (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Jul 2021 11:29:41 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48386 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232643AbhG0P3e (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Jul 2021 10:44:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D94C061760
-        for <linux-integrity@vger.kernel.org>; Tue, 27 Jul 2021 07:44:36 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1m8OJh-0005wY-AQ; Tue, 27 Jul 2021 16:44:21 +0200
-Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1m8OJe-0002zM-UG; Tue, 27 Jul 2021 16:44:18 +0200
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        David Howells <dhowells@redhat.com>,
-        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1] fscrypt: support encrypted and trusted keys
-Date:   Tue, 27 Jul 2021 16:43:49 +0200
-Message-Id: <20210727144349.11215-1-a.fatoum@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: afa@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+        Tue, 27 Jul 2021 11:29:34 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16RF86Au090214;
+        Tue, 27 Jul 2021 11:29:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=9m6JdoEMB+8iKU/wHGW/PAOtNPZdOO7HOkI3QqPRUFk=;
+ b=A2PzOM1cJrH2NSRwV0Az1jwcRxs0MWRsB9qjP5EsJl7/yuANpQ8dyB5kML3FQKjgWsE4
+ 715aSIhbD6LKl4Rbea/vwfyTeWuyc0cZQZHTMyRfKXsnJ79GO/2mo214eB0HSrz2C+Gg
+ Bt6lgb/ggEYlMSlCC+13qhrn+6NsD19t45M3TfIPK+FiCx7AZTdeu/U6BzvNSlKfyrWg
+ i7ekmJfs9+eO7Zj3W+LQM85D0Pi6Yb81rLnhWHIA57zV8U98XL3un8ADx2c+iRrV8tcC
+ zbE77Yn228JgbTxylnkyOxZaUfOPPx1/CgXKw4/oYTKUB6bygHWDCkwK4NZdLrD5WvZi aA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2m5g22b1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jul 2021 11:29:34 -0400
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16RF9Wbj101949;
+        Tue, 27 Jul 2021 11:29:34 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2m5g22a7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jul 2021 11:29:34 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16RFQteI000893;
+        Tue, 27 Jul 2021 15:29:31 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 3a235kgb73-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jul 2021 15:29:31 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16RFTT6E18219312
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Jul 2021 15:29:29 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0AA0CA4051;
+        Tue, 27 Jul 2021 15:29:29 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B690CA4055;
+        Tue, 27 Jul 2021 15:29:27 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.85.52])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 27 Jul 2021 15:29:27 +0000 (GMT)
+Message-ID: <1664c5d77e148eb387717428c55d2ef4f2482732.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/4] IMA: add support to restrict the hash algorithms
+ used for file appraisal
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     THOBY Simon <Simon.THOBY@viveris.fr>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
+Date:   Tue, 27 Jul 2021 11:29:26 -0400
+In-Reply-To: <20210727102307.552052-3-simon.thoby@viveris.fr>
+References: <20210727102307.552052-1-simon.thoby@viveris.fr>
+         <20210727102307.552052-3-simon.thoby@viveris.fr>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6ISpMEn49DhtqsK8SQNgIPQKIVqSOz2b
+X-Proofpoint-GUID: 6sfv_TSMgTV_Dm12v8aPvfGen1d6VITD
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-27_10:2021-07-27,2021-07-27 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 adultscore=0 phishscore=0
+ lowpriorityscore=0 impostorscore=0 suspectscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2107270090
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-For both v1 and v2 key setup mechanisms, userspace supplies the raw key
-material to the kernel after which it is never again disclosed to
-userspace.
+Hi Simon,
 
-Use of encrypted and trusted keys offers stronger guarantees:
-The key material is generated within the kernel and is never disclosed to
-userspace in clear text and, in the case of trusted keys, can be
-directly rooted to a trust source like a TPM chip.
+On Tue, 2021-07-27 at 10:23 +0000, THOBY Simon wrote:
+> This patch plugs in support for restricting the hash algorithms
+> accepted for protecting the security.ima xattr when appraising
+> files.
 
-Add support for trusted and encrypted keys by repurposing
-fscrypt_add_key_arg::raw to hold the key description when the new
-FSCRYPT_KEY_ARG_TYPE_DESC flag is supplied. The location of the flag
-was previously reserved and enforced by ioctl code to be zero, so this
-change won't break backwards compatibility.
+The first sentence should provide the motivation for the patch.  For
+example, start this paragraph by saying that the hash algorithms are
+currently not restricted.  Then continue with "Restrict ..." or maybe
+"Provide the plumbing to restrict ...".
 
-Corresponding userspace patches are available for fscryptctl:
-https://github.com/google/fscryptctl/pull/23
+> 
+> Each ima policy rule can have a list of allowed hash algorithms,
+> and a file matching the policy but whose IMA hash is
+> not explicitly in the list will not pass appraisal.
 
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
-key_extract_material used by this patch is added in
-<cover.b2fdd70b830d12853b12a12e32ceb0c8162c1346.1626945419.git-series.a.fatoum@pengutronix.de>
-which still awaits feedback.
+Belongs in the patch associated with the IMA policy "appraise_hash"
+rule option.
+> 
+> This do not apply only to IMA in hash mode, it also works with digital
+> signatures, in which case it checks that the hash (which was then
+> signed by the trusted private key) have been generated with one of
+> the algortihms whitelisted for this specific rule.
 
-Sending this RFC out anyway to get some feedback from the fscrypt
-developers whether this is the correct way to go about it.
+Instead of phrasing this paragraph in the negative, the content could
+be combined with the first paragraph in the positive.   For example,
+"Restrict the permitted set of hash algorithms used for verifying file
+signatures stored in security.ima xattr."
 
-To: "Theodore Y. Ts'o" <tytso@mit.edu>
-To: Jaegeuk Kim <jaegeuk@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Sumit Garg <sumit.garg@linaro.org>
-Cc: David Howells <dhowells@redhat.com>
-Cc: linux-fscrypt@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
-Cc: keyrings@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- Documentation/filesystems/fscrypt.rst | 24 ++++++++---
- fs/crypto/keyring.c                   | 59 ++++++++++++++++++++++++---
- include/uapi/linux/fscrypt.h          | 16 +++++++-
- 3 files changed, 87 insertions(+), 12 deletions(-)
+> 
+> Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
+> ---
 
-diff --git a/Documentation/filesystems/fscrypt.rst b/Documentation/filesystems/fscrypt.rst
-index 44b67ebd6e40..83738af2afa3 100644
---- a/Documentation/filesystems/fscrypt.rst
-+++ b/Documentation/filesystems/fscrypt.rst
-@@ -681,11 +681,15 @@ It can be executed on any file or directory on the target filesystem,
- but using the filesystem's root directory is recommended.  It takes in
- a pointer to struct fscrypt_add_key_arg, defined as follows::
- 
-+    #define FSCRYPT_KEY_ADD_RAW_ASIS		0
-+    #define FSCRYPT_KEY_ADD_RAW_DESC		1
-+
-     struct fscrypt_add_key_arg {
-             struct fscrypt_key_specifier key_spec;
-             __u32 raw_size;
-             __u32 key_id;
--            __u32 __reserved[8];
-+            __u32 raw_flags;     /* one of FSCRYPT_KEY_ADD_RAW_* */
-+            __u32 __reserved[7];
-             __u8 raw[];
-     };
- 
-@@ -732,8 +736,11 @@ as follows:
-   Alternatively, if ``key_id`` is nonzero, this field must be 0, since
-   in that case the size is implied by the specified Linux keyring key.
- 
--- ``key_id`` is 0 if the raw key is given directly in the ``raw``
--  field.  Otherwise ``key_id`` is the ID of a Linux keyring key of
-+- If ``key_id`` is 0, the raw key is given directly in the ``raw``
-+  field if ``raw_flags == FSCRYPT_KEY_ADD_RAW_ASIS``. With
-+  ``raw_flags == FSCRYPT_KEY_ADD_RAW_DESC``, ``raw`` is instead
-+  interpreted as the description of an encrypted or trusted key.
-+  Otherwise ``key_id`` is the ID of a Linux keyring key of
-   type "fscrypt-provisioning" whose payload is
-   struct fscrypt_provisioning_key_payload whose ``raw`` field contains
-   the raw key and whose ``type`` field matches ``key_spec.type``.
-@@ -748,8 +755,15 @@ as follows:
-   without having to store the raw keys in userspace memory.
- 
- - ``raw`` is a variable-length field which must contain the actual
--  key, ``raw_size`` bytes long.  Alternatively, if ``key_id`` is
--  nonzero, then this field is unused.
-+  key when ``raw_flags == FSCRYPT_KEY_ADD_RAW_ASIS``,
-+  ``raw_size`` bytes long.  Alternatively, if
-+  ``raw_flags == FSCRYPT_KEY_ADD_RAW_DESC``, ``raw`` is interpreted
-+  as the key description of an encrypted or trusted key, in that order.
-+  The material of this key will be used as if it were a raw key
-+  supplied by userspace.
-+
-+  In both cases, the buffer is ``raw_size`` bytes long. If ````key_id``
-+  is nonzero, then this field is unused.
- 
- For v2 policy keys, the kernel keeps track of which user (identified
- by effective user ID) added the key, and only allows the key to be
-diff --git a/fs/crypto/keyring.c b/fs/crypto/keyring.c
-index 0b3ffbb4faf4..484f7c883b17 100644
---- a/fs/crypto/keyring.c
-+++ b/fs/crypto/keyring.c
-@@ -20,6 +20,9 @@
- 
- #include <crypto/skcipher.h>
- #include <linux/key-type.h>
-+#include <linux/key-type.h>
-+#include <keys/encrypted-type.h>
-+#include <keys/trusted-type.h>
- #include <linux/random.h>
- #include <linux/seq_file.h>
- 
-@@ -662,13 +665,57 @@ int fscrypt_ioctl_add_key(struct file *filp, void __user *_uarg)
- 		if (err)
- 			goto out_wipe_secret;
- 	} else {
--		if (arg.raw_size < FSCRYPT_MIN_KEY_SIZE ||
--		    arg.raw_size > FSCRYPT_MAX_KEY_SIZE)
-+		struct key *keyring_key = ERR_PTR(-EINVAL);
-+		const void *key_material;
-+		const char *desc;
-+
-+		switch (arg.raw_flags) {
-+		case FSCRYPT_KEY_ADD_RAW_ASIS:
-+			if (arg.raw_size < FSCRYPT_MIN_KEY_SIZE ||
-+			    arg.raw_size > FSCRYPT_MAX_KEY_SIZE)
-+				return -EINVAL;
-+			secret.size = arg.raw_size;
-+			err = -EFAULT;
-+			if (copy_from_user(secret.raw, uarg->raw, secret.size))
-+				goto out_wipe_secret;
-+			break;
-+		case FSCRYPT_KEY_ADD_RAW_DESC:
-+			if (arg.raw_size > 4096)
-+				return -EINVAL;
-+			desc = memdup_user_nul(uarg->raw, arg.raw_size);
-+			if (IS_ERR(desc))
-+				return PTR_ERR(desc);
-+
-+			if (IS_REACHABLE(CONFIG_ENCRYPTED_KEYS))
-+				keyring_key = request_key(&key_type_encrypted, desc, NULL);
-+			if (IS_REACHABLE(CONFIG_TRUSTED_KEYS) && IS_ERR(keyring_key))
-+				keyring_key = request_key(&key_type_trusted, desc, NULL);
-+
-+			kfree(desc);
-+
-+			if (IS_ERR(keyring_key))
-+				return PTR_ERR(keyring_key);
-+
-+			down_read(&keyring_key->sem);
-+
-+			key_material = key_extract_material(keyring_key, &secret.size);
-+			if (!IS_ERR(key_material) && (secret.size < FSCRYPT_MIN_KEY_SIZE ||
-+			    secret.size > FSCRYPT_MAX_KEY_SIZE))
-+				key_material = ERR_PTR(-EINVAL);
-+			if (IS_ERR(key_material)) {
-+				up_read(&keyring_key->sem);
-+				key_put(keyring_key);
-+				return PTR_ERR(key_material);
-+			}
-+
-+			memcpy(secret.raw, key_material, secret.size);
-+
-+			up_read(&keyring_key->sem);
-+			key_put(keyring_key);
-+			break;
-+		default:
- 			return -EINVAL;
--		secret.size = arg.raw_size;
--		err = -EFAULT;
--		if (copy_from_user(secret.raw, uarg->raw, secret.size))
--			goto out_wipe_secret;
-+		}
- 	}
- 
- 	err = add_master_key(sb, &secret, &arg.key_spec);
-diff --git a/include/uapi/linux/fscrypt.h b/include/uapi/linux/fscrypt.h
-index 9f4428be3e36..bd498a188cf5 100644
---- a/include/uapi/linux/fscrypt.h
-+++ b/include/uapi/linux/fscrypt.h
-@@ -119,12 +119,26 @@ struct fscrypt_provisioning_key_payload {
- 	__u8 raw[];
- };
- 
-+/*
-+ * fscrypt_add_key_arg::raw contains the raw key material directly
-+ * if key_id == 0
-+ */
-+#define FSCRYPT_KEY_ADD_RAW_ASIS		0
-+
-+/*
-+ * fscrypt_add_key_arg::raw is a key descriptor for an already
-+ * existing kernel encrypted or trusted key if key_id == 0.
-+ * The kernel key's material will be used as input for fscrypt.
-+ */
-+#define FSCRYPT_KEY_ADD_RAW_DESC		1
-+
- /* Struct passed to FS_IOC_ADD_ENCRYPTION_KEY */
- struct fscrypt_add_key_arg {
- 	struct fscrypt_key_specifier key_spec;
- 	__u32 raw_size;
- 	__u32 key_id;
--	__u32 __reserved[8];
-+	__u32 raw_flags;	/* one of FSCRYPT_KEY_ADD_RAW_* */
-+	__u32 __reserved[7];
- 	__u8 raw[];
- };
- 
--- 
-2.30.2
+<snip>
+
+> @@ -327,6 +329,20 @@ static int process_measurement(struct file *file, const struct cred *cred,
+>  
+>  	hash_algo = ima_get_hash_algo(xattr_value, xattr_len);
+>  
+> +	/* Ensure that the digest was generated using an allowed algorithm */
+> +	if (appraisal_allowed_hashes &&
+> +	    !(appraisal_allowed_hashes & (1U << hash_algo))) {
+> +		rc = -EACCES;
+> +
+> +		if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
+> +			pathname = ima_d_path(&file->f_path, &pathbuf, filename);
+> +
+> +		integrity_audit_msg(AUDIT_INTEGRITY_DATA, file_inode(file),
+> +			pathname, "collect_data", "forbidden-hash-algorithm", rc, 0);
+> +
+> +		goto out_locked;
+> +	}
+> +
+
+This doesn't look like the right place for checking the hash algorithm.
+IMA may be configured differently on different systems.  Some might
+only enable measurement without appraisal, appraisal without
+measurement, or both.  Only appraisal returns a failure and prevents
+read, execute, mmap, etc.   The hash algorithm check probably should be
+deferred to appraisal.  Placing the test here would skip measurements.
+
+thanks,
+
+Mimi
+
+>  	rc = ima_collect_measurement(iint, file, buf, size, hash_algo, modsig);
+>  	if (rc != 0 && rc != -EBADF && rc != -EINVAL)
+>  		goto out_locked;
+
 
