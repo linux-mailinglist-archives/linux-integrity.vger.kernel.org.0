@@ -2,224 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 539C83D7F4A
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 22:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4688E3D7F4F
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 22:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbhG0Uct (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Jul 2021 16:32:49 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11744 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230409AbhG0Ucs (ORCPT
+        id S232392AbhG0Udt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Jul 2021 16:33:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29552 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232340AbhG0Uds (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Jul 2021 16:32:48 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16RKEb5I194607;
-        Tue, 27 Jul 2021 16:32:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=nzCAotyL82lcoHt2FnIA/iz5lVb1ff3wV2QbhAo5vYI=;
- b=BnSoGsLoVCKbeBtJT4ndpywIGujbBDBu9+FF+pLwPKP+BbPM2ttmc9ZYtSIIOG8rjE0H
- d2+Rcpxm+53G5Jn+nK6MhT7zJUEIbRRBYTvdUcH0diVGUHUD4N7UAHoeo6g3/Yu4fomZ
- IPJqSDo3+IItEUQNcSlf8zOPabo/kE6Z/e1qdmR1yKYVllz2+4fazgx3f5A6N46pyDm/
- jMfx59EB+tWJW+2McATO32e/uExONilBe5K9UTE5p6bP2HlPYbN7UhMXjApTXrS8gyg/
- RAp0S6+E0ssHMOs9hRz5ivM+RBpUmAWHRcHAHc4iBoHU8YkRdAMD1GHNXTfj0pnfVelp fA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2s0mreju-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 16:32:47 -0400
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16RKEwsE195215;
-        Tue, 27 Jul 2021 16:32:46 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2s0mrej9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 16:32:46 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16RKG6aD030141;
-        Tue, 27 Jul 2021 20:32:44 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3a235krdyq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 20:32:44 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16RKWfwE14942696
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jul 2021 20:32:41 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B76352057;
-        Tue, 27 Jul 2021 20:32:41 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.85.52])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 0C87652065;
-        Tue, 27 Jul 2021 20:32:39 +0000 (GMT)
-Message-ID: <5a3a35b5f20fb17f7430046b0378e05f1dffa098.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 2/5] IMA: block writes of the security.ima xattr with
- unsupported algorithms
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Cc:     Paul Moore <paul@paul-moore.com>
-Date:   Tue, 27 Jul 2021 16:32:39 -0400
-In-Reply-To: <20210727163330.790010-3-simon.thoby@viveris.fr>
-References: <20210727163330.790010-1-simon.thoby@viveris.fr>
-         <20210727163330.790010-3-simon.thoby@viveris.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: n5p9tw2VNRHncsndOHvhCtnS_c2Ip4HX
-X-Proofpoint-ORIG-GUID: wxZYMZw6c4sLVW9t7gbNy23fFopWpOUn
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-27_13:2021-07-27,2021-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1015 mlxlogscore=999
- priorityscore=1501 bulkscore=0 phishscore=0 spamscore=0 suspectscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2107270118
+        Tue, 27 Jul 2021 16:33:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627418028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tp5fB6VxG+WAT0uq+WsG9T4sfTRcerAMWdLsqTsihHI=;
+        b=eSCYXXDGqW+ZRP9/rRm/ef1uv3SrR5AaGljs9HNnU3wfqlVbK5nukX7CMUzAncmtUcvx96
+        2Y8PhOdFDE58NCHj6NIIBguhj58xEg5e9kAMch8KG4S9qI5qYH8jLGMOsUYMDDCiKAvzaB
+        Ls3FOAaStCuxl6oawu/EA+pp6GLu9XA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-172-bvsGNfZcOGm16VoDWgQEQQ-1; Tue, 27 Jul 2021 16:33:46 -0400
+X-MC-Unique: bvsGNfZcOGm16VoDWgQEQQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 968221006C81;
+        Tue, 27 Jul 2021 20:33:45 +0000 (UTC)
+Received: from agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (agk-cloud1.hosts.prod.upshift.rdu2.redhat.com [10.0.13.154])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D90E4101E249;
+        Tue, 27 Jul 2021 20:33:34 +0000 (UTC)
+Received: by agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (Postfix, from userid 3883)
+        id 6703B41FBD41; Tue, 27 Jul 2021 21:33:37 +0100 (BST)
+Date:   Tue, 27 Jul 2021 21:33:37 +0100
+From:   Alasdair G Kergon <agk@redhat.com>
+To:     Thore Sommer <public@thson.de>
+Cc:     tusharsu@linux.microsoft.com, agk@redhat.com, dm-devel@redhat.com,
+        linux-integrity@vger.kernel.org, nramas@linux.microsoft.com,
+        snitzer@redhat.com, zohar@linux.ibm.com
+Subject: Re: [dm-devel] [PATCH 0/7] device mapper target measurements using
+ IMA
+Message-ID: <20210727203337.GA81220@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
+Mail-Followup-To: Thore Sommer <public@thson.de>,
+        tusharsu@linux.microsoft.com, agk@redhat.com, dm-devel@redhat.com,
+        linux-integrity@vger.kernel.org, nramas@linux.microsoft.com,
+        snitzer@redhat.com, zohar@linux.ibm.com
+References: <c833339e-c4bf-6e78-5719-cd902fa8426f@linux.microsoft.com>
+ <20210727101802.779067-1-public@thson.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210727101802.779067-1-public@thson.de>
+Organization: Red Hat UK Ltd. Registered in England and Wales, number
+ 03798903. Registered Office: Amberley Place, 107-111 Peascod Street,
+ Windsor, Berkshire, SL4 1TE.
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[Cc'ing Paul Moore]
+On Tue, Jul 27, 2021 at 12:18:02PM +0200, Thore Sommer wrote:
+> No new IMA measurement is generated if dm-verity verification fails. This is
+> unfortunate because to make the dm-verity measurements useful we need to be
+> notified when hash_failed is set to true. We will need something like
+> "device_update" where we remeasure the device state if it has changed.
+ 
+Measurements in the current patchset are only triggered by ioctl calls
+initiated by userspace.
 
-Hi Simon,
+Having other triggering mechanisms - such as hooking into internal
+events when something unexpected happens - could be considered for
+follow-on patches.
 
-On Tue, 2021-07-27 at 16:33 +0000, THOBY Simon wrote:
-> By default, any write to the extended attributes security.ima will be
-> accepted, even if the xattr value uses a hash algorithm not compiled in
-> the kernel (which doesn't make sense, because the kernel wouldn't be able
-> to appraise that file, as it lacks support for validating the hash).
-> 
-> Prevent such writes: only writes using hash algorithms
-> available in the current kernel are now allowed. Any attempt to
-> perform these writes will be denied with an audit message.
-> 
-> Note however that CONFIG_IMA depends on CONFIG_CRYPTO_SHA1, which
-> somewhat hampers the security benefits of this measure (but MD4 and
-> MD5 can be disabled, which is already a significant improvement).
-> 
-> Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
-> ---
->  security/integrity/ima/ima_appraise.c | 51 ++++++++++++++++++++++++++-
->  1 file changed, 50 insertions(+), 1 deletion(-)
-> 
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index ef9dcfce45d4..989da2fbf496 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -575,12 +575,55 @@ static void ima_reset_appraise_flags(struct inode *inode, int digsig)
->  		clear_bit(IMA_DIGSIG, &iint->atomic_flags);
->  }
->  
-> +/**
-> + * ima_setxattr_validate_hash_alg() - Block setxattr with invalid digests
-> + * @dentry: file being altered
+> Creating a dm-verity device with mount then removing it and now if you create it
+> again no measurement is generated. Is that the expected behavior?  
 
-There isn't a one to one mapping betwen dentry and "file".   Perhaps
-something like used in  __vfs_setxattr_locked:
+Each of the relevant dm ioctls should be logged separately each time.  If that's
+not happening it might need fixing.
 
-*  @dentry: object to perform setxattr on
+> Is there a reason that suspend is not measured?
 
-> + * @xattr_value: value supplied by userland for the xattr
-> + * @xattr_value_len: length of xattr_value
-> + *
-> + * Context: called when the user tries to write the security.ima xattr.
-> + * The xattr value is mapped to some hash algorithm, and this algorithm
-> + * must be built in the kernel for the setxattr to be allowed.
-> + *
-> + * Emit an audit message when the algorithm is invalid.
-> + *
-> + * Return: 0 on success, else an error.
-> + */
-> +int ima_setxattr_validate_hash_alg(struct dentry *dentry,
-> +				   const void *xattr_value,
-> +				   size_t xattr_value_len)
+A suspend doesn't change the configuration so falls outside the criteria
+for this patch set.  (If there is some need for it, it would be covered
+by the need to measure internal events that I mentioned above.)
+ 
+> What can happen in between a "table_load" and "device_resume" that is security
+> relevant?
 
-Should this be static?  If it is a local function, then it doesn't
-really need to be prefixed with "ima_".  It could even be trimmed to
-validate_hash_algo().
+The table prepared by the load can be cleared.  That would change the
+effect of the resume.
+ 
+> Not directly device mapper related, but it would be nice to also measure the
+> mount points and a mapping to the device IDs. 
 
-> +{
-> +	int res = -EACCES;
+Again, that would be for future patches building on these ones.
 
-I know there isn't any variable naming consistency.  The original code
-used rc.  Subsequently it was replaced with result or ret.  Let's not
-introduce yet another variable name here.
-
-> +	char *path = NULL, *pathbuf = NULL;
-> +	enum hash_algo dentry_hash;
-> +
-> +	dentry_hash = ima_get_hash_algo((struct evm_ima_xattr_data *)xattr_value,
-> +				     xattr_value_len);
-
-The hash algorithm is extracted from the xattr_value.  Perhaps rename
-the variable to xattr_hash, xattr_hash_algo, or simply hash_algo?
-
-> +
-> +	if (likely(dentry_hash == ima_hash_algo
-> +	    || crypto_has_alg(hash_algo_name[dentry_hash], 0, 0)))
-> +		return 0;
-> +
-> +	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
-> +	/* no memory available ? no file path for you */
-
-The comment here is unnecessary.  Avoid or limit comments inside a
-function.  Refer to the section "8) Commenting" in
-Documentation/process/coding-style.rst
-
-> +	if (pathbuf)
-> +		path = dentry_path(dentry, pathbuf, PATH_MAX);
-> +
-> +	/* disallow xattr writes with algorithms not built in the kernel */
-> +	integrity_audit_msg(AUDIT_INTEGRITY_DATA, d_inode(dentry),
-> +		path, "collect_data", "unavailable-hash-algorithm", res, 0);
-
-This will emit an audit message without the filename when !path.  Is
-this what you intended?
-
-Now that this patch set is getting closer, examples of each new type of
-audit message needs to be provided to the audit mailing list.  Paul,
-any suggestions as to how/when to provide them?
-
-> +
-> +	kfree(pathbuf);
-> +
-> +	return res;
-> +}
-> +
->  int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
->  		       const void *xattr_value, size_t xattr_value_len)
->  {
->  	const struct evm_ima_xattr_data *xvalue = xattr_value;
->  	int digsig = 0;
-> -	int result;
-> +	int result, rc;
->  
->  	result = ima_protect_xattr(dentry, xattr_name, xattr_value,
->  				   xattr_value_len);
-> @@ -592,6 +635,12 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
->  		digsig = (xvalue->type == EVM_XATTR_PORTABLE_DIGSIG);
->  	}
->  	if (result == 1 || evm_revalidate_status(xattr_name)) {
-> +		/* the user-supplied xattr must use an allowed hash algo */
-
-With a function name containing "validate_hash_alg", this comment is
-unnecessary.
-
-thanks,
-
-Mimi
-
-> +		rc = ima_setxattr_validate_hash_alg(dentry, xattr_value,
-> +							xattr_value_len);
-> +		if (!rc)
-> +			return rc;
-> +
->  		ima_reset_appraise_flags(d_backing_inode(dentry), digsig);
->  		if (result == 1)
->  			result = 0;
-
+Alasdair
 
