@@ -2,85 +2,166 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C363D6C2B
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 04:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAD23D6C30
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 04:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbhG0CQt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Jul 2021 22:16:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41848 "EHLO mail.kernel.org"
+        id S234422AbhG0CSD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Jul 2021 22:18:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42156 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234440AbhG0CQs (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Jul 2021 22:16:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2290760FEE;
-        Tue, 27 Jul 2021 02:57:15 +0000 (UTC)
+        id S234410AbhG0CSD (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 26 Jul 2021 22:18:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D78B460FEE;
+        Tue, 27 Jul 2021 02:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627354636;
-        bh=iQ9FkdbtV/zROAlVG/8PBSjOtj+aTz+AaFmkHdysXtg=;
+        s=k20201202; t=1627354711;
+        bh=D7jyy3lazrgfTZyaTB4BgIHxwFeOv1IymHhq8hiVd6U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HpyMORbiiNmOKjWizE4f0nrPg8XLbuRguHi7r2Yk5/ja5TNBPSSgPkbqK71qEZOM4
-         aNO08v+UoN6JncvrYwPKxxAGtFuCwXHECUZQE7T6aHzDQMea9VkfyPcE3DY1lsbJ6N
-         J3a+s5FJrfBW1WyrU7T2aPgif3LxpjpXhcaSO6ajPluBGQ9MouJh7febqXdLFJnFJ6
-         8Js9QWy6f0lvhLw7hUI+g/bj2zxzvXELzHRX7VVw7lZ5Iao7oDuxfIllGIG5w7n/4n
-         9OFWBhTDivtL+8yv9QBCWonQQTS+6EaBJAXj9JM2mJcXhETM2Q/sDC/vqz3YCI0Tj1
-         IWNETP86Bw6Jw==
-Date:   Tue, 27 Jul 2021 05:57:14 +0300
+        b=cRj5czzYT0B8Rs3pS9KNkyps8ctAbVF3UVgWE8niEpqntkQ4ysSl8FRLhb9ojA7Cm
+         5+/bBBJvaHVT2BSK09wGeRlIAyxUN/OD4ZhDVJaRD2crpaAwZ5YgNv7wVJMTwU82Pn
+         bqhESmUmolDB376+8gbPP3Irj1HpSq9bnzqaXjyLziwGboE5sGzzUqHNKbX1dKO29c
+         hxRWbY/28dMrsVUt91JlWanaQx0rt/779c1ByLzUWBJGeGDKmXgpVm9b5HKtsa2KoA
+         riSZilBHxPwpYcSenitshPZl36PBt1dSJoK78KzLsgJJiAaNFT1b6HhXSdsNh3sCDl
+         yjiiOqqPEgPCw==
+Date:   Tue, 27 Jul 2021 05:58:28 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Andreas Rammhold <andreas@rammhold.de>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: Re: [PATCH] KEYS: trusted: Fix trusted key backends when building as
- module
-Message-ID: <20210727025714.3zll7spsmo3opont@kernel.org>
-References: <20210716081722.4130161-1-andreas@rammhold.de>
- <0a684d56-66d0-184e-4853-9faafa2d243d@pengutronix.de>
+To:     Borys Movchan <borysmn@axis.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        kernel@axis.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: Add Upgrade/Reduced mode support for TPM2 modules
+Message-ID: <20210727025828.giynspbcz7zdmosa@kernel.org>
+References: <20210719133717.18797-1-borysmn@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0a684d56-66d0-184e-4853-9faafa2d243d@pengutronix.de>
+In-Reply-To: <20210719133717.18797-1-borysmn@axis.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jul 19, 2021 at 09:10:01AM +0200, Ahmad Fatoum wrote:
-> Hello Andreas,
-> 
-> On 16.07.21 10:17, Andreas Rammhold wrote:
-> > Before this commit the kernel could end up with no trusted key sources
-> > even thought both of the currently supported backends (tpm & tee) were
-> > compoiled as modules. This manifested in the trusted key type not being
-> > registered at all.
-> 
-> I assume (TPM) trusted key module use worked before the TEE rework? If so,
-> 
-> an appropriate Fixes: Tag would then be in order.
-> 
-> > When checking if a CONFIG_… preprocessor variable is defined we only
-> > test for the builtin (=y) case and not the module (=m) case. By using
-> > the IS_ENABLE(…) macro we to test for both cases.
-> 
-> It looks to me like you could now provoke a link error if TEE is a module
-> and built-in trusted key core tries to link against trusted_key_tee_ops.
-> 
-> One solution for that IS_REACHABLE(). Another is to address the root cause,
-> which is the inflexible trusted keys Kconfig description:
-> 
-> - Trusted keys despite TEE support can still only be built when TCG_TPM is enabled
-> - There is no support to have TEE or TPM enabled without using those for
->   enabled trusted keys as well
-> - As you noticed, module build of the backend has issues
-> 
-> I addressed these three issues in a patch[1], a month ago, but have yet to
-> receive feedback.
+On Mon, Jul 19, 2021 at 03:37:17PM +0200, Borys Movchan wrote:
+> On some systems, especially embedded, TPM might start in
+> Upgrade/Reduced mode due to the previous failure of a firmware
+> upgrade process. Allow the TPM driver to handle such situations
+> properly. Enables a possibility for userspace application to
+> finalize TPM upgrade or recovery if required.
 
-Which of the patches is the bug fix?
+
+Please add short explanation what you mean by upgrade/reduced mode.
+
+Maybe for clarity speak about upgrade mode.
+
+> 
+> Signed-off-by: Borys Movchan <borysmn@axis.com>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 23 +++++++++++++++--------
+>  drivers/char/tpm/tpm2-cmd.c | 12 ++++++++++--
+>  include/linux/tpm.h         |  1 +
+>  3 files changed, 26 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index ddaeceb7e109..ff2367c447fb 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -574,20 +574,25 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
+>  int tpm_chip_register(struct tpm_chip *chip)
+>  {
+>  	int rc;
+> +	bool limited_mode = false;
+>  
+>  	rc = tpm_chip_start(chip);
+>  	if (rc)
+>  		return rc;
+>  	rc = tpm_auto_startup(chip);
+> -	if (rc) {
+> +	if (rc == -EIO) {
+> +		limited_mode = true;
+> +	} else if (rc) {
+>  		tpm_chip_stop(chip);
+>  		return rc;
+>  	}
+>  
+> -	rc = tpm_get_pcr_allocation(chip);
+> -	tpm_chip_stop(chip);
+> -	if (rc)
+> -		return rc;
+> +	if (!limited_mode) {
+> +		rc = tpm_get_pcr_allocation(chip);
+> +		tpm_chip_stop(chip);
+> +		if (rc)
+> +			return rc;
+> +	}
+>  
+>  	tpm_sysfs_add_device(chip);
+>  
+> @@ -595,9 +600,11 @@ int tpm_chip_register(struct tpm_chip *chip)
+>  
+>  	tpm_add_ppi(chip);
+>  
+> -	rc = tpm_add_hwrng(chip);
+> -	if (rc)
+> -		goto out_ppi;
+> +	if (!limited_mode) {
+> +		rc = tpm_add_hwrng(chip);
+> +		if (rc)
+> +			goto out_ppi;
+> +	}
+>  
+>  	rc = tpm_add_char_device(chip);
+>  	if (rc)
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index a25815a6f625..7468353ed67d 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -718,7 +718,8 @@ static int tpm2_startup(struct tpm_chip *chip)
+>   *                     sequence
+>   * @chip: TPM chip to use
+>   *
+> - * Returns 0 on success, < 0 in case of fatal error.
+> + * Returns 0 on success, -ENODEV in case of fatal error,
+> + *	    -EIO in case of Reduced/Upgrade mode
+>   */
+>  int tpm2_auto_startup(struct tpm_chip *chip)
+>  {
+> @@ -729,7 +730,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+>  		goto out;
+>  
+>  	rc = tpm2_do_selftest(chip);
+> -	if (rc && rc != TPM2_RC_INITIALIZE)
+> +	if (rc == TPM2_RC_UPGRADE) {
+> +		rc = -EIO;
+> +		goto out;
+> +	} else if (rc && rc != TPM2_RC_INITIALIZE)
+>  		goto out;
+>  
+>  	if (rc == TPM2_RC_INITIALIZE) {
+> @@ -743,6 +747,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+>  	}
+>  
+>  	rc = tpm2_get_cc_attrs_tbl(chip);
+> +	if (rc) { /* Succeeded until here, but failed -> reduced mode */
+> +		rc = -EIO;
+> +		goto out;
+> +	}
+>  
+>  out:
+>  	if (rc > 0)
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index aa11fe323c56..e873c42907f0 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -207,6 +207,7 @@ enum tpm2_return_codes {
+>  	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
+>  	TPM2_RC_FAILURE		= 0x0101,
+>  	TPM2_RC_DISABLED	= 0x0120,
+> +	TPM2_RC_UPGRADE		= 0x012D,
+>  	TPM2_RC_COMMAND_CODE    = 0x0143,
+>  	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
+>  	TPM2_RC_REFERENCE_H0	= 0x0910,
+> -- 
+> 2.20.1
+> 
+> 
 
 /Jarkko
