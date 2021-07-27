@@ -2,271 +2,152 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F29C3D7ADF
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 18:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9B83D7AFE
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 18:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbhG0QYZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Jul 2021 12:24:25 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41676 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229569AbhG0QYZ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Jul 2021 12:24:25 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16RGEcYv002816;
-        Tue, 27 Jul 2021 12:24:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=FiF7bl34zwGeiIjUjVFkuWKyvTGUJznO3t1PTaV6vwc=;
- b=I7ydFbSnPc5UeVVCy+A+3jW81qkPgZtCWR4LrF3wIhV6M6rRmkuq/cfKY9u9yAsG7Fuj
- o1dK5kUSgnAjFRj9Nh5Lgtc+jAxTdZ2R/KBhNbKjUAsF07UYtBtADefxXT3o4vmEqdtn
- Ptz7e3s804ebyYRzrpUqteAR4HiryKdXAwJjymtH5tWdOoTi2BqmX+HzmzGkR1Rh0WHr
- 0GKoi5jkpG3Bsk9EjTKhcLeofF928SDBzUwhte9Mv4v1NAs77UGDFvL9qEE+8nmTQsIR
- RgZA1IO3HhBNPh5VJSjKvI479SX9eN3q8rTB+KLEpVyOeVZm3O8YHOfvXQ9kK+QYf6ui 8g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2ng60au5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 12:24:24 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16RGEqIr003405;
-        Tue, 27 Jul 2021 12:24:24 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2ng60at7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 12:24:23 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16RGIM4V013619;
-        Tue, 27 Jul 2021 16:24:21 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3a235krbp0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 16:24:20 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16RGOI0h28246278
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jul 2021 16:24:18 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7F39611C054;
-        Tue, 27 Jul 2021 16:24:18 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 719D211C04A;
-        Tue, 27 Jul 2021 16:24:17 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.85.52])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Jul 2021 16:24:17 +0000 (GMT)
-Message-ID: <bd785a9d0c029cec34514d306e110bdef945c13e.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 3/4] IMA: add a policy option to restrict xattr hash
- algorithms on appraisal
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
+        id S229965AbhG0Qdn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Jul 2021 12:33:43 -0400
+Received: from mail-eopbgr130129.outbound.protection.outlook.com ([40.107.13.129]:40010
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229441AbhG0Qdm (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 27 Jul 2021 12:33:42 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bwsLOXHw1jTPhAA9xd9O+p+tASL7eISSuRSo21vVajZFqyaWId0LYN6rmhGZkAPHeeGEF0g3vESbbmK2kYVfLHZYq/8GXmSt+ir/+xQgumxshMX1nOq1ewXa5GaYRXV0nxYUbx6sLsnJY1o6Pd5ti5Va5ZPxJfCRWYwzsPtPl14ZhjJ5wi8pPdgSrcYe0+hjMl8076me8PvIMKvQbHARazRU/Oolz4RYPJ5O8J5ofbd6uWXoyIPtZmkOgABsbCYacWNYSONtd2Hfs9vVmflgzmME6NNf8dQpHnz53d9Y8aGb/eKrIZhVw3Xp45Udygjm8x1egZRiDcfTDjJ05htWag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I/WoRWCG3xvwfsrvc4xL2tDdIzeNLfKmv+iH3QWKiQc=;
+ b=oMj1+VZpm3++PZzWcZlpfc3Lff0NT0GP2wt4yaPT/ftLqnDVlvwsFE3Dk42M86pPalahNhgu3Tws2EnEGAqDmP+r5LzkV2tNX7Ztsq50gXoEbt+MefLMYuM05flFlZ30ouYYOh2D3aqkGNvaljIlhTOaJt6sLwSxHypt8s7Hr5QXAIUAgnrU2mPdFf7x035lG1qJPVYcSMTMOy8ZMsoSKA90c41hsPUwoOT3KUWkQnGx70YeFFErzsaxL+W3gFlZMxYjaQ6bkP8NV8o3cLvmg3u+3KW82sPT+KW5DMfNJ/IE+hSA0JEO5SarMloCI01VXepi6n4pC5PV3IpiEAOGBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
+ dkim=pass header.d=viveris.fr; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=viverislicensing.onmicrosoft.com;
+ s=selector2-viverislicensing-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I/WoRWCG3xvwfsrvc4xL2tDdIzeNLfKmv+iH3QWKiQc=;
+ b=vYUsQ3E6rk6h9goa+2bcz8q4k6OM8fDvmGHzEfiXafEvGa4+twlB23m/3bKbzIexZxqBMOgb8T5/mbwtgs4JexoZk/EJp0MZkKRTtXUhmsGfam3kp5pD7hMoeNkgdBzhxk8JN71a23yujDGPeo9c0/HYzKoanXoG7O1PPgqXGEI=
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ (2603:10a6:200:96::21) by AM0PR09MB4243.eurprd09.prod.outlook.com
+ (2603:10a6:208:182::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.28; Tue, 27 Jul
+ 2021 16:33:39 +0000
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432%9]) with mapi id 15.20.4352.031; Tue, 27 Jul 2021
+ 16:33:39 +0000
+From:   THOBY Simon <Simon.THOBY@viveris.fr>
+To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Date:   Tue, 27 Jul 2021 12:24:16 -0400
-In-Reply-To: <20210727102307.552052-4-simon.thoby@viveris.fr>
-References: <20210727102307.552052-1-simon.thoby@viveris.fr>
-         <20210727102307.552052-4-simon.thoby@viveris.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 1P2mVrY71wTGf7mJ-_NFPzsr_m0oxWW6
-X-Proofpoint-GUID: 4YfSAE5tsYIeZLaPpV2U1LNFphssCtWC
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-27_10:2021-07-27,2021-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- suspectscore=0 phishscore=0 spamscore=0 adultscore=0 clxscore=1015
- mlxlogscore=999 impostorscore=0 bulkscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2107270097
+CC:     THOBY Simon <Simon.THOBY@viveris.fr>
+Subject: [PATCH v4 1/5] IMA: remove the dependency on CRYPTO_MD5
+Thread-Topic: [PATCH v4 1/5] IMA: remove the dependency on CRYPTO_MD5
+Thread-Index: AQHXgwUkKmokX09Kxkiedz7G8dviPA==
+Date:   Tue, 27 Jul 2021 16:33:33 +0000
+Message-ID: <20210727163330.790010-2-simon.thoby@viveris.fr>
+References: <20210727163330.790010-1-simon.thoby@viveris.fr>
+In-Reply-To: <20210727163330.790010-1-simon.thoby@viveris.fr>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.ibm.com; dkim=none (message not signed)
+ header.d=none;linux.ibm.com; dmarc=none action=none header.from=viveris.fr;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ebdfefc6-dc42-491b-4592-08d9511c4a26
+x-ms-traffictypediagnostic: AM0PR09MB4243:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR09MB42436258247F487D0D4261AE94E99@AM0PR09MB4243.eurprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2657;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ksp2wx/TMkXLbtvGlzHye8JX32IMJwn1vg61dOrhUtDsusgjfpq7R7szNekLYZ82gbIisdHGpweZE4gSfk6x8Mvos/tb718m9jPnJ1MGr2GOz0Bo+fW23he6ANuZtDAlnJpRPKmF9s4Bq/sTU12REDKe+wGm7d4jp2b7FjlNPO8yO9Trc1d3360xECDfcnA/2ryDfz2qXzBOtjKdTX7jCCAFtlR3EI8wjkU5CsUWi8RRUoAfCtbTDd2j961j2C2vvpUymVoO9tT0l080/e69HIyccJ/HulZwiv1NA4NhcopVVY9AO3FviDMrQPvm0Tyu2bEuaxcjqdRwXZwVeCTuB7R6nrWneKzJIqR/wJpe4kd1XfcFScqebG5pGwfHcfjWslPUfVm5wIOizRfWV5LWcbWhyf5U03kZaW58h/yPTrZWsvoQTDYNtcfhd2+73od0Co/x/swF0dJMRNBCvHqRHCxfdRs8NwARUUeoDry3Kuyx0QhOXvNOCp4LggWh5QT5cR9psXSobUsIdh9h9DeT9ueojTo05WGk1hqL4VopVQk4TnCxOPSqK9ROaT86e8OS+l1Ur5U6l5zchsdjLmHzQMVKLtzmTrXrKzr8CqqxvrQ0D/Ih8cl5aZuITHZ9wTN24LAl1cyccmNBKGUaR8oZLU/rkW1h1XfqizIkZ/5SjmrBLsD7VF/zi+xofBXGjVmgahquPtRhkq9GvU/UI36G1g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(39840400004)(396003)(346002)(136003)(66446008)(122000001)(66946007)(6666004)(76116006)(36756003)(91956017)(2906002)(38100700002)(26005)(2616005)(186003)(6486002)(86362001)(6506007)(110136005)(4326008)(478600001)(64756008)(66556008)(66476007)(6512007)(71200400001)(1076003)(316002)(5660300002)(6636002)(83380400001)(8936002)(8676002)(107886003)(38070700004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?/oSNQxrG83LiH/bYsG5OD70yYmNvZrEURejPUuOKgsWuYbw2406XOejwaz?=
+ =?iso-8859-1?Q?Da5jGNgTXnKppgvzxkoOF3k9yOuTpuXIyvBBUA9VYj/NevXwlQy9fROcD+?=
+ =?iso-8859-1?Q?JTyqeR+YIvWusRo8KaMM4jNSzerc90l6pOajDYf9rXNZr8D4WSXeq2ZJZr?=
+ =?iso-8859-1?Q?5H88RRc7AIfVoOKQkejmWUnDDtzLv16WR6Lv27fkRSRSllYtoNgEm0YPQs?=
+ =?iso-8859-1?Q?fEXMpw57+3I6cNrO3yU8uFFv1VJhJBwt/8G4BlGsF9inUj6OsHsbdigo0G?=
+ =?iso-8859-1?Q?nJ3N59wMmpRRfwy9+krLZI3zz9CcVnKDo+tRte+pUNIiXU8wAtsp88t+LU?=
+ =?iso-8859-1?Q?uWojvLZzP2J06QHmglo6VCaIgN9kT0cUEiqoFf9xYSz+fhmpjlk55AdpQn?=
+ =?iso-8859-1?Q?xIONGLtUUmSsogE4ziuxYfCnr4LD66obC6Be8HarvkL9CaB1TAtRLt8Ef6?=
+ =?iso-8859-1?Q?4yDyRIsvjgDH8zxDjAkL7phjT1cvQD4DMQRApvWO9Tm03bcCCg7Cx7iw+x?=
+ =?iso-8859-1?Q?U3ubYVonJF41A86QysS11S+mx8g4GbDfSwPrx7sU8O2QMk6lAHa6nCdDHa?=
+ =?iso-8859-1?Q?baRZ6GSQBBAJb+c4obmY7Hr2EmzBkTNPXZnBjFg3eV/tVC8Nyk35LssvP6?=
+ =?iso-8859-1?Q?IsTqGZWtg17BCaOHwEdDK94PeQHZnnJHkF2k77IE7L3zUg4eQXVZdjEsEn?=
+ =?iso-8859-1?Q?zlPZKe8djXLz6nR4hEKQ+dBRSuWbOr9IREoyuHFUUT2cgJwutoNH2yjWNU?=
+ =?iso-8859-1?Q?67jU/7wFnEVGaic2a7Z7wdkLVN73f8j2mub1Nl5TWTEmGZvDjyzQXNSDX2?=
+ =?iso-8859-1?Q?bO7wCcDvHDAR5v6HoIjefF7KsZAv2Ie1d+5zkRAM697umh9T0w1UEl9UO8?=
+ =?iso-8859-1?Q?es9D6Wsh3jq9JQOx/jJjW1cxQw+OY1Jx3SDU4Vi7hy/oq78AAv3KkQUTP2?=
+ =?iso-8859-1?Q?dBPusiPf9uaWxFnRDbqO0nMuMKHNMpXLVgnRMIkyWWAjF0mJLwMJyrMMX8?=
+ =?iso-8859-1?Q?8m4XuoRBLOBZnlo3ElrrzHVM9JYfFfKYsU9HZqcaeoQb9fuTlM/xP55Lbf?=
+ =?iso-8859-1?Q?jSs0UXRrnSPtjYbrSRL0LqE7WjLxgtzc1u8YQKpjB53w4Xs5uf30ifgWRx?=
+ =?iso-8859-1?Q?3/9iFB8Cifuk7e/sDfXVGwYmM9abz1r/sKtaTE74yfqHyBT594MO83n3XO?=
+ =?iso-8859-1?Q?b0LH6joth4x9SUBEv9iWuQhXTbiB+NW+Ycmz6ABXJMMh8TOFXBYAfCaSnG?=
+ =?iso-8859-1?Q?AfWmyAPBg1s1glvrmNYhxkEmpFjSF3pH/IohNi2wBBZLbmfk/t1t0rmQZp?=
+ =?iso-8859-1?Q?T/1JmSvMad3b/6oTSPq2nQM0Zorp2O24YpfG3P7HzvWO0KEfINKJ0Yk4py?=
+ =?iso-8859-1?Q?sp91axsYR+?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: viveris.fr
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebdfefc6-dc42-491b-4592-08d9511c4a26
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jul 2021 16:33:33.8297
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RY4RTEdU3u6qFNWW669vJZAdLBsXyfcQkJpZ7iXcpyFIpiKV+XmcbtOGq7W24IlHQSuLeD2dGoTvIn7AC/auJA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR09MB4243
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Simon,
+Remove the CRYPTO_MD5 dependency for IMA, as it is not necessary
+and it hinders the efficiency of a patchset that limit the digests
+allowed for the security.ima xattr.
 
-On Tue, 2021-07-27 at 10:23 +0000, THOBY Simon wrote:
-> This patch defines a new IMA policy rule option "appraise_hash=",
-> that restricts the hash algorithms accepted for the extended attribute
-> security.ima when appraising.
+Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
+---
+ security/integrity/ima/Kconfig    | 1 -
+ security/integrity/ima/ima_main.c | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-"Define ..."
-
-> When a policy rule uses the 'appraise_hash' option, appraisal of a
-> file referenced by that rule will now fail if the digest algorithm
-> employed to hash the file was not one of those explicitly listed
-> in the option. In its absence, any hash algorithm compiled in the
-> kernel will be accepted.
-> 
-> For example, on a system where SELinux is properly deployed, the rule
->   appraise func=BPRM_CHECK obj_type=iptables_exec_t appraise_hash=sha256,sha384
-> will block the execution of iptables if the xattr security.ima of its
-> executables were not hashed with either sha256 or sha384.
-> 
-> Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
-> ---
->  Documentation/ABI/testing/ima_policy |  6 ++-
->  security/integrity/ima/ima_policy.c  | 72 ++++++++++++++++++++++++++--
->  2 files changed, 74 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-> index 070779e8d836..365e4c91719e 100644
-> --- a/Documentation/ABI/testing/ima_policy
-> +++ b/Documentation/ABI/testing/ima_policy
-> @@ -27,7 +27,7 @@ Description:
->  			lsm:	[[subj_user=] [subj_role=] [subj_type=]
->  				 [obj_user=] [obj_role=] [obj_type=]]
->  			option:	[[appraise_type=]] [template=] [permit_directio]
-> -				[appraise_flag=] [keyrings=]
-> +				[appraise_flag=] [keyrings=] [appraise_hash=]
-
-Nit:
-Probably nicer to keep the "appraise_" options together.  How about
-placing it after "appraise_flag", instead of at the end.
-
->  		  base:
->  			func:= [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK]
->  			        [FIRMWARE_CHECK]
-> @@ -55,6 +55,10 @@ Description:
->  			label:= [selinux]|[kernel_info]|[data_label]
->  			data_label:= a unique string used for grouping and limiting critical data.
->  			For example, "selinux" to measure critical data for SELinux.
-> +			appraise_hash:= comma-separated list of hash algorithms
-> +			For example, "sha256,sha512" to only accept to appraise
-> +			files where the security.ima xattr was hashed with one
-> +			of these two algorithms.
->  
->  		  default policy:
->  			# PROC_SUPER_MAGIC
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 344b5b0dc1a1..a7f110cbbff0 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -92,6 +92,7 @@ struct ima_rule_entry {
->  	struct ima_template_desc *template;
->  };
->  
-> +
-
-Is this extra blank line intentional?
-
->  /*
->   * sanity check in case the kernels gains more hash algorithms that can
->   * fit in an unsigned int
-> @@ -962,7 +963,7 @@ enum {
->  	Opt_uid_lt, Opt_euid_lt, Opt_fowner_lt,
->  	Opt_appraise_type, Opt_appraise_flag,
->  	Opt_permit_directio, Opt_pcr, Opt_template, Opt_keyrings,
-> -	Opt_label, Opt_err
-> +	Opt_label, Opt_appraise_hash, Opt_err
-
-Nit: move Opt_appraise_hash after Opt_appraise_type.
->  };
->  
->  static const match_table_t policy_tokens = {
-> @@ -1000,6 +1001,7 @@ static const match_table_t policy_tokens = {
->  	{Opt_template, "template=%s"},
->  	{Opt_keyrings, "keyrings=%s"},
->  	{Opt_label, "label=%s"},
-> +	{Opt_appraise_hash, "appraise_hash=%s"},
-
-ditto
-
->  	{Opt_err, NULL}
->  };
->  
-> @@ -1125,7 +1127,7 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
->  				     IMA_UID | IMA_FOWNER | IMA_FSUUID |
->  				     IMA_INMASK | IMA_EUID | IMA_PCR |
->  				     IMA_FSNAME | IMA_DIGSIG_REQUIRED |
-> -				     IMA_PERMIT_DIRECTIO))
-> +				     IMA_PERMIT_DIRECTIO | IMA_VALIDATE_HASH))
->  			return false;
->  
->  		break;
-> @@ -1137,7 +1139,7 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
->  				     IMA_INMASK | IMA_EUID | IMA_PCR |
->  				     IMA_FSNAME | IMA_DIGSIG_REQUIRED |
->  				     IMA_PERMIT_DIRECTIO | IMA_MODSIG_ALLOWED |
-> -				     IMA_CHECK_BLACKLIST))
-> +				     IMA_CHECK_BLACKLIST | IMA_VALIDATE_HASH))
->  			return false;
->  
->  		break;
-> @@ -1187,6 +1189,27 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
->  	return true;
->  }
->  
-> +static unsigned int ima_parse_appraise_hash(char *arg)
-> +{
-> +	unsigned int res = 0;
-> +	char *token;
-> +
-> +	while ((token = strsep(&arg, ",")) != NULL) {
-> +		int idx = match_string(hash_algo_name, HASH_ALGO__LAST, token);
-
-Move the variable definition to the beginning of the function.
-> +
-> +		if (idx < 0) {
-> +			pr_err("unknown hash algorithm \"%s\", ignoring",
-> +			       token);
-> +			continue;
-> +		}
-> +
-> +		/* Add the hash algorithm to the 'allowed' bitfield */
-> +		res |= (1U << idx);
-> +	}
-> +
-> +	return res;
-> +}
-> +
->  static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
->  {
->  	struct audit_buffer *ab;
-> @@ -1204,6 +1227,7 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
->  	entry->uid_op = &uid_eq;
->  	entry->fowner_op = &uid_eq;
->  	entry->action = UNKNOWN;
-> +	entry->allowed_hashes = 0;
->  	while ((p = strsep(&rule, " \t")) != NULL) {
->  		substring_t args[MAX_OPT_ARGS];
->  		int token;
-> @@ -1556,6 +1580,23 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
->  						 &(template_desc->fields),
->  						 &(template_desc->num_fields));
->  			entry->template = template_desc;
-> +			break;
-> +		case Opt_appraise_hash:
-
-ditto
-
-"appraise_hash=" should be limited to appraise rules.  Please update
-ima_validate_rule().
-
-thanks,
-
-Mimi
-
-> +			ima_log_string(ab, "appraise_hash", args[0].from);
-> +
-> +			if (entry->allowed_hashes) {
-> +				result = -EINVAL;
-> +				break;
-> +			}
-> +
-> +			entry->allowed_hashes = ima_parse_appraise_hash(args[0].from);
-> +			if (!entry->allowed_hashes) {
-> +				result = -EINVAL;
-> +				break;
-> +			}
-> +
-> +			entry->flags |= IMA_VALIDATE_HASH;
-> +
->  			break;
->  		case Opt_err:
->  			ima_log_string(ab, "UNKNOWN", p);
-> 
-<trim>
-
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfi=
+g
+index d0ceada99243..f3a9cc201c8c 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -6,7 +6,6 @@ config IMA
+ 	select SECURITYFS
+ 	select CRYPTO
+ 	select CRYPTO_HMAC
+-	select CRYPTO_MD5
+ 	select CRYPTO_SHA1
+ 	select CRYPTO_HASH_INFO
+ 	select TCG_TPM if HAS_IOMEM && !UML
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima=
+_main.c
+index 287b90509006..d171764230b7 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -53,8 +53,10 @@ static int __init hash_setup(char *str)
+ 	if (strcmp(template_desc->name, IMA_TEMPLATE_IMA_NAME) =3D=3D 0) {
+ 		if (strncmp(str, "sha1", 4) =3D=3D 0) {
+ 			ima_hash_algo =3D HASH_ALGO_SHA1;
++#ifdef CONFIG_CRYPTO_MD5
+ 		} else if (strncmp(str, "md5", 3) =3D=3D 0) {
+ 			ima_hash_algo =3D HASH_ALGO_MD5;
++#endif
+ 		} else {
+ 			pr_err("invalid hash algorithm \"%s\" for template \"%s\"",
+ 				str, IMA_TEMPLATE_IMA_NAME);
+--=20
+2.31.1
