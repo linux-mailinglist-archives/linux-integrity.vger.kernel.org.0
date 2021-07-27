@@ -2,95 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5602B3D6D4F
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 06:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590B63D7310
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 12:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234841AbhG0EZC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Jul 2021 00:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbhG0EZA (ORCPT
+        id S236336AbhG0KYs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Jul 2021 06:24:48 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:34274 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236298AbhG0KYb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Jul 2021 00:25:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB45C061760
-        for <linux-integrity@vger.kernel.org>; Mon, 26 Jul 2021 21:25:01 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1m8EeJ-00047E-E9; Tue, 27 Jul 2021 06:24:59 +0200
-Subject: Re: [PATCH v2] KEYS: trusted: fix use as module when CONFIG_TCG_TPM=m
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
-        Andreas Rammhold <andreas@rammhold.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-References: <20210721160258.7024-1-a.fatoum@pengutronix.de>
- <20210727030433.3dwod2elwtdkhwsc@kernel.org>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <fe39a449-88df-766b-a13a-290f4847d43e@pengutronix.de>
-Date:   Tue, 27 Jul 2021 06:24:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Tue, 27 Jul 2021 06:24:31 -0400
+X-Greylist: delayed 370 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Jul 2021 06:24:30 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1627381091;
+    s=strato-dkim-0002; d=thson.de;
+    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=zh4kX0yAPRzCE9zcCAKrxwBLTAvbgRFm+3P/YY10Smg=;
+    b=RDF2MvI7zhB5So3w8xtU6UlC6MUHAiySi4JEbNHfCg2COIdUWs2OLtdk8kjfch6123
+    JJoLgFfZZPKKyo+qVRcw+GJHLjHHesd3b6vdiMIgLobp2ZMsTuxYFd3Q1I8lf9MC3QZc
+    mvXNYSjLIgcLwiHfX5HoNgD96etQ+f4GZpKvumN38sQ+wucaB18t438UUUnAlbFnPqHJ
+    6wL+SHhiIMxh4kOdMnf5nKV7gZBPncYW2FVnKqN061PcFFG+P3kaXu1qV1UkdGUlPabN
+    R8oxeKGMrjGF+1PzJXXsY/Oi911bwPSiFCuI0J3mEp1Du8HdOHukXD/MBeE7aTN4003F
+    BC2w==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":PHkGeUmrW+uCZmxs998QJRUX30nOwJd7nOD9sw/xoauycprg5uef7cgCEpy7sPc="
+X-RZG-CLASS-ID: mo00
+Received: from USER-PC.fritz.box
+    by smtp.strato.de (RZmta 47.28.1 DYNA|AUTH)
+    with ESMTPSA id t06ddcx6RAIAo5V
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 27 Jul 2021 12:18:10 +0200 (CEST)
+From:   Thore Sommer <public@thson.de>
+To:     tusharsu@linux.microsoft.com
+Cc:     agk@redhat.com, dm-devel@redhat.com,
+        linux-integrity@vger.kernel.org, nramas@linux.microsoft.com,
+        public@thson.de, snitzer@redhat.com, zohar@linux.ibm.com
+Subject: Re: [dm-devel] [PATCH 0/7] device mapper target measurements using IMA
+Date:   Tue, 27 Jul 2021 12:18:02 +0200
+Message-Id: <20210727101802.779067-1-public@thson.de>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <c833339e-c4bf-6e78-5719-cd902fa8426f@linux.microsoft.com>
+References: <c833339e-c4bf-6e78-5719-cd902fa8426f@linux.microsoft.com>
 MIME-Version: 1.0
-In-Reply-To: <20210727030433.3dwod2elwtdkhwsc@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 27.07.21 05:04, Jarkko Sakkinen wrote:
->> Reported-by: Andreas Rammhold <andreas@rammhold.de>
->> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
->> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> 
-> Is it absolutely need to do all this *just* to fix the bug?
-> 
-> For a pure bug fix the most essential thing is to be able the backport
-> it to stable kernels.
+Hello Tushar,
 
-Not much happened in-between, so a backport should be trivial.
-I can provide these if needed.
+I've now tested your patches more in depth. I've used the latest changes from
+the dm-5.15 branch. Here are some things that I noticed during testing with
+dm-verity. I'm relative new to IMA and device mapper, so there are also some
+more general questions.
 
-> I don't really care at all about extra niceties ("it's now possible
-> stuff).
-> 
-> This looks like a bug fix and improvements bundle into a single patch.
+No new IMA measurement is generated if dm-verity verification fails. This is
+unfortunate because to make the dm-verity measurements useful we need to be
+notified when hash_failed is set to true. We will need something like
+"device_update" where we remeasure the device state if it has changed.
 
-You can replace the #ifdefs with #if IS_REACHABLE in trusted_core.c to fix the
-intermediate breakage and then throw that away again to fix the remaining
-dependency of trusted keys on TCG_TPM.
+Creating a dm-verity device with mount then removing it and now if you create it
+again no measurement is generated. Is that the expected behavior?  
+I would expect that new measurements for "table_load" and "device_resume" are
+created even if the entries are identical the other ones before.
 
-If you prefer that, Andreas perhaps could respin his series with
-s/IS_ENABLED/IS_REACHABLE/?
+There is no way to verify if the root hash was verified against a signature. We
+have "root_hash_sig_key_desc SIGNATURE_DESCRIPTION" in the dm table.
+"SIGNATURE_DESCRIPTION" itself is not really useful because it seems that we
+cannot map it back to the certificate that was used for verification but the
+presence of "root_hash_sig_key_desc" might be enough in combination with
+measuring the keyring.
 
-Cheers,
-Ahmad
+Is there a reason that suspend is not measured?
 
+How is the measured uuid created? The format seems to be
+"CRYPT-VERITY-UUID-NAME" where UUID is uuid from the verity device and NAME is
+the device mapper name. Does this naming come from the kernel or libcryptsetup?
 
-> 
-> /Jarkko
-> 
+What can happen in between a "table_load" and "device_resume" that is security
+relevant?
 
+For remote attestation services it would be nice if we have clear indicator from
+what component the "ima-buf" entry was generated. Prefixing all "n-ng" field
+entries with something like "dm_" would make it easier for us to add different
+validators for different measurements that use the "ima-buf" template. The
+keyring measurements already use "ima-buf" and using some kind of naming scheme
+to easily differentiate the entries would be nice.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Not directly device mapper related, but it would be nice to also measure the
+mount points and a mapping to the device IDs. The reasoning is that we can
+measure if the target is correct but not if it was mounted correctly.  
+In our case we can verify the trust of our initramfs that creates the dm-verity
+device and then mounts it and if this fails refuses to boot, but that might not
+always be the case.
+
+Regards, 
+Thore
