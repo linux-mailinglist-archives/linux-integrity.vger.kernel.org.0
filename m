@@ -2,23 +2,23 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F663D7302
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 12:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9906F3D7304
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 12:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236264AbhG0KXb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Jul 2021 06:23:31 -0400
-Received: from mail-eopbgr70131.outbound.protection.outlook.com ([40.107.7.131]:35061
+        id S236274AbhG0KXq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Jul 2021 06:23:46 -0400
+Received: from mail-eopbgr70098.outbound.protection.outlook.com ([40.107.7.98]:4837
         "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236253AbhG0KXZ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Jul 2021 06:23:25 -0400
+        id S236249AbhG0KXe (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 27 Jul 2021 06:23:34 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X1MhTsNqyJClJhztWHv8MqGCmHayfZn1jMrbuA6NkRHysfkN+levLTkVIPe2ai5GHLEN+pf9aPvLuN7ylmRpaMb/F4LiVx/mwsQHubjSx5CjNEqnC8k+ogvbhui5c0Oa923PrHS6wCZf5GUF2MqIuuNzopWOZJbwEN3jvQLfHTChKZq29r/CXeDXs5od91r0RXmrsJXgHCdeF98nL0Leq15H4pyL8hdbbnB3jeaJoK2Z6uG8FiWGa09TdoCFm4830QfKTHGPKL8HS31w7xciLi7HCI+judWyOHVLvOd2kEAr+2W1g1x4AxPaOxSYd6nujzuRfwRIuxJHM/M72NUvmg==
+ b=YDUcpCTDgXsNg3pTySPbusJGsW1wqN+ypHmkr0SxMTplOhaxxzr/qop1Wf6mFwyPAxtaUZE5GiUXxNDQB/kebTjLufCJIML5hXYXbP/61FvOfutNfoD2KoPh1a2+JTF3av2/ae3Bp84PjDF5nD8sEo3YtkJxDdHUuQqwPVqFsGX8XgOMd21xj+r4dn0sBkWfQfUBF6Oa+4N6i+vADftlXlX0aKWhjqXgH+nHdDXNC2GYOifBymXOatQUHW1HMByr/KEwA2ElLyVDzqLtRjO5Eka+xHvnArvfYxcgGoK2e6P33vr3rWrCDDFOy2n2qEjmvr+1rTS3HLaqtpTC5okggw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wspkq2dDxz/Bfai9RCo0QlAcAYpPrNMjY1rLGMCcWrU=;
- b=LvgEkEWgAesf0D+pWNj9qK153FiCp2E0TwwDfYmQ6P8gl4qpOdEESMnYlk9015h7/NuCwZkdd+7EOvmxQgubfNxhhRWR7Fhj9VomPXKZrX2SXfC1jSiN2F/n3c4DzJHQRpVJaVd5kn0qDWA300+6FdVxA4MtT3j0zqYep6FkMZkoqLB/lCmuL5o2H0yEANOdGOY//r6IuCbjt+QNzzRFFsxw5+O1LKrVBxafHWonW5CzD4hz8eADrgunq7AI9mdq7xR22nA1QEsSE4cOiQ8wztzjupHi69GyFKXNoPfB9VJQaiU6qakweytsEiXx+Ho418hEoHKMfP7ZGUZtyXPEew==
+ bh=mmNh/dVv0XALd56mz9Bu4Nd9ewP8Bx8BFQZbDOFbN3E=;
+ b=WxW9SwRGOpb9Cm7fu+J+X2dCddd8P6xAr3Q463bpRfv6hndLrwZEF33d8JmPxcnabZ770+6nL5smICYYYeusbn4ioa1JVISgPuVnW5aVPO3s/pR9M5LOwkdEJuH4k8D8htnFfztNsIRFXMm6EdUJfp5ItiLirYroog5ADHkp8b2Aquz62ix4EBocV6YTkKAWFevfMOEAIAomCSWXDF8JijNSGfFW7qHlT4fP8FPsOvM3/z4WGIWRJFNt1v+mP+jtynJ2fNIM5fmfVZvxW3BjpmTTHii8S2yOJ8mH/ynLod2WHCixrC95A3MeoCxP+hR8rDdEcX4p4SyYuKocgfUHSw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
  dkim=pass header.d=viveris.fr; arc=none
@@ -26,30 +26,32 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=viverislicensing.onmicrosoft.com;
  s=selector2-viverislicensing-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wspkq2dDxz/Bfai9RCo0QlAcAYpPrNMjY1rLGMCcWrU=;
- b=xrzGpRpfWu0N4RN4YKwGNdllYqL18EkCp3xGhFSUhDUs90V/kNnwv7jSFSETiikCkADm+4WG4/meD+TvOgBAAoNg17AZJUsZ3rIys9lmBz37F0R4njmgbBQBX+TUZbuQj0MN/gUdl4wJ/dBuq2z9EnZi9V8RR+oaDWEG9ioxKNM=
+ bh=mmNh/dVv0XALd56mz9Bu4Nd9ewP8Bx8BFQZbDOFbN3E=;
+ b=PvKA95cGCjVBalsh9RLe+ko+YUZlkvivMd44Qm6nmp6P9ElQ/KWzd9akGX8Tw4EErr562qy8hSTyZO7iSwF6501NznXoBwsdeh6OpqQ7pu01Lk73i8anz7mMHkrfQkL4hPpJGamNECgn/0mrEsmnYMtKEU2UUPD31RZB9BzXjTA=
 Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
  (2603:10a6:200:96::21) by AM0PR09MB3364.eurprd09.prod.outlook.com
  (2603:10a6:208:16c::18) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.26; Tue, 27 Jul
- 2021 10:23:23 +0000
+ 2021 10:23:33 +0000
 Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
  ([fe80::84a0:780d:1c5c:4432]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
  ([fe80::84a0:780d:1c5c:4432%9]) with mapi id 15.20.4352.031; Tue, 27 Jul 2021
- 10:23:23 +0000
+ 10:23:33 +0000
 From:   THOBY Simon <Simon.THOBY@viveris.fr>
 To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         BARVAUX Didier <Didier.BARVAUX@viveris.fr>
 CC:     THOBY Simon <Simon.THOBY@viveris.fr>
-Subject: [PATCH v3 0/4] IMA: restrict the accepted digest algorithms for the
- security.ima xattr
-Thread-Topic: [PATCH v3 0/4] IMA: restrict the accepted digest algorithms for
- the security.ima xattr
-Thread-Index: AQHXgtFtJwkB8OJs1ku7xiuulnAV9A==
-Date:   Tue, 27 Jul 2021 10:23:23 +0000
-Message-ID: <20210727102307.552052-1-simon.thoby@viveris.fr>
+Subject: [PATCH v3 1/4] IMA: block writes of the security.ima xattr with
+ unsupported algorithms
+Thread-Topic: [PATCH v3 1/4] IMA: block writes of the security.ima xattr with
+ unsupported algorithms
+Thread-Index: AQHXgtFzgGMZrlq3rkCxUiyd7vInTQ==
+Date:   Tue, 27 Jul 2021 10:23:32 +0000
+Message-ID: <20210727102307.552052-2-simon.thoby@viveris.fr>
+References: <20210727102307.552052-1-simon.thoby@viveris.fr>
+In-Reply-To: <20210727102307.552052-1-simon.thoby@viveris.fr>
 Accept-Language: fr-FR, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -57,153 +59,145 @@ X-MS-TNEF-Correlator:
 authentication-results: linux.ibm.com; dkim=none (message not signed)
  header.d=none;linux.ibm.com; dmarc=none action=none header.from=viveris.fr;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a5d6e9e1-cd9e-470d-94b1-08d950e8908c
+x-ms-office365-filtering-correlation-id: 1320ad4f-ddb4-4bdf-77cd-08d950e89617
 x-ms-traffictypediagnostic: AM0PR09MB3364:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR09MB3364F58268D068A761A41F5994E99@AM0PR09MB3364.eurprd09.prod.outlook.com>
+x-microsoft-antispam-prvs: <AM0PR09MB3364CD5161367B62E46BFAA394E99@AM0PR09MB3364.eurprd09.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: d2Z/skeIrbCQrJZxmllbgKPqYXIlJtH15P0yEE1K5I59y+ubeFqMdB/UxrGCSBzcgkwkbkHMUEKoCQYJoU5H+uTxilFcdVh6jV/PbxCWFw8zzOTNgJwX57AOsYpcb5jNxV5heJ2Y0zH7okaHuYA4mfx/388HE7/HtCijZU1phbVrWv4gQnSQXstjZUxAA3L/XNIbGSMGVwO7x2uGZs/+OjQBGgcMpDaO2mO8dBHdWEyZb/ZrKkUwuPzTlKTm5jh8VgR1R5EC2GEeUQBcbY2NxoCaSV/Z3y4U07wSazR5E9sPv7soEyWjncis75AY+Eb87IRfTWAlZFM6Hs1uR7vvzWZsO9ePMrqsPQtCTAM+NbesiFVbSZaTMOtrSDtIlSJOLpvaRug3aZJdexkfLK82JWtLrKvpAX6d9SKMycJmhadNsE0WpW7J1fG1Pbxjyrik22DDFZW3fqsfhQIUVZhoiayG+3c+i2NRY5TaQ+1wOmNdhOrZmonoUvpy3v5yxVS+n15YKZecbDAQr4RPGG2QZEhtMJijqIynrT4x+m09aPZ7dSIN3CvFOsXcs4YpfIqtlFgCFyprp480oJMT0RGGF54ZCtSoj6rCTy1F9+6FP/Oks0CU6BT5oc/a1WcQzkEyxvgYF9dKmCtPpsyp4Q5FuOeWKTUgo1L0zaaguwBtzvIrpLYdvjq3SojeL8wA/zYd2l05smM6V98DV2TedgN9GztY1VbrvXqJfy9TDF6btU01VqS6h39Zv+swi1A0EeRYrAbf0bGl+VaNFyatdly3QOhcPBD9O/VMt5kXpPVzk10=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39840400004)(366004)(346002)(376002)(396003)(136003)(6486002)(122000001)(966005)(2616005)(6512007)(6506007)(478600001)(15650500001)(8936002)(6636002)(66946007)(2906002)(316002)(91956017)(76116006)(107886003)(8676002)(186003)(66476007)(4326008)(64756008)(38100700002)(86362001)(5660300002)(110136005)(66556008)(66446008)(26005)(83380400001)(36756003)(71200400001)(1076003)(38070700004);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: pV49p/tk0eGCekrK4Iujcjyic6lGvgIbrlbHo1PaxAmhmwlHWQi05aX+UZyao7al2Tm3MfS8HVyP9XQhLLb4VmcwCAjNWku1FFKybRvaBa9B/2e6z/lWKQuKYF0HoSJlU6iPc3nU+xnlMkcb/jPVp5UYUULe1nyZF39Y/rU7CJNSaxBVLXmZ9PNEamybDlgqCfiCxIvXYVDcX8+gH1C4ra8RtHzXqxphPdK6FLKfV5YV596U185XS0IqnZLFu/hfAliYWZsPC/S03yX1T3fiQo9246gmyUGAIwMyueAPs9ImKlBA/WXLVWRStcrsSBJ8gS546w6+1Sn02+ykmfxwRqE5N904w/OpZ1uU4JgGWQny+CMo+jpNfV2Ibvm+I6krc+NaSzA7k0h51olvDV2x/Rzs0PrN+5co+vnZ4ie/6Xhgvg2yTb5niX3XpXZZMnhyAQOTHCqqOgWJzkDtGJq7xqtwZ8KlXGnGmFJwMtEtTaJxViLGBPpm/WBHJtlSRFD0ez3Nv6S5pR42KZCsIKpa6IdFUguW6Xa1YucAZ6UYz43OVrqpWMC/3pnfR2XyEvrk3AJxcYowujLLI6tn+lLTnKBo/fUPviFlmWfhApcIqsM3GIuAXR+HtICnc9zN5ld3BQsmc2Zd4/P5TC6msCMNqmOdxzLsCijiMPtjmsW7ksYQdbLrJEoZLazRQC98xNwAL4Z0lc5lWwOg/0WhSDX7Xw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39840400004)(366004)(346002)(376002)(396003)(136003)(6486002)(122000001)(2616005)(6512007)(6506007)(478600001)(15650500001)(8936002)(6636002)(66946007)(2906002)(316002)(91956017)(76116006)(107886003)(8676002)(186003)(66476007)(4326008)(64756008)(38100700002)(86362001)(5660300002)(110136005)(66556008)(66446008)(26005)(83380400001)(36756003)(71200400001)(1076003)(38070700004);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?oKZIpFDWe/EccAjIolBqTGBSqhBS4JH479Vd/s+FGMi+KuPJ+LbAGiUImk?=
- =?iso-8859-1?Q?giVYtMQlpJ/JocbevcEUInWCjeO8K46qhp5j6xABWFLJG5Cs2dqwgPe0LX?=
- =?iso-8859-1?Q?XPGjf3klyWkwGT04ZFLLs7baWEnhQeg4PTaocUMs90g254/BzY89xq+qPR?=
- =?iso-8859-1?Q?1XMFTkSBKLyH00JiOeM9ihFKAYpMNdxzQxOfJ81x9ISKM8KHon9AUe0YnO?=
- =?iso-8859-1?Q?4EEm08diW7JzgguCfoOyqST4/X3SJ+N/nLo4OHsxGi2ifLUcf/Ok7XG3wc?=
- =?iso-8859-1?Q?1YPFX6Le6qXGG8WzUCL1PKjI+oB7f4QMNxyeJaItq91p71aQN8eKp6M2El?=
- =?iso-8859-1?Q?FFYhtBjG+iz8NZuzKS1Gk9zfWcjtdawQ6QYKsROQEH1r5py0hSh9LgbqTz?=
- =?iso-8859-1?Q?YgTWA9FQpR9zdULsAarfuRqwxLzEykJu8QZjrYynNZASh2Scd0aGpXWjEd?=
- =?iso-8859-1?Q?bvSbIesHgUTv/sTDJ/F6/GaTlO3PImJ8pUPb7q8YuZzg1RZpJw49X3ddxO?=
- =?iso-8859-1?Q?eFTdvC5aMXaDF8b8Gd/vn88kbK6zcH3T7zkpkssiGhebt+NbzY8CoUeutY?=
- =?iso-8859-1?Q?HvWLEc6dvhAwOIW7N3LBmnJSRKZkGTb/1ZymJySkwG95rCciVwKK7O4kGQ?=
- =?iso-8859-1?Q?600J2BQU2v/XJR9LTLn3F5evtQL8TvBHYFJtEl+7Dh4JuRhQ7lexMkyYqF?=
- =?iso-8859-1?Q?iAUA6v4hITk4QyNwJHYmDStUUKYP1l+r7ddR98qa2spgwMeUK3UwfT0twi?=
- =?iso-8859-1?Q?ecSIvItNRJ1ElWLHocjCtS+WBoFnK8/cfJmv38vsuhnGP/cmQ6ChLDzLeU?=
- =?iso-8859-1?Q?f3zAB/IiZJQWeU7OBOCrY+FGQP3ysgBs9+DejVlFS3OBFSULAfAUOnyUap?=
- =?iso-8859-1?Q?g1K7aDv4P9GiNOSeYtnZ1D71aJlztDlPD2Sylo/93/0oXZm3EgFPmsybx/?=
- =?iso-8859-1?Q?it4o9/BOJGZQpgqOadm1+6JwHcimtsaE8Z2SzsWp8lz2ErbfyRa3QGBOHE?=
- =?iso-8859-1?Q?GMti4j21ekax2N4er5qeXfMREq5zNbEKaA8+B94LC/YEFPwVNH5HdKy63u?=
- =?iso-8859-1?Q?+8Ez5U31goNh5z+RTCx1LmX223YJ2K80+KEJg7yzmqFVku4vuHMgOcF/h0?=
- =?iso-8859-1?Q?vSp5yBdclJxlFp2CFdiqeQAy3vpB1Ed7i7P8+4GxiT6AHCyLPxOYYgndnG?=
- =?iso-8859-1?Q?K+DZxBAaw+SohA2PlGylev8RWiknAcFehBvykMRiV86SRehqjiRw1uLo2g?=
- =?iso-8859-1?Q?LUMH1AFDywTk9G/KKQA87QPnmqk60heXaOJQUNRC/9cjejW+qSN7fzK10B?=
- =?iso-8859-1?Q?eCuEv8ftOollL4T/tKMNb1CPoNEY/F7lrRufYpVKI4BWfp8+MOje8u6FGe?=
- =?iso-8859-1?Q?b15+WWvvCE?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?yBG6FmiFMjB/XDpFwoDj4jIsfMi4MdUjwdc+VUNVMVhRrh3idN66+qYpnK?=
+ =?iso-8859-1?Q?YjJQt1FajGdRqauqW8b1yfT6/fGT+HUgreGagJVqOpW4v8oRLfW6LN6dDf?=
+ =?iso-8859-1?Q?ZoMDthdxIKVNRjwj9sEMGMNttvGzEp+l/XowiKYkoI2HUIfk6hO8s9H7rJ?=
+ =?iso-8859-1?Q?7DlKToHAKgT1cEeOsIrmLmQkon6x+IRin2hqRyX+Nnhyx7L7jJtQX91E5S?=
+ =?iso-8859-1?Q?H4hW6mk6Y70r0ZzdQ2dndL3H4iUKDv0xNx3XGS8lYK+fbpgqN3c2IzXVFx?=
+ =?iso-8859-1?Q?crUWgv4ktzGQvwdDWnOzcoi7D5sPS3/EnQiiqm1wkXcfqLUfieSpG6WwNd?=
+ =?iso-8859-1?Q?yuZap/tp2iZ4JFs/oetD4gRoLZz5odWG8aP1dQiHsIbRI1/9xzK3Y/2wQW?=
+ =?iso-8859-1?Q?u982AzyzNuzBjNPa4Rltrk1Kt1oEDNYjdVW0O/szgtcya6sjq6a0Om+Fyw?=
+ =?iso-8859-1?Q?F6ItJ4q67UvXn8xd4+LLnfkCJX3xbm0DnbjSHBY0Po4zYwG1sIHZeZgICb?=
+ =?iso-8859-1?Q?RbLC9ImVfOTOHvvBh6pDPAsIRTRaHEqfaJWqkZ0N/Ie1rkTABAi1ML6rLV?=
+ =?iso-8859-1?Q?dEgzBOfyIdoRVcU4ySlhB9qnix/j4uV3EDucY0UiaZ+FTA4jO3L6uIS1bi?=
+ =?iso-8859-1?Q?prt/5gtpiQhhbSpduhp5uHT/uzp7M/UVdl71sHAYG3WW97E6bwoikKP6gt?=
+ =?iso-8859-1?Q?6TBPGHTPHGi5vSYNLit9POcsF3eIwDXvTXDMjKudUCRlmq6bh9yK6q7h0B?=
+ =?iso-8859-1?Q?1SEFDcGvx44hUf4iY9N3MRA9u4zSgoNDJdgcOiSaimgzzsS/EF9X20QR3n?=
+ =?iso-8859-1?Q?kz1KFNtD61BAV9AisRRK1hxLlK+XBkXxc24S7tk37pHNqfXQb38k1MLeQI?=
+ =?iso-8859-1?Q?ee/2u4UF+L9lNWoWJRkThQcBM0OhJcayi1hPLElmtXiQu7eRrqRgrw3hYi?=
+ =?iso-8859-1?Q?LhkB67+niweAoAAVyYWIKG5UtH0pbs0zv0BFGtYM7umD/t2VBy+3KLpwtF?=
+ =?iso-8859-1?Q?Cvpfyy7InK0FqJMBAUCsQCQe6uJpRvT0Mj1AGz/wdTsQTQnMj1l1qZo3ok?=
+ =?iso-8859-1?Q?jNfD6foy+mOTo7A43M7oPWczZy/VBFsiySWqJbNpvcPnvouuY1F1PP9cg6?=
+ =?iso-8859-1?Q?mY2Lp0qOkB0zRqZPIp0UxyPSj+MCldt28VEsxY0+e+LnioE2nvW0WY7MEp?=
+ =?iso-8859-1?Q?P1teai1OwX+YIV/Aex43rFmPtWkWT2h6QspHQtaHlox/INt17GdQ/VJAYF?=
+ =?iso-8859-1?Q?vUDzzrCJAZfRGFEzlvmEcfPszmYWRpxHnjHS4vwcX3dFVdbRyRs0ngjZul?=
+ =?iso-8859-1?Q?nI3+G2jjU0WeYv71mLsNPyrxjKYh0mrSwCxtf/JVhB16BG9T3jgvzc+DM9?=
+ =?iso-8859-1?Q?LZxLT1DXef?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: viveris.fr
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5d6e9e1-cd9e-470d-94b1-08d950e8908c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jul 2021 10:23:23.5763
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1320ad4f-ddb4-4bdf-77cd-08d950e89617
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jul 2021 10:23:32.9471
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CcYh1KBg/DPPoY8bV8frgDX84WvbiTPXIX2D2JLckS7V5XMeql6BEUHW1cVPrU4qVoFhNN9oc/lkno/gIl5TuQ==
+X-MS-Exchange-CrossTenant-userprincipalname: uBgv0C2UuUPeyVEaWBWyglzT8WQLLwtlu2/U175FREt6Bq7klRJlMNIp5YBfObuovvfzs34j/2eMVbbEv1NOIg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR09MB3364
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-IMA protects files by storing a hash (or a signature thereof) of their
-content in the security.ima xattr. While the security.ima xattr itself
-is protected by EVM with either a HMAC or a digital signature, no
-mechanism is currently in place to ensure that the security.ima xattr
-was generated with a strong digest algorithm, as was outlined in
-https://lore.kernel.org/linux-integrity/10dde047d76b447f32ca91356599be679b8=
-a76e5.camel@linux.ibm.com/t/#m0f8127c6982ef94aa42f5cc13ea83b9f9000917e
+By default, any write to the extended attributes security.ima will be
+accepted, even if the xattr value uses a hash algorithm not compiled in
+the kernel (which doesn't make sense, because the kernel wouldn't be able
+to appraise that file, as it lacks support for validating the hash).
 
-One important point is safeguarding users from mislabelling their
-files when using userland utilities to update their files, as this
-is the kind of behavior one can observe with evmctl (`evmctl ima_hash`
-defaults to sha1). Another group that may be interested is those
-that have deployed IMA years ago, possibly using algorithms that
-was then deemed sufficiently collision-resistant, but that proved
-to be weak with the passage of time (note that this could also
-happen in the future with algorithms considered safe today).
-This patch provides a migration path of sorts for these users.
+This patch prevents such writes: only writes using hash algorithms
+available in the current kernel are now allowed. Any attempt to
+perform these writes will be denied with an audit message.
 
-This patch series gives users the ability to restrict the algorithms
-accepted by their system, both when writing/updating xattrs, and
-when appraising files, while retaining a permissive behavior by default
-to preserve backward compatibility.
+The idea behind this patch is that a user can disable weak hashes
+when building the kernel, and thereby prevent their use in IMA
+(these hash algorithms will not only be blocked for setxattr per
+this patch, but they also won't be allowed for measurement/appraisal
+either as the kernel isn't able to measure files hashed with them).
 
-To provide these features, alter the behavior of setxattr to
-only accept hashes built in the kernel, instead of any hash listed
-in the kernel (complete list crypto/hash_info.c). In addition, the
-user can define in his IMA policy the list of digest algorithms
-allowed for writing to the security.ima xattr. In that case,
-only algorithms present in that list are accepted for writing.
+Note however that CONFIG_IMA depends on CONFIG_CRYPTO_MD5 and
+CONFIG_CRYPTO_SHA1, which hampers the security benefits of this
+measure.
 
-In addition, users may opt-in to whitelisting the hash
-algorithms accepted when appraising thanks to the new
-"appraise_hash" IMA policy option.
-By default IMA will keep accepting any hash algorithm, but specifying
-that option will make appraisal of files hashed with another algorithm
-fail.
+Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
+---
+ security/integrity/ima/ima_appraise.c | 42 +++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-
-Even when using this option to restrict accepted hashes, a migration
-to a new algorithm is still possible. Suppose your policy states you
-must migrate from 'old_algo' (e.g. sha1) to 'new_algo' (e.g. one of
-sha256/384/512). You can upgrade without relaxing the hash requirements:
-alter your policy rules from 'appraise_hash=3Dold_algo' to
-'appraise_hash=3Dold_algo,new_algo', update the "ima_hash" parameter to
-'new_algo', reboot, relabel all your files with 'new_algo', alter your
-policy_rule from 'appraise_hash=3Dold_algo,new_algo' to
-'appraise_hash=3Dnew_algo', reboot again and you're done.
-Agreed, it's quite a lot of churn - I don't know if this can be reduced -
-but this is technically doable.
-
-
-This series is based on the following repo/branch:
- repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
- branch: master
- commit ff1176468d368232b684f75e82563369208bc371 ("Linux 5.14-rc3")
-
-Changelog since v2:
-- remove the SecureBoot-specific behavior
-- users can now tweak through policy both the algorithms for
- appraising files (a feature already present in v2) and for writing
- with the new SETXATTR_CHECK value for the 'func' ima policy flag
-- updating 'forbidden-hash-algorithm' to 'denied-hash-algorithm' and
-  'unsupported-hash-algorithm' to disambiguate cases when the user
-  asked for an algorithm not present in the kernel and when the system
-  vendor explicitly opted in to a restricted list of accepted
-  algorithms
-- change the order of the patches to be bisect-safe while retaining
-  the guarantee that a policy cannot be accepted but not enforced
-
-Changelog since v1:
-- Remove the two boot parameters
-- filter out hash algorithms not compiled in the kernel
-  on xattr writes
-- add a special case when secure boot is enabled: only the
-  ima_hash algorithm is accepted on userland writes
-- add a policy option to opt-in to restricting digest algorithms
-  at a per-rule granularity
-
-Simon Thoby (4):
-  IMA: block writes of the security.ima xattr with unsupported
-    algorithms
-  IMA: add support to restrict the hash algorithms used for file
-    appraisal
-  IMA: add a policy option to restrict xattr hash algorithms on
-    appraisal
-  IMA: introduce a new policy option func=3DSETXATTR_CHECK
-
- Documentation/ABI/testing/ima_policy  |  15 ++-
- security/integrity/ima/ima.h          |  10 +-
- security/integrity/ima/ima_api.c      |   6 +-
- security/integrity/ima/ima_appraise.c |  65 ++++++++++-
- security/integrity/ima/ima_main.c     |  22 +++-
- security/integrity/ima/ima_policy.c   | 153 +++++++++++++++++++++++++-
- 6 files changed, 254 insertions(+), 17 deletions(-)
-
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima=
+/ima_appraise.c
+index ef9dcfce45d4..b5b11f5ec90a 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -575,6 +575,42 @@ static void ima_reset_appraise_flags(struct inode *ino=
+de, int digsig)
+ 		clear_bit(IMA_DIGSIG, &iint->atomic_flags);
+ }
+=20
++/**
++ * ima_setxattr_validate_hash_alg
++ *
++ * Called when the user tries to write the security.ima xattr.
++ * The xattr value maps to the hash algorithm hash_alg, and this function
++ * returns whether this setxattr should be allowed, emitting an audit
++ * message if necessary.
++ */
++int ima_setxattr_validate_hash_alg(struct dentry *dentry,
++				   const void *xattr_value,
++				   size_t xattr_value_len)
++{
++	int res =3D -EACCES;
++	char *path =3D NULL, *pathbuf =3D NULL;
++	enum hash_algo hash_alg =3D
++		ima_get_hash_algo((struct evm_ima_xattr_data *)xattr_value,
++				  xattr_value_len);
++
++	/* disallow xattr writes with algorithms not built in the kernel */
++	if (likely(hash_alg =3D=3D ima_hash_algo
++	    || crypto_has_alg(hash_algo_name[hash_alg], 0, 0)))
++		return 0;
++
++	pathbuf =3D kmalloc(PATH_MAX, GFP_KERNEL);
++	/* no memory available ? no file path for you */
++	if (pathbuf)
++		path =3D dentry_path(dentry, pathbuf, PATH_MAX);
++
++	integrity_audit_msg(AUDIT_INTEGRITY_DATA, d_inode(dentry),
++		path, "collect_data", "unavailable-hash-algorithm", res, 0);
++
++	kfree(pathbuf);
++
++	return res;
++}
++
+ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
+ 		       const void *xattr_value, size_t xattr_value_len)
+ {
+@@ -592,6 +628,12 @@ int ima_inode_setxattr(struct dentry *dentry, const ch=
+ar *xattr_name,
+ 		digsig =3D (xvalue->type =3D=3D EVM_XATTR_PORTABLE_DIGSIG);
+ 	}
+ 	if (result =3D=3D 1 || evm_revalidate_status(xattr_name)) {
++		/* the user-supplied xattr must use an allowed hash algo */
++		int rc =3D ima_setxattr_validate_hash_alg(dentry, xattr_value,
++							xattr_value_len);
++		if (rc !=3D 0)
++			return rc;
++
+ 		ima_reset_appraise_flags(d_backing_inode(dentry), digsig);
+ 		if (result =3D=3D 1)
+ 			result =3D 0;
 --=20
 2.31.1
