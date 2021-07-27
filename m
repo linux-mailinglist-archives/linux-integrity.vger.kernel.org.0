@@ -2,227 +2,291 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADACB3D6C12
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 04:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A24D3D6C14
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 04:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234516AbhG0CGS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 26 Jul 2021 22:06:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39120 "EHLO mail.kernel.org"
+        id S234410AbhG0CKb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 26 Jul 2021 22:10:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40118 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233727AbhG0CGS (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 26 Jul 2021 22:06:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E91B660FED;
-        Tue, 27 Jul 2021 02:46:45 +0000 (UTC)
+        id S233727AbhG0CKa (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 26 Jul 2021 22:10:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 74DB060F37;
+        Tue, 27 Jul 2021 02:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627354006;
-        bh=ZYpmbDsF6ia/xddzAjXQxYzKxGnOM1FJzTaQfUlC9dw=;
+        s=k20201202; t=1627354258;
+        bh=e/5suBuh0kynCbKoUdPgHhl4uUReI115X0ZIMZyGY1E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Up8SE7vVoFEBSESjrUYpVwjXHYPfIUwEMSTaWjQ8Rt89tNXTnsuytdRKRS3HApf6b
-         UvZ9h43DaCIJHuAcEOiapLhdpr71eD4RFXWx8JXDzWNzEjHKzZ8wSPTCtOdAOzotc5
-         xqoY2WhKiBKMpo1k0pvvOgl4nXCpcNxLXizY8oRUFUo+Kye/mDK5sKnfgGERxVTBnN
-         1/gDr8HPKv4CLc9IFvGNdZC0MKzAyql0zdP1AX+5Vh+oE+czdCZlwvOepSy7p0QPoY
-         8eCxKoEqGE/ZL4Nyh351R1mK4zkQsOiWcyszWhUGokeM0IbF1j0h7nL32Bqc8eF69l
-         BsKjL6fff3HgQ==
-Date:   Tue, 27 Jul 2021 05:46:44 +0300
+        b=m13se6LjTs8MzEQVGj5/P4rsb3ffz3gJAD6FPH9usFdSB7mSYvqOldEiXlLZmAWFA
+         WSHn89lqA+euwJUdI3+2hiJLuctbAa4nG9qW1LUcaVlg2XIJkkjv6iA+DrK5yPek9A
+         evKempTPYCEQA1ETS4sMUrSxxY3TNwGxPzlUyi63vhmhO7jdmyaUrfPXdkmkiDLQ2T
+         KJyuasNRElN/CM72Tyw7/4ThStR9QofUf6oCJdWfxLLtjHE4y1FTy57RMvO3wmjAuC
+         86/dh+sy1U2XjUcdfyHzOgderhqMpPFsufJIX2HZ3xuYGJmS7xcNJ4n4vqL8R6Ig9O
+         qmLW9ZXEutjDw==
+Date:   Tue, 27 Jul 2021 05:50:55 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Hao Wu <hao.wu@rubrik.com>
-Cc:     shrihari.kalkar@rubrik.com, seungyeop.han@rubrik.com,
-        anish.jhaveri@rubrik.com, peterhuewe@gmx.de, jgg@ziepe.ca,
-        linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de,
-        kgold@linux.ibm.com, zohar@linux.vnet.ibm.com,
-        why2jjj.linux@gmail.com, hamza@hpe.com, gregkh@linuxfoundation.org,
-        arnd@arndb.de, nayna@linux.vnet.ibm.com,
-        James.Bottomley@hansenpartnership.com
-Subject: Re: [PATCH v3] tpm: fix Atmel TPM crash caused by too frequent
- queries
-Message-ID: <20210727024644.frkuo4a6ssyz6uhc@kernel.org>
-References: <20210709044028.77278-1-hao.wu@rubrik.com>
- <20210711075122.30056-1-hao.wu@rubrik.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: Recent tpm_tis IRQ handling changes are causing kernel
+ backtraces]
+Message-ID: <20210727025055.uftpemuemmes2zed@kernel.org>
+References: <49bfb4a7-eb3c-77f9-ff8e-b37617a26195@redhat.com>
+ <20210623134054.45gjj2wbgz7jpjmy@kernel.org>
+ <90ed51b4-66d4-fb10-ca8e-d99532028fab@redhat.com>
+ <20210629180445.oind62rsktevm45q@kernel.org>
+ <b4398c5b-38dc-d511-ea29-0847bfca60b4@redhat.com>
+ <20210629220516.xm3jvjy7v2uw3fvz@kernel.org>
+ <29e72255-b995-9ffe-f379-5e9e349bee07@redhat.com>
+ <8819200d-e468-7b09-2e08-e44f5f2ed59f@redhat.com>
+ <20210709184426.7yftmufrmw3tp24s@kernel.org>
+ <fa61681f-b07f-9d31-b193-9d42cd23167a@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210711075122.30056-1-hao.wu@rubrik.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fa61681f-b07f-9d31-b193-9d42cd23167a@redhat.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Jul 11, 2021 at 12:51:22AM -0700, Hao Wu wrote:
-> The Atmel TPM 1.2 chips crash with error
-> `tpm_try_transmit: send(): error -62` since kernel 4.14.
-> It is observed from the kernel log after running `tpm_sealdata -z`.
-> The error thrown from the command is as follows
-> ```
-> $ tpm_sealdata -z
-> Tspi_Key_LoadKey failed: 0x00001087 - layer=tddl,
-> code=0087 (135), I/O error
-> ```
+On Sat, Jul 17, 2021 at 06:10:04PM +0200, Hans de Goede wrote:
+> Hi,
 > 
-> The issue was reproduced with the following Atmel TPM chip:
-> ```
-> $ tpm_version
-> T0  TPM 1.2 Version Info:
->   Chip Version:        1.2.66.1
->   Spec Level:          2
->   Errata Revision:     3
->   TPM Vendor ID:       ATML
->   TPM Version:         01010000
->   Manufacturer Info:   41544d4c
-> ```
+> On 7/9/21 8:44 PM, Jarkko Sakkinen wrote:
+> > On Wed, Jun 30, 2021 at 03:36:55PM +0200, Hans de Goede wrote:
+> >> Hi,
+> >>
+> >> On 6/30/21 2:47 PM, Hans de Goede wrote:
+> >>> Hi,
+> >>>
+> >>> On 6/30/21 12:05 AM, Jarkko Sakkinen wrote:
+> >>>> On Tue, Jun 29, 2021 at 09:14:39PM +0200, Hans de Goede wrote:
+> >>>>> Hi,
+> >>>>>
+> >>>>> On 6/29/21 8:04 PM, Jarkko Sakkinen wrote:
+> >>>>>> On Wed, Jun 23, 2021 at 03:54:59PM +0200, Hans de Goede wrote:
+> >>>>>>> Hi,
+> >>>>>>>
+> >>>>>>> On 6/23/21 3:40 PM, Jarkko Sakkinen wrote:
+> >>>>>>>> On Mon, Jun 21, 2021 at 02:04:52PM +0200, Hans de Goede wrote:
+> >>>>>>>>> Hi,
+> >>>>>>>>>
+> >>>>>>>>> On 6/14/21 3:33 PM, Hans de Goede wrote:
+> >>>>>>>>>> Hi,
+> >>>>>>>>>>
+> >>>>>>>>>> On 6/1/21 6:04 PM, Hans de Goede wrote:
+> >>>>>>>>>>> Hi,
+> >>>>>>>>>>>
+> >>>>>>>>>>> On 5/31/21 6:36 AM, Jarkko Sakkinen wrote:
+> >>>>>>>>>>>>> Interestingly enough the first backtrace is also happening on a:
+> >>>>>>>>>>>>> "Dell Inc. XPS 13 9310/0MRT12, BIOS 2.2.0 04/06/2021"
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> So it seems that at least with 5.12.6 (which has the last 2 fixes)
+> >>>>>>>>>>>>> all reports are about the XPS 13 9310. I wonder if there is an
+> >>>>>>>>>>>>> issue with the TPM interrupt line on the XPS 13 9310; I've asked the
+> >>>>>>>>>>>>> reporters to try adding tpm_tis.interrupts=0 to their kernel commandline.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> This is helpful for sure that these all are happening on matching hardware.
+> >>>>>>>>>>>
+> >>>>>>>>>>> So our kernel-backtrace tracking info (ABRT) just recorded a third backtrace
+> >>>>>>>>>>> with a kernel >= 5.12.6, again on the XPS 13 9310, so now we have 3 variants:
+> >>>>>>>>>>>
+> >>>>>>>>>>> 1. Backtrace starting with a call to ima_add_boot_aggregate
+> >>>>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1963712
+> >>>>>>>>>>>
+> >>>>>>>>>>> 2. Backtrace starting with a call to tpm_dev_async_work:
+> >>>>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1964974
+> >>>>>>>>>>> (note this one is not easily reproducible)
+> >>>>>>>>>>>
+> >>>>>>>>>>> 3. Backtrace starting with a call to rng_dev_read:
+> >>>>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1920510
+> >>>>>>>>>>>
+> >>>>>>>>>>> 3. is the new one. All bugs linked above are public, all 3 backtraces
+> >>>>>>>>>>> so far have only been reported on the XPS 13 9310 (with kernel >= 5.12.6)
+> >>>>>>>>>>> and I've asked all the reporters to check if tpm_tis.interrupts=0 helps.
+> >>>>>>>>>>
+> >>>>>>>>>> Quick status update, I've got a response from a XPS 13 9310 user in:
+> >>>>>>>>>>
+> >>>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1920510
+> >>>>>>>>>>
+> >>>>>>>>>> Indicating that a. he can reproduce this with the latest >= 5.12.6 kernels;
+> >>>>>>>>>> and b. it goes away when specifying tpm_tis.interrupts=0 as I expected
+> >>>>>>>>>> (I expected this because all the bug-reports started when the interrupt
+> >>>>>>>>>> code got fixed/re-enabled a while ago).
+> >>>>>>>>>
+> >>>>>>>>> One more status update.
+> >>>>>>>>>
+> >>>>>>>>> - A new 4th variant of the backtrace has been spotted, where the problem hits
+> >>>>>>>>> when called from probe() -> tpm2_auto_startup -> tpm2_do_selftest, see:
+> >>>>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1958381
+> >>>>>>>>>
+> >>>>>>>>> - So far all reports with kernel >= 5.12.6 have been on a Dell XPS 13 9310
+> >>>>>>>>> models. But the new variant is happening on a Dell XPS 15 9500 and the
+> >>>>>>>>> backtrace starting at ima_add_boot_aggregate is also being reported on
+> >>>>>>>>> a Dell XPS 15 9500 (as well as on the XPS 13 9310).
+> >>>>>>>>>
+> >>>>>>>>> Regards,
+> >>>>>>>>>
+> >>>>>>>>> Hans
+> >>>>>>>>
+> >>>>>>>> OK, I'll have to query if I could borrow that laptop from someone. It's
+> >>>>>>>> fairly common laptop, i.e. might be possible.
+> >>>>>>>
+> >>>>>>> In the mean time I've also got a report that this variant of the backtrace:
+> >>>>>>>
+> >>>>>>> 1. Backtrace starting with a call to ima_add_boot_aggregate
+> >>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=1963712
+> >>>>>>>
+> >>>>>>> Is also still happening with recent 5.12.y kernels on
+> >>>>>>> Dell Precision 7750 laptops. Both the Precision 7750 and the XPS 9500 use
+> >>>>>>> 10th gen comet lake processors (i7-10750H), where as the XPS 9310 is using
+> >>>>>>> an icelake processor. So the common denominator seems to be that they are
+> >>>>>>> all 2020 Dell laptop models using the latest Intel CPUs.
+> >>>>>>>
+> >>>>>>> FYI the complete list of models on which some of the 4 backtrace variants
+> >>>>>>> are still seen on recent 5.12.y kernels is now:
+> >>>>>>>
+> >>>>>>> Dell XPS 13 9310
+> >>>>>>> Dell XPS 15 9500
+> >>>>>>> Dell Precision 7750
+> >>>>>>>
+> >>>>>>> Regards,
+> >>>>>>>
+> >>>>>>> Hans
+> >>>>>>
+> >>>>>> Does "tpm_tis.interrupts=0" uniformly workaround the issue?
+> >>>>>
+> >>>>> I unfortunately have not gotten much replies to my request to test with
+> >>>>> tpm_tis.interrupts=0, but for those people who have bothered to test
+> >>>>> (2 reporters IIRC) using tpm_tis.interrupts=0 does avoid the issue.
+> >>>>
+> >>>> So we see this in dmesg as first anything from TPM:
+> >>>>
+> >>>> [    0.904572] tpm_tis STM0125:00: 2.0 TPM (device-id 0x0, rev-id 78)
+> >>>>
+> >>>> This means that one command is successfully processed by the TPM, i.e.
+> >>>> tpm2_probe() in tpm_tis_core_init().
+> >>>>
+> >>>> My first *guess*  was that IRQ is given by ACPI, would need ACPI dump to
+> >>>> confirm (e.g. sudo acpidump > acpi.dump). It cannot be so because otherwise
+> >>>> this code path would be executed:
+> >>>>
+> >>>>         if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+> >>>>                 dev_err(&chip->dev, FW_BUG
+> >>>>                         "TPM interrupt not working, polling instead\n");
+> >>>>
+> >>>>                 disable_interrupts(chip);
+> >>>>         }
+> >>>>
+> >>>> TPM_CHIP_FLAG_IRQ is never set, so you should see this message in dmesg if
+> >>>> a legit value is given to IRQ by ACPI.  We are probably planning re-enable
+> >>>> IRQ code after these type of issues are fully resolved, but right now you
+> >>>> should not end up having it enabled (see tpm_tis_send() function).
+> >>>>
+> >>>> To put this together "if (irq != -1) {" path in tpm_tis_core_init() is
+> >>>> never executed. And early in the same function the interrupt hardware is
+> >>>> *explicitly* disabled.
+> >>>>
+> >>>> For me this looks like a hardware bug right now: interrupts stay enabled
+> >>>> for some reason.
+> >>>>
+> >>>> ACPI dump would be useful to verify some of the assumptions in this.
+> >>>
+> >>> Ok, I've added a comment to the Fedora bugs for the 4 different backtrace
+> >>> variants asking for acpidumps for the Dell XPS 13 9310, Dell XPS 15 9500
+> >>> and Dell Precision 7750 laptops.
+> >>
+> >> 2 XPS 9310 acpidumps have been attached to:
+> >>
+> >> https://bugzilla.redhat.com/show_bug.cgi?id=1920510
+> >> https://bugzilla.redhat.com/show_bug.cgi?id=1964974
+> >>
+> >> Note the reporter of the first bug mentions that he is no longer having
+> >> this issue, but we are definitely still getting reports for kernel version
+> >>> 5.12.6 (which has the last 2 fixes) from XPS 9310 users...
+> >>
+> >> Maybe there are different BIOS versions in play ? It might be interesting
+> >> to compare the 2 acpidumps...
+> > 
+> > ❯ diff -u ../tmp/ssdt7.dsl ../tmp2/ssdt7.dsl
+> > --- ../tmp/ssdt7.dsl	2021-07-09 21:32:06.473166420 +0300
+> > +++ ../tmp2/ssdt7.dsl	2021-07-09 21:33:45.065934469 +0300
+> > @@ -5,7 +5,7 @@
+> >   * 
+> >   * Disassembling to symbolic ASL+ operators
+> >   *
+> > - * Disassembly of ssdt7.dat, Fri Jul  9 21:32:06 2021
+> > + * Disassembly of ssdt7.dat, Fri Jul  9 21:33:45 2021
+> >   *
+> >   * Original Table Header:
+> >   *     Signature        "SSDT"
+> > @@ -121,7 +121,7 @@
+> >                      0xFED40000,         // Address Base
+> >                      0x00005000,         // Address Length
+> >                      )
+> > -                Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y58)
+> > +                Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y55)
+> >                  {
+> >                      0x0000000C,
+> >                  }
+> > @@ -141,7 +141,7 @@
+> >                  }
+> >                  Else
+> >                  {
+> > -                    CreateDWordField (RES0, \_SB.TPM._Y58._INT, LIRQ)  // _INT: Interrupts
+> > +                    CreateDWordField (RES0, \_SB.TPM._Y55._INT, LIRQ)  // _INT: Interrupts
+> >                      LIRQ = IRQN /* \_SB_.TPM_.IRQN */
+> >                      Return (RES0) /* \_SB_.TPM_.RES0 */
+> >                  }
+> > @@ -152,14 +152,14 @@
+> >                  If ((IRQN != Zero))
+> >                  {
+> >                      CreateDWordField (Arg0, 0x11, IRQ0)
+> > -                    CreateDWordField (RES0, \_SB.TPM._Y58._INT, LIRQ)  // _INT: Interrupts
+> > +                    CreateDWordField (RES0, \_SB.TPM._Y55._INT, LIRQ)  // _INT: Interrupts
+> >                      LIRQ = IRQ0 /* \_SB_.TPM_._SRS.IRQ0 */
+> >                      IRQN = IRQ0 /* \_SB_.TPM_._SRS.IRQ0 */
+> >                      CreateBitField (Arg0, 0x79, ITRG)
+> > -                    CreateBitField (RES0, \_SB.TPM._Y58._HE, LTRG)  // _HE_: High-Edge
+> > +                    CreateBitField (RES0, \_SB.TPM._Y55._HE, LTRG)  // _HE_: High-Edge
+> >                      LTRG = ITRG /* \_SB_.TPM_._SRS.ITRG */
+> >                      CreateBitField (Arg0, 0x7A, ILVL)
+> > -                    CreateBitField (RES0, \_SB.TPM._Y58._LL, LLVL)  // _LL_: Low Level
+> > +                    CreateBitField (RES0, \_SB.TPM._Y55._LL, LLVL)  // _LL_: Low Level
+> >                      LLVL = ILVL /* \_SB_.TPM_._SRS.ILVL */
+> >                      If ((((TID0 & 0x0F) == Zero) || ((TID0 & 0x0F
+> >                          ) == 0x0F)))
+> > 
+> > This delta from "acpidump for Dell XPS 9310 (with Qualcomm QCA6390)" to
+> > "acpidump output from a Dell XPS 13 9310 that no longer has a problem"
+> > in SSDT7. The bug I'm referring to is
+> > 
+> > https://bugzilla.redhat.com/show_bug.cgi?id=1920510
+> > 
+> > Looks to me just using a different label.
 > 
-> The root cause of the issue is due to the TPM calls to msleep()
-> were replaced with usleep_range() [1], which reduces
-> the actual timeout. Via experiments, it is observed that
-> the original msleep(5) actually sleeps for 15ms.
-> Because of a known timeout issue in Atmel TPM 1.2 chip,
-> the shorter timeout than 15ms can cause the error described above.
+> Yes, although I have the feeling that does indicate that their are possibly
+> other changes under the hood. The 0x00000000c interrupt referred to seems to
+> be an interrupt directly on the APIC, which means that it is a GPIO in direct-irq
+> mode with level vs edge interrupt mode selection (pullup/down settings is all
+> directly done by the BIOS.
 > 
-> A few further changes in kernel 4.16 [2] and 4.18 [3, 4] further
-> reduced the timeout to less than 1ms. With experiments,
-> the problematic timeout in the latest kernel is the one
-> for `wait_for_tpm_stat`.
+> I'm aware that misconfiguring those settings (which Linux cannot see) was
+> an issue with the TPM IRQ on some Lenovo models, maybe the same is going on
+> here; and later BIOS versions contain a fix (and this somehow also has
+> changed the label in the DSDT ?).
 > 
-> To fix it, the patch reverts the timeout of `wait_for_tpm_stat`
-> to 15ms for all Atmel TPM 1.2 chips, but leave it untouched
-> for Ateml TPM 2.0 chip, and chips from other vendors.
-> As explained above, the chosen 15ms timeout is
-> the actual timeout before this issue introduced,
-> thus the old value is used here.
-> Particularly, TPM_ATML_TIMEOUT_WAIT_STAT_MIN is set to 14700us,
-> TPM_ATML_TIMEOUT_WAIT_STAT_MIN is set to 15000us according to
-> the existing TPM_TIMEOUT_RANGE_US (300us).
-> The fixed has been tested in the system with the affected Atmel chip
-> with no issues observed after boot up.
+> > What if we just set "interrupts=0" explicitly for STM0125 HID since the
+> > workaround seems to work according to the report?
 > 
-> References:
-> [1] 9f3fc7bcddcb tpm: replace msleep() with usleep_range() in TPM
-> 1.2/2.0 generic drivers
-> [2] cf151a9a44d5 tpm: reduce tpm polling delay in tpm_tis_core
-> [3] 59f5a6b07f64 tpm: reduce poll sleep time in tpm_transmit()
-> [4] 424eaf910c32 tpm: reduce polling time to usecs for even finer
-> granularity
-> 
-> Fixes: 9f3fc7bcddcb ("tpm: replace msleep() with usleep_range() in TPM 1.2/2.0 generic drivers")
-> Link: https://patchwork.kernel.org/project/linux-integrity/patch/20200926223150.109645-1-hao.wu@rubrik.com/
-> Signed-off-by: Hao Wu <hao.wu@rubrik.com>
-> ---
-> This version (v3) removes unnecessary condition check
-> in `wait_for_tpm_stat`.
+> That sounds like a reasonable workaround.
 
-Missing change long v1 -> v2.
+I just came from two week leave.
 
-Please do something like
-
-v3:
-- ...
-
-v2:
-- ...
-
-> 
-> Test Plan:
-> - Run fixed kernel with ATMEL TPM chips and see crash
-> has been fixed.
-> - Run fixed kernel with non-ATMEL TPM chips, and confirm
-> the timeout has not been changed.
-> 
-> drivers/char/tpm/tpm.h          |  6 ++++--
->  drivers/char/tpm/tpm_tis_core.c | 14 ++++++++++++--
->  include/linux/tpm.h             |  3 +++
->  3 files changed, 19 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 283f78211c3a..6de1b44c4aab 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -41,8 +41,10 @@ enum tpm_timeout {
->  	TPM_TIMEOUT_RETRY = 100, /* msecs */
->  	TPM_TIMEOUT_RANGE_US = 300,	/* usecs */
->  	TPM_TIMEOUT_POLL = 1,	/* msecs */
-> -	TPM_TIMEOUT_USECS_MIN = 100,      /* usecs */
-> -	TPM_TIMEOUT_USECS_MAX = 500      /* usecs */
-> +	TPM_TIMEOUT_USECS_MIN = 100,	/* usecs */
-> +	TPM_TIMEOUT_USECS_MAX = 500,	/* usecs */
-
-What is going on here?
-
-These lines should not change.
-
-> +	TPM_ATML_TIMEOUT_WAIT_STAT_MIN = 14700,	/* usecs */
-> +	TPM_ATML_TIMEOUT_WAIT_STAT_MAX = 15000	/* usecs */
-
-Move these definitions to tpm_tis_core.h. They are only useful
-for a single driver.
-
-
->  };
->  
->  /* TPM addresses */
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 55b9d3965ae1..2de1f71e8ae1 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -80,8 +80,8 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
->  		}
->  	} else {
->  		do {
-> -			usleep_range(TPM_TIMEOUT_USECS_MIN,
-> -				     TPM_TIMEOUT_USECS_MAX);
-> +			usleep_range(chip->timeout_wait_stat_min,
-> +				     chip->timeout_wait_stat_max);
->  			status = chip->ops->status(chip);
->  			if ((status & mask) == mask)
->  				return 0;
-> @@ -934,6 +934,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  	chip->timeout_b = msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
->  	chip->timeout_c = msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
->  	chip->timeout_d = msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
-> +	/* init timeouts for wait_for_tpm_stat */
-
-Remove this comment.
-
-> +	chip->timeout_wait_stat_min = TPM_TIMEOUT_USECS_MIN;
-> +	chip->timeout_wait_stat_max = TPM_TIMEOUT_USECS_MAX;
->  	priv->phy_ops = phy_ops;
->  	dev_set_drvdata(&chip->dev, priv);
->  
-> @@ -983,6 +986,13 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  
->  	priv->manufacturer_id = vendor;
->  
-> +	if (priv->manufacturer_id == TPM_VID_ATML &&
-> +		!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
-> +		/* If TPM chip is 1.2 ATMEL chip, timeout need to be relaxed*/
-> +		chip->timeout_wait_stat_min = TPM_ATML_TIMEOUT_WAIT_STAT_MIN;
-> +		chip->timeout_wait_stat_max = TPM_ATML_TIMEOUT_WAIT_STAT_MAX;
-> +	}
-> +
->  	rc = tpm_tis_read8(priv, TPM_RID(0), &rid);
->  	if (rc < 0)
->  		goto out_err;
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index aa11fe323c56..171b9102c976 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -150,6 +150,8 @@ struct tpm_chip {
->  	bool timeout_adjusted;
->  	unsigned long duration[TPM_NUM_DURATIONS]; /* jiffies */
->  	bool duration_adjusted;
-> +	unsigned int timeout_wait_stat_min; /* usecs */
-> +	unsigned int timeout_wait_stat_max; /* usecs */
->  
->  	struct dentry *bios_dir[TPM_NUM_EVENT_LOG_FILES];
->  
-> @@ -269,6 +271,7 @@ enum tpm2_cc_attrs {
->  #define TPM_VID_INTEL    0x8086
->  #define TPM_VID_WINBOND  0x1050
->  #define TPM_VID_STM      0x104A
-> +#define TPM_VID_ATML     0x1114
->  
->  enum tpm_chip_flags {
->  	TPM_CHIP_FLAG_TPM2		= BIT(1),
-> -- 
-> 2.29.0.vfs.0.0
-> 
-> 
+I'll create a patch that adds such workaround when I'm done with
+purging all the email
 
 /Jarkko
