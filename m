@@ -2,157 +2,159 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A20AC3D79CD
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 17:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC973D79E6
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jul 2021 17:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237078AbhG0P3l (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 27 Jul 2021 11:29:41 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48386 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232643AbhG0P3e (ORCPT
+        id S237136AbhG0Pfa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 27 Jul 2021 11:35:30 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3504 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237107AbhG0PfX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 27 Jul 2021 11:29:34 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16RF86Au090214;
-        Tue, 27 Jul 2021 11:29:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=9m6JdoEMB+8iKU/wHGW/PAOtNPZdOO7HOkI3QqPRUFk=;
- b=A2PzOM1cJrH2NSRwV0Az1jwcRxs0MWRsB9qjP5EsJl7/yuANpQ8dyB5kML3FQKjgWsE4
- 715aSIhbD6LKl4Rbea/vwfyTeWuyc0cZQZHTMyRfKXsnJ79GO/2mo214eB0HSrz2C+Gg
- Bt6lgb/ggEYlMSlCC+13qhrn+6NsD19t45M3TfIPK+FiCx7AZTdeu/U6BzvNSlKfyrWg
- i7ekmJfs9+eO7Zj3W+LQM85D0Pi6Yb81rLnhWHIA57zV8U98XL3un8ADx2c+iRrV8tcC
- zbE77Yn228JgbTxylnkyOxZaUfOPPx1/CgXKw4/oYTKUB6bygHWDCkwK4NZdLrD5WvZi aA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2m5g22b1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 11:29:34 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16RF9Wbj101949;
-        Tue, 27 Jul 2021 11:29:34 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a2m5g22a7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 11:29:34 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16RFQteI000893;
-        Tue, 27 Jul 2021 15:29:31 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04fra.de.ibm.com with ESMTP id 3a235kgb73-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jul 2021 15:29:31 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16RFTT6E18219312
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jul 2021 15:29:29 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0AA0CA4051;
-        Tue, 27 Jul 2021 15:29:29 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B690CA4055;
-        Tue, 27 Jul 2021 15:29:27 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.85.52])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Jul 2021 15:29:27 +0000 (GMT)
-Message-ID: <1664c5d77e148eb387717428c55d2ef4f2482732.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/4] IMA: add support to restrict the hash algorithms
- used for file appraisal
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        Tue, 27 Jul 2021 11:35:23 -0400
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GZ0pj0j1Zz6B9sL;
+        Tue, 27 Jul 2021 23:20:13 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 27 Jul 2021 17:35:16 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
+ Tue, 27 Jul 2021 17:35:16 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Date:   Tue, 27 Jul 2021 11:29:26 -0400
-In-Reply-To: <20210727102307.552052-3-simon.thoby@viveris.fr>
-References: <20210727102307.552052-1-simon.thoby@viveris.fr>
-         <20210727102307.552052-3-simon.thoby@viveris.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6ISpMEn49DhtqsK8SQNgIPQKIVqSOz2b
-X-Proofpoint-GUID: 6sfv_TSMgTV_Dm12v8aPvfGen1d6VITD
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-27_10:2021-07-27,2021-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 impostorscore=0 suspectscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2107270090
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC][PATCH v2 02/12] diglim: Basic definitions
+Thread-Topic: [RFC][PATCH v2 02/12] diglim: Basic definitions
+Thread-Index: AQHXgjyicwJtnSjv/UmZEg8zsJLYTqtWxYuAgAAn86A=
+Date:   Tue, 27 Jul 2021 15:35:16 +0000
+Message-ID: <e87ba6f452254067a5eb6d58937d65d1@huawei.com>
+References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
+ <20210726163700.2092768-3-roberto.sassu@huawei.com>
+ <YQAblc+UuMq68jxu@kroah.com>
+In-Reply-To: <YQAblc+UuMq68jxu@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Simon,
-
-On Tue, 2021-07-27 at 10:23 +0000, THOBY Simon wrote:
-> This patch plugs in support for restricting the hash algorithms
-> accepted for protecting the security.ima xattr when appraising
-> files.
-
-The first sentence should provide the motivation for the patch.  For
-example, start this paragraph by saying that the hash algorithms are
-currently not restricted.  Then continue with "Restrict ..." or maybe
-"Provide the plumbing to restrict ...".
-
+> From: Greg KH [mailto:gregkh@linuxfoundation.org]
+> Sent: Tuesday, July 27, 2021 4:44 PM
+> On Mon, Jul 26, 2021 at 06:36:50PM +0200, Roberto Sassu wrote:
+> > --- /dev/null
+> > +++ b/include/uapi/linux/diglim.h
+> > @@ -0,0 +1,51 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > +/*
+> > + * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
+> > + *
+> > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> > + *
+> > + * DIGLIM definitions exported to user space, useful for generating digest
+> > + * lists.
+> > + */
+> > +
+> > +#ifndef _UAPI__LINUX_DIGLIM_H
+> > +#define _UAPI__LINUX_DIGLIM_H
+> > +
+> > +#include <linux/types.h>
+> > +#include <linux/hash_info.h>
+> > +
+> > +enum compact_types { COMPACT_KEY, COMPACT_PARSER,
+> COMPACT_FILE,
+> > +		     COMPACT_METADATA, COMPACT_DIGEST_LIST,
+> COMPACT__LAST };
+> > +
+> > +enum compact_modifiers { COMPACT_MOD_IMMUTABLE,
+> COMPACT_MOD__LAST };
+> > +
+> > +enum compact_actions { COMPACT_ACTION_IMA_MEASURED,
+> > +		       COMPACT_ACTION_IMA_APPRAISED,
+> > +		       COMPACT_ACTION_IMA_APPRAISED_DIGSIG,
+> > +		       COMPACT_ACTION__LAST };
+> > +
+> > +enum ops { DIGEST_LIST_ADD, DIGEST_LIST_DEL, DIGEST_LIST_OP__LAST };
+> > +
+> > +/**
+> > + * struct compact_list_hdr - header of the following concatenated digests
+> > + * @version: version of the digest list
+> > + * @_reserved: field reserved for future use
+> > + * @type: type of digest list among enum compact_types
+> > + * @modifiers: additional attributes among (1 << enum compact_modifiers)
 > 
-> Each ima policy rule can have a list of allowed hash algorithms,
-> and a file matching the policy but whose IMA hash is
-> not explicitly in the list will not pass appraisal.
+> I do not understand this description, what does it mean?
 
-Belongs in the patch associated with the IMA policy "appraise_hash"
-rule option.
+Hi Greg
+
+yes, it is not very clear.
+
+@modifiers is a bitmask where each bit corresponds to a different
+attribute. enum compact_modifiers defines which bit position is
+assigned to each attribute.
+
+> > + * @algo: digest algorithm
 > 
-> This do not apply only to IMA in hash mode, it also works with digital
-> signatures, in which case it checks that the hash (which was then
-> signed by the trusted private key) have been generated with one of
-> the algortihms whitelisted for this specific rule.
+> Is this also a #define or an enum?  Where is the list of them?
 
-Instead of phrasing this paragraph in the negative, the content could
-be combined with the first paragraph in the positive.   For example,
-"Restrict the permitted set of hash algorithms used for verifying file
-signatures stored in security.ima xattr."
+@algo is an enum defined in include/uapi/linux/hash_info.h.
 
+> > + * @count: number of digests
+> > + * @datalen: length of concatenated digests
 > 
-> Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
-> ---
+> Where does this count and length come into play as nothing else is in
+> this structure?
 
-<snip>
+Each digest list must begin with this structure. From it, the parser knows
+how much data it should expect afterwards. After the data, there could be
+another or more blocks of this structure and following data.
 
-> @@ -327,6 +329,20 @@ static int process_measurement(struct file *file, const struct cred *cred,
->  
->  	hash_algo = ima_get_hash_algo(xattr_value, xattr_len);
->  
-> +	/* Ensure that the digest was generated using an allowed algorithm */
-> +	if (appraisal_allowed_hashes &&
-> +	    !(appraisal_allowed_hashes & (1U << hash_algo))) {
-> +		rc = -EACCES;
-> +
-> +		if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
-> +			pathname = ima_d_path(&file->f_path, &pathbuf, filename);
-> +
-> +		integrity_audit_msg(AUDIT_INTEGRITY_DATA, file_inode(file),
-> +			pathname, "collect_data", "forbidden-hash-algorithm", rc, 0);
-> +
-> +		goto out_locked;
-> +	}
-> +
+There is an example in the 'Compact Digest List Example' subsection,
+in Documentation/security/diglim/implementation.rst.
 
-This doesn't look like the right place for checking the hash algorithm.
-IMA may be configured differently on different systems.  Some might
-only enable measurement without appraisal, appraisal without
-measurement, or both.  Only appraisal returns a failure and prevents
-read, execute, mmap, etc.   The hash algorithm check probably should be
-deferred to appraisal.  Placing the test here would skip measurements.
+> > + *
+> > + * A digest list is a set of blocks composed by struct compact_list_hdr and
+> > + * the following concatenated digests.
+> > + */
+> > +struct compact_list_hdr {
+> > +	__u8 version;
+> > +	__u8 _reserved;
+> 
+> You MUST check this for 0 today, and document it above.  If not, you can
+> never use it in the future.
 
-thanks,
+Ok, yes. I will add it.
 
-Mimi
+Thanks
 
->  	rc = ima_collect_measurement(iint, file, buf, size, hash_algo, modsig);
->  	if (rc != 0 && rc != -EBADF && rc != -EINVAL)
->  		goto out_locked;
+Roberto
 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Li Jian, Shi Yanli
 
+> > +	__le16 type;
+> > +	__le16 modifiers;
+> > +	__le16 algo;
+> > +	__le32 count;
+> > +	__le32 datalen;
+> > +} __packed;
+> > +#endif /*_UAPI__LINUX_DIGLIM_H*/
+> > --
+> > 2.25.1
+> >
