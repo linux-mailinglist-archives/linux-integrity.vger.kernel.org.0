@@ -2,47 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6A53D98D7
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 00:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE483D98E4
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 00:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbhG1W2d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Jul 2021 18:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S232566AbhG1W3r (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Jul 2021 18:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbhG1W2a (ORCPT
+        with ESMTP id S232559AbhG1W3q (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Jul 2021 18:28:30 -0400
+        Wed, 28 Jul 2021 18:29:46 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A890CC08E9AD
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Jul 2021 15:27:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917FEC061765
+        for <linux-integrity@vger.kernel.org>; Wed, 28 Jul 2021 15:29:44 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <a.fatoum@pengutronix.de>)
-        id 1m8s1P-0004d1-BN; Thu, 29 Jul 2021 00:27:27 +0200
-Subject: Re: [RFC PATCH v1] fscrypt: support encrypted and trusted keys
+        id 1m8s3a-0004mh-Tb; Thu, 29 Jul 2021 00:29:42 +0200
+Subject: Re: [PATCH v2] KEYS: trusted: fix use as module when CONFIG_TCG_TPM=m
 To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        James Morris <jmorris@namei.org>,
+Cc:     James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
         James Bottomley <jejb@linux.ibm.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Sumit Garg <sumit.garg@linaro.org>,
         David Howells <dhowells@redhat.com>,
-        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210727144349.11215-1-a.fatoum@pengutronix.de>
- <20210728222243.4wqs64pqngzzii3b@kernel.org>
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
+        Andreas Rammhold <andreas@rammhold.de>,
+        David Gstir <david@sigma-star.at>,
+        Richard Weinberger <richard@nod.at>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+References: <20210721160258.7024-1-a.fatoum@pengutronix.de>
+ <20210727030433.3dwod2elwtdkhwsc@kernel.org>
+ <fe39a449-88df-766b-a13a-290f4847d43e@pengutronix.de>
+ <20210728215200.nfvnm5s2b27ang7i@kernel.org>
 From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <3d0a380b-ea75-6c99-0515-0988d6ecab1c@pengutronix.de>
-Date:   Thu, 29 Jul 2021 00:27:23 +0200
+Message-ID: <f0f05df9-95bb-8b67-cecc-742af0b19f1e@pengutronix.de>
+Date:   Thu, 29 Jul 2021 00:29:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <20210728222243.4wqs64pqngzzii3b@kernel.org>
+In-Reply-To: <20210728215200.nfvnm5s2b27ang7i@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -54,80 +57,33 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello Jarkko,
-
-On 29.07.21 00:22, Jarkko Sakkinen wrote:
-> On Tue, Jul 27, 2021 at 04:43:49PM +0200, Ahmad Fatoum wrote:
->> For both v1 and v2 key setup mechanisms, userspace supplies the raw key
->> material to the kernel after which it is never again disclosed to
->> userspace.
+On 28.07.21 23:52, Jarkko Sakkinen wrote:
+> On Tue, Jul 27, 2021 at 06:24:49AM +0200, Ahmad Fatoum wrote:
+>> On 27.07.21 05:04, Jarkko Sakkinen wrote:
+>>>> Reported-by: Andreas Rammhold <andreas@rammhold.de>
+>>>> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+>>>> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>>>
+>>> Is it absolutely need to do all this *just* to fix the bug?
+>>>
+>>> For a pure bug fix the most essential thing is to be able the backport
+>>> it to stable kernels.
 >>
->> Use of encrypted and trusted keys offers stronger guarantees:
->> The key material is generated within the kernel and is never disclosed to
->> userspace in clear text and, in the case of trusted keys, can be
->> directly rooted to a trust source like a TPM chip.
->>
->> Add support for trusted and encrypted keys by repurposing
->> fscrypt_add_key_arg::raw to hold the key description when the new
->> FSCRYPT_KEY_ARG_TYPE_DESC flag is supplied. The location of the flag
->> was previously reserved and enforced by ioctl code to be zero, so this
->> change won't break backwards compatibility.
->>
->> Corresponding userspace patches are available for fscryptctl:
->> https://github.com/google/fscryptctl/pull/23
->>
->> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
->> ---
->> key_extract_material used by this patch is added in
->> <cover.b2fdd70b830d12853b12a12e32ceb0c8162c1346.1626945419.git-series.a.fatoum@pengutronix.de>
->> which still awaits feedback.
->>
->> Sending this RFC out anyway to get some feedback from the fscrypt
->> developers whether this is the correct way to go about it.
->>
->> To: "Theodore Y. Ts'o" <tytso@mit.edu>
->> To: Jaegeuk Kim <jaegeuk@kernel.org>
->> To: Eric Biggers <ebiggers@kernel.org>
->> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->> Cc: James Morris <jmorris@namei.org>
->> Cc: "Serge E. Hallyn" <serge@hallyn.com>
->> Cc: James Bottomley <jejb@linux.ibm.com>
->> Cc: Mimi Zohar <zohar@linux.ibm.com>
->> Cc: Sumit Garg <sumit.garg@linaro.org>
->> Cc: David Howells <dhowells@redhat.com>
->> Cc: linux-fscrypt@vger.kernel.org
->> Cc: linux-crypto@vger.kernel.org
->> Cc: linux-integrity@vger.kernel.org
->> Cc: linux-security-module@vger.kernel.org
->> Cc: keyrings@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> ---
->>  Documentation/filesystems/fscrypt.rst | 24 ++++++++---
->>  fs/crypto/keyring.c                   | 59 ++++++++++++++++++++++++---
->>  include/uapi/linux/fscrypt.h          | 16 +++++++-
->>  3 files changed, 87 insertions(+), 12 deletions(-)
->>
->> diff --git a/Documentation/filesystems/fscrypt.rst b/Documentation/filesystems/fscrypt.rst
->> index 44b67ebd6e40..83738af2afa3 100644
->> --- a/Documentation/filesystems/fscrypt.rst
->> +++ b/Documentation/filesystems/fscrypt.rst
->> @@ -681,11 +681,15 @@ It can be executed on any file or directory on the target filesystem,
->>  but using the filesystem's root directory is recommended.  It takes in
->>  a pointer to struct fscrypt_add_key_arg, defined as follows::
->>  
->> +    #define FSCRYPT_KEY_ADD_RAW_ASIS		0
->> +    #define FSCRYPT_KEY_ADD_RAW_DESC		1
+>> Not much happened in-between, so a backport should be trivial.
+>> I can provide these if needed.
 > 
-> Would be nice to have these documented.
+> "not much" is not good enough. It should be "not anything".
 
-They have explanatory comments in the uAPI header. The Documentation file
-purposefully omits these comments and describes each field separately after
-the code block. I am just following suit.
+"Not much" [code that could conflict was added in-between].
 
-FWIW, I intend to drop these flags for v2 anyway.
+I just checked and it applies cleanly on v5.13. On the off chance
+that this patch conflicts with another stable backport by the time
+it's backported, I'll get a friendly automated email and send out
+a rebased patch.
 
 Cheers,
 Ahmad
+
 
 > 
 > /Jarkko
