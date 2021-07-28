@@ -2,196 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDFD3D97F1
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Jul 2021 23:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437123D9851
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 00:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbhG1V6Y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Jul 2021 17:58:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44968 "EHLO mail.kernel.org"
+        id S232073AbhG1WWs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Jul 2021 18:22:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54050 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232005AbhG1V6X (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Jul 2021 17:58:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5846C6103A;
-        Wed, 28 Jul 2021 21:58:21 +0000 (UTC)
+        id S232022AbhG1WWr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 28 Jul 2021 18:22:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 071B261019;
+        Wed, 28 Jul 2021 22:22:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627509501;
-        bh=ezqX1FxBa8zEWu5cc4dGcLZ31b6wltzL2lhjCEjPd4Y=;
+        s=k20201202; t=1627510965;
+        bh=j+LzmXUtSJPFBAH+9hQlIoYTHJxJKbuBPn8YylxDQqc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NYhgaSpAaZQiBMxbtw8mLPqN6JjKBRWz67kC67zjYpveuseyI6B+0C4hFgLevqDA8
-         7DQw2Yk+HFQt7g9PytIWaWF17EeqFM+rqDL/1v/piz3K+gaykO9917Ta7ogt5SjT0+
-         sbvvQwVba8FwGTJQfVh6dOYtAQU1+EnSvd1W7TG4o9z9tUtHesZBVzScHGpGqNmZAu
-         RquoQKp9lpu3wHv44y7dpwe/iN9Fl4+c0cUUkKnmYTcFBrogmTL/bsvNl1ly8/ot+s
-         udzdqVWpV5W9pE/H+ktZjmB5dOsh43k1oCXYKzG+Xm0u53WxtFRcjuKw84WbqQlsc7
-         tWsA7po0ENfjA==
-Date:   Thu, 29 Jul 2021 00:58:19 +0300
+        b=QckIa4S93w+Qg3Iw3yokMJlLjd08JmqqXmv5D5sCDBsQhJTBxYmk24O9QYuwzYtDg
+         4I/YSOYf6Z+O2AxGq3WND6/ndPh10gZqUhHDbAV3EepVJNLDCSdal5X9uHzYaB4Ff1
+         pPwMhg7YghjWvvCMdStVRTUfw5tLoXSPlOD/G79bcfbY9AWT9XgT8DVZzBy7i83Hx9
+         w2QGeeO4iTwyeeuRpjIsk1Hh0b5p17GtYH404zu9AAcPHKEikjh4uoQYctRI6tgSDk
+         0B4pU/QPpJaSnrQ3pRMJhotyMhfZc7HWExTNE0m9QcJm4KoOHKw/NbK47BY6V67gTY
+         UVadGHRyG5GIQ==
+Date:   Thu, 29 Jul 2021 01:22:43 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Borys Movchan <borysmn@axis.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        kernel@axis.com, linux-integrity@vger.kernel.org,
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: Add Upgrade/Reduced mode support for TPM2 modules
-Message-ID: <20210728215819.vsdwh2fbct7wxwsu@kernel.org>
-References: <20210728105730.10170-1-borysmn@axis.com>
+Subject: Re: [RFC PATCH v1] fscrypt: support encrypted and trusted keys
+Message-ID: <20210728222243.4wqs64pqngzzii3b@kernel.org>
+References: <20210727144349.11215-1-a.fatoum@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210728105730.10170-1-borysmn@axis.com>
+In-Reply-To: <20210727144349.11215-1-a.fatoum@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 12:57:30PM +0200, Borys Movchan wrote:
-> If something went wrong during the TPM firmware upgrade,
-> like power failure or the firmware image file get corrupted,
-> the TPM might end up in Upgrade or Failure mode upon the
-> next start. The state is persistent between the TPM power
-> cycle/restart.
+On Tue, Jul 27, 2021 at 04:43:49PM +0200, Ahmad Fatoum wrote:
+> For both v1 and v2 key setup mechanisms, userspace supplies the raw key
+> material to the kernel after which it is never again disclosed to
+> userspace.
 > 
-> According to TPM specification:
->  * If the TPM is in Upgrade mode, it will answer with
->    TPM2_RC_UPGRADE to all commands except Field Upgrade
->    related ones.
->  * If the TPM is in Failure mode, it will allow performing
->    TPM initialization but will not provide any crypto
->    operations. Will happily respond to Field Upgrade calls.
+> Use of encrypted and trusted keys offers stronger guarantees:
+> The key material is generated within the kernel and is never disclosed to
+> userspace in clear text and, in the case of trusted keys, can be
+> directly rooted to a trust source like a TPM chip.
 > 
-> The fix adds the possibility to detect an active state of
-> the TPM and gives the user-space a chance to finish the
-> firmware upgrade/recover the TPM.
-
-This is different than telling what the patch does. It's just
-describing a goal, but does not describe how the driver is
-changed, and reasons for doing that.
-
-For instance, you check 'limited_mode' flag in a few sites.
-How can I know that those are exactly the locations where this
-needs to be done?
-
-> Signed-off-by: Borys Movchan <borysmn@axis.com>
+> Add support for trusted and encrypted keys by repurposing
+> fscrypt_add_key_arg::raw to hold the key description when the new
+> FSCRYPT_KEY_ARG_TYPE_DESC flag is supplied. The location of the flag
+> was previously reserved and enforced by ioctl code to be zero, so this
+> change won't break backwards compatibility.
+> 
+> Corresponding userspace patches are available for fscryptctl:
+> https://github.com/google/fscryptctl/pull/23
+> 
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 > ---
+> key_extract_material used by this patch is added in
+> <cover.b2fdd70b830d12853b12a12e32ceb0c8162c1346.1626945419.git-series.a.fatoum@pengutronix.de>
+> which still awaits feedback.
 > 
-> Notes:
->     v2: The terms are changed to match the ones used in the TPM specification.
->     Rework the commit message to provide more details regarding TPM
->     behavior in Failure/Upgrade mode.
+> Sending this RFC out anyway to get some feedback from the fscrypt
+> developers whether this is the correct way to go about it.
 > 
->     The TPM specification describes TPM behavior in Upgrade mode very clearly.
->     Things are a bit more complex if we are talking about Failure mode.
->     The TPM behavior in this mode is highly vendor-specific. Although, there
->     is one thing clearly described in the TPM specification and can be relied
->     on to detect the Failure state: in Failure mode, the TPM doesn't provide
->     any crypto operations. Including access to attributes and configuration
->     registers.
->     It seems persistent between different TPM manufacturers, at least to the
->     degree I was able to verify.
+> To: "Theodore Y. Ts'o" <tytso@mit.edu>
+> To: Jaegeuk Kim <jaegeuk@kernel.org>
+> To: Eric Biggers <ebiggers@kernel.org>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: James Bottomley <jejb@linux.ibm.com>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: Sumit Garg <sumit.garg@linaro.org>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: linux-fscrypt@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-integrity@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  Documentation/filesystems/fscrypt.rst | 24 ++++++++---
+>  fs/crypto/keyring.c                   | 59 ++++++++++++++++++++++++---
+>  include/uapi/linux/fscrypt.h          | 16 +++++++-
+>  3 files changed, 87 insertions(+), 12 deletions(-)
 > 
->  drivers/char/tpm/tpm-chip.c | 23 +++++++++++++++--------
->  drivers/char/tpm/tpm2-cmd.c | 12 ++++++++++--
->  include/linux/tpm.h         |  1 +
->  3 files changed, 26 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index ddaeceb7e109..ff2367c447fb 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -574,20 +574,25 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
->  int tpm_chip_register(struct tpm_chip *chip)
->  {
->  	int rc;
-> +	bool limited_mode = false;
+> diff --git a/Documentation/filesystems/fscrypt.rst b/Documentation/filesystems/fscrypt.rst
+> index 44b67ebd6e40..83738af2afa3 100644
+> --- a/Documentation/filesystems/fscrypt.rst
+> +++ b/Documentation/filesystems/fscrypt.rst
+> @@ -681,11 +681,15 @@ It can be executed on any file or directory on the target filesystem,
+>  but using the filesystem's root directory is recommended.  It takes in
+>  a pointer to struct fscrypt_add_key_arg, defined as follows::
 >  
->  	rc = tpm_chip_start(chip);
->  	if (rc)
->  		return rc;
->  	rc = tpm_auto_startup(chip);
-> -	if (rc) {
-> +	if (rc == -EIO) {
-> +		limited_mode = true;
-> +	} else if (rc) {
->  		tpm_chip_stop(chip);
->  		return rc;
->  	}
->  
-> -	rc = tpm_get_pcr_allocation(chip);
-> -	tpm_chip_stop(chip);
-> -	if (rc)
-> -		return rc;
-> +	if (!limited_mode) {
-> +		rc = tpm_get_pcr_allocation(chip);
-> +		tpm_chip_stop(chip);
-> +		if (rc)
-> +			return rc;
-> +	}
->  
->  	tpm_sysfs_add_device(chip);
->  
-> @@ -595,9 +600,11 @@ int tpm_chip_register(struct tpm_chip *chip)
->  
->  	tpm_add_ppi(chip);
->  
-> -	rc = tpm_add_hwrng(chip);
-> -	if (rc)
-> -		goto out_ppi;
-> +	if (!limited_mode) {
-> +		rc = tpm_add_hwrng(chip);
-> +		if (rc)
-> +			goto out_ppi;
-> +	}
->  
->  	rc = tpm_add_char_device(chip);
->  	if (rc)
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index a25815a6f625..7468353ed67d 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -718,7 +718,8 @@ static int tpm2_startup(struct tpm_chip *chip)
->   *                     sequence
->   * @chip: TPM chip to use
->   *
-> - * Returns 0 on success, < 0 in case of fatal error.
-> + * Returns 0 on success, -ENODEV in case of fatal error,
-> + *	    -EIO in case of Reduced/Upgrade mode
->   */
->  int tpm2_auto_startup(struct tpm_chip *chip)
->  {
-> @@ -729,7 +730,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
->  		goto out;
->  
->  	rc = tpm2_do_selftest(chip);
-> -	if (rc && rc != TPM2_RC_INITIALIZE)
-> +	if (rc == TPM2_RC_UPGRADE) {
-> +		rc = -EIO;
-> +		goto out;
-> +	} else if (rc && rc != TPM2_RC_INITIALIZE)
->  		goto out;
->  
->  	if (rc == TPM2_RC_INITIALIZE) {
-> @@ -743,6 +747,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
->  	}
->  
->  	rc = tpm2_get_cc_attrs_tbl(chip);
-> +	if (rc) { /* Succeeded until here, but failed -> reduced mode */
-> +		rc = -EIO;
-> +		goto out;
-> +	}
->  
->  out:
->  	if (rc > 0)
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index aa11fe323c56..e873c42907f0 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -207,6 +207,7 @@ enum tpm2_return_codes {
->  	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
->  	TPM2_RC_FAILURE		= 0x0101,
->  	TPM2_RC_DISABLED	= 0x0120,
-> +	TPM2_RC_UPGRADE		= 0x012D,
->  	TPM2_RC_COMMAND_CODE    = 0x0143,
->  	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
->  	TPM2_RC_REFERENCE_H0	= 0x0910,
-> -- 
-> 2.20.1
-> 
-> 
+> +    #define FSCRYPT_KEY_ADD_RAW_ASIS		0
+> +    #define FSCRYPT_KEY_ADD_RAW_DESC		1
+
+Would be nice to have these documented.
 
 /Jarkko
