@@ -2,92 +2,159 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E73F53D8EA0
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Jul 2021 15:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BF93D8EB0
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Jul 2021 15:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbhG1NI7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 28 Jul 2021 09:08:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58344 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236430AbhG1NIc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 28 Jul 2021 09:08:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3B45160F02;
-        Wed, 28 Jul 2021 13:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627477710;
-        bh=H1S7AlV0COt/bxaXeyQx1d8vL8M0dbUMU7ZJt6NPQao=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lhF2L+uVa1UwdQ7Cqk0pnrjHOQNx7pTKWuDDejBNYjN7A4it/H9lYpeC/cKU1T5bw
-         hQM3Na89GeH11aOtWH5LwuNLnQAzrNKm1hNd9combq4MNd6d5kj5hDdM43SvCKXuKm
-         mQOhkROUEBDNzZVgDZy+12+010DsTRsyj4B8C+cW8N8WMZzTKfcnsxLC5IeSxnLEkM
-         Usd1c13/hPiRiWHeJ/26+IQEYEfcTRZhtc2H+p0eWQJKqapIBSJDHdGLSMPqq0dXGK
-         f+ajcoWDqnl3jOR5pdzhqf7hM7P7LLGGQbhY4LgJjY4meNxxAHNKQB500JiB5bLB/j
-         ByRRqXtjzReFA==
-Date:   Wed, 28 Jul 2021 15:08:23 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        id S235260AbhG1NMp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 28 Jul 2021 09:12:45 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32968 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235204AbhG1NMo (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 28 Jul 2021 09:12:44 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16SD4T07149258;
+        Wed, 28 Jul 2021 09:12:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=fHUwDChCJYjFAgC978DfDS4s4aeIat7P9gQuve3jNcU=;
+ b=kSN1eK/ODx4VliLj33Sm/ynonfIav9EgwbLEzMEiUqrx8QumcVOrKyyyYVLLzqFflpoy
+ ocbATC1eHMwS896HaXBIuQ7D6LwnfNAe06ZVAu7RqHaTqn0nMPyPAi8dGmq4u+gS3weA
+ aKwzTal4ypYINv4pwrwRIQdnZ+luDA2Lj6o2LQY5Em/HDf0HvZmPEVkQHSyFhPjUYwrR
+ zyOU4/Wuf2vMCR6JskX/qz1zt+LZU4oHV8Ni9rMRVgh0TZjbPwdfjT4sVEP66uE675wB
+ yu6IdfuM7tPsrsLcdIAIh30gFHIsmx7Hwc0YtZhE93eUQGtj7XnxcvOhE/LNV96mA02/ Kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3a37rv8rf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jul 2021 09:12:36 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16SD4hLk151273;
+        Wed, 28 Jul 2021 09:11:37 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3a37rv8nx6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jul 2021 09:11:37 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16SD9KoK002807;
+        Wed, 28 Jul 2021 13:09:44 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3a235xrq03-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jul 2021 13:09:44 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16SD9fpM28049786
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Jul 2021 13:09:41 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5AFE7A4068;
+        Wed, 28 Jul 2021 13:09:41 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3AA83A405F;
+        Wed, 28 Jul 2021 13:09:40 +0000 (GMT)
+Received: from sig-9-65-219-1.ibm.com (unknown [9.65.219.1])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Jul 2021 13:09:39 +0000 (GMT)
+Message-ID: <b5b2fa45ead2a40e1200ed7414fbae75255d9281.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 2/5] IMA: block writes of the security.ima xattr with
+ unsupported algorithms
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     THOBY Simon <Simon.THOBY@viveris.fr>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC][PATCH v2 02/12] diglim: Basic definitions
-Message-ID: <20210728150823.705623ad@sal.lan>
-In-Reply-To: <eb3b025820574f0d901a38a4ad088018@huawei.com>
-References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
-        <20210726163700.2092768-3-roberto.sassu@huawei.com>
-        <20210728133102.339c7b8e@coco.lan>
-        <eb3b025820574f0d901a38a4ad088018@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
+Cc:     Paul Moore <paul@paul-moore.com>
+Date:   Wed, 28 Jul 2021 09:09:39 -0400
+In-Reply-To: <7bc627f3-a3bb-1cf4-44dc-097b241ac7ad@viveris.fr>
+References: <20210727163330.790010-1-simon.thoby@viveris.fr>
+         <20210727163330.790010-3-simon.thoby@viveris.fr>
+         <5a3a35b5f20fb17f7430046b0378e05f1dffa098.camel@linux.ibm.com>
+         <529bc35e-642f-9f50-f3a7-0d3c07890afe@viveris.fr>
+         <3a576c8f562201f441a72bb7232c4bb0faa36318.camel@linux.ibm.com>
+         <7bc627f3-a3bb-1cf4-44dc-097b241ac7ad@viveris.fr>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: dLZUuyS6MIOWtaWbSWRtZQeyr-eBIdxf
+X-Proofpoint-ORIG-GUID: Q_OAxXahIjZwE0_cEMVqUbxJRmQOMnFL
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-28_08:2021-07-27,2021-07-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ adultscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
+ impostorscore=0 mlxlogscore=999 bulkscore=0 spamscore=0 lowpriorityscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2107280074
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Em Wed, 28 Jul 2021 11:45:02 +0000
-Roberto Sassu <roberto.sassu@huawei.com> escreveu:
-
-> > From: Mauro Carvalho Chehab [mailto:mchehab+huawei@kernel.org]
-> > Sent: Wednesday, July 28, 2021 1:31 PM
-> > Em Mon, 26 Jul 2021 18:36:50 +0200
-> > Roberto Sassu <roberto.sassu@huawei.com> escreveu:
-> >   
-
-> > > +struct compact_list_hdr {
-> > > +	__u8 version;
-> > > +	__u8 _reserved;
-> > > +	__le16 type;
-> > > +	__le16 modifiers;
-> > > +	__le16 algo;
-> > > +	__le32 count;
-> > > +	__le32 datalen;
-> > > +} __packed;
-> > > +#endif /*_UAPI__LINUX_DIGLIM_H*/  
-> > 
-> > Besides Greg's notes, I'm wondering why to enforce a particular
-> > endness here. I mean, this is uAPI. I would expect it to use the
-> > CPU endianness instead, in order to avoid uneeded conversions.  
+On Wed, 2021-07-28 at 12:53 +0000, THOBY Simon wrote:
+> Hi Mimi,
 > 
-> Also Greg had the same concern. I hoped the Lifecycle section clarified
-> the fact that digest lists are generated by software vendors not the
-> local system. Should I add something more in the documentation?
+> On 7/28/21 2:43 PM, Mimi Zohar wrote:
+> > Hi Simon,
+> > 
+> > On Wed, 2021-07-28 at 07:00 +0000, THOBY Simon wrote: 
+> >>>> +
+> >>>> +	if (likely(dentry_hash == ima_hash_algo
+> >>>> +	    || crypto_has_alg(hash_algo_name[dentry_hash], 0, 0)))
+> >>>> +		return 0;
+> >>>> +
+> >>>> +	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
+> >>>> +	/* no memory available ? no file path for you */
+> >>>
+> >>> The comment here is unnecessary.  Avoid or limit comments inside a
+> >>> function.  Refer to the section "8) Commenting" in
+> >>> Documentation/process/coding-style.rst
+> >>>
+> >>>> +	if (pathbuf)
+> >>>> +		path = dentry_path(dentry, pathbuf, PATH_MAX);
+> >>>> +
+> >>>> +	/* disallow xattr writes with algorithms not built in the kernel */
+> >>>> +	integrity_audit_msg(AUDIT_INTEGRITY_DATA, d_inode(dentry),
+> >>>> +		path, "collect_data", "unavailable-hash-algorithm", res, 0);
+> >>>
+> >>> This will emit an audit message without the filename when !path.  Is
+> >>> this what you intended?
+> >>>
+> >>
+> >> This is what I was clumsily trying to explain in the previous comment: if we cannot
+> >> allocate memory for a file path, I thought it best to log the audit message without
+> >> the path than fail with a -ENOMEM (auditing will also try to allocate a memory buffer
+> >> too, but a bit smaller, and memory could have been reclaimed between the two calls,
+> >> so the auditing operation may succeed).
+> >>
+> >> Of course I could also return -ENOMEM, and it would happily propagate back to the user.
+> >>
+> >> What do you think ?
+> > 
+> > Memory pressure isn't the reason for preventing the xattr write.  It's
+> > the reason for not being able to audit the setxattr failure.
 
-It shouldn't matter what kind of endness software vendors use on
-userspace (either CPU or a fixed endiannes - either LE or BE).
+Return the existing errno, not -ENOMEM.
 
-I mean, I won't doubt that some package tools use LE while others
-would use BE. At some point, this needs to be converted to 
-CPU endiannes.
+> 
+> I completely agree with you, but I'm not quite sure I get the action you want to take
+> from there.
+> Does this mean you prefer the mechanism already implemented in this patch (not printing
+> the file path and trying to audit the setxattr failure anyway)?
 
-IMO, the best would be to isolate whatever RPM/DEB/... endianness 
-is used on userspace from what the Kernel will use internally.
+Under memory pressure, I don't think partially auditing the setxattr,
+without the pathname, makes sense.   Not being able to audit the
+setxattr failure shouldn't affect the returned result.  It would be the
+same in either case.
 
-Just my 2 cents.
+   if (pathbuf) {
+      < audit message >
+      < free pathbuf >
+   }
 
-Regards,
-Mauro
+   return <failure>
+
+thanks,
+
+Mimi
+
+
