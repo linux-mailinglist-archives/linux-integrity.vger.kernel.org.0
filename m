@@ -2,106 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 691463DABD2
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 21:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658B23DAC4A
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 21:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbhG2TYX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Jul 2021 15:24:23 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:50836 "EHLO
+        id S229642AbhG2T6i (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Jul 2021 15:58:38 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:54958 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbhG2TYW (ORCPT
+        with ESMTP id S229788AbhG2T6i (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Jul 2021 15:24:22 -0400
+        Thu, 29 Jul 2021 15:58:38 -0400
 Received: from [192.168.86.34] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 191172048040;
-        Thu, 29 Jul 2021 12:24:19 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 191172048040
+        by linux.microsoft.com (Postfix) with ESMTPSA id 51A0C20B36E0;
+        Thu, 29 Jul 2021 12:58:34 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 51A0C20B36E0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1627586659;
-        bh=BmmwATUSw2oS5v373O164GXBqThODcC3h1xkHNpXUaA=;
+        s=default; t=1627588714;
+        bh=iLGbwp6wfjndlgTVvVE92NUr2Nkz1vhwtosUiQDnfeM=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=WXD1EzP+OBO6haTQAfQmDONWh6ShXS0UsvhrEYcjyMy6sqNKIHnmASsz22O5/K/CF
-         3sM4oqcJj7Cyy4oh/vOGmvxPBK30mWA1CfZzbSfCDlSeDvW6emau7du9OU4fTu7EH6
-         4bWt94G8MmW02o/s+jWSU7kz2405qzjbXZ3M/W1w=
-Subject: Re: [dm-devel] [PATCH 0/7] device mapper target measurements using
- IMA
-To:     Thore Sommer <public@thson.de>
-Cc:     agk@redhat.com, dm-devel@redhat.com,
-        linux-integrity@vger.kernel.org, nramas@linux.microsoft.com,
-        snitzer@redhat.com, zohar@linux.ibm.com
-References: <c833339e-c4bf-6e78-5719-cd902fa8426f@linux.microsoft.com>
- <20210727101802.779067-1-public@thson.de>
+        b=bYrcH4pYTsoANpuYvkGfvj0UQ7q/brAtTC2CL50ocWuyiwDFbOo/Azt5U7wbP7J3I
+         92krgpkGuq3Mw8YDU6VyL5jx9Sdg0ct0oZxwgpz6nkVAvkq1nepYRaD4R4OUThZCEg
+         4LiX58NZra09LKNj/rosFcUTFRR5HqW8TeNtrOBw=
+Subject: Re: [PATCH 1/7] dm: measure data on table load
+To:     Mimi Zohar <zohar@linux.ibm.com>, Mike Snitzer <snitzer@redhat.com>
+Cc:     dm-devel@redhat.com, agk@redhat.com,
+        linux-integrity@vger.kernel.org,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+References: <20210713004904.8808-1-tusharsu@linux.microsoft.com>
+ <20210713004904.8808-2-tusharsu@linux.microsoft.com>
+ <713d22788b678c612c5b18edfb8cf849af61ace5.camel@linux.ibm.com>
+ <YPhAaAyo8fKXzu5c@redhat.com>
+ <a6887d022d3943e0ca1efb845270fa715a60b925.camel@linux.ibm.com>
+ <758a4a85e0fb92e8cbc62b218c12b02f9123f640.camel@linux.ibm.com>
 From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <f73308f3-485f-46cb-0f20-6619edb541e6@linux.microsoft.com>
-Date:   Thu, 29 Jul 2021 12:24:18 -0700
+Message-ID: <32086dac-97e0-471c-2dc6-938e4fbc7d02@linux.microsoft.com>
+Date:   Thu, 29 Jul 2021 12:58:33 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210727101802.779067-1-public@thson.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <758a4a85e0fb92e8cbc62b218c12b02f9123f640.camel@linux.ibm.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Thore,
-Replying to a few questions which were not already answered by me/Alasdair.
+Hi Mimi,
 
-
-On 7/27/21 3:18 AM, Thore Sommer wrote:
-
-> There is no way to verify if the root hash was verified against a signature. We
-> have "root_hash_sig_key_desc SIGNATURE_DESCRIPTION" in the dm table.
-> "SIGNATURE_DESCRIPTION" itself is not really useful because it seems that we
-> cannot map it back to the certificate that was used for verification but the
-> presence of "root_hash_sig_key_desc" might be enough in combination with
-> measuring the keyring.
-
-Thanks for the suggestion Thore.
-I can update the verity_status() to measure if v->signature_key_desc is 
-set.
-
-Something like:
-DMEMIT("signature_key_desc_present=%c,", v->signature_key_desc ? 'y' :
-'n');
-
-Alasdair, Mike,
-Can you tell if this is needed and/or sufficient?
-If it is needed, should we log the full string  v->signature_key_desc?
-I am concerned about logging the full string as it is an unbounded
-buffer (a char*) coming from UM. And at the same time, not sure if just
-logging the presence is sufficient. Thoughts?
-
-Thore,
-Please note – even if we measure signature_key_desc (full string or just
-its presence): in order to use it with the keyrings, the IMA policy also
-needs to be set to measure key rings (using “measure func=KEY_CHECK
-...”). It is independent from measuring the device mapper data (which is
-measured when the policy is set to “measure func=CRITICAL_DATA
-label=device-mapper ...”).
-
-Therefore measuring keyrings together (i.e. in the same IMA log) with DM
-data  is not always guaranteed, since it is dictated by how the IMA
-policy is configured.
-
-Just FYI.
-
-> For remote attestation services it would be nice if we have clear indicator from
-> what component the "ima-buf" entry was generated. Prefixing all "n-ng" field
-> entries with something like "dm_" would make it easier for us to add different
-> validators for different measurements that use the "ima-buf" template. The
-> keyring measurements already use "ima-buf" and using some kind of naming scheme
-> to easily differentiate the entries would be nice.
-The event names typically come from kernel components that are doing the
-measurement of critical data. So any duplicates should be caught in the
-upstream review of the kernel patch.
-
-But thanks for the suggestion. I will prefix the event names in this 
-patch series with “dm_” to indicate they are related to device mapper.
-
-Thanks,
-Tushar
-> Regards,
-> Thore
+On 7/21/21 2:17 PM, Mimi Zohar wrote:
+> On Wed, 2021-07-21 at 12:07 -0400, Mimi Zohar wrote:
+>> On Wed, 2021-07-21 at 11:42 -0400, Mike Snitzer wrote:
+>>> On Tue, Jul 20 2021 at 10:12P -0400,
+>>> Mimi Zohar <zohar@linux.ibm.com> wrote:
+>>>
+>>>> Hi Tushar, Mike,
+>>>>
+>>>> On Mon, 2021-07-12 at 17:48 -0700, Tushar Sugandhi wrote:
+>>>>> +struct dm_ima_device_table_metadata {
+>>>>> +       /*
+>>>>> +        * Contains data specific to the device which is common across
+>>>>> +        * all the targets in the table.e.g. name, uuid, major, minor etc.
+>>>>> +        * The values are stored in comma separated list of key1=val1,key2=val2; pairs
+>>>>> +        * delimited by a semicolon at the end of the list.
+>>>>> +        */
+>>>>> +       char *device_metadata;
+>>>>> +       unsigned int device_metadata_len;
+>>>>> +       unsigned int num_targets;
+>>>>> +
+>>>>> +       /*
+>>>>> +        * Contains the sha256 hashs of the IMA measurements of the
+>>>>> +        * target attributes key-value pairs from the active/inactive tables.
+>>>>> +        */
+>>>>
+>>>>  From past experience hard coding the hash algorithm is really not a
+>>>> good idea.
+>>>>
+>>>> Mimi
+>>>>
+>>>>> +       char *hash;
+>>>>> +       unsigned int hash_len;
+>>>>> +
+>>>>> +};
+>>>
+>>> Hi Mimi,
+>>>
+>>> The dm-ima.c code is using SHASH_DESC_ON_STACK and then storing the
+>>> more opaque result via 'hash' and 'hash_len'.
+>>>
+>>> So if/when the dm-ima.c hash algorithm were to change this detail
+>>> won't change the dm_ima_device_table_metadata structure at all right?
+>>> But even if changes were needed this is purely an implementation
+>>> detail correct?  Why might users care which algorithm is used by
+>>> dm-ima to generate the hashes?
+>>>
+>>> Assuming there is a valid reason for users to care about this, we can
+>>> improve this aspect as follow-on work.. so I don't consider this a
+>>> blocker for this patchset at this point.  Please clarify if you feel
+>>> it should be a blocker.
+>>
+>> This goes back to my question as to if or how the template data in
+>> these DM critical data records are to be validated by the attestation
+>> server.   Asumming the hash/hash_len is being stored in the IMA
+>> measurement list, the less the attestation should need to know about
+>> the specific kernel version the better.
 > 
+> Hi Mike, Tushar,  Laskshmi,
+> 
+> Perhaps, when defining a new IMA "critical data" record, especially if
+> you know it's going to change, the critical data should contain a
+> version number.
+>
+Just to close the loop on this thread:
+
+As I explained on the other thread in this patch series -
+
+@the hash verification:
+the clear-text for the active/inactive table hashes is already logged in
+the 'table_load' event. And we will prefix the active/inactive table
+hashes with hash_algo.  (e.g. sha256:<hash>) in the remaining events.
+Together it should be sufficient for the attestation server to verify
+the active/inactive table hashes without maintaining any list of
+expected hashes or referring to kernel version etc.
+
+@versioning:
+We are already logging versions for individual targets. What was missing
+was some versioning at device level. So thanks again for the suggestion.
+We will add a version at device level in each of the events. Together
+that should help attestation server to determine what attributes to 
+expect in the event data - without relying on specific kernel version.
+
+Thanks again for your feedback.
+
+Regards,
+Tushar
+
+> thanks,
+> 
+> Mimi
+> 
+
