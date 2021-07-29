@@ -2,151 +2,243 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 651DD3DA8A9
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 18:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9228D3DA8C7
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 18:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbhG2QQG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Jul 2021 12:16:06 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14814 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229523AbhG2QQF (ORCPT
+        id S231475AbhG2QTo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Jul 2021 12:19:44 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58066 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231668AbhG2QTn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Jul 2021 12:16:05 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16TG3ODf195532;
-        Thu, 29 Jul 2021 12:16:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=jfpoF8lZhvSnApdR5QNNmgSoD/vX4e/7W/gfUyukGGc=;
- b=nWhbmc7fExOkZPBkXOOlgTSmAVYMStfBpxjR3+Vw6VtYOIAS2S1DxaUBfovu3dFPGzJN
- AEzo8DZmsfmMW+ltrd559nW9qdL1ZR5LChq1NfYyI1y/Gb0NCDniICUz0NnZOMye/Tpx
- /vceBMZLG+j/D18s2hXut5RJ1Hz+Ly6vS+hgUBzPxcQy7Axk7FaEM5a0bbJyCr03Qnf3
- o2UNvpK4cZDiOgDorPsgwcd54QgQPqBooF9kjkkNM5cSNgBZlxaMz7pALKuDkEwNP/LL
- pgu1ORd/TjxU8xER+ggoImfoGRrZ1fTO9xPLqMbKH19MwxvXwHDTmo7K7QBT66r9kMWH mg== 
+        Thu, 29 Jul 2021 12:19:43 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16TGIgJo006512;
+        Thu, 29 Jul 2021 12:19:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=5Zxuck6xXSAocuv1PazxRDLordw2Ud4JT3bPChBew18=;
+ b=Evzwb8pGE7dqwsQle25xqb0KHbnieh2V+cQPpxI3v009p8KlmOm1my9sOl4Dhrj1np4b
+ nLfXxotdupITwn3TEZkGDtv62wAuJmDQmJJPuv9O8sbG0UzgvIWKKRMJmsVZQ4MtfAwj
+ jS7h/N3j8OkCBXiyjjZRuYD9ydS1o+RGeYxx4tmrduVPqRtXO3tDo7zljoCTIlUbkyo9
+ CTw179E+UyE9cjiJimkF+qfcg3+X5L3LSG9k/GnWZ9A660B++tj0apKNcfxASxO05Ll0
+ NIHpfs2V1IsqkezcA3ogzsZMYyMWYzbGQe+vYrfIxR6LlIXNkeKJzrcDOnwl+JM1//cu 0w== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a3xu82dqb-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a3yqt012r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jul 2021 12:16:01 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16TG3mfF001027;
-        Thu, 29 Jul 2021 12:16:01 -0400
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a3xu82dpn-1
+        Thu, 29 Jul 2021 12:19:38 -0400
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16TGJbk0013906;
+        Thu, 29 Jul 2021 12:19:37 -0400
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a3yqt012e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jul 2021 12:16:01 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16TGCiUG026278;
-        Thu, 29 Jul 2021 16:15:59 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3a235khx92-1
+        Thu, 29 Jul 2021 12:19:37 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16TGCwMX017362;
+        Thu, 29 Jul 2021 16:19:37 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03dal.us.ibm.com with ESMTP id 3a235skfn2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jul 2021 16:15:59 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16TGDFiK26476932
+        Thu, 29 Jul 2021 16:19:37 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16TGJZhN42205594
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Jul 2021 16:13:15 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5597442047;
-        Thu, 29 Jul 2021 16:15:57 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3689E42057;
-        Thu, 29 Jul 2021 16:15:56 +0000 (GMT)
-Received: from sig-9-65-212-145.ibm.com (unknown [9.65.212.145])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 29 Jul 2021 16:15:55 +0000 (GMT)
-Message-ID: <07dced7b64c88b3212a8539da8e10450d62704dd.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 5/5] IMA: introduce a new policy option
- func=SETXATTR_CHECK
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Date:   Thu, 29 Jul 2021 12:15:55 -0400
-In-Reply-To: <1fdf70ea-a5db-75d5-3e33-71229fcfd31d@viveris.fr>
-References: <20210728132112.258606-1-simon.thoby@viveris.fr>
-         <20210728132112.258606-6-simon.thoby@viveris.fr>
-         <acf4fc349a59b4390e0ff57728f8f4920f89386a.camel@linux.ibm.com>
-         <1fdf70ea-a5db-75d5-3e33-71229fcfd31d@viveris.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Thu, 29 Jul 2021 16:19:35 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CF222112062;
+        Thu, 29 Jul 2021 16:19:35 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AFC0A112072;
+        Thu, 29 Jul 2021 16:19:35 +0000 (GMT)
+Received: from sbct-2.. (unknown [9.47.158.152])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Jul 2021 16:19:35 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     jarkko@kernel.org
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>
+Subject: [PATCH] tpm: ibmvtpm: Avoid error message when process gets signal while waiting
+Date:   Thu, 29 Jul 2021 12:19:31 -0400
+Message-Id: <20210729161931.3609894-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VySOcQmwfAG87fSXa8cdVt9Xo8_Heuqs
-X-Proofpoint-ORIG-GUID: USdFgYApfeUVCJxCbskS3DSIqoothJPt
+X-Proofpoint-ORIG-GUID: V3FyMKd6o9AAKRLhO-IlNn338K0xZY0W
+X-Proofpoint-GUID: HnvNjbmutjbe-adenl_3hw59qTn9Lczq
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-29_10:2021-07-29,2021-07-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0
- adultscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2021-07-29_12:2021-07-29,2021-07-29 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 clxscore=1015
+ impostorscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2107140000 definitions=main-2107290101
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Simon,
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-On Thu, 2021-07-29 at 07:47 +0000, THOBY Simon wrote:
-> 
-> >> + * for setxattr writes
-> >> + *
-> >> + * Update the atomic variable holding the set of allowed hash algorithms
-> >> + * that can be used to update the security.ima xattr of a file.
-> >> + *
-> >> + * Context: called when updating the IMA policy.
-> >> + *
-> >> + * SETXATTR_CHECK rules do not implement a full policy check because of
-> >> + * the performance impact performing rules checking on setxattr() would
-> >> + * have. The consequence is that only one SETXATTR_CHECK can be active at
-> >> + * a time.
-> >> + */
-> >> +static void update_allowed_hash_algorithms(void)
-> >> +{
-> >> +	struct ima_rule_entry *entry;
-> >> +
-> >> +	/*
-> >> +	 * We scan in reverse order because only the last entry with the
-> >> +	 * 'func=SETXATTR_CHECK' apply: this allows runtime upgrades of the
-> >> +	 * digest algorithm policy, unlike the other IMA rules that are
-> >> +	 * usually append-only. Old rules will still be present in the
-> >> +	 * ruleset, but inactive.
-> >> +	 */
-> > 
-> > Oh, my!  I really hope this won't be used as precedent.  Before
-> > agreeing to this, the existing policy rules must require loading of
-> > only signed IMA policies.
-> > 
-> 
-> 
-> After some though, I think you're right, there is not much point to do anything
-> different from the other IMA rules, 
-> 
-> Below is the modified version that I will submit in the next patch.
-> 
-> However given the similarities between this function and ima_update_policy_flag,
-> I think maybe I should merge them together: they are mostly called from the
-> same places and they both serve the same role: updating some of the global ima
-> variables after a policy update or at system initialization.
-> 
-> Do you think it would be ok to add that functionality to ima_update_policy_flag?
-> Maybe updating the name to reflect that the function updates multiples flags?
+When rngd is run as root then lots of these types of message will appear
+in the kernel log if the TPM has been configure to provide random bytes:
 
-We've gone through a couple of iterations of this patch.  At this
-point, it's defining a single set of setxattr permitted hash
-algorithms.  Renaming and adding the change to
-ima_update_policy_flags() definitely makes sense.
+[ 7406.275163] tpm tpm0: tpm_transmit: tpm_recv: error -4
 
-At the same time, I'd appreciate your fixing the RCU locking there.
+The issue is caused by the following call that is interrupted while
+waiting for the TPM's response.
 
-> As a side note on the patchset, maybe I should refrain from posting for a few days to give people time
-> to comment on it, instead of sending new versions in such a quick succession?
+sig = wait_event_interruptible(ibmvtpm->wq,
+                               !ibmvtpm->tpm_processing_cmd);
 
-Definitely.
+Rather than waiting for the response in the low level driver, have it use
+the polling loop in tpm_try_transmit() that uses a command's duration to
+poll until a result has been returned by the TPM, thus ending when the
+timeout has occurred but not responding to signals and ctrl-c anymore.
+To stay in this polling loop we now extend tpm_ibmvtpm_status() to return
+PM_STATUS_BUSY for as long as the vTPM is busy. Since we will need the
+timeouts in this loop now we get the TPM 1.2 and TPM 2 timeouts with
+tpm_get_timeouts().
 
-thanks,
+Rename the tpm_processing_cmd to tpm_status in ibmvtpm_dev and set the
+TPM_STATUS_BUSY flag while the vTPM is busy processing a command.
 
-Mimi
+To recreat the issue start rngd like this:
+
+sudo rngd -r /dev/hwrng -t
+
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=1981473
+Fixes: 6674ff145eef ("tpm_ibmvtpm: properly handle interrupted packet receptions")
+Cc: Nayna Jain <nayna@linux.ibm.com>
+Cc: George Wilson <gcwilson@linux.ibm.com>
+Reported-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+ drivers/char/tpm/tpm_ibmvtpm.c | 31 ++++++++++++++++++-------------
+ drivers/char/tpm/tpm_ibmvtpm.h |  3 ++-
+ 2 files changed, 20 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+index 903604769de9..5d795866b483 100644
+--- a/drivers/char/tpm/tpm_ibmvtpm.c
++++ b/drivers/char/tpm/tpm_ibmvtpm.c
+@@ -106,17 +106,12 @@ static int tpm_ibmvtpm_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ {
+ 	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
+ 	u16 len;
+-	int sig;
+ 
+ 	if (!ibmvtpm->rtce_buf) {
+ 		dev_err(ibmvtpm->dev, "ibmvtpm device is not ready\n");
+ 		return 0;
+ 	}
+ 
+-	sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
+-	if (sig)
+-		return -EINTR;
+-
+ 	len = ibmvtpm->res_len;
+ 
+ 	if (count < len) {
+@@ -220,11 +215,12 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ 		return -EIO;
+ 	}
+ 
+-	if (ibmvtpm->tpm_processing_cmd) {
++	if ((ibmvtpm->tpm_status & TPM_STATUS_BUSY)) {
+ 		dev_info(ibmvtpm->dev,
+ 		         "Need to wait for TPM to finish\n");
+ 		/* wait for previous command to finish */
+-		sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
++		sig = wait_event_interruptible(ibmvtpm->wq,
++				(ibmvtpm->tpm_status & TPM_STATUS_BUSY) == 0);
+ 		if (sig)
+ 			return -EINTR;
+ 	}
+@@ -237,7 +233,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ 	 * set the processing flag before the Hcall, since we may get the
+ 	 * result (interrupt) before even being able to check rc.
+ 	 */
+-	ibmvtpm->tpm_processing_cmd = true;
++	ibmvtpm->tpm_status |= TPM_STATUS_BUSY;
+ 
+ again:
+ 	rc = ibmvtpm_send_crq(ibmvtpm->vdev,
+@@ -255,7 +251,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ 			goto again;
+ 		}
+ 		dev_err(ibmvtpm->dev, "tpm_ibmvtpm_send failed rc=%d\n", rc);
+-		ibmvtpm->tpm_processing_cmd = false;
++		ibmvtpm->tpm_status &= ~TPM_STATUS_BUSY;
+ 	}
+ 
+ 	spin_unlock(&ibmvtpm->rtce_lock);
+@@ -269,7 +265,9 @@ static void tpm_ibmvtpm_cancel(struct tpm_chip *chip)
+ 
+ static u8 tpm_ibmvtpm_status(struct tpm_chip *chip)
+ {
+-	return 0;
++	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
++
++	return ibmvtpm->tpm_status;
+ }
+ 
+ /**
+@@ -457,7 +455,7 @@ static const struct tpm_class_ops tpm_ibmvtpm = {
+ 	.send = tpm_ibmvtpm_send,
+ 	.cancel = tpm_ibmvtpm_cancel,
+ 	.status = tpm_ibmvtpm_status,
+-	.req_complete_mask = 0,
++	.req_complete_mask = TPM_STATUS_BUSY,
+ 	.req_complete_val = 0,
+ 	.req_canceled = tpm_ibmvtpm_req_canceled,
+ };
+@@ -550,7 +548,7 @@ static void ibmvtpm_crq_process(struct ibmvtpm_crq *crq,
+ 		case VTPM_TPM_COMMAND_RES:
+ 			/* len of the data in rtce buffer */
+ 			ibmvtpm->res_len = be16_to_cpu(crq->len);
+-			ibmvtpm->tpm_processing_cmd = false;
++			ibmvtpm->tpm_status &= ~TPM_STATUS_BUSY;
+ 			wake_up_interruptible(&ibmvtpm->wq);
+ 			return;
+ 		default:
+@@ -688,8 +686,15 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+ 		goto init_irq_cleanup;
+ 	}
+ 
+-	if (!strcmp(id->compat, "IBM,vtpm20")) {
++
++	if (!strcmp(id->compat, "IBM,vtpm20"))
+ 		chip->flags |= TPM_CHIP_FLAG_TPM2;
++
++	rc = tpm_get_timeouts(chip);
++	if (rc)
++		goto init_irq_cleanup;
++
++	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+ 		rc = tpm2_get_cc_attrs_tbl(chip);
+ 		if (rc)
+ 			goto init_irq_cleanup;
+diff --git a/drivers/char/tpm/tpm_ibmvtpm.h b/drivers/char/tpm/tpm_ibmvtpm.h
+index b92aa7d3e93e..252f1cccdfc5 100644
+--- a/drivers/char/tpm/tpm_ibmvtpm.h
++++ b/drivers/char/tpm/tpm_ibmvtpm.h
+@@ -41,7 +41,8 @@ struct ibmvtpm_dev {
+ 	wait_queue_head_t wq;
+ 	u16 res_len;
+ 	u32 vtpm_version;
+-	bool tpm_processing_cmd;
++	u8 tpm_status;
++#define TPM_STATUS_BUSY		(1 << 0) /* vtpm is processing a command */
+ };
+ 
+ #define CRQ_RES_BUF_SIZE	PAGE_SIZE
+-- 
+2.31.1
 
