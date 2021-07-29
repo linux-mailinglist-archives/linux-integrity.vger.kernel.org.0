@@ -2,191 +2,236 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7D93D9D55
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 07:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09653D9EF5
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 09:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234261AbhG2F5N (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Jul 2021 01:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbhG2F5M (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Jul 2021 01:57:12 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEA0C0613C1
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Jul 2021 22:57:09 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id g13so8661124lfj.12
-        for <linux-integrity@vger.kernel.org>; Wed, 28 Jul 2021 22:57:09 -0700 (PDT)
+        id S234583AbhG2Hry (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Jul 2021 03:47:54 -0400
+Received: from mail-eopbgr50090.outbound.protection.outlook.com ([40.107.5.90]:27788
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234524AbhG2Hrx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 29 Jul 2021 03:47:53 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dbIhpsv73QJZ7cU6Y97M49PKeWrFUYO4Z4T6q/D3NB/IjUqXEvZtQImjRqAYbZdT0s26Fk2HHS4rPZT2SH8Tuh3C8wJZxfo6B1RxLHvkuGmST0iAH8AWBcoDqGgFQ2uIaleOeYokxv55wXjJp2pSXcjrbFEO3mgkTlVFTXkHEYLXHk1LMy4zIuBftvrZAQ8J2k1atUywOvD3tE5l7stK7JX5VnvUsLPRTwjjeQBU1aQrOl/QEJhXKKCOwkjZ6IcH8MPEIiePfIgxg2qO62p6R1dqlrNSMREcE8Gh7c3p2b/KbA71ae6nY8HDC/O/dF+1Su6jfI9XhmWhm21PiXdB1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M4VbEo9C+80z11MUKLjGJk4fhmpHvlvvyFuDhzjMQmk=;
+ b=krkf9ip/TjU9OTg8tI9/Qrmu+039GoyPe0ORitLx7HsvtpPD0JZgMvfGTETe+b1NK5vPtlPH4HGNemz/TC3z7BJejZzpWxN/UCAOWDhtt2IkIMlOYUgxfqQGTm0UdN/UUwNjhQq8TdiRo1bu+YxOMumGKrR9l8Sjsg8fhkhNLH9zdZSyoH+evazhy/TsBvviS4n2Raesf2HBt5kN2Ma/LbWGvyI3IqLwOM5MblPtVAXru6I9Hh0WfLqUsh68VVTaTf2zKu964QiQl66wAixewkHrnGVqIm0axr9B5o4LVTnCCToB2VUQiWxz23FJfq00Sut2OrEo/GTbxV86B+Fhbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
+ dkim=pass header.d=viveris.fr; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XcbhZ5Sjzz8dxY7pTRg9gGEgfRrO83ag5vG41bFy7qA=;
-        b=YQEazPr+8F1apEi6PsoFkWJBawAyqulBeVpaRkq8+OZmhbwY1w8AVgsg+ekg2keP8U
-         AQcbJfUtG6kHUx4bXydpdMV+rM1Fqd1RbfQGFJHSmUF+3eTPZgSJjGCjWMfi3z8FdKHx
-         9eQlqYzm1NR3PI3NeTNFqlYI+ILW5SPY64rTFV2wN12Xu4blbSJRHDWC+QXnXYIVacUP
-         /wg78Zv0mNs3pKalYMNWqLZJSW4c4MvY0wzm5PHUFEMKJeMZFAqGDbbqEpGrlveUhjP1
-         zV+2fMf0vt26mgSFhuuBJgNMNWgrDM67K5+KGvh+xqp0ABvRQsEksxGogLILccUxaclh
-         uAig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XcbhZ5Sjzz8dxY7pTRg9gGEgfRrO83ag5vG41bFy7qA=;
-        b=gKm63FRd2HxvX3oFYfvJ+wZ7V7SV6m73FN/eGAs3aeceSjq0BpCdxcdpayJF0HO2uF
-         qBO/VFwUcdEsMG/vkREjk/VKyDcQto4AEfok35yW/HpEmA/1CkS2mU+8zTTNhprC6847
-         SjK2pLdsvT1t93DN2BOfA3irxz3WeyuS7VCzWxs5xYfO345YnqK9e/5EpzTBBcueehLC
-         zewhvADFdw7nB0kIBTt3NpNq49QkjOYEHxlMYcYaBe2ijbnO1IT4uQnyl3AiUbBe1BdW
-         jn8w48lfbKXcB4Yhequ14aA9pwq99rRF0nf+qEvV/RIzp95BNgchakaShIm6Dxsmyp2B
-         3Xvg==
-X-Gm-Message-State: AOAM530gqP2kVBf/+fzs8WfNg1c4TqpwoexPFGQ6a3ZwSG91j/+1G9b5
-        3YkxeeqbP39cMo/UIfGwfo26Bb+7CUAfK8uL+F+D4A==
-X-Google-Smtp-Source: ABdhPJzXQMiTbRwHulQZgSyAMiQCjKimBxkJLN8fa+Src+cJukNSOCcSHAMcEv0gZ4fTWkxqcwZgE78x/0et/HUAcqo=
-X-Received: by 2002:a19:c757:: with SMTP id x84mr2581412lff.302.1627538227888;
- Wed, 28 Jul 2021 22:57:07 -0700 (PDT)
+ d=viverislicensing.onmicrosoft.com;
+ s=selector2-viverislicensing-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M4VbEo9C+80z11MUKLjGJk4fhmpHvlvvyFuDhzjMQmk=;
+ b=nl5jwUF0aePONSs1KBlzC9fHmPC1JBEC/6Au5+oNxNJIwAg7BngguRvqACyc01HNhky+YmuTXKax6SLRWYX27X4pf1gWyRcF1Lc2owhDubot5TtMPu0XdjieAuk5LREV3m/Cxl048ENkFQpCBQZWvG9I3WTuOozaXytN8byNmRM=
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ (2603:10a6:200:96::21) by AM0PR09MB4132.eurprd09.prod.outlook.com
+ (2603:10a6:208:193::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.21; Thu, 29 Jul
+ 2021 07:47:48 +0000
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432%9]) with mapi id 15.20.4352.033; Thu, 29 Jul 2021
+ 07:47:48 +0000
+From:   THOBY Simon <Simon.THOBY@viveris.fr>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
+Subject: Re: [PATCH v5 5/5] IMA: introduce a new policy option
+ func=SETXATTR_CHECK
+Thread-Topic: [PATCH v5 5/5] IMA: introduce a new policy option
+ func=SETXATTR_CHECK
+Thread-Index: AQHXg7N3E9MODKwTS0SH7kSeFFCcAatZAGeAgACUPYA=
+Date:   Thu, 29 Jul 2021 07:47:47 +0000
+Message-ID: <1fdf70ea-a5db-75d5-3e33-71229fcfd31d@viveris.fr>
+References: <20210728132112.258606-1-simon.thoby@viveris.fr>
+ <20210728132112.258606-6-simon.thoby@viveris.fr>
+ <acf4fc349a59b4390e0ff57728f8f4920f89386a.camel@linux.ibm.com>
+In-Reply-To: <acf4fc349a59b4390e0ff57728f8f4920f89386a.camel@linux.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.ibm.com; dkim=none (message not signed)
+ header.d=none;linux.ibm.com; dmarc=none action=none header.from=viveris.fr;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bb448ff0-5067-4f5d-9cf8-08d9526528ea
+x-ms-traffictypediagnostic: AM0PR09MB4132:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR09MB413257DB834B618199E21B2294EB9@AM0PR09MB4132.eurprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iyXTPcMkWUU1V/FaJjDkirIW6QHbywPOfVOdLob4jRrI1G5Eelw9NLVY3b+6qve/DvL2//nA0KRSUqBwy1o8dXtECKaurSdp8U7Dnt1elW2eLf8VnlradRPRSB9BtWe7gbhyNSn+R5pAXD/7FhraOkxdrEoi/ciVs/8XzO8rpiC8w81GrosoOhz0naYYwaeFjnWcjKK/RwfEAQ27jfgtJh544bYPZzQxASnCZIhAnc1mRJxppSPP7nhz7epwiyLLxK9vVAowmL95RUKQ8Yt2uzTU+ErYoAnEY6L9WRyr+z/owfVvr3BWDl0bhLXekna2vATbVo9OkA5CL2H0QQJXthHB5Urr/3JTcdUMp/Tmt7HfXLoR9qb4EpjxsFYRYWgy4kPLDOUiiPlZ9eVmwIM3I1zyFFuZcV872MGMBj43cxJF0uQ4/ProNFKqedxYNhpNHHf3SYECRoVB0fmg2objQ4X1Pj87g64ShyvrrynhKQNgcIvwmV9WOZ2HGKlhI5QFOKeyGeJVN36+gXwy6ElnVU+OkrTbtB2yUYBac27Og2qvYE5vD8Ia4d6wcLYDODGSh8ClH5H6LTRlwzNRidof2zCE6Xw2ZNt5+A/Lbh17CQH2U33o57hbPHj9RlrsApNLjECZIXYYcHz0NIWeK9VAj4sna/Exe8FBs/2LRJhYmFCehleIaTYI2em1Vznovx5CaRxNHCTjwoPkT5tAPRDzsjO/PQeuYuamNxUPBIgIHLY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(396003)(39840400004)(136003)(376002)(5660300002)(31696002)(66476007)(64756008)(6512007)(86362001)(316002)(66556008)(66946007)(31686004)(53546011)(6486002)(8936002)(110136005)(186003)(26005)(71200400001)(83380400001)(8676002)(6506007)(36756003)(6636002)(478600001)(2906002)(76116006)(2616005)(91956017)(38070700005)(122000001)(38100700002)(66446008)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-15?Q?WvdXz9vA14CUyNcEPb23xHjvdoIuqApsuSe06E10XzopSIgsq1nOygffZ?=
+ =?iso-8859-15?Q?fNWKJjkeLpz43sXYUsj1LF04OQaSrokNmUZJ7e6OkeYimxTbFPWsYcHuD?=
+ =?iso-8859-15?Q?XSOZxWpXL6MMoUcwxWm90UB1QFNxVsFQRRM9HltaOzFmlaxpJA7DnyBYA?=
+ =?iso-8859-15?Q?hy3lXUXgqtc/drJGYWpLL6CNPpXMoODqbM0bPT0NRdJZSzzTDs1WsQkM+?=
+ =?iso-8859-15?Q?mVyDW6q5gxDYWPDhVTGqpNSbaLYFzZHJ33BkHECgimNzk7EWLghB/YK1a?=
+ =?iso-8859-15?Q?iApcK4xt+30+I79jZQaHg+P4CTD6zxks7Eh9fvOm9VsfkwcY+vEA6k3nM?=
+ =?iso-8859-15?Q?1reXVJWakDb5QgUPHiZqttIfXTRbUVCUR2VKohf3vTDAm0tRYfCmPMbqT?=
+ =?iso-8859-15?Q?SolvGs9zYUKVVveXVgqrorzuYrIblQ2gV8Fahmh4Jl6Dw5XvJmPZ2uSvS?=
+ =?iso-8859-15?Q?5CQ7r1uVP5OmjTQsZk3TSmeNEg8U7ePIJu5nEH9Sc99vYAehSxx95SDHx?=
+ =?iso-8859-15?Q?Az5/7VExG9y7RDur3yggNfk2WHmXJv9KCVY4pdVyAtJHgCfx64W3LAVPm?=
+ =?iso-8859-15?Q?50y9iLDVMg4eEYmrz0eluhtCcWUxUCvnFBIXWBFQFjWpou7Hjotitb++k?=
+ =?iso-8859-15?Q?jJ6+6PmtitiR3xLoPFgFVNhrY7yediWGn/vxqed/XZQRLBnqAQaTNVWQT?=
+ =?iso-8859-15?Q?IlxfCXR4jrfsoh1UloVIGYANKjxPnOzD8gI+1lKizTCubF62MQ37boOP1?=
+ =?iso-8859-15?Q?JgOntxOEoLwtpvTXxGVJvv83nNtQ4mHeXd6hLrjVa6Y1usUbrO9hKK9aG?=
+ =?iso-8859-15?Q?iqegn32EvQzbAT4lo3dzc9tw0n/W7QoUhbp/73ezax3Z28joCw3xjaBvF?=
+ =?iso-8859-15?Q?DI4dTr2ylrE0zdyOePWaOowwB0B8s72jweTYIl6xaSXqaFRGrFFj8gUE6?=
+ =?iso-8859-15?Q?ap7Vv2oLeeaFOMUV4qqA+zLWzm4JIDac/C360qEywPkaUrbbEx6/LVBsR?=
+ =?iso-8859-15?Q?St2GG7ywtlzV397ZPlzao5+cQ2npRFtzHg++axAICr/0vOueRKCqcXD3D?=
+ =?iso-8859-15?Q?k4ajikQt5FvgtAd7skDufby9bbBBzb7yMSWh6+gKw33yuWJMNszaoneZL?=
+ =?iso-8859-15?Q?h4MqSiZa07AjU2vAPw8TrPQhzl5magwOGajvDzT0THhtAT5u1yKjPp9Qc?=
+ =?iso-8859-15?Q?1aLm9LBSzaRTsTFrrQfCe3iVINrQrhP7eQlQt9Snk+6A5o+BdS6BDTOMn?=
+ =?iso-8859-15?Q?xc3pyEygUghtBlYzzFCWi+YnNnS9ZVnWpfITEzcCHyWtLClcGLLAmTI8y?=
+ =?iso-8859-15?Q?OdO+cdxKKRsF/YdDvFeaNblSV/9JygjdMkgd2uQdg4JGwZvgIw+9pAuXw?=
+ =?iso-8859-15?Q?2eywkdfyLyI/QmSsq0elYK3H28GUqzie9?=
+Content-Type: text/plain; charset="iso-8859-15"
+Content-ID: <F37293FDB11C2646871675D2AA3D5F7A@eurprd09.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20210727144349.11215-1-a.fatoum@pengutronix.de>
- <YQA2fHPwH6EsH9BR@sol.localdomain> <367ea5bb-76cf-6020-cb99-91b5ca82d679@pengutronix.de>
- <YQGAOTdQRHFv9rlr@gmail.com>
-In-Reply-To: <YQGAOTdQRHFv9rlr@gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 29 Jul 2021 11:26:56 +0530
-Message-ID: <CAFA6WYO-h+ngCAT_PS=bZTQkBBtOpBRUmZNP4zhvRuLDJYQXkA@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] fscrypt: support encrypted and trusted keys
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        linux-fscrypt@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        git@andred.net, Omar Sandoval <osandov@osandov.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: viveris.fr
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb448ff0-5067-4f5d-9cf8-08d9526528ea
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jul 2021 07:47:48.0005
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xqks77NFLiC06r6Cwlx6ZLBEdVGnDaF7c99DfIhvo2z0QcWWNmnU4JohHr+slG43e+G/v4CBkV/UdyWRKj32Xw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR09MB4132
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Eric,
+Hi Mimi,
 
-On Wed, 28 Jul 2021 at 21:35, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Wed, Jul 28, 2021 at 10:50:42AM +0200, Ahmad Fatoum wrote:
-> > Hello Eric,
-> >
-> > On 27.07.21 18:38, Eric Biggers wrote:
-> > > On Tue, Jul 27, 2021 at 04:43:49PM +0200, Ahmad Fatoum wrote:
-> > >> For both v1 and v2 key setup mechanisms, userspace supplies the raw key
-> > >> material to the kernel after which it is never again disclosed to
-> > >> userspace.
-> > >>
-> > >> Use of encrypted and trusted keys offers stronger guarantees:
-> > >> The key material is generated within the kernel and is never disclosed to
-> > >> userspace in clear text and, in the case of trusted keys, can be
-> > >> directly rooted to a trust source like a TPM chip.
-> > >
-> > > Please include a proper justification for this feature
-> >
-> > I've patches pending for extending trusted keys to wrap the key sealing
-> > functionality of the CAAM IP on NXP SoCs[1]. I want the kernel to
-> > generate key material in the factory, have the CAAM encrypt it using its
-> > undisclosed unique key and pass it to userspace as encrypted blob that is
-> > persisted to an unencrypted volume. The intention is to thwart offline
-> > decryption of an encrypted file system in an embedded system, where a
-> > passphrase can't be supplied by an end user.
-> >
-> > Employing TPM and TEE trusted keys with this is already possible with
-> > dm-crypt, but I'd like this to be possible out-of-the-box with
-> > ubifs + fscrypt as well.
->
-> Why not do the key management in userspace, like tpm-tools
-> (https://github.com/tpm2-software/tpm2-tools)?  There are a lot of uses for this
-> type of hardware besides in-kernel crypto.  See
-> https://wiki.archlinux.org/title/Trusted_Platform_Module for all the things you
-> can do with the TPM on Linux, including LUKS encryption; this is all with
-> userspace key management.  Wouldn't the CAAM hardware be useful for similar
-> purposes and thus need a similar design as well, e.g. with functionality exposed
-> through some /dev node for userspace to use?  Or are you saying it will only
-> ever be useful for in-kernel crypto?
+On 7/29/21 12:57 AM, Mimi Zohar wrote:
+> Hi Simon,
+>=20
+> On Wed, 2021-07-28 at 13:21 +0000, THOBY Simon wrote:
+> =20
+>> @@ -914,6 +918,42 @@ int ima_check_policy(void)
+>>  	return 0;
+>>  }
+>> =20
+>> +/** update_allowed_hash_algorithms - update the hash algorithms allowed
+>=20
+> The first line of kernel-doc is just "/**" by itself, followed by the
+> function name and a brief description.  The brief description should
+> not wrap to the next line.  Refer to Documentation/doc-guide/kernel-
+> doc.rst.
+>=20
 
-AFAIK from my prior experience while working with CAAM engine during
-my time at NXP, it is generally a crypto engine with additional
-security properties like one discussed here to protect keys (blob
-encap and decap) etc. But it doesn't offer user authentication similar
-to what a TPM (ownership) can offer. Although, one should be able to
-expose CAAM via /dev node but I am not sure if that would be really
-useful without user authentication. I think similar should be the case
-for other crypto engines with additional security properties.
+Thanks, I will fix that in the next revision.
 
-With restriction of CAAM's security properties to kernel crypto we
-could at least ensure a kernel boundary that should offer enough
-resistance from malicious user space attacks.
+>> + * for setxattr writes
+>> + *
+>> + * Update the atomic variable holding the set of allowed hash algorithm=
+s
+>> + * that can be used to update the security.ima xattr of a file.
+>> + *
+>> + * Context: called when updating the IMA policy.
+>> + *
+>> + * SETXATTR_CHECK rules do not implement a full policy check because of
+>> + * the performance impact performing rules checking on setxattr() would
+>> + * have. The consequence is that only one SETXATTR_CHECK can be active =
+at
+>> + * a time.
+>> + */
+>> +static void update_allowed_hash_algorithms(void)
+>> +{
+>> +	struct ima_rule_entry *entry;
+>> +
+>> +	/*
+>> +	 * We scan in reverse order because only the last entry with the
+>> +	 * 'func=3DSETXATTR_CHECK' apply: this allows runtime upgrades of the
+>> +	 * digest algorithm policy, unlike the other IMA rules that are
+>> +	 * usually append-only. Old rules will still be present in the
+>> +	 * ruleset, but inactive.
+>> +	 */
+>=20
+> Oh, my!  I really hope this won't be used as precedent.  Before
+> agreeing to this, the existing policy rules must require loading of
+> only signed IMA policies.
+>=20
 
->
-> > > Note that there are several design flaws with the encrypted and trusted key
-> > > types:
-> > >
-> > > - By default, trusted keys are generated using the TPM's RNG rather than the
-> > >   kernel's RNG, which places all trust in an unauditable black box.
-> >
 
-With regards to trusted keys generated using the TEE's RNG, the
-underlying implementation being OP-TEE [1] which is an open source TEE
-implementation built on top of Arm TrustZone providing the hardware
-based isolation among the TEE and Linux. So regarding auditability, it
-should be comparatively easier to audit the TEE components designed
-with a goal of minimal footprint when compared with Linux kernel.
+After some though, I think you're right, there is not much point to do anyt=
+hing
+different from the other IMA rules,=20
 
-[1] https://github.com/OP-TEE/optee_os
+Below is the modified version that I will submit in the next patch.
 
-> > Patch to fix that awaits feedback on linux-integrity[2].
->
-> It does *not* fix it, as your patch only provides an option to use the kernel's
-> RNG whereas the default is still the TPM's RNG.
->
+However given the similarities between this function and ima_update_policy_=
+flag,
+I think maybe I should merge them together: they are mostly called from the
+same places and they both serve the same role: updating some of the global =
+ima
+variables after a policy update or at system initialization.
 
-Yes in case of TPM, default is still TPM's RNG but with Ahmad's patch
-#2, the trust source backend like CAAM should be able to use kernel's
-RNG by default.
+Do you think it would be ok to add that functionality to ima_update_policy_=
+flag?
+Maybe updating the name to reflect that the function updates multiples flag=
+s?
 
--Sumit
+=20
++/**
++ * update_allowed_hash_algorithms() - update the hash allowlist for setxat=
+tr
++ *
++ * Update the atomic variable holding the set of allowed hash algorithms
++ * that can be used to update the security.ima xattr of a file.
++ *
++ * SETXATTR_CHECK rules do not implement a full policy check because
++ * of the performance impact performing rules checking on setxattr()
++ * would have. The consequence is that only one SETXATTR_CHECK can be
++ * active at a given time.
++ *
++ * Context: Called when updating the IMA policy.
++ */
++static void update_allowed_hash_algorithms(void)
++{
++	struct ima_rule_entry *entry;
++
++	rcu_read_lock();
++	list_for_each_entry(entry, ima_rules, list) {
++		if (entry->func !=3D SETXATTR_CHECK)
++			continue;
++
++		/*
++		 * Two possibilities:
++		 * - the atomic was non-zero: a setxattr hash policy is
++		 *   already enforced -> do nothing
++		 * - the atomic was zero -> enable the setxattr hash policy
++		 *
++		 * While we could check if the atomic is non-zero at the
++		 * beginning of the function, doing it here prevent TOCTOU
++		 * races (not that I think there would be much interest for
++		 * an attacker to perform a TOCTOU race here)
++		 */
++		atomic_cmpxchg(&ima_setxattr_allowed_hash_algorithms, 0,
++			       entry->allowed_hashes);
++		break;
++	}
++	rcu_read_unlock();
++}
++
 
-> Most people don't change defaults.
->
-> Essentially your same argument was used for Dual_EC_DRBG; people argued it was
-> okay to standardize because people had the option to choose their own constants
-> if they felt the default constants were backdoored.  That didn't really matter,
-> though, since in practice everyone just used the default constants.
->
-> >
-> > > - trusted and encrypted keys aren't restricted to specific uses in the kernel
-> > >   (like the fscrypt-provisioning key type is) but rather are general-purpose.
-> > >   Hence, it may be possible to leak their contents to userspace by requesting
-> > >   their use for certain algorithms/features, e.g. to encrypt a dm-crypt target
-> > >   using a weak cipher that is vulnerable to key recovery attacks.
-> >
-> > The footgun is already there by allowing users to specify their own
-> >
-> > raw key. Users can already use $keyid for dm-crypt and then do
-> >
-> >   $ keyctl pipe $keyid | fscryptctl add_key /mnt
-> >
-> > The responsibility to not reuse key material already lies with the users,
-> > regardless if they handle the raw key material directly or indirectly via
-> > a trusted key description/ID.
->
-> Elsewhere you are claiming that "trusted" keys can never be disclosed to
-> userspace.  So you can't rely on userspace cooperating, right?
->
-> - Eric
+As a side note on the patchset, maybe I should refrain from posting for a f=
+ew days to give people time
+to comment on it, instead of sending new versions in such a quick successio=
+n?
+
+Thanks,
+Simon=
