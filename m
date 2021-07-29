@@ -2,64 +2,125 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A0F3DAA3C
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 19:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C703DAAE3
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jul 2021 20:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbhG2Rcr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 29 Jul 2021 13:32:47 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:37028 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbhG2Rcr (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 29 Jul 2021 13:32:47 -0400
-Received: from [192.168.86.34] (c-71-197-163-6.hsd1.wa.comcast.net [71.197.163.6])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9239E2043BBF;
-        Thu, 29 Jul 2021 10:32:43 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9239E2043BBF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1627579963;
-        bh=iJFvBbMdy08c6uGZ6Ve0hR8LzwIkWSCaUxXA8Rl3J1Q=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KH6y2TABH59YBCfOb2IA2NyLk2vHp5x4LE0EpLBf56aJJYdjneECv9iG2qJKisIlP
-         9kJMStj3XOdPRNdH2+IsWt7dq9Y4Y4KYxc2kBJi5ob/wQ10LecO8GeKu7U7qmRvVHK
-         mhBI2Jz4t8ak2xZrAxediJSHffU3DEy+5ofBVUAg=
-Subject: Re: [dm-devel] [PATCH 0/7] device mapper target measurements using
- IMA
-To:     Thore Sommer <public@thson.de>
-Cc:     agk@redhat.com, dm-devel@redhat.com,
-        linux-integrity@vger.kernel.org, nramas@linux.microsoft.com,
-        snitzer@redhat.com, zohar@linux.ibm.com
-References: <a30c8208-f255-d0f0-0bfb-c037367e638c@linux.microsoft.com>
- <20210728171402.1120181-1-public@thson.de>
-From:   Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Message-ID: <51402c7b-eeab-9dd5-a78f-05e501f578e3@linux.microsoft.com>
-Date:   Thu, 29 Jul 2021 10:32:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229896AbhG2S2R (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 29 Jul 2021 14:28:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39900 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229614AbhG2S2R (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 29 Jul 2021 14:28:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1132660EBD;
+        Thu, 29 Jul 2021 18:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627583293;
+        bh=CBrRBRO/tDGawMDo7/5lR6U7y1rcL3K2D2QD62EAY6s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SSnwQJ29s1xjFeEYWBu1pRC14ZtIm/hTtIUu0k3HawS4MB3N4ncTvbVEzae3ViuU7
+         jMa5AUdbBxSVR+sU86OHV8imvEEQ0yRcLvsmV4wgr9p97tx+SeN1m745TVZBloK3NU
+         +PLPoJvqKc+M0iUzkNEBBMzdETD8o3otG55JX/H678jYHFCZICO3RZvay7zsQNEqPU
+         3cPc9DshIMs//k25ZFoTZ6Az0Yyk/ivATKSGF6hGzGUO8ZndNr3l0ZNfodBZozS8lt
+         +bp3xPA5qOIzn21SiBqnQd6NFa3O1VRuEuw5UPvi8FxVaMdAJRFpvLAjIeTYx7kcAj
+         GpNEVPswy/0ig==
+Date:   Thu, 29 Jul 2021 11:28:11 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-fscrypt@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM" 
+        <linux-security-module@vger.kernel.org>,
+        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        git@andred.net, Omar Sandoval <osandov@osandov.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: Re: [RFC PATCH v1] fscrypt: support encrypted and trusted keys
+Message-ID: <YQLzOwnPF1434kUk@gmail.com>
+References: <20210727144349.11215-1-a.fatoum@pengutronix.de>
+ <YQA2fHPwH6EsH9BR@sol.localdomain>
+ <367ea5bb-76cf-6020-cb99-91b5ca82d679@pengutronix.de>
+ <YQGAOTdQRHFv9rlr@gmail.com>
+ <CAFA6WYO-h+ngCAT_PS=bZTQkBBtOpBRUmZNP4zhvRuLDJYQXkA@mail.gmail.com>
+ <1530428a-ad2c-a169-86a7-24bfafb9b9bd@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20210728171402.1120181-1-public@thson.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1530428a-ad2c-a169-86a7-24bfafb9b9bd@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, Jul 29, 2021 at 11:07:00AM +0200, Ahmad Fatoum wrote:
+> >> Most people don't change defaults.
+> >>
+> >> Essentially your same argument was used for Dual_EC_DRBG; people argued it was
+> >> okay to standardize because people had the option to choose their own constants
+> >> if they felt the default constants were backdoored.  That didn't really matter,
+> >> though, since in practice everyone just used the default constants.
+> 
+> I'd appreciate your feedback on my CAAM series if you think the defaults
+> can be improved. Trusted keys are no longer restricted to TPMs,
+> so users of other backends shouldn't be dismissed, because one backend
+> can be used with fscrypt by alternative means.
 
+I already gave feedback:
+https://lkml.kernel.org/keyrings/YGOcZtkw3ZM5kvl6@gmail.com
+https://lkml.kernel.org/keyrings/YGUHBelwhvJDhKoo@gmail.com
+https://lkml.kernel.org/keyrings/YGViOc3DG+Pjuur6@sol.localdomain
 
-On 7/28/21 10:14 AM, Thore Sommer wrote:
-> Hi Tushar,
+> >>>> - trusted and encrypted keys aren't restricted to specific uses in the kernel
+> >>>>   (like the fscrypt-provisioning key type is) but rather are general-purpose.
+> >>>>   Hence, it may be possible to leak their contents to userspace by requesting
+> >>>>   their use for certain algorithms/features, e.g. to encrypt a dm-crypt target
+> >>>>   using a weak cipher that is vulnerable to key recovery attacks.
+> >>>
+> >>> The footgun is already there by allowing users to specify their own
+> >>>
+> >>> raw key. Users can already use $keyid for dm-crypt and then do
+> >>>
+> >>>   $ keyctl pipe $keyid | fscryptctl add_key /mnt
+> >>>
+> >>> The responsibility to not reuse key material already lies with the users,
+> >>> regardless if they handle the raw key material directly or indirectly via
+> >>> a trusted key description/ID.
+> >>
+> >> Elsewhere you are claiming that "trusted" keys can never be disclosed to
+> >> userspace.  So you can't rely on userspace cooperating, right?
 > 
->> Most likely this is because you haven't set CONFIG_IMA_DISABLE_HTABLE=y.
-> Yes, that was the case.
+> The users I meant are humans, e.g. system integrators. They need to think about
 > 
-> With CONFIG_IMA_DISABLE_HTABLE=y the behavior is as expected. Now a new
-> measurement is created if I create the same device twice.
+> burning fuses, signing bootloaders, verifying kernel and root file systems,
 > 
-> Regards,
-> Thore
+> encrypting file systems and safekeeping their crypto keys. Ample opportunity for
 > 
-Thanks for confirming Thore. :)
+> stuff to go wrong. They would benefit from having relevant kernel functionality
+> 
+> integrate with each other instead of having to carry downstream patches, which
+> we and many others[1] did for years. We now finally have a chance to drop this
+> technical debt thanks to Sumit's trusted key rework and improve user security
+> along the way.
+> 
+> So, Eric, how should we proceed?
+> 
 
-Regards,
-Tushar
+It is probably inevitable that this be added, but you need to document it
+properly and not make misleading claims like "The key material is generated
+within the kernel" (for the TPM "trust" source the default is to use the TPM's
+RNG, *not* the kernel RNG), and "is never disclosed to userspace in clear text"
+(that's only guaranteed to be true for non-malicious userspace).  Also please
+properly document that this is mainly intended for accessing key wrapping
+hardware such as CAAM that can't be accessed from userspace in another way like
+TPMs can.
+
+- Eric
