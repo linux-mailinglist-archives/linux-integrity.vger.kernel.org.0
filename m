@@ -2,164 +2,181 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D81003DB453
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Jul 2021 09:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDFE3DB802
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Jul 2021 13:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237403AbhG3HQI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Jul 2021 03:16:08 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3535 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbhG3HQI (ORCPT
+        id S230157AbhG3Lp7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 30 Jul 2021 07:45:59 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35224 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238649AbhG3Lp6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 30 Jul 2021 03:16:08 -0400
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Gbdfp5sqqz6LBk7;
-        Fri, 30 Jul 2021 15:04:02 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 30 Jul 2021 09:16:00 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2176.012;
- Fri, 30 Jul 2021 09:16:00 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
- digest_list_del
-Thread-Topic: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add,
- digest_list_del
-Thread-Index: AQHXgjzPxJ6WuoGgH0KyG3D/y7w0xqtaWSsAgADBDpA=
-Date:   Fri, 30 Jul 2021 07:16:00 +0000
-Message-ID: <ef7c85dcb096479e95c8c60ccda4d700@huawei.com>
-References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
-         <20210726163700.2092768-7-roberto.sassu@huawei.com>
- <c9dffd9d29df095660beaa631ff252c4b33629a0.camel@linux.ibm.com>
-In-Reply-To: <c9dffd9d29df095660beaa631ff252c4b33629a0.camel@linux.ibm.com>
-Accept-Language: en-US
+        Fri, 30 Jul 2021 07:45:58 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16UBZDDT176623;
+        Fri, 30 Jul 2021 07:45:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Fq7B7puweAjYOu51S7X4z6Rj3k7JPskwLajYKuwF+2M=;
+ b=ZQL9sThQcIben+/12W0kVoOZcb2VMLwyo4emQpvYdKFpT8bIItVEKe0rBgOiDTlbUfmp
+ /JeuuI9s3S97p/tL9Ev8Fe5sRupIma3SyLYLtE69XqKediLB7xwFrt8+Mnwy+6RR2odw
+ xWjZHq1KYrt6RS046pJuDurvUTTPqNY+BCKu4AawIILUuHT1RlgiSN0MtUznU9BBAUgr
+ 6z4sRcFR1UXFWlckDwsinbW8qPqnvV/A1+0bbFI0lTgq3X/YNhuRfSJMIGOLItGeJXyM
+ HoZyZjUGeF0UTPiFZtXBiUpGrXuoTNZZ28y9Psyq0VKptBv+uLIbHWa0sPnU1xX7YQ+M ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3a4gp488m6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jul 2021 07:45:52 -0400
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16UBZUBY176985;
+        Fri, 30 Jul 2021 07:45:51 -0400
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3a4gp488m0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jul 2021 07:45:51 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16UBb22L027330;
+        Fri, 30 Jul 2021 11:45:51 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03dal.us.ibm.com with ESMTP id 3a235trtg1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jul 2021 11:45:51 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16UBjnFT24903982
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Jul 2021 11:45:49 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 349B1C6063;
+        Fri, 30 Jul 2021 11:45:49 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D99BC6066;
+        Fri, 30 Jul 2021 11:45:48 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 30 Jul 2021 11:45:48 +0000 (GMT)
+Subject: Re: [PATCH] tpm: ibmvtpm: Avoid error message when process gets
+ signal while waiting
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>, peterhuewe@gmx.de,
+        jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>
+References: <20210712162505.205943-1-stefanb@linux.vnet.ibm.com>
+ <20210727024225.swqy5ypcytsngpd6@kernel.org>
+ <ad4011fb-fc1f-4019-9856-7d171db3255c@linux.ibm.com>
+ <20210728215033.dhnekvksekalhcrn@kernel.org>
+ <2add3eac-916e-5072-f62d-23c65e23fb17@linux.ibm.com>
+ <20210730005744.ph7x6nme5ngtpf43@kernel.org>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <31309ba8-fe05-d85d-b2c6-72499ef1ff17@linux.ibm.com>
+Date:   Fri, 30 Jul 2021 07:45:47 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+In-Reply-To: <20210730005744.ph7x6nme5ngtpf43@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xuQ5202aNMLz4pNPKJhrZWth7Dkb505W
+X-Proofpoint-GUID: kNJmyJkrubmA3FkrSqTkGU5qy9Fp-HKE
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-30_05:2021-07-30,2021-07-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ adultscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 priorityscore=1501
+ mlxscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
+ definitions=main-2107300073
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> Sent: Thursday, July 29, 2021 11:21 PM
-> Hi Roberto,
-> 
-> On Mon, 2021-07-26 at 18:36 +0200, Roberto Sassu wrote:
-> > /*
-> > + * digest_list_read: read and parse the digest list from the path
-> > + */
-> > +static ssize_t digest_list_read(char *path, enum ops op)
-> > +{
-> > +       void *data = NULL;
-> > +       char *datap;
-> > +       size_t size;
-> > +       u8 actions = 0;
-> > +       struct file *file;
-> > +       char event_name[NAME_MAX + 9 + 1];
-> > +       u8 digest[IMA_MAX_DIGEST_SIZE] = { 0 };
-> > +       enum hash_algo algo;
-> > +       int rc, pathlen = strlen(path);
-> > +
-> > +       /* Remove \n. */
-> > +       datap = path;
-> > +       strsep(&datap, "\n");
-> > +
-> > +       file = filp_open(path, O_RDONLY, 0);
-> > +       if (IS_ERR(file)) {
-> > +               pr_err("unable to open file: %s (%ld)", path, PTR_ERR(file));
-> > +               return PTR_ERR(file);
-> > +       }
-> > +
-> > +       rc = kernel_read_file(file, 0, &data, INT_MAX, NULL,
-> > +                             READING_DIGEST_LIST);
-> > +       if (rc < 0) {
-> > +               pr_err("unable to read file: %s (%d)", path, rc);
-> > +               goto out;
-> > +       }
-> > +
-> > +       size = rc;
-> > +
-> > +       snprintf(event_name, sizeof(event_name), "%s_file_%s",
-> > +                op == DIGEST_LIST_ADD ? "add" : "del",
-> > +                file_dentry(file)->d_name.name);
-> > +
-> > +       rc = ima_measure_critical_data("diglim", event_name, data, size, false,
-> > +                                      digest, sizeof(digest));
-> > +       if (rc < 0 && rc != -EEXIST)
-> > +               goto out_vfree;
-> 
-> The digest lists could easily be measured while reading the digest list
-> file above in kernel_read_file().  What makes it "critical-data"?  In
-> the SELinux case, the in memory SELinux policy is being measured and
-> re-measured to make sure it hasn't been modified.  Is the digest list
-> file data being measured more than once?
 
-Hi Mimi
+On 7/29/21 8:57 PM, Jarkko Sakkinen wrote:
+> On Thu, Jul 29, 2021 at 09:39:18AM -0400, Stefan Berger wrote:
+>> On 7/28/21 5:50 PM, Jarkko Sakkinen wrote:
+>>> On Mon, Jul 26, 2021 at 11:00:51PM -0400, Stefan Berger wrote:
+>>>> On 7/26/21 10:42 PM, Jarkko Sakkinen wrote:
+>>>>> On Mon, Jul 12, 2021 at 12:25:05PM -0400, Stefan Berger wrote:
+>>>>>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>>>>>
+>>>>>> When rngd is run as root then lots of these types of message will appear
+>>>>>> in the kernel log if the TPM has been configure to provide random bytes:
+>>>>>>
+>>>>>> [ 7406.275163] tpm tpm0: tpm_transmit: tpm_recv: error -4
+>>>>>>
+>>>>>> The issue is caused by the following call that is interrupted while
+>>>>>> waiting for the TPM's response.
+>>>>>>
+>>>>>> sig = wait_event_interruptible(ibmvtpm->wq,
+>>>>>>                                   !ibmvtpm->tpm_processing_cmd);
+>>>>>>
+>>>>>> The solution is to use wait_event() instead.
+>>>>> Why?
+>>>> So it becomes uninterruptible and these error messages go away.
+>>> We do not want to make a process uninterruptible. That would prevent
+>>> killing it.
+>> I guess we'll have to go back to this one then:
+>> https://www.spinics.net/lists/linux-integrity/msg16741.html
+> Makes a heck lot more sense.
+>
+> There's a typo in the commit message: PM_STATUS_BUSY
+>
+> Also the commit message lacks explanation of this change completely:
+>
+> @@ -690,8 +688,15 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+>   		goto init_irq_cleanup;
+>   	}
+>   
+> -	if (!strcmp(id->compat, "IBM,vtpm20")) {
+> +
+> +	if (!strcmp(id->compat, "IBM,vtpm20"))
+>   		chip->flags |= TPM_CHIP_FLAG_TPM2;
+> +
+> +	rc = tpm_get_timeouts(chip);
+> +	if (rc)
+> +		goto init_irq_cleanup;
+> +
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+>   		rc = tpm2_get_cc_attrs_tbl(chip);
+>
+> The last paragraph should be rewritten in imperative form.
 
-yes, the digest lists can be measured with kernel_read_file().
-I didn't send the change yet, but I added a DIGEST_LIST_CHECK
-hook mapped to READING_DIGEST_LIST, so that digest lists
-can be easily measured or appraised.
 
-The point was that the digest of the digest list must be always
-calculated, as it is added to the hash table. Instead of duplicating
-the code, I preferred to use ima_measure_critical_data().
+will fix.
 
-The advantage is also that, if the use case is to just measure
-digest lists, ima_measure_critical_data() could do both at the
-same time.
+>
+> Finally, you could simplify the fix by simply changing the type of
+> tpm_processing_cmd to u8, and just set it to 'true' and 'false',
+> which will set the first bit.
 
-Digest lists can be seen as "critical data" in the sense that
-they can affect the security decision on whether to grant
-access to a file or not, assuming that an appropriate rule is
-added in the IMA policy.
+Are you sure? It's a bit mask we are using this with. Using 'true' for 
+these type of operations doesn't sound right.
 
-> I understand that with your changes to ima_measure_critical_data(),
-> which are now in next-integrity-testing branch, allow IMA to calculate
-> the file data hash.
+         u8 status = chip->ops->status(chip);
+         if ((status & chip->ops->req_complete_mask) ==
+             chip->ops->req_complete_val)
 
-Yes, correct. But actually there is another useful use case.
-If digest lists are not in the format supported by the kernel,
-the user space parser has to convert them before uploading
-them to the kernel.
+             goto out_recv;
 
-ima_measure_critical_data() would in this case measure
-the converted digest list (it is written directly, without
-sending the file path). It is easier to attest the result,
-instead of determining whether the user space parser
-produced the expected result (by checking the files it
-read).
+https://elixir.bootlin.com/linux/latest/source/drivers/char/tpm/tpm-interface.c#L108
 
-Thanks
+@@ -457,7 +455,7 @@ static const struct tpm_class_ops tpm_ibmvtpm = {
+  	.send = tpm_ibmvtpm_send,
+  	.cancel = tpm_ibmvtpm_cancel,
+  	.status = tpm_ibmvtpm_status,
+-	.req_complete_mask = 0,
++	.req_complete_mask = TPM_STATUS_BUSY,
+  	.req_complete_val = 0,
+  	.req_canceled = tpm_ibmvtpm_req_canceled,
+  };
 
-Roberto
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Li Jian, Shi Yanli
+    Stefan
 
-> thanks,
-> 
-> Mimi
-> 
-> > +
-> > +       algo = ima_get_current_hash_algo();
-> > +
-> 
-
+>
+> /Jarkko
