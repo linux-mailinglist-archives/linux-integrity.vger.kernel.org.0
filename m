@@ -2,181 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDFE3DB802
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Jul 2021 13:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0205D3DB800
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 Jul 2021 13:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbhG3Lp7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 30 Jul 2021 07:45:59 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35224 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S238649AbhG3Lp6 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
+        id S238633AbhG3Lp6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Fri, 30 Jul 2021 07:45:58 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16UBZDDT176623;
-        Fri, 30 Jul 2021 07:45:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Fq7B7puweAjYOu51S7X4z6Rj3k7JPskwLajYKuwF+2M=;
- b=ZQL9sThQcIben+/12W0kVoOZcb2VMLwyo4emQpvYdKFpT8bIItVEKe0rBgOiDTlbUfmp
- /JeuuI9s3S97p/tL9Ev8Fe5sRupIma3SyLYLtE69XqKediLB7xwFrt8+Mnwy+6RR2odw
- xWjZHq1KYrt6RS046pJuDurvUTTPqNY+BCKu4AawIILUuHT1RlgiSN0MtUznU9BBAUgr
- 6z4sRcFR1UXFWlckDwsinbW8qPqnvV/A1+0bbFI0lTgq3X/YNhuRfSJMIGOLItGeJXyM
- HoZyZjUGeF0UTPiFZtXBiUpGrXuoTNZZ28y9Psyq0VKptBv+uLIbHWa0sPnU1xX7YQ+M ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3a4gp488m6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jul 2021 07:45:52 -0400
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16UBZUBY176985;
-        Fri, 30 Jul 2021 07:45:51 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3a4gp488m0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jul 2021 07:45:51 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16UBb22L027330;
-        Fri, 30 Jul 2021 11:45:51 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma03dal.us.ibm.com with ESMTP id 3a235trtg1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jul 2021 11:45:51 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16UBjnFT24903982
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jul 2021 11:45:49 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 349B1C6063;
-        Fri, 30 Jul 2021 11:45:49 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5D99BC6066;
-        Fri, 30 Jul 2021 11:45:48 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 30 Jul 2021 11:45:48 +0000 (GMT)
-Subject: Re: [PATCH] tpm: ibmvtpm: Avoid error message when process gets
- signal while waiting
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>, peterhuewe@gmx.de,
-        jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Nageswara R Sastry <rnsastry@linux.ibm.com>
-References: <20210712162505.205943-1-stefanb@linux.vnet.ibm.com>
- <20210727024225.swqy5ypcytsngpd6@kernel.org>
- <ad4011fb-fc1f-4019-9856-7d171db3255c@linux.ibm.com>
- <20210728215033.dhnekvksekalhcrn@kernel.org>
- <2add3eac-916e-5072-f62d-23c65e23fb17@linux.ibm.com>
- <20210730005744.ph7x6nme5ngtpf43@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <31309ba8-fe05-d85d-b2c6-72499ef1ff17@linux.ibm.com>
-Date:   Fri, 30 Jul 2021 07:45:47 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-In-Reply-To: <20210730005744.ph7x6nme5ngtpf43@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xuQ5202aNMLz4pNPKJhrZWth7Dkb505W
-X-Proofpoint-GUID: kNJmyJkrubmA3FkrSqTkGU5qy9Fp-HKE
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: from mout.gmx.net ([212.227.17.21]:38947 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230157AbhG3Lp5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 30 Jul 2021 07:45:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1627645548;
+        bh=5nwtFUK6rZsQSaPedvMtggo0kXPpIuOZXQXwWmwUXyw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=QV220zb7rpnBcz4J0qAKKimC58tuXv5SUSM1V8eY52hw/duRbaqxszjCI1958pJ26
+         O9+H+cF/22/Pj3Z0YLmtgWe9eSYl1Ppn1phH9vW4QatTygOrQLQdhvo8cJos/Em1m2
+         4B4P8er62f0ZqOOUidr13ckYbn+FBhHEYMuxvw3A=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [87.130.101.138] ([87.130.101.138]) by web-mail.gmx.net
+ (3c-app-gmx-bs53.server.lan [172.19.170.137]) (via HTTP); Fri, 30 Jul 2021
+ 13:45:48 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-30_05:2021-07-30,2021-07-30 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 priorityscore=1501
- mlxscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
- definitions=main-2107300073
+Message-ID: <trinity-23757337-a194-45c1-864b-6f96a754fed1-1627645548572@3c-app-gmx-bs53>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linus.walleij@linaro.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Aw: Re: [PATCH v2] tpm, tpm_tis_spi: Allow to sleep in the
+ interrupt handler
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 30 Jul 2021 13:45:48 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20210623133420.gw2lziue5nkvjtps@kernel.org>
+References: <20210620023444.14684-1-LinoSanfilippo@gmx.de>
+ <20210623133420.gw2lziue5nkvjtps@kernel.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:iD0cgET1uosZgRcmeBTa/6zynHtSmS9RAa0zPzePWzPxyajS59Lk2bD+DghdCYoGMy3wl
+ DVtcWR7eCEnJfdRwqKPuGaFNH6Y3TpQqnsas/6vYDwDPfhn7M41UIlWtz89kdV+bjN4Ki89TvXhu
+ +fUryqpBqjDFTa0tBFgrBf6oEOiZaMx2SD3ao8FO3BQRyNESKtUiSZvY7gtvP60roXZLLMJyyY+s
+ yxfYG1aZIMutHe979SBulg30sI8rVFFQ6gUiTT2l3vBJENW/DB295om1QJnPTtjil5Y5Cni93mBI
+ Bw=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Sx8Hbnu69Tk=:P2zLXADOnYyEPlPGwyUGkl
+ JDPf3njtHtSOnAvZRuaDs4w0PlIoy/fIbUyRQ7nv9sejlZ0e+S2K3DzLwjyvQuK5GtRfL5FL1
+ EfZ3nbSpVQE6m0cwDoeDJnCbeaJiYjjacb3ru9yeVCxPIIPX+5iY3qNrCXbBgkA6u/BA4Td9q
+ 9H8QJjyuZFiw6joWvmw34iF+7Khtas7W4FsCuU1g03Y89Pzp7+LPonualQwIy4WVgvIRGTX3S
+ +SU+U5DdLzl2zzBkB6bhO9ZGtX9ghU8eH0cNAYw1SjhU0cKu1JQGP2WODjQVns08Y1n30hzPV
+ vSC44X9smcn/6j6A0bhC5KcBtMMf9jZewxqDDEqPVfQq6JlVyl/zoU7N8BYssQSjMhsVfPizH
+ D8ew9d0iNVCT9w+dLBoQV83w9Ckj51kxUcR2wrIuNc2KJT/4qRKMSve3/F2vQx8krAxTbjj/N
+ rudugvjvRAhJiKQ7k7pEkCsGO8qODhDXKMFI0/Z3xur0cO9uAt1iUbho7BfcXwsCymQjKrC1L
+ X4yz5FEsW7+I0dDwQ8EeqafdOmhqpbSRva8kmIiiBLaIJKgElr7L1K8Bo7mSoPxlfoaO2HBkg
+ IFdM6aMJuqCL0mPVR7BFm7kOc9nC30cg2AcsR0eLUjf90dDm6RlRdpRsCa1uNpZnosuuQ+gD9
+ CMf6UTvH3A1rnVbhnI2Gswf0G2JPHaO+Tj+hvTb+Fs/1dR8qCEMZwL0mPQAiTpGGFBHz8VzSK
+ R6anq5zpgN0mFUTK+LzjvToPLVJ/6jBs4irH8ejum0omELXzMlWkJrC/x9dW4aZJLgajW9DHP
+ 17NNPKbrfjOJg5pyfDjOhAncMHGbQ==
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Jarko,
 
-On 7/29/21 8:57 PM, Jarkko Sakkinen wrote:
-> On Thu, Jul 29, 2021 at 09:39:18AM -0400, Stefan Berger wrote:
->> On 7/28/21 5:50 PM, Jarkko Sakkinen wrote:
->>> On Mon, Jul 26, 2021 at 11:00:51PM -0400, Stefan Berger wrote:
->>>> On 7/26/21 10:42 PM, Jarkko Sakkinen wrote:
->>>>> On Mon, Jul 12, 2021 at 12:25:05PM -0400, Stefan Berger wrote:
->>>>>> From: Stefan Berger <stefanb@linux.ibm.com>
->>>>>>
->>>>>> When rngd is run as root then lots of these types of message will appear
->>>>>> in the kernel log if the TPM has been configure to provide random bytes:
->>>>>>
->>>>>> [ 7406.275163] tpm tpm0: tpm_transmit: tpm_recv: error -4
->>>>>>
->>>>>> The issue is caused by the following call that is interrupted while
->>>>>> waiting for the TPM's response.
->>>>>>
->>>>>> sig = wait_event_interruptible(ibmvtpm->wq,
->>>>>>                                   !ibmvtpm->tpm_processing_cmd);
->>>>>>
->>>>>> The solution is to use wait_event() instead.
->>>>> Why?
->>>> So it becomes uninterruptible and these error messages go away.
->>> We do not want to make a process uninterruptible. That would prevent
->>> killing it.
->> I guess we'll have to go back to this one then:
->> https://www.spinics.net/lists/linux-integrity/msg16741.html
-> Makes a heck lot more sense.
+> Gesendet: Mittwoch, 23. Juni 2021 um 15:34 Uhr
+> Von: "Jarkko Sakkinen" <jarkko@kernel.org>
+> An: "Lino Sanfilippo" <LinoSanfilippo@gmx.de>
+> Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linus.walleij@linaro.org, linux-int=
+egrity@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.o=
+rg
+> Betreff: Re: [PATCH v2] tpm, tpm_tis_spi: Allow to sleep in the interrup=
+t handler
 >
-> There's a typo in the commit message: PM_STATUS_BUSY
+> On Sun, Jun 20, 2021 at 04:34:44AM +0200, Lino Sanfilippo wrote:
+> > Interrupt handling at least includes reading and writing the interrupt
+> > status register within the interrupt routine. For accesses over SPI a =
+mutex
+> > is used in the concerning functions. Since this requires a sleepable
+> > context request a threaded interrupt handler for this case.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver=
+")
+> > Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
 >
-> Also the commit message lacks explanation of this change completely:
->
-> @@ -690,8 +688,15 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
->   		goto init_irq_cleanup;
->   	}
->   
-> -	if (!strcmp(id->compat, "IBM,vtpm20")) {
-> +
-> +	if (!strcmp(id->compat, "IBM,vtpm20"))
->   		chip->flags |= TPM_CHIP_FLAG_TPM2;
-> +
-> +	rc = tpm_get_timeouts(chip);
-> +	if (rc)
-> +		goto init_irq_cleanup;
-> +
-> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
->   		rc = tpm2_get_cc_attrs_tbl(chip);
->
-> The last paragraph should be rewritten in imperative form.
-
-
-will fix.
-
->
-> Finally, you could simplify the fix by simply changing the type of
-> tpm_processing_cmd to u8, and just set it to 'true' and 'false',
-> which will set the first bit.
-
-Are you sure? It's a bit mask we are using this with. Using 'true' for 
-these type of operations doesn't sound right.
-
-         u8 status = chip->ops->status(chip);
-         if ((status & chip->ops->req_complete_mask) ==
-             chip->ops->req_complete_val)
-
-             goto out_recv;
-
-https://elixir.bootlin.com/linux/latest/source/drivers/char/tpm/tpm-interface.c#L108
-
-@@ -457,7 +455,7 @@ static const struct tpm_class_ops tpm_ibmvtpm = {
-  	.send = tpm_ibmvtpm_send,
-  	.cancel = tpm_ibmvtpm_cancel,
-  	.status = tpm_ibmvtpm_status,
--	.req_complete_mask = 0,
-+	.req_complete_mask = TPM_STATUS_BUSY,
-  	.req_complete_val = 0,
-  	.req_canceled = tpm_ibmvtpm_req_canceled,
-  };
-
-
-    Stefan
-
+> I'll test this after rc1 PR (I have one NUC which uses tpm_tis_spi).
 >
 > /Jarkko
+>
+
+any news from this patch? Did you already have the opportunity to test it?
+
+Regards,
+Lino
