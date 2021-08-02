@@ -2,84 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D743DD212
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Aug 2021 10:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AE73DD3F9
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Aug 2021 12:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbhHBIfl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 2 Aug 2021 04:35:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43568 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232428AbhHBIfl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 2 Aug 2021 04:35:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 88C0761057;
-        Mon,  2 Aug 2021 08:35:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627893332;
-        bh=PS8OqBJDBxjaQi+snp59d5+ckpWtNZ6D8Vin4bKMsik=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TunhCp3a96gik8QdNgRL27GGU/13kOdl9cXB+C3ytpwFLzI6jVrs1lyoDDvOBTM6j
-         it0CMqG6Oi01Aljxd91t7IASlMoifiE7qTkC4gQ6gHki7eS/Ud1ru4MoP9tqD67NL4
-         pzsEo+eDQCcG6pGOkc3KPFO8c5wA52lT5FEqscQZwXe1lI0ovFrnojpKQMuI940roJ
-         /H1holKg4U0zKDux8I6v11F31JvHiLCw0lCgbI4eLT0xZnsLzLBHek0lwhs2QRSZQd
-         Zk6oxqTsR0pV9gRc81qWBPwjpI/Rjdh8fxVsypUtJKk/ksyy2swC0S4FMoHQsErCmz
-         XYnq5J+Vps7rQ==
-Date:   Mon, 2 Aug 2021 11:35:28 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Borys Movchan <borysmn@axis.com>
-Cc:     Borys Movchan <Borys.Movchan@axis.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, kernel <kernel@axis.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tpm: Add Upgrade/Reduced mode support for TPM2 modules
-Message-ID: <20210802083528.yayuwm6mlkowrsh2@kernel.org>
-References: <20210728105730.10170-1-borysmn@axis.com>
- <20210728215819.vsdwh2fbct7wxwsu@kernel.org>
- <b12dad90-c9ed-2331-7e96-78ca5c3994e8@axis.com>
+        id S233167AbhHBKis (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 2 Aug 2021 06:38:48 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:30015 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232553AbhHBKis (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 2 Aug 2021 06:38:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1627900712;
+    s=strato-dkim-0002; d=thson.de;
+    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=DIP3I6RkjVHsVygWJupDRROPDy4l0f131Hll/tYq4Es=;
+    b=f+rxEr7fnFTMped9cXehWX+Eyqk6kARXB2fN2XMDyqFNSH6VfXbSNlRUyN3yeJ2HQJ
+    ODO7LIrOZ0sRZUKhjfk6uRIM7XG4AmCskDZTDKAnlUUB3LdCGaYmv8yjmscHc99We1rn
+    eVKj98ljQ1bkKR8BHTuXMHl32bbWsqAzemJcPlYhkUfxvJMinLIuHzFxuWPk1KI9hkzt
+    yOOnuU/KBDXRIFwEiGs6zuW/eIVyuBDim72dgdpiRULAPK+1gDYjHU1AO7NPuAbYzOVm
+    STB5O0nfmgjbHKbpG+nCD107+03vb19KBnrhm7W5mRL18eoitUIYgZkYm8uGAosTVlSu
+    pPBw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":PHkGeUmrW+uCZmxs998QJRUX30nOwJd7nOD9sw/xoauycprg5uef7cgCEpy7sPc="
+X-RZG-CLASS-ID: mo00
+Received: from USER-PC.fritz.box
+    by smtp.strato.de (RZmta 47.28.1 DYNA|AUTH)
+    with ESMTPSA id t06ddcx72AcW8Oj
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 2 Aug 2021 12:38:32 +0200 (CEST)
+From:   Thore Sommer <public@thson.de>
+To:     tusharsu@linux.microsoft.com
+Cc:     agk@redhat.com, dm-devel@redhat.com,
+        linux-integrity@vger.kernel.org, nramas@linux.microsoft.com,
+        public@thson.de, snitzer@redhat.com, zohar@linux.ibm.com
+Subject: Re: [dm-devel] [PATCH 0/7] device mapper target measurements using IMA
+Date:   Mon,  2 Aug 2021 12:38:23 +0200
+Message-Id: <20210802103823.199091-1-public@thson.de>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <f73308f3-485f-46cb-0f20-6619edb541e6@linux.microsoft.com>
+References: <f73308f3-485f-46cb-0f20-6619edb541e6@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b12dad90-c9ed-2331-7e96-78ca5c3994e8@axis.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 04:24:01PM +0200, Borys Movchan wrote:
-> On 7/28/21 11:58 PM, Jarkko Sakkinen wrote:
-> > On Wed, Jul 28, 2021 at 12:57:30PM +0200, Borys Movchan wrote:
-> > > If something went wrong during the TPM firmware upgrade,
-> > > like power failure or the firmware image file get corrupted,
-> > > the TPM might end up in Upgrade or Failure mode upon the
-> > > next start. The state is persistent between the TPM power
-> > > cycle/restart.
-> > >
-> > > According to TPM specification:
-> > >  * If the TPM is in Upgrade mode, it will answer with
-> > >    TPM2_RC_UPGRADE to all commands except Field Upgrade
-> > >    related ones.
-> > >  * If the TPM is in Failure mode, it will allow performing
-> > >    TPM initialization but will not provide any crypto
-> > >    operations. Will happily respond to Field Upgrade calls.
-> > >
-> > > The fix adds the possibility to detect an active state of
-> > > the TPM and gives the user-space a chance to finish the
-> > > firmware upgrade/recover the TPM.
-> >
-> > This is different than telling what the patch does. It's just
-> > describing a goal, but does not describe how the driver is
-> > changed, and reasons for doing that.
-> >
-> > For instance, you check 'limited_mode' flag in a few sites.
-> > How can I know that those are exactly the locations where this
-> > needs to be done?
-> >
+Hi Tushar,
+
+thank you for answering my questions and looking at my suggestions.
+
+> I can update the verity_status() to measure if v->signature_key_desc is 
+> set.
 > 
-> Seems like I got what you are looking for. Let me try to explain the
-> reasoning
-> and doubts regarding what I meant under my change.
+> Something like:
+> DMEMIT("signature_key_desc_present=%c,", v->signature_key_desc ? 'y' :
+> 'n');
 
-Please try to nail this in the commit message instead, and I'll
-then review that.
+If my understanding that this entry is only set if the signature was validated
+is correct then this should work.
 
-/Jarkko
+> Please note â€“ even if we measure signature_key_desc (full string or just
+> its presence): in order to use it with the keyrings, the IMA policy also
+> needs to be set to measure key rings (using "measure func=KEY_CHECK
+> ..."). It is independent from measuring the device mapper data (which is
+> measured when the policy is set to â€œmeasure func=CRITICAL_DATA
+> label=device-mapper ...").
+> 
+> Therefore measuring keyrings together (i.e. in the same IMA log) with DM
+> data  is not always guaranteed, since it is dictated by how the IMA
+> policy is configured.
+
+Thanks for pointing that out. Currently we don't measure the keyrings but when
+we enable remote attestation for dm-verity we'll make sure that our IMA policy
+also measures the keyrings.
+
+Regards,
+Thore
