@@ -2,282 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 756D43DF2EE
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Aug 2021 18:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A3F3DF374
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Aug 2021 19:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbhHCQkU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Aug 2021 12:40:20 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:47722 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235044AbhHCQkF (ORCPT
+        id S234615AbhHCRC7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 3 Aug 2021 13:02:59 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39956 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234313AbhHCRCy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Aug 2021 12:40:05 -0400
-Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 64FF320B36E0;
-        Tue,  3 Aug 2021 09:39:53 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 64FF320B36E0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1628008793;
-        bh=beC0JVlejuVzUAFF+9/9jg5J6LbG8CqqUZ5j5KcsxiM=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=nMoXJqTb3+dd/JQE3jNFaiwrN4ktwHD036V7D+J04GaCjjPZz0hgdZr9mfCqV3ia0
-         vavK9XFYVVdEGTIc1c98oVuJtGQja7/UffK1yXtkGEcPsZ5lVpUEkbjKth0vAAAyA5
-         kkFZ1ZjlJndJFQe7/iYtlLv1BQn9uspt/hfi9b/Q=
-Subject: Re: [PATCH v5 3/5] IMA: add support to restrict the hash algorithms
- used for file appraisal
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-References: <20210728132112.258606-1-simon.thoby@viveris.fr>
- <20210728132112.258606-4-simon.thoby@viveris.fr>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Message-ID: <d7a695da-f72b-1a4d-02d6-acb819cfcbee@linux.microsoft.com>
-Date:   Tue, 3 Aug 2021 09:41:54 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <20210728132112.258606-4-simon.thoby@viveris.fr>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Tue, 3 Aug 2021 13:02:54 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 173GeB6r050725;
+        Tue, 3 Aug 2021 13:01:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=MDBxIUawbm49JyOfQS1cf24GJsUXapOiLraOXIEq5J8=;
+ b=bpMsecEPcjRYfjsg28xplQ4jl24je6dsDt6kvmVh8gAdPfMUDcEjiZtPgc9evxufZylZ
+ 2WLsjUvF700/c94KGUNoSsxmINmWbVRrFc8I2N6PHa5krWtMyNSi/V/4EQ5e7oCmh+4d
+ Lqc4zkdBH6HT01k3RWdDm+9O1xkHzrysWrZZGZEhtdnqbVRjncdUc7Ijb0beLW2z+aL9
+ 0NN/uOXHnB23JcV7MEMrcWPvzH0p0KCxF4bp1uiV3ToSEWs2qs+d5ZtC/Aux0P1NAyM8
+ SuERmMVVYRWPgkrd1YsArem/ZBj8Kv/ovBzfYUB5bouWoCTdtCZOEP3ZJvPkgznxCX0P DA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a76auqc0j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Aug 2021 13:01:37 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 173GeGDA050936;
+        Tue, 3 Aug 2021 13:01:36 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a76auqbyj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Aug 2021 13:01:36 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 173GvZR6004197;
+        Tue, 3 Aug 2021 17:01:33 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3a4x58psfp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 Aug 2021 17:01:33 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 173H1VZV55640356
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Aug 2021 17:01:31 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2BA415204E;
+        Tue,  3 Aug 2021 17:01:31 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.88.204])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A48B952054;
+        Tue,  3 Aug 2021 17:01:25 +0000 (GMT)
+Message-ID: <820cd72cd77c4716bff2bf344c64d7bcb59fc4d3.camel@linux.ibm.com>
+Subject: Re: [PATCH RFC v2 00/12] Enroll kernel keys thru MOK
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jarkko@kernel.org, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        torvalds@linux-foundation.org, scott.branden@broadcom.com,
+        weiyongjun1@huawei.com, nayna@linux.ibm.com, ebiggers@google.com,
+        ardb@kernel.org, nramas@linux.microsoft.com, lszubowi@redhat.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
+        glin@suse.com, konrad.wilk@oracle.com
+Date:   Tue, 03 Aug 2021 13:01:24 -0400
+In-Reply-To: <20210726171319.3133879-1-eric.snowberg@oracle.com>
+References: <20210726171319.3133879-1-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jDB4OEcti4Hsw9NPjhd4mwZjq4CRGf-A
+X-Proofpoint-ORIG-GUID: bK1hKs2bUBz3pY1FYqq74SJ5nMcq0C3Y
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-03_05:2021-08-03,2021-08-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ mlxlogscore=999 clxscore=1011 lowpriorityscore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 spamscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
+ definitions=main-2108030108
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Simon,
+Hi Eric,
 
-On 7/28/2021 6:21 AM, THOBY Simon wrote:
-> The kernel accepts any hash algorithm as a value for the security.ima
-> xattr. Users may wish to restrict the accepted algorithms to only
-> support strong cryptographic ones.
-> 
-> Provide the plumbing to restrict the permitted set of hash algorithms
-> used for verifying file hashes and digest algorithms stored in
-> security.ima xattr.
-> 
-> This do not apply only to IMA in hash mode, it also works with digital
-> signatures, in which case it checks that the hash (which was then
-> signed by the trusted private key) have been generated with one of
-> the algortihms whitelisted for this specific rule.
-typo: algortihms => algorithms
+On Mon, 2021-07-26 at 13:13 -0400, Eric Snowberg wrote:
 
-Also, suggest using "allowed list" (for digest algorithms allowed)
+> When the kernel boots, if MokListTrustedRT is set and
+> EFI_VARIABLE_NON_VOLATILE is not set, the MokListRT is loaded into the
+> mok keyring instead of the platform keyring. Mimi has suggested that
+> only CA keys or keys that can be vouched for by other kernel keys be
+> loaded into this keyring. All other certs will load into the platform
+> keyring instead.
 
-> 
-> Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
-> Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
-> ---
->   security/integrity/ima/ima.h          |  6 +++---
->   security/integrity/ima/ima_api.c      |  6 ++++--
->   security/integrity/ima/ima_appraise.c |  5 +++--
->   security/integrity/ima/ima_main.c     | 17 ++++++++++++++---
->   security/integrity/ima/ima_policy.c   | 18 ++++++++++++++++--
->   5 files changed, 40 insertions(+), 12 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index f0e448ed1f9f..7ef1b214d358 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -47,7 +47,7 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
->   extern int ima_policy_flag;
->   
->   /* set during initialization */
-> -extern int ima_hash_algo;
-> +extern int ima_hash_algo __ro_after_init;
->   extern int ima_sha1_idx __ro_after_init;
->   extern int ima_hash_algo_idx __ro_after_init;
->   extern int ima_extra_slots __ro_after_init;
-> @@ -254,7 +254,7 @@ int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
->   		   const struct cred *cred, u32 secid, int mask,
->   		   enum ima_hooks func, int *pcr,
->   		   struct ima_template_desc **template_desc,
-> -		   const char *func_data);
-> +		   const char *func_data, unsigned int *allowed_hashes);
->   int ima_must_measure(struct inode *inode, int mask, enum ima_hooks func);
->   int ima_collect_measurement(struct integrity_iint_cache *iint,
->   			    struct file *file, void *buf, loff_t size,
-> @@ -285,7 +285,7 @@ int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
->   		     const struct cred *cred, u32 secid, enum ima_hooks func,
->   		     int mask, int flags, int *pcr,
->   		     struct ima_template_desc **template_desc,
-> -		     const char *func_data);
-> +		     const char *func_data, unsigned int *allowed_hashes);
->   void ima_init_policy(void);
->   void ima_update_policy(void);
->   void ima_update_policy_flag(void);
-> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-> index d8e321cc6936..c91c2c402498 100644
-> --- a/security/integrity/ima/ima_api.c
-> +++ b/security/integrity/ima/ima_api.c
-> @@ -172,6 +172,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
->    * @pcr: pointer filled in if matched measure policy sets pcr=
->    * @template_desc: pointer filled in if matched measure policy sets template=
->    * @func_data: func specific data, may be NULL
-> + * @allowed_hashes: whitelist of hash algorithms allowed for the IMA xattr
-"@allowed_hashes: allowed list of hash algorithms for the IMA xattr"
+I suggested only loading the CA keys stored in the MOK db onto the MOK
+keyring.  Like the builtin trusted keyring, the MOK keyring would also
+be linked to the secondary keyring.   Assuming the secondary keyring is
+defined, all other properly signed MOK db keys  - signed by keys on the
+builtin, secondary or MOK keyring - would be loaded onto the secondary
+keyring.
 
->    *
->    * The policy is defined in terms of keypairs:
->    *		subj=, obj=, type=, func=, mask=, fsmagic=
-> @@ -188,14 +189,15 @@ int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
->   		   const struct cred *cred, u32 secid, int mask,
->   		   enum ima_hooks func, int *pcr,
->   		   struct ima_template_desc **template_desc,
-> -		   const char *func_data)
-> +		   const char *func_data, unsigned int *allowed_hashes)
->   {
->   	int flags = IMA_MEASURE | IMA_AUDIT | IMA_APPRAISE | IMA_HASH;
->   
->   	flags &= ima_policy_flag;
->   
->   	return ima_match_policy(mnt_userns, inode, cred, secid, func, mask,
-> -				flags, pcr, template_desc, func_data);
-> +				flags, pcr, template_desc, func_data,
-> +				allowed_hashes);
->   }
->   
->   /*
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index a5e0d3400bd1..12d406b5ab35 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -77,8 +77,9 @@ int ima_must_appraise(struct user_namespace *mnt_userns, struct inode *inode,
->   		return 0;
->   
->   	security_task_getsecid_subj(current, &secid);
-> -	return ima_match_policy(mnt_userns, inode, current_cred(), secid, func,
-> -				mask, IMA_APPRAISE | IMA_HASH, NULL, NULL, NULL);
-> +	return ima_match_policy(mnt_userns, inode, current_cred(), secid,
-> +				func, mask, IMA_APPRAISE | IMA_HASH, NULL,
-> +				NULL, NULL, NULL);
->   }
->   
->   static int ima_fix_xattr(struct dentry *dentry,
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 7f2310f29789..85b079c1a19b 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -210,6 +210,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
->   	int xattr_len = 0;
->   	bool violation_check;
->   	enum hash_algo hash_algo;
-> +	unsigned int allowed_hashes = 0;
->   
->   	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
->   		return 0;
-> @@ -219,7 +220,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
->   	 * Included is the appraise submask.
->   	 */
->   	action = ima_get_action(file_mnt_user_ns(file), inode, cred, secid,
-> -				mask, func, &pcr, &template_desc, NULL);
-> +				mask, func, &pcr, &template_desc, NULL,
-> +				&allowed_hashes);
->   	violation_check = ((func == FILE_CHECK || func == MMAP_CHECK) &&
->   			   (ima_policy_flag & IMA_MEASURE));
->   	if (!action && !violation_check)
-> @@ -356,6 +358,15 @@ static int process_measurement(struct file *file, const struct cred *cred,
->   
->   	if ((file->f_flags & O_DIRECT) && (iint->flags & IMA_PERMIT_DIRECTIO))
->   		rc = 0;
-> +
-> +	/* Ensure the digest was generated using an allowed algorithm */
-> +	if (rc == 0 && must_appraise && allowed_hashes != 0 &&
-> +	    (allowed_hashes & (1U << hash_algo)) == 0) {
-> +		rc = -EACCES;
-> +
-> +		integrity_audit_msg(AUDIT_INTEGRITY_DATA, file_inode(file),
-> +			pathname, "collect_data", "forbidden-hash-algorithm", rc, 0);
-> +	}
->   out_locked:
->   	if ((mask & MAY_WRITE) && test_bit(IMA_DIGSIG, &iint->atomic_flags) &&
->   	     !(iint->flags & IMA_NEW_FILE))
-> @@ -433,7 +444,7 @@ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
->   	inode = file_inode(vma->vm_file);
->   	action = ima_get_action(file_mnt_user_ns(vma->vm_file), inode,
->   				current_cred(), secid, MAY_EXEC, MMAP_CHECK,
-> -				&pcr, &template, NULL);
-> +				&pcr, &template, NULL, NULL);
->   
->   	/* Is the mmap'ed file in policy? */
->   	if (!(action & (IMA_MEASURE | IMA_APPRAISE_SUBMASK)))
-> @@ -882,7 +893,7 @@ void process_buffer_measurement(struct user_namespace *mnt_userns,
->   		security_task_getsecid_subj(current, &secid);
->   		action = ima_get_action(mnt_userns, inode, current_cred(),
->   					secid, 0, func, &pcr, &template,
-> -					func_data);
-> +					func_data, NULL);
->   		if (!(action & IMA_MEASURE))
->   			return;
->   	}
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index fd5d46e511f1..344b5b0dc1a1 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -35,6 +35,7 @@
->   #define IMA_FSNAME	0x0200
->   #define IMA_KEYRINGS	0x0400
->   #define IMA_LABEL	0x0800
-> +#define IMA_VALIDATE_HASH	0x1000
->   
->   #define UNKNOWN		0
->   #define MEASURE		0x0001	/* same as IMA_MEASURE */
-> @@ -79,6 +80,7 @@ struct ima_rule_entry {
->   	bool (*uid_op)(kuid_t, kuid_t);    /* Handlers for operators       */
->   	bool (*fowner_op)(kuid_t, kuid_t); /* uid_eq(), uid_gt(), uid_lt() */
->   	int pcr;
-> +	unsigned int allowed_hashes;
->   	struct {
->   		void *rule;	/* LSM file metadata specific */
->   		char *args_p;	/* audit value */
-> @@ -90,6 +92,14 @@ struct ima_rule_entry {
->   	struct ima_template_desc *template;
->   };
->   
-> +/*
-> + * sanity check in case the kernels gains more hash algorithms that can
-> + * fit in an unsigned int
-> + */
-> +static_assert(
-> +	8 * sizeof(unsigned int) >= HASH_ALGO__LAST,
-> +	"The bitfield allowed_hashes in ima_rule_entry is too small to contain all the supported hash algorithms, consider using a bigger type");
-> +
->   /*
->    * Without LSM specific knowledge, the default policy can only be
->    * written in terms of .action, .func, .mask, .fsmagic, .uid, and .fowner
-> @@ -646,6 +656,7 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
->    * @pcr: set the pcr to extend
->    * @template_desc: the template that should be used for this rule
->    * @func_data: func specific data, may be NULL
-> + * @allowed_hashes: whitelist of hash algorithms allowed for the IMA xattr
-"@allowed_hashes: allowed list of hash algorithms for the IMA xattr"
+As previously discussed, this might require reading the MOK db twice -
+once to load the CA keys on the MOK keyring, a second time to load the
+remaining properly signed keys onto the secondary keyring.
 
-  -lakshmi
 
->    *
->    * Measure decision based on func/mask/fsmagic and LSM(subj/obj/type)
->    * conditions.
-> @@ -658,7 +669,7 @@ int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
->   		     const struct cred *cred, u32 secid, enum ima_hooks func,
->   		     int mask, int flags, int *pcr,
->   		     struct ima_template_desc **template_desc,
-> -		     const char *func_data)
-> +		     const char *func_data, unsigned int *allowed_hashes)
->   {
->   	struct ima_rule_entry *entry;
->   	int action = 0, actmask = flags | (flags << 1);
-> @@ -684,8 +695,11 @@ int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
->   			action &= ~IMA_HASH;
->   			if (ima_fail_unverifiable_sigs)
->   				action |= IMA_FAIL_UNVERIFIABLE_SIGS;
-> -		}
->   
-> +			if (allowed_hashes &&
-> +			    entry->flags & IMA_VALIDATE_HASH)
-> +				*allowed_hashes = entry->allowed_hashes;
-> +		}
->   
->   		if (entry->action & IMA_DO_MASK)
->   			actmask &= ~(entry->action | entry->action << 1);
-> 
+thanks,
+
+Mimi
+
