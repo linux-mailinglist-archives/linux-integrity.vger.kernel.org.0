@@ -2,275 +2,301 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8383DFB13
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Aug 2021 07:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656443DFDD9
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Aug 2021 11:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235062AbhHDFb0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Aug 2021 01:31:26 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60642 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232010AbhHDFbZ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Aug 2021 01:31:25 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17454JtB105733;
-        Wed, 4 Aug 2021 01:31:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=NblZU99XF51OF6LVM6E3ZmyfEhrdUxiEedGEnfofF/E=;
- b=joWxsMl6UP9DdNm0KBnuJZ/ekpPhY/3LzOjDbLmc4LsWRCY8z5IUYURO/5/gZq5VFPWt
- vQXSZj3sOzY69I/Min3goGBtNy5LagswcvI14nS5j1BkAKKMeoOhQuibLVyEMV7jsY2m
- IZda102KHM6rfM3gkRAOvf4Of9N6sGeqF2MpohzUDJbJLZa8QjO9YZe/+E8OGmk3YLTz
- QDLIv891c896sioBi1jlnHZeZY+xzYXGofSiJTlyFzFDtISEojB+EF+In5tAJinKVZuU
- r/2HgAbdXFSoKrXlqztvRKHhmQuKIaDW2j7RIfPUidd77hoZae1Zihkngn4e6kSxEgU4 3A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a76r5vtf4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Aug 2021 01:31:12 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17454WYB106529;
-        Wed, 4 Aug 2021 01:31:12 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3a76r5vted-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Aug 2021 01:31:12 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1745IUAP015553;
-        Wed, 4 Aug 2021 05:31:10 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3a4x58qmvf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 Aug 2021 05:31:09 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1745V61N56230364
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 Aug 2021 05:31:06 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D8A2A405C;
-        Wed,  4 Aug 2021 05:31:06 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A7F76A4054;
-        Wed,  4 Aug 2021 05:31:01 +0000 (GMT)
-Received: from Nageswaras-MacBook-Pro-2.local (unknown [9.211.35.152])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed,  4 Aug 2021 05:31:01 +0000 (GMT)
-Subject: Re: [PATCH v2] tpm: ibmvtpm: Avoid error message when process gets
- signal while waiting
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>, jarkko@kernel.org
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>
-References: <20210803202622.1537040-1-stefanb@linux.vnet.ibm.com>
-From:   Nageswara Sastry <rnsastry@linux.ibm.com>
-Message-ID: <59736f0a-6090-2e95-805c-1f38b2c09d0c@linux.ibm.com>
-Date:   Wed, 4 Aug 2021 11:00:57 +0530
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
-In-Reply-To: <20210803202622.1537040-1-stefanb@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _vh0e6afxLKgUFxjHQZPh-Mhef-YGB6H
-X-Proofpoint-ORIG-GUID: 585esrirbLpr7a1ucgYsf_uJ0By8zyIq
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S237005AbhHDJUc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Aug 2021 05:20:32 -0400
+Received: from mail-eopbgr80098.outbound.protection.outlook.com ([40.107.8.98]:59630
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236951AbhHDJU3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 4 Aug 2021 05:20:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bhN7abTURGeaTtxjRdDkhwQpoWXGOyQp6oFovDeqmLrzLPKI35MpUaj9bDgsBAyTrRvQEhGsMjEkI5Om3Duj3x+GXjvDq1mZsmamAJCkcyJk9nV3OskGckZMc06E3mVu6bQol9zok115kbnLX58KRTWXNEh5myDmoBIcH6buWcNOs0QUiNeTDQ7Gl3DNIlCZqSxs5A1yRsgIsdPbu84ULi+Z8G0zh+9ho/GPnjAA+LxpIwWafV9jYcYOiTr3DlaYgbsFaTW8rnINHJTCU51xZoBQgirJN6z+CCSn9CBTCrLKwn10KfWoFrjQu8som3OMGDogJ1D8VK1+Bq18bHMUBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ToxJAqF8h1bsrJFqTJEfvkUmnRvxdlgB8kNNjcmxX+E=;
+ b=mplJ5OSmfi4iH7oZlkYxgRvB9+iVO9dtGJSdVN0bFZaXh2zGb0Q8b0ri1uVRzir4w60xXiIuYU3YELvAR76tFYmou22jtLJD11sDZ3/VZqvVXYUkQKOzRlA6A7m99ip8mcUojGe759ejD2544mQULx20rkryUyZ219Od48a8+xrvBv3p7IFviqYMNstYk3QEPKRrwH6XF5w04tFtIGHi4qrqZ1er9foSImPJWPUMoN4vvrM/wLd7Pba6hTar8yGOjMPkPmR2IZb2GQ8zzX/WM2zdbtLjn3TVvzSD2l5NS5PqGUIJltvxhpcPGRyo0QOjmLk9G65BwDGylVIdpHlT0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
+ dkim=pass header.d=viveris.fr; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=viverislicensing.onmicrosoft.com;
+ s=selector2-viverislicensing-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ToxJAqF8h1bsrJFqTJEfvkUmnRvxdlgB8kNNjcmxX+E=;
+ b=vR6t9NXSPhmKcng+jfrQsAk5CLaXKwtM+di49rR2nkY/QTN43a5BBQbfhasRWOkFAS1pqT6CIVMZqDKSh9zo5+nV05HL/0MGIIJBHgES31cOSFDTc9XlyejV/ichQxbK0aEq1aGcV47CdKZA6i4tT8ElvbGK+7Lv40Nc0x0cux0=
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ (2603:10a6:200:96::21) by AM0PR09MB2545.eurprd09.prod.outlook.com
+ (2603:10a6:208:d8::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.21; Wed, 4 Aug
+ 2021 09:20:14 +0000
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432%9]) with mapi id 15.20.4373.026; Wed, 4 Aug 2021
+ 09:20:14 +0000
+From:   THOBY Simon <Simon.THOBY@viveris.fr>
+To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
+CC:     THOBY Simon <Simon.THOBY@viveris.fr>
+Subject: [PATCH v6 0/5] IMA: restrict the accepted digest algorithms for the
+ security.ima xattr
+Thread-Topic: [PATCH v6 0/5] IMA: restrict the accepted digest algorithms for
+ the security.ima xattr
+Thread-Index: AQHXiRHuSQkcSNdsqEC9ssrYpaNapA==
+Date:   Wed, 4 Aug 2021 09:20:14 +0000
+Message-ID: <20210804092010.350372-1-simon.thoby@viveris.fr>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.ibm.com; dkim=none (message not signed)
+ header.d=none;linux.ibm.com; dmarc=none action=none header.from=viveris.fr;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a4d59ca8-08f8-474e-234b-08d957291172
+x-ms-traffictypediagnostic: AM0PR09MB2545:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR09MB2545E4E691E695525B0643CF94F19@AM0PR09MB2545.eurprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2ThoNZX0XYXWGA3ee7exndlcbgKFnVk1yRMI1DYM3tkszRGxCUf0pj8oCVcNN9X7JPI+Zx6Z/nwM2kDHc3IH/8z0cxlBAUdvxcQDDVyO5kz0u6icNYfQQOcBsl++9GjN83D08Y+SwXsyyzCSTyp34roXBg5DUppIIiOEJaKU4LZ4oK0SaqrDu0PT1M2gvMtEpBvBtnpbHmm30JUxpIlOUnSlswcMKwyYZ0esTh2QfDFN5y740Ezn0dLyM6FRxaW3GcKAQZq8aC/knKVwVm/oiGSgrT/89ECVoB06iaP7aOGcv0uOVVtB8f/JvozUphIjHZuzFP5cHb/oRcIpkrZipdsY7YNbhptUxcu6aBDXAmc27POfIfvr7SCW+JA+Va9LGoQhVa8QKhJx71A7GpFG6LHpNe8E1f8u7UwQzdXZgCypENIL8WtC3OKZdtwco3RxzKAT1FcF+AeJ0Mq6/y5QHTPmrjgixS3cKK1F2n5ABCsQUgFXPVyUXctRwTKQBlgyEVJRw70kpKNOL4bLwYAKX46UdsYY837GjAFm0vZBOdg9zWux8rH93wzxlLE0Xk/uO4PWuAVkey+3IEDTGsd5cWd3+3fsxYJ4lXniy7ptvl8SADZKT9fVn65UtvnKgEp3dPaO6C9UOEXURUBJ83RTixTcr/xDrA84RwpGi1ZaH3reuBn69Wm70Ff1x/xP687TkSCUxfLbr7WgmubEZ7zmcESViypMCxGMo6tHDqXhugFSpdD4d6bv4Tn7N3FLiBhuaDWarytbmJw3KMKRLyaxooVScoTrOnILZBvuBbxBNck=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39840400004)(136003)(346002)(376002)(366004)(478600001)(26005)(66476007)(66556008)(8936002)(64756008)(15650500001)(186003)(66446008)(83380400001)(36756003)(6512007)(66946007)(316002)(966005)(86362001)(110136005)(2616005)(38100700002)(6636002)(1076003)(38070700005)(122000001)(5660300002)(107886003)(6506007)(91956017)(6486002)(2906002)(76116006)(4326008)(8676002)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?8gToF9zNLStLRhqIR9jjQsBwewfE+kSfoSlyxwEDkN/ngdUhvly6s96qZn?=
+ =?iso-8859-1?Q?Zlw221iFHQNFJH8mHd7HJO74QAdX5N4zCJltBb99F7+bL9Kl3PppaLhaJT?=
+ =?iso-8859-1?Q?M72I8ARhBI6z29wwIaPdPN6/eXlBQnt+Ih8gAY8iFTRFtvmtgd8sZIXlHs?=
+ =?iso-8859-1?Q?5mUep1Xsr3McxJbkyHVT84NSdsyK/6AVRqVxqRCTkt29YjWRM+6UysYJK/?=
+ =?iso-8859-1?Q?zUjRxX8UlW4fIBe7GwWNU7wBgk2YTdD3L6h1Rq5xmVSYtcaSW7C+VtEXXO?=
+ =?iso-8859-1?Q?1shSpgu+fxT4Tz2bsIYpclQvH2XDL1r4McxJODauQ2mGCD+MAxUdX2/xFz?=
+ =?iso-8859-1?Q?EGgdIVHa2rv/H7Qh8PfvTzwn+DDkEUiYA/GCpXMnMwhkNaQYBP0bAtrlz8?=
+ =?iso-8859-1?Q?Lezg/jM/lWRRdkob+acCVr2BEEGxM9SyNrwtbQWKdpJRxuXlueS0iTLjFc?=
+ =?iso-8859-1?Q?WoPX2HQq1jLRedfxsKaLjOza8SqQl6Uo0go9+Ma5G8v0z+alRDNBNWTxO4?=
+ =?iso-8859-1?Q?OyQzzb/n/UgnuD3lFB3342zs+rqkDzfBBFfmdPp2J6ZNQ1BmR40bbZJ8WK?=
+ =?iso-8859-1?Q?KNw7IOJqJwXImUq6gGl8nOXW3nlX5hdJ9hC/dDyDeNBldOjKGm+Si+NeAn?=
+ =?iso-8859-1?Q?59YZQ8A+m8ThFn0qs04l7t6YYgfkaTGRDnwatRtp0PJqiFhAN+UPuhInGB?=
+ =?iso-8859-1?Q?TUzANrI8khmUyoHgykhguXcFtF8qqY59ygRMIzUC8WWMySRYhVQmbCS/KV?=
+ =?iso-8859-1?Q?V23A64F8Fr+V+96TIobl0NTE2Uat44Z/N+Rr7J2h+9YeiMqn94Oe5TsfiU?=
+ =?iso-8859-1?Q?jTLibPt6dltTO4dmdG7jhw1XKQre1uaXXRTTOcFq9ibaaNRELjmrgT6UzQ?=
+ =?iso-8859-1?Q?KIPygtdPkJMjkNv44/U6q6O9R0GnT+0pRZOtUj+YFyps1BxJCl1EHdW7rn?=
+ =?iso-8859-1?Q?Yg8OPC7zl3GMD/gFFCPr0v2tLHJzl1zT2nAUDFOJOXhA+YZEkrdZqPbglm?=
+ =?iso-8859-1?Q?ZvtMs+vyRn6amjv9t+OO03SRRqGIHXcYOUe4BmYQNk8hSQxjFsQo9BYAOd?=
+ =?iso-8859-1?Q?JTRbDCZnK5swKc+0i4lS8/7Sf2KiYTH6YrLTHMzIhOWQkd0jMP4TobG9+d?=
+ =?iso-8859-1?Q?zXawme3OWurKafphp5AKu+pbA3eMY9VBefsqb6oqh9nxhJovNLpHfrJ6ke?=
+ =?iso-8859-1?Q?YvvgyO55enuYbS8a0sZBLkCxb5YXUT0g+FJyt7IqBXZ2aslInFevCF/OH4?=
+ =?iso-8859-1?Q?m3diNoZDTENap0fuK2V13P1Fduzd1XC3NILKh7+YoTHEjgWUiieuwWxs5m?=
+ =?iso-8859-1?Q?sXtz5+TUJ9AiM1iIn1r4EoRWyEol7nVo3zGzgglgVz17C3oPiKpvLqZhHe?=
+ =?iso-8859-1?Q?gTMHtFGrAe?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-04_01:2021-08-03,2021-08-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- mlxlogscore=999 spamscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0
- clxscore=1011 priorityscore=1501 adultscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108040027
+X-OriginatorOrg: viveris.fr
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4d59ca8-08f8-474e-234b-08d957291172
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Aug 2021 09:20:14.6764
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +Vz3YVc+ikctWTvm/cAR6G3nPMZV/AebBsfcQS7TD24YAlDNAw6MoyX3ZAXhpFpdoBhjrRNnt2nAdciSSK8zwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR09MB2545
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+IMA protects files by storing a hash (or a signature thereof) of their
+content in the security.ima xattr. While the security.ima xattr itself
+is protected by EVM with either a HMAC or a digital signature, no
+mechanism is currently in place to ensure that the security.ima xattr
+was generated with a strong digest algorithm, and any hash defined
+in the kernel will be accepted, even obsolete formats like MD4 and MD5.
+
+The kernel itself will only write this xattr with the 'ima_hash' parameter,
+fixed at init, but it will also happily accept userland writes for said
+xattr, and those writes may use arbitrary hash algorithms as long as the
+kernel have support for it.
+
+One important point is safeguarding users from mislabelling their
+files when using userland utilities to update their files, as this
+is the kind of behavior one can observe with evmctl (`evmctl ima_hash`
+defaults to sha1). Another group that may be interested is those
+that have deployed IMA years ago, possibly using algorithms that
+was then deemed sufficiently collision-resistant, but that proved
+to be weak with the passage of time (note that this could also
+happen in the future with algorithms considered safe today).
+This patch provides a migration path of sorts for these users.
+
+This patch series gives users the ability to restrict the algorithms
+accepted by their system, both when writing/updating xattrs, and
+when appraising files, while retaining a permissive behavior by default
+to preserve backward compatibility.
+
+To provide these features, alter the behavior of setxattr to
+only accept hashes built in the kernel, instead of any hash listed
+in the kernel (complete list crypto/hash_info.c). In addition, the
+user can define in his IMA policy the list of digest algorithms
+allowed for writing to the security.ima xattr. In that case,
+only algorithms present in that list are accepted for writing.
+
+In addition, users may opt-in to allowlist hash algorithms for
+ppraising thanks to the new "appraise_hash" IMA policy option.
+By default IMA will keep accepting any hash algorithm, but specifying
+that option will make appraisal of files hashed with another algorithm
+fail.
 
 
-On 04/08/21 1:56 am, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> When rngd is run as root then lots of these types of message will appear
-> in the kernel log if the TPM has been configured to provide random bytes:
-> 
-> [ 7406.275163] tpm tpm0: tpm_transmit: tpm_recv: error -4
-> 
-> The issue is caused by the following call that is interrupted while
-> waiting for the TPM's response.
-> 
-> sig = wait_event_interruptible(ibmvtpm->wq,
->                                 !ibmvtpm->tpm_processing_cmd);
-> 
-> Rather than waiting for the response in the low level driver, have it use
-> the polling loop in tpm_try_transmit() that uses a command's duration to
-> poll until a result has been returned by the TPM, thus ending when the
-> timeout has occurred but not responding to signals and ctrl-c anymore. To
-> stay in this polling loop extend tpm_ibmvtpm_status() to return
-> TPM_STATUS_BUSY for as long as the vTPM is busy. Since the loop requires
-> the TPM's timeouts, get them now using tpm_get_timeouts() after setting
-> the TPM2 version flag on the chip.
-> 
-> Rename the tpm_processing_cmd to tpm_status in ibmvtpm_dev and set the
-> TPM_STATUS_BUSY flag while the vTPM is busy processing a command.
-> 
-> To recreat the resolved issue start rngd like this:
-> 
-> sudo rngd -r /dev/hwrng -t
-> sudo rngd -r /dev/tpm0 -t
-> 
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1981473
-> Fixes: 6674ff145eef ("tpm_ibmvtpm: properly handle interrupted packet receptions")
-> Cc: Nayna Jain <nayna@linux.ibm.com>
-> Cc: George Wilson <gcwilson@linux.ibm.com>
-> Reported-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> 
+Even when using this option to restrict accepted hashes, a migration
+to a new algorithm is still possible. Suppose your policy states you
+must migrate from 'old_algo' (e.g. sha1) to 'new_algo' (e.g. one of
+sha256/384/512). You can upgrade without relaxing the hash requirements:
+alter your policy rules from 'appraise_hash=3Dold_algo' to
+'appraise_hash=3Dold_algo,new_algo', load a new SETXATTR_CHECK policy
+rule that accept writes using 'new_algo', reboot, relabel
+all your files with 'new_algo', alter your policy rules from
+'appraise_hash=3Dold_algo,new_algo' to 'appraise_hash=3Dnew_algo',
+and you're done.
+While this represent a significant amount of work, it is important to
+showcase that this patchset is flexible enough to let users upgrade
+if needed.
 
-Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
 
-Tested the patch applying on kernel version 5.14.0-rc3
+Here is also a short description of the new audit messages, but I can
+send it in a followup mail if that is not the proper place:
 
-1. Ran with recreate commands i.e.
-rngd -r /dev/hwrng -t
-rngd -r /dev/tpm0 -t
+When writing the xattr with an algorithm not built in the kernel (here the
+kernel was built with CONFIG_CRYPTO_MD5 unset), e.g. with
+"evmctl ima_hash -a md5 /usr/bin/strace":
+	audit(1628066120.418:121): pid=3D1344 uid=3D0 auid=3D0 ses=3D1 subj=3Dunco=
+nfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=3Dcollect_data cause=
+=3Dunavailable-hash-algorithm comm=3D"evmctl" name=3D"/usr/bin/strace" dev=
+=3D"dm-0" ino=3D2632657 res=3D0 errno=3D0
 
-2. Ran the above rngd commands along with "stress-ng - dispatching hogs: 
-32 af-alg, 32 bsearch, 32 context, 32 cpu, 32 crypt, 32 hsearch, 32 
-longjmp, 32 lsearch, 32 matrix, 32 qsort, 32 str, 32 stream, 32 tsearch, 
-32 vecmath, 32 wcs" for 2 hours
+With the same command and the policy rule
+"appraise func=3DSETXATTR_CHECK appraise_hash=3Dsha256,sha384,sha512", we g=
+et:
+	audit(1628066210.141:127): pid=3D1362 uid=3D0 auid=3D0 ses=3D1 subj=3Dunco=
+nfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=3Dcollect_data cause=
+=3Ddenied-hash-algorithm comm=3D"evmctl" name=3D"/usr/bin/strace" dev=3D"dm=
+-0" ino=3D2632657 res=3D0 errno=3D0
 
-Thanks!!
-> ---
-> 
-> v2:
->   - reworded commit text
-> ---
->   drivers/char/tpm/tpm_ibmvtpm.c | 31 ++++++++++++++++++-------------
->   drivers/char/tpm/tpm_ibmvtpm.h |  3 ++-
->   2 files changed, 20 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
-> index 903604769de9..5d795866b483 100644
-> --- a/drivers/char/tpm/tpm_ibmvtpm.c
-> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
-> @@ -106,17 +106,12 @@ static int tpm_ibmvtpm_recv(struct tpm_chip *chip, u8 *buf, size_t count)
->   {
->   	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
->   	u16 len;
-> -	int sig;
->   
->   	if (!ibmvtpm->rtce_buf) {
->   		dev_err(ibmvtpm->dev, "ibmvtpm device is not ready\n");
->   		return 0;
->   	}
->   
-> -	sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
-> -	if (sig)
-> -		return -EINTR;
-> -
->   	len = ibmvtpm->res_len;
->   
->   	if (count < len) {
-> @@ -220,11 +215,12 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
->   		return -EIO;
->   	}
->   
-> -	if (ibmvtpm->tpm_processing_cmd) {
-> +	if ((ibmvtpm->tpm_status & TPM_STATUS_BUSY)) {
->   		dev_info(ibmvtpm->dev,
->   		         "Need to wait for TPM to finish\n");
->   		/* wait for previous command to finish */
-> -		sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
-> +		sig = wait_event_interruptible(ibmvtpm->wq,
-> +				(ibmvtpm->tpm_status & TPM_STATUS_BUSY) == 0);
->   		if (sig)
->   			return -EINTR;
->   	}
-> @@ -237,7 +233,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
->   	 * set the processing flag before the Hcall, since we may get the
->   	 * result (interrupt) before even being able to check rc.
->   	 */
-> -	ibmvtpm->tpm_processing_cmd = true;
-> +	ibmvtpm->tpm_status |= TPM_STATUS_BUSY;
->   
->   again:
->   	rc = ibmvtpm_send_crq(ibmvtpm->vdev,
-> @@ -255,7 +251,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
->   			goto again;
->   		}
->   		dev_err(ibmvtpm->dev, "tpm_ibmvtpm_send failed rc=%d\n", rc);
-> -		ibmvtpm->tpm_processing_cmd = false;
-> +		ibmvtpm->tpm_status &= ~TPM_STATUS_BUSY;
->   	}
->   
->   	spin_unlock(&ibmvtpm->rtce_lock);
-> @@ -269,7 +265,9 @@ static void tpm_ibmvtpm_cancel(struct tpm_chip *chip)
->   
->   static u8 tpm_ibmvtpm_status(struct tpm_chip *chip)
->   {
-> -	return 0;
-> +	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
-> +
-> +	return ibmvtpm->tpm_status;
->   }
->   
->   /**
-> @@ -457,7 +455,7 @@ static const struct tpm_class_ops tpm_ibmvtpm = {
->   	.send = tpm_ibmvtpm_send,
->   	.cancel = tpm_ibmvtpm_cancel,
->   	.status = tpm_ibmvtpm_status,
-> -	.req_complete_mask = 0,
-> +	.req_complete_mask = TPM_STATUS_BUSY,
->   	.req_complete_val = 0,
->   	.req_canceled = tpm_ibmvtpm_req_canceled,
->   };
-> @@ -550,7 +548,7 @@ static void ibmvtpm_crq_process(struct ibmvtpm_crq *crq,
->   		case VTPM_TPM_COMMAND_RES:
->   			/* len of the data in rtce buffer */
->   			ibmvtpm->res_len = be16_to_cpu(crq->len);
-> -			ibmvtpm->tpm_processing_cmd = false;
-> +			ibmvtpm->tpm_status &= ~TPM_STATUS_BUSY;
->   			wake_up_interruptible(&ibmvtpm->wq);
->   			return;
->   		default:
-> @@ -688,8 +686,15 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
->   		goto init_irq_cleanup;
->   	}
->   
-> -	if (!strcmp(id->compat, "IBM,vtpm20")) {
-> +
-> +	if (!strcmp(id->compat, "IBM,vtpm20"))
->   		chip->flags |= TPM_CHIP_FLAG_TPM2;
-> +
-> +	rc = tpm_get_timeouts(chip);
-> +	if (rc)
-> +		goto init_irq_cleanup;
-> +
-> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
->   		rc = tpm2_get_cc_attrs_tbl(chip);
->   		if (rc)
->   			goto init_irq_cleanup;
-> diff --git a/drivers/char/tpm/tpm_ibmvtpm.h b/drivers/char/tpm/tpm_ibmvtpm.h
-> index b92aa7d3e93e..252f1cccdfc5 100644
-> --- a/drivers/char/tpm/tpm_ibmvtpm.h
-> +++ b/drivers/char/tpm/tpm_ibmvtpm.h
-> @@ -41,7 +41,8 @@ struct ibmvtpm_dev {
->   	wait_queue_head_t wq;
->   	u16 res_len;
->   	u32 vtpm_version;
-> -	bool tpm_processing_cmd;
-> +	u8 tpm_status;
-> +#define TPM_STATUS_BUSY		(1 << 0) /* vtpm is processing a command */
->   };
->   
->   #define CRQ_RES_BUF_SIZE	PAGE_SIZE
-> 
+Note that the cause is now 'denied-hash-algorithm' instead of
+'unavailable-hash-algorithm'. We get that audit message for any algorithm
+outside of sha256/384/512 (including MD5). In a sense, 'denied-hash-algorit=
+hm'
+take predecence over 'unavailable-hash-algorithm'.
 
--- 
-Thanks and Regards
-R.Nageswara Sastry
+When appraising files, e.g. trying to execute a file whose xattr was hashed
+with sha1 while the policy rule
+"appraise func=3DBPRM_CHECK fowner=3D0 appraise_hash=3Dsha256" is enabled:
+	audit(1628066349.230:130): pid=3D1369 uid=3D0 auid=3D0 ses=3D1 subj=3Dunco=
+nfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 op=3Dcollect_data cause=
+=3Ddenied-hash-algorithm comm=3D"bash" name=3D"/usr/bin/strace" dev=3D"dm-0=
+" ino=3D2632657 res=3D0 errno=3D0
+
+This yields the same error message when appraising a file and updating a
+xattr with an invalid algorithm. Maybe that is not a desired behavior ?
+
+
+This series is based on the following repo/branch:
+ repo: https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrit=
+y.git
+ branch: next-integrity-testing
+ commit e37be5343ae2b9419aea1442b07e5d2428b437b4 ("Merge branch 'ima-buffer=
+-measurement-changes-v4' into next-integrity")
+
+Changelog since v5:
+- Adapt a few places where lines were longer than 80 characters (suggested =
+by
+ Mimi Zohar)
+- Rebase on top on next-integrity-testing (suggested by Mimi Zohar)
+- Replace "whitelist" with "allowlist" (suggested by both Mimi Zohar and
+  Lakshmi Ramasubramanian)
+- Fix a broken kernel-doc (suggested by Mimi Zohar)
+- Prune the feature that updated "func=3DSETXATTR_CHECK" (suggested by Mimi
+  Zohar)
+- Update the commit messages with suggestions from Lakshmi Ramasubramanian
+- Short-circuit a bit the evaluation in ima_appraise.c/validate_hash_algo
+  to return earlier in case of memory exhaustion (suggested by Lakshmi
+  Ramasubramanian)
+- Renamed "forbidden-hash-algorithm" in ima_main.c to reduce the number of
+
+Changelog since v4:
+- Deleting the ability to remove SETXATTR_CHECK rules, as it added
+  a lot of concurrency troubles while creating a special case for
+  SETXATTR_CHECK rules only, which is rarely a good idea (suggested by Mimi
+  Zohar)
+- Change from #ifdef CONFIG_... to IS_ENABLED (suggested by Mimi Zohar)
+- Various fixes (code style, english grammar errors, double initialization
+  to zero) reported by Mimi Zohar
+- Fixed a logic inversion error introduced in v4 where checks where
+  performed when no SETXATTR_CHECK rule was enabled.
+- Do not log partial audit messages under memory pressure (suggested by
+  Mimi Zohar)
+
+Changelog since v3:
+- fixed an issue where the first write to the policy would ignore the
+  SETXATTR_CHECK attribute
+- fixed potential concurrency issues (I would greatly like external
+  opinions on this, because I clearly don't know much about RCU. Beside
+  maybe it's better to completely ignore the duplicates SETXATTR_CHECK
+  issue and not update the IMA policy in any case)
+- remove the CONFIG_CRYPTO_MD5 requirement for IMA (suggested by Mimi Zohar=
+)
+- updated commit messages to follow more closely the kernel style guide
+  (suggested by Mimi Zohar)
+- moved the hash verification code on appraisal a bit later, to prevent
+  issues when using the code with IMA in a disable/auditing mode
+  (suggested by Mimi Zohar)
+- limit the 'appraise_hash' parameter to the 'appraise' action
+  (suggested by Mimi Zohar)
+
+Changelog since v2:
+- remove the SecureBoot-specific behavior (suggested by Mimi Zohar)
+- users can now tweak through policy both the algorithms for
+  appraising files (a feature already present in v2) and for writing
+  with the new SETXATTR_CHECK value for the 'func' ima policy flag
+- updating 'forbidden-hash-algorithm' to 'denied-hash-algorithm' and
+  'unsupported-hash-algorithm' to disambiguate cases when the user
+  asked for an algorithm not present in the kernel and when the system
+  vendor explicitly opted in to a restricted list of accepted
+  algorithms (suggested by Mimi Zohar)
+- change the order of the patches to be bisect-safe while retaining
+  the guarantee that a policy cannot be accepted but not enforced
+  (suggested by Mimi Zohar)
+
+Changelog since v1:
+- Remove the two boot parameters (suggested by Mimi Zohar)
+- filter out hash algorithms not compiled in the kernel
+  on xattr writes (suggested by Mimi Zohar)
+- add a special case when secure boot is enabled: only the
+  ima_hash algorithm is accepted on userland writes
+- add a policy option to opt-in to restricting digest algorithms
+  at a per-rule granularity (suggested by Mimi Zohar)
+
+Simon Thoby (5):
+  IMA: remove the dependency on CRYPTO_MD5
+  IMA: block writes of the security.ima xattr with unsupported
+    algorithms
+  IMA: add support to restrict the hash algorithms used for file
+    appraisal
+  IMA: add a policy option to restrict xattr hash algorithms on
+    appraisal
+  IMA: introduce a new policy option func=3DSETXATTR_CHECK
+
+ Documentation/ABI/testing/ima_policy  |  15 ++-
+ security/integrity/ima/Kconfig        |   1 -
+ security/integrity/ima/ima.h          |  14 ++-
+ security/integrity/ima/ima_api.c      |   6 +-
+ security/integrity/ima/ima_appraise.c |  73 ++++++++++-
+ security/integrity/ima/ima_main.c     |  23 +++-
+ security/integrity/ima/ima_policy.c   | 169 +++++++++++++++++++++++---
+ 7 files changed, 267 insertions(+), 34 deletions(-)
+
+--=20
+2.31.1
