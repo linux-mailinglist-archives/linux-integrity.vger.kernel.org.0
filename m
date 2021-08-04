@@ -2,148 +2,275 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4543DF9F7
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Aug 2021 05:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8383DFB13
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Aug 2021 07:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234223AbhHDDXN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 3 Aug 2021 23:23:13 -0400
-Received: from sender4-of-o51.zoho.com ([136.143.188.51]:21136 "EHLO
-        sender4-of-o51.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234064AbhHDDXM (ORCPT
+        id S235062AbhHDFb0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Aug 2021 01:31:26 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60642 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232010AbhHDFbZ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 3 Aug 2021 23:23:12 -0400
-X-Greylist: delayed 905 seconds by postgrey-1.27 at vger.kernel.org; Tue, 03 Aug 2021 23:23:12 EDT
-ARC-Seal: i=1; a=rsa-sha256; t=1628046428; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Vuage8/C+0ND4RkBkK9rjTzEw0c+3+844ZAbeU86DOUv3Orm2ug5KyKzUNjU3ikQPuapyQNTEDLC8jivur82DRMJKrVcjIqrrLzhgfdYbgGkVB/mVsP4XdwjTJADWWKtkfIZhCXvuUgMCJsPPnbrBskGf3NPHZnCk6r1cVHXpoE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1628046428; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=NqBoRvAywN9Gro5Luow8D32ZnnwnjQtyZoS2PTsrkg8=; 
-        b=IRUeiSYoa0vgA7aLs5iuh+apYPA0fAZxVphemSvUTFgCuEK7qxsfvhGyvzKqvsE0RFw9qr3Dvwr7XTsuCuSbgLEp52SUQfClX8enQaIhZmOgXsNj4ohQxDwGu6oV0Ar8a5xJ7pjwf7FgTTQ+MYExgCZJOebzipcFA6o0Khro2/o=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=apertussolutions.com;
-        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-        dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1628046428;
-        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        bh=NqBoRvAywN9Gro5Luow8D32ZnnwnjQtyZoS2PTsrkg8=;
-        b=dGHgOyjB0tncSAk5AgH6KZewkMuP+lGQpyH/cgkWCQsKowieQE0s6iHIeYy1IoMd
-        2EKcnFuCn7an+PgXLD25TrZg8/WKRH7gjjRYNwBXGnB98O10jtanBzYc2dx6841yEZK
-        vdvyoUNze6sJz7CvUY6QbLe3sJ9NKE142agJGoW0=
-Received: from [10.10.1.171] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-        with SMTPS id 1628046423716382.0922528096655; Tue, 3 Aug 2021 20:07:03 -0700 (PDT)
-Subject: Re: [PATCH v2 12/12] iommu: Do not allow IOMMU passthrough with
- Secure Launch
-To:     Andy Lutomirski <luto@kernel.org>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, trenchboot-devel@googlegroups.com
-References: <1624032777-7013-1-git-send-email-ross.philipson@oracle.com>
- <1624032777-7013-13-git-send-email-ross.philipson@oracle.com>
- <53edcf0e-c094-876c-ac3d-7c9752e9ea99@arm.com>
- <34d05f0e-b24c-b8cf-c521-8b30cc1df532@oracle.com>
- <CALCETrUdEvLFKuvU7z_ut6cEfAgJogNp3oBXL-EdDLU=W+VeKA@mail.gmail.com>
-From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Message-ID: <7fd6733d-ad0b-90d8-7579-5d5a282964a5@apertussolutions.com>
-Date:   Tue, 3 Aug 2021 23:05:28 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <CALCETrUdEvLFKuvU7z_ut6cEfAgJogNp3oBXL-EdDLU=W+VeKA@mail.gmail.com>
+        Wed, 4 Aug 2021 01:31:25 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17454JtB105733;
+        Wed, 4 Aug 2021 01:31:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=NblZU99XF51OF6LVM6E3ZmyfEhrdUxiEedGEnfofF/E=;
+ b=joWxsMl6UP9DdNm0KBnuJZ/ekpPhY/3LzOjDbLmc4LsWRCY8z5IUYURO/5/gZq5VFPWt
+ vQXSZj3sOzY69I/Min3goGBtNy5LagswcvI14nS5j1BkAKKMeoOhQuibLVyEMV7jsY2m
+ IZda102KHM6rfM3gkRAOvf4Of9N6sGeqF2MpohzUDJbJLZa8QjO9YZe/+E8OGmk3YLTz
+ QDLIv891c896sioBi1jlnHZeZY+xzYXGofSiJTlyFzFDtISEojB+EF+In5tAJinKVZuU
+ r/2HgAbdXFSoKrXlqztvRKHhmQuKIaDW2j7RIfPUidd77hoZae1Zihkngn4e6kSxEgU4 3A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a76r5vtf4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Aug 2021 01:31:12 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17454WYB106529;
+        Wed, 4 Aug 2021 01:31:12 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a76r5vted-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Aug 2021 01:31:12 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1745IUAP015553;
+        Wed, 4 Aug 2021 05:31:10 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma01fra.de.ibm.com with ESMTP id 3a4x58qmvf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Aug 2021 05:31:09 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1745V61N56230364
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 Aug 2021 05:31:06 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D8A2A405C;
+        Wed,  4 Aug 2021 05:31:06 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A7F76A4054;
+        Wed,  4 Aug 2021 05:31:01 +0000 (GMT)
+Received: from Nageswaras-MacBook-Pro-2.local (unknown [9.211.35.152])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  4 Aug 2021 05:31:01 +0000 (GMT)
+Subject: Re: [PATCH v2] tpm: ibmvtpm: Avoid error message when process gets
+ signal while waiting
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>, jarkko@kernel.org
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>
+References: <20210803202622.1537040-1-stefanb@linux.vnet.ibm.com>
+From:   Nageswara Sastry <rnsastry@linux.ibm.com>
+Message-ID: <59736f0a-6090-2e95-805c-1f38b2c09d0c@linux.ibm.com>
+Date:   Wed, 4 Aug 2021 11:00:57 +0530
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
+In-Reply-To: <20210803202622.1537040-1-stefanb@linux.vnet.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Language: en-GB
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: _vh0e6afxLKgUFxjHQZPh-Mhef-YGB6H
+X-Proofpoint-ORIG-GUID: 585esrirbLpr7a1ucgYsf_uJ0By8zyIq
 Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-04_01:2021-08-03,2021-08-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0
+ clxscore=1011 priorityscore=1501 adultscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108040027
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 6/21/21 5:15 PM, Andy Lutomirski wrote:
-> On Mon, Jun 21, 2021 at 10:51 AM Ross Philipson
-> <ross.philipson@oracle.com> wrote:
->>
->> On 6/18/21 2:32 PM, Robin Murphy wrote:
->>> On 2021-06-18 17:12, Ross Philipson wrote:
->>>> @@ -2761,7 +2762,10 @@ void iommu_set_default_passthrough(bool cmd_line)
->>>>    {
->>>>        if (cmd_line)
->>>>            iommu_cmd_line |= IOMMU_CMD_LINE_DMA_API;
->>>> -    iommu_def_domain_type = IOMMU_DOMAIN_IDENTITY;
->>>> +
->>>> +    /* Do not allow identity domain when Secure Launch is configured */
->>>> +    if (!(slaunch_get_flags() & SL_FLAG_ACTIVE))
->>>> +        iommu_def_domain_type = IOMMU_DOMAIN_IDENTITY;
->>>
->>> Quietly ignoring the setting and possibly leaving iommu_def_domain_type
->>> uninitialised (note that 0 is not actually a usable type) doesn't seem
->>> great. AFAICS this probably warrants similar treatment to the
->>
->> Ok so I guess it would be better to set it to IOMMU_DOMAIN_DMA event
->> though passthrough was requested. Or perhaps something more is needed here?
->>
->>> mem_encrypt_active() case - there doesn't seem a great deal of value in
->>> trying to save users from themselves if they care about measured boot
->>> yet explicitly pass options which may compromise measured boot. If you
->>> really want to go down that route there's at least the sysfs interface
->>> you'd need to nobble as well, not to mention the various ways of
->>> completely disabling IOMMUs...
->>
->> Doing a secure launch with the kernel is not a general purpose user use
->> case. A lot of work is done to secure the environment. Allowing
->> passthrough mode would leave the secure launch kernel exposed to DMA. I
->> think what we are trying to do here is what we intend though there may
->> be a better way or perhaps it is incomplete as you suggest.
->>
-> 
-> I don't really like all these special cases.  Generically, what you're
-> trying to do is (AFAICT) to get the kernel to run in a mode in which
-> it does its best not to trust attached devices.  Nothing about this is
-> specific to Secure Launch.  There are plenty of scenarios in which
-> this the case:
-> 
->   - Virtual devices in a VM host outside the TCB, e.g. VDUSE, Xen
-> device domains (did I get the name right), whatever tricks QEMU has,
-> etc.
->   - SRTM / DRTM technologies (including but not limited to Secure
-> Launch -- plain old Secure Boot can work like this too).
->   - Secure guest technologies, including but not limited to TDX and SEV.
->   - Any computer with a USB-C port or other external DMA-capable port.
->   - Regular computers in which the admin wants to enable this mode for
-> whatever reason.
-> 
-> Can you folks all please agree on a coordinated way for a Linux kernel
-> to configure itself appropriately?  Or to be configured via initramfs,
-> boot option, or some other trusted source of configuration supplied at
-> boot time?  We don't need a whole bunch of if (TDX), if (SEV), if
-> (secure launch), if (I have a USB-C port with PCIe exposed), if
-> (running on Xen), and similar checks all over the place.
 
-Hey Andy,
 
-On behalf of Ross and myself I wanted to follow up on the points raised 
-here. While there is an interest to ensure a system is properly 
-configured we should not be blocking the user from configuring the 
-system as they desire. Instead we are taking the approach to document 
-the SecureLaunch capability, in particular the recommend way to 
-configure the kernel to appropriately use the capability using the 
-already existing methods such as using kernel parameters. Hopefully that 
-will address the concerns in the short term. Looking forward, we do have 
-a vested interest in ensuring there is an ability to configure access 
-control for security and safety critical solutions and would be grateful 
-if we would be included in any discussions or working groups that might 
-be looking into unifying how all these security technologies should be 
-configuring the Linux kernel.
+On 04/08/21 1:56 am, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> When rngd is run as root then lots of these types of message will appear
+> in the kernel log if the TPM has been configured to provide random bytes:
+> 
+> [ 7406.275163] tpm tpm0: tpm_transmit: tpm_recv: error -4
+> 
+> The issue is caused by the following call that is interrupted while
+> waiting for the TPM's response.
+> 
+> sig = wait_event_interruptible(ibmvtpm->wq,
+>                                 !ibmvtpm->tpm_processing_cmd);
+> 
+> Rather than waiting for the response in the low level driver, have it use
+> the polling loop in tpm_try_transmit() that uses a command's duration to
+> poll until a result has been returned by the TPM, thus ending when the
+> timeout has occurred but not responding to signals and ctrl-c anymore. To
+> stay in this polling loop extend tpm_ibmvtpm_status() to return
+> TPM_STATUS_BUSY for as long as the vTPM is busy. Since the loop requires
+> the TPM's timeouts, get them now using tpm_get_timeouts() after setting
+> the TPM2 version flag on the chip.
+> 
+> Rename the tpm_processing_cmd to tpm_status in ibmvtpm_dev and set the
+> TPM_STATUS_BUSY flag while the vTPM is busy processing a command.
+> 
+> To recreat the resolved issue start rngd like this:
+> 
+> sudo rngd -r /dev/hwrng -t
+> sudo rngd -r /dev/tpm0 -t
+> 
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1981473
+> Fixes: 6674ff145eef ("tpm_ibmvtpm: properly handle interrupted packet receptions")
+> Cc: Nayna Jain <nayna@linux.ibm.com>
+> Cc: George Wilson <gcwilson@linux.ibm.com>
+> Reported-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> 
 
-V/r,
-Daniel P. Smith
+Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+
+Tested the patch applying on kernel version 5.14.0-rc3
+
+1. Ran with recreate commands i.e.
+rngd -r /dev/hwrng -t
+rngd -r /dev/tpm0 -t
+
+2. Ran the above rngd commands along with "stress-ng - dispatching hogs: 
+32 af-alg, 32 bsearch, 32 context, 32 cpu, 32 crypt, 32 hsearch, 32 
+longjmp, 32 lsearch, 32 matrix, 32 qsort, 32 str, 32 stream, 32 tsearch, 
+32 vecmath, 32 wcs" for 2 hours
+
+Thanks!!
+> ---
+> 
+> v2:
+>   - reworded commit text
+> ---
+>   drivers/char/tpm/tpm_ibmvtpm.c | 31 ++++++++++++++++++-------------
+>   drivers/char/tpm/tpm_ibmvtpm.h |  3 ++-
+>   2 files changed, 20 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+> index 903604769de9..5d795866b483 100644
+> --- a/drivers/char/tpm/tpm_ibmvtpm.c
+> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
+> @@ -106,17 +106,12 @@ static int tpm_ibmvtpm_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+>   {
+>   	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
+>   	u16 len;
+> -	int sig;
+>   
+>   	if (!ibmvtpm->rtce_buf) {
+>   		dev_err(ibmvtpm->dev, "ibmvtpm device is not ready\n");
+>   		return 0;
+>   	}
+>   
+> -	sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
+> -	if (sig)
+> -		return -EINTR;
+> -
+>   	len = ibmvtpm->res_len;
+>   
+>   	if (count < len) {
+> @@ -220,11 +215,12 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+>   		return -EIO;
+>   	}
+>   
+> -	if (ibmvtpm->tpm_processing_cmd) {
+> +	if ((ibmvtpm->tpm_status & TPM_STATUS_BUSY)) {
+>   		dev_info(ibmvtpm->dev,
+>   		         "Need to wait for TPM to finish\n");
+>   		/* wait for previous command to finish */
+> -		sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
+> +		sig = wait_event_interruptible(ibmvtpm->wq,
+> +				(ibmvtpm->tpm_status & TPM_STATUS_BUSY) == 0);
+>   		if (sig)
+>   			return -EINTR;
+>   	}
+> @@ -237,7 +233,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+>   	 * set the processing flag before the Hcall, since we may get the
+>   	 * result (interrupt) before even being able to check rc.
+>   	 */
+> -	ibmvtpm->tpm_processing_cmd = true;
+> +	ibmvtpm->tpm_status |= TPM_STATUS_BUSY;
+>   
+>   again:
+>   	rc = ibmvtpm_send_crq(ibmvtpm->vdev,
+> @@ -255,7 +251,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
+>   			goto again;
+>   		}
+>   		dev_err(ibmvtpm->dev, "tpm_ibmvtpm_send failed rc=%d\n", rc);
+> -		ibmvtpm->tpm_processing_cmd = false;
+> +		ibmvtpm->tpm_status &= ~TPM_STATUS_BUSY;
+>   	}
+>   
+>   	spin_unlock(&ibmvtpm->rtce_lock);
+> @@ -269,7 +265,9 @@ static void tpm_ibmvtpm_cancel(struct tpm_chip *chip)
+>   
+>   static u8 tpm_ibmvtpm_status(struct tpm_chip *chip)
+>   {
+> -	return 0;
+> +	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
+> +
+> +	return ibmvtpm->tpm_status;
+>   }
+>   
+>   /**
+> @@ -457,7 +455,7 @@ static const struct tpm_class_ops tpm_ibmvtpm = {
+>   	.send = tpm_ibmvtpm_send,
+>   	.cancel = tpm_ibmvtpm_cancel,
+>   	.status = tpm_ibmvtpm_status,
+> -	.req_complete_mask = 0,
+> +	.req_complete_mask = TPM_STATUS_BUSY,
+>   	.req_complete_val = 0,
+>   	.req_canceled = tpm_ibmvtpm_req_canceled,
+>   };
+> @@ -550,7 +548,7 @@ static void ibmvtpm_crq_process(struct ibmvtpm_crq *crq,
+>   		case VTPM_TPM_COMMAND_RES:
+>   			/* len of the data in rtce buffer */
+>   			ibmvtpm->res_len = be16_to_cpu(crq->len);
+> -			ibmvtpm->tpm_processing_cmd = false;
+> +			ibmvtpm->tpm_status &= ~TPM_STATUS_BUSY;
+>   			wake_up_interruptible(&ibmvtpm->wq);
+>   			return;
+>   		default:
+> @@ -688,8 +686,15 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+>   		goto init_irq_cleanup;
+>   	}
+>   
+> -	if (!strcmp(id->compat, "IBM,vtpm20")) {
+> +
+> +	if (!strcmp(id->compat, "IBM,vtpm20"))
+>   		chip->flags |= TPM_CHIP_FLAG_TPM2;
+> +
+> +	rc = tpm_get_timeouts(chip);
+> +	if (rc)
+> +		goto init_irq_cleanup;
+> +
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+>   		rc = tpm2_get_cc_attrs_tbl(chip);
+>   		if (rc)
+>   			goto init_irq_cleanup;
+> diff --git a/drivers/char/tpm/tpm_ibmvtpm.h b/drivers/char/tpm/tpm_ibmvtpm.h
+> index b92aa7d3e93e..252f1cccdfc5 100644
+> --- a/drivers/char/tpm/tpm_ibmvtpm.h
+> +++ b/drivers/char/tpm/tpm_ibmvtpm.h
+> @@ -41,7 +41,8 @@ struct ibmvtpm_dev {
+>   	wait_queue_head_t wq;
+>   	u16 res_len;
+>   	u32 vtpm_version;
+> -	bool tpm_processing_cmd;
+> +	u8 tpm_status;
+> +#define TPM_STATUS_BUSY		(1 << 0) /* vtpm is processing a command */
+>   };
+>   
+>   #define CRQ_RES_BUF_SIZE	PAGE_SIZE
+> 
+
+-- 
+Thanks and Regards
+R.Nageswara Sastry
