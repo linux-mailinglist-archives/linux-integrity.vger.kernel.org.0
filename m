@@ -2,181 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFD13E05BE
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Aug 2021 18:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00453E06D8
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Aug 2021 19:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbhHDQTh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 4 Aug 2021 12:19:37 -0400
-Received: from smtp2.axis.com ([195.60.68.18]:52095 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229731AbhHDQTg (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 4 Aug 2021 12:19:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1628093964;
-  x=1659629964;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=y/VvGw8hfjncPA/ggJtRSsIGz48Wf3sLzSxNjYJFhPE=;
-  b=h7NGW4Ri27qooXSuEu3bT90ivImk9a/lVByL2nfCowp/pjE8DKI3LJ8d
-   RSZA6Shf6Mw9F6/wuAMmZEwlM9Zs+FRe+kImigEqBfrlcnsssqBWKhCqQ
-   jrmWgvrBzKGiulxyWPxGoZEVFpiXx4z1vWNbe3AOWI2C44oWGsBRjEmhj
-   Hjeuu7NO/AqBIbSlcZbrSuMS2NwtuL8bJYYQKNSiSDCeAYw5FPoHEABgl
-   yVFGuW4ydLjxeOlFQTxC/qVOOtaKWdQEtYgoGVl+n5MqySsuNyP6rsUfR
-   N4iMfxbdCZOzzvKLsSkPB236wd6+MgUawN5LCQIXYLForEodlUuETZLjT
-   A==;
-From:   Borys Movchan <borysmn@axis.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-CC:     <kernel@axis.com>, Borys Movchan <borysmn@axis.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] tpm: Add Upgrade/Reduced mode support for TPM2 modules
-Date:   Wed, 4 Aug 2021 18:21:31 +0200
-Message-ID: <20210804162132.24786-1-borysmn@axis.com>
-X-Mailer: git-send-email 2.20.1
+        id S229869AbhHDRic (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 4 Aug 2021 13:38:32 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:37284 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230040AbhHDRic (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 4 Aug 2021 13:38:32 -0400
+Received: from [10.137.112.111] (unknown [131.107.147.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0C32B209DD64;
+        Wed,  4 Aug 2021 10:38:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0C32B209DD64
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1628098699;
+        bh=LXQPgu22ut9sfQYZjKHGSx3y+YPXB1QiXiyEww2Pox0=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=oHFAzG+6Qi+oewg9DNm48CO0wB5yqg8d6WhcNTDcO5qzqLCvoZIinXnCgBR7gR1s5
+         mnVCIG1qPJuLQm7b+Z5i+aZDgEu+yLtWiif17HLP0XDqga1pQ+gZHtLu2jL7fPLSBK
+         7qVoDIbfdI1dMe+AEjBa05nCM7T110qS5M6gN3NE=
+Subject: Re: [PATCH v6 2/5] IMA: block writes of the security.ima xattr with
+ unsupported algorithms
+To:     THOBY Simon <Simon.THOBY@viveris.fr>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
+References: <20210804092010.350372-1-simon.thoby@viveris.fr>
+ <20210804092010.350372-3-simon.thoby@viveris.fr>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Message-ID: <3234077b-9e00-7d80-28b9-b448fe1e06af@linux.microsoft.com>
+Date:   Wed, 4 Aug 2021 10:40:18 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail03w.axis.com (10.20.40.9) To se-mail07w.axis.com
- (10.20.40.13)
+In-Reply-To: <20210804092010.350372-3-simon.thoby@viveris.fr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-If something went wrong during the TPM firmware upgrade, like power
-failure or the firmware image file get corrupted, the TPM might end
-up in Upgrade or Failure mode upon the next start. The state is
-persistent between the TPM power cycle/restart.
+On 8/4/2021 2:20 AM, THOBY Simon wrote:
+> By default, writes to the extended attributes security.ima will be
+> allowed even if the hash algorithm used for the xattr is not compiled
+> in the kernel (which does not make sense because the kernel would not
+> be able to appraise that file as it lacks support for validating the
+> hash).
+> 
+> Prevent writes to the security.ima xattr if the hash algorithm used is
+> not available in the current kernel. Lo an audit message if such an
+> operation is attempted.
+Typo: Lo => Log
 
-According to TPM specification:
- * If the TPM is in Upgrade mode, it will answer with TPM2_RC_UPGRADE
-   to all commands except Field Upgrade related ones.
- * If the TPM is in Failure mode, it will allow performing TPM
-   initialization but will not provide any crypto operations.
-   Will happily respond to Field Upgrade calls.
+Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
 
-The fix changes the behavior of the `tpm2_auto_startup` function, so
-it tries to detect what mode TPM is running in. If the chip is in the
-Upgrade or Failure mode, the function returns -EIO error code which
-can be used later to adjust driver behavior later.
-After `tpm_chip_register` calls `tpm2_auto_startup` it checks for the
-error code. If the TPM is in Upgrade or Failure mode, set the
-`limited_mode` flag. The calls to `tpm2_get_cc_attrs_tbl`,
-`tpm_add_hwrng` and `tpm_get_pcr_allocation` will fail if the TPM is
-in Failure or Upgrade mode, so use `limited_mode` flag to exclude
-them from the module initialization sequence.
-
-Signed-off-by: Borys Movchan <borysmn@axis.com>
----
-
-Notes:
-    Commit message updated
-
- drivers/char/tpm/tpm-chip.c | 23 +++++++++++++++--------
- drivers/char/tpm/tpm2-cmd.c | 12 ++++++++++--
- include/linux/tpm.h         |  1 +
- 3 files changed, 26 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index ddaeceb7e109..ff2367c447fb 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -574,20 +574,25 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
- int tpm_chip_register(struct tpm_chip *chip)
- {
- 	int rc;
-+	bool limited_mode = false;
- 
- 	rc = tpm_chip_start(chip);
- 	if (rc)
- 		return rc;
- 	rc = tpm_auto_startup(chip);
--	if (rc) {
-+	if (rc == -EIO) {
-+		limited_mode = true;
-+	} else if (rc) {
- 		tpm_chip_stop(chip);
- 		return rc;
- 	}
- 
--	rc = tpm_get_pcr_allocation(chip);
--	tpm_chip_stop(chip);
--	if (rc)
--		return rc;
-+	if (!limited_mode) {
-+		rc = tpm_get_pcr_allocation(chip);
-+		tpm_chip_stop(chip);
-+		if (rc)
-+			return rc;
-+	}
- 
- 	tpm_sysfs_add_device(chip);
- 
-@@ -595,9 +600,11 @@ int tpm_chip_register(struct tpm_chip *chip)
- 
- 	tpm_add_ppi(chip);
- 
--	rc = tpm_add_hwrng(chip);
--	if (rc)
--		goto out_ppi;
-+	if (!limited_mode) {
-+		rc = tpm_add_hwrng(chip);
-+		if (rc)
-+			goto out_ppi;
-+	}
- 
- 	rc = tpm_add_char_device(chip);
- 	if (rc)
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index a25815a6f625..7468353ed67d 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -718,7 +718,8 @@ static int tpm2_startup(struct tpm_chip *chip)
-  *                     sequence
-  * @chip: TPM chip to use
-  *
-- * Returns 0 on success, < 0 in case of fatal error.
-+ * Returns 0 on success, -ENODEV in case of fatal error,
-+ *	    -EIO in case of Reduced/Upgrade mode
-  */
- int tpm2_auto_startup(struct tpm_chip *chip)
- {
-@@ -729,7 +730,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
- 		goto out;
- 
- 	rc = tpm2_do_selftest(chip);
--	if (rc && rc != TPM2_RC_INITIALIZE)
-+	if (rc == TPM2_RC_UPGRADE) {
-+		rc = -EIO;
-+		goto out;
-+	} else if (rc && rc != TPM2_RC_INITIALIZE)
- 		goto out;
- 
- 	if (rc == TPM2_RC_INITIALIZE) {
-@@ -743,6 +747,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
- 	}
- 
- 	rc = tpm2_get_cc_attrs_tbl(chip);
-+	if (rc) { /* Succeeded until here, but failed -> reduced mode */
-+		rc = -EIO;
-+		goto out;
-+	}
- 
- out:
- 	if (rc > 0)
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index aa11fe323c56..e873c42907f0 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -207,6 +207,7 @@ enum tpm2_return_codes {
- 	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
- 	TPM2_RC_FAILURE		= 0x0101,
- 	TPM2_RC_DISABLED	= 0x0120,
-+	TPM2_RC_UPGRADE		= 0x012D,
- 	TPM2_RC_COMMAND_CODE    = 0x0143,
- 	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
- 	TPM2_RC_REFERENCE_H0	= 0x0910,
--- 
-2.20.1
-
+> 
+> Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
+> ---
+>   security/integrity/ima/ima.h          |  2 +-
+>   security/integrity/ima/ima_appraise.c | 49 ++++++++++++++++++++++++++-
+>   2 files changed, 49 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 2f4c20b16ad7..829478dabeeb 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -319,7 +319,7 @@ int ima_must_appraise(struct user_namespace *mnt_userns, struct inode *inode,
+>   void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file);
+>   enum integrity_status ima_get_cache_status(struct integrity_iint_cache *iint,
+>   					   enum ima_hooks func);
+> -enum hash_algo ima_get_hash_algo(struct evm_ima_xattr_data *xattr_value,
+> +enum hash_algo ima_get_hash_algo(const struct evm_ima_xattr_data *xattr_value,
+>   				 int xattr_len);
+>   int ima_read_xattr(struct dentry *dentry,
+>   		   struct evm_ima_xattr_data **xattr_value);
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index 63bec42c353f..ed1a98f6ee19 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -171,7 +171,7 @@ static void ima_cache_flags(struct integrity_iint_cache *iint,
+>   	}
+>   }
+>   
+> -enum hash_algo ima_get_hash_algo(struct evm_ima_xattr_data *xattr_value,
+> +enum hash_algo ima_get_hash_algo(const struct evm_ima_xattr_data *xattr_value,
+>   				 int xattr_len)
+>   {
+>   	struct signature_v2_hdr *sig;
+> @@ -575,6 +575,51 @@ static void ima_reset_appraise_flags(struct inode *inode, int digsig)
+>   		clear_bit(IMA_DIGSIG, &iint->atomic_flags);
+>   }
+>   
+> +/**
+> + * validate_hash_algo() - Block setxattr with invalid digests
+> + * @dentry: object being setxattr()'ed
+> + * @xattr_value: value supplied by userland for the xattr
+> + * @xattr_value_len: length of xattr_value
+> + *
+> + * Context: called when the user tries to write the security.ima xattr.
+> + * The xattr value is mapped to some hash algorithm, and this algorithm
+> + * must be built in the kernel for the setxattr to be allowed.
+> + *
+> + * Emit an audit message when the algorithm is invalid.
+> + *
+> + * Return: 0 on success, else an error.
+> + */
+> +static int validate_hash_algo(struct dentry *dentry,
+> +				   const struct evm_ima_xattr_data *xattr_value,
+> +				   size_t xattr_value_len)
+> +{
+> +	int result = 0;
+> +	char *path = NULL, *pathbuf = NULL;
+> +	enum hash_algo xattr_hash_algo;
+> +
+> +	xattr_hash_algo = ima_get_hash_algo(xattr_value, xattr_value_len);
+> +
+> +	if (likely(xattr_hash_algo == ima_hash_algo ||
+> +		   crypto_has_alg(hash_algo_name[xattr_hash_algo], 0, 0)))
+> +		return result;
+> +
+> +	result = -EACCES;
+> +
+> +	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
+> +	if (!pathbuf)
+> +		return result;
+> +
+> +	path = dentry_path(dentry, pathbuf, PATH_MAX);
+> +
+> +	integrity_audit_msg(AUDIT_INTEGRITY_DATA, d_inode(dentry), path,
+> +			    "collect_data", "unavailable-hash-algorithm",
+> +			    result, 0);
+> +
+> +	kfree(pathbuf);
+> +
+> +	return result;
+> +}
+> +
+>   int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
+>   		       const void *xattr_value, size_t xattr_value_len)
+>   {
+> @@ -595,6 +640,8 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
+>   		ima_reset_appraise_flags(d_backing_inode(dentry), digsig);
+>   		if (result == 1)
+>   			result = 0;
+> +
+> +		result = validate_hash_algo(dentry, xvalue, xattr_value_len);
+>   	}
+>   	return result;
+>   }
+> 
