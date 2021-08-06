@@ -2,232 +2,212 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 402003E2D40
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Aug 2021 17:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F17D3E2D5C
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Aug 2021 17:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243305AbhHFPKN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Aug 2021 11:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
+        id S244067AbhHFPMq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Aug 2021 11:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242756AbhHFPKN (ORCPT
+        with ESMTP id S244232AbhHFPMm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Aug 2021 11:10:13 -0400
+        Fri, 6 Aug 2021 11:12:42 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566B7C0613CF
-        for <linux-integrity@vger.kernel.org>; Fri,  6 Aug 2021 08:09:57 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1mC1Tf-0006Dt-Sv; Fri, 06 Aug 2021 17:09:39 +0200
-Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1mC1Td-0001mU-C3; Fri, 06 Aug 2021 17:09:37 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC2DC061798
+        for <linux-integrity@vger.kernel.org>; Fri,  6 Aug 2021 08:12:26 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1mC1WK-0006yw-ON; Fri, 06 Aug 2021 17:12:24 +0200
+Subject: Re: [PATCH 0/4] KEYS: trusted: Introduce support for NXP CAAM-based
+ trusted keys
 From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <jejb@linux.ibm.com>,
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     Jan Luebbe <j.luebbe@pengutronix.de>,
+        Udit Agarwal <udit.agarwal@nxp.com>,
         Sumit Garg <sumit.garg@linaro.org>,
+        David Gstir <david@sigma-star.at>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Richard Weinberger <richard@nod.at>,
+        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
         David Howells <dhowells@redhat.com>,
-        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] fscrypt: support trusted keys
-Date:   Fri,  6 Aug 2021 17:09:28 +0200
-Message-Id: <20210806150928.27857-1-a.fatoum@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
+        linux-integrity@vger.kernel.org,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+References: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de>
+Message-ID: <b9e44f8e-84a0-90be-6cfc-d3a0bde12178@pengutronix.de>
+Date:   Fri, 6 Aug 2021 17:12:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Kernel trusted keys don't require userspace knowledge of the raw key
-material and instead export a sealed blob, which can be persisted to
-unencrypted storage. Userspace can then load this blob into the kernel,
-where it's unsealed and from there on usable for kernel crypto.
+Dear trusted key maintainers,
 
-This is incompatible with fscrypt, where userspace is supposed to supply
-the raw key material. For TPMs, a work around is to do key unsealing in
-userspace, but this may not be feasible for other trusted key backends.
+On 21.07.21 18:48, Ahmad Fatoum wrote:
+> Series applies on top of
+> https://lore.kernel.org/linux-integrity/20210721160258.7024-1-a.fatoum@pengutronix.de/T/#u
+> 
+> v2 -> v3:
+>  - Split off first Kconfig preparation patch. It fixes a regression,
+>    so sent that out, so it can be applied separately (Sumit)
+>  - Split off second key import patch. I'll send that out separately
+>    as it's a development aid and not required within the CAAM series
+>  - add MAINTAINERS entry
 
-Make it possible to benefit from both fscrypt and trusted key sealing
-by extending fscrypt_add_key_arg::key_id to hold either the ID of a
-fscrypt-provisioning or a trusted key.
+Gentle ping. I'd appreciate feedback on this series.
 
-A non fscrypt-provisioning key_id was so far prohibited, so additionally
-allowing trusted keys won't break backwards compatibility.
+Cheers,
+Ahmad
 
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
-Tested with:
-https://github.com/google/fscryptctl/pull/23
+> 
+> v1 -> v2:
+>  - Added new commit to make trusted key Kconfig option independent
+>    of TPM and added new Kconfig file for trusted keys
+>  - Add new commit for importing existing key material
+>  - Allow users to force use of kernel RNG (Jarkko)
+>  - Enforce maximum keymod size (Horia)
+>  - Use append_seq_(in|out)_ptr_intlen instead of append_seq_(in|out)_ptr
+>    (Horia)
+>  - Make blobifier handle private to CAAM glue code file (Horia)
+>  - Extend trusted keys documentation for CAAM
+>  - Rebased and updated original cover letter:
+> 
+> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+> built into many newer i.MX and QorIQ SoCs by NXP.
+> 
+> Its blob mechanism can AES encrypt/decrypt user data using a unique
+> never-disclosed device-specific key.
+> 
+> There has been multiple discussions on how to represent this within the kernel:
+> 
+> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+> built into many newer i.MX and QorIQ SoCs by NXP.
+> 
+> Its blob mechanism can AES encrypt/decrypt user data using a unique
+> never-disclosed device-specific key. There has been multiple
+> discussions on how to represent this within the kernel:
+> 
+>  - [RFC] crypto: caam - add red blobifier
+>    Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
+>    best integrate the blob mechanism.
+>    Mimi suggested that it could be used to implement trusted keys.
+>    Trusted keys back then were a TPM-only feature.
+> 
+>  - security/keys/secure_key: Adds the secure key support based on CAAM.
+>    Udit added[2] a new "secure" key type with the CAAM as backend. The key
+>    material stays within the kernel only.
+>    Mimi and James agreed that this needs a generic interface, not specific
+>    to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
+>    basis for TEE-backed keys.
+> 
+>  - [RFC] drivers: crypto: caam: key: Add caam_tk key type
+>    Franck added[3] a new "caam_tk" key type based on Udit's work. This time
+>    it uses CAAM "black blobs" instead of "red blobs", so key material stays
+>    within the CAAM and isn't exposed to kernel in plaintext.
+>    James voiced the opinion that there should be just one user-facing generic
+>    wrap/unwrap key type with multiple possible handlers.
+>    David suggested trusted keys.
+> 
+>  - Introduce TEE based Trusted Keys support
+>    Sumit reworked[4] trusted keys to support multiple possible backends with
+>    one chosen at boot time and added a new TEE backend along with TPM.
+>    This now sits in Jarkko's master branch to be sent out for v5.13
+> 
+> This patch series builds on top of Sumit's rework to have the CAAM as yet another
+> trusted key backend.
+> 
+> The CAAM bits are based on Steffen's initial patch from 2015. His work had been
+> used in the field for some years now, so I preferred not to deviate too much from it.
+> 
+> This series has been tested with dmcrypt[5] on an i.MX6DL.
+> 
+> Looking forward to your feedback.
+> 
+> Cheers,
+> Ahmad
+> 
+>  [1]: https://lore.kernel.org/linux-crypto/1447082306-19946-2-git-send-email-s.trumtrar@pengutronix.de/
+>  [2]: https://lore.kernel.org/linux-integrity/20180723111432.26830-1-udit.agarwal@nxp.com/
+>  [3]: https://lore.kernel.org/lkml/1551456599-10603-2-git-send-email-franck.lenormand@nxp.com/
+>  [4]: https://lore.kernel.org/lkml/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
+>  [5]: https://lore.kernel.org/linux-integrity/20210122084321.24012-2-a.fatoum@pengutronix.de/
+> 
+> ---
+> To: Jarkko Sakkinen <jarkko@kernel.org>
+> To: "Horia Geantă" <horia.geanta@nxp.com>
+> To: Mimi Zohar <zohar@linux.ibm.com>
+> To: Aymen Sghaier <aymen.sghaier@nxp.com>
+> To: Herbert Xu <herbert@gondor.apana.org.au>
+> To: "David S. Miller" <davem@davemloft.net>
+> To: James Bottomley <jejb@linux.ibm.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+> Cc: Udit Agarwal <udit.agarwal@nxp.com>
+> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+> Cc: David Gstir <david@sigma-star.at>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+> Cc: Sumit Garg <sumit.garg@linaro.org>
+> Cc: linux-integrity@vger.kernel.org
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> 
+> Ahmad Fatoum (4):
+>   KEYS: trusted: allow users to use kernel RNG for key material
+>   KEYS: trusted: allow trust sources to use kernel RNG for key material
+>   crypto: caam - add in-kernel interface for blob generator
+>   KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+> 
+>  Documentation/admin-guide/kernel-parameters.txt   |   8 +-
+>  Documentation/security/keys/trusted-encrypted.rst |  60 +++-
+>  MAINTAINERS                                       |   9 +-
+>  drivers/crypto/caam/Kconfig                       |   3 +-
+>  drivers/crypto/caam/Makefile                      |   1 +-
+>  drivers/crypto/caam/blob_gen.c                    | 230 +++++++++++++++-
+>  include/keys/trusted-type.h                       |   2 +-
+>  include/keys/trusted_caam.h                       |  11 +-
+>  include/soc/fsl/caam-blob.h                       |  56 ++++-
+>  security/keys/trusted-keys/Kconfig                |  11 +-
+>  security/keys/trusted-keys/Makefile               |   2 +-
+>  security/keys/trusted-keys/trusted_caam.c         |  74 +++++-
+>  security/keys/trusted-keys/trusted_core.c         |  23 +-
+>  13 files changed, 477 insertions(+), 13 deletions(-)
+>  create mode 100644 drivers/crypto/caam/blob_gen.c
+>  create mode 100644 include/keys/trusted_caam.h
+>  create mode 100644 include/soc/fsl/caam-blob.h
+>  create mode 100644 security/keys/trusted-keys/trusted_caam.c
+> 
+> base-commit: 97408d81ed533b953326c580ff2c3f1948b3fcee
+> 
 
-v1 here:
-https://lore.kernel.org/linux-fscrypt/20210727144349.11215-1-a.fatoum@pengutronix.de/T/#u
 
-v1 -> v2:
-  - Drop encrypted key support and key_extract_material
-  - Use key_id instead of repurposing raw (Eric)
-  - Shift focus to trusted key sealing for non-TPM as a rationale
-    why this integration is worthwhile (Eric)
-  - Extend documentation with rationale on why one would
-    use trusted keys and warn about trusted key reuse
-
-To: "Theodore Y. Ts'o" <tytso@mit.edu>
-To: Jaegeuk Kim <jaegeuk@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Sumit Garg <sumit.garg@linaro.org>
-Cc: David Howells <dhowells@redhat.com>
-Cc: linux-fscrypt@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
-Cc: keyrings@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- Documentation/filesystems/fscrypt.rst | 31 ++++++++++++++-----
- fs/crypto/keyring.c                   | 43 +++++++++++++++++++--------
- 2 files changed, 54 insertions(+), 20 deletions(-)
-
-diff --git a/Documentation/filesystems/fscrypt.rst b/Documentation/filesystems/fscrypt.rst
-index 44b67ebd6e40..c1811fa4285a 100644
---- a/Documentation/filesystems/fscrypt.rst
-+++ b/Documentation/filesystems/fscrypt.rst
-@@ -734,23 +734,40 @@ as follows:
- 
- - ``key_id`` is 0 if the raw key is given directly in the ``raw``
-   field.  Otherwise ``key_id`` is the ID of a Linux keyring key of
--  type "fscrypt-provisioning" whose payload is
-+  type "fscrypt-provisioning" or "trusted":
-+  "fscrypt-provisioning" keys have a payload of
-   struct fscrypt_provisioning_key_payload whose ``raw`` field contains
-   the raw key and whose ``type`` field matches ``key_spec.type``.
-   Since ``raw`` is variable-length, the total size of this key's
-   payload must be ``sizeof(struct fscrypt_provisioning_key_payload)``
--  plus the raw key size.  The process must have Search permission on
--  this key.
--
--  Most users should leave this 0 and specify the raw key directly.
--  The support for specifying a Linux keyring key is intended mainly to
--  allow re-adding keys after a filesystem is unmounted and re-mounted,
-+  plus the raw key size.
-+  For "trusted" keys, the payload is directly taken as the raw key.
-+
-+  The process must have Search permission on this key.
-+
-+  Most users leave this 0 and specify the raw key directly.
-+  "trusted" keys are useful to leverage kernel support for sealing
-+  and unsealing key material. Sealed keys can be persisted to
-+  unencrypted storage and later be used to decrypt the file system
-+  without requiring userspace to have knowledge of the raw key
-+  material.
-+  "fscrypt-provisioning" key support is intended mainly to allow
-+  re-adding keys after a filesystem is unmounted and re-mounted,
-   without having to store the raw keys in userspace memory.
- 
- - ``raw`` is a variable-length field which must contain the actual
-   key, ``raw_size`` bytes long.  Alternatively, if ``key_id`` is
-   nonzero, then this field is unused.
- 
-+.. note::
-+
-+   Users should take care not to reuse the fscrypt key material with
-+   different ciphers or in multiple contexts as this may make it
-+   easier to deduce the key.
-+   This also applies when the key material is supplied indirectly
-+   via a kernel trusted key. In this case, the trusted key should
-+   perferably be used only in a single context.
-+
- For v2 policy keys, the kernel keeps track of which user (identified
- by effective user ID) added the key, and only allows the key to be
- removed by that user --- or by "root", if they use
-diff --git a/fs/crypto/keyring.c b/fs/crypto/keyring.c
-index 0b3ffbb4faf4..721f5da51416 100644
---- a/fs/crypto/keyring.c
-+++ b/fs/crypto/keyring.c
-@@ -20,6 +20,7 @@
- 
- #include <crypto/skcipher.h>
- #include <linux/key-type.h>
-+#include <keys/trusted-type.h>
- #include <linux/random.h>
- #include <linux/seq_file.h>
- 
-@@ -577,28 +578,44 @@ static int get_keyring_key(u32 key_id, u32 type,
- 	key_ref_t ref;
- 	struct key *key;
- 	const struct fscrypt_provisioning_key_payload *payload;
--	int err;
-+	int err = 0;
- 
- 	ref = lookup_user_key(key_id, 0, KEY_NEED_SEARCH);
- 	if (IS_ERR(ref))
- 		return PTR_ERR(ref);
- 	key = key_ref_to_ptr(ref);
- 
--	if (key->type != &key_type_fscrypt_provisioning)
--		goto bad_key;
--	payload = key->payload.data[0];
-+	if (key->type == &key_type_fscrypt_provisioning) {
-+		payload = key->payload.data[0];
- 
--	/* Don't allow fscrypt v1 keys to be used as v2 keys and vice versa. */
--	if (payload->type != type)
--		goto bad_key;
-+		/* Don't allow fscrypt v1 keys to be used as v2 keys and vice versa. */
-+		if (payload->type != type) {
-+			err = -EKEYREJECTED;
-+			goto out_put;
-+		}
- 
--	secret->size = key->datalen - sizeof(*payload);
--	memcpy(secret->raw, payload->raw, secret->size);
--	err = 0;
--	goto out_put;
-+		secret->size = key->datalen - sizeof(*payload);
-+		memcpy(secret->raw, payload->raw, secret->size);
-+	} else if (IS_REACHABLE(CONFIG_TRUSTED_KEYS) && key->type == &key_type_trusted) {
-+		struct trusted_key_payload *tkp;
-+
-+		/* avoid reseal changing payload while we memcpy key */
-+		down_read(&key->sem);
-+		tkp = key->payload.data[0];
-+		if (!tkp || tkp->key_len < FSCRYPT_MIN_KEY_SIZE ||
-+		    tkp->key_len > FSCRYPT_MAX_KEY_SIZE) {
-+			up_read(&key->sem);
-+			err = -EINVAL;
-+			goto out_put;
-+		}
-+
-+		secret->size = tkp->key_len;
-+		memcpy(secret->raw, tkp->key, secret->size);
-+		up_read(&key->sem);
-+	} else {
-+		err = -EKEYREJECTED;
-+	}
- 
--bad_key:
--	err = -EKEYREJECTED;
- out_put:
- 	key_ref_put(ref);
- 	return err;
 -- 
-2.30.2
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
