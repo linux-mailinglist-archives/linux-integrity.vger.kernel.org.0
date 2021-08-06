@@ -2,212 +2,188 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F17D3E2D5C
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Aug 2021 17:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8519D3E2D72
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Aug 2021 17:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244067AbhHFPMq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Aug 2021 11:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244232AbhHFPMm (ORCPT
+        id S232027AbhHFPTh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Aug 2021 11:19:37 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55048 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232021AbhHFPTg (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Aug 2021 11:12:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC2DC061798
-        for <linux-integrity@vger.kernel.org>; Fri,  6 Aug 2021 08:12:26 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1mC1WK-0006yw-ON; Fri, 06 Aug 2021 17:12:24 +0200
-Subject: Re: [PATCH 0/4] KEYS: trusted: Introduce support for NXP CAAM-based
- trusted keys
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        James Bottomley <jejb@linux.ibm.com>
-Cc:     Jan Luebbe <j.luebbe@pengutronix.de>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        David Gstir <david@sigma-star.at>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Richard Weinberger <richard@nod.at>,
-        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
+        Fri, 6 Aug 2021 11:19:36 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 176F4Voc189122;
+        Fri, 6 Aug 2021 11:18:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=rgO1hBqZC57c2+Sv/vVXfN88h8j4+dvlSPH4nRvftfA=;
+ b=Wka4jACSVCTnFGdewURKfL0kkFh0fdao526RdszASXCXY8NneaqPwj/U5PRt5TuayslZ
+ Xsp9wE08uI4BP0XL1QDrBGkq+yCgU2VLGwDs4ggXQKqbDoWmc7fmMR0cNhKisrHUC+H5
+ tw5fkwlkH4nz1uOo57IHYo/LcfZVbp7FkMVO1LEqutXzxC7sqQMz+vHyP3+YgV2JzDDo
+ a4EnCxGpI3U3CoHmKcfx9eOv3WdN6rdJkCpf1PZ3XV7bRcMTnzDqB54lgSXv5bHBDwbl
+ VXGojnwxcgFZo6QXApY+MkkAD26L+9B2/FC6OaMU4ZGdF/ge4fH+avlhUxDVVb4x+8zS 9A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3a8j8j1spq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Aug 2021 11:18:43 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 176F5ADk004444;
+        Fri, 6 Aug 2021 11:18:42 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3a8j8j1snp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Aug 2021 11:18:42 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 176FIE6Z014168;
+        Fri, 6 Aug 2021 15:18:40 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04fra.de.ibm.com with ESMTP id 3a8dcqj4y9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Aug 2021 15:18:40 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 176FIbdQ55378386
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 6 Aug 2021 15:18:37 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B4DF511C05B;
+        Fri,  6 Aug 2021 15:18:37 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 87BB111C05E;
+        Fri,  6 Aug 2021 15:18:32 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.118.168])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  6 Aug 2021 15:18:32 +0000 (GMT)
+Message-ID: <dc76d9463bb5e081d10154e909321b0d75391846.camel@linux.ibm.com>
+Subject: Re: [PATCH RFC v2 10/12] KEYS: link system_trusted_keys to
+ mok_trusted_keys
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     keyrings@vger.kernel.org,
+        linux-integrity <linux-integrity@vger.kernel.org>,
         David Howells <dhowells@redhat.com>,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
-        linux-integrity@vger.kernel.org,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-References: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de>
-Message-ID: <b9e44f8e-84a0-90be-6cfc-d3a0bde12178@pengutronix.de>
-Date:   Fri, 6 Aug 2021 17:12:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        David Woodhouse <dwmw2@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, keescook@chromium.org,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+        scott.branden@broadcom.com, weiyongjun1@huawei.com,
+        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        lszubowi@redhat.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
+        glin@suse.com, "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>
+Date:   Fri, 06 Aug 2021 11:18:31 -0400
+In-Reply-To: <21CB8F51-9066-4095-9C6E-428FF9E86443@oracle.com>
+References: <20210726171319.3133879-1-eric.snowberg@oracle.com>
+         <20210726171319.3133879-11-eric.snowberg@oracle.com>
+         <6c751dadf4ce7385d0391ea26f1c7e4e910219e0.camel@linux.ibm.com>
+         <44ADB68B-4310-462B-96A8-2F69759BA2D8@oracle.com>
+         <d85bfe88bb4abd06e47a36743f53d0610da0a259.camel@linux.ibm.com>
+         <21CB8F51-9066-4095-9C6E-428FF9E86443@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Udv4oSrDO2ieLhANn4kq7bqpT8Hrhvos
+X-Proofpoint-ORIG-GUID: 365LpGflS7WoQs4sMb9ihzyLVcO8nzIM
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-06_05:2021-08-05,2021-08-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 mlxlogscore=999 lowpriorityscore=0
+ adultscore=0 spamscore=0 impostorscore=0 bulkscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108060104
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dear trusted key maintainers,
+On Fri, 2021-08-06 at 09:00 -0600, Eric Snowberg wrote:
+> > On Aug 5, 2021, at 9:19 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > 
+> > On Thu, 2021-08-05 at 19:29 -0600, Eric Snowberg wrote:
+> > 
+> >>> From the thread discussion on 00/12:
+> >>> 
+> >>> Only the builtin keys should ever be on the builtin keyring.  The
+> >>> builtin keyring would need to be linked to the mok keyring.  But in the
+> >>> secondary keyring case, the mok keyring would be linked to the
+> >>> secondary keyring, similar to how the builtin keyring is linked to the
+> >>> secondary keyring.
+> >>> 
+> >>>       if (key_link(secondary_trusted_keys, builtin_trusted_keys) < 0)
+> >>>               panic("Can't link trusted keyrings\n");
+> >> 
+> >> 
+> >> This part is confusing me though.
+> >> 
+> >> Here are some of the tests I’m performing with the current series:
+> >> 
+> >> Initial setup:
+> >> Create and enroll my own key into the MOK.
+> >> Sign a kernel, kernel module and IMA key with my new CA key.
+> >> Boot with lockdown enabled (to enforce sig validation).
+> >> 
+> >> Kernel built with CONFIG_SECONDARY_TRUSTED_KEYRING=y
+> >> 
+> >> $ keyctl show %:.secondary_trusted_keys
+> >> Keyring
+> >> 530463486 ---lswrv      0     0  keyring: .secondary_trusted_keys
+> >> 411466727 ---lswrv      0     0   \_ keyring: .builtin_trusted_keys
+> >> 979167715 ---lswrv      0     0   |   \_ asymmetric: Build time autogenerated kernel key: 07a56e29cfa1e21379aff2c522efff7d1963202a
+> >> 534573591 ---lswrv      0     0   |   \_ asymmetric: Oracle-CA: Oracle certificate signing key: aeefb4bfde095cacaabff81dd266974b1b4e23b8
+> >> 968109018 ---lswrv      0     0   \_ keyring: .mok
+> >> 857795115 ---lswrv      0     0       \_ asymmetric: Erics-CA: UEK signing key: 9bfa6860483aa46bd83f7fa1289d9fc35799e93b
+> >> 
+> >> With this setup I can:
+> >> * load a kernel module signed with my CA key
+> >> * run "kexec -ls" with the kernel signed with my CA key
+> >> * run "kexec -ls" with a kernel signed by a key in the platform keyring
+> >> * load another key into the secondary trusted keyring that is signed by my CA key
+> >> * load a key into the ima keyring, signed by my CA key
+> >> 
+> >> Kernel built without CONFIG_SECONDARY_TRUSTED_KEYRING defined
+> >> 
+> >> $ keyctl show %:.builtin_trusted_keys
+> >> Keyring
+> >> 812785375 ---lswrv      0     0  keyring: .builtin_trusted_keys
+> >> 455418681 ---lswrv      0     0   \_ keyring: .mok
+> >> 910809006 ---lswrv      0     0   |   \_ asymmetric: Erics-CA: UEK signing key: 9bfa6860483aa46bd83f7fa1289d9fc35799e93b
+> >> 115345009 ---lswrv      0     0   \_ asymmetric: Oracle-CA: Oracle certificate signing key: aeefb4bfde095cacaabff81dd266974b1b4e23b8
+> >> 513131506 ---lswrv      0     0   \_ asymmetric: Build time autogenerated kernel key: 22353509f203b55b84f15d0aadeddc134b646185
+> >> 
+> >> With this setup I can:
+> >> * load a kernel module signed with my CA key
+> >> * run "kexec -ls" with the kernel signed with my CA key
+> >> * run "kexec -ls" with a kernel signed by a key in the platform keyring
+> >> * load a key into the ima keyring, signed by my CA key
+> >> 
+> >> So why would the linking need to be switched?  Is there a test I’m
+> >> missing?  Thanks.
+> > 
+> > It's a question of semantics.  The builtin keyring name is self
+> > describing.  It should only contain the keys compiled into the kernel
+> > or inserted post build into the reserved memory.  Not only the kernel
+> > uses the builtin keyring, but userspace may as well[1].  Other users of
+> > the builtin keyring might not want to trust the mok keyring as well.
+> 
+> Should this feature only work with kernels built with 
+> CONFIG_SECONDARY_TRUSTED_KEYRING defined?  If so, I could drop support in 
+> the next version for kernels built without it.
 
-On 21.07.21 18:48, Ahmad Fatoum wrote:
-> Series applies on top of
-> https://lore.kernel.org/linux-integrity/20210721160258.7024-1-a.fatoum@pengutronix.de/T/#u
-> 
-> v2 -> v3:
->  - Split off first Kconfig preparation patch. It fixes a regression,
->    so sent that out, so it can be applied separately (Sumit)
->  - Split off second key import patch. I'll send that out separately
->    as it's a development aid and not required within the CAAM series
->  - add MAINTAINERS entry
+Support for loading the CA keys stored in the MOK db onto the mok
+keyring, only if the secondary keyring is configured would really
+simplify the code.   Support for using the mok  keyring without the
+secondary keyring being configured, could always be added later.  As
+long as the other distros agree, I'm all for it.
 
-Gentle ping. I'd appreciate feedback on this series.
+thanks,
 
-Cheers,
-Ahmad
+Mimi
 
-> 
-> v1 -> v2:
->  - Added new commit to make trusted key Kconfig option independent
->    of TPM and added new Kconfig file for trusted keys
->  - Add new commit for importing existing key material
->  - Allow users to force use of kernel RNG (Jarkko)
->  - Enforce maximum keymod size (Horia)
->  - Use append_seq_(in|out)_ptr_intlen instead of append_seq_(in|out)_ptr
->    (Horia)
->  - Make blobifier handle private to CAAM glue code file (Horia)
->  - Extend trusted keys documentation for CAAM
->  - Rebased and updated original cover letter:
-> 
-> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
-> built into many newer i.MX and QorIQ SoCs by NXP.
-> 
-> Its blob mechanism can AES encrypt/decrypt user data using a unique
-> never-disclosed device-specific key.
-> 
-> There has been multiple discussions on how to represent this within the kernel:
-> 
-> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
-> built into many newer i.MX and QorIQ SoCs by NXP.
-> 
-> Its blob mechanism can AES encrypt/decrypt user data using a unique
-> never-disclosed device-specific key. There has been multiple
-> discussions on how to represent this within the kernel:
-> 
->  - [RFC] crypto: caam - add red blobifier
->    Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
->    best integrate the blob mechanism.
->    Mimi suggested that it could be used to implement trusted keys.
->    Trusted keys back then were a TPM-only feature.
-> 
->  - security/keys/secure_key: Adds the secure key support based on CAAM.
->    Udit added[2] a new "secure" key type with the CAAM as backend. The key
->    material stays within the kernel only.
->    Mimi and James agreed that this needs a generic interface, not specific
->    to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
->    basis for TEE-backed keys.
-> 
->  - [RFC] drivers: crypto: caam: key: Add caam_tk key type
->    Franck added[3] a new "caam_tk" key type based on Udit's work. This time
->    it uses CAAM "black blobs" instead of "red blobs", so key material stays
->    within the CAAM and isn't exposed to kernel in plaintext.
->    James voiced the opinion that there should be just one user-facing generic
->    wrap/unwrap key type with multiple possible handlers.
->    David suggested trusted keys.
-> 
->  - Introduce TEE based Trusted Keys support
->    Sumit reworked[4] trusted keys to support multiple possible backends with
->    one chosen at boot time and added a new TEE backend along with TPM.
->    This now sits in Jarkko's master branch to be sent out for v5.13
-> 
-> This patch series builds on top of Sumit's rework to have the CAAM as yet another
-> trusted key backend.
-> 
-> The CAAM bits are based on Steffen's initial patch from 2015. His work had been
-> used in the field for some years now, so I preferred not to deviate too much from it.
-> 
-> This series has been tested with dmcrypt[5] on an i.MX6DL.
-> 
-> Looking forward to your feedback.
-> 
-> Cheers,
-> Ahmad
-> 
->  [1]: https://lore.kernel.org/linux-crypto/1447082306-19946-2-git-send-email-s.trumtrar@pengutronix.de/
->  [2]: https://lore.kernel.org/linux-integrity/20180723111432.26830-1-udit.agarwal@nxp.com/
->  [3]: https://lore.kernel.org/lkml/1551456599-10603-2-git-send-email-franck.lenormand@nxp.com/
->  [4]: https://lore.kernel.org/lkml/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
->  [5]: https://lore.kernel.org/linux-integrity/20210122084321.24012-2-a.fatoum@pengutronix.de/
-> 
-> ---
-> To: Jarkko Sakkinen <jarkko@kernel.org>
-> To: "Horia Geantă" <horia.geanta@nxp.com>
-> To: Mimi Zohar <zohar@linux.ibm.com>
-> To: Aymen Sghaier <aymen.sghaier@nxp.com>
-> To: Herbert Xu <herbert@gondor.apana.org.au>
-> To: "David S. Miller" <davem@davemloft.net>
-> To: James Bottomley <jejb@linux.ibm.com>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-> Cc: Udit Agarwal <udit.agarwal@nxp.com>
-> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
-> Cc: David Gstir <david@sigma-star.at>
-> Cc: Eric Biggers <ebiggers@kernel.org>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-> Cc: Sumit Garg <sumit.garg@linaro.org>
-> Cc: linux-integrity@vger.kernel.org
-> Cc: keyrings@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> 
-> Ahmad Fatoum (4):
->   KEYS: trusted: allow users to use kernel RNG for key material
->   KEYS: trusted: allow trust sources to use kernel RNG for key material
->   crypto: caam - add in-kernel interface for blob generator
->   KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
-> 
->  Documentation/admin-guide/kernel-parameters.txt   |   8 +-
->  Documentation/security/keys/trusted-encrypted.rst |  60 +++-
->  MAINTAINERS                                       |   9 +-
->  drivers/crypto/caam/Kconfig                       |   3 +-
->  drivers/crypto/caam/Makefile                      |   1 +-
->  drivers/crypto/caam/blob_gen.c                    | 230 +++++++++++++++-
->  include/keys/trusted-type.h                       |   2 +-
->  include/keys/trusted_caam.h                       |  11 +-
->  include/soc/fsl/caam-blob.h                       |  56 ++++-
->  security/keys/trusted-keys/Kconfig                |  11 +-
->  security/keys/trusted-keys/Makefile               |   2 +-
->  security/keys/trusted-keys/trusted_caam.c         |  74 +++++-
->  security/keys/trusted-keys/trusted_core.c         |  23 +-
->  13 files changed, 477 insertions(+), 13 deletions(-)
->  create mode 100644 drivers/crypto/caam/blob_gen.c
->  create mode 100644 include/keys/trusted_caam.h
->  create mode 100644 include/soc/fsl/caam-blob.h
->  create mode 100644 security/keys/trusted-keys/trusted_caam.c
-> 
-> base-commit: 97408d81ed533b953326c580ff2c3f1948b3fcee
-> 
-
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
