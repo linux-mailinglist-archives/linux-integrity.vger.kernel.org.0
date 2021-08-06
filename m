@@ -2,41 +2,47 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8923E2C51
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Aug 2021 16:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA7B3E2C5D
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Aug 2021 16:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbhHFOQM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 6 Aug 2021 10:16:12 -0400
-Received: from smtp1.axis.com ([195.60.68.17]:43318 "EHLO smtp1.axis.com"
+        id S237522AbhHFOSt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 6 Aug 2021 10:18:49 -0400
+Received: from smtp1.axis.com ([195.60.68.17]:26533 "EHLO smtp1.axis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237635AbhHFOQL (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 6 Aug 2021 10:16:11 -0400
+        id S234520AbhHFOSs (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 6 Aug 2021 10:18:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1628259356;
-  x=1659795356;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8pCUOSIuKbxNqx46D22O+hfLVUOlEUUvEt9QjI8/HAQ=;
-  b=LzHqmVMOQAbEBHxBziYEdIqt7ddycLKppL9lYW1Z0zlmW2bFpUUuk6mq
-   Na/pZY1SDNsqvWQFUOV8xn+mhW0EUz/Vk0SyuhdVXL9cSO5UhzR04QeOV
-   mXYAcV9bPe19MkrW2jqfgFO4F8CRMzyWE9ZeM2I0rRsaMsbOZoB+78zqn
-   tv5VaVvJVpRa2BhdsmUYrvdE3aZhGmqS/jTIn9QKJu8s1KePFAkhxHfmS
-   eeiNV3cJqTjIxblJ5j22zIKATYJlk0bvz3945isOkDuFV1HIfS4O68biB
-   gSyz/kAN8hunGN/McTxhzC4frbP8pELk9/XgMtG2OO6zfdBeUiv9Q4UFC
-   g==;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1628259513;
+  x=1659795513;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=oJyVeNAsXlYCxq0SZK6pymR2gKq/VG3wMDOx/8a6DEE=;
+  b=XQHHBiVaRiIVwS+9yDJmB1arOFuwoWU9XOcAJa9e5+RIt3VlsfAIWROa
+   DkDE1Hc9G5jGrjyNLnzpK0ZUohcbqEikwOLHYmO949evFhp4RDtis5cYe
+   YUV2z3i8i/m4jBDoRMaes4GnvxuDM7rjhiIFoNIevvDwNwFYk2bJfXjqc
+   uO1RLAG7R7AsbzjRIJYbFr19WYDxPCKJ+D3ycW5OGubUJeVX8i33s88wl
+   nNGKD3dReUDD1aSb4WyvJmter7pr4M4VV1n/nuIXXxulXb4dyhSnQMre+
+   l03AyISOPKxXmDAnl3aII18jwu0cs9gS/WGU1vdTZHkYrg90uf2LJbZT+
+   Q==;
+Subject: Re: [PATCH v3] tpm: Add Upgrade/Reduced mode support for TPM2 modules
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Borys Movchan <Borys.Movchan@axis.com>
+CC:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        kernel <kernel@axis.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210804162132.24786-1-borysmn@axis.com>
+ <20210805205245.qcdqcuog7zmsp7j5@kernel.org>
 From:   Borys Movchan <borysmn@axis.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-CC:     <kernel@axis.com>, Borys Movchan <borysmn@axis.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4] tpm: Add Upgrade/Reduced mode support for TPM2 modules
-Date:   Fri, 6 Aug 2021 16:18:08 +0200
-Message-ID: <20210806141808.6537-1-borysmn@axis.com>
-X-Mailer: git-send-email 2.20.1
+Message-ID: <d6cd1eb6-48b5-c1ad-e063-a26bc7509d95@axis.com>
+Date:   Fri, 6 Aug 2021 16:20:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+In-Reply-To: <20210805205245.qcdqcuog7zmsp7j5@kernel.org>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 X-Originating-IP: [10.0.5.60]
 X-ClientProxiedBy: se-mail04w.axis.com (10.20.40.10) To se-mail07w.axis.com
  (10.20.40.13)
@@ -44,159 +50,58 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-If something went wrong during the TPM firmware upgrade, like power
-failure or the firmware image file get corrupted, the TPM might end
-up in Upgrade or Failure mode upon the next start. The state is
-persistent between the TPM power cycle/restart.
 
-According to TPM specification:
- * If the TPM is in Upgrade mode, it will answer with TPM2_RC_UPGRADE
-   to all commands except Field Upgrade related ones.
- * If the TPM is in Failure mode, it will allow performing TPM
-   initialization but will not provide any crypto operations.
-   Will happily respond to Field Upgrade calls.
+On 8/5/21 10:52 PM, Jarkko Sakkinen wrote:
+> On Wed, Aug 04, 2021 at 06:21:31PM +0200, Borys Movchan wrote:
+>> If something went wrong during the TPM firmware upgrade, like power
+>> failure or the firmware image file get corrupted, the TPM might end
+>> up in Upgrade or Failure mode upon the next start. The state is
+>> persistent between the TPM power cycle/restart.
+>>
+>> According to TPM specification:
+>>  * If the TPM is in Upgrade mode, it will answer with TPM2_RC_UPGRADE
+>>    to all commands except Field Upgrade related ones.
+>>  * If the TPM is in Failure mode, it will allow performing TPM
+>>    initialization but will not provide any crypto operations.
+>>    Will happily respond to Field Upgrade calls.
+>>
+>> The fix changes the behavior of the `tpm2_auto_startup` function, so
+>                                 
+> In commit messages, you ought to use imperative form:
+>
+> "Change the behaviour of tpm2_auto_startup(), ..."
+>
+Done
+>> it tries to detect what mode TPM is running in. If the chip is in the
+>> Upgrade or Failure mode, the function returns -EIO error code which
+>> can be used later to adjust driver behavior later.
+> *How* tpm2_auto_startup() detects the mode?
+Done
+>> After `tpm_chip_register` calls `tpm2_auto_startup` it checks for the
+> Please remove all these hyphens. They make the commit message a pain
+> to read. E.g. instead write tpm_chip_register(). This is not Github.
+Done
+>> error code. If the TPM is in Upgrade or Failure mode, set the
+>> `limited_mode` flag. The calls to `tpm2_get_cc_attrs_tbl`,
+>> `tpm_add_hwrng` and `tpm_get_pcr_allocation` will fail if the TPM is
+>> in Failure or Upgrade mode, so use `limited_mode` flag to exclude
+>> them from the module initialization sequence.
+>>
+>> Signed-off-by: Borys Movchan <borysmn@axis.com>
+>> ---
+>>
+>> Notes:
+>>     Commit message updated
+> v2:
+> * Commit message updated.
+>
+> Notes would be something that had existed already in the first version.
+> Here we want a simple change log.
+Corrected
+> /Jarkko
+>
 
-Change the behavior of the tpm2_auto_startup(), so it detects the active
-running mode of the TPM.  It is easy to determine that TPM is in Upgrade
-mode by relying on the fact that tpm2_do_selftest() will return
-TPM2_RC_UPGRADE. In such a case, there is no point to finish the
-start-up procedure as the TPM will not accept any commands, except
-firmware upgrade related.
+Kind regards,
 
-On the other hand, if the TPM is in Failure mode, it will successfully
-respond to both tpm2_do_selftest() and tpm2_startup() calls. Although,
-will fail to answer to tpm2_get_cc_attrs_tbl(). Use this fact to
-conclude that TPM is in Failure mode.
-
-If the chip is in the Upgrade or Failure mode, the function returns -EIO
-error code.
-
-The return value is checked in the tpm_chip_register() call to determine
-the state of the TPM. If the TPM is not in normal operation mode, set
-the `limited_mode` flag. If the flag is set then the TPM is not able to
-provide any crypto functionality.  Correspondignly, the calls to
-tpm2_get_cc_attrs_tbl(), tpm_add_hwrng() and tpm_get_pcr_allocation()
-will fail. Use the flag to exclude them from the initialization
-sequence.
-
-Signed-off-by: Borys Movchan <borysmn@axis.com>
----
-
-Notes:
-    v2:
-    * Commit message updated.
-    
-    v3:
-    * Commit message reworked.
-    
-    v4:
-    * Description of how tpm2_auto_startup() detects the mode added to
-      commit message.
-
- drivers/char/tpm/tpm-chip.c | 23 +++++++++++++++--------
- drivers/char/tpm/tpm2-cmd.c | 12 ++++++++++--
- include/linux/tpm.h         |  1 +
- 3 files changed, 26 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index ddaeceb7e109..ff2367c447fb 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -574,20 +574,25 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
- int tpm_chip_register(struct tpm_chip *chip)
- {
- 	int rc;
-+	bool limited_mode = false;
- 
- 	rc = tpm_chip_start(chip);
- 	if (rc)
- 		return rc;
- 	rc = tpm_auto_startup(chip);
--	if (rc) {
-+	if (rc == -EIO) {
-+		limited_mode = true;
-+	} else if (rc) {
- 		tpm_chip_stop(chip);
- 		return rc;
- 	}
- 
--	rc = tpm_get_pcr_allocation(chip);
--	tpm_chip_stop(chip);
--	if (rc)
--		return rc;
-+	if (!limited_mode) {
-+		rc = tpm_get_pcr_allocation(chip);
-+		tpm_chip_stop(chip);
-+		if (rc)
-+			return rc;
-+	}
- 
- 	tpm_sysfs_add_device(chip);
- 
-@@ -595,9 +600,11 @@ int tpm_chip_register(struct tpm_chip *chip)
- 
- 	tpm_add_ppi(chip);
- 
--	rc = tpm_add_hwrng(chip);
--	if (rc)
--		goto out_ppi;
-+	if (!limited_mode) {
-+		rc = tpm_add_hwrng(chip);
-+		if (rc)
-+			goto out_ppi;
-+	}
- 
- 	rc = tpm_add_char_device(chip);
- 	if (rc)
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index a25815a6f625..7468353ed67d 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -718,7 +718,8 @@ static int tpm2_startup(struct tpm_chip *chip)
-  *                     sequence
-  * @chip: TPM chip to use
-  *
-- * Returns 0 on success, < 0 in case of fatal error.
-+ * Returns 0 on success, -ENODEV in case of fatal error,
-+ *	    -EIO in case of Reduced/Upgrade mode
-  */
- int tpm2_auto_startup(struct tpm_chip *chip)
- {
-@@ -729,7 +730,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
- 		goto out;
- 
- 	rc = tpm2_do_selftest(chip);
--	if (rc && rc != TPM2_RC_INITIALIZE)
-+	if (rc == TPM2_RC_UPGRADE) {
-+		rc = -EIO;
-+		goto out;
-+	} else if (rc && rc != TPM2_RC_INITIALIZE)
- 		goto out;
- 
- 	if (rc == TPM2_RC_INITIALIZE) {
-@@ -743,6 +747,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
- 	}
- 
- 	rc = tpm2_get_cc_attrs_tbl(chip);
-+	if (rc) { /* Succeeded until here, but failed -> reduced mode */
-+		rc = -EIO;
-+		goto out;
-+	}
- 
- out:
- 	if (rc > 0)
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index aa11fe323c56..e873c42907f0 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -207,6 +207,7 @@ enum tpm2_return_codes {
- 	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
- 	TPM2_RC_FAILURE		= 0x0101,
- 	TPM2_RC_DISABLED	= 0x0120,
-+	TPM2_RC_UPGRADE		= 0x012D,
- 	TPM2_RC_COMMAND_CODE    = 0x0143,
- 	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
- 	TPM2_RC_REFERENCE_H0	= 0x0910,
--- 
-2.20.1
+Borys
 
