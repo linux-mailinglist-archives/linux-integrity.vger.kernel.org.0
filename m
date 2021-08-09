@@ -2,162 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C01A03E4361
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 11:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5890D3E4380
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 12:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbhHIJ5K (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Aug 2021 05:57:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50774 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233528AbhHIJ5J (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Aug 2021 05:57:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CCB6660F11;
-        Mon,  9 Aug 2021 09:56:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628503009;
-        bh=siHqB30+J8sLOp7pEGFo9z0ErNUa2pMXDyohhHMW7U8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kevZHtdJYJPiRj0NYnYLFNKteyuj7hA/3N6StyCDAJnl9mszdPiYnuhSH2mqjlnq4
-         WtYS5CV8PlkYUHLSys+qFSJbIJh84/P6OSbhYCAHeckZZuBQ/2NVw3u+GY++pu/xed
-         l14Vq78Yr7dxIE2hki8H9zO0jo6NgQmwm3DfgomeezsJZ7yGAhQX1jiFDRnFx457nQ
-         +HK/EnQDZW1XX6O5PBu4X/sR1VXruhpIdGGtz2hN4+9EEOKfyQU9DwNffq0QDFghHT
-         lxYtXA121HNVgRoIU05N0p2enG/6gtH7nFUgNiY8mxJ814WTgXmO0XJsYoRASpqbnP
-         dxaypa2KMthug==
-Date:   Mon, 9 Aug 2021 12:56:47 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        id S233909AbhHIKBO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Aug 2021 06:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234257AbhHIKBH (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 9 Aug 2021 06:01:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7111DC061799
+        for <linux-integrity@vger.kernel.org>; Mon,  9 Aug 2021 03:00:47 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1mD25L-0004GC-S5; Mon, 09 Aug 2021 12:00:43 +0200
+Subject: Re: [PATCH v2] fscrypt: support trusted keys
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>, kernel@pengutronix.de,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         James Bottomley <jejb@linux.ibm.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
         David Howells <dhowells@redhat.com>,
-        kernel <kernel@pengutronix.de>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH 2/4] KEYS: trusted: allow trust sources to use kernel RNG
- for key material
-Message-ID: <20210809095647.7xcxjeot5gyvmlpj@kernel.org>
-References: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de>
- <7b771da7b09a01c8b4da2ed21f05251ea797b2e8.1626885907.git-series.a.fatoum@pengutronix.de>
- <CAFA6WYOskwZNe5Wb5PTtnSHQBonSXZ48eEex0w9jQ+JW4vG=+w@mail.gmail.com>
- <7537c853-3641-a6d3-91d8-70fea9f01a89@pengutronix.de>
+        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210806150928.27857-1-a.fatoum@pengutronix.de>
+ <20210809094408.4iqwsx77u64usfx6@kernel.org>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <10dac5c6-4530-217c-e1ea-a7e2e3572f43@pengutronix.de>
+Date:   Mon, 9 Aug 2021 12:00:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <20210809094408.4iqwsx77u64usfx6@kernel.org>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7537c853-3641-a6d3-91d8-70fea9f01a89@pengutronix.de>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Aug 09, 2021 at 09:52:20AM +0200, Ahmad Fatoum wrote:
-> Hello Sumit,
+Hello Jarkko,
+
+On 09.08.21 11:44, Jarkko Sakkinen wrote:
+> On Fri, Aug 06, 2021 at 05:09:28PM +0200, Ahmad Fatoum wrote:
+>> Kernel trusted keys don't require userspace knowledge of the raw key
+>> material and instead export a sealed blob, which can be persisted to
+>> unencrypted storage. Userspace can then load this blob into the kernel,
+>> where it's unsealed and from there on usable for kernel crypto.
+>>
+>> This is incompatible with fscrypt, where userspace is supposed to supply
+>> the raw key material. For TPMs, a work around is to do key unsealing in
+>> userspace, but this may not be feasible for other trusted key backends.
+>>
+>> Make it possible to benefit from both fscrypt and trusted key sealing
+>> by extending fscrypt_add_key_arg::key_id to hold either the ID of a
+>> fscrypt-provisioning or a trusted key.
+>>
+>> A non fscrypt-provisioning key_id was so far prohibited, so additionally
+>> allowing trusted keys won't break backwards compatibility.
+>>
+>> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>> ---
+>> Tested with:
+>> https://github.com/google/fscryptctl/pull/23
+>> -	if (key->type != &key_type_fscrypt_provisioning)
+>> -		goto bad_key;
+>> -	payload = key->payload.data[0];
+>> +	if (key->type == &key_type_fscrypt_provisioning) {
 > 
-> On 22.07.21 08:31, Sumit Garg wrote:
-> > On Wed, 21 Jul 2021 at 22:19, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
-> >>
-> >> The two existing trusted key sources don't make use of the kernel RNG,
-> >> but instead let the hardware that does the sealing/unsealing also
-> >> generate the random key material. While a previous change offers users
-> >> the choice to use the kernel RNG instead for both, new trust sources
-> >> may want to unconditionally use the kernel RNG for generating key
-> >> material, like it's done elsewhere in the kernel.
-> >>
-> >> This is especially prudent for hardware that has proven-in-production
-> >> HWRNG drivers implemented, as otherwise code would have to be duplicated
-> >> only to arrive at a possibly worse result.
-> >>
-> >> Make this possible by turning struct trusted_key_ops::get_random
-> >> into an optional member. If a driver leaves it NULL, kernel RNG
-> >> will be used instead.
-> >>
-> >> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> >> ---
-> >> To: James Bottomley <jejb@linux.ibm.com>
-> >> To: Jarkko Sakkinen <jarkko@kernel.org>
-> >> To: Mimi Zohar <zohar@linux.ibm.com>
-> >> To: David Howells <dhowells@redhat.com>
-> >> Cc: James Morris <jmorris@namei.org>
-> >> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> >> Cc: "Horia Geantă" <horia.geanta@nxp.com>
-> >> Cc: Aymen Sghaier <aymen.sghaier@nxp.com>
-> >> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> >> Cc: "David S. Miller" <davem@davemloft.net>
-> >> Cc: Udit Agarwal <udit.agarwal@nxp.com>
-> >> Cc: Eric Biggers <ebiggers@kernel.org>
-> >> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
-> >> Cc: David Gstir <david@sigma-star.at>
-> >> Cc: Richard Weinberger <richard@nod.at>
-> >> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-> >> Cc: Sumit Garg <sumit.garg@linaro.org>
-> >> Cc: keyrings@vger.kernel.org
-> >> Cc: linux-crypto@vger.kernel.org
-> >> Cc: linux-integrity@vger.kernel.org
-> >> Cc: linux-kernel@vger.kernel.org
-> >> Cc: linux-security-module@vger.kernel.org
-> >> ---
-> >>  include/keys/trusted-type.h               | 2 +-
-> >>  security/keys/trusted-keys/trusted_core.c | 2 +-
-> >>  2 files changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-> >> index d89fa2579ac0..4eb64548a74f 100644
-> >> --- a/include/keys/trusted-type.h
-> >> +++ b/include/keys/trusted-type.h
-> >> @@ -64,7 +64,7 @@ struct trusted_key_ops {
-> >>         /* Unseal a key. */
-> >>         int (*unseal)(struct trusted_key_payload *p, char *datablob);
-> >>
-> >> -       /* Get a randomized key. */
-> >> +       /* Optional: Get a randomized key. */
-> >>         int (*get_random)(unsigned char *key, size_t key_len);
-> >>
-> >>         /* Exit key interface. */
-> >> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-> >> index 569af9af8df0..d2b7626cde8b 100644
-> >> --- a/security/keys/trusted-keys/trusted_core.c
-> >> +++ b/security/keys/trusted-keys/trusted_core.c
-> >> @@ -334,7 +334,7 @@ static int __init init_trusted(void)
-> >>                         continue;
-> >>
-> >>                 get_random = trusted_key_sources[i].ops->get_random;
-> >> -               if (trusted_kernel_rng)
-> >> +               if (trusted_kernel_rng || !get_random)
-> >>                         get_random = kernel_get_random;
-> >>
-> > 
-> > For ease of understanding, I would prefer to write it as:
-> > 
-> >                   get_random = trusted_key_sources[i].ops->get_random ?:
-> >                                          kernel_get_random;
-> >                   if (trusted_kernel_rng)
-> >                         get_random = kernel_get_random;
-> > 
-> > With that:
-> > 
-> > Acked-by: Sumit Garg <sumit.garg@linaro.org>
-> 
-> I don't think it improves readability to split up the conditional.
-> At least I need to take a second pass over the code to understand
-> the second conditional.
+> Why does fscrypt have own key type, and does not extend 'encrypted' with a
+> new format [*]?
 
-Ternary operators are pain to read, unless a super trivial case.
+See the commit[1] adding it for more information. TL;DR:
 
-I'd stick to what you did.
+fscrypt maintainers would've preferred keys to be associated with
+a "domain". So an encrypted key generated for fscrypt use couldn't be reused
+for e.g. dm-crypt. They are wary of fscrypt users being more exposed if their
+keys can be used with weaker ciphers via other kernel functionality that could
+be used to extract information about the raw key material.
 
-/Jarkko
+Eric also mentioned dislike of the possibility of rooting encrypted keys to
+user keys. v2 is only restricted to v2, so we didn't discuss this further.
+
+Restricting the key to fscrypt-only precludes this reuse.
+
+My commit makes no attempts in changing that. It just adds a new way to pass
+raw key material into fscrypt. For more information, see the commit[1] adding
+that key type.
+
+> [*] https://www.kernel.org/doc/html/v5.13/security/keys/trusted-encrypted.html
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=93edd392ca
+
+Cheers,
+Ahmad
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
