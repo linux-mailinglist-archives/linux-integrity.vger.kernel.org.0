@@ -2,74 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B543B3E49DA
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 18:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1D83E49DF
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 18:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbhHIQbz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Aug 2021 12:31:55 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:5216 "EHLO
+        id S233180AbhHIQcA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Aug 2021 12:32:00 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:5752 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232993AbhHIQbs (ORCPT
+        by vger.kernel.org with ESMTP id S232887AbhHIQbt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Aug 2021 12:31:48 -0400
+        Mon, 9 Aug 2021 12:31:49 -0400
 Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 179GCKSu013022;
-        Mon, 9 Aug 2021 16:31:03 GMT
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 179GCKSv013022;
+        Mon, 9 Aug 2021 16:31:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=3mdbDIv/S/lggxNYRfzq4aRZ4D5Sk/xd9kkDvIMPGfM=;
- b=lOZEUzr5U88DANn9ExXXuYC2StFd5opBQ5tM6YgmLvW+lMDJMyYKwaIfCgVDoYM+aKpx
- LgFXJRBsx0G4dMtTxjoS8QZdPblF3xC5gzqluoNehWUi2dz7Pr0mqIp/M4ynXMks7Tfj
- Fmq4mSMl/Ax+65FO4LWWLRY5Nnl8Gk7kx6CvW4pROQ7nNzIiNoXY9gjp47PR6WwlQgES
- XVY0RuYcw8XEAyrcCKg+602pTbu8ITCESK9ZjAECrhcG3KCagTgcQ5Ug4EByVcAKAOxF
- hNv4D40wq3JR2jkf1sktEQ/mMwvvn9YVc5u9vuSCeZOVM1ddcSURPxSjllv3uYUCf7uZ hg== 
+ bh=3y2hwlVXyCwkUCsu64t+jatx24TvUnXBKSvm68yyz4k=;
+ b=PZzwr0Pi995hbZBB/iuuS4j9Br1+7WyFXFecMzxuuiEX0w7mDK9IE3L/K4046iSCPSEl
+ nWh9iRYG93FRAGQECgC+LtOUCAIyCPj1/si7GSwSNU1bt7jrQYnYBjLXp04YF+poVmUR
+ 2OM1IamQnUFKGb+mW03GKjQqNkSejdrTzv0jE1zmDu7x9aVX41bOpEklR3QV1CwuNd/c
+ 1kUifY96yHApfw5AEKprfy9vPk8elt6SwTgzBnyLOA8vRH7Y++zW6v6Y/Nd+Kohs9TP7
+ ugPD4IDwKel7/tNF2rGmNXP5HMnY3cGqAynpUiuMTqddbW+J6I67s1zLEeV5civq6Wab JA== 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2020-01-29;
- bh=3mdbDIv/S/lggxNYRfzq4aRZ4D5Sk/xd9kkDvIMPGfM=;
- b=LvLXHKV9X9mK27XoltfZuv3aE0+FWoTUvxbuuXpLSoy33TnH9qciGyVA7KJYmq2DjqLc
- SufOzuwbKvvcRIiy2ATEHcAwXJuOnxQruNY1FGdaHCz5mFAC3T8Q3coWHAkZFawJrRbw
- i5qEhb168Zvpx1jBagcxJnB4O2YP7Zc5TV1N6vQT3AW3QiGwavWVY7BlLn6XQcDSLcTj
- ktaf5pgr9p0eb37fJW47EFOPOosBPXemns16Ycg9kak6gmY/KkIbJPqjH2vtxiDVV6L3
- eRnddAg0OAaZjDGoxL/9ijHxTLz8Uf7EVsC0OfH+Ms6yinF7lNptia5+hTAsEJfm8VAG 4A== 
+ bh=3y2hwlVXyCwkUCsu64t+jatx24TvUnXBKSvm68yyz4k=;
+ b=cEhe7+CSk3NkcO3U6XNbAM4MOnxfyyZSBGe33IAFeYpY70eV3I2dGZkEA39ADzia+wNY
+ VnfiKBXONBbExnWX0bUD/UnXaLbHxnh8Db2CssgZBqnFbXumMxacuXGmo+4El24S1R0x
+ vdVITiIie4b47EYcWZPWYvLuSdIlQBKVdBkPtHbxsXnBpjN2gH48ytZ3qlYtptQ8gtfS
+ Pa/pjSOFffqDg4jlKGiCl7AFTIIntPmKHZKshhZl9r7v5BDB1Lt3uYk5iMWuF5uKqotr
+ xgbBW3Bdz5TuR9DpvDq7ZoKeMHpd1BLqc8B4viEi1i+468CYREZ6bp5FKItbTDleaZHD 5w== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ab17ds2f7-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ab17ds2fe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 09 Aug 2021 16:31:04 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 179GUeF7066407;
+        Mon, 9 Aug 2021 16:31:03 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
+        by aserp3020.oracle.com with ESMTP id 3a9vv3860c-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Mon, 09 Aug 2021 16:31:03 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 179GUeF5066407;
-        Mon, 9 Aug 2021 16:31:02 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
-        by aserp3020.oracle.com with ESMTP id 3a9vv3860c-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 09 Aug 2021 16:31:01 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EFW/oS6vGhaP660qtUnp5r33gwWDcprPK2b418S4c2mOJIviqc24QrmeMHm26PkuWfw+Durn1Its5Uhl2aRAgFnWV7fSF6yVWJkguehMNH2cGFJxMwc9Vb2DPLIdjhl6IUWh1+BVJEeIQleaTg688HXlO5bQ3Qki/b0hWxWp8KomFggws9unDM7rL63wvqTyv16kbGvjOW8K8m3+zi41bB+UoG/VCz467De6FasDIcu4I6miVXNDLfCMTTrBccLIchQufBL9enIEYEv5/F0BzlPM9lpYe34cWcI0vtH2OqI/ElhJfsqpc1pqK2/+REH4f1L3D+Vjq2gMUu6g7its+g==
+ b=m7pjfgwC2yIRyMUwwO5SrqPDkhEMpcdY+eLyoKX6WTSBzTjKcb3pr7QIF6tCoFUmyeBnahFUQ+A1rFQ1Z7GNofpeFM/R9dQ2WREqmSX4k/ZDZWzA5IClipWMsPsvOUlk8bFv0A63qQsu3qCUoHpAzBTn6nMCLcwCaLRcW5UWo1lpmaemhWUepmU9x6lXaf+u7haraiSq1mOCeM1mUlk6znnSmj9olfKSSTx/wqoGRTI6K5n+u6p3dTSqmGHmGptFppNoP9pceEvJ7rM19TEp9cMidmQbq+zzbdXHF+deSs8U5ILk5Y/IVkcpKHvBeEdZe7TT2TalvH2ieIweux8Fog==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3mdbDIv/S/lggxNYRfzq4aRZ4D5Sk/xd9kkDvIMPGfM=;
- b=caoVcJD/0dhF2um7HerAgtTN/sBgTRJu6XcgJk1QGl6ZcTBCM1t8vxw7KIxF/jJtXGVPijwbwouar67mVutGlcn4QfFOwRa5BAIXzda3YH73g9m+EBYKpIr0Qh3epHFuUvEp9Ne2rtmOdZPEJ7JxNWFumQ8jdNtktGL+RQ1IEOEuTtPwtMkEQQHqDf1YmC9wh8Cjx8RGzT7xjxL7qiNfG9TISBTPN6BijDumLbLQEV/pz8JsIvaEpkWWOJKdforrZt+6gAZFa+++5ji+ErsfW5FUS5hFO3WF/TMmx3BzMrcqcmNjDRYNc0E2pq+mNraRCHragGOdPgO5F1wKfcHpew==
+ bh=3y2hwlVXyCwkUCsu64t+jatx24TvUnXBKSvm68yyz4k=;
+ b=kfQ5tYQLx68uXPiDDZug8o/+HBXQ7G2xf0YcmvlpXwBgH+D867iUzapA8LRsCGqtTLah0J5n1KEa6IjiDlHmdZ+NvH7094AOiV6siM1/HklulmxopXP+dLAZcaOGhifVpgMvUHTLmpMIiUnF1p3luTM1RQYRr9hZIIbdiL4VyikZWK8GInJyWIn2CE7dsoBgHZtiNJro+M/H3YdYXWZwnFe/CFnWseQMM/NSGIEdvVS5qsNGGNriYBAcrXt6APaPcVhOgYZB6NUIZDKF/KrHHesap9l8ojZVH2A3ijF3GGyby50Pyf0D4eYvOfvxzWDk2xl4gf017Hs+vws/Bupc2Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3mdbDIv/S/lggxNYRfzq4aRZ4D5Sk/xd9kkDvIMPGfM=;
- b=nyXFZoYfNy4TMkWGHAxoLuTMjNVCf5YEQjB0Kt2BGUYJAmUQ3F+BuvsIw4t9p+nM/HodOLiZb/BbGQEh5YbHeh1rCKezUtICMopC0shT83jse8zy4cPA7VrSxzjJWPWujzm3DvSGvcBekyTXxe7sQqQSJ5e79moMZs8Mnaz/NdU=
+ bh=3y2hwlVXyCwkUCsu64t+jatx24TvUnXBKSvm68yyz4k=;
+ b=pGyCwUnCk5kxXjVuVM5CJ65dY3ESqY7/nmRVJjKdVxmXF413zpDm52T3FFEYZ6PCoQgfIMh4jxX+pH2phvu0Pycat/H1ppJp+BrNigajiYKtGB5LHdEAEd2D9AxKiLibKPdLolBsDGumNAzRneQru8iMPPhp8h13nwrlquy1DP8=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=oracle.com;
 Received: from BY5PR10MB3793.namprd10.prod.outlook.com (2603:10b6:a03:1f6::14)
  by BY5PR10MB3939.namprd10.prod.outlook.com (2603:10b6:a03:1f7::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15; Mon, 9 Aug
- 2021 16:30:58 +0000
+ 2021 16:30:59 +0000
 Received: from BY5PR10MB3793.namprd10.prod.outlook.com
  ([fe80::e035:720f:86fd:bae3]) by BY5PR10MB3793.namprd10.prod.outlook.com
  ([fe80::e035:720f:86fd:bae3%4]) with mapi id 15.20.4394.023; Mon, 9 Aug 2021
- 16:30:58 +0000
+ 16:30:59 +0000
 From:   Ross Philipson <ross.philipson@oracle.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
@@ -78,9 +78,9 @@ Cc:     ross.philipson@oracle.com, dpsmith@apertussolutions.com,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
         luto@amacapital.net, kanth.ghatraju@oracle.com,
         trenchboot-devel@googlegroups.com
-Subject: [PATCH v3 10/14] x86: Secure Launch SMP bringup support
-Date:   Mon,  9 Aug 2021 12:38:52 -0400
-Message-Id: <1628527136-2478-11-git-send-email-ross.philipson@oracle.com>
+Subject: [PATCH v3 11/14] kexec: Secure Launch kexec SEXIT support
+Date:   Mon,  9 Aug 2021 12:38:53 -0400
+Message-Id: <1628527136-2478-12-git-send-email-ross.philipson@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1628527136-2478-1-git-send-email-ross.philipson@oracle.com>
 References: <1628527136-2478-1-git-send-email-ross.philipson@oracle.com>
@@ -90,277 +90,175 @@ X-ClientProxiedBy: SA9PR10CA0021.namprd10.prod.outlook.com
  (2603:10b6:a03:1f6::14)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from lateralus.us.oracle.com (209.17.40.43) by SA9PR10CA0021.namprd10.prod.outlook.com (2603:10b6:806:a7::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Mon, 9 Aug 2021 16:30:56 +0000
+Received: from lateralus.us.oracle.com (209.17.40.43) by SA9PR10CA0021.namprd10.prod.outlook.com (2603:10b6:806:a7::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Mon, 9 Aug 2021 16:30:58 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4fbd8d9e-33df-465f-803f-08d95b531113
+X-MS-Office365-Filtering-Correlation-Id: 9ca9f452-0625-403c-04cf-08d95b531224
 X-MS-TrafficTypeDiagnostic: BY5PR10MB3939:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR10MB3939E3D0ED4407DE87F77546E6F69@BY5PR10MB3939.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Microsoft-Antispam-PRVS: <BY5PR10MB39390E4A43D104BAF4B93705E6F69@BY5PR10MB3939.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EYy8pcV9eiGK9E/wUQdH1/Fy/wwPWlqwGUhF0qQhck2tjN5C0U/uGL0MYgb/ZYMZlm+zHKxzs+b/cCdoXJX9nxiLVszKqwScnKr4Up0qzlxcoRuR5rcB5GqEN488J1BiYultDLpu+D+aWh7ht9D4aP39JSk5XVMwRmrUlOg0KXU9qyEg/RpqWtRyczOlrAJtK0oHruNjJ6OSt/hOf2Jgaa9Ujewi4hZ57tsPp8kopN/LdeWCb/gc7OOt6yWpPI98zI3C44Bf4PmfmbmcBGf6sV2s9D3+MszFRFrYmvF5A47rk/KZUZ0czQgf45V4VZKA+uq/HFL3H/N03K8jcVpKwzmluUi3syo5+jJPr0HcQShPe0bTNOj625ixsi7fWa0m4Hhkc3PLkKAjHjHsa0+wboj+DLv+0UK4UB+05XXhI+y6VzyBumXZFWt6RMnI1gN0bn0IUEu/JceP8Osmz0IOTgWqAGcoAvuf1ghlbRB7MCFj66MiPmpYFjsg/Wi/3S3v9jtb//ogoUMpVQZH2AGIXmTzT9Udoq9jT7dWKkWWuRHeiVIQKtG6N/lBF/hbtyQa7wK2glF6NfIuGg6D8pkRbGmzZZI6G53jVt7mBF235If1UXPJ9JdE2i/cLPhkKe24BrHN7qP/EQHw8G/+BfcelgRJP7alwDcQMj/DVgr7UwoY9NuJXQQ+pwzsm7stJX9hVRsjIgHHUeT33tCvRQbMYA==
+X-Microsoft-Antispam-Message-Info: oYRSVw8OZnVM/Vfr1yV7RvOssTxz+WmmugtMNNvI7nvNnKK+6Z0LJtQipUSENk2Ibtln5xcbFZU71uJdN53DoCp+9PiPmr2qY9mRxQqZEujkMUy4PuSZniOQTgfJZ0qgbQdfd5wJIlqf3BYNgRyFk+KSdiq7ICurczWj/9RpPozV+UyXeuJjjvx7ZBYMyAp3ZJvtr+Q0Iitc+1BFYMG7uWsRiNz2NR+t8knJdYs7q3RbeOnlSdTVwKq15ItBptBEpIb+TRf5+X14yidWzdtgZare6oT/ISWrDaJzJlfIyjJAapsPxNk55aAwjlrcg5wjpxzILmIK/+ytNRDlcCbUxfVuHA+2+LzhXULSAHAZjcNpnWVV4NmPwEP8XAEtMShW26sAto8RylqguVDHeUOEwvefg4wSFHD9cCe8jVnIQumiykKlJfDsDrWEx4hqHwfnSY3gYHA7G1Min8mwJOOLU8/D8REUvsUTL/PksFHbMjelA8aZlG1MnNtP7aq7+Oy4w2adymLufdmMFeUPk4agEr6p5pq8h4yD+ONi+kPi5oNIkRB+Zgyh9nHUMm6EI1DD2UAOmgtGygX7xYNWcLJtAlfLP/20yd2tQH+oAjwymF9LDLHRbC+PfHslpsog11yoU71HHlv4P4KZWt02s5CDHRF/H3Th9R++8h7j44OjTfcFhg24hQ05puz0OUw3WRLy1vlL6uTeL2ZkA035NH+YgQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3793.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(346002)(376002)(136003)(366004)(38350700002)(478600001)(86362001)(316002)(38100700002)(52116002)(4326008)(7696005)(7416002)(2906002)(6666004)(8936002)(83380400001)(6486002)(186003)(5660300002)(8676002)(26005)(44832011)(2616005)(66946007)(66476007)(66556008)(956004)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ei3CymM2pXg9r70Iaob0bK41wpP5lVhOGcHet/vWqKHzT58zJpwO2v4pknSu?=
- =?us-ascii?Q?rrePrSZMyMzZyBHu0av1Ex7bfQVUywfYC2Msc44GJptyC4V7+UJoE5c0DLMM?=
- =?us-ascii?Q?V5CzuLRBIzuA+iL+31w4h1EwSpP2wtr7cB2avLh4BHTE1kNSwwdlt/FPzTG5?=
- =?us-ascii?Q?+4KXVcFJV+MHu3Y0wmqpr3VMdOVAz7De1a26XKR8N/ofhBsKPi2OQmJkHwPH?=
- =?us-ascii?Q?uT3ojWzcn9XaJ8+yqyEP0/esVkXKUFT3xZvQch/kNcW809a9W8gmfZnwyWXB?=
- =?us-ascii?Q?4MWYoxD7EgSqlhQDZYyxMjT4dj2GrUHoI4by8WjIx0dYq+mNRM+xjBPoS8T2?=
- =?us-ascii?Q?lwuj0Hm8zZ0hgizXt1xRYHMHZ8+WEYmQtQdWN/I1MyMVdBCZriwLUfNbxKYK?=
- =?us-ascii?Q?BBfmrsuxgedD3S0ZVHew6daH4+AbSXfOFhRQccKXb+u9yPYACw5Eg77HjqvI?=
- =?us-ascii?Q?ynNdT3GkhU64SdW2R/eqx4mbqBDuy6dFzw0VaPGnceBIdAaUkcD3pKN35uLp?=
- =?us-ascii?Q?HJMzvvcaL1ad6rusiIQ5slDrSC/T6qhFeuJX2/y+FvNhijIU00KUiOnwzKK/?=
- =?us-ascii?Q?J8BBvm7dC7ZsHvf4jR3OLntv/TLM3COml9/ciRby3WM43/sHGZhcmg96lo6E?=
- =?us-ascii?Q?0B8F85Lin/aYGAAazCU8hM9m4/Zz495ifQvEFayK5KfcKBy+ecB+fBIfsVMs?=
- =?us-ascii?Q?oEx/YUFBzbSDIoPGc6LCEMqEpXpucXiwTarD4DTPBBw/aHULdAXjXuX04mWt?=
- =?us-ascii?Q?aSkJ9MUgqY/6eQP95+bqQ+6KCuEDuS7T9I2nJ3aatwRZBn2+NjxyNz4BOXOc?=
- =?us-ascii?Q?qFlYsWqoVuFEbB18YwEW/TB4ME5g9ZwvA/J1dD3KY0/iTT/gv2cyzmTsaNIz?=
- =?us-ascii?Q?N62Yr+j4j0ZCGeeChDsAYb/gD6koAp0PAuJSTMyQZj7q6wzoRJOy3VTw6RTO?=
- =?us-ascii?Q?0dCGFMFAsNeqB606Mcc6ZkLopV0v2PuLXKcbg42AEHj/0PUsNs/3MGixZJ+d?=
- =?us-ascii?Q?2dyXqg2xmQTZrWaSFaDfH005Sy4HPWcCDcgi7wQip0Jq31s4Ca4R0M5MpdO9?=
- =?us-ascii?Q?HRLZ6yp4t8nAP+AzAX0jOyj9OPJ5otCfQEbJa7reer/WTqn5GQdYdh+Y38wL?=
- =?us-ascii?Q?MWk+J4JlO7R5insoFhfxwIQhZKJZiU4v1N5KzhorgY4PYmJxSikZVdBAWlLg?=
- =?us-ascii?Q?8+ARA/RsFFARZUObUwnhrMSLFmrDWlAXk+1WG93TQePIMLe3+pKFxS6BBv2w?=
- =?us-ascii?Q?5eOm2iX9sg3nZ2D4Brl0PnS7IIpgbQGGIqh/Cp4XxtboPEESEEVko2yl4430?=
- =?us-ascii?Q?A/MgTOwmYw18KBRAsea9nvau?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6E1BWjwE19uLhCe6zLW1c6BnQrR2Lp5GQIYyHzhrg83CsMdSBhKR4XoEga7B?=
+ =?us-ascii?Q?lVyvlwkyo0A0neIn+incnrZwAg7dBR//EcT0ux4kF5afA5eiOAh1gLrBskPt?=
+ =?us-ascii?Q?o61uGZGkviJoKTL5Phz63NqVCw2w0uXmFH8RPI5s14rlCfjmR48rvIp+HQHG?=
+ =?us-ascii?Q?Psmn4YLzChdwi6POp7XaoJournr8mMVUd/OmYFbHpe+09K4nhJoTtJDVZHKg?=
+ =?us-ascii?Q?PRy6FTtiVHq9Kw9OldTg4xhQO/iHBnPF94+w9ciW1OY4e6eH3Zqx8wfv+SOq?=
+ =?us-ascii?Q?1RAIAzt0OOK/lH7RVZfxOl8vdnr4uklY5ljXkOLvdpZ0ey0lNWDXbb5bbHwT?=
+ =?us-ascii?Q?qiLLLC8DehHeMJg8EW4XH88hNkXgsoU7JP4wDJwNnk9qshZNNXgyPy1KO2f9?=
+ =?us-ascii?Q?S/XF8z1Ur8cxQnqxOe8yHMLpYxSrkzhgcx7lF7w9MShhKOCoHCH8FLIDtVaV?=
+ =?us-ascii?Q?vqn8AMl3Jz7fbJvLfSqG4q1t1Bl3ZMuRHyVG3mCECGfVl31+14PuoAUKAP9o?=
+ =?us-ascii?Q?WWAiq1DNN3XWodbq2rKv3ro5S/VV0N36zwkEen+2Hkuj17dhTjk44/xG3X0c?=
+ =?us-ascii?Q?pvegCTAHomB9qWYuYqhv/i+CE5TEoRxJ2SzecvI8z8oJJUnzImgKqaKCJBXk?=
+ =?us-ascii?Q?8Lrhl2DxT0NjtyW1lwFlcdeSyqGXUZiaRp3Fbpq+oUb3lRvBu2RWRhwcFSZa?=
+ =?us-ascii?Q?vqM2birTAVUzET47EdiR5KpydPc6Yo5Y71F+OGCcPd9SpuuQZaTPx36yCBF0?=
+ =?us-ascii?Q?aR3CO/4pxyQzZ9+CFPX1K4Bfe5w2LMFWFned600WEsnO3bORnU+a72tfoTe3?=
+ =?us-ascii?Q?+G/HiclIcJv+v+hyVe2cxNxl/BGEWNqgbyOusYWeKa5f87JuU309m+ZCCt2g?=
+ =?us-ascii?Q?A6CInSAKYZj17BBHSCty4ltNNwNcDcDhKSccd4sKzCsfhstV7mMd8lmeLsqc?=
+ =?us-ascii?Q?vqd6PT44EeAcN1uHLUPZoCvAuGxcsHapa4bKerirl7PVyUyd5ej1LqqUn9tJ?=
+ =?us-ascii?Q?sQQvC9iRBNwOHIsfK7r9OlKy3sPhIFw/rCjlPCaGrVq9tD47C3+NoPldqXat?=
+ =?us-ascii?Q?i6ZXFQdTLgwW/962XzJrS11LLPisp/7+xEN0bKu20x0gl7PYCEYkXDSM3zqk?=
+ =?us-ascii?Q?iY3E7Xvja0icjhki6EHY0oSy5oMgCAL881+UgQnVLgEecYKLhWM2JpFkac0W?=
+ =?us-ascii?Q?u9qWFOfIlZkQMVz2DnBBn97wK9oKJ09TPXHoB9ppbqOQPtzpH0ih9xaCouGR?=
+ =?us-ascii?Q?DDV+a64Osk/SR4wAjmDRDmPXOPIPRIWuiqq4NdPRFscIXbXbjDXjr6sYIn39?=
+ =?us-ascii?Q?i/G8d9eiTmO72HnibGw7n5oE?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4fbd8d9e-33df-465f-803f-08d95b531113
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ca9f452-0625-403c-04cf-08d95b531224
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB3793.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2021 16:30:57.8018
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2021 16:30:59.5788
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G0cVw7PAP/580Tu+TCNPZHvBzUG/aN/AnaxLmPWAozuVdO1ARw8UDikZxylXSY2XFM3sE25VbPFMb1+D853BK7w8QIrXAMQqW+yQL4wopQ8=
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gv83BIcT34f0IMn24xmJMGCdsZft1WXOYBHBjWNCG/fzFOCTI9NH+UCAZNAy+N8VM8ORd2fl6A+MS2KmH85IKGuYjFabdra+e/Nl6KacK8Y=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB3939
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10071 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
  phishscore=0 spamscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
  definitions=main-2108090119
-X-Proofpoint-GUID: 0t4LhumDqB1Fxd4AyjDpw6gKQsb4aeK8
-X-Proofpoint-ORIG-GUID: 0t4LhumDqB1Fxd4AyjDpw6gKQsb4aeK8
+X-Proofpoint-GUID: y8vnnf-VMICdsczTpiWr0UdW6CKsPoIU
+X-Proofpoint-ORIG-GUID: y8vnnf-VMICdsczTpiWr0UdW6CKsPoIU
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Intel, the APs are left in a well documented state after TXT performs
-the late launch. Specifically they cannot have #INIT asserted on them so
-a standard startup via INIT/SIPI/SIPI cannot be performed. Instead the
-early SL stub code parked the APs in a pause/jmp loop waiting for an NMI.
-The modified SMP boot code is called for the Secure Launch case. The
-jump address for the RM piggy entry point is fixed up in the jump where
-the APs are waiting and an NMI IPI is sent to the AP. The AP vectors to
-the Secure Launch entry point in the RM piggy which mimics what the real
-mode code would do then jumps the the standard RM piggy protected mode
-entry point.
+Prior to running the next kernel via kexec, the Secure Launch code
+closes down private SMX resources and does an SEXIT. This allows the
+next kernel to start normally without any issues starting the APs etc.
 
 Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 ---
- arch/x86/include/asm/realmode.h      |  3 ++
- arch/x86/kernel/smpboot.c            | 86 ++++++++++++++++++++++++++++++++++++
- arch/x86/realmode/rm/header.S        |  3 ++
- arch/x86/realmode/rm/trampoline_64.S | 37 ++++++++++++++++
- 4 files changed, 129 insertions(+)
+ arch/x86/kernel/slaunch.c | 71 +++++++++++++++++++++++++++++++++++++++++++++++
+ kernel/kexec_core.c       |  4 +++
+ 2 files changed, 75 insertions(+)
 
-diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
-index 5db5d08..ef37bf1 100644
---- a/arch/x86/include/asm/realmode.h
-+++ b/arch/x86/include/asm/realmode.h
-@@ -37,6 +37,9 @@ struct real_mode_header {
- #ifdef CONFIG_X86_64
- 	u32	machine_real_restart_seg;
- #endif
-+#ifdef CONFIG_SECURE_LAUNCH
-+	u32	sl_trampoline_start32;
-+#endif
- };
+diff --git a/arch/x86/kernel/slaunch.c b/arch/x86/kernel/slaunch.c
+index f91f0b5..60a193a 100644
+--- a/arch/x86/kernel/slaunch.c
++++ b/arch/x86/kernel/slaunch.c
+@@ -458,3 +458,74 @@ void __init slaunch_setup_txt(void)
  
- /* This must match data at realmode/rm/trampoline_{32,64}.S */
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 9320285..aafe627 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -57,6 +57,7 @@
- #include <linux/pgtable.h>
- #include <linux/overflow.h>
- #include <linux/syscore_ops.h>
-+#include <linux/slaunch.h>
- 
- #include <asm/acpi.h>
- #include <asm/desc.h>
-@@ -1021,6 +1022,83 @@ int common_cpu_up(unsigned int cpu, struct task_struct *idle)
- 	return 0;
+ 	pr_info("Intel TXT setup complete\n");
  }
- 
-+#ifdef CONFIG_SECURE_LAUNCH
 +
-+static atomic_t first_ap_only = {1};
-+
-+/*
-+ * Called to fix the long jump address for the waiting APs to vector to
-+ * the correct startup location in the Secure Launch stub in the rmpiggy.
-+ */
-+static int
-+slaunch_fixup_jump_vector(void)
++static inline void smx_getsec_sexit(void)
 +{
-+	struct sl_ap_wake_info *ap_wake_info;
-+	u32 *ap_jmp_ptr = NULL;
-+
-+	if (!atomic_dec_and_test(&first_ap_only))
-+		return 0;
-+
-+	ap_wake_info = slaunch_get_ap_wake_info();
-+
-+	ap_jmp_ptr = (u32 *)__va(ap_wake_info->ap_wake_block +
-+				 ap_wake_info->ap_jmp_offset);
-+
-+	*ap_jmp_ptr = real_mode_header->sl_trampoline_start32;
-+
-+	pr_info("TXT AP long jump address updated\n");
-+
-+	return 0;
++	asm volatile (".byte 0x0f,0x37\n"
++		      : : "a" (SMX_X86_GETSEC_SEXIT));
 +}
 +
-+/*
-+ * TXT AP startup is quite different than normal. The APs cannot have #INIT
-+ * asserted on them or receive SIPIs. The early Secure Launch code has parked
-+ * the APs in a pause loop waiting to receive an NMI. This will wake the APs
-+ * and have them jump to the protected mode code in the rmpiggy where the rest
-+ * of the SMP boot of the AP will proceed normally.
-+ */
-+static int
-+slaunch_wakeup_cpu_from_txt(int cpu, int apicid)
++void slaunch_finalize(int do_sexit)
 +{
-+	unsigned long send_status = 0, accept_status = 0;
++	void __iomem *config;
++	u64 one = TXT_REGVALUE_ONE, val;
 +
-+	/* Only done once */
-+	if (slaunch_fixup_jump_vector())
-+		return -1;
++	if ((slaunch_get_flags() & (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) !=
++	    (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT))
++		return;
 +
-+	/* Send NMI IPI to idling AP and wake it up */
-+	apic_icr_write(APIC_DM_NMI, apicid);
-+
-+	if (init_udelay == 0)
-+		udelay(10);
-+	else
-+		udelay(300);
-+
-+	send_status = safe_apic_wait_icr_idle();
-+
-+	if (init_udelay == 0)
-+		udelay(10);
-+	else
-+		udelay(300);
-+
-+	accept_status = (apic_read(APIC_ESR) & 0xEF);
-+
-+	if (send_status)
-+		pr_err("Secure Launch IPI never delivered???\n");
-+	if (accept_status)
-+		pr_err("Secure Launch IPI delivery error (%lx)\n",
-+			accept_status);
-+
-+	return (send_status | accept_status);
-+}
-+
-+#else
-+
-+#define slaunch_wakeup_cpu_from_txt(cpu, apicid)	0
-+
-+#endif  /* !CONFIG_SECURE_LAUNCH */
-+
- /*
-  * NOTE - on most systems this is a PHYSICAL apic ID, but on multiquad
-  * (ie clustered apic addressing mode), this is a LOGICAL apic ID.
-@@ -1075,6 +1153,13 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
- 	cpumask_clear_cpu(cpu, cpu_initialized_mask);
- 	smp_mb();
- 
-+	/* With Intel TXT, the AP startup is totally different */
-+	if ((slaunch_get_flags() & (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) ==
-+	   (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) {
-+		boot_error = slaunch_wakeup_cpu_from_txt(cpu, apicid);
-+		goto txt_wake;
++	config = ioremap(TXT_PRIV_CONFIG_REGS_BASE, TXT_NR_CONFIG_PAGES *
++			 PAGE_SIZE);
++	if (!config) {
++		pr_emerg("Error SEXIT failed to ioremap TXT private reqs\n");
++		return;
 +	}
 +
- 	/*
- 	 * Wake up a CPU in difference cases:
- 	 * - Use the method in the APIC driver if it's defined
-@@ -1087,6 +1172,7 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
- 		boot_error = wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
- 						     cpu0_nmi_registered);
- 
-+txt_wake:
- 	if (!boot_error) {
- 		/*
- 		 * Wait 10s total for first sign of life from AP
-diff --git a/arch/x86/realmode/rm/header.S b/arch/x86/realmode/rm/header.S
-index 8c1db5b..9136bd5 100644
---- a/arch/x86/realmode/rm/header.S
-+++ b/arch/x86/realmode/rm/header.S
-@@ -36,6 +36,9 @@ SYM_DATA_START(real_mode_header)
- #ifdef CONFIG_X86_64
- 	.long	__KERNEL32_CS
- #endif
-+#ifdef CONFIG_SECURE_LAUNCH
-+	.long	pa_sl_trampoline_start32
-+#endif
- SYM_DATA_END(real_mode_header)
- 
- 	/* End signature, used to verify integrity */
-diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
-index cc8391f..cdfc2c2 100644
---- a/arch/x86/realmode/rm/trampoline_64.S
-+++ b/arch/x86/realmode/rm/trampoline_64.S
-@@ -104,6 +104,43 @@ SYM_CODE_END(sev_es_trampoline_start)
- 
- 	.section ".text32","ax"
- 	.code32
-+#ifdef CONFIG_SECURE_LAUNCH
-+	.balign 4
-+SYM_CODE_START(sl_trampoline_start32)
-+	/*
-+	 * The early secure launch stub AP wakeup code has taken care of all
-+	 * the vagaries of launching out of TXT. This bit just mimics what the
-+	 * 16b entry code does and jumps off to the real startup_32.
-+	 */
-+	cli
-+	wbinvd
++	/* Clear secrets bit for SEXIT */
++	memcpy_toio(config + TXT_CR_CMD_NO_SECRETS, &one, sizeof(one));
++	memcpy_fromio(&val, config + TXT_CR_E2STS, sizeof(val));
++
++	/* Unlock memory configurations */
++	memcpy_toio(config + TXT_CR_CMD_UNLOCK_MEM_CONFIG, &one, sizeof(one));
++	memcpy_fromio(&val, config + TXT_CR_E2STS, sizeof(val));
++
++	/* Close the TXT private register space */
++	memcpy_toio(config + TXT_CR_CMD_CLOSE_PRIVATE, &one, sizeof(one));
++	memcpy_fromio(&val, config + TXT_CR_E2STS, sizeof(val));
 +
 +	/*
-+	 * The %ebx provided is not terribly useful since it is the physical
-+	 * address of tb_trampoline_start and not the base of the image.
-+	 * Use pa_real_mode_base, which is fixed up, to get a run time
-+	 * base register to use for offsets to location that do not have
-+	 * pa_ symbols.
++	 * Calls to iounmap are not being done because of the state of the
++	 * system this late in the kexec process. Local IRQs are disabled and
++	 * iounmap causes a TLB flush which in turn causes a warning. Leaving
++	 * thse mappings is not an issue since the next kernel is going to
++	 * completely re-setup memory management.
 +	 */
-+	movl    $pa_real_mode_base, %ebx
 +
-+	/*
-+	 * This may seem a little odd but this is what %esp would have had in
-+	 * it on the jmp from real mode because all real mode fixups were done
-+	 * via the code segment. The base is added at the 32b entry.
-+	 */
-+	movl	rm_stack_end, %esp
++	/* Map public registers and do a final read fence */
++	config = ioremap(TXT_PUB_CONFIG_REGS_BASE, TXT_NR_CONFIG_PAGES *
++			 PAGE_SIZE);
++	if (!config) {
++		pr_emerg("Error SEXIT failed to ioremap TXT public reqs\n");
++		return;
++	}
 +
-+	lgdt    tr_gdt(%ebx)
-+	lidt    tr_idt(%ebx)
++	memcpy_fromio(&val, config + TXT_CR_E2STS, sizeof(val));
 +
-+	movw	$__KERNEL_DS, %dx	# Data segment descriptor
++	pr_emerg("TXT clear secrets bit and unlock memory complete.");
 +
-+	/* Jump to where the 16b code would have jumped */
-+	ljmpl	$__KERNEL32_CS, $pa_startup_32
-+SYM_CODE_END(sl_trampoline_start32)
-+#endif
++	if (!do_sexit)
++		return;
 +
- 	.balign 4
- SYM_CODE_START(startup_32)
- 	movl	%edx, %ss
++	if (smp_processor_id() != 0) {
++		pr_emerg("Error TXT SEXIT must be called on CPU 0\n");
++		return;
++	}
++
++	/* Disable SMX mode */
++	cr4_set_bits(X86_CR4_SMXE);
++
++	/* Do the SEXIT SMX operation */
++	smx_getsec_sexit();
++
++	pr_emerg("TXT SEXIT complete.");
++}
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 4b34a9a..fdf0a27 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -39,6 +39,7 @@
+ #include <linux/hugetlb.h>
+ #include <linux/objtool.h>
+ #include <linux/kmsg_dump.h>
++#include <linux/slaunch.h>
+ 
+ #include <asm/page.h>
+ #include <asm/sections.h>
+@@ -1179,6 +1180,9 @@ int kernel_kexec(void)
+ 		cpu_hotplug_enable();
+ 		pr_notice("Starting new kernel\n");
+ 		machine_shutdown();
++
++		/* Finalize TXT registers and do SEXIT */
++		slaunch_finalize(1);
+ 	}
+ 
+ 	kmsg_dump(KMSG_DUMP_SHUTDOWN);
 -- 
 1.8.3.1
 
