@@ -2,54 +2,53 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D91643E40D2
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 09:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DD13E4108
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 09:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233285AbhHIHaZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Aug 2021 03:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
+        id S233429AbhHIHrY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Aug 2021 03:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbhHIHaZ (ORCPT
+        with ESMTP id S233568AbhHIHrX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Aug 2021 03:30:25 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F3EC0613CF
-        for <linux-integrity@vger.kernel.org>; Mon,  9 Aug 2021 00:30:03 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id k9so5855577edr.10
-        for <linux-integrity@vger.kernel.org>; Mon, 09 Aug 2021 00:30:03 -0700 (PDT)
+        Mon, 9 Aug 2021 03:47:23 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391BFC0613CF
+        for <linux-integrity@vger.kernel.org>; Mon,  9 Aug 2021 00:47:01 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id k5-20020a05600c1c85b02902e699a4d20cso220515wms.2
+        for <linux-integrity@vger.kernel.org>; Mon, 09 Aug 2021 00:47:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=AT+vD4mRzIhsGch4pR59zS7CJCH5VlJ0vx3WqXvMtak=;
-        b=PzhneyVRvoy1QVFuR6GoZjkQFVLzvMxb00f/usvo7NnQ66DhncSLEmnajIf9w60XK/
-         uyX35fqfsFHU1Eh6a/WASDWnW7qgFItuh5oRMSIkC+tXsvdKU/5pIB7u1h3JXH/vKNbP
-         TIOqXmSnQQDl6ONENPtsoXeebcUqnCulZ2RZoLdDMFDWwu35l39Pptv57cQq4nfHB1pR
-         CEfgqyDZpcRL9WXUobjDLo236VlWvFg3TeOst5ODW+fn7Z9dpgoX4ONtIIol5biQKuTl
-         OZaMonFfy1oLvsMxiGPAF2EzTzYS2AqieftFM0hCnrvYlySKTiilQ5eJhkAqRIC4+/k8
-         6UBg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=AdZSQ0X+1xmlIOCiK7mbRupUifnXy1bypiN4ePEVhpo=;
+        b=FfN6K/koYDzp/Sz+lJxez6WZISNGcewMxa8YqVmRrShQJTWpTSC71muwHf4Qrqw60d
+         HAbU/fFQrkZ/sA5M3O7dkRGe4hpN7q80xyLenGqzjM7Ohkn5wZAww01NhTxL4KAuF9eH
+         2A8RMzInWxEnFY8Qmz9EhoAdiOVRqumSb2EQO+elVXdefnPRDuue5fhvd34e6X6KJAY2
+         EHqbTwb2bPRQSo1dSjZRnEFNH0HUcPQe+EVYMztGe6Q+DPNKz21dqMo/84hPCCtlrQpc
+         dmFhq7MNsVKTwF8a9oetqtzk64Hd8MmRFk97/UqV1oE4Ykh4CudwXElJLBN9K57/xPAn
+         Z61Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=AT+vD4mRzIhsGch4pR59zS7CJCH5VlJ0vx3WqXvMtak=;
-        b=H1JotLJkM30EuE82VFHesUkwgVPvOwvXw++UleLVbCp2C4bdO29xm5ukMki/vHYIVT
-         xflVYuJu637vF5tIAwfTFlCK9gOr4DFyRdiSHo1ZDGQ0X50IfZsON4fO1bk8R2c8ZlXk
-         2sW+qcHuyqhXpGK8sz4bwaMgZtvJeU9Vtsrx+GAaAeVwVlih4BbV6Yf8Qy0nu6cPPeCF
-         xOXYYmoGfFw1HtW5RuOP+r3jdgow4SwWIKgoQNmIMiyYZDnv+aOt70qE7NREzXoTnICa
-         QxhleahmEYMyIP54oulUdSxeEnsd9W242jOq9z2HXkzL8QT5J8sC6aIcvDAPQh3bybvv
-         LqMw==
-X-Gm-Message-State: AOAM532vfKHOJYf2Ml61CSXzcHPDPeLWNDBRbinOM5FjbloaLnUWcXds
-        +/4WZ+Znz1U9iiJXJlnjzcS7p5h5CjH5H0NKflI=
-X-Google-Smtp-Source: ABdhPJztpqEXZfHrZHsV9OEpj0SE2fPShtFsNCkiewvz1YK47zFwTkkcFCLR9zc1j09ofQvM2bHNfnHn/PhLc7uZJ2Q=
-X-Received: by 2002:aa7:d709:: with SMTP id t9mr27547446edq.384.1628494201970;
- Mon, 09 Aug 2021 00:30:01 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=AdZSQ0X+1xmlIOCiK7mbRupUifnXy1bypiN4ePEVhpo=;
+        b=lu+c0jn5WiOCIolRp3xZPZzW5Vw+XH9diGtIlpEfnhUpYRstEFFJcShnzhlCe+83+I
+         42kcSuxrMBI2qQIRlzhZUFxf6Rvxp9NETcFTw/UxTHH4TVDsUTXGwfLKaLbdA16RokJO
+         zrBh3CTcLuCxWO8YbiPxrdJTBLmFqbKQKyb/SM7b6ByfhnN4V+MtKzkFX+Q+vAJ/x+2W
+         4b4nrlUrukG1HkWJcixHDJTwgM7ivnpaNhVs3MappriumO6QYpErF1vBlJagV0COL+86
+         eXb4i62JMgQCnldJgFFYwE+swU7nfzbCHm2fDXI7JMpsK9dyZoJFTA4hlENNTC1YP5hP
+         R8nA==
+X-Gm-Message-State: AOAM530hnLpf2sDkH8pTOPfu/7Wn1YwCsP1lshjKllW54hr+RjqDPXWm
+        gGqd3K2chFj9pfsHEBMelnbtNn3Xthtl6TiDi34=
+X-Google-Smtp-Source: ABdhPJzGg5/PwdQAIJJQssTUrInJPqagbBhKzaYoo4KhTlMZOIyN5QSbii7XMyGDmMLGeZT/1ZIHaqlCCEYwPTSfQWs=
+X-Received: by 2002:a1c:f414:: with SMTP id z20mr32939079wma.94.1628495219584;
+ Mon, 09 Aug 2021 00:46:59 -0700 (PDT)
 MIME-Version: 1.0
-Sender: nicole.mmm19611@gmail.com
-Received: by 2002:a54:254d:0:0:0:0:0 with HTTP; Mon, 9 Aug 2021 00:30:01 -0700 (PDT)
-From:   "dr.Abrar Zebadiyah" <mrssuzaramaling661@gmail.com>
-Date:   Mon, 9 Aug 2021 00:30:01 -0700
-X-Google-Sender-Auth: ABpW1SnHtB1QxBZgBk2g0iP2WbU
-Message-ID: <CAOg38vsY5=RGfCR60VVpjXnomc6hDmvTYAVMdTpHWJMoxcRR=Q@mail.gmail.com>
+Received: by 2002:a7b:c7d1:0:0:0:0:0 with HTTP; Mon, 9 Aug 2021 00:46:59 -0700 (PDT)
+Reply-To: asemotauyizahra@gmail.com
+From:   ASEMOTA UYI ZAHRA <harryanderson033@gmail.com>
+Date:   Mon, 9 Aug 2021 00:46:59 -0700
+Message-ID: <CAEC4EUWEM-ckYNZKYN2VteSinpsQnvCJKh946nj18X7Br5bx5g@mail.gmail.com>
 Subject: HELLO
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
@@ -58,48 +57,56 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 -- 
+GOOD MORNNG\GOOD EVENING TO YOU BEAUTIFUL ANGEL
 
-My Dear Friend.
+MY NAME IS ASEMOTA UYI ZAHRA
 
-How are you and your family Today? I hope all is well, and I am happy
-to share this transaction with you ,but you must keep everything as
-secret and very confidential.
+I AM FROM NIGERIA, BUT I BASED IN BURKINA FASO
 
-I have a very lucrative business transaction which requires your
-utmost discretion. Please understand that you and me, are to work as
-one team to inherit this fund, hence I am your insider in
+I AM 35 YEARS OLD
 
-the bank as the transaction commence. I advise you to feel free with
-me for all is going to be well with us. This business is 100% risk
-free.
+I AM A CHRISTIAN\I SPEAK ENGLISH AND MY NATIVE LANGUE
 
-Though, I know it would come to you at uttermost surprise unbelief
-because it is virtually impossible to know who is trustworthy and who
-to believed I am Dr. Rhama Benson sum of $10.5 million
+I AM SERIOUSLY LOOKING FOR A GOOD PARTNER
 
-is lying in our bank without claim i want you to help me to claim and
-receive it to your account in your country for our benefit.
+THAT WE WILL BOTH SPENT THE REST OF OUR LIFE
 
-I am aware of the unsafe nature of the internet, and was compelled to
-use this medium due to the nature of this project.I have access to
-every vital information that can be used to transfer
+TOGETHER TILL DEATH DEPART US
 
-this huge amount
-of money, which may culminate into the investment of the said funds
-into your account or any lucrative company in your country.
+I AM REAL MAN WITH TRUTH AND HONEST
 
-If you will like to assist me as a partner then indicate your
-interest, after which we shall both discuss the modalities and the
-sharing percentage. Upon receipt of your reply on your
+I AM A HUMBLE MAN AND I FORGIVE EASLY AND ALSO GOD FEARING MAN
 
-expression of interest, I will give you full details on how the
-business will be executed. I am open for negotiation,
+I BELIVE THAT TRUE LOVE STILL EXIST
 
-Thanks for your anticipated cooperation.Note you might receive this
-message in your inbox or spam folder, depends on your web host or
-server network
+I BELIVED THAT REAL PEOPLE STILL EXIST
 
-Contact my private email only if you are interested (drabrarzebadiyah@gmail.com)
+I BELIVE THAT REAL WOMEN WHO HAS GOD FEARING HEART STILL EXIST
 
-Compliment of the day,
-Regards,
+I BELIVE IF THE TRUE PERSON COMES YOUR WAY
+
+DISTANCE CAN NEVER BE A BARRIER TO TRUE LOVE
+
+NEVER DECLINE A PROSPOSA FROM A MAN BEACUSE
+
+YOU NO YOU ARE SENIOR TO HIM OR THE MAN IS SENIOR TO HER
+
+THAT IS ANOTHER BLOCKAGE IN A HUMAN MARITAL LIFE
+
+DONT CONDEM ANY MAN BEACUSE IS from A LOCAL COUNTRY
+
+beacuse that person maybe THE PERSON WHO GOD WANT IN YOUR LIFE
+
+IF YOU ARE TRULY INTERESTED IN ME I WILL SEND YOU MY PICTURS
+
+CONTACT ME...asemotauyizahra@gmail.com
+
+GMAIL HANGOUTS...uyia2205@gmail.com
+
+WHATSAPP NUMBER...+226 06 89 12 57
+
+call my cell phone number...+226 06 89 12 57
+
+REGARDS
+
+ASEMOTA UYI ZAHRA
