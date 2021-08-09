@@ -2,136 +2,163 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 661523E4E33
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 22:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0853F3E4E67
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 23:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbhHIU7m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Aug 2021 16:59:42 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29672 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233102AbhHIU7l (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Aug 2021 16:59:41 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 179KXwUx128624;
-        Mon, 9 Aug 2021 16:59:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=wmTAJT5xwW0htdyS7OnStJAr6DBUJsiLLQ4npd0S4JQ=;
- b=MeOm7pnV6C9o2LiqnXHUP0rQBxfU3mP1Y/QqJFa3hOOZGE1hVE1gxluDF9gu72XbTKsU
- sj0ipkjEcjW/gFRFOVx2xorKlYdM5xmgJEWU1ZspGhT2/ryYP7pJpytoCLDm7od/QLMG
- qP34m2oRVRU2QeXkAcZg/aqelPa2H1TDq/j79aBzZtmJANYVkyITi0xPyN1AGnv+EP8X
- 1JV+Mj1htWLP9MEGTtBan31A2xMmufaAceEHkindLL4W6Ng+xV4ML5ptNKriKB6CarOA
- wyOVA/5eGuiTGIj+hTqIPB5WpPkMjMnh1S6GIPaA2DSuX/Qrs/Qo9bsZYA7K4SrshujE Xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ab1j8j0d4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Aug 2021 16:59:20 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 179KYWPn131103;
-        Mon, 9 Aug 2021 16:59:20 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ab1j8j0cg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Aug 2021 16:59:20 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 179KwjQO006927;
-        Mon, 9 Aug 2021 20:59:18 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04fra.de.ibm.com with ESMTP id 3a9ht8m7x7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Aug 2021 20:59:17 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 179Ku7D439977254
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Aug 2021 20:56:07 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2EAA0A4064;
-        Mon,  9 Aug 2021 20:59:15 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0E0C1A4054;
-        Mon,  9 Aug 2021 20:59:14 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.60.134])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Aug 2021 20:59:13 +0000 (GMT)
-Message-ID: <6e325a893b94ffda59a9ae1a277858ba438dc9e2.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 1/5] IMA: remove the dependency on CRYPTO_MD5
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Date:   Mon, 09 Aug 2021 16:59:13 -0400
-In-Reply-To: <20210804092010.350372-2-simon.thoby@viveris.fr>
-References: <20210804092010.350372-1-simon.thoby@viveris.fr>
-         <20210804092010.350372-2-simon.thoby@viveris.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Yi8bPPxgqy70uK9Bc2UeG_lIdI6IdjCH
-X-Proofpoint-ORIG-GUID: XY_DhpUbN8rGMh8SMw4Ywj4cIW5VEIkF
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-09_08:2021-08-06,2021-08-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 impostorscore=0 suspectscore=0 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 adultscore=0 phishscore=0 mlxscore=0
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108090145
+        id S236446AbhHIVYs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Aug 2021 17:24:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49690 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236441AbhHIVYq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 9 Aug 2021 17:24:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 203B860EB9;
+        Mon,  9 Aug 2021 21:24:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628544264;
+        bh=D2aOWPkZRvo4FPeQiqOYNBi8S+9DKShgichgczsHHWo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iZLhpA+/gitAAaAEJQa+SuwtTRtdWqNg6KiI+uJ7wTvD3Slz3f1q3M9eNHEFeRye0
+         skvrWsmpZpvzteGIgxz4pTEpOgAipWgy9d7eUlNX8TSLP79IWGFGwweo0PtzzXd7OB
+         AEZsAAVVZ292uDGutkHjSqtKaODj/EDag/I63+6go3rh+dCs85LjWzbrvCixe8fofF
+         dgyiqfDqJVa2wzIudk1PTzSFI5sW3HaAMH3j/iQ+w7cgz2z0y4fJVAo4aRdc/zM6FO
+         /bYKoXwAhjmPGJpABv1eqcLcp3CKE5y689yJhJ/+5zZVIW9+Yy4Zn2AvdCx12kotWk
+         fG+pgXQ5/og3w==
+Date:   Mon, 9 Aug 2021 14:24:22 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, kernel@pengutronix.de,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] fscrypt: support trusted keys
+Message-ID: <YRGdBiJQ3xqZAT4w@gmail.com>
+References: <20210806150928.27857-1-a.fatoum@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210806150928.27857-1-a.fatoum@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2021-08-04 at 09:20 +0000, THOBY Simon wrote:
-> MD5 is a weak digest algorithm that shouldn't be used for cryptographic
-> operation. It hinders the efficiency of a patch set that aims to limit
-> the digests allowed for the extended file attribute namely security.ima.
-> MD5 is no longer a requirement for IMA, nor should it be used there.
-> 
-> Remove the CRYPTO_MD5 dependency for IMA.
-> 
-> Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
-> ---
->  security/integrity/ima/Kconfig    | 1 -
->  security/integrity/ima/ima_main.c | 3 ++-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index d0ceada99243..f3a9cc201c8c 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -6,7 +6,6 @@ config IMA
->  	select SECURITYFS
->  	select CRYPTO
->  	select CRYPTO_HMAC
-> -	select CRYPTO_MD5
->  	select CRYPTO_SHA1
->  	select CRYPTO_HASH_INFO
->  	select TCG_TPM if HAS_IOMEM && !UML
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 1cba6beb5a60..b70ee0125168 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -53,7 +53,8 @@ static int __init hash_setup(char *str)
->  	if (strcmp(template_desc->name, IMA_TEMPLATE_IMA_NAME) == 0) {
->  		if (strncmp(str, "sha1", 4) == 0) {
->  			ima_hash_algo = HASH_ALGO_SHA1;
-> -		} else if (strncmp(str, "md5", 3) == 0) {
-> +		} else if (IS_ENABLED(CONFIG_CRYPTO_MD5)
-> +			   && strncmp(str, "md5", 3) == 0) {
->  			ima_hash_algo = HASH_ALGO_MD5;
->  		} else {
->  			pr_err("invalid hash algorithm \"%s\" for template \"%s\"",
+Hi Ahmad,
 
-FYI, with the non "ima" template formats and MD5 is not configured, it
-fails with the following messages:
+This generally looks okay, but I have some comments below.
 
-ima: Can not allocate md5 (reason: -2)
-ima: Allocating md5 failed, going to use default hash algorithm sha256
+On Fri, Aug 06, 2021 at 05:09:28PM +0200, Ahmad Fatoum wrote:
+> Kernel trusted keys don't require userspace knowledge of the raw key
+> material and instead export a sealed blob, which can be persisted to
+> unencrypted storage. Userspace can then load this blob into the kernel,
+> where it's unsealed and from there on usable for kernel crypto.
 
-thanks,
+Please be explicit about where and how the keys get generated in this case.
 
-Mimi
+> This is incompatible with fscrypt, where userspace is supposed to supply
+> the raw key material. For TPMs, a work around is to do key unsealing in
+> userspace, but this may not be feasible for other trusted key backends.
 
+As far as I can see, "Key unsealing in userspace" actually is the preferred way
+to implement TPM-bound encryption.  So it doesn't seem fair to call it a "work
+around".
+
+> +  Most users leave this 0 and specify the raw key directly.
+> +  "trusted" keys are useful to leverage kernel support for sealing
+> +  and unsealing key material. Sealed keys can be persisted to
+> +  unencrypted storage and later be used to decrypt the file system
+> +  without requiring userspace to have knowledge of the raw key
+> +  material.
+> +  "fscrypt-provisioning" key support is intended mainly to allow
+> +  re-adding keys after a filesystem is unmounted and re-mounted,
+>    without having to store the raw keys in userspace memory.
+>  
+>  - ``raw`` is a variable-length field which must contain the actual
+>    key, ``raw_size`` bytes long.  Alternatively, if ``key_id`` is
+>    nonzero, then this field is unused.
+>  
+> +.. note::
+> +
+> +   Users should take care not to reuse the fscrypt key material with
+> +   different ciphers or in multiple contexts as this may make it
+> +   easier to deduce the key.
+> +   This also applies when the key material is supplied indirectly
+> +   via a kernel trusted key. In this case, the trusted key should
+> +   perferably be used only in a single context.
+
+Again, please be explicit about key generation.  Note that key generation is
+already discussed in a different section, "Master Keys".  There should be a
+mention of trusted keys there.  The above note about not reusing keys probably
+belongs there too.  (The section you're editing here is
+"FS_IOC_ADD_ENCRYPTION_KEY", which is primarily intended to just document the
+ioctl, so it's not necessarily the best place for this type of information.)
+
+> @@ -577,28 +578,44 @@ static int get_keyring_key(u32 key_id, u32 type,
+>  	key_ref_t ref;
+>  	struct key *key;
+>  	const struct fscrypt_provisioning_key_payload *payload;
+> -	int err;
+> +	int err = 0;
+>  
+>  	ref = lookup_user_key(key_id, 0, KEY_NEED_SEARCH);
+>  	if (IS_ERR(ref))
+>  		return PTR_ERR(ref);
+>  	key = key_ref_to_ptr(ref);
+>  
+> -	if (key->type != &key_type_fscrypt_provisioning)
+> -		goto bad_key;
+> -	payload = key->payload.data[0];
+> +	if (key->type == &key_type_fscrypt_provisioning) {
+
+This function is getting long; it probably should be broken this up into several
+functions.  E.g.:
+
+static int get_keyring_key(u32 key_id, u32 type,
+                           struct fscrypt_master_key_secret *secret)
+{
+        key_ref_t ref;
+        struct key *key;
+        int err;
+
+        ref = lookup_user_key(key_id, 0, KEY_NEED_SEARCH);
+        if (IS_ERR(ref))
+                return PTR_ERR(ref);
+        key = key_ref_to_ptr(ref);
+
+        if (key->type == &key_type_fscrypt_provisioning) {
+                err = fscrypt_get_provisioning_key(key, type, secret);
+        } else if (IS_REACHABLE(CONFIG_TRUSTED_KEYS) &&
+                   key->type == &key_type_trusted) {
+                err = fscrypt_get_trusted_key(key, secret);
+        } else {
+                err = -EKEYREJECTED;
+        }
+        key_ref_put(ref);
+        return err;
+}
+
+> +		/* Don't allow fscrypt v1 keys to be used as v2 keys and vice versa. */
+
+Please avoid overly-long lines.
+
+> +		tkp = key->payload.data[0];
+> +		if (!tkp || tkp->key_len < FSCRYPT_MIN_KEY_SIZE ||
+> +		    tkp->key_len > FSCRYPT_MAX_KEY_SIZE) {
+> +			up_read(&key->sem);
+> +			err = -EINVAL;
+> +			goto out_put;
+> +		}
+
+What does the !tkp case mean?  For "user" and "logon" keys it means "key
+revoked", but the "trusted" key type doesn't implement revoke.  Is this included
+just to be safe?  That might be reasonable, but perhaps the error code in that
+case (but not the invalid length cases) should be -EKEYREVOKED instead?
+
+- Eric
