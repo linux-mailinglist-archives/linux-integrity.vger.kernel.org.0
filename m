@@ -2,74 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B36A3E49F1
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 18:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B543B3E49DA
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Aug 2021 18:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233357AbhHIQcK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Aug 2021 12:32:10 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:59552 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233069AbhHIQby (ORCPT
+        id S233128AbhHIQbz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 9 Aug 2021 12:31:55 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:5216 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232993AbhHIQbs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Aug 2021 12:31:54 -0400
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 179GBWhY004565;
-        Mon, 9 Aug 2021 16:31:05 GMT
+        Mon, 9 Aug 2021 12:31:48 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 179GCKSu013022;
+        Mon, 9 Aug 2021 16:31:03 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=i4xQmbvI4G/h2NIs8DYNtjtoMidMR3X2fKkOhOoUOS8=;
- b=mvpOLELJNEXVoPfVgqTtpb86xApVZpdfHkR8psg27IN4ixt1vzRJ1/k9t9MROAkHfx5D
- 3OpUMpjTLvh6qawhvdA1FdPcffg9zWo06K4rFFAwQ0IlCPXZnn1MKwtJJmyS/5325BB7
- 8YyMbArCPnWKndh6wqw5MDmvm65AzKN85xVwPZCUhDKAmxyLcA+lzqu9Mj9Rmf8+zBdr
- gagxoNe58KMjg3m7kdzkjxlGfqXvwejWMp5gRXCmNoziLgQuFhDIjXwLFRDCQMSHUco7
- z8i/V+76GFeL/lxzQx4UkpDI9PLe7cN8j4PxLL1DLph0C4ToN0M6RPzF+CJXAhlV0cEc aw== 
+ bh=3mdbDIv/S/lggxNYRfzq4aRZ4D5Sk/xd9kkDvIMPGfM=;
+ b=lOZEUzr5U88DANn9ExXXuYC2StFd5opBQ5tM6YgmLvW+lMDJMyYKwaIfCgVDoYM+aKpx
+ LgFXJRBsx0G4dMtTxjoS8QZdPblF3xC5gzqluoNehWUi2dz7Pr0mqIp/M4ynXMks7Tfj
+ Fmq4mSMl/Ax+65FO4LWWLRY5Nnl8Gk7kx6CvW4pROQ7nNzIiNoXY9gjp47PR6WwlQgES
+ XVY0RuYcw8XEAyrcCKg+602pTbu8ITCESK9ZjAECrhcG3KCagTgcQ5Ug4EByVcAKAOxF
+ hNv4D40wq3JR2jkf1sktEQ/mMwvvn9YVc5u9vuSCeZOVM1ddcSURPxSjllv3uYUCf7uZ hg== 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2020-01-29;
- bh=i4xQmbvI4G/h2NIs8DYNtjtoMidMR3X2fKkOhOoUOS8=;
- b=m/x7ZGfqp0wwuqpmw3RGSuNtbKqt6Rvmp8tvrt7hz6LBr86yGJwEqaQFC/tKHsIFzpKq
- zIGNdjlM2LLVgsqFFerAtAz5x8/+jeB17Nrio5zaZO58gM52/o9tzLzUl4yyS37c8wOa
- rG0o5Y5h9vZYk9Ur7yMqPXBETKA1EqliqWtQwS0OTiMeYoM6SSDARSTVs1cDaIEXFDdG
- OCqbnS1o7lTG0LaOxXQLx0Hq+6hfLVC6FWV7LAAUPvkfabmAHbTi9b/BfMtyvR2P8GkS
- cutkbbHPAevC3jUKkeyVPH2uwfMJyJveQ9UHUbFsCeD2kRWgYYhUoRE4f4JkYb2jWnph 7w== 
+ bh=3mdbDIv/S/lggxNYRfzq4aRZ4D5Sk/xd9kkDvIMPGfM=;
+ b=LvLXHKV9X9mK27XoltfZuv3aE0+FWoTUvxbuuXpLSoy33TnH9qciGyVA7KJYmq2DjqLc
+ SufOzuwbKvvcRIiy2ATEHcAwXJuOnxQruNY1FGdaHCz5mFAC3T8Q3coWHAkZFawJrRbw
+ i5qEhb168Zvpx1jBagcxJnB4O2YP7Zc5TV1N6vQT3AW3QiGwavWVY7BlLn6XQcDSLcTj
+ ktaf5pgr9p0eb37fJW47EFOPOosBPXemns16Ycg9kak6gmY/KkIbJPqjH2vtxiDVV6L3
+ eRnddAg0OAaZjDGoxL/9ijHxTLz8Uf7EVsC0OfH+Ms6yinF7lNptia5+hTAsEJfm8VAG 4A== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3aav18hq5k-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ab17ds2f7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Mon, 09 Aug 2021 16:31:03 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 179GUeF4066407;
-        Mon, 9 Aug 2021 16:31:01 GMT
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 179GUeF5066407;
+        Mon, 9 Aug 2021 16:31:02 GMT
 Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
-        by aserp3020.oracle.com with ESMTP id 3a9vv3860c-2
+        by aserp3020.oracle.com with ESMTP id 3a9vv3860c-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 09 Aug 2021 16:31:00 +0000
+        Mon, 09 Aug 2021 16:31:01 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n7dYEtXzfvMfVImLA1rq90nVIwTiRR0nyvL5+eZbgAkvFpI8Dxd86bGazYo2+EnLLmrKgclelDzETxVvVWnhYSUXypaUqtIby69mRvyKCi+P32T5T2Bo7XJeqErvYgszS8TaBV9VHBTOY4wpPuFO0cfzN26yRJ+fvsUmBYDcywc8U7asEaorytInCO0sDfyIDhv7StOhi190BuEMgr20O/WPT2CJyXc5SFrde1cmIGN7gJgDL8zKCjQZL9tp5LS6TBFXboZ7N8seJOvGYkowAL6CfVMyuptgbAl48U2Wptz6d1Mwh5uVli8zzU659yHF2kpDGTITgXw3332PsTO1SA==
+ b=EFW/oS6vGhaP660qtUnp5r33gwWDcprPK2b418S4c2mOJIviqc24QrmeMHm26PkuWfw+Durn1Its5Uhl2aRAgFnWV7fSF6yVWJkguehMNH2cGFJxMwc9Vb2DPLIdjhl6IUWh1+BVJEeIQleaTg688HXlO5bQ3Qki/b0hWxWp8KomFggws9unDM7rL63wvqTyv16kbGvjOW8K8m3+zi41bB+UoG/VCz467De6FasDIcu4I6miVXNDLfCMTTrBccLIchQufBL9enIEYEv5/F0BzlPM9lpYe34cWcI0vtH2OqI/ElhJfsqpc1pqK2/+REH4f1L3D+Vjq2gMUu6g7its+g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i4xQmbvI4G/h2NIs8DYNtjtoMidMR3X2fKkOhOoUOS8=;
- b=dtNxguwRtkMZMUXJQs/X1y1H8cBunvVknSVJ0nhXpUmjJ7U4/36i/RRqlLvxJDWKoZXs6cmHU1E2yk0dr3JGRxj5NVSXqnruwgZMHUTb98ChWKeYbPAquyHtlU5cKeOakEXCKzKilieSkG4CYKvU9Lz71IAiC67nsmLotaRxzGNPFFZV54+BPpiSUUE1PUvRL0mhtv9PjB13NfIQ7cs87i3aVAZqi9LH+axagj9FCeX2AxANgJu7ExsrxkZPfyNRWw9+HoZaFtHgUV6X0c5gyWJP8eRauOgubBkZRmX4gH5ctTJcBwIDtuj+k56WwqZqFys9UW16C4K9hbC41i242Q==
+ bh=3mdbDIv/S/lggxNYRfzq4aRZ4D5Sk/xd9kkDvIMPGfM=;
+ b=caoVcJD/0dhF2um7HerAgtTN/sBgTRJu6XcgJk1QGl6ZcTBCM1t8vxw7KIxF/jJtXGVPijwbwouar67mVutGlcn4QfFOwRa5BAIXzda3YH73g9m+EBYKpIr0Qh3epHFuUvEp9Ne2rtmOdZPEJ7JxNWFumQ8jdNtktGL+RQ1IEOEuTtPwtMkEQQHqDf1YmC9wh8Cjx8RGzT7xjxL7qiNfG9TISBTPN6BijDumLbLQEV/pz8JsIvaEpkWWOJKdforrZt+6gAZFa+++5ji+ErsfW5FUS5hFO3WF/TMmx3BzMrcqcmNjDRYNc0E2pq+mNraRCHragGOdPgO5F1wKfcHpew==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i4xQmbvI4G/h2NIs8DYNtjtoMidMR3X2fKkOhOoUOS8=;
- b=ZZXy92WWVlOpEH/EVOXl22zvzjovpncvz+r2qVeGWPk8BA1UMEI3bFlyqbsJextD+37VoTLOlspZRH55kRkNWGG/ou7ZrnIB1PiKuFbEz/2zChz7aRYxqB0bfpq4uorqwrV4bKv+W3U6RWkDq/GcN10K7mTruEBVm7hVf3oiIGc=
+ bh=3mdbDIv/S/lggxNYRfzq4aRZ4D5Sk/xd9kkDvIMPGfM=;
+ b=nyXFZoYfNy4TMkWGHAxoLuTMjNVCf5YEQjB0Kt2BGUYJAmUQ3F+BuvsIw4t9p+nM/HodOLiZb/BbGQEh5YbHeh1rCKezUtICMopC0shT83jse8zy4cPA7VrSxzjJWPWujzm3DvSGvcBekyTXxe7sQqQSJ5e79moMZs8Mnaz/NdU=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=oracle.com;
 Received: from BY5PR10MB3793.namprd10.prod.outlook.com (2603:10b6:a03:1f6::14)
  by BY5PR10MB3939.namprd10.prod.outlook.com (2603:10b6:a03:1f7::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15; Mon, 9 Aug
- 2021 16:30:56 +0000
+ 2021 16:30:58 +0000
 Received: from BY5PR10MB3793.namprd10.prod.outlook.com
  ([fe80::e035:720f:86fd:bae3]) by BY5PR10MB3793.namprd10.prod.outlook.com
  ([fe80::e035:720f:86fd:bae3%4]) with mapi id 15.20.4394.023; Mon, 9 Aug 2021
- 16:30:56 +0000
+ 16:30:58 +0000
 From:   Ross Philipson <ross.philipson@oracle.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
@@ -78,9 +78,9 @@ Cc:     ross.philipson@oracle.com, dpsmith@apertussolutions.com,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
         luto@amacapital.net, kanth.ghatraju@oracle.com,
         trenchboot-devel@googlegroups.com
-Subject: [PATCH v3 09/14] x86: Secure Launch kernel late boot stub
-Date:   Mon,  9 Aug 2021 12:38:51 -0400
-Message-Id: <1628527136-2478-10-git-send-email-ross.philipson@oracle.com>
+Subject: [PATCH v3 10/14] x86: Secure Launch SMP bringup support
+Date:   Mon,  9 Aug 2021 12:38:52 -0400
+Message-Id: <1628527136-2478-11-git-send-email-ross.philipson@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1628527136-2478-1-git-send-email-ross.philipson@oracle.com>
 References: <1628527136-2478-1-git-send-email-ross.philipson@oracle.com>
@@ -90,603 +90,277 @@ X-ClientProxiedBy: SA9PR10CA0021.namprd10.prod.outlook.com
  (2603:10b6:a03:1f6::14)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from lateralus.us.oracle.com (209.17.40.43) by SA9PR10CA0021.namprd10.prod.outlook.com (2603:10b6:806:a7::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Mon, 9 Aug 2021 16:30:54 +0000
+Received: from lateralus.us.oracle.com (209.17.40.43) by SA9PR10CA0021.namprd10.prod.outlook.com (2603:10b6:806:a7::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Mon, 9 Aug 2021 16:30:56 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f4b7ae8e-5118-4507-f545-08d95b530fe2
+X-MS-Office365-Filtering-Correlation-Id: 4fbd8d9e-33df-465f-803f-08d95b531113
 X-MS-TrafficTypeDiagnostic: BY5PR10MB3939:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR10MB39393AF25DA2DA6BFC482BB1E6F69@BY5PR10MB3939.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Microsoft-Antispam-PRVS: <BY5PR10MB3939E3D0ED4407DE87F77546E6F69@BY5PR10MB3939.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dT1TL0XfC5QztKgwSY4pNgJ8rkkn5M689pzYgbTzDc23wwMtxfYQAcJJTAa4AsVJSJ0TTiga9559kdAFxYH6repvMhEDZEaBfZ0fSEatQoCd7OdnX2g8Jgcg37JRsrp3V1VKtJU+tuuz41ZuL503I6TS75TZG4IfOdepP7IzTFkuKvlDLGD9NgecBWqUjwuQrWIsTEclU8MiKue372XSHl3UX3NSvaaINHalCEf9JDRCx4S8FWXVZDbenC35H8uVgId6BswLKtKp3pjcY8vSD72dOQmoWNHgTtx6Adq2ru2z/zcTdZClefnt5HsiSSTwjNaqelQl7U2qhnEEeYBTGnARom+J4ILqh36sjwEd10KzLLQJ1Dbrd3kOCqFs+UxVt6Xtz386X3gVwFkJOp23oPf61mNd2aPPz7Ndhfx7cqmhbNZPDEy1Zf+9JHgAtpgmjia12qO2yaDBbj9hFQx6ppIyBpLwwFnAIWFghjzaPJUlZ5FcQzTBwiP6GtmuMAZfSuTPIU65JSqQIqcegQ0C3KPVxplU6JyKmlvgW2eyJRDAV3r1JA3YyjDMOposJ9wa+I1L7DbtiIDTwceQ5LrcyDavc3e+C1tACMxLgapmX+hGGD7bc0ic8wTXaM0v915ScRRVKAhWoRuAaoQTljVZ3aPErLSnbr46Eztwo9tJ23rQEqGZ3rIbCi7LWcAXCbyVfG4/dSEp8Gpxv5relrLQrw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3793.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(346002)(376002)(136003)(366004)(38350700002)(478600001)(86362001)(316002)(38100700002)(52116002)(4326008)(7696005)(7416002)(2906002)(6666004)(8936002)(83380400001)(6486002)(186003)(5660300002)(8676002)(26005)(44832011)(30864003)(2616005)(66946007)(66476007)(66556008)(956004)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: EYy8pcV9eiGK9E/wUQdH1/Fy/wwPWlqwGUhF0qQhck2tjN5C0U/uGL0MYgb/ZYMZlm+zHKxzs+b/cCdoXJX9nxiLVszKqwScnKr4Up0qzlxcoRuR5rcB5GqEN488J1BiYultDLpu+D+aWh7ht9D4aP39JSk5XVMwRmrUlOg0KXU9qyEg/RpqWtRyczOlrAJtK0oHruNjJ6OSt/hOf2Jgaa9Ujewi4hZ57tsPp8kopN/LdeWCb/gc7OOt6yWpPI98zI3C44Bf4PmfmbmcBGf6sV2s9D3+MszFRFrYmvF5A47rk/KZUZ0czQgf45V4VZKA+uq/HFL3H/N03K8jcVpKwzmluUi3syo5+jJPr0HcQShPe0bTNOj625ixsi7fWa0m4Hhkc3PLkKAjHjHsa0+wboj+DLv+0UK4UB+05XXhI+y6VzyBumXZFWt6RMnI1gN0bn0IUEu/JceP8Osmz0IOTgWqAGcoAvuf1ghlbRB7MCFj66MiPmpYFjsg/Wi/3S3v9jtb//ogoUMpVQZH2AGIXmTzT9Udoq9jT7dWKkWWuRHeiVIQKtG6N/lBF/hbtyQa7wK2glF6NfIuGg6D8pkRbGmzZZI6G53jVt7mBF235If1UXPJ9JdE2i/cLPhkKe24BrHN7qP/EQHw8G/+BfcelgRJP7alwDcQMj/DVgr7UwoY9NuJXQQ+pwzsm7stJX9hVRsjIgHHUeT33tCvRQbMYA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3793.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(346002)(376002)(136003)(366004)(38350700002)(478600001)(86362001)(316002)(38100700002)(52116002)(4326008)(7696005)(7416002)(2906002)(6666004)(8936002)(83380400001)(6486002)(186003)(5660300002)(8676002)(26005)(44832011)(2616005)(66946007)(66476007)(66556008)(956004)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tHrQeuZ+USGAi59gMi7wLGTTXmURXmpRY4tYf22t6BwEMcLhLdv/PXJ8b/m2?=
- =?us-ascii?Q?YJBGQL9OZ7DUxWE1sN6JxvV44bX4pXQ+5n3+qBWDcy+lH/ABVhbenswUILcq?=
- =?us-ascii?Q?Yp/B0DxleJH2qQDD4rFAVmWMXFmbSrhqOGy4Xp0Ov2ah2eOFm1+a7C+NUi9x?=
- =?us-ascii?Q?b0PTaICvGLfkmp6+CVqLrN/fKcJ3WCRlF7pax062a6dCItxj9lp1ULpaVuds?=
- =?us-ascii?Q?m6u8auV5bknNDgb36dbc44c0y6LCWgZihDqeyPcCUqaymejfeOSKyKBB1v0O?=
- =?us-ascii?Q?sWVtbr8VZFODL8lHDsAV5Gx6f8HZ9rOZj0avpqpjIOh3jO0vYiyvsXsTjQ8t?=
- =?us-ascii?Q?kfXjfmyQvugM+wfjoi8Lh0rds0Vv3B+G87skb84+SWZFJmd2JFbv8fcfuf55?=
- =?us-ascii?Q?FBCCrzY1E+nfs38hwfPPxC/WzCxLiQJRYtDJaUg4TXWm6hWb955+iLB0Bl//?=
- =?us-ascii?Q?Uro+RahyrEQTbamApIbfIO7yvjtdB7MNg8hTZPhMfvrnM+oY4HFwTETxOAIn?=
- =?us-ascii?Q?mkEIsy6pPXNue9iPyUbkkS/ucXsG9gYR25wt6std4XqkdqHU8GY2Z37JuHDC?=
- =?us-ascii?Q?uU9cK/YUaQkp8iHrfWZZ3ZeDfGpnnajinXH26DhOsgWGeGrvrJtisDB81bkG?=
- =?us-ascii?Q?0OLFBasthQlN6aTHjji13yk3Hi7DtSGCRT5PM6zAksL49sFwXzf6q7vsjeXF?=
- =?us-ascii?Q?T7drUPCq10DuWlAXeuQLJK6RjmxMlSczRZy3DkU2uy6DqeY5kv5/Gfx1LfAf?=
- =?us-ascii?Q?jCtlm+2UQvM80tmdMkLDvxDP2rKAqyUc7rLiCg73fKQgu2V2MzwP1MKw5aZQ?=
- =?us-ascii?Q?jN+zplilb+zYwEyyt8r89Z7vN8TiRXHehSYXuJH8I+Q6dEHaSJVDmIKGjpz+?=
- =?us-ascii?Q?gwo5ajL4ZqTsfG0dEN2EYOn1/bsApQkwgwAr2ikAVFNz0bIF2JMN8gTpybdT?=
- =?us-ascii?Q?pRkZwEwPIFbMUnsGhm4zCQMxBY0GHV03ABh1OUNsFL26cxntGZLjFudlxqz/?=
- =?us-ascii?Q?YqtInUzQmY8WBPf0fLfqDoyzSbgWrsbcAB9gdesBrWQE+0DQPPzY/p+vPe5y?=
- =?us-ascii?Q?xmurkdb600H8EtgO20F89PeM2Xz4ikv6NsY5l+oTZj5+Xt+qSb1X22FSC3PQ?=
- =?us-ascii?Q?R8H/BNXgmbQVK3xX17idig/v6NqGrFMCmKFVb9JN4A5XmkKAgQDwtPUoDM7L?=
- =?us-ascii?Q?rWDbXi9zDVqH6JSwUb5cFXcMNwpP9W+QNEY6WnyKtZycR8FhkFGPK6v7vFnt?=
- =?us-ascii?Q?2WCQ9T0i37VMreLvdytVb0REJQV8e1Xdiov/kUDW4tXaIVVz7Cfkxu9KewSH?=
- =?us-ascii?Q?2N4Trjr7uCMjjSxxY+6aw6sK?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ei3CymM2pXg9r70Iaob0bK41wpP5lVhOGcHet/vWqKHzT58zJpwO2v4pknSu?=
+ =?us-ascii?Q?rrePrSZMyMzZyBHu0av1Ex7bfQVUywfYC2Msc44GJptyC4V7+UJoE5c0DLMM?=
+ =?us-ascii?Q?V5CzuLRBIzuA+iL+31w4h1EwSpP2wtr7cB2avLh4BHTE1kNSwwdlt/FPzTG5?=
+ =?us-ascii?Q?+4KXVcFJV+MHu3Y0wmqpr3VMdOVAz7De1a26XKR8N/ofhBsKPi2OQmJkHwPH?=
+ =?us-ascii?Q?uT3ojWzcn9XaJ8+yqyEP0/esVkXKUFT3xZvQch/kNcW809a9W8gmfZnwyWXB?=
+ =?us-ascii?Q?4MWYoxD7EgSqlhQDZYyxMjT4dj2GrUHoI4by8WjIx0dYq+mNRM+xjBPoS8T2?=
+ =?us-ascii?Q?lwuj0Hm8zZ0hgizXt1xRYHMHZ8+WEYmQtQdWN/I1MyMVdBCZriwLUfNbxKYK?=
+ =?us-ascii?Q?BBfmrsuxgedD3S0ZVHew6daH4+AbSXfOFhRQccKXb+u9yPYACw5Eg77HjqvI?=
+ =?us-ascii?Q?ynNdT3GkhU64SdW2R/eqx4mbqBDuy6dFzw0VaPGnceBIdAaUkcD3pKN35uLp?=
+ =?us-ascii?Q?HJMzvvcaL1ad6rusiIQ5slDrSC/T6qhFeuJX2/y+FvNhijIU00KUiOnwzKK/?=
+ =?us-ascii?Q?J8BBvm7dC7ZsHvf4jR3OLntv/TLM3COml9/ciRby3WM43/sHGZhcmg96lo6E?=
+ =?us-ascii?Q?0B8F85Lin/aYGAAazCU8hM9m4/Zz495ifQvEFayK5KfcKBy+ecB+fBIfsVMs?=
+ =?us-ascii?Q?oEx/YUFBzbSDIoPGc6LCEMqEpXpucXiwTarD4DTPBBw/aHULdAXjXuX04mWt?=
+ =?us-ascii?Q?aSkJ9MUgqY/6eQP95+bqQ+6KCuEDuS7T9I2nJ3aatwRZBn2+NjxyNz4BOXOc?=
+ =?us-ascii?Q?qFlYsWqoVuFEbB18YwEW/TB4ME5g9ZwvA/J1dD3KY0/iTT/gv2cyzmTsaNIz?=
+ =?us-ascii?Q?N62Yr+j4j0ZCGeeChDsAYb/gD6koAp0PAuJSTMyQZj7q6wzoRJOy3VTw6RTO?=
+ =?us-ascii?Q?0dCGFMFAsNeqB606Mcc6ZkLopV0v2PuLXKcbg42AEHj/0PUsNs/3MGixZJ+d?=
+ =?us-ascii?Q?2dyXqg2xmQTZrWaSFaDfH005Sy4HPWcCDcgi7wQip0Jq31s4Ca4R0M5MpdO9?=
+ =?us-ascii?Q?HRLZ6yp4t8nAP+AzAX0jOyj9OPJ5otCfQEbJa7reer/WTqn5GQdYdh+Y38wL?=
+ =?us-ascii?Q?MWk+J4JlO7R5insoFhfxwIQhZKJZiU4v1N5KzhorgY4PYmJxSikZVdBAWlLg?=
+ =?us-ascii?Q?8+ARA/RsFFARZUObUwnhrMSLFmrDWlAXk+1WG93TQePIMLe3+pKFxS6BBv2w?=
+ =?us-ascii?Q?5eOm2iX9sg3nZ2D4Brl0PnS7IIpgbQGGIqh/Cp4XxtboPEESEEVko2yl4430?=
+ =?us-ascii?Q?A/MgTOwmYw18KBRAsea9nvau?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4b7ae8e-5118-4507-f545-08d95b530fe2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4fbd8d9e-33df-465f-803f-08d95b531113
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB3793.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2021 16:30:56.0798
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2021 16:30:57.8018
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kg7Xr9uuHSpVYQ6ol9pVsQxAU+mA+kL74YOgjrrhRF7zXzx6vDBjFhDLzhT9bwvDrVHUnUVCg+Qq9N3ExOQ1IlCZJAKZ9Mw1lXr4/9ktBAY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: G0cVw7PAP/580Tu+TCNPZHvBzUG/aN/AnaxLmPWAozuVdO1ARw8UDikZxylXSY2XFM3sE25VbPFMb1+D853BK7w8QIrXAMQqW+yQL4wopQ8=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB3939
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10071 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
  phishscore=0 spamscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
  definitions=main-2108090119
-X-Proofpoint-ORIG-GUID: DHqvSE1wjNFofiWETGsQ_1Gbf-YsNEk2
-X-Proofpoint-GUID: DHqvSE1wjNFofiWETGsQ_1Gbf-YsNEk2
+X-Proofpoint-GUID: 0t4LhumDqB1Fxd4AyjDpw6gKQsb4aeK8
+X-Proofpoint-ORIG-GUID: 0t4LhumDqB1Fxd4AyjDpw6gKQsb4aeK8
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The routine slaunch_setup is called out of the x86 specific setup_arch
-routine during early kernel boot. After determining what platform is
-present, various operations specific to that platform occur. This
-includes finalizing setting for the platform late launch and verifying
-that memory protections are in place.
-
-For TXT, this code also reserves the original compressed kernel setup
-area where the APs were left looping so that this memory cannot be used.
+On Intel, the APs are left in a well documented state after TXT performs
+the late launch. Specifically they cannot have #INIT asserted on them so
+a standard startup via INIT/SIPI/SIPI cannot be performed. Instead the
+early SL stub code parked the APs in a pause/jmp loop waiting for an NMI.
+The modified SMP boot code is called for the Secure Launch case. The
+jump address for the RM piggy entry point is fixed up in the jump where
+the APs are waiting and an NMI IPI is sent to the AP. The AP vectors to
+the Secure Launch entry point in the RM piggy which mimics what the real
+mode code would do then jumps the the standard RM piggy protected mode
+entry point.
 
 Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 ---
- arch/x86/kernel/Makefile   |   1 +
- arch/x86/kernel/setup.c    |   3 +
- arch/x86/kernel/slaunch.c  | 460 +++++++++++++++++++++++++++++++++++++++++++++
- drivers/iommu/intel/dmar.c |   4 +
- 4 files changed, 468 insertions(+)
- create mode 100644 arch/x86/kernel/slaunch.c
+ arch/x86/include/asm/realmode.h      |  3 ++
+ arch/x86/kernel/smpboot.c            | 86 ++++++++++++++++++++++++++++++++++++
+ arch/x86/realmode/rm/header.S        |  3 ++
+ arch/x86/realmode/rm/trampoline_64.S | 37 ++++++++++++++++
+ 4 files changed, 129 insertions(+)
 
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 3e625c6..d6ee904 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -80,6 +80,7 @@ obj-$(CONFIG_X86_32)		+= tls.o
- obj-$(CONFIG_IA32_EMULATION)	+= tls.o
- obj-y				+= step.o
- obj-$(CONFIG_INTEL_TXT)		+= tboot.o
-+obj-$(CONFIG_SECURE_LAUNCH)	+= slaunch.o
- obj-$(CONFIG_ISA_DMA_API)	+= i8237.o
- obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
- obj-y				+= cpu/
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 055a834..482bd76 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -19,6 +19,7 @@
- #include <linux/root_dev.h>
- #include <linux/hugetlb.h>
- #include <linux/tboot.h>
-+#include <linux/slaunch.h>
- #include <linux/usb/xhci-dbgp.h>
- #include <linux/static_call.h>
- #include <linux/swiotlb.h>
-@@ -976,6 +977,8 @@ void __init setup_arch(char **cmdline_p)
- 	early_gart_iommu_check();
+diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
+index 5db5d08..ef37bf1 100644
+--- a/arch/x86/include/asm/realmode.h
++++ b/arch/x86/include/asm/realmode.h
+@@ -37,6 +37,9 @@ struct real_mode_header {
+ #ifdef CONFIG_X86_64
+ 	u32	machine_real_restart_seg;
  #endif
++#ifdef CONFIG_SECURE_LAUNCH
++	u32	sl_trampoline_start32;
++#endif
+ };
  
-+	slaunch_setup_txt();
+ /* This must match data at realmode/rm/trampoline_{32,64}.S */
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 9320285..aafe627 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -57,6 +57,7 @@
+ #include <linux/pgtable.h>
+ #include <linux/overflow.h>
+ #include <linux/syscore_ops.h>
++#include <linux/slaunch.h>
+ 
+ #include <asm/acpi.h>
+ #include <asm/desc.h>
+@@ -1021,6 +1022,83 @@ int common_cpu_up(unsigned int cpu, struct task_struct *idle)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_SECURE_LAUNCH
++
++static atomic_t first_ap_only = {1};
++
++/*
++ * Called to fix the long jump address for the waiting APs to vector to
++ * the correct startup location in the Secure Launch stub in the rmpiggy.
++ */
++static int
++slaunch_fixup_jump_vector(void)
++{
++	struct sl_ap_wake_info *ap_wake_info;
++	u32 *ap_jmp_ptr = NULL;
++
++	if (!atomic_dec_and_test(&first_ap_only))
++		return 0;
++
++	ap_wake_info = slaunch_get_ap_wake_info();
++
++	ap_jmp_ptr = (u32 *)__va(ap_wake_info->ap_wake_block +
++				 ap_wake_info->ap_jmp_offset);
++
++	*ap_jmp_ptr = real_mode_header->sl_trampoline_start32;
++
++	pr_info("TXT AP long jump address updated\n");
++
++	return 0;
++}
++
++/*
++ * TXT AP startup is quite different than normal. The APs cannot have #INIT
++ * asserted on them or receive SIPIs. The early Secure Launch code has parked
++ * the APs in a pause loop waiting to receive an NMI. This will wake the APs
++ * and have them jump to the protected mode code in the rmpiggy where the rest
++ * of the SMP boot of the AP will proceed normally.
++ */
++static int
++slaunch_wakeup_cpu_from_txt(int cpu, int apicid)
++{
++	unsigned long send_status = 0, accept_status = 0;
++
++	/* Only done once */
++	if (slaunch_fixup_jump_vector())
++		return -1;
++
++	/* Send NMI IPI to idling AP and wake it up */
++	apic_icr_write(APIC_DM_NMI, apicid);
++
++	if (init_udelay == 0)
++		udelay(10);
++	else
++		udelay(300);
++
++	send_status = safe_apic_wait_icr_idle();
++
++	if (init_udelay == 0)
++		udelay(10);
++	else
++		udelay(300);
++
++	accept_status = (apic_read(APIC_ESR) & 0xEF);
++
++	if (send_status)
++		pr_err("Secure Launch IPI never delivered???\n");
++	if (accept_status)
++		pr_err("Secure Launch IPI delivery error (%lx)\n",
++			accept_status);
++
++	return (send_status | accept_status);
++}
++
++#else
++
++#define slaunch_wakeup_cpu_from_txt(cpu, apicid)	0
++
++#endif  /* !CONFIG_SECURE_LAUNCH */
++
+ /*
+  * NOTE - on most systems this is a PHYSICAL apic ID, but on multiquad
+  * (ie clustered apic addressing mode), this is a LOGICAL apic ID.
+@@ -1075,6 +1153,13 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
+ 	cpumask_clear_cpu(cpu, cpu_initialized_mask);
+ 	smp_mb();
+ 
++	/* With Intel TXT, the AP startup is totally different */
++	if ((slaunch_get_flags() & (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) ==
++	   (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) {
++		boot_error = slaunch_wakeup_cpu_from_txt(cpu, apicid);
++		goto txt_wake;
++	}
 +
  	/*
- 	 * partially used pages are not usable - thus
- 	 * we are rounding upwards:
-diff --git a/arch/x86/kernel/slaunch.c b/arch/x86/kernel/slaunch.c
-new file mode 100644
-index 0000000..f91f0b5
---- /dev/null
-+++ b/arch/x86/kernel/slaunch.c
-@@ -0,0 +1,460 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Secure Launch late validation/setup and finalization support.
-+ *
-+ * Copyright (c) 2021, Oracle and/or its affiliates.
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/linkage.h>
-+#include <linux/mm.h>
-+#include <linux/io.h>
-+#include <linux/uaccess.h>
-+#include <linux/security.h>
-+#include <linux/memblock.h>
-+#include <asm/segment.h>
-+#include <asm/sections.h>
-+#include <asm/tlbflush.h>
-+#include <asm/e820/api.h>
-+#include <asm/setup.h>
-+#include <linux/slaunch.h>
-+
-+static u32 sl_flags;
-+static struct sl_ap_wake_info ap_wake_info;
-+static u64 evtlog_addr;
-+static u32 evtlog_size;
-+static u64 vtd_pmr_lo_size;
-+
-+/* This should be plenty of room */
-+static u8 txt_dmar[PAGE_SIZE] __aligned(16);
-+
-+u32 slaunch_get_flags(void)
-+{
-+	return sl_flags;
-+}
-+EXPORT_SYMBOL(slaunch_get_flags);
-+
-+struct sl_ap_wake_info *slaunch_get_ap_wake_info(void)
-+{
-+	return &ap_wake_info;
-+}
-+
-+struct acpi_table_header *slaunch_get_dmar_table(struct acpi_table_header *dmar)
-+{
-+	/* The DMAR is only stashed and provided via TXT on Intel systems */
-+	if (memcmp(txt_dmar, "DMAR", 4))
-+		return dmar;
-+
-+	return (struct acpi_table_header *)(&txt_dmar[0]);
-+}
-+
-+void __noreturn slaunch_txt_reset(void __iomem *txt,
-+				  const char *msg, u64 error)
-+{
-+	u64 one = 1, val;
-+
-+	pr_err("%s", msg);
-+
-+	/*
-+	 * This performs a TXT reset with a sticky error code. The reads of
-+	 * TXT_CR_E2STS act as barriers.
-+	 */
-+	memcpy_toio(txt + TXT_CR_ERRORCODE, &error, sizeof(error));
-+	memcpy_fromio(&val, txt + TXT_CR_E2STS, sizeof(val));
-+	memcpy_toio(txt + TXT_CR_CMD_NO_SECRETS, &one, sizeof(one));
-+	memcpy_fromio(&val, txt + TXT_CR_E2STS, sizeof(val));
-+	memcpy_toio(txt + TXT_CR_CMD_UNLOCK_MEM_CONFIG, &one, sizeof(one));
-+	memcpy_fromio(&val, txt + TXT_CR_E2STS, sizeof(val));
-+	memcpy_toio(txt + TXT_CR_CMD_RESET, &one, sizeof(one));
-+
-+	for ( ; ; )
-+		asm volatile ("hlt");
-+
-+	unreachable();
-+}
-+
-+/*
-+ * The TXT heap is too big to map all at once with early_ioremap
-+ * so it is done a table at a time.
-+ */
-+static void __init *txt_early_get_heap_table(void __iomem *txt, u32 type,
-+					     u32 bytes)
-+{
-+	void *heap;
-+	u64 base, size, offset = 0;
-+	int i;
-+
-+	if (type > TXT_SINIT_TABLE_MAX)
-+		slaunch_txt_reset(txt,
-+			"Error invalid table type for early heap walk\n",
-+			SL_ERROR_HEAP_WALK);
-+
-+	memcpy_fromio(&base, txt + TXT_CR_HEAP_BASE, sizeof(base));
-+	memcpy_fromio(&size, txt + TXT_CR_HEAP_SIZE, sizeof(size));
-+
-+	/* Iterate over heap tables looking for table of "type" */
-+	for (i = 0; i < type; i++) {
-+		base += offset;
-+		heap = early_memremap(base, sizeof(u64));
-+		if (!heap)
-+			slaunch_txt_reset(txt,
-+				"Error early_memremap of heap for heap walk\n",
-+				SL_ERROR_HEAP_MAP);
-+
-+		offset = *((u64 *)heap);
-+
-+		/*
-+		 * After the first iteration, any offset of zero is invalid and
-+		 * implies the TXT heap is corrupted.
-+		 */
-+		if (!offset)
-+			slaunch_txt_reset(txt,
-+				"Error invalid 0 offset in heap walk\n",
-+				SL_ERROR_HEAP_ZERO_OFFSET);
-+
-+		early_memunmap(heap, sizeof(u64));
-+	}
-+
-+	/* Skip the size field at the head of each table */
-+	base += sizeof(u64);
-+	heap = early_memremap(base, bytes);
-+	if (!heap)
-+		slaunch_txt_reset(txt,
-+				  "Error early_memremap of heap section\n",
-+				  SL_ERROR_HEAP_MAP);
-+
-+	return heap;
-+}
-+
-+static void __init txt_early_put_heap_table(void *addr, unsigned long size)
-+{
-+	early_memunmap(addr, size);
-+}
-+
-+/*
-+ * TXT uses a special set of VTd registers to protect all of memory from DMA
-+ * until the IOMMU can be programmed to protect memory. There is the low
-+ * memory PMR that can protect all memory up to 4G. The high memory PRM can
-+ * be setup to protect all memory beyond 4Gb. Validate that these values cover
-+ * what is expected.
-+ */
-+static void __init slaunch_verify_pmrs(void __iomem *txt)
-+{
-+	struct txt_os_sinit_data *os_sinit_data;
-+	unsigned long last_pfn;
-+	u32 field_offset, err = 0;
-+	const char *errmsg = "";
-+
-+	field_offset = offsetof(struct txt_os_sinit_data, lcp_po_base);
-+	os_sinit_data = txt_early_get_heap_table(txt, TXT_OS_SINIT_DATA_TABLE,
-+						 field_offset);
-+
-+	/* Save a copy */
-+	vtd_pmr_lo_size = os_sinit_data->vtd_pmr_lo_size;
-+
-+	last_pfn = e820__end_of_ram_pfn();
-+
-+	/*
-+	 * First make sure the hi PMR covers all memory above 4G. In the
-+	 * unlikely case where there is < 4G on the system, the hi PMR will
-+	 * not be set.
-+	 */
-+	if (os_sinit_data->vtd_pmr_hi_base != 0x0ULL) {
-+		if (os_sinit_data->vtd_pmr_hi_base != 0x100000000ULL) {
-+			err = SL_ERROR_HI_PMR_BASE;
-+			errmsg =  "Error hi PMR base\n";
-+			goto out;
-+		}
-+
-+		if (PFN_PHYS(last_pfn) > os_sinit_data->vtd_pmr_hi_base +
-+		    os_sinit_data->vtd_pmr_hi_size) {
-+			err = SL_ERROR_HI_PMR_SIZE;
-+			errmsg = "Error hi PMR size\n";
-+			goto out;
-+		}
-+	}
-+
-+	/*
-+	 * Lo PMR base should always be 0. This was already checked in
-+	 * early stub.
-+	 */
-+
-+	/*
-+	 * Check that if the kernel was loaded below 4G, that it is protected
-+	 * by the lo PMR. Note this is the decompressed kernel. The ACM would
-+	 * have ensured the compressed kernel (the MLE image) was protected.
-+	 */
-+	if ((__pa_symbol(_end) < 0x100000000ULL) &&
-+	    (__pa_symbol(_end) > os_sinit_data->vtd_pmr_lo_size)) {
-+		err = SL_ERROR_LO_PMR_MLE;
-+		errmsg = "Error lo PMR does not cover MLE kernel\n";
-+	}
-+
-+	/*
-+	 * Other regions of interest like boot param, AP wake block, cmdline
-+	 * already checked for PMR coverage in the early stub code.
-+	 */
-+
-+out:
-+	txt_early_put_heap_table(os_sinit_data, field_offset);
-+
-+	if (err)
-+		slaunch_txt_reset(txt, errmsg, err);
-+}
-+
-+static void __init slaunch_txt_reserve_range(u64 base, u64 size)
-+{
-+	int type;
-+
-+	type = e820__get_entry_type(base, base + size - 1);
-+	if (type == E820_TYPE_RAM) {
-+		pr_info("memblock reserve base: %llx size: %llx\n", base, size);
-+		memblock_reserve(base, size);
-+	}
-+}
-+
-+/*
-+ * For Intel, certain regions of memory must be marked as reserved by putting
-+ * them on the memblock reserved list if they are not already e820 reserved.
-+ * This includes:
-+ *  - The TXT HEAP
-+ *  - The ACM area
-+ *  - The TXT private register bank
-+ *  - The MDR list sent to the MLE by the ACM (see TXT specification)
-+ *  (Normally the above are properly reserved by firmware but if it was not
-+ *  done, reserve them now)
-+ *  - The AP wake block
-+ *  - TPM log external to the TXT heap
-+ *
-+ * Also if the low PMR doesn't cover all memory < 4G, any RAM regions above
-+ * the low PMR must be reservered too.
-+ */
-+static void __init slaunch_txt_reserve(void __iomem *txt)
-+{
-+	struct txt_sinit_memory_descriptor_record *mdr;
-+	struct txt_sinit_mle_data *sinit_mle_data;
-+	void *mdrs;
-+	u64 base, size, heap_base, heap_size;
-+	u32 field_offset, mdrnum, mdroffset, mdrslen, i;
-+
-+	base = TXT_PRIV_CONFIG_REGS_BASE;
-+	size = TXT_PUB_CONFIG_REGS_BASE - TXT_PRIV_CONFIG_REGS_BASE;
-+	slaunch_txt_reserve_range(base, size);
-+
-+	memcpy_fromio(&heap_base, txt + TXT_CR_HEAP_BASE, sizeof(heap_base));
-+	memcpy_fromio(&heap_size, txt + TXT_CR_HEAP_SIZE, sizeof(heap_size));
-+	slaunch_txt_reserve_range(heap_base, heap_size);
-+
-+	memcpy_fromio(&base, txt + TXT_CR_SINIT_BASE, sizeof(base));
-+	memcpy_fromio(&size, txt + TXT_CR_SINIT_SIZE, sizeof(size));
-+	slaunch_txt_reserve_range(base, size);
-+
-+	field_offset = offsetof(struct txt_sinit_mle_data,
-+				sinit_vtd_dmar_table_size);
-+	sinit_mle_data = txt_early_get_heap_table(txt, TXT_SINIT_MLE_DATA_TABLE,
-+						  field_offset);
-+
-+	mdrnum = sinit_mle_data->num_of_sinit_mdrs;
-+	mdroffset = sinit_mle_data->sinit_mdrs_table_offset;
-+
-+	txt_early_put_heap_table(sinit_mle_data, field_offset);
-+
-+	if (!mdrnum)
-+		goto nomdr;
-+
-+	mdrslen = (mdrnum * sizeof(struct txt_sinit_memory_descriptor_record));
-+
-+	mdrs = txt_early_get_heap_table(txt, TXT_SINIT_MLE_DATA_TABLE,
-+					mdroffset + mdrslen - 8);
-+
-+	mdr = (struct txt_sinit_memory_descriptor_record *)
-+			(mdrs + mdroffset - 8);
-+
-+	for (i = 0; i < mdrnum; i++, mdr++) {
-+		/* Spec says some entries can have length 0, ignore them */
-+		if (mdr->type > 0 && mdr->length > 0)
-+			slaunch_txt_reserve_range(mdr->address, mdr->length);
-+	}
-+
-+	txt_early_put_heap_table(mdrs, mdroffset + mdrslen - 8);
-+
-+nomdr:
-+	slaunch_txt_reserve_range(ap_wake_info.ap_wake_block,
-+				  ap_wake_info.ap_wake_block_size);
-+
-+	/*
-+	 * Earlier checks ensured that the event log was properly situated
-+	 * either inside the TXT heap or outside. This is a check to see if the
-+	 * event log needs to be reserved. If it is in the TXT heap, it is
-+	 * already reserved.
-+	 */
-+	if (evtlog_addr < heap_base || evtlog_addr > (heap_base + heap_size))
-+		slaunch_txt_reserve_range(evtlog_addr, evtlog_size);
-+
-+	for (i = 0; i < e820_table->nr_entries; i++) {
-+		base = e820_table->entries[i].addr;
-+		size = e820_table->entries[i].size;
-+		if ((base >= vtd_pmr_lo_size) && (base < 0x100000000ULL))
-+			slaunch_txt_reserve_range(base, size);
-+		else if ((base < vtd_pmr_lo_size) &&
-+			 (base + size > vtd_pmr_lo_size))
-+			slaunch_txt_reserve_range(vtd_pmr_lo_size,
-+						  base + size - vtd_pmr_lo_size);
-+	}
-+}
-+
-+/*
-+ * TXT stashes a safe copy of the DMAR ACPI table to prevent tampering.
-+ * It is stored in the TXT heap. Fetch it from there and make it available
-+ * to the IOMMU driver.
-+ */
-+static void __init slaunch_copy_dmar_table(void __iomem *txt)
-+{
-+	struct txt_sinit_mle_data *sinit_mle_data;
-+	void *dmar;
-+	u32 field_offset, dmar_size, dmar_offset;
-+
-+	memset(&txt_dmar, 0, PAGE_SIZE);
-+
-+	field_offset = offsetof(struct txt_sinit_mle_data,
-+				processor_scrtm_status);
-+	sinit_mle_data = txt_early_get_heap_table(txt, TXT_SINIT_MLE_DATA_TABLE,
-+						  field_offset);
-+
-+	dmar_size = sinit_mle_data->sinit_vtd_dmar_table_size;
-+	dmar_offset = sinit_mle_data->sinit_vtd_dmar_table_offset;
-+
-+	txt_early_put_heap_table(sinit_mle_data, field_offset);
-+
-+	if (!dmar_size || !dmar_offset)
-+		slaunch_txt_reset(txt,
-+				  "Error invalid DMAR table values\n",
-+				  SL_ERROR_HEAP_INVALID_DMAR);
-+
-+	if (unlikely(dmar_size > PAGE_SIZE))
-+		slaunch_txt_reset(txt,
-+				  "Error DMAR too big to store\n",
-+				  SL_ERROR_HEAP_DMAR_SIZE);
-+
-+
-+	dmar = txt_early_get_heap_table(txt, TXT_SINIT_MLE_DATA_TABLE,
-+					dmar_offset + dmar_size - 8);
-+	if (!dmar)
-+		slaunch_txt_reset(txt,
-+				  "Error early_ioremap of DMAR\n",
-+				  SL_ERROR_HEAP_DMAR_MAP);
-+
-+	memcpy(&txt_dmar[0], dmar + dmar_offset - 8, dmar_size);
-+
-+	txt_early_put_heap_table(dmar, dmar_offset + dmar_size - 8);
-+}
-+
-+/*
-+ * The location of the safe AP wake code block is stored in the TXT heap.
-+ * Fetch it here in the early init code for later use in SMP startup.
-+ *
-+ * Also get the TPM event log values that may have to be put on the
-+ * memblock reserve list later.
-+ */
-+static void __init slaunch_fetch_os_mle_fields(void __iomem *txt)
-+{
-+	struct txt_os_mle_data *os_mle_data;
-+	u8 *jmp_offset;
-+
-+	os_mle_data = txt_early_get_heap_table(txt, TXT_OS_MLE_DATA_TABLE,
-+					       sizeof(*os_mle_data));
-+
-+	ap_wake_info.ap_wake_block = os_mle_data->ap_wake_block;
-+	ap_wake_info.ap_wake_block_size = os_mle_data->ap_wake_block_size;
-+
-+	jmp_offset = os_mle_data->mle_scratch + SL_SCRATCH_AP_JMP_OFFSET;
-+	ap_wake_info.ap_jmp_offset = *((u32 *)jmp_offset);
-+
-+	evtlog_addr = os_mle_data->evtlog_addr;
-+	evtlog_size = os_mle_data->evtlog_size;
-+
-+	txt_early_put_heap_table(os_mle_data, sizeof(*os_mle_data));
-+}
-+
-+/*
-+ * Intel TXT specific late stub setup and validation.
-+ */
-+void __init slaunch_setup_txt(void)
-+{
-+	void __iomem *txt;
-+	u64 one = TXT_REGVALUE_ONE, val;
-+
-+	if (!boot_cpu_has(X86_FEATURE_SMX))
-+		return;
-+
-+	/*
-+	 * First see if SENTER was done and not by TBOOT by reading the status
-+	 * register in the public space. If the public register space cannot
-+	 * be read, TXT is disabled.
-+	 */
-+	txt = early_ioremap(TXT_PUB_CONFIG_REGS_BASE,
-+			    TXT_NR_CONFIG_PAGES * PAGE_SIZE);
-+	if (!txt)
-+		return;
-+
-+	memcpy_fromio(&val, txt + TXT_CR_STS, sizeof(val));
-+	early_iounmap(txt, TXT_NR_CONFIG_PAGES * PAGE_SIZE);
-+
-+	/* Was SENTER done? */
-+	if (!(val & TXT_SENTER_DONE_STS))
-+		return;
-+
-+	/* Was it done by TBOOT? */
-+	if (boot_params.tboot_addr)
-+		return;
-+
-+	/* Now we want to use the private register space */
-+	txt = early_ioremap(TXT_PRIV_CONFIG_REGS_BASE,
-+			    TXT_NR_CONFIG_PAGES * PAGE_SIZE);
-+	if (!txt) {
-+		/* This is really bad, no where to go from here */
-+		panic("Error early_ioremap of TXT priv registers\n");
-+	}
-+
-+	/*
-+	 * Try to read the Intel VID from the TXT private registers to see if
-+	 * TXT measured launch happened properly and the private space is
-+	 * available.
-+	 */
-+	memcpy_fromio(&val, txt + TXT_CR_DIDVID, sizeof(val));
-+	if ((u16)(val & 0xffff) != 0x8086) {
-+		/*
-+		 * Can't do a proper TXT reset since it appears something is
-+		 * wrong even though SENTER happened and it should be in SMX
-+		 * mode.
-+		 */
-+		panic("Invalid TXT vendor ID, not in SMX mode\n");
-+	}
-+
-+	/* Set flags so subsequent code knows the status of the launch */
-+	sl_flags |= (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT);
-+
-+	/*
-+	 * Reading the proper DIDVID from the private register space means we
-+	 * are in SMX mode and private registers are open for read/write.
-+	 */
-+
-+	/* On Intel, have to handle TPM localities via TXT */
-+	memcpy_toio(txt + TXT_CR_CMD_SECRETS, &one, sizeof(one));
-+	memcpy_fromio(&val, txt + TXT_CR_E2STS, sizeof(val));
-+	memcpy_toio(txt + TXT_CR_CMD_OPEN_LOCALITY1, &one, sizeof(one));
-+	memcpy_fromio(&val, txt + TXT_CR_E2STS, sizeof(val));
-+
-+	slaunch_fetch_os_mle_fields(txt);
-+
-+	slaunch_verify_pmrs(txt);
-+
-+	slaunch_txt_reserve(txt);
-+
-+	slaunch_copy_dmar_table(txt);
-+
-+	early_iounmap(txt, TXT_NR_CONFIG_PAGES * PAGE_SIZE);
-+
-+	pr_info("Intel TXT setup complete\n");
-+}
-diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-index d66f79a..d167e5d 100644
---- a/drivers/iommu/intel/dmar.c
-+++ b/drivers/iommu/intel/dmar.c
-@@ -29,6 +29,7 @@
- #include <linux/iommu.h>
- #include <linux/numa.h>
- #include <linux/limits.h>
-+#include <linux/slaunch.h>
- #include <asm/irq_remapping.h>
- #include <asm/iommu_table.h>
- #include <trace/events/intel_iommu.h>
-@@ -663,6 +664,9 @@ static inline int dmar_walk_dmar_table(struct acpi_table_dmar *dmar,
- 	 */
- 	dmar_tbl = tboot_get_dmar_table(dmar_tbl);
+ 	 * Wake up a CPU in difference cases:
+ 	 * - Use the method in the APIC driver if it's defined
+@@ -1087,6 +1172,7 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
+ 		boot_error = wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
+ 						     cpu0_nmi_registered);
  
-+	/* If Secure Launch is active, it has similar logic */
-+	dmar_tbl = slaunch_get_dmar_table(dmar_tbl);
++txt_wake:
+ 	if (!boot_error) {
+ 		/*
+ 		 * Wait 10s total for first sign of life from AP
+diff --git a/arch/x86/realmode/rm/header.S b/arch/x86/realmode/rm/header.S
+index 8c1db5b..9136bd5 100644
+--- a/arch/x86/realmode/rm/header.S
++++ b/arch/x86/realmode/rm/header.S
+@@ -36,6 +36,9 @@ SYM_DATA_START(real_mode_header)
+ #ifdef CONFIG_X86_64
+ 	.long	__KERNEL32_CS
+ #endif
++#ifdef CONFIG_SECURE_LAUNCH
++	.long	pa_sl_trampoline_start32
++#endif
+ SYM_DATA_END(real_mode_header)
+ 
+ 	/* End signature, used to verify integrity */
+diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
+index cc8391f..cdfc2c2 100644
+--- a/arch/x86/realmode/rm/trampoline_64.S
++++ b/arch/x86/realmode/rm/trampoline_64.S
+@@ -104,6 +104,43 @@ SYM_CODE_END(sev_es_trampoline_start)
+ 
+ 	.section ".text32","ax"
+ 	.code32
++#ifdef CONFIG_SECURE_LAUNCH
++	.balign 4
++SYM_CODE_START(sl_trampoline_start32)
++	/*
++	 * The early secure launch stub AP wakeup code has taken care of all
++	 * the vagaries of launching out of TXT. This bit just mimics what the
++	 * 16b entry code does and jumps off to the real startup_32.
++	 */
++	cli
++	wbinvd
 +
- 	dmar = (struct acpi_table_dmar *)dmar_tbl;
- 	if (!dmar)
- 		return -ENODEV;
++	/*
++	 * The %ebx provided is not terribly useful since it is the physical
++	 * address of tb_trampoline_start and not the base of the image.
++	 * Use pa_real_mode_base, which is fixed up, to get a run time
++	 * base register to use for offsets to location that do not have
++	 * pa_ symbols.
++	 */
++	movl    $pa_real_mode_base, %ebx
++
++	/*
++	 * This may seem a little odd but this is what %esp would have had in
++	 * it on the jmp from real mode because all real mode fixups were done
++	 * via the code segment. The base is added at the 32b entry.
++	 */
++	movl	rm_stack_end, %esp
++
++	lgdt    tr_gdt(%ebx)
++	lidt    tr_idt(%ebx)
++
++	movw	$__KERNEL_DS, %dx	# Data segment descriptor
++
++	/* Jump to where the 16b code would have jumped */
++	ljmpl	$__KERNEL32_CS, $pa_startup_32
++SYM_CODE_END(sl_trampoline_start32)
++#endif
++
+ 	.balign 4
+ SYM_CODE_START(startup_32)
+ 	movl	%edx, %ss
 -- 
 1.8.3.1
 
