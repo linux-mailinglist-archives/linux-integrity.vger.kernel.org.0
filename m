@@ -2,46 +2,45 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECD03E5919
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Aug 2021 13:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEECA3E5913
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Aug 2021 13:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240118AbhHJL3h convert rfc822-to-8bit (ORCPT
+        id S229967AbhHJL3e convert rfc822-to-8bit (ORCPT
         <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Aug 2021 07:29:37 -0400
-Received: from mail-0201.mail-europe.com ([51.77.79.158]:42546 "EHLO
-        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238252AbhHJL3g (ORCPT
+        Tue, 10 Aug 2021 07:29:34 -0400
+Received: from mail-40134.protonmail.ch ([185.70.40.134]:26020 "EHLO
+        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238284AbhHJL3e (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Aug 2021 07:29:36 -0400
-Date:   Tue, 10 Aug 2021 11:28:25 +0000
-Authentication-Results: mail-4316.protonmail.ch; dkim=none
+        Tue, 10 Aug 2021 07:29:34 -0400
+Date:   Tue, 10 Aug 2021 11:29:04 +0000
+Authentication-Results: mail-40131.protonmail.ch; dkim=none
 To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
 From:   David Gstir <david@sigma-star.at>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        =?utf-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
+Cc:     =?utf-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
         Aymen Sghaier <aymen.sghaier@nxp.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
         James Bottomley <jejb@linux.ibm.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Richard Weinberger <richard@nod.at>,
-        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         David Howells <dhowells@redhat.com>,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
-        linux-integrity@vger.kernel.org,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>
+        James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Udit Agarwal <udit.agarwal@nxp.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
 Reply-To: David Gstir <david@sigma-star.at>
-Subject: Re: [PATCH 0/4] KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
-Message-ID: <74737543-4A73-49F8-92F7-F7FFE64A00DB@sigma-star.at>
-In-Reply-To: <8321cac9-350b-1325-4b7e-390f4f292070@pengutronix.de>
-References: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de> <b9e44f8e-84a0-90be-6cfc-d3a0bde12178@pengutronix.de> <20210809093519.er32rmspuvkrww45@kernel.org> <8321cac9-350b-1325-4b7e-390f4f292070@pengutronix.de>
+Subject: Re: [PATCH 3/4] crypto: caam - add in-kernel interface for blob generator
+Message-ID: <796E18E6-1329-40D6-B12F-4CE6C90DD988@sigma-star.at>
+In-Reply-To: <4078060ab2e44114af8204b4defea4f3d4b9e285.1626885907.git-series.a.fatoum@pengutronix.de>
+References: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de> <4078060ab2e44114af8204b4defea4f3d4b9e285.1626885907.git-series.a.fatoum@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8BIT
@@ -55,31 +54,94 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 Hi Ahmad,
 
-> On 09.08.2021, at 12:16, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+> On 21.07.2021, at 18:48, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+
 
 [...]
 
-> If it interests you, I described[2] my CAAM+ubifs+fscrypt use case in the
-> discussion thread on my fscrypt-trusted-keys v1. Jan, a colleague of mine, held a
-> talk[3] on the different solutions for authenticated and encrypted storage, which
-> you may want to check out.
->
-> I'd really appreciate feedback here on the the CAAM parts of this series, so this can
-> eventually go mainline.
+> diff --git a/drivers/crypto/caam/blob_gen.c b/drivers/crypto/caam/blob_gen.c
+> new file mode 100644
+> index 000000000000..513d3f90e438
+> --- /dev/null
+> +++ b/drivers/crypto/caam/blob_gen.c
+> @@ -0,0 +1,230 @@
 
-Since you mention the fscrypt trusted-keys use case:
+[...]
 
-I noticed that the key length for trusted-keys is limited to
-256 - 1024bit keys. fscrypt does however also support keys
-with e.g. 128bit keys (AES-128-CBC-ESSIV, AES-128-CTS-CBC).
-AFAIK, CAAM and TEE key blobs would also support key lengths outside the 256 - 1024bit range.
+> +
+> +int caam_encap_blob(struct caam_blob_priv *priv, const char *keymod,
+> +		    void *input, void *output, size_t length)
+> +{
+> +	u32 *desc;
+> +	struct device *jrdev = &priv->jrdev;
+> +	dma_addr_t dma_in, dma_out;
+> +	struct caam_blob_job_result testres;
+> +	size_t keymod_len = strlen(keymod);
+> +	int ret;
+> +
+> +	if (length <= CAAM_BLOB_OVERHEAD || keymod_len > CAAM_BLOB_KEYMOD_LENGTH)
 
-Wouldn’t it make sense to align the supported key lengths?
-I.e. extend the range of supported key lengths for trusted keys.
-Or is there a specific reason why key lengths below 256bit are
-not supported by trusted-keys?
+The docs for this function mention the length <= CAAM_BLOB_MAX_LEN
+restriction. This is not checked here. Is this intended?
 
-Cheers,
-David
+Since you already assert that MAX_BLOB_SIZE <= CAAM_BLOB_MAX_LEN
+in security/keys/trusted-keys/trusted_caam.c, this will never
+be an issue for CAAM-based trusted-keys though.
+
+
+> +		return -EINVAL;
+> +
+> +	desc = caam_blob_alloc_desc(keymod_len);
+> +	if (!desc) {
+> +		dev_err(jrdev, "unable to allocate desc\n");
+> +		return -ENOMEM;
+> +	}
+> +
+
+[...]
+
+> diff --git a/include/soc/fsl/caam-blob.h b/include/soc/fsl/caam-blob.h
+> new file mode 100644
+> index 000000000000..aebbc9335f64
+> --- /dev/null
+> +++ b/include/soc/fsl/caam-blob.h
+> @@ -0,0 +1,56 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2020 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
+> + */
+> +
+> +#ifndef __CAAM_BLOB_GEN
+> +#define __CAAM_BLOB_GEN
+> +
+> +#include <linux/types.h>
+> +
+> +#define CAAM_BLOB_KEYMOD_LENGTH		16
+> +#define CAAM_BLOB_OVERHEAD		(32 + 16)
+> +#define CAAM_BLOB_MAX_LEN		4096
+> +
+> +struct caam_blob_priv;
+> +
+> +/** caam_blob_gen_init - initialize blob generation
+> + *
+> + * returns either pointer to new caam_blob_priv instance
+> + * or error pointer
+> + */
+> +struct caam_blob_priv *caam_blob_gen_init(void);
+> +
+> +/** caam_blob_gen_init - free blob generation resources
+
+s/init/exit/
+
+
+> + *
+> + * @priv: instance returned by caam_blob_gen_init
+> + */
+> +void caam_blob_gen_exit(struct caam_blob_priv *priv);
+
+
+Except these minor things, I noticed no issues with this whole series:
+
+Reviewed-by: David Gstir <david@sigma-star.at>
 
 
