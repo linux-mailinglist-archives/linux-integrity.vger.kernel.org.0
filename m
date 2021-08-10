@@ -2,199 +2,210 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 024873E52E1
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Aug 2021 07:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2203E5325
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Aug 2021 07:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237647AbhHJFZV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Aug 2021 01:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237638AbhHJFZV (ORCPT
+        id S237327AbhHJF6u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Aug 2021 01:58:50 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16774 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231716AbhHJF6t (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Aug 2021 01:25:21 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0E1C0613D3
-        for <linux-integrity@vger.kernel.org>; Mon,  9 Aug 2021 22:24:59 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id h17so15903779ljh.13
-        for <linux-integrity@vger.kernel.org>; Mon, 09 Aug 2021 22:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CFWqBCQp2YlhCV7jSxWtmoCr8RILzISB86MNoTEBHeU=;
-        b=kOohwNbQp4KuzGJcZF4yy50pxkQN5Pb3iyD+ksrmfBVybK+TUfjtOwUyb7bKShe8tW
-         SdRFWAigtNDsjm+fYfhVo3pIxT6X/DNEHzlL1Yb+k45momrT3GI3kLzx/UC1L3NV5WvG
-         6dFgkqQwdB9tsG044F0FDPRv7bPPwEyO0WdNtgH2iU48kKdX3L++yX8EzxA0ZGhCs3f8
-         fJ5M+aYhbYV2OGcTpV+3ZpCUjy6t4JcreBfppE3CEU/cX5lIAyYfeMjg11Z4yiCF8DEQ
-         bxpEyJUVg8TveXXvdXTMtRzWZrcVTWIQZBTGaawTSWC3BK3cVJm1GvVbvcK1fDoPfnOF
-         sDYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CFWqBCQp2YlhCV7jSxWtmoCr8RILzISB86MNoTEBHeU=;
-        b=oRHW1N3cBDhZ5dZcIkCdkr0rM9yP2dTP4sTLHZi9f0KjuOsfO1CPn5GWTdjS/F8s7X
-         CLqVsd74gffKaHE2cYRHqPByDKGjwXnpkio5WjL+TJ0u6T4BraymfX+WrzU5QK49Ir8r
-         zlQRVNYgKiW2V1WDZB7R4w46U8o+stfDfdkK/0QQEN94rRSEXRLMWQ8K8YOqvw+gMv//
-         Aw0bKZvavykDhMDxKPT0HeweABAnZM0Xez07GqYB3WizJhcyDkqHvSLgQL7ZjUYIDyM3
-         LW3WV1UyC2jq1YQvzY+nwQhyNs7oVA4zjYbXfjyNrfVN+LlG3tcHAg12+mttWbZX7gRz
-         tzyw==
-X-Gm-Message-State: AOAM533hL6Xw1D/P9wsREL4M354OIW7wsbJqAnpC2ffncmk9RTwzJvNi
-        tPa7EBz8A/l2SPS7ElHESVI2j/RyO4geBFN9KjTDXg==
-X-Google-Smtp-Source: ABdhPJwAO97YdfcdCAmTaAWes9GxsrI5CP30XQe+NgCZoBVV5RVlt4j0z3ZrFIcGb4t5MvWxg/JuOLFUnrMQtk2HCJI=
-X-Received: by 2002:a05:651c:516:: with SMTP id o22mr17678549ljp.152.1628573097700;
- Mon, 09 Aug 2021 22:24:57 -0700 (PDT)
+        Tue, 10 Aug 2021 01:58:49 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17A5Y6He090552;
+        Tue, 10 Aug 2021 01:58:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=3MmnVrdD1xqpcE8h5t331LzNT9phObbJHwZanysa7EU=;
+ b=PTkkDtgz+Xfu/ct4nDcLhZU7dNiy4jRc1hDpBT+BasBBJTbnBEgTCFo+4CBlsy5Id38y
+ zMXbfl9D+k++gZxfms129hd5MLGW1adBiaI4h6s2k7cJZ67OdeJnMvTqRDo63yVsKU/g
+ k6vv7abIrJ4NNthbsjFMdOFy2v0iv7G6tJQEJMRNoQxlq0/aq/7h+YxtRzsvePzzABsw
+ UOK5Lz3cI4mdfbVDOlMjTWv0SeVTDf8Z/xA1NhGCELYOUuVLxNr1unetLDtrh0J3oENu
+ 1f83SQJF7dPE6Fuu1CjcNd+ulH9Zlzj8NaMDo5UjR6EG1aIrSH2jRFGEGD+V8WMbHMcp Sg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3abg7kc11p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Aug 2021 01:58:26 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17A5s7QH031773;
+        Tue, 10 Aug 2021 05:58:24 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3a9hehdape-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Aug 2021 05:58:24 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17A5wJGP59638116
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 Aug 2021 05:58:19 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BE273AE04D;
+        Tue, 10 Aug 2021 05:58:19 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C0CF6AE051;
+        Tue, 10 Aug 2021 05:58:17 +0000 (GMT)
+Received: from Nageswaras-MacBook-Pro-2.local (unknown [9.43.76.24])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 10 Aug 2021 05:58:17 +0000 (GMT)
+Subject: Re: [PATCH v4 1/2] tpm: ibmvtpm: Avoid error message when process
+ gets signal while waiting
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>, jarkko@kernel.org
+Cc:     nasastry@in.ibm.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>
+References: <20210809192159.2176580-1-stefanb@linux.vnet.ibm.com>
+ <20210809192159.2176580-2-stefanb@linux.vnet.ibm.com>
+From:   Nageswara Sastry <rnsastry@linux.ibm.com>
+Message-ID: <0047b861-c660-e126-a198-ebe77ca3c057@linux.ibm.com>
+Date:   Tue, 10 Aug 2021 11:28:15 +0530
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
+In-Reply-To: <20210809192159.2176580-2-stefanb@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: b3fLbRVj6INsErUfUPsbGL-BDpSqQCBz
+X-Proofpoint-ORIG-GUID: b3fLbRVj6INsErUfUPsbGL-BDpSqQCBz
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de>
- <7b771da7b09a01c8b4da2ed21f05251ea797b2e8.1626885907.git-series.a.fatoum@pengutronix.de>
- <CAFA6WYOskwZNe5Wb5PTtnSHQBonSXZ48eEex0w9jQ+JW4vG=+w@mail.gmail.com>
- <7537c853-3641-a6d3-91d8-70fea9f01a89@pengutronix.de> <20210809095647.7xcxjeot5gyvmlpj@kernel.org>
-In-Reply-To: <20210809095647.7xcxjeot5gyvmlpj@kernel.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 10 Aug 2021 10:54:46 +0530
-Message-ID: <CAFA6WYPg20EiYATXStt1mgGJVjkOK5BK7WDbTdzOujBdcH6KLg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] KEYS: trusted: allow trust sources to use kernel RNG
- for key material
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        kernel <kernel@pengutronix.de>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        "open list:ASYMMETRIC KEYS" <keyrings@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-10_01:2021-08-06,2021-08-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ bulkscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0 phishscore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 impostorscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
+ definitions=main-2108100034
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 9 Aug 2021 at 15:26, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Mon, Aug 09, 2021 at 09:52:20AM +0200, Ahmad Fatoum wrote:
-> > Hello Sumit,
-> >
-> > On 22.07.21 08:31, Sumit Garg wrote:
-> > > On Wed, 21 Jul 2021 at 22:19, Ahmad Fatoum <a.fatoum@pengutronix.de> =
-wrote:
-> > >>
-> > >> The two existing trusted key sources don't make use of the kernel RN=
-G,
-> > >> but instead let the hardware that does the sealing/unsealing also
-> > >> generate the random key material. While a previous change offers use=
-rs
-> > >> the choice to use the kernel RNG instead for both, new trust sources
-> > >> may want to unconditionally use the kernel RNG for generating key
-> > >> material, like it's done elsewhere in the kernel.
-> > >>
-> > >> This is especially prudent for hardware that has proven-in-productio=
-n
-> > >> HWRNG drivers implemented, as otherwise code would have to be duplic=
-ated
-> > >> only to arrive at a possibly worse result.
-> > >>
-> > >> Make this possible by turning struct trusted_key_ops::get_random
-> > >> into an optional member. If a driver leaves it NULL, kernel RNG
-> > >> will be used instead.
-> > >>
-> > >> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> > >> ---
-> > >> To: James Bottomley <jejb@linux.ibm.com>
-> > >> To: Jarkko Sakkinen <jarkko@kernel.org>
-> > >> To: Mimi Zohar <zohar@linux.ibm.com>
-> > >> To: David Howells <dhowells@redhat.com>
-> > >> Cc: James Morris <jmorris@namei.org>
-> > >> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> > >> Cc: "Horia Geant=C4=83" <horia.geanta@nxp.com>
-> > >> Cc: Aymen Sghaier <aymen.sghaier@nxp.com>
-> > >> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> > >> Cc: "David S. Miller" <davem@davemloft.net>
-> > >> Cc: Udit Agarwal <udit.agarwal@nxp.com>
-> > >> Cc: Eric Biggers <ebiggers@kernel.org>
-> > >> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
-> > >> Cc: David Gstir <david@sigma-star.at>
-> > >> Cc: Richard Weinberger <richard@nod.at>
-> > >> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-> > >> Cc: Sumit Garg <sumit.garg@linaro.org>
-> > >> Cc: keyrings@vger.kernel.org
-> > >> Cc: linux-crypto@vger.kernel.org
-> > >> Cc: linux-integrity@vger.kernel.org
-> > >> Cc: linux-kernel@vger.kernel.org
-> > >> Cc: linux-security-module@vger.kernel.org
-> > >> ---
-> > >>  include/keys/trusted-type.h               | 2 +-
-> > >>  security/keys/trusted-keys/trusted_core.c | 2 +-
-> > >>  2 files changed, 2 insertions(+), 2 deletions(-)
-> > >>
-> > >> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type=
-.h
-> > >> index d89fa2579ac0..4eb64548a74f 100644
-> > >> --- a/include/keys/trusted-type.h
-> > >> +++ b/include/keys/trusted-type.h
-> > >> @@ -64,7 +64,7 @@ struct trusted_key_ops {
-> > >>         /* Unseal a key. */
-> > >>         int (*unseal)(struct trusted_key_payload *p, char *datablob)=
-;
-> > >>
-> > >> -       /* Get a randomized key. */
-> > >> +       /* Optional: Get a randomized key. */
-> > >>         int (*get_random)(unsigned char *key, size_t key_len);
-> > >>
-> > >>         /* Exit key interface. */
-> > >> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/ke=
-ys/trusted-keys/trusted_core.c
-> > >> index 569af9af8df0..d2b7626cde8b 100644
-> > >> --- a/security/keys/trusted-keys/trusted_core.c
-> > >> +++ b/security/keys/trusted-keys/trusted_core.c
-> > >> @@ -334,7 +334,7 @@ static int __init init_trusted(void)
-> > >>                         continue;
-> > >>
-> > >>                 get_random =3D trusted_key_sources[i].ops->get_rando=
-m;
-> > >> -               if (trusted_kernel_rng)
-> > >> +               if (trusted_kernel_rng || !get_random)
-> > >>                         get_random =3D kernel_get_random;
-> > >>
-> > >
-> > > For ease of understanding, I would prefer to write it as:
-> > >
-> > >                   get_random =3D trusted_key_sources[i].ops->get_rand=
-om ?:
-> > >                                          kernel_get_random;
-> > >                   if (trusted_kernel_rng)
-> > >                         get_random =3D kernel_get_random;
-> > >
-> > > With that:
-> > >
-> > > Acked-by: Sumit Garg <sumit.garg@linaro.org>
-> >
-> > I don't think it improves readability to split up the conditional.
-> > At least I need to take a second pass over the code to understand
-> > the second conditional.
->
-> Ternary operators are pain to read, unless a super trivial case.
->
-> I'd stick to what you did.
 
-Fair enough, I am fine with the current patch.
 
--Sumit
+On 10/08/21 12:51 am, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> When rngd is run as root then lots of these types of message will appear
+> in the kernel log if the TPM has been configured to provide random bytes:
+> 
+> [ 7406.275163] tpm tpm0: tpm_transmit: tpm_recv: error -4
+> 
+> The issue is caused by the following call that is interrupted while
+> waiting for the TPM's response.
+> 
+> sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
+> 
+> Rather than waiting for the response in the low level driver, have it use
+> the polling loop in tpm_try_transmit() that uses a command's duration to
+> poll until a result has been returned by the TPM, thus ending when the
+> timeout has occurred but not responding to signals and ctrl-c anymore. To
+> stay in this polling loop extend tpm_ibmvtpm_status() to return
+> 'true' for as long as the vTPM is indicated as being busy in
+> tpm_processing_cmd. Since the loop requires the TPM's timeouts, get them
+> now using tpm_get_timeouts() after setting the TPM2 version flag on the
+> chip.
+> 
+> To recreat the resolved issue start rngd like this:
+> 
+> sudo rngd -r /dev/hwrng -t
+> sudo rngd -r /dev/tpm0 -t
+> 
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1981473
+> Fixes: 6674ff145eef ("tpm_ibmvtpm: properly handle interrupted packet receptions")
+> Cc: Nayna Jain <nayna@linux.ibm.com>
+> Cc: George Wilson <gcwilson@linux.ibm.com>
+> Reported-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 
->
-> /Jarkko
+
+Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+
+Tested with /dev/hwrng and /dev/tpm0 and not seen any tpm errors from 
+the kernel.
+
+> ---
+>   drivers/char/tpm/tpm_ibmvtpm.c | 20 ++++++++++++--------
+>   drivers/char/tpm/tpm_ibmvtpm.h |  2 +-
+>   2 files changed, 13 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+> index 903604769de9..7a9eca5768f8 100644
+> --- a/drivers/char/tpm/tpm_ibmvtpm.c
+> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
+> @@ -106,17 +106,12 @@ static int tpm_ibmvtpm_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+>   {
+>   	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
+>   	u16 len;
+> -	int sig;
+>   
+>   	if (!ibmvtpm->rtce_buf) {
+>   		dev_err(ibmvtpm->dev, "ibmvtpm device is not ready\n");
+>   		return 0;
+>   	}
+>   
+> -	sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
+> -	if (sig)
+> -		return -EINTR;
+> -
+>   	len = ibmvtpm->res_len;
+>   
+>   	if (count < len) {
+> @@ -269,7 +264,9 @@ static void tpm_ibmvtpm_cancel(struct tpm_chip *chip)
+>   
+>   static u8 tpm_ibmvtpm_status(struct tpm_chip *chip)
+>   {
+> -	return 0;
+> +	struct ibmvtpm_dev *ibmvtpm = dev_get_drvdata(&chip->dev);
+> +
+> +	return ibmvtpm->tpm_processing_cmd;
+>   }
+>   
+>   /**
+> @@ -457,7 +454,7 @@ static const struct tpm_class_ops tpm_ibmvtpm = {
+>   	.send = tpm_ibmvtpm_send,
+>   	.cancel = tpm_ibmvtpm_cancel,
+>   	.status = tpm_ibmvtpm_status,
+> -	.req_complete_mask = 0,
+> +	.req_complete_mask = true,
+>   	.req_complete_val = 0,
+>   	.req_canceled = tpm_ibmvtpm_req_canceled,
+>   };
+> @@ -688,8 +685,15 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+>   		goto init_irq_cleanup;
+>   	}
+>   
+> -	if (!strcmp(id->compat, "IBM,vtpm20")) {
+> +
+> +	if (!strcmp(id->compat, "IBM,vtpm20"))
+>   		chip->flags |= TPM_CHIP_FLAG_TPM2;
+> +
+> +	rc = tpm_get_timeouts(chip);
+> +	if (rc)
+> +		goto init_irq_cleanup;
+> +
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+>   		rc = tpm2_get_cc_attrs_tbl(chip);
+>   		if (rc)
+>   			goto init_irq_cleanup;
+> diff --git a/drivers/char/tpm/tpm_ibmvtpm.h b/drivers/char/tpm/tpm_ibmvtpm.h
+> index b92aa7d3e93e..51198b137461 100644
+> --- a/drivers/char/tpm/tpm_ibmvtpm.h
+> +++ b/drivers/char/tpm/tpm_ibmvtpm.h
+> @@ -41,7 +41,7 @@ struct ibmvtpm_dev {
+>   	wait_queue_head_t wq;
+>   	u16 res_len;
+>   	u32 vtpm_version;
+> -	bool tpm_processing_cmd;
+> +	u8 tpm_processing_cmd;
+>   };
+>   
+>   #define CRQ_RES_BUF_SIZE	PAGE_SIZE
+> 
+
+-- 
+Thanks and Regards
+R.Nageswara Sastry
