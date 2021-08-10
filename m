@@ -2,191 +2,225 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6430F3E53BF
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Aug 2021 08:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CE43E547F
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Aug 2021 09:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237104AbhHJGp2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 10 Aug 2021 02:45:28 -0400
-Received: from mail-eopbgr80094.outbound.protection.outlook.com ([40.107.8.94]:6017
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236783AbhHJGpY (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 10 Aug 2021 02:45:24 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DOsoY4IvWiGm4LMre8d5kcajJOCF+ZLWgIxN0spq/PMwpaQl+XCTITFeas37QvQq2MjsMR2shNKMT3vaauPfPZL0SdjKdJCOi4OdvTOPY/oJvvBcqiz/tohWqd8sCcrQyrSAllBmS8KnCJo2dziSPFcV256GjM4BKYITqHOcbAFl5uP921awE/GhaTpaz8UHNRbYWq3yqmMxtv0XTz31ij1hx8uDhvVJnSC3rT2UgsL00qVdOK0+LqxJTRFLC1Sduxd1HnE7r0rtvpVv5DigqVaHxC+leoGoch0fNDrPb2/mU2rRY6J9bf+6WDEl4ml2YCl5/7ANzr6GjPqaKqYu+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KorEzAQQNpzjxuKglFEYylcTHIUlZnczVk+9xrKZ/eI=;
- b=FikMLKPO64fqLfQFxsUVdK3YejJSVQVgX+VeX+2y66XXQ3yQ/pHpRkNc9sFTFWoCs3via756+3g7ubmKkOp7jRiJNrGQqlYNfKAibkN3mQLoQDVKi6wAbwUgkT31A5oFQiIzQZOeCv4qWSEh93zU3HuIWhskYrzbxZcByadRTsU/KeO4xaNySsm0oVE2XMsp8IqssL7ZdI4KI/umb9SifmdRT7oG3QxODmz8NX4gCuuQN5z8fiGwnldJuBaJ/kXZEz9O1HaQc87VP7j9BSCrmtFZnbqfCpbBxZ++4ky+ocAh8ZnLD996Qjcm1aK/fAfCDECpIi2Wcm7HpuMtj/OrJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
- dkim=pass header.d=viveris.fr; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=viverislicensing.onmicrosoft.com;
- s=selector2-viverislicensing-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KorEzAQQNpzjxuKglFEYylcTHIUlZnczVk+9xrKZ/eI=;
- b=sEtk0Rgd4JezOx9WBdR8u5fBrIKK/qPW2vZYlHG//SRB0n3t+bvV6xJzr63vgWdfUPaRloedwN6UI8VLTe71nZB/+3poiPpsXYdtsALJbeFAM8TO9fq/LPb1cjtBfcDc2FAR5G/Imu1AsvU9MU/lWL2JTHE0uYxxQAcm7k0Ywpg=
-Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
- (2603:10a6:200:96::21) by AM0PR09MB4242.eurprd09.prod.outlook.com
- (2603:10a6:208:18c::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.17; Tue, 10 Aug
- 2021 06:45:00 +0000
-Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
- ([fe80::84a0:780d:1c5c:4432]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
- ([fe80::84a0:780d:1c5c:4432%9]) with mapi id 15.20.4394.023; Tue, 10 Aug 2021
- 06:45:00 +0000
-From:   THOBY Simon <Simon.THOBY@viveris.fr>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Subject: Re: [PATCH v6 3/5] IMA: add support to restrict the hash algorithms
- used for file appraisal
-Thread-Topic: [PATCH v6 3/5] IMA: add support to restrict the hash algorithms
- used for file appraisal
-Thread-Index: AQHXiRHwT9XyeFXmY0qBhemJf3HNsKtreeuAgADaawA=
-Date:   Tue, 10 Aug 2021 06:45:00 +0000
-Message-ID: <b746a7c4-2fa1-4182-89ed-e5fec4b009ea@viveris.fr>
-References: <20210804092010.350372-1-simon.thoby@viveris.fr>
- <20210804092010.350372-4-simon.thoby@viveris.fr>
- <c1dadaa101b041fc7dcde1a5b3b52593a949e992.camel@linux.ibm.com>
-In-Reply-To: <c1dadaa101b041fc7dcde1a5b3b52593a949e992.camel@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linux.ibm.com; dkim=none (message not signed)
- header.d=none;linux.ibm.com; dmarc=none action=none header.from=viveris.fr;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 58779d16-7a27-435d-1111-08d95bca6067
-x-ms-traffictypediagnostic: AM0PR09MB4242:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR09MB4242F68272B3135EA41F9D0594F79@AM0PR09MB4242.eurprd09.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sPih7utrYdCR+M0TRwYYQAoZrXPmCMznTA5jnL98UJ+BNYLMwgbTh42vkuW+PMpPCOio7yXb8wpQyLVCpH9tlGqXZzQF6oYPIn0Gr3adgaBdMJLWD7rhs0clhK6BslPexerteraoRiMBoCdrQ5Oxzv0d6o4XeYA0HloQ64/e7n3INNyTKyzOQIuvgKZySRmViWbfRno7hIxGFQIbJIS2K/WrshJhW+5DgNG1ulGBIPdbo88ETwQ60rinOBqGOEgKbxD8L4AsgCQeokYzyjteaW8uP84g0xaNLTaj1s/HKLHFY/fAyGL3eRWiBl9oTaojaWEcMc5tqEHqijZK3juXWZhu9CezfsdtZmgrHVPiUCl/utjyuhFNIsDxTQ7KL3kKMkkgwphHdvCCnmGFJNUr7qLceXrK6kDAlUjOkRqCJlRPMJ0PtT5RwzMt8MhpwPP9l4GHbJBuPs83q6aipb8SJ0f7iwKcBFSPouBYnwYr3GeeiolxBW8q1qZcfMVaQwP7u3qZdGp/Ndv0n9Q9PcVPhYNkRFbRLarB0/l4MrocVg8S311WMT5I75tFmH/BD5SFKt3hfF3RPPd4gZfOTZHmobfc5YC/ppJdQrl2w1FgppoDdC6oubRg320OFtebi22mLxRuN0YVqjKLkcrv3woIk5gRSuDPzacFR0f7bYQn1R1APnwhjypOqrrs/LdPqyIMGWazZUL6SdiX3rTDwPQbnNTE9t3btX+ma69O+89lXsgqVeF/jf/4FQ1lE79gZt2F
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(366004)(136003)(66556008)(66476007)(64756008)(66446008)(71200400001)(6486002)(110136005)(2906002)(6636002)(86362001)(8936002)(66946007)(31686004)(6512007)(76116006)(91956017)(8676002)(31696002)(36756003)(38070700005)(26005)(38100700002)(6506007)(83380400001)(2616005)(508600001)(122000001)(53546011)(186003)(5660300002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-15?Q?8IFSi08yTP9q1vtMey5jbCTtkUE2FXLl2Zgh8d9BOjLNsABYrtZ1naIRg?=
- =?iso-8859-15?Q?mC6evKqULwvOHdbeUQAvZaBWgaCmu1S8XhmZVMABnapnrJuwRd6PCrPgk?=
- =?iso-8859-15?Q?GT6FbRhzwjtq2BSGQKG2AqKTMUsLsAI+zSosXFnbQmFU/AdVKqZah5Kjs?=
- =?iso-8859-15?Q?3E+5Jkc8h641Tq7Lm2y5mZtOsx3Y96bDXDcARFH3bCphq3XFd+58slclJ?=
- =?iso-8859-15?Q?lAokPd3OepdKC+LvHONKV/mz/J3etkjxsEkqyI2V7JMVDhC9Ce3906Hh5?=
- =?iso-8859-15?Q?xfyN6qvYeXF2ZcaSitj04JGpG/lN4F9+YpsJzadxwuWUluSS5OTGAtl8c?=
- =?iso-8859-15?Q?h1PflZ/dnfwgNEZMynf8paB+A6rXBAwSp67cCyEa8WqbAKoTWn7zX2WlR?=
- =?iso-8859-15?Q?hgk4xC4mIQ/u8S0jnpchDRmC2fQOfN2OdsjSiDfuF3Ue/ldz8co2YUnNj?=
- =?iso-8859-15?Q?mvzcecVdOO5n1WRlE6JIOJIyTuWovkYSPch34VHKqh0eWtNchZAhXtLK4?=
- =?iso-8859-15?Q?kBdTOS8RcJ1hm3KU6Faruasc0wYyd/omU88NDnvWAyeJr7cy1MAKX8jAe?=
- =?iso-8859-15?Q?6vXD2FaKQJrKdrCVup4nXgFARuf1VIxM3WxsZtntlGuLlQHR1fu4KmbLy?=
- =?iso-8859-15?Q?x0FK254X/W1iA/apwDZIeFllQJjID9G3hP9AHMv2Trb8fULygM+12Seip?=
- =?iso-8859-15?Q?Bb9co0V8Xt8KR0RRjR+GGDrYZOwSj2qxswi6AauL4o6NQSUpPD3xHK7TH?=
- =?iso-8859-15?Q?hE9WuP7a3wSEXZH6HWFJmwjnDZ+7jaeeBdNm+hAmRovdhScQPrnEt+KI/?=
- =?iso-8859-15?Q?slxStM4Io6kLPsf6DOlPmWip3X5TxvCzvWTZDpDBx0K/tj+vaasq6jsjU?=
- =?iso-8859-15?Q?O59qdpcMcXp8f9wphhP8s/vfuvRf5V959lJM2CAHL3f01b15s98I5tF9J?=
- =?iso-8859-15?Q?gOQ4T3BkhR/r+tzD7q+Y7jINUUlECRQnk9JDnvNAwzanxRX/9Oy86YZvT?=
- =?iso-8859-15?Q?aUS/4+L10qcLhjHGlHuvUAMVelUfAf6/30AtCGCUkhpiI90m2odMy0Ubp?=
- =?iso-8859-15?Q?E4zs7Giz6o9hoN3rqYc+J+C4gChNiZBP0U5o5zxY3vKjDbp/e19eSSJFi?=
- =?iso-8859-15?Q?Dij89HxHIUIKpPbjEcsjMURubYU9BPrEMV107EAtqFGrbTODuGCtr91T3?=
- =?iso-8859-15?Q?YMhT7/pCr4ox4Gakn9XNQUqFljA/0TT+kRSaq4oY+Tg3b0Tzi+gtVi34h?=
- =?iso-8859-15?Q?DIotS4tkWPyhBJZQTzDVPxl+62vwvNQZq48/McH0esGgDCuzd6C/IauTp?=
- =?iso-8859-15?Q?h+pMEV0IjPzupB2lAOZpgTWx039ADDJS3QX2BEGCSnbR/DilHhhllp+Pm?=
- =?iso-8859-15?Q?om6bhS8brcfIi/NVyw7DzllepB5pketQc?=
-Content-Type: text/plain; charset="iso-8859-15"
-Content-ID: <1069F08C44F25A4694C6F7A52548A73D@eurprd09.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S236680AbhHJHly (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Aug 2021 03:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236528AbhHJHlv (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 10 Aug 2021 03:41:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EF2C061796
+        for <linux-integrity@vger.kernel.org>; Tue, 10 Aug 2021 00:41:29 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1mDMO4-0005bc-BD; Tue, 10 Aug 2021 09:41:24 +0200
+Subject: Re: [PATCH v2] fscrypt: support trusted keys
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, kernel@pengutronix.de,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210806150928.27857-1-a.fatoum@pengutronix.de>
+ <YRGdBiJQ3xqZAT4w@gmail.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <2bc19003-82a1-0d2d-4548-3315686d77b4@pengutronix.de>
+Date:   Tue, 10 Aug 2021 09:41:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-X-OriginatorOrg: viveris.fr
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58779d16-7a27-435d-1111-08d95bca6067
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2021 06:45:00.7275
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9yth59ABpp3qQpsk4LsvHlbpiHFgiVtWkhADdFs0cxOqiSWClmKhfeyNI9GfOeRutd6IqNrFhz0cpqZhWi0/5w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR09MB4242
+In-Reply-To: <YRGdBiJQ3xqZAT4w@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+Hello Eric,
 
-On 8/9/21 7:43 PM, Mimi Zohar wrote:
-> On Wed, 2021-08-04 at 09:20 +0000, THOBY Simon wrote:
->> The kernel accepts any hash algorithm as a value for the security.ima
->> xattr. Users may wish to restrict the accepted algorithms to only
->> support strong cryptographic ones.
->>
->> Provide the plumbing to restrict the permitted set of hash algorithms
->> used for verifying file hashes and digest algorithms stored in
->> security.ima xattr.
->=20
-> simplify by saying "file hashes and signatures stored ..."
+On 09.08.21 23:24, Eric Biggers wrote:
+> Hi Ahmad,
+> 
+> This generally looks okay, but I have some comments below.
+> 
+> On Fri, Aug 06, 2021 at 05:09:28PM +0200, Ahmad Fatoum wrote:
+>> Kernel trusted keys don't require userspace knowledge of the raw key
+>> material and instead export a sealed blob, which can be persisted to
+>> unencrypted storage. Userspace can then load this blob into the kernel,
+>> where it's unsealed and from there on usable for kernel crypto.
+> 
+> Please be explicit about where and how the keys get generated in this case.
 
-Will fix in the next iteration.
+I intentionally avoided talking about this. You see, the trusted key documentation[1]
+phrases it as "all keys are created in the kernel", but you consider
+"'The key material is generated
+ within the kernel' [a] misleading claim'. [2]
 
->=20
->>
->> This do not apply only to IMA in hash mode, it also works with digital
->> signatures, where the hash from which the signature is derived (by
->> signing it with the trusted private key) must obey the same
->> restrictions.
->=20
-> The patch is limited to appraisal.  Is the above paragraph needed?=20
+Also, I hope patches to force kernel RNG and CAAM support (using kernel RNG as
+default) will soon be accepted, which would invalidate any further claims in the
+commit message without a means to correct them.
 
-Yes, what I was (badly) trying to say is that the appraisal check work both=
- when
-the security.ima xattr contains digital signatures and when it contains has=
-hes, as
-digital signatures can also be generated with different algorithms.
-Except, as you pointed out, by talking about "hash mode" here, I introduced=
- a confusion
-where the reader can believe I'm talking of the "hash" IMA policy action. I=
- will try
-to clarify that.
+I thus restricted my commit message to the necessary bit that are needed to
+understand the patch, which is: userspace knowledge of the key material is
+not required. If you disagree, could you provide me the text you'd prefer?
 
->=20
->>
->> Signed-off-by: Simon Thoby <simon.thoby@viveris.fr>
->> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->=20
-> This patch restricts the "hash algorithms".  Looking this over again
-> after some time, does truncating variable names here, and in the other
-> patches, to just "_hash|_hashes" make sense?  Perhaps the emphasis
-> should not be on "hash", but on "algo".
+>> This is incompatible with fscrypt, where userspace is supposed to supply
+>> the raw key material. For TPMs, a work around is to do key unsealing in
+>> userspace, but this may not be feasible for other trusted key backends.
+> 
+> As far as I can see, "Key unsealing in userspace" actually is the preferred way
+> to implement TPM-bound encryption.  So it doesn't seem fair to call it a "work
+> around".
 
-I will update that (and patch 4/5 consequently).=20
+In the context of *kernel trusted keys*, direct interaction with the TPM
+outside the kernel to decrypt a kernel-encrypted blob is surely not the
+preferred way.
 
->=20
->> @@ -684,8 +695,11 @@ int ima_match_policy(struct user_namespace *mnt_use=
-rns, struct inode *inode,
->>  			action &=3D ~IMA_HASH;
->>  			if (ima_fail_unverifiable_sigs)
->>  				action |=3D IMA_FAIL_UNVERIFIABLE_SIGS;
->> -		}
->> =20
->> +			if (allowed_hashes &&
->> +			    entry->flags & IMA_VALIDATE_HASH)
->> +				*allowed_hashes =3D entry->allowed_hashes;
+For TPM-bound encryption completely in userspace? Maybe. But that's not
+what this patch is about. It's about kernel trusted keys and offloading
+part of its functionality to userspace to _work around_ lack of kernel-side
+integration is exactly that: a _work around_.
+
+>> +  Most users leave this 0 and specify the raw key directly.
+>> +  "trusted" keys are useful to leverage kernel support for sealing
+>> +  and unsealing key material. Sealed keys can be persisted to
+>> +  unencrypted storage and later be used to decrypt the file system
+>> +  without requiring userspace to have knowledge of the raw key
+>> +  material.
+>> +  "fscrypt-provisioning" key support is intended mainly to allow
+>> +  re-adding keys after a filesystem is unmounted and re-mounted,
+>>    without having to store the raw keys in userspace memory.
+>>  
+>>  - ``raw`` is a variable-length field which must contain the actual
+>>    key, ``raw_size`` bytes long.  Alternatively, if ``key_id`` is
+>>    nonzero, then this field is unused.
+>>  
+>> +.. note::
+>> +
+>> +   Users should take care not to reuse the fscrypt key material with
+>> +   different ciphers or in multiple contexts as this may make it
+>> +   easier to deduce the key.
+>> +   This also applies when the key material is supplied indirectly
+>> +   via a kernel trusted key. In this case, the trusted key should
+>> +   perferably be used only in a single context.
+> 
+> Again, please be explicit about key generation.  Note that key generation is
+> already discussed in a different section, "Master Keys".  There should be a
+> mention of trusted keys there.  The above note about not reusing keys probably
+> belongs there too.  (The section you're editing here is
+> "FS_IOC_ADD_ENCRYPTION_KEY", which is primarily intended to just document the
+> ioctl, so it's not necessarily the best place for this type of information.)
+
+Yes. The content of the note is more appropriate there.
+
+>> @@ -577,28 +578,44 @@ static int get_keyring_key(u32 key_id, u32 type,
+>>  	key_ref_t ref;
+>>  	struct key *key;
+>>  	const struct fscrypt_provisioning_key_payload *payload;
+>> -	int err;
+>> +	int err = 0;
+>>  
+>>  	ref = lookup_user_key(key_id, 0, KEY_NEED_SEARCH);
+>>  	if (IS_ERR(ref))
+>>  		return PTR_ERR(ref);
+>>  	key = key_ref_to_ptr(ref);
+>>  
+>> -	if (key->type != &key_type_fscrypt_provisioning)
+>> -		goto bad_key;
+>> -	payload = key->payload.data[0];
+>> +	if (key->type == &key_type_fscrypt_provisioning) {
+> 
+> This function is getting long; it probably should be broken this up into several
+> functions.  E.g.:
+
+Will do for v3.
+
+> static int get_keyring_key(u32 key_id, u32 type,
+>                            struct fscrypt_master_key_secret *secret)
+> {
+>         key_ref_t ref;
+>         struct key *key;
+>         int err;
+> 
+>         ref = lookup_user_key(key_id, 0, KEY_NEED_SEARCH);
+>         if (IS_ERR(ref))
+>                 return PTR_ERR(ref);
+>         key = key_ref_to_ptr(ref);
+> 
+>         if (key->type == &key_type_fscrypt_provisioning) {
+>                 err = fscrypt_get_provisioning_key(key, type, secret);
+>         } else if (IS_REACHABLE(CONFIG_TRUSTED_KEYS) &&
+>                    key->type == &key_type_trusted) {
+>                 err = fscrypt_get_trusted_key(key, secret);
+>         } else {
+>                 err = -EKEYREJECTED;
+>         }
+>         key_ref_put(ref);
+>         return err;
+> }
+> 
+>> +		/* Don't allow fscrypt v1 keys to be used as v2 keys and vice versa. */
+> 
+> Please avoid overly-long lines.
+
+For v3 with helper functions, there will be one indentation level less,
+so this will be less 79 again instead of 87.
+
+> 
+>> +		tkp = key->payload.data[0];
+>> +		if (!tkp || tkp->key_len < FSCRYPT_MIN_KEY_SIZE ||
+>> +		    tkp->key_len > FSCRYPT_MAX_KEY_SIZE) {
+>> +			up_read(&key->sem);
+>> +			err = -EINVAL;
+>> +			goto out_put;
 >> +		}
->> =20
->>  		if (entry->action & IMA_DO_MASK)
->>  			actmask &=3D ~(entry->action | entry->action << 1);
->=20
->=20
-> "allowed_hashes" sounds like a set of digests.  Instead of
-> "allowed_hashes" and "IMA_VALIDATE_HASH", should it be "allowed_algo"
-> and "IMA_ALLOWED_ALGO"?
->=20
-> thanks,
->=20
-> Mimi
->=20
+> 
+> What does the !tkp case mean?  For "user" and "logon" keys it means "key
+> revoked", but the "trusted" key type doesn't implement revoke.  Is this included
+> just to be safe?
 
-Thanks,
-Simon=
+Oh, good point. I think I cargo-culted it off encrypted key support for
+eCryptfs and dm-crypt. Encrypted keys don't support revoke either..
+
+That might be reasonable, but perhaps the error code in that
+> case (but not the invalid length cases) should be -EKEYREVOKED instead?
+
+Yes. It was like this for v1, but I missed it when dropping the
+dependency on the key_extract_material patch. Will fix for v3.
+
+[1]: https://www.kernel.org/doc/html/v5.14-rc5/security/keys/trusted-encrypted.html
+[2]: https://lore.kernel.org/linux-fscrypt/YQLzOwnPF1434kUk@gmail.com/
+
+
+Cheers and thanks for the review,
+Ahmad
+
+
+> 
+> - Eric
+> 
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
