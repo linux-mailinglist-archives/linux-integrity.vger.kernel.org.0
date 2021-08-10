@@ -2,128 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B2F3E5003
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Aug 2021 01:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B076C3E5270
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Aug 2021 06:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235543AbhHIXes (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 9 Aug 2021 19:34:48 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9598 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233018AbhHIXes (ORCPT
+        id S234366AbhHJEwc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 10 Aug 2021 00:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231329AbhHJEwc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 9 Aug 2021 19:34:48 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 179NWiX9171926;
-        Mon, 9 Aug 2021 19:34:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=NNN13Ge2HOYu0HROjbcLiO3eZLwcFColRyjn4Po254g=;
- b=cjdDpup85u97qSzLI5+B9TdBi2oSAezMqTmZGXu2Pe15FA8mtU6ujn6qCH8lQjCdVZDW
- ZBGuUXQ4SwBjOaJYT0fV8WnRuZDQ1XUAJGycKPXk8Ye9mvSHhnLktwAWRkbJ0gvnHT8A
- 38BLCcFScfMlQd+QFm/lRsOhbmLTRaqBmiZOrIMiGMlyl0RWY9d1pggA++kT0sBepP4Y
- s6JrJAoSKwGAaxaz20xF/yxnpSnv5ldjJvodSiOoxKSq+glqhMN8UWEI5jn1aPAhhfDr
- OlP4Ep7jcC/pFQsBgqAskEHWhHZp5SY7DjL3SkuwqAzPOynBW1pgIAdnY4ZYDwylj1qM Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ab4j0ysf1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Aug 2021 19:34:24 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 179NYOgw177606;
-        Mon, 9 Aug 2021 19:34:24 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ab4j0yser-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Aug 2021 19:34:24 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 179NSIVJ005171;
-        Mon, 9 Aug 2021 23:34:22 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3a9ht8vwqc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Aug 2021 23:34:22 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 179NYKux50266502
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Aug 2021 23:34:20 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 245565204E;
-        Mon,  9 Aug 2021 23:34:20 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.60.134])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EE5B152051;
-        Mon,  9 Aug 2021 23:34:18 +0000 (GMT)
-Message-ID: <1381b22a98d7b43b7cba9f79fc0b739ed2816a5f.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 2/5] IMA: block writes of the security.ima xattr with
- unsupported algorithms
-From:   Mimi Zohar <zohar@linux.ibm.com>
+        Tue, 10 Aug 2021 00:52:32 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D822C0613D3;
+        Mon,  9 Aug 2021 21:52:10 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id w14so831679pjh.5;
+        Mon, 09 Aug 2021 21:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=pKuRJwP8rC3OTYzaZnoKKKbjB+cT8U3TpcbMo6IGM1I=;
+        b=aXorc5K3tDb6Jt5D/oZMu0WbYdFZPh4REiQKk6h3P2YXpIybWdEYMisoSpl0bdplIZ
+         okK83LJk4+lct7x07AXjqH+ffKN+uMOITVo450HvZZZD/hw+0UQjeU+17xPGJ0HnyMmz
+         VWdaoH/+WUBmTwooB43ArAJW9W4k/7xjlnjV6nLKcFTat9DxnK8AhQrz9VNodoEFYf+B
+         oifvK6ScemIWSkwAghfdkP09Lqjp358QGfdj8HGdL+2zNGUv76o7cS1+RaPKsO+lRSow
+         pf014ftxGarZ+p/gNfqS2oi1rqyKvD1dpmEx0rirlmbDIKapSyQv6fRyUaWr/5kh+Nvr
+         VbHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=pKuRJwP8rC3OTYzaZnoKKKbjB+cT8U3TpcbMo6IGM1I=;
+        b=dO9YbWtP83mBq92wdzvuHbE6T8n+RJfz2TA5u2Y4TGhvfGaX3qzjInfmEWhU/IBnTB
+         6wp/b5FT816gf1Wv8iLkW0/4YKMRaMvo8yRySYIjzxMryx/+TLHhHEVi98DnreDzloE7
+         g4CiEYrKkwfL7KdLaZfyPGBx05Cj3eb/InbSsCKNCoQbfspcfWXee5ktn3QBN2hkfcag
+         gXMLX4nmmZwSYXAnL9HB6OIgQXiCT2rvSsN8iJMNulSxBj4RT5HkXts5Y0wtVF/Mu+iL
+         jPRmm8HMUk7eh0WG+84u7Htcr6JzuMOiw5ulodR5VEsuATio06ANcLTVtKIoJFOf3GcA
+         SiSQ==
+X-Gm-Message-State: AOAM530FLFu/ibrUcMI/zsIxeBCowCV0RmGASVJoYhFshz8g48NNMJJ9
+        5f0/J/JQ0HBUbh5wLERBnTM=
+X-Google-Smtp-Source: ABdhPJw74a13BU5xFHy0dXT/REE8/z+ytaw+hyIvfZ5GzBzrVewUfSW8vW9+3dEuXAK124HxHJcVWg==
+X-Received: by 2002:a17:902:cece:b029:12c:72bb:4d64 with SMTP id d14-20020a170902ceceb029012c72bb4d64mr4549396plg.56.1628571130044;
+        Mon, 09 Aug 2021 21:52:10 -0700 (PDT)
+Received: from [192.168.1.194] ([50.39.237.102])
+        by smtp.gmail.com with ESMTPSA id m1sm18576016pfk.84.2021.08.09.21.52.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Aug 2021 21:52:09 -0700 (PDT)
+Subject: Re: [PATCH 1/1] NAX LSM: Add initial support support
 To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Date:   Mon, 09 Aug 2021 19:34:17 -0400
-In-Reply-To: <20210804092010.350372-3-simon.thoby@viveris.fr>
-References: <20210804092010.350372-1-simon.thoby@viveris.fr>
-         <20210804092010.350372-3-simon.thoby@viveris.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: DgsnfMbn169gRPRH7cVtsus3mozpmlwm
-X-Proofpoint-GUID: jISGohOm1njpW4nZukoTZhycZgdDFzaV
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-09_09:2021-08-06,2021-08-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- mlxscore=0 priorityscore=1501 suspectscore=0 clxscore=1015 malwarescore=0
- phishscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
- definitions=main-2108090165
+        Igor Zhbanov <i.zhbanov@omp.ru>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Cc:     Igor Zhbanov <izh1979@gmail.com>, Mimi Zohar <zohar@linux.ibm.com>
+References: <db1c1de0-3672-4bae-ef45-c554379f36f4@omp.ru>
+ <d97d7fdb-1676-9670-6cf5-2427f780ec6f@viveris.fr>
+From:   J Freyensee <why2jjj.linux@gmail.com>
+Message-ID: <98408368-119a-b00c-97eb-8ea9fd1d5244@gmail.com>
+Date:   Mon, 9 Aug 2021 21:52:07 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
+MIME-Version: 1.0
+In-Reply-To: <d97d7fdb-1676-9670-6cf5-2427f780ec6f@viveris.fr>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2021-08-04 at 09:20 +0000, THOBY Simon wrote:
-> +static int validate_hash_algo(struct dentry *dentry,
-> +                                  const struct evm_ima_xattr_data *xattr_value,
-> +                                  size_t xattr_value_len)
-> +{
-> +       int result = 0;
-> +       char *path = NULL, *pathbuf = NULL;
-> +       enum hash_algo xattr_hash_algo;
-> +
-> +       xattr_hash_algo = ima_get_hash_algo(xattr_value, xattr_value_len);
-> +
-> +       if (likely(xattr_hash_algo == ima_hash_algo ||
-> +                  crypto_has_alg(hash_algo_name[xattr_hash_algo], 0, 0)))
-> +               return result;
-> +
-> +       result = -EACCES;
-> +
-> +       pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
-> +       if (!pathbuf)
-> +               return result;
-> +
-> +       path = dentry_path(dentry, pathbuf, PATH_MAX);
-> +
-> +       integrity_audit_msg(AUDIT_INTEGRITY_DATA, d_inode(dentry), path,
-> +                           "collect_data", "unavailable-hash-algorithm",
-> +                           result, 0);
 
-"collect_data" refers to calculating the file hash,
-ima_collect_measurement(), which may be stored in the measurement list,
-used for verifying the signature and/or included in the audit record.
+snip...
 
-validate_hash_algo() verifies the hash algorithm before allowing the
-file hash or signature to be written as security.ima.  Instead of
-"collect_data" it should be "set_data" or something similar.
+>> +#define pr_fmt(fmt) "NAX: " fmt
+>> +
+>> +#include <linux/capability.h>
+>> +#include <linux/cred.h>
+>> +#include <linux/ctype.h>
+>> +#include <linux/lsm_hooks.h>
+>> +#include <linux/mman.h>
+>> +#include <linux/sched.h>
+>> +#include <linux/securebits.h>
+>> +#include <linux/security.h>
+>> +#include <linux/sysctl.h>
+>> +#include <linux/uidgid.h>
+>> +
+>> +#define NAX_MODE_PERMISSIVE 0 /* Log only             */
+>> +#define NAX_MODE_ENFORCING  1 /* Enforce and log      */
+>> +#define NAX_MODE_KILL       2 /* Kill process and log */
+>> +
+>> +static int mode   = CONFIG_SECURITY_NAX_MODE,
+>> +	   quiet  = IS_ENABLED(CONFIG_SECURITY_NAX_QUIET),
+>> +	   locked = IS_ENABLED(CONFIG_SECURITY_NAX_LOCKED);
+>> +
+>> +#define ALLOWED_CAPS_HEX_LEN (_KERNEL_CAPABILITY_U32S * 8)
+>> +
+>> +static char allowed_caps_hex[ALLOWED_CAPS_HEX_LEN + 1];
+>> +static kernel_cap_t allowed_caps = CAP_EMPTY_SET;
+>> +
+>> +static int
+>> +is_privileged_process(void)
+>> +{
+>> +	const struct cred *cred;
+>> +	kuid_t root_uid;
+>> +
+>> +	cred = current_cred();
+>> +	root_uid = make_kuid(cred->user_ns, 0);
+>> +	/* We count a process as privileged if it any of its IDs is zero
+>> +	 * or it has any unsafe capability (even in a user namespace) */
+>> +	if ((!issecure(SECURE_NOROOT) && (uid_eq(cred->uid,   root_uid) ||
+>> +					  uid_eq(cred->euid,  root_uid) ||
+>> +					  uid_eq(cred->suid,  root_uid) ||
+>> +					  uid_eq(cred->fsuid, root_uid))) ||
+>> +	    (!cap_issubset(cred->cap_effective, allowed_caps)) ||
+>> +	    (!cap_issubset(cred->cap_permitted, allowed_caps)))
+>> +		return 1;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void
+>> +log_warn(const char *reason)
+>> +{
+>> +	if (quiet)
+>> +		return;
+>> +
+>> +	pr_warn_ratelimited("%s: pid=%d, uid=%u, comm=\"%s\"\n",
+>> +		            reason, current->pid,
+>> +		            from_kuid(&init_user_ns, current_cred()->uid),
+>> +	                              current->comm);
+> Have you considered writing to the audit log instead of the kernel messages directly?
+> (not saying that this is necessarily better, but is there a reasoning to prefer one or
+> the other here? Audit logs are often consumed by automated tools and it may be more pratical
+> for people to detect and treat violations if the messages were pushed to the audit log
+> - but conversely, that requires defining and maintaining a stable log format for consumers)
 
-thanks,
+It's a good idea to writing to the audit log, HOWEVER I'd want to know 
+what all the rest of the LSMs are doing in a case like this. If all of 
+them just write kernel messages, I'd want this module to also write just 
+kernel messages for consistency sake for use with say, log harvesters 
+for a SIEM/XDR system solution.
 
-Mimi
+Just in general I like the thought of this LSM.  I used to work for a 
+security company in which their cloud "watched" situations where 
+mmap()/mprotect() would use anonymous executable pages for possible 
+"dodgy" behavior.
 
-> +
-> +       kfree(pathbuf);
-> +
-> +       return result;
-
+Jay
 
