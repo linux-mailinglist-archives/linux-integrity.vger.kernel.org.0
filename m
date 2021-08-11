@@ -2,128 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA133E96A3
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Aug 2021 19:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1366A3E96DA
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Aug 2021 19:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbhHKRQf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Aug 2021 13:16:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57480 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231264AbhHKRQ3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Aug 2021 13:16:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A77F760720;
-        Wed, 11 Aug 2021 17:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628702165;
-        bh=9h03uKGoS94D5joA0oQ8vjBfh49XzjEF5chJiZqRUSM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R4lANRmD7F79aJk1QwsPA2lv4OQqEB1kpG2XjTPtoXxx6kuKdityhC7zcwKDhreDm
-         XsJtAmOJwSddjxQ448+ktoeI/eZG+BkVyc8KFEo9igVGQiUXZozh4ciYpL3BBkmy/C
-         MSYHY5jOe/mKDm+DeplA7idJPn7uEyxVgcHpr/tEE0XIP51hv1ElOHYW1uwu9jfjA+
-         5YH/uPw3qKgSzzl5x8Ds9Ib4uFTwfnJNyYHvdvJQ8gOhgKZnARoeLVfV4/WPn2nr8T
-         BtQn83YSoqFY/rAzopncT84KP1iFL+r8KclwjGHTrQL7ZQQK11C+VpuZ4WRpn9JLly
-         baVtflrGpwJlA==
-Date:   Wed, 11 Aug 2021 10:16:03 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, kernel@pengutronix.de,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        David Howells <dhowells@redhat.com>,
-        linux-fscrypt@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fscrypt: support trusted keys
-Message-ID: <YRQF09f8st95yrFZ@gmail.com>
-References: <20210806150928.27857-1-a.fatoum@pengutronix.de>
- <20210809094408.4iqwsx77u64usfx6@kernel.org>
- <YRGVcaquAJiuc8bp@gmail.com>
- <20210810180636.vqwaeftv7alsodgn@kernel.org>
- <YRLJmaafp941uOdA@gmail.com>
- <20210810212140.sdq5dq2wy5uaj7h7@kernel.org>
- <YRLvPJehAeMiYb2Z@gmail.com>
- <20210811001743.ofzkwdwa6rcjsf4d@kernel.org>
- <d4f5c2593380c82ceebae2c8782a1c440b35f165.camel@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4f5c2593380c82ceebae2c8782a1c440b35f165.camel@linux.ibm.com>
+        id S229535AbhHKRcX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Aug 2021 13:32:23 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25772 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229484AbhHKRcW (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 11 Aug 2021 13:32:22 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17BH3pUh165487;
+        Wed, 11 Aug 2021 13:31:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=mACfITnV8J3o63aXB09nu8+1Hc5tNSHHQ7PJEpKwvD8=;
+ b=gsF/jItv/OXhkaN1J/qFcrrSvcIJ3BJn0xNIkcNpv2vsLjzO0kD+GiNqFTbIBMDvFtGY
+ ZAio6J3a9C1NycI55FwzXJFqahz9RWEnfV/Bc5g8MRAdBy+TxnBboEFiZO99ux5P2hjX
+ aPt/zcPy1FDxXC+SxO/5l5ePR6mrUEn7K5JlrxCCS84YTCgyFiClTKhEgr9RMoHu3SfW
+ kLmeS8qmpU0essV/eqWbvANmXO7gIRGMzQcZ2tOlCkdYWG2VTAVa7f8QwYT9dbwO2Fab
+ /AGY9HJVhoOwuCWiHNP2cs3/QQuH09x8V493p1a6Na1c0RCWxwFd2+fFf+WWARh2oboy xA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3abt97wrr9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Aug 2021 13:31:56 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17BH4MVe175894;
+        Wed, 11 Aug 2021 13:31:56 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3abt97wrqj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Aug 2021 13:31:56 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17BHRJVl027088;
+        Wed, 11 Aug 2021 17:31:54 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3a9ht90dke-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Aug 2021 17:31:54 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17BHSbRV58917280
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Aug 2021 17:28:37 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8EB39AE058;
+        Wed, 11 Aug 2021 17:31:51 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8CA9AAE053;
+        Wed, 11 Aug 2021 17:31:50 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.27.84])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 11 Aug 2021 17:31:50 +0000 (GMT)
+Message-ID: <1e261f41462aac5e9fbb6d9397f5f86a5379a803.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils] evmctl: fix memory leak in get_password
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Bruno Meneguele <bmeneg@redhat.com>
+Cc:     vt@altlinux.org, linux-integrity@vger.kernel.org
+Date:   Wed, 11 Aug 2021 13:31:49 -0400
+In-Reply-To: <YRP/+7XT25GbAEef@glitch>
+References: <20210810202852.236354-1-bmeneg@redhat.com>
+         <cf5349dc43b2e8efc709abcf8e1637b7da692bee.camel@linux.ibm.com>
+         <YRP/+7XT25GbAEef@glitch>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: u7e7kTn7-FE-fzMqVWKkYatoufTkb5GT
+X-Proofpoint-GUID: 34PJohOyLC2Lc0Gx7_Eczdkj6U4TAvlE
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-11_06:2021-08-11,2021-08-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 suspectscore=0 adultscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108110116
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 07:34:18AM -0400, Mimi Zohar wrote:
-> On Wed, 2021-08-11 at 03:17 +0300, Jarkko Sakkinen wrote:
-> > On Tue, Aug 10, 2021 at 02:27:24PM -0700, Eric Biggers wrote:
-> > > On Wed, Aug 11, 2021 at 12:21:40AM +0300, Jarkko Sakkinen wrote:
-> > > > On Tue, Aug 10, 2021 at 11:46:49AM -0700, Eric Biggers wrote:
-> > > > > On Tue, Aug 10, 2021 at 09:06:36PM +0300, Jarkko Sakkinen wrote:
-> > > > > > > > 
-> > > > > > > > I don't think this is right, or at least it does not follow the pattern
-> > > > > > > > in [*]. I.e. you should rather use trusted key to seal your fscrypt key.
-> > > > > > > 
-> > > > > > > What's the benefit of the extra layer of indirection over just using a "trusted"
-> > > > > > > key directly?  The use case for "encrypted" keys is not at all clear to me.
-> > > > > > 
-> > > > > > Because it is more robust to be able to use small amount of trusted keys,
-> > > > > > which are not entirely software based.
-> > > > > > 
-> > > > > > And since it's also a pattern on existing kernel features utilizing trusted
-> > > > > > keys, the pressure here to explain why break the pattern, should be on the
-> > > > > > side of the one who breaks it.
-> > > > > 
-> > > > > This is a new feature, so it's on the person proposing the feature to explain
-> > > > > why it's useful.  The purpose of "encrypted" keys is not at all clear, and the
-> > > > > documentation for them is heavily misleading.  E.g.:
-> > > > > 
-> > > > >     "user space sees, stores, and loads only encrypted blobs"
-> > > > >     (Not necessarily true, as I've explained previously.)
-> > > > > 
-> > > > >     "Encrypted keys do not depend on a trust source" ...  "The main disadvantage
-> > > > >     of encrypted keys is that if they are not rooted in a trusted key"
-> > > > >     (Not necessarily true, and in fact it seems they're only useful when they
-> > > > >     *do* depend on a trust source.  At least that's the use case that is being
-> > > > >     proposed here, IIUC.)
-> > > > > 
-> > > > > I do see a possible use for the layer of indirection that "encrypted" keys are,
-> > > > > which is that it would reduce the overhead of having lots of keys be directly
-> > > > > encrypted by the TPM/TEE/CAAM.  Is this the use case?  If so, it needs to be
-> > > > > explained.
-> > > > 
-> > > > If trusted keys are used directly, it's an introduction of a bottleneck.
-> > > > If they are used indirectly, you can still choose to have one trusted
-> > > > key per fscrypt key.
-> > > > 
-> > > > Thus, it's obviously a bad idea to use them directly.
+On Wed, 2021-08-11 at 13:51 -0300, Bruno Meneguele wrote:
+> On Wed, Aug 11, 2021 at 10:52:00AM -0400, Mimi Zohar wrote:
+> 
 > > > 
-> > > So actually explain that in the documentation.  It's not obvious at all.  And
-> > > does this imply that the support for trusted keys in dm-crypt is a mistake?
+> > > -	return pwd;
+> > > +	return password;
 > > 
-> > Looking at dm-crypt implementation, you can choose to use 'encrypted' key
-> > type, which you can seal with a trusted key.
+> > Wouldn't a simpler fix be to test "pwd" here?
+> >         if (!pwd)
+> >                 free(password);
+> >         return pwd;
 > > 
-> > Note: I have not been involved when the feature was added to dm-crypt.
 > 
-> At least for TPM 1.2,  "trusted" keys may be sealed to a PCR and then
-> extended to prevent subsequent usage.  For example, in the initramfs
-> all of the "encrypted" keys could be decrypted by a single "trusted"
-> key, before extending the PCR.
-> 
-> Mimi
-> 
+> The problem is on success, when 'pwd' is actually not NULL.
+> With that, I can't free(password). I would need to asprintf(pwd, ...) or
+> strndup(password). Because of that, I thought it would be cleaner to
+> remove 'password' completely.
 
-Neither of you actually answered my question, which is whether the support for
-trusted keys in dm-crypt is a mistake.  I think you're saying that it is?  That
-would imply that fscrypt shouldn't support trusted keys, but rather encrypted
-keys -- which conflicts with Ahmad's patch which is adding support for trusted
-keys.  Note that your reasoning for this is not documented at all in the
-trusted-encrypted keys documentation; it needs to be (email threads don't really
-matter), otherwise how would anyone know when/how to use this feature?
+I see.  So instead of "return pwd" as suggested above,
 
-- Eric
+        if (!pwd) {
+                free(password);
+                password = NULL;  <== set or return NULL
+        }
+
+        return password;
+
+thanks,
+
+Mimi
+
