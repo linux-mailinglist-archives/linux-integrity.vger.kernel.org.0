@@ -2,130 +2,172 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 136303E95E3
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Aug 2021 18:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8DF3E9656
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Aug 2021 18:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbhHKQ11 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Aug 2021 12:27:27 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61230 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229473AbhHKQ11 (ORCPT
+        id S229530AbhHKQvh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 11 Aug 2021 12:51:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51563 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229484AbhHKQvh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Aug 2021 12:27:27 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17BG4fBH073943;
-        Wed, 11 Aug 2021 12:27:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=8SlUOnW837HY1QeI8Esn83utWQIHhiNZb3oyLXdIAFg=;
- b=QVYbnQQwWNVjGxjRHDRE4UVoTDZ7RXKaytcGRRCbHJPjtBldn87xu6Q5Lem01lOboFe1
- dLADg2BHSsmn9t3hUyI7cBdyGGf+Xi0uFYZb0KUZaJjVLcSkFNkOxpFRgLKD7QpSdiWc
- oxBs/gObTPFbOtm9ZkdXNOS1yF+6nx+hAX9A/DOAmBSVjHt+Hc1/0SQgNpRE5jXxCWkY
- UgnM111ut8W9y/ZgopeDNQrGLz+zRhSUnpFzcuD53u3uvv4ywyMhihA9oqgWXF1H2mV+
- w5cIpglMZ2zxwNTlgRuHXWykOLipTAqP11Yw6bL2CMZpgG29r0tBGckt5Jx9JZ5d2Ff4 7A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3abrr5yfx7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Aug 2021 12:27:02 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17BG5NqA077953;
-        Wed, 11 Aug 2021 12:27:02 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3abrr5yfvm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Aug 2021 12:27:02 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17BGOUxZ027286;
-        Wed, 11 Aug 2021 16:26:59 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 3acfpg85d0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Aug 2021 16:26:59 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17BGQulh52494720
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Aug 2021 16:26:56 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B020142054;
-        Wed, 11 Aug 2021 16:26:56 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B7D104204B;
-        Wed, 11 Aug 2021 16:26:55 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.27.84])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 11 Aug 2021 16:26:55 +0000 (GMT)
-Message-ID: <84b3a572eb5fc1ec81291656c9f9af00568bff9f.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 4/5] IMA: add a policy option to restrict xattr hash
- algorithms on appraisal
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Date:   Wed, 11 Aug 2021 12:26:54 -0400
-In-Reply-To: <20210811114037.201887-5-simon.thoby@viveris.fr>
-References: <20210811114037.201887-1-simon.thoby@viveris.fr>
-         <20210811114037.201887-5-simon.thoby@viveris.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: vawKBUfp3dZMCLmhes_VEJFlnIaBFLUX
-X-Proofpoint-GUID: 6gxFTLeunbp4SAKkqRR_tzyQcCNpFg40
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-11_05:2021-08-11,2021-08-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 bulkscore=0 spamscore=0 impostorscore=0 adultscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 suspectscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108110108
+        Wed, 11 Aug 2021 12:51:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1628700672;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=abTUaAsyi8YEJvhYw1U65/Ux0/D8/ZAOGpT1MvTpjo8=;
+        b=CpmUCW1hfExePLQ26R67K1VwmZZS4pop+DKubuaSdq4rqs64bOWAM4attUeFc1meUG1VSA
+        aS69Lsm0ehef7RUzZMvtmySLIyJFTvKplLkQDT441SGYu8B9qPO5iaoNlJFHbaZNMnzLf4
+        y71oEZBr6uU56CMvaR0Wf87eI6dSshg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-560-xB15VZ8JOeSIkT8TECpZeg-1; Wed, 11 Aug 2021 12:51:10 -0400
+X-MC-Unique: xB15VZ8JOeSIkT8TECpZeg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 76559801AEB;
+        Wed, 11 Aug 2021 16:51:09 +0000 (UTC)
+Received: from localhost (unknown [10.22.34.142])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C47E95C25A;
+        Wed, 11 Aug 2021 16:51:08 +0000 (UTC)
+Date:   Wed, 11 Aug 2021 13:51:07 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     vt@altlinux.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH ima-evm-utils] evmctl: fix memory leak in get_password
+Message-ID: <YRP/+7XT25GbAEef@glitch>
+References: <20210810202852.236354-1-bmeneg@redhat.com>
+ <cf5349dc43b2e8efc709abcf8e1637b7da692bee.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ETNTZE9NvS0XRcA5"
+Content-Disposition: inline
+In-Reply-To: <cf5349dc43b2e8efc709abcf8e1637b7da692bee.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Simon,
 
-On Wed, 2021-08-11 at 11:40 +0000, THOBY Simon wrote:
-> +static unsigned int ima_parse_appraise_algos(char *arg)
-> +{
-> +	unsigned int res = 0;
-> +	int idx;
-> +	char *token;
-> +
-> +	while ((token = strsep(&arg, ",")) != NULL) {
-> +		idx = match_string(hash_algo_name, HASH_ALGO__LAST, token);
-> +
-> +		if (idx < 0) {
-> +			pr_err("unknown hash algorithm \"%s\"",
-> +			       token);
-> +			return 0;
+--ETNTZE9NvS0XRcA5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Previous versions of this patch ignored unknown algorithms.  If not all
-of the algorithms are defined in an older kernel, should loading the
-policy fail?   As new IMA policy features are defined, older kernels
-prevent loading newer policies with unknown features.   I hesitated to
-equate the two scenarios.
+On Wed, Aug 11, 2021 at 10:52:00AM -0400, Mimi Zohar wrote:
+> Hi Bruno,
+>=20
+> On Tue, 2021-08-10 at 17:28 -0300, Bruno Meneguele wrote:
+> > The variable "password" is not freed nor returned in case get_password()
+> > succeeds. Instead of using an intermediary variable ("pwd") for returni=
+ng
+> > the value, use the same "password" var. Issue found by Coverity scan to=
+ol.
+> >=20
+> > src/evmctl.c:2565: leaked_storage: Variable "password" going out of sco=
+pe
+> >     leaks the storage it points to.
+> >=20
+> > Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+> > ---
+> >  src/evmctl.c | 15 ++++++++++++---
+> >  1 file changed, 12 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/src/evmctl.c b/src/evmctl.c
+> > index 7a6f2021aa92..b49c7910a4a7 100644
+> > --- a/src/evmctl.c
+> > +++ b/src/evmctl.c
+> > @@ -2601,8 +2601,9 @@ static struct option opts[] =3D {
+> >  static char *get_password(void)
+> >  {
+> >  	struct termios flags, tmp_flags;
+> > -	char *password, *pwd;
+> > +	char *password;
+> >  	int passlen =3D 64;
+> > +	bool err =3D false;
+> > =20
+> >  	password =3D malloc(passlen);
+> >  	if (!password) {
+> > @@ -2622,16 +2623,24 @@ static char *get_password(void)
+> >  	}
+> > =20
+> >  	printf("PEM password: ");
+> > -	pwd =3D fgets(password, passlen, stdin);
+> > +	if (fgets(password, passlen, stdin) =3D=3D NULL) {
+> > +		perror("fgets");
+> > +		/* we still need to restore the terminal */
+> > +		err =3D true;
+> > +	}
+>=20
+> From the fgets manpage:=20
+>    fgets() returns s on success, and NULL on error
+>    or  when  end  of  file
+>    occurs while no characters have been read.=20
+>=20
 
-> +		}
-> +
-> +		/* Add the hash algorithm to the 'allowed' bitfield */
-> +		res |= (1U << idx);
+Yes, I was considering "end of file while no characters have been read"
+as an invalid password. The error message is misleading though, which
+can be fixed.
 
-This assumes that all the hash algorithms are enabled in the kernel,
-but nothing checks that they are.  In validate_hash_algo(), either the
-allowed_hashes is checked or the hash algorithm must be configured.  Do
-we really want a total separation like this?
+> >  	/* restore terminal */
+> >  	if (tcsetattr(fileno(stdin), TCSANOW, &flags) !=3D 0) {
+> >  		perror("tcsetattr");
+> > +		err =3D true;
+> > +	}
+> > +
+> > +	if (err) {
+> >  		free(password);
+> >  		return NULL;
+> >  	}
+> >=20
+> > -	return pwd;
+> > +	return password;
+>=20
+> Wouldn't a simpler fix be to test "pwd" here?
+>         if (!pwd)
+>                 free(password);
+>         return pwd;
+>=20
 
-thanks,
+The problem is on success, when 'pwd' is actually not NULL.
+With that, I can't free(password). I would need to asprintf(pwd, ...) or
+strndup(password). Because of that, I thought it would be cleaner to
+remove 'password' completely.
 
-Mimi
+Your call ... :)
 
-> +	}
-> +
-> +	return res;
-> +}
-> +
+> thanks,
+>=20
+> Mimi
+>=20
+> >  }
+> > =20
+> >  int main(int argc, char *argv[])
+>=20
+>=20
+
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
+
+--ETNTZE9NvS0XRcA5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmET//sACgkQYdRkFR+R
+okMBuQf/ZojawY/E+vhp405c/oLw3cdWhgQBzuSOZdyZf5ieR2fJdPLZINW1HwfR
+eRABVd1DIbd/+SKpOhIxPXNBjH7T/jhUeLC1Rh+25a2ZaIAhgPDr0n8g00xnoS+4
+pNvNTffIp8c8jUKTp2rylTS42gqDUkmAH2vaZQopJEyIvomVle8OmcjQeMoRsmk6
+L9v6dk7RMP7blH4qEMISc9YTxoEhJFeptuCMVN/+ioeIX3sJlyo/+KJ1tAn/4+jz
+ngfqh2aRSs9ihQiNeUwUxlz0hvnYtrQhFPu4bXh4YGzH89w8hXxP5IsC8tyGEudR
+PM+mVNIjZuNZrar7YJoMvoZrxPuhpw==
+=Hqih
+-----END PGP SIGNATURE-----
+
+--ETNTZE9NvS0XRcA5--
 
