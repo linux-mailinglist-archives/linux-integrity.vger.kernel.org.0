@@ -2,116 +2,126 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F12FA3EA8A4
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Aug 2021 18:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198263EAA45
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Aug 2021 20:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbhHLQnp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Aug 2021 12:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232796AbhHLQno (ORCPT
+        id S233714AbhHLScU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Aug 2021 14:32:20 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9116 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233517AbhHLScS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Aug 2021 12:43:44 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D622C061756;
-        Thu, 12 Aug 2021 09:43:19 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t9so14624280lfc.6;
-        Thu, 12 Aug 2021 09:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dpI49aW8bFob7ItIxFv2U2BpOItSUGPsyoYWNOaVyAM=;
-        b=ITy3S46jRabnrnRf8obgqgBSxaRunH7J78b5tKf44HwsA5Io+wfq3pbWX0JjF72bL9
-         TfAots5d8TEKprTPj6EDJDaeVsbjLkF/9d9GbQ5g+UX5B3+dJRq4EctGFonH4/bL6oBr
-         Ab7cOLWHXJUaucIEAVe8SAH0aqjjpkBGWA8PYhE6C2hSKsT4pU7FMdk+Sharq4iSFqAd
-         IRKW5mVFUwLFa41iPkaIAjmTxANe+59DHw7dia4Qn4n+G1zvTZNb7+qv3PUXMQxsDqE1
-         8N2A3175tNUroquCz1TtK1F92qc/WkZ6kINP53/3oVEm5Opia4DSm/NKQ5FihqkW4gKv
-         b6iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dpI49aW8bFob7ItIxFv2U2BpOItSUGPsyoYWNOaVyAM=;
-        b=nEsYzFK1apWNBPac1Vc5sbCmfO2Qzbg+YJq94vj6cxAJl8cJKp7D3mnEwF+Be6HZ1R
-         v/pmkFB9hEk8ly7j60i7N7SsQ+BtULtD7uMIE19F28BFR4CLVwYCLHN2HzZ23WAborNB
-         vR2nN7wnuxjnu/z8G5q6qDQ5mXIoJ1veN1Uf5yXTSZXyhV6n7q1/DusJmAIThGsP01T9
-         nEhOoz3cEs41KmOtlVgSLRchekUxw+gjutcakd4oEZ/ZiD1M7wE8hQ2X5g/YRKdE2fYo
-         9rVkPKYkiGhHDE4NFSMeySmA+yRhedHejuGDrYcxR6d9qSHGYy6dCf0XCagIhq4ijwuH
-         rJIA==
-X-Gm-Message-State: AOAM531HiAkmgPkAHK1BAAW2cNxA4zr8fhpK3pqCFP96uM1Xq5/u7Nfn
-        JoE0a9OJdcdJd3TYmMYF9r27SCKHfRCc2u5SGMc=
-X-Google-Smtp-Source: ABdhPJybcpJaSqzu5QJPDPXQ5Q8CvHZje9xGjMSbNK+CgYQobtyo0YZMiNC2i7TWnMkNZU90T1MT4WBI/78//sGZSWE=
-X-Received: by 2002:a05:6512:1183:: with SMTP id g3mr3326832lfr.130.1628786597637;
- Thu, 12 Aug 2021 09:43:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <db1c1de0-3672-4bae-ef45-c554379f36f4@omp.ru> <d97d7fdb-1676-9670-6cf5-2427f780ec6f@viveris.fr>
-In-Reply-To: <d97d7fdb-1676-9670-6cf5-2427f780ec6f@viveris.fr>
-From:   Igor Zhbanov <izh1979@gmail.com>
-Date:   Thu, 12 Aug 2021 19:43:10 +0300
-Message-ID: <CAEUiM9ObZD=miina1NsP8Ohtv=byO=33Kp2XaeF8_RB_R_uC1Q@mail.gmail.com>
-Subject: Re: [PATCH 1/1] NAX LSM: Add initial support support
-To:     THOBY Simon <Simon.THOBY@viveris.fr>
-Cc:     Igor Zhbanov <i.zhbanov@omp.ru>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 12 Aug 2021 14:32:18 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17CI3vk2086213;
+        Thu, 12 Aug 2021 14:31:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=8sKktw1/45R7QcPWdqSHJBJ4CkoUYmXGhXH+vUDVkpY=;
+ b=j4s3UqzW4JSxy+TYmjPAiF9vEol0Xp16s1glW6rPDkwpxgR5DlNEPexSWedZF/i+86iO
+ xL1OymTFL04oB3D0G8nmLJpCf5VvODoHlu86UlOUl84xQbYFQTa+6SqxiUpEsaJQt7Zb
+ RGlVB3L6HYPqF9f6MCTiXqIOkgd1FfnhEJ34QBruhfy3tDL7Cjepw1NBLelBD5kuj4tj
+ r61IM7mLoud1GAgs3qs9ip8H2ShCHFbWk8uN9dau8hHKeUu3bBwOuPPEx6MF9Kk/kTl3
+ EzI0TeaZoy+m/3tNvhhUTRyGPTxPyKB2DXmARidVPPAlBNWPHhWewRqqxYVh4CY7auZs KQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ad5sde239-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Aug 2021 14:31:50 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17CI4OGc092416;
+        Thu, 12 Aug 2021 14:31:50 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ad5sde22u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Aug 2021 14:31:50 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17CIUY9p002408;
+        Thu, 12 Aug 2021 18:31:48 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3abujqut65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Aug 2021 18:31:48 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17CIVkHC58261782
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Aug 2021 18:31:46 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F31EF4C059;
+        Thu, 12 Aug 2021 18:31:45 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A10CC4C04A;
+        Thu, 12 Aug 2021 18:31:44 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.76.214])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 12 Aug 2021 18:31:44 +0000 (GMT)
+Message-ID: <aef8a1e8cee322409ef3dc6723c7e77bc16f6b2f.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 4/5] IMA: add a policy option to restrict xattr hash
+ algorithms on appraisal
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     THOBY Simon <Simon.THOBY@viveris.fr>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
+Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Date:   Thu, 12 Aug 2021 14:31:43 -0400
+In-Reply-To: <c705ef557f40289d58ab7cbab8c2c0e7b888671e.camel@linux.ibm.com>
+References: <20210811114037.201887-1-simon.thoby@viveris.fr>
+         <20210811114037.201887-5-simon.thoby@viveris.fr>
+         <84b3a572eb5fc1ec81291656c9f9af00568bff9f.camel@linux.ibm.com>
+         <023a0ec1-aed7-9862-e0c9-a825d46ade0f@viveris.fr>
+         <c705ef557f40289d58ab7cbab8c2c0e7b888671e.camel@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Ud8vKO5Om3JBGA7-N65SfnmiwiMaRiYk
+X-Proofpoint-GUID: 6pjfSrxpYe_iRLGZkvnJvU8UyYxDXGEo
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-12_05:2021-08-12,2021-08-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 adultscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
+ definitions=main-2108120117
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 Hi Simon,
 
-Thanks for thorough review. Will post the corrected version soon.
+On Thu, 2021-08-12 at 09:16 -0400, Mimi Zohar wrote:
+> On Thu, 2021-08-12 at 08:06 +0000, THOBY Simon wrote:
 
-> > @@ -278,11 +279,11 @@ endchoice
-> >
-> >  config LSM
-> >       string "Ordered list of enabled LSMs"
-> > -     default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-> > -     default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-> > -     default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-> > -     default "landlock,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
-> > -     default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
-> > +     default "nax,landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
-> > +     default "nax,landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
-> > +     default "nax,landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
-> > +     default "nax,landlock,lockdown,yama,loadpin,safesetid,integrity,bpf" if DEFAULT_SECURITY_DAC
-> > +     default "nax,landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
->
-> I don't know the policy with regard to new LSMs, but enabling this one by default is maybe a bit violent?
-> That said, considering the default mode is SECURITY_NAX_MODE_LOG, this would just log kernel messages and
-> not break existing systems, so this shouldn't be a problem.
+> > However your comment does applies to the next patch ("IMA: introduce a new policy
+> > option func=SETXATTR_CHECK"), and we probably could restrict the algorithms referenced in
+> > ima_setxattr_allowed_hash_algorithms to ones the current kernel can use. 
+> > The easiest way to enforce this would probably be to check that when parsing 'appraise_algos'
+> > in ima_parse_appraise_algos(), we only add algorithms that are available, ignoring - or
+> > rejecting, according to the outcome of the discussion above - the other algorithms. That way,
+> > we do not have to pay the price of allocating a hash object every time validate_hash_algo() is
+> > called.
+> > 
+> > Would it be ok if I did that?
+> 
+> Without knowing and understanding all the environments in which IMA is
+> enabled (e.g. front end, back end build system), you're correct -
+> protecting the user from themselves -might not be the right answer.
+> 
+> What you suggested, above, would be the correct solution.  Perhaps post
+> that change as a separate patch, on top of this patch set, for
+> additional discussion.
 
-I've just oriended on landlock and lockdown. They are handled in the similar
-way. But, yes, by default NAX module doesn't block anything.
-If you suggest not to do that, I can remove it.
+Before posting the patch, please fix your user name and email address
+in the git configuration.  scripts/checkpatch.pl is complaining:
 
-> > +__setup("nax_mode=", setup_mode);
-> > +
-> > +static int __init setup_quiet(char *str)
-> > +{
-> > +     unsigned long val;
-> > +
-> > +     if (!locked && !kstrtoul(str, 0, &val))
-> > +             quiet = val ? 1 : 0;
->
-> The order of the kernel parameters will have an impact on NAX behavior.
->
-> "nax_mode=1 nax_locked=1" and "nax_locked=1 nax_mode=1" will end up with the same behavior.
-> in the first case the mode is enforced, in the second case it isn't (well unless you changed
->  the kernel configuration from the default) and it can't be enabled later either.
->
-> Is that desired?
+ERROR: Missing Signed-off-by: line by nominal patch author 'THOBY Simon
+<Simon.THOBY@viveris.fr>'
 
-Yes. The idea is that on boot you can set-up the proper options then block
-further changing (especially turning the module off).
-Initially it was implemented for sysctl parameters, so, you can change
-something in init-scripts, then lock. Then, I've extended it to command-line
-parameters.
-I can ignore "locked" flag in setup_* functions to defer locking to sysctl
-parsing. (Unless our command-line is glued by the bootloader from several
-parts, so we want to lock it as early as possible...).
+total: 1 errors, 0 warnings, 218 lines checked
 
-Thanks.
+thanks,
+
+Mimi
+
