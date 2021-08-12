@@ -2,124 +2,138 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F31B3EAB09
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Aug 2021 21:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFF23EAB3C
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Aug 2021 21:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231392AbhHLTdO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Aug 2021 15:33:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40366 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229607AbhHLTdO (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Aug 2021 15:33:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 146F66103E;
-        Thu, 12 Aug 2021 19:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628796768;
-        bh=lg/8arNicmC18ApageDiCyUDx1jcCzPLdyS+XQwn3PU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RElh9eQskkp0T8qjm1HbZTAQ6eLqgaXSObL33NSTZEDcoYv5+CK8ZTeMzd6nUPwp9
-         B5MAsHJcCQ5zJw8TS96FcyyYQ5qeGGGush4eYiIsH6rlzN3iOUoN0f7ASF+r7o3sEW
-         J6Q+dsRrLxnZppivTVBVOZQ5vmL7k3DJy5JFINxYDfqY/2ZS9tNpQTh+f06LoIDNKB
-         DWo5b0Obn7c46uDKV7DnIZJezgaRv8Sx/DnBbMFzemzYxy4bhlXbgX3DS8I6lUYUgh
-         gvgTMcVTDWmSxA67Iw7rg24YJkonmWmcfcF1lAxL5idevHMFYOZoDnFDeCmJIiU2kv
-         lNWgZ06EAfIOg==
-Date:   Thu, 12 Aug 2021 22:32:45 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
-        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
-        scott.branden@broadcom.com, weiyongjun1@huawei.com,
-        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
-        nramas@linux.microsoft.com, lszubowi@redhat.com,
+        id S235530AbhHLTrR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Aug 2021 15:47:17 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13726 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229601AbhHLTrR (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 12 Aug 2021 15:47:17 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17CJg770073156;
+        Thu, 12 Aug 2021 15:46:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=+b7f8kmyAbEAYIPfbVpueDbEOKVt9EAqfwZVIomWLBs=;
+ b=SQbXn9B9a5MiZQGrKoZMT/zWEPAlL5MXC/2k20PvJjujcKWFdKSiZf/g2PLAnP5cWubP
+ I/NDYojcGnYGpEhIS8f8apDZEhgLzr7ZpO9mAWphVpqOaGCybeYIHSQVr5AJOod1zhX1
+ ChFMFaty27s99dMGkhN2ZEDU3rze+XZi80OolEIr2/w2UA0u99H2FKe4E0wlJI+wDjzL
+ Qi/nt5qWv14d8ODKr2Q4YknleALToB80XjVVJ8N/lIsV11ievfuMBRMoD60CNKyJ07M0
+ CRJC/LERiVTOtY2/+tULIRxTG2Cbyp2zFh3yBqth2bNIpgw46Th/gwowuwHWYwLAuNOi kQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ad4hxt5n7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Aug 2021 15:46:17 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17CJgIxR076407;
+        Thu, 12 Aug 2021 15:46:17 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ad4hxt5me-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Aug 2021 15:46:16 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17CJc5L3017821;
+        Thu, 12 Aug 2021 19:46:15 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3acn76afb9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Aug 2021 19:46:14 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17CJkCMe48890112
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Aug 2021 19:46:12 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7484442052;
+        Thu, 12 Aug 2021 19:46:12 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9752242047;
+        Thu, 12 Aug 2021 19:46:06 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.76.214])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 12 Aug 2021 19:46:06 +0000 (GMT)
+Message-ID: <58e6e03b69b8fadfb854669086020c633837be88.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 10/14] KEYS: change link restriction for secondary to
+ also trust mok
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jarkko@kernel.org, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        torvalds@linux-foundation.org, scott.branden@broadcom.com,
+        weiyongjun1@huawei.com, nayna@linux.ibm.com, ebiggers@google.com,
+        ardb@kernel.org, nramas@linux.microsoft.com, lszubowi@redhat.com,
         linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-security-module@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
         glin@suse.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v3 04/14] integrity: add add_to_mok_keyring
-Message-ID: <20210812193245.yev4gyeuxrfwqfty@kernel.org>
+Date:   Thu, 12 Aug 2021 15:46:05 -0400
+In-Reply-To: <20210812021855.3083178-11-eric.snowberg@oracle.com>
 References: <20210812021855.3083178-1-eric.snowberg@oracle.com>
- <20210812021855.3083178-5-eric.snowberg@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210812021855.3083178-5-eric.snowberg@oracle.com>
+         <20210812021855.3083178-11-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4vvybyiNZxsZ3JHqLfIuYe8NXFawec5W
+X-Proofpoint-GUID: p2xhzbzAUj0ugUT-yhXXK5xGCmJBi_tE
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-12_06:2021-08-12,2021-08-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1015 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108120127
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 10:18:45PM -0400, Eric Snowberg wrote:
-> Add the ability to load Machine Owner Key (MOK) keys to the mok keyring.
-> If the permissions do not allow the key to be added to the mok keyring
-> this is not an error, add it to the platform keyring instead.
+Hi Eric,
 
-Should state why it isn't an error for clarity.
-
-/Jarkko
-
+On Wed, 2021-08-11 at 22:18 -0400, Eric Snowberg wrote:
+> With the introduction of the mok keyring, the end-user may choose to
+> trust Machine Owner Keys (MOK) within the kernel. If they have chosen to
+> trust them, the .mok keyring will contain these keys.  If not, the mok
+> keyring will always be empty.  Update the restriction check to allow the
+> secondary trusted keyring to also trust mok keys.
 > 
 > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 > ---
-> v1: Initial version
-> v3: Unmodified from v1
+> v3: Initial version
 > ---
->  security/integrity/integrity.h                |  4 ++++
->  .../integrity/platform_certs/mok_keyring.c    | 21 +++++++++++++++++++
->  2 files changed, 25 insertions(+)
+>  certs/system_keyring.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-> index e0e17ccba2e6..60d5c7ba05b2 100644
-> --- a/security/integrity/integrity.h
-> +++ b/security/integrity/integrity.h
-> @@ -278,9 +278,13 @@ integrity_audit_log_start(struct audit_context *ctx, gfp_t gfp_mask, int type)
->  #ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
->  void __init add_to_platform_keyring(const char *source, const void *data,
->  				    size_t len);
-> +void __init add_to_mok_keyring(const char *source, const void *data, size_t len);
->  #else
->  static inline void __init add_to_platform_keyring(const char *source,
->  						  const void *data, size_t len)
->  {
->  }
-> +void __init add_to_mok_keyring(const char *source, const void *data, size_t len)
-> +{
-> +}
->  #endif
-> diff --git a/security/integrity/platform_certs/mok_keyring.c b/security/integrity/platform_certs/mok_keyring.c
-> index fe4f2d336260..f260edac0863 100644
-> --- a/security/integrity/platform_certs/mok_keyring.c
-> +++ b/security/integrity/platform_certs/mok_keyring.c
-> @@ -21,6 +21,27 @@ static __init int mok_keyring_init(void)
->  }
->  device_initcall(mok_keyring_init);
+> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> index cb773e09ea67..8cc19a1ff051 100644
+> --- a/certs/system_keyring.c
+> +++ b/certs/system_keyring.c
+> @@ -110,7 +110,7 @@ static __init struct key_restriction *get_builtin_and_secondary_restriction(void
+>  	if (!restriction)
+>  		panic("Can't allocate secondary trusted keyring restriction\n");
 >  
-> +void __init add_to_mok_keyring(const char *source, const void *data, size_t len)
-> +{
-> +	key_perm_t perm;
-> +	int rc;
-> +
-> +	perm = (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW;
-> +	rc = integrity_load_cert(INTEGRITY_KEYRING_MOK, source, data, len, perm);
-> +
-> +	/*
-> +	 * If the mok keyring restrictions prevented the cert from loading,
-> +	 * this is not an error.  Just load it into the platform keyring
-> +	 * instead.
-> +	 */
-> +	if (rc)
-> +		rc = integrity_load_cert(INTEGRITY_KEYRING_PLATFORM, source,
-> +					 data, len, perm);
-> +
-> +	if (rc)
-> +		pr_info("Error adding keys to mok keyring %s\n", source);
-> +}
-> +
->  /*
->   * Try to load the MokListTrustedRT UEFI variable to see if we should trust
->   * the mok keys within the kernel. It is not an error if this variable
-> -- 
-> 2.18.4
-> 
-> 
+> -	restriction->check = restrict_link_by_builtin_and_secondary_trusted;
+> +	restriction->check = restrict_link_by_builtin_secondary_and_ca_trusted;
+>  
+>  	return restriction;
+>  }
+
+Not everyone needs to build a generic kernel, like the distros.  As
+previously discussed, not everyone is willing to trust the new MOK
+keyring nor the UEFI variable for enabling it.  For those environments,
+they should be able to totally disable the MOK keyring.
+
+Please define a Kconfig similar to "CONFIG_SECONDARY_TRUSTED_KEYRING"
+for MOK.  The "restriction" would be based on the new Kconfig being
+enabled.
+
+thanks,
+
+Mimi
+
