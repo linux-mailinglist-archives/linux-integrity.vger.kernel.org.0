@@ -2,126 +2,157 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 198263EAA45
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Aug 2021 20:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6A63EAA83
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Aug 2021 20:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbhHLScU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 12 Aug 2021 14:32:20 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9116 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233517AbhHLScS (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 12 Aug 2021 14:32:18 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17CI3vk2086213;
-        Thu, 12 Aug 2021 14:31:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=8sKktw1/45R7QcPWdqSHJBJ4CkoUYmXGhXH+vUDVkpY=;
- b=j4s3UqzW4JSxy+TYmjPAiF9vEol0Xp16s1glW6rPDkwpxgR5DlNEPexSWedZF/i+86iO
- xL1OymTFL04oB3D0G8nmLJpCf5VvODoHlu86UlOUl84xQbYFQTa+6SqxiUpEsaJQt7Zb
- RGlVB3L6HYPqF9f6MCTiXqIOkgd1FfnhEJ34QBruhfy3tDL7Cjepw1NBLelBD5kuj4tj
- r61IM7mLoud1GAgs3qs9ip8H2ShCHFbWk8uN9dau8hHKeUu3bBwOuPPEx6MF9Kk/kTl3
- EzI0TeaZoy+m/3tNvhhUTRyGPTxPyKB2DXmARidVPPAlBNWPHhWewRqqxYVh4CY7auZs KQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ad5sde239-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Aug 2021 14:31:50 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17CI4OGc092416;
-        Thu, 12 Aug 2021 14:31:50 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ad5sde22u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Aug 2021 14:31:50 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17CIUY9p002408;
-        Thu, 12 Aug 2021 18:31:48 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3abujqut65-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Aug 2021 18:31:48 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17CIVkHC58261782
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Aug 2021 18:31:46 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F31EF4C059;
-        Thu, 12 Aug 2021 18:31:45 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A10CC4C04A;
-        Thu, 12 Aug 2021 18:31:44 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.76.214])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 12 Aug 2021 18:31:44 +0000 (GMT)
-Message-ID: <aef8a1e8cee322409ef3dc6723c7e77bc16f6b2f.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 4/5] IMA: add a policy option to restrict xattr hash
- algorithms on appraisal
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Date:   Thu, 12 Aug 2021 14:31:43 -0400
-In-Reply-To: <c705ef557f40289d58ab7cbab8c2c0e7b888671e.camel@linux.ibm.com>
-References: <20210811114037.201887-1-simon.thoby@viveris.fr>
-         <20210811114037.201887-5-simon.thoby@viveris.fr>
-         <84b3a572eb5fc1ec81291656c9f9af00568bff9f.camel@linux.ibm.com>
-         <023a0ec1-aed7-9862-e0c9-a825d46ade0f@viveris.fr>
-         <c705ef557f40289d58ab7cbab8c2c0e7b888671e.camel@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Ud8vKO5Om3JBGA7-N65SfnmiwiMaRiYk
-X-Proofpoint-GUID: 6pjfSrxpYe_iRLGZkvnJvU8UyYxDXGEo
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-12_05:2021-08-12,2021-08-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 mlxscore=0 adultscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
- definitions=main-2108120117
+        id S234850AbhHLS7V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Aug 2021 14:59:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58258 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234588AbhHLS7V (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 12 Aug 2021 14:59:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 517E660200;
+        Thu, 12 Aug 2021 18:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628794735;
+        bh=4j5w1bAhfwL043thWwHbrt8AtOIjqKgMLpSCAvsF/DM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SimV6NQ2HUs2ObVX/JcHfnmJnp/3j54BtO9QUC53vlsO171hYCohgpZ/jyNzVJBx1
+         VB5Q/L0LsqaijM0pdpD0PuRrFY7Ag6RDTneRTCkllRi4SLN5DVdcJ2fx+Oa90AVEmr
+         glaUhxPer2JtidZrhMew0ndS1tXnEOsbJzj4IO+xYGaMGwcDENU9Q1r/NBRpe5qWs2
+         7cMp3wh7kKsiDbBb38rkyL1KG7+w0x49qc+iXeRMZBLfOPuXlNaXwoNFKQALwwMtXp
+         7gLi6TLmntoQF41tS8Z/s8UM7pqNybygnGQXtgqbyi+4jPt9yJTsb5JbtgfRXRIdY3
+         2OIt55S3DsSAw==
+Date:   Thu, 12 Aug 2021 21:58:53 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+        scott.branden@broadcom.com, weiyongjun1@huawei.com,
+        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
+        nramas@linux.microsoft.com, lszubowi@redhat.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        glin@suse.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v3 01/14] integrity: Introduce a Linux keyring for the
+ Machine Owner Key (MOK)
+Message-ID: <20210812185853.p5mgsgrftgwvt5fx@kernel.org>
+References: <20210812021855.3083178-1-eric.snowberg@oracle.com>
+ <20210812021855.3083178-2-eric.snowberg@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210812021855.3083178-2-eric.snowberg@oracle.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Simon,
-
-On Thu, 2021-08-12 at 09:16 -0400, Mimi Zohar wrote:
-> On Thu, 2021-08-12 at 08:06 +0000, THOBY Simon wrote:
-
-> > However your comment does applies to the next patch ("IMA: introduce a new policy
-> > option func=SETXATTR_CHECK"), and we probably could restrict the algorithms referenced in
-> > ima_setxattr_allowed_hash_algorithms to ones the current kernel can use. 
-> > The easiest way to enforce this would probably be to check that when parsing 'appraise_algos'
-> > in ima_parse_appraise_algos(), we only add algorithms that are available, ignoring - or
-> > rejecting, according to the outcome of the discussion above - the other algorithms. That way,
-> > we do not have to pay the price of allocating a hash object every time validate_hash_algo() is
-> > called.
-> > 
-> > Would it be ok if I did that?
+On Wed, Aug 11, 2021 at 10:18:42PM -0400, Eric Snowberg wrote:
+> Many UEFI Linux distributions boot using shim.  The UEFI shim provides
+> what is called Machine Owner Keys (MOK). Shim uses both the UEFI Secure
+> Boot DB and MOK keys to validate the next step in the boot chain.  The
+> MOK facility can be used to import user generated keys.  These keys can
+> be used to sign an end-users development kernel build.  When Linux
+> boots, both UEFI Secure Boot DB and MOK keys get loaded in the Linux
+> .platform keyring.
 > 
-> Without knowing and understanding all the environments in which IMA is
-> enabled (e.g. front end, back end build system), you're correct -
-> protecting the user from themselves -might not be the right answer.
+> Add a new Linux keyring called .mok.  This keyring shall contain just
+
+I would consider ".machine" instead. It holds MOK keys but is not a
+MOK key.
+
+> MOK keys and not the remaining keys in the platform keyring. This new
+> .mok keyring will be used in follow on patches.  Unlike keys in the
+> platform keyring, keys contained in the .mok keyring will be trusted
+> within the kernel if the end-user has chosen to do so.
 > 
-> What you suggested, above, would be the correct solution.  Perhaps post
-> that change as a separate patch, on top of this patch set, for
-> additional discussion.
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> ---
+> v1: Initial version
+> v2: Removed destory keyring code
+> v3: Unmodified from v2
+> ---
+>  security/integrity/Makefile                   |  3 ++-
+>  security/integrity/digsig.c                   |  1 +
+>  security/integrity/integrity.h                |  3 ++-
+>  .../integrity/platform_certs/mok_keyring.c    | 21 +++++++++++++++++++
+>  4 files changed, 26 insertions(+), 2 deletions(-)
+>  create mode 100644 security/integrity/platform_certs/mok_keyring.c
+> 
+> diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+> index 7ee39d66cf16..8e2e98cba1f6 100644
+> --- a/security/integrity/Makefile
+> +++ b/security/integrity/Makefile
+> @@ -9,7 +9,8 @@ integrity-y := iint.o
+>  integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
+>  integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
+>  integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
+> -integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o
+> +integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o \
+> +						  platform_certs/mok_keyring.o
+>  integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
+>  				      platform_certs/load_uefi.o \
+>  				      platform_certs/keyring_handler.o
+> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+> index 3b06a01bd0fd..e07334504ef1 100644
+> --- a/security/integrity/digsig.c
+> +++ b/security/integrity/digsig.c
+> @@ -30,6 +30,7 @@ static const char * const keyring_name[INTEGRITY_KEYRING_MAX] = {
+>  	".ima",
+>  #endif
+>  	".platform",
+> +	".mok",
+>  };
+>  
+>  #ifdef CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+> index 547425c20e11..e0e17ccba2e6 100644
+> --- a/security/integrity/integrity.h
+> +++ b/security/integrity/integrity.h
+> @@ -151,7 +151,8 @@ int integrity_kernel_read(struct file *file, loff_t offset,
+>  #define INTEGRITY_KEYRING_EVM		0
+>  #define INTEGRITY_KEYRING_IMA		1
+>  #define INTEGRITY_KEYRING_PLATFORM	2
+> -#define INTEGRITY_KEYRING_MAX		3
+> +#define INTEGRITY_KEYRING_MOK		3
+> +#define INTEGRITY_KEYRING_MAX		4
+>  
+>  extern struct dentry *integrity_dir;
+>  
+> diff --git a/security/integrity/platform_certs/mok_keyring.c b/security/integrity/platform_certs/mok_keyring.c
+> new file mode 100644
+> index 000000000000..b1ee45b77731
+> --- /dev/null
+> +++ b/security/integrity/platform_certs/mok_keyring.c
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * MOK keyring routines.
+> + *
+> + * Copyright (c) 2021, Oracle and/or its affiliates.
+> + */
+> +
+> +#include "../integrity.h"
+> +
+> +static __init int mok_keyring_init(void)
+> +{
+> +	int rc;
+> +
+> +	rc = integrity_init_keyring(INTEGRITY_KEYRING_MOK);
+> +	if (rc)
+> +		return rc;
+> +
+> +	pr_notice("MOK Keyring initialized\n");
+> +	return 0;
+> +}
+> +device_initcall(mok_keyring_init);
+> -- 
+> 2.18.4
+> 
+> 
 
-Before posting the patch, please fix your user name and email address
-in the git configuration.  scripts/checkpatch.pl is complaining:
-
-ERROR: Missing Signed-off-by: line by nominal patch author 'THOBY Simon
-<Simon.THOBY@viveris.fr>'
-
-total: 1 errors, 0 warnings, 218 lines checked
-
-thanks,
-
-Mimi
-
+/Jarkko
