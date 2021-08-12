@@ -2,185 +2,273 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5EA3E9C68
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Aug 2021 04:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C613EA049
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Aug 2021 10:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbhHLCVW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 11 Aug 2021 22:21:22 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:56774 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233780AbhHLCUm (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 11 Aug 2021 22:20:42 -0400
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17C2C0o6016211;
-        Thu, 12 Aug 2021 02:19:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2021-07-09;
- bh=oYw9rq5kRDCmTjFFvf42NeJU7vHf/fqd3JAdb9zMsO8=;
- b=uD8WN2tI53e3J0qLVFAHXF028af0Kg9a+XZEZcFr++jEyJfxizaQiyMkjvhTdupryv2A
- qFZA3/j0M0fweRfc8fgwW8LFMB61Gzd/n2v7Ioi8k148/Opg1djDQSkC9HEenBx7vz6y
- tJ/5azvzmPo9qx+NWKEKYdjjRsxTxJLvCeko5uhC6zO5rCdrdjH1Fu1W3jfo3tVE6ZBG
- APjUHtsgWjZPFgrtBwl3j68FmINZXrw+Y+Hrz+khII01CziCOsxh6oWb6B3WsER3Cmrf
- cskb+3c2LjCxxOclK2DVkV0ksRVERXax++tyEhuMkPEQ1NAS3NBXeXxHg4/c0CLQSCmu 0w== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2020-01-29;
- bh=oYw9rq5kRDCmTjFFvf42NeJU7vHf/fqd3JAdb9zMsO8=;
- b=nsYt+aFY3nBhS52sELf60nA1q5+qyKXXXr5dzyPR1V+MYLKLtzmYNpbyMtf47sQbi0UG
- gDkSa/MeYiVfKp9IqN5NmA/dirzzkSOPOwcVcP0LCzpbIzyovh7oxhm/W+ZKt1ctsY33
- bwbr3EP1iMDHOTxXZNQ1/A0FrqpA3+YqdFku4oAofAC3p4gHpNSKrFljWGDQSPS5cPCp
- 1ZeBW4qX5GVWKRlfEsClw9NXT6/EieL7QfBs+pPqbt7wlF5nGfGcWM7cgAICsEDq/vkr
- ivUP/Xekzvj4f5K8rZY5I29wwRwbi86dX+91LnSIDEow6aVhf30vgaqbq/5nsjHTnUIW VQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3abwqguqr0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Aug 2021 02:19:54 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 17C2GIHM143188;
-        Thu, 12 Aug 2021 02:19:53 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
-        by userp3030.oracle.com with ESMTP id 3abjw7j8gu-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Aug 2021 02:19:53 +0000
+        id S235075AbhHLIGy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 12 Aug 2021 04:06:54 -0400
+Received: from mail-eopbgr50121.outbound.protection.outlook.com ([40.107.5.121]:29035
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234788AbhHLIGx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 12 Aug 2021 04:06:53 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fqwviq3k7JXidmV/RBKxZ3EpJA8z0rfPFA7dNReKmav97kpa2ltGsQD2e00XbBJCyJuXa5JdbAGe46IRmxjstplizTM5DGoYKuazvdx3HXYWP44f23ZMuJUU+K9hct6K2Su6SE3Mu3+faZoDJEHdeXvfn2wTh/XZ65xUUi/JT90VnP4VR3py7s+hUY3oYnN206OWE1QFA6ZiooHmutLw7CGFFdeugf36UkPA6vkwj/O6PZfX9I4G2V0DRP6poYYE6mY0l2nYNENzi92ZAXT7XD/MtLcDLEXYY2BsLZHB09ofoobSWcLu1GnbDYzsAhTYw540K8BeikLEo5f1pMfzjw==
+ b=P2gvbSsGYZQDOJo7iFkcYjGSS1LcsT72QqjH5uZ8Fojv4DHmjvnqGptlCzR6W3+t9ls1I/J57B5MCJwVGv0Cs6dfS1SbPrhvnSzivi2MysVVNUFWYGMcWr+qlf6VpsmIfq240Lp2BMqCHyjC96UFrEPm+o3Zam0c2/nTMUzQh7FxtL0Un/SAICMb3Uq7f5PILTF/KzcAtldPgm0+CcWAT1sxjQbAee18GTn0WGbK9eX3qZJjL39pzx+fQMEFNE+wuofEvI5J1qMuoOre6WNIDV7J0tvn/EivPDheFCVrHdV1gDHjIPI7Wn7Sz2w+jVugfqs7kq9mw/zAoGVm0ONqkA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oYw9rq5kRDCmTjFFvf42NeJU7vHf/fqd3JAdb9zMsO8=;
- b=NOf6vMd5O+j6FgWdXBTKa4bV4Q1g0R3ZiroTpP5fTkrBbkuMwbl2FAzsJO/LyvtVodwYNaf4LZhyULb6aXFXp0+7czTBaZ1I2RLDJEjAAGfoZ3Mg8W5f/bN35cd2XgL0Ih5SaAOURp/GDciAebD7868wj2VI11VzelIvc8dthjBt3msZDuQ+NU+NgyX0yVVsWgGSTvueBRKd8xRSm+O02cJDYaDduFAy+emoPCsrPhVVNbNtAFSZpIpApSqjJXHZcd4yiiX8kB9cqbe7QyNL/GJMi/4Q5dsedufv1KHPOPbuDmj2qRl+xnGWzPVNYf5IdbgYBQ5pA4RBxGxQhp239g==
+ bh=SYEBOlIvbWpOvcpkEgEyyAPwBI5pJ9w1/vyNQNfoOK0=;
+ b=DtWRhINw2T2HDwJ/C3orTYt6uDe2vM05UrMUQt/O6XDP9xS7HC8VuJGzal9VTdgCRbhjFUnvSWAuBJz9VD8xrd2IPWyRT2V2sZmZjUccJYOkUn8pR9q8RxuKCZwwGwfrvBK8P5lY3f2xhi3QtaYk+IJ9MsJclfQ3mSbZ//yhxUqJ075uBuDwr4BVCkD2Xqth+aAA+GM6b/4r+u7DNz4xL8Kmd6TgjYAQY2VHHMXAGt5X1LBSSH3SJqBlVTNjmQkSwyJSkbSpdbsOAA7nD8sx9BekMX9SPWdPFXcGE4RcAT9fqQYrEBEW89gY99pNZ8FBBsZKxZgATPjaFY9UFGzX3g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+ smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
+ dkim=pass header.d=viveris.fr; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ d=viverislicensing.onmicrosoft.com;
+ s=selector2-viverislicensing-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oYw9rq5kRDCmTjFFvf42NeJU7vHf/fqd3JAdb9zMsO8=;
- b=EvjPOwOaDk/mFXY9xCmNgK6q9pEvY36Jt21DUpM4jowwcMclPXQOY/OcLTe5UcFD75rGu914nU685qv0A6PuXDtiY6JRLetrUYbzM6oCtujc5uKPW3zbVOYq+4mfuuRVXgfIFPa9tcYuMbJCqAZVf6PCYNogkn2N/Lp6NKHeMMQ=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=oracle.com;
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by CH2PR10MB3960.namprd10.prod.outlook.com (2603:10b6:610:6::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.17; Thu, 12 Aug
- 2021 02:19:48 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::bdce:cf4c:518c:fd15]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::bdce:cf4c:518c:fd15%6]) with mapi id 15.20.4394.023; Thu, 12 Aug 2021
- 02:19:48 +0000
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-To:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-        zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        jarkko@kernel.org, jmorris@namei.org, serge@hallyn.com
-Cc:     eric.snowberg@oracle.com, keescook@chromium.org,
-        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
-        scott.branden@broadcom.com, weiyongjun1@huawei.com,
-        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
-        nramas@linux.microsoft.com, lszubowi@redhat.com,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
-        glin@suse.com, konrad.wilk@oracle.com
-Subject: [PATCH v3 14/14] integrity: change ima link restriction to include mok keys
-Date:   Wed, 11 Aug 2021 22:18:55 -0400
-Message-Id: <20210812021855.3083178-15-eric.snowberg@oracle.com>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <20210812021855.3083178-1-eric.snowberg@oracle.com>
-References: <20210812021855.3083178-1-eric.snowberg@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR05CA0062.namprd05.prod.outlook.com
- (2603:10b6:a03:74::39) To CH2PR10MB4150.namprd10.prod.outlook.com
- (2603:10b6:610:ac::13)
+ bh=SYEBOlIvbWpOvcpkEgEyyAPwBI5pJ9w1/vyNQNfoOK0=;
+ b=Xd3toheeRtNN7T4+6giMZ8Nfd0BGPHw98Xf5TURsn6pPSyOp8+t/ZkawDCvCkYPM90rXKcmFzpWRGwWSJHoL+4shgymvR5vN2XIIjhtyZS+Zp0+GpPQ7+jF78XSpWLZuDr2pArh+7DOwS1+peTtSGQPWhSVnoFaSJ79b1bCFnOQ=
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ (2603:10a6:200:96::21) by AM4PR0902MB1668.eurprd09.prod.outlook.com
+ (2603:10a6:200:91::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.17; Thu, 12 Aug
+ 2021 08:06:26 +0000
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432%9]) with mapi id 15.20.4415.017; Thu, 12 Aug 2021
+ 08:06:26 +0000
+From:   THOBY Simon <Simon.THOBY@viveris.fr>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
+CC:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Subject: Re: [PATCH v7 4/5] IMA: add a policy option to restrict xattr hash
+ algorithms on appraisal
+Thread-Topic: [PATCH v7 4/5] IMA: add a policy option to restrict xattr hash
+ algorithms on appraisal
+Thread-Index: AQHXjqW6HKtkRWvTZ0yNvT6BOPuNR6tufhgAgAEGgIA=
+Date:   Thu, 12 Aug 2021 08:06:26 +0000
+Message-ID: <023a0ec1-aed7-9862-e0c9-a825d46ade0f@viveris.fr>
+References: <20210811114037.201887-1-simon.thoby@viveris.fr>
+ <20210811114037.201887-5-simon.thoby@viveris.fr>
+ <84b3a572eb5fc1ec81291656c9f9af00568bff9f.camel@linux.ibm.com>
+In-Reply-To: <84b3a572eb5fc1ec81291656c9f9af00568bff9f.camel@linux.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.ibm.com; dkim=none (message not signed)
+ header.d=none;linux.ibm.com; dmarc=none action=none header.from=viveris.fr;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1d1ba1fd-3ab1-4e3b-ac34-08d95d681543
+x-ms-traffictypediagnostic: AM4PR0902MB1668:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM4PR0902MB16688D1B5F605DEC912B944694F99@AM4PR0902MB1668.eurprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IY8w7oe0YQ7NiSVDeYIMdVvt2/dU5ZyJfbkFw3TndBXkauYk3RQyIM1zssZmec5F/d0xB1hjWQf9WpvLJvDw1aVR6ZYyeDzMALQ1I2LH9MNsfNcCwBWKgEN0TXQasCIOclzJY8SM4V8l0KKRHRMMSDE9FazcuxjncbC3xmkZgNIPMTSG6VN6YddzE40Tf/t83dI8L+gN6C+F5R4W9JZL9DcEHqc8cuE4ds5wXqgBrbrqECKypC7ieL4+uKHBvna78jbWy0v0f48gkamZRanEPsj5h2mzYv+QFxyKjqljPFSeU/MkubpR54OhgoQcJYr2UJ7ssT2Sqb++vC/8YdW2gxpgzE7Ot8ORCOebsqREkNOWNb7lTkO2nlCatotsScBd3CL41F2mTWFoVNei4TdElWwpY2cWJ9jKQhza9225X6tz/sB+BRT0gCthVQEF4bweVwqSmIXxOWDdEHalLLwp0Kv7FB6dM+FdD9yxCZTf93FTRAwHqXjs3X4y4WaXkxjamluK0ZJCGhi5Yt++eJYYLlcIaC4fuCJiK/uVHhRkwz56D+hn53bOaGvMii0BYwCLOHy3zayvL1d4NdUQhczLVnq6BomXzDcxRdGsUCC+YZkqHRWV7Jmv2nvdEDDICad52uHs5RWSbK5mXlFhxbnIOGk0pgrDVKiCezbDXp9wMpRDRagMeXu/JDblr314P9l8rZsksmMuFwZXQ3Ln9sC937fw1ORZjoqwIpjU00pNOuGlFQOEwn9EUhxCs21mJpoy
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39830400003)(396003)(136003)(376002)(366004)(5660300002)(478600001)(186003)(26005)(71200400001)(6512007)(2616005)(6506007)(53546011)(8676002)(6636002)(86362001)(31686004)(6486002)(110136005)(122000001)(66946007)(38070700005)(31696002)(36756003)(38100700002)(316002)(91956017)(4326008)(66446008)(64756008)(83380400001)(66556008)(66476007)(8936002)(76116006)(2906002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-15?Q?NasgyMjB9vfiMNFgGsYtU6KBOdk1fVkm4x711kv+KeginHBISHGIPZj3s?=
+ =?iso-8859-15?Q?AIheA6U+X6ZGU92z/Ob1/MkorbyEyeuhgauVk/oX/hEB/Co4Z1D6XGH41?=
+ =?iso-8859-15?Q?yUhM3qonV8e7UHAO44uu9d9hKBRlW0neVcAEzRL4fS+hBjJButtbd24sj?=
+ =?iso-8859-15?Q?x/7wj3JtYqxTdqF6E4Yry9L/PdkrHZmY1upKGiqejgzS8Z/IQDri6gZyX?=
+ =?iso-8859-15?Q?HhtpAqMtbXksL/dNT3ntq6c49A1nd7lpGJdy9I+gmWmnTp2TbVW66vpiq?=
+ =?iso-8859-15?Q?SbgaQRCXqpSnK6VdMaj/wTgnDZxzDZUqq+GtlsBetIcHs5uopLF2dsp+p?=
+ =?iso-8859-15?Q?u/ymvvp+77SfcmnP8EYnD8EmKxuWIZacbiPdtGf0V1z7GNFmfFglp5J7I?=
+ =?iso-8859-15?Q?SOu/DHCPfTlPHxXtebJTOJMlj3citzUAFQXsq70zelG7Kb6PWRwZ9rEap?=
+ =?iso-8859-15?Q?+q2yqQx8K+pxBDdJHdVWv+09vtNxN5kxIiIrTFEDISijin1uKHfCJNMC4?=
+ =?iso-8859-15?Q?nizB64QTy9dndK4TJJ7C/uYBkZVfwcRvM8LNqKTtQOE5TAqDMXIxhYQK0?=
+ =?iso-8859-15?Q?SSC5isSOXps5/gsHaWPygTqtRNkjwJFc6Cxx3ofA6o8WHR8eljCIK5vTF?=
+ =?iso-8859-15?Q?RWCjigjBMd4LvODQSFBO31vUxIrQVKIs4PkTRE56D+O+r2JYVorvsKwFe?=
+ =?iso-8859-15?Q?Rzwnfqf7H6UiToBddMpLiFbvZhl7KckGOB3Rr9kMQK/TIfq1vpJ3YfjYa?=
+ =?iso-8859-15?Q?GUtQzLyWmrSgR1CO1EJPdmGvfjRWGLQvyBim4sJaDqTSLtyvpEUsEh8s0?=
+ =?iso-8859-15?Q?b3rcpH+sWTkmsuiAgs1Ta6xs1ejNU+uNqDyifk+ZDE1EcC9lZafbB2JoP?=
+ =?iso-8859-15?Q?4wlfPXEnK0WQPPrRGhA7glLOGzIqRg08a53+uLjmPdmqvGfB3DO1Fz121?=
+ =?iso-8859-15?Q?hoUTMphGGfZ+sXWioMnOV2uHl5QCTt/FD/9nKorqU1R4bh6m0Awxl3iR3?=
+ =?iso-8859-15?Q?VzI0WpoJtz+2+H7ADgAjzfMPcqTf61MTgPecK9PtefsYsev43I+4EZ8wP?=
+ =?iso-8859-15?Q?GnksqWmMlIwIRXVIFFL+upJSDLtyTD1mMZ/pE/F7g6y0cIXsR6y1+6w/e?=
+ =?iso-8859-15?Q?3QkkjKAhfrsNkG0SjuphQt8bBj3Tp5sqxPxjVgbFJBt0kcNhcwNMv4Nf9?=
+ =?iso-8859-15?Q?aUALrvc6/3lI13i2PvsWMdTXbD9c9vAu0bfFr6Gk8Z58fZaOv+V1qotUl?=
+ =?iso-8859-15?Q?iqkmjlrNqZqv84vJhGpG8XFS7MlPJ6MuezFGbkPelaaKInuIjdGoq6FBh?=
+ =?iso-8859-15?Q?gJpdt/E1A0uAUZz8fLxH9IJAJyy2RykuRbG/dr1xfk+UTBFI424lkDarC?=
+ =?iso-8859-15?Q?RkgD/G7d38+H4L7FU/ekb3+ncGN4sjlUu?=
+Content-Type: text/plain; charset="iso-8859-15"
+Content-ID: <7C865876263CEB41B55A543ACA0CACB1@eurprd09.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.us.oracle.com (148.87.23.9) by BYAPR05CA0062.namprd05.prod.outlook.com (2603:10b6:a03:74::39) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.9 via Frontend Transport; Thu, 12 Aug 2021 02:19:46 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 635ad231-1862-4b52-8443-08d95d37a873
-X-MS-TrafficTypeDiagnostic: CH2PR10MB3960:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CH2PR10MB39609CF79AF53272D92737F487F99@CH2PR10MB3960.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ryY3L80Z78I7V9l4H0V9O4oauhB3NP+mw18kRYXEEDs4p+niu0Ou//rbLzUCjSzbOuw4KjPnXyYVhqrIzUgqGW8U+J6lYZxZ81LpCpzAbtDSJp1Zw6Xku65XuZ0OxJXLgSorQe6Krh8VdHCSp5N77o4nkqGXb9iC8WcuchWRVio4Dxojn62Be4keC1ejBCRaRL1vB0AGRe9mcgBalYZ3IpfrQQb2uNtZGH6ma4giGTwOGY4CYpjATCBl+OUaQkYA06+bL4BofW5nyMKv55qhX0rzvXgmAIf1OuWMD+tndREBW1iZ9h5FqlYKuOercgmZUfavnCPdG/rsDu4XhW3joMGr5QQXsiTt0GodWFQJKsZF6qLnWGMw+Uo3zbHOcJ1lqUR2272IWDXgF+UghhLuClWF/CVPy/HOPeMHO+FuS0Gw7F153YHN8C78ivXeb04ADdtH0Otk8r26xCV3lZ/iov0WffVTQoNWhQBSedAdl+LrM80yWv6l27U1nkbule3HiEIUhYR5DpFeEDlpH62UwsvsB4fdg7UQEUyVdzuGsjJmaHshpSTXal4V7VjrMVVUeSGjoRueCJm2Vl/1v3NwBBcUoSrA6879WsCjAqJkGZ/xILbR+rVnffjrFEGqpCvkuL61MdSr1k+aAb/BcRGBOoUneYnLnhFm3+9pQme4TN7STm9SKmRbK+dU3SBd6KkXQXdHV5eyrJDEzZp5fuZZCIy/47zymLzfKpszQTROLKM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39860400002)(366004)(346002)(136003)(376002)(7696005)(2616005)(38100700002)(66476007)(956004)(38350700002)(8936002)(6486002)(52116002)(66946007)(2906002)(44832011)(478600001)(316002)(36756003)(26005)(86362001)(4326008)(66556008)(921005)(83380400001)(186003)(8676002)(5660300002)(1076003)(107886003)(6666004)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E/W5j2BB7/ZoVPwx1qLKyy9ypyQtxpABGh+a5Ynm2J/l+6UbMi4TIe4sWqd4?=
- =?us-ascii?Q?eVWe0SCQDEy+RqrW5T1vBvZ86KlYAP9uccXG2Y089g0Ac+snp64EWT547g5f?=
- =?us-ascii?Q?Lwsxzyx8fnk771SPvPzqopC0HvnVetvNJD1bUT7u+I7s0uUOSjt5s7NJIQvn?=
- =?us-ascii?Q?a/5tZzb6OV3Xa9l3a7KeaPaiGeTUzMexg1VIKbS2zKEbWTljPbst4eGlX1WN?=
- =?us-ascii?Q?DDDkQMJGNYdiyzTPmKA/1okRl1E2LnC6iU7AT89zGRNMgvjcOo0xWqtkmuoj?=
- =?us-ascii?Q?NVO5QodQITjqbkyPAwdqhaW4KXMy18C28+6r/4ee+bOdunyeKwPHWKl+CFQJ?=
- =?us-ascii?Q?sLm39h56pjR1oSKqjJwnnSOVnMFKZk3Fmb5zQpHOEjLUSTPFFIi7dsA7E/EN?=
- =?us-ascii?Q?zcZ0XK10zhJxvkV7XorFESKCjGiYBShHV1As6QAZGa4kfJu3ZuQkxwYDoQrK?=
- =?us-ascii?Q?8HES28YqrirlKXaOKzP+Oz7xPi5as3xJtB49CwyYh9yq4QFG+YbHPPF+I1e4?=
- =?us-ascii?Q?GStorAWfFPItcXZzmERL3PTaj02Kk6RNH3swanxfJP9B75zvtDcDUIm82kaI?=
- =?us-ascii?Q?zmfK5XOd0sKz3d/yUILCmb3icb4dbH8yBCwk1ItCLOiGDUwJBep/rKX6sDo+?=
- =?us-ascii?Q?Gram1TvRQKXpPp07pAdA9tvnDP34f/NufzJrrIu2Z1kkk89N2c2C8Bh5DcK/?=
- =?us-ascii?Q?XALy9aX9cLffiYGsBcE0m9cuLJVUgIl2RGEPQSlQDQTPIM23rsnYtbMvSwlw?=
- =?us-ascii?Q?s5FmaZif6I5Kl+2gFjIWn1JtNryWCaUs86Z0zkwKrB3BdDsOKAUoAdqxzMZ3?=
- =?us-ascii?Q?M4XOlFXQBDmXN96SKAldiTpIDGeyebIHPjhm00M9Tgg2OyP2eZCNGxpv70TW?=
- =?us-ascii?Q?r7CLsrIyt3z88ipuwJ1AO6m7lv5Q1yQHN+9Hec91e/9eZnSu7DoIPBoX/bX6?=
- =?us-ascii?Q?Aqq+5gtB9yW2XrKMtFc1pEgGY8yt3EF8gPWw3gikkbXc1It8Bq4Fak9PUHiZ?=
- =?us-ascii?Q?IKeqBUOiqRdPrC6TRASslKdP7WRIyAtXCOLAYmFkayLOm997X1N+HmpzoFIZ?=
- =?us-ascii?Q?BxHCQD1p1EegwIEP21Kx6NTuKGvceU40MJdIJaDdWlyoYvZ/+gw230wn65mO?=
- =?us-ascii?Q?NOyuvZtq0uth0jlawulNDsahF+S5E/FqGy4eHgU2RRCdy/5vK3SaetRZR9OW?=
- =?us-ascii?Q?pq/YjlGLirM525Ayp3jPiGWZNwJ/ZV3kCZ4DgHnvovyvEQM8GIEvf/cBx5Nd?=
- =?us-ascii?Q?7vo4cAMqtpFGVVipSV0623Dy3BZ62Z1e6ZZ4Oorbl/RN1xunn1jtynHatIWz?=
- =?us-ascii?Q?ERs5mkzbSxfiy9XdgCx0qS/r?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 635ad231-1862-4b52-8443-08d95d37a873
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
+X-OriginatorOrg: viveris.fr
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2021 02:19:48.2015
+X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d1ba1fd-3ab1-4e3b-ac34-08d95d681543
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2021 08:06:26.3084
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ncDmECj7+KH/CLedqbgXeDN9qu5NDkhgAQOlbZqfp/binIsMBc92dYT7Lyeh2yjlYoB6aldN4Rim/YTfcudsWSgs+HQtBlaZG4SCb1Js9iY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB3960
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10073 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- malwarescore=0 phishscore=0 bulkscore=0 suspectscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108120013
-X-Proofpoint-ORIG-GUID: n0hbztuBF9QMKC48Ejok5joQfzd3Mv4D
-X-Proofpoint-GUID: n0hbztuBF9QMKC48Ejok5joQfzd3Mv4D
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zY+bxQ9n0bNpglsrWrJPT1uZRHVJp0vtf289e6uXX6ZYDrAmm6XXWuP1CH16WxYjIBJUZ1VFlNUBczsWaLbkbg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR0902MB1668
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-With the introduction of the mok keyring, the end-user may choose to
-trust Machine Owner Keys (MOK) within the kernel. If they have chosen to
-trust them, the .mok keyring will contain these keys.  If not, the mok
-keyring will always be empty.  Update the restriction check to allow the
-ima keyring to also trust mok keys when the secondary keyring is also
-trusted.
+Hi Mimi,
 
-Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
----
-v3: Initial version
----
- security/integrity/digsig.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-index 996bea950972..1419ff4fc2b9 100644
---- a/security/integrity/digsig.c
-+++ b/security/integrity/digsig.c
-@@ -34,7 +34,7 @@ static const char * const keyring_name[INTEGRITY_KEYRING_MAX] = {
- };
- 
- #ifdef CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
--#define restrict_link_to_ima restrict_link_by_builtin_and_secondary_trusted
-+#define restrict_link_to_ima restrict_link_by_builtin_secondary_and_ca_trusted
- #else
- #define restrict_link_to_ima restrict_link_by_builtin_trusted
- #endif
--- 
-2.18.4
+On 8/11/21 6:26 PM, Mimi Zohar wrote:
+> Hi Simon,
+>=20
+> On Wed, 2021-08-11 at 11:40 +0000, THOBY Simon wrote:
+>> +static unsigned int ima_parse_appraise_algos(char *arg)
+>> +{
+>> +	unsigned int res =3D 0;
+>> +	int idx;
+>> +	char *token;
+>> +
+>> +	while ((token =3D strsep(&arg, ",")) !=3D NULL) {
+>> +		idx =3D match_string(hash_algo_name, HASH_ALGO__LAST, token);
+>> +
+>> +		if (idx < 0) {
+>> +			pr_err("unknown hash algorithm \"%s\"",
+>> +			       token);
+>> +			return 0;
+>=20
+> Previous versions of this patch ignored unknown algorithms.  If not all
+> of the algorithms are defined in an older kernel, should loading the
+> policy fail?   As new IMA policy features are defined, older kernels
+> prevent loading newer policies with unknown features.   I hesitated to
+> equate the two scenarios.
 
+Yes, that choice isn't easy. I changed the behavior in response to Lakshmi'=
+s
+remark on v6. It's true that failing to load the policy on an old kernel be=
+cause
+of an unknown algorithm is not very desirable, but loading a partial policy=
+ may
+be worse.
+
+As an exampe, if we load the policy rule
+	appraise func=3DBPRM_CHECK fowner=3D0 appraise_algos=3Dsha256,<new_algo>
+in a version of the kernel that doesn't know about <new_algo>, a permissive=
+ interpretation
+would yield
+	appraise func=3DBPRM_CHECK fowner=3D0 appraise_algos=3Dsha256.
+Now if the the system files were already hashes with <new_algo>, then the u=
+ser is in
+for a world of pain as the system can't boot (trying to appraise every exec=
+utable root
+owns - that is, pretty much all of them - will fail).
+Admittedly, if the kernel doesn't know about <new_algo>, there is little ch=
+ances the
+filesystem was protected with that algorithm, unless the user did migrate t=
+o <new_algo>
+at some point and is now trying to rollback to an older kernel for some rea=
+son.
+So I think that remains a very niche issue.
+
+
+On the other hand, rejecting the policy protects against typos and human er=
+rors
+(while trying this patch, I once wrote 'appraise [...] appraise_hashes=3Dsh=
+a256,sha384;sha512'
+which was accepted and silently updated to 'appraise [...] appraise_hashes=
+=3Dsha256',
+and I didn't understood my error until trying to launch a command and being=
+ greeted with the
+infamous "Permission denied". Had I been monitoring the kernel log, I would=
+ have seen the error
+right away, but as the policy was accepted I assumed it did what I expected=
+ and didn't thought
+any more of it until seeing failures).
+It is also more consistent, as I think it is a desirable feature to know wh=
+en writing a policy
+to the kernel that reading it back will return the exact same policy, modul=
+o the order of the
+fields in the policy rules. Ignoring unknown algorithms breaks that behavio=
+r.
+
+
+Additionally, I don't think digest algorithms are added very frequently to =
+the
+kernel (or else the list would be much longer), which mitigate the potentia=
+l impact
+of either solution.
+
+
+After some thought, I am personally inclined to prefer strict checking, as =
+I think failing fast
+and early can save great ordeals later. Of course it's not always easy in t=
+he case of the kernel,
+where failure is not an option except in some rare catastrophic situations.=
+ But as rejecting
+invalid algorithms is coherent with the IMA behavior with regard to new fea=
+tures, and rejecting
+a policy cannot break a system (although it definitely reduces the trust yo=
+u can have in the
+integrity of the system), I think that's an acceptable behavior.
+
+>=20
+>> +		}
+>> +
+>> +		/* Add the hash algorithm to the 'allowed' bitfield */
+>> +		res |=3D (1U << idx);
+>=20
+> This assumes that all the hash algorithms are enabled in the kernel,
+> but nothing checks that they are.  In validate_hash_algo(), either the
+> allowed_hashes is checked or the hash algorithm must be configured.  Do
+> we really want a total separation like this?
+
+I kind of assumed that if the user allowlist some algorithms with 'appraise=
+_algos', he is basically
+saying "I know what I'm doing, trust these values", and thus these values t=
+ake precedence on
+the algorithms compiled in the kernel.
+
+In addition, validate_hash_algo() is only ever used for setxattr, not for a=
+ppraisal
+(which is the subject of this specific patch). If a user try to run a file =
+appraised
+with an algorithm not present in the kernel, ima_collect_measurement() woul=
+d fail
+before we even checked that the algorithm is in the allowlist (process_meas=
+urement()->
+ima_collect_measurement()->ima_calc_file_hash()->ima_calc_file_ahash()->ima=
+_alloc_atfm(<algo>)
+would fail and log an error message like "Can not allocate <algo> (reason: =
+<result>)").
+So that check is already done "for free" on appraisal.
+
+However your comment does applies to the next patch ("IMA: introduce a new =
+policy
+option func=3DSETXATTR_CHECK"), and we probably could restrict the algorith=
+ms referenced in
+ima_setxattr_allowed_hash_algorithms to ones the current kernel can use.=20
+The easiest way to enforce this would probably be to check that when parsin=
+g 'appraise_algos'
+in ima_parse_appraise_algos(), we only add algorithms that are available, i=
+gnoring - or
+rejecting, according to the outcome of the discussion above - the other alg=
+orithms. That way,
+we do not have to pay the price of allocating a hash object every time vali=
+date_hash_algo() is
+called.
+
+Would it be ok if I did that?
+
+>=20
+> thanks,
+>=20
+> Mimi
+>=20
+>> +	}
+>> +
+>> +	return res;
+>> +}
+>> +
+>=20
+
+Thanks,
+Simon=
