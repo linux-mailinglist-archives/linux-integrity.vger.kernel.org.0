@@ -2,116 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 955533EB5C1
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Aug 2021 14:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A890E3EBC0D
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Aug 2021 20:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240145AbhHMMt4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 13 Aug 2021 08:49:56 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51828 "EHLO
+        id S233186AbhHMS1x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 13 Aug 2021 14:27:53 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9620 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233416AbhHMMty (ORCPT
+        by vger.kernel.org with ESMTP id S232611AbhHMS1w (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 13 Aug 2021 08:49:54 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17DCYCKF012761;
-        Fri, 13 Aug 2021 08:49:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=X5EXgJBe9+qe/QnI6njLMHkTVJ+e7ODl3/1nShklDsE=;
- b=gtkU4cTpiOJaC6SpkyUzcLOf4s7UQn3QNR5oAYyyFGtguBk/DvW9Q/oixHP+5yQTtLVX
- wWMRT73Atukq+hhyVHJT1dM/GD549+KO8e9rtdAA5v9DuGXST5AUaFdt0Z4YJpik4c3v
- vH4i5d+MhhHNZTtvwG/8nXa/Ft7CJ7/n5iO7YZ3CLIEAjjnk1+bdizN+sprdlyWKeDn9
- waXrNnQH9o2Z2zq4e0cbpDBmV3xXnKAKkAkHcgqR+1btWLW114YETiNTAEIekraM9eKu
- l/i5q9x08D2GDvLWtY6TVBiA3IrfWgcgBQZIXL7JjERQdwBUQV7OX/2jP7wVSrhf6PgM 5Q== 
+        Fri, 13 Aug 2021 14:27:52 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17DI3jOQ042063;
+        Fri, 13 Aug 2021 14:26:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=j1lczph9q4hxdvWvkJjwrPNCN+2CWHiDAOVh9v5sYiU=;
+ b=F1+hlBD2gBPPNoUXcTiipWWtJWpJU6FA9KmkHDnQOfBVoCgwR2Gvxv0+7AkkSRL9NLFb
+ IuJ4dAHIwl9hU6p2JZ9DKch49Qulh294Gwyy7a7ilsJyADL90YH1lcmLlXD/4gvvNNwR
+ RXvrl+7pTe27FIpzGMwC1DqD22gyKtJU/wF5/gTs6ux1Pxjfe7IVF6mLjqA6Iu53yZ7q
+ 5mfElFskMjqkkkLE/zBIazGY6BhvHp6ivganzgDRCP1gPbuBMmL6UOMLP9po7E1W9/lE
+ Q+s9FxubEmUypH5IIDwBtCWissidvLRObSxaa7VoV8Ap1VEMey3qVFtynTWRNk6ySgVt CA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ad1ky631y-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3adsf3yww9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Aug 2021 08:49:26 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17DCYDMt012849;
-        Fri, 13 Aug 2021 08:49:26 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ad1ky631d-1
+        Fri, 13 Aug 2021 14:26:26 -0400
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17DI3lvf042231;
+        Fri, 13 Aug 2021 14:26:26 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3adsf3ywvr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Aug 2021 08:49:26 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17DClmZG021478;
-        Fri, 13 Aug 2021 12:49:23 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ad4kqhmd3-1
+        Fri, 13 Aug 2021 14:26:26 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17DIJkBu001449;
+        Fri, 13 Aug 2021 18:26:24 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma01dal.us.ibm.com with ESMTP id 3ackhs8q50-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 13 Aug 2021 12:49:23 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17DCnL8g55706040
+        Fri, 13 Aug 2021 18:26:24 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17DIQM5i30343530
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Aug 2021 12:49:21 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D065AE051;
-        Fri, 13 Aug 2021 12:49:21 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EFB2CAE04D;
-        Fri, 13 Aug 2021 12:49:19 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.21.129])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 13 Aug 2021 12:49:19 +0000 (GMT)
-Message-ID: <2ad7cb6361efafabc803555135fe299017eba07a.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 4/5] IMA: add a policy option to restrict xattr hash
- algorithms on appraisal
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Date:   Fri, 13 Aug 2021 08:49:18 -0400
-In-Reply-To: <b7cd3e6d-a23d-177b-5a6b-fb81d9bca4aa@viveris.fr>
-References: <20210811114037.201887-1-simon.thoby@viveris.fr>
-         <20210811114037.201887-5-simon.thoby@viveris.fr>
-         <84b3a572eb5fc1ec81291656c9f9af00568bff9f.camel@linux.ibm.com>
-         <023a0ec1-aed7-9862-e0c9-a825d46ade0f@viveris.fr>
-         <c705ef557f40289d58ab7cbab8c2c0e7b888671e.camel@linux.ibm.com>
-         <aef8a1e8cee322409ef3dc6723c7e77bc16f6b2f.camel@linux.ibm.com>
-         <b7cd3e6d-a23d-177b-5a6b-fb81d9bca4aa@viveris.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Fri, 13 Aug 2021 18:26:22 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38BE8112061;
+        Fri, 13 Aug 2021 18:26:22 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 745E3112062;
+        Fri, 13 Aug 2021 18:26:19 +0000 (GMT)
+Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com (unknown [9.211.76.133])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 13 Aug 2021 18:26:19 +0000 (GMT)
+Subject: Re: [PATCH v3 01/14] integrity: Introduce a Linux keyring for the
+ Machine Owner Key (MOK)
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Mimi Zohar <zohar@linux.ibm.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jmorris@namei.org, serge@hallyn.com,
+        keescook@chromium.org, gregkh@linuxfoundation.org,
+        torvalds@linux-foundation.org, scott.branden@broadcom.com,
+        weiyongjun1@huawei.com, nayna@linux.ibm.com, ebiggers@google.com,
+        ardb@kernel.org, nramas@linux.microsoft.com, lszubowi@redhat.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        glin@suse.com, konrad.wilk@oracle.com
+References: <20210812021855.3083178-1-eric.snowberg@oracle.com>
+ <20210812021855.3083178-2-eric.snowberg@oracle.com>
+ <20210812185853.p5mgsgrftgwvt5fx@kernel.org>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+Message-ID: <a3d7ce08-47e8-7287-772d-f7e789c47449@linux.vnet.ibm.com>
+Date:   Fri, 13 Aug 2021 14:26:18 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <20210812185853.p5mgsgrftgwvt5fx@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1JCoph6Zl-o_eK1bDcVbq5x-iXolkHwg
-X-Proofpoint-ORIG-GUID: lBN6iQrZX7fynXri3vuCdUYm0u6wPnm3
+X-Proofpoint-ORIG-GUID: NtaYsAueNdNnB6kwL7VEQdE3reAq6bwi
+X-Proofpoint-GUID: 33tuCCwIGg_cW1kX4YoburxLjhDz1bfR
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-13_04:2021-08-12,2021-08-13 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 mlxscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 phishscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108130076
+ definitions=2021-08-13_06:2021-08-13,2021-08-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ priorityscore=1501 phishscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
+ definitions=main-2108130107
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2021-08-13 at 07:17 +0000, THOBY Simon wrote:
-> On 8/12/21 8:31 PM, Mimi Zohar wrote:
-> > Before posting the patch, please fix your user name and email address
-> > in the git configuration.  scripts/checkpatch.pl is complaining:
-> > 
-> > ERROR: Missing Signed-off-by: line by nominal patch author 'THOBY Simon
-> > <Simon.THOBY@viveris.fr>'
-> 
-> > 
-> > total: 1 errors, 0 warnings, 218 lines checked
-> 
-> I guess Microsoft Exchange strikes again :/
-> On my end, the patches have the correct 'From: Simon Thoby <simon.thoby@viveris.fr>'
-> header, but it seems Outlook likes to rewrite headers to match my Microsoft work account
-> information. I will update my git config, as I can't edit the name and email of the corporate
-> account.
-> Sorry about that.
 
-If commit 48ca2d8ac8a1 ("checkpatch: add new warnings to author signoff
-checks") wasn't case sensitive, it would have flagged  "<
-simon.thoby@viveris.fr>" as a warning, not an error.
+On 8/12/21 2:58 PM, Jarkko Sakkinen wrote:
+> On Wed, Aug 11, 2021 at 10:18:42PM -0400, Eric Snowberg wrote:
+>> Many UEFI Linux distributions boot using shim.  The UEFI shim provides
+>> what is called Machine Owner Keys (MOK). Shim uses both the UEFI Secure
+>> Boot DB and MOK keys to validate the next step in the boot chain.  The
+>> MOK facility can be used to import user generated keys.  These keys can
+>> be used to sign an end-users development kernel build.  When Linux
+>> boots, both UEFI Secure Boot DB and MOK keys get loaded in the Linux
+>> .platform keyring.
+>>
+>> Add a new Linux keyring called .mok.  This keyring shall contain just
+> I would consider ".machine" instead. It holds MOK keys but is not a
+> MOK key.
 
-Mimi
+I agree with changing the name.
+
+I believe the underlying source from where CA keys are loaded might vary 
+based on the architecture (".mok" is UEFI specific.). The key part is 
+that this new keyring should contain only CA keys which can be later 
+used to vouch for user keys loaded onto IMA or secondary keyring at 
+runtime. It would be good to have a "ca" in the name, like .xxxx-ca, 
+where xxxx can be machine, owner, or system. I prefer .system-ca.
+
+Thanks & Regards,
+
+      - Nayna
 
