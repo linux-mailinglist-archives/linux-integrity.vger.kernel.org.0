@@ -2,23 +2,23 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E06CB3ED005
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Aug 2021 10:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A173ED006
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Aug 2021 10:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbhHPILj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Aug 2021 04:11:39 -0400
+        id S234758AbhHPILk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Aug 2021 04:11:40 -0400
 Received: from mail-vi1eur05on2111.outbound.protection.outlook.com ([40.107.21.111]:26208
         "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234732AbhHPILi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Aug 2021 04:11:38 -0400
+        id S234704AbhHPILj (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 16 Aug 2021 04:11:39 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AUhvNLb10vNO2RBOSbAp4U/65DedL9GB/Q50ZbWmFvp/ekb6ayMKJ0BLpVg6ro2ALuS2Fu6LXE/J66RyMwE7sQFQ1/vng6afj2rUwS0yvDaT00ybm5cX7s1vpO0NRo0arh7xifP/9N+7S+5e7YKCdbV7E6wyQDDSakfP1L7vQ4sxd9f77woO7tPF7uXUj17Oaa+6iRv0xNJU24+3EIFw7hN+MPsS5AkABaDTyeryoVUCQGvVLxPvuhnY3prAqaD5Q6MedZFxLqHOvssjRE5zoubh3GpLYQoczIehQLUPy75p+LKXYHwTcNa3NpKOV1RV7RL3d2rZgTwKt6WsvQoYVA==
+ b=fL41Pnz8yw+LUv5MnZ9+srW9PVx7ks9l7LRNlGldk2wzdmLm6E+ivDI218d1nXQxokNeIp3PYd2i0Bb/YC+hkjGFc6F1892lNHf2GdCPw04JxO5YA49CGIubYWEv/JZexIubxsnWZpeFtp2rdfEpVDdHN/ygUzZje/wCi7jfi6GQcLXTpAIq5eTvjneyyB2LKIYmTc+mdzCGuwb7wbOCUGEBW0LGlMYCWWf0aKFe50m0k8C48ovBHEzetBGLtkYnmDUdru8cMSBoNa2sLZw1htt+7/cg4jKq27oVks7ZLq3L/+nMHV+GOM5AUYxATbmlhXeFQSuUHQdQnA2BNNe5Qw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kk/3jL92HL9n1OuBzAAE4njqjN5OcAzPX5Z+turhasY=;
- b=jvM/lP66uFAdb0HePEO6Uh7Js65X/oQ/jpQ/S1xGcnFXV30j2wSEovpCGUshF11X9aDiYIlVvMTYociMTt6Vvc1VxWuIwDd5AEU6tZycAcd2wq9Rc0XeECvXAHC+gE8LME2YnN/Fdj8irqHPw1xpNK7UENC5ZKbyxdXj8+yBBYp1JfUgKLaiG2I3lUJSBlBrxV14o18d+w0eSdptiwuVCglHcU7l+jMWnJW1ztnjq6p8POZzilBHsMsNi6y5i5mAAx8mjfFSHjMDuROZ9rDHK644ClNyWfwsHvcnPAcZdkYrnZImbdCKR8GHlY1Bwr9ovjUZ9KlSAAKqemp+mKZogw==
+ bh=WmZZhlsKUy93m5WtPgq/nUZ4Rosq2q0dDgKN6fYOsFc=;
+ b=OqBzKLRaRpVqe2pgZMWNI3y7uYpRi7nO8aTOqU8RBCoKJGJHkk0n4/avWjl3+9FbdwV+wq+L0Ag3iTeHq36RlQplEvsCB+KYyUYM1ONroFt/pFaBLpyHnNxpf46PzXJ4JMF6i+wPWaLQXVE1DpIlOd0ITLD+tp9G7hSo6pg0pMVZBB7BNUn/rh6u6/pMuUaFwsjcN0iAJJu+d4yXAxKaqbLM5w0D1TJdJbedUXvgqnfu3xldQx8kSA49sg4yNHtgMG7RX3g6kjv8iQemlPxbW6VTFQBx1JW+qi8Dd5g26xagai+OkpGDvybTZfjoMLRYoJHJKvEwwg2vlz2soVjC7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
  dkim=pass header.d=viveris.fr; arc=none
@@ -26,8 +26,8 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=viverislicensing.onmicrosoft.com;
  s=selector2-viverislicensing-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kk/3jL92HL9n1OuBzAAE4njqjN5OcAzPX5Z+turhasY=;
- b=C9zspP5jXjx+IOncOtE13T6nimjLucUC1n5Fjc3Q2/7YWlKYDLyRSR099LAR/C9Wev8nijnVBgsF7ToGUfAQjMK+Ci1CSHDGM3FTqc7+lP5WkOLNHbipd3uE3MVWCp7Pe2AvezTITOBWxpMxbKSabaeb8lWuRsm/7Sl+uSJ2dmk=
+ bh=WmZZhlsKUy93m5WtPgq/nUZ4Rosq2q0dDgKN6fYOsFc=;
+ b=QqH++PQ5Ry2ZH5fo912LHV3mq9tm6GIevBi7uURJb+rnyxg7ACGDd4OquegVBtQ4M1cCVKQXDGDnwQrQDlPvoTWGuXH8JRtZYdCU8GfLeBM+OcHkr96P5RJ+RcwDN2Cn3MrWaaKLSeNqJMUL6xewmkQZnY8Ym72cCHN3KiUcsYw=
 Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
  (2603:10a6:200:96::21) by AM9PR09MB4516.eurprd09.prod.outlook.com
  (2603:10a6:20b:2d7::24) with Microsoft SMTP Server (version=TLS1_2,
@@ -44,13 +44,12 @@ To:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         BARVAUX Didier <Didier.BARVAUX@viveris.fr>
 CC:     THOBY Simon <Simon.THOBY@viveris.fr>,
         Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Subject: [PATCH v8 4/6] IMA: add a policy option to restrict xattr hash
- algorithms on appraisal
-Thread-Topic: [PATCH v8 4/6] IMA: add a policy option to restrict xattr hash
- algorithms on appraisal
-Thread-Index: AQHXknZA2tcwmmdQXE+MM5n+bbjdmw==
-Date:   Mon, 16 Aug 2021 08:11:00 +0000
-Message-ID: <20210816081056.24530-5-Simon.THOBY@viveris.fr>
+Subject: [PATCH v8 5/6] IMA: introduce a new policy option func=SETXATTR_CHECK
+Thread-Topic: [PATCH v8 5/6] IMA: introduce a new policy option
+ func=SETXATTR_CHECK
+Thread-Index: AQHXknZAR6uR7Q5bV0CCsygEkBMiMA==
+Date:   Mon, 16 Aug 2021 08:11:01 +0000
+Message-ID: <20210816081056.24530-6-Simon.THOBY@viveris.fr>
 References: <20210816081056.24530-1-Simon.THOBY@viveris.fr>
 In-Reply-To: <20210816081056.24530-1-Simon.THOBY@viveris.fr>
 Accept-Language: fr-FR, en-US
@@ -60,262 +59,349 @@ X-MS-TNEF-Correlator:
 authentication-results: linux.ibm.com; dkim=none (message not signed)
  header.d=none;linux.ibm.com; dmarc=none action=none header.from=viveris.fr;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d181221c-e2c5-4ca8-66a7-08d9608d6294
+x-ms-office365-filtering-correlation-id: f8d06bf1-ec98-4eac-1df1-08d9608d62ea
 x-ms-traffictypediagnostic: AM9PR09MB4516:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM9PR09MB451665A50236A4F91F7C996F94FD9@AM9PR09MB4516.eurprd09.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1824;
+x-microsoft-antispam-prvs: <AM9PR09MB4516C0A7AE5AFC229F3D8DCA94FD9@AM9PR09MB4516.eurprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uIWVmpyr2/5zG3oIG5bhzfNF0El5r8X06EEcOx63o89hQNHTQ8Fetjqx+9TnD2F9iIGgoIyrup43YU5KRT7JSpVIPYpAOuR7XRaeNPKbfQuQE4BwYe3mY3jjpgB3teDpX+Niyak7c+yTKrrXfvCZlLOjDvXWbHksJkOIU5BpxtnICeusPUDnI/IUY47cxrgtIa39mDQwehJGuPy2neXWJflLnextg8s3T7xJ0XUP1JuSut8y7I6iM2Sd2ovBrRYH/ZIWjsiHDpc37OXj55gFw3rOyR4LKfWSILWZ0lsmkhR4h+GU/EnGUczc14AhCc8EB+uoCU80h48TpcW0lcHTE8JCl14JkmBudphpFcbyVF/6U0ViFAWUyw3nvP7u32rTz9Uu+01gGXFCBz4nqBMj5jOPtJ4B0ow7zB2l28NqWj/0Uuc/puBsMkMi6PQQ0KCLkIWC4CqrRgWEJ+13BwP7UvqJJI2eLNYvEPd5Enq/ynSwqZZmlKGQkTq91PhFgccp2Al82Ywuc+YKjc+Xg3sXsCki5fidFdHcKqmHwk4XCh4VVhWJC2/E7E3Lfu7eDAgoakXED9vmExtWh5oieWXDFV5bjk9XW+tq6uZRI7z/M9PzX6cf3X9CkmKNNrfCErn+R2gC8/vBaNACpCiBS+ed2nwpQVvph+8hCONBVwDTIsGE8m5SuQJ2KbZ08Kk6otKosemYDKtfaVTRjAUMGugSyg==
+x-microsoft-antispam-message-info: O/xi4/ejcATSULFokcJuwu5gy4lGI0FlZL5v3rHhRqYiYfiZQTuRQD9MscCx0qYHFrDKVNs7qNzwx4Xx4EQK9Ak5du28R8MuKs6Cyb7AYI6ZDUP+sbhWCLuml1g99bRinMSS/WRas6Hrr4fW1DvcpM694LbWoH4Bmyi2O+3AzHDY4SeQJrd597QzPAEpmHzreaKPCNK3NNjtAlZASgOfSVqHe8GFEkfhEhqsUi8bMv+LHmZ4LqAH4kO0bcyh9Qtr2zcBkQGOmssSauIG4rdyYh7DUye1cVbQrjXzw5qdEArWR+xLIaJyk6ciOfDGrWtSJ5usBnAjY/iblPvoQUCwk/IbPmsEYhZkfOA1l65xrm4f5THr0/duoSzr33EX4JsT4XcMSfkcbrvXJYgg53+HnZ66I4k7Zdswnq370GhL10/n4wW2hhn9SUwNOiUP7Z7r1sUN469l8CSLtO16v9FljprlVLN6Q85/4SlY0sxEhbqKy/oGQ1eMtAEr8JGSfkrJjmtqeSimEenpFvOFtF/Yd/Y+zrYb2zFqOEUjOVuIfBrxENbFXIQ9cJ9K4m8V3sjEL6RsUDiGJsWKOQiBlP0kmShlXgkoMlr1guY0UVdGJJX0iLp332xN6ZdBPg3C6GEn2YUx+lDRCl/4LvvvaRBOcSSbNszsQxMwulPV3SBo7EmkeLnBYqFCScG2Rp6RTvsx+wxRij/xXJbnPLrropwY/Q==
 x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6512007)(71200400001)(6636002)(2616005)(122000001)(83380400001)(6486002)(36756003)(38100700002)(66446008)(8936002)(4326008)(110136005)(26005)(66946007)(1076003)(2906002)(5660300002)(508600001)(6506007)(8676002)(54906003)(186003)(38070700005)(86362001)(66556008)(316002)(76116006)(91956017)(66476007)(64756008);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?m7fYdSXI78VvMrPDsc/u/CYPt1RKz/NjiDeIanFY04pGfnmccQTJCv9RqB?=
- =?iso-8859-1?Q?AKUApJuYsUiUkQwlMeKWAaWhJqwX0J/hFdtQcKkr7QPJT0VvLGWTqYIWiy?=
- =?iso-8859-1?Q?MHAuEYMkdyCumb3tO7M06p6G2KG8TqfAbPnsG4uVuC+BQEOxKHw0ha6HzB?=
- =?iso-8859-1?Q?5TjpAgVSTs/eecW2dRrn1fSS+q1C7K6ZbEnHHw4Qql9ZhFCIPqCN4BfYPy?=
- =?iso-8859-1?Q?NdzJhvPam/kGWcK3rtmV63RkxojW1swAwaBhlp7SvYCXPYwLxe9LA1dnnb?=
- =?iso-8859-1?Q?JSI7Dg7pz3e38ix2Kwtcv0gfMcs8YpzBzNfVie9Gw/mWa85WaIeYhO0LL+?=
- =?iso-8859-1?Q?zQgj0CkxMy8bMyQIgUbHkydU7hJ8lwC0VE5vmiVhuCshRSEG72qzwP8z3M?=
- =?iso-8859-1?Q?vL+IDxKAPRTt9dobKnUM1Y+rYaoh19MNgwLQHrzAzgebcMB13ai6kVC1et?=
- =?iso-8859-1?Q?RPBqctbg/DttjCAq7/sRve+rTOOdhNRAmdL+vRdYoBiVdCcecfHU1IwHyb?=
- =?iso-8859-1?Q?4HlxEiEog7b9erGXU4a9Z+j6BAKSgjntL+4njSeWpbhZo8AM0q3pQDDURo?=
- =?iso-8859-1?Q?0o2KrEAEQ6RJUmLio2OwaUd0n7Nsv+5d0lUeTFV6mOptidZ/Ku85Rthg/3?=
- =?iso-8859-1?Q?xXONhJTncOO1fQw88F/Dfcy1Czr4XcmBWQXeg3byLN7FMl1Krl59o1lOfj?=
- =?iso-8859-1?Q?m/L1SL8FVwoUAdY3y+udjpuEZ+2VtJuawcSkCiyBD22/uztVXVe22d8szD?=
- =?iso-8859-1?Q?g1cYpUpMTv7AsrDMqG5oRDoqNtMoSDJ1GkCFJZLewvRrBTCzY4ITS2nysi?=
- =?iso-8859-1?Q?WK/6KfoK5m6YYDMeP1Ri6W7rblX1vO4S0hr3fyCk4gXS/LUL6y6Ng/gWFI?=
- =?iso-8859-1?Q?w6v8jsx2nKXnaD+GE9xy8+lUBEGgXU0j1DNoYFClXz7Rb9BznKDRM/mjbN?=
- =?iso-8859-1?Q?YtptjzdZ+Iv1mysXmbLReUO5qCnW5GeZjhe7MQCeT+CdMptsy0bpM1a9ZW?=
- =?iso-8859-1?Q?/HlzdAR1Xhbsg2Mg6FrTzsFgEXRRuMyGxNk7yR6xE247mAgJta33S6Zv+K?=
- =?iso-8859-1?Q?yEo26oeEZR/K4U7uDctmMJwawcZM8uf4t+T16d13Nb01T+5qz3fEILLRpW?=
- =?iso-8859-1?Q?ilcTGobPnsoYvyUMzBBJeBsSAndbcaWx9zw9aIW2+doQxSLLDxjw5kuelb?=
- =?iso-8859-1?Q?ptLDwCJ3lGppPLL3xHfDSpexeNkvtlPxi/tDKuBECdvdskK5yQtLV05Qhq?=
- =?iso-8859-1?Q?YsCl7xT3ZL3kjU6tJyU+Fjw2lb9Bz83a0ZRjiQH4TBeDkxcXzIDuHH4qKX?=
- =?iso-8859-1?Q?H2/OxHGqFkaxK5DUsbZpmg/he3/kfECV0UNl/CcSlI7RyqKTg/N02kobS2?=
- =?iso-8859-1?Q?sFsmroMfRS?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?2eAWJ+Cd1/slWw6tcZ6OqIhm8fYndNPr+iTaStr99m3clXNp8FReUut7E7?=
+ =?iso-8859-1?Q?Kdrk9fnKSVwQOnSArhlcZKnM0Kv0RVZTUkCL3ajqy7AXbMwTBRVhKSmNdC?=
+ =?iso-8859-1?Q?2c1KlMQoS4/RcWW4yxAgd+jPJGAIOryuqgZJ5V7rgVG4o4S/fk+tqMWW30?=
+ =?iso-8859-1?Q?1j9gTAyO9p9LycFQbL/jnNaPZIGAVDZdjX36QNOGTRv+1hVrNa0AGTLja2?=
+ =?iso-8859-1?Q?CsXJ9KcjMbtL0xAhBgUkaB4YCfvj61Si42NeBt+z67hlw+L4ujPQV6AI3G?=
+ =?iso-8859-1?Q?S8QWn0NRkKDukejKHJ29W8CmUHjb6hLZXxfCIdy2w0tfSpIbpKy9Vig5gU?=
+ =?iso-8859-1?Q?tlVcnVofe4fZgi7JqECF4p1Qf7aZRANVd3n710hgue/L4aXok8d351ykqg?=
+ =?iso-8859-1?Q?a1v0t8Og5H+1Nby6BzuOj2KLyNG6RP8hdTn+zUDrcLXtejdaOlxXUH3/hB?=
+ =?iso-8859-1?Q?OvwfI+db5rikNcxvfMhMb3Xs4d8CqwNAu3Gm2XpAUia9Y+yxuxd+q1eKWS?=
+ =?iso-8859-1?Q?RI9ynRcoNnnJUlvkYC5YgblUT7tfkISC/jZu/AN1b0CIVBAo/djQov7BM9?=
+ =?iso-8859-1?Q?6x3XZn6+PhUkLX+ouffni9N60GvUBf3WzGBFboDAdpOq+9BGLkVJD5EiLb?=
+ =?iso-8859-1?Q?xjb+3oTzPLrEDCicSZL3pejXnWw0XCsyxyTkpQrNlZNqeFydSwlQUq3OnZ?=
+ =?iso-8859-1?Q?EDyokZZAU87xaUpGEDaFb97hqHf14FAwKhJE4svXhri6bP0PYvwfX4c728?=
+ =?iso-8859-1?Q?vjT+zXBMZimYSi79yPjyVdmFsEEIfAFSumesOq3vWDug5R7DSRP8t7vst1?=
+ =?iso-8859-1?Q?rdPTy6iE3BTFE9NhlPY6g5vnaHaMjZ8ndSdcLokgWL4p9Og2qmtX66ndTE?=
+ =?iso-8859-1?Q?8ukq0WUnB0Yniawt5RfD4dzPYhyz9OTpPFANjwuOZB23CcovVBn2m6LTBU?=
+ =?iso-8859-1?Q?d4OOkmpCby4dNTI/mwi06loEJtngWIL658pgkRK7sm0wtXfKq9znIA9mip?=
+ =?iso-8859-1?Q?EPjbrhVJmmVf3cS3Ke3eowNKMb25w7uvDpqNoWUlH2QsgHHKiLt6VctX2n?=
+ =?iso-8859-1?Q?hKpBTmKOcuJSZ25rGauf4OH1B1xKlSCKxODXzAeKudX/1j1E+yiSVuSQ/9?=
+ =?iso-8859-1?Q?yLGCt2Hdr87VRKNS4jQ11205vcXpcoAOqGZCeT7Ro11qPAjy5JpETS15js?=
+ =?iso-8859-1?Q?+VNTQZOOhGUR05+T9zfzYXa5AZLo1lbxqQdiUrAeAveGy5ThWsVC+NMnGt?=
+ =?iso-8859-1?Q?93cu24Z3q6ybi4Qa0Lbk52ZiQnRCCbte9Pcp4dMZZaai3klhQzC9A1lGhJ?=
+ =?iso-8859-1?Q?DM5kJqsPMfx9CRjc0INm/2jNRLhYUVBE9YTG6WBcDP2A2foPU2OZIP0t8/?=
+ =?iso-8859-1?Q?NWF00aC1kY?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: viveris.fr
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d181221c-e2c5-4ca8-66a7-08d9608d6294
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2021 08:11:00.9154
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8d06bf1-ec98-4eac-1df1-08d9608d62ea
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2021 08:11:01.4222
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OwbLt7lKh4J19fj6NIVNFcPob7pATFz+YuVSAUwWkZ6+jQui9PnnWEdKfqax0eQrqIjzovheZednoRZvW8l0/Q==
+X-MS-Exchange-CrossTenant-userprincipalname: mydSAZEuipi9/ukztaVEXqkdaFBE/WLZ2i6azO9H3JcN1iZxEsM1geAchtLyTuP0v1JcTli0xZ5PScQEN5T/BQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR09MB4516
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The kernel has the ability to restrict the set of hash algorithms
-it accepts for the security.ima xattr when it appraises files.
+While users can restrict the accepted hash algorithms for the
+security.ima xattr file signature when appraising said file, users
+cannot restrict the algorithms that can be set on that attribute:
+any algorithm built in the kernel is accepted on a write.
 
-Define a new IMA policy rule option "appraise_algos=3D",
-using the mentioned mechanism to expose a user-toggable policy
-knob to opt-in to that restriction and select the desired set of
-algorithms that must be accepted.
+Define a new value for the ima policy option 'func' that restricts
+globally the hash algorithms accepted when writing the security.ima
+xattr.
 
-When a policy rule uses the 'appraise_algos' option, appraisal of a
-file referenced by that rule will now fail if the digest algorithm
-employed to hash the file was not one of those explicitly listed
-in the option. In its absence, any hash algorithm compiled in the
-kernel will be accepted.
-
-For example, on a system where SELinux is properly deployed, the rule
-  appraise func=3DBPRM_CHECK obj_type=3Diptables_exec_t appraise_algos=3Dsh=
-a256,sha384
-will block the execution of iptables if the xattr security.ima of its
-executables were not hashed with either sha256 or sha384.
+When a policy contains a rule of the form
+	appraise func=3DSETXATTR_CHECK appraise_algos=3Dsha256,sha384,sha512
+only values corresponding to one of these three digest algorithms
+will be accepted for writing the security.ima xattr.
+Attempting to write the attribute using another algorithm (or "free-form"
+data) will be denied with an audit log message.
+In the absence of such a policy rule, the default is still to only
+accept hash algorithms built in the kernel (with all the limitations
+that entails).
 
 Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: THOBY Simon <Simon.THOBY@viveris.fr>
 ---
- Documentation/ABI/testing/ima_policy |  6 ++-
- security/integrity/ima/ima_policy.c  | 74 ++++++++++++++++++++++++++--
- 2 files changed, 75 insertions(+), 5 deletions(-)
+ Documentation/ABI/testing/ima_policy  |  9 +++-
+ security/integrity/ima/ima.h          |  6 ++-
+ security/integrity/ima/ima_appraise.c | 29 ++++++++--
+ security/integrity/ima/ima_main.c     |  2 +-
+ security/integrity/ima/ima_policy.c   | 76 +++++++++++++++++++++++----
+ 5 files changed, 104 insertions(+), 18 deletions(-)
 
 diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testi=
 ng/ima_policy
-index 070779e8d836..b0e3d278e799 100644
+index b0e3d278e799..5c2798534950 100644
 --- a/Documentation/ABI/testing/ima_policy
 +++ b/Documentation/ABI/testing/ima_policy
-@@ -27,7 +27,7 @@ Description:
- 			lsm:	[[subj_user=3D] [subj_role=3D] [subj_type=3D]
- 				 [obj_user=3D] [obj_role=3D] [obj_type=3D]]
- 			option:	[[appraise_type=3D]] [template=3D] [permit_directio]
--				[appraise_flag=3D] [keyrings=3D]
-+				[appraise_flag=3D] [appraise_algos=3D] [keyrings=3D]
+@@ -30,9 +30,10 @@ Description:
+ 				[appraise_flag=3D] [appraise_algos=3D] [keyrings=3D]
  		  base:
  			func:=3D [BPRM_CHECK][MMAP_CHECK][CREDS_CHECK][FILE_CHECK][MODULE_CHECK=
 ]
- 			        [FIRMWARE_CHECK]
-@@ -55,6 +55,10 @@ Description:
- 			label:=3D [selinux]|[kernel_info]|[data_label]
- 			data_label:=3D a unique string used for grouping and limiting critical =
-data.
- 			For example, "selinux" to measure critical data for SELinux.
-+			appraise_algos:=3D comma-separated list of hash algorithms
-+			For example, "sha256,sha512" to only accept to appraise
-+			files where the security.ima xattr was hashed with one
-+			of these two algorithms.
+-			        [FIRMWARE_CHECK]
++				[FIRMWARE_CHECK]
+ 				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
+ 				[KEXEC_CMDLINE] [KEY_CHECK] [CRITICAL_DATA]
++				[SETXATTR_CHECK]
+ 			mask:=3D [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
+ 			       [[^]MAY_EXEC]
+ 			fsmagic:=3D hex value
+@@ -138,3 +139,9 @@ Description:
+ 		keys added to .builtin_trusted_keys or .ima keyring:
 =20
- 		  default policy:
- 			# PROC_SUPER_MAGIC
+ 			measure func=3DKEY_CHECK keyrings=3D.builtin_trusted_keys|.ima
++
++		Example of the special SETXATTR_CHECK appraise rule, that
++		restricts the hash algorithms allowed when writing to the
++		security.ima xattr of a file:
++
++			appraise func=3DSETXATTR_CHECK appraise_algos=3Dsha256,sha384,sha512
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index bcaf818fb647..be965a8715e4 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -46,6 +46,9 @@ enum tpm_pcrs { TPM_PCR0 =3D 0, TPM_PCR8 =3D 8, TPM_PCR10=
+ =3D 10 };
+ /* current content of the policy */
+ extern int ima_policy_flag;
+=20
++/* bitset of digests algorithms allowed in the setxattr hook */
++extern atomic_t ima_setxattr_allowed_hash_algorithms;
++
+ /* set during initialization */
+ extern int ima_hash_algo __ro_after_init;
+ extern int ima_sha1_idx __ro_after_init;
+@@ -198,6 +201,7 @@ static inline unsigned int ima_hash_key(u8 *digest)
+ 	hook(KEXEC_CMDLINE, kexec_cmdline)		\
+ 	hook(KEY_CHECK, key)				\
+ 	hook(CRITICAL_DATA, critical_data)		\
++	hook(SETXATTR_CHECK, setxattr_check)		\
+ 	hook(MAX_CHECK, none)
+=20
+ #define __ima_hook_enumify(ENUM, str)	ENUM,
+@@ -288,7 +292,7 @@ int ima_match_policy(struct user_namespace *mnt_userns,=
+ struct inode *inode,
+ 		     const char *func_data, unsigned int *allowed_algos);
+ void ima_init_policy(void);
+ void ima_update_policy(void);
+-void ima_update_policy_flag(void);
++void ima_update_policy_flags(void);
+ ssize_t ima_parse_add_rule(char *);
+ void ima_delete_rules(void);
+ int ima_check_policy(void);
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima=
+/ima_appraise.c
+index e2edef8a9185..8f1eb7ef041e 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -595,12 +595,32 @@ static int validate_hash_algo(struct dentry *dentry,
+ {
+ 	char *path =3D NULL, *pathbuf =3D NULL;
+ 	enum hash_algo xattr_hash_algo;
++	const char *errmsg =3D "unavailable-hash-algorithm";
++	unsigned int allowed_hashes;
+=20
+ 	xattr_hash_algo =3D ima_get_hash_algo(xattr_value, xattr_value_len);
+=20
+-	if (likely(xattr_hash_algo =3D=3D ima_hash_algo ||
+-		   crypto_has_alg(hash_algo_name[xattr_hash_algo], 0, 0)))
+-		return 0;
++	allowed_hashes =3D atomic_read(&ima_setxattr_allowed_hash_algorithms);
++
++	if (allowed_hashes) {
++		/* success if the algorithm is allowed in the ima policy */
++		if (allowed_hashes & (1U << xattr_hash_algo))
++			return 0;
++
++		/*
++		 * We use a different audit message when the hash algorithm
++		 * is denied by a policy rule, instead of not being built
++		 * in the kernel image
++		 */
++		errmsg =3D "denied-hash-algorithm";
++	} else {
++		if (likely(xattr_hash_algo =3D=3D ima_hash_algo))
++			return 0;
++
++		/* allow any xattr using an algorithm built in the kernel */
++		if (crypto_has_alg(hash_algo_name[xattr_hash_algo], 0, 0))
++			return 0;
++	}
+=20
+ 	pathbuf =3D kmalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!pathbuf)
+@@ -609,8 +629,7 @@ static int validate_hash_algo(struct dentry *dentry,
+ 	path =3D dentry_path(dentry, pathbuf, PATH_MAX);
+=20
+ 	integrity_audit_msg(AUDIT_INTEGRITY_DATA, d_inode(dentry), path,
+-			    "set_data", "unavailable-hash-algorithm",
+-			    -EACCES, 0);
++			    "set_data", errmsg, -EACCES, 0);
+=20
+ 	kfree(pathbuf);
+=20
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima=
+_main.c
+index af6367ba34ee..a734f7d5292c 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -1051,7 +1051,7 @@ static int __init init_ima(void)
+ 		pr_warn("Couldn't register LSM notifier, error %d\n", error);
+=20
+ 	if (!error)
+-		ima_update_policy_flag();
++		ima_update_policy_flags();
+=20
+ 	return error;
+ }
 diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/i=
 ma_policy.c
-index 1536e6f5eb22..cb86da0e562b 100644
+index cb86da0e562b..9eaa509f487a 100644
 --- a/security/integrity/ima/ima_policy.c
 +++ b/security/integrity/ima/ima_policy.c
-@@ -960,7 +960,7 @@ enum {
- 	Opt_fsuuid, Opt_uid_eq, Opt_euid_eq, Opt_fowner_eq,
- 	Opt_uid_gt, Opt_euid_gt, Opt_fowner_gt,
- 	Opt_uid_lt, Opt_euid_lt, Opt_fowner_lt,
--	Opt_appraise_type, Opt_appraise_flag,
-+	Opt_appraise_type, Opt_appraise_flag, Opt_appraise_algos,
- 	Opt_permit_directio, Opt_pcr, Opt_template, Opt_keyrings,
- 	Opt_label, Opt_err
- };
-@@ -995,6 +995,7 @@ static const match_table_t policy_tokens =3D {
- 	{Opt_fowner_lt, "fowner<%s"},
- 	{Opt_appraise_type, "appraise_type=3D%s"},
- 	{Opt_appraise_flag, "appraise_flag=3D%s"},
-+	{Opt_appraise_algos, "appraise_algos=3D%s"},
- 	{Opt_permit_directio, "permit_directio"},
- 	{Opt_pcr, "pcr=3D%s"},
- 	{Opt_template, "template=3D%s"},
-@@ -1095,7 +1096,8 @@ static bool ima_validate_rule(struct ima_rule_entry *=
-entry)
- 		return false;
+@@ -53,6 +53,8 @@ int ima_policy_flag;
+ static int temp_ima_appraise;
+ static int build_ima_appraise __ro_after_init;
 =20
- 	if (entry->action !=3D APPRAISE &&
--	    entry->flags & (IMA_DIGSIG_REQUIRED | IMA_MODSIG_ALLOWED | IMA_CHECK_=
-BLACKLIST))
-+	    entry->flags & (IMA_DIGSIG_REQUIRED | IMA_MODSIG_ALLOWED |
-+			    IMA_CHECK_BLACKLIST | IMA_VALIDATE_ALGOS))
- 		return false;
-=20
- 	/*
-@@ -1125,7 +1127,7 @@ static bool ima_validate_rule(struct ima_rule_entry *=
-entry)
- 				     IMA_UID | IMA_FOWNER | IMA_FSUUID |
- 				     IMA_INMASK | IMA_EUID | IMA_PCR |
- 				     IMA_FSNAME | IMA_DIGSIG_REQUIRED |
--				     IMA_PERMIT_DIRECTIO))
-+				     IMA_PERMIT_DIRECTIO | IMA_VALIDATE_ALGOS))
- 			return false;
-=20
- 		break;
-@@ -1137,7 +1139,7 @@ static bool ima_validate_rule(struct ima_rule_entry *=
-entry)
- 				     IMA_INMASK | IMA_EUID | IMA_PCR |
- 				     IMA_FSNAME | IMA_DIGSIG_REQUIRED |
- 				     IMA_PERMIT_DIRECTIO | IMA_MODSIG_ALLOWED |
--				     IMA_CHECK_BLACKLIST))
-+				     IMA_CHECK_BLACKLIST | IMA_VALIDATE_ALGOS))
- 			return false;
-=20
- 		break;
-@@ -1187,6 +1189,28 @@ static bool ima_validate_rule(struct ima_rule_entry =
-*entry)
- 	return true;
++atomic_t ima_setxattr_allowed_hash_algorithms;
++
+ #define MAX_LSM_RULES 6
+ enum lsm_rule_types { LSM_OBJ_USER, LSM_OBJ_ROLE, LSM_OBJ_TYPE,
+ 	LSM_SUBJ_USER, LSM_SUBJ_ROLE, LSM_SUBJ_TYPE
+@@ -720,24 +722,57 @@ int ima_match_policy(struct user_namespace *mnt_usern=
+s, struct inode *inode,
+ 	return action;
  }
 =20
-+static unsigned int ima_parse_appraise_algos(char *arg)
-+{
-+	unsigned int res =3D 0;
-+	int idx;
-+	char *token;
-+
-+	while ((token =3D strsep(&arg, ",")) !=3D NULL) {
-+		idx =3D match_string(hash_algo_name, HASH_ALGO__LAST, token);
-+
-+		if (idx < 0) {
-+			pr_err("unknown hash algorithm \"%s\"",
-+			       token);
-+			return 0;
+-/*
+- * Initialize the ima_policy_flag variable based on the currently
+- * loaded policy.  Based on this flag, the decision to short circuit
+- * out of a function or not call the function in the first place
+- * can be made earlier.
++/**
++ * ima_update_policy_flags() - Update global IMA variables
++ *
++ * Update ima_policy_flag and ima_setxattr_allowed_hash_algorithms
++ * based on the currently loaded policy.
++ *
++ * With ima_policy_flag, the decision to short circuit out of a function
++ * or not call the function in the first place can be made earlier.
++ *
++ * With ima_setxattr_allowed_hash_algorithms, the policy can restrict the
++ * set of hash algorithms accepted when updating the security.ima xattr of
++ * a file.
++ *
++ * Context: called after a policy update and at system initialization.
+  */
+-void ima_update_policy_flag(void)
++void ima_update_policy_flags(void)
+ {
+ 	struct ima_rule_entry *entry;
++	int new_policy_flag =3D 0;
+=20
++	rcu_read_lock();
+ 	list_for_each_entry(entry, ima_rules, list) {
++		/*
++		 * SETXATTR_CHECK rules do not implement a full policy check
++		 * because rule checking would probably have an important
++		 * performance impact on setxattr(). As a consequence, only one
++		 * SETXATTR_CHECK can be active at a given time.
++		 * Because we want to preserve that property, we set out to use
++		 * atomic_cmpxchg. Either:
++		 * - the atomic was non-zero: a setxattr hash policy is
++		 *   already enforced, we do nothing
++		 * - the atomic was zero: no setxattr policy was set, enable
++		 *   the setxattr hash policy
++		 */
++		if (entry->func =3D=3D SETXATTR_CHECK) {
++			atomic_cmpxchg(&ima_setxattr_allowed_hash_algorithms,
++				       0, entry->allowed_algos);
++			/* SETXATTR_CHECK doesn't impact ima_policy_flag */
++			continue;
 +		}
 +
-+		/* Add the hash algorithm to the 'allowed' bitfield */
-+		res |=3D (1U << idx);
-+	}
+ 		if (entry->action & IMA_DO_MASK)
+-			ima_policy_flag |=3D entry->action;
++			new_policy_flag |=3D entry->action;
+ 	}
++	rcu_read_unlock();
+=20
+ 	ima_appraise |=3D (build_ima_appraise | temp_ima_appraise);
+ 	if (!ima_appraise)
+-		ima_policy_flag &=3D ~IMA_APPRAISE;
++		new_policy_flag &=3D ~IMA_APPRAISE;
 +
-+	return res;
-+}
-+
- static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- {
- 	struct audit_buffer *ab;
-@@ -1522,6 +1546,25 @@ static int ima_parse_rule(char *rule, struct ima_rul=
-e_entry *entry)
- 			else
- 				result =3D -EINVAL;
- 			break;
-+		case Opt_appraise_algos:
-+			ima_log_string(ab, "appraise_algos", args[0].from);
-+
-+			if (entry->allowed_algos) {
-+				result =3D -EINVAL;
-+				break;
-+			}
-+
-+			entry->allowed_algos =3D
-+				ima_parse_appraise_algos(args[0].from);
-+			/* invalid or empty list of algorithms */
-+			if (!entry->allowed_algos) {
-+				result =3D -EINVAL;
-+				break;
-+			}
-+
-+			entry->flags |=3D IMA_VALIDATE_ALGOS;
-+
-+			break;
- 		case Opt_permit_directio:
- 			entry->flags |=3D IMA_PERMIT_DIRECTIO;
- 			break;
-@@ -1714,6 +1757,23 @@ static void ima_show_rule_opt_list(struct seq_file *=
-m,
- 		seq_printf(m, "%s%s", i ? "|" : "", opt_list->items[i]);
++	ima_policy_flag =3D new_policy_flag;
  }
 =20
-+static void ima_policy_show_appraise_algos(struct seq_file *m,
-+					   unsigned int allowed_hashes)
-+{
-+	int idx, list_size =3D 0;
-+
-+	for (idx =3D 0; idx < HASH_ALGO__LAST; idx++) {
-+		if (!(allowed_hashes & (1U << idx)))
-+			continue;
-+
-+		/* only add commas if the list contains multiple entries */
-+		if (list_size++)
-+			seq_puts(m, ",");
-+
-+		seq_puts(m, hash_algo_name[idx]);
-+	}
-+}
-+
- int ima_policy_show(struct seq_file *m, void *v)
- {
- 	struct ima_rule_entry *entry =3D v;
-@@ -1825,6 +1885,12 @@ int ima_policy_show(struct seq_file *m, void *v)
- 		seq_puts(m, " ");
- 	}
+ static int ima_appraise_flag(enum ima_hooks func)
+@@ -903,7 +938,9 @@ void __init ima_init_policy(void)
+ 			  ARRAY_SIZE(critical_data_rules),
+ 			  IMA_DEFAULT_POLICY);
 =20
-+	if (entry->flags & IMA_VALIDATE_ALGOS) {
-+		seq_puts(m, "appraise_algos=3D");
-+		ima_policy_show_appraise_algos(m, entry->allowed_algos);
-+		seq_puts(m, " ");
-+	}
+-	ima_update_policy_flag();
++	atomic_set(&ima_setxattr_allowed_hash_algorithms, 0);
 +
- 	for (i =3D 0; i < MAX_LSM_RULES; i++) {
- 		if (entry->lsm[i].rule) {
- 			switch (i) {
++	ima_update_policy_flags();
+ }
+=20
+ /* Make sure we have a valid policy, at least containing some rules. */
+@@ -943,7 +980,7 @@ void ima_update_policy(void)
+ 		 */
+ 		kfree(arch_policy_entry);
+ 	}
+-	ima_update_policy_flag();
++	ima_update_policy_flags();
+=20
+ 	/* Custom IMA policy has been loaded */
+ 	ima_process_queued_keys();
+@@ -1176,6 +1213,23 @@ static bool ima_validate_rule(struct ima_rule_entry =
+*entry)
+ 		if (ima_rule_contains_lsm_cond(entry))
+ 			return false;
+=20
++		break;
++	case SETXATTR_CHECK:
++		/* any action other than APPRAISE is unsupported */
++		if (entry->action !=3D APPRAISE)
++			return false;
++
++		/* SETXATTR_CHECK requires an appraise_algos parameter */
++		if (!(entry->flags & IMA_VALIDATE_ALGOS))
++			return false;
++
++		/*
++		 * full policies are not supported, they would have too
++		 * much of a performance impact
++		 */
++		if (entry->flags & ~(IMA_FUNC | IMA_VALIDATE_ALGOS))
++			return false;
++
+ 		break;
+ 	default:
+ 		return false;
+@@ -1332,6 +1386,8 @@ static int ima_parse_rule(char *rule, struct ima_rule=
+_entry *entry)
+ 				entry->func =3D KEY_CHECK;
+ 			else if (strcmp(args[0].from, "CRITICAL_DATA") =3D=3D 0)
+ 				entry->func =3D CRITICAL_DATA;
++			else if (strcmp(args[0].from, "SETXATTR_CHECK") =3D=3D 0)
++				entry->func =3D SETXATTR_CHECK;
+ 			else
+ 				result =3D -EINVAL;
+ 			if (!result)
 --=20
 2.31.1
