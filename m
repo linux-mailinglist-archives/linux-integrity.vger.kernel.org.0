@@ -2,292 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 729823ECA70
-	for <lists+linux-integrity@lfdr.de>; Sun, 15 Aug 2021 19:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E2A3ECF66
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Aug 2021 09:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbhHOR0u (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 15 Aug 2021 13:26:50 -0400
-Received: from smtp1.axis.com ([195.60.68.17]:57086 "EHLO smtp1.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229493AbhHOR0u (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 15 Aug 2021 13:26:50 -0400
+        id S233919AbhHPHbr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Aug 2021 03:31:47 -0400
+Received: from mail-vi1eur05on2122.outbound.protection.outlook.com ([40.107.21.122]:63456
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233906AbhHPHbr (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 16 Aug 2021 03:31:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TXHsTs78SDiwYtgc9vDpb2QHwouY32CgpCSUKd86xfNILcDORC6imJFFYQD2qWZwyj+nBq2pzwW3oPskIjz9NGZDt8CALdCNV9PxN0IJyALE6ExGty+MTrs+JCOJblxdu33O6BHbFCt/y1eck8fdj8pBrtMjTfEM1zGKGbWEzPpMZ3+e6VNslorkm7uS4wCtV4kaS6dLzKSdWXkJrUpM8wi2iIICzmJdb9HS0dqUIkKYrHvGpdkd9yfCPQaLVbc6zM/3EmPTyb9oAaZGnV8a6jZ3Y0c9YkRuBTkbvNbdw6uFkVvvhB+WoJyf73rvMDFMOO9CHu82tg1MgQGMeBKOBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l/wUuA9vDAIT5s97VKbHjAz+gaf49XbU1x3Vd/gDzjM=;
+ b=L7qrTTHbTTlpau+CMOAHmvlrrCo0Tb3GyW8gzeC3pgepUh1Bf6h5YZpaEH2K3fE35VZRh2Vws/kMn3zTKXg4ihiVS2yNkd8PRnnzf2YgD6Ct7HnY/iDg+TC7LjewoVBJLwv/B6rgYE+01r3KHeha5/8LQuKvtmngkWAjHdqUM9BDXC0YC+YPN8Nfy46Y2HA/FDIU+ntEMPoApceY+I/K4NDWIz2yK/8plvQLbX1rJDnERpn/Br9APZfaDKD//4zrh08ZcI/CdX0HBprEtcWIbZ3kl7r3eZIELD6bLHjJeabbEHK0IiBP/rgeJBu7ljtqiSuObM+Q5gAgQvoNNYrh6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
+ dkim=pass header.d=viveris.fr; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1629048380;
-  x=1660584380;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rj75vdBZosRGs+WpKUi5mHiJk4BWCJsnQya1hMpflr4=;
-  b=Ccr9Zl8QsZZuY2TNkIdgH4p7WJno9cUbCyAorCn09rVDkPkYzn4jeLBH
-   FIu5gW9ivAFraeN5ZXlZhSz2lQJlZBQIl0XQIxYPWDa6bBu0luSkXEpjB
-   JrdTw+epD7SziJliuk9GqXjqG00reM5W5h7ZCeL55okf4nDNBXqkSuYjL
-   SQdfxeN4KW1EsYfHolxWOhWrvyIFoS0wF/2n4ApPDzkUth54CSQBgmlCP
-   SMiSfqHEv6tjpRBBT//ssMivz9XyU2WLk4zHpPb4yAJy57Vw+53w0ND+U
-   83fh7LobRfuuz6HlEi2A2erLT0h223FfYDIIni1kRFiqzAbgLTGEdqpo6
-   Q==;
-Date:   Sun, 15 Aug 2021 19:28:58 +0200
-From:   Borys Movchan <borysmn@axis.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     Borys Movchan <Borys.Movchan@axis.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, kernel <kernel@axis.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] tpm: Add Upgrade/Reduced mode support for TPM2 modules
-Message-ID: <20210815172858.GA14375@lnxborysmn.se.axis.com>
-References: <20210809174731.27924-1-borysmn@axis.com>
- <20210810175312.ziglxdlqimsmxbak@kernel.org>
+ d=viverislicensing.onmicrosoft.com;
+ s=selector2-viverislicensing-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l/wUuA9vDAIT5s97VKbHjAz+gaf49XbU1x3Vd/gDzjM=;
+ b=46bSsCTGasFZME1OnUeliIvZfMjkRJaRobYJ2X6Xi87LKNZTDbzV7pucJFxTPPk6gPKhYtuDAKMnMXM80g0jmTbLvtK8d/GOA4d2afYQZbdEraB0NKns7LJ5E4ufP0jSeYs/CdED/ROnzl00ELu0zLR0gYyuMWuHcIjsWPqQ8Sw=
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ (2603:10a6:200:96::21) by AM0PR09MB4482.eurprd09.prod.outlook.com
+ (2603:10a6:208:16d::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.19; Mon, 16 Aug
+ 2021 07:31:12 +0000
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432%9]) with mapi id 15.20.4415.023; Mon, 16 Aug 2021
+ 07:31:12 +0000
+From:   THOBY Simon <Simon.THOBY@viveris.fr>
+To:     Igor Zhbanov <izh1979@gmail.com>
+CC:     Igor Zhbanov <i.zhbanov@omp.ru>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [PATCH 1/1] NAX LSM: Add initial support support
+Thread-Topic: [PATCH 1/1] NAX LSM: Add initial support support
+Thread-Index: AQHXg5n/AqeKwEHmDUiYDh8DD+AiWqtx92eAgAPixQA=
+Date:   Mon, 16 Aug 2021 07:31:12 +0000
+Message-ID: <f7296695-b181-0ffc-0e21-8cbedc11dce0@viveris.fr>
+References: <db1c1de0-3672-4bae-ef45-c554379f36f4@omp.ru>
+ <d97d7fdb-1676-9670-6cf5-2427f780ec6f@viveris.fr>
+ <CAEUiM9NnimMa2V2xN80kMox9gyOtUqhtPV1OPK3Ea83+JkxPpQ@mail.gmail.com>
+In-Reply-To: <CAEUiM9NnimMa2V2xN80kMox9gyOtUqhtPV1OPK3Ea83+JkxPpQ@mail.gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=viveris.fr;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0c0773ca-fc27-44e5-2757-08d96087d300
+x-ms-traffictypediagnostic: AM0PR09MB4482:
+x-microsoft-antispam-prvs: <AM0PR09MB4482CF500D8113392F0004B194FD9@AM0PR09MB4482.eurprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OHbc74fQQJp21jTJW7fIyhPN388Y8lFggFso+u4yhWz8Djbh59YHvI0mtrPb0/Dz3h93gOZDM6rDxivzcI5YQGlSSlRoYGj/VKeY8uw6Y5r+SsqfhNWIb5gQu69XszjqR58tIM8j2N4q+WDCs0J1CAqlsdblP1QPBFAOo8WvVxztBZ0HLUMyzU1iIAWPdZEW4sNPieCw25CU8Bq2/OpH05mTxug2QC07GWgTh7lj2xzJ5l4OUpmnLY11W/2/S+jsmfWr0Etw13BqwpstOuYCx+MUtr4hLZhjNAL5nj/MbaFvgt4dBNeAL+uyUUkbccADYJrAfXRzYGowo6hxgfzuKZdKN83iIIzmffu+aPQMEJ1/QoDLd0IEqi3aED5GqRg9tmQiFnDXw5V1+gmTgVrUHnXXOQUg18pXORqLUQdr21/saSKJ+IXcLTxxiTRPqMuvkFZwCmPrSNsXU8fM7Id6FosO+g24ernVeKCIDWW+iISe2EQAMPEFAb3g3thYIE3VjEHhUgbqacEl8cYbDa0lOOB/vUU+ybtz0qZY+7LlP6r0oWB085JD+tq5TnMnvIGlw0G73IMACrXx7yH0u5ghh3hUce3AhxRmWQcOjLVCK7gSOtN8hJcZyACyYRbzstPWXmwzdcdYKFQB5wJyHXyEi389NBtAfY8vsOT2CPYR7o+oS+hbq0MWi+hGXrwZfX+OPsu55lNyj4S1ngnpvZuUrhVg4dK2UZOH1rVkIjUb7t72RkmpU9F0Xr5PeH2bZVeeNkx9LrSB67BpNdqTfk7X0N+YnATHhzkxIBkpodQOC/X6P0sfSo14JtN0EOhm2InIvgO0MpGYt8iwfjg935bd8g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(366004)(396003)(346002)(39830400003)(64756008)(6916009)(2616005)(38070700005)(66556008)(66476007)(66946007)(83380400001)(31686004)(91956017)(76116006)(26005)(36756003)(478600001)(71200400001)(5660300002)(6506007)(53546011)(66446008)(6512007)(966005)(186003)(86362001)(316002)(6486002)(8676002)(31696002)(8936002)(38100700002)(122000001)(4326008)(54906003)(2906002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YlB2WS9nRnVtcGZ4QXlweWM2YjFSc1dLVm5QUEkvZmJTVzR4VThEbDA4SktD?=
+ =?utf-8?B?SnN5OGF5SE5rS2o4Z0k3cjBtVy82RnpxK3k0TUFCRzhycTRtUUpzcTVCbU1q?=
+ =?utf-8?B?ajY4MmhsNGE1a1U4eUFrL2JxejBmTG1TUk9VZkFDMlIxRVRTYUp4amdxWDJw?=
+ =?utf-8?B?bDIxWlBsY1hHN1hqdWxVancwTWIyeU5URUkxZ1J0OWJPbklzeXZDWmxCTmx3?=
+ =?utf-8?B?NUY3SXpzWmpiU1FuQWFlNjY4bDBqZUZhWGRRQzZVeDNVakx1WUZrZUkrbVlZ?=
+ =?utf-8?B?WHFqWHpocjVjYTRMdGdsdnY0UC9WSEVUR09PdGpJdUJqTzNZcVhIUkdTMHZj?=
+ =?utf-8?B?d0Z2SUN6eXU2NGJXQ1VoeFFIdlJJejkraktGS2oyZmdjTXo3NExOQzRid0Qx?=
+ =?utf-8?B?bmpCZ3BhSTF4TlVTUU1Tc1pEcWRjeHpGb0h4NkFMTTA2bnFET0kvUU40K3Ns?=
+ =?utf-8?B?TjVodUZvc04xZUNJSFNwT3BjUFp2cVBBcXhabGZDdlpoYURUWG1TK0puYmtq?=
+ =?utf-8?B?SnNyQVpvZ2MvcnNUOHBsS05KMFQwdW9kb1JCSm5nNzNsRVZxL0ZKUkdwZDZy?=
+ =?utf-8?B?dWdCSks4b2xWeG1yQjFQd000MkpzT3g2S3phYzJ1RFBjcTFUeEdaN0NvRURU?=
+ =?utf-8?B?NURrc3p6TnNtZmh0M09PZHlLZVozaUsyeWhjd2h6RFlmM29hNWhhcGIrdXBn?=
+ =?utf-8?B?OVJGVlFiYnZ2UGhkcy9Fenp3QzlzLzM0dEk1Y3YwQm55aGpvTWs4ZWp0WGhZ?=
+ =?utf-8?B?MCsrR3RpL3BGQ1p1NVN5Q0JVWTFyT3drOFlGV3ZyN1Z4cUxhY3NERU1rdHhp?=
+ =?utf-8?B?RXlQLzRHQlpXeWo2UHpJNXBsMFR0TDJma3M1VzhjNmNRZ1VZcUpaR2YwR2gw?=
+ =?utf-8?B?RzN6YTlwOEU1YXRSajlQMy9CS1J0TXFaT1c5VFB0Y1QvZUZvSEppU2ZLU1Fm?=
+ =?utf-8?B?MnlpUFJOei93Rnh2R29HTWl6K3JlWmphNGJmeWxtSTZOdWc0a29UdkpxZDJi?=
+ =?utf-8?B?LzZIaWhFZFd6RHh5K282RWdHSGVINDRPbGFxaG9idHpOY0pqaVBXQzg0R2k2?=
+ =?utf-8?B?SHpTSUUvRXFYRTcyd0xNN0d3RGtTbGlLdnJsYU9jMDFqMDRWckFXMmVkYjFm?=
+ =?utf-8?B?MmxYVFl1LzBTcE9yY1oyRzJzSGdyOGM4elJDQnk0SStLZE91MkJFU1VLL09Z?=
+ =?utf-8?B?T1VrNkhmU1FOcGdhRGpkMUwraHJuclhpc3NMZGREcExCczYzMGppRzJzd0FN?=
+ =?utf-8?B?UEJnZEVkWXFRblhhVGVidjNwK202ZkxEN2k0eHg3SXg2WXB1a1l1RnlDK0dF?=
+ =?utf-8?B?TjMxSThrc2FTWmxrK3F0SStYcHE2R09Mb0pRMjBqRDFOVWpieUNJdDlyMkts?=
+ =?utf-8?B?SEU2WnhDdjRzWTBlQ0lnU2Z6cVE5MnRIMnFyK1c5dUNLK1RWVjVHVlhuQmtU?=
+ =?utf-8?B?MXJrU2FRVXBKYmNuZEJVMHJHQ1ZYa2QwYjZxczVzVFpSWXpFRmw2RjUxTmd2?=
+ =?utf-8?B?RTkzOWhrQkRiWWZsdXpGQTBKU29aUnZ0Vi9aeVNDRjZ3TUdiaitOM2g2UCtG?=
+ =?utf-8?B?MWYrUXl5cEUrblhaOXF3SHJEMzNhSzYyN2Q4ZUtOYU50dldGN0Z1NStHWkla?=
+ =?utf-8?B?Rit4UXJPeEhGL0w2QnpueFIyTGNsT1Z6MUtmR1V2WjVaeW9rdU5ZWk9PWGs3?=
+ =?utf-8?B?K1NOdFk0MUFrQzJrRmVJMXJEYUFUWEI0TFR0TXhVWVFzNC9ocG1SUzN0Z1pT?=
+ =?utf-8?Q?TCehQh8hvz0DgzbABXTHfXU9cY/6ayizIaD8ajT?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BE86D558BAD63A4280529B1E29FC2DAB@eurprd09.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210810175312.ziglxdlqimsmxbak@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail07w.axis.com (10.20.40.13) To se-mail07w.axis.com
- (10.20.40.13)
+X-OriginatorOrg: viveris.fr
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c0773ca-fc27-44e5-2757-08d96087d300
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2021 07:31:12.5080
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dew4RTJ7+kkjnwMExeiciSRDJtwI56GSBx4lYxWcv/QhQ36tkY2mz4VRabudGDtE3ohuTh3GPsUkbEqgs3PDcQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR09MB4482
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Aug 10, 2021 at 07:53:12PM +0200, Jarkko Sakkinen wrote:
-> On Mon, Aug 09, 2021 at 07:47:30PM +0200, Borys Movchan wrote:
-> > If something went wrong during the TPM firmware upgrade, like power
-> > failure or the firmware image file get corrupted, the TPM might end
-> > up in Upgrade or Failure mode upon the next start. The state is
-> > persistent between the TPM power cycle/restart.
-> > 
-> > According to TPM specification:
-> >  * If the TPM is in Upgrade mode, it will answer with TPM2_RC_UPGRADE
-> >    to all commands except Field Upgrade related ones.
-> >  * If the TPM is in Failure mode, it will allow performing TPM
-> >    initialization but will not provide any crypto operations.
-> >    Will happily respond to Field Upgrade calls.
-> > 
-> > Change the behavior of the tpm2_auto_startup(), so it detects the active
-> > running mode of the TPM by adding the following checks.  If
-> > tpm2_do_selftest() call returns TPM2_RC_UPGRADE, the TPM is in Upgrade
-> > mode.
-> > If the TPM is in Failure mode, it will successfully respond to both
-> > tpm2_do_selftest() and tpm2_startup() calls. Although, will fail to
-> > answer to tpm2_get_cc_attrs_tbl(). Use this fact to conclude that TPM is
-> > in Failure mode.
-> > 
-> > If detected that the TPM is in the Upgrade or Failure mode, the function
-> > sets TPM_CHIP_FLAG_LIMITED_MODE flag.
-> 
-> Does this apply for TPM 1.2? Are there differences?
-> 
-
-Actually I am not sure, I am working with TPM 2 exclusively have no
-knowledge regarding other versions.
-
-> > The limited mode flag is used later during driver
-> > initialization/deinitialization to disable functionality which makes no
-> > sense or will fail in the current TPM state. Following functionality is
-> > affected:
-> >  * do not register TPM as a hwrng
-> >  * do not register sysfs entries which provide information impossible to
-> >    obtain in limited mode
-> >  * do not register resource managed character device
-> 
-> Maybe for consistency call it TPM_CHIP_FLAG_UPGRADE_MODE? It makes easier
-> to "connect dots" later on (has probably something to do TPM_RC_UPGRADE).
-> 
-> 
-
-My idea was to group both Failure and Upgrade mode and call them limited
-mode. As functionality of the TPM is limited in both of them. I was
-afraid that if I call it upgrade mode and map failure mode into it, it
-might get confusing. So please confirm that you prefer to name the flag
-as TPM_CHIP_FLAG_UPGRADE_MODE.
-
-> > 
-> > Signed-off-by: Borys Movchan <borysmn@axis.com>
-> > ---
-> > 
-> > Notes:
-> >     v2:
-> >      * Commit message updated.
-> >     
-> >     v3:
-> >      * Commit message reworked.
-> >     
-> >     v4:
-> >      * Description of how tpm2_auto_startup() detects the mode added to
-> >        commit message.
-> >     
-> >     v5:
-> >      * Introduce global flag: TPM_CHIP_FLAG_LIMITED_MODE.
-> >      * Add checks for the flag in places that will not work properly when TPM
-> >        functionality is limited.
-> >      * Avoid registering sysfs and character device entries that have no useful
-> >        function in limited mode.
-> >      * Do not register TPM as a hwrng.
-> >      * Do not try to obtain any crypto-related properties from TPM as it will fail
-> >        in limited mode.
-> > 
-> >  drivers/char/tpm/tpm-chip.c  | 16 ++++++++++------
-> >  drivers/char/tpm/tpm-sysfs.c |  3 +++
-> >  drivers/char/tpm/tpm2-cmd.c  | 13 ++++++++++++-
-> >  include/linux/tpm.h          |  2 ++
-> >  4 files changed, 27 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> > index ddaeceb7e109..8d159db39392 100644
-> > --- a/drivers/char/tpm/tpm-chip.c
-> > +++ b/drivers/char/tpm/tpm-chip.c
-> > @@ -444,7 +444,7 @@ static int tpm_add_char_device(struct tpm_chip *chip)
-> >  		return rc;
-> >  	}
-> >  
-> > -	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> > +	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !(chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)) {
-> 
-> You cannot rely on validity of TPM_CHIP_FLAG_TPM2, as tpm_tis driver
-> uses a TPM command to probe the TPM version.
-> 
-
-Good point, will fix in next patch version.
-
-> >  		rc = cdev_device_add(&chip->cdevs, &chip->devs);
-> >  		if (rc) {
-> >  			dev_err(&chip->devs,
-> > @@ -506,7 +506,8 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
-> >  	struct attribute **i;
-> >  	int rc;
-> >  
-> > -	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL))
-> > +	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL) ||
-> > +		chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)
-> >  		return 0;
-> >  
-> >  	rc = compat_only_sysfs_link_entry_to_kobj(
-> > @@ -536,7 +537,7 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
-> >  
-> >  static int tpm_add_hwrng(struct tpm_chip *chip)
-> >  {
-> > -	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-> > +	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)
-> >  		return 0;
-> >  
-> >  	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
-> > @@ -550,6 +551,9 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
-> >  {
-> >  	int rc;
-> >  
-> > +	if (chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)
-> > +		return 0;
-> > +
-> >  	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
-> >  	     tpm2_get_pcr_allocation(chip) :
-> >  	     tpm1_get_pcr_allocation(chip);
-> > @@ -612,7 +616,7 @@ int tpm_chip_register(struct tpm_chip *chip)
-> >  	return 0;
-> >  
-> >  out_hwrng:
-> > -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-> > +	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !(chip->flags & TPM_CHIP_FLAG_LIMITED_MODE))
-> >  		hwrng_unregister(&chip->hwrng);
-> >  out_ppi:
-> >  	tpm_bios_log_teardown(chip);
-> > @@ -637,10 +641,10 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
-> >  void tpm_chip_unregister(struct tpm_chip *chip)
-> >  {
-> >  	tpm_del_legacy_sysfs(chip);
-> > -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-> > +	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !(chip->flags & TPM_CHIP_FLAG_LIMITED_MODE))
-> >  		hwrng_unregister(&chip->hwrng);
-> >  	tpm_bios_log_teardown(chip);
-> > -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > +	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !(chip->flags & TPM_CHIP_FLAG_LIMITED_MODE))
-> >  		cdev_device_del(&chip->cdevs, &chip->devs);
-> >  	tpm_del_char_device(chip);
-> >  }
-> > diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-> > index 63f03cfb8e6a..43ea9c66342d 100644
-> > --- a/drivers/char/tpm/tpm-sysfs.c
-> > +++ b/drivers/char/tpm/tpm-sysfs.c
-> > @@ -478,6 +478,9 @@ void tpm_sysfs_add_device(struct tpm_chip *chip)
-> >  {
-> >  	int i;
-> >  
-> > +	if (chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)
-> > +		return;
-> > +
-> >  	WARN_ON(chip->groups_cnt != 0);
-> >  
-> >  	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> > index a25815a6f625..598d62695310 100644
-> > --- a/drivers/char/tpm/tpm2-cmd.c
-> > +++ b/drivers/char/tpm/tpm2-cmd.c
-> > @@ -729,7 +729,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
-> >  		goto out;
-> >  
-> >  	rc = tpm2_do_selftest(chip);
-> > -	if (rc && rc != TPM2_RC_INITIALIZE)
-> > +	if (rc == TPM2_RC_UPGRADE) {
-> > +		dev_info(&chip->dev, "TPM is in upgrade mode, functionality limited\n");
-> > +		chip->flags |= TPM_CHIP_FLAG_LIMITED_MODE;
-> > +		rc = 0;
-> > +		goto out;
-> > +	} else if (rc && rc != TPM2_RC_INITIALIZE)
-> >  		goto out;
-> >  
-> >  	if (rc == TPM2_RC_INITIALIZE) {
-> > @@ -743,6 +748,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
-> >  	}
-> >  
-> >  	rc = tpm2_get_cc_attrs_tbl(chip);
-> > +	if (rc) {
-> 
-> Why all rc's apply?
-> 
-
-Different vendors return different error codes here. Some, like STM
-return vendor specific ones.
-
-> > +		dev_info(&chip->dev, "TPM is in failure mode, functionality limited\n");
-> 
-> Here is again a different name for the same thing (different than
-> TPM_CHIP_FLAG_LIMITED_MODE).
-> 
-
-This check is triggered only if TPM is in Failure mode. It is different
-from Upgrade mode.
-
-> > +		chip->flags |= TPM_CHIP_FLAG_LIMITED_MODE;
-> > +		rc = 0;
-> > +		goto out;
-> > +	}
-> >  
-> >  out:
-> >  	if (rc > 0)
-> > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> > index aa11fe323c56..231d7c7ec913 100644
-> > --- a/include/linux/tpm.h
-> > +++ b/include/linux/tpm.h
-> > @@ -207,6 +207,7 @@ enum tpm2_return_codes {
-> >  	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
-> >  	TPM2_RC_FAILURE		= 0x0101,
-> >  	TPM2_RC_DISABLED	= 0x0120,
-> > +	TPM2_RC_UPGRADE		= 0x012D,
-> >  	TPM2_RC_COMMAND_CODE    = 0x0143,
-> >  	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
-> >  	TPM2_RC_REFERENCE_H0	= 0x0910,
-> > @@ -277,6 +278,7 @@ enum tpm_chip_flags {
-> >  	TPM_CHIP_FLAG_HAVE_TIMEOUTS	= BIT(4),
-> >  	TPM_CHIP_FLAG_ALWAYS_POWERED	= BIT(5),
-> >  	TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED	= BIT(6),
-> > +	TPM_CHIP_FLAG_LIMITED_MODE	= BIT(7),
-> >  };
-> >  
-> >  #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
-> > -- 
-> > 2.20.1
-> > 
-> > 
-> 
-> /Jarkko
-
-Kind regards,
-Borys
+SGkgSWdvciwNCg0KT24gOC8xMy8yMSAxMDoxMCBQTSwgSWdvciBaaGJhbm92IHdyb3RlOg0KPiBI
+aSBTaW1vbiwNCj4gDQo+INGB0YAsIDI4INC40Y7Quy4gMjAyMSDQsy4g0LIgMTM6MTksIFRIT0JZ
+IFNpbW9uIDxTaW1vbi5USE9CWUB2aXZlcmlzLmZyPjoNCj4+IFRoZSBrZXJuZWwgc3R5bGUgZ3Vp
+ZGUgbWFuZGF0ZXMgdGhhdCBhbGwgdmFyaWFibGVzIGFyZSBvbmx5IGRlZmluZWQgYXQgdGhlIGJl
+Z2dpbmluZyBvZiB0aGUNCj4+IGZ1bmN0aW9uLCBhbmQgbm90IGF0IHRoZSBiZWdnaW5pbmcgb2Yg
+YW55IGJsb2NrIGxpa2UgQzg5Lg0KPiANCj4gSSd2ZSBjaGVja2VkIHRoZSBrZXJuZWwgY29kaW5n
+IHN0eWxlIGFuZCBjb3VsZG4ndCBmaW5kIGFueXRoaW5nIGFib3V0DQo+IHZhcmlhYmxlcyBkZWZp
+bml0aW9uDQo+IHBsYWNlLiBDb3VsZCB5b3UsIHBsZWFzZSwgcG9pbnQgbWUgdG8gdGhlIHJlcXVp
+cmVtZW50Pw0KDQpBZnRlciB0cnlpbmcgKHdpdGhvdXQgcmVzdWx0cykgdG8gZmluZCBpdCBpbiB0
+aGUga2VybmVsIGNvZGluZyBzdHlsZSwgaXQgc2VlbXMgSSBoYXZlDQphY2NlcHRlZCBhIG1haW50
+YWluZXIgcHJlZmVyZW5jZSBhcyB0aGUgb2ZmaWNpYWwgc3R5bGUgZ3VpZGUgd2l0aG91dCBjaGVj
+a2luZzoNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWludGVncml0eS9iZDc4NWE5ZDBj
+MDI5Y2VjMzQ1MTRkMzA2ZTExMGJkZWY5NDVjMTNlLmNhbWVsQGxpbnV4LmlibS5jb20vDQooc2Vl
+ICJNb3ZlIHRoZSB2YXJpYWJsZSBkZWZpbml0aW9uIHRvIHRoZSBiZWdpbm5pbmcgb2YgdGhlIGZ1
+bmN0aW9uLiIpDQoNCkknbSBzb3JyeSBhYm91dCB0aGF0LCBhbmQgZm9yIHRoZSB0aW1lIHlvdSBt
+YXkgaGF2ZSBsb3N0IHRyeWluZyB0byBsb2NhdGUgaXQgaW4gdGhlIHN0eWxlIGd1aWRlLCB3aGlj
+aA0KZG9lc24ndCBzYXkgKGFzIGZhciBhcyBJIGNvdWxkIHNlZSkgYW55dGhpbmcgYWJvdXQgdmFy
+aWFibGUgZGVjbGFyYXRpb25zLg0KDQo+IA0KPiBTY29waW5nIHZhcmlhYmxlcyBkZWNsYXJhdGlv
+biBtYWtlcyB0aGUgY29kZSBiZXR0ZXIgYW5kIG1vcmUgc2VjdXJlLg0KDQpOb3QgYXJndWluZywg
+SSBhZ3JlZSB3aXRoIHlvdSBvbiB0aGUgYmVuZWZpdHMgZm9yIG1haW50YWluYWJpbGl0eSBhbmQg
+cmVhZGFiaWxpdHkgb2YNCmtlZXBpbmcgdmFyaWFibGUgZGVjbGFyYXRpb24gYW5kIHVzZSBsb2Nh
+bGl6ZWQgKHdoaWNoIGlzIGFsc28gd2h5IEkgdGhpbmsNCidhbGxvd2VkX2NhcHNfaGV4JyB3b3Vs
+ZCBiZSBiZXR0ZXIgYXMgYSBsb2NhbCB2YXJpYWJsZSkuDQoNCj4gQmVzaWRlcywgSSd2ZSBjaGVj
+a2VkIHRoZSBrZXJuZWwgc291cmNlcyBhbmQgc2VlIG1hbnkgZXhhbXBsZXMgb2YgdGhhdC4NCj4g
+DQo+IFRoYW5rIHlvdS4NCj4gDQoNClNvcnJ5IGFnYWluLA0KU2ltb24=
