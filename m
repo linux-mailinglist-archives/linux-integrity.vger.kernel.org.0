@@ -2,107 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 390D53EDEE2
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Aug 2021 22:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9D13EDFE2
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Aug 2021 00:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbhHPU7T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 16 Aug 2021 16:59:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52975 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231698AbhHPU7T (ORCPT
+        id S234317AbhHPWVG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 16 Aug 2021 18:21:06 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52244 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234391AbhHPWVG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 16 Aug 2021 16:59:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1629147527;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aKa4JIFgo1QMF+TVxmFpAttHSTW5o7TPLh5pO66X7QI=;
-        b=TZ28Bbsoy237vt73SgAhSorSfRMLmvbc5RMYGdddmm4ItH/FmbK3bztgfW/WiPPJxTnNqy
-        pn2rra5v967fp8vKUoeBF+iILfLltTnV0WpooVHse4rOK/0lbn3OAWhSihyM+IOAWShmJQ
-        Lhnb/Bphle1EsyZw5qAXyAfWmAPTglE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-171-aJg9jsAYMeC_9ABGziTxfg-1; Mon, 16 Aug 2021 16:58:45 -0400
-X-MC-Unique: aJg9jsAYMeC_9ABGziTxfg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A42BA192CC41;
-        Mon, 16 Aug 2021 20:58:44 +0000 (UTC)
-Received: from localhost (unknown [10.22.8.201])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 54E16620DE;
-        Mon, 16 Aug 2021 20:58:39 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     zohar@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org, kgold@linux.ibm.com,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH v2 ima-evm-utils] libimaevm: make SHA-256 the default hash algorithm
-Date:   Mon, 16 Aug 2021 17:58:35 -0300
-Message-Id: <20210816205835.76183-1-bmeneg@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+        Mon, 16 Aug 2021 18:21:06 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17GM4XZd120528;
+        Mon, 16 Aug 2021 18:20:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=kIX9EVrXGERnPUvPGe7vhmzFhozHU85C64p7/aDycAY=;
+ b=ojGuFaw9bRZgVo4la9DrQn4HFP5tampJznCZ61b/iFuVsukSetYxCPO75G4r61baQfob
+ H86kxkazBRWS+Dlhwsa/eDVTlOVwJpf/ZSWsu/NbJ+w5U4RJvHbecmVdTFSICbbXUFUk
+ 9pDqlAcAEzoMLHBmo9g47rzW1503fh9/ff1+GIgjTgwDOUSNwoLQeCrFgzcmWceOQ8kP
+ P7oTpowC94601qGNxXc0CR2mMHIM5rdzbDBmyzi7NtWm178PogPLkYUI9s2heIqc5bEH
+ NAU6LG3hreUWxIBrQK3SJHn9kSopcaoChBzcNcxCsJjRBw3wdyINkqlwQz7DaJR/uKr3 Xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3aeuct5a1f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Aug 2021 18:20:33 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17GM4n2d121545;
+        Mon, 16 Aug 2021 18:20:33 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3aeuct5a17-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Aug 2021 18:20:33 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17GMI4Rj026049;
+        Mon, 16 Aug 2021 22:20:31 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ae5f8bwmk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Aug 2021 22:20:31 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17GMH5Rs60293404
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 Aug 2021 22:17:05 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2FBB52054;
+        Mon, 16 Aug 2021 22:20:28 +0000 (GMT)
+Received: from sig-9-65-222-129.ibm.com (unknown [9.65.222.129])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A088552050;
+        Mon, 16 Aug 2021 22:20:27 +0000 (GMT)
+Message-ID: <aa0c635a090ff6849c4334566d6721ee036c491f.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 6/6] IMA: prevent SETXATTR_CHECK policy rules with
+ unavailable algorithms
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     THOBY Simon <Simon.THOBY@viveris.fr>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        BARVAUX Didier <Didier.BARVAUX@viveris.fr>
+Date:   Mon, 16 Aug 2021 18:20:26 -0400
+In-Reply-To: <20210816081056.24530-7-Simon.THOBY@viveris.fr>
+References: <20210816081056.24530-1-Simon.THOBY@viveris.fr>
+         <20210816081056.24530-7-Simon.THOBY@viveris.fr>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RgkKlKHR9H05C2r5n6y-rUpSvVjZ6eKa
+X-Proofpoint-GUID: ddRw2cX-0comQLsrRHetDTclhNOeeTj_
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-16_08:2021-08-16,2021-08-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ mlxlogscore=999 adultscore=0 priorityscore=1501 bulkscore=0
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108160138
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The SHA-1 algorithm is considered a weak hash algorithm and there has been
-some movement within certain distros to drop its support completely or at
-least drop it from the default behavior. ima-evm-utils uses it as the
-default algorithm in case the user doesn't explicitly ask for another
-through the --hashalgo/-a option. With that, make SHA-256 the default hash
-algorithm instead.
+On Mon, 2021-08-16 at 08:11 +0000, THOBY Simon wrote:
+> SETXATTR_CHECK poliy rules assume that any algorithm listed in the
+> 'appraise_algos' flag must be accepted when performing setxattr()
+> on the security.ima xattr.
+> However nothing checks that they are available in the current kernel.
+> A userland application could hash a file with a digest that the kernel
+> wouldn't be able to verify. However, if SETXATTR_CHECK is not in use,
+> the kernel already forbids that xattr write.
 
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
-Changelog:
-  v1: add ima-evm-utils to the [PATCH] part of the subject
+I assume the above couple of sentences are a continuation of the
+previous paragraph and concatenated them.  If it really is meant to be
+a separate paragraph a blank line needs to separate them.
 
- README          | 2 +-
- src/evmctl.c    | 2 +-
- src/libimaevm.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> Verify that algorithms listed in appraise_algos are available to the
+> current kernel and reject the policy update otherwise. This will fix
+> the inconsistency between SETXATTR_CHECK and non-SETXATTR_CHECK
+> behaviors.
+> 
+> That filtering is only performed in ima_parse_appraise_algos() when
+> updating policies so that we do not have to pay the price of allocating
+> a hash object every time validate_hash_algo() is called in
+> ima_inode_setxattr().
+> 
+> Signed-off-by: THOBY Simon <Simon.THOBY@viveris.fr>
 
-diff --git a/README b/README
-index 87cd3b5cd7da..0dc02f551673 100644
---- a/README
-+++ b/README
-@@ -41,7 +41,7 @@ COMMANDS
- OPTIONS
- -------
- 
--  -a, --hashalgo     sha1 (default), sha224, sha256, sha384, sha512
-+  -a, --hashalgo     sha1, sha224, sha256 (default), sha384, sha512
-   -s, --imasig       make IMA signature
-   -d, --imahash      make IMA hash
-   -f, --sigfile      store IMA signature in .sig file instead of xattr
-diff --git a/src/evmctl.c b/src/evmctl.c
-index a8065bbe124a..e0e55bc0b122 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -2496,7 +2496,7 @@ static void usage(void)
- 
- 	printf(
- 		"\n"
--		"  -a, --hashalgo     sha1 (default), sha224, sha256, sha384, sha512, streebog256, streebog512\n"
-+		"  -a, --hashalgo     sha1, sha224, sha256 (default), sha384, sha512, streebog256, streebog512\n"
- 		"  -s, --imasig       make IMA signature\n"
- 		"  -d, --imahash      make IMA hash\n"
- 		"  -f, --sigfile      store IMA signature in .sig file instead of xattr\n"
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index 8e9615796153..f6c72b878d88 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -88,7 +88,7 @@ static const char *const pkey_hash_algo_kern[PKEY_HASH__LAST] = {
- struct libimaevm_params imaevm_params = {
- 	.verbose = LOG_INFO,
- 	.x509 = 1,
--	.hash_algo = "sha1",
-+	.hash_algo = "sha256",
- };
- 
- static void __attribute__ ((constructor)) libinit(void);
--- 
-2.31.1
+Thanks, Simon.  Before pushing out the entire patch set, including this
+one, to next-integrity-testing branch,  I reverted the tag re-ordering, 
+fixed the line length of the sample appraise rule, and added the commit
+number (for stable) in the patch description.  Please verify.
+
+While testing, I noticed similar support is needed for appended
+signatures.  For example, "scripts/sign-file" can be used to sign
+kernel modules or the kernel image.
+
+Sample kexec rules:
+measure func=KEXEC_KERNEL_CHECK template=ima-modsig
+appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig|modsig appraise_algos=sha256
+
+thanks,
+
+Mimi
+
+
 
