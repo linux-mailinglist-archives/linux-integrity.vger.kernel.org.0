@@ -2,129 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4323F1FE4
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Aug 2021 20:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790143F20A1
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Aug 2021 21:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233971AbhHSS26 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 19 Aug 2021 14:28:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46010 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234161AbhHSS26 (ORCPT
+        id S234126AbhHSTcY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Aug 2021 15:32:24 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40646 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230504AbhHSTcX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 19 Aug 2021 14:28:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1629397701;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gLOQAa7GeujIXWs5Ck2qU9LI189LUpFF8byt6aWlTOo=;
-        b=ULy/aafHn1NiQj7nhaH210BMLcNFhA0SptAfHgk3qmzLGjQnPT3Zc2Cqef/eNCJ7st1RLM
-        6bBsYz/BhYw7FjtmEL5aeSA+5gZ705yTsIhBnmQyRh8YfptQHuxoxyrLqu9vS0p+57aN65
-        RB+7mx0T095+Y6RTIQi5Kwfm3LLl/mc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-479-OH9rZ-9aP4O4sC2TOf5G8A-1; Thu, 19 Aug 2021 14:28:19 -0400
-X-MC-Unique: OH9rZ-9aP4O4sC2TOf5G8A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 84FD81082920;
-        Thu, 19 Aug 2021 18:28:18 +0000 (UTC)
-Received: from localhost (unknown [10.22.17.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 120A31A26A;
-        Thu, 19 Aug 2021 18:28:17 +0000 (UTC)
-Date:   Thu, 19 Aug 2021 15:28:17 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Vitaly Chikunov <vt@altlinux.org>
-Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH ima-evm-utils v2] Use secure heap for private keys and
- passwords
-Message-ID: <YR6iwRZ9GCK272Me@glitch>
-References: <20210819021136.664597-1-vt@altlinux.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ClSxjBmqr8zXZ4Ef"
-Content-Disposition: inline
-In-Reply-To: <20210819021136.664597-1-vt@altlinux.org>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Thu, 19 Aug 2021 15:32:23 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17JJGiEq125158;
+        Thu, 19 Aug 2021 15:31:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=IhMTpgaF+/XifSRpiET4PLlR+xw/gRZjXUzbqdSF69g=;
+ b=hoAIyKJ1b4R8ErJcMVP5mfQgTpdeW8sgyA7/XjzwxcHfUbbNybHpGB6n0bzbPeuboL/I
+ +bH5RDqL0KiLsK3LwFKchdcieQhr05Fw2OHH0iJRqO9W0aNQq0GeYWFZC30GHC0b5ygq
+ ytpkSPq1lQI9LwHcnTrFkmtnvAc+FgapgofXxb1WJwTcTAKz1E9tfubDaepjVqrmTUQi
+ pSe/tjmCRTH12sKK7mQpbJFD5BCdMwecd5sDARTa9/efp2TR5LW4VZUtEeeCUh3WBH7U
+ /SkOqUz0qhr3bs939YvzXylGli/CuAw/oKeks00IyHCe86nEZVUU4onNHFpWJ0WGhWk/ RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3agp2d9hhm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Aug 2021 15:31:33 -0400
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17JJH4Fx126559;
+        Thu, 19 Aug 2021 15:31:33 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3agp2d9hgd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Aug 2021 15:31:33 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17JJH1w3000800;
+        Thu, 19 Aug 2021 19:31:31 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ae5f8gp06-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Aug 2021 19:31:31 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17JJRtnZ58786272
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Aug 2021 19:27:55 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AFF5C52052;
+        Thu, 19 Aug 2021 19:31:28 +0000 (GMT)
+Received: from sig-9-65-206-165.ibm.com (unknown [9.65.206.165])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id BCBB752069;
+        Thu, 19 Aug 2021 19:31:26 +0000 (GMT)
+Message-ID: <78dfd42fb6de3b3c373be66e38d021f145740c86.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: fix infinite loop within "ima_match_policy"
+ function.
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     THOBY Simon <Simon.THOBY@viveris.fr>,
+        liqiong <liqiong@nfschina.com>
+Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Thu, 19 Aug 2021 15:31:25 -0400
+In-Reply-To: <ed27351e0574f58ee59a3024554b8b0c7293515f.camel@linux.ibm.com>
+References: <20210819101529.28001-1-liqiong@nfschina.com>
+         <8d17f252-4a93-f430-3f25-e75556ab01e8@viveris.fr>
+         <ed27351e0574f58ee59a3024554b8b0c7293515f.camel@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UIf0kseCI95q6VXNtSNaRFSTP6Cwb_pA
+X-Proofpoint-GUID: cblgJ_wtl42znVymjdXO0ZckUKX-P02K
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-19_07:2021-08-17,2021-08-19 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 spamscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108190112
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, 2021-08-19 at 09:47 -0400, Mimi Zohar wrote:
+> On Thu, 2021-08-19 at 12:58 +0000, THOBY Simon wrote:
+> > Hi Liqiong,
+> > 
+> > On 8/19/21 12:15 PM, liqiong wrote:
+> > > When "ima_match_policy" is looping while "ima_update_policy" changs
+> > > the variable "ima_rules", then "ima_match_policy" may can't exit loop,
+> > > and kernel keeps printf "rcu_sched detected stall on CPU ...".
+> > > 
+> > > It occurs at boot phase, systemd-services are being checked within
+> > > "ima_match_policy,at the same time, the variable "ima_rules"
+> > > is changed by a service.
+> > 
+> > First off, thanks for finding and identifying this nasty bug.
+> 
+> Once the initial builtin policy rules have been replaced by a custom
+> policy, rules may only be appended by splicing the new rules with the
+> existing rules.  There should never be a problem reading the rules at
+> that point.   Does this problem occur before the builtin policy rules
+> have been replaced with a custom policy?
 
---ClSxjBmqr8zXZ4Ef
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, the problem is limited to transitioning from the builtin policy to
+the custom policy.   Adding a new lock around rcu code seems counter
+productive, especially since switching the policy rules happens once,
+normally during early boot before access to real root.  Please consider
+Simon's suggestion or finding some other solution.
 
-On Thu, Aug 19, 2021 at 05:11:36AM +0300, Vitaly Chikunov wrote:
-> After CRYPTO_secure_malloc_init OpenSSL will store private keys in
-> secure heap. This facility is only available since OpenSSL_1_1_0-pre1.
->=20
-> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-> ---
-> Change from v1:
-> - Do not use setfbuf to disable buffering as this is not proven to be
->   meaningful.
-> - Use secure heap for passwords too as suggested by Mimi Zohar.
-> - Fallback to OPENSSL_malloc for old OpenSSL as suggested by Mimi Zohar.
-> - Simplify logic of calling CRYPTO_secure_malloc_init (call it always on
->   OpenSSL init.)
-> - Should be applied after Bruno Meneguele's "evmctl: fix memory leak in
->   get_password" patch v2.
->=20
->  src/evmctl.c | 143 ++++++++++++++++++++++++++++++++++++++++++---------
->  1 file changed, 118 insertions(+), 25 deletions(-)
->=20
-> diff --git a/src/evmctl.c b/src/evmctl.c
-> index 5f7c2b8..a27e0b9 100644
-> --- a/src/evmctl.c
-> +++ b/src/evmctl.c
-> @@ -59,6 +59,7 @@
->  #include <assert.h>
-> =20
->  #include <openssl/asn1.h>
-> +#include <openssl/crypto.h>
->  #include <openssl/sha.h>
->  #include <openssl/pem.h>
->  #include <openssl/hmac.h>
-> @@ -165,6 +166,24 @@ struct tpm_bank_info {
->  static char *pcrfile[MAX_PCRFILE];
->  static unsigned npcrfile;
-> =20
-> +#if OPENSSL_VERSION_NUMBER <=3D 0x10100000
-> +#warning Your OpenSSL version is too old to have OPENSSL_secure_malloc, \
-> +	falling back to use plain OPENSSL_malloc.
-> +#define OPENSSL_secure_malloc	  OPENSSL_malloc
-> +#define OPENSSL_secure_free	  OPENSSL_free
-> +/*
-> + * Secure heap memory automatically cleared on free, but
-> + * OPENSSL_secure_clear_free will be used in case of fallback
+thanks,
 
-Shouldn't it be OPENSSL_clear_free instead of OPENSLL_secure_clear_free
-in the setence above?
-
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
-
---ClSxjBmqr8zXZ4Ef
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmEeosAACgkQYdRkFR+R
-okM6JggAr7P70G0Efz9nDAaiUfkm2EX2n/kww41EWE7DON32kktUbSx7Q2PzvNDA
-pSMlOCkrhmvTcj4f9CPw6Wl6WifOzPvnfNdBsnihm0Xzq9bhzqawlDrRfdx4puZg
-ulPtzCdMF2jeRf8rBxujmVzXRIacNDMnZkUlYbO5GjCRuq3hjzPey5V4Yccv1b1q
-AzjdG9jIFbC9sTX9vfgQr0eKWnJYfNNYybFoXSrzxQXhtqAMs5aiWX6Oc5/hdFcT
-2DfcXaxXPE19Jzeq3Vr56ePF9zhYEhpsc4KcZ5D+2rCpkCxUQWMLwSlty6PwU6sy
-C79+R7K3dJb+eKbsxibZK/ZNF151rg==
-=Cwg0
------END PGP SIGNATURE-----
-
---ClSxjBmqr8zXZ4Ef--
+Mimi
 
