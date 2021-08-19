@@ -2,120 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 790143F20A1
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Aug 2021 21:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AED03F215C
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Aug 2021 22:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbhHSTcY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 19 Aug 2021 15:32:24 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40646 "EHLO
+        id S234706AbhHSULD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 19 Aug 2021 16:11:03 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46772 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230504AbhHSTcX (ORCPT
+        by vger.kernel.org with ESMTP id S234511AbhHSULD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 19 Aug 2021 15:32:23 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17JJGiEq125158;
-        Thu, 19 Aug 2021 15:31:33 -0400
+        Thu, 19 Aug 2021 16:11:03 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17JK3jAg067442;
+        Thu, 19 Aug 2021 16:10:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=IhMTpgaF+/XifSRpiET4PLlR+xw/gRZjXUzbqdSF69g=;
- b=hoAIyKJ1b4R8ErJcMVP5mfQgTpdeW8sgyA7/XjzwxcHfUbbNybHpGB6n0bzbPeuboL/I
- +bH5RDqL0KiLsK3LwFKchdcieQhr05Fw2OHH0iJRqO9W0aNQq0GeYWFZC30GHC0b5ygq
- ytpkSPq1lQI9LwHcnTrFkmtnvAc+FgapgofXxb1WJwTcTAKz1E9tfubDaepjVqrmTUQi
- pSe/tjmCRTH12sKK7mQpbJFD5BCdMwecd5sDARTa9/efp2TR5LW4VZUtEeeCUh3WBH7U
- /SkOqUz0qhr3bs939YvzXylGli/CuAw/oKeks00IyHCe86nEZVUU4onNHFpWJ0WGhWk/ RQ== 
+ bh=Ow831jAIK4slW1DSv+vsd/VgYNB7cLpd3HPUfHEhRwU=;
+ b=dZAeIIlAiOjv/j8ZYFTmFreAFTxpnqcBFxhe9FEoaKVW45UbiQQ/1DhRfx+DTKXLDUKs
+ d5PhZzjpMWQtvtvUZ24DPPSDCdQ8YJkGRAIdhkCm2ThWj4xUjyEjRIDWmhwVhVRQJYDT
+ n4dTwkqvBkdL9dAc9KypkBdNCen04jXJ4L0RPBV1/IWMpqIPt4xpG1mA5lFwVGahYCXK
+ 1iSoeBxoX3Rc7W1c0vg2Wb1IOlNQoLPgpJOUDVodvvCiq/h7MHAC4qMooMM87Ru93qht
+ WLf1mTNoaRIioXhx5K5drcqmfhCE2Uu6zLE9Unz5Gwv/k9+XehOj33kCw8uZiWAwvTuh Yg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3agp2d9hhm-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ahq0yqbdy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Aug 2021 15:31:33 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17JJH4Fx126559;
-        Thu, 19 Aug 2021 15:31:33 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3agp2d9hgd-1
+        Thu, 19 Aug 2021 16:10:24 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17JK477F068723;
+        Thu, 19 Aug 2021 16:10:24 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ahq0yqbdd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Aug 2021 15:31:33 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17JJH1w3000800;
-        Thu, 19 Aug 2021 19:31:31 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ae5f8gp06-1
+        Thu, 19 Aug 2021 16:10:24 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17JJe84v026303;
+        Thu, 19 Aug 2021 20:10:22 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06fra.de.ibm.com with ESMTP id 3ae53hfj4f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Aug 2021 19:31:31 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17JJRtnZ58786272
+        Thu, 19 Aug 2021 20:10:22 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17JKAJ4Y53543178
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 Aug 2021 19:27:55 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AFF5C52052;
-        Thu, 19 Aug 2021 19:31:28 +0000 (GMT)
+        Thu, 19 Aug 2021 20:10:19 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B0A94C04A;
+        Thu, 19 Aug 2021 20:10:19 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5CA444C05C;
+        Thu, 19 Aug 2021 20:10:18 +0000 (GMT)
 Received: from sig-9-65-206-165.ibm.com (unknown [9.65.206.165])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id BCBB752069;
-        Thu, 19 Aug 2021 19:31:26 +0000 (GMT)
-Message-ID: <78dfd42fb6de3b3c373be66e38d021f145740c86.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: fix infinite loop within "ima_match_policy"
- function.
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 19 Aug 2021 20:10:18 +0000 (GMT)
+Message-ID: <05e47a86695818bfb0f1dca6aa3ea7cea6c6dffc.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils v2] Use secure heap for private keys and
+ passwords
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        liqiong <liqiong@nfschina.com>
-Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Thu, 19 Aug 2021 15:31:25 -0400
-In-Reply-To: <ed27351e0574f58ee59a3024554b8b0c7293515f.camel@linux.ibm.com>
-References: <20210819101529.28001-1-liqiong@nfschina.com>
-         <8d17f252-4a93-f430-3f25-e75556ab01e8@viveris.fr>
-         <ed27351e0574f58ee59a3024554b8b0c7293515f.camel@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Date:   Thu, 19 Aug 2021 16:10:17 -0400
+In-Reply-To: <20210819181225.vo7dmtm3z5mnwmlh@altlinux.org>
+References: <20210819021136.664597-1-vt@altlinux.org>
+         <600a9f93ca6e74621833cd9452a9dfd7b5a8d55a.camel@linux.ibm.com>
+         <20210819181225.vo7dmtm3z5mnwmlh@altlinux.org>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UIf0kseCI95q6VXNtSNaRFSTP6Cwb_pA
-X-Proofpoint-GUID: cblgJ_wtl42znVymjdXO0ZckUKX-P02K
+X-Proofpoint-ORIG-GUID: UrYWi529eGzTYtMd_ZZML2kng-ep66_9
+X-Proofpoint-GUID: hAu51Cwq01oZEYB1tSXBRoU5ExDnZMP4
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-19_07:2021-08-17,2021-08-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 impostorscore=0 spamscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108190112
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ impostorscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 adultscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108190116
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2021-08-19 at 09:47 -0400, Mimi Zohar wrote:
-> On Thu, 2021-08-19 at 12:58 +0000, THOBY Simon wrote:
-> > Hi Liqiong,
-> > 
-> > On 8/19/21 12:15 PM, liqiong wrote:
-> > > When "ima_match_policy" is looping while "ima_update_policy" changs
-> > > the variable "ima_rules", then "ima_match_policy" may can't exit loop,
-> > > and kernel keeps printf "rcu_sched detected stall on CPU ...".
-> > > 
-> > > It occurs at boot phase, systemd-services are being checked within
-> > > "ima_match_policy,at the same time, the variable "ima_rules"
-> > > is changed by a service.
-> > 
-> > First off, thanks for finding and identifying this nasty bug.
+On Thu, 2021-08-19 at 21:12 +0300, Vitaly Chikunov wrote:
+> Mimi,
 > 
-> Once the initial builtin policy rules have been replaced by a custom
-> policy, rules may only be appended by splicing the new rules with the
-> existing rules.  There should never be a problem reading the rules at
-> that point.   Does this problem occur before the builtin policy rules
-> have been replaced with a custom policy?
+> On Thu, Aug 19, 2021 at 02:06:03PM -0400, Mimi Zohar wrote:
+> > On Thu, 2021-08-19 at 05:11 +0300, Vitaly Chikunov wrote:
+> > > After CRYPTO_secure_malloc_init OpenSSL will store private keys in
+> > > secure heap. This facility is only available since OpenSSL_1_1_0-pre1.
+> > > 
+> > > Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+> > > ---
+> > > Change from v1:
+> > > - Do not use setfbuf to disable buffering as this is not proven to be
+> > >   meaningful.
+> > > - Use secure heap for passwords too as suggested by Mimi Zohar.
+> > > - Fallback to OPENSSL_malloc for old OpenSSL as suggested by Mimi Zohar.
+> > > - Simplify logic of calling CRYPTO_secure_malloc_init (call it always on
+> > >   OpenSSL init.)
+> > > - Should be applied after Bruno Meneguele's "evmctl: fix memory leak in
+> > >   get_password" patch v2.
+> > 
+> > Not sure why it isn't applying with/without Bruno's v2 patch.
+> 
+> It should be over next-testing + (manually git am'ed) Bruno's patch:
+> 
+>   db25fcd 2021-08-19 03:20:48 +0300 Use secure heap for private keys and passwords (Vitaly Chikunov)
+>   d37ea6d 2021-08-16 12:15:59 -0300 evmctl: fix memory leak in get_password (Bruno Meneguele)
+>   b1818c1 2021-08-03 16:40:08 -0400 Create alternative tpm2_pcr_read() that uses IBM TSS (Ken Goldman) (origin/next-testing)
 
-Yes, the problem is limited to transitioning from the builtin policy to
-the custom policy.   Adding a new lock around rcu code seems counter
-productive, especially since switching the policy rules happens once,
-normally during early boot before access to real root.  Please consider
-Simon's suggestion or finding some other solution.
-
-thanks,
+Sorry, my mistake.  Applied the wrong patch.
 
 Mimi
+
 
