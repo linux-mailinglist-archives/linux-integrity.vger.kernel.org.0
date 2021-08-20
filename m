@@ -2,140 +2,214 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D7E3F2D36
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Aug 2021 15:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3634D3F2EA2
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Aug 2021 17:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240754AbhHTNfu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Aug 2021 09:35:50 -0400
-Received: from mail-vi1eur05on2094.outbound.protection.outlook.com ([40.107.21.94]:41444
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233028AbhHTNfu (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Aug 2021 09:35:50 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GB+gMLJz6ampFNmWqLXkQ92O6VPGM6eIhidLFWUchwvF73V591ciRFqqyew/7Io7UKmgJ7UGQjPgO493aAzEchAj11VmWYrRwMw1RMwKiAy5to4CVKdkBUMj22+mV0MuUjz+4oeEj9JEJIYZSHynN0eW+MrKznXk7BlIMPaBKzj3LKOmuef+6teq1DmxWQ22TaMkBoZ5mLZuuxYJSzzBK0jgrlkJnpNsC1N0yT71yd494dHFqdZSiBx7rFjkA/9SvIPksN4zjCtjKq0DNraZcZFc1tfJjSgZEx4jnClPYVnJQn4tsXIQYpxNUPus9OoxPlb2SE7tKFXspD9keKvJHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MQ9sBbbgqVQaZEAZRvrTItA5eCkhRfYMTPczVUeL190=;
- b=TkO2bzOfyl+Z0meETyX3cw/2ThRHcy9lncMyvKZgkDSWLBUSPGlNBVzfreRc8bjYnSWWGyAQOKRdK2fgctF53MhiTzsRtIPRDDKYVzWziigG4YDjFtvPEw99JRPMI19ZI1VPoZqlxAHBb0yVQXGlqknp48xIZrZ7DfW/jmiCQsoNlQCAkMH+nWzZgffeaCi0PSpxijcbnBt0uvN9FWxQH3zJwfPoScmGKRs13QYsEXtEhvs814Fsp3ZsTg8/5kpjIiDX12SNjcnpgSeCATmXFrg9/TVEQVaE3KMCCleE+Ho5ZklO0HDHD0Nix7wGPj6vUETGZfrX2MbiUTtxq0v1Hg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
- dkim=pass header.d=viveris.fr; arc=none
+        id S241029AbhHTPOM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Aug 2021 11:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240987AbhHTPOG (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 20 Aug 2021 11:14:06 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD5EC061575;
+        Fri, 20 Aug 2021 08:13:28 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id u22so21212090lfq.13;
+        Fri, 20 Aug 2021 08:13:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=viverislicensing.onmicrosoft.com;
- s=selector2-viverislicensing-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MQ9sBbbgqVQaZEAZRvrTItA5eCkhRfYMTPczVUeL190=;
- b=LskZQdkROFsGBjzvvsVa8fKf3fcEYPXeWMJ6RFnryBBmoCK3mUHq0Vd+EJVYZJAHfaqgK36w3VqvmofbnhQIerDo5ReSu9FBIQ+ANiHdy1T87CHvg2B5pNQqCuuXsq5EhE7WiNHTdOaIA0CUfeF2GZtfvcnLTifsxysLFe2VKJ4=
-Received: from HE1PR0902MB1755.eurprd09.prod.outlook.com (2603:10a6:3:f2::20)
- by HE1PR0902MB1899.eurprd09.prod.outlook.com (2603:10a6:3:f3::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19; Fri, 20 Aug
- 2021 13:35:09 +0000
-Received: from HE1PR0902MB1755.eurprd09.prod.outlook.com
- ([fe80::dd95:456d:43e0:786f]) by HE1PR0902MB1755.eurprd09.prod.outlook.com
- ([fe80::dd95:456d:43e0:786f%10]) with mapi id 15.20.4436.019; Fri, 20 Aug
- 2021 13:35:08 +0000
-From:   THOBY Simon <Simon.THOBY@viveris.fr>
-To:     Igor Zhbanov <izh1979@gmail.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
+        d=gmail.com; s=20161025;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=cSoT4N2tA34NHjReyWjYwKRHNHDXLcJfJgrHgiJo3JQ=;
+        b=V8s/YGD7CYXf6AiI73iY8Zun6pRJR7wbSzwj4lnyYzKU+e8GoNWgJ2GB01KVTPeW21
+         j03VDx8bQfzNaNevVXAS0PXMth+7liUdG1gZdZ2HwLPcW9W3LQ5D3Isg5V9ex9++S9Wt
+         P6DKkbX8rq9uT3ofg+ea4ZjMgzjfLQlHV+fuhxdUlVJiMNuHDN5Ek3iKELuAASb4mTT3
+         QH2RuDMhvQ/bcT4bt4ESqPT1EGA6ZrMDwIll3V1aUqSFsH9swgxTVEVNu0aAoPMEPce+
+         2Dd8k1GRTzBZip1mpvkvrbgVUZ5C5zA3M5DFFzVdLwgWER2XVr6L/mLfwmso+8u3XARL
+         0pUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=cSoT4N2tA34NHjReyWjYwKRHNHDXLcJfJgrHgiJo3JQ=;
+        b=g/3v+iRDkGtXzhilIyq9H83e7NxyzzotP3QJ3FRUwHMjctL5FlVW4KOKEx+9oC852j
+         17GdBQNJ9QxK/mMUkfV7eHWhckOdtd2xIWNrID2KCyd+paUEt73o4MC7v/zsXxWI3I4h
+         Gsr4we/ZmU3/udc79fg1o+wf2wi6jIPuRdaFpJiRMIrO7frhChoL6XXsmhssLjWMnwT0
+         KMXu2ThGuqri4oXGxotEPw5NWfpCuahaMl8sD9foL34ztKobvtS6BucTUjtSQRKb6CJs
+         uPdnx9mRC4UQQo62b1/9wQ1/Lr4qOAityw5/DyMs/tONptKilxWBlqdmEr26Rxo2bJ+/
+         9CTg==
+X-Gm-Message-State: AOAM532iGINknLJieGec2bXf3uNYuR54HcAYpV3wiwCTpQUDqD6pro5p
+        Tw4TSXcl0kK5Sfx4mM5t7Q/yFZWzMIyNqSvk
+X-Google-Smtp-Source: ABdhPJx4vIyoFPSHzeu3c25taMlo31Y6lmSNq6e0/w5nh6fkeAgjqVZd4sa1O/4vFaUP3DNkCf00gA==
+X-Received: by 2002:a19:dc47:: with SMTP id f7mr15054328lfj.71.1629472406459;
+        Fri, 20 Aug 2021 08:13:26 -0700 (PDT)
+Received: from [192.168.0.153] (95-28-166-221.broadband.corbina.ru. [95.28.166.221])
+        by smtp.gmail.com with ESMTPSA id s7sm654971lfg.297.2021.08.20.08.13.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Aug 2021 08:13:26 -0700 (PDT)
+To:     linux-integrity <linux-integrity@vger.kernel.org>,
         linux-security-module <linux-security-module@vger.kernel.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/1] NAX (No Anonymous Execution) LSM
-Thread-Topic: [PATCH v3 0/1] NAX (No Anonymous Execution) LSM
-Thread-Index: AQHXlUdQ4ZzjOiHijU6T9EsD15WwTKt8ZdMA
-Date:   Fri, 20 Aug 2021 13:35:08 +0000
-Message-ID: <a0e96318-9c27-f447-58f4-6b065c99e4cb@viveris.fr>
-References: <adc0e031-f02d-775c-1148-e808013c1b97@gmail.com>
-In-Reply-To: <adc0e031-f02d-775c-1148-e808013c1b97@gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=viveris.fr;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b5566bb8-d5f3-4306-54d6-08d963df541f
-x-ms-traffictypediagnostic: HE1PR0902MB1899:
-x-microsoft-antispam-prvs: <HE1PR0902MB189918514158846F3284E84A94C19@HE1PR0902MB1899.eurprd09.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ubvARyWAdGSZ7SSIrsEYGVGYlysXAwKOzK7lXQBwu8bmvCXi2SCurl8oaMkjbpwJht+3VjjtDeMv2M1dK67MJNyn6RM2p4fuAo5N792VQn9OytXKbUjZqYp92fXiG8nwDWrP/qjPUEH7wvmY3U0TaOlLCIz6XwR5jr8PS3S5BY1TymsxkTNUfkhbYXrLUAuNCJVovczuMnsYeBVUnQt3AKGKHqEat+0VvnP4BZbwIp10Ed31kR7Y885qTMLTv7P59EkZ6LdzNNT5mE6DT8D5n+ZkoFCtTOOnYCwWORrITLISWj1SbGqXCnrr5tYRyHQCIQHjjNWZu32QbjL7o3IzzYqqQFGLYBXoyoxiXcPJTW0VmYwHGDCA/E3+ORdyU9wraC9UOI1ioSVNkaEQvVTmt1Fg+27p0PSYklvSaSbllLIInofJxS7w6Jsm8BcVfqFfycnw5p2bfjeUcLbrreAYt7MQAOFwAi0TgacKjgJs1lqfmagtwcPMQ8ujYjMxhffkJe60GKutUA/+CNsWjIK2QsvGqR0QImd/TwXxjpTHpo02vb1hBJGuInCHalk1zeOLaHH2ODYkCeCnpDLgt/Wse4EERL7uPy7ePS2+5xaxR7hUQD4AQWywwQfJ+vpGZyO8V+Kw96vb8yCiLANWPJedqxUFSVFbqH7CVhye0Rm88MXWkFJKQadLgli5DTpBhl9LKOPy0RxWQlouQ3LTivJ5vegfzwpb/duWRSbfKM8KEIlqb+QI8JyG7H7Xuvu3Upbx
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0902MB1755.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(136003)(376002)(396003)(39830400003)(6512007)(8936002)(36756003)(26005)(31686004)(83380400001)(8676002)(31696002)(5660300002)(38070700005)(6486002)(2906002)(71200400001)(66476007)(66556008)(64756008)(76116006)(66946007)(66446008)(86362001)(91956017)(478600001)(6506007)(38100700002)(2616005)(186003)(110136005)(316002)(122000001)(66574015)(53546011)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M0xBOXlaMjhLVDZISGJuaDlVc1V2RFNpSFpIbnc2SUs2Q2xyZmlCdkFZSzBN?=
- =?utf-8?B?ZWZiMUUyRHQySkt5VUgyRUVtVmdLS2FVZzdIdnZLbEI2TTVHY2VxeFR1TVJ2?=
- =?utf-8?B?NC9BL3YyNGhpZndjL3JQbTRJYUZaSjF4dktNMWU0ZWd4NWhadGMyd3I3UGlm?=
- =?utf-8?B?c1RYclVDaWVNUUxHbERLZTFXWUg1SDF4MGRlS2pRZnVwNXpSYmVNOEUxbGhl?=
- =?utf-8?B?UHdVZjdJWFFRb2dLQ0NjcXZjenkzOVdqQjhCV1R5cUNwM241T3VwMFI4dGdJ?=
- =?utf-8?B?UjBzbGQ4ZmlPRmJZNklZckI5RFZFanN2NWFqbjI3Z1ZTMzk0c1JkcHc1bHFw?=
- =?utf-8?B?UGZaOHNwZ0xwcFQvNnpIN1BKN2o0SUVIZVUzYnN5LzZ6WHdCbFdXM2JxUDZa?=
- =?utf-8?B?TzdNb2lFMDhSWWRzREd4Z2hJaU1TOGI3emhoTmpxTHl4UExYaUpkUHFROTdQ?=
- =?utf-8?B?TzlQbk53aGpmeXNPRmR0YnpXdTlKK1NsQS9mdTV1SlNXSVl1S1ZHMkswUjdn?=
- =?utf-8?B?UmFEd3FuUGdNMzdOaVpidTRqM09CZDBrZWpma2VnRi9rekNqWGNWaU9CV1l1?=
- =?utf-8?B?WENzM1BTN2NacS9HMUNjdDQvaldRMHUvZEhFUkJoTmVxcVFmR0NZYzFsbGwv?=
- =?utf-8?B?SFJzaDR4Z0hrb3B2NU1hMnp6b1Z3RTJiVTd2Sis5Wk8rcnhqbEJHVlFuVitl?=
- =?utf-8?B?S2U3QTNWWDBLNzBDa0VBczJnVHZQSTZsOXNJcUE0MFV0QWxidk5jVHpWM1pw?=
- =?utf-8?B?SDgvbTROSkY5Rk5uNzNvWGY4T2p2b2hEVVJHdi9kZ1ZvcXRwZndkMkl4QWYw?=
- =?utf-8?B?MlQzTTZpVXY0R1lvWmJEeG8zMTJmVU1iMExxalpvYU83NDhqOUcrZ1dwdFdI?=
- =?utf-8?B?Q2Z1MVFQSk84d2N6OW1aSVF6Z3VjR0JpbEZIM0kxSWN4T1NFQ05oQTlmVG81?=
- =?utf-8?B?aDNTclF0M3B6aDQrSTVWZklrNHd6Ymc0a0ZaVHB5R01MaS9iWE1CWGxQRm5W?=
- =?utf-8?B?eE1mQ2NLRmRYcnJqcDZXWWxVdWxWNGFWN1pmOTBZZXh2aEw4a0UrNUxiSWhk?=
- =?utf-8?B?RnhXUEtoaURvYTdtUXV6cXgzeWQzTjRGTHFXYTRoTkFXaFBxVTF2NG9ZQUxr?=
- =?utf-8?B?WW1LZERLbWQrdHVXMzJJQmNxOGxmMVE3SVhodWhmREFYa2xSMCtmUnFrclph?=
- =?utf-8?B?WnB0cXJaa3grVy9Zb0FVVEpXYWg4WVFVdWxrSjZ0ajBIVG1RNEJhODNCT0hv?=
- =?utf-8?B?K1hWSmRXeVcvdE5DNkprclFVbXlnYXByKyt5SGU3M1VzYXd3MmZqNm8zMnkr?=
- =?utf-8?B?NVZyakJUaVBxM2JwRFRmL1RoUWtGY1lidVhJM01rK2tweWlnN29kMVdhdFVR?=
- =?utf-8?B?Y01LTVExclgzYWVPbksxVVlrYkF5bmJ0QytmamVFanp0c3UwWHNaR3lsRllU?=
- =?utf-8?B?NG82QWFZbUtWZ3dSV2U5R040YmY1WC9VcVJOYVluQ0tsZUpJQWJ4d3o4dGdD?=
- =?utf-8?B?OFFQS1hHYXh2YmxreFlONkFBRTN5WmtDN01BdTVVbTI5alhYVklWYkZEeGo4?=
- =?utf-8?B?blNhdTdKckU3eDcxcWVTMnhiVDczQjhCVFArdFQ3UnBJWTBnd1VnSDhJMXRJ?=
- =?utf-8?B?RDRKTmQvbDE0VzVEeXBsOU4xUFQ2WVZpR2RJaFdyOXdoWFhWRFcrZkZZRDVV?=
- =?utf-8?B?Q2Uwb3FkVGxtanhsaThvaHNOZW1CRXp1aXRqT3pIa0tuM1hJc3BiOEdRQk5v?=
- =?utf-8?Q?0YTAfa4+XFb7SCpxD/JgQbb+idpjsTrjIpvMVEH?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EB70BE26BB238A40BB09C041D02C80E5@eurprd09.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        THOBY Simon <Simon.THOBY@viveris.fr>,
+        linux-kernel@vger.kernel.org
+From:   Igor Zhbanov <izh1979@gmail.com>
+Subject: [PATCH v4 0/1] NAX (No Anonymous Execution) LSM
+Message-ID: <57e58b7f-e601-e9c7-5adf-1d189ba4982d@gmail.com>
+Date:   Fri, 20 Aug 2021 18:13:31 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-OriginatorOrg: viveris.fr
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0902MB1755.eurprd09.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5566bb8-d5f3-4306-54d6-08d963df541f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2021 13:35:08.7463
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6EPcGmqWI80UO7Ra2dqNP/5sgrPxEOBT3CBpFVZVRDp2JrT6l/TTQfHs5riaaXbm7KpVbkAdxGI29iGbBHTSNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0902MB1899
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-SGkgSWdvciwNCg0KT24gOC8yMC8yMSAxMjoxMiBBTSwgSWdvciBaaGJhbm92IHdyb3RlOg0KPiBb
-T3ZlcnZpZXddDQo+IA0KPiBGaWxlbGVzcyBtYWx3YXJlIGF0dGFja3MgYXJlIGJlY29taW5nIG1v
-cmUgYW5kIG1vcmUgcG9wdWxhciwgYW5kIGV2ZW4NCj4gcmVhZHktdG8tdXNlIGZyYW1ld29ya3Mg
-YXJlIGF2YWlsYWJsZSBbMV0sIFsyXSwgWzNdLiBUaGV5IGFyZSBiYXNlZCBvbg0KPiBydW5uaW5n
-IG9mIHRoZSBtYWx3YXJlIGNvZGUgZnJvbSBhbm9ueW1vdXMgZXhlY3V0YWJsZSBtZW1vcnkgcGFn
-ZXMgKHdoaWNoDQo+IGFyZSBub3QgYmFja2VkIGJ5IGFuIGV4ZWN1dGFibGUgZmlsZSBvciBhIGxp
-YnJhcnkgb24gYSBmaWxlc3lzdGVtLikgVGhpcw0KPiBhbGxvd3MgZWZmZWN0aXZlbHkgaGlkaW5n
-IG1hbHdhcmUgcHJlc2VuY2UgaW4gYSBzeXN0ZW0sIG1ha2luZyBmaWxlc3lzdGVtDQo+IGludGVn
-cml0eSBjaGVja2luZyB0b29scyB1bmFibGUgdG8gZGV0ZWN0IHRoZSBpbnRydXNpb24uDQo+IA0K
-DQpbc25pcF0NCg0KPiANCj4gW1RPRE9dDQo+IC0gSW1wbGVtZW50IHhhdHRycyBzdXBwb3J0IGZv
-ciBtYXJraW5nIHByaXZpbGVnZWQgYmluYXJpZXMgb24gYSBwZXItZmlsZQ0KPiAgIGJhc2lzLg0K
-DQpJZi93aGVuIHlvdSBwbGFuIHRvIGFkZCB0aGF0LCBhZGRpbmcgdGhlIG5ldyB4YXR0ciB0byB0
-aGUgbGlzdCBvZiBFVk0tcHJvdGVjdGVkIHhhdHRycw0KbWF5IGJlIHdvcnRoIGRpc2N1c3Npbmcu
-DQoNCj4gLSBTdG9yZSBOQVggYXR0cmlidXRlcyBpbiB0aGUgcGVyLXRhc2sgTFNNIGJsb2IgdG8g
-aW1wbGVtZW50IHNwZWNpYWwNCj4gICBsYXVuY2hlcnMgZm9yIHRoZSBwcml2aWxlZ2VkIHByb2Nl
-c3Nlcywgc28gYWxsIG9mIHRoZSBjaGlsZHJlbiBwcm9jZXNzZXMNCj4gICBvZiBzdWNoIGEgbGF1
-bmNoZXIgd291bGQgYmUgYWxsb3dlZCB0byBoYXZlIGFub255bW91cyBleGVjdXRhYmxlIHBhZ2Vz
-DQo+ICAgKGJ1dCBub3QgdG8gZ3JhbmRjaGlsZHJlbikuDQo+IA0KDQpbc25pcF0NCg0KT3ZlcmFs
-bCBJJ20gcGxlYXNlZCB0byBzZWUgdGhpcyBwYXRjaCBhbmQgSSBoYXZlIG5vIG1vcmUgcmVtYXJr
-cywNCm91dHNpZGUgb2YgdGhlIGZldyBwb2ludHMgUmFuZHkgRHVubGFwIHJhaXNlZC4NCg0KUmV2
-aWV3ZWQtYnk6IFRIT0JZIFNpbW9uIDxTaW1vbi5USE9CWUB2aXZlcmlzLmZyPg0KDQpUaGFua3Ms
-DQpTaW1vbg==
+[Overview]
+
+Fileless malware attacks are becoming more and more popular, and even
+ready-to-use frameworks are available [1], [2], [3]. They are based on
+running of the malware code from anonymous executable memory pages (which
+are not backed by an executable file or a library on a filesystem.) This
+allows effectively hiding malware presence in a system, making filesystem
+integrity checking tools unable to detect the intrusion.
+
+Typically, the malware first needs to intercept the execution flow (e.g.,
+by the means of ROP-based exploit). Then it needs to download the main
+part (in the form of normal executable or library) from its server,
+because it is hard to implement the entire exploit in ROP-based form.
+There are a number of security mechanisms that can ensure the integrity
+of the file-system, but we need to ensure the integrity of the code in
+memory too, to be sure, that only authorized code is running in the
+system.
+
+The proposed LSM is preventing the creation of anonymous executable pages
+for the processes. The LSM intercepts mmap() and mprotect() system calls
+and handles it similarly to SELinux handlers.
+
+The module allows to block the violating system call or to kill the
+violating process, depending on the settings, along with rate-limited
+logging.
+
+Currently, the module restricts ether all processes or only the
+privileged processes, depending on the settings. The privileged process
+is a process for which any of the following is true:
++ uid   == 0 && !issecure(SECURE_NOROOT)
++ euid  == 0 && !issecure(SECURE_NOROOT)
++ suid  == 0 && !issecure(SECURE_NOROOT)
++ cap_effective has any capability except of kernel.nax.allowed_caps
++ cap_permitted has any capability except of kernel.nax.allowed_caps
+
+Checking of uid/euid/suid is important because a process may call
+seteuid(0) to gain privileges (if SECURE_NO_SETUID_FIXUP secure bit
+is not set).
+
+The sysctl parameter kernel.nax.allowed_caps allows to define safe
+capabilities set for the privileged processes.
+
+[JIT]
+
+Because of blocked anonymous code execution, JIT-compiled code, some
+interpreters (which are using JIT) and libffi-based projects can be
+broken.
+
+Our observation shows that such processes are typically running by a
+user, so they will not be privileged, so they will be allowed to use
+anonymous executable pages.
+
+But for small embedded set-ups it could be possible to get rid of such
+processes at all, so the module could be enabled without further
+restrictions to protect both privileged and non-privileged processes.
+
+In addition, libffi can be modified not to use anonymous executable
+pages.
+
+[Similar implementations]
+
+Although SELinux could be used to enable similar functionality, this LSM
+is simpler. It could be used in set-ups, where SELinux would be overkill.
+
+There is also SARA LSM module, which solves similar task, but it is more
+complex.
+
+[Cooperation with other security mechanisms]
+
+NAX LSM is more useful in conjunction with IMA. IMA would be responsible
+for integrity checking of file-based executables and libraries, and
+NAX LSM would be responsible for preventing of anonymous code execution.
+
+Alternatively, NAX LSM can be used with read-only root file system,
+protected by dm-verity/fs-verity.
+
+[TODO]
+- Implement xattrs support for marking privileged binaries on a per-file
+  basis and protect them with EVM.
+- Store NAX attributes in the per-task LSM blob to implement special
+  launchers for the privileged processes, so all of the children processes
+  of such a launcher would be allowed to have anonymous executable pages
+  (but not to grandchildren).
+
+[Links]
+
+[1] https://blog.fbkcs.ru/elf-in-memory-execution/
+[2] https://magisterquis.github.io/2018/03/31/in-memory-only-elf-execution.html
+[3] https://www.prodefence.org/fireelf-fileless-linux-malware-framework/
+
+[Credits]
+
+Thanks to Mimi Zohar for consulting and to Simon Thoby and Randy Dunlap for
+thorough review.
+
+[Changelog]
+
+V4
+- Fix indentation issues and typos in Kconfig.
+
+V3
+- Fix memory leak in allowed_caps assigning code.
+- Protect allowed_caps updating with a spinlock.
+- Fix Kconfig options description.
+- Add example for allowed_caps value.
+- Fix typo in documentation.
+
+V2
+- Fixed typo in Kconfig.
+- Fixed "cap_effective" and "cap_permitted" parameters description in NAX.rst.
+- Added "nax_allowed_caps" setup parameter. Factored out capabilities parsing
+  logic.
+- Added parameter for checking all processes (not only privileged).
+- Added Kconfig parameter for setting allowed capabilities.
+- Updated nax_file_mprotect() to avoid calling of nax_mmap_file() to avoid
+  duplicated checks.
+- Protect allowed_caps with RCU.
+- Fixed all errors and most warning found by checkpatch.pl.
+- Updated the module documentation. Added description of the boot parameters to
+  kernel-parameters.
+- Updated commit message.
+
+V1:
+- Initial implementation.
+
+Igor Zhbanov (1):
+  NAX LSM: Add initial support
+
+ Documentation/admin-guide/LSM/NAX.rst         |  72 +++
+ Documentation/admin-guide/LSM/index.rst       |   1 +
+ .../admin-guide/kernel-parameters.rst         |   1 +
+ .../admin-guide/kernel-parameters.txt         |  32 ++
+ security/Kconfig                              |  11 +-
+ security/Makefile                             |   2 +
+ security/nax/Kconfig                          | 113 +++++
+ security/nax/Makefile                         |   4 +
+ security/nax/nax-lsm.c                        | 472 ++++++++++++++++++
+ 9 files changed, 703 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/admin-guide/LSM/NAX.rst
+ create mode 100644 security/nax/Kconfig
+ create mode 100644 security/nax/Makefile
+ create mode 100644 security/nax/nax-lsm.c
+
+-- 
+2.26.2
+
