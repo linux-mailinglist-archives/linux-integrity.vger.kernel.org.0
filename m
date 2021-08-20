@@ -2,242 +2,139 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A53A3F328E
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Aug 2021 19:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3383F351E
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Aug 2021 22:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234942AbhHTRzA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Aug 2021 13:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234160AbhHTRy7 (ORCPT
+        id S230266AbhHTUUH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Aug 2021 16:20:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25101 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238872AbhHTUUH (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Aug 2021 13:54:59 -0400
-Received: from ha0.nfschina.com (unknown [IPv6:2400:dd01:100f:2:d63d:7eff:fe08:eb3f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28727C061575;
-        Fri, 20 Aug 2021 10:54:20 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha0.nfschina.com (Postfix) with ESMTP id 6DF53AE0DB1;
-        Sat, 21 Aug 2021 01:54:27 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha0.nfschina.com ([127.0.0.1])
-        by localhost (ha0.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BcXU23MVm0PP; Sat, 21 Aug 2021 01:54:06 +0800 (CST)
-Received: from [192.168.10.13] (unknown [112.3.220.165])
-        (Authenticated sender: liqiong@nfschina.com)
-        by ha0.nfschina.com (Postfix) with ESMTPA id E0D9CAE0D4F;
-        Sat, 21 Aug 2021 01:54:05 +0800 (CST)
-Message-ID: <6d60893c-63dc-394f-d43c-9ecab7b6d06e@nfschina.com>
-Date:   Sat, 21 Aug 2021 01:53:42 +0800
+        Fri, 20 Aug 2021 16:20:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1629490768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e0xk0PCgbvrI9oL4egy0zV/DTKLD6KkoLQ6vPavMKGE=;
+        b=WLlgdVohXbv00Y4iufV5eJ6NarYYvELoMeAE5eX1atOIKXDkTYFJ1Qj5kjaz2mgLBNlY+r
+        paeDCtqCu355SayZdDWLGnmDV8RbI6Wj4Slf2nHMlHXaAWHDUl34vo6ihAY7ERUtt9R8c3
+        LLjE7yxkemNUFAXs7tTscDi98ucHlrU=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-277--qaFsx2oOoa_vmgnELU_1A-1; Fri, 20 Aug 2021 16:19:27 -0400
+X-MC-Unique: -qaFsx2oOoa_vmgnELU_1A-1
+Received: by mail-qv1-f72.google.com with SMTP id s4-20020ad44b24000000b0035c77ac6861so7757087qvw.0
+        for <linux-integrity@vger.kernel.org>; Fri, 20 Aug 2021 13:19:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e0xk0PCgbvrI9oL4egy0zV/DTKLD6KkoLQ6vPavMKGE=;
+        b=Fj6u2tyNkRq7ja+DLHozIn8Zomlbhud6HSLJa5ywWZQ8836uEG+7QuS9eRf2Tb/eYV
+         wW+VXL1kxc4fq4Tyj4ghWyaH3ILVD1eK77w/Tsq49x/qj6ub2cj97X24kxCtaJZ+Nie/
+         HVb8LzbblLzYN9+xWgnOffrBOU2pWDobQZMFA3Se0C5PXCroFGto1yuo3Mk0FzZv0CU4
+         RlJ0bJao6V+sl6JFcGfgm0Zy1fx9tmv4ieGaJA74F+X11dO/IizmROMnAFaYjEBuG63K
+         x5cnJoWAfYgJkeVuF2aQy4PhO6qaLQtGJ78GVE43HodzVstJawOpSV6boXTvEtLqYNw9
+         FZ2Q==
+X-Gm-Message-State: AOAM530cgNGNmiCjqQ0H3vA355NJI+gpK/UILGPUQKS2aVT0AciHUS0S
+        VJCRLRhlaIEL+2WHpXDzTncOyH80kl7FUs8dUWVkkqoCAIwTwU6M42DkM5bsz3V2PiCtW+l+Q7q
+        0NTxNgclH7JVxg7tm5Z+GcgWZrvA=
+X-Received: by 2002:ae9:f701:: with SMTP id s1mr4317132qkg.223.1629490766944;
+        Fri, 20 Aug 2021 13:19:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyb2iDL3pszKH41Z1jgPp9S39r1QoXK1jvTsWR2PAHnl9VBPP2M+hZZXFZGgTA1ObYjix4Usw==
+X-Received: by 2002:ae9:f701:: with SMTP id s1mr4317111qkg.223.1629490766730;
+        Fri, 20 Aug 2021 13:19:26 -0700 (PDT)
+Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
+        by smtp.gmail.com with ESMTPSA id a14sm2768090qtb.57.2021.08.20.13.19.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Aug 2021 13:19:26 -0700 (PDT)
+Date:   Fri, 20 Aug 2021 16:19:25 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Cc:     dm-devel@redhat.com, agk@redhat.com, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, sfr@canb.auug.org.au,
+        public@thson.de, nramas@linux.microsoft.com,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH 0/6] updates to device mapper target measurement using ima
+Message-ID: <YSAOTX+TQwaCUeCn@redhat.com>
+References: <20210813213801.297051-1-tusharsu@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.0.1
-Subject: Re: [PATCH] ima: fix infinite loop within "ima_match_policy"
- function.
-Content-Language: en-US
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210819101529.28001-1-liqiong@nfschina.com>
- <8d17f252-4a93-f430-3f25-e75556ab01e8@viveris.fr>
- <d385686b-ffa5-5794-2cf2-b87f2a471e78@nfschina.com>
- <1f631c3d-5dce-e477-bfb3-05aa38836442@viveris.fr>
-From:   liqiong <liqiong@nfschina.com>
-In-Reply-To: <1f631c3d-5dce-e477-bfb3-05aa38836442@viveris.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210813213801.297051-1-tusharsu@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Simon,
+On Fri, Aug 13 2021 at  5:37P -0400,
+Tushar Sugandhi <tusharsu@linux.microsoft.com> wrote:
 
-On 2021/8/20 21:23, THOBY Simon wrote:
-> Hi Liqiong,
->
-> On 8/20/21 12:15 PM, 李力琼 wrote:
->> Hi, Simon:
->>
->> This solution is better then rwsem, a temp "ima_rules" variable should
->> can fix. I also have a another idea, with a little trick, default list
->> can traverse to the new list, so we don't need care about the read side.
->>
->> here is the patch:
->>
->> @@ -918,8 +918,21 @@ void ima_update_policy(void)
->>          list_splice_tail_init_rcu(&ima_temp_rules, policy, synchronize_rcu);
->>
->>          if (ima_rules != policy) {
->> +               struct list_head *prev_rules = ima_rules;
->> +               struct list_head *first = ima_rules->next;
->>                  ima_policy_flag = 0;
->> +
->> +               /*
->> +                * Make the previous list can traverse to new list,
->> +                * that is tricky, or there is a deadly loop whithin
->> +                * "list_for_each_entry_rcu(entry, ima_rules, list)"
->> +                *
->> +                * After update "ima_rules", restore the previous list.
->> +                */
-> I think this could be rephrased to be a tad clearer, I am not quite sure
-> how I must interpret the first sentence of the comment.
-I got it,  how about this:
-  /*
-   * The previous list has to traverse to new list,
-   * Or there may be a deadly loop within
-   * "list_for_each_entry_rcu(entry, ima_rules, list)"
-   *
-   * That is tricky, after updated "ima_rules", restore the previous list.
-   */
->
->
->> +               prev_rules->next = policy->next;
->>                  ima_rules = policy;
->> +               syncchronize_rcu();
-> I'm a bit puzzled as you seem to imply in the mail this patch was tested,
-> but there is no 'syncchronize_rcu' (with two 'c') symbol in the kernel.
-> Was that a copy/paste error? Or maybe you forgot the 'not' in "This
-> patch has been tested"? These errors happen, and I am myself quite an
-> expert in doing them :)
+> 
+> There were several improvements suggested for the original device mapper
+> target measurement patch series [1].
+> 
+> Those improvement suggestions include: 
+>  - Prefixing hashes for the DM tables being measured in ima log with the
+>    hash algorithm.
+>  - Adding version information for DM related events being measured in the
+>    ima log.
+>  - Prefixing DM related event names with "dm_".
+>  - Including the verity target attribute - "root_hash_sig_key_desc"
+>    in the ima measurement log.
+> 
+> This series incorporates the above suggestions.
+> 
+> This series also has the following fixes:
+>  - Adding a one-time warning to dmesg during dm_init if
+>    CONFIG_IMA_DISABLE_HTABLE is set to 'n'.
+>  - Updating 'integrity' target to remove the duplicate measurement of
+>    the attribute "mode=%c".
+>  - Indexing various attributes in 'multipath' target, and adding
+>    "nr_priority_groups=%u" attribute to the measurements.
+>  - Fixing 'make htmldocs' warnings in dm-ima.rst.
+>  - Adding missing documentation for the targets - 'cache', 'integrity',
+>    'multipath', and 'snapshot' in dm-ima.rst.
+>  - Updating dm-ima.rst documentation with the grammar for various DM
+>    events and targets in Backus Naur form.
+>  - Updating dm-ima.rst documentation to be consistent with the code
+>    changes described above.
+> 
+> This series is based on top of the following git repo/branch/commit:
+>  Repo: https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git
+>  Branch: dm-5.15
+>  Commit: commit 5a2a33884f0b ("dm crypt: Avoid percpu_counter spinlock contention in crypt_page_alloc()")
+> 
+> 
+> [1] https://patchwork.kernel.org/project/dm-devel/cover/20210713004904.8808-1-tusharsu@linux.microsoft.com/
+> 
+> Tushar Sugandhi (6):
+>   dm ima: prefix dm table hashes in ima log with hash algorithm
+>   dm ima: add version info to dm related events in ima log
+>   dm ima: prefix ima event name related to device mapper with dm_
+>   dm ima: add a warning in dm_init if duplicate ima events are not
+>     measured
+>   dm ima: update dm target attributes for ima measurements
+>   dm ima: update dm documentation for ima measurement support
 
+Hi,
 
-Sorry for the mistake, I copy/paste the patch and delete/edit some lines,
-have reviewed before sending, but not found. I have made a case to reproduce
-the error, dumping "ima_rules" and every item address of list in the error
-situaiton, I can watchthe "ima_rules" change, old list traversing to the 
-new list.
-And I have been doing a reboot test which found this bug. This patch 
-seems to work fine.
+I reviewed and staged these changes in dm-5.15 (and for-next) with
+minimal tweaks. Really just some whitespace and a simplification of
+the conditional for the warning in dm_init().
 
+Please make sure that you manually apply Christoph's fix for the issue
+you reported earlier in the week, you were cc'd on the ultimate fix
+which has a different patch header than this patch but on a code level
+it is identical (and only patch that landed on a public mailing list
+due to typo in linux-block email address when hch sent the final fix):
+https://listman.redhat.com/archives/dm-devel/2021-August/msg00154.html
 
->
->> +               prev_rules->next = first;
->>
->>
->> The side effect is the "ima_default_rules" will be changed a little while.
->> But it make sense, the process should be checked again by the new policy.
->>
->> This patch has been tested, if will do, I can resubmit this patch.>
->> How about this ?
->
-> Correct me if I'm wrong, here is how I think I understand you patch.
-> We start with a situation like that (step 0):
-> ima_rules --> List entry 0 (head node) = ima_default_rules <-> List entry 1 <-> List entry 2 <-> ... <-> List entry 0
->
-> Then we decide to update the policy for the first time, so
-> 'ima_rules [&ima_default_rules] != policy [&ima_policy_rules]'.
-> We enter the condition.
-> First we copy the current value of ima_rules (&ima_default_rules)
-> to a temporary variable 'prev_rules'. We also create a pointer dubbed
-> 'first' to the entry 1 in the default list (step 1):
-> prev_rules -------------
->                         \/
-> ima_rules --> List entry 0 (head node) = ima_default_rules <-> List entry 1 <-> List entry 2 <-> ... <-> List entry 0
->                                                                     /\
-> first --------------------------------------------------------------
->
->
-> Then we update prev_rules->next to point to policy->next (step 2):
-> List entry 1 <-> List entry 2 <-> ... -> List entry 0
->   /\
-> first
-> 	(notice that list entry 0 no longer points backwards to 'list entry 1',
-> 	but I don't think there is any reverse iteration in IMA, so it should be
-> 	safe)
->
-> prev_rules -------------
->                         \/
-> ima_rules --> List entry 0 (head node) = ima_default_rules
->                         |
->                         |
->                         -------------------------------------------
->                                                                   \/
-> policy --> policy entry 0' (head node) = ima_policy_rules <-> policy entry 1' <-> policy entry 2' <-> .... <-> policy entry 0'
->
->
-> We then update ima_rules to point to ima_policy_rules (step 3):
-> List entry 1 <-> List entry 2 <-> ... -> List entry 0
->   /\
-> first
->
-> prev_rules -------------
->                         \/
-> ima_rules     List entry 0 (head node) = ima_default_rules
->       |                 |
->       |                 |
->       |                 ------------------------------------------
->       ---------------                                            |
->                     \/                                           \/
-> policy --> policy entry 0' (head node) = ima_policy_rules <-> policy entry 1' <-> policy entry 2' <-> .... <-> policy entry 0'
->                                                                     /\
-> first --------------------------------------------------------------
->
-> Then we run synchronize_rcu() to wait for any RCU reader to exit their loops (step 4).
->
-> Finally we update prev_rules->next to point back to the ima policy and fix the loop (step 5):
->
-> List entry 1 <-> List entry 2 <-> ... -> List entry 0
->   /\
-> first
->
-> prev_rules ---> List entry 0 (head node) = ima_default_rules <-> List entry 1 <-> List entry 2 <-> ... <-> List entry 0
->                                                                       /\
->                                                                   first (now useless)
-> ima_rules
->       |
->       |
->       |
->       ---------------
->                     \/
-> policy --> policy entry 0' (head node) = ima_policy_rules <-> policy entry 1' <-> policy entry 2' <-> .... <-> policy entry 0'
->
-> The goal is that readers should still be able to loop
-> (forward, as we saw that backward looping is temporarily broken)
-> while in steps 0-4.
+It is an issue that'll linger in the dm-5.15 because I cannot rebase
+at this late hour even once Jens picks the fix up into the
+linux-block tree.
 
+Thanks,
+Mike
 
-Yes, It's the workflow.
-
-
-> I'm not completely sure what would happen to a client that started iterating
-> over ima_rules right after step 2.
->
-> Wouldn't they be able to start looping through the new policy
-> as 'List entry 0 (head node) = ima_default_rules' points to ima_policy_rules?
-> And if they, wouldn't they loop until the write to 'ima_rule' at step 3 (admittedly
-> very shortly thereafter) completed?
-> And would the compiler be allowed to optimize the read to 'ima_rules' in the
-> list_for_each_entry() loop, thereby never reloading the new value for
-> 'ima_rules', and thus looping forever, just what we are trying to avoid?
-
-
-Yes,  "ima_rules" cache not update in time, It's a risk. I am not sure 
-if "WRITE_ONCE"
-can do this trick. How about:
-     WRITE_ONCE(prev_rules->next, policy->next);
-     WRITE_ONCE(ima_rules, policy);
-
-
-If can't fix the cache issue, maybe the "ima_rules_tmp" solution is the 
-best way.
-I will test it.
-
-
-> Overall, I'm tempted to say this is perhaps a bit too complex (at least,
-> my head tells me it is, but that may very well be because I'm terrible
-> at concurrency issues).
->
-> Honestly, in this case I think awaiting input from more experienced
-> kernel devs than I is the best path forward :-)
->
->> ----------
->> Regards,
->> liqiong
->>
-> Thanks,
-> Simon
