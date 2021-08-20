@@ -2,135 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3683F355E
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Aug 2021 22:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECBA3F3571
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Aug 2021 22:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239463AbhHTUhY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 20 Aug 2021 16:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239830AbhHTUhQ (ORCPT
+        id S239307AbhHTUk7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 20 Aug 2021 16:40:59 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8374 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229811AbhHTUk7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 20 Aug 2021 16:37:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22794C061760
-        for <linux-integrity@vger.kernel.org>; Fri, 20 Aug 2021 13:36:38 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1mHBFk-0004Q1-7C; Fri, 20 Aug 2021 22:36:36 +0200
-Subject: Re: [PATCH 0/4] KEYS: trusted: Introduce support for NXP CAAM-based
- trusted keys
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     David Gstir <david@sigma-star.at>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>, keyrings@vger.kernel.org,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        linux-security-module@vger.kernel.org,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
-        Richard Weinberger <richard@nod.at>,
-        James Morris <jmorris@namei.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        David Howells <dhowells@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, Sascha Hauer <kernel@pengutronix.de>,
-        linux-integrity@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-References: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de>
- <CAJ+vNU23cXPmiqKcKH_WAgD-ea+=pEJzGK+q7zOy=v2o0XU7kA@mail.gmail.com>
- <2b48a848-d70b-9c43-5ca0-9ab72622ed12@pengutronix.de>
- <CAJ+vNU225mgHHg00r67f1L6bEub+_h55hCBAMhCq2rd8kWU-qg@mail.gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <9200d46d-94a2-befd-e9b0-93036e56eb8a@pengutronix.de>
-Date:   Fri, 20 Aug 2021 22:36:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <CAJ+vNU225mgHHg00r67f1L6bEub+_h55hCBAMhCq2rd8kWU-qg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        Fri, 20 Aug 2021 16:40:59 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17KKbYRg103783;
+        Fri, 20 Aug 2021 16:40:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=bdzy0qw0uLZwSG/Ec24VgKv4ya+aGMLknjqliBqgKoc=;
+ b=kKd+HMORUY4lqaFmyk2FRLCYPhXPtnBeuGxkPtxy5CyM9m+w4mirvijCcAA0DbStIxxd
+ xM5fqzCkxkCKM2msiSBzxHuFdZlyeAIU1mRoZ2U4ScssiuKVfK9Wascy9r3x+pkkCDE0
+ +MSK/NGiWkVB8vaKbQJnexO10+z5xiMlJRhxNwECQqmOLc92QgPrv4XZvTir2bDtMDHP
+ ZI32iY1mzMWya4/01PzfHdl1nqKEHEJFwGC07Nc8RvSnoO5DePT6lmUxNfTI59rIB3l0
+ 4Xz0SPkSXm4AnR+eHBEoOtPuD6LDxhd2AMifPuGcWqE2IO4r9QOIGkaMAbPEhdG2hp2u tg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3aj6smv9yq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Aug 2021 16:40:19 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17KKeJiu112486;
+        Fri, 20 Aug 2021 16:40:19 -0400
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3aj6smv9xx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Aug 2021 16:40:19 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17KKTtZ9004079;
+        Fri, 20 Aug 2021 20:40:16 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3ae53hh0t1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 20 Aug 2021 20:40:16 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17KKacaj56754576
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 Aug 2021 20:36:38 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2C4B42054;
+        Fri, 20 Aug 2021 20:40:13 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A3DFF42049;
+        Fri, 20 Aug 2021 20:40:12 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.35.235])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 20 Aug 2021 20:40:12 +0000 (GMT)
+Message-ID: <e6638458d82b767546b30d5c9c0cdde03d674e04.camel@linux.ibm.com>
+Subject: Re: [PATCH] IMA: set a default value for unknown digsig algorithms
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     THOBY Simon <Simon.THOBY@viveris.fr>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Cc:     "syzbot+e8bafe7b82c739eaf153@syzkaller.appspotmail.com" 
+        <syzbot+e8bafe7b82c739eaf153@syzkaller.appspotmail.com>
+Date:   Fri, 20 Aug 2021 16:40:11 -0400
+In-Reply-To: <20210820121847.34087-1-Simon.THOBY@viveris.fr>
+References: <20210820121847.34087-1-Simon.THOBY@viveris.fr>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QVGJYc-B4vpFtQtOnG_URikiT1fSidds
+X-Proofpoint-ORIG-GUID: sRTFJWfca6Z4HwIlLbOyvraDJJ2zc_pJ
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-20_08:2021-08-20,2021-08-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ phishscore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108200115
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 20.08.21 22:20, Tim Harvey wrote:
-> On Fri, Aug 20, 2021 at 9:20 AM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->> On 20.08.21 17:39, Tim Harvey wrote:
->>> Thanks for your work!
->>>
->>> I've been asked to integrate the capability of using CAAM to
->>> blob/deblob data to an older 5.4 kernel such as NXP's downstream
->>> vendor kernel does [1] and I'm trying to understand how your series
->>> works. I'm not at all familiar with the Linux Key Management API's or
->>> trusted keys. Can you provide an example of how this can be used for
->>> such a thing?
->>
->> Here's an example with dm-crypt:
->>
->>   https://lore.kernel.org/linux-integrity/5d44e50e-4309-830b-79f6-f5d888b1ef69@pengutronix.de/
->>
->> dm-crypt is a bit special at the moment, because it has direct support for
->> trusted keys. For interfacing with other parts of the kernel like ecryptfs
->> or EVM, you have to create encrypted keys rooted to the trusted keys and use
->> those. The kernel documentation has an example:
->>
->>   https://www.kernel.org/doc/html/v5.13/security/keys/trusted-encrypted.html
->>
->> If you backport this series, you can include the typo fix spotted by David.
->>
->> I'll send out a revised series, but given that a regression fix I want to
->> rebase on hasn't been picked up for 3 weeks now, I am not in a hurry.
->>
-> Thanks for the reference.
-> 
-> I'm still trying to understand the keyctl integration with caam. For
-> the 'data' param to keyctl you are using tings like 'new <len>' and
-> 'load <data>'. Where are these 'commands' identified?
+Hi Simon,
 
-Search for match_table_t in security/keys/trusted-keys/trusted_core.c
+On Fri, 2021-08-20 at 12:18 +0000, THOBY Simon wrote:
+> When adding new protections against writing invalid data in
+> the security.ima xattr, I erroneously expected ima_get_hash_algo()
+> to always return a valid 'enum hash_algo', but it turns out it trusts
+> the user-supplied digital signatures and return it without any checks.
+> It didn't affect process_measurement() because that function
+> (indirectly) calls into ima_alloc_atfm() that fallback silently
+> on the default hash algorithm, but it did affect ima_inode_setxattr
+> as that new function didn't perform a bounds check.
 
-> I may still be missing something. I'm using 4.14-rc6 with your series
-> and seeing the following:
+Please update patch description something like:
 
-That's an odd version to backport stuff to..
-
-> # cat /proc/cmdline
-> trusted.source=caam
-> # keyctl add trusted mykey 'new 32' @s)# create new trusted key named
-> 'mykey' of 32 bytes in the session keyring
-> 480104283
-> # keyctl print 480104283 # dump the key
-> keyctl_read_alloc: Unknown error 126
-> ^^^ not clear what this is
-
-Not sure what returns -ENOKEY for you. I haven't been using trusted
-keys on v4.14, but you can try tracing the keyctl syscall.
-
-Cheers,
-Ahmad
+The new function validate_hash_algo() assumed that ima_get_hash_algo()
+always return a valid 'enum hash_algo', but returned the user-supplied hash algorithm from the digital signature without any checks.
 
 > 
-> Best regards,
+> Update ima_get_hash_algo() to always return a valid hash algorithm,
+> defaulting on 'ima_hash_algo' when the user-supplied value inside
+> the xattr is invalid.
 > 
-> Tim
+> This patch was successfully tested by syszbot, see
+> https://syzkaller.appspot.com/bug?extid=e8bafe7b82c739eaf153.
+
+Thank you for the pointer.
 > 
+> Signed-off-by: THOBY Simon <Simon.THOBY@viveris.fr>
+> Reported-by: syzbot+e8bafe7b82c739eaf153@syzkaller.appspotmail.com
+Fixes: 50f742dd9147 ("IMA: block writes of the security.ima xattr with
+unsupported algorithms")
+
+thanks,
+
+Mimi
+
+> ---
+>  security/integrity/ima/ima_appraise.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index 8f1eb7ef041e..dbba51583e7c 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -185,7 +185,8 @@ enum hash_algo ima_get_hash_algo(const struct evm_ima_xattr_data *xattr_value,
+>  	switch (xattr_value->type) {
+>  	case EVM_IMA_XATTR_DIGSIG:
+>  		sig = (typeof(sig))xattr_value;
+> -		if (sig->version != 2 || xattr_len <= sizeof(*sig))
+> +		if (sig->version != 2 || xattr_len <= sizeof(*sig)
+> +		    || sig->hash_algo >= HASH_ALGO__LAST)
+>  			return ima_hash_algo;
+>  		return sig->hash_algo;
+>  		break;
 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
