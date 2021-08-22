@@ -2,303 +2,365 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCCE3F3BEC
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Aug 2021 19:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AAA3F3CD4
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Aug 2021 02:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbhHURux (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 21 Aug 2021 13:50:53 -0400
-Received: from smtp1.axis.com ([195.60.68.17]:57069 "EHLO smtp1.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231969AbhHURuw (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 21 Aug 2021 13:50:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1629568213;
-  x=1661104213;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yLDM+vNDD8JHbT4us+SoFhJVh82f80/OA2KMHUrnBOQ=;
-  b=BMRjDBAG1YeShviwbkedSjfEEjyfUlngiXs7B/Y24xaTYBDSKjdX1fTj
-   Ot/ct6ZcLxuNGp6ZQSSBvePWrawCCAbhMInY+Eyfmo0vWp8Qwtvgb4R8z
-   QWHXk3O0cFiVt9fw5N5VPTgjuFYLY3peTbzQ8pQVphIYahi7KeEIpYZhy
-   BD/HsaTBn4AU+9OOk1CxDVyTfHcQapbRdi9302loTwJCNVgaJ0wFX9yC8
-   TrIiV+CCFeSdOqEjlbsznL1P0N89eBMcEYIFy69JZAetXqvYiRD2/YwXg
-   kZdELdOCmVuQhLh7hRXWV/71ScjS0ZMw6xuCtNKt2EAOj8PvdJ+rvKFFo
-   A==;
-Date:   Sat, 21 Aug 2021 19:53:01 +0200
-From:   Borys Movchan <borysmn@axis.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        kernel <kernel@axis.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] tpm: Add Upgrade/Reduced mode support for TPM2 modules
-Message-ID: <20210821175301.7sjqc736pwdi6k5v@lnxborysmn.se.axis.com>
-References: <20210809174731.27924-1-borysmn@axis.com>
- <20210810175312.ziglxdlqimsmxbak@kernel.org>
- <20210815172858.GA14375@lnxborysmn.se.axis.com>
+        id S229950AbhHVALp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 21 Aug 2021 20:11:45 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:49382 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229519AbhHVALo (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 21 Aug 2021 20:11:44 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 117B372C8F8;
+        Sun, 22 Aug 2021 03:11:03 +0300 (MSK)
+Received: from beacon.altlinux.org (unknown [193.43.10.9])
+        by imap.altlinux.org (Postfix) with ESMTPSA id DF0A74A46F1;
+        Sun, 22 Aug 2021 03:11:02 +0300 (MSK)
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH ima-evm-utils v3] Use secure heap for private keys and passwords
+Date:   Sun, 22 Aug 2021 03:10:55 +0300
+Message-Id: <20210822001055.1772873-1-vt@altlinux.org>
+X-Mailer: git-send-email 2.29.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210815172858.GA14375@lnxborysmn.se.axis.com>
-User-Agent: NeoMutt/20180716
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail07w.axis.com (10.20.40.13) To se-mail07w.axis.com
- (10.20.40.13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Aug 15, 2021 at 07:28:58PM +0200, Borys Movchan wrote:
-> On Tue, Aug 10, 2021 at 07:53:12PM +0200, Jarkko Sakkinen wrote:
-> > On Mon, Aug 09, 2021 at 07:47:30PM +0200, Borys Movchan wrote:
-> > > If something went wrong during the TPM firmware upgrade, like power
-> > > failure or the firmware image file get corrupted, the TPM might end
-> > > up in Upgrade or Failure mode upon the next start. The state is
-> > > persistent between the TPM power cycle/restart.
-> > > 
-> > > According to TPM specification:
-> > >  * If the TPM is in Upgrade mode, it will answer with TPM2_RC_UPGRADE
-> > >    to all commands except Field Upgrade related ones.
-> > >  * If the TPM is in Failure mode, it will allow performing TPM
-> > >    initialization but will not provide any crypto operations.
-> > >    Will happily respond to Field Upgrade calls.
-> > > 
-> > > Change the behavior of the tpm2_auto_startup(), so it detects the active
-> > > running mode of the TPM by adding the following checks.  If
-> > > tpm2_do_selftest() call returns TPM2_RC_UPGRADE, the TPM is in Upgrade
-> > > mode.
-> > > If the TPM is in Failure mode, it will successfully respond to both
-> > > tpm2_do_selftest() and tpm2_startup() calls. Although, will fail to
-> > > answer to tpm2_get_cc_attrs_tbl(). Use this fact to conclude that TPM is
-> > > in Failure mode.
-> > > 
-> > > If detected that the TPM is in the Upgrade or Failure mode, the function
-> > > sets TPM_CHIP_FLAG_LIMITED_MODE flag.
-> > 
-> > Does this apply for TPM 1.2? Are there differences?
-> > 
-> 
-> Actually I am not sure, I am working with TPM 2 exclusively have no
-> knowledge regarding other versions.
-> 
-> > > The limited mode flag is used later during driver
-> > > initialization/deinitialization to disable functionality which makes no
-> > > sense or will fail in the current TPM state. Following functionality is
-> > > affected:
-> > >  * do not register TPM as a hwrng
-> > >  * do not register sysfs entries which provide information impossible to
-> > >    obtain in limited mode
-> > >  * do not register resource managed character device
-> > 
-> > Maybe for consistency call it TPM_CHIP_FLAG_UPGRADE_MODE? It makes easier
-> > to "connect dots" later on (has probably something to do TPM_RC_UPGRADE).
-> > 
-> > 
-> 
-> My idea was to group both Failure and Upgrade mode and call them limited
-> mode. As functionality of the TPM is limited in both of them. I was
-> afraid that if I call it upgrade mode and map failure mode into it, it
-> might get confusing. So please confirm that you prefer to name the flag
-> as TPM_CHIP_FLAG_UPGRADE_MODE.
-> 
-> > > 
-> > > Signed-off-by: Borys Movchan <borysmn@axis.com>
-> > > ---
-> > > 
-> > > Notes:
-> > >     v2:
-> > >      * Commit message updated.
-> > >     
-> > >     v3:
-> > >      * Commit message reworked.
-> > >     
-> > >     v4:
-> > >      * Description of how tpm2_auto_startup() detects the mode added to
-> > >        commit message.
-> > >     
-> > >     v5:
-> > >      * Introduce global flag: TPM_CHIP_FLAG_LIMITED_MODE.
-> > >      * Add checks for the flag in places that will not work properly when TPM
-> > >        functionality is limited.
-> > >      * Avoid registering sysfs and character device entries that have no useful
-> > >        function in limited mode.
-> > >      * Do not register TPM as a hwrng.
-> > >      * Do not try to obtain any crypto-related properties from TPM as it will fail
-> > >        in limited mode.
-> > > 
-> > >  drivers/char/tpm/tpm-chip.c  | 16 ++++++++++------
-> > >  drivers/char/tpm/tpm-sysfs.c |  3 +++
-> > >  drivers/char/tpm/tpm2-cmd.c  | 13 ++++++++++++-
-> > >  include/linux/tpm.h          |  2 ++
-> > >  4 files changed, 27 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> > > index ddaeceb7e109..8d159db39392 100644
-> > > --- a/drivers/char/tpm/tpm-chip.c
-> > > +++ b/drivers/char/tpm/tpm-chip.c
-> > > @@ -444,7 +444,7 @@ static int tpm_add_char_device(struct tpm_chip *chip)
-> > >  		return rc;
-> > >  	}
-> > >  
-> > > -	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> > > +	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !(chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)) {
-> > 
-> > You cannot rely on validity of TPM_CHIP_FLAG_TPM2, as tpm_tis driver
-> > uses a TPM command to probe the TPM version.
-> > 
-> 
-> Good point, will fix in next patch version.
-> 
+After CRYPTO_secure_malloc_init OpenSSL will store private keys in
+secure heap. This facility is only available since OpenSSL_1_1_0-pre1.
 
-After giving it a 2nd thought, I would say, it doesn't meter in this
-case. Changing the condition to ignore TPM_CHIP_FLAG_TPM2 will not
-change the behavior of the condition at all.
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+---
+ src/evmctl.c | 148 +++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 121 insertions(+), 27 deletions(-)
 
-Please let me know what should I do next.
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 5f7c2b8..cebe9ec 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -59,6 +59,7 @@
+ #include <assert.h>
+ 
+ #include <openssl/asn1.h>
++#include <openssl/crypto.h>
+ #include <openssl/sha.h>
+ #include <openssl/pem.h>
+ #include <openssl/hmac.h>
+@@ -165,6 +166,24 @@ struct tpm_bank_info {
+ static char *pcrfile[MAX_PCRFILE];
+ static unsigned npcrfile;
+ 
++#if OPENSSL_VERSION_NUMBER <= 0x10100000
++#warning Your OpenSSL version is too old to have OPENSSL_secure_malloc, \
++	falling back to use plain OPENSSL_malloc.
++#define OPENSSL_secure_malloc	  OPENSSL_malloc
++#define OPENSSL_secure_free	  OPENSSL_free
++/*
++ * Secure heap memory automatically cleared on free, but
++ * OPENSSL_secure_clear_free will be used in case of fallback
++ * to plain OPENSSL_malloc.
++ */
++#define OPENSSL_secure_clear_free OPENSSL_clear_free
++#define OPENSSL_clear_free(ptr, num)		\
++	do {					\
++		OPENSSL_cleanse(ptr, num);	\
++		OPENSSL_free(ptr);		\
++	} while (0)
++#endif
++
+ static int bin2file(const char *file, const char *ext, const unsigned char *data, int len)
+ {
+ 	FILE *fp;
+@@ -188,7 +207,9 @@ static int bin2file(const char *file, const char *ext, const unsigned char *data
+ 	return err;
+ }
+ 
+-static unsigned char *file2bin(const char *file, const char *ext, int *size)
++/* Return data in OpenSSL secure heap if 'secure' is true. */
++static unsigned char *file2bin(const char *file, const char *ext, int *size,
++			       int secure)
+ {
+ 	FILE *fp;
+ 	size_t len;
+@@ -215,7 +236,10 @@ static unsigned char *file2bin(const char *file, const char *ext, int *size)
+ 	}
+ 	len = stats.st_size;
+ 
+-	data = malloc(len);
++	if (secure)
++		data = OPENSSL_secure_malloc(len);
++	else
++		data = malloc(len);
+ 	if (!data) {
+ 		log_err("Failed to malloc %zu bytes: %s\n", len, name);
+ 		fclose(fp);
+@@ -224,7 +248,10 @@ static unsigned char *file2bin(const char *file, const char *ext, int *size)
+ 	if (fread(data, len, 1, fp) != 1) {
+ 		log_err("Failed to fread %zu bytes: %s\n", len, name);
+ 		fclose(fp);
+-		free(data);
++		if (secure)
++			OPENSSL_secure_clear_free(data, len);
++		else
++			free(data);
+ 		return NULL;
+ 	}
+ 	fclose(fp);
+@@ -872,7 +899,7 @@ static int verify_ima(const char *file)
+ 	int len;
+ 
+ 	if (sigfile) {
+-		void *tmp = file2bin(file, "sig", &len);
++		void *tmp = file2bin(file, "sig", &len, 0);
+ 
+ 		if (!tmp) {
+ 			log_err("Failed reading: %s\n", file);
+@@ -1001,7 +1028,7 @@ static int cmd_import(struct command *cmd)
+ 
+ 		if (!pkey)
+ 			return 1;
+-		pub = file2bin(inkey, NULL, &len);
++		pub = file2bin(inkey, NULL, &len, 0);
+ 		if (!pub) {
+ 			EVP_PKEY_free(pkey);
+ 			return 1;
+@@ -1040,9 +1067,9 @@ static int setxattr_ima(const char *file, char *sig_file)
+ 	int len, err;
+ 
+ 	if (sig_file)
+-		sig = file2bin(sig_file, NULL, &len);
++		sig = file2bin(sig_file, NULL, &len, 0);
+ 	else
+-		sig = file2bin(file, "sig", &len);
++		sig = file2bin(file, "sig", &len, 0);
+ 	if (!sig)
+ 		return 0;
+ 
+@@ -1082,9 +1109,9 @@ static int calc_evm_hmac(const char *file, const char *keyfile, unsigned char *h
+ 	unsigned int mdlen;
+ 	char **xattrname;
+ 	unsigned char xattr_value[1024];
+-	unsigned char *key;
++	unsigned char *key; /* @secure heap */
+ 	int keylen;
+-	unsigned char evmkey[MAX_KEY_SIZE];
++	unsigned char *evmkey; /* @secure heap */
+ 	char list[1024];
+ 	ssize_t list_size;
+ 	struct h_misc_64 hmac_misc;
+@@ -1096,21 +1123,30 @@ static int calc_evm_hmac(const char *file, const char *keyfile, unsigned char *h
+ 	pctx = HMAC_CTX_new();
+ #endif
+ 
+-	key = file2bin(keyfile, NULL, &keylen);
++	key = file2bin(keyfile, NULL, &keylen, 1);
+ 	if (!key) {
+ 		log_err("Failed to read a key: %s\n", keyfile);
+ 		return -1;
+ 	}
+ 
+-	if (keylen > sizeof(evmkey)) {
++	evmkey = OPENSSL_secure_malloc(MAX_KEY_SIZE);
++	if (!evmkey) {
++		log_err("Failed to allocate %d bytes\n", MAX_KEY_SIZE);
++		goto out;
++	}
++
++	if (keylen > MAX_KEY_SIZE) {
+ 		log_err("key is too long: %d\n", keylen);
+ 		goto out;
+ 	}
+ 
+ 	/* EVM key is 128 bytes */
+ 	memcpy(evmkey, key, keylen);
+-	if (keylen < sizeof(evmkey))
+-		memset(evmkey + keylen, 0, sizeof(evmkey) - keylen);
++	if (keylen < MAX_KEY_SIZE)
++		memset(evmkey + keylen, 0, MAX_KEY_SIZE - keylen);
++
++	/* Shorten lifetime of key data. */
++	OPENSSL_cleanse(key, keylen);
+ 
+ 	if (lstat(file, &st)) {
+ 		log_err("Failed to stat: %s\n", file);
+@@ -1147,12 +1183,15 @@ static int calc_evm_hmac(const char *file, const char *keyfile, unsigned char *h
+ 		goto out;
+ 	}
+ 
+-	err = !HMAC_Init_ex(pctx, evmkey, sizeof(evmkey), md, NULL);
++	err = !HMAC_Init_ex(pctx, evmkey, MAX_KEY_SIZE, md, NULL);
+ 	if (err) {
+ 		log_err("HMAC_Init() failed\n");
+ 		goto out;
+ 	}
+ 
++	/* Shorten lifetime of evmkey data. */
++	OPENSSL_cleanse(evmkey, MAX_KEY_SIZE);
++
+ 	for (xattrname = evm_config_xattrnames; *xattrname != NULL; xattrname++) {
+ 		err = lgetxattr(file, *xattrname, xattr_value, sizeof(xattr_value));
+ 		if (err < 0) {
+@@ -1222,7 +1261,9 @@ out_ctx_cleanup:
+ 	HMAC_CTX_free(pctx);
+ #endif
+ out:
+-	free(key);
++	if (evmkey)
++		OPENSSL_secure_clear_free(evmkey, MAX_KEY_SIZE);
++	OPENSSL_secure_clear_free(key, keylen);
+ 	return err ?: mdlen;
+ }
+ 
+@@ -2596,15 +2637,41 @@ static struct option opts[] = {
+ 
+ };
+ 
++/*
++ * Copy password from optarg into secure heap, so it could be
++ * freed in the same way as a result of get_password().
++ */
++static char *optarg_password(char *optarg)
++{
++	size_t len;
++	char *keypass;
++
++	if (!optarg)
++		return NULL;
++	len = strlen(optarg);
++	keypass = OPENSSL_secure_malloc(len + 1);
++	if (keypass)
++		memcpy(keypass, optarg, len + 1);
++	else
++		log_err("OPENSSL_secure_malloc(%zu) failed\n", len + 1);
++	/*
++	 * This memset does not add real security, just increases
++	 * the chance of password being obscured in ps output.
++	 */
++	memset(optarg, 'X', len);
++	return keypass;
++}
++
++/* Read from TTY into secure heap. */
+ static char *get_password(void)
+ {
+ 	struct termios flags, tmp_flags;
+ 	char *password, *pwd;
+-	int passlen = 64;
++	const int passlen = 64;
+ 
+-	password = malloc(passlen);
++	password = OPENSSL_secure_malloc(passlen);
+ 	if (!password) {
+-		perror("malloc");
++		log_err("OPENSSL_secure_malloc(%u) failed\n", passlen);
+ 		return NULL;
+ 	}
+ 
+@@ -2614,8 +2681,8 @@ static char *get_password(void)
+ 	tmp_flags.c_lflag |= ECHONL;
+ 
+ 	if (tcsetattr(fileno(stdin), TCSANOW, &tmp_flags) != 0) {
+-		perror("tcsetattr");
+-		free(password);
++		log_err("tcsetattr: %s\n", strerror(errno));
++		OPENSSL_secure_free(password);
+ 		return NULL;
+ 	}
+ 
+@@ -2624,13 +2691,15 @@ static char *get_password(void)
+ 
+ 	/* restore terminal */
+ 	if (tcsetattr(fileno(stdin), TCSANOW, &flags) != 0) {
+-		perror("tcsetattr");
+-		free(password);
+-		return NULL;
++		log_err("tcsetattr: %s\n", strerror(errno));
++		/*
++		 * Password is already here, so there is no reason
++		 * to stop working on this petty error.
++		 */
+ 	}
+ 
+ 	if (pwd == NULL) {
+-		free(password);
++		OPENSSL_secure_free(password);
+ 		return NULL;
+ 	}
+ 
+@@ -2643,6 +2712,7 @@ int main(int argc, char *argv[])
+ 	ENGINE *eng = NULL;
+ 	unsigned long keyid;
+ 	char *eptr;
++	char *keypass = NULL; /* @secure heap */
+ 
+ #if !(OPENSSL_VERSION_NUMBER < 0x10100000)
+ 	OPENSSL_init_crypto(
+@@ -2651,6 +2721,17 @@ int main(int argc, char *argv[])
+ #endif
+ 			    OPENSSL_INIT_ENGINE_ALL_BUILTIN, NULL);
+ #endif
++#if OPENSSL_VERSION_NUMBER > 0x10100000
++	/*
++	 * This facility is available since OpenSSL_1_1_0-pre1.
++	 * 'Heap size' 8192 is chosen to be big enough, so that any single key
++	 * data could fit. 'Heap minsize' 64 is just to be efficient for small
++	 * buffers.
++	 */
++	if (!CRYPTO_secure_malloc_init(8192, 64))
++		log_err("CRYPTO_secure_malloc_init() failed\n");
++#endif
++
+ 	g_argv = argv;
+ 	g_argc = argc;
+ 
+@@ -2682,10 +2763,18 @@ int main(int argc, char *argv[])
+ 			imaevm_params.hash_algo = optarg;
+ 			break;
+ 		case 'p':
++			if (keypass)
++				OPENSSL_secure_clear_free(keypass,
++							  strlen(keypass));
+ 			if (optarg)
+-				imaevm_params.keypass = optarg;
++				keypass = optarg_password(optarg);
+ 			else
+-				imaevm_params.keypass = get_password();
++				keypass = get_password();
++			if (!keypass) {
++				log_err("Cannot read password\n");
++				goto quit;
++			}
++			imaevm_params.keypass = keypass;
+ 			break;
+ 		case 'f':
+ 			sigfile = 1;
+@@ -2841,7 +2930,9 @@ int main(int argc, char *argv[])
+ 		if (err < 0)
+ 			err = 125;
+ 	}
+-
++quit:
++	if (keypass)
++		OPENSSL_secure_clear_free(keypass, strlen(keypass));
+ 	if (eng) {
+ 		ENGINE_finish(eng);
+ 		ENGINE_free(eng);
+@@ -2849,6 +2940,9 @@ int main(int argc, char *argv[])
+ 		ENGINE_cleanup();
+ #endif
+ 	}
++#if OPENSSL_VERSION_NUMBER > 0x10100000
++	CRYPTO_secure_malloc_done();
++#endif
+ 	ERR_free_strings();
+ 	EVP_cleanup();
+ 	BIO_free(NULL);
+-- 
+2.29.3
 
-> > >  		rc = cdev_device_add(&chip->cdevs, &chip->devs);
-> > >  		if (rc) {
-> > >  			dev_err(&chip->devs,
-> > > @@ -506,7 +506,8 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
-> > >  	struct attribute **i;
-> > >  	int rc;
-> > >  
-> > > -	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL))
-> > > +	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL) ||
-> > > +		chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)
-> > >  		return 0;
-> > >  
-> > >  	rc = compat_only_sysfs_link_entry_to_kobj(
-> > > @@ -536,7 +537,7 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
-> > >  
-> > >  static int tpm_add_hwrng(struct tpm_chip *chip)
-> > >  {
-> > > -	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-> > > +	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)
-> > >  		return 0;
-> > >  
-> > >  	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
-> > > @@ -550,6 +551,9 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
-> > >  {
-> > >  	int rc;
-> > >  
-> > > +	if (chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)
-> > > +		return 0;
-> > > +
-> > >  	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
-> > >  	     tpm2_get_pcr_allocation(chip) :
-> > >  	     tpm1_get_pcr_allocation(chip);
-> > > @@ -612,7 +616,7 @@ int tpm_chip_register(struct tpm_chip *chip)
-> > >  	return 0;
-> > >  
-> > >  out_hwrng:
-> > > -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-> > > +	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !(chip->flags & TPM_CHIP_FLAG_LIMITED_MODE))
-> > >  		hwrng_unregister(&chip->hwrng);
-> > >  out_ppi:
-> > >  	tpm_bios_log_teardown(chip);
-> > > @@ -637,10 +641,10 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
-> > >  void tpm_chip_unregister(struct tpm_chip *chip)
-> > >  {
-> > >  	tpm_del_legacy_sysfs(chip);
-> > > -	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-> > > +	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !(chip->flags & TPM_CHIP_FLAG_LIMITED_MODE))
-> > >  		hwrng_unregister(&chip->hwrng);
-> > >  	tpm_bios_log_teardown(chip);
-> > > -	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > > +	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !(chip->flags & TPM_CHIP_FLAG_LIMITED_MODE))
-> > >  		cdev_device_del(&chip->cdevs, &chip->devs);
-> > >  	tpm_del_char_device(chip);
-> > >  }
-> > > diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-> > > index 63f03cfb8e6a..43ea9c66342d 100644
-> > > --- a/drivers/char/tpm/tpm-sysfs.c
-> > > +++ b/drivers/char/tpm/tpm-sysfs.c
-> > > @@ -478,6 +478,9 @@ void tpm_sysfs_add_device(struct tpm_chip *chip)
-> > >  {
-> > >  	int i;
-> > >  
-> > > +	if (chip->flags & TPM_CHIP_FLAG_LIMITED_MODE)
-> > > +		return;
-> > > +
-> > >  	WARN_ON(chip->groups_cnt != 0);
-> > >  
-> > >  	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > > diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> > > index a25815a6f625..598d62695310 100644
-> > > --- a/drivers/char/tpm/tpm2-cmd.c
-> > > +++ b/drivers/char/tpm/tpm2-cmd.c
-> > > @@ -729,7 +729,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
-> > >  		goto out;
-> > >  
-> > >  	rc = tpm2_do_selftest(chip);
-> > > -	if (rc && rc != TPM2_RC_INITIALIZE)
-> > > +	if (rc == TPM2_RC_UPGRADE) {
-> > > +		dev_info(&chip->dev, "TPM is in upgrade mode, functionality limited\n");
-> > > +		chip->flags |= TPM_CHIP_FLAG_LIMITED_MODE;
-> > > +		rc = 0;
-> > > +		goto out;
-> > > +	} else if (rc && rc != TPM2_RC_INITIALIZE)
-> > >  		goto out;
-> > >  
-> > >  	if (rc == TPM2_RC_INITIALIZE) {
-> > > @@ -743,6 +748,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
-> > >  	}
-> > >  
-> > >  	rc = tpm2_get_cc_attrs_tbl(chip);
-> > > +	if (rc) {
-> > 
-> > Why all rc's apply?
-> > 
-> 
-> Different vendors return different error codes here. Some, like STM
-> return vendor specific ones.
-> 
-> > > +		dev_info(&chip->dev, "TPM is in failure mode, functionality limited\n");
-> > 
-> > Here is again a different name for the same thing (different than
-> > TPM_CHIP_FLAG_LIMITED_MODE).
-> > 
-> 
-> This check is triggered only if TPM is in Failure mode. It is different
-> from Upgrade mode.
-> 
-> > > +		chip->flags |= TPM_CHIP_FLAG_LIMITED_MODE;
-> > > +		rc = 0;
-> > > +		goto out;
-> > > +	}
-> > >  
-> > >  out:
-> > >  	if (rc > 0)
-> > > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> > > index aa11fe323c56..231d7c7ec913 100644
-> > > --- a/include/linux/tpm.h
-> > > +++ b/include/linux/tpm.h
-> > > @@ -207,6 +207,7 @@ enum tpm2_return_codes {
-> > >  	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
-> > >  	TPM2_RC_FAILURE		= 0x0101,
-> > >  	TPM2_RC_DISABLED	= 0x0120,
-> > > +	TPM2_RC_UPGRADE		= 0x012D,
-> > >  	TPM2_RC_COMMAND_CODE    = 0x0143,
-> > >  	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
-> > >  	TPM2_RC_REFERENCE_H0	= 0x0910,
-> > > @@ -277,6 +278,7 @@ enum tpm_chip_flags {
-> > >  	TPM_CHIP_FLAG_HAVE_TIMEOUTS	= BIT(4),
-> > >  	TPM_CHIP_FLAG_ALWAYS_POWERED	= BIT(5),
-> > >  	TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED	= BIT(6),
-> > > +	TPM_CHIP_FLAG_LIMITED_MODE	= BIT(7),
-> > >  };
-> > >  
-> > >  #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
-> > > -- 
-> > > 2.20.1
-> > > 
-> > > 
-> > 
-> > /Jarkko
-> 
-> Kind regards,
-> Borys
-
-Kind regards,
-Borys
