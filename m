@@ -2,125 +2,285 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC40B3F4B2D
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Aug 2021 14:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064F43F4BA3
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Aug 2021 15:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236098AbhHWM5y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 23 Aug 2021 08:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbhHWM5y (ORCPT
+        id S237203AbhHWNXE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Aug 2021 09:23:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32352 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236188AbhHWNXB (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 23 Aug 2021 08:57:54 -0400
-Received: from ha0.nfschina.com (unknown [IPv6:2400:dd01:100f:2:d63d:7eff:fe08:eb3f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5B57C061575;
-        Mon, 23 Aug 2021 05:57:11 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha0.nfschina.com (Postfix) with ESMTP id B9F30AE0DA2;
-        Mon, 23 Aug 2021 20:56:51 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha0.nfschina.com ([127.0.0.1])
-        by localhost (ha0.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id TjcJYbOzOmnU; Mon, 23 Aug 2021 20:56:33 +0800 (CST)
-Received: from [172.30.18.174] (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by ha0.nfschina.com (Postfix) with ESMTPA id B7245AE0DBF;
-        Mon, 23 Aug 2021 20:56:32 +0800 (CST)
-Subject: Re: [PATCH] ima: fix infinite loop within "ima_match_policy"
- function.
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210819101529.28001-1-liqiong@nfschina.com>
- <8d17f252-4a93-f430-3f25-e75556ab01e8@viveris.fr>
- <d385686b-ffa5-5794-2cf2-b87f2a471e78@nfschina.com>
- <1f631c3d-5dce-e477-bfb3-05aa38836442@viveris.fr>
- <96037695de6125c701889c168550def278adfd4b.camel@linux.ibm.com>
- <f9798484-7090-0ddf-50a6-7c7c5bf0606c@nfschina.com>
- <fee498ec-087c-b52d-102c-d29d98f9b794@nfschina.com>
- <cf715a40-b255-c688-578c-7f8bcd004ee3@viveris.fr>
-From:   liqiong <liqiong@nfschina.com>
-Message-ID: <0a30bfdf-4f51-fd2a-d32c-bb9f8c2de72c@nfschina.com>
-Date:   Mon, 23 Aug 2021 20:56:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        Mon, 23 Aug 2021 09:23:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1629724938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MMId87pMi8oWpeAgHDdeKvh3vjXKgtsblqEnw6fL8wU=;
+        b=MX9LHZL+bvWFeBrmSrelB/VEbd4FjYlql3Cc0qmQGRwqGKQuj7HQT5f16rUyg8U0AzJiXr
+        qN5MsjCrDwEHFd7HYhDoO9qvJehtUjeT3+6Xxcox1rX6obirll/6BOE4DrExx8DFGG2LLF
+        II+xeFbKh4wHu1UEO+ue0e8+KOnOBCA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-28-fq1WitAPPNqLqPwD0ax-Zg-1; Mon, 23 Aug 2021 09:22:16 -0400
+X-MC-Unique: fq1WitAPPNqLqPwD0ax-Zg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 78F721940922;
+        Mon, 23 Aug 2021 13:22:15 +0000 (UTC)
+Received: from localhost (unknown [10.22.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C641410372E3;
+        Mon, 23 Aug 2021 13:22:14 +0000 (UTC)
+Date:   Mon, 23 Aug 2021 10:22:13 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Vitaly Chikunov <vt@altlinux.org>
+Cc:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH ima-evm-utils v3] Use secure heap for private keys and
+ passwords
+Message-ID: <YSOhBXD/FUIa9QLz@glitch>
+References: <20210822001055.1772873-1-vt@altlinux.org>
 MIME-Version: 1.0
-In-Reply-To: <cf715a40-b255-c688-578c-7f8bcd004ee3@viveris.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BAsPIwHN7GLVwkAq"
+Content-Disposition: inline
+In-Reply-To: <20210822001055.1772873-1-vt@altlinux.org>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Simon :
 
-在 2021年08月23日 16:14, THOBY Simon 写道:
-> Hi Liqiong,
->
-> On 8/23/21 10:06 AM, liqiong wrote:
->> Hi Simon :
->>
->> Using a temporary ima_rules variable is not working for "ima_policy_next". 
->>
->>  void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos)
->>  {
->>  	struct ima_rule_entry *entry = v;
->> -
->> +	struct list_head *ima_rules_tmp = rcu_dereference(ima_rules);
->>  	rcu_read_lock();
->>  	entry = list_entry_rcu(entry->list.next, struct ima_rule_entry, list);
->>  	rcu_read_unlock();
->>  	(*pos)++;
->>  
->> -	return (&entry->list == ima_rules) ? NULL : entry;
->> +	return (&entry->list == ima_rules_tmp) ? NULL : entry;
->>  }
->>
->> It seems no way to fix "ima_rules" change within this function, it will alway
->> return a entry if "ima_rules" being changed.
-> - I think rcu_dereference() should be called inside the RCU read lock
-> - Maybe we could cheat with:
-> 	return (&entry->list == &ima_policy_rules || &entry->list == &ima_default_rules) ? NULL : entry;
->   as that's the only two rulesets IMA ever use?
->   Admittedly, this is not as clean as previously, but it should work too.
->
-> The way I see it, the semaphore solution would not work here either,
-> as ima_policy_next() is called repeatedly as a seq_file
-> (it is set up in ima_fs.c) and we can't control the locking there:
-> we cannot lock across the seq_read() call (that cure could end up be
-> worse than the disease, deadlock-wise), so I fear we cannot protect
-> against a list update while a user is iterating with a lock.
->
-> So in both cases a cheat like "&entry->list == &ima_policy_rules || &entry->list == &ima_default_rules"
-> maybe need to be considered.
->
-> What do you think?
+--BAsPIwHN7GLVwkAq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes,  semaphore solution not work here,  splicing two list is a little complex.
-This solution is  simple and clear,  should  work.  I will work on that, test and 
-confirm  the patch. 
+On Sun, Aug 22, 2021 at 03:10:55AM +0300, Vitaly Chikunov wrote:
+> After CRYPTO_secure_malloc_init OpenSSL will store private keys in
+> secure heap. This facility is only available since OpenSSL_1_1_0-pre1.
+>=20
+> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+> ---
+>  src/evmctl.c | 148 +++++++++++++++++++++++++++++++++++++++++----------
+>  1 file changed, 121 insertions(+), 27 deletions(-)
+>=20
+> diff --git a/src/evmctl.c b/src/evmctl.c
+> index 5f7c2b8..cebe9ec 100644
+> --- a/src/evmctl.c
+> +++ b/src/evmctl.c
+> @@ -59,6 +59,7 @@
+>  #include <assert.h>
+> =20
+>  #include <openssl/asn1.h>
+> +#include <openssl/crypto.h>
+>  #include <openssl/sha.h>
+>  #include <openssl/pem.h>
+>  #include <openssl/hmac.h>
+> @@ -165,6 +166,24 @@ struct tpm_bank_info {
+>  static char *pcrfile[MAX_PCRFILE];
+>  static unsigned npcrfile;
+> =20
+> +#if OPENSSL_VERSION_NUMBER <=3D 0x10100000
+> +#warning Your OpenSSL version is too old to have OPENSSL_secure_malloc, \
+> +	falling back to use plain OPENSSL_malloc.
+> +#define OPENSSL_secure_malloc	  OPENSSL_malloc
+> +#define OPENSSL_secure_free	  OPENSSL_free
+> +/*
+> + * Secure heap memory automatically cleared on free, but
+> + * OPENSSL_secure_clear_free will be used in case of fallback
+> + * to plain OPENSSL_malloc.
+> + */
+> +#define OPENSSL_secure_clear_free OPENSSL_clear_free
+> +#define OPENSSL_clear_free(ptr, num)		\
+> +	do {					\
+> +		OPENSSL_cleanse(ptr, num);	\
+> +		OPENSSL_free(ptr);		\
+> +	} while (0)
+> +#endif
+> +
+>  static int bin2file(const char *file, const char *ext, const unsigned ch=
+ar *data, int len)
+>  {
+>  	FILE *fp;
+> @@ -188,7 +207,9 @@ static int bin2file(const char *file, const char *ext=
+, const unsigned char *data
+>  	return err;
+>  }
+> =20
+> -static unsigned char *file2bin(const char *file, const char *ext, int *s=
+ize)
+> +/* Return data in OpenSSL secure heap if 'secure' is true. */
+> +static unsigned char *file2bin(const char *file, const char *ext, int *s=
+ize,
+> +			       int secure)
+>  {
+>  	FILE *fp;
+>  	size_t len;
+> @@ -215,7 +236,10 @@ static unsigned char *file2bin(const char *file, con=
+st char *ext, int *size)
+>  	}
+>  	len =3D stats.st_size;
+> =20
+> -	data =3D malloc(len);
+> +	if (secure)
+> +		data =3D OPENSSL_secure_malloc(len);
+> +	else
+> +		data =3D malloc(len);
+>  	if (!data) {
+>  		log_err("Failed to malloc %zu bytes: %s\n", len, name);
+>  		fclose(fp);
+> @@ -224,7 +248,10 @@ static unsigned char *file2bin(const char *file, con=
+st char *ext, int *size)
+>  	if (fread(data, len, 1, fp) !=3D 1) {
+>  		log_err("Failed to fread %zu bytes: %s\n", len, name);
+>  		fclose(fp);
+> -		free(data);
+> +		if (secure)
+> +			OPENSSL_secure_clear_free(data, len);
+> +		else
+> +			free(data);
+>  		return NULL;
+>  	}
+>  	fclose(fp);
+> @@ -872,7 +899,7 @@ static int verify_ima(const char *file)
+>  	int len;
+> =20
+>  	if (sigfile) {
+> -		void *tmp =3D file2bin(file, "sig", &len);
+> +		void *tmp =3D file2bin(file, "sig", &len, 0);
+> =20
+>  		if (!tmp) {
+>  			log_err("Failed reading: %s\n", file);
+> @@ -1001,7 +1028,7 @@ static int cmd_import(struct command *cmd)
+> =20
+>  		if (!pkey)
+>  			return 1;
+> -		pub =3D file2bin(inkey, NULL, &len);
+> +		pub =3D file2bin(inkey, NULL, &len, 0);
+>  		if (!pub) {
+>  			EVP_PKEY_free(pkey);
+>  			return 1;
+> @@ -1040,9 +1067,9 @@ static int setxattr_ima(const char *file, char *sig=
+_file)
+>  	int len, err;
+> =20
+>  	if (sig_file)
+> -		sig =3D file2bin(sig_file, NULL, &len);
+> +		sig =3D file2bin(sig_file, NULL, &len, 0);
+>  	else
+> -		sig =3D file2bin(file, "sig", &len);
+> +		sig =3D file2bin(file, "sig", &len, 0);
+>  	if (!sig)
+>  		return 0;
+> =20
+> @@ -1082,9 +1109,9 @@ static int calc_evm_hmac(const char *file, const ch=
+ar *keyfile, unsigned char *h
+>  	unsigned int mdlen;
+>  	char **xattrname;
+>  	unsigned char xattr_value[1024];
+> -	unsigned char *key;
+> +	unsigned char *key; /* @secure heap */
+>  	int keylen;
+> -	unsigned char evmkey[MAX_KEY_SIZE];
+> +	unsigned char *evmkey; /* @secure heap */
+>  	char list[1024];
+>  	ssize_t list_size;
+>  	struct h_misc_64 hmac_misc;
+> @@ -1096,21 +1123,30 @@ static int calc_evm_hmac(const char *file, const =
+char *keyfile, unsigned char *h
+>  	pctx =3D HMAC_CTX_new();
+>  #endif
+> =20
+> -	key =3D file2bin(keyfile, NULL, &keylen);
+> +	key =3D file2bin(keyfile, NULL, &keylen, 1);
+>  	if (!key) {
+>  		log_err("Failed to read a key: %s\n", keyfile);
+>  		return -1;
+>  	}
+> =20
+> -	if (keylen > sizeof(evmkey)) {
+> +	evmkey =3D OPENSSL_secure_malloc(MAX_KEY_SIZE);
+> +	if (!evmkey) {
+> +		log_err("Failed to allocate %d bytes\n", MAX_KEY_SIZE);
+> +		goto out;
+> +	}
+> +
+> +	if (keylen > MAX_KEY_SIZE) {
+>  		log_err("key is too long: %d\n", keylen);
+>  		goto out;
+>  	}
+> =20
+>  	/* EVM key is 128 bytes */
+>  	memcpy(evmkey, key, keylen);
+> -	if (keylen < sizeof(evmkey))
+> -		memset(evmkey + keylen, 0, sizeof(evmkey) - keylen);
+> +	if (keylen < MAX_KEY_SIZE)
+> +		memset(evmkey + keylen, 0, MAX_KEY_SIZE - keylen);
+> +
+> +	/* Shorten lifetime of key data. */
+> +	OPENSSL_cleanse(key, keylen);
+> =20
+>  	if (lstat(file, &st)) {
+>  		log_err("Failed to stat: %s\n", file);
+> @@ -1147,12 +1183,15 @@ static int calc_evm_hmac(const char *file, const =
+char *keyfile, unsigned char *h
+>  		goto out;
+>  	}
+> =20
+> -	err =3D !HMAC_Init_ex(pctx, evmkey, sizeof(evmkey), md, NULL);
+> +	err =3D !HMAC_Init_ex(pctx, evmkey, MAX_KEY_SIZE, md, NULL);
+>  	if (err) {
+>  		log_err("HMAC_Init() failed\n");
+>  		goto out;
+>  	}
+> =20
+> +	/* Shorten lifetime of evmkey data. */
+> +	OPENSSL_cleanse(evmkey, MAX_KEY_SIZE);
+> +
+>  	for (xattrname =3D evm_config_xattrnames; *xattrname !=3D NULL; xattrna=
+me++) {
+>  		err =3D lgetxattr(file, *xattrname, xattr_value, sizeof(xattr_value));
+>  		if (err < 0) {
+> @@ -1222,7 +1261,9 @@ out_ctx_cleanup:
+>  	HMAC_CTX_free(pctx);
+>  #endif
+>  out:
+> -	free(key);
+> +	if (evmkey)
+> +		OPENSSL_secure_clear_free(evmkey, MAX_KEY_SIZE);
+> +	OPENSSL_secure_clear_free(key, keylen);
 
-"rcu_dereference() should be called inside the RCU read lock", I will correct this.
+Minor thing: considering you already OPENSSL_cleanse() both evmkey and
+key, is it necessary to call OPENSSL_secure_clear_free() instead of only
+OPENSSL_secure_free()?
 
-Thanks for your help.
+But like I said, that's a minor thing :)
 
+Reviewed-by: Bruno Meneguele <bmeneg@redhat.com>
 
-Regrads,
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
 
-liqiong
+--BAsPIwHN7GLVwkAq
+Content-Type: application/pgp-signature; name="signature.asc"
 
->
->
->> Regrads,
->>
->> liqiong
-> Thanks,
-> Simon
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmEjoQUACgkQYdRkFR+R
+okOMTggAyA0Uf8JzH63Kx/5NSsntroe5G2PsyacaM6N/aPLO5WB+WyfBinXrvq3R
+Oeot9Fi8Mkax9aDMkAiNxgu59VXDJ+H5O1eyO7IG5RPueh2w5sK0Ydp3zfAFw2t8
+0e5o/oepegfq7B8yRuhY73IdhVMhB9uF0a4+efcYQ53rBLPcZttxMwdEF9uwViBP
+VfavyLFTsYOMB/U99EBpDFbtS2SHW0ige+EYt1B9Zvv4/GYh824KQiaawyHrFX2c
+T8yi4LSjJTfXsztwUEGe3UF69IseRyxAnt5e5P7HQ7EwxkANE572Pp+eFOAJPqB6
+QS269Q9WKQgEQ0bTFmL3V4Cd4skljA==
+=R3B6
+-----END PGP SIGNATURE-----
+
+--BAsPIwHN7GLVwkAq--
 
