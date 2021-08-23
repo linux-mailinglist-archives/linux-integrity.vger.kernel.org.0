@@ -2,226 +2,297 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEBF3F438E
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Aug 2021 05:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D8B3F45A6
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Aug 2021 09:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbhHWDFS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 22 Aug 2021 23:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbhHWDFQ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 22 Aug 2021 23:05:16 -0400
-Received: from ha0.nfschina.com (unknown [IPv6:2400:dd01:100f:2:d63d:7eff:fe08:eb3f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F501C061575;
-        Sun, 22 Aug 2021 20:04:33 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha0.nfschina.com (Postfix) with ESMTP id 419EFAE0DA2;
-        Mon, 23 Aug 2021 11:04:17 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha0.nfschina.com ([127.0.0.1])
-        by localhost (ha0.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GYwI0yPOej4K; Mon, 23 Aug 2021 11:03:57 +0800 (CST)
-Received: from [172.30.18.174] (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by ha0.nfschina.com (Postfix) with ESMTPA id 212EBAE0DEE;
-        Mon, 23 Aug 2021 11:03:57 +0800 (CST)
-Subject: Re: [PATCH] ima: fix infinite loop within "ima_match_policy"
- function.
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        THOBY Simon <Simon.THOBY@viveris.fr>
-Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        id S234938AbhHWHOB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 23 Aug 2021 03:14:01 -0400
+Received: from mail-vi1eur05on2106.outbound.protection.outlook.com ([40.107.21.106]:17280
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234861AbhHWHN6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 23 Aug 2021 03:13:58 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Wp7TlfqJLXSAFLRWpCpYBedK4PScctEO1lHRKGLI0/rbTVvkjvlkoMA0XG5GvKzFCURVGyZTl1pYp4HoV+fr/oMKaFtp76rnKPcAt3PVAeWVQ/g57YXagYZh3PHeN9nLFjwamcghyI5TU4RtzyaNOo5TrKg090SXayd2vEXpk7feN6n4q1ElbKcvUcqxrGb8jFgIRLxJfjVdtcmat9GGcjE2WJwA24aEzcsmKVcXID9r/kvzRZHdllY80DlixTeWQLJIiU2Ar7yV0UvR4KhvH576m6smeYacO/2sZ/wmiC4cUWzjkki/UkR3wvAL0nTXhPpBoTGkiseT9qaEQGfz2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eZZJ2jcReuFGJ30y6VSn05ofJ/tOIH3vg8Csic6m3+A=;
+ b=E8NaVRrBzUL1cGj8sblunhh9gjOYjrMEVcOl741zzXmsGU1ABTiKo6C4q4Fx5cYo8mCX2C88VsaaLd4uAvwvHy7sLI00qVB7zHGYVvR67Vyr+aVRruA2NN/iZ4YnPejVdHOpuZxHo4jnOi9CplyQTwMDfK0WRV3x7xKuk8ld926reFszF5BTXUkqgSJNz34+VvOjkK1OeJbvJ1TvUPDSAyu+km73Havd/j2DG5riBIhr0NdndKL5ZQklESUTPAZd5kZpK51La6j1IRmQ04D0xOLTI64IBN4+ZWbBx/4nyIGmhFPetvsRyj4cu6lyqseOTIrQcc2inVM0OaWQAVx/mA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=viveris.fr; dmarc=pass action=none header.from=viveris.fr;
+ dkim=pass header.d=viveris.fr; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=viverislicensing.onmicrosoft.com;
+ s=selector2-viverislicensing-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eZZJ2jcReuFGJ30y6VSn05ofJ/tOIH3vg8Csic6m3+A=;
+ b=Hrq5D56MCgV5O+2rg4cgiebWelBv/z8l/Vna05hwFsnT7eM23G2hhLeZSV2g3udsdFD4noV5SNEkiBDgbCRuCR009k0DrzWGBgXfxcKlm1XzUpWW0lijhNAF7gNnxSdrJS5zhK3L1+l+uF9EV/nj9jpomJLlqcR0wtx936dTG7s=
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ (2603:10a6:200:96::21) by AM9PR09MB4978.eurprd09.prod.outlook.com
+ (2603:10a6:20b:2fe::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.23; Mon, 23 Aug
+ 2021 07:13:12 +0000
+Received: from AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432]) by AM4PR0902MB1748.eurprd09.prod.outlook.com
+ ([fe80::84a0:780d:1c5c:4432%9]) with mapi id 15.20.4436.024; Mon, 23 Aug 2021
+ 07:13:12 +0000
+From:   THOBY Simon <Simon.THOBY@viveris.fr>
+To:     liqiong <liqiong@nfschina.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+CC:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
         "jmorris@namei.org" <jmorris@namei.org>,
         "serge@hallyn.com" <serge@hallyn.com>,
         "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ima: fix infinite loop within "ima_match_policy"
+ function.
+Thread-Topic: [PATCH] ima: fix infinite loop within "ima_match_policy"
+ function.
+Thread-Index: AQHXlPnZCsK5CNi7NkWxUIAyoKg2DKt8LpyAgAA0rYCAAEtjAIAEBAmA
+Date:   Mon, 23 Aug 2021 07:13:12 +0000
+Message-ID: <f64b2b3b-c92a-c452-3a7f-7f5e44270b32@viveris.fr>
 References: <20210819101529.28001-1-liqiong@nfschina.com>
  <8d17f252-4a93-f430-3f25-e75556ab01e8@viveris.fr>
  <d385686b-ffa5-5794-2cf2-b87f2a471e78@nfschina.com>
  <1f631c3d-5dce-e477-bfb3-05aa38836442@viveris.fr>
- <96037695de6125c701889c168550def278adfd4b.camel@linux.ibm.com>
-From:   =?UTF-8?B?5p2O5Yqb55C8?= <liqiong@nfschina.com>
-Message-ID: <f9798484-7090-0ddf-50a6-7c7c5bf0606c@nfschina.com>
-Date:   Mon, 23 Aug 2021 11:04:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
-MIME-Version: 1.0
-In-Reply-To: <96037695de6125c701889c168550def278adfd4b.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+ <6d60893c-63dc-394f-d43c-9ecab7b6d06e@nfschina.com>
+In-Reply-To: <6d60893c-63dc-394f-d43c-9ecab7b6d06e@nfschina.com>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: nfschina.com; dkim=none (message not signed)
+ header.d=none;nfschina.com; dmarc=none action=none header.from=viveris.fr;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 28047e6f-50c3-4dc8-3634-08d96605782a
+x-ms-traffictypediagnostic: AM9PR09MB4978:
+x-microsoft-antispam-prvs: <AM9PR09MB4978808314477D9D9C24A88794C49@AM9PR09MB4978.eurprd09.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TJUNbNJIIk9hes0XBBMoXegE8M79aUuo2ePtjv7QuPardE1vFjiifWPiiBQPEE/KZ6O086dsVsJIOz67LuqllNiKkldxyJMu3b2w6MLSYRv+d6s1i8x3Q58TTx5gjAXb+PKY5OP09ieo4JDlYEhRbz71aYWrmXs0u1W9ct4YXaH/S10KDNKstFByx6jCQAaonmsLd6kZwoAimwoB4Oua4bHWYyEo/SNUryIAExJJWlDGPCFRyXpPZ7reofAFwVPmvdJcWnX+3OMAm+aCfXOblCFB4aiYXl52dst/czGWe7yeEbpBisPVd+0SJ3mAsUl+mZttuambp79vVhyMTZIdfCX1ZriDiwhDBAhmFghDC1FbZ6xaHmj4MNhoh3DXs/pmNDnKQ3Hglkqz8tWjNynhRIfCyZTIvMC0P9qxCwuaNt5rjaHQPYuISVcIHMs70XcXXDJ7edXj7XzVYgqy9c1psdBNKvMws/EiTZj6qaIp4cs3/zANTvhorqJJHIo7N4WMjGVDHC8TTgfqpMn7eSWfx75zUZl1xkmfhluTkhHG2XgyGz4jAudzPnEftvGDny/PIkVJAQ09cH4DRozmjzAMbN6Fx4XPBV9zDPpeCsFl2mV8kRtCKgzqf80f7/EcUIlMB1KgPfZISm2McGN3x/DUwvadLOf2wRuxhQwDnMbz815MOik2Wi1vkyT6/00GX3HUWtCK/5ieb48wa39vrFDf0UjYwocU4l0T6aiCstsam/c=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0902MB1748.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39830400003)(376002)(396003)(346002)(366004)(136003)(38100700002)(54906003)(122000001)(76116006)(36756003)(91956017)(6512007)(31696002)(66946007)(110136005)(86362001)(53546011)(2906002)(66446008)(66476007)(31686004)(71200400001)(316002)(6506007)(38070700005)(6486002)(8936002)(8676002)(186003)(5660300002)(26005)(478600001)(66556008)(83380400001)(2616005)(4326008)(64756008)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Tlg0MFBBeG12VGxmYkNXeUNmZExGNHFNbmFKS2hmc1cyMm9sRFJuT1hiVHls?=
+ =?utf-8?B?bUI1VlNjeUhNSVRRYXlVbVMwRVJuMU92R1h1QjVtemNRNEdrRkZ0OUFkMmJU?=
+ =?utf-8?B?WFFCMXVGUkw5V3dXSWhkM09VVkF3WTY2SVF0SHNFSnFreVZpOFBVc2U1T1li?=
+ =?utf-8?B?dlBGZlJUaUpUV0JkTFVOT2Z3QWVWQ3NROVhBVGRHYmd1SDZodzVhZkp6cUp5?=
+ =?utf-8?B?ZHZ1NnowcCtwSFE3Tzl4UWxDZlRKOENJQk1xSjhrTE9ZRmh5RFh3VVU0cEkx?=
+ =?utf-8?B?eXo1RDNGdVFYdXVBa0RGbHduVEF0SHJDa0ZrMURoZ0VlL0RmWFdZeXlXdzRK?=
+ =?utf-8?B?bngrOHdvNlFlVUd2VTZyQThESktIUCtwQmR3SDRMMEVMK1JYWSsybGNsbzA3?=
+ =?utf-8?B?NmQ4czRxbTdsc3ZQWEJ2MnpUOHVqZXN5eTgxQVVINGNWT0I3OVhBbElMdlRU?=
+ =?utf-8?B?dFBZL3ZOZjJVNndETGFVc1BoU1pldlVUL1ZxVDF6Z0lKditpZGc5a0l2Vy9I?=
+ =?utf-8?B?eUJGMmtUeDRLc0phd1Z0ZHVXaU92cmQySVlzZUk5bkxUYXk4VWhWSm50STlY?=
+ =?utf-8?B?UE5WeTQ0aStkNlpGY051YnJCQ0FWZENmSkNPeWVCbWhGTHJRUW1Ca0RUL29F?=
+ =?utf-8?B?MElvM1RXT3hMcWo5aUJpUmh0aXJzREExVWNaUEpUUUZ6MUNFeHpuaWp4LzFM?=
+ =?utf-8?B?T2xPSGVYaGJSQms2ZFVUQ2dSbUF1UXdvUXEra3F3a3Nsc0pWYUk2cTRwdlJN?=
+ =?utf-8?B?S1VvajY3S2ppOE1hQm5uM1Y1V003UmRVTW5UUElyL3k1RmRoZTBtYmQ2Tkl6?=
+ =?utf-8?B?N3NJb0dUMmlNWmwzaVdXbjdvTU5rOXdyUmRtMk9tV2tlNE9ISDRqS0xqS1BV?=
+ =?utf-8?B?Szd6eFdoZ3BvM1FsTktoa3ZuTWNMVjFFb0d3Y2QzeFJ4RnE1ZWhKSUpwUStO?=
+ =?utf-8?B?TUFUZ01ydWFiTDlvNnBCMytIYXNyUG9tWXBUMHh6NXR0aU1uWWpncHhkOHpF?=
+ =?utf-8?B?N21vYUNObjJEWlp1SkIwdmpLQjQvNzNza2c3UjdyS0xIOW1PY0VCVC9LZ0Rv?=
+ =?utf-8?B?eWFhWlJra2pRNzh1NTVnRkRjcG0zSGg3NnlSSThza29pQ3F6ZlR5TGxHVTJL?=
+ =?utf-8?B?RzZPQTBBd05YRGNQQWVwUVlYTzBLTkc1anpYcDBpRmY0QlBQdjJIdHVxM01j?=
+ =?utf-8?B?YU1KTkI1LzlGNnpwc0FpSHc3d0ZyYTdmVzRmNnZpaWNnSGZ0cnRwa08ybEgv?=
+ =?utf-8?B?cVJ1NVlza09oMUUzSXVxWGxSZDRQUENURlFkU3kvSGYxSnM2RFhpVjBQK0w3?=
+ =?utf-8?B?V2VKOUxsR3JZb0loL0hOUWY1SFA2QzFQWDFISTdrWnZmTjVHbHkwY0l1Mmxz?=
+ =?utf-8?B?OTI4UGpISUxsdWhBc3ZXckhBYUZuWC9qYkpGR0NoQkFPTkxSc1JtQzBxSjdM?=
+ =?utf-8?B?eXRyNVVyaHNQU1RtRlZmNHlhbGt1d1NtRTBlNGttZjNKNFo1N2FBMi9YbnIv?=
+ =?utf-8?B?OXJZVzA1RTZ1TXVtSnV5K1JFZFNXZDIwalEzZTFYczFkYVFFNTNGK3Bpa1N3?=
+ =?utf-8?B?RHdydG42WkZGZ3QzNGNkcElqOTkyYS9RRWptd01Pa1V0M2xLUW1BZk5Yb0NZ?=
+ =?utf-8?B?MnUzTjg1MXNYZjBPUGRlMWNOdlBRMkRUVk82c1pVZGQ5UlJIaXRTbDlGNFl3?=
+ =?utf-8?B?R0hUUnd0QzBhRHFoNU5ua3E5bkFITFJLSlN4V2UvQlZ3VjdtWkg4NXZDNkMz?=
+ =?utf-8?Q?Wclu7fb0BGVjgWp32QuMKg1H9CEx6cVs+jhfNS/?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <143F6196B904C140A22D1F4F1581F6CE@eurprd09.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: viveris.fr
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM4PR0902MB1748.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28047e6f-50c3-4dc8-3634-08d96605782a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2021 07:13:12.5278
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 34bab81c-945c-43f1-ad13-592b97e11b40
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UJdG0gCYiTULQzaK/C1Nwi+ZstvFrjK14qroPPpp2pe3mBHd9zw6ugAlRLsvg/60q810EqhO1ZKzr8vdX/RdkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR09MB4978
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi :
-
-The situation is a little different,'list_splice_init_rcu'
-don't change the list head. If "ima_rules" being changed,
-readers may can't reload the new value in time for cpu cache
-or compiler optimization. Defining "ima_rules" as a volatile 
-variable can fix, but It is inefficient.
-
-Maybe using a temporary ima_rules variable for every 
-"list_for_each_entry_rcu(entry, ima_rules, list)" loop is 
-a better solution to fix the "endless loop" bug. 
-
-Regards,
-
-liqiong
-
-在 2021年08月20日 23:48, Mimi Zohar 写道:
-> On Fri, 2021-08-20 at 13:23 +0000, THOBY Simon wrote:
->> Hi Liqiong,
->>
->> On 8/20/21 12:15 PM, 李力琼 wrote:
->>> Hi, Simon:
->>>
->>> This solution is better then rwsem, a temp "ima_rules" variable should 
->>> can fix. I also have a another idea, with a little trick, default list
->>> can traverse to the new list, so we don't need care about the read side. 
->>>
->>> here is the patch:
->>>
->>> @@ -918,8 +918,21 @@ void ima_update_policy(void)
->>>         list_splice_tail_init_rcu(&ima_temp_rules, policy, synchronize_rcu);
->>>
->>>         if (ima_rules != policy) {
->>> +               struct list_head *prev_rules = ima_rules;
->>> +               struct list_head *first = ima_rules->next;
->>>                 ima_policy_flag = 0;
->>> +
->>> +               /*
->>> +                * Make the previous list can traverse to new list,
->>> +                * that is tricky, or there is a deadly loop whithin
->>> +                * "list_for_each_entry_rcu(entry, ima_rules, list)"
->>> +                *
->>> +                * After update "ima_rules", restore the previous list.
->>> +                */
->> I think this could be rephrased to be a tad clearer, I am not quite sure
->> how I must interpret the first sentence of the comment.
->>
->>
->>> +               prev_rules->next = policy->next;
->>>                 ima_rules = policy;
->>> +               syncchronize_rcu();
->> I'm a bit puzzled as you seem to imply in the mail this patch was tested,
->> but there is no 'syncchronize_rcu' (with two 'c') symbol in the kernel.
->> Was that a copy/paste error? Or maybe you forgot the 'not' in "This
->> patch has been tested"? These errors happen, and I am myself quite an
->> expert in doing them :)
->>
->>> +               prev_rules->next = first;
->>>
->>>
->>> The side effect is the "ima_default_rules" will be changed a little while.
->>> But it make sense, the process should be checked again by the new policy.
->>>
->>> This patch has been tested, if will do, I can resubmit this patch.> 
->>> How about this ?
->> least
->>
->> Correct me if I'm wrong, here is how I think I understand you patch.
->> We start with a situation like that (step 0):
->> ima_rules --> List entry 0 (head node) = ima_default_rules <-> List entry 1 <-> List entry 2 <-> ... <-> List entry 0
->>
->> Then we decide to update the policy for the first time, so
->> 'ima_rules [&ima_default_rules] != policy [&ima_policy_rules]'.
->> We enter the condition.
->> First we copy the current value of ima_rules (&ima_default_rules)
->> to a temporary variable 'prev_rules'. We also create a pointer dubbed
->> 'first' to the entry 1 in the default list (step 1):
->> prev_rules -------------
->>                        \/
->> ima_rules --> List entry 0 (head node) = ima_default_rules <-> List entry 1 <-> List entry 2 <-> ... <-> List entry 0
->>                                                                    /\
->> first --------------------------------------------------------------
->>
->>
->> Then we update prev_rules->next to point to policy->next (step 2):
->> List entry 1 <-> List entry 2 <-> ... -> List entry 0
->>  /\
->> first
->> 	(notice that list entry 0 no longer points backwards to 'list entry 1',
->> 	but I don't think there is any reverse iteration in IMA, so it should be
->> 	safe)
->>
->> prev_rules -------------
->>                        \/
->> ima_rules --> List entry 0 (head node) = ima_default_rules   
->>                        |
->>                        |
->>                        -------------------------------------------
->>                                                                  \/
->> policy --> policy entry 0' (head node) = ima_policy_rules <-> policy entry 1' <-> policy entry 2' <-> .... <-> policy entry 0'
->>
->>
->> We then update ima_rules to point to ima_policy_rules (step 3):
->> List entry 1 <-> List entry 2 <-> ... -> List entry 0
->>  /\
->> first
->>
->> prev_rules -------------
->>                        \/
->> ima_rules     List entry 0 (head node) = ima_default_rules   
->>      |                 |
->>      |                 |
->>      |                 ------------------------------------------
->>      ---------------                                            |
->>                    \/                                           \/
->> policy --> policy entry 0' (head node) = ima_policy_rules <-> policy entry 1' <-> policy entry 2' <-> .... <-> policy entry 0'
->>                                                   synchronize_rcu                 /\
->> first --------------------------------------------------------------
->>
->> Then we run synchronize_rcu() to wait for any RCU reader to exit their loops (step 4).
->>
->> Finally we update prev_rules->next to point back to the ima policy and fix the loop (step 5):
->>
->> List entry 1 <-> List entry 2 <-> ... -> List entry 0
->>  /\
->> first
->>
->> prev_rules ---> List entry 0 (head node) = ima_default_rules <-> List entry 1 <-> List entry 2 <-> ... <-> List entry 0
->>                                                                      /\
->>                                                                  first (now useless)
->> ima_rules        
->>      |
->>      |
->>      |
->>      ---------------
->>                    \/
->> policy --> policy entry 0' (head node) = ima_policy_rules <-> policy entry 1' <-> policy entry 2' <-> .... <-> policy entry 0'
->>
->> The goal is that readers should still be able to loop
->> (forward, as we saw that backward looping is temporarily broken)
->> while in steps 0-4.
->>
->> I'm not completely sure what would happen to a client that started iterating
->> over ima_rules right after step 2.
->>
->> Wouldn't they be able to start looping through the new policy
->> as 'List entry 0 (head node) = ima_default_rules' points to ima_policy_rules?
->> And if they, wouldn't they loop until the write to 'ima_rule' at step 3 (admittedly
->> very shortly thereafter) completed?
->> And would the compiler be allowed to optimize the read to 'ima_rules' in the
->> list_for_each_entry() loop, thereby never reloading the new value for
->> 'ima_rules', and thus looping forever, just what we are trying to avoid?
->>
->> Overall, I'm tempted to say this is perhaps a bit too complex (at least,
->> my head tells me it is, but that may very well be because I'm terrible
->> at concurrency issues).
->>
->> Honestly, in this case I think awaiting input from more experienced
->> kernel devs than I is the best path forward :-)
-> I'm far from an expert on RCU locking, but __list_splice_init_rcu()
-> provides an example of how to make sure there aren't any readers
-> traversing the list, before two lists are spliced together.   In our
-> case, after there aren't any readers, instead of splicing two lists
-> together, it should be safe to point to the new list.
->
-> thanks,
->
-> Mimi
->
+SGkgTGlxaW9uZywNCg0KT24gOC8yMC8yMSA3OjUzIFBNLCBsaXFpb25nIHdyb3RlOg0KPiBIaSBT
+aW1vbiwNCj4gDQo+IE9uIDIwMjEvOC8yMCAyMToyMywgVEhPQlkgU2ltb24gd3JvdGU6DQo+PiBI
+aSBMaXFpb25nLA0KPj4NCj4+IE9uIDgvMjAvMjEgMTI6MTUgUE0sIOadjuWKm+eQvCB3cm90ZToN
+Cj4+PiBIaSwgU2ltb246DQo+Pj4NCj4+PiBUaGlzIHNvbHV0aW9uIGlzIGJldHRlciB0aGVuIHJ3
+c2VtLCBhIHRlbXAgImltYV9ydWxlcyIgdmFyaWFibGUgc2hvdWxkDQo+Pj4gY2FuIGZpeC4gSSBh
+bHNvIGhhdmUgYSBhbm90aGVyIGlkZWEsIHdpdGggYSBsaXR0bGUgdHJpY2ssIGRlZmF1bHQgbGlz
+dA0KPj4+IGNhbiB0cmF2ZXJzZSB0byB0aGUgbmV3IGxpc3QsIHNvIHdlIGRvbid0IG5lZWQgY2Fy
+ZSBhYm91dCB0aGUgcmVhZCBzaWRlLg0KPj4+DQo+Pj4gaGVyZSBpcyB0aGUgcGF0Y2g6DQo+Pj4N
+Cj4+PiBAQCAtOTE4LDggKzkxOCwyMSBAQCB2b2lkIGltYV91cGRhdGVfcG9saWN5KHZvaWQpDQo+
+Pj4gwqDCoMKgwqDCoMKgwqDCoCBsaXN0X3NwbGljZV90YWlsX2luaXRfcmN1KCZpbWFfdGVtcF9y
+dWxlcywgcG9saWN5LCBzeW5jaHJvbml6ZV9yY3UpOw0KPj4+DQo+Pj4gwqDCoMKgwqDCoMKgwqDC
+oCBpZiAoaW1hX3J1bGVzICE9IHBvbGljeSkgew0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIHN0cnVjdCBsaXN0X2hlYWQgKnByZXZfcnVsZXMgPSBpbWFfcnVsZXM7DQo+Pj4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGxpc3RfaGVhZCAqZmlyc3QgPSBpbWFf
+cnVsZXMtPm5leHQ7DQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaW1hX3Bv
+bGljeV9mbGFnID0gMDsNCj4+PiArDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+LyoNCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogTWFrZSB0aGUgcHJldmlv
+dXMgbGlzdCBjYW4gdHJhdmVyc2UgdG8gbmV3IGxpc3QsDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCAqIHRoYXQgaXMgdHJpY2t5LCBvciB0aGVyZSBpcyBhIGRlYWRseSBsb29w
+IHdoaXRoaW4NCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogImxpc3RfZm9y
+X2VhY2hfZW50cnlfcmN1KGVudHJ5LCBpbWFfcnVsZXMsIGxpc3QpIg0KPj4+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgKg0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgKiBBZnRlciB1cGRhdGUgImltYV9ydWxlcyIsIHJlc3RvcmUgdGhlIHByZXZpb3VzIGxpc3Qu
+DQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLw0KPj4gSSB0aGluayB0aGlz
+IGNvdWxkIGJlIHJlcGhyYXNlZCB0byBiZSBhIHRhZCBjbGVhcmVyLCBJIGFtIG5vdCBxdWl0ZSBz
+dXJlDQo+PiBob3cgSSBtdXN0IGludGVycHJldCB0aGUgZmlyc3Qgc2VudGVuY2Ugb2YgdGhlIGNv
+bW1lbnQuDQo+IEkgZ290IGl0LMKgIGhvdyBhYm91dCB0aGlzOg0KPiDCoC8qDQo+IMKgICogVGhl
+IHByZXZpb3VzIGxpc3QgaGFzIHRvIHRyYXZlcnNlIHRvIG5ldyBsaXN0LA0KPiDCoCAqIE9yIHRo
+ZXJlIG1heSBiZSBhIGRlYWRseSBsb29wIHdpdGhpbg0KDQpNYXliZSAnZGVhZGxvY2snIHdvdWxk
+IGJlIGNsZWFyZXIgdGhhbiAnZGVhZGx5IGxvb3AnPw0KDQo+IMKgICogImxpc3RfZm9yX2VhY2hf
+ZW50cnlfcmN1KGVudHJ5LCBpbWFfcnVsZXMsIGxpc3QpIg0KPiDCoCAqDQo+IMKgICogVGhhdCBp
+cyB0cmlja3ksIGFmdGVyIHVwZGF0ZWQgImltYV9ydWxlcyIsIHJlc3RvcmUgdGhlIHByZXZpb3Vz
+IGxpc3QuDQoNCk1heWJlIHNvbWV0aGluZyBsaWtlICJUaGlzIGlzIHRyaWNreSwgc28gd2UgcmVz
+dG9yZSB0aGUgcHJldmlvdXMgbGlzdCAoaW1hX2RlZmF1bHRfcnVsZXMpDQpvbmNlICdpbWFfcnVs
+ZXMnIGlzIHVwZGF0ZWQiID8NCg0KPiDCoCAqLz4+DQo+Pg0KPj4+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHByZXZfcnVsZXMtPm5leHQgPSBwb2xpY3ktPm5leHQ7DQo+Pj4gwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaW1hX3J1bGVzID0gcG9saWN5Ow0KPj4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN5bmNjaHJvbml6ZV9yY3UoKTsNCj4+IEknbSBhIGJp
+dCBwdXp6bGVkIGFzIHlvdSBzZWVtIHRvIGltcGx5IGluIHRoZSBtYWlsIHRoaXMgcGF0Y2ggd2Fz
+IHRlc3RlZCwNCj4+IGJ1dCB0aGVyZSBpcyBubyAnc3luY2Nocm9uaXplX3JjdScgKHdpdGggdHdv
+ICdjJykgc3ltYm9sIGluIHRoZSBrZXJuZWwuDQo+PiBXYXMgdGhhdCBhIGNvcHkvcGFzdGUgZXJy
+b3I/IE9yIG1heWJlIHlvdSBmb3Jnb3QgdGhlICdub3QnIGluICJUaGlzDQo+PiBwYXRjaCBoYXMg
+YmVlbiB0ZXN0ZWQiPyBUaGVzZSBlcnJvcnMgaGFwcGVuLCBhbmQgSSBhbSBteXNlbGYgcXVpdGUg
+YW4NCj4+IGV4cGVydCBpbiBkb2luZyB0aGVtIDopDQo+IA0KPiANCj4gU29ycnkgZm9yIHRoZSBt
+aXN0YWtlLCBJIGNvcHkvcGFzdGUgdGhlIHBhdGNoIGFuZCBkZWxldGUvZWRpdCBzb21lIGxpbmVz
+LA0KPiBoYXZlIHJldmlld2VkIGJlZm9yZSBzZW5kaW5nLCBidXQgbm90IGZvdW5kLiBJIGhhdmUg
+bWFkZSBhIGNhc2UgdG8gcmVwcm9kdWNlDQo+IHRoZSBlcnJvciwgZHVtcGluZyAiaW1hX3J1bGVz
+IiBhbmQgZXZlcnkgaXRlbSBhZGRyZXNzIG9mIGxpc3QgaW4gdGhlIGVycm9yDQo+IHNpdHVhaXRv
+biwgSSBjYW4gd2F0Y2h0aGUgImltYV9ydWxlcyIgY2hhbmdlLCBvbGQgbGlzdCB0cmF2ZXJzaW5n
+IHRvIHRoZSBuZXcgbGlzdC4NCj4gQW5kIEkgaGF2ZSBiZWVuIGRvaW5nIGEgcmVib290IHRlc3Qg
+d2hpY2ggZm91bmQgdGhpcyBidWcuIFRoaXMgcGF0Y2ggc2VlbXMgdG8gd29yayBmaW5lLg0KPiAN
+Cg0KTm8gd29ycmllcywgaSBqdXN0IHdhbnRlZCB0byBtYWtlIHN1cmUgSSB1bmRlcnN0b29kIHlv
+dSBjb3JyZWN0bHkuDQoNCj4gDQo+Pg0KPj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHByZXZfcnVsZXMtPm5leHQgPSBmaXJzdDsNCj4+Pg0KPj4+DQo+Pj4gVGhlIHNpZGUgZWZmZWN0
+IGlzIHRoZSAiaW1hX2RlZmF1bHRfcnVsZXMiIHdpbGwgYmUgY2hhbmdlZCBhIGxpdHRsZSB3aGls
+ZS4NCj4+PiBCdXQgaXQgbWFrZSBzZW5zZSwgdGhlIHByb2Nlc3Mgc2hvdWxkIGJlIGNoZWNrZWQg
+YWdhaW4gYnkgdGhlIG5ldyBwb2xpY3kuDQo+Pj4NCj4+PiBUaGlzIHBhdGNoIGhhcyBiZWVuIHRl
+c3RlZCwgaWYgd2lsbCBkbywgSSBjYW4gcmVzdWJtaXQgdGhpcyBwYXRjaC4+DQo+Pj4gSG93IGFi
+b3V0IHRoaXMgPw0KPj4NCj4+IENvcnJlY3QgbWUgaWYgSSdtIHdyb25nLCBoZXJlIGlzIGhvdyBJ
+IHRoaW5rIEkgdW5kZXJzdGFuZCB5b3UgcGF0Y2guDQo+PiBXZSBzdGFydCB3aXRoIGEgc2l0dWF0
+aW9uIGxpa2UgdGhhdCAoc3RlcCAwKToNCj4+IGltYV9ydWxlcyAtLT4gTGlzdCBlbnRyeSAwICho
+ZWFkIG5vZGUpID0gaW1hX2RlZmF1bHRfcnVsZXMgPC0+IExpc3QgZW50cnkgMSA8LT4gTGlzdCBl
+bnRyeSAyIDwtPiAuLi4gPC0+IExpc3QgZW50cnkgMA0KPj4NCj4+IFRoZW4gd2UgZGVjaWRlIHRv
+IHVwZGF0ZSB0aGUgcG9saWN5IGZvciB0aGUgZmlyc3QgdGltZSwgc28NCj4+ICdpbWFfcnVsZXMg
+WyZpbWFfZGVmYXVsdF9ydWxlc10gIT0gcG9saWN5IFsmaW1hX3BvbGljeV9ydWxlc10nLg0KPj4g
+V2UgZW50ZXIgdGhlIGNvbmRpdGlvbi4NCj4+IEZpcnN0IHdlIGNvcHkgdGhlIGN1cnJlbnQgdmFs
+dWUgb2YgaW1hX3J1bGVzICgmaW1hX2RlZmF1bHRfcnVsZXMpDQo+PiB0byBhIHRlbXBvcmFyeSB2
+YXJpYWJsZSAncHJldl9ydWxlcycuIFdlIGFsc28gY3JlYXRlIGEgcG9pbnRlciBkdWJiZWQNCj4+
+ICdmaXJzdCcgdG8gdGhlIGVudHJ5IDEgaW4gdGhlIGRlZmF1bHQgbGlzdCAoc3RlcCAxKToNCj4+
+IHByZXZfcnVsZXMgLS0tLS0tLS0tLS0tLQ0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBcLw0KPj4gaW1hX3J1bGVzIC0tPiBMaXN0IGVudHJ5IDAgKGhl
+YWQgbm9kZSkgPSBpbWFfZGVmYXVsdF9ydWxlcyA8LT4gTGlzdCBlbnRyeSAxIDwtPiBMaXN0IGVu
+dHJ5IDIgPC0+IC4uLiA8LT4gTGlzdCBlbnRyeSAwDQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAv
+XA0KPj4gZmlyc3QgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0NCj4+DQo+Pg0KPj4gVGhlbiB3ZSB1cGRhdGUgcHJldl9ydWxlcy0+
+bmV4dCB0byBwb2ludCB0byBwb2xpY3ktPm5leHQgKHN0ZXAgMik6DQo+PiBMaXN0IGVudHJ5IDEg
+PC0+IExpc3QgZW50cnkgMiA8LT4gLi4uIC0+IExpc3QgZW50cnkgMA0KPj4gwqAgL1wNCj4+IGZp
+cnN0DQo+PiDCoMKgwqDCoChub3RpY2UgdGhhdCBsaXN0IGVudHJ5IDAgbm8gbG9uZ2VyIHBvaW50
+cyBiYWNrd2FyZHMgdG8gJ2xpc3QgZW50cnkgMScsDQo+PiDCoMKgwqDCoGJ1dCBJIGRvbid0IHRo
+aW5rIHRoZXJlIGlzIGFueSByZXZlcnNlIGl0ZXJhdGlvbiBpbiBJTUEsIHNvIGl0IHNob3VsZCBi
+ZQ0KPj4gwqDCoMKgwqBzYWZlKQ0KPj4NCj4+IHByZXZfcnVsZXMgLS0tLS0tLS0tLS0tLQ0KPj4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcLw0KPj4gaW1h
+X3J1bGVzIC0tPiBMaXN0IGVudHJ5IDAgKGhlYWQgbm9kZSkgPSBpbWFfZGVmYXVsdF9ydWxlcw0K
+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8DQo+PiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwNCj4+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcLw0KPj4g
+cG9saWN5IC0tPiBwb2xpY3kgZW50cnkgMCcgKGhlYWQgbm9kZSkgPSBpbWFfcG9saWN5X3J1bGVz
+IDwtPiBwb2xpY3kgZW50cnkgMScgPC0+IHBvbGljeSBlbnRyeSAyJyA8LT4gLi4uLiA8LT4gcG9s
+aWN5IGVudHJ5IDAnDQo+Pg0KPj4NCj4+IFdlIHRoZW4gdXBkYXRlIGltYV9ydWxlcyB0byBwb2lu
+dCB0byBpbWFfcG9saWN5X3J1bGVzIChzdGVwIDMpOg0KPj4gTGlzdCBlbnRyeSAxIDwtPiBMaXN0
+IGVudHJ5IDIgPC0+IC4uLiAtPiBMaXN0IGVudHJ5IDANCj4+IMKgIC9cDQo+PiBmaXJzdA0KPj4N
+Cj4+IHByZXZfcnVsZXMgLS0tLS0tLS0tLS0tLQ0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcLw0KPj4gaW1hX3J1bGVzwqDCoMKgwqAgTGlzdCBlbnRy
+eSAwIChoZWFkIG5vZGUpID0gaW1hX2RlZmF1bHRfcnVsZXMNCj4+IMKgwqDCoMKgwqAgfMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwNCj4+IMKgwqDCoMKgwqAgfMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwNCj4+IMKgwqDCoMKgwqAgfMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LQ0KPj4gwqDCoMKgwqDCoCAtLS0tLS0tLS0tLS0tLS3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCB8DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcL8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcLw0KPj4gcG9saWN5IC0tPiBwb2xpY3kgZW50cnkgMCcg
+KGhlYWQgbm9kZSkgPSBpbWFfcG9saWN5X3J1bGVzIDwtPiBwb2xpY3kgZW50cnkgMScgPC0+IHBv
+bGljeSBlbnRyeSAyJyA8LT4gLi4uLiA8LT4gcG9saWN5IGVudHJ5IDAnDQo+PiDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCAvXA0KPj4gZmlyc3QgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4+DQo+PiBUaGVuIHdlIHJ1biBzeW5jaHJv
+bml6ZV9yY3UoKSB0byB3YWl0IGZvciBhbnkgUkNVIHJlYWRlciB0byBleGl0IHRoZWlyIGxvb3Bz
+IChzdGVwIDQpLg0KPj4NCj4+IEZpbmFsbHkgd2UgdXBkYXRlIHByZXZfcnVsZXMtPm5leHQgdG8g
+cG9pbnQgYmFjayB0byB0aGUgaW1hIHBvbGljeSBhbmQgZml4IHRoZSBsb29wIChzdGVwIDUpOg0K
+Pj4NCj4+IExpc3QgZW50cnkgMSA8LT4gTGlzdCBlbnRyeSAyIDwtPiAuLi4gLT4gTGlzdCBlbnRy
+eSAwDQo+PiDCoCAvXA0KPj4gZmlyc3QNCj4+DQo+PiBwcmV2X3J1bGVzIC0tLT4gTGlzdCBlbnRy
+eSAwIChoZWFkIG5vZGUpID0gaW1hX2RlZmF1bHRfcnVsZXMgPC0+IExpc3QgZW50cnkgMSA8LT4g
+TGlzdCBlbnRyeSAyIDwtPiAuLi4gPC0+IExpc3QgZW50cnkgMA0KPj4gwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIC9cDQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZpcnN0IChub3cgdXNlbGVzcykNCj4+
+IGltYV9ydWxlcw0KPj4gwqDCoMKgwqDCoCB8DQo+PiDCoMKgwqDCoMKgIHwNCj4+IMKgwqDCoMKg
+wqAgfA0KPj4gwqDCoMKgwqDCoCAtLS0tLS0tLS0tLS0tLS0NCj4+IMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIFwvDQo+PiBwb2xpY3kgLS0+IHBvbGljeSBlbnRyeSAwJyAo
+aGVhZCBub2RlKSA9IGltYV9wb2xpY3lfcnVsZXMgPC0+IHBvbGljeSBlbnRyeSAxJyA8LT4gcG9s
+aWN5IGVudHJ5IDInIDwtPiAuLi4uIDwtPiBwb2xpY3kgZW50cnkgMCcNCj4+DQo+PiBUaGUgZ29h
+bCBpcyB0aGF0IHJlYWRlcnMgc2hvdWxkIHN0aWxsIGJlIGFibGUgdG8gbG9vcA0KPj4gKGZvcndh
+cmQsIGFzIHdlIHNhdyB0aGF0IGJhY2t3YXJkIGxvb3BpbmcgaXMgdGVtcG9yYXJpbHkgYnJva2Vu
+KQ0KPj4gd2hpbGUgaW4gc3RlcHMgMC00Lg0KPiANCj4gDQo+IFllcywgSXQncyB0aGUgd29ya2Zs
+b3cuDQo+IA0KPiANCj4+IEknbSBub3QgY29tcGxldGVseSBzdXJlIHdoYXQgd291bGQgaGFwcGVu
+IHRvIGEgY2xpZW50IHRoYXQgc3RhcnRlZCBpdGVyYXRpbmcNCj4+IG92ZXIgaW1hX3J1bGVzIHJp
+Z2h0IGFmdGVyIHN0ZXAgMi4NCj4+DQo+PiBXb3VsZG4ndCB0aGV5IGJlIGFibGUgdG8gc3RhcnQg
+bG9vcGluZyB0aHJvdWdoIHRoZSBuZXcgcG9saWN5DQo+PiBhcyAnTGlzdCBlbnRyeSAwIChoZWFk
+IG5vZGUpID0gaW1hX2RlZmF1bHRfcnVsZXMnIHBvaW50cyB0byBpbWFfcG9saWN5X3J1bGVzPw0K
+Pj4gQW5kIGlmIHRoZXksIHdvdWxkbid0IHRoZXkgbG9vcCB1bnRpbCB0aGUgd3JpdGUgdG8gJ2lt
+YV9ydWxlJyBhdCBzdGVwIDMgKGFkbWl0dGVkbHkNCj4+IHZlcnkgc2hvcnRseSB0aGVyZWFmdGVy
+KSBjb21wbGV0ZWQ/DQo+PiBBbmQgd291bGQgdGhlIGNvbXBpbGVyIGJlIGFsbG93ZWQgdG8gb3B0
+aW1pemUgdGhlIHJlYWQgdG8gJ2ltYV9ydWxlcycgaW4gdGhlDQo+PiBsaXN0X2Zvcl9lYWNoX2Vu
+dHJ5KCkgbG9vcCwgdGhlcmVieSBuZXZlciByZWxvYWRpbmcgdGhlIG5ldyB2YWx1ZSBmb3INCj4+
+ICdpbWFfcnVsZXMnLCBhbmQgdGh1cyBsb29waW5nIGZvcmV2ZXIsIGp1c3Qgd2hhdCB3ZSBhcmUg
+dHJ5aW5nIHRvIGF2b2lkPw0KPiANCj4gDQo+IFllcyzCoCAiaW1hX3J1bGVzIiBjYWNoZSBub3Qg
+dXBkYXRlIGluIHRpbWUsIEl0J3MgYSByaXNrLiBJIGFtIG5vdCBzdXJlIGlmICJXUklURV9PTkNF
+Ig0KPiBjYW4gZG8gdGhpcyB0cmljay4gSG93IGFib3V0Og0KPiDCoMKgwqAgV1JJVEVfT05DRShw
+cmV2X3J1bGVzLT5uZXh0LCBwb2xpY3ktPm5leHQpOw0KPiDCoMKgwqAgV1JJVEVfT05DRShpbWFf
+cnVsZXMsIHBvbGljeSk7DQoNClF1aXRlIGZyYW5rbHksIEkgZG9uJ3Qga25vdy4gQXMgSSBzYWlk
+IGVhcmxpZXIsIHRoaXMgaXMgcmVhbGx5IHdheSBhYm92ZSBteSBsZXZlbC4NCkknbSBmaW5lIHdh
+aXRpbmcgZm9yIG1vcmUgZXhwZXJpZW5jZWQgb3BpbmlvbnMgb24gdGhpcyBvbmUuDQoNCk9uIHRo
+ZSBhc3BlY3Qgb2YgbWFpbnRhaW5hYmlsaXR5LCBJIGRvIHRoaW5rIHRoaXMgc29sdXRpb24gaXMg
+cGVyaGFwcyB0b28gY29tcGxleA0Kd2hlbiBjb21wYXJlZCB0byBvdGhlciBzb2x1dGlvbnMgbGlr
+ZSB0aGUgc2VtYXBob3JlIHlvdSBmaXJzdCBwcm9wb3NlZC4NCkEgc29sdXRpb24gb2Ygc2ltaWxh
+ciBjb21wbGV4aXR5IHdpdGggUkNVIHdvdWxkIGJlIGlkZWFsIHRvIHByZXZlbnQgYWRkaW5nIGEN
+CnNlbWFwaG9yZSBvbiBhIHJlYWQtbW9zdGx5IHNjZW5hcmlvLCBidXQgSSdtIHN0aWxsIG1vcmUg
+Y29uZmlkZW50IGluIHRoZSBzZW1hcGhvcmUNCnRoYW4gaW4gdGhlIHNvbHV0aW9uIGFib3ZlLCBi
+ZWNhdXNlIGl0IGlzIGVhc3kgdG8gaGF2ZSBjb25maWRlbmNlIGluIHRoZSBzZW1hcGhvcmUsDQp3
+aGlsZSB0aGlzIHBhdGNoIGlzIG5vdCBhdCBhbGwgb2J2aW91cyB0byBtZSwgYW5kIG1heWJlIHRo
+ZSBuZXh0IHBlcnNvbiB3aG8gd2lsbA0KaGF2ZSB0byBlZGl0IHRoYXQgcGllY2Ugb2YgY29kZS4N
+Cg0KPiANCj4gSWYgY2FuJ3QgZml4IHRoZSBjYWNoZSBpc3N1ZSwgbWF5YmUgdGhlICJpbWFfcnVs
+ZXNfdG1wIiBzb2x1dGlvbiBpcyB0aGUgYmVzdCB3YXkuDQo+IEkgd2lsbCB0ZXN0IGl0Lg0KPiAN
+Cj4gDQo+PiBPdmVyYWxsLCBJJ20gdGVtcHRlZCB0byBzYXkgdGhpcyBpcyBwZXJoYXBzIGEgYml0
+IHRvbyBjb21wbGV4IChhdCBsZWFzdCwNCj4+IG15IGhlYWQgdGVsbHMgbWUgaXQgaXMsIGJ1dCB0
+aGF0IG1heSB2ZXJ5IHdlbGwgYmUgYmVjYXVzZSBJJ20gdGVycmlibGUNCj4+IGF0IGNvbmN1cnJl
+bmN5IGlzc3VlcykuDQo+Pg0KPj4gSG9uZXN0bHksIGluIHRoaXMgY2FzZSBJIHRoaW5rIGF3YWl0
+aW5nIGlucHV0IGZyb20gbW9yZSBleHBlcmllbmNlZA0KPj4ga2VybmVsIGRldnMgdGhhbiBJIGlz
+IHRoZSBiZXN0IHBhdGggZm9yd2FyZCA6LSkNCj4+DQo+Pj4gLS0tLS0tLS0tLQ0KPj4+IFJlZ2Fy
+ZHMsDQo+Pj4gbGlxaW9uZw0KDQpUaGFua3MsDQpTaW1vbg==
