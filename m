@@ -2,145 +2,226 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 171D33F41E1
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Aug 2021 00:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEBF3F438E
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Aug 2021 05:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbhHVWRa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 22 Aug 2021 18:17:30 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2466 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229700AbhHVWR3 (ORCPT
+        id S232355AbhHWDFS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 22 Aug 2021 23:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230401AbhHWDFQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 22 Aug 2021 18:17:29 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17MM3NYM083017;
-        Sun, 22 Aug 2021 18:16:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=PgVp/OHYx+bmfu4y/jODW1/qakY1LoCzXW8iMXEXZ4k=;
- b=OudHtvBM2Y/CEYXxjMXyD6fp+fsbP4yAb8QsyMJ129VaK/egx26btdSxciafmb3UsOZD
- /XlVbKbv59mRNIH1T1xwN9F+L2X+8qKmfojgRNTfGjrpJuvd8QaxhsTBZ9kggX4VZWhh
- VX/pfzww2aOihdxw000d2XJV6FuFEbDt4ounyKtxQgQYTr2ShkZU2/YMht9MbakX+DqT
- Ll+SOqI2mJIzdOdS3yDaQCpfFbdaBQ6OlkMnmTgaUA0UEaTPintyuDpPUXfyijLglnpg
- iFCmR60nS4R4w/B5+/9LRVc6IIoAB5LMPP58QvROiRw4hqXGrPeWC/m8Zd67ykruB0OW UQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3akf0u5q13-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 22 Aug 2021 18:16:46 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17MMCkSt111970;
-        Sun, 22 Aug 2021 18:16:45 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3akf0u5q0g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 22 Aug 2021 18:16:45 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17MMBpt2024122;
-        Sun, 22 Aug 2021 22:16:43 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ajs48t7rb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 22 Aug 2021 22:16:43 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17MMD3MQ60096956
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 22 Aug 2021 22:13:03 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C510AE045;
-        Sun, 22 Aug 2021 22:16:41 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 95D4AAE051;
-        Sun, 22 Aug 2021 22:16:39 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.125.161])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 22 Aug 2021 22:16:39 +0000 (GMT)
-Message-ID: <80ee29e0c202fa1af27e46dfe4be2cd04b6b61b2.camel@linux.ibm.com>
-Subject: Re: [PATCH] IMA: reject unknown hash algorithms in ima_get_hash_algo
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Cc:     "nramas@linux.microsoft.com" <nramas@linux.microsoft.com>,
-        "syzbot+e8bafe7b82c739eaf153@syzkaller.appspotmail.com" 
-        <syzbot+e8bafe7b82c739eaf153@syzkaller.appspotmail.com>
-Date:   Sun, 22 Aug 2021 18:16:38 -0400
-In-Reply-To: <892b127f-d929-68da-7709-fa001935bfae@viveris.fr>
-References: <20210822085522.3416-1-Simon.THOBY@viveris.fr>
-         <892b127f-d929-68da-7709-fa001935bfae@viveris.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vR96jF5vqjBLBfFLmzmyXrKYS3QcbDqC
-X-Proofpoint-ORIG-GUID: MuWRynceS1SBVCa69B6-MYaPZITud3_x
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sun, 22 Aug 2021 23:05:16 -0400
+Received: from ha0.nfschina.com (unknown [IPv6:2400:dd01:100f:2:d63d:7eff:fe08:eb3f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F501C061575;
+        Sun, 22 Aug 2021 20:04:33 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by ha0.nfschina.com (Postfix) with ESMTP id 419EFAE0DA2;
+        Mon, 23 Aug 2021 11:04:17 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from ha0.nfschina.com ([127.0.0.1])
+        by localhost (ha0.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GYwI0yPOej4K; Mon, 23 Aug 2021 11:03:57 +0800 (CST)
+Received: from [172.30.18.174] (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by ha0.nfschina.com (Postfix) with ESMTPA id 212EBAE0DEE;
+        Mon, 23 Aug 2021 11:03:57 +0800 (CST)
+Subject: Re: [PATCH] ima: fix infinite loop within "ima_match_policy"
+ function.
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        THOBY Simon <Simon.THOBY@viveris.fr>
+Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210819101529.28001-1-liqiong@nfschina.com>
+ <8d17f252-4a93-f430-3f25-e75556ab01e8@viveris.fr>
+ <d385686b-ffa5-5794-2cf2-b87f2a471e78@nfschina.com>
+ <1f631c3d-5dce-e477-bfb3-05aa38836442@viveris.fr>
+ <96037695de6125c701889c168550def278adfd4b.camel@linux.ibm.com>
+From:   =?UTF-8?B?5p2O5Yqb55C8?= <liqiong@nfschina.com>
+Message-ID: <f9798484-7090-0ddf-50a6-7c7c5bf0606c@nfschina.com>
+Date:   Mon, 23 Aug 2021 11:04:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-22_06:2021-08-20,2021-08-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
- definitions=main-2108220146
+In-Reply-To: <96037695de6125c701889c168550def278adfd4b.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, 2021-08-22 at 09:00 +0000, THOBY Simon wrote:
-> On 8/22/21 10:55 AM, THOBY Simon wrote:
-> > The new function validate_hash_algo() assumed that ima_get_hash_algo()
-> > always return a valid 'enum hash_algo', but it returned the
-> > user-supplied value present in the digital signature without
-> > any bounds checks.
-> > 
-> > Update ima_get_hash_algo() to always return a valid hash algorithm,
-> > defaulting on 'ima_hash_algo' when the user-supplied value inside
-> > the xattr is invalid.
-> > 
-> > Signed-off-by: THOBY Simon <Simon.THOBY@viveris.fr>
-> > Reported-by: syzbot+e8bafe7b82c739eaf153@syzkaller.appspotmail.com
-> > Fixes: 50f742dd9147 ("IMA: block writes of the security.ima xattr with
-> > unsupported algorithms")
-> > Reviewed-by: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> > ---
-> >  security/integrity/ima/ima_appraise.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> > index 8f1eb7ef041e..dbba51583e7c 100644
-> > --- a/security/integrity/ima/ima_appraise.c
-> > +++ b/security/integrity/ima/ima_appraise.c
-> > @@ -185,7 +185,8 @@ enum hash_algo ima_get_hash_algo(const struct evm_ima_xattr_data *xattr_value,
-> >  	switch (xattr_value->type) {
-> >  	case EVM_IMA_XATTR_DIGSIG:
-> >  		sig = (typeof(sig))xattr_value;
-> > -		if (sig->version != 2 || xattr_len <= sizeof(*sig))
-> > +		if (sig->version != 2 || xattr_len <= sizeof(*sig)
-> > +		    || sig->hash_algo >= HASH_ALGO__LAST)
-> >  			return ima_hash_algo;
-> >  		return sig->hash_algo;
-> >  		break;
-> > 
-> 
-> Oops, I forgot to update the patch version, and to add a changelog.
-> Here it is:
-> - Updating the commit message
-> - Adding the 'Fixes:' and 'Reviewed-by:' annotations
-> 
-> As the patch content didn't change, the comment on 
-> syszbot ("This patch was successfully tested by syszbot, see
-> https://syzkaller.appspot.com/bug?extid=e8bafe7b82c739eaf153.")
-> is still true.
-> 
-> Sorry about that,
+Hi Mimi :
 
-This looks fine.  Comments that you want to convey to
-reviewers/maintainers, like the testing info, go after the patch
-description after three-dash line.   Only the information that should
-be retained should be in the patch description.
+The situation is a little different,'list_splice_init_rcu'
+don't change the list head. If "ima_rules" being changed,
+readers may can't reload the new value in time for cpu cache
+or compiler optimization. Defining "ima_rules" as a volatile 
+variable can fix, but It is inefficient.
 
-thanks,
+Maybe using a temporary ima_rules variable for every 
+"list_for_each_entry_rcu(entry, ima_rules, list)" loop is 
+a better solution to fix the "endless loop" bug. 
 
-Mimi
+Regards,
 
+liqiong
+
+在 2021年08月20日 23:48, Mimi Zohar 写道:
+> On Fri, 2021-08-20 at 13:23 +0000, THOBY Simon wrote:
+>> Hi Liqiong,
+>>
+>> On 8/20/21 12:15 PM, 李力琼 wrote:
+>>> Hi, Simon:
+>>>
+>>> This solution is better then rwsem, a temp "ima_rules" variable should 
+>>> can fix. I also have a another idea, with a little trick, default list
+>>> can traverse to the new list, so we don't need care about the read side. 
+>>>
+>>> here is the patch:
+>>>
+>>> @@ -918,8 +918,21 @@ void ima_update_policy(void)
+>>>         list_splice_tail_init_rcu(&ima_temp_rules, policy, synchronize_rcu);
+>>>
+>>>         if (ima_rules != policy) {
+>>> +               struct list_head *prev_rules = ima_rules;
+>>> +               struct list_head *first = ima_rules->next;
+>>>                 ima_policy_flag = 0;
+>>> +
+>>> +               /*
+>>> +                * Make the previous list can traverse to new list,
+>>> +                * that is tricky, or there is a deadly loop whithin
+>>> +                * "list_for_each_entry_rcu(entry, ima_rules, list)"
+>>> +                *
+>>> +                * After update "ima_rules", restore the previous list.
+>>> +                */
+>> I think this could be rephrased to be a tad clearer, I am not quite sure
+>> how I must interpret the first sentence of the comment.
+>>
+>>
+>>> +               prev_rules->next = policy->next;
+>>>                 ima_rules = policy;
+>>> +               syncchronize_rcu();
+>> I'm a bit puzzled as you seem to imply in the mail this patch was tested,
+>> but there is no 'syncchronize_rcu' (with two 'c') symbol in the kernel.
+>> Was that a copy/paste error? Or maybe you forgot the 'not' in "This
+>> patch has been tested"? These errors happen, and I am myself quite an
+>> expert in doing them :)
+>>
+>>> +               prev_rules->next = first;
+>>>
+>>>
+>>> The side effect is the "ima_default_rules" will be changed a little while.
+>>> But it make sense, the process should be checked again by the new policy.
+>>>
+>>> This patch has been tested, if will do, I can resubmit this patch.> 
+>>> How about this ?
+>> least
+>>
+>> Correct me if I'm wrong, here is how I think I understand you patch.
+>> We start with a situation like that (step 0):
+>> ima_rules --> List entry 0 (head node) = ima_default_rules <-> List entry 1 <-> List entry 2 <-> ... <-> List entry 0
+>>
+>> Then we decide to update the policy for the first time, so
+>> 'ima_rules [&ima_default_rules] != policy [&ima_policy_rules]'.
+>> We enter the condition.
+>> First we copy the current value of ima_rules (&ima_default_rules)
+>> to a temporary variable 'prev_rules'. We also create a pointer dubbed
+>> 'first' to the entry 1 in the default list (step 1):
+>> prev_rules -------------
+>>                        \/
+>> ima_rules --> List entry 0 (head node) = ima_default_rules <-> List entry 1 <-> List entry 2 <-> ... <-> List entry 0
+>>                                                                    /\
+>> first --------------------------------------------------------------
+>>
+>>
+>> Then we update prev_rules->next to point to policy->next (step 2):
+>> List entry 1 <-> List entry 2 <-> ... -> List entry 0
+>>  /\
+>> first
+>> 	(notice that list entry 0 no longer points backwards to 'list entry 1',
+>> 	but I don't think there is any reverse iteration in IMA, so it should be
+>> 	safe)
+>>
+>> prev_rules -------------
+>>                        \/
+>> ima_rules --> List entry 0 (head node) = ima_default_rules   
+>>                        |
+>>                        |
+>>                        -------------------------------------------
+>>                                                                  \/
+>> policy --> policy entry 0' (head node) = ima_policy_rules <-> policy entry 1' <-> policy entry 2' <-> .... <-> policy entry 0'
+>>
+>>
+>> We then update ima_rules to point to ima_policy_rules (step 3):
+>> List entry 1 <-> List entry 2 <-> ... -> List entry 0
+>>  /\
+>> first
+>>
+>> prev_rules -------------
+>>                        \/
+>> ima_rules     List entry 0 (head node) = ima_default_rules   
+>>      |                 |
+>>      |                 |
+>>      |                 ------------------------------------------
+>>      ---------------                                            |
+>>                    \/                                           \/
+>> policy --> policy entry 0' (head node) = ima_policy_rules <-> policy entry 1' <-> policy entry 2' <-> .... <-> policy entry 0'
+>>                                                   synchronize_rcu                 /\
+>> first --------------------------------------------------------------
+>>
+>> Then we run synchronize_rcu() to wait for any RCU reader to exit their loops (step 4).
+>>
+>> Finally we update prev_rules->next to point back to the ima policy and fix the loop (step 5):
+>>
+>> List entry 1 <-> List entry 2 <-> ... -> List entry 0
+>>  /\
+>> first
+>>
+>> prev_rules ---> List entry 0 (head node) = ima_default_rules <-> List entry 1 <-> List entry 2 <-> ... <-> List entry 0
+>>                                                                      /\
+>>                                                                  first (now useless)
+>> ima_rules        
+>>      |
+>>      |
+>>      |
+>>      ---------------
+>>                    \/
+>> policy --> policy entry 0' (head node) = ima_policy_rules <-> policy entry 1' <-> policy entry 2' <-> .... <-> policy entry 0'
+>>
+>> The goal is that readers should still be able to loop
+>> (forward, as we saw that backward looping is temporarily broken)
+>> while in steps 0-4.
+>>
+>> I'm not completely sure what would happen to a client that started iterating
+>> over ima_rules right after step 2.
+>>
+>> Wouldn't they be able to start looping through the new policy
+>> as 'List entry 0 (head node) = ima_default_rules' points to ima_policy_rules?
+>> And if they, wouldn't they loop until the write to 'ima_rule' at step 3 (admittedly
+>> very shortly thereafter) completed?
+>> And would the compiler be allowed to optimize the read to 'ima_rules' in the
+>> list_for_each_entry() loop, thereby never reloading the new value for
+>> 'ima_rules', and thus looping forever, just what we are trying to avoid?
+>>
+>> Overall, I'm tempted to say this is perhaps a bit too complex (at least,
+>> my head tells me it is, but that may very well be because I'm terrible
+>> at concurrency issues).
+>>
+>> Honestly, in this case I think awaiting input from more experienced
+>> kernel devs than I is the best path forward :-)
+> I'm far from an expert on RCU locking, but __list_splice_init_rcu()
+> provides an example of how to make sure there aren't any readers
+> traversing the list, before two lists are spliced together.   In our
+> case, after there aren't any readers, instead of splicing two lists
+> together, it should be safe to point to the new list.
+>
+> thanks,
+>
+> Mimi
+>
