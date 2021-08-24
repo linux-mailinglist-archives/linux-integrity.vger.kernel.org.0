@@ -2,33 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9573F5DAC
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Aug 2021 14:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BE53F5E1B
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Aug 2021 14:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236905AbhHXMLC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Aug 2021 08:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234787AbhHXMLB (ORCPT
+        id S237329AbhHXMjs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Aug 2021 08:39:48 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20588 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237196AbhHXMjr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Aug 2021 08:11:01 -0400
-Received: from ha0.nfschina.com (unknown [IPv6:2400:dd01:100f:2:d63d:7eff:fe08:eb3f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B76CC061757;
-        Tue, 24 Aug 2021 05:10:16 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by ha0.nfschina.com (Postfix) with ESMTP id 559C1AE0DBF;
-        Tue, 24 Aug 2021 20:09:46 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from ha0.nfschina.com ([127.0.0.1])
-        by localhost (ha0.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bc1O8ZkHRKm7; Tue, 24 Aug 2021 20:09:24 +0800 (CST)
-Received: from [172.30.18.174] (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by ha0.nfschina.com (Postfix) with ESMTPA id 8F3EDAE058B;
-        Tue, 24 Aug 2021 20:09:23 +0800 (CST)
+        Tue, 24 Aug 2021 08:39:47 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17OCY3vn118550;
+        Tue, 24 Aug 2021 08:38:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=1+jTVe2SbG0OIxYvjCqJfmIEo15dcWnkJJD8WSTNT2c=;
+ b=Gwb4OXfPkoasReWabIHnDbDFpRVl+A3SWPFqbj5OM4FjYGtiytDgaI+HJ8E6neL1sDyr
+ jI/TsUV1HHYcS4LGDqfMAqdSDTGwlJHJ2aYjVQiaNGVQo6bSgQXtvFj1pP3O0Eu8C6uY
+ cftRVwkWoBM8BZMpXNqJ0x4ppJ0bTmnePqsjw6rcEihB7HzyFUgtb5DgqPpb081pxtRv
+ LJ7u7HEeuD15lMTRfkdU7pzxFvpaV1IDnrKuHtAZWiX77YR8x6DOfK2YxgmcsyX/rS00
+ roSuMW35a8ijfE9QrsRlIEYbuvhCbfoLc5Pg8MlS2ERmeT9D3aw6VYTv/kKkCs3zyl1t uQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3amvttpu9e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Aug 2021 08:38:50 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17OCYNwK120631;
+        Tue, 24 Aug 2021 08:38:50 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3amvttpu81-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Aug 2021 08:38:50 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17OCbRwj027031;
+        Tue, 24 Aug 2021 12:38:48 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ajs48w628-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Aug 2021 12:38:48 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17OCZ4mV55575030
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Aug 2021 12:35:04 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BFC72AE055;
+        Tue, 24 Aug 2021 12:38:45 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0D899AE061;
+        Tue, 24 Aug 2021 12:38:44 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.88.64])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Aug 2021 12:38:43 +0000 (GMT)
+Message-ID: <2c4f61ff68544b2627fc4a38ad1e4109184ec68a.camel@linux.ibm.com>
 Subject: Re: [PATCH] ima: fix deadlock within "ima_match_policy" function.
-To:     THOBY Simon <Simon.THOBY@viveris.fr>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     liqiong <liqiong@nfschina.com>,
+        THOBY Simon <Simon.THOBY@viveris.fr>
 Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
         "jmorris@namei.org" <jmorris@namei.org>,
         "serge@hallyn.com" <serge@hallyn.com>,
@@ -36,169 +67,70 @@ Cc:     "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 24 Aug 2021 08:38:43 -0400
+In-Reply-To: <3ba4da9d-fa7b-c486-0c48-67cee4d5de6d@nfschina.com>
 References: <20210819101529.28001-1-liqiong@nfschina.com>
- <20210824085747.23604-1-liqiong@nfschina.com>
- <e720e88e-ebfa-56df-6048-f2da0b8fa2a0@viveris.fr>
-From:   liqiong <liqiong@nfschina.com>
-Message-ID: <3ba4da9d-fa7b-c486-0c48-67cee4d5de6d@nfschina.com>
-Date:   Tue, 24 Aug 2021 20:09:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
-MIME-Version: 1.0
-In-Reply-To: <e720e88e-ebfa-56df-6048-f2da0b8fa2a0@viveris.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+         <20210824085747.23604-1-liqiong@nfschina.com>
+         <e720e88e-ebfa-56df-6048-f2da0b8fa2a0@viveris.fr>
+         <3ba4da9d-fa7b-c486-0c48-67cee4d5de6d@nfschina.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OAF4OJxESa_6v8_XNPYC-lJS3HujDIh8
+X-Proofpoint-ORIG-GUID: yIFyAedLM7p_QQFuogEEIoA2Fr4C4qQ8
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-24_02:2021-08-24,2021-08-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 impostorscore=0 suspectscore=0
+ bulkscore=0 spamscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
+ definitions=main-2108240084
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Simon :
+On Tue, 2021-08-24 at 20:09 +0800, liqiong wrote:
+> Hi Simon :
+> 
+> ima: fix deadlock within RCU list of ima_rules.
+> 
 
-ima: fix deadlock within RCU list of ima_rules.
+Before the following paragraph, an introductory sentence is needed. 
+Try adding a sentence to the affect that "ima_rules" initially points
+to the "ima_default_rules", but after loading a custom policy points to
+the "ima_policy_rules".   Then describe the bug at a high level,
+something like - transitioning to the "ima_policy_rules" isn't being
+done safely.
 
-ima_match_policy() is looping on the policy ruleset while
-ima_update_policy() updates the variable "ima_rules". This can
-lead to a situation where ima_match_policy() can't exit the
-'list_for_each_entry_rcu' loop, causing RCU stalls
-("rcu_sched detected stall on CPU ...").
+Followed by the details.
 
-This problem can happen in practice: updating the IMA policy
-in the boot process while systemd-services are being checked.
+> ima_match_policy() is looping on the policy ruleset while
+> ima_update_policy() updates the variable "ima_rules". This can
+> lead to a situation where ima_match_policy() can't exit the
+> 'list_for_each_entry_rcu' loop, causing RCU stalls
+> ("rcu_sched detected stall on CPU ...").
+> 
+> This problem can happen in practice: updating the IMA policy
+> in the boot process while systemd-services are being checked.
+> 
+> In addition to ima_match_policy(), other function with 
+> "list_for_each_entry_rcu" should happen too. Fix locking by 
+> introducing a duplicate of "ima_rules" for each 
+> "list_for_each_entry_rcu".
+> 
+> 
+> How about this commit message ?
+> 
+> I have tested this patch in lab, we can reproduced this error case, 
+> have done reboot test many times. This patch should work. 
 
-In addition to ima_match_policy(), other function with 
-"list_for_each_entry_rcu" should happen too. Fix locking by 
-introducing a duplicate of "ima_rules" for each 
-"list_for_each_entry_rcu".
+The above comment doesn't belong in the commit message, but is a
+message to the reviewers/maintainers and goes after the patch
+descriptions three dashes line.
 
+thanks,
 
-How about this commit message ?
-
-I have tested this patch in lab, we can reproduced this error case, 
-have done reboot test many times. This patch should work. 
-
-
-在 2021年08月24日 17:50, THOBY Simon 写道:
-> Hi liqiong,
->
-> On 8/24/21 10:57 AM, liqiong wrote:
->> When "ima_match_policy" is looping while "ima_update_policy" changs
-> Small typo: "changes"/"updates"
->
->> the variable "ima_rules", then "ima_match_policy" may can't exit
->> loop, Finally cause RCU CPU Stall Warnings: "rcu_sched detected
->> stall on CPU ...".
-> This could perhaps be rephrased to something like:
-> """
-> ima_match_policy() can loop on the policy ruleset while
-> ima_update_policy() updates the variable "ima_rules".
-> This can lead to a situation where ima_match_policy()
-> can't exit the 'list_for_each_entry_rcu' loop, causing
-> RCU stalls ("rcu_sched detected stall on CPU ...").
-> """
->
->
->> The problem is limited to transitioning from the builtin policy to
->> the custom policy. Eg. At boot time, systemd-services are being
->> checked within "ima_match_policy", at the same time, the variable
->> "ima_rules" is changed by another service.
-> For the second sentence, consider something in the likes of:
-> "This problem can happen in practice: updating the IMA policy
-> in the boot process while systemd-services are being checked
-> have been observed to trigger this issue.".
->
->
-> Your commit message is also supposed to explain what you are doing,
-> using the imperative form ((see 'Documentation/process/submitting-patches.rst'):
-> """
-> Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-> instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-> to do frotz", as if you are giving orders to the codebase to change
-> its behaviour.
-> """
->
-> Maybe add a paragraph with something like "Fix locking by introducing ...."?
->
->
->> Signed-off-by: liqiong <liqiong@nfschina.com>
->> ---
->>  security/integrity/ima/ima_policy.c | 17 ++++++++++++-----
->>  1 file changed, 12 insertions(+), 5 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->> index fd5d46e511f1..e92b197bfd3c 100644
->> --- a/security/integrity/ima/ima_policy.c
->> +++ b/security/integrity/ima/ima_policy.c
->> @@ -662,12 +662,14 @@ int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
->>  {
->>  	struct ima_rule_entry *entry;
->>  	int action = 0, actmask = flags | (flags << 1);
->> +	struct list_head *ima_rules_tmp;
->>  
->>  	if (template_desc && !*template_desc)
->>  		*template_desc = ima_template_desc_current();
->>  
->>  	rcu_read_lock();
->> -	list_for_each_entry_rcu(entry, ima_rules, list) {
->> +	ima_rules_tmp = rcu_dereference(ima_rules);
->> +	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
->>  
->>  		if (!(entry->action & actmask))
->>  			continue;
->> @@ -919,8 +921,8 @@ void ima_update_policy(void)
->>  
->>  	if (ima_rules != policy) {
->>  		ima_policy_flag = 0;
->> -		ima_rules = policy;
->>  
->> +		rcu_assign_pointer(ima_rules, policy);
->>  		/*
->>  		 * IMA architecture specific policy rules are specified
->>  		 * as strings and converted to an array of ima_entry_rules
->> @@ -1649,9 +1651,11 @@ void *ima_policy_start(struct seq_file *m, loff_t *pos)
->>  {
->>  	loff_t l = *pos;
->>  	struct ima_rule_entry *entry;
->> +	struct list_head *ima_rules_tmp;
->>  
->>  	rcu_read_lock();
->> -	list_for_each_entry_rcu(entry, ima_rules, list) {
->> +	ima_rules_tmp = rcu_dereference(ima_rules);
->> +	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
->>  		if (!l--) {
->>  			rcu_read_unlock();
->>  			return entry;
->> @@ -1670,7 +1674,8 @@ void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos)
->>  	rcu_read_unlock();
->>  	(*pos)++;
->>  
->> -	return (&entry->list == ima_rules) ? NULL : entry;
->> +	return (&entry->list == &ima_default_rules ||
->> +		&entry->list == &ima_policy_rules) ? NULL : entry;
->>  }
->>  
->>  void ima_policy_stop(struct seq_file *m, void *v)
->> @@ -1872,6 +1877,7 @@ bool ima_appraise_signature(enum kernel_read_file_id id)
->>  	struct ima_rule_entry *entry;
->>  	bool found = false;
->>  	enum ima_hooks func;
->> +	struct list_head *ima_rules_tmp;
->>  
->>  	if (id >= READING_MAX_ID)
->>  		return false;
->> @@ -1879,7 +1885,8 @@ bool ima_appraise_signature(enum kernel_read_file_id id)
->>  	func = read_idmap[id] ?: FILE_CHECK;
->>  
->>  	rcu_read_lock();
->> -	list_for_each_entry_rcu(entry, ima_rules, list) {
->> +	ima_rules_tmp = rcu_dereference(ima_rules);
->> +	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
->>  		if (entry->action != APPRAISE)
->>  			continue;
->>  
->>
-> I haven't tested the patch myself, but the code diff looks fine to me.
->
-> Thanks,
-> Simon
+Mimi
 
