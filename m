@@ -2,129 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5914E3F6089
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Aug 2021 16:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FB63F6180
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Aug 2021 17:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237851AbhHXOiN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 24 Aug 2021 10:38:13 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:15730 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237852AbhHXOiN (ORCPT
+        id S238245AbhHXPY3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 24 Aug 2021 11:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238217AbhHXPY2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 24 Aug 2021 10:38:13 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17OEaQIV088398;
-        Tue, 24 Aug 2021 10:36:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=LscKHOmM4JXne0ldvl9TPd0dEiLHWZoKTEFyx0n/fFk=;
- b=Vt5FXLCTugPQWD9ChXt6LeboeDn2bqF/B+EuObl75hT2ljdFNqWEsUFjOmtuB8AepbA+
- wEmjaN2um8Z3RUgkRk79Dw5yXtfG+tIi1iybUnxkF7RM6Wn0MndCrVzC2LbYmNROndA+
- ZPb78OhAPtzrKssNQsfxKAjv0LFjnl/yN/dBNkmMuatOobejo6zAGalji0x+LG64+UfF
- JrxLeF8lk1Z7qs93J0nerCmF4Aak8+qohTz4jwMakuQ/zTU1eEuncTSctRAmzITG9bIT
- TFNgWJOKfqEltaEye4oRFsDHx4uY6TSOJX7lEmFHzHjeShMEVDr6r97FKW0LtlCr+6ZD QA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3amv09beb3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Aug 2021 10:36:43 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17OEacmN089288;
-        Tue, 24 Aug 2021 10:36:43 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3amv09bdt3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Aug 2021 10:36:43 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17OEXVaS004979;
-        Tue, 24 Aug 2021 14:34:18 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ajs48wbvr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Aug 2021 14:34:17 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17OEYFQc54133198
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Aug 2021 14:34:15 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6709F42041;
-        Tue, 24 Aug 2021 14:34:15 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 622124204C;
-        Tue, 24 Aug 2021 14:34:10 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.88.64])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 24 Aug 2021 14:34:10 +0000 (GMT)
-Message-ID: <9526a4e0be9579a9e52064dd590a78c6496ee025.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 00/12] Enroll kernel keys thru MOK
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nayna <nayna@linux.vnet.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     keyrings@vger.kernel.org,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>, keescook@chromium.org,
-        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
-        scott.branden@broadcom.com, weiyongjun1@huawei.com,
-        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        lszubowi@redhat.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
+        Tue, 24 Aug 2021 11:24:28 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4365CC0613CF
+        for <linux-integrity@vger.kernel.org>; Tue, 24 Aug 2021 08:23:44 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id fz10so3076683pjb.0
+        for <linux-integrity@vger.kernel.org>; Tue, 24 Aug 2021 08:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AlWf418OhmiZZMN2ujHNQZWc18fzFQ+ab1INkCf29Dg=;
+        b=h9B4MYL0ZHRCwtAFt9WLYquuLvRZY3ZCCd0XIomoYvZ/jkoNVJdc55k62FFnuwd1r7
+         KLVHJ+ivYOKxQrgspcN15/GAG+WeLPPJioIeu8kDX54oEdLsMc/JZNEdqZ/SYYbK8f/V
+         dd4Td0t3+cqb3J819AV3cgKAch6vromBXLeFAxkK8rhiUa64HUXUrBYx8mimYFdFfHEr
+         +EHk2SA9hz8QZIMc5JdR6bknuXL2VZRYGm1aVlobZlv/qwoE4gBtuJQoSDriV11cXUZk
+         hXIFqqZX0mmem3uOXznck4OCoDYL3CDtoesGzW8jRiWOrAbAM4CrGYRtg6npSuOR+iPp
+         ejvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AlWf418OhmiZZMN2ujHNQZWc18fzFQ+ab1INkCf29Dg=;
+        b=GoWc62CBFpKAXP+NF7l5JXYobyLZixZZUXJ/BZ99IXdt8Mbke8reA65jB6XnmtfKpQ
+         /aq0daXoEeRYmBDJDlKnEOVd/ETst3VD6z8bpku5Ir0AUTrfHWcBeprMsUkjqoh2W9Pi
+         d3W8qXodbb2qy3cBkyvwfYr/MytEFR0wWxn2HMtfpAaabTpT9rkdpI7EJ/iEL/W2o2Cu
+         v2orakBFVnKHXycAA0tlgxCHSNOAKTpg3Y1JzHRmXyqxrQW32G1vvgsaE/w3CGC8jVPL
+         akmfAlwQF0TMiJW7ImcvGgLvs2ciAgIxVjvVfhtZ7sva33NcCSaspFwW3kdbpvMBGCQc
+         4ytg==
+X-Gm-Message-State: AOAM531XuVAkvzyfWHmATq59oPHVLdoUdDXdU+yFVvSjFyiREjjQmMcV
+        Mo/RDhBJV/Rsh2nMKPgkoQE/Wv85Ez0ox48mH3qmQA==
+X-Google-Smtp-Source: ABdhPJxwlxA/ggkzhnXhTxNIIF8d5nI4NsBBRTBHNjWOZLC0rAevPRz+KC1lxMKEVQGfdXwnNpQqQIxZMl/dJ3MDtBc=
+X-Received: by 2002:a17:902:bd81:b029:12c:b6fb:feef with SMTP id
+ q1-20020a170902bd81b029012cb6fbfeefmr33981892pls.84.1629818623699; Tue, 24
+ Aug 2021 08:23:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de>
+ <CAJ+vNU23cXPmiqKcKH_WAgD-ea+=pEJzGK+q7zOy=v2o0XU7kA@mail.gmail.com>
+ <2b48a848-d70b-9c43-5ca0-9ab72622ed12@pengutronix.de> <CAJ+vNU225mgHHg00r67f1L6bEub+_h55hCBAMhCq2rd8kWU-qg@mail.gmail.com>
+ <9200d46d-94a2-befd-e9b0-93036e56eb8a@pengutronix.de> <CAJ+vNU19z0syr0oHOrSGxL0cVW+Kjv76kmp6uvGc2akHbtX0Nw@mail.gmail.com>
+ <fa530833-2bb9-f8f3-68c6-99423d29e2ca@pengutronix.de> <CAJ+vNU0iRTagc5_qvsG4jvt=B_wruj=1O2ZRixqWek8JTN=aeg@mail.gmail.com>
+ <8b559c9c-a4c0-d335-5e54-40b9acc08707@pengutronix.de>
+In-Reply-To: <8b559c9c-a4c0-d335-5e54-40b9acc08707@pengutronix.de>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Tue, 24 Aug 2021 08:23:32 -0700
+Message-ID: <CAJ+vNU2q_KCi8nNv56s0ip7CZaAE=YgObwFUyzuGa_T1Ywp-wQ@mail.gmail.com>
+Subject: Re: [PATCH 0/4] KEYS: trusted: Introduce support for NXP CAAM-based
+ trusted keys
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     David Gstir <david@sigma-star.at>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>, keyrings@vger.kernel.org,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
         linux-security-module@vger.kernel.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        pjones@redhat.com,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        Patrick Uiterwijk <patrick@puiterwijk.org>
-Date:   Tue, 24 Aug 2021 10:34:09 -0400
-In-Reply-To: <bffb33a3-d5b5-f376-9d7d-706d38357d1a@linux.vnet.ibm.com>
-References: <20210819002109.534600-1-eric.snowberg@oracle.com>
-         <fcb30226f378ef12cd8bd15938f0af0e1a3977a2.camel@kernel.org>
-         <f76fcf41728fbdd65f2b3464df0821f248b2cba0.camel@linux.ibm.com>
-         <91B1FE51-C6FC-4ADF-B05A-B1E59E20132E@oracle.com>
-         <e7e251000432cf7c475e19c56b0f438b92fec16e.camel@linux.ibm.com>
-         <cedc77fefdf22b2cec086f3e0dd9cc698db9bca2.camel@kernel.org>
-         <bffb33a3-d5b5-f376-9d7d-706d38357d1a@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: r_swUgDIao0jShx0mbE5bkkPhHhggCoq
-X-Proofpoint-GUID: SQpjP5z9YPQ9zB2BIjFB6bvDvc41h9gG
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-24_05:2021-08-24,2021-08-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 mlxscore=0 phishscore=0 clxscore=1015
- suspectscore=0 bulkscore=0 spamscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108240094
+        Udit Agarwal <udit.agarwal@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
+        Richard Weinberger <richard@nod.at>,
+        James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        David Howells <dhowells@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, Sascha Hauer <kernel@pengutronix.de>,
+        linux-integrity@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Tue, Aug 24, 2021 at 12:33 AM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+>
+> On 23.08.21 19:50, Tim Harvey wrote:
+> > On Mon, Aug 23, 2021 at 6:29 AM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+> >> On 20.08.21 23:19, Tim Harvey wrote:
+> >>> On Fri, Aug 20, 2021 at 1:36 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+> >>>> On 20.08.21 22:20, Tim Harvey wrote:
+> >>> It works for a user keyring but not a session keyring... does that
+> >>> explain anything?
+> >>> # keyctl add trusted mykey 'new 32' @u
+> >>> 941210782
+> >>> # keyctl print 941210782
+> >>> 83b7845cb45216496aead9ee2c6a406f587d64aad47bddc539d8947a247e618798d9306b36398b5dc2722a4c3f220a3a763ee175f6bd64758fdd49ca4db597e8ce328121b60edbba9b8d8d55056be896
+> >>> # keyctl add trusted mykey 'new 32' @s
+> >>> 310571960
+> >>> # keyctl print 310571960
+> >>> keyctl_read_alloc: Unknown error 126
+> >>
+> >> Both sequences work for me.
+> >>
+> >> My getty is started by systemd. I think systemd allocates a new session
+> >> keyring for the getty that's inherited by the shell and the commands I run
+> >> it in. If you don't do that, each command will get its own session key.
+> >>
+> >>> Sorry, I'm still trying to wrap my head around the differences in
+> >>> keyrings and trusted vs user keys.
+> >>
+> >> No problem. HTH.
+> >
+> > Ahmad,
+> >
+> > Ok that explains it - my testing is using a very basic buildroot
+> > ramdisk rootfs. If I do a 'keyctl new_session' first I can use the
+> > system keyring fine as well.
+>
+> Great. Does this mean I can get your Tested-by: ? :)
+>
 
-> >> Jarkko, I think the emphasis should not be on "machine" from Machine
-> >> Owner Key (MOK), but on "owner".  Whereas Nayna is focusing more on the
-> >> "_ca" aspect of the name.   Perhaps consider naming it
-> >> "system_owner_ca" or something along those lines.
+Absolutely,
 
-> > What do you gain such overly long identifier? Makes no sense. What
-> > is "ca aspect of the name" anyway?
-> 
-> As I mentioned previously, the main usage of this new keyring is that it 
-> should contain only CA keys which can be later used to vouch for user 
-> keys loaded onto secondary or IMA keyring at runtime. Having ca in the 
-> name like .xxxx_ca, would make the keyring name self-describing. Since 
-> you preferred .system, we can call it .system_ca.
+For the series:
 
-Sounds good to me.  Jarkko?
+I tested this series on top of v5.14.rc-7 on a Gateworks
+imx8mm-venice-gw73xx board with kernel param trusted.source=caam and
+keyutils-1.6:
+# keyctl new_session
+22544757
+# keyctl add trusted mykey 'new 32' @s
+160701809
+# keyctl print 160701809
+990e03aa4515aee420eede17e26a58d0c5568c8bd2c9c2ee2f22a0583181d20d4f65cf9cb1f944a3cc92c0e3184a44a29a7e511f0a55a6af11a70ac2b2924514002475e73ae09820042896b9ee00a5ec
 
-thanks,
+Tested-By: Tim Harvey <tharvey@gateworks.com>
 
-Mimi
+One more question: I've got a user that wants to blob/deblob generic
+data. They can use the caam_encap_blob/caam_decap_blob functions in
+kernel code but could you give me a suggestion for how they could use
+this in:
+a) userspace code (using the keyctl syscall I assume)
+b) userspace cmdline (via keyutils I assume)
 
+Many thanks,
+
+Tim
