@@ -2,138 +2,167 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E13E53F7475
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Aug 2021 13:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8532F3F7482
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Aug 2021 13:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239799AbhHYLkd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 25 Aug 2021 07:40:33 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41628 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232199AbhHYLk2 (ORCPT
+        id S239331AbhHYLqq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 25 Aug 2021 07:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232199AbhHYLqq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 25 Aug 2021 07:40:28 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17PBXUrg060092;
-        Wed, 25 Aug 2021 07:39:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=hXemy+AI8N+IIsFU/E5uooHm4euKA6Kq7/+3f5i/IOo=;
- b=geL7uMqrMZyicJpA30lJYAkoI5sCRHxR7pvBMfKm1J97zH5ACGK5+zAgsGgnDRmFdLiF
- hLRk2kGIa51D2OJFjpa8m7p27vQbApBR+K7pHAvUW3KHV5UPvnONccsgdNzXSdtiz+GP
- hWMuTsf7f5hAGGAihfk/DDXwcIerD/dHm0Z1dfI3/M1RZDDzkD5lzdrj2L5bJz/Kt9U2
- zRb1G7rJxc5WxV+/RHal6k3DOvJ06tTYRimhUXkxVpNrD8ELYchgsVHiP7D00LhB0H13
- VWvDgj7nIcvOHToXFym5RcMi58EqjJvTqiU90Bhk0pn1hA90pPQNKuiDJ3F3XWzcWFHt mA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3angn80faa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Aug 2021 07:39:38 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 17PBXelK061460;
-        Wed, 25 Aug 2021 07:39:38 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3angn80f98-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Aug 2021 07:39:38 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17PBd91u002069;
-        Wed, 25 Aug 2021 11:39:35 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 3ajs48duqf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Aug 2021 11:39:35 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17PBdWO957082196
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 Aug 2021 11:39:32 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9ACD211C06C;
-        Wed, 25 Aug 2021 11:39:32 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5C09E11C050;
-        Wed, 25 Aug 2021 11:39:31 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.60.9])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Aug 2021 11:39:31 +0000 (GMT)
-Message-ID: <0c5c0851cd07f861ebf79bc0ac90e57d71317985.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils v3] Use secure heap for private keys and
- passwords
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Vitaly Chikunov <vt@altlinux.org>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Date:   Wed, 25 Aug 2021 07:39:30 -0400
-In-Reply-To: <20210822001055.1772873-1-vt@altlinux.org>
-References: <20210822001055.1772873-1-vt@altlinux.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: T4P4QsW4M5dmSD1E9VKEuYL01VaOacKT
-X-Proofpoint-GUID: UDUgc2jvKVWR2lqeiMQpt8njP1J3ikPm
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-25_04:2021-08-25,2021-08-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- suspectscore=0 bulkscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- mlxscore=0 clxscore=1015 spamscore=0 mlxlogscore=999 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
- definitions=main-2108250068
+        Wed, 25 Aug 2021 07:46:46 -0400
+Received: from ha0.nfschina.com (unknown [IPv6:2400:dd01:100f:2:d63d:7eff:fe08:eb3f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E505BC061757;
+        Wed, 25 Aug 2021 04:45:58 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by ha0.nfschina.com (Postfix) with ESMTP id 9AD0AAE0DC7;
+        Wed, 25 Aug 2021 19:45:17 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from ha0.nfschina.com ([127.0.0.1])
+        by localhost (ha0.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bZVhb-isVgmc; Wed, 25 Aug 2021 19:44:56 +0800 (CST)
+Received: from [172.30.18.174] (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by ha0.nfschina.com (Postfix) with ESMTPA id 6768FAE0D1B;
+        Wed, 25 Aug 2021 19:44:56 +0800 (CST)
+Subject: Re: [PATCH] ima: fix deadlock within RCU list of ima_rules
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     THOBY Simon <Simon.THOBY@viveris.fr>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210819101529.28001-1-liqiong@nfschina.com>
+ <20210824085747.23604-1-liqiong@nfschina.com>
+ <e720e88e-ebfa-56df-6048-f2da0b8fa2a0@viveris.fr>
+ <3ba4da9d-fa7b-c486-0c48-67cee4d5de6d@nfschina.com>
+ <2c4f61ff68544b2627fc4a38ad1e4109184ec68a.camel@linux.ibm.com>
+ <d502623a-7a49-04f8-1672-6521ceef260b@nfschina.com>
+From:   liqiong <liqiong@nfschina.com>
+Message-ID: <5a032a1b-f763-a0e4-8ea2-803872bd7174@nfschina.com>
+Date:   Wed, 25 Aug 2021 19:45:33 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
+MIME-Version: 1.0
+In-Reply-To: <d502623a-7a49-04f8-1672-6521ceef260b@nfschina.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Vitaly,
+Hi Mimi,
 
-On Sun, 2021-08-22 at 03:10 +0300, Vitaly Chikunov wrote:
-> After CRYPTO_secure_malloc_init OpenSSL will store private keys 
+This copy may be better.
 
-^and passwords
 
-> in
-> secure heap. This facility is only available since OpenSSL_1_1_0-pre1.
-> 
-> Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+subject: ima: fix deadlock when iterating over the init "ima_rules" list.
 
-Initially we started out discussing ways of protecting passwords, which
-this patch does.  Thank you!  I'm not sure, however, it is protecting
-the private keys.  Does read_priv_pkey()  also use the secure heap or
-is PEM_read_PrivateKey() already safe?
 
+
+When traversing back to head, the init "ima_rules" list can't exit
+iterating if "ima_rules" has been updated to "ima_policy_rules".
+It causes soft lockup and RCU stalls. So we can introduce a duplicate
+of "ima_rules" for each "ima_rules" list loop.
+
+Signed-off-by: liqiong <liqiong@nfschina.com>
+---
+ This problem can happen in practice: updating the IMA policy
+ in the boot process while systemd-services are being checked.
+
+ security/integrity/ima/ima_policy.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index fd5d46e511f1..e92b197bfd3c 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+
+
+Regards,
+
+liqiong
+
+
+
+在 2021年08月25日 15:05, liqiong 写道:
+> Hi Mimi,
+>
+> Thanks for the advice，maybe i should trim the message,
+> here is a new copy:
+>
+>
+> subject: ima: fix deadlock when iterating over the init "ima_rules" list.
+>
+> The init "ima_rules" list can't traverse back to head, if "ima_rules"
+> is being updated to "ima_policy_rules". It causes soft lockup and RCU stalls.
+> So we can introduce a duplicate of "ima_rules" for each "ima_rules" list loop.
+>
+> Signed-off-by: liqiong <liqiong@nfschina.com>
 > ---
->  src/evmctl.c | 148 +++++++++++++++++++++++++++++++++++++++++----------
->  1 file changed, 121 insertions(+), 27 deletions(-)
-> 
-> diff --git a/src/evmctl.c b/src/evmctl.c
-> 
-> @@ -188,7 +207,9 @@ static int bin2file(const char *file, const char *ext, const unsigned char *data
->  	return err;
->  }
-> 
-> -static unsigned char *file2bin(const char *file, const char *ext, int *size)
-> +/* Return data in OpenSSL secure heap if 'secure' is true. */
-> +static unsigned char *file2bin(const char *file, const char *ext, int *size,
-> +			       int secure)
->  {
-
-The only caller of file2bin() that sets "secure" is evm_calc_hmac(),
-but evm_calc_hmac() is a debugging tool, not meant for setting the real
-security.evm xattr.
-
-The kernel EVM HMAC key is an "encrypted" key type, which should be
-based on a "trusted" key.  Neither of which are exposed to userspace
-unencrypted. 
-
-Enabling DEBUG by default was suppose to be temporary.  At this point,
-should it be disabled?  As evm_calc_hmac() is only meant for debugging,
-do we really care whether evm_calc_hmac() uses a secure heap or stack
-for private keys or passwords?
-
-thanks,
-
-Mimi
-
->  	FILE *fp;
->  	size_t len;
+>  This problem can happen in practice: updating the IMA policy
+>  in the boot process while systemd-services are being checked.
+>
+>  security/integrity/ima/ima_policy.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+>
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index fd5d46e511f1..e92b197bfd3c 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+>
+>
+> Regards,
+>
+> liqiong
+>
+> 在 2021年08月24日 20:38, Mimi Zohar 写道:
+>> On Tue, 2021-08-24 at 20:09 +0800, liqiong wrote:
+>>> Hi Simon :
+>>>
+>>> ima: fix deadlock within RCU list of ima_rules.
+>>>
+>> Before the following paragraph, an introductory sentence is needed. 
+>> Try adding a sentence to the affect that "ima_rules" initially points
+>> to the "ima_default_rules", but after loading a custom policy points to
+>> the "ima_policy_rules".   Then describe the bug at a high level,
+>> something like - transitioning to the "ima_policy_rules" isn't being
+>> done safely.
+>>
+>> Followed by the details.
+>>
+>>> ima_match_policy() is looping on the policy ruleset while
+>>> ima_update_policy() updates the variable "ima_rules". This can
+>>> lead to a situation where ima_match_policy() can't exit the
+>>> 'list_for_each_entry_rcu' loop, causing RCU stalls
+>>> ("rcu_sched detected stall on CPU ...").
+>>>
+>>> This problem can happen in practice: updating the IMA policy
+>>> in the boot process while systemd-services are being checked.
+>>>
+>>> In addition to ima_match_policy(), other function with 
+>>> "list_for_each_entry_rcu" should happen too. Fix locking by 
+>>> introducing a duplicate of "ima_rules" for each 
+>>> "list_for_each_entry_rcu".
+>>>
+>>>
+>>> How about this commit message ?
+>>>
+>>> I have tested this patch in lab, we can reproduced this error case, 
+>>> have done reboot test many times. This patch should work. 
+>> The above comment doesn't belong in the commit message, but is a
+>> message to the reviewers/maintainers and goes after the patch
+>> descriptions three dashes line.
+>>
+>> thanks,
+>>
+>> Mimi
+>>
+>>
+>
 
