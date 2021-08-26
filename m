@@ -2,125 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 936533F8917
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Aug 2021 15:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB993F8B60
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Aug 2021 17:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242729AbhHZNgp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Aug 2021 09:36:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22306 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242644AbhHZNgo (ORCPT
+        id S242931AbhHZP6V (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Aug 2021 11:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234972AbhHZP6V (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Aug 2021 09:36:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1629984957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FNJXjENmiJP8VP1mC2nn5kzqRMzER0E25H1qNDEi8eM=;
-        b=PGWPBlnXJ8t80ZMFHhp39+y9KrYiBFKvfoeMw971/V5FyQWGjIgrJU1sEeyFJMv7x94/0L
-        JQHTFLjRTyoCTpc791KOT8LcztL5L1trBQ33vQR3rPg+ITTAmqG/b3giQ8m5qA3ySQ5E3O
-        Bgy0BHfiebsmpmDx3zyBHJqdSip92o0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-397-q1NYaNtgPxm-xLkGMwUTOw-1; Thu, 26 Aug 2021 09:35:55 -0400
-X-MC-Unique: q1NYaNtgPxm-xLkGMwUTOw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B8FB892502;
-        Thu, 26 Aug 2021 13:35:53 +0000 (UTC)
-Received: from localhost (unknown [10.22.8.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2B40F60C04;
-        Thu, 26 Aug 2021 13:35:52 +0000 (UTC)
-Date:   Thu, 26 Aug 2021 10:35:52 -0300
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Simon.THOBY@viveris.fr, kgold@linux.ibm.com,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 ima-evm-utils 1/2] set default hash algorithm in
- configuration time
-Message-ID: <YSeYuNglsE3XWBSA@glitch>
-References: <20210820230001.102249-1-bmeneg@redhat.com>
- <20210820230001.102249-2-bmeneg@redhat.com>
- <3ea0519200137128c67556b9c627a4849ddfbd24.camel@linux.ibm.com>
+        Thu, 26 Aug 2021 11:58:21 -0400
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8159C061757;
+        Thu, 26 Aug 2021 08:57:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=MIME-Version:Content-Transfer-Encoding:Content-Type:References
+        :In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ZnGe1nVJ1CjSDZDcZI0kLv7JieGOOXz8IXiGfM2vWOg=; b=vCwqW1gApWpdGNv1xOnZEngggZ
+        tapUoSvNGbDkeiGebQoMw5auiTyvm1Bf+8L2tTnwQUrcU9hKH9zEpThL0jphg8B4cCVg1zRpn3zsK
+        e5RriResuYJf+iIpnb5blFK2vNvMK/WGSq9P0ANhriDGHHVS+92EV54qoDWipGXG7oj4VMmV6L0j0
+        3Srwy3i36F8r1cam65UIgDSl3AoNAl0XSs8bwCENdQMYq6+oRVl5NpDz8AKgqlt1r6DrlqXhbGHK9
+        r/p/K5srrlj0pNAQ6iQGKjMhirW7YXhDGurLKyyUk2JT1qOVWEMr2HteoAnKECnf8dOdltGtSPx+p
+        y6tQ1MDQ==;
+Received: from 83-245-197-237.elisa-laajakaista.fi ([83.245.197.237] helo=localhost)
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <jarkko.sakkinen@iki.fi>)
+        id 1mJHkX-0006ux-Oe; Thu, 26 Aug 2021 18:57:05 +0300
+Message-ID: <284e47260b22b8f308a1efa6754845329f6c89a5.camel@iki.fi>
+Subject: Re: [PATCH v13 1/7] tpm: Make read{16, 32}() and write32() in 
+ tpm_tis_phy_ops optional
+From:   Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+To:     amirmizi6@gmail.com, Eyal.Cohen@nuvoton.com,
+        jarkko.sakkinen@linux.intel.com, oshrialkoby85@gmail.com,
+        alexander.steffen@infineon.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org, benoit.houyere@st.com,
+        eajames@linux.ibm.com, joel@jms.id.au
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
+Date:   Thu, 26 Aug 2021 18:57:04 +0300
+In-Reply-To: <20210826111908.117278-2-amirmizi6@gmail.com>
+References: <20210826111908.117278-1-amirmizi6@gmail.com>
+         <20210826111908.117278-2-amirmizi6@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="loU+pg6pQEqg2kR1"
-Content-Disposition: inline
-In-Reply-To: <3ea0519200137128c67556b9c627a4849ddfbd24.camel@linux.ibm.com>
-X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-SA-Exim-Connect-IP: 83.245.197.237
+X-SA-Exim-Mail-From: jarkko.sakkinen@iki.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
---loU+pg6pQEqg2kR1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Aug 25, 2021 at 05:43:50PM -0400, Mimi Zohar wrote:
-> Hi Bruno,
+On Thu, 2021-08-26 at 14:19 +0300, amirmizi6@gmail.com wrote:
+> From: Amir Mizinski <amirmizi6@gmail.com>
 >=20
-> On Fri, 2021-08-20 at 20:00 -0300, Bruno Meneguele wrote:
-> > The default hash algorithm for evmctl is today hardcoded libimaevm.c fi=
-le.
-> > To facilitate different distributions and users to set their own default
-> > hash algorithm this patch adds the --with-default-hash=3D<algo> option =
-to the
-> > configuration script.
-> >=20
-> > The algorithm chosen by the user will then be checked if is available i=
-n the
-> > kernel, otherwise IMA won't be able to verify files hashed by the user.=
- For
-> > that, the file exposed by the kernel crypto API (/proc/crypto) is filte=
-red
-> > by an AWK script in order to check the algorithm's name and the module
-> > providing it. Initally, only "module: kernel" is accepted, following IM=
-A's
-> > CONFIG_CRYPTO_SHA1/SHA256 dependency.
->=20
-> There's a difference between preventing an evmctl user from
-> unintentionally using an unsupported algorithm and the distro, or
-> whoever is building the package, defining the wrong default hash
-> algorithm.
->=20
-> My preference would be to allow any hash algorithm defined in
-> hash_info.h (kernel_headers package) as the default.
->=20
+> Only tpm_tis can use memory-mapped I/O, which is truly mapped into
+> the kernel's memory space. Therefore, using ioread16/ioread32/iowrite32
+> turns into a straightforward pointer dereference.
+> Every other driver requires more complicated operations to read more than
+> one byte at a time and will just fall back to read_bytes/write_bytes.
 
-Good point. Considering we already depend on the kernel-headers pkg and
-we also allow the user to specify a custom path for headers, it's indeed
-better to keep the consistency.
+s/Every other driver/Some drivers, such as tpm_tis_spi,/g.
 
-I'll prepare a v5 using the kernel-headers instead of /proc/crypto.
+> Therefore, move this common code out of tpm_tis_spi and into tpm_tis_core
+> so that it is used automatically when low-level drivers do not implement
+> the specialized methods.
 
-> thanks,
->=20
-> Mimi
->=20
+This does not really explain why you are moving the code.
 
---=20
-bmeneg=20
-PGP Key: http://bmeneg.com/pubkey.txt
+You are moving it so that you don't have to reimplement things both in
+SPI and I2C drivers?
 
---loU+pg6pQEqg2kR1
-Content-Type: application/pgp-signature; name="signature.asc"
+Perhaps:
 
------BEGIN PGP SIGNATURE-----
+"Re-implement tpm_tis_{read, write}_{16, 32}, so that they check
+ if implementations for {read, write}_{16, 32} in tpm_tis_phys_ops
+ exist, and if not, fallback to {read, write}_bytes()."
 
-iQEyBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmEnmLcACgkQYdRkFR+R
-okMsRQf3Zd80jdgSn0IxlblPzseLiEFBZCtKMF+dV5EplT8qQedVuQEcNECl29qg
-KChq2MLIDLKAznYNhg2gVImaBKz4lV2teaIlyH2aA2UkO3uIL+SjD6yz/0Tb0IQW
-zGMisl6RTii3CXGu2r2lQuns3okNJQjppEXYcJ+xE6lS9sEnBIhYTSGlBxmtZ2xw
-+LQdAwPzv9jbmkNu7POa5+aQdYkUYCfCJC7MAVgdXOCxzJZGYgkQMXaNk8GrxYiD
-TilqyNJf5jA8pgIOdmNG+O0/lXbpJgaDCZ90HcGj33qQZMrgx7Q3UfniUQMXvVW8
-k0dKQZtKSaxHqNJ536+9HSFdYtI/
-=h45h
------END PGP SIGNATURE-----
+> Co-developed-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+> Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+> Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
---loU+pg6pQEqg2kR1--
+Since there's been a while, it'd be better if you dropped my tags.
+I consider them as expired by now. Please do this for all patches.
+
+/Jarkko
 
