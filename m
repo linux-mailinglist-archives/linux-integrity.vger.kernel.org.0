@@ -2,21 +2,21 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 692AF3F872E
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Aug 2021 14:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAD83F8732
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Aug 2021 14:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242493AbhHZMTz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 26 Aug 2021 08:19:55 -0400
+        id S242579AbhHZMT7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 26 Aug 2021 08:19:59 -0400
 Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:41648 "EHLO
         herzl.nuvoton.co.il" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S242578AbhHZMTy (ORCPT
+        with ESMTP id S242586AbhHZMT7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 26 Aug 2021 08:19:54 -0400
+        Thu, 26 Aug 2021 08:19:59 -0400
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 17QBJURj025241;
-        Thu, 26 Aug 2021 14:19:30 +0300
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 17QBJVYG025244;
+        Thu, 26 Aug 2021 14:19:31 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
-        id 1A58063A1C; Thu, 26 Aug 2021 14:19:40 +0300 (IDT)
+        id 662E963A1D; Thu, 26 Aug 2021 14:19:41 +0300 (IDT)
 From:   amirmizi6@gmail.com
 To:     Eyal.Cohen@nuvoton.com, jarkko.sakkinen@linux.intel.com,
         oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
@@ -28,11 +28,10 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
         Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
         shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
-        Amir Mizinski <amirmizi6@gmail.com>,
-        Alexander Steffen <Alexander.Steffen@infineon.com>
-Subject: [PATCH v13 1/7] tpm: Make read{16, 32}() and write32() in  tpm_tis_phy_ops optional
-Date:   Thu, 26 Aug 2021 14:19:02 +0300
-Message-Id: <20210826111908.117278-2-amirmizi6@gmail.com>
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: [PATCH v13 2/7] tpm: tpm_tis: Fix expected bit handling and send all  bytes in one shot without last byte in exception
+Date:   Thu, 26 Aug 2021 14:19:03 +0300
+Message-Id: <20210826111908.117278-3-amirmizi6@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20210826111908.117278-1-amirmizi6@gmail.com>
 References: <20210826111908.117278-1-amirmizi6@gmail.com>
@@ -44,176 +43,183 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Amir Mizinski <amirmizi6@gmail.com>
 
-Only tpm_tis can use memory-mapped I/O, which is truly mapped into
-the kernel's memory space. Therefore, using ioread16/ioread32/iowrite32
-turns into a straightforward pointer dereference.
-Every other driver requires more complicated operations to read more than
-one byte at a time and will just fall back to read_bytes/write_bytes.
-Therefore, move this common code out of tpm_tis_spi and into tpm_tis_core
-so that it is used automatically when low-level drivers do not implement
-the specialized methods.
+Detected the following incorrect implementation of the send command:
+polling on the TPM_STS.stsValid field followed by checking the
+TPM_STS.expect field only once. Since TPM_STS.stsValid represents the
+TPM_STS.expect validity, both fields should be polled at the same time.
 
-Co-developed-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+This fix modifies the signature of 'wait_for_tpm_stat()', adding an
+additional "mask_result" parameter to its call and renaming it to
+'tpm_tis_wait_for_stat()' for better alignment with other naming.
+'tpm_tis_wait_for_stat()' is now polling the TPM_STS with a mask and waits
+for the value in mask_result. The fix adds the ability to check if certain
+TPM_STS bits have been cleared.
+
+This change is also aligned to verifying the CRC on I2C TPM. The CRC
+verification should be done after the TPM_STS.expect field is cleared
+(TPM received all expected command bytes and set the calculated CRC value
+in the register).
+
+In addition, the send command was changed to comply with
+TCG_DesignPrinciples_TPM2p0Driver_vp24_pubrev.pdf as follows:
+- send all command bytes in one loop
+- remove special handling of the last byte
+
+Suggested-by: Benoit Houyere <benoit.houyere@st.com>
 Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
 Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 ---
- drivers/char/tpm/tpm_tis_core.h     | 38 +++++++++++++++++++++++++++++++---
- drivers/char/tpm/tpm_tis_spi.h      |  4 ----
- drivers/char/tpm/tpm_tis_spi_cr50.c |  3 ---
- drivers/char/tpm/tpm_tis_spi_main.c | 41 -------------------------------------
- 4 files changed, 35 insertions(+), 51 deletions(-)
+ drivers/char/tpm/tpm_tis_core.c | 70 +++++++++++++++--------------------------
+ 1 file changed, 26 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index b2a3c6c..e8fad0e 100644
---- a/drivers/char/tpm/tpm_tis_core.h
-+++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -124,13 +124,35 @@ static inline int tpm_tis_read8(struct tpm_tis_data *data, u32 addr, u8 *result)
- static inline int tpm_tis_read16(struct tpm_tis_data *data, u32 addr,
- 				 u16 *result)
- {
--	return data->phy_ops->read16(data, addr, result);
-+	__le16 result_le;
-+	int rc;
-+
-+	if (data->phy_ops->read16)
-+		return data->phy_ops->read16(data, addr, result);
-+
-+	rc = data->phy_ops->read_bytes(data, addr, sizeof(u16),
-+				       (u8 *)&result_le);
-+	if (!rc)
-+		*result = le16_to_cpu(result_le);
-+
-+	return rc;
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 69579ef..b34e59b 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -44,9 +44,9 @@ static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
+ 	return false;
  }
  
- static inline int tpm_tis_read32(struct tpm_tis_data *data, u32 addr,
- 				 u32 *result)
+-static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+-		unsigned long timeout, wait_queue_head_t *queue,
+-		bool check_cancel)
++static int tpm_tis_wait_for_stat(struct tpm_chip *chip, u8 mask, u8 stat,
++				 unsigned long timeout,
++				 wait_queue_head_t *queue, bool check_cancel)
  {
--	return data->phy_ops->read32(data, addr, result);
-+	__le32 result_le;
-+	int rc;
-+
-+	if (data->phy_ops->read32)
-+		return data->phy_ops->read32(data, addr, result);
-+
-+	rc = data->phy_ops->read_bytes(data, addr, sizeof(u32),
-+				       (u8 *)&result_le);
-+	if (!rc)
-+		*result = le32_to_cpu(result_le);
-+
-+	return rc;
- }
+ 	unsigned long stop;
+ 	long rc;
+@@ -55,7 +55,7 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
  
- static inline int tpm_tis_write_bytes(struct tpm_tis_data *data, u32 addr,
-@@ -147,7 +169,17 @@ static inline int tpm_tis_write8(struct tpm_tis_data *data, u32 addr, u8 value)
- static inline int tpm_tis_write32(struct tpm_tis_data *data, u32 addr,
- 				  u32 value)
- {
--	return data->phy_ops->write32(data, addr, value);
-+	__le32 value_le;
-+	int rc;
-+
-+	if (data->phy_ops->write32)
-+		return data->phy_ops->write32(data, addr, value);
-+
-+	value_le = cpu_to_le32(value);
-+	rc = data->phy_ops->write_bytes(data, addr, sizeof(u32),
-+					(u8 *)&value_le);
-+
-+	return rc;
- }
+ 	/* check current status */
+ 	status = chip->ops->status(chip);
+-	if ((status & mask) == mask)
++	if ((status & mask) == stat)
+ 		return 0;
  
- static inline bool is_bsw(void)
-diff --git a/drivers/char/tpm/tpm_tis_spi.h b/drivers/char/tpm/tpm_tis_spi.h
-index bba7397..d0f66f6 100644
---- a/drivers/char/tpm/tpm_tis_spi.h
-+++ b/drivers/char/tpm/tpm_tis_spi.h
-@@ -31,10 +31,6 @@ extern int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
- extern int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
- 				u8 *in, const u8 *out);
+ 	stop = jiffies + timeout;
+@@ -83,7 +83,7 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+ 			usleep_range(TPM_TIMEOUT_USECS_MIN,
+ 				     TPM_TIMEOUT_USECS_MAX);
+ 			status = chip->ops->status(chip);
+-			if ((status & mask) == mask)
++			if ((status & mask) == stat)
+ 				return 0;
+ 		} while (time_before(jiffies, stop));
+ 	}
+@@ -259,10 +259,11 @@ static int recv_data(struct tpm_chip *chip, u8 *buf, size_t count)
+ 	int size = 0, burstcnt, rc;
  
--extern int tpm_tis_spi_read16(struct tpm_tis_data *data, u32 addr, u16 *result);
--extern int tpm_tis_spi_read32(struct tpm_tis_data *data, u32 addr, u32 *result);
--extern int tpm_tis_spi_write32(struct tpm_tis_data *data, u32 addr, u32 value);
--
- #ifdef CONFIG_TCG_TIS_SPI_CR50
- extern int cr50_spi_probe(struct spi_device *spi);
- #else
-diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_tis_spi_cr50.c
-index ea759af..9af6f84 100644
---- a/drivers/char/tpm/tpm_tis_spi_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
-@@ -220,9 +220,6 @@ static int tpm_tis_spi_cr50_write_bytes(struct tpm_tis_data *data, u32 addr,
- static const struct tpm_tis_phy_ops tpm_spi_cr50_phy_ops = {
- 	.read_bytes = tpm_tis_spi_cr50_read_bytes,
- 	.write_bytes = tpm_tis_spi_cr50_write_bytes,
--	.read16 = tpm_tis_spi_read16,
--	.read32 = tpm_tis_spi_read32,
--	.write32 = tpm_tis_spi_write32,
- };
+ 	while (size < count) {
+-		rc = wait_for_tpm_stat(chip,
+-				 TPM_STS_DATA_AVAIL | TPM_STS_VALID,
+-				 chip->timeout_c,
+-				 &priv->read_queue, true);
++		rc = tpm_tis_wait_for_stat(chip,
++					   TPM_STS_DATA_AVAIL | TPM_STS_VALID,
++					   TPM_STS_DATA_AVAIL | TPM_STS_VALID,
++					   chip->timeout_c, &priv->read_queue,
++					   true);
+ 		if (rc < 0)
+ 			return rc;
+ 		burstcnt = get_burstcount(chip);
+@@ -315,8 +316,9 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ 		goto out;
+ 	}
  
- static void cr50_print_fw_version(struct tpm_tis_data *data)
-diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-index 54584b4..942900c 100644
---- a/drivers/char/tpm/tpm_tis_spi_main.c
-+++ b/drivers/char/tpm/tpm_tis_spi_main.c
-@@ -152,44 +152,6 @@ static int tpm_tis_spi_write_bytes(struct tpm_tis_data *data, u32 addr,
- 	return tpm_tis_spi_transfer(data, addr, len, NULL, value);
- }
+-	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+-				&priv->int_queue, false) < 0) {
++	if (tpm_tis_wait_for_stat(chip, TPM_STS_VALID, TPM_STS_VALID,
++				  chip->timeout_c, &priv->int_queue,
++				  false) < 0) {
+ 		size = -ETIME;
+ 		goto out;
+ 	}
+@@ -342,61 +344,40 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 	int rc, status, burstcnt;
+ 	size_t count = 0;
+-	bool itpm = priv->flags & TPM_TIS_ITPM_WORKAROUND;
  
--int tpm_tis_spi_read16(struct tpm_tis_data *data, u32 addr, u16 *result)
--{
--	__le16 result_le;
--	int rc;
--
--	rc = data->phy_ops->read_bytes(data, addr, sizeof(u16),
--				       (u8 *)&result_le);
--	if (!rc)
--		*result = le16_to_cpu(result_le);
--
--	return rc;
--}
--
--int tpm_tis_spi_read32(struct tpm_tis_data *data, u32 addr, u32 *result)
--{
--	__le32 result_le;
--	int rc;
--
--	rc = data->phy_ops->read_bytes(data, addr, sizeof(u32),
--				       (u8 *)&result_le);
--	if (!rc)
--		*result = le32_to_cpu(result_le);
--
--	return rc;
--}
--
--int tpm_tis_spi_write32(struct tpm_tis_data *data, u32 addr, u32 value)
--{
--	__le32 value_le;
--	int rc;
--
--	value_le = cpu_to_le32(value);
--	rc = data->phy_ops->write_bytes(data, addr, sizeof(u32),
--					(u8 *)&value_le);
--
--	return rc;
--}
--
- int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
- 		     int irq, const struct tpm_tis_phy_ops *phy_ops)
- {
-@@ -205,9 +167,6 @@ int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
- static const struct tpm_tis_phy_ops tpm_spi_phy_ops = {
- 	.read_bytes = tpm_tis_spi_read_bytes,
- 	.write_bytes = tpm_tis_spi_write_bytes,
--	.read16 = tpm_tis_spi_read16,
--	.read32 = tpm_tis_spi_read32,
--	.write32 = tpm_tis_spi_write32,
- };
+ 	status = tpm_tis_status(chip);
+ 	if ((status & TPM_STS_COMMAND_READY) == 0) {
+ 		tpm_tis_ready(chip);
+-		if (wait_for_tpm_stat
+-		    (chip, TPM_STS_COMMAND_READY, chip->timeout_b,
+-		     &priv->int_queue, false) < 0) {
++		if (tpm_tis_wait_for_stat(chip, TPM_STS_COMMAND_READY,
++					  TPM_STS_COMMAND_READY,
++					  chip->timeout_b, &priv->int_queue,
++					  false) < 0) {
+ 			rc = -ETIME;
+ 			goto out_err;
+ 		}
+ 	}
  
- static int tpm_tis_spi_probe(struct spi_device *dev)
+-	while (count < len - 1) {
++	while (count < len) {
+ 		burstcnt = get_burstcount(chip);
+ 		if (burstcnt < 0) {
+ 			dev_err(&chip->dev, "Unable to read burstcount\n");
+ 			rc = burstcnt;
+ 			goto out_err;
+ 		}
+-		burstcnt = min_t(int, burstcnt, len - count - 1);
++		burstcnt = min_t(int, burstcnt, len - count);
+ 		rc = tpm_tis_write_bytes(priv, TPM_DATA_FIFO(priv->locality),
+ 					 burstcnt, buf + count);
+ 		if (rc < 0)
+ 			goto out_err;
+ 
+ 		count += burstcnt;
+-
+-		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+-					&priv->int_queue, false) < 0) {
+-			rc = -ETIME;
+-			goto out_err;
+-		}
+-		status = tpm_tis_status(chip);
+-		if (!itpm && (status & TPM_STS_DATA_EXPECT) == 0) {
+-			rc = -EIO;
+-			goto out_err;
+-		}
+ 	}
+-
+-	/* write last byte */
+-	rc = tpm_tis_write8(priv, TPM_DATA_FIFO(priv->locality), buf[count]);
+-	if (rc < 0)
+-		goto out_err;
+-
+-	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+-				&priv->int_queue, false) < 0) {
++	if (tpm_tis_wait_for_stat(chip, TPM_STS_VALID | TPM_STS_DATA_EXPECT,
++				  TPM_STS_VALID, chip->timeout_a,
++				  &priv->int_queue, false) < 0) {
+ 		rc = -ETIME;
+ 		goto out_err;
+ 	}
+-	status = tpm_tis_status(chip);
+-	if (!itpm && (status & TPM_STS_DATA_EXPECT) != 0) {
+-		rc = -EIO;
+-		goto out_err;
+-	}
+ 
+ 	return 0;
+ 
+@@ -451,9 +432,10 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 		ordinal = be32_to_cpu(*((__be32 *) (buf + 6)));
+ 
+ 		dur = tpm_calc_ordinal_duration(chip, ordinal);
+-		if (wait_for_tpm_stat
+-		    (chip, TPM_STS_DATA_AVAIL | TPM_STS_VALID, dur,
+-		     &priv->read_queue, false) < 0) {
++		if (tpm_tis_wait_for_stat(chip,
++					  TPM_STS_DATA_AVAIL | TPM_STS_VALID,
++					  TPM_STS_DATA_AVAIL | TPM_STS_VALID,
++					  dur, &priv->read_queue, false) < 0) {
+ 			rc = -ETIME;
+ 			goto out_err;
+ 		}
 -- 
 2.7.4
 
