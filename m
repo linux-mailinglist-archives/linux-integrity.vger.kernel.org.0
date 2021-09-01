@@ -2,108 +2,115 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 750753FD118
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Sep 2021 04:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453593FD260
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Sep 2021 06:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238552AbhIACNm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Aug 2021 22:13:42 -0400
-Received: from mail-dm6nam08on2089.outbound.protection.outlook.com ([40.107.102.89]:3560
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231249AbhIACNl (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Aug 2021 22:13:41 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zbe/2FQ7glNzmDNRp0zaju0Io1MQ8QC14em9PItakvBMJqUpLRoZFpfrdGRBqPu3oUf44RjacGN8HVk4pb3tDDAPXyPidtnnL0GTnY4E1siqSPvk1Fu8NMtUu1HlWMQOorwJI+IoO9ESG6sfKNp9oLUhzSAgHC8kr+SiTv61cRM1CA6AJGhh0dUxER674qV4ZpL+uAUJl6/QcvXWXsFXbjsFxtHknzt+Uzd870eCLX2xxU9erfPR6FFJfntRyrKrGOH3QC+jPgYFr5opnDf+dZrYJZW4ybGOhjKVcJ/2BpEy6XK36hxps+2zLI9PA0VScmFJEmQaFAYv6UR7nAuKdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=v/bh4uwbJvUbiW3BJ6IO4rmjPT1zMHUV+1Mu+V/7u0U=;
- b=kBI9zzwxyfCK8d8nuuP92NSBhpYxXdpPc3/6jACxGOyfVCyzUstlToJ0K9x0BzkDU2TMvE+oUV4nEDlBq3TXIXExHqusSYuOaNadlK03jd2l4JZujbe2b9BgcUmg2DhxF6QgsK+2naaB7Vpx/zHBrJv8sh5K6KcRPX61BhmFjCUaoJDUP7Eza4UBCv0MqllexirL523pxU/BG3gx1V8pPUMFzXKG+ygGk1Nz8AcGn02qnVNyPoShD2aB7Fr5Rr9yblPuU3gu3qWuuIHpJI48nw2QnO1g8zpysM8cMPeamto5Tmhh3eOswRQLTmq9mbIKsc0hJ2k0rOgWIhcsyzsX2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
- dkim=pass header.d=vpitech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v/bh4uwbJvUbiW3BJ6IO4rmjPT1zMHUV+1Mu+V/7u0U=;
- b=phvFkBRzMYxQ7rbChD69DYIrulCz0wgXaf+X1T9sw7t0m4n7byPYX3iLMys4evOGTBc+92O8ncIpg2Iaseui2vyp8BYxUabUsWoj+yYsWpdbfr64eXVEzsnNp5ESnkRsw4aK8ZjDkKuX+bBRCLWvcbvaMpGmZqB3q4ce+4IEaW0=
-Authentication-Results: vpitech.com; dkim=none (message not signed)
- header.d=none;vpitech.com; dmarc=none action=none header.from=vpitech.com;
-Received: from DM5PR07MB3975.namprd07.prod.outlook.com (2603:10b6:4:b3::39) by
- DM6PR07MB8144.namprd07.prod.outlook.com (2603:10b6:5:20e::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4478.17; Wed, 1 Sep 2021 02:12:44 +0000
-Received: from DM5PR07MB3975.namprd07.prod.outlook.com
- ([fe80::b000:3dbc:a50b:1261]) by DM5PR07MB3975.namprd07.prod.outlook.com
- ([fe80::b000:3dbc:a50b:1261%6]) with mapi id 15.20.4436.023; Wed, 1 Sep 2021
- 02:12:44 +0000
-Date:   Tue, 31 Aug 2021 20:12:41 -0600
-From:   Alex Henrie <alexh@vpitech.com>
-To:     Alex Henrie <alexh@vpitech.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        alexhenrie24@gmail.com
-Subject: Re: [PATCH] ima: add gid support
-Message-Id: <20210831201241.a256fa28b510a8e2546be79a@vpitech.com>
-In-Reply-To: <20210702222027.13973-1-alexh@vpitech.com>
-References: <20210702222027.13973-1-alexh@vpitech.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CY4PR01CA0001.prod.exchangelabs.com (2603:10b6:903:1f::11)
- To DM5PR07MB3975.namprd07.prod.outlook.com (2603:10b6:4:b3::39)
+        id S229974AbhIAEfl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Sep 2021 00:35:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50932 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229572AbhIAEfk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 1 Sep 2021 00:35:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9DD4E60FC0;
+        Wed,  1 Sep 2021 04:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630470884;
+        bh=3mYu60fBwt4q3TRGDVU2zleQgKPWNhp/oQv2LPQint0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=h/24bkOrqWTCh2K3wO1KyRfSTs8qf8N4CkLobV3HycwUXPC6E8WP6E843gVOQYm3/
+         +8dJDOI8ogT28QoOIiQdywKlxyqbDxIbWzTaf62Zx2kQKvZdsHn+cZNSAJg976SXO1
+         h7Fuooig2gEN6GOik6alWzkJHOHKIxr7lboDOLIzeKcYVrWCKhMSNYgqoYEr6A9R3a
+         oT+YnWpwBMRGR1sC+E3CeTNlUxatHQtIUMQ1Xqm/oEnLRxMKSB8dnLIwxoM1CTF52F
+         x5Lr4i63UgzrVYMc7ewuoUHgPkegOCrw9yWotU6bzNNEyPW0TyCdN8fqnlWaAbiO7+
+         p50eb/iNtdJHg==
+Message-ID: <18c0a9ca6b3ab8103e3b9270a6f59539787f6e12.camel@kernel.org>
+Subject: Re: [PATCH v4 00/12] Enroll kernel keys thru MOK
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Nayna <nayna@linux.vnet.ibm.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     keyrings@vger.kernel.org,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, keescook@chromium.org,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+        scott.branden@broadcom.com, weiyongjun1@huawei.com,
+        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        lszubowi@redhat.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org, pjones@redhat.com,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        Patrick Uiterwijk <patrick@puiterwijk.org>
+Date:   Wed, 01 Sep 2021 07:34:41 +0300
+In-Reply-To: <10bc1017-2b45-43f3-ad91-d09310b24c2c@linux.vnet.ibm.com>
+References: <20210819002109.534600-1-eric.snowberg@oracle.com>
+         <fcb30226f378ef12cd8bd15938f0af0e1a3977a2.camel@kernel.org>
+         <f76fcf41728fbdd65f2b3464df0821f248b2cba0.camel@linux.ibm.com>
+         <91B1FE51-C6FC-4ADF-B05A-B1E59E20132E@oracle.com>
+         <e7e251000432cf7c475e19c56b0f438b92fec16e.camel@linux.ibm.com>
+         <cedc77fefdf22b2cec086f3e0dd9cc698db9bca2.camel@kernel.org>
+         <bffb33a3-d5b5-f376-9d7d-706d38357d1a@linux.vnet.ibm.com>
+         <9526a4e0be9579a9e52064dd590a78c6496ee025.camel@linux.ibm.com>
+         <9067ff7142d097698b827f3c1630a751898a76bf.camel@kernel.org>
+         <bc37d1da3ef5aae16e69eeda25d6ce6fe6a51a77.camel@HansenPartnership.com>
+         <10bc1017-2b45-43f3-ad91-d09310b24c2c@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from demeter (66.60.105.30) by CY4PR01CA0001.prod.exchangelabs.com (2603:10b6:903:1f::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.19 via Frontend Transport; Wed, 1 Sep 2021 02:12:43 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 822eb616-1341-4a58-545b-08d96cedfb9a
-X-MS-TrafficTypeDiagnostic: DM6PR07MB8144:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM6PR07MB81440E6730CB6E53F59E8989B8CD9@DM6PR07MB8144.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Yt3TzKME6jKbtigi3jvWubbJeoD/tES3s2LeigTc025ac74wUDDrCZTIxp37jI07e9qKOz0j5X1W+GZqjHs8UXi77z4o9ksMxW3UZtXeevqmQiEI8uofeEjT7fFJo8Ys5pqxr+3g0HxmiphFQfzOiac2x2AZcrHHtXO5lnFxqx91YU8zrG5pgJBxWinAwvsyCu9s2CaMGDShosaGoezUs2yW4Onl4B75ofnUTyUPa23e8tdHz7wxwt6IDlOBh143ceU/5OUKeLGXotnWfKX+X1cH6/yoIMKweVHBRZ6jComsRnQ+YPfHOrmzoZK8/Xs1vPjVK5rgKahBCmOz25IvPHEfEALsOINjr4OOmoq+bhn2ddelPgH6CFHMkNh6rqkuYamwlCRp29pFsgczmdBC+aWnZDV+4HqC5lU0ZWiJKxNwRS0nQ9jctX00i287bNpc54J3YQS3oPQqpQS/KOFwpLIJYLeqYjPfK3GJhWSp2bMJTeyhtgvdm+dxsDZrcqbZf9HTAjzMTayKp7urzTcJl3WHsdGv+nWeufPaWsydAP+SbJ0A8hB3qapwhcCJaY4GeMSFGFoEyn7rlg8lhA97aV6Re4BB4S7RN8pPvY0MMtwi8Y9pBvYkSrRtxZ5bXMDt5vrgKg15SH2FafEpgSD2nPfB5SrPpncPnnpVtpOaYLfSpIxoSUBz4b/BM2NQLafE56NTX1zrtttpSSb3GNVvDA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR07MB3975.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(37006003)(508600001)(5660300002)(6486002)(6200100001)(316002)(86362001)(4326008)(6862004)(558084003)(52116002)(26005)(66556008)(1076003)(66476007)(6496006)(186003)(2616005)(8676002)(36756003)(8936002)(956004)(2906002)(38350700002)(38100700002)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?c/YV+BXMnvzFDqiIWwrqJ9AbA4Alxr/ZNBK2tZVF+Jn6UolmUGo4KCwT9dij?=
- =?us-ascii?Q?h5cbOOruRMqEApkrp2YnRdQMPSaUlL0C6q6JUiGCdKQERE6TL/gwv2AhoKpf?=
- =?us-ascii?Q?0Z/e+CnrJ7AyksU+Z7L20f6qBH/wC5IU7HyiLQWxAOF+SQ7RazKrhyNn2wRu?=
- =?us-ascii?Q?sjWLqYn7aWAyn0wQCgcSiZfLmMFx8ySBXaevNUhU2NZwpXpvfGRMwP+EJoeN?=
- =?us-ascii?Q?QgbnmOJIYQ71SCmMMHanAz7PyNjZK1IkAR68YQyKiwhI8sNkALbGQ9Z4vNGV?=
- =?us-ascii?Q?znUC615VDYAQfK9CAwysUAlVAAvibBgUbkjztKdQ+b1qt1hO8QKIi7itTj0V?=
- =?us-ascii?Q?5Ys7lfy8m9LWk/IWfmF6tCB6W/lodFvI1N6kcJS0XP/RZiKOesMOxCmAqp51?=
- =?us-ascii?Q?4a/sV91/sx+iXsvKDlxntUbcKREceW18wqJYuSJzuhz2jCvmQ9xtDylzTC5z?=
- =?us-ascii?Q?sLHmP6mHBcTei9sy5Vudbxbw7r/g0p5uYSguxenTskoANOiKfQh/nU5Q47yF?=
- =?us-ascii?Q?TWseexGx0Tx5O/kCzIJ/DSbPqunFmDWKRVszfOfSOvfgnO9p6naRjkTrjtW5?=
- =?us-ascii?Q?AO+CbF6LPfJTalMWQaSZQtbTbH4IGdIS5cGnzQJUhKyJvXJO0bkelK24vRV2?=
- =?us-ascii?Q?Y4KIkSNq4h8Du+/LRzvR6id0xa/SsN2sM1KbefwC5iFMpcG6TlKYSXIuzxpD?=
- =?us-ascii?Q?JBAkpuhFFdTSVgMtb4c8xFKxDPDuLkDWTGWvVzAvdttEofCfakMYopbFMpW6?=
- =?us-ascii?Q?qJ4k6vN2a5ccA8o32nogIhV4dwuVgM9J7m5i6HnNPUbTKCnYOsqlnN9MNaXP?=
- =?us-ascii?Q?fsnmj/PGsoPQWCyL/5M3nDGSSi2oEWot+J3BDSK+mIs/IETFHTV5zNV9Lwrw?=
- =?us-ascii?Q?s53H3ZHuVqCtBfXCHSMc5rxRvLEIp18DD1enM21HP9ED2p7/EXg4Xa6uBj8X?=
- =?us-ascii?Q?7yzNVXJPESOql6rtJUxlhThrna3W6/uixlfgF1S6Wv7zYV93R4TcxrFzNCyT?=
- =?us-ascii?Q?H6plSpsu1YhNPUKGKQaksdfUDbtlSgd548pnFcOL02qOmN6IFnK6SxhFTVH7?=
- =?us-ascii?Q?StbvuMSbqSNhnfNG1cRaPk/c9NOrPeAmEvMG1/9+/EePV2l6+bZQXwjHj6UQ?=
- =?us-ascii?Q?nQ1VgpoPhhzhtByPP4eoL9qnqj7LA1SuCkSEn4OQCWeqF1qeBJjnO02UN9Jb?=
- =?us-ascii?Q?nS6VcSolPYdE7Tl7vAZDMWJ9S+avAJmzUYrRdyqTC27ekoojNXxFys8mSJHS?=
- =?us-ascii?Q?KhDpnRsGkqvZirtePXeR0MBB1EkizixMi/ngVi/piVPMicVlB2IJM8i5Cbwy?=
- =?us-ascii?Q?hzNeB3B+Lsqa5v9xhHIUMgq3?=
-X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 822eb616-1341-4a58-545b-08d96cedfb9a
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR07MB3975.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2021 02:12:43.9017
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZLnf2hl7WRjc/KMQ6+ThiV4uZKPdWNnvDHUcH8iu6oa2nF2r5kgg88aYghaBq9+FlxPiFxG+V6GkzQVqOUnOsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB8144
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello, could I get some feedback on this patch? Are there any
-objections to including it upstream?
+On Fri, 2021-08-27 at 16:44 -0400, Nayna wrote:
+> On 8/25/21 6:27 PM, James Bottomley wrote:
+> > On Thu, 2021-08-26 at 01:21 +0300, Jarkko Sakkinen wrote:
+> > > On Tue, 2021-08-24 at 10:34 -0400, Mimi Zohar wrote:
+> > > > > > > Jarkko, I think the emphasis should not be on "machine" from
+> > > > > > > Machine Owner Key (MOK), but on "owner".  Whereas Nayna is
+> > > > > > > focusing more on the "_ca" aspect of the name.   Perhaps
+> > > > > > > consider naming it "system_owner_ca" or something along those
+> > > > > > > lines.
+> > > > > > What do you gain such overly long identifier? Makes no sense.
+> > > > > > What is "ca aspect of the name" anyway?
+> > > > > As I mentioned previously, the main usage of this new keyring is
+> > > > > that it should contain only CA keys which can be later used to
+> > > > > vouch for user keys loaded onto secondary or IMA keyring at
+> > > > > runtime. Having ca in the  name like .xxxx_ca, would make the
+> > > > > keyring name self-describing. Since you preferred .system, we can
+> > > > > call it .system_ca.
+> > > > Sounds good to me.  Jarkko?
+> > > >=20
+> > > > thanks,
+> > > >=20
+> > > > Mimi
+> > > I just wonder what you exactly gain with "_ca"?
+> > Remember, a CA cert is a self signed cert with the CA:TRUE basic
+> > constraint.  Pretty much no secure boot key satisfies this (secure boot
+> > chose deliberately NOT to use CA certificates, so they're all some type
+> > of intermediate or leaf), so the design seems to be only to pick out
+> > the CA certificates you put in the MOK keyring.  Adding the _ca suffix
+> > may deflect some of the "why aren't all my MOK certificates in the
+> > keyring" emails ...
+>=20
+> My understanding is the .system_ca keyring should not be restricted only=
+=20
+> to self-signed CAs (Root CA). Any cert that can qualify as Root or=20
+> Intermediate CA with Basic Constraints CA:TRUE should be allowed. In=20
+> fact, the intermediate CA certificates closest to the leaf nodes would=
+=20
+> be best.
+>=20
+> Thanks for bringing up that adding the _ca suffix may deflect some of=20
+> the "why aren't all my MOK certificates in the keyring" emails.
 
--Alex
+What the heck is the pragamatic gain of adding such a suffix? Makes
+zero sense.
+
+/Jarkko
