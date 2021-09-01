@@ -2,147 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2703FCFB5
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Sep 2021 00:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D023FD07A
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Sep 2021 02:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbhHaW7a (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 31 Aug 2021 18:59:30 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5878 "EHLO
+        id S241406AbhIAAyA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 31 Aug 2021 20:54:00 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54796 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232580AbhHaW7a (ORCPT
+        by vger.kernel.org with ESMTP id S231509AbhIAAx7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 31 Aug 2021 18:59:30 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17VMWfUw109378;
-        Tue, 31 Aug 2021 18:58:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=3eVbDvOmZf7XoDA9T/v6+g2s12510lbRLOf9Y6xCU9E=;
- b=PczA32GyQtMXnJcPXovrHBlbGKeFLY/Jf0tqezJUFZ2wG0c7Jl0qzMnve/1UcM62UD81
- bU9ytS8qSWDTnFTfE6vXX7rxmUY/sx6yvLn+IfWD4dre3S8u9cW/aWHy5NFf78tc34tI
- fhV5eZuPA6uio/U+ZpG191zCVe/Vjp2EAfCLdA8syjVPqpkDPPFRsFj4gGVv9pXE6CjM
- BqwU466VB3ekgmo99n0Z7rR3jflD6Q3kQrXVn/UNBXVjcVGYGzWZ/ejiwMbZMjEFhZoY
- TNPxpzAU3swub1eiWBQZFd2Pc4wZ/OI8PW5vtoQsOC7iDwaHEtmBUkSIBpEPsg7WM7k1 cA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3asvd71pka-1
+        Tue, 31 Aug 2021 20:53:59 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1810Y9nI045052;
+        Tue, 31 Aug 2021 20:52:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=S+vwLi+45krq88Ka4EYXVLoMuSWJAYuOgMxx8mDnubQ=;
+ b=deAYEqqU5aMCIswtLnTyk20aVNmtPFebxB6Tb3W2Q+RlZ1JZpkUg+bi3bh076TlO3Zqr
+ P95ZJCOPOYnHl6CZipEbclRZ0m4uKYbZN0c3X0DxnP/IFQsJ+0ArbYDxFfE0mc43xG+r
+ WENoBR7WakeYsK0HHbszjwW5d+TyCcbDprhvZ03BFiIM2N/U5AFozB6MT1+zeB3RoXbL
+ CXJ/wSxXNVG/DFGcDRe4THE92ijXKbp0H+vCb3QNjADQXQE/nBTn0liWMcgVvl7tHfFx
+ U73FzRipvJWl2mqhr5O4pEIQDkhgxyPSvjaB1u4kbzRPeA2tlf0Ni/I8TFKf9mi9/E6Q sg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3asxn70vg1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Aug 2021 18:58:32 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17VMqkXA009374;
-        Tue, 31 Aug 2021 22:58:30 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3aqcs90tf7-1
+        Tue, 31 Aug 2021 20:52:25 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1810kmff086585;
+        Tue, 31 Aug 2021 20:52:24 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3asxn70vfm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Aug 2021 22:58:30 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17VMwSmf56754628
+        Tue, 31 Aug 2021 20:52:24 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1810miJh026273;
+        Wed, 1 Sep 2021 00:52:23 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma04wdc.us.ibm.com with ESMTP id 3aqcsc2suu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Sep 2021 00:52:23 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1810qLa738142332
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Aug 2021 22:58:28 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F0AEDA4977;
-        Tue, 31 Aug 2021 22:58:27 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 115E7A4965;
-        Tue, 31 Aug 2021 22:58:27 +0000 (GMT)
-Received: from sig-9-65-89-16.ibm.com (unknown [9.65.89.16])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Aug 2021 22:58:26 +0000 (GMT)
-Message-ID: <5b3eedc2dcd03a8d16a8fbed3f4c2466521e1bdb.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity subsystem updates for v5.15
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 31 Aug 2021 18:58:26 -0400
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -sKu6JkYQlSk80e_UbLyJ7MvrxmBH7__
-X-Proofpoint-GUID: -sKu6JkYQlSk80e_UbLyJ7MvrxmBH7__
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 1 Sep 2021 00:52:21 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9DD6228066;
+        Wed,  1 Sep 2021 00:52:21 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 65BA028058;
+        Wed,  1 Sep 2021 00:52:17 +0000 (GMT)
+Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com (unknown [9.211.95.128])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Sep 2021 00:52:17 +0000 (GMT)
+Subject: Re: [PATCH v4 00/12] Enroll kernel keys thru MOK
+To:     Eric Snowberg <eric.snowberg@oracle.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, keescook@chromium.org,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+        scott.branden@broadcom.com, weiyongjun1@huawei.com,
+        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        lszubowi@redhat.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org, pjones@redhat.com,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        Patrick Uiterwijk <patrick@puiterwijk.org>
+References: <20210819002109.534600-1-eric.snowberg@oracle.com>
+ <fcb30226f378ef12cd8bd15938f0af0e1a3977a2.camel@kernel.org>
+ <f76fcf41728fbdd65f2b3464df0821f248b2cba0.camel@linux.ibm.com>
+ <91B1FE51-C6FC-4ADF-B05A-B1E59E20132E@oracle.com>
+ <e7e251000432cf7c475e19c56b0f438b92fec16e.camel@linux.ibm.com>
+ <cedc77fefdf22b2cec086f3e0dd9cc698db9bca2.camel@kernel.org>
+ <bffb33a3-d5b5-f376-9d7d-706d38357d1a@linux.vnet.ibm.com>
+ <9526a4e0be9579a9e52064dd590a78c6496ee025.camel@linux.ibm.com>
+ <9067ff7142d097698b827f3c1630a751898a76bf.camel@kernel.org>
+ <bc37d1da3ef5aae16e69eeda25d6ce6fe6a51a77.camel@HansenPartnership.com>
+ <10bc1017-2b45-43f3-ad91-d09310b24c2c@linux.vnet.ibm.com>
+ <D07DE64F-FE8B-4020-8EC2-94C3C0F9920A@oracle.com>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+Message-ID: <89a37802-1423-6b1c-c0ef-6f84e544ac33@linux.vnet.ibm.com>
+Date:   Tue, 31 Aug 2021 20:52:16 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <D07DE64F-FE8B-4020-8EC2-94C3C0F9920A@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WV_ZVu190WkpdPe5PqSJVTYkBc2NlkNX
+X-Proofpoint-ORIG-GUID: fXWlbOls-kFkB-Cmew8atS2JC6VEAo20
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-31_09:2021-08-31,2021-08-31 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- phishscore=0 priorityscore=1501 spamscore=0 suspectscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108310122
+ definitions=2021-08-31_10:2021-08-31,2021-08-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ adultscore=0 impostorscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
+ phishscore=0 spamscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
+ definitions=main-2109010001
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Linus,
-  
-The Integrity pull request for v5.15 contains only IMA changes:
 
-- Limit the allowed hash algorithms when writing security.ima xattrs or
-verifying them, based on the IMA policy and the configured hash
-algorithms.
+On 8/30/21 1:39 PM, Eric Snowberg wrote:
+>> On Aug 27, 2021, at 2:44 PM, Nayna <nayna@linux.vnet.ibm.com> wrote:
+>> On 8/25/21 6:27 PM, James Bottomley wrote:
+>>> Remember, a CA cert is a self signed cert with the CA:TRUE basic
+>>> constraint.  Pretty much no secure boot key satisfies this (secure boot
+>>> chose deliberately NOT to use CA certificates, so they're all some type
+>>> of intermediate or leaf), so the design seems to be only to pick out
+>>> the CA certificates you put in the MOK keyring.  Adding the _ca suffix
+>>> may deflect some of the "why aren't all my MOK certificates in the
+>>> keyring" emails ...
+>>
+>> My understanding is the .system_ca keyring should not be restricted only
+>> to self-signed CAs (Root CA). Any cert that can qualify as Root or
+>> Intermediate CA with Basic Constraints CA:TRUE should be allowed. In
+>> fact, the intermediate CA certificates closest to the leaf nodes would be
+>> best.
+> With an intermediate containing CA:TRUE, the intermediate cert would not
+> be self signed. Just for my clarification, does this mean I should remove
+> the check that validates if it is self signed and instead somehow check if
+> the CA flag is set?  Wouldn’t this potentially allow improperly signed certs
+> into this new keyring?
+>
+In this model, we are relying on the admin to ensure the authenticity of 
+the certificate(s) being loaded onto the new keyring. It is similar to 
+trusting the admin to enable the variable and add keys to MOK. Following 
+are the checks that must pass before adding it to .system_ca keyring.
 
-- Return the calculated "critical data" measurement hash and size to
-avoid code duplication.  (Preparatory change for a proposed LSM.)
+1. Check against revocation_list.
+2. Check Basic Constraints: CA=TRUE.
+3. Check keyUsage = keyCertSign.
 
-[Stephen Rothwell addressed a merge conflict between the new device
-mapper "critical data" measurements (drivers/md/dm-ima.c) and extending
-the "critical data" measurement function.]
+Thanks & Regards,
 
-- and a single patch to address a compiler warning.
-
-thanks,
-
-Mimi
-
-The following changes since commit 2734d6c1b1a089fb593ef6a23d4b70903526fe0c:
-
-  Linux 5.14-rc2 (2021-07-18 14:13:49 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.15
-
-for you to fetch changes up to cb181da161963eddc9de0000de6ab2c7942be219:
-
-  IMA: reject unknown hash algorithms in ima_get_hash_algo (2021-08-23 18:22:00 -0400)
-
-----------------------------------------------------------------
-integrity-v5.15
-
-----------------------------------------------------------------
-Austin Kim (1):
-      IMA: remove -Wmissing-prototypes warning
-
-Mimi Zohar (2):
-      Merge branch 'ima-buffer-measurement-changes-v4' into next-integrity
-      Merge branch 'restrict-digest-alg-v8' into next-integrity
-
-Roberto Sassu (3):
-      ima: Introduce ima_get_current_hash_algo()
-      ima: Return int in the functions to measure a buffer
-      ima: Add digest and digest_len params to the functions to measure a buffer
-
-THOBY Simon (7):
-      IMA: remove the dependency on CRYPTO_MD5
-      IMA: block writes of the security.ima xattr with unsupported algorithms
-      IMA: add support to restrict the hash algorithms used for file appraisal
-      IMA: add a policy option to restrict xattr hash algorithms on appraisal
-      IMA: introduce a new policy option func=SETXATTR_CHECK
-      IMA: prevent SETXATTR_CHECK policy rules with unavailable algorithms
-      IMA: reject unknown hash algorithms in ima_get_hash_algo
-
- Documentation/ABI/testing/ima_policy         |  15 ++-
- include/linux/ima.h                          |  23 +++-
- security/integrity/ima/Kconfig               |   1 -
- security/integrity/ima/ima.h                 |  24 ++--
- security/integrity/ima/ima_api.c             |   6 +-
- security/integrity/ima/ima_appraise.c        |  78 ++++++++++--
- security/integrity/ima/ima_asymmetric_keys.c |   2 +-
- security/integrity/ima/ima_init.c            |   3 +-
- security/integrity/ima/ima_main.c            |  89 ++++++++++----
- security/integrity/ima/ima_mok.c             |   2 +-
- security/integrity/ima/ima_policy.c          | 174 ++++++++++++++++++++++++---
- security/integrity/ima/ima_queue_keys.c      |   2 +-
- security/selinux/ima.c                       |   6 +-
- 13 files changed, 350 insertions(+), 75 deletions(-)
+        - Nayna
 
