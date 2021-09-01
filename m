@@ -2,107 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 887DE3FDE15
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Sep 2021 16:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C663FE20C
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Sep 2021 20:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbhIAOz1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Sep 2021 10:55:27 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24592 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229748AbhIAOz0 (ORCPT
+        id S1346819AbhIASMU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Sep 2021 14:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346756AbhIASMT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Sep 2021 10:55:26 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 181EXPAI007427;
-        Wed, 1 Sep 2021 10:54:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=9DZdRKzJEJ1kf7QtEQGQRIuTcNnizwB/HNlJ5GAj6ww=;
- b=JlS9mZ6ScCc/SDfi6jrR2PDGHZaPzaVpcb0waskknWbYlIeoqgdpQLt79KkZg8+xpWuc
- 1wNQKY/vaBgDEcjRziwc/fQ/0wphvdryHuRfHuYYqHqUdd823hXl4irEWD63eRlUlRcL
- 9iRJYvPtIa6g5TPtB4jKzO2Fn0k6SwsCx89ALDDuCO1zLmcdezl9FA7VU6IAh6BO3xHM
- ghTwQ1fKpGCNcMt2ANBfH7GY4iv3ambiT0q2aE21wknSOlppursyxuS0wmWDivsDhcKw
- WP+V2chbuhMG0y2qwCjBT++0mSbFpiEnUBTgHn06z/cIF9AR62XgFVYho6DOF9V3Cli1 qg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3at7ybyb2a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Sep 2021 10:54:29 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 181EgPii091184;
-        Wed, 1 Sep 2021 10:54:29 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3at7ybyb1f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Sep 2021 10:54:29 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 181EpxNU003327;
-        Wed, 1 Sep 2021 14:54:26 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3aqcs9u0ws-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Sep 2021 14:54:26 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 181EoOrJ60555622
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Sep 2021 14:50:24 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E0F642052;
-        Wed,  1 Sep 2021 14:54:24 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A6F142045;
-        Wed,  1 Sep 2021 14:54:23 +0000 (GMT)
-Received: from sig-9-77-135-32.ibm.com (unknown [9.77.135.32])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Sep 2021 14:54:23 +0000 (GMT)
-Message-ID: <ab00a38ebd268a67eae306a368cd94964a06f0ba.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: add gid support
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Alex Henrie <alexh@vpitech.com>
-Cc:     linux-integrity@vger.kernel.org, alexhenrie24@gmail.com
-Date:   Wed, 01 Sep 2021 10:54:21 -0400
-In-Reply-To: <20210831201241.a256fa28b510a8e2546be79a@vpitech.com>
-References: <20210702222027.13973-1-alexh@vpitech.com>
-         <20210831201241.a256fa28b510a8e2546be79a@vpitech.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ex9Iu4-HuU0uDwaN4aJcwLbTsqCytAcJ
-X-Proofpoint-ORIG-GUID: 5KkvD0g_dTr34uz2y1i-ZvEe86LkaBID
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-09-01_04:2021-09-01,2021-09-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- bulkscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- mlxlogscore=999 lowpriorityscore=0 suspectscore=0 clxscore=1011
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2109010085
+        Wed, 1 Sep 2021 14:12:19 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A76C0613A4
+        for <linux-integrity@vger.kernel.org>; Wed,  1 Sep 2021 11:11:21 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id k24so274134pgh.8
+        for <linux-integrity@vger.kernel.org>; Wed, 01 Sep 2021 11:11:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=LD3mpzy1s09M3e/Eheelu/QMtbN6lrYJQ+S1BsYhmG4zP9OQuKOeD1zHV2lZaK7Hdt
+         vXoBMumPRACuZhnwd8TYAFIvdImPe0Zn4DA41GnzHGsnpDZPE0wUFWVFNzgpxF6bh6D8
+         CVxTiiIN7w8BVpPirFLytZKK2cFqqV6q9qR8cw4XmdYYgGZs+MdnDeP+neEr/SbnLI2h
+         mwT6gqJ8+HvNCQei5Zu6b3U+/YcUOepEDfVn6t0IkNG5YzxTV8mH8IqZ4zEsqBchdgxI
+         E/zGH3KCiuS7UdfEMBVKPbpzhhPyh4quLRALvE4iCHtswqSZDgWUuzksodIw8OWwGR1Z
+         0RlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=cJoNHsbdOnz2ugow6MhEu2U2X97mQfJb2ETWE6u/6iLz3oVY4lhdyH1hbVPjvrdMMk
+         YS2m+3oQ1cARh026TsTeXSQvvvCC2UriFrgKAwb9J471IUX7McWy2Q+BKDVh9kBkeiVp
+         R//UZX5tg2xq92zAP7qNr8AJf7A6mRxt/C4oc9gtK55/QxJgKNw/0PvQpvEP4RgN4O+V
+         Cv2XRtb3CVuZN1RaGROQVWL8a/supzLLUe8Wl5B1FpiGxCVGbMFTVzOsj8xEScwppxl6
+         VqTpUprt4/aVe/fmwyqUP34UQa1zMrbBMpHnOzi0IN4FB5IzsUKAP6aB4QlwF+/FREe7
+         v7ug==
+X-Gm-Message-State: AOAM532MgPWBNQIeRGqksc0NEKZlvNpHO9nX1iIOJtgBwt6EcxrFtX/P
+        vpiswRKwP0N9osV/+D/qqN3YTuNXtbH/kRuoBkPdYHIgAK7ZZg==
+X-Google-Smtp-Source: ABdhPJwbbBYGjUEQSS3Bb7EfYk34O3AVuG22pVIF78fkATQG8c+PQmeHgcc35+YrriS74Wl5STB8JbzOasp+8kCVBlk=
+X-Received: by 2002:a67:8c5:: with SMTP id 188mr1017695vsi.4.1630519870726;
+ Wed, 01 Sep 2021 11:11:10 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:ab0:740d:0:0:0:0:0 with HTTP; Wed, 1 Sep 2021 11:11:10 -0700 (PDT)
+From:   CorisBank International <corisbankintlbf@gmail.com>
+Date:   Wed, 1 Sep 2021 11:11:10 -0700
+Message-ID: <CA+25hwzjLgVdtDXYWeuqFBTvAbpc4oxK0dW54s7tjGNyU_m0ow@mail.gmail.com>
+Subject: CORISBANK INTERNATIONAL OFFICIAL NOTIFICATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Alex,
+Att: Client
 
-On Tue, 2021-08-31 at 20:12 -0600, Alex Henrie wrote:
-> Hello, could I get some feedback on this patch? Are there any
-> objections to including it upstream?
 
-Conceptually I don't have a problem with the patch, but I'd also like a
-test to go with it.  
+CORISBANK INTERNATIONAL URGENT NOTIFICATION
 
-Roberto posted "ima-evm-utils: Add UML support and tests for EVM
-portable signatures", which introduces using UML (User Mode Linux) for
-testing new kernel features, which, unfortunately, still needs to be
-reviewed and upstreamed.  (Hint, hint help with reviewing.]
+Notification / Notification/ Notification
 
-Another option is to define an LTP test.   In either case, a custom IMA
-policy would be defined in terms of a loopback mounted filesystem to
-avoid affecting the entire system.
+Note, We are writing to inform you officially that Finally the Central
+Bank Financial Authority have approved to transfer your $8.2Million
+which was signed by late Mrs Rose Banneth the COVID.19 victim to
+transfer to you, Late Mrs Rose Banneth the France Lady contacted us to
+transfer her fund in our bank to you for Orphanage work before she
+died by the COVID.19
+and as it is now, you will receive your fund through our corresponding
+bank in Dubai [Emirate Investment Bank ] for security reason. Please
+you should reconfirm your details to receive the $8.2Million.
 
-I'd appreciate your re-basing and re-posting this patch.
+Name, Country, Address, occupations, Age, Telephone number, account
+Details so that we can immediately forward to the World Bank to
+transfer the fund.
+You are advised to comply on timely manner to permit this esteem bank
+transfer your fund as scheduled.
 
-thanks,
+We look forward to serving you better
+Your Financial Comfort Is A Priority
+Thank you for choosing Corisbank International.
 
-Mimi
+Sincerely,
 
+----
+
+Mr Diakarya Ouattara
+Managing Director
+Bank Coris
+Burkina Faso
++226 556 163 37
+financial_bf_info@accountant.com
