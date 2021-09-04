@@ -2,250 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD891400AE9
-	for <lists+linux-integrity@lfdr.de>; Sat,  4 Sep 2021 13:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC0E400BC1
+	for <lists+linux-integrity@lfdr.de>; Sat,  4 Sep 2021 17:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351110AbhIDKwD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 4 Sep 2021 06:52:03 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:36564 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351095AbhIDKwB (ORCPT
+        id S236759AbhIDPBO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 4 Sep 2021 11:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236742AbhIDPBO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 4 Sep 2021 06:52:01 -0400
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 7A7A472C8B0;
-        Sat,  4 Sep 2021 13:50:58 +0300 (MSK)
-Received: from beacon.altlinux.org (unknown [193.43.10.9])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 52B9F4A46FC;
-        Sat,  4 Sep 2021 13:50:58 +0300 (MSK)
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Bruno Meneguele <bmeneg@redhat.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH ima-evm-utils v4] evmctl: Use secure heap for private keys and passwords
-Date:   Sat,  4 Sep 2021 13:50:54 +0300
-Message-Id: <20210904105054.3388329-1-vt@altlinux.org>
-X-Mailer: git-send-email 2.29.3
+        Sat, 4 Sep 2021 11:01:14 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADBAC061575
+        for <linux-integrity@vger.kernel.org>; Sat,  4 Sep 2021 08:00:12 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id o39-20020a05600c512700b002e74638b567so1561289wms.2
+        for <linux-integrity@vger.kernel.org>; Sat, 04 Sep 2021 08:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=pq8QdcgdNxjJmg61r8dPGvWyeowRsap/Qds2NQHbQZA=;
+        b=ObGanXpy/qG9ZmJ8TQB4Rfph0tmhVaeYW1PNOH2SHKJlCRKGEnGR9IG1o/q+k6CS2Q
+         DcJFBorw1R0HVbv5WnEzU7ydMkkdvflpAJbYTdf/FA0TmKAmr9f8AJH+yDNFuzxNGDRV
+         YfluqfuvY8qO3SV6L3NXaODBKaZc/j5GrPb3h8hsMIx9C+eWG0BEzzT14B0CLYNaY3Zy
+         h1wFbl0ar6t4B6n8lhJvTnm4vs255aO64RMUz2dscNpa7UIPQrpq0nnURTMhb2e6xDM/
+         8GyfBBSlhyjNs4xJ3+BCFd+tGYRxZEUQcTk4lC63mD/WxsRG6Ax/M7LTEDS6kBGtWR92
+         1p8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=pq8QdcgdNxjJmg61r8dPGvWyeowRsap/Qds2NQHbQZA=;
+        b=dYuF7TMCrW/jT9I67MdMX5qhj6UVizMwQf3e2EGlaW63EWJdc+b2mdg9V7B5a3VaJP
+         ToVjkB9mNXlg0T9DHxcXyCTN6qYPj3tgY6l4ln9y2sH3/5JtDrtbhsAyCH3t3bSNkpFu
+         edc7PenrJ2uGNwocSXBtJdPw3X+1Mk1MT1Rh2HnoXUR/u+N12uQSkFD/v7zb7WCU+qPx
+         JDP6WqjJm+biPyWYk3dV+XivcdtMjZIGuck2HGdEf8qLVm0nqbfeiXmDlgZvFZLSEKSu
+         gAhjl2RCk6FKe+Vh3gxQtke19UtD1x2isJwiuR685xnT5ZwgvPMw9LpA59VIYupFZptK
+         VJkQ==
+X-Gm-Message-State: AOAM532dLv7raWib9Q16k9u5DmT2/BGbZN7XWBidQJannIYuPkZ7XPfL
+        N5dbJmKlgdVePWr4TYgr4hmDF6d8O4uX36SlzHM=
+X-Google-Smtp-Source: ABdhPJyGp1JTkkg0XmlZcjk9dPHD3bfLw8Iz+sfy6ImMaUK0aVXV+Wjd0dmSXSPkYKVjtu78x6KrofOp9HGNTVtPPC4=
+X-Received: by 2002:a1c:158:: with SMTP id 85mr3490405wmb.187.1630767610128;
+ Sat, 04 Sep 2021 08:00:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Reply-To: bouchetb@yandex.com
+Sender: oluwa001@gmail.com
+Received: by 2002:a1c:4341:0:0:0:0:0 with HTTP; Sat, 4 Sep 2021 08:00:09 -0700 (PDT)
+From:   Dr Bryan Bouchet <drbryanbouchet52@gmail.com>
+Date:   Sat, 4 Sep 2021 16:00:09 +0100
+X-Google-Sender-Auth: Ha-kNOK8ySCU3_MQjzxHCayzle8
+Message-ID: <CAJjmsvrRgPXBRQY6iwzOSn=B6GSLsHU6EDQv-3n_8Nz99qVOoA@mail.gmail.com>
+Subject: PLEASE RESPOND VERY URGENTLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-After CRYPTO_secure_malloc_init OpenSSL will automatically store private
-keys in secure heap. OPENSSL_secure_malloc(3):
+Dear Friend,
 
-  If a secure heap is used, then private key BIGNUM values are stored
-  there. This protects long-term storage of private keys, but will not
-  necessarily put all intermediate values and computations there.
+With due respect, i have decided to contact you on a business
+transaction that will be beneficial to both of us. At the bank last
+account and auditing evaluation, my staffs came across an old account
+which was being maintained by a foreign client who we learn was among
+the deceased passengers of motor accident on November.2003, the
+deceased was unable to run this account since his death. The account
+has remained dormant without the knowledge of his family since it was
+put in a safe deposit account in the bank for future investment by the clie=
+nt.
 
-Additionally, we try to keep user passwords in secure heap too.
-This facility is only available since OpenSSL_1_1_0-pre1.
+Since his demise, even the members of his family haven't applied for
+claims over this fund and it has been in the safe deposit account
+until i discovered that it cannot be claimed since our client is a
+foreign national and we are sure that he has no next of kin here to
+file claims over the money. As the director of the department, this
+discovery was brought to my office so as to decide what is to be done;
+I decided to seek ways through which to transfer this money out of the
+bank and out of the country too.
 
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-Reviewed-by: Bruno Meneguele <bmeneg@redhat.com>
-Cc: Stefan Berger <stefanb@linux.ibm.com>
----
-Change since v3:
-- Undo secure heap handling from (file2bin and) calc_evm_hmac since this
-  is debugging tool only. Add comment about this.
-- Since there is only code removals and new comments I keep Reviewed-by
-  tag.
+The total amount in the account is (18.6 million) with my positions as
+a staff of this bank, i am handicapped because i cannot operate
+foreign accounts and cannot lay benefice claim over this money. The
+client was a foreign national and you will only be asked to act as his
+next of kin and i will supply you with all the necessary information
+and bank data to assist you in being able to transfer this money to
+any bank of your choice where this money could be transferred into.
 
- src/evmctl.c | 97 +++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 85 insertions(+), 12 deletions(-)
+The total sum will be shared as follows: 50% for me, 50% for you, and
+expenses incidental occur during the transfer will be incur by both of
+us. The transfer is risk free on both sides hence you are going to
+follow my instruction till the fund transfer to your account. Since I
+work in this bank that is why you should be confident in the success
+of this transaction because you will be updated with information=E2=80=99s =
+as
+at when desired.
 
-diff --git a/src/evmctl.c b/src/evmctl.c
-index 5f7c2b8..7bd20f8 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -59,6 +59,7 @@
- #include <assert.h>
- 
- #include <openssl/asn1.h>
-+#include <openssl/crypto.h>
- #include <openssl/sha.h>
- #include <openssl/pem.h>
- #include <openssl/hmac.h>
-@@ -165,6 +166,24 @@ struct tpm_bank_info {
- static char *pcrfile[MAX_PCRFILE];
- static unsigned npcrfile;
- 
-+#if OPENSSL_VERSION_NUMBER <= 0x10100000
-+#warning Your OpenSSL version is too old to have OPENSSL_secure_malloc, \
-+	falling back to use plain OPENSSL_malloc.
-+#define OPENSSL_secure_malloc	  OPENSSL_malloc
-+#define OPENSSL_secure_free	  OPENSSL_free
-+/*
-+ * Secure heap memory automatically cleared on free, but
-+ * OPENSSL_secure_clear_free will be used in case of fallback
-+ * to plain OPENSSL_malloc.
-+ */
-+#define OPENSSL_secure_clear_free OPENSSL_clear_free
-+#define OPENSSL_clear_free(ptr, num)		\
-+	do {					\
-+		OPENSSL_cleanse(ptr, num);	\
-+		OPENSSL_free(ptr);		\
-+	} while (0)
-+#endif
-+
- static int bin2file(const char *file, const char *ext, const unsigned char *data, int len)
- {
- 	FILE *fp;
-@@ -1072,6 +1091,7 @@ static int cmd_setxattr_ima(struct command *cmd)
- 
- #define MAX_KEY_SIZE 128
- 
-+/* This function is debugging tool and should not be used for real private data. */
- static int calc_evm_hmac(const char *file, const char *keyfile, unsigned char *hash)
- {
-         const EVP_MD *md;
-@@ -2596,15 +2616,41 @@ static struct option opts[] = {
- 
- };
- 
-+/*
-+ * Copy password from optarg into secure heap, so it could be
-+ * freed in the same way as a result of get_password().
-+ */
-+static char *optarg_password(char *optarg)
-+{
-+	size_t len;
-+	char *keypass;
-+
-+	if (!optarg)
-+		return NULL;
-+	len = strlen(optarg);
-+	keypass = OPENSSL_secure_malloc(len + 1);
-+	if (keypass)
-+		memcpy(keypass, optarg, len + 1);
-+	else
-+		log_err("OPENSSL_secure_malloc(%zu) failed\n", len + 1);
-+	/*
-+	 * This memset does not add real security, just increases
-+	 * the chance of password being obscured in ps output.
-+	 */
-+	memset(optarg, 'X', len);
-+	return keypass;
-+}
-+
-+/* Read from TTY into secure heap. */
- static char *get_password(void)
- {
- 	struct termios flags, tmp_flags;
- 	char *password, *pwd;
--	int passlen = 64;
-+	const int passlen = 64;
- 
--	password = malloc(passlen);
-+	password = OPENSSL_secure_malloc(passlen);
- 	if (!password) {
--		perror("malloc");
-+		log_err("OPENSSL_secure_malloc(%u) failed\n", passlen);
- 		return NULL;
- 	}
- 
-@@ -2614,8 +2660,8 @@ static char *get_password(void)
- 	tmp_flags.c_lflag |= ECHONL;
- 
- 	if (tcsetattr(fileno(stdin), TCSANOW, &tmp_flags) != 0) {
--		perror("tcsetattr");
--		free(password);
-+		log_err("tcsetattr: %s\n", strerror(errno));
-+		OPENSSL_secure_free(password);
- 		return NULL;
- 	}
- 
-@@ -2624,13 +2670,15 @@ static char *get_password(void)
- 
- 	/* restore terminal */
- 	if (tcsetattr(fileno(stdin), TCSANOW, &flags) != 0) {
--		perror("tcsetattr");
--		free(password);
--		return NULL;
-+		log_err("tcsetattr: %s\n", strerror(errno));
-+		/*
-+		 * Password is already here, so there is no reason
-+		 * to stop working on this petty error.
-+		 */
- 	}
- 
- 	if (pwd == NULL) {
--		free(password);
-+		OPENSSL_secure_free(password);
- 		return NULL;
- 	}
- 
-@@ -2643,6 +2691,7 @@ int main(int argc, char *argv[])
- 	ENGINE *eng = NULL;
- 	unsigned long keyid;
- 	char *eptr;
-+	char *keypass = NULL; /* @secure heap */
- 
- #if !(OPENSSL_VERSION_NUMBER < 0x10100000)
- 	OPENSSL_init_crypto(
-@@ -2651,6 +2700,17 @@ int main(int argc, char *argv[])
- #endif
- 			    OPENSSL_INIT_ENGINE_ALL_BUILTIN, NULL);
- #endif
-+#if OPENSSL_VERSION_NUMBER > 0x10100000
-+	/*
-+	 * This facility is available since OpenSSL_1_1_0-pre1.
-+	 * 'Heap size' 8192 is chosen to be big enough, so that any single key
-+	 * data could fit. 'Heap minsize' 64 is just to be efficient for small
-+	 * buffers.
-+	 */
-+	if (!CRYPTO_secure_malloc_init(8192, 64))
-+		log_err("CRYPTO_secure_malloc_init() failed\n");
-+#endif
-+
- 	g_argv = argv;
- 	g_argc = argc;
- 
-@@ -2682,10 +2742,18 @@ int main(int argc, char *argv[])
- 			imaevm_params.hash_algo = optarg;
- 			break;
- 		case 'p':
-+			if (keypass)
-+				OPENSSL_secure_clear_free(keypass,
-+							  strlen(keypass));
- 			if (optarg)
--				imaevm_params.keypass = optarg;
-+				keypass = optarg_password(optarg);
- 			else
--				imaevm_params.keypass = get_password();
-+				keypass = get_password();
-+			if (!keypass) {
-+				log_err("Cannot read password\n");
-+				goto quit;
-+			}
-+			imaevm_params.keypass = keypass;
- 			break;
- 		case 'f':
- 			sigfile = 1;
-@@ -2841,7 +2909,9 @@ int main(int argc, char *argv[])
- 		if (err < 0)
- 			err = 125;
- 	}
--
-+quit:
-+	if (keypass)
-+		OPENSSL_secure_clear_free(keypass, strlen(keypass));
- 	if (eng) {
- 		ENGINE_finish(eng);
- 		ENGINE_free(eng);
-@@ -2849,6 +2919,9 @@ int main(int argc, char *argv[])
- 		ENGINE_cleanup();
- #endif
- 	}
-+#if OPENSSL_VERSION_NUMBER > 0x10100000
-+	CRYPTO_secure_malloc_done();
-+#endif
- 	ERR_free_strings();
- 	EVP_cleanup();
- 	BIO_free(NULL);
--- 
-2.29.3
+I will wish you to keep this transaction secret and confidential as I
+am hoping to retire with my share of this money at the end of
+transaction which will be when this money is safety in your account. I
+will then come over to your country for sharing according to the
+previously agreed percentages. You might even have to advise me on
+possibilities of investment in your country or elsewhere of our
+choice. May god help you to help me to a restive retirement?
 
+(1) Your full name..............
+(2) Your age:................
+(3) Sex:.....................
+(4) Your telephone number:.................
+(5) Your occupation:.....................
+(6) Your country:.....................
+
+Yours sincerely,
+Dr Bryan Bouchet
