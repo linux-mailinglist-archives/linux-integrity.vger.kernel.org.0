@@ -2,30 +2,30 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 847AF405845
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Sep 2021 15:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C602405858
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Sep 2021 15:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355483AbhIINws (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Sep 2021 09:52:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37240 "EHLO mail.kernel.org"
+        id S1353866AbhIIN6W (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Sep 2021 09:58:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44618 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240903AbhIINvL (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Sep 2021 09:51:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C8CBB60E94;
-        Thu,  9 Sep 2021 13:50:00 +0000 (UTC)
+        id S1352996AbhIIN5I (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 9 Sep 2021 09:57:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BBCCC611CB;
+        Thu,  9 Sep 2021 13:55:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631195401;
-        bh=EKizRFE604TA7mZ4e2VhCAEb+bG2xQL8uEJDyWOYE7E=;
+        s=k20201202; t=1631195758;
+        bh=c5iA0xZnsS2ihax/Ol/20Gbo0ppGT5VXT99jFlcp6Eo=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=iaIoaX2rio6PIN9NSfFX0h7aBAOmjZFhMWeUJ07GexBfHZ2hV3F0XiiP4/yUy+He2
-         owb0oN2g1YmjI1HLbqkEDbAOJdVJ13Tq3ZTUsgB9OHR8RL9zPAyJHYTRND8sR54rjt
-         WvmlleA6Ayj7XrxEnTanffDaDLiWvTCg6CSElG6GkDKQFYFidsUCJrqPYyKOeqGffJ
-         xVzyyb5TZUMbuFHV7kb/Pg+ADrIFzLerO48wp2D4UneBTdQH6oJg6OgYglcGDKH32Z
-         X5q/UpSBH67D8+zCR1piAzhVq9G/of76jWTP73R22HfqDn/v4cjy0szTtIYvNeHOdf
-         D+OuQzAjhBmvQ==
-Message-ID: <8118cf37e9b76bb0ce326f7c1af5a5b6c02e0400.camel@kernel.org>
-Subject: Re: [PATCH v5 04/12] integrity: restrict INTEGRITY_KEYRING_MACHINE
- to restrict_link_by_ca
+        b=J3pyVybmGebub+vWfza4U/0mTJQdRcORir91+E7ho+y5uBjHaaNKNonmTQP5TrgoA
+         3rv1D4vHwSFQ7xz9CzyMyXiLf7KSqvSEctg75KBU3RehbwJ5LmIYAC13G2eDYtR42J
+         EYfIzNQ60PP5U6//Uo9tVQgE9POw9aPENNVrk/6wD+mt8DMtDmHZdyDGoZpo4Q6OFu
+         JgL0krJYUMXvIgXOXml9ul//2pORyn0suOo9H1rJ/xs0UGTXzCBK6cm9HCg0+ins7x
+         SWGEaAMzTx/OCabfUjXYjq8ruxfO0JTfo1g8SIUvi1P52ZBXaqimW9PdfPjnzsICbX
+         nN8w53MAJ4QXA==
+Message-ID: <1d6fa8c32123e3e3708214540a45a940fab01ee1.camel@kernel.org>
+Subject: Re: [PATCH v5 01/12] integrity: Introduce a Linux keyring called
+ machine
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
         linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
@@ -40,10 +40,10 @@ Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
         linux-security-module@vger.kernel.org,
         James.Bottomley@HansenPartnership.com, pjones@redhat.com,
         konrad.wilk@oracle.com
-Date:   Thu, 09 Sep 2021 16:49:58 +0300
-In-Reply-To: <20210907160110.2699645-5-eric.snowberg@oracle.com>
+Date:   Thu, 09 Sep 2021 16:55:56 +0300
+In-Reply-To: <20210907160110.2699645-2-eric.snowberg@oracle.com>
 References: <20210907160110.2699645-1-eric.snowberg@oracle.com>
-         <20210907160110.2699645-5-eric.snowberg@oracle.com>
+         <20210907160110.2699645-2-eric.snowberg@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.36.5-0ubuntu1 
@@ -52,51 +52,26 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2021-09-07 at 12:01 -0400, Eric Snowberg wrote:
-> Set the restriction check for INTEGRITY_KEYRING_MACHINE keys to
-> restrict_link_by_ca.  This will only allow CA keys into the machine
-> keyring.
+On Tue, 2021-09-07 at 12:00 -0400, Eric Snowberg wrote:
+> Many UEFI Linux distributions boot using shim.  The UEFI shim provides
+> what is called Machine Owner Keys (MOK). Shim uses both the UEFI Secure
+> Boot DB and MOK keys to validate the next step in the boot chain.  The
+> MOK facility can be used to import user generated keys.  These keys can
+> be used to sign an end-users development kernel build.  When Linux
+> boots, both UEFI Secure Boot DB and MOK keys get loaded in the Linux
+> .platform keyring.
+>=20
+> Add a new Linux keyring called machine.  This keyring shall contain just
+> MOK CA keys and not the remaining keys in the platform keyring. This new
+> machine keyring will be used in follow on patches.  Unlike keys in the
+> platform keyring, keys contained in the machine keyring will be trusted
+> within the kernel if the end-user has chosen to do so.
 >=20
 > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> ---
-> v1: Initial version
-> v2: Added !IS_ENABLED(CONFIG_INTEGRITY_TRUSTED_KEYRING check so mok
->     keyring gets created even when it isn't enabled
-> v3: Rename restrict_link_by_system_trusted_or_ca to restrict_link_by_ca
-> v4: removed unnecessary restriction->check set
-> v5: Rename to machine keyring
-> ---
->  security/integrity/digsig.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->=20
-> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-> index 5a75ac2c4dbe..2b75bbbd9e0e 100644
-> --- a/security/integrity/digsig.c
-> +++ b/security/integrity/digsig.c
-> @@ -132,14 +132,18 @@ int __init integrity_init_keyring(const unsigned in=
-t id)
->  		goto out;
->  	}
-> =20
-> -	if (!IS_ENABLED(CONFIG_INTEGRITY_TRUSTED_KEYRING))
-> +	if (!IS_ENABLED(CONFIG_INTEGRITY_TRUSTED_KEYRING) && id !=3D INTEGRITY_=
-KEYRING_MACHINE)
->  		return 0;
-> =20
->  	restriction =3D kzalloc(sizeof(struct key_restriction), GFP_KERNEL);
->  	if (!restriction)
->  		return -ENOMEM;
-> =20
-> -	restriction->check =3D restrict_link_to_ima;
-> +	if (id =3D=3D INTEGRITY_KEYRING_MACHINE)
-> +		restriction->check =3D restrict_link_by_ca;
-> +	else
-> +		restriction->check =3D restrict_link_to_ima;
-> +
->  	if (id !=3D INTEGRITY_KEYRING_MACHINE)
->  		perm |=3D KEY_USR_WRITE;
-> =20
 
-03 and 04 look sane. As said, the patches seem to be already in nice shape.
+I guess this is somewhat sealed so
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 /Jarkko
+
