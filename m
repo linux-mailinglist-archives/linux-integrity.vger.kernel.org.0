@@ -2,113 +2,208 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AD04058A5
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Sep 2021 16:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116C7405A19
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Sep 2021 17:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348393AbhIIOKI (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Sep 2021 10:10:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60888 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351483AbhIIOJi (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Sep 2021 10:09:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 594AB6115A;
-        Thu,  9 Sep 2021 14:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631196508;
-        bh=yP+ysKgI6gksJztduaF0K0VhsMtgg2xjeDMysyA7SgE=;
-        h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=GaqjbqpanNTMgd+gx5NhvbUoJjxpmdKXbak4y3Y7DRP8b3R41qf+QEBYlpiyeNmc6
-         Wk8FQBRcBB3//Cg76sPVIm54YJL615K+HZRX7JFVdZPLU2tGExJscCcGkH0zzXmNSw
-         6CrF4jzePXCXwWSr+JCccTY36aPBE/t3NN+6quy7dIJytdHjC9XZma5Q0etvv2J7Lz
-         DCaHxd49uyRYFBry7cjTPmft7RgxyimGj/R41UJAvNhiDk5iDz6wiby0OEHOQpp1JZ
-         E52ZCuDs2OQayj12sw10sWA3oicK727lw6D2hytImehjT9+vIPdzfHy+dCd5xJlXwB
-         M/1mUmq45/1ZA==
-Message-ID: <3f3d10544a3f83e4a940896abeb80da948cba827.camel@kernel.org>
-Subject: Re: [PATCH v6] tpm: fix Atmel TPM crash caused by too frequent
- queries
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Hao Wu <hao.wu@rubrik.com>, shrihari.kalkar@rubrik.com,
-        seungyeop.han@rubrik.com, anish.jhaveri@rubrik.com,
-        peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        pmenzel@molgen.mpg.de, kgold@linux.ibm.com,
-        zohar@linux.vnet.ibm.com, why2jjj.linux@gmail.com, hamza@hpe.com,
-        gregkh@linuxfoundation.org, arnd@arndb.de,
-        nayna@linux.vnet.ibm.com, James.Bottomley@hansenpartnership.com
-Date:   Thu, 09 Sep 2021 17:08:26 +0300
-In-Reply-To: <20210908092606.96115-1-hao.wu@rubrik.com>
-References: <20210908092606.96115-1-hao.wu@rubrik.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
+        id S236649AbhIIPVn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Sep 2021 11:21:43 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56564 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233473AbhIIPVk (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 9 Sep 2021 11:21:40 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 189F3FHX048023;
+        Thu, 9 Sep 2021 11:19:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=lpgD5vGEmIaRlhyfMXPRmGy9zj9rf8ajeuGtr4XPduY=;
+ b=bw8f8en2UXaRxE+/+5vgFZJpeYlXD97XTnewnEK1ERTUvBPn0vx8hd4hQc6EmdtFYEJO
+ goSChKyGUg1DjUSqKfglO3yL2gYJ7Y/d+veQJEgrSTR3Y4Y6IgRr1vjL/xP3EMQA/zgV
+ SaI2JC0qovKkpX6alJpljFXapg6MfqJNJH+Jo8xLr349dZWrsM5GrhMwZ0nY72gxjVjh
+ 4tkJV96edNg/P/PwUd77fYDbi+Apok4MRhaPkRIphmEf/EzHw6w7sxTo/OWa1YwXNiZh
+ mWwwh7UdqlPou6l7eav8NpGdslgSRNAVL+rSLJIhjwo2c7BZZhDNyS7xrit/lJOviA9p oA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ayhwr5jqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Sep 2021 11:19:55 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 189F4CKI052407;
+        Thu, 9 Sep 2021 11:19:54 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3ayhwr5jpj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Sep 2021 11:19:54 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 189FIEn0025560;
+        Thu, 9 Sep 2021 15:19:52 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3axcnkew6n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Sep 2021 15:19:52 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 189FFTKS14156272
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Sep 2021 15:15:29 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97F1D4204D;
+        Thu,  9 Sep 2021 15:19:49 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE4B842041;
+        Thu,  9 Sep 2021 15:19:44 +0000 (GMT)
+Received: from sig-9-65-72-231.ibm.com (unknown [9.65.72.231])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Sep 2021 15:19:44 +0000 (GMT)
+Message-ID: <02024a370f3180e5a6668282e5843ab58bf2a073.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 01/12] integrity: Introduce a Linux keyring called
+ machine
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jarkko@kernel.org, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        torvalds@linux-foundation.org, scott.branden@broadcom.com,
+        weiyongjun1@huawei.com, nayna@linux.ibm.com, ebiggers@google.com,
+        ardb@kernel.org, nramas@linux.microsoft.com, lszubowi@redhat.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Date:   Thu, 09 Sep 2021 11:19:43 -0400
+In-Reply-To: <20210907160110.2699645-2-eric.snowberg@oracle.com>
+References: <20210907160110.2699645-1-eric.snowberg@oracle.com>
+         <20210907160110.2699645-2-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wspITacEcQ5vvoXOSzWgB8P8y2gYDHE7
+X-Proofpoint-ORIG-GUID: TI866xkV7-3Gg1LO0soUIQh1MMBaIjNY
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-09-09_05:2021-09-09,2021-09-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ adultscore=0 phishscore=0 mlxscore=0 priorityscore=1501 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109090093
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2021-09-08 at 02:26 -0700, Hao Wu wrote:
-> The Atmel TPM 1.2 chips crash with error
-> `tpm_try_transmit: send(): error -62` since kernel 4.14.
-> It is observed from the kernel log after running `tpm_sealdata -z`.
-> The error thrown from the command is as follows
-> ```
-> $ tpm_sealdata -z
-> Tspi_Key_LoadKey failed: 0x00001087 - layer=3Dtddl,
-> code=3D0087 (135), I/O error
-> ```
->=20
-> The issue was reproduced with the following Atmel TPM chip:
-> ```
-> $ tpm_version
-> T0  TPM 1.2 Version Info:
->   Chip Version:        1.2.66.1
->   Spec Level:          2
->   Errata Revision:     3
->   TPM Vendor ID:       ATML
->   TPM Version:         01010000
->   Manufacturer Info:   41544d4c
-> ```
->=20
-> The root cause of the issue is due to the TPM calls to msleep()
-> were replaced with usleep_range() [1], which reduces
-> the actual timeout. Via experiments, it is observed that
-> the original msleep(5) actually sleeps for 15ms.
-> Because of a known timeout issue in Atmel TPM 1.2 chip,
-> the shorter timeout than 15ms can cause the error described above.
->=20
-> A few further changes in kernel 4.16 [2] and 4.18 [3, 4] further
-> reduced the timeout to less than 1ms. With experiments,
-> the problematic timeout in the latest kernel is the one
-> for `wait_for_tpm_stat`.
->=20
-> To fix it, the patch reverts the timeout of `wait_for_tpm_stat`
-> to 15ms for all Atmel TPM 1.2 chips, but leave it untouched
-> for Ateml TPM 2.0 chip, and chips from other vendors.
-> As explained above, the chosen 15ms timeout is
-> the actual timeout before this issue introduced,
-> thus the old value is used here.
-> Particularly, TPM_ATML_TIMEOUT_WAIT_STAT_MIN is set to 14700us,
-> TPM_ATML_TIMEOUT_WAIT_STAT_MIN is set to 15000us according to
-> the existing TPM_TIMEOUT_RANGE_US (300us).
-> The fixed has been tested in the system with the affected Atmel chip
-> with no issues observed after boot up.
->=20
-> References:
-> [1] 9f3fc7bcddcb tpm: replace msleep() with usleep_range() in TPM
-> 1.2/2.0 generic drivers
-> [2] cf151a9a44d5 tpm: reduce tpm polling delay in tpm_tis_core
-> [3] 59f5a6b07f64 tpm: reduce poll sleep time in tpm_transmit()
-> [4] 424eaf910c32 tpm: reduce polling time to usecs for even finer
-> granularity
->=20
-> Fixes: 9f3fc7bcddcb ("tpm: replace msleep() with usleep_range() in TPM 1.=
-2/2.0 generic drivers")
-> Link: https://patchwork.kernel.org/project/linux-integrity/patch/20200926=
-223150.109645-1-hao.wu@rubrik.com/
-> Signed-off-by: Hao Wu <hao.wu@rubrik.com>
+On Tue, 2021-09-07 at 12:00 -0400, Eric Snowberg wrote:
+> Many UEFI Linux distributions boot using shim.  The UEFI shim provides
+> what is called Machine Owner Keys (MOK). Shim uses both the UEFI Secure
+> Boot DB and MOK keys to validate the next step in the boot chain.  The
+> MOK facility can be used to import user generated keys.  These keys can
+> be used to sign an end-users development kernel build.  When Linux
+> boots, both UEFI Secure Boot DB and MOK keys get loaded in the Linux
+> .platform keyring.
+> 
+> Add a new Linux keyring called machine.  This keyring shall contain just
 
-Thanks!
+^Define
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> MOK CA keys and not the remaining keys in the platform keyring. This new
+> machine keyring will be used in follow on patches.  Unlike keys in the
+> platform keyring, keys contained in the machine keyring will be trusted
+> within the kernel if the end-user has chosen to do so.
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> ---
+> v1: Initial version
+> v2: Removed destory keyring code
+> v3: Unmodified from v2
+> v4: Add Kconfig, merged in "integrity: add add_to_mok_keyring" 
+> v5: Rename to machine keyring
+> ---
+>  security/integrity/Kconfig                    | 11 +++++
+>  security/integrity/Makefile                   |  1 +
+>  security/integrity/digsig.c                   |  1 +
+>  security/integrity/integrity.h                | 12 +++++-
+>  .../platform_certs/machine_keyring.c          | 42 +++++++++++++++++++
+>  5 files changed, 66 insertions(+), 1 deletion(-)
+>  create mode 100644 security/integrity/platform_certs/machine_keyring.c
+> 
+> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+> index 71f0177e8716..52193b86768a 100644
+> --- a/security/integrity/Kconfig
+> +++ b/security/integrity/Kconfig
+> @@ -62,6 +62,17 @@ config INTEGRITY_PLATFORM_KEYRING
+>           provided by the platform for verifying the kexec'ed kerned image
+>           and, possibly, the initramfs signature.
+>  
+> +config INTEGRITY_MACHINE_KEYRING
+> +	bool "Provide a keyring to which CA Machine Owner Keys may be added"
+> +	depends on SECONDARY_TRUSTED_KEYRING
+> +	depends on INTEGRITY_ASYMMETRIC_KEYS
+> +	depends on SYSTEM_BLACKLIST_KEYRING
+> +	help
+> +	 If set, provide a keyring to which CA Machine Owner Keys (MOK) may
+> +	 be added. This keyring shall contain just CA MOK keys.  Unlike keys
+> +	 in the platform keyring, keys contained in the .machine keyring will
+> +	 be trusted within the kernel.
 
-/Jarkko
+No sense in creating the ".machine" keyring, unless it is possible to
+safely load CA certificates on it.  At least for the time being, this
+should also be dependent on EFI.
+
+<snip>
+
+> +++ b/security/integrity/platform_certs/machine_keyring.c
+> @@ -0,0 +1,42 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Machine keyring routines.
+> + *
+> + * Copyright (c) 2021, Oracle and/or its affiliates.
+> + */
+> +
+> +#include "../integrity.h"
+> +
+> +static __init int machine_keyring_init(void)
+> +{
+> +	int rc;
+> +
+> +	rc = integrity_init_keyring(INTEGRITY_KEYRING_MACHINE);
+> +	if (rc)
+> +		return rc;
+> +
+> +	pr_notice("Machine keyring initialized\n");
+> +	return 0;
+> +}
+> +device_initcall(machine_keyring_init);
+> +
+> +void __init add_to_machine_keyring(const char *source, const void *data, size_t len)
+> +{
+> +	key_perm_t perm;
+> +	int rc;
+> +
+> +	perm = (KEY_POS_ALL & ~KEY_POS_SETATTR) | KEY_USR_VIEW;
+> +	rc = integrity_load_cert(INTEGRITY_KEYRING_MACHINE, source, data, len, perm);
+> +
+> +	/*
+> +	 * Some MOKList keys may not pass the machine keyring restrictions.
+> +	 * If the restriction check does not pass and the platform keyring
+> +	 * is configured, try to add it into that keyring instead.
+> +	 */
+> +	if (rc)
+
+In addition to the comment, also test to see if the ".platform" keyring
+is configured.
+
+thanks,
+
+Mimi
+
+> +		rc = integrity_load_cert(INTEGRITY_KEYRING_PLATFORM, source,
+> +					 data, len, perm);
+> +
+> +	if (rc)
+> +		pr_info("Error adding keys to machine keyring %s\n", source);
+> +}
+
 
