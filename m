@@ -2,187 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F46405B52
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Sep 2021 18:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B80DD405C03
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Sep 2021 19:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238377AbhIIQwq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Sep 2021 12:52:46 -0400
-Received: from mail-dm6nam12on2082.outbound.protection.outlook.com ([40.107.243.82]:12507
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238789AbhIIQwq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Sep 2021 12:52:46 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HqTvTpZAxlgot6vH5Ym89NXfnJSOz1zxib+U1Dm5t8DHFW7FdhCaKXpwsDELbgpkIIdgomCLFOiMz3Xipnm35NQrpdYkGutjSHlfNMI/Oya/7tlDcm2uIYOgxnoHyoOuIUHO+CTiobx16xyi0730Sv0X4LWxg0xTAEXNPfxthiHo4leyWTWmFhogMPTlHgZokPrrH7k23yDIa3jjPif6NdoRP+QD58FSOGqsaS7n10EGJmKeM57IMEswSSSvIoouNjUCuq+5BgpOIW/yUQnQqvII4pUB0vb7t3OKYzpO5d/ff8u68ZWF7FjuppSi0BpexI/BOvrzCrsc+W3eBLRNGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=+T9DtiRWoLup4+CsDkgKyFxaAqMBUsAQ6Y3jexeiyME=;
- b=BAD7HrWh4HvueNSKxkJa6fCb6ZPWSbve1XHvqArE9wtCnnVcVWq0QJfCqNnnCm8f34QajtirocawtQjbQ0L1+hs4BwQux+nSG06OUP9fzhlNFf2t+cK4e+MjdFRqqvb7ySvwP1xeTVIYf5KNBrtGcxSmm5r483WOF6/ft/e/RmtmnUVUZPHr9UI+Y/JTvEr6ZUiNTW2ExgM12IDo0TsxirQH5pzMWVigepRMlePX4t7Duw7WLoYNOEVGSKarVrnSTvJJK3SUjprLVmh7jnrxY+W98ZNDCMYz0sC5OxkQGPxEkfGKVtPSAYsDx2zv2/vWg8OyK3Jfq2gyroWjnfZ+SQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
- dkim=pass header.d=vpitech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+T9DtiRWoLup4+CsDkgKyFxaAqMBUsAQ6Y3jexeiyME=;
- b=lwTJSqdszhM+1RnNpo6Ud0ey4oqfmlxrjtzezCS90mU6151V0Mxs4084HNXFhbJU48agRTLYF8WfqDRIRQCgnpbMyfp22lwBRuQvUcNTgfimq67XyBWLVzH8ew7JVhmM2XbAVGPsVF7e8zg9FgmLxNdTeej6yvKskF7E9vb+EVc=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=vpitech.com;
-Received: from MW2PR07MB3980.namprd07.prod.outlook.com (2603:10b6:907:a::32)
- by MW4PR07MB8667.namprd07.prod.outlook.com (2603:10b6:303:104::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.15; Thu, 9 Sep
- 2021 16:51:34 +0000
-Received: from MW2PR07MB3980.namprd07.prod.outlook.com
- ([fe80::cc48:9777:4f07:6014]) by MW2PR07MB3980.namprd07.prod.outlook.com
- ([fe80::cc48:9777:4f07:6014%4]) with mapi id 15.20.4478.026; Thu, 9 Sep 2021
- 16:51:34 +0000
-From:   Alex Henrie <alexh@vpitech.com>
-To:     linux-integrity@vger.kernel.org, ltp@lists.linux.it,
-        zohar@linux.ibm.com, pvorel@suse.cz, alexhenrie24@gmail.com
-Cc:     Alex Henrie <alexh@vpitech.com>
-Subject: [PATCH ltp] IMA: Add tests for uid, gid, fowner, and fgroup options
-Date:   Thu,  9 Sep 2021 10:51:11 -0600
-Message-Id: <20210909165111.51038-2-alexh@vpitech.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210909165111.51038-1-alexh@vpitech.com>
-References: <20210909165111.51038-1-alexh@vpitech.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MWHPR22CA0050.namprd22.prod.outlook.com
- (2603:10b6:300:12a::12) To MW2PR07MB3980.namprd07.prod.outlook.com
- (2603:10b6:907:a::32)
-MIME-Version: 1.0
-Received: from demeter.ad.vpitech.com (66.60.105.30) by MWHPR22CA0050.namprd22.prod.outlook.com (2603:10b6:300:12a::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Thu, 9 Sep 2021 16:51:34 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 45706093-7d39-42b5-19b9-08d973b2152c
-X-MS-TrafficTypeDiagnostic: MW4PR07MB8667:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MW4PR07MB866724479844D2497C51BD37B8D59@MW4PR07MB8667.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:231;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a8k+G2xX1w4WRF9EKgm4H9PfD1OpQYeiGoPhjfNFHQNuzc4lfMoUnjBe6sZiWVVUSywGIHsd/crC13TR8aVQUrGap+CZLhmLcMir2DYAGF0yVYNq4ANRavhVWiMr8bTDFVH2j+zD+m2dL1OVXjdLpb6oE8LusWxUWD8MnDggOOz75rHCA7uGzXYycImrNduTsUWNwyLtEYNKPIWxDXbH0b/l7gCMNpni4LBBb3uB6Kk7O58AaKr+Ij5bQqBJuNI7L9uMqQP62j/5y0W77Vb3fup85bqhKvzGPL0LlOf8AoYyBWsOukgme3cYRIkYOb6RHs+6kfKUEgekYollXSSTJRNqZxMoc9WitrLD0BQd1RNa+LYwt8qF7WAytqhU6tQaKEPfYLYnH0yLbpMmfI6WRplt3iv1+H2J4hNjVJREN9/ijMq1dP3NWTcItAk4y9EWUaBbjEu0jvzQm/+ccCyuIhbsgzM0hsn7TOcNXGJhjiODohD6eqav4+bNO07lK529jyBLTQ5g49RH8wihf9YGzn2zPF+MPgWThVBZKp1QI5+LnmWOZYXdSpaU0oTVznF/HOcB0ndsf70BVuC4wD60W0bsoBSMeZIgCAfsEUiFHd7QIHVO1gxhUFWXlFHZ/mvoT5Bb5X4VvdqwjdHbWMvHB6MS5kRqrvY4QoGTQhCVBe6Z5k+IOEC1+IC9beE8DKgEwNCNqdicwESA1vthINQU5g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR07MB3980.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(346002)(136003)(376002)(39840400004)(396003)(2616005)(2906002)(36756003)(66476007)(66556008)(52116002)(86362001)(6666004)(478600001)(1076003)(8936002)(66946007)(956004)(7696005)(5660300002)(8676002)(6486002)(107886003)(38350700002)(38100700002)(186003)(4326008)(316002)(83380400001)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eJG9YAytUjUNRf0RJpUXPq0z3ZQX1NsPanqxOBwZhv2d/KAQ52N1G0e5UiJO?=
- =?us-ascii?Q?q3GAtp0f1mp9qsM3t7EDL5EhgGQYLHWSL7wwuPdrDgt4P35jVRX+Ma/iNB/X?=
- =?us-ascii?Q?e+sV/lApenIgCkSYGtHij5acTh9wRUjaH4y4See/cu3Nktr9LaURXmviWPQP?=
- =?us-ascii?Q?sT7v/PnDUOek/d++PRF31vXld/QoRj8CKapaDKOLUDEyYroKRlPNfzA42hvq?=
- =?us-ascii?Q?7I4RGAf5NASlBHPpNqJ+NnM02UB2SP/ysGk2UeSv5PoOQnPEofIVaGsAa3ZO?=
- =?us-ascii?Q?RbyRfuby9zEvLePyTUdmzNG1p5kmfNjpG/X82ADXMs9NabvspyOr8ea1HzE+?=
- =?us-ascii?Q?Hz6s+wgVYVffhtKpgM6DxUY8w+bmb8MzJrN532/P2UbaCHGsfB43Hr7BqbXC?=
- =?us-ascii?Q?/LgMJul3oUiWBgGLKGpIe1eX1QT1W/cLsh0BaaSp7Q+zYT1xVHWwJAEs1z0+?=
- =?us-ascii?Q?VTBdS2U/umdA5jmjCsYPJ0ENHU6NTOzL2iE2MJvHFVmDqi5UBlFJGUanc3au?=
- =?us-ascii?Q?YnSbDBmt7z3Gl31msZqbmU9egRQx9T2WBAOsvydr8sTz2nZU59aR//y6DOvL?=
- =?us-ascii?Q?7bz1+vTO3R31HCJbX9ldMxBd42OKecC+RCVX74nuQxI2XiS+5R3mlvl2K+C8?=
- =?us-ascii?Q?8yfTzjkx2rUFZ6cShbJYScwegI8mQY/oA8VNHNP7jd1ITkZ5pABGNX2C97jj?=
- =?us-ascii?Q?s2cCNl0cekUxqt4ogqe/uoWIcZlfdmE8Ducr92jz4PqGoN0IdmUjy5ROfCIw?=
- =?us-ascii?Q?R2NGSYWzCHhc+sDWSOdAcFtj2RwTPpYuoGY7wvBsmBcA7u5lW6+gTfZK0G1z?=
- =?us-ascii?Q?xerOiMg33D0itAaa8tQTlfVqTuNBFuvR6ePU/qqvcd7Hnc4AGs58he4qtTuP?=
- =?us-ascii?Q?jVGpUFwKSpvecmUuUHR8UZzOzx1ImWZspq+yie4OV3a97Brj7jTXJNmYqeoY?=
- =?us-ascii?Q?8onbP88CQPxmelhqboW7ydNPPXaJiVqncx/3t50y3VknWaxhrLmSKqedF2J3?=
- =?us-ascii?Q?NZg+J8B1UhvOyPx+E8gcDcI4+vyYBZiq0HwjsgD+83HhfiK/prIMDEkJWNy9?=
- =?us-ascii?Q?NlVZ4myyH0hNMrRwJfM54onYxmWICx9OCGDNVf7pTPpEPdWjFfaoKxLMXanF?=
- =?us-ascii?Q?rilAQIZRtURKp5t/V+iTetHllKQQezs1KCatqN4H5ETfV93syRJstlL+lRES?=
- =?us-ascii?Q?gShb7kgqVsw/uMEI+sqghNr6vLCSRm4OMGCn6eCdJSAfbFKj3zDYazyzU+ih?=
- =?us-ascii?Q?BmKHXSoZj54am8vOcpzEIMLqJJ8WvEi64EIV2j24XFzp5I99QCffsAJ6YUQ+?=
- =?us-ascii?Q?9B5RAu7u9XMrDSRFOzEHEuKN?=
-X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45706093-7d39-42b5-19b9-08d973b2152c
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR07MB3980.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2021 16:51:34.7439
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +jIanzir6D3sdzB6IabrORkJSBu3iCsC8UGELB1sLjPIgE+fSadEtrAZkCYdC5TmkZ2qbi/Hbku2p/11eJu92A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR07MB8667
+        id S241462AbhIIR1k (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Sep 2021 13:27:40 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46838 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241332AbhIIR1i (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 9 Sep 2021 13:27:38 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 189H2kKl056795;
+        Thu, 9 Sep 2021 13:26:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=lkzpx1Tn5acnD+EXNOoAfCaAc3jKeDS5YG+LLNQ9m1g=;
+ b=HYXQrEgqpMgJDlu8pmGGcwOJJkcsonjOqpFpjahq3ervorr34Vi6L60chLRSkwS4zu08
+ 7ljpSGzuFi5IRZUi8OC0CMpCWkh+UYawBy5p21gnwW9uOfrSnOSy7sLYkXqXE/PdYyLf
+ 4dmutXLL+5o8eJB7NP2ezCzMr0idME6m5EcBi5ijSMbCiREI4RQcRcePyrurxJgdCBX5
+ AUwc39fNvJFoVGjonTaPCtzdA2iYIoO9BFDlhiHWYTztPfp9Hu19di/2Yf5wqEmOpH9K
+ 1eaqOg784e+aNMDaHUFJSB4NvwuvSzQzuswt3ZcziALowU+8uW5T0LxFsuGdh9KSxHaL Bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3aymu9tve8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Sep 2021 13:26:08 -0400
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 189HGvmE136511;
+        Thu, 9 Sep 2021 13:26:07 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3aymu9tvcs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Sep 2021 13:26:07 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 189HNV8x029025;
+        Thu, 9 Sep 2021 17:26:04 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ayfv2wv05-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Sep 2021 17:26:04 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 189HQ2pZ52560160
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Sep 2021 17:26:02 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0F1C4A405C;
+        Thu,  9 Sep 2021 17:26:02 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 77A8AA405B;
+        Thu,  9 Sep 2021 17:25:57 +0000 (GMT)
+Received: from sig-9-65-72-231.ibm.com (unknown [9.65.72.231])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Sep 2021 17:25:57 +0000 (GMT)
+Message-ID: <c5d8d846cd03a97344700f8ce4f038cdc3e3b8fd.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 04/12] integrity: restrict INTEGRITY_KEYRING_MACHINE
+ to restrict_link_by_ca
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jarkko@kernel.org, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        torvalds@linux-foundation.org, scott.branden@broadcom.com,
+        weiyongjun1@huawei.com, nayna@linux.ibm.com, ebiggers@google.com,
+        ardb@kernel.org, nramas@linux.microsoft.com, lszubowi@redhat.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Date:   Thu, 09 Sep 2021 13:25:56 -0400
+In-Reply-To: <20210907160110.2699645-5-eric.snowberg@oracle.com>
+References: <20210907160110.2699645-1-eric.snowberg@oracle.com>
+         <20210907160110.2699645-5-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Hf4ARJoNwkPG4FqevaTM8ylFDiRu77J6
+X-Proofpoint-GUID: 05MiVjz0dLkr1TJhs_lx_If7lMhv2QtJ
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-09-09_06:2021-09-09,2021-09-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ adultscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
+ mlxlogscore=999 suspectscore=0 malwarescore=0 bulkscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2109030001
+ definitions=main-2109090106
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Requires "ima: add gid support".
+On Tue, 2021-09-07 at 12:01 -0400, Eric Snowberg wrote:
+> Set the restriction check for INTEGRITY_KEYRING_MACHINE keys to
+> restrict_link_by_ca.  This will only allow CA keys into the machine
+> keyring.
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 
-Signed-off-by: Alex Henrie <alexh@vpitech.com>
----
- .../integrity/ima/tests/ima_measurements.sh   | 37 ++++++++++++++++++-
- 1 file changed, 35 insertions(+), 2 deletions(-)
+Normally the new function, in this case the restriction, and usage
+should be defined together.  Any reason why 3/12 and 4/12 are two
+separate patches?  I would squash them together.
 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-index 1927e937c..3c1bcbf88 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-@@ -8,6 +8,7 @@
- 
- TST_NEEDS_CMDS="awk cut sed"
- TST_SETUP="setup"
-+TST_CLEANUP="cleanup"
- TST_CNT=3
- TST_NEEDS_DEVICE=1
- 
-@@ -20,6 +21,13 @@ setup()
- 	TEST_FILE="$PWD/test.txt"
- 	POLICY="$IMA_DIR/policy"
- 	[ -f "$POLICY" ] || tst_res TINFO "not using default policy"
-+
-+	cat $IMA_POLICY > policy-original
-+}
-+
-+cleanup()
-+{
-+	cat policy-original > $IMA_POLICY
- }
- 
- ima_check()
-@@ -103,7 +111,7 @@ test3()
- 	local file="$dir/test.txt"
- 
- 	# Default policy does not measure user files
--	tst_res TINFO "verify not measuring user files"
-+	tst_res TINFO "verify not measuring user files by default"
- 	tst_check_cmds sudo || return
- 
- 	if ! id $user >/dev/null 2>/dev/null; then
-@@ -116,9 +124,34 @@ test3()
- 	cd $dir
- 	# need to read file to get updated $ASCII_MEASUREMENTS
- 	sudo -n -u $user sh -c "echo $(date) user file > $file; cat $file > /dev/null"
-+	EXPECT_FAIL "grep $file $ASCII_MEASUREMENTS"
- 	cd ..
- 
--	EXPECT_FAIL "grep $file $ASCII_MEASUREMENTS"
-+	tst_res TINFO "verify measuring user files when requested via uid"
-+	ROD echo "measure uid=$(id -u $user)" \> $IMA_POLICY
-+	ROD echo "$(date) uid test" \> $TEST_FILE
-+	sudo -n -u $user sh -c "cat $TEST_FILE > /dev/null"
-+	ima_check
-+
-+	tst_res TINFO "verify measuring user files when requested via gid"
-+	ROD echo "measure gid=$(id -g $user)" \> $IMA_POLICY
-+	ROD echo "$(date) gid test" \> $TEST_FILE
-+	sudo -n -u $user sh -c "cat $TEST_FILE > /dev/null"
-+	ima_check
-+
-+	tst_res TINFO "verify measuring user files when requested via fowner"
-+	ROD echo "measure fowner=$(id -u $user)" \> $IMA_POLICY
-+	ROD echo "$(date) fowner test" \> $TEST_FILE
-+	chown $user $TEST_FILE
-+	cat $TEST_FILE > /dev/null
-+	ima_check
-+
-+	tst_res TINFO "verify measuring user files when requested via fgroup"
-+	ROD echo "measure fgroup=$(id -g $user)" \> $IMA_POLICY
-+	ROD echo "$(date) fgroup test" \> $TEST_FILE
-+	chgrp $(id -g $user) $TEST_FILE
-+	cat $TEST_FILE > /dev/null
-+	ima_check
- }
- 
- tst_run
--- 
-2.33.0
+> ---
+> v1: Initial version
+> v2: Added !IS_ENABLED(CONFIG_INTEGRITY_TRUSTED_KEYRING check so mok
+>     keyring gets created even when it isn't enabled
+> v3: Rename restrict_link_by_system_trusted_or_ca to restrict_link_by_ca
+> v4: removed unnecessary restriction->check set
+> v5: Rename to machine keyring
+> ---
+>  security/integrity/digsig.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+> index 5a75ac2c4dbe..2b75bbbd9e0e 100644
+> --- a/security/integrity/digsig.c
+> +++ b/security/integrity/digsig.c
+> @@ -132,14 +132,18 @@ int __init integrity_init_keyring(const unsigned int id)
+>  		goto out;
+>  	}
+>  
+> -	if (!IS_ENABLED(CONFIG_INTEGRITY_TRUSTED_KEYRING))
+> +	if (!IS_ENABLED(CONFIG_INTEGRITY_TRUSTED_KEYRING) && id != INTEGRITY_KEYRING_MACHINE)
+
+Over 80 chars, please split the line.
+
+thanks,
+
+Mimi
+
+>  		return 0;
+>  
+>  	restriction = kzalloc(sizeof(struct key_restriction), GFP_KERNEL);
+>  	if (!restriction)
+>  		return -ENOMEM;
+>  
+> -	restriction->check = restrict_link_to_ima;
+> +	if (id == INTEGRITY_KEYRING_MACHINE)
+> +		restriction->check = restrict_link_by_ca;
+> +	else
+> +		restriction->check = restrict_link_to_ima;
+> +
+>  	if (id != INTEGRITY_KEYRING_MACHINE)
+>  		perm |= KEY_USR_WRITE;
+>  
+
 
