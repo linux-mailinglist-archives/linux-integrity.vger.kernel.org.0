@@ -2,202 +2,255 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3821406E25
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Sep 2021 17:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEDD0406FE9
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Sep 2021 18:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234408AbhIJP0U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Sep 2021 11:26:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47795 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234130AbhIJP0S (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Sep 2021 11:26:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631287507;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Spjb4nXfZUekXVpbbEbvGvyHKZjYa0hVWN3PuAUQBHs=;
-        b=TGngOO9SBguB7p41pC2/7iJcC00l/HaKZHQT9Qdw9a4nRHq5iuZGUYRANJ0+5p67ORg1oS
-        ip0eUYKWKnZ6URAAlKRNUMLz6evtlUjbHid6h5wzDMWi8HK4gWNn9YqjXNmufqq0XjGLjA
-        5jWTj5C0tcnPr/N+uaawnrMvowh9ilQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-238-tatq2IbuPIy6aYtbxbjYHQ-1; Fri, 10 Sep 2021 11:25:06 -0400
-X-MC-Unique: tatq2IbuPIy6aYtbxbjYHQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F13A5801E72;
-        Fri, 10 Sep 2021 15:25:04 +0000 (UTC)
-Received: from localhost (unknown [10.22.33.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 87F891B5C0;
-        Fri, 10 Sep 2021 15:25:01 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     zohar@linux.ibm.com, Simon.THOBY@viveris.fr, kgold@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH v6 ima-evm-utils 1/2] set default hash algorithm in configuration time
-Date:   Fri, 10 Sep 2021 12:24:57 -0300
-Message-Id: <20210910152457.345462-1-bmeneg@redhat.com>
-In-Reply-To: <20210902192427.314337-2-bmeneg@redhat.com>
-References: <20210902192427.314337-2-bmeneg@redhat.com>
-MIME-Version: 1.0
+        id S229503AbhIJQrE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Sep 2021 12:47:04 -0400
+Received: from mail-sn1anam02on2079.outbound.protection.outlook.com ([40.107.96.79]:33633
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229448AbhIJQrE (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 10 Sep 2021 12:47:04 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TpzRJok3OSKfDMY36vtA4p1UNbqO/i445r3WEMWsRG9d9we4L8Iz1EVbMSJUb78CHijH4E20CftgqJ3F+4dV1S7G3JCHvF8sK+6FUWyZMvYObzKSwh38EaXU6shOxUl7AB8sI1n59RTPY+G5osI3uRRUg+QZ5Dxp15NaKbVHGwnavoiNWEohduqXZ/Ka6h2H8ynXR/UOeHnzsZ4V5P5R15sEpBvY1t8X36tePe6Bfi/mzHN/6wcSnpTIEWF7OHT9vz484MiywkZTgW8inGxGQoa4Pvk8caJLxRMGF3TWaCw2S5nFzCIhVVZFMJpbjAeVcDAJvDp1ki8ZaugVQ4smXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=1xxuuqLRrgXtS+hEfc1wkPberdG8RdG6xaXoHM+mKLQ=;
+ b=Edm2YYf3KwWYeEBZ1EDx/jQ9cW0vo5mwW6lWz1z5O5LfXLfM0hLt6T4pPsKhpkvTsnc00i7p/87gQh7zFPBvXzyGrxkmFf9CD4X64qNj7Um6nTPpoIsI9lwmqF3U34Bd3kOkWJ7EO95BmK2qYuyuSKRqIu4vudBeGu+EXkSiDDMlMrB27iSbvQkuA/Tj6k536UejwFpeJuIUSVxIYvQuvpxb+nXQ/6IkXv7FTQ8WgmUPeP7ZdGak01dr6uYJl9h+R+7DhkjNQeOE5NB8MlMyZx14Lv4+ikWIi2aNwpZ/RP+oUE147miKEEwi/GCLUNpcqAUXHFV9MY6/er5BvitrtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
+ dkim=pass header.d=vpitech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1xxuuqLRrgXtS+hEfc1wkPberdG8RdG6xaXoHM+mKLQ=;
+ b=XXNzgdQAatZlawb+7H9Rz3VlPXOVDVnTAFpLkmE6J90MskRtXIxYmR4AK0StCN93aTs/OosqdyXdazUJjvneyhujkM5x4U9Is53lLmtEwTFdTycuHsaUEi33OW1c2GREDSqwjwVtrRxiK3+ckm4HOcvrndCpAb5b9nv0L/EdCco=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=vpitech.com;
+Received: from DM5PR07MB3975.namprd07.prod.outlook.com (2603:10b6:4:b3::39) by
+ DM6PR07MB7993.namprd07.prod.outlook.com (2603:10b6:5:169::33) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4500.16; Fri, 10 Sep 2021 16:45:50 +0000
+Received: from DM5PR07MB3975.namprd07.prod.outlook.com
+ ([fe80::94ed:80bc:9907:b5b1]) by DM5PR07MB3975.namprd07.prod.outlook.com
+ ([fe80::94ed:80bc:9907:b5b1%5]) with mapi id 15.20.4478.027; Fri, 10 Sep 2021
+ 16:45:50 +0000
+From:   Alex Henrie <alexh@vpitech.com>
+To:     linux-integrity@vger.kernel.org, ltp@lists.linux.it,
+        zohar@linux.ibm.com, pvorel@suse.cz, alexhenrie24@gmail.com
+Cc:     Alex Henrie <alexh@vpitech.com>
+Subject: [PATCH ltp v2] IMA: Add tests for uid, gid, fowner, and fgroup options
+Date:   Fri, 10 Sep 2021 10:44:48 -0600
+Message-Id: <20210910164448.28302-1-alexh@vpitech.com>
+X-Mailer: git-send-email 2.33.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain
+X-ClientProxiedBy: CO2PR04CA0095.namprd04.prod.outlook.com
+ (2603:10b6:104:6::21) To DM5PR07MB3975.namprd07.prod.outlook.com
+ (2603:10b6:4:b3::39)
+MIME-Version: 1.0
+Received: from demeter.ad.vpitech.com (66.60.105.30) by CO2PR04CA0095.namprd04.prod.outlook.com (2603:10b6:104:6::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Fri, 10 Sep 2021 16:45:49 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 241749d3-6577-4505-ebb1-08d9747a7228
+X-MS-TrafficTypeDiagnostic: DM6PR07MB7993:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM6PR07MB79935C200925D30F2DD108C0B8D69@DM6PR07MB7993.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:747;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LpqUXwjYiBEdjFhrT9KZKuTUYubA5hlkohTZ+LHDtd3MnoMCdQeIUC3oCWnr3ai02zOIXpycB4OoMVyy+We3d/eUTKtCxxOYbenSZY/3+grRx3nLl+jSBLOqgjZtkEojN4CUAraRLl3bJ2jzLgbuRTUuAKOJXxKGCwMC12i3y2QUWoiF1zhhWFk4/XkBMmVEudKVoeN9cqRLC9zM/CTEy8mXbUjYIcDwHTNTgeg5CV7W76zPRz9jwJeTQCk4wRWe4i/AqcK8aUzMXHB49lPkodFcAkdR5H2L1+3Sko+DqiwQB+S0bcMpP4uObvp9f5NfD2pkpSaSEABGcq1jSd1oPK+bwCzI0xELASSyZHmAQszIvY7LpH6745iuRy8W5kzRPYHtxd5ewQ7mxu2ZRmXXzeQqmeSrIC8bEtqpRgexNQCU1i1gciXgNWr6EahjqWP9l4JwZCKa/URZw1QAnPsGJiH/tVnTGBOR67ySXF/ooE/edIw+wH+8J6UKtkrYyMLPG+dQUGqGVA97ZvsqE6AATLCMNQIWjZBALGtBH3qw1CQ6RlFWQbzU5qvs4kvswPI/WuEfffX6GxAKR7xC/Ws3zu4CY7iCbi3TbhEXLHiaLLwHAxMwhKuQfifzH4kCqzy+jkvYyUP5cxB/0N9ond19RKxP1DHyRwA3IA48ncj2/siCHcsAVxGSq9rSBB6apPmAoK2dYnOTm4YeBQK+wrHltg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR07MB3975.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(136003)(396003)(346002)(39830400003)(366004)(36756003)(2616005)(52116002)(7696005)(8676002)(956004)(316002)(26005)(83380400001)(5660300002)(4326008)(66946007)(66476007)(8936002)(66556008)(2906002)(86362001)(107886003)(1076003)(478600001)(186003)(38350700002)(38100700002)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?geuL5bW/7aph2EicSJnWDwCUYAwtwtItPqpy9IFqQp/cwfxJnCZEYuWFrD2L?=
+ =?us-ascii?Q?kG3KyxzKHeyDCvM3P1v4yGE3i6Xmq3DNGJSjX0JCr6VZZx7dfkG+RL4Iiww/?=
+ =?us-ascii?Q?SGRgkHwq+3jE2hKGZQwmVt7WnJ8KhDinQgdcZUX/129ncwS9IWzBKdSsuUCf?=
+ =?us-ascii?Q?KncYpUqOwtsmpM/p1kjlMvvZOWZ2cS7fR2oLGE3aWZRuW3CWxhCM17ePsnHD?=
+ =?us-ascii?Q?JN6na4Ehp+xHP79NhQOZ2u1/F9h2TIVjlOBDWIZWBvBgF2nEb52wf8zTa1lq?=
+ =?us-ascii?Q?n80xtRo3lBNt8dsppWo07Kx/ZYlvKISC9xZVPncpnwF340EWgO46NaBHLSP0?=
+ =?us-ascii?Q?4MC39M2rWDMEYYJ436GLE1qE7fije7YFH6X+IGopfKAB2TgqkvYbWlOeNjNB?=
+ =?us-ascii?Q?Yd5+MWw6tD7XEieCYJZDj3D7JLz8oEVPTHNRTIvGLbP35FafcvyJzz2gxvdg?=
+ =?us-ascii?Q?XL17odOllsdSwluYdy93ScDDS6j/5DE5M3QIrjX9b7mFavwq1hiA6eplaDZW?=
+ =?us-ascii?Q?hMK3YEeKGuxn7nDHkv2oekK9MyPx9cqqAJpjAvub6XFhX2+yUwuAunUbmamP?=
+ =?us-ascii?Q?Fwo+UVbotvn6CKsrBXL2RcCMsUl4CIcEiR+MG53L8kx/svWk4YYMrpMgZyMc?=
+ =?us-ascii?Q?7DXlpHcrl5UcyVdi8p17bIg4NugyZiePTFt0+GCG9PDH4CqxnkMrtiKJLgT1?=
+ =?us-ascii?Q?/LA/X846gY57t3+s1t9h396z1YnITgfKlmQJrugOxfkdbveOEI8YQapH1+tH?=
+ =?us-ascii?Q?Re2nQtil+4f2W7dIvqpNmzHYpFDkysKrEPY6AtJ3QT0v1udDMx8rUG9HxUYD?=
+ =?us-ascii?Q?ojIlueBuxdSxsA67zofIgaOctY3IdidiqX5EZb9JrtDVwaMCEzIp64oVudmT?=
+ =?us-ascii?Q?XMOy7ojmvcwC3ZfxI5lSVrFmHqbvS6Yqj7pH1aNuAazKW9TAwlOzX96s2+qD?=
+ =?us-ascii?Q?E8+6Zu9whj/LzSYHTYqfIstaiSTPggJ6pa9Oe3sw+8nOGS1w/R5mRi3nmf7D?=
+ =?us-ascii?Q?tJT4DubKY9ciSpWfdfWRZyfM3E0eI+saBEEYLDX8SyPatwJuWyLl8pwrBNoc?=
+ =?us-ascii?Q?c5/3XwQ6SZxAHTvCA5w8CGoZ5etb7vEtGhZVgQFGKVVO73GcPrisrFiHWoUz?=
+ =?us-ascii?Q?HrTBSkaNXBkiGPbnBykvXHizF0BLsypfzAIBJBbP+51rxAsDXoyo5JtrQKke?=
+ =?us-ascii?Q?8LoUqhNQp/uHGKgDFPKDOpv1VIWPqosJFJ9EI2Tc9Feg4Hl00nmjiTIeuB9v?=
+ =?us-ascii?Q?WsqlDNt1H8AhnQLXD4SLPxkjBIteiR9JY9loaSIeIow7d24Qcrq47bxH3mAC?=
+ =?us-ascii?Q?Buwo1GMZxJo8sU7+wEyDuH0/?=
+X-OriginatorOrg: vpitech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 241749d3-6577-4505-ebb1-08d9747a7228
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR07MB3975.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2021 16:45:50.2410
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0Emo9000SRwrsud+r/eq6DFJ8IIPK2Sf5wRZZbhHHmTjT+Ed8rPHbH442vAjdgDza6JGbHtMu9m/MMdl2Sq4cw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB7993
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The default hash algorithm for evmctl is today hardcoded in the libimaevm.c
-file. To facilitate package maintainers across different distributions to
-set their own default hash algorithm this, patch adds the
---with-default-hash=<algo> option to the configuration script.
+Requires "ima: add gid support".
 
-The chosen algorithm will then be checked by its available in the kernel,
-otherwise IMA won't be able to verify files hashed by the user. For that,
-the kernel header hash_info.h used as the source of supported hashes. In
-case the hash_info.h header is not present, the configuration script warns
-about it, but uses whatever the user specified in the option.
-
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+Signed-off-by: Alex Henrie <alexh@vpitech.com>
 ---
-Changelog:
-v5 - remove case insensitive grep (suggested by Mimi)
+v2:
+- Add sudo to list of required commands
+- Check policy writability
+- Check kernel version
+- Use `sudo sg` to test the gid option
+- Don't try to restore the original policy after testing
+---
+ .../integrity/ima/tests/ima_measurements.sh   | 37 +++++++++++++++++--
+ .../integrity/ima/tests/ima_policy.sh         | 14 +------
+ .../security/integrity/ima/tests/ima_setup.sh | 10 +++++
+ 3 files changed, 45 insertions(+), 16 deletions(-)
 
- README                  |  2 +-
- configure.ac            |  2 ++
- m4/default-hash-algo.m4 | 34 ++++++++++++++++++++++++++++++++++
- src/evmctl.c            |  4 ++--
- src/imaevm.h            |  4 ++++
- src/libimaevm.c         |  2 +-
- 6 files changed, 44 insertions(+), 4 deletions(-)
- create mode 100644 m4/default-hash-algo.m4
-
-diff --git a/README b/README
-index 87cd3b5cd7da..4e35826cd982 100644
---- a/README
-+++ b/README
-@@ -41,7 +41,7 @@ COMMANDS
- OPTIONS
- -------
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
+index 1927e937c..d685fc161 100755
+--- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
+@@ -6,7 +6,7 @@
+ #
+ # Verify that measurements are added to the measurement list based on policy.
  
--  -a, --hashalgo     sha1 (default), sha224, sha256, sha384, sha512
-+  -a, --hashalgo     sha1, sha224, sha256, sha384, sha512
-   -s, --imasig       make IMA signature
-   -d, --imahash      make IMA hash
-   -f, --sigfile      store IMA signature in .sig file instead of xattr
-diff --git a/configure.ac b/configure.ac
-index a2d91b3db202..aff6fdfb26b4 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -62,6 +62,7 @@ else
- fi
- 
- EVMCTL_MANPAGE_DOCBOOK_XSL
-+AX_DEFAULT_HASH_ALGO([$KERNEL_HEADERS])
- 
- # for gcov
- #CFLAGS="$CFLAGS -Wall -fprofile-arcs -ftest-coverage"
-@@ -81,6 +82,7 @@ echo
- echo
- echo	"Configuration:"
- echo	"          debug: $pkg_cv_enable_debug"
-+echo	"   default-hash: $HASH_ALGO"
- echo	"   openssl-conf: $enable_openssl_conf"
- echo	"      tss2-esys: $ac_cv_lib_tss2_esys_Esys_Free"
- echo	" tss2-rc-decode: $ac_cv_lib_tss2_rc_Tss2_RC_Decode"
-diff --git a/m4/default-hash-algo.m4 b/m4/default-hash-algo.m4
-new file mode 100644
-index 000000000000..0b6a94349e79
---- /dev/null
-+++ b/m4/default-hash-algo.m4
-@@ -0,0 +1,34 @@
-+dnl Copyright (c) 2021 Bruno Meneguele <bmeneg@redhat.com>
-+dnl Check hash algorithm availability in the kernel
-+dnl
-+dnl $1 - $KERNEL_HEADERS
+-TST_NEEDS_CMDS="awk cut sed"
++TST_NEEDS_CMDS="awk cut sed sg sudo"
+ TST_SETUP="setup"
+ TST_CNT=3
+ TST_NEEDS_DEVICE=1
+@@ -20,6 +20,8 @@ setup()
+ 	TEST_FILE="$PWD/test.txt"
+ 	POLICY="$IMA_DIR/policy"
+ 	[ -f "$POLICY" ] || tst_res TINFO "not using default policy"
 +
-+AC_DEFUN([AX_DEFAULT_HASH_ALGO], [
-+	HASH_INFO_HEADER="$1/include/uapi/linux/hash_info.h"
-+
-+	AC_ARG_WITH([default_hash],
-+		AS_HELP_STRING([--with-default-hash=ALGORITHM], [specifies the default hash algorithm to be used]),
-+		[HASH_ALGO=$withval],
-+		[HASH_ALGO=sha1])
-+
-+	AC_CHECK_HEADER([$HASH_INFO_HEADER],
-+		[HAVE_HASH_INFO_HEADER=yes],
-+		[AC_MSG_WARN([$HASH_INFO_HEADER not found.])])
-+
-+	if test "x$HAVE_HASH_INFO_HEADER" = "x"; then
-+		AC_MSG_RESULT([using $HASH_ALGO algorithm as default hash algorith])
-+		AC_DEFINE_UNQUOTED(DEFAULT_HASH_ALGO, "$HASH_ALGO", [Define default hash algorithm])
-+	else
-+		AC_PROG_SED()
-+		AC_PROG_GREP()
-+		$SED -n 's/HASH_ALGO_\(.*\),/\L\1\E/p' $HASH_INFO_HEADER | $GREP -w $HASH_ALGO > /dev/null
-+		have_hash=$?
-+
-+		if test $have_hash -ne 0; then
-+			AC_MSG_ERROR([$HASH_ALGO algorithm specified, but not provided by the kernel], 1)
-+		else
-+			AC_MSG_NOTICE([using $HASH_ALGO as default hash algorithm])
-+			AC_DEFINE_UNQUOTED(DEFAULT_HASH_ALGO, "$HASH_ALGO", [Define default hash algorithm])
-+		fi
-+	fi
-+])
-diff --git a/src/evmctl.c b/src/evmctl.c
-index c999589943aa..d9385a225e88 100644
---- a/src/evmctl.c
-+++ b/src/evmctl.c
-@@ -2500,7 +2500,7 @@ static void usage(void)
- 
- 	printf(
- 		"\n"
--		"  -a, --hashalgo     sha1 (default), sha224, sha256, sha384, sha512, streebog256, streebog512\n"
-+		"  -a, --hashalgo     sha1, sha224, sha256, sha384, sha512, streebog256, streebog512 (default: %s)\n"
- 		"  -s, --imasig       make IMA signature\n"
- 		"  -d, --imahash      make IMA hash\n"
- 		"  -f, --sigfile      store IMA signature in .sig file instead of xattr\n"
-@@ -2534,7 +2534,7 @@ static void usage(void)
- 		"      --ignore-violations ignore ToMToU measurement violations\n"
- 		"  -v                 increase verbosity level\n"
- 		"  -h, --help         display this help and exit\n"
--		"\n");
-+		"\n", DEFAULT_HASH_ALGO);
++	require_policy_writable
  }
  
- struct command cmds[] = {
-diff --git a/src/imaevm.h b/src/imaevm.h
-index 491f136c105f..cc3dfd2e9163 100644
---- a/src/imaevm.h
-+++ b/src/imaevm.h
-@@ -74,6 +74,10 @@
- #define log_err(fmt, args...)		do_log(LOG_ERR, fmt, ##args)
- #define log_errno(fmt, args...)		do_log(LOG_ERR, fmt ": errno: %s (%d)\n", ##args, strerror(errno), errno)
+ ima_check()
+@@ -103,7 +105,7 @@ test3()
+ 	local file="$dir/test.txt"
  
-+#ifndef DEFAULT_HASH_ALGO
-+#define DEFAULT_HASH_ALGO "sha1"
-+#endif
+ 	# Default policy does not measure user files
+-	tst_res TINFO "verify not measuring user files"
++	tst_res TINFO "verify not measuring user files by default"
+ 	tst_check_cmds sudo || return
+ 
+ 	if ! id $user >/dev/null 2>/dev/null; then
+@@ -116,9 +118,38 @@ test3()
+ 	cd $dir
+ 	# need to read file to get updated $ASCII_MEASUREMENTS
+ 	sudo -n -u $user sh -c "echo $(date) user file > $file; cat $file > /dev/null"
++	EXPECT_FAIL "grep $file $ASCII_MEASUREMENTS"
+ 	cd ..
+ 
+-	EXPECT_FAIL "grep $file $ASCII_MEASUREMENTS"
++	tst_res TINFO "verify measuring user files when requested via uid"
++	ROD echo "measure uid=$(id -u $user)" \> $IMA_POLICY
++	ROD echo "$(date) uid test" \> $TEST_FILE
++	sudo -n -u $user sh -c "cat $TEST_FILE > /dev/null"
++	ima_check
 +
- #define	DATA_SIZE	4096
- #define SHA1_HASH_LEN   20
++	tst_res TINFO "verify measuring user files when requested via fowner"
++	ROD echo "measure fowner=$(id -u $user)" \> $IMA_POLICY
++	ROD echo "$(date) fowner test" \> $TEST_FILE
++	chown $user $TEST_FILE
++	cat $TEST_FILE > /dev/null
++	ima_check
++
++	if tst_kvcmp -lt 5.15; then
++		tst_brk TCONF "gid and fgroup options require kernel 5.15 or newer"
++	fi
++
++	tst_res TINFO "verify measuring user files when requested via gid"
++	ROD echo "measure gid=$(id -g $user)" \> $IMA_POLICY
++	ROD echo "$(date) gid test" \> $TEST_FILE
++	sudo sg $user "sh -c 'cat $TEST_FILE > /dev/null'"
++	ima_check
++
++	tst_res TINFO "verify measuring user files when requested via fgroup"
++	ROD echo "measure fgroup=$(id -g $user)" \> $IMA_POLICY
++	ROD echo "$(date) fgroup test" \> $TEST_FILE
++	chgrp $user $TEST_FILE
++	cat $TEST_FILE > /dev/null
++	ima_check
+ }
  
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index 8e9615796153..2555e58a873b 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -88,7 +88,7 @@ static const char *const pkey_hash_algo_kern[PKEY_HASH__LAST] = {
- struct libimaevm_params imaevm_params = {
- 	.verbose = LOG_INFO,
- 	.x509 = 1,
--	.hash_algo = "sha1",
-+	.hash_algo = DEFAULT_HASH_ALGO,
- };
+ tst_run
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_policy.sh b/testcases/kernel/security/integrity/ima/tests/ima_policy.sh
+index 244cf081d..f1d3b6074 100755
+--- a/testcases/kernel/security/integrity/ima/tests/ima_policy.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_policy.sh
+@@ -11,19 +11,9 @@ TST_CNT=2
  
- static void __attribute__ ((constructor)) libinit(void);
+ . ima_setup.sh
+ 
+-check_policy_writable()
+-{
+-	local err="IMA policy already loaded and kernel not configured to enable multiple writes to it (need CONFIG_IMA_WRITE_POLICY=y)"
+-
+-	[ -f $IMA_POLICY ] || tst_brk TCONF "$err"
+-	# CONFIG_IMA_READ_POLICY
+-	echo "" 2> log > $IMA_POLICY
+-	grep -q "Device or resource busy" log && tst_brk TCONF "$err"
+-}
+-
+ setup()
+ {
+-	check_policy_writable
++	require_policy_writable
+ 
+ 	VALID_POLICY="$TST_DATAROOT/measure.policy"
+ 	[ -f $VALID_POLICY ] || tst_brk TCONF "missing $VALID_POLICY"
+@@ -55,7 +45,6 @@ test1()
+ 
+ 	local p1
+ 
+-	check_policy_writable
+ 	load_policy $INVALID_POLICY & p1=$!
+ 	wait "$p1"
+ 	if [ $? -ne 0 ]; then
+@@ -71,7 +60,6 @@ test2()
+ 
+ 	local p1 p2 rc1 rc2
+ 
+-	check_policy_writable
+ 	load_policy $VALID_POLICY & p1=$!
+ 	load_policy $VALID_POLICY & p2=$!
+ 	wait "$p1"; rc1=$?
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+index 565f0bc3e..9c25d634d 100644
+--- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+@@ -73,6 +73,16 @@ require_policy_readable()
+ 	fi
+ }
+ 
++require_policy_writable()
++{
++	local err="IMA policy already loaded and kernel not configured to enable multiple writes to it (need CONFIG_IMA_WRITE_POLICY=y)"
++
++	[ -f $IMA_POLICY ] || tst_brk TCONF "$err"
++	# CONFIG_IMA_READ_POLICY
++	echo "" 2> log > $IMA_POLICY
++	grep -q "Device or resource busy" log && tst_brk TCONF "$err"
++}
++
+ check_ima_policy_content()
+ {
+ 	local pattern="$1"
 -- 
-2.31.1
+2.33.0
 
