@@ -2,93 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E48407175
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Sep 2021 20:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968184071A3
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Sep 2021 21:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbhIJSsf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Sep 2021 14:48:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42795 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231932AbhIJSse (ORCPT
+        id S233244AbhIJTFV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Sep 2021 15:05:21 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9736 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233156AbhIJTFS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Sep 2021 14:48:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631299642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V52c2PH38OndfG+MLqkkMGZ4Hcc5ilgezUhK4fpL5CI=;
-        b=Ho+c3NmSE+x85WM9AGlWUrPYaQeav29tDeg6aOZQbzujP2anCIocfP9AslzSjESKq5tPI0
-        bVboaKKCNTYQ4lsgonrhUBuYufpGLh6y4rHo+5oGfLah3lns7uuHsfEqDnQQWn+8jD4P0I
-        2EgBwWjiVXBUerw82cwYv2Ri28X78J4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-114-DR33u-E4Prele3jcWXT0rQ-1; Fri, 10 Sep 2021 14:47:19 -0400
-X-MC-Unique: DR33u-E4Prele3jcWXT0rQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A4EAE84A5E5;
-        Fri, 10 Sep 2021 18:47:18 +0000 (UTC)
-Received: from localhost (unknown [10.22.33.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AC31C5D9C6;
-        Fri, 10 Sep 2021 18:47:14 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     zohar@linux.ibm.com, Simon.THOBY@viveris.fr, kgold@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH v7 ima-evm-utils 2/2] make SHA-256 the default hash algorithm
-Date:   Fri, 10 Sep 2021 15:47:01 -0300
-Message-Id: <20210910184701.386163-3-bmeneg@redhat.com>
-In-Reply-To: <20210910184701.386163-1-bmeneg@redhat.com>
-References: <20210910184701.386163-1-bmeneg@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+        Fri, 10 Sep 2021 15:05:18 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 18AJ3Lc1037375;
+        Fri, 10 Sep 2021 15:04:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=pC4LNIF/AAe4jqIs+XGaKPKIB4/VU839zIaRoxq/9qs=;
+ b=lhcHukavigwnTTZtYJ8hKttqav6LjR7B+OfSfgH27ql0Q3AlMzaGVEGmQm3BVHvPtSa1
+ om8nFcVv0ErU5PxIyR5CQwa9xE95zsWbkmJykTsAOAfQodmcMk1UAtodbQVuhY1XUyGr
+ ZVz50VSJITziD72sad1+bw7zBJMty2PW+onijr+uNCTqvcnXOEJQp2wkMhnrofEd6iSj
+ hopV+AyJO481StKExZRQNlLrLgedjOmpNZo81DfyW5CTfzRnH/JN6EejYWZvQxSdz03g
+ HEKZ0AMypqtLJLl/NvdxqYRepjELGoFAKQdO+vmYmllLUfxff6RSyWPVj9qIPYCgZxD8 AA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3b05nq230n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Sep 2021 15:04:03 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18AJ3M7a037384;
+        Fri, 10 Sep 2021 15:04:03 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3b05nq2307-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Sep 2021 15:04:03 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18AJ2Oil018816;
+        Fri, 10 Sep 2021 19:04:01 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3axcnkjur4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Sep 2021 19:04:00 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18AIxZ8n55837142
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Sep 2021 18:59:35 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0327011C054;
+        Fri, 10 Sep 2021 19:03:58 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9C86811C050;
+        Fri, 10 Sep 2021 19:03:56 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.55.253])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Sep 2021 19:03:56 +0000 (GMT)
+Message-ID: <49378953e411e8e93f6f4503de7f6a2ec9d8e961.camel@linux.ibm.com>
+Subject: Re: [PATCH ima-evm-utils v4] evmctl: Use secure heap for private
+ keys and passwords
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Vitaly Chikunov <vt@altlinux.org>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Bruno Meneguele <bmeneg@redhat.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Date:   Fri, 10 Sep 2021 15:03:55 -0400
+In-Reply-To: <413f31067da8a63ecd76228e86505a9f4e5599f8.camel@linux.ibm.com>
+References: <20210904105054.3388329-1-vt@altlinux.org>
+         <413f31067da8a63ecd76228e86505a9f4e5599f8.camel@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: KuASyEehqG7htBaBIwwHMbs1bYno7aKP
+X-Proofpoint-GUID: EYqdH-qpSnSkdcS3KY-O7Xcq_bhSSkxv
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-09-10_07:2021-09-09,2021-09-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ adultscore=0 clxscore=1015 bulkscore=0 phishscore=0 spamscore=0
+ malwarescore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109100110
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The SHA-1 algorithm is considered a weak hash algorithm and there has been
-some movement within certain distros to drop its support completely or at
-least drop it from the default behavior. ima-evm-utils uses it as the
-default algorithm in case the user doesn't explicitly ask for another
-through the --with-default-hash configuration time option or --hashalgo/-a
-runtime option. With that, make SHA-256 the default hash algorithm instead.
+Hi Vitaly, Stefan,
 
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
- m4/default-hash-algo.m4 | 2 +-
- src/imaevm.h            | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, 2021-09-10 at 10:55 -0400, Mimi Zohar wrote:
+> What was the conclusion in terms of reading the password stored in the
+> environment variable?
 
-diff --git a/m4/default-hash-algo.m4 b/m4/default-hash-algo.m4
-index b6164a57d11f..92390fd43b6e 100644
---- a/m4/default-hash-algo.m4
-+++ b/m4/default-hash-algo.m4
-@@ -9,7 +9,7 @@ AC_DEFUN([AX_DEFAULT_HASH_ALGO], [
- 	AC_ARG_WITH([default_hash],
- 		AS_HELP_STRING([--with-default-hash=ALGORITHM], [specifies the default hash algorithm to be used]),
- 		[HASH_ALGO=$withval],
--		[HASH_ALGO=sha1])
-+		[HASH_ALGO=sha256])
- 
- 	AC_PROG_SED()
- 	HASH_ALGO="$(echo $HASH_ALGO | $SED 's/\(.*\)/\L\1\E/')"
-diff --git a/src/imaevm.h b/src/imaevm.h
-index cc3dfd2e9163..ba7b23907669 100644
---- a/src/imaevm.h
-+++ b/src/imaevm.h
-@@ -75,7 +75,7 @@
- #define log_errno(fmt, args...)		do_log(LOG_ERR, fmt ": errno: %s (%d)\n", ##args, strerror(errno), errno)
- 
- #ifndef DEFAULT_HASH_ALGO
--#define DEFAULT_HASH_ALGO "sha1"
-+#define DEFAULT_HASH_ALGO "sha256"
- #endif
- 
- #define	DATA_SIZE	4096
--- 
-2.31.1
+If this is an issue, perhaps call the equivalent of optarg_password()
+to store the environment variable in secure heap memory.
+
+Something like:
+	imaevm_params.keypass =
+optarg_password(getenv("EVMCTL_KEY_PASSWORD"));
+
+optarg_password() would then become a wrapper around the new function.
+
+thanks,
+
+Mimi
 
