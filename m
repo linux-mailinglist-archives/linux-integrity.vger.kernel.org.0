@@ -2,255 +2,356 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDD0406FE9
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Sep 2021 18:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1182540707E
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Sep 2021 19:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbhIJQrE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Sep 2021 12:47:04 -0400
-Received: from mail-sn1anam02on2079.outbound.protection.outlook.com ([40.107.96.79]:33633
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229448AbhIJQrE (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Sep 2021 12:47:04 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TpzRJok3OSKfDMY36vtA4p1UNbqO/i445r3WEMWsRG9d9we4L8Iz1EVbMSJUb78CHijH4E20CftgqJ3F+4dV1S7G3JCHvF8sK+6FUWyZMvYObzKSwh38EaXU6shOxUl7AB8sI1n59RTPY+G5osI3uRRUg+QZ5Dxp15NaKbVHGwnavoiNWEohduqXZ/Ka6h2H8ynXR/UOeHnzsZ4V5P5R15sEpBvY1t8X36tePe6Bfi/mzHN/6wcSnpTIEWF7OHT9vz484MiywkZTgW8inGxGQoa4Pvk8caJLxRMGF3TWaCw2S5nFzCIhVVZFMJpbjAeVcDAJvDp1ki8ZaugVQ4smXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=1xxuuqLRrgXtS+hEfc1wkPberdG8RdG6xaXoHM+mKLQ=;
- b=Edm2YYf3KwWYeEBZ1EDx/jQ9cW0vo5mwW6lWz1z5O5LfXLfM0hLt6T4pPsKhpkvTsnc00i7p/87gQh7zFPBvXzyGrxkmFf9CD4X64qNj7Um6nTPpoIsI9lwmqF3U34Bd3kOkWJ7EO95BmK2qYuyuSKRqIu4vudBeGu+EXkSiDDMlMrB27iSbvQkuA/Tj6k536UejwFpeJuIUSVxIYvQuvpxb+nXQ/6IkXv7FTQ8WgmUPeP7ZdGak01dr6uYJl9h+R+7DhkjNQeOE5NB8MlMyZx14Lv4+ikWIi2aNwpZ/RP+oUE147miKEEwi/GCLUNpcqAUXHFV9MY6/er5BvitrtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
- dkim=pass header.d=vpitech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1xxuuqLRrgXtS+hEfc1wkPberdG8RdG6xaXoHM+mKLQ=;
- b=XXNzgdQAatZlawb+7H9Rz3VlPXOVDVnTAFpLkmE6J90MskRtXIxYmR4AK0StCN93aTs/OosqdyXdazUJjvneyhujkM5x4U9Is53lLmtEwTFdTycuHsaUEi33OW1c2GREDSqwjwVtrRxiK3+ckm4HOcvrndCpAb5b9nv0L/EdCco=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=vpitech.com;
-Received: from DM5PR07MB3975.namprd07.prod.outlook.com (2603:10b6:4:b3::39) by
- DM6PR07MB7993.namprd07.prod.outlook.com (2603:10b6:5:169::33) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4500.16; Fri, 10 Sep 2021 16:45:50 +0000
-Received: from DM5PR07MB3975.namprd07.prod.outlook.com
- ([fe80::94ed:80bc:9907:b5b1]) by DM5PR07MB3975.namprd07.prod.outlook.com
- ([fe80::94ed:80bc:9907:b5b1%5]) with mapi id 15.20.4478.027; Fri, 10 Sep 2021
- 16:45:50 +0000
-From:   Alex Henrie <alexh@vpitech.com>
-To:     linux-integrity@vger.kernel.org, ltp@lists.linux.it,
-        zohar@linux.ibm.com, pvorel@suse.cz, alexhenrie24@gmail.com
-Cc:     Alex Henrie <alexh@vpitech.com>
-Subject: [PATCH ltp v2] IMA: Add tests for uid, gid, fowner, and fgroup options
-Date:   Fri, 10 Sep 2021 10:44:48 -0600
-Message-Id: <20210910164448.28302-1-alexh@vpitech.com>
-X-Mailer: git-send-email 2.33.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CO2PR04CA0095.namprd04.prod.outlook.com
- (2603:10b6:104:6::21) To DM5PR07MB3975.namprd07.prod.outlook.com
- (2603:10b6:4:b3::39)
+        id S231314AbhIJR0t (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Sep 2021 13:26:49 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36442 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229664AbhIJR0t (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 10 Sep 2021 13:26:49 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 18AH2kZr064633;
+        Fri, 10 Sep 2021 13:25:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=sCkXXuL6IsSLPV5w3c8QZ16Rg6dvcIASmccY5sARfNY=;
+ b=G09PxSuLOM19OrzBzbogh4oSpQVEQcjt6bcrU1SixVD+9iOOeRtw+4RRbt/O93x8KIYo
+ +R9mIFra/5b5SYtNJF9fLpf8YR8Kp+2urCEaHCGl0zR7Y0nvXbWHToBwNrcgFqtk5Vo8
+ kHx7wBWbKkSWeFecmCdQtJ08r1P0EOKeqGiDr4+iUKNLCacbvTJZpvUagXDLG62KyLaN
+ gce44zhenZwLLixMAIwnFZjrG6SpSkAU4M9m7alDo8bxSIVU+jQYRVtU0HcDNK06JUnH
+ fK5hWCkZBV7zDdHBJwHhKK5u/oDAQjsB3wpbrwlXtgUM+bIpHoqvybBBm939BASnlnff Lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3aywacam9m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Sep 2021 13:25:35 -0400
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18AH81Na093148;
+        Fri, 10 Sep 2021 13:25:34 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3aywacam92-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Sep 2021 13:25:34 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18AHCMXA009033;
+        Fri, 10 Sep 2021 17:25:33 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma02fra.de.ibm.com with ESMTP id 3axcnktcut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Sep 2021 17:25:32 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18AHPT3i55312674
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Sep 2021 17:25:29 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4EAC11C04A;
+        Fri, 10 Sep 2021 17:25:28 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A018911C058;
+        Fri, 10 Sep 2021 17:25:26 +0000 (GMT)
+Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com.com (unknown [9.211.56.210])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Sep 2021 17:25:26 +0000 (GMT)
+From:   Nayna Jain <nayna@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
+Cc:     dhowells@redhat.com, zohar@linux.ibm.com, jarkko@kernel.org,
+        seth.forshee@canonical.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>
+Subject: [PATCH] integrity: support including firmware ".platform" keys at build time
+Date:   Fri, 10 Sep 2021 13:25:15 -0400
+Message-Id: <20210910172515.8430-1-nayna@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: from demeter.ad.vpitech.com (66.60.105.30) by CO2PR04CA0095.namprd04.prod.outlook.com (2603:10b6:104:6::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Fri, 10 Sep 2021 16:45:49 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 241749d3-6577-4505-ebb1-08d9747a7228
-X-MS-TrafficTypeDiagnostic: DM6PR07MB7993:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM6PR07MB79935C200925D30F2DD108C0B8D69@DM6PR07MB7993.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:747;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LpqUXwjYiBEdjFhrT9KZKuTUYubA5hlkohTZ+LHDtd3MnoMCdQeIUC3oCWnr3ai02zOIXpycB4OoMVyy+We3d/eUTKtCxxOYbenSZY/3+grRx3nLl+jSBLOqgjZtkEojN4CUAraRLl3bJ2jzLgbuRTUuAKOJXxKGCwMC12i3y2QUWoiF1zhhWFk4/XkBMmVEudKVoeN9cqRLC9zM/CTEy8mXbUjYIcDwHTNTgeg5CV7W76zPRz9jwJeTQCk4wRWe4i/AqcK8aUzMXHB49lPkodFcAkdR5H2L1+3Sko+DqiwQB+S0bcMpP4uObvp9f5NfD2pkpSaSEABGcq1jSd1oPK+bwCzI0xELASSyZHmAQszIvY7LpH6745iuRy8W5kzRPYHtxd5ewQ7mxu2ZRmXXzeQqmeSrIC8bEtqpRgexNQCU1i1gciXgNWr6EahjqWP9l4JwZCKa/URZw1QAnPsGJiH/tVnTGBOR67ySXF/ooE/edIw+wH+8J6UKtkrYyMLPG+dQUGqGVA97ZvsqE6AATLCMNQIWjZBALGtBH3qw1CQ6RlFWQbzU5qvs4kvswPI/WuEfffX6GxAKR7xC/Ws3zu4CY7iCbi3TbhEXLHiaLLwHAxMwhKuQfifzH4kCqzy+jkvYyUP5cxB/0N9ond19RKxP1DHyRwA3IA48ncj2/siCHcsAVxGSq9rSBB6apPmAoK2dYnOTm4YeBQK+wrHltg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR07MB3975.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(136003)(396003)(346002)(39830400003)(366004)(36756003)(2616005)(52116002)(7696005)(8676002)(956004)(316002)(26005)(83380400001)(5660300002)(4326008)(66946007)(66476007)(8936002)(66556008)(2906002)(86362001)(107886003)(1076003)(478600001)(186003)(38350700002)(38100700002)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?geuL5bW/7aph2EicSJnWDwCUYAwtwtItPqpy9IFqQp/cwfxJnCZEYuWFrD2L?=
- =?us-ascii?Q?kG3KyxzKHeyDCvM3P1v4yGE3i6Xmq3DNGJSjX0JCr6VZZx7dfkG+RL4Iiww/?=
- =?us-ascii?Q?SGRgkHwq+3jE2hKGZQwmVt7WnJ8KhDinQgdcZUX/129ncwS9IWzBKdSsuUCf?=
- =?us-ascii?Q?KncYpUqOwtsmpM/p1kjlMvvZOWZ2cS7fR2oLGE3aWZRuW3CWxhCM17ePsnHD?=
- =?us-ascii?Q?JN6na4Ehp+xHP79NhQOZ2u1/F9h2TIVjlOBDWIZWBvBgF2nEb52wf8zTa1lq?=
- =?us-ascii?Q?n80xtRo3lBNt8dsppWo07Kx/ZYlvKISC9xZVPncpnwF340EWgO46NaBHLSP0?=
- =?us-ascii?Q?4MC39M2rWDMEYYJ436GLE1qE7fije7YFH6X+IGopfKAB2TgqkvYbWlOeNjNB?=
- =?us-ascii?Q?Yd5+MWw6tD7XEieCYJZDj3D7JLz8oEVPTHNRTIvGLbP35FafcvyJzz2gxvdg?=
- =?us-ascii?Q?XL17odOllsdSwluYdy93ScDDS6j/5DE5M3QIrjX9b7mFavwq1hiA6eplaDZW?=
- =?us-ascii?Q?hMK3YEeKGuxn7nDHkv2oekK9MyPx9cqqAJpjAvub6XFhX2+yUwuAunUbmamP?=
- =?us-ascii?Q?Fwo+UVbotvn6CKsrBXL2RcCMsUl4CIcEiR+MG53L8kx/svWk4YYMrpMgZyMc?=
- =?us-ascii?Q?7DXlpHcrl5UcyVdi8p17bIg4NugyZiePTFt0+GCG9PDH4CqxnkMrtiKJLgT1?=
- =?us-ascii?Q?/LA/X846gY57t3+s1t9h396z1YnITgfKlmQJrugOxfkdbveOEI8YQapH1+tH?=
- =?us-ascii?Q?Re2nQtil+4f2W7dIvqpNmzHYpFDkysKrEPY6AtJ3QT0v1udDMx8rUG9HxUYD?=
- =?us-ascii?Q?ojIlueBuxdSxsA67zofIgaOctY3IdidiqX5EZb9JrtDVwaMCEzIp64oVudmT?=
- =?us-ascii?Q?XMOy7ojmvcwC3ZfxI5lSVrFmHqbvS6Yqj7pH1aNuAazKW9TAwlOzX96s2+qD?=
- =?us-ascii?Q?E8+6Zu9whj/LzSYHTYqfIstaiSTPggJ6pa9Oe3sw+8nOGS1w/R5mRi3nmf7D?=
- =?us-ascii?Q?tJT4DubKY9ciSpWfdfWRZyfM3E0eI+saBEEYLDX8SyPatwJuWyLl8pwrBNoc?=
- =?us-ascii?Q?c5/3XwQ6SZxAHTvCA5w8CGoZ5etb7vEtGhZVgQFGKVVO73GcPrisrFiHWoUz?=
- =?us-ascii?Q?HrTBSkaNXBkiGPbnBykvXHizF0BLsypfzAIBJBbP+51rxAsDXoyo5JtrQKke?=
- =?us-ascii?Q?8LoUqhNQp/uHGKgDFPKDOpv1VIWPqosJFJ9EI2Tc9Feg4Hl00nmjiTIeuB9v?=
- =?us-ascii?Q?WsqlDNt1H8AhnQLXD4SLPxkjBIteiR9JY9loaSIeIow7d24Qcrq47bxH3mAC?=
- =?us-ascii?Q?Buwo1GMZxJo8sU7+wEyDuH0/?=
-X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 241749d3-6577-4505-ebb1-08d9747a7228
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR07MB3975.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2021 16:45:50.2410
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0Emo9000SRwrsud+r/eq6DFJ8IIPK2Sf5wRZZbhHHmTjT+Ed8rPHbH442vAjdgDza6JGbHtMu9m/MMdl2Sq4cw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB7993
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -kYXINhYFKI0cDLoinL0Ib_2qJEmIiaH
+X-Proofpoint-ORIG-GUID: S1_rDgwGFAVkFgSzP5WCuv0QWJjC4otw
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-09-10_07:2021-09-09,2021-09-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ adultscore=0 clxscore=1011 mlxscore=0 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109100099
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Requires "ima: add gid support".
+Firmware keys are loaded on boot onto the ".platform" keyring. In addition,
+allow firmware keys to be compiled into the kernel and loaded onto the
+".platform" keyring.
 
-Signed-off-by: Alex Henrie <alexh@vpitech.com>
+Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
 ---
-v2:
-- Add sudo to list of required commands
-- Check policy writability
-- Check kernel version
-- Use `sudo sg` to test the gid option
-- Don't try to restore the original policy after testing
----
- .../integrity/ima/tests/ima_measurements.sh   | 37 +++++++++++++++++--
- .../integrity/ima/tests/ima_policy.sh         | 14 +------
- .../security/integrity/ima/tests/ima_setup.sh | 10 +++++
- 3 files changed, 45 insertions(+), 16 deletions(-)
+ certs/Makefile                                |  3 ++-
+ certs/blacklist.c                             |  1 -
+ certs/common.c                                |  2 +-
+ certs/common.h                                |  9 -------
+ certs/system_keyring.c                        |  1 -
+ include/keys/system_keyring.h                 |  3 +++
+ security/integrity/Kconfig                    | 10 +++++++
+ security/integrity/Makefile                   | 17 +++++++++++-
+ security/integrity/digsig.c                   |  2 +-
+ security/integrity/integrity.h                |  6 +++++
+ .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
+ .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
+ 12 files changed, 88 insertions(+), 15 deletions(-)
+ delete mode 100644 certs/common.h
+ create mode 100644 security/integrity/platform_certs/platform_cert.S
 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-index 1927e937c..d685fc161 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-@@ -6,7 +6,7 @@
+diff --git a/certs/Makefile b/certs/Makefile
+index 359239a0ee9e..29765d0aefbb 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -3,7 +3,8 @@
+ # Makefile for the linux kernel signature checking certificates.
  #
- # Verify that measurements are added to the measurement list based on policy.
  
--TST_NEEDS_CMDS="awk cut sed"
-+TST_NEEDS_CMDS="awk cut sed sg sudo"
- TST_SETUP="setup"
- TST_CNT=3
- TST_NEEDS_DEVICE=1
-@@ -20,6 +20,8 @@ setup()
- 	TEST_FILE="$PWD/test.txt"
- 	POLICY="$IMA_DIR/policy"
- 	[ -f "$POLICY" ] || tst_res TINFO "not using default policy"
-+
-+	require_policy_writable
- }
+-obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o common.o
++obj-y	+= common.o
++obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o
+ obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
+ obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
+ ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),"")
+diff --git a/certs/blacklist.c b/certs/blacklist.c
+index c9a435b15af4..b95e9b19c42f 100644
+--- a/certs/blacklist.c
++++ b/certs/blacklist.c
+@@ -17,7 +17,6 @@
+ #include <linux/uidgid.h>
+ #include <keys/system_keyring.h>
+ #include "blacklist.h"
+-#include "common.h"
  
- ima_check()
-@@ -103,7 +105,7 @@ test3()
- 	local file="$dir/test.txt"
+ static struct key *blacklist_keyring;
  
- 	# Default policy does not measure user files
--	tst_res TINFO "verify not measuring user files"
-+	tst_res TINFO "verify not measuring user files by default"
- 	tst_check_cmds sudo || return
+diff --git a/certs/common.c b/certs/common.c
+index 16a220887a53..41f763415a00 100644
+--- a/certs/common.c
++++ b/certs/common.c
+@@ -2,7 +2,7 @@
  
- 	if ! id $user >/dev/null 2>/dev/null; then
-@@ -116,9 +118,38 @@ test3()
- 	cd $dir
- 	# need to read file to get updated $ASCII_MEASUREMENTS
- 	sudo -n -u $user sh -c "echo $(date) user file > $file; cat $file > /dev/null"
-+	EXPECT_FAIL "grep $file $ASCII_MEASUREMENTS"
- 	cd ..
+ #include <linux/kernel.h>
+ #include <linux/key.h>
+-#include "common.h"
++#include <keys/system_keyring.h>
  
--	EXPECT_FAIL "grep $file $ASCII_MEASUREMENTS"
-+	tst_res TINFO "verify measuring user files when requested via uid"
-+	ROD echo "measure uid=$(id -u $user)" \> $IMA_POLICY
-+	ROD echo "$(date) uid test" \> $TEST_FILE
-+	sudo -n -u $user sh -c "cat $TEST_FILE > /dev/null"
-+	ima_check
-+
-+	tst_res TINFO "verify measuring user files when requested via fowner"
-+	ROD echo "measure fowner=$(id -u $user)" \> $IMA_POLICY
-+	ROD echo "$(date) fowner test" \> $TEST_FILE
-+	chown $user $TEST_FILE
-+	cat $TEST_FILE > /dev/null
-+	ima_check
-+
-+	if tst_kvcmp -lt 5.15; then
-+		tst_brk TCONF "gid and fgroup options require kernel 5.15 or newer"
-+	fi
-+
-+	tst_res TINFO "verify measuring user files when requested via gid"
-+	ROD echo "measure gid=$(id -g $user)" \> $IMA_POLICY
-+	ROD echo "$(date) gid test" \> $TEST_FILE
-+	sudo sg $user "sh -c 'cat $TEST_FILE > /dev/null'"
-+	ima_check
-+
-+	tst_res TINFO "verify measuring user files when requested via fgroup"
-+	ROD echo "measure fgroup=$(id -g $user)" \> $IMA_POLICY
-+	ROD echo "$(date) fgroup test" \> $TEST_FILE
-+	chgrp $user $TEST_FILE
-+	cat $TEST_FILE > /dev/null
-+	ima_check
- }
- 
- tst_run
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_policy.sh b/testcases/kernel/security/integrity/ima/tests/ima_policy.sh
-index 244cf081d..f1d3b6074 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_policy.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_policy.sh
-@@ -11,19 +11,9 @@ TST_CNT=2
- 
- . ima_setup.sh
- 
--check_policy_writable()
--{
--	local err="IMA policy already loaded and kernel not configured to enable multiple writes to it (need CONFIG_IMA_WRITE_POLICY=y)"
+ int load_certificate_list(const u8 cert_list[],
+ 			  const unsigned long list_size,
+diff --git a/certs/common.h b/certs/common.h
+deleted file mode 100644
+index abdb5795936b..000000000000
+--- a/certs/common.h
++++ /dev/null
+@@ -1,9 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
 -
--	[ -f $IMA_POLICY ] || tst_brk TCONF "$err"
--	# CONFIG_IMA_READ_POLICY
--	echo "" 2> log > $IMA_POLICY
--	grep -q "Device or resource busy" log && tst_brk TCONF "$err"
--}
+-#ifndef _CERT_COMMON_H
+-#define _CERT_COMMON_H
 -
- setup()
+-int load_certificate_list(const u8 cert_list[], const unsigned long list_size,
+-			  const struct key *keyring);
+-
+-#endif
+diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+index 692365dee2bd..d130d5a96e09 100644
+--- a/certs/system_keyring.c
++++ b/certs/system_keyring.c
+@@ -16,7 +16,6 @@
+ #include <keys/asymmetric-type.h>
+ #include <keys/system_keyring.h>
+ #include <crypto/pkcs7.h>
+-#include "common.h"
+ 
+ static struct key *builtin_trusted_keys;
+ #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
+diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.h
+index 6acd3cf13a18..842d770b2a46 100644
+--- a/include/keys/system_keyring.h
++++ b/include/keys/system_keyring.h
+@@ -10,6 +10,9 @@
+ 
+ #include <linux/key.h>
+ 
++extern int load_certificate_list(const u8 cert_list[],
++				 const unsigned long list_size,
++				 const struct key *keyring);
+ #ifdef CONFIG_SYSTEM_TRUSTED_KEYRING
+ 
+ extern int restrict_link_by_builtin_trusted(struct key *keyring,
+diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+index 71f0177e8716..b2009b792882 100644
+--- a/security/integrity/Kconfig
++++ b/security/integrity/Kconfig
+@@ -62,6 +62,16 @@ config INTEGRITY_PLATFORM_KEYRING
+          provided by the platform for verifying the kexec'ed kerned image
+          and, possibly, the initramfs signature.
+ 
++config INTEGRITY_PLATFORM_BUILTIN_KEYS
++        string "Builtin X.509 keys for .platform keyring"
++        depends on KEYS
++        depends on ASYMMETRIC_KEY_TYPE
++        depends on INTEGRITY_PLATFORM_KEYRING
++        help
++          If set, this option should be the filename of a PEM-formatted file
++          containing X.509 certificates to be loaded onto the ".platform"
++          keyring.
++
+ config LOAD_UEFI_KEYS
+        depends on INTEGRITY_PLATFORM_KEYRING
+        depends on EFI
+diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+index 7ee39d66cf16..a45f083589b8 100644
+--- a/security/integrity/Makefile
++++ b/security/integrity/Makefile
+@@ -3,13 +3,18 @@
+ # Makefile for caching inode integrity data (iint)
+ #
+ 
++quiet_cmd_extract_certs  = EXTRACT_CERTS   $(patsubst "%",%,$(2))
++      cmd_extract_certs  = scripts/extract-cert $(2) $@
++$(eval $(call config_filename,INTEGRITY_PLATFORM_BUILTIN_KEYS))
++
+ obj-$(CONFIG_INTEGRITY) += integrity.o
+ 
+ integrity-y := iint.o
+ integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
+ integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
+ integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
+-integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o
++integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o \
++						  platform_certs/platform_cert.o
+ integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
+ 				      platform_certs/load_uefi.o \
+ 				      platform_certs/keyring_handler.o
+@@ -19,3 +24,13 @@ integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
+                                      platform_certs/keyring_handler.o
+ obj-$(CONFIG_IMA)			+= ima/
+ obj-$(CONFIG_EVM)			+= evm/
++
++
++$(obj)/platform_certs/platform_cert.o: $(obj)/platform_certs/platform_certificate_list
++
++targets += platform_certificate_list
++
++$(obj)/platform_certs/platform_certificate_list: scripts/extract-cert $(INTEGRITY_PLATFORM_BUILTIN_KEYS_FILENAME) FORCE
++	$(call if_changed,extract_certs,$(CONFIG_INTEGRITY_PLATFORM_BUILTIN_KEYS))
++
++clean-files := platform_certs/platform_certificate_list
+diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+index 3b06a01bd0fd..0ea40ed8dfcb 100644
+--- a/security/integrity/digsig.c
++++ b/security/integrity/digsig.c
+@@ -38,7 +38,7 @@ static const char * const keyring_name[INTEGRITY_KEYRING_MAX] = {
+ #define restrict_link_to_ima restrict_link_by_builtin_trusted
+ #endif
+ 
+-static struct key *integrity_keyring_from_id(const unsigned int id)
++struct key *integrity_keyring_from_id(const unsigned int id)
  {
--	check_policy_writable
-+	require_policy_writable
+ 	if (id >= INTEGRITY_KEYRING_MAX)
+ 		return ERR_PTR(-EINVAL);
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 547425c20e11..feb84e1b1105 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -167,6 +167,7 @@ int __init integrity_init_keyring(const unsigned int id);
+ int __init integrity_load_x509(const unsigned int id, const char *path);
+ int __init integrity_load_cert(const unsigned int id, const char *source,
+ 			       const void *data, size_t len, key_perm_t perm);
++struct key *integrity_keyring_from_id(const unsigned int id);
+ #else
  
- 	VALID_POLICY="$TST_DATAROOT/measure.policy"
- 	[ -f $VALID_POLICY ] || tst_brk TCONF "missing $VALID_POLICY"
-@@ -55,7 +45,6 @@ test1()
- 
- 	local p1
- 
--	check_policy_writable
- 	load_policy $INVALID_POLICY & p1=$!
- 	wait "$p1"
- 	if [ $? -ne 0 ]; then
-@@ -71,7 +60,6 @@ test2()
- 
- 	local p1 p2 rc1 rc2
- 
--	check_policy_writable
- 	load_policy $VALID_POLICY & p1=$!
- 	load_policy $VALID_POLICY & p2=$!
- 	wait "$p1"; rc1=$?
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-index 565f0bc3e..9c25d634d 100644
---- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-@@ -73,6 +73,16 @@ require_policy_readable()
- 	fi
+ static inline int integrity_digsig_verify(const unsigned int id,
+@@ -194,6 +195,11 @@ static inline int __init integrity_load_cert(const unsigned int id,
+ {
+ 	return 0;
  }
- 
-+require_policy_writable()
++
++static inline struct key *integrity_keyring_from_id(const unsigned int id)
 +{
-+	local err="IMA policy already loaded and kernel not configured to enable multiple writes to it (need CONFIG_IMA_WRITE_POLICY=y)"
-+
-+	[ -f $IMA_POLICY ] || tst_brk TCONF "$err"
-+	# CONFIG_IMA_READ_POLICY
-+	echo "" 2> log > $IMA_POLICY
-+	grep -q "Device or resource busy" log && tst_brk TCONF "$err"
++	return ERR_PTR(-EOPNOTSUPP);
 +}
+ #endif /* CONFIG_INTEGRITY_SIGNATURE */
+ 
+ #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
+diff --git a/security/integrity/platform_certs/platform_cert.S b/security/integrity/platform_certs/platform_cert.S
+new file mode 100644
+index 000000000000..20bccce5dc5a
+--- /dev/null
++++ b/security/integrity/platform_certs/platform_cert.S
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <linux/export.h>
++#include <linux/init.h>
 +
- check_ima_policy_content()
- {
- 	local pattern="$1"
++	__INITRODATA
++
++	.align 8
++#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
++	.globl platform_certificate_list
++platform_certificate_list:
++__cert_list_start:
++	.incbin "security/integrity/platform_certs/platform_certificate_list"
++__cert_list_end:
++#endif
++
++	.align 8
++	.globl platform_certificate_list_size
++platform_certificate_list_size:
++#ifdef CONFIG_64BIT
++	.quad __cert_list_end - __cert_list_start
++#else
++	.long __cert_list_end - __cert_list_start
++#endif
+diff --git a/security/integrity/platform_certs/platform_keyring.c b/security/integrity/platform_certs/platform_keyring.c
+index bcafd7387729..17535050d08d 100644
+--- a/security/integrity/platform_certs/platform_keyring.c
++++ b/security/integrity/platform_certs/platform_keyring.c
+@@ -12,8 +12,12 @@
+ #include <linux/cred.h>
+ #include <linux/err.h>
+ #include <linux/slab.h>
++#include <keys/system_keyring.h>
+ #include "../integrity.h"
+ 
++extern __initconst const u8 platform_certificate_list[];
++extern __initconst const unsigned long platform_certificate_list_size;
++
+ /**
+  * add_to_platform_keyring - Add to platform keyring without validation.
+  * @source: Source of key
+@@ -37,6 +41,28 @@ void __init add_to_platform_keyring(const char *source, const void *data,
+ 		pr_info("Error adding keys to platform keyring %s\n", source);
+ }
+ 
++static __init int load_builtin_platform_cert(void)
++{
++	const u8 *p;
++	unsigned long size;
++	int rc;
++	struct key *keyring;
++
++	p = platform_certificate_list;
++	size = platform_certificate_list_size;
++
++	keyring = integrity_keyring_from_id(INTEGRITY_KEYRING_PLATFORM);
++	if (IS_ERR(keyring))
++		return PTR_ERR(keyring);
++
++	rc = load_certificate_list(p, size, keyring);
++	if (rc)
++		pr_info("Error adding keys to platform keyring %d\n", rc);
++
++	return rc;
++}
++late_initcall(load_builtin_platform_cert);
++
+ /*
+  * Create the trusted keyrings.
+  */
 -- 
-2.33.0
+2.27.0
 
