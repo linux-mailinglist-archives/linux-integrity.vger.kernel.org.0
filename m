@@ -2,111 +2,177 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABB3408596
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Sep 2021 09:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA74C408735
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Sep 2021 10:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237795AbhIMHt0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Sep 2021 03:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237771AbhIMHtT (ORCPT
+        id S238251AbhIMIlq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Sep 2021 04:41:46 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:50244 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238229AbhIMIlj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Sep 2021 03:49:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD579C061760
-        for <linux-integrity@vger.kernel.org>; Mon, 13 Sep 2021 00:48:03 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1mPgh3-00024a-5u; Mon, 13 Sep 2021 09:47:57 +0200
-Subject: Re: [PATCH v3] KEYS: trusted: Fix trusted key backends when building
- as module
-To:     Andreas Rammhold <andreas@rammhold.de>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sumit Garg <sumit.garg@linaro.org>
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210730012822.3460913-1-andreas@rammhold.de>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <0d42a11a-0117-49a9-d2c9-bc6cc405235d@pengutronix.de>
-Date:   Mon, 13 Sep 2021 09:47:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 13 Sep 2021 04:41:39 -0400
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DC3581FFAA;
+        Mon, 13 Sep 2021 08:40:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1631522421;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KD9wM/7qWqNzdEKbj8UfE38r0cX5g54K+576RN3MS2o=;
+        b=rW7yOGAy0MiP5oabJJg2mHf4o0xkYQS16XFLh6iPx1oGIJ90N9bfk2c8P+CE9TGO6xylQe
+        vGiqQXX3Vtmh+cZW0OBUNjK4wsy0dUVCzB9n2SS8igwqYLNkk5/db2djRJd5mIXetcBzdr
+        V17JBqfX5SYEGOI6v+DlcZycB975fUU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1631522421;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KD9wM/7qWqNzdEKbj8UfE38r0cX5g54K+576RN3MS2o=;
+        b=7PeplFo5FXrvFSYK4WVN5HSlOOm+IxJwv+gbprCwpx5ofV8lZS0zNMY9wyVumqqP5EJ7Ak
+        fOJeuC0/VWMcnpBQ==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id A7AC5132AB;
+        Mon, 13 Sep 2021 08:40:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id LTY9J3UOP2GMFAAAGKfGzw
+        (envelope-from <pvorel@suse.cz>); Mon, 13 Sep 2021 08:40:21 +0000
+Date:   Mon, 13 Sep 2021 10:40:20 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Alex Henrie <alexh@vpitech.com>
+Cc:     linux-integrity@vger.kernel.org, ltp@lists.linux.it,
+        zohar@linux.ibm.com, alexhenrie24@gmail.com
+Subject: Re: [PATCH ltp v2] IMA: Add tests for uid, gid, fowner, and fgroup
+ options
+Message-ID: <YT8OdIYtP/FaC52z@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20210910164448.28302-1-alexh@vpitech.com>
 MIME-Version: 1.0
-In-Reply-To: <20210730012822.3460913-1-andreas@rammhold.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210910164448.28302-1-alexh@vpitech.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Dear trusted key maintainers,
+Hi Alex,
 
-On 30.07.21 03:28, Andreas Rammhold wrote:
-> Before this commit the kernel could end up with no trusted key sources
-> even though both of the currently supported backends (TPM and TEE) were
-> compiled as modules. This manifested in the trusted key type not being
-> registered at all.
-> 
-> When checking if a CONFIG_… preprocessor variable is defined we only
-> test for the builtin (=y) case and not the module (=m) case. By using
-> the IS_REACHABLE() macro we do test for both cases.
-> 
-> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
-> Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Does anyone intend to pick this up?
+> Requires "ima: add gid support".
 
-Cheers,
-Ahmad
-
-
-
-> 
-> ---
-> 
-> v3:
-> * Fixed patch formatting
-> 
 > v2:
-> * Fixed commit message
-> * Switched from IS_DEFINED() to IS_REACHABLE()
-> 
->  security/keys/trusted-keys/trusted_core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-> index d5c891d8d353..5b35f1b87644 100644
-> --- a/security/keys/trusted-keys/trusted_core.c
-> +++ b/security/keys/trusted-keys/trusted_core.c
-> @@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
->  MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
->  
->  static const struct trusted_key_source trusted_key_sources[] = {
-> -#if defined(CONFIG_TCG_TPM)
-> +#if IS_REACHABLE(CONFIG_TCG_TPM)
->  	{ "tpm", &trusted_key_tpm_ops },
->  #endif
-> -#if defined(CONFIG_TEE)
-> +#if IS_REACHABLE(CONFIG_TEE)
->  	{ "tee", &trusted_key_tee_ops },
->  #endif
->  };
-> 
+> - Add sudo to list of required commands
+> - Check policy writability
+> - Check kernel version
+> - Use `sudo sg` to test the gid option
+> - Don't try to restore the original policy after testing
 
+...
+> -	check_policy_writable
+> +	require_policy_writable
+Good point to fix function name. But could you please do the rename and move to
+ima_setup.sh in separate commit?
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Also, why do you extending test3()? Wouldn't be more readable to add test4()?
+See notes below.
+
+...
+> +++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
+...
+> -TST_NEEDS_CMDS="awk cut sed"
+> +TST_NEEDS_CMDS="awk cut sed sg sudo"
+I'm sorry, I was wrong. sudo is needed just in the last test, thus
+original check "tst_check_cmds sudo || return" is enough.
+Having it TST_NEEDS_CMDS it requires it also for old kernels, which is necessary.
+
+chgrp and sg you newly introduced, should be also tested by tst_check_cmds,
+after checking kernel version.
+
+>  TST_SETUP="setup"
+>  TST_CNT=3
+>  TST_NEEDS_DEVICE=1
+> @@ -20,6 +20,8 @@ setup()
+>  	TEST_FILE="$PWD/test.txt"
+>  	POLICY="$IMA_DIR/policy"
+>  	[ -f "$POLICY" ] || tst_res TINFO "not using default policy"
+> +
+> +	require_policy_writable
+This changes test to require CONFIG_IMA_WRITE_POLICY=y. Most distributions does
+not have it, thus you'd disable testing for most distros. Not having policy
+readable and writeable everywhere greatly complicates IMA testing.
+...
+>  }
+
+> @@ -103,7 +105,7 @@ test3()
+>  	local file="$dir/test.txt"
+
+>  	# Default policy does not measure user files
+> -	tst_res TINFO "verify not measuring user files"
+> +	tst_res TINFO "verify not measuring user files by default"
+>  	tst_check_cmds sudo || return
+
+>  	if ! id $user >/dev/null 2>/dev/null; then
+> @@ -116,9 +118,38 @@ test3()
+>  	cd $dir
+>  	# need to read file to get updated $ASCII_MEASUREMENTS
+>  	sudo -n -u $user sh -c "echo $(date) user file > $file; cat $file > /dev/null"
+> +	EXPECT_FAIL "grep $file $ASCII_MEASUREMENTS"
+>  	cd ..
+
+> -	EXPECT_FAIL "grep $file $ASCII_MEASUREMENTS"
+> +	tst_res TINFO "verify measuring user files when requested via uid"
+> +	ROD echo "measure uid=$(id -u $user)" \> $IMA_POLICY
+This is the reason for require_policy_writable.
+Previously it was possible to run it without:
+
+ima_measurements 1 TPASS: correct digest found
+ima_measurements 2 TINFO: verify updating record in the IMA measurement list
+ima_measurements 2 TINFO: computing digest for sha256 algorithm
+ima_measurements 2 TPASS: correct digest found
+ima_measurements 3 TINFO: verify not measuring user files
+ima_measurements 3 TPASS: grep /tmp/LTP_ima_measurements.6nhS7ScgBn/user/test.txt /sys/kernel/security/ima/ascii_runtime_measurements failed as expected
+
+I'd keep the old EXPECT_FAIL variant (suppose it's still valid and don't require
+writable policy) and definitely separate new tests.
+Remember, test should run the same on older kernels (we don't want to drop
+coverage on older distros / enterprise distros).
+
+> +	ROD echo "$(date) uid test" \> $TEST_FILE
+> +	sudo -n -u $user sh -c "cat $TEST_FILE > /dev/null"
+> +	ima_check
+> +
+> +	tst_res TINFO "verify measuring user files when requested via fowner"
+> +	ROD echo "measure fowner=$(id -u $user)" \> $IMA_POLICY
+> +	ROD echo "$(date) fowner test" \> $TEST_FILE
+> +	chown $user $TEST_FILE
+> +	cat $TEST_FILE > /dev/null
+> +	ima_check
+> +
+> +	if tst_kvcmp -lt 5.15; then
+> +		tst_brk TCONF "gid and fgroup options require kernel 5.15 or newer"
+> +	fi
+> +
+> +	tst_res TINFO "verify measuring user files when requested via gid"
+> +	ROD echo "measure gid=$(id -g $user)" \> $IMA_POLICY
+> +	ROD echo "$(date) gid test" \> $TEST_FILE
+> +	sudo sg $user "sh -c 'cat $TEST_FILE > /dev/null'"
+> +	ima_check
+> +
+> +	tst_res TINFO "verify measuring user files when requested via fgroup"
+> +	ROD echo "measure fgroup=$(id -g $user)" \> $IMA_POLICY
+> +	ROD echo "$(date) fgroup test" \> $TEST_FILE
+> +	chgrp $user $TEST_FILE
+> +	cat $TEST_FILE > /dev/null
+> +	ima_check
+>  }
+...
+
+Kind regards,
+Petr
