@@ -2,95 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E22409EE3
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Sep 2021 23:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D53C409F88
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Sep 2021 00:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242744AbhIMVLp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Sep 2021 17:11:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47978 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231976AbhIMVLo (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Sep 2021 17:11:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BDF4860FC1;
-        Mon, 13 Sep 2021 21:10:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631567428;
-        bh=5bdCCTygd91fQIytnh4lqUemAO4kuKMYzwmLEv44tvo=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=tnmGMWWIiXSL0/IB+sPHdGhSQuNbkRoSnCJGahZa3iFVZJFEJpMHLPK3OFRSkQC/K
-         HxX0QBKiXkc3H6BAI+y+HO4sgUEibLLRYFl0eLVMMaF7gOcinA0rSYBzDxvAMk6C1h
-         2o96dGLi5r7Tw/bKMJPM9/PXQhwKCAU0/OBmXJ6O0VpXvpW5e4FTubyYxattb+n6O5
-         F2xj1KzsZM6xvP6cRAdiB+wWbtzSGck7rxgZT7Qtcq9WAzzvFSezTrLXQo3TlDJKXM
-         isoY/Y8vBRNkHwyB8NfK0gbo/vfMsd5sTzdCD6LjW5k9PU2UYhEd0tmilFAH4Lm6cY
-         gNw/YYH+TpKXA==
-Message-ID: <5659e538b806c64cd738b13d89663890034447d0.camel@kernel.org>
-Subject: Re: [PATCH v14 2/7] tpm: tpm_tis: Fix expected bit handling and
- send all bytes in one shot without last byte in exception
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     amirmizi6@gmail.com, Eyal.Cohen@nuvoton.com,
-        oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, peterhuewe@gmx.de,
-        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
-        benoit.houyere@st.com, eajames@linux.ibm.com, joel@jms.id.au
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
-        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
-        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
-        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
-Date:   Tue, 14 Sep 2021 00:10:26 +0300
-In-Reply-To: <20210913144351.101167-3-amirmizi6@gmail.com>
-References: <20210913144351.101167-1-amirmizi6@gmail.com>
-         <20210913144351.101167-3-amirmizi6@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S235035AbhIMWTk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Sep 2021 18:19:40 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:63360 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234858AbhIMWTj (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 13 Sep 2021 18:19:39 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 18DKvE1E010490
+        for <linux-integrity@vger.kernel.org>; Mon, 13 Sep 2021 18:18:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=+22RQXL1IrHLHzhsHQRIgRC1yc3CfDZdsNRcsWSz4v0=;
+ b=CERkwcKGAylkG/P/11YhmoV/mJGALiU6+XN9k3KZXD8AeKEwG9wI8VldGx9k6uZUeFUn
+ VQO3SoHVEnKmZlyEiOV7PEgNVpHOtxE5z8NHxCQpB3v6QuCMEmz4M++m3VTb6FEOjJzk
+ JgbeZh9i/bbDJtbPK8oDdN8bs9zs10jJeq2tUH0syosF04YyQKt4X6w/5jxi4uXC/GPb
+ oaeAmuW427axbD7586aflz2KjUKosqqta29fsivX+kjb6smJZ05GLIfHMY14YC4cV3EH
+ e/IizhnSiUkC3pte3DK3IvB+10u4zjXyIIJZYLsBLDaedJBCPQen0mCC5PmeCND36Msv vA== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3b232su98w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 13 Sep 2021 18:18:23 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18DMHgC6019690
+        for <linux-integrity@vger.kernel.org>; Mon, 13 Sep 2021 22:18:22 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma01dal.us.ibm.com with ESMTP id 3b0m3c56xr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-integrity@vger.kernel.org>; Mon, 13 Sep 2021 22:18:22 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18DMIKiP19661234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Sep 2021 22:18:20 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B3DB2BE068;
+        Mon, 13 Sep 2021 22:18:20 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6F7B3BE05D;
+        Mon, 13 Sep 2021 22:18:20 +0000 (GMT)
+Received: from sbct-2.pok.ibm.com (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 13 Sep 2021 22:18:20 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v4 0/9] ima-evm-utils: Add support for signing with pkcs11 URIs
+Date:   Mon, 13 Sep 2021 18:18:04 -0400
+Message-Id: <20210913221813.2554880-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: v3Adfy0sNONh26mSfGyGTYyRQAmq2vAF
+X-Proofpoint-ORIG-GUID: v3Adfy0sNONh26mSfGyGTYyRQAmq2vAF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-11_02,2021-09-09_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109130045
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-09-13 at 17:43 +0300, amirmizi6@gmail.com wrote:
-> From: Amir Mizinski <amirmizi6@gmail.com>
->=20
-> Detected an incorrect implementation of the send command.
-> Currently, the driver polls the TPM_STS.stsValid field until TRUE; then i=
-t
-> reads TPM_STS register again to verify only that TPM_STS.expect field is
-> FALSE (i.e., it ignores TPM_STS.stsValid).
-> Since TPM_STS.stsValid represents the TPM_STS.expect validity, both field=
-s
-> fields should be checked in the same TPM_STS register read value.
->=20
-> This fix modifies the signature of 'wait_for_tpm_stat()', adding an
-> additional "mask_result" parameter to its call and renaming it to
-> 'tpm_tis_wait_for_stat()' for better alignment with other naming.
-> 'tpm_tis_wait_for_stat()' is now polling the TPM_STS with a mask and wait=
-s
-> for the value in mask_result. The fix adds the ability to check if certai=
-n
-> TPM_STS bits have been cleared.
+This series of patches adds support for signing with pkcs11 URIs so that
+pkcs11-enabled devices can also be used for file signing.
 
-Use imprative form, e.g. "Modify the signature...".
+Extend the existing sign_verify.test with tests for the new pkcs11 URI support. 
+Use SoftHSM, when available, as a pkcs11 device for testing.
 
->=20
-> This change is also aligned to verifying the CRC on I2C TPM. The CRC
-> verification should be done after the TPM_STS.expect field is cleared
-> (TPM received all expected command bytes and set the calculated CRC value
-> in the register).
+  Stefan
 
-What does it mean when you "align to verifying"?
+v4:
+  - Addressed Mimi's comments on v3
 
-> In addition, the send command was changed to comply with
-> TCG_DesignPrinciples_TPM2p0Driver_vp24_pubrev.pdf as follows:
-> - send all command bytes in one loop
-> - remove special handling of the last byte
->=20
-> Suggested-by: Benoit Houyere <benoit.houyere@st.com>
-> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+v3:
+  - Used commit messages Mimi suggested
+  - 7/9: Split off imported script into own patch
+  - 8/9: Added missing EVMCTL_ENGINE variable that allowed to enable Debian
+         and Ubuntu testing in 9/9; improvements on setup and teardown
+         functions
+  - 9/9: Installation of required packages on Debian and Ubuntu
 
+Stefan Berger (9):
+  evmctl: Implement support for EVMCTL_KEY_PASSWORD environment variable
+  evmctl: Handle failure to initialize the openssl engine
+  evmctl: Implement function for setting up an OpenSSL engine
+  evmctl: Define and use an ENGINE field in libimaevm_params
+  evmctl: use the pkcs11 engine for pkcs11: prefixed URIs
+  libimaevm: Add support for pkcs11 private keys for signing a v2 hash
+  tests: Import softhsm_setup script to enable pkcs11 test case
+  tests: Extend sign_verify test with pkcs11-specific test
+  tests: Get the packages for pkcs11 testing on the CI/CD system
 
-I don't think the rename is important enough to be done, and it
-definitely should not be melded into another patch.
+ README                 |   5 +
+ ci/alt.sh              |   3 +
+ ci/debian.sh           |   3 +-
+ ci/fedora.sh           |   8 ++
+ ci/tumbleweed.sh       |   3 +
+ src/evmctl.c           |  54 +++++---
+ src/imaevm.h           |   2 +
+ src/libimaevm.c        |  47 +++++--
+ tests/functions.sh     |  45 ++++++-
+ tests/ima_hash.test    |   2 +-
+ tests/sign_verify.test |  52 ++++++--
+ tests/softhsm_setup    | 293 +++++++++++++++++++++++++++++++++++++++++
+ 12 files changed, 473 insertions(+), 44 deletions(-)
+ create mode 100755 tests/softhsm_setup
 
-/Jarkko
+-- 
+2.31.1
 
