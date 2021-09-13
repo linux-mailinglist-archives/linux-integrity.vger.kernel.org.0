@@ -2,68 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43218409E27
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Sep 2021 22:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4253409E99
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Sep 2021 22:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243864AbhIMUcc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Sep 2021 16:32:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34304 "EHLO mail.kernel.org"
+        id S242386AbhIMUzQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Sep 2021 16:55:16 -0400
+Received: from mout.gmx.net ([212.227.15.18]:55017 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243788AbhIMUcc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Sep 2021 16:32:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5BC1B6108B;
-        Mon, 13 Sep 2021 20:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631565075;
-        bh=RPJ5U0dUxyH05Qy2WqNugAgF143GUG387/KfM6hOVeQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Jcv56BwX+tVHQHfFs8YxsC23XjBczKIqJb8hQzuDdDMv8JqhRFhyGYxrhkF+fGpwr
-         5OXNq8lHL2RJCbq7Q2BLlPvz1r5wZiY2o6ej3GFhbVxsJVQqOpUC0xdE0Iu0KPYf3k
-         vJhkyklcNjQBBrKNS3jZCS4CyaJuj9POfU9Twxk4G6PE1VbyQVwDNOhtwMYh3MhDvl
-         DsNJUAAuvW/s7qYPN8tyQa4joaFdKABhelq+Y55FBsXm0SlTXW4MGusxwroGos7716
-         qNq/PVumcuCz8Uz+Fv9DvfdSQOqTqQkIoChC6o9JgiBvs0yQ1svS9cITA3DfM1Zwpb
-         lfhdpsvsQpvng==
-Message-ID: <169a507329c2273f64c1c7ebab0a3530b19e971e.camel@kernel.org>
-Subject: Re: [PATCH v2 1/1] tpm/tpm_i2c_infineon: Fix init endian vendor
- check
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Florian Eckert <fe@dev.tdt.de>, peterhuewe@gmx.de, jgg@ziepe.ca,
-        Eckert.Florian@googlemail.com
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 13 Sep 2021 23:31:13 +0300
-In-Reply-To: <20210913120521.18572-1-fe@dev.tdt.de>
-References: <20210913120521.18572-1-fe@dev.tdt.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S244584AbhIMUzN (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 13 Sep 2021 16:55:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1631566431;
+        bh=8LyRUmRax3hCQti0YfuqbJX2nczTd/Squcie9S85a+8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=g7nFy/z0PY4tvbyJWJLup+J0g1wGQ8/DMV5IbHxxDkgGzguTsNoUbl+UbsY4zdqGl
+         6rtV3oO2qWPQ7CzTj/g7KwjrFsw1Jjjs8mkV9hTy1K8vdDAGeAp3qNRMbtkXGIpz1Z
+         wRKg6q8i33JE5mOKh/tZaKkbT3dT71P0mh7fF/d0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [46.223.119.124] ([46.223.119.124]) by web-mail.gmx.net
+ (3c-app-gmx-bs69.server.lan [172.19.170.214]) (via HTTP); Mon, 13 Sep 2021
+ 22:53:50 +0200
 MIME-Version: 1.0
+Message-ID: <trinity-27f56ffd-504a-4c34-9cda-0953ccc459a3-1631566430623@3c-app-gmx-bs69>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, p.rosenberger@kunbus.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Aw: Re: [PATCH] tpm: fix potential NULL pointer access in
+ tpm_del_char_device()
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 13 Sep 2021 22:53:50 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <204a438b6db54060d03689389d6663b0d4ca815d.camel@kernel.org>
+References: <20210910180451.19314-1-LinoSanfilippo@gmx.de>
+ <204a438b6db54060d03689389d6663b0d4ca815d.camel@kernel.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:mRkR/BryvYpdOREPVnSkv4q0GMCGed0FmfaW+Ko5NshPxZKEfu7va6u5xiYPB+DIck60l
+ aOczt6/VhN5Jfg+sGpER8I+Hfqz+XmNyIa5AY8MSk1UfOo8UPaM6k6a/BS9HliCW0rmRWGE40Gv4
+ BkKGFAdup4fQyXsMaGZRGWIQv5zlc3OidRSIREpuCmjPZYXUR/6BBwb+2UU2zwGN7W4nvbK5/YYJ
+ 4qQyjuEetyu9FChhkyF5TlZKansz2utakOO8YjkbrHhS3y9mN1vzuZ6lsOBogWaMMvY+ywsvkFc+
+ O0=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:uYuHfN1JriI=:DtBZSOURbchsaDSgWzW7Ft
+ ZZm2cxBJMVEcr3QvMPfDI4v/RcUvDnLYOfBN7a51Bcoc0HgJNHTZlf8KVYoPcn/hFFDCqmfBP
+ I3Lpd0YPn20QvyhQdJ79OqozjJspVp0oEbWYKJHGgp8NurvSn4sJqdTl6clcrsRbigpOBJtP3
+ j0ForO/Y5/hQRiz24DNFT5x/0mHuAdPfBwx2l0pki92pf4FNfTxA7LoUxgwBXQNaqWt55tUg0
+ RHk1w+03EVofwjKTD/xaZMVYsz91RmCfvsZnn3gNVV1gG5fG7eZcwX6Mg2/xHFUiR4CdPrAnh
+ 3r0eHecwbsowgUxVbX99fx40t2+cNkxPLpcLvA6bs/F0PQVcoXnK+9J2UloCS3VoBz770RXjb
+ SMgghoWUcIyNT2QgKjcffVr0IGBDDFURdtkWq2A/qVL3PzkOw4FUu3dad+/pvrYBlPMknP39Q
+ zt0trDwTJ2YltPwVUEIuMBYcS1KRHNDrPtYNYnAo2Kg4PL0A0OLlhvaTnL4bfsS7JYleLBkDj
+ Fg0DBU+zNjUtdi6uNh6qqAx28xNvy8EB5nIykIAEzZK3zsu0TI9PFfDPsW2eD1JnrnS2nCC29
+ j8LdpEtvQ1LHCi+JXH/xYtbNg9zuRMpO2R8i+9g6TRrOOZi9PsDDsaFwVZyJWCdRixhB6FYrX
+ wkPS0/xq7ipPgWfP8VdYNaJhtnr5iC/UGH+Krt3eUBtaFdHl1IjdR48xx0ceoCJsmtYcsHhi1
+ 9ZXGbvq2bcz3mk7Miom/eOT7nGWgMKf9OKD5gcsASiMlT5QwHEcA/eWduF6X6PZJBxYowvPKl
+ yYPKKiv
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-09-13 at 14:05 +0200, Florian Eckert wrote:
-> On my embedded system I use this tpm infineon chip via i2c bus.
-> The system is a MIPS architecture and therefore works in big endian mode.
->=20
-> The problem is, that the chip type is not correctly recognized,
-> because the vendor ID is wrongly aligned in the memory.
->=20
-> By declaring the vendor ID variable as a `__le32` type, the TPM chip is
-> then correctly recognized by the driver and feels then responsible.
 
-Please no hyphens just normal single quotes.
+Hi,
 
-You should have always in a commit message some explanation what
-the patch does in imperative form, e.g. "Change type of xxx ...
-because ...".
+> Gesendet: Montag, 13. September 2021 um 22:25 Uhr
+> Von: "Jarkko Sakkinen" <jarkko@kernel.org>
+> An: "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de, jgg@zi=
+epe.ca
+> Cc: p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org, linux-ker=
+nel@vger.kernel.org, stable@vger.kernel.org
+> Betreff: Re: [PATCH] tpm: fix potential NULL pointer access in tpm_del_c=
+har_device()
+>
+> On Fri, 2021-09-10 at 20:04 +0200, Lino Sanfilippo wrote:
+> > In tpm_del_char_device() make sure that chip->ops is still valid.
+> > This check is needed since in case of a system shutdown
+> > tpm_class_shutdown() has already been called and set chip->ops to NULL=
+.
+> > This leads to a NULL pointer access as soon as tpm_del_char_device()
+> > tries to access chip->ops in case of TPM 2.
+> >
+> > Fixes: dcbeab1946454 ("tpm: fix crash in tpm_tis deinitialization")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> > ---
+>
+> Have you been able to reproduce this in some environment?
+>
+> /Jarkko
+>
+>
 
-I cannot from find a variable named "vendor ID" from
-tpm_tis_i2c_init(). Maybe you are referring to the variable,
-of which name is "vendor"?
+Yes, this bug is reproducable on my system that is running a 5.10 raspberr=
+y kernel.
+I use a SLB 9670 which is connected via SPI.
 
-Finally, the commit message lacks explanation what is changed, i.e.
-tpm2_tis_i2c_init() in this case.
-
-Did you find the commit ID where this regression was introduceD?
-
-/Jarkko
+Regards,
+Lino
