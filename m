@@ -2,102 +2,78 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4253409E99
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Sep 2021 22:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719CE409ED0
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Sep 2021 23:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242386AbhIMUzQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Sep 2021 16:55:16 -0400
-Received: from mout.gmx.net ([212.227.15.18]:55017 "EHLO mout.gmx.net"
+        id S232241AbhIMVH0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Sep 2021 17:07:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46058 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244584AbhIMUzN (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Sep 2021 16:55:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1631566431;
-        bh=8LyRUmRax3hCQti0YfuqbJX2nczTd/Squcie9S85a+8=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=g7nFy/z0PY4tvbyJWJLup+J0g1wGQ8/DMV5IbHxxDkgGzguTsNoUbl+UbsY4zdqGl
-         6rtV3oO2qWPQ7CzTj/g7KwjrFsw1Jjjs8mkV9hTy1K8vdDAGeAp3qNRMbtkXGIpz1Z
-         wRKg6q8i33JE5mOKh/tZaKkbT3dT71P0mh7fF/d0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [46.223.119.124] ([46.223.119.124]) by web-mail.gmx.net
- (3c-app-gmx-bs69.server.lan [172.19.170.214]) (via HTTP); Mon, 13 Sep 2021
- 22:53:50 +0200
-MIME-Version: 1.0
-Message-ID: <trinity-27f56ffd-504a-4c34-9cda-0953ccc459a3-1631566430623@3c-app-gmx-bs69>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, p.rosenberger@kunbus.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Aw: Re: [PATCH] tpm: fix potential NULL pointer access in
- tpm_del_char_device()
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 13 Sep 2021 22:53:50 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <204a438b6db54060d03689389d6663b0d4ca815d.camel@kernel.org>
-References: <20210910180451.19314-1-LinoSanfilippo@gmx.de>
- <204a438b6db54060d03689389d6663b0d4ca815d.camel@kernel.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:mRkR/BryvYpdOREPVnSkv4q0GMCGed0FmfaW+Ko5NshPxZKEfu7va6u5xiYPB+DIck60l
- aOczt6/VhN5Jfg+sGpER8I+Hfqz+XmNyIa5AY8MSk1UfOo8UPaM6k6a/BS9HliCW0rmRWGE40Gv4
- BkKGFAdup4fQyXsMaGZRGWIQv5zlc3OidRSIREpuCmjPZYXUR/6BBwb+2UU2zwGN7W4nvbK5/YYJ
- 4qQyjuEetyu9FChhkyF5TlZKansz2utakOO8YjkbrHhS3y9mN1vzuZ6lsOBogWaMMvY+ywsvkFc+
- O0=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:uYuHfN1JriI=:DtBZSOURbchsaDSgWzW7Ft
- ZZm2cxBJMVEcr3QvMPfDI4v/RcUvDnLYOfBN7a51Bcoc0HgJNHTZlf8KVYoPcn/hFFDCqmfBP
- I3Lpd0YPn20QvyhQdJ79OqozjJspVp0oEbWYKJHGgp8NurvSn4sJqdTl6clcrsRbigpOBJtP3
- j0ForO/Y5/hQRiz24DNFT5x/0mHuAdPfBwx2l0pki92pf4FNfTxA7LoUxgwBXQNaqWt55tUg0
- RHk1w+03EVofwjKTD/xaZMVYsz91RmCfvsZnn3gNVV1gG5fG7eZcwX6Mg2/xHFUiR4CdPrAnh
- 3r0eHecwbsowgUxVbX99fx40t2+cNkxPLpcLvA6bs/F0PQVcoXnK+9J2UloCS3VoBz770RXjb
- SMgghoWUcIyNT2QgKjcffVr0IGBDDFURdtkWq2A/qVL3PzkOw4FUu3dad+/pvrYBlPMknP39Q
- zt0trDwTJ2YltPwVUEIuMBYcS1KRHNDrPtYNYnAo2Kg4PL0A0OLlhvaTnL4bfsS7JYleLBkDj
- Fg0DBU+zNjUtdi6uNh6qqAx28xNvy8EB5nIykIAEzZK3zsu0TI9PFfDPsW2eD1JnrnS2nCC29
- j8LdpEtvQ1LHCi+JXH/xYtbNg9zuRMpO2R8i+9g6TRrOOZi9PsDDsaFwVZyJWCdRixhB6FYrX
- wkPS0/xq7ipPgWfP8VdYNaJhtnr5iC/UGH+Krt3eUBtaFdHl1IjdR48xx0ceoCJsmtYcsHhi1
- 9ZXGbvq2bcz3mk7Miom/eOT7nGWgMKf9OKD5gcsASiMlT5QwHEcA/eWduF6X6PZJBxYowvPKl
- yYPKKiv
+        id S231976AbhIMVH0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 13 Sep 2021 17:07:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F06860698;
+        Mon, 13 Sep 2021 21:06:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631567169;
+        bh=WHMsQg43LJV/PJPmoR45EGXsHwrBzbGcrTUUq7+QIko=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=QhKEJQSZqQOBUPe7mrFobpvYGKu4U9GlGuYK1KGijlUeJh2kxyCufhTx1V9om34Xr
+         Eb1TxEScN7BudefEeBbimqLJIkHmBUuu7LhyIkfDYb9GANRy2ZCWaIyBspF2SZ0kL5
+         liTQeEV4IzJwGT/YMdyeaKZDIeYxMpv4Sj3ZKLEVm0mt3o72YNdjRSkWU+x1C1xJh2
+         ljMz6ctwuGdIsz8AXW2fJIR6Y5wK+qVoez4rBeaWFJ/d3phKhpNaCZafht5NkjqRPz
+         xMMKD+ipEZxL7476tNPWxlwqmf+IW0jMYy5iP96dF8Iqo/AAaCKBHwviYGi90qVyL1
+         S5aq1FwhZRl0Q==
+Message-ID: <dd7fbcaafad3259a307f1a2d8a72127e7bcc0630.camel@kernel.org>
+Subject: Re: [PATCH v14 1/7] tpm: Make read{16, 32}() and write32() in
+ tpm_tis_phy_ops optional
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     amirmizi6@gmail.com, Eyal.Cohen@nuvoton.com,
+        oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, peterhuewe@gmx.de,
+        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
+        benoit.houyere@st.com, eajames@linux.ibm.com, joel@jms.id.au
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
+Date:   Tue, 14 Sep 2021 00:06:07 +0300
+In-Reply-To: <20210913144351.101167-2-amirmizi6@gmail.com>
+References: <20210913144351.101167-1-amirmizi6@gmail.com>
+         <20210913144351.101167-2-amirmizi6@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Mon, 2021-09-13 at 17:43 +0300, amirmizi6@gmail.com wrote:
+> From: Amir Mizinski <amirmizi6@gmail.com>
+>=20
+> Only tpm_tis can use memory-mapped I/O, which is truly mapped into the
+> kernel's memory space. Therefore, using ioread16/ioread32/iowrite32 turns
+> into a straightforward pointer dereference.
+> Some drivers, such as tpm_tis_spi, require more complicated operations to
+> read more than one byte at a time and, as a result, will revert to
+> read_bytes/write_bytes.
+> Therefore, re-implement tpm_tis_{read, write}_{16, 32}, so that they chec=
+k
+> if implementations for {read, write}_{16, 32} in tpm_tis_phys_ops  exist;
+> if they do not exist, then revert to {read, write}_bytes().
+>  static int tpm_tis_spi_probe(struct spi_device *dev)
 
-Hi,
+This is otherwise good but lacks explanation why this makes sense, other th=
+an
+somewhat obvious benefit of having less calbacks, which BTW should be state=
+d
+explicitly in the commit message too.
 
-> Gesendet: Montag, 13. September 2021 um 22:25 Uhr
-> Von: "Jarkko Sakkinen" <jarkko@kernel.org>
-> An: "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de, jgg@zi=
-epe.ca
-> Cc: p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org, linux-ker=
-nel@vger.kernel.org, stable@vger.kernel.org
-> Betreff: Re: [PATCH] tpm: fix potential NULL pointer access in tpm_del_c=
-har_device()
->
-> On Fri, 2021-09-10 at 20:04 +0200, Lino Sanfilippo wrote:
-> > In tpm_del_char_device() make sure that chip->ops is still valid.
-> > This check is needed since in case of a system shutdown
-> > tpm_class_shutdown() has already been called and set chip->ops to NULL=
-.
-> > This leads to a NULL pointer access as soon as tpm_del_char_device()
-> > tries to access chip->ops in case of TPM 2.
-> >
-> > Fixes: dcbeab1946454 ("tpm: fix crash in tpm_tis deinitialization")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-> > ---
->
-> Have you been able to reproduce this in some environment?
->
-> /Jarkko
->
->
+You must answer what is your by doing this change, e.g. what you are unable
+to do, if the callbacks are removed (just an example).
 
-Yes, this bug is reproducable on my system that is running a 5.10 raspberr=
-y kernel.
-I use a SLB 9670 which is connected via SPI.
+I get the change, but motivation to do it needs to be there.
 
-Regards,
-Lino
+/Jarkko
+
