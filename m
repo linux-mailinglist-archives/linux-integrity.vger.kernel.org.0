@@ -2,21 +2,21 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F86840B2A6
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Sep 2021 17:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCA640B2AA
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Sep 2021 17:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234108AbhINPOi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 14 Sep 2021 11:14:38 -0400
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:43279 "EHLO
+        id S234104AbhINPOl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 14 Sep 2021 11:14:41 -0400
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:43285 "EHLO
         herzl.nuvoton.co.il" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233617AbhINPOh (ORCPT
+        with ESMTP id S234151AbhINPOk (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 14 Sep 2021 11:14:37 -0400
+        Tue, 14 Sep 2021 11:14:40 -0400
 Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 18EFAlxd031447;
-        Tue, 14 Sep 2021 18:10:47 +0300
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 18EFAmXl031450;
+        Tue, 14 Sep 2021 18:10:48 +0300
 Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
-        id 2A7D863A1E; Tue, 14 Sep 2021 18:10:58 +0300 (IDT)
+        id 2FF7263A19; Tue, 14 Sep 2021 18:10:59 +0300 (IDT)
 From:   amirmizi6@gmail.com
 To:     Eyal.Cohen@nuvoton.com, jarkko@kernel.org, oshrialkoby85@gmail.com,
         alexander.steffen@infineon.com, robh+dt@kernel.org,
@@ -29,13 +29,14 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
         shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
         Amir Mizinski <amirmizi6@gmail.com>
-Subject: [PATCH v15 3/6] tpm: Handle an exception for TPM Firmware Update  mode.
-Date:   Tue, 14 Sep 2021 18:10:29 +0300
-Message-Id: <20210914151032.216122-4-amirmizi6@gmail.com>
+Subject: [PATCH v15 4/6] tpm: tpm_tis: verify TPM_STS register is valid after locality request
+Date:   Tue, 14 Sep 2021 18:10:30 +0300
+Message-Id: <20210914151032.216122-5-amirmizi6@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20210914151032.216122-1-amirmizi6@gmail.com>
 References: <20210914151032.216122-1-amirmizi6@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
@@ -43,48 +44,46 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Amir Mizinski <amirmizi6@gmail.com>
 
-Add a condition to enable communication with the TPM while the TPM is in
-firmware update mode.
-In such a case if power was cut during the TPM firmware update, the driver
-should ignore the "selftest" command return code (TPM2_RC_UPGRADE or
-TPM2_RC_COMMAND_CODE) and skip the rest of the TPM initialization
-sequence.
+This issue could occur when the TPM does not update TPM_STS register after
+a locality request (TPM_STS Initial value = 0xFF) and a TPM_STS register
+read occurs in the tpm_tis_status(chip) function call.
 
-Suggested-by: Benoit Houyere <benoit.houyere@st.com>tpm: Handle an exception for TPM Firmware Update
- mode.
+When a call to tpm_tis_send_data() function is made after a
+request_locality() call, the condition
+("if ((status & TPM_STS_COMMAND_READY) == 0)") is checked. At this moment
+if the status value is 0xFF, then it is considered, wrongly, in “ready”
+state (by checking only one bit). However, at this moment the TPM is, in
+fact, in "Idle" state and remains in "Idle" state because
+"tpm_tis_ready(chip);" was not executed.
+Waiting for the condition TPM_STS.tpmGo == 0, will ensure that the TPM
+status register has the correct value.
+
+Suggested-by: Benoit Houyere <benoit.houyere@st.com>
 Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
 ---
- drivers/char/tpm/tpm2-cmd.c | 4 ++++
- include/linux/tpm.h         | 1 +
- 2 files changed, 5 insertions(+)
+ drivers/char/tpm/tpm_tis_core.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index a25815a..c2b541d 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -729,6 +729,10 @@ int tpm2_auto_startup(struct tpm_chip *chip)
- 		goto out;
- 
- 	rc = tpm2_do_selftest(chip);
-+
-+	if (rc == TPM2_RC_UPGRADE || rc == TPM2_RC_COMMAND_CODE)
-+		return 0;
-+
- 	if (rc && rc != TPM2_RC_INITIALIZE)
- 		goto out;
- 
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index aa11fe3..c5bf934 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -207,6 +207,7 @@ enum tpm2_return_codes {
- 	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
- 	TPM2_RC_FAILURE		= 0x0101,
- 	TPM2_RC_DISABLED	= 0x0120,
-+	TPM2_RC_UPGRADE         = 0x012D,
- 	TPM2_RC_COMMAND_CODE    = 0x0143,
- 	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
- 	TPM2_RC_REFERENCE_H0	= 0x0910,
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 7ea7f64..f340a44 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -177,8 +177,14 @@ static int request_locality(struct tpm_chip *chip, int l)
+ 	} else {
+ 		/* wait for burstcount */
+ 		do {
+-			if (check_locality(chip, l))
++			if (check_locality(chip, l)) {
++				if (wait_for_tpm_stat(chip, TPM_STS_GO, 0,
++							  chip->timeout_c,
++							  &priv->int_queue,
++							  false) < 0)
++					return -ETIME;
+ 				return l;
++			}
+ 			tpm_msleep(TPM_TIMEOUT);
+ 		} while (time_before(jiffies, stop));
+ 	}
 -- 
 2.7.4
 
