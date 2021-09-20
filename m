@@ -2,184 +2,147 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C50410865
-	for <lists+linux-integrity@lfdr.de>; Sat, 18 Sep 2021 21:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC2C41277A
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Sep 2021 22:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238383AbhIRTin (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 18 Sep 2021 15:38:43 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45538 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237817AbhIRTim (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 18 Sep 2021 15:38:42 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18IFxfQx018003;
-        Sat, 18 Sep 2021 15:37:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hxxXatR13ZPSWSACiX+1YgmweHCK2i101mpW0hfwPSA=;
- b=m9njVA98/xXxiJJYB6mkqD+7apxJC/oz+OtDsD4BlYPVDcwM1NZ4zWjd/nSsMqzaxcZc
- /yQwWZxuvrVbOhgZTq+CD9yOi9Iaxw0GTHv5S5SjmKiBNINMKxZrCi+O1Q/V8+m/0gxq
- 1LUWQWqAmhvx29smeuopvQFlwzXnBNzdl0pjLrugUe9ivxQnoEjB7480QRrhwae0Xz3O
- DgomMlBZR9wPazgzUEP5aCjKTjeM9MzBKxYcpFJoMN1Fj9jTHJV1Kt/3xCc3cDGiOD53
- 7K/FCw3OJklH5yMWNPSq8PoaqR7JNLT3WWeuiXt52w4hc8k8nj+kTx0js9Z29SwOG3zO XA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3b5k88ab8f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Sep 2021 15:37:11 -0400
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18IJTjgf040875;
-        Sat, 18 Sep 2021 15:37:10 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3b5k88ab87-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Sep 2021 15:37:10 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18IJY1aX006587;
-        Sat, 18 Sep 2021 19:37:09 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma03dal.us.ibm.com with ESMTP id 3b57r91v47-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 18 Sep 2021 19:37:09 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18IJb8Dg40239502
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 Sep 2021 19:37:08 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CA9E136053;
-        Sat, 18 Sep 2021 19:37:08 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1EDE3136051;
-        Sat, 18 Sep 2021 19:37:07 +0000 (GMT)
-Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com (unknown [9.163.30.115])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Sat, 18 Sep 2021 19:37:06 +0000 (GMT)
-Subject: Re: [PATCH v2] integrity: support including firmware ".platform" keys
- at build time
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
-Cc:     dhowells@redhat.com, zohar@linux.ibm.com,
-        seth.forshee@canonical.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Nayna Jain <nayna@linux.ibm.com>
-References: <20210916125756.89908-1-nayna@linux.ibm.com>
- <8b8678505d4fe299a2f3a82133d81f41b2c527b7.camel@kernel.org>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-Message-ID: <be4bd13d-659d-710d-08b9-1a34a65e5c5d@linux.vnet.ibm.com>
-Date:   Sat, 18 Sep 2021 15:37:06 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S231129AbhITUsi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Sep 2021 16:48:38 -0400
+Received: from linderud.dev ([163.172.10.146]:56146 "EHLO linderud.pw"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230356AbhITUqh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 20 Sep 2021 16:46:37 -0400
+X-Greylist: delayed 576 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 Sep 2021 16:46:37 EDT
+Received: from linderud.pw (localhost [127.0.0.1])
+        by linderud.pw (Postfix) with ESMTP id D7453C01B4;
+        Mon, 20 Sep 2021 22:35:00 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.5-pre1 (2020-06-20) on velox
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED autolearn=ham
+        autolearn_force=no version=3.4.5-pre1
+Received: from localhost (host-37-191-241-102.lynet.no [37.191.241.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: morten)
+        by linderud.pw (Postfix) with ESMTPSA id 8BCA6C001C;
+        Mon, 20 Sep 2021 22:35:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
+        s=linderud; t=1632170100;
+        bh=OwdRbJc/TbitNW2Zx/UmsifqU/l9t7XuLiHqlNN609c=;
+        h=From:To:Cc:Subject:Date;
+        b=WD0ci4ptMwbSYIcJHKMInvTa5b8ONt7V3npXO1wu5FgHIFAKvf8w0YLpyLFCUd+1t
+         1gHzIML2FPa6/7sFhkEMxNQ6uc5GnAz4gvqxK4TN4DgbANwZy6ZtLGmDfW9zTEAFQ2
+         n1eVMml+AFuexCp2wrGAI97vvng1+QfmOQ27w3GPvwD5XgnHGJ8/nrwW7C7Yzo96In
+         rXgkWHxIuCBREF6WyrsUuFe7FOJzsuURZuBOv1Fa3j4cETCRsFI0a/0tbP9GEaAuVB
+         viMs9A+mazsQzHJvXV+PjR/lBBGlh5MWAqUfKO7TGyrQd8068TFZ8+jN4hdh4/nXoq
+         3n4VM38hpTozUBzJk662t5lhZy3J34OChEjwbxl13cOXFl92LYF09FBtaLsjeWkDfj
+         +hp7O1tijTpQyJYhOx3AEvnGqWMyq3/c9lbMcE4uwREc5IzxEN4u9yMFtXs7wHwli8
+         sECyYYBppWTOuFiMmyPnLz1ujTvYW4gM8izvqMYalh3RKU6EEsq4ynt0qbANFMZ0EU
+         grWkQ6sge+ws2lTFo94A4Kyxa4AkfPHotZ7kLkt1d1mtQaR+86FS2Sxcv5Zn53qqTy
+         Q7G1kDLHoTXGxMj5OlFXVY7BHyFLCBL8AsXIhOZ7c6BU8CrfsrrmRQui4I0jeL4iWk
+         VKuBZVFOi1PfEUzRTp/CzqIA=
+From:   Morten Linderud <morten@linderud.pw>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Morten Linderud <morten@linderud.pw>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [PATCH] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI config
+Date:   Mon, 20 Sep 2021 22:34:47 +0200
+Message-Id: <20210920203447.4124005-1-morten@linderud.pw>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <8b8678505d4fe299a2f3a82133d81f41b2c527b7.camel@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Q_9ujqswEIKWVjirp7cyaP7LUag-FqgE
-X-Proofpoint-ORIG-GUID: PKUdliW24YKs2KQkCGRo2VWAiqQCa6lj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-18_07,2021-09-17_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- bulkscore=0 malwarescore=0 adultscore=0 priorityscore=1501 suspectscore=0
- spamscore=0 impostorscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2109030001
- definitions=main-2109180137
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Some vendors report faulty values in the acpi TPM2 table. This causes
+the function to abort with EIO and essentially short circuits the
+tpm_read_log function as we never even attempt to read the EFI
+configuration table for a log.
 
-On 9/16/21 10:46 AM, Jarkko Sakkinen wrote:
-> On Thu, 2021-09-16 at 08:57 -0400, Nayna Jain wrote:
->> Some firmware support secureboot by embedding static keys to verify the
->> Linux kernel during boot. However, these firmware do not expose an
->> interface for the kernel to load firmware keys onto ".platform" keyring.
->> This would prevent kernel signature verification on kexec. For those
->> environments, allow firmware keys to be compiled into the kernel and
->> loaded onto the ".platform" keyring.
-> "allow" means absolutely nothing. Just tell what your patch does,
-> and approach taken. Already the patch description should roughly
-> give idea what and why of code changes. There's nothing here.
->
->> Reported-by: kernel test robot <lkp@intel.com>
-> I don't get this reported-by here.
->
->> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
->> ---
->>
->> v2:
->> * Fixed the error reported by kernel test robot
->> * Updated patch description based on Jarkko's feedback.
->>
->>   certs/Makefile                                |  3 ++-
->>   certs/blacklist.c                             |  1 -
->>   certs/common.c                                |  2 +-
->>   certs/common.h                                |  9 -------
->>   certs/system_keyring.c                        |  1 -
->>   include/keys/system_keyring.h                 |  3 +++
->>   security/integrity/Kconfig                    | 10 +++++++
->>   security/integrity/Makefile                   | 17 +++++++++++-
->>   security/integrity/digsig.c                   |  2 +-
->>   security/integrity/integrity.h                |  6 +++++
->>   .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
->>   .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
->>   12 files changed, 88 insertions(+), 15 deletions(-)
->>   delete mode 100644 certs/common.h
->>   create mode 100644 security/integrity/platform_certs/platform_cert.S
->>
->> diff --git a/certs/Makefile b/certs/Makefile
->> index 279433783b10..64ee37f38b85 100644
->> --- a/certs/Makefile
->> +++ b/certs/Makefile
->> @@ -3,7 +3,8 @@
->>   # Makefile for the linux kernel signature checking certificates.
->>   #
->>   
->> -obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o common.o
->> +obj-$(CONFIG_KEYS) += common.o
->> +obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o
->>   obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
->>   obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
->>   ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),"")
->> diff --git a/certs/blacklist.c b/certs/blacklist.c
->> index c9a435b15af4..b95e9b19c42f 100644
->> --- a/certs/blacklist.c
->> +++ b/certs/blacklist.c
->> @@ -17,7 +17,6 @@
->>   #include <linux/uidgid.h>
->>   #include <keys/system_keyring.h>
->>   #include "blacklist.h"
->> -#include "common.h"
->>   
->>   static struct key *blacklist_keyring;
->>   
->> diff --git a/certs/common.c b/certs/common.c
->> index 16a220887a53..41f763415a00 100644
->> --- a/certs/common.c
->> +++ b/certs/common.c
->> @@ -2,7 +2,7 @@
->>   
->>   #include <linux/kernel.h>
->>   #include <linux/key.h>
->> -#include "common.h"
-> Why this include is removed?
->
-> You should include to your commit message *also* the approach
-> you are taking. If you export a function, you should mention
-> it explicitly.
+This changes the condition to only look for a positive return value,
+else hands over the eventlog discovery to the EFI configuration table
+which should hopefully work better.
 
-Thanks Jarrko for the review.
+It's unclear to me if there is a better solution to this then just
+failing. However, I do not see any clear reason why we can't properly
+fallback to the EFI configuration table.
 
-Do you think it would be better to split this patch into two ?
+The following hardware was used to test this issue on:
+    Framework Laptop (Pre-production)
+    BIOS: INSYDE Corp, Revision: 3.2
+    TPM Device: NTC, Firmware Revision: 7.2
 
-Patch 1: Export load_certificate_list() to be called outside certs/
+Dump of the fault ACPI TPM2 table:
+    [000h 0000   4]                    Signature : "TPM2"    [Trusted Platform Module hardware interface Table]
+    [004h 0004   4]                 Table Length : 0000004C
+    [008h 0008   1]                     Revision : 04
+    [009h 0009   1]                     Checksum : 2B
+    [00Ah 0010   6]                       Oem ID : "INSYDE"
+    [010h 0016   8]                 Oem Table ID : "TGL-ULT"
+    [018h 0024   4]                 Oem Revision : 00000002
+    [01Ch 0028   4]              Asl Compiler ID : "ACPI"
+    [020h 0032   4]        Asl Compiler Revision : 00040000
 
-Patch 2: Add and load compiled-in certificates in ".platform" keyring.
+    [024h 0036   2]               Platform Class : 0000
+    [026h 0038   2]                     Reserved : 0000
+    [028h 0040   8]              Control Address : 0000000000000000
+    [030h 0048   4]                 Start Method : 06 [Memory Mapped I/O]
 
-Thanks & Regards,
+    [034h 0052  12]            Method Parameters : 00 00 00 00 00 00 00 00 00 00 00 00
+    [040h 0064   4]           Minimum Log Length : 00010000
+    [044h 0068   8]                  Log Address : 000000004053D000
 
-     - Nayna
+Signed-off-by: Morten Linderud <morten@linderud.pw>
+---
+ drivers/char/tpm/eventlog/acpi.c   | 5 +++--
+ drivers/char/tpm/eventlog/common.c | 6 +++++-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-
+diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+index 1b18ce5ebab1..9ce39cdb0bd8 100644
+--- a/drivers/char/tpm/eventlog/acpi.c
++++ b/drivers/char/tpm/eventlog/acpi.c
+@@ -136,8 +136,10 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 
+ 	ret = -EIO;
+ 	virt = acpi_os_map_iomem(start, len);
+-	if (!virt)
++	if (!virt) {
++		dev_warn(&chip->dev, "%s: Failed to map acpi memory\n", __func__);
+ 		goto err;
++	}
+ 
+ 	memcpy_fromio(log->bios_event_log, virt, len);
+ 
+@@ -145,7 +147,6 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
+ 	    !tpm_is_tpm2_log(log->bios_event_log, len)) {
+-		/* try EFI log next */
+ 		ret = -ENODEV;
+ 		goto err;
+ 	}
+diff --git a/drivers/char/tpm/eventlog/common.c b/drivers/char/tpm/eventlog/common.c
+index 8512ec76d526..f64256bc2f89 100644
+--- a/drivers/char/tpm/eventlog/common.c
++++ b/drivers/char/tpm/eventlog/common.c
+@@ -83,7 +83,11 @@ static int tpm_read_log(struct tpm_chip *chip)
+ 	}
+ 
+ 	rc = tpm_read_log_acpi(chip);
+-	if (rc != -ENODEV)
++	/*
++	 * only return if we found a log else we try look for a
++	 * log in the EFI configuration table
++	 */
++	if (rc > 0)
+ 		return rc;
+ 
+ 	rc = tpm_read_log_efi(chip);
+-- 
+2.33.0
