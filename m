@@ -2,118 +2,166 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E225D413AB7
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Sep 2021 21:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5717E413BEB
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Sep 2021 23:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbhIUT3z (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Sep 2021 15:29:55 -0400
-Received: from linderud.dev ([163.172.10.146]:36962 "EHLO linderud.pw"
+        id S235209AbhIUVEy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Sep 2021 17:04:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37634 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231304AbhIUT3z (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Sep 2021 15:29:55 -0400
-Received: from linderud.pw (localhost [127.0.0.1])
-        by linderud.pw (Postfix) with ESMTP id 5A9B7C032A;
-        Tue, 21 Sep 2021 21:27:53 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.5-pre1 (2020-06-20) on velox
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED autolearn=ham
-        autolearn_force=no version=3.4.5-pre1
-Received: from localhost (host-37-191-241-102.lynet.no [37.191.241.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: morten)
-        by linderud.pw (Postfix) with ESMTPSA id 1206BC001C;
-        Tue, 21 Sep 2021 21:27:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
-        s=linderud; t=1632252473;
-        bh=0GqyYMQkXphc8kPn1Om1uqRbo2dbuCAEQIAmDaGZnPc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=DvbI4uZ2GGwJM7jz99iiU/H9cQ7deSnqx7286T7FmIUK+8MtyVjM23cFUFPQfJIhC
-         VLuUX74csW/y7nnK/9thz70X5jJYYQDjVx+ewsTi50i7bUCcQaWWl/d+NUMqreGcA9
-         Ex5jhtJoPzVBCap1zEXVcjFyCYKPuYii5mBUe12Ftsrax1V1gsrjMYxLoS1LGwI4fb
-         DwQ9vqYHFS+0hvooYH27qXWVdpygiKlDFd9OW4cH/bUQ5IsYOLcmOj4a3Gatl4TMDf
-         BUz8FL7WdrmWC+dQy4AGnClrgt+vs4Zb9IdhDB0quKRNHgUMWgKM8oE3JxgHToKt2z
-         +BNXsJ9CS5lZzfuOqTBJFtd/n6zsUNtM3KaSHJn2kdObH3d1UT60w5jF+l75GrU/Lz
-         MXEnJUDY3obRCu6KvFN98tyb2Kz4ESK7gOGOYDSud/B40ODadNyewsRSO9QUc0oEAr
-         NSrZavWfHRSmFqBJTNoyoWV9LQtYAcYC5ZKD+8vCCje4Z+i8lUsp0LC4eeLeEZZNrJ
-         ydTnV07iGnzNarryzXc6ewkrzMyfWNzmIONSfE3revI1nBG97WGg/hrG4cOcBMIP4v
-         ZZB4TigNxKYYsNJ4n9f4F8EOjJDgU+yMb2/1ekmtg45yYOr/c4RblPfebeoIC+FOXa
-         dZDsAzLNX2y3zbNKrUZzV1KM=
-Date:   Tue, 21 Sep 2021 21:27:51 +0200
-From:   Morten Linderud <morten@linderud.pw>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: Re: [PATCH] tpm/eventlog: Don't abort tpm_read_log on faulty ACPI
- config
-Message-ID: <20210921192751.3ukruxkzukzfw5xl@anathema>
-References: <20210920203447.4124005-1-morten@linderud.pw>
- <896a0773cac953ae2f35ba08af65a598aa71942d.camel@kernel.org>
+        id S235206AbhIUVEx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 21 Sep 2021 17:04:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6410C611C6;
+        Tue, 21 Sep 2021 21:03:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632258204;
+        bh=YhqVrip59Rt+ejldx4zOH6RSKXsNMGSJzfGiFZHPJQc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=CzO/y6fFJ5EozaaIMR4bExW75mL3X4I3kZntrlReVCg/MSN9Xyp4w+ey6grOjXyx9
+         0e7cCoz80zS26yz4soxWvi+mOYguNKYyG5MEGgBiMYCQ/KKgNzRxAu7wYQmBUthCkw
+         ruQ4ODbvgWE+W5JmFNcnNEJ4spGkzPW+nVo9lFFgCFsy/Dy6pUJV6MaizMpmOiQ7aL
+         BHVLpelKbsLEM5OoWkge8lytmNrrWOt2QmNaDbWQkSjn4b/4wcFSOoCvE5BtCm2Eyq
+         uai6QSRBqwSnvQbiC1iFs0NZqIM2aYyOPxm/Ex6LAJztu0nOY8o59SbQnlcm66zAaL
+         Im6OUuqSAQ25w==
+Message-ID: <270f47e1b152a1fb8fd909ec188b5573176980fc.camel@kernel.org>
+Subject: Re: [PATCH v6 00/13] Enroll kernel keys thru MOK
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Peter Jones <pjones@redhat.com>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+        scott.branden@broadcom.com, weiyongjun1@huawei.com,
+        nayna@linux.ibm.com, ebiggers@google.com, ardb@kernel.org,
+        nramas@linux.microsoft.com, lszubowi@redhat.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@HansenPartnership.com,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>
+Date:   Wed, 22 Sep 2021 00:03:22 +0300
+In-Reply-To: <20210916221416.onvqgz5iij3c7e6j@redhat.com>
+References: <20210914211416.34096-1-eric.snowberg@oracle.com>
+         <bee0ebc354a651ea5b263897f9b155dc604fa7c5.camel@kernel.org>
+         <A02EE1DA-12BE-4998-ACE6-2D74FF380297@oracle.com>
+         <f6e2e17cc6c8a3056cc066a7baa4d943eeb47c84.camel@kernel.org>
+         <20210916221416.onvqgz5iij3c7e6j@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <896a0773cac953ae2f35ba08af65a598aa71942d.camel@kernel.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 09:58:11PM +0300, Jarkko Sakkinen wrote:
-> On Mon, 2021-09-20 at 22:34 +0200, Morten Linderud wrote:
-> > Some vendors report faulty values in the acpi TPM2 table. This causes
-> 
-> Nit: ACPI (not acpi)
-> 
-> > the function to abort with EIO and essentially short circuits the
-> > tpm_read_log function as we never even attempt to read the EFI
-> > configuration table for a log.
-> 
-> Nit: tpm_read_log()
-> 
-> > This changes the condition to only look for a positive return value,
-> > else hands over the eventlog discovery to the EFI configuration table
-> 
-> "hands over" -> "fallback"
-> 
-> > which should hopefully work better.
-> 
-> Please write in imperative form, e.g. "Change...", or perhaps in this
-> case "Look...". 
-> 
-> Hopes are somewhat irrelevant, in the context of a commit message.
-> 
-> > It's unclear to me if there is a better solution to this then just
-> > failing. However, I do not see any clear reason why we can't properly
-> > fallback to the EFI configuration table.
-> 
-> Neither hopes nor doubts help us :-)
-> 
-> Because the commit message did not discuss any of the code changes
-> that were done it is very hard to say much anything of this yet.
+On Thu, 2021-09-16 at 18:14 -0400, Peter Jones wrote:
+> On Thu, Sep 16, 2021 at 06:15:50PM +0300, Jarkko Sakkinen wrote:
+> > On Wed, 2021-09-15 at 15:28 -0600, Eric Snowberg wrote:
+> > > > On Sep 15, 2021, at 11:57 AM, Jarkko Sakkinen <jarkko@kernel.org> w=
+rote:
+> > > >=20
+> > > > On Tue, 2021-09-14 at 17:14 -0400, Eric Snowberg wrote:
+> > > > > Back in 2013 Linus requested a feature to allow end-users to have=
+ the=20
+> > > > > ability "to add their own keys and sign modules they trust". This=
+ was
+> > > > > his *second* order outlined here [1]. There have been many attemp=
+ts=20
+> > > > > over the years to solve this problem, all have been rejected.  Ma=
+ny=20
+> > > > > of the failed attempts loaded all preboot firmware keys into the =
+kernel,
+> > > > > including the Secure Boot keys. Many distributions carry one of t=
+hese=20
+> > > > > rejected attempts [2], [3], [4]. This series tries to solve this =
+problem=20
+> > > > > with a solution that takes into account all the problems brought =
+up in=20
+> > > > > the previous attempts.
+> > > > >=20
+> > > > > On UEFI based systems, this series introduces a new Linux kernel =
+keyring=20
+> > > > > containing the Machine Owner Keys (MOK) called machine. It also d=
+efines
+> > > > > a new MOK variable in shim. This variable allows the end-user to =
+decide=20
+> > > > > if they want to load MOK keys into the machine keyring. Mimi has =
+suggested=20
+> > > > > that only CA keys contained within the MOK be loaded into the mac=
+hine=20
+> > > > > keyring. All other certs will load into the platform keyring inst=
+ead.
+> > > > >=20
+> > > > > By default, nothing changes; MOK keys are not loaded into the mac=
+hine
+> > > > > keyring.  They are only loaded after the end-user makes the decis=
+ion=20
+> > > > > themselves.  The end-user would set this through mokutil using a =
+new=20
+> > > > > --trust-mok option [5]. This would work similar to how the kernel=
+ uses=20
+> > > > > MOK variables to enable/disable signature validation as well as u=
+se/ignore=20
+> > > > > the db. Any kernel operation that uses either the builtin or seco=
+ndary=20
+> > > > > trusted keys as a trust source shall also reference the new machi=
+ne=20
+> > > > > keyring as a trust source.
+> > > > >=20
+> > > > > Secure Boot keys will never be loaded into the machine keyring.  =
+They
+> > > > > will always be loaded into the platform keyring.  If an end-user =
+wanted=20
+> > > > > to load one, they would need to enroll it into the MOK.
+> > > > >=20
+> > > > > Steps required by the end user:
+> > > > >=20
+> > > > > Sign kernel module with user created key:
+> > > > > $ /usr/src/kernels/$(uname -r)/scripts/sign-file sha512 \
+> > > > >   machine_signing_key.priv machine_signing_key.x509 my_module.ko
+> > > > >=20
+> > > > > Import the key into the MOK
+> > > > > $ mokutil --import machine_signing_key.x509
+> > > > >=20
+> > > > > Setup the kernel to load MOK keys into the .machine keyring
+> > > > > $ mokutil --trust-mok
+> > > > >=20
+> > > > > Then reboot, the MokManager will load and ask if you want to trus=
+t the
+> > > > > MOK key and enroll the MOK into the MOKList.  Afterwards the sign=
+ed kernel
+> > > > > module will load.
+> > > > >=20
+> > > > > I have included links to both the mokutil [5] and shim [6] change=
+s I
+> > > > > have made to support this new functionality.
+> > > >=20
+> > > > How hard it is to self-compile shim and boot it with QEMU (I
+> > > > do not know even the GIT location of Shim)?
+> > >=20
+> > > It is not hard, that is the setup I use for my testing.  Upstream shi=
+m=20
+> > > is located here [1].  Or you can use my repo which contains the neces=
+sary
+> > > changes [2].
+> > >=20
+> > > [1] https://github.com/rhboot/shim
+> > > [2] https://github.com/esnowberg/shim/tree/mokvars-v2
+> > >=20
+> >=20
+> > So, my 2nd Q would be: which order these should be upstreamed?
+> >=20
+> > Linux patch set cannot depend on "yet to be upstreamed" things.
+> >=20
+> > Code changes look good enough to me.
+>=20
+> We can carry this support in shim before it's in kernel.  Eric's current
+> patch for shim and mokutil looks mostly reasonable, though I see a few
+> minor nits we'll have to sort out.
 
-Thanks for the review! First kernel patch so all feedback is welcome :)
+I would revisit this patch set after there is an official shim release
+out containing the new API. No  kernel patches, which depend on any
+non-upstream changes, can be rightfully reviewed.
 
-The code change is essentially just relaxing the return value for the ACPI log
-lookup. I'm not quite sure what is missing from the commit message in that
-regard? Is the second paragraph insufficient?
-
-> There's also one corner case that was not discussed in the commit
-> message.
-> 
-> The historical reason for not using TPM2 file is that old TPM2's
-> did not have that feature. You have to ensure that legacy hardware
-> does not break.
-
-This should only relax the cases where an error which is not ENODEV is returned.
-Legacy hardware that return ENODEV because the table doesn't exist, or is
-missing the log start and length, should be unaffected by this change.
-
-> /Jarkko
-
-Cheers!
-
--- 
-Morten Linderud
-PGP: 9C02FF419FECBE16
+/Jarkko
