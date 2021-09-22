@@ -2,123 +2,180 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86868414EC7
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Sep 2021 19:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B9E415030
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Sep 2021 20:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236706AbhIVRH4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Sep 2021 13:07:56 -0400
-Received: from mail-bn8nam11on2047.outbound.protection.outlook.com ([40.107.236.47]:36417
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S237022AbhIVSzX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Sep 2021 14:55:23 -0400
+Received: from mail-dm6nam10on2089.outbound.protection.outlook.com ([40.107.93.89]:5863
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236711AbhIVRHz (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Sep 2021 13:07:55 -0400
+        id S229732AbhIVSzW (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 22 Sep 2021 14:55:22 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cdmRYtcTvcjRgPqSqYRDiraGopHG7DGZL5eu/xRph85rYOywsqQ3nJyMKgINB38rmwzCNslzZ4IKNwnd0Z/UHJye250TmsqRhhb9zkkIQyQWCLnH3VETy/0nL6rcn3ruR7BaJzDFP4z3FZ1VLMvw36ixdvPBZWlT2w7n6USOg1kUVBBLYXhod+vkPOiOU9JGXh7sYwEM1jmoDzr08Iw1bhdinSPaaoW8HPWkqV9vMY/9HtSuaXyFnZdrAhEo4HMoxD4AcN4yWQ0mx6UjSkD6TkNzdkYwHeNTNxag8nGr86DKSTbLhMah9ttEpbIgt5/MF9rtuyGzyzSHqBxCUhmuJg==
+ b=YRj8mKzgQcEOJgRaM/9or9Srz9j1hs3D8srLuA3P0CvC2lsF92UW17ONwtne8O3p4vRtEG2ZuZf6M8W70FNaqPukW3rWpx+FK1gVyiYMNNAhrQD8rzSUNkcqVOkDVUPM4B5HGH4V1wGuRm2HNlMpiho/lVF+UXNYf115yuhaKlsmUwng5Kvg+Uk2B0g5W1cNCMpZD0kiDnhNU8KO9X7MJq17bKAJKVjU2tKolTzs3M2dgrYs/dpB58tUbWjYxs4bGDvWilCmKhf67hCjPPAn7vuzxXmyP+PEbal1ShqwJRRcfVGiSO04TjhNQEjH+U/Wd8WOJQyjESuGkeelcbg+4A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=KSHsGEVQuDpoXHyl4plz+PLiTy/wuSO1p+SsZ2TqthI=;
- b=IPOPXHc56c6G81AVYHgm2uZ/1PV5LwQ6PFGhifZTzNJPgWH1m4ku7pjJub9n1NB913rXufq9x0iNrWKBhYbANPWVWoa/G+b+4LzlWcMuNr8UgQZ3eiXJBvzrNv1FflkAtjzaMoCIkADfP1J29wIl1QeQUW5GyDTWo/XlKzvPxsQSgAMXXh3U3LLlqX/1S4QP5hru1gH2knBIPpH7d6ZC8j0vGpI0icbZxbEncL6oamCPNGSZVuCCuA1vRoWYyxHzF2clTdBBsAqHIk3RlOFdvVE5IbjW0vTLufGn8UzJ5dHGFcrqH8552DUFdH68VcNP/hkewN1b9wybv55eGPb91w==
+ bh=aJx0bn5bjojlOxYp6On5sSFGejd5EZgnUMZmo5Q7nO0=;
+ b=e+Y1c3vxyKTI6Pbz6jlXlbqWh/aVNRc9sM8TelV2aIPg4ntmldoGU/i3rTly4P7xmSMnTJsJ/tjM0uhLgvdOdhtiXFMdkdxFjfHl599lyX2EF0Wikx/gwcuub+gincrGrQCT5Ppce9D+XT0kbXnIJEtH96eYyeukLl1sqAw2Bi8mK3Tjdd9MbHqINHaAPnDgLDuAplL54VnfAxPmKDiyhLoeMjZ3Kjkfl3V1blB2gcHH5oo/cRaf/4w9rcBuqZ60ZfWC6TXJzvFWCUfhj+BCWVypoPSHwMZw4UGlrST4uOhVDqic6719N2xvkGYY9e/qW8CzpAzhy4UapHk5Pp9lsw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
  dkim=pass header.d=vpitech.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KSHsGEVQuDpoXHyl4plz+PLiTy/wuSO1p+SsZ2TqthI=;
- b=BlS8FoN2kC4GNhRmOEm0xT52VEJIUrd8A8m8vnGIHBUoUDZPeeYSLZSikIuwUUb/rz8FlSUs3jOdeMAbwxEmxzUTPCEjPBEKvjablMilJec8froFPRd4hzThactnY/WbztYT01s0oeU4cESF8yYPFL2qgPBQBTQ0uaMrIYwAC/w=
-Authentication-Results: suse.cz; dkim=none (message not signed)
- header.d=none;suse.cz; dmarc=none action=none header.from=vpitech.com;
+ bh=aJx0bn5bjojlOxYp6On5sSFGejd5EZgnUMZmo5Q7nO0=;
+ b=Xx4xARsYim5MC6u2rspx1GuA4u8i9N4XBW52RodHfo/lHpa4oAn50sMD8p6m6Z8QvNFuEVpOeAGZkjHsEzJ8ZwFFC6nDAw5UTYDbhkx4v4xh0MwXKStlqZjIm33THbIzt8nBAXOzTITmqq5QF/ZwEZvNs/FU2n9bz2l1Dmnsl50=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=vpitech.com;
 Received: from MW2PR07MB3980.namprd07.prod.outlook.com (2603:10b6:907:a::32)
- by MWHPR07MB3184.namprd07.prod.outlook.com (2603:10b6:300:e2::20) with
+ by MW4PR07MB8649.namprd07.prod.outlook.com (2603:10b6:303:102::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.14; Wed, 22 Sep
- 2021 17:06:22 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.16; Wed, 22 Sep
+ 2021 18:53:49 +0000
 Received: from MW2PR07MB3980.namprd07.prod.outlook.com
  ([fe80::cc48:9777:4f07:6014]) by MW2PR07MB3980.namprd07.prod.outlook.com
  ([fe80::cc48:9777:4f07:6014%4]) with mapi id 15.20.4544.015; Wed, 22 Sep 2021
- 17:06:21 +0000
-Date:   Wed, 22 Sep 2021 11:06:20 -0600
+ 18:53:49 +0000
 From:   Alex Henrie <alexh@vpitech.com>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     ltp@lists.linux.it, alexhenrie24@gmail.com,
-        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v6 3/3] IMA: Add tests for uid, gid, fowner, and fgroup
- options
-Message-Id: <20210922110620.cf7530d5120d2f0173ed2f05@vpitech.com>
-In-Reply-To: <20210922115310.5927-4-pvorel@suse.cz>
-References: <20210922115310.5927-1-pvorel@suse.cz>
-        <20210922115310.5927-4-pvorel@suse.cz>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MWHPR14CA0012.namprd14.prod.outlook.com
- (2603:10b6:300:ae::22) To MW2PR07MB3980.namprd07.prod.outlook.com
+To:     linux-integrity@vger.kernel.org, ltp@lists.linux.it,
+        zohar@linux.ibm.com, pvorel@suse.cz, alexhenrie24@gmail.com
+Cc:     Alex Henrie <alexh@vpitech.com>
+Subject: [PATCH ltp v7 1/3] IMA: Move check_policy_writable() to ima_setup.sh and rename it
+Date:   Wed, 22 Sep 2021 12:52:30 -0600
+Message-Id: <20210922185232.492879-1-alexh@vpitech.com>
+X-Mailer: git-send-email 2.33.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MWHPR11CA0003.namprd11.prod.outlook.com
+ (2603:10b6:301:1::13) To MW2PR07MB3980.namprd07.prod.outlook.com
  (2603:10b6:907:a::32)
 MIME-Version: 1.0
-Received: from demeter (66.60.105.30) by MWHPR14CA0012.namprd14.prod.outlook.com (2603:10b6:300:ae::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15 via Frontend Transport; Wed, 22 Sep 2021 17:06:21 +0000
+Received: from demeter.ad.vpitech.com (66.60.105.30) by MWHPR11CA0003.namprd11.prod.outlook.com (2603:10b6:301:1::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15 via Frontend Transport; Wed, 22 Sep 2021 18:53:48 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 558cab13-a91b-4636-4f3d-08d97deb4d43
-X-MS-TrafficTypeDiagnostic: MWHPR07MB3184:
-X-Microsoft-Antispam-PRVS: <MWHPR07MB3184D42E2CD34E5CB1D474F1B8A29@MWHPR07MB3184.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1360;
+X-MS-Office365-Filtering-Correlation-Id: 16af8fc4-7199-4144-6ef7-08d97dfa5013
+X-MS-TrafficTypeDiagnostic: MW4PR07MB8649:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MW4PR07MB8649231BEAEFF3D9719C608DB8A29@MW4PR07MB8649.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:962;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GQ7iS8odZS/1kUkasDnL+BSUsQULDDlXIk47J0/C/fEdXxk9RG3NgOz17VnxWXcYs2pPdzpcsJeVtRQdt+1IO/TDeCQQ18qibQ1OFglYgf76SRgewAR7zsClIU2MI8upwgAdhdPbdaZY9iCYyM35RQRQSETftTNqaiDRXERzd2uMTTjXNX3pSzz0M/oKCc2hL7dHmhHwRJMXFKDqs08T+l7YuWlpVf9/1AP9a6DLrlcjd++M6l8IFS5R5THbXlBbkFm4qwBpf1PUgBrzlCj+fXz4Nbu35KwmmQmJY/J3qUPeRXUcxj/MmhgUlpbbdDNJTAsy22hzJ5qKBsTejQ7/4/OWH4xPZ892y128Nt5503dcZGHDSQ4yvyQXqOCRAPiOZoPcBOQEJFJYCydn7RqFOhfCygjEVvwxhUTEfX5N2xgT1LL/7UJ5pRL0Kx5+krf5nTHqxi1scOPuKa3ASVttkbiz8z8mkH42iDOZ9AVHRCLJf6cG/KzMBRwfOHLGhuewmvI5L1BMwxzYlNAQbWvSv38wEGWRTeuRltwxY9NAVXASh1B6eV0fguCHnXhtV8CAk19+11SEJjrOupN7sVD3JZBuaUAH/WMYr67WV0WFfxODKpPtiuSJG0Nc+Qr431cOueU856SeXQd4jlRyCBdet78O2NJM27c7cppes3vUgkswlupnZQqdKF6HFH5/3mDtwsMOR2v9ACV6pBQpaqsSyA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR07MB3980.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(39840400004)(376002)(346002)(136003)(396003)(366004)(8676002)(8936002)(508600001)(6486002)(2906002)(6496006)(186003)(5660300002)(86362001)(6916009)(66556008)(66946007)(26005)(316002)(52116002)(4744005)(66476007)(1076003)(83380400001)(2616005)(956004)(36756003)(4326008)(38350700002)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 6KnvqjnvgApau6QENced1+L+6BIjK6U3+tsdSgo9htVBY/wiCEeBDbSPNw+IbkB5cUGcWNZBeXbErefqNs6fw2cQCjCiSnheIUDIGsBKfy3bQbyWcMtrtNQLczi/4aOZANfhON5+mr8jclIptwrlSmnpngw6CfNATlqJurdJeGMx/x4sfY5AsSPRU/GUue5Gmc0v0WYAZ54rnz8S3HaUCf6aF46z6aoZPz4g9/of4VvMd5E/BsuHRsU8HEl6+tl/CNietCbyYZbm6ztOuK5bi7yV58jJuQLyHJcrj2jVoLVZqWovTUkm+n/zjg1EDuMv0Zg6Qe98qw+nrGnmUySB9mJyy2ce4xGAiw6S3xmhmW5xRidExusxIageKFiJE0Q0fWqnwSMp9BGnz629vP589bTDwXRZQ5+JCfzUpr1rplxpv3ORHj3nNkui4oyuKk/6Q6K548+6ZI6BoCrmrShiCl6KcJsHig7mjnwy/XEH2NEARg319XTRQEISi/QZsci1VnKaZp4oKftmflVZhdLwYZc3wrabBrHiqpnw5odB9r+nnVUj5jP4/LZ98+EyItCq1Mk+uUs9c2JQezEve788PCyLdsexlBDNSBL71k32nC5CCEyTQ89fnX53JQmFSKcYekXLiykDwvR4tBC3UXZR9BllxwMua2mZfdzdrq10+5aFzSD1iaglIHKN4N1GDobAefhG7tn3drqKo/C44fs0rw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR07MB3980.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(346002)(396003)(366004)(39840400004)(376002)(1076003)(186003)(8936002)(38100700002)(86362001)(6486002)(6666004)(2906002)(4326008)(7696005)(107886003)(38350700002)(26005)(316002)(52116002)(8676002)(83380400001)(5660300002)(66476007)(956004)(2616005)(508600001)(66556008)(36756003)(66946007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R55dn6WfGp7x9PkTy/o0KzW3/jSuylsUd7Qwrmi1qwUbN2nwumBseRkyeHfy?=
- =?us-ascii?Q?VUmAmCZZ2Ltn39sO4C7UjIb5SIeTkkEXTSCnB/bh8quw6gun1zeu79djQhRb?=
- =?us-ascii?Q?YYgaQ8YW6YaWw23FurRC0AHEgv266NiiDMgsCUCaaUeEBlnTk8SAS620r+N9?=
- =?us-ascii?Q?Y3Roou1/z15rVFh84h52SZNGaqHE27a/xgxFRGVW/nio2UdBYdrh0r2hFEho?=
- =?us-ascii?Q?aAx3zYwPk/HEApAnhH4MGCISuhBhWiWNcbH0qFrWDIk1j5QwjyFuPtH6mB67?=
- =?us-ascii?Q?t7jGWdIAN2B/4P/gVAVdJli+E/j1thIEmAOgz4R0FawQ1jKmqwubpFwQtHki?=
- =?us-ascii?Q?9PPn0t2wlJZB0K38jXgZf8W+O2s02owqmH0GjUadnqQHmRVIqbAIIbSxb+hv?=
- =?us-ascii?Q?OhDbLjlFIOPecf03NGH6Id869q8H60ZfyaXTLO49AgHsdWSxSFJJcTDksUgB?=
- =?us-ascii?Q?WY8mCricn98CPa+0bQ5aD9w7cf06aMvaGfgpew1O/OK2gSDFmlJ8zQJelD4N?=
- =?us-ascii?Q?AeWkbUcOFYEbgFPTYY8d5X1/Em4jG/ScuxbvkwuWuIkA12r4RXqP79mQ7pnq?=
- =?us-ascii?Q?rruFKbX82+ijIHZMpgyOzP9nrzlS7/7XJccYreJf7H7hUYmc7pvHrf1gMlWo?=
- =?us-ascii?Q?IqH7sMf2jH6kEpyTrtTJrcpPzTcC0ajFSm2KyBie2oIq7qIX0ugrMGi9r8wp?=
- =?us-ascii?Q?M6xcwyZEXQxbhEvJMyoHYEmc4fCx7zY7RKqoIXvr9zzvZPYCaAlKjCUksKPp?=
- =?us-ascii?Q?8llsJJuh3W2GHQgQF88By4jRumGJFPj6k3Zyj6YCORpA3puw7ScF3SQP9zMY?=
- =?us-ascii?Q?b+3ZN+x51tygRhuiECIiwuuBspi2kTBcLcqj+ETz9rg4vv7Hr0w8YIf4QCST?=
- =?us-ascii?Q?Nr+Sbisg76U9ndz1dqMgQX8WlfdNLXnuLn0DK4TMoho79/JC2fdvojmLS64G?=
- =?us-ascii?Q?OL5y/0E0y2Mtt950Vf3laZwHn8YmGDydw1+CXCtchubBrf4L5QqPNfRjc5L3?=
- =?us-ascii?Q?FEV8h81Yncr7SaTPXtfiA7ceQucYEi7tyO3AXV6KvOpmW+ozYNOdjuAgswJD?=
- =?us-ascii?Q?K6bGOT0DLzDb98oT7LuyKaQdB5Ajj12hznRNUoS/cU6fmnb4P1NfyIj23IxA?=
- =?us-ascii?Q?WGdKS5hfBekC094glv2zH7FNWOhzE47ciPEsVOpfyfJ/h16G7lHCjqxuj2Oj?=
- =?us-ascii?Q?7Q1zisU7IQYRgKTo2S64SMQsUV9Yyz/xnOFcdgR/djqf4L0iuG3Fa+DdxQIU?=
- =?us-ascii?Q?zSPpSWGEJGSinxzrAwPPDxZI/4Vi/+tKf5T/qHpW3d2BsNxbKP3WLoXFCt5u?=
- =?us-ascii?Q?DHuJ07Z121Fl9IveSyNUjUNX?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YdIYobZXH9YZEm8rjhLMWyae/t+Z6gqM9RQBrz1EYG2SMSrqHz9VC1lQfnIB?=
+ =?us-ascii?Q?5dMhkx+fEoGQ8srYnXlkM/LQoFs0JUbiKIVX870Kxv2qGM7s+hoEH/t2Aa/0?=
+ =?us-ascii?Q?84VwvR1sBCIdXyesQJ3R3HttcfnTmCDd/5br2VXtnSkjYOuaC3sStDUz1eBt?=
+ =?us-ascii?Q?8jhzP0rxytqNFp1fwsJ4xAkPy4aQhHELY9htqDx0kC+wmJ/x7ESkr3e7GMxf?=
+ =?us-ascii?Q?C0ylPJ1tf+pe21cC1dbqCpsFpwXDrL31Ixl7S2IXwbFB+Pv7xDW7XZ0NESbl?=
+ =?us-ascii?Q?QrNB/fJizpB2pl8khmY6nfZWweiSCo3Jn6zK0oP4gIxhslUIVn2BOubGgboZ?=
+ =?us-ascii?Q?8IUGav5miStq1JeN+Q1jVlc+vrzV7fhqmRKkKaLOzTYvQVXad4L1BbCJIgrJ?=
+ =?us-ascii?Q?TwYmiTvS7F5a+2QEM2crWYjUxyPtDIfa17xr28fjV5yhm7s536HCvjfulgQ0?=
+ =?us-ascii?Q?IkbU4RmWf0ochntgzmxc6+OWq0hDpQFp2Wu73P4E/AwpYTMVZs/jnJtpC78M?=
+ =?us-ascii?Q?um3HKK255CTCO/vzksYCs6rOa2iA+YOLlxg81Jynbc8RBzaFkZHWoGTusfTj?=
+ =?us-ascii?Q?W2t1F/APr6GY4tSnYpDKYezQg3mMC1e+vScCoEHbOUoguHhdS0nEoVXj69my?=
+ =?us-ascii?Q?y91pbgDUIyGyNl2gQeXJ0YLK3LCQ6+MP1FlpGouIrs65mx4Uey7od6JWWD5o?=
+ =?us-ascii?Q?5HxfMzITcKy7TwvDBLRmkXVaGbHzkXqPYkU2kiIr6O/xjAlHEv9T103KsJYg?=
+ =?us-ascii?Q?rJaEVUpMDP3VmtWLVvi6iz7vudqr3cAht4HXWDR3sdOaIB+HES1MD6AtRSXn?=
+ =?us-ascii?Q?vMUTVgMcxJFmPiUUi0wsLt3WORtWzGDIpvqvKgv1G/r5y1o8sM+/B5p+GJId?=
+ =?us-ascii?Q?DhK4y5PA+C2MIT7ri3Nw1Wp0joY1q2GBbdAwYHaMpSHxQivjsLHoj3MzOXw/?=
+ =?us-ascii?Q?q/JZZT2dMBkLr1aNN+dRzxYbDAGLtdIDon4VxnLJIB66UR5Ab7SuAFZZtdBX?=
+ =?us-ascii?Q?CzWHE+DzN6SVXoO4LHX6uLvxmSYwfkVMhXYNJLOE2ju/dRdoil8A9qx9u/7c?=
+ =?us-ascii?Q?57qmfLJe7b58dqn8K4K1kHA+N7Y6GbxGCGxFAHR/reKarAjf8W56qyG9dC00?=
+ =?us-ascii?Q?ofPk2I/Ta0usXFURHq7Eiv/NnQksZC9vaHw0icDBMt5fl3wNG5ES7kqsN5Gg?=
+ =?us-ascii?Q?SKs+iYc/FllzOBFLEML/ZBNh5nx4UW8AmF8MEc9Z6uLXKDWqrtBFyPwrmGNC?=
+ =?us-ascii?Q?SzisOYkhOig9PzEosRnxC0RDoODiGlsfhcW85obeuxSbARpbRTIMOtMzuV4p?=
+ =?us-ascii?Q?IR19q1+mPf4PAnNbjlrDTXX5?=
 X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 558cab13-a91b-4636-4f3d-08d97deb4d43
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16af8fc4-7199-4144-6ef7-08d97dfa5013
 X-MS-Exchange-CrossTenant-AuthSource: MW2PR07MB3980.namprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2021 17:06:21.8678
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2021 18:53:49.0051
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DogjNPcTSUGy8NF6VaZXgQMVDPC2dEwxCAT5jIIqJHD1CzJGG/2kaxVY+wfGvTC0oLCdrwA+An6FJ7rTXVbxIw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR07MB3184
+X-MS-Exchange-CrossTenant-UserPrincipalName: 59q2Seoz3NaPNstytB+rdLl45RksKwbWG9MwAY0iyQuDGKpiwEYjHmat+la9cecLU1ZXl+2U49N+Wfck+fwqHw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR07MB8649
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 22 Sep 2021 13:53:10 +0200
-Petr Vorel <pvorel@suse.cz> wrote:
+Suggested-by: Petr Vorel <pvorel@suse.cz>
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
+Signed-off-by: Alex Henrie <alexh@vpitech.com>
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+ .../security/integrity/ima/tests/ima_policy.sh   | 16 +++-------------
+ .../security/integrity/ima/tests/ima_setup.sh    | 10 ++++++++++
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-> From: Alex Henrie <alexh@vpitech.com>
-> 
-> Requires "ima: add gid support".
-> 
-> Reviewed-by: Petr Vorel <pvorel@suse.cz>
-> Signed-off-by: Alex Henrie <alexh@vpitech.com>
-> [ pvorel: add test_file parameter to ima_check(), add
-> verify_measurement() (DRY) ]
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_policy.sh b/testcases/kernel/security/integrity/ima/tests/ima_policy.sh
+index 244cf081d..8924549df 100755
+--- a/testcases/kernel/security/integrity/ima/tests/ima_policy.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_policy.sh
+@@ -11,19 +11,9 @@ TST_CNT=2
+ 
+ . ima_setup.sh
+ 
+-check_policy_writable()
+-{
+-	local err="IMA policy already loaded and kernel not configured to enable multiple writes to it (need CONFIG_IMA_WRITE_POLICY=y)"
+-
+-	[ -f $IMA_POLICY ] || tst_brk TCONF "$err"
+-	# CONFIG_IMA_READ_POLICY
+-	echo "" 2> log > $IMA_POLICY
+-	grep -q "Device or resource busy" log && tst_brk TCONF "$err"
+-}
+-
+ setup()
+ {
+-	check_policy_writable
++	require_policy_writable
+ 
+ 	VALID_POLICY="$TST_DATAROOT/measure.policy"
+ 	[ -f $VALID_POLICY ] || tst_brk TCONF "missing $VALID_POLICY"
+@@ -55,7 +45,7 @@ test1()
+ 
+ 	local p1
+ 
+-	check_policy_writable
++	require_policy_writable
+ 	load_policy $INVALID_POLICY & p1=$!
+ 	wait "$p1"
+ 	if [ $? -ne 0 ]; then
+@@ -71,7 +61,7 @@ test2()
+ 
+ 	local p1 p2 rc1 rc2
+ 
+-	check_policy_writable
++	require_policy_writable
+ 	load_policy $VALID_POLICY & p1=$!
+ 	load_policy $VALID_POLICY & p2=$!
+ 	wait "$p1"; rc1=$?
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+index 565f0bc3e..9c25d634d 100644
+--- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+@@ -73,6 +73,16 @@ require_policy_readable()
+ 	fi
+ }
+ 
++require_policy_writable()
++{
++	local err="IMA policy already loaded and kernel not configured to enable multiple writes to it (need CONFIG_IMA_WRITE_POLICY=y)"
++
++	[ -f $IMA_POLICY ] || tst_brk TCONF "$err"
++	# CONFIG_IMA_READ_POLICY
++	echo "" 2> log > $IMA_POLICY
++	grep -q "Device or resource busy" log && tst_brk TCONF "$err"
++}
++
+ check_ima_policy_content()
+ {
+ 	local pattern="$1"
+-- 
+2.33.0
 
-Thanks Petr for taking over and making the changes you want directly,
-that makes my life much easier.
-
--Alex
