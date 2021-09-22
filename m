@@ -2,58 +2,58 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D8A414834
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Sep 2021 13:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D72F414836
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Sep 2021 13:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235840AbhIVLyq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        id S235848AbhIVLyq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Wed, 22 Sep 2021 07:54:46 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:55124 "EHLO
+Received: from smtp-out1.suse.de ([195.135.220.28]:55140 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235848AbhIVLyq (ORCPT
+        with ESMTP id S235852AbhIVLyq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Wed, 22 Sep 2021 07:54:46 -0400
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 98DE62221F;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C9F65222CF;
         Wed, 22 Sep 2021 11:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
         t=1632311595; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mAyH2CJtRCU4xqE/aaGcE/R2zsO563hWfAIpryl4syc=;
-        b=mK+gK+ZtElQPI+aBOeU1ki07egIfog0g/vBxoC5StICO2uEO2KzOsCDvGFvUP/9MMsoXyt
-        Mne7EH3QIk8UfoErdECcGC2S9sX39/1/JkmG1m7ScF6hHsy9bQYvSa1ZxFK6Gmh0G6K9V7
-        XdzVBM/4M1xPOjr93wt4d8JFNoS4Ai0=
+        bh=2uYlr6b/NxsdBICfWqG6HJ4ljJcu+lACUQcJRyulBbo=;
+        b=NeqNSFQlDj6gIBFH45/CbLcUZEvZtq7UNYf3vwyx2Tt+KsanNvKUEwvBIopEII65WMdl8Z
+        E7hPZjFFVUQUdXTeBlwJ0aK5zIcKfmaolrOuz93PWPNYQpIsmaoUF1Zgc6tpkMxUewVYzH
+        jN7TqwKtzrwGhGvrRF7YcRY9AmuXHLo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
         s=susede2_ed25519; t=1632311595;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mAyH2CJtRCU4xqE/aaGcE/R2zsO563hWfAIpryl4syc=;
-        b=FZu2oC9hwTUk1Yy+ADt5RPsaX9x78KdvYzKyCk0StFSaHwF1RikipVYRvmSRmXnAkT3pck
-        vvWnMpkuyPXWRYAQ==
+        bh=2uYlr6b/NxsdBICfWqG6HJ4ljJcu+lACUQcJRyulBbo=;
+        b=GYwtGKEPhqkmTEPbqPLMontVl5P2Mivgpg+r9yw1PQHghfxiLiPGnLGkouZjhrIbrb3AoE
+        FGeL8JqaMrwFVDAA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 542BE13D76;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 97AF214289;
         Wed, 22 Sep 2021 11:53:15 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id cBajEisZS2F9CgAAMHmgww
+        id 0CUjIysZS2F9CgAAMHmgww
         (envelope-from <pvorel@suse.cz>); Wed, 22 Sep 2021 11:53:15 +0000
 From:   Petr Vorel <pvorel@suse.cz>
 To:     ltp@lists.linux.it
 Cc:     Alex Henrie <alexh@vpitech.com>, alexhenrie24@gmail.com,
         linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
         Petr Vorel <pvorel@suse.cz>
-Subject: [PATCH v6 2/3] IMA: Move ima_check to ima_setup.sh
-Date:   Wed, 22 Sep 2021 13:53:09 +0200
-Message-Id: <20210922115310.5927-3-pvorel@suse.cz>
+Subject: [PATCH v6 3/3] IMA: Add tests for uid, gid, fowner, and fgroup options
+Date:   Wed, 22 Sep 2021 13:53:10 +0200
+Message-Id: <20210922115310.5927-4-pvorel@suse.cz>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210922115310.5927-1-pvorel@suse.cz>
 References: <20210922115310.5927-1-pvorel@suse.cz>
@@ -65,111 +65,97 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Alex Henrie <alexh@vpitech.com>
 
+Requires "ima: add gid support".
+
 Reviewed-by: Petr Vorel <pvorel@suse.cz>
 Signed-off-by: Alex Henrie <alexh@vpitech.com>
-[ pvorel: add test_file parameter to ima_check(), keep $TEST_FILE in
-ima_measurements.sh ]
+[ pvorel: add test_file parameter to ima_check(), add
+verify_measurement() (DRY) ]
 Signed-off-by: Petr Vorel <pvorel@suse.cz>
 ---
- .../integrity/ima/tests/ima_measurements.sh   | 31 ++-----------------
- .../security/integrity/ima/tests/ima_setup.sh | 28 +++++++++++++++++
- 2 files changed, 30 insertions(+), 29 deletions(-)
+ runtest/ima                                   |  1 +
+ .../integrity/ima/tests/ima_conditionals.sh   | 62 +++++++++++++++++++
+ 2 files changed, 63 insertions(+)
+ create mode 100755 testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-index ef8577d30..a83c416de 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-@@ -21,33 +21,6 @@ setup()
- 	[ -f "$IMA_POLICY" ] || tst_res TINFO "not using default policy"
- }
- 
--ima_check()
--{
--	local algorithm digest expected_digest line tmp
--
--	# need to read file to get updated $ASCII_MEASUREMENTS
--	cat $TEST_FILE > /dev/null
--
--	line="$(grep $TEST_FILE $ASCII_MEASUREMENTS | tail -1)"
--
--	if tmp=$(get_algorithm_digest "$line"); then
--		algorithm=$(echo "$tmp" | cut -d'|' -f1)
--		digest=$(echo "$tmp" | cut -d'|' -f2)
--	else
--		tst_res TBROK "failed to get algorithm/digest for '$TEST_FILE': $tmp"
--	fi
--
--	tst_res TINFO "computing digest for $algorithm algorithm"
--	expected_digest="$(compute_digest $algorithm $TEST_FILE)" || \
--		tst_brk TCONF "cannot compute digest for $algorithm algorithm"
--
--	if [ "$digest" = "$expected_digest" ]; then
--		tst_res TPASS "correct digest found"
--	else
--		tst_res TFAIL "digest not found"
--	fi
--}
--
- check_iversion_support()
- {
- 	local device mount fs
-@@ -83,7 +56,7 @@ test1()
- {
- 	tst_res TINFO "verify adding record to the IMA measurement list"
- 	ROD echo "$(date) this is a test file" \> $TEST_FILE
--	ima_check
-+	ima_check $TEST_FILE
- }
- 
- test2()
-@@ -92,7 +65,7 @@ test2()
- 	tst_res TINFO "verify updating record in the IMA measurement list"
- 	check_iversion_support || return
- 	ROD echo "$(date) modified file" \> $TEST_FILE
--	ima_check
-+	ima_check $TEST_FILE
- }
- 
- test3()
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-index 9c25d634d..af7f3a5f5 100644
---- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-@@ -279,6 +279,34 @@ get_algorithm_digest()
- 	echo "$algorithm|$digest"
- }
- 
-+ima_check()
+diff --git a/runtest/ima b/runtest/ima
+index 29caa034a..01942eefa 100644
+--- a/runtest/ima
++++ b/runtest/ima
+@@ -6,4 +6,5 @@ ima_violations ima_violations.sh
+ ima_keys ima_keys.sh
+ ima_kexec ima_kexec.sh
+ ima_selinux ima_selinux.sh
++ima_conditionals ima_conditionals.sh
+ evm_overlay evm_overlay.sh
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh b/testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
+new file mode 100755
+index 000000000..102d29756
+--- /dev/null
++++ b/testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
+@@ -0,0 +1,62 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-or-later
++# Copyright (c) 2021 VPI Technology
++# Copyright (c) 2021 Petr Vorel <pvorel@suse.cz>
++# Author: Alex Henrie <alexh@vpitech.com>
++#
++# Verify that conditional rules work.
++
++TST_NEEDS_CMDS="chgrp chown id sg sudo"
++TST_CNT=1
++TST_NEEDS_DEVICE=1
++
++. ima_setup.sh
++
++verify_measurement()
 +{
-+	local test_file="$1"
-+	local algorithm digest expected_digest line tmp
++	local request="$1"
++	local user="nobody"
++	local test_file="$PWD/test.txt"
++	local cmd="cat $test_file > /dev/null"
 +
-+	# need to read file to get updated $ASCII_MEASUREMENTS
-+	cat $test_file > /dev/null
++	local value="$(id -u $user)"
++	[ "$request" = 'gid' -o "$request" = 'fgroup' ] && value="$(id -g $user)"
 +
-+	line="$(grep $test_file $ASCII_MEASUREMENTS | tail -1)"
++	require_policy_writable
 +
-+	if tmp=$(get_algorithm_digest "$line"); then
-+		algorithm=$(echo "$tmp" | cut -d'|' -f1)
-+		digest=$(echo "$tmp" | cut -d'|' -f2)
-+	else
-+		tst_res TBROK "failed to get algorithm/digest for '$test_file': $tmp"
-+	fi
++	ROD rm -f $test_file
 +
-+	tst_res TINFO "computing digest for $algorithm algorithm"
-+	expected_digest="$(compute_digest $algorithm $test_file)" || \
-+		tst_brk TCONF "cannot compute digest for $algorithm algorithm"
++	tst_res TINFO "verify measuring user files when requested via $request"
++	ROD echo "measure $request=$value" \> $IMA_POLICY
++	ROD echo "$(date) $request test" \> $test_file
 +
-+	if [ "$digest" = "$expected_digest" ]; then
-+		tst_res TPASS "correct digest found"
-+	else
-+		tst_res TFAIL "digest not found"
-+	fi
++	case "$request" in
++	fgroup)
++		chgrp $user $test_file
++		$cmd
++	fowner)
++		chown $user $test_file
++		$cmd
++		;;
++	gid) sudo sg $user "sh -c '$cmd'";;
++	uid) sudo -n -u $user sh -c "$cmd";;
++	*) tst_brk TBROK "Invalid res type '$1'";;
++	esac
++
++	ima_check $test_file
 +}
 +
- # check_evmctl REQUIRED_TPM_VERSION
- # return: 0: evmctl is new enough, 1: version older than required (or version < v0.9)
- check_evmctl()
++test1()
++{
++	verify_measurement uid
++	verify_measurement fowner
++
++	if tst_kvcmp -lt 5.16; then
++		tst_brk TCONF "gid and fgroup options require kernel 5.16 or newer"
++	fi
++
++	verify_measurement gid
++	verify_measurement fgroup
++}
++
++tst_run
 -- 
 2.33.0
 
