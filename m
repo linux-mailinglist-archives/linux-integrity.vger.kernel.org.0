@@ -2,30 +2,30 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F02413F43
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Sep 2021 04:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E687413F41
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Sep 2021 04:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbhIVCK7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Sep 2021 22:10:59 -0400
+        id S229640AbhIVCK6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Sep 2021 22:10:58 -0400
 Received: from mail-bn1nam07on2051.outbound.protection.outlook.com ([40.107.212.51]:15239
         "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229734AbhIVCK6 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Sep 2021 22:10:58 -0400
+        id S229587AbhIVCK5 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 21 Sep 2021 22:10:57 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S98XOJAj99CEhaiwnW8vkKvQO/ccnEnY6VuKTlSng5UKGWucqDCa8U/8as1VSNmjPmW+Cv2m3E8hvBP5H/f/+VlFRQvmCB+q3EN+dLmaqXzb5U1IVspJuwAOv3yTFJQwGz8A50UjT7K7g7jyshtohAV8K0Yvcld1oHcQcDGzwkVE3AKy38l8XslQVOqstfUIpA9C2vpT2AgMs6+YCkFIJmN4+eWznBsWgjliM7UVcjsYvUGk6G7CwodSOgs7gd+ofRs6NFPehFoAqW7e3KxPzMQRvg4F5a25lKahHZCiNE5b+QJLnCRS9AkmIcVriNZwUGocmcOi0XgWnfoEfXVIAg==
+ b=PI3q5N/bFCRCpxl2REp6rjdAz0PjhfmbneBkz4I5L+7fEneMVS++lgsxQvBnyTmuzL1SX5/VdDA4/0v6a3dsIaKWADpKz66S17r+BGfzYLAqf9fQxLiLBTtXtOBrqy3/+JvrFf0+8E7Zu9T9GF1tq3tOnJ5yAbvMWPA2epl7/I3vlD6FWj1v+A8fiVwFH3MClLg6+BK6HKgmnJ0W4d3vwuo9J6jJquUvD2vc1aPm9IHYrBWWncBEvCB1ReWa9+VlvL6pX671wcHqC7feHeiawJdn4mizEWwG9MUVmc+rsNQi7az60r+8qXPzTwaC+1/nKtV5bDEUrBGV3CzMfixEyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=94+usKn4g49TnEjBKT4BXod0UFimzkXERUq4i/vApW0=;
- b=l8DkTOl2nmrd/pLt6Itf2lZ65z1g17Qr/QWBxgOZHvt+WJd2BA86MFo3zvnYDiTgdiHi0H2qoWZXv3zlL8AsxXg9feZaEJdkLfs8eUls68V9nLuKAWkwtIqoOZrnSo0G6agvME0gogFgNDCZ5taRANsNlshqHvXzj1xyrBOyetzHho+VVTcS8jmiKwLxNrFzGE7D8aooXYz62H9lxN6ntVpBDd6ZzfnXWEzgkeukkwUxmxShGFAiT/ancNUsZlZdBynyr7rkt2hp4C4keTM2qoq2w2LPEb8XBzNjBRqK+HdAGjilJCoPgmdcHWaiA/WC+Vxqh3iYJ8DnMFB5z6YS8A==
+ bh=q82MiURpCg3wYsHmeiNsNe7Rf/gZWspLeepH6kdLtXo=;
+ b=cY0jWfOcULln8t0otund3jY0o2WimIuLLVcalD9RtMz1k2EARCLb3lEI7+TlIkbRLGNF+9+76a3XKccZyFS2zM+1RdxpKcyIv8Om9YpP8ukjijHFkeLXCXq4c2w2M7lKZBp2UbPttiNSIPAr1wq4+OM+M9A8GJB5pY9E92wLeZVIndH0fyC6SbTMhysD1I1ZdDD+jZpykfJ/s15GYuds5eGoJ7S6iPrutJu1XI1ZclBhSBYxnUtbv/v0cDmLRNtcyF//WMMmKaJck6AHEDcqc4Do+Gr6ozjD6sCdYPOAy1Sz9CQOR6L58Ul7er5ETft5YfiZiAUHl5XgTBYPRv4ySQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
  dkim=pass header.d=vpitech.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=94+usKn4g49TnEjBKT4BXod0UFimzkXERUq4i/vApW0=;
- b=PfOebaN+mV5Mg1WIrDH6d+u1alZsyrlou/iDlI7mAmFFl1jqF5PHfOoohvXP+iAvbrSVYJaRImlgjnYmwxREhDiqQvOy+22uGfiXUW/KpS+r5MfnP+fwvFQSz1YpgjJTYtAJfauP2c76z6ukpg3uvXep/I8PhbOyVmH3qrtD8Ro=
+ bh=q82MiURpCg3wYsHmeiNsNe7Rf/gZWspLeepH6kdLtXo=;
+ b=SUerteztQvg7qzSrQyAK9/S0FR90ZltAw8ft91hyVZbh8r9Xs9sQFmGemW8SsspL84xawWc6Pi7uNrsWEGuTv5eno3Q8kBkJQuOJwzZvEBuSEv0xLld5kh1GAS6t6FZpgWhuYLLimPDQ/fNzfQtA5baV7bKD8nvj+VjzrVvtCQs=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none
  header.from=vpitech.com;
@@ -42,9 +42,9 @@ From:   Alex Henrie <alexh@vpitech.com>
 To:     linux-integrity@vger.kernel.org, ltp@lists.linux.it,
         zohar@linux.ibm.com, pvorel@suse.cz, alexhenrie24@gmail.com
 Cc:     Alex Henrie <alexh@vpitech.com>
-Subject: [PATCH ltp v5 2/3] IMA: Move ima_check to ima_setup.sh
-Date:   Tue, 21 Sep 2021 20:08:00 -0600
-Message-Id: <20210922020801.466936-2-alexh@vpitech.com>
+Subject: [PATCH ltp v5 3/3] IMA: Add tests for uid, gid, fowner, and fgroup options
+Date:   Tue, 21 Sep 2021 20:08:01 -0600
+Message-Id: <20210922020801.466936-3-alexh@vpitech.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210922020801.466936-1-alexh@vpitech.com>
 References: <20210922020801.466936-1-alexh@vpitech.com>
@@ -54,152 +54,141 @@ X-ClientProxiedBy: MW4PR04CA0222.namprd04.prod.outlook.com
  (2603:10b6:303:87::17) To MW2PR07MB3980.namprd07.prod.outlook.com
  (2603:10b6:907:a::32)
 MIME-Version: 1.0
-Received: from demeter.ad.vpitech.com (66.60.105.30) by MW4PR04CA0222.namprd04.prod.outlook.com (2603:10b6:303:87::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend Transport; Wed, 22 Sep 2021 02:09:23 +0000
+Received: from demeter.ad.vpitech.com (66.60.105.30) by MW4PR04CA0222.namprd04.prod.outlook.com (2603:10b6:303:87::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend Transport; Wed, 22 Sep 2021 02:09:24 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c2d49815-71c9-4763-8b6d-08d97d6dff6e
+X-MS-Office365-Filtering-Correlation-Id: ec431f4b-d0e5-436f-4f4a-08d97d6dffe0
 X-MS-TrafficTypeDiagnostic: MWHPR07MB3149:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR07MB3149781E61E7D7EF87C4E009B8A29@MWHPR07MB3149.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-Microsoft-Antispam-PRVS: <MWHPR07MB31491BB727F8A4E6D202132DB8A29@MWHPR07MB3149.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:130;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Pz2wpT49GXqs6fEC4jAN8zntuXePnUjb4nsziZErWYjkBX8N0OmF0gF6ollfT2WK1UO1c20qp0BvU9zvNIAtOCaPVXLVP6PnEcWQyvfwPY+860Ny22jfDDBJ0cpn3n9IH5sej5ac1ZY+Mu4Z5MLpdXBp6rnDFBeo8LR/bjMztdz+OAyyN1+cA+zI6KQT1NiitLMltVOrtGrK66Nyv+zi5VR18e5FXGYBM4s5pi99D7KBXm3feTN70cBXcnanJPiAtYPc26rxfztCnlT4qEczU5rrcb7qoFFttlAYu7Yvi7/OH9EK5lCRCGTKXkPcTwho9fkRWc9LCWCQfEbF3xrkHZ4tybSle9XCZJa6/z57g2dXPRcKuJhpnLVwAm1Rqe2/nyGLmhEHs4K0w/603HigY6yTveAgohENNsbcYwtdOqSAbv3tkGPSFf6iykV0rwWS7tjqR8mv2CMQYYofLsC+IYtcoMK3Nv1J5qDBoOX1qcerKgW/z2mJBzxXCtB4Ei5vwn5xsWMj+fO1ALH2CNoMLOnsFycFZgIj8tiimNdK8cxANIWQqiIiRe1MgRub6AolOzLTZiQ8nDGnDu4BHh/Y0TWVY8FPwqrLHQ6/u9pkAJaDr625ttUwDSQYZWML9rnPcvYUVklXNkKeZpHu6eeOEnBxAVIZqr3QtdZ1rtMh4cUZLF1JQX67E4DqgisPjhI6vjYO4D9ASvCETcLh/vz+hQ==
+X-Microsoft-Antispam-Message-Info: hsWjKml9r3E4Ni0gohMWKLjI9K7E7FLiPPShotQxFtt5ng4JieHcsYNs9l2iW7zqyLTYKMlnZmAla/R9qrqsYc8WYcUq7VDCc87GJRGeFmcxHu8KLo/x43lc4nTalefMBKC7tDu97EM47UDgriSUB/Tny3Vmp2Eu3nXYC4mA2BgXNAXjJenuWGfAhiz0vodELofD1O9cCJ+8h9jZB4wGu8ZP1DNunPO1K8QsNIhdgoCIP+9lwczzdxsX2IEz+euI9s2m4CgnGfV+XzwG13MZ+VpT44mfOWjz9WgXmUbIVZnU+vsXJhrXTbdOJ6mosNEWGA6YKiS47SZuA4eQC1IPmKgtDpN66tSX0oP03KflxAFbEVQMcVS1IHE9H8vr+Ut7eFUUFxWf7DL4abK4IONsCxuT4ECKG3xzxit3z7X9cZBOLLo30VGS8rV2/wHeqzMpUds1MlHLejmwQRxHH/vtZmHF0/SLfxUrGunm9lnCrY45euoE8e4X8v7w7iHMYKl33zuKdKthLJCginZbVOI94ivH+RseuRbKymAAkNKRIzh+ms1tc7YY/oa0J++La+R+Les5Y5qTO++8CGaMrmi9UGPhrA00k5Fz7lsBQpSZ2jqlbfuAPIcSnLuOPv00fgPylJO8EUYyd3NaWUX/SZN+FJrNm7i5uSCtju3WMhjLN2AwHqktj8zDUUu+Q41r195/SAtJ7A4eNyBoowp9UHTDiA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR07MB3980.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39830400003)(136003)(376002)(396003)(366004)(66946007)(36756003)(66476007)(66556008)(1076003)(5660300002)(52116002)(7696005)(316002)(6666004)(2616005)(956004)(86362001)(2906002)(83380400001)(26005)(107886003)(508600001)(8676002)(8936002)(6486002)(186003)(38100700002)(38350700002)(4326008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qOLFMxyGJ/iwhn7LmTClh6MIQq6FCtNbOZkF+lyFEoqhWI0F+XN+oekXCIzV?=
- =?us-ascii?Q?EA4ACfX904cc903F8OqFShAkG+E7hhMhy8JtW82geLsEVvY8raZ8qZAClLgP?=
- =?us-ascii?Q?EyWGddfq9EyJJbYGb9Q8NyO0mICTWO6pCwSue7TdaIgFJTFgOvp8/NN4Y1HE?=
- =?us-ascii?Q?4HUpfbed/eKH4ycK0vqurbzqCFPOto7iyneo/oJQD2BWWzY/FU6TwZe6mgr7?=
- =?us-ascii?Q?5XOujRnLK/tnvH0YXvouJsxfLpmoLOYaCoOIwDJ9yvHqt+f4lwS4PbU//My0?=
- =?us-ascii?Q?bWm22dMlA7xqT9IE3+2HsdQmT0RydtWc6ds59VuuSs1qCuJZ8vjELqpeW+03?=
- =?us-ascii?Q?+BNLqv2BbY0fC1Q9iEzITepNWmYj7K0aB6v4LLSj3a1ZD3iw7zhEo20BiUa7?=
- =?us-ascii?Q?kPLICL9/kGRiJ7dWbtKAY3XUi9YbmL7x2HEeb+yNBswSf8Jfc+EfeJXHXGFb?=
- =?us-ascii?Q?z7DkYByyKmMl6RQ3BOZ3npOljma6CiN1vBg41FyDjF188qKdfaDb3ilLhfm6?=
- =?us-ascii?Q?Xnh7V4dzBNBo7uVM8q4ysrkQrd8vvVpnTHUgNaBgDFh1dQRPkU6WqurquwaA?=
- =?us-ascii?Q?fgW2fsY52pmS+JbzPaPXmkqUNc/CIJouXI/5J2HzTTrFtSTNHoWYdUKQ/fA+?=
- =?us-ascii?Q?ZRarkvInxr886eSWIi3Xxn8BTRbsiYGgfmHFE5NNZve/rSzxMklkqg71kqtZ?=
- =?us-ascii?Q?0RGiBb311eNuw7YDT4qfkxAoQ5CLiLKtYqBpXzXQgBAfZEYcNcK++sktsmJP?=
- =?us-ascii?Q?nH7zGWvyEHWAnFBilYPDtvah5er6JX+B8ED1wCocD0o+FANCWWiEb/JsFceP?=
- =?us-ascii?Q?B2f+RMobGVeimkPwhVggtxAkze7wQKFeJBoyC85f8iLcp2I0GpL9PJdgZrlH?=
- =?us-ascii?Q?KygmYMQ79S9E4Dh6OaId/EeAk67dCvQpivT5iMnOMxTRKYtV+cHQcRLaAQiE?=
- =?us-ascii?Q?vnOukFYIsQoDQSMOJDYxJrZoBznD+NlGUgwVMOc6cR9MOal/mXQT3wqCoT2x?=
- =?us-ascii?Q?FQN/UNbm5Neh7Le06NAkUZoSutGFnrwfbD/Avi7nx/SkNaVyU5REJ9CHxph5?=
- =?us-ascii?Q?OO01FPiEBmluTgYnIlUR9kSaftShmMZhVQs4JL8TJh6RZGXPFpClfanr/7q0?=
- =?us-ascii?Q?bAws9hu3YwfJOGGm1wJVUpyLiEy+pa4+HwYOOxXbZJt17yBurxtne4JQKHup?=
- =?us-ascii?Q?BdN4YYJNP/u5bS9GvEE4ROpHjl89ExHIOFJsBPVM8ygPbjm+0spL1ALwvW4S?=
- =?us-ascii?Q?6NlJM/aGkuSKkEnCcHeLIGEaUzNG0m8v9BTxkZeIP9nbGsJQ/zYKm/uxtAbD?=
- =?us-ascii?Q?8JnHtigZzPJW3f6EYokS9Jie?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+aRfdaR0yGwybwSgyBrGnZTVIIvZVLTuAxzsm9h641HuOQWwmVdROCkVMWt5?=
+ =?us-ascii?Q?BOMjBopkRPw7QOfkbpIdMM0uwcjUTmRMORpnVU44CyorqKEo84Hl8nnJU8ce?=
+ =?us-ascii?Q?Qvrz13imaySvAfF53e0jsENAsDkoVlPUPwdW8SsyfkxSNCxzSavDHjuFPONY?=
+ =?us-ascii?Q?SKkaTtVfu1R8wVlDVQi1NUU9eCTldIvS5pZxuzqvY0nhkoKNI5Dq7/V5MHf8?=
+ =?us-ascii?Q?rMJiUmR7BLYTN65voZZREErMLVNl8nGm/+Dms+lSn73o4kBI0b/d/9gbQFfH?=
+ =?us-ascii?Q?JThh14rqfTowFJjcltq10NrSiHowDS0THpKNPQCX/OxIcbqsTN3VnRB1hv3u?=
+ =?us-ascii?Q?AhuqiZ6adrPVfGKPjIwguhcRvXNDr3V3yvNQTgYjfmGfPWvxn2/rxe5jl6TB?=
+ =?us-ascii?Q?DXe5U6JTJ+/7rBq1ebEntvfS3tXnz6dHv+hX2TFc7I4mhwvDkQ7yqXst8Q4w?=
+ =?us-ascii?Q?1reXIzFeUQZeGtKrhh5uzv6TMBzYdkwRD6XqkTBI6ckpoBV1YvKDTg5+Ri4/?=
+ =?us-ascii?Q?xz9TTN85YnmcZQOTqEBupW2C3nWSFEYe8BZ9Sy2tMyEbl3UWjoOMgsivlvp1?=
+ =?us-ascii?Q?0KBKK2TLqB0y4xwvAjcpSIC4DRdxPt+S5viQgqnnbaJ+tkfK9jaPISmQ0M0J?=
+ =?us-ascii?Q?Hy+Jqt7ZZslSQR8dbVhl9bbWfmqhN1nqvyNkkqgl19AdsebIdVxizjT8oHHi?=
+ =?us-ascii?Q?7auo47rwHRXsKMFXa4oWT7q0vTmrsXF5xV1nK3B/CQXzif0uY+7jm3VtYv+F?=
+ =?us-ascii?Q?PrdWNIl8mns3RBmkuB8UdmSGM3u0xqCE7rH4+aWZ6W+/D2M37yFK1sPeCjzT?=
+ =?us-ascii?Q?GOXtSFKQ74bLNFEyGdyq/rnzxOdsElJxeSYnzRI9WX5Ka4xzNk46BHcy/IJO?=
+ =?us-ascii?Q?/wrCa0LHqY8uE+3bImpc9JCZvDiUqnNG+Ni7q+TZZYHI9g40mNk14AXD+kQ6?=
+ =?us-ascii?Q?6Y/RN08QZUuT3SKS6MOSPsVfHdd442D1KY1dVnHWR0utuASbaGKU/C2Wp6dB?=
+ =?us-ascii?Q?ukX/kHOMxZjblo/mN+9pXJn69d00ZwQOj3id/PnFf6xEE/SuEjkxQcKYT3zR?=
+ =?us-ascii?Q?L0n3gRRSdMzQWRRIJjxFDmHg10aADbPJLo/RUSuQ5Gu39C3G61vpa23hiytQ?=
+ =?us-ascii?Q?GFSf5wTmK6F542n1dfjWtvjcWUpt8Wo66wQKRz7obSUAewhNEnIvxPbC//BJ?=
+ =?us-ascii?Q?wvF1MKCeQLA8z6k9SqQUUZWFVq9TNrUAoBA/VnaNYThGsM78Q42Kl54j4CXA?=
+ =?us-ascii?Q?69DBacA3AlsgbzaTktY/hB+kJ1AyawqBPkS7TP4Y5tQCe3PAEPTA+K291pnH?=
+ =?us-ascii?Q?hGXupb9p0aBXT6hoISXrJF1x?=
 X-OriginatorOrg: vpitech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2d49815-71c9-4763-8b6d-08d97d6dff6e
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec431f4b-d0e5-436f-4f4a-08d97d6dffe0
 X-MS-Exchange-CrossTenant-AuthSource: MW2PR07MB3980.namprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2021 02:09:24.2756
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2021 02:09:24.9042
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fSXk4eJm3M7vZysFfgSUHrZnECGB2b4h78eJEyB2oE1nZUrupW6lR/pN2ELDUNiHOuaOuKYwYyZJbeJmGLVl1g==
+X-MS-Exchange-CrossTenant-UserPrincipalName: XAdM9Z6v9Z7wePpFXUxGSn1MqcM4FXXDcBmt43k1wDVECqmAf6Vk715OiN85OKt/WEoWPy9Z7ArOnqUBf/Wl5A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR07MB3149
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Requires "ima: add gid support".
+
 Signed-off-by: Alex Henrie <alexh@vpitech.com>
 ---
- .../integrity/ima/tests/ima_measurements.sh   | 28 -------------------
- .../security/integrity/ima/tests/ima_setup.sh | 28 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 28 deletions(-)
+v5: Omit awk and cut from TST_NEEDS_CMDS
+---
+ runtest/ima                                   |  1 +
+ .../integrity/ima/tests/ima_conditionals.sh   | 57 +++++++++++++++++++
+ 2 files changed, 58 insertions(+)
+ create mode 100755 testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-index 1927e937c..807c5f57b 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
-@@ -17,38 +17,10 @@ setup()
- {
- 	require_ima_policy_cmdline "tcb"
- 
--	TEST_FILE="$PWD/test.txt"
- 	POLICY="$IMA_DIR/policy"
- 	[ -f "$POLICY" ] || tst_res TINFO "not using default policy"
- }
- 
--ima_check()
--{
--	local algorithm digest expected_digest line tmp
--
--	# need to read file to get updated $ASCII_MEASUREMENTS
--	cat $TEST_FILE > /dev/null
--
--	line="$(grep $TEST_FILE $ASCII_MEASUREMENTS | tail -1)"
--
--	if tmp=$(get_algorithm_digest "$line"); then
--		algorithm=$(echo "$tmp" | cut -d'|' -f1)
--		digest=$(echo "$tmp" | cut -d'|' -f2)
--	else
--		tst_res TBROK "failed to get algorithm/digest for '$TEST_FILE': $tmp"
--	fi
--
--	tst_res TINFO "computing digest for $algorithm algorithm"
--	expected_digest="$(compute_digest $algorithm $TEST_FILE)" || \
--		tst_brk TCONF "cannot compute digest for $algorithm algorithm"
--
--	if [ "$digest" = "$expected_digest" ]; then
--		tst_res TPASS "correct digest found"
--	else
--		tst_res TFAIL "digest not found"
--	fi
--}
--
- check_iversion_support()
- {
- 	local device mount fs
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-index 9c25d634d..976c6a86c 100644
---- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-@@ -188,6 +188,7 @@ ima_setup()
- 	if [ "$TST_NEEDS_DEVICE" = 1 ]; then
- 		tst_res TINFO "\$TMPDIR is on tmpfs => run on loop device"
- 		mount_loop_device
-+		TEST_FILE="$PWD/test.txt"
- 	fi
- 
- 	[ -n "$TST_SETUP_CALLER" ] && $TST_SETUP_CALLER
-@@ -279,6 +280,33 @@ get_algorithm_digest()
- 	echo "$algorithm|$digest"
- }
- 
-+ima_check()
+diff --git a/runtest/ima b/runtest/ima
+index 29caa034a..01942eefa 100644
+--- a/runtest/ima
++++ b/runtest/ima
+@@ -6,4 +6,5 @@ ima_violations ima_violations.sh
+ ima_keys ima_keys.sh
+ ima_kexec ima_kexec.sh
+ ima_selinux ima_selinux.sh
++ima_conditionals ima_conditionals.sh
+ evm_overlay evm_overlay.sh
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh b/testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
+new file mode 100755
+index 000000000..657f4d244
+--- /dev/null
++++ b/testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
+@@ -0,0 +1,57 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-or-later
++# Copyright (c) 2021 VPI Technology
++# Author: Alex Henrie <alexh@vpitech.com>
++#
++# Verify that conditional rules work.
++
++TST_NEEDS_CMDS="chgrp chown sg sudo"
++TST_CNT=1
++TST_NEEDS_DEVICE=1
++
++. ima_setup.sh
++
++test1()
 +{
-+	local algorithm digest expected_digest line tmp
++	local user="nobody"
 +
-+	# need to read file to get updated $ASCII_MEASUREMENTS
++	require_policy_writable
++	ROD rm -f $TEST_FILE
++	tst_res TINFO "verify measuring user files when requested via uid"
++	ROD echo "measure uid=$(id -u $user)" \> $IMA_POLICY
++	ROD echo "$(date) uid test" \> $TEST_FILE
++	sudo -n -u $user sh -c "cat $TEST_FILE > /dev/null"
++	ima_check
++
++	require_policy_writable
++	ROD rm -f $TEST_FILE
++	tst_res TINFO "verify measuring user files when requested via fowner"
++	ROD echo "measure fowner=$(id -u $user)" \> $IMA_POLICY
++	ROD echo "$(date) fowner test" \> $TEST_FILE
++	chown $user $TEST_FILE
 +	cat $TEST_FILE > /dev/null
++	ima_check
 +
-+	line="$(grep $TEST_FILE $ASCII_MEASUREMENTS | tail -1)"
-+
-+	if tmp=$(get_algorithm_digest "$line"); then
-+		algorithm=$(echo "$tmp" | cut -d'|' -f1)
-+		digest=$(echo "$tmp" | cut -d'|' -f2)
-+	else
-+		tst_res TBROK "failed to get algorithm/digest for '$TEST_FILE': $tmp"
++	if tst_kvcmp -lt 5.16; then
++		tst_brk TCONF "gid and fgroup options require kernel 5.16 or newer"
 +	fi
 +
-+	tst_res TINFO "computing digest for $algorithm algorithm"
-+	expected_digest="$(compute_digest $algorithm $TEST_FILE)" || \
-+		tst_brk TCONF "cannot compute digest for $algorithm algorithm"
++	require_policy_writable
++	ROD rm -f $TEST_FILE
++	tst_res TINFO "verify measuring user files when requested via gid"
++	ROD echo "measure gid=$(id -g $user)" \> $IMA_POLICY
++	ROD echo "$(date) gid test" \> $TEST_FILE
++	sudo sg $user "sh -c 'cat $TEST_FILE > /dev/null'"
++	ima_check
 +
-+	if [ "$digest" = "$expected_digest" ]; then
-+		tst_res TPASS "correct digest found"
-+	else
-+		tst_res TFAIL "digest not found"
-+	fi
++	require_policy_writable
++	ROD rm -f $TEST_FILE
++	tst_res TINFO "verify measuring user files when requested via fgroup"
++	ROD echo "measure fgroup=$(id -g $user)" \> $IMA_POLICY
++	ROD echo "$(date) fgroup test" \> $TEST_FILE
++	chgrp $user $TEST_FILE
++	cat $TEST_FILE > /dev/null
++	ima_check
 +}
 +
- # check_evmctl REQUIRED_TPM_VERSION
- # return: 0: evmctl is new enough, 1: version older than required (or version < v0.9)
- check_evmctl()
++tst_run
 -- 
 2.33.0
 
