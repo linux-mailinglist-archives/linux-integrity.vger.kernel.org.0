@@ -2,90 +2,72 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C413415AA8
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Sep 2021 11:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9876F416518
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 Sep 2021 20:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239796AbhIWJQV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 23 Sep 2021 05:16:21 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:38068 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238189AbhIWJQV (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 23 Sep 2021 05:16:21 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A1D4C1FD77;
-        Thu, 23 Sep 2021 09:14:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1632388489;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hjEblAiuGNbLAlz7cWIUzWMmxgmFSh7dc4Xmm8c/hlc=;
-        b=II5LAtdmSFIfgYb7p+C9dc9GpELTacSqcNWCM9Dw7UqydrQIR0cglyKiQSZrJNZr3NZcOm
-        CdLM9+PSuhrQ8fpgMZW03ynWaIjmHf+CZhOHBOsLF6EIl+mUC3aSoZLrW8imteoFYbDKr1
-        vdMM2ZQHweOz5GZyd/nUmylNojFagQw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1632388489;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hjEblAiuGNbLAlz7cWIUzWMmxgmFSh7dc4Xmm8c/hlc=;
-        b=wO07WqoB8a+0KayhCvAg0lnof9fBZRs39RYBwkc/NrwBmdoa2zJdxbWM6pXeyLpYYCTBPj
-        afEpYkvmGkET8WCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 59E3913DCA;
-        Thu, 23 Sep 2021 09:14:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gBEDE4lFTGHBNgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Thu, 23 Sep 2021 09:14:49 +0000
-Date:   Thu, 23 Sep 2021 11:14:47 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Alex Henrie <alexh@vpitech.com>
-Cc:     ltp@lists.linux.it, alexhenrie24@gmail.com,
-        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v6 3/3] IMA: Add tests for uid, gid, fowner, and fgroup
- options
-Message-ID: <YUxFh1Gp231NftEY@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20210922115310.5927-1-pvorel@suse.cz>
- <20210922115310.5927-4-pvorel@suse.cz>
- <20210922110620.cf7530d5120d2f0173ed2f05@vpitech.com>
+        id S233874AbhIWSRq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 23 Sep 2021 14:17:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40862 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230474AbhIWSRq (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 23 Sep 2021 14:17:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DCB9610C8;
+        Thu, 23 Sep 2021 18:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632420974;
+        bh=Jjum8dD2jyB0jumFhHDg/89BHQQUykCQ01qdRsUvSig=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pGn774gtchQAkmAUxsd2VER4HO/rPVwwRTZEQ6nTYhWQ+873lH0Jb7CtPFKJp7bEY
+         pm9WQfzmlaMZWB3nLil+uUr4v8ioukgGtOufbeJP+cJwrXzRZ4Oi0tNM8XlrwnMhXu
+         qeEW4bIBtCJ2i8waU3KKH6ghN2vt4kI3/+3NahwNly2heoBUErbyykYaUe+twnAGNr
+         ap5kBr8HyuV+i6BTIATRMoJV2Xi57C0OEWzGGRms4gKBDJubPTrPo6mIvBtFhQ0Ssm
+         OxuLRSkhKaexcho+mJKMX5rf12RuiGgEh49JqM3FHGH3nRc/Dd0GmB7EnUVGYBaiyp
+         pybk16TYk+u8g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Alexander Wellbrock <a.wellbrock@mailbox.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH] tpm_tis_spi: Add missing SPI ID
+Date:   Thu, 23 Sep 2021 19:15:20 +0100
+Message-Id: <20210923181520.8680-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210922110620.cf7530d5120d2f0173ed2f05@vpitech.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1345; h=from:subject; bh=Jjum8dD2jyB0jumFhHDg/89BHQQUykCQ01qdRsUvSig=; b=owEBbAGT/pANAwAKASTWi3JdVIfQAcsmYgBhTMP6tNnCvq3YyWMInujrOJK6jIwm37bFvj0HLRCS 2IGQ/KSJATIEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYUzD+gAKCRAk1otyXVSH0J/5B/ itYom3Zxu3jXea+GzXyj+jjYPRoaJSXEq+SfEm7YPsGi7f2w2SzJDozh+h9sbl47J25wriReIFn5D0 xlKygFqHMk6OrRyU75DCYsh45cWPBQEd95HLIxafBUdkVCrRha0nsq8trEVwSr/YFNFBHKIGduAS0p LCVpMGIVz6H/pkdqxUtJQzIqnRA6pR0M00LhonCDsVXkkGZYxTwnePVjOYK1HPj4/C4AUZx+M9BGSe 4R9lFlM0NUTT8An9j0HeEu40OkDvqAQKfwp3fYdRroirySi1hsMxo92p7qnQKLPxidnQ9WmqLCkTp3 oAbBVkQe35it1xQ08Bl5SZ6ztpGNk=
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> On Wed, 22 Sep 2021 13:53:10 +0200
-> Petr Vorel <pvorel@suse.cz> wrote:
+In commit c46ed2281bbe ("tpm_tis_spi: add missing SPI device ID entries")
+we added SPI IDs for all the DT aliases to handle the fact that we always
+use SPI modaliases to load modules even when probed via DT however this
+added an alias for the non-idiomatic tpm_tis-spi compatible as tpm_tis_spi
+which doesn't actually match. Add an extra ID for tpm_tis-spi rather than
+just fix the existing one since what's currently there is going to be
+better for anyone actually using SPI IDs to instantiate.
 
-> > From: Alex Henrie <alexh@vpitech.com>
+Fixes: c46ed2281bbe ("tpm_tis_spi: add missing SPI device ID entries")
+Fixes: 96c8395e2166 ("spi: Revert modalias changes")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/char/tpm/tpm_tis_spi_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > Requires "ima: add gid support".
+diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+index 54584b4b00d1..aaa59a00eeae 100644
+--- a/drivers/char/tpm/tpm_tis_spi_main.c
++++ b/drivers/char/tpm/tpm_tis_spi_main.c
+@@ -267,6 +267,7 @@ static const struct spi_device_id tpm_tis_spi_id[] = {
+ 	{ "st33htpm-spi", (unsigned long)tpm_tis_spi_probe },
+ 	{ "slb9670", (unsigned long)tpm_tis_spi_probe },
+ 	{ "tpm_tis_spi", (unsigned long)tpm_tis_spi_probe },
++	{ "tpm_tis-spi", (unsigned long)tpm_tis_spi_probe },
+ 	{ "cr50", (unsigned long)cr50_spi_probe },
+ 	{}
+ };
+-- 
+2.20.1
 
-> > Reviewed-by: Petr Vorel <pvorel@suse.cz>
-> > Signed-off-by: Alex Henrie <alexh@vpitech.com>
-> > [ pvorel: add test_file parameter to ima_check(), add
-> > verify_measurement() (DRY) ]
-> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
-
-> Thanks Petr for taking over and making the changes you want directly,
-> that makes my life much easier.
-yw. FYI I'll merge v7 after it's merged into mainline, I expect it'll be in v5.16-rc1.
-Could you please notify me if I forget?
-
-I'll try to have look into kernel patch itself.
-
-Kind regards,
-Petr
-
-> -Alex
