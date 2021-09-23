@@ -2,72 +2,90 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C67104151F1
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Sep 2021 22:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C413415AA8
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 Sep 2021 11:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237808AbhIVU4s (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Sep 2021 16:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237891AbhIVU4n (ORCPT
+        id S239796AbhIWJQV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 23 Sep 2021 05:16:21 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:38068 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238189AbhIWJQV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Sep 2021 16:56:43 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FECEC0613F0
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Sep 2021 13:55:07 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id i4so17172594lfv.4
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Sep 2021 13:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=fr8lNb1tzuroNDnbJJtYWeXOCGZbssrkZvaRy8HVdYCeSSxS96vSwd3R2+r1vg3M6/
-         ex66FoD7Oi9BZ+eroN2ctcLno3UxJhL89X1t6yEsFayGc2q4Pz0zZQBaUGqcHr3s/S1+
-         lgIwwHuJ4O8SDnA5oR3zC/CFwa9fWO84703n6I2aQyNKP1VzeqgyNRTdZaVTG81gy6Vx
-         t6u58+esbUQxWBZY5IFD1w784RDrV2U7d72/V+RQAoF8LyHU+KHsqwJTuZK+RI9xoYHQ
-         hU/k+XKo5P60J+yjbN5r0LQMnBzU5qvJitpMdoh7dt6f9DChJ/lZbweVN/xESakomSrI
-         Tc/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=ZV9c2XEFjwRQH17WSpeVqbyiggmRcuI1UAcxTLy8wOyNCWIENhQw+MWzgIFmxli7wJ
-         8Vd3H2sghJhlO1WA8IM3if6CX0ROHDczK/B52WExfbm7BkQXEiNIgtzr0B1eUNbZvYpC
-         reilDwt13Mz7LuHmuBViB1ZR1gCi08ULwddaDIdNY/Zjqj7fH4F98KJICDAK4OvjN9B/
-         ib9Pka9slyav/7WpMofF3FlFl0k+N04qP0ynu4AUIaZnwift8neYeFDYaK84X5zuNAmg
-         svEm5p61BJGx5C5SoPHyj0vpZ4oT1fN+Cbt/g6QoBcFSX1WEiGkoKT9mFFOTisAnsqQR
-         +cRg==
-X-Gm-Message-State: AOAM530pXtBNT3lS9mRhapclYvfECfwsvnrb8abTuoNPIqU8eS0ODeTu
-        fOeH8QnIo7SX10SH7XOGtSqtijBbN7dBSvdh4FxYa/wyZi8=
-X-Google-Smtp-Source: ABdhPJwYYn7ZwazUxB30/XTxKCOf4dlZaC6TfP1ljKsU4ZNb40cpLRsdAvw7sAb51nYQkeG7S6W5vU7Cgq+lC3FYxgE=
-X-Received: by 2002:a05:651c:1546:: with SMTP id y6mr1383813ljp.53.1632344095088;
- Wed, 22 Sep 2021 13:54:55 -0700 (PDT)
+        Thu, 23 Sep 2021 05:16:21 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A1D4C1FD77;
+        Thu, 23 Sep 2021 09:14:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1632388489;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hjEblAiuGNbLAlz7cWIUzWMmxgmFSh7dc4Xmm8c/hlc=;
+        b=II5LAtdmSFIfgYb7p+C9dc9GpELTacSqcNWCM9Dw7UqydrQIR0cglyKiQSZrJNZr3NZcOm
+        CdLM9+PSuhrQ8fpgMZW03ynWaIjmHf+CZhOHBOsLF6EIl+mUC3aSoZLrW8imteoFYbDKr1
+        vdMM2ZQHweOz5GZyd/nUmylNojFagQw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1632388489;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hjEblAiuGNbLAlz7cWIUzWMmxgmFSh7dc4Xmm8c/hlc=;
+        b=wO07WqoB8a+0KayhCvAg0lnof9fBZRs39RYBwkc/NrwBmdoa2zJdxbWM6pXeyLpYYCTBPj
+        afEpYkvmGkET8WCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 59E3913DCA;
+        Thu, 23 Sep 2021 09:14:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gBEDE4lFTGHBNgAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Thu, 23 Sep 2021 09:14:49 +0000
+Date:   Thu, 23 Sep 2021 11:14:47 +0200
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Alex Henrie <alexh@vpitech.com>
+Cc:     ltp@lists.linux.it, alexhenrie24@gmail.com,
+        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [PATCH v6 3/3] IMA: Add tests for uid, gid, fowner, and fgroup
+ options
+Message-ID: <YUxFh1Gp231NftEY@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20210922115310.5927-1-pvorel@suse.cz>
+ <20210922115310.5927-4-pvorel@suse.cz>
+ <20210922110620.cf7530d5120d2f0173ed2f05@vpitech.com>
 MIME-Version: 1.0
-Sender: ratcliffijames58@gmail.com
-Received: by 2002:a05:6504:5067:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:54:54
- -0700 (PDT)
-From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
-Date:   Wed, 22 Sep 2021 21:54:54 +0100
-X-Google-Sender-Auth: B3PIuwFz7UcaHNCffYC8akvbLEk
-Message-ID: <CAKVTYWSPSMf085dB7FkhkLr9XtoZHkjbvunoMard5qsSPn4ZOg@mail.gmail.com>
-Subject: My Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210922110620.cf7530d5120d2f0173ed2f05@vpitech.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Assalamu alaikum,
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological,
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children. I have investment funds
-worth Twenty Seven Million Five Hundred Thousand United State Dollar
-($27.500.000.00 ) and i need a trusted  investment Manager/Partner
-because of my current refugee status, however, I am interested in you
-for investment project assistance in your country. If you are willing
-to handle this project on my behalf kindly reply urgently to enable me
-to provide you more information about the investment
-funds.
-Best Regards
+> On Wed, 22 Sep 2021 13:53:10 +0200
+> Petr Vorel <pvorel@suse.cz> wrote:
+
+> > From: Alex Henrie <alexh@vpitech.com>
+
+> > Requires "ima: add gid support".
+
+> > Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> > Signed-off-by: Alex Henrie <alexh@vpitech.com>
+> > [ pvorel: add test_file parameter to ima_check(), add
+> > verify_measurement() (DRY) ]
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+
+> Thanks Petr for taking over and making the changes you want directly,
+> that makes my life much easier.
+yw. FYI I'll merge v7 after it's merged into mainline, I expect it'll be in v5.16-rc1.
+Could you please notify me if I forget?
+
+I'll try to have look into kernel patch itself.
+
+Kind regards,
+Petr
+
+> -Alex
