@@ -2,109 +2,81 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8554176B8
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Sep 2021 16:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC294176F6
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Sep 2021 16:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346726AbhIXOWH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 24 Sep 2021 10:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345544AbhIXOWH (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 24 Sep 2021 10:22:07 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34222C061571
-        for <linux-integrity@vger.kernel.org>; Fri, 24 Sep 2021 07:20:34 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id m7so11328438qke.8
-        for <linux-integrity@vger.kernel.org>; Fri, 24 Sep 2021 07:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7cWc4yzdb0VnFfnu4UMB5K2rNfvo1h4uviMaG/9Luy8=;
-        b=jUq7bdAP6GfaQzVHqsEAN1yhZxpZXIpCQX6jGOig1ZIcsJ16N5sRYGiVzSBsnsrAQF
-         +Q80Vj1jInTt6ZbMMlSOTBWvZykFl6FWvPtSP1LUG2/LkzZ8kE5Os1NmxLaXE4V3EOik
-         X4TQbe6kou6y73WNqR4j5gIhSIuvW6ThKo4o2nA0DX6LcOa63bN4ad0XkoP1B8nAcnVe
-         pNI5vwGwzYcMVcEGk0VictQerdTKB20vJVowJCn21NzV+VienIlUX6NPY52Ziy8SE4Ef
-         phvB07TanfmqYer6svKLlkxX1/VR927Lxk8YbXE40sT3O/ts9yJ1ORRwbTyitYbfTLGB
-         7edw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7cWc4yzdb0VnFfnu4UMB5K2rNfvo1h4uviMaG/9Luy8=;
-        b=z8TNeHUPFIXgMEGPqaEl2a5OAc4s4/m0ZodekBZx6gXVWp5bFO6xeVmsD8TXDivySH
-         J1LY0zs6uyfJymAVBmeLZnW+uJxpOw+f0bx7iAr4OohszMZIcrXyYXJEk33DZhwHDzXQ
-         qEbEgneNElw2sxQZfRVl+M9G9OOTS6FA+NAxjAOmALW3trNHHFhl5rkuUh9Lk8vwEn1V
-         wJh3VbtCouupyDW1gW9u1T/Iq3p+kFTAeL/jB6y8p+HeATTNWDf02Vb92x5ZYZaQJ0xT
-         Y4Vx0LGL2OgifYY4zPqkONizwyba3vUYbOp9KcPO1F7irG6y6wC8Jllhn0EtU4CsOpWH
-         UUYw==
-X-Gm-Message-State: AOAM530DNzmVO+1FWLyL/avifpSbdMEzbWdvyNo/hMNX0aHuItCZUxcz
-        UdxZx6hESo+/TDiWwZ1lzAQx1A==
-X-Google-Smtp-Source: ABdhPJw0YEb7syFNucm0QZguZSbj1llvgZ897+2/7RW+V9bkpAcfpW1rJ64+ZabX7Iv75/M/bWZjrw==
-X-Received: by 2002:a05:620a:238:: with SMTP id u24mr10627934qkm.404.1632493233224;
-        Fri, 24 Sep 2021 07:20:33 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id c16sm5531221qkk.113.2021.09.24.07.20.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 07:20:32 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1mTm40-005CHZ-8x; Fri, 24 Sep 2021 11:20:32 -0300
-Date:   Fri, 24 Sep 2021 11:20:32 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de,
-        p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] tpm: fix potential NULL pointer access in
- tpm_del_char_device()
-Message-ID: <20210924142032.GY3544071@ziepe.ca>
-References: <20210910180451.19314-1-LinoSanfilippo@gmx.de>
- <204a438b6db54060d03689389d6663b0d4ca815d.camel@kernel.org>
- <trinity-27f56ffd-504a-4c34-9cda-0953ccc459a3-1631566430623@3c-app-gmx-bs69>
- <c22d2878f9816000c33f5349e7256cadae22b400.camel@kernel.org>
- <50bd6224-0f01-ca50-af0e-f79b933e7998@gmx.de>
- <20210924133321.GX3544071@ziepe.ca>
- <b49f4b52-44c4-8cb8-a102-689e9f788177@gmx.de>
+        id S1346792AbhIXOoL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 24 Sep 2021 10:44:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39172 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346793AbhIXOoJ (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 24 Sep 2021 10:44:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BA6E160F13;
+        Fri, 24 Sep 2021 14:42:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632494556;
+        bh=ILM6DAhBU5V6AX509JHxrKkU26JrZm1T05IXEYOSE+s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=paIzPvsmsoFNnesw4gBs2eCFXmnfZd0mgDGjHPoJIR42QEezKPFYoX/9tQvgRTSPP
+         FRabiXJqNaT8BYYjCk7eJxwcu7Plr0W+wCXf3zRzQ4qdZRNNPk3UxBTK6cW39mjyNT
+         gVFCei6kzx2UIM0NReTKbQxTWW6cO9gLJh0hvjqxrrOLgeaJmRIRVkW5cEVVDtHw+s
+         MmamDK4orZwlIsphu68d3mvnJWr5A0Ey8UwMnLBIVqlGoZNCL0JQg9Y5ASGoR+ZwyW
+         PW9wYdSsvR0AFL+t7itc3NQ9FDKHmrEHzku7DhbmLFmFeHZqPQK44lONZOz22V7OuY
+         Qjn83LuPBCd0A==
+From:   Mark Brown <broonie@kernel.org>
+To:     Alexander Wellbrock <a.wellbrock@mailbox.org>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-integrity@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Subject: [PATCH v2] tpm_tis_spi: Add missing SPI ID
+Date:   Fri, 24 Sep 2021 15:41:11 +0100
+Message-Id: <20210924144111.15267-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b49f4b52-44c4-8cb8-a102-689e9f788177@gmx.de>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1575; h=from:subject; bh=ILM6DAhBU5V6AX509JHxrKkU26JrZm1T05IXEYOSE+s=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhTeLyH6J2mQPcicQmI/FNzF5FZhH8QFTfVeEXUCxD B4qeAa+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYU3i8gAKCRAk1otyXVSH0EmVB/ sExhWS73+/LKAzWofGdz10rqKn4vpmI22XMLcsx9BXNTUp6Jboi1ZSCsiknKWEdgswx9tSui/RNy8B nQb+t4kDcRbzSz1xuSoLdUWdL4D67jUpx6g5MfyrNgoZ7YCFJ8CuiA9yEJTdtnLuyjQa/swW6VD9wI 0wzXbbBuaqHnMf4JrKEP7EkZ7bXS7osQMJ+JWrHIhqAKvmxnnlsZTNCcxap4hyA7pWFr+thg909M5W D/UmfvgWrUpVQm1q8i2EhR216PW2uJQfTP0XMbnC6JH+Pis0nuCEiJey+SuJhkl9P/c6zLqIZ5RBqf nIqCb4Kr6k461N6lrLArykhNzaafPi
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 04:17:52PM +0200, Lino Sanfilippo wrote:
-> On 24.09.21 at 15:33, Jason Gunthorpe wrote:
-> > On Fri, Sep 24, 2021 at 03:29:46PM +0200, Lino Sanfilippo wrote:
-> >
-> >> So this bug is triggered when the bcm2835 drivers shutdown() function is called since this
-> >> driver does something quite unusual: it unregisters the spi controller in its shutdown()
-> >> handler.
-> >
-> > This seems wrong
-> >
-> > Jason
-> >
-> 
-> 
-> Unregistering the SPI controller during shutdown is only a side-effect of calling
-> bcm2835_spi_remove() in the shutdown handler:
-> 
-> static void bcm2835_spi_shutdown(struct platform_device *pdev)
-> {
-> 	int ret;
-> 
-> 	ret = bcm2835_spi_remove(pdev);
-> 	if (ret)
-> 		dev_err(&pdev->dev, "failed to shutdown\n");
-> }
+In commit c46ed2281bbe ("tpm_tis_spi: add missing SPI device ID entries")
+we added SPI IDs for all the DT aliases to handle the fact that we always
+use SPI modaliases to load modules even when probed via DT however the
+mentioned commit missed that the SPI and OF device ID entries did not
+match and were different and so DT nodes with compatible
+"tcg,tpm_tis-spi" will not match.  Add an extra ID for tpm_tis-spi
+rather than just fix the existing one since what's currently there is
+going to be better for anyone actually using SPI IDs to instantiate.
 
-That's wrong, the shutdown handler is only supposed to make the HW
-stop doing DMA and interrupts so we can have a clean transition to
-kexec/etc
+Fixes: c46ed2281bbe ("tpm_tis_spi: add missing SPI device ID entries")
+Fixes: 96c8395e2166 ("spi: Revert modalias changes")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-It should not be manipulating other state.
+v2:
+ - Tweak commit message with suggestion from Javier.
 
-Jason
+ drivers/char/tpm/tpm_tis_spi_main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+index 54584b4b00d1..aaa59a00eeae 100644
+--- a/drivers/char/tpm/tpm_tis_spi_main.c
++++ b/drivers/char/tpm/tpm_tis_spi_main.c
+@@ -267,6 +267,7 @@ static const struct spi_device_id tpm_tis_spi_id[] = {
+ 	{ "st33htpm-spi", (unsigned long)tpm_tis_spi_probe },
+ 	{ "slb9670", (unsigned long)tpm_tis_spi_probe },
+ 	{ "tpm_tis_spi", (unsigned long)tpm_tis_spi_probe },
++	{ "tpm_tis-spi", (unsigned long)tpm_tis_spi_probe },
+ 	{ "cr50", (unsigned long)cr50_spi_probe },
+ 	{}
+ };
+-- 
+2.20.1
+
