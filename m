@@ -2,174 +2,323 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B91416FA0
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Sep 2021 11:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5474175B6
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Sep 2021 15:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245355AbhIXJzN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 24 Sep 2021 05:55:13 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:7264 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245306AbhIXJzM (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 24 Sep 2021 05:55:12 -0400
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18O9PNrV027806;
-        Fri, 24 Sep 2021 09:53:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
- bh=+7h214Q2GWSEhM42l8Lw5EmA5pkZRD26Dgov90G50/4=;
- b=xZbFWPFaesyMchWoth85tWrXRO3o/2JDomjW+DdEGcrTZ9BO5SFMFVnm2qcsJiXLxgsx
- wlubehEF6IvDAtPmop2f33WyYiGbsJnZE8YVtkMuTxxhPFc0chLVdD4dDk6NbNwGHvTJ
- c9WLWDd+Ei7mBRNzGYUfTRqUn0QpKdKcb3Uo7yfpAUzRHGHr6QSP3TsHug2PTf5wJNUI
- bpyDRxwjpEEcxsXCKXt+xNeSzxs3Zjpklt2T2X9DBSrROuke2xnLfJ0JRiF2VSz2QNRg
- +B7bLJPzGsije2IK+G0OjvhPLNH+hzHE0Wc/S9p5WEwX0V+bdcGdXRoN11iV0L4lRvKa Gw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3b93ey29kf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Sep 2021 09:53:38 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 18O9ngSx094184;
-        Fri, 24 Sep 2021 09:53:37 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        by userp3030.oracle.com with ESMTP id 3b93g320qk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Sep 2021 09:53:36 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cXPbfEmvVxivpoip6wovoSWAE2C/Sa4u5xkXOUNmNMsxLBPEigJRc8vFnPoYa9RfOwhgKmqLNQ/7Dd4UWcsUE2jKKmDIuOmnCNkiu5yVZPep7oW9+D67PPXCS00dHZ8lCFwZVYRsLYaMhFg/tg6bjDvoCPfdM/Qqe0lGBzS4UQj8tXCpwtANB4D9Zwo9vyIHf3eeJ58FNo0hcav0+npBetkhm/bzHyJ+12EM9ltXn1H4OHYB4bnoKRaNqtcraJRjRqDhWnpi5DQnpZJiw32XRpM5SlBoQUpprzBF/9PN5Srasx3WyroZq0XXnyRTqkeoU/6Q85qtYHwSgG9sHypbeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=+7h214Q2GWSEhM42l8Lw5EmA5pkZRD26Dgov90G50/4=;
- b=QDtOgUqS8FmbMRcuJ027pNDSrBHVJTDi47G1Z47rE9Ld2cCdyKJa6hmlawIHt05XsRBJNTU521g/7P4FKwYbKtNapXf2WXKVv7jLLh7Y8uUUZjsT9XCFFeoHhaa5+6MOIZ+b6/sNdYy0OynVWWpEN5ju1Z71jzTf9fyHX5ysJvyPeOGWHgxdNjwAMaNf+1R1zz42l3jwWqCwQXE/J4DVAPXrd80ws8SH/Q6FgUIsBeQxgNC3qO8OQ55oqWfvjdVNZkO5na1K/3Vudr4A1fD/SqPsoj40RlBMtufB1xODol0e/MfEpQ6jH74cmhop7XEjq0IJAOyOzaabtNPOaaMRFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+7h214Q2GWSEhM42l8Lw5EmA5pkZRD26Dgov90G50/4=;
- b=jp5q39GZLSn3K5KkMgsee7/EXvFcEhtDAIdT321vApcEzMMAY8BdQ90blQBsz+KOSJN6jifHXph5Tnni0pljqRI5u/18xAEkWUR+krwtGxCNDyaDCUicWofC8HgQPVi7C3GlVi1JgiRL0lU2bUc90Mx9a067OX0yS2rsV+1PXgk=
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=oracle.com;
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CO1PR10MB4466.namprd10.prod.outlook.com
- (2603:10b6:303:9b::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15; Fri, 24 Sep
- 2021 09:53:35 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::d409:11b5:5eb2:6be9]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::d409:11b5:5eb2:6be9%5]) with mapi id 15.20.4544.015; Fri, 24 Sep 2021
- 09:53:35 +0000
-Date:   Fri, 24 Sep 2021 12:53:24 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     christophe.ricard@gmail.com
-Cc:     linux-integrity@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: [bug report] tpm/tpm_i2c_stm_st33: Split tpm_i2c_tpm_st33 in 2
- layers (core + phy)
-Message-ID: <20210924095324.GA21453@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: ZR0P278CA0066.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:21::17) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        id S1344472AbhIXNbb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 24 Sep 2021 09:31:31 -0400
+Received: from mout.gmx.net ([212.227.17.20]:55629 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344509AbhIXNb0 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 24 Sep 2021 09:31:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+        s=badeba3b8450; t=1632490187;
+        bh=DFSefilhraRmcDYtR1JwTbD7OMt5GAX7CLYIifQAll8=;
+        h=X-UI-Sender-Class:From:Subject:To:Cc:References:Date:In-Reply-To;
+        b=OKh9sH/zXtTRwUc/6uItrV7xsEyYgC8QbPzVkTj71vM5X4EJyZ8vcev3NjDSmhdrp
+         1FP/ZwbMv2bKIy4KCiyOpQX7YE0Q7dy1rPYvp2/98gjxSYJw6DKzqXzZHaNHLCQO8M
+         lTqiGyOJ9dVTqHZU23pN2R7LFW7SWf0kX8nGyXJ4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.51] ([46.223.119.124]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M89Gt-1mYPyT3JSN-005Kmt; Fri, 24
+ Sep 2021 15:29:46 +0200
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Subject: Re: [PATCH] tpm: fix potential NULL pointer access in
+ tpm_del_char_device()
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, p.rosenberger@kunbus.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20210910180451.19314-1-LinoSanfilippo@gmx.de>
+ <204a438b6db54060d03689389d6663b0d4ca815d.camel@kernel.org>
+ <trinity-27f56ffd-504a-4c34-9cda-0953ccc459a3-1631566430623@3c-app-gmx-bs69>
+ <c22d2878f9816000c33f5349e7256cadae22b400.camel@kernel.org>
+Message-ID: <50bd6224-0f01-ca50-af0e-f79b933e7998@gmx.de>
+Date:   Fri, 24 Sep 2021 15:29:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Received: from kili (62.8.83.99) by ZR0P278CA0066.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:21::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.13 via Frontend Transport; Fri, 24 Sep 2021 09:53:33 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1316cafd-c96f-4fb3-fc30-08d97f412cc2
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4466:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CO1PR10MB4466D2DFC386DAAB40D71E148EA49@CO1PR10MB4466.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xxGL2GU16DBkt3x5imWdNz+/ul5/HkyDLGTSWP3qYjj/+cz3XbNQ6Naz7BL8Gqa2UdZNKttcC1Lhe/ko/OR1ulChjHjxizjjjcv6AN7yuD5kSK3XoFuHSy7a8NwYuXkUz1CO1Ffrnh1QMKrQtsR1K7i740YDDTK0yiaTBqyMfAF7epb1VGIldqR/qGlkrVdEXqZSd5t+rZqmXDhsSyZEcTH+Y3lyzzaZI0PcsXUjKdDZa7vx4mk0ohpfn6hY9xFK/2vNL1qCSlXXVKFMetijKBIwhw9FMFL0hE0ojXW0Y5g104mniQdiBCzNxprowN59/91qhCbOZrk+Vfx59k+htHkSRMWWiv/ub7Lfj4LGVmkDzkehFKH/dmCxBtNVxshBY8qVNhQU0fm4Q+ear+QfT89m3m6OGm1nqeGjtL4szAl05vMVP9VwfC8lIq2gWwGrjF2TAxranpiFdomYhlcZ6FSLD3coWlkGtdKTtN2VuTwBKCBMTh82c7/gwaItJfq38ol7TfdLpW+f7Rb/rAy5/8ysYChnR8rGXT6/iMftc14wkENBqjGGXnIcv4HsslwVWO70ZtPVL3fGVAohX4IwM4tRgK7BNc52ASzp8fD2oiUCSjrEKBxozamcsvNv1NOVZGl8cr0jYzCJoVgz3iCYdGxZsHTJqYOs3eOcXoRlj4YqkbHtr1wT8OnwaiLQqBJWmSs+Y76Mmi/lbQplQAM1SU1qKF9Y+1KSL7GJjFA7LwM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6666004)(33656002)(8936002)(316002)(38100700002)(5660300002)(956004)(9686003)(9576002)(83380400001)(4326008)(38350700002)(44832011)(8676002)(66556008)(55016002)(66946007)(33716001)(2906002)(66476007)(186003)(86362001)(26005)(508600001)(1076003)(6496006)(6916009)(52116002)(70780200001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0WH1bXFfIs7VoxUFCoy2LUzIKfl825hTIb//ju3VvWqzFHvbULbAbPuXDuQD?=
- =?us-ascii?Q?nI2VjgpeO0eFk1KbbnN0nTj7bLZ+TdnNEtjTP9Mrzpr1AH8fsqmuARL2tXZ2?=
- =?us-ascii?Q?T66w4O8xAaOUQsYAeCXTkTdz+Nnh1JI1MtDfL3K1v/UOZWo0tKbu/+BAb5r9?=
- =?us-ascii?Q?+Q3MnGnbwt/224S+lyeQQR/v9EYxHrmlfujkaC0EOBs71cBGlQycvlWvMcBw?=
- =?us-ascii?Q?Yub7/luRkuoaaVAPi/hXNmJZdjkvo0/BIhTnRWYa855y9WJANpBCXh7tV3IM?=
- =?us-ascii?Q?Cd/s2W9h6WaqV2/Sl2KiEpMLhH8j4uqmZ5vgsyHks2hh+cIhrw5Hh829sQko?=
- =?us-ascii?Q?3G8GS1xyXjYrdhuA7/OcetN8PfrrbpW/fNgUMWqlSdhqdpy8Hvu/a30ztj+C?=
- =?us-ascii?Q?zCmIAtU2LxmbCdA6eGJWqVxJp7EpuzvvfNpd3F4IbxT56rdYwry82oJf/mod?=
- =?us-ascii?Q?jGhOfI9JgBkGjBD2oDv5cmx2xnBgKnr9DI4k1UD9hiaLWejXeVMuH0qr/sM2?=
- =?us-ascii?Q?obWlW7kNDF8eUjVr8G53LrwSQCC9UvEOe/Rry2H4OT2+KSilAshzK3RemIme?=
- =?us-ascii?Q?ixI/7EDiHpH01X6qm/hdAo6Q0dFhud0p7iRR9nzRllalsBJB/q5tO6O1egcv?=
- =?us-ascii?Q?O4rpP8G/of1nCLFqWp0KNSEa+bzjPRuFRiaN3/kY+431F+H0cBVWvn24faRO?=
- =?us-ascii?Q?cf5f2Qz6m4cTf7JTHT/dUcetYTcK6y7wxe/QeR8+ASHL4UEIVzlKQ6EKsviX?=
- =?us-ascii?Q?Rns4EhmnQHRN+jY/uBLEGV3IlN2DZXGUNOFga3jvSKxqHh75EV+YqG4JMEOW?=
- =?us-ascii?Q?ZG/oYjw9/gm1stb0SJxEZC7Xm4IYLZH8jeH0K67/XAsH4/bmU0kjUQoJJPrn?=
- =?us-ascii?Q?srxYiyB5ENmrKwZa96wktEtt7vEyHGIt+MoWIM9DueGk5Ee2oANjZrXYiw/y?=
- =?us-ascii?Q?lIsqzzDPOlJjflWMJsW+u+Wm8sIDb47kGxiVCbh0YyZqHC30d6e0/SaqlIiS?=
- =?us-ascii?Q?ov4MHGHsZEbjAqhIZ7SAi1+Qa4fZZDiMsuSpzi2z8mdJ6zE4foBm2TtiC5SX?=
- =?us-ascii?Q?DyqyBlkDFX/L/9IATSN3wS4yp75SLWedaaorawhErzbcOwXOgKF71BS0kdWK?=
- =?us-ascii?Q?ZLVvHc0hbS1K9h9b2TDWGzkJRt3iHfdmiqtQkmwT+r1jyhsnZpWXhFasWD/c?=
- =?us-ascii?Q?Q7bQi4gp++IWRjiY9IWDD/qigW5EA0knpTGL3tXH4J7WEGGnuY4+qrD52WnT?=
- =?us-ascii?Q?Pk6heb+GMY1Jaq4swr9bamPyEgOt0iz7QD0ES4qZ+1yqtDBrN0Su43AJUK3j?=
- =?us-ascii?Q?wcO+tFekjBoN6ff0wQGC5GhI?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1316cafd-c96f-4fb3-fc30-08d97f412cc2
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2021 09:53:35.3072
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jMzZvp1D4hsGKw//nQ//+s9aoKsFeT5e05+ePmrWKdtV46OaEkjh0UN7rqVa92jpj2pXJ2nvV8fU1VuoBOmaBrBkrsrDdE2+hHBsIYox3Hk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4466
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10116 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0
- mlxlogscore=999 malwarescore=0 mlxscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2109240059
-X-Proofpoint-GUID: jqbno4Rbvt-rLUi_-C56y8mnS9i9eFtk
-X-Proofpoint-ORIG-GUID: jqbno4Rbvt-rLUi_-C56y8mnS9i9eFtk
+In-Reply-To: <c22d2878f9816000c33f5349e7256cadae22b400.camel@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ZvN7fgQ+0nS+cw3X/TFiyM9pyHfKUGSQle/tEG+Zz3UX2VMoMaZ
+ D0YkZE0pcwObN5y1yoByixbPrp9fL5gHWdOwAyT8egW4B2uALhVK6qMS8s6pEDM8nv7Q/G1
+ nNVam8IH3gqct7TNH1/RqYjVhUP9d9VAe+mK54O+6fVP0+JcjfIUYLn/KAA7fGsoovz2JFY
+ 81hdHFhcCVg7t6yRmHJKg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fyIbybALCR8=:g+t9GWme8xAAd64oaA617W
+ x9Kkq6IDdsG+/C4UiSpl5dQZmHxx8EsnM7jPgTjdq1Tx3l+92rvloItLdrdE8sC/NsDYKcOty
+ EHcJA3+NTGhLVbNbIh6gNAO2sJQHvTYLHd1P/eEH8jjTAWHIxp2EtV17YO5EuImnRL7vinfzw
+ pYxiMRAF8av0vOQ68IhAnyyI3RW6Ga9wpzdgZ/lB4vU7+T7JGA51rYclDqDsENdzyIqV7g5Km
+ vXK6xbRELoDHTEVGblRKDn7+IRcxMqPpofI1mg/cXLBCtSjbW4jK8NGu7fhK6hmZvNCwz1zt9
+ qLFZKiZwFFz6udhg596MCL1IiZWK3wXinB9NNur31x2ys6y9KsfhNM0DQAk2WM/x+7bRVVooB
+ LxcPiQ+L0wSp6iBOY7JvvbAG7oso5AmpGPl7kBSlqSU2tEwZqeQCeUqK32x8uzPJN8N5DCZTG
+ 53cTCT1e6O4RP+00i77oEkFHUN2ab9oG4HOXYtxpeqZv5MgmrcmX0YdeA30cjgMcTopNzDpmh
+ Tbt4QV7hPOwV2oxupvPdVBuLIWxpvE0EFTMavK1Cx0Ur9r2SjVXUmxX1wvB+wV6DIiMkn2UJQ
+ SEQX0cTlIDx7z3y0I3SU19AkWDLYRPjU3SHRXotEDRLYH0o45HatBJ8z8OR8/aUUaBzZwyvMC
+ NWgBzZjP3wMSkodybkot+PRjuiDHhBJkqJlJL7eQgIbROgdipN+CF2bQGvHBL9ClszWZOS92X
+ XIMj+l31xkOP9Zab8WgELWo3wMbR/jD+Pj/BTMfLrjvOliwK+64XBCvoSwwd+T0zqy3b5P7Ef
+ a17lQNuf91fHuYuUsVrV16HhYo2F8eEEQ1N0kWl9DcOxAGZ1kSxTiIqb5lSZT4xxxZU1u8uV+
+ bCFhCpfSIOIzDbVxO0tJl0PHMfGmbfMazEbkKRy6phMWUlmSzk/fFb8oBD88Sa3JcUTr4YqkL
+ /LR5Y5Mv6IV1y8ZQlslxFKFTx7886WMnEAKRV+rE9AEJWwwuzcLn9j7V+Glaruz6t6xhUSIB6
+ 24U+tV36VMBV8kZRXd/ecthYNGAQ2tAVJm5XABvVj+1MiHBC5qOQ38RBr3GWT5tf2B7/SdX5o
+ igpNZLonsTEB34=
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-[ Ancient code.  Never use your permanent Gmail address for kernel
-  development if you want to have peace in your life.  - dan ]
+Hi,
 
-Hello Christophe Ricard,
+On 14.09.21 at 02:31, Jarkko Sakkinen wrote:
+> On Mon, 2021-09-13 at 22:53 +0200, Lino Sanfilippo wrote:
+>> Hi,
+>>
+>>> Gesendet: Montag, 13. September 2021 um 22:25 Uhr
+>>> Von: "Jarkko Sakkinen" <jarkko@kernel.org>
+>>> An: "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de, jgg@=
+ziepe.ca
+>>> Cc: p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org, linux-k=
+ernel@vger.kernel.org, stable@vger.kernel.org
+>>> Betreff: Re: [PATCH] tpm: fix potential NULL pointer access in tpm_del=
+_char_device()
+>>>
+>>> On Fri, 2021-09-10 at 20:04 +0200, Lino Sanfilippo wrote:
+>>>> In tpm_del_char_device() make sure that chip->ops is still valid.
+>>>> This check is needed since in case of a system shutdown
+>>>> tpm_class_shutdown() has already been called and set chip->ops to NUL=
+L.
+>>>> This leads to a NULL pointer access as soon as tpm_del_char_device()
+>>>> tries to access chip->ops in case of TPM 2.
+>>>>
+>>>> Fixes: dcbeab1946454 ("tpm: fix crash in tpm_tis deinitialization")
+>>>> Cc: stable@vger.kernel.org
+>>>> Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+>>>> ---
+>>>
+>>> Have you been able to reproduce this in some environment?
+>>>
+>>> /Jarkko
+>>>
+>>>
+>>
+>> Yes, this bug is reproducable on my system that is running a 5.10 raspb=
+erry kernel.
+>> I use a SLB 9670 which is connected via SPI.
+>
+> Can you confirm that the lates mainline kernel has also this
+> issue here? That is lacking in this fix.
+>
+> It's obvious that the issue does not scale to every system,
+> so it would nice to know the difference that triggers the
+> issue, before applying this, and it also needs to be
+> documented to the commit message.
+>
 
-The patch bf38b8710892: "tpm/tpm_i2c_stm_st33: Split tpm_i2c_tpm_st33
-in 2 layers (core + phy)" from Mar 8, 2015, leads to the following
-Smatch static checker warning:
+Sorry for the long delay in replying. I have tried to get a recent mainlin=
+e kernel running
+on my hardware but so far without success. Concerning the circumstances un=
+der which this
+bug triggers and if this also applies to the current mainline code please =
+take a look at
+the kernel dump on my system:
 
-	drivers/char/tpm/st33zp24/st33zp24.c:117 check_locality()
-	error: uninitialized symbol 'data'.
+[  174.078277] 8<--- cut here ---
+[  174.078288] Unable to handle kernel NULL pointer dereference at virtual=
+ address 00000034
+[  174.078293] pgd =3D 557a5fc9
+[  174.078300] [00000034] *pgd=3D031cf003, *pmd=3D00000000
+[  174.078317] Internal error: Oops: 206 [#1] SMP ARM
+[  174.078323] Modules linked in: tpm_tis_spi tpm_tis_core tpm spidev gpio=
+_pca953x mcp320x rtc_pcf2127 industrialio regmap_i2c regmap_spi 8021q garp=
+ stp llc ftdi_sio6
+[  174.078441] CPU: 3 PID: 1 Comm: systemd-shutdow Tainted: G        WC   =
+     5.10.27-rt36-C4LS+ #1
+[  174.078448] Hardware name: BCM2835
+[  174.078451] PC is at tpm_chip_start+0x1c/0xc0 [tpm]
+[  174.078492] LR is at tpm_chip_unregister+0xc0/0xe0 [tpm]
+[  174.078525] pc : [<bf244080>]    lr : [<bf2447c8>]    psr: 20000013
+[  174.078529] sp : c1903c38  ip : c1903c50  fp : c1903c4c
+[  174.078533] r10: c1aca054  r9 : c0e77b28  r8 : c311c000
+[  174.078537] r7 : 00000000  r6 : bf262010  r5 : c323fbf8  r4 : c323f800
+[  174.078541] r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : c323f800
+[  174.078546] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segmen=
+t none
+[  174.078553] Control: 30c5383d  Table: 02a47980  DAC: f7bd3313
+[  174.078556] Process systemd-shutdow (pid: 1, stack limit =3D 0xa0551b1d=
+)
+[  174.078561] Stack: (0xc1903c38 to 0xc1904000)
+[  174.078566] 3c20:                                                      =
+ c323f800 c323fbf8
+[  174.078574] 3c40: c1903c64 c1903c50 bf2447c8 bf244070 c323f800 c3498800=
+ c1903c7c c1903c68
+[  174.078581] 3c60: bf260190 bf244714 c3498800 c3498800 c1903c94 c1903c80=
+ c08b9fa8 bf26017c
+[  174.078588] 3c80: c3498800 00000000 c1903cb4 c1903c98 c0862b20 c08b9f7c=
+ c1aaf730 c3498800
+[  174.078595] 3ca0: c12fc9d0 00000000 c1903cc4 c1903cb8 c0862bf4 c0862a1c=
+ c1903ce4 c1903cc8
+[  174.078602] 3cc0: c08612d0 c0862be0 c3498800 00005744 c08ba298 00000000=
+ c1903d2c c1903ce8
+[  174.078609] 3ce0: c085c61c c0861200 ffffe000 c13404c0 c0781f40 c0e77b28=
+ c1903d2c c1205048
+[  174.078616] 3d00: c0332c3c c3498800 00000000 c08ba298 c13fdd7c c1356018=
+ c0e77b28 c1aca054
+[  174.078623] 3d20: c1903d44 c1903d30 c085c8d0 c085c498 c3498800 00000000=
+ c1903d5c c1903d48
+[  174.078630] 3d40: c08ba294 c085c8c0 c311c000 00000000 c1903d6c c1903d60=
+ c08ba2b0 c08ba25c
+[  174.078638] 3d60: c1903d9c c1903d70 c085bb90 c08ba2a4 c1903d8c c369a080=
+ c369a114 c1205048
+[  174.078645] 3d80: c1903da4 c311c000 c311c000 00000000 c1903dbc c1903da0=
+ c08ba748 c085bb2c
+[  174.078651] 3da0: c311c380 c311c000 00000000 c13fdd7c c1903ddc c1903dc0=
+ bf168534 c08ba718
+[  174.078659] 3dc0: c1aca000 c1a75010 c1aca010 c13fdd7c c1903df4 c1903de0=
+ bf168588 bf16850c
+[  174.078666] 3de0: c1aca014 c1a75010 c1903e04 c1903df8 c0863ca0 bf168578=
+ c1903e3c c1903e08
+[  174.078673] 3e00: c085fc90 c0863c80 c1903e3c c0e77b18 c0248888 00000000=
+ 00000000 8855a600
+[  174.078680] 3e20: c120f1cc fee1dead c1902000 00000058 c1903e4c c1903e40=
+ c0249eb0 c085fb00
+[  174.078687] 3e40: c1903e64 c1903e50 c0249fa0 c0249e78 01234567 00000000=
+ c1903f94 c1903e68
+[  174.078694] 3e60: c024a244 c0249f90 c1903ed4 c2ec5180 00000024 c1903f58=
+ 00000005 c0441f50
+[  174.078701] 3e80: c1903ec4 c1903e90 c0441d94 c0498350 00000000 c1903ea0=
+ c0739fa4 00000024
+[  174.078708] 3ea0: c2ec5180 c1903f58 c1903ed4 c2ec5180 00000005 00000000=
+ c1903f4c c1903ec8
+[  174.078715] 3ec0: c0441f50 c0425938 c1903ed0 c1903ed4 00000000 00000005=
+ 00000000 00000024
+[  174.078722] 3ee0: c1903eec 00000005 c020007c bec81250 00000004 bec81f62=
+ 00000010 bec81264
+[  174.078729] 3f00: 00000005 bec8131c 0000000a b6d0ef50 00000001 c0200e70=
+ ffffe000 c13404c0
+[  174.078736] 3f20: 00000000 c04673e8 c1903f4c c1205048 c2ec5180 bec8128c=
+ 00000000 00000000
+[  174.078743] 3f40: c1903f94 c1903f50 c04420d0 c0441eb4 00000000 c13404c0=
+ 00000000 00000000
+[  174.078750] 3f60: c1903f94 c1205048 c0332c3c c1205048 bec8131c 00000000=
+ 00000000 00000000
+[  174.078757] 3f80: 00000058 c0200204 c1903fa4 c1903f98 c024a398 c024a13c=
+ 00000000 c1903fa8
+[  174.078764] 3fa0: c0200040 c024a38c 00000000 00000000 fee1dead 28121969=
+ 01234567 8855a600
+[  174.078771] 3fc0: 00000000 00000000 00000000 00000058 00000fff bec81be8=
+ 00000000 00456b80
+[  174.078778] 3fe0: 00468e3c bec81b68 004534a8 b6e4ba38 60000010 fee1dead=
+ 00000000 00000000
+[  174.078782] Backtrace:
+[  174.078786] [<bf244064>] (tpm_chip_start [tpm]) from [<bf2447c8>] (tpm_=
+chip_unregister+0xc0/0xe0 [tpm])
+[  174.078853]  r5:c323fbf8 r4:c323f800
+[  174.078855] [<bf244708>] (tpm_chip_unregister [tpm]) from [<bf260190>] =
+(tpm_tis_spi_remove+0x20/0x30 [tpm_tis_spi])
+[  174.078899]  r5:c3498800 r4:c323f800
+[  174.078901] [<bf260170>] (tpm_tis_spi_remove [tpm_tis_spi]) from [<c08b=
+9fa8>] (spi_drv_remove+0x38/0x50)
+[  174.078923]  r5:c3498800 r4:c3498800
+[  174.078926] [<c08b9f70>] (spi_drv_remove) from [<c0862b20>] (device_rel=
+ease_driver_internal+0x110/0x1c4)
+[  174.078942]  r5:00000000 r4:c3498800
+[  174.078945] [<c0862a10>] (device_release_driver_internal) from [<c0862b=
+f4>] (device_release_driver+0x20/0x24)
+[  174.078959]  r7:00000000 r6:c12fc9d0 r5:c3498800 r4:c1aaf730
+[  174.078962] [<c0862bd4>] (device_release_driver) from [<c08612d0>] (bus=
+_remove_device+0xdc/0x108)
+[  174.078973] [<c08611f4>] (bus_remove_device) from [<c085c61c>] (device_=
+del+0x190/0x428)
+[  174.078989]  r7:00000000 r6:c08ba298 r5:00005744 r4:c3498800
+[  174.078992] [<c085c48c>] (device_del) from [<c085c8d0>] (device_unregis=
+ter+0x1c/0x30)
+[  174.079009]  r10:c1aca054 r9:c0e77b28 r8:c1356018 r7:c13fdd7c r6:c08ba2=
+98 r5:00000000
+[  174.079013]  r4:c3498800
+[  174.079015] [<c085c8b4>] (device_unregister) from [<c08ba294>] (spi_unr=
+egister_device+0x44/0x48)
+[  174.079030]  r5:00000000 r4:c3498800
+[  174.079033] [<c08ba250>] (spi_unregister_device) from [<c08ba2b0>] (__u=
+nregister+0x18/0x20)
+[  174.079048]  r5:00000000 r4:c311c000
+[  174.079050] [<c08ba298>] (__unregister) from [<c085bb90>] (device_for_e=
+ach_child+0x70/0xb4)
+[  174.079064] [<c085bb20>] (device_for_each_child) from [<c08ba748>] (spi=
+_unregister_controller+0x3c/0x134)
+[  174.079081]  r6:00000000 r5:c311c000 r4:c311c000
+[  174.079083] [<c08ba70c>] (spi_unregister_controller) from [<bf168534>] =
+(bcm2835_spi_remove+0x34/0x6c [spi_bcm2835])
+[  174.079104]  r7:c13fdd7c r6:00000000 r5:c311c000 r4:c311c380
+[  174.079107] [<bf168500>] (bcm2835_spi_remove [spi_bcm2835]) from [<bf16=
+8588>] (bcm2835_spi_shutdown+0x1c/0x38 [spi_bcm2835])
+[  174.079130]  r7:c13fdd7c r6:c1aca010 r5:c1a75010 r4:c1aca000
+[  174.079132] [<bf16856c>] (bcm2835_spi_shutdown [spi_bcm2835]) from [<c0=
+863ca0>] (platform_drv_shutdown+0x2c/0x30)
+[  174.079150]  r5:c1a75010 r4:c1aca014
+[  174.079153] [<c0863c74>] (platform_drv_shutdown) from [<c085fc90>] (dev=
+ice_shutdown+0x19c/0x24c)
+[  174.079164] [<c085faf4>] (device_shutdown) from [<c0249eb0>] (kernel_re=
+start_prepare+0x44/0x48)
+[  174.079183]  r10:00000058 r9:c1902000 r8:fee1dead r7:c120f1cc r6:8855a6=
+00 r5:00000000
+[  174.079186]  r4:00000000
+[  174.079189] [<c0249e6c>] (kernel_restart_prepare) from [<c0249fa0>] (ke=
+rnel_restart+0x1c/0x60)
+[  174.079203] [<c0249f84>] (kernel_restart) from [<c024a244>] (__do_sys_r=
+eboot+0x114/0x1f8)
+[  174.079218]  r5:00000000 r4:01234567
+[  174.079221] [<c024a130>] (__do_sys_reboot) from [<c024a398>] (sys_reboo=
+t+0x18/0x1c)
+[  174.079238]  r8:c0200204 r7:00000058 r6:00000000 r5:00000000 r4:0000000=
+0
+[  174.079241] [<c024a380>] (sys_reboot) from [<c0200040>] (ret_fast_sysca=
+ll+0x0/0x28)
+[  174.079254] Exception stack(0xc1903fa8 to 0xc1903ff0)
+[  174.079260] 3fa0:                   00000000 00000000 fee1dead 28121969=
+ 01234567 8855a600
+[  174.079267] 3fc0: 00000000 00000000 00000000 00000058 00000fff bec81be8=
+ 00000000 00456b80
+[  174.079273] 3fe0: 00468e3c bec81b68 004534a8 b6e4ba38
+[  174.079280] Code: e52de004 e8bd4000 e5903410 e1a04000 (e5932034)
+[  174.079285] ---[ end trace 33e1042219f38210 ]---
+[  174.879428] Kernel panic - not syncing:
+[  174.879432] Attempted to kill init! exitcode=3D0x0000000b
 
-drivers/char/tpm/st33zp24/st33zp24.c
-    110 static bool check_locality(struct tpm_chip *chip)
-    111 {
-    112         struct st33zp24_dev *tpm_dev = dev_get_drvdata(&chip->dev);
-    113         u8 data;
-    114         u8 status;
-    115 
-    116         status = tpm_dev->ops->recv(tpm_dev->phy_id, TPM_ACCESS, &data, 1);
---> 117         if (status && (data &
 
-The ->recv() functions, st33zp24_i2c_recv() and st33zp24_spi_recv(),
-return negative error codes.
+Note that before this bug happens all pre_shutdown handlers have already b=
+een executed
+including tpm_class_shutdown() which sets chip->ops to NULL.
 
-st33zp24_i2c_recv() is especially of problematic because theoretically
-it could return 1 on error.  The i2c_master_recv() function is tricky.
-It would be better if it returned negative and zero instead of returning
-the number of bytes sent.
+So this bug is triggered when the bcm2835 drivers shutdown() function is c=
+alled since this
+driver does something quite unusual: it unregisters the spi controller in =
+its shutdown()
+handler.
 
-USB had this same issue so Greg added new helper functions in commit
-719b8f2850d3 ("USB: add usb_control_msg_send() and usb_control_msg_recv()")
+This eventually results in a call to tpm_del_char_device(). This is not pr=
+oblematic unless we have
+TPM2, since in this case tpm_chip_start() is called and chip->ops is acces=
+sed again, resulting in
+the NULL pointer access.
 
-    118                 (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID)) ==
-    119                 (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID))
-    120                 return true;
-    121 
-    122         return false;
-    123 } /* check_locality() */
+So to make it short the combination of
+- the tpm chips pre_shutdown handler setting chip->ops to NULL
+- the use of the bcm2835 driver with the spi controller deregistration in =
+its shutdown function
+- the use of TPM 2
 
-regards,
-dan carpenter
+results in the situation in which this bug can trigger.
+
+AFAICS this is still the case in the mainline code. Also note that with th=
+e
+freescale LPSPI controller driver there is another driver that unregisters=
+ the spi
+controller in its shutdown function.
+
+
+Please let me know if you need further information.
+
+Regards,
+Lino
+
