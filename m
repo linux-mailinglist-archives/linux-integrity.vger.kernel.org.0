@@ -2,126 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5EB41C0C4
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Sep 2021 10:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3A241C129
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Sep 2021 10:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244790AbhI2Ikb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 29 Sep 2021 04:40:31 -0400
-Received: from mout.gmx.net ([212.227.15.19]:58697 "EHLO mout.gmx.net"
+        id S244905AbhI2JAM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Sep 2021 05:00:12 -0400
+Received: from mout.gmx.net ([212.227.15.19]:57751 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244459AbhI2Ikb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 29 Sep 2021 04:40:31 -0400
+        id S244764AbhI2JAL (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 29 Sep 2021 05:00:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1632904717;
-        bh=69pRpa6l2Y08HczbwXoeIQeKFHMhbQLtr9C6GLFurWc=;
+        s=badeba3b8450; t=1632905905;
+        bh=0LEmnNPhcWdihF2RjF95YJlRjy/VpEvhtUCClVkra3E=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=A9H+y8imr9orFbW6XtLfjHN39XTK2JNwDkvLn6vuSkUrWhXW2qtrH0CA/1iPqeNnf
-         qP3BRmG3eiJyctp1bVdBzDGW5FUrPsS+J0OFJIjeRoWX4y4CQ0dTvlvEVCHWZp9wws
-         uPYhHLtq3uHBZGu4QU+4ZtLGsdC+XqmYUTLJ8lLQ=
+        b=NoQ22YzDXYVc3sXRvJUxxZbTH7Tlh7bOQtkkk6SIFFsMXEXH0IU7OllhYyN/9nbAo
+         9z2naBmrgWWlrfEZjYAhIOsQZXKD+oejMQLhCaMM9qRQPw3a0tuHeHq4uKo+8obxkK
+         gkMOtNf+RSWaM3fhYbSoBpYFMS1a69TPSz/4kRNc=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from [87.130.101.138] ([87.130.101.138]) by web-mail.gmx.net
  (3c-app-gmx-bs21.server.lan [172.19.170.73]) (via HTTP); Wed, 29 Sep 2021
- 10:38:37 +0200
+ 10:58:25 +0200
 MIME-Version: 1.0
-Message-ID: <trinity-4f6dfbb9-adbe-4569-a1de-1e6502eea309-1632904717666@3c-app-gmx-bs21>
+Message-ID: <trinity-04f4aedd-514d-47bc-8622-cf6b1a264d52-1632905905528@3c-app-gmx-bs21>
 From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
-        linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jgg@ziepe.ca, p.rosenberger@kunbus.com,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org
-Subject: Aw: Re: [PATCH] spi: bcm2835: do not unregister controller in
- shutdown handler
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de,
+        p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: Re: [PATCH] tpm: fix potential NULL pointer access in
+ tpm_del_char_device()
 Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 29 Sep 2021 10:38:37 +0200
+Date:   Wed, 29 Sep 2021 10:58:25 +0200
 Importance: normal
 Sensitivity: Normal
-In-Reply-To: <20210928200843.GM4199@sirena.org.uk>
-References: <20210928195657.5573-1-LinoSanfilippo@gmx.de>
- <20210928200843.GM4199@sirena.org.uk>
+In-Reply-To: <20210924142032.GY3544071@ziepe.ca>
+References: <20210910180451.19314-1-LinoSanfilippo@gmx.de>
+ <204a438b6db54060d03689389d6663b0d4ca815d.camel@kernel.org>
+ <trinity-27f56ffd-504a-4c34-9cda-0953ccc459a3-1631566430623@3c-app-gmx-bs69>
+ <c22d2878f9816000c33f5349e7256cadae22b400.camel@kernel.org>
+ <50bd6224-0f01-ca50-af0e-f79b933e7998@gmx.de>
+ <20210924133321.GX3544071@ziepe.ca>
+ <b49f4b52-44c4-8cb8-a102-689e9f788177@gmx.de>
+ <20210924142032.GY3544071@ziepe.ca>
 X-UI-Message-Type: mail
 X-Priority: 3
-X-Provags-ID: V03:K1:b8hgkS5jXCfvegurMfbZnwGpqsyAAk/k9HKW4mOlU5AC0UBZUo9OkoB/WCdb6WkVevUY0
- Ydyfk11n5YxknZnEGRxqV4qq+CUVg9k9jHjgUOIAJS6eiPDRuVxTbNmhJZBdZ70FbLZjgWqE+BTG
- OeAbjUaKCmXBWjA+1K7H+KQ7+CJ7EjqOI9eZZNs0qEZhGS50N9qZp0JZk8T9i8zj/+k12IpKSRM/
- JhkcAeegsUKui93HHopQtydG8mZhgkmqro1qcnilIZ2FO2AZefArxu9WMO0OtVdwj1kouxibqf0Q
- /0=
+X-Provags-ID: V03:K1:jxiYz/CfHteSo64qsJl+OFqt2ZEi7cgLLlu3QlsURDEaRf1qcf2836+rv8hUCuZubEcXY
+ IOXBufYQQSASmDArS0/i4E2Npm5wTfyBbLtF8c7fHYKE2HnyuDG3BSBfjEsQtVyn5m9DwhEz+GKR
+ VL37F+2X/7FRBU37VzZKlp2kUXmu9L7cnXSeT3uCScmv+QzWJbEVyUKYjbGnU3YfMYN29otDNmEl
+ pZw+FfU1OI4uZYyOe8C/qGmaoPU4y7HeUOitF7lV0o6nkSaQ7bunYlUz4gSH1j9rkm9yoNY3r0cw
+ Uw=
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0CB2d6rUfk4=:nNGEIyKajqtJJj6uXiCAXv
- huiclZoRqXFelSqItT/tQ+jqyU1sOyyYoogxhYg/P3sL65KAg3b8cbziaUOZe7lmpKsoNBIn9
- ENmYQjFlm3RQAxRmwUK4YleMjEy1yNfS199WCV9CyMX08WI/3A+aFGca+bbXPZbPu4pXGSHm4
- IuoZY5k+LorE5kU6kIUc1HgJo3fd6oCky4ByVmUv0b9hDuH4viz4SD/5j4dI7pGBURLHB/UGw
- TkqrkIKEsWOaiEXxxbzBf3IlfbmJOFLwhbhlpZLSuyxXuuMdAJ5QOLNpAFqO5ht/364+bMDdb
- D/iTFbkYZQ9VGrnetBRqWsVsZHRCLNaluLcHbwpuFU7kbiV5mLaNtj18fVmr/32JJpthc64oS
- GBQaSu0owx624wq/p4gMGWIPQtnc1nni0bSMRFZ0MTEHMPDnl/Lzlvh5sw6lcg3fgS2010kWL
- mQiCtVeFvGhjm5J03l52UIt2GSEtiM+RuHaFqMhyDQQ2ZGuYBiQABfpAIIAhBmP2nadpBDINr
- L0sWrK1VEpIAnGh/era1ytcVl2NuXJHvscg5spKJj5B5+kQu67YASEL3hB181Rsh+O/ZFi7+I
- 3PojC8gvkzp0psq2weQuPZUUSRIhuPpBc3flxRnzctd5tEp1/6VgiIiV8yzh0nsPCVjiBLzzk
- 17NmEJa0BBcHm/oh8tThWojofc+0ZOz1b1bwYAEYNVV+mUVwOm4D4l2fK2e9ZfYLNnUmGu314
- krs9qJGZ7ZkQ7Zzp/6lEI5fx41ZqHhUe4FxpmCeZpd7KviZKPgzmCsM5k+vNIgVXyRJpU/kGE
- nUUXupI
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yQoCdAJcWJM=:pi5fuWIg9BPlVs+WOjM1Gi
+ tRqUOlzFucYaLb8HvycKb40Lwear0svHybX7xRzYidSwelXeuxOatMaruV5mO1RfdPTyvuW8F
+ c+GeHzXaSvTvdZnznqurSABvSnY1DJVBKDKzefeK47IED2VTNyGO8Mkgs/4FVNPQkNqPKbA4H
+ CEQ5X/ADltCCDP3O8h6pg4VLzvEL9BylgfhKfR1wttX2fk2PoBfFNHMj7bSdxEGGbcFF1dyGo
+ NbxtqDBPr0t8xgPBKV2s8KKRZhr69cAILvgMAW0Zz7uaG0r5JVa2c3Fl1X2a1yTaiyZK9Zq27
+ cJAIbSyOFw6y/ZEUbmUu8uJLBAHGmWCOLFqv798Z0Mbp3B46i86aD3Tbv3/nSf8a0E9fbvCc8
+ fGmBw506xZhbP01CF9OrUMaA0DI8xBZjaHhZQ+6N0sQiUu+MwICfeaUB3aTYL/PWceT09Gq2A
+ Y/n491oRRQ9Zcxpf3U4EmOgFGlaM8S9ep5nE0sBwioNqSKA1aZ55PlzmLNSKdducUszns0CTd
+ PfmN4FLgIVDgpjfHlKEjRmleZC4/fOKIs+XswuXhw8kJbErFZotC9Wbr3HvK4GgDpBX/jJcOG
+ OrKMzD9xDZ4FAuD9SzJLVxSxL7JgueTRANN61t4CA9ghivBKufxt0qC89Unf+1wwg+xMvgK6k
+ cNzHMv6qaD0hrKEb5dkZ47XNUy3dWit0jZmrS4vdZEgn1ayKJJb4yradQVg4e6lSO6OZrULwo
+ tDjRnbrqOvdRP9jj0xOT+7qxi+A1Y7N3FA4iiaPGLHpq/Q9+h8Ij1yEvtXgdphyfPN6p24+YW
+ n40VELY
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
 Hi,
 
-> Gesendet: Dienstag, 28. September 2021 um 22:08 Uhr
-> Von: "Mark Brown" <broonie@kernel.org>
+> Gesendet: Freitag, 24. September 2021 um 16:20 Uhr
+> Von: "Jason Gunthorpe" <jgg@ziepe.ca>
 > An: "Lino Sanfilippo" <LinoSanfilippo@gmx.de>
-> Cc: f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com, bcm-=
-kernel-feedback-list@broadcom.com, nsaenz@kernel.org, linux-spi@vger.kerne=
-l.org, linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infrad=
-ead.org, linux-kernel@vger.kernel.org, jgg@ziepe.ca, p.rosenberger@kunbus.=
-com, linux-integrity@vger.kernel.org, stable@vger.kernel.org
-> Betreff: Re: [PATCH] spi: bcm2835: do not unregister controller in shutd=
-own handler
+> Cc: "Jarkko Sakkinen" <jarkko@kernel.org>, peterhuewe@gmx.de, p.rosenber=
+ger@kunbus.com, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.=
+org, stable@vger.kernel.org
+> Betreff: Re: [PATCH] tpm: fix potential NULL pointer access in tpm_del_c=
+har_device()
 >
-> On Tue, Sep 28, 2021 at 09:56:57PM +0200, Lino Sanfilippo wrote:
-> > Do not unregister the SPI controller in the shutdown handler. The reas=
-on
-> > to avoid this is that controller unregistration results in the slave
-> > devices remove() handler being called which may be unexpected for slav=
-e
-> > drivers at system shutdown.
+> On Fri, Sep 24, 2021 at 04:17:52PM +0200, Lino Sanfilippo wrote:
+> > On 24.09.21 at 15:33, Jason Gunthorpe wrote:
+> > > On Fri, Sep 24, 2021 at 03:29:46PM +0200, Lino Sanfilippo wrote:
+> > >
+> > >> So this bug is triggered when the bcm2835 drivers shutdown() functi=
+on is called since this
+> > >> driver does something quite unusual: it unregisters the spi control=
+ler in its shutdown()
+> > >> handler.
+> > >
+> > > This seems wrong
+> > >
+> > > Jason
+> > >
 > >
-> > One example is if the BCM2835 driver is used together with the TPM SPI
-> > driver:
-> > At system shutdown first the TPM chip devices (pre) shutdown handler
-> > (tpm_class_shutdown) is called, stopping the chip and setting an opera=
-tions
-> > pointer to NULL.
-> > Then since the BCM2835 shutdown handler unregisters the SPI controller=
- the
-> > TPM SPI remove function (tpm_tis_spi_remove) is also called. In case o=
-f
-> > TPM 2 this function accesses the now nullified operations pointer,
-> > resulting in the following NULL pointer access:
 > >
-> > [  174.078277] 8<--- cut here ---
-> > [  174.078288] Unable to handle kernel NULL pointer dereference at vir=
-tual address 00000034
-> > [  174.078293] pgd =3D 557a5fc9
-> > [  174.078300] [00000034] *pgd=3D031cf003, *pmd=3D00000000
-> > [  174.078317] Internal error: Oops: 206 [#1] SMP ARM
-> > [  174.078323] Modules linked in: tpm_tis_spi tpm_tis_core tpm spidev =
-gpio_pca953x mcp320x rtc_pcf2127 industrialio regmap_i2c regmap_spi 8021q =
-garp stp llc ftdi_sio6
+> > Unregistering the SPI controller during shutdown is only a side-effect=
+ of calling
+> > bcm2835_spi_remove() in the shutdown handler:
+> >
+> > static void bcm2835_spi_shutdown(struct platform_device *pdev)
+> > {
+> > 	int ret;
+> >
+> > 	ret =3D bcm2835_spi_remove(pdev);
+> > 	if (ret)
+> > 		dev_err(&pdev->dev, "failed to shutdown\n");
+> > }
 >
-> Please think hard before including complete backtraces in upstream
-> reports, they are very large and contain almost no useful information
-> relative to their size so often obscure the relevant content in your
-> message. If part of the backtrace is usefully illustrative (it often is
-> for search engines if nothing else) then it's usually better to pull out
-> the relevant sections.
+> That's wrong, the shutdown handler is only supposed to make the HW
+> stop doing DMA and interrupts so we can have a clean transition to
+> kexec/etc
 >
+> It should not be manipulating other state.
 
-Thank you for the feedback, I will omit the stack trace in the next versio=
-n.
+
+I created another patch that fixes the issue in the BCM2835 driver instead
+(see https://marc.info/?l=3Dlinux-spi&m=3D163285906725366&w=3D2).
+
+However I still think that the fix I proposed for TPM is valueable, becaus=
+e
+it saves us from any SPI controller driver that does not know/care about t=
+he
+issue that is caused in TPM by unregistering the controller in the shutdow=
+n
+handler. Note that the freescale DSPI driver is another candidate that beh=
+aves
+errorneous in this way.
 
 Regards,
 Lino
