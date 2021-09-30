@@ -2,181 +2,259 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C28341DCC1
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 Sep 2021 16:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07F441DE51
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 Sep 2021 18:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351915AbhI3O4k convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 30 Sep 2021 10:56:40 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3903 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352006AbhI3O4k (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 30 Sep 2021 10:56:40 -0400
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HKx5r2TZtz67j7Z
-        for <linux-integrity@vger.kernel.org>; Thu, 30 Sep 2021 22:51:44 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Thu, 30 Sep 2021 16:54:55 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.008;
- Thu, 30 Sep 2021 16:54:55 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: DIGLIM demo
-Thread-Topic: DIGLIM demo
-Thread-Index: Ade2CqzI+X/Y8CsWSXG0J+ba4sw+oQ==
-Date:   Thu, 30 Sep 2021 14:54:55 +0000
-Message-ID: <48cd737c504d45208377daa27d625531@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.48.214.88]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1348019AbhI3QEk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 30 Sep 2021 12:04:40 -0400
+Received: from smtp2.axis.com ([195.60.68.18]:15716 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347439AbhI3QEk (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 30 Sep 2021 12:04:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1633017777;
+  x=1664553777;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QXhC5KFMX8tQBn1qtEN1Tt+Sn3XS99KDnjTP/m8fU+o=;
+  b=BQSurFJ6yHMZizvv7sqxo/TgtVgRnuvr6UAvVej1RFysxdtQzG7Mdf9N
+   VF+WjEITkmfRBAtIpbM6NJEoOOwlW2/hn4yr2sGeGf3IYBYzkC3CRjl6i
+   z/EYr6r+v0waBQa3gvfuwpuOiTw+AFwdbRPfyOFTGH4ZEbIzHqBN5/58B
+   mQdF4wKANKSzHPI1aAV82Y5jEmSsnniitsbNwipKpo7Xl7GEK/nCZDEWF
+   9bLEmTP93SCrdPt0EHo88CvYxEOnw7evy92b+yNohbinuAnt5vUVQ/9L/
+   sf1cr85g34T+n8rcHOF6WM0df1PzMUuZyocBy4v65Lhouv40nPBv/wFzJ
+   A==;
+From:   Borys Movchan <borysmn@axis.com>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+CC:     <kernel@axis.com>, Borys Movchan <borysmn@axis.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6] tpm: Add Upgrade/Reduced mode support for TPM2 modules
+Date:   Thu, 30 Sep 2021 18:02:40 +0200
+Message-ID: <20210930160241.9691-1-borysmn@axis.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail04w.axis.com (10.20.40.10) To se-mail07w.axis.com
+ (10.20.40.13)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi everyone
+If something went wrong during the TPM firmware upgrade, like power
+failure or the firmware image file get corrupted, the TPM might end
+up in Upgrade or Failure mode upon the next start. The state is
+persistent between the TPM power cycle/restart.
 
-recently I published some patch sets about a new kernel
-component called Digest Lists Integrity Module (DIGLIM),
-which has the ability to store reference values of files
-from Linux distributions (currently only RPM-based ones
-are supported), and to use them for measurement and
-appraisal with IMA.
+According to TPM specification:
+ * If the TPM is in Upgrade mode, it will answer with TPM2_RC_UPGRADE
+   to all commands except Field Upgrade related ones.
+ * If the TPM is in Failure mode, it will allow performing TPM
+   initialization but will not provide any crypto operations.
+   Will happily respond to Field Upgrade calls.
 
-I prepared a demo, to show how easy is to change an
-existing distribution (I tested Fedora 34 and openSUSE
-Leap 15.3) to check the integrity of executables and
-shared libraries.
+Change the behavior of the tpm2_auto_startup(), so it detects the active
+running mode of the TPM by adding the following checks.  If
+tpm2_do_selftest() call returns TPM2_RC_UPGRADE, the TPM is in Upgrade
+mode.
+If the TPM is in Failure mode, it will successfully respond to both
+tpm2_do_selftest() and tpm2_startup() calls. Although, will fail to
+answer to tpm2_get_cc_attrs_tbl(). Use this fact to conclude that TPM is
+in Failure mode.
 
-The basic changes are (I suggest to test them in a VM):
-- install a new kernel which includes the patches I sent to
-   the kernel mailing lists plus some not yet published (mainly
-   for supporting PGP appended signatures)
-- write RPM headers and PGP appended signatures to files
-- regenerate initial ram disk to include the RPM headers
-- reconfigure the boot loader to add IMA-specific options
+If detected that the TPM is in the Upgrade or Failure mode, the function
+sets TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE flag.
 
-I would discourage to test in on a real system, as IMA would
-prevent execution of anything that has not been shipped
-with the Linux distribution.
+The limited mode flag is used later during driver
+initialization/deinitialization to disable functionality which makes no
+sense or will fail in the current TPM state. Following functionality is
+affected:
+ * do not register TPM as a hwrng
+ * do not register sysfs entries which provide information impossible to
+   obtain in limited mode
+ * do not register resource managed character device
 
-Instructions:
+Signed-off-by: Borys Movchan <borysmn@axis.com>
+---
 
-1) Add my repository with the modified kernel and
-     DIGLIM-specific package:
+Notes:
+    v2:
+     * Commit message updated.
+    
+    v3:
+     * Commit message reworked.
+    
+    v4:
+     * Description of how tpm2_auto_startup() detects the mode added to
+       commit message.
+    
+    v5:
+     * Introduce global flag: TPM_CHIP_FLAG_LIMITED_MODE.
+     * Add checks for the flag in places that will not work properly when TPM
+       functionality is limited.
+     * Avoid registering sysfs and character device entries that have no useful
+       function in limited mode.
+     * Do not register TPM as a hwrng.
+     * Do not try to obtain any crypto-related properties from TPM as it will fail
+       in limited mode.
+    
+    v6:
+     * Rename the TPM_CHIP_FLAG_LIMITED_MODE to TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE
+       to reduce confusion. Update info messages.
 
-(Fedora) # dnf copr enable robertosassu/DIGLIM
-(openSUSE) # zypper addrepo https://download.opensuse.org/repositories/home:/roberto.sassu:/branches:/Kernel:/stable/15.3/home:roberto.sassu:branches:Kernel:stable.repo
+ drivers/char/tpm/tpm-chip.c  | 23 ++++++++++++++++-------
+ drivers/char/tpm/tpm-sysfs.c |  3 +++
+ drivers/char/tpm/tpm2-cmd.c  | 14 +++++++++++++-
+ include/linux/tpm.h          |  2 ++
+ 4 files changed, 34 insertions(+), 8 deletions(-)
 
-2) Install required packages:
-
-(Fedora) # dnf install kernel-5.14.8-300.local.fc34.x86_64 kernel-diglim-5.14.8-300.local.fc34.x86_64
-(openSUSE) # zypper in kernel-default kernel-default-diglim
-
-3) Write RPM headers and PGP appended signatures to
-     the /etc/digest_lists directory:
-
-# /usr/libexec/diglim/rpm_gen -d /etc/digest_lists
-
-4) Tell DIGLIM to upload to the kernel only the digests
-     of immutable files:
-
-# touch /etc/digest_lists/.immutable
-
-5) Modify dracut configuration to include DIGLIM-related files:
-
-# echo "install_optional_items+=\" /etc/digest_lists/* /etc/digest_lists/.immutable \"" >> /etc/dracut.conf
-# echo "install_optional_items+=\" /usr/libexec/diglim/upload_digest_lists \"" >> /etc/dracut.conf
-# echo "install_optional_items+=\" /usr/libexec/diglim/rpm_parser \"" >> /etc/dracut.conf
-# echo "do_strip=\"no\"" >> /etc/dracut.conf
-
-6) Regenerate the initial ram disk:
-
-(Fedora) # dracut -f --kver 5.14.8-300.local.fc34.x86_64
-(openSUSE) # dracut -f --kver 5.14.8-lp153.11.g4ae263c-default
-
-7) Add IMA-specific options to the kernel command line
-     (WARNING: it turns on IMA appraisal in enforcing mode,
-      other kernels may become unbootable)
-
-(Fedora) # echo "GRUB_CMDLINE_LINUX_DEFAULT=\"\$GRUB_CMDLINE_LINUX_DEFAULT slab_nomerge ima_template=ima-modsig ima_policy=\\\\\\\"exec_tcb|tmpfs|diglim|appraise_exec_tcb|appraise_tmpfs|appraise_diglim|secure_boot\\\\\\\" module.sig_enforce\"" >> /etc/default/grub
-grub2-mkconfig -o /boot/grub2/grub.cfg
-(openSUSE)  # echo "GRUB_CMDLINE_LINUX_DEFAULT=\"\$GRUB_CMDLINE_LINUX_DEFAULT slab_nomerge ima_template=ima-modsig ima_policy=\\\"exec_tcb|tmpfs|diglim|appraise_exec_tcb|appraise_tmpfs|appraise_diglim|secure_boot\\\" module.sig_enforce\"" >> /etc/default/grub
-grub2-mkconfig -o /boot/grub2/grub.cfg
-
-8) Update the boot loader configuration:
-
-# grub2-mkconfig -o /boot/grub2/grub.cfg
-
-9) Reboot
-
-After reboot, IMA will deny execution of files not from
-the distribution. For example, it is possible to execute:
-
-# cp /usr/bin/cat .
-# ./cat
-# echo test >> cat
-# ./cat
-bash: ./cat: Permission denied
-
-
-With the following command, it is possible to see which
-RPM headers have been measured by IMA:
-
-# cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements
-
-
-The execution policy enforced by IMA can be seen with:
-
-# cat /sys/kernel/security/integrity/ima/policy
-
-
-DIGLIM statistics can be obtained with:
-
-# cat /sys/kernel/security/integrity/diglim/digests_count
-Parser digests: 1
-File digests: 11365
-Metadata digests: 0
-Digest list digests: 508
-
-
-Memory usage by DIGLIM (indexes) can be seen with:
-
-# slabtop --once |grep digest
- 13056  13056 100%    0.03K    102      128       408K digest_list_item_ref_cache
- 12032  12032 100%    0.03K     94      128       376K digest_item_cache
-   546    546 100%    0.09K     13       42        52K digest_list_item_cache
-
-
-Uploaded digest lists (binary and ASCII format) can be seen
-in the /sys/kernel/security/integrity/diglim/digest_lists_loaded.
-
-Finally, all the applied patches are available at:
-
-https://github.com/robertosassu/linux/tree/digest-lists-full-ima-pgp-v1-devel-v3
-
-
-The sources used to create the RPMs are available at:
-
-https://src.fedoraproject.org/fork/robertosassu/rpms/kernel/tree/diglim
-https://build.opensuse.org/package/show/home:roberto.sassu:branches:Kernel:stable/kernel-source
-
-Any suggestion or feedback is very appreciated. If you have
-troubles trying the demo, let me know.
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index ddaeceb7e109..3378bfe06006 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -444,7 +444,8 @@ static int tpm_add_char_device(struct tpm_chip *chip)
+ 		return rc;
+ 	}
+ 
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
++	    !(chip->flags & TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE)) {
+ 		rc = cdev_device_add(&chip->cdevs, &chip->devs);
+ 		if (rc) {
+ 			dev_err(&chip->devs,
+@@ -488,7 +489,8 @@ static void tpm_del_legacy_sysfs(struct tpm_chip *chip)
+ {
+ 	struct attribute **i;
+ 
+-	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL))
++	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL) ||
++	    chip->flags & TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE)
+ 		return;
+ 
+ 	sysfs_remove_link(&chip->dev.parent->kobj, "ppi");
+@@ -506,7 +508,8 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
+ 	struct attribute **i;
+ 	int rc;
+ 
+-	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL))
++	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL) ||
++		chip->flags & TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE)
+ 		return 0;
+ 
+ 	rc = compat_only_sysfs_link_entry_to_kobj(
+@@ -536,7 +539,8 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ 
+ static int tpm_add_hwrng(struct tpm_chip *chip)
+ {
+-	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM))
++	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) ||
++	    chip->flags & TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE)
+ 		return 0;
+ 
+ 	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
+@@ -550,6 +554,9 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
+ {
+ 	int rc;
+ 
++	if (chip->flags & TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE)
++		return 0;
++
+ 	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
+ 	     tpm2_get_pcr_allocation(chip) :
+ 	     tpm1_get_pcr_allocation(chip);
+@@ -612,7 +619,7 @@ int tpm_chip_register(struct tpm_chip *chip)
+ 	return 0;
+ 
+ out_hwrng:
+-	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
++	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !(chip->flags & TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE))
+ 		hwrng_unregister(&chip->hwrng);
+ out_ppi:
+ 	tpm_bios_log_teardown(chip);
+@@ -637,10 +644,12 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
+ void tpm_chip_unregister(struct tpm_chip *chip)
+ {
+ 	tpm_del_legacy_sysfs(chip);
+-	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
++	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) &&
++	    !(chip->flags & TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE))
+ 		hwrng_unregister(&chip->hwrng);
+ 	tpm_bios_log_teardown(chip);
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2)
++	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
++	    !(chip->flags & TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE))
+ 		cdev_device_del(&chip->cdevs, &chip->devs);
+ 	tpm_del_char_device(chip);
+ }
+diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
+index 63f03cfb8e6a..2842f3c667a5 100644
+--- a/drivers/char/tpm/tpm-sysfs.c
++++ b/drivers/char/tpm/tpm-sysfs.c
+@@ -480,6 +480,9 @@ void tpm_sysfs_add_device(struct tpm_chip *chip)
+ 
+ 	WARN_ON(chip->groups_cnt != 0);
+ 
++	if (chip->flags & TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE)
++		return;
++
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+ 		chip->groups[chip->groups_cnt++] = &tpm2_dev_group;
+ 	else
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index a25815a6f625..76245c861e59 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -729,7 +729,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+ 		goto out;
+ 
+ 	rc = tpm2_do_selftest(chip);
+-	if (rc && rc != TPM2_RC_INITIALIZE)
++	if (rc == TPM2_RC_UPGRADE) {
++		dev_info(&chip->dev, "TPM requires firmware upgrade\n");
++		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE;
++		rc = 0;
++		goto out;
++	} else if (rc && rc != TPM2_RC_INITIALIZE)
+ 		goto out;
+ 
+ 	if (rc == TPM2_RC_INITIALIZE) {
+@@ -743,6 +748,13 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+ 	}
+ 
+ 	rc = tpm2_get_cc_attrs_tbl(chip);
++	if (rc) {
++		dev_info(&chip->dev,
++			 "TPM requires firmware recovery/upgrade\n");
++		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE;
++		rc = 0;
++		goto out;
++	}
+ 
+ out:
+ 	if (rc > 0)
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index aa11fe323c56..498f487d786f 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -207,6 +207,7 @@ enum tpm2_return_codes {
+ 	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
+ 	TPM2_RC_FAILURE		= 0x0101,
+ 	TPM2_RC_DISABLED	= 0x0120,
++	TPM2_RC_UPGRADE		= 0x012D,
+ 	TPM2_RC_COMMAND_CODE    = 0x0143,
+ 	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
+ 	TPM2_RC_REFERENCE_H0	= 0x0910,
+@@ -277,6 +278,7 @@ enum tpm_chip_flags {
+ 	TPM_CHIP_FLAG_HAVE_TIMEOUTS	= BIT(4),
+ 	TPM_CHIP_FLAG_ALWAYS_POWERED	= BIT(5),
+ 	TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED	= BIT(6),
++	TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE	= BIT(7),
+ };
+ 
+ #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
+-- 
+2.20.1
 
