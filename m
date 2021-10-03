@@ -2,149 +2,155 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E6641FF4C
-	for <lists+linux-integrity@lfdr.de>; Sun,  3 Oct 2021 04:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EFF420230
+	for <lists+linux-integrity@lfdr.de>; Sun,  3 Oct 2021 17:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbhJCC5q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 2 Oct 2021 22:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbhJCC5q (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 2 Oct 2021 22:57:46 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483F2C061780
-        for <linux-integrity@vger.kernel.org>; Sat,  2 Oct 2021 19:55:59 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id r18so49979536edv.12
-        for <linux-integrity@vger.kernel.org>; Sat, 02 Oct 2021 19:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
-        b=af5Gxzcz5LaYgh2aFgdMGUZ5Hf6jLP93wdq4P7HgVNg9F/+OdAg6hxiTApEAXv87Ih
-         sN1EmSIwl4aLh4Y5bHrd0z9GoILsRLPiy+AhVxbNc+QrFM+USDBA/gt1tbUb7AvLShyA
-         HOgB/e4ewUnxap/34B14repEQR66csoeht6o6/khKZqMBOfHz6eDNcazAjN1aKSui2lL
-         8X0tCfuPGKfJj3fd/F6hDUwI61VF7OdqNrCimAHOwX/0CK9sX8JxzUDvToFtlA+gG6od
-         p+zr/lqCT57mPU4KSLb+Euao/ZygX/UZyxx/78KMO97GXl4OwGmhDCKFEIQEfNAm73Id
-         OPJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
-        b=CUUxXjrsmQKxa3JV5DGe5rf82IOcfJVbkThUyNvhfrxZiREGqmcDDzWYPKYkxzmyGG
-         5dnnYfjwaL5mCbpqZZkJtwJ5FbSFAHdeWQfuEauJsxayKjnDq1l1KEcNMc+Z8rXpfJDh
-         hrYqgnqEuiCv46WS49sICjEiQG8fU7dcm5JzZSnAAyFiQpewLBPIq80lSVCySRNqFgm1
-         YSgJ+F0fDCH6ZVc+hYV7PPzv2JlNCWlTMFpnQCXH112PPBcOD/WHJkM7TMsNHXH1/2Dc
-         TfzLHpMrU7M3aQYS0ix8OKC/73bqAbouaZuhLh6qN1FPXyY8h1YwkfZ2fW9ZLABF1d5z
-         yN7g==
-X-Gm-Message-State: AOAM531ohUjER7n0Zx8yeXlUiUIMCiK0vx17lMPJBQvxyYxsWgC6BPeu
-        IpyiKAOYSo8J4ZtqfEIZY3OQclU79W2cD0zjl8E=
-X-Google-Smtp-Source: ABdhPJyhcNjpqiSKu23n+M6zguQS38N1BkFUgxb9polR8nxSsbmCMz5NBcNuZ3Zs5dOjaZ4X4Sb+evY2BW8t3IlSzH0=
-X-Received: by 2002:a05:6402:40c5:: with SMTP id z5mr8416207edb.272.1633229757606;
- Sat, 02 Oct 2021 19:55:57 -0700 (PDT)
+        id S230519AbhJCP14 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 3 Oct 2021 11:27:56 -0400
+Received: from mout.gmx.net ([212.227.15.18]:37487 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230516AbhJCP1z (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 3 Oct 2021 11:27:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1633274750;
+        bh=GsIV15WbViOKkLUGeouMdOFdGvs2UA2diG7UBvlfgvs=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Ge0tKegNb5s7q3aqxsDMJHZPB8zu4m5Bo0cdOLI/C77t7EAzDyrVtkIWsjFw/jrQm
+         +7Fp3hAor1gaANsykcuO9pNSwG+7rsJCkt73vE5ny+YRb7q9lwvzt/CT3lWjlo6usK
+         BSsSfzSZJ8Kbm2oSWv9SB+nlhspxwsO3+gdePTYk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.54] ([46.223.119.124]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M26rD-1mUZKZ0EeX-002aNz; Sun, 03
+ Oct 2021 17:25:50 +0200
+Subject: Re: [PATCH] spi: bcm2835: do not unregister controller in shutdown
+ handler
+To:     Mark Brown <broonie@kernel.org>
+Cc:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
+        linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jgg@ziepe.ca, p.rosenberger@kunbus.com,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org
+References: <20210928195657.5573-1-LinoSanfilippo@gmx.de>
+ <20211001175422.GA53652@sirena.org.uk>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <2c4d7115-7a02-f79e-c91b-3c2dd54051b2@gmx.de>
+Date:   Sun, 3 Oct 2021 17:25:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Received: by 2002:a05:6408:1c:b0:124:ee6a:e267 with HTTP; Sat, 2 Oct 2021
- 19:55:57 -0700 (PDT)
-From:   Irene Zakari <irenezakari202@gmail.com>
-Date:   Sat, 2 Oct 2021 19:55:57 -0700
-Message-ID: <CAL_4AGWUUQc_2eLeMFgcqsoPeWsBBQFuLE-i_VUfMAoRn9tgYw@mail.gmail.com>
-Subject: PLEASE I NEED YOUR HELP
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211001175422.GA53652@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:JXzItrah1Ysv5H34L0vLflnCcU0pNh57s1u2g2KlMO1ntSz2/KF
+ Et+leSUTxSIhHkZiqMU1lG5a887SeUgTQNSAGrQ47OTfPWcmhYOBQieM7Q8IxQkcxn1dPRK
+ Sdn8pK5zyk2sjy48Q9TPNYs+SOw45UDXoehKfjltYlu6P+qtymLNQ57SSLFr3A0EwzvhMh9
+ VrXUWfBLHGTtUxXDtsBRw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6zwH3r+iLco=:6W0apopmoj2B09KvDs+rIU
+ cQFTT2y4R3c2xdCAjDCYOPwfYFHJMFovhRRHMzJmilHReC+fla8JZKctZTE/cIIwx3MmYvUwX
+ 2WT61p/+37yZGEnAVkCKnfFqYHArblQEDKt3Un/BJzyJV7f8WRVM1N1sow2dcX0Ix0o3IQPC8
+ 0pewl87Sa/4X+7FuC2NG24n6+HWmZCJ77BN789zZPFqTs/5m4VZcooH5cX1KDaS/1/ITCsCLF
+ uGgxry8VQIXPtXtEbqjzY+vP7zT8hoMVubPcPQLyHkhbBGuq8GsU26inAGmLXqxFH4FFzyiK4
+ glKOrpeFz280AxlQAWxWZ23nKiAd+4gIIe6q343ZeIyQHtKAna8/q8Bx1SI33D+l0oBdPG0hK
+ hWKNrVD5tXJCC9n/nMVFewHqn/g+4PR1IhdYY1zGweUkdmq/Pz0rYKTIeWeLJd/YOp0An7BZ8
+ lZNIOODue23K7WjV1KEI/DZ4ao1mYT/6LtM0V1W73KDOGqwVSfkzAhXMMM/9bpd/kE4flaaI9
+ JUWIi5FzhI88cZgsxyFTBdYf1HSFIVz3DwRNhQ96KHTYcN091RlgMKueSZ/vbbenlbbzj6Mwt
+ 4PKEBNrLAIilLoVFWSw2t8aQYRKqry4puEbqNn1ZMi5PvcUp2/ZqE1HL1izNk+NyQKOfSqD+8
+ AC4f6dHk+s5QR6zliP1lF4vZ+M9cF54H3GSRhHCDFBYDJg0J1bPt3eX12n+17dnYRKGfYOeTp
+ bTMIumzxiC/9u5w1HUBAeDWf8/X+poWAHg8f7ezWxpwIIvgq/sWuovsAWHWABG4CPVg2gH96L
+ 1VrlE4U5Z3V+W1fn8ctj4jlh1lr0dRkPdYPmNslhahuDOHCWuApQZ5uKnAgx5WTJ1T5Tq8SX3
+ UBYwRXmR5M/+kfjTbHcbPVvtQvk/YUPW5AxJK+leNSMVpryhOdaqiLFIIiuWSA8cHWks8LHVD
+ PMLB+iJ5UKLsvagA+HWrzYHcRSkt3ACJKzsNPN6+5i6ZD0Qwg7CG6yfoRbbSd1691frm7aPNS
+ FEijcEJ0vji19sHXaQn/8iZICE3Z7WLfRWRt3sgnpb/HRIMBThz5xWeEyfnKr+UanHj5+fKpq
+ rePWMb5ClTYlQc=
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello   ..
 
-How do you do over there? I hope you are doing well?
+Hi,
 
-My name is Irene. (24 years), i am single, from Gambia, the only child
-of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
-(Building Construction Company in The Gambia) also the CEO of Bernard
-Import and Export (GAMBIA).
+On 01.10.21 at 19:54, Mark Brown wrote:
+> On Tue, Sep 28, 2021 at 09:56:57PM +0200, Lino Sanfilippo wrote:
+>
+>> One example is if the BCM2835 driver is used together with the TPM SPI
+>> driver:
+>> At system shutdown first the TPM chip devices (pre) shutdown handler
+>> (tpm_class_shutdown) is called, stopping the chip and setting an operat=
+ions
+>> pointer to NULL.
+>> Then since the BCM2835 shutdown handler unregisters the SPI controller =
+the
+>> TPM SPI remove function (tpm_tis_spi_remove) is also called. In case of
+>> TPM 2 this function accesses the now nullified operations pointer,
+>> resulting in the following NULL pointer access:
+>
+> This is a bug in that driver, it should be able to cope with a race
+> between a removal (which might be triggered for some other reason) and a
+> shutdown.  Obviously this is actively triggered by this code path but it
+> could happen via some other mechanism.
+>
+>> The first attempt to fix this was with an extra check in the tpm chip
+>> driver (see https://marc.info/?l=3Dlinux-integrity&m=3D163129718414118&=
+w=3D2) to
+>> avoid the NULL pointer access.
+>> Then Jason Gunthorpe noted that the real issue was the BCM driver
+>> unregistering the chip in the shutdown handler(see
+>> https://marc.info/?l=3Dlinux-integrity&m=3D163129718414118&w=3D2) which=
+ led
+>> me to this solution.
+>
+> Whatever happens here you should still fix the driver.
 
-As a matter of fact my mother died when i was barely 4 years old
-according to my late father and because of the type of love he had for
-my mother made him to remain UN-married till he left the ghost..
+Agreed.
 
-So after the death of my father as a result of assassinate, his brother (My
-Uncle) who is the purchasing and marketing sale manager of my late
-fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
-convert all the properties and resources of my late father into his
-which i quarreled with him and it made him to lay his anger on me to
-the extent of hiring an assassins to kill me but to God be the glory i
-succeeded by making a way to Burkina faso for my dear life.
-Honestly i do live a fearful life even here in Burkina faso because of
-those Assassins coming after me .
+>
+>> -static int bcm2835_spi_remove(struct platform_device *pdev)
+>> +static void bcm2835_spi_shutdown(struct platform_device *pdev)
+>>  {
+>>  	struct spi_controller *ctlr =3D platform_get_drvdata(pdev);
+>>  	struct bcm2835_spi *bs =3D spi_controller_get_devdata(ctlr);
+>>
+>> -	bcm2835_debugfs_remove(bs);
+>> -
+>> -	spi_unregister_controller(ctlr);
+>> -
+>>  	bcm2835_dma_release(ctlr, bs);
+>
+> It is not at all clear to me that it is safe to deallocate the DMA
+> resources the controller is using without first releasing the
+> controller, I don't see what's stopping something coming along and
+> submitting new transactions which could in turn try to start doing
+> DMA.
+>
 
-I would want to live and study in your country for my better future.
-because my father same blood brother wanted to force me into undecided
-marriage, just for me to leave my father home and went and live with
-another man I never know as he want to occupied all my father home
-and maybe to sold it as my father no longer alive, I'm the only child
-daughter my father born, '' but he don't know that i am not
-interesting in any of my father properties or early marriage for now,
-because i still have future to think about and to focus on my studies
-first as i was doing my first year in the University before the death
-of my father.
+I see your point here. So what about narrowing down the shutdown handler
+to only disable the hardware:
 
-Actually what I want to discuss with you is about my personal issue
-concern funds my late father deposited in a bank outside my country,
-worth $4.5 million united state dollars. i need your assistance to
-receive and invest this funds in your country.
+static void bcm2835_spi_shutdown(struct platform_device *pdev)
+{
+	struct spi_controller *ctlr =3D platform_get_drvdata(pdev);
+	struct bcm2835_spi *bs =3D spi_controller_get_devdata(ctlr);
 
-Please help me, I am sincere to you and I want to be member of your
-family as well if you wouldn't mind to accept me and lead me to better
-future in your country.
+	if (ctlr->dma_tx)
+		dmaengine_terminate_sync(ctlr->dma_tx);
 
-All the documents the bank issue to my father during time of deposit
-is with me now.
-I already notify the bank on phone about the death of my father and
-they are surprise for the news and accept that my father is their good
-customer.
-I will be happy if this money can be invested in any business of your
-choice and it will be under your control till i finished my education,
-also I'm assuring you good relationship and I am ready to discuss the
-amount of money to give you from this money for your help.
+	if (ctlr->dma_rx)
+		dmaengine_terminate_sync(ctlr->dma_rx);
 
-Therefore, I shall give you the bank contact and other necessary
-information in my next email if you will only promise me that you will
-not/never betray and disclosed this matter to anybody, because, this
-money is the only hope i have for survival on earth since I have lost
-my parents.
+	/* Clear FIFOs, and disable the HW block */
+	bcm2835_wr(bs, BCM2835_SPI_CS,
+		   BCM2835_SPI_CS_CLEAR_RX | BCM2835_SPI_CS_CLEAR_TX);
 
-Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
-CERTIFICATE here with me, but before I give you further information, i
-will like to know your full data
+	clk_disable_unprepare(bs->clk);
+}
 
-1. Full Name: ........................
-2. Address: ..................
-3. Nationality: ........... Sex................
-4. Age:........... Date of Birth:................
-5. Occupation:...................
-.....
-6. Phone: ........... Fax:.........................
-7. State of Origin: .......Country:..............
-8. Occupation:...................
-................
-9. Marital status........... E-mail address's: ............
-10. Scan copy of your ID card or Driving License/Photo:............
-DECLARATION:
+Regards,
+Lino
 
-so that i will be fully sure that i am not trusting the wrong person.
-and it will also give me the mind to send you the bank contact for you
-to communicate with them for more verification about this money. and
-to know you more better.
 
-Meanwhile, you can reach me through my pastor,his name is Pastor Paul
-any time you call, tell him that you want to speak with me because
-right now i am living in the church here in Burkina faso and i don't
-want to stay here any longer,
-send for me to speak with you his phone number is this(+226 75213646)
 
-I will stop here and i will be waiting for your reply and feel free
-ask any thing you want to know about me.
-Please help me, I would be highly appreciated
-Have nice day.
-From Irene
+
+
