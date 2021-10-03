@@ -2,137 +2,149 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7198841FE4D
-	for <lists+linux-integrity@lfdr.de>; Sat,  2 Oct 2021 23:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E6641FF4C
+	for <lists+linux-integrity@lfdr.de>; Sun,  3 Oct 2021 04:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234093AbhJBVtR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 2 Oct 2021 17:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S229512AbhJCC5q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 2 Oct 2021 22:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234069AbhJBVtQ (ORCPT
+        with ESMTP id S229534AbhJCC5q (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 2 Oct 2021 17:49:16 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554F3C0613EC
-        for <linux-integrity@vger.kernel.org>; Sat,  2 Oct 2021 14:47:30 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id b192so9888490wmb.2
-        for <linux-integrity@vger.kernel.org>; Sat, 02 Oct 2021 14:47:30 -0700 (PDT)
+        Sat, 2 Oct 2021 22:57:46 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483F2C061780
+        for <linux-integrity@vger.kernel.org>; Sat,  2 Oct 2021 19:55:59 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id r18so49979536edv.12
+        for <linux-integrity@vger.kernel.org>; Sat, 02 Oct 2021 19:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rammhold-de.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DsMQk+8XXK1QsERSjLKDCEcVwg6XJ78+oxDV4RX+0p8=;
-        b=MuS1vyAXNZRsOTxEBMpN7525qbmZsfsMfBl8tK4fsejdN07wZjhlezUBmQAbb9CblL
-         wyf8IPNUZwgGUGeRcgf2fJRLTZ2RUP6Fd3KGvnDNlxHMINk9BuXpSIWKOmyOBMHVAOtR
-         g7brUyYpEcQToTIV4Rzx/wTQ50y/2N3j/z68bIDfN0S6spafac5Y06tdOUwewj66Kkz2
-         3GV9CwRNgNYaLXU5qe/UrsH+jLqrsh/rMpV5a5T9y8GmmH2GnnnW1P3iPEkvIRsTffiU
-         xnlEUqr85xK2DQGAs+eSMshhBOkVaGZ8PP0p0Xxsxrnc8PaZsxzMrIhSkB1wujHS/WkU
-         VmaA==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=af5Gxzcz5LaYgh2aFgdMGUZ5Hf6jLP93wdq4P7HgVNg9F/+OdAg6hxiTApEAXv87Ih
+         sN1EmSIwl4aLh4Y5bHrd0z9GoILsRLPiy+AhVxbNc+QrFM+USDBA/gt1tbUb7AvLShyA
+         HOgB/e4ewUnxap/34B14repEQR66csoeht6o6/khKZqMBOfHz6eDNcazAjN1aKSui2lL
+         8X0tCfuPGKfJj3fd/F6hDUwI61VF7OdqNrCimAHOwX/0CK9sX8JxzUDvToFtlA+gG6od
+         p+zr/lqCT57mPU4KSLb+Euao/ZygX/UZyxx/78KMO97GXl4OwGmhDCKFEIQEfNAm73Id
+         OPJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=DsMQk+8XXK1QsERSjLKDCEcVwg6XJ78+oxDV4RX+0p8=;
-        b=cTxZtY1fDh6J0nBN+h7G4zdFPfPfhBDotuqHIoqw9LN9TpzqxhMH2NhsLnIYgnwcmi
-         nUDd8zKtTClqiQ9walHiv2+F5XgAglGzlYVdlibef8cGAQmLCUP1nKuUNOBi53ortaLG
-         gkTmU3ro8lH66c2Vtz8KY0zhkHGFAVY5n8t2L7maIXwUyqpARmCTCfZ+WpVNVlNPlcYh
-         rTZ3iM5S14N2bMzAUSLf6XKzSbLc61/8K4h06MUADgCYw1VYBF3wYhrmppjdHof1yCV2
-         ShL+1cQABixIja4hZX1hUUreNmxIWM+n7myoxAtEO7YA1yXDZXstLGyeWLZeOEs3Bt95
-         wAag==
-X-Gm-Message-State: AOAM530zWLt22DdmyjgC4lgHhA6RoEqSNbFc89o1VDh3aayEmMBjatd5
-        6KryUZQMv0smHlhF561jMmIK9w==
-X-Google-Smtp-Source: ABdhPJwdYX14ToIr9FfRr/UP9/URxjMCG5/550hRz7VmbwRlxzR5s/s0klM9Dzz4ZV2ijUyONK3MYg==
-X-Received: by 2002:a7b:c24c:: with SMTP id b12mr985862wmj.173.1633211248812;
-        Sat, 02 Oct 2021 14:47:28 -0700 (PDT)
-Received: from localhost ([2a00:e67:5c9:a:5621:d377:9a16:5c6c])
-        by smtp.gmail.com with ESMTPSA id x9sm9407532wrv.82.2021.10.02.14.47.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Oct 2021 14:47:27 -0700 (PDT)
-Date:   Sat, 2 Oct 2021 23:47:25 +0200
-From:   Andreas Rammhold <andreas@rammhold.de>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] KEYS: trusted: Fix trusted key backends when building
- as module
-Message-ID: <20211002214725.fqmtbfjwtlom745c@wrt>
-References: <20210730012822.3460913-1-andreas@rammhold.de>
- <0d42a11a-0117-49a9-d2c9-bc6cc405235d@pengutronix.de>
- <20210927085104.vq42feghtaqiv6ni@wrt>
- <856359f263575f01d0ce2fcf8f042321f750b38c.camel@linux.ibm.com>
- <20210927200835.wvazk73cek3t5tkf@wrt>
- <2ad2c536367028ef6d9300745586a123cb13d9f1.camel@linux.ibm.com>
- <20210927205521.7c4psu4vz5eoyfnf@wrt>
- <81602197662f3e6d032103bd1ac3690342544b7e.camel@linux.ibm.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=CUUxXjrsmQKxa3JV5DGe5rf82IOcfJVbkThUyNvhfrxZiREGqmcDDzWYPKYkxzmyGG
+         5dnnYfjwaL5mCbpqZZkJtwJ5FbSFAHdeWQfuEauJsxayKjnDq1l1KEcNMc+Z8rXpfJDh
+         hrYqgnqEuiCv46WS49sICjEiQG8fU7dcm5JzZSnAAyFiQpewLBPIq80lSVCySRNqFgm1
+         YSgJ+F0fDCH6ZVc+hYV7PPzv2JlNCWlTMFpnQCXH112PPBcOD/WHJkM7TMsNHXH1/2Dc
+         TfzLHpMrU7M3aQYS0ix8OKC/73bqAbouaZuhLh6qN1FPXyY8h1YwkfZ2fW9ZLABF1d5z
+         yN7g==
+X-Gm-Message-State: AOAM531ohUjER7n0Zx8yeXlUiUIMCiK0vx17lMPJBQvxyYxsWgC6BPeu
+        IpyiKAOYSo8J4ZtqfEIZY3OQclU79W2cD0zjl8E=
+X-Google-Smtp-Source: ABdhPJyhcNjpqiSKu23n+M6zguQS38N1BkFUgxb9polR8nxSsbmCMz5NBcNuZ3Zs5dOjaZ4X4Sb+evY2BW8t3IlSzH0=
+X-Received: by 2002:a05:6402:40c5:: with SMTP id z5mr8416207edb.272.1633229757606;
+ Sat, 02 Oct 2021 19:55:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <81602197662f3e6d032103bd1ac3690342544b7e.camel@linux.ibm.com>
+Received: by 2002:a05:6408:1c:b0:124:ee6a:e267 with HTTP; Sat, 2 Oct 2021
+ 19:55:57 -0700 (PDT)
+From:   Irene Zakari <irenezakari202@gmail.com>
+Date:   Sat, 2 Oct 2021 19:55:57 -0700
+Message-ID: <CAL_4AGWUUQc_2eLeMFgcqsoPeWsBBQFuLE-i_VUfMAoRn9tgYw@mail.gmail.com>
+Subject: PLEASE I NEED YOUR HELP
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 17:31 27.09.21, Mimi Zohar wrote:
-> On Mon, 2021-09-27 at 22:55 +0200, Andreas Rammhold wrote:
-> > On 16:33 27.09.21, Mimi Zohar wrote:
-> > > On Mon, 2021-09-27 at 22:08 +0200, Andreas Rammhold wrote:
-> > > > On 07:27 27.09.21, Mimi Zohar wrote:
-> > > > > On Mon, 2021-09-27 at 10:51 +0200, Andreas Rammhold wrote:
-> > > > > > On 09:47 13.09.21, Ahmad Fatoum wrote:
-> > > > > > > Dear trusted key maintainers,
-> > > > > > > 
-> > > > > > > On 30.07.21 03:28, Andreas Rammhold wrote:
-> > > > > > > > Before this commit the kernel could end up with no trusted key sources
-> > > > > > > > even though both of the currently supported backends (TPM and TEE) were
-> > > > > > > > compiled as modules. This manifested in the trusted key type not being
-> > > > > > > > registered at all.
-> > > > > > > > 
-> > > > > > > > When checking if a CONFIG_… preprocessor variable is defined we only
-> > > > > > > > test for the builtin (=y) case and not the module (=m) case. By using
-> > > > > > > > the IS_REACHABLE() macro we do test for both cases.
-> > > > > > > > 
-> > > > > > > > Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
-> > > > > > > > Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
-> > > > > > > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > > > > Does anyone intend to pick this up?
-> > > > > > 
-> > > > > > Did this end up in any tree by now? I am wondering if I should resend
-> > > > > > the patch instead. Perhaps it was just overlooked?
-> > > > > 
-> > > > > For EVM environments only using trusted and encrypted keys, not file
-> > > > > signatures, the trusted key is needed to decrypt the "master" key in
-> > > > > order to verify kernel modules.
-> > > > 
-> > > > So what you are saying is that right now (before this patch & after this
-> > > > patch) you could compile a kernel that wouldn't be able to load any
-> > > > modules when the trusted keychain part is built as module?
-> > > 
-> > > Before this patch, trusted and encrypted keys are builtin, so verifying
-> > > kernel modules with security.evm containing an EVM hmac would succeed. 
-> > > Afterwards it would fail, as there's a dependency on the trusted key to
-> > > verify the integrity of the trusted key module.
-> > 
-> > But building with =m was a valid configuration which is the original
-> > reason for me submitting the patch. So perhaps this should not be
-> > allowed to be a module then?
-> 
-> My mistake.  Trusted and encrypted key types have always been defined
-> as tristate.  Only when EVM selects encrypted keys, and by extension
-> trusted keys, are they builtin.
+Hello   ..
 
-So how do we go about this patch? Building the TPM support as module has
-broken actually using the trusted backend. This patch fixes that while
-still allowing it to be a builtin. If there is some configuration there
-a module isn't acceptable I am sure that is handled within Kconfig?
+How do you do over there? I hope you are doing well?
 
+My name is Irene. (24 years), i am single, from Gambia, the only child
+of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
+(Building Construction Company in The Gambia) also the CEO of Bernard
+Import and Export (GAMBIA).
 
-Andi
+As a matter of fact my mother died when i was barely 4 years old
+according to my late father and because of the type of love he had for
+my mother made him to remain UN-married till he left the ghost..
+
+So after the death of my father as a result of assassinate, his brother (My
+Uncle) who is the purchasing and marketing sale manager of my late
+fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
+convert all the properties and resources of my late father into his
+which i quarreled with him and it made him to lay his anger on me to
+the extent of hiring an assassins to kill me but to God be the glory i
+succeeded by making a way to Burkina faso for my dear life.
+Honestly i do live a fearful life even here in Burkina faso because of
+those Assassins coming after me .
+
+I would want to live and study in your country for my better future.
+because my father same blood brother wanted to force me into undecided
+marriage, just for me to leave my father home and went and live with
+another man I never know as he want to occupied all my father home
+and maybe to sold it as my father no longer alive, I'm the only child
+daughter my father born, '' but he don't know that i am not
+interesting in any of my father properties or early marriage for now,
+because i still have future to think about and to focus on my studies
+first as i was doing my first year in the University before the death
+of my father.
+
+Actually what I want to discuss with you is about my personal issue
+concern funds my late father deposited in a bank outside my country,
+worth $4.5 million united state dollars. i need your assistance to
+receive and invest this funds in your country.
+
+Please help me, I am sincere to you and I want to be member of your
+family as well if you wouldn't mind to accept me and lead me to better
+future in your country.
+
+All the documents the bank issue to my father during time of deposit
+is with me now.
+I already notify the bank on phone about the death of my father and
+they are surprise for the news and accept that my father is their good
+customer.
+I will be happy if this money can be invested in any business of your
+choice and it will be under your control till i finished my education,
+also I'm assuring you good relationship and I am ready to discuss the
+amount of money to give you from this money for your help.
+
+Therefore, I shall give you the bank contact and other necessary
+information in my next email if you will only promise me that you will
+not/never betray and disclosed this matter to anybody, because, this
+money is the only hope i have for survival on earth since I have lost
+my parents.
+
+Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
+CERTIFICATE here with me, but before I give you further information, i
+will like to know your full data
+
+1. Full Name: ........................
+2. Address: ..................
+3. Nationality: ........... Sex................
+4. Age:........... Date of Birth:................
+5. Occupation:...................
+.....
+6. Phone: ........... Fax:.........................
+7. State of Origin: .......Country:..............
+8. Occupation:...................
+................
+9. Marital status........... E-mail address's: ............
+10. Scan copy of your ID card or Driving License/Photo:............
+DECLARATION:
+
+so that i will be fully sure that i am not trusting the wrong person.
+and it will also give me the mind to send you the bank contact for you
+to communicate with them for more verification about this money. and
+to know you more better.
+
+Meanwhile, you can reach me through my pastor,his name is Pastor Paul
+any time you call, tell him that you want to speak with me because
+right now i am living in the church here in Burkina faso and i don't
+want to stay here any longer,
+send for me to speak with you his phone number is this(+226 75213646)
+
+I will stop here and i will be waiting for your reply and feel free
+ask any thing you want to know about me.
+Please help me, I would be highly appreciated
+Have nice day.
+From Irene
