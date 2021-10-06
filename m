@@ -2,161 +2,145 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B126F423B87
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Oct 2021 12:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F012424781
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Oct 2021 21:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237851AbhJFKdC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 6 Oct 2021 06:33:02 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:43932 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237856AbhJFKdA (ORCPT
+        id S239430AbhJFTwB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 6 Oct 2021 15:52:01 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47504 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229810AbhJFTwA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 6 Oct 2021 06:33:00 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D63DB224F4;
-        Wed,  6 Oct 2021 10:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1633516267; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N+en3ZuUsBHZlVQNahZku78kNuNJSgkqqBay6AsX4tY=;
-        b=0rXcyq3jSeT1ZCiQiP1Cmt2hlr+njphT9HOSMfy61EmvvvrgsnNe4za9c/sHE83Ay4bEhM
-        iX1VGJoKx5WyX+jy+6n6joDNALO8FWEPXvPLPibJ9tDMICmr/jr8+SReBbyLjExGXBDu8h
-        juH5EbEK9Dt/q5c4vAOoiFnyPFX3aC4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1633516267;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N+en3ZuUsBHZlVQNahZku78kNuNJSgkqqBay6AsX4tY=;
-        b=wV+L1QTE88Dj1HJ2ILFck6GTg8SRO8r0u6/c3kAifjWoMiLK6BAS50c/j5r4EH6nHRpdyb
-        VsTVfyC7MUj76cBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EFEC13E19;
-        Wed,  6 Oct 2021 10:31:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sIZiJet6XWF/dAAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Wed, 06 Oct 2021 10:31:07 +0000
-From:   Petr Vorel <pvorel@suse.cz>
-To:     ltp@lists.linux.it
-Cc:     Alex Henrie <alexh@vpitech.com>, alexhenrie24@gmail.com,
-        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Petr Vorel <pvorel@suse.cz>
-Subject: [PATCH v8 3/3] IMA: Add tests for uid, gid, fowner, and fgroup options
-Date:   Wed,  6 Oct 2021 12:30:59 +0200
-Message-Id: <20211006103059.9617-4-pvorel@suse.cz>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211006103059.9617-1-pvorel@suse.cz>
-References: <20211006103059.9617-1-pvorel@suse.cz>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 6 Oct 2021 15:52:00 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 196IVXSL030685;
+        Wed, 6 Oct 2021 15:50:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=L8prqtAD4A3iwQ8CC0mAy/CKO4HDayjvd6cvLXJwJn0=;
+ b=X16iPw/Wq3DiwfUlhvfiM+Ba0BSPjmMKNeaezS7Irf+wkGl29snCBbQMZwnv0v6UiX2X
+ sxQLE8zvNFXG5OxxHhDthX/mnZ1pxm7ucnVGe/t3VCKvkHaZ4tYhEcCFxwANGx2EFcOn
+ yOUII4o569N25GfZRChAMALGDIYEAOGVwapNxNpeNV0D53h3uvCPiVy5+8M4240SgkG+
+ A446yd3RtYWHpGpSOzJDz0akAdIsX/snwBaLorXTQdNVkQwS9JJ2GbIzDBoviEAhkOWP
+ hUAywZwI4q7d9YLyL0dlSyB+PAvH74TQqyI24W6h3hI3Fhe8kOvH+ZMdzP0jmUd+XGVp hA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bh38bdeat-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Oct 2021 15:50:06 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 196JJSVO020152;
+        Wed, 6 Oct 2021 15:50:05 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bh38bdea4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Oct 2021 15:50:05 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 196Jgrbu009018;
+        Wed, 6 Oct 2021 19:50:04 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3bef2b92j9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 06 Oct 2021 19:50:03 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 196Jo1UU46596488
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 6 Oct 2021 19:50:01 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 53699A404D;
+        Wed,  6 Oct 2021 19:50:01 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 030A0A4051;
+        Wed,  6 Oct 2021 19:50:00 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.15.60])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  6 Oct 2021 19:49:59 +0000 (GMT)
+Message-ID: <81863154aebf9d3e023bd37acca8ff265a187fd0.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima: add gid support
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Alex Henrie <alexh@vpitech.com>, linux-integrity@vger.kernel.org,
+        pvorel@suse.cz, alexhenrie24@gmail.com
+Cc:     Curtis Veit <veit@vpieng.com>
+Date:   Wed, 06 Oct 2021 15:49:58 -0400
+In-Reply-To: <20211005003237.501882-1-alexh@vpitech.com>
+References: <20211005003237.501882-1-alexh@vpitech.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zhCraBuE3CLlswVuNxnXXZ4XMiuq-ZpE
+X-Proofpoint-GUID: QLdeyXbIjJxF_yH9xZJrxl8GwfrtTu6J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-10-06_04,2021-10-06_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 phishscore=0 spamscore=0 priorityscore=1501
+ mlxlogscore=999 mlxscore=0 bulkscore=0 impostorscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2110060121
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Alex Henrie <alexh@vpitech.com>
+Hi Alex,
 
-Requires "ima: add gid support".
+On Mon, 2021-10-04 at 18:32 -0600, Alex Henrie wrote:
+> From: Curtis Veit <veit@vpieng.com>
+> 
+> IMA currently supports the concept of rules based on uid where the rule
+> is based on the uid of the file owner or the uid of the user accessing
+> the file. It is useful to have similar rules based on gid. This patch
+> provides that ability.
+> 
+> Signed-off-by: Curtis Veit <veit@vpieng.com>
+> Co-developed-by: Alex Henrie <alexh@vpitech.com>
+> Signed-off-by: Alex Henrie <alexh@vpitech.com>
+> ---
+> v2: Trivial changes that Mimi requested
 
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
-Signed-off-by: Alex Henrie <alexh@vpitech.com>
-[ pvorel: add test_file parameter to ima_check(), add
-verify_measurement() (DRY) ]
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
- runtest/ima                                   |  1 +
- .../integrity/ima/tests/ima_conditionals.sh   | 63 +++++++++++++++++++
- 2 files changed, 64 insertions(+)
- create mode 100755 testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
+Sorry, scripts/check-patch.pl reported some warnings.  Two more trivial changes.
 
-diff --git a/runtest/ima b/runtest/ima
-index 29caa034a..01942eefa 100644
---- a/runtest/ima
-+++ b/runtest/ima
-@@ -6,4 +6,5 @@ ima_violations ima_violations.sh
- ima_keys ima_keys.sh
- ima_kexec ima_kexec.sh
- ima_selinux ima_selinux.sh
-+ima_conditionals ima_conditionals.sh
- evm_overlay evm_overlay.sh
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh b/testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
-new file mode 100755
-index 000000000..c83006f6d
---- /dev/null
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
-@@ -0,0 +1,63 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# Copyright (c) 2021 VPI Engineering
-+# Copyright (c) 2021 Petr Vorel <pvorel@suse.cz>
-+# Author: Alex Henrie <alexh@vpitech.com>
-+#
-+# Verify that conditional rules work.
-+
-+TST_NEEDS_CMDS="chgrp chown id sg sudo"
-+TST_CNT=1
-+TST_NEEDS_DEVICE=1
-+
-+. ima_setup.sh
-+
-+verify_measurement()
-+{
-+	local request="$1"
-+	local user="nobody"
-+	local test_file="$PWD/test.txt"
-+	local cmd="cat $test_file > /dev/null"
-+
-+	local value="$(id -u $user)"
-+	[ "$request" = 'gid' -o "$request" = 'fgroup' ] && value="$(id -g $user)"
-+
-+	require_policy_writable
-+
-+	ROD rm -f $test_file
-+
-+	tst_res TINFO "verify measuring user files when requested via $request"
-+	ROD echo "measure $request=$value" \> $IMA_POLICY
-+	ROD echo "$(date) $request test" \> $test_file
-+
-+	case "$request" in
-+	fgroup)
-+		chgrp $user $test_file
-+		$cmd
-+		;;
-+	fowner)
-+		chown $user $test_file
-+		$cmd
-+		;;
-+	gid) sudo sg $user "sh -c '$cmd'";;
-+	uid) sudo -n -u $user sh -c "$cmd";;
-+	*) tst_brk TBROK "Invalid res type '$1'";;
-+	esac
-+
-+	ima_check $test_file
-+}
-+
-+test1()
-+{
-+	verify_measurement uid
-+	verify_measurement fowner
-+
-+	if tst_kvcmp -lt 5.16; then
-+		tst_brk TCONF "gid and fgroup options require kernel 5.16 or newer"
-+	fi
-+
-+	verify_measurement gid
-+	verify_measurement fgroup
-+}
-+
-+tst_run
--- 
-2.33.0
+> ---
+>  Documentation/ABI/testing/ima_policy |   8 +-
+>  security/integrity/ima/ima_policy.c  | 201 +++++++++++++++++++++++----
+>  2 files changed, 180 insertions(+), 29 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
+> index 5c2798534950..e1a04bd3b9e5 100644
+> --- a/Documentation/ABI/testing/ima_policy
+
+> @@ -78,9 +81,13 @@ struct ima_rule_entry {
+>  	unsigned long fsmagic;
+>  	uuid_t fsuuid;
+>  	kuid_t uid;
+> +	kgid_t gid;
+>  	kuid_t fowner;
+> +	kgid_t fgroup;
+>  	bool (*uid_op)(kuid_t, kuid_t);    /* Handlers for operators       */
+> +	bool (*gid_op)(kgid_t, kgid_t);
+>  	bool (*fowner_op)(kuid_t, kuid_t); /* uid_eq(), uid_gt(), uid_lt() */
+> +	bool (*fgroup_op)(kgid_t, kgid_t); /* gid_eq(), gid_gt(), gid_lt() */
+
+scripts/checkpatch.pl complains about missing variables.
+
+>  	int pcr;
+>  	unsigned int allowed_algos; /* bitfield of allowed hash algorithms */
+>  	struct {
+> 
+> @@ -582,10 +590,23 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
+>  		} else if (!rule->uid_op(cred->euid, rule->uid))
+>  			return false;
+>  	}
+> -
+> +	if ((rule->flags & IMA_GID) && !rule->gid_op(rule->gid, cred->gid))
+
+All of uid_op/gid_op calls in ima_match_rules() pass the "cred->xxxx,
+rule->xxx" except here, where it is rule->gid, cred->rule.   Reversing
+the parameters here will help with addressing the checkpatch.pl
+warning.
+
+thanks,
+
+Mimi
 
