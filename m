@@ -2,115 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 907F3425B82
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Oct 2021 21:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8613425C6E
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Oct 2021 21:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241382AbhJGT2P (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Oct 2021 15:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241176AbhJGT2O (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Oct 2021 15:28:14 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E02C061755
-        for <linux-integrity@vger.kernel.org>; Thu,  7 Oct 2021 12:26:21 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id j15so4587126plh.7
-        for <linux-integrity@vger.kernel.org>; Thu, 07 Oct 2021 12:26:21 -0700 (PDT)
+        id S231938AbhJGTny (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Oct 2021 15:43:54 -0400
+Received: from mail-bn8nam12on2057.outbound.protection.outlook.com ([40.107.237.57]:59744
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240908AbhJGTnx (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 7 Oct 2021 15:43:53 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RqidA0OmtpSf1TG4np5lFKwl4NOa7T0LOL1NpzfZ3Y++BpyGzcaIuxDoY0D3gPVVEF/r5cN0Y6iywVBj377vafrzKQGELLZ9hAq0GKkVODvpQ1KlW6Pj9M4l0xWSunPcP5niDrvXsGPzEFLIJexuAqFboJiJ/rHBNyG4J3q6nvGV3rVPRqn9HiHBx9QTQpacgwz2r/Jrk5b9+7CIV0iZL/5kV9iOp2agNqUQSMr8W7Om8rxTQamS6KUn2UqHjE7B/CSZmpom1Ygjw7ykkcFa0LtEbFXJDMiO2Ov0a30Y+/Ape75GvjECqJWDVD/9hjsRv/3L//wcrQM/pecGJgnKew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oJl3NS0XQJDUmvM9V/PNIaiIz3Z2jt2Y77EUt/f6EsQ=;
+ b=mtfnXxip2kHYcoR2fB+qgtr/YL8gulOwJ+zlhW9xpoUYpEqUAJkiG6mt+jN3ftmYdZ5PBSjM50+5D2Z/aytvFY4NeIc6iVdtrI/kMB2xK0P9bIY4MtYZqB+JuxWx3ksM40zWdUVUSJyqIarn7gV0l4orLcdNGHhUkcvLLdtqMWJg3s3vfcKC9G+NFLNQTAmZ1U7UToVz5upWgPNOvt5I5dTX1TfwMwZoGjA4ryfwPFytbqiroe0t+mZD6CfMS9yphri+g8kgdn7MrcAazolU20PrfCO/NB8dZ3LoHQxI+1Ht5G8fzafEYrwwG4JVLfjS1zy9zwC8GZra02MzDA3yzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vpitech.com; dmarc=pass action=none header.from=vpitech.com;
+ dkim=pass header.d=vpitech.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=NZdCC7CS4dz4WubheIViknJtIIkaL8xCwtFH+zR8MvM=;
-        b=eHzzunjEiw0c49/WWP7ttbNMcB3anVXl2I3BhWlHxCkAgfUZJaQlEQ4yj49eW+O5Qd
-         V/tr9/w7+oeASdwfi2gPR+2A9dR5TzHngo0qjndDetXgsqoAB1QXDYqUefhEG8akLtkm
-         NXtn7bxmsTq3rNyvns/y2bVgOPK39DmHni93s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=NZdCC7CS4dz4WubheIViknJtIIkaL8xCwtFH+zR8MvM=;
-        b=dG8SgqXyct7UGztIRWk3sVoUqvJBHR36xxJ1Zv3EWqKtY66JYpyPUgrH1OR5YJwqdO
-         TroJBWb6XyEo26iKbwWbg1ukZxIOMI3/taolaRNgpMnzLtJAz5gKyOVB/+kbp2seHE7g
-         BYfEyvw71iZa0bxAQw+S67dykxs4O4SRgPNPF9fLivNmDgYDTzup25LlyyZ5F8qoZte2
-         +eW2oKQYpnq4bR6228w9F3D00ibevd1kEWDF0lqbRr0HOk2F9IeHo/ch4CsFcP2csSlq
-         kKzyeTHlAhQ91T9vLYEwrsCvpMEi5Sd/AJKKsliYi2XDPUnn3VqGlU/wh3fz82hp8+UC
-         DKDQ==
-X-Gm-Message-State: AOAM530UBWTkbEdMI3y3fPBEVxXemyiVhzM8ePXFlnIQ+IdAg6C3ybw3
-        Xu+CVpk8hOiV/gwF8MBtiNMQRg==
-X-Google-Smtp-Source: ABdhPJx4Tw35x1xl9BQYB1be7fBA/xGCyy08poTnjhSNtRNoa/m8AG/GdRnhqGS7ZQ1VLaYiOhqwvw==
-X-Received: by 2002:a17:90a:6b4d:: with SMTP id x13mr2840636pjl.208.1633634780607;
-        Thu, 07 Oct 2021 12:26:20 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y24sm210615pfo.69.2021.10.07.12.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 12:26:20 -0700 (PDT)
-Date:   Thu, 7 Oct 2021 12:26:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v13 2/3] arch: Wire up trusted_for(2)
-Message-ID: <202110071226.750297A@keescook>
-References: <20211007182321.872075-1-mic@digikod.net>
- <20211007182321.872075-3-mic@digikod.net>
+ d=vpitech.onmicrosoft.com; s=selector2-vpitech-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oJl3NS0XQJDUmvM9V/PNIaiIz3Z2jt2Y77EUt/f6EsQ=;
+ b=hbLMxGEaDa1H1hUiTU41XVMxQQpuMK2obbTJV0Rpt5fUn02gUJXHKCNGtLomPBtj0AgcF5G0bVdYdLIWoFhsolxZ98LjICKDx7r5sBT8vi8D11Bw9wjJQhAzm29r9Obd9HJAjPegT2ud3ca3CRtuLWZ6/s/lWRWweF0YR6yEk1A=
+Authentication-Results: linux.ibm.com; dkim=none (message not signed)
+ header.d=none;linux.ibm.com; dmarc=none action=none header.from=vpitech.com;
+Received: from MW2PR07MB3980.namprd07.prod.outlook.com (2603:10b6:907:a::32)
+ by MWHPR07MB3517.namprd07.prod.outlook.com (2603:10b6:301:6c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.22; Thu, 7 Oct
+ 2021 19:41:57 +0000
+Received: from MW2PR07MB3980.namprd07.prod.outlook.com
+ ([fe80::cc48:9777:4f07:6014]) by MW2PR07MB3980.namprd07.prod.outlook.com
+ ([fe80::cc48:9777:4f07:6014%4]) with mapi id 15.20.4566.022; Thu, 7 Oct 2021
+ 19:41:56 +0000
+Date:   Thu, 7 Oct 2021 13:41:55 -0600
+From:   Alex Henrie <alexh@vpitech.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, pvorel@suse.cz,
+        alexhenrie24@gmail.com, Curtis Veit <veit@vpieng.com>
+Subject: Re: [PATCH v2] ima: add gid support
+Message-Id: <20211007134155.33964293864ff7ffa7cae691@vpitech.com>
+In-Reply-To: <81863154aebf9d3e023bd37acca8ff265a187fd0.camel@linux.ibm.com>
+References: <20211005003237.501882-1-alexh@vpitech.com>
+        <81863154aebf9d3e023bd37acca8ff265a187fd0.camel@linux.ibm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0367.namprd04.prod.outlook.com
+ (2603:10b6:303:81::12) To MW2PR07MB3980.namprd07.prod.outlook.com
+ (2603:10b6:907:a::32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211007182321.872075-3-mic@digikod.net>
+Received: from demeter (66.60.105.30) by MW4PR04CA0367.namprd04.prod.outlook.com (2603:10b6:303:81::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.22 via Frontend Transport; Thu, 7 Oct 2021 19:41:56 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 68e0d5cf-15ee-42e4-69a7-08d989ca856d
+X-MS-TrafficTypeDiagnostic: MWHPR07MB3517:
+X-Microsoft-Antispam-PRVS: <MWHPR07MB3517ED0F8D14DE5157E11247B8B19@MWHPR07MB3517.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CqLYMt9U7Lz1xuQMdUfvM9NGeqfbgdrCtfuAcu9kKuvP301fdWKQvte5dhQ+N73WHOS1yOaPPU61z/guenfCdXQhlVjBbNZwirCUSN13OMYWVTMNCrFbzAn97yMTmn8vlu4dXg1kNuUmQAC+cCtmd6zXA8UFiNp3OFhN58hoUK7l5JuwjTstDYJGdoBpW5Q4AZIfNUXWOrmRyssgpLY4lpQ5p4txvXYiQL75SrY6IxnYHA/Lyi3jhKTQ2tSkbNgvTRvzP6EGvIFs+/zygPqF7eUsoU5z2RnljlbKRPIgnT6PvECpBggEi0E/u3uvIeZHtZyzJ7zXX6xnXgzLNih8G8MJPasA0UgX20d2n3PdyJQvv2JhzH8ekNaZZn8gL5LbsdeIzt/Nch1OUaIMNyf9NEM2QBRUQV64vFZNpEpcAidlmu9tDK6f3Zp1YOyZqo2NWMqij7h04AweLgdfZb9B9TtO4OyAnfncYQ71gEZgPUCkjRMEiKUsug/2ZQTTc3+D0I7psLrAaEe75cEsRZy2DKiXOA0tF58kq6eJZwZLcHDnVOqiY8fyuQiz8m6Sq0HZYEivbmIghIVnif+iWrTqpx/AKXRqfYlgGRnY7rMb15JKT4Zc9mgsY6Ow3GZDinO8/SJHFe2aVTor0uB1/5t8Dint/VZib68PJNV8axjPz8B1bdFWoXcaabUh4ku9rZoQfDn/DiYjmPvUq9OojB9Vg5l6LVTUlakVkLhcLhBPMMI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR07MB3980.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(396003)(366004)(346002)(39840400004)(376002)(186003)(4326008)(5660300002)(66946007)(66476007)(1076003)(26005)(66556008)(38100700002)(8936002)(956004)(6916009)(38350700002)(508600001)(2616005)(2906002)(36756003)(316002)(107886003)(8676002)(6486002)(6496006)(83380400001)(52116002)(86362001)(21314003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?N+7fM1CRkFY0a6evBy8ow1PSOtprAaWZ/+icx/1n5xYk95cQMarBS2Ddrxgd?=
+ =?us-ascii?Q?bhEqq6b5N5mG2eHEiEF8egccgtZHqJpgDWzfcoLx0lGmMMDU20Rem02cbNyQ?=
+ =?us-ascii?Q?p9glCNDRuiuoBArVWd8ECU028W3hUrXc8dMn/uU1V0k7Yhe3QDrAMR+7bVXE?=
+ =?us-ascii?Q?8BrCqxqIXuXBUUAi2sjlYAi80rZZThgdOKxoqOnZeFTA9MohWUuDtPq2/bAZ?=
+ =?us-ascii?Q?N6EDNHBpPGfMUIYUdm3dhw1cDiaX3i/dLQVbFsxDY+cD6cWgbvD3vZ6zwrfm?=
+ =?us-ascii?Q?ixFyI3uRfs4TicgL3XQlgtLQ1evliiy63yZ8/fcGdSd1RLn3B0pWtTXQblSH?=
+ =?us-ascii?Q?peKpTg6RukYGKIOGEMHRMTD0uGuOH1cdXjwpBaO0jSQF+nWxMibk/zy2kjJi?=
+ =?us-ascii?Q?oBzwvPCNrhW1C5Rf6u15nLIbAdqWFiL7GR4jUrd7aWYJo/THCFiNFlYZN8Bc?=
+ =?us-ascii?Q?ZTcTdK5TZIsYqZDHvcWTPWJ6SYfQB905zTI/OPMAam0Z8S/8HdB8U/ynTKCU?=
+ =?us-ascii?Q?QlkuwNqfEoYS2W6g3Mwf8/6lUBHzSgongpUuL4Qh7cNhB/kO5ZUn1pC9tpK3?=
+ =?us-ascii?Q?QFBZupVf4o5u8EeQgBfTjkVxn3Xj0PoOOXAptPnY30x9by7LIycI7q/ubQdY?=
+ =?us-ascii?Q?ne+GGHIoQGZZvNtO5HMYOAzgjkWJiBUIJHB2F+p1hIV+RrYEemGXv7dFDnyn?=
+ =?us-ascii?Q?7yk/Wrc0Ubj9S25F4uPAsjX5BUptd7aWD+I0zht1F96W3q0rw1+uyO4ctDdH?=
+ =?us-ascii?Q?gtOKr0vmxH3xMJ0rf2DS5Qmz/3RVfAlzo618A4PlRIYI1h8RboT/A06GIV7e?=
+ =?us-ascii?Q?sZec7PuvwKoVW1lJloBzt+AGltk5GHPtxmvgnCv4UQITIAd9cOia6srJmAnI?=
+ =?us-ascii?Q?saCDDZCndXJ3D3uKQEk9IIXNxW/U2uOVt1I20eVNqmDhWetkyZSQ5/Ip1LRc?=
+ =?us-ascii?Q?VWrcrqUYCpwqQdH12gRbNkmNO6SqZHxnR96fnb4uVD12AioS9aVcXvya4VBF?=
+ =?us-ascii?Q?0mp2xWp167bgF7LkhLlzcDceshh2nTDpTco5e/rmXZhTI4L2ThimbaL4C8Mz?=
+ =?us-ascii?Q?VduJmg6Ey+bzdXVSef8LFUK4dBWie3BHhCelvGH54CwRIHoI/CZOVPbrpVET?=
+ =?us-ascii?Q?oeRtE1qLhkOmeKwXBGmgEzvYcbPhYkKM5oLMeXh4NwOBRa/3kwthgFJaB//H?=
+ =?us-ascii?Q?Tx+hKxehC11/7LYFxFHM8WbdE0ueYB4um/v9UebD37KqPsrv/dgccrt83mL5?=
+ =?us-ascii?Q?BNIHXAq2Vu9P6lg44SbfZHvyQFAgTlPWVjN5YJjbWymY60dFYX/yRn7zm5KH?=
+ =?us-ascii?Q?J/NosHZAt/iQd0K+cbHcanBF?=
+X-MS-Exchange-Transport-Forked: True
+X-OriginatorOrg: vpitech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68e0d5cf-15ee-42e4-69a7-08d989ca856d
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR07MB3980.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2021 19:41:56.7733
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 130d6264-38b7-4474-a9bf-511ff1224fac
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SvGvXFcjqwQNzCPmDZp80qtr+LILdo0j0Ov0/fl6kQalHbspZppiVwsRGrBX+IObT9hMYS6kwNNkX0+ayFtQzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR07MB3517
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Oct 07, 2021 at 08:23:19PM +0200, Mickaël Salaün wrote:
-> From: Mickaël Salaün <mic@linux.microsoft.com>
-> 
-> Wire up trusted_for(2) for all architectures.
-> 
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+On Wed, 06 Oct 2021 15:49:58 -0400
+Mimi Zohar <zohar@linux.ibm.com> wrote:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> On Mon, 2021-10-04 at 18:32 -0600, Alex Henrie wrote:
+> > @@ -78,9 +81,13 @@ struct ima_rule_entry {
+> >  	unsigned long fsmagic;
+> >  	uuid_t fsuuid;
+> >  	kuid_t uid;
+> > +	kgid_t gid;
+> >  	kuid_t fowner;
+> > +	kgid_t fgroup;
+> >  	bool (*uid_op)(kuid_t, kuid_t);    /* Handlers for operators       */
+> > +	bool (*gid_op)(kgid_t, kgid_t);
+> >  	bool (*fowner_op)(kuid_t, kuid_t); /* uid_eq(), uid_gt(), uid_lt() */
+> > +	bool (*fgroup_op)(kgid_t, kgid_t); /* gid_eq(), gid_gt(), gid_lt() */
+> 
+> scripts/checkpatch.pl complains about missing variables.
 
--- 
-Kees Cook
+I'll resend with a new patch that fixes the existing style problems
+with the UID code before adding GID support.
+
+> > @@ -582,10 +590,23 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
+> >  		} else if (!rule->uid_op(cred->euid, rule->uid))
+> >  			return false;
+> >  	}
+> > -
+> > +	if ((rule->flags & IMA_GID) && !rule->gid_op(rule->gid, cred->gid))
+> 
+> All of uid_op/gid_op calls in ima_match_rules() pass the "cred->xxxx,
+> rule->xxx" except here, where it is rule->gid, cred->rule.   Reversing
+> the parameters here will help with addressing the checkpatch.pl
+> warning.
+
+Good catch, thanks.
+
+-Alex
