@@ -2,135 +2,69 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96055425028
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Oct 2021 11:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A76B4253A9
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Oct 2021 15:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240707AbhJGJgi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 7 Oct 2021 05:36:38 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:49216 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240712AbhJGJgg (ORCPT
+        id S233143AbhJGNIw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 7 Oct 2021 09:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240974AbhJGNIw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 7 Oct 2021 05:36:36 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5C14122636;
-        Thu,  7 Oct 2021 09:34:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1633599282;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oCNTuDA86Yx9mhczyzKj3htwjs7J498UQ14YZsykrCc=;
-        b=v8MxO+Z9+wZUj7kyZJZZsj43QSOA9qP8qdBGZl5KhBakBb7WMCMhTbzUmV47v8QXhJ2oWM
-        pBqiJhqVd6bMgwVAEiAiWHGuEF2m9gFUztFOePARjtQNtjj61/c6ivM75N0s9OUt48w1+8
-        PRgbeSewhDMCZ5Onub5cHBZiqF5ZMaw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1633599282;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oCNTuDA86Yx9mhczyzKj3htwjs7J498UQ14YZsykrCc=;
-        b=a9zOJ7KaE5DQmuYtspuTo/lmPqddlua1mL5oSf3SZJW0w69HoBw70k2NYJyOP15DSxgVm5
-        W6HJCzjjzGnSWxAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1071E13513;
-        Thu,  7 Oct 2021 09:34:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eu7CATK/XmGfNwAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Thu, 07 Oct 2021 09:34:42 +0000
-Date:   Thu, 7 Oct 2021 11:34:40 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Alex Henrie <alexh@vpitech.com>, linux-integrity@vger.kernel.org,
-        alexhenrie24@gmail.com, Curtis Veit <veit@vpieng.com>
-Subject: Re: [PATCH v2] ima: add gid support
-Message-ID: <YV6/MBZzZ5GS+MCv@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20211005003237.501882-1-alexh@vpitech.com>
- <81863154aebf9d3e023bd37acca8ff265a187fd0.camel@linux.ibm.com>
+        Thu, 7 Oct 2021 09:08:52 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934EDC061570
+        for <linux-integrity@vger.kernel.org>; Thu,  7 Oct 2021 06:06:58 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id i20so7279270edj.10
+        for <linux-integrity@vger.kernel.org>; Thu, 07 Oct 2021 06:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=x0pWExGBmrIq729IIlvOahOD2dMzv6RJizC7Zlt0vBc=;
+        b=h8VRyrUQSY7s72U5qwm4iFLLaAyfgGzWnIba/J2JcRvGNJMkvN5ZbtlL3PMAGvHghr
+         25FrUVPONdkpxIVo5aCmd8o8wixYsCitNo+yo9DnHqPr+h/Pf932hcT7cCG8vuQnrB0s
+         r9m4os+Et+GJukbWE1nW4elrouCrdUPYJzwrd6UXyd039WtjE2T90qzLaH+b4uIHc6Gd
+         L2L2kArG7jMzUUef7mDcUtakJnFhYBDs3JanMEhv0MrEeRet7N8qY9QIFydQe7MK8920
+         fqnB/KGcdFM45ovjGJJrLWUtmFrPg4zuuIFw9r78eFsYP7CKdBrDoV0EsT20FmUNWgZy
+         Gzog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=x0pWExGBmrIq729IIlvOahOD2dMzv6RJizC7Zlt0vBc=;
+        b=xbdr2YWtguEw4yvPy7QvhZ8IGaA2LnJ1RQ60pNrT+yrTuwK03riEQAQ/oWgwpyeZ5Y
+         MGSWX7MlsEBkS7VNDuBWSRa7kAYKBrOcrQweBsTiP7vdEHozpng3qYsUaI62HXHJZBuN
+         yqDx3Bn0pOlkYghDi7XOJNu8Htf/pxrUocSdcluVClY2rwsz4jJEY9kA8CQ6t+PUHkOW
+         IgQ25TiNJpzJXgJAJ1i9meUVX7EfGuK9yq9MRZKkft//AN5mGyI5GDDt9JmDQYiQK48w
+         zZdkkjcj0LMUfTd3HlLDmAid0KWMMab5t0R4wtJbmePiQ+6yNl8IDdxMfmdxRqUREoCm
+         3TaQ==
+X-Gm-Message-State: AOAM533GXHgsThXNL2LIxnIy5XsC/dNCDLUyFkD16/JacAXC9PW0Ez7Q
+        liBxs6sJLalngqzbOIrWNJw59MHwSH28Wa7KeVs=
+X-Google-Smtp-Source: ABdhPJyBlTKzqJdMZp92RQj9mYJvsOV0qGFjPSkyQSvmL5xeu4M/L3JQiOWz81Q9IkDMFLh+Ppm0vYU2RwFmMGQ+/hQ=
+X-Received: by 2002:a05:6402:4389:: with SMTP id o9mr6572775edc.38.1633612010387;
+ Thu, 07 Oct 2021 06:06:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <81863154aebf9d3e023bd37acca8ff265a187fd0.camel@linux.ibm.com>
+Received: by 2002:a05:6400:1205:0:0:0:0 with HTTP; Thu, 7 Oct 2021 06:06:50
+ -0700 (PDT)
+Reply-To: ms.lisahugh000@gmail.com
+From:   MS LISA HUGH <olivier.folly0@gmail.com>
+Date:   Thu, 7 Oct 2021 15:06:50 +0200
+Message-ID: <CAG_GOAu2vyn7DtaL=4XNpa69O+yz8ov8BWVTw78oHt-HpmCitQ@mail.gmail.com>
+Subject: BUSINESS MASSAGE AND DETAILS LATER. >>MS LISA HUGH.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Alex, Mimi,
+Dear Friend,
 
-> Hi Alex,
+I am Ms Lisa Hugh accountant and files keeping with with the bank.
 
-> On Mon, 2021-10-04 at 18:32 -0600, Alex Henrie wrote:
-> > From: Curtis Veit <veit@vpieng.com>
+I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
+bank account with your co-operation for both of us benefit.
 
-> > IMA currently supports the concept of rules based on uid where the rule
-> > is based on the uid of the file owner or the uid of the user accessing
-> > the file. It is useful to have similar rules based on gid. This patch
-> > provides that ability.
-
-> > Signed-off-by: Curtis Veit <veit@vpieng.com>
-> > Co-developed-by: Alex Henrie <alexh@vpitech.com>
-> > Signed-off-by: Alex Henrie <alexh@vpitech.com>
-> > ---
-> > v2: Trivial changes that Mimi requested
-
-> Sorry, scripts/check-patch.pl reported some warnings.  Two more trivial changes.
-
-> > ---
-> >  Documentation/ABI/testing/ima_policy |   8 +-
-> >  security/integrity/ima/ima_policy.c  | 201 +++++++++++++++++++++++----
-> >  2 files changed, 180 insertions(+), 29 deletions(-)
-
-> > diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-> > index 5c2798534950..e1a04bd3b9e5 100644
-> > --- a/Documentation/ABI/testing/ima_policy
-
-> > @@ -78,9 +81,13 @@ struct ima_rule_entry {
-> >  	unsigned long fsmagic;
-> >  	uuid_t fsuuid;
-> >  	kuid_t uid;
-> > +	kgid_t gid;
-> >  	kuid_t fowner;
-> > +	kgid_t fgroup;
-> >  	bool (*uid_op)(kuid_t, kuid_t);    /* Handlers for operators       */
-> > +	bool (*gid_op)(kgid_t, kgid_t);
-> >  	bool (*fowner_op)(kuid_t, kuid_t); /* uid_eq(), uid_gt(), uid_lt() */
-> > +	bool (*fgroup_op)(kgid_t, kgid_t); /* gid_eq(), gid_gt(), gid_lt() */
-
-> scripts/checkpatch.pl complains about missing variables.
-+1
-
-> >  	int pcr;
-> >  	unsigned int allowed_algos; /* bitfield of allowed hash algorithms */
-> >  	struct {
-
-> > @@ -582,10 +590,23 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
-> >  		} else if (!rule->uid_op(cred->euid, rule->uid))
-> >  			return false;
-> >  	}
-> > -
-> > +	if ((rule->flags & IMA_GID) && !rule->gid_op(rule->gid, cred->gid))
-
-> All of uid_op/gid_op calls in ima_match_rules() pass the "cred->xxxx,
-> rule->xxx" except here, where it is rule->gid, cred->rule.   Reversing
-> the parameters here will help with addressing the checkpatch.pl
-> warning.
-+1
-
-Apart from those checkpatch issues patch LGTM.
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
-
-Kind regards,
-Petr
-
-> thanks,
-
-> Mimi
-
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh
