@@ -2,69 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D602426723
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Oct 2021 11:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3E8426774
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Oct 2021 12:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbhJHJvQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 8 Oct 2021 05:51:16 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:37394 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbhJHJvP (ORCPT
+        id S239036AbhJHKRm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 8 Oct 2021 06:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239488AbhJHKRl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 8 Oct 2021 05:51:15 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E5A9D20116;
-        Fri,  8 Oct 2021 09:49:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1633686559;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z6QU4JEJg2ILscmywWsFr2OY1JnT6L4LYp+taGZjMqw=;
-        b=sLELKBlLfsYRhLeGUjQLz0MPoO7neosozEaXTdl7aub9fLHdka0mGvG1uFCdEHCbsgJDUW
-        J9Dc5ncxwQ7xR+tWZwdkE7BPjplWj7zOvggxkyK7ZZLAfJn7Arvyz8bRsLnUAo1mUGwtrL
-        9nrEwZhVLOgyZtUisuzRk/Tg66CvBj0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1633686559;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z6QU4JEJg2ILscmywWsFr2OY1JnT6L4LYp+taGZjMqw=;
-        b=u+6S18t/GcJp/HvMTYu3mC1nEQl9UojtpAmljgPsyopDEY19+Iu8JvMrNn+yC+tKB9dAvO
-        tsHAL9i3PNzA54DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9FEDB13EA2;
-        Fri,  8 Oct 2021 09:49:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KE5RJB8UYGFOEAAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Fri, 08 Oct 2021 09:49:19 +0000
-Date:   Fri, 8 Oct 2021 11:49:17 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     linux-integrity@vger.kernel.org
-Cc:     Alex Henrie <alexh@vpitech.com>, alexhenrie24@gmail.com,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v6 0/2] IMA checkpatch fixes
-Message-ID: <YWAUHS4NWQ6UCont@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20211008091430.22392-1-pvorel@suse.cz>
+        Fri, 8 Oct 2021 06:17:41 -0400
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ad])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60B5C061570;
+        Fri,  8 Oct 2021 03:15:46 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4HQkbj1pTMzMqD8t;
+        Fri,  8 Oct 2021 12:15:45 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4HQkbd2lkGzlh8Tv;
+        Fri,  8 Oct 2021 12:15:41 +0200 (CEST)
+Subject: Re: [PATCH v13 1/3] fs: Add trusted_for(2) syscall implementation and
+ related sysctl
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20211007182321.872075-1-mic@digikod.net>
+ <20211007182321.872075-2-mic@digikod.net> <202110071217.16C7208F@keescook>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <92b01e4f-2bc3-8ba2-997b-5757058fe184@digikod.net>
+Date:   Fri, 8 Oct 2021 12:16:17 +0200
+User-Agent: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211008091430.22392-1-pvorel@suse.cz>
+In-Reply-To: <202110071217.16C7208F@keescook>
+Content-Type: text/plain; charset=iso-8859-15
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi all,
 
-Ah, version of this patchset is obviously 1, not 6.
+On 07/10/2021 21:25, Kees Cook wrote:
+> On Thu, Oct 07, 2021 at 08:23:18PM +0200, Mickaël Salaün wrote:
+>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>
+>> The trusted_for() syscall enables user space tasks to check that files
+>> are trusted to be executed or interpreted by user space.  This may allow
+>> script interpreters to check execution permission before reading
+>> commands from a file, or dynamic linkers to allow shared object loading.
+>> This may be seen as a way for a trusted task (e.g. interpreter) to check
+>> the trustworthiness of files (e.g. scripts) before extending its control
+>> flow graph with new ones originating from these files.
+>> [...]
+>>  aio-nr & aio-max-nr
+>> @@ -382,3 +383,52 @@ Each "watch" costs roughly 90 bytes on a 32bit kernel, and roughly 160 bytes
+>>  on a 64bit one.
+>>  The current default value for  max_user_watches  is the 1/25 (4%) of the
+>>  available low memory, divided for the "watch" cost in bytes.
+>> +
+>> +
+>> +trust_policy
+>> +------------
+> 
+> bikeshed: can we name this "trusted_for_policy"? Both "trust" and
+> "policy" are very general words, but "trusted_for" (after this series)
+> will have a distinct meaning, so "trusted_for_policy" becomes more
+> specific/searchable.
 
-Kind regards,
-Petr
+Ok, I'll rename this sysctl.
+
+> 
+> With that renamed, I think it looks good! I'm looking forward to
+> interpreters using this. :)
+> 
+> Acked-by: Kees Cook <keescook@chromium.org>
+> 
