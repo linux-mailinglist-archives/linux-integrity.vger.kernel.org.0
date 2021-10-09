@@ -2,108 +2,179 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9044273E5
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Oct 2021 00:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5B142790C
+	for <lists+linux-integrity@lfdr.de>; Sat,  9 Oct 2021 12:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243574AbhJHWtg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 8 Oct 2021 18:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S232752AbhJIKlG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 9 Oct 2021 06:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbhJHWtf (ORCPT
+        with ESMTP id S231386AbhJIKlG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 8 Oct 2021 18:49:35 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E303C061762
-        for <linux-integrity@vger.kernel.org>; Fri,  8 Oct 2021 15:47:39 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 187so9328824pfc.10
-        for <linux-integrity@vger.kernel.org>; Fri, 08 Oct 2021 15:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=IDL1dGbYQGd5Z4n8MbIk3dyJApzaVNleP7ehAou5XC4=;
-        b=k/DtfYhTXoNzDDeSt76IrPgiHKVbJzl+yCmhiVP/k9h8OwZ+VHDbs2A9FEOSncQ6Nu
-         c0oNPpuSA0nexNb/AGdFb+q1kORF6YZCNXJNkA0aiLO369TZ7sk5ShzhZMZeTnhRLb7A
-         UNQpET4n7Z7KsW9liWrD/WoMIMHK7Ci23ktRY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=IDL1dGbYQGd5Z4n8MbIk3dyJApzaVNleP7ehAou5XC4=;
-        b=gtwfW+lIVOzO8jzbtEs0D2CRgUBnLib7X5mZhF6l+iRtGGhFU++pzGIUvHzJqSIcGd
-         mUVcO97F1OLTahLkZQk4Mnxan0agXkKaM2pnCChgjZ5OnTqQTJlz43V2poTwmN95RJWE
-         Br0asSUnIyyN7+XmRbNRSdzI/v/KGOAgu/Fyxyau+vF27T7U5M0Gz9HJBxmAqosB6PnM
-         /i1MmKp7rZO8LkrBunHl1Q+30bC1z+zNx+gx7pkISJtH0zfq+opmCeVD0EEXVfM+YU6d
-         Vfzo8PKei/uoPZ6UaWSouq06YCDUVa+hmB9fn+qgS2eDMiiU+gTWLp0Mx7X+UOcfZuO3
-         IZhQ==
-X-Gm-Message-State: AOAM531BPshrmgn9c4n44w9yzywH86qGvd+/EHIBh9n1t5RP/3Vn2SQi
-        5/GYkGC82Ceaen959z3P6Fsv9A==
-X-Google-Smtp-Source: ABdhPJwvnmLJjnp89CGi8tOitxi5+0+62XoRbPGjNi0V+bAyRDLPPpqmm4mrkramzCbREIT8ipI6YQ==
-X-Received: by 2002:a05:6a00:1944:b0:438:d002:6e35 with SMTP id s4-20020a056a00194400b00438d0026e35mr12543299pfk.20.1633733258954;
-        Fri, 08 Oct 2021 15:47:38 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k17sm295225pff.214.2021.10.08.15.47.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 15:47:38 -0700 (PDT)
-Date:   Fri, 8 Oct 2021 15:47:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v14 0/3] Add trusted_for(2) (was O_MAYEXEC)
-Message-ID: <202110081545.8D8C2980@keescook>
-References: <20211008104840.1733385-1-mic@digikod.net>
+        Sat, 9 Oct 2021 06:41:06 -0400
+Received: from ha0.nfschina.com (unknown [IPv6:2400:dd01:100f:2:d63d:7eff:fe08:eb3f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B936C061570;
+        Sat,  9 Oct 2021 03:39:08 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by ha0.nfschina.com (Postfix) with ESMTP id 8DEB8AE0E44;
+        Sat,  9 Oct 2021 18:40:50 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from ha0.nfschina.com ([127.0.0.1])
+        by localhost (ha0.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FtkZCRRlX7cL; Sat,  9 Oct 2021 18:40:29 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by ha0.nfschina.com (Postfix) with ESMTPA id 28FD7AE0DE1;
+        Sat,  9 Oct 2021 18:40:29 +0800 (CST)
+From:   liqiong <liqiong@nfschina.com>
+To:     Simon.THOBY@viveris.fr, zohar@linux.ibm.com
+Cc:     dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] ima: fix deadlock when traversing "ima_default_rules".
+Date:   Sat,  9 Oct 2021 18:38:21 +0800
+Message-Id: <20211009103821.51767-1-liqiong@nfschina.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210918031139.22674-1-liqiong@nfschina.com>
+References: <20210918031139.22674-1-liqiong@nfschina.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211008104840.1733385-1-mic@digikod.net>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Oct 08, 2021 at 12:48:37PM +0200, Mickaël Salaün wrote:
-> This patch series is mainly a rebase on v5.15-rc4 with some cosmetic
-> changes suggested by Kees Cook.  Andrew, can you please consider to
-> merge this into your tree?
+The current IMA ruleset is identified by the variable "ima_rules"
+that default to "&ima_default_rules". When loading a custom policy
+for the first time, the variable is updated to "&ima_policy_rules"
+instead. That update isn't RCU-safe, and deadlocks are possible.
+Indeed, some functions like ima_match_policy() may loop indefinitely
+when traversing "ima_default_rules" with list_for_each_entry_rcu().
 
-Thanks for staying on this series! This is a good step in the right
-direction for finally plugging the "interpreter" noexec hole. I'm pretty
-sure Chrome OS will immediately use this as they've been carrying
-similar functionality for a long time.
+When iterating over the default ruleset back to head, if the list
+head is "ima_default_rules", and "ima_rules" have been updated to
+"&ima_policy_rules", the loop condition (&entry->list != ima_rules)
+stays always true, traversing won't terminate, causing a soft lockup
+and RCU stalls.
 
+Introduce a temporary value for "ima_rules" when iterating over
+the ruleset to avoid the deadlocks.
+
+Signed-off-by: liqiong <liqiong@nfschina.com>
+Reviewed-by: THOBY Simon <Simon.THOBY@viveris.fr>
+Fixes: 38d859f991f3 ("IMA: policy can now be updated multiple times")
+Reported-by: kernel test robot <lkp@intel.com> (Fix sparse: incompatible types in comparison expression.)
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/ima/ima_policy.c | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 87b9b71cb820..12e8adcd80a2 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -228,7 +228,7 @@ static struct ima_rule_entry *arch_policy_entry __ro_after_init;
+ static LIST_HEAD(ima_default_rules);
+ static LIST_HEAD(ima_policy_rules);
+ static LIST_HEAD(ima_temp_rules);
+-static struct list_head *ima_rules = &ima_default_rules;
++static struct list_head __rcu *ima_rules = (struct list_head __rcu *)(&ima_default_rules);
+ 
+ static int ima_policy __initdata;
+ 
+@@ -675,12 +675,14 @@ int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
+ {
+ 	struct ima_rule_entry *entry;
+ 	int action = 0, actmask = flags | (flags << 1);
++	struct list_head *ima_rules_tmp;
+ 
+ 	if (template_desc && !*template_desc)
+ 		*template_desc = ima_template_desc_current();
+ 
+ 	rcu_read_lock();
+-	list_for_each_entry_rcu(entry, ima_rules, list) {
++	ima_rules_tmp = rcu_dereference(ima_rules);
++	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
+ 
+ 		if (!(entry->action & actmask))
+ 			continue;
+@@ -741,9 +743,11 @@ void ima_update_policy_flags(void)
+ {
+ 	struct ima_rule_entry *entry;
+ 	int new_policy_flag = 0;
++	struct list_head *ima_rules_tmp;
+ 
+ 	rcu_read_lock();
+-	list_for_each_entry(entry, ima_rules, list) {
++	ima_rules_tmp = rcu_dereference(ima_rules);
++	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
+ 		/*
+ 		 * SETXATTR_CHECK rules do not implement a full policy check
+ 		 * because rule checking would probably have an important
+@@ -968,10 +972,10 @@ void ima_update_policy(void)
+ 
+ 	list_splice_tail_init_rcu(&ima_temp_rules, policy, synchronize_rcu);
+ 
+-	if (ima_rules != policy) {
++	if (ima_rules != (struct list_head __rcu *)policy) {
+ 		ima_policy_flag = 0;
+-		ima_rules = policy;
+ 
++		rcu_assign_pointer(ima_rules, policy);
+ 		/*
+ 		 * IMA architecture specific policy rules are specified
+ 		 * as strings and converted to an array of ima_entry_rules
+@@ -1061,7 +1065,7 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
+ 		pr_warn("rule for LSM \'%s\' is undefined\n",
+ 			entry->lsm[lsm_rule].args_p);
+ 
+-		if (ima_rules == &ima_default_rules) {
++		if (ima_rules == (struct list_head __rcu *)(&ima_default_rules)) {
+ 			kfree(entry->lsm[lsm_rule].args_p);
+ 			entry->lsm[lsm_rule].args_p = NULL;
+ 			result = -EINVAL;
+@@ -1768,9 +1772,11 @@ void *ima_policy_start(struct seq_file *m, loff_t *pos)
+ {
+ 	loff_t l = *pos;
+ 	struct ima_rule_entry *entry;
++	struct list_head *ima_rules_tmp;
+ 
+ 	rcu_read_lock();
+-	list_for_each_entry_rcu(entry, ima_rules, list) {
++	ima_rules_tmp = rcu_dereference(ima_rules);
++	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
+ 		if (!l--) {
+ 			rcu_read_unlock();
+ 			return entry;
+@@ -1789,7 +1795,8 @@ void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos)
+ 	rcu_read_unlock();
+ 	(*pos)++;
+ 
+-	return (&entry->list == ima_rules) ? NULL : entry;
++	return (&entry->list == &ima_default_rules ||
++		&entry->list == &ima_policy_rules) ? NULL : entry;
+ }
+ 
+ void ima_policy_stop(struct seq_file *m, void *v)
+@@ -2014,6 +2021,7 @@ bool ima_appraise_signature(enum kernel_read_file_id id)
+ 	struct ima_rule_entry *entry;
+ 	bool found = false;
+ 	enum ima_hooks func;
++	struct list_head *ima_rules_tmp;
+ 
+ 	if (id >= READING_MAX_ID)
+ 		return false;
+@@ -2021,7 +2029,8 @@ bool ima_appraise_signature(enum kernel_read_file_id id)
+ 	func = read_idmap[id] ?: FILE_CHECK;
+ 
+ 	rcu_read_lock();
+-	list_for_each_entry_rcu(entry, ima_rules, list) {
++	ima_rules_tmp = rcu_dereference(ima_rules);
++	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
+ 		if (entry->action != APPRAISE)
+ 			continue;
+ 
 -- 
-Kees Cook
+2.25.1
+
