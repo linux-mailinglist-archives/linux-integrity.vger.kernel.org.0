@@ -2,118 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 731BF427A9E
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Oct 2021 15:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9AA4281B8
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 Oct 2021 16:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbhJINcr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 9 Oct 2021 09:32:47 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:35754 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233209AbhJINcq (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 9 Oct 2021 09:32:46 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 199BVVke007307;
-        Sat, 9 Oct 2021 09:30:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=4Cro3IpcEkZeGz4yDmnXZpwZJa3Nd2CCDYW1ytGiNbw=;
- b=kJ7qtltQ0cYEWq9Lsxp0UM1v5srrA8BPAPXxyvYye4whtqVWi3TgImbPmsfmprD86HXF
- iM12jbOG82a13N1wuYMU/e6kvgisuf284d/QN2GNfh5qqGPXXPx8ZOBZmA/Wn30IsUC1
- ofOJpzLxywpXCtcesGvjZZNj7EuGGjSWX156V7h7F0tLkzwAIu8Qfc9Rr6s+ceM+Mxwo
- UtqUvIR4UWeEnl+Bwf1D/EE7Q16y1uXFweOztbcFgMDy51D/NNSfEFSh52tzKUUPpN2I
- ckOIexRjkrTrYbu5qNA3tEfLjKrJfEayKnEsPqY/7YiNrQq0xW0VVZ+9zAy3zZV8xbKh uQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bka9ksax0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 09 Oct 2021 09:30:00 -0400
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 199DPc6I032508;
-        Sat, 9 Oct 2021 09:29:59 -0400
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bka9ksawm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 09 Oct 2021 09:29:59 -0400
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 199DMVM5028876;
-        Sat, 9 Oct 2021 13:29:58 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma05wdc.us.ibm.com with ESMTP id 3bk2q9mj6t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 09 Oct 2021 13:29:57 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 199DTuDp35717580
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 9 Oct 2021 13:29:57 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D67417806B;
-        Sat,  9 Oct 2021 13:29:56 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1127778060;
-        Sat,  9 Oct 2021 13:29:53 +0000 (GMT)
-Received: from [172.17.101.49] (unknown [9.211.116.119])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Sat,  9 Oct 2021 13:29:53 +0000 (GMT)
-Message-ID: <1749e7c3b528d361c09b40e5758b92c7386ffe1f.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/2] tpm: use SM3 instead of SM3_256
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
+        id S232539AbhJJOXc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 10 Oct 2021 10:23:32 -0400
+Received: from albireo.enyo.de ([37.24.231.21]:55530 "EHLO albireo.enyo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231846AbhJJOXc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 10 Oct 2021 10:23:32 -0400
+X-Greylist: delayed 628 seconds by postgrey-1.27 at vger.kernel.org; Sun, 10 Oct 2021 10:23:31 EDT
+Received: from [172.17.203.2] (port=48075 helo=deneb.enyo.de)
+        by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1mZZWh-0005qE-Ez; Sun, 10 Oct 2021 14:10:07 +0000
+Received: from fw by deneb.enyo.de with local (Exim 4.94.2)
+        (envelope-from <fw@deneb.enyo.de>)
+        id 1mZZWh-0006hy-5Z; Sun, 10 Oct 2021 16:10:07 +0200
+From:   Florian Weimer <fw@deneb.enyo.de>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
-Date:   Sat, 09 Oct 2021 08:29:52 -0500
-In-Reply-To: <20211009130828.101396-1-tianjia.zhang@linux.alibaba.com>
-References: <20211009130828.101396-1-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WI7fZO2iFMsMT2VYtdPhk3sDP0oOa09u
-X-Proofpoint-ORIG-GUID: 55pBK2apPaN51qGasERyyQnEDHOUSIei
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FC?= =?iso-8859-1?Q?n?= 
+        <mic@linux.microsoft.com>
+Subject: Re: [PATCH v14 1/3] fs: Add trusted_for(2) syscall implementation
+ and related sysctl
+References: <20211008104840.1733385-1-mic@digikod.net>
+        <20211008104840.1733385-2-mic@digikod.net>
+Date:   Sun, 10 Oct 2021 16:10:07 +0200
+In-Reply-To: <20211008104840.1733385-2-mic@digikod.net>
+ (=?iso-8859-1?Q?=22Micka=EBl_Sala=FCn=22's?=
+        message of "Fri, 8 Oct 2021 12:48:38 +0200")
+Message-ID: <87tuhpynr4.fsf@mid.deneb.enyo.de>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-10-09_03,2021-10-07_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 adultscore=0 mlxscore=0 malwarescore=0
- bulkscore=0 clxscore=1011 phishscore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2109230001 definitions=main-2110090093
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, 2021-10-09 at 21:08 +0800, Tianjia Zhang wrote:
-> According to https://tools.ietf.org/id/draft-oscca-cfrg-sm3-01.html,
-> SM3 always produces a 256-bit hash value and there are no plans for
-> other length development, so there is no ambiguity in the name of
-> sm3.
+* Mickaël Salaün:
 
-For the TPM we're following the TPM Library specification
+> Being able to restrict execution also enables to protect the kernel by
+> restricting arbitrary syscalls that an attacker could perform with a
+> crafted binary or certain script languages.  It also improves multilevel
+> isolation by reducing the ability of an attacker to use side channels
+> with specific code.  These restrictions can natively be enforced for ELF
+> binaries (with the noexec mount option) but require this kernel
+> extension to properly handle scripts (e.g. Python, Perl).  To get a
+> consistent execution policy, additional memory restrictions should also
+> be enforced (e.g. thanks to SELinux).
 
-https://trustedcomputinggroup.org/resource/tpm-library-specification/
+One example I have come across recently is that code which can be
+safely loaded as a Perl module is definitely not a no-op as a shell
+script: it downloads code and executes it, apparently over an
+untrusted network connection and without signature checking.
 
-Which is very clear: the algorithm name is TPM_ALG_SM3_256
+Maybe in the IMA world, the expectation is that such ambiguous code
+would not be signed in the first place, but general-purpose
+distributions are heading in a different direction with
+across-the-board signing:
 
-We're using sm3 as our exposed name because that's what linux crypto
-uses, so there should be no problem in what the end user sees, but
-changing to non standard TPM definitions is only going to cause
-confusion at the kernel level.
+  Signed RPM Contents
+  <https://fedoraproject.org/wiki/Changes/Signed_RPM_Contents>
 
-James
-
-
+So I wonder if we need additional context information for a potential
+LSM to identify the intended use case.
