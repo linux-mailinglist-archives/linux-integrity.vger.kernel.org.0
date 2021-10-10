@@ -2,102 +2,166 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9AA4281B8
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 Oct 2021 16:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874D542826C
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 Oct 2021 18:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbhJJOXc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 10 Oct 2021 10:23:32 -0400
-Received: from albireo.enyo.de ([37.24.231.21]:55530 "EHLO albireo.enyo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231846AbhJJOXc (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 10 Oct 2021 10:23:32 -0400
-X-Greylist: delayed 628 seconds by postgrey-1.27 at vger.kernel.org; Sun, 10 Oct 2021 10:23:31 EDT
-Received: from [172.17.203.2] (port=48075 helo=deneb.enyo.de)
-        by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1mZZWh-0005qE-Ez; Sun, 10 Oct 2021 14:10:07 +0000
-Received: from fw by deneb.enyo.de with local (Exim 4.94.2)
-        (envelope-from <fw@deneb.enyo.de>)
-        id 1mZZWh-0006hy-5Z; Sun, 10 Oct 2021 16:10:07 +0200
-From:   Florian Weimer <fw@deneb.enyo.de>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FC?= =?iso-8859-1?Q?n?= 
-        <mic@linux.microsoft.com>
-Subject: Re: [PATCH v14 1/3] fs: Add trusted_for(2) syscall implementation
- and related sysctl
-References: <20211008104840.1733385-1-mic@digikod.net>
-        <20211008104840.1733385-2-mic@digikod.net>
-Date:   Sun, 10 Oct 2021 16:10:07 +0200
-In-Reply-To: <20211008104840.1733385-2-mic@digikod.net>
- (=?iso-8859-1?Q?=22Micka=EBl_Sala=FCn=22's?=
-        message of "Fri, 8 Oct 2021 12:48:38 +0200")
-Message-ID: <87tuhpynr4.fsf@mid.deneb.enyo.de>
+        id S231144AbhJJQEK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 10 Oct 2021 12:04:10 -0400
+Received: from mx22.baidu.com ([220.181.50.185]:53692 "EHLO baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230271AbhJJQEK (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Sun, 10 Oct 2021 12:04:10 -0400
+Received: from BJHW-Mail-Ex03.internal.baidu.com (unknown [10.127.64.13])
+        by Forcepoint Email with ESMTPS id B652381AFE1D5BE5BBF5;
+        Mon, 11 Oct 2021 00:02:09 +0800 (CST)
+Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
+ BJHW-Mail-Ex03.internal.baidu.com (10.127.64.13) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Mon, 11 Oct 2021 00:02:09 +0800
+Received: from localhost.localdomain (172.31.63.8) by
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Mon, 11 Oct 2021 00:02:08 +0800
+From:   Cai Huoqing <caihuoqing@baidu.com>
+To:     <caihuoqing@baidu.com>
+CC:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] tpm: ibmvtpm: Make use of dma_alloc_coherent()
+Date:   Mon, 11 Oct 2021 00:01:45 +0800
+Message-ID: <20211010160147.590-1-caihuoqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
+X-Originating-IP: [172.31.63.8]
+X-ClientProxiedBy: BJHW-Mail-Ex16.internal.baidu.com (10.127.64.39) To
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-* Mickaël Salaün:
+Replacing kmalloc/kfree/get_zeroed_page/free_page/dma_map_single/
+dma_unmap_single() with dma_alloc_coherent/dma_free_coherent()
+helps to reduce code size, and simplify the code, and coherent
+DMA will not clear the cache every time.
 
-> Being able to restrict execution also enables to protect the kernel by
-> restricting arbitrary syscalls that an attacker could perform with a
-> crafted binary or certain script languages.  It also improves multilevel
-> isolation by reducing the ability of an attacker to use side channels
-> with specific code.  These restrictions can natively be enforced for ELF
-> binaries (with the noexec mount option) but require this kernel
-> extension to properly handle scripts (e.g. Python, Perl).  To get a
-> consistent execution policy, additional memory restrictions should also
-> be enforced (e.g. thanks to SELinux).
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+---
+ drivers/char/tpm/tpm_ibmvtpm.c | 61 ++++++++++------------------------
+ 1 file changed, 18 insertions(+), 43 deletions(-)
 
-One example I have come across recently is that code which can be
-safely loaded as a Perl module is definitely not a no-op as a shell
-script: it downloads code and executes it, apparently over an
-untrusted network connection and without signature checking.
+diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+index 3af4c07a9342..5f55a14ee824 100644
+--- a/drivers/char/tpm/tpm_ibmvtpm.c
++++ b/drivers/char/tpm/tpm_ibmvtpm.c
+@@ -356,15 +356,12 @@ static void tpm_ibmvtpm_remove(struct vio_dev *vdev)
+ 		rc = plpar_hcall_norets(H_FREE_CRQ, vdev->unit_address);
+ 	} while (rc == H_BUSY || H_IS_LONG_BUSY(rc));
+ 
+-	dma_unmap_single(ibmvtpm->dev, ibmvtpm->crq_dma_handle,
+-			 CRQ_RES_BUF_SIZE, DMA_BIDIRECTIONAL);
+-	free_page((unsigned long)ibmvtpm->crq_queue.crq_addr);
+-
+-	if (ibmvtpm->rtce_buf) {
+-		dma_unmap_single(ibmvtpm->dev, ibmvtpm->rtce_dma_handle,
+-				 ibmvtpm->rtce_size, DMA_BIDIRECTIONAL);
+-		kfree(ibmvtpm->rtce_buf);
+-	}
++	dma_free_coherent(ibmvtpm->dev, CRQ_RES_BUF_SIZE,
++			  crq_q->crq_addr, crq_q->crq_dma_handle);
++
++	if (ibmvtpm->rtce_buf)
++		dma_free_coherent(ibmvtpm->dev, ibmvtpm->rtce_size,
++				  ibmvtpm->rtce_buf, ibmvtpm->rtce_dma_handle);
+ 
+ 	kfree(ibmvtpm);
+ 	/* For tpm_ibmvtpm_get_desired_dma */
+@@ -522,23 +519,12 @@ static void ibmvtpm_crq_process(struct ibmvtpm_crq *crq,
+ 				return;
+ 			}
+ 			ibmvtpm->rtce_size = be16_to_cpu(crq->len);
+-			ibmvtpm->rtce_buf = kmalloc(ibmvtpm->rtce_size,
+-						    GFP_ATOMIC);
+-			if (!ibmvtpm->rtce_buf) {
+-				dev_err(ibmvtpm->dev, "Failed to allocate memory for rtce buffer\n");
+-				return;
+-			}
+-
+-			ibmvtpm->rtce_dma_handle = dma_map_single(ibmvtpm->dev,
+-				ibmvtpm->rtce_buf, ibmvtpm->rtce_size,
+-				DMA_BIDIRECTIONAL);
+-
+-			if (dma_mapping_error(ibmvtpm->dev,
+-					      ibmvtpm->rtce_dma_handle)) {
+-				kfree(ibmvtpm->rtce_buf);
+-				ibmvtpm->rtce_buf = NULL;
+-				dev_err(ibmvtpm->dev, "Failed to dma map rtce buffer\n");
+-			}
++			ibmvtpm->rtce_buf = dma_alloc_coherent(ibmvtpm->dev,
++							       ibmvtpm->rtce_size,
++							       &ibmvtpm->rtce_dma_handle,
++							       GFP_ATOMIC);
++			if (!ibmvtpm->rtce_buf)
++				dev_err(ibmvtpm->dev, "Failed to dma allocate rtce buffer\n");
+ 
+ 			return;
+ 		case VTPM_GET_VERSION_RES:
+@@ -618,22 +604,13 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+ 	ibmvtpm->vdev = vio_dev;
+ 
+ 	crq_q = &ibmvtpm->crq_queue;
+-	crq_q->crq_addr = (struct ibmvtpm_crq *)get_zeroed_page(GFP_KERNEL);
+-	if (!crq_q->crq_addr) {
+-		dev_err(dev, "Unable to allocate memory for crq_addr\n");
+-		goto cleanup;
+-	}
+ 
+ 	crq_q->num_entry = CRQ_RES_BUF_SIZE / sizeof(*crq_q->crq_addr);
+ 	init_waitqueue_head(&crq_q->wq);
+-	ibmvtpm->crq_dma_handle = dma_map_single(dev, crq_q->crq_addr,
+-						 CRQ_RES_BUF_SIZE,
+-						 DMA_BIDIRECTIONAL);
+-
+-	if (dma_mapping_error(dev, ibmvtpm->crq_dma_handle)) {
+-		dev_err(dev, "dma mapping failed\n");
++	crq_q->crq_addr = dma_alloc_coherent(dev, CRQ_RES_BUF_SIZE,
++					    &ibmvtpm->crq_dma_handle, GFP_KERNEL);
++	if (!crq_q->crq_addr)
+ 		goto cleanup;
+-	}
+ 
+ 	rc = plpar_hcall_norets(H_REG_CRQ, vio_dev->unit_address,
+ 				ibmvtpm->crq_dma_handle, CRQ_RES_BUF_SIZE);
+@@ -642,7 +619,7 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+ 
+ 	if (rc) {
+ 		dev_err(dev, "Unable to register CRQ rc=%d\n", rc);
+-		goto reg_crq_cleanup;
++		goto cleanup;
+ 	}
+ 
+ 	rc = request_irq(vio_dev->irq, ibmvtpm_interrupt, 0,
+@@ -704,13 +681,11 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+ 	do {
+ 		rc1 = plpar_hcall_norets(H_FREE_CRQ, vio_dev->unit_address);
+ 	} while (rc1 == H_BUSY || H_IS_LONG_BUSY(rc1));
+-reg_crq_cleanup:
+-	dma_unmap_single(dev, ibmvtpm->crq_dma_handle, CRQ_RES_BUF_SIZE,
+-			 DMA_BIDIRECTIONAL);
+ cleanup:
+ 	if (ibmvtpm) {
+ 		if (crq_q->crq_addr)
+-			free_page((unsigned long)crq_q->crq_addr);
++			dma_free_coherent(dev, CRQ_RES_BUF_SIZE,
++					  crq_q->crq_addr, crq_q->crq_dma_handle);
+ 		kfree(ibmvtpm);
+ 	}
+ 
+-- 
+2.25.1
 
-Maybe in the IMA world, the expectation is that such ambiguous code
-would not be signed in the first place, but general-purpose
-distributions are heading in a different direction with
-across-the-board signing:
-
-  Signed RPM Contents
-  <https://fedoraproject.org/wiki/Changes/Signed_RPM_Contents>
-
-So I wonder if we need additional context information for a potential
-LSM to identify the intended use case.
