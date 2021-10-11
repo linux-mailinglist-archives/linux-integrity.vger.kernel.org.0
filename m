@@ -2,84 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F376428D49
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Oct 2021 14:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF552428DD8
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Oct 2021 15:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236695AbhJKMsZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 11 Oct 2021 08:48:25 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:38196 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236696AbhJKMsY (ORCPT
+        id S236918AbhJKNaO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 11 Oct 2021 09:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236903AbhJKNaN (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 11 Oct 2021 08:48:24 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 265801FEA4;
-        Mon, 11 Oct 2021 12:46:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1633956384;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q8aCM04Y5KKget2yGbE096ODHyYDPCyVX15tuLF1gmw=;
-        b=SiSrBUhr7CcKxSsPBgknC52c3DOauZC9tW2h6EfYABhoUF66kYMnQ4g7Je0eGGJzXyeT/K
-        EInMlXK5NPXnbdMhZLZ0erQhqdsk52vgy4sN7w9wIerE4ndlLJRi+cDp3BEWrzgLCLTgoH
-        A4IprkRFSJuHZLOH++ORAXB22S5ygBQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1633956384;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q8aCM04Y5KKget2yGbE096ODHyYDPCyVX15tuLF1gmw=;
-        b=rOEHUMOHgsh6dCj9nw45/O6TMDNDfVmcfDVp2sgvqWi8FrV9lpBy2gXCSvXxpYctKpq3Cw
-        HXxpOOkLs4RPg0Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EB96413C72;
-        Mon, 11 Oct 2021 12:46:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gT1jNx8yZGGYAQAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Mon, 11 Oct 2021 12:46:23 +0000
-Date:   Mon, 11 Oct 2021 14:46:22 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, Alex Henrie <alexh@vpitech.com>,
-        alexhenrie24@gmail.com
-Subject: Re: [PATCH v6 0/2] IMA checkpatch fixes
-Message-ID: <YWQyHjqJshY1b//w@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20211008091430.22392-1-pvorel@suse.cz>
- <685eb07ebb22de45a0b15c82fe7b8d56431269ce.camel@linux.ibm.com>
+        Mon, 11 Oct 2021 09:30:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71033C06174E
+        for <linux-integrity@vger.kernel.org>; Mon, 11 Oct 2021 06:28:13 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mZvLb-0006hT-FC; Mon, 11 Oct 2021 15:28:07 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mZvLa-0003pW-K2; Mon, 11 Oct 2021 15:28:06 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mZvLX-0000TT-I2; Mon, 11 Oct 2021 15:28:03 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>, kernel@pengutronix.de,
+        linux-integrity@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH 13/13] tpm: st33zp24: Make st33zp24_remove() return void
+Date:   Mon, 11 Oct 2021 15:27:54 +0200
+Message-Id: <20211011132754.2479853-14-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
+References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <685eb07ebb22de45a0b15c82fe7b8d56431269ce.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+X-Patch-Hashes: v=1; h=sha256; i=2RfjlQngpYVdDmF7/sh7VSPt9aAaxh1F9oCTWbtcFaI=; m=YmvLiK47JXRlSzLFzxqwlRAcg9TrPiYd49fSIG4963c=; p=J4sUOjxlatUSZp6KZXQHP7X5Nt2PutSw8I364wwqzYo=; g=fcea7ec8c956ac6a1c9afce0aa9705bb0fa52453
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkO4UACgkQwfwUeK3K7AlUIwf/atw 1vHUc2x10B24gV5mm7WzFEHz2GSF02GivDWJEaPLAPuONjpAXLnN8SZno3395W48ObCVk0L24PP+Y 1HJu2qPsQJOLqU69z94vZm1JfSwVfaUZ0Wl7NGyCrWNotVqEr1d9jl0pPuIUmvr/d3K6qALqc2fQG pMbeTEvlPbzecrx/JwsHWlrFVD5FB6gWRkME3DlN9johP7hRAdfA52dp7giA6XwulZO/j5zeoCufw DfXTedCXk0QSmxGfB1Dp3Ot1ZIEce09+NzggcU1DQ5ROqsC6ReAp48jTNE69bgZfl124AMva3/b4E 1nnBMR8oHlb/dlM0gf7+96cJk176haQ==
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+Up to now st33zp24_remove() returns zero unconditionally. Make it return
+void instead which makes it easier to see in the callers that there is
+no error to handle.
 
-> Hi Petr, Alex,
+Also the return value of i2c and spi remove callbacks is ignored anyway.
 
-> On Fri, 2021-10-08 at 11:14 +0200, Petr Vorel wrote:
-> > Hi,
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/char/tpm/st33zp24/i2c.c      | 5 +----
+ drivers/char/tpm/st33zp24/spi.c      | 5 +----
+ drivers/char/tpm/st33zp24/st33zp24.c | 3 +--
+ drivers/char/tpm/st33zp24/st33zp24.h | 2 +-
+ 4 files changed, 4 insertions(+), 11 deletions(-)
 
-> > very minor checkpatch fixes based on [v3,2/2] ima: add gid support patchset [1].
-
-> These and the original gid patch set are now queued in next-integrity-
-> testing.
-Thanks!
-
-Kind regards,
-Petr
-
-> thanks,
-
-> Mimi
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index 7c617edff4ca..3170d59d660c 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -267,11 +267,8 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
+ static int st33zp24_i2c_remove(struct i2c_client *client)
+ {
+ 	struct tpm_chip *chip = i2c_get_clientdata(client);
+-	int ret;
+ 
+-	ret = st33zp24_remove(chip);
+-	if (ret)
+-		return ret;
++	st33zp24_remove(chip);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index a75dafd39445..ccd9e42b8eab 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -384,11 +384,8 @@ static int st33zp24_spi_probe(struct spi_device *dev)
+ static int st33zp24_spi_remove(struct spi_device *dev)
+ {
+ 	struct tpm_chip *chip = spi_get_drvdata(dev);
+-	int ret;
+ 
+-	ret = st33zp24_remove(chip);
+-	if (ret)
+-		return ret;
++	st33zp24_remove(chip);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
+index 4ec10ab5e576..2b63654c38d6 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.c
++++ b/drivers/char/tpm/st33zp24/st33zp24.c
+@@ -588,10 +588,9 @@ EXPORT_SYMBOL(st33zp24_probe);
+  * @param: tpm_data, the tpm phy.
+  * @return: 0 in case of success.
+  */
+-int st33zp24_remove(struct tpm_chip *chip)
++void st33zp24_remove(struct tpm_chip *chip)
+ {
+ 	tpm_chip_unregister(chip);
+-	return 0;
+ }
+ EXPORT_SYMBOL(st33zp24_remove);
+ 
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.h b/drivers/char/tpm/st33zp24/st33zp24.h
+index 6747be1e2502..b387a476c555 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.h
++++ b/drivers/char/tpm/st33zp24/st33zp24.h
+@@ -34,5 +34,5 @@ int st33zp24_pm_resume(struct device *dev);
+ 
+ int st33zp24_probe(void *phy_id, const struct st33zp24_phy_ops *ops,
+ 		   struct device *dev, int irq, int io_lpcpd);
+-int st33zp24_remove(struct tpm_chip *chip);
++void st33zp24_remove(struct tpm_chip *chip);
+ #endif /* __LOCAL_ST33ZP24_H__ */
+-- 
+2.30.2
 
