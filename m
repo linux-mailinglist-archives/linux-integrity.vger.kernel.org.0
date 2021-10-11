@@ -2,30 +2,25 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AF64288BB
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Oct 2021 10:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10D1428912
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Oct 2021 10:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235043AbhJKI2N (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 11 Oct 2021 04:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234931AbhJKI2N (ORCPT
+        id S235337AbhJKIsR (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 11 Oct 2021 04:48:17 -0400
+Received: from smtp-42ae.mail.infomaniak.ch ([84.16.66.174]:58351 "EHLO
+        smtp-42ae.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235312AbhJKIsQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 11 Oct 2021 04:28:13 -0400
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [IPv6:2001:1600:3:17::1909])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D48C061570
-        for <linux-integrity@vger.kernel.org>; Mon, 11 Oct 2021 01:26:12 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4HSX1t5y8BzMqJTT;
-        Mon, 11 Oct 2021 10:26:10 +0200 (CEST)
+        Mon, 11 Oct 2021 04:48:16 -0400
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4HSXT32QDgzMq0TS;
+        Mon, 11 Oct 2021 10:46:15 +0200 (CEST)
 Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4HSX1q3sgfzlhNx5;
-        Mon, 11 Oct 2021 10:26:07 +0200 (CEST)
-Subject: Re: [PATCH v14 1/3] fs: Add trusted_for(2) syscall implementation and
- related sysctl
-To:     Florian Weimer <fw@deneb.enyo.de>
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4HSXT10Jtzzlh8TC;
+        Mon, 11 Oct 2021 10:46:13 +0200 (CEST)
+Subject: Re: [PATCH v14 0/3] Add trusted_for(2) (was O_MAYEXEC)
+To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
         Aleksa Sarai <cyphar@cyphar.com>,
         Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -36,6 +31,7 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Dmitry Vyukov <dvyukov@google.com>,
         Eric Biggers <ebiggers@kernel.org>,
         Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
         Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
@@ -57,18 +53,16 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
         kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
 References: <20211008104840.1733385-1-mic@digikod.net>
- <20211008104840.1733385-2-mic@digikod.net> <87tuhpynr4.fsf@mid.deneb.enyo.de>
+ <20211010144814.d9fb99de6b0af65b67dc96cb@linux-foundation.org>
 From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <334a71c1-b97e-e52e-e772-a9003ec676c3@digikod.net>
-Date:   Mon, 11 Oct 2021 10:26:58 +0200
+Message-ID: <457941da-c4a4-262f-2981-74a85519c56f@digikod.net>
+Date:   Mon, 11 Oct 2021 10:47:04 +0200
 User-Agent: 
 MIME-Version: 1.0
-In-Reply-To: <87tuhpynr4.fsf@mid.deneb.enyo.de>
-Content-Type: text/plain; charset=iso-8859-15
+In-Reply-To: <20211010144814.d9fb99de6b0af65b67dc96cb@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -76,40 +70,52 @@ List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 10/10/2021 16:10, Florian Weimer wrote:
-> * Micka�l Sala�n:
+On 10/10/2021 23:48, Andrew Morton wrote:
+> On Fri,  8 Oct 2021 12:48:37 +0200 Mickaël Salaün <mic@digikod.net> wrote:
 > 
->> Being able to restrict execution also enables to protect the kernel by
->> restricting arbitrary syscalls that an attacker could perform with a
->> crafted binary or certain script languages.  It also improves multilevel
->> isolation by reducing the ability of an attacker to use side channels
->> with specific code.  These restrictions can natively be enforced for ELF
->> binaries (with the noexec mount option) but require this kernel
->> extension to properly handle scripts (e.g. Python, Perl).  To get a
->> consistent execution policy, additional memory restrictions should also
->> be enforced (e.g. thanks to SELinux).
+>> The final goal of this patch series is to enable the kernel to be a
+>> global policy manager by entrusting processes with access control at
+>> their level.  To reach this goal, two complementary parts are required:
+>> * user space needs to be able to know if it can trust some file
+>>   descriptor content for a specific usage;
+>> * and the kernel needs to make available some part of the policy
+>>   configured by the system administrator.
 > 
-> One example I have come across recently is that code which can be
-> safely loaded as a Perl module is definitely not a no-op as a shell
-> script: it downloads code and executes it, apparently over an
-> untrusted network connection and without signature checking.
+> Apologies if I missed this...
 > 
-> Maybe in the IMA world, the expectation is that such ambiguous code
-> would not be signed in the first place, but general-purpose
-> distributions are heading in a different direction with
-> across-the-board signing:
+> It would be nice to see a description of the proposed syscall interface
+> in these changelogs!  Then a few questions I have will be answered...
+
+I described this syscall and it's semantic in the first patch in
+Documentation/admin-guide/sysctl/fs.rst
+Do you want me to copy-paste this content in the cover letter?
+
 > 
->   Signed RPM Contents
->   <https://fedoraproject.org/wiki/Changes/Signed_RPM_Contents>
+> long trusted_for(const int fd,
+> 		 const enum trusted_for_usage usage,
+> 		 const u32 flags)
 > 
-> So I wonder if we need additional context information for a potential
-> LSM to identify the intended use case.
+> - `usage' must be equal to TRUSTED_FOR_EXECUTION, so why does it
+>   exist?  Some future modes are planned?  Please expand on this.
+
+Indeed, the current use case is to check if the kernel would allow
+execution of a file. But as Florian pointed out, we may want to add more
+context in the future, e.g. to enforce signature verification, to check
+if this is a legitimate (system) library, to check if the file is
+allowed to be used as (trusted) configuration…
+
+> 
+> - `flags' is unused (must be zero).  So why does it exist?  What are
+>   the plans here?
+
+This is mostly to follow syscall good practices for extensibility. It
+could be used in combination with the usage argument (which defines the
+user space semantic), e.g. to check for extra properties such as
+cryptographic or integrity requirements, origin of the file…
+
+> 
+> - what values does the syscall return and what do they mean?
 > 
 
-This is an interesting use case. I think such policy enforcement could
-be done either with an existing LSM (e.g. IMA) or a new one (e.g. IPE),
-but it could also partially be enforced by the script interpreter. The
-kernel should have enough context: interpreter process (which could be
-dedicated to a specific usage) and the opened script file, or we could
-add a new usage flag to the trusted_for syscall if that makes sense.
-Either way, this doesn't seem to be an issue for the current patch series.
+It returns 0 on success, or -EACCES if the kernel policy denies the
+specified usage.
