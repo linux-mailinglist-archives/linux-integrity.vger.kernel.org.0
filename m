@@ -2,56 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDC2428A5A
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Oct 2021 12:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181EA428A62
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Oct 2021 12:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235705AbhJKKFO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 11 Oct 2021 06:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
+        id S235781AbhJKKFT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 11 Oct 2021 06:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235748AbhJKKFN (ORCPT
+        with ESMTP id S235762AbhJKKFP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 11 Oct 2021 06:05:13 -0400
+        Mon, 11 Oct 2021 06:05:15 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D59C061745
-        for <linux-integrity@vger.kernel.org>; Mon, 11 Oct 2021 03:03:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7762DC061745
+        for <linux-integrity@vger.kernel.org>; Mon, 11 Oct 2021 03:03:15 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <afa@pengutronix.de>)
-        id 1mZs8v-0006Si-K8; Mon, 11 Oct 2021 12:02:49 +0200
+        id 1mZs8v-0006Sj-Kj; Mon, 11 Oct 2021 12:02:49 +0200
 Received: from afa by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <afa@pengutronix.de>)
-        id 1mZs8r-0002cb-Qj; Mon, 11 Oct 2021 12:02:45 +0200
+        id 1mZs8r-0002cg-Rq; Mon, 11 Oct 2021 12:02:45 +0200
 From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
 To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        James Bottomley <jejb@linux.ibm.com>
-Cc:     kernel@pengutronix.de, David Howells <dhowells@redhat.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
         Sumit Garg <sumit.garg@linaro.org>,
-        Andreas Rammhold <andreas@rammhold.de>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     kernel@pengutronix.de, Andreas Rammhold <andreas@rammhold.de>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Richard Weinberger <richard@nod.at>, keyrings@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v4 0/5] KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
-Date:   Mon, 11 Oct 2021 12:02:33 +0200
-Message-Id: <cover.8f40b6d1b93adc80aed2cac29a134f7a7fb5ee98.1633946449.git-series.a.fatoum@pengutronix.de>
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: [PATCH v4 1/5] KEYS: trusted: allow use of TEE as backend without TCG_TPM support
+Date:   Mon, 11 Oct 2021 12:02:34 +0200
+Message-Id: <c36b3e3d4d215e790491e1a274a8993dd68e2a39.1633946449.git-series.a.fatoum@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.8f40b6d1b93adc80aed2cac29a134f7a7fb5ee98.1633946449.git-series.a.fatoum@pengutronix.de>
+References: <cover.8f40b6d1b93adc80aed2cac29a134f7a7fb5ee98.1633946449.git-series.a.fatoum@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
 X-SA-Exim-Mail-From: afa@pengutronix.de
@@ -61,152 +57,197 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Series applies on top of Andreas' regression fix here:
-https://lore.kernel.org/linux-integrity/20210730012822.3460913-1-andreas@rammhold.de/
+With recent rework, trusted keys are no longer limited to TPM as trust
+source. The Kconfig symbol is unchanged however leading to a few issues:
 
-v3 was here:
-https://lore.kernel.org/linux-integrity/cover.9fc9298fd9d63553491871d043a18affc2dbc8a8.1626885907.git-series.a.fatoum@pengutronix.de
+  - TCG_TPM is required, even if only TEE is to be used
+  - Enabling TCG_TPM, but excluding it from available trusted sources
+    is not possible
+  - TEE=m && TRUSTED_KEYS=y will lead to TEE support being silently
+    dropped, which is not the best user experience
 
+Remedy these issues by introducing two new boolean Kconfig symbols:
+TRUSTED_KEYS_TPM and TRUSTED_KEYS_TEE with the appropriate
+dependencies.
+
+Any code depending on the TPM trusted key backend or symbols exported
+by it will now need to explicitly state that it
+
+  depends on TRUSTED_KEYS && TRUSTED_KEYS_TPM
+
+The latter to ensure the dependency is built and the former to ensure
+it's reachable for module builds. This currently only affects
+CONFIG_ASYMMETRIC_TPM_KEY_SUBTYPE, so it's fixed up here as well.
+
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+Tested-By: Andreas Rammhold <andreas@rammhold.de>
+Tested-By: Tim Harvey <tharvey@gateworks.com>
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
 v3 -> v4:
-  - Collected Acked-by's, Reviewed-by's and Tested-by
-  - Fixed typo spotted by David
-  - Rebased on top of Andreas' regression fix and pulled Kconfig
-    inflexibility fix back into series
+  - rebased on top of Andreas' regression fix and pulled it back
+    into series
 
 v2 -> v3:
- - Split off first Kconfig preparation patch. It fixes a regression,
-   so sent that out, so it can be applied separately (Sumit)
- - Split off second key import patch. I'll send that out separately
-   as it's a development aid and not required within the CAAM series
- - add MAINTAINERS entry
+  - factored this patch out as a fix for backporting
 
 v1 -> v2:
- - Added new commit to make trusted key Kconfig option independent
-   of TPM and added new Kconfig file for trusted keys
- - Add new commit for importing existing key material
- - Allow users to force use of kernel RNG (Jarkko)
- - Enforce maximum keymod size (Horia)
- - Use append_seq_(in|out)_ptr_intlen instead of append_seq_(in|out)_ptr
-   (Horia)
- - Make blobifier handle private to CAAM glue code file (Horia)
- - Extend trusted keys documentation for CAAM
- - Rebased and updated original cover letter:
+  - Move rest of TPM-related selects from TRUSTED_KEYS to
+    TRUSTED_KEYS_TPM (Sumit)
+  - Remove left-over line in Makefile (Sumit)
+  - added Fixes: tag
+  - adjust commit message to reference the regression reported
+    by Andreas
+  - have ASYMMETRIC_TPM_KEY_SUBTYPE depend on TRUSTED_KEYS_TPM,
+    because it references global symbols that are exported
+    by the trusted key TPM backend.
 
-The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
-built into many newer i.MX and QorIQ SoCs by NXP.
+[1]: https://lore.kernel.org/linux-integrity/f8285eb0135ba30c9d846cf9dd395d1f5f8b1efc.1624364386.git-series.a.fatoum@pengutronix.de/
+[2]: https://lore.kernel.org/linux-integrity/20210719091335.vwfebcpkf4pag3wm@wrt/T/#t
 
-Its blob mechanism can AES encrypt/decrypt user data using a unique
-never-disclosed device-specific key.
-
-There has been multiple discussions on how to represent this within the kernel:
-
-The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
-built into many newer i.MX and QorIQ SoCs by NXP.
-
-Its blob mechanism can AES encrypt/decrypt user data using a unique
-never-disclosed device-specific key. There has been multiple
-discussions on how to represent this within the kernel:
-
- - [RFC] crypto: caam - add red blobifier
-   Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
-   best integrate the blob mechanism.
-   Mimi suggested that it could be used to implement trusted keys.
-   Trusted keys back then were a TPM-only feature.
-
- - security/keys/secure_key: Adds the secure key support based on CAAM.
-   Udit added[2] a new "secure" key type with the CAAM as backend. The key
-   material stays within the kernel only.
-   Mimi and James agreed that this needs a generic interface, not specific
-   to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
-   basis for TEE-backed keys.
-
- - [RFC] drivers: crypto: caam: key: Add caam_tk key type
-   Franck added[3] a new "caam_tk" key type based on Udit's work. This time
-   it uses CAAM "black blobs" instead of "red blobs", so key material stays
-   within the CAAM and isn't exposed to kernel in plaintext.
-   James voiced the opinion that there should be just one user-facing generic
-   wrap/unwrap key type with multiple possible handlers.
-   David suggested trusted keys.
-
- - Introduce TEE based Trusted Keys support
-   Sumit reworked[4] trusted keys to support multiple possible backends with
-   one chosen at boot time and added a new TEE backend along with TPM.
-   This now sits in Jarkko's master branch to be sent out for v5.13
-
-This patch series builds on top of Sumit's rework to have the CAAM as yet another
-trusted key backend.
-
-The CAAM bits are based on Steffen's initial patch from 2015. His work had been
-used in the field for some years now, so I preferred not to deviate too much from it.
-
-This series has been tested with dmcrypt[5] on an i.MX6DL.
-
-Looking forward to your feedback.
-
-Cheers,
-Ahmad
-
- [1]: https://lore.kernel.org/linux-crypto/1447082306-19946-2-git-send-email-s.trumtrar@pengutronix.de/
- [2]: https://lore.kernel.org/linux-integrity/20180723111432.26830-1-udit.agarwal@nxp.com/
- [3]: https://lore.kernel.org/lkml/1551456599-10603-2-git-send-email-franck.lenormand@nxp.com/
- [4]: https://lore.kernel.org/lkml/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
- [5]: https://lore.kernel.org/linux-integrity/20210122084321.24012-2-a.fatoum@pengutronix.de/
-
----
 To: Jarkko Sakkinen <jarkko@kernel.org>
-To: "Horia Geantă" <horia.geanta@nxp.com>
+To: James Morris <jmorris@namei.org>
+To: "Serge E. Hallyn" <serge@hallyn.com>
+To: James Bottomley <jejb@linux.ibm.com>
 To: Mimi Zohar <zohar@linux.ibm.com>
-To: Aymen Sghaier <aymen.sghaier@nxp.com>
+To: Sumit Garg <sumit.garg@linaro.org>
+To: David Howells <dhowells@redhat.com>
 To: Herbert Xu <herbert@gondor.apana.org.au>
 To: "David S. Miller" <davem@davemloft.net>
-To: James Bottomley <jejb@linux.ibm.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Cc: Udit Agarwal <udit.agarwal@nxp.com>
-Cc: Jan Luebbe <j.luebbe@pengutronix.de>
 Cc: David Gstir <david@sigma-star.at>
-Cc: Eric Biggers <ebiggers@kernel.org>
 Cc: Richard Weinberger <richard@nod.at>
-Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-Cc: Sumit Garg <sumit.garg@linaro.org>
-Cc: Andreas Rammhold <andreas@rammhold.de>
-Cc: linux-integrity@vger.kernel.org
 Cc: keyrings@vger.kernel.org
 Cc: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Cc: linux-security-module@vger.kernel.org
-
-Ahmad Fatoum (5):
-  KEYS: trusted: allow use of TEE as backend without TCG_TPM support
-  KEYS: trusted: allow users to use kernel RNG for key material
-  KEYS: trusted: allow trust sources to use kernel RNG for key material
-  crypto: caam - add in-kernel interface for blob generator
-  KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
-
- Documentation/admin-guide/kernel-parameters.txt   |   8 +-
- Documentation/security/keys/trusted-encrypted.rst |  60 +++-
- MAINTAINERS                                       |   9 +-
- crypto/asymmetric_keys/Kconfig                    |   2 +-
- drivers/crypto/caam/Kconfig                       |   3 +-
- drivers/crypto/caam/Makefile                      |   1 +-
- drivers/crypto/caam/blob_gen.c                    | 230 +++++++++++++++-
- include/keys/trusted-type.h                       |   2 +-
- include/keys/trusted_caam.h                       |  11 +-
- include/soc/fsl/caam-blob.h                       |  56 ++++-
- security/keys/Kconfig                             |  18 +-
- security/keys/trusted-keys/Kconfig                |  38 ++-
- security/keys/trusted-keys/Makefile               |  10 +-
- security/keys/trusted-keys/trusted_caam.c         |  74 +++++-
- security/keys/trusted-keys/trusted_core.c         |  27 +-
- 15 files changed, 519 insertions(+), 30 deletions(-)
- create mode 100644 drivers/crypto/caam/blob_gen.c
- create mode 100644 include/keys/trusted_caam.h
- create mode 100644 include/soc/fsl/caam-blob.h
+Cc: linux-integrity@vger.kernel.org
+---
+ crypto/asymmetric_keys/Kconfig            |  2 +-
+ security/keys/Kconfig                     | 18 +++++----------
+ security/keys/trusted-keys/Kconfig        | 29 ++++++++++++++++++++++++-
+ security/keys/trusted-keys/Makefile       |  8 +++----
+ security/keys/trusted-keys/trusted_core.c |  4 +--
+ 5 files changed, 43 insertions(+), 18 deletions(-)
  create mode 100644 security/keys/trusted-keys/Kconfig
- create mode 100644 security/keys/trusted-keys/trusted_caam.c
 
-base-commit: 69226657a551b835e9bee694313b1e3355fa0ac8
+diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
+index 1f1f004dc757..8886eddbf881 100644
+--- a/crypto/asymmetric_keys/Kconfig
++++ b/crypto/asymmetric_keys/Kconfig
+@@ -25,7 +25,7 @@ config ASYMMETRIC_PUBLIC_KEY_SUBTYPE
+ config ASYMMETRIC_TPM_KEY_SUBTYPE
+ 	tristate "Asymmetric TPM backed private key subtype"
+ 	depends on TCG_TPM
+-	depends on TRUSTED_KEYS
++	depends on TRUSTED_KEYS && TRUSTED_KEYS_TPM
+ 	select CRYPTO_HMAC
+ 	select CRYPTO_SHA1
+ 	select CRYPTO_HASH_INFO
+diff --git a/security/keys/Kconfig b/security/keys/Kconfig
+index 64b81abd087e..9ec302962fe2 100644
+--- a/security/keys/Kconfig
++++ b/security/keys/Kconfig
+@@ -70,23 +70,19 @@ config BIG_KEYS
+ 
+ config TRUSTED_KEYS
+ 	tristate "TRUSTED KEYS"
+-	depends on KEYS && TCG_TPM
+-	select CRYPTO
+-	select CRYPTO_HMAC
+-	select CRYPTO_SHA1
+-	select CRYPTO_HASH_INFO
+-	select ASN1_ENCODER
+-	select OID_REGISTRY
+-	select ASN1
++	depends on KEYS
+ 	help
+ 	  This option provides support for creating, sealing, and unsealing
+ 	  keys in the kernel. Trusted keys are random number symmetric keys,
+-	  generated and RSA-sealed by the TPM. The TPM only unseals the keys,
+-	  if the boot PCRs and other criteria match.  Userspace will only ever
+-	  see encrypted blobs.
++	  generated and sealed by a trust source selected at kernel boot-time.
++	  Userspace will only ever see encrypted blobs.
+ 
+ 	  If you are unsure as to whether this is required, answer N.
+ 
++if TRUSTED_KEYS
++source "security/keys/trusted-keys/Kconfig"
++endif
++
+ config ENCRYPTED_KEYS
+ 	tristate "ENCRYPTED KEYS"
+ 	depends on KEYS
+diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
+new file mode 100644
+index 000000000000..fc4abd581abb
+--- /dev/null
++++ b/security/keys/trusted-keys/Kconfig
+@@ -0,0 +1,29 @@
++config TRUSTED_KEYS_TPM
++	bool "TPM-based trusted keys"
++	depends on TCG_TPM >= TRUSTED_KEYS
++	default y
++	select CRYPTO
++	select CRYPTO_HMAC
++	select CRYPTO_SHA1
++	select CRYPTO_HASH_INFO
++	select ASN1_ENCODER
++	select OID_REGISTRY
++	select ASN1
++	help
++	  Enable use of the Trusted Platform Module (TPM) as trusted key
++	  backend. Trusted keys are random number symmetric keys,
++	  which will be generated and RSA-sealed by the TPM.
++	  The TPM only unseals the keys, if the boot PCRs and other
++	  criteria match.
++
++config TRUSTED_KEYS_TEE
++	bool "TEE-based trusted keys"
++	depends on TEE >= TRUSTED_KEYS
++	default y
++	help
++	  Enable use of the Trusted Execution Environment (TEE) as trusted
++	  key backend.
++
++if !TRUSTED_KEYS_TPM && !TRUSTED_KEYS_TEE
++comment "No trust source selected!"
++endif
+diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
+index feb8b6c3cc79..2e2371eae4d5 100644
+--- a/security/keys/trusted-keys/Makefile
++++ b/security/keys/trusted-keys/Makefile
+@@ -5,10 +5,10 @@
+ 
+ obj-$(CONFIG_TRUSTED_KEYS) += trusted.o
+ trusted-y += trusted_core.o
+-trusted-y += trusted_tpm1.o
++trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm1.o
+ 
+ $(obj)/trusted_tpm2.o: $(obj)/tpm2key.asn1.h
+-trusted-y += trusted_tpm2.o
+-trusted-y += tpm2key.asn1.o
++trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm2.o
++trusted-$(CONFIG_TRUSTED_KEYS_TPM) += tpm2key.asn1.o
+ 
+-trusted-$(CONFIG_TEE) += trusted_tee.o
++trusted-$(CONFIG_TRUSTED_KEYS_TEE) += trusted_tee.o
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index 5b35f1b87644..8cab69e5d0da 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+ MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+ 
+ static const struct trusted_key_source trusted_key_sources[] = {
+-#if IS_REACHABLE(CONFIG_TCG_TPM)
++#if defined(CONFIG_TRUSTED_KEYS_TPM)
+ 	{ "tpm", &trusted_key_tpm_ops },
+ #endif
+-#if IS_REACHABLE(CONFIG_TEE)
++#if defined(CONFIG_TRUSTED_KEYS_TEE)
+ 	{ "tee", &trusted_key_tee_ops },
+ #endif
+ };
 -- 
 git-series 0.9.1
