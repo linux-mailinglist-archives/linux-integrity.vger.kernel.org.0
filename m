@@ -2,40 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AA642A9E4
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Oct 2021 18:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF5A42AADE
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Oct 2021 19:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbhJLQt1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 12 Oct 2021 12:49:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46456 "EHLO mail.kernel.org"
+        id S229810AbhJLRgW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 12 Oct 2021 13:36:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54558 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229565AbhJLQt1 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 12 Oct 2021 12:49:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 00F006023D;
-        Tue, 12 Oct 2021 16:47:24 +0000 (UTC)
+        id S229495AbhJLRgV (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 12 Oct 2021 13:36:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 102DB60F3A;
+        Tue, 12 Oct 2021 17:34:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634057245;
-        bh=5lti4xfeDEfSIml3z35sDZxLmq3CLvQlZRxdz0NiwmI=;
+        s=k20201202; t=1634060059;
+        bh=vQbEidpgXr6FaFFn7V0wQVFQj8i1/kMIP06dD8XVfKI=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=NWZDwIGWlmbaZ412UoViC/PorRHoMRraxUv/bthF+/Ugc+g8Nr6fdLgEbvuR8aMrQ
-         vYC3+s5fBFdx7zlU/wubRJiMIgfoi///I2HPkl6SZSsclpW5PFCA5tmaNSD52IVoxj
-         KAm9HSloJAnN0lUE7YrVgabYd327JLTDjdfhk2O6NT5yPlFzVo0Gay8d7qCblCN1fs
-         WjYT26OF9W+IIAtOkci4M7wMFS7VQHNx0VXU7/laOvviG/UCN5ardjKNwmrInT56KX
-         cF/S/ZXDcLWUE1QO9+f7f1bL5TH9IPXozvqlYlOiFaHAdyrnPWomLGrlV/ff8+hxea
-         xJFlrlkQwNlhA==
-Message-ID: <4c6974280020118735644679f8498fe86748e648.camel@kernel.org>
-Subject: Re: [PATCH 13/13] tpm: st33zp24: Make st33zp24_remove() return void
+        b=FMFXZHVJfcoeh8Z/aKa+0uWphQld+A5M0vvJ2jfNQCOR6/26sAHeT2oksujVBLR6T
+         4g1clLPN2oFCIZwJh8MMjW0MvFIJXh1UTPRlWubeVeYwbSXDVIgZajcWY1YZgJbVHW
+         akr2ByLYWkTZQTwriV8KplrDxL0ncHpdrZYfDi0dPgZs2KAsDJsrLBP4v8dxA3x3eq
+         2MdMFd8+71dmmtREeGtU8KCTGWT3ZPyGqQ3oexUnRvZ7uENLBHEqsw5w/lqT0LKV56
+         9rwSOaNoobocy3nGeD36D45i9EgK34JQq1+uJYif/CcF0MwMs+fLRyaH4T4wED9sFF
+         jSMepMizG/4pg==
+Message-ID: <b990e7af84075968f2c0cd018077f40ec280d136.camel@kernel.org>
+Subject: Re: [PATCH v2 1/1] tpm: add request_locality before write
+ TPM_INT_ENABLE
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Peter Huewe <peterhuewe@gmx.de>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Jason Gunthorpe <jgg@ziepe.ca>, kernel@pengutronix.de,
-        linux-integrity@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org
-Date:   Tue, 12 Oct 2021 19:47:22 +0300
-In-Reply-To: <20211011132754.2479853-14-u.kleine-koenig@pengutronix.de>
-References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
-         <20211011132754.2479853-14-u.kleine-koenig@pengutronix.de>
+To:     Chen Jun <chenjun102@huawei.com>, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, rui.xiang@huawei.com
+Date:   Tue, 12 Oct 2021 20:34:16 +0300
+In-Reply-To: <20211012124803.11956-1-chenjun102@huawei.com>
+References: <20211012124803.11956-1-chenjun102@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.40.0-1 
@@ -44,111 +41,65 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-10-11 at 15:27 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> Up to now st33zp24_remove() returns zero unconditionally. Make it return
-> void instead which makes it easier to see in the callers that there is
-> no error to handle.
+On Tue, 2021-10-12 at 12:48 +0000, Chen Jun wrote:
+> the addr can not be written without request_locality.
 
-So, void is not a return value.
+So, you need to describe the commit does here, e.g. you could replace
+what you have with
 
+"
+Locality is not appropriately requested before writing the int mask.
+Add the missing boilerplate.
+"
+
+I.e. for any commit you need to be able to describe what you are doing,
+not just the sympton.
 
 >=20
-> Also the return value of i2c and spi remove callbacks is ignored anyway.
-                           ~~~     ~~~
-			   I2C     SPI
-
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> Fixes: e6aef069b6e9 ("tpm_tis: convert to using locality callbacks")
+> Signed-off-by: Chen Jun <chenjun102@huawei.com>
 > ---
-> =C2=A0drivers/char/tpm/st33zp24/i2c.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 5 +=
-----
-> =C2=A0drivers/char/tpm/st33zp24/spi.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 5 +=
-----
-> =C2=A0drivers/char/tpm/st33zp24/st33zp24.c | 3 +--
-> =C2=A0drivers/char/tpm/st33zp24/st33zp24.h | 2 +-
-> =C2=A04 files changed, 4 insertions(+), 11 deletions(-)
+> =C2=A0drivers/char/tpm/tpm_tis_core.c | 8 ++++++++
+> =C2=A01 file changed, 8 insertions(+)
 >=20
-> diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/=
-i2c.c
-> index 7c617edff4ca..3170d59d660c 100644
-> --- a/drivers/char/tpm/st33zp24/i2c.c
-> +++ b/drivers/char/tpm/st33zp24/i2c.c
-> @@ -267,11 +267,8 @@ static int st33zp24_i2c_probe(struct i2c_client *cli=
-ent,
-> =C2=A0static int st33zp24_i2c_remove(struct i2c_client *client)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct tpm_chip *chip =3D=
- i2c_get_clientdata(client);
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> =C2=A0
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D st33zp24_remove(chip);
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0return ret;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st33zp24_remove(chip);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> =C2=A0}
-> diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/=
-spi.c
-> index a75dafd39445..ccd9e42b8eab 100644
-> --- a/drivers/char/tpm/st33zp24/spi.c
-> +++ b/drivers/char/tpm/st33zp24/spi.c
-> @@ -384,11 +384,8 @@ static int st33zp24_spi_probe(struct spi_device *dev=
-)
-> =C2=A0static int st33zp24_spi_remove(struct spi_device *dev)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct tpm_chip *chip =3D=
- spi_get_drvdata(dev);
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> =C2=A0
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D st33zp24_remove(chip);
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0return ret;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st33zp24_remove(chip);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> =C2=A0}
-> diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33=
-zp24/st33zp24.c
-> index 4ec10ab5e576..2b63654c38d6 100644
-> --- a/drivers/char/tpm/st33zp24/st33zp24.c
-> +++ b/drivers/char/tpm/st33zp24/st33zp24.c
-> @@ -588,10 +588,9 @@ EXPORT_SYMBOL(st33zp24_probe);
-> =C2=A0 * @param: tpm_data, the tpm phy.
-> =C2=A0 * @return: 0 in case of success.
-> =C2=A0 */
-> -int st33zp24_remove(struct tpm_chip *chip)
-> +void st33zp24_remove(struct tpm_chip *chip)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tpm_chip_unregister(chip)=
-;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> =C2=A0}
-> =C2=A0EXPORT_SYMBOL(st33zp24_remove);
-> =C2=A0
-> diff --git a/drivers/char/tpm/st33zp24/st33zp24.h b/drivers/char/tpm/st33=
-zp24/st33zp24.h
-> index 6747be1e2502..b387a476c555 100644
-> --- a/drivers/char/tpm/st33zp24/st33zp24.h
-> +++ b/drivers/char/tpm/st33zp24/st33zp24.h
-> @@ -34,5 +34,5 @@ int st33zp24_pm_resume(struct device *dev);
-> =C2=A0
-> =C2=A0int st33zp24_probe(void *phy_id, const struct st33zp24_phy_ops *ops=
-,
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
+ore.c
+> index 69579efb247b..bea587301917 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -978,7 +978,15 @@ int tpm_tis_core_init(struct device *dev, struct tpm=
+_tis_data *priv, int irq,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0intmask |=3D TPM_INTF_CMD=
+_READY_INT | TPM_INTF_LOCALITY_CHANGE_INT |
 > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct device *dev, int irq, int io_lp=
-cpd);
-> -int st33zp24_remove(struct tpm_chip *chip);
-> +void st33zp24_remove(struct tpm_chip *chip);
-> =C2=A0#endif /* __LOCAL_ST33ZP24_H__ */
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS=
+_VALID_INT;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0intmask &=3D ~TPM_GLOBAL_=
+INT_ENABLE;
+> +
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rc =3D request_locality(chip, =
+0);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rc < 0) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0rc =3D -ENODEV;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0goto out_err;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> +
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tpm_tis_write32(priv, TPM=
+_INT_ENABLE(priv->locality), intmask);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0release_locality(chip, 0);
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rc =3D tpm_chip_start(chi=
+p);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rc)
 
-Even though this does not improve things at run-time, this does
-help to understand what the code does, so in that sense I do
-think that this a sane change to make.
+Thanks a lot for the fix. If you could fix the commit message,
+I'm happy to apply this.
 
-With an appropriate commit message, this can be applied.
+Also add:
+
+Cc: stable@vger.kernel.org
 
 /Jarkko
 
