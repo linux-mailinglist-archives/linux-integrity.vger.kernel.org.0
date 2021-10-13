@@ -2,350 +2,193 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2878B42BB67
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Oct 2021 11:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B20542BE89
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Oct 2021 13:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237139AbhJMJX6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 13 Oct 2021 05:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbhJMJX6 (ORCPT
+        id S231536AbhJMLEQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 13 Oct 2021 07:04:16 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25438 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233422AbhJMLDy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 13 Oct 2021 05:23:58 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F44C061570;
-        Wed, 13 Oct 2021 02:21:55 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id k7so5927662wrd.13;
-        Wed, 13 Oct 2021 02:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uNF3RaS9/sT6+odi9lPrDXDb6WsY4KBhg798xoiyr2U=;
-        b=S4XDCjW/x/6OCUR8iwHWtZpbbNAmXo8e/Y6RlwvN7mTmo265/Fbzc8Viq+M8qYJIBP
-         KlHrQolgEa/tRH8M1CzW4Rwlss4o4g/ZdiSukT6oU0dadX4/UQ15oVTi/Dp/gmSfYJmH
-         ngDCFAtMdGNHAwi8qPK/qMMQ/TU1pKHa1fIIukZ/+Dr6BjzbvG9yYn3CKoeXdn3itQDl
-         kAHYMjZdMKcEfdZLn2+KUVL7iY4rQfwVmyBM/JkqtN/ijjR5dMnJ5hUXqx+iCvrqpQiO
-         bKrbusQVxnmZwBMOWcb1GgYW15jCMojBDRDWEe2LaHaHUzAIRSrobF8uQmj8ShbFHnyN
-         Bh0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uNF3RaS9/sT6+odi9lPrDXDb6WsY4KBhg798xoiyr2U=;
-        b=geofRnYb5ne/jZa0JTlJY/+v7Z9D6s79AtQeIykqMtE13VGRzFXh4NFIdgsNbIPe8u
-         2p6FSlobPXWyjnfsMtQGUB40oy9dLyGWYrIOHVRM0MjWgAB0C2l+VjCRg3JmfwZ8ZgFx
-         K+UXqi5PJetCUlyPk7qv69xwYOHamgLAw1iCgFniOQIoBKHlG6oVTktbczSu1dO7p7sG
-         2H40HpZvZm/jrhQpxRPYrgJmFDbeUx5w6tLhnJWfDhxC3xz/9xvl0QC37eejVkuuezEE
-         S/HgCliar00RPhKontDOfe4Wakep1iVvDyC2L/Fbap63EVVrM/5QHXO1u08B9HwXEA25
-         aWcA==
-X-Gm-Message-State: AOAM5335APTG9WA4VD7oVk9j/9MdoRiiLxWZloBKkfYZFA57O+ZmD4pR
-        0tgdCxKYdFgvbb/8Az+7fqvv6E0OCg4=
-X-Google-Smtp-Source: ABdhPJzUG/lOcQzZFiCabW109RZ2NKZEzrsblv2fjahzzsvRyq7VSkw3eA/d2CbWrTUpCKNMmvHRDA==
-X-Received: by 2002:a05:6000:1aca:: with SMTP id i10mr39125044wry.207.1634116913746;
-        Wed, 13 Oct 2021 02:21:53 -0700 (PDT)
-Received: from localhost.localdomain ([197.49.234.11])
-        by smtp.gmail.com with ESMTPSA id z6sm7184636wmp.1.2021.10.13.02.21.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Oct 2021 02:21:53 -0700 (PDT)
-From:   Sohaib Mohamed <sohaib.amhmd@gmail.com>
-To:     sohaib.amhmd@gmail.com
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm/st33zp24: drop unneeded over-commenting
-Date:   Wed, 13 Oct 2021 11:21:50 +0200
-Message-Id: <20211013092151.11835-1-sohaib.amhmd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 13 Oct 2021 07:03:54 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19DAWjNY021851;
+        Wed, 13 Oct 2021 07:01:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=Px8pkOv21BYoBjV0MsiMZ5RdlpIGjMih1XX8iRmQ+n4=;
+ b=dmq+KU4lWzoORY+icHikD573vDLKwHwp+Ei5VdCCYXYnfzl9o+ShFJqGp/xZDs5NZgx1
+ lO0taxXD8oHOdySQZ/VuGtKhbd9/p1CrDoFVxoTbAIhz4vqIkZKmq6mZwdmrAkSkLYAi
+ GuSBTFi6jhBq6sj2Dd5A5v4twi0jhOcUXcqLJ6gVtrziJG/CaCzIlMDyyoLeDS2wKd39
+ 1uUuDsFqbtHDenpM+lkl14BKvSmQ5ISq87Vd+fLSa5aSJnqw69xzPMay9HXzaa5TsSY3
+ JIc81C6E/diex3HtC/lJfRJXnCmsYKN7Weh9VtgfrDZOxd4vGAU5Vdarr4aopDc3/SoH 8w== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bnr79fry8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Oct 2021 07:01:40 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19DAxbEu001715;
+        Wed, 13 Oct 2021 11:01:32 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3bk2qa7mj7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Oct 2021 11:01:32 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19DB1Ptj52363708
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Oct 2021 11:01:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 50FEEAE065;
+        Wed, 13 Oct 2021 11:01:25 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 71110AE055;
+        Wed, 13 Oct 2021 11:01:20 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.160.27.171])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 13 Oct 2021 11:01:19 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 1/2] ima: define ima_trusted_for hook
+Date:   Wed, 13 Oct 2021 07:01:12 -0400
+Message-Id: <20211013110113.13239-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0Qa3CeZ6ycpWRLqrL4IA72DQIGVC8Lle
+X-Proofpoint-ORIG-GUID: 0Qa3CeZ6ycpWRLqrL4IA72DQIGVC8Lle
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-13_04,2021-10-13_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=955 malwarescore=0 adultscore=0
+ suspectscore=0 bulkscore=0 spamscore=0 phishscore=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2109230001 definitions=main-2110130071
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Remove parameter descriptions from all static functions.
-Remove the comment altogether that does not tell what the function does.
+A major interpreter integrity gap exists which allows files read by
+the interpreter to be executed without measuring the file or verifying
+the file's signature.
 
-Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Sohaib Mohamed <sohaib.amhmd@gmail.com>
+The kernel has no knowledge about the file being read by the interpreter.
+Only the interpreter knows the context(eg. data, execute) and must be
+trusted to provide that information accurately.
+
+To close this integrity gap, define an ima_trusted_for hook to allow
+IMA to measure the file and verify the file's signature based on policy.
+
+Sample policy rules:
+	measure func=TRUSTED_FOR_CHECK
+	appraise func=TRUSTED_FOR_CHECK
+
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- drivers/char/tpm/st33zp24/st33zp24.c | 122 ++++-----------------------
- 1 file changed, 17 insertions(+), 105 deletions(-)
+Mickaël, here is the first LSM/integrity instantiation of the trusted_for
+hook.
 
-diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
-index 4ec10ab5e576..ce9efb73c144 100644
---- a/drivers/char/tpm/st33zp24/st33zp24.c
-+++ b/drivers/char/tpm/st33zp24/st33zp24.c
-@@ -61,9 +61,7 @@ enum tis_defaults {
- };
+ Documentation/ABI/testing/ima_policy |  2 +-
+ security/integrity/ima/ima.h         |  1 +
+ security/integrity/ima/ima_main.c    | 23 +++++++++++++++++++++++
+ security/integrity/ima/ima_policy.c  |  3 +++
+ 4 files changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
+index e1a04bd3b9e5..85618e726801 100644
+--- a/Documentation/ABI/testing/ima_policy
++++ b/Documentation/ABI/testing/ima_policy
+@@ -34,7 +34,7 @@ Description:
+ 				[FIRMWARE_CHECK]
+ 				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
+ 				[KEXEC_CMDLINE] [KEY_CHECK] [CRITICAL_DATA]
+-				[SETXATTR_CHECK]
++				[SETXATTR_CHECK] [TRUSTED_FOR_CHECK]
+ 			mask:= [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
+ 			       [[^]MAY_EXEC]
+ 			fsmagic:= hex value
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index be965a8715e4..827236dbbefb 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -202,6 +202,7 @@ static inline unsigned int ima_hash_key(u8 *digest)
+ 	hook(KEY_CHECK, key)				\
+ 	hook(CRITICAL_DATA, critical_data)		\
+ 	hook(SETXATTR_CHECK, setxattr_check)		\
++	hook(TRUSTED_FOR_CHECK, trusted_for_check)	\
+ 	hook(MAX_CHECK, none)
  
- /*
-- * clear_interruption clear the pending interrupt.
-- * @param: tpm_dev, the tpm device device.
-- * @return: the interrupt status value.
-+ * clear the pending interrupt.
-  */
- static u8 clear_interruption(struct st33zp24_dev *tpm_dev)
- {
-@@ -72,12 +70,10 @@ static u8 clear_interruption(struct st33zp24_dev *tpm_dev)
- 	tpm_dev->ops->recv(tpm_dev->phy_id, TPM_INT_STATUS, &interrupt, 1);
- 	tpm_dev->ops->send(tpm_dev->phy_id, TPM_INT_STATUS, &interrupt, 1);
- 	return interrupt;
--} /* clear_interruption() */
-+}
+ #define __ima_hook_enumify(ENUM, str)	ENUM,
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 465865412100..e09054ac3352 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -26,6 +26,7 @@
+ #include <linux/ima.h>
+ #include <linux/iversion.h>
+ #include <linux/fs.h>
++#include <uapi/linux/trusted-for.h>
  
- /*
-- * st33zp24_cancel, cancel the current command execution or
-- * set STS to COMMAND READY.
-- * @param: chip, the tpm_chip description as specified in driver/char/tpm/tpm.h
-+ * cancel the current command execution or set STS to COMMAND READY.
-  */
- static void st33zp24_cancel(struct tpm_chip *chip)
- {
-@@ -86,12 +82,10 @@ static void st33zp24_cancel(struct tpm_chip *chip)
+ #include "ima.h"
  
- 	data = TPM_STS_COMMAND_READY;
- 	tpm_dev->ops->send(tpm_dev->phy_id, TPM_STS, &data, 1);
--} /* st33zp24_cancel() */
-+}
- 
- /*
-- * st33zp24_status return the TPM_STS register
-- * @param: chip, the tpm chip description
-- * @return: the TPM_STS register value.
-+ * return the TPM_STS register
-  */
- static u8 st33zp24_status(struct tpm_chip *chip)
- {
-@@ -100,12 +94,10 @@ static u8 st33zp24_status(struct tpm_chip *chip)
- 
- 	tpm_dev->ops->recv(tpm_dev->phy_id, TPM_STS, &data, 1);
- 	return data;
--} /* st33zp24_status() */
-+}
- 
- /*
-- * check_locality if the locality is active
-- * @param: chip, the tpm chip description
-- * @return: true if LOCALITY0 is active, otherwise false
-+ * if the locality is active
-  */
- static bool check_locality(struct tpm_chip *chip)
- {
-@@ -120,13 +112,8 @@ static bool check_locality(struct tpm_chip *chip)
- 		return true;
- 
- 	return false;
--} /* check_locality() */
-+}
- 
--/*
-- * request_locality request the TPM locality
-- * @param: chip, the chip description
-- * @return: the active locality or negative value.
-- */
- static int request_locality(struct tpm_chip *chip)
- {
- 	struct st33zp24_dev *tpm_dev = dev_get_drvdata(&chip->dev);
-@@ -153,12 +140,8 @@ static int request_locality(struct tpm_chip *chip)
- 
- 	/* could not get locality */
- 	return -EACCES;
--} /* request_locality() */
-+}
- 
--/*
-- * release_locality release the active locality
-- * @param: chip, the tpm chip description.
-- */
- static void release_locality(struct tpm_chip *chip)
- {
- 	struct st33zp24_dev *tpm_dev = dev_get_drvdata(&chip->dev);
-@@ -171,8 +154,6 @@ static void release_locality(struct tpm_chip *chip)
- 
- /*
-  * get_burstcount return the burstcount value
-- * @param: chip, the chip description
-- * return: the burstcount or negative value.
-  */
- static int get_burstcount(struct tpm_chip *chip)
- {
-@@ -200,18 +181,8 @@ static int get_burstcount(struct tpm_chip *chip)
- 		msleep(TPM_TIMEOUT);
- 	} while (time_before(jiffies, stop));
- 	return -EBUSY;
--} /* get_burstcount() */
--
-+}
- 
--/*
-- * wait_for_tpm_stat_cond
-- * @param: chip, chip description
-- * @param: mask, expected mask value
-- * @param: check_cancel, does the command expected to be canceled ?
-- * @param: canceled, did we received a cancel request ?
-- * @return: true if status == mask or if the command is canceled.
-- * false in other cases.
-- */
- static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
- 				bool check_cancel, bool *canceled)
- {
-@@ -228,13 +199,7 @@ static bool wait_for_tpm_stat_cond(struct tpm_chip *chip, u8 mask,
+@@ -519,6 +520,28 @@ int ima_file_check(struct file *file, int mask)
  }
+ EXPORT_SYMBOL_GPL(ima_file_check);
  
- /*
-- * wait_for_stat wait for a TPM_STS value
-- * @param: chip, the tpm chip description
-- * @param: mask, the value mask to wait
-- * @param: timeout, the timeout
-- * @param: queue, the wait queue.
-- * @param: check_cancel, does the command can be cancelled ?
-- * @return: the tpm status, 0 if success, -ETIME if timeout is reached.
-+ * wait for a TPM_STS value
-  */
- static int wait_for_stat(struct tpm_chip *chip, u8 mask, unsigned long timeout,
- 			wait_queue_head_t *queue, bool check_cancel)
-@@ -292,15 +257,8 @@ static int wait_for_stat(struct tpm_chip *chip, u8 mask, unsigned long timeout,
- 	}
- 
- 	return -ETIME;
--} /* wait_for_stat() */
++/**
++ * ima_trusted_for - based on policy, measure/appraise/audit measurement
++ * @file: pointer to the file to be measured/appraised/audit
++ * @usage: limit enumeration to TRUSTED_FOR_EXECUTION
++ *
++ * Measure/appraise/audit files being executed by an interpreter.
++ *
++ * On success return 0.  On integrity appraisal error, assuming the file
++ * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
++ */
++int ima_trusted_for(struct file *file, const enum trusted_for_usage usage)
++{
++	u32 secid;
++
++	if (usage != TRUSTED_FOR_EXECUTION)
++		return 0;
++
++	security_task_getsecid_subj(current, &secid);
++	return process_measurement(file, current_cred(), secid, NULL,
++				   0, MAY_EXEC, TRUSTED_FOR_CHECK);
 +}
- 
--/*
-- * recv_data receive data
-- * @param: chip, the tpm chip description
-- * @param: buf, the buffer where the data are received
-- * @param: count, the number of data to receive
-- * @return: the number of bytes read from TPM FIFO.
-- */
- static int recv_data(struct tpm_chip *chip, u8 *buf, size_t count)
++
+ static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
  {
- 	struct st33zp24_dev *tpm_dev = dev_get_drvdata(&chip->dev);
-@@ -325,12 +283,6 @@ static int recv_data(struct tpm_chip *chip, u8 *buf, size_t count)
- 	return size;
- }
- 
--/*
-- * tpm_ioserirq_handler the serirq irq handler
-- * @param: irq, the tpm chip description
-- * @param: dev_id, the description of the chip
-- * @return: the status of the handler.
-- */
- static irqreturn_t tpm_ioserirq_handler(int irq, void *dev_id)
- {
- 	struct tpm_chip *chip = dev_id;
-@@ -341,16 +293,10 @@ static irqreturn_t tpm_ioserirq_handler(int irq, void *dev_id)
- 	disable_irq_nosync(tpm_dev->irq);
- 
- 	return IRQ_HANDLED;
--} /* tpm_ioserirq_handler() */
-+}
- 
- /*
-- * st33zp24_send send TPM commands through the I2C bus.
-- *
-- * @param: chip, the tpm_chip description as specified in driver/char/tpm/tpm.h
-- * @param: buf,	the buffer to send.
-- * @param: count, the number of bytes to send.
-- * @return: In case of success the number of bytes sent.
-- *			In other case, a < 0 value describing the issue.
-+ * send TPM commands through the I2C bus.
-  */
- static int st33zp24_send(struct tpm_chip *chip, unsigned char *buf,
- 			 size_t len)
-@@ -431,14 +377,6 @@ static int st33zp24_send(struct tpm_chip *chip, unsigned char *buf,
- 	return ret;
- }
- 
--/*
-- * st33zp24_recv received TPM response through TPM phy.
-- * @param: chip, the tpm_chip description as specified in driver/char/tpm/tpm.h.
-- * @param: buf,	the buffer to store datas.
-- * @param: count, the number of bytes to send.
-- * @return: In case of success the number of bytes received.
-- *	    In other case, a < 0 value describing the issue.
-- */
- static int st33zp24_recv(struct tpm_chip *chip, unsigned char *buf,
- 			    size_t count)
- {
-@@ -478,12 +416,6 @@ static int st33zp24_recv(struct tpm_chip *chip, unsigned char *buf,
- 	return size;
- }
- 
--/*
-- * st33zp24_req_canceled
-- * @param: chip, the tpm_chip description as specified in driver/char/tpm/tpm.h.
-- * @param: status, the TPM status.
-- * @return: Does TPM ready to compute a new command ? true.
-- */
- static bool st33zp24_req_canceled(struct tpm_chip *chip, u8 status)
- {
- 	return (status == TPM_STS_COMMAND_READY);
-@@ -501,11 +433,7 @@ static const struct tpm_class_ops st33zp24_tpm = {
- };
- 
- /*
-- * st33zp24_probe initialize the TPM device
-- * @param: client, the i2c_client description (TPM I2C description).
-- * @param: id, the i2c_device_id struct.
-- * @return: 0 in case of success.
-- *	 -1 in other case.
-+ * initialize the TPM device
-  */
- int st33zp24_probe(void *phy_id, const struct st33zp24_phy_ops *ops,
- 		   struct device *dev, int irq, int io_lpcpd)
-@@ -583,11 +511,6 @@ int st33zp24_probe(void *phy_id, const struct st33zp24_phy_ops *ops,
- }
- EXPORT_SYMBOL(st33zp24_probe);
- 
--/*
-- * st33zp24_remove remove the TPM device
-- * @param: tpm_data, the tpm phy.
-- * @return: 0 in case of success.
-- */
- int st33zp24_remove(struct tpm_chip *chip)
- {
- 	tpm_chip_unregister(chip);
-@@ -596,12 +519,6 @@ int st33zp24_remove(struct tpm_chip *chip)
- EXPORT_SYMBOL(st33zp24_remove);
- 
- #ifdef CONFIG_PM_SLEEP
--/*
-- * st33zp24_pm_suspend suspend the TPM device
-- * @param: tpm_data, the tpm phy.
-- * @param: mesg, the power management message.
-- * @return: 0 in case of success.
-- */
- int st33zp24_pm_suspend(struct device *dev)
- {
- 	struct tpm_chip *chip = dev_get_drvdata(dev);
-@@ -615,14 +532,9 @@ int st33zp24_pm_suspend(struct device *dev)
- 		ret = tpm_pm_suspend(dev);
- 
- 	return ret;
--} /* st33zp24_pm_suspend() */
-+}
- EXPORT_SYMBOL(st33zp24_pm_suspend);
- 
--/*
-- * st33zp24_pm_resume resume the TPM device
-- * @param: tpm_data, the tpm phy.
-- * @return: 0 in case of success.
-- */
- int st33zp24_pm_resume(struct device *dev)
- {
- 	struct tpm_chip *chip = dev_get_drvdata(dev);
-@@ -640,7 +552,7 @@ int st33zp24_pm_resume(struct device *dev)
- 			tpm1_do_selftest(chip);
- 	}
- 	return ret;
--} /* st33zp24_pm_resume() */
-+}
- EXPORT_SYMBOL(st33zp24_pm_resume);
- #endif
- 
+ 	struct integrity_iint_cache *iint;
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 320ca80aacab..847803a24201 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1210,6 +1210,7 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+ 	case POST_SETATTR:
+ 	case FIRMWARE_CHECK:
+ 	case POLICY_CHECK:
++	case TRUSTED_FOR_CHECK:
+ 		if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
+ 				     IMA_UID | IMA_FOWNER | IMA_FSUUID |
+ 				     IMA_INMASK | IMA_EUID | IMA_PCR |
+@@ -1423,6 +1424,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+ 			/* PATH_CHECK is for backwards compat */
+ 			else if (strcmp(args[0].from, "PATH_CHECK") == 0)
+ 				entry->func = FILE_CHECK;
++			else if (strcmp(args[0].from, "TRUSTED_FOR_CHECK") == 0)
++				entry->func = TRUSTED_FOR_CHECK;
+ 			else if (strcmp(args[0].from, "MODULE_CHECK") == 0)
+ 				entry->func = MODULE_CHECK;
+ 			else if (strcmp(args[0].from, "FIRMWARE_CHECK") == 0)
 -- 
-2.25.1
-
+2.27.0
