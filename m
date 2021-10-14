@@ -2,181 +2,190 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F76542D871
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Oct 2021 13:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FE542D9A7
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Oct 2021 15:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbhJNLqa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 14 Oct 2021 07:46:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26214 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231250AbhJNLqV (ORCPT
+        id S231310AbhJNNDr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 14 Oct 2021 09:03:47 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43138 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231300AbhJNNDq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 14 Oct 2021 07:46:21 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19EBaVpT014239;
-        Thu, 14 Oct 2021 07:44:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=CYG9NOulpfBzL19tViJqN/tdKovcx6JB2vB5XeSA5XM=;
- b=CycwXLQ8KgxuqyUqirTr+UcORfYa/81Y4OR757TvzaBCiO1inRiIxbLFglvONc+c1W2B
- yl1OS3Wz3bZ1xN93g0SOlWBGIREfaOdbiIsX1IgQ+KPIseUJm4Nh5Ltk5XVt8Z82MEH0
- e2u2/1Kljjq6sMuUw2XqcZrpiBHaeGEY98SI78fbOMalGrcSynEZEz6EtXmIYzPfwtDA
- aqD5VBD6aTFZsSPTpP7xY7UR1lZH9X46u5/i+Nb1TFE+CIH6OvLDM4Uz++5jTWSaNPpG
- Lv+6wo5S4hpY45GQYNfLnVrdp/1sgZfm8zM4YDCw9NJkEoiTYa4uv9m2IuLj5pcajm9C Ww== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3bnshj90rf-1
+        Thu, 14 Oct 2021 09:03:46 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19EBDFLH008993;
+        Thu, 14 Oct 2021 09:01:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=teLW8J+lrbmfY0wiZKBnolVNto5Rpg+cKO9JZOfoh5c=;
+ b=jbLzsaepeykRAliWbtMRJDJUrLT80VfOHZrPMSebSAsSbwB8r13lnBCp0hmCm8tBqhAh
+ afTlSd+E6grypLxkPSrNWtC+UL/8D/JMAqwzQB1p9HmCkr3lsvLEr+LijB6iqi2jt6MC
+ Y0ltjfR/YT5+x699K26t5XG5yl2EaetvWSNyO2Xbyp5NdLkmBt66/SgzZG4346ZwbgYD
+ WS9u3M8HtRVT50EfEwTgzTbuWTQ4c6PrsEwnLZnV7s7kMdRVawEYwOuAA7n42WAbEQQH
+ q1EyzbfMr3bhTqbCDTB3vnCONmH0jm7NCkDl5xfoA6ASOaejSbycwLxrJxH4HOp8ikPU Yg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bnpf49fkg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Oct 2021 07:44:09 -0400
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19EBam9b018459;
-        Thu, 14 Oct 2021 07:44:09 -0400
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3bnshj90r3-1
+        Thu, 14 Oct 2021 09:01:35 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19ECpn4j002932;
+        Thu, 14 Oct 2021 13:01:33 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03fra.de.ibm.com with ESMTP id 3bk2qajf7x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Oct 2021 07:44:09 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19EBfdDc021982;
-        Thu, 14 Oct 2021 11:44:08 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma01wdc.us.ibm.com with ESMTP id 3bk2qbns5t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Oct 2021 11:44:08 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19EBi7hE38011216
+        Thu, 14 Oct 2021 13:01:33 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19ECtsrn57278968
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Oct 2021 11:44:07 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42311136055;
-        Thu, 14 Oct 2021 11:44:07 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B09BF136067;
-        Thu, 14 Oct 2021 11:44:06 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 14 Oct 2021 11:44:06 +0000 (GMT)
-Subject: Re: IMA namespaces
-To:     Denis Semakin <0xsemakin@gmail.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        denis.semakin@huawei.com
-References: <CABtpKGVtgwZbvX9j0QNB3FyZkT_LgwHWdpKYijULeBZ1Z+Xw0w@mail.gmail.com>
- <de9e081e-154e-03c9-c23d-b3e624910975@linux.ibm.com>
- <CABtpKGWqH4K2pSZczgqAF1BMYTE+g1Nn+d2sePsjpJEU+RxiuQ@mail.gmail.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <fa1c1f1f-3bc7-d61f-3665-65afeb300644@linux.ibm.com>
-Date:   Thu, 14 Oct 2021 07:44:05 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 14 Oct 2021 12:55:54 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 59F4DA404D;
+        Thu, 14 Oct 2021 13:01:31 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A615A4051;
+        Thu, 14 Oct 2021 13:01:30 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.160.55.249])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Oct 2021 13:01:30 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: [PATCH v1 1/3] ima: define ima_trusted_for hook
+Date:   Thu, 14 Oct 2021 09:01:23 -0400
+Message-Id: <20211014130125.6991-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <CABtpKGWqH4K2pSZczgqAF1BMYTE+g1Nn+d2sePsjpJEU+RxiuQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tuWt5PoE2wkY6v3NthOXgRu4LrhZp9Pr
-X-Proofpoint-GUID: hDObAUIQ0MaSowUkB4g6aPOF6DQv4AfN
+X-Proofpoint-GUID: rysSjnn3QQwge_o2i28xQFuLM5pm0zh6
+X-Proofpoint-ORIG-GUID: rysSjnn3QQwge_o2i28xQFuLM5pm0zh6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-14_03,2021-10-14_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- bulkscore=0 mlxlogscore=999 adultscore=0 clxscore=1011 phishscore=0
- impostorscore=0 suspectscore=0 malwarescore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2110140073
+ definitions=2021-10-14_07,2021-10-14_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 clxscore=1015 lowpriorityscore=0 mlxscore=0
+ phishscore=0 adultscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=921 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2109230001 definitions=main-2110140084
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+A major interpreter integrity gap exists which allows files read by
+the interpreter to be executed without measuring the file or verifying
+the file's signature.
 
-On 10/14/21 6:12 AM, Denis Semakin wrote:
-> The new statements look very similar to previous. A couple of the
-> items are already under development.
-> What about new capabilities CAP_INTEGRITY_ADMIN and
-> CAP_SECURITY_XATTR_ADMIN which are mentioned in the first original
-> edition of "Considerations..."
+The kernel has no knowledge about the file being read by the interpreter.
+Only the interpreter knows the context(eg. data, execute) and must be
+trusted to provide that information accurately.
 
-They still exist but are part of the implementation rather than the high 
-level requirement R4.
+To close this integrity gap, define an ima_trusted_for hook to allow
+IMA to measure the file and verify the file's signature based on policy.
 
-> Br,
-> Denis
->
-> On Wed, Oct 13, 2021 at 10:14 PM Stefan Berger <stefanb@linux.ibm.com> wrote:
->>
->> On 9/1/21 8:00 AM, Denis Semakin wrote:
->>> Hello.
->>> A few months ago we started a project dedicated to single IMA namespaces.
->>> Last years there were a number of patch-sets about this problem, e.g.
->>> the last one was from  Krzysztof Struczynski. But no one patch-set
->>> wasn’t applied to the mainline.
->>>
->>> Also there is a document (thanks Mimi) that describes the main goal,
->>> architecture and design - “IMA Namespacing design considerations”.
->>>
->>> As a result of investigations: Krzysztof’s patches were successfully
->>> adopted for Linux kernel v5.10.30 and tested,
->>> at least that allowed to study integrity and IMA a source code a
->>> little bit. But that patch-set does not match “...design
->>> considerations…”. Then we may take all patches as a base, use
->>> “Considerations…” as architecture description and start to implement
->>> but it is obvious that it does not make sense without community
->>> (review, discussion, etc).
->> We are working on another design document, which is based on the initial
->> one, that lists the following design requirements for IMA namespacing:
->>
->> R1 Each container must have the possibility to spawn an independent IMA
->> namespace
->>     (IMA-ns). Each IMA-ns must have the following properties:
->>     R1.1 An IMA-ns must have an independent IMA-policy with
->>         (i)  an initial default policy, and
->>         (ii) rules that provide the possibility to cause measurements and
->> appraisal
->>             in IMA-ns child namespaces.
->>     R1.2 An IMA-ns must have independent IMA-measurement with
->>         (i)  its own measurement list and
->>         (ii) the possibility to measure and log files accessed in an
->> IMA-ns child
->>              namespace per the IMA-policy.
->>     R1.3 An IMA-ns must have independent IMA-appraisal with
->>         (i)  its own set of keyrings and
->>         (ii) the possibility to appraise files accessed in an IMA-ns
->> child namespace
->>              per the IMA-policy.
->>     R1.4 An IMA-ns must have independent IMA-audit with
->>         (i)  its own emission of audit messages distinguishable from
->> those audit
->>              messages of other IMA-ns's and
->>         (ii) the possibility to audit files accessed in an IMA-ns child
->> namespaces.
->> R2 As an additional requirement host root's actions in an IMA-ns must be
->> measured
->>      and audited (in all IMA namespaces) in the IMA root namespace,
->> independent of
->>      whether the IMA policy enables logging or auditing in child
->> namespaces, if there
->>      is an IMA measurements or auditing policy in the IMA root namespace.
->>      The same may apply to a container root user whose actions in a
->> child-IMA-ns need
->>      to be measured and audited if there is an IMA measurement or
->> audition policy in
->>      the IMA-ns.
->> R3 An independent instance of SecurityFS must be accessible to each
->> IMA-ns showing
->>      the IMA-policy, the IMA measurement list, and other information
->> related to the
->>      'owning' IMA-ns.
->> R4 A container's root user must be able to
->>      (i)  load the IMA policy inside a container using SecurityFS of its
->> IMA-ns and
->>      (ii) sign files inside a container.
->> R5 An independent vTPM instance should be connectable to each IMA-ns
->> where the
->>      IMA-ns extends its measurements into the vTPM's PCRs.
->>
->>
->> Maybe we can discuss those until we can share the document with a wider
->> audience.
->>
->>      Stefan
->>
->>
+Sample policy rules:
+	measure func=TRUSTED_FOR_CHECK
+	appraise func=TRUSTED_FOR_CHECK appraise_type=imasig
+
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ Documentation/ABI/testing/ima_policy |  2 +-
+ security/integrity/ima/ima.h         |  1 +
+ security/integrity/ima/ima_main.c    | 23 +++++++++++++++++++++++
+ security/integrity/ima/ima_policy.c  |  3 +++
+ 4 files changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
+index e1a04bd3b9e5..85618e726801 100644
+--- a/Documentation/ABI/testing/ima_policy
++++ b/Documentation/ABI/testing/ima_policy
+@@ -34,7 +34,7 @@ Description:
+ 				[FIRMWARE_CHECK]
+ 				[KEXEC_KERNEL_CHECK] [KEXEC_INITRAMFS_CHECK]
+ 				[KEXEC_CMDLINE] [KEY_CHECK] [CRITICAL_DATA]
+-				[SETXATTR_CHECK]
++				[SETXATTR_CHECK] [TRUSTED_FOR_CHECK]
+ 			mask:= [[^]MAY_READ] [[^]MAY_WRITE] [[^]MAY_APPEND]
+ 			       [[^]MAY_EXEC]
+ 			fsmagic:= hex value
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index be965a8715e4..827236dbbefb 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -202,6 +202,7 @@ static inline unsigned int ima_hash_key(u8 *digest)
+ 	hook(KEY_CHECK, key)				\
+ 	hook(CRITICAL_DATA, critical_data)		\
+ 	hook(SETXATTR_CHECK, setxattr_check)		\
++	hook(TRUSTED_FOR_CHECK, trusted_for_check)	\
+ 	hook(MAX_CHECK, none)
+ 
+ #define __ima_hook_enumify(ENUM, str)	ENUM,
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 465865412100..e09054ac3352 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -26,6 +26,7 @@
+ #include <linux/ima.h>
+ #include <linux/iversion.h>
+ #include <linux/fs.h>
++#include <uapi/linux/trusted-for.h>
+ 
+ #include "ima.h"
+ 
+@@ -519,6 +520,28 @@ int ima_file_check(struct file *file, int mask)
+ }
+ EXPORT_SYMBOL_GPL(ima_file_check);
+ 
++/**
++ * ima_trusted_for - based on policy, measure/appraise/audit measurement
++ * @file: pointer to the file to be measured/appraised/audit
++ * @usage: limit enumeration to TRUSTED_FOR_EXECUTION
++ *
++ * Measure/appraise/audit files being executed by an interpreter.
++ *
++ * On success return 0.  On integrity appraisal error, assuming the file
++ * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
++ */
++int ima_trusted_for(struct file *file, const enum trusted_for_usage usage)
++{
++	u32 secid;
++
++	if (usage != TRUSTED_FOR_EXECUTION)
++		return 0;
++
++	security_task_getsecid_subj(current, &secid);
++	return process_measurement(file, current_cred(), secid, NULL,
++				   0, MAY_EXEC, TRUSTED_FOR_CHECK);
++}
++
+ static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+ {
+ 	struct integrity_iint_cache *iint;
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 320ca80aacab..847803a24201 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1210,6 +1210,7 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+ 	case POST_SETATTR:
+ 	case FIRMWARE_CHECK:
+ 	case POLICY_CHECK:
++	case TRUSTED_FOR_CHECK:
+ 		if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
+ 				     IMA_UID | IMA_FOWNER | IMA_FSUUID |
+ 				     IMA_INMASK | IMA_EUID | IMA_PCR |
+@@ -1423,6 +1424,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+ 			/* PATH_CHECK is for backwards compat */
+ 			else if (strcmp(args[0].from, "PATH_CHECK") == 0)
+ 				entry->func = FILE_CHECK;
++			else if (strcmp(args[0].from, "TRUSTED_FOR_CHECK") == 0)
++				entry->func = TRUSTED_FOR_CHECK;
+ 			else if (strcmp(args[0].from, "MODULE_CHECK") == 0)
+ 				entry->func = MODULE_CHECK;
+ 			else if (strcmp(args[0].from, "FIRMWARE_CHECK") == 0)
+-- 
+2.27.0
+
