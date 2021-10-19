@@ -2,32 +2,28 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 932BA431E60
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 Oct 2021 15:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24562433254
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Oct 2021 11:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234596AbhJROAj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 18 Oct 2021 10:00:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38242 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234664AbhJRN63 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 18 Oct 2021 09:58:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BAF7F61A40;
-        Mon, 18 Oct 2021 13:41:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634564489;
-        bh=iyQNCJw3F2btWylGkoSsJbiuAqzwxr7VZp84T8arEwk=;
-        h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=Muk1xW0O5fPkNs1SObNldVoKqidRwndzDDCkNEC0B0lO2IyZKUCtY8K+mMfUuaYZd
-         cL0KbWMGwXTcZritJ7+AqX/i/Slq2vQ3TFT8qH4dnzifxwAlHnTB0R7fXbt/9Ydo6o
-         R6TW5vdR2I6vipcf13Wm9iIo7VWkS1eEmHIv3H14gJR2CmDKO2uFtJ4JYn5d5YXnpq
-         vEb7U3LYwRzjycvD69cavPuejBiYJODJwHhnF1zOLy2p7gCguIkj9PfbV2Ef/Rzk88
-         Ktx6XBGnB9cYIhgCbMozT4+fkladPBDQqNT0gUOFJuK42Tvn0S19FEBuRX06p0kTdR
-         7iRo20kZTREzw==
-Message-ID: <41aba1e1c5849b58f83108eb9f9f115d0cd5826f.camel@kernel.org>
+        id S235071AbhJSJh3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 19 Oct 2021 05:37:29 -0400
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:35815 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234561AbhJSJh2 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 19 Oct 2021 05:37:28 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0UsuQlL7_1634636110;
+Received: from 30.240.101.11(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UsuQlL7_1634636110)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 19 Oct 2021 17:35:11 +0800
+Message-ID: <3bd42726-b383-eb33-5c03-2932036d06a4@linux.alibaba.com>
+Date:   Tue, 19 Oct 2021 17:35:05 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.0
 Subject: Re: [PATCH 1/2] crypto: use SM3 instead of SM3_256
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     jejb@linux.ibm.com,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+Content-Language: en-US
+To:     jejb@linux.ibm.com, Jarkko Sakkinen <jarkko@kernel.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Herbert Xu <herbert@gondor.apana.org.au>,
@@ -41,69 +37,48 @@ To:     jejb@linux.ibm.com,
         linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
-Date:   Mon, 18 Oct 2021 16:41:26 +0300
-In-Reply-To: <af8c2098c4cfe23b941a191f7b4ec0e3a5251760.camel@linux.ibm.com>
 References: <20211009130828.101396-1-tianjia.zhang@linux.alibaba.com>
-         <20211009130828.101396-2-tianjia.zhang@linux.alibaba.com>
-         <7035153d58e220473fe3cd17c9f574f2d91c740b.camel@linux.ibm.com>
-         <dbac037710d711959d5ce0969f80ea0dd18a176e.camel@kernel.org>
-         <af8c2098c4cfe23b941a191f7b4ec0e3a5251760.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.40.0-1 
-MIME-Version: 1.0
+ <20211009130828.101396-2-tianjia.zhang@linux.alibaba.com>
+ <7035153d58e220473fe3cd17c9f574f2d91c740b.camel@linux.ibm.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <7035153d58e220473fe3cd17c9f574f2d91c740b.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-10-18 at 09:32 -0400, James Bottomley wrote:
-> On Mon, 2021-10-18 at 16:27 +0300, Jarkko Sakkinen wrote:
-> > On Mon, 2021-10-18 at 09:05 -0400, James Bottomley wrote:
-> > > On Sat, 2021-10-09 at 21:08 +0800, Tianjia Zhang wrote:
-> > > [...]
-> > > > diff --git a/include/uapi/linux/hash_info.h
-> > > > b/include/uapi/linux/hash_info.h
-> > > > index 74a8609fcb4d..1355525dd4aa 100644
-> > > > --- a/include/uapi/linux/hash_info.h
-> > > > +++ b/include/uapi/linux/hash_info.h
-> > > > @@ -32,7 +32,7 @@ enum hash_algo {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_TGR_128,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_TGR_160,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_TGR_192,
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_SM3_256,
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_SM3,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_STREEBOG_256,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO_STREEBOG_512,
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 HASH_ALGO__LAST
-> > >=20
-> > > This is another one you can't do: all headers in UAPI are exports
-> > > to userspace and the definitions constitute an ABI.=C2=A0 If you simp=
-ly
-> > > do a rename, every userspace program that uses the current
-> > > definition will immediately break on compile.=C2=A0 You could add
-> > > HASH_ALGO_SM3, but you can't remove HASH_ALGO_SM3_256
-> > >=20
-> > > James
-> >=20
-> > So: shouldn't then also the old symbol continue to work also
-> > semantically?
->=20
-> Yes, that's the point: you can add a new definition ... in this case an
-> alias for the old one, but you can't remove a definition that's been
-> previously exported.
+Hi James,
 
-Thanks, this of course obvious :-) I forgot temporarily that crypto
-has uapi interface. Tianjia, this patch set break production systems,
-so no chance we would ever merge it in this form.
+On 10/18/21 9:05 PM, James Bottomley wrote:
+> On Sat, 2021-10-09 at 21:08 +0800, Tianjia Zhang wrote:
+> [...]
+>> diff --git a/include/uapi/linux/hash_info.h
+>> b/include/uapi/linux/hash_info.h
+>> index 74a8609fcb4d..1355525dd4aa 100644
+>> --- a/include/uapi/linux/hash_info.h
+>> +++ b/include/uapi/linux/hash_info.h
+>> @@ -32,7 +32,7 @@ enum hash_algo {
+>>   	HASH_ALGO_TGR_128,
+>>   	HASH_ALGO_TGR_160,
+>>   	HASH_ALGO_TGR_192,
+>> -	HASH_ALGO_SM3_256,
+>> +	HASH_ALGO_SM3,
+>>   	HASH_ALGO_STREEBOG_256,
+>>   	HASH_ALGO_STREEBOG_512,
+>>   	HASH_ALGO__LAST
+> 
+> This is another one you can't do: all headers in UAPI are exports to
+> userspace and the definitions constitute an ABI.  If you simply do a
+> rename, every userspace program that uses the current definition will
+> immediately break on compile.  You could add HASH_ALGO_SM3, but you
+> can't remove HASH_ALGO_SM3_256
+> 
+> James
+> 
 
-Why not just do this:
+Correct, Thanks for pointing it out, redefining a macro is indeed a more 
+appropriate method.
 
-...
-HASH_ALGO_SM3_256,
-HASH_ALOG_SM3 =3D HASH_ALOG_SM_256,
-...
-
-There is not good reason to mod the implementation because both symbols
-are kept.
-
-/Jarkko
+Best regards,
+Tianjia
