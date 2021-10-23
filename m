@@ -2,86 +2,92 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA77438129
-	for <lists+linux-integrity@lfdr.de>; Sat, 23 Oct 2021 02:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B3B438413
+	for <lists+linux-integrity@lfdr.de>; Sat, 23 Oct 2021 17:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbhJWAui (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 22 Oct 2021 20:50:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55618 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229507AbhJWAui (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 22 Oct 2021 20:50:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ADB5F6101C;
-        Sat, 23 Oct 2021 00:48:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634950100;
-        bh=kbtNHfGbGhSMTAw0+cA9930pf9e1d4ODVtDxLJB8ts0=;
-        h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=Eo8NRWz4J4aoPfPJ2sLX/Xrbd8+vVzacRcBGYaC9WBuZFnUcrew6/6//GZeuq8O2C
-         htN23e6J3Q39RBFAS1DqXxIkQZHS0Y3YFPwj35yEkRbXfwq18VaLc4+akTbmegKa61
-         QFkDW3igonoSEBFsbbIKyixv6VOIKcSmE0CUPd5UUqDAIbg46od8rLrcDXwIfEYzxP
-         M31o7JQvj69xmboEk2A1IIfALhcDrpiV4q7usN9F8+IfUKLw4hwQkubO4xQNHuxpz+
-         ekIbOSY7ZPdDliovD/MLBeP08CcI1j1Jb8gQrRZIUZ2+EzRhs7V2Dz1MblFasLw//m
-         xF89ZSZqBo7+Q==
-Message-ID: <f5c87a233027c8026ae8574f3e25c9162da3bfff.camel@kernel.org>
-Subject: Re: [PATCH v2 1/2] crypto: use SM3 instead of SM3_256
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jerry Snitselaar <jsnitsel@redhat.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
-Date:   Sat, 23 Oct 2021 03:48:17 +0300
-In-Reply-To: <20211019100423.43615-2-tianjia.zhang@linux.alibaba.com>
-References: <20211019100423.43615-1-tianjia.zhang@linux.alibaba.com>
-         <20211019100423.43615-2-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.40.4-1 
+        id S231509AbhJWPpN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 23 Oct 2021 11:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230280AbhJWPpM (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Sat, 23 Oct 2021 11:45:12 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FA4C061348
+        for <linux-integrity@vger.kernel.org>; Sat, 23 Oct 2021 08:42:52 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id e12so3648300wra.4
+        for <linux-integrity@vger.kernel.org>; Sat, 23 Oct 2021 08:42:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
+        b=AYtLHgTG+6uRU7+ihCnpuOHko6pqohXhhQkkijOFNs1K9R3uZtGzQ5Q1/HW70ikQOH
+         to4qY+MneU8Wp5m/9lAfflx+y719nabfpikWCEUlEWf4TV2mCVtwTqCiU9WBe0/PueVA
+         Ai5uemlRsLruanwKtfzO+GeDcAbGf94MhP9fVYsSthGmJThkp9aXQloZUCc7KpPJDIe5
+         ZDHZUIMzc7AFUI4sZuF8c0yufIwBcSuY8XEdvjlaOTWtthy6nwfYJOAMZizkpVyMjWcI
+         yYcYAJzSYs4KyL2X7l5KUECXBatU7ZxHLxcDM7wHj0/uSurwobyzbl1doBaHD0t2U4Ok
+         8KFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
+        b=kl+WHprxt+/UQpcU05/GKR6HACg7zM30EmAI+zfVt/vcbig/adJ0morsn9JfLspJ9e
+         KEo6oIUUfg3r4vgGvw9BJxMhMSTAdz9O3nMzNowKUCRPuTi+ucj5cDbnQGSQek81zRJO
+         yBP60rVIxIxWN0Ldhgyv98vJPlWVBr4KC5syU2iOsTpHAERELYDFTkQxO6ziDR1LFkM6
+         aCFf/Vxc0Fv7U++7wQtS4bO3qEjcCUdPtmV5PILCzhhkESgKYFFko/2prf1yiHefQ6Jh
+         i2fO8PcupTKAyVPA9DbG8Lgje3II18YDDWzAggLvBJPuXNjT115yVNepaH45V25FlXGI
+         WGTQ==
+X-Gm-Message-State: AOAM531qI3Rn1vryjuetCPFXKOxal9KwBnvTyyI3bEMrAew67N1a9ro4
+        L9Uc5GS5nPp/0/DApqTJBCjcYUeJMlYX+8EuIgc=
+X-Google-Smtp-Source: ABdhPJxbHWCQaA22XVwQFJLeK97z9oroWNyFUNBz/3teSSfazwM0svrL6URXAe5PADGpGE0jjZn5M2av0IBmVyuOXKg=
+X-Received: by 2002:adf:a411:: with SMTP id d17mr3075552wra.232.1635003770995;
+ Sat, 23 Oct 2021 08:42:50 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a1c:a916:0:0:0:0:0 with HTTP; Sat, 23 Oct 2021 08:42:50
+ -0700 (PDT)
+Reply-To: martinafrancis01@gmail.com
+From:   martinafran42 <martinafran42@gmail.com>
+Date:   Sat, 23 Oct 2021 08:42:50 -0700
+Message-ID: <CAC1Op46rzf-95OpiL4YE=Lzvu2F7NstX11WdGagxm5dfjjFJ3w@mail.gmail.com>
+Subject: =?UTF-8?Q?Dobry_dzie=C5=84_moja_droga?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTEwLTE5IGF0IDE4OjA0ICswODAwLCBUaWFuamlhIFpoYW5nIHdyb3RlOgo+
-IEFjY29yZGluZyB0byBodHRwczovL3Rvb2xzLmlldGYub3JnL2lkL2RyYWZ0LW9zY2NhLWNmcmct
-c20zLTAxLmh0bWwsCj4gU00zIGFsd2F5cyBwcm9kdWNlcyBhIDI1Ni1iaXQgaGFzaCB2YWx1ZSBh
-bmQgdGhlcmUgYXJlIG5vIHBsYW5zIGZvcgo+IG90aGVyIGxlbmd0aCBkZXZlbG9wbWVudCwgc28g
-dGhlcmUgaXMgbm8gYW1iaWd1aXR5IGluIHRoZSBuYW1lIG9mIHNtMy4KPiAKPiBTdWdnZXN0ZWQt
-Ynk6IEphbWVzIEJvdHRvbWxleSA8amVqYkBsaW51eC5pYm0uY29tPgo+IFNpZ25lZC1vZmYtYnk6
-IFRpYW5qaWEgWmhhbmcgPHRpYW5qaWEuemhhbmdAbGludXguYWxpYmFiYS5jb20+Cj4gLS0tCj4g
-wqBEb2N1bWVudGF0aW9uL3NlY3VyaXR5L2tleXMvdHJ1c3RlZC1lbmNyeXB0ZWQucnN0IHwgMiAr
-LQo+IMKgY3J5cHRvL2hhc2hfaW5mby5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCA0ICsrLS0KPiDCoGRyaXZlcnMvY2hhci90
-cG0vdHBtMi1jbWQuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IHwgMiArLQo+IMKgaW5jbHVkZS9jcnlwdG8vaGFzaF9pbmZvLmjCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMiArLQo+IMKgaW5jbHVkZS91YXBpL2xpbnV4
-L2hhc2hfaW5mby5owqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzICsr
-LQo+IMKgc2VjdXJpdHkva2V5cy90cnVzdGVkLWtleXMvdHJ1c3RlZF90cG0yLmPCoMKgwqDCoMKg
-wqDCoMKgIHwgMiArLQo+IMKgNiBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDcgZGVs
-ZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vc2VjdXJpdHkva2V5cy90
-cnVzdGVkLWVuY3J5cHRlZC5yc3QgYi9Eb2N1bWVudGF0aW9uL3NlY3VyaXR5L2tleXMvdHJ1c3Rl
-ZC1lbmNyeXB0ZWQucnN0Cj4gaW5kZXggODBkNWE1YWY2MmExLi4zMjkyNDYxNTE3ZjYgMTAwNjQ0
-Cj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9zZWN1cml0eS9rZXlzL3RydXN0ZWQtZW5jcnlwdGVkLnJz
-dAo+ICsrKyBiL0RvY3VtZW50YXRpb24vc2VjdXJpdHkva2V5cy90cnVzdGVkLWVuY3J5cHRlZC5y
-c3QKPiBAQCAtMTYyLDcgKzE2Miw3IEBAIFVzYWdlOjoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgZGVmYXVsdCAxIChyZXNlYWxpbmcgYWxsb3dlZCkKPiDCoMKg
-wqDCoMKgwqDCoCBoYXNoPcKgwqDCoMKgwqDCoMKgwqAgaGFzaCBhbGdvcml0aG0gbmFtZSBhcyBh
-IHN0cmluZy4gRm9yIFRQTSAxLnggdGhlIG9ubHkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgYWxsb3dlZCB2YWx1ZSBpcyBzaGExLiBGb3IgVFBNIDIueCB0aGUg
-YWxsb3dlZCB2YWx1ZXMKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBhcmUgc2hhMSwgc2hhMjU2LCBzaGEzODQsIHNoYTUxMiBhbmQgc20zLTI1Ni4KPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBhcmUgc2hhMSwgc2hhMjU2LCBzaGEz
-ODQsIHNoYTUxMiBhbmQgc20zLgoKWW91IGNhbm5vdCByZW1vdmUgc20zLTI1NiBmcm9tIHVhcGku
-CgovSmFya2tvCgo=
+--=20
+Dobry dzie=C5=84 moja droga
+Jak si=C4=99 masz i twoja rodzina.
+Jestem pani Martina Francis, chora wdowa pisz=C4=85ca ze szpitalnego =C5=82=
+=C3=B3=C5=BCka
+bez dziecka. Kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, aby=C5=9Bcie dowiedz=
+ieli si=C4=99 o moim
+pragnieniu przekazania sumy (2 700 000,00 USD MILION=C3=93W USD), kt=C3=B3r=
+=C4=85
+odziedziczy=C5=82am po moim zmar=C5=82ym m=C4=99=C5=BCu na cele charytatywn=
+e, obecnie
+fundusz jest nadal w banku. Niedawno m=C3=B3j lekarz powiedzia=C5=82 mi, =
+=C5=BCe mam
+powa=C5=BCn=C4=85 chorob=C4=99 nowotworow=C4=85 i moje =C5=BCycie nie jest =
+ju=C5=BC gwarantowane,
+dlatego podejmuj=C4=99 t=C4=99 decyzj=C4=99..
 
+Chc=C4=99, aby=C5=9Bcie skorzystali z tego funduszu dla ludzi ubogich,
+maltretowanych dzieci, mniej uprzywilejowanych, ko=C5=9Bcio=C5=82=C3=B3w, s=
+ieroci=C5=84c=C3=B3w
+i cierpi=C4=85cych wd=C3=B3w w spo=C5=82ecze=C5=84stwie.
+
+Prosz=C4=99, wr=C3=B3=C4=87 do mnie natychmiast po przeczytaniu tej wiadomo=
+=C5=9Bci, aby
+uzyska=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3w dotycz=C4=85cych tej age=
+ndy humanitarnej.
+
+Niech B=C3=B3g ci=C4=99 b=C5=82ogos=C5=82awi, kiedy czekam na twoj=C4=85 od=
+powied=C5=BA.
+
+Twoja siostra.
+Pani Martina Francis.
