@@ -2,84 +2,87 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A429438B0C
-	for <lists+linux-integrity@lfdr.de>; Sun, 24 Oct 2021 19:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692A1438DA6
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Oct 2021 05:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbhJXRqL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 24 Oct 2021 13:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbhJXRqL (ORCPT
+        id S231954AbhJYDGc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 24 Oct 2021 23:06:32 -0400
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:55363 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230040AbhJYDGc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 24 Oct 2021 13:46:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C16C061745;
-        Sun, 24 Oct 2021 10:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=nFn6fi/iskR5+ltkie8eDQymFVJfaUyjj9/k24bqil0=; b=pDdtD1cxcIbdnIUPmFsmt4VhD5
-        BFLCCa96wHcTyeenK04CvmYCouHdUq34C+4tPCQvM9pjlqPQyJ6lA+8Duwr4VxIJ85N283gYQfbGn
-        UZhFnmaN5Omckopj0DAF7mL+/TBURDYZJlCUvvzN54e4hUDcKusGlVjrKv9VZsvrDg7QD4NvyuItN
-        bAFTpXBu9eFRnKwh9+Q6rlKauyqRg06Eicbkbqzmo6whYolp1yEjOUdxokyZezBkscHUqWSZPec5f
-        Ut8TMRDL2Fjf6YpDpiSdAtado8oUohK8JwjETLqeZS8W933khRpVNXBL1e1AMittAYAFVTFZZbe0V
-        kVoMcLMA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mehX6-00EPLj-Pa; Sun, 24 Oct 2021 17:43:44 +0000
-Subject: Re: [PATCH v17 5/6] tpm: tpm_tis: Add tpm_tis_i2c driver
-To:     amirmizi6@gmail.com, Eyal.Cohen@nuvoton.com, jarkko@kernel.org,
-        oshrialkoby85@gmail.com, alexander.steffen@infineon.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, peterhuewe@gmx.de,
-        jgg@ziepe.ca, arnd@arndb.de, gregkh@linuxfoundation.org,
-        benoit.houyere@st.com, eajames@linux.ibm.com, joel@jms.id.au
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
-        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
-        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
-        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
-References: <20211024164855.250362-1-amirmizi6@gmail.com>
- <20211024164855.250362-6-amirmizi6@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <c0c82d83-7b92-3cb6-5f08-acfc33d275be@infradead.org>
-Date:   Sun, 24 Oct 2021 10:43:43 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Sun, 24 Oct 2021 23:06:32 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0UtUyMKi_1635131045;
+Received: from 30.240.102.8(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UtUyMKi_1635131045)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 25 Oct 2021 11:04:06 +0800
+Message-ID: <0997d70b-9f28-ba0a-853f-2160922dc722@linux.alibaba.com>
+Date:   Mon, 25 Oct 2021 11:04:02 +0800
 MIME-Version: 1.0
-In-Reply-To: <20211024164855.250362-6-amirmizi6@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.0
+Subject: Re: [PATCH v2 1/2] crypto: use SM3 instead of SM3_256
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20211019100423.43615-1-tianjia.zhang@linux.alibaba.com>
+ <20211019100423.43615-2-tianjia.zhang@linux.alibaba.com>
+ <f5c87a233027c8026ae8574f3e25c9162da3bfff.camel@kernel.org>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <f5c87a233027c8026ae8574f3e25c9162da3bfff.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 10/24/21 9:48 AM, amirmizi6@gmail.com wrote:
-> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> index 4308f9c..ba90137 100644
-> --- a/drivers/char/tpm/Kconfig
-> +++ b/drivers/char/tpm/Kconfig
-> @@ -86,6 +86,18 @@ config TCG_TIS_SYNQUACER
->   	  To compile this driver as a module, choose  M here;
->   	  the module will be called tpm_tis_synquacer.
->   
-> +config TCG_TIS_I2C
-> +	tristate "TPM I2C Interface Specification"
-> +	depends on I2C
-> +	select CRC_CCITT
-> +	select TCG_TIS_CORE
-> +	help
-> +	  If you have a TPM security chip, compliant with the TCG TPM PTP
-> +	  (I2C interface) specification and connected to an I2C bus master,
-> +	  say Yes and it will be accessible from within Linux.
-> +	  To compile this driver as a module, choose  M here;
+Hi Jarkko,
 
-	                                      choose M here;
-[drop one space]
+On 10/23/21 8:48 AM, Jarkko Sakkinen wrote:
+> On Tue, 2021-10-19 at 18:04 +0800, Tianjia Zhang wrote:
+>> According to https://tools.ietf.org/id/draft-oscca-cfrg-sm3-01.html,
+>> SM3 always produces a 256-bit hash value and there are no plans for
+>> other length development, so there is no ambiguity in the name of sm3.
+>>
+>> Suggested-by: James Bottomley <jejb@linux.ibm.com>
+>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>> ---
+>>   Documentation/security/keys/trusted-encrypted.rst | 2 +-
+>>   crypto/hash_info.c                                | 4 ++--
+>>   drivers/char/tpm/tpm2-cmd.c                       | 2 +-
+>>   include/crypto/hash_info.h                        | 2 +-
+>>   include/uapi/linux/hash_info.h                    | 3 ++-
+>>   security/keys/trusted-keys/trusted_tpm2.c         | 2 +-
+>>   6 files changed, 8 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+>> index 80d5a5af62a1..3292461517f6 100644
+>> --- a/Documentation/security/keys/trusted-encrypted.rst
+>> +++ b/Documentation/security/keys/trusted-encrypted.rst
+>> @@ -162,7 +162,7 @@ Usage::
+>>                        default 1 (resealing allowed)
+>>          hash=         hash algorithm name as a string. For TPM 1.x the only
+>>                        allowed value is sha1. For TPM 2.x the allowed values
+>> -                     are sha1, sha256, sha384, sha512 and sm3-256.
+>> +                     are sha1, sha256, sha384, sha512 and sm3.
+> 
+> You cannot remove sm3-256 from uapi.
+> 
 
-> +	  the module will be called tpm_tis_i2c.
+Thanks for pointing it out, Maybe this fix is more appropriate in patch 2.
 
-
--- 
-~Randy
+Best regards,
+Tianjia
