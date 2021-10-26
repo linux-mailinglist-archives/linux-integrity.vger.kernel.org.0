@@ -2,83 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 324FA43B20D
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Oct 2021 14:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3746743B433
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Oct 2021 16:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbhJZMO4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 26 Oct 2021 08:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235703AbhJZMO4 (ORCPT
+        id S236655AbhJZOdb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 26 Oct 2021 10:33:31 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:49874 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236729AbhJZOdV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 26 Oct 2021 08:14:56 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF96C061745
-        for <linux-integrity@vger.kernel.org>; Tue, 26 Oct 2021 05:12:32 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 82-20020a1c0055000000b0032ccc3ad5c1so934577wma.2
-        for <linux-integrity@vger.kernel.org>; Tue, 26 Oct 2021 05:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yCf+F0GmHnDwhpZJvN1skt34FOjo0gmVkyRLRwMgACY=;
-        b=q5BK/RPO1hK3ir+WBN10yfLed0PVt83YCUKlewvVLGQx0gN8AjWH/xb2xYQPfo9rS8
-         v1h7uEamUVMOA0KWGz8Lc+pvYsiGZkkU8VCeS4v9fVxADU+arzfBw+fSqmnYfc0p5GDn
-         4jqKvfUjk45uXXHdfpm/KMbC0bQg5GGwfq7sw+eSus7LXOcJaxONF25VTtPcjsZXMaDf
-         EpqS/BLeCL01ofTHEKmUsYOHvge9qZO6Bcjdxppn1NTWmew/bqQlRMPl/PcNdvCKted7
-         dev6yfpmFkbS1l49Y1yVkjlravEBrIvXSsNGqpJI5/3LUPdm14aFfUfA0x1l4con397t
-         XbcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=yCf+F0GmHnDwhpZJvN1skt34FOjo0gmVkyRLRwMgACY=;
-        b=18No5FI/xqQdJWvXboie7ErOa46DYvPzeKQAgliGY4FtOi5+T+JJiBK1j7t0wbxun8
-         TfCtErBn83PBoicmSOp0viof8hZB4svLuh9IP2gGQxvPlsLcWCT3rJy9KuMXGDzxDCbx
-         Zk8BqqRgIax6Um52dKn0k3wXdpF0OhMHfHlm7a5MUurAe011PdgATsbAYx7Wji8WhdWR
-         j/kRGl+M+ddx4jPX5Noc59Xb29ZWe+xyEG0PB2bilWxCk1sHzzJDwd+Nx1JtKuEJ1Usa
-         fgZ7bOftewU0WHzcJuiJUC7xg9DkXX5nNfjCedy+/57qR8Bj6jLnThEeeAgEf+GKMz+d
-         8hOQ==
-X-Gm-Message-State: AOAM53279lbX+hi/cI5p039v3h73Msp332GPlGniaAmorfZJrPmsPoTs
-        vBz9Rb1c/o3frCBcLYI6D3epGy5EEjk=
-X-Google-Smtp-Source: ABdhPJynSB391PtlUtgnLyPxl5vZSIq/8PWiVXX/RaFUJTO2+gen5q0ePxb0P9CJCa4U7JrxEwFbug==
-X-Received: by 2002:a7b:c926:: with SMTP id h6mr14225541wml.41.1635250350860;
-        Tue, 26 Oct 2021 05:12:30 -0700 (PDT)
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
-        by smtp.gmail.com with ESMTPSA id h14sm458947wmq.34.2021.10.26.05.12.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Oct 2021 05:12:30 -0700 (PDT)
-Date:   Tue, 26 Oct 2021 14:12:16 +0200
-From:   Petr Vorel <petr.vorel@gmail.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>
-Subject: Re: [PATCH ima-evm-utils 1/2] switch to using crun for podman
-Message-ID: <YXfwoOEZZKKII6s9@pevik>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
+        Tue, 26 Oct 2021 10:33:21 -0400
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 115B772C8B8;
+        Tue, 26 Oct 2021 17:30:55 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id ED1924A46EC;
+        Tue, 26 Oct 2021 17:30:54 +0300 (MSK)
+Date:   Tue, 26 Oct 2021 17:30:54 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <petr.vorel@gmail.com>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        "Dmitry V. Levin" <ldv@altlinux.org>
+Subject: Re: [PATCH ima-evm-utils 2/2] upgrade to glibc-2.34 uses clone3
+ causing CI to fail
+Message-ID: <20211026143054.7khp5jxcyn2fzira@altlinux.org>
 References: <20211026024929.535519-1-zohar@linux.ibm.com>
+ <20211026024929.535519-2-zohar@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-In-Reply-To: <20211026024929.535519-1-zohar@linux.ibm.com>
+In-Reply-To: <20211026024929.535519-2-zohar@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+Mimi,
 
-> Fix for:
+On Mon, Oct 25, 2021 at 10:49:29PM -0400, Mimi Zohar wrote:
+> Both opensuse/tumbleweed and Alt Linux have upgraded to glibc-2.34,
+> causing the CI testing to fail.  Disable seccomp (which is not needed
+> anyway, since GA uses throwable virtual environments anyway).
 
-> "container_linux.go:367: starting container process caused: error
-> adding seccomp filter rule for syscall bdflush: permission denied":
-> OCI permission denied"
+JFYI. We decided to update our glibc package to fall-back from clone3 to
+clone in case it's EPERM. So, after some time (perhaps a day) this
+workaround will not be needed for ALT Linux. But this will not hurts
+either and may be beneficial in the future.
 
-I was surprised crun is updated but runc not, but LGTM.
-It'd be nice if somebody test it with public travis (I no longer have access).
+Thanks,
 
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-
-IMHO from a long term perspective it'd be nice to create GitHub Actions profile
-(but that's not related to this patchset).
-
-Kind regards,
-Petr
+> 
+> options: --security-opt seccomp=unconfined
+> 
+> Suggested-by: Vitaly Chikunov <vt@altlinux.org>
+> Acked-by: Petr Vorel <petr.vorel@gmail.com>
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  .github/workflows/ci.yml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+> index 0931f2487d50..ad611ad914b4 100644
+> --- a/.github/workflows/ci.yml
+> +++ b/.github/workflows/ci.yml
+> @@ -103,6 +103,7 @@ jobs:
+>      container:
+>        image: ${{ matrix.container }}
+>        env: ${{ matrix.env }}
+> +      options: --security-opt seccomp=unconfined
+>  
+>      steps:
+>      - name: Show OS
+> -- 
+> 2.27.0
