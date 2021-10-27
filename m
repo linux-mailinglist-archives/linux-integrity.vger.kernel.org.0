@@ -2,29 +2,29 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA28E43C926
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Oct 2021 14:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB9343C953
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Oct 2021 14:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235496AbhJ0MFF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 27 Oct 2021 08:05:05 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57196 "EHLO
+        id S241715AbhJ0MPh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 27 Oct 2021 08:15:37 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57306 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbhJ0MFF (ORCPT
+        with ESMTP id S232242AbhJ0MPh (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 27 Oct 2021 08:05:05 -0400
+        Wed, 27 Oct 2021 08:15:37 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 1BD521F443DB
+        with ESMTPSA id D6CF71F44425
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     apronin@chromium.org, peterhuewe@gmx.de, jarkko@kernel.org,
-        jgg@ziepe.ca,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH] tpm: tpm_tis_spi_cr50: Add default RNG quality
-Date:   Wed, 27 Oct 2021 14:02:33 +0200
-Message-Id: <20211027120233.2489258-1-angelogioacchino.delregno@collabora.com>
+Subject: [RESEND PATCH] tpm: tpm_tis_spi_cr50: Add default RNG quality
+Date:   Wed, 27 Oct 2021 14:12:58 +0200
+Message-Id: <20211027121258.2501124-1-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -45,6 +45,10 @@ conservative quality value was chosen.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
+
+Sorry for the resend, I forgot to include linux-kernel@vger.kernel.org the
+first time.
+
  drivers/char/tpm/tpm_tis_spi_cr50.c | 1 +
  1 file changed, 1 insertion(+)
 
