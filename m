@@ -2,91 +2,126 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC3443DFF6
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Oct 2021 13:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E56243E15E
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Oct 2021 14:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbhJ1L3P (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 28 Oct 2021 07:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbhJ1L3P (ORCPT
+        id S230093AbhJ1M7l (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 28 Oct 2021 08:59:41 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:64460 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229946AbhJ1M7l (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 28 Oct 2021 07:29:15 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F33CC061745;
-        Thu, 28 Oct 2021 04:26:48 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id r2so6035198pgl.10;
-        Thu, 28 Oct 2021 04:26:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=IIgzbCmJH6eDmoU6Rqe6z1SlQ1KC0noTe8OtzZG3ZXc=;
-        b=UH1ojTWBIxdb2Q2DTP4cdVsYkBJ46JX4aOlqk9qcQ1dr/H5hCeSzeDTOmCWhERPTxB
-         JPqJvsAAYTEfszgmTB+0XRpVrKMNu9Io+8ce94JYcp2lB/Zz9KBQ+4KYYy589VU5SmUo
-         K9wrRMhbXvXK4nYR3p02u3LPcX6K4qZzhT1ALYBKZEKN9pGXYhQl2RlkDGomEJuRWFAK
-         Qc7WQnkjOlTaxoRDqihUs7eZnzqDEr9HUZSVu4pzCha4ao1HutC0SlTV8IMxvCYMsGfj
-         kRovxdZZ4/a+GAHk6xMtjJ8PsXkrdYX4BtgYrkt/MDdJ4X0eKBcQfzBdeTXFCcG4gsty
-         sPIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=IIgzbCmJH6eDmoU6Rqe6z1SlQ1KC0noTe8OtzZG3ZXc=;
-        b=qnIWtqoIXUrMU1srsoypTpaG9WATTr54V2F+DsNnd9nT7VSI2F1c+DF/0fFhHIbYIm
-         pVYJC8fIbwdy73goMYuE3kuNb84YitmmNwnh5rRA43OMGjI+b5rDfO7wOJVMuaOi4i5b
-         wqda5uHoCtmS0cA1hQV89S1jHXGSOiOtbR9jz1/Xo5cewPbJ0xFGxKdrQvVEavUjTSwK
-         dbPPnWPSyH1yrbuzRP/t8yaN7pQaUc03anlJYTqzuJy5u4VlddJ7fJdAlbPeNUgi/skB
-         fJGn7K+0QRkrgL9KfyHwBUaemPpVY7PhCb0WhtXaDt3F7AsWfLaymlKPp/SnrtWSMfI0
-         Ed7w==
-X-Gm-Message-State: AOAM5302SQGXhMY4ZXv6gjEY7k+H1KuCgTu0fAxUtAIKN4B9iGscsB7j
-        i7w7QTai0ckDximzVQ0FR9Y=
-X-Google-Smtp-Source: ABdhPJyQ+T3xcRBMgJmU6HlTfB8hDttP6eFuOiS3EhmLiugSYnAQ5DYxGKz0WBvGCzglOpX9nb4X4Q==
-X-Received: by 2002:a62:4ed2:0:b0:47b:f2f9:8812 with SMTP id c201-20020a624ed2000000b0047bf2f98812mr3699488pfb.5.1635420407813;
-        Thu, 28 Oct 2021 04:26:47 -0700 (PDT)
-Received: from raspberrypi ([49.166.114.232])
-        by smtp.gmail.com with ESMTPSA id m16sm3470309pfk.187.2021.10.28.04.26.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 04:26:47 -0700 (PDT)
-Date:   Thu, 28 Oct 2021 12:26:42 +0100
-From:   Austin Kim <austindh.kim@gmail.com>
-To:     zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, austin.kim@lge.com
-Subject: [PATCH] evm: mark evm_fixmode as __ro_after_init
-Message-ID: <20211028112642.GA1110@raspberrypi>
+        Thu, 28 Oct 2021 08:59:41 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19SClxWL011260;
+        Thu, 28 Oct 2021 12:56:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=INVjYdr5gOcGiPS4sk9gH2v6Lz9ouI5VLmcx1ztSyQo=;
+ b=Ke+uy7DrTihhmaJ3oHitCrskzuXMZxX65iUNrDO1fwQOHgFe0eEX3fDSbR36Ej53CmFZ
+ dwnsOfH25Bd01RPAqcAwwJWg9xdyh3ikyc3Xjx04duti83cWHccTvVOx2xA7pQSEv3lf
+ ocrlk5cg2G73UfVOZ1Bj8FeI/2v976cuMVDx3K4HvKz6aWryZUIdVnQnvCjUfvonWnLU
+ wCe78Y/MzkQDV8jTE78xikRsOMvcmkIZV06kGXnNbrNZmbKOo8OpQP7Q3uqJFD4MrmkU
+ 8rA/ueY0kn5iwJ/ZGUroB8Ugmg3XXR4e26CNZDfeIYtXPviN4qkLf820SjKOHisjUHza UQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3byv6er4qt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Oct 2021 12:56:46 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19SCmTlE012057;
+        Thu, 28 Oct 2021 12:56:45 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3byv6er4qd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Oct 2021 12:56:45 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19SCrb9m026734;
+        Thu, 28 Oct 2021 12:56:44 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04dal.us.ibm.com with ESMTP id 3bx4f8vvn5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Oct 2021 12:56:44 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19SCuhvn48955892
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Oct 2021 12:56:43 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3E5FD7805C;
+        Thu, 28 Oct 2021 12:56:43 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 396277806B;
+        Thu, 28 Oct 2021 12:56:40 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.163.12.226])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Oct 2021 12:56:39 +0000 (GMT)
+Message-ID: <5b4ef3212232836b02920e57014d69300b484f20.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/2] tpm: use SM3 instead of SM3_256
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org
+Date:   Thu, 28 Oct 2021 08:56:38 -0400
+In-Reply-To: <20211026075626.61975-3-tianjia.zhang@linux.alibaba.com>
+References: <20211026075626.61975-1-tianjia.zhang@linux.alibaba.com>
+         <20211026075626.61975-3-tianjia.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GWOqV3gAEq8QSKNIJu50pIXY1-qMcU6E
+X-Proofpoint-ORIG-GUID: xFCfz9k46q-l0FnrN5q9B3PNV22O0QGq
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-28_01,2021-10-26_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 malwarescore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2110280069
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Austin Kim <austin.kim@lge.com>
+On Tue, 2021-10-26 at 15:56 +0800, Tianjia Zhang wrote:
+> According to https://tools.ietf.org/id/draft-oscca-cfrg-sm3-01.html,
+> SM3 always produces a 256-bit hash value and there are no plans for
+> other length development, so there is no ambiguity in the name of
+> sm3.
 
-The evm_fixmode is only configurable by command-line option and it is never
-modified outside initcalls, so declaring it with __ro_after_init is better.
+Please just drop this piece.
 
-Signed-off-by: Austin Kim <austin.kim@lge.com>
----
- security/integrity/evm/evm_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[...]
+>         hash=         hash algorithm name as a string. For TPM 1.x
+> the only
+>                       allowed value is sha1. For TPM 2.x the allowed
+> values
+> -                     are sha1, sha256, sha384, sha512 and sm3-256.
+> +                     are sha1, sha256, sha384, sha512 and sm3.
 
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 1c8435dfabee..08f907382c61 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -78,7 +78,7 @@ static struct xattr_list evm_config_default_xattrnames[] = {
- 
- LIST_HEAD(evm_config_xattrnames);
- 
--static int evm_fixmode;
-+static int evm_fixmode __ro_after_init;
- static int __init evm_set_fixmode(char *str)
- {
- 	if (strncmp(str, "fix", 3) == 0)
--- 
-2.20.1
+the hash parameter is an external ABI we can't simply change ... as
+Jarkko already told you.
+
+The rest are constants defined in the TPM standard, which we shouldn't
+change because then it makes everyone wonder why we're deviating.
+
+James
+
+
+
 
