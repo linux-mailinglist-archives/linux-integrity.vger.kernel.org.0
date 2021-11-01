@@ -2,82 +2,86 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C7C4414E8
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Nov 2021 09:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FAA441A78
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Nov 2021 12:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbhKAIIv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Nov 2021 04:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbhKAIIj (ORCPT
+        id S231673AbhKALO1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Nov 2021 07:14:27 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19460 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231485AbhKALO1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Nov 2021 04:08:39 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42011C061714
-        for <linux-integrity@vger.kernel.org>; Mon,  1 Nov 2021 01:06:02 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id e2so28046274ljg.13
-        for <linux-integrity@vger.kernel.org>; Mon, 01 Nov 2021 01:06:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=SFtDbE+6IDkHc1ulMYz3kIam1g8jrqMGveAFEIhzD57obcB2AAsvwDS7G9U5mllj4v
-         CXcMkcBLXp8av6pKrkxlnlH5OKDvvoptJUs33+ZsvH08EiMe99qcW7O6zHQLvSZrgd0O
-         vCM1DFFUxXbOTgTBZUHaqMWAsLsVkwQHIKx7yYArIjJiU9Id6qnVa2AaPiZRD+AlKd5h
-         AdNSKNBm0Kf1bwocLQT9cET1yolKLuAIwOilZUtmrnQSP+fGgJWS3nO8E8Mb56sNH1Bp
-         AO0nfdr8sSYDIc/xE0EXH23DxgT/1mFqpNrA+Y0Xex+/Q8MVRWz+jzSmqE3rPOpMkPfs
-         t3vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=eOwdJ9uG8MadyhsLov3L6A5gDpnh75ZUV/dbdIJ+mmbpWf2PcSOrrh+gmFvpgFM2B5
-         qhjIcOs7bPG/dRgkk6X58sJNm4wPvHTkxf+6xQe+dgrX7ooukMA4Q8+O+pxpjP+Rh2QE
-         ie2GpPfJ5cTnEz6nUSyk4nzw8o8vP6tGdhHVtPVvmOq1T1pUVOcAwzbcLc8xoz0cgbsx
-         GwNahbBva3OBCT5QKcB+L29OuMEZJjvUjz7Hc2rCXcPI3w0sidBuHs7cQriCmmf3pJyy
-         8y8QG13P0uM1ByeN3ielzvbtaLQTcy9lWzMA1viL7hr1OQlZWTdQAaDzvEXJdIeHojA8
-         MPtg==
-X-Gm-Message-State: AOAM533StCkC0NHkuBDDPIGIIgpxrSX1vQeT8t6GIpsTuxwztiVxxvVh
-        I/l8z4QIRBOaeJ2+anPlv09vsWqrdDr+LlWI9vonTqwJzrY=
-X-Google-Smtp-Source: ABdhPJxUF1tFmQzyAoIKyVPAG7R9FZL/KscgZLvfipr9TchgvjoT54aDh6EPcy8Ml6w3HwOZZMYj/oDtLWKn7uRbNdI=
-X-Received: by 2002:a05:651c:548:: with SMTP id q8mr6002668ljp.220.1635753949864;
- Mon, 01 Nov 2021 01:05:49 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:49
- -0700 (PDT)
-Reply-To: aisha.7d@yahoo.com
-From:   Aisha AG <rbx17058@gmail.com>
-Date:   Mon, 1 Nov 2021 00:05:49 -0800
-Message-ID: <CA+KbyydWeN4vHtdJCa8_Ot01GFV1JVo19c-A3KMMDn_Yj4rckg@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 1 Nov 2021 07:14:27 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A19qAOt009654;
+        Mon, 1 Nov 2021 11:11:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=qpzpNeMM353jv+aIU5E5LwGs8Fmfs9hCdTzRofg0u5U=;
+ b=JeH1OKAQ2NpRQ3Tvcqz4wZCHE9qKGXZQ7Xod+6+DtMA7S7FayOAn/Y4xCQucK+yD9RK6
+ w5kggxwjlsLNbjs3Ek7zbRi3WJLyy9ZoAVZsZOIRGfnsbrZJXd3B2m6/k5rsbeJA3lwO
+ td2oAyDPKhrWWt0JD7qODInNPLQkKU2oA+XRZBpxIFprhjXMEAkoV9NGvGwtKMt968PF
+ NgUuNaGqnbRdhLAZJXhx8FpMnXj2m7Yh5TF8Q4BLnJURe7P5fT+uRaLMcSahpFzcOS27
+ eS6shtA3NPeUa4NMp9k+FIqvaqF0Rr/ZaYF+nWExwCqiB/en93kEc+ALoLfYE2gbGpPx pw== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3c2e01sac5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Nov 2021 11:11:52 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1A1B8ZlX020575;
+        Mon, 1 Nov 2021 11:11:49 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3c0wp9h5hr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Nov 2021 11:11:49 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1A1B5Qnw62980468
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 1 Nov 2021 11:05:26 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 341DC11C054;
+        Mon,  1 Nov 2021 11:11:47 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9A27D11C052;
+        Mon,  1 Nov 2021 11:11:46 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.124.155])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  1 Nov 2021 11:11:46 +0000 (GMT)
+Message-ID: <dc8614682d047a3adb1135c626203b4fc21059f4.camel@linux.ibm.com>
+Subject: Re: IMA testsuite?
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Date:   Mon, 01 Nov 2021 07:11:46 -0400
+In-Reply-To: <c8012c58-6cce-1d17-902e-a9e757c39822@schaufler-ca.com>
+References: <c8012c58-6cce-1d17-902e-a9e757c39822.ref@schaufler-ca.com>
+         <c8012c58-6cce-1d17-902e-a9e757c39822@schaufler-ca.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UPjmRP43J1x24azAWGKxBopPon2TCX4b
+X-Proofpoint-ORIG-GUID: UPjmRP43J1x24azAWGKxBopPon2TCX4b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-01_04,2021-11-01_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 spamscore=0 clxscore=1015 mlxlogscore=852 suspectscore=0
+ phishscore=0 priorityscore=1501 adultscore=0 impostorscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111010064
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
--- 
+On Fri, 2021-10-29 at 17:19 -0700, Casey Schaufler wrote:
+> I'm having trouble tracking down an official IMA testsuite.
+> Is there one?
 
-Hello Dear,
+There are tests in LTP, kselftests, eBPF, and ima-evm-utils, but not
+per-se a single full testsuite.
 
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
-Am a Widow and a single Mother with three Children.
+Mimi
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar $27.500.000.00, and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country,may be from there,we can build business relationship
-in the nearest future.
-
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply
-urgently to enable me to provide you more information about the
-investment funds.
-Best Regards
-Mrs Aisha Al-Qaddafi.
