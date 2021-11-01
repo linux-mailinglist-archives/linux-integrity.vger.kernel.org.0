@@ -2,119 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9D744202E
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Nov 2021 19:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B897442035
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Nov 2021 19:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232097AbhKASmM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 1 Nov 2021 14:42:12 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45140 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232027AbhKASmJ (ORCPT
+        id S232156AbhKASn7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 1 Nov 2021 14:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232191AbhKASn5 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 1 Nov 2021 14:42:09 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A1GcDTt006264;
-        Mon, 1 Nov 2021 18:39:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Nzr7lR3aQ3VBWsphZ1B0qGLbhoXGUME2mUDbdc/i00o=;
- b=pdY7NFx5B0KWE423L8WQ/0cl+JeGn22QLbkHgvEkw/MIcnXHMALPLlDa0AAT141uYa8G
- bZz9nf+f6bntn2o70s8BB0PREsoVfixI/Esw73//Ki2RH8vCeV0IyQ3xDjkZr5gJOw4B
- i6fe5ZtaaXPPMydwHyBUXZPtLveKNxoEbpqUObFVbC+dj14GySWPbMcbBCSGlFu51bWx
- MH4rArPQF697kkInBVnXJ/CwAPom16m97PZfJ1F5CAjXMo9qVWtgnQlc7dk5lyWLsyE/
- e5ja3jUcEtQ64kLZTj9BFv93qsyowG+oEUlYAt2z7Z2WgE+DIjnbjZDXC0TGn4zzOd7h 4w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3c2dfgjcuw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 01 Nov 2021 18:39:32 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1A1IR5eM009614;
-        Mon, 1 Nov 2021 18:39:31 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3c2dfgjcu6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 01 Nov 2021 18:39:31 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1A1IdA31003101;
-        Mon, 1 Nov 2021 18:39:30 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3c0wpauum5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 01 Nov 2021 18:39:29 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1A1IX5Hl42336726
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 1 Nov 2021 18:33:05 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 75D0542041;
-        Mon,  1 Nov 2021 18:39:27 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CFE542042;
-        Mon,  1 Nov 2021 18:39:26 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.124.155])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  1 Nov 2021 18:39:26 +0000 (GMT)
-Message-ID: <4d0f219c941bf096658d78a95ca566a76b15b082.camel@linux.ibm.com>
-Subject: Re: [PATCH ima-evm-utils 1/2] switch to using crun for podman
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Petr Vorel <petr.vorel@gmail.com>
-Cc:     linux-integrity@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>
-Date:   Mon, 01 Nov 2021 14:39:26 -0400
-In-Reply-To: <YXfwoOEZZKKII6s9@pevik>
-References: <20211026024929.535519-1-zohar@linux.ibm.com>
-         <YXfwoOEZZKKII6s9@pevik>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
+        Mon, 1 Nov 2021 14:43:57 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308A5C061767
+        for <linux-integrity@vger.kernel.org>; Mon,  1 Nov 2021 11:41:23 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id r12so67686703edt.6
+        for <linux-integrity@vger.kernel.org>; Mon, 01 Nov 2021 11:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rammhold-de.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tK7r+aOUpXiWnfiwAPiSOz1gaCFp1ie4wKIj38RnVS0=;
+        b=ruKobEoKgA+9XBxDsgVW1CRTiVWK+aw/bHsUEJ0s52ltCFSRjtIqfAPoS7wGOBxQr2
+         IUtSLE+xTgVPnOcNQkt/Afjf+zw9SsXwnk0HQqgnjm+lFqMc2HAzqV4NMVVzFqSZ0CG3
+         BXtPJOl0LNHCsG2zYyU5mJqnLTUMjqf55mVBcm/8RzBGawMMHjV84a3LjCF8wbToFYig
+         ZixbsMAyzF0XGTu1dzGfWfKJspHNy1e1BgfOs9lXaabZhexAGWali4LkDy45fbhRKFps
+         oNvk+j1lQ6ZeZ3UD0vV9og0yfN+WHzuPp2gvKKIw52fhwJ9+3gF9OC4EyOnO6v1+q6cG
+         iIvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tK7r+aOUpXiWnfiwAPiSOz1gaCFp1ie4wKIj38RnVS0=;
+        b=amBCVgJ4T0jJNSRxR+FUNWwoe6wjwyXtlhFq0d0YbQHvZZziyCR/jdHHSONriqEEzp
+         Usq4yLy5wqlKPZXc75oe7H6zMilEGlcLjV76JaYN203s61ReOq0kOM4mnYHfIfyJQuh7
+         IhRIy2jB8I1rLMMIZnGzILcUmVzVrbI13FhXIPNG46U5fP56EvIpex3NEewY88vGS3X6
+         7rsVadUiJRByQwrbglofGTsGCliyBwWWX9swHB1vVBEb9YtVKXF4vK/CtjEc3IYH8NpI
+         ECWHbXg4azsGqn+ktZJUbmDSVEXyJbWCZ3Ab0MRlEbgGwsrvRDtFlCKWxMS9i1bjEPIs
+         zrfA==
+X-Gm-Message-State: AOAM533pRBWEH++XVAK4bQQBh5Mht3EM4qzrCxl4/amy9CeqDi1cH/Jg
+        BL5Gs5GaRHWPW7ofxSFnT5UApQ==
+X-Google-Smtp-Source: ABdhPJw1o58zrRvllzKw3O/CP70fCWa3OK8W/Nc/1ktVmi36JGPjLsBMcoTFRiSdotgSABpmTqs4Uw==
+X-Received: by 2002:a05:6402:1242:: with SMTP id l2mr24547785edw.50.1635792081696;
+        Mon, 01 Nov 2021 11:41:21 -0700 (PDT)
+Received: from localhost ([2a00:e67:5c9:a:2e15:c474:2ef7:bc26])
+        by smtp.gmail.com with ESMTPSA id e13sm7175182eje.95.2021.11.01.11.41.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Nov 2021 11:41:20 -0700 (PDT)
+From:   andreas@rammhold.de
+To:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sumit Garg <sumit.garg@linaro.org>
+Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] KEYS: trusted: Fix trusted key backends when building as module
+Date:   Mon,  1 Nov 2021 19:41:14 +0100
+Message-Id: <20211101184115.1468041-1-andreas@rammhold.de>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cAwzuYiDbCmbo0rUx4GqK7PTcqmDB6Ql
-X-Proofpoint-ORIG-GUID: FVBJPDFu2kbdZOv_uFXuOw7eR93AqZLk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-01_07,2021-11-01_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- phishscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015 spamscore=0
- mlxscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111010099
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Petr,
+From: Andreas Rammhold <andreas@rammhold.de>
 
-On Tue, 2021-10-26 at 14:12 +0200, Petr Vorel wrote:
-> Hi Mimi,
-> 
-> > Fix for:
-> 
-> > "container_linux.go:367: starting container process caused: error
-> > adding seccomp filter rule for syscall bdflush: permission denied":
-> > OCI permission denied"
-> 
-> I was surprised crun is updated but runc not, but LGTM.
-> It'd be nice if somebody test it with public travis (I no longer have access).
+Before this commit the kernel could end up with no trusted key sources
+even though both of the currently supported backends (TPM and TEE) were
+compiled as modules. This manifested in the trusted key type not being
+registered at all.
 
-Stefan tested on the public travis, which resulted in updating Alpine,
-Fedora, and Alt to use podman and crun.  Other than the alt:sisyphus
-image prompt, the tests all pass.  I assume this is intermittent.
-    
-     Please select an image:
-      ▸ docker.io/library/alt:sisyphus
-        quay.io/alt:sisyphus
+When checking if a CONFIG_… preprocessor variable is defined we only
+test for the builtin (=y) case and not the module (=m) case. By using
+the IS_REACHABLE() macro we do test for both cases.
 
-> 
-> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+---
 
-thanks!
+This is a resend becuase of this unfortunate timeline:
+  - 2021-05-09: Regression hits mainline with v5.13-rc1
+  - 2021-07-16: Issue reported. v1 of this patch sent out
+  - 2021-07-21: Ahmad sends out alternative patch to fix issue
+  - 2021-07-27: Jarkko (Maintainer) NACKs Ahmad's patch because of scope
+  - 2021-07-29: v2 with fixes sent out
+  - 2021-07-29: Jarkko gives his Reviewed-by and requests one more v3
+  - 2021-07-31: v3 sent out
+  - 2021-09-13: Pinged, no feedback
+  - 2021-09-27: Pinged, Mimi (Maintainer) comments due to to misunderstanding.
+                Question about why this is not merged ignored
+  - 2021-10-11: Pinged, no feedback
 
-Mimi
+v3:
+* Fixed patch formatting
 
-> 
-> IMHO from a long term perspective it'd be nice to create GitHub Actions profile
-> (but that's not related to this patchset).
+v2:
+* Fixed commit message
+* Switched from IS_DEFINED() to IS_REACHABLE()
 
 
+ security/keys/trusted-keys/trusted_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index d5c891d8d3534..5b35f1b876441 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+ MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+ 
+ static const struct trusted_key_source trusted_key_sources[] = {
+-#if defined(CONFIG_TCG_TPM)
++#if IS_REACHABLE(CONFIG_TCG_TPM)
+ 	{ "tpm", &trusted_key_tpm_ops },
+ #endif
+-#if defined(CONFIG_TEE)
++#if IS_REACHABLE(CONFIG_TEE)
+ 	{ "tee", &trusted_key_tee_ops },
+ #endif
+ };
+-- 
+2.33.0
 
