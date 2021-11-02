@@ -2,122 +2,60 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB81F4431A1
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Nov 2021 16:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40734435B7
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Nov 2021 19:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbhKBP2n (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 2 Nov 2021 11:28:43 -0400
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:47482 "EHLO
-        herzl.nuvoton.co.il" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234599AbhKBP2k (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 2 Nov 2021 11:28:40 -0400
-Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 1A2FMgOT005904;
-        Tue, 2 Nov 2021 17:22:42 +0200
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
-        id E47BB63A1D; Tue,  2 Nov 2021 17:22:53 +0200 (IST)
-From:   amirmizi6@gmail.com
-To:     Eyal.Cohen@nuvoton.com, jarkko@kernel.org, oshrialkoby85@gmail.com,
-        alexander.steffen@infineon.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
-        arnd@arndb.de, gregkh@linuxfoundation.org, benoit.houyere@st.com,
-        eajames@linux.ibm.com, joel@jms.id.au
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
-        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
-        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
-        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
-        Amir Mizinski <amirmizi6@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v18 6/6] tpm: Add YAML schema for TPM TIS I2C options
-Date:   Tue,  2 Nov 2021 17:20:56 +0200
-Message-Id: <20211102152056.241769-7-amirmizi6@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20211102152056.241769-1-amirmizi6@gmail.com>
-References: <20211102152056.241769-1-amirmizi6@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S235069AbhKBSkH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 2 Nov 2021 14:40:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36392 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235177AbhKBSkF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 2 Nov 2021 14:40:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 6C8EA6103C;
+        Tue,  2 Nov 2021 18:37:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635878250;
+        bh=KW/6vlseMMQdU9ju+f0Im9d/jyi6hPkLygCy+5iFyYU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=scgivtIsiakuZmYSx7cNLPYdiqzlzWgsX2ECnUf+K1Tb7uObKU/k3AF3jWCmd1Kh5
+         zHvbuea9BqXGS+5+5Y7fiOkOpk1AWrIwFaoV8WoCbHTDwRDIBtOJVZXAbfr4vPEp84
+         IExj1IhGAwlmNxd4xRjQx28Q4Xei8TR3gM5Fc12309mbk1xg3bj7L5ZKxAdu/IfSzQ
+         8jsbLPGAznRdqJ4LQiwsyUFive1bT6KmG0z36C+8A1O7oRRsw5BJucRrz0uRQOl4uw
+         RmKn9+Gp9zoCt5Hj/hHSh5LUcUyXtCxhfOO3dHkwXPgCqQ21MqjNqyZ2xe7+g9e5Xx
+         84DsaCaTGOrwA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 66F4160A90;
+        Tue,  2 Nov 2021 18:37:30 +0000 (UTC)
+Subject: Re: [GIT PULL] integrity subsystem updates for v5.16
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <3f066f52d4937414a9e01c7f46a714e988e6196a.camel@linux.ibm.com>
+References: <3f066f52d4937414a9e01c7f46a714e988e6196a.camel@linux.ibm.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <3f066f52d4937414a9e01c7f46a714e988e6196a.camel@linux.ibm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.16
+X-PR-Tracked-Commit-Id: 32ba540f3c2a7ef61ed5a577ce25069a3d714fc9
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c150d66bd514b21a8d0c4da063d77fb7bf1ecc4b
+Message-Id: <163587825041.14475.16002631597249011515.pr-tracker-bot@kernel.org>
+Date:   Tue, 02 Nov 2021 18:37:30 +0000
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Amir Mizinski <amirmizi6@gmail.com>
+The pull request you sent on Tue, 02 Nov 2021 06:41:09 -0400:
 
-Add a YAML schema to support tpm tis i2c related dt-bindings for the I2c
-PTP based physical layer.
+> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.16
 
-This patch adds the documentation for corresponding device tree bindings of
-I2C based Physical TPM.
-Refer to the 'I2C Interface Definition' section in
-'TCG PC Client PlatformTPMProfile(PTP) Specification' publication
-for specification.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c150d66bd514b21a8d0c4da063d77fb7bf1ecc4b
 
-Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../bindings/security/tpm/tpm-tis-i2c.yaml         | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+Thank you!
 
-diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
-new file mode 100644
-index 0000000..217ba8e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/security/tpm/tpm-tis-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: I2C PTP based TPM Device Tree Bindings
-+
-+maintainers:
-+  - Amir Mizinski <amirmizi6@gmail.com>
-+
-+description:
-+  Device Tree Bindings for I2C based Trusted Platform Module(TPM).
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          # Nuvoton's Trusted Platform Module (TPM) (NPCT75x)
-+          - nuvoton,npct75x
-+      - const: tcg,tpm-tis-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupt:
-+    maxItems: 1
-+
-+  crc-checksum:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      Set this flag to enable CRC checksum.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      tpm@2e {
-+        compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
-+        reg = <0x2e>;
-+        crc-checksum;
-+      };
-+    };
-+...
 -- 
-2.7.4
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
