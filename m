@@ -2,444 +2,360 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F71244464F
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Nov 2021 17:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8C644547A
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Nov 2021 15:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbhKCQ4U convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 3 Nov 2021 12:56:20 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4061 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbhKCQ4U (ORCPT
+        id S231267AbhKDOHx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Nov 2021 10:07:53 -0400
+Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:47749 "EHLO
+        herzl.nuvoton.co.il" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230420AbhKDOHw (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 3 Nov 2021 12:56:20 -0400
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Hkt570wkHz686Hq;
-        Thu,  4 Nov 2021 00:48:43 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Wed, 3 Nov 2021 17:53:40 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.015;
- Wed, 3 Nov 2021 17:53:40 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "deven.desai@linux.microsoft.com" <deven.desai@linux.microsoft.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "eparis@redhat.com" <eparis@redhat.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>
-CC:     "jannh@google.com" <jannh@google.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: RE: [RFC PATCH v7 14/16] scripts: add boot policy generation program
-Thread-Topic: [RFC PATCH v7 14/16] scripts: add boot policy generation program
-Thread-Index: AQHXwGWMtob3cI5FPU6KyidED8CNc6vyIPKAgAAEUjA=
-Date:   Wed, 3 Nov 2021 16:53:40 +0000
-Message-ID: <5b4cdc3c3dba4fe68dfc9590b7d12e48@huawei.com>
-References: <1634151995-16266-1-git-send-email-deven.desai@linux.microsoft.com>
- <1634151995-16266-15-git-send-email-deven.desai@linux.microsoft.com>
- <12aec559d6df4191a39ecaec7a0a378e@huawei.com>
-In-Reply-To: <12aec559d6df4191a39ecaec7a0a378e@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 4 Nov 2021 10:07:52 -0400
+Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
+        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 1A4E23vJ029310;
+        Thu, 4 Nov 2021 16:02:03 +0200
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
+        id B98FE63A1D; Thu,  4 Nov 2021 16:02:14 +0200 (IST)
+From:   amirmizi6@gmail.com
+To:     Eyal.Cohen@nuvoton.com, jarkko@kernel.org, oshrialkoby85@gmail.com,
+        alexander.steffen@infineon.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+        arnd@arndb.de, gregkh@linuxfoundation.org, benoit.houyere@st.com,
+        eajames@linux.ibm.com, joel@jms.id.au
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
+        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
+        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
+        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: [PATCH v19 0/5] Add tpm i2c ptp driver
+Date:   Thu,  4 Nov 2021 16:02:06 +0200
+Message-Id: <20211104140211.6258-1-amirmizi6@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
-> Sent: Wednesday, November 3, 2021 5:43 PM
-> > From: deven.desai@linux.microsoft.com
-> > [mailto:deven.desai@linux.microsoft.com]
-> > From: Deven Bowers <deven.desai@linux.microsoft.com>
-> >
-> > Enables an IPE policy to be enforced from kernel start, enabling access
-> > control based on trust from kernel startup. This is accomplished by
-> > transforming an IPE policy indicated by CONFIG_IPE_BOOT_POLICY into a
-> > c-string literal that is parsed at kernel startup as an unsigned policy.
-> >
-> > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> > ---
-> >
-> > Relevant changes since v6:
-> >   * Move patch 01/12 to [14/16] of the series
-> >
-> > ---
-> >  MAINTAINERS                   |   1 +
-> >  scripts/Makefile              |   1 +
-> >  scripts/ipe/Makefile          |   2 +
-> >  scripts/ipe/polgen/.gitignore |   1 +
-> >  scripts/ipe/polgen/Makefile   |   6 ++
-> >  scripts/ipe/polgen/polgen.c   | 145 ++++++++++++++++++++++++++++++++++
-> >  security/ipe/.gitignore       |   1 +
-> >  security/ipe/Kconfig          |  10 +++
-> >  security/ipe/Makefile         |  13 +++
-> >  security/ipe/ctx.c            |  18 +++++
-> >  10 files changed, 198 insertions(+)
-> >  create mode 100644 scripts/ipe/Makefile
-> >  create mode 100644 scripts/ipe/polgen/.gitignore
-> >  create mode 100644 scripts/ipe/polgen/Makefile
-> >  create mode 100644 scripts/ipe/polgen/polgen.c
-> >  create mode 100644 security/ipe/.gitignore
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index f1e76f791d47..a84ca781199b 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -9283,6 +9283,7 @@ INTEGRITY POLICY ENFORCEMENT (IPE)
-> >  M:	Deven Bowers <deven.desai@linux.microsoft.com>
-> >  M:	Fan Wu <wufan@linux.microsoft.com>
-> >  S:	Supported
-> > +F:	scripts/ipe/
-> >  F:	security/ipe/
-> >
-> >  INTEL 810/815 FRAMEBUFFER DRIVER
-> > diff --git a/scripts/Makefile b/scripts/Makefile
-> > index 9adb6d247818..a31da6d57a36 100644
-> > --- a/scripts/Makefile
-> > +++ b/scripts/Makefile
-> > @@ -41,6 +41,7 @@ targets += module.lds
-> >  subdir-$(CONFIG_GCC_PLUGINS) += gcc-plugins
-> >  subdir-$(CONFIG_MODVERSIONS) += genksyms
-> >  subdir-$(CONFIG_SECURITY_SELINUX) += selinux
-> > +subdir-$(CONFIG_SECURITY_IPE) += ipe
-> >
-> >  # Let clean descend into subdirs
-> >  subdir-	+= basic dtc gdb kconfig mod
-> > diff --git a/scripts/ipe/Makefile b/scripts/ipe/Makefile
-> > new file mode 100644
-> > index 000000000000..e87553fbb8d6
-> > --- /dev/null
-> > +++ b/scripts/ipe/Makefile
-> > @@ -0,0 +1,2 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +subdir-y := polgen
-> > diff --git a/scripts/ipe/polgen/.gitignore b/scripts/ipe/polgen/.gitignore
-> > new file mode 100644
-> > index 000000000000..80f32f25d200
-> > --- /dev/null
-> > +++ b/scripts/ipe/polgen/.gitignore
-> > @@ -0,0 +1 @@
-> > +polgen
-> > diff --git a/scripts/ipe/polgen/Makefile b/scripts/ipe/polgen/Makefile
-> > new file mode 100644
-> > index 000000000000..066060c22b4a
-> > --- /dev/null
-> > +++ b/scripts/ipe/polgen/Makefile
-> > @@ -0,0 +1,6 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +hostprogs-always-y	:= polgen
-> > +HOST_EXTRACFLAGS += \
-> > +	-I$(srctree)/include \
-> > +	-I$(srctree)/include/uapi \
-> > +
-> > diff --git a/scripts/ipe/polgen/polgen.c b/scripts/ipe/polgen/polgen.c
-> > new file mode 100644
-> > index 000000000000..73cf13e743f7
-> > --- /dev/null
-> > +++ b/scripts/ipe/polgen/polgen.c
-> > @@ -0,0 +1,145 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (C) Microsoft Corporation. All rights reserved.
-> > + */
-> > +
-> > +#include <stdlib.h>
-> > +#include <stddef.h>
-> > +#include <stdio.h>
-> > +#include <unistd.h>
-> > +#include <errno.h>
-> > +
-> > +static void usage(const char *const name)
-> > +{
-> > +	printf("Usage: %s OutputFile (PolicyFile)\n", name);
-> > +	exit(EINVAL);
-> > +}
-> > +
-> > +static int policy_to_buffer(const char *pathname, char **buffer, size_t *size)
-> > +{
-> > +	int rc = 0;
-> > +	FILE *fd;
-> > +	char *lbuf;
-> > +	size_t fsize;
-> > +	size_t read;
-> > +
-> > +	fd = fopen(pathname, "r");
-> > +	if (!fd) {
-> > +		rc = errno;
-> > +		goto out;
-> > +	}
-> > +
-> > +	fseek(fd, 0, SEEK_END);
-> > +	fsize = ftell(fd);
-> > +	rewind(fd);
-> > +
-> > +	lbuf = malloc(fsize);
-> > +	if (!lbuf) {
-> > +		rc = ENOMEM;
-> > +		goto out_close;
-> > +	}
-> > +
-> > +	read = fread((void *)lbuf, sizeof(*lbuf), fsize, fd);
-> > +	if (read != fsize) {
-> > +		rc = -1;
-> > +		goto out_free;
-> > +	}
-> > +
-> > +	*buffer = lbuf;
-> > +	*size = fsize;
-> > +	fclose(fd);
-> > +
-> > +	return rc;
-> > +
-> > +out_free:
-> > +	free(lbuf);
-> > +out_close:
-> > +	fclose(fd);
-> > +out:
-> > +	return rc;
-> > +}
-> > +
-> > +static int write_boot_policy(const char *pathname, const char *buf, size_t
-> size)
-> > +{
-> > +	int rc = 0;
-> > +	FILE *fd;
-> > +	size_t i;
-> > +
-> > +	fd = fopen(pathname, "w");
-> > +	if (!fd) {
-> > +		rc = errno;
-> > +		goto err;
-> > +	}
-> > +
-> > +	fprintf(fd, "/* This file is automatically generated.");
-> > +	fprintf(fd, " Do not edit. */\n");
-> > +	fprintf(fd, "#include <stddef.h>\n");
-> > +	fprintf(fd, "\nextern const char *const ipe_boot_policy;\n\n");
-> > +	fprintf(fd, "const char *const ipe_boot_policy =\n");
-> > +
-> > +	if (!buf || size == 0) {
-> > +		fprintf(fd, "\tNULL;\n");
-> > +		fclose(fd);
-> > +		return 0;
-> > +	}
-> > +
-> > +	fprintf(fd, "\t\"");
-> > +
-> > +	for (i = 0; i < size; ++i) {
-> > +		switch (buf[i]) {
-> > +		case '"':
-> > +			fprintf(fd, "\\\"");
-> > +			break;
-> > +		case '\'':
-> > +			fprintf(fd, "'");
-> > +			break;
-> > +		case '\n':
-> > +			fprintf(fd, "\\n\"\n\t\"");
-> > +			break;
-> > +		case '\\':
-> > +			fprintf(fd, "\\\\");
-> > +			break;
-> > +		case '\t':
-> > +			fprintf(fd, "\\t");
-> > +			break;
-> > +		case '\?':
-> > +			fprintf(fd, "\\?");
-> > +			break;
-> > +		default:
-> > +			fprintf(fd, "%c", buf[i]);
-> > +		}
-> > +	}
-> > +	fprintf(fd, "\";\n");
-> > +	fclose(fd);
-> > +
-> > +	return 0;
-> > +
-> > +err:
-> > +	if (fd)
-> > +		fclose(fd);
-> > +	return rc;
-> > +}
-> > +
-> > +int main(int argc, const char *const argv[])
-> > +{
-> > +	int rc = 0;
-> > +	size_t len = 0;
-> > +	char *policy = NULL;
-> > +
-> > +	if (argc < 2)
-> > +		usage(argv[0]);
-> > +
-> > +	if (argc > 2) {
-> > +		rc = policy_to_buffer(argv[2], &policy, &len);
-> > +		if (rc != 0)
-> > +			goto cleanup;
-> > +	}
-> > +
-> > +	rc = write_boot_policy(argv[1], policy, len);
-> > +cleanup:
-> > +	if (policy)
-> > +		free(policy);
-> > +	if (rc != 0)
-> > +		perror("An error occurred during policy conversion: ");
-> > +	return rc;
-> > +}
-> > diff --git a/security/ipe/.gitignore b/security/ipe/.gitignore
-> > new file mode 100644
-> > index 000000000000..eca22ad5ed22
-> > --- /dev/null
-> > +++ b/security/ipe/.gitignore
-> > @@ -0,0 +1 @@
-> > +boot-policy.c
-> > \ No newline at end of file
-> > diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
-> > index fcf82a8152ec..39df680b67a2 100644
-> > --- a/security/ipe/Kconfig
-> > +++ b/security/ipe/Kconfig
-> > @@ -20,6 +20,16 @@ menuconfig SECURITY_IPE
-> >
-> >  if SECURITY_IPE
-> >
-> > +config IPE_BOOT_POLICY
-> > +	string "Integrity policy to apply on system startup"
-> > +	help
-> > +	  This option specifies a filepath to a IPE policy that is compiled
-> > +	  into the kernel. This policy will be enforced until a policy update
-> > +	  is deployed via the $securityfs/ipe/policies/$policy_name/active
-> > +	  interface.
-> > +
-> > +	  If unsure, leave blank.
-> > +
-> >  choice
-> >  	prompt "Hash algorithm used in auditing policies"
-> >  	default IPE_AUDIT_HASH_SHA1
-> > diff --git a/security/ipe/Makefile b/security/ipe/Makefile
-> > index 1e7b2d7fcd9e..89fec670f954 100644
-> > --- a/security/ipe/Makefile
-> > +++ b/security/ipe/Makefile
-> > @@ -7,7 +7,18 @@
-> >
-> >  ccflags-y := -I$(srctree)/security/ipe/modules
-> >
-> > +quiet_cmd_polgen = IPE_POL $(2)
-> > +      cmd_polgen = scripts/ipe/polgen/polgen security/ipe/boot-policy.c $(2)
-> > +
-> > +$(eval $(call config_filename,IPE_BOOT_POLICY))
-> > +
-> > +targets += boot-policy.c
-> > +
-> > +$(obj)/boot-policy.c: scripts/ipe/polgen/polgen
-> > $(IPE_BOOT_POLICY_FILENAME) FORCE
-> > +	$(call if_changed,polgen,$(IPE_BOOT_POLICY_FILENAME))
-> > +
-> >  obj-$(CONFIG_SECURITY_IPE) += \
-> > +	boot-policy.o \
-> >  	ctx.o \
-> >  	eval.o \
-> >  	fs.o \
-> > @@ -21,3 +32,5 @@ obj-$(CONFIG_SECURITY_IPE) += \
-> >  	policyfs.o \
-> >
-> >  obj-$(CONFIG_AUDIT) += audit.o
-> > +
-> > +clean-files := boot-policy.c \
-> > diff --git a/security/ipe/ctx.c b/security/ipe/ctx.c
-> > index fc9b8e467bc9..879acf4ceac5 100644
-> > --- a/security/ipe/ctx.c
-> > +++ b/security/ipe/ctx.c
-> > @@ -15,6 +15,7 @@
-> >  #include <linux/spinlock.h>
-> >  #include <linux/moduleparam.h>
-> >
-> > +extern const char *const ipe_boot_policy;
-> >  static bool success_audit;
-> >  static bool enforce = true;
-> >
-> > @@ -329,6 +330,7 @@ void ipe_put_ctx(struct ipe_context *ctx)
-> >  int __init ipe_init_ctx(void)
-> >  {
-> >  	int rc = 0;
-> > +	struct ipe_policy *p = NULL;
-> >  	struct ipe_context *lns = NULL;
-> >
-> >  	lns = create_ctx();
-> > @@ -342,10 +344,26 @@ int __init ipe_init_ctx(void)
-> >  	WRITE_ONCE(lns->enforce, enforce);
-> >  	spin_unlock(&lns->lock);
-> >
-> > +	if (ipe_boot_policy) {
-> > +		p = ipe_new_policy(ipe_boot_policy, strlen(ipe_boot_policy),
-> > +				   NULL, 0);
-> > +		if (IS_ERR(p)) {
-> > +			rc = PTR_ERR(lns);
-> 
-> This should be:
-> 
-> 	rc = PTR_ERR(p);
-> 
-> > +			goto err;
-> > +		}
-> > +
-> > +		ipe_add_policy(lns, p);
-> > +		rc = ipe_set_active_pol(p);
-> > +		if (!rc)
-> 
-> Here you need to set a non-zero value, so that ipe_init()
-> does not enable the LSM.
+From: Amir Mizinski <amirmizi6@gmail.com>
 
-Actually you probably should just check that rc is not zero
-and goto err.
+This patch set adds support for TPM devices that implement the I2C.
+Interface defined by TCG PTP specification:
+https://trustedcomputinggroup.org/wp-content/uploads/TCG_PC_Client_Platform_TPM_Profile_PTP_2.0_r1.03_v22.pdf
 
-Roberto
+The driver was tested on Raspberry-Pie 3, using Nuvoton NPCT75X TPM.
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
+Interrupts are not implemented yet, preparing it for the next patch.
+This patch is based on initial work by oshri Alkoby, Alexander Steffen and Christophe Ricard
 
-> I would set to 1 a new global variable, like ipe_lsm_enabled,
-> in ipe_init() just before security_add_hooks().
-> 
-> Then, I would add a check of this variable in ipe_init_securityfs()
-> to avoid the kernel panic.
-> 
-> Roberto
-> 
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Li Peng, Zhong Ronghua
-> 
-> > +			goto err;
-> > +	}
-> > +
-> >  	rcu_assign_pointer(*ipe_tsk_ctx(current), lns);
-> > +	ipe_put_policy(p);
-> >
-> >  	return 0;
-> >  err:
-> > +	ipe_put_policy(p);
-> >  	ipe_put_ctx(lns);
-> >  	return rc;
-> >  }
-> > --
-> > 2.33.0
+Changes since version 1:
+-"char:tpm:Add check_data handle to tpm_tis_phy_ops in order to check data integrity"
+        - Fixed and extended commit description.
+        - Fixed an issue regarding handling max retries.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options":
+        -Converted "tpm_tis_i2c.txt" to "tpm-tis-i2c.yaml".
+        - Renamed "tpm_tis-i2c" to "tpm-tis-i2c".
+        - Removed interrupts properties.
+-"char: tpm: add tpm_tis_i2c driver"
+        - Replaced "tpm_tis-i2c" with "tpm-tis-i2c" in "tpm_tis_i2c.c".
+Addressed comments from:
+ - Jarkko Sakkinen: https://patchwork.kernel.org/patch/11236257/
+ - Rob Herring: https://patchwork.kernel.org/patch/11236253/
+
+Changes since version 2:
+- Added 2 new commits with improvements suggested by Benoit Houyere.
+        -"Fix expected bit handling and send all bytes in one shot without last byte in exception"
+        -"Handle an exception for TPM Firmware Update mode."
+- Updated patch to latest v5.5
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options"
+        - Added "interrupts" and "crc-checksum" to properties.
+        - Updated binding description and commit info.
+-"char: tpm: add tpm_tis_i2c driver" (suggested by Benoit Houyere)
+        - Added repeat I2C frame after NACK.
+        - Checksum I2C feature activation in DTS file configuration.
+Addressed comments from:
+ - Rob Herring: https://lore.kernel.org/patchwork/patch/1161287/
+
+Changes since version 3:
+- Updated patch to latest v5.6
+- Updated commits headlines and development credit format by Jarkko Sakkinen suggestion
+-"tpm: tpm_tis: Make implementation of read16 read32 write32 optional"
+        - Updated commit description.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options"
+        - Fixed 'make dt_binding_check' errors on YAML file.
+        - Removed interrupts from required and examples since there is no use for them in current patch.
+Addressed comments from:
+ - Jarkko Sakkinen: https://lore.kernel.org/patchwork/patch/1192101/
+ - Rob Herring: https://lore.kernel.org/patchwork/patch/1192099/
+
+Changes since version 4:
+-"tpm: tpm_tis: Make implementation of read16 read32 write32 optional"
+        -Added a "Reviewed-by" tag:
+-"tpm: tpm_tis: Add check_data handle to tpm_tis_phy_ops in order to check data integrity"
+        -Fixed credit typos.
+-"tpm: tpm_tis: rewrite "tpm_tis_req_canceled()""
+        -Added fixes tag and removed changes for STM.
+-"tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception"
+        -Fixed typos, edited description to be clearer, and added a "Suggested-by" tag.
+-"tpm: Handle an exception for TPM Firmware Update mode."
+        -Added a "Suggested-by" tag.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C options"
+        -Fixed 'make dt_binding_check' errors.
+-"tpm: tpm_tis: add tpm_tis_i2c driver"
+        -Added tested-by tag by Eddie James.
+        -Fixed indent in Kconfig file.
+        -Fixed 'MODULE_DESCRIPTION'.
+Addressed comments from:
+ - Jarkko Sakkinen: https://patchwork.kernel.org/patch/11467645/
+                https://patchwork.kernel.org/patch/11467655/
+                https://patchwork.kernel.org/patch/11467643/
+                https://patchwork.kernel.org/patch/11467659/
+                https://patchwork.kernel.org/patch/11467651/
+ - Rob Herring: https://patchwork.kernel.org/patch/11467653/
+ - Randy Dunlap: https://patchwork.kernel.org/patch/11467651/
+ - Eddie James: https://lore.kernel.org/patchwork/patch/1192104/
+
+Changes since version 5:
+-"tpm: tpm_tis: Add check_data handle to tpm_tis_phy_ops"
+        -Updated short description and fixed long description to be more clear.
+Addressed comments from:
+ - Jarkko Sakkinen: https://lkml.org/lkml/2020/4/6/748
+
+Changes since version 6:
+-"tpm: tpm_tis: Make implementation of read16, read32 and write32 optional"
+        -Fixed short description.
+        -fixed long description proofreading issues.
+-"tpm: tpm_tis: Add check_data handle to tpm_tis_phy_ops"
+        -Fixed long description by Jarkko comments and proofreading issues.
+        -Replaced "check_data" with verify_data_integrity".
+        -New line before return statement.
+-"tpm: tpm_tis: rewrite "tpm_tis_req_canceled()"
+        -Fixed line over 80 characters.
+        -fixed long description proofreading issues.
+-" tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot"
+        -fixed long description proofreading issues.
+-"dt-bindings: tpm: Add YAML schema for TPM TIS I2C option"
+        -Replaced "tpm-tis-i2c@2e" with "tpm_tis@2e".
+        -Fixed CRC_Checksum description.
+-"tpm: tpm_tis: add tpm_tis_i2c driver"
+        -Replaced "depends on CRC_CCIT" with "select CRC_CCIT".
+        -Added tested-by tag by Joel Stanley.
+        -Fixed checkpatch.pl warnings.
+Addressed comments from:
+ - Jarkko Sakkinen:
+        https://lore.kernel.org/patchwork/patch/1221336/
+        https://lore.kernel.org/patchwork/patch/1221337/
+        https://lore.kernel.org/patchwork/patch/1221339/
+ - Joel Stanley:
+        https://lore.kernel.org/patchwork/patch/1220543/
+ - Rob Herring:
+        https://lore.kernel.org/patchwork/patch/1221334/
+
+Changes since version 7:
+- Added a new commit with improvements suggested by Benoit Houyere.
+        -"tpm: tpm_tis: verify TPM_STS register is valid after locality request"
+-"tpm: tpm_tis: Rewrite "tpm_tis_req_canceled()""
+        -Fixed Hash for Fixes tag.
+-"tpm: Add YAML schema for TPM TIS I2C options"
+        -Added a compatible string specific to the nuvoton npct75x chip.
+-"tpm: tpm_tis: add tpm_tis_i2c driver"
+        -added a compatible string according to yaml file.
+Addressed comments from:
+ - Jarkko Sakkinen:
+        https://lore.kernel.org/patchwork/patch/1231524/
+ - Rob Herring:
+        https://lore.kernel.org/patchwork/patch/1231526/
+
+Changes since version 8:
+- "tpm: tpm_tis: Make implementation of read16, read32 and write32 optional"
+        -Fixed a compile error conflicting CR50
+- "tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception"
+        -Moved commit backwards from 4/8 to 2/8 for a better flow with new data integrity check design
+- "tpm: tpm_tis: Add retry in case of protocol failure or data integrity (on I2C only) failure."
+        -Renamed from "tpm: tpm_tis: Add check_data handle to tpm_tis_phy_ops"
+        -Redesign and added a retry for additional error cases.
+- "tpm: Add YAML schema for TPM TIS I2C options"
+        -Fixed Dual-license new binding
+        -Removed "oneOf"
+        -Fixed tpm_tis@2e to tpm@2e
+Addressed comments from:
+ - Jarkko Sakkinen:
+        https://lore.kernel.org/patchwork/patch/1240728/
+        https://lore.kernel.org/patchwork/patch/1240736/
+ - Rob Herring:
+        https://lore.kernel.org/patchwork/patch/1240733/
+
+Changes since version 9:
+- "tpm: Make read{16, 32}() and write32() in tpm_tis_phy_ops optional"
+        -Fixed short description
+- "tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception"
+        -Canceled wait_for_tpm_stat() function renaming.
+        -Fixed long description
+- "tpm: Add YAML schema for TPM TIS I2C options"
+        -Added a reviewed-by tag.
+Addressed comments from:
+ - Jarkko Sakkinen:
+        https://lore.kernel.org/patchwork/patch/1247163/
+        https://lore.kernel.org/patchwork/patch/1247164/
+ - Rob Herring:
+        https://lore.kernel.org/patchwork/patch/1247161/
+
+Changes since version 10:
+- "tpm: Make read{16, 32}() and write32() in tpm_tis_phy_ops optional"
+        -Added a Reviewed-by and Tested-by tags
+- "tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception"
+        -Renamed "mask_result" parameter with "stat"
+- "tpm: tpm_tis: Add retry in case of protocol failure or data integrity (on I2C only) failure."
+        -Edited long description.
+        -Modified tpm_tis_recv() to __tpm_tis_recv() and Introduced a new tpm_tis_recv() function
+Addressed comments from:
+ - Jarkko Sakkinen:
+        https://lore.kernel.org/patchwork/patch/1252428/
+        https://lore.kernel.org/patchwork/patch/1252422/
+        https://lore.kernel.org/patchwork/patch/1252424/
+
+Changes since version 11:
+- "tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception"
+        -Added a "Reviewed-by" tag
+        -Renamed 'wait_for_tpm_stat()' function with 'tpm_tis_wait_for_stat()'
+- "tpm: tpm_tis: Add retry in case of protocol failure."
+        -Removed data integrity check and created a new commit for it.
+        -Edited short and long description.
+- "tpm: tpm_tis: Add verify_data_integrity handle to tpm_tis_phy_ops"
+        -This is a new commit.
+Addressed comments from:
+ - Jarkko Sakkinen:
+        https://lore.kernel.org/patchwork/patch/1258107/
+        https://lore.kernel.org/patchwork/patch/1258110/
+
+Changes since version 12:
+	
+- Moved "tpm: Add YAML schema for TPM TIS I2C options" to end of patch.
+- Removed two commits to be resubmited on later patch:
+        - "tpm: tpm_tis: Add retry in case of protocol failure."
+        - "tpm: tpm_tis: Add verify_data_integrity handle to tpm_tis_phy_ops"
+- "tpm: tpm_tis: add tpm_tis_i2c driver"
+        - Removed verify data integrity (Checksum) functuality from i2c driver.
+		- Edited Long Description.
+		- Updated header comment for tpm_tis_i2c.c
+Addressed comments from:
+ - Jarkko Sakkinen:
+        https://lore.kernel.org/patchwork/patch/1263805/
+        https://lore.kernel.org/patchwork/patch/1263813/
+		
+Changes since version 13:
+	
+- Edited description of commits 1-6 by Jarkko comments.
+- "tpm: Add YAML schema for TPM TIS I2C options"
+        - Fixed YAML compilation error of missing "additionalProperties" field
+Addressed comments from:
+ - Jarkko Sakkinen:
+        https://lkml.org/lkml/2021/8/26/546
+        https://lkml.org/lkml/2021/8/26/548
+	https://lkml.org/lkml/2021/8/26/550
+	https://lkml.org/lkml/2021/8/26/551
+	https://lkml.org/lkml/2021/8/26/552
+	https://lkml.org/lkml/2021/8/26/553
+	https://lkml.org/lkml/2021/8/26/555
+ - Rob Herring:
+	https://lkml.org/lkml/2021/8/26/427
+	
+Changes since version 14:
+
+- "tpm: Make read{16, 32}() and write32() in tpm_tis_phy_ops optional"
+		-Removed commit.
+- "tpm: tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception"
+		-Fixed description and restored "wait_for_tom_stat" to its original name
+- "tpm: tpm_tis: add tpm_tis_i2c driver"
+		-Added read{16, 32}() and write32() functions in i2c driver.
+Addressed comments from:
+ - Jarkko Sakkinen:
+	https://lkml.org/lkml/2021/9/13/2235
+	https://lkml.org/lkml/2021/9/13/2241
+
+Changes since version 15:
+
+- tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception
+	-Fixed and added description
+	-Added a fixed tag
+	-Changed stat parameter name to result.
+- tpm: Add YAML schema for TPM TIS I2C options
+	-Added Reviewd-by tag
+Addressed comments from:
+ - Jarkko Sakkinen:
+	https://www.spinics.net/lists/linux-integrity/msg19686.html	
+ - Rob Herring:
+	https://www.spinics.net/lists/linux-integrity/msg19686.html
+
+Changes since version 16:
+
+- tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception
+	-removed modifing of handeling the last byte on send command for future addition.
+	-fixed minor description issues and fixes tag format.
+-tpm: tpm_tis: Rewrite "tpm_tis_req_canceled()"
+	-fixed fixes tag format.
+Addressed comments from:
+ - Jarkko Sakkinen:
+	https://www.spinics.net/lists/kernel/msg4120640.html
+	https://www.spinics.net/lists/kernel/msg4120641.html
+
+Changes since version 17:
+- tpm_tis: Fix expected bit handling and send all bytes in one shot without last byte in exception
+	-removed "fixed" tag
+	-renamed wait_for_tpm_stat(): tpm_tis_wait_for_stat()
+	-renamed result parameter : expected
+	-fixed description for above changes.
+- tpm: tpm_tis: Rewrite "tpm_tis_req_canceled()"
+	-removed "fixed" tag
+- tpm: tpm_tis: Verify TPM_STS register is valid after locality request
+	-rewrote first peregraph of long description to explain issue
+- tpm: tpm_tis: Add tpm_tis_i2c driver
+	-drop one space from Kconfig help
+Addressed comments from:
+ - Jarkko Sakkinen:
+	https://lkml.org/lkml/2021/10/25/1848
+	https://lkml.org/lkml/2021/10/25/1849
+	https://lkml.org/lkml/2021/10/25/1850
+ - Randy Dunlap
+	https://lkml.org/lkml/2021/10/24/233
+
+Changes since version 18:
+- Removed "tpm: Handle an exception for TPM Firmware Update mode" commit from patch since it is being handled in anoither patch by Borys Movcha.
+- tpm_tis: Fix expected bit handling
+	-Added Reviewd-by tag 
+- tpm: tpm_tis: Rewrite "tpm_tis_req_canceled()"
+	-Removed outer parentheses in final return condition and put it to a single line.
+- tpm: tpm_tis: Verify TPM_STS register is valid after locality request
+	-Fix tpm_tis_wait_for_stat() call
+- tpm: tpm_tis: Add tpm_tis_i2c driver
+	-fix code review comments along the driver by Jarkko
+Addressed comments from:
+ - Jarkko Sakkinen:
+	https://lkml.org/lkml/2021/11/2/978
+	https://lkml.org/lkml/2021/11/2/987
+	https://lkml.org/lkml/2021/11/2/989
+	https://lkml.org/lkml/2021/11/2/993
+
+
+Amir Mizinski (5):
+  tpm_tis: Fix expected bit handling
+  tpm: tpm_tis: Rewrite "tpm_tis_req_canceled()"
+  tpm: tpm_tis: Verify TPM_STS register is valid after locality request
+  tpm: tpm_tis: Add tpm_tis_i2c driver
+  tpm: Add YAML schema for TPM TIS I2C options
+
+ .../bindings/security/tpm/tpm-tis-i2c.yaml         |  52 ++++
+ drivers/char/tpm/Kconfig                           |  12 +
+ drivers/char/tpm/Makefile                          |   1 +
+ drivers/char/tpm/tpm_tis_core.c                    |  72 +++---
+ drivers/char/tpm/tpm_tis_i2c.c                     | 263 +++++++++++++++++++++
+ 5 files changed, 361 insertions(+), 39 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+ create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
+
+-- 
+2.7.4
 
