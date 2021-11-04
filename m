@@ -2,122 +2,96 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8369F44547D
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Nov 2021 15:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E5D445783
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Nov 2021 17:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbhKDOH7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 4 Nov 2021 10:07:59 -0400
-Received: from 212.199.177.27.static.012.net.il ([212.199.177.27]:47757 "EHLO
-        herzl.nuvoton.co.il" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231335AbhKDOH6 (ORCPT
+        id S231635AbhKDQwu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 4 Nov 2021 12:52:50 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:52224 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231670AbhKDQwu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 4 Nov 2021 10:07:58 -0400
-Received: from taln60.nuvoton.co.il (ntil-fw [212.199.177.25])
-        by herzl.nuvoton.co.il (8.13.8/8.13.8) with ESMTP id 1A4E28Lu029325;
-        Thu, 4 Nov 2021 16:02:08 +0200
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10140)
-        id A916363A22; Thu,  4 Nov 2021 16:02:19 +0200 (IST)
-From:   amirmizi6@gmail.com
-To:     Eyal.Cohen@nuvoton.com, jarkko@kernel.org, oshrialkoby85@gmail.com,
-        alexander.steffen@infineon.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
-        arnd@arndb.de, gregkh@linuxfoundation.org, benoit.houyere@st.com,
-        eajames@linux.ibm.com, joel@jms.id.au
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, oshri.alkoby@nuvoton.com,
-        tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
-        Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
-        shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com,
-        Amir Mizinski <amirmizi6@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v19 5/5] tpm: Add YAML schema for TPM TIS I2C options
-Date:   Thu,  4 Nov 2021 16:02:11 +0200
-Message-Id: <20211104140211.6258-6-amirmizi6@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20211104140211.6258-1-amirmizi6@gmail.com>
-References: <20211104140211.6258-1-amirmizi6@gmail.com>
+        Thu, 4 Nov 2021 12:52:50 -0400
+Received: from [10.137.106.139] (unknown [131.107.159.11])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5488920ABA8A;
+        Thu,  4 Nov 2021 09:50:11 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5488920ABA8A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1636044611;
+        bh=70oKxXaC5XNouM0+NDiFgXEE5PMtET77eJLZFYYci9k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QTKVBJVMXPh2gPnr0WaTWevKIfpWcFm2+KUmt6g4+ZerTiyO4bnaGQU9fE12l0+Xh
+         NA6uM9jk0VvhmBHbQp81K7f4KhiJzw0/yqY6vASd8stPO9uNngf5K8DzODGIhlxdTe
+         6sM2ssGJXoFwN71AI5Iv1rQ/NlHEMZ1edwBVJXsQ=
+Message-ID: <99aaf850-21d6-5f8c-0cf1-6c7390b8ceea@linux.microsoft.com>
+Date:   Thu, 4 Nov 2021 09:50:10 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [RFC PATCH v7 04/16] ipe: add userspace interface
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "eparis@redhat.com" <eparis@redhat.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>
+Cc:     "jannh@google.com" <jannh@google.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-audit@redhat.com" <linux-audit@redhat.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+References: <1634151995-16266-1-git-send-email-deven.desai@linux.microsoft.com>
+ <1634151995-16266-5-git-send-email-deven.desai@linux.microsoft.com>
+ <601a323495b745f0a060e67f03af2337@huawei.com>
+From:   Deven Bowers <deven.desai@linux.microsoft.com>
+In-Reply-To: <601a323495b745f0a060e67f03af2337@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Amir Mizinski <amirmizi6@gmail.com>
 
-Add a YAML schema to support tpm tis i2c related dt-bindings for the I2c
-PTP based physical layer.
+On 11/3/2021 2:42 AM, Roberto Sassu wrote:
+>>
+>> +
+>> +/**
+>> + * ipe_init_securityfs: Initialize IPE's securityfs tree at fsinit
+>> + *
+>> + * Return:
+>> + * !0 - Error
+>> + * 0 - OK
+>> + */
+>> +static int __init ipe_init_securityfs(void)
+>> +{
+>> +	int rc = 0;
+>> +	struct ipe_context *ctx = NULL;
+>> +
+>> +	ctx = ipe_current_ctx();
+> Hi Deven
+>
+> the instruction above should be executed only if IPE LSM is
+> enabled. Otherwise, the kernel panics due to the illegal access
+> to the security blob of the task.
 
-This patch adds the documentation for corresponding device tree bindings of
-I2C based Physical TPM.
-Refer to the 'I2C Interface Definition' section in
-'TCG PC Client PlatformTPMProfile(PTP) Specification' publication
-for specification.
+I see. I mistakenly assumed that failure in the LSM init would cause
+a kernel panic (as the system is now booting without a potentially
+required security component) as opposed to just disabling the LSM
+and emitting a warning.
 
-Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../bindings/security/tpm/tpm-tis-i2c.yaml         | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+Easy fix for v8.
 
-diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
-new file mode 100644
-index 0000000..217ba8e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/security/tpm/tpm-tis-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: I2C PTP based TPM Device Tree Bindings
-+
-+maintainers:
-+  - Amir Mizinski <amirmizi6@gmail.com>
-+
-+description:
-+  Device Tree Bindings for I2C based Trusted Platform Module(TPM).
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          # Nuvoton's Trusted Platform Module (TPM) (NPCT75x)
-+          - nuvoton,npct75x
-+      - const: tcg,tpm-tis-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupt:
-+    maxItems: 1
-+
-+  crc-checksum:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      Set this flag to enable CRC checksum.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      tpm@2e {
-+        compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
-+        reg = <0x2e>;
-+        crc-checksum;
-+      };
-+    };
-+...
--- 
-2.7.4
+Thanks for pointing it out.
+
 
