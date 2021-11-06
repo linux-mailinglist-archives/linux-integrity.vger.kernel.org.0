@@ -2,110 +2,128 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED534467EB
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Nov 2021 18:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7833E446E0A
+	for <lists+linux-integrity@lfdr.de>; Sat,  6 Nov 2021 14:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbhKERbw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 5 Nov 2021 13:31:52 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:41520 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234280AbhKERbw (ORCPT
+        id S233769AbhKFNQv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 6 Nov 2021 09:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233775AbhKFNQu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 5 Nov 2021 13:31:52 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A5HBmVU017120;
-        Fri, 5 Nov 2021 17:29:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=KIBOQwiMkltIEZd0nLJ+XGokU70edvB4BdVLlUrPiWI=;
- b=oWmhTHUMNOMIFupYJeGBMj24j5/LBbBGdcx++tSNQd5WRtNe4yzAksWKyTQnjI7dusY1
- ydF/yU3avCRfXU00I08eLUZCDMS5x/6hWRBiwu+Y0OZBueEgxmElWuN9KfjZ1wbnv5nt
- R9Q33e2IUmVVspZLujImeJc33X5E2N21zzVweEthUOub5IsB+4f399idQ5HUEfho1BTt
- oXEnVycnVIJjGn2+ECxDht5F/tLWYsm8mVqx2AUqbkyR/vqzRFc5TSfHe61oFIIuaQpU
- 3HhXMATHArDL5nQhbHthAOH4fAHM5KZ0daAhLBQLdxySq1DUz2mIQ/LQ+uT1n4vzQpE+ jQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3c56aubxxp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Nov 2021 17:29:06 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1A5HLK1n026591;
-        Fri, 5 Nov 2021 17:29:06 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3c56aubxwr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Nov 2021 17:29:05 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1A5HRG4T017754;
-        Fri, 5 Nov 2021 17:29:03 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3c4t4cpxk7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Nov 2021 17:29:03 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1A5HT1BH55837000
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 5 Nov 2021 17:29:01 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1626BA405B;
-        Fri,  5 Nov 2021 17:29:01 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 60C6DA4060;
-        Fri,  5 Nov 2021 17:29:00 +0000 (GMT)
-Received: from sig-9-77-136-168.ibm.com (unknown [9.77.136.168])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  5 Nov 2021 17:29:00 +0000 (GMT)
-Message-ID: <9475f96833540e0601b23b40cbc1dcbc30903ec6.camel@linux.ibm.com>
-Subject: Re: ima-evm-utils: version 1.4 released
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Petr Vorel <pvorel@suse.cz>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        "Bruno E. O. Meneguele" <bmeneg@redhat.com>
-Date:   Fri, 05 Nov 2021 13:28:59 -0400
-In-Reply-To: <e7213f8c-a6f5-f73e-d88f-a264e6d231bb@linux.microsoft.com>
-References: <9af9143c2c90f1ebae6cc34a7100673332cce1a1.camel@linux.ibm.com>
-         <YYToG+8u/edIcc3u@pevik>
-         <e7213f8c-a6f5-f73e-d88f-a264e6d231bb@linux.microsoft.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: k5Pz04of-f2yQTdHy6sbPCJ7MhX7dOiz
-X-Proofpoint-ORIG-GUID: x1PkviYE51m0ng9b2e1-izibCSOSx9Bs
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sat, 6 Nov 2021 09:16:50 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C80C061714
+        for <linux-integrity@vger.kernel.org>; Sat,  6 Nov 2021 06:14:09 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id j28so12286955ila.1
+        for <linux-integrity@vger.kernel.org>; Sat, 06 Nov 2021 06:14:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=b4rYg5SOz5rOM5p5ctP9uplrloJl2DRm6ET8X/kYdOk=;
+        b=PboOpgrfU3ATV+sTop9kQW43x9iMzHQ20rh2Fl49j8fCZ3lUTsVW9KfV5xO4hxVD51
+         bPoMqnmMPVC+TNK1+9DuPHoufPsny/ZQc8V7DVlBItIVJECEOkJWLYJfYbMmeljP2BTy
+         U3LQPK6yTNCmZ2V5FrBbXQ9oREBWsTJusEk3ecXSdgfjIX+RPQj9ry34szfF6cfmj3b3
+         iZDiTN2GTUUce0t8uiM2vVno7fvRfznG3FDFW/DMEHmwoQ3JmXF3ONfqIHbEyeW3ac7l
+         ikl027AG/asdWDw3EcAT1g4MyHZUNxswNo+L9a4clQSAqKpqDWNJorTPNR0iJaRG2Yz5
+         VUgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=b4rYg5SOz5rOM5p5ctP9uplrloJl2DRm6ET8X/kYdOk=;
+        b=O0grUydHdaeLZll4xg8a9Di/aXTwF9jFU6Xm+Y74PCEzgzSPS1Wc/fFdx114hmJYL8
+         VCZEaWiSaeeAf6RpcK8/ZICiWx50RIwNoTfRLTJwLewF9GwAXRY22rgPmEGoUqNHSVZc
+         0rxwvPlJr3T66kIGk5YphiuiMDRNOzhM5zUl0McAo64EwXQn4zqsgOQLTD3RXt5ezat6
+         kYVBGPRHpZ0CbRO8s+J8kLhQcUeqa/r0YLIPBqS4p5NYOXEnSW3pHpsK3Hgc6mdNZNEt
+         jHXuPJZlN9vZYoIHRgeGyArDl8GtmT7vnH1/nBkmspDVds7SZ03wNXoY4oW5jgbxb8qv
+         WeYw==
+X-Gm-Message-State: AOAM531arBjOrd91cLlXzDTo7wjcRqlme6iOmy+X1FuBx+IRu5FG9wZx
+        rChsMFSFYiik+cR9JyQcOmqtXJdrg/0lUdAQdps=
+X-Google-Smtp-Source: ABdhPJwyRufVCIn2FlwFNfbuH57EUFO/tWAYQ/jCX2B12pevHXa4e/VcYC/ax7szP/MNnbRdscVljCs6hhUSs1yr+X8=
+X-Received: by 2002:a92:c263:: with SMTP id h3mr32720586ild.322.1636204448278;
+ Sat, 06 Nov 2021 06:14:08 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-05_02,2021-11-03_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 lowpriorityscore=0 adultscore=0 priorityscore=1501
- malwarescore=0 mlxscore=0 clxscore=1015 phishscore=0 spamscore=0
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111050095
+Received: by 2002:a05:6602:2f03:0:0:0:0 with HTTP; Sat, 6 Nov 2021 06:14:07
+ -0700 (PDT)
+Reply-To: msbelinaya892@gmail.com
+From:   msbelinaya <raymondmicheal919@gmail.com>
+Date:   Sat, 6 Nov 2021 13:14:07 +0000
+Message-ID: <CAM6ZuANNJ_fBYQPVsXqpF250aVygBZdUNz_usy-5C2y6yfvdMA@mail.gmail.com>
+Subject: =?UTF-8?Q?T=C3=BCrkei?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2021-11-05 at 09:21 -0700, Lakshmi Ramasubramanian wrote:
-> On 11/5/2021 1:15 AM, Petr Vorel wrote:
-> > Hi Mimi,
-> > 
-> >> Please refer to the NEWS file for the short summary and the git history
-> >> for details of the ima-evm-utils v1.4 release.
-> 
-> Thanks for the info Mimi.
-> 
-> I checked both "master" and "next-testing" branches in the following, 
-> and I still see 1.3.2 version only.
-> 
-> 	https://github.com/pevik/ima-evm-utils
-> 
-> Is there a different github url for the latest ima-evm-utils source?
+Ich biete meine Freundschaft an und glaube, dass Sie mich mit gutem
+Herzen akzeptieren werden. Ich wurde gedr=C3=A4ngt, Sie zu kontaktieren und
+zu sehen, wie wir einander am besten unterst=C3=BCtzen k=C3=B6nnen. Ich bin=
+ Frau
+Kodjovi Hegbor aus der T=C3=BCrkei und arbeite als Divisionsleiterin f=C3=
+=BCr
+Operationen bei der StandardBNP bank limited Turkey . Ich glaube, es
+ist der Wille Gottes, dass ich Ihnen jetzt begegnen werde. Ich habe
+ein wichtiges gesch=C3=A4ftliches Gespr=C3=A4ch, das ich mit Ihnen teilen
+m=C3=B6chte, von dem ich glaube, dass es Sie interessiert, da es mit Ihrem
+Nachnamen in Verbindung steht und Sie davon profitieren werden.
 
-The original sf git repo https://sourceforge.net/projects/linux-ima/
-and the new github https://github.com/mimizohar/ima-evm-utils.
+ Im Jahr 2006 hat ein B=C3=BCrger Ihres Landes bei meiner Bank ein
+Nicht-Residentenkonto f=C3=BCr 36 Monate des Kalenders im Wert von
+=C2=A38.400.000,00 eingerichtet. Das Ablaufdatum f=C3=BCr diesen Depotvertr=
+ag
+war der 16. Januar 2009. Leider starb er w=C3=A4hrend einer Gesch=C3=A4ftsr=
+eise
+bei einem t=C3=B6dlichen Erdbeben am 12. Mai 2008 in Sichuan, China, bei
+dem mindestens 68.000 Menschen ums Leben kamen.
 
-Mimi
+Das Management meiner Bank hat noch nichts von seinem Tod erfahren,
+ich wusste davon, weil er mein Freund war und ich sein Kontof=C3=BChrer
+war, als das Konto vor meiner Bef=C3=B6rderung er=C3=B6ffnet wurde. Jedoch =
+Herr
+ erw=C3=A4hnte bei der Kontoer=C3=B6ffnung keine n=C3=A4chsten Verwandten/E=
+rben, und
+er war nicht verheiratet und hatte keine Kinder. Letzte Woche hat
+meine Bankdirektion mich gebeten, Anweisungen zu geben, was mit seinen
+Geldern zu tun ist, wenn der Vertrag verl=C3=A4ngert werden soll.
 
+Ich wei=C3=9F, dass dies passieren wird, und deshalb habe ich nach einem
+Mittel gesucht, um mit der Situation umzugehen, denn wenn meine
+Bankdirektoren wissen, dass sie tot sind und keinen Erben haben,
+werden sie das Geld f=C3=BCr ihren pers=C3=B6nlichen Gebrauch nehmen, also =
+Ich
+m=C3=B6chte nicht, dass so etwas passiert. Als ich Ihren Nachnamen sah, war
+ich gl=C3=BCcklich und suche jetzt Ihre Mitarbeit, um Sie als Next of
+Kin/Erbe des Kontos zu pr=C3=A4sentieren, da Sie den gleichen Nachnamen wie
+er haben und meine Bankzentrale das Konto freigeben wird f=C3=BCr dich. Es
+besteht kein Risiko; die Transaktion wird im Rahmen einer legitimen
+Vereinbarung ausgef=C3=BChrt, die Sie vor Rechtsverletzungen sch=C3=BCtzt.
+
+Es ist besser, dass wir das Geld beanspruchen, als es den
+Bankdirektoren zu erlauben, es zu nehmen, sie sind bereits reich. Ich
+bin kein gieriger Mensch, daher schlage ich vor, dass wir das Geld zu
+gleichen Teilen teilen, 50/50% auf beide Parteien. Mein Anteil wird
+mir helfen, mein eigenes Unternehmen zu gr=C3=BCnden und den Erl=C3=B6s f=
+=C3=BCr
+wohlt=C3=A4tige Zwecke zu verwenden, was mein Traum war.
+
+Teilen Sie mir Ihre Meinung zu meinem Vorschlag mit, bitte, ich
+brauche wirklich Ihre Hilfe bei dieser Transaktion. Ich habe Sie
+ausgew=C3=A4hlt, um mir zu helfen, nicht durch mein eigenes Tun, mein
+Lieber, sondern bei Gott wollte ich, dass Sie wissen, dass ich mir
+Zeit zum Beten genommen habe =C3=BCber diese Mitteilung, bevor ich Sie
+jemals kontaktiert habe, teilen Sie mir Ihre Meinung dazu mit und
+behandeln Sie diese Informationen bitte als STRENG GEHEIM. Nach Erhalt
+Ihrer Antwort, ausschlie=C3=9Flich =C3=BCber meine pers=C3=B6nliche E-Mail-=
+Adresse,
+msbelinaya892@gmail.com
+gibt Ihnen Details zur Transaktion. Und eine Kopie der
+Einlagenbescheinigung des Fonds sowie die Gr=C3=BCndungsurkunde der
+Gesellschaft, die den Fonds erstellt hat.
+Gott segne, in Erwartung Ihrer dringenden Antwort
+Mit freundlichen Gr=C3=BC=C3=9Fen
+Frau Kodjovi Hegbor
+msbelinaya892@gmail.com
