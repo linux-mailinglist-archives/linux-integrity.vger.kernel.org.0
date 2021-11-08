@@ -2,113 +2,62 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDD944762A
-	for <lists+linux-integrity@lfdr.de>; Sun,  7 Nov 2021 23:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A83447B1A
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Nov 2021 08:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235655AbhKGWF3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 7 Nov 2021 17:05:29 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:37924 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235654AbhKGWF2 (ORCPT
+        id S237807AbhKHHar (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Nov 2021 02:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237844AbhKHHaY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 7 Nov 2021 17:05:28 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9E363212C2;
-        Sun,  7 Nov 2021 22:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1636322564;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AuwAcJ4HaM7MbmUxUL/7LP4ABH9efUxTbsQvUNRJ0zg=;
-        b=VZBBh2SY0CW1WNPjAVzilyUHUPwlc2zgUyVcxC9cxGA76vyOP1SEWBYSkb6Ra2X5dNq1Nr
-        /1JnH5KACfy7ULQoRZwYcD5Vum2bhxeb2QxJhandi0XCCi6xtyR9AgTgXFQ343NOHZjxfc
-        ldSuz59w6s7stzACNWX8SFjhmhCeZP8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1636322564;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AuwAcJ4HaM7MbmUxUL/7LP4ABH9efUxTbsQvUNRJ0zg=;
-        b=OI/z3YQKDSYd9PYkKNzJY7eQeku2WBAC4toeoN9VqTbmm9UAiyKPZ1hFEPiDuulRsBBxXi
-        hEbv/BER/L+wd+Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 228C513517;
-        Sun,  7 Nov 2021 22:02:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jGjdAwRNiGFzKgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Sun, 07 Nov 2021 22:02:44 +0000
-Date:   Sun, 7 Nov 2021 23:02:42 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        "Bruno E. O. Meneguele" <bmeneg@redhat.com>
-Subject: Re: ima-evm-utils: version 1.4 released
-Message-ID: <YYhNAojmg/OTgSRt@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <9af9143c2c90f1ebae6cc34a7100673332cce1a1.camel@linux.ibm.com>
- <YYToG+8u/edIcc3u@pevik>
- <e7213f8c-a6f5-f73e-d88f-a264e6d231bb@linux.microsoft.com>
+        Mon, 8 Nov 2021 02:30:24 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34C3C061228
+        for <linux-integrity@vger.kernel.org>; Sun,  7 Nov 2021 23:27:33 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id o8so58521081edc.3
+        for <linux-integrity@vger.kernel.org>; Sun, 07 Nov 2021 23:27:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=lohGAXI96njXpZ5r6vgYlUkp2V68iRMzDV25uaLpmT1WmpX2h0YNNnPekuKOrJR7Hh
+         rCcmOUgGjsAkeHEvvQCkM6ux+TyqL0CqGbf0IPfL8V+eIKLF7r3X9QWFup/xVl2xV9qZ
+         NGc0LQ7JpvXhk+YTEHFaFd2QnuENE8mCWi0drmIQkANv1zf9DM6Bfjx/yF/A/b9RtJFU
+         CT2DuJeqJ7evq+rJKQgmUSCIg2GjkqvLZlnb0ekZ1/3u7apFf2k73Uqo2u8YZ8hKmOIw
+         ZGA3M8LZJFGSmW3P+nQyYMCLCtL13s+WCsnPOmCuuFd5xieMsN0vbLhindKIE3OfrP6U
+         BcYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=dhM5G6l9u9lKs+EG26gQHJM0s7/FuxcLJs62OZ8P0sRdVhKkuYWH55eeOBNQqZNP6w
+         SqU8n553DSD9Jkt+wdz2Pmo8yR/N2qacAUmodu6MLRnkim6sEBSX8bcv++1G7yXcy3Aw
+         1XY2fq2a37uoRVe1/2ikNSYj2q/I7+sWuZ52aCaXuIbBs44p0W3JMiXvoehx6vBSOiS/
+         3R+djopZintd7FEzAsGrc69NKE5atygmntBqBfIxFDNzSxDwKR7VeETLCZYKXYfuIMIr
+         efr2AHj/v9ls1w9lEK9F2SIeXpYfqHwlBOClidUXIkdre3FR9cNNEjGAbeZTrRyFa2oX
+         d/ow==
+X-Gm-Message-State: AOAM531kUcS2aPhGchqQgGTPiTNBC69ULcICKM/fsWkqjHIcHdCbJUie
+        qd1pd0BqpLjVsuLku7BnShIf8j3bi6Lmh5fGUCksjPQbfBg=
+X-Google-Smtp-Source: ABdhPJwiROS9SRRNMvDLES4YHo6uT5d60ZUwIiFmBNAm9OxEfLgMU9cee9PqVQWim0XNVifN/Rk5vWcyMQ7rvBndYNE=
+X-Received: by 2002:a05:6402:557:: with SMTP id i23mr66769092edx.176.1636356441798;
+ Sun, 07 Nov 2021 23:27:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e7213f8c-a6f5-f73e-d88f-a264e6d231bb@linux.microsoft.com>
+Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:27:21 -0800 (PST)
+Reply-To: mariaschaefler@gmx.com
+From:   Maria Schaefler <ziskoraa@gmail.com>
+Date:   Mon, 8 Nov 2021 07:27:21 +0000
+Message-ID: <CAJh0FjiFL7uihMBL6ckYO8FJ6tnzM+tBivU2c60yDbG14LZLeA@mail.gmail.com>
+Subject: MY HEART CHOOSE YOU.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Lakshmi, all,
-
-> On 11/5/2021 1:15 AM, Petr Vorel wrote:
-> > Hi Mimi,
-
-> > > Please refer to the NEWS file for the short summary and the git history
-> > > for details of the ima-evm-utils v1.4 release.
-
-> Thanks for the info Mimi.
-
-> I checked both "master" and "next-testing" branches in the following, and I
-> still see 1.3.2 version only.
-
-> 	https://github.com/pevik/ima-evm-utils
-FYI this is my unofficial fork which I used for Travis testing, now used for
-GitHub actions testing. I stated it's unofficial since it's creation in About
-section.
-
-Kind regards,
-Petr
-
-> Is there a different github url for the latest ima-evm-utils source?
-
-> I am seeing the following errors when trying to validate IMA measurement
-> using the util. I'd like to try the latest (v1.4).
-
-> sudo ./evmctl ima_measurement
-> /sys/kernel/security/ima/binary_runtime_measurements  -vv
-
-> Error messages for the above command
-> ------------------------------------
-> Using tsspcrread to read PCRs.
-
-> tpm2_pcr_supported:67 Found 'tsspcrread' in $PATHread_tpm_banks:1923
-> Failed to read sha1 PCRs: (TSS_Socket_Open: Error on connect to
-> localhost:2321)
-
-> read_tpm_banks:1923 Failed to read sha256 PCRs: (TSS_Socket_Open: Error
-> on connect to localhost:2321)
-
-> Failed to read any TPM PCRs
-
-> thanks,
->  -lakshmi
-
-
+Given my current state of health, I have decided to donate what I
+inherited from my late husband to you to help the poor and needy. I am
+Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
+cancer about 2 years ago and I have few months to live according to
+medical experts. Email me for my directives
