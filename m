@@ -2,135 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FD8449EA4
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Nov 2021 23:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2950144A488
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Nov 2021 03:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbhKHW1F (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 8 Nov 2021 17:27:05 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6322 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229627AbhKHW1F (ORCPT
+        id S239105AbhKICUb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 8 Nov 2021 21:20:31 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23856 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238836AbhKICUa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 8 Nov 2021 17:27:05 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A8MNYVV013965;
-        Mon, 8 Nov 2021 22:24:15 GMT
+        Mon, 8 Nov 2021 21:20:30 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A90m3A7021935;
+        Tue, 9 Nov 2021 02:17:40 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=ObuCR1oYdSOvW6kwLjS49gGfTVpg8zrPjP0cS4tjOxI=;
- b=Ovaul1ayQNQdE5MFNsNxpJfVIWq8JX6zAD7N13zTRbzUF3is6OnbmZrHxUB0tRxEZkR4
- uKYvyW32+Glac9qDLxeakTgKmdC+JhXyCsSpHKlBZz5KjnSXrKKoOTmALtXwtiqhLWKe
- LAxKKcKq6m7MDoitDrVDnchRI/YiGTMw2BZQESKxta+2KVlY0f8tHkFt+kpjc9JUWyEU
- m+Xuw3egjj60NOqdNQzPsUqb/9NqLt3YVSdvUypogO/P+nF2FtLsKKl9OT0I/afLwh8N
- Lsa2p66iTHK2n1b0uHm6ttuckApP9eT5Z6pOzqcmkYC0Zs/nenGNMHRak9MVjvwPx2LS PA== 
+ bh=srivzpXQQj1XWX94GmBJogiyqRcek1t80QGSGRKBNUw=;
+ b=ZC+cb4YrFGH/5N3PReXhRK5jVvJLft/lqp4ZqdFMfTs1gOiYlIXLwl9ifIws0lQavbDv
+ RCaoNGkCvStvAhdjMcT/spiNs8dZp1yP2yHDFglA8+kfSr92aegrEIs45+03TuyXEZr8
+ vdGrr8ePqqEbLJgpguwhsyAavsJZA9fcCl/+qjZZqRcaWvmc2L0B4fzm6Fg/v/EfXeJ1
+ iSpW4rfgO5ZfHICrlhrrohyTXnvNLlB/U5TaOkgodeT+KREN69ABQCyM5P/Wcr7RvNjR
+ 67oLPXVPppNgtcYn2qvgFB6qF3PgZbT0/fBHYqYdVWxqvCOtpoWxWP7LuW3tFCCKT8bm /g== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3c7cn6r08h-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3c7erx1ptj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Nov 2021 22:24:15 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1A8MOEVX016655;
-        Mon, 8 Nov 2021 22:24:14 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3c7cn6r080-1
+        Tue, 09 Nov 2021 02:17:39 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1A926hUr032717;
+        Tue, 9 Nov 2021 02:17:39 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3c7erx1psx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Nov 2021 22:24:14 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1A8MMMuY023116;
-        Mon, 8 Nov 2021 22:24:12 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3c5gyjrub2-1
+        Tue, 09 Nov 2021 02:17:39 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1A92Dn0K014479;
+        Tue, 9 Nov 2021 02:17:36 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3c5gyjb44r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Nov 2021 22:24:12 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1A8MHVip65012100
+        Tue, 09 Nov 2021 02:17:36 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1A92HYR6066168
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 8 Nov 2021 22:17:31 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 24A1B4C059;
-        Mon,  8 Nov 2021 22:24:09 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 01B754C046;
-        Mon,  8 Nov 2021 22:24:08 +0000 (GMT)
+        Tue, 9 Nov 2021 02:17:34 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 82E6111C050;
+        Tue,  9 Nov 2021 02:17:34 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1CCD11C052;
+        Tue,  9 Nov 2021 02:17:33 +0000 (GMT)
 Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.5.243])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  8 Nov 2021 22:24:07 +0000 (GMT)
-Message-ID: <e247769212d137e9d1584e30c42a5bebeb3c11c9.camel@linux.ibm.com>
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  9 Nov 2021 02:17:33 +0000 (GMT)
+Message-ID: <ca8a4b45b3d7449b41b244217dddc9c91335780c.camel@linux.ibm.com>
 Subject: Re: ima-evm-utils: version 1.4 released
 From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Ken Goldman <kgold@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
         Vitaly Chikunov <vt@altlinux.org>,
         "Bruno E. O. Meneguele" <bmeneg@redhat.com>
-Date:   Mon, 08 Nov 2021 17:24:07 -0500
-In-Reply-To: <e7bdd3d2-8928-b3d4-852e-83ff3e988bc0@linux.microsoft.com>
+Date:   Mon, 08 Nov 2021 21:17:33 -0500
+In-Reply-To: <YYmLOoa6E78G3ii2@pevik>
 References: <9af9143c2c90f1ebae6cc34a7100673332cce1a1.camel@linux.ibm.com>
          <YYToG+8u/edIcc3u@pevik>
          <e7213f8c-a6f5-f73e-d88f-a264e6d231bb@linux.microsoft.com>
-         <36ee20b3-cdd7-e879-7c8b-235578e41628@linux.ibm.com>
-         <e7bdd3d2-8928-b3d4-852e-83ff3e988bc0@linux.microsoft.com>
+         <9475f96833540e0601b23b40cbc1dcbc30903ec6.camel@linux.ibm.com>
+         <YYmLOoa6E78G3ii2@pevik>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NOL5iOGbJpQeDE09BW61zBQH_Iiaj4e6
-X-Proofpoint-GUID: HKPWBLdbDGjldF2VakC1_VOKfFlhqMH9
+X-Proofpoint-GUID: Y4b2A1bi6B0p-7Hv6C9hyd9PX3tWS0IY
+X-Proofpoint-ORIG-GUID: dxOCfhJFMYzzBGyYvFGfRHV0TXejl9Bv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-08_06,2021-11-08_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- mlxscore=0 adultscore=0 mlxlogscore=999 clxscore=1015 malwarescore=0
- lowpriorityscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111080130
+ definitions=2021-11-08_07,2021-11-08_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 mlxscore=0 clxscore=1011 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
+ adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111090007
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-11-08 at 12:46 -0800, Lakshmi Ramasubramanian wrote:
-> Thanks for the response Ken.
-> 
-> >> I am seeing the following errors when trying to validate IMA 
-> >> measurement using the util. I'd like to try the latest (v1.4).
-> >>
-> >> sudo ./evmctl ima_measurement
-> >> /sys/kernel/security/ima/binary_runtime_measurements  -vv
-> >>
-> >> Error messages for the above command
-> >> ------------------------------------
-> >> Using tsspcrread to read PCRs.
-> >>
-> >> tpm2_pcr_supported:67 Found 'tsspcrread' in $PATHread_tpm_banks:1923
-> >> Failed to read sha1 PCRs: (TSS_Socket_Open: Error on connect to
-> >> localhost:2321)
-> >>
-> >> read_tpm_banks:1923 Failed to read sha256 PCRs: (TSS_Socket_Open: Error
-> >> on connect to localhost:2321)
-> >>
-> >> Failed to read any TPM PCRs
-> >>
-> > 
-> > This sounds like your program is trying to connect to a SW TPM,
-> > and the SW TPM process is not running.
-> > 
-> 
-> There is a physical TPM on the machine where I am running ima-evm-utils 
-> to verify IMA measurements. I want to use that physical TPM and not a 
-> software TPM.
-> 
-> I am seeing the error with v1.4 sources as well.
-> 
-> I will review ima-evm-utils code and check how to get it to use the 
-> physical TPM for validating the IMA measurements.
+Hi Petr,
 
-This release has support for linking with "-libmtss", in addition to
-calling the command line tools.  Check the configure output to see
-which TSS you're using.
+On Mon, 2021-11-08 at 21:40 +0100, Petr Vorel wrote:
+> Github repository is marked as primary. How about moving releases also to
+> GitHub?
 
-If you're using the IBM TSS, first make sure that "tsspcrread -halg
-sha256 -ha 10 -ns", for example, is actually working.
+Done.
 
 thanks,
 
