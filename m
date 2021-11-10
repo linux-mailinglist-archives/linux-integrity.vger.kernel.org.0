@@ -2,172 +2,100 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A2C44BD54
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Nov 2021 09:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6876944C612
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Nov 2021 18:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbhKJIz2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Nov 2021 03:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbhKJIz0 (ORCPT
+        id S231841AbhKJRmY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Nov 2021 12:42:24 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44484 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230230AbhKJRmY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Nov 2021 03:55:26 -0500
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fa8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C5AC061764
-        for <linux-integrity@vger.kernel.org>; Wed, 10 Nov 2021 00:52:39 -0800 (PST)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4HpzBX2JmZzMprpP;
-        Wed, 10 Nov 2021 09:52:36 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4HpzBQ4NYzzlh8Tm;
-        Wed, 10 Nov 2021 09:52:30 +0100 (CET)
-Subject: Re: [fs] a0918006f9: netperf.Throughput_tps -11.6% regression
-To:     Kees Cook <keescook@chromium.org>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     lkp@lists.01.org, lkp@intel.com, ying.huang@intel.com,
-        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20211012192410.2356090-2-mic@digikod.net>
- <20211105064159.GB17949@xsang-OptiPlex-9020>
- <202111090920.4958E610D1@keescook>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <95966337-b36e-f45e-6b16-f433bcb90c4d@digikod.net>
-Date:   Wed, 10 Nov 2021 09:52:51 +0100
-User-Agent: 
-MIME-Version: 1.0
-In-Reply-To: <202111090920.4958E610D1@keescook>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Wed, 10 Nov 2021 12:42:24 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AAHCQ7w011648;
+        Wed, 10 Nov 2021 17:39:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=DsmJTDmYa8Ou29XXykXIjUTIY5EdNVZGfdayt//X1SI=;
+ b=IFU9TaKB+ZFGGaz6licffK4uHbty8THDCH7Hj6LC2KcUFOvKhWeVl5ijW/nXY9Zztive
+ 5JHCmDUTBUl/a6jIdq0AaCwW7rufgDwdYjGsulZcDVebI9WkwJv7ipBJvOn8edDyeBpc
+ YmcDaTUl/GKz16efuq2ZrL9Jjqn39Tmv5gVra+k8b+6wdckFm64N7QoEQEZ1jB3Jr9pd
+ 7ten2aXSudrLibS2toDXj4kPQs+OlNq4dvbACnUuj2LzMD7ZTVwyJ1y5vBLmaKUePhVn
+ tuVfPWapNlQXhARmn9hYGJ4f4F5cMkiX4dDqnssskovEa2UKwgyrc2iYzLfj0N57bDj7 2A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3c8j9e0qtv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Nov 2021 17:39:35 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AAHCs5L014537;
+        Wed, 10 Nov 2021 17:39:35 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3c8j9e0qt4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Nov 2021 17:39:35 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AAHXqCp005851;
+        Wed, 10 Nov 2021 17:39:32 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06fra.de.ibm.com with ESMTP id 3c5gykb91t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Nov 2021 17:39:32 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AAHWpE751315172
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Nov 2021 17:32:51 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7557D52050;
+        Wed, 10 Nov 2021 17:39:30 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.122.189])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7024F52087;
+        Wed, 10 Nov 2021 17:39:29 +0000 (GMT)
+Message-ID: <6213c2f886637f824b14c67de7f9534349417b49.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH] ima: differentiate overlay, pivot_root, and other
+ pathnames
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Michael Peters <michael00peters@gmail.com>
+Cc:     amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu
+Date:   Wed, 10 Nov 2021 12:39:28 -0500
+In-Reply-To: <CAJQqANe-SFvPEEQcQrGUsn9n1aFybCOQaofvnmS+qZGvnNh7nQ@mail.gmail.com>
+References: <CAJQqANe-SFvPEEQcQrGUsn9n1aFybCOQaofvnmS+qZGvnNh7nQ@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bzOCqSqLSHHbM0ebbLhv52CMp5eObhbZ
+X-Proofpoint-GUID: G5MeeHsLaLTk7BHMG7xNU-B0ujXzhGA3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-10_06,2021-11-08_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxscore=0 adultscore=0 impostorscore=0 mlxlogscore=999 priorityscore=1501
+ bulkscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111100087
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Wed, 2021-11-10 at 10:28 -0500, Michael Peters wrote:
 
-On 09/11/2021 18:21, Kees Cook wrote:
-> On Fri, Nov 05, 2021 at 02:41:59PM +0800, kernel test robot wrote:
->>
->>
->> Greeting,
->>
->> FYI, we noticed a -11.6% regression of netperf.Throughput_tps due to commit:
->>
->>
->> commit: a0918006f9284b77397ae4f163f055c3e0f987b2 ("[PATCH v15 1/3] fs: Add trusted_for(2) syscall implementation and related sysctl")
->> url: https://github.com/0day-ci/linux/commits/Micka-l-Sala-n/Add-trusted_for-2-was-O_MAYEXEC/20211013-032533
->> patch link: https://lore.kernel.org/kernel-hardening/20211012192410.2356090-2-mic@digikod.net
->>
->> in testcase: netperf
->> on test machine: 192 threads 4 sockets Intel(R) Xeon(R) Platinum 9242 CPU @ 2.30GHz with 192G memory
->> with following parameters:
->>
->> 	ip: ipv4
->> 	runtime: 300s
->> 	nr_threads: 16
->> 	cluster: cs-localhost
->> 	test: TCP_CRR
->> 	cpufreq_governor: performance
->> 	ucode: 0x5003006
->>
->> test-description: Netperf is a benchmark that can be use to measure various aspect of networking performance.
->> test-url: http://www.netperf.org/netperf/
->>
->>
->> please be noted we made out some further analysis/tests, as Fengwei mentioned:
->> ==============================================================================
->> Here is my investigation result of this regression:
->>
->> If I add patch to make sure the kernel function address and data address is
->> almost same even with this patch, there is almost no performance delta(0.1%)
->> w/o the patch.
->>
->> And if I only make sure function address same w/o the patch, the performance
->> delta is about 5.1%.
->>
->> So suppose this regression is triggered by different function and data address.
->> We don't know why the different address could bring such kind of regression yet
->> ===============================================================================
->>
->>
->> we also tested on other platforms.
->> on a Cooper Lake (Intel(R) Xeon(R) Gold 5318H CPU @ 2.50GHz with 128G memory),
->> we also observed regression but the gap is smaller:
->> =========================================================================================
->> cluster/compiler/cpufreq_governor/ip/kconfig/nr_threads/rootfs/runtime/tbox_group/test/testcase/ucode:
->>   cs-localhost/gcc-9/performance/ipv4/x86_64-rhel-8.3/16/debian-10.4-x86_64-20200603.cgz/300s/lkp-cpl-4sp1/TCP_CRR/netperf/0x700001e
->>
->> commit:
->>   v5.15-rc4
->>   a0918006f9284b77397ae4f163f055c3e0f987b2
->>
->>        v5.15-rc4 a0918006f9284b77397ae4f163f
->> ---------------- ---------------------------
->>          %stddev     %change         %stddev
->>              \          |                \
->>     333492            -5.7%     314346 ±  2%  netperf.Throughput_total_tps
->>      20843            -4.5%      19896        netperf.Throughput_tps
->>
->>
->> but no regression on a 96 threads 2 sockets Ice Lake with 256G memory:
->> =========================================================================================
->> cluster/compiler/cpufreq_governor/ip/kconfig/nr_threads/rootfs/runtime/tbox_group/test/testcase/ucode:
->>   cs-localhost/gcc-9/performance/ipv4/x86_64-rhel-8.3/16/debian-10.4-x86_64-20200603.cgz/300s/lkp-icl-2sp1/TCP_CRR/netperf/0xb000280
->>
->> commit:
->>   v5.15-rc4
->>   a0918006f9284b77397ae4f163f055c3e0f987b2
->>
->>        v5.15-rc4 a0918006f9284b77397ae4f163f
->> ---------------- ---------------------------
->>          %stddev     %change         %stddev
->>              \          |                \
->>     555600            -0.1%     555305        netperf.Throughput_total_tps
->>      34725            -0.1%      34706        netperf.Throughput_tps
->>
->>
->> Fengwei also helped review these results and commented:
->> I suppose these three CPUs have different cache policy. It also could be
->> related with netperf throughput testing.
-> 
-> Does moving the syscall implementation somewhere else change things?
-> That's a _huge_ performance change for something that isn't even called.
-> What's going on here?
+> This looks good, but would be even better if the flag that controlled
+> this was settable in the ima_policy. That's much easier to work with
+> in a lot of DevOps toolchains and pipelines and is similar to how the
+> other ima configuration is done.
 
-This regression doesn't make sense. I guess this is the result of a
-flaky netperf test, maybe because the test machine was overloaded at
-that time.
+Thanks, Michael.  Agreed, which is one of the reasons for posting this
+patch as an RFC.  The other reason is that it is an incomplete
+solution, since it doesn't address mount namespaces.  Any suggestions
+for addressing mount namespaces would be appreciated. Assuming there is
+a benefit for a partial solution, I'll add the per policy rule support.
+
+thanks,
+
+Mimi
+
