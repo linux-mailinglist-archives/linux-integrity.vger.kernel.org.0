@@ -2,593 +2,466 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADE344C877
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Nov 2021 20:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FF344C8AC
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Nov 2021 20:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbhKJTJS (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 10 Nov 2021 14:09:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232729AbhKJTJG (ORCPT
+        id S233058AbhKJTSV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 10 Nov 2021 14:18:21 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19658 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232355AbhKJTSL (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 10 Nov 2021 14:09:06 -0500
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [IPv6:2001:1600:4:17::190e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD687C061208
-        for <linux-integrity@vger.kernel.org>; Wed, 10 Nov 2021 11:06:18 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4HqDpc5Q2wzMq4qX;
-        Wed, 10 Nov 2021 20:06:16 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4HqDpc267Bzlh8Tr;
-        Wed, 10 Nov 2021 20:06:16 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        Wed, 10 Nov 2021 14:18:11 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AAIHhZO027684;
+        Wed, 10 Nov 2021 19:15:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=bJ46XaxAk6yniptvEjJyzQFdkovNXGn8xnAWNNGd3qA=;
+ b=lSv/So7+0uhwlXbuiwAxnP+ybO9IbfhodtsR9XRZd/r599MWonbvgvoMC2f5Art847Eh
+ 6IiE4T6qMBRlEfunxIuDr3v501iBFOCALy13aU3Hdy4L+X5d7WIwPzxa2nzSTJaqp3ak
+ jKFxA3mBtyFt7GhgJZ2PayeJ9AfSXMLFFC/2cDXzzyZvZyH3vFKQK8kJ4xl7j5AZLNYV
+ 1MjEqMHwFXCE6C3a+m81Ul8XfRKpI4a9TqgT8fMWqeGCJq98O54iLV3xSrOBp6P3gnyT
+ xJkq+s5Fe397D1etAcmg1u9C8AF58djlrmKeSvMMWDVfjIJ49nnW1WwgCNkGiVoPkSdV RA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3c8j9e2n0g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Nov 2021 19:15:16 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AAJ1Uf4017974;
+        Wed, 10 Nov 2021 19:15:16 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3c8j9e2n06-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Nov 2021 19:15:16 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AAJ7XH3010800;
+        Wed, 10 Nov 2021 19:15:15 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma02dal.us.ibm.com with ESMTP id 3c5hbcfjrc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Nov 2021 19:15:15 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AAJFDEv37028218
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Nov 2021 19:15:14 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E286E124058;
+        Wed, 10 Nov 2021 19:15:13 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5076B12405C;
+        Wed, 10 Nov 2021 19:15:11 +0000 (GMT)
+Received: from [9.211.115.32] (unknown [9.211.115.32])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 10 Nov 2021 19:15:11 +0000 (GMT)
+Message-ID: <f8665ade-881e-f976-b932-f9a8d4de54c3@linux.vnet.ibm.com>
+Date:   Wed, 10 Nov 2021 14:15:10 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3] integrity: support including firmware ".platform" keys
+ at build time
+Content-Language: en-US
+To:     Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
+Cc:     dhowells@redhat.com, zohar@linux.ibm.com, jarkko@kernel.org,
         linux-security-module@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v16 3/3] selftest/interpreter: Add tests for trusted_for(2) policies
-Date:   Wed, 10 Nov 2021 20:06:26 +0100
-Message-Id: <20211110190626.257017-4-mic@digikod.net>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211110190626.257017-1-mic@digikod.net>
-References: <20211110190626.257017-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        linux-kernel@vger.kernel.org, Seth Forshee <seth@forshee.me>
+References: <20211004145258.14056-1-nayna@linux.ibm.com>
+ <8d7e1609-f77e-834e-cf40-05e19bbc3dbe@canonical.com>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <8d7e1609-f77e-834e-cf40-05e19bbc3dbe@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -iVwnwURkhf8CHF3Pqfjdwxik5RX0fuC
+X-Proofpoint-GUID: P_ndwSH-Olfo26euYC15i2aFC3xvP4L6
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-10_07,2021-11-08_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ mlxscore=0 adultscore=0 impostorscore=0 mlxlogscore=999 priorityscore=1501
+ bulkscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111100094
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
 
-Test that checks performed by trusted_for(2) on file descriptors are
-consistent with noexec mount points and file execute permissions,
-according to the policy configured with the fs.trust_policy sysctl.
+On 11/5/21 10:05, Dimitri John Ledkov wrote:
+> (Changing Seth's email to personal domain one)
+>
+> On 04/10/2021 15:52, Nayna Jain wrote:
+>> Some firmware support secure boot by embedding static keys to verify the
+>> Linux kernel during boot. However, these firmware do not expose an
+>> interface for the kernel to load firmware keys onto ".platform" keyring.
+>> This would prevent kernel signature verification on kexec.
+>>
+>> For these environments, a new function load_builtin_platform_cert() is
+>> defined to load compiled in certificates onto the ".platform" keyring.
+>>
+>> load_certificate_list() is currently used for parsing compiled in
+>> certificates to be loaded onto the .builtin or .blacklist keyrings.
+>> Export load_certificate_list() allowing it to be used for parsing compiled
+>> in ".platform" keyring certificates as well.
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>(auto build test ERROR)
+>> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+>> ---
+>> NOTE: I am wondering if we should split this patch into two:
+>> (https://lore.kernel.org/linux-integrity/be4bd13d-659d-710d-08b9-1a34a65e5c5d@linux.vnet.ibm.com/).
+>> I can do so if you also prefer the same.
+>>
+> Yes, i think you should split the patches into refactor & new feature.
+> It allows one to clearly inspect/validate the no-change refactor, and
+> separately review the newly added feature with clarity.
+>
+> Or maybe avoid the refactor all together, see my optional suggestion at
+> the end.
 
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Reviewed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20211110190626.257017-4-mic@digikod.net
----
+Thanks Dimitri for the feedback. Sorry for the delay in the response, I 
+was on vacation last week.  Yes, I have split the patches now for next 
+version. Answers to other comments are inline.
 
-Changes since v14:
-* Add Reviewed-by Kees Cook.
 
-Changes since v13:
-* Move -I to CFLAGS (suggested by Kees Cook).
-* Update sysctl name.
+>> v3:
+>> * Included Jarkko's feedback
+>>   ** updated patch description to include approach.
+>>   ** removed extern for function declaration in the .h file.
+>> * Included load_certificate_list() within #ifdef CONFIG_KEYS condition.
+>>
+>> v2:
+>> * Fixed the error reported by kernel test robot
+>> * Updated patch description based on Jarkko's feedback.
+>>
+>>   certs/Makefile                                |  3 ++-
+>>   certs/blacklist.c                             |  1 -
+>>   certs/common.c                                |  2 +-
+>>   certs/common.h                                |  9 -------
+>>   certs/system_keyring.c                        |  1 -
+>>   include/keys/system_keyring.h                 |  6 +++++
+>>   security/integrity/Kconfig                    | 10 +++++++
+>>   security/integrity/Makefile                   | 17 +++++++++++-
+>>   security/integrity/digsig.c                   |  2 +-
+>>   security/integrity/integrity.h                |  6 +++++
+>>   .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
+>>   .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
+>>   12 files changed, 91 insertions(+), 15 deletions(-)
+>>   delete mode 100644 certs/common.h
+>>   create mode 100644 security/integrity/platform_certs/platform_cert.S
+>>
+>> diff --git a/certs/Makefile b/certs/Makefile
+>> index 279433783b10..64ee37f38b85 100644
+>> --- a/certs/Makefile
+>> +++ b/certs/Makefile
+>> @@ -3,7 +3,8 @@
+>>   # Makefile for the linux kernel signature checking certificates.
+>>   #
+>>   
+>> -obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o common.o
+>> +obj-$(CONFIG_KEYS) += common.o
+>> +obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o
+>>   obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
+>>   obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
+>>   ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),"")
+>> diff --git a/certs/blacklist.c b/certs/blacklist.c
+>> index c9a435b15af4..b95e9b19c42f 100644
+>> --- a/certs/blacklist.c
+>> +++ b/certs/blacklist.c
+>> @@ -17,7 +17,6 @@
+>>   #include <linux/uidgid.h>
+>>   #include <keys/system_keyring.h>
+>>   #include "blacklist.h"
+>> -#include "common.h"
+>>   
+>>   static struct key *blacklist_keyring;
+>>   
+>> diff --git a/certs/common.c b/certs/common.c
+>> index 16a220887a53..41f763415a00 100644
+>> --- a/certs/common.c
+>> +++ b/certs/common.c
+>> @@ -2,7 +2,7 @@
+>>   
+>>   #include <linux/kernel.h>
+>>   #include <linux/key.h>
+>> -#include "common.h"
+>> +#include <keys/system_keyring.h>
+>>   
+>>   int load_certificate_list(const u8 cert_list[],
+>>   			  const unsigned long list_size,
+>> diff --git a/certs/common.h b/certs/common.h
+>> deleted file mode 100644
+>> index abdb5795936b..000000000000
+>> --- a/certs/common.h
+>> +++ /dev/null
+>> @@ -1,9 +0,0 @@
+>> -/* SPDX-License-Identifier: GPL-2.0-or-later */
+>> -
+>> -#ifndef _CERT_COMMON_H
+>> -#define _CERT_COMMON_H
+>> -
+>> -int load_certificate_list(const u8 cert_list[], const unsigned long list_size,
+>> -			  const struct key *keyring);
+>> -
+>> -#endif
+>> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+>> index 692365dee2bd..d130d5a96e09 100644
+>> --- a/certs/system_keyring.c
+>> +++ b/certs/system_keyring.c
+>> @@ -16,7 +16,6 @@
+>>   #include <keys/asymmetric-type.h>
+>>   #include <keys/system_keyring.h>
+>>   #include <crypto/pkcs7.h>
+>> -#include "common.h"
+>>   
+>>   static struct key *builtin_trusted_keys;
+>>   #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
+>> diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.h
+>> index 6acd3cf13a18..d3f914d9a632 100644
+>> --- a/include/keys/system_keyring.h
+>> +++ b/include/keys/system_keyring.h
+>> @@ -10,6 +10,12 @@
+>>   
+>>   #include <linux/key.h>
+>>   
+>> +#ifdef CONFIG_KEYS
+>> +int load_certificate_list(const u8 cert_list[],
+>> +			  const unsigned long list_size,
+>> +			  const struct key *keyring);
+>> +#endif
+>> +
+>>   #ifdef CONFIG_SYSTEM_TRUSTED_KEYRING
+>>   
+>>   extern int restrict_link_by_builtin_trusted(struct key *keyring,
+>> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+>> index 71f0177e8716..b2009b792882 100644
+>> --- a/security/integrity/Kconfig
+>> +++ b/security/integrity/Kconfig
+>> @@ -62,6 +62,16 @@ config INTEGRITY_PLATFORM_KEYRING
+>>            provided by the platform for verifying the kexec'ed kerned image
+>>            and, possibly, the initramfs signature.
+>>   
+>> +config INTEGRITY_PLATFORM_BUILTIN_KEYS
+>> +        string "Builtin X.509 keys for .platform keyring"
+>> +        depends on KEYS
+>> +        depends on ASYMMETRIC_KEY_TYPE
+>> +        depends on INTEGRITY_PLATFORM_KEYRING
+>> +        help
+>> +          If set, this option should be the filename of a PEM-formatted file
+>> +          containing X.509 certificates to be loaded onto the ".platform"
+>> +          keyring.
+>> +
+>>   config LOAD_UEFI_KEYS
+>>          depends on INTEGRITY_PLATFORM_KEYRING
+>>          depends on EFI
+>> diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+>> index 7ee39d66cf16..a45f083589b8 100644
+>> --- a/security/integrity/Makefile
+>> +++ b/security/integrity/Makefile
+>> @@ -3,13 +3,18 @@
+>>   # Makefile for caching inode integrity data (iint)
+>>   #
+>>   
+>> +quiet_cmd_extract_certs  = EXTRACT_CERTS   $(patsubst "%",%,$(2))
+>> +      cmd_extract_certs  = scripts/extract-cert $(2) $@
+>> +$(eval $(call config_filename,INTEGRITY_PLATFORM_BUILTIN_KEYS))
+>> +
+>>   obj-$(CONFIG_INTEGRITY) += integrity.o
+>>   
+>>   integrity-y := iint.o
+>>   integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
+>>   integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
+>>   integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
+>> -integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o
+>> +integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o \
+>> +						  platform_certs/platform_cert.o
+>>   integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
+>>   				      platform_certs/load_uefi.o \
+>>   				      platform_certs/keyring_handler.o
+>> @@ -19,3 +24,13 @@ integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
+>>                                        platform_certs/keyring_handler.o
+>>   obj-$(CONFIG_IMA)			+= ima/
+>>   obj-$(CONFIG_EVM)			+= evm/
+>> +
+>> +
+>> +$(obj)/platform_certs/platform_cert.o: $(obj)/platform_certs/platform_certificate_list
+>> +
+>> +targets += platform_certificate_list
+>> +
+>> +$(obj)/platform_certs/platform_certificate_list: scripts/extract-cert $(INTEGRITY_PLATFORM_BUILTIN_KEYS_FILENAME) FORCE
+>> +	$(call if_changed,extract_certs,$(CONFIG_INTEGRITY_PLATFORM_BUILTIN_KEYS))
+>> +
+>> +clean-files := platform_certs/platform_certificate_list
+>> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+>> index 3b06a01bd0fd..0ea40ed8dfcb 100644
+>> --- a/security/integrity/digsig.c
+>> +++ b/security/integrity/digsig.c
+>> @@ -38,7 +38,7 @@ static const char * const keyring_name[INTEGRITY_KEYRING_MAX] = {
+>>   #define restrict_link_to_ima restrict_link_by_builtin_trusted
+>>   #endif
+>>   
+>> -static struct key *integrity_keyring_from_id(const unsigned int id)
+>> +struct key *integrity_keyring_from_id(const unsigned int id)
+>>   {
+>>   	if (id >= INTEGRITY_KEYRING_MAX)
+>>   		return ERR_PTR(-EINVAL);
+>> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+>> index 547425c20e11..feb84e1b1105 100644
+>> --- a/security/integrity/integrity.h
+>> +++ b/security/integrity/integrity.h
+>> @@ -167,6 +167,7 @@ int __init integrity_init_keyring(const unsigned int id);
+>>   int __init integrity_load_x509(const unsigned int id, const char *path);
+>>   int __init integrity_load_cert(const unsigned int id, const char *source,
+>>   			       const void *data, size_t len, key_perm_t perm);
+>> +struct key *integrity_keyring_from_id(const unsigned int id);
+>>   #else
+>>   
+>>   static inline int integrity_digsig_verify(const unsigned int id,
+>> @@ -194,6 +195,11 @@ static inline int __init integrity_load_cert(const unsigned int id,
+>>   {
+>>   	return 0;
+>>   }
+>> +
+>> +static inline struct key *integrity_keyring_from_id(const unsigned int id)
+>> +{
+>> +	return ERR_PTR(-EOPNOTSUPP);
+>> +}
+>>   #endif /* CONFIG_INTEGRITY_SIGNATURE */
+>>   
+>>   #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
+>> diff --git a/security/integrity/platform_certs/platform_cert.S b/security/integrity/platform_certs/platform_cert.S
+>> new file mode 100644
+>> index 000000000000..20bccce5dc5a
+>> --- /dev/null
+>> +++ b/security/integrity/platform_certs/platform_cert.S
+>> @@ -0,0 +1,23 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+> My personal preference would be to have platform_cert.S next to all the
+> other "extract certs and build an object out of them", as in
+> /certs/platform_cert.S right next to the other similar .S files, i.e
+> system_certificates.S and revocation_certificates.S it would make it
+> easier to inspect the build and find all the various types of built-in keys.
+>
+> This is a minor comment/suggestion, that you can reject.
 
-Changes since v12:
-* Fix Makefile's license.
+I think anything platform related should be in the platform_certs/ 
+directory.
 
-Changes since v10:
-* Update selftest Makefile.
 
-Changes since v9:
-* Rename the syscall and the sysctl.
-* Update tests for enum trusted_for_usage
+>
+>> +#include <linux/export.h>
+>> +#include <linux/init.h>
+>> +
+>> +	__INITRODATA
+>> +
+>> +	.align 8
+>> +#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
+>> +	.globl platform_certificate_list
+>> +platform_certificate_list:
+>> +__cert_list_start:
+>> +	.incbin "security/integrity/platform_certs/platform_certificate_list"
+>> +__cert_list_end:
+>> +#endif
+>> +
+>> +	.align 8
+>> +	.globl platform_certificate_list_size
+>> +platform_certificate_list_size:
+>> +#ifdef CONFIG_64BIT
+>> +	.quad __cert_list_end - __cert_list_start
+>> +#else
+>> +	.long __cert_list_end - __cert_list_start
+>> +#endif
+>> diff --git a/security/integrity/platform_certs/platform_keyring.c b/security/integrity/platform_certs/platform_keyring.c
+>> index bcafd7387729..17535050d08d 100644
+>> --- a/security/integrity/platform_certs/platform_keyring.c
+>> +++ b/security/integrity/platform_certs/platform_keyring.c
+>> @@ -12,8 +12,12 @@
+>>   #include <linux/cred.h>
+>>   #include <linux/err.h>
+>>   #include <linux/slab.h>
+>> +#include <keys/system_keyring.h>
+>>   #include "../integrity.h"
+>>   
+>> +extern __initconst const u8 platform_certificate_list[];
+>> +extern __initconst const unsigned long platform_certificate_list_size;
+>> +
+>>   /**
+>>    * add_to_platform_keyring - Add to platform keyring without validation.
+>>    * @source: Source of key
+>> @@ -37,6 +41,28 @@ void __init add_to_platform_keyring(const char *source, const void *data,
+>>   		pr_info("Error adding keys to platform keyring %s\n", source);
+>>   }
+>>   
+> I think the below hunk should be guarded with #ifdef
+> CONFIG_INTEGRITY_PLATFORM_BUILTIN_KEYS, similar to how similar call is
+> ifdef'ed in case of revocation keys i.e. see ifdef
+> CONFIG_SYSTEM_REVOCATION_LIST in certs/blacklist.c. Because one can
+> configure a kernel with a platform keyring, but without platform builtin
+> keys.
+>
+> I think this must be be fixed.
 
-Changes since v8:
-* Update with the dedicated syscall introspect_access(2) and the renamed
-  fs.introspection_policy sysctl.
-* Remove check symlink which can't be use as is anymore.
-* Use socketpair(2) to test UNIX socket.
+If there are no builtin keys configured, then size would be zero and 
+load_certificate_list would just return. I am not sure why it had to be 
+ifdef'ed for revocation, I do not see the same for loading system 
+certificates onto system keyring. Please let me know if you think I am 
+missing something.
 
-Changes since v7:
-* Update tests with faccessat2/AT_INTERPRETED, including new ones to
-  check that setting R_OK or W_OK returns EINVAL.
-* Add tests for memfd, pipefs and nsfs.
-* Rename and move back tests to a standalone directory.
 
-Changes since v6:
-* Add full combination tests for all file types, including block
-  devices, character devices, fifos, sockets and symlinks.
-* Properly save and restore initial sysctl value for all tests.
+>
+>> +static __init int load_builtin_platform_cert(void)
+>> +{
+>> +	const u8 *p;
+>> +	unsigned long size;
+>> +	int rc;
+>> +	struct key *keyring;
+>> +
+>> +	p = platform_certificate_list;
+>> +	size = platform_certificate_list_size;
+>> +
+>> +	keyring = integrity_keyring_from_id(INTEGRITY_KEYRING_PLATFORM);
+>> +	if (IS_ERR(keyring))
+>> +		return PTR_ERR(keyring);
+>> +
+>> +	rc = load_certificate_list(p, size, keyring);
+>> +	if (rc)
+>> +		pr_info("Error adding keys to platform keyring %d\n", rc);
+>> +
+>> +	return rc;
+>> +}
+>> +late_initcall(load_builtin_platform_cert);
+>> +
+>
+> Some more general comment:
+> I do wonder if the refactor of load_certificate_list can be somehow
+> avoided. For example, when platform keyring is allocated it calls
+> set_platform_trusted_keys() from certs/system-keyring.c which could add
+> a call to load_builtin_platform_cert, and it already has a handle to the
+> platform keyring. The set_platform_trusted_keys() could call to
+> load_certificate_list there without late_initcall, alocating variables,
+> and looking up the integrity_keyring_from id. It would make this feature
+> patch very concise and straight forward then.
+>
+> That way builtin platform certs will be done before platform specific
+> load_*.c things are done. But also it will make builtin certs loading be
+> done in a different place from the rest of the platform certs loading
+> (e.g. the uefi one). So maybe doing builtin certs loading, next to all
+> other platform cert loading makes sense, despite it being away from
+> other builtin certs loading into other keyrings.
+>
+> I am divided on this =)
 
-Changes since v5:
-* Refactor with FIXTURE_VARIANT, which make the tests much more easy to
-  read and maintain.
-* Save and restore initial sysctl value (suggested by Kees Cook).
-* Test with a sysctl value of 0.
-* Check errno in sysctl_access_write test.
-* Update tests for the CAP_SYS_ADMIN switch.
-* Update tests to check -EISDIR (replacing -EACCES).
-* Replace FIXTURE_DATA() with FIXTURE() (spotted by Kees Cook).
-* Use global const strings.
+Yes, I had also thought about it. I saw that set_platform_trusted_keys() 
+call is dependent on CONFIG_SYSTEM_TRUSTED_KEYRING. By design, it should 
+be possible to load platform certs onto the platform keyring even when 
+the system keyring is not enabled. So, I preferred to keep it separate 
+and in platform_keyring.c.
 
-Changes since v3:
-* Replace RESOLVE_MAYEXEC with O_MAYEXEC.
-* Add tests to check that O_MAYEXEC is ignored by open(2) and openat(2).
+Thanks & Regards,
 
-Changes since v2:
-* Move tests from exec/ to openat2/ .
-* Replace O_MAYEXEC with RESOLVE_MAYEXEC from openat2(2).
-* Cleanup tests.
-
-Changes since v1:
-* Move tests from yama/ to exec/ .
-* Fix _GNU_SOURCE in kselftest_harness.h .
-* Add a new test sysctl_access_write to check if CAP_MAC_ADMIN is taken
-  into account.
-* Test directory execution which is always forbidden since commit
-  73601ea5b7b1 ("fs/open.c: allow opening only regular files during
-  execve()"), and also check that even the root user can not bypass file
-  execution checks.
-* Make sure delete_workspace() always as enough right to succeed.
-* Cosmetic cleanup.
----
- tools/testing/selftests/Makefile              |   1 +
- .../testing/selftests/interpreter/.gitignore  |   2 +
- tools/testing/selftests/interpreter/Makefile  |  21 +
- tools/testing/selftests/interpreter/config    |   1 +
- .../selftests/interpreter/trust_policy_test.c | 362 ++++++++++++++++++
- 5 files changed, 387 insertions(+)
- create mode 100644 tools/testing/selftests/interpreter/.gitignore
- create mode 100644 tools/testing/selftests/interpreter/Makefile
- create mode 100644 tools/testing/selftests/interpreter/config
- create mode 100644 tools/testing/selftests/interpreter/trust_policy_test.c
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index c852eb40c4f7..3a032a545f74 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -20,6 +20,7 @@ TARGETS += ftrace
- TARGETS += futex
- TARGETS += gpio
- TARGETS += intel_pstate
-+TARGETS += interpreter
- TARGETS += ipc
- TARGETS += ir
- TARGETS += kcmp
-diff --git a/tools/testing/selftests/interpreter/.gitignore b/tools/testing/selftests/interpreter/.gitignore
-new file mode 100644
-index 000000000000..82a4846cbc4b
---- /dev/null
-+++ b/tools/testing/selftests/interpreter/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+/*_test
-diff --git a/tools/testing/selftests/interpreter/Makefile b/tools/testing/selftests/interpreter/Makefile
-new file mode 100644
-index 000000000000..7402fdb6533f
---- /dev/null
-+++ b/tools/testing/selftests/interpreter/Makefile
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS += -Wall -O2 -I$(khdr_dir)
-+LDLIBS += -lcap
-+
-+src_test := $(wildcard *_test.c)
-+TEST_GEN_PROGS := $(src_test:.c=)
-+
-+KSFT_KHDR_INSTALL := 1
-+include ../lib.mk
-+
-+khdr_dir = $(top_srcdir)/usr/include
-+
-+$(khdr_dir)/asm-generic/unistd.h: khdr
-+	@:
-+
-+$(khdr_dir)/linux/trusted-for.h: khdr
-+	@:
-+
-+$(OUTPUT)/%_test: %_test.c $(khdr_dir)/asm-generic/unistd.h $(khdr_dir)/linux/trusted-for.h ../kselftest_harness.h
-+	$(LINK.c) $< $(LDLIBS) -o $@
-diff --git a/tools/testing/selftests/interpreter/config b/tools/testing/selftests/interpreter/config
-new file mode 100644
-index 000000000000..dd53c266bf52
---- /dev/null
-+++ b/tools/testing/selftests/interpreter/config
-@@ -0,0 +1 @@
-+CONFIG_SYSCTL=y
-diff --git a/tools/testing/selftests/interpreter/trust_policy_test.c b/tools/testing/selftests/interpreter/trust_policy_test.c
-new file mode 100644
-index 000000000000..b59f07f537ad
---- /dev/null
-+++ b/tools/testing/selftests/interpreter/trust_policy_test.c
-@@ -0,0 +1,362 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test trusted_for(2) with fs.trusted_for_policy sysctl
-+ *
-+ * Copyright © 2018-2020 ANSSI
-+ *
-+ * Author: Mickaël Salaün <mic@digikod.net>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <asm-generic/unistd.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/trusted-for.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/capability.h>
-+#include <sys/mman.h>
-+#include <sys/mount.h>
-+#include <sys/socket.h>
-+#include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/sysmacros.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#ifndef trusted_for
-+static int trusted_for(const int fd, const enum trusted_for_usage usage,
-+		const __u32 flags)
-+{
-+	errno = 0;
-+	return syscall(__NR_trusted_for, fd, usage, flags);
-+}
-+#endif
-+
-+static const char sysctl_path[] = "/proc/sys/fs/trusted_for_policy";
-+
-+static const char workdir_path[] = "./test-mount";
-+static const char reg_file_path[] = "./test-mount/regular_file";
-+static const char dir_path[] = "./test-mount/directory";
-+static const char block_dev_path[] = "./test-mount/block_device";
-+static const char char_dev_path[] = "./test-mount/character_device";
-+static const char fifo_path[] = "./test-mount/fifo";
-+
-+static void ignore_dac(struct __test_metadata *_metadata, int override)
-+{
-+	cap_t caps;
-+	const cap_value_t cap_val[2] = {
-+		CAP_DAC_OVERRIDE,
-+		CAP_DAC_READ_SEARCH,
-+	};
-+
-+	caps = cap_get_proc();
-+	ASSERT_NE(NULL, caps);
-+	ASSERT_EQ(0, cap_set_flag(caps, CAP_EFFECTIVE, 2, cap_val,
-+				override ? CAP_SET : CAP_CLEAR));
-+	ASSERT_EQ(0, cap_set_proc(caps));
-+	EXPECT_EQ(0, cap_free(caps));
-+}
-+
-+static void ignore_sys_admin(struct __test_metadata *_metadata, int override)
-+{
-+	cap_t caps;
-+	const cap_value_t cap_val[1] = {
-+		CAP_SYS_ADMIN,
-+	};
-+
-+	caps = cap_get_proc();
-+	ASSERT_NE(NULL, caps);
-+	ASSERT_EQ(0, cap_set_flag(caps, CAP_EFFECTIVE, 1, cap_val,
-+				override ? CAP_SET : CAP_CLEAR));
-+	ASSERT_EQ(0, cap_set_proc(caps));
-+	EXPECT_EQ(0, cap_free(caps));
-+}
-+
-+static void test_omx(struct __test_metadata *_metadata,
-+		const char *const path, const int err_access)
-+{
-+	int flags = O_RDONLY | O_CLOEXEC;
-+	int fd, access_ret, access_errno;
-+
-+	/* Do not block on pipes. */
-+	if (path == fifo_path)
-+		flags |= O_NONBLOCK;
-+
-+	fd = open(path, flags);
-+	ASSERT_LE(0, fd) {
-+		TH_LOG("Failed to open %s: %s", path, strerror(errno));
-+	}
-+	access_ret = trusted_for(fd, TRUSTED_FOR_EXECUTION, 0);
-+	access_errno = errno;
-+	if (err_access) {
-+		ASSERT_EQ(err_access, access_errno) {
-+			TH_LOG("Wrong error for trusted_for(2) with %s: %s",
-+					path, strerror(access_errno));
-+		}
-+		ASSERT_EQ(-1, access_ret);
-+	} else {
-+		ASSERT_EQ(0, access_ret) {
-+			TH_LOG("Access denied for %s: %s", path, strerror(access_errno));
-+		}
-+	}
-+
-+	/* Tests unsupported trusted usage. */
-+	access_ret = trusted_for(fd, 0, 0);
-+	ASSERT_EQ(-1, access_ret);
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	access_ret = trusted_for(fd, 2, 0);
-+	ASSERT_EQ(-1, access_ret);
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	EXPECT_EQ(0, close(fd));
-+}
-+
-+static void test_policy_fd(struct __test_metadata *_metadata, const int fd,
-+		const bool has_policy)
-+{
-+	const int ret = trusted_for(fd, TRUSTED_FOR_EXECUTION, 0);
-+
-+	if (has_policy) {
-+		ASSERT_EQ(-1, ret);
-+		ASSERT_EQ(EACCES, errno) {
-+			TH_LOG("Wrong error for trusted_for(2) with FD: %s", strerror(errno));
-+		}
-+	} else {
-+		ASSERT_EQ(0, ret) {
-+			TH_LOG("Access denied for FD: %s", strerror(errno));
-+		}
-+	}
-+}
-+
-+FIXTURE(access) {
-+	char initial_sysctl_value;
-+	int memfd, pipefd;
-+	int pipe_fds[2], socket_fds[2];
-+};
-+
-+static void test_file_types(struct __test_metadata *_metadata, FIXTURE_DATA(access) *self,
-+		const int err_code, const bool has_policy)
-+{
-+	/* Tests are performed on a tmpfs mount point. */
-+	test_omx(_metadata, reg_file_path, err_code);
-+	test_omx(_metadata, dir_path, has_policy ? EACCES : 0);
-+	test_omx(_metadata, block_dev_path, has_policy ? EACCES : 0);
-+	test_omx(_metadata, char_dev_path, has_policy ? EACCES : 0);
-+	test_omx(_metadata, fifo_path, has_policy ? EACCES : 0);
-+
-+	/* Checks that exec is denied for any socket FD. */
-+	test_policy_fd(_metadata, self->socket_fds[0], has_policy);
-+
-+	/* Checks that exec is denied for any memfd. */
-+	test_policy_fd(_metadata, self->memfd, has_policy);
-+
-+	/* Checks that exec is denied for any pipefs FD. */
-+	test_policy_fd(_metadata, self->pipefd, has_policy);
-+}
-+
-+static void test_files(struct __test_metadata *_metadata, FIXTURE_DATA(access) *self,
-+		const int err_code, const bool has_policy)
-+{
-+	/* Tests as root. */
-+	ignore_dac(_metadata, 1);
-+	test_file_types(_metadata, self, err_code, has_policy);
-+
-+	/* Tests without bypass. */
-+	ignore_dac(_metadata, 0);
-+	test_file_types(_metadata, self, err_code, has_policy);
-+}
-+
-+static void sysctl_write_char(struct __test_metadata *_metadata, const char value)
-+{
-+	int fd;
-+
-+	fd = open(sysctl_path, O_WRONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd);
-+	ASSERT_EQ(1, write(fd, &value, 1));
-+	EXPECT_EQ(0, close(fd));
-+}
-+
-+static char sysctl_read_char(struct __test_metadata *_metadata)
-+{
-+	int fd;
-+	char sysctl_value;
-+
-+	fd = open(sysctl_path, O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd);
-+	ASSERT_EQ(1, read(fd, &sysctl_value, 1));
-+	EXPECT_EQ(0, close(fd));
-+	return sysctl_value;
-+}
-+
-+FIXTURE_VARIANT(access) {
-+	const bool mount_exec;
-+	const bool file_exec;
-+	const int sysctl_err_code[3];
-+};
-+
-+FIXTURE_VARIANT_ADD(access, mount_exec_file_exec) {
-+	.mount_exec = true,
-+	.file_exec = true,
-+	.sysctl_err_code = {0, 0, 0},
-+};
-+
-+FIXTURE_VARIANT_ADD(access, mount_exec_file_noexec)
-+{
-+	.mount_exec = true,
-+	.file_exec = false,
-+	.sysctl_err_code = {0, EACCES, EACCES},
-+};
-+
-+FIXTURE_VARIANT_ADD(access, mount_noexec_file_exec)
-+{
-+	.mount_exec = false,
-+	.file_exec = true,
-+	.sysctl_err_code = {EACCES, 0, EACCES},
-+};
-+
-+FIXTURE_VARIANT_ADD(access, mount_noexec_file_noexec)
-+{
-+	.mount_exec = false,
-+	.file_exec = false,
-+	.sysctl_err_code = {EACCES, EACCES, EACCES},
-+};
-+
-+FIXTURE_SETUP(access)
-+{
-+	int procfd_path_size;
-+	static const char path_template[] = "/proc/self/fd/%d";
-+	char procfd_path[sizeof(path_template) + 10];
-+
-+	/*
-+	 * Cleans previous workspace if any error previously happened (don't
-+	 * check errors).
-+	 */
-+	umount(workdir_path);
-+	rmdir(workdir_path);
-+
-+	/* Creates a clean mount point. */
-+	ASSERT_EQ(0, mkdir(workdir_path, 00700));
-+	ASSERT_EQ(0, mount("test", workdir_path, "tmpfs", MS_MGC_VAL |
-+				(variant->mount_exec ? 0 : MS_NOEXEC),
-+				"mode=0700,size=4k"));
-+
-+	/* Creates a regular file. */
-+	ASSERT_EQ(0, mknod(reg_file_path, S_IFREG | (variant->file_exec ? 0500 : 0400), 0));
-+	/* Creates a directory. */
-+	ASSERT_EQ(0, mkdir(dir_path, variant->file_exec ? 0500 : 0400));
-+	/* Creates a character device: /dev/null. */
-+	ASSERT_EQ(0, mknod(char_dev_path, S_IFCHR | 0400, makedev(1, 3)));
-+	/* Creates a block device: /dev/loop0 */
-+	ASSERT_EQ(0, mknod(block_dev_path, S_IFBLK | 0400, makedev(7, 0)));
-+	/* Creates a fifo. */
-+	ASSERT_EQ(0, mknod(fifo_path, S_IFIFO | 0400, 0));
-+
-+	/* Creates a regular file without user mount point. */
-+	self->memfd = memfd_create("test-interpreted", MFD_CLOEXEC);
-+	ASSERT_LE(0, self->memfd);
-+	/* Sets mode, which must be ignored by the exec check. */
-+	ASSERT_EQ(0, fchmod(self->memfd, variant->file_exec ? 0500 : 0400));
-+
-+	/* Creates a pipefs file descriptor. */
-+	ASSERT_EQ(0, pipe(self->pipe_fds));
-+	procfd_path_size = snprintf(procfd_path, sizeof(procfd_path),
-+			path_template, self->pipe_fds[0]);
-+	ASSERT_LT(procfd_path_size, sizeof(procfd_path));
-+	self->pipefd = open(procfd_path, O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, self->pipefd);
-+	ASSERT_EQ(0, fchmod(self->pipefd, variant->file_exec ? 0500 : 0400));
-+
-+	/* Creates a socket file descriptor. */
-+	ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_DGRAM | SOCK_CLOEXEC, 0, self->socket_fds));
-+
-+	/* Saves initial sysctl value. */
-+	self->initial_sysctl_value = sysctl_read_char(_metadata);
-+
-+	/* Prepares for sysctl writes. */
-+	ignore_sys_admin(_metadata, 1);
-+}
-+
-+FIXTURE_TEARDOWN(access)
-+{
-+	EXPECT_EQ(0, close(self->memfd));
-+	EXPECT_EQ(0, close(self->pipefd));
-+	EXPECT_EQ(0, close(self->pipe_fds[0]));
-+	EXPECT_EQ(0, close(self->pipe_fds[1]));
-+	EXPECT_EQ(0, close(self->socket_fds[0]));
-+	EXPECT_EQ(0, close(self->socket_fds[1]));
-+
-+	/* Restores initial sysctl value. */
-+	sysctl_write_char(_metadata, self->initial_sysctl_value);
-+
-+	/* There is no need to unlink the test files. */
-+	ASSERT_EQ(0, umount(workdir_path));
-+	ASSERT_EQ(0, rmdir(workdir_path));
-+}
-+
-+TEST_F(access, sysctl_0)
-+{
-+	/* Do not enforce anything. */
-+	sysctl_write_char(_metadata, '0');
-+	test_files(_metadata, self, 0, false);
-+}
-+
-+TEST_F(access, sysctl_1)
-+{
-+	/* Enforces mount exec check. */
-+	sysctl_write_char(_metadata, '1');
-+	test_files(_metadata, self, variant->sysctl_err_code[0], true);
-+}
-+
-+TEST_F(access, sysctl_2)
-+{
-+	/* Enforces file exec check. */
-+	sysctl_write_char(_metadata, '2');
-+	test_files(_metadata, self, variant->sysctl_err_code[1], true);
-+}
-+
-+TEST_F(access, sysctl_3)
-+{
-+	/* Enforces mount and file exec check. */
-+	sysctl_write_char(_metadata, '3');
-+	test_files(_metadata, self, variant->sysctl_err_code[2], true);
-+}
-+
-+FIXTURE(cleanup) {
-+	char initial_sysctl_value;
-+};
-+
-+FIXTURE_SETUP(cleanup)
-+{
-+	/* Saves initial sysctl value. */
-+	self->initial_sysctl_value = sysctl_read_char(_metadata);
-+}
-+
-+FIXTURE_TEARDOWN(cleanup)
-+{
-+	/* Restores initial sysctl value. */
-+	ignore_sys_admin(_metadata, 1);
-+	sysctl_write_char(_metadata, self->initial_sysctl_value);
-+}
-+
-+TEST_F(cleanup, sysctl_access_write)
-+{
-+	int fd;
-+	ssize_t ret;
-+
-+	ignore_sys_admin(_metadata, 1);
-+	sysctl_write_char(_metadata, '0');
-+
-+	ignore_sys_admin(_metadata, 0);
-+	fd = open(sysctl_path, O_WRONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd);
-+	ret = write(fd, "0", 1);
-+	ASSERT_EQ(-1, ret);
-+	ASSERT_EQ(EPERM, errno);
-+	EXPECT_EQ(0, close(fd));
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.32.0
+       - Nayna
 
