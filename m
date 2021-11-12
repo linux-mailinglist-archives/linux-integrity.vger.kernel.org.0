@@ -2,60 +2,206 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0212244ED1D
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Nov 2021 20:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C19044ED27
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Nov 2021 20:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235541AbhKLTRz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Nov 2021 14:17:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39120 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235265AbhKLTRy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Nov 2021 14:17:54 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 47A9D60F0F;
-        Fri, 12 Nov 2021 19:15:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636744503;
-        bh=he4nr5Zv1gj4KhLHrTt/kC3kiKokVah8k8LJvlxoIRI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kU7HDMriA9hhIsiB0T9A9b+mcLYld4tLHPl2C9DwU/nD5vae/RmDMSCpv66q/G12y
-         ul4lU4/LmdD7OddSFchAgI52Gdy+L5UEVLSyPkRsRJTfc10OfKuo1f0epLGQXN0R+G
-         1cNa3K/AYNOUf6lxyLOjGjffTKvVcg9jTuujT143VcQJA5lGVagdXrTD4pcol0UJRo
-         ABdgqB72Q3O0pGUykGDPmqps8j1ZTYn3yxmOlvY92/cnPrhfBZJcrpDF0ULz3tzxCH
-         mbxf7Mhw6JH7anfDf9YyYoIZD9LWVO0W0oRixyXXg2LDm7VNLtFk4wpLdl65HazcxA
-         0YmnomMJh2zow==
-Date:   Fri, 12 Nov 2021 11:15:01 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     tytso@mit.edu, corbet@lwn.net, viro@zeniv.linux.org.uk,
-        hughd@google.com, akpm@linux-foundation.org,
-        linux-fscrypt@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH 2/5] fsverity: Revalidate built-in signatures at
- file open
-Message-ID: <YY69NaucW+0t474Q@gmail.com>
-References: <20211112124411.1948809-1-roberto.sassu@huawei.com>
- <20211112124411.1948809-3-roberto.sassu@huawei.com>
+        id S235619AbhKLTS6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Nov 2021 14:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230137AbhKLTS5 (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 12 Nov 2021 14:18:57 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84546C06127A;
+        Fri, 12 Nov 2021 11:16:06 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so7563110wmd.1;
+        Fri, 12 Nov 2021 11:16:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=R4ezy0Y4KPXp1tXNQDpaUBacCpK19eND/tfIECpPASc=;
+        b=YBAsL5+dMv+AtdCI71meU1aglw9me3H8v1QOrePgPB15Qdk6rfgsmCdUa3yRRslChm
+         ZvwFGybUYmH0pUsRB4iG1vgM5KuZsjKJedZTGh9aqBW5D7uE8Zhq4sadE0/TJznNFJJv
+         vkafBQ6sMgd0Iu2yRmQLoXMAQCuTVFhemjROjYpBjO77jx+BxZ9HyKBbFAhPT9Y91Mqw
+         6ZDocCpHjmTV53A+K8h4+cTq7LsnGH7HYUqNUxGkRDidrKfR/dMZFR3ZbllKD7NW/SJ8
+         xHA3zhUcjwK7nluuLxnneD0QK9CXYo2T8596s7qhzcqLGGplshe7hfyK18Y+2/guOa18
+         wvMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=R4ezy0Y4KPXp1tXNQDpaUBacCpK19eND/tfIECpPASc=;
+        b=v6f//MRtxMtC3U1K0vSeWTOSDAJ75y2i0LOA5FZ6BMcSyZ6kJNs6aI2KbECO0uLj8j
+         fmGtmd6ouiyKoTWL1N7a3LC5DGjGf/pchcZJzIHcK8XAtLN0tQVJ2O4VWd8WZm99d7ro
+         uG8myOO3c8Q93Rze2Bm8CjrtAJVadUJLHQGNOd1xjfEiRuK+g6QVr8TDlw4sD5pqv4MT
+         WoZohFxCCyZAIPY1ua2USt75Ps3zYESU/AUJvp7sx4AWkZai/YmZfEIofzDjrrDPL+85
+         FntF4BytoDFD1UYwTfKfbswxITWWTjbhZpSV1I2WobN8kZo8JGCqD/htDtDUiFq8/LIu
+         2KeQ==
+X-Gm-Message-State: AOAM530NgCOxWQABjTAYCKoWPq/eYCTC2CcyS8J1BKM3RnDDoYiMaaWH
+        0iT04/45UXbBdw20i0ixGWs=
+X-Google-Smtp-Source: ABdhPJztY+FW6YVXoupcUTvo6LglloVd3KdIeP82Ahk9x8OJslbogmifLiXmtGgsz7nnMioMPxUcgQ==
+X-Received: by 2002:a05:600c:a05:: with SMTP id z5mr19436348wmp.73.1636744565070;
+        Fri, 12 Nov 2021 11:16:05 -0800 (PST)
+Received: from [10.168.10.170] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id t127sm12995735wma.9.2021.11.12.11.16.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Nov 2021 11:16:04 -0800 (PST)
+Message-ID: <8a22a3c2-468c-e96c-6516-22a0f029aa34@gmail.com>
+Date:   Fri, 12 Nov 2021 20:16:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211112124411.1948809-3-roberto.sassu@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v16 1/3] fs: Add trusted_for(2) syscall implementation and
+ related sysctl
+Content-Language: en-US
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20211110190626.257017-1-mic@digikod.net>
+ <20211110190626.257017-2-mic@digikod.net>
+From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+In-Reply-To: <20211110190626.257017-2-mic@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 01:44:08PM +0100, Roberto Sassu wrote:
-> Fsverity signatures are validated only upon request by the user by setting
-> the requirement through procfs or sysctl.
-> 
-> However, signatures are validated only when the fsverity-related
-> initialization is performed on the file. If the initialization happened
-> while the signature requirement was disabled, the signature is not
-> validated again.
+Hi Mickaël,
 
-I'm not sure this really matters.  If someone has started using a verity file
-before the require_signatures sysctl was set, then there is already a race
-condition; this patch doesn't fix that.  Don't you need to set the
-require_signatures sysctl early enough anyway?
+On 11/10/21 20:06, Mickaël Salaün wrote:
+> diff --git a/fs/open.c b/fs/open.c
+> index f732fb94600c..96a80abec41b 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -480,6 +482,114 @@ SYSCALL_DEFINE2(access, const char __user *, filename, int, mode)
+>   	return do_faccessat(AT_FDCWD, filename, mode, 0);
+>   }
+>   
+> +#define TRUST_POLICY_EXEC_MOUNT			BIT(0)
+> +#define TRUST_POLICY_EXEC_FILE			BIT(1)
+> +
+> +int sysctl_trusted_for_policy __read_mostly;
+> +
+> +/**
+...
+> + */
+> +SYSCALL_DEFINE3(trusted_for, const int, fd, const enum trusted_for_usage, usage,
 
-- Eric
+Please, don't use enums for interfaces.  They are implementation defined 
+types, and vary between compilers and within the same compiler also 
+depending on optimization flags.
+
+C17::6.7.2.2.4:
+[
+Each enumerated type shall be compatible with char,
+a signed integer type, or an unsigned integer type.
+The choice of type is implementation-defined,130)
+but shall be capable of representing the values of
+all the members of the enumeration.
+]
+
+See also:
+<https://stackoverflow.com/questions/366017/what-is-the-size-of-an-enum-in-c>
+
+So, please use only standard integer types for interfaces.
+
+And in the case of enums, since the language specifies that enumeration 
+constants (the macro-like identifiers) are of type int, it makes sense 
+for functions to use int.
+
+C17::6.7.2.2.3:
+[
+The identifiers in an enumerator list are declared as constants
+that have type int and may appear wherever such are permitted.
+]
+
+I'd use an int for the API/ABI, even if it's expected to be assigned 
+values of 'enum trusted_for_usage' (that should be specified in the 
+manual page in DESCRIPTION, but not in SYNOPSIS, which should specify int).
+
+
+
+TL;DR:
+
+ISO C specifies that for the following code:
+
+	enum foo {BAR};
+
+	enum foo foobar;
+
+typeof(foo)    shall be int
+typeof(foobar) is implementation-defined
+
+Since foobar = BAR; assigns an int, the best thing to do to avoid 
+implementation-defined behavior, is to declare foobar as int too.
+
+
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index 528a478dbda8..c535e0e43cc8 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -462,6 +463,7 @@ asmlinkage long sys_fallocate(int fd, int mode, loff_t offset, loff_t len);
+>   asmlinkage long sys_faccessat(int dfd, const char __user *filename, int mode);
+>   asmlinkage long sys_faccessat2(int dfd, const char __user *filename, int mode,
+>   			       int flags);
+> +asmlinkage long sys_trusted_for(int fd, enum trusted_for_usage usage, u32 flags);
+
+Same here.
+
+>   asmlinkage long sys_chdir(const char __user *filename);
+>   asmlinkage long sys_fchdir(unsigned int fd);
+>   asmlinkage long sys_chroot(const char __user *filename);
+
+Thanks,
+Alex
+
+
+-- 
+Alejandro Colomar
+Linux man-pages comaintainer; http://www.kernel.org/doc/man-pages/
+http://www.alejandro-colomar.es/
+
+-- 
+Alejandro Colomar
+Linux man-pages comaintainer; http://www.kernel.org/doc/man-pages/
+http://www.alejandro-colomar.es/
