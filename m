@@ -2,206 +2,85 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C19044ED27
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Nov 2021 20:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E3744EFC7
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Nov 2021 23:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235619AbhKLTS6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 12 Nov 2021 14:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S232129AbhKLW4N (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 12 Nov 2021 17:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbhKLTS5 (ORCPT
+        with ESMTP id S231320AbhKLW4N (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 12 Nov 2021 14:18:57 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84546C06127A;
-        Fri, 12 Nov 2021 11:16:06 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so7563110wmd.1;
-        Fri, 12 Nov 2021 11:16:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=R4ezy0Y4KPXp1tXNQDpaUBacCpK19eND/tfIECpPASc=;
-        b=YBAsL5+dMv+AtdCI71meU1aglw9me3H8v1QOrePgPB15Qdk6rfgsmCdUa3yRRslChm
-         ZvwFGybUYmH0pUsRB4iG1vgM5KuZsjKJedZTGh9aqBW5D7uE8Zhq4sadE0/TJznNFJJv
-         vkafBQ6sMgd0Iu2yRmQLoXMAQCuTVFhemjROjYpBjO77jx+BxZ9HyKBbFAhPT9Y91Mqw
-         6ZDocCpHjmTV53A+K8h4+cTq7LsnGH7HYUqNUxGkRDidrKfR/dMZFR3ZbllKD7NW/SJ8
-         xHA3zhUcjwK7nluuLxnneD0QK9CXYo2T8596s7qhzcqLGGplshe7hfyK18Y+2/guOa18
-         wvMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=R4ezy0Y4KPXp1tXNQDpaUBacCpK19eND/tfIECpPASc=;
-        b=v6f//MRtxMtC3U1K0vSeWTOSDAJ75y2i0LOA5FZ6BMcSyZ6kJNs6aI2KbECO0uLj8j
-         fmGtmd6ouiyKoTWL1N7a3LC5DGjGf/pchcZJzIHcK8XAtLN0tQVJ2O4VWd8WZm99d7ro
-         uG8myOO3c8Q93Rze2Bm8CjrtAJVadUJLHQGNOd1xjfEiRuK+g6QVr8TDlw4sD5pqv4MT
-         WoZohFxCCyZAIPY1ua2USt75Ps3zYESU/AUJvp7sx4AWkZai/YmZfEIofzDjrrDPL+85
-         FntF4BytoDFD1UYwTfKfbswxITWWTjbhZpSV1I2WobN8kZo8JGCqD/htDtDUiFq8/LIu
-         2KeQ==
-X-Gm-Message-State: AOAM530NgCOxWQABjTAYCKoWPq/eYCTC2CcyS8J1BKM3RnDDoYiMaaWH
-        0iT04/45UXbBdw20i0ixGWs=
-X-Google-Smtp-Source: ABdhPJztY+FW6YVXoupcUTvo6LglloVd3KdIeP82Ahk9x8OJslbogmifLiXmtGgsz7nnMioMPxUcgQ==
-X-Received: by 2002:a05:600c:a05:: with SMTP id z5mr19436348wmp.73.1636744565070;
-        Fri, 12 Nov 2021 11:16:05 -0800 (PST)
-Received: from [10.168.10.170] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id t127sm12995735wma.9.2021.11.12.11.16.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Nov 2021 11:16:04 -0800 (PST)
-Message-ID: <8a22a3c2-468c-e96c-6516-22a0f029aa34@gmail.com>
-Date:   Fri, 12 Nov 2021 20:16:01 +0100
+        Fri, 12 Nov 2021 17:56:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B19FC061766
+        for <linux-integrity@vger.kernel.org>; Fri, 12 Nov 2021 14:53:22 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mlfQ6-0000ZE-2t; Fri, 12 Nov 2021 23:53:18 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mlfQ4-000ACg-O8; Fri, 12 Nov 2021 23:53:16 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mlfQ3-00036m-My; Fri, 12 Nov 2021 23:53:15 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Subject: [PATCH] char: tpm: cr50_i2c: Drop if with an always false condition
+Date:   Fri, 12 Nov 2021 23:53:08 +0100
+Message-Id: <20211112225308.1149304-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v16 1/3] fs: Add trusted_for(2) syscall implementation and
- related sysctl
-Content-Language: en-US
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20211110190626.257017-1-mic@digikod.net>
- <20211110190626.257017-2-mic@digikod.net>
-From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-In-Reply-To: <20211110190626.257017-2-mic@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
+X-Patch-Hashes: v=1; h=sha256; i=SoW3Vuwhm8TIB5U4C9nlfKtJzkJHhUKcJlsyB7JbSpU=; m=5f3SEN4FqM+YnOUw7E3FyRLD55kyrMfA0yuJJExPdXQ=; p=UBEVABVT/pG5pknLPNg0e9utpAcWJRcwUGvkvbxr+QM=; g=9ec5403f3f20fb6409e4d318f6a23126681b003d
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGO8EMACgkQwfwUeK3K7AnxRgf8Ce7 ck5P6nDd15FnxtZiUgE2cHL31Bi4KF0U+whIjBMOF2N95o8FbPncSSoBed+nAOQVEEJihlN3cdcGH Mqpjx793aaoRuQ7ru+2vhYigEJzaVU2V6pIPjF3T0S01HjN99qnJTaE9ShPUBphkgRAHJoafjl/jG BrSJTNayjxFXVO6CJnlDQiP3Bj8HocWMWJ5hdsHatqH01ztJOAD86YffhUP8Cw/CzE5CgMmIg6VSM 263GjVTqp35MY23GGp/Dg58wSXYFi3ka1cCkmw/IWGpYlAlYYKK9f8tJ6EnfdXKYjMWDuA/UELpwZ JLNNTq20D543p30brGYKCWGjR5Pplig==
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mickaël,
+tpm_cr50_i2c_remove() is only called after tpm_cr50_i2c_probe() returned
+successfully. As i2c_get_clientdata() returns driver data for the
+client's device and this was set in tpmm_chip_alloc() it won't return
+NULL.
 
-On 11/10/21 20:06, Mickaël Salaün wrote:
-> diff --git a/fs/open.c b/fs/open.c
-> index f732fb94600c..96a80abec41b 100644
-> --- a/fs/open.c
-> +++ b/fs/open.c
-> @@ -480,6 +482,114 @@ SYSCALL_DEFINE2(access, const char __user *, filename, int, mode)
->   	return do_faccessat(AT_FDCWD, filename, mode, 0);
->   }
->   
-> +#define TRUST_POLICY_EXEC_MOUNT			BIT(0)
-> +#define TRUST_POLICY_EXEC_FILE			BIT(1)
-> +
-> +int sysctl_trusted_for_policy __read_mostly;
-> +
-> +/**
-...
-> + */
-> +SYSCALL_DEFINE3(trusted_for, const int, fd, const enum trusted_for_usage, usage,
+Simplify accordingly to prepare changing the prototype of the i2c remove
+callback to return void. Notice that already today returning an error
+code from the remove callback doesn't prevent removal.
 
-Please, don't use enums for interfaces.  They are implementation defined 
-types, and vary between compilers and within the same compiler also 
-depending on optimization flags.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/char/tpm/tpm_tis_i2c_cr50.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-C17::6.7.2.2.4:
-[
-Each enumerated type shall be compatible with char,
-a signed integer type, or an unsigned integer type.
-The choice of type is implementation-defined,130)
-but shall be capable of representing the values of
-all the members of the enumeration.
-]
-
-See also:
-<https://stackoverflow.com/questions/366017/what-is-the-size-of-an-enum-in-c>
-
-So, please use only standard integer types for interfaces.
-
-And in the case of enums, since the language specifies that enumeration 
-constants (the macro-like identifiers) are of type int, it makes sense 
-for functions to use int.
-
-C17::6.7.2.2.3:
-[
-The identifiers in an enumerator list are declared as constants
-that have type int and may appear wherever such are permitted.
-]
-
-I'd use an int for the API/ABI, even if it's expected to be assigned 
-values of 'enum trusted_for_usage' (that should be specified in the 
-manual page in DESCRIPTION, but not in SYNOPSIS, which should specify int).
-
-
-
-TL;DR:
-
-ISO C specifies that for the following code:
-
-	enum foo {BAR};
-
-	enum foo foobar;
-
-typeof(foo)    shall be int
-typeof(foobar) is implementation-defined
-
-Since foobar = BAR; assigns an int, the best thing to do to avoid 
-implementation-defined behavior, is to declare foobar as int too.
-
-
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index 528a478dbda8..c535e0e43cc8 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -462,6 +463,7 @@ asmlinkage long sys_fallocate(int fd, int mode, loff_t offset, loff_t len);
->   asmlinkage long sys_faccessat(int dfd, const char __user *filename, int mode);
->   asmlinkage long sys_faccessat2(int dfd, const char __user *filename, int mode,
->   			       int flags);
-> +asmlinkage long sys_trusted_for(int fd, enum trusted_for_usage usage, u32 flags);
-
-Same here.
-
->   asmlinkage long sys_chdir(const char __user *filename);
->   asmlinkage long sys_fchdir(unsigned int fd);
->   asmlinkage long sys_chroot(const char __user *filename);
-
-Thanks,
-Alex
-
-
+diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+index c89278103703..622cdf622ddc 100644
+--- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
++++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+@@ -751,12 +751,6 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
+ static int tpm_cr50_i2c_remove(struct i2c_client *client)
+ {
+ 	struct tpm_chip *chip = i2c_get_clientdata(client);
+-	struct device *dev = &client->dev;
+-
+-	if (!chip) {
+-		dev_err(dev, "Could not get client data at remove\n");
+-		return -ENODEV;
+-	}
+ 
+ 	tpm_chip_unregister(chip);
+ 	tpm_cr50_release_locality(chip, true);
 -- 
-Alejandro Colomar
-Linux man-pages comaintainer; http://www.kernel.org/doc/man-pages/
-http://www.alejandro-colomar.es/
+2.30.2
 
--- 
-Alejandro Colomar
-Linux man-pages comaintainer; http://www.kernel.org/doc/man-pages/
-http://www.alejandro-colomar.es/
