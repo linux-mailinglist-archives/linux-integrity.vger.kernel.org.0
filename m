@@ -2,25 +2,25 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CBF4515B9
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Nov 2021 21:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A19451DB3
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Nov 2021 01:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352818AbhKOUt6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 15 Nov 2021 15:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S1347120AbhKPAcb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 15 Nov 2021 19:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345447AbhKOT22 (ORCPT
+        with ESMTP id S1345457AbhKOT2b (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 15 Nov 2021 14:28:28 -0500
-Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76FBC0AD659
-        for <linux-integrity@vger.kernel.org>; Mon, 15 Nov 2021 10:53:16 -0800 (PST)
+        Mon, 15 Nov 2021 14:28:31 -0500
+Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [IPv6:2001:1600:4:17::1908])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C3EC0AD656;
+        Mon, 15 Nov 2021 10:53:13 -0800 (PST)
 Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4HtJHG651NzMptP7;
-        Mon, 15 Nov 2021 19:53:14 +0100 (CET)
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4HtJHD1SRNzMpnS3;
+        Mon, 15 Nov 2021 19:53:12 +0100 (CET)
 Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4HtJHG2xdTzlh8TZ;
-        Mon, 15 Nov 2021 19:53:14 +0100 (CET)
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4HtJHC5VHrzlh8Td;
+        Mon, 15 Nov 2021 19:53:11 +0100 (CET)
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>
@@ -62,9 +62,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v17 3/3] selftest/interpreter: Add tests for trusted_for(2) policies
-Date:   Mon, 15 Nov 2021 19:53:04 +0100
-Message-Id: <20211115185304.198460-4-mic@digikod.net>
+Subject: [PATCH v17 1/3] fs: Add trusted_for(2) syscall implementation and related sysctl
+Date:   Mon, 15 Nov 2021 19:53:02 +0100
+Message-Id: <20211115185304.198460-2-mic@digikod.net>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211115185304.198460-1-mic@digikod.net>
 References: <20211115185304.198460-1-mic@digikod.net>
@@ -77,519 +77,503 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Mickaël Salaün <mic@linux.microsoft.com>
 
-Test that checks performed by trusted_for(2) on file descriptors are
-consistent with noexec mount points and file execute permissions,
-according to the policy configured with the fs.trust_policy sysctl.
+The trusted_for() syscall enables user space tasks to check that files
+are trusted to be executed or interpreted by user space.  This may allow
+script interpreters to check execution permission before reading
+commands from a file, or dynamic linkers to allow shared object loading.
+This may be seen as a way for a trusted task (e.g. interpreter) to check
+the trustworthiness of files (e.g. scripts) before extending its control
+flow graph with new ones originating from these files.
+
+The security policy is consistently managed by the kernel through the
+new sysctl: fs.trusted_for_policy .  This enables system administrators
+to enforce two complementary security policies according to the
+installed system: enforce the noexec mount option, and enforce
+executable file permission.  Indeed, because of compatibility with
+installed systems, only system administrators are able to check that
+this new enforcement is in line with the system mount points and file
+permissions.
+
+For this to be possible, script interpreters must use trusted_for(2)
+with the TRUSTED_FOR_EXECUTION usage.  To be fully effective, these
+interpreters also need to handle the other ways to execute code: command
+line parameters (e.g., option -e for Perl), module loading (e.g., option
+-m for Python), stdin, file sourcing, environment variables,
+configuration files, etc.  According to the threat model, it may be
+acceptable to allow some script interpreters (e.g. Bash) to interpret
+commands from stdin, may it be a TTY or a pipe, because it may not be
+enough to (directly) perform syscalls.
+
+Even without enforced security policy, user space interpreters can use
+this syscall to try as much as possible to enforce the system policy at
+their level, knowing that it will not break anything on running systems
+which do not care about this feature.  However, on systems which want
+this feature enforced, there will be knowledgeable people (i.e. system
+administrator who configured fs.trusted_for_policy deliberately) to
+manage it.
+
+Because trusted_for(2) is a mean to enforce a system-wide security
+policy (but not application-centric policies), it does not make sense
+for user space to check the sysctl value.  Indeed, this new syscall only
+enables to extend the system ability to enforce a policy thanks to (some
+trusted) user space collaboration.  Moreover, additional security
+policies could be managed by LSMs.  This is a best-effort approach from
+the application developer point of view:
+https://lore.kernel.org/lkml/1477d3d7-4b36-afad-7077-a38f42322238@digikod.net/
+
+trusted_for(2) with TRUSTED_FOR_EXECUTION should not be confused with
+the O_EXEC flag (for open) which is intended for execute-only, which
+obviously doesn't work for scripts.  However, a similar behavior could
+be implemented in user space with O_PATH:
+https://lore.kernel.org/lkml/1e2f6913-42f2-3578-28ed-567f6a4bdda1@digikod.net/
+
+Being able to restrict execution also enables to protect the kernel by
+restricting arbitrary syscalls that an attacker could perform with a
+crafted binary or certain script languages.  It also improves multilevel
+isolation by reducing the ability of an attacker to use side channels
+with specific code.  These restrictions can natively be enforced for ELF
+binaries (with the noexec mount option) but require this kernel
+extension to properly handle scripts (e.g. Python, Perl).  To get a
+consistent execution policy, additional memory restrictions should also
+be enforced (e.g. thanks to SELinux).
+
+This is a new implementation of a patch initially written by
+Vincent Strubel for CLIP OS 4:
+https://github.com/clipos-archive/src_platform_clip-patches/blob/f5cb330d6b684752e403b4e41b39f7004d88e561/1901_open_mayexec.patch
+This patch has been used for more than 13 years with customized script
+interpreters.  Some examples (with the original O_MAYEXEC) can be found
+here:
+https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
 
 Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Co-developed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
+Signed-off-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
 Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Reviewed-by: Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20211115185304.198460-4-mic@digikod.net
+Acked-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20211115185304.198460-2-mic@digikod.net
 ---
+
+Changes since v16:
+* Replace the enum trusted_for_usage with an int in the syscall
+  signature to avoid C unspecified behavior (suggested by Alejandro
+  Colomar).  This is mostly a cosmetic fix according to the current
+  kernel compilers and used options, but let's remove
+  implementation-defined hazard.
 
 Changes since v14:
-* Add Reviewed-by Kees Cook.
+* Add full syscall documentation (requested by Andrew Morton).
 
 Changes since v13:
-* Move -I to CFLAGS (suggested by Kees Cook).
-* Update sysctl name.
+* Rename sysctl from "trust_policy" to "trusted_for_policy" (suggested
+  by Kees Cook).
+* Add Acked-by Kees Cook.
 
 Changes since v12:
-* Fix Makefile's license.
+* Update inode_permission() call to allign with commit 47291baa8ddf
+  ("namei: make permission helpers idmapped mount aware").
+* Switch from d_backing_inode(f.file->f_path.dentry) to
+  file_inode(f.file).
 
 Changes since v10:
-* Update selftest Makefile.
+* Add enum definition to syscalls.h .
 
 Changes since v9:
-* Rename the syscall and the sysctl.
-* Update tests for enum trusted_for_usage
+* Rename the syscall to trusted_for(2) and the sysctl to fs.trust_policy
+* Add a dedicated enum trusted_for_usage with include/uapi/linux/trusted-for.h
+* Remove the extra MAY_INTROSPECTION_EXEC bit.  LSMs can still implement
+  this feature themselves.
 
 Changes since v8:
-* Update with the dedicated syscall introspect_access(2) and the renamed
-  fs.introspection_policy sysctl.
-* Remove check symlink which can't be use as is anymore.
-* Use socketpair(2) to test UNIX socket.
+* Add a dedicated syscall introspect_access() (requested by Al Viro).
+* Rename MAY_INTERPRETED_EXEC to MAY_INTROSPECTION_EXEC .
+* Rename the sysctl fs.interpreted_access to fs.introspection_policy .
+* Update documentation.
 
 Changes since v7:
-* Update tests with faccessat2/AT_INTERPRETED, including new ones to
-  check that setting R_OK or W_OK returns EINVAL.
-* Add tests for memfd, pipefs and nsfs.
-* Rename and move back tests to a standalone directory.
+* Replaces openat2/O_MAYEXEC with faccessat2/X_OK/AT_INTERPRETED .
+  Switching to an FD-based syscall was suggested by Al Viro and Jann
+  Horn.
+* Handle special file descriptors.
+* Add a compatibility mode for execute/read check.
+* Move the sysctl policy from fs/namei.c to fs/open.c for the new
+  faccessat2/AT_INTERPRETED.
+* Rename the sysctl from fs.open_mayexec_enforce to
+  fs.interpreted_access .
+* Update documentation accordingly.
 
 Changes since v6:
-* Add full combination tests for all file types, including block
-  devices, character devices, fifos, sockets and symlinks.
-* Properly save and restore initial sysctl value for all tests.
+* Allow opening pipes, block devices and character devices with
+  O_MAYEXEC when there is no enforced policy, but forbid any non-regular
+  file opened with O_MAYEXEC otherwise (i.e. for any enforced policy).
+* Add a paragraph about the non-regular files policy.
+* Move path_noexec() calls out of the fast-path (suggested by Kees
+  Cook).
+* Do not set __FMODE_EXEC for now because of inconsistent behavior:
+  https://lore.kernel.org/lkml/202007160822.CCDB5478@keescook/
+* Returns EISDIR when opening a directory with O_MAYEXEC.
+* Removed Deven Bowers and Kees Cook Reviewed-by tags because of the
+  current update.
 
 Changes since v5:
-* Refactor with FIXTURE_VARIANT, which make the tests much more easy to
-  read and maintain.
-* Save and restore initial sysctl value (suggested by Kees Cook).
-* Test with a sysctl value of 0.
-* Check errno in sysctl_access_write test.
-* Update tests for the CAP_SYS_ADMIN switch.
-* Update tests to check -EISDIR (replacing -EACCES).
-* Replace FIXTURE_DATA() with FIXTURE() (spotted by Kees Cook).
-* Use global const strings.
+* Remove the static enforcement configuration through Kconfig because it
+  makes the code more simple like this, and because the current sysctl
+  configuration can only be set with CAP_SYS_ADMIN, the same way mount
+  options (i.e. noexec) can be set.  If an harden distro wants to
+  enforce a configuration, it should restrict capabilities or sysctl
+  configuration.  Furthermore, an LSM can easily leverage O_MAYEXEC to
+  fit its need.
+* Move checks from inode_permission() to may_open() and make the error
+  codes more consistent according to file types (in line with a previous
+  commit): opening a directory with O_MAYEXEC returns EISDIR and other
+  non-regular file types may return EACCES.
+* In may_open(), when OMAYEXEC_ENFORCE_FILE is set, replace explicit
+  call to generic_permission() with an artificial MAY_EXEC to avoid
+  double calls.  This makes sense especially when an LSM policy forbids
+  execution of a file.
+* Replace the custom proc_omayexec() with
+  proc_dointvec_minmax_sysadmin(), and then replace the CAP_MAC_ADMIN
+  check with a CAP_SYS_ADMIN one (suggested by Kees Cook and Stephen
+  Smalley).
+* Use BIT() (suggested by Kees Cook).
+* Rename variables (suggested by Kees Cook).
+* Reword the kconfig help.
+* Import the documentation patch (suggested by Kees Cook):
+  https://lore.kernel.org/lkml/20200505153156.925111-6-mic@digikod.net/
+* Update documentation and add LWN.net article.
+
+Changes since v4:
+* Add kernel configuration options to enforce O_MAYEXEC at build time,
+  and disable the sysctl in such case (requested by James Morris).
+* Reword commit message.
 
 Changes since v3:
-* Replace RESOLVE_MAYEXEC with O_MAYEXEC.
-* Add tests to check that O_MAYEXEC is ignored by open(2) and openat(2).
+* Switch back to O_MAYEXEC, but only handle it with openat2(2) which
+  checks unknown flags (suggested by Aleksa Sarai). Cf.
+  https://lore.kernel.org/lkml/20200430015429.wuob7m5ofdewubui@yavin.dot.cyphar.com/
 
 Changes since v2:
-* Move tests from exec/ to openat2/ .
-* Replace O_MAYEXEC with RESOLVE_MAYEXEC from openat2(2).
-* Cleanup tests.
+* Replace O_MAYEXEC with RESOLVE_MAYEXEC from openat2(2).  This change
+  enables to not break existing application using bogus O_* flags that
+  may be ignored by current kernels by using a new dedicated flag, only
+  usable through openat2(2) (suggested by Jeff Layton).  Using this flag
+  will results in an error if the running kernel does not support it.
+  User space needs to manage this case, as with other RESOLVE_* flags.
+  The best effort approach to security (for most common distros) will
+  simply consists of ignoring such an error and retry without
+  RESOLVE_MAYEXEC.  However, a fully controlled system may which to
+  error out if such an inconsistency is detected.
+* Cosmetic changes.
 
 Changes since v1:
-* Move tests from yama/ to exec/ .
-* Fix _GNU_SOURCE in kselftest_harness.h .
-* Add a new test sysctl_access_write to check if CAP_MAC_ADMIN is taken
-  into account.
-* Test directory execution which is always forbidden since commit
-  73601ea5b7b1 ("fs/open.c: allow opening only regular files during
-  execve()"), and also check that even the root user can not bypass file
-  execution checks.
-* Make sure delete_workspace() always as enough right to succeed.
-* Cosmetic cleanup.
+* Set __FMODE_EXEC when using O_MAYEXEC to make this information
+  available through the new fanotify/FAN_OPEN_EXEC event (suggested by
+  Jan Kara and Matthew Bobrowski):
+  https://lore.kernel.org/lkml/20181213094658.GA996@lithium.mbobrowski.org/
+* Move code from Yama to the FS subsystem (suggested by Kees Cook).
+* Make omayexec_inode_permission() static (suggested by Jann Horn).
+* Use mode 0600 for the sysctl.
+* Only match regular files (not directories nor other types), which
+  follows the same semantic as commit 73601ea5b7b1 ("fs/open.c: allow
+  opening only regular files during execve()").
 ---
- tools/testing/selftests/Makefile              |   1 +
- .../testing/selftests/interpreter/.gitignore  |   2 +
- tools/testing/selftests/interpreter/Makefile  |  21 +
- tools/testing/selftests/interpreter/config    |   1 +
- .../selftests/interpreter/trust_policy_test.c | 362 ++++++++++++++++++
- 5 files changed, 387 insertions(+)
- create mode 100644 tools/testing/selftests/interpreter/.gitignore
- create mode 100644 tools/testing/selftests/interpreter/Makefile
- create mode 100644 tools/testing/selftests/interpreter/config
- create mode 100644 tools/testing/selftests/interpreter/trust_policy_test.c
+ Documentation/admin-guide/sysctl/fs.rst |  50 +++++++++++
+ fs/open.c                               | 111 ++++++++++++++++++++++++
+ include/linux/fs.h                      |   1 +
+ include/linux/syscalls.h                |   1 +
+ include/uapi/linux/trusted-for.h        |  18 ++++
+ kernel/sysctl.c                         |  12 ++-
+ 6 files changed, 191 insertions(+), 2 deletions(-)
+ create mode 100644 include/uapi/linux/trusted-for.h
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index c852eb40c4f7..3a032a545f74 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -20,6 +20,7 @@ TARGETS += ftrace
- TARGETS += futex
- TARGETS += gpio
- TARGETS += intel_pstate
-+TARGETS += interpreter
- TARGETS += ipc
- TARGETS += ir
- TARGETS += kcmp
-diff --git a/tools/testing/selftests/interpreter/.gitignore b/tools/testing/selftests/interpreter/.gitignore
-new file mode 100644
-index 000000000000..82a4846cbc4b
---- /dev/null
-+++ b/tools/testing/selftests/interpreter/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+/*_test
-diff --git a/tools/testing/selftests/interpreter/Makefile b/tools/testing/selftests/interpreter/Makefile
-new file mode 100644
-index 000000000000..7402fdb6533f
---- /dev/null
-+++ b/tools/testing/selftests/interpreter/Makefile
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/Documentation/admin-guide/sysctl/fs.rst b/Documentation/admin-guide/sysctl/fs.rst
+index 2a501c9ddc55..e364d6c45790 100644
+--- a/Documentation/admin-guide/sysctl/fs.rst
++++ b/Documentation/admin-guide/sysctl/fs.rst
+@@ -48,6 +48,7 @@ Currently, these files are in /proc/sys/fs:
+ - suid_dumpable
+ - super-max
+ - super-nr
++- trusted_for_policy
+ 
+ 
+ aio-nr & aio-max-nr
+@@ -382,3 +383,52 @@ Each "watch" costs roughly 90 bytes on a 32bit kernel, and roughly 160 bytes
+ on a 64bit one.
+ The current default value for  max_user_watches  is the 1/25 (4%) of the
+ available low memory, divided for the "watch" cost in bytes.
 +
-+CFLAGS += -Wall -O2 -I$(khdr_dir)
-+LDLIBS += -lcap
 +
-+src_test := $(wildcard *_test.c)
-+TEST_GEN_PROGS := $(src_test:.c=)
++trusted_for_policy
++------------------
 +
-+KSFT_KHDR_INSTALL := 1
-+include ../lib.mk
++An interpreter can call :manpage:`trusted_for(2)` with a
++``TRUSTED_FOR_EXECUTION`` usage to check that opened regular files are expected
++to be executable.  If the file is not identified as executable, then the
++syscall returns -EACCES.  This may allow a script interpreter to check
++executable permission before reading commands from a file, or a dynamic linker
++to only load executable shared objects.  One interesting use case is to enforce
++a "write xor execute" policy through interpreters.
 +
-+khdr_dir = $(top_srcdir)/usr/include
++The ability to restrict code execution must be thought as a system-wide policy,
++which first starts by restricting mount points with the ``noexec`` option.
++This option is also automatically applied to special filesystems such as /proc .
++This prevents files on such mount points to be directly executed by the kernel
++or mapped as executable memory (e.g. libraries).  With script interpreters
++using :manpage:`trusted_for(2)`, the executable permission can then be checked
++before reading commands from files.  This makes it possible to enforce the
++``noexec`` at the interpreter level, and thus propagates this security policy
++to scripts.  To be fully effective, these interpreters also need to handle the
++other ways to execute code: command line parameters (e.g., option ``-e`` for
++Perl), module loading (e.g., option ``-m`` for Python), stdin, file sourcing,
++environment variables, configuration files, etc.  According to the threat
++model, it may be acceptable to allow some script interpreters (e.g.  Bash) to
++interpret commands from stdin, may it be a TTY or a pipe, because it may not be
++enough to (directly) perform syscalls.
 +
-+$(khdr_dir)/asm-generic/unistd.h: khdr
-+	@:
++There are two complementary security policies: enforce the ``noexec`` mount
++option, and enforce executable file permission.  These policies are handled by
++the ``fs.trusted_for_policy`` sysctl (writable only with ``CAP_SYS_ADMIN``) as
++a bitmask:
 +
-+$(khdr_dir)/linux/trusted-for.h: khdr
-+	@:
++1 - Mount restriction: checks that the mount options for the underlying VFS
++    mount do not prevent execution.
 +
-+$(OUTPUT)/%_test: %_test.c $(khdr_dir)/asm-generic/unistd.h $(khdr_dir)/linux/trusted-for.h ../kselftest_harness.h
-+	$(LINK.c) $< $(LDLIBS) -o $@
-diff --git a/tools/testing/selftests/interpreter/config b/tools/testing/selftests/interpreter/config
-new file mode 100644
-index 000000000000..dd53c266bf52
---- /dev/null
-+++ b/tools/testing/selftests/interpreter/config
-@@ -0,0 +1 @@
-+CONFIG_SYSCTL=y
-diff --git a/tools/testing/selftests/interpreter/trust_policy_test.c b/tools/testing/selftests/interpreter/trust_policy_test.c
-new file mode 100644
-index 000000000000..b59f07f537ad
---- /dev/null
-+++ b/tools/testing/selftests/interpreter/trust_policy_test.c
-@@ -0,0 +1,362 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test trusted_for(2) with fs.trusted_for_policy sysctl
++2 - File permission restriction: checks that the file is marked as
++    executable for the current process (e.g., POSIX permissions, ACLs).
++
++Note that as long as a policy is enforced, checking any non-regular file with
++:manpage:`trusted_for(2)` returns -EACCES (e.g. TTYs, pipe), even when such a
++file is marked as executable or is on an executable mount point.
++
++Code samples can be found in
++tools/testing/selftests/interpreter/trust_policy_test.c and interpreter patches
++(for the original O_MAYEXEC) are available at
++https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC .
++See also an overview article: https://lwn.net/Articles/820000/ .
+diff --git a/fs/open.c b/fs/open.c
+index f732fb94600c..0e5d5216d0cd 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -32,6 +32,8 @@
+ #include <linux/ima.h>
+ #include <linux/dnotify.h>
+ #include <linux/compat.h>
++#include <linux/sysctl.h>
++#include <uapi/linux/trusted-for.h>
+ 
+ #include "internal.h"
+ 
+@@ -480,6 +482,115 @@ SYSCALL_DEFINE2(access, const char __user *, filename, int, mode)
+ 	return do_faccessat(AT_FDCWD, filename, mode, 0);
+ }
+ 
++#define TRUST_POLICY_EXEC_MOUNT			BIT(0)
++#define TRUST_POLICY_EXEC_FILE			BIT(1)
++
++int sysctl_trusted_for_policy __read_mostly;
++
++/**
++ * sys_trusted_for - Check that a FD is trusted for a specific usage
 + *
-+ * Copyright © 2018-2020 ANSSI
++ * @fd: File descriptor to check.
++ * @usage: Identify the user space usage (defined by enum trusted_for_usage)
++ *         intended for the file descriptor (only TRUSTED_FOR_EXECUTION for
++ *         now).
 + *
-+ * Author: Mickaël Salaün <mic@digikod.net>
++ * @flags: Must be 0.
++ *
++ * This system call enables user space to ask the kernel: is this file
++ * descriptor's content trusted to be used for this purpose?  The set of @usage
++ * currently only contains TRUSTED_FOR_EXECUTION, but other may follow (e.g.
++ * configuration, sensitive data).  If the kernel identifies the file
++ * descriptor as trustworthy for this usage, this call returns 0 and the caller
++ * should then take this information into account.
++ *
++ * The execution usage means that the content of the file descriptor is trusted
++ * according to the system policy to be executed by user space, which means
++ * that it interprets the content or (try to) maps it as executable memory.
++ *
++ * A simple system-wide security policy can be set by the system administrator
++ * through a sysctl configuration consistent with the mount points or the file
++ * access rights: Documentation/admin-guide/sysctl/fs.rst
++ *
++ * @flags could be used in the future to do complementary checks (e.g.
++ * signature or integrity requirements, origin of the file).
++ *
++ * Possible returned errors are:
++ *
++ * - EINVAL: unknown @usage or unknown @flags;
++ * - EBADF: @fd is not a file descriptor for the calling thread;
++ * - EACCES: the requested usage is denied (and user space should enforce it).
 + */
-+
-+#define _GNU_SOURCE
-+#include <asm-generic/unistd.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/trusted-for.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/capability.h>
-+#include <sys/mman.h>
-+#include <sys/mount.h>
-+#include <sys/socket.h>
-+#include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/sysmacros.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#ifndef trusted_for
-+static int trusted_for(const int fd, const enum trusted_for_usage usage,
-+		const __u32 flags)
++SYSCALL_DEFINE3(trusted_for, const int, fd, const int, usage, const u32, flags)
 +{
-+	errno = 0;
-+	return syscall(__NR_trusted_for, fd, usage, flags);
-+}
-+#endif
++	int mask, err = -EACCES;
++	struct fd f;
++	struct inode *inode;
 +
-+static const char sysctl_path[] = "/proc/sys/fs/trusted_for_policy";
++	if (flags)
++		return -EINVAL;
 +
-+static const char workdir_path[] = "./test-mount";
-+static const char reg_file_path[] = "./test-mount/regular_file";
-+static const char dir_path[] = "./test-mount/directory";
-+static const char block_dev_path[] = "./test-mount/block_device";
-+static const char char_dev_path[] = "./test-mount/character_device";
-+static const char fifo_path[] = "./test-mount/fifo";
++	/* Only handles execution for now. */
++	if (usage != TRUSTED_FOR_EXECUTION)
++		return -EINVAL;
++	mask = MAY_EXEC;
 +
-+static void ignore_dac(struct __test_metadata *_metadata, int override)
-+{
-+	cap_t caps;
-+	const cap_value_t cap_val[2] = {
-+		CAP_DAC_OVERRIDE,
-+		CAP_DAC_READ_SEARCH,
-+	};
-+
-+	caps = cap_get_proc();
-+	ASSERT_NE(NULL, caps);
-+	ASSERT_EQ(0, cap_set_flag(caps, CAP_EFFECTIVE, 2, cap_val,
-+				override ? CAP_SET : CAP_CLEAR));
-+	ASSERT_EQ(0, cap_set_proc(caps));
-+	EXPECT_EQ(0, cap_free(caps));
-+}
-+
-+static void ignore_sys_admin(struct __test_metadata *_metadata, int override)
-+{
-+	cap_t caps;
-+	const cap_value_t cap_val[1] = {
-+		CAP_SYS_ADMIN,
-+	};
-+
-+	caps = cap_get_proc();
-+	ASSERT_NE(NULL, caps);
-+	ASSERT_EQ(0, cap_set_flag(caps, CAP_EFFECTIVE, 1, cap_val,
-+				override ? CAP_SET : CAP_CLEAR));
-+	ASSERT_EQ(0, cap_set_proc(caps));
-+	EXPECT_EQ(0, cap_free(caps));
-+}
-+
-+static void test_omx(struct __test_metadata *_metadata,
-+		const char *const path, const int err_access)
-+{
-+	int flags = O_RDONLY | O_CLOEXEC;
-+	int fd, access_ret, access_errno;
-+
-+	/* Do not block on pipes. */
-+	if (path == fifo_path)
-+		flags |= O_NONBLOCK;
-+
-+	fd = open(path, flags);
-+	ASSERT_LE(0, fd) {
-+		TH_LOG("Failed to open %s: %s", path, strerror(errno));
-+	}
-+	access_ret = trusted_for(fd, TRUSTED_FOR_EXECUTION, 0);
-+	access_errno = errno;
-+	if (err_access) {
-+		ASSERT_EQ(err_access, access_errno) {
-+			TH_LOG("Wrong error for trusted_for(2) with %s: %s",
-+					path, strerror(access_errno));
-+		}
-+		ASSERT_EQ(-1, access_ret);
-+	} else {
-+		ASSERT_EQ(0, access_ret) {
-+			TH_LOG("Access denied for %s: %s", path, strerror(access_errno));
-+		}
-+	}
-+
-+	/* Tests unsupported trusted usage. */
-+	access_ret = trusted_for(fd, 0, 0);
-+	ASSERT_EQ(-1, access_ret);
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	access_ret = trusted_for(fd, 2, 0);
-+	ASSERT_EQ(-1, access_ret);
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	EXPECT_EQ(0, close(fd));
-+}
-+
-+static void test_policy_fd(struct __test_metadata *_metadata, const int fd,
-+		const bool has_policy)
-+{
-+	const int ret = trusted_for(fd, TRUSTED_FOR_EXECUTION, 0);
-+
-+	if (has_policy) {
-+		ASSERT_EQ(-1, ret);
-+		ASSERT_EQ(EACCES, errno) {
-+			TH_LOG("Wrong error for trusted_for(2) with FD: %s", strerror(errno));
-+		}
-+	} else {
-+		ASSERT_EQ(0, ret) {
-+			TH_LOG("Access denied for FD: %s", strerror(errno));
-+		}
-+	}
-+}
-+
-+FIXTURE(access) {
-+	char initial_sysctl_value;
-+	int memfd, pipefd;
-+	int pipe_fds[2], socket_fds[2];
-+};
-+
-+static void test_file_types(struct __test_metadata *_metadata, FIXTURE_DATA(access) *self,
-+		const int err_code, const bool has_policy)
-+{
-+	/* Tests are performed on a tmpfs mount point. */
-+	test_omx(_metadata, reg_file_path, err_code);
-+	test_omx(_metadata, dir_path, has_policy ? EACCES : 0);
-+	test_omx(_metadata, block_dev_path, has_policy ? EACCES : 0);
-+	test_omx(_metadata, char_dev_path, has_policy ? EACCES : 0);
-+	test_omx(_metadata, fifo_path, has_policy ? EACCES : 0);
-+
-+	/* Checks that exec is denied for any socket FD. */
-+	test_policy_fd(_metadata, self->socket_fds[0], has_policy);
-+
-+	/* Checks that exec is denied for any memfd. */
-+	test_policy_fd(_metadata, self->memfd, has_policy);
-+
-+	/* Checks that exec is denied for any pipefs FD. */
-+	test_policy_fd(_metadata, self->pipefd, has_policy);
-+}
-+
-+static void test_files(struct __test_metadata *_metadata, FIXTURE_DATA(access) *self,
-+		const int err_code, const bool has_policy)
-+{
-+	/* Tests as root. */
-+	ignore_dac(_metadata, 1);
-+	test_file_types(_metadata, self, err_code, has_policy);
-+
-+	/* Tests without bypass. */
-+	ignore_dac(_metadata, 0);
-+	test_file_types(_metadata, self, err_code, has_policy);
-+}
-+
-+static void sysctl_write_char(struct __test_metadata *_metadata, const char value)
-+{
-+	int fd;
-+
-+	fd = open(sysctl_path, O_WRONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd);
-+	ASSERT_EQ(1, write(fd, &value, 1));
-+	EXPECT_EQ(0, close(fd));
-+}
-+
-+static char sysctl_read_char(struct __test_metadata *_metadata)
-+{
-+	int fd;
-+	char sysctl_value;
-+
-+	fd = open(sysctl_path, O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd);
-+	ASSERT_EQ(1, read(fd, &sysctl_value, 1));
-+	EXPECT_EQ(0, close(fd));
-+	return sysctl_value;
-+}
-+
-+FIXTURE_VARIANT(access) {
-+	const bool mount_exec;
-+	const bool file_exec;
-+	const int sysctl_err_code[3];
-+};
-+
-+FIXTURE_VARIANT_ADD(access, mount_exec_file_exec) {
-+	.mount_exec = true,
-+	.file_exec = true,
-+	.sysctl_err_code = {0, 0, 0},
-+};
-+
-+FIXTURE_VARIANT_ADD(access, mount_exec_file_noexec)
-+{
-+	.mount_exec = true,
-+	.file_exec = false,
-+	.sysctl_err_code = {0, EACCES, EACCES},
-+};
-+
-+FIXTURE_VARIANT_ADD(access, mount_noexec_file_exec)
-+{
-+	.mount_exec = false,
-+	.file_exec = true,
-+	.sysctl_err_code = {EACCES, 0, EACCES},
-+};
-+
-+FIXTURE_VARIANT_ADD(access, mount_noexec_file_noexec)
-+{
-+	.mount_exec = false,
-+	.file_exec = false,
-+	.sysctl_err_code = {EACCES, EACCES, EACCES},
-+};
-+
-+FIXTURE_SETUP(access)
-+{
-+	int procfd_path_size;
-+	static const char path_template[] = "/proc/self/fd/%d";
-+	char procfd_path[sizeof(path_template) + 10];
++	f = fdget(fd);
++	if (!f.file)
++		return -EBADF;
++	inode = file_inode(f.file);
 +
 +	/*
-+	 * Cleans previous workspace if any error previously happened (don't
-+	 * check errors).
++	 * For compatibility reasons, without a defined security policy, we
++	 * must map the execute permission to the read permission.  Indeed,
++	 * from user space point of view, being able to execute data (e.g.
++	 * scripts) implies to be able to read this data.
 +	 */
-+	umount(workdir_path);
-+	rmdir(workdir_path);
++	if ((mask & MAY_EXEC)) {
++		/*
++		 * If there is a system-wide execute policy enforced, then
++		 * forbids access to non-regular files and special superblocks.
++		 */
++		if ((sysctl_trusted_for_policy & (TRUST_POLICY_EXEC_MOUNT |
++						TRUST_POLICY_EXEC_FILE))) {
++			if (!S_ISREG(inode->i_mode))
++				goto out_fd;
++			/*
++			 * Denies access to pseudo filesystems that will never
++			 * be mountable (e.g. sockfs, pipefs) but can still be
++			 * reachable through /proc/self/fd, or memfd-like file
++			 * descriptors, or nsfs-like files.
++			 *
++			 * According to the selftests, SB_NOEXEC seems to be
++			 * only used by proc and nsfs filesystems.
++			 */
++			if ((f.file->f_path.dentry->d_sb->s_flags &
++						(SB_NOUSER | SB_KERNMOUNT | SB_NOEXEC)))
++				goto out_fd;
++		}
 +
-+	/* Creates a clean mount point. */
-+	ASSERT_EQ(0, mkdir(workdir_path, 00700));
-+	ASSERT_EQ(0, mount("test", workdir_path, "tmpfs", MS_MGC_VAL |
-+				(variant->mount_exec ? 0 : MS_NOEXEC),
-+				"mode=0700,size=4k"));
++		if ((sysctl_trusted_for_policy & TRUST_POLICY_EXEC_MOUNT) &&
++				path_noexec(&f.file->f_path))
++			goto out_fd;
++		/*
++		 * For compatibility reasons, if the system-wide policy doesn't
++		 * enforce file permission checks, then replaces the execute
++		 * permission request with a read permission request.
++		 */
++		if (!(sysctl_trusted_for_policy & TRUST_POLICY_EXEC_FILE))
++			mask &= ~MAY_EXEC;
++		/* To be executed *by* user space, files must be readable. */
++		mask |= MAY_READ;
++	}
 +
-+	/* Creates a regular file. */
-+	ASSERT_EQ(0, mknod(reg_file_path, S_IFREG | (variant->file_exec ? 0500 : 0400), 0));
-+	/* Creates a directory. */
-+	ASSERT_EQ(0, mkdir(dir_path, variant->file_exec ? 0500 : 0400));
-+	/* Creates a character device: /dev/null. */
-+	ASSERT_EQ(0, mknod(char_dev_path, S_IFCHR | 0400, makedev(1, 3)));
-+	/* Creates a block device: /dev/loop0 */
-+	ASSERT_EQ(0, mknod(block_dev_path, S_IFBLK | 0400, makedev(7, 0)));
-+	/* Creates a fifo. */
-+	ASSERT_EQ(0, mknod(fifo_path, S_IFIFO | 0400, 0));
++	err = inode_permission(file_mnt_user_ns(f.file), inode,
++			mask | MAY_ACCESS);
 +
-+	/* Creates a regular file without user mount point. */
-+	self->memfd = memfd_create("test-interpreted", MFD_CLOEXEC);
-+	ASSERT_LE(0, self->memfd);
-+	/* Sets mode, which must be ignored by the exec check. */
-+	ASSERT_EQ(0, fchmod(self->memfd, variant->file_exec ? 0500 : 0400));
-+
-+	/* Creates a pipefs file descriptor. */
-+	ASSERT_EQ(0, pipe(self->pipe_fds));
-+	procfd_path_size = snprintf(procfd_path, sizeof(procfd_path),
-+			path_template, self->pipe_fds[0]);
-+	ASSERT_LT(procfd_path_size, sizeof(procfd_path));
-+	self->pipefd = open(procfd_path, O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, self->pipefd);
-+	ASSERT_EQ(0, fchmod(self->pipefd, variant->file_exec ? 0500 : 0400));
-+
-+	/* Creates a socket file descriptor. */
-+	ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_DGRAM | SOCK_CLOEXEC, 0, self->socket_fds));
-+
-+	/* Saves initial sysctl value. */
-+	self->initial_sysctl_value = sysctl_read_char(_metadata);
-+
-+	/* Prepares for sysctl writes. */
-+	ignore_sys_admin(_metadata, 1);
++out_fd:
++	fdput(f);
++	return err;
 +}
 +
-+FIXTURE_TEARDOWN(access)
-+{
-+	EXPECT_EQ(0, close(self->memfd));
-+	EXPECT_EQ(0, close(self->pipefd));
-+	EXPECT_EQ(0, close(self->pipe_fds[0]));
-+	EXPECT_EQ(0, close(self->pipe_fds[1]));
-+	EXPECT_EQ(0, close(self->socket_fds[0]));
-+	EXPECT_EQ(0, close(self->socket_fds[1]));
+ SYSCALL_DEFINE1(chdir, const char __user *, filename)
+ {
+ 	struct path path;
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 1cb616fc1105..6a2f9b163816 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -87,6 +87,7 @@ extern int sysctl_protected_symlinks;
+ extern int sysctl_protected_hardlinks;
+ extern int sysctl_protected_fifos;
+ extern int sysctl_protected_regular;
++extern int sysctl_trusted_for_policy;
+ 
+ typedef __kernel_rwf_t rwf_t;
+ 
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 528a478dbda8..20306eb8d133 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -462,6 +462,7 @@ asmlinkage long sys_fallocate(int fd, int mode, loff_t offset, loff_t len);
+ asmlinkage long sys_faccessat(int dfd, const char __user *filename, int mode);
+ asmlinkage long sys_faccessat2(int dfd, const char __user *filename, int mode,
+ 			       int flags);
++asmlinkage long sys_trusted_for(int fd, int usage, u32 flags);
+ asmlinkage long sys_chdir(const char __user *filename);
+ asmlinkage long sys_fchdir(unsigned int fd);
+ asmlinkage long sys_chroot(const char __user *filename);
+diff --git a/include/uapi/linux/trusted-for.h b/include/uapi/linux/trusted-for.h
+new file mode 100644
+index 000000000000..cc4f030c5103
+--- /dev/null
++++ b/include/uapi/linux/trusted-for.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _UAPI_LINUX_TRUSTED_FOR_H
++#define _UAPI_LINUX_TRUSTED_FOR_H
 +
-+	/* Restores initial sysctl value. */
-+	sysctl_write_char(_metadata, self->initial_sysctl_value);
-+
-+	/* There is no need to unlink the test files. */
-+	ASSERT_EQ(0, umount(workdir_path));
-+	ASSERT_EQ(0, rmdir(workdir_path));
-+}
-+
-+TEST_F(access, sysctl_0)
-+{
-+	/* Do not enforce anything. */
-+	sysctl_write_char(_metadata, '0');
-+	test_files(_metadata, self, 0, false);
-+}
-+
-+TEST_F(access, sysctl_1)
-+{
-+	/* Enforces mount exec check. */
-+	sysctl_write_char(_metadata, '1');
-+	test_files(_metadata, self, variant->sysctl_err_code[0], true);
-+}
-+
-+TEST_F(access, sysctl_2)
-+{
-+	/* Enforces file exec check. */
-+	sysctl_write_char(_metadata, '2');
-+	test_files(_metadata, self, variant->sysctl_err_code[1], true);
-+}
-+
-+TEST_F(access, sysctl_3)
-+{
-+	/* Enforces mount and file exec check. */
-+	sysctl_write_char(_metadata, '3');
-+	test_files(_metadata, self, variant->sysctl_err_code[2], true);
-+}
-+
-+FIXTURE(cleanup) {
-+	char initial_sysctl_value;
++/**
++ * enum trusted_for_usage - Usage for which a file descriptor is trusted
++ *
++ * Argument of trusted_for(2).
++ */
++enum trusted_for_usage {
++	/**
++	 * @TRUSTED_FOR_EXECUTION: Check that the data read from a file
++	 * descriptor is trusted to be executed or interpreted (e.g. scripts).
++	 */
++	TRUSTED_FOR_EXECUTION = 1,
 +};
 +
-+FIXTURE_SETUP(cleanup)
-+{
-+	/* Saves initial sysctl value. */
-+	self->initial_sysctl_value = sysctl_read_char(_metadata);
-+}
-+
-+FIXTURE_TEARDOWN(cleanup)
-+{
-+	/* Restores initial sysctl value. */
-+	ignore_sys_admin(_metadata, 1);
-+	sysctl_write_char(_metadata, self->initial_sysctl_value);
-+}
-+
-+TEST_F(cleanup, sysctl_access_write)
-+{
-+	int fd;
-+	ssize_t ret;
-+
-+	ignore_sys_admin(_metadata, 1);
-+	sysctl_write_char(_metadata, '0');
-+
-+	ignore_sys_admin(_metadata, 0);
-+	fd = open(sysctl_path, O_WRONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd);
-+	ret = write(fd, "0", 1);
-+	ASSERT_EQ(-1, ret);
-+	ASSERT_EQ(EPERM, errno);
-+	EXPECT_EQ(0, close(fd));
-+}
-+
-+TEST_HARNESS_MAIN
++#endif /* _UAPI_LINUX_TRUSTED_FOR_H */
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 083be6af29d7..002dc830c165 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -115,6 +115,7 @@ static int sixty = 60;
+ 
+ static int __maybe_unused neg_one = -1;
+ static int __maybe_unused two = 2;
++static int __maybe_unused three = 3;
+ static int __maybe_unused four = 4;
+ static unsigned long zero_ul;
+ static unsigned long one_ul = 1;
+@@ -936,7 +937,6 @@ static int proc_taint(struct ctl_table *table, int write,
+ 	return err;
+ }
+ 
+-#ifdef CONFIG_PRINTK
+ static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
+ 				void *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -945,7 +945,6 @@ static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
+ 
+ 	return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ }
+-#endif
+ 
+ /**
+  * struct do_proc_dointvec_minmax_conv_param - proc_dointvec_minmax() range checking structure
+@@ -3357,6 +3356,15 @@ static struct ctl_table fs_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= &two,
+ 	},
++	{
++		.procname       = "trusted_for_policy",
++		.data           = &sysctl_trusted_for_policy,
++		.maxlen         = sizeof(int),
++		.mode           = 0600,
++		.proc_handler	= proc_dointvec_minmax_sysadmin,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= &three,
++	},
+ #if defined(CONFIG_BINFMT_MISC) || defined(CONFIG_BINFMT_MISC_MODULE)
+ 	{
+ 		.procname	= "binfmt_misc",
 -- 
 2.33.1
 
