@@ -2,89 +2,150 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E71BF452E51
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Nov 2021 10:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9267D452F66
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Nov 2021 11:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbhKPJsJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Nov 2021 04:48:09 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:49710 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbhKPJsI (ORCPT
+        id S234247AbhKPKrD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Nov 2021 05:47:03 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4098 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234039AbhKPKqd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Nov 2021 04:48:08 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8E5371FD26;
-        Tue, 16 Nov 2021 09:45:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1637055910;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jt0khjIMGrtpJBgM3VFNRZ9OiYsUygQh0pMSCg9zcL8=;
-        b=DFGhSeVc50yJPsqZp/KDZx12b4nPTu45cxX9Hp/8LTRjQ0xWeK+Cp72zXIoVCD9swxs7oH
-        Ydw1q+OR3Oojuqgm/bVrb2e55fuMqiaQIhf99kn3u9JWpcedooXRGiXkrbXyP+wrEZXmtJ
-        CemDAX4Cqa7+B7vXqdFzzRrxzojaSgc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1637055910;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jt0khjIMGrtpJBgM3VFNRZ9OiYsUygQh0pMSCg9zcL8=;
-        b=XU0Ho0uJooPwsyDQ241nDafzkOxpdPVAgDBL6s/s3yely/dD6SpgiahvOScGpHkpkLKkFX
-        JmpDI7dog5AJYKDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5917F13BFD;
-        Tue, 16 Nov 2021 09:45:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id m1PaE6Z9k2GOFAAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Tue, 16 Nov 2021 09:45:10 +0000
-Date:   Tue, 16 Nov 2021 10:45:08 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        "Bruno E. O. Meneguele" <bmeneg@redhat.com>
-Subject: Re: ima-evm-utils: version 1.4 released
-Message-ID: <YZN9pJeU6rDfEzVr@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <9af9143c2c90f1ebae6cc34a7100673332cce1a1.camel@linux.ibm.com>
- <YYToG+8u/edIcc3u@pevik>
- <e7213f8c-a6f5-f73e-d88f-a264e6d231bb@linux.microsoft.com>
- <9475f96833540e0601b23b40cbc1dcbc30903ec6.camel@linux.ibm.com>
- <YYmLOoa6E78G3ii2@pevik>
- <ca8a4b45b3d7449b41b244217dddc9c91335780c.camel@linux.ibm.com>
+        Tue, 16 Nov 2021 05:46:33 -0500
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HtjHN6bskz67mLl;
+        Tue, 16 Nov 2021 18:39:44 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 16 Nov 2021 11:43:27 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
+ Tue, 16 Nov 2021 11:43:27 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+CC:     "tytso@mit.edu" <tytso@mit.edu>, "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "hughd@google.com" <hughd@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC][PATCH 5/5] shmem: Add fsverity support
+Thread-Topic: [RFC][PATCH 5/5] shmem: Add fsverity support
+Thread-Index: AQHX18M/qVU4RXchik23Vn+neZuDEKwAMhaAgAQN/bCAAKcCAIABDzqA
+Date:   Tue, 16 Nov 2021 10:43:27 +0000
+Message-ID: <0974034ff3b6426abd89f3c6f45c6d23@huawei.com>
+References: <20211112124411.1948809-1-roberto.sassu@huawei.com>
+ <20211112124411.1948809-6-roberto.sassu@huawei.com>
+ <YY68iXKPWN8+rd+0@gmail.com> <6adb6da30b734213942f976745c456f6@huawei.com>
+ <YZKvXK+vX/we4GCD@gmail.com>
+In-Reply-To: <YZKvXK+vX/we4GCD@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca8a4b45b3d7449b41b244217dddc9c91335780c.camel@linux.ibm.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+> From: Eric Biggers [mailto:ebiggers@kernel.org]
+> Sent: Monday, November 15, 2021 8:05 PM
+> On Mon, Nov 15, 2021 at 08:49:41AM +0000, Roberto Sassu wrote:
+> > > From: Eric Biggers [mailto:ebiggers@kernel.org]
+> > > Sent: Friday, November 12, 2021 8:12 PM
+> > > On Fri, Nov 12, 2021 at 01:44:11PM +0100, Roberto Sassu wrote:
+> > > > Make the necessary modifications to support fsverity in tmpfs.
+> > > >
+> > > > First, implement the fsverity operations (in a similar way of f2fs). These
+> > > > operations make use of shmem_read_mapping_page() instead of
+> > > > read_mapping_page() to handle the case where the page has been
+> swapped
+> > > out.
+> > > > The fsverity descriptor is placed at the end of the file and its location
+> > > > is stored in an xattr.
+> > > >
+> > > > Second, implement the ioctl operations to enable, measure and read
+> fsverity
+> > > > metadata.
+> > > >
+> > > > Lastly, add calls to fsverity functions, to ensure that fsverity-relevant
+> > > > operations are checked and handled by fsverity (file open, attr set, inode
+> > > > evict).
+> > > >
+> > > > Fsverity support can be enabled through the kernel configuration and
+> > > > remains enabled by default for every tmpfs filesystem instantiated (there
+> > > > should be no overhead, unless fsverity is enabled for a file).
+> > > >
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > >
+> > > I don't see how this makes sense at all.  The point of fs-verity is to avoid
+> > > having to hash the whole file when verifying it.  However, obviously the
+> whole
+> > > file still has to be hashed to build the Merkle tree in the first place.  That
+> > > makes sense for a persistent filesystem where a file can be written once and
+> > > verified many times.  I don't see how it makes sense for tmpfs, where files
+> have
+> > > to be re-created on every boot.  You might as well just hash the whole file.
+> >
+> > The point of adding fsverity support for tmpfs was to being able to do
+> > integrity enforcement with just one mechanism, given that I was
+> > planning to do integrity verification with reference values loaded
+> > to the kernel with DIGLIM [1].
+> >
+> > With an LSM such as IPE [2], integrity verification would consist in
+> > querying the fsverity digest with DIGLIM and allowing the operation
+> > if the digest was found. With fsverity support in tmpfs, this can be
+> > done from the very beginning of the boot process.
+> >
+> > Using regular file digests would be also possible but this requires
+> > loading with DIGLIM both fsverity and non-fsverity reference values.
+> > It would also require two separate mechanisms for calculating
+> > the file digest depending on the filesystem. It could be done, but
+> > I thought it was easier to add support for fsverity in tmpfs.
+> >
+> > > Also, you didn't implement actually verifying the data (by calling
+> > > fsverity_verify_page()), so this patch doesn't really do anything anyway.
+> >
+> > Yes, at the end I didn't add it. Probably the only place where
+> > calling fsverity_verify_page() would make sense is when a page
+> > is swapped in (assuming that the swap device is untrusted).
+> >
+> > I tried to add a call in shmem_swapin_page() but fsverity complained
+> > due to the fact that the page was already up to date, and also
+> > rejected the page. I will check it better.
+> >
+> 
+> It sounds like you really only care about calculating fs-verity file digests.
+> That's just an algorithm for hashing a file, so it could just be implemented in
+> generic code that operates on any file on any filesystem, like how IMA
+> implemennts full file hashing for any file.  There isn't a need for any special
+> filesystem support to do this.
 
-> Hi Petr,
+Initially I thought the same. Then, I realized that fsverity is much more
+than that. Fsverity could be seen as a sort of property enforcer, it provides
+a property associated to the file (the fsverity digest) and ensures that
+the property remains the same while the system is running. In addition,
+it takes advantage of the page cache to avoid remeasuring an up to date
+page.
 
-> On Mon, 2021-11-08 at 21:40 +0100, Petr Vorel wrote:
-> > Github repository is marked as primary. How about moving releases also to
-> > GitHub?
+This remove some burden from LSMs. IPE would have just to compare
+the fsverity digest with that in the policy (or just query it with DIGLIM).
+Not taking into consideration the specific filesystem, not having to
+fall back to the new fsverity measurement function, and avoiding to
+preserve the fsverity property by itself, would make the LSM
+implementation very simple.
 
-> Done.
-Great, thank you! Also, when you have time, could you please put there
-checksums? (ideally sha256/sha512) or even signed checksum file).
+Roberto
 
-Kind regards,
-Petr
-
-> thanks,
-
-> Mimi
-
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua
