@@ -2,68 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A11D8453082
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Nov 2021 12:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1DE45367E
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Nov 2021 16:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234933AbhKPLbJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 16 Nov 2021 06:31:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235071AbhKPLac (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 16 Nov 2021 06:30:32 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EE9C061225
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Nov 2021 03:26:59 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id c4so36780179wrd.9
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Nov 2021 03:26:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=49VN2EPgYHrEXK97OpQX0CxGM5w7EiGtxSfN5GFh/XE=;
-        b=VPSdTQPJ5hxea0d4B/OGzopTdVjRnbFmJz+O0tAMBIW+kVpQPKiYwfvCdPxAiu9RO7
-         oe9kEcogTcLI4iYVrS1eOtN05ZsYHexXSFFQpbbx9c1Ayow9QIMNNWeK3yqQOqbV6uta
-         lYm4w6zcQWO4dqR/GNjN0aurI02r6lW3XO4xQxM/13UYVUY6ET4f0O8Iq4IG8IZUtkwp
-         NHbrha8XPUVMG3Xu1I5WAylPedohg9BtJHXmX/E5I/oVcL5vEd+kv9L+n5IA0SK5OUNr
-         Wzfz9JBOv9okjRvaOWABxHrvDpiLS87CruKZfKxQJvud8svtNp7BgBXzyICxaDFUC026
-         9ZZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=49VN2EPgYHrEXK97OpQX0CxGM5w7EiGtxSfN5GFh/XE=;
-        b=pktzSJAX9fULAC4u/GsgUg5erojMR8EF5kkHAwyytGJ0aYX+cwUlWFMvMdBTnJWDhE
-         pMaH5d996nsoTMhFeDvJmMluMkkMh3SsxVFFfkOp0QBQ/1MkFhGpgoJj1i+ggWLnC5zo
-         hdu61HqFG/N8fVSiyU8TyNS78rrjKK8wD9L2QKghIHr1JfGaRjIte6/gu4f1FFftnSTK
-         Bcy9bfIceILIwORP/876nnd9x8R756YGKj10cTqS3NByNlcoKQh1fB3JpYior7GReGen
-         Dp5V6hHmmCqvPk1DkKJLxV8j3kMIaqTwZRn6c1FOwr0D84P6Xe57pUafI+2LyRDAUQBf
-         J3gg==
-X-Gm-Message-State: AOAM531SCaq7YpiP6CDeWxkkeZRc29b/mec8Tm9z/B+90pVN6CMvg6dx
-        pWbH52VzVI5x4Cy3NsfhUSh1Flp8ew97mBouzUs=
-X-Google-Smtp-Source: ABdhPJx7V7Pzab1iLpC1tLfl5XTeFedl5ZB5PcVwW8xnRDThhRI1kD0wWb7jxJL13vcYZKWR942PRdG0Y0xdZFQs61A=
-X-Received: by 2002:a5d:4107:: with SMTP id l7mr8132229wrp.209.1637062018294;
- Tue, 16 Nov 2021 03:26:58 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:600c:3b97:0:0:0:0 with HTTP; Tue, 16 Nov 2021 03:26:57
- -0800 (PST)
-Reply-To: ebodrdickson1020@gmail.com
-From:   "Dr.Dickson Ebo" <drdicksonelo1023@gmail.com>
-Date:   Tue, 16 Nov 2021 03:26:57 -0800
-Message-ID: <CABq-xD7ZFmUMjZ9aWbbAm9nEKVBK1nOq1MtQg6NNJHmUXBtxzg@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
+        id S238537AbhKPP7A (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 16 Nov 2021 10:59:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58596 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238786AbhKPP6g (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 16 Nov 2021 10:58:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 56F9861C12;
+        Tue, 16 Nov 2021 15:55:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637078137;
+        bh=BtX9jWIE6WUbTRiRgUTKNHbgFkN+wayCXmBMzwnBEig=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=sQrpgmoEuMvlyB81kjfD1Qprbc7wjRQ7bpneSX5EtVJ7NvUp0moWnF3L7dpdvjaJR
+         zQRv631GTYogbxdLcvFlL23wDy02L6rpXdSI8VPvyNyv7BLdCawuQ4LJINa0+vzB8i
+         zz9rJ2vcOcNSFrOJtKSQ3NbX+5GC9FsoQn5LQDSkv4Hd8KU9vkOyp3DQ69g2bfgIpj
+         sQeaLx/IqA06P1Hj2miL23JaEDStw6Y4vQgkyn1ow7BiVjIOYfz+cT20YrVfG7qWbz
+         WGeF8eF79hRE/xEWrnSNkc0MCMttiEhK0kfUNll8RbM/DSqxYaXDFgWbHpUYX86gGx
+         YEzdGT4el7szw==
+Message-ID: <671cac28ac30a1135030261948487922cfcd4d89.camel@kernel.org>
+Subject: Re: [PATCH] char: tpm: cr50_i2c: Drop if with an always false
+ condition
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org
+Date:   Tue, 16 Nov 2021 17:55:35 +0200
+In-Reply-To: <20211113215340.cn5kyia7g6fcquh2@pengutronix.de>
+References: <20211112225308.1149304-1-u.kleine-koenig@pengutronix.de>
+         <0c7eb1e97e73e2cd3182a98d8cf76c6a2e2e6578.camel@kernel.org>
+         <20211113215340.cn5kyia7g6fcquh2@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.40.4-1 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Finance and Audit Department, Zenith Bank Plc.
+On Sat, 2021-11-13 at 22:53 +0100, Uwe Kleine-K=C3=B6nig wrote:
+> Hello,
+>=20
+> On Sat, Nov 13, 2021 at 12:53:32PM +0200, Jarkko Sakkinen wrote:
+> > On Fri, 2021-11-12 at 23:53 +0100, Uwe Kleine-K=C3=B6nig wrote:
+> > > tpm_cr50_i2c_remove() is only called after tpm_cr50_i2c_probe() retur=
+ned
+> > > successfully. As i2c_get_clientdata() returns driver data for the
+> > > client's device and this was set in tpmm_chip_alloc() it won't return
+> > > NULL.
+> >=20
+> > This does not make the check obsolete, e.g. it would catch a programmin=
+g
+> > error elsewhere.
+> >=20
+> > > Simplify accordingly to prepare changing the prototype of the i2c rem=
+ove
+> > > callback to return void. Notice that already today returning an error
+> > > code from the remove callback doesn't prevent removal.
+> >=20
+> > I don't understand what you are trying to say.
+>=20
+> The eventual goal is the following change:
+>=20
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index 16119ac1aa97..c7069ebf5a66 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -273,7 +273,7 @@ struct i2c_driver {
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Standard driver model =
+interfaces */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int (*probe)(struct i2c_c=
+lient *client, const struct i2c_device_id *id);
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int (*remove)(struct i2c_clien=
+t *client);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0void (*remove)(struct i2c_clie=
+nt *client);
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* New driver model inter=
+face to aid the seamless removal of the
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * current probe()'s, mor=
+e commonly unused than used second parameter.
+>=20
+> To prepare that I want to change all remove callbacks to unconditionally
+> return 0.
+>=20
+> The motivation for the above change is that returning an error from an
+> i2c (or spi or platform) remove callback doesn't prevent the device from
+> being removed. So the ability to return an int leads to wrong
+> expectations by driver authors.
+>=20
+> The only effect a non-zero return code has, is an error message from the
+> i2c core. So if you object to my suggested change, the minimal change I
+> want to convince you of is to replace
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -ENODEV;
+>=20
+> by
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+>=20
+> .
+>=20
+> Best regards
+> Uwe
 
-The President of the Federal Republic of Nigeria through the Zenith
-International Bank Nigeria PLC has released your
-Contract/Inheritance/Compensation Fund.
+Please then include it to a patch set, where this happens.
 
-Kindly get back to us as soon as possible.
+/Jarkko
 
-Yours faithfully,
-Dr. Dickson Ebo.
