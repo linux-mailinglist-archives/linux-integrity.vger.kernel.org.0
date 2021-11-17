@@ -2,28 +2,28 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CD445426C
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Nov 2021 09:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6560345426F
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Nov 2021 09:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbhKQINV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 17 Nov 2021 03:13:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55710 "EHLO mail.kernel.org"
+        id S232478AbhKQINw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 17 Nov 2021 03:13:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56144 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232086AbhKQINV (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 17 Nov 2021 03:13:21 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A970D61B7D;
-        Wed, 17 Nov 2021 08:10:22 +0000 (UTC)
+        id S232086AbhKQINw (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 17 Nov 2021 03:13:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6501361B7D;
+        Wed, 17 Nov 2021 08:10:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637136623;
+        s=k20201202; t=1637136653;
         bh=r95Z+70f1SxANDfTBZzjaeB9B3eWiVZJu26oU6UqTm8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=jzK9va+Hbe2/5w6dtqZcck3jrN6+Uoi/rIiYnVzZD0f1gE8MPIqO9hleJ7aTMquvg
-         S+fpeodj1jERXc5vQNt9suP08x1sTEZuBjYf7Q4IRH7E9HHacG/g4Ay+e/MTkSmFCO
-         0Iu+c+GYTogBJ4RfaH4QmFC/XT9IXNeVAA98bFj/mCEtwWSg5Kad59PUusa9WPjaff
-         EPXfajoX1kVeo9G7I6hqcanqSuNm9NqNybdu3doO069b3WUnv1wb6drsSMKeaBnL17
-         aJuDSyWE7vamtBFo0FMnTWRTvt6r93FV5Wb2xHB1YckGdWKsLrvK2TnINf1QjebbLs
-         GP0xUEt+hBJEA==
-Message-ID: <fd914758628f416db9fbaa35e910cceedabb65f7.camel@kernel.org>
+        h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
+        b=eFMySi2LOKAWYoEZtXyVIw0ICpJadkyEamYFudJAG0zv4WKJv8o5u4JK2M+sT49BB
+         bUMQRu1zQvKRwk8BJ+iGoUIOgrVsrV1kxFpNU6MRHH0ANarZ17Wv4+T/tPeE9Tlns0
+         bGG310LIsHooAO0KtxFZ6/l+HsHUHXeWhmU5zA5BsmhLFVRbOqMZkmopRyG1FPNQ3r
+         9JmeGIL0vh3oalkW7SCMzu5e+Hh3+cE+qlUF8As4dpA1qz19maUye+zLDKuMLLhQJs
+         CyTYuyBc6si+TgS/+yd3JITN9MHsNAljFRxniz7vwIO1jldPLhFDFC0Xe7P0VRVtLD
+         4g1kh6hYzPmRQ==
+Message-ID: <a13a7e60a25bcdfc186d9b262f21947ca4e0159e.camel@kernel.org>
 Subject: Re: [PATCH v19 3/5] tpm: tpm_tis: Verify TPM_STS register is valid
  after locality request
 From:   Jarkko Sakkinen <jarkko@kernel.org>
@@ -37,14 +37,14 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         tmaimon77@gmail.com, gcwilson@us.ibm.com, kgoldman@us.ibm.com,
         Dan.Morav@nuvoton.com, oren.tanami@nuvoton.com,
         shmulik.hager@nuvoton.com, amir.mizinski@nuvoton.com
-Date:   Wed, 17 Nov 2021 10:10:20 +0200
 In-Reply-To: <20211104140211.6258-4-amirmizi6@gmail.com>
 References: <20211104140211.6258-1-amirmizi6@gmail.com>
          <20211104140211.6258-4-amirmizi6@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.40.4-1 
+Date:   Wed, 17 Nov 2021 10:10:36 +0200
 MIME-Version: 1.0
+User-Agent: Evolution 3.40.4-1 
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
