@@ -2,158 +2,124 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35BB45C6F5
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Nov 2021 15:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B6B45CA87
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Nov 2021 18:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352784AbhKXOQ4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 24 Nov 2021 09:16:56 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44566 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352777AbhKXOQe (ORCPT
+        id S1349391AbhKXRFT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 24 Nov 2021 12:05:19 -0500
+Received: from mail-m972.mail.163.com ([123.126.97.2]:47782 "EHLO
+        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242707AbhKXRFT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 24 Nov 2021 09:16:34 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AOBm91w005285;
-        Wed, 24 Nov 2021 14:13:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=FRrxLWEmfeQ/NnkQZMb7wpFJ+lJSMAm3qJyxMRFZ5F4=;
- b=MR1wE7E9GDJIL3rS33NuC2lJ4SuFT+Myj0/i1fpzhBmD/QC7mmDAjkF+x0Pqgh0NuzOb
- cG/wxIaZRblftNb1dEZ+vYgPk6S+yZSIkioWbju3VBB6zXEF7uC5O6ugNp592vaijHZw
- 85WonEnCHBWejQSAspCRITUPn5Zcpry7SYo6EGmVUZwbdS8KAKt5m3VJ4B0dT6A3ccz5
- p+715BduR47p5j6F8svRNGnWmqgtyfvWgIcU2mDA053jNZzq5KN9T7rVXutb32QSrzqt
- yIr9mJgoES5yQLG219BOQ+ABJQCuyb7sRA2Fvjit+JOplp0v+85xLHv1by6iKzJ/2GA2 MQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3chmu1b31v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Nov 2021 14:13:22 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AOE9suu023413;
-        Wed, 24 Nov 2021 14:13:22 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3chmu1b31f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Nov 2021 14:13:22 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AOECixS027887;
-        Wed, 24 Nov 2021 14:13:21 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma02wdc.us.ibm.com with ESMTP id 3cernb2evt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Nov 2021 14:13:21 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AOEDKVG40763736
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Nov 2021 14:13:20 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A9278B206E;
-        Wed, 24 Nov 2021 14:13:20 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 98853B2067;
-        Wed, 24 Nov 2021 14:13:20 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 24 Nov 2021 14:13:20 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     jarkko@kernel.org, linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v2 3/3] selftests: tpm2: Add support for SHA-384 and SHA-512
-Date:   Wed, 24 Nov 2021 09:13:14 -0500
-Message-Id: <20211124141314.1356338-4-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211124141314.1356338-1-stefanb@linux.ibm.com>
-References: <20211124141314.1356338-1-stefanb@linux.ibm.com>
+        Wed, 24 Nov 2021 12:05:19 -0500
+X-Greylist: delayed 924 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Nov 2021 12:05:17 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8ERBp
+        /cCG6WzioJCfEWJSK1orI4R+L3An4qXLiZdnB0=; b=OXoqhebDEZzeJ7/tZsJ8J
+        SmHIkZsNHWXXKsahcfmp5T5PaR4vFOn43TKWCwZtcdsvse2Y3iS9n2yfkEkCP2Ci
+        UjVtEpPgC5S6Qv0Tiq1HAYq9yLfeKz9fnQYKqFL7FONJ8brCFR5+TGnmQhNDGfVy
+        crGX80h2iLKCQeg3+CzZFY=
+Received: from localhost.localdomain (unknown [218.106.182.227])
+        by smtp2 (Coremail) with SMTP id GtxpCgBHHNXNa55h7hmJKQ--.39097S4;
+        Thu, 25 Nov 2021 00:44:01 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     jejb@linux.ibm.com, jarkko@kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianglei Nie <niejianglei@gmail.com>
+Subject: [PATCH] security:trusted_tpm2: Fix memory leak in tpm2_key_encode()
+Date:   Thu, 25 Nov 2021 00:43:54 +0800
+Message-Id: <20211124164354.20448-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Cx8zVA4XdFK3OwFpWkFURNMTBeaTX_Lf
-X-Proofpoint-ORIG-GUID: _tVLqPmiRL_rnkoZgzVYLbt27FC-wqXw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-24_04,2021-11-24_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 mlxscore=0 bulkscore=0 clxscore=1011
- phishscore=0 suspectscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111240079
+X-CM-TRANSID: GtxpCgBHHNXNa55h7hmJKQ--.39097S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJw18Ww1kWF15Gry3XrWrZrb_yoW5XryUpF
+        ZxKF17ZrWagry7Ary7Ja1Svr1fCay5Gr47GwsrW39rGasxJFsxtFy7ArWYgrnrAFWfKw15
+        ZF4qvFWUWrWDtrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bY2-5UUUUU=
+X-Originating-IP: [218.106.182.227]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbi6xFVjFXlyRVF+AAAsy
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add support for SHA-384 and SHA-512 to the TPM2 library and extend
-the test case's PCR bank probing function to also probe for SHA-384
-and SHA-512 banks in case SHA-1 and SHA-256 banks are not available
-for use.
+From: Jianglei Nie <niejianglei@gmail.com>
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Line 36 (#1) allocates a memory chunk for scratch by kmalloc(), but
+it is never freed through the function, which will lead to a memory
+leak.
+
+We should kfree() scratch before the function returns (#2, #3 and #4).
+
+31 static int tpm2_key_encode(struct trusted_key_payload *payload,
+32			   struct trusted_key_options *options,
+33			   u8 *src, u32 len)
+34 {
+36	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+        // #1: kmalloc space
+37	u8 *work = scratch, *work1;
+50	if (!scratch)
+51		return -ENOMEM;
+
+56	if (options->blobauth_len == 0) {
+60		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+61			return PTR_ERR(w); // #2: missing kfree
+63	}
+
+71	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+72		 "BUG: scratch buffer is too small"))
+73		return -EINVAL; // #3: missing kfree
+
+  	// #4: missing kfree: scratch is never used afterwards.
+82	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+83		return PTR_ERR(work1);
+
+85	return work1 - payload->blob;
+86 }
+
+Signed-off-by: Jianglei Nie <niejianglei@gmail.com>
 ---
- tools/testing/selftests/tpm2/tpm2.py       | 12 +++++++++++-
- tools/testing/selftests/tpm2/tpm2_tests.py |  3 ++-
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ security/keys/trusted-keys/trusted_tpm2.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
-index f34486cd7342..d0960fe0e029 100644
---- a/tools/testing/selftests/tpm2/tpm2.py
-+++ b/tools/testing/selftests/tpm2/tpm2.py
-@@ -37,6 +37,8 @@ TPM2_ALG_SHA1 = 0x0004
- TPM2_ALG_AES = 0x0006
- TPM2_ALG_KEYEDHASH = 0x0008
- TPM2_ALG_SHA256 = 0x000B
-+TPM2_ALG_SHA384 = 0x000C
-+TPM2_ALG_SHA512 = 0x000D
- TPM2_ALG_NULL = 0x0010
- TPM2_ALG_CBC = 0x0042
- TPM2_ALG_CFB = 0x0043
-@@ -67,6 +69,8 @@ HR_TRANSIENT = 0x80000000
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 0165da386289..99bb8b2409ac 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 		unsigned char bool[3], *w = bool;
+ 		/* tag 0 is emptyAuth */
+ 		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+-		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
++		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
++			kfree(scratch);
+ 			return PTR_ERR(w);
++		}
+ 		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+ 	}
  
- SHA1_DIGEST_SIZE = 20
- SHA256_DIGEST_SIZE = 32
-+SHA384_DIGEST_SIZE = 48
-+SHA512_DIGEST_SIZE = 64
+@@ -69,8 +71,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 	 * trigger, so if it does there's something nefarious going on
+ 	 */
+ 	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
+-		 "BUG: scratch buffer is too small"))
++		 "BUG: scratch buffer is too small")){
++		kfree(scratch);
+ 		return -EINVAL;
++	}
  
- TPM2_VER0_ERRORS = {
-     0x000: "TPM_RC_SUCCESS",
-@@ -186,16 +190,22 @@ RC_WARN = 0x900
- ALG_DIGEST_SIZE_MAP = {
-     TPM2_ALG_SHA1: SHA1_DIGEST_SIZE,
-     TPM2_ALG_SHA256: SHA256_DIGEST_SIZE,
-+    TPM2_ALG_SHA384: SHA384_DIGEST_SIZE,
-+    TPM2_ALG_SHA512: SHA512_DIGEST_SIZE,
- }
+ 	work = asn1_encode_integer(work, end_work, options->keyhandle);
+ 	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+@@ -79,6 +83,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 	work1 = payload->blob;
+ 	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
+ 				     scratch, work - scratch);
++	kfree(scratch);
+ 	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
+ 		return PTR_ERR(work1);
  
- ALG_HASH_FUNCTION_MAP = {
-     TPM2_ALG_SHA1: hashlib.sha1,
--    TPM2_ALG_SHA256: hashlib.sha256
-+    TPM2_ALG_SHA256: hashlib.sha256,
-+    TPM2_ALG_SHA384: hashlib.sha384,
-+    TPM2_ALG_SHA512: hashlib.sha512,
- }
- 
- NAME_ALG_MAP = {
-     "sha1": TPM2_ALG_SHA1,
-     "sha256": TPM2_ALG_SHA256,
-+    "sha384": TPM2_ALG_SHA384,
-+    "sha512": TPM2_ALG_SHA512,
- }
- 
- 
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index ae88d8866e5d..3feca25038f5 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -29,7 +29,8 @@ class SmokeTest(unittest.TestCase):
- 
-     def determine_bank_alg(self):
-         # Probe for available PCR bank
--        for bank_alg in [tpm2.TPM2_ALG_SHA1, tpm2.TPM2_ALG_SHA256]:
-+        for bank_alg in [tpm2.TPM2_ALG_SHA1, tpm2.TPM2_ALG_SHA256,
-+                         tpm2.TPM2_ALG_SHA384, tpm2.TPM2_ALG_SHA512]:
-             try:
-                 handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
-                 self.client.policy_pcr(handle, [17], bank_alg=bank_alg)
 -- 
-2.31.1
+2.25.1
 
