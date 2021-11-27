@@ -2,35 +2,32 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBF746004D
-	for <lists+linux-integrity@lfdr.de>; Sat, 27 Nov 2021 17:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FF346004E
+	for <lists+linux-integrity@lfdr.de>; Sat, 27 Nov 2021 17:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237232AbhK0QwD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 27 Nov 2021 11:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbhK0QuD (ORCPT
+        id S238160AbhK0Qwc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 27 Nov 2021 11:52:32 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:36144 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233676AbhK0Quc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 27 Nov 2021 11:50:03 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85175C06173E
-        for <linux-integrity@vger.kernel.org>; Sat, 27 Nov 2021 08:46:48 -0800 (PST)
+        Sat, 27 Nov 2021 11:50:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1638031608;
-        bh=5ah6AxdfuuD0MZT2VqRIK0hSzcNTKo4O78noGVJ2uJQ=;
+        d=hansenpartnership.com; s=20151216; t=1638031637;
+        bh=BnMaFRu2u9lYF5O/Dz40XEb/zenFZ/1AZ2LtdiU9XmI=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-        b=njGCo5Tdm9jijSkAdLP70yvLqq5iEYYKkXsiTQiojxEQawWokxQ16RbMYS6hBSoZx
-         paiIamBvzue628J0V/8o/tIIhVeXRXDX0h5QfqdAcNmBWJhEAr/oMrAMuHJPTGY5as
-         n4f5SHQIRADQ3QTiveSF7alzcC+Mq12w+xcxGvCc=
+        b=JMhhAOi63QwMeNZe+ZueSZIv4gf1F6ipxJ04Oqvg8vDo4pzFhXUaFljLPAJPtQJ3x
+         XU+J8lI0RVjVAPcKyd/LauYOanV72KgtM97eNybVwvtx/2kSbaO3edf0ln7/00Kkkg
+         608WNGvnETk6ShTe2ApJvh9E0gfgkaN1N6Z+RMQE=
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5B0BE12809DF;
-        Sat, 27 Nov 2021 11:46:48 -0500 (EST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id E766312809ED;
+        Sat, 27 Nov 2021 11:47:17 -0500 (EST)
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id M61YihtRPkeo; Sat, 27 Nov 2021 11:46:48 -0500 (EST)
+        with ESMTP id bprGBakR3mfb; Sat, 27 Nov 2021 11:47:17 -0500 (EST)
 Received: from rainbow.int.hansenpartnership.com (unknown [153.66.140.204])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0F5F71280693;
-        Sat, 27 Nov 2021 11:46:46 -0500 (EST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A29E31280693;
+        Sat, 27 Nov 2021 11:47:16 -0500 (EST)
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     containers@lists.linux.dev, Mimi Zohar <zohar@linux.ibm.com>,
@@ -45,9 +42,9 @@ Cc:     containers@lists.linux.dev, Mimi Zohar <zohar@linux.ibm.com>,
         Lily Sturmann <lsturman@redhat.com>,
         Patrick Uiterwijk <puiterwi@redhat.com>,
         Christian Brauner <christian@brauner.io>
-Subject: [RFC 1/3] userns: add uuid field
-Date:   Sat, 27 Nov 2021 16:45:47 +0000
-Message-Id: <20211127164549.2571457-2-James.Bottomley@HansenPartnership.com>
+Subject: [RFC 2/3] ima: Namespace IMA
+Date:   Sat, 27 Nov 2021 16:45:48 +0000
+Message-Id: <20211127164549.2571457-3-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211127164549.2571457-1-James.Bottomley@HansenPartnership.com>
 References: <20211127164549.2571457-1-James.Bottomley@HansenPartnership.com>
@@ -57,92 +54,184 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-As a precursor to namespacing IMA a way of uniquely identifying the
-namespace to appear in the IMA log is needed.  This log may be
-transported away from the running system and may be analyzed even
-after the system has been rebooted.  Thus we need a way of identifying
-namespaces in the log which is unique.  UUID, being designed
-probabilistically never to repeat, fits this bill so add it to the
-user_namespace which we'll also use for namespacing IMA.
+Use the user namespace as the basis for namespacing IMA.  The
+implementation is very simple: add a new template called 'ima-ns'
+which exports the uuid of the user namespace into the IMA log.  This
+can be used to uniquely separate every container in the IMA log.
 
-uuid_gen() is used to create each uuid uniquely.  It feeds off the
-pseudo random number generator, but this should be as unique as we
-need for probabilistic non repeats without depleting the entropy
-pool.  Since there is no random initializer for a uuid, this is done
-in user_namespaces_init().  This should be safe because IMA is a late
-initcall.
+Note that the admin of the user namespace still cannot read back the
+IMA log because the IMA securityfs entries are not yet namespace
+aware.  However, root in the init_user_ns can read the log and see the
+containers.
 
-This patch contains no exposure mechanisms, and the subsequent patches
-only add uuid entries in the IMA log.  However, it is not unlikely
-that eventually orchestration systems will want to know what the uuid
-is (to tie their container ID to the one in the IMA log), so
-additional patches exposing this via NSIO and /proc/<pid>/ns could be
-added.
+You can get the uuid of init_user_ns from the boot_aggregate entry
+which is always the first one recorded in the log.  Any execution with
+a different uuid is in a new IMA namespace.
 
-For checkpoint/restore, the uuid should not be a property that
-transports because otherwise we'll have to have a set mechanism with a
-uniqueness check.
+A sample of the log showing entry into a container is:
+
+10 7766c926c9db8dd4c923f96be5635b04593029c1 ima-ns sha256:0000000000000000000000000000000000000000000000000000000000000000 boot_aggregate 6582e360-1354-42b9-a6ef-ee1993d982da
+[...]
+10 e0355132472d4d0ae1cc044412b4033bd5e1a48a ima-ns sha256:353e4d6b807056757fb5df31bafe7df80605bec20b445d5e9afd949ca4147d49 /usr/bin/unshare 6582e360-1354-42b9-a6ef-ee1993d982da
+10 f257f5a12fd6e28d32b367a2e453c3badd0e8774 ima-ns sha256:2a7c66fc7e19acc100ee2b777b71179043fade8b81968828522cf31e6a96eaa7 /usr/bin/bash e496e384-4133-4d57-b93a-1812b83badf2
+10 1bb206dbdf18f75e4515aeef378ba50e555a9291 ima-ns sha256:795fb52db49b211450c7242dbcad00d782a7b8174f669c259f74a7ccabe03a90 /usr/bin/id e496e384-4133-4d57-b93a-1812b83badf2
 
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
- include/linux/user_namespace.h | 2 ++
- kernel/user.c                  | 1 +
- kernel/user_namespace.c        | 3 +++
- 3 files changed, 6 insertions(+)
+ include/linux/ima.h                       |  1 +
+ security/integrity/ima/Kconfig            |  6 +++++-
+ security/integrity/ima/ima_template.c     |  6 +++++-
+ security/integrity/ima/ima_template_lib.c | 24 ++++++++++++++++++++++-
+ security/integrity/ima/ima_template_lib.h |  4 ++++
+ 5 files changed, 38 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
-index 33a4240e6a6f..d155788abdc1 100644
---- a/include/linux/user_namespace.h
-+++ b/include/linux/user_namespace.h
-@@ -10,6 +10,7 @@
- #include <linux/rwsem.h>
- #include <linux/sysctl.h>
- #include <linux/err.h>
-+#include <linux/uuid.h>
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index b6ab66a546ae..09b14b73889e 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -11,6 +11,7 @@
+ #include <linux/fs.h>
+ #include <linux/security.h>
+ #include <linux/kexec.h>
++#include <linux/user_namespace.h>
+ #include <crypto/hash_info.h>
+ struct linux_binprm;
  
- #define UID_GID_MAP_MAX_BASE_EXTENTS 5
- #define UID_GID_MAP_MAX_EXTENTS 340
-@@ -99,6 +100,7 @@ struct user_namespace {
- #endif
- 	struct ucounts		*ucounts;
- 	long ucount_max[UCOUNT_COUNTS];
-+	uuid_t			uuid;
- } __randomize_layout;
+diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+index f3a9cc201c8c..4f0ce241b585 100644
+--- a/security/integrity/ima/Kconfig
++++ b/security/integrity/ima/Kconfig
+@@ -69,7 +69,8 @@ choice
+ 	  hash, defined as 20 bytes, and a null terminated pathname,
+ 	  limited to 255 characters.  The 'ima-ng' measurement list
+ 	  template permits both larger hash digests and longer
+-	  pathnames.
++	  pathnames.  The 'ima-ns' adds the namespace uuid to the
++	  'ima-ng' template.
  
- struct ucounts {
-diff --git a/kernel/user.c b/kernel/user.c
-index e2cf8c22b539..bf9ae1d0b670 100644
---- a/kernel/user.c
-+++ b/kernel/user.c
-@@ -67,6 +67,7 @@ struct user_namespace init_user_ns = {
- 	.keyring_name_list = LIST_HEAD_INIT(init_user_ns.keyring_name_list),
- 	.keyring_sem = __RWSEM_INITIALIZER(init_user_ns.keyring_sem),
- #endif
-+	/* .uuid is initialized in user_namespaces_init() */
+ 	config IMA_TEMPLATE
+ 		bool "ima"
+@@ -77,6 +78,8 @@ choice
+ 		bool "ima-ng (default)"
+ 	config IMA_SIG_TEMPLATE
+ 		bool "ima-sig"
++	config IMA_NS_TEMPLATE
++		bool "ima-ns"
+ endchoice
+ 
+ config IMA_DEFAULT_TEMPLATE
+@@ -85,6 +88,7 @@ config IMA_DEFAULT_TEMPLATE
+ 	default "ima" if IMA_TEMPLATE
+ 	default "ima-ng" if IMA_NG_TEMPLATE
+ 	default "ima-sig" if IMA_SIG_TEMPLATE
++	default "ima-ns" if IMA_NS_TEMPLATE
+ 
+ choice
+ 	prompt "Default integrity hash algorithm"
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index 694560396be0..14e02eb3d0f3 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -24,6 +24,7 @@ static struct ima_template_desc builtin_templates[] = {
+ 	{.name = "ima-modsig", .fmt = "d-ng|n-ng|sig|d-modsig|modsig"},
+ 	{.name = "evm-sig",
+ 	 .fmt = "d-ng|n-ng|evmsig|xattrnames|xattrlengths|xattrvalues|iuid|igid|imode"},
++	{.name = "ima-ns", .fmt = "d-ng|n-ng|ns"},
+ 	{.name = "", .fmt = ""},	/* placeholder for a custom format */
  };
- EXPORT_SYMBOL_GPL(init_user_ns);
  
-diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-index 6b2e3ca7ee99..8ce57c16ddd3 100644
---- a/kernel/user_namespace.c
-+++ b/kernel/user_namespace.c
-@@ -141,6 +141,8 @@ int create_user_ns(struct cred *new)
- 	if (!setup_userns_sysctls(ns))
- 		goto fail_keyring;
+@@ -64,6 +65,9 @@ static const struct ima_template_field supported_fields[] = {
+ 	{.field_id = "xattrvalues",
+ 	 .field_init = ima_eventinodexattrvalues_init,
+ 	 .field_show = ima_show_template_sig},
++	{.field_id = "ns",
++	 .field_init = ima_ns_init,
++	 .field_show = ima_show_template_uuid},
+ };
  
-+	uuid_gen(&ns->uuid);
-+
- 	set_cred_user_ns(new, ns);
- 	return 0;
- fail_keyring:
-@@ -1386,6 +1388,7 @@ const struct proc_ns_operations userns_operations = {
- static __init int user_namespaces_init(void)
- {
- 	user_ns_cachep = KMEM_CACHE(user_namespace, SLAB_PANIC | SLAB_ACCOUNT);
-+	uuid_gen(&init_user_ns.uuid);
- 	return 0;
+ /*
+@@ -72,7 +76,7 @@ static const struct ima_template_field supported_fields[] = {
+  * description as 'd-ng' and 'n-ng' respectively.
+  */
+ #define MAX_TEMPLATE_NAME_LEN \
+-	sizeof("d-ng|n-ng|evmsig|xattrnames|xattrlengths|xattrvalues|iuid|igid|imode")
++	sizeof("d-ng|n-ng|evmsig|xattrnames|xattrlengths|xattrvalues|iuid|igid|imode|ns")
+ 
+ static struct ima_template_desc *ima_template;
+ static struct ima_template_desc *ima_buf_template;
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index ca017cae73eb..ebd54c1b5206 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -26,7 +26,8 @@ enum data_formats {
+ 	DATA_FMT_DIGEST_WITH_ALGO,
+ 	DATA_FMT_STRING,
+ 	DATA_FMT_HEX,
+-	DATA_FMT_UINT
++	DATA_FMT_UINT,
++	DATA_FMT_UUID,
+ };
+ 
+ static int ima_write_template_field_data(const void *data, const u32 datalen,
+@@ -120,6 +121,9 @@ static void ima_show_template_data_ascii(struct seq_file *m,
+ 			break;
+ 		}
+ 		break;
++	case DATA_FMT_UUID:
++		seq_printf(m, "%pU", buf_ptr);
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -202,6 +206,12 @@ void ima_show_template_uint(struct seq_file *m, enum ima_show_type show,
+ 	ima_show_template_field_data(m, show, DATA_FMT_UINT, field_data);
  }
- subsys_initcall(user_namespaces_init);
+ 
++void ima_show_template_uuid(struct seq_file *m, enum ima_show_type show,
++			    struct ima_field_data *field_data)
++{
++	ima_show_template_field_data(m, show, DATA_FMT_UUID, field_data);
++}
++
+ /**
+  * ima_parse_buf() - Parses lengths and data from an input buffer
+  * @bufstartp:       Buffer start address.
+@@ -685,3 +695,15 @@ int ima_eventinodexattrvalues_init(struct ima_event_data *event_data,
+ {
+ 	return ima_eventinodexattrs_init_common(event_data, field_data, 'v');
+ }
++
++/*
++ *  ima_ns_init - include the namespace UUID as part of the template
++ *  data
++ */
++int ima_ns_init(struct ima_event_data *event_data,
++		struct ima_field_data *field_data)
++{
++	return ima_write_template_field_data(&current_user_ns()->uuid,
++					     UUID_SIZE, DATA_FMT_UUID,
++					     field_data);
++}
+diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
+index c71f1de95753..6ea2156271ae 100644
+--- a/security/integrity/ima/ima_template_lib.h
++++ b/security/integrity/ima/ima_template_lib.h
+@@ -29,6 +29,8 @@ void ima_show_template_buf(struct seq_file *m, enum ima_show_type show,
+ 			   struct ima_field_data *field_data);
+ void ima_show_template_uint(struct seq_file *m, enum ima_show_type show,
+ 			    struct ima_field_data *field_data);
++void ima_show_template_uuid(struct seq_file *m, enum ima_show_type show,
++			    struct ima_field_data *field_data);
+ int ima_parse_buf(void *bufstartp, void *bufendp, void **bufcurp,
+ 		  int maxfields, struct ima_field_data *fields, int *curfields,
+ 		  unsigned long *len_mask, int enforce_mask, char *bufname);
+@@ -62,4 +64,6 @@ int ima_eventinodexattrlengths_init(struct ima_event_data *event_data,
+ 				    struct ima_field_data *field_data);
+ int ima_eventinodexattrvalues_init(struct ima_event_data *event_data,
+ 				   struct ima_field_data *field_data);
++int ima_ns_init(struct ima_event_data *event_data,
++		struct ima_field_data *field_data);
+ #endif /* __LINUX_IMA_TEMPLATE_LIB_H */
 -- 
 2.33.0
 
