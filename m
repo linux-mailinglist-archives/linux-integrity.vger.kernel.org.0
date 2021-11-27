@@ -2,224 +2,175 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1494845FC71
-	for <lists+linux-integrity@lfdr.de>; Sat, 27 Nov 2021 04:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5C646004B
+	for <lists+linux-integrity@lfdr.de>; Sat, 27 Nov 2021 17:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352118AbhK0DtC (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Nov 2021 22:49:02 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5930 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236666AbhK0DrC (ORCPT
+        id S231256AbhK0Qv1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 27 Nov 2021 11:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229504AbhK0Qt1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Nov 2021 22:47:02 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AR3MVKe023858;
-        Sat, 27 Nov 2021 03:43:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=4eB56somxyCGqXyzYvzkcEQfJwq4cs00pYLIPKTRSd0=;
- b=BXz4p1Xj33GTpa4ZS2qpnj3JYTWNT/cd1qHmkE5TfflDN2aIbjjXKTQg9Is4MEUfoBPH
- LUz58cWxIw7bHstALm7r3epXf30chBc+i3Dy7U3Orzq0Xd+D/kxjMKh32CyvaadNvJcP
- Lf6IDV1yZWI78q5zlHb+tdFTVaz9f42ORL/koD/vfF15vTqO9zcXlSz/jxySRL689/fJ
- CLuT0SWryUSyaxsPJq9rTJdz8xAs4eB2v/2k1g2CNoFTlbZCQJty+XbKwXz2IbZQ1rFQ
- FwGqpi1JUqxw4LTGWZONIntRIYWOVDtesJgJa1UdZHwDxIU3hqfRPVPbsGtO1uLAnSnd VA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ckcq386yf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 27 Nov 2021 03:43:45 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AR3YKDW020454;
-        Sat, 27 Nov 2021 03:43:45 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ckcq386ya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 27 Nov 2021 03:43:45 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AR3h0Xo025865;
-        Sat, 27 Nov 2021 03:43:44 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma02dal.us.ibm.com with ESMTP id 3ckca98f7v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 27 Nov 2021 03:43:44 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AR3hhVI21627784
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 27 Nov 2021 03:43:43 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5AE6AAC05F;
-        Sat, 27 Nov 2021 03:43:43 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30072AC05E;
-        Sat, 27 Nov 2021 03:43:43 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Sat, 27 Nov 2021 03:43:43 +0000 (GMT)
-Message-ID: <2557c1e2-b0fa-8729-0eb0-6ae68ee6f653@linux.ibm.com>
-Date:   Fri, 26 Nov 2021 22:43:42 -0500
+        Sat, 27 Nov 2021 11:49:27 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BB5C061574
+        for <linux-integrity@vger.kernel.org>; Sat, 27 Nov 2021 08:46:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1638031571;
+        bh=qTXSjYwIShcIgQm1cWqKlyzsP2MDeDMn1QB43Y4sS60=;
+        h=From:To:Subject:Date:Message-Id:From;
+        b=MQ7oxs+5IrlPZJhvD9OTS8NpvfYibdV9Zwm0sHT3KHr9ZtztVq9Ehv+jbJtePyR9E
+         ILvSKh7bmFNBowhiIFfr41ik2cnSnYbtyG6Ku2uQEzSNMif8O//jY98lS7l5S+Vhw+
+         aRAutDeeAwm2v3lrPmlkwkrAykS4MVFzh++0GH7w=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 4EC4A128063F;
+        Sat, 27 Nov 2021 11:46:11 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mYj7AoHhMH8m; Sat, 27 Nov 2021 11:46:11 -0500 (EST)
+Received: from rainbow.int.hansenpartnership.com (unknown [153.66.140.204])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id E44461280639;
+        Sat, 27 Nov 2021 11:46:09 -0500 (EST)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     containers@lists.linux.dev, Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        krzysztof.struczynski@huawei.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Michael Peters <mpeters@redhat.com>,
+        Luke Hinds <lhinds@redhat.com>,
+        Lily Sturmann <lsturman@redhat.com>,
+        Patrick Uiterwijk <puiterwi@redhat.com>,
+        Christian Brauner <christian@brauner.io>
+Subject: [RFC 0/3] Namespace IMA
+Date:   Sat, 27 Nov 2021 16:45:46 +0000
+Message-Id: <20211127164549.2571457-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3 1/3] selftests: tpm2: Probe for available PCR bank
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-References: <20211125003827.1360432-1-stefanb@linux.vnet.ibm.com>
- <20211125003827.1360432-2-stefanb@linux.vnet.ibm.com>
- <97ddf0f23592b74e7647e3c9b36b37553c594c82.camel@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <97ddf0f23592b74e7647e3c9b36b37553c594c82.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aUbulO1Y26RYD-7d-PQyEFe0TZSG6FjT
-X-Proofpoint-ORIG-GUID: WXDukT7EUqffygXAbUtycn2irpRL29Gx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-27_01,2021-11-25_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 adultscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- mlxscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111270017
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Over the past five years there have been several attempts to namespace
+IMA [1,2,3].  All of them were eventually fairly huge patch series,
+which try to solve every issue and potential issue all at once, making
+them incredibly difficult to review and highly dependent on an array
+of non-IMA features which causes huge upporting difficulty as the
+patch progresses.  Given this, I thought we'd try a different way:
+introduce a minimal namespacing of IMA and try to build on it in
+subsequent patches.
 
-On 11/26/21 19:29, Jarkko Sakkinen wrote:
-> On Wed, 2021-11-24 at 19:38 -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Probe for an available PCR bank to accommodate devices that do not have a
-> What does "probing for an vailable PCR bank" even mean?
+This first patch set namespaces IMA by tying it to the user namespace.
+The reason for this is that IMA, at some point, is going to need to do
+appraisal in containers and thus ima namespaces are going to require
+.ima or _ima keyrings.  Since they keyrings are already namespaced
+inside user_ns, adding keyring functionality to a different namespace
+is going to be problematic, so I elected to fix the problem by using
+the same namespace for IMA and the keyrings.  This decision could
+obviously change, but I think given the keyring dependence, we'd need
+a good reason to have a different namespace for IMA.
 
-Checking ? Testing ? What's the difference to those words?
+All this patch set does is add a new template 'ima-ns' which includes
+the user namespace uuid (added by the first patch) in the IMA log.
+Using uuids gives us probabalistically unique identifiers for all
+namespaces without having to check them for uniqueness.
 
+Once we have the container being logged, it stands to reason that the
+ima inode cache needs to record one event per namespace per inode
+instead of the one global event per inode, so if I enter the ima
+namespace and execute the same measured command, it will log again
+with the new namespace uuid even if the hash is the same:
 
->
->> SHA-1 PCR bank or whose SHA-1 bank is deactivated. Use the bank that can
->> be used for the TPM2 commands, such as the SHA-256 bank.
-> This is incorrect, as the patch does not have code to query
-> available hash algorithms.
+ > ls
+ > grep ls /sys/kernel/security/integrity/ima/ascii_runtime_measurements
+10 c70c7b851f83c8c71ee7b508c8468383c0d2c154 ima-ns sha256:1f7f27ef1052e33731c9ff56a36ac3af4437e3f95ad55f6813c320b087b5d356 /usr/bin/ls 6582e360-1354-42b9-a6ef-ee1993d982da
+ > unshare --user -r
+ # ls
+ # exit
+ > grep ls /sys/kernel/security/integrity/ima/ascii_runtime_measurements
+ 10 c70c7b851f83c8c71ee7b508c8468383c0d2c154 ima-ns sha256:1f7f27ef1052e33731c9ff56a36ac3af4437e3f95ad55f6813c320b087b5d356 /usr/bin/ls 6582e360-1354-42b9-a6ef-ee1993d982da
+10 144a73d85e9cf999c4abbc99f3c41e9422c8016e ima-ns sha256:1f7f27ef1052e33731c9ff56a36ac3af4437e3f95ad55f6813c320b087b5d356 /usr/bin/ls e496e384-4133-4d57-b93a-1812b83badf2
 
-I am not sure I understand. The new function determines which PCR banks 
-(SHA-1 or SHA-256) the subsequent tests can use. It tries to execute the 
-policy_pcr command with the given hash bank algorithm (SHA-256 or SHA-1) 
-and if it returns an UnknowPcrBankError it tries the next one in the 
-list. It doesn't need to query available hash algorithms. A TPM 2 may 
-support SHA 256 and yet its SHA 256 bank may be deactivate.
+Note that this namespacing if the iint cache is in the third patch and
+could be dropped if there's huge opposition.
 
-> What the code does, and only does that, is to use SHA-256 as
-> a fallback when SHA-1 is not enabled.
->
-> /Jarkko
->
->
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> ---
->>   tools/testing/selftests/tpm2/tpm2_tests.py | 35 +++++++++++++++++-----
->>   1 file changed, 27 insertions(+), 8 deletions(-)
->>
->> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
->> index 9d764306887b..6b88ff0e47b9 100644
->> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
->> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
->> @@ -27,7 +27,23 @@ class SmokeTest(unittest.TestCase):
->>           result = self.client.unseal(self.root_key, blob, auth, None)
->>           self.assertEqual(data, result)
->>   
->> +    def determine_bank_alg(self):
->> +        # Probe for available PCR bank
->> +        for bank_alg in [tpm2.TPM2_ALG_SHA1, tpm2.TPM2_ALG_SHA256]:
->> +            try:
->> +                handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
->> +                self.client.policy_pcr(handle, [17], bank_alg=bank_alg)
->> +                return bank_alg
->> +            except tpm2.UnknownPCRBankError:
->> +                pass
->> +            finally:
->> +                self.client.flush_context(handle)
->> +        return None
->> +
->>       def test_seal_with_policy(self):
->> +        bank_alg = self.determine_bank_alg()
->> +        self.assertIsNotNone(bank_alg)
->> +
->>           handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
->>   
->>           data = ('X' * 64).encode()
->> @@ -35,7 +51,7 @@ class SmokeTest(unittest.TestCase):
->>           pcrs = [16]
->>   
->>           try:
->> -            self.client.policy_pcr(handle, pcrs)
->> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
->>               self.client.policy_password(handle)
->>   
->>               policy_dig = self.client.get_policy_digest(handle)
->> @@ -47,7 +63,7 @@ class SmokeTest(unittest.TestCase):
->>           handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
->>   
->>           try:
->> -            self.client.policy_pcr(handle, p"Use SHA-256 as a fallback crs)
->> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
->>               self.client.policy_password(handle)
->>   
->>               result = self.client.unseal(self.root_key, blob, auth, handle)
->> @@ -72,6 +88,9 @@ class SmokeTest(unittest.TestCase):
->>           self.assertEqual(rc, tpm2.TPM2_RC_AUTH_FAIL)
->>   
->>       def test_unseal_with_wrong_policy(self):
->> +        bank_alg = self.determine_bank_alg()
->> +        self.assertIsNotNone(bank_alg)
->> +
->>           handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
->>   
->>           data = ('X' * 64).encode()
->> @@ -79,7 +98,7 @@ class SmokeTest(unittest.TestCase):
->>           pcrs = [16]
->>   
->>           try:
->> -            self.client.policy_pcr(handle, pcrs)
->> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
->>               self.client.policy_password(handle)
->>   
->>               policy_dig = self.client.get_policy_digest(handle)
->> @@ -91,13 +110,13 @@ class SmokeTest(unittest.TestCase):
->>           # Extend first a PCR that is not part of the policy and try to unseal.
->>           # This should succeed.
->>   
->> -        ds = tpm2.get_digest_size(tpm2.TPM2_ALG_SHA1)
->> -        self.client.extend_pcr(1, ('X' * ds).encode())
->> +        ds = tpm2.get_digest_size(bank_alg)
->> +        self.client.extend_pcr(1, ('X' * ds).encode(), bank_alg=bank_alg)
->>   
->>           handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
->>   
->>           try:
->> -            self.client.policy_pcr(handle, pcrs)
->> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
->>               self.client.policy_password(handle)
->>   
->>               result = self.client.unseal(self.root_key, blob, auth, handle)
->> @@ -109,14 +128,14 @@ class SmokeTest(unittest.TestCase):
->>   
->>           # Then, extend a PCR that is part of the policy and try to unseal.
->>           # This should fail.
->> -        self.client.extend_pcr(16, ('X' * ds).encode())
->> +        self.client.extend_pcr(16, ('X' * ds).encode(), bank_alg=bank_alg)
->>   
->>           handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
->>   
->>           rc = 0
->>   
->>           try:
->> -            self.client.policy_pcr(handle, pcrs)
->> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
->>               self.client.policy_password(handle)
->>   
->>               result = self.client.unseal(self.root_key, blob, auth, handle)
+Some things to note are that the IMA securityfs entries aren't
+virtualized.  This is planned for a follow up patch (so currently the
+admin can't even view the ima log in the container).  Everything
+that's logged goes through the main IMA log and the physical TPM.
+This means that the admin of the physical system can attest to the
+log, but the containers would have to trust the admins attestation of
+their log pieces.  The initial IMA policy is also inherited from the
+physical system and can't currently be changed.
+
+The rough plan of action for follow up patches is
+
+1. Namespace securityfs so container admin can read the IMA files like
+   log which would only show entries related to the container (so
+   likely only entries of the current and all child user namespaces)
+   and policy.
+
+2. Add per namespace policies by writing to the policy file in the
+   container.  Obviously implementation of this would have to preserve
+   the security of the system, so the new namespace couldn't stop
+   logging something the physical host required to be logged, but it
+   could add additional classes of things to log.
+
+3. Add the ima keyrings and the ability to appraise inside the container.
+
+There could be other phases beyond this, including possibly optionally
+attaching a vtpm to the container to provide local quotes but this
+should be need driven.
+
+Some non problems of this approach are:
+
+* The continuous growth of the IMA log.  This is already a problem
+  with non-namespaced IMA.  One can argue that the above
+  implementation makes the problem worse, but it is unarguable that if
+  the problem were solved generally it would no logner be an issue for
+  containers.
+
+* attesting to the in-container IMA log.  Given it's being logged
+  through the physical TPM, the physical system owner will have to
+  publish a mechanism for attesting to particular container entries of
+  the log.
+
+[1] https://lore.kernel.org/all/20200818152037.11869-1-krzysztof.struczynski@huawei.com
+[2] https://lore.kernel.org/all/20180511144230.75384-1-stefanb@linux.vnet.ibm.com
+[3] https://lore.kernel.org/all/1494511203-8397-1-git-send-email-guilherme.magalhaes@hpe.com
+
+James
+
+---
+
+James Bottomley (3):
+  userns: add uuid field
+  ima: Namespace IMA
+  ima: make the integrity inode cache per namespace
+
+ include/linux/ima.h                       |  14 ++-
+ include/linux/user_namespace.h            |   7 ++
+ kernel/user.c                             |   2 +
+ kernel/user_namespace.c                   |   9 ++
+ security/integrity/iint.c                 |   4 +-
+ security/integrity/ima/Kconfig            |   6 +-
+ security/integrity/ima/Makefile           |   2 +-
+ security/integrity/ima/ima.h              |  21 +++-
+ security/integrity/ima/ima_api.c          |   7 +-
+ security/integrity/ima/ima_main.c         |  21 ++--
+ security/integrity/ima/ima_ns.c           | 115 ++++++++++++++++++++++
+ security/integrity/ima/ima_policy.c       |   2 +-
+ security/integrity/ima/ima_template.c     |   6 +-
+ security/integrity/ima/ima_template_lib.c |  26 ++++-
+ security/integrity/ima/ima_template_lib.h |   4 +
+ security/integrity/integrity.h            |  11 ++-
+ 16 files changed, 236 insertions(+), 21 deletions(-)
+ create mode 100644 security/integrity/ima/ima_ns.c
+
+-- 
+2.33.0
+
