@@ -2,149 +2,88 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD99445F778
-	for <lists+linux-integrity@lfdr.de>; Sat, 27 Nov 2021 01:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D202945F783
+	for <lists+linux-integrity@lfdr.de>; Sat, 27 Nov 2021 01:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343601AbhK0AeV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 26 Nov 2021 19:34:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59400 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343715AbhK0AcU (ORCPT
+        id S242334AbhK0Ao4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 26 Nov 2021 19:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229693AbhK0Am4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 26 Nov 2021 19:32:20 -0500
+        Fri, 26 Nov 2021 19:42:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4013C061748;
+        Fri, 26 Nov 2021 16:39:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE8A0B82948;
-        Sat, 27 Nov 2021 00:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7921C004E1;
-        Sat, 27 Nov 2021 00:29:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D16A623BB;
+        Sat, 27 Nov 2021 00:39:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10ECDC004E1;
+        Sat, 27 Nov 2021 00:39:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637972943;
-        bh=o+em8kfwsqJ2QupMLLADRCTDh/5vnvuG3Lnujj+swS4=;
+        s=k20201202; t=1637973581;
+        bh=PcOF56GVPiU5QNHH54WQ/qVEsJfSIIehARqsTZnkvTQ=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ChuKe1a/qvSV0k6OZM6tgpE9pKM2SQwFskak0EsRWaRtIwmjFTGmFd9E5R/mClm85
-         bsRrHknhjIGwuKOOHsWQBLhFB3b74n21Jzy5M9FwmtCpwWTgWE34lZeUWhOWYhiJ6m
-         BxkD90PQqWMhLr5YAtddIU/3+QLQ3j/WdNsivPX5pCYgo0sHSghbqtkJD38Yh/1ZNu
-         aI1VjDqP5XUUq4wIuyW14raEB58BbW9WSp/pHWFCOKggbeab+qiMWQVXu5jY0VXV7F
-         vMsoIghKFknfP3JpUOkFspI89yyrTXB0TfKg8eRUgTTHfbK7GpQKjJjC9fJV1OGjmX
-         8iP/jK8oSW9qw==
-Message-ID: <97ddf0f23592b74e7647e3c9b36b37553c594c82.camel@kernel.org>
-Subject: Re: [PATCH v3 1/3] selftests: tpm2: Probe for available PCR bank
+        b=YYZm04gJJW8OseHRe5cYN9BoXPSeUWlZUCbFRzLWEUsDmtK+U5FhAqz5q7CVwR2BU
+         qUaeqm08KvcJne3/mzr4QDiuR1lV7km04kdEUBxgxqorEXtnSK7pNP/9QzrI46y2Is
+         Ff2+zUzi+ZmSrJZpC2oeXmbBh8JbenfJmY41rXv5Wgy6vXus3NMl/BvVo/BWqep3Qu
+         Zq3/MphpE0Bq2ymYfwCenvC00hmSzussq4ttkkX35BloHhDjUXFxNV17MEpPkD3Kz+
+         pAInmj11An10LehGnB1p+ds4sTye1km1wCaA+RnWr6m+q5MNWEHLbx+PAkP4mScs3S
+         h43lkz6KrPv+Q==
+Message-ID: <8ae595e00a1af8af398d99b5eea980011535334a.camel@kernel.org>
+Subject: Re: [PATCH v8 03/17] integrity: Introduce a Linux keyring called
+ machine
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date:   Sat, 27 Nov 2021 02:29:00 +0200
-In-Reply-To: <20211125003827.1360432-2-stefanb@linux.vnet.ibm.com>
-References: <20211125003827.1360432-1-stefanb@linux.vnet.ibm.com>
-         <20211125003827.1360432-2-stefanb@linux.vnet.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     keescook@chromium.org, torvalds@linux-foundation.org,
+        weiyongjun1@huawei.com, nayna@linux.ibm.com, ebiggers@google.com,
+        ardb@kernel.org, nramas@linux.microsoft.com, lszubowi@redhat.com,
+        jason@zx2c4.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@HansenPartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Date:   Sat, 27 Nov 2021 02:39:39 +0200
+In-Reply-To: <20211124044124.998170-4-eric.snowberg@oracle.com>
+References: <20211124044124.998170-1-eric.snowberg@oracle.com>
+         <20211124044124.998170-4-eric.snowberg@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.40.4-1 
 MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-T24gV2VkLCAyMDIxLTExLTI0IGF0IDE5OjM4IC0wNTAwLCBTdGVmYW4gQmVyZ2VyIHdyb3RlOgo+
-IEZyb206IFN0ZWZhbiBCZXJnZXIgPHN0ZWZhbmJAbGludXguaWJtLmNvbT4KPiAKPiBQcm9iZSBm
-b3IgYW4gYXZhaWxhYmxlIFBDUiBiYW5rIHRvIGFjY29tbW9kYXRlIGRldmljZXMgdGhhdCBkbyBu
-b3QgaGF2ZSBhCgpXaGF0IGRvZXMgInByb2JpbmcgZm9yIGFuIHZhaWxhYmxlIFBDUiBiYW5rIiBl
-dmVuIG1lYW4/Cgo+IFNIQS0xIFBDUiBiYW5rIG9yIHdob3NlIFNIQS0xIGJhbmsgaXMgZGVhY3Rp
-dmF0ZWQuIFVzZSB0aGUgYmFuayB0aGF0IGNhbgo+IGJlIHVzZWQgZm9yIHRoZSBUUE0yIGNvbW1h
-bmRzLCBzdWNoIGFzIHRoZSBTSEEtMjU2IGJhbmsuCgpUaGlzIGlzIGluY29ycmVjdCwgYXMgdGhl
-IHBhdGNoIGRvZXMgbm90IGhhdmUgY29kZSB0byBxdWVyeQphdmFpbGFibGUgaGFzaCBhbGdvcml0
-aG1zLgoKV2hhdCB0aGUgY29kZSBkb2VzLCBhbmQgb25seSBkb2VzIHRoYXQsIGlzIHRvIHVzZSBT
-SEEtMjU2IGFzwqAKYSBmYWxsYmFjayB3aGVuIFNIQS0xIGlzIG5vdCBlbmFibGVkLgoKL0phcmtr
-bwoKCj4gCj4gU2lnbmVkLW9mZi1ieTogU3RlZmFuIEJlcmdlciA8c3RlZmFuYkBsaW51eC5pYm0u
-Y29tPgo+IC0tLQo+IMKgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdHBtMi90cG0yX3Rlc3RzLnB5
-IHwgMzUgKysrKysrKysrKysrKysrKystLS0tLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDI3IGluc2Vy
-dGlvbnMoKyksIDggZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzL3RwbTIvdHBtMl90ZXN0cy5weSBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Rw
-bTIvdHBtMl90ZXN0cy5weQo+IGluZGV4IDlkNzY0MzA2ODg3Yi4uNmI4OGZmMGU0N2I5IDEwMDY0
-NAo+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RwbTIvdHBtMl90ZXN0cy5weQo+ICsr
-KyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RwbTIvdHBtMl90ZXN0cy5weQo+IEBAIC0yNyw3
-ICsyNywyMyBAQCBjbGFzcyBTbW9rZVRlc3QodW5pdHRlc3QuVGVzdENhc2UpOgo+IMKgwqDCoMKg
-wqDCoMKgwqAgcmVzdWx0ID0gc2VsZi5jbGllbnQudW5zZWFsKHNlbGYucm9vdF9rZXksIGJsb2Is
-IGF1dGgsIE5vbmUpCj4gwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmFzc2VydEVxdWFsKGRhdGEsIHJl
-c3VsdCkKPiDCoAo+ICvCoMKgwqAgZGVmIGRldGVybWluZV9iYW5rX2FsZyhzZWxmKToKPiArwqDC
-oMKgwqDCoMKgwqAgIyBQcm9iZSBmb3IgYXZhaWxhYmxlIFBDUiBiYW5rCj4gK8KgwqDCoMKgwqDC
-oMKgIGZvciBiYW5rX2FsZyBpbiBbdHBtMi5UUE0yX0FMR19TSEExLCB0cG0yLlRQTTJfQUxHX1NI
-QTI1Nl06Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgaGFuZGxlID0gc2VsZi5jbGllbnQuc3RhcnRfYXV0aF9zZXNzaW9uKHRw
-bTIuVFBNMl9TRV9UUklBTCkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYu
-Y2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBbMTddLCBiYW5rX2FsZz1iYW5rX2FsZykKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiBiYW5rX2FsZwo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIGV4Y2VwdCB0cG0yLlVua25vd25QQ1JCYW5rRXJyb3I6Cj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwYXNzCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZmlu
-YWxseToKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LmZsdXNo
-X2NvbnRleHQoaGFuZGxlKQo+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gTm9uZQo+ICsKPiDCoMKg
-wqDCoCBkZWYgdGVzdF9zZWFsX3dpdGhfcG9saWN5KHNlbGYpOgo+ICvCoMKgwqDCoMKgwqDCoCBi
-YW5rX2FsZyA9IHNlbGYuZGV0ZXJtaW5lX2JhbmtfYWxnKCkKPiArwqDCoMKgwqDCoMKgwqAgc2Vs
-Zi5hc3NlcnRJc05vdE5vbmUoYmFua19hbGcpCj4gKwo+IMKgwqDCoMKgwqDCoMKgwqAgaGFuZGxl
-ID0gc2VsZi5jbGllbnQuc3RhcnRfYXV0aF9zZXNzaW9uKHRwbTIuVFBNMl9TRV9UUklBTCkKPiDC
-oAo+IMKgwqDCoMKgwqDCoMKgwqAgZGF0YSA9ICgnWCcgKiA2NCkuZW5jb2RlKCkKPiBAQCAtMzUs
-NyArNTEsNyBAQCBjbGFzcyBTbW9rZVRlc3QodW5pdHRlc3QuVGVzdENhc2UpOgo+IMKgwqDCoMKg
-wqDCoMKgwqAgcGNycyA9IFsxNl0KPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBwY3JzKQo+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBw
-Y3JzLCBiYW5rX2FsZz1iYW5rX2FsZykKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2VsZi5j
-bGllbnQucG9saWN5X3Bhc3N3b3JkKGhhbmRsZSkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBwb2xpY3lfZGlnID0gc2VsZi5jbGllbnQuZ2V0X3BvbGljeV9kaWdlc3QoaGFuZGxlKQo+
-IEBAIC00Nyw3ICs2Myw3IEBAIGNsYXNzIFNtb2tlVGVzdCh1bml0dGVzdC5UZXN0Q2FzZSk6Cj4g
-wqDCoMKgwqDCoMKgwqDCoCBoYW5kbGUgPSBzZWxmLmNsaWVudC5zdGFydF9hdXRoX3Nlc3Npb24o
-dHBtMi5UUE0yX1NFX1BPTElDWSkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBwIlVzZSBT
-SEEtMjU2IGFzIGEgZmFsbGJhY2sgY3JzKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYu
-Y2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBwY3JzLCBiYW5rX2FsZz1iYW5rX2FsZykKPiDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgc2VsZi5jbGllbnQucG9saWN5X3Bhc3N3b3JkKGhhbmRsZSkK
-PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXN1bHQgPSBzZWxmLmNsaWVudC51bnNl
-YWwoc2VsZi5yb290X2tleSwgYmxvYiwgYXV0aCwgaGFuZGxlKQo+IEBAIC03Miw2ICs4OCw5IEBA
-IGNsYXNzIFNtb2tlVGVzdCh1bml0dGVzdC5UZXN0Q2FzZSk6Cj4gwqDCoMKgwqDCoMKgwqDCoCBz
-ZWxmLmFzc2VydEVxdWFsKHJjLCB0cG0yLlRQTTJfUkNfQVVUSF9GQUlMKQo+IMKgCj4gwqDCoMKg
-wqAgZGVmIHRlc3RfdW5zZWFsX3dpdGhfd3JvbmdfcG9saWN5KHNlbGYpOgo+ICvCoMKgwqDCoMKg
-wqDCoCBiYW5rX2FsZyA9IHNlbGYuZGV0ZXJtaW5lX2JhbmtfYWxnKCkKPiArwqDCoMKgwqDCoMKg
-wqAgc2VsZi5hc3NlcnRJc05vdE5vbmUoYmFua19hbGcpCj4gKwo+IMKgwqDCoMKgwqDCoMKgwqAg
-aGFuZGxlID0gc2VsZi5jbGllbnQuc3RhcnRfYXV0aF9zZXNzaW9uKHRwbTIuVFBNMl9TRV9UUklB
-TCkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgZGF0YSA9ICgnWCcgKiA2NCkuZW5jb2RlKCkKPiBA
-QCAtNzksNyArOTgsNyBAQCBjbGFzcyBTbW9rZVRlc3QodW5pdHRlc3QuVGVzdENhc2UpOgo+IMKg
-wqDCoMKgwqDCoMKgwqAgcGNycyA9IFsxNl0KPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+
-IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBw
-Y3JzKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFu
-ZGxlLCBwY3JzLCBiYW5rX2FsZz1iYW5rX2FsZykKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-c2VsZi5jbGllbnQucG9saWN5X3Bhc3N3b3JkKGhhbmRsZSkKPiDCoAo+IMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBwb2xpY3lfZGlnID0gc2VsZi5jbGllbnQuZ2V0X3BvbGljeV9kaWdlc3QoaGFu
-ZGxlKQo+IEBAIC05MSwxMyArMTEwLDEzIEBAIGNsYXNzIFNtb2tlVGVzdCh1bml0dGVzdC5UZXN0
-Q2FzZSk6Cj4gwqDCoMKgwqDCoMKgwqDCoCAjIEV4dGVuZCBmaXJzdCBhIFBDUiB0aGF0IGlzIG5v
-dCBwYXJ0IG9mIHRoZSBwb2xpY3kgYW5kIHRyeSB0byB1bnNlYWwuCj4gwqDCoMKgwqDCoMKgwqDC
-oCAjIFRoaXMgc2hvdWxkIHN1Y2NlZWQuCj4gwqAKPiAtwqDCoMKgwqDCoMKgwqAgZHMgPSB0cG0y
-LmdldF9kaWdlc3Rfc2l6ZSh0cG0yLlRQTTJfQUxHX1NIQTEpCj4gLcKgwqDCoMKgwqDCoMKgIHNl
-bGYuY2xpZW50LmV4dGVuZF9wY3IoMSwgKCdYJyAqIGRzKS5lbmNvZGUoKSkKPiArwqDCoMKgwqDC
-oMKgwqAgZHMgPSB0cG0yLmdldF9kaWdlc3Rfc2l6ZShiYW5rX2FsZykKPiArwqDCoMKgwqDCoMKg
-wqAgc2VsZi5jbGllbnQuZXh0ZW5kX3BjcigxLCAoJ1gnICogZHMpLmVuY29kZSgpLCBiYW5rX2Fs
-Zz1iYW5rX2FsZykKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgaGFuZGxlID0gc2VsZi5jbGllbnQu
-c3RhcnRfYXV0aF9zZXNzaW9uKHRwbTIuVFBNMl9TRV9QT0xJQ1kpCj4gwqAKPiDCoMKgwqDCoMKg
-wqDCoMKgIHRyeToKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5wb2xpY3lf
-cGNyKGhhbmRsZSwgcGNycykKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5w
-b2xpY3lfcGNyKGhhbmRsZSwgcGNycywgYmFua19hbGc9YmFua19hbGcpCj4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wYXNzd29yZChoYW5kbGUpCj4gwqAKPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVzdWx0ID0gc2VsZi5jbGllbnQudW5zZWFsKHNlbGYu
-cm9vdF9rZXksIGJsb2IsIGF1dGgsIGhhbmRsZSkKPiBAQCAtMTA5LDE0ICsxMjgsMTQgQEAgY2xh
-c3MgU21va2VUZXN0KHVuaXR0ZXN0LlRlc3RDYXNlKToKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAg
-IyBUaGVuLCBleHRlbmQgYSBQQ1IgdGhhdCBpcyBwYXJ0IG9mIHRoZSBwb2xpY3kgYW5kIHRyeSB0
-byB1bnNlYWwuCj4gwqDCoMKgwqDCoMKgwqDCoCAjIFRoaXMgc2hvdWxkIGZhaWwuCj4gLcKgwqDC
-oMKgwqDCoMKgIHNlbGYuY2xpZW50LmV4dGVuZF9wY3IoMTYsICgnWCcgKiBkcykuZW5jb2RlKCkp
-Cj4gK8KgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LmV4dGVuZF9wY3IoMTYsICgnWCcgKiBkcyku
-ZW5jb2RlKCksIGJhbmtfYWxnPWJhbmtfYWxnKQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoCBoYW5k
-bGUgPSBzZWxmLmNsaWVudC5zdGFydF9hdXRoX3Nlc3Npb24odHBtMi5UUE0yX1NFX1BPTElDWSkK
-PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgcmMgPSAwCj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgIHRy
-eToKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5wb2xpY3lfcGNyKGhhbmRs
-ZSwgcGNycykKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5wb2xpY3lfcGNy
-KGhhbmRsZSwgcGNycywgYmFua19hbGc9YmFua19hbGcpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHNlbGYuY2xpZW50LnBvbGljeV9wYXNzd29yZChoYW5kbGUpCj4gwqAKPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgcmVzdWx0ID0gc2VsZi5jbGllbnQudW5zZWFsKHNlbGYucm9vdF9rZXks
-IGJsb2IsIGF1dGgsIGhhbmRsZSkKCg==
+On Tue, 2021-11-23 at 23:41 -0500, Eric Snowberg wrote:
+> Many UEFI Linux distributions boot using shim.=C2=A0 The UEFI shim provid=
+es
+> what is called Machine Owner Keys (MOK). Shim uses both the UEFI Secure
+> Boot DB and MOK keys to validate the next step in the boot chain.=C2=A0 T=
+he
+> MOK facility can be used to import user generated keys.=C2=A0 These keys =
+can
+> be used to sign an end-users development kernel build.=C2=A0 When Linux
+> boots, both UEFI Secure Boot DB and MOK keys get loaded in the Linux
+> .platform keyring.
+>=20
+> Define a new Linux keyring called machine.=C2=A0 This keyring shall conta=
+in just
+> MOK CA keys and not the remaining keys in the platform keyring. This new
+> machine keyring will be used in follow on patches.=C2=A0 Unlike keys in t=
+he
+> platform keyring, keys contained in the machine keyring will be trusted
+> within the kernel if the end-user has chosen to do so.
+>=20
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+/Jarkko
