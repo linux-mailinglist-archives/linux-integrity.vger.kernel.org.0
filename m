@@ -2,90 +2,114 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D19460082
-	for <lists+linux-integrity@lfdr.de>; Sat, 27 Nov 2021 18:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 946164603D9
+	for <lists+linux-integrity@lfdr.de>; Sun, 28 Nov 2021 05:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235413AbhK0RbW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 27 Nov 2021 12:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244168AbhK0R3V (ORCPT
+        id S232158AbhK1EQV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 27 Nov 2021 23:16:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36878 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231809AbhK1EOV (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 27 Nov 2021 12:29:21 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C848C061746;
-        Sat, 27 Nov 2021 09:26:06 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id j3so26119876wrp.1;
-        Sat, 27 Nov 2021 09:26:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r/ozYoR08H/XXW9Gao2CC3lzOc6yYZ/UMoGZeifS3Ss=;
-        b=n1tLH6HOp5+n2CGCEA8o4LvlRsI+8OnwJlYyCxPPXsqtX+OFCEAj+38QewTDKd7+uw
-         RIMhKluImQqvOnQDjb/viZjNrQQpV+P0DGbBwPP7dWwP7w0YnvoBFp5xlKgfZEPIm2SK
-         6q+HmqVV35iNmEDkkqK8GbO4UIjSAr/BoiaDvoRjiWqngVoxd4GzD8Wbrzi0JSZEMq8O
-         uOy8JIA0QgFJlTKtBGJbpaN7KngHXb3Qf/UjcIWUbieSuNPeZ3yrho+BV7N3Gt+xG6eY
-         IZu/LwPqmoFViXgo1S2m0c5OTqFcruUGtjeJfRkyJ+UUjXgD+JTsqB0M+qUod34Xavh4
-         N2pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r/ozYoR08H/XXW9Gao2CC3lzOc6yYZ/UMoGZeifS3Ss=;
-        b=Z3GoVKG6D7j3YR+Vwwst+C7zLgMR6tV20y57MxD0f/jGJNdaaXp6DELpVBCh72uJlu
-         P339Adb/oufv+PdMVIcX00urcb1xirEPO1jh4s5q2i1IdyaH6nrh/TS6jQMzR0QoH6vX
-         9VgCgmgmB5h71JNMmo9Z4/d0W+ugU/U7Id9Tp1v70Nvf/h2aVCQcT+7j4TgJABFTSJqO
-         i/ek+f0e+Fd8P6tM6Z1g6zvY73DsDjoecDqJPtSr5axXRNXb6tDFHyQl5sjxQfHVuWpE
-         n8Wlp2EYfdEzJ/C+rvqhgFTc3yrI+eppqpYHFysH+8faZJtZacWXJ4MALjp+blwgNf3n
-         MuKA==
-X-Gm-Message-State: AOAM530J413w01JZ04x2wO3aL0x5XDVOI9bF4vST7HpZUu2+R6tdb8tL
-        eu2O85AFAGWdPA==
-X-Google-Smtp-Source: ABdhPJxzt++dlNdWq40q40ITInoJudc5jVmSXPUYFSSjX9Vw6WDE0SvpssXN0Qddhzy0k/aTpSB4lg==
-X-Received: by 2002:a05:6000:188c:: with SMTP id a12mr20961328wri.92.1638033965237;
-        Sat, 27 Nov 2021 09:26:05 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id w22sm2219198wmi.27.2021.11.27.09.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Nov 2021 09:26:04 -0800 (PST)
-From:   Colin Ian King <colin.i.king@googlemail.com>
-X-Google-Original-From: Colin Ian King <colin.i.king@gmail.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: make const pointer desc a static const array
-Date:   Sat, 27 Nov 2021 17:26:04 +0000
-Message-Id: <20211127172604.126322-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Sat, 27 Nov 2021 23:14:21 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AS3lUgr020383;
+        Sun, 28 Nov 2021 04:10:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=CKBnb3MYe70rtX3nRjCGRYnZT+Pr+vtwmuUljcDB2Ts=;
+ b=WsNKl04CSEYHwC1drAoUHyOZa3TA9fSZ/SkhiOnwdWhEWL5aamXTqEoh8vGAs2dD1rRU
+ WIpej+Z/FxjGO0uCMmm+X55GrqCeiKTxsaZ7Tibxf2h5Le2buoKUZi/3Jm41VZbQWDMW
+ r1oB/DL0JlbcAP4sdgOTkip4loxNYHWuW0a3sVyLYs/poheJlrJP3j8OOItgmI2cz9Ek
+ OtDu+5hyYQWFFSSUivVbjHWMBNmf5wYdWd58BAkM4KrO8WI6A7Swa4au7qId03Bml8tC
+ F3p8SaH1fTQd7rJlxf8ZB1fhuFLRGd+aQFhqRtBdyX1+6GtGgK1iQW74oIbvXlvem+TX AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cm1btgsbn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 28 Nov 2021 04:10:56 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AS40hrx025803;
+        Sun, 28 Nov 2021 04:10:55 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cm1btgsbg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 28 Nov 2021 04:10:55 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AS47ptj006771;
+        Sun, 28 Nov 2021 04:10:55 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma03wdc.us.ibm.com with ESMTP id 3ckca9kgja-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 28 Nov 2021 04:10:55 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AS4Asdn22938106
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 28 Nov 2021 04:10:54 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A6DD6AE071;
+        Sun, 28 Nov 2021 04:10:54 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 988BEAE063;
+        Sun, 28 Nov 2021 04:10:54 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Sun, 28 Nov 2021 04:10:54 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     jarkko@kernel.org, linux-integrity@vger.kernel.org
+Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v4 0/2] selftests: tpm2: Determine available PCR bank
+Date:   Sat, 27 Nov 2021 23:10:50 -0500
+Message-Id: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Fb1-HEzOGXurhCWsrD-Nwi-cMAY7AP1M
+X-Proofpoint-ORIG-GUID: cKlxzCW9jnx2OiHhAurr2uQ5zHHjVZbk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-27_06,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0
+ spamscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111280018
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Make const pointer desc a static const array, removes a dereference
-and shrinks object code a few bytes.
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/char/tpm/tpm_tis_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series of patches fixes two issues with TPM2 selftest.
+- Determines available PCR banks for use by test cases
+- Resets DA lock on TPM2 to avoid subsequent test failures
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index b2659a4c4016..649b4229e76e 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -716,7 +716,7 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
- 
- static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
- {
--	const char *desc = "attempting to generate an interrupt";
-+	static const char desc[] = "attempting to generate an interrupt";
- 	u32 cap2;
- 	cap_t cap;
- 	int ret;
+  Stefan
+
+v4:
+ - Switch to query TPM2_GET_CAP to determine the available PCR banks
+ - Moved call to reset DA lock into finally branch at end of test
+ - Dropped patch 3
+
+v3:
+ - Mention SHA-256 PCR bank as alternative in patch 1 description
+
+v2:
+ - Clarified patch 1 description 
+ - Added patch 3 with support for SHA-384 and SHA-512
+
+
+
+Stefan Berger (2):
+  selftests: tpm2: Determine available PCR bank
+  selftests: tpm2: Reset the dictionary attack lock
+
+ tools/testing/selftests/tpm2/tpm2.py       | 31 ++++++++++++++++++++++
+ tools/testing/selftests/tpm2/tpm2_tests.py | 31 ++++++++++++++++------
+ 2 files changed, 54 insertions(+), 8 deletions(-)
+
 -- 
-2.33.1
+2.31.1
 
