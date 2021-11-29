@@ -2,31 +2,31 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A40462116
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Nov 2021 20:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE81462121
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Nov 2021 20:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349844AbhK2T4U (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 Nov 2021 14:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S234464AbhK2T67 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 Nov 2021 14:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355748AbhK2TyS (ORCPT
+        with ESMTP id S241950AbhK2T47 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:54:18 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18387C07CA0E
-        for <linux-integrity@vger.kernel.org>; Mon, 29 Nov 2021 08:17:00 -0800 (PST)
+        Mon, 29 Nov 2021 14:56:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A305C061748
+        for <linux-integrity@vger.kernel.org>; Mon, 29 Nov 2021 08:21:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2B72FCE1312
-        for <linux-integrity@vger.kernel.org>; Mon, 29 Nov 2021 16:16:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A30C53FAD;
-        Mon, 29 Nov 2021 16:16:52 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 17:16:50 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EED586159B
+        for <linux-integrity@vger.kernel.org>; Mon, 29 Nov 2021 16:21:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428E9C53FC7;
+        Mon, 29 Nov 2021 16:21:02 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 17:20:59 +0100
 From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     "Serge E. Hallyn" <serge@hallyn.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
 Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
         linux-integrity@vger.kernel.org, containers@lists.linux.dev,
         Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
@@ -39,121 +39,71 @@ Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         Patrick Uiterwijk <puiterwi@redhat.com>,
         Christian Brauner <christian@brauner.io>
 Subject: Re: [RFC 3/3] ima: make the integrity inode cache per namespace
-Message-ID: <20211129161650.dtcvh2ozgquz6rli@wittgenstein>
+Message-ID: <20211129162059.udhl7m7tbt4otgxd@wittgenstein>
 References: <20211127164549.2571457-1-James.Bottomley@HansenPartnership.com>
  <20211127164549.2571457-4-James.Bottomley@HansenPartnership.com>
  <20211129045834.GB20606@mail.hallyn.com>
  <755446b10c8415fd469b814535c4a12964af3264.camel@HansenPartnership.com>
  <70b81e62-46af-9d39-3dcb-4cfbae645175@linux.ibm.com>
  <a74b18c1aee2b14426cc12e2fd336716c447f070.camel@HansenPartnership.com>
- <20211129142235.hez3ovtuj3rpscgm@wittgenstein>
- <afee2f0483271a6cdb1bc7b48b819a3ca2c4ceda.camel@HansenPartnership.com>
- <20211129153539.GA26325@mail.hallyn.com>
+ <1402f334-8072-48d1-b30b-2c2cdd4869dd@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211129153539.GA26325@mail.hallyn.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1402f334-8072-48d1-b30b-2c2cdd4869dd@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 09:35:39AM -0600, Serge Hallyn wrote:
-> On Mon, Nov 29, 2021 at 09:46:55AM -0500, James Bottomley wrote:
-> > On Mon, 2021-11-29 at 15:22 +0100, Christian Brauner wrote:
-> > > On Mon, Nov 29, 2021 at 09:10:29AM -0500, James Bottomley wrote:
-> > > > On Mon, 2021-11-29 at 08:53 -0500, Stefan Berger wrote:
-> > > > > On 11/29/21 07:50, James Bottomley wrote:
-> > > > > > On Sun, 2021-11-28 at 22:58 -0600, Serge E. Hallyn wrote:
-> > > > > > > On Sat, Nov 27, 2021 at 04:45:49PM +0000, James Bottomley
-> > > > > > > wrote:
-> > > > > > > > Currently we get one entry in the IMA log per unique file
-> > > > > > > > event.  So, if you have a measurement policy and it
-> > > > > > > > measures a particular binary it will not get measured again
-> > > > > > > > if it is subsequently executed. For Namespaced IMA, the
-> > > > > > > > correct behaviour seems to be to log once per inode per
-> > > > > > > > namespace (so every unique execution in a namespace gets a
-> > > > > > > > separate log entry).  Since logging once per inode per
-> > > > > > > > namespace is
-> > > > > > > I suspect I'll need to do a more in depth reading of the
-> > > > > > > existing code, but I'll ask the lazy question anyway (since
-> > > > > > > you say "the correct behavior seems to be") - is it actually
-> > > > > > > important that files which were appraised under a parent
-> > > > > > > namespace's policy already should be logged again?
-> > > > > > I think so.  For a couple of reasons, assuming the namespace
-> > > > > > eventually gets its own log entries, which the next incremental
-> > > > > > patch proposed to do by virtualizing the securityfs
-> > > > > > entries.  If you don't do this:
-> > > > > 
-> > > > > To avoid duplicate efforts, an implementation of a virtualized 
-> > > > > securityfs is in this series here:
-> > > > > 
-> > > > > https://github.com/stefanberger/linux-ima-namespaces/commits/v5.15%2Bimans.20211119.v3
-> > > > > 
-> > > > > It starts with 'securityfs: Prefix global variables with
-> > > > > secruityfs_'
-> > > > 
-> > > > That's quite a big patch series.  I already actually implemented
-> > > > this as part of the RFC for getting the per namespace measurement
-> > > > log.  The attached is basically what I did.
-> > > > 
-> > > > Most of the time we don't require namespacing the actual virtualfs
-> > > > file, because it's world readable.  IMA has a special requirement
-> > > > in this regard because the IMA files should be readable (and
-> > > > writeable when we get around to policy updates) by the admin of the
-> > > > namespace but their protection is 0640 or 0440.  I thought the
-> > > > simplest solution would be to make an additional flag that coped
-> > > > with the permissions and a per-inode flag way of making the file as
-> > > > "accessible by userns admin".  Doing something simple like this
-> > > > gives a much smaller diffstat:
+On Mon, Nov 29, 2021 at 09:30:00AM -0500, Stefan Berger wrote:
+> 
+> On 11/29/21 09:10, James Bottomley wrote:
+> > On Mon, 2021-11-29 at 08:53 -0500, Stefan Berger wrote:
+> > > On 11/29/21 07:50, James Bottomley wrote:
+> > > > On Sun, 2021-11-28 at 22:58 -0600, Serge E. Hallyn wrote:
+> > > > > On Sat, Nov 27, 2021 at 04:45:49PM +0000, James Bottomley wrote:
+> > > > > > Currently we get one entry in the IMA log per unique file
+> > > > > > event.  So, if you have a measurement policy and it measures a
+> > > > > > particular binary it will not get measured again if it is
+> > > > > > subsequently executed. For Namespaced IMA, the correct
+> > > > > > behaviour
+> > > > > > seems to be to log once per inode per namespace (so every
+> > > > > > unique
+> > > > > > execution in a namespace gets a separate log entry).  Since
+> > > > > > logging
+> > > > > > once per inode per namespace is
+> > > > > I suspect I'll need to do a more in depth reading of the existing
+> > > > > code, but I'll ask the lazy question anyway (since you say "the
+> > > > > correct behavior seems to be") - is it actually important that
+> > > > > files which were appraised under a parent namespace's policy
+> > > > > already
+> > > > > should be logged again?
+> > > > I think so.  For a couple of reasons, assuming the namespace
+> > > > eventually
+> > > > gets its own log entries, which the next incremental patch proposed
+> > > > to
+> > > > do by virtualizing the securityfs entries.  If you don't do this:
+> > > To avoid duplicate efforts, an implementation of a virtualized
+> > > securityfs is in this series here:
 > > > 
-> > > That's a NAK from me. Stefan's series might be bigger but it does
-> > > things correctly. I appreciate the keep it simple attitude but no. I
-> > > won't speciale-case securityfs or similar stuff in core vfs helpers.
-> > 
-> > Well, there's a reason it's an unpublished patch.  However, the more
-> > important point is that namespacing IMA requires discussion of certain
-> > points that we never seem to drive to a conclusion.  Using the akpm
-> > method, I propose simple patches that drive the discussion.  I think
-> > the points are:
-> > 
-> >    1. Should IMA be its own namespace or tied to the user namespace?  The
-> >       previous patches all took the separate Namespace approach, but I
-> >       think that should be reconsidered now keyrings are in the user
-> >       namespace.
+> > > https://github.com/stefanberger/linux-ima-namespaces/commits/v5.15%2Bimans.20211119.v3
+> > > 
+> > > It starts with 'securityfs: Prefix global variables with secruityfs_'
+> > That's quite a big patch series.  I already actually implemented this
+> > as part of the RFC for getting the per namespace measurement log.  The
+> > attached is basically what I did.
 > 
-> Well that purely depends on the needed scope.
-> 
-> The audit container identifier is a neat thing.  But it absolutely must
-> be settable, so seems to conflict with your needs.
-> 
-> Your patch puts an identifier on the user_namespace.  I'm not quite sure,
-> does that satisfy Stefan's needs?  A new ima ns if and only if there is a
-> new user ns?
+> I know it's big. I tried to avoid having to bind-mount the system-wide
+> single securityfs into the container and inherit all the other security
+> subsystems' files and directories (evm, TPM, safesetid, apparmor, tomoyo [
+> https://elixir.bootlin.com/linux/latest/C/ident/securityfs_create_dir ]) and
+> instead have a  'view' that is a bit more restricted to those subsystems
+> that are namespaced. The securityfs_ns I created can be mounted into each
+> user namespace individually and only shows what you're supposed to see
+> without other filesystem tricks to hide files or so. It should be
+> future-extensible for other subsystem to register themselves there if they
+> have something to show to the user.
 
-I kept thinking about this question while I was out running and while I
-admittedly have reacted poorly to CLONE_NEWIMA patches before it feels
-to me that this is the right approach after all. Making it part of
-userns at least in this form isn't clean.
-
-I think attaching a uuid to a userns alone for the sake of IMA is wrong.
-Additionally, I think a uuid only for the userns is too limited. This is
-similar to the problem of the audit container id. If we have some sort
-of uuid for ima it will automatically evolve into something like a
-container id (I'm not even arguing that this is necessarily wrong.).
-We also have the issue that we then have the container audit id thing -
-if this ever lands and the ima userns uuid. All that makes it quite
-messy.
-
-I think CLONE_NEWIMA is ultimately nicer and allows the implementation
-to be decoupled from the userns and self-contained as possible. This
-also means that ima ns works for privileged containers which sure is a
-valid use-case.
-It will also make securityfs namespacing easier as it can be a keyed
-super where the key is the ima ns (similar to how we deal with e.g.
-mqueue).
-
-> 
-> I think you two need to get together and discuss the requirements, and come
-> back with a brief but very precise document explaining what you need.
-
-Good idea.
+From a quick glance, your implementation is doing the right thing.
+You're creating a keyed super via get_tree_keyed().
