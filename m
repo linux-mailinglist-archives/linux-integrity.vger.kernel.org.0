@@ -2,131 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5484C461F9B
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Nov 2021 19:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07220461C5D
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Nov 2021 18:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237041AbhK2Sxw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 29 Nov 2021 13:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379539AbhK2Svv (ORCPT
+        id S1347315AbhK2RGn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 29 Nov 2021 12:06:43 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61368 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346245AbhK2REn (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:51:51 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323D5C043CEF
-        for <linux-integrity@vger.kernel.org>; Mon, 29 Nov 2021 07:08:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1638198489;
-        bh=C7rlmjvCJkDvUMEnxSS8/T7w+qb/IyjvaJpJfh4row4=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=LmsgiC+1bRPS5m2wQ5DPIZGE/qUnXc6egz9a9XZT+zR3Bsn+/sFu9szQBXFlPu7A5
-         51tb/QegwvJqnXhjoR3TngCK0uJnqf5GwA3OzmjgRmAsu952Npuwme8UKblPYtesPT
-         pGk+3IXHZvaxiGzzvceW4/7Hp7mj4C6Qq1ZqXoN8=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C63D91280970;
-        Mon, 29 Nov 2021 10:08:09 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zMuDmpdvlhYg; Mon, 29 Nov 2021 10:08:09 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1638198489;
-        bh=C7rlmjvCJkDvUMEnxSS8/T7w+qb/IyjvaJpJfh4row4=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=LmsgiC+1bRPS5m2wQ5DPIZGE/qUnXc6egz9a9XZT+zR3Bsn+/sFu9szQBXFlPu7A5
-         51tb/QegwvJqnXhjoR3TngCK0uJnqf5GwA3OzmjgRmAsu952Npuwme8UKblPYtesPT
-         pGk+3IXHZvaxiGzzvceW4/7Hp7mj4C6Qq1ZqXoN8=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::c447])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 88357128096D;
-        Mon, 29 Nov 2021 10:08:08 -0500 (EST)
-Message-ID: <c4c975b8d382136d76db9a9ff9b6b182afd2487d.camel@HansenPartnership.com>
-Subject: Re: [RFC 3/3] ima: make the integrity inode cache per namespace
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-integrity@vger.kernel.org, containers@lists.linux.dev,
+        Mon, 29 Nov 2021 12:04:43 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATFkcHL004585;
+        Mon, 29 Nov 2021 17:01:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=tyJn1dJDKOISYr6ZBfAQkOJsshvSUxtJqeXTCrXzPaQ=;
+ b=djYJS2prL6tqi/AWoA9X3CWmj4j+SNJYduPxpWdiUVaxHxL07Ku2a+Qe9m5kUk8FtW1K
+ 7PWw0YU0xMdSFhzGYQ76ptNt7ZGnE4UxbBjKfShINeV/QNAjhD6N3tBVENP2ROTg3LZZ
+ Zv8RfG/G2RBNNwdddFArA34RmPP6wpC1ayWxRYatLQitE/YR4r5Y6QiEUIvrOmjnoWVN
+ MflHwENtYcxqjbaGX2QFcZ7SBDbyMPbumsSqU0XhPb3xmAYjDDtLvc9X8l4P/CmfsI19
+ Y2rNw6HB2Aug/A6LfweqMFRIa3wU0hStQ0ZYQMn2RdTMo9EFuegWcFcpjP2xiyxdgR/r Sg== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cn1t71yrv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 17:01:23 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATGuj1x006995;
+        Mon, 29 Nov 2021 17:01:21 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3ckbxje6uj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 17:01:21 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATH1Ivp19661196
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Nov 2021 17:01:18 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA7F44C063;
+        Mon, 29 Nov 2021 17:01:18 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A542A4C044;
+        Mon, 29 Nov 2021 17:01:17 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.68.145])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 29 Nov 2021 17:01:17 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        krzysztof.struczynski@huawei.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Michael Peters <mpeters@redhat.com>,
-        Luke Hinds <lhinds@redhat.com>,
-        Lily Sturmann <lsturman@redhat.com>,
-        Patrick Uiterwijk <puiterwi@redhat.com>,
-        Christian Brauner <christian@brauner.io>
-Date:   Mon, 29 Nov 2021 10:08:06 -0500
-In-Reply-To: <1402f334-8072-48d1-b30b-2c2cdd4869dd@linux.ibm.com>
-References: <20211127164549.2571457-1-James.Bottomley@HansenPartnership.com>
-         <20211127164549.2571457-4-James.Bottomley@HansenPartnership.com>
-         <20211129045834.GB20606@mail.hallyn.com>
-         <755446b10c8415fd469b814535c4a12964af3264.camel@HansenPartnership.com>
-         <70b81e62-46af-9d39-3dcb-4cfbae645175@linux.ibm.com>
-         <a74b18c1aee2b14426cc12e2fd336716c447f070.camel@HansenPartnership.com>
-         <1402f334-8072-48d1-b30b-2c2cdd4869dd@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Eric Biggers <ebiggers@kernel.org>
+Subject: [PATCH 0/4] ima: support fs-verity signatures stored as
+Date:   Mon, 29 Nov 2021 12:00:53 -0500
+Message-Id: <20211129170057.243127-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: lut-SrzVKLJ-JpDWmXzwhdr9vCKQgf5G
+X-Proofpoint-ORIG-GUID: lut-SrzVKLJ-JpDWmXzwhdr9vCKQgf5G
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-29_10,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0
+ priorityscore=1501 phishscore=0 clxscore=1011 mlxscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111290081
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-11-29 at 09:30 -0500, Stefan Berger wrote:
-> On 11/29/21 09:10, James Bottomley wrote:
-> > On Mon, 2021-11-29 at 08:53 -0500, Stefan Berger wrote:
-> > > On 11/29/21 07:50, James Bottomley wrote:
-> > > > On Sun, 2021-11-28 at 22:58 -0600, Serge E. Hallyn wrote:
-> > > > > On Sat, Nov 27, 2021 at 04:45:49PM +0000, James Bottomley
-> > > > > wrote:
-> > > > > > Currently we get one entry in the IMA log per unique file
-> > > > > > event.  So, if you have a measurement policy and it
-> > > > > > measures a particular binary it will not get measured again
-> > > > > > if it is subsequently executed. For Namespaced IMA, the
-> > > > > > correct behaviour seems to be to log once per inode per
-> > > > > > namespace (so every unique execution in a namespace gets a
-> > > > > > separate log entry).  Since logging once per inode per
-> > > > > > namespace is
-> > > > > I suspect I'll need to do a more in depth reading of the
-> > > > > existing code, but I'll ask the lazy question anyway (since
-> > > > > you say "the correct behavior seems to be") - is it actually
-> > > > > important that files which were appraised under a parent
-> > > > > namespace's policy already should be logged again?
-> > > > I think so.  For a couple of reasons, assuming the namespace
-> > > > eventually gets its own log entries, which the next incremental
-> > > > patch proposed to do by virtualizing the securityfs
-> > > > entries.  If you don't do this:
-> > > To avoid duplicate efforts, an implementation of a virtualized
-> > > securityfs is in this series here:
-> > > 
-> > > https://github.com/stefanberger/linux-ima-namespaces/commits/v5.15%2Bimans.20211119.v3
-> > > 
-> > > It starts with 'securityfs: Prefix global variables with
-> > > secruityfs_' 
+Support for fs-verity file digests in IMA was discussed from the beginning,
+prior to fs-verity being upstreamed[1,2].  This patch set adds signature
+verification support based on the fs-verity file digest.  Both the
+file digest and the signature must be included in the IMA measurement list
+in order to disambiguate the type of file digest.
 
-> > That's quite a big patch series.  I already actually implemented
-> > this as part of the RFC for getting the per namespace measurement
-> > log.  The attached is basically what I did.
-> 
-> I know it's big. I tried to avoid having to bind-mount the system-
-> wide single securityfs into the container and inherit all the other
-> security subsystems' files and directories (evm, TPM, safesetid,
-> apparmor, tomoyo  [ 
-> https://elixir.bootlin.com/linux/latest/C/ident/securityfs_create_dir
->  
-> ]) and instead have a  'view' that is a bit more restricted to those 
-> subsystems that are namespaced. The securityfs_ns I created can be 
-> mounted into each user namespace individually and only shows what
-> you're supposed to see without other filesystem tricks to hide files
-> or so. It should be future-extensible for other subsystem to register
-> themselves there if they have something to show to the user.
+[1] https://events19.linuxfoundation.org/wp-content/uploads/2017/11/fs-verify_Mike-Halcrow_Eric-Biggers.pdf
+[2] Documentation/filesystems/fsverity.rst
 
-Using F_USER_NS for this is certainly what it was designed for.  I
-don't think size is a problem as long as it's right sized to perform
-the required function.  I usually find it easier to oversimplify and
-work up, but that's certainly not the only approach.
+Mimi Zohar (4):
+  fs-verity: define a function to return the integrity protected file
+    digest
+  ima: define a new signature type named IMA_VERITY_DIGSIG
+  ima: limit including fs-verity's file digest in measurement list
+  ima: support fs-verity file digest based signatures
 
-James
+ fs/verity/fsverity_private.h              |  6 ---
+ fs/verity/measure.c                       | 49 +++++++++++++++++++++++
+ include/linux/fsverity.h                  | 17 ++++++++
+ security/integrity/ima/ima.h              |  3 +-
+ security/integrity/ima/ima_api.c          | 23 ++++++++++-
+ security/integrity/ima/ima_appraise.c     |  9 ++++-
+ security/integrity/ima/ima_main.c         |  7 +++-
+ security/integrity/ima/ima_template_lib.c |  3 +-
+ security/integrity/integrity.h            |  1 +
+ 9 files changed, 107 insertions(+), 11 deletions(-)
 
+-- 
+2.27.0
 
