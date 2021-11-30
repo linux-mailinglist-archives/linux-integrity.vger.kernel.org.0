@@ -2,257 +2,137 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 056CC463E32
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 19:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 605A0463F31
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 21:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239800AbhK3S6m (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 13:58:42 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:43938 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235387AbhK3S6k (ORCPT
+        id S229898AbhK3UbA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 15:31:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48570 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343667AbhK3UbA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:58:40 -0500
-Received: from [10.137.106.139] (unknown [131.107.159.11])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7526020DEE27;
-        Tue, 30 Nov 2021 10:55:20 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7526020DEE27
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1638298520;
-        bh=jdJ3O+n/LkBO98hWieh7dVs9KitCGmYhprvFZHk6PLk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YTILtOkEbTZwRWJmewl5mN87VA4st2CE3JZSd1WYfYEJdIZP+2VlG0gesXwp7zu93
-         U4SIdob24AcRoO3d4ZbxVLSIXo1q87l8Bym8UI+NOSDnq5yuPhNCBqBjZh0AtrS7o1
-         Kqk712gvF4+URWAA4SG1WmlXi3FTLbeZsZ0VmM9c=
-Message-ID: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
-Date:   Tue, 30 Nov 2021 10:55:20 -0800
+        Tue, 30 Nov 2021 15:31:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638304058;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AcMNv7Mr+B4p3hEjaHnnJQgfgj2Zfos0EhRVXhwbDc0=;
+        b=TA8s5+wTkGcf2rgGkvRyUp1dI01PLm776pT1z6x0t30M7tTMuCN8iMORyrmTY9LA9xdjah
+        V5dJWjozol1dc1R1dw1ImgtWZjcHo8F8UF8yLDAGjWD0QFwW4KXPZp4dArHp4UCf9p8unc
+        k9IogEABqTYIR0fSc35RZfH952Qhszg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-385-sFhFSPFrP4CIoucnQlO17Q-1; Tue, 30 Nov 2021 15:27:34 -0500
+X-MC-Unique: sFhFSPFrP4CIoucnQlO17Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BAE6310144E3;
+        Tue, 30 Nov 2021 20:27:29 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.123])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 611AE45D64;
+        Tue, 30 Nov 2021 20:27:17 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?utf-8?Q?Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
+References: <20211115185304.198460-1-mic@digikod.net>
+Date:   Tue, 30 Nov 2021 21:27:15 +0100
+In-Reply-To: <20211115185304.198460-1-mic@digikod.net> (=?utf-8?Q?=22Micka?=
+ =?utf-8?Q?=C3=ABl_Sala=C3=BCn=22's?=
+        message of "Mon, 15 Nov 2021 19:53:01 +0100")
+Message-ID: <87sfvd8k4c.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [RFC PATCH v7 11/16] ipe: add support for dm-verity as a trust
- provider
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "eparis@redhat.com" <eparis@redhat.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>
-Cc:     "jannh@google.com" <jannh@google.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>
-References: <1634151995-16266-1-git-send-email-deven.desai@linux.microsoft.com>
- <1634151995-16266-12-git-send-email-deven.desai@linux.microsoft.com>
- <721462c3da064d359ca3c83845298ccf@huawei.com>
-From:   Deven Bowers <deven.desai@linux.microsoft.com>
-In-Reply-To: <721462c3da064d359ca3c83845298ccf@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+* Micka=C3=ABl Sala=C3=BCn:
 
-On 11/25/2021 1:37 AM, Roberto Sassu wrote:
->> From: deven.desai@linux.microsoft.com
->> [mailto:deven.desai@linux.microsoft.com]
->> Sent: Wednesday, October 13, 2021 9:07 PM
->> From: Deven Bowers <deven.desai@linux.microsoft.com>
+> Primary goal of trusted_for(2)
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+>
+> This new syscall enables user space to ask the kernel: is this file
+> descriptor's content trusted to be used for this purpose?  The set of
+> usage currently only contains execution, but other may follow (e.g.
+> configuration, sensitive data).  If the kernel identifies the file
+> descriptor as trustworthy for this usage, user space should then take
+> this information into account.  The "execution" usage means that the
+> content of the file descriptor is trusted according to the system policy
+> to be executed by user space, which means that it interprets the content
+> or (try to) maps it as executable memory.
 
-..snip
+I sketched my ideas about =E2=80=9CIMA gadgets=E2=80=9D here:
 
->> diff --git a/security/ipe/modules/Makefile b/security/ipe/modules/Makefile
->> index e0045ec65434..84fadce85193 100644
->> --- a/security/ipe/modules/Makefile
->> +++ b/security/ipe/modules/Makefile
->> @@ -6,3 +6,5 @@
->>   #
->>
->>   obj-$(CONFIG_IPE_PROP_BOOT_VERIFIED) += boot_verified.o
->> +obj-$(CONFIG_IPE_PROP_DM_VERITY_SIGNATURE) += dmverity_signature.o
->> +obj-$(CONFIG_IPE_PROP_DM_VERITY_ROOTHASH) += dmverity_roothash.o
->> diff --git a/security/ipe/modules/dmverity_roothash.c
->> b/security/ipe/modules/dmverity_roothash.c
->> new file mode 100644
->> index 000000000000..0f82bec3b842
->> --- /dev/null
->> +++ b/security/ipe/modules/dmverity_roothash.c
->> @@ -0,0 +1,80 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (C) Microsoft Corporation. All rights reserved.
->> + */
->> +
->> +#include "ipe_module.h"
->> +
->> +#include <linux/fs.h>
->> +#include <linux/types.h>
->> +
->> +struct counted_array {
->> +	size_t	len;
->> +	u8     *data;
->> +};
->> +
->> +static int dvrh_parse(const char *valstr, void **value)
->> +{
->> +	int rv = 0;
->> +	struct counted_array *arr;
->> +
->> +	arr = kzalloc(sizeof(*arr), GFP_KERNEL);
->> +	if (!arr) {
->> +		rv = -ENOMEM;
->> +		goto err;
->> +	}
->> +
->> +	arr->len = (strlen(valstr) / 2);
->> +
->> +	arr->data = kzalloc(arr->len, GFP_KERNEL);
->> +	if (!arr->data) {
->> +		rv = -ENOMEM;
->> +		goto err;
->> +	}
->> +
->> +	rv = hex2bin(arr->data, valstr, arr->len);
->> +	if (rv != 0)
->> +		goto err2;
->> +
->> +	*value = arr;
->> +	return rv;
->> +err2:
->> +	kfree(arr->data);
->> +err:
->> +	kfree(arr);
->> +	return rv;
->> +}
->> +
->> +static bool dvrh_eval(const struct ipe_eval_ctx *ctx, const void *val)
->> +{
->> +	const u8 *src;
->> +	struct counted_array *expect = (struct counted_array *)val;
->> +
->> +	if (!ctx->ipe_bdev)
->> +		return false;
->> +
->> +	if (ctx->ipe_bdev->hashlen != expect->len)
->> +		return false;
->> +
->> +	src = ctx->ipe_bdev->hash;
->> +
->> +	return !memcmp(expect->data, src, expect->len);
-> Hi Deven
->
-> I was curious to see if determining the property at run-time
-> could apply also to dm-verity. It seems it could be done
-> (I omit some checks, I also keep the expected value in hex
-> format):
->
-> ---
->          md = dm_get_md(file_inode(ctx->file)->i_sb->s_dev);
->          table = dm_get_live_table(md, &srcu_idx);
->          num_targets = dm_table_get_num_targets(table);
->
->          for (i = 0; i < num_targets; i++) {
->                  struct dm_target *ti = dm_table_get_target(table, i);
->
->                  if (strcmp(ti->type->name, "verity"))
->                          continue;
->
->                  ti->type->status(ti, STATUSTYPE_IMA, 0, result, sizeof(result));
->          }
->
->          dm_put_live_table(md, srcu_idx);
->          dm_put(md);
->
->          root_digest_ptr = strstr(result, "root_digest=");
->          return !strncmp(expect->data, root_digest_ptr + 12, expect->len);
-> ---
->
-> Only dm_table_get_target() is not exported yet, but I guess it could
-> be. dm_table_get_num_targets() is exported.
+  IMA gadgets
+  <https://www.openwall.com/lists/oss-security/2021/11/30/1>
 
-I had tried something similar in a very early draft of IPE. The issue
-that comes with this is that when you compile device-mapper as a module
-(CONFIG_BLK_DEV_DM=m) you start to get linking errors with this
-approach.
+I still don't think the proposed trusted_for interface is sufficient.
+The example I gave is a Perl module that does nothing (on its own) when
+loaded as a Perl module (although you probably don't want to sign it
+anyway, given what it implements), but triggers an unwanted action when
+sourced (using .) as a shell script.
 
-Obviously, we can fix this in the IPE's module Kconfig by setting the
-dependency to be =y, but it's something to highlight. My general
-preference is to support the =m configuration by using these blobs.
+> @usage identifies the user space usage intended for @fd: only
+> TRUSTED_FOR_EXECUTION for now, but trusted_for_usage could be extended
+> to identify other usages (e.g. configuration, sensitive data).
 
-The runtime approach does work with fs-verity, because fs-verity is a
-file-system level feature that cannot be compiled as a module.
+We would need TRUSTED_FOR_EXECUTION_BY_BASH,
+TRUSTED_FOR_EXECUTION_BY_PERL, etc.  I'm not sure that actually works.
 
-> With this code, you would not have to manage security blobs
-> outside IPE. Maybe you could add a blob for the super block, so
-> that you verify the dm-verity property just once per filesystem.
->
-> Roberto
->
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Li Peng, Zhong Ronghua
->
->> +}
->> +
->> +static int dvrh_free(void **val)
->> +{
->> +	struct counted_array *expect = (struct counted_array *)val;
->> +
->> +	kfree(expect->data);
->> +	kfree(expect);
->> +
->> +	return 0;
->> +}
->> +
->> +IPE_MODULE(dvrh) = {
->> +	.name = "dmverity_roothash",
->> +	.version = 1,
->> +	.parse = dvrh_parse,
->> +	.free = dvrh_free,
->> +	.eval = dvrh_eval,
->> +};
->> diff --git a/security/ipe/modules/dmverity_signature.c
->> b/security/ipe/modules/dmverity_signature.c
->> new file mode 100644
->> index 000000000000..08746fcbcb3e
->> --- /dev/null
->> +++ b/security/ipe/modules/dmverity_signature.c
->> @@ -0,0 +1,25 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (C) Microsoft Corporation. All rights reserved.
->> + */
->> +
->> +#include "ipe_module.h"
->> +
->> +#include <linux/fs.h>
->> +#include <linux/types.h>
->> +
->> +static bool dvv_eval(const struct ipe_eval_ctx *ctx, const void *val)
->> +{
->> +	bool expect = (bool)val;
->> +	bool eval = ctx->ipe_bdev && (!!ctx->ipe_bdev->sigdata);
->> +
->> +	return expect == eval;
->> +}
->> +
->> +IPE_MODULE(dvv) = {
->> +	.name = "dmverity_signature",
->> +	.version = 1,
->> +	.parse = ipe_bool_parse,
->> +	.free = NULL,
->> +	.eval = dvv_eval,
->> +};
->> --
->> 2.33.0
+Caller process context does not work because we have this confusion
+internally between glibc's own use (for the dynamic linker
+configuration), and for loading programs/shared objects (there seems to
+be a corner case where you can execute arbitrary code even without
+executable mappings in the ELF object), and the script interpreter
+itself (the primary target for trusted_for).
+
+But for generating auditing events, trusted_for seems is probably quite
+helpful.
+
+Thanks,
+Florian
+
