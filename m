@@ -2,127 +2,186 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E614634EE
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 13:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C64463509
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbhK3M7x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 07:59:53 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52100 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230264AbhK3M7w (ORCPT
+        id S231482AbhK3NDc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 08:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231371AbhK3NDc (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:59:52 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUCjliR029883;
-        Tue, 30 Nov 2021 12:56:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=s//M2tm6vMe+N1QRsaqsOuOcWaXhsmUu3+OS5HrKggE=;
- b=HHSDd/8OI95fqXJArksEPb5Y5cWBq6OXkN/FqgtImKYAtJ0QcB5Fil5Hi7N7cmX7jsoc
- 6m+cTaiXWFny26Q2zDJcu1xCtgeRrPfiWdmip1NGUZuseYCieQlsgszyt8/cx462tyZE
- bYhq/gh9oAP/T/VThIrNocjSOLQKzIbChrQU/obMeRqJ1DUp60kX4cUuVBDNB5rb393A
- L+yohk5HZU9fSZfPbAqPoEhkqgpercqPRFO2U7IHyzVBQ9fzvime+lHUZBEYA8ssZwHG
- zDDimFUxCWHp1kI5i0smLxScF0AbFK1+MDUNsBF2mAKHoCJVCiT9NNoSwKI3nscoD371 Xw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cnm8eg75s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 12:56:30 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUCr26F024585;
-        Tue, 30 Nov 2021 12:56:28 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ckcacerbj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 12:56:28 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUCuQb97733748
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Nov 2021 12:56:26 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0BA4B42045;
-        Tue, 30 Nov 2021 12:56:26 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 075744204C;
-        Tue, 30 Nov 2021 12:56:25 +0000 (GMT)
-Received: from sig-9-65-92-250.ibm.com (unknown [9.65.92.250])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 30 Nov 2021 12:56:24 +0000 (GMT)
-Message-ID: <16364d376af32a97fc6a119d4e7366862f16f417.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/4] ima: support fs-verity signatures stored as
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 30 Nov 2021 07:56:24 -0500
-In-Reply-To: <YaWOR+Bav6PBgHHq@sol.localdomain>
-References: <20211129170057.243127-1-zohar@linux.ibm.com>
-         <YaWOR+Bav6PBgHHq@sol.localdomain>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: I94w52xVLtw4mBSFd5N_ZaoQChx7uHBB
-X-Proofpoint-GUID: I94w52xVLtw4mBSFd5N_ZaoQChx7uHBB
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 30 Nov 2021 08:03:32 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74018C061574
+        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 05:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1638277212;
+        bh=WbsCwODG0tNAwrCQWZwzuygwhfVc3PiURHXWEcl7deM=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=jPLotuYDw6KAoOGuwaPiJ6WQzURAwTXQc2I8IEsoSX1sZfjKQL9b6xTytPYZRHdww
+         43LM/kW95mkWnvsqSFSp8hxIGvmcMvmyoyKR3sP1HzkWMdnMDIuV5WDnXALDStnTZ8
+         lfh74Un6igD9/3DB88luFgCz1gsvUKRZi07v9lMs=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 09A3312805E5;
+        Tue, 30 Nov 2021 08:00:12 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id CpEad8vbMWiH; Tue, 30 Nov 2021 08:00:11 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1638277211;
+        bh=WbsCwODG0tNAwrCQWZwzuygwhfVc3PiURHXWEcl7deM=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=Si7cZMPos35C7+Tbd5HHVXRsWEZRCxGYFDXp4du+nzwYJYR5kwC+gI+w7Xss70Xkx
+         dVWZDOQofvNzu3bvO8VxdadecxZ04KIcmU8bA+nwu7Y5+/fHrADDAgvWpDbfawat+E
+         ix4r0jn7Ub5ER2vRg20E6gsWIE2QrnheHBTku7PY=
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id BE50512804CF;
+        Tue, 30 Nov 2021 08:00:10 -0500 (EST)
+Message-ID: <c6c6f2ebf37b88cb66189bbac16feb611ae2b9ab.camel@HansenPartnership.com>
+Subject: Re: [RFC 3/3] ima: make the integrity inode cache per namespace
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, containers@lists.linux.dev,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        krzysztof.struczynski@huawei.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Michael Peters <mpeters@redhat.com>,
+        Luke Hinds <lhinds@redhat.com>,
+        Lily Sturmann <lsturman@redhat.com>,
+        Patrick Uiterwijk <puiterwi@redhat.com>,
+        Christian Brauner <christian@brauner.io>
+Date:   Tue, 30 Nov 2021 08:00:09 -0500
+In-Reply-To: <20211130045904.GB32444@mail.hallyn.com>
+References: <20211127164549.2571457-1-James.Bottomley@HansenPartnership.com>
+         <20211127164549.2571457-4-James.Bottomley@HansenPartnership.com>
+         <20211129045834.GB20606@mail.hallyn.com>
+         <755446b10c8415fd469b814535c4a12964af3264.camel@HansenPartnership.com>
+         <70b81e62-46af-9d39-3dcb-4cfbae645175@linux.ibm.com>
+         <a74b18c1aee2b14426cc12e2fd336716c447f070.camel@HansenPartnership.com>
+         <20211129142235.hez3ovtuj3rpscgm@wittgenstein>
+         <afee2f0483271a6cdb1bc7b48b819a3ca2c4ceda.camel@HansenPartnership.com>
+         <20211129153539.GA26325@mail.hallyn.com>
+         <16e27be21e2886ba17298d94fdaff39236667890.camel@HansenPartnership.com>
+         <20211130045904.GB32444@mail.hallyn.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_07,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
- mlxscore=0 spamscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2111300072
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-11-29 at 18:36 -0800, Eric Biggers wrote:
-> On Mon, Nov 29, 2021 at 12:00:53PM -0500, Mimi Zohar wrote:
-> > Support for fs-verity file digests in IMA was discussed from the beginning,
-> > prior to fs-verity being upstreamed[1,2].  This patch set adds signature
-> > verification support based on the fs-verity file digest.  Both the
-> > file digest and the signature must be included in the IMA measurement list
-> > in order to disambiguate the type of file digest.
+On Mon, 2021-11-29 at 22:59 -0600, Serge E. Hallyn wrote:
+> On Mon, Nov 29, 2021 at 11:44:35AM -0500, James Bottomley wrote:
+> > On Mon, 2021-11-29 at 09:35 -0600, Serge E. Hallyn wrote:
+> > > On Mon, Nov 29, 2021 at 09:46:55AM -0500, James Bottomley wrote:
+> > [...]
+> > > > Well, there's a reason it's an unpublished patch.  However, the
+> > > > more important point is that namespacing IMA requires
+> > > > discussion of certain points that we never seem to drive to a
+> > > > conclusion.  Using the akpm method, I propose simple patches
+> > > > that drive the discussion.  I think the points are:
+> > > > 
+> > > >    1. Should IMA be its own namespace or tied to the user
+> > > > namespace?  The previous patches all took the separate
+> > > > Namespace approach, but I think that should be reconsidered now
+> > > > keyrings are in the user namespace.
+> > > 
+> > > Well that purely depends on the needed scope.
+> > > 
+> > > The audit container identifier is a neat thing.  But it
+> > > absolutely must be settable, so seems to conflict with your
+> > > needs.
 > > 
-> > [1] https://events19.linuxfoundation.org/wp-content/uploads/2017/11/fs-verify_Mike-Halcrow_Eric-Biggers.pdf
-> > [2] Documentation/filesystems/fsverity.rst
+> > I think not allowing duplicate entries for the lifetime of the log
+> > is required, which causes a problem since namespaces can die before
+> > this lifetime ends.  I think there is a nice security benefit in
+> > making it not user settable, but I don't think that's necessarily a
+> > requirement.
 > > 
-> > Mimi Zohar (4):
-> >   fs-verity: define a function to return the integrity protected file
-> >     digest
-> >   ima: define a new signature type named IMA_VERITY_DIGSIG
-> >   ima: limit including fs-verity's file digest in measurement list
-> >   ima: support fs-verity file digest based signatures
+> > > Your patch puts an identifier on the user_namespace.  I'm not
+> > > quite sure, does that satisfy Stefan's needs?  A new ima ns if
+> > > and only if there is a new user ns?
 > > 
-> >  fs/verity/fsverity_private.h              |  6 ---
-> >  fs/verity/measure.c                       | 49 +++++++++++++++++++++++
-> >  include/linux/fsverity.h                  | 17 ++++++++
-> >  security/integrity/ima/ima.h              |  3 +-
-> >  security/integrity/ima/ima_api.c          | 23 ++++++++++-
-> >  security/integrity/ima/ima_appraise.c     |  9 ++++-
-> >  security/integrity/ima/ima_main.c         |  7 +++-
-> >  security/integrity/ima/ima_template_lib.c |  3 +-
-> >  security/integrity/integrity.h            |  1 +
-> >  9 files changed, 107 insertions(+), 11 deletions(-)
+> > Part of the problem is that IMA needs an admin user ... to be able
+> > to read the log and set the policy and, when we get to appraisal,
+> > set and read the keyrings.  IMA NS iff user ns satisfies this, but
+> > the minimalist in me then asks why not make them the same thing?
+> > 
+> > > I think you two need to get together and discuss the
+> > > requirements, and come back with a brief but very precise
+> > > document explaining what you need. Are you both looking at the
+> > > same use case?  Who is consuming the audit log, and to what
+> > > end?  Container administrators?  Any time they log in? How do
+> > > they assure themselves that the securityfs file they're reading
+> > > hasn't been overmounted?
+> > 
+> > There are several different use cases.  I'm asking how I would use
+> > the IMA namespace for the unprivileged containers I usually set up
+> > by hand.  Stefan is looking at how docker/kubernetes would do
+> > it.  There's also the Huawei use case which is a sort of
+> > attestation for function as a service and there's the Red Hat use
+> > case for OpenShift.
+> > 
+> > However, the common denominator in all of these is they require a
+> > way to uniquely distinguish the containers, which is why the patch
+> > series I sent as an RFC starts that way.  If we can start with the
+> > common elements, we can build towards something that satisfies all
+> > the use cases ... and allow consensus to emerge as further patches
+> > are discussed.
 > 
-> I left some comments, but this generally looks like the right approach.
-> However, I'm not an expert in IMA, so it's hard for me to review the IMA parts.
+> The reason I asked this question in response to this patch is because
+> here I'm not picking at the userns->uuid, but rather it's the new
+> linked lists for the inode that feel wrong.
 
-Thank you for the quick review!
+Well that one's fully separable.  The first two patches could be
+complete for this round.  However, if you believe there has to be one
+entry per inode per namespace then the iint cache needs to accommodate
+that.  The measurement is a function of the inode alone: if the inode
+doesn't change that value is the same regardless of namespace.  it's
+only whether it's been logged that's really per namespace, hence the
+namespace list hanging off the iint entry ... if there were a huge
+number of namespaces, perhaps it should be a btree instead of a list,
+but it needs to be some type of two level thing, I think?
 
+The design of patch 3 is mostly to get people to think about what
+should be in the per namespace log.
+
+>   So if you can get what you need some other way - maybe just "we
+> opened all these files and got no integrity failure messages", or a
+> hash table keyed on (userns *, inode *) instead of the linked lists
+> to look up whether an inode has been measured, or some userspace
+> daemon to resubmit already logged approvals, which I gather won't
+> work for unpriv containers - that would be nice.
+
+I could do a separate (userns *, inode *) btree for the measured part,
+but we'd still have to have the per inode store of the measurement
+because that's namespace blind.  Given this, it seems inefficient not
+to make use of the tie between the two.
+
+> > Part of my problem is I don't really know what I need, I just want
+> > IMA namespaces to work easily for the unprivileged use case and
+> > I'll figure it out as I play with it ... but to do that I need
+> > something to start playing with.
 > 
-> Can you add documentation for this feature?
+> But for that kind of research you use an out of tree patchset, not
+> speculative infrastructure in the kernel.  If that's what this
+> patchset is, then I'll (feel a little silly and) look over it with a
+> different set of eyes :)
 
-Yes, of course.  Originally I assumed the fs-verity support would be a
-lot more complicated, but to my pleasant surprise by limiting the IMA
-fsverity support to just signatures and requiring the file signature be
-included in the IMA measurement list, it's a lot simpler than expected.
-As there aren't any IMA policy changes, I'm just thinking about where
-to document it.
+Well, no, you're looking with the right set of eyes.  The design of
+this patch set is to begin incrementally with the pieces everyone can
+agree on, so start as small as it can be: the namespace and a label as
+a trial balloon.  If everyone had agreed it looked OK, there would be
+no reason not to put it upstream and start on the next step.
 
-thanks,
+James
 
-Mimi
 
