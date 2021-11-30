@@ -2,231 +2,161 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F602463CFC
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 18:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB47463CBF
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 18:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244951AbhK3RmK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 12:42:10 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:58848 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244935AbhK3RmJ (ORCPT
+        id S244855AbhK3Ra5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 12:30:57 -0500
+Received: from sonic306-27.consmr.mail.ne1.yahoo.com ([66.163.189.89]:40510
+        "EHLO sonic306-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244824AbhK3Ra4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:42:09 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUHYMa3019746;
-        Tue, 30 Nov 2021 17:38:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=KrNS8J8peoBIOLYOyxCHxqIdVOXlgA7akUdJJYcxt3o=;
- b=gKFMY49rv6SxBthaZtCeNnrYS/1M0LNEYbnnk6f6spNkLMKQfhp8uYzqSFfEIzPXD+dz
- oZnGnMjFYYD4YMuAa+Q/y6gbfBTDemBu9nNaqMxfwdeb8bokEenawGmW5vZIL6ToNaP2
- 3jeeCdGOoSOKxGy6amN/K8g0/i8SY2F8JiwMWd3Fo/yupTvB7T7c29SE9BZnDUzzJrOI
- AsddbUKjpfVnLm3ytf/k5paImnpYppoP+tDTcX9Lxe2ox3uxlgEBEPBapC5VwGZ53EVe
- Rp4cy2eGPWlvZyWjR5x7y6mbs0AxltCvcifryXy/5ShBkoCvVpoQGLwiXj6OnVko7Fq8 Yg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cmvmwu945-15
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Nov 2021 17:38:23 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AUHLmJb152834;
-        Tue, 30 Nov 2021 17:21:51 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2107.outbound.protection.outlook.com [104.47.55.107])
-        by userp3030.oracle.com with ESMTP id 3ck9sywmqc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Nov 2021 17:21:51 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BKbMVlWsY7a3mHzdeKhqMd67bjoie/8VSmnYK/fZcpL/SlGgvgl11YQzOUKLgOlN8Uye+47+yiMxgSPfM/2goz4Zq6I0E89vppOMSRDKqEQ56V1QOseUrie2Y8tKHlUZYA7t5N4sovOr7J5qPiQTe9a3KJ2VtDYYdGZx5Lxu73nwG9AaGHM+9L6utLdsi+KzwFE5aWmXlqn5xlhZJmJHhEDK0dShvYkawjrsGhr4sKkaOVGpm0+X4co1T9AZj3dUeKUN/k9O1HN/Z+YPNdIWcOj8PjFh7gTVwE6F0EZAPiMAjknm0yvVCVfR4M2y55o7V71xJWkGh0XRN/BQxNn/Hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KrNS8J8peoBIOLYOyxCHxqIdVOXlgA7akUdJJYcxt3o=;
- b=YBR+DVegzsXDNRaSFoQ0bMgZ5qtDjNBxtTl16CqUBHAeznikukzuUM+rnw6/f21CfPJmmQjGCj/adIUegW1eYTnabvtV/gZqn9e0xCI2puZUQ0kOZqhPsOlcd/nBkh6BKx6yDRNuP4Cg/SwZpgxTgg3yKMQUGGdpWrIjvE6Dqc/IrWwCZiZAEXSEqE28llclnmn79UJl5zN2cDFdxwUv8uFEKeFWiwD58cHRaU/rx4fVwf85gtHhKpqI5d82+8Fznup1h8g27Xa6mbTUCHYgIwlsYlROxdY6wxvZljhGxRcqirBi4kPg6btmeHMymObwa7kfVHcLxRuAfGfWOPSGgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KrNS8J8peoBIOLYOyxCHxqIdVOXlgA7akUdJJYcxt3o=;
- b=RNQvQgo6pk/giME/t/FrxYv9VxtbqJf6hBY6Kue218W6rksdgP1MgxFyB+LzN13OTWQ9PiDntItkhhNf6sNqponFf6LypRUh1yWHPLc6URdSLXM2IOIxZALfY4nf/230LbBpwvclQ31uyVn8kKxeTgCUi5UNNruVhCBbhRBtZRI=
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by CH2PR10MB4310.namprd10.prod.outlook.com (2603:10b6:610:ab::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.19; Tue, 30 Nov
- 2021 17:21:45 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::65b8:d8e7:e373:4896]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::65b8:d8e7:e373:4896%9]) with mapi id 15.20.4713.021; Tue, 30 Nov 2021
- 17:21:45 +0000
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "ebiggers@google.com" <ebiggers@google.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "nramas@linux.microsoft.com" <nramas@linux.microsoft.com>,
-        "lszubowi@redhat.com" <lszubowi@redhat.com>,
-        "jason@zx2c4.com" <jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Subject: Re: [PATCH v8 09/17] KEYS: Rename
- get_builtin_and_secondary_restriction
-Thread-Topic: [PATCH v8 09/17] KEYS: Rename
- get_builtin_and_secondary_restriction
-Thread-Index: AQHX4O2pDdgPDu39Wk2pZOJ3EdBmzqwWj2cAgAXMOQA=
-Date:   Tue, 30 Nov 2021 17:21:45 +0000
-Message-ID: <8906F8A4-313F-45E5-8ABD-A1A2D07BFD93@oracle.com>
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
- <20211124044124.998170-10-eric.snowberg@oracle.com>
- <fb1d583f588e3f46fdadbe3cf6288bb098ff45f8.camel@kernel.org>
-In-Reply-To: <fb1d583f588e3f46fdadbe3cf6288bb098ff45f8.camel@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.20.0.1.32)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 463944b0-3f9d-4bd3-d41c-08d9b425e25a
-x-ms-traffictypediagnostic: CH2PR10MB4310:
-x-microsoft-antispam-prvs: <CH2PR10MB4310C249B8DC82AEC557E9B887679@CH2PR10MB4310.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +oKuCCV5D6mFrzP7YYZ/9HayQdEVTlqFxpykLrpaliVzXsUgipQIM/LY8vBwF05VKhea8jqcx21XubgT/PWi4y1AUNN26juRrE3hZOvxOEcasXsR17LzbdtYgK12hfMLrHWRF95GuuT7j4wqIoGpeY+DfbX3MxOVlOvdPwkV5T28odbHkEvMm5jE8J9D1jknkLgHATTlv4O4KVNyc/afLOgnHZwOhSWekjTfMDL3+pISoa8H/UYLlLCbmkRjDbjnLKi82mS56CddcIX4GVCon0MFZvf9rNnSzKrPbRS/0KACCK/du1Ug7jR157rSBJbbnrFBRc7HIlcLGSczLKC57rKeDyFjJ03XD8heATUVRHfVcIcH01NCIndZvDm1+lV3XPNUYT+99l5rGcAcZijHV1C+N6EprvauSd7/m6Da979VCKgZ+/gNuHcIFeLs7KfU8fHr1FMXdN1kgQgeVQ0JqEyimwy3bh+gFSyK8IxbotStUGV2rh5wFs01G0T2TK0inrF6IFnC404dsB6nrHyhlXGRB13ftJxxizxn2Fd60wto5twojuAEW2EZWGv+CnF9jzys0e16D++lzS2azdVNdvV8sxCstFxwlJm0UOIMepX8IKSIJjco1+1VA69GlH++KDnOb8F05NdPLHpWalBLMTFf61PEDR1eJHJl2mwwZeRXURWQ96yxwsfZINOt+iEZVVayqktzH1izoRRbiJ1Tnz3aKlIYGjxBzmSSyGRrakE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(36756003)(6916009)(4001150100001)(8676002)(71200400001)(66556008)(66946007)(316002)(33656002)(66476007)(2616005)(6512007)(508600001)(64756008)(8936002)(38100700002)(76116006)(4326008)(54906003)(91956017)(44832011)(186003)(66446008)(38070700005)(107886003)(83380400001)(122000001)(53546011)(86362001)(6506007)(2906002)(6486002)(5660300002)(7416002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dESvCPo5pji3P7YFNn+kIJAmlyFr7oRlpOFb3IHafeQJPLCnkeUm9QK1g4fi?=
- =?us-ascii?Q?mxraiKGCbj2gNvmcD9hSJDv4lJG0yU/fbl0Bh8CzcNptePSKExvjvuREhRju?=
- =?us-ascii?Q?7La+TqjK/48bBGtId+6ShlNwoOw9JSzREGjN1mvQW8FhkbVkEl7PQKMoVU+s?=
- =?us-ascii?Q?2V95tWGfZCX5sk+Txos8f1X7wWr+nMqonNQ13/51/EEZukIl9h13NxiMz2+f?=
- =?us-ascii?Q?H+zKJRvoQgaL4fhPkz45kdf6BkCBxatR9gKc/7xMTt75u3lW1skKF0SMuZ5z?=
- =?us-ascii?Q?Poutd2f/lkliuPvaO5sSBhQWvITcdie1r8OpTYZPdC0WHdp05bLfyqqhg2Cb?=
- =?us-ascii?Q?eZbjhfahv64CKx9I5lVaJ44BTf40PDOZq9WZjNORIjKBZFJeivJ+0i24uuMR?=
- =?us-ascii?Q?V1/DtCMabftUsmIuFTUC9A5YGorxasTPG7nimm0/AfNwGRRPZuYydN8aLtas?=
- =?us-ascii?Q?omJwMsMJqmjKjyLJyKDNdHH+fR0LgXOWStDw/gKUg7Srlk2+PFhgxoLTsroL?=
- =?us-ascii?Q?ZszQ9891ClVrvicJ6afC0tslFhaaUmKqe1GotZ8mDw1dHBmz3lYJObnbhtw5?=
- =?us-ascii?Q?ntANITGK5VsvqoAqg2OZjhW9N4jBD2kBZA1eJWSdVOFdHfd/bmU0DYFa9WKP?=
- =?us-ascii?Q?tha5KYdfFo92y6Fu0fACOe8iKGM0GBW50IuDpgrKMxI98z9YLcFEVbolZvRZ?=
- =?us-ascii?Q?uys9CgROeeaKI7G9R84XyVODqYfNFPV3fOy7FRUdCYwhU4kPEs50tXxVxvTw?=
- =?us-ascii?Q?QMvzKlr+j5uD8CsuMpgfMj7/36QFohlmjZbNUeDDVh5QmSrxQp6pMQNKQgnn?=
- =?us-ascii?Q?0Ckow/LrxzAhTcYCn6+p7KTWK48+PDsP92+Vh5Wd0lPJ0QRIjxWz4IrzsHZ3?=
- =?us-ascii?Q?XnobOPyHB6JGcj02/tAngA2L8QWXtWTBKdOJg7b+WDIF7SKXmoNXQDpTs//3?=
- =?us-ascii?Q?y+kzyEaBwkzK33Cc/UWeXT2WQwQ7LKuK54fFr3Q3IFjU+wvNe5gzoGrFXuoe?=
- =?us-ascii?Q?MWasCqmWqbnWkAOKnzBn2wP1gWIcZxf2tcxJ3ihzP39Jg15b712HfBwjNRn/?=
- =?us-ascii?Q?KelWttgHF8sL8Vd8JyT8mMDEcAMII997VpoXiSM0NaACnPuPItGzltbPXiF/?=
- =?us-ascii?Q?YK49XXiexqFD/vF6/P/uG1lrwS7sNANmQdOwotc0IrF3bCetgWKUtJbZxyg0?=
- =?us-ascii?Q?hioeTCRBGHP394SWx3N215Pn+poZCPAmhEiqqvZHLpcjmbnlc1L4wABGte4A?=
- =?us-ascii?Q?zxncOeC3u6qa0wFtw1jSdAak3bNYI928E8DwpEWUWC3BqWpeiKRquHFHrFNY?=
- =?us-ascii?Q?wSRYpPteuZr6NVWba/U6jqHsr3cVBrDwuiSyRe/jhiYkys6ogK9KWq/9sEKR?=
- =?us-ascii?Q?CBc8Nhl1NKslpQ08BwOQ53oNajIa39NqV5OohTRB2bQR44SX/Ek/BIQYBs4y?=
- =?us-ascii?Q?yx41CxiX9jTduMryAOPqcraNZXWYbLSOWqpNay9x7hdY7e9J4BOV1NF6g7wI?=
- =?us-ascii?Q?Hp1XHJenNG1C61owLhS+5yWuEnP72dmrBQHARfbpmPPE1AjBBA5mkfWxIFzH?=
- =?us-ascii?Q?zsia+syaGHCG0SBVi/Fo+bSlp0XEHKp5cIbbdb/trBr5Gu5JtkdQbStWAOnW?=
- =?us-ascii?Q?f5ou78jy2c57pu1aEsa/UvWFR+1e8Wykqm+lv8qf5dOPNeJVqxUhPvYWt6uc?=
- =?us-ascii?Q?g3fVU5YQZw+501Fthk1L3bim6G9JFRbrhvkQY11Pv0FJj6Eg?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <51E04660718A564D903A8411D920E554@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 30 Nov 2021 12:30:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1638293256; bh=Ll/htjmjzlwAw6nkkFJdkVnnaTjQ5Hrp/qvezecSysE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=QvAF2f10YFvYA4kImh7smBKka3QCooqEZ0mkbH/y/tscBwEm0+TTobtyo0u7mM6UmGp3gQ7z+tYfd1kWLtC3h+w4oIOVKmI90BDPB8dsxJ9yKnsQJeslC1dLxLyhrC4v1vTbG9mt6iyimlM9GZGsMYaR/+Dl1e149m3y0HSEbSfEYmcyclvDNjpK5xQWFfq2WZizFeC/B0FsmViORYQ9AyMGCf9DPOY04GtBStB1WtFJY20vaXg74DgIyTNkfCet7YkkXxtC7/PprNEGDXmsBPVZvoDrfcm2FfSsUkVRLiONkvgA3pX8JtX7Dfx+tEeHu4+RYxPn9iZ05VE8zMHOIg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1638293256; bh=RayyAnTyfeNNRO8T5TBZZ73BaFbL+nYu9L1yKKlE2EI=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=uoKFAYYZbDbQDPjDCSsRl40eMQqa64Xb2Ezzam1TgHG7DBQNft5RatZkUqi33+UG+LSjbVOKYOXKjdHo9qaihqatGahbEZEIWDo7BrpBRktjfEQjoNOpydpUtzYBDKP8FGF3bAggOgFYLIbh4P3/2SBxz7CEAZ0z3rMt6nEZg1mQwa5u1dqZoxofkSWxt0VMIhnwo4swuYBm4BtRQwrxyhj7PqcuIFp0aahmsAkpxzfS4L9YoXUZFNqH8WEKTohYrKWzs+2/0FEUbWMNRuM6rDOALsWLFnM6hnBw5TVFfNiI3QOINc7tH4WaP0ERJB75wyhT/6XW/cUscsJfzQxf/Q==
+X-YMail-OSG: _djuMj0VM1mKzUOchqUULqm6xtGx_pWPrQUrgckGg5A2JEZ4O5eJYuOgeTWuKak
+ rEEzE4mGUFrBBTBY_gRnE6u2AqhZ.CeK_90JAal1lUm22k8PxzYcdV0xX8sGAXOlOEB8QSkHPtev
+ chxjMWCyL3g.FFJbteUhqCTHmD1BLyKm7rNxERd28LaNuJvyyrDrDHYqVyecX6q.MczkmzfSJdki
+ 98FyrHFvH4CUpiTffLz1TS9kJQK9vPoZg4bS0cRQDz5FiIGPoDSP8Gg9VKmq9GpdaFVlsaDlv3fD
+ ypUSCSbftnDz4Py84djudSF8pr5yy8.d1v42YS4kZRFr_xsw9U52m4VCxTUDzCfgbMhN3gRvxNOk
+ srDEeElH9DMpC854e2Pjwz3G3a.uppzHr7X4xCJ5Yyoc6vlycTQHTBvglbd0eRzmbgllU1MIwNBC
+ .9kvi981QBhQOdhIMClEKIAdWkFfcehnl1Jx0V3wYtz1CCVkMr5I1203lFz5dQCH9tEjDuflWfOJ
+ e4vBFACgQ9mIKValqwwX6qZPdFttftH6JIZlnrots4oZCPjI6O.bsrSdkJ8gthZng17mJkalWmgU
+ 7VOWJL13bAf2pcmKijzj9J8S6Mum1btItZyoCL4csQBuaF6HSZwcX8Hc2wxw3CFwF0idkxHmndqn
+ 77PGhCzw4dTgbeLraTZM71ao1SMw1.rPCvie3OoXOihhIYFu3ZkKkRNivHIv1vwTP15NkYKqGBCe
+ MxPufv9RvEbIgAxEtiDHuvd0f18G0fEvk7lvXGLNSoxaFdTDtCZMvSU5z.7N7xAZ7v1zxd36nUwW
+ oBmOx0WnTrMwPay4H9UxjzMxtlsmSdr52ag0EG1NEgG4qGPzplzewzly5nRe2X0ngBZKkXTku5nW
+ I3qM_Bbge9Z2f_jZ6ybXbD1oIDfhzlZsNEc5nW9AxMfrcr7wIZiQL5n4tfSGcnMRZQNSS90_B62b
+ znHG3KHepLuWzYRAUyHwLdi046bAnF3E_8TekyGKtOLEApvDL3Dhxxk2ijX3BBUzlMHLUQV8DBX8
+ 5Obe.JuVxc_jwdZVflCtjKPsDJoL5.lG7MlG..5gnfcpPW5H9_IcGxh2TSdMmfwn7YhtuBKNr7tp
+ Fv._drd7Md4UCdSh82Uee1Gb_BhGppLeTyXWCN.2tW29q4CcMjoDkdU.DIMhRKnuWMFgZ6Qvcx93
+ bO_P0f1fQ46zr1f5gODCwi6fTs4jdCH9qU4RT0ZEEYKJWDAxKvAsL0vpiJzxvQ7h05pjnQeZgodM
+ kpsJp327wgybdP8vUj6EasFBioQFEBjrCt3hEsLBoSV7QBth6ABZPuJl1z2YiqSPcmENA75LoUlS
+ Su7uHiJEIvc02JZP5mdQSWzm2fG9ZrZK9jFjnd6Unvu3OPvcibjCXJge9wk62J_VXP4JuErIZR1i
+ WoJgD1Ph5TDyqV6Eu3T2Tlmn3wCiVbn4_QhuhnWVfKvisz1FRFThyfSA.v7jgCP1TYMhBQxDfh8a
+ xrx2SrR3oByduVT2nVrlDKF_x1LlU_EFJdfFNqKQTRYFNNDRIGID7yLkZvaSoXghcf9tQKUAmazF
+ hx4CtP.bkECvWCcn7dzsJ4roeAeu8cNusJ66dirwGRAdhQhXPvTz8iJQAYS3DFQlgqT0NP_kTga.
+ H3xcZB6DWa1Y3gq8qEf4tU_hdX0w3taFehCMz03gstApjL1HeUUosb0KZ2wb_LwuFC2MTntf.BRW
+ QddfsyztcmvYPgbDzf9Q946AsdvvDRfiZ5lHhc1uCGFq8xK0Gk3mRzZeOdlRiatwaCISdnjl3Df5
+ .T0q8TzLyHlZ0Z9sIRgZmbrKqNG483Ajos_vk23w_qZDejMWovfrL1dGo6JcQqTFwVDmDXCYafEl
+ hJqf9Y3ZngbErYeL2qDVJN3rBfLtnf5Ju4JAQW4KEBQJWvQesm.ET7Kgz_P8rKzTxF0RKwQzWP.Y
+ nPsiu6SpuCVWbDZy7.5W4rO3qicnIRyNmoRwAFF7Yin4t0tFodnD5eif5APVx7O.foK8J1E9NlM_
+ wrqJtHETTtG2HtDLU5rMarYEoj_AktdQa1.KDMiui9bApPy.a_hg9ZmljJ6QHRfvnJz29Q.tMq7k
+ LZv4g7HH_pY9SuFUMATc.9d4Nty2jzJYa4kpBMkF4fS6ROBN0jQTkZFIGNsR_EjEFfOUsHYEzDuy
+ 6FNkSo9NMS8Taf7IBZxLo5Q6MBJzV4k2VQhhRV_gCej4RT_Hank37nlmjHGqyfwtTeVGvf03NNAR
+ GRuEDwsgEar3ozNY-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Tue, 30 Nov 2021 17:27:36 +0000
+Received: by kubenode514.mail-prod1.omega.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 2ec5ae8fbf93c3d61fd0794923068b9f;
+          Tue, 30 Nov 2021 17:27:33 +0000 (UTC)
+Message-ID: <e482c499-8bff-72c8-bbda-1ecc5a7f3452@schaufler-ca.com>
+Date:   Tue, 30 Nov 2021 09:27:30 -0800
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 463944b0-3f9d-4bd3-d41c-08d9b425e25a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2021 17:21:45.2764
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AGzOyYXAtk1y+opCdcYZ3dU6lrpEkUOfZa7VpVjcELWE3Nv7EEVBtvjbpkmm6+yiFxayot+FHMIYjo464IRrwO3rOPFpsy/CQD0e/kyKXhc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4310
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10184 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 malwarescore=0
- spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2111300089
-X-Proofpoint-ORIG-GUID: DfJvNXh7shEXIvflWTvYaQyaoH3Ppcuf
-X-Proofpoint-GUID: DfJvNXh7shEXIvflWTvYaQyaoH3Ppcuf
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [RFC 15/20] capabilities: Introduce CAP_INTEGRITY_ADMIN
+Content-Language: en-US
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Denis Semakin <denis.semakin@huawei.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
+ <20211130160654.1418231-16-stefanb@linux.ibm.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20211130160654.1418231-16-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.19306 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On 11/30/2021 8:06 AM, Stefan Berger wrote:
+> From: Denis Semakin <denis.semakin@huawei.com>
+>
+> This patch introduces CAP_INTEGRITY_ADMIN, a new capability that allows
+> to setup IMA (Integrity Measurement Architecture) policies per container
+> for non-root users.
 
+Why not use CAP_MAC_ADMIN? IMA is a mandatory policy. The scope
+is system security administration. It seems to fit your needs.
+I introduced CAP_MAC_ADMIN for Smack, and believe that IMA using
+it would be completely appropriate.
 
-> On Nov 26, 2021, at 5:49 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->=20
-> On Tue, 2021-11-23 at 23:41 -0500, Eric Snowberg wrote:
->> In preparation for returning either the existing
->> restrict_link_by_builtin_and_secondary_trusted or the upcoming
->> restriction that includes the trusted builtin, secondary and
->> machine keys, to improve clarity, rename
->> get_builtin_and_secondary_restriction to get_secondary_restriction.
->>=20
->> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
->> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
->> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->> ---
->> v6: Initial version
->> v7: Unmodified from v7
->> v8: Code unmodified from v7, added Mimi's Reviewed-by
->> ---
->>  certs/system_keyring.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
->> index 692365dee2bd..8f1f87579819 100644
->> --- a/certs/system_keyring.c
->> +++ b/certs/system_keyring.c
->> @@ -77,7 +77,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
->>   * Allocate a struct key_restriction for the "builtin and secondary tru=
-st"
->>   * keyring. Only for use in system_trusted_keyring_init().
->>   */
->> -static __init struct key_restriction *get_builtin_and_secondary_restric=
-tion(void)
->> +static __init struct key_restriction *get_secondary_restriction(void)
->>  {
->>         struct key_restriction *restriction;
->> =20
->> @@ -117,7 +117,7 @@ static __init int system_trusted_keyring_init(void)
->>                                KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEA=
-RCH |
->>                                KEY_USR_WRITE),
->>                               KEY_ALLOC_NOT_IN_QUOTA,
->> -                             get_builtin_and_secondary_restriction(),
->> +                             get_secondary_restriction(),
->>                               NULL);
->>         if (IS_ERR(secondary_trusted_keys))
->>                 panic("Can't allocate secondary trusted keyring\n");
->=20
-> This is wrong order.
->=20
-> You should first do the changes that make the old name
-> obsolete and only after that have a patch that does the
-> rename. Unfortunately, this patch cannot possibly acked
-> with the current order.
-
-I can change the order, but I'm confused how this would work for a git bise=
-ct.=20
-If the rename happens afterwards, now two patches will always need to be=20
-reverted instead of the possibility of one.  Is this your expectation?
-
+>
+> The main purpose of this new capability is discribed in this document:
+> https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
+> It is said: "setting the policy should be possibly without the powerful
+> CAP_SYS_ADMIN and there should be the opportunity to gate this with a new
+> capability CAP_INTEGRITY_ADMIN that allows a user to set the IMA policy
+> during container runtime.."
+>
+> In other words it should be possible to setup IMA policies while not
+> giving too many privilges to the user, therefore splitting the
+> CAP_INTEGRITY_ADMIN off from CAP_SYS_ADMIN.
+>
+> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>   include/linux/capability.h          | 6 ++++++
+>   include/uapi/linux/capability.h     | 7 ++++++-
+>   security/selinux/include/classmap.h | 4 ++--
+>   3 files changed, 14 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/capability.h b/include/linux/capability.h
+> index 65efb74c3585..ea6d58acb95e 100644
+> --- a/include/linux/capability.h
+> +++ b/include/linux/capability.h
+> @@ -278,4 +278,10 @@ int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
+>   int cap_convert_nscap(struct user_namespace *mnt_userns, struct dentry *dentry,
+>   		      const void **ivalue, size_t size);
+>   
+> +static inline bool integrity_admin_ns_capable(struct user_namespace *ns)
+> +{
+> +	return ns_capable(ns, CAP_INTEGRITY_ADMIN) ||
+> +		ns_capable(ns, CAP_SYS_ADMIN);
+> +}
+> +
+>   #endif /* !_LINUX_CAPABILITY_H */
+> diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
+> index 463d1ba2232a..48b08e4b3895 100644
+> --- a/include/uapi/linux/capability.h
+> +++ b/include/uapi/linux/capability.h
+> @@ -417,7 +417,12 @@ struct vfs_ns_cap_data {
+>   
+>   #define CAP_CHECKPOINT_RESTORE	40
+>   
+> -#define CAP_LAST_CAP         CAP_CHECKPOINT_RESTORE
+> +/* Allow setup IMA policy per container independently */
+> +/* No necessary to be superuser */
+> +
+> +#define CAP_INTEGRITY_ADMIN	41
+> +
+> +#define CAP_LAST_CAP		CAP_INTEGRITY_ADMIN
+>   
+>   #define cap_valid(x) ((x) >= 0 && (x) <= CAP_LAST_CAP)
+>   
+> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+> index 35aac62a662e..7ff532b90f09 100644
+> --- a/security/selinux/include/classmap.h
+> +++ b/security/selinux/include/classmap.h
+> @@ -28,9 +28,9 @@
+>   
+>   #define COMMON_CAP2_PERMS  "mac_override", "mac_admin", "syslog", \
+>   		"wake_alarm", "block_suspend", "audit_read", "perfmon", "bpf", \
+> -		"checkpoint_restore"
+> +		"checkpoint_restore", "integrity_admin"
+>   
+> -#if CAP_LAST_CAP > CAP_CHECKPOINT_RESTORE
+> +#if CAP_LAST_CAP > CAP_INTEGRITY_ADMIN
+>   #error New capability defined, please update COMMON_CAP2_PERMS.
+>   #endif
+>   
