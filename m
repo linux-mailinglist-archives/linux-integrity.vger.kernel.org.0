@@ -2,161 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEAA46351B
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB114463535
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237026AbhK3NMy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 08:12:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236929AbhK3NMy (ORCPT
+        id S232424AbhK3NUX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 08:20:23 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22896 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232031AbhK3NUW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:12:54 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71165C061574
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 05:09:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1638277775;
-        bh=n1TFcwEoygn1lnCP6+JLiYGxZufgS7TqcZcMf0iCa1c=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=O2lkS5VI74CZRcmuQl3a8z4HY5D9G84UKcOA/hXP/6fUfxye4kujZG8An6SLAm995
-         KDxclJ9tRO9GMB6DpdI4JzwqwaMr6Q01yEPIVVvtqcZ7Y3JMdiKvBcAu5rw77h2aw6
-         FZn5e9LBVsvnLGHV6IK2tcyYs3LVMZ2Tb7f9D5Ho=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 236AD12805E5;
-        Tue, 30 Nov 2021 08:09:35 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id a2nHguwqJ_RH; Tue, 30 Nov 2021 08:09:35 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1638277774;
-        bh=n1TFcwEoygn1lnCP6+JLiYGxZufgS7TqcZcMf0iCa1c=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=CFOEpKNDaUcEwbZaNo+esTYo6pinWAjs2bJjlgpq6uQKS9rhfL/CEDQNZANJU8291
-         +M+QvGoZ+JwNNuKrT9xBTqVFBT5GozqnuDO7VJ3P50gMf9YPB8UrLE2l0QRst+WuNU
-         3VqzOid86XC/xHTiRD/gLZlIbyBNdMIN23VW7CgQ=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 243A512804CF;
-        Tue, 30 Nov 2021 08:09:32 -0500 (EST)
-Message-ID: <22f44b97c03d70ac0205f494657856f27fa75030.camel@HansenPartnership.com>
-Subject: Re: [RFC 1/3] userns: add uuid field
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, containers@lists.linux.dev,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        krzysztof.struczynski@huawei.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Michael Peters <mpeters@redhat.com>,
-        Luke Hinds <lhinds@redhat.com>,
-        Lily Sturmann <lsturman@redhat.com>,
-        Patrick Uiterwijk <puiterwi@redhat.com>,
-        Christian Brauner <christian@brauner.io>
-Date:   Tue, 30 Nov 2021 08:09:31 -0500
-In-Reply-To: <20211129135639.3boeegnusxllho35@wittgenstein>
-References: <20211128044558.GA11794@mail.hallyn.com>
-         <2e32a6897877ed600de64b3d664dc6014389dbe4.camel@HansenPartnership.com>
-         <20211128151805.GA15306@mail.hallyn.com>
-         <60c99d461368593dfd51765c527b01c6bf0a9fea.camel@HansenPartnership.com>
-         <20211128204715.GA17707@mail.hallyn.com>
-         <e1b36c9c36f0f6d3262de6141ad67e8044cfeade.camel@HansenPartnership.com>
-         <20211128214906.GA18470@mail.hallyn.com>
-         <e1d8fcb0dffd5d88c95140f644ece25273071d79.camel@HansenPartnership.com>
-         <20211129015901.GA20161@mail.hallyn.com>
-         <9f3466c1-276b-1d7e-917c-37c6f02d5571@linux.ibm.com>
-         <20211129135639.3boeegnusxllho35@wittgenstein>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
-MIME-Version: 1.0
+        Tue, 30 Nov 2021 08:20:22 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUD7qUT032112;
+        Tue, 30 Nov 2021 13:17:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=0rIetcX3x6LjEhiveIf76VIp8g4avAXdpA9rIWwTqyA=;
+ b=ePAaM+0SrqmxwFAdugksa7U3dRwIBTmYYfnW8z1apxi2FxXFmynUVatkIpWlP3epIxyw
+ I6VxeWFqU2PropJWmRjbL54Pwwoey7Z+JUMNqeCWcUCmYoPpLIyEbg5og32N+h1jjdc0
+ DnzgMEUmB1np0a2ZjWEGCtsD0asa+b9a+Igy6mwaJNEEwkajvXwhX3Kdzp38VKl07Qvr
+ Qe5vq09MgmKm3hsKicKLAgEZiBjYpZn5JLLJKuPmSBdbyVF9py9pQk+VTPfJCjolkRJN
+ ecZuZ4JaOYCdF5z/KJ7+kn1fcwir7V4QrqRp8xjBFI8XelozTDcFycA7YVV9NUQDnhOt EQ== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cnkd09qse-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 13:17:00 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUD9QiK013413;
+        Tue, 30 Nov 2021 13:15:56 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3ckca9np14-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 13:15:56 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUDFsaW29295036
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Nov 2021 13:15:54 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66385AE051;
+        Tue, 30 Nov 2021 13:15:54 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C0E14AE04D;
+        Tue, 30 Nov 2021 13:15:53 +0000 (GMT)
+Received: from sig-9-65-92-250.ibm.com (unknown [9.65.92.250])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 30 Nov 2021 13:15:53 +0000 (GMT)
+Message-ID: <5e4e7f69e756881a6efc1c575d74931e4ff48478.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/4] ima: limit including fs-verity's file digest in
+ measurement list
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 30 Nov 2021 08:15:53 -0500
+In-Reply-To: <YaWN2RPEO3fZqkv4@sol.localdomain>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+         <20211129170057.243127-4-zohar@linux.ibm.com>
+         <YaWN2RPEO3fZqkv4@sol.localdomain>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XXzhLryAOufCLeKLbSAkt6OUgdCxbtk_
+X-Proofpoint-ORIG-GUID: XXzhLryAOufCLeKLbSAkt6OUgdCxbtk_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_07,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxscore=0 phishscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
+ bulkscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111300075
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-11-29 at 14:56 +0100, Christian Brauner wrote:
-> On Mon, Nov 29, 2021 at 08:49:40AM -0500, Stefan Berger wrote:
-> > On 11/28/21 20:59, Serge E. Hallyn wrote:
-> > > On Sun, Nov 28, 2021 at 05:56:28PM -0500, James Bottomley wrote:
-> > > > On Sun, 2021-11-28 at 15:49 -0600, Serge E. Hallyn wrote:
-> > > > > On Sun, Nov 28, 2021 at 04:21:29PM -0500, James Bottomley
-> > > > > wrote:
-> > > > > > On Sun, 2021-11-28 at 14:47 -0600, Serge E. Hallyn wrote:
-> > > > > > > On Sun, Nov 28, 2021 at 01:00:28PM -0500, James Bottomley
-> > > > > > > wrote:
-> > > > > > > > On Sun, 2021-11-28 at 09:18 -0600, Serge E. Hallyn
-> > > > > > > > wrote:
-> > > > [...]
-> > > > > > > > > So given that 'unique per boot' is sufficient, what
-> > > > > > > > > would be the problem with simply adding a simple
-> > > > > > > > > ever-increasing unique atomix count to the struct
-> > > > > > > > > user_namespace?
-> > > > > > > > I don't think there is any ... but I equally don't see
-> > > > > > > > why people would want to save and restore the uuid but
-> > > > > > > > not the new monotonic identifier ... because it's still
-> > > > > > > > just a marker on a namespace.
-> > > > > > > But you've called it "the namespace uuid".  I'm not even
-> > > > > > > really thinking of checkpoint/restart, just stopping and
-> > > > > > > restarting a container.  I'm convinced people will want
-> > > > > > > to start using it because, well, it is a nice feature.
-> > > > > > Right, but the uniqueness property depends on you not being
-> > > > > > able to set it.  If you just want a namespace label, you
-> > > > > > can have that, but anything a user can set is either a pain
-> > > > > > to guarantee uniqueness (have to check all the other
-> > > > > > objects) or is simply a non-unique label.
-> > > > > > 
-> > > > > > If you want to label a container, which could have many
-> > > > > > namespaces and be stopped and restarted many times, it does
-> > > > > > sound like you want a non-unique settable label.  However,
-> > > > > > IMA definitely needs a guaranteed per namespace unique
-> > > > > > label.
-> > > > > > 
-> > > > > > Is the objection simply you think a UUID sound like it
-> > > > > > should be
-> > > > > Objection is too strong.  Concern.
-> > > > > 
-> > > > > But yes, to me a uuid (a) feels like it should be generally
-> > > > > useful including being settable and (b) not super duper 100%
-> > > > > absolutely guaranteed to always be unique per boot, as an
-> > > > > incremented counter would be.
-> > > > OK, but a bunch of cats I found on the Internet agree with me,
-> > > > a UUID shouldn't be settable:
-> > > > 
-> > > > https://en.wikipedia.org/wiki/Universally_unique_identifier
-> > > > 
-> > > > The key point being, if you can set the id, it can't be unique
-> > > > ... it
-> > > Ok, so can you just put a comment above there saying "this must
-> > > not be settable from userspace" ?
-> > 
-> > So I have been working on an IMA namespacing series again as well
-> > and would like to use some sort of unique identifier for audit
-> > messages emitted from an IMA/user namespace other than the
-> > init_ima_ns. This UUID may just work for this, but how would one
-> > associate the UUID with a container if it ever comes to that when
-> > evaluating audit logs? Shouldn't it be settable from user
-> > space for some sort of 'coordination' between container runtime and
-> > kernel?
+Hi Eric,
+
+On Mon, 2021-11-29 at 18:35 -0800, Eric Biggers wrote:
+> > diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+> > index 42c6ff7056e6..179c7f0364c2 100644
+> > --- a/security/integrity/ima/ima_api.c
+> > +++ b/security/integrity/ima/ima_api.c
+> > @@ -217,7 +217,8 @@ int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
+> >   */
+> >  int ima_collect_measurement(struct integrity_iint_cache *iint,
+> >                           struct file *file, void *buf, loff_t size,
+> > -                         enum hash_algo algo, struct modsig *modsig)
+> > +                         enum hash_algo algo, struct modsig *modsig,
+> > +                         bool veritysig)
 > 
-> Wouldn't this be solved by the audit container id patchset? In fact,
-> can't we use this for IMA as well?
+> 'veritysig' is being added here but it doesn't actually do anything.  It seems
+> this patchset is not split up correctly.
 
-Stefan asked, but it really doesn't have the properties we need, plus
-they don't seem to want the audit id used as the container id.
+True, this patch just adds the plumbing.  Reversing 3 & 4 could result
+in including the fs-verity digest, without the signature in the
+measurement list.  The alternative is to squash patches 3 & 4.
 
-How about this:  Since the label has to be unique for the lifetime of
-the system, if we allow it to be settable, we'll have to carry it
-outside the namespace anyway because memory of the label has to live on
-after the namespace dies to avoid duplication, so I'll move it into a
-parallel namespace structure ima will carry.  it will be settable once,
-but if you don't set it before it's used, then we'll set it to a
-randombly generated uuid.  If you do set it, it will be checked for
-uniqueness against all previous labels.
+thanks,
 
-James
-
+Mimi
 
