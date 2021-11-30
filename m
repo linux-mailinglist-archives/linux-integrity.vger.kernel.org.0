@@ -2,137 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 605A0463F31
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 21:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 170334641C7
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 23:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbhK3UbA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 15:31:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48570 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343667AbhK3UbA (ORCPT
+        id S236587AbhK3WxG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 17:53:06 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34234 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233731AbhK3WxF (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 15:31:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638304058;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AcMNv7Mr+B4p3hEjaHnnJQgfgj2Zfos0EhRVXhwbDc0=;
-        b=TA8s5+wTkGcf2rgGkvRyUp1dI01PLm776pT1z6x0t30M7tTMuCN8iMORyrmTY9LA9xdjah
-        V5dJWjozol1dc1R1dw1ImgtWZjcHo8F8UF8yLDAGjWD0QFwW4KXPZp4dArHp4UCf9p8unc
-        k9IogEABqTYIR0fSc35RZfH952Qhszg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-sFhFSPFrP4CIoucnQlO17Q-1; Tue, 30 Nov 2021 15:27:34 -0500
-X-MC-Unique: sFhFSPFrP4CIoucnQlO17Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BAE6310144E3;
-        Tue, 30 Nov 2021 20:27:29 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.193.123])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 611AE45D64;
-        Tue, 30 Nov 2021 20:27:17 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?utf-8?Q?Tr=C3=A9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
-References: <20211115185304.198460-1-mic@digikod.net>
-Date:   Tue, 30 Nov 2021 21:27:15 +0100
-In-Reply-To: <20211115185304.198460-1-mic@digikod.net> (=?utf-8?Q?=22Micka?=
- =?utf-8?Q?=C3=ABl_Sala=C3=BCn=22's?=
-        message of "Mon, 15 Nov 2021 19:53:01 +0100")
-Message-ID: <87sfvd8k4c.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Tue, 30 Nov 2021 17:53:05 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUMkZEW022501;
+        Tue, 30 Nov 2021 22:49:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=z4DGoY8XdH+P+eAOKsjRpwmyvkYyrqgoRVOtJ1mts54=;
+ b=c0ZTCyvQyUOkLj9Y4SL/nMoKamqeWifzw/Kquzzup4kmMh+9EsNa4DGTzCeCX9ACE9dd
+ eQ4qOEyq8/Su2dRxd6GvZfndAjBNJKIk9XDbSQ6QFL63lfSjfaceM08pcUzJmK/WF7Z8
+ 2VtkTmXBCdwbjf+bW81avtvPJTSlAqINJ3f6InQaCNYqHH9phOwyTbFyZbatxE/b2wLu
+ PaxaiSU1wfXxzrz+n7C1rNAnjyinoz+Qot1rkHjFDD88nOkg1mKIwaKp7ill6QcpoyWY
+ a2P7ClwUkyH3OyxRETZ99WWbiSQg6Gx7R0atB+aIMTcoBiIvLhuQagbnN2B7TpSn+vhq xA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cnw20g2fb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 22:49:41 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUMmVwt016761;
+        Tue, 30 Nov 2021 22:49:39 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ckcack8w8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 22:49:39 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUMnbIU23331206
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Nov 2021 22:49:37 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 369EB42042;
+        Tue, 30 Nov 2021 22:49:37 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6885942041;
+        Tue, 30 Nov 2021 22:49:36 +0000 (GMT)
+Received: from sig-9-65-92-250.ibm.com (unknown [9.65.92.250])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 30 Nov 2021 22:49:36 +0000 (GMT)
+Message-ID: <2120df834ded1811b39349552c34587bb79b212d.camel@linux.ibm.com>
+Subject: Re: [PATCH 0/4] ima: support fs-verity signatures stored as
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 30 Nov 2021 17:49:35 -0500
+In-Reply-To: <16364d376af32a97fc6a119d4e7366862f16f417.camel@linux.ibm.com>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+         <YaWOR+Bav6PBgHHq@sol.localdomain>
+         <16364d376af32a97fc6a119d4e7366862f16f417.camel@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: d9HPCuipX8lWo-tm_3KfJTaE4uszF_Ov
+X-Proofpoint-ORIG-GUID: d9HPCuipX8lWo-tm_3KfJTaE4uszF_Ov
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 clxscore=1015 suspectscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111300111
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-* Micka=C3=ABl Sala=C3=BCn:
+On Tue, 2021-11-30 at 07:56 -0500, Mimi Zohar wrote:
+> On Mon, 2021-11-29 at 18:36 -0800, Eric Biggers wrote:
+> > On Mon, Nov 29, 2021 at 12:00:53PM -0500, Mimi Zohar wrote:
+> > > Support for fs-verity file digests in IMA was discussed from the beginning,
+> > > prior to fs-verity being upstreamed[1,2].  This patch set adds signature
+> > > verification support based on the fs-verity file digest.  Both the
+> > > file digest and the signature must be included in the IMA measurement list
+> > > in order to disambiguate the type of file digest.
+> > > 
+> > > [1] https://events19.linuxfoundation.org/wp-content/uploads/2017/11/fs-verify_Mike-Halcrow_Eric-Biggers.pdf
+> > > [2] Documentation/filesystems/fsverity.rst
+> > > 
+> > > Mimi Zohar (4):
+> > >   fs-verity: define a function to return the integrity protected file
+> > >     digest
+> > >   ima: define a new signature type named IMA_VERITY_DIGSIG
+> > >   ima: limit including fs-verity's file digest in measurement list
+> > >   ima: support fs-verity file digest based signatures
+> > > 
+> > >  fs/verity/fsverity_private.h              |  6 ---
+> > >  fs/verity/measure.c                       | 49 +++++++++++++++++++++++
+> > >  include/linux/fsverity.h                  | 17 ++++++++
+> > >  security/integrity/ima/ima.h              |  3 +-
+> > >  security/integrity/ima/ima_api.c          | 23 ++++++++++-
+> > >  security/integrity/ima/ima_appraise.c     |  9 ++++-
+> > >  security/integrity/ima/ima_main.c         |  7 +++-
+> > >  security/integrity/ima/ima_template_lib.c |  3 +-
+> > >  security/integrity/integrity.h            |  1 +
+> > >  9 files changed, 107 insertions(+), 11 deletions(-)
+> > 
+> > I left some comments, but this generally looks like the right approach.
+> > However, I'm not an expert in IMA, so it's hard for me to review the IMA parts.
+> 
+> Thank you for the quick review!
+> 
+> > 
+> > Can you add documentation for this feature?
+> 
+> Yes, of course.  Originally I assumed the fs-verity support would be a
+> lot more complicated, but to my pleasant surprise by limiting the IMA
+> fsverity support to just signatures and requiring the file signature be
+> included in the IMA measurement list, it's a lot simpler than expected.
+> As there aren't any IMA policy changes, I'm just thinking about where
+> to document it.
 
-> Primary goal of trusted_for(2)
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
->
-> This new syscall enables user space to ask the kernel: is this file
-> descriptor's content trusted to be used for this purpose?  The set of
-> usage currently only contains execution, but other may follow (e.g.
-> configuration, sensitive data).  If the kernel identifies the file
-> descriptor as trustworthy for this usage, user space should then take
-> this information into account.  The "execution" usage means that the
-> content of the file descriptor is trusted according to the system policy
-> to be executed by user space, which means that it interprets the content
-> or (try to) maps it as executable memory.
+I'll update both Documentation/filesystems/fsverity.rst and
+Documentation/security/IMA-templates.rst.
 
-I sketched my ideas about =E2=80=9CIMA gadgets=E2=80=9D here:
+thanks,
 
-  IMA gadgets
-  <https://www.openwall.com/lists/oss-security/2021/11/30/1>
-
-I still don't think the proposed trusted_for interface is sufficient.
-The example I gave is a Perl module that does nothing (on its own) when
-loaded as a Perl module (although you probably don't want to sign it
-anyway, given what it implements), but triggers an unwanted action when
-sourced (using .) as a shell script.
-
-> @usage identifies the user space usage intended for @fd: only
-> TRUSTED_FOR_EXECUTION for now, but trusted_for_usage could be extended
-> to identify other usages (e.g. configuration, sensitive data).
-
-We would need TRUSTED_FOR_EXECUTION_BY_BASH,
-TRUSTED_FOR_EXECUTION_BY_PERL, etc.  I'm not sure that actually works.
-
-Caller process context does not work because we have this confusion
-internally between glibc's own use (for the dynamic linker
-configuration), and for loading programs/shared objects (there seems to
-be a corner case where you can execute arbitrary code even without
-executable mappings in the ELF object), and the script interpreter
-itself (the primary target for trusted_for).
-
-But for generating auditing events, trusted_for seems is probably quite
-helpful.
-
-Thanks,
-Florian
+Mimi
 
