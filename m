@@ -2,105 +2,153 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB554635B9
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0571F463A11
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 16:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbhK3Nrj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 08:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbhK3Nrj (ORCPT
+        id S234074AbhK3PeV (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 10:34:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29608 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229769AbhK3PeU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:47:39 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0703C061574
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 05:44:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 09889CE19FE
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 13:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC75C53FC1;
-        Tue, 30 Nov 2021 13:44:10 +0000 (UTC)
-Date:   Tue, 30 Nov 2021 14:44:07 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, containers@lists.linux.dev,
+        Tue, 30 Nov 2021 10:34:20 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUFQE9v005941;
+        Tue, 30 Nov 2021 15:28:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=lRJ9EeRkehNcBeN0Slv1bMFVDNn8zq/kDiLTfuorS78=;
+ b=djlV+m4uyuRwJxKWjfgbwasZlTtheaI/iQD1iWPDifkwk6+2q57+Gui7hqzlMkrJdUso
+ rohgduHkETF0ss9YUMvAG0gVXd6e9i/HTyEbsbSfhpaxmQTCzUrfvS5x8GHkXyTWfWU9
+ l9vVAJ5yHGCCEhZs4r8KjplCmNBt+67jxPvgAxeqBWth2Kt3BI2/ItDvOgOZl5ptvRjB
+ yDj+D+9c0dVjtVX6EZZoJYHu5g4dCDBlN5LiXNMWTHDiKW52u2EaBlPqVZ7R+FCwmORf
+ vka7rL1E4is9bf/y6hyVgq6RekVhn5OCBK1ZkGh0bOp6Z2RLnygk2kroWzDTUZ3ozrji jA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cnpg7099n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 15:28:38 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AUFQSLI007382;
+        Tue, 30 Nov 2021 15:28:37 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cnpg7098n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 15:28:37 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUFD54u004410;
+        Tue, 30 Nov 2021 15:28:34 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ckcacg7wg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 15:28:34 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUFSTWQ19136886
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Nov 2021 15:28:29 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 05C03A404D;
+        Tue, 30 Nov 2021 15:28:29 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A4C52A4059;
+        Tue, 30 Nov 2021 15:28:27 +0000 (GMT)
+Received: from osiris (unknown [9.145.157.87])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 30 Nov 2021 15:28:27 +0000 (GMT)
+Date:   Tue, 30 Nov 2021 16:28:26 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Michal Suchanek <msuchanek@suse.de>
+Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
+        Philipp Rudo <prudo@redhat.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        krzysztof.struczynski@huawei.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Michael Peters <mpeters@redhat.com>,
-        Luke Hinds <lhinds@redhat.com>,
-        Lily Sturmann <lsturman@redhat.com>,
-        Patrick Uiterwijk <puiterwi@redhat.com>,
-        Christian Brauner <christian@brauner.io>
-Subject: Re: [RFC 3/3] ima: make the integrity inode cache per namespace
-Message-ID: <20211130134407.3hy2p7vlrevei2aa@wittgenstein>
-References: <20211129045834.GB20606@mail.hallyn.com>
- <755446b10c8415fd469b814535c4a12964af3264.camel@HansenPartnership.com>
- <70b81e62-46af-9d39-3dcb-4cfbae645175@linux.ibm.com>
- <a74b18c1aee2b14426cc12e2fd336716c447f070.camel@HansenPartnership.com>
- <20211129142235.hez3ovtuj3rpscgm@wittgenstein>
- <afee2f0483271a6cdb1bc7b48b819a3ca2c4ceda.camel@HansenPartnership.com>
- <20211129153539.GA26325@mail.hallyn.com>
- <20211129161650.dtcvh2ozgquz6rli@wittgenstein>
- <c73dd2cc-7915-9343-5ad0-e53c762e29a3@linux.ibm.com>
- <20211130050316.GC32444@mail.hallyn.com>
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
+Message-ID: <YaZDGjKSaH2YKl/h@osiris>
+References: <cover.1637862358.git.msuchanek@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211130050316.GC32444@mail.hallyn.com>
+In-Reply-To: <cover.1637862358.git.msuchanek@suse.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rSCYo3RBvp-zpEg4RRrySvGTJx2g36_q
+X-Proofpoint-GUID: -IO6R0uBLYVSlOsUgVLBc1VitLs8tbzj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_09,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=829
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ bulkscore=0 priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1011
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111300081
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 11:03:17PM -0600, Serge Hallyn wrote:
-> On Mon, Nov 29, 2021 at 12:04:29PM -0500, Stefan Berger wrote:
-> > 
-> > On 11/29/21 11:16, Christian Brauner wrote:
-> > > On Mon, Nov 29, 2021 at 09:35:39AM -0600, Serge Hallyn wrote:
-> > > > On Mon, Nov 29, 2021 at 09:46:55AM -0500, James Bottomley wrote:
-> > > > > On Mon, 2021-11-29 at 15:22 +0100, Christian Brauner wrote:
-> > > > > > On Mon, Nov 29, 2021 at 09:10:29AM -0500, James Bottomley wrote:
-> > > > > > 
-> > > I kept thinking about this question while I was out running and while I
-> > > admittedly have reacted poorly to CLONE_NEWIMA patches before it feels
-> > > to me that this is the right approach after all. Making it part of
-> > > userns at least in this form isn't clean.
-> > > 
-> > > I think attaching a uuid to a userns alone for the sake of IMA is wrong.
-> > > Additionally, I think a uuid only for the userns is too limited. This is
-> > > similar to the problem of the audit container id. If we have some sort
-> > > of uuid for ima it will automatically evolve into something like a
-> > > container id (I'm not even arguing that this is necessarily wrong.).
-> > > We also have the issue that we then have the container audit id thing -
-> > > if this ever lands and the ima userns uuid. All that makes it quite
-> > > messy.
-> > > 
-> > > I think CLONE_NEWIMA is ultimately nicer and allows the implementation
-> > > to be decoupled from the userns and self-contained as possible. This
-> > > also means that ima ns works for privileged containers which sure is a
-> > > valid use-case.
-> > 
-> > The thing is that piggy backing on the user namespace at least allows us to
-> > 'always see' where IMA's keyring is (across setns()). If we were using an
-> > independent IMA namespace how would we guarantee that the user sees the
-> > keyring for IMA appraisal? We would at least have to take a reference (as in
-> > get_user_ns()) to the user namespace when the IMA namespace is created so
-> > that it at least the association of IMA namespace to user namespace remains
+On Thu, Nov 25, 2021 at 07:02:38PM +0100, Michal Suchanek wrote:
+> Hello,
 > 
-> Maybe we pull they keyring info into a new struct which is referred
-> to and pinned by both user_ns and ima_ns?  (But I actually am ignorant
-> of how ima is using the keyrings, so again I need to go do some reading.)
-
-That's one way of doing it and we'd be able to shrink struct
-user_namespace because of it if we have to go down that road anyway.
-
+> This is resend of the KEXEC_SIG patchset.
 > 
-> More moving parts isn't my first choice.  But if you need namespaced IMA
-> for containers that aren't doing CLONE_NEWUSER, then a separate ima_ns is
-> your only option.  Is that a requirement for you?
+> The first patch is new because it'a a cleanup that does not require any
+> change to the module verification code.
+> 
+> The second patch is the only one that is intended to change any
+> functionality.
+> 
+> The rest only deduplicates code but I did not receive any review on that
+> part so I don't know if it's desirable as implemented.
+> 
+> The first two patches can be applied separately without the rest.
+> 
+> Thanks
+> 
+> Michal
+> 
+> Michal Suchanek (6):
+>   s390/kexec_file: Don't opencode appended signature check.
+>   powerpc/kexec_file: Add KEXEC_SIG support.
+>   kexec_file: Don't opencode appended signature verification.
+>   module: strip the signature marker in the verification function.
+>   module: Use key_being_used_for for log messages in
+>     verify_appended_signature
+>   module: Move duplicate mod_check_sig users code to mod_parse_sig
+> 
+>  arch/powerpc/Kconfig                     | 11 +++++
+>  arch/powerpc/kexec/elf_64.c              | 14 ++++++
+>  arch/s390/kernel/machine_kexec_file.c    | 42 ++----------------
+>  crypto/asymmetric_keys/asymmetric_type.c |  1 +
+>  include/linux/module_signature.h         |  1 +
+>  include/linux/verification.h             |  4 ++
+>  kernel/module-internal.h                 |  2 -
+>  kernel/module.c                          | 12 +++--
+>  kernel/module_signature.c                | 56 +++++++++++++++++++++++-
+>  kernel/module_signing.c                  | 33 +++++++-------
+>  security/integrity/ima/ima_modsig.c      | 22 ++--------
+>  11 files changed, 113 insertions(+), 85 deletions(-)
+
+For all patches which touch s390:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
