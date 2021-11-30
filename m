@@ -2,106 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB114463535
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A0F463582
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbhK3NUX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 08:20:23 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22896 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232031AbhK3NUW (ORCPT
+        id S240397AbhK3Ngt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 08:36:49 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:33408 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231627AbhK3Ngt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:20:22 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUD7qUT032112;
-        Tue, 30 Nov 2021 13:17:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=0rIetcX3x6LjEhiveIf76VIp8g4avAXdpA9rIWwTqyA=;
- b=ePAaM+0SrqmxwFAdugksa7U3dRwIBTmYYfnW8z1apxi2FxXFmynUVatkIpWlP3epIxyw
- I6VxeWFqU2PropJWmRjbL54Pwwoey7Z+JUMNqeCWcUCmYoPpLIyEbg5og32N+h1jjdc0
- DnzgMEUmB1np0a2ZjWEGCtsD0asa+b9a+Igy6mwaJNEEwkajvXwhX3Kdzp38VKl07Qvr
- Qe5vq09MgmKm3hsKicKLAgEZiBjYpZn5JLLJKuPmSBdbyVF9py9pQk+VTPfJCjolkRJN
- ecZuZ4JaOYCdF5z/KJ7+kn1fcwir7V4QrqRp8xjBFI8XelozTDcFycA7YVV9NUQDnhOt EQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cnkd09qse-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 13:17:00 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUD9QiK013413;
-        Tue, 30 Nov 2021 13:15:56 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 3ckca9np14-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 13:15:56 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUDFsaW29295036
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Nov 2021 13:15:54 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66385AE051;
-        Tue, 30 Nov 2021 13:15:54 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0E14AE04D;
-        Tue, 30 Nov 2021 13:15:53 +0000 (GMT)
-Received: from sig-9-65-92-250.ibm.com (unknown [9.65.92.250])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 30 Nov 2021 13:15:53 +0000 (GMT)
-Message-ID: <5e4e7f69e756881a6efc1c575d74931e4ff48478.camel@linux.ibm.com>
-Subject: Re: [PATCH 3/4] ima: limit including fs-verity's file digest in
- measurement list
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 30 Nov 2021 08:15:53 -0500
-In-Reply-To: <YaWN2RPEO3fZqkv4@sol.localdomain>
-References: <20211129170057.243127-1-zohar@linux.ibm.com>
-         <20211129170057.243127-4-zohar@linux.ibm.com>
-         <YaWN2RPEO3fZqkv4@sol.localdomain>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: XXzhLryAOufCLeKLbSAkt6OUgdCxbtk_
-X-Proofpoint-ORIG-GUID: XXzhLryAOufCLeKLbSAkt6OUgdCxbtk_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_07,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxscore=0 phishscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
- bulkscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2111300075
+        Tue, 30 Nov 2021 08:36:49 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 03400CE18AF
+        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 13:33:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC762C53FC1;
+        Tue, 30 Nov 2021 13:33:22 +0000 (UTC)
+Date:   Tue, 30 Nov 2021 14:33:18 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org, containers@lists.linux.dev,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        krzysztof.struczynski@huawei.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Michael Peters <mpeters@redhat.com>,
+        Luke Hinds <lhinds@redhat.com>,
+        Lily Sturmann <lsturman@redhat.com>,
+        Patrick Uiterwijk <puiterwi@redhat.com>,
+        Christian Brauner <christian@brauner.io>
+Subject: Re: [RFC 3/3] ima: make the integrity inode cache per namespace
+Message-ID: <20211130133318.3lpirmouybdn2c2m@wittgenstein>
+References: <755446b10c8415fd469b814535c4a12964af3264.camel@HansenPartnership.com>
+ <70b81e62-46af-9d39-3dcb-4cfbae645175@linux.ibm.com>
+ <a74b18c1aee2b14426cc12e2fd336716c447f070.camel@HansenPartnership.com>
+ <20211129142235.hez3ovtuj3rpscgm@wittgenstein>
+ <afee2f0483271a6cdb1bc7b48b819a3ca2c4ceda.camel@HansenPartnership.com>
+ <20211129153539.GA26325@mail.hallyn.com>
+ <20211129161650.dtcvh2ozgquz6rli@wittgenstein>
+ <c73dd2cc-7915-9343-5ad0-e53c762e29a3@linux.ibm.com>
+ <20211130050316.GC32444@mail.hallyn.com>
+ <2246a547-3971-8b92-47a4-589a59a33db7@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2246a547-3971-8b92-47a4-589a59a33db7@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Eric,
-
-On Mon, 2021-11-29 at 18:35 -0800, Eric Biggers wrote:
-> > diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-> > index 42c6ff7056e6..179c7f0364c2 100644
-> > --- a/security/integrity/ima/ima_api.c
-> > +++ b/security/integrity/ima/ima_api.c
-> > @@ -217,7 +217,8 @@ int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
-> >   */
-> >  int ima_collect_measurement(struct integrity_iint_cache *iint,
-> >                           struct file *file, void *buf, loff_t size,
-> > -                         enum hash_algo algo, struct modsig *modsig)
-> > +                         enum hash_algo algo, struct modsig *modsig,
-> > +                         bool veritysig)
+On Tue, Nov 30, 2021 at 06:55:51AM -0500, Stefan Berger wrote:
 > 
-> 'veritysig' is being added here but it doesn't actually do anything.  It seems
-> this patchset is not split up correctly.
+> On 11/30/21 00:03, Serge E. Hallyn wrote:
+> > On Mon, Nov 29, 2021 at 12:04:29PM -0500, Stefan Berger wrote:
+> > > On 11/29/21 11:16, Christian Brauner wrote:
+> > > > On Mon, Nov 29, 2021 at 09:35:39AM -0600, Serge Hallyn wrote:
+> > > > > On Mon, Nov 29, 2021 at 09:46:55AM -0500, James Bottomley wrote:
+> > > > > > On Mon, 2021-11-29 at 15:22 +0100, Christian Brauner wrote:
+> > > > > > > On Mon, Nov 29, 2021 at 09:10:29AM -0500, James Bottomley wrote:
+> > > > > > > 
+> > > > I kept thinking about this question while I was out running and while I
+> > > > admittedly have reacted poorly to CLONE_NEWIMA patches before it feels
+> > > > to me that this is the right approach after all. Making it part of
+> > > > userns at least in this form isn't clean.
+> > > > 
+> > > > I think attaching a uuid to a userns alone for the sake of IMA is wrong.
+> > > > Additionally, I think a uuid only for the userns is too limited. This is
+> > > > similar to the problem of the audit container id. If we have some sort
+> > > > of uuid for ima it will automatically evolve into something like a
+> > > > container id (I'm not even arguing that this is necessarily wrong.).
+> > > > We also have the issue that we then have the container audit id thing -
+> > > > if this ever lands and the ima userns uuid. All that makes it quite
+> > > > messy.
+> > > > 
+> > > > I think CLONE_NEWIMA is ultimately nicer and allows the implementation
+> > > > to be decoupled from the userns and self-contained as possible. This
+> > > > also means that ima ns works for privileged containers which sure is a
+> > > > valid use-case.
+> > > The thing is that piggy backing on the user namespace at least allows us to
+> > > 'always see' where IMA's keyring is (across setns()). If we were using an
+> > > independent IMA namespace how would we guarantee that the user sees the
+> > > keyring for IMA appraisal? We would at least have to take a reference (as in
+> > > get_user_ns()) to the user namespace when the IMA namespace is created so
+> > > that it at least the association of IMA namespace to user namespace remains
+> > Maybe we pull they keyring info into a new struct which is referred
+> > to and pinned by both user_ns and ima_ns?  (But I actually am ignorant
+> > of how ima is using the keyrings, so again I need to go do some reading.)
+> > 
+> > More moving parts isn't my first choice.  But if you need namespaced IMA
+> > for containers that aren't doing CLONE_NEWUSER, then a separate ima_ns is
+> > your only option.  Is that a requirement for you?
+> 
+> I cannot think of a scenario where a user wouldn't want/refuse to open a
+> user namespace to get an IMA namespace...
 
-True, this patch just adds the plumbing.  Reversing 3 & 4 could result
-in including the fs-verity digest, without the signature in the
-measurement list.  The alternative is to squash patches 3 & 4.
-
-thanks,
-
-Mimi
-
+The point is that unprivileged containers are still rare. And for quitea
+few workloads they won't go away. Especially for a lot of Kubernetes
+workloads - even if it finally has userns support - won't be able to
+migrate to unprivileged. And I would think that they would want ima
+support as well. But utlimately that's something the integrity folks
+have to decide. If you decide that not having this feature for
+non-CLONE_NEWUSER workloads then so be it.
