@@ -2,93 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1391462BE6
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 06:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E64E462C37
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 06:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbhK3FGi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 00:06:38 -0500
-Received: from mail.hallyn.com ([178.63.66.53]:40212 "EHLO mail.hallyn.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231882AbhK3FGh (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 00:06:37 -0500
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 0865F774; Mon, 29 Nov 2021 23:03:17 -0600 (CST)
-Date:   Mon, 29 Nov 2021 23:03:17 -0600
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, containers@lists.linux.dev,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        krzysztof.struczynski@huawei.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Michael Peters <mpeters@redhat.com>,
-        Luke Hinds <lhinds@redhat.com>,
-        Lily Sturmann <lsturman@redhat.com>,
-        Patrick Uiterwijk <puiterwi@redhat.com>,
-        Christian Brauner <christian@brauner.io>
-Subject: Re: [RFC 3/3] ima: make the integrity inode cache per namespace
-Message-ID: <20211130050316.GC32444@mail.hallyn.com>
-References: <20211127164549.2571457-4-James.Bottomley@HansenPartnership.com>
- <20211129045834.GB20606@mail.hallyn.com>
- <755446b10c8415fd469b814535c4a12964af3264.camel@HansenPartnership.com>
- <70b81e62-46af-9d39-3dcb-4cfbae645175@linux.ibm.com>
- <a74b18c1aee2b14426cc12e2fd336716c447f070.camel@HansenPartnership.com>
- <20211129142235.hez3ovtuj3rpscgm@wittgenstein>
- <afee2f0483271a6cdb1bc7b48b819a3ca2c4ceda.camel@HansenPartnership.com>
- <20211129153539.GA26325@mail.hallyn.com>
- <20211129161650.dtcvh2ozgquz6rli@wittgenstein>
- <c73dd2cc-7915-9343-5ad0-e53c762e29a3@linux.ibm.com>
+        id S238322AbhK3Fgt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 00:36:49 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:46422 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230163AbhK3Fgs (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Tue, 30 Nov 2021 00:36:48 -0500
+Received: from [10.137.112.111] (unknown [131.107.147.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E2F0B20DEED2;
+        Mon, 29 Nov 2021 21:33:29 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E2F0B20DEED2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1638250410;
+        bh=Ka0mPJgYWmiDnzwsdqmRMIk4RJt332upLQtsgsCn/dc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DovVDIeZ3Wk5BWgvAvkCFlTP8xh0m4/KwjRKzNT4UxmUoMb2HGiKFwl23OmtgG64p
+         dcuIW/1LucLBJ+M5s70CVF0Ei9Ctthc0h7PgLAampsdeRfK0KaEbt5pVgnHFigvWJJ
+         LpSZ1pMQoiwVz9ZInscmql2LI9ohi6qHkLpek2XM=
+Message-ID: <53ee68b8-e3fe-887c-89d3-a327c8dc181f@linux.microsoft.com>
+Date:   Mon, 29 Nov 2021 21:33:29 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c73dd2cc-7915-9343-5ad0-e53c762e29a3@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 1/4] fs-verity: define a function to return the integrity
+ protected file digest
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+ <20211129170057.243127-2-zohar@linux.ibm.com>
+ <YaWKJEqD6G23uG/A@sol.localdomain>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+In-Reply-To: <YaWKJEqD6G23uG/A@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:04:29PM -0500, Stefan Berger wrote:
-> 
-> On 11/29/21 11:16, Christian Brauner wrote:
-> > On Mon, Nov 29, 2021 at 09:35:39AM -0600, Serge Hallyn wrote:
-> > > On Mon, Nov 29, 2021 at 09:46:55AM -0500, James Bottomley wrote:
-> > > > On Mon, 2021-11-29 at 15:22 +0100, Christian Brauner wrote:
-> > > > > On Mon, Nov 29, 2021 at 09:10:29AM -0500, James Bottomley wrote:
-> > > > > 
-> > I kept thinking about this question while I was out running and while I
-> > admittedly have reacted poorly to CLONE_NEWIMA patches before it feels
-> > to me that this is the right approach after all. Making it part of
-> > userns at least in this form isn't clean.
-> > 
-> > I think attaching a uuid to a userns alone for the sake of IMA is wrong.
-> > Additionally, I think a uuid only for the userns is too limited. This is
-> > similar to the problem of the audit container id. If we have some sort
-> > of uuid for ima it will automatically evolve into something like a
-> > container id (I'm not even arguing that this is necessarily wrong.).
-> > We also have the issue that we then have the container audit id thing -
-> > if this ever lands and the ima userns uuid. All that makes it quite
-> > messy.
-> > 
-> > I think CLONE_NEWIMA is ultimately nicer and allows the implementation
-> > to be decoupled from the userns and self-contained as possible. This
-> > also means that ima ns works for privileged containers which sure is a
-> > valid use-case.
-> 
-> The thing is that piggy backing on the user namespace at least allows us to
-> 'always see' where IMA's keyring is (across setns()). If we were using an
-> independent IMA namespace how would we guarantee that the user sees the
-> keyring for IMA appraisal? We would at least have to take a reference (as in
-> get_user_ns()) to the user namespace when the IMA namespace is created so
-> that it at least the association of IMA namespace to user namespace remains
+Hi Mimi,
 
-Maybe we pull they keyring info into a new struct which is referred
-to and pinned by both user_ns and ima_ns?  (But I actually am ignorant
-of how ima is using the keyrings, so again I need to go do some reading.)
+On 11/29/2021 6:19 PM, Eric Biggers wrote:
+> Generally looks fine.  A few nits below:
+> 
+> On Mon, Nov 29, 2021 at 12:00:54PM -0500, Mimi Zohar wrote:
+>> Define a function named fsverity_measure() to return the verity file digest
+>> and the associated hash algorithm (enum hash_algo).
+>>
+>> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+>> ---
+>>   fs/verity/fsverity_private.h |  6 -----
+>>   fs/verity/measure.c          | 49 ++++++++++++++++++++++++++++++++++++
+>>   include/linux/fsverity.h     | 17 +++++++++++++
+>>   3 files changed, 66 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/fs/verity/fsverity_private.h b/fs/verity/fsverity_private.h
+>> index a7920434bae5..54c5f0993541 100644
+>> --- a/fs/verity/fsverity_private.h
+>> +++ b/fs/verity/fsverity_private.h
+>> @@ -26,12 +26,6 @@ struct ahash_request;
+>>    */
+>>   #define FS_VERITY_MAX_LEVELS		8
+>>   
+>> -/*
+>> - * Largest digest size among all hash algorithms supported by fs-verity.
+>> - * Currently assumed to be <= size of fsverity_descriptor::root_hash.
+>> - */
+>> -#define FS_VERITY_MAX_DIGEST_SIZE	SHA512_DIGEST_SIZE
+> 
+> The include of sha2.h should be removed from this file.
+> 
+>> +/**
+>> + * fsverity_measure() - get a verity file's digest
+nit: The function name seems to suggest it is measuring the fs-verity 
+file's digest. Since it is reading the file's digest: 
+fsverity_read_digest() or fsverity_read_measure()?
 
-More moving parts isn't my first choice.  But if you need namespaced IMA
-for containers that aren't doing CLONE_NEWUSER, then a separate ima_ns is
-your only option.  Is that a requirement for you?
+  -lakshmi
+
+>> + * @inode: inode to get digest of
+>> + * @digest: pointer to the digest
+>> + * @alg: pointer to the hash algorithm enumeration
+> 
+> It should be made clear that @digest and @alg are output, for example:
+> 
+>   * @digest: (out) pointer to the digest
+>   * @alg: (out) pointer to the hash algorithm enumeration
+> 
+>> + * Return the file hash algorithm, digest size, and digest of an fsverity
+>> + * protected file.
+> 
+> The digest size is implied, not returned.
+> 
+>> +
+>> +		if (!strcmp(hash_alg->name, hash_algo_name[i])) {
+> 
+> As the kernel test robot pointed out, this creates a dependency on
+> CRYPTO_HASH_INFO.  So FS_VERITY will need to select CRYPTO_HASH_INFO.
+> 
+> - Eric
+> 
