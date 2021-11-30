@@ -2,152 +2,127 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 339954633A8
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 12:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E614634EE
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 13:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241221AbhK3MAn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 07:00:43 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:53422 "EHLO
+        id S230444AbhK3M7x (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 07:59:53 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52100 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241270AbhK3L7j (ORCPT
+        by vger.kernel.org with ESMTP id S230264AbhK3M7w (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:59:39 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUBlNL8025105;
-        Tue, 30 Nov 2021 11:55:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=uIZAjevreFQmW522hR9rWhA8J4q1gu1y06hXqfBlV2Y=;
- b=QeFRaR5DaoMGlKuYpfbqlCtNVeTUbxT8huTwU6HVwfDYuaihSOIMXWSZEH+/KW9ZcR/C
- OXNMapZHWrARKcTOTWfNB1I20nuZNGhOPVC0354mqEbSPcPV91pkmw8JXIeZzuGD4gVe
- X+N1AoqyXa93ab80WCj2qCWm+m5f2VfR0vdfkKa4l7w6Ke/evts8bjkI37i9YQPieHoZ
- hmTZN6NrsJvWggcNqR350vj4goHpwMMWUVhJF4Ezm2NDJhLM/ljqtnHORMosr0Uv5xEw
- jVMRgnwAzgiQWUYH/ez31O5edLswgeC22jzSdZLS2UbHdkqfZxkR3jU3SlTpmVh/3Te+ uw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cnkd2849h-1
+        Tue, 30 Nov 2021 07:59:52 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUCjliR029883;
+        Tue, 30 Nov 2021 12:56:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=s//M2tm6vMe+N1QRsaqsOuOcWaXhsmUu3+OS5HrKggE=;
+ b=HHSDd/8OI95fqXJArksEPb5Y5cWBq6OXkN/FqgtImKYAtJ0QcB5Fil5Hi7N7cmX7jsoc
+ 6m+cTaiXWFny26Q2zDJcu1xCtgeRrPfiWdmip1NGUZuseYCieQlsgszyt8/cx462tyZE
+ bYhq/gh9oAP/T/VThIrNocjSOLQKzIbChrQU/obMeRqJ1DUp60kX4cUuVBDNB5rb393A
+ L+yohk5HZU9fSZfPbAqPoEhkqgpercqPRFO2U7IHyzVBQ9fzvime+lHUZBEYA8ssZwHG
+ zDDimFUxCWHp1kI5i0smLxScF0AbFK1+MDUNsBF2mAKHoCJVCiT9NNoSwKI3nscoD371 Xw== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cnm8eg75s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 11:55:55 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AUBqZXM010526;
-        Tue, 30 Nov 2021 11:55:54 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cnkd28494-1
+        Tue, 30 Nov 2021 12:56:30 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUCr26F024585;
+        Tue, 30 Nov 2021 12:56:28 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ckcacerbj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 11:55:54 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUBs2ii010233;
-        Tue, 30 Nov 2021 11:55:54 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03dal.us.ibm.com with ESMTP id 3ckcab8xy8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 11:55:53 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUBtqYC21562020
+        Tue, 30 Nov 2021 12:56:28 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUCuQb97733748
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Nov 2021 11:55:52 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B645CBE05F;
-        Tue, 30 Nov 2021 11:55:52 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C64C1BE05A;
-        Tue, 30 Nov 2021 11:55:51 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 30 Nov 2021 11:55:51 +0000 (GMT)
-Message-ID: <2246a547-3971-8b92-47a4-589a59a33db7@linux.ibm.com>
-Date:   Tue, 30 Nov 2021 06:55:51 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC 3/3] ima: make the integrity inode cache per namespace
-Content-Language: en-US
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, containers@lists.linux.dev,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        krzysztof.struczynski@huawei.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Michael Peters <mpeters@redhat.com>,
-        Luke Hinds <lhinds@redhat.com>,
-        Lily Sturmann <lsturman@redhat.com>,
-        Patrick Uiterwijk <puiterwi@redhat.com>,
-        Christian Brauner <christian@brauner.io>
-References: <20211127164549.2571457-4-James.Bottomley@HansenPartnership.com>
- <20211129045834.GB20606@mail.hallyn.com>
- <755446b10c8415fd469b814535c4a12964af3264.camel@HansenPartnership.com>
- <70b81e62-46af-9d39-3dcb-4cfbae645175@linux.ibm.com>
- <a74b18c1aee2b14426cc12e2fd336716c447f070.camel@HansenPartnership.com>
- <20211129142235.hez3ovtuj3rpscgm@wittgenstein>
- <afee2f0483271a6cdb1bc7b48b819a3ca2c4ceda.camel@HansenPartnership.com>
- <20211129153539.GA26325@mail.hallyn.com>
- <20211129161650.dtcvh2ozgquz6rli@wittgenstein>
- <c73dd2cc-7915-9343-5ad0-e53c762e29a3@linux.ibm.com>
- <20211130050316.GC32444@mail.hallyn.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211130050316.GC32444@mail.hallyn.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Tue, 30 Nov 2021 12:56:26 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0BA4B42045;
+        Tue, 30 Nov 2021 12:56:26 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 075744204C;
+        Tue, 30 Nov 2021 12:56:25 +0000 (GMT)
+Received: from sig-9-65-92-250.ibm.com (unknown [9.65.92.250])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 30 Nov 2021 12:56:24 +0000 (GMT)
+Message-ID: <16364d376af32a97fc6a119d4e7366862f16f417.camel@linux.ibm.com>
+Subject: Re: [PATCH 0/4] ima: support fs-verity signatures stored as
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 30 Nov 2021 07:56:24 -0500
+In-Reply-To: <YaWOR+Bav6PBgHHq@sol.localdomain>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+         <YaWOR+Bav6PBgHHq@sol.localdomain>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: KPncAg3FQE3e0faVS3zF97wrRIIWIcuz
-X-Proofpoint-ORIG-GUID: romtJ-TP0pSdOaaIVHLQq4cToFerABo_
+X-Proofpoint-ORIG-GUID: I94w52xVLtw4mBSFd5N_ZaoQChx7uHBB
+X-Proofpoint-GUID: I94w52xVLtw4mBSFd5N_ZaoQChx7uHBB
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-30_07,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 priorityscore=1501 adultscore=0 mlxlogscore=999
- phishscore=0 suspectscore=0 bulkscore=0 clxscore=1015 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111300066
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+ mlxscore=0 spamscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111300072
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Mon, 2021-11-29 at 18:36 -0800, Eric Biggers wrote:
+> On Mon, Nov 29, 2021 at 12:00:53PM -0500, Mimi Zohar wrote:
+> > Support for fs-verity file digests in IMA was discussed from the beginning,
+> > prior to fs-verity being upstreamed[1,2].  This patch set adds signature
+> > verification support based on the fs-verity file digest.  Both the
+> > file digest and the signature must be included in the IMA measurement list
+> > in order to disambiguate the type of file digest.
+> > 
+> > [1] https://events19.linuxfoundation.org/wp-content/uploads/2017/11/fs-verify_Mike-Halcrow_Eric-Biggers.pdf
+> > [2] Documentation/filesystems/fsverity.rst
+> > 
+> > Mimi Zohar (4):
+> >   fs-verity: define a function to return the integrity protected file
+> >     digest
+> >   ima: define a new signature type named IMA_VERITY_DIGSIG
+> >   ima: limit including fs-verity's file digest in measurement list
+> >   ima: support fs-verity file digest based signatures
+> > 
+> >  fs/verity/fsverity_private.h              |  6 ---
+> >  fs/verity/measure.c                       | 49 +++++++++++++++++++++++
+> >  include/linux/fsverity.h                  | 17 ++++++++
+> >  security/integrity/ima/ima.h              |  3 +-
+> >  security/integrity/ima/ima_api.c          | 23 ++++++++++-
+> >  security/integrity/ima/ima_appraise.c     |  9 ++++-
+> >  security/integrity/ima/ima_main.c         |  7 +++-
+> >  security/integrity/ima/ima_template_lib.c |  3 +-
+> >  security/integrity/integrity.h            |  1 +
+> >  9 files changed, 107 insertions(+), 11 deletions(-)
+> 
+> I left some comments, but this generally looks like the right approach.
+> However, I'm not an expert in IMA, so it's hard for me to review the IMA parts.
 
-On 11/30/21 00:03, Serge E. Hallyn wrote:
-> On Mon, Nov 29, 2021 at 12:04:29PM -0500, Stefan Berger wrote:
->> On 11/29/21 11:16, Christian Brauner wrote:
->>> On Mon, Nov 29, 2021 at 09:35:39AM -0600, Serge Hallyn wrote:
->>>> On Mon, Nov 29, 2021 at 09:46:55AM -0500, James Bottomley wrote:
->>>>> On Mon, 2021-11-29 at 15:22 +0100, Christian Brauner wrote:
->>>>>> On Mon, Nov 29, 2021 at 09:10:29AM -0500, James Bottomley wrote:
->>>>>>
->>> I kept thinking about this question while I was out running and while I
->>> admittedly have reacted poorly to CLONE_NEWIMA patches before it feels
->>> to me that this is the right approach after all. Making it part of
->>> userns at least in this form isn't clean.
->>>
->>> I think attaching a uuid to a userns alone for the sake of IMA is wrong.
->>> Additionally, I think a uuid only for the userns is too limited. This is
->>> similar to the problem of the audit container id. If we have some sort
->>> of uuid for ima it will automatically evolve into something like a
->>> container id (I'm not even arguing that this is necessarily wrong.).
->>> We also have the issue that we then have the container audit id thing -
->>> if this ever lands and the ima userns uuid. All that makes it quite
->>> messy.
->>>
->>> I think CLONE_NEWIMA is ultimately nicer and allows the implementation
->>> to be decoupled from the userns and self-contained as possible. This
->>> also means that ima ns works for privileged containers which sure is a
->>> valid use-case.
->> The thing is that piggy backing on the user namespace at least allows us to
->> 'always see' where IMA's keyring is (across setns()). If we were using an
->> independent IMA namespace how would we guarantee that the user sees the
->> keyring for IMA appraisal? We would at least have to take a reference (as in
->> get_user_ns()) to the user namespace when the IMA namespace is created so
->> that it at least the association of IMA namespace to user namespace remains
-> Maybe we pull they keyring info into a new struct which is referred
-> to and pinned by both user_ns and ima_ns?  (But I actually am ignorant
-> of how ima is using the keyrings, so again I need to go do some reading.)
->
-> More moving parts isn't my first choice.  But if you need namespaced IMA
-> for containers that aren't doing CLONE_NEWUSER, then a separate ima_ns is
-> your only option.  Is that a requirement for you?
+Thank you for the quick review!
 
-I cannot think of a scenario where a user wouldn't want/refuse to open a 
-user namespace to get an IMA namespace...
+> 
+> Can you add documentation for this feature?
 
+Yes, of course.  Originally I assumed the fs-verity support would be a
+lot more complicated, but to my pleasant surprise by limiting the IMA
+fsverity support to just signatures and requiring the file signature be
+included in the IMA measurement list, it's a lot simpler than expected.
+As there aren't any IMA policy changes, I'm just thinking about where
+to document it.
+
+thanks,
+
+Mimi
 
