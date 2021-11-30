@@ -2,50 +2,50 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C64463509
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEAA46351B
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbhK3NDc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 08:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        id S237026AbhK3NMy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 08:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbhK3NDc (ORCPT
+        with ESMTP id S236929AbhK3NMy (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:03:32 -0500
+        Tue, 30 Nov 2021 08:12:54 -0500
 Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74018C061574
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 05:00:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71165C061574
+        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 05:09:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1638277212;
-        bh=WbsCwODG0tNAwrCQWZwzuygwhfVc3PiURHXWEcl7deM=;
+        d=hansenpartnership.com; s=20151216; t=1638277775;
+        bh=n1TFcwEoygn1lnCP6+JLiYGxZufgS7TqcZcMf0iCa1c=;
         h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=jPLotuYDw6KAoOGuwaPiJ6WQzURAwTXQc2I8IEsoSX1sZfjKQL9b6xTytPYZRHdww
-         43LM/kW95mkWnvsqSFSp8hxIGvmcMvmyoyKR3sP1HzkWMdnMDIuV5WDnXALDStnTZ8
-         lfh74Un6igD9/3DB88luFgCz1gsvUKRZi07v9lMs=
+        b=O2lkS5VI74CZRcmuQl3a8z4HY5D9G84UKcOA/hXP/6fUfxye4kujZG8An6SLAm995
+         KDxclJ9tRO9GMB6DpdI4JzwqwaMr6Q01yEPIVVvtqcZ7Y3JMdiKvBcAu5rw77h2aw6
+         FZn5e9LBVsvnLGHV6IK2tcyYs3LVMZ2Tb7f9D5Ho=
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 09A3312805E5;
-        Tue, 30 Nov 2021 08:00:12 -0500 (EST)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 236AD12805E5;
+        Tue, 30 Nov 2021 08:09:35 -0500 (EST)
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CpEad8vbMWiH; Tue, 30 Nov 2021 08:00:11 -0500 (EST)
+        with ESMTP id a2nHguwqJ_RH; Tue, 30 Nov 2021 08:09:35 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1638277211;
-        bh=WbsCwODG0tNAwrCQWZwzuygwhfVc3PiURHXWEcl7deM=;
+        d=hansenpartnership.com; s=20151216; t=1638277774;
+        bh=n1TFcwEoygn1lnCP6+JLiYGxZufgS7TqcZcMf0iCa1c=;
         h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Si7cZMPos35C7+Tbd5HHVXRsWEZRCxGYFDXp4du+nzwYJYR5kwC+gI+w7Xss70Xkx
-         dVWZDOQofvNzu3bvO8VxdadecxZ04KIcmU8bA+nwu7Y5+/fHrADDAgvWpDbfawat+E
-         ix4r0jn7Ub5ER2vRg20E6gsWIE2QrnheHBTku7PY=
+        b=CFOEpKNDaUcEwbZaNo+esTYo6pinWAjs2bJjlgpq6uQKS9rhfL/CEDQNZANJU8291
+         +M+QvGoZ+JwNNuKrT9xBTqVFBT5GozqnuDO7VJ3P50gMf9YPB8UrLE2l0QRst+WuNU
+         3VqzOid86XC/xHTiRD/gLZlIbyBNdMIN23VW7CgQ=
 Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id BE50512804CF;
-        Tue, 30 Nov 2021 08:00:10 -0500 (EST)
-Message-ID: <c6c6f2ebf37b88cb66189bbac16feb611ae2b9ab.camel@HansenPartnership.com>
-Subject: Re: [RFC 3/3] ima: make the integrity inode cache per namespace
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 243A512804CF;
+        Tue, 30 Nov 2021 08:09:32 -0500 (EST)
+Message-ID: <22f44b97c03d70ac0205f494657856f27fa75030.camel@HansenPartnership.com>
+Subject: Re: [RFC 1/3] userns: add uuid field
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
+To:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
         linux-integrity@vger.kernel.org, containers@lists.linux.dev,
         Mimi Zohar <zohar@linux.ibm.com>,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
@@ -57,19 +57,19 @@ Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
         Lily Sturmann <lsturman@redhat.com>,
         Patrick Uiterwijk <puiterwi@redhat.com>,
         Christian Brauner <christian@brauner.io>
-Date:   Tue, 30 Nov 2021 08:00:09 -0500
-In-Reply-To: <20211130045904.GB32444@mail.hallyn.com>
-References: <20211127164549.2571457-1-James.Bottomley@HansenPartnership.com>
-         <20211127164549.2571457-4-James.Bottomley@HansenPartnership.com>
-         <20211129045834.GB20606@mail.hallyn.com>
-         <755446b10c8415fd469b814535c4a12964af3264.camel@HansenPartnership.com>
-         <70b81e62-46af-9d39-3dcb-4cfbae645175@linux.ibm.com>
-         <a74b18c1aee2b14426cc12e2fd336716c447f070.camel@HansenPartnership.com>
-         <20211129142235.hez3ovtuj3rpscgm@wittgenstein>
-         <afee2f0483271a6cdb1bc7b48b819a3ca2c4ceda.camel@HansenPartnership.com>
-         <20211129153539.GA26325@mail.hallyn.com>
-         <16e27be21e2886ba17298d94fdaff39236667890.camel@HansenPartnership.com>
-         <20211130045904.GB32444@mail.hallyn.com>
+Date:   Tue, 30 Nov 2021 08:09:31 -0500
+In-Reply-To: <20211129135639.3boeegnusxllho35@wittgenstein>
+References: <20211128044558.GA11794@mail.hallyn.com>
+         <2e32a6897877ed600de64b3d664dc6014389dbe4.camel@HansenPartnership.com>
+         <20211128151805.GA15306@mail.hallyn.com>
+         <60c99d461368593dfd51765c527b01c6bf0a9fea.camel@HansenPartnership.com>
+         <20211128204715.GA17707@mail.hallyn.com>
+         <e1b36c9c36f0f6d3262de6141ad67e8044cfeade.camel@HansenPartnership.com>
+         <20211128214906.GA18470@mail.hallyn.com>
+         <e1d8fcb0dffd5d88c95140f644ece25273071d79.camel@HansenPartnership.com>
+         <20211129015901.GA20161@mail.hallyn.com>
+         <9f3466c1-276b-1d7e-917c-37c6f02d5571@linux.ibm.com>
+         <20211129135639.3boeegnusxllho35@wittgenstein>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
@@ -78,109 +78,84 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, 2021-11-29 at 22:59 -0600, Serge E. Hallyn wrote:
-> On Mon, Nov 29, 2021 at 11:44:35AM -0500, James Bottomley wrote:
-> > On Mon, 2021-11-29 at 09:35 -0600, Serge E. Hallyn wrote:
-> > > On Mon, Nov 29, 2021 at 09:46:55AM -0500, James Bottomley wrote:
-> > [...]
-> > > > Well, there's a reason it's an unpublished patch.  However, the
-> > > > more important point is that namespacing IMA requires
-> > > > discussion of certain points that we never seem to drive to a
-> > > > conclusion.  Using the akpm method, I propose simple patches
-> > > > that drive the discussion.  I think the points are:
+On Mon, 2021-11-29 at 14:56 +0100, Christian Brauner wrote:
+> On Mon, Nov 29, 2021 at 08:49:40AM -0500, Stefan Berger wrote:
+> > On 11/28/21 20:59, Serge E. Hallyn wrote:
+> > > On Sun, Nov 28, 2021 at 05:56:28PM -0500, James Bottomley wrote:
+> > > > On Sun, 2021-11-28 at 15:49 -0600, Serge E. Hallyn wrote:
+> > > > > On Sun, Nov 28, 2021 at 04:21:29PM -0500, James Bottomley
+> > > > > wrote:
+> > > > > > On Sun, 2021-11-28 at 14:47 -0600, Serge E. Hallyn wrote:
+> > > > > > > On Sun, Nov 28, 2021 at 01:00:28PM -0500, James Bottomley
+> > > > > > > wrote:
+> > > > > > > > On Sun, 2021-11-28 at 09:18 -0600, Serge E. Hallyn
+> > > > > > > > wrote:
+> > > > [...]
+> > > > > > > > > So given that 'unique per boot' is sufficient, what
+> > > > > > > > > would be the problem with simply adding a simple
+> > > > > > > > > ever-increasing unique atomix count to the struct
+> > > > > > > > > user_namespace?
+> > > > > > > > I don't think there is any ... but I equally don't see
+> > > > > > > > why people would want to save and restore the uuid but
+> > > > > > > > not the new monotonic identifier ... because it's still
+> > > > > > > > just a marker on a namespace.
+> > > > > > > But you've called it "the namespace uuid".  I'm not even
+> > > > > > > really thinking of checkpoint/restart, just stopping and
+> > > > > > > restarting a container.  I'm convinced people will want
+> > > > > > > to start using it because, well, it is a nice feature.
+> > > > > > Right, but the uniqueness property depends on you not being
+> > > > > > able to set it.  If you just want a namespace label, you
+> > > > > > can have that, but anything a user can set is either a pain
+> > > > > > to guarantee uniqueness (have to check all the other
+> > > > > > objects) or is simply a non-unique label.
+> > > > > > 
+> > > > > > If you want to label a container, which could have many
+> > > > > > namespaces and be stopped and restarted many times, it does
+> > > > > > sound like you want a non-unique settable label.  However,
+> > > > > > IMA definitely needs a guaranteed per namespace unique
+> > > > > > label.
+> > > > > > 
+> > > > > > Is the objection simply you think a UUID sound like it
+> > > > > > should be
+> > > > > Objection is too strong.  Concern.
+> > > > > 
+> > > > > But yes, to me a uuid (a) feels like it should be generally
+> > > > > useful including being settable and (b) not super duper 100%
+> > > > > absolutely guaranteed to always be unique per boot, as an
+> > > > > incremented counter would be.
+> > > > OK, but a bunch of cats I found on the Internet agree with me,
+> > > > a UUID shouldn't be settable:
 > > > > 
-> > > >    1. Should IMA be its own namespace or tied to the user
-> > > > namespace?  The previous patches all took the separate
-> > > > Namespace approach, but I think that should be reconsidered now
-> > > > keyrings are in the user namespace.
-> > > 
-> > > Well that purely depends on the needed scope.
-> > > 
-> > > The audit container identifier is a neat thing.  But it
-> > > absolutely must be settable, so seems to conflict with your
-> > > needs.
+> > > > https://en.wikipedia.org/wiki/Universally_unique_identifier
+> > > > 
+> > > > The key point being, if you can set the id, it can't be unique
+> > > > ... it
+> > > Ok, so can you just put a comment above there saying "this must
+> > > not be settable from userspace" ?
 > > 
-> > I think not allowing duplicate entries for the lifetime of the log
-> > is required, which causes a problem since namespaces can die before
-> > this lifetime ends.  I think there is a nice security benefit in
-> > making it not user settable, but I don't think that's necessarily a
-> > requirement.
-> > 
-> > > Your patch puts an identifier on the user_namespace.  I'm not
-> > > quite sure, does that satisfy Stefan's needs?  A new ima ns if
-> > > and only if there is a new user ns?
-> > 
-> > Part of the problem is that IMA needs an admin user ... to be able
-> > to read the log and set the policy and, when we get to appraisal,
-> > set and read the keyrings.  IMA NS iff user ns satisfies this, but
-> > the minimalist in me then asks why not make them the same thing?
-> > 
-> > > I think you two need to get together and discuss the
-> > > requirements, and come back with a brief but very precise
-> > > document explaining what you need. Are you both looking at the
-> > > same use case?  Who is consuming the audit log, and to what
-> > > end?  Container administrators?  Any time they log in? How do
-> > > they assure themselves that the securityfs file they're reading
-> > > hasn't been overmounted?
-> > 
-> > There are several different use cases.  I'm asking how I would use
-> > the IMA namespace for the unprivileged containers I usually set up
-> > by hand.  Stefan is looking at how docker/kubernetes would do
-> > it.  There's also the Huawei use case which is a sort of
-> > attestation for function as a service and there's the Red Hat use
-> > case for OpenShift.
-> > 
-> > However, the common denominator in all of these is they require a
-> > way to uniquely distinguish the containers, which is why the patch
-> > series I sent as an RFC starts that way.  If we can start with the
-> > common elements, we can build towards something that satisfies all
-> > the use cases ... and allow consensus to emerge as further patches
-> > are discussed.
+> > So I have been working on an IMA namespacing series again as well
+> > and would like to use some sort of unique identifier for audit
+> > messages emitted from an IMA/user namespace other than the
+> > init_ima_ns. This UUID may just work for this, but how would one
+> > associate the UUID with a container if it ever comes to that when
+> > evaluating audit logs? Shouldn't it be settable from user
+> > space for some sort of 'coordination' between container runtime and
+> > kernel?
 > 
-> The reason I asked this question in response to this patch is because
-> here I'm not picking at the userns->uuid, but rather it's the new
-> linked lists for the inode that feel wrong.
+> Wouldn't this be solved by the audit container id patchset? In fact,
+> can't we use this for IMA as well?
 
-Well that one's fully separable.  The first two patches could be
-complete for this round.  However, if you believe there has to be one
-entry per inode per namespace then the iint cache needs to accommodate
-that.  The measurement is a function of the inode alone: if the inode
-doesn't change that value is the same regardless of namespace.  it's
-only whether it's been logged that's really per namespace, hence the
-namespace list hanging off the iint entry ... if there were a huge
-number of namespaces, perhaps it should be a btree instead of a list,
-but it needs to be some type of two level thing, I think?
+Stefan asked, but it really doesn't have the properties we need, plus
+they don't seem to want the audit id used as the container id.
 
-The design of patch 3 is mostly to get people to think about what
-should be in the per namespace log.
-
->   So if you can get what you need some other way - maybe just "we
-> opened all these files and got no integrity failure messages", or a
-> hash table keyed on (userns *, inode *) instead of the linked lists
-> to look up whether an inode has been measured, or some userspace
-> daemon to resubmit already logged approvals, which I gather won't
-> work for unpriv containers - that would be nice.
-
-I could do a separate (userns *, inode *) btree for the measured part,
-but we'd still have to have the per inode store of the measurement
-because that's namespace blind.  Given this, it seems inefficient not
-to make use of the tie between the two.
-
-> > Part of my problem is I don't really know what I need, I just want
-> > IMA namespaces to work easily for the unprivileged use case and
-> > I'll figure it out as I play with it ... but to do that I need
-> > something to start playing with.
-> 
-> But for that kind of research you use an out of tree patchset, not
-> speculative infrastructure in the kernel.  If that's what this
-> patchset is, then I'll (feel a little silly and) look over it with a
-> different set of eyes :)
-
-Well, no, you're looking with the right set of eyes.  The design of
-this patch set is to begin incrementally with the pieces everyone can
-agree on, so start as small as it can be: the namespace and a label as
-a trial balloon.  If everyone had agreed it looked OK, there would be
-no reason not to put it upstream and start on the next step.
+How about this:  Since the label has to be unique for the lifetime of
+the system, if we allow it to be settable, we'll have to carry it
+outside the namespace anyway because memory of the label has to live on
+after the namespace dies to avoid duplication, so I'll move it into a
+parallel namespace structure ima will carry.  it will be settable once,
+but if you don't set it before it's used, then we'll set it to a
+randombly generated uuid.  If you do set it, it will be checked for
+uniqueness against all previous labels.
 
 James
 
