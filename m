@@ -2,108 +2,119 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A0F463582
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A93463597
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Nov 2021 14:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240397AbhK3Ngt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 08:36:49 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:33408 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbhK3Ngt (ORCPT
+        id S233908AbhK3NkL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 08:40:11 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12268 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229921AbhK3NkK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:36:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 03400CE18AF
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 13:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC762C53FC1;
-        Tue, 30 Nov 2021 13:33:22 +0000 (UTC)
-Date:   Tue, 30 Nov 2021 14:33:18 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, containers@lists.linux.dev,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        krzysztof.struczynski@huawei.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Michael Peters <mpeters@redhat.com>,
-        Luke Hinds <lhinds@redhat.com>,
-        Lily Sturmann <lsturman@redhat.com>,
-        Patrick Uiterwijk <puiterwi@redhat.com>,
-        Christian Brauner <christian@brauner.io>
-Subject: Re: [RFC 3/3] ima: make the integrity inode cache per namespace
-Message-ID: <20211130133318.3lpirmouybdn2c2m@wittgenstein>
-References: <755446b10c8415fd469b814535c4a12964af3264.camel@HansenPartnership.com>
- <70b81e62-46af-9d39-3dcb-4cfbae645175@linux.ibm.com>
- <a74b18c1aee2b14426cc12e2fd336716c447f070.camel@HansenPartnership.com>
- <20211129142235.hez3ovtuj3rpscgm@wittgenstein>
- <afee2f0483271a6cdb1bc7b48b819a3ca2c4ceda.camel@HansenPartnership.com>
- <20211129153539.GA26325@mail.hallyn.com>
- <20211129161650.dtcvh2ozgquz6rli@wittgenstein>
- <c73dd2cc-7915-9343-5ad0-e53c762e29a3@linux.ibm.com>
- <20211130050316.GC32444@mail.hallyn.com>
- <2246a547-3971-8b92-47a4-589a59a33db7@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2246a547-3971-8b92-47a4-589a59a33db7@linux.ibm.com>
+        Tue, 30 Nov 2021 08:40:10 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUDHOmp003917;
+        Tue, 30 Nov 2021 13:36:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=qyOEgt+j8v4rot0tCjopd92DtEHy28X+Qjah5atxKE0=;
+ b=ZTaRGoGRjtzvqGblV3xeWyfNB2Pveas7xqyEKACcROWo9TzJNgUoJeF4GqZY/wPV7m8G
+ G6QDcf+wKXQZPZnSgx4siULAkAl3TclwWlceNpokYoH8kX0B/nkkk3IP15Vf7Od/qLot
+ c/pluHAMdxQF/j4VaG60cg2UMmeiDPzi/5aeCpLuQzJnDLgXXaMfUA71ZqnaCiMjAvIp
+ DNwA2Gu6EmHdl+IJFbV9b4XFNYe+UkiTznYwOXQxBuZiXgVWFtDrRvryaK1Mni60yoHo
+ jVaLoXlvS2beuSGvTrRxqo4l/zc3oVi4C2lGIICdzsshfoZ10sO8C0LVlnlOO+nCYurj 6g== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cnmq88d3c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 13:36:49 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUDWeg0017485;
+        Tue, 30 Nov 2021 13:36:47 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3ckca9wtes-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 13:36:46 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUDai1S27984382
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Nov 2021 13:36:44 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D76552098;
+        Tue, 30 Nov 2021 13:36:44 +0000 (GMT)
+Received: from sig-9-65-92-250.ibm.com (unknown [9.65.92.250])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 85C1952093;
+        Tue, 30 Nov 2021 13:36:42 +0000 (GMT)
+Message-ID: <138c2aa0dba46d5e6bb163ca8bb62b4117cc8459.camel@linux.ibm.com>
+Subject: Re: [PATCH 4/4] ima: support fs-verity file digest based signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org
+Cc:     linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>
+Date:   Tue, 30 Nov 2021 08:36:41 -0500
+In-Reply-To: <7dfa283e-13b2-40de-158d-8642778d74cc@linux.microsoft.com>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+         <20211129170057.243127-5-zohar@linux.ibm.com>
+         <7dfa283e-13b2-40de-158d-8642778d74cc@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: uBM_6rOdkwnp30mb3N8Al8z1WBT7Nvay
+X-Proofpoint-GUID: uBM_6rOdkwnp30mb3N8Al8z1WBT7Nvay
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_08,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111300078
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 06:55:51AM -0500, Stefan Berger wrote:
-> 
-> On 11/30/21 00:03, Serge E. Hallyn wrote:
-> > On Mon, Nov 29, 2021 at 12:04:29PM -0500, Stefan Berger wrote:
-> > > On 11/29/21 11:16, Christian Brauner wrote:
-> > > > On Mon, Nov 29, 2021 at 09:35:39AM -0600, Serge Hallyn wrote:
-> > > > > On Mon, Nov 29, 2021 at 09:46:55AM -0500, James Bottomley wrote:
-> > > > > > On Mon, 2021-11-29 at 15:22 +0100, Christian Brauner wrote:
-> > > > > > > On Mon, Nov 29, 2021 at 09:10:29AM -0500, James Bottomley wrote:
-> > > > > > > 
-> > > > I kept thinking about this question while I was out running and while I
-> > > > admittedly have reacted poorly to CLONE_NEWIMA patches before it feels
-> > > > to me that this is the right approach after all. Making it part of
-> > > > userns at least in this form isn't clean.
-> > > > 
-> > > > I think attaching a uuid to a userns alone for the sake of IMA is wrong.
-> > > > Additionally, I think a uuid only for the userns is too limited. This is
-> > > > similar to the problem of the audit container id. If we have some sort
-> > > > of uuid for ima it will automatically evolve into something like a
-> > > > container id (I'm not even arguing that this is necessarily wrong.).
-> > > > We also have the issue that we then have the container audit id thing -
-> > > > if this ever lands and the ima userns uuid. All that makes it quite
-> > > > messy.
-> > > > 
-> > > > I think CLONE_NEWIMA is ultimately nicer and allows the implementation
-> > > > to be decoupled from the userns and self-contained as possible. This
-> > > > also means that ima ns works for privileged containers which sure is a
-> > > > valid use-case.
-> > > The thing is that piggy backing on the user namespace at least allows us to
-> > > 'always see' where IMA's keyring is (across setns()). If we were using an
-> > > independent IMA namespace how would we guarantee that the user sees the
-> > > keyring for IMA appraisal? We would at least have to take a reference (as in
-> > > get_user_ns()) to the user namespace when the IMA namespace is created so
-> > > that it at least the association of IMA namespace to user namespace remains
-> > Maybe we pull they keyring info into a new struct which is referred
-> > to and pinned by both user_ns and ima_ns?  (But I actually am ignorant
-> > of how ima is using the keyrings, so again I need to go do some reading.)
-> > 
-> > More moving parts isn't my first choice.  But if you need namespaced IMA
-> > for containers that aren't doing CLONE_NEWUSER, then a separate ima_ns is
-> > your only option.  Is that a requirement for you?
-> 
-> I cannot think of a scenario where a user wouldn't want/refuse to open a
-> user namespace to get an IMA namespace...
+Hi Lakshmi, Eric,
 
-The point is that unprivileged containers are still rare. And for quitea
-few workloads they won't go away. Especially for a lot of Kubernetes
-workloads - even if it finally has userns support - won't be able to
-migrate to unprivileged. And I would think that they would want ima
-support as well. But utlimately that's something the integrity folks
-have to decide. If you decide that not having this feature for
-non-CLONE_NEWUSER workloads then so be it.
+On Mon, 2021-11-29 at 21:56 -0800, Lakshmi Ramasubramanian wrote:
+> Hi Mimi,
+> 
+> On 11/29/2021 9:00 AM, Mimi Zohar wrote:
+> > Instead of calculating a file hash and verifying the signature stored
+> > in the security.ima xattr against the calculated file hash, verify the
+> > signature of the fs-verity's file digest.  The fs-verity file digest is
+> > a hash that includes the Merkle tree root hash.
+
+> This patch is reading the fs-verity signature for the given file using 
+> the new function fsverity_measure() that was defined in [Patch 1/4]. Is 
+> it also verifying the fs-verity signature here?
+
+Yes, the signature stored in the security.ima xattr may be a file hash,
+a regular file signature, or a signature of the fs-verity file digest. 
+The signature is verified like any other signature stored as an xattr.
+
+>  
+> > +static int ima_collect_verity_measurement(struct integrity_iint_cache *iint,
+> > +					  struct ima_digest_data *hash)
+> > +{
+> > +	u8 verity_digest[FS_VERITY_MAX_DIGEST_SIZE];
+> > +	enum hash_algo verity_alg;
+> > +	int rc;
+> > +
+> > +	rc = fsverity_measure(iint->inode, verity_digest, &verity_alg);
+> nit: fsverity_collect_measurement() may be more appropriate for this 
+> function (defined in [PATCH 1/4]).
+
+From an IMA perspective it certainly would be a better function name,
+but this function may be used by other kernel subsystems.  Eric
+suggested renaming the function as fsverity_get_digest(), as opposed to
+fsverity_read_digest().   get/put are normally used to bump a reference
+count or to get/release a lock.   Perhaps a combination like
+fsverity_collect_digest() would be acceptable.
+
+thanks,
+
+Mimi
+
