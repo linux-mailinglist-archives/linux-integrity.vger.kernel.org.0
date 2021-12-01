@@ -2,260 +2,142 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 258F946531A
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 17:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CF7465371
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 17:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351467AbhLAQq4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Dec 2021 11:46:56 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4187 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351516AbhLAQqr (ORCPT
+        id S243465AbhLARCA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Dec 2021 12:02:00 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49650 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S242454AbhLARB7 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:46:47 -0500
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J44cN5KkYz67sj9;
-        Thu,  2 Dec 2021 00:41:56 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 17:43:22 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
- Wed, 1 Dec 2021 17:43:22 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     "deven.desai@linux.microsoft.com" <deven.desai@linux.microsoft.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "eparis@redhat.com" <eparis@redhat.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>
-CC:     "jannh@google.com" <jannh@google.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>
-Subject: RE: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
-Thread-Topic: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
-Thread-Index: AQHX5tHI6VSZDPA0J0GM0KIP7fuaeKwd1ttw
-Date:   Wed, 1 Dec 2021 16:43:21 +0000
-Message-ID: <69abc43a0cba431ab2411c0442c873d9@huawei.com>
-References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
- <20211201163708.3578176-1-roberto.sassu@huawei.com>
-In-Reply-To: <20211201163708.3578176-1-roberto.sassu@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 1 Dec 2021 12:01:59 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1FBd83026640;
+        Wed, 1 Dec 2021 16:58:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=VU6MM+ROwKEmDcMes7UuCYMgIHLwkYSvn+IJYoamdTQ=;
+ b=NEENPoWNZZfahISMyzbk/Gi0JOz/WxSr8dVE8WEFajbTJS9oyYbu/K28BOjXO7wGYB9J
+ bT5oXNLlJl8JBDF/c1Ota390GQ+8Nrpk5w0aMHebP1aRs2M/auLaaaWLS03ipxB8yCj4
+ NxapkzzgcwLA587ZBJjOTCO0ZROCppVwAPZ00W41ytJU/iHmOw4B+fhtKiYc2XWL1HLA
+ tOVeJEMMupuLk4LkY8yjmwSS6M2AaCtBwjO4dNxKmShU4UcqxY1/jJQTBZrSqbqc56mz
+ kqaxR/AAXquK7nT/b6axj2qlfPS/dzxec/ASMa1spwQ24bQRZXzwm6dvYGnDyA8lxVCY pg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpb76u3xk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 16:58:15 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B1GJMVU019722;
+        Wed, 1 Dec 2021 16:58:15 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpb76u3x8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 16:58:15 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1Gr49u000871;
+        Wed, 1 Dec 2021 16:58:14 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma02wdc.us.ibm.com with ESMTP id 3ckcac15a6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 16:58:14 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1GwCFg25428276
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Dec 2021 16:58:12 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE26078067;
+        Wed,  1 Dec 2021 16:58:12 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 55B1E78082;
+        Wed,  1 Dec 2021 16:58:10 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.96.125])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Dec 2021 16:58:10 +0000 (GMT)
+Message-ID: <7c751783b28766412f158e5ca074748ed18070bd.camel@linux.ibm.com>
+Subject: Re: [RFC 17/20] ima: Use integrity_admin_ns_capable() to check
+ corresponding capability
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Denis Semakin <denis.semakin@huawei.com>
+Date:   Wed, 01 Dec 2021 11:58:09 -0500
+In-Reply-To: <20211130160654.1418231-18-stefanb@linux.ibm.com>
+References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
+         <20211130160654.1418231-18-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: IV8FMQfPPxHh36jAptePXcUOmmrwDJhM
+X-Proofpoint-ORIG-GUID: CdmKW_qXY0asGSqdRmoOdmU2cK0kTiNa
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 priorityscore=1501 adultscore=0 clxscore=1011
+ malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112010090
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Roberto Sassu
-> Sent: Wednesday, December 1, 2021 5:37 PM
-> Users of the device mapper driver might want to obtain a device status,
-> with status types defined in the status_type_t enumerator.
+On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
+> From: Denis Semakin <denis.semakin@huawei.com>
 > 
-> If a function to get the status is exported by the device mapper, when
-> compiled as a module, it is not suitable to use by callers compiled builtin
-> in the kernel.
+> Use integrity_admin_ns_capable() to check corresponding capability to
+> allow read/write IMA policy without CAP_SYS_ADMIN but with
+> CAP_INTEGRITY_ADMIN.
 > 
-> Introduce the real function to get the status, _dm_get_status(), in the
-> device mapper module, and add the stub dm_get_status() in dm-builtin.c, so
-> that it can be invoked by builtin callers.
-> 
-> The stub calls the real function if the device mapper is compiled builtin
-> or the module has been loaded. Calls to the real function are safely
-> disabled if the module is unloaded. The race condition is avoided by
-> incrementing the reference count of the module.
-> 
-> _dm_get_status() invokes the status() method for each device mapper table,
-> which writes a string to the supplied buffer as output. The buffer might
-> contain multiple strings concatenated together. If there is not enough
-> space available, the string is truncated and a termination character is put
-> at the end.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
 > ---
->  drivers/md/dm-builtin.c       | 13 +++++++
->  drivers/md/dm-core.h          |  5 +++
->  drivers/md/dm.c               | 71 +++++++++++++++++++++++++++++++++++
->  include/linux/device-mapper.h |  3 ++
->  4 files changed, 92 insertions(+)
+>  security/integrity/ima/ima_fs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/md/dm-builtin.c b/drivers/md/dm-builtin.c
-> index 8eb52e425141..cc1e9c27ab41 100644
-> --- a/drivers/md/dm-builtin.c
-> +++ b/drivers/md/dm-builtin.c
-> @@ -47,3 +47,16 @@ void dm_kobject_release(struct kobject *kobj)
->  }
-> 
->  EXPORT_SYMBOL(dm_kobject_release);
-> +
-> +dm_get_status_fn status_fn;
-> +EXPORT_SYMBOL(status_fn);
-> +
-> +ssize_t dm_get_status(dev_t dev, status_type_t type, const char
-> *target_name,
-> +		      u8 *buf, size_t buf_len)
-> +{
-> +	if (status_fn)
-> +		return status_fn(dev, type, target_name, buf, buf_len);
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +EXPORT_SYMBOL(dm_get_status);
-> diff --git a/drivers/md/dm-core.h b/drivers/md/dm-core.h
-> index b855fef4f38a..6600ec260558 100644
-> --- a/drivers/md/dm-core.h
-> +++ b/drivers/md/dm-core.h
-> @@ -259,4 +259,9 @@ extern atomic_t dm_global_event_nr;
->  extern wait_queue_head_t dm_global_eventq;
->  void dm_issue_global_event(void);
-> 
-> +typedef ssize_t (*dm_get_status_fn)(dev_t dev, status_type_t type,
-> +				    const char *target_name, u8 *buf,
-> +				    size_t buf_len);
-> +
-> +extern dm_get_status_fn status_fn;
->  #endif
-> diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-> index 662742a310cb..55e59a4e3661 100644
-> --- a/drivers/md/dm.c
-> +++ b/drivers/md/dm.c
-> @@ -192,6 +192,74 @@ static unsigned dm_get_numa_node(void)
->  					 DM_NUMA_NODE,
-> num_online_nodes() - 1);
->  }
-> 
-> +static ssize_t _dm_get_status(dev_t dev, status_type_t type,
-> +			      const char *target_name, u8 *buf, size_t buf_len)
-> +{
-> +	struct mapped_device *md;
-> +	struct dm_table *table;
-> +	u8 *buf_ptr = buf;
-> +	ssize_t len, res = 0;
-> +	int srcu_idx, num_targets, i;
-> +
-> +	if (buf_len > INT_MAX)
-> +		return -EINVAL;
-> +
-> +	if (!buf_len)
-> +		return buf_len;
-> +
-> +	if (!try_module_get(THIS_MODULE))
-> +		return -EBUSY;
-> +
-> +	md = dm_get_md(dev);
-> +	if (!md) {
-> +		res = -ENOENT;
-> +		goto out_module;
-> +	}
-> +
-> +	table = dm_get_live_table(md, &srcu_idx);
-> +	if (!table) {
-> +		res = -ENOENT;
-> +		goto out_md;
-> +	}
-> +
-> +	memset(buf, 0, buf_len);
-> +
-> +	num_targets = dm_table_get_num_targets(table);
-> +
-> +	for (i = 0; i < num_targets; i++) {
-> +		struct dm_target *ti = dm_table_get_target(table, i);
-> +
-> +		if (!ti)
-> +			continue;
-> +
-> +		if (target_name && strcmp(ti->type->name, target_name))
-> +			continue;
-> +
-> +		if (!ti->type->status)
-> +			continue;
-> +
-> +		ti->type->status(ti, type, 0, buf_ptr, buf + buf_len - buf_ptr);
-> +
-> +		if (!*buf_ptr)
-> +			continue;
-> +
-> +		len = strlen(buf_ptr);
-> +		buf_ptr += len + 1;
-> +
-> +		if (buf_ptr == buf + buf_len)
-> +			break;
-> +
-> +		res += len + 1;
+> diff --git a/security/integrity/ima/ima_fs.c
+> b/security/integrity/ima/ima_fs.c
+> index fd2798f2d224..6766bb8262f2 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -393,7 +393,7 @@ static int ima_open_policy(struct inode *inode,
+> struct file *filp)
+>  #else
+>  		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
+>  			return -EACCES;
+> -		if (!ns_capable(ns->user_ns, CAP_SYS_ADMIN))
+> +		if (!integrity_admin_ns_capable(ns->user_ns))
 
-The line above before the check.
+so this one is basically replacing what you did in RFC 16/20, which
+seems a little redundant.
 
-Roberto
+The question I'd like to ask is: is there still a reason for needing
+CAP_INTEGRITY_ADMIN?  My thinking is that now IMA is pretty much tied
+to requiring a user (and a mount, because of securityfs_ns) namespace,
+there might not be a pressing need for an admin capability separated
+from CAP_SYS_ADMIN because the owner of the user namespace passes the
+ns_capable(..., CAP_SYS_ADMIN) check.  The rationale in 
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
+https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
 
-> +	}
-> +
-> +	dm_put_live_table(md, srcu_idx);
-> +out_md:
-> +	dm_put(md);
-> +out_module:
-> +	module_put(THIS_MODULE);
-> +	return res;
-> +}
-> +
->  static int __init local_init(void)
->  {
->  	int r;
-> @@ -275,6 +343,7 @@ static int __init dm_init(void)
->  			goto bad;
->  	}
-> 
-> +	status_fn = _dm_get_status;
->  	return 0;
->  bad:
->  	while (i--)
-> @@ -287,6 +356,8 @@ static void __exit dm_exit(void)
->  {
->  	int i = ARRAY_SIZE(_exits);
-> 
-> +	status_fn = NULL;
-> +
->  	while (i--)
->  		_exits[i]();
-> 
-> diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
-> index a7df155ea49b..d97b296d3104 100644
-> --- a/include/linux/device-mapper.h
-> +++ b/include/linux/device-mapper.h
-> @@ -487,6 +487,9 @@ int dm_report_zones(struct block_device *bdev,
-> sector_t start, sector_t sector,
->  		    struct dm_report_zones_args *args, unsigned int nr_zones);
->  #endif /* CONFIG_BLK_DEV_ZONED */
-> 
-> +ssize_t dm_get_status(dev_t dev, status_type_t type, const char
-> *target_name,
-> +		      u8 *buf, size_t buf_len);
-> +
->  /*
->   * Device mapper functions to parse and create devices specified by the
->   * parameter "dm-mod.create="
-> --
-> 2.32.0
+Is effectively "because CAP_SYS_ADMIN is too powerful" but that's no
+longer true of the user namespace owner.  It only passes the ns_capable
+() check not the capable() one, so while it does get CAP_SYS_ADMIN, it
+can only use it in a few situations which represent quite a power
+reduction already.
+
+James
+
 
