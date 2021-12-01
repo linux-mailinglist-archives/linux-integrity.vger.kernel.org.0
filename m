@@ -2,143 +2,156 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 013524644FF
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 03:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DFA464738
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 07:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346211AbhLACle (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 21:41:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53425 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346222AbhLACl2 (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:41:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638326287;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W0n5k4sl9AYBphe6cujkRUTAtSAAGA+Ca8Fn1jgb3kw=;
-        b=N3mzgk9UowmoT9bOELTegEg+modpoOEo2XRxoZTD2ZXoKI8rBY5ktzlsSp7cEDex0f4GM5
-        PbSWp/f4WI7VrjtC8cbiIG/PUy4NLouem1PL0surhgLCqlVQxmJtyJR33k858Un97cROcV
-        jgl/5eajJjl23AtbjXmW4lJNzUyD28c=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-420-PtZgyoLZM6iWg_vjmPTmng-1; Tue, 30 Nov 2021 21:38:04 -0500
-X-MC-Unique: PtZgyoLZM6iWg_vjmPTmng-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 133C5102C7EB;
-        Wed,  1 Dec 2021 02:37:59 +0000 (UTC)
-Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3ADC560C13;
-        Wed,  1 Dec 2021 02:37:50 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 10:37:47 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Michal Suchanek <msuchanek@suse.de>
-Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
-Message-ID: <20211201023747.GN21646@MiWiFi-R3L-srv>
-References: <cover.1637862358.git.msuchanek@suse.de>
+        id S236244AbhLAGjb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Dec 2021 01:39:31 -0500
+Received: from mga01.intel.com ([192.55.52.88]:29004 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230303AbhLAGjb (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 1 Dec 2021 01:39:31 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="260368092"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="260368092"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 22:36:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="677146995"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 30 Nov 2021 22:36:08 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msJDr-000ENt-GT; Wed, 01 Dec 2021 06:36:07 +0000
+Date:   Wed, 1 Dec 2021 14:35:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Barnes <robbarnes@google.com>, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Rob Barnes <robbarnes@google.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] char: tpm: cr50: Set TPM_FIRMWARE_POWER_MANAGED based on
+ device property
+Message-ID: <202112011433.QeYkYJE1-lkp@intel.com>
+References: <20211130235918.2216110-1-robbarnes@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1637862358.git.msuchanek@suse.de>
+In-Reply-To: <20211130235918.2216110-1-robbarnes@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+Hi Rob,
 
-On 11/25/21 at 07:02pm, Michal Suchanek wrote:
-> Hello,
-> 
-> This is resend of the KEXEC_SIG patchset.
-> 
-> The first patch is new because it'a a cleanup that does not require any
-> change to the module verification code.
-> 
-> The second patch is the only one that is intended to change any
-> functionality.
-> 
-> The rest only deduplicates code but I did not receive any review on that
-> part so I don't know if it's desirable as implemented.
+Thank you for the patch! Yet something to improve:
 
-Do you have the link of your 1st version?
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on v5.16-rc3 next-20211201]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-And after going through the whole series, it doesn't tell what this
-patch series intends to do in cover-letter or patch log.
+url:    https://github.com/0day-ci/linux/commits/Rob-Barnes/char-tpm-cr50-Set-TPM_FIRMWARE_POWER_MANAGED-based-on-device-property/20211201-080132
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 5d331b5922551637c586cdf5fdc1778910fc937f
+config: hexagon-randconfig-r041-20211128 (https://download.01.org/0day-ci/archive/20211201/202112011433.QeYkYJE1-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/4c5a69ab6ee4ba384abbbf714753053b5cd0de2c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Rob-Barnes/char-tpm-cr50-Set-TPM_FIRMWARE_POWER_MANAGED-based-on-device-property/20211201-080132
+        git checkout 4c5a69ab6ee4ba384abbbf714753053b5cd0de2c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/char/tpm/
 
-Thanks
-Baoquan
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> The first two patches can be applied separately without the rest.
-> 
-> Thanks
-> 
-> Michal
-> 
-> Michal Suchanek (6):
->   s390/kexec_file: Don't opencode appended signature check.
->   powerpc/kexec_file: Add KEXEC_SIG support.
->   kexec_file: Don't opencode appended signature verification.
->   module: strip the signature marker in the verification function.
->   module: Use key_being_used_for for log messages in
->     verify_appended_signature
->   module: Move duplicate mod_check_sig users code to mod_parse_sig
-> 
->  arch/powerpc/Kconfig                     | 11 +++++
->  arch/powerpc/kexec/elf_64.c              | 14 ++++++
->  arch/s390/kernel/machine_kexec_file.c    | 42 ++----------------
->  crypto/asymmetric_keys/asymmetric_type.c |  1 +
->  include/linux/module_signature.h         |  1 +
->  include/linux/verification.h             |  4 ++
->  kernel/module-internal.h                 |  2 -
->  kernel/module.c                          | 12 +++--
->  kernel/module_signature.c                | 56 +++++++++++++++++++++++-
->  kernel/module_signing.c                  | 33 +++++++-------
->  security/integrity/ima/ima_modsig.c      | 22 ++--------
->  11 files changed, 113 insertions(+), 85 deletions(-)
-> 
-> -- 
-> 2.31.1
-> 
-> 
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
-> 
+All errors (new ones prefixed by >>):
 
+   In file included from drivers/char/tpm/tpm_tis_spi_cr50.c:18:
+   In file included from drivers/char/tpm/tpm_tis_core.h:22:
+   In file included from drivers/char/tpm/tpm.h:28:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+           int mapping_size;
+               ^
+>> drivers/char/tpm/tpm_tis_spi_cr50.c:319:45: error: use of undeclared identifier 'dev'
+           if (tpm_cr50_spi_is_firmware_power_managed(dev))
+                                                      ^
+   1 warning and 1 error generated.
+
+
+vim +/dev +319 drivers/char/tpm/tpm_tis_spi_cr50.c
+
+   263	
+   264	int cr50_spi_probe(struct spi_device *spi)
+   265	{
+   266		struct tpm_tis_spi_phy *phy;
+   267		struct cr50_spi_phy *cr50_phy;
+   268		int ret;
+   269		struct tpm_chip *chip;
+   270	
+   271		cr50_phy = devm_kzalloc(&spi->dev, sizeof(*cr50_phy), GFP_KERNEL);
+   272		if (!cr50_phy)
+   273			return -ENOMEM;
+   274	
+   275		phy = &cr50_phy->spi_phy;
+   276		phy->flow_control = cr50_spi_flow_control;
+   277		phy->wake_after = jiffies;
+   278		init_completion(&phy->ready);
+   279	
+   280		cr50_phy->access_delay = CR50_NOIRQ_ACCESS_DELAY;
+   281		cr50_phy->last_access = jiffies;
+   282		mutex_init(&cr50_phy->time_track_mutex);
+   283	
+   284		if (spi->irq > 0) {
+   285			ret = devm_request_irq(&spi->dev, spi->irq,
+   286					       cr50_spi_irq_handler,
+   287					       IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+   288					       "cr50_spi", cr50_phy);
+   289			if (ret < 0) {
+   290				if (ret == -EPROBE_DEFER)
+   291					return ret;
+   292				dev_warn(&spi->dev, "Requesting IRQ %d failed: %d\n",
+   293					 spi->irq, ret);
+   294				/*
+   295				 * This is not fatal, the driver will fall back to
+   296				 * delays automatically, since ready will never
+   297				 * be completed without a registered irq handler.
+   298				 * So, just fall through.
+   299				 */
+   300			} else {
+   301				/*
+   302				 * IRQ requested, let's verify that it is actually
+   303				 * triggered, before relying on it.
+   304				 */
+   305				cr50_phy->irq_needs_confirmation = true;
+   306			}
+   307		} else {
+   308			dev_warn(&spi->dev,
+   309				 "No IRQ - will use delays between transactions.\n");
+   310		}
+   311	
+   312		ret = tpm_tis_spi_init(spi, phy, -1, &tpm_spi_cr50_phy_ops);
+   313		if (ret)
+   314			return ret;
+   315	
+   316		cr50_print_fw_version(&phy->priv);
+   317	
+   318		chip = dev_get_drvdata(&spi->dev);
+ > 319		if (tpm_cr50_spi_is_firmware_power_managed(dev))
+   320			chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
+   321	
+   322		return 0;
+   323	}
+   324	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
