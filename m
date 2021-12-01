@@ -2,144 +2,143 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A21146446A
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 02:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013524644FF
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 03:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240993AbhLABKX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 30 Nov 2021 20:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbhLABKV (ORCPT
+        id S1346211AbhLACle (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 30 Nov 2021 21:41:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53425 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346222AbhLACl2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 30 Nov 2021 20:10:21 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B403C061574
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 17:07:01 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id y13so94398571edd.13
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Nov 2021 17:07:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dDTZQO1s0l0nQ4okwAIdEoHQ0YiyLaeFzWFpDGXURhI=;
-        b=aKNAM/hTD2iyToIfqhdvNElGlNz9s4c/KoEOloKnsDnBEqXyqyhwYtC2k4V2Z29Ggn
-         +lCXAtuOpk0iQ5eDzn4kskDCc8OBWFvZ9JqVFA5JLxu1TSSG/YxssrYsCO8FWCfa6qcM
-         +z4U//Z4fsc3N5DwKeNMvUZdr2y6nHv+6d8iEYXb8tGncg6XmtgLZVXqK39wY3N63duR
-         HCle84xmK41sYwEp0AQj2ovjVB2X/++iufFILpVt1GA9iC5em/e6g1rjyY9bf2VgSG5T
-         vWocu4b0nzqES5H+XLSYywAOR/GNZYkfeYyv13c2VG30g6TdJDNddeC+wgPeuRcm45/o
-         PBSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dDTZQO1s0l0nQ4okwAIdEoHQ0YiyLaeFzWFpDGXURhI=;
-        b=yFk7CELP55pECbtvaM0I4seNy9WMOjIAYvmxGo3lxYZBOd1+ySM4PAT3adfPbiw/eA
-         r5oaKyfFEFnexMb3hwAtTvJxwxyFKsROcla/Na/bxW7CTa1teoE4opTogPgq22GdHGtJ
-         +Cv/jr3UbBfYF5g+KSttHDlwfTOWW2QkWQ/9E3F1vdxd67asgXhKG0gl21hMiGxW8mYs
-         fodjo9XcO5SLnvh8ELQwozNlZuU51TXoQEAuvtRBggvzkWVtuyLgDv0zaDOUNGUbvTD5
-         CPg9WVFQt/9/+Hp9xB4cYy4H4DReJCjBx+emjd2D7KDhd8Ec/kDdEvCsSEOC4etOBwfz
-         gcIw==
-X-Gm-Message-State: AOAM53323SwOmHuXZqjEJMjDRqcRLYMarwcCPi0FV8EPh3ORbq28cWjC
-        Lio9B76iqa1aFuL/PnX/xJm9mVZHWL0muKTnha5t
-X-Google-Smtp-Source: ABdhPJxty9SzAkb0v8cwbtS2kkFtq94PrIqZjihhoj6I/Aj1LVnCBLmzhnBqErP0r0YUKFdEbazwCMhiZXkezaGEjsU=
-X-Received: by 2002:a17:906:d96e:: with SMTP id rp14mr3105756ejb.104.1638320819895;
- Tue, 30 Nov 2021 17:06:59 -0800 (PST)
+        Tue, 30 Nov 2021 21:41:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638326287;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W0n5k4sl9AYBphe6cujkRUTAtSAAGA+Ca8Fn1jgb3kw=;
+        b=N3mzgk9UowmoT9bOELTegEg+modpoOEo2XRxoZTD2ZXoKI8rBY5ktzlsSp7cEDex0f4GM5
+        PbSWp/f4WI7VrjtC8cbiIG/PUy4NLouem1PL0surhgLCqlVQxmJtyJR33k858Un97cROcV
+        jgl/5eajJjl23AtbjXmW4lJNzUyD28c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-420-PtZgyoLZM6iWg_vjmPTmng-1; Tue, 30 Nov 2021 21:38:04 -0500
+X-MC-Unique: PtZgyoLZM6iWg_vjmPTmng-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 133C5102C7EB;
+        Wed,  1 Dec 2021 02:37:59 +0000 (UTC)
+Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3ADC560C13;
+        Wed,  1 Dec 2021 02:37:50 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 10:37:47 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Michal Suchanek <msuchanek@suse.de>
+Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
+        Philipp Rudo <prudo@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
+Message-ID: <20211201023747.GN21646@MiWiFi-R3L-srv>
+References: <cover.1637862358.git.msuchanek@suse.de>
 MIME-Version: 1.0
-References: <1630070917-9896-1-git-send-email-ross.philipson@oracle.com>
-In-Reply-To: <1630070917-9896-1-git-send-email-ross.philipson@oracle.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 30 Nov 2021 20:06:49 -0500
-Message-ID: <CAHC9VhTJG24iG=U0geO-ZhC6OogxOu4icBrNY22+qRNpWd5PBQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/14] x86: Trenchboot secure dynamic launch Linux
- kernel support
-To:     Ross Philipson <ross.philipson@oracle.com>,
-        trenchboot-devel@googlegroups.com
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, dpsmith@apertussolutions.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        luto@amacapital.net, kanth.ghatraju@oracle.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1637862358.git.msuchanek@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Aug 27, 2021 at 9:20 AM Ross Philipson
-<ross.philipson@oracle.com> wrote:
->
-> The larger focus of the Trechboot project (https://github.com/TrenchBoot) is to
-> enhance the boot security and integrity in a unified manner. The first area of
-> focus has been on the Trusted Computing Group's Dynamic Launch for establishing
-> a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
-> Trust for Measurement).
+Hi,
 
-My apologies for such a late reply, but I'm just getting around to
-looking at this and I have a few questions on the basic design/flow
-(below) ...
+On 11/25/21 at 07:02pm, Michal Suchanek wrote:
+> Hello,
+> 
+> This is resend of the KEXEC_SIG patchset.
+> 
+> The first patch is new because it'a a cleanup that does not require any
+> change to the module verification code.
+> 
+> The second patch is the only one that is intended to change any
+> functionality.
+> 
+> The rest only deduplicates code but I did not receive any review on that
+> part so I don't know if it's desirable as implemented.
 
-> The basic flow is:
->
->  - Entry from the dynamic launch jumps to the SL stub
+Do you have the link of your 1st version?
 
-So I'm clear, at this point the combined stub+kernel+initramfs+cmdline
-image has already been loaded into memory and the SL stub is
-executing, yes?
+And after going through the whole series, it doesn't tell what this
+patch series intends to do in cover-letter or patch log.
 
-As TrenchBoot seems to be focused on boot measurement and not
-enforcing policy, I'm guessing this is considered out-of-scope (not to
-mention that the combined stub+kernel image makes this less
-interesting), but has any thought been given to leveraging the TXT
-launch control policy, or is it simply an empty run-everything policy?
+Thanks
+Baoquan
 
->  - SL stub fixes up the world on the BSP
->  - For TXT, SL stub wakes the APs, fixes up their worlds
->  - For TXT, APs are left halted waiting for an NMI to wake them
->  - SL stub jumps to startup_32
->  - SL main locates the TPM event log and writes the measurements of
->    configuration and module information into it.
+> 
+> The first two patches can be applied separately without the rest.
+> 
+> Thanks
+> 
+> Michal
+> 
+> Michal Suchanek (6):
+>   s390/kexec_file: Don't opencode appended signature check.
+>   powerpc/kexec_file: Add KEXEC_SIG support.
+>   kexec_file: Don't opencode appended signature verification.
+>   module: strip the signature marker in the verification function.
+>   module: Use key_being_used_for for log messages in
+>     verify_appended_signature
+>   module: Move duplicate mod_check_sig users code to mod_parse_sig
+> 
+>  arch/powerpc/Kconfig                     | 11 +++++
+>  arch/powerpc/kexec/elf_64.c              | 14 ++++++
+>  arch/s390/kernel/machine_kexec_file.c    | 42 ++----------------
+>  crypto/asymmetric_keys/asymmetric_type.c |  1 +
+>  include/linux/module_signature.h         |  1 +
+>  include/linux/verification.h             |  4 ++
+>  kernel/module-internal.h                 |  2 -
+>  kernel/module.c                          | 12 +++--
+>  kernel/module_signature.c                | 56 +++++++++++++++++++++++-
+>  kernel/module_signing.c                  | 33 +++++++-------
+>  security/integrity/ima/ima_modsig.c      | 22 ++--------
+>  11 files changed, 113 insertions(+), 85 deletions(-)
+> 
+> -- 
+> 2.31.1
+> 
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+> 
 
-Since the stub+kernel image are combined it looks like the kernel
-measurement comes from the ACM via the MLE measurement into PCR 18,
-while the stub generated measurements are extended into PCR 19 or 20
-depending on the configuration, yes?
-
-I realize that moving the TXT code into the kernel makes this
-difficult (not possible?), but one of the things that was nice about
-the tboot based approach (dynamic, early launch) was that it could be
-extended to do different types of measurements, e.g. a signing
-authority measurement similar to UEFI Secure Boot and PCR 7.  If that
-is possible, I think it is something worth including in the design,
-even if it isn't initially implemented.  The only thing that
-immediately comes to mind would be a section/region based approach
-similar to systemd-boot/gummiboot where the (signed) kernel is kept in
-a well known region and verified/measured by the stub prior to jumping
-into its start point.
-
->  - Kernel boot proceeds normally from this point.
->  - During early setup, slaunch_setup() runs to finish some validation
->    and setup tasks.
->  - The SMP bringup code is modified to wake the waiting APs. APs vector
->    to rmpiggy and start up normally from that point.
->  - SL platform module is registered as a late initcall module. It reads
->    the TPM event log and extends the measurements taken into the TPM PCRs.
-
-I'm sure there is some issue with passing data across boundaries, but
-is there any reason why the TPM event log needs to be updated
-out-of-sync with the TPM PCRs?  Is is possible to pass the
-measurements to the SL platform module which would both extend the
-PCRs and update the TPM event log at the same time?
-
->  - SL platform module initializes the securityfs interface to allow
->    asccess to the TPM event log and TXT public registers.
->  - Kernel boot finishes booting normally
->  - SEXIT support to leave SMX mode is present on the kexec path and
->    the various reboot paths (poweroff, reset, halt).
-
-It doesn't look like it's currently implemented, but it looks like
-eventually you plan to support doing a new DRTM measurement on kexec,
-is that correct?  I'm sure that is something a *lot* of people
-(including myself) would like to see happen.
-
--- 
-paul moore
-www.paul-moore.com
