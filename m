@@ -2,141 +2,78 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F0B464B9B
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 11:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F29F464BCB
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 11:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348641AbhLAKb0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Dec 2021 05:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348628AbhLAKb0 (ORCPT
+        id S1348736AbhLAKn3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Dec 2021 05:43:29 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54400 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348733AbhLAKn2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:31:26 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38551C061574;
-        Wed,  1 Dec 2021 02:28:05 -0800 (PST)
+        Wed, 1 Dec 2021 05:43:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 389FDCE1DB2;
-        Wed,  1 Dec 2021 10:28:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D209AC53FCC;
-        Wed,  1 Dec 2021 10:28:00 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 547F0CE1D91;
+        Wed,  1 Dec 2021 10:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B99B5C53FAD;
+        Wed,  1 Dec 2021 10:40:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638354481;
-        bh=m6mcqbYuHeMeS8hGqq/RnBLl6KXb9FndE6k43W6VWWo=;
+        s=k20201202; t=1638355204;
+        bh=a4Cq/m0f4IxDH0TKW9jWlHW2kYkBEcRg+PoObqg/Rqo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VA3AxZbGfIiJSQyqUMMErcKvc7GlztLuXaxI6MfnvTIi8GJd0KlUku7RdXKYYc7DD
-         QwFn+fCa08o6c1SaDDMV5GXaCBra2i5oKaNn3+iKK/iwpdDtKbvIV/A4IA7LWVqgu+
-         WOppeNg/PZbQ/feuQw1y19GjoYIrNW4CqJ4c5ePkH8TfxeS8Zcf9nFdpW1r99vCTVr
-         BLrWzLjILbGWwljOpKUAk32T20jSEGE/vViTW/0pyufacOkXi0Swu6y7ED3Lkq0xX8
-         HOifikPZyAZpkbveo7+dDfD8BepfUhyK/68Gy1Bvi9xeZNTcTyLr/tBWDioq2cRSGo
-         wS9Zq0FPdRzdQ==
-Date:   Wed, 1 Dec 2021 12:27:58 +0200
+        b=gVNncubsPfYf4tPmWbtlDX2UeIM3QABUX74xntHSpnQK0tCOs3DqD5fTDIDSyIFqS
+         vR140YxIMlG79ieberlHDSj4OaAHCDBTXg1uDNdpdYFqlvaq+OCiQvLLrSlHLQDwKI
+         yjl3Yrl76KYv7T3qpFznxo2aqHm6zYBCuo9lN5U72J3A+Yg1UWbjCpDEm8acSwuC9O
+         Av7KSjMSjQZkZnk0H/D7R+gyPat951qFi0pa8BIFtH7L6+8LLllm3furXmvGbWiGsy
+         sOoJWNtGugI5+OlPq5wioRas976ZR7kmgr6M6qqVz8qQpCZ+c7uPdkasUvMqthIVXH
+         qmyEbY2aCc61A==
+Date:   Wed, 1 Dec 2021 12:40:01 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     andreas@rammhold.de, James Bottomley <jejb@linux.ibm.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "ebiggers@google.com" <ebiggers@google.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "nramas@linux.microsoft.com" <nramas@linux.microsoft.com>,
-        "lszubowi@redhat.com" <lszubowi@redhat.com>,
-        "jason@zx2c4.com" <jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Subject: Re: [PATCH v8 09/17] KEYS: Rename
- get_builtin_and_secondary_restriction
-Message-ID: <YadOLrHb14MEfphi@iki.fi>
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
- <20211124044124.998170-10-eric.snowberg@oracle.com>
- <fb1d583f588e3f46fdadbe3cf6288bb098ff45f8.camel@kernel.org>
- <8906F8A4-313F-45E5-8ABD-A1A2D07BFD93@oracle.com>
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v4] KEYS: trusted: Fix trusted key backends when building
+ as module
+Message-ID: <YadRAWbl2aiapf8l@iki.fi>
+References: <20211201095900.3009225-1-a.fatoum@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8906F8A4-313F-45E5-8ABD-A1A2D07BFD93@oracle.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211201095900.3009225-1-a.fatoum@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 05:21:45PM +0000, Eric Snowberg wrote:
+On Wed, Dec 01, 2021 at 10:59:00AM +0100, Ahmad Fatoum wrote:
+> From: Andreas Rammhold <andreas@rammhold.de>
 > 
+> Before this commit the kernel could end up with no trusted key sources
+> even though both of the currently supported backends (TPM and TEE) were
+> compiled as modules. This manifested in the trusted key type not being
+> registered at all.
 > 
-> > On Nov 26, 2021, at 5:49 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > 
-> > On Tue, 2021-11-23 at 23:41 -0500, Eric Snowberg wrote:
-> >> In preparation for returning either the existing
-> >> restrict_link_by_builtin_and_secondary_trusted or the upcoming
-> >> restriction that includes the trusted builtin, secondary and
-> >> machine keys, to improve clarity, rename
-> >> get_builtin_and_secondary_restriction to get_secondary_restriction.
-> >> 
-> >> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> >> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> >> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> >> ---
-> >> v6: Initial version
-> >> v7: Unmodified from v7
-> >> v8: Code unmodified from v7, added Mimi's Reviewed-by
-> >> ---
-> >>  certs/system_keyring.c | 4 ++--
-> >>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >> 
-> >> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> >> index 692365dee2bd..8f1f87579819 100644
-> >> --- a/certs/system_keyring.c
-> >> +++ b/certs/system_keyring.c
-> >> @@ -77,7 +77,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
-> >>   * Allocate a struct key_restriction for the "builtin and secondary trust"
-> >>   * keyring. Only for use in system_trusted_keyring_init().
-> >>   */
-> >> -static __init struct key_restriction *get_builtin_and_secondary_restriction(void)
-> >> +static __init struct key_restriction *get_secondary_restriction(void)
-> >>  {
-> >>         struct key_restriction *restriction;
-> >>  
-> >> @@ -117,7 +117,7 @@ static __init int system_trusted_keyring_init(void)
-> >>                                KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEARCH |
-> >>                                KEY_USR_WRITE),
-> >>                               KEY_ALLOC_NOT_IN_QUOTA,
-> >> -                             get_builtin_and_secondary_restriction(),
-> >> +                             get_secondary_restriction(),
-> >>                               NULL);
-> >>         if (IS_ERR(secondary_trusted_keys))
-> >>                 panic("Can't allocate secondary trusted keyring\n");
-> > 
-> > This is wrong order.
-> > 
-> > You should first do the changes that make the old name
-> > obsolete and only after that have a patch that does the
-> > rename. Unfortunately, this patch cannot possibly acked
-> > with the current order.
+> When checking if a CONFIG_… preprocessor variable is defined we only
+> test for the builtin (=y) case and not the module (=m) case. By using
+> the IS_REACHABLE() macro we do test for both cases.
 > 
-> I can change the order, but I'm confused how this would work for a git bisect. 
-> If the rename happens afterwards, now two patches will always need to be 
-> reverted instead of the possibility of one.  Is this your expectation?
+> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+> Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+> Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-I'd drop this patch altogether. Old name is a bit ugly but does it matter
-all that much?
-
-You already 16 patches without this.
+Thank you, I picked this.
 
 /Jarkko
