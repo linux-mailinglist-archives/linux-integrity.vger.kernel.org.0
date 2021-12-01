@@ -2,121 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C30464B7A
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 11:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F0B464B9B
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 11:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348595AbhLAKWf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Dec 2021 05:22:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59530 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbhLAKWe (ORCPT
+        id S1348641AbhLAKb0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Dec 2021 05:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348628AbhLAKb0 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:22:34 -0500
+        Wed, 1 Dec 2021 05:31:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38551C061574;
+        Wed,  1 Dec 2021 02:28:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B08AB81E17;
-        Wed,  1 Dec 2021 10:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 387F8C53FCC;
-        Wed,  1 Dec 2021 10:19:11 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 389FDCE1DB2;
+        Wed,  1 Dec 2021 10:28:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D209AC53FCC;
+        Wed,  1 Dec 2021 10:28:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638353951;
-        bh=1DD6yb8AndnxLz2+3Nk3lf/qwuXp3fDEiH6kGOpOszU=;
+        s=k20201202; t=1638354481;
+        bh=m6mcqbYuHeMeS8hGqq/RnBLl6KXb9FndE6k43W6VWWo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tlzh7bhavcuJL1JqvmDk1Pm+IxQe6SWnZS0YSsrgT245Kv02NKGibqzXW+dF0KFef
-         EroXPB0P923FZ4+JNasEbAzQV8X3YHuNN1Bse4uKZiylQlDC/krndQMHr8N+nF4yHf
-         SWEmU24CovYm7TBosS6Fl9pXUR4FeXRvg2IPbrwhaKl3MW5Z2IMTa6ONG0HsdTRImU
-         T+f5GcwZ/FZ2Itdc9JhMSYPhnRIEYWnsNfTPU3NPY7yMR6M1LOhI5Jl7PyU7jvZdH9
-         tPetaLPCgDyhV8wkvirXtXDRx/fWpEgMlAK0Vmt2QxS1t0H3bgWSXLbJvCIM21K065
-         cgBC+oTl0H+zw==
-Date:   Wed, 1 Dec 2021 12:19:09 +0200
+        b=VA3AxZbGfIiJSQyqUMMErcKvc7GlztLuXaxI6MfnvTIi8GJd0KlUku7RdXKYYc7DD
+         QwFn+fCa08o6c1SaDDMV5GXaCBra2i5oKaNn3+iKK/iwpdDtKbvIV/A4IA7LWVqgu+
+         WOppeNg/PZbQ/feuQw1y19GjoYIrNW4CqJ4c5ePkH8TfxeS8Zcf9nFdpW1r99vCTVr
+         BLrWzLjILbGWwljOpKUAk32T20jSEGE/vViTW/0pyufacOkXi0Swu6y7ED3Lkq0xX8
+         HOifikPZyAZpkbveo7+dDfD8BepfUhyK/68Gy1Bvi9xeZNTcTyLr/tBWDioq2cRSGo
+         wS9Zq0FPdRzdQ==
+Date:   Wed, 1 Dec 2021 12:27:58 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH v4 2/2] selftests: tpm2: Reset the dictionary attack lock
-Message-ID: <YadMHU0scgKvCTMV@iki.fi>
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-3-stefanb@linux.vnet.ibm.com>
- <YaVljk1vLRZ/TDJ/@iki.fi>
- <e569444c-e0cd-52bc-308f-7fa457dbf086@linux.ibm.com>
- <YadLaHB0oJZYTMbh@iki.fi>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "ebiggers@google.com" <ebiggers@google.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "nramas@linux.microsoft.com" <nramas@linux.microsoft.com>,
+        "lszubowi@redhat.com" <lszubowi@redhat.com>,
+        "jason@zx2c4.com" <jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@hansenpartnership.com>,
+        "pjones@redhat.com" <pjones@redhat.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>
+Subject: Re: [PATCH v8 09/17] KEYS: Rename
+ get_builtin_and_secondary_restriction
+Message-ID: <YadOLrHb14MEfphi@iki.fi>
+References: <20211124044124.998170-1-eric.snowberg@oracle.com>
+ <20211124044124.998170-10-eric.snowberg@oracle.com>
+ <fb1d583f588e3f46fdadbe3cf6288bb098ff45f8.camel@kernel.org>
+ <8906F8A4-313F-45E5-8ABD-A1A2D07BFD93@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YadLaHB0oJZYTMbh@iki.fi>
+In-Reply-To: <8906F8A4-313F-45E5-8ABD-A1A2D07BFD93@oracle.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 12:16:11PM +0200, Jarkko Sakkinen wrote:
-> On Mon, Nov 29, 2021 at 07:26:12PM -0500, Stefan Berger wrote:
-> > 
-> > On 11/29/21 18:43, Jarkko Sakkinen wrote:
-> > > On Sat, Nov 27, 2021 at 11:10:52PM -0500, Stefan Berger wrote:
-> > > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > > 
-> > > > Reset the dictionary attack lock to avoid the following types of test
-> > > > failures after running the test 2 times:
-> > > > 
-> > > > ======================================================================
-> > > > ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
-> > > > ----------------------------------------------------------------------
-> > > > Traceback (most recent call last):
-> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2_tests.py", line 105, in test_unseal_with_wrong_policy
-> > > >      blob = self.client.seal(self.root_key, data, auth, policy_dig)
-> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 620, in seal
-> > > >      rsp = self.send_cmd(cmd)
-> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 397, in send_cmd
-> > > >      raise ProtocolError(cc, rc)
-> > > > tpm2.ProtocolError: TPM_RC_LOCKOUT: cc=0x00000153, rc=0x00000921
-> > > > 
-> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > ---
-> > > >   tools/testing/selftests/tpm2/tpm2_tests.py | 2 ++
-> > > >   1 file changed, 2 insertions(+)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > > index e63a37819978..ad6f54c01adf 100644
-> > > > --- a/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > > +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > > @@ -139,6 +139,8 @@ class SmokeTest(unittest.TestCase):
-> > > >           except:
-> > > >               self.client.flush_context(handle)
-> > > >               raise
-> > > > +        finally:
-> > > > +            self.client.reset_da_lock()
-> > > >           self.assertEqual(rc, tpm2.TPM2_RC_POLICY_FAIL)
-> > > > -- 
-> > > > 2.31.1
-> > > > 
-> > > I don't agree with this as a DA lock has legit use. This would be adequate
-> > > for systems dedicated for kernel testing only.
-> > 
-> > The problem is this particular test case I am patching here causes the above
-> > test failures upon rerun. We are testing the driver here presumably and not
-> > the TPM2, so I think we should leave the TPM2 as cleaned up as possible,
-> > thus my suggestion is to reset the DA lock and we won't hear any complaints
-> > after that.
+On Tue, Nov 30, 2021 at 05:21:45PM +0000, Eric Snowberg wrote:
 > 
-> Ok.
 > 
-> > > We could make this available in the folder where TPM2 tests are:
-> > > 
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-scripts.git/tree/tpm2-reset-da-lock
+> > On Nov 26, 2021, at 5:49 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
 > > 
+> > On Tue, 2021-11-23 at 23:41 -0500, Eric Snowberg wrote:
+> >> In preparation for returning either the existing
+> >> restrict_link_by_builtin_and_secondary_trusted or the upcoming
+> >> restriction that includes the trusted builtin, secondary and
+> >> machine keys, to improve clarity, rename
+> >> get_builtin_and_secondary_restriction to get_secondary_restriction.
+> >> 
+> >> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> >> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> >> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> >> ---
+> >> v6: Initial version
+> >> v7: Unmodified from v7
+> >> v8: Code unmodified from v7, added Mimi's Reviewed-by
+> >> ---
+> >>  certs/system_keyring.c | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >> 
+> >> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> >> index 692365dee2bd..8f1f87579819 100644
+> >> --- a/certs/system_keyring.c
+> >> +++ b/certs/system_keyring.c
+> >> @@ -77,7 +77,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
+> >>   * Allocate a struct key_restriction for the "builtin and secondary trust"
+> >>   * keyring. Only for use in system_trusted_keyring_init().
+> >>   */
+> >> -static __init struct key_restriction *get_builtin_and_secondary_restriction(void)
+> >> +static __init struct key_restriction *get_secondary_restriction(void)
+> >>  {
+> >>         struct key_restriction *restriction;
+> >>  
+> >> @@ -117,7 +117,7 @@ static __init int system_trusted_keyring_init(void)
+> >>                                KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEARCH |
+> >>                                KEY_USR_WRITE),
+> >>                               KEY_ALLOC_NOT_IN_QUOTA,
+> >> -                             get_builtin_and_secondary_restriction(),
+> >> +                             get_secondary_restriction(),
+> >>                               NULL);
+> >>         if (IS_ERR(secondary_trusted_keys))
+> >>                 panic("Can't allocate secondary trusted keyring\n");
 > > 
-> > The tss packages also have command line tools to reset the DA lock, but it
-> > shouldn't be necessary to use them after running a **driver** test case.
+> > This is wrong order.
+> > 
+> > You should first do the changes that make the old name
+> > obsolete and only after that have a patch that does the
+> > rename. Unfortunately, this patch cannot possibly acked
+> > with the current order.
 > 
-> If you speak about TSS, please alway say which one :-)
-> 
-> Adding non-volatile state changes explicitly is to a test case is both
+> I can change the order, but I'm confused how this would work for a git bisect. 
+> If the rename happens afterwards, now two patches will always need to be 
+> reverted instead of the possibility of one.  Is this your expectation?
 
-A typo, should be:
+I'd drop this patch altogether. Old name is a bit ugly but does it matter
+all that much?
 
-"Adding non-volatile state changes explicitly to a test case is both"
+You already 16 patches without this.
 
 /Jarkko
