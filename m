@@ -2,154 +2,169 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D53CE464D4B
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 12:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21174464EB1
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 14:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349059AbhLALwD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Dec 2021 06:52:03 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:42012 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348563AbhLALwC (ORCPT
+        id S245048AbhLANVu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Dec 2021 08:21:50 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58864 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234027AbhLANVt (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:52:02 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id E8C3D212C2;
-        Wed,  1 Dec 2021 11:48:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638359319; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WrpXoBK/4LwwvZ609Va7mvqZYMz7+OB0m9N/bzmDziw=;
-        b=HoFAEUtdm1wIBQkZ8wytWV68qtGZn5Zx5grFcSya42VQirGgSCl6A+DC2vIcZ5TdyxdbTr
-        W2NAmwDLCRrnNBybHxojCOdjDjD70hWsiQ6QiXdF+k7JVvpls0tm3Ngx0XWYwG/B7neevV
-        w/0YAfAcfrGr1j1OEHqZd2YRZeXZFvw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638359319;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WrpXoBK/4LwwvZ609Va7mvqZYMz7+OB0m9N/bzmDziw=;
-        b=lFf3wqoLPgzv6s+15hy2N/O1nDrvid9mKt3tQRAPUvx23YZo+486dPM+tI4vMosa0+voxm
-        ihq/i/mlKzqbKOBA==
-Received: from kunlun.suse.cz (unknown [10.100.128.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3A7ECA3B81;
-        Wed,  1 Dec 2021 11:48:37 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 12:48:36 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Nayna <nayna@linux.vnet.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        James Morris <jmorris@namei.org>,
+        Wed, 1 Dec 2021 08:21:49 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1CmnDu017582;
+        Wed, 1 Dec 2021 13:15:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=o7MU5ZEW3BlvRrPu95u+FYlzxn/o3dCRZhGlSHuRGvs=;
+ b=EQbqU93mjERx4tytUgOTiHfb/lGWvW4J+OdQxiFYvTJWsC9Vey7ux6eqqUnHWQJ9Ai9O
+ g/wRbQgnAFsSFPnc/XoUuIDZj3ekriraPETjJ4J/tSi9r8nwllxlrbPqJ8zVxHppZBDL
+ AjKLO5zZgQy3InnVnUXy7CNWjK2EBI0vc0oKVOLOBTOwzzJZXQ9coo5EZlDugBy5CfTj
+ OdpSsG5IWScTeMLAZdSB/JScFrGrYBr3uDP6LU/V48PKwScFi+wmMEIFqjX1lHcEGhIB
+ YgRfaMkqpNiilRRfjr/frM0L9e4sThP4RLpWDxEZqzygsR49fInvTUDAOPZIUyOf1U3I aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cp9cqrhvt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 13:15:08 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B1CsDlt010900;
+        Wed, 1 Dec 2021 13:15:07 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cp9cqrhu4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 13:15:06 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1DD03i022753;
+        Wed, 1 Dec 2021 13:15:03 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3ckbxk04ak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 13:15:03 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1DF0xY23789982
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Dec 2021 13:15:00 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D8BF11C050;
+        Wed,  1 Dec 2021 13:15:00 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E98D511C05B;
+        Wed,  1 Dec 2021 13:14:54 +0000 (GMT)
+Received: from sig-9-65-78-183.ibm.com (unknown [9.65.78.183])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Dec 2021 13:14:54 +0000 (GMT)
+Message-ID: <e91d238422f8df139acf84cc2df6ddb4fd300b87.camel@linux.ibm.com>
+Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Florian Weimer <fweimer@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
         Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        linux-crypto@vger.kernel.org,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Philipp Rudo <prudo@redhat.com>,
-        Frank van der Linden <fllinden@amazon.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-security-module@vger.kernel.org,
-        Jessica Yu <jeyu@kernel.org>, linux-integrity@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        buendgen@de.ibm.com
-Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
-Message-ID: <20211201114836.GD117207@kunlun.suse.cz>
-References: <cover.1637862358.git.msuchanek@suse.de>
- <20211201023747.GN21646@MiWiFi-R3L-srv>
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?ISO-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Date:   Wed, 01 Dec 2021 08:14:54 -0500
+In-Reply-To: <4a88f95b-d54d-ad70-fb49-e3c3f1d097f2@digikod.net>
+References: <20211115185304.198460-1-mic@digikod.net>
+         <87sfvd8k4c.fsf@oldenburg.str.redhat.com>
+         <4a88f95b-d54d-ad70-fb49-e3c3f1d097f2@digikod.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4_DbnL0LEYui2lYeqbE8yT4i3z_a1Jb2
+X-Proofpoint-GUID: 9Log-g6aWaMUBg8JjxhDYCR2BbjEsiMa
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201023747.GN21646@MiWiFi-R3L-srv>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ adultscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
+ mlxlogscore=999 impostorscore=0 bulkscore=0 phishscore=0 clxscore=1011
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112010076
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hello,
-
-On Wed, Dec 01, 2021 at 10:37:47AM +0800, Baoquan He wrote:
-> Hi,
+On Wed, 2021-12-01 at 10:23 +0100, Mickaël Salaün wrote:
+> On 30/11/2021 21:27, Florian Weimer wrote:
+> > * Mickaël Salaün:
+> > 
+> >> Primary goal of trusted_for(2)
+> >> ==============================
+> >>
+> >> This new syscall enables user space to ask the kernel: is this file
+> >> descriptor's content trusted to be used for this purpose?  The set of
+> >> usage currently only contains execution, but other may follow (e.g.
+> >> configuration, sensitive data).  If the kernel identifies the file
+> >> descriptor as trustworthy for this usage, user space should then take
+> >> this information into account.  The "execution" usage means that the
+> >> content of the file descriptor is trusted according to the system policy
+> >> to be executed by user space, which means that it interprets the content
+> >> or (try to) maps it as executable memory.
+> > 
+> > I sketched my ideas about “IMA gadgets” here:
+> > 
+> >    IMA gadgets
+> >    <https://www.openwall.com/lists/oss-security/2021/11/30/1>
+> > 
+> > I still don't think the proposed trusted_for interface is sufficient.
+> > The example I gave is a Perl module that does nothing (on its own) when
+> > loaded as a Perl module (although you probably don't want to sign it
+> > anyway, given what it implements), but triggers an unwanted action when
+> > sourced (using .) as a shell script.
 > 
-> On 11/25/21 at 07:02pm, Michal Suchanek wrote:
-> > Hello,
-> > 
-> > This is resend of the KEXEC_SIG patchset.
-> > 
-> > The first patch is new because it'a a cleanup that does not require any
-> > change to the module verification code.
-> > 
-> > The second patch is the only one that is intended to change any
-> > functionality.
-> > 
-> > The rest only deduplicates code but I did not receive any review on that
-> > part so I don't know if it's desirable as implemented.
-> 
-> Do you have the link of your 1st version?
+> The fact that IMA doesn't cover all metadata, file names nor the file 
+> hierarchies is well known and the solution can be implemented with 
+> dm-verity (which has its own drawbacks).
 
-This is the previous version:
-https://lore.kernel.org/lkml/cover.1635948742.git.msuchanek@suse.de/
+Thanks, Mickaël, for responding.  I'll go even farther and say that IMA
+wasn't ever meant to protect file metadata.  Another option is EVM,
+which addresses some, but not all of the issues.
 
-Thanks
+thanks,
 
-Michal
+Mimi
 
-> And after going through the whole series, it doesn't tell what this
-> patch series intends to do in cover-letter or patch log.
 > 
-> Thanks
-> Baoquan
-> 
-> > 
-> > The first two patches can be applied separately without the rest.
-> > 
-> > Thanks
-> > 
-> > Michal
-> > 
-> > Michal Suchanek (6):
-> >   s390/kexec_file: Don't opencode appended signature check.
-> >   powerpc/kexec_file: Add KEXEC_SIG support.
-> >   kexec_file: Don't opencode appended signature verification.
-> >   module: strip the signature marker in the verification function.
-> >   module: Use key_being_used_for for log messages in
-> >     verify_appended_signature
-> >   module: Move duplicate mod_check_sig users code to mod_parse_sig
-> > 
-> >  arch/powerpc/Kconfig                     | 11 +++++
-> >  arch/powerpc/kexec/elf_64.c              | 14 ++++++
-> >  arch/s390/kernel/machine_kexec_file.c    | 42 ++----------------
-> >  crypto/asymmetric_keys/asymmetric_type.c |  1 +
-> >  include/linux/module_signature.h         |  1 +
-> >  include/linux/verification.h             |  4 ++
-> >  kernel/module-internal.h                 |  2 -
-> >  kernel/module.c                          | 12 +++--
-> >  kernel/module_signature.c                | 56 +++++++++++++++++++++++-
-> >  kernel/module_signing.c                  | 33 +++++++-------
-> >  security/integrity/ima/ima_modsig.c      | 22 ++--------
-> >  11 files changed, 113 insertions(+), 85 deletions(-)
-> > 
-> > -- 
-> > 2.31.1
-> > 
-> > 
-> > _______________________________________________
-> > kexec mailing list
-> > kexec@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/kexec
-> > 
-> 
+> trusted_for is a tool for interpreters to enforce a security policy 
+> centralized by the kernel. The kind of file confusion attacks you are 
+> talking about should be addressed by a system policy. If the mount point 
+> options are not enough to express such policy, then we need to rely on 
+> IMA, SELinux or IPE to reduce the scope of legitimate mapping between 
+> scripts and interpreters.
+
