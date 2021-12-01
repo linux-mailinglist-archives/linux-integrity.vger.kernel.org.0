@@ -2,169 +2,180 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21174464EB1
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 14:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A39464EB6
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 14:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245048AbhLANVu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Dec 2021 08:21:50 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58864 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234027AbhLANVt (ORCPT
+        id S243184AbhLANYY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Dec 2021 08:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234027AbhLANYX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:21:49 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1CmnDu017582;
-        Wed, 1 Dec 2021 13:15:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=o7MU5ZEW3BlvRrPu95u+FYlzxn/o3dCRZhGlSHuRGvs=;
- b=EQbqU93mjERx4tytUgOTiHfb/lGWvW4J+OdQxiFYvTJWsC9Vey7ux6eqqUnHWQJ9Ai9O
- g/wRbQgnAFsSFPnc/XoUuIDZj3ekriraPETjJ4J/tSi9r8nwllxlrbPqJ8zVxHppZBDL
- AjKLO5zZgQy3InnVnUXy7CNWjK2EBI0vc0oKVOLOBTOwzzJZXQ9coo5EZlDugBy5CfTj
- OdpSsG5IWScTeMLAZdSB/JScFrGrYBr3uDP6LU/V48PKwScFi+wmMEIFqjX1lHcEGhIB
- YgRfaMkqpNiilRRfjr/frM0L9e4sThP4RLpWDxEZqzygsR49fInvTUDAOPZIUyOf1U3I aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cp9cqrhvt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 13:15:08 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B1CsDlt010900;
-        Wed, 1 Dec 2021 13:15:07 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cp9cqrhu4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 13:15:06 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1DD03i022753;
-        Wed, 1 Dec 2021 13:15:03 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3ckbxk04ak-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 13:15:03 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1DF0xY23789982
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Dec 2021 13:15:00 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D8BF11C050;
-        Wed,  1 Dec 2021 13:15:00 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E98D511C05B;
-        Wed,  1 Dec 2021 13:14:54 +0000 (GMT)
-Received: from sig-9-65-78-183.ibm.com (unknown [9.65.78.183])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Dec 2021 13:14:54 +0000 (GMT)
-Message-ID: <e91d238422f8df139acf84cc2df6ddb4fd300b87.camel@linux.ibm.com>
-Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Florian Weimer <fweimer@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?ISO-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Date:   Wed, 01 Dec 2021 08:14:54 -0500
-In-Reply-To: <4a88f95b-d54d-ad70-fb49-e3c3f1d097f2@digikod.net>
-References: <20211115185304.198460-1-mic@digikod.net>
-         <87sfvd8k4c.fsf@oldenburg.str.redhat.com>
-         <4a88f95b-d54d-ad70-fb49-e3c3f1d097f2@digikod.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4_DbnL0LEYui2lYeqbE8yT4i3z_a1Jb2
-X-Proofpoint-GUID: 9Log-g6aWaMUBg8JjxhDYCR2BbjEsiMa
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 1 Dec 2021 08:24:23 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5853C061574
+        for <linux-integrity@vger.kernel.org>; Wed,  1 Dec 2021 05:21:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1638364860;
+        bh=TEUbT8YAZQdRQS5d9YMYuRhKTaAeqsYeGDHBuzE0N3g=;
+        h=From:To:Subject:Date:Message-Id:From;
+        b=UwTArRZfauO6hNOXvoyOJfW1v8ek0HZNjWUNx+ioJ9vnjXANkveq/7MHlOkGzE3pE
+         fL8NmK2Dm8yR0DPwXZ/GQYaAH7QILX1YM/xyVT4jZuQrA8hLynEzSNGfblbDhFlAg9
+         JzXI2hIVIvFpbqYxkQ2lYB5UdqVX8bG/j4fwBiLc=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CB4251280403;
+        Wed,  1 Dec 2021 08:21:00 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3maekpuAqkZP; Wed,  1 Dec 2021 08:21:00 -0500 (EST)
+Received: from rainbow.int.hansenpartnership.com (unknown [153.66.140.204])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7454C12803C3;
+        Wed,  1 Dec 2021 08:20:59 -0500 (EST)
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     containers@lists.linux.dev, Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        krzysztof.struczynski@huawei.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Michael Peters <mpeters@redhat.com>,
+        Luke Hinds <lhinds@redhat.com>,
+        Lily Sturmann <lsturman@redhat.com>,
+        Patrick Uiterwijk <puiterwi@redhat.com>,
+        Christian Brauner <christian@brauner.io>
+Subject: [RFC v2 0/3] Namespace IMA log entries
+Date:   Wed,  1 Dec 2021 13:20:41 +0000
+Message-Id: <20211201132044.566371-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- adultscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
- mlxlogscore=999 impostorscore=0 bulkscore=0 phishscore=0 clxscore=1011
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112010076
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, 2021-12-01 at 10:23 +0100, Mickaël Salaün wrote:
-> On 30/11/2021 21:27, Florian Weimer wrote:
-> > * Mickaël Salaün:
-> > 
-> >> Primary goal of trusted_for(2)
-> >> ==============================
-> >>
-> >> This new syscall enables user space to ask the kernel: is this file
-> >> descriptor's content trusted to be used for this purpose?  The set of
-> >> usage currently only contains execution, but other may follow (e.g.
-> >> configuration, sensitive data).  If the kernel identifies the file
-> >> descriptor as trustworthy for this usage, user space should then take
-> >> this information into account.  The "execution" usage means that the
-> >> content of the file descriptor is trusted according to the system policy
-> >> to be executed by user space, which means that it interprets the content
-> >> or (try to) maps it as executable memory.
-> > 
-> > I sketched my ideas about “IMA gadgets” here:
-> > 
-> >    IMA gadgets
-> >    <https://www.openwall.com/lists/oss-security/2021/11/30/1>
-> > 
-> > I still don't think the proposed trusted_for interface is sufficient.
-> > The example I gave is a Perl module that does nothing (on its own) when
-> > loaded as a Perl module (although you probably don't want to sign it
-> > anyway, given what it implements), but triggers an unwanted action when
-> > sourced (using .) as a shell script.
-> 
-> The fact that IMA doesn't cover all metadata, file names nor the file 
-> hierarchies is well known and the solution can be implemented with 
-> dm-verity (which has its own drawbacks).
+v2: drop the user namespace uuid and instead add an IMA specific label
+(residing in an opaque IMA structure pointed to by the user_ns) that
+is settable once before use, but if not set reverts to a randomly
+generated uuid.
 
-Thanks, Mickaël, for responding.  I'll go even farther and say that IMA
-wasn't ever meant to protect file metadata.  Another option is EVM,
-which addresses some, but not all of the issues.
+Over the past five years there have been several attempts to namespace
+IMA [1,2,3].  All of them were eventually fairly huge patch series,
+which try to solve every issue and potential issue all at once, making
+them incredibly difficult to review and highly dependent on an array
+of non-IMA features which causes huge upporting difficulty as the
+patch progresses.  Given this, I thought we'd try a different way:
+introduce a minimal namespacing of IMA and try to build on it in
+subsequent patches.
 
-thanks,
+This first patch set namespaces IMA by tying it to the user
+namespace. We're still discussing whether this is a good idea, so I'll
+pass on the justification and note that the only addition is a
+ima_ns_info pointer which points to a structure that has a lifetime
+longer than the namespace, so the whole machinery for managing this
+could be transferred to a different namespace.  Within this pointer is
+a label for the IMA namespace, which has a set API (but no exposure in
+the current patch se) and if the label isn't set before the namespace
+causes an IMA log entry, a uuid is placed into the label.
 
-Mimi
+All this patch set does is add a new template 'ima-ns' which includes
+the namespace label (added by the first patch) in the IMA log.  Using
+uuids gives us probabalistically unique identifiers for all namespaces
+without having to check them for uniqueness.
 
-> 
-> trusted_for is a tool for interpreters to enforce a security policy 
-> centralized by the kernel. The kind of file confusion attacks you are 
-> talking about should be addressed by a system policy. If the mount point 
-> options are not enough to express such policy, then we need to rely on 
-> IMA, SELinux or IPE to reduce the scope of legitimate mapping between 
-> scripts and interpreters.
+Once we have the container being logged, it stands to reason that the
+ima inode cache needs to record one event per namespace per inode
+instead of the one global event per inode, so if I enter the ima
+namespace and execute the same measured command, it will log again
+with the new namespace uuid even if the hash is the same:
+
+ > ls
+ > grep ls /sys/kernel/security/integrity/ima/ascii_runtime_measurements
+10 c70c7b851f83c8c71ee7b508c8468383c0d2c154 ima-ns sha256:1f7f27ef1052e33731c9ff56a36ac3af4437e3f95ad55f6813c320b087b5d356 /usr/bin/ls 6582e360-1354-42b9-a6ef-ee1993d982da
+ > unshare --user -r
+ # ls
+ # exit
+ > grep ls /sys/kernel/security/integrity/ima/ascii_runtime_measurements
+ 10 c70c7b851f83c8c71ee7b508c8468383c0d2c154 ima-ns sha256:1f7f27ef1052e33731c9ff56a36ac3af4437e3f95ad55f6813c320b087b5d356 /usr/bin/ls 6582e360-1354-42b9-a6ef-ee1993d982da
+10 144a73d85e9cf999c4abbc99f3c41e9422c8016e ima-ns sha256:1f7f27ef1052e33731c9ff56a36ac3af4437e3f95ad55f6813c320b087b5d356 /usr/bin/ls e496e384-4133-4d57-b93a-1812b83badf2
+
+Note that this namespacing if the iint cache is in the third patch and
+could be dropped if there's huge opposition.
+
+Some things to note are that the IMA securityfs entries aren't
+virtualized.  This is planned for a follow up patch (so currently the
+admin can't even view the ima log in the container).  Everything
+that's logged goes through the main IMA log and the physical TPM.
+This means that the admin of the physical system can attest to the
+log, but the containers would have to trust the admins attestation of
+their log pieces.  The initial IMA policy is also inherited from the
+physical system and can't currently be changed.
+
+The rough plan of action for follow up patches is
+
+1. Namespace securityfs so container admin can read the IMA files like
+   log which would only show entries related to the container (so only
+   entries generated by the current and all child namespaces) and
+   policy.
+
+2. Add per namespace policies by writing to the policy file in the
+   container.  Obviously implementation of this would have to preserve
+   the security of the system, so the new namespace couldn't stop
+   logging something the physical host required to be logged, but it
+   could add additional classes of things to log.
+
+3. Add the ima keyrings and the ability to appraise inside the container.
+
+There could be other phases beyond this, including possibly optionally
+attaching a vtpm to the container to provide local quotes but this
+should be need driven.
+
+Some non problems of this approach are:
+
+* The continuous growth of the IMA log.  This is already a problem
+  with non-namespaced IMA.  One can argue that the above
+  implementation makes the problem worse, but it is unarguable that if
+  the problem were solved generally it would no logner be an issue for
+  containers.
+
+* attesting to the in-container IMA log.  Given it's being logged
+  through the physical TPM, the physical system owner will have to
+  publish a mechanism for attesting to particular container entries of
+  the log.
+
+[1] https://lore.kernel.org/all/20200818152037.11869-1-krzysztof.struczynski@huawei.com
+[2] https://lore.kernel.org/all/20180511144230.75384-1-stefanb@linux.vnet.ibm.com
+[3] https://lore.kernel.org/all/1494511203-8397-1-git-send-email-guilherme.magalhaes@hpe.com
+
+James
+
+---
+
+James Bottomley (3):
+  userns: add ima_ns_info field containing a settable namespace label
+  ima: show the namespace label in the ima-ns template
+  ima: make the integrity inode cache per namespace
+
+ include/linux/ima.h                       |  15 +-
+ include/linux/user_namespace.h            |   7 +
+ kernel/user.c                             |   1 +
+ kernel/user_namespace.c                   |   6 +
+ security/integrity/iint.c                 |   4 +-
+ security/integrity/ima/Kconfig            |   6 +-
+ security/integrity/ima/Makefile           |   2 +-
+ security/integrity/ima/ima.h              |  26 +++-
+ security/integrity/ima/ima_api.c          |   7 +-
+ security/integrity/ima/ima_main.c         |  21 +--
+ security/integrity/ima/ima_ns.c           | 169 ++++++++++++++++++++++
+ security/integrity/ima/ima_policy.c       |   2 +-
+ security/integrity/ima/ima_template.c     |   6 +-
+ security/integrity/ima/ima_template_lib.c |  17 +++
+ security/integrity/ima/ima_template_lib.h |   4 +
+ security/integrity/integrity.h            |  11 +-
+ 16 files changed, 284 insertions(+), 20 deletions(-)
+ create mode 100644 security/integrity/ima/ima_ns.c
+
+-- 
+2.33.0
 
