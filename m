@@ -2,150 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29148464A7C
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 10:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F306F464B1A
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 Dec 2021 10:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbhLAJZq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 1 Dec 2021 04:25:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S232736AbhLAKC4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 1 Dec 2021 05:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242126AbhLAJZo (ORCPT
+        with ESMTP id S1348380AbhLAKCu (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:25:44 -0500
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC18AC06174A
-        for <linux-integrity@vger.kernel.org>; Wed,  1 Dec 2021 01:22:23 -0800 (PST)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4J3ts80dGnzMqdLy;
-        Wed,  1 Dec 2021 10:22:20 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4J3ts25XFnzlhKSV;
-        Wed,  1 Dec 2021 10:22:14 +0100 (CET)
-Message-ID: <4a88f95b-d54d-ad70-fb49-e3c3f1d097f2@digikod.net>
-Date:   Wed, 1 Dec 2021 10:23:42 +0100
-MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
+        Wed, 1 Dec 2021 05:02:50 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F37C061574
+        for <linux-integrity@vger.kernel.org>; Wed,  1 Dec 2021 01:59:29 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1msMOL-0000TW-VX; Wed, 01 Dec 2021 10:59:09 +0100
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1msMOI-00Ccql-PN; Wed, 01 Dec 2021 10:59:06 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     andreas@rammhold.de, James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20211115185304.198460-1-mic@digikod.net>
- <87sfvd8k4c.fsf@oldenburg.str.redhat.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
-In-Reply-To: <87sfvd8k4c.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: [PATCH v4] KEYS: trusted: Fix trusted key backends when building as module
+Date:   Wed,  1 Dec 2021 10:59:00 +0100
+Message-Id: <20211201095900.3009225-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+From: Andreas Rammhold <andreas@rammhold.de>
 
-On 30/11/2021 21:27, Florian Weimer wrote:
-> * Mickaël Salaün:
-> 
->> Primary goal of trusted_for(2)
->> ==============================
->>
->> This new syscall enables user space to ask the kernel: is this file
->> descriptor's content trusted to be used for this purpose?  The set of
->> usage currently only contains execution, but other may follow (e.g.
->> configuration, sensitive data).  If the kernel identifies the file
->> descriptor as trustworthy for this usage, user space should then take
->> this information into account.  The "execution" usage means that the
->> content of the file descriptor is trusted according to the system policy
->> to be executed by user space, which means that it interprets the content
->> or (try to) maps it as executable memory.
-> 
-> I sketched my ideas about “IMA gadgets” here:
-> 
->    IMA gadgets
->    <https://www.openwall.com/lists/oss-security/2021/11/30/1>
-> 
-> I still don't think the proposed trusted_for interface is sufficient.
-> The example I gave is a Perl module that does nothing (on its own) when
-> loaded as a Perl module (although you probably don't want to sign it
-> anyway, given what it implements), but triggers an unwanted action when
-> sourced (using .) as a shell script.
+Before this commit the kernel could end up with no trusted key sources
+even though both of the currently supported backends (TPM and TEE) were
+compiled as modules. This manifested in the trusted key type not being
+registered at all.
 
-The fact that IMA doesn't cover all metadata, file names nor the file 
-hierarchies is well known and the solution can be implemented with 
-dm-verity (which has its own drawbacks).
+When checking if a CONFIG_… preprocessor variable is defined we only
+test for the builtin (=y) case and not the module (=m) case. By using
+the IS_REACHABLE() macro we do test for both cases.
 
-trusted_for is a tool for interpreters to enforce a security policy 
-centralized by the kernel. The kind of file confusion attacks you are 
-talking about should be addressed by a system policy. If the mount point 
-options are not enough to express such policy, then we need to rely on 
-IMA, SELinux or IPE to reduce the scope of legitimate mapping between 
-scripts and interpreters.
+Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+Signed-off-by: Andreas Rammhold <andreas@rammhold.de>
+Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
+Timeline so far:
+  - 2021-05-09: Regression hits mainline with v5.13-rc1
+  - 2021-07-16: Issue reported. v1 of this patch sent out
+  - 2021-07-21: Ahmad sends out alternative patch to fix issue
+  - 2021-07-27: Jarkko (Maintainer) NACKs Ahmad's patch because of scope
+  - 2021-07-29: v2 with fixes sent out
+  - 2021-07-29: Jarkko gives his Reviewed-by and requests one more v3
+  - 2021-07-31: v3 sent out
+  - 2021-09-13: Pinged, no maintainer feedback
+  - 2021-09-27: Pinged, Mimi (Maintainer) comments due to to misunderstanding.
+                Question about why this is not picked up ignored
+  - 2021-10-11: Pinged, no maintainer feedback
+  - 2021-11-01: Resend with timeline, but dropped R-b's, no maintainer feedback
+  - 2021-12-01: This resend with timeline and tags
 
-> 
->> @usage identifies the user space usage intended for @fd: only
->> TRUSTED_FOR_EXECUTION for now, but trusted_for_usage could be extended
->> to identify other usages (e.g. configuration, sensitive data).
-> 
-> We would need TRUSTED_FOR_EXECUTION_BY_BASH,
-> TRUSTED_FOR_EXECUTION_BY_PERL, etc.  I'm not sure that actually works.
+v3 -> v4:
+  * Add my Tested-by
+  * Add Reviewed-by's missed during v3 RESEND
+  * Update timeline and resent in agreement with Andreas
+v3 -> v3 RESEND:
+  * Add timeline
+v2 -> v3:
+  * Fixed patch formatting
+v1 -> v2:
+  * Fixed commit message
+  * Switched from IS_DEFINED() to IS_REACHABLE()
+---
+ security/keys/trusted-keys/trusted_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Well, this doesn't scale and that is the reason trusted_for usage is 
-more generic. The kernel already has all the information required to 
-identify scripts and interpreters types. We don't need to make the user 
-space interface more complex by listing all types. The kernel only miss 
-the semantic of how the intrepreter wants to interpret files, and that 
-is the purpose of trusted_for. LSMs are designed to define complex 
-policies and trusted_for enables them to extend such policies.
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index d5c891d8d353..5b35f1b87644 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+ MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+ 
+ static const struct trusted_key_source trusted_key_sources[] = {
+-#if defined(CONFIG_TCG_TPM)
++#if IS_REACHABLE(CONFIG_TCG_TPM)
+ 	{ "tpm", &trusted_key_tpm_ops },
+ #endif
+-#if defined(CONFIG_TEE)
++#if IS_REACHABLE(CONFIG_TEE)
+ 	{ "tee", &trusted_key_tee_ops },
+ #endif
+ };
+-- 
+2.30.2
 
-> 
-> Caller process context does not work because we have this confusion
-> internally between glibc's own use (for the dynamic linker
-> configuration), and for loading programs/shared objects (there seems to
-> be a corner case where you can execute arbitrary code even without
-> executable mappings in the ELF object), and the script interpreter
-> itself (the primary target for trusted_for).
-
-The current use case for trusted_for is script interpreters, but we can 
-extend the trusted_for_usage enum with new usages like TRUSTED_FOR_LINK 
-and others. I'm not convinced glibc should be treated differently than 
-other executable code that want to load a shared library, but it is a 
-discussion we can have when trusted_for will be in mainline and someone 
-will propose a new usage. ;)
-
-> 
-> But for generating auditing events, trusted_for seems is probably quite
-> helpful.
-
-Indeed, it enables to add semantic to audit events.
