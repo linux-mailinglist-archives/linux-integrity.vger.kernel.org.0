@@ -2,206 +2,214 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B48466434
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 14:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C56466468
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 14:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240394AbhLBNEp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Dec 2021 08:04:45 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:39970 "EHLO
+        id S1346770AbhLBNVy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Dec 2021 08:21:54 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:43604 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbhLBNEp (ORCPT
+        with ESMTP id S239533AbhLBNVx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Dec 2021 08:04:45 -0500
+        Thu, 2 Dec 2021 08:21:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 36D44CE22BD;
-        Thu,  2 Dec 2021 13:01:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4157FC00446;
-        Thu,  2 Dec 2021 13:01:14 +0000 (UTC)
-Date:   Thu, 2 Dec 2021 14:01:10 +0100
+        by sin.source.kernel.org (Postfix) with ESMTPS id EBB5BCE1ED3;
+        Thu,  2 Dec 2021 13:18:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCEA2C00446;
+        Thu,  2 Dec 2021 13:18:21 +0000 (UTC)
+Date:   Thu, 2 Dec 2021 14:18:18 +0100
 From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
         serge@hallyn.com, containers@lists.linux.dev,
         dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
         krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
         mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Denis Semakin <denis.semakin@huawei.com>
-Subject: Re: [RFC 17/20] ima: Use integrity_admin_ns_capable() to check
- corresponding capability
-Message-ID: <20211202130110.ij5h3o6mcbqscjqh@wittgenstein>
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [RFC 20/20] ima: Setup securityfs_ns for IMA namespace
+Message-ID: <20211202131818.ygzsywwfu4rfcbuy@wittgenstein>
 References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
- <20211130160654.1418231-18-stefanb@linux.ibm.com>
- <7c751783b28766412f158e5ca074748ed18070bd.camel@linux.ibm.com>
- <34085058-ff5f-c28e-c716-6f4fa71747a3@linux.ibm.com>
- <4b12309289c6a51991c5062fed0fde03e0a6f703.camel@linux.ibm.com>
- <20211202125955.qcmmnblit3nmatdo@wittgenstein>
+ <20211130160654.1418231-21-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211202125955.qcmmnblit3nmatdo@wittgenstein>
+In-Reply-To: <20211130160654.1418231-21-stefanb@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 01:59:55PM +0100, Christian Brauner wrote:
-> On Wed, Dec 01, 2021 at 02:29:09PM -0500, James Bottomley wrote:
-> > On Wed, 2021-12-01 at 12:35 -0500, Stefan Berger wrote:
-> > > On 12/1/21 11:58, James Bottomley wrote:
-> > > > On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
-> > > > > From: Denis Semakin <denis.semakin@huawei.com>
-> > > > > 
-> > > > > Use integrity_admin_ns_capable() to check corresponding
-> > > > > capability to allow read/write IMA policy without CAP_SYS_ADMIN
-> > > > > but with CAP_INTEGRITY_ADMIN.
-> > > > > 
-> > > > > Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
-> > > > > ---
-> > > > >   security/integrity/ima/ima_fs.c | 2 +-
-> > > > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/security/integrity/ima/ima_fs.c
-> > > > > b/security/integrity/ima/ima_fs.c
-> > > > > index fd2798f2d224..6766bb8262f2 100644
-> > > > > --- a/security/integrity/ima/ima_fs.c
-> > > > > +++ b/security/integrity/ima/ima_fs.c
-> > > > > @@ -393,7 +393,7 @@ static int ima_open_policy(struct inode
-> > > > > *inode,
-> > > > > struct file *filp)
-> > > > >   #else
-> > > > >   		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
-> > > > >   			return -EACCES;
-> > > > > -		if (!ns_capable(ns->user_ns, CAP_SYS_ADMIN))
-> > > > > +		if (!integrity_admin_ns_capable(ns->user_ns))
-> > > > so this one is basically replacing what you did in RFC 16/20, which
-> > > > seems a little redundant.
-> > > > 
-> > > > The question I'd like to ask is: is there still a reason for
-> > > > needing CAP_INTEGRITY_ADMIN?  My thinking is that now IMA is pretty
-> > > > much tied to requiring a user (and a mount, because of
-> > > > securityfs_ns) namespace, there might not be a pressing need for an
-> > > > admin capability separated from CAP_SYS_ADMIN because the owner of
-> > > > the user namespace passes the ns_capable(..., CAP_SYS_ADMIN)
-> > > > check.  The rationale in
-> > > 
-> > > Casey suggested using CAP_MAC_ADMIN, which I think would also work.
-> > > 
-> > >      CAP_MAC_ADMIN (since Linux 2.6.25)
-> > >                Allow MAC configuration or state changes. Implemented
-> > > for
-> > >                the Smack Linux Security Module (LSM).
-> > > 
-> > > 
-> > > Down the road I think we should cover setting file extended
-> > > attributes with the same capability as well for when a user signs
-> > > files or installs packages with file signatures.  A container runtime
-> > > could hold CAP_SYS_ADMIN while setting up a container and mounting
-> > > filesystems and drop it for the first process started there. Since we
-> > > are using the user namespace to spawn an IMA namespace, we would then
-> > > require CAP_SYSTEM_ADMIN to be left available so that the user can do
-> > > IMA related stuff in the container (set or append to the policy,
-> > > write file signatures). I am not sure whether that should be the case
-> > > or rather give the user something finer grained, such as
-> > > CAP_MAC_ADMIN. So, it's about granularity...
-> > 
-> > It's possible ... any orchestration system that doesn't enter a user
-> > namespace has to strictly regulate capabilities.   I'm probably biased
-> > because I always use a user_ns so I never really had to mess with
-> > capabilities.
-> > 
-> > > > https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
-> > > > 
-> > > > Is effectively "because CAP_SYS_ADMIN is too powerful" but that's
-> > > > no longer true of the user namespace owner.  It only passes the
-> > > > ns_capable() check not the capable() one, so while it does get
-> > > > CAP_SYS_ADMIN, it can only use it in a few situations which
-> > > > represent quite a power reduction already.
-> > > 
-> > > At least docker containers drop CAP_SYS_ADMIN.
-> > 
-> > Well docker doesn't use the user_ns.  But even given that,
-> > CAP_SYS_ADMIN is always dropped for most container systems.  What
-> > happens when you enter a user namespace is the ns_capable( ...,
-> > CAP_SYS_ADMIN) check returns true if you're the owner of the user_ns,
-> > in the same way it would for root.  So effectively entering a user
-> > namespace without CAP_SYS_ADMIN but mapping the owner id to 0 (what
-> > unshare -r --user does) gives you back a form of CAP_SYS_ADMIN that
-> > responds only in the places in the kernel that have a ns_capable()
-> > check instead of a capable() one (most of the places you list below). 
-> > This is the principle of how unprivileged containers actually work ...
-> > and the source of some of our security problems if you get back an
-> > ability to do something you shouldn't be allowed to do as an
-> > unprivileged user.
-> > 
-> > >  I am not sure what the decision was based on but probably they don't
-> > > want to give the user what is not absolutely necessary, but usage of
-> > > user namespaces (with IMA namespaces) would kind of force it to be
-> > > available then to do IMA-related stuff ...
-> > > 
-> > > Following this man page here 
-> > > https://man7.org/linux/man-pages/man7/user_namespaces.7.html
-> > > 
-> > > CAP_SYS_ADMIN in a user namespace is about
-> > > 
-> > > - bind-mounting filesystems
-> > > 
-> > > - mounting /proc filesystems
-> > > 
-> > > - creating nested user namespaces
-> > > 
-> > > - configuring UTS namespace
-> > > 
-> > > - configuring whether setgroups() can be used
-> > > 
-> > > - usage of setns()
-> > > 
-> > > 
-> > > Do we want to add '- only way of *setting up* IMA related stuff' to
-> > > this list?
-> > 
-> > I don't see why not, but other container people should weigh in
-> > because, as I said, I mostly use the user namespace and unprivileged
-> > containers and don't bother with capabilities.
+On Tue, Nov 30, 2021 at 11:06:54AM -0500, Stefan Berger wrote:
+> Setup securityfs_ns with symlinks, directories, and files for IMA
+> namespacing support. The same directory structure that IMA uses on the
+> host is also created for the namespacing case.
 > 
-> There are very few scenarios where dropping capabilities in an
-> unprivileged container makes sense. In a lot of other scenarios it is
-> just a misunderstanding of the meaning of capabilities and their
-> relationship to user namespaces. Usually, granting a full set of
-> capabilities to the payload of an unprivigileged container is the right
-> thing to do. All things that are properly namespaced will check
-> capabilities in the relevant user namespace. Those that aren't will
-> check them against the initial user namespaces.
+> Increment the user namespace's refcount_teardown value by '1' once
+> securityfs_ns has been successfully setup since the initialization of the
+> filesystem causes an additional reference to the user namespace to be
+> taken. The early teardown function will delete the file system and release
+> the additional reference.
 > 
-> But I do think the question of whether or not ima should go into
-> cap_sys_admin is more a question of capability semantics then it is in
-> how exactly ima is namespaced. We do have agreed before that overloading
-> cap_sys_admin further isn't ideal. Often we end up rectifying that
-> mistake later. For example, how we moved stuff like criu, bpf, and perf
-> to their own capability. Now we're left with stuff like:
+> The securityfs_ns file and directory ownerships cannot be set when the
+> filesystem is setup since at this point the user namespace has not been
+> configured yet by the user and therefore the ownership mappings are not
+> available, yet. Therefore, adjust the file and directory ownerships when
+> an inode's function for determining the permissions of a file or directory
+> is accessed.
 > 
-> static inline bool perfmon_capable(void)
-> {
-> 	return capable(CAP_PERFMON) || capable(CAP_SYS_ADMIN);
-> }
+> This filesystem can now be mounted as follows:
 > 
-> static inline bool bpf_capable(void)
-> {
-> 	return capable(CAP_BPF) || capable(CAP_SYS_ADMIN);
-> }
+> mount -t securityfs_ns /sys/kernel/security/ /sys/kernel/security/
 > 
-> static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
-> {
-> 	return ns_capable(ns, CAP_CHECKPOINT_RESTORE) ||
-> 		ns_capable(ns, CAP_SYS_ADMIN);
-> }
+> The following directories, symlinks, and files are then available.
 > 
-> for the sake of adhering to legacy behavior. I think we can skip over
-> that mistake and introduce cap_sys_integrity.
+> $ ls -l sys/kernel/security/
+> total 0
+> lr--r--r--. 1 nobody nobody 0 Nov 27 06:44 ima -> integrity/ima
+> drwxr-xr-x. 3 nobody nobody 0 Nov 27 06:44 integrity
+> 
+> $ ls -l sys/kernel/security/ima/
+> total 0
+> -r--r-----. 1 root root 0 Nov 27 06:44 ascii_runtime_measurements
+> -r--r-----. 1 root root 0 Nov 27 06:44 binary_runtime_measurements
+> -rw-------. 1 root root 0 Nov 27 06:44 policy
+> -r--r-----. 1 root root 0 Nov 27 06:44 runtime_measurements_count
+> -r--r-----. 1 root root 0 Nov 27 06:44 violations
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  include/linux/ima.h                      |  17 +++
+>  security/integrity/ima/ima.h             |   2 +
+>  security/integrity/ima/ima_fs.c          | 178 ++++++++++++++++++++++-
+>  security/integrity/ima/ima_init_ima_ns.c |   6 +-
+>  security/integrity/ima/ima_ns.c          |   4 +-
+>  5 files changed, 203 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index fe08919df326..a2c5e516f706 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -221,6 +221,18 @@ struct ima_h_table {
+>  	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
+>  };
+>  
+> +enum {
+> +	IMAFS_DENTRY_INTEGRITY_DIR = 0,
+> +	IMAFS_DENTRY_DIR,
+> +	IMAFS_DENTRY_SYMLINK,
+> +	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
+> +	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
+> +	IMAFS_DENTRY_RUNTIME_MEASUREMENTS_COUNT,
+> +	IMAFS_DENTRY_VIOLATIONS,
+> +	IMAFS_DENTRY_IMA_POLICY,
+> +	IMAFS_DENTRY_LAST
+> +};
+> +
+>  struct ima_namespace {
+>  	struct kref kref;
+>  	struct user_namespace *user_ns;
+> @@ -267,6 +279,11 @@ struct ima_namespace {
+>  	struct mutex ima_write_mutex;
+>  	unsigned long ima_fs_flags;
+>  	int valid_policy;
+> +
+> +	struct dentry *dentry[IMAFS_DENTRY_LAST];
+> +	struct vfsmount *mount;
+> +	int mount_count;
+> +	bool file_ownership_fixes_done;
+>  };
+>  
+>  extern struct ima_namespace init_ima_ns;
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index bb9763cd5fb1..9bcd71bb716c 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -139,6 +139,8 @@ struct ns_status {
+>  /* Internal IMA function definitions */
+>  int ima_init(void);
+>  int ima_fs_init(void);
+> +int ima_fs_ns_init(struct ima_namespace *ns);
+> +void ima_fs_ns_free(struct ima_namespace *ns);
+>  int ima_add_template_entry(struct ima_namespace *ns,
+>  			   struct ima_template_entry *entry, int violation,
+>  			   const char *op, struct inode *inode,
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+> index 6766bb8262f2..9a14be520268 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/parser.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/ima.h>
+> +#include <linux/namei.h>
+>  
+>  #include "ima.h"
+>  
+> @@ -436,8 +437,13 @@ static int ima_release_policy(struct inode *inode, struct file *file)
+>  
+>  	ima_update_policy(ns);
+>  #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
+> -	securityfs_remove(ima_policy);
+> -	ima_policy = NULL;
+> +	if (ns == &init_ima_ns) {
+> +		securityfs_remove(ima_policy);
+> +		ima_policy = NULL;
+> +	} else {
+> +		securityfs_ns_remove(ns->dentry[IMAFS_DENTRY_POLICY]);
+> +		ns->dentry[IMAFS_DENTRY_POLICY] = NULL;
+> +	}
+>  #elif defined(CONFIG_IMA_WRITE_POLICY)
+>  	clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
+>  #elif defined(CONFIG_IMA_READ_POLICY)
+> @@ -509,3 +515,171 @@ int __init ima_fs_init(void)
+>  	securityfs_remove(ima_policy);
+>  	return -1;
+>  }
+> +
+> +/*
+> + * Fix the ownership (uid/gid) of the dentry's that couldn't be set at the
+> + * time of their creation because the user namespace wasn't configured, yet.
+> + */
+> +static void ima_fs_ns_fixup_uid_gid(struct ima_namespace *ns)
+> +{
+> +	struct inode *inode;
+> +	size_t i;
+> +
+> +	if (ns->file_ownership_fixes_done ||
+> +	    ns->user_ns->uid_map.nr_extents == 0)
+> +		return;
+> +
+> +	ns->file_ownership_fixes_done = true;
+> +	for (i = 0; i < IMAFS_DENTRY_LAST; i++) {
+> +		if (!ns->dentry[i])
+> +			continue;
+> +		inode = ns->dentry[i]->d_inode;
+> +		inode->i_uid = make_kuid(ns->user_ns, 0);
+> +		inode->i_gid = make_kgid(ns->user_ns, 0);
+> +	}
+> +}
+> +
+> +/* Fix the permissions when a file is opened */
+> +int ima_fs_ns_permission(struct user_namespace *mnt_userns, struct inode *inode,
+> +			 int mask)
+> +{
+> +	ima_fs_ns_fixup_uid_gid(get_current_ns());
 
-(Or under CAP_MAC_ADMIN as suggested elsewhere in the thread as I saw
-just now.)
+As noted later in the thread if this is required it means something is
+buggy in the current code. That shouldn't be needed.
+
+I think there's a more fundamental issue here. The correct way to do all
+this would be to restructure securityfs at least how it works inside of
+user namespaces. Currently, securityfs works like debugfs: a single
+shared superblock that is pinned by each new inode that is created via:
+
+	simple_pin_fs(&fs_type, &mount, &mount_count);
+	simple_release_fs(&mount, &mount_count);
+
+and each mount surfaces the same superblock. Ideally making securityfs
+mountable inside of user namespaces should get you a new superblock.
+Functions that create files for the ima ns would then be called inside
+->fill_super etc.
