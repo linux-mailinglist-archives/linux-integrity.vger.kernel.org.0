@@ -2,198 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34867465E8B
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 08:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52436465E9D
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 08:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355795AbhLBHT3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Dec 2021 02:19:29 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4188 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344823AbhLBHT3 (ORCPT
+        id S1345495AbhLBHYn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Dec 2021 02:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345415AbhLBHYm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Dec 2021 02:19:29 -0500
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J4RzK1H0jz689SN;
-        Thu,  2 Dec 2021 15:14:37 +0800 (CST)
-Received: from lhreml733-chm.china.huawei.com (10.201.108.84) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 08:16:04 +0100
-Received: from lhreml738-chm.china.huawei.com (10.201.108.188) by
- lhreml733-chm.china.huawei.com (10.201.108.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 07:16:03 +0000
-Received: from lhreml738-chm.china.huawei.com ([10.201.108.188]) by
- lhreml738-chm.china.huawei.com ([10.201.108.188]) with mapi id
- 15.01.2308.020; Thu, 2 Dec 2021 07:16:03 +0000
-From:   Denis Semakin <denis.semakin@huawei.com>
-To:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-CC:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
-        "containers@lists.linux.dev" <containers@lists.linux.dev>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "mpeters@redhat.com" <mpeters@redhat.com>,
-        "lhinds@redhat.com" <lhinds@redhat.com>,
-        "lsturman@redhat.com" <lsturman@redhat.com>,
-        "puiterwi@redhat.com" <puiterwi@redhat.com>,
-        "jamjoom@us.ibm.com" <jamjoom@us.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "rgb@redhat.com" <rgb@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>
-Subject: RE: [RFC 17/20] ima: Use integrity_admin_ns_capable() to check
- corresponding capability
-Thread-Topic: [RFC 17/20] ima: Use integrity_admin_ns_capable() to check
- corresponding capability
-Thread-Index: AQHX5gRi8NAgyQQI8Uudk0DVH1kRuqwd3TOAgAAKigCAAB+mgIAAvWww
-Date:   Thu, 2 Dec 2021 07:16:03 +0000
-Message-ID: <70960f70d44840789b5f7a847116281e@huawei.com>
-References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
-         <20211130160654.1418231-18-stefanb@linux.ibm.com>
-         <7c751783b28766412f158e5ca074748ed18070bd.camel@linux.ibm.com>
-         <34085058-ff5f-c28e-c716-6f4fa71747a3@linux.ibm.com>
- <4b12309289c6a51991c5062fed0fde03e0a6f703.camel@linux.ibm.com>
-In-Reply-To: <4b12309289c6a51991c5062fed0fde03e0a6f703.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.122.133.14]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 2 Dec 2021 02:24:42 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1409C061574;
+        Wed,  1 Dec 2021 23:21:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rqO5y6tHMaMK9eTexEF756VFsX+GgPuXTh5uGfxFaBk=; b=rCceHGLVni7wC5PsXHlpbGqfg3
+        Gae/8XyFn8y4oyg+Qw5og/bCu3s/+TNzPPqDQem4/nhBhWAtOC2vyqMKBN/6Xc+/rSVQEAiVWF7mz
+        koQPaa/bLFZbc5KJwRwGPUSoBqP6HfJhEZtzXVyt060HryAfkt/pKwqKSqfn6Oi8bitBmO7e62qSa
+        ojk+kcXmsi5Rjx17eX/f1OFOBe0cHtek9rXkUXs5jzEB3mTEfInnWXhtcR57vkB9AlNyb7SGsiYml
+        EoHpJHoWf6svwRQPdOZfr+ILiS8MktFI27w5MEqskeVR8MFTXyKf88CtE9kpLnax+ilGu1kTkLGlq
+        bFtKQQRw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1msgOj-00BArf-A8; Thu, 02 Dec 2021 07:20:53 +0000
+Date:   Wed, 1 Dec 2021 23:20:53 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     deven.desai@linux.microsoft.com, corbet@lwn.net, axboe@kernel.dk,
+        agk@redhat.com, snitzer@redhat.com, ebiggers@kernel.org,
+        tytso@mit.edu, paul@paul-moore.com, eparis@redhat.com,
+        jmorris@namei.org, serge@hallyn.com, jannh@google.com,
+        dm-devel@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-audit@redhat.com,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, tusharsu@linux.microsoft.com
+Subject: Re: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Message-ID: <Yahz1SYRG1CQIh0z@infradead.org>
+References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
+ <20211201163708.3578176-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201163708.3578176-1-roberto.sassu@huawei.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-T2J2aW91c2x5IHRoZSBtYWluIGdvYWwgYnkgYWRkaW5nIG5ldyBjYXBhYmlsaXR5IHdhcyB0byBh
-dm9pZCB0aGUgdXNpbmcgQ0FQX1NZU19BRE1JTiAoSU9XIHN1cGVydXNlcikNCnRvIG1hbmFnZSBJ
-TUEgc3R1ZmYsIHRoYXQgd2FzIGFsc28gYWJvdXQgc2VjdXJpdHkgZ3JhbnVsYXJpdHkuICBJdCdz
-IGdvb2QgaWYgQ0FQX01BQ19BRE1JTiB3aWxsIGJlIGVub3VnaCBmb3IgZG9pbmcgSU1BIHJlbGF0
-ZWQgdGhpbmdzICh3cml0ZSBwb2xpY2llcyBhbmQgZXh0ZW5kZWQgYXR0cmlidXRlcykuDQpCdXQg
-Zm9yIG1lIGl0J3MgYSBsaXR0bGUgYml0IHVuY2xlYXIgaG93IHRvIGRlYWwgd2l0aCB1bnByaXZp
-bGVnZWQgdXNlcnM6IGFzc3VtaW5nIHRoZXJlJ3Mgbm8gQ0FQX0lOVEVHUklUWV9BRE1JTiBidXQg
-Q0FQX01BQ19BRE1JTiB3YXMgc2V0IHVwLCBzbyBpbiB0aGlzIGNhc2UgdXNlciBjYW4gY29udHJv
-bCBhbnkgTFNNIChzZUxpbnV4LCBTTUFDSywgZXRjKSBhbmQgSU1BIChwb2xpY2llcywgeGF0dHJz
-KS4gV2hhdCBpZiAuLiBmb3Igc29tZSBzeXN0ZW1zIHRoZXJlIHdvdWxkIGJlIHNvbWUgcmVxdWly
-ZW1lbnRzIHRoYXQgd2lsbCBhbGxvdyB0byB0b3VjaCBMU00gYnV0IGRvIG5vdCBjaGFuZ2UgYW55
-IElNQSAoaW50ZWdyaXR5KSB0aGluZ3M/IEEgdXNlciBjYW4gc2V0IHVwIGFueSBJTUEgcG9saWN5
-IChpdCdzIGFib3V0IHRoZSBzeXN0ZW0gaW50ZWdyaXR5KSwgbW9kaWZ5IElNQSByZWxhdGVkIHhh
-dHRycyBidXQgaXQncyBmb3JiaWRkZW4gdG8gY2hhbmdlIHNlTGludXggcG9saWNpZXMgYW5kIGUu
-Zy4gU01BQ0sgbGFiZWxzLi4uIE1heSBiZSBpdCdzIHVucmVhbCBzY2VuYXJpbyBvZiBjb3Vyc2Uu
-Li4gYnV0IEkgZ3Vlc3MgaXQncyBub3QgMTAwJSBpbXBvc3NpYmxlLg0KDQpCZXN0IHJlZ2FyZHMs
-DQpEZW5pcw0KDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBKYW1lcyBCb3R0
-b21sZXkgW21haWx0bzpqZWpiQGxpbnV4LmlibS5jb21dIA0KU2VudDogV2VkbmVzZGF5LCBEZWNl
-bWJlciAxLCAyMDIxIDEwOjI5IFBNDQpUbzogU3RlZmFuIEJlcmdlciA8c3RlZmFuYkBsaW51eC5p
-Ym0uY29tPjsgbGludXgtaW50ZWdyaXR5QHZnZXIua2VybmVsLm9yZw0KQ2M6IHpvaGFyQGxpbnV4
-LmlibS5jb207IHNlcmdlQGhhbGx5bi5jb207IGNocmlzdGlhbi5icmF1bmVyQHVidW50dS5jb207
-IGNvbnRhaW5lcnNAbGlzdHMubGludXguZGV2OyBkbWl0cnkua2FzYXRraW5AZ21haWwuY29tOyBl
-YmllZGVybUB4bWlzc2lvbi5jb207IEtyenlzenRvZiBTdHJ1Y3p5bnNraSA8a3J6eXN6dG9mLnN0
-cnVjenluc2tpQGh1YXdlaS5jb20+OyBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdl
-aS5jb20+OyBtcGV0ZXJzQHJlZGhhdC5jb207IGxoaW5kc0ByZWRoYXQuY29tOyBsc3R1cm1hbkBy
-ZWRoYXQuY29tOyBwdWl0ZXJ3aUByZWRoYXQuY29tOyBqYW1qb29tQHVzLmlibS5jb207IGxpbnV4
-LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IHBhdWxAcGF1bC1tb29yZS5jb207IHJnYkByZWRoYXQu
-Y29tOyBsaW51eC1zZWN1cml0eS1tb2R1bGVAdmdlci5rZXJuZWwub3JnOyBqbW9ycmlzQG5hbWVp
-Lm9yZzsgRGVuaXMgU2VtYWtpbiA8ZGVuaXMuc2VtYWtpbkBodWF3ZWkuY29tPg0KU3ViamVjdDog
-UmU6IFtSRkMgMTcvMjBdIGltYTogVXNlIGludGVncml0eV9hZG1pbl9uc19jYXBhYmxlKCkgdG8g
-Y2hlY2sgY29ycmVzcG9uZGluZyBjYXBhYmlsaXR5DQoNCk9uIFdlZCwgMjAyMS0xMi0wMSBhdCAx
-MjozNSAtMDUwMCwgU3RlZmFuIEJlcmdlciB3cm90ZToNCj4gT24gMTIvMS8yMSAxMTo1OCwgSmFt
-ZXMgQm90dG9tbGV5IHdyb3RlOg0KPiA+IE9uIFR1ZSwgMjAyMS0xMS0zMCBhdCAxMTowNiAtMDUw
-MCwgU3RlZmFuIEJlcmdlciB3cm90ZToNCj4gPiA+IEZyb206IERlbmlzIFNlbWFraW4gPGRlbmlz
-LnNlbWFraW5AaHVhd2VpLmNvbT4NCj4gPiA+IA0KPiA+ID4gVXNlIGludGVncml0eV9hZG1pbl9u
-c19jYXBhYmxlKCkgdG8gY2hlY2sgY29ycmVzcG9uZGluZyBjYXBhYmlsaXR5IA0KPiA+ID4gdG8g
-YWxsb3cgcmVhZC93cml0ZSBJTUEgcG9saWN5IHdpdGhvdXQgQ0FQX1NZU19BRE1JTiBidXQgd2l0
-aCANCj4gPiA+IENBUF9JTlRFR1JJVFlfQURNSU4uDQo+ID4gPiANCj4gPiA+IFNpZ25lZC1vZmYt
-Ynk6IERlbmlzIFNlbWFraW4gPGRlbmlzLnNlbWFraW5AaHVhd2VpLmNvbT4NCj4gPiA+IC0tLQ0K
-PiA+ID4gICBzZWN1cml0eS9pbnRlZ3JpdHkvaW1hL2ltYV9mcy5jIHwgMiArLQ0KPiA+ID4gICAx
-IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gPiA+IA0KPiA+
-ID4gZGlmZiAtLWdpdCBhL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX2ZzLmMgDQo+ID4gPiBi
-L3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX2ZzLmMgaW5kZXggZmQyNzk4ZjJkMjI0Li42NzY2
-YmI4MjYyZjIgDQo+ID4gPiAxMDA2NDQNCj4gPiA+IC0tLSBhL3NlY3VyaXR5L2ludGVncml0eS9p
-bWEvaW1hX2ZzLmMNCj4gPiA+ICsrKyBiL3NlY3VyaXR5L2ludGVncml0eS9pbWEvaW1hX2ZzLmMN
-Cj4gPiA+IEBAIC0zOTMsNyArMzkzLDcgQEAgc3RhdGljIGludCBpbWFfb3Blbl9wb2xpY3koc3Ry
-dWN0IGlub2RlIA0KPiA+ID4gKmlub2RlLCBzdHJ1Y3QgZmlsZSAqZmlscCkNCj4gPiA+ICAgI2Vs
-c2UNCj4gPiA+ICAgCQlpZiAoKGZpbHAtPmZfZmxhZ3MgJiBPX0FDQ01PREUpICE9IE9fUkRPTkxZ
-KQ0KPiA+ID4gICAJCQlyZXR1cm4gLUVBQ0NFUzsNCj4gPiA+IC0JCWlmICghbnNfY2FwYWJsZShu
-cy0+dXNlcl9ucywgQ0FQX1NZU19BRE1JTikpDQo+ID4gPiArCQlpZiAoIWludGVncml0eV9hZG1p
-bl9uc19jYXBhYmxlKG5zLT51c2VyX25zKSkNCj4gPiBzbyB0aGlzIG9uZSBpcyBiYXNpY2FsbHkg
-cmVwbGFjaW5nIHdoYXQgeW91IGRpZCBpbiBSRkMgMTYvMjAsIHdoaWNoIA0KPiA+IHNlZW1zIGEg
-bGl0dGxlIHJlZHVuZGFudC4NCj4gPiANCj4gPiBUaGUgcXVlc3Rpb24gSSdkIGxpa2UgdG8gYXNr
-IGlzOiBpcyB0aGVyZSBzdGlsbCBhIHJlYXNvbiBmb3IgbmVlZGluZyANCj4gPiBDQVBfSU5URUdS
-SVRZX0FETUlOPyAgTXkgdGhpbmtpbmcgaXMgdGhhdCBub3cgSU1BIGlzIHByZXR0eSBtdWNoIA0K
-PiA+IHRpZWQgdG8gcmVxdWlyaW5nIGEgdXNlciAoYW5kIGEgbW91bnQsIGJlY2F1c2Ugb2YNCj4g
-PiBzZWN1cml0eWZzX25zKSBuYW1lc3BhY2UsIHRoZXJlIG1pZ2h0IG5vdCBiZSBhIHByZXNzaW5n
-IG5lZWQgZm9yIGFuIA0KPiA+IGFkbWluIGNhcGFiaWxpdHkgc2VwYXJhdGVkIGZyb20gQ0FQX1NZ
-U19BRE1JTiBiZWNhdXNlIHRoZSBvd25lciBvZiANCj4gPiB0aGUgdXNlciBuYW1lc3BhY2UgcGFz
-c2VzIHRoZSBuc19jYXBhYmxlKC4uLiwgQ0FQX1NZU19BRE1JTikgY2hlY2suICANCj4gPiBUaGUg
-cmF0aW9uYWxlIGluDQo+IA0KPiBDYXNleSBzdWdnZXN0ZWQgdXNpbmcgQ0FQX01BQ19BRE1JTiwg
-d2hpY2ggSSB0aGluayB3b3VsZCBhbHNvIHdvcmsuDQo+IA0KPiAgICAgIENBUF9NQUNfQURNSU4g
-KHNpbmNlIExpbnV4IDIuNi4yNSkNCj4gICAgICAgICAgICAgICAgQWxsb3cgTUFDIGNvbmZpZ3Vy
-YXRpb24gb3Igc3RhdGUgY2hhbmdlcy4gSW1wbGVtZW50ZWQgDQo+IGZvcg0KPiAgICAgICAgICAg
-ICAgICB0aGUgU21hY2sgTGludXggU2VjdXJpdHkgTW9kdWxlIChMU00pLg0KPiANCj4gDQo+IERv
-d24gdGhlIHJvYWQgSSB0aGluayB3ZSBzaG91bGQgY292ZXIgc2V0dGluZyBmaWxlIGV4dGVuZGVk
-IGF0dHJpYnV0ZXMgDQo+IHdpdGggdGhlIHNhbWUgY2FwYWJpbGl0eSBhcyB3ZWxsIGZvciB3aGVu
-IGEgdXNlciBzaWducyBmaWxlcyBvciANCj4gaW5zdGFsbHMgcGFja2FnZXMgd2l0aCBmaWxlIHNp
-Z25hdHVyZXMuICBBIGNvbnRhaW5lciBydW50aW1lIGNvdWxkIA0KPiBob2xkIENBUF9TWVNfQURN
-SU4gd2hpbGUgc2V0dGluZyB1cCBhIGNvbnRhaW5lciBhbmQgbW91bnRpbmcgDQo+IGZpbGVzeXN0
-ZW1zIGFuZCBkcm9wIGl0IGZvciB0aGUgZmlyc3QgcHJvY2VzcyBzdGFydGVkIHRoZXJlLiBTaW5j
-ZSB3ZSANCj4gYXJlIHVzaW5nIHRoZSB1c2VyIG5hbWVzcGFjZSB0byBzcGF3biBhbiBJTUEgbmFt
-ZXNwYWNlLCB3ZSB3b3VsZCB0aGVuIA0KPiByZXF1aXJlIENBUF9TWVNURU1fQURNSU4gdG8gYmUg
-bGVmdCBhdmFpbGFibGUgc28gdGhhdCB0aGUgdXNlciBjYW4gZG8gDQo+IElNQSByZWxhdGVkIHN0
-dWZmIGluIHRoZSBjb250YWluZXIgKHNldCBvciBhcHBlbmQgdG8gdGhlIHBvbGljeSwgd3JpdGUg
-DQo+IGZpbGUgc2lnbmF0dXJlcykuIEkgYW0gbm90IHN1cmUgd2hldGhlciB0aGF0IHNob3VsZCBi
-ZSB0aGUgY2FzZSBvciANCj4gcmF0aGVyIGdpdmUgdGhlIHVzZXIgc29tZXRoaW5nIGZpbmVyIGdy
-YWluZWQsIHN1Y2ggYXMgQ0FQX01BQ19BRE1JTi4gDQo+IFNvLCBpdCdzIGFib3V0IGdyYW51bGFy
-aXR5Li4uDQoNCkl0J3MgcG9zc2libGUgLi4uIGFueSBvcmNoZXN0cmF0aW9uIHN5c3RlbSB0aGF0
-IGRvZXNuJ3QgZW50ZXIgYSB1c2VyDQpuYW1lc3BhY2UgaGFzIHRvIHN0cmljdGx5IHJlZ3VsYXRl
-IGNhcGFiaWxpdGllcy4gICBJJ20gcHJvYmFibHkgYmlhc2VkDQpiZWNhdXNlIEkgYWx3YXlzIHVz
-ZSBhIHVzZXJfbnMgc28gSSBuZXZlciByZWFsbHkgaGFkIHRvIG1lc3Mgd2l0aCBjYXBhYmlsaXRp
-ZXMuDQoNCj4gPiBodHRwczovL2tlcm5zZWMub3JnL3dpa2kvaW5kZXgucGhwL0lNQV9OYW1lc3Bh
-Y2luZ19kZXNpZ25fY29uc2lkZXJhdA0KPiA+IGlvbnMNCj4gPiANCj4gPiBJcyBlZmZlY3RpdmVs
-eSAiYmVjYXVzZSBDQVBfU1lTX0FETUlOIGlzIHRvbyBwb3dlcmZ1bCIgYnV0IHRoYXQncyBubyAN
-Cj4gPiBsb25nZXIgdHJ1ZSBvZiB0aGUgdXNlciBuYW1lc3BhY2Ugb3duZXIuICBJdCBvbmx5IHBh
-c3NlcyB0aGUNCj4gPiBuc19jYXBhYmxlKCkgY2hlY2sgbm90IHRoZSBjYXBhYmxlKCkgb25lLCBz
-byB3aGlsZSBpdCBkb2VzIGdldCANCj4gPiBDQVBfU1lTX0FETUlOLCBpdCBjYW4gb25seSB1c2Ug
-aXQgaW4gYSBmZXcgc2l0dWF0aW9ucyB3aGljaCANCj4gPiByZXByZXNlbnQgcXVpdGUgYSBwb3dl
-ciByZWR1Y3Rpb24gYWxyZWFkeS4NCj4gDQo+IEF0IGxlYXN0IGRvY2tlciBjb250YWluZXJzIGRy
-b3AgQ0FQX1NZU19BRE1JTi4NCg0KV2VsbCBkb2NrZXIgZG9lc24ndCB1c2UgdGhlIHVzZXJfbnMu
-ICBCdXQgZXZlbiBnaXZlbiB0aGF0LCBDQVBfU1lTX0FETUlOIGlzIGFsd2F5cyBkcm9wcGVkIGZv
-ciBtb3N0IGNvbnRhaW5lciBzeXN0ZW1zLiAgV2hhdCBoYXBwZW5zIHdoZW4geW91IGVudGVyIGEg
-dXNlciBuYW1lc3BhY2UgaXMgdGhlIG5zX2NhcGFibGUoIC4uLiwNCkNBUF9TWVNfQURNSU4pIGNo
-ZWNrIHJldHVybnMgdHJ1ZSBpZiB5b3UncmUgdGhlIG93bmVyIG9mIHRoZSB1c2VyX25zLCBpbiB0
-aGUgc2FtZSB3YXkgaXQgd291bGQgZm9yIHJvb3QuICBTbyBlZmZlY3RpdmVseSBlbnRlcmluZyBh
-IHVzZXIgbmFtZXNwYWNlIHdpdGhvdXQgQ0FQX1NZU19BRE1JTiBidXQgbWFwcGluZyB0aGUgb3du
-ZXIgaWQgdG8gMCAod2hhdCB1bnNoYXJlIC1yIC0tdXNlciBkb2VzKSBnaXZlcyB5b3UgYmFjayBh
-IGZvcm0gb2YgQ0FQX1NZU19BRE1JTiB0aGF0IHJlc3BvbmRzIG9ubHkgaW4gdGhlIHBsYWNlcyBp
-biB0aGUga2VybmVsIHRoYXQgaGF2ZSBhIG5zX2NhcGFibGUoKSBjaGVjayBpbnN0ZWFkIG9mIGEg
-Y2FwYWJsZSgpIG9uZSAobW9zdCBvZiB0aGUgcGxhY2VzIHlvdSBsaXN0IGJlbG93KS4gDQpUaGlz
-IGlzIHRoZSBwcmluY2lwbGUgb2YgaG93IHVucHJpdmlsZWdlZCBjb250YWluZXJzIGFjdHVhbGx5
-IHdvcmsgLi4uDQphbmQgdGhlIHNvdXJjZSBvZiBzb21lIG9mIG91ciBzZWN1cml0eSBwcm9ibGVt
-cyBpZiB5b3UgZ2V0IGJhY2sgYW4gYWJpbGl0eSB0byBkbyBzb21ldGhpbmcgeW91IHNob3VsZG4n
-dCBiZSBhbGxvd2VkIHRvIGRvIGFzIGFuIHVucHJpdmlsZWdlZCB1c2VyLg0KDQo+ICBJIGFtIG5v
-dCBzdXJlIHdoYXQgdGhlIGRlY2lzaW9uIHdhcyBiYXNlZCBvbiBidXQgcHJvYmFibHkgdGhleSBk
-b24ndCANCj4gd2FudCB0byBnaXZlIHRoZSB1c2VyIHdoYXQgaXMgbm90IGFic29sdXRlbHkgbmVj
-ZXNzYXJ5LCBidXQgdXNhZ2Ugb2YgDQo+IHVzZXIgbmFtZXNwYWNlcyAod2l0aCBJTUEgbmFtZXNw
-YWNlcykgd291bGQga2luZCBvZiBmb3JjZSBpdCB0byBiZSANCj4gYXZhaWxhYmxlIHRoZW4gdG8g
-ZG8gSU1BLXJlbGF0ZWQgc3R1ZmYgLi4uDQo+IA0KPiBGb2xsb3dpbmcgdGhpcyBtYW4gcGFnZSBo
-ZXJlDQo+IGh0dHBzOi8vbWFuNy5vcmcvbGludXgvbWFuLXBhZ2VzL21hbjcvdXNlcl9uYW1lc3Bh
-Y2VzLjcuaHRtbA0KPiANCj4gQ0FQX1NZU19BRE1JTiBpbiBhIHVzZXIgbmFtZXNwYWNlIGlzIGFi
-b3V0DQo+IA0KPiAtIGJpbmQtbW91bnRpbmcgZmlsZXN5c3RlbXMNCj4gDQo+IC0gbW91bnRpbmcg
-L3Byb2MgZmlsZXN5c3RlbXMNCj4gDQo+IC0gY3JlYXRpbmcgbmVzdGVkIHVzZXIgbmFtZXNwYWNl
-cw0KPiANCj4gLSBjb25maWd1cmluZyBVVFMgbmFtZXNwYWNlDQo+IA0KPiAtIGNvbmZpZ3VyaW5n
-IHdoZXRoZXIgc2V0Z3JvdXBzKCkgY2FuIGJlIHVzZWQNCj4gDQo+IC0gdXNhZ2Ugb2Ygc2V0bnMo
-KQ0KPiANCj4gDQo+IERvIHdlIHdhbnQgdG8gYWRkICctIG9ubHkgd2F5IG9mICpzZXR0aW5nIHVw
-KiBJTUEgcmVsYXRlZCBzdHVmZicgdG8gDQo+IHRoaXMgbGlzdD8NCg0KSSBkb24ndCBzZWUgd2h5
-IG5vdCwgYnV0IG90aGVyIGNvbnRhaW5lciBwZW9wbGUgc2hvdWxkIHdlaWdoIGluIGJlY2F1c2Us
-IGFzIEkgc2FpZCwgSSBtb3N0bHkgdXNlIHRoZSB1c2VyIG5hbWVzcGFjZSBhbmQgdW5wcml2aWxl
-Z2VkIGNvbnRhaW5lcnMgYW5kIGRvbid0IGJvdGhlciB3aXRoIGNhcGFiaWxpdGllcy4NCg0KSmFt
-ZXMNCg0KDQo=
+On Wed, Dec 01, 2021 at 05:37:08PM +0100, Roberto Sassu wrote:
+> Users of the device mapper driver might want to obtain a device status,
+> with status types defined in the status_type_t enumerator.
+
+The patch looks really odd.  And without the corresponding user of your
+new functionality it is entirely unreviewable anyway.
