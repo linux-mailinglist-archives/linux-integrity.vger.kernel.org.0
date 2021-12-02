@@ -2,132 +2,206 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 041594663ED
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 13:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4EB466430
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 14:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357898AbhLBMuW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Dec 2021 07:50:22 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15452 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347388AbhLBMuW (ORCPT
+        id S241733AbhLBNDd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Dec 2021 08:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232890AbhLBNDb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:50:22 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2BNQWO031635;
-        Thu, 2 Dec 2021 12:46:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=3hXA/kZ8cttkItCz5wN6XJFfxji6OOhKwPo1uBwRm6c=;
- b=muqlrP491UAkDbILVryfZ9HgdpRTMu6rFDEae/Ef4INnxopZIow7PKnChMm2LbUcNxBm
- xecsWgMNtwhS8ycAkFSgl0NydWuZDkUB+mTDdlTmGq19emLMcGpMh+tZ3agOhCZA3sQg
- TUJv9UTdlTobODj3jq/3cy3K6lnJZboftPxAH8uit3ojh11kZfS92wWaGyTOlIQrw9Ir
- yfn5XAKD7Ig4oKbLhmBGk7uwWoF5df28XSCEPYV8VVT7UTbDfSyXBWDKeeJLeUfT/Cr9
- HM1JP15TnCxWxguLT1Na//B4E+Nx4yJavGTLi+qETO1+ynSLMJ6ixh4K0GXhRfjVHWIT jQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpw7t9kfv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 12:46:43 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2CUgnZ027850;
-        Thu, 2 Dec 2021 12:46:43 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpw7t9kfh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 12:46:43 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2Cdi1I020986;
-        Thu, 2 Dec 2021 12:46:42 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma01wdc.us.ibm.com with ESMTP id 3ckcaccvws-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 12:46:42 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2CkeQS49611192
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Dec 2021 12:46:40 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE3FF7806E;
-        Thu,  2 Dec 2021 12:46:39 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C28FE78066;
-        Thu,  2 Dec 2021 12:46:37 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.96.125])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Dec 2021 12:46:37 +0000 (GMT)
-Message-ID: <141ce433f026b47edb1d9a8f89e4581db253c579.camel@linux.ibm.com>
-Subject: Re: [RFC 08/20] ima: Move measurement list related variables into
- ima_namespace
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        Thu, 2 Dec 2021 08:03:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E8BC06174A;
+        Thu,  2 Dec 2021 05:00:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C9F6B82341;
+        Thu,  2 Dec 2021 13:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD1BC00446;
+        Thu,  2 Dec 2021 12:59:59 +0000 (UTC)
+Date:   Thu, 2 Dec 2021 13:59:55 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
         dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
         krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
         mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
         puiterwi@redhat.com, jamjoom@us.ibm.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Thu, 02 Dec 2021 07:46:36 -0500
-In-Reply-To: <20211130160654.1418231-9-stefanb@linux.ibm.com>
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Denis Semakin <denis.semakin@huawei.com>
+Subject: Re: [RFC 17/20] ima: Use integrity_admin_ns_capable() to check
+ corresponding capability
+Message-ID: <20211202125955.qcmmnblit3nmatdo@wittgenstein>
 References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
-         <20211130160654.1418231-9-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+ <20211130160654.1418231-18-stefanb@linux.ibm.com>
+ <7c751783b28766412f158e5ca074748ed18070bd.camel@linux.ibm.com>
+ <34085058-ff5f-c28e-c716-6f4fa71747a3@linux.ibm.com>
+ <4b12309289c6a51991c5062fed0fde03e0a6f703.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: T09BanDLEgX0wX9EPjPKPhK2YZuaEPfi
-X-Proofpoint-GUID: 2K7t0JURPY-TD3zyVDNCAr7tDbuOCg4m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-12-02_07,2021-12-02_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 mlxscore=0 phishscore=0 clxscore=1015 impostorscore=0
- adultscore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112020080
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4b12309289c6a51991c5062fed0fde03e0a6f703.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
-> Move measurement list related variables into the ima_namespace. This
-> way a
-> front-end like SecurityFS can show the measurement list inside an IMA
-> namespace.
+On Wed, Dec 01, 2021 at 02:29:09PM -0500, James Bottomley wrote:
+> On Wed, 2021-12-01 at 12:35 -0500, Stefan Berger wrote:
+> > On 12/1/21 11:58, James Bottomley wrote:
+> > > On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
+> > > > From: Denis Semakin <denis.semakin@huawei.com>
+> > > > 
+> > > > Use integrity_admin_ns_capable() to check corresponding
+> > > > capability to allow read/write IMA policy without CAP_SYS_ADMIN
+> > > > but with CAP_INTEGRITY_ADMIN.
+> > > > 
+> > > > Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+> > > > ---
+> > > >   security/integrity/ima/ima_fs.c | 2 +-
+> > > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/security/integrity/ima/ima_fs.c
+> > > > b/security/integrity/ima/ima_fs.c
+> > > > index fd2798f2d224..6766bb8262f2 100644
+> > > > --- a/security/integrity/ima/ima_fs.c
+> > > > +++ b/security/integrity/ima/ima_fs.c
+> > > > @@ -393,7 +393,7 @@ static int ima_open_policy(struct inode
+> > > > *inode,
+> > > > struct file *filp)
+> > > >   #else
+> > > >   		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
+> > > >   			return -EACCES;
+> > > > -		if (!ns_capable(ns->user_ns, CAP_SYS_ADMIN))
+> > > > +		if (!integrity_admin_ns_capable(ns->user_ns))
+> > > so this one is basically replacing what you did in RFC 16/20, which
+> > > seems a little redundant.
+> > > 
+> > > The question I'd like to ask is: is there still a reason for
+> > > needing CAP_INTEGRITY_ADMIN?  My thinking is that now IMA is pretty
+> > > much tied to requiring a user (and a mount, because of
+> > > securityfs_ns) namespace, there might not be a pressing need for an
+> > > admin capability separated from CAP_SYS_ADMIN because the owner of
+> > > the user namespace passes the ns_capable(..., CAP_SYS_ADMIN)
+> > > check.  The rationale in
+> > 
+> > Casey suggested using CAP_MAC_ADMIN, which I think would also work.
+> > 
+> >      CAP_MAC_ADMIN (since Linux 2.6.25)
+> >                Allow MAC configuration or state changes. Implemented
+> > for
+> >                the Smack Linux Security Module (LSM).
+> > 
+> > 
+> > Down the road I think we should cover setting file extended
+> > attributes with the same capability as well for when a user signs
+> > files or installs packages with file signatures.  A container runtime
+> > could hold CAP_SYS_ADMIN while setting up a container and mounting
+> > filesystems and drop it for the first process started there. Since we
+> > are using the user namespace to spawn an IMA namespace, we would then
+> > require CAP_SYSTEM_ADMIN to be left available so that the user can do
+> > IMA related stuff in the container (set or append to the policy,
+> > write file signatures). I am not sure whether that should be the case
+> > or rather give the user something finer grained, such as
+> > CAP_MAC_ADMIN. So, it's about granularity...
 > 
-> Implement ima_free_measurements() to free a list of measurements
-> and call it when an IMA namespace is deleted.
-
-This one worries me quite a lot.  What seems to be happening in this
-code:
-
-> @@ -107,7 +100,7 @@ static int ima_add_digest_entry(struct
-> ima_namespace *ns,
->         qe->entry = entry;
->  
->         INIT_LIST_HEAD(&qe->later);
-> -       list_add_tail_rcu(&qe->later, &ima_measurements);
-> +       list_add_tail_rcu(&qe->later, &ns->ima_measurements);
->  
->         atomic_long_inc(&ns->ima_htable.len);
->         if (update_htable) {
+> It's possible ... any orchestration system that doesn't enter a user
+> namespace has to strictly regulate capabilities.   I'm probably biased
+> because I always use a user_ns so I never really had to mess with
+> capabilities.
 > 
+> > > https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
+> > > 
+> > > Is effectively "because CAP_SYS_ADMIN is too powerful" but that's
+> > > no longer true of the user namespace owner.  It only passes the
+> > > ns_capable() check not the capable() one, so while it does get
+> > > CAP_SYS_ADMIN, it can only use it in a few situations which
+> > > represent quite a power reduction already.
+> > 
+> > At least docker containers drop CAP_SYS_ADMIN.
+> 
+> Well docker doesn't use the user_ns.  But even given that,
+> CAP_SYS_ADMIN is always dropped for most container systems.  What
+> happens when you enter a user namespace is the ns_capable( ...,
+> CAP_SYS_ADMIN) check returns true if you're the owner of the user_ns,
+> in the same way it would for root.  So effectively entering a user
+> namespace without CAP_SYS_ADMIN but mapping the owner id to 0 (what
+> unshare -r --user does) gives you back a form of CAP_SYS_ADMIN that
+> responds only in the places in the kernel that have a ns_capable()
+> check instead of a capable() one (most of the places you list below). 
+> This is the principle of how unprivileged containers actually work ...
+> and the source of some of our security problems if you get back an
+> ability to do something you shouldn't be allowed to do as an
+> unprivileged user.
+> 
+> >  I am not sure what the decision was based on but probably they don't
+> > want to give the user what is not absolutely necessary, but usage of
+> > user namespaces (with IMA namespaces) would kind of force it to be
+> > available then to do IMA-related stuff ...
+> > 
+> > Following this man page here 
+> > https://man7.org/linux/man-pages/man7/user_namespaces.7.html
+> > 
+> > CAP_SYS_ADMIN in a user namespace is about
+> > 
+> > - bind-mounting filesystems
+> > 
+> > - mounting /proc filesystems
+> > 
+> > - creating nested user namespaces
+> > 
+> > - configuring UTS namespace
+> > 
+> > - configuring whether setgroups() can be used
+> > 
+> > - usage of setns()
+> > 
+> > 
+> > Do we want to add '- only way of *setting up* IMA related stuff' to
+> > this list?
+> 
+> I don't see why not, but other container people should weigh in
+> because, as I said, I mostly use the user namespace and unprivileged
+> containers and don't bother with capabilities.
 
-is that we now only add the measurements to the namespace list, but
-that list is freed when the namespace dies.  However, the measurement
-is still extended through the PCRs meaning we have incomplete
-information for a replay after the namespace dies?
+There are very few scenarios where dropping capabilities in an
+unprivileged container makes sense. In a lot of other scenarios it is
+just a misunderstanding of the meaning of capabilities and their
+relationship to user namespaces. Usually, granting a full set of
+capabilities to the payload of an unprivigileged container is the right
+thing to do. All things that are properly namespaced will check
+capabilities in the relevant user namespace. Those that aren't will
+check them against the initial user namespaces.
 
-I tend to think the way this should work is that until we have a way of
-attesting inside the namespace, all measurements should go into the
-physical log, so that replay is always complete for the PCRs, so
-effectively the visible log of the namespace would always have to be a
-subset of the physical log.
+But I do think the question of whether or not ima should go into
+cap_sys_admin is more a question of capability semantics then it is in
+how exactly ima is namespaced. We do have agreed before that overloading
+cap_sys_admin further isn't ideal. Often we end up rectifying that
+mistake later. For example, how we moved stuff like criu, bpf, and perf
+to their own capability. Now we're left with stuff like:
 
-James
+static inline bool perfmon_capable(void)
+{
+	return capable(CAP_PERFMON) || capable(CAP_SYS_ADMIN);
+}
 
+static inline bool bpf_capable(void)
+{
+	return capable(CAP_BPF) || capable(CAP_SYS_ADMIN);
+}
 
+static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+{
+	return ns_capable(ns, CAP_CHECKPOINT_RESTORE) ||
+		ns_capable(ns, CAP_SYS_ADMIN);
+}
+
+for the sake of adhering to legacy behavior. I think we can skip over
+that mistake and introduce cap_sys_integrity.
+
+Christian
