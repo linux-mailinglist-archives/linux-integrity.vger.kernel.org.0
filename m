@@ -2,145 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1045D466ABD
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 21:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A8B466B8F
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 22:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344876AbhLBUKU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Dec 2021 15:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S1377101AbhLBVVW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Dec 2021 16:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344983AbhLBUJk (ORCPT
+        with ESMTP id S1377084AbhLBVVP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Dec 2021 15:09:40 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D80C06175E
-        for <linux-integrity@vger.kernel.org>; Thu,  2 Dec 2021 12:05:48 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id b26-20020aa7951a000000b004a815eb3a3aso362342pfp.16
-        for <linux-integrity@vger.kernel.org>; Thu, 02 Dec 2021 12:05:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Q7dcspo1yxZdIpTVvB7xq0jwV29ozWKIKptmzdGoFi8=;
-        b=pRtiIFuWPD9tgarwR95185Mti/r0psZB9R+EUm436CXn7ny6uuCQVl/I4yPXu3cD+O
-         1fvHmfUH2TlT614xVyz6CNZWIqWqGsfwLSuqzogK8e7PhlcG0zqnu8wahkIVjiGWUqOs
-         ujZceN1gBWHiJ0muQbP6teJsdz8oF8bw77HI3Ijrg10oVMzigBWJKXmJR2AAmKvx6Tl1
-         JExbE5slri1Hd+NoHSvDeqeItJXF67pDAxwO/HxBToOlsIvuRgPH+v4+FYkzc0T1ARh9
-         XOmOqLNbIQURjU5U55pnAt4x8dQYdGgTz++Qmr1HRHudqmTjwzRAxjEyy+axs0F55zdQ
-         fhfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Q7dcspo1yxZdIpTVvB7xq0jwV29ozWKIKptmzdGoFi8=;
-        b=kxJY5sLHGd/+CSXCPiQRQYKP8f/K6muhEjiCwJUUjiJhDDQIkGDyY1PwBLZrLJ2k4I
-         LXSht+gVVM6QoAmdTZmjOnq8D/Ph9rGVUz3AGpv0AZU5Y1OpLauJyEshqhi9z5P3Isv3
-         N/ko7NGksVaoFtT8XTpg7YISiUzz+GPohCjAG6O7KUCEB50S7sPs1D+vN3ovLCrWPXuv
-         0tjFU2pTdh83voVfchzWL+qWWZiu/NGYtx4NWYr17/cxSwHyGHfnR/hRQzJB9rs7kUEp
-         +q477qZXmeIWiLOA3bJOL4r/88WTxntTpcwoCK8XKwIwgFaGKYWNOwIC7Xj1supujlza
-         VmlQ==
-X-Gm-Message-State: AOAM531L7zT3mE95fAc/fKO6m0DTGh4za3yWe8hdAc1mJWiOZTO4wREr
-        hPsByFc0KGbmmznQMAE/mWYTqN7oSe4jaLM=
-X-Google-Smtp-Source: ABdhPJxRzLigLbVcNn28qh4EgCSCeEih5LspCPYEyRBeE0p7mykjLIvRRjwyiSnl6rgxnOp7YYzzKtMyoj41o/8=
-X-Received: from robscloud.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:553e])
- (user=robbarnes job=sendgmr) by 2002:a63:920b:: with SMTP id
- o11mr1111269pgd.314.1638475547585; Thu, 02 Dec 2021 12:05:47 -0800 (PST)
-Date:   Thu,  2 Dec 2021 20:03:40 +0000
-In-Reply-To: <202112011433.QeYkYJE1-lkp@intel.com>
-Message-Id: <20211202200342.2430249-1-robbarnes@google.com>
-Mime-Version: 1.0
-References: <202112011433.QeYkYJE1-lkp@intel.com>
-X-Mailer: git-send-email 2.34.0.384.gca35af8252-goog
-Subject: [PATCH v2] char: tpm: cr50: Set TPM_FIRMWARE_POWER_MANAGED based on
- device property
-From:   Rob Barnes <robbarnes@google.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Rob Barnes <robbarnes@google.com>, linux-integrity@vger.kernel.org,
+        Thu, 2 Dec 2021 16:21:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4159C06175E;
+        Thu,  2 Dec 2021 13:17:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 793A162828;
+        Thu,  2 Dec 2021 21:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C41C9C00446;
+        Thu,  2 Dec 2021 21:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638479867;
+        bh=W3xBBcJLWE+u1rVNV1hlT/71b+PMgM8tysBbrSfTzDI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PEpysPPvcXC93E20vqKNSFueqtlAsE8GLTU75A0Sn8GAoMnBm9aJA3vofCC3SG1pi
+         TEnlp/B/SoZ0ubVJNCfBZ7wbbQi+Y+VWD97JmDbRt2h2uqkc6mmfVtNxm8/mvWiMfU
+         T0pDhabkyq/GgUWK6SqEqdoOkit7n5kxDxVkxn7Wy+4MKCkFNjDO0ccoEiSzygk2Xz
+         S3IjMM6xzLXZ8Bi/RGTrvZ3bocU8Vp+E1+Mkk8DG8c612TnzixeuGDtNht6v5OgZTG
+         3k5Ib3TZotJ+P/FszdA8URr5Jx7a692+FMr0OjKrLE7Hw08zEm1TCX1xzrgzqGCVzW
+         byTjNBijWEV8Q==
+Date:   Thu, 2 Dec 2021 13:17:46 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 2/4] ima: define a new signature type named
+ IMA_VERITY_DIGSIG
+Message-ID: <Yak3+n7fcqaM53ct@sol.localdomain>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+ <20211129170057.243127-3-zohar@linux.ibm.com>
+ <YaWNX3nwslG/Q2aH@sol.localdomain>
+ <6931ed7b1c7d5906bb595447fc24cd8a9b3e3d62.camel@linux.ibm.com>
+ <a1b808d664603bfd4bd2f747b59c3e0c51646922.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1b808d664603bfd4bd2f747b59c3e0c51646922.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Set TPM_FIRMWARE_POWER_MANAGED flag based on 'firmware-power-managed'
-ACPI DSD property. For the CR50 TPM, this flag defaults to true when
-the property is unset.
+On Thu, Dec 02, 2021 at 11:25:05AM -0500, Mimi Zohar wrote:
+> Hi Eric,
+> 
+> On Tue, 2021-11-30 at 13:14 -0500, Mimi Zohar wrote:
+> > On Mon, 2021-11-29 at 18:33 -0800, Eric Biggers wrote:
+> > > On Mon, Nov 29, 2021 at 12:00:55PM -0500, Mimi Zohar wrote:
+> > > > To differentiate between a regular file hash and an fs-verity file digest
+> > > > based signature stored as security.ima xattr, define a new signature type
+> > > > named IMA_VERITY_DIGSIG.
+> > > > 
+> > > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > 
+> > > For this new signature type, what bytes are actually signed?  It looks like it's
+> > > just the raw digest, which isn't sufficient since it is ambiguous.  It needs to
+> > > include information that makes it clear what the signer is actually signing,
+> > > such as "this is an fs-verity SHA-256 file digest".  See
+> > > 'struct fsverity_formatted_digest' for an example of this (but it isn't
+> > > necessary to use that exact structure).
+> > > 
+> > > I think the existing IMA signatures have the same problem (but it is hard for me
+> > > to understand the code).  However, a new signature type doesn't have
+> > > backwards-compatibility concerns, so it could be done right.
+> > 
+> > As this change should probably be applicable to all signature types,
+> > the signature version in the  signature_v2_hdr should be bumped.  The
+> > existing signature version could co-exist with the new signature
+> > version.
+> 
+> By signing the file hash, the sig field in the IMA measurement list can
+> be directly verified against the digest field.  For appended
+> signatures, we defined a new template named ima-modsig which contains
+> two file hashes, with and without the appended signature.
+> 
+> Similarly, by signing a digest containing other metadata and fs-
+> verity's file digest, the measurement list should include both digests.
+> Otherwise the consumer of the measurement list would first need to
+> calculate the signed digest before verifying the signature.
+> 
+> Options:
+> - Include just fs-verity's file digest and the signature in the
+> measurement list.  Leave it to the consumer of the measurement list to
+> deal with.
+> - Define a new template format to include both digests, add a new field
+> in the iint for the signed digest.  (Much more work.)
+> - As originally posted, directly sign fs-verity's file digest.
 
-When this flag is set to false, the CR50 TPM driver will always send
-a shutdown command whenever the system suspends.
+I don't really have enough knowledge about IMA and how it is used to decide on
+one approach or the other.  Note that earlier I mentioned that it would be
+possible to have an fs-verity setting that makes a full file digest be included
+in the fsverity_descriptor, so it gets covered by the fs-verity file digest and
+is also retrievable in constant time like the fs-verity file digest is.
 
-Signed-off-by: Rob Barnes <robbarnes@google.com>
----
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 14 +++++++++++++-
- drivers/char/tpm/tpm_tis_spi_cr50.c | 14 +++++++++++++-
- 2 files changed, 26 insertions(+), 2 deletions(-)
+If you'd like to solve this problem at the IMA layer instead, by storing the
+full file digest in an xattr and signing both the full file digest and fs-verity
+file digest together, that would achieve the same goal of making the full file
+digest available, and wouldn't require any changes to fs-verity.  This would
+assume that the file would be signed, though.  What about audit-only mode
+without signatures; is that something you care about?
 
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index c89278103703..70143cc4f4e8 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -628,6 +628,17 @@ static bool tpm_cr50_i2c_req_canceled(struct tpm_chip *chip, u8 status)
- 	return status == TPM_STS_COMMAND_READY;
- }
- 
-+static bool tpm_cr50_i2c_is_firmware_power_managed(struct device *dev)
-+{
-+	u8 val;
-+	int ret;
-+	/* This flag should default true when the device property is not present */
-+	ret = device_property_read_u8(dev, "firmware-power-managed", &val);
-+	if (ret)
-+		return 1;
-+	return val;
-+}
-+
- static const struct tpm_class_ops cr50_i2c = {
- 	.flags = TPM_OPS_AUTO_STARTUP,
- 	.status = &tpm_cr50_i2c_tis_status,
-@@ -686,7 +697,8 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
- 
- 	/* cr50 is a TPM 2.0 chip */
- 	chip->flags |= TPM_CHIP_FLAG_TPM2;
--	chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
-+	if (tpm_cr50_i2c_is_firmware_power_managed(dev))
-+		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
- 
- 	/* Default timeouts */
- 	chip->timeout_a = msecs_to_jiffies(TIS_SHORT_TIMEOUT);
-diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_tis_spi_cr50.c
-index dae98dbeeeac..6c40ff99d3ea 100644
---- a/drivers/char/tpm/tpm_tis_spi_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
-@@ -185,6 +185,17 @@ static int cr50_spi_flow_control(struct tpm_tis_spi_phy *phy,
- 	return 0;
- }
- 
-+static bool tpm_cr50_spi_is_firmware_power_managed(struct device *dev)
-+{
-+	u8 val;
-+	int ret;
-+	/* This flag should default true when the device property is not present */
-+	ret = device_property_read_u8(dev, "firmware-power-managed", &val);
-+	if (ret)
-+		return 1;
-+	return val;
-+}
-+
- static int tpm_tis_spi_cr50_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
- 				     u8 *in, const u8 *out)
- {
-@@ -309,7 +320,8 @@ int cr50_spi_probe(struct spi_device *spi)
- 	cr50_print_fw_version(&phy->priv);
- 
- 	chip = dev_get_drvdata(&spi->dev);
--	chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
-+	if (tpm_cr50_spi_is_firmware_power_managed(&spi->dev))
-+		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
- 
- 	return 0;
- }
--- 
-2.34.0.384.gca35af8252-goog
+Alternatively, maybe this problem doesn't need to be solved at all and IMA would
+be fine with the fs-verity file digest only, and not need the full file hash
+too.  I don't know the answer to that; I think it's up to you to decide.
 
+- Eric
