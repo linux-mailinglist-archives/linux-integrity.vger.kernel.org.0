@@ -2,66 +2,64 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A47F4664B2
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 14:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEE94664BF
+	for <lists+linux-integrity@lfdr.de>; Thu,  2 Dec 2021 14:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240049AbhLBNvj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Dec 2021 08:51:39 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9668 "EHLO
+        id S1358354AbhLBN4X (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Dec 2021 08:56:23 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5202 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237001AbhLBNvi (ORCPT
+        by vger.kernel.org with ESMTP id S1346917AbhLBN4V (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Dec 2021 08:51:38 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2DPHM8032550;
-        Thu, 2 Dec 2021 13:48:02 GMT
+        Thu, 2 Dec 2021 08:56:21 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2DPJSZ017947;
+        Thu, 2 Dec 2021 13:52:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=MmgvdhyJPoNWW/dBOs0kANx303pZyLYVvVbuOyTYwu0=;
- b=UXtkavV0U/gcX4mzIIp3f7diXQUAMDVhiYDMREQBOcLrNXdrfGWjq5L0tvZ8YarIH1c+
- +qO1JeQ+kUcnbkCVwgxia6+GKR/tnLDbFAWQ6WTK3Rj/oelENctSOFFMacyMIuCSOmea
- HfN/pUmQiN1bxH0LpwYigzNZ7NLPsMUNarswgcU2WUOU4H99UQsHh8iFj1pvtFsTqB9w
- WRNnTRKUC9TWq8RCgWqDMeSDy99N9ELxjgZns3E66o1GvpFx9UCdVnqnx3u31yJhafH2
- F6VwImmC5tJoSpc5Av41AB/D5ASig5Y6DeZeIE0nxnV9N4CLDFvzeqG6f1YC0wcrt7uL YQ== 
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=odNM1SuCcKK6sCNzJJneZ0ovpnjIH9BAQkTZy7joDRY=;
+ b=Rk3+Vm4+s5x/MNVGxwQE8KApdLXYxFCuHBZol2PWdD165qiVIj3WywpTpbyViQSOvpkN
+ 5r3i05WIkRsAZ0X0jyqo29Kx53PEz0Xbryr/UcnSFTrWive7pkIoFHnhg3StGaaWMd2w
+ 998lAT78sVJY6byxDbSEov1212C7Ug5ljXFCfx/9twJfeIi7zeW6qhjW0Kqls9Esm0/x
+ Uj5tnAPrmxTjlvREPams+7juXb2bPERSllm1ZQSwGx6HE5iLI/AGfwcmtS5mDdS21OPS
+ LbcDpN0hb1llEOkIDZ3kVyGcHv1VUWNsqVuARYiT0HojaakfP72Cti6HVsHKAfL7bZvy jg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpxvwrpx1-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpxhy99c0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 13:48:02 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2DPKPm000522;
-        Thu, 2 Dec 2021 13:48:01 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpxvwrpwj-1
+        Thu, 02 Dec 2021 13:52:46 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2DQQiN020701;
+        Thu, 2 Dec 2021 13:52:45 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpxhy99bg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 13:48:01 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2DisJA017187;
-        Thu, 2 Dec 2021 13:48:00 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma01dal.us.ibm.com with ESMTP id 3ckcadh5xy-1
+        Thu, 02 Dec 2021 13:52:45 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2Dj8Z4011454;
+        Thu, 2 Dec 2021 13:52:44 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02wdc.us.ibm.com with ESMTP id 3ckcacp4wx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 13:48:00 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2Dlv9421692918
+        Thu, 02 Dec 2021 13:52:43 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2DqfE139780624
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Dec 2021 13:47:57 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BBA86BE053;
-        Thu,  2 Dec 2021 13:47:57 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6BABBE04F;
-        Thu,  2 Dec 2021 13:47:54 +0000 (GMT)
+        Thu, 2 Dec 2021 13:52:41 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 48E72136061;
+        Thu,  2 Dec 2021 13:52:41 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 10170136059;
+        Thu,  2 Dec 2021 13:52:37 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Dec 2021 13:47:54 +0000 (GMT)
-Message-ID: <142d8d23-4feb-a0ed-a1ba-50cb1fa57cd6@linux.ibm.com>
-Date:   Thu, 2 Dec 2021 08:47:53 -0500
-MIME-Version: 1.0
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Dec 2021 13:52:37 +0000 (GMT)
+Message-ID: <9b95d629-3d17-dbdc-05f1-205e50ec9e95@linux.ibm.com>
+Date:   Thu, 2 Dec 2021 08:52:37 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [RFC 13/20] securityfs: Build securityfs_ns for namespacing
- support
+Subject: Re: [RFC 20/20] ima: Setup securityfs_ns for IMA namespace
 Content-Language: en-US
 To:     Christian Brauner <christian.brauner@ubuntu.com>
 Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
@@ -73,359 +71,223 @@ Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org
 References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
- <20211130160654.1418231-14-stefanb@linux.ibm.com>
- <20211202133500.ms5u5ze7sztfyyjh@wittgenstein>
+ <20211130160654.1418231-21-stefanb@linux.ibm.com>
+ <20211202131818.ygzsywwfu4rfcbuy@wittgenstein>
 From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211202133500.ms5u5ze7sztfyyjh@wittgenstein>
+In-Reply-To: <20211202131818.ygzsywwfu4rfcbuy@wittgenstein>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: XGFBvajLAlZG1IrHgKOemshEnpCsaRVf
-X-Proofpoint-GUID: dJdrScYtDzlkKNvFmHACqZNmqLF2teNA
+X-Proofpoint-ORIG-GUID: yG9PQRou744qZr4gUqx54ql_n5sAv8Za
+X-Proofpoint-GUID: o2a_UNAkqbdnTh3bp-Q3BF3VlzQtdpct
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-12-02_07,2021-12-02_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 mlxscore=0 adultscore=0 bulkscore=0
- clxscore=1015 spamscore=0 phishscore=0 suspectscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ mlxscore=0 bulkscore=0 impostorscore=0 adultscore=0 priorityscore=1501
+ phishscore=0 clxscore=1015 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2112020088
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 12/2/21 08:35, Christian Brauner wrote:
-> On Tue, Nov 30, 2021 at 11:06:47AM -0500, Stefan Berger wrote:
->> Implement 'securityfs_ns' for support of IMA namespacing so that each
->> IMA (user) namespace can have its own front-end for showing the currently
->> active policy, the measurement list, number of violations and so on. This
->> filesystem shares much of the existing code of SecurityFS but requires a
->> new API call securityfs_ns_create_mount() for creating a new instance.
+On 12/2/21 08:18, Christian Brauner wrote:
+> On Tue, Nov 30, 2021 at 11:06:54AM -0500, Stefan Berger wrote:
+>> Setup securityfs_ns with symlinks, directories, and files for IMA
+>> namespacing support. The same directory structure that IMA uses on the
+>> host is also created for the namespacing case.
 >>
->> The API calls of securityfs_ns have the prefix securityfs_ns_ and take
->> additional parameters struct vfsmount * and mount_count that allow for
->> multiple instances of this filesystem to exist.
+>> Increment the user namespace's refcount_teardown value by '1' once
+>> securityfs_ns has been successfully setup since the initialization of the
+>> filesystem causes an additional reference to the user namespace to be
+>> taken. The early teardown function will delete the file system and release
+>> the additional reference.
 >>
->> The filesystem can be mounted to the usual securityfs mount point like
->> this:
+>> The securityfs_ns file and directory ownerships cannot be set when the
+>> filesystem is setup since at this point the user namespace has not been
+>> configured yet by the user and therefore the ownership mappings are not
+>> available, yet. Therefore, adjust the file and directory ownerships when
+>> an inode's function for determining the permissions of a file or directory
+>> is accessed.
 >>
->> mount -t securityfs_ns /sys/kernel/security /sys/kernel/security
+>> This filesystem can now be mounted as follows:
+>>
+>> mount -t securityfs_ns /sys/kernel/security/ /sys/kernel/security/
+>>
+>> The following directories, symlinks, and files are then available.
+>>
+>> $ ls -l sys/kernel/security/
+>> total 0
+>> lr--r--r--. 1 nobody nobody 0 Nov 27 06:44 ima -> integrity/ima
+>> drwxr-xr-x. 3 nobody nobody 0 Nov 27 06:44 integrity
+>>
+>> $ ls -l sys/kernel/security/ima/
+>> total 0
+>> -r--r-----. 1 root root 0 Nov 27 06:44 ascii_runtime_measurements
+>> -r--r-----. 1 root root 0 Nov 27 06:44 binary_runtime_measurements
+>> -rw-------. 1 root root 0 Nov 27 06:44 policy
+>> -r--r-----. 1 root root 0 Nov 27 06:44 runtime_measurements_count
+>> -r--r-----. 1 root root 0 Nov 27 06:44 violations
 >>
 >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 >> ---
->>   include/linux/security.h   |  18 ++++
->>   include/uapi/linux/magic.h |   1 +
->>   security/inode.c           | 197 +++++++++++++++++++++++++++++++++++--
->>   3 files changed, 210 insertions(+), 6 deletions(-)
+>>   include/linux/ima.h                      |  17 +++
+>>   security/integrity/ima/ima.h             |   2 +
+>>   security/integrity/ima/ima_fs.c          | 178 ++++++++++++++++++++++-
+>>   security/integrity/ima/ima_init_ima_ns.c |   6 +-
+>>   security/integrity/ima/ima_ns.c          |   4 +-
+>>   5 files changed, 203 insertions(+), 4 deletions(-)
 >>
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index 7e0ba63b5dde..8e479266f544 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -1929,6 +1929,24 @@ struct dentry *securityfs_create_symlink(const char *name,
->>   					 const struct inode_operations *iops);
->>   extern void securityfs_remove(struct dentry *dentry);
->>   
->> +extern struct dentry *securityfs_ns_create_file(const char *name, umode_t mode,
->> +						struct dentry *parent, void *data,
->> +						const struct file_operations *fops,
->> +						const struct inode_operations *iops,
->> +						struct vfsmount **mount, int *mount_count);
->> +extern struct dentry *securityfs_ns_create_dir(const char *name, struct dentry *parent,
->> +					       const struct inode_operations *iops,
->> +					       struct vfsmount **mount, int *mount_count);
->> +struct dentry *securityfs_ns_create_symlink(const char *name,
->> +					    struct dentry *parent,
->> +					    const char *target,
->> +					    const struct inode_operations *iops,
->> +					    struct vfsmount **mount, int *mount_count);
->> +extern void securityfs_ns_remove(struct dentry *dentry,
->> +				 struct vfsmount **mount, int *mount_count);
->> +struct vfsmount *securityfs_ns_create_mount(struct user_namespace *user_ns);
->> +extern struct vfsmount *securityfs_ns_mount;
->> +
->>   #else /* CONFIG_SECURITYFS */
->>   
->>   static inline struct dentry *securityfs_create_dir(const char *name,
->> diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
->> index 35687dcb1a42..5c1cc6088dd2 100644
->> --- a/include/uapi/linux/magic.h
->> +++ b/include/uapi/linux/magic.h
->> @@ -11,6 +11,7 @@
->>   #define CRAMFS_MAGIC_WEND	0x453dcd28	/* magic number with the wrong endianess */
->>   #define DEBUGFS_MAGIC          0x64626720
->>   #define SECURITYFS_MAGIC	0x73636673
->> +#define SECURITYFS_NS_MAGIC	0x73334473
->>   #define SELINUX_MAGIC		0xf97cff8c
->>   #define SMACK_MAGIC		0x43415d53	/* "SMAC" */
->>   #define RAMFS_MAGIC		0x858458f6	/* some random number */
->> diff --git a/security/inode.c b/security/inode.c
->> index 429744ff4ab3..8077d1f31489 100644
->> --- a/security/inode.c
->> +++ b/security/inode.c
->> @@ -21,6 +21,7 @@
->>   #include <linux/security.h>
->>   #include <linux/lsm_hooks.h>
->>   #include <linux/magic.h>
->> +#include <linux/user_namespace.h>
->>   
->>   static struct vfsmount *securityfs_mount;
->>   static int securityfs_mount_count;
->> @@ -73,6 +74,61 @@ static struct file_system_type securityfs_type = {
->>   	.kill_sb =	kill_litter_super,
+>> diff --git a/include/linux/ima.h b/include/linux/ima.h
+>> index fe08919df326..a2c5e516f706 100644
+>> --- a/include/linux/ima.h
+>> +++ b/include/linux/ima.h
+>> @@ -221,6 +221,18 @@ struct ima_h_table {
+>>   	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
 >>   };
 >>   
->> +static int securityfs_ns_fill_super(struct super_block *sb, struct fs_context *fc)
->> +{
->> +	static const struct tree_descr files[] = {{""}};
->> +	int error;
->> +
->> +	error = simple_fill_super(sb, SECURITYFS_NS_MAGIC, files);
->> +	if (error)
->> +		return error;
->> +
->> +	sb->s_op = &securityfs_super_operations;
->> +
->> +	return 0;
->> +}
->> +
->> +static int securityfs_ns_get_tree(struct fs_context *fc)
->> +{
->> +	return get_tree_keyed(fc, securityfs_ns_fill_super, fc->user_ns);
->> +}
->> +
->> +static const struct fs_context_operations securityfs_ns_context_ops = {
->> +	.get_tree	= securityfs_ns_get_tree,
+>> +enum {
+>> +	IMAFS_DENTRY_INTEGRITY_DIR = 0,
+>> +	IMAFS_DENTRY_DIR,
+>> +	IMAFS_DENTRY_SYMLINK,
+>> +	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
+>> +	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
+>> +	IMAFS_DENTRY_RUNTIME_MEASUREMENTS_COUNT,
+>> +	IMAFS_DENTRY_VIOLATIONS,
+>> +	IMAFS_DENTRY_IMA_POLICY,
+>> +	IMAFS_DENTRY_LAST
 >> +};
 >> +
->> +static int securityfs_ns_init_fs_context(struct fs_context *fc)
->> +{
->> +	fc->ops = &securityfs_ns_context_ops;
->> +	return 0;
->> +}
+>>   struct ima_namespace {
+>>   	struct kref kref;
+>>   	struct user_namespace *user_ns;
+>> @@ -267,6 +279,11 @@ struct ima_namespace {
+>>   	struct mutex ima_write_mutex;
+>>   	unsigned long ima_fs_flags;
+>>   	int valid_policy;
 >> +
->> +static struct file_system_type securityfs_ns_type = {
->> +	.owner			= THIS_MODULE,
->> +	.name			= "securityfs_ns",
->> +	.init_fs_context	= securityfs_ns_init_fs_context,
->> +	.kill_sb		= kill_litter_super,
->> +	.fs_flags		= FS_USERNS_MOUNT,
->> +};
->> +
->> +struct vfsmount *securityfs_ns_create_mount(struct user_namespace *user_ns)
->> +{
->> +	struct fs_context *fc;
->> +	struct vfsmount *mnt;
->> +
->> +	fc = fs_context_for_mount(&securityfs_ns_type, SB_KERNMOUNT);
->> +	if (IS_ERR(fc))
->> +		return ERR_CAST(fc);
->> +
->> +	put_user_ns(fc->user_ns);
->> +	fc->user_ns = get_user_ns(user_ns);
->> +
->> +	mnt = fc_mount(fc);
->> +	put_fs_context(fc);
->> +	return mnt;
->> +}
->> +
->> +
->>   /**
->>    * securityfs_create_dentry - create a dentry in the securityfs filesystem
->>    *
->> @@ -155,8 +211,8 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
->>   	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
->>   	inode->i_private = data;
->>   	if (S_ISDIR(mode)) {
->> -		inode->i_op = &simple_dir_inode_operations;
->> -		inode->i_fop = &simple_dir_operations;
->> +		inode->i_op = iops ? iops : &simple_dir_inode_operations;
->> +		inode->i_fop = fops ? fops : &simple_dir_operations;
->>   		inc_nlink(inode);
->>   		inc_nlink(dir);
->>   	} else if (S_ISLNK(mode)) {
->> @@ -214,6 +270,41 @@ struct dentry *securityfs_create_file(const char *name, umode_t mode,
->>   }
->>   EXPORT_SYMBOL_GPL(securityfs_create_file);
+>> +	struct dentry *dentry[IMAFS_DENTRY_LAST];
+>> +	struct vfsmount *mount;
+>> +	int mount_count;
+>> +	bool file_ownership_fixes_done;
+>>   };
 >>   
->> +/**
->> + * securityfs_ns_create_file - create a file in the securityfs_ns filesystem
->> + *
->> + * @name: a pointer to a string containing the name of the file to create.
->> + * @mode: the permission that the file should have
->> + * @parent: a pointer to the parent dentry for this file.  This should be a
->> + *          directory dentry if set.  If this parameter is %NULL, then the
->> + *          file will be created in the root of the securityfs_ns filesystem.
->> + * @data: a pointer to something that the caller will want to get to later
->> + *        on.  The inode.i_private pointer will point to this value on
->> + *        the open() call.
->> + * @fops: a pointer to a struct file_operations that should be used for
->> + *        this file.
->> + * @mount: Pointer to a pointer of a an existing vfsmount
->> + * @mount_count: The mount_count that goes along with the @mount
->> + *
->> + * This function creates a file in securityfs_ns with the given @name.
->> + *
->> + * This function returns a pointer to a dentry if it succeeds.  This
->> + * pointer must be passed to the securityfs_ns_remove() function when the file
->> + * is to be removed (no automatic cleanup happens if your module is unloaded,
->> + * you are responsible here).  If an error occurs, the function will return
->> + * the error value (via ERR_PTR).
->> + */
->> +struct dentry *securityfs_ns_create_file(const char *name, umode_t mode,
->> +					 struct dentry *parent, void *data,
->> +					 const struct file_operations *fops,
->> +					 const struct inode_operations *iops,
->> +					 struct vfsmount **mount, int *mount_count)
->> +{
->> +	return securityfs_create_dentry(name, mode, parent, data, fops, iops,
->> +					&securityfs_ns_type, mount, mount_count);
->> +}
->> +EXPORT_SYMBOL_GPL(securityfs_ns_create_file);
->> +
->>   /**
->>    * securityfs_create_dir - create a directory in the securityfs filesystem
->>    *
->> @@ -240,6 +331,34 @@ struct dentry *securityfs_create_dir(const char *name, struct dentry *parent)
->>   }
->>   EXPORT_SYMBOL_GPL(securityfs_create_dir);
+>>   extern struct ima_namespace init_ima_ns;
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index bb9763cd5fb1..9bcd71bb716c 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -139,6 +139,8 @@ struct ns_status {
+>>   /* Internal IMA function definitions */
+>>   int ima_init(void);
+>>   int ima_fs_init(void);
+>> +int ima_fs_ns_init(struct ima_namespace *ns);
+>> +void ima_fs_ns_free(struct ima_namespace *ns);
+>>   int ima_add_template_entry(struct ima_namespace *ns,
+>>   			   struct ima_template_entry *entry, int violation,
+>>   			   const char *op, struct inode *inode,
+>> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+>> index 6766bb8262f2..9a14be520268 100644
+>> --- a/security/integrity/ima/ima_fs.c
+>> +++ b/security/integrity/ima/ima_fs.c
+>> @@ -22,6 +22,7 @@
+>>   #include <linux/parser.h>
+>>   #include <linux/vmalloc.h>
+>>   #include <linux/ima.h>
+>> +#include <linux/namei.h>
 >>   
->> +/**
->> + * securityfs_ns_create_dir - create a directory in the securityfs_ns filesystem
->> + *
->> + * @name: a pointer to a string containing the name of the directory to
->> + *        create.
->> + * @parent: a pointer to the parent dentry for this file.  This should be a
->> + *          directory dentry if set.  If this parameter is %NULL, then the
->> + *          directory will be created in the root of the securityfs_ns filesystem.
->> + * @mount: Pointer to a pointer of a an existing vfsmount
->> + * @mount_count: The mount_count that goes along with the @mount
->> + *
->> + * This function creates a directory in securityfs_ns with the given @name.
->> + *
->> + * This function returns a pointer to a dentry if it succeeds.  This
->> + * pointer must be passed to the securityfs_ns_remove() function when the file
->> + * is to be removed (no automatic cleanup happens if your module is unloaded,
->> + * you are responsible here).  If an error occurs, the function will return
->> + * the error value (via ERR_PTR).
->> + */
->> +struct dentry *securityfs_ns_create_dir(const char *name, struct dentry *parent,
->> +					const struct inode_operations *iops,
->> +					struct vfsmount **mount, int *mount_count)
->> +{
->> +	return securityfs_ns_create_file(name, S_IFDIR | 0755, parent, NULL, NULL,
->> +					 iops, mount, mount_count);
->> +}
->> +EXPORT_SYMBOL_GPL(securityfs_ns_create_dir);
->> +
->>   struct dentry *_securityfs_create_symlink(const char *name,
->>   					  struct dentry *parent,
->>   					  const char *target,
->> @@ -263,6 +382,7 @@ struct dentry *_securityfs_create_symlink(const char *name,
+>>   #include "ima.h"
 >>   
->>   	return dent;
+>> @@ -436,8 +437,13 @@ static int ima_release_policy(struct inode *inode, struct file *file)
+>>   
+>>   	ima_update_policy(ns);
+>>   #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
+>> -	securityfs_remove(ima_policy);
+>> -	ima_policy = NULL;
+>> +	if (ns == &init_ima_ns) {
+>> +		securityfs_remove(ima_policy);
+>> +		ima_policy = NULL;
+>> +	} else {
+>> +		securityfs_ns_remove(ns->dentry[IMAFS_DENTRY_POLICY]);
+>> +		ns->dentry[IMAFS_DENTRY_POLICY] = NULL;
+>> +	}
+>>   #elif defined(CONFIG_IMA_WRITE_POLICY)
+>>   	clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
+>>   #elif defined(CONFIG_IMA_READ_POLICY)
+>> @@ -509,3 +515,171 @@ int __init ima_fs_init(void)
+>>   	securityfs_remove(ima_policy);
+>>   	return -1;
 >>   }
 >> +
->>   /**
->>    * securityfs_create_symlink - create a symlink in the securityfs filesystem
->>    *
->> @@ -300,6 +420,42 @@ struct dentry *securityfs_create_symlink(const char *name,
->>   }
->>   EXPORT_SYMBOL_GPL(securityfs_create_symlink);
->>   
->> +/**
->> + * securityfs_ns_create_symlink - create a symlink in the securityfs_ns filesystem
->> + *
->> + * @name: a pointer to a string containing the name of the symlink to
->> + *        create.
->> + * @parent: a pointer to the parent dentry for the symlink.  This should be a
->> + *          directory dentry if set.  If this parameter is %NULL, then the
->> + *          directory will be created in the root of the securityfs_ns filesystem.
->> + * @target: a pointer to a string containing the name of the symlink's target.
->> + *          If this parameter is %NULL, then the @iops parameter needs to be
->> + *          setup to handle .readlink and .get_link inode_operations.
->> + * @iops: a pointer to the struct inode_operations to use for the symlink. If
->> + *        this parameter is %NULL, then the default simple_symlink_inode
->> + *        operations will be used.
->> + * @mount: Pointer to a pointer of a an existing vfsmount
->> + * @mount_count: The mount_count that goes along with the @mount
->> + *
->> + * This function creates a symlink in securityfs_ns with the given @name.
->> + *
->> + * This function returns a pointer to a dentry if it succeeds.  This
->> + * pointer must be passed to the securityfs_ns_remove() function when the file
->> + * is to be removed (no automatic cleanup happens if your module is unloaded,
->> + * you are responsible here).  If an error occurs, the function will return
->> + * the error value (via ERR_PTR).
+>> +/*
+>> + * Fix the ownership (uid/gid) of the dentry's that couldn't be set at the
+>> + * time of their creation because the user namespace wasn't configured, yet.
 >> + */
->> +struct dentry *securityfs_ns_create_symlink(const char *name,
->> +					    struct dentry *parent,
->> +					    const char *target,
->> +					    const struct inode_operations *iops,
->> +					    struct vfsmount **mount, int *mount_count)
+>> +static void ima_fs_ns_fixup_uid_gid(struct ima_namespace *ns)
 >> +{
->> +	return _securityfs_create_symlink(name, parent, target, iops,
->> +					  &securityfs_ns_type, mount, mount_count);
->> +}
->> +EXPORT_SYMBOL_GPL(securityfs_ns_create_symlink);
+>> +	struct inode *inode;
+>> +	size_t i;
 >> +
->>   void _securityfs_remove(struct dentry *dentry, struct vfsmount **mount, int *mount_count)
->>   {
->>   	struct inode *dir;
->> @@ -340,6 +496,27 @@ void securityfs_remove(struct dentry *dentry)
->>   
->>   EXPORT_SYMBOL_GPL(securityfs_remove);
->>   
->> +/**
->> + * securityfs_ns_remove - removes a file or directory from the securityfs_ns filesystem
->> + *
->> + * @dentry: a pointer to a the dentry of the file or directory to be removed.
->> + * @mount: Pointer to a pointer of a an existing vfsmount
->> + * @mount_count: The mount_count that goes along with the @mount
->> + *
->> + * This function removes a file or directory in securityfs_ns that was previously
->> + * created with a call to another securityfs_ns function (like
->> + * securityfs_ns_create_file() or variants thereof.)
->> + *
->> + * This function is required to be called in order for the file to be
->> + * removed. No automatic cleanup of files will happen when a module is
->> + * removed; you are responsible here.
->> + */
->> +void securityfs_ns_remove(struct dentry *dentry, struct vfsmount **mount, int *mount_count)
+>> +	if (ns->file_ownership_fixes_done ||
+>> +	    ns->user_ns->uid_map.nr_extents == 0)
+>> +		return;
+>> +
+>> +	ns->file_ownership_fixes_done = true;
+>> +	for (i = 0; i < IMAFS_DENTRY_LAST; i++) {
+>> +		if (!ns->dentry[i])
+>> +			continue;
+>> +		inode = ns->dentry[i]->d_inode;
+>> +		inode->i_uid = make_kuid(ns->user_ns, 0);
+>> +		inode->i_gid = make_kgid(ns->user_ns, 0);
+>> +	}
+>> +}
+>> +
+>> +/* Fix the permissions when a file is opened */
+>> +int ima_fs_ns_permission(struct user_namespace *mnt_userns, struct inode *inode,
+>> +			 int mask)
 >> +{
->> +	_securityfs_remove(dentry, mount, mount_count);
->> +}
->> +EXPORT_SYMBOL_GPL(securityfs_ns_remove);
->> +
->>   #ifdef CONFIG_SECURITY
->>   static struct dentry *lsm_dentry;
->>   static ssize_t lsm_read(struct file *filp, char __user *buf, size_t count,
->> @@ -364,14 +541,22 @@ static int __init securityfs_init(void)
->>   		return retval;
->>   
->>   	retval = register_filesystem(&securityfs_type);
->> -	if (retval) {
->> -		sysfs_remove_mount_point(kernel_kobj, "security");
->> -		return retval;
->> -	}
->> +	if (retval)
->> +		goto remove_mount;
->> +	retval = register_filesystem(&securityfs_ns_type);
->> +	if (retval)
->> +		goto unregister_filesystem;
-> So you're introducing a new filesystem type securityfs_ns. Ithink that's
-> simply wrong and feels like a hack. What issues did you run into when
-> trying to convert the existing securityfs itself?
-
-I primarily didn't want to touch the existing securityfs with its 
-existing users and it being a single instance filesystem. So I though 
-I'd create something with a new API just for namespaces that is 
-multi-instance capable.
-
-
+>> +	ima_fs_ns_fixup_uid_gid(get_current_ns());
+> As noted later in the thread if this is required it means something is
+> buggy in the current code. That shouldn't be needed.
+I fixed this yesterday with late initialization: 
+https://lkml.org/lkml/2021/12/1/1181
 >
-> I see no immediate reason why a get_tree_keyed() conversion for
-> securityfs wouldn't work even with the debugfs pin/unpin logic in there
-> kept for the securityfs mounted in the initial userns.
-Ok, let me try to convert securityfs then.
+> I think there's a more fundamental issue here. The correct way to do all
+> this would be to restructure securityfs at least how it works inside of
+> user namespaces. Currently, securityfs works like debugfs: a single
+> shared superblock that is pinned by each new inode that is created via:
+>
+> 	simple_pin_fs(&fs_type, &mount, &mount_count);
+> 	simple_release_fs(&mount, &mount_count);
+>
+> and each mount surfaces the same superblock. Ideally making securityfs
+> mountable inside of user namespaces should get you a new superblock.
+> Functions that create files for the ima ns would then be called inside
+> ->fill_super etc.
+
+So this would be the wrong place to do it? I moved it there because this 
+is called late (upon mounting) when the configuration of the user 
+namespace has completed.
+
+static int securityfs_ns_init_fs_context(struct fs_context *fc)
+{
+          int rc;
+
+          if (fc->user_ns->ima_ns->late_fs_init) {
+                  rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
+                  if (rc)
+                          return rc;
+          }
+          fc->ops = &securityfs_ns_context_ops;
+          return 0;
+}
+
+
+Stefan
+
+
+
