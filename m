@@ -2,225 +2,255 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5D1467CD0
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Dec 2021 18:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E437467CF7
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Dec 2021 19:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382438AbhLCRxE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 3 Dec 2021 12:53:04 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:36658 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343541AbhLCRxD (ORCPT
+        id S1359352AbhLCSKK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 3 Dec 2021 13:10:10 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56932 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1353418AbhLCSKI (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:53:03 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3H7N9i002175;
-        Fri, 3 Dec 2021 17:49:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=KGJoHFN6t30Hg/u4/UO/V5+fT7CS/VPCuSPZDVXXVdM=;
- b=UfHoAOedJyIhaA7AtruxaKMbtyKpWenSmY/RVh9MD1PZI/VUw4jyktS93aB1Qe32dlvc
- ou+yCAaJLfH7V2tbkvm02kWb6R0e2AINmPCDP4WHKkEd9hPjHKzY9pcfK2/NyzY2tfwA
- kwLBQRwFT993sZCUMta/jRW92tWI4eT/h46J+6jW14UBBVrT/epiXOxUgKflTBNOhaqk
- qJPoRDSBpLW1qv/Gog2BvvgifMuJHCIma96Ni63E4PD04AqEwqB+yUBMUe6n06I2/3sH
- tHuOdSpWQPbLjPWBIuB3+zfKgkgyc08UlaD9pOZ1PtM3ZDDrIjIkSEvhiSW5EhcjEtNE XA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cqkx5hrnc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Dec 2021 17:49:04 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B3HexrX007725;
-        Fri, 3 Dec 2021 17:48:49 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2107.outbound.protection.outlook.com [104.47.58.107])
-        by userp3030.oracle.com with ESMTP id 3ck9t6jxf6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Dec 2021 17:48:49 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FSaohaEiPxdI6AoczlDynC6fxd14KODCpMJa/xD81/u0sLun2RhRxTTy8LZM928kF48Yz4tYNGryOL3q5wyPiUBAqjD4G7p9s5Vk6GzpbE6I4yoO7MqMvt9v9MfkHii1W3PWlSdOYlbRxNYJr4xZj9rzhf7wqPURBClvpbCxiIBOknSwtYaWeG9fNx72zQ/3hqMAEb5Y+Lkj3nREpuMAf7+iJiwCohb4sSLEMTqQZUkvlSxhRDcX1Xhfgq0nb0RMq0p2gTlC4ozk/JMO5d4btZVLdbKBvsgVk1mRG6gj5Ehmst5woIj2mBy1TU55wcIoBi+D/+v1T/Cb44Ie4ByA5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KGJoHFN6t30Hg/u4/UO/V5+fT7CS/VPCuSPZDVXXVdM=;
- b=g+XWqQs4pAbey+3dk8S8c5KuOMQdZ7LzL5M6pyLKxFJStXAHA1LT2YP+CZAvqzHj4rY4UtkZfFZbi/nMHjG73ThtsTTDo6e5vdbTOkYWurtDrmrjJc7ZOlOnYikEJIRHMlAZmIljPXjiTFjCAzcW8d6Wj3Q3/7ujWYVZSSEx7agaA90f/+q6f0zQnT90qbFDDH2pa22E1UX6I10S4ZmbjBZwTRwNH/4SFEO9KHlMbSZDFKWBBa1Z446Q6Uo1WGDeWbCoV6W+48mR80eWF/1EEaTqy3NqBKvCLX88R2R2NOWEtYjsnQjAiX9VbmRrRepg6O4MkgjWOUA/N0lRTgSbRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KGJoHFN6t30Hg/u4/UO/V5+fT7CS/VPCuSPZDVXXVdM=;
- b=Ns+jPxBP+DEsuLnWZNnGSuPTVMQf0OUk4sbgR6UwnTtY2kPpD0qDlWuev3TsU/LbYxUsKcgX2KNGrxYMwnJZHE833IsXX2dE/pvvdAyq3jT6D1CYc6J8wZirsRCtlHl+3R+Lavr5neuGdGPWPTIIb9lylisW4DvzDSjVfLGR91k=
-Received: from BY5PR10MB3793.namprd10.prod.outlook.com (2603:10b6:a03:1f6::14)
- by BY5PR10MB4002.namprd10.prod.outlook.com (2603:10b6:a03:1b0::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Fri, 3 Dec
- 2021 17:48:46 +0000
-Received: from BY5PR10MB3793.namprd10.prod.outlook.com
- ([fe80::b46e:493b:14b7:9c83]) by BY5PR10MB3793.namprd10.prod.outlook.com
- ([fe80::b46e:493b:14b7:9c83%3]) with mapi id 15.20.4755.019; Fri, 3 Dec 2021
- 17:48:46 +0000
-Message-ID: <b2fd060d-0ac8-b00e-cebb-46015dfea14c@oracle.com>
-Date:   Fri, 3 Dec 2021 12:48:43 -0500
+        Fri, 3 Dec 2021 13:10:08 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3FpZi2030775;
+        Fri, 3 Dec 2021 18:06:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=siyREWmz2+sW8HcsCvJYgd9SEIscCNn5ZgDPBq8SHHE=;
+ b=hiiRtF4SgiZlbF1X4g7zPwdvd3y2p3NY5NJDMOZLvQftljDkdfVoT9S1IXncEovChOMN
+ AQ+Vvwr97rFIts53N/bfUXxOmtXNIAundDkvcwxFq6/E8eJ9CaNSk1rVLW7Hyzr5wBOw
+ ip7clAI8w+se591PzziCYkJWiXbWhJe+Q+u2A9JQcLBkGbb66FtxKTNdk9vlBI0wanNo
+ FLhC6DjvbYjE5UMzB2/huJ6d42b+XGV2Zhm1g+58BTWglTk0kp0cihy3NYffjvaXmblR
+ Qw/pQMKx0H8vEBARlsbMBDBQd//Q61ZCGBZD1XOcc04Wk19uY0CVCjE03/iFmT8cb4UR vw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cqp8haq95-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 18:06:18 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B3HsqpS008034;
+        Fri, 3 Dec 2021 18:06:18 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cqp8haq8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 18:06:18 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3I4GFg025496;
+        Fri, 3 Dec 2021 18:06:17 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03dal.us.ibm.com with ESMTP id 3ckcaeb8q7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 18:06:17 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3I6E0O66650470
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Dec 2021 18:06:14 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3DB05AE067;
+        Fri,  3 Dec 2021 18:06:14 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB874AE060;
+        Fri,  3 Dec 2021 18:06:13 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Dec 2021 18:06:13 +0000 (GMT)
+Message-ID: <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
+Date:   Fri, 3 Dec 2021 13:06:13 -0500
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH v4 04/14] Documentation/x86: Secure Launch kernel
- documentation
+Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
 Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, iommu@lists.linux-foundation.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     dpsmith@apertussolutions.com, luto@amacapital.net,
-        mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        kanth.ghatraju@oracle.com, tglx@linutronix.de,
-        trenchboot-devel@googlegroups.com
-References: <1630070917-9896-1-git-send-email-ross.philipson@oracle.com>
- <1630070917-9896-5-git-send-email-ross.philipson@oracle.com>
- <bd677501-bd65-9648-c8f5-1b90983377b5@arm.com>
- <6713b6b2-3c6d-8318-ee9e-e1746f02a3a5@oracle.com>
- <7ee55288-209f-8f19-ef69-27e2a5448473@arm.com>
-From:   Ross Philipson <ross.philipson@oracle.com>
-In-Reply-To: <7ee55288-209f-8f19-ef69-27e2a5448473@arm.com>
-Content-Type: text/plain; charset=UTF-8
+To:     jejb@linux.ibm.com, linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
+ <20211203023118.1447229-20-stefanb@linux.ibm.com>
+ <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BLAPR03CA0146.namprd03.prod.outlook.com
- (2603:10b6:208:32e::31) To BY5PR10MB3793.namprd10.prod.outlook.com
- (2603:10b6:a03:1f6::14)
-MIME-Version: 1.0
-Received: from [IPV6:2601:191:8500:cff0::7928] (2601:191:8500:cff0::7928) by BLAPR03CA0146.namprd03.prod.outlook.com (2603:10b6:208:32e::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend Transport; Fri, 3 Dec 2021 17:48:44 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cc6149e2-f5ed-43bc-09ce-08d9b68527bc
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4002:
-X-Microsoft-Antispam-PRVS: <BY5PR10MB4002A0F077B704765CAC5D85E66A9@BY5PR10MB4002.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vNoMfgdubtWHYNDz0LZHViSkjqOPWHo6xf8eibYFW4OjYaIvudYVquFz7Z1EV3ij8mLomV/VrY6oN8LMrMJ/J9FfGQM8cUKKLk9x44RkPKlf97dRWh3I72RhuUlv3rKImWhPiCw7WLfgIQC8zwDamWMeUCjTmP+C3WKKljwhjdHPTeQ6EYGNPdQodyAU1PH70stB9ozqPkYuJ22YDeiNdFW9VDPGVuqPcoGT23dNwOKu3UxhTwCOho1hmM6yOAjcwSIoyPVJoBcR6lI8pppcgES66S6yM16StcdB2hyXAyzv4qHTREz++nr34WivebItioaPcvW0+vHrN6ZrzaYxSSx99oGhXWkguxOK7WxWxdeWu5yC0JnzpSOH+9zp3WnH7ABC31/mI5oEveBXQMvlF5y/kzGzDyqC4B6yNYJHtMwoxgwybQpCUGtq4J8+791eyRCvSvG+TR7H5WT/cF8RDLSWNYWSB2OUsHFX7Ne7ncVSKkdtWHX2lzi4Z+bcdbRBXKIECjOTJWgsrycnQYPBetyxtIXPtNay9G9mmNwMjO2vCKuYzakxUUSY8cXPoL06NUlVXcJVYfeVu4Qm5ZHCAjciNdFh2dtdW/sDDsRD/IDYIRbNhrE+LnxW/CqhdWtOJBR2QfEDalx9IKqAmtFDfnjipziVoBRB1nby8STW8xx347gdGHCHphKu6l9AWSWFXFgzaQbTndEBnqo3iTFyeC41R6+5E1wR9h6+KEegnCY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3793.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66476007)(2906002)(31696002)(66946007)(31686004)(7416002)(66556008)(5660300002)(8676002)(316002)(83380400001)(36756003)(8936002)(6486002)(508600001)(38100700002)(53546011)(2616005)(4326008)(44832011)(86362001)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q05MQXVDUTlGdDZzNzRwZnlNSHo1elZjcDhQaWFHUUV1Z3lXYjlrU1hUTlRF?=
- =?utf-8?B?VHRqK3B2SDBMMkRMdXVLWXgxOXliZHBab1FqUzlEeVF4MlhFYk9lbVMxYXo5?=
- =?utf-8?B?S0RhVnhVNHhRMXhNL1BuZVZRTEs3cTVhUTd2QnAvTTJtYzRCRGtZYlVXRjdh?=
- =?utf-8?B?UkR1UTdQUU1PRzE2ZTdaUkxTWmFFdUp2ZlNub2ltUVJjSVA0VDJ2dE5Vd3V6?=
- =?utf-8?B?U1lnN1gzSjgzcFBQWWlTTUdsdkFVZzZlMmhsWk1RbjZRV0lPalByc2xYZHUx?=
- =?utf-8?B?TkpTWHAvTWVaMXlNWk1lYzdTSHhqRTE5SS9QVDU3S3BNVS9kZVZJWUxCSlcx?=
- =?utf-8?B?YXhkNU5jaXJwTlI5QjJ4UjVmZFNUYWx1bWdwS0VOcWtZUlIvOXo5OXZoU3ls?=
- =?utf-8?B?c2t2MTNXNmc5ZEFYL2xsUENzSUVqUllDQmRnbTEzWURybG9EaW03WnV3bHBJ?=
- =?utf-8?B?ZVVXNGloSDQzaTVpUUUyRVJ4TEMwc3RSVDRQVWFuOUwwZE5zblY0Vit6WjAx?=
- =?utf-8?B?VWtsSTZwQ3J2QVVreXNMRGV4dEpxNlJ1Q2ZqazZQTnRuSVhVeEZ5NXozTXJP?=
- =?utf-8?B?SjZSYXM5MCtwc2pGYkFHZ2ZvNVdGR1B5Z0ZNYm9pTHBoRTNQb3Q2c3FNN3lk?=
- =?utf-8?B?djUzTVE5Q3oyVWE4S0FabFk1VzRVYjRrYzVMVXVna2hDZEZRMm15MXVuVWJY?=
- =?utf-8?B?MDlCNGNsK2NaR2JuVXRueEVnNGlVOXZ4bm56dlpsTUFwYWhRMUpnd1NJM0Yv?=
- =?utf-8?B?eVp4MWJwNVkrZnlFL0t6UlJoYUszZWFsYW51ekRRb3dUV2ZmalFKSi9nNEpI?=
- =?utf-8?B?TWd0NUQ2NkZtTHJjVGpQWUorcGtiTVdoWHZzQjUwTTZTREE2OVRRZmRaa0or?=
- =?utf-8?B?dHJwRDRCRzVQVERhNkZoZVBDOVZJRjE0MkV5NmtqZ0JJeklzQW8xYXpTaDhu?=
- =?utf-8?B?NFFaM1NEOVkwdmRtNTJWZ3R3Q1F1VVZqMFZPWHlFSXB0WkU4MElMd2V3Y05J?=
- =?utf-8?B?VW8vWXhvNW5vZWd4aXR3SjJSUG9rclUraXFFTGZ5Q3dmVVM1S1gzR1Z6djhU?=
- =?utf-8?B?VnNPNzdjVDNCTWp1bzdNdm92VHlhdzVpdmoyME04VktSS1JpUXZYd3ZTK3lG?=
- =?utf-8?B?Wjl6VVVBU1NLK3BuQXBGcXYzRkltVVpCN0ZENTFtQ2RmSGxyKzVSMW5MeDh2?=
- =?utf-8?B?SnlaOGphZ0xaTEgrWTlpalNiRXlmQkI0Z1BvdlV0VURZT3VjeFA4RHdHR25z?=
- =?utf-8?B?UFFIK0tEckZmN1V6YTZTRXM2ckJuK1llMlpLSmtlajgzaU1NQVdwTlFNUGs4?=
- =?utf-8?B?ZXZLWVNVaTZsZStldzhoaXp1SVRMSzh5TkxsaVhLOEY5ZzBFSDkvSFp4Zlgy?=
- =?utf-8?B?a1ZjMXRFSURJNHRnUWI5eUFEMUVPSUNMd2Z4ajVwR1dMNTI2QlpxR2FwVnRp?=
- =?utf-8?B?cUtOdFZ0WENYTmMyOTdLRTNsSjZTRFJQTndnVnZUK2w4L01sOVpTTU9tTHNj?=
- =?utf-8?B?Mks0VFhUaHlzUkkwc3FUMnM0aFp6YkFDWnNBNUFhekRJWFY2a2VtZ3VkRTI4?=
- =?utf-8?B?Q3BkMzhrVkxCUzZaRVdKZUtnVytOaHQ4Q0lIV3UvQi9La2JxZTM5M1p2dmhj?=
- =?utf-8?B?Y1AwM2pNNUh4dm1ZK2FtWmZRVVNNdHhtUHNRK3hVMjVTOXNqT0gvWURIL1VB?=
- =?utf-8?B?Nmlwakt4QjZLYThKUGZWSFZsVG5ZMVZjdVN1SWdWdXR2R3d2SWV1VzVIV2dR?=
- =?utf-8?B?QndiMFE1akx0aFlQQU9rdjZYd0ZWc25xa0wxelpoK0g1RTdCUEQxU0ZhVXh3?=
- =?utf-8?B?NHNaQXg3ZGhUTnEzdXZKRzl2T0p4RmpMZmptRWVwR0N1WnRkdXgvNjVSOFVs?=
- =?utf-8?B?SXBTKzExWlFmdjJ0L003ODlPYjh6cTBmMTRLdE5xWE5JM09xb0piZ0hYcVRv?=
- =?utf-8?B?TXY2OVYvYTRVME1rNElFeUt4ekkvNU0raC9RSVpDMXp3dEJ4QXdBODFSaE4z?=
- =?utf-8?B?NXpXZU1WQ1ZvYnFDaEJ3UEUrRFE5MW92OUlvMUh4UlNBZEpwOUZ6U1NqQXBT?=
- =?utf-8?B?RnNsV09wMnFuSS84TGtMRjJuVnVqK0VJUzd1RU5GUkNaOTBzcWtSRCtkWGNQ?=
- =?utf-8?B?alVIVThpV1NHejZRdmZTWDBuenMxQWFNOUFmYk96MkhVWWw0c3BoWmk2R1ZV?=
- =?utf-8?B?UFdJUkIzd2hCdnBUMEFhdDlVdUhyOFl0bWs0ZU1QUDVGSGRvL1UyTFUzMkxY?=
- =?utf-8?B?MVdIL1kwZ2V2dEE1SmxxbUY5UzFCK0lhb2tyR2c2cCs2cllFd2lSMzlPS0I0?=
- =?utf-8?Q?AgNus9vHSncl9gmF3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc6149e2-f5ed-43bc-09ce-08d9b68527bc
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB3793.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 17:48:46.5554
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kTZA3CU1DnQYApB/itWIfO7Iuc4UL3zWdNqxzOF8JvJeTIIeac3/ekZTD6lUjJsXj3jLlgX4H7rZxWNXQj9G7Yk5qoqX6jrba0VjRQ/oMI0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4002
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10187 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 malwarescore=0
- spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112030112
-X-Proofpoint-GUID: ItEI_sDqqDNcbOXK0kLpEm5U1Gan_8t1
-X-Proofpoint-ORIG-GUID: ItEI_sDqqDNcbOXK0kLpEm5U1Gan_8t1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: lWcBeCjaWeVDNMaRIbVwCWN9gF0yiUFI
+X-Proofpoint-GUID: -0WCxuWP3EctpDJDj3AWClbN7ztDSNL-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999
+ clxscore=1015 phishscore=0 spamscore=0 adultscore=0 impostorscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112030115
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 12/3/21 11:03, Robin Murphy wrote:
-> On 2021-12-03 15:47, Ross Philipson wrote:
->> On 12/2/21 12:26, Robin Murphy wrote:
->>> On 2021-08-27 14:28, Ross Philipson wrote:
->>> [...]
->>>> +IOMMU Configuration
->>>> +-------------------
->>>> +
->>>> +When doing a Secure Launch, the IOMMU should always be enabled and
->>>> the drivers
->>>> +loaded. However, IOMMU passthrough mode should never be used. This
->>>> leaves the
->>>> +MLE completely exposed to DMA after the PMR's [2]_ are disabled.
->>>> First, IOMMU
->>>> +passthrough should be disabled by default in the build configuration::
->>>> +
->>>> +  "Device Drivers" -->
->>>> +      "IOMMU Hardware Support" -->
->>>> +          "IOMMU passthrough by default [ ]"
->>>> +
->>>> +This unset the Kconfig value CONFIG_IOMMU_DEFAULT_PASSTHROUGH.
->>>
->>> Note that the config structure has now changed, and if set, passthrough
->>> is deselected by choosing a different default domain type.
->>
->> Thanks for the heads up. We will have to modify this for how things
->> exist today.
->>
->>>
->>>> +In addition, passthrough must be disabled on the kernel command line
->>>> when doing
->>>> +a Secure Launch as follows::
->>>> +
->>>> +  iommu=nopt iommu.passthrough=0
->>>
->>> This part is a bit silly - those options are literally aliases for the
->>> exact same thing, and furthermore if the config is already set as
->>> required then the sole effect either of them will have is to cause "(set
->>> by kernel command line)" to be printed. There is no value in explicitly
->>> overriding the default value with the default value - if anyone can
->>> append an additional "iommu.passthrough=1" (or "iommu=pt") to the end of
->>> the command line they'll still win.
->>
->> I feel like when we worked on this, it was still important to set those
->> values. This could have been in an older kernel version. We will go back
->> and verify what you are saying here and adjust the documentation
->> accordingly.
->>
->> As to anyone just adding values to the command line, that is why the
->> command line is part of the DRTM measurements.
-> 
-> Yeah, I had a vague memory that that was the case - basically if you can
-> trust the command line as much as the config then it's definitely
-> redundant to pass an option for this (see iommu_subsys_init() - it's now
-> all plumbed through iommu_def_domain_type), and if you can't then
-> passing them is futile anyway.
 
-Thanks you for your feedback.
+On 12/3/21 12:03, James Bottomley wrote:
+> On Thu, 2021-12-02 at 21:31 -0500, Stefan Berger wrote:
+> [...]
+>>   static int securityfs_init_fs_context(struct fs_context *fc)
+>>   {
+>> +	int rc;
+>> +
+>> +	if (fc->user_ns->ima_ns->late_fs_init) {
+>> +		rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
+>> +		if (rc)
+>> +			return rc;
+>> +	}
+>>   	fc->ops = &securityfs_context_ops;
+>>   	return 0;
+>>   }
+> I know I suggested this, but to get this to work in general, it's going
+> to have to not be specific to IMA, so it's going to have to become
+> something generic like a notifier chain.  The other problem is it's
+> only working still by accident:
 
-Ross
+I had thought about this also but the rationale was:
 
-> 
-> Cheers,
-> Robin.
+securityfs is compiled due to CONFIG_IMA_NS and the user namespace 
+exists there and that has a pointer now to ima_namespace, which can have 
+that callback. I assumed that other namespaced subsystems could also be 
+reached then via such a callback, but I don't know.
+
+I suppose any late filesystem init callchain would have to be connected 
+to the user_namespace somehow?
+
+
+>
+>> +int ima_fs_ns_init(struct ima_namespace *ns)
+>> +{
+>> +	ns->mount = securityfs_ns_create_mount(ns->user_ns);
+> This actually triggers on the call to securityfs_init_fs_context, but
+> nothing happens because the callback is null.  Every subsequent use of
+> fscontext will trigger this.  The point of a keyed supeblock is that
+> fill_super is only called once per key, that's the place we should be
+> doing this.   It should also probably be a blocking notifier so any
+> consumer of securityfs can be namespaced by registering for this
+> notifier.
+
+
+What I don't like about the fill_super is that it gets called too early:
+
+[   67.058611] securityfs_ns_create_mount @ 102 target user_ns: 
+ffff95c010698c80; nr_extents: 0
+[   67.059836] securityfs_fill_super @ 47  user_ns: ffff95c010698c80; 
+nr_extents: 0
+
+We are switching to the target user namespace in 
+securityfs_ns_create_mount. The expected nr_extents at this point is 0, 
+since user_ns hasn't been configured, yet. But then security_fill_super 
+is also called with nr_extents 0. We cannot use that, it's too early!
+
+
+>
+>> +	if (IS_ERR(ns->mount)) {
+>> +		ns->mount = NULL;
+>> +		return -1;
+>> +	}
+>> +	ns->mount_count = 1;
+> This is a bit nasty, too: we're spilling the guts of mount count
+> tracking into IMA instead of encapsulating it inside securityfs.
+
+
+Ok, I can make this disappear.
+
+
+>
+>> +
+>> +	/* Adjust the trigger for user namespace's early teardown of
+>> dependent
+>> +	 * namespaces. Due to the filesystem there's an additional
+>> reference
+>> +	 * to the user namespace.
+>> +	 */
+>> +	ns->user_ns->refcount_teardown += 1;
+>> +
+>> +	ns->late_fs_init = ima_fs_ns_late_init;
+>> +
+>> +	return 0;
+>> +}
+> I think what should be happening is that we shouldn't so the
+> simple_pin_fs, which creates the inodes, ahead of time; we should do it
+> inside fill_super using a notifier, meaning it gets called once per
+
+fill_super would only work for the init_user_ns from what I can see.
+
+
+> key, creates the root dentry then triggers the notifier which
+> instantiates all the namespaced entries.  We can still use
+> simple_pin_fs for this because there's no locking across fill_super.
+> This would mean fill_super would be called the first time the
+> securityfs is mounted inside the namespace.
+
+
+I guess I would need to know how fill_super would work or how it could 
+be called late/delayed as well.
+
+
+>
+> If we do it this way, we can now make securityfs have its own mount and
+> mount_count inside the user namespace, which it uses internally to the
+> securityfs code, thus avoiding exposing them to ima or any other
+> namespaced consumer.
+>
+> I also think we now don't need the securityfs_ns_ duplicated functions
+> because the callback via the notifier chain now ensures we can use the
+> namespace they were created in to distinguish between non namespaced
+> and namespaced entries.
+
+Is there then no need to pass a separate vfsmount * in anymore? Where 
+would the vfsmount pointer reside? For now it's in ima_namespace, but it 
+sounds like it should be in a more centralized place? Should it also be 
+connected to the user_namespace so we can pick it up using get_user_ns()?
+
+
+>
+> So non-namespaced consumers of securityfs would do what they do now
+> (calling the securityfs_create on initialization) and namespaced
+> consumers would register a callback on the notifier which would get
+> called once for every namespace the securityfs gets mounted in.
+>
+> I also theorize if we do it with notifiers, we could have a notifier on
+> kill_sb to tear down all the entires.  If we do this, I think we don't
+> have to pin any more.
+>
+> James
+>
+>
+
+diff --git a/security/inode.c b/security/inode.c
+index ed5f1c533776..49c9839642ed 100644
+--- a/security/inode.c
++++ b/security/inode.c
+@@ -44,6 +44,8 @@ static int securityfs_fill_super(struct super_block 
+*sb, struct fs_context *fc)
+         static const struct tree_descr files[] = {{""}};
+         int error;
+
++       printk(KERN_INFO "%s @ %u  user_ns: %px; nr_extents: %d\n", 
+__func__, __LINE__, fc->user_ns, fc->user_ns->uid_map.nr_extents);
++
+         error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+         if (error)
+                 return error;
+@@ -97,6 +99,8 @@ struct vfsmount *securityfs_ns_create_mount(struct 
+user_namespace *user_ns)
+         put_user_ns(fc->user_ns);
+         fc->user_ns = get_user_ns(user_ns);
+
++       printk(KERN_INFO "%s @ %u target user_ns: %px; nr_extents: 
+%d\n", __func__, __LINE__, fc->user_ns, fc->user_ns->uid_map.nr_extents);
++
+         mnt = fc_mount(fc);
+         put_fs_context(fc);
+         return mnt;
 
