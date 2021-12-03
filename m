@@ -2,59 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2067C466FE9
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Dec 2021 03:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B88A3466FDC
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Dec 2021 03:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378303AbhLCCfe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 2 Dec 2021 21:35:34 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49776 "EHLO
+        id S1378210AbhLCCfX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 2 Dec 2021 21:35:23 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6492 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378156AbhLCCfT (ORCPT
+        by vger.kernel.org with ESMTP id S1378155AbhLCCfS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:35:19 -0500
+        Thu, 2 Dec 2021 21:35:18 -0500
 Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B31qlJq008772;
-        Fri, 3 Dec 2021 02:31:44 GMT
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B31qPTn008161;
+        Fri, 3 Dec 2021 02:31:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=hEdI4aBLFFLpCOrcNtnP/fiAlaQIVSyXlVHCjtm7n/M=;
- b=rQA0hVqwgL2LXsUDySA0Nn9MeV35/C8QXvusyMBOoG4CuJ/AaVWK6K02ten9g/aV4TY/
- Voeg+s3D1MfpGgLERJukxriINycfzG4UPXRzYbh/2WUvM1bNgo+6fK0x64hI+Lt9O3jr
- SHfsg8a3ywFBe2xa+mfjecuVs5CVRwN4P3Pr4L0dN6q+IA8//iBRwKWDMJ66A86QyBFm
- 5k/ggb7ZGnkAOp1LQiQ1QNTXzfbr4haU74yTpUSlPbRciYU8KoSpQtVvSVBBf5kCuk7H
- JzuY/RNpD4a9hrKQt7TfGXqTz9NHIIaETWTo34ZSNtcUdYRyzFsjVst4py3l/BbYwC6s RA== 
+ bh=KK53tBUKl1BhRAg26/l3a5POBARot8jPd4kxd3J+ijs=;
+ b=hy9Tksxu1bIHtwtWXTfPYoE9qWq4cXUZ/PuO5/o5lIr/N87A80v/PD+U/jNb15gxW/Z5
+ tjAkqOu3IKBysJDw24sU2w3bQ+sJ9MxDEQmuPc1dLZE2x0rtfvu+J4/1swNoclCbAb2X
+ CkQTh5T0N1U4XRbHqCvIRHzGFE33Ervsqkn3JSfP0hBkS/Prt2g7MV9rV5sRK2czrehd
+ 46ixbHLDArVGBkwGTkPcedF8A+Z83AwAphy1N8fdNbZ83LkK9Ri6QFCc3e7iEnk5PkpH
+ sDHNt8h1jtHrAUD2Uwj+LH8gytJUpJpBwqE5i1iMxcssItuaMUY+XTX+C2pRudHUBfFW YA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cq9y40h2h-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cq9y40h32-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 02:31:43 +0000
+        Fri, 03 Dec 2021 02:31:44 +0000
 Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B32Vg9l011202;
-        Fri, 3 Dec 2021 02:31:42 GMT
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B32Rrvg016710;
+        Fri, 3 Dec 2021 02:31:44 GMT
 Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cq9y40h22-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cq9y40h2d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 02:31:44 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B32Rkck025381;
+        Fri, 3 Dec 2021 02:31:42 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01wdc.us.ibm.com with ESMTP id 3ckcacuf18-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 03 Dec 2021 02:31:42 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B32RkoO025349;
-        Fri, 3 Dec 2021 02:31:41 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma01wdc.us.ibm.com with ESMTP id 3ckcacuf04-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 02:31:41 +0000
 Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B32Vdb956426834
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B32VebL17957122
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Dec 2021 02:31:39 GMT
+        Fri, 3 Dec 2021 02:31:40 GMT
 Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8669D6E06A;
+        by IMSVA (Postfix) with ESMTP id BE3CF6E068;
+        Fri,  3 Dec 2021 02:31:40 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A81146E056;
         Fri,  3 Dec 2021 02:31:39 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 738A46E052;
-        Fri,  3 Dec 2021 02:31:38 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Dec 2021 02:31:38 +0000 (GMT)
+        Fri,  3 Dec 2021 02:31:39 +0000 (GMT)
 From:   Stefan Berger <stefanb@linux.ibm.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     zohar@linux.ibm.com, serge@hallyn.com,
@@ -66,17 +66,17 @@ Cc:     zohar@linux.ibm.com, serge@hallyn.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: [RFC v2 11/19] securityfs: Prefix global variables with securityfs_
-Date:   Thu,  2 Dec 2021 21:31:10 -0500
-Message-Id: <20211203023118.1447229-12-stefanb@linux.ibm.com>
+Subject: [RFC v2 12/19] securityfs: Pass static variables as parameters from top level functions
+Date:   Thu,  2 Dec 2021 21:31:11 -0500
+Message-Id: <20211203023118.1447229-13-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211203023118.1447229-1-stefanb@linux.ibm.com>
 References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: syknhlNM_dun_8oVrXuy8HwT4qZxrP_p
-X-Proofpoint-GUID: QFoYem00JcNejYosv21QR7fvlklao97R
+X-Proofpoint-ORIG-GUID: 3-Fl6qVWvPUtKE1LmatthEwIBZ6djiO6
+X-Proofpoint-GUID: v6n4HsigtHY7q0BuPvQRu5VkqqP-95pE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-03_01,2021-12-02_01,2021-12-02_01
@@ -89,63 +89,175 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Prefix global variables 'mount' and 'mount_count' with securityfs_ so they
-are easier to distinguish as variables belonging to securityfs rather than
-variables being passed in through new APIs we will introduce.
+Pass the securityfs_-prefixed static variables from current top level
+functions so that new APIs allow callers to pass in similar parameters and
+thus share most of the existing functions.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- security/inode.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ security/inode.c | 92 ++++++++++++++++++++++++++++++------------------
+ 1 file changed, 58 insertions(+), 34 deletions(-)
 
 diff --git a/security/inode.c b/security/inode.c
-index 6c326939750d..71d93108de55 100644
+index 71d93108de55..9299f134877f 100644
 --- a/security/inode.c
 +++ b/security/inode.c
-@@ -22,8 +22,8 @@
- #include <linux/lsm_hooks.h>
- #include <linux/magic.h>
- 
--static struct vfsmount *mount;
--static int mount_count;
-+static struct vfsmount *securityfs_mount;
-+static int securityfs_mount_count;
- 
- static void securityfs_free_inode(struct inode *inode)
+@@ -88,6 +88,11 @@ static struct file_system_type fs_type = {
+  *        this file.
+  * @iops: a point to a struct of inode_operations that should be used for
+  *        this file/dir
++ * @mount: a pointer to a pointer for existing vfsmount to use or for
++ *         one to create
++ * @mount_count: pointer to integer for mount_count that goes along with
++ *               @mount
++ *
+  *
+  * This is the basic "create a file/dir/symlink" function for
+  * securityfs.  It allows for a wide range of flexibility in creating
+@@ -107,7 +112,8 @@ static struct file_system_type fs_type = {
+ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+ 					struct dentry *parent, void *data,
+ 					const struct file_operations *fops,
+-					const struct inode_operations *iops)
++					const struct inode_operations *iops,
++					struct vfsmount **mount, int *mount_count)
  {
-@@ -118,12 +118,12 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+ 	struct dentry *dentry;
+ 	struct inode *dir, *inode;
+@@ -118,12 +124,12 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
  
  	pr_debug("securityfs: creating file '%s'\n",name);
  
--	error = simple_pin_fs(&fs_type, &mount, &mount_count);
-+	error = simple_pin_fs(&fs_type, &securityfs_mount, &securityfs_mount_count);
+-	error = simple_pin_fs(&fs_type, &securityfs_mount, &securityfs_mount_count);
++	error = simple_pin_fs(&fs_type, mount, mount_count);
  	if (error)
  		return ERR_PTR(error);
  
  	if (!parent)
--		parent = mount->mnt_root;
-+		parent = securityfs_mount->mnt_root;
+-		parent = securityfs_mount->mnt_root;
++		parent = (*mount)->mnt_root;
  
  	dir = d_inode(parent);
  
-@@ -168,7 +168,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+@@ -168,7 +174,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
  	dentry = ERR_PTR(error);
  out:
  	inode_unlock(dir);
--	simple_release_fs(&mount, &mount_count);
-+	simple_release_fs(&securityfs_mount, &securityfs_mount_count);
+-	simple_release_fs(&securityfs_mount, &securityfs_mount_count);
++	simple_release_fs(mount, mount_count);
  	return dentry;
  }
  
-@@ -309,7 +309,7 @@ void securityfs_remove(struct dentry *dentry)
+@@ -201,7 +207,9 @@ struct dentry *securityfs_create_file(const char *name, umode_t mode,
+ 				      struct dentry *parent, void *data,
+ 				      const struct file_operations *fops)
+ {
+-	return securityfs_create_dentry(name, mode, parent, data, fops, NULL);
++	return securityfs_create_dentry(name, mode, parent, data, fops, NULL,
++					&securityfs_mount,
++					&securityfs_mount_count);
+ }
+ EXPORT_SYMBOL_GPL(securityfs_create_file);
+ 
+@@ -231,6 +239,27 @@ struct dentry *securityfs_create_dir(const char *name, struct dentry *parent)
+ }
+ EXPORT_SYMBOL_GPL(securityfs_create_dir);
+ 
++static struct dentry *_securityfs_create_symlink(const char *name,
++						 struct dentry *parent,
++						 const char *target,
++						 const struct inode_operations *iops,
++						 struct vfsmount **mount, int *mount_count)
++{
++	struct dentry *dent;
++	char *link = NULL;
++
++	if (target) {
++		link = kstrdup(target, GFP_KERNEL);
++		if (!link)
++			return ERR_PTR(-ENOMEM);
++	}
++	dent = securityfs_create_dentry(name, S_IFLNK | 0444, parent,
++					link, NULL, iops, mount, mount_count);
++	if (IS_ERR(dent))
++		kfree(link);
++
++	return dent;
++}
+ /**
+  * securityfs_create_symlink - create a symlink in the securityfs filesystem
+  *
+@@ -262,37 +291,13 @@ struct dentry *securityfs_create_symlink(const char *name,
+ 					 const char *target,
+ 					 const struct inode_operations *iops)
+ {
+-	struct dentry *dent;
+-	char *link = NULL;
+-
+-	if (target) {
+-		link = kstrdup(target, GFP_KERNEL);
+-		if (!link)
+-			return ERR_PTR(-ENOMEM);
+-	}
+-	dent = securityfs_create_dentry(name, S_IFLNK | 0444, parent,
+-					link, NULL, iops);
+-	if (IS_ERR(dent))
+-		kfree(link);
+-
+-	return dent;
++	return _securityfs_create_symlink(name, parent, target, iops,
++					  &securityfs_mount, &securityfs_mount_count);
+ }
+ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
+ 
+-/**
+- * securityfs_remove - removes a file or directory from the securityfs filesystem
+- *
+- * @dentry: a pointer to a the dentry of the file or directory to be removed.
+- *
+- * This function removes a file or directory in securityfs that was previously
+- * created with a call to another securityfs function (like
+- * securityfs_create_file() or variants thereof.)
+- *
+- * This function is required to be called in order for the file to be
+- * removed. No automatic cleanup of files will happen when a module is
+- * removed; you are responsible here.
+- */
+-void securityfs_remove(struct dentry *dentry)
++static void _securityfs_remove(struct dentry *dentry,
++			       struct vfsmount **mount, int *mount_count)
+ {
+ 	struct inode *dir;
+ 
+@@ -309,8 +314,27 @@ void securityfs_remove(struct dentry *dentry)
  		dput(dentry);
  	}
  	inode_unlock(dir);
--	simple_release_fs(&mount, &mount_count);
-+	simple_release_fs(&securityfs_mount, &securityfs_mount_count);
+-	simple_release_fs(&securityfs_mount, &securityfs_mount_count);
++	simple_release_fs(mount, mount_count);
++}
++
++/**
++ * securityfs_remove - removes a file or directory from the securityfs filesystem
++ *
++ * @dentry: a pointer to a the dentry of the file or directory to be removed.
++ *
++ * This function removes a file or directory in securityfs that was previously
++ * created with a call to another securityfs function (like
++ * securityfs_create_file() or variants thereof.)
++ *
++ * This function is required to be called in order for the file to be
++ * removed. No automatic cleanup of files will happen when a module is
++ * removed; you are responsible here.
++ */
++void securityfs_remove(struct dentry *dentry)
++{
++	_securityfs_remove(dentry, &securityfs_mount, &securityfs_mount_count);
  }
++
  EXPORT_SYMBOL_GPL(securityfs_remove);
  
+ #ifdef CONFIG_SECURITY
 -- 
 2.31.1
 
