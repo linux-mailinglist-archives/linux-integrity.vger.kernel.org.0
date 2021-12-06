@@ -2,114 +2,231 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1221646A2AA
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Dec 2021 18:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC91446A2E9
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Dec 2021 18:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238348AbhLFRZ4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Dec 2021 12:25:56 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46858 "EHLO
+        id S241909AbhLFRa5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Dec 2021 12:30:57 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:30654 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232414AbhLFRZy (ORCPT
+        by vger.kernel.org with ESMTP id S240329AbhLFR34 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:25:54 -0500
+        Mon, 6 Dec 2021 12:29:56 -0500
 Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6FjSxW005643;
-        Mon, 6 Dec 2021 17:22:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ubl+npukGCKFaQX9Fvtq8DHnrcsdC/VCt+FCKi1gKeA=;
- b=m8+2jccfuVL2KORn8fSRcTIfX1jXc+n5cisnEag2Hb5AmgLpQLph4nOF7r6arlcCcia4
- fAMc91D8ZZrRp2rZODQ+qaxl3iKokSdO7CDY5AQ1x/ErzFm5Pge60TfrFoMvcctRSEV6
- O0X8i97VMMn0EDDr5GMoldsNBXcKd1JEF+drID5zH57wNQ4rXT7fsuBEgRPvjr3NGdHI
- qHWa81jjx/8nT0XB4n2AhmHxj9mVeyn8wS1202k5Z39U+/ZMyKXJWyRt126bM7n0Pmqd
- tB4Xv13A+v1ugiKY0n+eTVrYH4+qFEj/S6GbZx+v5qtNcmH7VcVP28TsyAgIocG0YaHn DQ== 
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6FjRtr005534;
+        Mon, 6 Dec 2021 17:26:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=5dAPaPlMd5CJ+2PVoXw4RIyM0HE+Jr/GDRtytyJkbac=;
+ b=SBIIMeiWKna2Sgm1VQboWNvF+76TqtbWUIk5al49zZ/pq0gPCYygUpM6FzNrmWR5Q78w
+ ClMW+dCjfm1MxUSX5++Pfp4ugWXzwDpSHwMroFg7kfmflR9n3GtLyfGNR1VGXYKymBIA
+ fbg5KZbbTRllvUMkX3mlqRUEXGW0VoawfM/y8yHSzttgIzLQL0TXa6Wiev30oRtJHiau
+ ys3+QBbgw5JLeWZgWriXmeqp/9yegiVKt1qW5AdwIEUje+uBK7XmKXDKTjnq/Q5oNZ4O
+ ORl0OHdqEgKxxj2cbnA1yQdKiuaIDZ3yl+UbU8xnDqvHz3vQ9PSDbKb3fkLYNcft7SqY 7g== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3csmnekatc-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3csmnekdah-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 17:22:08 +0000
+        Mon, 06 Dec 2021 17:26:11 +0000
 Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B6HGonx032007;
-        Mon, 6 Dec 2021 17:22:07 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3csmnekasy-1
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B6H91PE031387;
+        Mon, 6 Dec 2021 17:26:10 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3csmnekda7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 17:22:07 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B6HEHgb000452;
-        Mon, 6 Dec 2021 17:22:05 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma03wdc.us.ibm.com with ESMTP id 3cqyy72auv-1
+        Mon, 06 Dec 2021 17:26:10 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B6HDicY029393;
+        Mon, 6 Dec 2021 17:26:09 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03dal.us.ibm.com with ESMTP id 3cqyya2my3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 17:22:05 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B6HM4rE52822378
+        Mon, 06 Dec 2021 17:26:08 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B6HQ7VS50594172
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Dec 2021 17:22:04 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7AABF78063;
-        Mon,  6 Dec 2021 17:22:04 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 289B378060;
-        Mon,  6 Dec 2021 17:22:02 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Dec 2021 17:22:01 +0000 (GMT)
-Message-ID: <f3a6d18f-86e4-e567-16d4-47c15d3d9aab@linux.ibm.com>
-Date:   Mon, 6 Dec 2021 12:22:01 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
-Content-Language: en-US
-To:     jejb@linux.ibm.com, linux-integrity@vger.kernel.org
+        Mon, 6 Dec 2021 17:26:07 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3ACDF2805C;
+        Mon,  6 Dec 2021 17:26:07 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 18C9C28059;
+        Mon,  6 Dec 2021 17:26:07 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Dec 2021 17:26:07 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
 Cc:     zohar@linux.ibm.com, serge@hallyn.com,
         christian.brauner@ubuntu.com, containers@lists.linux.dev,
         dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
         krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
         mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
- <20211203023118.1447229-20-stefanb@linux.ibm.com>
- <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
- <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
- <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
- <cd05433a-3630-e7f5-e144-ff766d7792fa@linux.ibm.com>
- <084e6522e1e778408cf6b3581d75f7349d336006.camel@linux.ibm.com>
- <e4134d4f-5134-ade8-6428-3510ac940757@linux.ibm.com>
- <915b3be92544f6572f214f360a592708f46ad7e6.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <915b3be92544f6572f214f360a592708f46ad7e6.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v3 00/16] ima: Namespace IMA with audit support in IMA-ns
+Date:   Mon,  6 Dec 2021 12:25:44 -0500
+Message-Id: <20211206172600.1495968-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ScE-9ZebKg2WAdfktQWEDRzFXmo1XYlw
-X-Proofpoint-GUID: UQe5HTJ0U2Xr8ZFrgYvxzn4qNKSj6OSd
+X-Proofpoint-ORIG-GUID: 5hh1xSrf9rJIa-dDyinvb_GP3VkB77ia
+X-Proofpoint-GUID: oVt0Fj-k5zrg5eMXdwQko2VVQ83tIug_
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-06_06,2021-12-06_02,2021-12-02_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
  lowpriorityscore=0 mlxscore=0 priorityscore=1501 phishscore=0
  suspectscore=0 impostorscore=0 malwarescore=0 bulkscore=0 clxscore=1015
- mlxlogscore=676 classifier=spam adjust=0 reason=mlx scancount=1
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2112060104
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+The goal of this series of patches is to start with the namespacing of
+IMA and support auditing within an IMA namespace (IMA-ns) as the first
+step.
 
-On 12/6/21 09:11, James Bottomley wrote:
-> On Mon, 2021-12-06 at 09:03 -0500, Stefan Berger wrote:
->
-> It's never too early to see what the series is shaping up as.  However,
-> I'm still not sure I got the right trigger for the SECURITYFS_NS_ADD
-> notifier, so that may still have to move ... or even that there isn't
-> some locking subtlety I missed in triggering SECURITY_NS_REMOVE from
-> kill_sb.
+In this series the IMA namespace is piggy backing on the user namespace
+and therefore an IMA namespace gets created when a user namespace is
+created. The advantage of this is that the user namespace can provide
+the keys infrastructure that IMA appraisal support will need later on.
 
-I'll post v3 with the early changes and your Signed-off-by's added where 
-I made changes to files.
+We chose the goal of supporting auditing within an IMA namespace since it
+requires the least changes to IMA. Following this series, auditing within
+an IMA namespace can be activated by a user running the following lines
+that rely on a statically linked busybox to be installed on the host for
+execution within the minimal container environment:
 
-    Stefan
+mkdir -p rootfs/{bin,mnt,proc}
+cp /sbin/busybox rootfs/bin
+PATH=/bin unshare --user --map-root-user --mount-proc --pid --fork \
+  --root rootfs busybox sh -c \
+ "busybox mount -t securityfs /mnt /mnt; \
+  busybox echo 'audit func=BPRM_CHECK mask=MAY_EXEC' > /mnt/ima/policy; \
+  busybox cat /mnt/ima/policy"
+
+Following the audit log on the host the last line cat'ing the IMA policy
+inside the namespace would have been audited. Unfortunately the auditing
+line is not distinguishable from one stemming from actions on the host.
+The hope here is that Richard Brigg's container id support for auditing
+would help resolve the problem.
+
+The following lines added to a suitable IMA policy on the host would
+cause the execution of the commands inside the container (by uid 1000)
+to be measured and audited as well on the host, thus leading to two
+auditing messages for the 'busybox cat' above and log entries in IMA's
+system log.
+
+echo -e "measure func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+        "audit func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+    > /sys/kernel/security/ima/policy
+
+The goal of supporting measurement and auditing by the host, of actions
+occurring within IMA namespaces, is that users, particularly root,
+should not be able to evade the host's IMA policy just by spawning
+new IMA namespaces, running programs there, and discarding the namespaces
+again. This is achieved through 'hierarchical processing' of file
+accesses that are evaluated against the policy of the namespace where
+the action occurred and against all namespaces' and their policies leading
+back to the root IMA namespace (init_ima_ns).
+
+The patch series adds support for a virtualized SecurityFS with a few
+new API calls that are used by IMA namespacing. Only the data relevant
+to the IMA namespace are shown. The files and directories of other
+security subsystems (TPM, evm, Tomoyo, safesetid) are not showing
+up when secruityfs is mounted inside a user namespace.
+
+Much of the code leading up to the virtualization of SecurityFS deals
+with moving IMA's variables from various files into the IMA namespace
+structure called 'ima_namespace'. When it comes to determining the
+current IMA namespace I took the approach to get the current IMA
+namespace (get_current_ns()) on the top level and pass the pointer all
+the way down to those functions that now need access to the ima_namespace
+to get to their variables. This later on comes in handy once hierarchical
+processing is implemented in this series where we walk the list of
+namespaces backwards and again need to pass the pointer into functions.
+
+This patch also introduces usage of CAP_MAC_ADMIN to allow access to the
+IMA policy via reduced capabilities. We would again later on use this
+capability to allow users to set file extended attributes for IMA appraisal
+support.
+
+The basis for this series of patches is Linux v5.15.
+My tree with these patches is here:
+https://github.com/stefanberger/linux-ima-namespaces/tree/v5.15%2Bimans.v3.public
+
+Regards,
+   Stefan
+
+v3:
+ - Further modifications to virtualized SecurityFS following James's posted patch
+ - Dropping of early teardown for user_namespaces since not needed anymore
+
+v2:
+ - Folllwed Christian's suggestion to virtualize securitytfs; no more securityfs_ns
+ - Followed James's advice for late 'population' of securityfs for IMA namespaces
+ - Squashed 2 patches dealing with capabilities
+ - Added missing 'depends on USER_NS' to Kconfig
+ - Added missing 'static' to several functions
+
+
+*** BLURB HERE ***
+
+Mehmet Kayaalp (2):
+  ima: Define ns_status for storing namespaced iint data
+  ima: Namespace audit status flags
+
+Stefan Berger (14):
+  ima: Add IMA namespace support
+  ima: Move delayed work queue and variables into ima_namespace
+  ima: Move IMA's keys queue related variables into ima_namespace
+  ima: Move policy related variables into ima_namespace
+  ima: Move ima_htable into ima_namespace
+  ima: Move measurement list related variables into ima_namespace
+  ima: Only accept AUDIT rules for IMA non-init_ima_ns namespaces for
+    now
+  ima: Implement hierarchical processing of file accesses
+  securityfs: Move vfsmount into user_namespace
+  securityfs: Extend securityfs with namespacing support
+  ima: Move some IMA policy and filesystem related variables into
+    ima_namespace
+  ima: Use mac_admin_ns_capable() to check corresponding capability
+  ima: Move dentries into ima_namespace
+  ima: Setup securityfs for IMA namespace
+
+ include/linux/capability.h                   |   6 +
+ include/linux/ima.h                          | 126 ++++++++++++++
+ include/linux/security.h                     |   8 +
+ include/linux/user_namespace.h               |   8 +
+ init/Kconfig                                 |  13 ++
+ kernel/user.c                                |   9 +-
+ kernel/user_namespace.c                      |  16 ++
+ security/inode.c                             |  83 +++++++--
+ security/integrity/ima/Makefile              |   4 +-
+ security/integrity/ima/ima.h                 | 145 ++++++++++------
+ security/integrity/ima/ima_api.c             |  33 ++--
+ security/integrity/ima/ima_appraise.c        |  26 +--
+ security/integrity/ima/ima_asymmetric_keys.c |   8 +-
+ security/integrity/ima/ima_fs.c              | 170 ++++++++++++-------
+ security/integrity/ima/ima_init.c            |  22 +--
+ security/integrity/ima/ima_init_ima_ns.c     |  73 ++++++++
+ security/integrity/ima/ima_main.c            | 128 +++++++++-----
+ security/integrity/ima/ima_ns.c              | 111 ++++++++++++
+ security/integrity/ima/ima_ns_status.c       | 132 ++++++++++++++
+ security/integrity/ima/ima_policy.c          | 142 +++++++++-------
+ security/integrity/ima/ima_queue.c           |  75 ++++----
+ security/integrity/ima/ima_queue_keys.c      |  73 +++-----
+ security/integrity/ima/ima_template.c        |   4 +-
+ 23 files changed, 1075 insertions(+), 340 deletions(-)
+ create mode 100644 security/integrity/ima/ima_init_ima_ns.c
+ create mode 100644 security/integrity/ima/ima_ns.c
+ create mode 100644 security/integrity/ima/ima_ns_status.c
+
+-- 
+2.31.1
+
