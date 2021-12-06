@@ -2,150 +2,215 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C288646955E
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Dec 2021 13:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DFD469571
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Dec 2021 13:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242825AbhLFMHL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Dec 2021 07:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242675AbhLFMHK (ORCPT
+        id S242854AbhLFMM1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Dec 2021 07:12:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54076 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242776AbhLFMM1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Dec 2021 07:07:10 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660C4C061746
-        for <linux-integrity@vger.kernel.org>; Mon,  6 Dec 2021 04:03:42 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id r9-20020a63d909000000b003312e182b9cso1973347pgg.16
-        for <linux-integrity@vger.kernel.org>; Mon, 06 Dec 2021 04:03:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=p1dnwp9pexb4Wt3I9dr5nw5PW+WuwG9peUBcyXTrLmk=;
-        b=ItMJzmgvxGxPVesVHjU0mcymz1iyNdwpJWoB73JHipYHHFD56MFpq4sYU4NBiImkoI
-         m+7ZaTUYKErzvpu8Ynaz0TYQK3PPupffOC9QQMyR3Mw+7XeLkNGV2OQPWa8xbUgIWBPH
-         79az/W5Oq4Kc3oPYhGGXgmBxGjRWvTDoSJMubBBFCM+85x/7OCOAPPjHKEsB6N1gxwn8
-         toYbj+BJ2FyXGJE5jadM7l8lFVu3vwlrvkWCifhw/XT5v9sVEuHOefDxzzSkNpGmfao8
-         PsaQEZPlDCSbln5xDaZxhBLkKwRyUH7J7zi6hiflWwOhBOmima9KuqA5oga0B04BgZSY
-         nipg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=p1dnwp9pexb4Wt3I9dr5nw5PW+WuwG9peUBcyXTrLmk=;
-        b=yuV9HC6h6frRSqXhuJNcSXFBfN+3364a3q9OqpsnPHBtqV2xLwWbnJqAb3eMlCKO2X
-         IgMmY1TduY8tzZ2nFsyu5DBi4e+dQDK8KHf2rNiiaRTPm5FpuuKx5lxoctzRkR3P9kT7
-         corBrHy5RJVdYC8d7vK4VcRgV4km4c22OXi5W7zGh7Ud4UQAfvWwWu+dFNLyN/oFxw8A
-         4qN5WUoFnS8y7XpEkeBOwQoQqMOLlWCoU2DeJ6mhqhiHcGF0WK7FsWRBvhTuEkJSTeRf
-         0CwxF1TSlBbQ3pC/9T+J3kAod7fJFGql7m0dvF5zYCjRfGDL8eHBcyQOdirJ3Xd4WMCp
-         YTbg==
-X-Gm-Message-State: AOAM532MX+Ld9qrh5dzvYtOMuer1G2cTqlK3QyDczJOiMQ+XFRyNB1+j
-        k+wGXNN222MJy8n5frmgtVFTKNE3BQFPGh8=
-X-Google-Smtp-Source: ABdhPJx+ASdS+2v1RcQjXuw5XjroTrKuPkStI0J3v+VCCjEsMDvw7wj+8AHdDAGbYM0+DtL9BgAwfSBPmDEQ4LQ=
-X-Received: from robscloud.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:553e])
- (user=robbarnes job=sendgmr) by 2002:a17:902:c204:b0:142:2441:aa26 with SMTP
- id 4-20020a170902c20400b001422441aa26mr43283611pll.84.1638792221807; Mon, 06
- Dec 2021 04:03:41 -0800 (PST)
-Date:   Mon,  6 Dec 2021 12:03:09 +0000
-In-Reply-To: <Yaut12SfSYPGcs6S@iki.fi>
-Message-Id: <20211206120311.2844838-1-robbarnes@google.com>
-Mime-Version: 1.0
-References: <Yaut12SfSYPGcs6S@iki.fi>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH v3] char: tpm: cr50: Set TPM_FIRMWARE_POWER_MANAGED based on
- device property
-From:   Rob Barnes <robbarnes@google.com>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Rob Barnes <robbarnes@google.com>, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 6 Dec 2021 07:12:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FECCB8105C;
+        Mon,  6 Dec 2021 12:08:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B880C341C2;
+        Mon,  6 Dec 2021 12:08:50 +0000 (UTC)
+Date:   Mon, 6 Dec 2021 13:08:47 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     jejb@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
+Message-ID: <20211206120847.ayr3zycigld6rf4j@wittgenstein>
+References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
+ <20211203023118.1447229-20-stefanb@linux.ibm.com>
+ <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
+ <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
+ <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
+ <ed654d0f-6194-ce29-a854-3d9128d81b7a@schaufler-ca.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ed654d0f-6194-ce29-a854-3d9128d81b7a@schaufler-ca.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Set TPM_FIRMWARE_POWER_MANAGED flag based on 'firmware-power-managed'
-ACPI DSD property. For the CR50 TPM, this flag defaults to true when
-the property is unset.
+On Fri, Dec 03, 2021 at 11:37:14AM -0800, Casey Schaufler wrote:
+> On 12/3/2021 10:50 AM, James Bottomley wrote:
+> > On Fri, 2021-12-03 at 13:06 -0500, Stefan Berger wrote:
+> > > On 12/3/21 12:03, James Bottomley wrote:
+> > > > On Thu, 2021-12-02 at 21:31 -0500, Stefan Berger wrote:
+> > > > [...]
+> > > > >    static int securityfs_init_fs_context(struct fs_context *fc)
+> > > > >    {
+> > > > > +	int rc;
+> > > > > +
+> > > > > +	if (fc->user_ns->ima_ns->late_fs_init) {
+> > > > > +		rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
+> > > > > +		if (rc)
+> > > > > +			return rc;
+> > > > > +	}
+> > > > >    	fc->ops = &securityfs_context_ops;
+> > > > >    	return 0;
+> > > > >    }
+> > > > I know I suggested this, but to get this to work in general, it's
+> > > > going to have to not be specific to IMA, so it's going to have to
+> > > > become something generic like a notifier chain.  The other problem
+> > > > is it's only working still by accident:
+> > > I had thought about this also but the rationale was:
+> > > 
+> > > securityfs is compiled due to CONFIG_IMA_NS and the user namespace
+> > > exists there and that has a pointer now to ima_namespace, which can
+> > > have that callback. I assumed that other namespaced subsystems could
+> > > also be  reached then via such a callback, but I don't know.
+> > Well securityfs is supposed to exist for LSMs.  At some point each of
+> > those is going to need to be namespaced, which may eventually be quite
+> > a pile of callbacks, which is why I thought of a notifier.
+> 
+> While AppArmor, lockdown and the integrity family use securityfs,
+> SELinux and Smack do not. They have their own independent filesystems.
+> Implementations of namespacing for each of SELinux and Smack have been
+> proposed, but nothing has been adopted. It would be really handy to
+> namespace the infrastructure rather than each individual LSM, but I
+> fear that's a bigger project than anyone will be taking on any time
+> soon. It's likely to encounter many of the same issues that I've been
+> dealing with for module stacking.
 
-When this flag is set to false, the CR50 TPM driver will always send
-a shutdown command whenever the system suspends.
+The main thing that bothers me is that it uses simple_pin_fs() and
+simple_unpin_fs() which I would try hard to get rid of if possible. The
+existence of this global pinning logic makes namespacing it properly
+more difficult then it needs to be and it creates imho wonky semantics
+where the last unmount doesn't really destroy the superblock. Instead
+subsequents mounts resurface the same superblock. There might be an
+inherent design reason why this needs to be this way but I would advise
+against these semantics for anything that wants to be namespaced.
+Probably the first securityfs mount in init_user_ns can follow these
+semantics but ones tied to a non-initial user namespace should not as
+the userns can go away. In that case the pinning logic seems strange as
+conceptually the userns pins the securityfs mount as evidenced by the
+fact that we key by it in get_tree_keyed().
 
-Signed-off-by: Rob Barnes <robbarnes@google.com>
----
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 16 +++++++++++++++-
- drivers/char/tpm/tpm_tis_spi_cr50.c | 16 +++++++++++++++-
- 2 files changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index c89278103703..f6c0affbb456 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -628,6 +628,19 @@ static bool tpm_cr50_i2c_req_canceled(struct tpm_chip *chip, u8 status)
- 	return status == TPM_STS_COMMAND_READY;
- }
- 
-+static bool tpm_cr50_i2c_is_firmware_power_managed(struct device *dev)
-+{
-+	u8 val;
-+	int ret;
-+
-+	/* This flag should default true when the device property is not present */
-+	ret = device_property_read_u8(dev, "firmware-power-managed", &val);
-+	if (ret)
-+		return true;
-+
-+	return val;
-+}
-+
- static const struct tpm_class_ops cr50_i2c = {
- 	.flags = TPM_OPS_AUTO_STARTUP,
- 	.status = &tpm_cr50_i2c_tis_status,
-@@ -686,7 +699,8 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
- 
- 	/* cr50 is a TPM 2.0 chip */
- 	chip->flags |= TPM_CHIP_FLAG_TPM2;
--	chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
-+	if (tpm_cr50_i2c_is_firmware_power_managed(dev))
-+		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
- 
- 	/* Default timeouts */
- 	chip->timeout_a = msecs_to_jiffies(TIS_SHORT_TIMEOUT);
-diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_tis_spi_cr50.c
-index dae98dbeeeac..7bf123d3c537 100644
---- a/drivers/char/tpm/tpm_tis_spi_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
-@@ -185,6 +185,19 @@ static int cr50_spi_flow_control(struct tpm_tis_spi_phy *phy,
- 	return 0;
- }
- 
-+static bool tpm_cr50_spi_is_firmware_power_managed(struct device *dev)
-+{
-+	u8 val;
-+	int ret;
-+
-+	/* This flag should default true when the device property is not present */
-+	ret = device_property_read_u8(dev, "firmware-power-managed", &val);
-+	if (ret)
-+		return true;
-+
-+	return val;
-+}
-+
- static int tpm_tis_spi_cr50_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
- 				     u8 *in, const u8 *out)
- {
-@@ -309,7 +322,8 @@ int cr50_spi_probe(struct spi_device *spi)
- 	cr50_print_fw_version(&phy->priv);
- 
- 	chip = dev_get_drvdata(&spi->dev);
--	chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
-+	if (tpm_cr50_spi_is_firmware_power_managed(&spi->dev))
-+		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED;
- 
- 	return 0;
- }
--- 
-2.34.1.400.ga245620fadb-goog
-
+> 
+> > 
+> > > I suppose any late filesystem init callchain would have to be
+> > > connected to the user_namespace somehow?
+> > I don't think so; I think just moving some securityfs entries into the
+> > user_namespace and managing the notifier chain from within securityfs
+> > will do for now.  [although I'd have to spec this out in code before I
+> > knew for sure].
+> > 
+> > > > > +int ima_fs_ns_init(struct ima_namespace *ns)
+> > > > > +{
+> > > > > +	ns->mount = securityfs_ns_create_mount(ns->user_ns);
+> > > > This actually triggers on the call to securityfs_init_fs_context,
+> > > > but nothing happens because the callback is null.  Every subsequent
+> > > > use of fscontext will trigger this.  The point of a keyed supeblock
+> > > > is that fill_super is only called once per key, that's the place we
+> > > > should be doing this.   It should also probably be a blocking
+> > > > notifier so anyconsumer of securityfs can be namespaced by
+> > > > registering for this notifier.
+> > > What I don't like about the fill_super is that it gets called too
+> > > early:
+> > > 
+> > > [   67.058611] securityfs_ns_create_mount @ 102 target user_ns:
+> > > ffff95c010698c80; nr_extents: 0
+> > > [   67.059836] securityfs_fill_super @ 47  user_ns:
+> > > ffff95c010698c80;
+> > > nr_extents: 0
+> > Right, it's being activated by securityfs_ns_create_mount which is
+> > called as soon as the user_ns is created.
+> > 
+> > > We are switching to the target user namespace in
+> > > securityfs_ns_create_mount. The expected nr_extents at this point is
+> > > 0, since user_ns hasn't been configured, yet. But then
+> > > security_fill_super is also called with nr_extents 0. We cannot use
+> > > that, it's too early!
+> > Exactly, so I was thinking of not having a securityfs_ns_create_mount
+> > at all.  All the securityfs_ns_create.. calls would be in the notifier
+> > call chain. This means there's nothing to fill the superblock until an
+> > actual mount on it is called.
+> > 
+> > > > > +	if (IS_ERR(ns->mount)) {
+> > > > > +		ns->mount = NULL;
+> > > > > +		return -1;
+> > > > > +	}
+> > > > > +	ns->mount_count = 1;
+> > > > This is a bit nasty, too: we're spilling the guts of mount count
+> > > > tracking into IMA instead of encapsulating it inside securityfs.
+> > > Ok, I can make this disappear.
+> > > 
+> > > 
+> > > > > +
+> > > > > +	/* Adjust the trigger for user namespace's early teardown of
+> > > > > dependent
+> > > > > +	 * namespaces. Due to the filesystem there's an additional
+> > > > > reference
+> > > > > +	 * to the user namespace.
+> > > > > +	 */
+> > > > > +	ns->user_ns->refcount_teardown += 1;
+> > > > > +
+> > > > > +	ns->late_fs_init = ima_fs_ns_late_init;
+> > > > > +
+> > > > > +	return 0;
+> > > > > +}
+> > > > I think what should be happening is that we shouldn't so the
+> > > > simple_pin_fs, which creates the inodes, ahead of time; we should
+> > > > do it inside fill_super using a notifier, meaning it gets called
+> > > > once per
+> > > fill_super would only work for the init_user_ns from what I can see.
+> > > 
+> > > 
+> > > > key, creates the root dentry then triggers the notifier which
+> > > > instantiates all the namespaced entries.  We can still use
+> > > > simple_pin_fs for this because there's no locking across
+> > > > fill_super.
+> > > > This would mean fill_super would be called the first time the
+> > > > securityfs is mounted inside the namespace.
+> > > I guess I would need to know how fill_super would work or how it
+> > > could be called late/delayed as well.
+> > So it would be called early in the init_user_ns by non-namespaced
+> > consumers of securityfs, like it is now.
+> > 
+> > Namespaced consumers wouldn't call any securityfs_ns_create callbacks
+> > to create dentries until they were notified from the fill_super
+> > notifier, which would now only be triggered on first mount of
+> > securityfs inside the namespace.
+> > 
+> > > > If we do it this way, we can now make securityfs have its own mount
+> > > > and mount_count inside the user namespace, which it uses internally
+> > > > to the securityfs code, thus avoiding exposing them to ima or any
+> > > > other namespaced consumer.
+> > > > 
+> > > > I also think we now don't need the securityfs_ns_ duplicated
+> > > > functions because the callback via the notifier chain now ensures
+> > > > we can usethe namespace they were created in to distinguish between
+> > > > non namespaced and namespaced entries.
+> > > Is there then no need to pass a separate vfsmount * in anymore?
+> > I don't think so no.  It could be entirely managed internally to
+> > securityfs.
+> > 
+> > > Where would the vfsmount pointer reside? For now it's in
+> > > ima_namespace, but it sounds like it should be in a more centralized
+> > > place? Should it also be  connected to the user_namespace so we can
+> > > pick it up using get_user_ns()?
+> > exactly.  I think struct user_namespace should have two elements gated
+> > by a #ifdef CONFIG_SECURITYFS which are the vfsmount and the
+> > mount_count for passing into simple_pin_fs.
+> > 
+> > 
+> > James
+> > 
+> > 
+> 
