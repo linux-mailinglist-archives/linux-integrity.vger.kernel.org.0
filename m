@@ -2,142 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CF146948C
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Dec 2021 11:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC31469545
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Dec 2021 12:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241989AbhLFLBR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Dec 2021 06:01:17 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4201 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241972AbhLFLBN (ORCPT
+        id S242744AbhLFLz7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Dec 2021 06:55:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38284 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242736AbhLFLz6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:01:13 -0500
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J70hy1Svhz67wK2;
-        Mon,  6 Dec 2021 18:56:02 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 11:57:41 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
- Mon, 6 Dec 2021 11:57:41 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Christoph Hellwig <hch@infradead.org>
-CC:     "deven.desai@linux.microsoft.com" <deven.desai@linux.microsoft.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "eparis@redhat.com" <eparis@redhat.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>
-Subject: RE: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
-Thread-Topic: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
-Thread-Index: AQHX5tHI6VSZDPA0J0GM0KIP7fuaeKweu+CAgAAaFvD///01gIAAEg9QgAFg9oCAAC4FMIAE3cYA
-Date:   Mon, 6 Dec 2021 10:57:41 +0000
-Message-ID: <e38392762299459890eee792a3a7cb09@huawei.com>
-References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
- <20211201163708.3578176-1-roberto.sassu@huawei.com>
- <Yahz1SYRG1CQIh0z@infradead.org>
- <e57d2d23ec7845febb79ca4476c73fcb@huawei.com>
- <YaiHX+dWNUlmsNac@infradead.org>
- <b4bf4a384b334cdab1522b3b082bd088@huawei.com>
- <Yam+m9eiLxIamGXm@infradead.org>
- <28208b7f142f4295ac5c857af5cffe07@huawei.com>
-In-Reply-To: <28208b7f142f4295ac5c857af5cffe07@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 6 Dec 2021 06:55:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A798611B4;
+        Mon,  6 Dec 2021 11:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE10C341C1;
+        Mon,  6 Dec 2021 11:52:23 +0000 (UTC)
+Date:   Mon, 6 Dec 2021 12:52:20 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     jejb@linux.ibm.com, linux-integrity@vger.kernel.org,
+        zohar@linux.ibm.com, serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
+Message-ID: <20211206115220.7ku74xddmmlhbjdh@wittgenstein>
+References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
+ <20211203023118.1447229-20-stefanb@linux.ibm.com>
+ <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
+ <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
+ <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
+ <cd05433a-3630-e7f5-e144-ff766d7792fa@linux.ibm.com>
+ <b285b0d4-e615-bea4-f22f-09d83f8f8edb@linux.ibm.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b285b0d4-e615-bea4-f22f-09d83f8f8edb@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-> From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
-> Sent: Friday, December 3, 2021 11:20 AM
-> > From: Christoph Hellwig [mailto:hch@infradead.org]
-> > Sent: Friday, December 3, 2021 7:52 AM
-> > On Thu, Dec 02, 2021 at 09:29:52AM +0000, Roberto Sassu wrote:
-> > > The problem being solved is how to grant access to files
-> > > which satisfy a property defined in the policy.
-> >
-> > If you have want to enforce access to files in the block layer using
-> > a specific stacking block driver you don't just have one layering
-> > violation but a bunch of them.  Please go back to the drawing board.
+On Fri, Dec 03, 2021 at 07:33:39PM -0500, Stefan Berger wrote:
 > 
-> Ok. I write my thoughts here, so that it is easier to align.
+> On 12/3/21 14:11, Stefan Berger wrote:
+> > 
+> > On 12/3/21 13:50, James Bottomley wrote:
+> > 
+> > 
+> > > 
+> > > > Where would the vfsmount pointer reside? For now it's in
+> > > > ima_namespace, but it sounds like it should be in a more centralized
+> > > > place? Should it also be  connected to the user_namespace so we can
+> > > > pick it up using get_user_ns()?
+> > > exactly.  I think struct user_namespace should have two elements gated
+> > > by a #ifdef CONFIG_SECURITYFS which are the vfsmount and the
+> > > mount_count for passing into simple_pin_fs.
+> > 
+> > Also that we can do for as long as it flies beyond the conversation
+> > here... :-) Anyone else have an opinion ?
 > 
-> dm-verity provides block-level integrity, which means that
-> the block layer itself is responsible to not pass data to the
-> upper layer, the filesystem, if a block is found corrupted.
-> 
-> The dm-verity root digest represents the immutable state
-> of the block device. dm-verity is still responsible to enforce
-> accesses to the block device according to the root digest
-> passed at device setup time. Nothing changes, the block
-> layer still detects data corruption against the passed
-> reference value.
-> 
-> The task of the security layer is to decide whether or not
-> the root digest passed at device setup time is acceptable,
-> e.g. it represents a device containing genuine files coming
-> from a software vendor.
-> 
-> The mandatory policy can be enforced at different layers,
-> depending on whether the security controls are placed.
-> A possibility would be to deny mounting block devices that
-> don't satisfy the mandatory policy.
-> 
-> However, if the mandatory policy wants only to restrict
-> execution of approved files and allowing the rest, making
-> the decision at the block layer is too coarse and restrictive.
-> It would force the user to mount only approved block
-> devices. The security layer must operate on files to enforce
-> this policy.
-> 
-> Now probably there is the part where there is no agreement.
-> 
-> The integrity property of a block device applies also to the
-> files on the filesystem mounted from that device. User space
-> programs cannot access files in that filesystem coming from a
-> device with a different dm-verity root digest, or files stored
-> in a corrupted block device.
-> 
-> If what I wrote is correct, that the integrity property is preserved
-> across the layers, this would give enough flexibility to enforce
-> policies at a higher layer, although that property is guaranteed
-> by a lower layer.
+> I moved it now and this greatly reduced the amount of changes. The dentries
+> are now all in the ima_namespace and it works with one API. Thanks!
 
-Hi Christoph
-
-did I address your concerns? If yes, I could send the new patch
-set, including the patch that uses the new functionality.
-
-Thanks
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
+Ideally you only have one entry in struct user_namespace for ima that
+encompasses all information needed; not multiple entries. Similar to
+what I did for binfmt_misc
+https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/commit/?h=fs.binfmt_misc&id=eb50eb90a694e05f6fd6533951a56ca3ed040761
+if that works.
