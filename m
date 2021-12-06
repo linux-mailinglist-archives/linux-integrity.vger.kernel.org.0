@@ -2,148 +2,262 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4E446A8DC
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Dec 2021 21:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9FC46A99C
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Dec 2021 22:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349895AbhLFVAZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Dec 2021 16:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349925AbhLFVAO (ORCPT
+        id S1350725AbhLFVSk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 6 Dec 2021 16:18:40 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6052 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350866AbhLFVSO (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:00:14 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8030DC061354
-        for <linux-integrity@vger.kernel.org>; Mon,  6 Dec 2021 12:56:45 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id r25so48052635edq.7
-        for <linux-integrity@vger.kernel.org>; Mon, 06 Dec 2021 12:56:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SPIEvU27nJzVjEldPndh6AIS3bn8rbbKEjqvujfESAs=;
-        b=sqwrKYiuzMi5dmssg4GlXv9w5rXRuhpdynng6r31rrdUObFVM64iPlAGLY+IA6nJ/m
-         1gWVgyo7h8UJSqiNk8kHnQBl3DslIrDGeQY/YI4e8xSZwdJRLRPILwtK2RvxOIlaDPjC
-         OBpGK2HLI8rTM8NspupF8U0OMeFFkOlxbGDEdtu/HKjDnBfhz0fkSnyY621D4Xsbi4/b
-         3ST5UtyYqeWW1cHbeOb480Uy4eW1eKVVgbiLR6jyCICedfyJJmGjtpyRESSiCOiDt3JU
-         DhRelVF98isI2imEImS6IZhbw31inMErIQFNgiZw9xj2I71NmXJtHWWx+Lg6R3ctNEeU
-         pQ1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SPIEvU27nJzVjEldPndh6AIS3bn8rbbKEjqvujfESAs=;
-        b=CzxKJedvtLqSVqu73yWeOxo5Epi0kss8RqD8GpV/aVbXSl7fNxTjpuTTUJw3WmTU/3
-         hBOBtXs+nRf2kgFl2KleZu+HzPC4KiRZZx534O8BdQmCfnuqPmO77vR3PofbyifBoeL5
-         1qT9yy/2hH1ABlRryjdNLUFlITgN6W1ZYchlcbiMY/psW6OhKlL97oJR9Lw/41zNSOju
-         9wmofKxxXkiTfWctxo3hvumGqtEK5Ho6SI8hffKbcoFG7UF6u+wbg4I2wp2GghVhmMEy
-         9OCVWbJFN9Dw0EG/6/Wrkyd30JThvwJyhU8uaiQClD5anTVipDy632/iSD2MJ/XiKTeH
-         Et2w==
-X-Gm-Message-State: AOAM533Hc977nqs8J0nBZ1DA6M0zf/wulewakPQfACWBeYjrTn3RpArV
-        kFAKMFyZgxxTlipQva4MVXX04NW8uSu+YO1Oo+IitypcHg==
-X-Google-Smtp-Source: ABdhPJyGSChgdU/2qHILkiKTMa1sAUYPNsA9phsLkYfr2JydqmXGaS1LTwjvs5zpRZPdPLscuqOdPR5Q9zocilnkoek=
-X-Received: by 2002:a17:907:9196:: with SMTP id bp22mr46000620ejb.69.1638824203940;
- Mon, 06 Dec 2021 12:56:43 -0800 (PST)
-MIME-Version: 1.0
-References: <1630070917-9896-1-git-send-email-ross.philipson@oracle.com>
- <CAHC9VhTJG24iG=U0geO-ZhC6OogxOu4icBrNY22+qRNpWd5PBQ@mail.gmail.com> <456caf8c-b79a-e8b0-581f-3504240466ff@apertussolutions.com>
-In-Reply-To: <456caf8c-b79a-e8b0-581f-3504240466ff@apertussolutions.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 6 Dec 2021 15:56:33 -0500
-Message-ID: <CAHC9VhSZx7j2sEs1H3ON-eDoeWdtXPC7XNQcv5D1WbnP=4Lchg@mail.gmail.com>
-Subject: Re: [PATCH v4 00/14] x86: Trenchboot secure dynamic launch Linux
- kernel support
-To:     "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Cc:     Ross Philipson <ross.philipson@oracle.com>,
-        trenchboot-devel@googlegroups.com, linux-kernel@vger.kernel.org,
-        x86@kernel.org, iommu@lists.linux-foundation.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        luto@amacapital.net, kanth.ghatraju@oracle.com
+        Mon, 6 Dec 2021 16:18:14 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6KpEPh031874;
+        Mon, 6 Dec 2021 21:14:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=ShB4uba5GUGqtY+f8M5TLlSaUG5gbp9vI+lNh9lyRLc=;
+ b=NC1NtVj+3gHx+N0s4+zflOvoHTe33eb2Mhijok8HmXNyBecE7iSxsX2JmygdKunhOr6g
+ 8B4CkB2qXk/a/bR207GWZDZ8iWAO3BVJMfMLEfBFxlND77y5ZZI5SJX6kQyGhJciAdTg
+ n1O1n32zldXGn7V+422YDp6iAOV1yt25Vd6S9ySX423tjdpxNFn4N1rpDhIEPlFn+Iy3
+ bNH+Dn9gpLPyULV9PcijOJxJMolbsnclIKrrAASBh2NnsiiWKQM1PcnkkjsSxxDkV19t
+ 6PSvIYFVk4SUDIlygMUbIszHZvxACO++Aq+uGajbW8h+RTry9SVu5Z9CfwvbSqZRUk/0 yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3csswy8d56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 21:14:23 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B6KpTMN032458;
+        Mon, 6 Dec 2021 21:14:22 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3csswy8d52-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 21:14:22 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B6LDiYK015162;
+        Mon, 6 Dec 2021 21:14:21 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03dal.us.ibm.com with ESMTP id 3cqyya7mnd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 21:14:21 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B6LEKgA53084512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Dec 2021 21:14:20 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 815567806E;
+        Mon,  6 Dec 2021 21:14:20 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AFF0C7805E;
+        Mon,  6 Dec 2021 21:14:16 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Dec 2021 21:14:16 +0000 (GMT)
+Message-ID: <97ca7651b7ae9a0b6dce4d23c76af266fbd5642f.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 00/16] ima: Namespace IMA with audit support in IMA-ns
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Mon, 06 Dec 2021 16:14:15 -0500
+In-Reply-To: <20211206172600.1495968-1-stefanb@linux.ibm.com>
+References: <20211206172600.1495968-1-stefanb@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 5DiuQODpqbkjb6W1U0bDD77_9ZmriIw8
+X-Proofpoint-GUID: 9ClYdqg6AUGKpHh4k17z3C3sxFygYh-H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_07,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
+ impostorscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112060128
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 11:11 AM Daniel P. Smith
-<dpsmith@apertussolutions.com> wrote:
-> Hi Paul!
+On Mon, 2021-12-06 at 12:25 -0500, Stefan Berger wrote:
+[...]
+> v3:
+>  - Further modifications to virtualized SecurityFS following James's
+> posted patch
+>  - Dropping of early teardown for user_namespaces since not needed
+> anymore
 
-/me waves
+This is my incremental to this series that moves the namespaced
+securityfs away from using a vfsmount and on to a root dentry instead,
+meaning we can call the blocking notifier from fill_super as Christian
+requested (and thus can remove the securityfs_notifier_sent indicator
+since it's only called once).
 
-> On 11/30/21 8:06 PM, Paul Moore wrote:
-> > On Fri, Aug 27, 2021 at 9:20 AM Ross Philipson
-> > <ross.philipson@oracle.com> wrote:
-> >>
-> >> The larger focus of the Trechboot project (https://github.com/TrenchBoot) is to
-> >> enhance the boot security and integrity in a unified manner. The first area of
-> >> focus has been on the Trusted Computing Group's Dynamic Launch for establishing
-> >> a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
-> >> Trust for Measurement).
-> >
-> > My apologies for such a late reply, but I'm just getting around to
-> > looking at this and I have a few questions on the basic design/flow
-> > (below) ...
->
-> No worries, thank you so much for taking the time to review.
->
-> >> The basic flow is:
-> >>
-> >>  - Entry from the dynamic launch jumps to the SL stub
-> >
-> > So I'm clear, at this point the combined stub+kernel+initramfs+cmdline
-> > image has already been loaded into memory and the SL stub is
-> > executing, yes?
->
-> That is correct.
->
-> > As TrenchBoot seems to be focused on boot measurement and not
-> > enforcing policy, I'm guessing this is considered out-of-scope (not to
-> > mention that the combined stub+kernel image makes this less
-> > interesting), but has any thought been given to leveraging the TXT
-> > launch control policy, or is it simply an empty run-everything policy?
->
-> The TrenchBoot model is a bit different and takes a more flexible
-> approach to allow users to build tailored solutions. For instance Secure
-> Launch is able to be used in a configuration that is similar to tboot.
-> Consider the functions of tboot, it has a portion that is the
-> post-launch kernel that handles the handover from the ACM and a portion
-> that provides the Verified Launch policy engine, which is only capable
-> of enforcing policy on what is contained in the Multiboot chain. The
-> TrenchBoot approach is to introduce the Secure Launch capability into a
-> kernel, in this case Linux, to handle the handover from the ACM, and
-> then transition to a running user space that can contain a distribution
-> specific policy enforcement. As an example, the TrenchBoot project
-> contributed to the uroot project a Secure Launch policy engine which
-> enables the creation of an initramfs image which can then be embedded
-> into a minimal configuration Secure Launch Linux kernel ...
+James
 
-Thank you for the answers, that was helpful.
+---
 
-I think I initially misunderstood TrenchBoot, thinking that a Secure
-Launch'd kernel/userspace would be the "normal" OS that would
-transition to multi-user mode and be available for users and
-applications.  However, on reading your response it appears that the
-Secure Launch'd kernel/initramfs exists only to verify a secondary
-kernel/initramfs/userspace and then kexec() into that once verified.
+From 07b680d5fd59f5d3cea5580be25a2c9e08a01c3b Mon Sep 17 00:00:00 2001
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+Date: Mon, 6 Dec 2021 20:27:00 +0000
+Subject: [PATCH] Incremental for d_root
 
-> Finally if your schedule allows it and it is not too much to ask, it
-> would be greatly appreciated if some code review could be provided.
-> Otherwise thank you for taking the time that you have to review the
-> approach.
+---
+ include/linux/user_namespace.h |  3 +-
+ security/inode.c               | 55 +++++++++++++---------------------
+ 2 files changed, 22 insertions(+), 36 deletions(-)
 
-I have to admit that I'm not sure I'm the most appropriate person to
-review all of the Intel TXT related assembly, but I could give it a
-shot as time allows.  I would think Intel would be willing to help out
-here if one were to ask nicely :)
-
-Beyond that, and with my new understanding of how TrenchBoot is
-supposed to work, I guess my only other concern is how one might
-verify the integrity of the Secure Launch environment on the local
-system during boot.  My apologies if I missed some details about that
-in your docs, responses, etc. but is this something that TrenchBoot is
-planning on addressing (or has already addressed)?
-
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index 6b8bd060d8c4..03a0879376a0 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -104,8 +104,7 @@ struct user_namespace {
+ 	struct ima_namespace	*ima_ns;
+ #endif
+ #ifdef CONFIG_SECURITYFS
+-	struct vfsmount		*securityfs_mount;
+-	bool			securityfs_notifier_sent;
++	struct dentry		*securityfs_root;
+ #endif
+ } __randomize_layout;
+ 
+diff --git a/security/inode.c b/security/inode.c
+index 45211845fc31..f8b6cb3dfb87 100644
+--- a/security/inode.c
++++ b/security/inode.c
+@@ -24,6 +24,7 @@
+ #include <linux/magic.h>
+ #include <linux/user_namespace.h>
+ 
++static struct vfsmount *securityfs_mount;
+ static int securityfs_mount_count;
+ 
+ static BLOCKING_NOTIFIER_HEAD(securityfs_ns_notifier);
+@@ -40,43 +41,24 @@ static const struct super_operations securityfs_super_operations = {
+ 	.free_inode	= securityfs_free_inode,
+ };
+ 
+-static struct file_system_type fs_type;
+-
+-static void securityfs_free_context(struct fs_context *fc)
+-{
+-	struct user_namespace *ns = fc->user_ns;
+-
+-	if (ns == &init_user_ns ||
+-	    ns->securityfs_notifier_sent)
+-		return;
+-
+-	ns->securityfs_notifier_sent = true;
+-
+-	ns->securityfs_mount = vfs_kern_mount(&fs_type, SB_KERNMOUNT,
+-					      fs_type.name, NULL);
+-	if (IS_ERR(ns->securityfs_mount)) {
+-		printk(KERN_ERR "kern mount on securityfs ERROR: %ld\n",
+-		       PTR_ERR(ns->securityfs_mount));
+-		ns->securityfs_mount = NULL;
+-		return;
+-	}
+-
+-	blocking_notifier_call_chain(&securityfs_ns_notifier,
+-				     SECURITYFS_NS_ADD, fc->user_ns);
+-	mntput(ns->securityfs_mount);
+-}
+-
+ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ {
+ 	static const struct tree_descr files[] = {{""}};
+ 	int error;
++	struct user_namespace *ns = fc->user_ns;
+ 
+ 	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+ 	if (error)
+ 		return error;
+ 
++	ns->securityfs_root = dget(sb->s_root);
++
+ 	sb->s_op = &securityfs_super_operations;
+ 
++	if (ns != &init_user_ns)
++		blocking_notifier_call_chain(&securityfs_ns_notifier,
++					     SECURITYFS_NS_ADD, ns);
++
+ 	return 0;
+ }
+ 
+@@ -87,7 +69,6 @@ static int securityfs_get_tree(struct fs_context *fc)
+ 
+ static const struct fs_context_operations securityfs_context_ops = {
+ 	.get_tree	= securityfs_get_tree,
+-	.free		= securityfs_free_context,
+ };
+ 
+ static int securityfs_init_fs_context(struct fs_context *fc)
+@@ -104,8 +85,10 @@ static void securityfs_kill_super(struct super_block *sb)
+ 		blocking_notifier_call_chain(&securityfs_ns_notifier,
+ 					     SECURITYFS_NS_REMOVE,
+ 					     sb->s_fs_info);
+-	ns->securityfs_notifier_sent = false;
+-	ns->securityfs_mount = NULL;
++
++	dput(ns->securityfs_root);
++	ns->securityfs_root = NULL;
++
+ 	kill_litter_super(sb);
+ }
+ 
+@@ -174,14 +157,18 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+ 	pr_debug("securityfs: creating file '%s'\n",name);
+ 
+ 	if (ns == &init_user_ns) {
+-		error = simple_pin_fs(&fs_type, &ns->securityfs_mount,
++		error = simple_pin_fs(&fs_type, &securityfs_mount,
+ 				      &securityfs_mount_count);
+ 		if (error)
+ 			return ERR_PTR(error);
+ 	}
+ 
+-	if (!parent)
+-		parent = ns->securityfs_mount->mnt_root;
++	if (!parent) {
++		if (ns == &init_user_ns)
++			parent = securityfs_mount->mnt_root;
++		else
++			parent = ns->securityfs_root;
++	}
+ 
+ 	dir = d_inode(parent);
+ 
+@@ -227,7 +214,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+ out:
+ 	inode_unlock(dir);
+ 	if (ns == &init_user_ns)
+-		simple_release_fs(&ns->securityfs_mount,
++		simple_release_fs(&securityfs_mount,
+ 				  &securityfs_mount_count);
+ 	return dentry;
+ }
+@@ -371,7 +358,7 @@ void securityfs_remove(struct dentry *dentry)
+ 	}
+ 	inode_unlock(dir);
+ 	if (ns == &init_user_ns)
+-		simple_release_fs(&ns->securityfs_mount,
++		simple_release_fs(&securityfs_mount,
+ 				  &securityfs_mount_count);
+ }
+ EXPORT_SYMBOL_GPL(securityfs_remove);
 -- 
-paul moore
-www.paul-moore.com
+2.33.0
+
+
