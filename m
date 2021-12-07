@@ -2,69 +2,171 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D2446AF62
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Dec 2021 01:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3113846BE81
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Dec 2021 15:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378709AbhLGAye (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 6 Dec 2021 19:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
+        id S233563AbhLGPCp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 7 Dec 2021 10:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbhLGAye (ORCPT
+        with ESMTP id S232812AbhLGPCp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 6 Dec 2021 19:54:34 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD39C061746
-        for <linux-integrity@vger.kernel.org>; Mon,  6 Dec 2021 16:51:04 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id r25so49950215edq.7
-        for <linux-integrity@vger.kernel.org>; Mon, 06 Dec 2021 16:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
-        b=QEbZy3MV2LfiFIZsY0WUk20ZKmDQAaNZ6gTKLlsvDkLcoQ0bT1chURhBKjHwDOhC9l
-         TYXnXCm/ehsnImFAYTteXiawNHcls8ViSmmEfgG9JqQ+SuUlpq+qAF0dgoDHC9UJCwhW
-         cY7hVUXu1+y7cCM5E70awwT1jDhKv1rHWmZlLcBVxOOdKikG7YRpRqf0bCFOu4PNqpye
-         o5aY7H6FPDumiHtv+whaA/CZ332gvhBHe6J/q0XV2ZDPUfEA9wmIeypOFnBf8PbDE5qr
-         gy7iZM6e6VCAC/oPych1cYEFIyq4Bk0Zx/BJ4jg7jH9DfhFXbRB5Pml+HdKkedQU55IA
-         9/Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
-        b=zPrqO2vmCELmxPsDhjvHKOzbSrY2u9/u83vr54D0pYoY7ajEPFkeX0XssgFqjSN7sH
-         lgpXgtgkU45ig0zWh9Z6vbpykXcWW2fsfl/kE+wM/YH+UDZcXY66YSrWk399bdAKDzD5
-         DLDBjBhs4P8YAKMYsECrRdJoyj5EH9BB9Rju74f4Km8WUndBJm4Dt9aWP2GYWHSvq3lQ
-         9OioemQWxEdezYi5Jd5REBJtvYM3AL1kZy7IRjY8b32GpE1qS3NPVq9JU7daTxMyM7KC
-         MUHTgNVZbFUJoD1ksQux505f+4f5Kwttb65bZruaaCuQp30849RMpWrZW5op6Dw7ATWJ
-         BdHg==
-X-Gm-Message-State: AOAM532f/Pl2NsDyxjnmtHwnXW4hu8hmXDM562ew9pATg+XwH3LwqWWs
-        3aikkKnEZGt57+xA5gFeDyY9uuY+v0Ht93Cvwj0=
-X-Google-Smtp-Source: ABdhPJwpCFuW9VmR/DLlTEw9NjUXqyEg5H09ZPYMPP8NONaxeXrqcerg/Nn2uXqRVNy8QM1uESwHpqhD+RjcUrBRBjI=
-X-Received: by 2002:a17:907:3da9:: with SMTP id he41mr20519824ejc.105.1638838263127;
- Mon, 06 Dec 2021 16:51:03 -0800 (PST)
+        Tue, 7 Dec 2021 10:02:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735C5C061574;
+        Tue,  7 Dec 2021 06:59:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39271B817E4;
+        Tue,  7 Dec 2021 14:59:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4299C341C1;
+        Tue,  7 Dec 2021 14:59:05 +0000 (UTC)
+Date:   Tue, 7 Dec 2021 15:59:01 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [PATCH v3 00/16] ima: Namespace IMA with audit support in IMA-ns
+Message-ID: <20211207145901.awiibdgdidbshsbf@wittgenstein>
+References: <20211206172600.1495968-1-stefanb@linux.ibm.com>
+ <97ca7651b7ae9a0b6dce4d23c76af266fbd5642f.camel@linux.ibm.com>
 MIME-Version: 1.0
-Received: by 2002:a50:7185:0:0:0:0:0 with HTTP; Mon, 6 Dec 2021 16:51:02 -0800 (PST)
-Reply-To: salemchantal@mail.ee
-From:   MRS Salem Chantal Lawrence <mark89828904@gmail.com>
-Date:   Mon, 6 Dec 2021 16:51:02 -0800
-Message-ID: <CAPn67BivmBdW7f_PdovFqMCkkht8EX3PUgmExv9bvG-YdbfdDw@mail.gmail.com>
-Subject: ATM VISA DAPARTCARD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <97ca7651b7ae9a0b6dce4d23c76af266fbd5642f.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Attention
+On Mon, Dec 06, 2021 at 04:14:15PM -0500, James Bottomley wrote:
+> On Mon, 2021-12-06 at 12:25 -0500, Stefan Berger wrote:
+> [...]
+> > v3:
+> >  - Further modifications to virtualized SecurityFS following James's
+> > posted patch
+> >  - Dropping of early teardown for user_namespaces since not needed
+> > anymore
+> 
+> This is my incremental to this series that moves the namespaced
+> securityfs away from using a vfsmount and on to a root dentry instead,
+> meaning we can call the blocking notifier from fill_super as Christian
+> requested (and thus can remove the securityfs_notifier_sent indicator
+> since it's only called once).
 
+Somehow b4 retrieves your patch out-of-band which makes it weird to
+reply to so I'm copy-pasting it here and reply inline:
 
-You have been compensated with the sum of 4.6 million dollars in this
-United Nation the payment will be issue into Atm Visa Card and send to you
+On Mon, Dec 06, 2021 at 08:27:00PM +0000, James Bottomley wrote:
+> ---
+>  include/linux/user_namespace.h |  3 +-
+>  security/inode.c               | 55 +++++++++++++---------------------
+>  2 files changed, 22 insertions(+), 36 deletions(-)
+> 
+> diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+> index 6b8bd060d8c4..03a0879376a0 100644
+> --- a/include/linux/user_namespace.h
+> +++ b/include/linux/user_namespace.h
+> @@ -104,8 +104,7 @@ struct user_namespace {
+>  	struct ima_namespace	*ima_ns;
+>  #endif
+>  #ifdef CONFIG_SECURITYFS
+> -	struct vfsmount		*securityfs_mount;
+> -	bool			securityfs_notifier_sent;
+> +	struct dentry		*securityfs_root;
+>  #endif
+>  } __randomize_layout;
+>  
+> diff --git a/security/inode.c b/security/inode.c
+> index 45211845fc31..f8b6cb3dfb87 100644
+> --- a/security/inode.c
+> +++ b/security/inode.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/magic.h>
+>  #include <linux/user_namespace.h>
+>  
+> +static struct vfsmount *securityfs_mount;
+>  static int securityfs_mount_count;
+>  
+>  static BLOCKING_NOTIFIER_HEAD(securityfs_ns_notifier);
+> @@ -40,43 +41,24 @@ static const struct super_operations securityfs_super_operations = {
+>  	.free_inode	= securityfs_free_inode,
+>  };
+>  
+> -static struct file_system_type fs_type;
+> -
+> -static void securityfs_free_context(struct fs_context *fc)
+> -{
+> -	struct user_namespace *ns = fc->user_ns;
+> -
+> -	if (ns == &init_user_ns ||
+> -	    ns->securityfs_notifier_sent)
+> -		return;
+> -
+> -	ns->securityfs_notifier_sent = true;
+> -
+> -	ns->securityfs_mount = vfs_kern_mount(&fs_type, SB_KERNMOUNT,
+> -					      fs_type.name, NULL);
+> -	if (IS_ERR(ns->securityfs_mount)) {
+> -		printk(KERN_ERR "kern mount on securityfs ERROR: %ld\n",
+> -		       PTR_ERR(ns->securityfs_mount));
+> -		ns->securityfs_mount = NULL;
+> -		return;
+> -	}
+> -
+> -	blocking_notifier_call_chain(&securityfs_ns_notifier,
+> -				     SECURITYFS_NS_ADD, fc->user_ns);
+> -	mntput(ns->securityfs_mount);
+> -}
+> -
+>  static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  {
+>  	static const struct tree_descr files[] = {{""}};
+>  	int error;
+> +	struct user_namespace *ns = fc->user_ns;
+>  
+>  	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+>  	if (error)
+>  		return error;
+>  
+> +	ns->securityfs_root = dget(sb->s_root);
+> +
+>  	sb->s_op = &securityfs_super_operations;
+>  
+> +	if (ns != &init_user_ns)
+> +		blocking_notifier_call_chain(&securityfs_ns_notifier,
+> +					     SECURITYFS_NS_ADD, ns);
 
-from the Santander bank of Spain we need your address, Passport and your
-whatsapp number.
+I would propose not to use the notifier logic. While it might be nifty
+it's over-engineered in my opinion. The dentry stashing in struct
+user_namespace currently serves the purpose to make it retrievable in
+ima_fs_ns_init(). That doesn't justify its existence imho.
 
+There is one central place were all users of namespaced securityfs can
+create the files that they need to and that is in
+securityfs_fill_super(). (If you want to make that more obvious then give
+it a subdirectory securityfs and move inode.c in there.)
 
-THANKS
-MRS Salem Chantal Lawrence
+We simply will expect users to add:
+
+ima_init_securityfs()
+mylsm_init_securityfs()
+
+that are to be placed in fill_super
+
+and
+
+ima_kill_securityfs()
+mylsm_kill_securityfs()
+
+that get called in kill_super and the root dentry and other relevant
+information should be passed explicitly into those functions. Then we
+can remove the dentry stashing from struct user_namespace altogether and
+the patch gets smaller too.
