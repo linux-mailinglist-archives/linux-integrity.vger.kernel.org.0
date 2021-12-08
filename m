@@ -2,271 +2,188 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D63546D05D
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Dec 2021 10:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A69946D065
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Dec 2021 10:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbhLHJ4o (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Dec 2021 04:56:44 -0500
-Received: from smtp2.axis.com ([195.60.68.18]:44909 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230194AbhLHJ4o (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:56:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1638957193;
-  x=1670493193;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=N3ZR8KGsZckvWVOAr6YCWsyzFLREZl2dOgPIPvWPV4s=;
-  b=FWsQmH9mcSnInzsHLhRrUPaF4miuj05ArkBJxTeQbS0sBtxdUBB6UThK
-   BCRuKdyZqLlwY/ZWCMt5oGe3zFwfgKI+Kkh8vPJ304pVG3sGxVgCykpVa
-   P+yxv73hV9bIJbcOrcIvHwVulNUarb2jjuww8L8zfmHjD39JYpFnqPLHg
-   /C9UUNSXA6NKoPygRKznui6cWpYeBh8+zeam4rLoOxc8uaq5pPauBH3pu
-   7bZldIMeKHVQLrH5j126FE0frQ952aZw773pz7bRXfYz62qHUCmHPQvxg
-   I6B2/QH0XCO0ioBmelU0r4S7ICvIEDncbsvF26ZJy2cUJ3hM9vCOVW8mB
-   A==;
-From:   Axel Jonsson <axel.jonsson@axis.com>
-To:     <jarkko@kernel.org>
-CC:     <sergio.ruiz@axis.com>, <borysmn@axis.com>, <jgg@ziepe.ca>,
-        <kernel@axis.com>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <peterhuewe@gmx.de>,
-        Axel Jonsson <axelj@axis.com>
-Subject: [PATCH v7] tpm: Add Upgrade/Reduced mode support for TPM2 modules
-Date:   Wed, 8 Dec 2021 10:53:07 +0100
-Message-ID: <20211208095307.9558-1-axel.jonsson@axis.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <59f8d5a835ff0f02c9efe0ecff0abbe1b4f08111.camel@kernel.org>
-References: <59f8d5a835ff0f02c9efe0ecff0abbe1b4f08111.camel@kernel.org>
+        id S231187AbhLHJ6r (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Dec 2021 04:58:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53516 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229490AbhLHJ6q (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 8 Dec 2021 04:58:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638957313;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RbXsax9ldMWCPX0huGTH/ykVh4lOIdMfM3HnOVtd9Sg=;
+        b=YlmtKy/0TK0qSKVy5NdXt4s3AhSodgNywQ/iKdIClA+QOAoV7EtU4GWONg63GmMDALLI+2
+        UNGw/4ROeJmzif129AH2DGHLXiaTEhyGA9gJmG9e8xf2iCTws6Nkq5CbDY0rVVJJlOk6AE
+        rd/2iEPpV7S0krmgnlzpHL4dBYdCYnQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-413-MBArii7hOAGNVhEwT_QDGA-1; Wed, 08 Dec 2021 04:55:12 -0500
+X-MC-Unique: MBArii7hOAGNVhEwT_QDGA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8C4231023F4D;
+        Wed,  8 Dec 2021 09:55:07 +0000 (UTC)
+Received: from rhtmp (unknown [10.39.193.91])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A1B142B178;
+        Wed,  8 Dec 2021 09:54:57 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 10:54:55 +0100
+From:   Philipp Rudo <prudo@redhat.com>
+To:     Michal =?UTF-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>
+Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
+Message-ID: <20211208105455.00085532@rhtmp>
+In-Reply-To: <20211207173221.GM117207@kunlun.suse.cz>
+References: <cover.1637862358.git.msuchanek@suse.de>
+        <20211207171014.2cfc4a54@rhtmp>
+        <20211207173221.GM117207@kunlun.suse.cz>
+Organization: Red Hat inc.
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Axel Jonsson <axelj@axis.com>
+Hi Michal,
 
-If something went wrong during the TPM firmware upgrade, like power
-failure or the firmware image file get corrupted, the TPM might end
-up in Upgrade or Failure mode upon the next start. The state is
-persistent between the TPM power cycle/restart.
+On Tue, 7 Dec 2021 18:32:21 +0100
+Michal Such=C3=A1nek <msuchanek@suse.de> wrote:
 
-According to TPM specification:
- * If the TPM is in Upgrade mode, it will answer with TPM2_RC_UPGRADE
-   to all commands except TPM2_FieldUpgradeData(). It may also accept
-   other commands if it is able to complete them using the previously
-   installed firmware.
- * If the TPM is in Failure mode, it will allow performing TPM
-   initialization but will not provide any crypto operations.
-   Will happily respond to Field Upgrade calls.
+> On Tue, Dec 07, 2021 at 05:10:14PM +0100, Philipp Rudo wrote:
+> > Hi Michal,
+> >=20
+> > i finally had the time to take a closer look at the series. Except for
+> > the nit in patch 4 and my personal preference in patch 6 the code looks
+> > good to me.
+> >=20
+> > What I don't like are the commit messages on the first commits. In my
+> > opinion they are so short that they are almost useless. For example in
+> > patch 2 there is absolutely no explanation why you can simply copy the
+> > s390 over to ppc. =20
+>=20
+> They use the same signature format. I suppose I can add a note saying
+> that.
 
-Change the behavior of the tpm2_auto_startup(), so it detects the active
-running mode of the TPM by adding the following checks.  If
-tpm2_do_selftest() call returns TPM2_RC_UPGRADE, the TPM is in Upgrade
-mode.
-If the TPM is in Failure mode, it will successfully respond to both
-tpm2_do_selftest() and tpm2_startup() calls. Although, will fail to
-answer to tpm2_get_cc_attrs_tbl(). Use this fact to conclude that TPM is
-in Failure mode.
+The note is what I was asking for. For me the commit message is an
+important piece of documentation for other developers (or yourself in a
+year). That's why in my opinion it's important to describe _why_ you do
+something in it as you cannot get the _why_ by reading the code.
 
-If detected that the TPM is in the Upgrade or Failure mode, the function
-sets TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE flag.
+> > Or in patch 3 you are silently changing the error
+> > code in kexec from EKEYREJECT to ENODATA. So I would appreciate it if =
+=20
+>=20
+> Not sure what I should do about this. The different implementations use
+> different random error codes, and when they are unified the error code
+> clearly changes for one or the other.
 
-The TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE flag is used later during driver
-initialization/deinitialization to disable functionality which makes no
-sense or will fail in the current TPM state. Following functionality is
-affected:
- * Do not register TPM as a hwrng
- * Do not register sysfs entries which provide information impossible to
-   obtain in limited mode
- * Do not register resource managed character device
+My complaint wasn't that you change the return code. There's no way to
+avoid choosing one over the other. It's again that you don't document
+the change in the commit message for others.
 
-Signed-off-by: Axel Jonsson <axelj@axis.com>
----
+> Does anything depend on a particular error code returned?
 
-Notes:
-    Notes:
-        v2:
-         * Commit message updated.
-    
-        v3:
-         * Commit message reworked.
-    
-        v4:
-         * Description of how tpm2_auto_startup() detects the mode added to
-           commit message.
-    
-        v5:
-         * Introduce global flag: TPM_CHIP_FLAG_LIMITED_MODE.
-         * Add checks for the flag in places that will not work properly when TPM
-           functionality is limited.
-         * Avoid registering sysfs and character device entries that have no useful
-           function in limited mode.
-         * Do not register TPM as a hwrng.
-         * Do not try to obtain any crypto-related properties from TPM as it will fail
-           in limited mode.
-    
-        v6:
-         * Rename the TPM_CHIP_FLAG_LIMITED_MODE to TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE
-           to reduce confusion. Update info messages.
-    
-        v7:
-         * Clarified in commit message which command can be run in firmware upgrade
-         mode
-         * Corrected info and style in commit message
-         * Renamed TPM_CHIP_FLAG_FIRMWARE_UPGRADE_MODE to TPM_CHIP_FLAG_FIRMWARE_MODE
-         * Replaced TPM_CHIP_FLAG_FIRMWARE_MODE flag check with function from
-         include/linux/tpm.h
+Not that I know of. At least in the kexec-tools ENODATA and EKEYREJECT
+are handled the same way.
 
- drivers/char/tpm/tpm-chip.c  | 23 ++++++++++++++++-------
- drivers/char/tpm/tpm-sysfs.c |  3 +++
- drivers/char/tpm/tpm2-cmd.c  |  6 +++++-
- include/linux/tpm.h          | 10 ++++++++++
- 4 files changed, 34 insertions(+), 8 deletions(-)
+Thanks
+Philipp
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index ddaeceb7e109..285d054d187b 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -444,7 +444,8 @@ static int tpm_add_char_device(struct tpm_chip *chip)
- 		return rc;
- 	}
- 
--	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
-+	    !tpm_is_firmware_upgrade(chip)) {
- 		rc = cdev_device_add(&chip->cdevs, &chip->devs);
- 		if (rc) {
- 			dev_err(&chip->devs,
-@@ -488,7 +489,8 @@ static void tpm_del_legacy_sysfs(struct tpm_chip *chip)
- {
- 	struct attribute **i;
- 
--	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL))
-+	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL) ||
-+	    tpm_is_firmware_upgrade(chip))
- 		return;
- 
- 	sysfs_remove_link(&chip->dev.parent->kobj, "ppi");
-@@ -506,7 +508,8 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
- 	struct attribute **i;
- 	int rc;
- 
--	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL))
-+	if (chip->flags & (TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_VIRTUAL) ||
-+		tpm_is_firmware_upgrade(chip))
- 		return 0;
- 
- 	rc = compat_only_sysfs_link_entry_to_kobj(
-@@ -536,7 +539,8 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
- 
- static int tpm_add_hwrng(struct tpm_chip *chip)
- {
--	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-+	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) ||
-+	    tpm_is_firmware_upgrade(chip))
- 		return 0;
- 
- 	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
-@@ -550,6 +554,9 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
- {
- 	int rc;
- 
-+	if (tpm_is_firmware_upgrade(chip))
-+		return 0;
-+
- 	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
- 	     tpm2_get_pcr_allocation(chip) :
- 	     tpm1_get_pcr_allocation(chip);
-@@ -612,7 +619,7 @@ int tpm_chip_register(struct tpm_chip *chip)
- 	return 0;
- 
- out_hwrng:
--	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-+	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) && !tpm_is_firmware_upgrade(chip))
- 		hwrng_unregister(&chip->hwrng);
- out_ppi:
- 	tpm_bios_log_teardown(chip);
-@@ -637,10 +644,12 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
- void tpm_chip_unregister(struct tpm_chip *chip)
- {
- 	tpm_del_legacy_sysfs(chip);
--	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM))
-+	if (IS_ENABLED(CONFIG_HW_RANDOM_TPM) &&
-+	    !tpm_is_firmware_upgrade(chip))
- 		hwrng_unregister(&chip->hwrng);
- 	tpm_bios_log_teardown(chip);
--	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-+	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
-+	    !tpm_is_firmware_upgrade(chip))
- 		cdev_device_del(&chip->cdevs, &chip->devs);
- 	tpm_del_char_device(chip);
- }
-diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-index 63f03cfb8e6a..54c71473aa29 100644
---- a/drivers/char/tpm/tpm-sysfs.c
-+++ b/drivers/char/tpm/tpm-sysfs.c
-@@ -480,6 +480,9 @@ void tpm_sysfs_add_device(struct tpm_chip *chip)
- 
- 	WARN_ON(chip->groups_cnt != 0);
- 
-+	if (tpm_is_firmware_upgrade(chip))
-+		return;
-+
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
- 		chip->groups[chip->groups_cnt++] = &tpm2_dev_group;
- 	else
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index a25815a6f625..24928b0160f1 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -743,8 +743,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
- 	}
- 
- 	rc = tpm2_get_cc_attrs_tbl(chip);
--
- out:
-+	if (rc == TPM2_RC_UPGRADE) {
-+		dev_info(&chip->dev, "TPM in field upgrade mode, requires firmware upgrade\n");
-+		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_MODE;
-+		rc = 0;
-+	}
- 	if (rc > 0)
- 		rc = -ENODEV;
- 	return rc;
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 12d827734686..d38efdae382c 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -207,6 +207,7 @@ enum tpm2_return_codes {
- 	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
- 	TPM2_RC_FAILURE		= 0x0101,
- 	TPM2_RC_DISABLED	= 0x0120,
-+	TPM2_RC_UPGRADE		= 0x012D,
- 	TPM2_RC_COMMAND_CODE    = 0x0143,
- 	TPM2_RC_TESTING		= 0x090A, /* RC_WARN */
- 	TPM2_RC_REFERENCE_H0	= 0x0910,
-@@ -278,6 +279,7 @@ enum tpm_chip_flags {
- 	TPM_CHIP_FLAG_HAVE_TIMEOUTS	= BIT(4),
- 	TPM_CHIP_FLAG_ALWAYS_POWERED	= BIT(5),
- 	TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED	= BIT(6),
-+	TPM_CHIP_FLAG_FIRMWARE_MODE	= BIT(7),
- };
- 
- #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
-@@ -399,6 +401,14 @@ static inline void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
- 	tpm_buf_append(buf, (u8 *) &value2, 4);
- }
- 
-+/*
-+ * Check if TPM device is in the firmware upgrade mode.
-+ */
-+static inline bool tpm_is_firmware_upgrade(struct tpm_chip *chip)
-+{
-+	return chip->flags & TPM_CHIP_FLAG_FIRMWARE_MODE;
-+}
-+
- static inline u32 tpm2_rc_value(u32 rc)
- {
- 	return (rc & BIT(7)) ? rc & 0xff : rc;
--- 
-2.20.1
+
+> Thanks
+>=20
+> Michal
+>=20
+> > you could improve them a little.
+> >=20
+> > Thanks
+> > Philipp
+> >=20
+> > On Thu, 25 Nov 2021 19:02:38 +0100
+> > Michal Suchanek <msuchanek@suse.de> wrote:
+> >  =20
+> > > Hello,
+> > >=20
+> > > This is resend of the KEXEC_SIG patchset.
+> > >=20
+> > > The first patch is new because it'a a cleanup that does not require a=
+ny
+> > > change to the module verification code.
+> > >=20
+> > > The second patch is the only one that is intended to change any
+> > > functionality.
+> > >=20
+> > > The rest only deduplicates code but I did not receive any review on t=
+hat
+> > > part so I don't know if it's desirable as implemented.
+> > >=20
+> > > The first two patches can be applied separately without the rest.
+> > >=20
+> > > Thanks
+> > >=20
+> > > Michal
+> > >=20
+> > > Michal Suchanek (6):
+> > >   s390/kexec_file: Don't opencode appended signature check.
+> > >   powerpc/kexec_file: Add KEXEC_SIG support.
+> > >   kexec_file: Don't opencode appended signature verification.
+> > >   module: strip the signature marker in the verification function.
+> > >   module: Use key_being_used_for for log messages in
+> > >     verify_appended_signature
+> > >   module: Move duplicate mod_check_sig users code to mod_parse_sig
+> > >=20
+> > >  arch/powerpc/Kconfig                     | 11 +++++
+> > >  arch/powerpc/kexec/elf_64.c              | 14 ++++++
+> > >  arch/s390/kernel/machine_kexec_file.c    | 42 ++----------------
+> > >  crypto/asymmetric_keys/asymmetric_type.c |  1 +
+> > >  include/linux/module_signature.h         |  1 +
+> > >  include/linux/verification.h             |  4 ++
+> > >  kernel/module-internal.h                 |  2 -
+> > >  kernel/module.c                          | 12 +++--
+> > >  kernel/module_signature.c                | 56 ++++++++++++++++++++++=
++-
+> > >  kernel/module_signing.c                  | 33 +++++++-------
+> > >  security/integrity/ima/ima_modsig.c      | 22 ++--------
+> > >  11 files changed, 113 insertions(+), 85 deletions(-)
+> > >  =20
+> >  =20
+>=20
 
