@@ -2,55 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D261E46DE32
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Dec 2021 23:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A8946DE1E
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Dec 2021 23:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240798AbhLHWWy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Dec 2021 17:22:54 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5350 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240669AbhLHWWQ (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
+        id S240665AbhLHWWQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
         Wed, 8 Dec 2021 17:22:16 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8KviPA002889;
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31466 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240626AbhLHWWM (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 8 Dec 2021 17:22:12 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8M2nMf025792;
         Wed, 8 Dec 2021 22:18:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=AWBt23PpNj21Wa1wKb+UTLG6nQp0/VdHHn5levAi5tU=;
- b=tdhvee/2g3ip0NiU8HC6Czt6NAmWiLfRJnwxzUuzytd3a7yuWGpZuiH/EAFeXvnhRVKg
- bB+YWOf4YZsGzjSzA1fMTTdR83U1BEMitbtq482gg6I1xlJKlTaChsf7LaPIOA+iedE5
- AGjru2kxfiqxcvDg8D2t2gUveLi16/izeBN2vPqMN62SyaBNXRPv8//QtGfSBXfMP6L4
- k9kxIEDwwSvn63H82cpFcA3go4xcroMu22spaJLh3r4SZekleF46xR37mB2qyxN1LaWf
- AvaZn8w8gBMYdXngOp8YY3DNF2WDzLwqe2kzIiuGqFBr6OOLz6Yk3Qo6cVGS/VWRbotO Uw== 
+ bh=VFCafjZBHM4IiiTmsZecYIY4YByY5dqdiPHVgLL187Y=;
+ b=J5n/nPVmSpss+6AFk4cxk0c3b2Lcg9TTREXnuxU5CxPeuHCgixaGzik3A1hgKCGFmlGQ
+ 9iubs2WNExR9QTjGLL1GwFqBKEd7njpktGu4pypFTvJWmwJ6Cot0CuraCyptYDktJSqE
+ J9dGgjrat/bc3d44EEkYZ4+zL7KkN2fJbkcrUPViCB4zhUKSzGEiyCalfNa80JeewFjN
+ 7AXhf3lIDnSsC2yk6UElkfoylYXZgVTpebvQEpN+UosHd5nAj1zSqtDwhbQ2UW+1cgUU
+ 2X8sm/JBfyyEXBLlbeMVUObzPlz1tPiAPkaXH30AbDu1qSrIoG3MemtQI74gwCQl9Jyx WQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu46y9cjq-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu55h87kn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 08 Dec 2021 22:18:27 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8MHcev001841;
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B8MHvqQ018199;
         Wed, 8 Dec 2021 22:18:27 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu46y9cje-1
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu55h87kb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 08 Dec 2021 22:18:27 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8MDrbg021458;
-        Wed, 8 Dec 2021 22:18:25 GMT
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B8MDsPc020055;
+        Wed, 8 Dec 2021 22:18:26 GMT
 Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma05wdc.us.ibm.com with ESMTP id 3cqyybbkch-1
+        by ppma01dal.us.ibm.com with ESMTP id 3cqyycykc8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Dec 2021 22:18:25 +0000
+        Wed, 08 Dec 2021 22:18:26 +0000
 Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8MIO3I21037564
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B8MIOJX25166238
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 8 Dec 2021 22:18:24 GMT
 Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D8DC28067;
+        by IMSVA (Postfix) with ESMTP id 973E32805E;
         Wed,  8 Dec 2021 22:18:24 +0000 (GMT)
 Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3BC632805E;
+        by IMSVA (Postfix) with ESMTP id 6FE122806A;
         Wed,  8 Dec 2021 22:18:24 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
@@ -66,1229 +66,501 @@ Cc:     zohar@linux.ibm.com, serge@hallyn.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v5 06/16] ima: Move policy related variables into ima_namespace
-Date:   Wed,  8 Dec 2021 17:18:08 -0500
-Message-Id: <20211208221818.1519628-7-stefanb@linux.ibm.com>
+Subject: [PATCH v5 07/16] ima: Move ima_htable into ima_namespace
+Date:   Wed,  8 Dec 2021 17:18:09 -0500
+Message-Id: <20211208221818.1519628-8-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211208221818.1519628-1-stefanb@linux.ibm.com>
 References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: kGb02X1W9-9hE8Ja-y9xnWwS0YFoHFIK
-X-Proofpoint-ORIG-GUID: 0GtV52YUspgUqWHcrR8kbRCp0-Nr1OdB
+X-Proofpoint-GUID: yuMIHroSNvD9tbYfdgaCHDgc_boFNHew
+X-Proofpoint-ORIG-GUID: 12JAfPiIS3ZQra1anr1Mjq37CerbodGv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-08_08,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- suspectscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
- phishscore=0 priorityscore=1501 bulkscore=0 malwarescore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112080121
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 adultscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 clxscore=1015 lowpriorityscore=0 mlxlogscore=999
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112080121
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Move variables related to the IMA policy into the ima_namespace. This way
-the IMA policy of an IMA namespace can be set and displayed using a
-front-end like SecurityFS.
+Move ima_htable into ima_namespace. This way a front-end like
+SecurityFS can show the number of violations of an IMA namespace.
 
-Implement ima_free_policy_rules() that frees the policy rules on
-ima_namespace deletion.
+Move ima_hash_key() into ima_queue.c since it's only used there.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- include/linux/ima.h                          |  10 ++
- security/integrity/ima/ima.h                 |  35 ++---
- security/integrity/ima/ima_api.c             |   8 +-
- security/integrity/ima/ima_appraise.c        |  26 ++--
- security/integrity/ima/ima_asymmetric_keys.c |   3 +-
- security/integrity/ima/ima_fs.c              |  10 +-
- security/integrity/ima/ima_init.c            |   8 +-
- security/integrity/ima/ima_init_ima_ns.c     |   6 +
- security/integrity/ima/ima_main.c            |  83 +++++++-----
- security/integrity/ima/ima_ns.c              |   1 +
- security/integrity/ima/ima_policy.c          | 132 +++++++++++--------
- security/integrity/ima/ima_queue_keys.c      |   2 +-
- 12 files changed, 196 insertions(+), 128 deletions(-)
+ include/linux/ima.h                      | 11 +++++++
+ security/integrity/ima/ima.h             | 34 +++++++------------
+ security/integrity/ima/ima_api.c         | 17 ++++++----
+ security/integrity/ima/ima_fs.c          |  7 ++--
+ security/integrity/ima/ima_init.c        |  6 ++--
+ security/integrity/ima/ima_init_ima_ns.c |  4 +++
+ security/integrity/ima/ima_main.c        | 13 ++++----
+ security/integrity/ima/ima_queue.c       | 42 ++++++++++++++----------
+ security/integrity/ima/ima_template.c    |  4 +--
+ 9 files changed, 78 insertions(+), 60 deletions(-)
 
 diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 0ce58c17cb25..9971ee09b7ee 100644
+index 9971ee09b7ee..080edecc0ea1 100644
 --- a/include/linux/ima.h
 +++ b/include/linux/ima.h
-@@ -239,9 +239,19 @@ struct ima_namespace {
- 	long ima_key_queue_timeout;
- 	bool timer_expired;
- #endif
+@@ -211,6 +211,15 @@ static inline int ima_inode_removexattr(struct dentry *dentry,
+ }
+ #endif /* CONFIG_IMA_APPRAISE */
+ 
++#define IMA_HASH_BITS 10
++#define IMA_MEASURE_HTABLE_SIZE (1 << IMA_HASH_BITS)
 +
-+	struct list_head ima_default_rules;
-+	/* ns's policy rules */
-+	struct list_head ima_policy_rules;
-+	struct list_head ima_temp_rules;
-+	/* Pointer to ns's current policy */
-+	struct list_head __rcu *ima_rules;
-+	/* current content of the policy */
-+	int ima_policy_flag;
++struct ima_h_table {
++	atomic_long_t len;	/* number of stored measurements in the list */
++	atomic_long_t violations;
++	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
++};
++
+ struct ima_namespace {
+ 	struct kref kref;
+ 	struct user_namespace *user_ns;
+@@ -248,6 +257,8 @@ struct ima_namespace {
+ 	struct list_head __rcu *ima_rules;
+ 	/* current content of the policy */
+ 	int ima_policy_flag;
++
++	struct ima_h_table ima_htable;
  };
  
  extern struct ima_namespace init_ima_ns;
-+extern struct list_head ima_default_rules;
- 
- #ifdef CONFIG_IMA_NS
- 
 diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 97eb03376855..e295141f2478 100644
+index e295141f2478..a7e6c8fb152a 100644
 --- a/security/integrity/ima/ima.h
 +++ b/security/integrity/ima/ima.h
-@@ -43,9 +43,6 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
+@@ -32,9 +32,6 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
+ #define IMA_DIGEST_SIZE		SHA1_DIGEST_SIZE
+ #define IMA_EVENT_NAME_LEN_MAX	255
  
- #define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks : 0)
- 
--/* current content of the policy */
--extern int ima_policy_flag;
+-#define IMA_HASH_BITS 10
+-#define IMA_MEASURE_HTABLE_SIZE (1 << IMA_HASH_BITS)
 -
- /* bitset of digests algorithms allowed in the setxattr hook */
- extern atomic_t ima_setxattr_allowed_hash_algorithms;
+ #define IMA_TEMPLATE_FIELD_ID_MAX_LEN	16
+ #define IMA_TEMPLATE_NUM_FIELDS_MAX	15
  
-@@ -265,7 +262,8 @@ static inline void ima_process_queued_keys(struct ima_namespace *ns) {}
- #endif /* CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS */
+@@ -143,7 +140,8 @@ struct ns_status {
+ /* Internal IMA function definitions */
+ int ima_init(void);
+ int ima_fs_init(void);
+-int ima_add_template_entry(struct ima_template_entry *entry, int violation,
++int ima_add_template_entry(struct ima_namespace *ns,
++			   struct ima_template_entry *entry, int violation,
+ 			   const char *op, struct inode *inode,
+ 			   const unsigned char *filename);
+ int ima_calc_file_hash(struct file *file, struct ima_digest_data *hash);
+@@ -152,7 +150,8 @@ int ima_calc_buffer_hash(const void *buf, loff_t len,
+ int ima_calc_field_array_hash(struct ima_field_data *field_data,
+ 			      struct ima_template_entry *entry);
+ int ima_calc_boot_aggregate(struct ima_digest_data *hash);
+-void ima_add_violation(struct file *file, const unsigned char *filename,
++void ima_add_violation(struct ima_namespace *ns,
++		       struct file *file, const unsigned char *filename,
+ 		       struct integrity_iint_cache *iint,
+ 		       const char *op, const char *cause);
+ int ima_init_crypto(void);
+@@ -165,8 +164,10 @@ struct ima_template_desc *ima_template_desc_current(void);
+ struct ima_template_desc *ima_template_desc_buf(void);
+ struct ima_template_desc *lookup_template_desc(const char *name);
+ bool ima_template_has_modsig(const struct ima_template_desc *ima_template);
+-int ima_restore_measurement_entry(struct ima_template_entry *entry);
+-int ima_restore_measurement_list(loff_t bufsize, void *buf);
++int ima_restore_measurement_entry(struct ima_namespace *ns,
++				  struct ima_template_entry *entry);
++int ima_restore_measurement_list(struct ima_namespace *ns,
++				 loff_t bufsize, void *buf);
+ int ima_measurements_show(struct seq_file *m, void *v);
+ unsigned long ima_get_binary_runtime_size(void);
+ int ima_init_template(void);
+@@ -180,19 +181,6 @@ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
+  */
+ extern spinlock_t ima_queue_lock;
  
- /* LIM API function definitions */
--int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
-+int ima_get_action(struct ima_namespace *ns,
-+		   struct user_namespace *mnt_userns, struct inode *inode,
- 		   const struct cred *cred, u32 secid, int mask,
- 		   enum ima_hooks func, int *pcr,
- 		   struct ima_template_desc **template_desc,
-@@ -279,7 +277,8 @@ void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
+-struct ima_h_table {
+-	atomic_long_t len;	/* number of stored measurements in the list */
+-	atomic_long_t violations;
+-	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
+-};
+-extern struct ima_h_table ima_htable;
+-
+-static inline unsigned int ima_hash_key(u8 *digest)
+-{
+-	/* there is no point in taking a hash of part of a digest */
+-	return (digest[0] | digest[1] << 8) % IMA_MEASURE_HTABLE_SIZE;
+-}
+-
+ #define __ima_hooks(hook)				\
+ 	hook(NONE, none)				\
+ 	hook(FILE_CHECK, file)				\
+@@ -272,7 +260,8 @@ int ima_must_measure(struct inode *inode, int mask, enum ima_hooks func);
+ int ima_collect_measurement(struct integrity_iint_cache *iint,
+ 			    struct file *file, void *buf, loff_t size,
+ 			    enum hash_algo algo, struct modsig *modsig);
+-void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
++void ima_store_measurement(struct ima_namespace *ns,
++			   struct integrity_iint_cache *iint, struct file *file,
+ 			   const unsigned char *filename,
  			   struct evm_ima_xattr_data *xattr_value,
  			   int xattr_len, const struct modsig *modsig, int pcr,
- 			   struct ima_template_desc *template_desc);
--int process_buffer_measurement(struct user_namespace *mnt_userns,
-+int process_buffer_measurement(struct ima_namespace *ns,
-+			       struct user_namespace *mnt_userns,
- 			       struct inode *inode, const void *buf, int size,
- 			       const char *eventname, enum ima_hooks func,
- 			       int pcr, const char *func_data,
-@@ -297,17 +296,19 @@ void ima_free_template_entry(struct ima_template_entry *entry);
- const char *ima_d_path(const struct path *path, char **pathbuf, char *filename);
- 
- /* IMA policy related functions */
--int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
-+int ima_match_policy(struct ima_namespace *ns,
-+		     struct user_namespace *mnt_userns, struct inode *inode,
- 		     const struct cred *cred, u32 secid, enum ima_hooks func,
- 		     int mask, int flags, int *pcr,
- 		     struct ima_template_desc **template_desc,
- 		     const char *func_data, unsigned int *allowed_algos);
--void ima_init_policy(void);
-+void ima_init_policy(struct ima_namespace *ns);
- void ima_update_policy(struct ima_namespace *ns);
--void ima_update_policy_flags(void);
--ssize_t ima_parse_add_rule(char *);
--void ima_delete_rules(void);
--int ima_check_policy(void);
-+void ima_update_policy_flags(struct ima_namespace *ns);
-+ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule);
-+void ima_delete_rules(struct ima_namespace *ns);
-+int ima_check_policy(struct ima_namespace *ns);
-+void ima_free_policy_rules(struct ima_namespace *ns);
- void *ima_policy_start(struct seq_file *m, loff_t *pos);
- void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos);
- void ima_policy_stop(struct seq_file *m, void *v);
-@@ -323,14 +324,16 @@ int ima_policy_show(struct seq_file *m, void *v);
- #define IMA_APPRAISE_KEXEC	0x40
- 
- #ifdef CONFIG_IMA_APPRAISE
--int ima_check_blacklist(struct integrity_iint_cache *iint,
-+int ima_check_blacklist(struct ima_namespace *ns,
-+			struct integrity_iint_cache *iint,
- 			const struct modsig *modsig, int pcr);
- int ima_appraise_measurement(enum ima_hooks func,
- 			     struct integrity_iint_cache *iint,
- 			     struct file *file, const unsigned char *filename,
- 			     struct evm_ima_xattr_data *xattr_value,
- 			     int xattr_len, const struct modsig *modsig);
--int ima_must_appraise(struct user_namespace *mnt_userns, struct inode *inode,
-+int ima_must_appraise(struct ima_namespace *ns,
-+		      struct user_namespace *mnt_userns, struct inode *inode,
- 		      int mask, enum ima_hooks func);
- void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file);
- enum integrity_status ima_get_cache_status(struct integrity_iint_cache *iint,
-@@ -341,7 +344,8 @@ int ima_read_xattr(struct dentry *dentry,
- 		   struct evm_ima_xattr_data **xattr_value);
- 
- #else
--static inline int ima_check_blacklist(struct integrity_iint_cache *iint,
-+static inline int ima_check_blacklist(struct ima_namespace *ns,
-+				      struct integrity_iint_cache *iint,
- 				      const struct modsig *modsig, int pcr)
- {
- 	return 0;
-@@ -358,7 +362,8 @@ static inline int ima_appraise_measurement(enum ima_hooks func,
- 	return INTEGRITY_UNKNOWN;
- }
- 
--static inline int ima_must_appraise(struct user_namespace *mnt_userns,
-+static inline int ima_must_appraise(struct ima_namespace *ns,
-+				    struct user_namespace *mnt_userns,
- 				    struct inode *inode, int mask,
- 				    enum ima_hooks func)
- {
+@@ -289,7 +278,8 @@ void ima_audit_measurement(struct integrity_iint_cache *iint,
+ int ima_alloc_init_template(struct ima_event_data *event_data,
+ 			    struct ima_template_entry **entry,
+ 			    struct ima_template_desc *template_desc);
+-int ima_store_template(struct ima_template_entry *entry, int violation,
++int ima_store_template(struct ima_namespace *ns,
++		       struct ima_template_entry *entry, int violation,
+ 		       struct inode *inode,
+ 		       const unsigned char *filename, int pcr);
+ void ima_free_template_entry(struct ima_template_entry *entry);
 diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 8f7bab17b784..808aec56dbb6 100644
+index 808aec56dbb6..71c5517fe8bc 100644
 --- a/security/integrity/ima/ima_api.c
 +++ b/security/integrity/ima/ima_api.c
-@@ -14,6 +14,7 @@
- #include <linux/xattr.h>
- #include <linux/evm.h>
- #include <linux/iversion.h>
-+#include <linux/ima.h>
- 
- #include "ima.h"
- 
-@@ -185,7 +186,8 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
-  * Returns IMA_MEASURE, IMA_APPRAISE mask.
+@@ -100,7 +100,8 @@ int ima_alloc_init_template(struct ima_event_data *event_data,
   *
+  * Returns 0 on success, error code otherwise
   */
--int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
-+int ima_get_action(struct ima_namespace *ns,
-+		   struct user_namespace *mnt_userns, struct inode *inode,
- 		   const struct cred *cred, u32 secid, int mask,
- 		   enum ima_hooks func, int *pcr,
- 		   struct ima_template_desc **template_desc,
-@@ -193,9 +195,9 @@ int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
+-int ima_store_template(struct ima_template_entry *entry,
++int ima_store_template(struct ima_namespace *ns,
++		       struct ima_template_entry *entry,
+ 		       int violation, struct inode *inode,
+ 		       const unsigned char *filename, int pcr)
  {
- 	int flags = IMA_MEASURE | IMA_AUDIT | IMA_APPRAISE | IMA_HASH;
- 
--	flags &= ima_policy_flag;
-+	flags &= ns->ima_policy_flag;
- 
--	return ima_match_policy(mnt_userns, inode, cred, secid, func, mask,
-+	return ima_match_policy(ns, mnt_userns, inode, cred, secid, func, mask,
- 				flags, pcr, template_desc, func_data,
- 				allowed_algos);
- }
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index dbba51583e7c..b0c1992d8c4b 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -68,7 +68,8 @@ bool is_ima_appraise_enabled(void)
-  *
-  * Return 1 to appraise or hash
-  */
--int ima_must_appraise(struct user_namespace *mnt_userns, struct inode *inode,
-+int ima_must_appraise(struct ima_namespace *ns,
-+		      struct user_namespace *mnt_userns, struct inode *inode,
- 		      int mask, enum ima_hooks func)
- {
- 	u32 secid;
-@@ -77,7 +78,7 @@ int ima_must_appraise(struct user_namespace *mnt_userns, struct inode *inode,
- 		return 0;
- 
- 	security_task_getsecid_subj(current, &secid);
--	return ima_match_policy(mnt_userns, inode, current_cred(), secid,
-+	return ima_match_policy(ns, mnt_userns, inode, current_cred(), secid,
- 				func, mask, IMA_APPRAISE | IMA_HASH, NULL,
- 				NULL, NULL, NULL);
- }
-@@ -341,7 +342,8 @@ static int modsig_verify(enum ima_hooks func, const struct modsig *modsig,
-  *
-  * Returns -EPERM if the hash is blacklisted.
-  */
--int ima_check_blacklist(struct integrity_iint_cache *iint,
-+int ima_check_blacklist(struct ima_namespace *ns,
-+			struct integrity_iint_cache *iint,
- 			const struct modsig *modsig, int pcr)
- {
- 	enum hash_algo hash_algo;
-@@ -357,7 +359,7 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
- 
- 		rc = is_binary_blacklisted(digest, digestsize);
- 		if ((rc == -EPERM) && (iint->flags & IMA_MEASURE))
--			process_buffer_measurement(&init_user_ns, NULL, digest, digestsize,
-+			process_buffer_measurement(ns, &init_user_ns, NULL, digest, digestsize,
- 						   "blacklisted-hash", NONE,
- 						   pcr, NULL, false, NULL, 0);
+@@ -120,7 +121,7 @@ int ima_store_template(struct ima_template_entry *entry,
+ 		}
  	}
-@@ -527,14 +529,15 @@ void ima_inode_post_setattr(struct user_namespace *mnt_userns,
- 			    struct dentry *dentry)
- {
- 	struct inode *inode = d_backing_inode(dentry);
-+	struct ima_namespace *ns = get_current_ns();
- 	struct integrity_iint_cache *iint;
- 	int action;
- 
--	if (!(ima_policy_flag & IMA_APPRAISE) || !S_ISREG(inode->i_mode)
-+	if (!(ns->ima_policy_flag & IMA_APPRAISE) || !S_ISREG(inode->i_mode)
- 	    || !(inode->i_opflags & IOP_XATTR))
- 		return;
- 
--	action = ima_must_appraise(mnt_userns, inode, MAY_ACCESS, POST_SETATTR);
-+	action = ima_must_appraise(ns, mnt_userns, inode, MAY_ACCESS, POST_SETATTR);
- 	iint = integrity_iint_find(inode);
- 	if (iint) {
- 		set_bit(IMA_CHANGE_ATTR, &iint->atomic_flags);
-@@ -559,11 +562,12 @@ static int ima_protect_xattr(struct dentry *dentry, const char *xattr_name,
- 	return 0;
- }
- 
--static void ima_reset_appraise_flags(struct inode *inode, int digsig)
-+static void ima_reset_appraise_flags(struct ima_namespace *ns,
-+				     struct inode *inode, int digsig)
- {
- 	struct integrity_iint_cache *iint;
- 
--	if (!(ima_policy_flag & IMA_APPRAISE) || !S_ISREG(inode->i_mode))
-+	if (!(ns->ima_policy_flag & IMA_APPRAISE) || !S_ISREG(inode->i_mode))
- 		return;
- 
- 	iint = integrity_iint_find(inode);
-@@ -641,6 +645,7 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
- 		       const void *xattr_value, size_t xattr_value_len)
- {
- 	const struct evm_ima_xattr_data *xvalue = xattr_value;
-+	struct ima_namespace *ns = get_current_ns();
- 	int digsig = 0;
- 	int result;
- 
-@@ -658,18 +663,19 @@ int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
- 		if (result)
- 			return result;
- 
--		ima_reset_appraise_flags(d_backing_inode(dentry), digsig);
-+		ima_reset_appraise_flags(ns, d_backing_inode(dentry), digsig);
- 	}
+ 	entry->pcr = pcr;
+-	result = ima_add_template_entry(entry, violation, op, inode, filename);
++	result = ima_add_template_entry(ns, entry, violation, op, inode, filename);
  	return result;
  }
  
- int ima_inode_removexattr(struct dentry *dentry, const char *xattr_name)
+@@ -131,7 +132,8 @@ int ima_store_template(struct ima_template_entry *entry,
+  * By extending the PCR with 0xFF's instead of with zeroes, the PCR
+  * value is invalidated.
+  */
+-void ima_add_violation(struct file *file, const unsigned char *filename,
++void ima_add_violation(struct ima_namespace *ns,
++		       struct file *file, const unsigned char *filename,
+ 		       struct integrity_iint_cache *iint,
+ 		       const char *op, const char *cause)
  {
-+	struct ima_namespace *ns = get_current_ns();
+@@ -145,14 +147,14 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
  	int result;
  
- 	result = ima_protect_xattr(dentry, xattr_name, NULL, 0);
- 	if (result == 1 || evm_revalidate_status(xattr_name)) {
--		ima_reset_appraise_flags(d_backing_inode(dentry), 0);
-+		ima_reset_appraise_flags(ns, d_backing_inode(dentry), 0);
- 		if (result == 1)
- 			result = 0;
+ 	/* can overflow, only indicator */
+-	atomic_long_inc(&ima_htable.violations);
++	atomic_long_inc(&ns->ima_htable.violations);
+ 
+ 	result = ima_alloc_init_template(&event_data, &entry, NULL);
+ 	if (result < 0) {
+ 		result = -ENOMEM;
+ 		goto err_out;
  	}
-diff --git a/security/integrity/ima/ima_asymmetric_keys.c b/security/integrity/ima/ima_asymmetric_keys.c
-index b20e82eda8f4..959e9f2f6c26 100644
---- a/security/integrity/ima/ima_asymmetric_keys.c
-+++ b/security/integrity/ima/ima_asymmetric_keys.c
-@@ -61,7 +61,8 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
- 	 * if the IMA policy is configured to measure a key linked
- 	 * to the given keyring.
- 	 */
--	process_buffer_measurement(&init_user_ns, NULL, payload, payload_len,
-+	process_buffer_measurement(ns, &init_user_ns, NULL,
-+				   payload, payload_len,
- 				   keyring->description, KEY_CHECK, 0,
- 				   keyring->description, false, NULL, 0);
- }
+-	result = ima_store_template(entry, violation, inode,
++	result = ima_store_template(ns, entry, violation, inode,
+ 				    filename, CONFIG_IMA_MEASURE_PCR_IDX);
+ 	if (result < 0)
+ 		ima_free_template_entry(entry);
+@@ -299,7 +301,8 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+  *
+  * Must be called with iint->mutex held.
+  */
+-void ima_store_measurement(struct integrity_iint_cache *iint,
++void ima_store_measurement(struct ima_namespace *ns,
++			   struct integrity_iint_cache *iint,
+ 			   struct file *file, const unsigned char *filename,
+ 			   struct evm_ima_xattr_data *xattr_value,
+ 			   int xattr_len, const struct modsig *modsig, int pcr,
+@@ -334,7 +337,7 @@ void ima_store_measurement(struct integrity_iint_cache *iint,
+ 		return;
+ 	}
+ 
+-	result = ima_store_template(entry, violation, inode, filename, pcr);
++	result = ima_store_template(ns, entry, violation, inode, filename, pcr);
+ 	if ((!result || result == -EEXIST) && !(file->f_flags & O_DIRECT)) {
+ 		iint->flags |= IMA_MEASURED;
+ 		iint->measured_pcrs |= (0x1 << pcr);
 diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 5cff3d6c3dc7..25f85c58ebef 100644
+index 25f85c58ebef..e37c973a94c6 100644
 --- a/security/integrity/ima/ima_fs.c
 +++ b/security/integrity/ima/ima_fs.c
-@@ -274,6 +274,7 @@ static const struct file_operations ima_ascii_measurements_ops = {
- 
- static ssize_t ima_read_policy(char *path)
+@@ -53,7 +53,9 @@ static ssize_t ima_show_htable_violations(struct file *filp,
+ 					  char __user *buf,
+ 					  size_t count, loff_t *ppos)
  {
+-	return ima_show_htable_value(buf, count, ppos, &ima_htable.violations);
 +	struct ima_namespace *ns = get_current_ns();
- 	void *data = NULL;
- 	char *datap;
- 	size_t size;
-@@ -297,7 +298,7 @@ static ssize_t ima_read_policy(char *path)
- 	datap = data;
- 	while (size > 0 && (p = strsep(&datap, "\n"))) {
- 		pr_debug("rule: %s\n", p);
--		rc = ima_parse_add_rule(p);
-+		rc = ima_parse_add_rule(ns, p);
- 		if (rc < 0)
- 			break;
- 		size -= rc;
-@@ -315,6 +316,7 @@ static ssize_t ima_read_policy(char *path)
- static ssize_t ima_write_policy(struct file *file, const char __user *buf,
- 				size_t datalen, loff_t *ppos)
++
++	return ima_show_htable_value(buf, count, ppos, &ns->ima_htable.violations);
+ }
+ 
+ static const struct file_operations ima_htable_violations_ops = {
+@@ -65,8 +67,9 @@ static ssize_t ima_show_measurements_count(struct file *filp,
+ 					   char __user *buf,
+ 					   size_t count, loff_t *ppos)
  {
+-	return ima_show_htable_value(buf, count, ppos, &ima_htable.len);
 +	struct ima_namespace *ns = get_current_ns();
- 	char *data;
- 	ssize_t result;
  
-@@ -345,7 +347,7 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
- 				    1, 0);
- 		result = -EACCES;
- 	} else {
--		result = ima_parse_add_rule(data);
-+		result = ima_parse_add_rule(ns, data);
- 	}
- 	mutex_unlock(&ima_write_mutex);
- out_free:
-@@ -416,7 +418,7 @@ static int ima_release_policy(struct inode *inode, struct file *file)
- 	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
- 		return seq_release(inode, file);
++	return ima_show_htable_value(buf, count, ppos, &ns->ima_htable.len);
+ }
  
--	if (valid_policy && ima_check_policy() < 0) {
-+	if (valid_policy && ima_check_policy(ns) < 0) {
- 		cause = "failed";
- 		valid_policy = 0;
- 	}
-@@ -426,7 +428,7 @@ static int ima_release_policy(struct inode *inode, struct file *file)
- 			    "policy_update", cause, !valid_policy, 0);
- 
- 	if (!valid_policy) {
--		ima_delete_rules();
-+		ima_delete_rules(ns);
- 		valid_policy = 1;
- 		clear_bit(IMA_FS_BUSY, &ima_fs_flags);
- 		return 0;
+ static const struct file_operations ima_measurements_count_ops = {
 diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 24848373a061..d78f8faf6dcd 100644
+index d78f8faf6dcd..8e0ae3a4f04a 100644
 --- a/security/integrity/ima/ima_init.c
 +++ b/security/integrity/ima/ima_init.c
-@@ -104,15 +104,15 @@ static int __init ima_add_boot_aggregate(void)
- #ifdef CONFIG_IMA_LOAD_X509
- void __init ima_load_x509(void)
+@@ -39,7 +39,7 @@ struct tpm_chip *ima_tpm_chip;
+  * a different value.) Violations add a zero entry to the measurement
+  * list and extend the aggregate PCR value with ff...ff's.
+  */
+-static int __init ima_add_boot_aggregate(void)
++static int __init ima_add_boot_aggregate(struct ima_namespace *ns)
  {
--	int unset_flags = ima_policy_flag & IMA_APPRAISE;
-+	int unset_flags = init_ima_ns.ima_policy_flag & IMA_APPRAISE;
+ 	static const char op[] = "add_boot_aggregate";
+ 	const char *audit_cause = "ENOMEM";
+@@ -86,7 +86,7 @@ static int __init ima_add_boot_aggregate(void)
+ 		goto err_out;
+ 	}
  
--	ima_policy_flag &= ~unset_flags;
-+	init_ima_ns.ima_policy_flag &= ~unset_flags;
- 	integrity_load_x509(INTEGRITY_KEYRING_IMA, CONFIG_IMA_X509_PATH);
- 
- 	/* load also EVM key to avoid appraisal */
- 	evm_load_x509();
- 
--	ima_policy_flag |= unset_flags;
-+	init_ima_ns.ima_policy_flag |= unset_flags;
- }
- #endif
- 
-@@ -149,7 +149,7 @@ int __init ima_init(void)
+-	result = ima_store_template(entry, violation, NULL,
++	result = ima_store_template(ns, entry, violation, NULL,
+ 				    boot_aggregate_name,
+ 				    CONFIG_IMA_MEASURE_PCR_IDX);
+ 	if (result < 0) {
+@@ -145,7 +145,7 @@ int __init ima_init(void)
+ 	rc = ima_init_digests();
+ 	if (rc != 0)
+ 		return rc;
+-	rc = ima_add_boot_aggregate();	/* boot aggregate must be first entry */
++	rc = ima_add_boot_aggregate(&init_ima_ns);	/* boot aggregate must be first entry */
  	if (rc != 0)
  		return rc;
  
--	ima_init_policy();
-+	ima_init_policy(&init_ima_ns);
- 
- 	rc = ima_fs_init();
- 	if (rc != 0)
 diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
-index 144b30ceefb0..f32cd9f22eff 100644
+index f32cd9f22eff..32ff7e271024 100644
 --- a/security/integrity/ima/ima_init_ima_ns.c
 +++ b/security/integrity/ima/ima_init_ima_ns.c
-@@ -34,6 +34,12 @@ int ima_init_namespace(struct ima_namespace *ns)
- 		ima_init_key_queue(ns);
- #endif
+@@ -40,6 +40,10 @@ int ima_init_namespace(struct ima_namespace *ns)
+ 	ns->ima_rules = (struct list_head __rcu *)(&ns->ima_default_rules);
+ 	ns->ima_policy_flag = 0;
  
-+	INIT_LIST_HEAD(&ns->ima_default_rules);
-+	INIT_LIST_HEAD(&ns->ima_policy_rules);
-+	INIT_LIST_HEAD(&ns->ima_temp_rules);
-+	ns->ima_rules = (struct list_head __rcu *)(&ns->ima_default_rules);
-+	ns->ima_policy_flag = 0;
++	atomic_long_set(&ns->ima_htable.len, 0);
++	atomic_long_set(&ns->ima_htable.violations, 0);
++	memset(&ns->ima_htable.queue, 0, sizeof(ns->ima_htable.queue));
 +
  	return 0;
  }
  
 diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 4386010a480e..897304046ba4 100644
+index 897304046ba4..2121a831f38a 100644
 --- a/security/integrity/ima/ima_main.c
 +++ b/security/integrity/ima/ima_main.c
-@@ -185,10 +185,11 @@ static void ima_check_last_writer(struct integrity_iint_cache *iint,
+@@ -112,7 +112,8 @@ static int mmap_violation_check(enum ima_hooks func, struct file *file,
+  *	  could result in a file measurement error.
+  *
   */
- void ima_file_free(struct file *file)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	struct inode *inode = file_inode(file);
- 	struct integrity_iint_cache *iint;
+-static void ima_rdwr_violation_check(struct file *file,
++static void ima_rdwr_violation_check(struct ima_namespace *ns,
++				     struct file *file,
+ 				     struct integrity_iint_cache *iint,
+ 				     int must_measure,
+ 				     char **pathbuf,
+@@ -145,10 +146,10 @@ static void ima_rdwr_violation_check(struct file *file,
+ 	*pathname = ima_d_path(&file->f_path, pathbuf, filename);
  
--	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
-+	if (!ns->ima_policy_flag || !S_ISREG(inode->i_mode))
- 		return;
- 
- 	iint = integrity_iint_find(inode);
-@@ -198,11 +199,11 @@ void ima_file_free(struct file *file)
- 	ima_check_last_writer(iint, inode, file);
+ 	if (send_tomtou)
+-		ima_add_violation(file, *pathname, iint,
++		ima_add_violation(ns, file, *pathname, iint,
+ 				  "invalid_pcr", "ToMToU");
+ 	if (send_writers)
+-		ima_add_violation(file, *pathname, iint,
++		ima_add_violation(ns, file, *pathname, iint,
+ 				  "invalid_pcr", "open_writers");
  }
  
--static int process_measurement(struct file *file, const struct cred *cred,
-+static int process_measurement(struct ima_namespace *ns,
-+			       struct file *file, const struct cred *cred,
- 			       u32 secid, char *buf, loff_t size, int mask,
- 			       enum ima_hooks func)
- {
--	struct ima_namespace *ns = get_current_ns();
- 	struct inode *inode = file_inode(file);
- 	struct integrity_iint_cache *iint = NULL;
- 	struct ns_status *status = NULL;
-@@ -220,18 +221,18 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	unsigned int allowed_algos = 0;
- 	unsigned long flags;
+@@ -257,7 +258,7 @@ static int process_measurement(struct ima_namespace *ns,
+ 	}
  
--	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
-+	if (!ns->ima_policy_flag || !S_ISREG(inode->i_mode))
- 		return 0;
+ 	if (!rc && violation_check)
+-		ima_rdwr_violation_check(file, iint, action & IMA_MEASURE,
++		ima_rdwr_violation_check(ns, file, iint, action & IMA_MEASURE,
+ 					 &pathbuf, &pathname, filename);
  
- 	/* Return an IMA_MEASURE, IMA_APPRAISE, IMA_AUDIT action
- 	 * bitmask based on the appraise/audit/measurement policy.
- 	 * Included is the appraise submask.
- 	 */
--	action = ima_get_action(file_mnt_user_ns(file), inode, cred, secid,
-+	action = ima_get_action(ns, file_mnt_user_ns(file), inode, cred, secid,
- 				mask, func, &pcr, &template_desc, NULL,
- 				&allowed_algos);
- 	violation_check = ((func == FILE_CHECK || func == MMAP_CHECK) &&
--			   (ima_policy_flag & IMA_MEASURE));
-+			   (ns->ima_policy_flag & IMA_MEASURE));
- 	if (!action && !violation_check)
- 		return 0;
+ 	inode_unlock(inode);
+@@ -354,7 +355,7 @@ static int process_measurement(struct ima_namespace *ns,
+ 		pathname = ima_d_path(&file->f_path, &pathbuf, filename);
  
-@@ -357,7 +358,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	if (action & IMA_MEASURE)
+-		ima_store_measurement(iint, file, pathname,
++		ima_store_measurement(ns, iint, file, pathname,
  				      xattr_value, xattr_len, modsig, pcr,
  				      template_desc);
  	if (rc == 0 && (action & IMA_APPRAISE_SUBMASK)) {
--		rc = ima_check_blacklist(iint, modsig, pcr);
-+		rc = ima_check_blacklist(ns, iint, modsig, pcr);
- 		if (rc != -EPERM) {
- 			inode_lock(inode);
- 			rc = ima_appraise_measurement(func, iint, file,
-@@ -416,12 +417,13 @@ static int process_measurement(struct file *file, const struct cred *cred,
-  */
- int ima_file_mmap(struct file *file, unsigned long prot)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	u32 secid;
- 
- 	if (file && (prot & PROT_EXEC)) {
- 		security_task_getsecid_subj(current, &secid);
--		return process_measurement(file, current_cred(), secid, NULL,
--					   0, MAY_EXEC, MMAP_CHECK);
-+		return process_measurement(ns, file, current_cred(), secid,
-+					   NULL, 0, MAY_EXEC, MMAP_CHECK);
+@@ -978,7 +979,7 @@ int process_buffer_measurement(struct ima_namespace *ns,
+ 		goto out;
  	}
  
- 	return 0;
-@@ -441,6 +443,7 @@ int ima_file_mmap(struct file *file, unsigned long prot)
-  */
- int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	struct ima_template_desc *template = NULL;
- 	struct file *file = vma->vm_file;
- 	char filename[NAME_MAX];
-@@ -453,13 +456,13 @@ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
- 	int pcr;
+-	ret = ima_store_template(entry, violation, NULL, event_data.buf, pcr);
++	ret = ima_store_template(ns, entry, violation, NULL, event_data.buf, pcr);
+ 	if (ret < 0) {
+ 		audit_cause = "store_entry";
+ 		ima_free_template_entry(entry);
+diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
+index 532da87ce519..373154039b91 100644
+--- a/security/integrity/ima/ima_queue.c
++++ b/security/integrity/ima/ima_queue.c
+@@ -17,6 +17,7 @@
  
- 	/* Is mprotect making an mmap'ed file executable? */
--	if (!(ima_policy_flag & IMA_APPRAISE) || !vma->vm_file ||
-+	if (!(ns->ima_policy_flag & IMA_APPRAISE) || !vma->vm_file ||
- 	    !(prot & PROT_EXEC) || (vma->vm_flags & VM_EXEC))
- 		return 0;
+ #include <linux/rculist.h>
+ #include <linux/slab.h>
++#include <linux/ima.h>
+ #include "ima.h"
  
- 	security_task_getsecid_subj(current, &secid);
- 	inode = file_inode(vma->vm_file);
--	action = ima_get_action(file_mnt_user_ns(vma->vm_file), inode,
-+	action = ima_get_action(ns, file_mnt_user_ns(vma->vm_file), inode,
- 				current_cred(), secid, MAY_EXEC, MMAP_CHECK,
- 				&pcr, &template, NULL, NULL);
+ #define AUDIT_CAUSE_LEN_MAX 32
+@@ -31,21 +32,22 @@ static unsigned long binary_runtime_size;
+ static unsigned long binary_runtime_size = ULONG_MAX;
+ #endif
  
-@@ -495,17 +498,18 @@ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long prot)
-  */
- int ima_bprm_check(struct linux_binprm *bprm)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	int ret;
- 	u32 secid;
- 
- 	security_task_getsecid_subj(current, &secid);
--	ret = process_measurement(bprm->file, current_cred(), secid, NULL, 0,
--				  MAY_EXEC, BPRM_CHECK);
-+	ret = process_measurement(ns, bprm->file, current_cred(), secid, NULL,
-+				  0, MAY_EXEC, BPRM_CHECK);
- 	if (ret)
- 		return ret;
- 
- 	security_cred_getsecid(bprm->cred, &secid);
--	return process_measurement(bprm->file, bprm->cred, secid, NULL, 0,
-+	return process_measurement(ns, bprm->file, bprm->cred, secid, NULL, 0,
- 				   MAY_EXEC, CREDS_CHECK);
- }
- 
-@@ -521,21 +525,23 @@ int ima_bprm_check(struct linux_binprm *bprm)
-  */
- int ima_file_check(struct file *file, int mask)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	u32 secid;
- 
- 	security_task_getsecid_subj(current, &secid);
--	return process_measurement(file, current_cred(), secid, NULL, 0,
-+	return process_measurement(ns, file, current_cred(), secid, NULL, 0,
- 				   mask & (MAY_READ | MAY_WRITE | MAY_EXEC |
- 					   MAY_APPEND), FILE_CHECK);
- }
- EXPORT_SYMBOL_GPL(ima_file_check);
- 
--static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
-+static int __ima_inode_hash(struct ima_namespace *ns,
-+			    struct inode *inode, char *buf, size_t buf_size)
- {
- 	struct integrity_iint_cache *iint;
- 	int hash_algo;
- 
--	if (!ima_policy_flag)
-+	if (!ns->ima_policy_flag)
- 		return -EOPNOTSUPP;
- 
- 	iint = integrity_iint_find(inode);
-@@ -585,10 +591,12 @@ static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
-  */
- int ima_file_hash(struct file *file, char *buf, size_t buf_size)
- {
-+	struct ima_namespace *ns = get_current_ns();
-+
- 	if (!file)
- 		return -EINVAL;
- 
--	return __ima_inode_hash(file_inode(file), buf, buf_size);
-+	return __ima_inode_hash(ns, file_inode(file), buf, buf_size);
- }
- EXPORT_SYMBOL_GPL(ima_file_hash);
- 
-@@ -612,10 +620,12 @@ EXPORT_SYMBOL_GPL(ima_file_hash);
-  */
- int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
- {
-+	struct ima_namespace *ns = get_current_ns();
-+
- 	if (!inode)
- 		return -EINVAL;
- 
--	return __ima_inode_hash(inode, buf, buf_size);
-+	return __ima_inode_hash(ns, inode, buf, buf_size);
- }
- EXPORT_SYMBOL_GPL(ima_inode_hash);
- 
-@@ -631,13 +641,14 @@ EXPORT_SYMBOL_GPL(ima_inode_hash);
- void ima_post_create_tmpfile(struct user_namespace *mnt_userns,
- 			     struct inode *inode)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	struct integrity_iint_cache *iint;
- 	int must_appraise;
- 
--	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
-+	if (!ns->ima_policy_flag || !S_ISREG(inode->i_mode))
- 		return;
- 
--	must_appraise = ima_must_appraise(mnt_userns, inode, MAY_ACCESS,
-+	must_appraise = ima_must_appraise(ns, mnt_userns, inode, MAY_ACCESS,
- 					  FILE_CHECK);
- 	if (!must_appraise)
- 		return;
-@@ -663,14 +674,15 @@ void ima_post_create_tmpfile(struct user_namespace *mnt_userns,
- void ima_post_path_mknod(struct user_namespace *mnt_userns,
- 			 struct dentry *dentry)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	struct integrity_iint_cache *iint;
- 	struct inode *inode = dentry->d_inode;
- 	int must_appraise;
- 
--	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
-+	if (!ns->ima_policy_flag || !S_ISREG(inode->i_mode))
- 		return;
- 
--	must_appraise = ima_must_appraise(mnt_userns, inode, MAY_ACCESS,
-+	must_appraise = ima_must_appraise(ns, mnt_userns, inode, MAY_ACCESS,
- 					  FILE_CHECK);
- 	if (!must_appraise)
- 		return;
-@@ -699,6 +711,7 @@ void ima_post_path_mknod(struct user_namespace *mnt_userns,
- int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
- 		  bool contents)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	enum ima_hooks func;
- 	u32 secid;
- 
-@@ -721,7 +734,7 @@ int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
- 	/* Read entire file for all partial reads. */
- 	func = read_idmap[read_id] ?: FILE_CHECK;
- 	security_task_getsecid_subj(current, &secid);
--	return process_measurement(file, current_cred(), secid, NULL,
-+	return process_measurement(ns, file, current_cred(), secid, NULL,
- 				   0, MAY_READ, func);
- }
- 
-@@ -749,6 +762,7 @@ const int read_idmap[READING_MAX_ID] = {
- int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 		       enum kernel_read_file_id read_id)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	enum ima_hooks func;
- 	u32 secid;
- 
-@@ -764,7 +778,7 @@ int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 
- 	func = read_idmap[read_id] ?: FILE_CHECK;
- 	security_task_getsecid_subj(current, &secid);
--	return process_measurement(file, current_cred(), secid, buf, size,
-+	return process_measurement(ns, file, current_cred(), secid, buf, size,
- 				   MAY_READ, func);
- }
- 
-@@ -870,7 +884,8 @@ int ima_post_load_data(char *buf, loff_t size,
-  * has been written to the passed location but not added to a measurement entry,
-  * a negative value otherwise.
-  */
--int process_buffer_measurement(struct user_namespace *mnt_userns,
-+int process_buffer_measurement(struct ima_namespace *ns,
-+			       struct user_namespace *mnt_userns,
- 			       struct inode *inode, const void *buf, int size,
- 			       const char *eventname, enum ima_hooks func,
- 			       int pcr, const char *func_data,
-@@ -898,7 +913,7 @@ int process_buffer_measurement(struct user_namespace *mnt_userns,
- 	if (digest && digest_len < digest_hash_len)
- 		return -EINVAL;
- 
--	if (!ima_policy_flag && !digest)
-+	if (!ns->ima_policy_flag && !digest)
- 		return -ENOENT;
- 
- 	template = ima_template_desc_buf();
-@@ -917,7 +932,7 @@ int process_buffer_measurement(struct user_namespace *mnt_userns,
- 	 */
- 	if (func) {
- 		security_task_getsecid_subj(current, &secid);
--		action = ima_get_action(mnt_userns, inode, current_cred(),
-+		action = ima_get_action(ns, mnt_userns, inode, current_cred(),
- 					secid, 0, func, &pcr, &template,
- 					func_data, NULL);
- 		if (!(action & IMA_MEASURE) && !digest)
-@@ -954,7 +969,7 @@ int process_buffer_measurement(struct user_namespace *mnt_userns,
- 	if (digest)
- 		memcpy(digest, iint.ima_hash->digest, digest_hash_len);
- 
--	if (!ima_policy_flag || (func && !(action & IMA_MEASURE)))
-+	if (!ns->ima_policy_flag || (func && !(action & IMA_MEASURE)))
- 		return 1;
- 
- 	ret = ima_alloc_init_template(&event_data, &entry, template);
-@@ -988,6 +1003,7 @@ int process_buffer_measurement(struct user_namespace *mnt_userns,
-  */
- void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	struct fd f;
- 
- 	if (!buf || !size)
-@@ -997,7 +1013,8 @@ void ima_kexec_cmdline(int kernel_fd, const void *buf, int size)
- 	if (!f.file)
- 		return;
- 
--	process_buffer_measurement(file_mnt_user_ns(f.file), file_inode(f.file),
-+	process_buffer_measurement(ns,
-+				   file_mnt_user_ns(f.file), file_inode(f.file),
- 				   buf, size, "kexec-cmdline", KEXEC_CMDLINE, 0,
- 				   NULL, false, NULL, 0);
- 	fdput(f);
-@@ -1027,10 +1044,12 @@ int ima_measure_critical_data(const char *event_label,
- 			      const void *buf, size_t buf_len,
- 			      bool hash, u8 *digest, size_t digest_len)
- {
-+	struct ima_namespace *ns = get_current_ns();
-+
- 	if (!event_name || !event_label || !buf || !buf_len)
- 		return -ENOPARAM;
- 
--	return process_buffer_measurement(&init_user_ns, NULL, buf, buf_len,
-+	return process_buffer_measurement(ns, &init_user_ns, NULL, buf, buf_len,
- 					  event_name, CRITICAL_DATA, 0,
- 					  event_label, hash, digest,
- 					  digest_len);
-@@ -1063,7 +1082,7 @@ static int __init init_ima(void)
- 		pr_warn("Couldn't register LSM notifier, error %d\n", error);
- 
- 	if (!error)
--		ima_update_policy_flags();
-+		ima_update_policy_flags(&init_ima_ns);
- 
- 	return error;
- }
-diff --git a/security/integrity/ima/ima_ns.c b/security/integrity/ima/ima_ns.c
-index 1ee724bab714..9c628ab2978b 100644
---- a/security/integrity/ima/ima_ns.c
-+++ b/security/integrity/ima/ima_ns.c
-@@ -57,6 +57,7 @@ int create_ima_ns(struct user_namespace *user_ns)
- static void destroy_ima_ns(struct ima_namespace *ns)
- {
- 	pr_debug("DESTROY ima_ns: 0x%p\n", ns);
-+	ima_free_policy_rules(ns);
- 	free_ns_status_cache(ns);
- 	kmem_cache_free(imans_cachep, ns);
- }
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index e5aef287d14d..4d6d3a39f65e 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -52,7 +52,6 @@
- #define INVALID_PCR(a) (((a) < 0) || \
- 	(a) >= (sizeof_field(struct integrity_iint_cache, measured_pcrs) * 8))
- 
--int ima_policy_flag;
- static int temp_ima_appraise;
- static int build_ima_appraise __ro_after_init;
- 
-@@ -233,11 +232,6 @@ static struct ima_rule_entry critical_data_rules[] __ro_after_init = {
- /* An array of architecture specific rules */
- static struct ima_rule_entry *arch_policy_entry __ro_after_init;
- 
--static LIST_HEAD(ima_default_rules);
--static LIST_HEAD(ima_policy_rules);
--static LIST_HEAD(ima_temp_rules);
--static struct list_head __rcu *ima_rules = (struct list_head __rcu *)(&ima_default_rules);
+-/* key: inode (before secure-hashing a file) */
+-struct ima_h_table ima_htable = {
+-	.len = ATOMIC_LONG_INIT(0),
+-	.violations = ATOMIC_LONG_INIT(0),
+-	.queue[0 ... IMA_MEASURE_HTABLE_SIZE - 1] = HLIST_HEAD_INIT
+-};
 -
- static int ima_policy __initdata;
- 
- static int __init default_measure_policy_setup(char *str)
-@@ -454,12 +448,12 @@ static bool ima_rule_contains_lsm_cond(struct ima_rule_entry *entry)
-  * to the old, stale LSM policy.  Update the IMA LSM based rules to reflect
-  * the reloaded LSM policy.
+ /* mutex protects atomicity of extending measurement list
+  * and extending the TPM PCR aggregate. Since tpm_extend can take
+  * long (and the tpm driver uses a mutex), we can't use the spinlock.
   */
--static void ima_lsm_update_rules(void)
-+static void ima_lsm_update_rules(struct ima_namespace *ns)
- {
- 	struct ima_rule_entry *entry, *e;
- 	int result;
+ static DEFINE_MUTEX(ima_extend_list_mutex);
  
--	list_for_each_entry_safe(entry, e, &ima_policy_rules, list) {
-+	list_for_each_entry_safe(entry, e, &ns->ima_policy_rules, list) {
- 		if (!ima_rule_contains_lsm_cond(entry))
- 			continue;
- 
-@@ -474,10 +468,12 @@ static void ima_lsm_update_rules(void)
- int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
- 			  void *lsm_data)
- {
-+	struct ima_namespace *ns = get_current_ns();
 +
- 	if (event != LSM_POLICY_CHANGE)
- 		return NOTIFY_DONE;
- 
--	ima_lsm_update_rules();
-+	ima_lsm_update_rules(ns);
- 	return NOTIFY_OK;
- }
- 
-@@ -688,7 +684,8 @@ static int get_subaction(struct ima_rule_entry *rule, enum ima_hooks func)
-  * list when walking it.  Reads are many orders of magnitude more numerous
-  * than writes so ima_match_policy() is classical RCU candidate.
-  */
--int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
-+int ima_match_policy(struct ima_namespace *ns,
-+		     struct user_namespace *mnt_userns, struct inode *inode,
- 		     const struct cred *cred, u32 secid, enum ima_hooks func,
- 		     int mask, int flags, int *pcr,
- 		     struct ima_template_desc **template_desc,
-@@ -702,7 +699,7 @@ int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
- 		*template_desc = ima_template_desc_current();
- 
- 	rcu_read_lock();
--	ima_rules_tmp = rcu_dereference(ima_rules);
-+	ima_rules_tmp = rcu_dereference(ns->ima_rules);
- 	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
- 
- 		if (!(entry->action & actmask))
-@@ -760,14 +757,14 @@ int ima_match_policy(struct user_namespace *mnt_userns, struct inode *inode,
-  *
-  * Context: called after a policy update and at system initialization.
-  */
--void ima_update_policy_flags(void)
-+void ima_update_policy_flags(struct ima_namespace *ns)
- {
- 	struct ima_rule_entry *entry;
- 	int new_policy_flag = 0;
- 	struct list_head *ima_rules_tmp;
- 
- 	rcu_read_lock();
--	ima_rules_tmp = rcu_dereference(ima_rules);
-+	ima_rules_tmp = rcu_dereference(ns->ima_rules);
- 	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
- 		/*
- 		 * SETXATTR_CHECK rules do not implement a full policy check
-@@ -797,7 +794,7 @@ void ima_update_policy_flags(void)
- 	if (!ima_appraise)
- 		new_policy_flag &= ~IMA_APPRAISE;
- 
--	ima_policy_flag = new_policy_flag;
-+	ns->ima_policy_flag = new_policy_flag;
- }
- 
- static int ima_appraise_flag(enum ima_hooks func)
-@@ -813,7 +810,8 @@ static int ima_appraise_flag(enum ima_hooks func)
- 	return 0;
- }
- 
--static void add_rules(struct ima_rule_entry *entries, int count,
-+static void add_rules(struct ima_namespace *ns,
-+		      struct ima_rule_entry *entries, int count,
- 		      enum policy_rule_list policy_rule)
- {
- 	int i = 0;
-@@ -822,7 +820,7 @@ static void add_rules(struct ima_rule_entry *entries, int count,
- 		struct ima_rule_entry *entry;
- 
- 		if (policy_rule & IMA_DEFAULT_POLICY)
--			list_add_tail(&entries[i].list, &ima_default_rules);
-+			list_add_tail(&entries[i].list, &ns->ima_default_rules);
- 
- 		if (policy_rule & IMA_CUSTOM_POLICY) {
- 			entry = kmemdup(&entries[i], sizeof(*entry),
-@@ -830,7 +828,7 @@ static void add_rules(struct ima_rule_entry *entries, int count,
- 			if (!entry)
- 				continue;
- 
--			list_add_tail(&entry->list, &ima_policy_rules);
-+			list_add_tail(&entry->list, &ns->ima_policy_rules);
- 		}
- 		if (entries[i].action == APPRAISE) {
- 			if (entries != build_appraise_rules)
-@@ -843,9 +841,10 @@ static void add_rules(struct ima_rule_entry *entries, int count,
- 	}
- }
- 
--static int ima_parse_rule(char *rule, struct ima_rule_entry *entry);
-+static int ima_parse_rule(struct ima_namespace *ns,
-+			  char *rule, struct ima_rule_entry *entry);
- 
--static int __init ima_init_arch_policy(void)
-+static int __init ima_init_arch_policy(struct ima_namespace *ns)
- {
- 	const char * const *arch_rules;
- 	const char * const *rules;
-@@ -873,7 +872,7 @@ static int __init ima_init_arch_policy(void)
- 		result = strscpy(rule, *rules, sizeof(rule));
- 
- 		INIT_LIST_HEAD(&arch_policy_entry[i].list);
--		result = ima_parse_rule(rule, &arch_policy_entry[i]);
-+		result = ima_parse_rule(ns, rule, &arch_policy_entry[i]);
- 		if (result) {
- 			pr_warn("Skipping unknown architecture policy rule: %s\n",
- 				rule);
-@@ -891,23 +890,23 @@ static int __init ima_init_arch_policy(void)
-  *
-  * ima_rules points to either the ima_default_rules or the new ima_policy_rules.
-  */
--void __init ima_init_policy(void)
-+void __init ima_init_policy(struct ima_namespace *ns)
- {
- 	int build_appraise_entries, arch_entries;
- 
- 	/* if !ima_policy, we load NO default rules */
- 	if (ima_policy)
--		add_rules(dont_measure_rules, ARRAY_SIZE(dont_measure_rules),
-+		add_rules(ns, dont_measure_rules, ARRAY_SIZE(dont_measure_rules),
- 			  IMA_DEFAULT_POLICY);
- 
- 	switch (ima_policy) {
- 	case ORIGINAL_TCB:
--		add_rules(original_measurement_rules,
-+		add_rules(ns, original_measurement_rules,
- 			  ARRAY_SIZE(original_measurement_rules),
- 			  IMA_DEFAULT_POLICY);
- 		break;
- 	case DEFAULT_TCB:
--		add_rules(default_measurement_rules,
-+		add_rules(ns, default_measurement_rules,
- 			  ARRAY_SIZE(default_measurement_rules),
- 			  IMA_DEFAULT_POLICY);
- 		break;
-@@ -921,11 +920,11 @@ void __init ima_init_policy(void)
- 	 * and custom policies, prior to other appraise rules.
- 	 * (Highest priority)
- 	 */
--	arch_entries = ima_init_arch_policy();
-+	arch_entries = ima_init_arch_policy(ns);
- 	if (!arch_entries)
- 		pr_info("No architecture policies found\n");
- 	else
--		add_rules(arch_policy_entry, arch_entries,
-+		add_rules(ns, arch_policy_entry, arch_entries,
- 			  IMA_DEFAULT_POLICY | IMA_CUSTOM_POLICY);
- 
- 	/*
-@@ -933,7 +932,7 @@ void __init ima_init_policy(void)
- 	 * signatures, prior to other appraise rules.
- 	 */
- 	if (ima_use_secure_boot)
--		add_rules(secure_boot_rules, ARRAY_SIZE(secure_boot_rules),
-+		add_rules(ns, secure_boot_rules, ARRAY_SIZE(secure_boot_rules),
- 			  IMA_DEFAULT_POLICY);
- 
- 	/*
-@@ -945,32 +944,32 @@ void __init ima_init_policy(void)
- 	build_appraise_entries = ARRAY_SIZE(build_appraise_rules);
- 	if (build_appraise_entries) {
- 		if (ima_use_secure_boot)
--			add_rules(build_appraise_rules, build_appraise_entries,
-+			add_rules(ns, build_appraise_rules, build_appraise_entries,
- 				  IMA_CUSTOM_POLICY);
- 		else
--			add_rules(build_appraise_rules, build_appraise_entries,
-+			add_rules(ns, build_appraise_rules, build_appraise_entries,
- 				  IMA_DEFAULT_POLICY | IMA_CUSTOM_POLICY);
- 	}
- 
- 	if (ima_use_appraise_tcb)
--		add_rules(default_appraise_rules,
-+		add_rules(ns, default_appraise_rules,
- 			  ARRAY_SIZE(default_appraise_rules),
- 			  IMA_DEFAULT_POLICY);
- 
- 	if (ima_use_critical_data)
--		add_rules(critical_data_rules,
-+		add_rules(ns, critical_data_rules,
- 			  ARRAY_SIZE(critical_data_rules),
- 			  IMA_DEFAULT_POLICY);
- 
- 	atomic_set(&ima_setxattr_allowed_hash_algorithms, 0);
- 
--	ima_update_policy_flags();
-+	ima_update_policy_flags(ns);
- }
- 
- /* Make sure we have a valid policy, at least containing some rules. */
--int ima_check_policy(void)
-+int ima_check_policy(struct ima_namespace *ns)
- {
--	if (list_empty(&ima_temp_rules))
-+	if (list_empty(&ns->ima_temp_rules))
- 		return -EINVAL;
- 	return 0;
- }
-@@ -988,14 +987,14 @@ int ima_check_policy(void)
-  */
- void ima_update_policy(struct ima_namespace *ns)
- {
--	struct list_head *policy = &ima_policy_rules;
-+	struct list_head *policy = &ns->ima_policy_rules;
- 
--	list_splice_tail_init_rcu(&ima_temp_rules, policy, synchronize_rcu);
-+	list_splice_tail_init_rcu(&ns->ima_temp_rules, policy, synchronize_rcu);
- 
--	if (ima_rules != (struct list_head __rcu *)policy) {
--		ima_policy_flag = 0;
-+	if (ns->ima_rules != (struct list_head __rcu *)policy) {
-+		ns->ima_policy_flag = 0;
- 
--		rcu_assign_pointer(ima_rules, policy);
-+		rcu_assign_pointer(ns->ima_rules, policy);
- 		/*
- 		 * IMA architecture specific policy rules are specified
- 		 * as strings and converted to an array of ima_entry_rules
-@@ -1004,7 +1003,7 @@ void ima_update_policy(struct ima_namespace *ns)
- 		 */
- 		kfree(arch_policy_entry);
- 	}
--	ima_update_policy_flags();
-+	ima_update_policy_flags(ns);
- 
- 	/* Custom IMA policy has been loaded */
- 	ima_process_queued_keys(ns);
-@@ -1077,7 +1076,8 @@ static const match_table_t policy_tokens = {
- 	{Opt_err, NULL}
- };
- 
--static int ima_lsm_rule_init(struct ima_rule_entry *entry,
-+static int ima_lsm_rule_init(struct ima_namespace *ns,
-+			     struct ima_rule_entry *entry,
- 			     substring_t *args, int lsm_rule, int audit_type)
- {
- 	int result;
-@@ -1097,7 +1097,7 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
- 		pr_warn("rule for LSM \'%s\' is undefined\n",
- 			entry->lsm[lsm_rule].args_p);
- 
--		if (ima_rules == (struct list_head __rcu *)(&ima_default_rules)) {
-+		if (ns->ima_rules == (struct list_head __rcu *)(&ns->ima_default_rules)) {
- 			kfree(entry->lsm[lsm_rule].args_p);
- 			entry->lsm[lsm_rule].args_p = NULL;
- 			result = -EINVAL;
-@@ -1324,7 +1324,8 @@ static unsigned int ima_parse_appraise_algos(char *arg)
- 	return res;
- }
- 
--static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
-+static int ima_parse_rule(struct ima_namespace *ns,
-+			  char *rule, struct ima_rule_entry *entry)
- {
- 	struct audit_buffer *ab;
- 	char *from;
-@@ -1674,37 +1675,37 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 			break;
- 		case Opt_obj_user:
- 			ima_log_string(ab, "obj_user", args[0].from);
--			result = ima_lsm_rule_init(entry, args,
-+			result = ima_lsm_rule_init(ns, entry, args,
- 						   LSM_OBJ_USER,
- 						   AUDIT_OBJ_USER);
- 			break;
- 		case Opt_obj_role:
- 			ima_log_string(ab, "obj_role", args[0].from);
--			result = ima_lsm_rule_init(entry, args,
-+			result = ima_lsm_rule_init(ns, entry, args,
- 						   LSM_OBJ_ROLE,
- 						   AUDIT_OBJ_ROLE);
- 			break;
- 		case Opt_obj_type:
- 			ima_log_string(ab, "obj_type", args[0].from);
--			result = ima_lsm_rule_init(entry, args,
-+			result = ima_lsm_rule_init(ns, entry, args,
- 						   LSM_OBJ_TYPE,
- 						   AUDIT_OBJ_TYPE);
- 			break;
- 		case Opt_subj_user:
- 			ima_log_string(ab, "subj_user", args[0].from);
--			result = ima_lsm_rule_init(entry, args,
-+			result = ima_lsm_rule_init(ns, entry, args,
- 						   LSM_SUBJ_USER,
- 						   AUDIT_SUBJ_USER);
- 			break;
- 		case Opt_subj_role:
- 			ima_log_string(ab, "subj_role", args[0].from);
--			result = ima_lsm_rule_init(entry, args,
-+			result = ima_lsm_rule_init(ns, entry, args,
- 						   LSM_SUBJ_ROLE,
- 						   AUDIT_SUBJ_ROLE);
- 			break;
- 		case Opt_subj_type:
- 			ima_log_string(ab, "subj_type", args[0].from);
--			result = ima_lsm_rule_init(entry, args,
-+			result = ima_lsm_rule_init(ns, entry, args,
- 						   LSM_SUBJ_TYPE,
- 						   AUDIT_SUBJ_TYPE);
- 			break;
-@@ -1810,7 +1811,7 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
-  * Avoid locking by allowing just one writer at a time in ima_write_policy()
-  * Returns the length of the rule parsed, an error code on failure
-  */
--ssize_t ima_parse_add_rule(char *rule)
-+ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule)
- {
- 	static const char op[] = "update_policy";
- 	char *p;
-@@ -1834,7 +1835,7 @@ ssize_t ima_parse_add_rule(char *rule)
- 
- 	INIT_LIST_HEAD(&entry->list);
- 
--	result = ima_parse_rule(p, entry);
-+	result = ima_parse_rule(ns, p, entry);
- 	if (result) {
- 		ima_free_rule(entry);
- 		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL,
-@@ -1843,7 +1844,7 @@ ssize_t ima_parse_add_rule(char *rule)
- 		return result;
- 	}
- 
--	list_add_tail(&entry->list, &ima_temp_rules);
-+	list_add_tail(&entry->list, &ns->ima_temp_rules);
- 
- 	return len;
- }
-@@ -1854,12 +1855,24 @@ ssize_t ima_parse_add_rule(char *rule)
-  * different from the active one.  There is also only one user of
-  * ima_delete_rules() at a time.
-  */
--void ima_delete_rules(void)
-+void ima_delete_rules(struct ima_namespace *ns)
- {
- 	struct ima_rule_entry *entry, *tmp;
- 
- 	temp_ima_appraise = 0;
--	list_for_each_entry_safe(entry, tmp, &ima_temp_rules, list) {
-+	list_for_each_entry_safe(entry, tmp, &ns->ima_temp_rules, list) {
-+		list_del(&entry->list);
-+		ima_free_rule(entry);
-+	}
++static inline unsigned int ima_hash_key(u8 *digest)
++{
++	/* there is no point in taking a hash of part of a digest */
++	return (digest[0] | digest[1] << 8) % IMA_MEASURE_HTABLE_SIZE;
 +}
 +
-+void ima_free_policy_rules(struct ima_namespace *ns)
-+{
-+	struct ima_rule_entry *entry, *tmp;
-+
-+	ima_delete_rules(ns);
-+
-+	list_for_each_entry_safe(entry, tmp, &ns->ima_policy_rules, list) {
- 		list_del(&entry->list);
- 		ima_free_rule(entry);
+ /* lookup up the digest value in the hash table, and return the entry */
+-static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
++static struct ima_queue_entry *ima_lookup_digest_entry(struct ima_namespace *ns,
++						       u8 *digest_value,
+ 						       int pcr)
+ {
+ 	struct ima_queue_entry *qe, *ret = NULL;
+@@ -54,7 +56,7 @@ static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
+ 
+ 	key = ima_hash_key(digest_value);
+ 	rcu_read_lock();
+-	hlist_for_each_entry_rcu(qe, &ima_htable.queue[key], hnext) {
++	hlist_for_each_entry_rcu(qe, &ns->ima_htable.queue[key], hnext) {
+ 		rc = memcmp(qe->entry->digests[ima_hash_algo_idx].digest,
+ 			    digest_value, hash_digest_size[ima_hash_algo]);
+ 		if ((rc == 0) && (qe->entry->pcr == pcr)) {
+@@ -90,7 +92,8 @@ static int get_binary_runtime_size(struct ima_template_entry *entry)
+  *
+  * (Called with ima_extend_list_mutex held.)
+  */
+-static int ima_add_digest_entry(struct ima_template_entry *entry,
++static int ima_add_digest_entry(struct ima_namespace *ns,
++				struct ima_template_entry *entry,
+ 				bool update_htable)
+ {
+ 	struct ima_queue_entry *qe;
+@@ -106,11 +109,12 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
+ 	INIT_LIST_HEAD(&qe->later);
+ 	list_add_tail_rcu(&qe->later, &ima_measurements);
+ 
+-	atomic_long_inc(&ima_htable.len);
++	atomic_long_inc(&ns->ima_htable.len);
+ 	if (update_htable) {
+ 		key = ima_hash_key(entry->digests[ima_hash_algo_idx].digest);
+-		hlist_add_head_rcu(&qe->hnext, &ima_htable.queue[key]);
+-	}
++		hlist_add_head_rcu(&qe->hnext, &ns->ima_htable.queue[key]);
++	} else
++		INIT_HLIST_NODE(&qe->hnext);
+ 
+ 	if (binary_runtime_size != ULONG_MAX) {
+ 		int size;
+@@ -156,7 +160,8 @@ static int ima_pcr_extend(struct tpm_digest *digests_arg, int pcr)
+  * kexec, maintain the total memory size required for serializing the
+  * binary_runtime_measurements.
+  */
+-int ima_add_template_entry(struct ima_template_entry *entry, int violation,
++int ima_add_template_entry(struct ima_namespace *ns,
++			   struct ima_template_entry *entry, int violation,
+ 			   const char *op, struct inode *inode,
+ 			   const unsigned char *filename)
+ {
+@@ -169,14 +174,14 @@ int ima_add_template_entry(struct ima_template_entry *entry, int violation,
+ 
+ 	mutex_lock(&ima_extend_list_mutex);
+ 	if (!violation && !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE)) {
+-		if (ima_lookup_digest_entry(digest, entry->pcr)) {
++		if (ima_lookup_digest_entry(ns, digest, entry->pcr)) {
+ 			audit_cause = "hash_exists";
+ 			result = -EEXIST;
+ 			goto out;
+ 		}
  	}
-@@ -1885,12 +1898,13 @@ static const char *const mask_tokens[] = {
  
- void *ima_policy_start(struct seq_file *m, loff_t *pos)
- {
-+	struct ima_namespace *ns = get_current_ns();
- 	loff_t l = *pos;
- 	struct ima_rule_entry *entry;
- 	struct list_head *ima_rules_tmp;
- 
- 	rcu_read_lock();
--	ima_rules_tmp = rcu_dereference(ima_rules);
-+	ima_rules_tmp = rcu_dereference(ns->ima_rules);
- 	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
- 		if (!l--) {
- 			rcu_read_unlock();
-@@ -1904,14 +1918,15 @@ void *ima_policy_start(struct seq_file *m, loff_t *pos)
- void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos)
- {
- 	struct ima_rule_entry *entry = v;
-+	struct ima_namespace *ns = get_current_ns();
- 
- 	rcu_read_lock();
- 	entry = list_entry_rcu(entry->list.next, struct ima_rule_entry, list);
- 	rcu_read_unlock();
- 	(*pos)++;
- 
--	return (&entry->list == &ima_default_rules ||
--		&entry->list == &ima_policy_rules) ? NULL : entry;
-+	return (&entry->list == &ns->ima_default_rules ||
-+		&entry->list == &ns->ima_policy_rules) ? NULL : entry;
+-	result = ima_add_digest_entry(entry,
++	result = ima_add_digest_entry(ns, entry,
+ 				      !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE));
+ 	if (result < 0) {
+ 		audit_cause = "ENOMEM";
+@@ -201,12 +206,13 @@ int ima_add_template_entry(struct ima_template_entry *entry, int violation,
+ 	return result;
  }
  
- void ima_policy_stop(struct seq_file *m, void *v)
-@@ -2166,6 +2181,7 @@ int ima_policy_show(struct seq_file *m, void *v)
-  */
- bool ima_appraise_signature(enum kernel_read_file_id id)
+-int ima_restore_measurement_entry(struct ima_template_entry *entry)
++int ima_restore_measurement_entry(struct ima_namespace *ns,
++				  struct ima_template_entry *entry)
  {
-+	struct ima_namespace *ns = get_current_ns();
- 	struct ima_rule_entry *entry;
- 	bool found = false;
- 	enum ima_hooks func;
-@@ -2177,7 +2193,7 @@ bool ima_appraise_signature(enum kernel_read_file_id id)
- 	func = read_idmap[id] ?: FILE_CHECK;
+ 	int result = 0;
  
- 	rcu_read_lock();
--	ima_rules_tmp = rcu_dereference(ima_rules);
-+	ima_rules_tmp = rcu_dereference(ns->ima_rules);
- 	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
- 		if (entry->action != APPRAISE)
- 			continue;
-diff --git a/security/integrity/ima/ima_queue_keys.c b/security/integrity/ima/ima_queue_keys.c
-index 4c69178b1ffe..a6eb802e5ae4 100644
---- a/security/integrity/ima/ima_queue_keys.c
-+++ b/security/integrity/ima/ima_queue_keys.c
-@@ -150,7 +150,7 @@ void ima_process_queued_keys(struct ima_namespace *ns)
+ 	mutex_lock(&ima_extend_list_mutex);
+-	result = ima_add_digest_entry(entry, 0);
++	result = ima_add_digest_entry(ns, entry, 0);
+ 	mutex_unlock(&ima_extend_list_mutex);
+ 	return result;
+ }
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index 694560396be0..2ae87eb23a59 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -400,7 +400,7 @@ static int ima_restore_template_data(struct ima_template_desc *template_desc,
+ }
  
- 	list_for_each_entry_safe(entry, tmp, &ns->ima_keys, list) {
- 		if (!ns->timer_expired)
--			process_buffer_measurement(&init_user_ns, NULL,
-+			process_buffer_measurement(ns, &init_user_ns, NULL,
- 						   entry->payload,
- 						   entry->payload_len,
- 						   entry->keyring_name,
+ /* Restore the serialized binary measurement list without extending PCRs. */
+-int ima_restore_measurement_list(loff_t size, void *buf)
++int ima_restore_measurement_list(struct ima_namespace *ns, loff_t size, void *buf)
+ {
+ 	char template_name[MAX_TEMPLATE_NAME_LEN];
+ 	unsigned char zero[TPM_DIGEST_SIZE] = { 0 };
+@@ -516,7 +516,7 @@ int ima_restore_measurement_list(loff_t size, void *buf)
+ 
+ 		entry->pcr = !ima_canonical_fmt ? *(u32 *)(hdr[HDR_PCR].data) :
+ 			     le32_to_cpu(*(__le32 *)(hdr[HDR_PCR].data));
+-		ret = ima_restore_measurement_entry(entry);
++		ret = ima_restore_measurement_entry(ns, entry);
+ 		if (ret < 0)
+ 			break;
+ 
 -- 
 2.31.1
 
