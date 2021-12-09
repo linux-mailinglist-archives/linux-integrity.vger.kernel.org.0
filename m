@@ -2,145 +2,97 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E35746E06F
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Dec 2021 02:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F8846E198
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Dec 2021 05:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbhLIBzU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 8 Dec 2021 20:55:20 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:62774 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229680AbhLIBzT (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 8 Dec 2021 20:55:19 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8NpFij020559;
-        Thu, 9 Dec 2021 01:51:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=lzNkL6HlG8uoD4LD2dknfufOrMTAzaPjmA2GavdwoYk=;
- b=bGfF52MtqCIan3T31khGXLZ5V9SQmsU4tNjRDTsPk0R+5fMLn2gtnBKPbdfDuVa5s9QK
- XmTVr0wMHAec3IqMumy0uRK150V/ZkYtf4Px4RsbTrVM9NS2NME5CgfEGqgnV82aUZ00
- papvyzMMEPdotAsvuLc65+p4/1d6b7TvD2FdY3ubuGHJYgUW4w64dSV5iQqjf1stp22s
- j91697c2DmCOoxj+0FsETRnoxKIVyspCZ/X0ets/IywZblS6I8ZBW/n5mKd5sRTVMANF
- C8GODj+RezSazeQblBkrne22Q7MD+gT2+p8iZAbeqaa2y20zWnjaUpcNtyfi0g7Nsbgn 0w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu1gk88we-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 01:51:01 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B91k8st023060;
-        Thu, 9 Dec 2021 01:51:00 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cu1gk88w2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 01:51:00 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B91mA8k014682;
-        Thu, 9 Dec 2021 01:50:59 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma04dal.us.ibm.com with ESMTP id 3cqyybtxwq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Dec 2021 01:50:59 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B91ovro28115566
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Dec 2021 01:50:57 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 00C6BC6063;
-        Thu,  9 Dec 2021 01:50:57 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F1C6DC6062;
-        Thu,  9 Dec 2021 01:50:54 +0000 (GMT)
-Received: from [9.211.91.166] (unknown [9.211.91.166])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Dec 2021 01:50:54 +0000 (GMT)
-Message-ID: <b5e6ec36-a9ec-22f4-be58-28d48bdc38b4@linux.vnet.ibm.com>
-Date:   Wed, 8 Dec 2021 20:50:54 -0500
+        id S230116AbhLIEoo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 8 Dec 2021 23:44:44 -0500
+Received: from mga12.intel.com ([192.55.52.136]:33075 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229940AbhLIEon (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 8 Dec 2021 23:44:43 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="218037863"
+X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
+   d="scan'208";a="218037863"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2021 20:41:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,191,1635231600"; 
+   d="scan'208";a="750221147"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Dec 2021 20:41:07 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mvBEx-0001UL-5o; Thu, 09 Dec 2021 04:41:07 +0000
+Date:   Thu, 9 Dec 2021 12:40:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com
+Subject: Re: [PATCH v5 01/16] ima: Add IMA namespace support
+Message-ID: <202112091252.hCpFK6H4-lkp@intel.com>
+References: <20211208221818.1519628-2-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
-Content-Language: en-US
-To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org
-Cc:     kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-s390@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <cover.1637862358.git.msuchanek@suse.de>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <cover.1637862358.git.msuchanek@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xrnPnY685HKWDzMtt8FN4mvhzwUwSKub
-X-Proofpoint-ORIG-GUID: PnjZLCiMbUjVAQT56miJWZSqnDdO6KM6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-09_01,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=984
- lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0 suspectscore=0
- impostorscore=0 adultscore=0 priorityscore=1501 mlxscore=0 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112090006
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208221818.1519628-2-stefanb@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Stefan,
 
-On 11/25/21 13:02, Michal Suchanek wrote:
-> Hello,
+Thank you for the patch! Perhaps something to improve:
 
-Hi Michael,
+[auto build test WARNING on zohar-integrity/next-integrity]
+[also build test WARNING on linux/master linus/master v5.16-rc4 next-20211208]
+[cannot apply to jmorris-security/next-testing]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->
-> This is resend of the KEXEC_SIG patchset.
->
-> The first patch is new because it'a a cleanup that does not require any
-> change to the module verification code.
->
-> The second patch is the only one that is intended to change any
-> functionality.
->
-> The rest only deduplicates code but I did not receive any review on that
-> part so I don't know if it's desirable as implemented.
->
-> The first two patches can be applied separately without the rest.
+url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211209-062017
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20211209/202112091252.hCpFK6H4-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/0e5d16c2da02e9c61692836edf0b6f7f227e1867
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211209-062017
+        git checkout 0e5d16c2da02e9c61692836edf0b6f7f227e1867
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
 
-Patch 2 fails to apply on v5.16-rc4. Can you please also include git 
-tree/branch while posting the patches ?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Secondly, I see that you add the powerpc support in Patch 2 and then 
-modify it again in Patch 5 after cleanup. Why not add the support for 
-powerpc after the clean up ? This will reduce some rework and also 
-probably simplify patches.
+All warnings (new ones prefixed by >>):
 
-Thanks & Regards,
+   In file included from fs/open.c:32:
+   include/linux/ima.h: In function 'create_ima_ns':
+>> include/linux/ima.h:263:5: warning: "CONFIG_IMA" is not defined, evaluates to 0 [-Wundef]
+     263 | #if CONFIG_IMA
+         |     ^~~~~~~~~~
 
-      - Nayna
 
+vim +/CONFIG_IMA +263 include/linux/ima.h
+
+   260	
+   261	static inline int create_ima_ns(struct user_namespace *user_ns)
+   262	{
+ > 263	#if CONFIG_IMA
+   264		user_ns->ima_ns = get_ima_ns(&init_ima_ns);
+   265	#endif
+   266		return 0;
+   267	}
+   268	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
