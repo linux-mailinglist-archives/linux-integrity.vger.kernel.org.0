@@ -2,134 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C1746E907
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Dec 2021 14:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C58446E915
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 Dec 2021 14:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbhLINXF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 9 Dec 2021 08:23:05 -0500
-Received: from mga18.intel.com ([134.134.136.126]:21048 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230306AbhLINXF (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 9 Dec 2021 08:23:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639055972; x=1670591972;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0oCW1VQbPxRRRG1yCpeFHLx2QRuvAS6IkaCU8uu83u4=;
-  b=cDLuLfcrwVLnY6d4PFmUPlppfksiWg7khnZmYAczKQXCJdJVJ2rp/VtM
-   a+0Qm1/wmCLzTQMOjYVu+98od80VSNpCl+IObwuz06mHHe4wPiSUrl0Vl
-   p8bSLn+h8d0NuFKMIgbuzAMI+5IXrfXWuzZrMVR7HRy6WAS3IFQkJlgwd
-   h4zqyfHYRYVcwoeko+YN+0ZcB0uvkxPIf50qjurRDLdqOkhMlAthd+OjC
-   Aq6KxrPSp9npqYfO9sOf3Gx47XLltlrHf1vfFHK2QqE2mbc1cnAggPfYN
-   KAzwQH068l+oPcxzPTvb5Gf5A+329k7PzcnwBEaed7hOuONmh/FjqIsz8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10192"; a="224961240"
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="224961240"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2021 05:19:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="480333772"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 09 Dec 2021 05:19:27 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mvJKY-0001xG-Rj; Thu, 09 Dec 2021 13:19:26 +0000
-Date:   Thu, 9 Dec 2021 21:19:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com
-Subject: Re: [PATCH v5 01/16] ima: Add IMA namespace support
-Message-ID: <202112092123.r0jOHT8e-lkp@intel.com>
-References: <20211208221818.1519628-2-stefanb@linux.ibm.com>
+        id S237871AbhLIN1f (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 9 Dec 2021 08:27:35 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18370 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237913AbhLIN1e (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 9 Dec 2021 08:27:34 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B9CTIYF001755;
+        Thu, 9 Dec 2021 13:23:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=Peb/1+zlJfUFXCByvdrVxxZHXcbEVfe/h5BLXGK8cfU=;
+ b=TZu4JI3e+xJjXvuO6TdMssLpPULlJfSh8gKiMp9lj2jqu8/n6VVwXlRABqo8mUdXnKkM
+ FvS9YAizUPouMCUS1UcKMNs1PTjHWQZ8loPFJoMJHovh+QOfal60A0pUVvndpBCUa8i0
+ 0ApzNGyJIaF35dVUzyl4gJG3TobY5xZoeWOAmwhsn+WVzdClwrq8hM4dns3KCrBzq1xO
+ aFqkrLQpM/ZAgf/RjmeJdoNq6Ea6P44eONkDUzgM9Qq2YZdt3stFX82yrQ1CKywedwQG
+ eLUml95hQ9b97uNGGj1ofIvz8cm87gZA8QzPpruGVI/mB7YYVjP7SjSbtBqypdLYLw04 /Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cuhuch5ap-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 13:23:45 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B9CV3pe009524;
+        Thu, 9 Dec 2021 13:23:44 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cuhuch5ab-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 13:23:44 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B9DIDgO031552;
+        Thu, 9 Dec 2021 13:23:43 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04dal.us.ibm.com with ESMTP id 3cqyyc6u9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Dec 2021 13:23:43 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B9DNfBX43843924
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Dec 2021 13:23:41 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2208478068;
+        Thu,  9 Dec 2021 13:23:41 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2CD6978067;
+        Thu,  9 Dec 2021 13:23:37 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Dec 2021 13:23:36 +0000 (GMT)
+Message-ID: <e285cfdc3f6380c7ca5f6e22378ba8343bedf622.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 14/16] ima: Use mac_admin_ns_capable() to check
+ corresponding capability
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Denis Semakin <denis.semakin@huawei.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "christian.brauner@ubuntu.com" <christian.brauner@ubuntu.com>,
+        "containers@lists.linux.dev" <containers@lists.linux.dev>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        Krzysztof Struczynski <krzysztof.struczynski@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "mpeters@redhat.com" <mpeters@redhat.com>,
+        "lhinds@redhat.com" <lhinds@redhat.com>,
+        "lsturman@redhat.com" <lsturman@redhat.com>,
+        "puiterwi@redhat.com" <puiterwi@redhat.com>,
+        "jamjoom@us.ibm.com" <jamjoom@us.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "rgb@redhat.com" <rgb@redhat.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>
+Date:   Thu, 09 Dec 2021 08:23:35 -0500
+In-Reply-To: <0299fefc764b453a9449b0df2ca06dc7@huawei.com>
+References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
+         <20211208221818.1519628-15-stefanb@linux.ibm.com>
+         <0299fefc764b453a9449b0df2ca06dc7@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: R8r8z7DhB-xEleZFpzp9M3XvfZJ9a0Ll
+X-Proofpoint-ORIG-GUID: u46tJdfnkoEbFj8j50kxjEePKVoTFNlO
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208221818.1519628-2-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-09_04,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 clxscore=1015 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112090073
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Stefan,
+On Thu, 2021-12-09 at 07:22 +0000, Denis Semakin wrote:
+> Hi. 
+> My question won't be about capabilities. I'm wondering how IMA-ns
+> which is associated with USER-ns and is created during USER-ns
+> creation would be used by some namespaces orchestration systems, e.g.
+> Kubernetes?
 
-Thank you for the patch! Perhaps something to improve:
+Orchestration systems that don't adopt the user namespace can't really
+run containers requiring admin correctly without giving them root minus
+some capabilities, which is rather unsafe, so the expectation is that
+they'll all figure it out eventually for security reasons.
 
-[auto build test WARNING on zohar-integrity/next-integrity]
-[also build test WARNING on linux/master linus/master v5.16-rc4 next-20211208]
-[cannot apply to jmorris-security/next-testing]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> .. It seems that it can be run without any user namespaces... 
+> Their community just discuss this opportunity to support User
+> namespaces. (see https://github.com/kubernetes/enhancements/pull/2101
+> ) Looks like currently IMA-ns will not be applicable for Kubernetes.
 
-url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211209-062017
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
-config: i386-randconfig-s031-20211207 (https://download.01.org/0day-ci/archive/20211209/202112092123.r0jOHT8e-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/0e5d16c2da02e9c61692836edf0b6f7f227e1867
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211209-062017
-        git checkout 0e5d16c2da02e9c61692836edf0b6f7f227e1867
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+Well, lets just say it adds one more reason to get kubernetes to
+finally run rootless privileged containers correctly ...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+James
 
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/md/dm-ioctl.c: note: in included file:
->> include/linux/ima.h:263:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_IMA'
---
-   fs/open.c: note: in included file:
->> include/linux/ima.h:263:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_IMA'
-   fs/open.c:1011:21: sparse: sparse: restricted fmode_t degrades to integer
---
-   fs/file_table.c: note: in included file:
->> include/linux/ima.h:263:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_IMA'
---
-   fs/namei.c: note: in included file:
->> include/linux/ima.h:263:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_IMA'
-   fs/namei.c:680:17: sparse: sparse: context imbalance in 'terminate_walk' - unexpected unlock
-   fs/namei.c: note: in included file (through include/linux/rbtree.h, include/linux/mm_types.h, include/linux/mmzone.h, ...):
-   include/linux/rcupdate.h:718:9: sparse: sparse: context imbalance in 'try_to_unlazy' - unexpected unlock
-   include/linux/rcupdate.h:718:9: sparse: sparse: context imbalance in 'try_to_unlazy_next' - unexpected unlock
-   fs/namei.c:2318:19: sparse: sparse: context imbalance in 'path_init' - different lock contexts for basic block
---
-   fs/attr.c: note: in included file:
->> include/linux/ima.h:263:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_IMA'
---
-   security/security.c: note: in included file:
->> include/linux/ima.h:263:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_IMA'
-   security/security.c:358:25: sparse: sparse: cast removes address space '__rcu' of expression
---
-   security/keys/key.c: note: in included file:
->> include/linux/ima.h:263:5: sparse: sparse: undefined preprocessor identifier 'CONFIG_IMA'
-   security/keys/key.c:123:17: sparse: sparse: context imbalance in 'key_user_put' - unexpected unlock
-
-vim +/CONFIG_IMA +263 include/linux/ima.h
-
-   260	
-   261	static inline int create_ima_ns(struct user_namespace *user_ns)
-   262	{
- > 263	#if CONFIG_IMA
-   264		user_ns->ima_ns = get_ima_ns(&init_ima_ns);
-   265	#endif
-   266		return 0;
-   267	}
-   268	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
