@@ -2,52 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FB44702E5
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Dec 2021 15:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A591470360
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Dec 2021 16:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242169AbhLJOjJ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 10 Dec 2021 09:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S236607AbhLJPD4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 10 Dec 2021 10:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241946AbhLJOjJ (ORCPT
+        with ESMTP id S231735AbhLJPDz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:39:09 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C10C061746
-        for <linux-integrity@vger.kernel.org>; Fri, 10 Dec 2021 06:35:34 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id l75-20020a25254e000000b005f763be2fecso16832231ybl.7
-        for <linux-integrity@vger.kernel.org>; Fri, 10 Dec 2021 06:35:34 -0800 (PST)
+        Fri, 10 Dec 2021 10:03:55 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE742C061746
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Dec 2021 07:00:20 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id l145-20020a25cc97000000b005c5d04a1d52so16863565ybf.23
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Dec 2021 07:00:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:message-id:mime-version:subject:from:to:cc
          :content-transfer-encoding;
-        bh=xLc09WV6Qu2dzEO8WHxbqWb2CklMj2w1g9g/RlmotlE=;
-        b=GCwE77RIhPT5+AoF5eq/A+g677ivslfAwc3yi64DLBEaXqNYrHb8e/T8Mv466zwfsg
-         iP7lHVQOj7GuS7D4iBL2JEBoeDNkEaxXcCaRN1Fuqz21OK7KOEZorWROLhaKFwe8bW0Z
-         aHcywAm+oRwKNXsZNSYs3a1UYQKM1Ow5cH1UcDNXrndt8+/KOep9i2iP5Wc/9n5kEKkY
-         PBq4shOnZ95Q8TQY0WC6eWcsYTraBGGiDxGJxeg6JYKvEoTGDYEjE+2wJLb2RWu0OVim
-         z/AltvYuIotLPZUUwH9IV51mbWKs/nEMnL6xmMP2RmXIUTcEZRpymsIoTDnbt/Ucsm28
-         OQJg==
+        bh=nEUf1o9A4RxiKViFceFWJItzMhzL2zLt++iCvnltIvU=;
+        b=HACHGNiFoS5fHrsxBf5y8hRRKaujIayqlJ7rebAXVt4mA1umQXmko2DtmbRe848oZX
+         mtEX5N6Kdjah5JhTM613c3eY847+z6zwamrBzpzpvxc4LoMhM9ON6J75aVBrdPmE9Rl1
+         cjW7AtiFmL2G5ExOcVF45KjjewQtxuqOPaaFGQSO2pfLvy7n4BsmxUFXp7XFFZJfi5gK
+         emIQwspxWA/lvk5AqKZb7lIGxcClMpMAaGAep7R+OeSnP/PFSrsWKCcTQY3uNOfOF5K4
+         d7z5ZBZNSbvh/thEoNdoTNSanctLqzCD0n4dN5uIerQi65QzAh02SeiY+vIXWH98mTiW
+         GaxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
          :content-transfer-encoding;
-        bh=xLc09WV6Qu2dzEO8WHxbqWb2CklMj2w1g9g/RlmotlE=;
-        b=pZitcQblUWgHo6hFACdr+ody+KGbU/3xfIBCGgbZUSEOcqc5Ve148mtxWIpatgGTt5
-         wYKrLru/WNMVQIMixp5SAhcqWHiEe7QjXZaSIhHBs6Kpzf8jR28iZR7X5H19L9WxS3S3
-         XeR2OgQjshF/lLDxv7qfbRqtqJFPpFLpN07/rM/zPRUXHiFGGIovgWco3GmgnnxUPvzh
-         XSWav2obgMc9IOU1zMIMnptwq8MqGQQz9+rfpxfq4vAkXO5JS89Ad7GTc4z/qMPhyttj
-         K/qxHzjnMaFVjOuCtX4qul076FslMgw9/P6CHyeg0FnZK2sGAFLqZbTzbDcN5PGMXSmO
-         tDPA==
-X-Gm-Message-State: AOAM5336njPFTwgnLvse0tfJ4/lpJCVOl387gFvtDteDgGsK3sbNXRo0
-        hVykMqGjRwn33SfujmvotxKSwR+1BrTrhpmWrjs3i5QxGdJ1JnzQAR4TiFZjvG6oi1ebYWTC3z0
-        eRBYpwhq6X9Cc3lbbFgSgxYliWhMjppY48KjcfbO3nBEsrMVlYCk3Nja+TBgLsJb6zfsde2o=
-X-Google-Smtp-Source: ABdhPJxcUGzlv0vf4fBaLEd8VHYKcvgwciIYUmDntBSdz9kAw5y6fCD/YsE3G+DQzSal447OhyLWyotg/A==
+        bh=nEUf1o9A4RxiKViFceFWJItzMhzL2zLt++iCvnltIvU=;
+        b=NyUat9SnysWY2JQO0Jqvk37HYIpcef/tkwSlw/nBT98iw/CzS/T9XtUMs17qfXwVih
+         /hqTwPgH2LI23xR21dY0gvqn9FtO7E6J6WuF5pHhQ2FTwFn1WICJdXHKpOjPusGpNCfb
+         rPYxeDzjNYI+Eld2P4GYbzwkntd9ed5O9sYEBBiAqyBWunxNoz2VXb1KfudONzLULDSB
+         xGAe3yr8cyIVWYujQTSJixWZ97AWLKA8/+BiEIID4EoDZLGgh1EnYmScPwKaSep+y3g6
+         36dIWMYYGUKQ6mYVXmPmkasluIetlXMQBh3/lQNajXxqRdv8Fsn0Bug2a5TZJiRPeqaY
+         JDhQ==
+X-Gm-Message-State: AOAM5333gQdQ9X7PpHhmWXp07uMCFVt5XpiGScR92Bb7+bpEeUHClH8U
+        PfmQTHVCPWEWWT6faZrq1Yxu8uf0NUY2VuDA3nqrRWNKMZhaEBf15/oPWhwHyBZt2R4hmJ/Hxc7
+        P5adY+IdB1dnDMMCKzP1JTcWGndlrgTPycseGTr6OPDTp7rgYgFK6fc/W7MI1vMoJFaRWssQ=
+X-Google-Smtp-Source: ABdhPJzT6WbteBMu5E+XPj1emkvmyJ/2QmxHhsg7/eVq4kmauOS7DCwKW8B2iligUKPHJh1Ffo06pADUTA==
 X-Received: from yaelt.nyc.corp.google.com ([2620:0:1003:415:78e8:100b:1fab:e86a])
- (user=yaelt job=sendgmr) by 2002:a25:808c:: with SMTP id n12mr15235156ybk.71.1639146933384;
- Fri, 10 Dec 2021 06:35:33 -0800 (PST)
-Date:   Fri, 10 Dec 2021 09:35:31 -0500
-Message-Id: <20211210143531.1948911-1-yaelt@google.com>
+ (user=yaelt job=sendgmr) by 2002:a05:6902:1248:: with SMTP id
+ t8mr16892322ybu.185.1639148419972; Fri, 10 Dec 2021 07:00:19 -0800 (PST)
+Date:   Fri, 10 Dec 2021 10:00:18 -0500
+Message-Id: <20211210150018.2075133-1-yaelt@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
 Subject: [PATCH] Instantiate key with user-provided decrypted data.
@@ -144,7 +144,7 @@ ption
 ils
 diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encry=
 pted-keys/encrypted.c
-index 87432b35d771..af32c8a07dbc 100644
+index 87432b35d771..114da02c1131 100644
 --- a/security/keys/encrypted-keys/encrypted.c
 +++ b/security/keys/encrypted-keys/encrypted.c
 @@ -159,6 +159,7 @@ static int valid_master_desc(const char *new_desc, cons=
@@ -173,13 +173,13 @@ t char *orig_desc)
  			break;
  		}
 +		*decrypted_data =3D strsep(&datablob, " \t");
-+		if (decrypted_data) {
-+			if (strlen(decrypted_data) !=3D decrypted_datalen) {
++		if (*decrypted_data) {
++			if (strlen(*decrypted_data) !=3D decrypted_datalen) {
 +				pr_info("encrypted_key: decrypted data provided does not match decrypt=
 ed data length provided\n");
 +				break;
 +			}
-+			if (!isalnum(decrypted_data)) {
++			if (!isalnum(*decrypted_data)) {
 +				pr_info("encrypted_key: decrypted data provided must be alphanumeric\n=
 ");
 +				break;
