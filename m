@@ -2,134 +2,130 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D073D47172F
-	for <lists+linux-integrity@lfdr.de>; Sat, 11 Dec 2021 23:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BE7471798
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Dec 2021 02:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbhLKWd7 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 11 Dec 2021 17:33:59 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23522 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231516AbhLKWd6 (ORCPT
+        id S230024AbhLLB2Q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 11 Dec 2021 20:28:16 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28336 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230038AbhLLB2P (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 11 Dec 2021 17:33:58 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BBMRCQN003689;
-        Sat, 11 Dec 2021 22:33:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=EcSstuXrlPcX99mLLNhOV/tDXzPh8dc/FswaQJkDwnk=;
- b=lqnOsMUihrCFPZ65tNcrIMo2eeSDT5z5HzZa40WD3KHIr5KaT+Jsx/wvsJUMV+H6JskD
- aNF39F5R2DQNfxqf0dtRkASqVOp5EGy3B3SOjDO7jfV7W53e/AqTj8FclqnIT85kt56R
- RFlu8nXxN/zbS9hLat/0BEVPa88lW9IOig7+cTWNST0iNvWVQ6hOQwJdm2KcX+e3TmAf
- Ms7KvaURq/SQ6FKk6rAk6r/Q02WU03lBuxWjVMLSSDNz5hpKQHkBaguZKaI07lHuuQ0P
- SzabjA2S0/++6Q8VOrRk6DWNW3/h1ganvGxKOFU59q09mhCzyvpgBEZXQKT4KOuph2o9 1Q== 
+        Sat, 11 Dec 2021 20:28:15 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BC0vaQe022711;
+        Sun, 12 Dec 2021 01:28:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=YZDQ1dVmJSObr2QC5ds1YJSFNcrnTSy0Dpv1KV7by7M=;
+ b=NzNAwTGfeotavIYcra89xn1xTyNs23Pyt2HBdTIgWdV7B7ao1UvZmpl+UjdiVukBfdUH
+ eiAVRmA1WB9o3od30Yjx0OwY+U2wkAcBS2c/dlSt8UfDFKGq18zSoFh6D84pzVPAV1yy
+ gCz0c6izzq7oUAKF2foyH+WJg5g/Gb7csoyL1RxEXm51Da83nEGYT/2tLYm5Zc/tRTV6
+ BX6kQHWYeZMXbrnNjHbRFq33BWeeIumyx+qttn4OLLLF5OJdZiziXRvtEbQhHhFmg4cp
+ pxaZVB8Cbe+A0qZvCLLTR+mhM7miVG2IVA6yxoW3Das3vx/+kSlYvjTFhnjj3GeDOfJ8 zA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cw44hgcu7-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cw70f89rr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Dec 2021 22:33:47 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BBMXAhj017224;
-        Sat, 11 Dec 2021 22:33:47 GMT
+        Sun, 12 Dec 2021 01:28:10 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BC1S96w018427;
+        Sun, 12 Dec 2021 01:28:09 GMT
 Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cw44hgcu4-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cw70f89rf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Dec 2021 22:33:47 +0000
+        Sun, 12 Dec 2021 01:28:09 +0000
 Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BBMX3cn021932;
-        Sat, 11 Dec 2021 22:33:46 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01wdc.us.ibm.com with ESMTP id 3cvkm90sdw-1
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BC1J37h030766;
+        Sun, 12 Dec 2021 01:28:08 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma01wdc.us.ibm.com with ESMTP id 3cvkm91xkt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Dec 2021 22:33:46 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BBMXjXm30081298
+        Sun, 12 Dec 2021 01:28:08 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BC1S6qa11338076
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 11 Dec 2021 22:33:45 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F25DD6E052;
-        Sat, 11 Dec 2021 22:33:44 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 045896E04E;
-        Sat, 11 Dec 2021 22:33:42 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Sat, 11 Dec 2021 22:33:42 +0000 (GMT)
-Message-ID: <0c95df54-cac0-6fb6-a3f0-94583d886a76@linux.ibm.com>
-Date:   Sat, 11 Dec 2021 17:33:42 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v6 14/17] ima: Tie opened SecurityFS files to the IMA
- namespace it belongs to
-Content-Language: en-US
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
- <20211210194736.1538863-15-stefanb@linux.ibm.com>
- <20211211110038.dbshu23uvlhv65vn@wittgenstein>
+        Sun, 12 Dec 2021 01:28:06 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F0EF912405C;
+        Sun, 12 Dec 2021 01:28:05 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D7600124054;
+        Sun, 12 Dec 2021 01:28:05 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Sun, 12 Dec 2021 01:28:05 +0000 (GMT)
 From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211211110038.dbshu23uvlhv65vn@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     jarkko@kernel.org, peterhuewe@gmx.de,
+        linux-integrity@vger.kernel.org
+Cc:     jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, pavrampu@in.ibm.com,
+        Korrapati.Likhitha@ibm.com, gcwilson@us.ibm.com,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH] tpm: Fix kexec crash due to access to ops NULL pointer (powerpc)
+Date:   Sat, 11 Dec 2021 20:28:04 -0500
+Message-Id: <20211212012804.1555661-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: lBbnWW53L7LnVea46BDDZIhWviGe-zeb
-X-Proofpoint-GUID: RcUk-CqGx18OOcpDaidIlaFFCRwtJFJZ
+X-Proofpoint-ORIG-GUID: GxgV9UOK6OpX3GkMwldcJNfNFy16amgT
+X-Proofpoint-GUID: Wc47lRA6TO1_spWYa5gsKtc-wxTsIIDq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-11_10,2021-12-10_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- impostorscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
- spamscore=0 mlxscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112110130
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ bulkscore=0 priorityscore=1501 mlxlogscore=782 clxscore=1011
+ suspectscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112120004
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Fix the following crash on kexec by checking chip->ops for a NULL pointer
+in tpm_chip_start() and returning an error code if this is the case.
 
-On 12/11/21 06:00, Christian Brauner wrote:
-> On Fri, Dec 10, 2021 at 02:47:33PM -0500, Stefan Berger wrote:
->> Tie IMA's files in SecurityFS to the IMA namespace they belong to so that
->> also file descriptor that were passed or inherited to other user/IMA
->> namespaces will always access the data of the IMA namespace they originally
->> belonged to.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> ---
->>   security/integrity/ima/ima_fs.c     | 74 ++++++++++++++++++++++++-----
->>   security/integrity/ima/ima_policy.c |  4 +-
->>   2 files changed, 63 insertions(+), 15 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
->> index 0e582ceecc7f..a136d14f29ec 100644
->> --- a/security/integrity/ima/ima_fs.c
->> +++ b/security/integrity/ima/ima_fs.c
->> @@ -35,6 +35,20 @@ static int __init default_canonical_fmt_setup(char *str)
->>   }
->>   __setup("ima_canonical_fmt", default_canonical_fmt_setup);
->>   
->> +static inline struct user_namespace *ima_user_ns_from_file(struct file *filp)
->> +{
->> +	return filp->f_path.mnt->mnt_sb->s_user_ns;
->> +}
-> I'd probably rewrite this as:
->
-> static inline struct user_namespace *ima_user_ns_from_file(const struct file *filp)
-> {
-> 	return file_inode(filp)->i_sb->s_user_ns;
-> }
->
-> as it spares you some pointer chasing and also looks cleaner.
+BUG: Kernel NULL pointer dereference on read at 0x00000060
+Faulting instruction address: 0xc00000000099a06c
+Oops: Kernel access of bad area, sig: 11 [#1]
+...
+NIP [c00000000099a06c] tpm_chip_start+0x2c/0x140
+ LR [c00000000099a808] tpm_chip_unregister+0x108/0x170
+Call Trace:
+[c0000000188bfa00] [c000000002b03930] fw_devlink_strict+0x0/0x8 (unreliable)
+[c0000000188bfa30] [c00000000099a808] tpm_chip_unregister+0x108/0x170
+[c0000000188bfa70] [c0000000009a3874] tpm_ibmvtpm_remove+0x34/0x130
+[c0000000188bfae0] [c000000000110dbc] vio_bus_remove+0x5c/0xb0
+[c0000000188bfb20] [c0000000009bc154] device_shutdown+0x1d4/0x3a8
+[c0000000188bfbc0] [c000000000196e14] kernel_restart_prepare+0x54/0x70
 
-Ok. This patch is being absorbed by all the functions currently using 
-get_current_ns() and should access it via the file instead.
+The referenced patch below introduced a function to shut down the VIO bus.
+The bus shutdown now calls tpm_del_char_device (via tpm_chip_unregister)
+after a call to tpm_class_shutdown, which already set chip->ops to NULL.
+The crash occurrs when tpm_del_char_device calls tpm_chip_start with the
+chip->ops NULL pointer.
 
-    Stefan
+Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and vio_bus")
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+ drivers/char/tpm/tpm-chip.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index ddaeceb7e109..cca1bde296ee 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -101,6 +101,9 @@ int tpm_chip_start(struct tpm_chip *chip)
+ {
+ 	int ret;
+ 
++	if (!chip->ops)
++		return -EINVAL;
++
+ 	tpm_clk_enable(chip);
+ 
+ 	if (chip->locality == -1) {
+-- 
+2.31.1
+
