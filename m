@@ -2,134 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E27D847312B
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Dec 2021 17:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6AB473153
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Dec 2021 17:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbhLMQDu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 13 Dec 2021 11:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234218AbhLMQDt (ORCPT
+        id S237133AbhLMQLs (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 13 Dec 2021 11:11:48 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:37822 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236838AbhLMQLr (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 13 Dec 2021 11:03:49 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DDAC061574;
-        Mon, 13 Dec 2021 08:03:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BDED1CE1196;
-        Mon, 13 Dec 2021 16:03:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B81CC34602;
-        Mon, 13 Dec 2021 16:03:40 +0000 (UTC)
-Date:   Mon, 13 Dec 2021 17:03:37 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [PATCH v5 13/16] ima: Move some IMA policy and filesystem
- related variables into ima_namespace
-Message-ID: <20211213160337.5uc7ifhysk4hdao7@wittgenstein>
-References: <20211208221818.1519628-1-stefanb@linux.ibm.com>
- <20211208221818.1519628-14-stefanb@linux.ibm.com>
- <20211209191109.o3x7nynnm52zhygz@wittgenstein>
- <0ab33fbc-8438-27b6-ff4c-0321bfc73855@linux.ibm.com>
- <20211210113244.odv2ibrifz2jzft5@wittgenstein>
- <dca4e7c9-87a7-9a9e-b1f2-df16f1a45019@linux.ibm.com>
- <20211211095026.i2gvqjy4df3sxq42@wittgenstein>
- <85b75c98-6452-9706-7549-10b416350b7d@linux.ibm.com>
- <20211213155020.pvadnomqnsub5vg2@wittgenstein>
+        Mon, 13 Dec 2021 11:11:47 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B1B971F3BA;
+        Mon, 13 Dec 2021 16:11:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639411906; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=UC9vX+yzI1xib8kQHkMFXmkpNsL/m9Qgumk8tsYtvSg=;
+        b=eGCvssb8vEV2yt1Njr+JAraRlJm6rKiG7bUaZg0vfCV3/amox1nYJe8NXDFanLFQ9HGIVi
+        wj4uGBgZKnA9kpEekAmX3CtEFi/TRgUSj7SUQMzvKB45u4ycPkuxwxd2fZH5DYCNDOi+bG
+        vcr9Gghhwaabaw/RjCOO9u8n09raDxA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639411906;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=UC9vX+yzI1xib8kQHkMFXmkpNsL/m9Qgumk8tsYtvSg=;
+        b=PxJPf/HRpVg8K3qDcLtB2sIxfCA53rVkMpXOdUjet6u4UFIOZ4Gk0RxrrHz/caQiNf+0yl
+        7TcQ3gt97lxsEVAw==
+Received: from alsa1.nue.suse.com (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id A86C6A3B84;
+        Mon, 13 Dec 2021 16:11:46 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Joey Lee <jlee@suse.com>
+Subject: [PATCH] ima: Fix undefined arch_ima_get_secureboot() and co
+Date:   Mon, 13 Dec 2021 17:11:45 +0100
+Message-Id: <20211213161145.3447-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211213155020.pvadnomqnsub5vg2@wittgenstein>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 04:50:20PM +0100, Christian Brauner wrote:
-> On Mon, Dec 13, 2021 at 10:33:40AM -0500, Stefan Berger wrote:
-> > 
-> > On 12/11/21 04:50, Christian Brauner wrote:
-> > > On Fri, Dec 10, 2021 at 08:57:11AM -0500, Stefan Berger wrote:
-> > > > 
-> > > > 
-> > > > there anything that would prevent us from setns()'ing to that target user
-> > > > namespace so that we would now see that of a user namespace that we are not
-> > > > allowed to see?
-> > > If you're really worried about someone being able to access a securityfs
-> > > instance whose userns doesn't match the userns the securityfs instance
-> > > was mounted in there are multiple ways to fix it. The one that I tend to
-> > > prefer is:
-> > > 
-> > >  From e0ff6a8dcc573763568e685dd70d1547efd68df9 Mon Sep 17 00:00:00 2001
-> > > From: Christian Brauner <christian.brauner@ubuntu.com>
-> > > Date: Fri, 10 Dec 2021 11:47:37 +0100
-> > > Subject: !!!! HERE BE DRAGONS - COMPLETELY UNTESTED !!!!
-> > > 
-> > > securityfs: only allow access to securityfs from within same namespace
-> > > 
-> > > Limit opening of securityfs files to callers located in the same namespace.
-> > > 
-> > > ---
-> > >   security/inode.c | 33 +++++++++++++++++++++++++++++++--
-> > >   1 file changed, 31 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/security/inode.c b/security/inode.c
-> > > index eaccba7017d9..9eaf757c08cb 100644
-> > > --- a/security/inode.c
-> > > +++ b/security/inode.c
-> > > @@ -80,6 +80,35 @@ static struct file_system_type fs_type = {
-> > >   	.fs_flags =	FS_USERNS_MOUNT,
-> > >   };
-> > > +static int securityfs_permission(struct user_namespace *mnt_userns,
-> > > +				 struct inode *inode, int mask)
-> > > +{
-> > > +	int err;
-> > > +
-> > > +	err = generic_permission(&init_user_ns, inode, mask);
-> > > +	if (!err) {
-> > > +		if (inode->i_sb->s_user_ns != current_user_ns())
-> > > +			err = -EACCES;
-> > > +	}
-> > > +
-> > > +	return err;
-> > > +}
-> > > +
-> > > +const struct inode_operations securityfs_dir_inode_operations = {
-> > > +	.permission	= securityfs_permission,
-> > > +	.lookup		= simple_lookup,
-> > > +};
-> > > +
-> > > +const struct file_operations securityfs_dir_operations = {
-> > > +	.permission	= securityfs_permission,
-> > 
-> > 
-> > This interface function on file operations doesn't exist.
-> 
-> It's almost as if the subject line of this patch warned about its draft
-> character. That was supposed for regular files.
-> 
-> > 
-> > I'll use the inode_operations and also hook it to the root dentry of the
-> > super_block. Then there's no need to have this check on symlinks and
-> > files...
-> 
-> Don't special case the inode_operations for the root inode!
-> If a privileged process opens an fd refering to a struct file for the
+Currently arch_ima_get_secureboot() and arch_get_ima_policy() are
+defined only when CONFIG_IMA is set, and this makes the code calling
+those functions without CONFIG_IMA failing.  Although there is no such
+in-tree users, but the out-of-tree users already hit it.
 
-s/a privileged process/a process that is located in an ancestor userns
-of the securityfs instance
+Move the declaration and the dummy definition of those functions
+outside ifdef-CONFIG_IMA block for fixing the undefined symbols.
 
-> root inode and leaks it to an unprivileged process by accident the
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ include/linux/ima.h | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-s/unprivileged process/process located in a descendant userns
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index b6ab66a546ae..426b1744215e 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -50,21 +50,6 @@ static inline void ima_appraise_parse_cmdline(void) {}
+ extern void ima_add_kexec_buffer(struct kimage *image);
+ #endif
+ 
+-#ifdef CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
+-extern bool arch_ima_get_secureboot(void);
+-extern const char * const *arch_get_ima_policy(void);
+-#else
+-static inline bool arch_ima_get_secureboot(void)
+-{
+-	return false;
+-}
+-
+-static inline const char * const *arch_get_ima_policy(void)
+-{
+-	return NULL;
+-}
+-#endif
+-
+ #else
+ static inline enum hash_algo ima_get_current_hash_algo(void)
+ {
+@@ -155,6 +140,21 @@ static inline int ima_measure_critical_data(const char *event_label,
+ 
+ #endif /* CONFIG_IMA */
+ 
++#ifdef CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
++extern bool arch_ima_get_secureboot(void);
++extern const char * const *arch_get_ima_policy(void);
++#else
++static inline bool arch_ima_get_secureboot(void)
++{
++	return false;
++}
++
++static inline const char * const *arch_get_ima_policy(void)
++{
++	return NULL;
++}
++#endif
++
+ #ifndef CONFIG_IMA_KEXEC
+ struct kimage;
+ 
+-- 
+2.31.1
 
-> unprivileged process can open any file or directory beneath via openat()
-> and friends.
