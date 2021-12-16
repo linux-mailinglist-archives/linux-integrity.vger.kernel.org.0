@@ -2,190 +2,176 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D68477141
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 13:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA546477234
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 13:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbhLPMDE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Dec 2021 07:03:04 -0500
-Received: from mga14.intel.com ([192.55.52.115]:2892 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234296AbhLPMDB (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:03:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639656181; x=1671192181;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B0yYE6pyJ5FHWWiTURE+O7JxIfssJQEmx4NecM1/bC8=;
-  b=U2hyeqIxaHziihndLVr2vDSYBOhuWOX3lM4i77LrIR2Qq/bs8G5XA4HU
-   tlRrNRhRvXO5Kdro+FFUVRSVN529Ma3EIcOEFaUo3ljJkrSrJKCXwv9yP
-   QK9WDsWpVT/lAzsRuYVnDJbtAe4Q0H9troRu8zmkmgul5H0DFeyMToMOK
-   ftj4wf7JKvZOxWTjJA3F8qyEPb/kVNcST2pyBY+S3EeDjiLmspHfW8at+
-   Hv4+9W1wti0pqsrjAhRu+tjjmWAwQNb4f2FgTIICz33hFwcVJ1FGl4UvU
-   YDVTl4mzXHUVWbFHWSev3RQdrtabJVZZXlTMTxPToXQthUo11wFVLIBpi
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="239693155"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="239693155"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 04:03:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="568369340"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Dec 2021 04:02:58 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mxpTN-00035m-Rr; Thu, 16 Dec 2021 12:02:57 +0000
-Date:   Thu, 16 Dec 2021 20:02:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com
-Subject: Re: [PATCH v7 14/14] ima: Setup securityfs for IMA namespace
-Message-ID: <202112161948.NK58RGVT-lkp@intel.com>
-References: <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
+        id S234231AbhLPMuk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Dec 2021 07:50:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44688 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229781AbhLPMuk (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:50:40 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36222B8240E;
+        Thu, 16 Dec 2021 12:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3E8C36AEB;
+        Thu, 16 Dec 2021 12:50:31 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 13:50:27 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v7 00/14] ima: Namespace IMA with audit support in IMA-ns
+Message-ID: <20211216125027.fte6625wu5vxkjpi@wittgenstein>
+References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Stefan,
+On Thu, Dec 16, 2021 at 12:43:09AM -0500, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> The goal of this series of patches is to start with the namespacing of
+> IMA and support auditing within an IMA namespace (IMA-ns) as the first
+> step.
+> 
+> In this series the IMA namespace is piggy backing on the user namespace
+> and therefore an IMA namespace gets created when a user namespace is
+> created. The advantage of this is that the user namespace can provide
+> the keys infrastructure that IMA appraisal support will need later on.
+> 
+> We chose the goal of supporting auditing within an IMA namespace since it
+> requires the least changes to IMA. Following this series, auditing within
+> an IMA namespace can be activated by a user running the following lines
+> that rely on a statically linked busybox to be installed on the host for
+> execution within the minimal container environment:
+> 
+> mkdir -p rootfs/{bin,mnt,proc}
+> cp /sbin/busybox rootfs/bin
+> cp /sbin/busybox rootfs/bin/busybox2
+> echo >> rootfs/bin/busybox2
+> PATH=/bin unshare --user --map-root-user --mount-proc --pid --fork \
+>   --root rootfs busybox sh -c \
+>  "busybox mount -t securityfs /mnt /mnt; \
+>   busybox echo 'audit func=BPRM_CHECK mask=MAY_EXEC' > /mnt/ima/policy; \
+>   busybox2 cat /mnt/ima/policy"
+> 
+> [busybox2 is used to demonstrate 2 measurements; see below]
+> 
+> Following the audit log on the host the last line cat'ing the IMA policy
+> inside the namespace would have been audited. Unfortunately the auditing
+> line is not distinguishable from one stemming from actions on the host.
+> The hope here is that Richard Brigg's container id support for auditing
+> would help resolve the problem.
+> 
+> The following lines added to a suitable IMA policy on the host would
+> cause the execution of the commands inside the container (by uid 1000)
+> to be measured and audited as well on the host, thus leading to two
+> auditing messages for the 'busybox2 cat' above and log entries in IMA's
+> system log.
+> 
+> echo -e "measure func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+>         "audit func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+>     > /sys/kernel/security/ima/policy
+> 
+> The goal of supporting measurement and auditing by the host, of actions
+> occurring within IMA namespaces, is that users, particularly root,
+> should not be able to evade the host's IMA policy just by spawning
+> new IMA namespaces, running programs there, and discarding the namespaces
+> again. This is achieved through 'hierarchical processing' of file
+> accesses that are evaluated against the policy of the namespace where
+> the action occurred and against all namespaces' and their policies leading
+> back to the root IMA namespace (init_ima_ns).
 
-Thank you for the patch! Perhaps something to improve:
+Note that your worst-case is 32 levels (maximum supported userns
+nesting) where each ima namespace defines a separate policy.
 
-[auto build test WARNING on zohar-integrity/next-integrity]
-[also build test WARNING on linux/master linus/master v5.16-rc5]
-[cannot apply to jmorris-security/next-testing next-20211215]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+So make sure you don't run into locking issues when hierarchically
+processing rules. So far I think it's fine since the locks aren't held
+across the hierarchial walk but are dropped and reaqcuired for each
+level.
 
-url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211216-134611
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
-config: mips-buildonly-randconfig-r006-20211216 (https://download.01.org/0day-ci/archive/20211216/202112161948.NK58RGVT-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project dd245bab9fbb364faa1581e4f92ba3119a872fba)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/bc2f1f683efbf2ad7b955fd4afc78861609eff4b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211216-134611
-        git checkout bc2f1f683efbf2ad7b955fd4afc78861609eff4b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash security/integrity/ima/
+But that could still mean a lot of contention on iint->mutex since this
+lock is global, i.e. in this context: for all ima namespaces. You might
+want to consider coming up with some rough ideas for how to solve this
+_if_ this becomes a problem in the future.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> The patch series adds support for a virtualized SecurityFS with a few
+> new API calls that are used by IMA namespacing. Only the data relevant
+> to the IMA namespace are shown. The files and directories of other
+> security subsystems (TPM, evm, Tomoyo, safesetid) are not showing
+> up when secruityfs is mounted inside a user namespace.
+> 
+> Much of the code leading up to the virtualization of SecurityFS deals
+> with moving IMA's variables from various files into the IMA namespace
+> structure called 'ima_namespace'. When it comes to determining the
+> current IMA namespace I took the approach to get the current IMA
+> namespace (get_current_ns()) on the top level and pass the pointer all
+> the way down to those functions that now need access to the ima_namespace
+> to get to their variables. This later on comes in handy once hierarchical
+> processing is implemented in this series where we walk the list of
+> namespaces backwards and again need to pass the pointer into functions.
 
-All warnings (new ones prefixed by >>):
+Just to repeat the point from earlier reviews, all those functions need
+to be guaranteed to call from syscall context. Functions that operate on
+files have different semantics.
 
->> security/integrity/ima/ima_fs.c:451:5: warning: no previous prototype for function 'ima_fs_ns_init' [-Wmissing-prototypes]
-   int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
-       ^
-   security/integrity/ima/ima_fs.c:451:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
-   ^
-   static 
-   1 warning generated.
+> 
+> This patch also introduces usage of CAP_MAC_ADMIN to allow access to the
+> IMA policy via reduced capabilities. We would again later on use this
+> capability to allow users to set file extended attributes for IMA appraisal
+> support.
+> 
+> My tree with these patches is here:
+> 
+> git fetch https://github.com/stefanberger/linux-ima-namespaces v5.15+imans.v7.posted 
+> 
+> Regards,
+>    Stefan
+> 
+> v7:
+>  - Dropped 2 patches related to key queues; using &init_ima_ns for all calls
+>    from functions related to key queues where calls need ima_namespace
+>  - Moved ima_namespace to security/integrity/ima/ima.h
+>  - Extended API descriptions with ns parameter where needed
+>  - Using init_ima_ns in functions related to appraisal and xattrs
+>  - SecurityFS: Using ima_ns_from_file() to get ns pointer 
+>  - Reformatted to 80 columns per line
 
+Since we're starting to be fairly along I would ask you to please write
+detailed commit messages for the next revision.
 
-vim +/ima_fs_ns_init +451 security/integrity/ima/ima_fs.c
+I would also like to see all links for prior versions of this patchset
+in the commit message since the discussion has been fairly extensive so
+for this series it makes a lot of sense. So something like:
 
-   450	
- > 451	int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
-   452	{
-   453		struct ima_namespace *ns = user_ns->ima_ns;
-   454		struct dentry *int_dir;
-   455		struct dentry *ima_dir = NULL;
-   456		struct dentry *ima_symlink = NULL;
-   457		struct dentry *binary_runtime_measurements = NULL;
-   458		struct dentry *ascii_runtime_measurements = NULL;
-   459		struct dentry *runtime_measurements_count = NULL;
-   460		struct dentry *violations = NULL;
-   461	
-   462		/* FIXME: update when evm and integrity are namespaced */
-   463		if (user_ns != &init_user_ns) {
-   464			int_dir =
-   465				securityfs_create_dir("integrity", root);
-   466			if (IS_ERR(int_dir))
-   467				return -1;
-   468		} else
-   469			int_dir = integrity_dir;
-   470	
-   471		ima_dir = securityfs_create_dir("ima", int_dir);
-   472		if (IS_ERR(ima_dir))
-   473			goto out;
-   474	
-   475		ima_symlink = securityfs_create_symlink("ima", root, "integrity/ima",
-   476							NULL);
-   477		if (IS_ERR(ima_symlink))
-   478			goto out;
-   479	
-   480		binary_runtime_measurements =
-   481		    securityfs_create_file("binary_runtime_measurements",
-   482					   S_IRUSR | S_IRGRP, ima_dir, NULL,
-   483					   &ima_measurements_ops);
-   484		if (IS_ERR(binary_runtime_measurements))
-   485			goto out;
-   486	
-   487		ascii_runtime_measurements =
-   488		    securityfs_create_file("ascii_runtime_measurements",
-   489					   S_IRUSR | S_IRGRP, ima_dir, NULL,
-   490					   &ima_ascii_measurements_ops);
-   491		if (IS_ERR(ascii_runtime_measurements))
-   492			goto out;
-   493	
-   494		runtime_measurements_count =
-   495		    securityfs_create_file("runtime_measurements_count",
-   496					   S_IRUSR | S_IRGRP, ima_dir, NULL,
-   497					   &ima_measurements_count_ops);
-   498		if (IS_ERR(runtime_measurements_count))
-   499			goto out;
-   500	
-   501		violations =
-   502		    securityfs_create_file("violations", S_IRUSR | S_IRGRP,
-   503					   ima_dir, NULL, &ima_htable_violations_ops);
-   504		if (IS_ERR(violations))
-   505			goto out;
-   506	
-   507	
-   508		if (!ns->policy_dentry_removed) {
-   509			ns->policy_dentry =
-   510			    securityfs_create_file("policy", POLICY_FILE_FLAGS,
-   511						   ima_dir, NULL,
-   512						   &ima_measure_policy_ops);
-   513			if (IS_ERR(ns->policy_dentry))
-   514				goto out;
-   515		}
-   516	
-   517		return 0;
-   518	out:
-   519		securityfs_remove(ns->policy_dentry);
-   520		securityfs_remove(violations);
-   521		securityfs_remove(runtime_measurements_count);
-   522		securityfs_remove(ascii_runtime_measurements);
-   523		securityfs_remove(binary_runtime_measurements);
-   524		securityfs_remove(ima_symlink);
-   525		securityfs_remove(ima_dir);
-   526		if (user_ns != &init_user_ns)
-   527			securityfs_remove(integrity_dir);
-   528	
-   529		return -1;
-   530	}
-   531	
+Link: https://lore.kernel.org/r/$MSGID (v1)
+Link: https://lore.kernel.org/r/$MSGID (v2)
+Link: https://lore.kernel.org/r/$MSGID (v3)
+Link: https://lore.kernel.org/r/$MSGID (v4)
+Link: https://lore.kernel.org/r/$MSGID (v5)
+Link: https://lore.kernel.org/r/$MSGID (v6)
+Link: https://lore.kernel.org/r/$MSGID (v7)
+Signed-off-by: meh
+Signed-off-by: mih
+Signed-off-by: muh
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I find that extremely pleasant in case we need to revisit things later.
+(Technically you can get the same by searching lore via the final link
+but I find it be pretty pleasing to just copy+paste directly from the
+commit message to the discussion for the earlier patch.)
