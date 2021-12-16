@@ -2,59 +2,59 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 609934769B3
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 06:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B095D4769BA
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 06:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbhLPFnv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Dec 2021 00:43:51 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49908 "EHLO
+        id S233803AbhLPFoA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Dec 2021 00:44:00 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7892 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231231AbhLPFnu (ORCPT
+        by vger.kernel.org with ESMTP id S233760AbhLPFny (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Dec 2021 00:43:50 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BG4Uiq9024476;
+        Thu, 16 Dec 2021 00:43:54 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BG4Upjq008030;
         Thu, 16 Dec 2021 05:43:40 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=zHWfoApnPpByvUFvCcLazFi8Y5aMJ4I/+PNPrwsk4rE=;
- b=Byd82wjZwgUBHp7GKoPeJZB5kIskslL4q0FxB5tC08mIHDsbzkKQ582451UWvkj5jCEs
- ta5v2hkHQ3GdsoiS+kxV8NGdnOJ5pxidBr8Gh3tLqFVF4PRtXvRH52SNPN9T2YAOe3LK
- pbg1QQT7KJXu7snxchSIr+OWEc0QO1GDgXYp94dPdliYkRXFpkL4i+N/B56vZIDlAvD4
- 0NDlNkadYFPYYPd7jfod9YsQH6X8GefEXbAczEoYYFVITpp4DCkSor9ay+1nvyUim8/w
- JVSkUfsizGDgdTOM4ycyDWDdD9G0FUA5Yk/kv3it0q9AuZOCR+XjEqQN6FmtyrTijpDB iQ== 
+ bh=SlqBuKXAAM2v0BxqXZwRFnGcDoT8VmWgdvhg1d8RyIA=;
+ b=Ufgf6ij8SNpAIkGEAN8y4xPIwqVsSAJ56u52eiKS5/vmm0DmYlzrbwZL2wYy/L5nnIsp
+ NPtNrEHd5nUk6E19T8NUONZpPH80sioIsXBEzh/OKrjbj88/wwKEs3jjWKYkVZoz7RU6
+ O5blAAHCeDU+qu2kkb7FGiRCtloPnznRvNyLKiAikIgDeUbD9cuo1pVfOUYLpQkrX7pn
+ VwsfUx8EBmXm+EoD8xXo/EDpyrpZs8PnLplcWvhrcC8ncwBVSCaroSLS3cC4/7/YaRxr
+ FkTZHrpaeopK2gbzQuTFwLXAy/SVJS27nhswd/AKUBtbha5vtCYP/50UB8lobbPyjdHj KQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cyfv44gns-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cyhykh1qp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 05:43:40 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BG5cVqD025120;
+        Thu, 16 Dec 2021 05:43:40 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cyhykh1qg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Dec 2021 05:43:40 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BG5g7a6021288;
+        Thu, 16 Dec 2021 05:43:39 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma02dal.us.ibm.com with ESMTP id 3cy7fw1b91-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 16 Dec 2021 05:43:39 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BG5gWEx032262;
-        Thu, 16 Dec 2021 05:43:38 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cyfv44gnn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 05:43:38 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BG5hP73011104;
-        Thu, 16 Dec 2021 05:43:38 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma03dal.us.ibm.com with ESMTP id 3cy7712aba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 05:43:37 +0000
 Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BG5hahP29491570
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BG5hbBE28705072
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Dec 2021 05:43:36 GMT
+        Thu, 16 Dec 2021 05:43:37 GMT
 Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 642546E05E;
+        by IMSVA (Postfix) with ESMTP id 9FCE46E053;
+        Thu, 16 Dec 2021 05:43:37 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 85CB76E054;
         Thu, 16 Dec 2021 05:43:36 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5413B6E059;
-        Thu, 16 Dec 2021 05:43:35 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Dec 2021 05:43:35 +0000 (GMT)
+        Thu, 16 Dec 2021 05:43:36 +0000 (GMT)
 From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
 To:     linux-integrity@vger.kernel.org
 Cc:     zohar@linux.ibm.com, serge@hallyn.com,
@@ -65,25 +65,26 @@ Cc:     zohar@linux.ibm.com, serge@hallyn.com,
         puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v7 08/14] ima: Implement hierarchical processing of file accesses
-Date:   Thu, 16 Dec 2021 00:43:17 -0500
-Message-Id: <20211216054323.1707384-9-stefanb@linux.vnet.ibm.com>
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v7 09/14] securityfs: Only use simple_pin_fs/simple_release_fs for init_user_ns
+Date:   Thu, 16 Dec 2021 00:43:18 -0500
+Message-Id: <20211216054323.1707384-10-stefanb@linux.vnet.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
 References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -rHdYuDb6qmXiN70YqIKDo8Jyc4feOch
-X-Proofpoint-ORIG-GUID: 4VLjKf1UulFIM3vqNe7QO6wNBFqjGjzB
+X-Proofpoint-GUID: LtD_ttXvEmgtAXTV3dNqRPKxKNBywiOF
+X-Proofpoint-ORIG-GUID: 7Govcfie9VH1IId6W5YJHoLV0RfiuDzZ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-16_01,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- suspectscore=0 spamscore=0 adultscore=0 malwarescore=0 clxscore=1015
- priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ mlxlogscore=999 mlxscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 suspectscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2112160033
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
@@ -91,85 +92,103 @@ X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Stefan Berger <stefanb@linux.ibm.com>
 
-Implement hierarchical processing of file accesses in IMA namespaces by
-walking the list of IMA namespaces towards the init_ima_ns. This way
-file accesses can be audited in an IMA namespace and also be evaluated
-against the IMA policies of parent IMA namespaces.
+To prepare for virtualization of SecurityFS, use simple_pin_fs and
+simpe_release_fs only when init_user_ns is active.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
- include/linux/ima.h               |  9 +++++++++
- security/integrity/ima/ima_main.c | 30 ++++++++++++++++++++++++++----
- 2 files changed, 35 insertions(+), 4 deletions(-)
+ security/inode.c | 34 +++++++++++++++++++++++++---------
+ 1 file changed, 25 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 61461ee5b208..f9e592bb9560 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -66,6 +66,15 @@ static inline const char * const *arch_get_ima_policy(void)
- }
- #endif
+diff --git a/security/inode.c b/security/inode.c
+index 6c326939750d..fee01ff4d831 100644
+--- a/security/inode.c
++++ b/security/inode.c
+@@ -21,9 +21,10 @@
+ #include <linux/security.h>
+ #include <linux/lsm_hooks.h>
+ #include <linux/magic.h>
++#include <linux/user_namespace.h>
  
-+static inline struct user_namespace *ima_user_ns(struct ima_namespace *ns)
-+{
-+	struct user_namespace *user_ns;
-+
-+	user_ns = current_user_ns();
-+	WARN_ON(user_ns->ima_ns != ns);
-+	return user_ns;
-+}
-+
- #else
- static inline enum hash_algo ima_get_current_hash_algo(void)
+-static struct vfsmount *mount;
+-static int mount_count;
++static struct vfsmount *init_securityfs_mount;
++static int init_securityfs_mount_count;
+ 
+ static void securityfs_free_inode(struct inode *inode)
  {
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 98be891c2621..4c85a8df3c86 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -200,10 +200,10 @@ void ima_file_free(struct file *file)
- 	ima_check_last_writer(iint, inode, file);
- }
- 
--static int process_measurement(struct ima_namespace *ns,
--			       struct file *file, const struct cred *cred,
--			       u32 secid, char *buf, loff_t size, int mask,
--			       enum ima_hooks func)
-+static int __process_measurement(struct ima_namespace *ns,
-+				 struct file *file, const struct cred *cred,
-+				 u32 secid, char *buf, loff_t size, int mask,
-+				 enum ima_hooks func)
+@@ -109,6 +110,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+ 					const struct file_operations *fops,
+ 					const struct inode_operations *iops)
  {
- 	struct inode *inode = file_inode(file);
- 	struct integrity_iint_cache *iint = NULL;
-@@ -405,6 +405,28 @@ static int process_measurement(struct ima_namespace *ns,
- 	return 0;
++	struct user_namespace *ns = current_user_ns();
+ 	struct dentry *dentry;
+ 	struct inode *dir, *inode;
+ 	int error;
+@@ -118,12 +120,19 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+ 
+ 	pr_debug("securityfs: creating file '%s'\n",name);
+ 
+-	error = simple_pin_fs(&fs_type, &mount, &mount_count);
+-	if (error)
+-		return ERR_PTR(error);
++	if (ns == &init_user_ns) {
++		error = simple_pin_fs(&fs_type, &init_securityfs_mount,
++				      &init_securityfs_mount_count);
++		if (error)
++			return ERR_PTR(error);
++	}
+ 
+-	if (!parent)
+-		parent = mount->mnt_root;
++	if (!parent) {
++		if (ns == &init_user_ns)
++			parent = init_securityfs_mount->mnt_root;
++		else
++			return ERR_PTR(-EINVAL);
++	}
+ 
+ 	dir = d_inode(parent);
+ 
+@@ -168,7 +177,9 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+ 	dentry = ERR_PTR(error);
+ out:
+ 	inode_unlock(dir);
+-	simple_release_fs(&mount, &mount_count);
++	if (ns == &init_user_ns)
++		simple_release_fs(&init_securityfs_mount,
++				  &init_securityfs_mount_count);
+ 	return dentry;
  }
  
-+static int process_measurement(struct ima_namespace *ns,
-+			       struct file *file, const struct cred *cred,
-+			       u32 secid, char *buf, loff_t size, int mask,
-+			       enum ima_hooks func)
-+{
-+	struct user_namespace *user_ns = ima_user_ns(ns);
-+	int ret = 0;
+@@ -294,11 +305,14 @@ EXPORT_SYMBOL_GPL(securityfs_create_symlink);
+  */
+ void securityfs_remove(struct dentry *dentry)
+ {
++	struct user_namespace *ns;
+ 	struct inode *dir;
+ 
+ 	if (!dentry || IS_ERR(dentry))
+ 		return;
+ 
++	ns = dentry->d_sb->s_user_ns;
 +
-+	while (user_ns) {
-+		ns = user_ns->ima_ns;
-+
-+		ret = __process_measurement(ns, file, cred, secid, buf, size,
-+					    mask, func);
-+		if (ret)
-+			break;
-+
-+		user_ns = user_ns->parent;
-+	};
-+
-+	return ret;
-+}
-+
- /**
-  * ima_file_mmap - based on policy, collect/store measurement.
-  * @file: pointer to the file to be measured (May be NULL)
+ 	dir = d_inode(dentry->d_parent);
+ 	inode_lock(dir);
+ 	if (simple_positive(dentry)) {
+@@ -309,7 +323,9 @@ void securityfs_remove(struct dentry *dentry)
+ 		dput(dentry);
+ 	}
+ 	inode_unlock(dir);
+-	simple_release_fs(&mount, &mount_count);
++	if (ns == &init_user_ns)
++		simple_release_fs(&init_securityfs_mount,
++				  &init_securityfs_mount_count);
+ }
+ EXPORT_SYMBOL_GPL(securityfs_remove);
+ 
 -- 
 2.31.1
 
