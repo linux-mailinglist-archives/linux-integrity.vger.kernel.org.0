@@ -2,65 +2,44 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2913477EE8
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 22:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730CD477F99
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 22:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236880AbhLPViT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Dec 2021 16:38:19 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8212 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236820AbhLPViT (ORCPT
+        id S234665AbhLPVwv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Dec 2021 16:52:51 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:59070 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234629AbhLPVwv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Dec 2021 16:38:19 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BGKQQnX024494;
-        Thu, 16 Dec 2021 21:38:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=0pyn4IWIx1Fu0WZKd1EhQmwziqA3HmO1dC0kUFj5hvc=;
- b=PupN7oOg6+KV4Ir1DW0oOcRQRTIHIqTDgULwVLU/KzRdRd+IvAfYDOFQq6uvZ9bCxkHr
- yqHi/LRJjMOHD7QM6bbJEtQiTuxdKmPQy+Kha/jQ0zdjZCdXG0xgu/yaPWD8Dz6PNA84
- v9eLV67HPiCibf2iEkQYn+pzeVqvtu87ax1QhcFs0JMShvRJ0x4i/DIKy3MsEGlgfgbE
- v9tMSKcOj4B99zY5i5Avyntb0mMtYW7Jvr/NrcQmssgoaK2HZASDb2E2Q6RZJoX9dWKn
- yHIaeHtn7dPqttQp/RaPlkNRgmnNnW3FmWJz67pwW9SdyDewM66KMuBO1B4/ILsIXTg+ kQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyq8v51ht-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 21:38:07 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BGLREPs018033;
-        Thu, 16 Dec 2021 21:38:06 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyq8v51h7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 21:38:06 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BGLWIZ4005346;
-        Thu, 16 Dec 2021 21:38:05 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma04wdc.us.ibm.com with ESMTP id 3cy76wvkvm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 21:38:05 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BGLc4wi20971896
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Dec 2021 21:38:04 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ABD257805C;
-        Thu, 16 Dec 2021 21:38:04 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 73AF678067;
-        Thu, 16 Dec 2021 21:38:03 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Dec 2021 21:38:03 +0000 (GMT)
-Message-ID: <b6aaf04b-c20f-64b7-1c4d-14aea032a773@linux.ibm.com>
-Date:   Thu, 16 Dec 2021 16:38:02 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v7 14/14] ima: Setup securityfs for IMA namespace
-Content-Language: en-US
+        Thu, 16 Dec 2021 16:52:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1639691570;
+        bh=LLHJG9qY3yjOObMbgWYj684Svyh+zyuMMlc5pZe48sg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=fBSP0jRzf9gJWoTO4i7RjpjxmNpN/UqHT7zpv4Yz3sQ6JygaHXPcgNAypJRspzJVl
+         ywrvXGouqz7An9vFSPoF8bUU5T8s/zxxsE8X7e5pmf5GjPKIYEAJQmRJ9i3QlnNBat
+         X4DN4l8Xa9TsThOn4fpCGFucfvM/74HNfaipiXaw=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D9B701280B09;
+        Thu, 16 Dec 2021 16:52:50 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id HmOs0ZxTXecz; Thu, 16 Dec 2021 16:52:50 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1639691570;
+        bh=LLHJG9qY3yjOObMbgWYj684Svyh+zyuMMlc5pZe48sg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=fBSP0jRzf9gJWoTO4i7RjpjxmNpN/UqHT7zpv4Yz3sQ6JygaHXPcgNAypJRspzJVl
+         ywrvXGouqz7An9vFSPoF8bUU5T8s/zxxsE8X7e5pmf5GjPKIYEAJQmRJ9i3QlnNBat
+         X4DN4l8Xa9TsThOn4fpCGFucfvM/74HNfaipiXaw=
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 17C441280AF4;
+        Thu, 16 Dec 2021 16:52:49 -0500 (EST)
+Message-ID: <f408c42b74e28d90fce262abd50fc8a3079c0fa3.camel@HansenPartnership.com>
+Subject: Re: [PATCH v7 01/14] ima: Add IMA namespace support
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
 To:     Christian Brauner <christian.brauner@ubuntu.com>,
         Stefan Berger <stefanb@linux.vnet.ibm.com>
 Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
@@ -68,69 +47,70 @@ Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
         dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
         krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
         mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
+        Stefan Berger <stefanb@linux.ibm.com>
+Date:   Thu, 16 Dec 2021 16:52:47 -0500
+In-Reply-To: <20211216140806.hi4jxw54yvbu5cox@wittgenstein>
 References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
- <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
- <20211216135100.43suxkutyuwac7yh@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211216135100.43suxkutyuwac7yh@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fQIvGATwnszgSkOAlMn--SduAhzzpVVX
-X-Proofpoint-GUID: o3WKyDHTbZUbfQu9X3ONmUopjWHAhjn2
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+         <20211216054323.1707384-2-stefanb@linux.vnet.ibm.com>
+         <20211216140806.hi4jxw54yvbu5cox@wittgenstein>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-16_08,2021-12-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
- priorityscore=1501 mlxscore=0 spamscore=0 adultscore=0 suspectscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112160115
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Thu, 2021-12-16 at 15:08 +0100, Christian Brauner wrote:
+> On Thu, Dec 16, 2021 at 12:43:10AM -0500, Stefan Berger wrote:
+[...]
+> > diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+> > index 6b2e3ca7ee99..6fa01323aac9 100644
+> > --- a/kernel/user_namespace.c
+> > +++ b/kernel/user_namespace.c
+> > @@ -20,6 +20,7 @@
+> >  #include <linux/fs_struct.h>
+> >  #include <linux/bsearch.h>
+> >  #include <linux/sort.h>
+> > +#include <linux/ima.h>
+> >  
+> >  static struct kmem_cache *user_ns_cachep __read_mostly;
+> >  static DEFINE_MUTEX(userns_state_mutex);
+> > @@ -141,8 +142,14 @@ int create_user_ns(struct cred *new)
+> >  	if (!setup_userns_sysctls(ns))
+> >  		goto fail_keyring;
+> >  
+> > +	ret = create_ima_ns(ns);
+> 
+> Instead of greedily allocating a new ima namespace for each new user
+> namespace creation and wasting memory that is likely wasted since
+> most containers won't use ima (for a long time at least) have you
+> considered lazily allocating it like I suggested in one of my first
+> reviews?
+> 
+> So under the assumption that the only way for a container to get its
+> own ima policy it needs to have mounted a new securityfs instance you
+> can move the ima namespace allocation into
+> fill_super/ima_fs_ns_init():
 
-On 12/16/21 08:51, Christian Brauner wrote:
->
->> +int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
->>   {
->>   	struct ima_namespace *ns = user_ns->ima_ns;
->> -	struct dentry *ima_dir;
->> +	struct dentry *int_dir;
->> +	struct dentry *ima_dir = NULL;
->>   	struct dentry *ima_symlink = NULL;
->>   	struct dentry *binary_runtime_measurements = NULL;
->>   	struct dentry *ascii_runtime_measurements = NULL;
->>   	struct dentry *runtime_measurements_count = NULL;
->>   	struct dentry *violations = NULL;
->>   
->> -	ima_dir = securityfs_create_dir("ima", integrity_dir);
->> +	/* FIXME: update when evm and integrity are namespaced */
->> +	if (user_ns != &init_user_ns) {
->> +		int_dir =
->> +			securityfs_create_dir("integrity", root);
->> +		if (IS_ERR(int_dir))
->> +			return -1;
-> That should probably be return PTR_ERR(int_dir)
+The current patch set has the ima namespace born with an empty policy,
+meaning it can never do anything until a new policy is inserted via a
+write to the securityfs, and therefore the IMA namespace could be
+lazily allocated.  However, that's not quite how the initial IMA
+namespace behaves because a policy can be passed in on the kernel
+command line (or built into the kernel).  If the ima NS were born with
+a default policy (say taken from the initial IMA default policy, or
+simply inherited from the parent at creation time) then we wouldn't be
+able to do lazy allocation.  Before we tie ourselves to never being
+able to have a default policy for an IMA namespace, perhaps we should
+discuss if this is the correct behaviour we want to nail into the
+system.
 
-That's actually from current usptream ( 
-https://elixir.bootlin.com/linux/latest/source/security/integrity/ima/ima_fs.c#L457 
-) The question is then whether at the end it should also return 
-something else than what it currently returns:
+James
 
-out:
-     securityfs_remove(violations);
 
-     [...]
-
-     securityfs_remove(ima_policy);
-     return -1;
 
 
