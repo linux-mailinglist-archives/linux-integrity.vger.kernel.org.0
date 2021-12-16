@@ -2,145 +2,265 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D6E476835
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 03:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982E9476866
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 03:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbhLPCmB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 15 Dec 2021 21:42:01 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1366 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230436AbhLPCmA (ORCPT
+        id S233203AbhLPCzw (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 15 Dec 2021 21:55:52 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48952 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233189AbhLPCzv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 15 Dec 2021 21:42:00 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BG0PKVT016128;
-        Thu, 16 Dec 2021 02:41:49 GMT
+        Wed, 15 Dec 2021 21:55:51 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BFMjNof008883;
+        Thu, 16 Dec 2021 02:55:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=qzkckg/+NQ4FQtLP6Nm9kJTIfHvLTLW8GszapH/EpKk=;
- b=IQ/4NBdsVzNJ78iwEFb+pMAaHS73Ws3RINOk3tO2273JTtXGYhVFL1FRCzn1RajQVQQu
- 3kGuDhGonU57oISci1rdN9lOq6x7BFsTEMrfldJG+UbYTEvW+dMTypK7KU7HEDQh2Ihm
- J6u6El8uhTVqeQCXYTpKPD9TswLC8JJTuCQKQ0Ib1+u/A41IC6iUOqbJTofVQ6SDzapM
- VCckXNTBPc/YLyarD77sxz2wsJEr/hr0IyD1L0sWIivwG0En1XD70Bzfw3HeBbIL9ALV
- Fal0TOV4dMY0VPRBK8AlLkTPiJOAFgV5m6NkHO4UF4rqhs4t1u6MGH7KV3LAr3FKwBKa pA== 
+ bh=n1aarXbVf68G1xVu5ueFolIg01AbLnOTx4Qwo/7JSeM=;
+ b=sGeVJHD8MVQgewhVU6V5i2aarMgxWb5GC2GtadhirEObboAzZ9cMe9FquaFrmPO691Ud
+ wEC6bNoHepzBqfKmTzsH0uUOxr8wfDu9p+XDPIUYHA2FA+fBtL4iZYBEs6nmoHO5XOSB
+ UyopPt0sVymCNAdQfjamXOG1ldhdnnbzdbj8hTkBgR5WxXYvSMwH1c0Ko7LP2SZHeH1Q
+ cr88Ez/LrKkIrydPyBlOVzs8HFFb8nHMky7bofA8pSRsjvHSNL//FY9epZeew5jTO5w3
+ LCjPyH+kJ0fWXAQsvm72XCySK33rIxsEgJ0u14cXMus5JJS2Osrh1CJxd52DCrJhfuqv 4w== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyn1jhc0m-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cypc6fek0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 02:41:49 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BG2fnb3005478;
-        Thu, 16 Dec 2021 02:41:49 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyn1jhc09-1
+        Thu, 16 Dec 2021 02:55:38 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BG2sGxd016809;
+        Thu, 16 Dec 2021 02:55:38 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cypc6fejr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 02:41:48 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BG2Ynrb008953;
-        Thu, 16 Dec 2021 02:41:47 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma01dal.us.ibm.com with ESMTP id 3cy7e3pk51-1
+        Thu, 16 Dec 2021 02:55:38 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BG2lrix003230;
+        Thu, 16 Dec 2021 02:55:37 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma04dal.us.ibm.com with ESMTP id 3cy7hf6q8e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 02:41:47 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BG2fkkj25100574
+        Thu, 16 Dec 2021 02:55:37 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BG2tasi26411358
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Dec 2021 02:41:46 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C3972805C;
-        Thu, 16 Dec 2021 02:41:46 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 38DA228058;
-        Thu, 16 Dec 2021 02:41:42 +0000 (GMT)
+        Thu, 16 Dec 2021 02:55:36 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 143D3124054;
+        Thu, 16 Dec 2021 02:55:36 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DED6124052;
+        Thu, 16 Dec 2021 02:55:35 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Dec 2021 02:41:42 +0000 (GMT)
-Message-ID: <2c440d28-6857-9343-2230-f0f2905fe3a7@linux.ibm.com>
-Date:   Wed, 15 Dec 2021 21:41:41 -0500
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 16 Dec 2021 02:55:35 +0000 (GMT)
+Message-ID: <cd14c566-afaf-8295-5445-420164903336@linux.ibm.com>
+Date:   Wed, 15 Dec 2021 21:55:35 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH v6 17/17] ima: Setup securityfs for IMA namespace
+Subject: Re: [PATCH v4 10/16] ima: Implement hierarchical processing of file
+ accesses
 Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-integrity@vger.kernel.org, serge@hallyn.com,
         containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
         ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
         roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
         lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
         jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
         paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-References: <20211210194736.1538863-1-stefanb@linux.ibm.com>
- <20211210194736.1538863-18-stefanb@linux.ibm.com>
- <11e9dbc416438575fe925c820ff7ad2d8d4b0510.camel@linux.ibm.com>
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20211207202127.1508689-1-stefanb@linux.ibm.com>
+ <20211207202127.1508689-11-stefanb@linux.ibm.com>
+ <20211208120954.nnawb6d2bpp54yll@wittgenstein>
+ <20211208122339.vkqtuckl74ywg3s5@wittgenstein>
+ <60fa585b-984e-fa13-e76f-56083a726259@linux.ibm.com>
+ <395640be-e11d-c242-9e64-9ecf7b479f86@linux.ibm.com>
+ <2cd00e8d0fa819b507cabd34e8f1760d5ff783c6.camel@linux.ibm.com>
 From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <11e9dbc416438575fe925c820ff7ad2d8d4b0510.camel@linux.ibm.com>
+In-Reply-To: <2cd00e8d0fa819b507cabd34e8f1760d5ff783c6.camel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 2aDWWgK-qH_YagsHqxCA4bWiBcbhtDEW
-X-Proofpoint-GUID: ZyQbgqEAdyETNAmwJaj02yaTUJlBVN1N
+X-Proofpoint-ORIG-GUID: Gh5y9mLW-rzG7cTVHuP-4s9nM-bLT-l5
+X-Proofpoint-GUID: nUDc9GT5K5sSTHUkAqxYtY2TbKFSYmuE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-16_01,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- clxscore=1015 malwarescore=0 spamscore=0 mlxscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 spamscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
+ phishscore=0 impostorscore=0 bulkscore=0 suspectscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2112160010
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 12/15/21 16:31, Mimi Zohar wrote:
-> Hi Stefan, James,
+On 12/15/21 18:04, Mimi Zohar wrote:
+> On Wed, 2021-12-08 at 13:22 -0500, Stefan Berger wrote:
+>> On 12/8/21 11:50, Stefan Berger wrote:
+>>> On 12/8/21 07:23, Christian Brauner wrote:
+>>>> On Wed, Dec 08, 2021 at 01:09:54PM +0100, Christian Brauner wrote:
+>>>>> On Tue, Dec 07, 2021 at 03:21:21PM -0500, Stefan Berger wrote:
+>>>>>> Implement hierarchical processing of file accesses in IMA
+>>>>>> namespaces by
+>>>>>> walking the list of IMA namespaces towards the init_ima_ns. This way
+>>>>>> file accesses can be audited in an IMA namespace and also be evaluated
+>>>>>> against the IMA policies of parent IMA namespaces.
+>>>>>>
+>>>>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>>>>> ---
+>>>>>>    security/integrity/ima/ima_main.c | 29 +++++++++++++++++++++++++----
+>>>>>>    1 file changed, 25 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>> diff --git a/security/integrity/ima/ima_main.c
+>>>>>> b/security/integrity/ima/ima_main.c
+>>>>>> index 2121a831f38a..e9fa46eedd27 100644
+>>>>>> --- a/security/integrity/ima/ima_main.c
+>>>>>> +++ b/security/integrity/ima/ima_main.c
+>>>>>> @@ -200,10 +200,10 @@ void ima_file_free(struct file *file)
+>>>>>>        ima_check_last_writer(iint, inode, file);
+>>>>>>    }
+>>>>>>    -static int process_measurement(struct ima_namespace *ns,
+>>>>>> -                   struct file *file, const struct cred *cred,
+>>>>>> -                   u32 secid, char *buf, loff_t size, int mask,
+>>>>>> -                   enum ima_hooks func)
+>>>>>> +static int _process_measurement(struct ima_namespace *ns,
+>>>>> Hm, it's much more common to use double underscores then single
+>>>>> underscores to
+>>>>>
+>>>>> __process_measurement()
+>>>>>
+>>>>> reads a lot more natural to people perusing kernel code quite often.
+>>>>>
+>>>>>> +                struct file *file, const struct cred *cred,
+>>>>>> +                u32 secid, char *buf, loff_t size, int mask,
+>>>>>> +                enum ima_hooks func)
+>>>>>>    {
+>>>>>>        struct inode *inode = file_inode(file);
+>>>>>>        struct integrity_iint_cache *iint = NULL;
+>>>>>> @@ -405,6 +405,27 @@ static int process_measurement(struct
+>>>>>> ima_namespace *ns,
+>>>>>>        return 0;
+>>>>>>    }
+>>>>>>    +static int process_measurement(struct ima_namespace *ns,
+>>>>>> +                   struct file *file, const struct cred *cred,
+>>>>>> +                   u32 secid, char *buf, loff_t size, int mask,
+>>>>>> +                   enum ima_hooks func)
+>>>>>> +{
+>>>>>> +    int ret = 0;
+>>>>>> +    struct user_namespace *user_ns;
+>>>>>> +
+>>>>>> +    do {
+>>>>>> +        ret = _process_measurement(ns, file, cred, secid, buf,
+>>>>>> size, mask, func);
+>>>>>> +        if (ret)
+>>>>>> +            break;
+>>>>>> +        user_ns = ns->user_ns->parent;
+>>>>>> +        if (!user_ns)
+>>>>>> +            break;
+>>>>>> +        ns = user_ns->ima_ns;
+>>>>>> +    } while (1);
+>>>>> I'd rather write this as:
+>>>>>
+>>>>>      struct user_namespace *user_ns = ns->user_ns;
+>>>>>
+>>>>>      while (user_ns) {
+>>>>>          ns = user_ns->ima_ns;
+>>>>>
+>>>>>              ret = __process_measurement(ns, file, cred, secid, buf,
+>>>>> size, mask, func);
+>>>>>              if (ret)
+>>>>>                  break;
+>>>>>          user_ns = user_ns->parent;
+>>>>>
+>>>>>      }
+>>>>>
+>>>>> because the hierarchy is only an implicit property inherited by ima
+>>>>> namespaces from the implementation of user namespaces. In other words,
+>>>>> we're only indirectly walking a hierarchy of ima namespaces because
+>>>>> we're walking a hierarchy of user namespaces. So the ima ns actually
+>>>>> just gives us the entrypoint into the userns hierarchy which the double
+>>>>> deref writing it with a while() makes obvious.
+>>>> Which brings me to another point.
+>>>>
+>>>> Technically nothing seems to prevent an ima_ns to survive the
+>>>> destruction of its associated userns in ima_ns->user_ns?
+>>>>
+>>>> One thread does get_ima_ns() and mucks around with it while another one
+>>>> does put_user_ns().
+>>>>
+>>>> Assume it's the last reference to the userns which is now -
+>>>> asynchronously - cleaned up from ->work. So at some point you're ending
+>>>> with a dangling pointer in ima_ns->user_ns eventually causing a UAF.
+>>>>
+>>>> If I'm thinking correct than you need to fix this. I can think of two
+>>>> ways right now where one of them I'm not sure how well that would work:
+>>>> 1. ima_ns takes a reference count to userns at creation. Here you need
+>>>>      to make very sure that you're not ending up with reference counting
+>>>>      cycles where the two structs keep each other alive.
+>>> Right. I am not sure what the trigger would be for ima_ns to release
+>>> that one reference.
+>>>
+>>>
+>>>> 2. rcu trickery. That's the one I'm not sure how well that would work
+>>>>      where you'd need rcu_read_lock()/rcu_read_unlock() with a
+>>>>      get_user_ns() in the middle whenever you're trying to get a ref to
+>>>>      the userns from an ima_ns and handle the case where the userns is
+>>>>      gone.
+>>>>
+>>>> Or maybe I'me missing something in the patch series that makes this all
+>>>> a non-issue.
+>>> I suppose one can always call current_user_ns() to get a pointer to
+>>> the current user namespace that the process is accessing the file in
+>>> that IMA now reacts to. With the hierarchical processing we are
+>>> walking backwards towards init_user_ns. The problem should only exist
+>>> if something else frees the current user namespace (or its parents) so
+>>> that the hierarchy collapses. Assuming we are always in a process
+>>> context then 'current' should protect us, no ?
+>>>
+>> All existing callers to process_measurements call it at least once with
+>> current_cred().
+>>
+>> The only problem that I see where we are accessing the IMA namespace
+>> outside a process context is in 4/16 'ima: Move delayed work queue and
+>> variables into ima_namespace' where a delayed work queue is used. I
+>> fixed this now by getting an additional reference to the user namesapce
+>> before scheduling the delayed work and release it when it ran or when it
+>> is canceled (cancel_delayed_work_sync()) but it didn't run.
+>>
+>  From  the "ima: Move delayed work queue and variables into
+> ima_namespace" patch description:
+>     Since keys queued up for measurement currently are only relevant in
+>     the init_ima_ns, call ima_init_key_queue() only when the init_ima_ns
+>     is initialized.
 >
-> On Fri, 2021-12-10 at 14:47 -0500, Stefan Berger wrote:
->> Setup securityfs with symlinks, directories, and files for IMA
->> namespacing support. The same directory structure that IMA uses on the
->> host is also created for the namespacing case.
->>
->> The securityfs file and directory ownerships cannot be set when the
->> IMA namespace is initialized. Therefore, delay the setup of the file
->> system to a later point when securityfs is in securityfs_fill_super.
->>
->> This filesystem can now be mounted as follows:
->>
->> mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
->>
->> The following directories, symlinks, and files are then available.
->>
->> $ ls -l sys/kernel/security/
->> total 0
->> lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
->> drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
-> The ima symlink was introduced for backwards compatibilty.  Refer to
-> commit 0c343af8065b ("integrity: Add an integrity directory in
-> securityfs").  The symlink shouldn't need to be supported in IMA
-> namespace.
+> When IMA_QUEUE_EARLY_BOOT_KEYS is not enabled, ima_should_queue_key()
+> simply returns false.  Why do the keys workqueue need to be namespaced?
+> Is this preparatory for some future IMA namespacing?
 
-That's backwards compatibility for applications and scripts. If we want 
-to have these running unmodified inside IMA namespaces I think it's 
-better to keep the symbolic link and not treat the IMA namespaces any 
-different than the host.
 
-    Stefan
+06 ima: Move policy related variables into ima_namespace
+
+05 ima: Move IMA's keys queue related variables into ima_namespace
+
+04 ima: Move delayed work queue and variables into ima_namespace
+
+
+06 requires the ima_namespace parameter to be passed into 
+process_buffer_measurement(). The problem was ima_process_queued_keys() 
+that needs to pass the namespace but it's probably sufficient to use 
+&init_ima_ns there as the ima_namespace parameter, which would allow to 
+drop 05 and 04.
+
+   Stefan
 
 >
 > thanks,
 >
 > Mimi
 >
->> $ ls -l sys/kernel/security/ima/
->> total 0
->> -r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
->> -r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
->> -rw-------. 1 root root 0 Dec  2 00:18 policy
->> -r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
->> -r--r-----. 1 root root 0 Dec  2 00:18 violations
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
