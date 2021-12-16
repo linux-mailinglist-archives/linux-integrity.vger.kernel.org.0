@@ -2,292 +2,183 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB1B4769D2
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 06:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DAE476F58
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 12:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbhLPFoN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Dec 2021 00:44:13 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:59276 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233820AbhLPFoA (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Dec 2021 00:44:00 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BG4UrQh018664;
-        Thu, 16 Dec 2021 05:43:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=WZTt5N+m24l3rB3fSDkkd5mvrbAxssRN3e1Z6VuINmQ=;
- b=FAYJwRQP+jG65NAZlJwZwYN8EfLNKu+qeFFdu0qIxD4oCP9EeATAnSHU0cqCIfzWFBHe
- bTUld9G+KBNC/+4yhVjib+BIOU2mlsTNIxzRFZnDZYELmjYFFL8yllBxUM+sQKkrCNUo
- 9He982mDbBQboi05ZaupgkaKX3wJ69k1lbbSPGJ/0BzrM5I04zkwtdvdRt49AyzHzG/Q
- /a5drCFieokGM6ElHQ+jlpxa9r5z57lH2pB0Rm0q8ztmUOq4D1AVNwui6Ewhmc5NjSd1
- ncXUnRdF3+8ULi2UxWF4UUYip13bJYSr891Z01lYeJ7VV3LIk3agehULAi/gNe4WBrPc UQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyn1jm9ak-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 05:43:47 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BG50el1007800;
-        Thu, 16 Dec 2021 05:43:46 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cyn1jm9aa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 05:43:46 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BG5fvVJ032291;
-        Thu, 16 Dec 2021 05:43:45 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma04dal.us.ibm.com with ESMTP id 3cy7hf9bsc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 05:43:45 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BG5hhnc31785366
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Dec 2021 05:43:43 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C51C96E053;
-        Thu, 16 Dec 2021 05:43:43 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A26346E052;
-        Thu, 16 Dec 2021 05:43:42 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Dec 2021 05:43:42 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        id S236336AbhLPLAH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Dec 2021 06:00:07 -0500
+Received: from mga12.intel.com ([192.55.52.136]:17910 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236331AbhLPLAC (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Thu, 16 Dec 2021 06:00:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639652402; x=1671188402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kyO5ihOz/ALaQl8Q/ytMsN/xFujiQgte8E153O1Mi4s=;
+  b=dziyThKtawTho04N67T8aQC8apfVdrxNwF0TneMGy3UZWfkN2MIrDkLD
+   WVciBcG0MU4ahT8Rc2YSaTaIotHSRWEfMuxZ1IA0zLu3x4B5tBp6l+NGu
+   fStWsVr2iYUKHdbhDhnYRRD03UEpsoRWezVJx7cIJ5p0Dq7J2N6BkZqjP
+   kpwhSp5ZlHh0MR5O9MrexZDhAjoLGIqCx9mEqFSZnXRewNQOyqfNg2PjX
+   WSD5WKBSbkYrv30kVqfBS6WmvvRj3lDLajrZaoudcVQd0/Odp+dAPfozU
+   PlmvF7C44U+iU2BxPrTmAlhNgFjCgWaX9/yzYlW/KTyKchSOta7Xc21Ku
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="219475482"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="219475482"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 03:00:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="682897497"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 16 Dec 2021 02:59:57 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxoUO-00032M-Pz; Thu, 16 Dec 2021 10:59:56 +0000
+Date:   Thu, 16 Dec 2021 18:59:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, zohar@linux.ibm.com, serge@hallyn.com,
         christian.brauner@ubuntu.com, containers@lists.linux.dev,
         dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
         krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v7 14/14] ima: Setup securityfs for IMA namespace
-Date:   Thu, 16 Dec 2021 00:43:23 -0500
-Message-Id: <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
-References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
+        mpeters@redhat.com
+Subject: Re: [PATCH v7 14/14] ima: Setup securityfs for IMA namespace
+Message-ID: <202112161827.mbpxbf1k-lkp@intel.com>
+References: <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Sc4s3QC2UR58vrd4hIX3JvLoWYd3q0B6
-X-Proofpoint-GUID: 1ao4xZzJj2v9K4_cmHTZGy5udDvbQHip
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-16_01,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- clxscore=1015 malwarescore=0 spamscore=0 mlxscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112160033
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216054323.1707384-15-stefanb@linux.vnet.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+Hi Stefan,
 
-Setup securityfs with symlinks, directories, and files for IMA
-namespacing support. The same directory structure that IMA uses on the
-host is also created for the namespacing case.
+Thank you for the patch! Perhaps something to improve:
 
-The securityfs file and directory ownerships cannot be set when the
-IMA namespace is initialized. Therefore, delay the setup of the file
-system to a later point when securityfs is in securityfs_fill_super.
+[auto build test WARNING on zohar-integrity/next-integrity]
+[also build test WARNING on linux/master linus/master v5.16-rc5]
+[cannot apply to jmorris-security/next-testing next-20211215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This filesystem can now be mounted as follows:
+url:    https://github.com/0day-ci/linux/commits/Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211216-134611
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20211216/202112161827.mbpxbf1k-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/bc2f1f683efbf2ad7b955fd4afc78861609eff4b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stefan-Berger/ima-Namespace-IMA-with-audit-support-in-IMA-ns/20211216-134611
+        git checkout bc2f1f683efbf2ad7b955fd4afc78861609eff4b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash security/integrity/ima/
 
-mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The following directories, symlinks, and files are then available.
+All warnings (new ones prefixed by >>):
 
-$ ls -l sys/kernel/security/
-total 0
-lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
-drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
+>> security/integrity/ima/ima_fs.c:451:5: warning: no previous prototype for 'ima_fs_ns_init' [-Wmissing-prototypes]
+     451 | int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
+         |     ^~~~~~~~~~~~~~
 
-$ ls -l sys/kernel/security/ima/
-total 0
--r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
--r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
--rw-------. 1 root root 0 Dec  2 00:18 policy
--r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
--r--r-----. 1 root root 0 Dec  2 00:18 violations
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+vim +/ima_fs_ns_init +451 security/integrity/ima/ima_fs.c
+
+   450	
+ > 451	int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
+   452	{
+   453		struct ima_namespace *ns = user_ns->ima_ns;
+   454		struct dentry *int_dir;
+   455		struct dentry *ima_dir = NULL;
+   456		struct dentry *ima_symlink = NULL;
+   457		struct dentry *binary_runtime_measurements = NULL;
+   458		struct dentry *ascii_runtime_measurements = NULL;
+   459		struct dentry *runtime_measurements_count = NULL;
+   460		struct dentry *violations = NULL;
+   461	
+   462		/* FIXME: update when evm and integrity are namespaced */
+   463		if (user_ns != &init_user_ns) {
+   464			int_dir =
+   465				securityfs_create_dir("integrity", root);
+   466			if (IS_ERR(int_dir))
+   467				return -1;
+   468		} else
+   469			int_dir = integrity_dir;
+   470	
+   471		ima_dir = securityfs_create_dir("ima", int_dir);
+   472		if (IS_ERR(ima_dir))
+   473			goto out;
+   474	
+   475		ima_symlink = securityfs_create_symlink("ima", root, "integrity/ima",
+   476							NULL);
+   477		if (IS_ERR(ima_symlink))
+   478			goto out;
+   479	
+   480		binary_runtime_measurements =
+   481		    securityfs_create_file("binary_runtime_measurements",
+   482					   S_IRUSR | S_IRGRP, ima_dir, NULL,
+   483					   &ima_measurements_ops);
+   484		if (IS_ERR(binary_runtime_measurements))
+   485			goto out;
+   486	
+   487		ascii_runtime_measurements =
+   488		    securityfs_create_file("ascii_runtime_measurements",
+   489					   S_IRUSR | S_IRGRP, ima_dir, NULL,
+   490					   &ima_ascii_measurements_ops);
+   491		if (IS_ERR(ascii_runtime_measurements))
+   492			goto out;
+   493	
+   494		runtime_measurements_count =
+   495		    securityfs_create_file("runtime_measurements_count",
+   496					   S_IRUSR | S_IRGRP, ima_dir, NULL,
+   497					   &ima_measurements_count_ops);
+   498		if (IS_ERR(runtime_measurements_count))
+   499			goto out;
+   500	
+   501		violations =
+   502		    securityfs_create_file("violations", S_IRUSR | S_IRGRP,
+   503					   ima_dir, NULL, &ima_htable_violations_ops);
+   504		if (IS_ERR(violations))
+   505			goto out;
+   506	
+   507	
+   508		if (!ns->policy_dentry_removed) {
+   509			ns->policy_dentry =
+   510			    securityfs_create_file("policy", POLICY_FILE_FLAGS,
+   511						   ima_dir, NULL,
+   512						   &ima_measure_policy_ops);
+   513			if (IS_ERR(ns->policy_dentry))
+   514				goto out;
+   515		}
+   516	
+   517		return 0;
+   518	out:
+   519		securityfs_remove(ns->policy_dentry);
+   520		securityfs_remove(violations);
+   521		securityfs_remove(runtime_measurements_count);
+   522		securityfs_remove(ascii_runtime_measurements);
+   523		securityfs_remove(binary_runtime_measurements);
+   524		securityfs_remove(ima_symlink);
+   525		securityfs_remove(ima_dir);
+   526		if (user_ns != &init_user_ns)
+   527			securityfs_remove(integrity_dir);
+   528	
+   529		return -1;
+   530	}
+   531	
+
 ---
- include/linux/ima.h             | 14 ++++++++++++
- security/inode.c                |  6 ++++-
- security/integrity/ima/ima.h    |  1 +
- security/integrity/ima/ima_fs.c | 40 ++++++++++++++++++++++++---------
- 4 files changed, 49 insertions(+), 12 deletions(-)
-
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index f9e592bb9560..a2705aa5242a 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -40,6 +40,7 @@ extern int ima_measure_critical_data(const char *event_label,
- 				     const char *event_name,
- 				     const void *buf, size_t buf_len,
- 				     bool hash, u8 *digest, size_t digest_len);
-+extern int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root);
- 
- #ifdef CONFIG_IMA_APPRAISE_BOOTPARAM
- extern void ima_appraise_parse_cmdline(void);
-@@ -232,6 +233,12 @@ static inline struct ima_namespace *get_current_ns(void)
- 	return current_user_ns()->ima_ns;
- }
- 
-+static inline int ima_securityfs_init(struct user_namespace *user_ns,
-+				      struct dentry *root)
-+{
-+	return ima_fs_ns_init(user_ns, root);
-+}
-+
- #else
- 
- static inline void free_ima_ns(struct user_namespace *user_ns)
-@@ -250,6 +257,13 @@ static inline struct ima_namespace *get_current_ns(void)
- {
- 	return &init_ima_ns;
- }
-+
-+static inline int ima_securityfs_init(struct user_namespace *ns,
-+				      struct dentry *root)
-+{
-+	return 0;
-+}
-+
- #endif /* CONFIG_IMA_NS */
- 
- #if defined(CONFIG_IMA_APPRAISE) && defined(CONFIG_INTEGRITY_TRUSTED_KEYRING)
-diff --git a/security/inode.c b/security/inode.c
-index a0d9f086e3d5..ad9395d121f2 100644
---- a/security/inode.c
-+++ b/security/inode.c
-@@ -16,6 +16,7 @@
- #include <linux/fs_context.h>
- #include <linux/mount.h>
- #include <linux/pagemap.h>
-+#include <linux/ima.h>
- #include <linux/init.h>
- #include <linux/namei.h>
- #include <linux/security.h>
-@@ -77,7 +78,10 @@ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 	sb->s_op = &securityfs_super_operations;
- 	sb->s_root->d_inode->i_op = &securityfs_dir_inode_operations;
- 
--	return 0;
-+	if (ns != &init_user_ns)
-+		error = ima_securityfs_init(ns, sb->s_root);
-+
-+	return error;
- }
- 
- static int securityfs_get_tree(struct fs_context *fc)
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index d51703290e25..9b0f6a3763f9 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -148,6 +148,7 @@ struct ima_namespace {
- 	int valid_policy;
- 
- 	struct dentry *policy_dentry;
-+	bool policy_dentry_removed;
- } __randomize_layout;
- 
- extern const int read_idmap[];
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 7c5a721f4f3d..3b8001ba62e3 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -431,6 +431,7 @@ static int ima_release_policy(struct inode *inode, struct file *file)
- #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
- 	securityfs_remove(ns->policy_dentry);
- 	ns->policy_dentry = NULL;
-+	ns->policy_dentry_removed = true;
- #elif defined(CONFIG_IMA_WRITE_POLICY)
- 	clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
- #elif defined(CONFIG_IMA_READ_POLICY)
-@@ -447,21 +448,31 @@ static const struct file_operations ima_measure_policy_ops = {
- 	.llseek = generic_file_llseek,
- };
- 
--static int __init ima_fs_ns_init(struct user_namespace *user_ns)
-+int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
- {
- 	struct ima_namespace *ns = user_ns->ima_ns;
--	struct dentry *ima_dir;
-+	struct dentry *int_dir;
-+	struct dentry *ima_dir = NULL;
- 	struct dentry *ima_symlink = NULL;
- 	struct dentry *binary_runtime_measurements = NULL;
- 	struct dentry *ascii_runtime_measurements = NULL;
- 	struct dentry *runtime_measurements_count = NULL;
- 	struct dentry *violations = NULL;
- 
--	ima_dir = securityfs_create_dir("ima", integrity_dir);
-+	/* FIXME: update when evm and integrity are namespaced */
-+	if (user_ns != &init_user_ns) {
-+		int_dir =
-+			securityfs_create_dir("integrity", root);
-+		if (IS_ERR(int_dir))
-+			return -1;
-+	} else
-+		int_dir = integrity_dir;
-+
-+	ima_dir = securityfs_create_dir("ima", int_dir);
- 	if (IS_ERR(ima_dir))
--		return -1;
-+		goto out;
- 
--	ima_symlink = securityfs_create_symlink("ima", NULL, "integrity/ima",
-+	ima_symlink = securityfs_create_symlink("ima", root, "integrity/ima",
- 						NULL);
- 	if (IS_ERR(ima_symlink))
- 		goto out;
-@@ -493,11 +504,15 @@ static int __init ima_fs_ns_init(struct user_namespace *user_ns)
- 	if (IS_ERR(violations))
- 		goto out;
- 
--	ns->policy_dentry = securityfs_create_file("policy", POLICY_FILE_FLAGS,
--					    ima_dir, NULL,
--					    &ima_measure_policy_ops);
--	if (IS_ERR(ns->policy_dentry))
--		goto out;
-+
-+	if (!ns->policy_dentry_removed) {
-+		ns->policy_dentry =
-+		    securityfs_create_file("policy", POLICY_FILE_FLAGS,
-+					   ima_dir, NULL,
-+					   &ima_measure_policy_ops);
-+		if (IS_ERR(ns->policy_dentry))
-+			goto out;
-+	}
- 
- 	return 0;
- out:
-@@ -508,10 +523,13 @@ static int __init ima_fs_ns_init(struct user_namespace *user_ns)
- 	securityfs_remove(binary_runtime_measurements);
- 	securityfs_remove(ima_symlink);
- 	securityfs_remove(ima_dir);
-+	if (user_ns != &init_user_ns)
-+		securityfs_remove(integrity_dir);
-+
- 	return -1;
- }
- 
- int __init ima_fs_init(void)
- {
--	return ima_fs_ns_init(&init_user_ns);
-+	return ima_fs_ns_init(&init_user_ns, NULL);
- }
--- 
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
