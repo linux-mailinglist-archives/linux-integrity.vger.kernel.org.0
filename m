@@ -2,184 +2,226 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 626DF47730B
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 14:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED79477331
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Dec 2021 14:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237093AbhLPNXO (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Dec 2021 08:23:14 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8104 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232110AbhLPNXO (ORCPT
+        id S237574AbhLPNcA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 16 Dec 2021 08:32:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34348 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234599AbhLPNcA (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:23:14 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BGAhMrY038697;
-        Thu, 16 Dec 2021 13:23:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=C60u5fgQwrqkI/S3ecNj2qnPkL6oMzGVTZ1CXYGQmPI=;
- b=ZBdT6uo+fQzyRgBxCIn/XrtnphSlI71kwQhBEYN5FF/qSMWcxRp1M3w2uEM3teaOhVKI
- RMHLfuRQEMb+iouObqxucsYlNerjOdNZDX9lzgfX4KEf1Ltf8NM0F/eIjOHRJaTDpz0A
- hF6/I4sEFQZdGT5cwPYSHROtnfArVWw6BXXDHDKCxvQwXh0UAxFiMDr5WmklX9oiAbEm
- Z520QrEti5YSX9tlylNicWzkPnlivo97tzx3zb/9lauLc64ndcg30EZRrkfEb0Hj+WQj
- eRZenyLsWYb4AcFO2yjJp2o3SbwySXOcUOJQUKehZEZ3DrsfMA772gtcEwT+J5tjtpkM lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cymkw5xb6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 13:23:04 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BGDN4jV020625;
-        Thu, 16 Dec 2021 13:23:04 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cymkw5xa8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 13:23:03 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BGDIU21029147;
-        Thu, 16 Dec 2021 13:23:01 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 3cy7k9ekkj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Dec 2021 13:23:01 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BGDMwWi14877060
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Dec 2021 13:22:58 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8669AE053;
-        Thu, 16 Dec 2021 13:22:58 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A9E19AE04D;
-        Thu, 16 Dec 2021 13:22:57 +0000 (GMT)
-Received: from sig-9-65-93-34.ibm.com (unknown [9.65.93.34])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Dec 2021 13:22:57 +0000 (GMT)
-Message-ID: <72b57e7f22a593ea7fe38e340ba11de944658554.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Fix undefined arch_ima_get_secureboot() and co
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     joeyli <jlee@suse.com>
-Cc:     Takashi Iwai <tiwai@suse.de>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Date:   Thu, 16 Dec 2021 08:22:56 -0500
-In-Reply-To: <20211216043212.GG3786@linux-l9pv.suse>
-References: <20211213161145.3447-1-tiwai@suse.de>
-         <d99fc78005d8a245449dd6ca0158cf9e2a897465.camel@linux.ibm.com>
-         <s5hpmpz9o08.wl-tiwai@suse.de> <20211215160345.GF3786@linux-l9pv.suse>
-         <a54f7de463853f9c3b7404739793d2f690aa317e.camel@linux.ibm.com>
-         <20211216043212.GG3786@linux-l9pv.suse>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: AWs_xyAFMNpQnf6ETQvsFhZgLU4prfqw
-X-Proofpoint-ORIG-GUID: sUnBR6dCTZ_YliRkNsmqGLItsiUglCtY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-16_04,2021-12-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- clxscore=1015 lowpriorityscore=0 malwarescore=0 spamscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112160073
+        Thu, 16 Dec 2021 08:32:00 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A75AEB8230C;
+        Thu, 16 Dec 2021 13:31:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA942C36AE0;
+        Thu, 16 Dec 2021 13:31:51 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 14:31:48 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v7 00/14] ima: Namespace IMA with audit support in IMA-ns
+Message-ID: <20211216133148.aw3xs4sxuebkampb@wittgenstein>
+References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
+ <20211216125027.fte6625wu5vxkjpi@wittgenstein>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211216125027.fte6625wu5vxkjpi@wittgenstein>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Thu, 2021-12-16 at 12:32 +0800, joeyli wrote:
-> On Wed, Dec 15, 2021 at 01:16:48PM -0500, Mimi Zohar wrote:
-> > [Cc'ing Eric Snowberg, Jarkko]
+On Thu, Dec 16, 2021 at 01:50:27PM +0100, Christian Brauner wrote:
+> On Thu, Dec 16, 2021 at 12:43:09AM -0500, Stefan Berger wrote:
+> > From: Stefan Berger <stefanb@linux.ibm.com>
 > > 
-> > Hi Joey,
+> > The goal of this series of patches is to start with the namespacing of
+> > IMA and support auditing within an IMA namespace (IMA-ns) as the first
+> > step.
 > > 
-> > On Thu, 2021-12-16 at 00:03 +0800, joeyli wrote:
-> > > Hi Takashi, Mimi,
-> > > 
-> > > On Tue, Dec 14, 2021 at 04:58:47PM +0100, Takashi Iwai wrote:
-> > > > On Tue, 14 Dec 2021 16:31:21 +0100,
-> > > > Mimi Zohar wrote:
-> > > > > 
-> > > > > Hi Takashi,
-> > > > > 
-> > > > > On Mon, 2021-12-13 at 17:11 +0100, Takashi Iwai wrote:
-> > > > > > Currently arch_ima_get_secureboot() and arch_get_ima_policy() are
-> > > > > > defined only when CONFIG_IMA is set, and this makes the code calling
-> > > > > > those functions without CONFIG_IMA failing.  Although there is no such
-> > > > > > in-tree users, but the out-of-tree users already hit it.
-> > > > > > 
-> > > > > > Move the declaration and the dummy definition of those functions
-> > > > > > outside ifdef-CONFIG_IMA block for fixing the undefined symbols.
-> > > > > > 
-> > > > > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> > > > > 
-> > > > > Before lockdown was upstreamed, we made sure that IMA and lockdown
-> > > > > could co-exist.  This patch makes the stub functions available even
-> > > > > when IMA is not configured.  Do the remaining downstream patches
-> > > > > require IMA to be disabled or can IMA co-exist?
-> > > > 
-> > > > I guess Joey (Cc'ed) can explain this better.  AFAIK, currently it's
-> > > > used in a part of MODSIGN stuff in SUSE kernels, and it's calling
-> > > > unconditionally this function for checking whether the system is with
-> > > > the Secure Boot or not.
-> > > >
-> > > 
-> > > Actually in downstream code, I used arch_ima_get_secureboot() in
-> > > load_uefi_certs() to prevent the mok be loaded when secure boot is
-> > > disabled. Because the security of MOK relies on secure boot.
-> > > 
-> > > The downstream code likes this:
-> > > 
-> > > /* the MOK and MOKx can not be trusted when secure boot is disabled */
-> > > -      if (!efi_enabled(EFI_SECURE_BOOT))
-> > > +      if (!arch_ima_get_secureboot())
-> > > 		return 0;
-> > > 
-> > > The old EFI_SECURE_BOOT bit can only be available on x86_64, so I switch
-> > > the code to to arch_ima_get_secureboot() for cross-architectures and sync
-> > > with upstream api.
-> > > 
-> > > The load_uefi.c depends on CONFIG_INTEGRITY but not CONFIG_IMA. So
-> > > load_uefi.c still be built when CONFIG_INTEGRITY=y and CONFIG_IMA=n.
-> > > Then "implicit declaration of function 'arch_ima_get_secureboot'" is
-> > > happened.
+> > In this series the IMA namespace is piggy backing on the user namespace
+> > and therefore an IMA namespace gets created when a user namespace is
+> > created. The advantage of this is that the user namespace can provide
+> > the keys infrastructure that IMA appraisal support will need later on.
 > > 
-> > The existing upstream code doesn't require secureboot to load the
-> > MOK/MOKx keys.  Why is your change being made downstream?
-> >
-> Because the security of MOK relies on secure boot. When secure boot is
-> disabled, EFI firmware will not verify binary code. So arbitrary efi
-> binary code can modify MOK when rebooting.
+> > We chose the goal of supporting auditing within an IMA namespace since it
+> > requires the least changes to IMA. Following this series, auditing within
+> > an IMA namespace can be activated by a user running the following lines
+> > that rely on a statically linked busybox to be installed on the host for
+> > execution within the minimal container environment:
+> > 
+> > mkdir -p rootfs/{bin,mnt,proc}
+> > cp /sbin/busybox rootfs/bin
+> > cp /sbin/busybox rootfs/bin/busybox2
+> > echo >> rootfs/bin/busybox2
+> > PATH=/bin unshare --user --map-root-user --mount-proc --pid --fork \
+> >   --root rootfs busybox sh -c \
+> >  "busybox mount -t securityfs /mnt /mnt; \
+> >   busybox echo 'audit func=BPRM_CHECK mask=MAY_EXEC' > /mnt/ima/policy; \
+> >   busybox2 cat /mnt/ima/policy"
+> > 
+> > [busybox2 is used to demonstrate 2 measurements; see below]
+> > 
+> > Following the audit log on the host the last line cat'ing the IMA policy
+> > inside the namespace would have been audited. Unfortunately the auditing
+> > line is not distinguishable from one stemming from actions on the host.
+> > The hope here is that Richard Brigg's container id support for auditing
+> > would help resolve the problem.
+> > 
+> > The following lines added to a suitable IMA policy on the host would
+> > cause the execution of the commands inside the container (by uid 1000)
+> > to be measured and audited as well on the host, thus leading to two
+> > auditing messages for the 'busybox2 cat' above and log entries in IMA's
+> > system log.
+> > 
+> > echo -e "measure func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+> >         "audit func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+> >     > /sys/kernel/security/ima/policy
+> > 
+> > The goal of supporting measurement and auditing by the host, of actions
+> > occurring within IMA namespaces, is that users, particularly root,
+> > should not be able to evade the host's IMA policy just by spawning
+> > new IMA namespaces, running programs there, and discarding the namespaces
+> > again. This is achieved through 'hierarchical processing' of file
+> > accesses that are evaluated against the policy of the namespace where
+> > the action occurred and against all namespaces' and their policies leading
+> > back to the root IMA namespace (init_ima_ns).
 > 
-> When user disabled secure boot, a hacker can just replace shim.efi then
-> reboot for enrolling new MOK without any interactive. Or hacker can just
-> replace shim.efi and wait user to reboot their machine. A hacker's MOK can
-> also be enrolled by hacked shim. User can't perceive. 
->  
-> > Are you aware of Eric Snowberg's "Enroll kernel keys thru MOK" patch
-> > set?  When INTEGRITY_MACHINE_KEYRING is enabled and new UEFI variables
-> > are enabled,  instead of loading the MOK keys onto the .platform
-> > keyring, they're loaded onto a new keyring name ".machine", which is
-> > linked to the secondary keyring.
-> > 
-> > Eric's patchset doesn't add a new check either to make sure secure boot
-> > is enabled before loading the MOK/MOKx keys.
-> >
+> Note that your worst-case is 32 levels (maximum supported userns
+> nesting) where each ima namespace defines a separate policy.
 > 
-> Kernel doesn't know how was a MOK enrolled. Kernel can only detect the
-> state of secure boot. If kernel doesn't want to check the state of secure
-> boot before loading MOK, then user should understands that they can not disable
-> secure boot when using MOK. 
+> So make sure you don't run into locking issues when hierarchically
+> processing rules. So far I think it's fine since the locks aren't held
+> across the hierarchial walk but are dropped and reaqcuired for each
+> level.
+> 
+> But that could still mean a lot of contention on iint->mutex since this
+> lock is global, i.e. in this context: for all ima namespaces. You might
+> want to consider coming up with some rough ideas for how to solve this
+> _if_ this becomes a problem in the future.
+> 
+> > 
+> > The patch series adds support for a virtualized SecurityFS with a few
+> > new API calls that are used by IMA namespacing. Only the data relevant
+> > to the IMA namespace are shown. The files and directories of other
+> > security subsystems (TPM, evm, Tomoyo, safesetid) are not showing
+> > up when secruityfs is mounted inside a user namespace.
+> > 
+> > Much of the code leading up to the virtualization of SecurityFS deals
+> > with moving IMA's variables from various files into the IMA namespace
+> > structure called 'ima_namespace'. When it comes to determining the
+> > current IMA namespace I took the approach to get the current IMA
+> > namespace (get_current_ns()) on the top level and pass the pointer all
+> > the way down to those functions that now need access to the ima_namespace
+> > to get to their variables. This later on comes in handy once hierarchical
+> > processing is implemented in this series where we walk the list of
+> > namespaces backwards and again need to pass the pointer into functions.
+> 
+> Just to repeat the point from earlier reviews, all those functions need
+> to be guaranteed to call from syscall context. Functions that operate on
+> files have different semantics.
+> 
+> > 
+> > This patch also introduces usage of CAP_MAC_ADMIN to allow access to the
+> > IMA policy via reduced capabilities. We would again later on use this
+> > capability to allow users to set file extended attributes for IMA appraisal
+> > support.
+> > 
+> > My tree with these patches is here:
+> > 
+> > git fetch https://github.com/stefanberger/linux-ima-namespaces v5.15+imans.v7.posted 
+> > 
+> > Regards,
+> >    Stefan
+> > 
+> > v7:
+> >  - Dropped 2 patches related to key queues; using &init_ima_ns for all calls
+> >    from functions related to key queues where calls need ima_namespace
+> >  - Moved ima_namespace to security/integrity/ima/ima.h
+> >  - Extended API descriptions with ns parameter where needed
+> >  - Using init_ima_ns in functions related to appraisal and xattrs
+> >  - SecurityFS: Using ima_ns_from_file() to get ns pointer 
+> >  - Reformatted to 80 columns per line
+> 
+> Since we're starting to be fairly along I would ask you to please write
+> detailed commit messages for the next revision.
+> 
+> I would also like to see all links for prior versions of this patchset
+> in the commit message since the discussion has been fairly extensive so
+> for this series it makes a lot of sense. So something like:
+> 
+> Link: https://lore.kernel.org/r/$MSGID (v1)
+> Link: https://lore.kernel.org/r/$MSGID (v2)
+> Link: https://lore.kernel.org/r/$MSGID (v3)
+> Link: https://lore.kernel.org/r/$MSGID (v4)
+> Link: https://lore.kernel.org/r/$MSGID (v5)
+> Link: https://lore.kernel.org/r/$MSGID (v6)
+> Link: https://lore.kernel.org/r/$MSGID (v7)
+> Signed-off-by: meh
+> Signed-off-by: mih
+> Signed-off-by: muh
+> 
+> I find that extremely pleasant in case we need to revisit things later.
+> (Technically you can get the same by searching lore via the final link
+> but I find it be pretty pleasing to just copy+paste directly from the
+> commit message to the discussion for the earlier patch.)
 
-Thanks, Joey, for the detailed explained.  I was agreeing with you that
-MOK/MOKx keys should only be loaded when secure boot is enabled.  A
-better way for me to have phrased the questions would have been, why
-are you making this change downstream and not upstream?
+So I looked through the series from a high-level view for once and I
+would like to change how it is currently structured.
 
-thanks,
+Currently, it looks a lot like you end up with a half-namespaced ima if
+you compile and run a kernel in the middle of this patch series. Not
+just is this asking for semantic chaos if we need to debug something it
+also makes bisection a giant pain later.
 
-Mimi
+In addition, the fact that you need a hack like
 
+> +struct ima_namespace {
+> +	int avoid_zero_size;
+
+in the first patch is another good sign that this should be restructured.
+
+Here's how I would prefer to see this done. I think we should organize
+this in three big chunks (bullet points are not meant to signify
+individual patches):
+
+1. namespace securityfs
+   This patch is thematically standalone and should move to the
+   beginning of the series.
+   I would strongly recommend to fold patch 9 and 10 into a single patch
+   and add a lengthy explanation. You should be able to recycle a lof of
+   stuff I wrote in earlier reviews.
+
+2. Introduce struct ima_namespace and pass it through to all callers:
+   - introduce struct ima_namespace
+   - move all the relevant things into this structure (this also avoids
+     the "avoid_zero_size" hack).
+   - define, setup, and expose init_ima_ns 
+   - introduce get_current_ns() and always have it return &init_ima_ns for now
+   - replace all accesses to global variables to go through &init_ima_ns
+   - add new infrastructure you'll need later on
+   Bonus is that you can extend all the functions that later need access
+   to a specific ima namespace to take a struct ima_namespace * argument
+   and pass down &init_ima_ns down (retrieved via get_current_ns()). This
+   will make the actual namespace patch very easy to follow.
+
+3. namespace ima
+   - add a new entry for struct ima_namespace to struct user_namespace
+   - add creation helpers, kmem cache etc.
+   - create files in securityfs per ns
+
+This way at all points in the series we have clearly defined semantics
+where ima namespacing is either fully working or fully not working and
+the switch is atomic in the patch(es) part of 3.
