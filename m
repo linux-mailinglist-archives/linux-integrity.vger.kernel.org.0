@@ -2,128 +2,121 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EECC447830E
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Dec 2021 03:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF39947883B
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Dec 2021 10:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbhLQCSU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 16 Dec 2021 21:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbhLQCSU (ORCPT
+        id S234633AbhLQJzW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 17 Dec 2021 04:55:22 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56542 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234631AbhLQJzW (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 16 Dec 2021 21:18:20 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE96C061574
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Dec 2021 18:18:19 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id l75-20020a25254e000000b005f763be2fecso1999641ybl.7
-        for <linux-integrity@vger.kernel.org>; Thu, 16 Dec 2021 18:18:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=pR+fjBVeHG+Dz5BWpaT9e03Wce0EIRy1MQ2NNyLJbHA=;
-        b=fbBiF4or7qS7Z6ZEnhelyPWq7ciS54XuEki/bsr1s3zu7JSoMHwX2dJMNwdRwKPcy+
-         D+cgumSnvyI6bJ3dOo12zLL+oNZP6OkPTLBRP4ruzO0mO93t2KhocL3ha4GX13CrKAOL
-         hHbELr2ac/wWSCywQYE6xkiEyb6ECrL6k6oS0OQ8BxtR9f0pryKfSo3O0F3rRggafAiP
-         2sSUsj7kO5+UJRokE4w8ydsWNn23hax4FCVMEcdc/tTr7iLsrq93DRX+FpMWnZOUD3tb
-         OoX8kVnQ+w8b1H7I5Y/MAlHu53y/6Nu3MHUZHtavnBxtpCVjsOXHjlDQAk/i/ARDBUJk
-         nUvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=pR+fjBVeHG+Dz5BWpaT9e03Wce0EIRy1MQ2NNyLJbHA=;
-        b=dzQarDDxQ0fo37njvw/mzBeGkKOQzBgrsqqHZb1y545ADAvGJ8JCFRNpz4RkV30Ad7
-         ASMKmkENfH+R0TJ4RwbXlqV80/xWw9h8HsJ2svFsgk5chR1uBh/ygq9WzMBiP57GkKkx
-         /hrPWbbIPG784HuzDxRKVUA+2mYzUF0K+rNY1Q4FrEJPxg/4Bg37G88Hj3zq+uKwR/OQ
-         XC7EZSK3Un5qUrbuJImVc5LHPxXBKfXxSHnOP4V9Tg2cCEgg36yg259pbWXWyswUe6af
-         KVRdnQ41Qy3R/j1UYp5ckuHXO5RD3UEixnwUueAOKMBI8IRfW3pjuWBfynnqQmUu1Hj+
-         VsuQ==
-X-Gm-Message-State: AOAM532CoE79oMKF4UcYCfuT/gFZ1L2hKUTc3vUJFjhj4iLd3gzLaFGz
-        B+J35amd6yZipcNj6EQ5IBaYOzyj4A==
-X-Google-Smtp-Source: ABdhPJyI65wYsFsZsazdtJWtk2ZwdrYbfZjCAODHe/2Qn4zJDVaFqUkU/WCE8Sq/+Dorh6R073GRNX5QZw==
-X-Received: from yaelt.nyc.corp.google.com ([2620:0:1003:415:7c73:1d86:25c1:77e5])
- (user=yaelt job=sendgmr) by 2002:a25:9849:: with SMTP id k9mr1414250ybo.728.1639707498968;
- Thu, 16 Dec 2021 18:18:18 -0800 (PST)
-Date:   Thu, 16 Dec 2021 21:17:26 -0500
-Message-Id: <20211217021726.2487455-1-yaelt@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH] syscalls/keyctl09: test encrypted keys.
-From:   Yael Tiomkin <yaelt@google.com>
-To:     ltp@lists.linux.it
-Cc:     zohar@linux.ibm.com, pvorel@suse.cz,
-        linux-integrity@vger.kernel.org, Yael Tiomkin <yaelt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 17 Dec 2021 04:55:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19AE062070;
+        Fri, 17 Dec 2021 09:55:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C25DCC36AE8;
+        Fri, 17 Dec 2021 09:55:16 +0000 (UTC)
+Date:   Fri, 17 Dec 2021 10:55:13 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v7 01/14] ima: Add IMA namespace support
+Message-ID: <20211217095513.bzlkwboq3y6yqeyx@wittgenstein>
+References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
+ <20211216054323.1707384-2-stefanb@linux.vnet.ibm.com>
+ <20211216140806.hi4jxw54yvbu5cox@wittgenstein>
+ <f408c42b74e28d90fce262abd50fc8a3079c0fa3.camel@HansenPartnership.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f408c42b74e28d90fce262abd50fc8a3079c0fa3.camel@HansenPartnership.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Test that encrypted keys can be instantiated using
-both user-provided decrypted data
-(https://lore.kernel.org/linux-integrity/20211213192030.125091-1-yaelt@google.com/),
-or kernel-generated numbers.
+On Thu, Dec 16, 2021 at 04:52:47PM -0500, James Bottomley wrote:
+> On Thu, 2021-12-16 at 15:08 +0100, Christian Brauner wrote:
+> > On Thu, Dec 16, 2021 at 12:43:10AM -0500, Stefan Berger wrote:
+> [...]
+> > > diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+> > > index 6b2e3ca7ee99..6fa01323aac9 100644
+> > > --- a/kernel/user_namespace.c
+> > > +++ b/kernel/user_namespace.c
+> > > @@ -20,6 +20,7 @@
+> > >  #include <linux/fs_struct.h>
+> > >  #include <linux/bsearch.h>
+> > >  #include <linux/sort.h>
+> > > +#include <linux/ima.h>
+> > >  
+> > >  static struct kmem_cache *user_ns_cachep __read_mostly;
+> > >  static DEFINE_MUTEX(userns_state_mutex);
+> > > @@ -141,8 +142,14 @@ int create_user_ns(struct cred *new)
+> > >  	if (!setup_userns_sysctls(ns))
+> > >  		goto fail_keyring;
+> > >  
+> > > +	ret = create_ima_ns(ns);
+> > 
+> > Instead of greedily allocating a new ima namespace for each new user
+> > namespace creation and wasting memory that is likely wasted since
+> > most containers won't use ima (for a long time at least) have you
+> > considered lazily allocating it like I suggested in one of my first
+> > reviews?
+> > 
+> > So under the assumption that the only way for a container to get its
+> > own ima policy it needs to have mounted a new securityfs instance you
+> > can move the ima namespace allocation into
+> > fill_super/ima_fs_ns_init():
+> 
+> The current patch set has the ima namespace born with an empty policy,
+> meaning it can never do anything until a new policy is inserted via a
+> write to the securityfs, and therefore the IMA namespace could be
+> lazily allocated.  However, that's not quite how the initial IMA
+> namespace behaves because a policy can be passed in on the kernel
+> command line (or built into the kernel).  If the ima NS were born with
+> a default policy (say taken from the initial IMA default policy, or
+> simply inherited from the parent at creation time) then we wouldn't be
+> able to do lazy allocation.  Before we tie ourselves to never being
+> able to have a default policy for an IMA namespace, perhaps we should
+> discuss if this is the correct behaviour we want to nail into the
+> system.
 
-Signed-off-by: Yael Tiomkin <yaelt@google.com>
----
- testcases/kernel/syscalls/keyctl/keyctl09.c | 50 +++++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 testcases/kernel/syscalls/keyctl/keyctl09.c
+If ima in the future decides to do policy inheritance it can simply
+switch from delayed allocation at mount time to allocation at userns
+creation time. So we can proceed with lazy allocation without much
+problem for now.
 
-diff --git a/testcases/kernel/syscalls/keyctl/keyctl09.c b/testcases/kernel/syscalls/keyctl/keyctl09.c
-new file mode 100644
-index 000000000..4589ef367
---- /dev/null
-+++ b/testcases/kernel/syscalls/keyctl/keyctl09.c
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (c) 2021 Google, Inc.
-+ */
-+
-+/*
-+ * Description: This tests that encrypted keys can be instantiated using
-+ * user-provided decrypted data (plaintext), and separately, using
-+ * kernel-generated key material.
-+ */
-+
-+#include <errno.h>
-+#include <stdint.h>
-+
-+#include "tst_test.h"
-+#include "lapi/keyctl.h"
-+
-+static void do_test(void)
-+{
-+	key_serial_t masterkey;
-+	key_serial_t encryptedkey1;
-+	key_serial_t encryptedkey2;
-+	char buffer[128];
-+
-+	masterkey = add_key("user", "user:masterkey", "foo", 3, KEY_SPEC_PROCESS_KEYRING);
-+	if (masterkey == -1)
-+		tst_brk(TBROK | TERRNO, "Failed to add user key");
-+
-+	encryptedkey1 = add_key("encrypted", "ltptestkey1", "new enc32 user:masterkey 32 plaintext12345678901234567890123", 60, KEY_SPEC_PROCESS_KEYRING);
-+	if (encryptedkey1 == -1)
-+		tst_brk(TBROK | TERRNO, "Failed to instantiate encrypted key using payload decrypted data");
-+
-+	TEST(keyctl(KEYCTL_READ, encryptedkey1, buffer, sizeof(buffer)));
-+	if (TST_RET < 0)
-+		tst_brk(TBROK | TTERRNO, "KEYCTL_READ failed for encryptedkey1");
-+
-+	encryptedkey2 = add_key("encrypted", "ltptestkey2", "new enc32 user:masterkey 32", 27, KEY_SPEC_PROCESS_KEYRING);
-+	if (encryptedkey2 == -1)
-+		tst_brk(TBROK | TERRNO, "Failed to instantiate encrypted key using kernel-generated key material");
-+
-+	TEST(keyctl(KEYCTL_READ, encryptedkey2, buffer, sizeof(buffer)));
-+	if (TST_RET < 0)
-+		tst_brk(TBROK | TTERRNO, "KEYCTL_READ failed for encryptedkey2");
-+
-+	tst_res(TPASS, "Encrypted keys were successfully instantiated and read");
-+}
-+
-+static struct tst_test test = {
-+	.test_all = do_test,
-+};
--- 
-2.34.1.173.g76aa8bc2d0-goog
+In addition what is happening now is in effect policy inheritance, i.e.
+each container is bound by the parent ima_ns policy until it decides to
+setup its own.
 
+Aside from that the container manager can and should be responsible for
+the default ima policy to apply to containers. The default ima policy
+can be passed through the spec file, configuration file, or - for the
+hardcore people - compiled into the container manager itself. This is
+not different from LSMs (e.g. AppArmor, seccomp) where the policy for
+each container is generated from a fixed template that was built into
+the container manager binary and then written via
+/proc/<pid>/attr/current during container setup.
+
+During container setup the process that ultimately calls exec to execute
+the payload does all of the required setup work. The setup process
+should not be automatically bound by a default policy that gets created
+when the userns is created. That will just cause problems during
+container setup.
+Until the setup process has decided that all preliminary setup steps are
+done only the ancestor policy should restrict it.
+This is exactly the same for all LSMs and seccomp. They all are usually
+setup closely before calling exec. I see no reason for ima to diverge
+from this model.
