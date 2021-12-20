@@ -2,106 +2,101 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C441747AF15
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Dec 2021 16:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 391F847B4F5
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Dec 2021 22:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237972AbhLTPI4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Dec 2021 10:08:56 -0500
-Received: from mout.gmx.net ([212.227.17.22]:49909 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239460AbhLTPHH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Dec 2021 10:07:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1640012819;
-        bh=ExqcfdSeorMvGLnSOWloYS8Zi49Z7vZRjhyfXFGBUvQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=ki6ZglJkBXGNDhH1DL2MepnpTq1ZldsmvUhJvaWo4tqABiQhBCYT7V96Xy1gwhLnE
-         lS2fIdP95sff+ES3r/Nn13QVihXe7AdOr/S0uM2mMZls2ql5Weok6Jgq3Lf58j9ki2
-         xk1WZmxMs2isE9foxsMP0CwSkg4VIxLdgPDTs2vo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([46.223.119.124]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MY68T-1myZiw1Xzx-00YRJE; Mon, 20
- Dec 2021 16:06:59 +0100
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>, stable@vger.kernel.org
-Subject: [PATCH v2] tpm: fix potential NULL pointer access in tpm_del_char_device
-Date:   Mon, 20 Dec 2021 16:06:35 +0100
-Message-Id: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.34.1
+        id S229748AbhLTVRe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Dec 2021 16:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229695AbhLTVRd (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 20 Dec 2021 16:17:33 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975F3C061574;
+        Mon, 20 Dec 2021 13:17:33 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id w24so9034513ply.12;
+        Mon, 20 Dec 2021 13:17:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=psuOqlsJGs9pG6gMEgVrjbWLFo36C86JFOb7U8gCWs8=;
+        b=G26WWF2RtTLN99ou1dc9FDdsz49LsFtA8TwS/pIB04TvsrXNYMJ9G8mmAfxpyB9HeN
+         ddTbMDxSMwI/Niz+Dl3FRsEGtyRpRWlr+1OFBJAcFcZNhtq2tzS1TM1IMYaAlnw8QVe8
+         82vbib1bvTDoeTxUJBHlE4RjM77GT9afAud5Brrfjezr+QSc7CsJFMNFg7qhsWXKxwHv
+         xAmEiYRBxHCvtxQ3QPpA2u130z2mp2rQByvBDI1Wb6bJW2dxqzzgb+KJYyf8Lw+XJTKU
+         R4VMvXf8v8x0WVzV6akSqCydNW4zEV5PO+vJ6mB9tnsTAnWXL/BUokG0Bsi5dZMTGL6j
+         27Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=psuOqlsJGs9pG6gMEgVrjbWLFo36C86JFOb7U8gCWs8=;
+        b=iKaekvl89bGk/ipxOHJYAR1aiBYWASr5HugjJ4QPJUrJhUbzEAwRkGga3A2fY16VQ4
+         PTNlj7Kn/HXSDtJXId9Ptsh/67dioCynzCkznXNPeDmoKG4tiX6zrh8IfOliycFiE49T
+         PweJaHV+vOTLWdDR2vsrhEEWUQYhIAao9838G30XDmV49kBPL106DoNdRK7ShvYVH/Aw
+         Oie1aCGd8BXgeTMSRRqHYlch6REPMnHfy+n6eZSxtdOrOYAcOptASgfgS8ddJrdnpm/R
+         moXI0NE43vBenl9S6HdZBCvC0x+a2KOXySQ0ev+PWfx0peqqLhcc6p40Hu0AtucD6dWm
+         oaTw==
+X-Gm-Message-State: AOAM53094FaO5ni178uKHI1sM2ZdZIDn6BzCULudngnql72NuY38vQPF
+        UVMVV40HDIUn9E3/9iz9NHNq/ED61gBIMA==
+X-Google-Smtp-Source: ABdhPJyZKdrn0LUAun5zZXzDkS/CWNW+U0/A3AX8Vw9RKBlJJ56jwPPpoZ2kusokGEQs13pS9iHOmQ==
+X-Received: by 2002:a17:902:eb44:b0:148:b1ed:1a33 with SMTP id i4-20020a170902eb4400b00148b1ed1a33mr21079pli.149.1640035053118;
+        Mon, 20 Dec 2021 13:17:33 -0800 (PST)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id ot6sm301975pjb.32.2021.12.20.13.17.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 13:17:32 -0800 (PST)
+From:   Tadeusz Struk <tstruk@gmail.com>
+To:     jarkko@kernel.org
+Cc:     Tadeusz Struk <tstruk@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] tpm: Fix error handling in async work
+Date:   Mon, 20 Dec 2021 13:16:59 -0800
+Message-Id: <20211220211700.5772-1-tstruk@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:VSpIHCjSucsOxWy7hG0cnMrBZMjWeQPXOCuFT7kbNWhNYgw+i0X
- +CaUAC6eG6MOYpZO2RTbi6VG04Qs0myIADbBdMpcyIVMp7DyhCg/lkKgWv/Y6kdCbNcJRNy
- 6GXdiutVvQapWqR47twaTVx6tudTQfhH6+3FQ7rLmrNlkHwF6FxyRCz9HtGdJX8OiMQ+d1/
- 1FHXhg8EOqzfZiJR3TCng==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TctFUmfyLJY=:eLT2w9B4HdIdxDpih17snI
- Kw/327TQhPfCfUDPlYBo/sNKjCXvpBrTeU7Hf/qFy7zqBloKfsIOmdciwkjbODARVvXwoFNd8
- T64ICHmyPYJuBWwohgZd0BEZt/gnVQxbESWZtTYzYD2rsaWKtUtZFYDBWVMFyGzllbhOTkeYE
- JXZq0JB7OU2BnQT5BZPHhnXX/8LbPesny6KqSFXheld463Wc5Us8HRDjlvsfwqF9D8iU8f/Am
- y8OvKdEGW6xqgR2pJJ2lwnYZvCxxCqLiaVm6Q04k1Z4gUFwqY2sPoSj67Z0q8i1IKHUumuZhw
- 2bJ5sdbr3S67WGxblzo7KMen85AuH1tCuSFfSS/lxLWPSBkqYla1vpSBnux82ifU94mSuEbsD
- RWc1AdkI0QO523OcyMTFiEkoHIqEpJpox4mL5okmPDRi8isKp2PPYG01ZyWXUeqEcjefI0Tob
- 7r8h3vZ96Q7e0a8B/fAPU8MWwtnF2+ZcBo/NY7mLoobioizud9QigSwhboRdt4B4nDyqJoOLD
- rE3YwNVNrUGTEI9jH1ylJllYplhhSHX7lH89XhoVCyer+ArebEUSgm0YIS6B0OYwc9WvLu0Pf
- hOTd/0UgapWrniar/FRbxtsJ66p+DgATq/peUMo6JB4pfnjust4IF73N0KSWJBf8XNxBXZZuf
- aoBFtmFSCnxQqi81pYtJrIRn6BrUe8Xl1NU+t7ls21BkLXS1d7XJpkkjF6wsjnuPxT4i22V08
- UmQVywGtvvA6xbPdNTmeSHmpzB6uBINzHUoQfp0XontgFpZItmgy1My4pwoWqwB9iIKiByWa3
- XWfvvrdbajupHAQv5fJir2VuR5uEtyTqH1hprpTPE1rjA1vmQQI3AhxN4GJPtNdrIVC6xE7v6
- NxckYr3pRAFNJw9wi2WNI6hu3sCvmKrjRVsSgd+m2GkhMvS5Eh9XHy4rsHzcCDw1exAPF18i8
- xDoGeASVeOGWN0d3lsAMuu9RBhnIF7NmMS86Q8aL/m9Zm/YCsNkGRxeNRLhNIO7qP3blQ6Rjb
- 2Mo105fdkYslT6nUdhU36CPg5zZvXPEFK+5q7muIABnwoxPbiHhNI6fz0hy+IR2i1euZT/iNT
- fbZkdEdrCceDTo=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-U29tZSBTUEkgY29udHJvbGxlciBkcml2ZXJzIHVucmVnaXN0ZXIgdGhlIGNvbnRyb2xsZXIgaW4g
-dGhlIHNodXRkb3duCmhhbmRsZXIgKGUuZy4gQkNNMjgzNSkuIElmIHN1Y2ggYSBjb250cm9sbGVy
-IGlzIHVzZWQgd2l0aCBhIFRQTSAyIHNsYXZlCmNoaXAtPm9wcyBtYXkgYmUgYWNjZXNzZWQgd2hl
-biBpdCBpcyBhbHJlYWR5IE5VTEw6CgpBdCBzeXN0ZW0gc2h1dGRvd24gdGhlIHByZS1zaHV0ZG93
-biBoYW5kbGVyIHRwbV9jbGFzc19zaHV0ZG93bigpIHNodXRzIGRvd24KVFBNIDIgYW5kIHNldHMg
-Y2hpcC0+b3BzIHRvIE5VTEwuIFRoZW4gYXQgU1BJIGNvbnRyb2xsZXIgdW5yZWdpc3RyYXRpb24K
-dHBtX3Rpc19zcGlfcmVtb3ZlKCkgaXMgY2FsbGVkIGFuZCBldmVudHVhbGx5IGNhbGxzIHRwbV9k
-ZWxfY2hhcl9kZXZpY2UoKQp3aGljaCB0cmllcyB0byBzaHV0IGRvd24gVFBNIDIgYWdhaW4uIFRo
-ZXJlYnkgaXQgYWNjZXNzZXMgY2hpcC0+b3BzIGFnYWluOgoodHBtX2RlbF9jaGFyX2RldmljZSBj
-YWxscyB0cG1fY2hpcF9zdGFydCB3aGljaCBjYWxscyB0cG1fY2xrX2VuYWJsZSB3aGljaApjYWxs
-cyBjaGlwLT5vcHMtPmNsa19lbmFibGUpLgoKQXZvaWQgdGhlIE5VTEwgcG9pbnRlciBhY2Nlc3Mg
-YnkgdGVzdGluZyBpZiBjaGlwLT5vcHMgaXMgdmFsaWQgYW5kIHNraXBwaW5nCnRoZSBUUE0gMiBz
-aHV0ZG93biBwcm9jZWR1cmUgaW4gY2FzZSBpdCBpcyBOVUxMLgoKRml4ZXM6IGRjYmVhYjE5NDY0
-NTQgKCJ0cG06IGZpeCBjcmFzaCBpbiB0cG1fdGlzIGRlaW5pdGlhbGl6YXRpb24iKQpDYzogc3Rh
-YmxlQHZnZXIua2VybmVsLm9yZwpTaWduZWQtb2ZmLWJ5OiBMaW5vIFNhbmZpbGlwcG8gPExpbm9T
-YW5maWxpcHBvQGdteC5kZT4KLS0tCgpDaGFuZ2VzIHRvIHYyOgotIHJlcGhyYXNlZCB0aGUgY29t
-bWl0IG1lc3NhZ2UgdG8gY2xhcmlmeSB0aGUgY2lyY3Vtc3RhbmNlcyB1bmRlciB3aGljaAogIHRo
-aXMgYnVnIHRyaWdnZXJzIChhcyByZXF1ZXN0ZWQgYnkgSmFya2tvKQoKCkkgd2FzIGFibGUgdG8g
-cmVwcm9kdWNlIHRoaXMgaXNzdWUgd2l0aCBhIFNMQiA5NjcwIFRQTSBjaGlwIGNvbnRyb2xsZWQg
-YnkgCmEgQkNNMjgzNSBTUEkgY29udHJvbGxlci4gCgpUaGUgYXBwcm9hY2ggdG8gZml4IHRoaXMg
-aXNzdWUgaW4gdGhlIEJDTTI4MzUgZHJpdmVyIHdhcyByZWplY3RlZCBhZnRlciBhCmRpc2N1c3Np
-b24gb24gdGhlIG1haWxpbmcgbGlzdDoKCmh0dHBzOi8vbWFyYy5pbmZvLz9sPWxpbnV4LWludGVn
-cml0eSZtPTE2MzI4NTkwNjcyNTM2NyZ3PTIKClRoZSByZWFzb24gZm9yIHRoZSByZWplY3Rpb24g
-d2FzIHRoZSByZWFsaXphdGlvbiwgdGhhdCB0aGlzIGlzc3VlIHNob3VsZCByYXRoZXIKYmUgZml4
-ZWQgaW4gdGhlIFRQTSBjb2RlOgoKaHR0cHM6Ly9tYXJjLmluZm8vP2w9bGludXgtc3BpJm09MTYz
-MzExMDg3NDIzMjcxJnc9MgoKU28gdGhpcyBpcyB0aGUgcmV3b3JrZWQgdmVyc2lvbiBvZiBhIHBh
-dGNoIHRoYXQgaXMgc3VwcG9zZWQgdG8gZG8gdGhhdC4KCgogZHJpdmVycy9jaGFyL3RwbS90cG0t
-Y2hpcC5jIHwgMTYgKysrKysrKysrKystLS0tLQogMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlv
-bnMoKyksIDUgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jaGFyL3RwbS90cG0t
-Y2hpcC5jIGIvZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jCmluZGV4IGRkYWVjZWI3ZTEwOS4u
-Nzk2MGRhNDkwZTcyIDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbS1jaGlwLmMKKysr
-IGIvZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jCkBAIC00NzQsMTMgKzQ3NCwxOSBAQCBzdGF0
-aWMgdm9pZCB0cG1fZGVsX2NoYXJfZGV2aWNlKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAogCS8q
-IE1ha2UgdGhlIGRyaXZlciB1bmNhbGxhYmxlLiAqLwogCWRvd25fd3JpdGUoJmNoaXAtPm9wc19z
-ZW0pOwotCWlmIChjaGlwLT5mbGFncyAmIFRQTV9DSElQX0ZMQUdfVFBNMikgewotCQlpZiAoIXRw
-bV9jaGlwX3N0YXJ0KGNoaXApKSB7Ci0JCQl0cG0yX3NodXRkb3duKGNoaXAsIFRQTTJfU1VfQ0xF
-QVIpOwotCQkJdHBtX2NoaXBfc3RvcChjaGlwKTsKKwkvKiBDaGVjayBpZiBjaGlwLT5vcHMgaXMg
-c3RpbGwgdmFsaWQ6IEluIGNhc2UgdGhhdCB0aGUgY29udHJvbGxlcgorCSAqIGRyaXZlcnMgc2h1
-dGRvd24gaGFuZGxlciB1bnJlZ2lzdGVycyB0aGUgY29udHJvbGxlciBpbiBpdHMKKwkgKiBzaHV0
-ZG93biBoYW5kbGVyIHdlIGFyZSBjYWxsZWQgdHdpY2UgYW5kIGNoaXAtPm9wcyB0byBOVUxMLgor
-CSAqLworCWlmIChjaGlwLT5vcHMpIHsKKwkJaWYgKGNoaXAtPmZsYWdzICYgVFBNX0NISVBfRkxB
-R19UUE0yKSB7CisJCQlpZiAoIXRwbV9jaGlwX3N0YXJ0KGNoaXApKSB7CisJCQkJdHBtMl9zaHV0
-ZG93bihjaGlwLCBUUE0yX1NVX0NMRUFSKTsKKwkJCQl0cG1fY2hpcF9zdG9wKGNoaXApOworCQkJ
-fQogCQl9CisJCWNoaXAtPm9wcyA9IE5VTEw7CiAJfQotCWNoaXAtPm9wcyA9IE5VTEw7CiAJdXBf
-d3JpdGUoJmNoaXAtPm9wc19zZW0pOwogfQogCgpiYXNlLWNvbW1pdDogYTc5MDRhNTM4OTMzYzUy
-NTA5NmNhMmNjZGUxZTYwZDBlZTYyYzA4ZQotLSAKMi4zNC4xCgo=
+When an invalid (non exitsinting) handle is used in a tpm command,
+that uses the resource manager interface (/dev/tpmrm0) the resource
+manager tries to load it from its internal cache, but fails and
+returns an -EINVAL error to the caller. The existing async handler
+doesn't handle these error cases currently and the condition in the
+poll handler never returns mask with EPOLLIN set causing the userspace
+code to get stack. Make sure that error conditions also contribute
+to the poll mask so that a correct error code could passed back
+to the caller.
+
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: <linux-integrity@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+Fixes: 9e1b74a63f77 ("tpm: add support for nonblocking operation")
+Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
+---
+ drivers/char/tpm/tpm-dev-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index c08cbb306636..fe2679f84cb6 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -69,7 +69,7 @@ static void tpm_dev_async_work(struct work_struct *work)
+ 	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
+ 			       sizeof(priv->data_buffer));
+ 	tpm_put_ops(priv->chip);
+-	if (ret > 0) {
++	if (ret != 0) {
+ 		priv->response_length = ret;
+ 		mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
+ 	}
+-- 
+2.30.2
+
