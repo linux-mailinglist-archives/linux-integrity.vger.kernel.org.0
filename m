@@ -2,133 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C8447A43E
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Dec 2021 06:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C441747AF15
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Dec 2021 16:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbhLTFRj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 20 Dec 2021 00:17:39 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:28210 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229437AbhLTFRi (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 20 Dec 2021 00:17:38 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BK4gx5q023741;
-        Mon, 20 Dec 2021 05:17:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=+CYJqSqiYfNAP3QMr+5CRH+D4WzJnM8u+I9ZOmg7xrQ=;
- b=KIo2Mv1OcYw/IY1dGKcxe32JS07iOQcUVBRFqLM4waum4l6iaL/AUjj+6ERj2QxLdGa/
- 6zk9K7ucGXZB4dc6WDcoh6xWOFkAILTPgEQcPhP233XUxYk2pEHKOOSm1ycFNHX/4tRh
- q8AV2cYLg0KQIb6YQZi13yH2ymM6LCIamYx8jCh5UXSI+tQxGQQeTZ4MHtOH599nffxh
- 8R4KbV6b8J3pWxc9+gWotBduvpUqixLO3Q7+tWbnytPZeSqlKUnGp5xEsR3iGTgee7mU
- qVn+ZBu0NWZg8VMQDPzOdeNAViuZ9DnwGCWrHik4mJ3uEg1ETCyGnX9NjLfg/YavNTok Cg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d1891075p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 05:17:23 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BK5F9GY025375;
-        Mon, 20 Dec 2021 05:17:23 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d1891075d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 05:17:23 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BK4di1P009171;
-        Mon, 20 Dec 2021 05:17:21 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 3d17990cv6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Dec 2021 05:17:21 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BK5HHZ732833868
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Dec 2021 05:17:17 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4688EAE04D;
-        Mon, 20 Dec 2021 05:17:17 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F3E08AE045;
-        Mon, 20 Dec 2021 05:17:14 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.79.190.221])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Dec 2021 05:17:14 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH] tpm: Fix kexec crash due to access to ops NULL pointer
- (powerpc)
-From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
-In-Reply-To: <20211212012804.1555661-1-stefanb@linux.ibm.com>
-Date:   Mon, 20 Dec 2021 10:47:13 +0530
-Cc:     jarkko@kernel.org, peterhuewe@gmx.de,
-        linux-integrity@vger.kernel.org, Korrapati.Likhitha@ibm.com,
-        pavrampu@in.ibm.com, linux-kernel@vger.kernel.org, jgg@ziepe.ca,
-        linux-security-module@vger.kernel.org, gcwilson@us.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B816AE7F-E224-4203-9B21-99310D49040D@linux.vnet.ibm.com>
-References: <20211212012804.1555661-1-stefanb@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: T48F18qsbpGXA1jXdlhi-RC5TxT0JTH3
-X-Proofpoint-ORIG-GUID: O6mN2UqEGCbQxCBoBu8e3G5WIxPmM_oM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-20_02,2021-12-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 priorityscore=1501 mlxscore=0 phishscore=0 spamscore=0
- bulkscore=0 mlxlogscore=999 clxscore=1011 malwarescore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112200028
+        id S237972AbhLTPI4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Dec 2021 10:08:56 -0500
+Received: from mout.gmx.net ([212.227.17.22]:49909 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239460AbhLTPHH (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 20 Dec 2021 10:07:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1640012819;
+        bh=ExqcfdSeorMvGLnSOWloYS8Zi49Z7vZRjhyfXFGBUvQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=ki6ZglJkBXGNDhH1DL2MepnpTq1ZldsmvUhJvaWo4tqABiQhBCYT7V96Xy1gwhLnE
+         lS2fIdP95sff+ES3r/Nn13QVihXe7AdOr/S0uM2mMZls2ql5Weok6Jgq3Lf58j9ki2
+         xk1WZmxMs2isE9foxsMP0CwSkg4VIxLdgPDTs2vo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Venus.fritz.box ([46.223.119.124]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MY68T-1myZiw1Xzx-00YRJE; Mon, 20
+ Dec 2021 16:06:59 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>, stable@vger.kernel.org
+Subject: [PATCH v2] tpm: fix potential NULL pointer access in tpm_del_char_device
+Date:   Mon, 20 Dec 2021 16:06:35 +0100
+Message-Id: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:VSpIHCjSucsOxWy7hG0cnMrBZMjWeQPXOCuFT7kbNWhNYgw+i0X
+ +CaUAC6eG6MOYpZO2RTbi6VG04Qs0myIADbBdMpcyIVMp7DyhCg/lkKgWv/Y6kdCbNcJRNy
+ 6GXdiutVvQapWqR47twaTVx6tudTQfhH6+3FQ7rLmrNlkHwF6FxyRCz9HtGdJX8OiMQ+d1/
+ 1FHXhg8EOqzfZiJR3TCng==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TctFUmfyLJY=:eLT2w9B4HdIdxDpih17snI
+ Kw/327TQhPfCfUDPlYBo/sNKjCXvpBrTeU7Hf/qFy7zqBloKfsIOmdciwkjbODARVvXwoFNd8
+ T64ICHmyPYJuBWwohgZd0BEZt/gnVQxbESWZtTYzYD2rsaWKtUtZFYDBWVMFyGzllbhOTkeYE
+ JXZq0JB7OU2BnQT5BZPHhnXX/8LbPesny6KqSFXheld463Wc5Us8HRDjlvsfwqF9D8iU8f/Am
+ y8OvKdEGW6xqgR2pJJ2lwnYZvCxxCqLiaVm6Q04k1Z4gUFwqY2sPoSj67Z0q8i1IKHUumuZhw
+ 2bJ5sdbr3S67WGxblzo7KMen85AuH1tCuSFfSS/lxLWPSBkqYla1vpSBnux82ifU94mSuEbsD
+ RWc1AdkI0QO523OcyMTFiEkoHIqEpJpox4mL5okmPDRi8isKp2PPYG01ZyWXUeqEcjefI0Tob
+ 7r8h3vZ96Q7e0a8B/fAPU8MWwtnF2+ZcBo/NY7mLoobioizud9QigSwhboRdt4B4nDyqJoOLD
+ rE3YwNVNrUGTEI9jH1ylJllYplhhSHX7lH89XhoVCyer+ArebEUSgm0YIS6B0OYwc9WvLu0Pf
+ hOTd/0UgapWrniar/FRbxtsJ66p+DgATq/peUMo6JB4pfnjust4IF73N0KSWJBf8XNxBXZZuf
+ aoBFtmFSCnxQqi81pYtJrIRn6BrUe8Xl1NU+t7ls21BkLXS1d7XJpkkjF6wsjnuPxT4i22V08
+ UmQVywGtvvA6xbPdNTmeSHmpzB6uBINzHUoQfp0XontgFpZItmgy1My4pwoWqwB9iIKiByWa3
+ XWfvvrdbajupHAQv5fJir2VuR5uEtyTqH1hprpTPE1rjA1vmQQI3AhxN4GJPtNdrIVC6xE7v6
+ NxckYr3pRAFNJw9wi2WNI6hu3sCvmKrjRVsSgd+m2GkhMvS5Eh9XHy4rsHzcCDw1exAPF18i8
+ xDoGeASVeOGWN0d3lsAMuu9RBhnIF7NmMS86Q8aL/m9Zm/YCsNkGRxeNRLhNIO7qP3blQ6Rjb
+ 2Mo105fdkYslT6nUdhU36CPg5zZvXPEFK+5q7muIABnwoxPbiHhNI6fz0hy+IR2i1euZT/iNT
+ fbZkdEdrCceDTo=
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-
-> On 12-Dec-2021, at 6:58 AM, Stefan Berger <stefanb@linux.ibm.com> =
-wrote:
->=20
-> Fix the following crash on kexec by checking chip->ops for a NULL =
-pointer
-> in tpm_chip_start() and returning an error code if this is the case.
->=20
-> BUG: Kernel NULL pointer dereference on read at 0x00000060
-> Faulting instruction address: 0xc00000000099a06c
-> Oops: Kernel access of bad area, sig: 11 [#1]
-> ...
-> NIP [c00000000099a06c] tpm_chip_start+0x2c/0x140
-> LR [c00000000099a808] tpm_chip_unregister+0x108/0x170
-> Call Trace:
-> [c0000000188bfa00] [c000000002b03930] fw_devlink_strict+0x0/0x8 =
-(unreliable)
-> [c0000000188bfa30] [c00000000099a808] tpm_chip_unregister+0x108/0x170
-> [c0000000188bfa70] [c0000000009a3874] tpm_ibmvtpm_remove+0x34/0x130
-> [c0000000188bfae0] [c000000000110dbc] vio_bus_remove+0x5c/0xb0
-> [c0000000188bfb20] [c0000000009bc154] device_shutdown+0x1d4/0x3a8
-> [c0000000188bfbc0] [c000000000196e14] kernel_restart_prepare+0x54/0x70
->=20
-> The referenced patch below introduced a function to shut down the VIO =
-bus.
-> The bus shutdown now calls tpm_del_char_device (via =
-tpm_chip_unregister)
-> after a call to tpm_class_shutdown, which already set chip->ops to =
-NULL.
-> The crash occurrs when tpm_del_char_device calls tpm_chip_start with =
-the
-> chip->ops NULL pointer.
->=20
-> Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver =
-and vio_bus")
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
-
-With the patch applied, kexec with vTPM works as expected.
-
-Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-
-Thanks
--Sachin=
+U29tZSBTUEkgY29udHJvbGxlciBkcml2ZXJzIHVucmVnaXN0ZXIgdGhlIGNvbnRyb2xsZXIgaW4g
+dGhlIHNodXRkb3duCmhhbmRsZXIgKGUuZy4gQkNNMjgzNSkuIElmIHN1Y2ggYSBjb250cm9sbGVy
+IGlzIHVzZWQgd2l0aCBhIFRQTSAyIHNsYXZlCmNoaXAtPm9wcyBtYXkgYmUgYWNjZXNzZWQgd2hl
+biBpdCBpcyBhbHJlYWR5IE5VTEw6CgpBdCBzeXN0ZW0gc2h1dGRvd24gdGhlIHByZS1zaHV0ZG93
+biBoYW5kbGVyIHRwbV9jbGFzc19zaHV0ZG93bigpIHNodXRzIGRvd24KVFBNIDIgYW5kIHNldHMg
+Y2hpcC0+b3BzIHRvIE5VTEwuIFRoZW4gYXQgU1BJIGNvbnRyb2xsZXIgdW5yZWdpc3RyYXRpb24K
+dHBtX3Rpc19zcGlfcmVtb3ZlKCkgaXMgY2FsbGVkIGFuZCBldmVudHVhbGx5IGNhbGxzIHRwbV9k
+ZWxfY2hhcl9kZXZpY2UoKQp3aGljaCB0cmllcyB0byBzaHV0IGRvd24gVFBNIDIgYWdhaW4uIFRo
+ZXJlYnkgaXQgYWNjZXNzZXMgY2hpcC0+b3BzIGFnYWluOgoodHBtX2RlbF9jaGFyX2RldmljZSBj
+YWxscyB0cG1fY2hpcF9zdGFydCB3aGljaCBjYWxscyB0cG1fY2xrX2VuYWJsZSB3aGljaApjYWxs
+cyBjaGlwLT5vcHMtPmNsa19lbmFibGUpLgoKQXZvaWQgdGhlIE5VTEwgcG9pbnRlciBhY2Nlc3Mg
+YnkgdGVzdGluZyBpZiBjaGlwLT5vcHMgaXMgdmFsaWQgYW5kIHNraXBwaW5nCnRoZSBUUE0gMiBz
+aHV0ZG93biBwcm9jZWR1cmUgaW4gY2FzZSBpdCBpcyBOVUxMLgoKRml4ZXM6IGRjYmVhYjE5NDY0
+NTQgKCJ0cG06IGZpeCBjcmFzaCBpbiB0cG1fdGlzIGRlaW5pdGlhbGl6YXRpb24iKQpDYzogc3Rh
+YmxlQHZnZXIua2VybmVsLm9yZwpTaWduZWQtb2ZmLWJ5OiBMaW5vIFNhbmZpbGlwcG8gPExpbm9T
+YW5maWxpcHBvQGdteC5kZT4KLS0tCgpDaGFuZ2VzIHRvIHYyOgotIHJlcGhyYXNlZCB0aGUgY29t
+bWl0IG1lc3NhZ2UgdG8gY2xhcmlmeSB0aGUgY2lyY3Vtc3RhbmNlcyB1bmRlciB3aGljaAogIHRo
+aXMgYnVnIHRyaWdnZXJzIChhcyByZXF1ZXN0ZWQgYnkgSmFya2tvKQoKCkkgd2FzIGFibGUgdG8g
+cmVwcm9kdWNlIHRoaXMgaXNzdWUgd2l0aCBhIFNMQiA5NjcwIFRQTSBjaGlwIGNvbnRyb2xsZWQg
+YnkgCmEgQkNNMjgzNSBTUEkgY29udHJvbGxlci4gCgpUaGUgYXBwcm9hY2ggdG8gZml4IHRoaXMg
+aXNzdWUgaW4gdGhlIEJDTTI4MzUgZHJpdmVyIHdhcyByZWplY3RlZCBhZnRlciBhCmRpc2N1c3Np
+b24gb24gdGhlIG1haWxpbmcgbGlzdDoKCmh0dHBzOi8vbWFyYy5pbmZvLz9sPWxpbnV4LWludGVn
+cml0eSZtPTE2MzI4NTkwNjcyNTM2NyZ3PTIKClRoZSByZWFzb24gZm9yIHRoZSByZWplY3Rpb24g
+d2FzIHRoZSByZWFsaXphdGlvbiwgdGhhdCB0aGlzIGlzc3VlIHNob3VsZCByYXRoZXIKYmUgZml4
+ZWQgaW4gdGhlIFRQTSBjb2RlOgoKaHR0cHM6Ly9tYXJjLmluZm8vP2w9bGludXgtc3BpJm09MTYz
+MzExMDg3NDIzMjcxJnc9MgoKU28gdGhpcyBpcyB0aGUgcmV3b3JrZWQgdmVyc2lvbiBvZiBhIHBh
+dGNoIHRoYXQgaXMgc3VwcG9zZWQgdG8gZG8gdGhhdC4KCgogZHJpdmVycy9jaGFyL3RwbS90cG0t
+Y2hpcC5jIHwgMTYgKysrKysrKysrKystLS0tLQogMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlv
+bnMoKyksIDUgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jaGFyL3RwbS90cG0t
+Y2hpcC5jIGIvZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jCmluZGV4IGRkYWVjZWI3ZTEwOS4u
+Nzk2MGRhNDkwZTcyIDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbS1jaGlwLmMKKysr
+IGIvZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jCkBAIC00NzQsMTMgKzQ3NCwxOSBAQCBzdGF0
+aWMgdm9pZCB0cG1fZGVsX2NoYXJfZGV2aWNlKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAogCS8q
+IE1ha2UgdGhlIGRyaXZlciB1bmNhbGxhYmxlLiAqLwogCWRvd25fd3JpdGUoJmNoaXAtPm9wc19z
+ZW0pOwotCWlmIChjaGlwLT5mbGFncyAmIFRQTV9DSElQX0ZMQUdfVFBNMikgewotCQlpZiAoIXRw
+bV9jaGlwX3N0YXJ0KGNoaXApKSB7Ci0JCQl0cG0yX3NodXRkb3duKGNoaXAsIFRQTTJfU1VfQ0xF
+QVIpOwotCQkJdHBtX2NoaXBfc3RvcChjaGlwKTsKKwkvKiBDaGVjayBpZiBjaGlwLT5vcHMgaXMg
+c3RpbGwgdmFsaWQ6IEluIGNhc2UgdGhhdCB0aGUgY29udHJvbGxlcgorCSAqIGRyaXZlcnMgc2h1
+dGRvd24gaGFuZGxlciB1bnJlZ2lzdGVycyB0aGUgY29udHJvbGxlciBpbiBpdHMKKwkgKiBzaHV0
+ZG93biBoYW5kbGVyIHdlIGFyZSBjYWxsZWQgdHdpY2UgYW5kIGNoaXAtPm9wcyB0byBOVUxMLgor
+CSAqLworCWlmIChjaGlwLT5vcHMpIHsKKwkJaWYgKGNoaXAtPmZsYWdzICYgVFBNX0NISVBfRkxB
+R19UUE0yKSB7CisJCQlpZiAoIXRwbV9jaGlwX3N0YXJ0KGNoaXApKSB7CisJCQkJdHBtMl9zaHV0
+ZG93bihjaGlwLCBUUE0yX1NVX0NMRUFSKTsKKwkJCQl0cG1fY2hpcF9zdG9wKGNoaXApOworCQkJ
+fQogCQl9CisJCWNoaXAtPm9wcyA9IE5VTEw7CiAJfQotCWNoaXAtPm9wcyA9IE5VTEw7CiAJdXBf
+d3JpdGUoJmNoaXAtPm9wc19zZW0pOwogfQogCgpiYXNlLWNvbW1pdDogYTc5MDRhNTM4OTMzYzUy
+NTA5NmNhMmNjZGUxZTYwZDBlZTYyYzA4ZQotLSAKMi4zNC4xCgo=
