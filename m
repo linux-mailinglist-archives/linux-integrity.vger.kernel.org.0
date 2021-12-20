@@ -2,42 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 033F047A1D6
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Dec 2021 19:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C8447A43E
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Dec 2021 06:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236354AbhLSSrE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 19 Dec 2021 13:47:04 -0500
-Received: from bl19-211-117.dsl.telepac.pt ([2.80.211.117]:59988 "HELO
-        Cxywrntd" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with SMTP
-        id S234537AbhLSSrE (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 19 Dec 2021 13:47:04 -0500
-Date:   Sun, 19 Dec 2021 18:47:03 -0000
-X-Mailer: WebmasterWorld 3.11 http://www.webmasterworld.com
-Message-ID: <20211219184703231.109065824B8E38A5@Uoqictviagvooo>
-To:     <linux-integrity@vger.kernel.org>
-From:   <jsguerra513@gmail.com>
-Subject: Large 3 bedroom Apartment for sale 650,000 Euros
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        id S230406AbhLTFRj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 20 Dec 2021 00:17:39 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:28210 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229437AbhLTFRi (ORCPT
+        <rfc822;linux-integrity@vger.kernel.org>);
+        Mon, 20 Dec 2021 00:17:38 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BK4gx5q023741;
+        Mon, 20 Dec 2021 05:17:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=+CYJqSqiYfNAP3QMr+5CRH+D4WzJnM8u+I9ZOmg7xrQ=;
+ b=KIo2Mv1OcYw/IY1dGKcxe32JS07iOQcUVBRFqLM4waum4l6iaL/AUjj+6ERj2QxLdGa/
+ 6zk9K7ucGXZB4dc6WDcoh6xWOFkAILTPgEQcPhP233XUxYk2pEHKOOSm1ycFNHX/4tRh
+ q8AV2cYLg0KQIb6YQZi13yH2ymM6LCIamYx8jCh5UXSI+tQxGQQeTZ4MHtOH599nffxh
+ 8R4KbV6b8J3pWxc9+gWotBduvpUqixLO3Q7+tWbnytPZeSqlKUnGp5xEsR3iGTgee7mU
+ qVn+ZBu0NWZg8VMQDPzOdeNAViuZ9DnwGCWrHik4mJ3uEg1ETCyGnX9NjLfg/YavNTok Cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d1891075p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Dec 2021 05:17:23 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BK5F9GY025375;
+        Mon, 20 Dec 2021 05:17:23 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d1891075d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Dec 2021 05:17:23 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BK4di1P009171;
+        Mon, 20 Dec 2021 05:17:21 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma05fra.de.ibm.com with ESMTP id 3d17990cv6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Dec 2021 05:17:21 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BK5HHZ732833868
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Dec 2021 05:17:17 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4688EAE04D;
+        Mon, 20 Dec 2021 05:17:17 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F3E08AE045;
+        Mon, 20 Dec 2021 05:17:14 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.79.190.221])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Dec 2021 05:17:14 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH] tpm: Fix kexec crash due to access to ops NULL pointer
+ (powerpc)
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+In-Reply-To: <20211212012804.1555661-1-stefanb@linux.ibm.com>
+Date:   Mon, 20 Dec 2021 10:47:13 +0530
+Cc:     jarkko@kernel.org, peterhuewe@gmx.de,
+        linux-integrity@vger.kernel.org, Korrapati.Likhitha@ibm.com,
+        pavrampu@in.ibm.com, linux-kernel@vger.kernel.org, jgg@ziepe.ca,
+        linux-security-module@vger.kernel.org, gcwilson@us.ibm.com,
+        linuxppc-dev@lists.ozlabs.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B816AE7F-E224-4203-9B21-99310D49040D@linux.vnet.ibm.com>
+References: <20211212012804.1555661-1-stefanb@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: T48F18qsbpGXA1jXdlhi-RC5TxT0JTH3
+X-Proofpoint-ORIG-GUID: O6mN2UqEGCbQxCBoBu8e3G5WIxPmM_oM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-20_02,2021-12-16_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 phishscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=999 clxscore=1011 malwarescore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112200028
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
---------------------------------------------------------------------------------
-"Excellent T3 with good areas, living room with balcony, 2 bedrooms, one suite and two bathrooms.
 
+> On 12-Dec-2021, at 6:58 AM, Stefan Berger <stefanb@linux.ibm.com> =
+wrote:
+>=20
+> Fix the following crash on kexec by checking chip->ops for a NULL =
+pointer
+> in tpm_chip_start() and returning an error code if this is the case.
+>=20
+> BUG: Kernel NULL pointer dereference on read at 0x00000060
+> Faulting instruction address: 0xc00000000099a06c
+> Oops: Kernel access of bad area, sig: 11 [#1]
+> ...
+> NIP [c00000000099a06c] tpm_chip_start+0x2c/0x140
+> LR [c00000000099a808] tpm_chip_unregister+0x108/0x170
+> Call Trace:
+> [c0000000188bfa00] [c000000002b03930] fw_devlink_strict+0x0/0x8 =
+(unreliable)
+> [c0000000188bfa30] [c00000000099a808] tpm_chip_unregister+0x108/0x170
+> [c0000000188bfa70] [c0000000009a3874] tpm_ibmvtpm_remove+0x34/0x130
+> [c0000000188bfae0] [c000000000110dbc] vio_bus_remove+0x5c/0xb0
+> [c0000000188bfb20] [c0000000009bc154] device_shutdown+0x1d4/0x3a8
+> [c0000000188bfbc0] [c000000000196e14] kernel_restart_prepare+0x54/0x70
+>=20
+> The referenced patch below introduced a function to shut down the VIO =
+bus.
+> The bus shutdown now calls tpm_del_char_device (via =
+tpm_chip_unregister)
+> after a call to tpm_class_shutdown, which already set chip->ops to =
+NULL.
+> The crash occurrs when tpm_del_char_device calls tpm_chip_start with =
+the
+> chip->ops NULL pointer.
+>=20
+> Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver =
+and vio_bus")
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
 
-Asking price 650,000? Negotiable
+With the patch applied, kexec with vTPM works as expected.
 
-Estoril is a place of prestige and a lot of history, offers many cultural attractions and points of interest. Minutes from the beach and is just a 20-minute drive from Lisbon, but nevertheless has an efficient transport network and road access. Nearby there are also several schools, Golf courses, a racetrack, in addition to the Natural Park of Sintra-Cascais."
+Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
 
-
-
-"Excelente T3 com boas áreas, sala com varanda, 2 quartos, uma suite e duas casas de banho.
-
-Negociável. 650,000?
-
-São João do Estoril é um local de prestígio e muita história, dispõe de muitos atractivos culturais e pontos de interesse. A minutos da praia e fica apenas a 20 minutos de carro de Lisboa, mas no entanto possui uma rede eficiente de transportes e acessos rodoviários. Nas proximidades existem também várias escolas, campos de Golf, um autódromo, além do Parque Natural de Sintra-Cascais.
-
-https://1drv.ms/b/s!AlYdJec1WTg0hH8VO-6tJLvaMb_x?e=4Wfa93
+Thanks
+-Sachin=
