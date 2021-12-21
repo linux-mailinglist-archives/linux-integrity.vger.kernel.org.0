@@ -2,80 +2,108 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F0B47BC2C
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Dec 2021 09:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 509B147BC57
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Dec 2021 10:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234641AbhLUIut (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 21 Dec 2021 03:50:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51912 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbhLUIut (ORCPT
+        id S234288AbhLUJB6 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 21 Dec 2021 04:01:58 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:60534 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234135AbhLUJB6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 21 Dec 2021 03:50:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 21 Dec 2021 04:01:58 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 920E96147F;
-        Tue, 21 Dec 2021 08:50:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E2ADC36AE2;
-        Tue, 21 Dec 2021 08:50:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640076648;
-        bh=RJSqsLYeU9GawOiffanQgQyeJI8F3d1k4te3xm7hTm0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rm8mH27OGKStX5WQToTflsPASgoB7rhMasB65wkeW0jpXMA1pzYbekEtufMBqkILX
-         eTig0GI0DUS52rxlRN6Rcy5Fr45+qJkBCRwztSk+X0Yt8DqFpvbPUta34FmTER3ao6
-         lESJg9N7WgFHAkl0wueojJ6T0+pq++qTC6PgBdbDp/8B9ek1zNWSkJDzuIChUUu7AZ
-         AtxhrxZch/VlUXmuJsrbetg3WkJn46+jywAkc91g41mLR7rVIyvb/RK3ysIOWX1xeB
-         ct8h/2N4YvYTO68TFiUkO+i658K1huHib2HOjUFbkfX90fVwd51DV4P5fIDeK4CPtq
-         6hlXOawJbH8sg==
-Date:   Tue, 21 Dec 2021 10:50:46 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Andreas Rammhold <andreas@rammhold.de>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
-Message-ID: <YcGVZitNa23PCSFV@iki.fi>
-References: <20210712170313.884724-1-mic@digikod.net>
- <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 065F721117;
+        Tue, 21 Dec 2021 09:01:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640077317;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hNkASE91271N7CeDuT3M7bBED42kg/o4zLewajWHevA=;
+        b=uRhZTgQ64ZFNw2Z4Ssd10/Z3BaoLEbGFwI/Lv6Hf36as/NGskXHbUuGCu72cpe+VTF2oZW
+        bHUO6aFcoFKCoAZEIEuGg3NWssir1xBL/y5Flm3bBAf1HrO0C0QK1ci1mSbXGSm/DHzaZ3
+        uMXwmEACw0ue7HHidn60xxEzm/rLIVA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640077317;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hNkASE91271N7CeDuT3M7bBED42kg/o4zLewajWHevA=;
+        b=ptnMdv2SSM4byjCiteTUVulmOekX56lDgC+PtvQhR2v3al9urJRLBRqQfWl5kQ23nNmRSv
+        cEN2SIqERwlZJWBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A6BE413C26;
+        Tue, 21 Dec 2021 09:01:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id frlTJgSYwWFLNwAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Tue, 21 Dec 2021 09:01:56 +0000
+Date:   Tue, 21 Dec 2021 10:01:54 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Yael Tiomkin <yaelt@google.com>
+Cc:     ltp@lists.linux.it, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v2] syscalls/keyctl09: test encrypted keys.
+Message-ID: <YcGYAhskkG1r+5Qs@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20211221023721.129689-1-yaelt@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net>
+In-Reply-To: <20211221023721.129689-1-yaelt@google.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 04:30:29PM +0100, Mickaël Salaün wrote:
-> Hi Jarkko,
-> 
-> Since everyone seems OK with this and had plenty of time to complain, could
-> you please take this patch series in your tree? It still applies on
-> v5.16-rc5 and it is really important to us. Please let me know if you need
-> something more.
-> 
-> Regards,
->  Mickaël
+Hi Yael,
 
-I'm off-work up until end of the year, i.e. I will address only important
-bug fixes and v5.16 up until that.
+you still have some problem when running more iterations:
 
-If any of the patches is yet missing my ack, feel free to
+./keyctl09 -i500
+keyctl09.c:49: TPASS: Encrypted keys were successfully instantiated and read
+keyctl09.c:49: TPASS: Encrypted keys were successfully instantiated and read
+...
+keyctl09.c:33: TFAIL: Failed to instantiate encrypted key using payload decrypted data
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+(some people really try high number of iterations.)
+Could you please have a look?
 
-/Jarkko
+> Test that encrypted keys can be instantiated using
+> both user-provided decrypted data
+> (https://lore.kernel.org/linux-integrity/20211213192030.125091-1-yaelt@google.com/),
+> or kernel-generated numbers.
++1 for doc!
+
+...
+> +static void do_test(void)
+> +{
+> +	key_serial_t masterkey;
+> +	key_serial_t encryptedkey1;
+> +	key_serial_t encryptedkey2;
+> +	char buffer[128];
+> +
+> +	masterkey = add_key("user", "user:masterkey", "foo", 3,
+> +			    KEY_SPEC_PROCESS_KEYRING);
+> +	if (masterkey == -1)
+> +		tst_brk(TBROK | TERRNO, "Failed to add user key");
+> +
+> +	encryptedkey1 = add_key("encrypted", "ltptestkey1", ENCRYPTED_KEY_1_PAYLOAD,
+> +				60, KEY_SPEC_PROCESS_KEYRING);
+> +	if (encryptedkey1 == -1)
+> +		tst_brk(TFAIL, "Failed to instantiate encrypted key using payload decrypted data");
+nit: this might be TBROK (test preparation phase), not sure
+(and not that important).
+
+The rest LGTM.
+
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
+
+Kind regards,
+Petr
