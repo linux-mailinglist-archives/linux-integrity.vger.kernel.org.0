@@ -2,132 +2,132 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEE647CC65
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Dec 2021 06:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6AB47CD27
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Dec 2021 07:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbhLVFLg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Dec 2021 00:11:36 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:17316 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229509AbhLVFLf (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Dec 2021 00:11:35 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BM3QSUF018672;
-        Wed, 22 Dec 2021 05:11:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Jz+TRqM/kTaDY19Ct8ZIFyS8L0SnEev97rTaAsftvzY=;
- b=T5+PYFliTUxc4Q7f/CPBg/JkX3dxIOOfpRGv3MXqFamLSRCMsaRy7+tQQ/AsKGPPoc62
- c9dQ5VSPcG/Qy/HKqqiAtlhj4PD4r6QM8f+TC1ZFnPSC4F9m9W7T165lqZ+3xQ7web/w
- qSsSH9m9Yikf5Tqsemq/KazRwH3d/fbIzel8clq7jluKSUPojG5ilXRrJxNlk3Pbh/Ef
- OetstekLZwpXMrZYlHcQkbNrxNFMa2OuT2RyQSgJIqCrvnqcP+HwAIQCH9gMCcPkOmgZ
- UVOKf/K0RS1A8wk+/hlb0Z8tIlCDJ0URsW1RMQOGFqxGVlphg3R4Mp3hrMVDeQVUn0Mg 2g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d3v40hb6r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Dec 2021 05:11:28 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BM50SZJ028916;
-        Wed, 22 Dec 2021 05:11:28 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d3v40hb6f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Dec 2021 05:11:27 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BM54HDw017052;
-        Wed, 22 Dec 2021 05:11:25 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3d16wk1ff8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 22 Dec 2021 05:11:25 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BM5BMRI46072286
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Dec 2021 05:11:23 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D204152052;
-        Wed, 22 Dec 2021 05:11:22 +0000 (GMT)
-Received: from [9.43.47.145] (unknown [9.43.47.145])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id A22DB5204E;
-        Wed, 22 Dec 2021 05:11:21 +0000 (GMT)
-Message-ID: <8c785afa-4564-d7ca-0bb8-34d5b5ca89bd@linux.ibm.com>
-Date:   Wed, 22 Dec 2021 10:41:19 +0530
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH v2] syscalls/keyctl09: test encrypted keys.
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     Yael Tiomkin <yaelt@google.com>, ltp@lists.linux.it,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org
-References: <20211221023721.129689-1-yaelt@google.com>
- <aafb5351-a73a-dac3-b0fa-3faad707bafa@linux.ibm.com> <YcGw5Lyo+hBEnlFD@pevik>
-From:   Nageswara Sastry <rnsastry@linux.ibm.com>
-In-Reply-To: <YcGw5Lyo+hBEnlFD@pevik>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7jkXjXALIwl71lDM4MItaYn-BHPxg8Wr
-X-Proofpoint-ORIG-GUID: iUa3RKt67W364e9387hNrZ-W4cEVB4X6
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S238988AbhLVG4h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Dec 2021 01:56:37 -0500
+Received: from mout.gmx.net ([212.227.17.20]:57369 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235252AbhLVG4h (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 22 Dec 2021 01:56:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1640156183;
+        bh=usaE+auloC0pKur1KyeikoeCQuPrvDwpepUfa8MTVBM=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=bfAhe70bDEEZZnFnE7Ox822RAFR0ZxPycmQqYq9kynkvLpT05LL/qs0wgyalyFSxc
+         pP13EnpAs/trPnl0l0ZzrF1XdR48T82Z+jCY6L22iBx3U3Zg0WUW7sQK4VgL0iEzUN
+         uTzG2SkoXFBV1szfheDPjoAY6VANpc1BjxwbfJp0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.70] ([46.223.119.124]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtwUm-1mCDD111eW-00uHCG; Wed, 22
+ Dec 2021 07:56:23 +0100
+Subject: Re: [PATCH v2] tpm: fix potential NULL pointer access in
+ tpm_del_char_device
+To:     Stefan Berger <stefanb@linux.ibm.com>, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca
+Cc:     p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20211220150635.8545-1-LinoSanfilippo@gmx.de>
+ <af847879-0f29-08e7-7609-da3b27381d3a@linux.ibm.com>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <926f57a8-81b8-b3a9-8338-71213f1b85ac@gmx.de>
+Date:   Wed, 22 Dec 2021 07:56:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-22_01,2021-12-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- mlxlogscore=999 malwarescore=0 mlxscore=0 clxscore=1015 impostorscore=0
- phishscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112220031
+In-Reply-To: <af847879-0f29-08e7-7609-da3b27381d3a@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:drYXROArZ3cwX1WlTQdq2uKpG6SFxH+1Ub6aaSiTYRYnuKz9Qbm
+ sTvQtIwb4GPEWvFj4om8LDumN8p/hd2ps4z/5y1kiso7Lm84XM9QCTtZnKWWf4RsqJMgLnh
+ fiINh7ajSWGhZPx95inayWuoFH9csLKDZ40sEPdPhm2wXP4zifRnlEgtDLVNcnatfnfSSGw
+ Ltd+wexmEJpyy4iOVEQAw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:q5XXRM0EOvE=:dxGm4/HlpZ1+G/pXELQt6g
+ rXkhfXj8XkbJOiNKkcqbWAjVQuF+5YckJLzOALfQ4QpDWFWGNzhdh/A8yPDmvrVrorXD6rui8
+ YIrd83Usd3R5FzMAJZ8BXzMHHQa7oHH1YVtdLuirupZrEKWQgmBzJ2D4ExORFk855TCH5aO3f
+ ZxnnEwLuaCKMRDyDQQn6CQFjiLLcr7qXXcLYHte4iNrnGZOB0VSVwmNcSeXmLN5tgFkT73N98
+ FrfYkOAu9zSjy6nbw9hACdOL9DdAP3Tqu1epKZrJY2bfEEjcYtTR+dc8eJg9gweu5iR90ihzP
+ H+xUrniG+tL042JFYmmYNYzKf7Mdnmo7wiNkDic3s9PHjyunN9vPSDeeMfJ/o4SZ6VaaYj5E6
+ U1LbkYn3rq8CAkjbb1P1UVw5BTjTF3sVMbPVCpf4Ex2HZC4RAY7mb0wV2L7tbDe5CMNC3vjjE
+ e51NoEdXaPsXUMwZ5+o9Z8GsaJYOD7z4A9sdgkFiLSD7LJkSTYpzfQke6ZP8Ag9qxtCKZ0Y7B
+ /Go+TN1pG8Fhg9qqBvntdXO0nlIS2vdP4j3FxY71omK1oIoykzETER8oLp8lg4VIbqX3N9SfY
+ pdL09lySuIW5F2icP908BnRs289gEMGHLNQqFGPHmv02klDsirDAGbCRcd/3AKpooGDCw+Ezh
+ bex950zJkFLYhlFoVxOkeurM8q//vdT1BUxjBg+dkQ1rPrT6+q3UclPi0+xccbxiqYhO1Nbtc
+ Kks/NCdwX7Xa9sLK4UaTu8LyMZYf5GjQ+brD4eS0sRiuUI6MqWBQ56BDVELel7KccGM97faLO
+ o/arbV8Ng5qSzQLGbVT5ZbAb6OHPwCsWp+J5AEM1fMNeHZpa9hPB7KXj8ssl1hVpvd58wHnvU
+ F1M5VB6tFt7aNnBh2f3LXHoncMGEpp3cIpgATNL99R7wDUBJcisPh0QhmrwlyRm3l+/EKOeOL
+ C24X1gR3w7NzvU0pLFVJkWYwv+iqYaAu+98T+0BNuFq82pDuOS8SEY76WsXsvWpvrTsw/fV+q
+ Hgm/gVR1cm730V+4Ehrd3w6slh/xyAf9VNGD9xtlWpBhcdcIZdAHt9ijIYB+JLO7daR0FzYUx
+ hQM0rjbCo0l4WY=
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-
-On 21/12/21 4:18 pm, Petr Vorel wrote:
-> Hi Nageswara,
-> 
->> On 21/12/21 8:07 am, Yael Tiomkin wrote:
->>> Test that encrypted keys can be instantiated using
->>> both user-provided decrypted data
->>> (https://lore.kernel.org/linux-integrity/20211213192030.125091-1-yaelt@google.com/),
->>> or kernel-generated numbers.
-> 
->>> Signed-off-by: Yael Tiomkin <yaelt@google.com>
-> 
->> Tested on ppc64le platform
-> 
-> I suppose it also fails on ppc64le when run more iterations.
+Hi Stefan,
 
 
-Tried with -i500, -i5000 and -i50000 also ... no failures were seen on 
-ppc64le architecture.
+On 22.12.21 at 05:53, Stefan Berger wrote:
 
-Summary:
-passed   500
-failed   0
+>>
+>> =C2=A0 drivers/char/tpm/tpm-chip.c | 16 +++++++++++-----
+>> =C2=A0 1 file changed, 11 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+>> index ddaeceb7e109..7960da490e72 100644
+>> --- a/drivers/char/tpm/tpm-chip.c
+>> +++ b/drivers/char/tpm/tpm-chip.c
+>> @@ -474,13 +474,19 @@ static void tpm_del_char_device(struct tpm_chip *=
+chip)
+>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Make the driver uncallable. */
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 down_write(&chip->ops_sem);
+>> -=C2=A0=C2=A0=C2=A0 if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!tpm_chip_start(chip)) =
+{
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm=
+2_shutdown(chip, TPM2_SU_CLEAR);
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm=
+_chip_stop(chip);
+>> +=C2=A0=C2=A0=C2=A0 /* Check if chip->ops is still valid: In case that =
+the controller
+>> +=C2=A0=C2=A0=C2=A0=C2=A0 * drivers shutdown handler unregisters the co=
+ntroller in its
+>> +=C2=A0=C2=A0=C2=A0=C2=A0 * shutdown handler we are called twice and ch=
+ip->ops to NULL.
+>> +=C2=A0=C2=A0=C2=A0=C2=A0 */
+>> +=C2=A0=C2=A0=C2=A0 if (chip->ops) {
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (chip->flags & TPM_CHIP_=
+FLAG_TPM2) {
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if =
+(!tpm_chip_start(chip)) {
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 tpm2_shutdown(chip, TPM2_SU_CLEAR);
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 tpm_chip_stop(chip);
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 chip->ops =3D NULL;
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>> -=C2=A0=C2=A0=C2=A0 chip->ops =3D NULL;
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 up_write(&chip->ops_sem);
+>> =C2=A0 }
+>> =C2=A0
+>> base-commit: a7904a538933c525096ca2ccde1e60d0ee62c08e
+>
+>
+> Fixes: 39d0099f9439 ("powerpc/pseries: Add shutdown() to vio_driver and =
+vio_bus")
+>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>
+> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+>
+>
 
-Summary:
-passed   5000
-failed   0
+Thanks a lot for testing this.
 
-Summary:
-passed   50000
-failed   0
-
-
-> ./keyctl09 -i500
-> keyctl09.c:49: TPASS: Encrypted keys were successfully instantiated and read
-> keyctl09.c:49: TPASS: Encrypted keys were successfully instantiated and read
-> ...
-> keyctl09.c:33: TFAIL: Failed to instantiate encrypted key using payload decrypted data
-> 
-> (It's always good to put higher number iterations.)
-> 
-> Kind regards,
-> Petr
-
--- 
-Thanks and Regards
-R.Nageswara Sastry
+Best regards,
+Lino
