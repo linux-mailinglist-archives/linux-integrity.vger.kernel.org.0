@@ -2,78 +2,93 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B6347D78A
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Dec 2021 20:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEC947D8C8
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Dec 2021 22:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345146AbhLVTQl (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Dec 2021 14:16:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53309 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345140AbhLVTQi (ORCPT
+        id S240057AbhLVVbY (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Dec 2021 16:31:24 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:65170 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239878AbhLVVbX (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Dec 2021 14:16:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640200593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oBXYBJqXC5x++uqbwSfIJ2fpJnl6ko1ZlQWQiKD9HK0=;
-        b=RS5/vWKWONi3HBNpBJgT5vP4Lj7kTAvQj/OmkVrwyEQkRytbasdMpYGOLod6oTyPS7PXSx
-        Gi2PNHftFszo+t+7Vg6RICR2pkmdMdM3f/v4SQRqfB/sgPQCc3G7wroXYye3Z42froMgSF
-        AF8mewlTOWksQcs8UGfOY+08VjCYvgQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-428-SBMaDYKzPiWUDvX_Ir1ccA-1; Wed, 22 Dec 2021 14:16:30 -0500
-X-MC-Unique: SBMaDYKzPiWUDvX_Ir1ccA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 14B781023F4D;
-        Wed, 22 Dec 2021 19:16:29 +0000 (UTC)
-Received: from localhost (unknown [10.22.32.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 97A0F29997;
-        Wed, 22 Dec 2021 19:16:28 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     zohar@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH] ima: silence measurement list hexdump during kexec
-Date:   Wed, 22 Dec 2021 16:16:23 -0300
-Message-Id: <20211222191623.376174-1-bmeneg@redhat.com>
+        Wed, 22 Dec 2021 16:31:23 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BMLLRI9013138;
+        Wed, 22 Dec 2021 21:31:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=C5GlPGGyAgCU46yQJci8FUIiTGb4xW1TL894ObhExwY=;
+ b=PjhzS6v/FqOzUhCk1PZPHPo/7XLQES8tybqoh1oJ+TjWEeiVO/FUohkwR4gsR/hB6rIn
+ /uwBaDPuw05uP+AbVF4oQrsl8Ncus6n+C2aFsA9eKA4YujL+UlXwhrme+KFWR8bNj8YN
+ rFqhod7GI10GY4pDMb/90/TmgVrG5e8Lwlbgk+q9VTh5ZNi9OP0LcOy8YVvyPFg7dnuX
+ x+Y+/YxubB9UrJ3jTJ6iw0T14I9gd9A/A0xYLJPmSt3HiInnVIn8MqtFbwdD2LZvkjAl
+ HV9bMLneWbQKBOnMjeLdV/gXg6RzSW3HTKM1MfuCRo94g6Q1kC8qV5Yh8bUtA3t0VbXY 9Q== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d48n53n8w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 21:31:16 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BMLM7rS012489;
+        Wed, 22 Dec 2021 21:31:06 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3d16wk24q5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 21:31:06 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BMLV3Ip43581834
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Dec 2021 21:31:03 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF55D11C04A;
+        Wed, 22 Dec 2021 21:31:02 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C423911C058;
+        Wed, 22 Dec 2021 21:31:01 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.95.213])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Dec 2021 21:31:01 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>,
+        Nageswara Sastry <rnsastry@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Takashi Iwai <tiwai@suse.de>,
+        Joey Lee <jlee@suse.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] selftest/kexec: minor update to the existing test
+Date:   Wed, 22 Dec 2021 16:30:50 -0500
+Message-Id: <20211222213052.6771-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -e1t5jKsai_JKq5qaEf3_9UjLd_jZy_J
+X-Proofpoint-ORIG-GUID: -e1t5jKsai_JKq5qaEf3_9UjLd_jZy_J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-22_09,2021-12-22_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=938
+ impostorscore=0 priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112220112
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-The measurement list is dumped during a soft reset (kexec) through the call
-to "print_hex_dump(KERN_DEBUG, ...)", which ignores the DEBUG build flag.
-Instead, use "print_hex_dump_debug(...)", honoring the build flag.
+Some distros are now storing the Kconfig in /lib/modules/`uname -r`/config.
+Check there first before attempting to read it from /proc or extract it
+from the kernel image.
 
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
- security/integrity/ima/ima_kexec.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Fix "ignored null byte in input" warning.
 
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index f799cc278a9a..13753136f03f 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -61,9 +61,9 @@ static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
- 	}
- 	memcpy(file.buf, &khdr, sizeof(khdr));
- 
--	print_hex_dump(KERN_DEBUG, "ima dump: ", DUMP_PREFIX_NONE,
--			16, 1, file.buf,
--			file.count < 100 ? file.count : 100, true);
-+	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
-+			     file.buf, file.count < 100 ? file.count : 100,
-+			     true);
- 
- 	*buffer_size = file.count;
- 	*buffer = file.buf;
+Mimi Zohar (2):
+  selftest/kexec: fix "ignored null byte in input" warning
+  selftests/kexec: update searching for the Kconfig
+
+ tools/testing/selftests/kexec/kexec_common_lib.sh   | 13 +++++++++----
+ .../testing/selftests/kexec/test_kexec_file_load.sh |  5 +++--
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
 -- 
-2.33.1
+2.27.0
 
