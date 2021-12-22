@@ -2,120 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557C047D51F
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Dec 2021 17:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7888047D59A
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Dec 2021 18:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241880AbhLVQcE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Dec 2021 11:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241856AbhLVQcE (ORCPT
+        id S1344215AbhLVRKU (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Dec 2021 12:10:20 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45352 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230314AbhLVRKU (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:32:04 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A722C061401
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Dec 2021 08:32:04 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id i187so702546qkf.5
-        for <linux-integrity@vger.kernel.org>; Wed, 22 Dec 2021 08:32:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GVq0Lkiq1jbxQVK9A6lpW+BwXHCHGEmsYVl2rEAV60Y=;
-        b=iv0i8LFszW7AfFHKMoHpVVENR7IkX+qRUoG8cYeDB22IY2avyba2NmJPr4bdYp9TPp
-         xYlccU5Dq6xkOR3j9t8IH9Bz3t+AnnLgezD6PhYfPxQFs38nswabHw1wFPhfV6rTNdbz
-         WyO2Pp3MJCJjHvt70R+Mnlolk8FiLEha9tLciLluapBneoq3RGZcmrgmkMk/52vHjLlu
-         py7bHoFni1qyxynw7XFowlIlgqxAoA1hLjYoR8pl1CstFgICqTsNjbGtyXPjIQzvavPQ
-         Dw5k//PbwXPHAV/rvHOrYvuFgfRsIXbiV96jQYpDTveKZIHEtsm7XkcaYx60/Zif0X6l
-         fpeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GVq0Lkiq1jbxQVK9A6lpW+BwXHCHGEmsYVl2rEAV60Y=;
-        b=CayIVPN3OMl3Yw1btAYHKTLj4379u4lZN9TDoecY7Elixg7YTERy0W2Xv+y15Leyhg
-         alVIjHPEprWN1g1VqMc9pGDQY55QXYfcZ/rlksZ9xF2qCOidLSyL3sv7vC+cXsPCDh3s
-         XCIQcoLkDbdxD9il8IJ6gteAROWSWN2d66c9vMYwmHbr1LNem1PfGd0nJB+EtqsuW+Py
-         mrA2nDJCg0IOX2OlO5I6QxQ+T3z3IQqkl6rTKR+wemEHo5GC+CX2XJoXBZh0TtTI8YWb
-         OJjLwTANmNknKm8dNMgQx9+6NookpRXqcIZbSmy2Zznc0F7G1vQOoYer0B3GthJtt2R6
-         CkdQ==
-X-Gm-Message-State: AOAM5331E74SazWekyldDwrefnxFqZta+Yi7uk1bav8uJUORzqDLoIKT
-        qGq1ii7yXy3cg1Bm43TKyEbdH5K9q5i7RaxFy5HU/25uok8VYA==
-X-Google-Smtp-Source: ABdhPJxDn4eTGAjkL0ahiBxdGuYS4W5B2EFD8qOqlWwHv0RL2u2pL3vuXz9YL9Pwo2b4hlaPu5CRfvxrwXuFCweqBz0=
-X-Received: by 2002:a37:a3c7:: with SMTP id m190mr2513404qke.288.1640190723204;
- Wed, 22 Dec 2021 08:32:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20211213192030.125091-1-yaelt@google.com> <ec2ec0a9a7ba1adc6e54bbf7051a83ba90a39c0b.camel@linux.ibm.com>
-In-Reply-To: <ec2ec0a9a7ba1adc6e54bbf7051a83ba90a39c0b.camel@linux.ibm.com>
-From:   Yael Tiomkin <yaelt@google.com>
-Date:   Wed, 22 Dec 2021 11:31:51 -0500
-Message-ID: <CAKoutNvhYYiKgCLFFqzczuT444TraMhmEhzFwC7u42ALTdSqaQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Instantiate key with user-provided decrypted data.
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        Jarkko Sakkinen <jarkko@kernel.org>, corbet@lwn.net,
-        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
-        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 22 Dec 2021 12:10:20 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BMH7aYb015224;
+        Wed, 22 Dec 2021 17:10:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=nYaXQipwzETt4J2rtE2uBsqHuGhd71QhvpT8TF2KJoc=;
+ b=fViTgUrMjWUyyDemDf7e8hS1ZE/jfkMPYJLIuIf8fhbU8qS6VLHFUEIHBblAZFS8/tFb
+ Ul7q0TiD6x3KfvRxcjBhJWsh4MuV7oaVMgXowhOiPCVx8HHmES8Wi2EvFzg9V5E/GSCI
+ Id7BVE9kyIT2RocdexlEJVrCUrOAa3k4qbCoZdRfAu/u3EmFEjpIJUkYF4zOADofx886
+ DA4qxx0ddHuACGDX/StCWdfUHmBatMYgp8bn+TKpZSfOVTjVXMSvyYErIkJ+/F9HEQ3h
+ 5Yg+1AxHAngD/tjX7mF3TmY14FfA7ps/1US83qh6dwI/oiaHAZcdWbZgHVxi3hY3mjhY SQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d3eu0n14y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 17:10:12 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BMH9k3t022820;
+        Wed, 22 Dec 2021 17:10:12 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d3eu0n14a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 17:10:11 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BMH6w0Y031802;
+        Wed, 22 Dec 2021 17:10:10 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3d16wk0r4n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Dec 2021 17:10:10 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BMHA7Uj38011198
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Dec 2021 17:10:07 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5774F4204C;
+        Wed, 22 Dec 2021 17:10:07 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D01342041;
+        Wed, 22 Dec 2021 17:10:06 +0000 (GMT)
+Received: from sig-9-65-92-34.ibm.com (unknown [9.65.92.34])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Dec 2021 17:10:06 +0000 (GMT)
+Message-ID: <be59880bb5be18207eeb91b920f43d05fa3a1dd2.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fix undefined arch_ima_get_secureboot() and co
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Takashi Iwai <tiwai@suse.de>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Joey Lee <jlee@suse.com>
+Date:   Wed, 22 Dec 2021 12:10:05 -0500
+In-Reply-To: <20211213161145.3447-1-tiwai@suse.de>
+References: <20211213161145.3447-1-tiwai@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: v1bcwv8vK7ETddMYAENsVSGHDYsb3GsG
+X-Proofpoint-ORIG-GUID: XVnzW0x1qWZXJpje5DQvVLpO_ZFcVFC7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-22_07,2021-12-22_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 mlxscore=0 bulkscore=0
+ malwarescore=0 impostorscore=0 phishscore=0 mlxlogscore=963 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112220096
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 7:37 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
->
-> Hi Yael,
->
-> On Mon, 2021-12-13 at 14:20 -0500, Yael Tiomkin wrote:
-> > The encrypted.c class supports instantiation of encrypted keys with
-> > either an already-encrypted key material, or by generating new key
-> > material based on random numbers. To support encryption of
-> > user-provided decrypted data, this patch defines a new datablob
-> > format: [<format>] <master-key name> <decrypted data length>
-> > <decrypted data>.
-> >
-> > Signed-off-by: Yael Tiomkin <yaelt@google.com>
->
-> Other than the comment below,
->     Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->
-> Could you also provide an LTP test for defining, exporting, and loading
-> an encrypted key based on user provided key data?
->
-> thanks,
->
-> Mimi
->
-> > ---
->
-> > @@ -303,6 +306,16 @@ Load an encrypted key "evm" from saved blob::
-> >      82dbbc55be2a44616e4959430436dc4f2a7a9659aa60bb4652aeb2120f149ed197c564e0
-> >      24717c64 5972dcb82ab2dde83376d82b2e3c09ffc
-> >
-> > +Instantiate an encrypted key "evm" using user-provided decrypted data::
-> > +
-> > +    $ keyctl add encrypted evm "new default user:kmk 32 `cat evm.blob`" @u
-> > +    794890253
->
-> The existing references to "evm.blob" refer to the encrypted key data.
-> Here "evm.blob" is unencrypted data.  Perhaps name it something like
-> "evm.user-provided-data" data.
->
-> > +
-> > +    $ keyctl print 794890253
-> > +    default user:kmk 32 2375725ad57798846a9bbd240de8906f006e66c03af53b1b382d
-> > +    bbc55be2a44616e4959430436dc4f2a7a9659aa60bb4652aeb2120f149ed197c564e0247
-> > +    17c64 5972dcb82ab2dde83376d82b2e3c09ffc
-> > +
->
+Hi Takashi,
 
-Hi Mimi,
+On Mon, 2021-12-13 at 17:11 +0100, Takashi Iwai wrote:
+> Currently arch_ima_get_secureboot() and arch_get_ima_policy() are
+> defined only when CONFIG_IMA is set, and this makes the code calling
+> those functions without CONFIG_IMA failing.  Although there is no such
+> in-tree users, but the out-of-tree users already hit it.
+> 
+> Move the declaration and the dummy definition of those functions
+> outside ifdef-CONFIG_IMA block for fixing the undefined symbols.
+> 
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 
-I have posted the ltp test:
-https://lore.kernel.org/all/20211221023721.129689-1-yaelt@google.com/
+Joey's patch has a dependency on your patch, as seen by the kernel test
+robot report.  I'll drop the one line referencing in-tree/out-of-tree
+sentence in the patch description, before picking it up as well.
 
-I will update the documentation per your suggestion.
+thanks,
 
-Thanks,
-Yael
+Mimi
+
