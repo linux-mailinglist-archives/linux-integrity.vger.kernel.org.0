@@ -2,243 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D33E447DD78
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Dec 2021 02:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC4C47DE2E
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 Dec 2021 05:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242448AbhLWBjq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 22 Dec 2021 20:39:46 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40504 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239866AbhLWBjp (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 22 Dec 2021 20:39:45 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BN172d7002332;
-        Thu, 23 Dec 2021 01:39:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=8R4K9C9ZuDPbuJe6V0JoqAmBwLKXgc7zt8sYMRwfRbs=;
- b=GpWFH2mNrf8FeLf8P1UyYACBAcZzBu2Gbh1la1ZDUZnxBg7JM/9wsjZ1lTwIo4iuoFP4
- UKdEcV7819Q2phh3Usbhro5PDsL0TxMu0KetUFqHHTvgE1LCsu4RxfaKXaS2eZ0HsGNa
- lUYu6HWGBQAcpvfhuk073xFx17uGrc0gvA84wh+xhwlngPkavkstHRnxpqUMocJaR+nJ
- vTe1TgTdr5/0yQOpl34LJ8oo8C2FR0ifLD0Lwm9/QDudFbH8OSlN8KTndaLANfk/NGZx
- 2/W4vkcRMhNaHds5j3MBryyotLbfdsAmI2SvvApDNkXXFDLCthrWOHwG5b4X0NTswXz5 hA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d4d1kjd6v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Dec 2021 01:39:41 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BN1ZRgL007146;
-        Thu, 23 Dec 2021 01:39:41 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d4d1kjd67-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Dec 2021 01:39:41 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BN1buXP013247;
-        Thu, 23 Dec 2021 01:39:39 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3d179agvxq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Dec 2021 01:39:39 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BN1dao148628034
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Dec 2021 01:39:36 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 168924C058;
-        Thu, 23 Dec 2021 01:39:36 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14B7A4C044;
-        Thu, 23 Dec 2021 01:39:34 +0000 (GMT)
-Received: from li-4b5937cc-25c4-11b2-a85c-cea3a66903e4.ibm.com.com (unknown [9.211.41.75])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 23 Dec 2021 01:39:33 +0000 (GMT)
-From:   Nayna Jain <nayna@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
-Cc:     dhowells@redhat.com, zohar@linux.ibm.com, jarkko@kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, Nayna Jain <nayna@linux.ibm.com>
-Subject: [PATCH v6 3/3] integrity: support including firmware ".platform" keys at build time
-Date:   Wed, 22 Dec 2021 20:39:19 -0500
-Message-Id: <20211223013919.206273-4-nayna@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211223013919.206273-1-nayna@linux.ibm.com>
-References: <20211223013919.206273-1-nayna@linux.ibm.com>
+        id S242078AbhLWEDa (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 22 Dec 2021 23:03:30 -0500
+Received: from mout.gmx.net ([212.227.17.21]:34501 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238699AbhLWED3 (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 22 Dec 2021 23:03:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1640232199;
+        bh=4ILo/VJm8wgroPorTTpv5tAKucJx98LcPaR7SD+bkw8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=hrf0cYhm4HEHji31aXKDeXveSfpishJEHt0cTeypZ1L0ZVeK+rKflKdvzgutBCaca
+         winCaQv6CFuGUAhzE8wQHgGdrcnb8CmBV9ofdlbZbWI+feBq/sUtSLE+rdE21J7xjq
+         MQfMiAUEMX01uIrjc9cCkAVE0MPs9lNLgKbE7rWQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from Venus.fritz.box ([46.223.119.124]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N1fii-1mKDZ039ei-011zLn; Thu, 23
+ Dec 2021 05:03:18 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     p.rosenberger@kunbus.com, stefanb@linux.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>, stable@vger.kernel.org
+Subject: [PATCH v3] tpm: fix potential NULL pointer access in tpm_del_char_device
+Date:   Thu, 23 Dec 2021 05:02:46 +0100
+Message-Id: <20211223040246.6575-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Tiu-Tvb1lZFYknj1zXoXXef9FleVPNdk
-X-Proofpoint-GUID: -u2GjD4n9vCSBYYGotqnK8m4Z61K1vGU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-22_09,2021-12-22_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- adultscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 suspectscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112230005
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:2kDWMu0wWMr7HLmwOpt7VP3fzse20/ciSnJzNIltI1yar+OtMxB
+ 6XrkoGlLhABtmA+RWtFcAwJr8tXhG8It642u3/HFEOHbK7LyNQCl7Wn4PdwYgcj3SujBfVk
+ FKDKHRTllKA6kUlZcbisqn6PgsT8WBdDgxtlbGiu9QhnxKvk2zk6WjG0ZYq8FFkwVOqXyeJ
+ QJMSvilLhUxGxh5Pedh4Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:g85bodK0EJ8=:RR6KOWkI1oIuahrmq37tih
+ 3qeasUJCSto5uPGPyYK+OZAP4MoMOupg8Sh4OTfDNqYpkXg0TRLiodBGjNQN6YMVmBHVujrQH
+ F+AMp0X/MPE58fIBII5SEZeysswyI73FxAMTtASQTJ8vhcWeBZFVCDrdbmUPL5d1FHdEupelh
+ x5L9QbW/OSv76T59XTMv9/DJ27hxLbTsfkR8utrpTO24eGwSZHY+oFJ/xg9ROVKo0QhAX3GmX
+ 4mT7zRNEAtC/16e1njXD9D7CRgwWTEScCtCN0l7Lks0/zeq1mHVjz9M8xc0qoScAc9K0YgPtH
+ SrB214JkLSJl0eCU1qrJUL9CsYCyDZ1ex3BZRzK559PuueOkFrYJy2gbz8TD2UxHgzX1iO51n
+ /ydFMq8xW54sDYuFS5a30bwDzPwSJS8KlVNm1oN/KT0D98a7dzNb1OZ8gpKcfO8Hw3Rdo1rc/
+ eUIgsBdNr9dQv3OS7VwXHaDmz12Mo88rA2A67Yq2fe4+c3aKWG4rX/tEZJu3c5Sk2yLfjU9F8
+ bg1K0iLiY/GyKt+Ek6NjfBDV4H1sW5Ct9ZRyWYpPPtnXRa3Go9qsu4wdlAm8ZFom/BkpFX2dy
+ EYdm2NoUwIh7Z3pRDE025q+xIrN/JCSVTI7lDVld+ReAS1/0zBXnxrIoD4m59YkFNG4VuKAzN
+ QT6yE4I2eVNuIBCoJuW9frxc3lyi/NcyT679G+qd9pLAeNeN2KVildRqIXSyGCjAJsCcX7aSx
+ nDXroty/i816krTerEwJNERjZALaxyr4fiS6Mxz2T3Wf7D1XSHbxbaWnyYX8lnYz762sRpsmS
+ uBdPIynVcw5IO51lN+Taowhg7vyogFa/5FwPG8iuUrJWHoEiWyeEDPsRS5/56fKSrrqyS5GAd
+ riYnEWr0i3anposHhWlivB7A2pX3tjopQVQ6H6eBguf/o+p06MmIc9MdkZQT+xyf2o84dIJxh
+ I5TY/6v+hBGeIpUhqr1myCcF216EpaGkhi+8RVbJ9rs+ziTsu+PKSoebnBAhN6LEn2Nd/vd8a
+ Jfl5w0QIUhJLZQBlsgilBokt0SmfxlZb/dBsqPM2HWympJ1ryOpgwIMFtBvBrOBXyNvM0nlN/
+ FGjemhUQC6yMEc=
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Allow firmware keys to be embedded in the Linux kernel and loaded onto
-the ".platform" keyring on boot.
-
-The firmware keys can be specified in a file as a list of PEM encoded
-certificates using new config INTEGRITY_PLATFORM_KEYS. The certificates
-are embedded in the image by converting the PEM-formatted certificates
-into DER(binary) and generating
-security/integrity/platform_certs/platform_certificate_list file at
-build time. On boot, the embedded certs from the image are loaded onto
-the ".platform" keyring.
-
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
----
- security/integrity/Kconfig                    | 10 +++++++
- security/integrity/Makefile                   | 17 +++++++++++-
- .../integrity/platform_certs/platform_cert.S  | 23 ++++++++++++++++
- .../platform_certs/platform_keyring.c         | 26 +++++++++++++++++++
- 4 files changed, 75 insertions(+), 1 deletion(-)
- create mode 100644 security/integrity/platform_certs/platform_cert.S
-
-diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-index 71f0177e8716..9fccf1368b8a 100644
---- a/security/integrity/Kconfig
-+++ b/security/integrity/Kconfig
-@@ -62,6 +62,16 @@ config INTEGRITY_PLATFORM_KEYRING
-          provided by the platform for verifying the kexec'ed kerned image
-          and, possibly, the initramfs signature.
- 
-+config INTEGRITY_PLATFORM_KEYS
-+        string "Builtin X.509 keys for .platform keyring"
-+        depends on KEYS
-+        depends on ASYMMETRIC_KEY_TYPE
-+        depends on INTEGRITY_PLATFORM_KEYRING
-+        help
-+          If set, this option should be the filename of a PEM-formatted file
-+          containing X.509 certificates to be loaded onto the ".platform"
-+          keyring.
-+
- config LOAD_UEFI_KEYS
-        depends on INTEGRITY_PLATFORM_KEYRING
-        depends on EFI
-diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-index 7ee39d66cf16..46629f5ef4f6 100644
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -3,13 +3,18 @@
- # Makefile for caching inode integrity data (iint)
- #
- 
-+quiet_cmd_extract_certs  = EXTRACT_CERTS   $(patsubst "%",%,$(2))
-+      cmd_extract_certs  = scripts/extract-cert $(2) $@
-+$(eval $(call config_filename,INTEGRITY_PLATFORM_KEYS))
-+
- obj-$(CONFIG_INTEGRITY) += integrity.o
- 
- integrity-y := iint.o
- integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
- integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
- integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
--integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o
-+integrity-$(CONFIG_INTEGRITY_PLATFORM_KEYRING) += platform_certs/platform_keyring.o \
-+						  platform_certs/platform_cert.o
- integrity-$(CONFIG_LOAD_UEFI_KEYS) += platform_certs/efi_parser.o \
- 				      platform_certs/load_uefi.o \
- 				      platform_certs/keyring_handler.o
-@@ -19,3 +24,13 @@ integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
-                                      platform_certs/keyring_handler.o
- obj-$(CONFIG_IMA)			+= ima/
- obj-$(CONFIG_EVM)			+= evm/
-+
-+
-+$(obj)/platform_certs/platform_cert.o: $(obj)/platform_certs/platform_certificate_list
-+
-+targets += platform_certificate_list
-+
-+$(obj)/platform_certs/platform_certificate_list: scripts/extract-cert $(INTEGRITY_PLATFORM_KEYS_FILENAME) FORCE
-+	$(call if_changed,extract_certs,$(CONFIG_INTEGRITY_PLATFORM_KEYS))
-+
-+clean-files := platform_certs/platform_certificate_list
-diff --git a/security/integrity/platform_certs/platform_cert.S b/security/integrity/platform_certs/platform_cert.S
-new file mode 100644
-index 000000000000..20bccce5dc5a
---- /dev/null
-+++ b/security/integrity/platform_certs/platform_cert.S
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/export.h>
-+#include <linux/init.h>
-+
-+	__INITRODATA
-+
-+	.align 8
-+#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
-+	.globl platform_certificate_list
-+platform_certificate_list:
-+__cert_list_start:
-+	.incbin "security/integrity/platform_certs/platform_certificate_list"
-+__cert_list_end:
-+#endif
-+
-+	.align 8
-+	.globl platform_certificate_list_size
-+platform_certificate_list_size:
-+#ifdef CONFIG_64BIT
-+	.quad __cert_list_end - __cert_list_start
-+#else
-+	.long __cert_list_end - __cert_list_start
-+#endif
-diff --git a/security/integrity/platform_certs/platform_keyring.c b/security/integrity/platform_certs/platform_keyring.c
-index bcafd7387729..b45de142c5f5 100644
---- a/security/integrity/platform_certs/platform_keyring.c
-+++ b/security/integrity/platform_certs/platform_keyring.c
-@@ -12,8 +12,12 @@
- #include <linux/cred.h>
- #include <linux/err.h>
- #include <linux/slab.h>
-+#include <keys/system_keyring.h>
- #include "../integrity.h"
- 
-+extern __initconst const u8 platform_certificate_list[];
-+extern __initconst const unsigned long platform_certificate_list_size;
-+
- /**
-  * add_to_platform_keyring - Add to platform keyring without validation.
-  * @source: Source of key
-@@ -37,6 +41,28 @@ void __init add_to_platform_keyring(const char *source, const void *data,
- 		pr_info("Error adding keys to platform keyring %s\n", source);
- }
- 
-+static __init int load_platform_certificate_list(void)
-+{
-+	const u8 *p;
-+	unsigned long size;
-+	int rc;
-+	struct key *keyring;
-+
-+	p = platform_certificate_list;
-+	size = platform_certificate_list_size;
-+
-+	keyring = integrity_keyring_from_id(INTEGRITY_KEYRING_PLATFORM);
-+	if (IS_ERR(keyring))
-+		return PTR_ERR(keyring);
-+
-+	rc = load_certificate_list(p, size, keyring);
-+	if (rc)
-+		pr_info("Error adding keys to platform keyring %d\n", rc);
-+
-+	return rc;
-+}
-+late_initcall(load_platform_certificate_list);
-+
- /*
-  * Create the trusted keyrings.
-  */
--- 
-2.27.0
-
+U29tZSBTUEkgY29udHJvbGxlciBkcml2ZXJzIHVucmVnaXN0ZXIgdGhlIGNvbnRyb2xsZXIgaW4g
+dGhlIHNodXRkb3duCmhhbmRsZXIgKGUuZy4gQkNNMjgzNSkuIElmIHN1Y2ggYSBjb250cm9sbGVy
+IGlzIHVzZWQgd2l0aCBhIFRQTSAyIHNsYXZlCmNoaXAtPm9wcyBtYXkgYmUgYWNjZXNzZWQgd2hl
+biBpdCBpcyBhbHJlYWR5IE5VTEw6CgpBdCBzeXN0ZW0gc2h1dGRvd24gdGhlIHByZS1zaHV0ZG93
+biBoYW5kbGVyIHRwbV9jbGFzc19zaHV0ZG93bigpIHNodXRzIGRvd24KVFBNIDIgYW5kIHNldHMg
+Y2hpcC0+b3BzIHRvIE5VTEwuIFRoZW4gYXQgU1BJIGNvbnRyb2xsZXIgdW5yZWdpc3RyYXRpb24K
+dHBtX3Rpc19zcGlfcmVtb3ZlKCkgaXMgY2FsbGVkIGFuZCBldmVudHVhbGx5IGNhbGxzIHRwbV9k
+ZWxfY2hhcl9kZXZpY2UoKQp3aGljaCB0cmllcyB0byBzaHV0IGRvd24gVFBNIDIgYWdhaW4uIFRo
+ZXJlYnkgaXQgYWNjZXNzZXMgY2hpcC0+b3BzIGFnYWluOgoodHBtX2RlbF9jaGFyX2RldmljZSBj
+YWxscyB0cG1fY2hpcF9zdGFydCB3aGljaCBjYWxscyB0cG1fY2xrX2VuYWJsZSB3aGljaApjYWxs
+cyBjaGlwLT5vcHMtPmNsa19lbmFibGUpLgoKQXZvaWQgdGhlIE5VTEwgcG9pbnRlciBhY2Nlc3Mg
+YnkgdGVzdGluZyBpZiBjaGlwLT5vcHMgaXMgdmFsaWQgYW5kIHNraXBwaW5nCnRoZSBUUE0gMiBz
+aHV0ZG93biBwcm9jZWR1cmUgaW4gY2FzZSBpdCBpcyBOVUxMLgoKRml4ZXM6IGRjYmVhYjE5NDY0
+NTQgKCJ0cG06IGZpeCBjcmFzaCBpbiB0cG1fdGlzIGRlaW5pdGlhbGl6YXRpb24iKQpGaXhlczog
+MzlkMDA5OWY5NDM5ICgicG93ZXJwYy9wc2VyaWVzOiBBZGQgc2h1dGRvd24oKSB0byB2aW9fZHJp
+dmVyIGFuZCB2aW9fYnVzIikKQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcKVGVzdGVkLWJ5OiBT
+dGVmYW4gQmVyZ2VyIDxzdGVmYW5iQGxpbnV4LmlibS5jb20+ClJldmlld2VkLWJ5OiBTdGVmYW4g
+QmVyZ2VyIDxzdGVmYW5iQGxpbnV4LmlibS5jb20+ClNpZ25lZC1vZmYtYnk6IExpbm8gU2FuZmls
+aXBwbyA8TGlub1NhbmZpbGlwcG9AZ214LmRlPgotLS0KQ2hhbmdlcyBpbiB2MzoKLSBhZGRlZCB0
+YWdzIGZvciBTdGVmYW5zIHJldmlldyBhbmQgdGVzdAotIGNvcnJlY3RlZCB0aGUgc291cmNlIGNv
+ZGUgY29tbWVudAoKQ2hhbmdlcyBpbiB2MjoKLSByZXBocmFzZWQgdGhlIGNvbW1pdCBtZXNzYWdl
+IHRvIGNsYXJpZnkgdGhlIGNpcmN1bXN0YW5jZXMgdW5kZXIgd2hpY2gKICB0aGlzIGJ1ZyB0cmln
+Z2VycyAoYXMgcmVxdWVzdGVkIGJ5IEphcmtrbykKCkkgd2FzIGFibGUgdG8gcmVwcm9kdWNlIHRo
+aXMgaXNzdWUgd2l0aCBhIFNMQiA5NjcwIFRQTSBjaGlwIGNvbnRyb2xsZWQgYnkgCmEgQkNNMjgz
+NSBTUEkgY29udHJvbGxlci4gCgpUaGUgYXBwcm9hY2ggdG8gZml4IHRoaXMgaXNzdWUgaW4gdGhl
+IEJDTTI4MzUgZHJpdmVyIHdhcyByZWplY3RlZCBhZnRlciBhCmRpc2N1c3Npb24gb24gdGhlIG1h
+aWxpbmcgbGlzdDoKCmh0dHBzOi8vbWFyYy5pbmZvLz9sPWxpbnV4LWludGVncml0eSZtPTE2MzI4
+NTkwNjcyNTM2NyZ3PTIKClRoZSByZWFzb24gZm9yIHRoZSByZWplY3Rpb24gd2FzIHRoZSByZWFs
+aXphdGlvbiwgdGhhdCB0aGlzIGlzc3VlIHNob3VsZCByYXRoZXIKYmUgZml4ZWQgaW4gdGhlIFRQ
+TSBjb2RlOgoKaHR0cHM6Ly9tYXJjLmluZm8vP2w9bGludXgtc3BpJm09MTYzMzExMDg3NDIzMjcx
+Jnc9MgoKU28gdGhpcyBpcyB0aGUgcmV3b3JrZWQgdmVyc2lvbiBvZiBhIHBhdGNoIHRoYXQgaXMg
+c3VwcG9zZWQgdG8gZG8gdGhhdC4KCgogZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jIHwgMTYg
+KysrKysrKysrKystLS0tLQogMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDUgZGVs
+ZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jaGFyL3RwbS90cG0tY2hpcC5jIGIvZHJp
+dmVycy9jaGFyL3RwbS90cG0tY2hpcC5jCmluZGV4IGRkYWVjZWI3ZTEwOS4uMDMxMjJkNjI0Njcw
+IDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbS1jaGlwLmMKKysrIGIvZHJpdmVycy9j
+aGFyL3RwbS90cG0tY2hpcC5jCkBAIC00NzQsMTMgKzQ3NCwxOSBAQCBzdGF0aWMgdm9pZCB0cG1f
+ZGVsX2NoYXJfZGV2aWNlKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAogCS8qIE1ha2UgdGhlIGRy
+aXZlciB1bmNhbGxhYmxlLiAqLwogCWRvd25fd3JpdGUoJmNoaXAtPm9wc19zZW0pOwotCWlmIChj
+aGlwLT5mbGFncyAmIFRQTV9DSElQX0ZMQUdfVFBNMikgewotCQlpZiAoIXRwbV9jaGlwX3N0YXJ0
+KGNoaXApKSB7Ci0JCQl0cG0yX3NodXRkb3duKGNoaXAsIFRQTTJfU1VfQ0xFQVIpOwotCQkJdHBt
+X2NoaXBfc3RvcChjaGlwKTsKKwkvKiBJbiBjYXNlIHRoYXQgdGhlIFNQSSBtYXN0ZXIgaXMgdW5y
+ZWdpc3RlcmVkIGluIGl0cyBkcml2ZXJzCisJICogc2h1dGRvd24gaGFuZGxlciwgdHBtX2NsYXNz
+X3NodXRkb3duKCkgaGFzIGFscmVhZHkgYmVlbiBjYWxsZWQKKwkgKiBhbmQgc2V0IGNoaXAtPm9w
+cyB0byBOVUxMLiBTbyBjaGVjayBpZiBpdCBpcyBzdGlsbCB2YWxpZC4KKwkgKi8KKwlpZiAoY2hp
+cC0+b3BzKSB7CisJCWlmIChjaGlwLT5mbGFncyAmIFRQTV9DSElQX0ZMQUdfVFBNMikgeworCQkJ
+aWYgKCF0cG1fY2hpcF9zdGFydChjaGlwKSkgeworCQkJCXRwbTJfc2h1dGRvd24oY2hpcCwgVFBN
+Ml9TVV9DTEVBUik7CisJCQkJdHBtX2NoaXBfc3RvcChjaGlwKTsKKwkJCX0KIAkJfQorCQljaGlw
+LT5vcHMgPSBOVUxMOwogCX0KLQljaGlwLT5vcHMgPSBOVUxMOwogCXVwX3dyaXRlKCZjaGlwLT5v
+cHNfc2VtKTsKIH0KIAoKYmFzZS1jb21taXQ6IGJjNDkxZmIxMjUxM2U3OTcwMmM2ZjkzNmM4Mzhm
+NzkyYjUzODkxMjkKLS0gCjIuMzQuMQoK
