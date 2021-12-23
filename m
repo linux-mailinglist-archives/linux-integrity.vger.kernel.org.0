@@ -2,79 +2,122 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0344747E08F
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Dec 2021 09:42:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B81C47E601
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 Dec 2021 16:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347273AbhLWImD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 23 Dec 2021 03:42:03 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:49994 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239194AbhLWImC (ORCPT
+        id S234588AbhLWPts (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 23 Dec 2021 10:49:48 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:43471 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349069AbhLWPtj (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 23 Dec 2021 03:42:02 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2FAA91F38A;
-        Thu, 23 Dec 2021 08:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1640248921;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mVzBkfCiZhGKEEUEAsMg7AXPFS0Tl2snzCE0PSlakvA=;
-        b=tzwZk8CjMmdq4z3NKhAm9muERQRt9TkJVd8tcHnblPxoKNXbw+zZJYiOe0suy8Wb2v8Mx/
-        jf05TsOALZpBKYyUYueTvpc9jGduyA1NISbnFGNnYUwAOi8PodjgBOR7P3k9jiYCAfjwsz
-        R3gvTo7JAnFqQPBib24QMh2Tih5hR/Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1640248921;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mVzBkfCiZhGKEEUEAsMg7AXPFS0Tl2snzCE0PSlakvA=;
-        b=iDWNmlC+hPoyhJuMR7q2mAw4Zj4S3AQ1NTADi8ueKs+1VdTgNwwnmwu4w7n93Jwm7sf74s
-        oEYrnDTZzpoGrcCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C8E4713E82;
-        Thu, 23 Dec 2021 08:42:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iEPsLlg2xGF3aQAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Thu, 23 Dec 2021 08:42:00 +0000
-Date:   Thu, 23 Dec 2021 09:41:59 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Takashi Iwai <tiwai@suse.de>, Joey Lee <jlee@suse.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] selftest/kexec: fix "ignored null byte in input"
- warning
-Message-ID: <YcQ2V8JmGkowEwQ5@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20211222213052.6771-1-zohar@linux.ibm.com>
- <20211222213052.6771-2-zohar@linux.ibm.com>
+        Thu, 23 Dec 2021 10:49:39 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 53A635C016A;
+        Thu, 23 Dec 2021 10:49:38 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 23 Dec 2021 10:49:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm3; bh=w+OCQKaR9fThO/RPri2JnBRIRY
+        P7/F4zfxZs/8kP+LM=; b=aA4Gn+Ev8JXdGjM2OO8zbFp+cOvg5zyTcCPH0jVvmv
+        sxEQRW5polfhKBcvgYgCxTP0tUTOFzt1yw+LPyJClMJncVlA/4t4CHauVwWoLttE
+        5florhDViJyT85VBqodg+rGToLM0BWAqqX22yTdofOh92XR1+jDh2CWRBd6gjcWr
+        ldKb9Sl/vGFafPZyt8xmuUvRoy7S1ACy8NeJqCFXMiYNGyym+G1ODZrH5LrNsDdx
+        uf3w1XU7ff37p1flZaLrldjF1z1s9uUwyBxgV5Nw1JBeZ67aXhZ1g8KY2e2iQOHE
+        Kp/OSIoDKBwE3paXfvclG9QmlWByKqS3i8ygO170FjHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=w+OCQKaR9fThO/RPr
+        i2JnBRIRYP7/F4zfxZs/8kP+LM=; b=Oznwu/pETiss8/LDfZzxOhLG1Vqv7OBW8
+        d8QMTK1npQhGvnD+QaooE8vtG0r2AVBk2WPPo0f559oBIJG0ctpD7cvue1bargsM
+        5G4xZqk0fnJR0/+vlqBg3vOcpImJlQqkZsuKcypVYz1vFVkOx9e7jItM87+1XZVB
+        A4Jv8fZp3pO14wfzkIMKlgmzwuB5vBUEfHzVEVAS1RkkQOgt+LPiyci3yJNKQG8g
+        x5uYRAF1xiOlfFH4Pi+bujjqJQo/IcEHLOBGaIbwx6klivDhn/kkqiJVE+PA/tXJ
+        rsamKzJczdGrB+WtZbQMHMYenEMV8+fDZcYYcZGUaFAoGwxLNxz+w==
+X-ME-Sender: <xms:kZrEYVrvYOXZav5rc6N506smd8U6KVQG1DNkI3YwMMLKroC86jP7wg>
+    <xme:kZrEYXrhPrzvcDGCOl_x-bAqy63qpm3YYpSBhbM3H4ix3XvhpiHMxJeejCsOyR91l
+    IKNnWSgPTVdzOgJg6E>
+X-ME-Received: <xmr:kZrEYSP1MUUy-tN4A6LjraNpwNStAxEN_4M1iZ3zOsb5qUehSQXLbMSx3e2ScTVjazHuAhRdUe3K-Wq7qYeOLhIR8Vq8Hw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtkedgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlfeehmdenucfjughrpefhvffufffkofgggfestdekredtredttden
+    ucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhesshhtfi
+    gtgidrgiihiieqnecuggftrfgrthhtvghrnheptdeludegheejteelheduudegkeehleet
+    feekiedtfefgleeifeelhefgveejhfffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
+X-ME-Proxy: <xmx:kZrEYQ4-qvONOt4j4zKBBtLzgfabc4kNfPaHTxfiBLYFglPBKnasqA>
+    <xmx:kZrEYU7EaEgggE1hQR4rjpvrTZV3AMuNs4nT2a9CcFAiWve6p3Gdyw>
+    <xmx:kZrEYYhFyBGIJIHFZGLnA7ED7KUAna44LGe6NUF9jMZtslfqQR4B9w>
+    <xmx:kprEYRvfsN-O62pZ5ptj-Mj8baYI5hfo2zmWaQXQukh3uZZXQil1FQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Dec 2021 10:49:37 -0500 (EST)
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Hao Wu <hao.wu@rubrik.com>
+Cc:     Patrick Williams <patrick@stwcx.xyz>, stable@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm: fix NPE on probe for missing device
+Date:   Thu, 23 Dec 2021 09:49:31 -0600
+Message-Id: <20211223154932.678424-1-patrick@stwcx.xyz>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222213052.6771-2-zohar@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Mimi,
+When using the tpm_tis-spi driver on a system missing the physical TPM,
+a null pointer exception was observed.
 
-> Instead of assigning the string to a variable, which might contain a
-> null character, redirect the output and grep for the string directly.
+    [    0.938677] Unable to handle kernel NULL pointer dereference at virtual address 00000004
+    [    0.939020] pgd = 10c753cb
+    [    0.939237] [00000004] *pgd=00000000
+    [    0.939808] Internal error: Oops: 5 [#1] SMP ARM
+    [    0.940157] CPU: 0 PID: 48 Comm: kworker/u4:1 Not tainted 5.15.10-dd1e40c #1
+    [    0.940364] Hardware name: Generic DT based system
+    [    0.940601] Workqueue: events_unbound async_run_entry_fn
+    [    0.941048] PC is at tpm_tis_remove+0x28/0xb4
+    [    0.941196] LR is at tpm_tis_core_init+0x170/0x6ac
 
-Looks reasonable to me.
+This is due to an attempt in 'tpm_tis_remove' to use the drvdata, which
+was not initialized in 'tpm_tis_core_init' prior to the first error.
 
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
+Move the initialization of drvdata earlier so 'tpm_tis_remove' has
+access to it.
 
-Kind regards,
-Petr
+Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
+Fixes: 79ca6f74dae0 ("tpm: fix Atmel TPM crash caused by too frequent queries")
+Cc: stable@vger.kernel.org
+---
+ drivers/char/tpm/tpm_tis_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index b2659a4c4016..9813b934e6e4 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -950,6 +950,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
+ 	priv->phy_ops = phy_ops;
+ 
++	dev_set_drvdata(&chip->dev, priv);
++
+ 	rc = tpm_tis_read32(priv, TPM_DID_VID(0), &vendor);
+ 	if (rc < 0)
+ 		goto out_err;
+@@ -962,8 +964,6 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
+ 	}
+ 
+-	dev_set_drvdata(&chip->dev, priv);
+-
+ 	if (is_bsw()) {
+ 		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
+ 					ILB_REMAP_SIZE);
+-- 
+2.32.0
+
