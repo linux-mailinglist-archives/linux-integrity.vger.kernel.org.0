@@ -2,116 +2,131 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC1347EA1B
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Dec 2021 02:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E8747EF0E
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Dec 2021 14:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbhLXBMd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 23 Dec 2021 20:12:33 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46424 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229995AbhLXBMd (ORCPT
+        id S238298AbhLXNOx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 24 Dec 2021 08:14:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36961 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230463AbhLXNOx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 23 Dec 2021 20:12:33 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BO175Xw018647;
-        Fri, 24 Dec 2021 01:12:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=NcT3ysjtJESuIVVpCtisdKBE1Dd2aThqk8vQduNnOpA=;
- b=QShAs9+1a8eNTcuItKQaEIKesHAbL8beH9Gn77oPlPW+jW+6RoWAR2zhw3CephuGIRZ/
- EfPYPamTUBaykFtvR2hVvx6otkXmVLD/1nxKOmHNktxe6VqEGCBry2hr690x1c6svVP2
- w+RVIXVRdDmMDMTypUgv6+ikWjMSHGc4k0tJPhOs0sauKj3yRBrwhnkQDguXPPes1aT4
- liULvGDFODaXsAJmYZdzGDGdeybrfAxFEdO6IjyKge5j1//qDRMkQ8xLUXaJfyh3slUr
- yxsZRbbZGZG/Ic7QoHEY4W/cQBqV3lvVK8F2Bu7a0TDph7QbwMMVPSGYxNbPJa+srkNL 0A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d53er8nbc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Dec 2021 01:12:25 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BO1COLx016349;
-        Fri, 24 Dec 2021 01:12:24 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d53er8nb5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Dec 2021 01:12:24 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BO18Oc8017357;
-        Fri, 24 Dec 2021 01:12:23 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma05wdc.us.ibm.com with ESMTP id 3d179cjftt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Dec 2021 01:12:23 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BO1CMSQ32899514
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Dec 2021 01:12:22 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 857DE136055;
-        Fri, 24 Dec 2021 01:12:22 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18B81136051;
-        Fri, 24 Dec 2021 01:12:21 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 24 Dec 2021 01:12:21 +0000 (GMT)
-Message-ID: <eaad369c-f02e-8d83-94b1-fdac7ae84388@linux.ibm.com>
-Date:   Thu, 23 Dec 2021 20:12:21 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v4 1/2] selftests: tpm2: Determine available PCR bank
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-2-stefanb@linux.vnet.ibm.com>
- <YaVkw5dnCewnFybR@iki.fi>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <YaVkw5dnCewnFybR@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xyxYc-MQo0TGsoyoLjdFQZLRiKq0NiLA
-X-Proofpoint-GUID: 0dFsPYYrfZ2EI2Db5bbTYP74_AHKPmQg
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 24 Dec 2021 08:14:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640351692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bxlEvALMK9lzn0nPdbICOgS36zyGodPPp1ZtECyg394=;
+        b=N3T8DfpjWMxw190AjLn9L6EAWYXAVWbMMOZFbn0BTCcJvXyJZDJcHyxGPQwa8vVqk6NjaS
+        5ag0BEga0WSnEmtGZ8y1RsORgo0Gwrh0ch5uxTqRpP3/b4y+IN5AwGOwFmeme6gMGneS/Y
+        J77fszzN3vg5+DLyF0I/nBDaIDISj1E=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-459-LqCCXgrnOFKugTBbvE3d6g-1; Fri, 24 Dec 2021 08:14:48 -0500
+X-MC-Unique: LqCCXgrnOFKugTBbvE3d6g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BB8B01006AA5;
+        Fri, 24 Dec 2021 13:14:47 +0000 (UTC)
+Received: from localhost (unknown [10.22.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 586E9519B7;
+        Fri, 24 Dec 2021 13:14:47 +0000 (UTC)
+Date:   Fri, 24 Dec 2021 10:14:46 -0300
+From:   Bruno Meneguele <bmeneg@redhat.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ima: silence measurement list hexdump during kexec
+Message-ID: <YcXHxgP1w2Us72bS@glitch>
+References: <20211222191623.376174-1-bmeneg@redhat.com>
+ <31d71e1957e84d2440f41d43d2570b112e91a27b.camel@linux.ibm.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-23_04,2021-12-22_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 bulkscore=0
- adultscore=0 spamscore=0 mlxlogscore=826 clxscore=1015 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112240003
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kki6z1n8KXFa6VqM"
+Content-Disposition: inline
+In-Reply-To: <31d71e1957e84d2440f41d43d2570b112e91a27b.camel@linux.ibm.com>
+X-PGP-Key: http://keys.gnupg.net/pks/lookup?op=get&search=0x3823031E4660608D
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Shuah,
 
-   are you going to take this fix here - only 1/2 ?
+--kki6z1n8KXFa6VqM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/lkml/20211128041052.1395504-1-stefanb@linux.vnet.ibm.com/T/#m21209a978c237368499ce5f082f3c0fc03bcbbeb
+On Wed, Dec 22, 2021 at 05:13:56PM -0500, Mimi Zohar wrote:
+> Hi Bruno,
+>=20
+> On Wed, 2021-12-22 at 16:16 -0300, Bruno Meneguele wrote:
+> > The measurement list is dumped during a soft reset (kexec) through the =
+call
+> > to "print_hex_dump(KERN_DEBUG, ...)", which ignores the DEBUG build fla=
+g.
+> > Instead, use "print_hex_dump_debug(...)", honoring the build flag.
+> >=20
+> > Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
+>=20
+> The patch description needs to at least explain why using
+> print_hex_dump() isn't sufficent.   Look at how print_hex_dump() is
+> defined.  Based on whether CONFIG_DYNAMIC_DEBUG is enabled, different
+> functions are used.
 
-   Stefan
+Sending the v2 in a sec :)
 
-On 11/29/21 18:39, Jarkko Sakkinen wrote:
-> On Sat, Nov 27, 2021 at 11:10:51PM -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Determine an available PCR bank to be used by a test case by querying the
->> capability TPM2_GET_CAP. The TPM2 returns TPML_PCR_SELECTIONS that
->> contains an array of TPMS_PCR_SELECTIONs indicating available PCR banks
->> and the bitmasks that show which PCRs are enabled in each bank. Collect
->> the data in a dictionary. From the dictionary determine the PCR bank that
->> has the PCRs enabled that the test needs. This avoids test failures with
->> TPM2's that either to not have a SHA-1 bank or whose SHA-1 bank is
->> disabled.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->
-> /Jarkko
+Thanks Mimi
+
+>=20
+> Mimi
+>=20
+> > ---
+> >  security/integrity/ima/ima_kexec.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/im=
+a/ima_kexec.c
+> > index f799cc278a9a..13753136f03f 100644
+> > --- a/security/integrity/ima/ima_kexec.c
+> > +++ b/security/integrity/ima/ima_kexec.c
+> > @@ -61,9 +61,9 @@ static int ima_dump_measurement_list(unsigned long *b=
+uffer_size, void **buffer,
+> >  	}
+> >  	memcpy(file.buf, &khdr, sizeof(khdr));
+> > =20
+> > -	print_hex_dump(KERN_DEBUG, "ima dump: ", DUMP_PREFIX_NONE,
+> > -			16, 1, file.buf,
+> > -			file.count < 100 ? file.count : 100, true);
+> > +	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
+> > +			     file.buf, file.count < 100 ? file.count : 100,
+> > +			     true);
+> > =20
+> >  	*buffer_size =3D file.count;
+> >  	*buffer =3D file.buf;
+>=20
+>=20
+
+--=20
+bmeneg=20
+PGP Key: http://bmeneg.com/pubkey.txt
+
+--kki6z1n8KXFa6VqM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmHFx8YACgkQYdRkFR+R
+okPreQgAnqpFVqEElAwuWlt1HoxsbRlLag8dnhRrGaWr1tWQabQwgEgEcCw8KFXI
+7KIpzscweZEKsMrBT8yu62PCnBN2DGZpXg4FuGS0f66pzhS5b+XN/2gZB0AfaPUm
+R1oDOPGcMu73l0Y9cXaveWt3GdWFstFDFRTtBJK3SlmmrY6S6YmMSVAAQPb4nt5u
+QtgfIU5biLpICpjATmfoCd5Ja/xf17Nv7F/8UP7IihVCL3qMVqeAj3rWGIQrITNy
+hGK6U85n2Hc3ZCVhZOEf6M68guAnd04BHeDLjqPggFyhhF50BLTrJyAhj1awj7pm
+S5QTNCcJOH2c5W8bPu4qdh27TQengA==
+=9i6w
+-----END PGP SIGNATURE-----
+
+--kki6z1n8KXFa6VqM--
+
