@@ -2,122 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B81C47E601
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Dec 2021 16:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC1347EA1B
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Dec 2021 02:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234588AbhLWPts (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 23 Dec 2021 10:49:48 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:43471 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349069AbhLWPtj (ORCPT
+        id S230130AbhLXBMd (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 23 Dec 2021 20:12:33 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46424 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229995AbhLXBMd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 23 Dec 2021 10:49:39 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 53A635C016A;
-        Thu, 23 Dec 2021 10:49:38 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 23 Dec 2021 10:49:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm3; bh=w+OCQKaR9fThO/RPri2JnBRIRY
-        P7/F4zfxZs/8kP+LM=; b=aA4Gn+Ev8JXdGjM2OO8zbFp+cOvg5zyTcCPH0jVvmv
-        sxEQRW5polfhKBcvgYgCxTP0tUTOFzt1yw+LPyJClMJncVlA/4t4CHauVwWoLttE
-        5florhDViJyT85VBqodg+rGToLM0BWAqqX22yTdofOh92XR1+jDh2CWRBd6gjcWr
-        ldKb9Sl/vGFafPZyt8xmuUvRoy7S1ACy8NeJqCFXMiYNGyym+G1ODZrH5LrNsDdx
-        uf3w1XU7ff37p1flZaLrldjF1z1s9uUwyBxgV5Nw1JBeZ67aXhZ1g8KY2e2iQOHE
-        Kp/OSIoDKBwE3paXfvclG9QmlWByKqS3i8ygO170FjHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=w+OCQKaR9fThO/RPr
-        i2JnBRIRYP7/F4zfxZs/8kP+LM=; b=Oznwu/pETiss8/LDfZzxOhLG1Vqv7OBW8
-        d8QMTK1npQhGvnD+QaooE8vtG0r2AVBk2WPPo0f559oBIJG0ctpD7cvue1bargsM
-        5G4xZqk0fnJR0/+vlqBg3vOcpImJlQqkZsuKcypVYz1vFVkOx9e7jItM87+1XZVB
-        A4Jv8fZp3pO14wfzkIMKlgmzwuB5vBUEfHzVEVAS1RkkQOgt+LPiyci3yJNKQG8g
-        x5uYRAF1xiOlfFH4Pi+bujjqJQo/IcEHLOBGaIbwx6klivDhn/kkqiJVE+PA/tXJ
-        rsamKzJczdGrB+WtZbQMHMYenEMV8+fDZcYYcZGUaFAoGwxLNxz+w==
-X-ME-Sender: <xms:kZrEYVrvYOXZav5rc6N506smd8U6KVQG1DNkI3YwMMLKroC86jP7wg>
-    <xme:kZrEYXrhPrzvcDGCOl_x-bAqy63qpm3YYpSBhbM3H4ix3XvhpiHMxJeejCsOyR91l
-    IKNnWSgPTVdzOgJg6E>
-X-ME-Received: <xmr:kZrEYSP1MUUy-tN4A6LjraNpwNStAxEN_4M1iZ3zOsb5qUehSQXLbMSx3e2ScTVjazHuAhRdUe3K-Wq7qYeOLhIR8Vq8Hw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtkedgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpefhvffufffkofgggfestdekredtredttden
-    ucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhesshhtfi
-    gtgidrgiihiieqnecuggftrfgrthhtvghrnheptdeludegheejteelheduudegkeehleet
-    feekiedtfefgleeifeelhefgveejhfffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
-X-ME-Proxy: <xmx:kZrEYQ4-qvONOt4j4zKBBtLzgfabc4kNfPaHTxfiBLYFglPBKnasqA>
-    <xmx:kZrEYU7EaEgggE1hQR4rjpvrTZV3AMuNs4nT2a9CcFAiWve6p3Gdyw>
-    <xmx:kZrEYYhFyBGIJIHFZGLnA7ED7KUAna44LGe6NUF9jMZtslfqQR4B9w>
-    <xmx:kprEYRvfsN-O62pZ5ptj-Mj8baYI5hfo2zmWaQXQukh3uZZXQil1FQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Dec 2021 10:49:37 -0500 (EST)
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Hao Wu <hao.wu@rubrik.com>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, stable@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: fix NPE on probe for missing device
-Date:   Thu, 23 Dec 2021 09:49:31 -0600
-Message-Id: <20211223154932.678424-1-patrick@stwcx.xyz>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
+        Thu, 23 Dec 2021 20:12:33 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BO175Xw018647;
+        Fri, 24 Dec 2021 01:12:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=NcT3ysjtJESuIVVpCtisdKBE1Dd2aThqk8vQduNnOpA=;
+ b=QShAs9+1a8eNTcuItKQaEIKesHAbL8beH9Gn77oPlPW+jW+6RoWAR2zhw3CephuGIRZ/
+ EfPYPamTUBaykFtvR2hVvx6otkXmVLD/1nxKOmHNktxe6VqEGCBry2hr690x1c6svVP2
+ w+RVIXVRdDmMDMTypUgv6+ikWjMSHGc4k0tJPhOs0sauKj3yRBrwhnkQDguXPPes1aT4
+ liULvGDFODaXsAJmYZdzGDGdeybrfAxFEdO6IjyKge5j1//qDRMkQ8xLUXaJfyh3slUr
+ yxsZRbbZGZG/Ic7QoHEY4W/cQBqV3lvVK8F2Bu7a0TDph7QbwMMVPSGYxNbPJa+srkNL 0A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d53er8nbc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Dec 2021 01:12:25 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BO1COLx016349;
+        Fri, 24 Dec 2021 01:12:24 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d53er8nb5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Dec 2021 01:12:24 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BO18Oc8017357;
+        Fri, 24 Dec 2021 01:12:23 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma05wdc.us.ibm.com with ESMTP id 3d179cjftt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Dec 2021 01:12:23 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BO1CMSQ32899514
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Dec 2021 01:12:22 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 857DE136055;
+        Fri, 24 Dec 2021 01:12:22 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 18B81136051;
+        Fri, 24 Dec 2021 01:12:21 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 24 Dec 2021 01:12:21 +0000 (GMT)
+Message-ID: <eaad369c-f02e-8d83-94b1-fdac7ae84388@linux.ibm.com>
+Date:   Thu, 23 Dec 2021 20:12:21 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4 1/2] selftests: tpm2: Determine available PCR bank
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
+ <20211128041052.1395504-2-stefanb@linux.vnet.ibm.com>
+ <YaVkw5dnCewnFybR@iki.fi>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <YaVkw5dnCewnFybR@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xyxYc-MQo0TGsoyoLjdFQZLRiKq0NiLA
+X-Proofpoint-GUID: 0dFsPYYrfZ2EI2Db5bbTYP74_AHKPmQg
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-23_04,2021-12-22_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 spamscore=0 mlxlogscore=826 clxscore=1015 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112240003
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When using the tpm_tis-spi driver on a system missing the physical TPM,
-a null pointer exception was observed.
+Shuah,
 
-    [    0.938677] Unable to handle kernel NULL pointer dereference at virtual address 00000004
-    [    0.939020] pgd = 10c753cb
-    [    0.939237] [00000004] *pgd=00000000
-    [    0.939808] Internal error: Oops: 5 [#1] SMP ARM
-    [    0.940157] CPU: 0 PID: 48 Comm: kworker/u4:1 Not tainted 5.15.10-dd1e40c #1
-    [    0.940364] Hardware name: Generic DT based system
-    [    0.940601] Workqueue: events_unbound async_run_entry_fn
-    [    0.941048] PC is at tpm_tis_remove+0x28/0xb4
-    [    0.941196] LR is at tpm_tis_core_init+0x170/0x6ac
+   are you going to take this fix here - only 1/2 ?
 
-This is due to an attempt in 'tpm_tis_remove' to use the drvdata, which
-was not initialized in 'tpm_tis_core_init' prior to the first error.
+https://lore.kernel.org/lkml/20211128041052.1395504-1-stefanb@linux.vnet.ibm.com/T/#m21209a978c237368499ce5f082f3c0fc03bcbbeb
 
-Move the initialization of drvdata earlier so 'tpm_tis_remove' has
-access to it.
+   Stefan
 
-Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
-Fixes: 79ca6f74dae0 ("tpm: fix Atmel TPM crash caused by too frequent queries")
-Cc: stable@vger.kernel.org
----
- drivers/char/tpm/tpm_tis_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index b2659a4c4016..9813b934e6e4 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -950,6 +950,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
- 	priv->phy_ops = phy_ops;
- 
-+	dev_set_drvdata(&chip->dev, priv);
-+
- 	rc = tpm_tis_read32(priv, TPM_DID_VID(0), &vendor);
- 	if (rc < 0)
- 		goto out_err;
-@@ -962,8 +964,6 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
- 		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
- 	}
- 
--	dev_set_drvdata(&chip->dev, priv);
--
- 	if (is_bsw()) {
- 		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
- 					ILB_REMAP_SIZE);
--- 
-2.32.0
-
+On 11/29/21 18:39, Jarkko Sakkinen wrote:
+> On Sat, Nov 27, 2021 at 11:10:51PM -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Determine an available PCR bank to be used by a test case by querying the
+>> capability TPM2_GET_CAP. The TPM2 returns TPML_PCR_SELECTIONS that
+>> contains an array of TPMS_PCR_SELECTIONs indicating available PCR banks
+>> and the bitmasks that show which PCRs are enabled in each bank. Collect
+>> the data in a dictionary. From the dictionary determine the PCR bank that
+>> has the PCRs enabled that the test needs. This avoids test failures with
+>> TPM2's that either to not have a SHA-1 bank or whose SHA-1 bank is
+>> disabled.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+>
+> /Jarkko
