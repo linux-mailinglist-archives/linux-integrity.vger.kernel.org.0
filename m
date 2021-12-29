@@ -2,62 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50809480E25
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Dec 2021 01:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFE9480E89
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Dec 2021 02:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237963AbhL2ASf (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Dec 2021 19:18:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40766 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233216AbhL2ASe (ORCPT
+        id S238185AbhL2B3y (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 Dec 2021 20:29:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54882 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232128AbhL2B3y (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Dec 2021 19:18:34 -0500
+        Tue, 28 Dec 2021 20:29:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D8F3B817D6;
-        Wed, 29 Dec 2021 00:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B8A8C36AEB;
-        Wed, 29 Dec 2021 00:18:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4EDB6135A;
+        Wed, 29 Dec 2021 01:29:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B53C9C36AE7;
+        Wed, 29 Dec 2021 01:29:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640737111;
-        bh=DESLPMWIKpTscMcVtWTkUzLP3rdDDuNCoCrkwOpcv+0=;
+        s=k20201202; t=1640741393;
+        bh=ydUgVYXQclY7oFMxL3aKnC9+MuSwNx30h/5qMs9gnOo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gXZjcyV9YJkJbU1eY1LHkNnd2BVlbxfBs+Ar93bZSnTmPeuiFISl08zl+zHzOBBot
-         B83XBwciAiM5Ep1aIzFqjxl57EscutLmeNEnrujaNZxMFYOux2ZsfUHErkk4gFTBaS
-         3y5DnziPHrBCnCdKkjy4vE/ZSdAhxMpxUIrHn6yIzEHSKKoCsdc+dEwkljyEOBNHdO
-         tmBoND+obdA3sCnE7M21622SzdhM+HOUtadIwugnIlvFR6uIEOx173frmoi5V+uPpb
-         2sumBFxpBQ+1DeR+Me8lE94Gw4AZiI5ESUWWxj+Emlj9OT74d2Ol0uw8udvl3yCTEF
-         xdLLb7TYW2Eyg==
-Date:   Wed, 29 Dec 2021 02:18:29 +0200
+        b=P6MQoAV7g6mJik6mNjyFgC2osFmy/WJaZzEPFxd1RLbZBwE7qRKwvJgbOgArm46NM
+         cKD7nISY/GtokKwWCL4o9bVq7SngXRxP9eB8/sM8uznp3YmHWQVeFBUXT4VbXOU248
+         2OUVMDDwEAmYa5vnSTFMx94FdoPfs+d051I0wEK893L9hkOFvD7NUMdRDHLpn2V38D
+         7YBBNQPmcLoTzACWAg3xtOLTn/SjojeWI90rX8qcubaxOIHzpnCYmceGsztEkdr427
+         acFQWKB8gGFsH58ADFwX3XTqPdUXaRbW3pqFw8yGyjW12a2Ki3yxG1ES2mpeb3flLD
+         GbdautlPLkoVg==
+Date:   Wed, 29 Dec 2021 03:29:50 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Yael Tiomkin <yaelt@google.com>
-Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, corbet@lwn.net, dhowells@redhat.com,
-        jmorris@namei.org, serge@hallyn.com, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3] Instantiate key with user-provided decrypted data.
-Message-ID: <YcupVS1fxe2nHgy+@iki.fi>
-References: <20211222171757.851754-1-yaelt@google.com>
+To:     Nayna Jain <nayna@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        dhowells@redhat.com, zohar@linux.ibm.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
+        seth@forshee.me, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v6 1/3] certs: export load_certificate_list() to be used
+ outside certs/
+Message-ID: <Ycu6Dq1Tq2cqq/Lf@iki.fi>
+References: <20211223013919.206273-1-nayna@linux.ibm.com>
+ <20211223013919.206273-2-nayna@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211222171757.851754-1-yaelt@google.com>
+In-Reply-To: <20211223013919.206273-2-nayna@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 12:17:57PM -0500, Yael Tiomkin wrote:
-> The encrypted.c class supports instantiation of encrypted keys with
-> either an already-encrypted key material, or by generating new key
-> material based on random numbers. To support encryption of
-> user-provided decrypted data, this patch defines a new datablob
-> format: [<format>] <master-key name> <decrypted data length>
-> <decrypted data>.
+On Wed, Dec 22, 2021 at 08:39:17PM -0500, Nayna Jain wrote:
+> load_certificate_list() parses certificates embedded in the kernel
+> image to load them onto the keyring.
+> 
+> Commit "2565ca7f5ec1 (certs: Move load_system_certificate_list to a common
+> function)" made load_certificate_list() a common function in the certs/
+> directory. Now, export load_certificate_list() outside certs/ to be used
+> by other functions.
 
-So, the code change looks quite legit but why is this needed?
-
-This part is missing from the commit message.
+It is exported to make callable by load_platform_certificate_list(). Making
+anything callable by other functions by itself has no inherit value, and
+does not serve as a stimulus to make such code change.
 
 /Jarkko
