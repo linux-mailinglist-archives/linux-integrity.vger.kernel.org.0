@@ -2,93 +2,116 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF71480EC3
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Dec 2021 03:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8D6480EEE
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Dec 2021 03:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238319AbhL2CDQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Dec 2021 21:03:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47904 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238311AbhL2CDO (ORCPT
+        id S238398AbhL2CdZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 28 Dec 2021 21:33:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34728 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229620AbhL2CdY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Dec 2021 21:03:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640743393;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Jjo6Ob6hJrXlH4BR+sKFz80O6IEjl7bd1wCCkIVR998=;
-        b=gEXyKL3hbS3aqoVB+Eq//xMK/2Q0/jNlpx6CAsRf6x459TZMJ4wVYkAEJTX9Gpg2tqk1ud
-        yLR1/Px3L0620fMonY6PyGfWnnGNTg27EsIB27Xv05Lpblg0f06VsuXeYt/6e+Wluik4j+
-        gFF6vdnqAcm2MhkejEqS6TGPnrKXvYQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-622-b5SdRnOGONWmiDSyyToCww-1; Tue, 28 Dec 2021 21:03:10 -0500
-X-MC-Unique: b5SdRnOGONWmiDSyyToCww-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 28 Dec 2021 21:33:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 77894801B2F;
-        Wed, 29 Dec 2021 02:03:09 +0000 (UTC)
-Received: from localhost (unknown [10.22.16.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ABDD761082;
-        Wed, 29 Dec 2021 02:03:05 +0000 (UTC)
-From:   Bruno Meneguele <bmeneg@redhat.com>
-To:     zohar@linux.ibm.com
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bruno Meneguele <bmeneg@redhat.com>
-Subject: [PATCH v4] ima: silence measurement list hexdump during kexec
-Date:   Tue, 28 Dec 2021 23:03:03 -0300
-Message-Id: <20211229020303.357610-1-bmeneg@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B5896116D;
+        Wed, 29 Dec 2021 02:33:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570A6C36AEB;
+        Wed, 29 Dec 2021 02:33:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640745203;
+        bh=27QGy6tcsDryLMWNMkI1zKPKtVGmZ/7l48wgukdkdJY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=r/TnGmlJI+HG2ZMquOTe6zs9zxFNvvM8965htoF+gW6awGAkXV2UbwtJ3x8r2iH50
+         icuh4nWhSIlt5ftHnjH4k87s7hnpIxOEKIb8JrP73HAkLMsBfxA7FgGkDPT+9/3KQl
+         renRv6KTIG3yg0mmQzhT5g1LdTT1H7S6/zI/AU4Wk7NRV9Ls3ObMuRXP5IZuFEdYRC
+         CjbIDLl3RwW1tSTjHeNbDKQ2Q5MKJiLxTSPZDeS+tyOlgNJzSqhnuDIMsY3WmoxNPm
+         rDRRu3d0L6H2nQrHlhqcLu2eUqayVb1qgX+VLxP36BI7cR10rGwUgLaOrLSk1FKwa3
+         42WV5e4rbqQ0w==
+Date:   Wed, 29 Dec 2021 04:33:21 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, James Morris <jmorris@namei.org>,
+        David Howells <dhowells@redhat.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Andrew Zaborowski <andrew.zaborowski@intel.com>
+Subject: [GIT PULL] TPM DEVICE DRIVER updates for v5.17
+Message-ID: <YcvI8Uki51C2aMqe@iki.fi>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Direclty calling print_hex_dump() dumps the IMA measurement list on soft
-resets (kexec) straight to the syslog (kmsg/dmesg) without considering the
-DEBUG flag or the dynamic debug state, causing the output to be always
-printed, including during boot time.
+Hi,
 
-Since this output is only valid for IMA debugging, but not necessary on
-normal kexec operation, print_hex_dump_debug() adheres to the pr_debug()
-behavior: the dump is only printed to syslog when DEBUG is defined or when
-explicitly requested by the user through dynamic debugging.
+Other than bug fixes for TPM, includes a patch for asymmetric keys to allow
+to look up and verify with self-signed certificates (keys without so called
+Authority Key Identifier (AKID)) using a new "dn:" prefix in the query.
 
-Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
----
-Changelog:
-- v3: 
-  - after more in depth testing it was defined that v1 and v2 solution
-	matches with the expected behavior instead of the one proposed on v3.
-  - clarify/simplify the patch description.
-- v2: guard call with #ifdef instead of using print_hex_dump_debug, which
-  would not completely solve the case.
-- v1: update commit log with more information.
+BR,
+Jarkko
 
- security/integrity/ima/ima_kexec.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The following changes since commit e7c124bd04631973a3cc0df19ab881b56d8a2d50:
 
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index f799cc278a9a..13753136f03f 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -61,9 +61,9 @@ static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
- 	}
- 	memcpy(file.buf, &khdr, sizeof(khdr));
- 
--	print_hex_dump(KERN_DEBUG, "ima dump: ", DUMP_PREFIX_NONE,
--			16, 1, file.buf,
--			file.count < 100 ? file.count : 100, true);
-+	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
-+			     file.buf, file.count < 100 ? file.count : 100,
-+			     true);
- 
- 	*buffer_size = file.count;
- 	*buffer = file.buf;
--- 
-2.33.1
+  Merge tag 'selinux-pr-20211228' of git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux (2021-12-28 13:33:06 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.17
+
+for you to fetch changes up to 035d19ee9b906f8a6937d44cc1dd1bf065be8641:
+
+  tpm: fix NPE on probe for missing device (2021-12-29 03:44:50 +0200)
+
+----------------------------------------------------------------
+tpmdd updates for Linux v5.17
+
+----------------------------------------------------------------
+Andrew Zaborowski (1):
+      keys: X.509 public key issuer lookup without AKID
+
+AngeloGioacchino Del Regno (1):
+      tpm: tpm_tis_spi_cr50: Add default RNG quality
+
+Chen Jun (1):
+      tpm: add request_locality before write TPM_INT_ENABLE
+
+Christophe Jaillet (1):
+      tpm_tis: Fix an error handling path in 'tpm_tis_core_init()'
+
+Lino Sanfilippo (1):
+      tpm: fix potential NULL pointer access in tpm_del_char_device
+
+Patrick Williams (1):
+      tpm: fix NPE on probe for missing device
+
+Rob Barnes (1):
+      char: tpm: cr50: Set TPM_FIRMWARE_POWER_MANAGED based on device property
+
+Sohaib Mohamed (1):
+      tpm/st33zp24: drop unneeded over-commenting
+
+axelj (1):
+      tpm: Add Upgrade/Reduced mode support for TPM2 modules
+
+ crypto/asymmetric_keys/asymmetric_type.c  |  57 ++++++++++----
+ crypto/asymmetric_keys/pkcs7_trust.c      |   6 +-
+ crypto/asymmetric_keys/restrict.c         |  48 +++++++-----
+ crypto/asymmetric_keys/x509_cert_parser.c |  10 +++
+ crypto/asymmetric_keys/x509_public_key.c  |  10 +++
+ drivers/char/tpm/st33zp24/st33zp24.c      | 122 +++++-------------------------
+ drivers/char/tpm/tpm-chip.c               |  37 ++++++---
+ drivers/char/tpm/tpm-sysfs.c              |   3 +
+ drivers/char/tpm/tpm2-cmd.c               |   6 ++
+ drivers/char/tpm/tpm_tis_core.c           |  14 +++-
+ drivers/char/tpm/tpm_tis_i2c_cr50.c       |  16 +++-
+ drivers/char/tpm/tpm_tis_spi_cr50.c       |  20 ++++-
+ include/crypto/public_key.h               |   2 +-
+ include/keys/asymmetric-type.h            |   3 +-
+ include/linux/tpm.h                       |  10 +++
+ 15 files changed, 205 insertions(+), 159 deletions(-)
