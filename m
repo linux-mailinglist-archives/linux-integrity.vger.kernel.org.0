@@ -2,116 +2,106 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8D6480EEE
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Dec 2021 03:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05465480FCD
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Dec 2021 06:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238398AbhL2CdZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 28 Dec 2021 21:33:25 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34728 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbhL2CdY (ORCPT
+        id S234335AbhL2FH2 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 29 Dec 2021 00:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbhL2FH1 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 28 Dec 2021 21:33:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B5896116D;
-        Wed, 29 Dec 2021 02:33:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570A6C36AEB;
-        Wed, 29 Dec 2021 02:33:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640745203;
-        bh=27QGy6tcsDryLMWNMkI1zKPKtVGmZ/7l48wgukdkdJY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=r/TnGmlJI+HG2ZMquOTe6zs9zxFNvvM8965htoF+gW6awGAkXV2UbwtJ3x8r2iH50
-         icuh4nWhSIlt5ftHnjH4k87s7hnpIxOEKIb8JrP73HAkLMsBfxA7FgGkDPT+9/3KQl
-         renRv6KTIG3yg0mmQzhT5g1LdTT1H7S6/zI/AU4Wk7NRV9Ls3ObMuRXP5IZuFEdYRC
-         CjbIDLl3RwW1tSTjHeNbDKQ2Q5MKJiLxTSPZDeS+tyOlgNJzSqhnuDIMsY3WmoxNPm
-         rDRRu3d0L6H2nQrHlhqcLu2eUqayVb1qgX+VLxP36BI7cR10rGwUgLaOrLSk1FKwa3
-         42WV5e4rbqQ0w==
-Date:   Wed, 29 Dec 2021 04:33:21 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org, James Morris <jmorris@namei.org>,
-        David Howells <dhowells@redhat.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Andrew Zaborowski <andrew.zaborowski@intel.com>
-Subject: [GIT PULL] TPM DEVICE DRIVER updates for v5.17
-Message-ID: <YcvI8Uki51C2aMqe@iki.fi>
+        Wed, 29 Dec 2021 00:07:27 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB34C061574;
+        Tue, 28 Dec 2021 21:07:27 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id w24so15045728ply.12;
+        Tue, 28 Dec 2021 21:07:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y6D6kbQh7Cm8wpKn4BMX0UeN0YW2Jh8hSVkReFZ+rr0=;
+        b=AnBHZiOUD8KsAoY3K1MG71EP84nDDtl4vM6ADKBTqCbqMPspmtkokR/HH2W64G/Iea
+         rnLcZPFJdi4wKhjvqiJJNVvg7afGzvIvxYcKBQLI8bfKo9/Z1sVUu1+FnQshcyoRkwdL
+         3jvoxuuDXsy0+JrBqLu/Ppjoo9BrXpDZ5T/zUTZv7V8KC8/DvMPR4+C9ugsLTeqlKERP
+         aJcJJ4jOUduAzWlCMifNHlE97fZVFQ1JaYxinYRhThrZiUDBWfmzU6SQClmvECJBNoIs
+         y2cSFiJxID9b80EHl1eBBHw3F8jPliTe+8DXM39HPkU/geUN4oKxbE0TDdEJC5X3GYLt
+         /W4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y6D6kbQh7Cm8wpKn4BMX0UeN0YW2Jh8hSVkReFZ+rr0=;
+        b=2XfOfQJTNBSuSv/qQE1z4TrDwxZc70CDFyLy1KciuZnghzqUpwTukMxKYOzTMIf6p+
+         zBRLVvPyHAvYNbfs166bOiurQBLYU1dU5i9jO9bnim1DrvYcHMFzFsaie6dC1PKVcS1A
+         xUhsuNOS0gABbCEh+tpKafZQNEDtw6ZbnvA+DYzKZUT13QRPYdQfG3cNEAlb3O2VrYPq
+         sDK/8TxzTTWpGoo1e+OU2KSDbLikU4fUXmjpAbDf+Tc8tLkX0sknsgNGFlzGNbqw/Fss
+         jaZk2ZvpOU0KpkKr9pjn/U3VN/ZAeu8Dq9/LSOkbl2ysDMcLW7QN2LJTfKTWpx9ZUFYS
+         M9sQ==
+X-Gm-Message-State: AOAM532gFSVXJ1E3XdCma/GrNt2zUcyNn0x7xLjw6aVo67bhRUQGKjba
+        0HjeyyWbul90Tn6wfZUzHDw=
+X-Google-Smtp-Source: ABdhPJzk6oL9KXcJyWhxTR58cu+5MprY7TsEK+11sG9oXbwJInMenmBHGbzMASUI3wr1ajZUWg/Nkg==
+X-Received: by 2002:a17:90b:1b43:: with SMTP id nv3mr18247490pjb.136.1640754447119;
+        Tue, 28 Dec 2021 21:07:27 -0800 (PST)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id w9sm18484274pge.18.2021.12.28.21.07.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 21:07:26 -0800 (PST)
+From:   Tadeusz Struk <tstruk@gmail.com>
+To:     jarkko@kernel.org
+Cc:     Tadeusz Struk <tstruk@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] tpm: Fix error handling in async work
+Date:   Tue, 28 Dec 2021 21:06:54 -0800
+Message-Id: <20211229050655.2030-1-tstruk@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi,
+When an invalid (non existing) handle is used in a tpm command,
+that uses the resource manager interface (/dev/tpmrm0) the resource
+manager tries to load it from its internal cache, but fails and
+returns an -EINVAL error to the caller. The async handler doesn't
+handle these error cases currently and the condition in the poll
+handler never returns mask with EPOLLIN set.
+The result is that the poll call blocks and the application gets stuck
+until the user_read_timer wakes it up after 120 sec.
+Make sure that error conditions also contribute to the poll mask
+so that a correct error code could passed back to the caller.
 
-Other than bug fixes for TPM, includes a patch for asymmetric keys to allow
-to look up and verify with self-signed certificates (keys without so called
-Authority Key Identifier (AKID)) using a new "dn:" prefix in the query.
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: <linux-integrity@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+Fixes: 9e1b74a63f77 ("tpm: add support for nonblocking operation")
+Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
+---
+Changes in v2:
+- Updated commit message with better problem description.
+- Fixed typeos.
+---
+ drivers/char/tpm/tpm-dev-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BR,
-Jarkko
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index c08cbb306636..fe2679f84cb6 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -69,7 +69,7 @@ static void tpm_dev_async_work(struct work_struct *work)
+ 	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
+ 			       sizeof(priv->data_buffer));
+ 	tpm_put_ops(priv->chip);
+-	if (ret > 0) {
++	if (ret != 0) {
+ 		priv->response_length = ret;
+ 		mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
+ 	}
+-- 
+2.30.2
 
-The following changes since commit e7c124bd04631973a3cc0df19ab881b56d8a2d50:
-
-  Merge tag 'selinux-pr-20211228' of git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux (2021-12-28 13:33:06 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v5.17
-
-for you to fetch changes up to 035d19ee9b906f8a6937d44cc1dd1bf065be8641:
-
-  tpm: fix NPE on probe for missing device (2021-12-29 03:44:50 +0200)
-
-----------------------------------------------------------------
-tpmdd updates for Linux v5.17
-
-----------------------------------------------------------------
-Andrew Zaborowski (1):
-      keys: X.509 public key issuer lookup without AKID
-
-AngeloGioacchino Del Regno (1):
-      tpm: tpm_tis_spi_cr50: Add default RNG quality
-
-Chen Jun (1):
-      tpm: add request_locality before write TPM_INT_ENABLE
-
-Christophe Jaillet (1):
-      tpm_tis: Fix an error handling path in 'tpm_tis_core_init()'
-
-Lino Sanfilippo (1):
-      tpm: fix potential NULL pointer access in tpm_del_char_device
-
-Patrick Williams (1):
-      tpm: fix NPE on probe for missing device
-
-Rob Barnes (1):
-      char: tpm: cr50: Set TPM_FIRMWARE_POWER_MANAGED based on device property
-
-Sohaib Mohamed (1):
-      tpm/st33zp24: drop unneeded over-commenting
-
-axelj (1):
-      tpm: Add Upgrade/Reduced mode support for TPM2 modules
-
- crypto/asymmetric_keys/asymmetric_type.c  |  57 ++++++++++----
- crypto/asymmetric_keys/pkcs7_trust.c      |   6 +-
- crypto/asymmetric_keys/restrict.c         |  48 +++++++-----
- crypto/asymmetric_keys/x509_cert_parser.c |  10 +++
- crypto/asymmetric_keys/x509_public_key.c  |  10 +++
- drivers/char/tpm/st33zp24/st33zp24.c      | 122 +++++-------------------------
- drivers/char/tpm/tpm-chip.c               |  37 ++++++---
- drivers/char/tpm/tpm-sysfs.c              |   3 +
- drivers/char/tpm/tpm2-cmd.c               |   6 ++
- drivers/char/tpm/tpm_tis_core.c           |  14 +++-
- drivers/char/tpm/tpm_tis_i2c_cr50.c       |  16 +++-
- drivers/char/tpm/tpm_tis_spi_cr50.c       |  20 ++++-
- include/crypto/public_key.h               |   2 +-
- include/keys/asymmetric-type.h            |   3 +-
- include/linux/tpm.h                       |  10 +++
- 15 files changed, 205 insertions(+), 159 deletions(-)
