@@ -2,55 +2,55 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D1348468C
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jan 2022 18:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB77484670
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jan 2022 18:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbiADRFT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 4 Jan 2022 12:05:19 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25356 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235655AbiADRE6 (ORCPT
+        id S235694AbiADRFG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 4 Jan 2022 12:05:06 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:24342 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235653AbiADRE6 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
         Tue, 4 Jan 2022 12:04:58 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 204EUbMT018438;
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 204FRiS3018686;
         Tue, 4 Jan 2022 17:04:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=kL215ffcax4mWsvQFITyeOWRr4rK+JF7AQo+OAuxnJ8=;
- b=tMwMCxcr0IXMWP6E9hNAdseHLvsmxPXKYB14USclUZ6/E9YDBfyarRTVhhpBoTZh7gsd
- KXsvw3WGMAZ/gNjTB42oZ/Av0mtDZOTL5o/jrzTCxB3r1LReQgNBOt/0o9ZkysOBOjsy
- L6DFeXo+EYa4QsphHTa3xwWar6oliMPyoI4umyZ0H05vHdw4QitjltP5fBqK1kNkxr7V
- hNoRX0MpE7I5C9ymbVLTdVgK53s8ilT1MdIKyxwGHFdPWbPtC0e0vg9ruZ99BFai1siT
- vwvzI2mbwSt8lpw95dOCPfAQFpsfPTGcc85WRdiKsr5vnKdbbzUv08PjhQT/zTGWWuFd Ew== 
+ bh=cFaNTU3/eFAEOtwcmPn2655o7VE8FhkeuPg2kikKLiI=;
+ b=l7fBurG+91g6sOpezeJdcqDDhsu0oNwGEFriblQHpumbA2sO999tgSq5ZC9UDYpVaGXM
+ U3yyRGqTYaExSZ0FgR9FDTEKfypJDpvbiNLJ8f64qzTGU1glOqC1ZBggOFxkmM5lVKoF
+ PXkhqYRl1aZLh+ikzIo0e6fUvKoc4uxnp/dk7DZA1QQcY/Mw7+Nu7+XWfcTo20Vn/BFX
+ 4SxbxDtQPYD4gg4SwufnzRoc4YtHZDDDouPREluymSqO1g5qQ5UGpTH0nhA+79tI2gxr
+ Ytgtjy4gcSfct20Yh4fH7BcDqT6Jzym7o4pDmoz3BcxWCd4ZKzjZARb6WHlb8r26+cYj Ow== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dcen7deux-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dcmt3evtc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 04 Jan 2022 17:04:32 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 204FLYH9001427;
-        Tue, 4 Jan 2022 17:04:32 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dcen7deum-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 17:04:32 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 204H2ea9019359;
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 204GmKkO031323;
         Tue, 4 Jan 2022 17:04:31 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma04dal.us.ibm.com with ESMTP id 3daekbaext-1
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dcmt3evt2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 04 Jan 2022 17:04:31 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 204H2jmQ031194;
+        Tue, 4 Jan 2022 17:04:30 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma02wdc.us.ibm.com with ESMTP id 3daekaf3mm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jan 2022 17:04:30 +0000
 Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 204H4TT325625058
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 204H4ULq36766090
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 4 Jan 2022 17:04:30 GMT
 Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8E28AC064;
+        by IMSVA (Postfix) with ESMTP id DC3DBAC05B;
         Tue,  4 Jan 2022 17:04:29 +0000 (GMT)
 Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A665EAC05B;
+        by IMSVA (Postfix) with ESMTP id C90C4AC066;
         Tue,  4 Jan 2022 17:04:29 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
         by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
@@ -66,242 +66,188 @@ Cc:     zohar@linux.ibm.com, serge@hallyn.com,
         linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v8 05/19] ima: Move measurement list related variables into ima_namespace
-Date:   Tue,  4 Jan 2022 12:04:02 -0500
-Message-Id: <20220104170416.1923685-6-stefanb@linux.vnet.ibm.com>
+Subject: [PATCH v8 06/19] ima: Move some IMA policy and filesystem related variables into ima_namespace
+Date:   Tue,  4 Jan 2022 12:04:03 -0500
+Message-Id: <20220104170416.1923685-7-stefanb@linux.vnet.ibm.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
 References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aaRLnpNkZJwnMlnCMt63nv0whgyYatGC
-X-Proofpoint-GUID: YmErKfTZajbRyXreBmuC8IxPATijAuVx
+X-Proofpoint-ORIG-GUID: CBoAQtG6mHyJBLdlaU9Rfboruj4XN0TZ
+X-Proofpoint-GUID: l62K0l5T70rbcJpHeB398-z2dzIepgBz
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-04_08,2022-01-04_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 impostorscore=0 malwarescore=0 suspectscore=0
- phishscore=0 spamscore=0 mlxscore=0 priorityscore=1501 adultscore=0
- mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201040114
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 spamscore=0 suspectscore=0 lowpriorityscore=0 mlxscore=0
+ impostorscore=0 bulkscore=0 clxscore=1015 phishscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201040114
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 From: Stefan Berger <stefanb@linux.ibm.com>
 
-Move measurement list related variables into the ima_namespace. This way a
-front-end like SecurityFS can show the measurement list inside an IMA
-namespace.
+Move the ima_write_mutex, ima_fs_flag, and valid_policy variables into
+ima_namespace. This way each IMA namespace can set those variables
+independently.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- security/integrity/ima/ima.h             |  5 +++--
- security/integrity/ima/ima_fs.c          |  6 ++++--
- security/integrity/ima/ima_init_ima_ns.c |  5 +++++
- security/integrity/ima/ima_kexec.c       | 12 +++++++-----
- security/integrity/ima/ima_queue.c       | 24 ++++++++++--------------
- 5 files changed, 29 insertions(+), 23 deletions(-)
+ security/integrity/ima/ima.h             |  5 ++++
+ security/integrity/ima/ima_fs.c          | 32 +++++++++++-------------
+ security/integrity/ima/ima_init_ima_ns.c |  4 +++
+ 3 files changed, 23 insertions(+), 18 deletions(-)
 
 diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 68d8a8e6fd1d..ee16ce5050c8 100644
+index ee16ce5050c8..82b3f6a98320 100644
 --- a/security/integrity/ima/ima.h
 +++ b/security/integrity/ima/ima.h
-@@ -106,7 +106,6 @@ struct ima_queue_entry {
- 	struct list_head later;		/* place in ima_measurements list */
- 	struct ima_template_entry *entry;
- };
--extern struct list_head ima_measurements;	/* list of all measurements */
- 
- /* Some details preceding the binary serialized measurement list */
- struct ima_kexec_hdr {
-@@ -134,6 +133,8 @@ struct ima_namespace {
- 	int ima_policy_flag;
- 
+@@ -135,6 +135,11 @@ struct ima_namespace {
  	struct ima_h_table ima_htable;
-+	struct list_head ima_measurements;
-+	unsigned long binary_runtime_size;
+ 	struct list_head ima_measurements;
+ 	unsigned long binary_runtime_size;
++
++	/* IMA's filesystem */
++	struct mutex ima_write_mutex;
++	unsigned long ima_fs_flags;
++	int valid_policy;
  } __randomize_layout;
  extern struct ima_namespace init_ima_ns;
  
-@@ -184,7 +185,7 @@ int ima_restore_measurement_entry(struct ima_namespace *ns,
- int ima_restore_measurement_list(struct ima_namespace *ns,
- 				 loff_t bufsize, void *buf);
- int ima_measurements_show(struct seq_file *m, void *v);
--unsigned long ima_get_binary_runtime_size(void);
-+unsigned long ima_get_binary_runtime_size(struct ima_namespace *ns);
- int ima_init_template(void);
- void ima_init_template_list(void);
- int __init ima_init_digests(void);
 diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index e5468031acdb..5462cb49e455 100644
+index 5462cb49e455..973bf17754b2 100644
 --- a/security/integrity/ima/ima_fs.c
 +++ b/security/integrity/ima/ima_fs.c
-@@ -80,12 +80,13 @@ static const struct file_operations ima_measurements_count_ops = {
- /* returns pointer to hlist_node */
- static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
- {
-+	struct ima_namespace *ns = &init_ima_ns;
- 	loff_t l = *pos;
- 	struct ima_queue_entry *qe;
+@@ -24,8 +24,6 @@
  
- 	/* we need a lock since pos could point beyond last element */
- 	rcu_read_lock();
--	list_for_each_entry_rcu(qe, &ima_measurements, later) {
-+	list_for_each_entry_rcu(qe, &ns->ima_measurements, later) {
- 		if (!l--) {
- 			rcu_read_unlock();
- 			return qe;
-@@ -97,6 +98,7 @@ static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
- 
- static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
- {
-+	struct ima_namespace *ns = &init_ima_ns;
- 	struct ima_queue_entry *qe = v;
- 
- 	/* lock protects when reading beyond last element
-@@ -107,7 +109,7 @@ static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
- 	rcu_read_unlock();
- 	(*pos)++;
- 
--	return (&qe->later == &ima_measurements) ? NULL : qe;
-+	return (&qe->later == &ns->ima_measurements) ? NULL : qe;
- }
- 
- static void ima_measurements_stop(struct seq_file *m, void *v)
-diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
-index 5a755fa7d091..d9c505fd8a14 100644
---- a/security/integrity/ima/ima_init_ima_ns.c
-+++ b/security/integrity/ima/ima_init_ima_ns.c
-@@ -19,6 +19,11 @@ static int ima_init_namespace(struct ima_namespace *ns)
- 	atomic_long_set(&ns->ima_htable.len, 0);
- 	atomic_long_set(&ns->ima_htable.violations, 0);
- 	memset(&ns->ima_htable.queue, 0, sizeof(ns->ima_htable.queue));
-+	INIT_LIST_HEAD(&ns->ima_measurements);
-+	if (IS_ENABLED(CONFIG_IMA_KEXEC) && ns == &init_ima_ns)
-+		ns->binary_runtime_size = 0;
-+	else
-+		ns->binary_runtime_size = ULONG_MAX;
- 
- 	return 0;
- }
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index f3ef8a0df992..c07149228013 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -15,7 +15,8 @@
  #include "ima.h"
  
- #ifdef CONFIG_IMA_KEXEC
--static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
-+static int ima_dump_measurement_list(struct ima_namespace *ns,
-+				    unsigned long *buffer_size, void **buffer,
- 				     unsigned long segment_size)
- {
- 	struct ima_queue_entry *qe;
-@@ -36,7 +37,7 @@ static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
- 
- 	memset(&khdr, 0, sizeof(khdr));
- 	khdr.version = 1;
--	list_for_each_entry_rcu(qe, &ima_measurements, later) {
-+	list_for_each_entry_rcu(qe, &ns->ima_measurements, later) {
- 		if (file.count < file.size) {
- 			khdr.count++;
- 			ima_measurements_show(&file, qe);
-@@ -84,6 +85,7 @@ void ima_add_kexec_buffer(struct kimage *image)
- 	struct kexec_buf kbuf = { .image = image, .buf_align = PAGE_SIZE,
- 				  .buf_min = 0, .buf_max = ULONG_MAX,
- 				  .top_down = true };
-+	struct ima_namespace *ns = &init_ima_ns;
- 	unsigned long binary_runtime_size;
- 
- 	/* use more understandable variable names than defined in kbuf */
-@@ -96,11 +98,11 @@ void ima_add_kexec_buffer(struct kimage *image)
- 	 * Reserve an extra half page of memory for additional measurements
- 	 * added during the kexec load.
- 	 */
--	binary_runtime_size = ima_get_binary_runtime_size();
-+	binary_runtime_size = ima_get_binary_runtime_size(ns);
- 	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
- 		kexec_segment_size = ULONG_MAX;
- 	else
--		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
-+		kexec_segment_size = ALIGN(ima_get_binary_runtime_size(ns) +
- 					   PAGE_SIZE / 2, PAGE_SIZE);
- 	if ((kexec_segment_size == ULONG_MAX) ||
- 	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
-@@ -108,7 +110,7 @@ void ima_add_kexec_buffer(struct kimage *image)
- 		return;
- 	}
- 
--	ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
-+	ima_dump_measurement_list(ns, &kexec_buffer_size, &kexec_buffer,
- 				  kexec_segment_size);
- 	if (!kexec_buffer) {
- 		pr_err("Not enough memory for the kexec measurement buffer.\n");
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index ba1cffd083b8..9d2cb9ab5d8c 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -24,13 +24,6 @@
- /* pre-allocated array of tpm_digest structures to extend a PCR */
- static struct tpm_digest *digests;
- 
--LIST_HEAD(ima_measurements);	/* list of all measurements */
--#ifdef CONFIG_IMA_KEXEC
--static unsigned long binary_runtime_size;
--#else
--static unsigned long binary_runtime_size = ULONG_MAX;
--#endif
+-static DEFINE_MUTEX(ima_write_mutex);
 -
- /* mutex protects atomicity of extending measurement list
-  * and extending the TPM PCR aggregate. Since tpm_extend can take
-  * long (and the tpm driver uses a mutex), we can't use the spinlock.
-@@ -100,7 +93,7 @@ static int ima_add_digest_entry(struct ima_namespace *ns,
- 	qe->entry = entry;
+ bool ima_canonical_fmt;
+ static int __init default_canonical_fmt_setup(char *str)
+ {
+@@ -36,8 +34,6 @@ static int __init default_canonical_fmt_setup(char *str)
+ }
+ __setup("ima_canonical_fmt", default_canonical_fmt_setup);
  
- 	INIT_LIST_HEAD(&qe->later);
--	list_add_tail_rcu(&qe->later, &ima_measurements);
-+	list_add_tail_rcu(&qe->later, &ns->ima_measurements);
- 
- 	atomic_long_inc(&ns->ima_htable.len);
- 	if (update_htable) {
-@@ -109,12 +102,14 @@ static int ima_add_digest_entry(struct ima_namespace *ns,
- 	} else
- 		INIT_HLIST_NODE(&qe->hnext);
- 
--	if (binary_runtime_size != ULONG_MAX) {
-+	if (ns->binary_runtime_size != ULONG_MAX) {
- 		int size;
- 
- 		size = get_binary_runtime_size(entry);
--		binary_runtime_size = (binary_runtime_size < ULONG_MAX - size) ?
--		     binary_runtime_size + size : ULONG_MAX;
-+		ns->binary_runtime_size =
-+			(ns->binary_runtime_size < ULONG_MAX - size)
-+			? ns->binary_runtime_size + size
-+			: ULONG_MAX;
+-static int valid_policy = 1;
+-
+ static ssize_t ima_show_htable_value(char __user *buf, size_t count,
+ 				     loff_t *ppos, atomic_long_t *val)
+ {
+@@ -338,7 +334,7 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
+ 		goto out;
  	}
+ 
+-	result = mutex_lock_interruptible(&ima_write_mutex);
++	result = mutex_lock_interruptible(&ns->ima_write_mutex);
+ 	if (result < 0)
+ 		goto out_free;
+ 
+@@ -353,12 +349,12 @@ static ssize_t ima_write_policy(struct file *file, const char __user *buf,
+ 	} else {
+ 		result = ima_parse_add_rule(ns, data);
+ 	}
+-	mutex_unlock(&ima_write_mutex);
++	mutex_unlock(&ns->ima_write_mutex);
+ out_free:
+ 	kfree(data);
+ out:
+ 	if (result < 0)
+-		valid_policy = 0;
++		ns->valid_policy = 0;
+ 
+ 	return result;
+ }
+@@ -375,8 +371,6 @@ enum ima_fs_flags {
+ 	IMA_FS_BUSY,
+ };
+ 
+-static unsigned long ima_fs_flags;
+-
+ #ifdef	CONFIG_IMA_READ_POLICY
+ static const struct seq_operations ima_policy_seqops = {
+ 		.start = ima_policy_start,
+@@ -391,6 +385,8 @@ static const struct seq_operations ima_policy_seqops = {
+  */
+ static int ima_open_policy(struct inode *inode, struct file *filp)
+ {
++	struct ima_namespace *ns = &init_ima_ns;
++
+ 	if (!(filp->f_flags & O_WRONLY)) {
+ #ifndef	CONFIG_IMA_READ_POLICY
+ 		return -EACCES;
+@@ -402,7 +398,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
+ 		return seq_open(filp, &ima_policy_seqops);
+ #endif
+ 	}
+-	if (test_and_set_bit(IMA_FS_BUSY, &ima_fs_flags))
++	if (test_and_set_bit(IMA_FS_BUSY, &ns->ima_fs_flags))
+ 		return -EBUSY;
  	return 0;
  }
-@@ -124,12 +119,13 @@ static int ima_add_digest_entry(struct ima_namespace *ns,
-  * entire binary_runtime_measurement list, including the ima_kexec_hdr
-  * structure.
+@@ -416,25 +412,25 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
   */
--unsigned long ima_get_binary_runtime_size(void)
-+unsigned long ima_get_binary_runtime_size(struct ima_namespace *ns)
+ static int ima_release_policy(struct inode *inode, struct file *file)
  {
--	if (binary_runtime_size >= (ULONG_MAX - sizeof(struct ima_kexec_hdr)))
-+	if (ns->binary_runtime_size >=
-+				(ULONG_MAX - sizeof(struct ima_kexec_hdr)))
- 		return ULONG_MAX;
+-	const char *cause = valid_policy ? "completed" : "failed";
+ 	struct ima_namespace *ns = &init_ima_ns;
++	const char *cause = ns->valid_policy ? "completed" : "failed";
+ 
+ 	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
+ 		return seq_release(inode, file);
+ 
+-	if (valid_policy && ima_check_policy(ns) < 0) {
++	if (ns->valid_policy && ima_check_policy(ns) < 0) {
+ 		cause = "failed";
+-		valid_policy = 0;
++		ns->valid_policy = 0;
+ 	}
+ 
+ 	pr_info("policy update %s\n", cause);
+ 	integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
+-			    "policy_update", cause, !valid_policy, 0);
++			    "policy_update", cause, !ns->valid_policy, 0);
+ 
+-	if (!valid_policy) {
++	if (!ns->valid_policy) {
+ 		ima_delete_rules(ns);
+-		valid_policy = 1;
+-		clear_bit(IMA_FS_BUSY, &ima_fs_flags);
++		ns->valid_policy = 1;
++		clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
+ 		return 0;
+ 	}
+ 
+@@ -443,7 +439,7 @@ static int ima_release_policy(struct inode *inode, struct file *file)
+ 	securityfs_remove(ima_policy);
+ 	ima_policy = NULL;
+ #elif defined(CONFIG_IMA_WRITE_POLICY)
+-	clear_bit(IMA_FS_BUSY, &ima_fs_flags);
++	clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
+ #elif defined(CONFIG_IMA_READ_POLICY)
+ 	inode->i_mode &= ~S_IWUSR;
+ #endif
+diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
+index d9c505fd8a14..68671f976756 100644
+--- a/security/integrity/ima/ima_init_ima_ns.c
++++ b/security/integrity/ima/ima_init_ima_ns.c
+@@ -25,6 +25,10 @@ static int ima_init_namespace(struct ima_namespace *ns)
  	else
--		return binary_runtime_size + sizeof(struct ima_kexec_hdr);
-+		return ns->binary_runtime_size + sizeof(struct ima_kexec_hdr);
+ 		ns->binary_runtime_size = ULONG_MAX;
+ 
++	mutex_init(&ns->ima_write_mutex);
++	ns->valid_policy = 1;
++	ns->ima_fs_flags = 0;
++
+ 	return 0;
  }
  
- static int ima_pcr_extend(struct tpm_digest *digests_arg, int pcr)
 -- 
 2.31.1
 
