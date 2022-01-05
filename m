@@ -2,44 +2,45 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EADF4859C5
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Jan 2022 21:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D264859D5
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Jan 2022 21:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243852AbiAEUHm (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 5 Jan 2022 15:07:42 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40390 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243847AbiAEUHk (ORCPT
+        id S243900AbiAEUMe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 5 Jan 2022 15:12:34 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60114 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243875AbiAEUMd (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:07:40 -0500
+        Wed, 5 Jan 2022 15:12:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C527B81D5C;
-        Wed,  5 Jan 2022 20:07:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80935C36AE0;
-        Wed,  5 Jan 2022 20:07:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9F256183C;
+        Wed,  5 Jan 2022 20:12:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB3DC36AE0;
+        Wed,  5 Jan 2022 20:12:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641413258;
-        bh=li3QLwxVn9lTYMyu8AVDi89PvVj8yPmgWVVq8l2imWA=;
+        s=k20201202; t=1641413552;
+        bh=VKtAIConpbBFA6GqxUHN4Ht5xmPdKeItLVEssC8Va1I=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=DlFSqTNrf4gavWiRw6K9Bj6HH2uPFH4c1DsD9UFYT7gLt8PWAfqZXX264JX6XyMBl
-         0Bno5kLWg62V26nhWJm5Khi2rSNFzGx9cAfiEwjCj4hX7dv1CATRgYelTDhbrGX/TI
-         IYt0/a5InOFxnwVkYMOzcB/QiW4svWYWslCzN0wXHfmHkWLW4JUndULgcUgEVvzKQP
-         c3+qeFJhLjEmY9hUmWiX+UIQZjKyWbcRllxGOA9McrKYtoxbE7IqpYyVAsXKcE+8Hz
-         oV31hVbrJDddCx9nxgHmSBBUoQeHcNfwCnfdDKWsDN8IAdjZH0eHFMej5gAsjOkRAE
-         Gm4Td5L4dYTPA==
-Message-ID: <02122eeb569342b1083e8058afe04733a99617e2.camel@kernel.org>
-Subject: Re: [PATCH 2/2] selftests: tpm: add async space test with
- noneexisting handle
+        b=Isjb6nB8batMswToanbNXUml8r8wH4WSeugz+Hr84UYHiH7dlo9tjAhZwx+ClrmeK
+         ahBbeCGAqlVNrB7ke+ptPWuZ2OD2SnZdTbRrPTBiqbF9IUZikURO17wUyUjjDSlnZ3
+         qsu2kITz6cxMK0ovuobEdC/TmBfFTDtWjNuV+J1HP6tSHQB6dylKSECi66sTAMb/TD
+         p5muKmpGAobQUUHg38SbLzBCFIbJ0+tZ2CsFFJ865Z93mynpn7FKoDCMbbbO6ADvqI
+         aP5g06Nnjx9lusr4vte/UdNcSTx6kbXekd4EcWgdBW7sOMQVtt9Bo/L+QIPxumegzG
+         UWXrD0Zb+Aiog==
+Message-ID: <db88a381739e08806e2370e8fbe8fdde82731464.camel@kernel.org>
+Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
+ decrypted data
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tadeusz Struk <tstruk@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-integrity@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 05 Jan 2022 22:07:32 +0200
-In-Reply-To: <20211229050655.2030-2-tstruk@gmail.com>
-References: <20211229050655.2030-1-tstruk@gmail.com>
-         <20211229050655.2030-2-tstruk@gmail.com>
+To:     Yael Tiomkin <yaelt@google.com>, linux-integrity@vger.kernel.org
+Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, corbet@lwn.net,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Date:   Wed, 05 Jan 2022 22:12:27 +0200
+In-Reply-To: <20211229215330.4134835-1-yaelt@google.com>
+References: <20211229215330.4134835-1-yaelt@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.42.2 
@@ -48,59 +49,20 @@ Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2021-12-28 at 21:06 -0800, Tadeusz Struk wrote:
-> Add a test for tpm2 spaces in async mode that checks if
-                 ~~~~
-I would rather speak about adding a test case for /dev/tpmrm0.
+On Wed, 2021-12-29 at 16:53 -0500, Yael Tiomkin wrote:
+> The encrypted.c class supports instantiation of encrypted keys with
+> either an already-encrypted key material, or by generating new key
+> material based on random numbers. This patch defines a new datablob
+> format: [<format>] <master-key name> <decrypted data length>
+> <decrypted data> that allows to instantiate encrypted keys using
+> user-provided decrypted data, and therefore allows to perform key
+> encryption from userspace. The decrypted key material will be
+> inaccessible from userspace.
 
-> the code handles invalid handles correctly.
->=20
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: <linux-integrity@vger.kernel.org>
-> Cc: <linux-kselftest@vger.kernel.org>
-> Cc: <linux-kernel@vger.kernel.org>
-> Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
-> ---
-> =C2=A0tools/testing/selftests/tpm2/tpm2_tests.py | 16 ++++++++++++++++
-> =C2=A01 file changed, 16 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py
-> b/tools/testing/selftests/tpm2/tpm2_tests.py
-> index 9d764306887b..b373b0936e40 100644
-> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
-> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-> @@ -302,3 +302,19 @@ class AsyncTest(unittest.TestCase):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 log.debug("Calling get_c=
-ap in a NON_BLOCKING mode")
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 async_client.get_cap(tpm=
-2.TPM2_CAP_HANDLES,
-> tpm2.HR_LOADED_SESSION)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 async_client.close()
-> +
-> +=C2=A0=C2=A0=C2=A0 def test_flush_invlid_context(self):
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 log =3D logging.getLogger(__n=
-ame__)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 log.debug(sys._getframe().f_c=
-ode.co_name)
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 async_client =3D tpm2.Client(=
-tpm2.Client.FLAG_SPACE |
-> tpm2.Client.FLAG_NONBLOCK)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 log.debug("Calling flush_cont=
-ext passing in an invalid
-> handle ")
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 handle =3D 0x80123456
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =3D 0
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 try:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 async=
-_client.flush_context(handle)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 except OSError as e:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =
-=3D e.errno
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 self.assertEqual(rc, 22)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 async_client.close()
+The 2nd to last sentence is essentially a tautology but fails to
+be even that, as you can already "perform key encryption" from user
+space, just not with arbitrary key material.
 
-BR,
-Jarkko
+It does not elighten any applications of this feature.
+
+/Jarkko
