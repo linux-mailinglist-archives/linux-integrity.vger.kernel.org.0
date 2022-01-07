@@ -2,199 +2,178 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80699487845
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jan 2022 14:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 064B6487C46
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jan 2022 19:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347606AbiAGNcu (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jan 2022 08:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347601AbiAGNcs (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jan 2022 08:32:48 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D38C061401
-        for <linux-integrity@vger.kernel.org>; Fri,  7 Jan 2022 05:32:48 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id u13so15503417lff.12
-        for <linux-integrity@vger.kernel.org>; Fri, 07 Jan 2022 05:32:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JgcMCFnFrjIsgT43dvK+WgNIyiihonsed1brH+P2D0k=;
-        b=mEI7jqVRKmy03URhYvc0p0L+hMdoyra2ECiMxTX/3RiaDiocOY7DRfkPjtsujwlnRA
-         laRjCnDCwK1qDTmyq6nNoCGz/yZaOaG5QOOZ7VrOR6faHbLme9aN91yjiYkTsxZGCqU3
-         4k5JSMZSJR57XTEqf8OzeKujv82JetVewZdxM0ZWhDs0Uu3Mus1YR9ktbtd3z1W4igwg
-         OLGe3tg7o1vPb7rlUBBVQrtDmp/IS0eKKJCE+f5kkuYxTO37DUxVe6dAPFCXOkzcRuw8
-         yPotRtz0eEHRMTZiAJj0ytaS83kDIA9AIa6gNyk7qghA/JfTXAbHr2vpmRIwSr06EFqz
-         SAVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JgcMCFnFrjIsgT43dvK+WgNIyiihonsed1brH+P2D0k=;
-        b=LXc1jmH7psF8nJoB2Fu6+j51Yc+V26VurTdAFA3+QWLA/EYNdNgt2xZbE96sEPmTlw
-         7hwGOEfXnUzbCHvdkKzGfCysKCBF95C6+6kHhmOpssX8FwNgxDOuZ6XOL/3J6vio+2U0
-         jlhnGHNjGmF+HMjZxUckx7Jf+hXUqWY4G01jVqtt+rdteRxh94QGFwMa8zW/9Hucy7L6
-         pSND5Z528DzL0anDDRV1WVKNWMrlCBKShgsQw4BYJ9sqOesV4F9M47j0o7UnowWLwfZW
-         wC52YB5SM/TLrUc9yinPRtrDaRYQmWu1tfTpKmoH8g7qiX9l14cmNQXvhh/ClmfCENYx
-         nMNg==
-X-Gm-Message-State: AOAM533QxLEDoHL8/xzouNlhEvx5cJFgG70bTwcJJWFI+TCHe+nraVv6
-        kldZKyiqX04PmPrmk7KjXxLhly8R0paH0pdsjJdlPA==
-X-Google-Smtp-Source: ABdhPJxZHR0aginZgeaaYSzSUhy2Fw0PNKIoeJ95+NIIxDoKc7NxCixL2nW6SsH00NmHlbpTh1DCtZe284yoZsAR7KU=
-X-Received: by 2002:a2e:bf01:: with SMTP id c1mr18783547ljr.511.1641562366348;
- Fri, 07 Jan 2022 05:32:46 -0800 (PST)
+        id S229657AbiAGSig (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jan 2022 13:38:36 -0500
+Received: from mga14.intel.com ([192.55.52.115]:47803 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229653AbiAGSig (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Fri, 7 Jan 2022 13:38:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641580716; x=1673116716;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aX0BdEbcfDa/OSEf5GO2WFRe0rvp1OkSlWcNIZx/r10=;
+  b=QN56y/jFgcsLysgNdEZelkGdvza73nJ2k+W/8cEEwBHjCLltKjG4WODh
+   PKJDPm573y8yTcZ8SCP2MOU8yM5duEBV/NxqzLNOEWeW74kMLmss1r7JA
+   R2tEHpAHzQSumJ1BKyRA9ec1BSAAMagZn1t5wbfmFqn4Hrni+l3pXH6z6
+   W02XiET33SwTGm8FYPByCctoMHV+vpEtBwpCDj/1/nI9DeevvB+NpMtET
+   nch0qdFmz8dQKGTWwd+TNM4qyJuLKQB94q1o9UDbTaiU5KDghahzBj+Hi
+   3zQjX5U/rvgPWIMQ/DEFthD3cp7nVvnaDVVuNwOc+KZy0zsi63lAyfHJN
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10219"; a="243115762"
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="243115762"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2022 10:37:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,270,1635231600"; 
+   d="scan'208";a="622014628"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 07 Jan 2022 10:37:07 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5u6s-000Ivw-Uq; Fri, 07 Jan 2022 18:37:06 +0000
+Date:   Sat, 8 Jan 2022 02:36:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Michal Suchanek <msuchanek@suse.de>, kexec@lists.infradead.org,
+        Philipp Rudo <prudo@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 3/6] kexec_file: Don't opencode appended signature
+ verification.
+Message-ID: <202201080202.yy2w2Wmg-lkp@intel.com>
+References: <378d956adfa3be2a6d95a71391b4bb2f7458ada3.1641555875.git.msuchanek@suse.de>
 MIME-Version: 1.0
-References: <20211229215330.4134835-1-yaelt@google.com> <CAFA6WYPuPHgcnzt6j+Q-EA2Dos6vBDukrjpheo5srLVXFrifEg@mail.gmail.com>
- <5a38824152eeee0fc9ba0a4fd2308bb6e0970059.camel@linux.ibm.com>
- <CAFA6WYOJt3=YMTt_QQSq6Z-MK42hwWspgSpasw2fuPtVFcP3uA@mail.gmail.com>
- <CAKoutNvW1c7MkTaFwyrD7MjUVXvTtcBOGFULMittJ5vzjMN0mg@mail.gmail.com>
- <CAFA6WYPQRagZF8-grn_LC8_SAaxBzh=cSgHhFAQQOYK+L2KuBQ@mail.gmail.com> <CAKoutNtuY0+L29d6xzn6BgEKBytFsBHZ_kgkCOJZuicb_uNPHg@mail.gmail.com>
-In-Reply-To: <CAKoutNtuY0+L29d6xzn6BgEKBytFsBHZ_kgkCOJZuicb_uNPHg@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 7 Jan 2022 19:02:33 +0530
-Message-ID: <CAFA6WYPxogLMk1EDqvM_mwgCmU1s_yDwYFPjq6wurnQGhG=-_w@mail.gmail.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-To:     Yael Tiomkin <yaelt@google.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        jejb@linux.ibm.com, Jarkko Sakkinen <jarkko@kernel.org>,
-        corbet@lwn.net, dhowells@redhat.com, jmorris@namei.org,
-        serge@hallyn.com, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        =?UTF-8?Q?Jan_L=C3=BCbbe?= <jlu@pengutronix.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <378d956adfa3be2a6d95a71391b4bb2f7458ada3.1641555875.git.msuchanek@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 7 Jan 2022 at 18:23, Yael Tiomkin <yaelt@google.com> wrote:
->
-> Hi Sumit,
->
-> On Fri, Jan 7, 2022 at 12:15 AM Sumit Garg <sumit.garg@linaro.org> wrote:
-> >
-> > Hi Yael,
-> >
-> > On Thu, 6 Jan 2022 at 01:48, Yael Tiomkin <yaelt@google.com> wrote:
-> > >
-> > > Hi Sumit,
-> > >
-> > > On Mon, Jan 3, 2022 at 1:51 AM Sumit Garg <sumit.garg@linaro.org> wrote:
-> > > >
-> > > > Hi Mimi,
-> > > >
-> > > > Apologies for the delayed reply as I was on leave for a long new year weekend.
-> > > >
-> > > > On Thu, 30 Dec 2021 at 18:59, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > > > >
-> > > > > Hi Sumit,
-> > > > >
-> > > > > On Thu, 2021-12-30 at 15:37 +0530, Sumit Garg wrote:
-> > > > > > + Jan, Ahmad
-> > > > > >
-> > > > > > On Thu, 30 Dec 2021 at 03:24, Yael Tiomkin <yaelt@google.com> wrote:
-> > > > > > >
-> > > > > > > The encrypted.c class supports instantiation of encrypted keys with
-> > > > > > > either an already-encrypted key material, or by generating new key
-> > > > > > > material based on random numbers. This patch defines a new datablob
-> > > > > > > format: [<format>] <master-key name> <decrypted data length>
-> > > > > > > <decrypted data> that allows to instantiate encrypted keys using
-> > > > > > > user-provided decrypted data, and therefore allows to perform key
-> > > > > > > encryption from userspace. The decrypted key material will be
-> > > > > > > inaccessible from userspace.
-> > > > > >
-> > > > > > This type of user-space key import feature has already been discussed
-> > > > > > at large in the context of trusted keys here [1]. So what makes it
-> > > > > > special in case of encrypted keys such that it isn't a "UNSAFE_IMPORT"
-> > > > > > or "DEBUGGING_IMPORT" or "DEVELOPMENT_IMPORT", ...?
-> > > > > >
-> > > > > > [1] https://lore.kernel.org/linux-integrity/74830d4f-5a76-8ba8-aad0-0d79f7c01af9@pengutronix.de/
-> > > > > >
-> > > > > > -Sumit
-> > > > > >
-> > > > > > >
-> > > > > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > > > > > Signed-off-by: Yael Tiomkin <yaelt@google.com>
-> > > > >
-> > > > > There is a difference between trusted and encrypted keys.
-> > > >
-> > > > Yeah I understand the implementation differences.
-> > > >
-> > > > >  So in
-> > > > > addition to pointing to the rather long discussion thread, please
-> > > > > summarize the conclusion and, assuming you agree, include why in once
-> > > > > case it was acceptable and in the other it wasn't to provide userspace
-> > > > > key data.
-> > > >
-> > > > My major concern with importing user-space key data in *plain* format
-> > > > is that if import is *not* done in a safe (manufacturing or
-> > > > production) environment then the plain key data is susceptible to
-> > > > user-space compromises when the device is in the field.
-> > >
-> > > I agree this can happen. Key distribution in any scenario needs to be
-> > > secure and this could also potentially be an issue if the key is first
-> > > encrypted and then imported.
-> >
-> > Currently its not the case with encrypted keys. These are random keys
-> > generated within the kernel and encrypted with master key within the
-> > kernel and then exposed to user-space as encrypted blob only.
->
->
-> There are two different ways to create encrypted keys. One is to have
-> them generated within the kernel using random numbers, and the other
-> is by importing them in their encrypted form from user-space.
-> I was referring to the latter in my previous statement.
->
+Hi Michal,
 
-So, from a key distribution security point of view, encrypted key
-user-space import is **not equal to** plain key user-space import.
-That's why we need to have a separate compile time option as every
-device may come with its own threat model and may choose to enable or
-disable this user-space plain key import feature.
+Thank you for the patch! Yet something to improve:
 
--Sumit
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on s390/features linus/master jeyu/modules-next v5.16-rc8 next-20220106]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> >
-> > > We can make sure the documentation
-> > > highlights the safety requirement.
-> > >
-> >
-> > IMO, you should enable this feature as a compile time option. The help
-> > text for that config option should highlight the use-case along with a
-> > safety warning.
-> >
-> > -Sumit
-> >
-> > > >
-> > > > And it sounds like we are diverting from basic definition [1] of encrypted keys:
-> > > >
-> > > > "Trusted and Encrypted Keys are two new key types added to the
-> > > > existing kernel key ring service. Both of these new types are variable
-> > > > length symmetric keys, and in both cases all keys are created in the
-> > > > kernel, and **user space sees, stores, and loads** only encrypted
-> > > > blobs."
-> > > >
-> > > > Also, as Jarrko mentioned earlier the use-case is still not clear to
-> > > > me as well. Isn't user logon keys an alternative option for
-> > > > non-readable user-space keys?
-> > >
-> > > The goal in this change is to allow key encryption from userspace,
-> > > using user-provided decrypted data. This cannot be achieved in logon
-> > > keys, which as you mentioned, are simply non-readable user type keys.
-> > >
-> > >
-> > > >
-> > > > [1] https://www.kernel.org/doc/html/v4.13/security/keys/trusted-encrypted.html
-> > > >
-> > > > -Sumit
-> > > >
-> > > > >
-> > > > > thanks,
-> > > > >
-> > > > > Mimi
-> > > > >
-> > >
-> > > Yael
+url:    https://github.com/0day-ci/linux/commits/Michal-Suchanek/KEXEC_SIG-with-appended-signature/20220107-195818
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: hexagon-randconfig-r016-20220107 (https://download.01.org/0day-ci/archive/20220108/202201080202.yy2w2Wmg-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/c59400c94a653abe5a5fbfd5bc166bd3ac1ebb41
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Michal-Suchanek/KEXEC_SIG-with-appended-signature/20220107-195818
+        git checkout c59400c94a653abe5a5fbfd5bc166bd3ac1ebb41
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> kernel/module.c:2898:40: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'size_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
+                   err = verify_appended_signature(mod, &info->len,
+                                                        ^~~~~~~~~~
+   include/linux/verification.h:63:57: note: passing argument to parameter 'len' here
+   int verify_appended_signature(const void *data, size_t *len, struct key *trusted_keys,
+                                                           ^
+   kernel/module.c:4804:6: warning: no previous prototype for function 'module_layout' [-Wmissing-prototypes]
+   void module_layout(struct module *mod,
+        ^
+   kernel/module.c:4804:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void module_layout(struct module *mod,
+   ^
+   static 
+   1 warning and 1 error generated.
+
+
+vim +2898 kernel/module.c
+
+  2880	
+  2881	#ifdef CONFIG_MODULE_SIG
+  2882	static int module_sig_check(struct load_info *info, int flags)
+  2883	{
+  2884		int err = -ENODATA;
+  2885		const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+  2886		const char *reason;
+  2887		const void *mod = info->hdr;
+  2888	
+  2889		/*
+  2890		 * Require flags == 0, as a module with version information
+  2891		 * removed is no longer the module that was signed
+  2892		 */
+  2893		if (flags == 0 &&
+  2894		    info->len > markerlen &&
+  2895		    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+  2896			/* We truncate the module to discard the signature */
+  2897			info->len -= markerlen;
+> 2898			err = verify_appended_signature(mod, &info->len,
+  2899							VERIFY_USE_SECONDARY_KEYRING, "module");
+  2900			if (!err) {
+  2901				info->sig_ok = true;
+  2902				return 0;
+  2903			}
+  2904		}
+  2905	
+  2906		/*
+  2907		 * We don't permit modules to be loaded into the trusted kernels
+  2908		 * without a valid signature on them, but if we're not enforcing,
+  2909		 * certain errors are non-fatal.
+  2910		 */
+  2911		switch (err) {
+  2912		case -ENODATA:
+  2913			reason = "unsigned module";
+  2914			break;
+  2915		case -ENOPKG:
+  2916			reason = "module with unsupported crypto";
+  2917			break;
+  2918		case -ENOKEY:
+  2919			reason = "module with unavailable key";
+  2920			break;
+  2921	
+  2922		default:
+  2923			/*
+  2924			 * All other errors are fatal, including lack of memory,
+  2925			 * unparseable signatures, and signature check failures --
+  2926			 * even if signatures aren't required.
+  2927			 */
+  2928			return err;
+  2929		}
+  2930	
+  2931		if (is_module_sig_enforced()) {
+  2932			pr_notice("Loading of %s is rejected\n", reason);
+  2933			return -EKEYREJECTED;
+  2934		}
+  2935	
+  2936		return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
+  2937	}
+  2938	#else /* !CONFIG_MODULE_SIG */
+  2939	static int module_sig_check(struct load_info *info, int flags)
+  2940	{
+  2941		return 0;
+  2942	}
+  2943	#endif /* !CONFIG_MODULE_SIG */
+  2944	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
