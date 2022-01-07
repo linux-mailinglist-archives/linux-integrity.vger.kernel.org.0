@@ -2,175 +2,65 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0492848720F
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jan 2022 06:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A084876B3
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jan 2022 12:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346129AbiAGFPM (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 7 Jan 2022 00:15:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
+        id S238054AbiAGLpG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 7 Jan 2022 06:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbiAGFPL (ORCPT
+        with ESMTP id S238037AbiAGLpG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 7 Jan 2022 00:15:11 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1E1C061201
-        for <linux-integrity@vger.kernel.org>; Thu,  6 Jan 2022 21:15:10 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id c18-20020a4a3812000000b002da81004c1cso1218093ooa.13
-        for <linux-integrity@vger.kernel.org>; Thu, 06 Jan 2022 21:15:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/lXYTMqTPQj6nVYc2LjkC+PRXcEeKHgZlGRbidIcOIo=;
-        b=L3zHbWNYc53NMKrX6Sl1d3PRn29b66vuiNXviFr8GA4a+SYGpiSAyvS18jms6d8qVB
-         fKs3D+Nbr+M6SNOoFZDyMEvRSdPvzFrzzEGDWpLMQWGidJTOSq1Iqpx53jH1xd4YXitS
-         SSGZeD8LGKgJig/FEGdCluCKQl2Oe2NwjhtHQpWiii5utKHQBmtfn6tScZX6Kakzb2TF
-         EP0qNy52kdQQDeE0/CzqJ36Xhn6zZGmaoniKY5iaEE+FoazTqn1MIU0UX+METLAKof5P
-         IzzC0+07tN5TPfH60atp5u5kgV5lP7qVsaQzSBeSiN0T3CFVtqm2p2FVW9BXdVs6KNB/
-         cx8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/lXYTMqTPQj6nVYc2LjkC+PRXcEeKHgZlGRbidIcOIo=;
-        b=OVK8qmie4PkggxbHoCOP5b6u/L3Jx42WoOIRbHTwm3EHIiEnwUsi3R4C+67MeVobI/
-         TYNaDuskXzDC8raF069PUoMly8WJx+p8CzLvM6RsnMpEUqHaq3M28Xi+0IlXb9+vsh7x
-         MLcNJA4LP8F48lBAH6qp8bH0qxPgPRBFCp0cW7FbpIz+8J3tjv2f1ZiqR3meNYAf1FUJ
-         uF2tN13hWCcfP3qWSwy2CL5/i4NCbtHDvk8vFSDMqyueG1sZ1LKIDSyFjjDI4X3ONdQn
-         rVda0/OoVxD+NtiFjrbaiPMev2j5St0KY+u4ziL50clVmUVdu3nNSHhW2QHWYhiPqDUY
-         KgHw==
-X-Gm-Message-State: AOAM530brtB0hU/ghACYP6bW4+eRcYaeZT2vpq8UYYgj1EyaVROBifpt
-        piwWq/pxQGLUvWPY3fSXsNYJI8d+7Ey3DoqHWkVnzw==
-X-Google-Smtp-Source: ABdhPJwJ2NaeNTYz8jr/Bz1rJEZfuZ5XHAT20ivQM2kiMSToIXtUl8uQhMexLkbtkzTkHr/nOhstN/RfFJf7Y6M22uk=
-X-Received: by 2002:a4a:5403:: with SMTP id t3mr3926068ooa.72.1641532510072;
- Thu, 06 Jan 2022 21:15:10 -0800 (PST)
+        Fri, 7 Jan 2022 06:45:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB05C061245;
+        Fri,  7 Jan 2022 03:45:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56BE0B8259E;
+        Fri,  7 Jan 2022 11:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B9EC36AE9;
+        Fri,  7 Jan 2022 11:45:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641555903;
+        bh=ETS/HS/74MY5r0BinUUiMCS97lB/3KlbR9VTps9j1Vs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ibFNg2VpNvF799jh/L46hrVgNHZdxLGJoffDhUuZ/40gxZ60gNDlfM+7j2xbSEsNi
+         iq40JEssQ7U3xzourmN0izjweRNLrhDKs4p2leYyLnPHONf6tROTVWsfl1gU/af+wg
+         usPmHoyH6uQxxyDuNJB9r4cFhmJxHalcDNBH0pxgfcYO6UP2NvQryBn6Hju4/xfPhT
+         0v4gewGVdXoJiL1WVc6lqkhjNFE6sdCcbG6kEXU1Wapo9PrJqah4GzL7G2UpqwjX0r
+         PeP47ID4TWcOPOHOO0eGE12wniPvlKMDcQotqC3jdBH6zmPa4dLZSSqoUofXC5LbOT
+         8tRsktbaaXPpQ==
+Date:   Fri, 7 Jan 2022 13:44:58 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>,
+        linux-integrity@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        kernel@pengutronix.de, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3] tpm: st33zp24: Make st33zp24_remove() a void function
+Message-ID: <YdgnuvGIq1DcLlJT@iki.fi>
+References: <20220104231103.227924-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-References: <20211229215330.4134835-1-yaelt@google.com> <CAFA6WYPuPHgcnzt6j+Q-EA2Dos6vBDukrjpheo5srLVXFrifEg@mail.gmail.com>
- <5a38824152eeee0fc9ba0a4fd2308bb6e0970059.camel@linux.ibm.com>
- <CAFA6WYOJt3=YMTt_QQSq6Z-MK42hwWspgSpasw2fuPtVFcP3uA@mail.gmail.com> <CAKoutNvW1c7MkTaFwyrD7MjUVXvTtcBOGFULMittJ5vzjMN0mg@mail.gmail.com>
-In-Reply-To: <CAKoutNvW1c7MkTaFwyrD7MjUVXvTtcBOGFULMittJ5vzjMN0mg@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 7 Jan 2022 10:44:57 +0530
-Message-ID: <CAFA6WYPQRagZF8-grn_LC8_SAaxBzh=cSgHhFAQQOYK+L2KuBQ@mail.gmail.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-To:     Yael Tiomkin <yaelt@google.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        jejb@linux.ibm.com, Jarkko Sakkinen <jarkko@kernel.org>,
-        corbet@lwn.net, dhowells@redhat.com, jmorris@namei.org,
-        serge@hallyn.com, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        =?UTF-8?Q?Jan_L=C3=BCbbe?= <jlu@pengutronix.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220104231103.227924-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Yael,
+On Wed, Jan 05, 2022 at 12:11:03AM +0100, Uwe Kleine-König wrote:
+> Up to now st33zp24_remove() returns zero unconditionally. Make it return
+> no value instead which makes it easier to see in the callers that there is
+> no error to handle.
+> 
+> Also the return value of i2c and spi remove callbacks is ignored anyway.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-On Thu, 6 Jan 2022 at 01:48, Yael Tiomkin <yaelt@google.com> wrote:
->
-> Hi Sumit,
->
-> On Mon, Jan 3, 2022 at 1:51 AM Sumit Garg <sumit.garg@linaro.org> wrote:
-> >
-> > Hi Mimi,
-> >
-> > Apologies for the delayed reply as I was on leave for a long new year weekend.
-> >
-> > On Thu, 30 Dec 2021 at 18:59, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > >
-> > > Hi Sumit,
-> > >
-> > > On Thu, 2021-12-30 at 15:37 +0530, Sumit Garg wrote:
-> > > > + Jan, Ahmad
-> > > >
-> > > > On Thu, 30 Dec 2021 at 03:24, Yael Tiomkin <yaelt@google.com> wrote:
-> > > > >
-> > > > > The encrypted.c class supports instantiation of encrypted keys with
-> > > > > either an already-encrypted key material, or by generating new key
-> > > > > material based on random numbers. This patch defines a new datablob
-> > > > > format: [<format>] <master-key name> <decrypted data length>
-> > > > > <decrypted data> that allows to instantiate encrypted keys using
-> > > > > user-provided decrypted data, and therefore allows to perform key
-> > > > > encryption from userspace. The decrypted key material will be
-> > > > > inaccessible from userspace.
-> > > >
-> > > > This type of user-space key import feature has already been discussed
-> > > > at large in the context of trusted keys here [1]. So what makes it
-> > > > special in case of encrypted keys such that it isn't a "UNSAFE_IMPORT"
-> > > > or "DEBUGGING_IMPORT" or "DEVELOPMENT_IMPORT", ...?
-> > > >
-> > > > [1] https://lore.kernel.org/linux-integrity/74830d4f-5a76-8ba8-aad0-0d79f7c01af9@pengutronix.de/
-> > > >
-> > > > -Sumit
-> > > >
-> > > > >
-> > > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > > > Signed-off-by: Yael Tiomkin <yaelt@google.com>
-> > >
-> > > There is a difference between trusted and encrypted keys.
-> >
-> > Yeah I understand the implementation differences.
-> >
-> > >  So in
-> > > addition to pointing to the rather long discussion thread, please
-> > > summarize the conclusion and, assuming you agree, include why in once
-> > > case it was acceptable and in the other it wasn't to provide userspace
-> > > key data.
-> >
-> > My major concern with importing user-space key data in *plain* format
-> > is that if import is *not* done in a safe (manufacturing or
-> > production) environment then the plain key data is susceptible to
-> > user-space compromises when the device is in the field.
->
-> I agree this can happen. Key distribution in any scenario needs to be
-> secure and this could also potentially be an issue if the key is first
-> encrypted and then imported.
+This patch does not improve functinality in any possible way, and neither
+does it fix any bug.
 
-Currently its not the case with encrypted keys. These are random keys
-generated within the kernel and encrypted with master key within the
-kernel and then exposed to user-space as encrypted blob only.
-
-> We can make sure the documentation
-> highlights the safety requirement.
->
-
-IMO, you should enable this feature as a compile time option. The help
-text for that config option should highlight the use-case along with a
-safety warning.
-
--Sumit
-
-> >
-> > And it sounds like we are diverting from basic definition [1] of encrypted keys:
-> >
-> > "Trusted and Encrypted Keys are two new key types added to the
-> > existing kernel key ring service. Both of these new types are variable
-> > length symmetric keys, and in both cases all keys are created in the
-> > kernel, and **user space sees, stores, and loads** only encrypted
-> > blobs."
-> >
-> > Also, as Jarrko mentioned earlier the use-case is still not clear to
-> > me as well. Isn't user logon keys an alternative option for
-> > non-readable user-space keys?
->
-> The goal in this change is to allow key encryption from userspace,
-> using user-provided decrypted data. This cannot be achieved in logon
-> keys, which as you mentioned, are simply non-readable user type keys.
->
->
-> >
-> > [1] https://www.kernel.org/doc/html/v4.13/security/keys/trusted-encrypted.html
-> >
-> > -Sumit
-> >
-> > >
-> > > thanks,
-> > >
-> > > Mimi
-> > >
->
-> Yael
+/Jarkko
