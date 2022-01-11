@@ -2,117 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 658EA48A774
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jan 2022 06:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EAC48A777
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jan 2022 06:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347326AbiAKFwr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jan 2022 00:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S1347395AbiAKFw4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jan 2022 00:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347288AbiAKFwq (ORCPT
+        with ESMTP id S1347383AbiAKFw4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jan 2022 00:52:46 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A98CC06173F;
-        Mon, 10 Jan 2022 21:52:46 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id l8so13311010plt.6;
-        Mon, 10 Jan 2022 21:52:46 -0800 (PST)
+        Tue, 11 Jan 2022 00:52:56 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489E3C06173F;
+        Mon, 10 Jan 2022 21:52:56 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso3171029pje.0;
+        Mon, 10 Jan 2022 21:52:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jIfH09JLImJRHA4SgBVUlZIpfJTuCTHgSeKemIfbCRg=;
-        b=Q/te1YCCOtFEOLwx6H13j5toJEgwF1TWXHH8Liq8/o9KoZyG53yQX3Qq4BOTuHnrr2
-         lqvXmBJBSZSw1pJWmD9GcaqKnNY4ssLEjXRDDCVJ4uzP+cWN0QLktUhRqdopvcEjKyWv
-         g1X9NysdCj/V6r3NdKJia7WyR2jx6k84VUwjtLRrnFYllXe2B4ouSwQLNSzF+DvlGA1c
-         I3ht8TdIysMBgQp1W5nIKlRiqxCUyb96stoSDgziDQjlF4DVxKATgvH80PcXV1//ukyn
-         8nm3djvfCiGf9ch+GXiw0xJrC+sduY/6eWZ34NSDzLEXgcFSlFhVHPlJzBjPOFXMjnPd
-         h6hg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8izNN1CH17wIIsXqec4/Z1Hegm0aWPFiD659FrlOgN4=;
+        b=Jr2c2svWQBxdpk5UMBy3vjw2aqYrWRXYfLOmEwzO6nXxhKrKcvnhX0/iGgCJydkCKP
+         NUhkgOVK3sEhwT7Ywdq64Udx7UguuQEB4lsxEb2WDfsx3zfjcTtuLfTRQGrukuC0LpZ4
+         6yVHHLJOz26PM82h+eD3JtKFDVW4DbSLYQQREtBqqkMKiyiLRLITOmAJ9qryKbHobpW0
+         hzEYlITfBpR+NDEw2JD71NhEs1+13BIfZj3vCGR+rbicy8qC6lojQD/i8ZRs+6cL4pdt
+         y9kAqDE38bZBcu9H923uvo4LJ3OwfoGV1FBoqreQnRK/4M4xwZVz2ZzzrIKnd6hkMjsh
+         EJJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jIfH09JLImJRHA4SgBVUlZIpfJTuCTHgSeKemIfbCRg=;
-        b=nThbzfPUW1rS46bE1W562BLa2lifPrJ46w4i2f//JEPx7V31kW2YgJNlKNY3r/uMpB
-         uATZ5Ov+9QTFfq2giqzRdtGRlSFyw14hPGyARz0+UTVOeBbmPoLJ9cYCmva2euqoJqH0
-         9M2LeQvuHZHQhIC0vORVlFD+LaF7N0rsTqSAIoC64tqc0hprWIOc5zDe7gLU8l0iXVOE
-         Ihgnn2/BhQWhRPdDSUuU+5sWAA0yL0QrLtVcNLfcTsW8VxCzdUuWN+YTh9o0Gh614JFN
-         ciLDwNj+L+twgl3Gt6L3eRJdoVcSmLQehtFerDpRc+bvnyuPOOYw+pEEnywa+OGFIRcu
-         95yQ==
-X-Gm-Message-State: AOAM533Epk9KYSyfnXI1w0/LUttRpTlr7NBoJHH+N7nWWBczPVsun07E
-        iVBQ/VVMzpA6AqcyzUkC+GAgC7ZgdbX8Hvf0gqI=
-X-Google-Smtp-Source: ABdhPJy6fG3APJEM65fde4H5vmIgSUFjPOR0m8oxa4fcMZqnTTcWVluDguIb3zsZkWUJHSxeULxxHA==
-X-Received: by 2002:a63:1d7:: with SMTP id 206mr2771722pgb.111.1641880365805;
-        Mon, 10 Jan 2022 21:52:45 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8izNN1CH17wIIsXqec4/Z1Hegm0aWPFiD659FrlOgN4=;
+        b=lA9n2RWQ82I7aUdks3gBn7yUd/HRp46R+D/3CSdCrR5U0iMTOI3b4h3StaBrqs7w6g
+         tyNLt3VDFM8rIledJTZga0lbFPR4T72FBkYswelDp11jYVg95YpImMuKWL2AQ93bcbYn
+         ipS6Fgs+xC4+Wa0krAwp4d6KoQ7Bnp3tLPcaTK8piNy63KQs8qLbrh1NA9l/gfTaeOKy
+         uuF74kOJjaIIOBRvqUrpl+To3W/11D/gSORCHRuO/7v7H34EWaXJ8toTxCkfZ40W9ixz
+         fR725/4Sj2bhjZqus6dfyOI+Jq2bukZfbBWK/e1CYk2sdf5H3yxlQKM4i7GMARU6aUAD
+         6okg==
+X-Gm-Message-State: AOAM530AoIo7YjGIedN86j/C3n+vZUt48Jz9TCQ7iAoEmiz1SlB6EQnx
+        UOZIfliXfYexgIwdtzLlqzY=
+X-Google-Smtp-Source: ABdhPJya9+ka4mTEpG4biB0uvDatieGUdi3kOKWEdH1UE4Ag2RkTU+4+K79+oSOqDsSKi4OHoeno3w==
+X-Received: by 2002:a63:7a41:: with SMTP id j1mr2772570pgn.20.1641880375764;
+        Mon, 10 Jan 2022 21:52:55 -0800 (PST)
 Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id k3sm843254pjt.39.2022.01.10.21.52.45
+        by smtp.gmail.com with ESMTPSA id k3sm843254pjt.39.2022.01.10.21.52.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 21:52:45 -0800 (PST)
+        Mon, 10 Jan 2022 21:52:55 -0800 (PST)
 From:   Tadeusz Struk <tstruk@gmail.com>
 To:     jarkko@kernel.org
-Cc:     Tadeusz Struk <tstruk@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+Cc:     Tadeusz Struk <tstruk@gmail.com>, Shuah Khan <shuah@kernel.org>,
+        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/2] tpm: Fix error handling in async work
-Date:   Mon, 10 Jan 2022 21:52:27 -0800
-Message-Id: <20220111055228.1830-1-tstruk@gmail.com>
+Subject: [PATCH v2 2/2] selftests: tpm: add async space test with noneexisting handle
+Date:   Mon, 10 Jan 2022 21:52:28 -0800
+Message-Id: <20220111055228.1830-2-tstruk@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220111055228.1830-1-tstruk@gmail.com>
+References: <20220111055228.1830-1-tstruk@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When an invalid (non existing) handle is used in a TPM command,
-that uses the resource manager interface (/dev/tpmrm0) the resource
-manager tries to load it from its internal cache, but fails and
-the tpm_dev_transmit returns an -EINVAL error to the caller.
-The existing async handler doesn't handle these error cases
-currently and the condition in the poll handler never returns
-mask with EPOLLIN set.
-The result is that the poll call blocks and the application gets stuck
-until the user_read_timer wakes it up after 120 sec.
-Change the tpm_dev_async_work function to handle error conditions
-returned from tpm_dev_transmit they are also reflected in the poll mask
-and a correct error code could passed back to the caller.
+Add a test for /dev/tpmrm0 in async mode that checks if
+the code handles invalid handles correctly.
 
 Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Shuah Khan <shuah@kernel.org>
 Cc: <linux-integrity@vger.kernel.org>
-Cc: <stable@vger.kernel.org>
+Cc: <linux-kselftest@vger.kernel.org>
 Cc: <linux-kernel@vger.kernel.org>
-Fixes: 9e1b74a63f77 ("tpm: add support for nonblocking operation")
 Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
 ---
-Changed in v2:
-- Updated commit message with better problem description
-- Fixed typeos.
-Changed in v3:
-- Added a comment to tpm_dev_async_work.
-- Updated commit message.
+Changes in v2:
+- Updated commit message
 ---
- drivers/char/tpm/tpm-dev-common.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ tools/testing/selftests/tpm2/tpm2_tests.py | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-index c08cbb306636..50df8f09ff79 100644
---- a/drivers/char/tpm/tpm-dev-common.c
-+++ b/drivers/char/tpm/tpm-dev-common.c
-@@ -69,7 +69,13 @@ static void tpm_dev_async_work(struct work_struct *work)
- 	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
- 			       sizeof(priv->data_buffer));
- 	tpm_put_ops(priv->chip);
--	if (ret > 0) {
+diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+index 9d764306887b..b373b0936e40 100644
+--- a/tools/testing/selftests/tpm2/tpm2_tests.py
++++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+@@ -302,3 +302,19 @@ class AsyncTest(unittest.TestCase):
+         log.debug("Calling get_cap in a NON_BLOCKING mode")
+         async_client.get_cap(tpm2.TPM2_CAP_HANDLES, tpm2.HR_LOADED_SESSION)
+         async_client.close()
 +
-+	/*
-+	 * If ret is > 0 then tpm_dev_transmit returned the size of the
-+	 * response. If ret is < 0 then tpm_dev_transmit failed and
-+	 * returned a return code.
-+	 */
-+	if (ret != 0) {
- 		priv->response_length = ret;
- 		mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
- 	}
++    def test_flush_invlid_context(self):
++        log = logging.getLogger(__name__)
++        log.debug(sys._getframe().f_code.co_name)
++
++        async_client = tpm2.Client(tpm2.Client.FLAG_SPACE | tpm2.Client.FLAG_NONBLOCK)
++        log.debug("Calling flush_context passing in an invalid handle ")
++        handle = 0x80123456
++        rc = 0
++        try:
++            async_client.flush_context(handle)
++        except OSError as e:
++            rc = e.errno
++
++        self.assertEqual(rc, 22)
++        async_client.close()
 -- 
 2.30.2
 
