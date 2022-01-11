@@ -2,109 +2,52 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EAC48A777
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jan 2022 06:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAD148A8CD
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jan 2022 08:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347395AbiAKFw4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jan 2022 00:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347383AbiAKFw4 (ORCPT
+        id S1348699AbiAKHtp (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jan 2022 02:49:45 -0500
+Received: from mail.BETTERBIZ.PL ([45.86.209.138]:48098 "EHLO
+        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235873AbiAKHto (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jan 2022 00:52:56 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489E3C06173F;
-        Mon, 10 Jan 2022 21:52:56 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso3171029pje.0;
-        Mon, 10 Jan 2022 21:52:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8izNN1CH17wIIsXqec4/Z1Hegm0aWPFiD659FrlOgN4=;
-        b=Jr2c2svWQBxdpk5UMBy3vjw2aqYrWRXYfLOmEwzO6nXxhKrKcvnhX0/iGgCJydkCKP
-         NUhkgOVK3sEhwT7Ywdq64Udx7UguuQEB4lsxEb2WDfsx3zfjcTtuLfTRQGrukuC0LpZ4
-         6yVHHLJOz26PM82h+eD3JtKFDVW4DbSLYQQREtBqqkMKiyiLRLITOmAJ9qryKbHobpW0
-         hzEYlITfBpR+NDEw2JD71NhEs1+13BIfZj3vCGR+rbicy8qC6lojQD/i8ZRs+6cL4pdt
-         y9kAqDE38bZBcu9H923uvo4LJ3OwfoGV1FBoqreQnRK/4M4xwZVz2ZzzrIKnd6hkMjsh
-         EJJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8izNN1CH17wIIsXqec4/Z1Hegm0aWPFiD659FrlOgN4=;
-        b=lA9n2RWQ82I7aUdks3gBn7yUd/HRp46R+D/3CSdCrR5U0iMTOI3b4h3StaBrqs7w6g
-         tyNLt3VDFM8rIledJTZga0lbFPR4T72FBkYswelDp11jYVg95YpImMuKWL2AQ93bcbYn
-         ipS6Fgs+xC4+Wa0krAwp4d6KoQ7Bnp3tLPcaTK8piNy63KQs8qLbrh1NA9l/gfTaeOKy
-         uuF74kOJjaIIOBRvqUrpl+To3W/11D/gSORCHRuO/7v7H34EWaXJ8toTxCkfZ40W9ixz
-         fR725/4Sj2bhjZqus6dfyOI+Jq2bukZfbBWK/e1CYk2sdf5H3yxlQKM4i7GMARU6aUAD
-         6okg==
-X-Gm-Message-State: AOAM530AoIo7YjGIedN86j/C3n+vZUt48Jz9TCQ7iAoEmiz1SlB6EQnx
-        UOZIfliXfYexgIwdtzLlqzY=
-X-Google-Smtp-Source: ABdhPJya9+ka4mTEpG4biB0uvDatieGUdi3kOKWEdH1UE4Ag2RkTU+4+K79+oSOqDsSKi4OHoeno3w==
-X-Received: by 2002:a63:7a41:: with SMTP id j1mr2772570pgn.20.1641880375764;
-        Mon, 10 Jan 2022 21:52:55 -0800 (PST)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id k3sm843254pjt.39.2022.01.10.21.52.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 21:52:55 -0800 (PST)
-From:   Tadeusz Struk <tstruk@gmail.com>
-To:     jarkko@kernel.org
-Cc:     Tadeusz Struk <tstruk@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests: tpm: add async space test with noneexisting handle
-Date:   Mon, 10 Jan 2022 21:52:28 -0800
-Message-Id: <20220111055228.1830-2-tstruk@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220111055228.1830-1-tstruk@gmail.com>
-References: <20220111055228.1830-1-tstruk@gmail.com>
+        Tue, 11 Jan 2022 02:49:44 -0500
+Received: by mail.betterbiz.pl (Postfix, from userid 1001)
+        id 6B7FD82AEE; Tue, 11 Jan 2022 02:45:51 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
+        t=1641887384; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        h=Date:From:To:Subject:From;
+        b=SCQ/QzH0DNE8zoikTViqB6vCjXjfZ2TTDaViZ7WxyQF0dJdBhYCz/E5Eb4WXtcfJ2
+         3AMuGGthXoHOz1cg/huXKNsluT8KIyftWNUPhj0xwIpkR2A13G7aEv/Srvzm6tCmtO
+         zgNcb3292ZPy/VJUAGorRKMtxNCYUcyyQXXDWaEjmSD445uDB6V0vsFHL/JZImRytr
+         Rxs190zVeoTSju0v55JhSydkwzvqmp+M4/XK3x783XVEEO9tBBtGUGZenHBYrKTqzj
+         /tkNytJ+BNjXLGZeGgnWCWxQoCqIhhe+dRNyAU5BL8e9wV4z28Xucds2lCjOxF3CV2
+         DhWX9hcs2ZF2A==
+Received: by mail.betterbiz.pl for <linux-integrity@vger.kernel.org>; Tue, 11 Jan 2022 07:45:45 GMT
+Message-ID: <20220111024500-0.1.o.zjf.0.3chi6yjbkk@betterbiz.pl>
+Date:   Tue, 11 Jan 2022 07:45:45 GMT
+From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
+To:     <linux-integrity@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.betterbiz.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Add a test for /dev/tpmrm0 in async mode that checks if
-the code handles invalid handles correctly.
+Dzie=C5=84 dobry,
 
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: <linux-integrity@vger.kernel.org>
-Cc: <linux-kselftest@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
----
-Changes in v2:
-- Updated commit message
----
- tools/testing/selftests/tpm2/tpm2_tests.py | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-index 9d764306887b..b373b0936e40 100644
---- a/tools/testing/selftests/tpm2/tpm2_tests.py
-+++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-@@ -302,3 +302,19 @@ class AsyncTest(unittest.TestCase):
-         log.debug("Calling get_cap in a NON_BLOCKING mode")
-         async_client.get_cap(tpm2.TPM2_CAP_HANDLES, tpm2.HR_LOADED_SESSION)
-         async_client.close()
-+
-+    def test_flush_invlid_context(self):
-+        log = logging.getLogger(__name__)
-+        log.debug(sys._getframe().f_code.co_name)
-+
-+        async_client = tpm2.Client(tpm2.Client.FLAG_SPACE | tpm2.Client.FLAG_NONBLOCK)
-+        log.debug("Calling flush_context passing in an invalid handle ")
-+        handle = 0x80123456
-+        rc = 0
-+        try:
-+            async_client.flush_context(handle)
-+        except OSError as e:
-+            rc = e.errno
-+
-+        self.assertEqual(rc, 22)
-+        async_client.close()
--- 
-2.30.2
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Jakub Daroch
