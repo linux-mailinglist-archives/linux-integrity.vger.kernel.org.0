@@ -2,122 +2,117 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B27D48A6E4
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jan 2022 05:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658EA48A774
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jan 2022 06:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347915AbiAKEsK (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 10 Jan 2022 23:48:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60386 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346578AbiAKEsJ (ORCPT
+        id S1347326AbiAKFwr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jan 2022 00:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347288AbiAKFwq (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 10 Jan 2022 23:48:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39D0161464;
-        Tue, 11 Jan 2022 04:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65C1EC36AEB;
-        Tue, 11 Jan 2022 04:48:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641876488;
-        bh=9k7gOl/NHLklU+ZV4oa3MqfoDU/Ae8pDZuPPq4e+vuY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TKjMXLohTL3KBqdbMa/XT/78E7lOCg80MzUcrVl+POwdOzlNXTT/v0XkpQwMvO1Hu
-         ZnU6/oVx7vDiq94PluRGsnKlzMmqBIMIgxjE/oB+jK/xKxjxcggUAQjuHl+pUw8QvM
-         KHQDp5jvSf5OOouYoM8ZvLrTEMrN7ErmtAXPGV0KdQD0qODl1bozuIzexS+6I2UtvY
-         jcF49TsTNXgig1bnFP57SOskccPCfVnn6iAlCy9GjW0xGoCvhHoM2kKH82Os4Qbt7t
-         pAg3Usuc/CKwk8R3hP9ExITRl7oSO3LfDWxRe1bVlzVLsyvtH4qxPz30hWlJWutPOi
-         L72N3+S77MUfw==
-Date:   Mon, 10 Jan 2022 20:48:06 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] ima: support fs-verity file digest based
- signatures
-Message-ID: <Yd0MBkL9J5CGF0W9@sol.localdomain>
-References: <20220109185517.312280-1-zohar@linux.ibm.com>
- <20220109185517.312280-6-zohar@linux.ibm.com>
- <Ydy3EA9ONY3kn1xr@gmail.com>
- <b4105f9b-98f7-f941-47db-2f72e0c5b8bd@linux.ibm.com>
+        Tue, 11 Jan 2022 00:52:46 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A98CC06173F;
+        Mon, 10 Jan 2022 21:52:46 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id l8so13311010plt.6;
+        Mon, 10 Jan 2022 21:52:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jIfH09JLImJRHA4SgBVUlZIpfJTuCTHgSeKemIfbCRg=;
+        b=Q/te1YCCOtFEOLwx6H13j5toJEgwF1TWXHH8Liq8/o9KoZyG53yQX3Qq4BOTuHnrr2
+         lqvXmBJBSZSw1pJWmD9GcaqKnNY4ssLEjXRDDCVJ4uzP+cWN0QLktUhRqdopvcEjKyWv
+         g1X9NysdCj/V6r3NdKJia7WyR2jx6k84VUwjtLRrnFYllXe2B4ouSwQLNSzF+DvlGA1c
+         I3ht8TdIysMBgQp1W5nIKlRiqxCUyb96stoSDgziDQjlF4DVxKATgvH80PcXV1//ukyn
+         8nm3djvfCiGf9ch+GXiw0xJrC+sduY/6eWZ34NSDzLEXgcFSlFhVHPlJzBjPOFXMjnPd
+         h6hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jIfH09JLImJRHA4SgBVUlZIpfJTuCTHgSeKemIfbCRg=;
+        b=nThbzfPUW1rS46bE1W562BLa2lifPrJ46w4i2f//JEPx7V31kW2YgJNlKNY3r/uMpB
+         uATZ5Ov+9QTFfq2giqzRdtGRlSFyw14hPGyARz0+UTVOeBbmPoLJ9cYCmva2euqoJqH0
+         9M2LeQvuHZHQhIC0vORVlFD+LaF7N0rsTqSAIoC64tqc0hprWIOc5zDe7gLU8l0iXVOE
+         Ihgnn2/BhQWhRPdDSUuU+5sWAA0yL0QrLtVcNLfcTsW8VxCzdUuWN+YTh9o0Gh614JFN
+         ciLDwNj+L+twgl3Gt6L3eRJdoVcSmLQehtFerDpRc+bvnyuPOOYw+pEEnywa+OGFIRcu
+         95yQ==
+X-Gm-Message-State: AOAM533Epk9KYSyfnXI1w0/LUttRpTlr7NBoJHH+N7nWWBczPVsun07E
+        iVBQ/VVMzpA6AqcyzUkC+GAgC7ZgdbX8Hvf0gqI=
+X-Google-Smtp-Source: ABdhPJy6fG3APJEM65fde4H5vmIgSUFjPOR0m8oxa4fcMZqnTTcWVluDguIb3zsZkWUJHSxeULxxHA==
+X-Received: by 2002:a63:1d7:: with SMTP id 206mr2771722pgb.111.1641880365805;
+        Mon, 10 Jan 2022 21:52:45 -0800 (PST)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id k3sm843254pjt.39.2022.01.10.21.52.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 21:52:45 -0800 (PST)
+From:   Tadeusz Struk <tstruk@gmail.com>
+To:     jarkko@kernel.org
+Cc:     Tadeusz Struk <tstruk@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] tpm: Fix error handling in async work
+Date:   Mon, 10 Jan 2022 21:52:27 -0800
+Message-Id: <20220111055228.1830-1-tstruk@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b4105f9b-98f7-f941-47db-2f72e0c5b8bd@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 10:26:23PM -0500, Stefan Berger wrote:
-> 
-> On 1/10/22 17:45, Eric Biggers wrote:
-> > On Sun, Jan 09, 2022 at 01:55:16PM -0500, Mimi Zohar wrote:
-> > > +	case IMA_VERITY_DIGSIG:
-> > > +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
-> > > +
-> > > +		algo = iint->ima_hash->algo;
-> > > +		hash = kzalloc(sizeof(*hash) + hash_digest_size[algo],
-> > > +			       GFP_KERNEL);
-> > > +		if (!hash) {
-> > > +			*cause = "verity-hashing-error";
-> > > +			*status = INTEGRITY_FAIL;
-> > > +			break;
-> > > +		}
-> > > +
-> > > +		rc = calc_tbs_hash(IMA_VERITY_DIGSIG, iint->ima_hash->algo,
-> > > +				   iint->ima_hash->digest, hash);
-> > > +		if (rc) {
-> > > +			*cause = "verity-hashing-error";
-> > > +			*status = INTEGRITY_FAIL;
-> > > +			break;
-> > > +		}
-> > > +
-> > > +		rc = integrity_digsig_verify(INTEGRITY_KEYRING_IMA,
-> > > +					     (const char *)xattr_value,
-> > > +					     xattr_len, hash->digest,
-> > > +					     hash->length);
-> > This is still verifying a raw hash value, which is wrong as I've explained
-> > several times.  Yes, you are now hashing the hash algorithm ID together with the
-> > original hash value, but at the end the thing being signed/verified is still a
-> > raw hash value, which is ambigious.
-> > 
-> > I think I see where the confusion is.  If rsa-pkcs1pad is used, then the
-> > asymmetric algorithm is parameterized by a hash algorithm, and this hash
-> > algorithm's identifier is automatically built-in to the data which is
-> > signed/verified.  And the data being signed/verified is assumed to be a hash
-> > value of the same type.  So in this case, the caller doesn't need to handle
-> > disambiguating raw hashes.
-> > 
-> > However, asymmetric_verify() also supports ecdsa and ecrdsa signatures.  As far
-> > as I can tell, those do *not* have the hash algorithm identifier built-in to the
-> > data which is signed/verified; they just sign/verify the data given.  That
-> 
-> 
-> The signatures are generated by evmctl by this code here, which works for
-> RSA and ECDSA and likely also ECRDSA:
-> 
-> https://sourceforge.net/p/linux-ima/ima-evm-utils/ci/master/tree/src/libimaevm.c#l1036
-> 
->    if (!EVP_PKEY_sign_init(ctx))
->         goto err;
->     st = "EVP_get_digestbyname";
->     if (!(md = EVP_get_digestbyname(algo)))
->         goto err;
->     st = "EVP_PKEY_CTX_set_signature_md";
->     if (!EVP_PKEY_CTX_set_signature_md(ctx, md))
->         goto err;
->     st = "EVP_PKEY_sign";
->     sigsize = MAX_SIGNATURE_SIZE - sizeof(struct signature_v2_hdr) - 1;
->     if (!EVP_PKEY_sign(ctx, hdr->sig, &sigsize, hash, size))
->         goto err;
->     len = (int)sigsize;
-> 
-> As far as I know, these are not raw signatures but generate the OIDs for RSA
-> + shaXYZ or ECDSA + shaXYZ (1.2.840.10045.4.1 et al) and prepend them to the
-> hash and then sign that.
+When an invalid (non existing) handle is used in a TPM command,
+that uses the resource manager interface (/dev/tpmrm0) the resource
+manager tries to load it from its internal cache, but fails and
+the tpm_dev_transmit returns an -EINVAL error to the caller.
+The existing async handler doesn't handle these error cases
+currently and the condition in the poll handler never returns
+mask with EPOLLIN set.
+The result is that the poll call blocks and the application gets stuck
+until the user_read_timer wakes it up after 120 sec.
+Change the tpm_dev_async_work function to handle error conditions
+returned from tpm_dev_transmit they are also reflected in the poll mask
+and a correct error code could passed back to the caller.
 
-As I said, this appears to be true for RSA but not for ECDSA or ECRDSA.
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: <linux-integrity@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+Fixes: 9e1b74a63f77 ("tpm: add support for nonblocking operation")
+Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
+---
+Changed in v2:
+- Updated commit message with better problem description
+- Fixed typeos.
+Changed in v3:
+- Added a comment to tpm_dev_async_work.
+- Updated commit message.
+---
+ drivers/char/tpm/tpm-dev-common.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-- Eric
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index c08cbb306636..50df8f09ff79 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -69,7 +69,13 @@ static void tpm_dev_async_work(struct work_struct *work)
+ 	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
+ 			       sizeof(priv->data_buffer));
+ 	tpm_put_ops(priv->chip);
+-	if (ret > 0) {
++
++	/*
++	 * If ret is > 0 then tpm_dev_transmit returned the size of the
++	 * response. If ret is < 0 then tpm_dev_transmit failed and
++	 * returned a return code.
++	 */
++	if (ret != 0) {
+ 		priv->response_length = ret;
+ 		mod_timer(&priv->user_read_timer, jiffies + (120 * HZ));
+ 	}
+-- 
+2.30.2
+
