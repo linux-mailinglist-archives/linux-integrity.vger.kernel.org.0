@@ -2,221 +2,171 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1D748AF35
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jan 2022 15:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECB448B4E5
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Jan 2022 19:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241111AbiAKOMh (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 11 Jan 2022 09:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiAKOMg (ORCPT
+        id S1350102AbiAKSEE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 11 Jan 2022 13:04:04 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4388 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345156AbiAKSDv (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 11 Jan 2022 09:12:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19E0C06173F;
-        Tue, 11 Jan 2022 06:12:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3195C614C5;
-        Tue, 11 Jan 2022 14:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44306C36AEB;
-        Tue, 11 Jan 2022 14:12:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641910355;
-        bh=39gsf/zi5FwfVpRQ7qXWhjiEz5h+LSXUb6QfZmEYPWY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nXtYONf8inAFnV/Pgm0SkIEhw+f4XV2MIqoNW66nD1n4hBbyIFSYyTXy9CTX73yTR
-         85qowFyGhmfiGST8+1cBJP0/CoFu0Ssex1g6P91e01r/mNnObkUOGj8S8EtmkxPt3l
-         zQHGG0qY5MFUxrWVVJwx+31DVD0NOiDINuoISJwahn44npaxO2nhq6ElGBqN9jAWpr
-         yvvKQjGM3StP9sejuUdgIJObRri4pwG+pvDmu6t+z1Jf21tG3ytb2fxTMihr/cPQUk
-         cukE5xlYUf7k7IZhPGgFOzwkwCE1FNqgRMqlILcgP/3M1LTfO7fCWreKfdgtoVPmld
-         7myFHqjQME1aQ==
-Date:   Tue, 11 Jan 2022 15:12:27 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, serge@hallyn.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH v8 01/19] securityfs: Extend securityfs with namespacing
- support
-Message-ID: <20220111141227.27upfpzhqwyob3ev@wittgenstein>
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
- <20220104170416.1923685-2-stefanb@linux.vnet.ibm.com>
- <YdUXU3XIzhxFUfVB@zeniv-ca.linux.org.uk>
- <20220105101815.ldsm4s5yx7pmuiil@wittgenstein>
- <d11458798496f2aed2fb31a7bb077f5938174083.camel@linux.ibm.com>
+        Tue, 11 Jan 2022 13:03:51 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JYJQj1JcLz67Cr0;
+        Wed, 12 Jan 2022 02:01:01 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 11 Jan 2022 19:03:46 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <dhowells@redhat.com>, <dwmw2@infradead.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <linux-fscrypt@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zohar@linux.ibm.com>,
+        <ebiggers@kernel.org>, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Date:   Tue, 11 Jan 2022 19:03:04 +0100
+Message-ID: <20220111180318.591029-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d11458798496f2aed2fb31a7bb077f5938174083.camel@linux.ibm.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 07:16:26AM -0500, Mimi Zohar wrote:
-> On Wed, 2022-01-05 at 11:18 +0100, Christian Brauner wrote:
-> > On Wed, Jan 05, 2022 at 03:58:11AM +0000, Al Viro wrote:
-> > > On Tue, Jan 04, 2022 at 12:03:58PM -0500, Stefan Berger wrote:
-> > > > From: Stefan Berger <stefanb@linux.ibm.com> 
-> 
-> > > > Drop the additional dentry reference to enable simple cleanup of dentries
-> > > > upon umount. Now the dentries do not need to be explicitly freed anymore
-> > > > but we can just rely on d_genocide() and the dcache shrinker to do all
-> > > > the required work.
-> > 
-> > The "additional dentry reference" mentioned only relates to an afaict
-> > unnecessary dget() in securityfs_create_dentry() which I pointed out
-> > as part of earlier reviews. But the phrasing implies that there's a
-> > behavioral change for the initial securityfs instance based on the
-> > removal of this additional dget() when there really isn't.
-> > 
-> > After securityfs_create_dentry() has created a new dentry via
-> > lookup_one_len() and eventually called d_instantiate() it currently
-> > takes an additional reference on the newly created dentry via dget().
-> > This additional reference is then paired with an additional dput() in
-> > securityfs_remove(). I have not yet seen a reason why this is
-> > necessary maybe you can help there.
-> > 
-> > For example, contrast this with debugfs which has the same underlying
-> > logic as securityfs, i.e. any created dentry pins the whole filesystem
-> > via simple_pin_fs() until the dentry is released and simple_unpin_fs()
-> > is called. It uses a similar pairing as securityfs: where securityfs
-> > has the securityfs_create_dentry() and securityfs_remove() pairing,
-> > debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
-> > But debugfs doesn't take an additional reference on the just created
-> > dentry in __debugfs_create_file() which would need to be put in
-> > debugfs_remove().
-> > 
-> > So if we contrast the creation routines of securityfs and debugfs directly
-> > condensed to just the dentry references:
-> > 
-> > securityfs       |   debugfs
-> > ---------------- | ------------------
-> >                  |
-> > lookup_one_len() |   lookup_one_len()
-> > d_instantiate()  |   d_instantiate() 
-> > dget()           |
-> > 
-> > And I have not understood why securityfs would need that additional
-> > dget(). Not just intrinsically but also when contrasted with debugfs. So
-> > that additional dget() is removed as part of this patch.
-> 
-> Assuming it isn't needed, could removing it be a separate patch and
-> upstreamed independently of either the securityfs or IMA namespacing
-> changes?
+Support for PGP keys and signatures was proposed by David long time ago,
+before the decision of using PKCS#7 for kernel modules signatures
+verification was made. After that, there has been not enough interest to
+support PGP too.
 
-Yeah, if the security tree wants to take it. So sm like:
+Lately, when discussing a proposal of introducing fsverity signatures in
+Fedora [1], developers expressed their preference on not having a separate
+key for signing, which would complicate the management of the distribution.
+They would be more in favor of using the same PGP key, currently used for
+signing RPM headers, also for file-based signatures (not only fsverity, but
+also IMA ones).
 
-From 478e96d1da24960e50897e6752f410b3d0833570 Mon Sep 17 00:00:00 2001
-From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 11 Jan 2022 14:04:11 +0100
-Subject: [PATCH] securityfs: rework dentry creation
+Another envisioned use case would be to add the ability to appraise RPM
+headers with their existing PGP signature, so that they can be used as an
+authenticated source of reference values for appraising remaining
+files [2].
 
-When securityfs creates a new file or directory via
-securityfs_create_dentry() it will take an additional reference on the
-newly created dentry after it has attached the new inode to the new
-dentry and added it to the hashqueues.
-If we contrast this with debugfs which has the same underlying logic as
-securityfs. It uses a similar pairing as securityfs. Where securityfs
-has the securityfs_create_dentry() and securityfs_remove() pairing,
-debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
+To make these use cases possible, introduce support for PGP keys and
+signatures in the kernel, and load provided PGP keys in the built-in
+keyring, so that PGP signatures of RPM headers, fsverity digests, and IMA
+digests can be verified from this trust anchor.
 
-In contrast to securityfs, debugfs doesn't take an additional reference
-on the newly created dentry in __debugfs_create_file() which would need
-to be put in debugfs_remove().
+In addition to the original version of the patch set, also introduce
+support for signature verification of PGP keys, so that those keys can be
+added to keyrings with a signature-based restriction (e.g. .ima). PGP keys
+are searched with partial IDs, provided with signature subtype 16 (Issuer).
+Search with full IDs could be supported with
+draft-ietf-openpgp-rfc4880bis-10, by retrieving the information from
+signature subtype 33 (Issuer Fingerprint). Due to the possibility of ID
+collisions, the key_or_keyring restriction is not supported.
 
-The additional dget() isn't a problem per se. In the current
-implementation of securityfs each created dentry pins the filesystem via
-until it is removed. Since it is virtually guaranteed that there is at
-least one user of securityfs that has created dentries the initial
-securityfs mount cannot go away until all dentries have been removed.
+The patch set includes two preliminary patches: patch 1 introduces
+mpi_key_length(), to get the number of bits and bytes of an MPI; patch 2
+introduces rsa_parse_priv_key_raw() and rsa_parse_pub_key_raw(), to parse
+an RSA key in RAW format if the ASN.1 parser returns an error.
 
-Since most of the users of the initial securityfs mount don't go away
-until the system is shutdown the initial securityfs won't go away when
-unmounted. Instead a mount will usually surface the same superblock as
-before. The additional dget() doesn't matter in this scenario since it
-is required that all dentries have been cleaned up by the respective
-users before the superblock can be destroyed, i.e. superblock shutdown
-is tied to the lifetime of the associated dentries.
+Patches 3-5 introduce the library necessary to parse PGP keys and
+signatures, whose support is added with patches 6-10. Patch 11 introduces
+verify_pgp_signature() to be used by kernel subsystems (e.g. fsverity and
+IMA). Patch 12 is for testing of PGP signatures. Finally, patches 13-14
+allow loading a set of PGP keys from a supplied blob at boot time.
 
-However, in order to support ima namespaces we need to extend securityfs
-to support being mounted outside of the initial user namespace. For
-namespaced users the pinning logic doesn't make sense. Whereas in the
-initial namespace the securityfs instance and the associated data
-structures of its users can't go away for reason explained earlier users
-of non-initial securityfs instances do go away when the last users of
-the namespace are gone.
+I generated the diff from [3] (rebased). It is available at:
 
-So for those users we neither want to duplicate the pinning logic nor
-make the global securityfs instance display different information based
-on the namespace. Both options would be really messy and hacky.
+https://github.com/robertosassu/linux/compare/pgp-signatures-v1-orig..pgp-signatures-v1
 
-Instead we will simply give each namespace its own securityfs instance
-similar to how each ipc namespace has its own mqueue instance and all
-entries in there are cleaned up on umount or when the last user of the
-associated namespace is gone.
+Changelog
 
-This means that the superblock's lifetime isn't tied to the dentries.
-Instead the last umount, without any fds kept open, will trigger a clean
-shutdown. But now the additional dget() gets in the way. Instead of
-being able to rely on the generic superblock shutdown logic we would
-need to drop the additional dentry reference during superblock shutdown
-for all associated users. That would force the use of a generic
-coordination mechanism for current and future users of securityfs which
-is unnecessary. Simply remove the additional dget() in
-securityfs_dentry_create().
+v0 [3]:
+- style fixes
+- move include/linux/pgp.h and pgplib.h to crypto/asymmetric_keys
+- introduce verify_pgp_signature()
+- replace KEY_ALLOC_TRUSTED flag with KEY_ALLOC_BUILT_IN
+- don't fetch PGP subkeys
+- drop support for DSA
+- store number of MPIs in pgp_key_algo_p_num_mpi array
+- replace dynamic memory allocations with static ones in
+  pgp_generate_fingerprint()
+- store only keys with capability of verifying signatures
+- remember selection of PGP signature packet and don't repeat parsing
+- move search of the PGP key to verify the signature from the beginning
+  to the end of the verification process (to be similar with PKCS#7)
+- don't retry key search in the session keyring from the signature
+  verification code, let the caller pass the desired keyring
+- for the PGP signature test key type, retry the key search in the session
+  keyring
+- retry key search in restrict_link_by_signature() with a partial ID
+  (provided in the PGP signature)
 
-In securityfs_remove() we will call dget() to take an additional
-reference on the dentry about to be removed. After simple_unlink() or
-simple_rmdir() have dropped the dentry refcount we can call d_delete()
-which will either turn the dentry into negative dentry if our earlier
-dget() is the only reference to the dentry, i.e. it has no other users,
-or remove it from the hashqueues in case there are additional users.
+[1] https://fedoraproject.org/wiki/Changes/FsVerityRPM
+[2] https://fedoraproject.org/wiki/Changes/DIGLIM
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-modsign.git/log/?h=pgp-parser
 
-All of these changes should not have any effect on the userspace
-semantics of the initial securityfs mount.
+David Howells (8):
+  PGPLIB: PGP definitions (RFC 4880)
+  PGPLIB: Basic packet parser
+  PGPLIB: Signature parser
+  KEYS: PGP data parser
+  KEYS: Provide PGP key description autogeneration
+  KEYS: PGP-based public key signature verification
+  PGP: Provide a key type for testing PGP signatures
+  KEYS: Provide a function to load keys from a PGP keyring blob
 
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- security/inode.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Roberto Sassu (6):
+  mpi: Introduce mpi_key_length()
+  rsa: add parser of raw format
+  KEYS: Retry asym key search with partial ID in
+    restrict_link_by_signature()
+  KEYS: Calculate key digest and get signature of the key
+  verification: introduce verify_pgp_signature()
+  KEYS: Introduce load_pgp_public_keyring()
 
-diff --git a/security/inode.c b/security/inode.c
-index 6c326939750d..13e6780c4444 100644
---- a/security/inode.c
-+++ b/security/inode.c
-@@ -159,7 +159,6 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
- 		inode->i_fop = fops;
- 	}
- 	d_instantiate(dentry, inode);
--	dget(dentry);
- 	inode_unlock(dir);
- 	return dentry;
- 
-@@ -302,10 +301,12 @@ void securityfs_remove(struct dentry *dentry)
- 	dir = d_inode(dentry->d_parent);
- 	inode_lock(dir);
- 	if (simple_positive(dentry)) {
-+		dget(dentry);
- 		if (d_is_dir(dentry))
- 			simple_rmdir(dir, dentry);
- 		else
- 			simple_unlink(dir, dentry);
-+		d_delete(dentry);
- 		dput(dentry);
- 	}
- 	inode_unlock(dir);
+ MAINTAINERS                             |   1 +
+ certs/Kconfig                           |  11 +
+ certs/Makefile                          |   7 +
+ certs/system_certificates.S             |  18 +
+ certs/system_keyring.c                  |  91 ++++
+ crypto/asymmetric_keys/Kconfig          |  38 ++
+ crypto/asymmetric_keys/Makefile         |  13 +
+ crypto/asymmetric_keys/pgp.h            | 206 ++++++++
+ crypto/asymmetric_keys/pgp_library.c    | 620 ++++++++++++++++++++++++
+ crypto/asymmetric_keys/pgp_parser.h     |  18 +
+ crypto/asymmetric_keys/pgp_preload.c    | 110 +++++
+ crypto/asymmetric_keys/pgp_public_key.c | 484 ++++++++++++++++++
+ crypto/asymmetric_keys/pgp_signature.c  | 507 +++++++++++++++++++
+ crypto/asymmetric_keys/pgp_test_key.c   | 129 +++++
+ crypto/asymmetric_keys/pgplib.h         |  74 +++
+ crypto/asymmetric_keys/restrict.c       |  10 +-
+ crypto/rsa.c                            |  14 +-
+ crypto/rsa_helper.c                     |  69 +++
+ include/crypto/internal/rsa.h           |   6 +
+ include/crypto/pgp.h                    |  35 ++
+ include/linux/mpi.h                     |   2 +
+ include/linux/verification.h            |  23 +
+ lib/mpi/mpicoder.c                      |  33 +-
+ 23 files changed, 2506 insertions(+), 13 deletions(-)
+ create mode 100644 crypto/asymmetric_keys/pgp.h
+ create mode 100644 crypto/asymmetric_keys/pgp_library.c
+ create mode 100644 crypto/asymmetric_keys/pgp_parser.h
+ create mode 100644 crypto/asymmetric_keys/pgp_preload.c
+ create mode 100644 crypto/asymmetric_keys/pgp_public_key.c
+ create mode 100644 crypto/asymmetric_keys/pgp_signature.c
+ create mode 100644 crypto/asymmetric_keys/pgp_test_key.c
+ create mode 100644 crypto/asymmetric_keys/pgplib.h
+ create mode 100644 include/crypto/pgp.h
+
 -- 
 2.32.0
 
