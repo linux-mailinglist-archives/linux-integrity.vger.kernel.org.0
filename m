@@ -2,103 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D79248C0D1
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jan 2022 10:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919DF48C465
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jan 2022 14:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351975AbiALJQ0 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jan 2022 04:16:26 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4403 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238051AbiALJQ0 (ORCPT
+        id S240620AbiALNHE (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jan 2022 08:07:04 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:48838 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353366AbiALNGx (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jan 2022 04:16:26 -0500
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JYhgg0J3Cz685HY;
-        Wed, 12 Jan 2022 17:13:35 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 12 Jan 2022 10:16:23 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
- Wed, 12 Jan 2022 10:16:23 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-CC:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Subject: RE: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Topic: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Index: AQHYBxWUAJoIvMeqLk2UYoD6PZRMZ6xeNfyAgADgBLA=
-Date:   Wed, 12 Jan 2022 09:16:22 +0000
-Message-ID: <b37f9c0e9bf941f0b778c6949538835d@huawei.com>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <ab29dd6f-1301-e012-8898-9c739ca511a3@maciej.szmigiero.name>
-In-Reply-To: <ab29dd6f-1301-e012-8898-9c739ca511a3@maciej.szmigiero.name>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 12 Jan 2022 08:06:53 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AF3451F385;
+        Wed, 12 Jan 2022 13:06:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1641992811;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0D7iElc2KBU4F3mP8SKPzfDB41mMoY/kXSh/x1Pnzy8=;
+        b=UsNnxGAeV0fwkDNUYiW7BW27V2BxPImo6KrmWXhl70oPDX0PnKuw53++kLnram5e+ji2sK
+        9/q0HV+iFRRDqrkOZ9zQkKK6GqWZkFEsw0uwmhKGLFPOWZEDxMVECEez49M/vn4KX6HZcQ
+        tVHroNE+M5gAZy/1qZokn3nMhdAl+lk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1641992811;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0D7iElc2KBU4F3mP8SKPzfDB41mMoY/kXSh/x1Pnzy8=;
+        b=pw0THi05QwDNihuOTbytvxfEvxp0BbxqJcp9HW1EyJMpbF/2EBv95Q0iIBgLZA1X+TU2kJ
+        NvwBE9/IvV4zYlAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 75F5013B61;
+        Wed, 12 Jan 2022 13:06:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ARgCG2vS3mEDTAAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Wed, 12 Jan 2022 13:06:51 +0000
+Date:   Wed, 12 Jan 2022 14:06:49 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     ltp@lists.linux.it
+Cc:     Alex Henrie <alexh@vpitech.com>, alexhenrie24@gmail.com,
+        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [PATCH v8 0/3] IMA: Add tests for uid, gid, fowner, and fgroup
+ options
+Message-ID: <Yd7SaS2TIaUrlcIN@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20211006103059.9617-1-pvorel@suse.cz>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211006103059.9617-1-pvorel@suse.cz>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBNYWNpZWogUy4gU3ptaWdpZXJvIFttYWlsdG86bWFpbEBtYWNpZWouc3ptaWdpZXJv
-Lm5hbWVdDQo+IFNlbnQ6IFR1ZXNkYXksIEphbnVhcnkgMTEsIDIwMjIgOTozMyBQTQ0KPiBPbiAx
-MS4wMS4yMDIyIDE5OjAzLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+IFN1cHBvcnQgZm9yIFBH
-UCBrZXlzIGFuZCBzaWduYXR1cmVzIHdhcyBwcm9wb3NlZCBieSBEYXZpZCBsb25nIHRpbWUgYWdv
-LA0KPiA+IGJlZm9yZSB0aGUgZGVjaXNpb24gb2YgdXNpbmcgUEtDUyM3IGZvciBrZXJuZWwgbW9k
-dWxlcyBzaWduYXR1cmVzDQo+ID4gdmVyaWZpY2F0aW9uIHdhcyBtYWRlLiBBZnRlciB0aGF0LCB0
-aGVyZSBoYXMgYmVlbiBub3QgZW5vdWdoIGludGVyZXN0IHRvDQo+ID4gc3VwcG9ydCBQR1AgdG9v
-Lg0KPiA+DQo+ID4gTGF0ZWx5LCB3aGVuIGRpc2N1c3NpbmcgYSBwcm9wb3NhbCBvZiBpbnRyb2R1
-Y2luZyBmc3Zlcml0eSBzaWduYXR1cmVzIGluDQo+ID4gRmVkb3JhIFsxXSwgZGV2ZWxvcGVycyBl
-eHByZXNzZWQgdGhlaXIgcHJlZmVyZW5jZSBvbiBub3QgaGF2aW5nIGEgc2VwYXJhdGUNCj4gPiBr
-ZXkgZm9yIHNpZ25pbmcsIHdoaWNoIHdvdWxkIGNvbXBsaWNhdGUgdGhlIG1hbmFnZW1lbnQgb2Yg
-dGhlIGRpc3RyaWJ1dGlvbi4NCj4gPiBUaGV5IHdvdWxkIGJlIG1vcmUgaW4gZmF2b3Igb2YgdXNp
-bmcgdGhlIHNhbWUgUEdQIGtleSwgY3VycmVudGx5IHVzZWQgZm9yDQo+ID4gc2lnbmluZyBSUE0g
-aGVhZGVycywgYWxzbyBmb3IgZmlsZS1iYXNlZCBzaWduYXR1cmVzIChub3Qgb25seSBmc3Zlcml0
-eSwgYnV0DQo+ID4gYWxzbyBJTUEgb25lcykuDQo+IA0KPiBBcmVuJ3QgUEdQIGtleXMgc2ltcGx5
-IFJTQSAvIEVDQyAvIEVkRFNBIGtleXMgd2l0aCBhZGRpdGlvbmFsIG1ldGFkYXRhPw0KPiBDYW4n
-dCB0aGV5IGJlIHVud3JhcHBlZCBmcm9tIHRoZWlyIChjb21wbGV4KSBQR1AgZm9ybWF0IGluIHVz
-ZXJzcGFjZSBhbmQNCj4gbG9hZGVkIHJhdyBpbnRvIHRoZSBrZXJuZWwsIGluIGEgc2ltaWxhciB3
-YXkgYXMgdGhleSBhcmUgc29tZXRpbWVzIHVzZWQNCj4gZm9yIFNTSCBhdXRoZW50aWNhdGlvbj8N
-Cg0KUHJvYmFibHksIHRoaXMgd291bGQgYmUgcG9zc2libGUgYnkgaW50cm9kdWNpbmcgYSBuZXcg
-YXN5bW1ldHJpYw0Ka2V5IHN1YnR5cGUgcGFyc2luZyBQR1Aga2V5cyBhbmQgc2lnbmF0dXJlcyBp
-biBhIG1vcmUgc2ltcGxlIGZvcm1hdCwNCmFmdGVyIGNvbnZlcnNpb24gYnkgdXNlciBzcGFjZS4g
-QnV0IHN0aWxsLCBhIHBhcnNlciB3b3VsZCBiZSByZXF1aXJlZC4NClRvIGJlIGhvbmVzdCwgSSB3
-b3VsZCBwcmVmZXIgdG8gaW1wbGVtZW50IChhY3R1YWxseSBEYXZpZCBkaWQpIGENCnBhcnNlciBm
-b2xsb3dpbmcgYW4gUkZDLCB0aGFuIGRldmVsb3BpbmcgYSBuZXcgb25lLg0KDQo+IFRoaXMgd2ls
-bCBzYXZlIHVzIGZyb20gaGF2aW5nIHRvIGFkZCBjb21wbGV4IHBhcnNlcnMgKGEgd2VsbC1rbm93
-biBzb3VyY2UNCj4gb2YgYnVncykgaW50byB0aGUga2VybmVsIC0gSSBndWVzcyB0aGVyZSBhcmVu
-J3QgYW55IHBsYW5zIHRvIGFkZCBhbg0KPiBpbi1rZXJuZWwgUEdQIFdlYiBvZiBUcnVzdCBpbXBs
-ZW1lbnRhdGlvbi4NCg0KSSBleHRlbnNpdmVseSB0ZXN0ZWQgdGhlIGltcGxlbWVudGF0aW9uIHdp
-dGggYW4gYWQtaG9jIGZhdWx0IGluamVjdG9yLA0KdG8gc2VlIGlmIHRoZSBjb2RlIGNhbiBjb3Jy
-ZWN0bHkgaGFuZGxlIGVycm9ycy4gSSBhbHNvIGRldmVsb3BlZCBhDQpmdXp6ZXIgdG8gY29ycnVw
-dCB0aGUgZGF0YSBiZWZvcmUgaXQgaXMgcmVhZCBieSB0aGUga2VybmVsLiBGaW5hbGx5LA0KSSBj
-aGVja2VkIHRoYXQgdGhlcmUgYXJlIG5vdCBtZW1vcnkgbGVha3MuIEJ1dCBJIGFncmVlLCB0aGVy
-ZSBjb3VsZA0Kc3RpbGwgYmUgYnVncy4NCg0KSWYgeW91IG1lYW4gdGhhdCBhIGtleSBjYW4gYmUg
-YWRkZWQgdG8gdGhlIGtlcm5lbCBpZiBpcyB2b3VjaGVkIGZvcg0KYnkgYW5vdGhlciBrZXkgaW4g
-dGhlIGJ1aWx0LWluIGtleXJpbmcsIEkgYWN0dWFsbHkgaW1wbGVtZW50ZWQgdGhpcw0KKHdhcyBt
-aXNzaW5nIGluIHRoZSBvcmlnaW5hbCBpbXBsZW1lbnRhdGlvbikuIFNvbWUga2V5cmluZ3MsIGUu
-Zy4gLmltYSwNCmhhdmUgdGhpcyByZXN0cmljdGlvbi4NCg0KVGhlIHdheSB0aGlzIHdvcmtzIGlz
-IHRoYXQsIHdoZW5ldmVyIHlvdSBhZGQgYSBQR1Aga2V5IHRvIHRoZQ0Ka2VybmVsLCB0aGUgcGFy
-c2VyIHRha2VzIG5vdCBvbmx5IHRoZSBwdWJsaWMga2V5IGFuZCB0aGUgdXNlciBJRCwNCmJ1dCBh
-bHNvIGl0cyBzaWduYXR1cmUgYnkgdGhlIHNhbWUgb3IgYW5vdGhlciBQR1Aga2V5Lg0KDQpUaGUg
-c2lnbmF0dXJlIGlzIHZlcmlmaWVkIHdoZW4gdGhlIGtleSBpcyBhZGRlZCB0byB0aGUga2V5cmlu
-Zw0Kd2l0aCB0aGF0IHJlc3RyaWN0aW9uLCBhbmQgb25seSBpZiB0aGUgdmVyaWZpY2F0aW9uIGlz
-IHN1Y2Nlc3NmdWwNCnRoZSBrZXkgY2FuIGJlIGFkZGVkLg0KDQpSb2JlcnRvDQoNCkhVQVdFSSBU
-RUNITk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3Rv
-cjogTGkgUGVuZywgWmhvbmcgUm9uZ2h1YQ0KDQo+IFRoYW5rcywNCj4gTWFjaWVqDQo=
+Hi all,
+
+FYI patchset merged with diff below. Fixed
+* "cat: '>': No such file or directory" error reported by Mimi
+* use /proc/uptime to not require date
+
+Thanks for your work and patience.
+
+FYI we had some discussion about merging patches earlier - after they met rc1 or
+next-tree (I guess getting into maintainer tree could be accepted). Feel free to
+contribute to this discussion:
+
+https://lore.kernel.org/ltp/20211221113042.21357-1-rpalethorpe@suse.com/
+https://lore.kernel.org/ltp/87lf0ffw1y.fsf@suse.de/
+https://lore.kernel.org/ltp/YdW5WEXgrotentzM@yuki/
+
+Kind regards,
+Petr
+
+diff --git testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
+index c83006f6d1..095028e163 100755
+--- testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
++++ testcases/kernel/security/integrity/ima/tests/ima_conditionals.sh
+@@ -5,8 +5,11 @@
+ # Author: Alex Henrie <alexh@vpitech.com>
+ #
+ # Verify that conditional rules work.
++#
++# gid and fgroup options test kernel commit 40224c41661b ("ima: add gid
++# support") from v5.16.
+ 
+-TST_NEEDS_CMDS="chgrp chown id sg sudo"
++TST_NEEDS_CMDS="cat chgrp chown id sg sudo"
+ TST_CNT=1
+ TST_NEEDS_DEVICE=1
+ 
+@@ -28,16 +31,16 @@ verify_measurement()
+ 
+ 	tst_res TINFO "verify measuring user files when requested via $request"
+ 	ROD echo "measure $request=$value" \> $IMA_POLICY
+-	ROD echo "$(date) $request test" \> $test_file
++	ROD echo "$(cat /proc/uptime) $request test" \> $test_file
+ 
+ 	case "$request" in
+ 	fgroup)
+ 		chgrp $user $test_file
+-		$cmd
++		sh -c "$cmd"
+ 		;;
+ 	fowner)
+ 		chown $user $test_file
+-		$cmd
++		sh -c "$cmd"
+ 		;;
+ 	gid) sudo sg $user "sh -c '$cmd'";;
+ 	uid) sudo -n -u $user sh -c "$cmd";;
