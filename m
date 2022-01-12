@@ -2,94 +2,113 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 669E148CB3C
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jan 2022 19:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 381D348CCFA
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jan 2022 21:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356474AbiALSrk (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 12 Jan 2022 13:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356475AbiALSrb (ORCPT
-        <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:47:31 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3591CC061748
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jan 2022 10:47:31 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id hv15so6798845pjb.5
-        for <linux-integrity@vger.kernel.org>; Wed, 12 Jan 2022 10:47:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ej6+dzQXYBNYBghW2L5wnTD1qTCyFwEQze4u8PLMM8c=;
-        b=k9T3MzlCu7qh8lbrZMe83Xi2hfmMkadDB+O1cBHpL7WOorRnSxHeHwXL9Ssk3f0wmd
-         hS+rh67RzV4VyThVS7uI3PzlZ5Y2TQ+CssEiAKxtGvTQP1rpm7OeHzduw3rRGnB8GzcO
-         cxzrrXYYYTYI32kxY3ywU9+MVbZP2M5NSd0pnY/1X3so+evKJxUfw6oBj1V+eYOEhofk
-         bWDDeZHW1s5meAJywrAU407L/RM6zu81HK8CzU6LdABFlX1qZXRAK6S9mG5Nx2t8cu9l
-         CLf772yfZwKv6neNpkSbSCyYLzTdrIAOv9dH8ag8PZiISwSSi6PU6uWLR1JH0y3xmxjM
-         0rHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ej6+dzQXYBNYBghW2L5wnTD1qTCyFwEQze4u8PLMM8c=;
-        b=N9J9PxNUWY7B9dafbEywampVJC+hczBum/rh/34oomj5POeR9HJil+LLh15fvHr/07
-         /E4OI1+tmjLZD20LJkRKrgpU+DT4tLNMz9x0eXpAoAjHOOjy/swqwzzuwzqtmTcO3u8l
-         r9gWE7kBsZDvr05yQNeJAk34KSYnRyLDnmhAbW+ZujP8aZSN538ITJp6vceV/crITvqt
-         RbN0ctQdcoKdFxz9nRwKPNMJeSUHnVm+ZhvWbaYO3k+OOzDihqY0dxley/yemNWsqi/f
-         XcKO+NAHvQJDQSPQiN/X4fgjrMRa92WaLUfMl8KqpfXeWB5TyF3RCGBWBeScKZ1cqZYi
-         TLTA==
-X-Gm-Message-State: AOAM532rHoS3ZPlRtxddBSfnKMHcscr3xs6CNZDBp4vyiuWbfVPTcF6E
-        3mX91N+c3NhxcKfo8w7+dck+GtHPc94LIQ==
-X-Google-Smtp-Source: ABdhPJzFpL8XksOuR6w6J5ddL6p8mmeC1OPP8IFYeXebroqx48h3ogwBFXpq6MS1gdcueN+4pULAKA==
-X-Received: by 2002:a17:90b:3910:: with SMTP id ob16mr10314729pjb.181.1642013250654;
-        Wed, 12 Jan 2022 10:47:30 -0800 (PST)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id gt22sm367722pjb.35.2022.01.12.10.47.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 10:47:30 -0800 (PST)
-Message-ID: <3c2eeee7-0d3e-8000-67ad-3054f229cbe0@linaro.org>
-Date:   Wed, 12 Jan 2022 10:47:29 -0800
+        id S1357230AbiALUPy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 12 Jan 2022 15:15:54 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:55462 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350686AbiALUPy (ORCPT <rfc822;linux-integrity@vger.kernel.org>);
+        Wed, 12 Jan 2022 15:15:54 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1n7k24-0005Dj-Rb; Wed, 12 Jan 2022 21:15:44 +0100
+Message-ID: <ab3d2bda-a704-f5d3-adee-e52b7d0a4641@maciej.szmigiero.name>
+Date:   Wed, 12 Jan 2022 21:15:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH v3 1/2] tpm: Fix error handling in async work
 Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Tadeusz Struk <tstruk@gmail.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220111055228.1830-1-tstruk@gmail.com> <Yd8fY/wixkXhXEFH@iki.fi>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <Yd8fY/wixkXhXEFH@iki.fi>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <ab29dd6f-1301-e012-8898-9c739ca511a3@maciej.szmigiero.name>
+ <b37f9c0e9bf941f0b778c6949538835d@huawei.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+In-Reply-To: <b37f9c0e9bf941f0b778c6949538835d@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 1/12/22 10:35, Jarkko Sakkinen wrote:
-> These look good to me! Thank you. I'm in process of compiling a test
-> kernel.
+On 12.01.2022 10:16, Roberto Sassu wrote:
+>> From: Maciej S. Szmigiero [mailto:mail@maciej.szmigiero.name]
+>> Sent: Tuesday, January 11, 2022 9:33 PM
+>> On 11.01.2022 19:03, Roberto Sassu wrote:
+>>> Support for PGP keys and signatures was proposed by David long time ago,
+>>> before the decision of using PKCS#7 for kernel modules signatures
+>>> verification was made. After that, there has been not enough interest to
+>>> support PGP too.
+>>>
+>>> Lately, when discussing a proposal of introducing fsverity signatures in
+>>> Fedora [1], developers expressed their preference on not having a separate
+>>> key for signing, which would complicate the management of the distribution.
+>>> They would be more in favor of using the same PGP key, currently used for
+>>> signing RPM headers, also for file-based signatures (not only fsverity, but
+>>> also IMA ones).
+>>
+>> Aren't PGP keys simply RSA / ECC / EdDSA keys with additional metadata?
+>> Can't they be unwrapped from their (complex) PGP format in userspace and
+>> loaded raw into the kernel, in a similar way as they are sometimes used
+>> for SSH authentication?
+> 
+> Probably, this would be possible by introducing a new asymmetric
+> key subtype parsing PGP keys and signatures in a more simple format,
+> after conversion by user space. But still, a parser would be required.
+> To be honest, I would prefer to implement (actually David did) a
+> parser following an RFC, than developing a new one.
 
-Thanks Jarkko,
-You can run the new test before and after applying the change and see
-how it behaves. Also just noticed a mistake in the comment, sorry but
-it was quite late when I sent it.
+A parser in userspace is preferred to one in kernel since if there is
+a bug somewhere its consequences are much less severe.
+And experience shows that parsers are especially prone to bugs.
+A userspace implementation can also be tightly sandboxed for extra
+security.
 
-+	/*
-+	 * If ret is > 0 then tpm_dev_transmit returned the size of the
-+	 * response. If ret is < 0 then tpm_dev_transmit failed and
-+	 * returned a return code.
-+	 */
+There are many existing OpenPGP parsing libraries to choose from.
 
-In the above could you please replace:
+>> This will save us from having to add complex parsers (a well-known source
+>> of bugs) into the kernel - I guess there aren't any plans to add an
+>> in-kernel PGP Web of Trust implementation.
+> 
+> I extensively tested the implementation with an ad-hoc fault injector,
+> to see if the code can correctly handle errors. I also developed a
+> fuzzer to corrupt the data before it is read by the kernel. Finally,
+> I checked that there are not memory leaks. But I agree, there could
+> still be bugs.
+> 
+> If you mean that a key can be added to the kernel if is vouched for
+> by another key in the built-in keyring, I actually implemented this
+> (was missing in the original implementation). Some keyrings, e.g. .ima,
+> have this restriction.
+> 
+> The way this works is that, whenever you add a PGP key to the
+> kernel, the parser takes not only the public key and the user ID,
+> but also its signature by the same or another PGP key.
+> 
+> The signature is verified when the key is added to the keyring
+> with that restriction, and only if the verification is successful
+> the key can be added.
 
-s/returned a return code/returned an error code/
+I understand but it would be great to make use as much as possible of
+the existing in-kernel signature verification mechanisms.
 
-before applying the patch. I would appreciate that.
+> Roberto
 
--- 
 Thanks,
-Tadeusz
+Maciej
+
