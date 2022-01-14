@@ -2,91 +2,83 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C209648E34E
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jan 2022 05:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 143EC48E6EC
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jan 2022 09:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbiANEbi (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 13 Jan 2022 23:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiANEbh (ORCPT
+        id S230177AbiANIxN (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jan 2022 03:53:13 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:49506 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233231AbiANIxM (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 13 Jan 2022 23:31:37 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81251C061574;
-        Thu, 13 Jan 2022 20:31:37 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id h1so12231392pls.11;
-        Thu, 13 Jan 2022 20:31:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Y3Vea8plG7NdygEVdJpagO9aiMQvkxxFcDl4y17hVgM=;
-        b=YWDavPGlHlCkZioKRp2U+66aqRlsrunjaGL4gKYFEtafhyIo/iQudiCKytDDQ8K9rY
-         r5i+EfhJl+fCKTQn+rXsUKqLBkhxBpdEPawyOhAv4oWMbrejPSFGUoPXO+4CXP9m5NHy
-         FbiUypYUmRMscR5MTK4b1T3CwUiPaV4q/w4cMxId61VDDwp5HzJHJS08j8ns8vxhSpL7
-         PKLiFwlD9uEQ0gYciGNs/qjstn1Qyf0YwZCNcbK31fLg0MVPpUjiIUsq2iDF2zm5H3PN
-         CgoSAQ5YOMkDdFu7tAQr3V4KkwnYH6TalT2WimukYB4zVEmCWdYVXxLtrDXqjWtyzzlg
-         +zkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Y3Vea8plG7NdygEVdJpagO9aiMQvkxxFcDl4y17hVgM=;
-        b=CfFekbcw1nSpRY/0iUSM9D2W82vpd46Zg0t573d9QvxoM6L+J/HN1PJQgQqbr2Gaye
-         cKW9NTAjg8Q8O4lhBbX/0sF/EUFeJdOFeTdwckxTmEAid5D8WdVhdXNpmLCxEjgJP8F+
-         Kv8ks4hmXt4xTjNs50TTwY+i/hiuH+3aGLvd4bB3j+XLO+mi52Fy17s9hCfZz35ofcLw
-         iXDaBebaQ1ZugecbKp5KbDeQgDM2mzJYriXKFp5uSAMd877kOQZfEaqbd0PfijeDUYVo
-         yAhy8dTUufd+sNPTHh136m65KPexJoqUx36Qcg1WKUQcwtdY/TlVaVtIzGRTFKzTA+YQ
-         GvhA==
-X-Gm-Message-State: AOAM530ppnXgkC70KutvqM1vGbQb2dUSs3d2EhEvOebdaHpq4BzSeZNc
-        akwwd7D+XhCLK20u0qMfM/jZHf38UdfgZNvn1Zkm7A13IDry/g==
-X-Google-Smtp-Source: ABdhPJyJlqSq579IOa444NxezIZu364d2xx7ujWPNs4VT85tSXATFc06+6N4r0b0i61MGpILYb+/3O7BZrS2iFnxxVY=
-X-Received: by 2002:a17:90a:7e8a:: with SMTP id j10mr8582758pjl.13.1642134697015;
- Thu, 13 Jan 2022 20:31:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20211124214418.GA1094@raspberrypi> <CAOoBcBWHi+UJENsfNzG2NMAjBj0RjsKSWNDaQ+++F-uL0ubAYQ@mail.gmail.com>
- <f227bd950c3b7c060b4b581f5604fe4d9103e942.camel@linux.ibm.com>
-In-Reply-To: <f227bd950c3b7c060b4b581f5604fe4d9103e942.camel@linux.ibm.com>
-From:   Austin Kim <austindh.kim@gmail.com>
-Date:   Fri, 14 Jan 2022 13:31:25 +0900
-Message-ID: <CADLLry5kph-7RUE0FYYR87625mvBCOYJR93JWTZ7KWKUS-8FKA@mail.gmail.com>
-Subject: Re: [PATCH] ima: Fix trivial typos in the comments
+        Fri, 14 Jan 2022 03:53:12 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 15DD81F3BF;
+        Fri, 14 Jan 2022 08:53:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1642150391;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8IHZ/Hky+no6jLGdjAJCDrjLZc5+zFZ1khnmnGZuMN8=;
+        b=XWOMasDra8vtmEW5T/qHkXJFqZ/VKGeNDPA440PeSjOo7KvaPnV6D+0zBHWObdG3CuykYF
+        84tr8GnebmZ8H9q7ggm5rBjWH7THpU+M66hwHXroFngoHIoA/hkySN5w710yaNDkeq10yu
+        lToJ208E0sLloJ6bRkjxJngdDlksCOc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1642150391;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8IHZ/Hky+no6jLGdjAJCDrjLZc5+zFZ1khnmnGZuMN8=;
+        b=oj0ABhrhHbhJTd8wH+BNz+ZRs0+Nm5Q+PQIq+R/tDE8KLc/BU9ScZYoKSwR07XzrjdQIoD
+        oi0pFvjZ3qW2mwBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CBD1713C16;
+        Fri, 14 Jan 2022 08:53:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IXe4LvY54WFWfQAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Fri, 14 Jan 2022 08:53:10 +0000
+Date:   Fri, 14 Jan 2022 09:53:09 +0100
+From:   Petr Vorel <pvorel@suse.cz>
 To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Austin Kim <austinkernel.kim@gmail.com>, dmitry.kasatkin@gmail.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     ltp@lists.linux.it, linux-integrity@vger.kernel.org,
+        Alex Henrie <alexh@vpitech.com>, alexhenrie24@gmail.com,
+        Cyril Hrubis <chrubis@suse.cz>
+Subject: Re: [PATCH 1/1] ima_measurements.sh: Use /proc/uptime instead of date
+Message-ID: <YeE59WLtUBP04i/r@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20220112150123.13768-1-pvorel@suse.cz>
+ <8f0d69607590096c1be5d7c4c2a3ece316100ca0.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f0d69607590096c1be5d7c4c2a3ece316100ca0.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-2022=EB=85=84 1=EC=9B=94 14=EC=9D=BC (=EA=B8=88) =EC=98=A4=EC=A0=84 10:51, =
-Mimi Zohar <zohar@linux.ibm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Hi Austin,
->
-> On Wed, 2022-01-12 at 17:46 +0900, Austin Kim wrote:
->
-> > >
-> > > There are a few minor typos in the comments. Fix these.
-> > >
-> > > Signed-off-by: Austin Kim <austindh.kim@gmail.com>
->
-> It would be really nice if checkpatch.pl would catch spelling mistakes
-> before the patch was upstreamed.
+Hi Mimi,
 
-Thanks for feedback.
-Let me make sure to upstream patch after executing
-'./scripts/checkpatch.pl --strict' command.
+> On Wed, 2022-01-12 at 16:01 +0100, Petr Vorel wrote:
+> > It fixes more iterations (e.g. -i2) which is more precise.
+> > date +%s could be used, but it's better use procfs file instead
+> > requiring binary.
 
-BR,
-Austin Kim
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
 
->
-> thanks,
->
+> Thanks, Petr.
+
 > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->
+
+Thanks a lot for your review, merged.
+
+Kind regards,
+Petr
+
