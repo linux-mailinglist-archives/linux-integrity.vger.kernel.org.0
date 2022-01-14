@@ -2,108 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 329E048EAA0
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jan 2022 14:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5E548EB05
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jan 2022 14:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241208AbiANN1h (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jan 2022 08:27:37 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4970 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235222AbiANN1g (ORCPT
+        id S235689AbiANNpj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jan 2022 08:45:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42156 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235680AbiANNpi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jan 2022 08:27:36 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20ECrVgS030473;
-        Fri, 14 Jan 2022 13:27:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=LQVK3PWHhEVZj9NJeLbJSmcD0L8Z5fH6JODv7w3uJwI=;
- b=JAoBvyn20lWQOjvnnRg3qA2YtDyZhE0z+fsQrSQbIcPS79ji7aN4uYEXBQLmdEwTH0rd
- a2YyHLnbTqFH1mAJE6lQk1+XKbPHETGJ6Ho9roKhltwoTwTze5zgvkx9G8ATevvayIYZ
- m4mX8UNUe/NYS5IEmHqkwDoaOKS8SE/4Ck+PHUeDVxbJFn55C8B4v6Rh1J4lVR7h1msG
- Q/HngpHyi5CdHOZ8ifH+HJT4QVBUGDWuJ47DO7uDM5JO1Bx0QGrtNw+zddCw6hxHQrEb
- 11ICIpY1YVV6UXLgBzWuz1nhpkIEI+eTzekpWQQUyLXuny7bGpha9+Pk1xfvX6Er8TmF Mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dk9k1gm9c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jan 2022 13:27:34 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20ECvcQs015418;
-        Fri, 14 Jan 2022 13:27:33 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dk9k1gm8x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jan 2022 13:27:33 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20EDRWYP006415;
-        Fri, 14 Jan 2022 13:27:32 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04fra.de.ibm.com with ESMTP id 3df28abpsp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jan 2022 13:27:31 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20EDRTYr42926572
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 14 Jan 2022 13:27:29 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 72D30A4051;
-        Fri, 14 Jan 2022 13:27:29 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 391CDA4040;
-        Fri, 14 Jan 2022 13:27:28 +0000 (GMT)
-Received: from sig-9-65-86-203.ibm.com (unknown [9.65.86.203])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 14 Jan 2022 13:27:28 +0000 (GMT)
-Message-ID: <dd5b09c0985f47fe164df06f8f2f387c0332c5ec.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Fix trivial typos in the comments
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Joe Perches <joe@perches.com>,
-        Austin Kim <austinkernel.kim@gmail.com>,
-        Austin Kim <austindh.kim@gmail.com>
-Cc:     dmitry.kasatkin@gmail.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 14 Jan 2022 08:27:27 -0500
-In-Reply-To: <d9478a99032ea7182e0cd30ea822c1993ac2cd68.camel@perches.com>
-References: <20211124214418.GA1094@raspberrypi>
-         <CAOoBcBWHi+UJENsfNzG2NMAjBj0RjsKSWNDaQ+++F-uL0ubAYQ@mail.gmail.com>
-         <f227bd950c3b7c060b4b581f5604fe4d9103e942.camel@linux.ibm.com>
-         <d9478a99032ea7182e0cd30ea822c1993ac2cd68.camel@perches.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UPEh_h6DxCi7fnNqtYRyPhuDj3PnHpzp
-X-Proofpoint-GUID: KNTF8P1ia6M_MZXHcG3vGqA1JLSlDxJB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-14_04,2022-01-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 phishscore=0 suspectscore=0
- mlxlogscore=984 malwarescore=0 bulkscore=0 priorityscore=1501 spamscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201140088
+        Fri, 14 Jan 2022 08:45:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6055B825EE;
+        Fri, 14 Jan 2022 13:45:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA136C36AEA;
+        Fri, 14 Jan 2022 13:45:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642167935;
+        bh=6gqibBkBClRmRyQBZY5HwyitOU+GVwVvJirzhTxQSlc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k9IglTIKG8eAefGuuATD9ZeuKdDDAErx/crdeut+QVtYOZZxDqdXiiiGuIWkXce0H
+         RL5hDILud+ZFPtKbIIoCpqVeFcIeuTV68T1B7eHUnaP+NQFFYNKxilwY9ir0N2rX30
+         1cJQVE5I32eTBT51LKNLZzydSAU4pLGCiSuEZ4gZ+EUrM9vw4bT5VY3mZqTP8jm1W4
+         ReMGQvw99QUW2paPrwatblpbJHWsWxJ+tQLBhREGBNRxNFx+ifSDI4E9VRyUE2Jo+r
+         2mVhfM3SOmXCY79Cx9keSQXRWRqtxdnYWbkc8VQ94FhD1jHUtqGKcxk9CFuOb026zK
+         vXEiPJL+hFmRg==
+Date:   Fri, 14 Jan 2022 14:45:27 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v8 18/19] ima: Show owning user namespace's uid and gid
+ when displaying policy
+Message-ID: <20220114134527.bk5ijfrqwt334ypr@wittgenstein>
+References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+ <20220104170416.1923685-19-stefanb@linux.vnet.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220104170416.1923685-19-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Joe,
-
-On Thu, 2022-01-13 at 18:05 -0800, Joe Perches wrote:
-> On Thu, 2022-01-13 at 20:51 -0500, Mimi Zohar wrote:
-> > On Wed, 2022-01-12 at 17:46 +0900, Austin Kim wrote:
-> > > > There are a few minor typos in the comments. Fix these.
-> > It would be really nice if checkpatch.pl would catch spelling mistakes
-> > before the patch was upstreamed.
+On Tue, Jan 04, 2022 at 12:04:15PM -0500, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
 > 
-> Try ./scripts/checkpatch.pl --strict
+> Show the uid and gid values of the owning user namespace when displaying
+> the IMA policy rather than the kernel uid and gid values. Now the same uid
+> and gid values are shown in the policy as those that were used when the
+> policy was set.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  security/integrity/ima/ima_policy.c | 19 +++++++++++++------
+>  1 file changed, 13 insertions(+), 6 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 15c68dc5da9e..b7dbc687b6ff 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -1997,6 +1997,7 @@ static void ima_policy_show_appraise_algos(struct seq_file *m,
+>  
+>  int ima_policy_show(struct seq_file *m, void *v)
+>  {
+> +	struct user_namespace *user_ns = ima_user_ns_from_file(m->file);
 
-"--strict" didn't find the typos in comments, but "--codespell" did. 
-Nice!
+Hm, so when looking at the policy entries via seq_file's .show method
+and displaying the {g,u}id values of the rules we don't want the values
+resolved according to the user namespace the securityfs instances was
+mounted in. That would be misleading for callers that are in an
+ancestor userns (which we allow in .permission).
 
-thanks,
+So we want to make sure that we see the values as the opener of the file
+would see them. This is similar to e.g. looking at a task's ids through
+/proc/<pid>/status. So this should be seq_user_ns(m) instead of
+ima_user_ns_from_file().
 
-Mimi
+>  	struct ima_rule_entry *entry = v;
+>  	int i;
+>  	char tbuf[64] = {0,};
+> @@ -2074,7 +2075,8 @@ int ima_policy_show(struct seq_file *m, void *v)
+>  	}
+>  
+>  	if (entry->flags & IMA_UID) {
+> -		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->uid));
+> +		snprintf(tbuf, sizeof(tbuf),
+> +			 "%d", from_kuid(user_ns, entry->uid));
 
+This should be from_k{g,u}id_munged().
