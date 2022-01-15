@@ -2,74 +2,111 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA4948F44F
-	for <lists+linux-integrity@lfdr.de>; Sat, 15 Jan 2022 03:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C043748F524
+	for <lists+linux-integrity@lfdr.de>; Sat, 15 Jan 2022 06:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbiAOCKQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jan 2022 21:10:16 -0500
-Received: from relay032.a.hostedemail.com ([64.99.140.32]:42970 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231258AbiAOCKQ (ORCPT
+        id S231754AbiAOFbD (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sat, 15 Jan 2022 00:31:03 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:34312 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231184AbiAOFbD (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jan 2022 21:10:16 -0500
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id 2A93C61E65;
-        Sat, 15 Jan 2022 02:10:14 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id E9B4F2002F;
-        Sat, 15 Jan 2022 02:10:11 +0000 (UTC)
-Message-ID: <6598b080d13e4f08d92899857927200a83f1ddfe.camel@perches.com>
-Subject: Re: [PATCH] ima: Fix trivial typos in the comments
-From:   Joe Perches <joe@perches.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Austin Kim <austinkernel.kim@gmail.com>,
-        Austin Kim <austindh.kim@gmail.com>
-Cc:     dmitry.kasatkin@gmail.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 14 Jan 2022 18:10:11 -0800
-In-Reply-To: <dd5b09c0985f47fe164df06f8f2f387c0332c5ec.camel@linux.ibm.com>
-References: <20211124214418.GA1094@raspberrypi>
-         <CAOoBcBWHi+UJENsfNzG2NMAjBj0RjsKSWNDaQ+++F-uL0ubAYQ@mail.gmail.com>
-         <f227bd950c3b7c060b4b581f5604fe4d9103e942.camel@linux.ibm.com>
-         <d9478a99032ea7182e0cd30ea822c1993ac2cd68.camel@perches.com>
-         <dd5b09c0985f47fe164df06f8f2f387c0332c5ec.camel@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sat, 15 Jan 2022 00:31:03 -0500
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 8C9A972C8DC;
+        Sat, 15 Jan 2022 08:31:01 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 73E714A46FE;
+        Sat, 15 Jan 2022 08:31:01 +0300 (MSK)
+Date:   Sat, 15 Jan 2022 08:31:01 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
+ signatures
+Message-ID: <20220115053101.36xoy2bc7ypozo6l@altlinux.org>
+References: <20211202215507.298415-1-zohar@linux.ibm.com>
+ <20211202215507.298415-5-zohar@linux.ibm.com>
+ <YalDvGjq0inMFKln@sol.localdomain>
+ <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
+ <YdYrw4eiQPryOMkZ@gmail.com>
+ <20220109204537.oueokvvkrkyy3ipq@altlinux.org>
+ <YdtOhsv/A5dqlApY@sol.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: qsz9h8yuyxrfaeutnwbir3kdp9hcn1zp
-X-Spam-Status: No, score=-4.89
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: E9B4F2002F
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/Sm6NybTT0UK2QqZowJVcSIsHPQLBvWEc=
-X-HE-Tag: 1642212611-419469
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <YdtOhsv/A5dqlApY@sol.localdomain>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, 2022-01-14 at 08:27 -0500, Mimi Zohar wrote:
-> Hi Joe,
-> 
-> On Thu, 2022-01-13 at 18:05 -0800, Joe Perches wrote:
-> > On Thu, 2022-01-13 at 20:51 -0500, Mimi Zohar wrote:
-> > > On Wed, 2022-01-12 at 17:46 +0900, Austin Kim wrote:
-> > > > > There are a few minor typos in the comments. Fix these.
-> > > It would be really nice if checkpatch.pl would catch spelling mistakes
-> > > before the patch was upstreamed.
+Eric,
+
+On Sun, Jan 09, 2022 at 01:07:18PM -0800, Eric Biggers wrote:
+> On Sun, Jan 09, 2022 at 11:45:37PM +0300, Vitaly Chikunov wrote:
+> > On Wed, Jan 05, 2022 at 03:37:39PM -0800, Eric Biggers wrote:
+> > > On Fri, Dec 31, 2021 at 10:35:00AM -0500, Mimi Zohar wrote:
+> > > > On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
+> > > > > On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
+> > > > > >  	case IMA_VERITY_DIGSIG:
+> > > > > > -		fallthrough;
+> > > > > > +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
+> > > > > > +
+> > > > > > +		/*
+> > > > > > +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
+> > > > > > +		 * and the fs-verity file digest, not directly on the
+> > > > > > +		 * fs-verity file digest.  Both digests should probably be
+> > > > > > +		 * included in the IMA measurement list, but for now this
+> > > > > > +		 * digest is only used for verifying the IMA signature.
+> > > > > > +		 */
+> > > > > > +		verity_digest[0] = IMA_VERITY_DIGSIG;
+> > > > > > +		memcpy(verity_digest + 1, iint->ima_hash->digest,
+> > > > > > +		       iint->ima_hash->length);
+> > > > > > +
+> > > > > > +		hash.hdr.algo = iint->ima_hash->algo;
+> > > > > > +		hash.hdr.length = iint->ima_hash->length;
+> > > > > 
+> > > > > This is still wrong because the bytes being signed don't include the hash
+> > > > > algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
+> > > > > supports SHA-512 too, and it may support other hash algorithms in the future.
+> > > > 
+> > > > IMA assumes that the file hash algorithm and the signature algorithm
+> > > > are the same.   If they're not the same, for whatever reason, the
+> > > > signature verification would simply fail.
+> > > > 
+> > > > Based on the v2 signature header 'type' field, IMA can differentiate
+> > > > between regular IMA file hash based signatures and fs-verity file
+> > > > digest based signatures.  The digest field (d-ng) in the IMA
+> > > > meausrement list prefixes the digest with the hash algorithm. I'm
+> > > > missing the reason for needing to hash fs-verity's file digest with
+> > > > other metadata, and sign that hash rather than fs-verity's file digest
+> > > > directly.
+> > > 
+> > > Because if someone signs a raw hash, then they also implicitly sign the same
+> > > hash value for all supported hash algorithms that produce the same length hash.
 > > 
-> > Try ./scripts/checkpatch.pl --strict
+> > Unless there is broken hash algorithm allowing for preimage attacks this
+> > is irrelevant. If there is two broken algorithms allowing for collisions,
+> > colliding hashes could be prepared even if algo id is hashed too.
+> > 
 > 
-> "--strict" didn't find the typos in comments, but "--codespell" did. 
-> Nice!
+> Only one algorithm needs to be broken.  For example, SM3 has the same hash
+> length as SHA-256.  If SM3 support were to be added to fs-verity, and if someone
+> were to find a way to find an input that has a specific SM3 digest, then they
+> could also make it match a specific SHA-256 digest.  Someone might intend to
+> sign a SHA-256 digest, but if they are only signing the raw 32 bytes of the
+> digest, then they would also be signing the corresponding SM3 digest.  That's
+> why the digest that is signed *must* also include the algorithm used in the
+> digest (not the algorithm(s) used in the signature, which is different).
 
-Right, but it does depend on the particular typo.
+I think it will be beneficial if we pass hash algo id to the
+akcipher_alg::verify. In fact, ecrdsa should only be used with streebog.
+And perhaps, sm2 with sm3, pkcs1 with md/sha/sm3, and ecdsa with sha family
+hashes.
 
-checkpatch always uses the scripts/spelling.txt dictionary.
-
-codespell isn't always installed on machines and has to be
-enabled with that --codespell option.
-
-Anyway, glad it works for you.
+Thanks,
 
 
+> 
+> - Eric
