@@ -2,93 +2,74 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6884148F1F1
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jan 2022 22:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA4948F44F
+	for <lists+linux-integrity@lfdr.de>; Sat, 15 Jan 2022 03:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiANVNB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 14 Jan 2022 16:13:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47966 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiANVNA (ORCPT
+        id S232143AbiAOCKQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 14 Jan 2022 21:10:16 -0500
+Received: from relay032.a.hostedemail.com ([64.99.140.32]:42970 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231258AbiAOCKQ (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 14 Jan 2022 16:13:00 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41BC061F6E;
-        Fri, 14 Jan 2022 21:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D6DC36AE5;
-        Fri, 14 Jan 2022 21:12:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642194779;
-        bh=niJzjtKa24M/K9SaTRk1489GynPFKKY7X52fQyZqBjA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NXEylpgU00kAF987ah7HC5CJVS97UihExbToSPmKKjPX6YV4LuqbiAoRoz9TAnFkf
-         K1aaU3L0a/xWKZGmsYpF56VN2CH9RtI/3NXqiH8bOALYd+zhYr/8hwxWqBT5Bi+vS/
-         ngx2MdIqZ/bL7kRhEiM9GHt/phpk9aJLp0ULZAF+xaGFD6wqUfBL4oeUXUeot2hRQJ
-         9lNVAOisVRppl8mt+XWbSsyw33s6ASldILhE3IkKxUsuoFuDLFpJQ5173cEognDBXl
-         CcXWk/l+VdM+hoB6niGS6QKDLseoqyAt9VdxVwWwMiyuXLWPzlGP41OvqC/0By3uXC
-         LJgldWTdYeSOQ==
-Date:   Fri, 14 Jan 2022 23:12:46 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Tadeusz Struk <tstruk@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com
-Subject: Re: [PATCH v3 1/2] tpm: Fix error handling in async work
-Message-ID: <YeHnTlK+QCZiUyOL@iki.fi>
-References: <20220111055228.1830-1-tstruk@gmail.com>
- <Yd8fY/wixkXhXEFH@iki.fi>
- <3c2eeee7-0d3e-8000-67ad-3054f229cbe0@linaro.org>
- <YeHmB0BWgfVGPL55@iki.fi>
+        Fri, 14 Jan 2022 21:10:16 -0500
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay01.hostedemail.com (Postfix) with ESMTP id 2A93C61E65;
+        Sat, 15 Jan 2022 02:10:14 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id E9B4F2002F;
+        Sat, 15 Jan 2022 02:10:11 +0000 (UTC)
+Message-ID: <6598b080d13e4f08d92899857927200a83f1ddfe.camel@perches.com>
+Subject: Re: [PATCH] ima: Fix trivial typos in the comments
+From:   Joe Perches <joe@perches.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Austin Kim <austinkernel.kim@gmail.com>,
+        Austin Kim <austindh.kim@gmail.com>
+Cc:     dmitry.kasatkin@gmail.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 14 Jan 2022 18:10:11 -0800
+In-Reply-To: <dd5b09c0985f47fe164df06f8f2f387c0332c5ec.camel@linux.ibm.com>
+References: <20211124214418.GA1094@raspberrypi>
+         <CAOoBcBWHi+UJENsfNzG2NMAjBj0RjsKSWNDaQ+++F-uL0ubAYQ@mail.gmail.com>
+         <f227bd950c3b7c060b4b581f5604fe4d9103e942.camel@linux.ibm.com>
+         <d9478a99032ea7182e0cd30ea822c1993ac2cd68.camel@perches.com>
+         <dd5b09c0985f47fe164df06f8f2f387c0332c5ec.camel@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YeHmB0BWgfVGPL55@iki.fi>
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: qsz9h8yuyxrfaeutnwbir3kdp9hcn1zp
+X-Spam-Status: No, score=-4.89
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: E9B4F2002F
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/Sm6NybTT0UK2QqZowJVcSIsHPQLBvWEc=
+X-HE-Tag: 1642212611-419469
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Fri, Jan 14, 2022 at 11:07:22PM +0200, Jarkko Sakkinen wrote:
-> On Wed, Jan 12, 2022 at 10:47:29AM -0800, Tadeusz Struk wrote:
-> > On 1/12/22 10:35, Jarkko Sakkinen wrote:
-> > > These look good to me! Thank you. I'm in process of compiling a test
-> > > kernel.
+On Fri, 2022-01-14 at 08:27 -0500, Mimi Zohar wrote:
+> Hi Joe,
+> 
+> On Thu, 2022-01-13 at 18:05 -0800, Joe Perches wrote:
+> > On Thu, 2022-01-13 at 20:51 -0500, Mimi Zohar wrote:
+> > > On Wed, 2022-01-12 at 17:46 +0900, Austin Kim wrote:
+> > > > > There are a few minor typos in the comments. Fix these.
+> > > It would be really nice if checkpatch.pl would catch spelling mistakes
+> > > before the patch was upstreamed.
 > > 
-> > Thanks Jarkko,
-> > You can run the new test before and after applying the change and see
-> > how it behaves. Also just noticed a mistake in the comment, sorry but
-> > it was quite late when I sent it.
-> > 
-> > +	/*
-> > +	 * If ret is > 0 then tpm_dev_transmit returned the size of the
-> > +	 * response. If ret is < 0 then tpm_dev_transmit failed and
-> > +	 * returned a return code.
-> > +	 */
-> > 
-> > In the above could you please replace:
-> > 
-> > s/returned a return code/returned an error code/
-> > 
-> > before applying the patch. I would appreciate that.
+> > Try ./scripts/checkpatch.pl --strict
 > 
-> Please send new versions, there's also this:
-> 
-> def test_flush_invlid_context()
-> 
-> I'd figure "invlid" should be  "invalid"
-> 
-> You can add, as these changes do not change the semantics of the
-> patches:
-> 
-> Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> It's always best if you author the final version, as then a clear
-> reference on what was accepted exist at lore.kernel.org.
+> "--strict" didn't find the typos in comments, but "--codespell" did. 
+> Nice!
 
-Maybe it is good to mention that the test environment was libvirt hosted
-QEMU using swtpm, which I tried for the first time, instead of real hadware
-(libvirt has a nice property that it handles the startup/shutdown of
-swtpm). I managed to run all tests so I guess swtpm is working properly.
+Right, but it does depend on the particular typo.
 
-/Jarkko
+checkpatch always uses the scripts/spelling.txt dictionary.
+
+codespell isn't always installed on machines and has to be
+enabled with that --codespell option.
+
+Anyway, glad it works for you.
+
+
