@@ -2,75 +2,99 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD7A48FD74
-	for <lists+linux-integrity@lfdr.de>; Sun, 16 Jan 2022 15:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8263D48FD77
+	for <lists+linux-integrity@lfdr.de>; Sun, 16 Jan 2022 15:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiAPOeW (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 16 Jan 2022 09:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiAPOeW (ORCPT
+        id S235395AbiAPOeg (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 16 Jan 2022 09:34:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33146 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229785AbiAPOef (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 16 Jan 2022 09:34:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE29DC061574;
-        Sun, 16 Jan 2022 06:34:21 -0800 (PST)
+        Sun, 16 Jan 2022 09:34:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92D36B80D4C;
-        Sun, 16 Jan 2022 14:34:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F919C36AE9;
-        Sun, 16 Jan 2022 14:34:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14139B80D05;
+        Sun, 16 Jan 2022 14:34:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF34C36AE7;
+        Sun, 16 Jan 2022 14:34:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642343659;
-        bh=Oo3IEYSZe4Lq3ZPlAY8Bw/E9I4wuk7EtHkE4QX98vEE=;
+        s=k20201202; t=1642343672;
+        bh=oCqvjsNEHd9Y5M9rEsW3iU49LfLeq8eNQ8Zn339zLqU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PoofQluGqNYvUJpHRB8vgQcj+23MTWbAFmyUHBydxcjp9wrKn4NfS6rKAM8rOZujs
-         X+usDF26jKOlIOfodseT9lkjcAH1ot1W3KNFDSSRrXR1p2BJB2AeMym8wQ1U9dV1oS
-         XyVI63GEJMcpKl63Va7mIi02/+WybM0kQKRgEbonMTGshp9XJ7fOoNuY1iSUoVjqVL
-         9+Msfs4/wTnGkq5FM5LexGVSzf5CBBQyPYZLRs6NYcF1SeZbBL8OM1MKoXoPzQBl3w
-         1rPI5Yop4A77fDBkLR+OM7oGgdd4x3n5+vfZYyy6Bb9X7JSnurEKyrlrtcQKYVAbtt
-         krU93zG+VWLkg==
-Date:   Sun, 16 Jan 2022 16:34:06 +0200
+        b=j58W1h/obVl+IfAzefOxcsNjkMZGG9Dh7jPlmOPhHkz2nq9mysO1oJvaEn9mQkNfj
+         ylI2Advz7kOA48NCzouItB152EWl6E3XY8I5hGqc9jNY/PpeIAqcx0CHKaudy8Pc9Z
+         KJKtfAh1LmpnPXYD7eyVGZCazzJeMzNPV48SLuuZ7ZP8GyLjllSCfApEZnJIrUVVAG
+         S1f34/3bv2CEgtlXTn3BVTEsuvxHkAatjm0N0NqnQaZuMC5Jtss+lTcguvnLE0AIw7
+         zqYC+7leO0dKC6vTQLEwFC88CA/rv+rcZWpfBRSpqQW0M5i6te5pTUTSdeghWOBGFU
+         6J3bPsKGKjbcQ==
+Date:   Sun, 16 Jan 2022 16:34:20 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Tadeusz Struk <tstruk@gmail.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] tpm: Fix error handling in async work
-Message-ID: <YeQs3rHQ+0eVGDTH@iki.fi>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-integrity@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] selftests: tpm: add async space test with
+ noneexisting handle
+Message-ID: <YeQs7Fy5NaK6m6Ar@iki.fi>
 References: <20220116012627.2031-1-tstruk@gmail.com>
+ <20220116012627.2031-2-tstruk@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220116012627.2031-1-tstruk@gmail.com>
+In-Reply-To: <20220116012627.2031-2-tstruk@gmail.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 05:26:26PM -0800, Tadeusz Struk wrote:
-> When an invalid (non existing) handle is used in a TPM command,
-> that uses the resource manager interface (/dev/tpmrm0) the resource
-> manager tries to load it from its internal cache, but fails and
-> the tpm_dev_transmit returns an -EINVAL error to the caller.
-> The existing async handler doesn't handle these error cases
-> currently and the condition in the poll handler never returns
-> mask with EPOLLIN set.
-> The result is that the poll call blocks and the application gets stuck
-> until the user_read_timer wakes it up after 120 sec.
-> Change the tpm_dev_async_work function to handle error conditions
-> returned from tpm_dev_transmit they are also reflected in the poll mask
-> and a correct error code could passed back to the caller.
+On Sat, Jan 15, 2022 at 05:26:27PM -0800, Tadeusz Struk wrote:
+> Add a test for /dev/tpmrm0 in async mode that checks if
+> the code handles invalid handles correctly.
 > 
 > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Shuah Khan <shuah@kernel.org>
 > Cc: <linux-integrity@vger.kernel.org>
-> Cc: <stable@vger.kernel.org>
+> Cc: <linux-kselftest@vger.kernel.org>
 > Cc: <linux-kernel@vger.kernel.org>
 > 
-> Fixes: 9e1b74a63f77 ("tpm: add support for nonblocking operation")
 > Tested-by: Jarkko Sakkinen<jarkko@kernel.org>
 > Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
+> ---
+> Changed in v2:
+> - Updated commit message
+> Changed in v3:
+> - Fixed typo in the function name
+> ---
+>  tools/testing/selftests/tpm2/tpm2_tests.py | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+> index 9d764306887b..340ffef97fb6 100644
+> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
+> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+> @@ -302,3 +302,19 @@ class AsyncTest(unittest.TestCase):
+>          log.debug("Calling get_cap in a NON_BLOCKING mode")
+>          async_client.get_cap(tpm2.TPM2_CAP_HANDLES, tpm2.HR_LOADED_SESSION)
+>          async_client.close()
+> +
+> +    def test_flush_invalid_context(self):
+> +        log = logging.getLogger(__name__)
+> +        log.debug(sys._getframe().f_code.co_name)
+> +
+> +        async_client = tpm2.Client(tpm2.Client.FLAG_SPACE | tpm2.Client.FLAG_NONBLOCK)
+> +        log.debug("Calling flush_context passing in an invalid handle ")
+> +        handle = 0x80123456
+> +        rc = 0
+> +        try:
+> +            async_client.flush_context(handle)
+> +        except OSError as e:
+> +            rc = e.errno
+> +
+> +        self.assertEqual(rc, 22)
+> +        async_client.close()
+> -- 
+> 2.30.2
+> 
 
 Thank you.
 
