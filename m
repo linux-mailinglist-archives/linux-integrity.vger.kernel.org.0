@@ -2,102 +2,107 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D0E491171
-	for <lists+linux-integrity@lfdr.de>; Mon, 17 Jan 2022 22:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C7949121C
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 00:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243374AbiAQVyy (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 17 Jan 2022 16:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234113AbiAQVyx (ORCPT
+        id S234766AbiAQXDG (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 17 Jan 2022 18:03:06 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:8040 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229842AbiAQXDG (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 17 Jan 2022 16:54:53 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6228AC061401
-        for <linux-integrity@vger.kernel.org>; Mon, 17 Jan 2022 13:54:53 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id a21so6495881qkn.0
-        for <linux-integrity@vger.kernel.org>; Mon, 17 Jan 2022 13:54:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KmBygC3q5AQG8qkNJvnSnx+ggl7+9U+ombjnJKusFG4=;
-        b=BBYk7pWCxTpa4e9gEBi36zq0wZnDK1j8g3Khe3W2pLKftHSHr/CXDUEoyfqz3ooNbi
-         Glv8rYMWVGazEcND3kjnCvRMhHh/gu6xQWjwk8OJcUpOewIl+l/ejIwlhSRThY2N0OVs
-         mwTbFhmbf+K+mhRd0FmNjgwoVw20osV7MBe8U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KmBygC3q5AQG8qkNJvnSnx+ggl7+9U+ombjnJKusFG4=;
-        b=JZF42UtIjQ+wKyRuKB3k32K1aCuCwmzxbYta0iRw8F8wo+T4+BuvyIatqfzRFvizVK
-         8SqOWbw/8yegl92jOMNert/UOsT/xP7/B8BwCzaytYvrXOa4AiX/X4H2WLOWzkeHYUKJ
-         x7iMuZZE3OpwlJ9WkPAEy4oFKcRt0g8ugq7Y6MbtVfSdCOKOr9Ty/nrJtLp64Sa3vScp
-         Ve2ffmn4W1hQ2eeRk9O0yMxEFQbs7X8CRiRAuRBzSVLFtSNR7MXxQGhORif/mBkE8fPW
-         T2WMp37XIFt8uqXY2S9lI4hZR3e9yEVqYRk8wMBWF9LF7zL9y9D9QiT9AM+O60rRPP37
-         AslQ==
-X-Gm-Message-State: AOAM53318iZkI6Ko1TYQtzGSPofOzhDvGTjPaQAFs3XwysaiewFt5MbL
-        Z0xjcafDIr5WOpDm7GSKsZHReg==
-X-Google-Smtp-Source: ABdhPJxaMz1oYURs6e5lMt7vVVBbGEnFSB7TjiLRH+xlZuiq3V/0TG+DoST9VWbXv6HeYfW5osR6TA==
-X-Received: by 2002:a37:aad8:: with SMTP id t207mr15930861qke.216.1642456492290;
-        Mon, 17 Jan 2022 13:54:52 -0800 (PST)
-Received: from nitro.local (bras-base-mtrlpq5031w-grc-32-216-209-220-181.dsl.bell.ca. [216.209.220.181])
-        by smtp.gmail.com with ESMTPSA id f9sm9371606qkp.94.2022.01.17.13.54.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jan 2022 13:54:51 -0800 (PST)
-Date:   Mon, 17 Jan 2022 16:54:49 -0500
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>, dhowells@redhat.com,
-        dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, ebiggers@kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Message-ID: <20220117215449.2qboqd3nmsky2g3w@nitro.local>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <YeV+jkGg6mpQdRID@zx2c4.com>
- <20220117165933.l3762ppcbj5jxicc@meerkat.local>
- <392d28fa-7a2c-867a-5fbb-640064461eb7@maciej.szmigiero.name>
+        Mon, 17 Jan 2022 18:03:06 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20HKTEGj010709;
+        Mon, 17 Jan 2022 23:03:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=M7BMP24y1cQ28K7PlH8TJ6wkIn7xRBvGLBDOYJ3A/m0=;
+ b=I4GTfaboWlND4IHEFCKiX+teaqPmKiOnvtCU9fEJ3m2Zn3s7B13FJKun56NBvySEsbG4
+ saecKj5vpcVRMWzvJoOwn7TtCT+78moQ8NEUiccXKBNHn8v8Qp0OKF317UJQbXJgifO9
+ 53jvh6rNXJCNTIJ0Yi+ATi1w0MmsknllwLb2tAof+VNHl2zxtjo/W7WetM+3n3BX50YE
+ 9ozlrCO8HZFrl2+I33vzGSu8FajP1nsLwh06uL3K+PFP1dHOG+s+H2quSwW/a4pLSjVw
+ duv4+VJov0ctPDjjwXBwEjLsC+6K+ZR7ul5ZAHZR8TlBkn5YevZCmZpGz+K0m+ysxonD pw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dnfhe2phr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jan 2022 23:03:03 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20HMvLsw014269;
+        Mon, 17 Jan 2022 23:03:01 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dknhj7hb9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jan 2022 23:03:01 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20HN2wTD45351420
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Jan 2022 23:02:58 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D30FFA406B;
+        Mon, 17 Jan 2022 23:02:58 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 08282A4067;
+        Mon, 17 Jan 2022 23:02:58 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.85.218])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 17 Jan 2022 23:02:57 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        linux-security-module@vger.kernel.org,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: add missing "security/integrity" directory
+Date:   Mon, 17 Jan 2022 18:02:29 -0500
+Message-Id: <20220117230229.16475-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6xPCtEPtag_9tqrfPy5id-62z4Dor_tX
+X-Proofpoint-ORIG-GUID: 6xPCtEPtag_9tqrfPy5id-62z4Dor_tX
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <392d28fa-7a2c-867a-5fbb-640064461eb7@maciej.szmigiero.name>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-17_07,2022-01-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 mlxlogscore=839 spamscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 bulkscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201170144
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 09:59:22PM +0100, Maciej S. Szmigiero wrote:
-> > I am concerned that ed25519 private key management is very rudimentary -- more
-> > often than not it is just kept somewhere on disk, often without any passphrase
-> > encryption.
-> > 
-> > With all its legacy warts, GnuPG at least has decent support for hardware
-> > off-load via OpenPGP smartcards or TPM integration in GnuPG 2.3, but the best
-> > we have with ed25519 is passhprase protection as implemented in minisign (and
-> 
-> I am not sure that I understood your point here correctly, but GnuPG
-> already supports ed25519 keys, including stored on a smartcard - for
-> example, on a YubiKey [1].
+Update the IMA and EVM records to include the "security/integrity"
+directory.
 
-Yes, I know, but you cannot use ed25519-capable OpenPGP smartcards to create
-non-PGP signatures. The discussion was about using ed25519 signatures
-directly (e.g. like signify/minisign do). Jason pointed out to me on IRC that
-it's possible to do it with YubiHSM, but it's an expensive device ($650 USD
-from Yubico).
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> While the current software support for ed25519 might be limited, there
-> is certainly progress being made, RFC 8410 allowed these algos for X.509
-> certificates.
-> Support for such certificates is already implemented in OpenSSL [2].
-> 
-> ECDSA, on the other hand, is very fragile with respect to random number
-> generation at signing time.
-> We know that people got burned here in the past.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5250298d2817..a9973d0991e3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7181,6 +7181,7 @@ M:	Mimi Zohar <zohar@linux.ibm.com>
+ L:	linux-integrity@vger.kernel.org
+ S:	Supported
+ F:	security/integrity/evm/
++F:	security/integrity
+ 
+ EXTENSIBLE FIRMWARE INTERFACE (EFI)
+ M:	Ard Biesheuvel <ardb@kernel.org>
+@@ -9419,6 +9420,7 @@ L:	linux-integrity@vger.kernel.org
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+ F:	security/integrity/ima/
++F:	security/integrity
+ 
+ INTEL 810/815 FRAMEBUFFER DRIVER
+ M:	Antonino Daplas <adaplas@gmail.com>
+-- 
+2.27.0
 
-I think this is taking us far away from the main topic (which
-signing/verification standards to use in-kernel).
-
--K
