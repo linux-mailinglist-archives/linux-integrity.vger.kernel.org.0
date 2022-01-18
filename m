@@ -2,85 +2,112 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CE5492D46
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 19:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B3F492D69
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 19:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347803AbiARS0T (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jan 2022 13:26:19 -0500
-Received: from mail-yb1-f176.google.com ([209.85.219.176]:46940 "EHLO
-        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347817AbiARS0S (ORCPT
+        id S244648AbiARSff (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jan 2022 13:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244660AbiARSff (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:26:18 -0500
-Received: by mail-yb1-f176.google.com with SMTP id p5so58576137ybd.13
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 10:26:18 -0800 (PST)
+        Tue, 18 Jan 2022 13:35:35 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CA0C06161C
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 10:35:34 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id u11so20042026plh.13
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 10:35:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FaIaORNSz7XiJbleCuK1NUmRfZPUdajgr0r/v10ft40=;
+        b=JKRND+wPYLCcyAzDO1KAQCZh/sZV8jXN5P7KsXPAiUvMkrJdqmkKMe21LGgmkC60wJ
+         RBaUkPkRsMDEQPNJAxSCN6maYxQ8Vkiom1FrmmeS4dc5tDUwAlMdzqDLsbeE/ltJ2MK8
+         HgD09inP/PWgqeDZEosczAFdnFtx83z2pb8LQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=nNs5o4VvLJblkKkIVcPmYPx10yy3hUKHbFmbQiq0e2c=;
-        b=k1y5ckhceySpEZMA7obmMl2+KGz4+tmUWIvKS8ZJ/FZSBE0lbI9D6cEB5xsaNKwNzJ
-         qL8d3wlkPUQ9YiJdfLlzCbx7Dz0/xnD47m8lpk1Z2PcDxdzXENIB+hlqGU/1J3k2Yk3y
-         FajsN4XPozfzsgTfVpR20oYQ77+UXHP9vvPBDqXAPCkcZoyyhRW+rS8VIm84Z1j2iMXp
-         wtcebhktcZoaQqcUtRBjBzAMDFLnr+1iEXXZ6I8jH21hlfQJB6pqzxGeNuC/NfnqAh3t
-         dafNQQ4V3vr0lJf0ZfnzOftIT60uIXubAmoxA7CeZe5ml6l8wwNycNjaa5p4k8EMtDcL
-         RTTA==
-X-Gm-Message-State: AOAM5316XISnepNkf1Bv51J9fS+vvzc4ks3YkldQ+6DCAqqGVk0ybaxz
-        YuueEnS8j/X4YjniruAbDVpOt5GJAZdrb8sHvQohZg==
-X-Google-Smtp-Source: ABdhPJx5/up8OyqXZHlIHqf4NfI6Tfjq2cViE0P7N9WMB4LYAqgwwLReT8UFbDuDxxQ69bbIL88CvfRTEhI+2+iMALI=
-X-Received: by 2002:a25:1388:: with SMTP id 130mr35201366ybt.321.1642530376588;
- Tue, 18 Jan 2022 10:26:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FaIaORNSz7XiJbleCuK1NUmRfZPUdajgr0r/v10ft40=;
+        b=UGo/JbnHRb3vUstjo4ievjzMzPhNofMj05Lsk/nOFH9XPKarpc3IoTD4h6LbwTePhk
+         BXYi5dqHt/YnnqLudE4UgWjMjeXUAqjm+9mbRrm3Fp5MBtpbGVXJt/GX4vNS8QZG0M5z
+         EFA9zgH8t7xfWnrVUjJmg1hz4wzJK+rNshFB5jR6KeAmfngHVKkFdRpwfkYGhHOLof/l
+         pXPk2Lhvspga7uzYf72QGk3g2DjZ6tyoq/BjkisBCa2FPmnrYWlQPi4s3P0MTBhp3fg7
+         04mcTGU5oqZfUi5QORXuwxDUQXEKpYM/Dv3bvNXDC1b2PadtltXOS0BbADV/knP3PyrZ
+         v+yA==
+X-Gm-Message-State: AOAM531ZkeuRTi7ax93oPAWdNqzklXfgOeo6j4aacBW7qZCe4W7krtxs
+        rgVog2I8GVb8+G0R2R8rp74AZQ==
+X-Google-Smtp-Source: ABdhPJzWj0MC3WxjUBAs9H6h5KZ3dTfa1s9aGT3n//kJgRttbimCUDBIt/amV11vg462BRCfp/QQWw==
+X-Received: by 2002:a17:902:bd05:b0:148:a2f7:9d87 with SMTP id p5-20020a170902bd0500b00148a2f79d87mr29276085pls.166.1642530934336;
+        Tue, 18 Jan 2022 10:35:34 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w70sm13371180pfd.186.2022.01.18.10.35.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jan 2022 10:35:34 -0800 (PST)
+Date:   Tue, 18 Jan 2022 10:35:33 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] tpm: vtpm_proxy: Avoid device-originated buffer overflow
+Message-ID: <202201181035.2CF27A0262@keescook>
+References: <20220113002727.3709495-1-keescook@chromium.org>
+ <4b59d305-6858-1514-751a-37853ad777be@linux.ibm.com>
 MIME-Version: 1.0
-From:   Martin Ross <mross@pobox.com>
-Date:   Tue, 18 Jan 2022 13:26:05 -0500
-Message-ID: <CA++MVV3Jse4WZ-zr-SUWQz3Gk_dByU6JduVfUkvQNW+jgm9O4Q@mail.gmail.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-To:     jarkko@kernel.org
-Cc:     corbet@lwn.net, dhowells@redhat.com, jejb@linux.ibm.com,
-        jmorris@namei.org, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, serge@hallyn.com,
-        Yael Tiomkin <yaelt@google.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4b59d305-6858-1514-751a-37853ad777be@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Hi Jarkko,
+On Thu, Jan 13, 2022 at 04:19:32PM -0500, Stefan Berger wrote:
+> I just want to clarify this. In vtpm_proxy_tpm_op_send() we have the only
+> place that sets req_len to a value larger than 0:
+> 
+> static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t
+> count)
+> {
+>     struct proxy_dev *proxy_dev = dev_get_drvdata(&chip->dev);
+> 
+>     if (count > sizeof(proxy_dev->buffer)) {
+>         dev_err(&chip->dev,
+>             "Invalid size in send: count=%zd, buffer size=%zd\n",
+>             count, sizeof(proxy_dev->buffer));
+>         return -EIO;
+>     }
+> 
+> [...]
+> 
+>     proxy_dev->req_len = count;
+>     memcpy(proxy_dev->buffer, buf, count);
+> 
+> [...]
+> 
+> }
+> 
+> 
+> The above makes sure that we cannot copy more bytes into the
+> proxy_dev->buffer than the what the buffer has bytes for.
+> 
+> It then sets req_len to a valid value that is less or equal to the buffer
+> size.
+> 
+> Considering this your check above seems to only be there to make the
+> compiler happy but otherwise I don't see that this is a real problem with a
+> buffer overflow?!
+> 
+> Nevertheless, let all those compilers be happy:
+> 
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-I have been working with Yael on this project so I thought I might add
-a bit of background here around the use case that this series of
-patches is trying to address.
+Ah yes, thanks! I'll reword the commit log for v2. :)
 
-At a high level we are trying to provide users of encryption that have
-key management hierarchies a better tradeoff between security and
-availability.  For available and performance reasons master keys often
-need to be released (or derived/wrapped keys created) outside of a KMS
-to clients (which may in turn further wrap those keys in a series of
-levels).  What we are trying to do is provide a mechanism where the
-wrapping/unwrapping of these keys is not dependent on a remote call at
-runtime.  e.g.  To unwrap a key if you are using AWS KMS or Google
-Service you need to make an RPC.  In practice to defend against
-availability or performance issues, designers end up building their
-own kms and effectively encrypting everything with a DEK.  The DEK
-encrypts same set as the master key thereby eliminating the security
-benefit of keeping the master key segregated in the first place.
-
-We are building a mechanism to  create a security boundary in the
-kernel that allows these master keys to be stored in the kernel and
-used to wrap/unwrap keys via less trusted user processes.  The other
-goal here is to eliminate the complexity and statefulness required to
-do this today which would be to create a trusted daemon or process on
-the machine.  Concretely this means that since the user process will
-not have the master key the system designer has better options.  One
-obvious advantage is that any core dumps or code injection attacks
-won't be able to trivially grab the master key from the process or the
-linux keyring.  Once in the kernel this functionality can be
-transparently integrated into user space crypto libraries that have
-existing key management functionality.
-
-Hope this helps and happy to answer any further questions!
-
-M
+-- 
+Kees Cook
