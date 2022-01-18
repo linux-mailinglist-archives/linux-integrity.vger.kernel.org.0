@@ -2,102 +2,165 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B14FF492E8A
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 20:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F957492F0A
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 21:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348287AbiARTje (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jan 2022 14:39:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244586AbiARTje (ORCPT
+        id S1343489AbiARUNX (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jan 2022 15:13:23 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4820 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348488AbiARUNS (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jan 2022 14:39:34 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34FFC061574
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 11:39:33 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id t66so225576qkb.4
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 11:39:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tLdog0n5L37y3MRWMAFNB4F/ux6HarIU0b+GSL5AL8I=;
-        b=JxuUbd1edEtbcMjCPSHSeTD/CMYEQdKqj/JLXxnkn+Bkc6GbozsOmUxwYRcTFsY47V
-         WslujJVSY9vZtdXObppzaJQ0XtxjM0/O6BcKQE/zLqUnX0H8LSFwCeWeCMv6fVoWagiZ
-         UtOtlLdGXjCLwzJlFu1FXI8C5OfuzJPVSSbieu+2VLq4ZVapGXxYrJTLJFqeMIFy9d2Z
-         k0/ON6VVV5+yE9VVVEWmaWQlbwRu5BN60dy3Gg3kukxXeKDIhZdFxFaEc4FoJa1LtbHS
-         Uv158qvrSco6aI/Rx+lCeqczh5qvcETHy05zvS+uAImu/AEx1laINzofgC3XGJBKWFzn
-         RXog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tLdog0n5L37y3MRWMAFNB4F/ux6HarIU0b+GSL5AL8I=;
-        b=ftysk1ZBnPoZ1XnOtenQyinvzvlUUPvS6/qP0O1+rsqde4eDxh/GjuRmCnOGvFkN7r
-         a8Y6u0nBmrdGlU1xiwSdR43EMkDILLy9N1yoKkCut8RdxIz1M2boZCHJ7l5Q+DB8Mszc
-         e7U602QEmENkS1C1gYJMB2VOB+zZJL7sRv0lW3tdvYIse5Sq1H58nX5KiI3p32juemIC
-         hpQ7/7LBFoosV2p3bIHw3pYLq+1gmNdYeOM3+G+NfoBvKojh2xA+EctRFJRHOVVl6dFW
-         kbo4uIXb5J5xig8iwinPv6WTf1FGoJwUk+wMrf11hSwCOUaX5X6SuLlKMzZVcU1PpjCr
-         HD/g==
-X-Gm-Message-State: AOAM531XoEWFur2fx8AnEv4slhUEHMi86b0Dqmu197yrXCNsiWRWjKH7
-        IC0Npzo3qVvc+dyIeJfy1vF8TQ==
-X-Google-Smtp-Source: ABdhPJyv+GW0Uxig4OgnmrE0B7ffqMZTGZmT4aK6Hb5mU/4+tpZB5vTRrUzdANLkG2L924vH1W5P2A==
-X-Received: by 2002:a37:de09:: with SMTP id h9mr18417793qkj.764.1642534772953;
-        Tue, 18 Jan 2022 11:39:32 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id a19sm431977qtx.7.2022.01.18.11.39.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 11:39:32 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1n9uKJ-0012sn-OS; Tue, 18 Jan 2022 15:39:31 -0400
-Date:   Tue, 18 Jan 2022 15:39:31 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jann Horn <jannh@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
-Message-ID: <20220118193931.GH8034@ziepe.ca>
-References: <20220118183650.3386989-1-keescook@chromium.org>
- <CAG48ez00FFW-n_Pi=+ya1xY5QuB3q2mPr8++scVe3h3ROeF_mg@mail.gmail.com>
+        Tue, 18 Jan 2022 15:13:18 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IHRDhv010575;
+        Tue, 18 Jan 2022 20:13:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=APUYDznO3Quaz+Sc0s0sZb+MiLSW6FJB7cBY6Cn3RU8=;
+ b=ObkN5+WSWaysDU41ut+nVvODrD7MO2qpmHSCN9bE1sn8UfYMjbUkYF339tZ1YXVI1L7j
+ L7v4tSZQCL8uaNLgx4M4WXZp04y0FtPHINkf5thG3x/9PX4oMG1zBHtPXvhzGQ+3Ujdr
+ k2lWrcdt/mDP1CoWKaQCsvyhn5czaSA3nYNmFZDJNL/ljbcnIz1yCVwNCPhPQ+5TGqQp
+ 6QV7lVzPZOEaowdKH7Zhc7Bew0d1iY6IFMqto2UfjJaWfKEVbE90LXGJH/+VKJDZgaIA
+ oZKw5Vqwu5dX0HQRKB5/si1G5UnIxAoVQsFRbfdmmU53Jp1v+0qM0BLk2R+1EEhOztXm Zw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yavjt1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 20:13:05 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IJZuSU004306;
+        Tue, 18 Jan 2022 20:13:05 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yavjsn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 20:13:05 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IK1xJP012541;
+        Tue, 18 Jan 2022 20:13:04 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma05wdc.us.ibm.com with ESMTP id 3dknwasc5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 18 Jan 2022 20:13:04 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IKD3U815466788
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Jan 2022 20:13:03 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6372BE05A;
+        Tue, 18 Jan 2022 20:13:02 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C635BE059;
+        Tue, 18 Jan 2022 20:13:00 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Jan 2022 20:13:00 +0000 (GMT)
+Message-ID: <d53a66a2-17e2-54b3-f115-efd7c58080a7@linux.ibm.com>
+Date:   Tue, 18 Jan 2022 15:12:59 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG48ez00FFW-n_Pi=+ya1xY5QuB3q2mPr8++scVe3h3ROeF_mg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 07/19] ima: Move dentry into ima_namespace and others
+ onto stack
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+ <20220104170416.1923685-8-stefanb@linux.vnet.ibm.com>
+ <a7c5ac94b4c4d87b407353f74ff87bc0b13542a4.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <a7c5ac94b4c4d87b407353f74ff87bc0b13542a4.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3HaX4pOfEpqkwQI_nTwVgEtt-lcLRJrf
+X-Proofpoint-GUID: HTpAqsbImGmRNkb9a8LkaDtqEYrZAuWZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ priorityscore=1501 clxscore=1015 impostorscore=0 suspectscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201180119
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 08:32:43PM +0100, Jann Horn wrote:
-> On Tue, Jan 18, 2022 at 7:37 PM Kees Cook <keescook@chromium.org> wrote:
-> > When building with -Warray-bounds, this warning was emitted:
-> >
-> > In function 'memset',
-> >     inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
-> > ./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
-> > [-Warray-bounds]
-> >    43 | #define __underlying_memset     __builtin_memset
-> >       |                                 ^
-> 
-> Can you explain what that compiler warning actually means, and which
-> compiler it is from? Is this from a 32-bit or a 64-bit architecture?
-> 
-> It sounds like the compiler (GCC?) is hallucinating a codepath on
-> which "len" is guaranteed to be >=2147483648, right? Why is it doing
-> that? Is this some kinda side effect from the fortify code?
 
-I agree, this looks bogus, or at least the commit message neeeds alot
-more explaining.
+On 1/13/22 15:28, Mimi Zohar wrote:
+> Hi Stefan,
+>
+> Nobody refers to the IMA securityfs files as dentries.  The Subject
+> line is suppose to provide a hint about the patch.  How about changing
+> the "Subject" line to "ima: Move IMA securityfs files into
+> ima_namespaces or onto stack".
+>
+> On Tue, 2022-01-04 at 12:04 -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Move the policy file dentry into the ima_namespace for reuse by
+>> virtualized SecurityFS and for being able to remove it from
+>> the filesystem. Move the other dentries onto the stack.
+> Missing is an explanation why the other IMA securityfs files can be on
+> the stack.  Maybe start out by saying that the ns_ima_init securityfs
+> files are never deleted.  Then transition into the IMA namespaced
+> securityfs files and how they will be deleted.
 
-static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
+How about this:
 
-        if (count > sizeof(proxy_dev->buffer))
-            [...]
-        proxy_dev->req_len = count;
+ima: Move IMA securityfs files into ima_namespace or onto stack
 
-Not clear how req_len can be larger than sizeof(buffer)?
+Move the IMA policy file's dentry into the ima_namespace for reuse by
+virtualized securityfs and for being able to remove the file from the
+filesystem using securityfs_remove().
 
-Jason
+Move the other files' dentries onto the stack since they are not needed
+outside the function where they are created in. Also, their cleanup is
+automatically handled by the filesystem upon umount of a virtualized
+secruityfs instance, so they don't need to be explicitly freed anymore.
+
+When moving the dentry 'ima_policy' into ima_namespace rename it to
+'policy_dentry' to clarify its datatype and avoid a name clash with
+'int ima_policy' from ima_policy.c.
+
+    Stefan
+
+
+
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   security/integrity/ima/ima.h    |  2 ++
+>>   security/integrity/ima/ima_fs.c | 32 ++++++++++++++++++--------------
+>>   2 files changed, 20 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index 82b3f6a98320..224b09617c52 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -140,6 +140,8 @@ struct ima_namespace {
+>>   	struct mutex ima_write_mutex;
+>>   	unsigned long ima_fs_flags;
+>>   	int valid_policy;
+>> +
+>> +	struct dentry *policy_dentry;
+> None of the other securityfs files are renamed.  Why is "ima_policy"
+> being renamed to "policy_dentry"?  If there is a need, it should be
+> documented in the patch description.
+>
+> thanks,
+>
+> Mimi
+>
+>>   } __randomize_layout;
+>>   extern struct ima_namespace init_ima_ns;
+>>
