@@ -2,109 +2,136 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B03492D79
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 19:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3734492DD3
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 19:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348129AbiARSgx (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jan 2022 13:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348141AbiARSgx (ORCPT
+        id S244965AbiARSto (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jan 2022 13:49:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47658 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239777AbiARSto (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jan 2022 13:36:53 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF07C06173E
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 10:36:52 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 188so24813pgf.1
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 10:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iW16hd+cXQQsHyRP7rt+lJ5AICZ50nA5CTVDepKk1SY=;
-        b=hkjqRWJ4GTUWf/fA1HqqRNXjXZBRWN0KbJB3mPlHa5YoKLe77jPKhe+wjGQu0WRXnp
-         OKWGhgSC2QBrVgvIzuYh8G5csrAG3/M6LoMiY9y0yb9p4hkFmfAoDJFErBjEiWG1Qta5
-         9IqRb58Pch9kVolf/Or7Uy7XlFzTIVmZXG018=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iW16hd+cXQQsHyRP7rt+lJ5AICZ50nA5CTVDepKk1SY=;
-        b=1N6z65sUUxc7oi7uUy/PR6OKt8238IBpJXGrJtyIlye+lGnHigwhTpgAXHOIFCoKNd
-         370YHjnb24xUEDfSQemP3zj5VHt3uRXHdUgfGxdt6Ax7XX51pbKd39vwO70a4zw8DwxI
-         6/56lucxNp6rmr4lurnAq2Re6l9OzDqK8/Gdmagkr62k4Q/uhm9rGncfJ49rY2klAt7k
-         Y+lf9E3rupLJPWQa4CTIfAEm86DForuNMKvkiRdGTaGJq8vAShvwlKDiiYWSOlo/ZDJ+
-         YqA11NPJuj0Af1OLgnnjKrjwZpzSrgNceKhZ+tz9+prilrt8v/WjIC8pGxP838USRbX9
-         LMog==
-X-Gm-Message-State: AOAM533XYtuPTPg0btadX5kE9WKDZNoIOTJv9pKXA+xAVnGAwNqzytVu
-        Rx0HE1OLd3MwlojYxEpSj8m7FA==
-X-Google-Smtp-Source: ABdhPJzHBVHEaBUgvGyzi2wXWjc7xsYpLja7zuIEJVM5c8RiYPsKsQrWpZl0npooGeV7ZnjrOCpPVQ==
-X-Received: by 2002:a63:7544:: with SMTP id f4mr24302719pgn.556.1642531012435;
-        Tue, 18 Jan 2022 10:36:52 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w18sm5509171pga.18.2022.01.18.10.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 10:36:52 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Huewe <peterhuewe@gmx.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
-Date:   Tue, 18 Jan 2022 10:36:50 -0800
-Message-Id: <20220118183650.3386989-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 18 Jan 2022 13:49:44 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6E29B816B8;
+        Tue, 18 Jan 2022 18:49:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F203FC340E5;
+        Tue, 18 Jan 2022 18:49:40 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="U/Y+YHBu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1642531777;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8kDfRJVSB/Dcaimsa/vjMLUP8srTQCq9bVl6p5ZAm2c=;
+        b=U/Y+YHBuewTXqw0C6Dj06InDbbu4B8M3iGKZaGvn1NdBWM9C+47xqEH+P0VHOepFNXU+FE
+        5Ue6x1hkyZoBp7FRPjhB/KUzhdk/KKK0lcQwM8b1TF3B2IArDW5xYzXR2j4p2mRKhKzyKA
+        RpWgPrc2X0yu+PRQIJRb8+A+DXlW40I=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4704321f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 18 Jan 2022 18:49:36 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id 23so4732437ybf.7;
+        Tue, 18 Jan 2022 10:49:35 -0800 (PST)
+X-Gm-Message-State: AOAM5304+u5MliVSIqnDuvJ6zgsUuXxUBNGi9N99bB22nJMLLvtpXKhZ
+        Qn21/aqB3w/yRbMgnHUNaQMHtxjO/xova/Jym/E=
+X-Google-Smtp-Source: ABdhPJwjXcqqMBS96Vtvk119QZBIJ9xohbPgfh8+w+auW1qVQLfqIpJyVlBaV93K+rzMyMYefFNSjqHidvJp07ttYOk=
+X-Received: by 2002:a25:ef08:: with SMTP id g8mr499647ybd.115.1642531774549;
+ Tue, 18 Jan 2022 10:49:34 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1713; h=from:subject; bh=aQ56F/K9EivD7wwGaVgmtBlfGCGvsRBhNwMsTf+3QQw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh5wjCHVDaUYrsL2fGabA2P1j4qpg2fjljD/IAr3nW n6XxQjuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYecIwgAKCRCJcvTf3G3AJrcHEA CE9wB7dgJGERHXIitTtvTPL1be+tJVDIAl87bB3MwfS4vzZgOWJqNTJ/gt3zjvNgavNIcMn3EOd+ZS y9iiiTsLfmIAb0Yl7TQJgeqRMpKVf8OMPrw12CDawZ0/Ed/fWaFwfXxX8FSxDT5xOV3SsmQpZwRMUg S4JealaQ3hCb053471GPtUlthOGmjB+RKIDV++2l6mLXj0pPMQ31OaXlCuqQ27pUiOWibuVos5awWA ulS24UU3Y7cfuGXOwsOxk1Zwz9JF7Sll/40RKpQPhezoNSa7kDdIiUOwJGBWtvcCXBY09+CkU1AykC PuyAlIwJVkP7xm2to/ky6AuSHnu0a4yK6y1z0I72G3VDWmSWo2O2ocs5nfGkDWGGwSmU6SChFcGOC5 pTb3qlaHupazqOOyJSV0hBBMby4GXrSQbXA+giMXA4LfDQF2TwRo5Se5+X5FOk0mgMMPshtQ5chJnZ 6ORLeitCZgEP7QMFLJzVl675Htd6W7dOkSsyhlS0xZ/cGLnafcF2vtyXqgYtDfvnRYgbQDvyj93rb4 LulMmcwhdjpBt+w4rxDmrn321EciKzWZPJSdQrMWapDhDO7D+Xah5e87OvA93AdO1uXziDO8l9edfv HtrRkEQAIgGP/gYGiDdrF8oIGSACvoLIsNcLL7s+T0dsj/jzdeTZCYq2cFSw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <YeV+jkGg6mpQdRID@zx2c4.com> <887a1e46cd6f4c02a6530a15f00e8eb8@huawei.com>
+In-Reply-To: <887a1e46cd6f4c02a6530a15f00e8eb8@huawei.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 18 Jan 2022 19:49:23 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pMEJxGzmetDu0Bkf1=fqb+BHGQ3-6NB3hhtRjLWHm1cA@mail.gmail.com>
+Message-ID: <CAHmME9pMEJxGzmetDu0Bkf1=fqb+BHGQ3-6NB3hhtRjLWHm1cA@mail.gmail.com>
+Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+To:     roberto.sassu@huawei.com
+Cc:     "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-When building with -Warray-bounds, this warning was emitted:
+Hi Roberto,
 
-In function 'memset',
-    inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
-./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
-[-Warray-bounds]
-   43 | #define __underlying_memset     __builtin_memset
-      |                                 ^
+Thanks for your detailed reply.
 
-There was no checking of the req_len value. To keep this code robust,
-and to silence the compiler warning, check the size before attempting
-a memset().
+On Mon, Jan 17, 2022 at 4:21 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+> The problem is that I don't see that transition coming soon.
+> Transition from PGP to another scheme would require Linux
+> distribution vendors to do an huge amount of work. It could
+> probably take years before that transition occurs.
+> More specifically, the first task would be to modify how
+> RPMs are signed (and thus how they are verified). The second
+> task would be to have a different way to certify the public key.
+> Lastly, Linux distribution vendors would have to change their
+> building infrastructure to use the new certified key, a new
+> version of the rpm package manager which takes as input
+> the new key, produces a different type of signature and embeds
+> it in the RPM header.
 
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-integrity@vger.kernel.org
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Link: https://lore.kernel.org/lkml/4b59d305-6858-1514-751a-37853ad777be@linux.ibm.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v1: https://lore.kernel.org/lkml/20220113002727.3709495-1-keescook@chromium.org
-v2: make commit log more accurate, add Reviewed-by
----
- drivers/char/tpm/tpm_vtpm_proxy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hm, yea, I see your dilemma.
 
-diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-index 91c772e38bb5..5c865987ba5c 100644
---- a/drivers/char/tpm/tpm_vtpm_proxy.c
-+++ b/drivers/char/tpm/tpm_vtpm_proxy.c
-@@ -91,7 +91,7 @@ static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
- 
- 	len = proxy_dev->req_len;
- 
--	if (count < len) {
-+	if (count < len || len > sizeof(proxy_dev->buffer)) {
- 		mutex_unlock(&proxy_dev->buf_lock);
- 		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
- 			 count, len);
--- 
-2.30.2
+On the one hand, you recognize the problems with what currently
+exists. On the other hand, you[r organization] hasn't made the
+transition to something better. So, rather than putting in what might
+be a lot of work to transition to something better (which includes
+actually evaluating *what* the better thing would be), you'd prefer to
+put in a smaller amount of work to make the current thing satisfy some
+of your needs, even though you recognize its flaws. It seems like this
+is one of those "short term" vs "long term" investment tradeoffs.
 
+I don't have a whole lot _technical_ to say about long term vs short
+term thinking, but it does strike me that PGP is one of these cases
+where people have known about the flaws for decades, but the ecosystem
+keeps being extended because people continue to go with the short term
+solutions, one by one, and now they've wound up here, at the doorstep
+of the kernel. Maybe if at some point somebody puts down the foot and
+says, "the road of short term intentions stops here," there might
+gradually be impetus toward looking into long term solutions, e.g.
+viable PGP replacements? Just a thought.
+
+> If in the future the transition from PGP to another scheme
+> occurs, support for PGP keys and signatures can be still
+> deprecated.
+
+Things in the kernel rarely disappear. At best, they become subtly
+neglected, and then somebody gets bit by some security bug. At worst,
+we're stuck maintaining a PGP implementation until the end of
+eternity.
+
+
+On the technical front, though, I had sort of the same thought as
+Maciej: is there some way that you can unwrap the PGP data in
+userspace, and re-encode it in ASN.1, and somehow magically account
+for the various metadata included in the signatures? The devil here
+might be in the details, and I'm not sure whether it's feasible. But
+if it is, this would seem to be a much nicer solution. I'm not the
+hugest fan of having an ASN.1 parser in the kernel either, but it's
+_already_ there, and if you could somehow piggyback on top of it, that
+means we'd be able to avoid importing this PGP implementation.
+
+Concretely, it looks like the hardest part of this is the fact that
+pgp_digest_signature seems to hash in some PGP-specific metadata, not
+just the raw data. Am I reading that right, and that's the case? If
+so, that might spell trouble. You also mentioned in that other thread
+the possibility of using a new/custom PGP packet type for this? Is the
+idea there that you'd come up with something that could be unwrapped
+into an ASN.1-verifable blob, as a custom extension of PGP that
+distros could then distribute?
+
+Jason
