@@ -2,141 +2,102 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F87492FF3
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 22:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB0F493123
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 00:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349522AbiARVUn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jan 2022 16:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349478AbiARVUm (ORCPT
+        id S1350161AbiARXDj (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jan 2022 18:03:39 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47748 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238025AbiARXDi (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jan 2022 16:20:42 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6413CC06173E
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 13:20:42 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id i65so501628pfc.9
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 13:20:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1XFeP6RNPzLCJfqoUd76H+t40KtDQUNh5VVtLJcfmgc=;
-        b=juf7aPxwbqkK8/wuz96AC4A0W28SqhpeNYDqxYbiBbaCuRGzw/TBmB1qm6vp5AD29q
-         lxE9BbV0e1nZzGeJ5Vkz6TuDMKG+2yOvphO7bGYFn3KIe1LD/IqOGMQgQhcdt3RYpdMe
-         mCZD2WHIGDjr2qfKff1r0Mb5+Dj9+kvt3m9fc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1XFeP6RNPzLCJfqoUd76H+t40KtDQUNh5VVtLJcfmgc=;
-        b=ckS5TNPu62BoemqzSq3mhcJ+NJOrjGvt0C4hbntcHbGMaP5qNLONqx6Fm2uQDjKfKL
-         EokV0tDBSRHz6Q0mMwtwelRLuYU71HesUWE0zqwd/wfcRItWt4kH6JhB/B/Auj0ZsSZW
-         hJrKKNijVTZVGXnLt7qczDoSEi5fnKqGuQH1L8ovNKsTSzKE8hu+wT01xHVomExCZHcT
-         8CqcmGsbYMb09nY39JTeTko5N2BPwr/lbP+UI40+nXhYkvCxfaz8gTRZoJGI3UVORTFR
-         SDm7qXB8EwBhQkgkrwQ+G0lwSL3D1V+83rdCp6b+yfYc1LBSTQ14j4edvxEr3dvznk8j
-         NDjQ==
-X-Gm-Message-State: AOAM532exkavuthztSyrTaxHT6sguM5CxMlZFKwrKj+wg9vncMXFn2Y+
-        ADkZ7EYe6qecCuZ5bAlSZzUqiw==
-X-Google-Smtp-Source: ABdhPJxj+QSfdAHHN0VP1WhOiT2/VnJC+AhAou/jI85HXTaB9Qu4NMHkHAdZM4jHGj/R76eqkD4hrQ==
-X-Received: by 2002:a05:6a00:16c7:b0:4a4:edfe:4625 with SMTP id l7-20020a056a0016c700b004a4edfe4625mr27409471pfc.58.1642540841797;
-        Tue, 18 Jan 2022 13:20:41 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m14sm12363450pfh.129.2022.01.18.13.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 13:20:41 -0800 (PST)
-Date:   Tue, 18 Jan 2022 13:20:40 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Jann Horn <jannh@google.com>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
-Message-ID: <202201181255.DB5D38F6AA@keescook>
-References: <20220118183650.3386989-1-keescook@chromium.org>
- <CAG48ez00FFW-n_Pi=+ya1xY5QuB3q2mPr8++scVe3h3ROeF_mg@mail.gmail.com>
- <20220118193931.GH8034@ziepe.ca>
+        Tue, 18 Jan 2022 18:03:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E0AD612D3;
+        Tue, 18 Jan 2022 23:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C0FC340E0;
+        Tue, 18 Jan 2022 23:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642547017;
+        bh=JwxY2h9tn3QE+WRRLQPNM+uQ68EejJ4xhgjUAq77hWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ukveCzfprxQ8zpV7fQKoIcvoTWtVmd0L9ll7H6IeS2o3YDXLINBG4IVQACbTsgckj
+         VOaDmm8ZlFqcwB9G1T4+orQSuAAlXBiwf4eTGA4XDmy3EpSr6ztf0omxs0Nehl9C8n
+         UgfM55ECiqtgi0kv/orpwrsXyzbVw5ZMzxSh3PW4be1CQ+IGRKFuOw+VJVrDkXlWbk
+         zzRYGUDlOcR4yPvkn6vRg2de85Takv9uNol9sxPQSj77osrWelTazrv7CIN0H9VlmT
+         A7SxM8N/lkcAavSDt0fhpYBwoqXbqUjFGADZ34jxSAetjaWsrNzXe7ltqj+k5fcLrJ
+         B7xomrIy3KdQg==
+Date:   Tue, 18 Jan 2022 15:03:35 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Antony Vennard <antony@vennard.ch>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com
+Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Message-ID: <YedHR93wPLS/JEsE@sol.localdomain>
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <YeV+jkGg6mpQdRID@zx2c4.com>
+ <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
+ <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220118193931.GH8034@ziepe.ca>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 03:39:31PM -0400, Jason Gunthorpe wrote:
-> On Tue, Jan 18, 2022 at 08:32:43PM +0100, Jann Horn wrote:
-> > On Tue, Jan 18, 2022 at 7:37 PM Kees Cook <keescook@chromium.org> wrote:
-> > > When building with -Warray-bounds, this warning was emitted:
-> > >
-> > > In function 'memset',
-> > >     inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtpm_proxy.c:102:2:
-> > > ./include/linux/fortify-string.h:43:33: warning: '__builtin_memset' pointer overflow between offset 164 and size [2147483648, 4294967295]
-> > > [-Warray-bounds]
-> > >    43 | #define __underlying_memset     __builtin_memset
-> > >       |                                 ^
-> > 
-> > Can you explain what that compiler warning actually means, and which
-> > compiler it is from? Is this from a 32-bit or a 64-bit architecture?
-
-This is from ARCH=i386
-
-> > 
-> > It sounds like the compiler (GCC?) is hallucinating a codepath on
-
-Yes, GCC 11.2.
-
-> > which "len" is guaranteed to be >=2147483648, right? Why is it doing
-> > that? Is this some kinda side effect from the fortify code?
-
-Right; I don't know what triggered it. I assume the "count" comparison.
-The warning is generated with or without CONFIG_FORTIFY_SOURCE. It is
-from adding -Warray-bounds. This is one of the last places in the kernel
-where a warning is being thrown for this option, and it has found a lot
-of real bugs, so Gustavo and I have been working to get the build
-warning-clean so we can enable it globally.
-
-> I agree, this looks bogus, or at least the commit message neeeds alot
-> more explaining.
+On Tue, Jan 18, 2022 at 09:50:21PM +0100, Antony Vennard wrote:
 > 
-> static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
+> Hi All,
 > 
->         if (count > sizeof(proxy_dev->buffer))
->             [...]
->         proxy_dev->req_len = count;
+> On 17/01/2022 16:02, James Bottomley wrote:
+> > On Mon, 2022-01-17 at 15:34 +0100, Jason A. Donenfeld wrote:
+> > > Hi,
+> > > 
+> > > While it looks like you put a lot of work into this patchset, I think
+> > > the general idea of adding PGP *to the kernel* is a pretty daunting
+> > > proposition. The general consensus in the crypto engineering world is
+> > > that PGP ought to be on its way out. We definitely don't want to
+> > > perpetuate this project-on-life-support into the permanence of kernel
+> > > code. Some quick Google searches will reveal a litany of blog posts
+> > > to the tune of, "why oh why are people still using this?" Here's one
+> > > from 2019:
+> > > https://latacora.micro.blog/2019/07/16/the-pgp-problem.html . I
+> > > think these are arguments to take seriously. And even if you disagree
+> > > with some parts, you may want to consider whether the remaining parts
+> > > warrant a bit of pause before adding this to the kernel and
+> > > perpetuating PGP's design further.
 > 
-> Not clear how req_len can be larger than sizeof(buffer)?
+> So while I understand why this is being proposed and clearly effort has gone
+> into it, I also think it is not the right approach. It seems this proposal
+> is to include a full PGP packet parser and verification logic in the kernel
+> as an equivalent to allow PGP signatures to be submitted via
+> FS_IOC_ENABLE_VERITY:
+> 
+> "FS_IOC_ENABLE_VERITY accepts a pointer to a PKCS#7 formatted detached
+> signature in DER format of the file’s fs-verity digest."
+> 
 
-Given the current code, I agree: it's not possible.
+It's worth noting that if fs-verity built-in signatures are used, a trusted
+userspace program is still required to determine and enforce the policy of which
+files are required to be signed.  The kernel only handles the actual signature
+verification.  This was basically a proof-of-concept which reused the kernel's
+module signature verification code (which happens to use PKCS#7).
 
-As for the cause of the warning, my assumption is that since the compiler
-only has visibility into vtpm_proxy_fops_read(), and sees size_t len set
-from ((struct proxy_dev *)filp->private_data)->req_len, and it performs
-range checking perhaps triggered by the "count" comparison:
+I'd encourage new users to either go all-in on a userspace solution, using a
+trusted userspace program to verify signatures of fs-verity file digests;
+*or* go all-in on an in-kernel solution, using the IMA support for fs-verity
+which Mimi Zohar is working on.  A userspace solution could use a simple
+signature format, using a modern algorithm such as Ed25519.  IMA uses a simple
+signature format too, though it uses a complex format (X.509) for public keys.
 
-
-static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
-                                    size_t count, loff_t *off)
-{
-        struct proxy_dev *proxy_dev = filp->private_data;
-        size_t len;
-	...
-        len = proxy_dev->req_len;
-
-        if (count < len) {
-		...
-                return -EIO;
-        }
-
-        rc = copy_to_user(buf, proxy_dev->buffer, len);
-        memset(proxy_dev->buffer, 0, len);
-
-
-I haven't been able to reproduce the specific cause of why GCC decided to
-do the bounds checking, but it's not an unreasonable thing to check for,
-just for robustness.
-
--- 
-Kees Cook
+- Eric
