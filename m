@@ -2,181 +2,200 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D67492F90
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 21:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED85492FCA
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Jan 2022 21:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245303AbiARUmo (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jan 2022 15:42:44 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51282 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238061AbiARUmo (ORCPT
+        id S1349111AbiARU5q (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jan 2022 15:57:46 -0500
+Received: from chameleon.vennard.ch ([37.35.107.252]:52638 "EHLO
+        chameleon.vennard.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245609AbiARU5q (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:42:44 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20IKXnZb010509;
-        Tue, 18 Jan 2022 20:42:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=lvufmgSXOhEp4NlWXuaPh3W+jRMNCuZZX8/ntPvQvVI=;
- b=pu436hMjywVVSLJwjtkLxPZOWnlS1Uu7IiwBqN7Bfs/lte//72xml62x/yvIDat6PmmE
- up0fpZniwGmgUGDm+R33HzgRUFQtkzcTTe4xv/ceiyffmBDw+B0gn+AY5NPA8qubfirb
- JSankqI7Br9HLcgsrSXgAtZGTyUtZXtR9XySk9c6Esv/SDV2nQb759aeJ++NJo4A25JZ
- txwMOg98zch+FOv0A5b3MkHjTDUCF6+BcCNZDbbQoukixyMK2nNfGOHZrI2O514rG3vc
- m8zRj8l2XRmj9rSvtTROwTPiIMz/FIhcyroDXdGva1DKJKRSwFVVdT58M0Irhx59CX3h dw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yaw30b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 20:42:30 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20IKSxjg024911;
-        Tue, 18 Jan 2022 20:42:30 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dp1yaw2yt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 20:42:30 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20IKIspn015708;
-        Tue, 18 Jan 2022 20:42:28 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3dknw96f6d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jan 2022 20:42:27 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20IKgMmB45351302
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Jan 2022 20:42:22 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB25E42041;
-        Tue, 18 Jan 2022 20:42:22 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA2B942042;
-        Tue, 18 Jan 2022 20:42:19 +0000 (GMT)
-Received: from sig-9-65-88-194.ibm.com (unknown [9.65.88.194])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Jan 2022 20:42:19 +0000 (GMT)
-Message-ID: <fbdade37017dd836881c5ecd98fae7313de5b5bb.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 07/19] ima: Move dentry into ima_namespace and others
- onto stack
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Tue, 18 Jan 2022 15:42:14 -0500
-In-Reply-To: <d53a66a2-17e2-54b3-f115-efd7c58080a7@linux.ibm.com>
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
-         <20220104170416.1923685-8-stefanb@linux.vnet.ibm.com>
-         <a7c5ac94b4c4d87b407353f74ff87bc0b13542a4.camel@linux.ibm.com>
-         <d53a66a2-17e2-54b3-f115-efd7c58080a7@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LvMK1ZdIpXV8z_-FIzzNIlCq2_7mh-63
-X-Proofpoint-GUID: pwL3tbWKXN8GnY3Csceck8Rfk-pxqGjB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-18_05,2022-01-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- priorityscore=1501 clxscore=1015 impostorscore=0 suspectscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201180120
+        Tue, 18 Jan 2022 15:57:46 -0500
+X-Greylist: delayed 422 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Jan 2022 15:57:44 EST
+Received: from localhost (localhost [IPv6:::1])
+        by chameleon.vennard.ch (Postfix) with ESMTP id BA7F9120BBF;
+        Tue, 18 Jan 2022 20:50:37 +0000 (GMT)
+Received: from chameleon.vennard.ch ([IPv6:::1])
+        by localhost (chameleon.vennard.ch [IPv6:::1]) (amavisd-new, port 10032)
+        with ESMTP id ooQvYuX_Bke6; Tue, 18 Jan 2022 20:50:32 +0000 (GMT)
+Received: from localhost (localhost [IPv6:::1])
+        by chameleon.vennard.ch (Postfix) with ESMTP id 6A7B2120BF2;
+        Tue, 18 Jan 2022 20:50:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 chameleon.vennard.ch 6A7B2120BF2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vennard.ch;
+        s=9ECFC226-3425-11E4-849C-FD7C69C5B08C; t=1642539032;
+        bh=h9L8ml/Dr+9Otc4vSQsu7LfWauQMaE0fP0OWB1a411E=;
+        h=From:To:Message-ID:Date:MIME-Version;
+        b=fVEfEhlpeNjsHYFnpFu3wB4XxSwlSACTv2MSWsmmDB92fE0zvL8m9j+/gw3Y4+HgZ
+         eG8K1weO39zugC808b8Dd0jM/h5egUD6NKoqptNcDksDs6KvS4MvpAV0SqA1eWSrD2
+         XkCrGKKOjbFpQYYzX/CVpukf3eEW3t6vp4+D8Ijz/Tg0HRxuTGOckh7zbpToAw6Zwk
+         b1Chf3ONUzVqQ83gitdTkDmzmIUjSZJdCoYMmATpRYPZYOxqwclgxPOKY+v//yPUA0
+         hvxXijEwlJEs/z/CAmRQay9qr0xs2u3y1m+VYbCnkDLDSz8heX9AWCCWv8MzKpgGPw
+         ERz40MpvfIYxW+ieirDsP7Txxn6dnGa/e7le5RqFU/oLcX5tvdvNblybTj4soB+XeU
+         27IiONqAwA38Otq+sLwnrv4eD5hMEgGKmEqHZimbtTX4fDlgLHHXZXqCn6oSHwb0r9
+         G1Chq9PVUxXsIwr0oSyjEmM9E5EhErGrUIQzS1JhhteRz/L8dJiinu0LXplJfHpDQy
+         +8V2UILXIm9pNdhENzSHVywRYd1l8VUBXZMDM43NgwfSq73LzqO2ZhX5jBet1yF2u6
+         LJkkkHza4DsVu8HauHhGqzU9agMt2GO5xcGzTYRWVSf0pqdyC3qdbgTziUnIhjKcqg
+         yheNz5YbYIAbPRekG6fYSSoQ=
+X-Virus-Scanned: amavisd-new at vennard.ch
+Received: from chameleon.vennard.ch ([IPv6:::1])
+        by localhost (chameleon.vennard.ch [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id xHHYNI3omkmN; Tue, 18 Jan 2022 20:50:23 +0000 (GMT)
+Received: from [IPV6:2001:470:26:1b7::8a8a] (unknown [IPv6:2001:470:26:1b7::8a8a])
+        by chameleon.vennard.ch (Postfix) with ESMTPSA id 249EE120BBF;
+        Tue, 18 Jan 2022 20:50:20 +0000 (GMT)
+Authentication-Results: chameleon.vennard.ch; dkim=none
+From:   Antony Vennard <antony@vennard.ch>
+Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        ebiggers@kernel.org
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <YeV+jkGg6mpQdRID@zx2c4.com>
+ <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
+Message-ID: <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
+Date:   Tue, 18 Jan 2022 21:50:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+MIME-Version: 1.0
+In-Reply-To: <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, 2022-01-18 at 15:12 -0500, Stefan Berger wrote:
-> On 1/13/22 15:28, Mimi Zohar wrote:
-> > Hi Stefan,
-> >
-> > Nobody refers to the IMA securityfs files as dentries.  The Subject
-> > line is suppose to provide a hint about the patch.  How about changing
-> > the "Subject" line to "ima: Move IMA securityfs files into
-> > ima_namespaces or onto stack".
-> >
-> > On Tue, 2022-01-04 at 12:04 -0500, Stefan Berger wrote:
-> >> From: Stefan Berger <stefanb@linux.ibm.com>
-> >>
-> >> Move the policy file dentry into the ima_namespace for reuse by
-> >> virtualized SecurityFS and for being able to remove it from
-> >> the filesystem. Move the other dentries onto the stack.
-> > Missing is an explanation why the other IMA securityfs files can be on
-> > the stack.  Maybe start out by saying that the ns_ima_init securityfs
-> > files are never deleted.  Then transition into the IMA namespaced
-> > securityfs files and how they will be deleted.
-> 
-> How about this:
-> 
-> ima: Move IMA securityfs files into ima_namespace or onto stack
-> 
-> Move the IMA policy file's dentry into the ima_namespace for reuse by
-> virtualized securityfs and for being able to remove the file from the
-> filesystem using securityfs_remove().
 
-How about "Move the IMA securityfs policy file ..."
+Hi All,
 
-> Move the other files' dentries onto the stack since they are not needed
+On 17/01/2022 16:02, James Bottomley wrote:
+> On Mon, 2022-01-17 at 15:34 +0100, Jason A. Donenfeld wrote:
+>> Hi,
+>>
+>> While it looks like you put a lot of work into this patchset, I think
+>> the general idea of adding PGP *to the kernel* is a pretty daunting
+>> proposition. The general consensus in the crypto engineering world is
+>> that PGP ought to be on its way out. We definitely don't want to
+>> perpetuate this project-on-life-support into the permanence of kernel
+>> code. Some quick Google searches will reveal a litany of blog posts
+>> to the tune of, "why oh why are people still using this?" Here's one
+>> from 2019:
+>> https://latacora.micro.blog/2019/07/16/the-pgp-problem.html . I
+>> think these are arguments to take seriously. And even if you disagree
+>> with some parts, you may want to consider whether the remaining parts
+>> warrant a bit of pause before adding this to the kernel and
+>> perpetuating PGP's design further.
 
-How about "Move the other IMA securityfs files ..."
+So while I understand why this is being proposed and clearly effort has=20
+gone into it, I also think it is not the right approach. It seems this=20
+proposal is to include a full PGP packet parser and verification logic=20
+in the kernel as an equivalent to allow PGP signatures to be submitted=20
+via FS_IOC_ENABLE_VERITY:
 
-> outside the function where they are created in. Also, their cleanup is
-> automatically handled by the filesystem upon umount of a virtualized
-> secruityfs instance, so they don't need to be explicitly freed anymore.
-> 
-> When moving the dentry 'ima_policy' into ima_namespace rename it to
-> 'policy_dentry' to clarify its datatype and avoid a name clash with
-> 'int ima_policy' from ima_policy.c.
+"FS_IOC_ENABLE_VERITY accepts a pointer to a PKCS#7 formatted detached=20
+signature in DER format of the file=E2=80=99s fs-verity digest."
 
-To prevent namespace pollution, static variables need to be prefixed
-(e.g. "ima_").  This is not a concern with variables inside the
-ima_namespace structure.  Why not just rename the variable "policy".
+I may be misinterpreting, but as I understand it logic for X.509/PKCS=20
+validation already exists in-kernel because of UEFI and module signing,=20
+so this signature would be verified up to trusted roots. The proposal is=20
+to duplicate all of this logic but in terms of PGP-formatted keys.
 
-Refer to the section on "Naming" in Documentation/process/coding-
-style.rst.
+I believe this is unnecessary. Since it seems to require both a=20
+signature and verification up to a root, and distributions like Fedora=20
+already deal with x509 module signing keys for their kernel modules, I=20
+can't see the merit in including the full PGP system too. The=20
+least-effort approach, I would suggest, is to include an x509=20
+representation of the signature in the RPM and use the existing API to=20
+push that up into the kernel, with the trust anchor the same as is used=20
+for module signing keys, or whatever distributions prefer (they, after=20
+all, control the kernel trust anchors).
 
-thanks,
+I understand this requires some effort, but so too does maintaining a=20
+fully fledged PGP packet parser as privileged code for all time, and I=20
+think maintaining this in userspace is a) easier and b) less costly than=20
+doing it in kernel. As an added bonus, a PGP-parsing library in a=20
+memory-safe language could be used in userspace.
 
-Mimi
+A slightly more drastic step would be to wholesale move to PKCS=20
+signatures for packaging. Linux distributions could be their own trusted=20
+roots for this purpose if they so desired, and since they control=20
+certificate bundles anyway they've no need to add them to the browser=20
+list if that is a concern, and can issue certs without SSL Client/SSL=20
+Server types and OIDs.
 
-> 
-> 
-> 
-> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> >> ---
-> >>   security/integrity/ima/ima.h    |  2 ++
-> >>   security/integrity/ima/ima_fs.c | 32 ++++++++++++++++++--------------
-> >>   2 files changed, 20 insertions(+), 14 deletions(-)
-> >>
-> >> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> >> index 82b3f6a98320..224b09617c52 100644
-> >> --- a/security/integrity/ima/ima.h
-> >> +++ b/security/integrity/ima/ima.h
-> >> @@ -140,6 +140,8 @@ struct ima_namespace {
-> >>   	struct mutex ima_write_mutex;
-> >>   	unsigned long ima_fs_flags;
-> >>   	int valid_policy;
-> >> +
-> >> +	struct dentry *policy_dentry;
-> > None of the other securityfs files are renamed.  Why is "ima_policy"
-> > being renamed to "policy_dentry"?  If there is a need, it should be
-> > documented in the patch description.
-> >
-> > thanks,
-> >
-> > Mimi
-> >
-> >>   } __randomize_layout;
-> >>   extern struct ima_namespace init_ima_ns;
-> >>
+> The reason is simple though: for all the detractors and whining, no-
+> one's actually been able to come up with a more usable replacement.
+> Very few people who complain about GPG actually submit patches to fix
+> it.  A few come up with their own infrastructure which tends to have
+> even more problems.
 
+Probably replacing with PKCS is a non-starter, but it is at least=20
+possible and it is highly likely distros package one or more tools=20
+capable of validating such signatures in their base installs.
 
+There are multiple problems with PGP that receive complaints. They are:
+
+  1) No forward secrecy in messaging-based crypto.
+  2) The data format.
+  3) Outdated cryptography still supported.
+  4) UX.
+
+Of these, all four could be levelled against PKCS standards and related=20
+tools too (except TLS protocols for the first point), and only 2 and 3=20
+are relevant here since we are concerned with signature validation only.
+
+I'm not "against" PGP per se, but I'm not convinced by the idea of=20
+adding PGP support just for fs-verity.
+
+>> If you're looking for a simple signature mechanism to replace the use
+>> of X.509 and all of that infrastructure, may I suggest just coming up
+>> with something simple using ed25519,
+>=20
+> Please, no, use universally supported crypto that we can use TPM
+> hardware for, which for EC currently means P-256.  It may be possible
+> to get the TCG and the other security bodies to add Edwards signatures
+> but the rate of progression of quantum means that Grover's Algorithm
+> will likely get there first and we'll need P-521 or X448.
+
+I agree: whatever is chosen should in my view have decent support for=20
+hardware-backed keys, because I strongly hope that is what distribution=20
+key storage looks like. If not I might need to move to Gentoo.
+
+The current RPM signing keys for Fedora are RSA-4096, which in my=20
+opinion does not actually meet the bar for "good hardware support for=20
+algorithm". RSA-2048 tokens are common, but 4096 much less so.
+
+Unfortunately for this reason signify/minisign is not ideal as tools: so=20
+far as I can see it has no support for hardware-backed keys. That's not=20
+to say they couldn't, although they both use ed25519.
+
+I am not sure if we'll end up in the situation where Grover's algorithm=20
+is efficient but Shor is not, but this is all guesswork until we get=20
+closer to a quantum computer with enough logical Qubits. But your=20
+substantive point I think is valid: hardware vendors are disappointingly=20
+slow at adopting edwards curves.
+
+>>   similar to signify or minisign? Very minimal code in the kernel, in
+>> userspace, and very few moving parts to break.
+>=20
+> Heh, this is the classic cryptographers dilemma: go for something
+> pejorative which can be minimal but which has only a relatively small
+> set of possible use cases and no future proofing or go for something
+> extensible which ends up more complex and others then criticize as
+> being a "swiss army knife".
+
+I think this is the wrong framing for the problem. We already have one=20
+extensible system that is complicated in the kernel. This patch proposes=20
+to add a second one achieving the same purpose instead of a userspace=20
+solution to take advantage of the existing code, which I think would be=20
+preferable and safer.
+
+Antony
