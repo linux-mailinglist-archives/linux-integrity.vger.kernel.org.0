@@ -2,141 +2,216 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBC4493B0D
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 14:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED12493B22
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 14:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354738AbiASNZQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Jan 2022 08:25:16 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4432 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350184AbiASNZP (ORCPT
+        id S241194AbiASNcv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Jan 2022 08:32:51 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14790 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1354833AbiASNcs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:25:15 -0500
-Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jf5wV6qk1z67HKP;
-        Wed, 19 Jan 2022 21:24:58 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 19 Jan 2022 14:25:12 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Wed, 19 Jan 2022 14:25:12 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Antony Vennard <antony@vennard.ch>
-CC:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-Subject: RE: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Topic: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Index: AQHYBxWUAJoIvMeqLk2UYoD6PZRMZ6xnP9oAgAAHlwCAAfOkgIAAJTmAgAD7bXA=
-Date:   Wed, 19 Jan 2022 13:25:12 +0000
-Message-ID: <d71ea8ae51e1438c894b44b011f3efda@huawei.com>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <YeV+jkGg6mpQdRID@zx2c4.com>
- <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
- <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
- <YedHR93wPLS/JEsE@sol.localdomain>
-In-Reply-To: <YedHR93wPLS/JEsE@sol.localdomain>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.48.214.59]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 19 Jan 2022 08:32:48 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JAvcst028475;
+        Wed, 19 Jan 2022 13:32:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=iQOM2B7pBkIu/v+1xQgTsapMW9lVF15319i1ZV98854=;
+ b=Vvjfbr4zVL9FdnR3nFn8gSMLljR+2Z6Aksroq4Msrzxn+vHEyENF1wVPHXz3aneaoRtm
+ 7rsHbQLqOI63bM6IkQ51vu7v5/nH7QUCYhsCBIw37CCW6DB/pmGoNcjCYCIGlF5pJ0em
+ Vwe6OiP5Upsi5xIt0swkziqFnh98Kj41NW3tqD5SMGeuJ/PVyUgQxoYfinOxALcOqW+/
+ LLXYmEFexgHqaqWmdyq6QuOUOKTH+Q3udWsfku4rK0rHzrHiAE6Nq1nU3KN0UdbQZTUJ
+ HOxNEkoWLLpgJBxXgaHtwKE0Nx8lIKUW82/4lRc899iK1sK7TyMeCkjLrRHVk/sPg80G ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dphbqb6h9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 13:32:32 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JDL71R012456;
+        Wed, 19 Jan 2022 13:32:31 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dphbqb6gj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 13:32:31 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JDH8nG016689;
+        Wed, 19 Jan 2022 13:32:30 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03wdc.us.ibm.com with ESMTP id 3dknwaggg8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 19 Jan 2022 13:32:30 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JDWTOi30409176
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 13:32:29 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14F6DBE05B;
+        Wed, 19 Jan 2022 13:32:29 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 37A52BE053;
+        Wed, 19 Jan 2022 13:32:26 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jan 2022 13:32:25 +0000 (GMT)
+Message-ID: <c76b2bfc-d629-c720-e13c-84367524b88f@linux.ibm.com>
+Date:   Wed, 19 Jan 2022 08:32:24 -0500
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 03/19] ima: Move policy related variables into
+ ima_namespace
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+ <20220104170416.1923685-4-stefanb@linux.vnet.ibm.com>
+ <150cb51f95c3fe54e94edc5b96b2e15edb3bf399.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <150cb51f95c3fe54e94edc5b96b2e15edb3bf399.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: J1Ciy3qNc1FEHBz2o0_fECRRD-mCAzYY
+X-Proofpoint-ORIG-GUID: Y6LSk7xDS6psh9z4QijZWX87OwSxJpQy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-19_07,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxlogscore=999 spamscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 bulkscore=0 suspectscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201190075
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBFcmljIEJpZ2dlcnMgW21haWx0bzplYmlnZ2Vyc0BrZXJuZWwub3JnXQ0KPiBTZW50
-OiBXZWRuZXNkYXksIEphbnVhcnkgMTksIDIwMjIgMTI6MDQgQU0NCj4gT24gVHVlLCBKYW4gMTgs
-IDIwMjIgYXQgMDk6NTA6MjFQTSArMDEwMCwgQW50b255IFZlbm5hcmQgd3JvdGU6DQo+ID4NCj4g
-PiBIaSBBbGwsDQo+ID4NCj4gPiBPbiAxNy8wMS8yMDIyIDE2OjAyLCBKYW1lcyBCb3R0b21sZXkg
-d3JvdGU6DQo+ID4gPiBPbiBNb24sIDIwMjItMDEtMTcgYXQgMTU6MzQgKzAxMDAsIEphc29uIEEu
-IERvbmVuZmVsZCB3cm90ZToNCj4gPiA+ID4gSGksDQo+ID4gPiA+DQo+ID4gPiA+IFdoaWxlIGl0
-IGxvb2tzIGxpa2UgeW91IHB1dCBhIGxvdCBvZiB3b3JrIGludG8gdGhpcyBwYXRjaHNldCwgSSB0
-aGluaw0KPiA+ID4gPiB0aGUgZ2VuZXJhbCBpZGVhIG9mIGFkZGluZyBQR1AgKnRvIHRoZSBrZXJu
-ZWwqIGlzIGEgcHJldHR5IGRhdW50aW5nDQo+ID4gPiA+IHByb3Bvc2l0aW9uLiBUaGUgZ2VuZXJh
-bCBjb25zZW5zdXMgaW4gdGhlIGNyeXB0byBlbmdpbmVlcmluZyB3b3JsZCBpcw0KPiA+ID4gPiB0
-aGF0IFBHUCBvdWdodCB0byBiZSBvbiBpdHMgd2F5IG91dC4gV2UgZGVmaW5pdGVseSBkb24ndCB3
-YW50IHRvDQo+ID4gPiA+IHBlcnBldHVhdGUgdGhpcyBwcm9qZWN0LW9uLWxpZmUtc3VwcG9ydCBp
-bnRvIHRoZSBwZXJtYW5lbmNlIG9mIGtlcm5lbA0KPiA+ID4gPiBjb2RlLiBTb21lIHF1aWNrIEdv
-b2dsZSBzZWFyY2hlcyB3aWxsIHJldmVhbCBhIGxpdGFueSBvZiBibG9nIHBvc3RzDQo+ID4gPiA+
-IHRvIHRoZSB0dW5lIG9mLCAid2h5IG9oIHdoeSBhcmUgcGVvcGxlIHN0aWxsIHVzaW5nIHRoaXM/
-IiBIZXJlJ3Mgb25lDQo+ID4gPiA+IGZyb20gMjAxOToNCj4gPiA+ID4gaHR0cHM6Ly9sYXRhY29y
-YS5taWNyby5ibG9nLzIwMTkvMDcvMTYvdGhlLXBncC1wcm9ibGVtLmh0bWwgLiBJDQo+ID4gPiA+
-IHRoaW5rIHRoZXNlIGFyZSBhcmd1bWVudHMgdG8gdGFrZSBzZXJpb3VzbHkuIEFuZCBldmVuIGlm
-IHlvdSBkaXNhZ3JlZQ0KPiA+ID4gPiB3aXRoIHNvbWUgcGFydHMsIHlvdSBtYXkgd2FudCB0byBj
-b25zaWRlciB3aGV0aGVyIHRoZSByZW1haW5pbmcgcGFydHMNCj4gPiA+ID4gd2FycmFudCBhIGJp
-dCBvZiBwYXVzZSBiZWZvcmUgYWRkaW5nIHRoaXMgdG8gdGhlIGtlcm5lbCBhbmQNCj4gPiA+ID4g
-cGVycGV0dWF0aW5nIFBHUCdzIGRlc2lnbiBmdXJ0aGVyLg0KPiA+DQo+ID4gU28gd2hpbGUgSSB1
-bmRlcnN0YW5kIHdoeSB0aGlzIGlzIGJlaW5nIHByb3Bvc2VkIGFuZCBjbGVhcmx5IGVmZm9ydCBo
-YXMgZ29uZQ0KPiA+IGludG8gaXQsIEkgYWxzbyB0aGluayBpdCBpcyBub3QgdGhlIHJpZ2h0IGFw
-cHJvYWNoLiBJdCBzZWVtcyB0aGlzIHByb3Bvc2FsDQo+ID4gaXMgdG8gaW5jbHVkZSBhIGZ1bGwg
-UEdQIHBhY2tldCBwYXJzZXIgYW5kIHZlcmlmaWNhdGlvbiBsb2dpYyBpbiB0aGUga2VybmVsDQo+
-ID4gYXMgYW4gZXF1aXZhbGVudCB0byBhbGxvdyBQR1Agc2lnbmF0dXJlcyB0byBiZSBzdWJtaXR0
-ZWQgdmlhDQo+ID4gRlNfSU9DX0VOQUJMRV9WRVJJVFk6DQo+ID4NCj4gPiAiRlNfSU9DX0VOQUJM
-RV9WRVJJVFkgYWNjZXB0cyBhIHBvaW50ZXIgdG8gYSBQS0NTIzcgZm9ybWF0dGVkIGRldGFjaGVk
-DQo+ID4gc2lnbmF0dXJlIGluIERFUiBmb3JtYXQgb2YgdGhlIGZpbGXigJlzIGZzLXZlcml0eSBk
-aWdlc3QuIg0KPiA+DQo+IA0KPiBJdCdzIHdvcnRoIG5vdGluZyB0aGF0IGlmIGZzLXZlcml0eSBi
-dWlsdC1pbiBzaWduYXR1cmVzIGFyZSB1c2VkLCBhIHRydXN0ZWQNCj4gdXNlcnNwYWNlIHByb2dy
-YW0gaXMgc3RpbGwgcmVxdWlyZWQgdG8gZGV0ZXJtaW5lIGFuZCBlbmZvcmNlIHRoZSBwb2xpY3kg
-b2Ygd2hpY2gNCj4gZmlsZXMgYXJlIHJlcXVpcmVkIHRvIGJlIHNpZ25lZC4gIFRoZSBrZXJuZWwg
-b25seSBoYW5kbGVzIHRoZSBhY3R1YWwgc2lnbmF0dXJlDQo+IHZlcmlmaWNhdGlvbi4gIFRoaXMg
-d2FzIGJhc2ljYWxseSBhIHByb29mLW9mLWNvbmNlcHQgd2hpY2ggcmV1c2VkIHRoZSBrZXJuZWwn
-cw0KPiBtb2R1bGUgc2lnbmF0dXJlIHZlcmlmaWNhdGlvbiBjb2RlICh3aGljaCBoYXBwZW5zIHRv
-IHVzZSBQS0NTIzcpLg0KDQpKdXN0IHRvIHNob3cgaG93IHRoZSBmc3Zlcml0eSBjb2RlIHdpbGwg
-bG9vayBsaWtlIGFmdGVyIGFkZGluZyBzdXBwb3J0DQpmb3IgUEdQIHNpZ25hdHVyZXM6DQoNCisg
-ICAgICAgc3dpdGNoICh2aS0+dHlwZSkgew0KKyAgICAgICBjYXNlIFBLRVlfSURfUEtDUzc6DQor
-ICAgICAgICAgICAgICAgZXJyID0gdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZShkLCBzaXplb2YoKmQp
-ICsgaGFzaF9hbGctPmRpZ2VzdF9zaXplLA0KKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgc2lnbmF0dXJlLCBzaWdfc2l6ZSwgZnN2ZXJpdHlfa2V5cmluZywNCisg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFZFUklGWUlOR19VTlNQ
-RUNJRklFRF9TSUdOQVRVUkUsDQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBOVUxMLCBOVUxMKTsNCisgICAgICAgICAgICAgICBicmVhazsNCisgICAgICAgY2Fz
-ZSBQS0VZX0lEX1BHUDoNCisgICAgICAgICAgICAgICBlcnIgPSB2ZXJpZnlfcGdwX3NpZ25hdHVy
-ZShkLCBzaXplb2YoKmQpICsgaGFzaF9hbGctPmRpZ2VzdF9zaXplLA0KKyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNpZ25hdHVyZSwgc2lnX3NpemUsIGZzdmVyaXR5
-X2tleXJpbmcsDQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVkVS
-SUZZSU5HX1VOU1BFQ0lGSUVEX1NJR05BVFVSRSwNCisgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBOVUxMLCBOVUxMKTsNCisgICAgICAgICAgICAgICBicmVhazsNCisg
-ICAgICAgZGVmYXVsdDoNCisgICAgICAgICAgICAgICBlcnIgPSAtRU9QTk9UU1VQUDsNCisgICAg
-ICAgfQ0KDQpBcyB5b3UgY2FuIHNlZSwgdGhlIGNoYW5nZSB3aWxsIGJlIHN0cmFpZ2h0Zm9yd2Fy
-ZC4NCg0KT24gdXNlciBzcGFjZSBzaWRlLCBJIHBsYW4gdG8gYWRkIHRoZSBjYXBhYmlsaXR5IHRv
-IGZzdmVyaXR5LXV0aWxzDQp0byBwcm9kdWNlIGEgUEdQIHNpZ25hdHVyZSB3aXRoIHRoZSBHUEcg
-a2V5IHBhc3NlZCBieSBycG1zaWduLg0KDQo+IEknZCBlbmNvdXJhZ2UgbmV3IHVzZXJzIHRvIGVp
-dGhlciBnbyBhbGwtaW4gb24gYSB1c2Vyc3BhY2Ugc29sdXRpb24sIHVzaW5nIGENCj4gdHJ1c3Rl
-ZCB1c2Vyc3BhY2UgcHJvZ3JhbSB0byB2ZXJpZnkgc2lnbmF0dXJlcyBvZiBmcy12ZXJpdHkgZmls
-ZSBkaWdlc3RzOw0KPiAqb3IqIGdvIGFsbC1pbiBvbiBhbiBpbi1rZXJuZWwgc29sdXRpb24sIHVz
-aW5nIHRoZSBJTUEgc3VwcG9ydCBmb3IgZnMtdmVyaXR5DQo+IHdoaWNoIE1pbWkgWm9oYXIgaXMg
-d29ya2luZyBvbi4gIEEgdXNlcnNwYWNlIHNvbHV0aW9uIGNvdWxkIHVzZSBhIHNpbXBsZQ0KDQpQ
-cm9iYWJseSwgdGhlcmUgaXMgYWxzbyB0aGUgdGhpcmQgb3B0aW9uIG9mIGFuIExTTSAoc3VjaCBh
-cyBJUEUpIHRoYXQgZ2V0cw0KZnJvbSBmc3Zlcml0eSB0aGUgaW5mb3JtYXRpb24gaWYgdGhlIHNp
-Z25hdHVyZSB3YXMgdmFsaWRhdGVkLCBhbmQgZGVjaWRlDQpkZXBlbmRpbmcgb24gYSBwb2xpY3ku
-IEkgd291bGQgYWxzbyBleHBvc2UgdGhlIGluZm9ybWF0aW9uIGFib3V0IHRoZQ0KcmVzdHJpY3Rp
-b24gaW1wb3NlZCBvbiB0aGUga2V5cmluZyBmcm9tIHdoaWNoIHRoZSBrZXkgdXNlZCB0byB2ZXJp
-ZnkNCnRoZSBzaWduYXR1cmUgd2FzIGZvdW5kLg0KDQpNYXliZSBJTUEgY291bGQgdXNlIHRoaXMg
-YXBwcm9hY2ggdG9vLCB3aGljaCB3b3VsZCBhdm9pZCB0aGUgbmVlZA0Kb2YgaW50cm9kdWNpbmcg
-YW5vdGhlciBzaWduYXR1cmUgZm9ybWF0LiBJZiB0aGF0IGlzIGRlc2lyZWQsIHlvdSBtaWdodA0K
-d2FudCB0byBjb29yZGluYXRlIHdpdGggdGhlIGF1dGhvcnMgb2YgYSBGZWRvcmEgZmVhdHVyZToN
-Cg0KaHR0cHM6Ly9mZWRvcmFwcm9qZWN0Lm9yZy93aWtpL0NoYW5nZXMvRnNWZXJpdHlSUE0NCg0K
-d2hpY2gsIGFzIGZhciBhcyBJIGtub3csIHBsYW4gdG8gdXNlIHRoZSBzaWduYXR1cmUgZm9ybWF0
-IGFscmVhZHkNCnVwc3RyZWFtZWQuDQoNClRoYW5rcw0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNI
-Tk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3Rvcjog
-TGkgUGVuZywgWmhvbmcgUm9uZ2h1YQ0KDQo+IHNpZ25hdHVyZSBmb3JtYXQsIHVzaW5nIGEgbW9k
-ZXJuIGFsZ29yaXRobSBzdWNoIGFzIEVkMjU1MTkuICBJTUEgdXNlcyBhIHNpbXBsZQ0KPiBzaWdu
-YXR1cmUgZm9ybWF0IHRvbywgdGhvdWdoIGl0IHVzZXMgYSBjb21wbGV4IGZvcm1hdCAoWC41MDkp
-IGZvciBwdWJsaWMga2V5cy4NCj4gDQo+IC0gRXJpYw0K
+
+On 1/13/22 15:26, Mimi Zohar wrote:
+> Hi Stefan,
+>
+> On Tue, 2022-01-04 at 12:04 -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Move variables related to the IMA policy into the ima_namespace. This way
+>> the IMA policy of an IMA namespace can be set and displayed using a
+>> front-end like SecurityFS.
+>>
+>> Implement ima_ns_from_file() to get the IMA namespace via the user
+>> namespace of the SecurityFS superblock that a file belongs to.
+>>
+>> To get the current ima_namespace use get_current_ns() when a function
+>> that is related to a policy rule is called. In other cases where functions
+>> are called due file attribute modifications, use init_ima_ns, since these
+>> functions are related to IMA appraisal and changes to file attributes are
+>> only relevant to the init_ima_ns until IMA namespaces also support IMA
+>> appraisal. In ima_file_free() use init_ima_ns since in this case flags
+>> related to file measurements may be affected, which is not supported in
+>> IMA namespaces, yet.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Please split this patch into "ima: pass through ima namespace", or some
+> other name,  and "ima: Move policy related variables into
+
+What is supposed to happen in the 'ima: pass through ima namespace' 
+patch? What part of this patch do you expect to see there and what do 
+you want to see deferred to a 2nd patch?
+
+
+> ima_namespace".  The other option is to combine the "pass through ima
+> namespace" with the 2nd patch, like Christian's example.
+
+You mean I should merge this patch with the 2nd?
+
+I am a bit confused as to what you are proposing. The first option would 
+create 2 patches out of this one, the 2nd option would merge this one 
+with the 2nd patch.
+
+The equivalent of Christian's 2nd patch would be to merge this patch 
+into the 2nd. So then let's do that?
+
+
+>
+>> ---
+>>   security/integrity/ima/ima.h                 |  49 ++++---
+>>   security/integrity/ima/ima_api.c             |   8 +-
+>>   security/integrity/ima/ima_appraise.c        |  28 ++--
+>>   security/integrity/ima/ima_asymmetric_keys.c |   4 +-
+>>   security/integrity/ima/ima_fs.c              |  16 ++-
+>>   security/integrity/ima/ima_init.c            |   8 +-
+>>   security/integrity/ima/ima_init_ima_ns.c     |   6 +
+>>   security/integrity/ima/ima_main.c            |  83 +++++++----
+>>   security/integrity/ima/ima_policy.c          | 142 ++++++++++---------
+>>   security/integrity/ima/ima_queue_keys.c      |  11 +-
+>>   10 files changed, 213 insertions(+), 142 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index c4af3275f015..0b3dc9425076 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -20,6 +20,7 @@
+>>   #include <linux/hash.h>
+>>   #include <linux/tpm.h>
+>>   #include <linux/audit.h>
+>> +#include <linux/user_namespace.h>
+>>   #include <crypto/hash_info.h>
+>>   
+>>   #include "../integrity.h"
+>> @@ -43,9 +44,6 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
+>>   
+>>   #define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks : 0)
+>>   
+>> -/* current content of the policy */
+>> -extern int ima_policy_flag;
+>> -
+>>   /* bitset of digests algorithms allowed in the setxattr hook */
+>>   extern atomic_t ima_setxattr_allowed_hash_algorithms;
+>>   
+>> @@ -120,6 +118,14 @@ struct ima_kexec_hdr {
+>>   };
+>>   
+>>   struct ima_namespace {
+>> +	struct list_head ima_default_rules;
+>> +	/* ns's policy rules */
+> Thank you for adding comments.  Why is the ima_default_rules not
+> considered "ns's policy rules"?   Will this come later or is it limited
+> to init_ima_ns?
+Let me move the comment up.
+>
+>> +	struct list_head ima_policy_rules;
+>> +	struct list_head ima_temp_rules;
+>> +	/* Pointer to ns's current policy */
+>> +	struct list_head __rcu *ima_rules;
+> Since "Pointer to ns's current policy" only refers to ima_rules, append
+> it to the variable definition.
+
+
+Ok, I will move it onto the same line then.
+
+
+>
+>> +	/* current content of the policy */
+>> +	int ima_policy_flag;
+> Similarly here append the comment to the variable definition.
+
+Will do. Thanks.
+
+
+>
+>>   } __randomize_layout;
+>>   extern struct ima_namespace init_ima_ns;
+> thanks,
+>
+> Mimi
+>
+>
