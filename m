@@ -2,84 +2,76 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7000349316A
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 00:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D75394931BB
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 01:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350294AbiARXd4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jan 2022 18:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S1350390AbiASASb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jan 2022 19:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350196AbiARXd4 (ORCPT
+        with ESMTP id S244782AbiASASb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jan 2022 18:33:56 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C26C06161C
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 15:33:56 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id w6so647898qtk.4
-        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 15:33:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e+S41aLkIpofGd7A0yy9q0Ab7HtB9JJVBC8F1jt0b6c=;
-        b=clXDUcIffYjfb/7+GCLMpj70X6Kklr2CvyZNAkDfKeordPqgZ7dr9uCnFSrH0Z8fNs
-         nmu5FARUH6TejAfwX1Fo1rkfkvv8bHFh1+lKS0R1ZwnoUYhfYHagawuBgwKHXbDdVc3m
-         4Db6OhnkKoyHGtNaFJBJ5564aHLLpnUzY4xMIUvW8eAGLf/GJSLVcLBise9Zd80I64/K
-         RIBYXpNrGLn8HYX1HYAz4w7JMc+dJ3cWNwnZf6IkPxz+nGqHNtZ3Q2ioa2U0Wlqj6mz1
-         djYy1SByRU3VgMqUewD00DzXvQRjSABtx5QUsawfNM0EneTw0gUpbM3B5vw/hBes8ns9
-         v1jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e+S41aLkIpofGd7A0yy9q0Ab7HtB9JJVBC8F1jt0b6c=;
-        b=w14PLygTyZjse36+QTAWhsWQ/BmOAzYUgBa0Kq/0Q4KYfNjJ6tS9rJSTis5sB+CWbk
-         2D8+Zr127Et7gd9vK6QV9M5QrScUSKrPB+eXyC/hP+ZukxepyJ0vUhKij/C54i5+oinf
-         6e5mrJ0EbF7+SgyDOXfcbciC4gcoUKTSjrQ++ubB6u2HwJPc+Yl0UsyGY06E3bOB+Jb8
-         0XLrMpDRKq7Cr1ph7OmkpDvLJYMbHq/Ri5ZenKyrSNsuIscthtWCkfzpIqNFSqd85by5
-         Ak6JFA2tmSI4dz9GMFjegsoVPIiLPh9LMl2pEo8eq/HteEYd7P055akLmpzAaNlq77od
-         ur1g==
-X-Gm-Message-State: AOAM532s9Le7oK0eokihedHHti5rMWUUl2N8/QbeXJreJ944pt6RE/+3
-        IxHWheRiQfbpacrs6oi2b2B3ZwumK6DYDA==
-X-Google-Smtp-Source: ABdhPJwOjbDopS98863TEW7dj+SfAWZdlKugbYoHHCkjP2gsnGQo+88ZrJWCdi88DSmGi6fc93r3ZA==
-X-Received: by 2002:a05:622a:587:: with SMTP id c7mr22863235qtb.354.1642548835231;
-        Tue, 18 Jan 2022 15:33:55 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id w85sm8204142qkb.3.2022.01.18.15.33.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 15:33:54 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1n9xz7-0016WR-P2; Tue, 18 Jan 2022 19:33:53 -0400
-Date:   Tue, 18 Jan 2022 19:33:53 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jann Horn <jannh@google.com>, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
+        Tue, 18 Jan 2022 19:18:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB8CC061574;
+        Tue, 18 Jan 2022 16:18:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5CE2614B8;
+        Wed, 19 Jan 2022 00:18:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7523C340E0;
+        Wed, 19 Jan 2022 00:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642551510;
+        bh=5Tf0l9OJlBOiQqmblg2h3eakocTe+K3hVsNuIhBqNYU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jllIWL0W2wQPKirORuD/sk36gzXNdYkYUVI2mXkyCIOy9smwLK99vfbHEi3f02BWq
+         1M5RYeBYqp7lvH1YFsfuUXly0teYfHiMQW5nYUh7I/bAiKbL/W3Jph9cLahs1OLxXE
+         89gwHvEHzc17bL0ufzN6W4owSco5cvPYk6NdkD1QIwu5hDHoT8BW2/ricNd7KgqqG0
+         0etF9QHnoxbc3N4bIFdW/X2TicG3yEB2Mn0pKe8wOKY66V/1D7M+Ptu9iRukbA8BaG
+         R7kRSjhHCNKrPFFDPZpsi75BbIug31QzF5jzXots+ACQj3a5dm6OmB2yBBwHW67qv+
+         +oiyAw8uMU4LA==
+Date:   Tue, 18 Jan 2022 16:18:28 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        keyrings@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
         Stefan Berger <stefanb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
-Message-ID: <20220118233353.GI8034@ziepe.ca>
-References: <20220118183650.3386989-1-keescook@chromium.org>
- <CAG48ez00FFW-n_Pi=+ya1xY5QuB3q2mPr8++scVe3h3ROeF_mg@mail.gmail.com>
- <20220118193931.GH8034@ziepe.ca>
- <202201181255.DB5D38F6AA@keescook>
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] ima: fix reference leak in asymmetric_verify()
+Message-ID: <YedY1BCKSKXn2Dcc@sol.localdomain>
+References: <20220113194438.69202-1-ebiggers@kernel.org>
+ <55c5576db2bb0f8a2b9d509f4d1160911388fa41.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202201181255.DB5D38F6AA@keescook>
+In-Reply-To: <55c5576db2bb0f8a2b9d509f4d1160911388fa41.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 01:20:40PM -0800, Kees Cook wrote:
+On Thu, Jan 13, 2022 at 08:52:59PM -0500, Mimi Zohar wrote:
+> Hi Eric,
+> 
+> On Thu, 2022-01-13 at 11:44 -0800, Eric Biggers wrote:
+> > From: Eric Biggers <ebiggers@google.com>
+> > 
+> > Don't leak a reference to the key if its algorithm is unknown.
+> > 
+> > Fixes: 947d70597236 ("ima: Support EC keys for signature verification")
+> > Cc: <stable@vger.kernel.org> # v5.13+
+> > Signed-off-by: Eric Biggers <ebiggers@google.com>
+> 
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> 
 
-> I haven't been able to reproduce the specific cause of why GCC decided to
-> do the bounds checking, but it's not an unreasonable thing to check for,
-> just for robustness.
+Thanks.  You're intending to apply this patch, right?  Or are you expecting
+someone else to?  get_maintainer.pl didn't associate this file with IMA, but I
+see you sent out a patch to fix that
+(https://lore.kernel.org/linux-integrity/20220117230229.16475-1-zohar@linux.ibm.com/T/#u).
 
-Well, the commit message should explain this is to silence a compiler
-bug and maybe put some colour on what version(s) are actually buggy..
-
-Jason
+- Eric
