@@ -2,216 +2,292 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BED12493B22
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 14:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEAB493D66
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 16:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241194AbiASNcv (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Jan 2022 08:32:51 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14790 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1354833AbiASNcs (ORCPT
+        id S1355627AbiASPla (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Jan 2022 10:41:30 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19334 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1355826AbiASPlP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:32:48 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JAvcst028475;
-        Wed, 19 Jan 2022 13:32:32 GMT
+        Wed, 19 Jan 2022 10:41:15 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20JESaWA015514;
+        Wed, 19 Jan 2022 15:41:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=iQOM2B7pBkIu/v+1xQgTsapMW9lVF15319i1ZV98854=;
- b=Vvjfbr4zVL9FdnR3nFn8gSMLljR+2Z6Aksroq4Msrzxn+vHEyENF1wVPHXz3aneaoRtm
- 7rsHbQLqOI63bM6IkQ51vu7v5/nH7QUCYhsCBIw37CCW6DB/pmGoNcjCYCIGlF5pJ0em
- Vwe6OiP5Upsi5xIt0swkziqFnh98Kj41NW3tqD5SMGeuJ/PVyUgQxoYfinOxALcOqW+/
- LLXYmEFexgHqaqWmdyq6QuOUOKTH+Q3udWsfku4rK0rHzrHiAE6Nq1nU3KN0UdbQZTUJ
- HOxNEkoWLLpgJBxXgaHtwKE0Nx8lIKUW82/4lRc899iK1sK7TyMeCkjLrRHVk/sPg80G ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dphbqb6h9-1
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=sJRt/KUTCZbZMQP55egvS7agHXjTZXhMP4T5nbrqtAY=;
+ b=iC/Cs8SoUR34xAVvVdauEOfYm7ubSFp6ZDAAUhR8tCAgLstnAR4zH6190VpU9Dn6Unuj
+ Ty4IWn+J2oVinEzRHhf6LgJWQhGsCVAa5twRRm3Dv6ITQ5YI4JTF43wi84fWh/CzHWsq
+ xFUpmD8mV6JLXk1lj2Y6mewyluK0kTHB4mq+C4pwbC++dtqhp9ME8VSm4l4Lm+CWEyt5
+ sypssjj/AGlVhGSQuLbE7/zTF+zpYzbjhv5/AHn5CJYirDTOhnV+k7kZgiM6eeSTW0gK
+ m1PZSdKv+4WFVZ+EgIU3B6HGIXZFannAcQWNuJDoCz1/YZ6QXX9recBPqndGXwGEMIuI eQ== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dpmehsmpw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 13:32:32 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20JDL71R012456;
-        Wed, 19 Jan 2022 13:32:31 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dphbqb6gj-1
+        Wed, 19 Jan 2022 15:41:09 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JFbUHm002769;
+        Wed, 19 Jan 2022 15:41:08 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma02dal.us.ibm.com with ESMTP id 3dknwc5cr6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 13:32:31 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20JDH8nG016689;
-        Wed, 19 Jan 2022 13:32:30 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03wdc.us.ibm.com with ESMTP id 3dknwaggg8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Jan 2022 13:32:30 +0000
+        Wed, 19 Jan 2022 15:41:08 +0000
 Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JDWTOi30409176
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20JFf7T923003526
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jan 2022 13:32:29 GMT
+        Wed, 19 Jan 2022 15:41:07 GMT
 Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14F6DBE05B;
-        Wed, 19 Jan 2022 13:32:29 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 4F904BE056;
+        Wed, 19 Jan 2022 15:41:07 +0000 (GMT)
 Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37A52BE053;
-        Wed, 19 Jan 2022 13:32:26 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id D7FFCBE05A;
+        Wed, 19 Jan 2022 15:41:05 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
         by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Jan 2022 13:32:25 +0000 (GMT)
-Message-ID: <c76b2bfc-d629-c720-e13c-84367524b88f@linux.ibm.com>
-Date:   Wed, 19 Jan 2022 08:32:24 -0500
-MIME-Version: 1.0
+        Wed, 19 Jan 2022 15:41:05 +0000 (GMT)
+Message-ID: <1fbb8f9d-0ec7-52e3-9287-a17ce2ff73d9@linux.ibm.com>
+Date:   Wed, 19 Jan 2022 10:41:05 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
-Subject: Re: [PATCH v8 03/19] ima: Move policy related variables into
- ima_namespace
+Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
+ signatures
 Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
- <20220104170416.1923685-4-stefanb@linux.vnet.ibm.com>
- <150cb51f95c3fe54e94edc5b96b2e15edb3bf399.camel@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Vitaly Chikunov <vt@altlinux.org>
+Cc:     Vitaly Chikunov <vt@altlinux.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20211202215507.298415-1-zohar@linux.ibm.com>
+ <20211202215507.298415-5-zohar@linux.ibm.com>
+ <YalDvGjq0inMFKln@sol.localdomain>
+ <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
+ <YdYrw4eiQPryOMkZ@gmail.com> <20220109204537.oueokvvkrkyy3ipq@altlinux.org>
+ <YdtOhsv/A5dqlApY@sol.localdomain>
+ <20220115053101.36xoy2bc7ypozo6l@altlinux.org>
+ <YeJn7hxLEfdVrUQT@sol.localdomain>
+ <7e611504-eed8-6943-f1ae-7fb23298d3e5@linux.ibm.com>
+ <Yedf/VyOsTha++b8@sol.localdomain>
 From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <150cb51f95c3fe54e94edc5b96b2e15edb3bf399.camel@linux.ibm.com>
+In-Reply-To: <Yedf/VyOsTha++b8@sol.localdomain>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: J1Ciy3qNc1FEHBz2o0_fECRRD-mCAzYY
-X-Proofpoint-ORIG-GUID: Y6LSk7xDS6psh9z4QijZWX87OwSxJpQy
+X-Proofpoint-GUID: WKYpffVgIwFySLs3bQP8PEzCevF2nHFU
+X-Proofpoint-ORIG-GUID: WKYpffVgIwFySLs3bQP8PEzCevF2nHFU
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-19_07,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxlogscore=999 spamscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 suspectscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201190075
+ definitions=2022-01-19_08,2022-01-19_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 adultscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 malwarescore=0 clxscore=1011 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201190089
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
 
-On 1/13/22 15:26, Mimi Zohar wrote:
-> Hi Stefan,
->
-> On Tue, 2022-01-04 at 12:04 -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
+On 1/18/22 19:49, Eric Biggers wrote:
+> On Sat, Jan 15, 2022 at 10:31:40PM -0500, Stefan Berger wrote:
+>> On 1/15/22 01:21, Eric Biggers wrote:
+>>> On Sat, Jan 15, 2022 at 08:31:01AM +0300, Vitaly Chikunov wrote:
+>>>> Eric,
+>>>>
+>>>> On Sun, Jan 09, 2022 at 01:07:18PM -0800, Eric Biggers wrote:
+>>>>> On Sun, Jan 09, 2022 at 11:45:37PM +0300, Vitaly Chikunov wrote:
+>>>>>> On Wed, Jan 05, 2022 at 03:37:39PM -0800, Eric Biggers wrote:
+>>>>>>> On Fri, Dec 31, 2021 at 10:35:00AM -0500, Mimi Zohar wrote:
+>>>>>>>> On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
+>>>>>>>>> On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
+>>>>>>>>>>    	case IMA_VERITY_DIGSIG:
+>>>>>>>>>> -		fallthrough;
+>>>>>>>>>> +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
+>>>>>>>>>> +
+>>>>>>>>>> +		/*
+>>>>>>>>>> +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
+>>>>>>>>>> +		 * and the fs-verity file digest, not directly on the
+>>>>>>>>>> +		 * fs-verity file digest.  Both digests should probably be
+>>>>>>>>>> +		 * included in the IMA measurement list, but for now this
+>>>>>>>>>> +		 * digest is only used for verifying the IMA signature.
+>>>>>>>>>> +		 */
+>>>>>>>>>> +		verity_digest[0] = IMA_VERITY_DIGSIG;
+>>>>>>>>>> +		memcpy(verity_digest + 1, iint->ima_hash->digest,
+>>>>>>>>>> +		       iint->ima_hash->length);
+>>>>>>>>>> +
+>>>>>>>>>> +		hash.hdr.algo = iint->ima_hash->algo;
+>>>>>>>>>> +		hash.hdr.length = iint->ima_hash->length;
+>>>>>>>>> This is still wrong because the bytes being signed don't include the hash
+>>>>>>>>> algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
+>>>>>>>>> supports SHA-512 too, and it may support other hash algorithms in the future.
+>>>>>>>> IMA assumes that the file hash algorithm and the signature algorithm
+>>>>>>>> are the same.   If they're not the same, for whatever reason, the
+>>>>>>>> signature verification would simply fail.
+>>>>>>>>
+>>>>>>>> Based on the v2 signature header 'type' field, IMA can differentiate
+>>>>>>>> between regular IMA file hash based signatures and fs-verity file
+>>>>>>>> digest based signatures.  The digest field (d-ng) in the IMA
+>>>>>>>> meausrement list prefixes the digest with the hash algorithm. I'm
+>>>>>>>> missing the reason for needing to hash fs-verity's file digest with
+>>>>>>>> other metadata, and sign that hash rather than fs-verity's file digest
+>>>>>>>> directly.
+>>>>>>> Because if someone signs a raw hash, then they also implicitly sign the same
+>>>>>>> hash value for all supported hash algorithms that produce the same length hash.
+>>>>>> Unless there is broken hash algorithm allowing for preimage attacks this
+>>>>>> is irrelevant. If there is two broken algorithms allowing for collisions,
+>>>>>> colliding hashes could be prepared even if algo id is hashed too.
+>>>>>>
+>>>>> Only one algorithm needs to be broken.  For example, SM3 has the same hash
+>>>>> length as SHA-256.  If SM3 support were to be added to fs-verity, and if someone
+>>>>> were to find a way to find an input that has a specific SM3 digest, then they
+>>>>> could also make it match a specific SHA-256 digest.  Someone might intend to
+>>>>> sign a SHA-256 digest, but if they are only signing the raw 32 bytes of the
+>>>>> digest, then they would also be signing the corresponding SM3 digest.  That's
+>>>>> why the digest that is signed *must* also include the algorithm used in the
+>>>>> digest (not the algorithm(s) used in the signature, which is different).
+>>>> I think it will be beneficial if we pass hash algo id to the
+>>>> akcipher_alg::verify. In fact, ecrdsa should only be used with streebog.
+>>>> And perhaps, sm2 with sm3, pkcs1 with md/sha/sm3, and ecdsa with sha family
+>>>> hashes.
+>>>>
+>>> I was going to reply to this thread again, but I got a bit distracted by
+>>> everything else being broken.  Yes, the kernel needs to be restricting which
+>>> hash algorithms can be used with each public key algorithm, along the lines of
+>>> what you said.  I asked the BoringSSL maintainers for advice, and they confirmed
+>>> that ECDSA just signs/verifies a raw hash, and in fact it *must* be a raw hash
+>>> for it to be secure.  This is a design flaw in ECDSA, which was fixed in newer
+>>> algorithms such as EdDSA and SM2 as those have a hash built-in to the signature
+>>> scheme.  To mitigate it, the allowed hash algorithms must be restricted; in the
+>>> case of ECDSA, that means to the SHA family (preferably excluding SHA-1).
+>>>
+>>> akcipher_alg::verify doesn't actually know which hash algorithm is used, except
+>>> in the case of rsa-pkcs1pad where it is built into the name of the algorithm.
+>>> So it can't check the hash algorithm.  I believe it needs to happen in
+>>> public_key_verify_signature() (and I'm working on a patch for that).
+>>>
+>>> Now, SM2 is different from ECDSA and ECRDSA in that it uses the modern design
+>>> that includes the hash into the signature algorithm.  This means that it must be
+>>> used to sign/verify *data*, not a hash.  (Well, you can sign/verify a hash, but
+>>> SM2 will hash it again internally.)  Currently, public_key_verify_signature()
+>>> allows SM2 to be used to sign/verify a hash, skipping the SM2 internal hash, and
+>>> IMA uses this.  This is broken and must be removed, since it isn't actually the
+>>> SM2 algorithm as specified anymore, but rather some homebrew thing with unknown
+>>> security properties. (Well, I'm not confident about SM2, but homebrew is worse.)
+>>>
+>>> Adding fs-verity support to IMA also complicates things, as doing it naively
+>>> would introduce an ambiguity about what is signed.  Naively, the *data* that is
+>>> signed (considering the hash as part of the signature algorithm) would be either
+>>> the whole file, in the case of traditional IMA, or the fsverity_descriptor
+>>> struct, in the case of IMA with fs-verity.  However, a file could have contents
+>>> which match an fsverity_descriptor struct; that would create an ambiguity.
+>>>
+>>> Assuming that it needs to be allowed that the same key can sign files for both
+>>> traditional and fs-verity hashing, solving this problem will require a second
+>>> hash.  The easiest way to do this would be sign/verify the following struct:
+>>>
+>>> 	struct ima_file_id {
+>>> 		u8 is_fsverity;
+>>> 		u8 hash_algorithm;
+>>> 		u8 hash[];
+>>> 	};
 >>
->> Move variables related to the IMA policy into the ima_namespace. This way
->> the IMA policy of an IMA namespace can be set and displayed using a
->> front-end like SecurityFS.
+>> To calrify, I suppose that for ECDSA NIST P256 you would allow pairing with
+>> any of the SHA family hashes (also as defined by the existing OIDs) and as
+>> the standard allows today? And the same then applies for NIST p384 etc.?
 >>
->> Implement ima_ns_from_file() to get the IMA namespace via the user
->> namespace of the SecurityFS superblock that a file belongs to.
+>> Further, I suppose similar restriction would apply for ECRDSA to pair it
+>> with Streebog only, as Vitaly said.
+> I don't have any better ideas.
+>
+>> What's happening now is that to verify a signature, IMA/integrity subsystem
+>> fills out the following structure:
 >>
->> To get the current ima_namespace use get_current_ns() when a function
->> that is related to a policy rule is called. In other cases where functions
->> are called due file attribute modifications, use init_ima_ns, since these
->> functions are related to IMA appraisal and changes to file attributes are
->> only relevant to the init_ima_ns until IMA namespaces also support IMA
->> appraisal. In ima_file_free() use init_ima_ns since in this case flags
->> related to file measurements may be affected, which is not supported in
->> IMA namespaces, yet.
+>> struct public_key_signature pks;
 >>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Please split this patch into "ima: pass through ima namespace", or some
-> other name,  and "ima: Move policy related variables into
-
-What is supposed to happen in the 'ima: pass through ima namespace' 
-patch? What part of this patch do you expect to see there and what do 
-you want to see deferred to a 2nd patch?
-
-
-> ima_namespace".  The other option is to combine the "pass through ima
-> namespace" with the 2nd patch, like Christian's example.
-
-You mean I should merge this patch with the 2nd?
-
-I am a bit confused as to what you are proposing. The first option would 
-create 2 patches out of this one, the 2nd option would merge this one 
-with the 2nd patch.
-
-The equivalent of Christian's 2nd patch would be to merge this patch 
-into the 2nd. So then let's do that?
-
-
->
->> ---
->>   security/integrity/ima/ima.h                 |  49 ++++---
->>   security/integrity/ima/ima_api.c             |   8 +-
->>   security/integrity/ima/ima_appraise.c        |  28 ++--
->>   security/integrity/ima/ima_asymmetric_keys.c |   4 +-
->>   security/integrity/ima/ima_fs.c              |  16 ++-
->>   security/integrity/ima/ima_init.c            |   8 +-
->>   security/integrity/ima/ima_init_ima_ns.c     |   6 +
->>   security/integrity/ima/ima_main.c            |  83 +++++++----
->>   security/integrity/ima/ima_policy.c          | 142 ++++++++++---------
->>   security/integrity/ima/ima_queue_keys.c      |  11 +-
->>   10 files changed, 213 insertions(+), 142 deletions(-)
+>> pks.hash_algo = hash_algo_name[hdr->hash_algo];  // name of hash algo will
+>> go into this here, e.g., 'sha256'
+>> pks.pkey_algo = pk->pkey_algo; // this is either 'rsa', 'ecdsa-', 'ecrdsa-'
+>> or 'sm2' string
 >>
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index c4af3275f015..0b3dc9425076 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -20,6 +20,7 @@
->>   #include <linux/hash.h>
->>   #include <linux/tpm.h>
->>   #include <linux/audit.h>
->> +#include <linux/user_namespace.h>
->>   #include <crypto/hash_info.h>
->>   
->>   #include "../integrity.h"
->> @@ -43,9 +44,6 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
->>   
->>   #define NR_BANKS(chip) ((chip != NULL) ? chip->nr_allocated_banks : 0)
->>   
->> -/* current content of the policy */
->> -extern int ima_policy_flag;
->> -
->>   /* bitset of digests algorithms allowed in the setxattr hook */
->>   extern atomic_t ima_setxattr_allowed_hash_algorithms;
->>   
->> @@ -120,6 +118,14 @@ struct ima_kexec_hdr {
->>   };
->>   
->>   struct ima_namespace {
->> +	struct list_head ima_default_rules;
->> +	/* ns's policy rules */
-> Thank you for adding comments.  Why is the ima_default_rules not
-> considered "ns's policy rules"?   Will this come later or is it limited
-> to init_ima_ns?
-Let me move the comment up.
->
->> +	struct list_head ima_policy_rules;
->> +	struct list_head ima_temp_rules;
->> +	/* Pointer to ns's current policy */
->> +	struct list_head __rcu *ima_rules;
-> Since "Pointer to ns's current policy" only refers to ima_rules, append
-> it to the variable definition.
+>> It then calls:
+>>
+>>      ret = verify_signature(key, &pks);
+>>
+>> IMO, in the call path down this function the pairing of public key and hash
+>> algo would have to be enforced in order to enforce the standards. Would this
+>> not be sufficient to be able to stay with the standards ?
+> That sounds right, though there are a number of other issues including SM2 being
+> implemented incorrectly, the "encoding" string isn't validated, and it not being
+> enforced that public_key_signature::pkey_algo actually matches
+> public_key::pkey_algo.
+
+I don't know enough about SM2.
 
 
-Ok, I will move it onto the same line then.
+Which call path are you looking at for "encoding" ?
+
+For IMA's signature verification with public keys we will necessarily 
+get into:
+
+public_key_verfiy_signature: 
+https://elixir.bootlin.com/linux/v5.14.21/source/crypto/asymmetric_keys/public_key.c#L311
+
+sig->encoding is at least then used in software_key_determine_akcipher: 
+https://elixir.bootlin.com/linux/v5.14.21/source/crypto/asymmetric_keys/public_key.c#L66
+
+It doesn't *seem* to be used elsewhere down this call path. Is this not 
+enough of looking at 'encoding' that is used to form the alg_name?
 
 
->
->> +	/* current content of the policy */
->> +	int ima_policy_flag;
-> Similarly here append the comment to the variable definition.
+Regarding matching of  public_key_signature::pkey_algo and 
+public_key::pkey_algo: What could be the implications of this not 
+matching? Does it matter? Could one accidentally succeed in verifying a 
+signature with the wrong type of key?
 
-Will do. Thanks.
+
+As for the proposed patch. I would need to split this up into 3 patches 
+with their corresponding fixes tag, either SM2 or ECDRSA in the first 
+depending on which one is oldest. But not knowing about SM2 I would 
+probably skip this one.
 
 
 >
->>   } __randomize_layout;
->>   extern struct ima_namespace init_ima_ns;
-> thanks,
+>> File hashes: IMA calculates the hash over a file itself by calling crypto
+>> functions, so at least the digest's bytes are trusted input in that respect
+>> and using the sha family type of hashes directly with ECDSA should work.
+>> Which algorithm IMA is supposed to use for the hashing is given in the xattr
+>> bytestream header. IMA could then take that type of hash, lookup the hash
+>> function, perform the hashing on the data, and let verify_signature enforce
+>> the pairing, rejecting file signatures with wrong pairing. This way the only
+>> thing that is needed is 'enforcement of pairing'.
+>>
+>> Fsverity: How much control does a user have over the hash family fsverity is
+>> using? Can IMA ECDSA/RSA users tell it to use a sha family hash and ECRDSA
+>> users make it use a Streebog hash so that also the pairing of hash and key
+>> type can work 'naturally' and we don't need the level of indirection via
+>> your structure above?
+> The hash algorithm used by fs-verity is configurable and is always returned
+> along with the file digest.  Currently, only SHA-256 and SHA-512 are supported.
 >
-> Mimi
+> Keep in mind that if you sign the fs-verity file digest directly with RSA,
+> ECDSA, or ECRDSA, the *data* you are actually signing is the fsverity_descriptor
+> -- the struct which the hash is a hash of.
 >
+> That creates an ambiguity when full file hashes are also signed by the same key,
+> as I previously mentioned.  A level of indirection is needed to avoid that.
 >
+> In the naive method, the *data* being signed would also be different with SM2.
+> The level of indirection would avoid that.
+
+So in the fsverity case that level of indirection is needed, for the 
+existing file signatures I don't think we need it.
+
+    Stefan
+
+>
+> - Eric
