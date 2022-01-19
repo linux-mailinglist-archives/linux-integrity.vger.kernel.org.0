@@ -2,223 +2,207 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A35B4931EF
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 01:39:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024654931F4
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 01:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238446AbiASAjr (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 18 Jan 2022 19:39:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        id S1349264AbiASAme (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 18 Jan 2022 19:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237177AbiASAjq (ORCPT
+        with ESMTP id S237177AbiASAme (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 18 Jan 2022 19:39:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B001EC061574;
-        Tue, 18 Jan 2022 16:39:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A3DD614CE;
-        Wed, 19 Jan 2022 00:39:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9F1C340E0;
-        Wed, 19 Jan 2022 00:39:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642552785;
-        bh=rlNJ3O+wBaQqAhYetNswbsESAgyvWjhZQPvJIQXyZHw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pFmSHxaan3THvA8LMLq/j+6MWtW7A9dgqpWgVlprDoW4EuqlYUuv0bbaV91nuVMbc
-         LNU1UvAOnF3yJPZZUR5/YxtLytQQNCxVUBbHodwdoCIyRpXna19488vqDEJkBcY8lF
-         V5YIXwTMWVZwhY12XWB3yIZ4gagahUp1x3gnxqt8bM9dgb2irXM6Ngajsj1mBsaYOB
-         azqE+cv0ENgI+FyTF9yIOAXkTJTmsvkW5yoENNYkoTKbODibf4pUHJVIuHJ61qY3P7
-         eBvy7Sheh6fGjzaSc+v0t5aVA5harnXCJdwdjXmHOWbraohTKGc16MtAG1vw6wKYnn
-         paO0KW6U91BOA==
-Date:   Tue, 18 Jan 2022 16:39:44 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Vitaly Chikunov <vt@altlinux.org>, linux-integrity@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
- signatures
-Message-ID: <Yedd0CKCHSq1ugFk@sol.localdomain>
-References: <20211202215507.298415-1-zohar@linux.ibm.com>
- <20211202215507.298415-5-zohar@linux.ibm.com>
- <YalDvGjq0inMFKln@sol.localdomain>
- <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
- <YdYrw4eiQPryOMkZ@gmail.com>
- <20220109204537.oueokvvkrkyy3ipq@altlinux.org>
- <YdtOhsv/A5dqlApY@sol.localdomain>
- <20220115053101.36xoy2bc7ypozo6l@altlinux.org>
- <YeJn7hxLEfdVrUQT@sol.localdomain>
- <bc803a35d914dde65640428d2b29cc6e89d176d4.camel@linux.ibm.com>
+        Tue, 18 Jan 2022 19:42:34 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B5EC061574
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 16:42:33 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id m3so2522592lfu.0
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Jan 2022 16:42:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WC6vCmlBaJcnOq0yqjfAIqZ48ognlL3tNUNuOCNKcLA=;
+        b=JjdZ1Qa07omNstuAfkDNTfKeVCeI3Y9spOp3On6OcIMntUS3IS5W/0Jqr8JBWQcuuq
+         wvfuCIEq9LyVMNJhUREVCJJH/yzkpHWh/Jc+sx5VLJafgGpTKk90V/aeek82j8R9SpIG
+         ssvHuxn4pBXKmBCOrMUZV8jYXXphDOr8QW6G0KsuREth4TOM/Bvt9ZM9E117kgZgQPiV
+         IAjpkAYGdX9tH76Y4rt/BT4Rbqacl/i5q0/wIfHLLkuz1f/HVGDOzaUcZn45X1U659Ve
+         kDcqj1epuybqsUqzS2+tPbfOWz+IqOeEAjAJ30Z4hCxtFPMwwFg+tP2ftuSGjhbA6Jj4
+         fhLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WC6vCmlBaJcnOq0yqjfAIqZ48ognlL3tNUNuOCNKcLA=;
+        b=N3Zp9OUSP2sOHWzFozzbGD5UrvXi3AkL6hGLZ7l+FRhtUKMYacLsTWTTmaDq1I0x8t
+         ttG9KWcKPW93QoiMnJYogm4XiOBAKMNOQasPBwo2jsq2oIe5esh199+iXg+JmeRTKopW
+         KEXzMLLz42F6jEG58pdY2fC6BcVPZX1xI+ax3Hf4O7pqeDmO1H+/tV58PpFm+pi+NoSN
+         lW7dbQ0yB0URCKfwRuAbxax7SqCBMAONIO8sBM9ONQgcY1lbSRVbnm29B73+HkYji4zW
+         28Q0MNCb/s5ya3f4Vrrrg+wuuUr0fivBnxt+ajr2uSwSy0uqBVODfGwIZLBRhuAnwac5
+         bTdw==
+X-Gm-Message-State: AOAM5313kPA2DNObqRw8uXxFPHSn4ZVHRe9WQa7K311bjn9Cvnb6cc3I
+        GKFX0eRGmjxJfB40LDWbBGA1C6R12OgBq5zOoNbVkw==
+X-Google-Smtp-Source: ABdhPJyh4AKgqcun9w5U2hmSqhuaRzXvM7cXo5We6xiKZ5ywhTrrC+pfHoCKkGU6LnR5SyPjoI1uggDb8QK43Jy9o4Y=
+X-Received: by 2002:a2e:9e98:: with SMTP id f24mr22000014ljk.347.1642552951599;
+ Tue, 18 Jan 2022 16:42:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bc803a35d914dde65640428d2b29cc6e89d176d4.camel@linux.ibm.com>
+References: <20220118183650.3386989-1-keescook@chromium.org>
+ <CAG48ez00FFW-n_Pi=+ya1xY5QuB3q2mPr8++scVe3h3ROeF_mg@mail.gmail.com>
+ <20220118193931.GH8034@ziepe.ca> <202201181255.DB5D38F6AA@keescook>
+In-Reply-To: <202201181255.DB5D38F6AA@keescook>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 19 Jan 2022 01:42:04 +0100
+Message-ID: <CAG48ez1iTF9KegKJrW5a3WzXgCPZJ73nS2_e5esKJRppdzvv8g@mail.gmail.com>
+Subject: Re: [PATCH v2] tpm: vtpm_proxy: Double-check to avoid buffer overflow
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 12:01:28PM -0500, Mimi Zohar wrote:
-> On Fri, 2022-01-14 at 22:21 -0800, Eric Biggers wrote:
-> > On Sat, Jan 15, 2022 at 08:31:01AM +0300, Vitaly Chikunov wrote:
-> > > Eric,
-> > > 
-> > > On Sun, Jan 09, 2022 at 01:07:18PM -0800, Eric Biggers wrote:
-> > > > On Sun, Jan 09, 2022 at 11:45:37PM +0300, Vitaly Chikunov wrote:
-> > > > > On Wed, Jan 05, 2022 at 03:37:39PM -0800, Eric Biggers wrote:
-> > > > > > On Fri, Dec 31, 2021 at 10:35:00AM -0500, Mimi Zohar wrote:
-> > > > > > > On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
-> > > > > > > > On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
-> > > > > > > > >  	case IMA_VERITY_DIGSIG:
-> > > > > > > > > -		fallthrough;
-> > > > > > > > > +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
-> > > > > > > > > +
-> > > > > > > > > +		/*
-> > > > > > > > > +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
-> > > > > > > > > +		 * and the fs-verity file digest, not directly on the
-> > > > > > > > > +		 * fs-verity file digest.  Both digests should probably be
-> > > > > > > > > +		 * included in the IMA measurement list, but for now this
-> > > > > > > > > +		 * digest is only used for verifying the IMA signature.
-> > > > > > > > > +		 */
-> > > > > > > > > +		verity_digest[0] = IMA_VERITY_DIGSIG;
-> > > > > > > > > +		memcpy(verity_digest + 1, iint->ima_hash->digest,
-> > > > > > > > > +		       iint->ima_hash->length);
-> > > > > > > > > +
-> > > > > > > > > +		hash.hdr.algo = iint->ima_hash->algo;
-> > > > > > > > > +		hash.hdr.length = iint->ima_hash->length;
-> > > > > > > > 
-> > > > > > > > This is still wrong because the bytes being signed don't include the hash
-> > > > > > > > algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
-> > > > > > > > supports SHA-512 too, and it may support other hash algorithms in the future.
-> > > > > > > 
-> > > > > > > IMA assumes that the file hash algorithm and the signature algorithm
-> > > > > > > are the same.   If they're not the same, for whatever reason, the
-> > > > > > > signature verification would simply fail.
-> > > > > > > 
-> > > > > > > Based on the v2 signature header 'type' field, IMA can differentiate
-> > > > > > > between regular IMA file hash based signatures and fs-verity file
-> > > > > > > digest based signatures.  The digest field (d-ng) in the IMA
-> > > > > > > meausrement list prefixes the digest with the hash algorithm. I'm
-> > > > > > > missing the reason for needing to hash fs-verity's file digest with
-> > > > > > > other metadata, and sign that hash rather than fs-verity's file digest
-> > > > > > > directly.
-> > > > > > 
-> > > > > > Because if someone signs a raw hash, then they also implicitly sign the same
-> > > > > > hash value for all supported hash algorithms that produce the same length hash.
-> > > > > 
-> > > > > Unless there is broken hash algorithm allowing for preimage attacks this
-> > > > > is irrelevant. If there is two broken algorithms allowing for collisions,
-> > > > > colliding hashes could be prepared even if algo id is hashed too.
-> > > > > 
-> > > > 
-> > > > Only one algorithm needs to be broken.  For example, SM3 has the same hash
-> > > > length as SHA-256.  If SM3 support were to be added to fs-verity, and if someone
-> > > > were to find a way to find an input that has a specific SM3 digest, then they
-> > > > could also make it match a specific SHA-256 digest.  Someone might intend to
-> > > > sign a SHA-256 digest, but if they are only signing the raw 32 bytes of the
-> > > > digest, then they would also be signing the corresponding SM3 digest.  That's
-> > > > why the digest that is signed *must* also include the algorithm used in the
-> > > > digest (not the algorithm(s) used in the signature, which is different).
-> > > 
-> > > I think it will be beneficial if we pass hash algo id to the
-> > > akcipher_alg::verify. In fact, ecrdsa should only be used with streebog.
-> > > And perhaps, sm2 with sm3, pkcs1 with md/sha/sm3, and ecdsa with sha family
-> > > hashes.
-> > > 
-> > 
-> > I was going to reply to this thread again, but I got a bit distracted by
-> > everything else being broken.  Yes, the kernel needs to be restricting which
-> > hash algorithms can be used with each public key algorithm, along the lines of
-> > what you said.  I asked the BoringSSL maintainers for advice, and they confirmed
-> > that ECDSA just signs/verifies a raw hash, and in fact it *must* be a raw hash
-> > for it to be secure.  This is a design flaw in ECDSA, which was fixed in newer
-> > algorithms such as EdDSA and SM2 as those have a hash built-in to the signature
-> > scheme.  To mitigate it, the allowed hash algorithms must be restricted; in the
-> > case of ECDSA, that means to the SHA family (preferably excluding SHA-1).
-> > 
-> > akcipher_alg::verify doesn't actually know which hash algorithm is used, except
-> > in the case of rsa-pkcs1pad where it is built into the name of the algorithm.
-> > So it can't check the hash algorithm.  I believe it needs to happen in
-> > public_key_verify_signature() (and I'm working on a patch for that).
-> > 
-> > Now, SM2 is different from ECDSA and ECRDSA in that it uses the modern design
-> > that includes the hash into the signature algorithm.  This means that it must be
-> > used to sign/verify *data*, not a hash.  (Well, you can sign/verify a hash, but
-> > SM2 will hash it again internally.)  Currently, public_key_verify_signature()
-> > allows SM2 to be used to sign/verify a hash, skipping the SM2 internal hash, and
-> > IMA uses this.  This is broken and must be removed, since it isn't actually the
-> > SM2 algorithm as specified anymore, but rather some homebrew thing with unknown
-> > security properties. (Well, I'm not confident about SM2, but homebrew is worse.)
-> > 
-> > Adding fs-verity support to IMA also complicates things, as doing it naively
-> > would introduce an ambiguity about what is signed.  Naively, the *data* that is
-> > signed (considering the hash as part of the signature algorithm) would be either
-> > the whole file, in the case of traditional IMA, or the fsverity_descriptor
-> > struct, in the case of IMA with fs-verity.  However, a file could have contents
-> > which match an fsverity_descriptor struct; that would create an ambiguity.
-> > 
-> > Assuming that it needs to be allowed that the same key can sign files for both
-> > traditional and fs-verity hashing, solving this problem will require a second
-> > hash.
-> 
-> The IMA fs-verity policy rule could require specifying the hash
-> algorithm.  If it would require specifying a particular key as well,
-> would hashing the hash then not be needed?
+On Tue, Jan 18, 2022 at 10:20 PM Kees Cook <keescook@chromium.org> wrote:
+> On Tue, Jan 18, 2022 at 03:39:31PM -0400, Jason Gunthorpe wrote:
+> > On Tue, Jan 18, 2022 at 08:32:43PM +0100, Jann Horn wrote:
+> > > On Tue, Jan 18, 2022 at 7:37 PM Kees Cook <keescook@chromium.org> wro=
+te:
+> > > > When building with -Warray-bounds, this warning was emitted:
+> > > >
+> > > > In function 'memset',
+> > > >     inlined from 'vtpm_proxy_fops_read' at drivers/char/tpm/tpm_vtp=
+m_proxy.c:102:2:
+> > > > ./include/linux/fortify-string.h:43:33: warning: '__builtin_memset'=
+ pointer overflow between offset 164 and size [2147483648, 4294967295]
+> > > > [-Warray-bounds]
+> > > >    43 | #define __underlying_memset     __builtin_memset
+> > > >       |                                 ^
+> > >
+> > > Can you explain what that compiler warning actually means, and which
+> > > compiler it is from? Is this from a 32-bit or a 64-bit architecture?
+>
+> This is from ARCH=3Di386
+>
+> > >
+> > > It sounds like the compiler (GCC?) is hallucinating a codepath on
+>
+> Yes, GCC 11.2.
+>
+> > > which "len" is guaranteed to be >=3D2147483648, right? Why is it doin=
+g
+> > > that? Is this some kinda side effect from the fortify code?
+>
+> Right; I don't know what triggered it. I assume the "count" comparison.
+> The warning is generated with or without CONFIG_FORTIFY_SOURCE. It is
+> from adding -Warray-bounds. This is one of the last places in the kernel
+> where a warning is being thrown for this option, and it has found a lot
+> of real bugs, so Gustavo and I have been working to get the build
+> warning-clean so we can enable it globally.
+>
+> > I agree, this looks bogus, or at least the commit message neeeds alot
+> > more explaining.
+> >
+> > static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_=
+t count)
+> >
+> >         if (count > sizeof(proxy_dev->buffer))
+> >             [...]
+> >         proxy_dev->req_len =3D count;
+> >
+> > Not clear how req_len can be larger than sizeof(buffer)?
+>
+> Given the current code, I agree: it's not possible.
+>
+> As for the cause of the warning, my assumption is that since the compiler
+> only has visibility into vtpm_proxy_fops_read(), and sees size_t len set
+> from ((struct proxy_dev *)filp->private_data)->req_len, and it performs
+> range checking perhaps triggered by the "count" comparison:
+>
+>
+> static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
+>                                     size_t count, loff_t *off)
+> {
+>         struct proxy_dev *proxy_dev =3D filp->private_data;
+>         size_t len;
+>         ...
+>         len =3D proxy_dev->req_len;
+>
+>         if (count < len) {
+>                 ...
+>                 return -EIO;
+>         }
+>
+>         rc =3D copy_to_user(buf, proxy_dev->buffer, len);
+>         memset(proxy_dev->buffer, 0, len);
+>
+>
+> I haven't been able to reproduce the specific cause of why GCC decided to
+> do the bounds checking, but it's not an unreasonable thing to check for,
+> just for robustness.
 
-If both of those were true, and if the key was never reused for other purposes
-(either for other hash algorithms or for full file hashes), that would be fine.
-Obviously, the IMA policy is trusted in this context, since it's what tells the
-kernel to verify signatures in the first place.
+Ok, I think this is what's happening:
 
-But, I could see users getting this wrong and reusing keys.
 
-> 
-> > The easiest way to do this would be sign/verify the following struct:
-> > 	struct ima_file_id {
-> > 		u8 is_fsverity;
-> > 		u8 hash_algorithm;
-> > 		u8 hash[];
-> > 	};
-> > 
-> 
-> The v2 version of this patch introduces the "ima_tbs_hash" structure,
-> which is more generic, since it uses the IMA xattr record type.  Other
-> than that, I don't see a difference.
-> 
-> > This would be the *data* that is signed/verified -- meaning that it would be
-> > hashed again as part of the signature algorithm (whether that hash is built-in
-> > to the signature algorithm, as is the case for modern algorithms, or handled by
-> > the caller as is the case for legacy algorithms).
-> 
-> There seems to be an inconsistency, here, with what you said above,
-> "... ECDSA just signs/verifies a raw hash, and in fact it *must* be a
-> raw hash for it to be secure."
+$ cat bogus_bounds_warning_small.i
+struct proxy_dev {
+ unsigned char buffer[4096];
+};
 
-There isn't an inconsistency.  ECDSA is among the algorithms where the caller is
-expected to handle the hash.
+long state;
 
-It is confusing dealing with all these different signature algorithms.  I think
-the right way to think about this is in terms of what *data* is being
-signed/verified.  Currently the data is the full file contents.  I think it
-needs to be made into an annotated hash, e.g. the struct I gave.
+void vtpm_proxy_fops_read(struct proxy_dev *proxy_dev, unsigned int len) {
+  /*
+   * sz =3D=3D SIZE_MAX =3D=3D -1  because the compiler can't prove whether=
+ proxy_dev
+   * points to an array or a single object and we're using the type-0 versi=
+on.
+   */
+  int sz =3D __builtin_object_size(proxy_dev->buffer, 0);
+  _Bool check_result;
 
-public_key_verify_signature() also needs to be fixed to support both types of
-signature algorithms (caller-provided hash and internal hash) in a logical way.
-Originally it only supported caller-provided hashes, but then SM2 support was
-added and now it is super broken.
+  /* always false but must keep this check to trigger the warning */
+  if (sz >=3D 0 && sz < len) {
+    check_result =3D 0;
+  /*
+   * compiler forks the rest of the function starting at this check, probab=
+ly
+   * because it sees that a branch further down has a condition that depend=
+s on
+   * which branch we took here
+   */
+  } else if (len > 0x7fffffff/*INT_MAX*/) {
+    check_result =3D 0;
+  } else {
+    check_result =3D 1;
+  }
+  /*
+   * this part is basically duplicated, it is compiled once for the
+   * len<=3D0x7fffffff case and once for the len>0x7fffffff case
+   */
+  __builtin_memset(proxy_dev->buffer, 0, len);
 
-> > Note that both traditional
-> > and fs-verity hashes would need to use this same method for it to be secure; the
-> > kernel must not accept signatures using the old method at the same time.
-> 
-> The v2 version of this patch set signed the hash of a hash just for fs-
-> verity signatures.  Adding the equivalent support for regular file
-> hashes will require the version in the IMA signature_v2_hdr to be
-> incremented.  If the version is incremented now, both signatures
-> versions should then be able to co-exist.
+  if (check_result)
+    state |=3D 1;
+}
+$ gcc -ggdb -std=3Dgnu89 -Warray-bounds -m32 -mregparm=3D3 -fno-pic
+-march=3Di686 -O2 -c -o bogus_bounds_warning.o
+bogus_bounds_warning_small.i
+bogus_bounds_warning_small.i: In function =E2=80=98vtpm_proxy_fops_read=E2=
+=80=99:
+bogus_bounds_warning_small.i:32:3: warning: =E2=80=98__builtin_memset=E2=80=
+=99
+specified bound between 2147483648 and 4294967295 exceeds maximum
+object size 2147483647 [-Wstringop-overflow=3D]
+   32 |   __builtin_memset(proxy_dev->buffer, 0, len);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-That seems like a good thing, unless you want users to be responsible for only
-ever signing full file hashes *or* fs-verity file hashes with each key.  That
-seems like something that users will get wrong.
 
-- Eric
+Here's what the CFG of the generated machine code looks like - you can
+see how the function is split up starting at the "len > 0x7fffffff"
+check: https://var.thejh.net/gcc_bounds_warning_cfg.png
+
+(You can also see how the two copies of __builtin_memset() generate
+some pretty gross and bloated code...)
