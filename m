@@ -2,209 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E66493ACF
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 14:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBC4493B0D
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Jan 2022 14:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354523AbiASNEB (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 19 Jan 2022 08:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354077AbiASNEA (ORCPT
+        id S1354738AbiASNZQ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 19 Jan 2022 08:25:16 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4432 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350184AbiASNZP (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 19 Jan 2022 08:04:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6113C061574;
-        Wed, 19 Jan 2022 05:04:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4836161472;
-        Wed, 19 Jan 2022 13:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09FDAC004E1;
-        Wed, 19 Jan 2022 13:03:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642597439;
-        bh=Lonhk8FqgowFMZcLwH8PUOtrhO/x4T7psKE6RNUkLVI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u4/CIqSeBQ0KxYtXJAGP6wLuBNozhE5tihrZmI6FE0x6wu9xulmTXiPeiUSXAnIkg
-         mGxWQ6IbmGA49mh18dK6nlv7y8YZ/s9IrPRaVs6EQUDfiTJOLFWc9KCT9YDhdFtxsq
-         aS5FTi+D/ZN7H/CqO7qhEH+a5Iwo4lAtQAArl2j5gZIwPVeWfa29AsoQ8DUiVKITyQ
-         /nPPzAhwpVonHAsZLIwSMugnapOkE5JFw/rXO4CwY14lCZyfk5x5jXnTFxywcMU5z9
-         Ano8FwSoDsp95xFClhT07NB9zDpX7MtZkXfjoQS8St94HTv1Nka3zTWdvdg0hOt7U0
-         Z7eyXyJJkKYyA==
-Date:   Wed, 19 Jan 2022 14:03:52 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [PATCH v8 19/19] ima: Enable IMA namespaces
-Message-ID: <20220119130352.wwpkieyjxzdku5mq@wittgenstein>
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
- <20220104170416.1923685-20-stefanb@linux.vnet.ibm.com>
- <20220114144515.vbler7ae3jqebhec@wittgenstein>
- <8f7e0bcc-cd7c-723d-c544-300b5e8f3873@linux.ibm.com>
- <20220119094613.cxxxmz5qbuehd7c3@wittgenstein>
- <e3604476-5255-109e-994f-01e09b5340c0@linux.ibm.com>
+        Wed, 19 Jan 2022 08:25:15 -0500
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jf5wV6qk1z67HKP;
+        Wed, 19 Jan 2022 21:24:58 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 19 Jan 2022 14:25:12 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
+ Wed, 19 Jan 2022 14:25:12 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Antony Vennard <antony@vennard.ch>
+CC:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+Subject: RE: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Thread-Topic: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+Thread-Index: AQHYBxWUAJoIvMeqLk2UYoD6PZRMZ6xnP9oAgAAHlwCAAfOkgIAAJTmAgAD7bXA=
+Date:   Wed, 19 Jan 2022 13:25:12 +0000
+Message-ID: <d71ea8ae51e1438c894b44b011f3efda@huawei.com>
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <YeV+jkGg6mpQdRID@zx2c4.com>
+ <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
+ <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
+ <YedHR93wPLS/JEsE@sol.localdomain>
+In-Reply-To: <YedHR93wPLS/JEsE@sol.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.214.59]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e3604476-5255-109e-994f-01e09b5340c0@linux.ibm.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 07:45:22AM -0500, Stefan Berger wrote:
-> 
-> On 1/19/22 04:46, Christian Brauner wrote:
-> > On Tue, Jan 18, 2022 at 01:09:12PM -0500, Stefan Berger wrote:
-> > > On 1/14/22 09:45, Christian Brauner wrote:
-> > > > On Tue, Jan 04, 2022 at 12:04:16PM -0500, Stefan Berger wrote:
-> > > > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > > > 
-> > > > > Introduce the IMA_NS in Kconfig for IMA namespace enablement.
-> > > > > 
-> > > > > Enable the lazy initialization of an IMA namespace when a user mounts
-> > > > > SecurityFS. Now a user_namespace will get a pointer to an ima_namespace
-> > > > > and therefore add an implementation of get_current_ns() that returns this
-> > > > > pointer.
-> > > > > 
-> > > > > get_current_ns() may now return a NULL pointer for as long as the IMA
-> > > > > namespace hasn't been created, yet. Therefore, return early from those
-> > > > > functions that may now get a NULL pointer from this call. The NULL
-> > > > > pointer can typically be treated similar to not having an IMA policy set
-> > > > > and simply return early from a function.
-> > > > > 
-> > > > > Implement ima_ns_from_file() for SecurityFS-related files where we can
-> > > > > now get the IMA namespace via the user namespace pointer associated
-> > > > > with the superblock of the SecurityFS filesystem instance. Since
-> > > > > the functions using ima_ns_from_file() will only be called after an
-> > > > > ima_namesapce has been allocated they will never get a NULL pointer
-> > > > > for the ima_namespace.
-> > > > > 
-> > > > > Switch access to userns->ima_ns to use acquire/release semantics to ensure
-> > > > > that a newly created ima_namespace structure is fully visible upon access.
-> > > > > 
-> > > > > Replace usage of current_user_ns() with ima_ns_from_user_ns() that
-> > > > > implements a method to derive the user_namespace from the given
-> > > > > ima_namespace. It leads to the same result.
-> > > > > 
-> > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > > ---
-> > > [...]
-> > > > > diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> > > > > index b7dbc687b6ff..5a9b511ebbae 100644
-> > > > > --- a/security/integrity/ima/ima_policy.c
-> > > > > +++ b/security/integrity/ima/ima_policy.c
-> > > > > @@ -1333,6 +1333,7 @@ static unsigned int ima_parse_appraise_algos(char *arg)
-> > > > >    static int ima_parse_rule(struct ima_namespace *ns,
-> > > > >    			  char *rule, struct ima_rule_entry *entry)
-> > > > >    {
-> > > > > +	struct user_namespace *user_ns = ima_ns_to_user_ns(ns);
-> > > > So I think ima_policy_write() and therefore ima_parse_rule() can
-> > > > legitimately be reached at least from an ancestor userns but also from a
-> > > > completely unrelated userns via securityfs. Sorry, I didn't see this
-> > > > earlier. Think of the following two scenarios:
-> > > > 
-> > > > * userns1: unshare -U --map-root --mount
-> > > > -----------------------------------------
-> > > >      mount -t securityfs securityfs /userns1_securityfs
-> > > >      fd_in_userns1 = open("/userns1_securityfs/ima_file, O_RDWR);
-> > > > 
-> > > >      /* I _think_ that sending of fds here should work but I haven't
-> > > >       * bothered to recheck the scm code as I need to do some driving in a
-> > > >       * little bit so I'm running out of time...
-> > > >       */
-> > > >      send_fd_scm_rights(fd_in_userns1, task_in_userns2);
-> > > > 
-> > > > * userns2: unshare -U --map-root --mount
-> > > > -----------------------------------------
-> > > >      fd_from_userns1 = receive_fd_scm_rights();
-> > > >      write_policy(fd_from_userns1, "my fancy policy");
-> > > Passing an fd around like this presumably indicates that you intend to let
-> > > the recipient read/write to it.
-> > Yes.
-> > 
-> > > 
-> > > > It also means that if you inherit an fd from a more privileged imans
-> > > > instance you can write to it:
-> > > Now in this example we have to assume that root is making a mistake passing
-> > > the file descriptor around?
-> > > 
-> > > # ls -l /sys/kernel/security/ima/
-> > > total 0
-> > > -r--r-----. 1 root root 0 Jan 18 12:48 ascii_runtime_measurements
-> > > -r--r-----. 1 root root 0 Jan 18 12:48 binary_runtime_measurements
-> > > -rw-------. 1 root root 0 Jan 18 12:48 policy
-> > > -r--r-----. 1 root root 0 Jan 18 12:48 runtime_measurements_count
-> > > -r--r-----. 1 root root 0 Jan 18 12:48 violations
-> > > 
-> > > > * initial_userns:
-> > > 
-> > > So that's the host, right? And this is a 2nd independent example from the
-> > > first.
-> > Yes, these are just two examples to give a more complete idea of the
-> > semantics by specifying two cases and how ima would behave.
-> > 
-> > > > ------------------
-> > > >      mount -t securityfs securityfs /initial_securityfs
-> > > > 
-> > > >      fd_in_initial_securityfs = open("/initial_securityfs/ima_file, O_RDWR);
-> > > > 
-> > > >      pid = fork():
-> > > >      if (pid == 0) {
-> > > > 	unshare(CLONE_NEWUSER);
-> > > > 	/* write idmapping for yourself */
-> > > > 
-> > > > 	write_policy(fd_in_initial_securityfs, "my fancy policy");
-> > > >      }
-> > > > 
-> > > > would allow an unprivileged caller to alter the host's ima policy (as
-> > > > you can see the example requires cooperation).
-> > > Sorry, not currently following. Root is the only one being able to open that
-> > > IMA files on the host, right? Is this a mistake here where root passed the
-> > Yes.
-> > 
-> > > fd onto the child and that child is not trusted to mess with the fd
-> > > including passing it on further?
-> > This is just an example what the current semantics mean in practice.
-> > The above code snippet is neither good nor bad by itself as that depends
-> > on context:
-> > 
-> > 1) Let's say for whatever reason you would like to let unprivileged
-> >     containers add policy rules (sorry in case I'm using the wrong ima
-> >     vernacular) for themselves to the initial ima namespace during
-> >     startup. That can be a rather valid and important use-case. Then this
-> >     code snipped above where root opens a policy fd in the host
-> >     securityfs instance and then let's the container access it across
-> >     fork() + post namespace creation is "good" as it will allow the
-> >     container to write the rules during setup while e.g. letting the
-> >     container manager process (the code prior to fork) continue doing
-> >     other stuff.
-> 
-> I would agree to supporting passing the fd to other containers to have them
-> add rules to the policy, if that's what is intended.
-> 
-> 
-> > 
-> > 2) If you only want to ever allow container manager on the host write
-> >     rules for the container in the initial ima ns but never the container
-> >     setup process itself then the above code is "bad". The policy fd
-> >     should've been closed before the fork() and definitely be opened
-> >     o-cloexec.
-> 
-> I would treat the IMA files' file descriptors like those of fd =
-> open("/top/secret/file", O_RDWR) assuming the programmer knows the
-> implications of passing the fd around, including knowing that open fds are
-> inherited by child processes... I don't see that there's anything wrong with
-> that.
-
-Agreed. And we do already have these semantics for a range of fds
-including splitting open and write between callers and namespaces.
+PiBGcm9tOiBFcmljIEJpZ2dlcnMgW21haWx0bzplYmlnZ2Vyc0BrZXJuZWwub3JnXQ0KPiBTZW50
+OiBXZWRuZXNkYXksIEphbnVhcnkgMTksIDIwMjIgMTI6MDQgQU0NCj4gT24gVHVlLCBKYW4gMTgs
+IDIwMjIgYXQgMDk6NTA6MjFQTSArMDEwMCwgQW50b255IFZlbm5hcmQgd3JvdGU6DQo+ID4NCj4g
+PiBIaSBBbGwsDQo+ID4NCj4gPiBPbiAxNy8wMS8yMDIyIDE2OjAyLCBKYW1lcyBCb3R0b21sZXkg
+d3JvdGU6DQo+ID4gPiBPbiBNb24sIDIwMjItMDEtMTcgYXQgMTU6MzQgKzAxMDAsIEphc29uIEEu
+IERvbmVuZmVsZCB3cm90ZToNCj4gPiA+ID4gSGksDQo+ID4gPiA+DQo+ID4gPiA+IFdoaWxlIGl0
+IGxvb2tzIGxpa2UgeW91IHB1dCBhIGxvdCBvZiB3b3JrIGludG8gdGhpcyBwYXRjaHNldCwgSSB0
+aGluaw0KPiA+ID4gPiB0aGUgZ2VuZXJhbCBpZGVhIG9mIGFkZGluZyBQR1AgKnRvIHRoZSBrZXJu
+ZWwqIGlzIGEgcHJldHR5IGRhdW50aW5nDQo+ID4gPiA+IHByb3Bvc2l0aW9uLiBUaGUgZ2VuZXJh
+bCBjb25zZW5zdXMgaW4gdGhlIGNyeXB0byBlbmdpbmVlcmluZyB3b3JsZCBpcw0KPiA+ID4gPiB0
+aGF0IFBHUCBvdWdodCB0byBiZSBvbiBpdHMgd2F5IG91dC4gV2UgZGVmaW5pdGVseSBkb24ndCB3
+YW50IHRvDQo+ID4gPiA+IHBlcnBldHVhdGUgdGhpcyBwcm9qZWN0LW9uLWxpZmUtc3VwcG9ydCBp
+bnRvIHRoZSBwZXJtYW5lbmNlIG9mIGtlcm5lbA0KPiA+ID4gPiBjb2RlLiBTb21lIHF1aWNrIEdv
+b2dsZSBzZWFyY2hlcyB3aWxsIHJldmVhbCBhIGxpdGFueSBvZiBibG9nIHBvc3RzDQo+ID4gPiA+
+IHRvIHRoZSB0dW5lIG9mLCAid2h5IG9oIHdoeSBhcmUgcGVvcGxlIHN0aWxsIHVzaW5nIHRoaXM/
+IiBIZXJlJ3Mgb25lDQo+ID4gPiA+IGZyb20gMjAxOToNCj4gPiA+ID4gaHR0cHM6Ly9sYXRhY29y
+YS5taWNyby5ibG9nLzIwMTkvMDcvMTYvdGhlLXBncC1wcm9ibGVtLmh0bWwgLiBJDQo+ID4gPiA+
+IHRoaW5rIHRoZXNlIGFyZSBhcmd1bWVudHMgdG8gdGFrZSBzZXJpb3VzbHkuIEFuZCBldmVuIGlm
+IHlvdSBkaXNhZ3JlZQ0KPiA+ID4gPiB3aXRoIHNvbWUgcGFydHMsIHlvdSBtYXkgd2FudCB0byBj
+b25zaWRlciB3aGV0aGVyIHRoZSByZW1haW5pbmcgcGFydHMNCj4gPiA+ID4gd2FycmFudCBhIGJp
+dCBvZiBwYXVzZSBiZWZvcmUgYWRkaW5nIHRoaXMgdG8gdGhlIGtlcm5lbCBhbmQNCj4gPiA+ID4g
+cGVycGV0dWF0aW5nIFBHUCdzIGRlc2lnbiBmdXJ0aGVyLg0KPiA+DQo+ID4gU28gd2hpbGUgSSB1
+bmRlcnN0YW5kIHdoeSB0aGlzIGlzIGJlaW5nIHByb3Bvc2VkIGFuZCBjbGVhcmx5IGVmZm9ydCBo
+YXMgZ29uZQ0KPiA+IGludG8gaXQsIEkgYWxzbyB0aGluayBpdCBpcyBub3QgdGhlIHJpZ2h0IGFw
+cHJvYWNoLiBJdCBzZWVtcyB0aGlzIHByb3Bvc2FsDQo+ID4gaXMgdG8gaW5jbHVkZSBhIGZ1bGwg
+UEdQIHBhY2tldCBwYXJzZXIgYW5kIHZlcmlmaWNhdGlvbiBsb2dpYyBpbiB0aGUga2VybmVsDQo+
+ID4gYXMgYW4gZXF1aXZhbGVudCB0byBhbGxvdyBQR1Agc2lnbmF0dXJlcyB0byBiZSBzdWJtaXR0
+ZWQgdmlhDQo+ID4gRlNfSU9DX0VOQUJMRV9WRVJJVFk6DQo+ID4NCj4gPiAiRlNfSU9DX0VOQUJM
+RV9WRVJJVFkgYWNjZXB0cyBhIHBvaW50ZXIgdG8gYSBQS0NTIzcgZm9ybWF0dGVkIGRldGFjaGVk
+DQo+ID4gc2lnbmF0dXJlIGluIERFUiBmb3JtYXQgb2YgdGhlIGZpbGXigJlzIGZzLXZlcml0eSBk
+aWdlc3QuIg0KPiA+DQo+IA0KPiBJdCdzIHdvcnRoIG5vdGluZyB0aGF0IGlmIGZzLXZlcml0eSBi
+dWlsdC1pbiBzaWduYXR1cmVzIGFyZSB1c2VkLCBhIHRydXN0ZWQNCj4gdXNlcnNwYWNlIHByb2dy
+YW0gaXMgc3RpbGwgcmVxdWlyZWQgdG8gZGV0ZXJtaW5lIGFuZCBlbmZvcmNlIHRoZSBwb2xpY3kg
+b2Ygd2hpY2gNCj4gZmlsZXMgYXJlIHJlcXVpcmVkIHRvIGJlIHNpZ25lZC4gIFRoZSBrZXJuZWwg
+b25seSBoYW5kbGVzIHRoZSBhY3R1YWwgc2lnbmF0dXJlDQo+IHZlcmlmaWNhdGlvbi4gIFRoaXMg
+d2FzIGJhc2ljYWxseSBhIHByb29mLW9mLWNvbmNlcHQgd2hpY2ggcmV1c2VkIHRoZSBrZXJuZWwn
+cw0KPiBtb2R1bGUgc2lnbmF0dXJlIHZlcmlmaWNhdGlvbiBjb2RlICh3aGljaCBoYXBwZW5zIHRv
+IHVzZSBQS0NTIzcpLg0KDQpKdXN0IHRvIHNob3cgaG93IHRoZSBmc3Zlcml0eSBjb2RlIHdpbGwg
+bG9vayBsaWtlIGFmdGVyIGFkZGluZyBzdXBwb3J0DQpmb3IgUEdQIHNpZ25hdHVyZXM6DQoNCisg
+ICAgICAgc3dpdGNoICh2aS0+dHlwZSkgew0KKyAgICAgICBjYXNlIFBLRVlfSURfUEtDUzc6DQor
+ICAgICAgICAgICAgICAgZXJyID0gdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZShkLCBzaXplb2YoKmQp
+ICsgaGFzaF9hbGctPmRpZ2VzdF9zaXplLA0KKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgc2lnbmF0dXJlLCBzaWdfc2l6ZSwgZnN2ZXJpdHlfa2V5cmluZywNCisg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFZFUklGWUlOR19VTlNQ
+RUNJRklFRF9TSUdOQVRVUkUsDQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBOVUxMLCBOVUxMKTsNCisgICAgICAgICAgICAgICBicmVhazsNCisgICAgICAgY2Fz
+ZSBQS0VZX0lEX1BHUDoNCisgICAgICAgICAgICAgICBlcnIgPSB2ZXJpZnlfcGdwX3NpZ25hdHVy
+ZShkLCBzaXplb2YoKmQpICsgaGFzaF9hbGctPmRpZ2VzdF9zaXplLA0KKyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNpZ25hdHVyZSwgc2lnX3NpemUsIGZzdmVyaXR5
+X2tleXJpbmcsDQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVkVS
+SUZZSU5HX1VOU1BFQ0lGSUVEX1NJR05BVFVSRSwNCisgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBOVUxMLCBOVUxMKTsNCisgICAgICAgICAgICAgICBicmVhazsNCisg
+ICAgICAgZGVmYXVsdDoNCisgICAgICAgICAgICAgICBlcnIgPSAtRU9QTk9UU1VQUDsNCisgICAg
+ICAgfQ0KDQpBcyB5b3UgY2FuIHNlZSwgdGhlIGNoYW5nZSB3aWxsIGJlIHN0cmFpZ2h0Zm9yd2Fy
+ZC4NCg0KT24gdXNlciBzcGFjZSBzaWRlLCBJIHBsYW4gdG8gYWRkIHRoZSBjYXBhYmlsaXR5IHRv
+IGZzdmVyaXR5LXV0aWxzDQp0byBwcm9kdWNlIGEgUEdQIHNpZ25hdHVyZSB3aXRoIHRoZSBHUEcg
+a2V5IHBhc3NlZCBieSBycG1zaWduLg0KDQo+IEknZCBlbmNvdXJhZ2UgbmV3IHVzZXJzIHRvIGVp
+dGhlciBnbyBhbGwtaW4gb24gYSB1c2Vyc3BhY2Ugc29sdXRpb24sIHVzaW5nIGENCj4gdHJ1c3Rl
+ZCB1c2Vyc3BhY2UgcHJvZ3JhbSB0byB2ZXJpZnkgc2lnbmF0dXJlcyBvZiBmcy12ZXJpdHkgZmls
+ZSBkaWdlc3RzOw0KPiAqb3IqIGdvIGFsbC1pbiBvbiBhbiBpbi1rZXJuZWwgc29sdXRpb24sIHVz
+aW5nIHRoZSBJTUEgc3VwcG9ydCBmb3IgZnMtdmVyaXR5DQo+IHdoaWNoIE1pbWkgWm9oYXIgaXMg
+d29ya2luZyBvbi4gIEEgdXNlcnNwYWNlIHNvbHV0aW9uIGNvdWxkIHVzZSBhIHNpbXBsZQ0KDQpQ
+cm9iYWJseSwgdGhlcmUgaXMgYWxzbyB0aGUgdGhpcmQgb3B0aW9uIG9mIGFuIExTTSAoc3VjaCBh
+cyBJUEUpIHRoYXQgZ2V0cw0KZnJvbSBmc3Zlcml0eSB0aGUgaW5mb3JtYXRpb24gaWYgdGhlIHNp
+Z25hdHVyZSB3YXMgdmFsaWRhdGVkLCBhbmQgZGVjaWRlDQpkZXBlbmRpbmcgb24gYSBwb2xpY3ku
+IEkgd291bGQgYWxzbyBleHBvc2UgdGhlIGluZm9ybWF0aW9uIGFib3V0IHRoZQ0KcmVzdHJpY3Rp
+b24gaW1wb3NlZCBvbiB0aGUga2V5cmluZyBmcm9tIHdoaWNoIHRoZSBrZXkgdXNlZCB0byB2ZXJp
+ZnkNCnRoZSBzaWduYXR1cmUgd2FzIGZvdW5kLg0KDQpNYXliZSBJTUEgY291bGQgdXNlIHRoaXMg
+YXBwcm9hY2ggdG9vLCB3aGljaCB3b3VsZCBhdm9pZCB0aGUgbmVlZA0Kb2YgaW50cm9kdWNpbmcg
+YW5vdGhlciBzaWduYXR1cmUgZm9ybWF0LiBJZiB0aGF0IGlzIGRlc2lyZWQsIHlvdSBtaWdodA0K
+d2FudCB0byBjb29yZGluYXRlIHdpdGggdGhlIGF1dGhvcnMgb2YgYSBGZWRvcmEgZmVhdHVyZToN
+Cg0KaHR0cHM6Ly9mZWRvcmFwcm9qZWN0Lm9yZy93aWtpL0NoYW5nZXMvRnNWZXJpdHlSUE0NCg0K
+d2hpY2gsIGFzIGZhciBhcyBJIGtub3csIHBsYW4gdG8gdXNlIHRoZSBzaWduYXR1cmUgZm9ybWF0
+IGFscmVhZHkNCnVwc3RyZWFtZWQuDQoNClRoYW5rcw0KDQpSb2JlcnRvDQoNCkhVQVdFSSBURUNI
+Tk9MT0dJRVMgRHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQpNYW5hZ2luZyBEaXJlY3Rvcjog
+TGkgUGVuZywgWmhvbmcgUm9uZ2h1YQ0KDQo+IHNpZ25hdHVyZSBmb3JtYXQsIHVzaW5nIGEgbW9k
+ZXJuIGFsZ29yaXRobSBzdWNoIGFzIEVkMjU1MTkuICBJTUEgdXNlcyBhIHNpbXBsZQ0KPiBzaWdu
+YXR1cmUgZm9ybWF0IHRvbywgdGhvdWdoIGl0IHVzZXMgYSBjb21wbGV4IGZvcm1hdCAoWC41MDkp
+IGZvciBwdWJsaWMga2V5cy4NCj4gDQo+IC0gRXJpYw0K
