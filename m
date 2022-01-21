@@ -2,164 +2,153 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9074349631E
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jan 2022 17:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED03249676A
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jan 2022 22:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351268AbiAUQu5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 21 Jan 2022 11:50:57 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4440 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349221AbiAUQu5 (ORCPT
+        id S230433AbiAUVkF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 21 Jan 2022 16:40:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230181AbiAUVkE (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 21 Jan 2022 11:50:57 -0500
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JgQKQ2tgTz67qjY;
-        Sat, 22 Jan 2022 00:47:38 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 21 Jan 2022 17:50:52 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
- Fri, 21 Jan 2022 17:50:52 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Antony Vennard <antony@vennard.ch>
-CC:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-Subject: RE: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Topic: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
-Thread-Index: AQHYBxWUAJoIvMeqLk2UYoD6PZRMZ6xnP9oAgAAHlwCAAfOkgIAAJTmAgAD7bXCAA18/UA==
-Date:   Fri, 21 Jan 2022 16:50:52 +0000
-Message-ID: <289f4694fc084f029187af7e8a3120cc@huawei.com>
-References: <20220111180318.591029-1-roberto.sassu@huawei.com>
- <YeV+jkGg6mpQdRID@zx2c4.com>
- <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
- <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
- <YedHR93wPLS/JEsE@sol.localdomain>
- <d71ea8ae51e1438c894b44b011f3efda@huawei.com>
-In-Reply-To: <d71ea8ae51e1438c894b44b011f3efda@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 21 Jan 2022 16:40:04 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B313C06173D
+        for <linux-integrity@vger.kernel.org>; Fri, 21 Jan 2022 13:40:04 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z22so44758893edd.12
+        for <linux-integrity@vger.kernel.org>; Fri, 21 Jan 2022 13:40:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2XzEYKOvGUCpJX1XC7Y0iE2kDUqIGFs9tTF2AQ87lvo=;
+        b=1FHUwnsgGA6Odi7wwfQc5WTlGMrmy+53Pg9yOCxP/YPWosvijOtSsQksoXSMP80AN6
+         zx7Sw2lu5mFVfkt9M4kv+9JfLb6cW1w8/qmu7AhBlpwYbQJR9WHKAodsaqYSUeCe2Hwn
+         g7M3fvX0NEzhtiSsbTOeeU+Xr0frSH1XRWjYsrx/W18xY0sfmY3JC6o91EGUkqUwGRPh
+         mqmEeJT4iUviFmC0wGbwh5lGxeZhFvb8InCG8tmpcxOqSrvQrcMuQORxFV+XztoLiyBe
+         odv5PPEvge6mxsVn8eDdZRbCARMKAzxxKCu2DoWhaR56lHqLUwgqfQnPxbsnfUDxq7Z9
+         mSkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2XzEYKOvGUCpJX1XC7Y0iE2kDUqIGFs9tTF2AQ87lvo=;
+        b=ox43rGnbAt9D7uDIh7td7clJB+RHHYFNRyRBAUIusy97MN+B/TfLmk7OpbVQSOrOq+
+         ELEE7rT21CX2AHJCQuHCePlupXQ1OpX3hektpxYxvChDUJXBrORlUcHFporE3X+xm/s4
+         GE1s2RVmACfZClYjOjmNhAntTpS8olRDyJXKw0Dv1N86iy61GcHE32rcCHYIc6UzEMSO
+         tj2vlhyn+bes8f1QIvxo6O2cqEdh7W6r8403AE7ED/aExWIgma/djr6ECiR0tx/5wkhR
+         KiMcYjRZiTo/XM0cSUfimTl63PyxAwUzGrT7kZMmzc3i07/rDmpkvrLCnRy3zG33S8eB
+         d5xg==
+X-Gm-Message-State: AOAM531X7rIm+ztoOfes0Vqiem8m+1jjOvrc2sdEfstjs7Oiowq5NR0Z
+        kMEcx7QKR0Y+OUsh0k3E3QZY2/8Ez2asOs/aJs3C
+X-Google-Smtp-Source: ABdhPJyQLJtPj7Mu2Mv0ZwC2SSr2Iox19K/oxdj+523DvOIjsMyu/b4DP8NVvcO9V+LRwi9GrtbhSc7hL9jqXgNDk14=
+X-Received: by 2002:aa7:d407:: with SMTP id z7mr5819912edq.331.1642801202509;
+ Fri, 21 Jan 2022 13:40:02 -0800 (PST)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+References: <1630070917-9896-1-git-send-email-ross.philipson@oracle.com>
+ <CAHC9VhTJG24iG=U0geO-ZhC6OogxOu4icBrNY22+qRNpWd5PBQ@mail.gmail.com>
+ <456caf8c-b79a-e8b0-581f-3504240466ff@apertussolutions.com> <CAHC9VhSZx7j2sEs1H3ON-eDoeWdtXPC7XNQcv5D1WbnP=4Lchg@mail.gmail.com>
+In-Reply-To: <CAHC9VhSZx7j2sEs1H3ON-eDoeWdtXPC7XNQcv5D1WbnP=4Lchg@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 21 Jan 2022 16:39:51 -0500
+Message-ID: <CAHC9VhThAbwuy+wXZfeMorc0QZ19FOfh0rk7uqaOj7uHvruM0Q@mail.gmail.com>
+Subject: Re: [PATCH v4 00/14] x86: Trenchboot secure dynamic launch Linux
+ kernel support
+To:     "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Cc:     Ross Philipson <ross.philipson@oracle.com>,
+        trenchboot-devel@googlegroups.com, linux-kernel@vger.kernel.org,
+        x86@kernel.org, iommu@lists.linux-foundation.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        luto@amacapital.net, kanth.ghatraju@oracle.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-PiBGcm9tOiBSb2JlcnRvIFNhc3N1IFttYWlsdG86cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tXQ0K
-PiBTZW50OiBXZWRuZXNkYXksIEphbnVhcnkgMTksIDIwMjIgMjoyNSBQTQ0KPiA+IEZyb206IEVy
-aWMgQmlnZ2VycyBbbWFpbHRvOmViaWdnZXJzQGtlcm5lbC5vcmddDQo+ID4gU2VudDogV2VkbmVz
-ZGF5LCBKYW51YXJ5IDE5LCAyMDIyIDEyOjA0IEFNDQo+ID4gT24gVHVlLCBKYW4gMTgsIDIwMjIg
-YXQgMDk6NTA6MjFQTSArMDEwMCwgQW50b255IFZlbm5hcmQgd3JvdGU6DQo+ID4gPg0KPiA+ID4g
-SGkgQWxsLA0KPiA+ID4NCj4gPiA+IE9uIDE3LzAxLzIwMjIgMTY6MDIsIEphbWVzIEJvdHRvbWxl
-eSB3cm90ZToNCj4gPiA+ID4gT24gTW9uLCAyMDIyLTAxLTE3IGF0IDE1OjM0ICswMTAwLCBKYXNv
-biBBLiBEb25lbmZlbGQgd3JvdGU6DQo+ID4gPiA+ID4gSGksDQo+ID4gPiA+ID4NCj4gPiA+ID4g
-PiBXaGlsZSBpdCBsb29rcyBsaWtlIHlvdSBwdXQgYSBsb3Qgb2Ygd29yayBpbnRvIHRoaXMgcGF0
-Y2hzZXQsIEkgdGhpbmsNCj4gPiA+ID4gPiB0aGUgZ2VuZXJhbCBpZGVhIG9mIGFkZGluZyBQR1Ag
-KnRvIHRoZSBrZXJuZWwqIGlzIGEgcHJldHR5IGRhdW50aW5nDQo+ID4gPiA+ID4gcHJvcG9zaXRp
-b24uIFRoZSBnZW5lcmFsIGNvbnNlbnN1cyBpbiB0aGUgY3J5cHRvIGVuZ2luZWVyaW5nIHdvcmxk
-IGlzDQo+ID4gPiA+ID4gdGhhdCBQR1Agb3VnaHQgdG8gYmUgb24gaXRzIHdheSBvdXQuIFdlIGRl
-ZmluaXRlbHkgZG9uJ3Qgd2FudCB0bw0KPiA+ID4gPiA+IHBlcnBldHVhdGUgdGhpcyBwcm9qZWN0
-LW9uLWxpZmUtc3VwcG9ydCBpbnRvIHRoZSBwZXJtYW5lbmNlIG9mIGtlcm5lbA0KPiA+ID4gPiA+
-IGNvZGUuIFNvbWUgcXVpY2sgR29vZ2xlIHNlYXJjaGVzIHdpbGwgcmV2ZWFsIGEgbGl0YW55IG9m
-IGJsb2cgcG9zdHMNCj4gPiA+ID4gPiB0byB0aGUgdHVuZSBvZiwgIndoeSBvaCB3aHkgYXJlIHBl
-b3BsZSBzdGlsbCB1c2luZyB0aGlzPyIgSGVyZSdzIG9uZQ0KPiA+ID4gPiA+IGZyb20gMjAxOToN
-Cj4gPiA+ID4gPiBodHRwczovL2xhdGFjb3JhLm1pY3JvLmJsb2cvMjAxOS8wNy8xNi90aGUtcGdw
-LXByb2JsZW0uaHRtbCAuIEkNCj4gPiA+ID4gPiB0aGluayB0aGVzZSBhcmUgYXJndW1lbnRzIHRv
-IHRha2Ugc2VyaW91c2x5LiBBbmQgZXZlbiBpZiB5b3UgZGlzYWdyZWUNCj4gPiA+ID4gPiB3aXRo
-IHNvbWUgcGFydHMsIHlvdSBtYXkgd2FudCB0byBjb25zaWRlciB3aGV0aGVyIHRoZSByZW1haW5p
-bmcgcGFydHMNCj4gPiA+ID4gPiB3YXJyYW50IGEgYml0IG9mIHBhdXNlIGJlZm9yZSBhZGRpbmcg
-dGhpcyB0byB0aGUga2VybmVsIGFuZA0KPiA+ID4gPiA+IHBlcnBldHVhdGluZyBQR1AncyBkZXNp
-Z24gZnVydGhlci4NCj4gPiA+DQo+ID4gPiBTbyB3aGlsZSBJIHVuZGVyc3RhbmQgd2h5IHRoaXMg
-aXMgYmVpbmcgcHJvcG9zZWQgYW5kIGNsZWFybHkgZWZmb3J0IGhhcyBnb25lDQo+ID4gPiBpbnRv
-IGl0LCBJIGFsc28gdGhpbmsgaXQgaXMgbm90IHRoZSByaWdodCBhcHByb2FjaC4gSXQgc2VlbXMg
-dGhpcyBwcm9wb3NhbA0KPiA+ID4gaXMgdG8gaW5jbHVkZSBhIGZ1bGwgUEdQIHBhY2tldCBwYXJz
-ZXIgYW5kIHZlcmlmaWNhdGlvbiBsb2dpYyBpbiB0aGUga2VybmVsDQo+ID4gPiBhcyBhbiBlcXVp
-dmFsZW50IHRvIGFsbG93IFBHUCBzaWduYXR1cmVzIHRvIGJlIHN1Ym1pdHRlZCB2aWENCj4gPiA+
-IEZTX0lPQ19FTkFCTEVfVkVSSVRZOg0KPiA+ID4NCj4gPiA+ICJGU19JT0NfRU5BQkxFX1ZFUklU
-WSBhY2NlcHRzIGEgcG9pbnRlciB0byBhIFBLQ1MjNyBmb3JtYXR0ZWQgZGV0YWNoZWQNCj4gPiA+
-IHNpZ25hdHVyZSBpbiBERVIgZm9ybWF0IG9mIHRoZSBmaWxl4oCZcyBmcy12ZXJpdHkgZGlnZXN0
-LiINCj4gPiA+DQo+ID4NCj4gPiBJdCdzIHdvcnRoIG5vdGluZyB0aGF0IGlmIGZzLXZlcml0eSBi
-dWlsdC1pbiBzaWduYXR1cmVzIGFyZSB1c2VkLCBhIHRydXN0ZWQNCj4gPiB1c2Vyc3BhY2UgcHJv
-Z3JhbSBpcyBzdGlsbCByZXF1aXJlZCB0byBkZXRlcm1pbmUgYW5kIGVuZm9yY2UgdGhlIHBvbGlj
-eSBvZg0KPiB3aGljaA0KPiA+IGZpbGVzIGFyZSByZXF1aXJlZCB0byBiZSBzaWduZWQuICBUaGUg
-a2VybmVsIG9ubHkgaGFuZGxlcyB0aGUgYWN0dWFsIHNpZ25hdHVyZQ0KPiA+IHZlcmlmaWNhdGlv
-bi4gIFRoaXMgd2FzIGJhc2ljYWxseSBhIHByb29mLW9mLWNvbmNlcHQgd2hpY2ggcmV1c2VkIHRo
-ZSBrZXJuZWwncw0KPiA+IG1vZHVsZSBzaWduYXR1cmUgdmVyaWZpY2F0aW9uIGNvZGUgKHdoaWNo
-IGhhcHBlbnMgdG8gdXNlIFBLQ1MjNykuDQo+IA0KPiBKdXN0IHRvIHNob3cgaG93IHRoZSBmc3Zl
-cml0eSBjb2RlIHdpbGwgbG9vayBsaWtlIGFmdGVyIGFkZGluZyBzdXBwb3J0DQo+IGZvciBQR1Ag
-c2lnbmF0dXJlczoNCj4gDQo+ICsgICAgICAgc3dpdGNoICh2aS0+dHlwZSkgew0KPiArICAgICAg
-IGNhc2UgUEtFWV9JRF9QS0NTNzoNCj4gKyAgICAgICAgICAgICAgIGVyciA9IHZlcmlmeV9wa2Nz
-N19zaWduYXR1cmUoZCwgc2l6ZW9mKCpkKSArIGhhc2hfYWxnLT5kaWdlc3Rfc2l6ZSwNCj4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2lnbmF0dXJlLCBzaWdf
-c2l6ZSwgZnN2ZXJpdHlfa2V5cmluZywNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgVkVSSUZZSU5HX1VOU1BFQ0lGSUVEX1NJR05BVFVSRSwNCj4gKyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTlVMTCwgTlVMTCk7DQo+ICsg
-ICAgICAgICAgICAgICBicmVhazsNCj4gKyAgICAgICBjYXNlIFBLRVlfSURfUEdQOg0KPiArICAg
-ICAgICAgICAgICAgZXJyID0gdmVyaWZ5X3BncF9zaWduYXR1cmUoZCwgc2l6ZW9mKCpkKSArIGhh
-c2hfYWxnLT5kaWdlc3Rfc2l6ZSwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHNpZ25hdHVyZSwgc2lnX3NpemUsIGZzdmVyaXR5X2tleXJpbmcsDQo+ICsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBWRVJJRllJTkdfVU5TUEVDSUZJ
-RURfU0lHTkFUVVJFLA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgTlVMTCwgTlVMTCk7DQo+ICsgICAgICAgICAgICAgICBicmVhazsNCj4gKyAgICAgICBkZWZh
-dWx0Og0KPiArICAgICAgICAgICAgICAgZXJyID0gLUVPUE5PVFNVUFA7DQo+ICsgICAgICAgfQ0K
-PiANCj4gQXMgeW91IGNhbiBzZWUsIHRoZSBjaGFuZ2Ugd2lsbCBiZSBzdHJhaWdodGZvcndhcmQu
-DQo+IA0KPiBPbiB1c2VyIHNwYWNlIHNpZGUsIEkgcGxhbiB0byBhZGQgdGhlIGNhcGFiaWxpdHkg
-dG8gZnN2ZXJpdHktdXRpbHMNCj4gdG8gcHJvZHVjZSBhIFBHUCBzaWduYXR1cmUgd2l0aCB0aGUg
-R1BHIGtleSBwYXNzZWQgYnkgcnBtc2lnbi4NCg0KQXQgdGhlIGVuZCwgaXQgd2FzIG5vdCBuZWNl
-c3NhcnkuIFdpdGggdGhpcyBwYXRjaCBzZXQsIHJwbXNpZ24gaXMgYWJsZQ0KdG8gcHJvZHVjZSBh
-IFBHUCBzaWduYXR1cmUgd2l0aG91dCBtb2RpZmljYXRpb25zIHRvIGZzdmVyaXR5LXV0aWxzOg0K
-DQpodHRwczovL2dpdGh1Yi5jb20vcm9iZXJ0b3Nhc3N1L3JwbS9jb21taXRzL2ZzdmVyaXR5LWdw
-Zy12MQ0KDQpUaGUgbW9kaWZpY2F0aW9ucyBhcmUgdmVyeSBtaW5pbWFsLCBiYXNpY2FsbHkgY29u
-c2lzdCBpbiBpbnRyb2R1Y2luZw0KdGhlIG5ldyBmdW5jdGlvbiBycG1WZXJpdHlTaWduRmlsZUdQ
-RygpIHRoYXQgY3JlYXRlcyBhIGZpbGUgd2l0aA0KdGhlIGZzdmVyaXR5X2Zvcm1hdHRlZF9kaWdl
-c3Qgc3RydWN0dXJlLCBhbmQgc2lnbnMgaXQgd2l0aCB0aGUNCmV4cG9zZWQgZnVuY3Rpb24gbWFr
-ZUdQR1NpZ25hdHVyZUFyZ3MoKS4NCg0KVGhlIGZzdmVyaXR5IHJwbSBwbHVnaW4gd29ya3Mgd2l0
-aG91dCBtb2RpZmljYXRpb24sIGFuZCB0aGUNCmtlcm5lbCB0YWtlcyBjYXJlIG9mIHRoZSB2ZXJp
-ZmljYXRpb24gb2YgdGhlIFBHUCBzaWduYXR1cmVzIHdoZW4NCmEgcGFja2FnZSBpcyBpbnN0YWxs
-ZWQuDQoNCkkgd3JvdGUgYSBtb3JlIGRldGFpbGVkIHByb2NlZHVyZSB0byBzaWduIGFuZCBpbnN0
-YWxsIGEgcGFja2FnZQ0Kd2l0aCBmc3Zlcml0eSBzaWduYXR1cmVzIGluIHRoZSBQR1AgZm9ybWF0
-LiBJdCBjYW4gYmUgZm91bmQgaGVyZToNCg0KaHR0cHM6Ly93d3cuc3Bpbmljcy5uZXQvbGlzdHMv
-ZmVkb3JhLWRldmVsL21zZzI5NjU2Mi5odG1sDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xP
-R0lFUyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQ
-ZW5nLCBaaG9uZyBSb25naHVhDQoNCj4gPiBJJ2QgZW5jb3VyYWdlIG5ldyB1c2VycyB0byBlaXRo
-ZXIgZ28gYWxsLWluIG9uIGEgdXNlcnNwYWNlIHNvbHV0aW9uLCB1c2luZyBhDQo+ID4gdHJ1c3Rl
-ZCB1c2Vyc3BhY2UgcHJvZ3JhbSB0byB2ZXJpZnkgc2lnbmF0dXJlcyBvZiBmcy12ZXJpdHkgZmls
-ZSBkaWdlc3RzOw0KPiA+ICpvciogZ28gYWxsLWluIG9uIGFuIGluLWtlcm5lbCBzb2x1dGlvbiwg
-dXNpbmcgdGhlIElNQSBzdXBwb3J0IGZvciBmcy12ZXJpdHkNCj4gPiB3aGljaCBNaW1pIFpvaGFy
-IGlzIHdvcmtpbmcgb24uICBBIHVzZXJzcGFjZSBzb2x1dGlvbiBjb3VsZCB1c2UgYSBzaW1wbGUN
-Cj4gDQo+IFByb2JhYmx5LCB0aGVyZSBpcyBhbHNvIHRoZSB0aGlyZCBvcHRpb24gb2YgYW4gTFNN
-IChzdWNoIGFzIElQRSkgdGhhdCBnZXRzDQo+IGZyb20gZnN2ZXJpdHkgdGhlIGluZm9ybWF0aW9u
-IGlmIHRoZSBzaWduYXR1cmUgd2FzIHZhbGlkYXRlZCwgYW5kIGRlY2lkZQ0KPiBkZXBlbmRpbmcg
-b24gYSBwb2xpY3kuIEkgd291bGQgYWxzbyBleHBvc2UgdGhlIGluZm9ybWF0aW9uIGFib3V0IHRo
-ZQ0KPiByZXN0cmljdGlvbiBpbXBvc2VkIG9uIHRoZSBrZXlyaW5nIGZyb20gd2hpY2ggdGhlIGtl
-eSB1c2VkIHRvIHZlcmlmeQ0KPiB0aGUgc2lnbmF0dXJlIHdhcyBmb3VuZC4NCj4gDQo+IE1heWJl
-IElNQSBjb3VsZCB1c2UgdGhpcyBhcHByb2FjaCB0b28sIHdoaWNoIHdvdWxkIGF2b2lkIHRoZSBu
-ZWVkDQo+IG9mIGludHJvZHVjaW5nIGFub3RoZXIgc2lnbmF0dXJlIGZvcm1hdC4gSWYgdGhhdCBp
-cyBkZXNpcmVkLCB5b3UgbWlnaHQNCj4gd2FudCB0byBjb29yZGluYXRlIHdpdGggdGhlIGF1dGhv
-cnMgb2YgYSBGZWRvcmEgZmVhdHVyZToNCj4gDQo+IGh0dHBzOi8vZmVkb3JhcHJvamVjdC5vcmcv
-d2lraS9DaGFuZ2VzL0ZzVmVyaXR5UlBNDQo+IA0KPiB3aGljaCwgYXMgZmFyIGFzIEkga25vdywg
-cGxhbiB0byB1c2UgdGhlIHNpZ25hdHVyZSBmb3JtYXQgYWxyZWFkeQ0KPiB1cHN0cmVhbWVkLg0K
-PiANCj4gVGhhbmtzDQo+IA0KPiBSb2JlcnRvDQo+IA0KPiBIVUFXRUkgVEVDSE5PTE9HSUVTIER1
-ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KPiBNYW5hZ2luZyBEaXJlY3RvcjogTGkgUGVuZywg
-WmhvbmcgUm9uZ2h1YQ0KPiANCj4gPiBzaWduYXR1cmUgZm9ybWF0LCB1c2luZyBhIG1vZGVybiBh
-bGdvcml0aG0gc3VjaCBhcyBFZDI1NTE5LiAgSU1BIHVzZXMgYQ0KPiBzaW1wbGUNCj4gPiBzaWdu
-YXR1cmUgZm9ybWF0IHRvbywgdGhvdWdoIGl0IHVzZXMgYSBjb21wbGV4IGZvcm1hdCAoWC41MDkp
-IGZvciBwdWJsaWMga2V5cy4NCj4gPg0KPiA+IC0gRXJpYw0K
+On Mon, Dec 6, 2021 at 3:56 PM Paul Moore <paul@paul-moore.com> wrote:
+> On Thu, Dec 2, 2021 at 11:11 AM Daniel P. Smith
+> <dpsmith@apertussolutions.com> wrote:
+> > Hi Paul!
+>
+> /me waves
+>
+> > On 11/30/21 8:06 PM, Paul Moore wrote:
+> > > On Fri, Aug 27, 2021 at 9:20 AM Ross Philipson
+> > > <ross.philipson@oracle.com> wrote:
+> > >>
+> > >> The larger focus of the Trechboot project (https://github.com/TrenchBoot) is to
+> > >> enhance the boot security and integrity in a unified manner. The first area of
+> > >> focus has been on the Trusted Computing Group's Dynamic Launch for establishing
+> > >> a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
+> > >> Trust for Measurement).
+> > >
+> > > My apologies for such a late reply, but I'm just getting around to
+> > > looking at this and I have a few questions on the basic design/flow
+> > > (below) ...
+> >
+> > No worries, thank you so much for taking the time to review.
+> >
+> > >> The basic flow is:
+> > >>
+> > >>  - Entry from the dynamic launch jumps to the SL stub
+> > >
+> > > So I'm clear, at this point the combined stub+kernel+initramfs+cmdline
+> > > image has already been loaded into memory and the SL stub is
+> > > executing, yes?
+> >
+> > That is correct.
+> >
+> > > As TrenchBoot seems to be focused on boot measurement and not
+> > > enforcing policy, I'm guessing this is considered out-of-scope (not to
+> > > mention that the combined stub+kernel image makes this less
+> > > interesting), but has any thought been given to leveraging the TXT
+> > > launch control policy, or is it simply an empty run-everything policy?
+> >
+> > The TrenchBoot model is a bit different and takes a more flexible
+> > approach to allow users to build tailored solutions. For instance Secure
+> > Launch is able to be used in a configuration that is similar to tboot.
+> > Consider the functions of tboot, it has a portion that is the
+> > post-launch kernel that handles the handover from the ACM and a portion
+> > that provides the Verified Launch policy engine, which is only capable
+> > of enforcing policy on what is contained in the Multiboot chain. The
+> > TrenchBoot approach is to introduce the Secure Launch capability into a
+> > kernel, in this case Linux, to handle the handover from the ACM, and
+> > then transition to a running user space that can contain a distribution
+> > specific policy enforcement. As an example, the TrenchBoot project
+> > contributed to the uroot project a Secure Launch policy engine which
+> > enables the creation of an initramfs image which can then be embedded
+> > into a minimal configuration Secure Launch Linux kernel ...
+>
+> Thank you for the answers, that was helpful.
+>
+> I think I initially misunderstood TrenchBoot, thinking that a Secure
+> Launch'd kernel/userspace would be the "normal" OS that would
+> transition to multi-user mode and be available for users and
+> applications.  However, on reading your response it appears that the
+> Secure Launch'd kernel/initramfs exists only to verify a secondary
+> kernel/initramfs/userspace and then kexec() into that once verified.
+>
+> > Finally if your schedule allows it and it is not too much to ask, it
+> > would be greatly appreciated if some code review could be provided.
+> > Otherwise thank you for taking the time that you have to review the
+> > approach.
+>
+> I have to admit that I'm not sure I'm the most appropriate person to
+> review all of the Intel TXT related assembly, but I could give it a
+> shot as time allows.  I would think Intel would be willing to help out
+> here if one were to ask nicely :)
+>
+> Beyond that, and with my new understanding of how TrenchBoot is
+> supposed to work, I guess my only other concern is how one might
+> verify the integrity of the Secure Launch environment on the local
+> system during boot.  My apologies if I missed some details about that
+> in your docs, responses, etc. but is this something that TrenchBoot is
+> planning on addressing (or has already addressed)?
+
+I wanted to follow-up on this thread just in case this last question
+was lost ...
+
+-- 
+paul moore
+paul-moore.com
