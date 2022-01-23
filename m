@@ -2,134 +2,103 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4684973D9
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Jan 2022 18:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FDA4975A5
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Jan 2022 22:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239355AbiAWRwb (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sun, 23 Jan 2022 12:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239389AbiAWRwX (ORCPT
+        id S240161AbiAWVAn (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Sun, 23 Jan 2022 16:00:43 -0500
+Received: from chameleon.vennard.ch ([37.35.107.252]:58038 "EHLO
+        chameleon.vennard.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240141AbiAWVAm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sun, 23 Jan 2022 12:52:23 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D36C06173D
-        for <linux-integrity@vger.kernel.org>; Sun, 23 Jan 2022 09:52:23 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nBh29-0007aH-Qo; Sun, 23 Jan 2022 18:52:09 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nBh28-00BycL-Fi; Sun, 23 Jan 2022 18:52:07 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nBh27-000tzd-1m; Sun, 23 Jan 2022 18:52:07 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH 3/5] tpm: st33zp24: Make st33zp24_remove() a void function
-Date:   Sun, 23 Jan 2022 18:51:59 +0100
-Message-Id: <20220123175201.34839-4-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
+        Sun, 23 Jan 2022 16:00:42 -0500
+Received: from localhost (localhost [IPv6:::1])
+        by chameleon.vennard.ch (Postfix) with ESMTP id 4CBCF120BBF;
+        Sun, 23 Jan 2022 21:00:36 +0000 (GMT)
+Received: from chameleon.vennard.ch ([IPv6:::1])
+        by localhost (chameleon.vennard.ch [IPv6:::1]) (amavisd-new, port 10032)
+        with ESMTP id uhevxyFMwwfF; Sun, 23 Jan 2022 21:00:30 +0000 (GMT)
+Received: from localhost (localhost [IPv6:::1])
+        by chameleon.vennard.ch (Postfix) with ESMTP id E803D120BF2;
+        Sun, 23 Jan 2022 21:00:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 chameleon.vennard.ch E803D120BF2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vennard.ch;
+        s=9ECFC226-3425-11E4-849C-FD7C69C5B08C; t=1642971630;
+        bh=wYCS3S8iRLYkdQZ1IN33mUgc56a+EDfAzR7fwxMS9Zo=;
+        h=To:From:Message-ID:Date:MIME-Version;
+        b=bqbbJtUNsjQUiDHX7Xt909aSY+UOXZPKs9GUAOWxMXoBn96OxoSykyBMkcdO+ccj7
+         y2aByqvx1ltq4mtK9O1V3wpeTtcPKLI3yvCZTTunDP1/7sCob1I4Db6Z0NRWHG8bo2
+         t5dMcYhblyqoW1RqXmmzAcYT/xP7XgQe1TJcB4OEPLsrEU9m7t8l3N6GwNsbBOGYla
+         jLxQ/6he00hOh3HkekBHOTjg18GHywyALwCkmabGqwBa3rR4dlcWrYMqRB5EJY9Txw
+         s3Ilat5vgp8ZKnR+myU3YyKIlyG3SF8q35MbyNln/zglDHEL9CuCS6ZhlxIVfE5u+o
+         r+1BtYIDg8W05npsr28eOeEkfN8ku/VTpFiDEd7oCVURwiH/PASn08Nu1BRdVMalzo
+         f+3mj5zKN4DPe8ghZc+Kzh5UBqEDTv/3UUOPATDRsjp2pMgEPYvWpEW+ptdIS/3Fq5
+         T5bewjQcquNnYDMc91GbAE04wO0bp2PCVzmxS4iKoq11+uVec3s8RUbev7ZfA/Og/S
+         FEaokvzOKFGVEZySUg+gZ2aVd7+C5NyDNvDy/M0eH5pF3RaJ3nC/dePhN6U9UTXyVY
+         2lhOYf3kk0xChgXx5ZJ6B/ic53K/uruuCYITINv6JRAyqthq6IZ1f5AogztL2r5vZZ
+         kxwMtSjC/ETEr0EqwJ9ymGwU=
+X-Virus-Scanned: amavisd-new at vennard.ch
+Received: from chameleon.vennard.ch ([IPv6:::1])
+        by localhost (chameleon.vennard.ch [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id MyYrkqBLqrMj; Sun, 23 Jan 2022 21:00:21 +0000 (GMT)
+Received: from [IPV6:2001:470:26:1b7::8a8a] (unknown [IPv6:2001:470:26:1b7::8a8a])
+        by chameleon.vennard.ch (Postfix) with ESMTPSA id 09456120BBF;
+        Sun, 23 Jan 2022 21:00:18 +0000 (GMT)
+Authentication-Results: chameleon.vennard.ch; dkim=none
+Subject: Re: [PATCH 00/14] KEYS: Add support for PGP keys and signatures
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com
+References: <20220111180318.591029-1-roberto.sassu@huawei.com>
+ <YeV+jkGg6mpQdRID@zx2c4.com>
+ <d92912bba61ee37e42d04b64073b9031604acc0f.camel@HansenPartnership.com>
+ <079f10b9-060b-3a36-2224-fa1b483cbad5@vennard.ch>
+ <YedHR93wPLS/JEsE@sol.localdomain>
+From:   Antony Vennard <antony@vennard.ch>
+Message-ID: <24206663-b0ee-8c99-28c3-da4d433dee9d@vennard.ch>
+Date:   Sun, 23 Jan 2022 22:00:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2756; h=from:subject; bh=xanM/4H9Bd80DO/mfvdHRdub2K22KGbCgYSxlx9+sdw=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBh7ZWy1e/PJkcVrROxK5T6z8YTUUNJu4Inqu5c3JNY tlgPPmKJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYe2VsgAKCRDB/BR4rcrsCdUtCA CUuyOVE/+am5ZKhqJvoFkF3PNBMcT39WEXG3AXwkYiKH2FgT5lTbJpnMcOAdo4H116CtXDR9teUVid L9tiE9achFHxhi8ALqj93x1OsCZyV2WTjl5Kb/NrmHYSdNDf/X+EJE1kbHiMHti4rNvS/BLoQYbhzp Rqfia8JhT5IEfTmF1AdM1XMHUworLm9kJT0jK2fI27nDKht7wcCrFFeX+K9Ab+cwxWqKkJqY7v1HIV sGdmfBvb4zt9p1AWBL72BWuu+Jnrz523cfsNv/cSBGhTBnRxdmvlsNAMEiXKqA63uCiileVpJHeiWy 8APu5Fm5YQKTSWe2KyIyiYvpu6qG4K
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+In-Reply-To: <YedHR93wPLS/JEsE@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Up to now st33zp24_remove() returns zero unconditionally. Make it return
-no value instead which makes it easier to see in the callers that there is
-no error to handle.
 
-Also the return value of i2c and spi remove callbacks is ignored anyway.
+On 19/01/2022 00:03, Eric Biggers wrote:
+> On Tue, Jan 18, 2022 at 09:50:21PM +0100, Antony Vennard wrote:
+>>
+>> Hi All,
 
-Link: https://lore.kernel.org/r/20220104231103.227924-1-u.kleine-koenig@pengutronix.de
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/char/tpm/st33zp24/i2c.c      | 5 +----
- drivers/char/tpm/st33zp24/spi.c      | 5 +----
- drivers/char/tpm/st33zp24/st33zp24.c | 3 +--
- drivers/char/tpm/st33zp24/st33zp24.h | 2 +-
- 4 files changed, 4 insertions(+), 11 deletions(-)
+> It's worth noting that if fs-verity built-in signatures are used, a trusted
+> userspace program is still required to determine and enforce the policy of which
+> files are required to be signed.  The kernel only handles the actual signature
+> verification.  This was basically a proof-of-concept which reused the kernel's
+> module signature verification code (which happens to use PKCS#7).
+> 
+> I'd encourage new users to either go all-in on a userspace solution, using a
+> trusted userspace program to verify signatures of fs-verity file digests;
+> *or* go all-in on an in-kernel solution, using the IMA support for fs-verity
+> which Mimi Zohar is working on.  A userspace solution could use a simple
+> signature format, using a modern algorithm such as Ed25519.  IMA uses a simple
+> signature format too, though it uses a complex format (X.509) for public keys.
 
-diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-index 7c617edff4ca..3170d59d660c 100644
---- a/drivers/char/tpm/st33zp24/i2c.c
-+++ b/drivers/char/tpm/st33zp24/i2c.c
-@@ -267,11 +267,8 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
- static int st33zp24_i2c_remove(struct i2c_client *client)
- {
- 	struct tpm_chip *chip = i2c_get_clientdata(client);
--	int ret;
- 
--	ret = st33zp24_remove(chip);
--	if (ret)
--		return ret;
-+	st33zp24_remove(chip);
- 
- 	return 0;
- }
-diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
-index a75dafd39445..ccd9e42b8eab 100644
---- a/drivers/char/tpm/st33zp24/spi.c
-+++ b/drivers/char/tpm/st33zp24/spi.c
-@@ -384,11 +384,8 @@ static int st33zp24_spi_probe(struct spi_device *dev)
- static int st33zp24_spi_remove(struct spi_device *dev)
- {
- 	struct tpm_chip *chip = spi_get_drvdata(dev);
--	int ret;
- 
--	ret = st33zp24_remove(chip);
--	if (ret)
--		return ret;
-+	st33zp24_remove(chip);
- 
- 	return 0;
- }
-diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
-index ce9efb73c144..15b393e92c8e 100644
---- a/drivers/char/tpm/st33zp24/st33zp24.c
-+++ b/drivers/char/tpm/st33zp24/st33zp24.c
-@@ -511,10 +511,9 @@ int st33zp24_probe(void *phy_id, const struct st33zp24_phy_ops *ops,
- }
- EXPORT_SYMBOL(st33zp24_probe);
- 
--int st33zp24_remove(struct tpm_chip *chip)
-+void st33zp24_remove(struct tpm_chip *chip)
- {
- 	tpm_chip_unregister(chip);
--	return 0;
- }
- EXPORT_SYMBOL(st33zp24_remove);
- 
-diff --git a/drivers/char/tpm/st33zp24/st33zp24.h b/drivers/char/tpm/st33zp24/st33zp24.h
-index 6747be1e2502..b387a476c555 100644
---- a/drivers/char/tpm/st33zp24/st33zp24.h
-+++ b/drivers/char/tpm/st33zp24/st33zp24.h
-@@ -34,5 +34,5 @@ int st33zp24_pm_resume(struct device *dev);
- 
- int st33zp24_probe(void *phy_id, const struct st33zp24_phy_ops *ops,
- 		   struct device *dev, int irq, int io_lpcpd);
--int st33zp24_remove(struct tpm_chip *chip);
-+void st33zp24_remove(struct tpm_chip *chip);
- #endif /* __LOCAL_ST33ZP24_H__ */
--- 
-2.34.1
+FWIW I checked some of the options for hardware key storage. Thales HSMs 
+support Ed25519, at least according to their marketing materials. 
+Similarly Javacard 3.1 supports (will support) X/Ed 25519/448, so when 
+tokens supporting this emerge (if they haven't already) hardware support 
+for modern algorithms should exist too.
 
+I therefore agree. Use Ed25519.
+
+Antony
