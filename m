@@ -2,32 +2,32 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E349449BCCE
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jan 2022 21:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7672D49BCFC
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jan 2022 21:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbiAYUQH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 Jan 2022 15:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
+        id S231867AbiAYUYF (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 Jan 2022 15:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiAYUQA (ORCPT
+        with ESMTP id S231904AbiAYUXz (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:16:00 -0500
+        Tue, 25 Jan 2022 15:23:55 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F229C06173B;
-        Tue, 25 Jan 2022 12:16:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DC3C06173B;
+        Tue, 25 Jan 2022 12:23:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IbFB6DTJJ4iMyawf6GaaHr11tjdCfEphnSRzGKo+FKs=; b=hiazood1qkVjV1i29ykJOnWMCG
-        pdtGgjfRr96hOK0waryYHqV7CuQ/60g6frDloZA/2zMXXtSSQKnuSTghjdm71KfQj+e/sDTIZCFy3
-        9J4RUJMLlw0WDKwiygF+M5IkUWO7f/G+k5Xdcb5vVJlyxSzHEWqFhleKyd5OJsv4RoQMiLKGVuufL
-        bCa6XqV+LdXruqudaZhXBJCpikPUHa0HuJfLOSqtAj0qqKnz5Xr7nQGgFiNC+u1JgvdPXuR5lqruO
-        Cz9ifdazAA6u/1kbSK6EbkCepDMfDq0vsfcCDZbup3nuIOB8WuAbcvUtjGhMHuzBNhACRfOpBdfOw
-        qOUzk6lQ==;
+        bh=8jiAAbr8zjyas8ne1Zsnl8EfrMwDftxtsxyZx5EZ57c=; b=Zs3kdWGPYxRaR0Lyl8LsCxUojd
+        FFbsw3pyxYrZ3IXIN8AF9RJ2qJ/Bmqcq2TAd6QT97fTEJJEFH59N5EDUXItL67rTvqu9CELDUkQ+i
+        Uq1OFX4NMD28J5kX4RmW2tWk2EloLum46S6lt5QX8psuNiE8k3FRvZ5otiABScKNxYFCnOmYjIJ7f
+        +Jf+ktkVVjy9xeba6ZX6Vk6EFOOytBwL3uw9rF5ICEep7gNmiJbbL9ISoXGxu/dq8g6Z96luSyUeh
+        S4RZni/SQBT61HceEIDWZTN/SkrD1UpDe7IJTO6rRWoQOpjyw970iqk7dkaHA9OIckeBBYkUmjUDv
+        rJLNxzvg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCSEO-009T8k-2u; Tue, 25 Jan 2022 20:15:56 +0000
-Date:   Tue, 25 Jan 2022 12:15:56 -0800
+        id 1nCSM3-009UF5-Sa; Tue, 25 Jan 2022 20:23:51 +0000
+Date:   Tue, 25 Jan 2022 12:23:51 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Michal Suchanek <msuchanek@suse.de>,
         David Howells <dhowells@redhat.com>
@@ -59,68 +59,31 @@ Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
         Sven Schnelle <svens@linux.ibm.com>,
         Baoquan He <bhe@redhat.com>,
         linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 3/6] kexec_file: Don't opencode appended signature
- verification.
-Message-ID: <YfBafIXgnLzf0QMb@bombadil.infradead.org>
+Subject: Re: [PATCH v5 4/6] module: strip the signature marker in the
+ verification function.
+Message-ID: <YfBcVy62MidVTtux@bombadil.infradead.org>
 References: <cover.1641900831.git.msuchanek@suse.de>
- <7834eb187ef67cd88fc67f10e831130e3717d776.1641900831.git.msuchanek@suse.de>
+ <96d29773b9ef418a71b1d8bbfd0a456a0f996ec6.1641900831.git.msuchanek@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7834eb187ef67cd88fc67f10e831130e3717d776.1641900831.git.msuchanek@suse.de>
+In-Reply-To: <96d29773b9ef418a71b1d8bbfd0a456a0f996ec6.1641900831.git.msuchanek@suse.de>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 12:37:45PM +0100, Michal Suchanek wrote:
-> diff --git a/include/linux/verification.h b/include/linux/verification.h
-> index a655923335ae..32db9287a7b0 100644
-> --- a/include/linux/verification.h
-> +++ b/include/linux/verification.h
-> @@ -60,5 +60,8 @@ extern int verify_pefile_signature(const void *pebuf, unsigned pelen,
->  				   enum key_being_used_for usage);
->  #endif
->  
-> +int verify_appended_signature(const void *data, unsigned long *len,
-> +			      struct key *trusted_keys, const char *what);
-> +
-
-Looks very non-module specific.
-
-> diff --git a/kernel/module_signing.c b/kernel/module_signing.c
-> index 8723ae70ea1f..30149969f21f 100644
-> --- a/kernel/module_signing.c
-> +++ b/kernel/module_signing.c
-> @@ -14,32 +14,38 @@
->  #include <crypto/public_key.h>
->  #include "module-internal.h"
->  
-> -/*
-> - * Verify the signature on a module.
-> +/**
-> + * verify_appended_signature - Verify the signature on a module with the
-> + * signature marker stripped.
-> + * @data: The data to be verified
-> + * @len: Size of @data.
-> + * @trusted_keys: Keyring to use for verification
-> + * @what: Informational string for log messages
->   */
-> -int mod_verify_sig(const void *mod, struct load_info *info)
-> +int verify_appended_signature(const void *data, unsigned long *len,
-> +			      struct key *trusted_keys, const char *what)
->  {
-> -	struct module_signature ms;
-> -	size_t sig_len, modlen = info->len;
-> +	struct module_signature *ms;
-
-There goes the abstraction, so why not make this clear where we re-use
-the struct module_signature for various things and call it as it is,
-verify_mod_appended_signature() or some such?
-
-David? Any preference?
-
-Other than that:
+On Tue, Jan 11, 2022 at 12:37:46PM +0100, Michal Suchanek wrote:
+> It is stripped by each caller separately.
+> 
+> Note: this changes the error for kexec_file from EKEYREJECTED to ENODATA
+> when the signature marker is missing.
+> 
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+> v3: - Philipp Rudo <prudo@redhat.com>: Update the commit with note about
+>       change of raturn value
+>     - the module_signature.h is now no longer needed for kexec_file
 
 Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
