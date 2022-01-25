@@ -2,49 +2,26 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FDF49B104
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jan 2022 11:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63E449B198
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jan 2022 11:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237999AbiAYJ5c (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 Jan 2022 04:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237552AbiAYJzY (ORCPT
+        id S1350406AbiAYKYS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 Jan 2022 05:24:18 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:33293 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243263AbiAYKUa (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:55:24 -0500
-X-Greylist: delayed 644 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Jan 2022 01:55:22 PST
-Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC8AC06173D;
-        Tue, 25 Jan 2022 01:55:22 -0800 (PST)
-Received: from [IPV6:2003:e9:d71e:a9f7:7a7b:6f31:a637:f96b] (p200300e9d71ea9f77a7b6f31a637f96b.dip0.t-ipconnect.de [IPv6:2003:e9:d71e:a9f7:7a7b:6f31:a637:f96b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: stefan@datenfreihafen.org)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id F07DEC038E;
-        Tue, 25 Jan 2022 10:44:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
-        s=2021; t=1643103874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GoIG+75u1/C8Q0IQMWQkza+f14Geqz2ci3clcv5LbbA=;
-        b=sGVaqmb8ajP7SMAimYbwmLeoz3qwgAKJtXKJhVBI6LVnprU3zcENtw8CSuIVtlDP12Ftcg
-        omtJC4WBLS9wYTTYBNtwuVwIpt9p+QXLrBu2J5mSbkoUdwkk6Q2U+dEAkWJcH84zrQEyei
-        x733CU2siv1QufCl/+nKqBu3Gb9hr+Y2jwgbd/nGY+h+cGoJ1aMrkQ/Xr04xLClVQrb7Zb
-        TfJLM6l+udOvFgWOaiKtuRju9kT+LL2mscfBK+X4SZcr+cFkeecEEkxb8wgAwr3nuwM406
-        TQmICGSC57YvMB7lqOtVDQPqzsvnI2bxJ1XBFEpgEaxjDEmWG5ZeH7Hj87MfNg==
-Message-ID: <c82b8cc0-ef82-9e8a-525c-8d811376bfae@datenfreihafen.org>
-Date:   Tue, 25 Jan 2022 10:44:28 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 5/5] spi: make remove callback a void function
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        Tue, 25 Jan 2022 05:20:30 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id DC28B2000C;
+        Tue, 25 Jan 2022 10:19:29 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 11:19:28 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
         Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
@@ -60,7 +37,7 @@ Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
         Emma Anholt <emma@anholt.net>,
         David Lechner <david@lechnology.com>,
         Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Noralf =?UTF-8?B?VHLDuG5uZXM=?= <noralf@tronnes.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Dan Robertson <dan@dlrobertson.com>,
@@ -86,7 +63,6 @@ Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Eric Piel <eric.piel@tremplin-utc.net>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -101,8 +77,9 @@ Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
         Vladimir Oltean <olteanv@gmail.com>,
         Woojung Huh <woojung.huh@microchip.com>,
         UNGLinuxDriver@microchip.com,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Alexander Aring <alex.aring@gmail.com>,
+        =?UTF-8?B?xYF1?= =?UTF-8?B?a2Fzeg==?= Stelmach 
+        <l.stelmach@samsung.com>, Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
         Harry Morris <h.morris@cascoda.com>,
         Varka Bhadram <varkabhadram@gmail.com>,
         Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
@@ -120,7 +97,7 @@ Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
         Mark Gross <markgross@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        =?UTF-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
         Jiri Slaby <jirislaby@kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
         Daniel Thompson <daniel.thompson@linaro.org>,
@@ -131,7 +108,7 @@ Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
         Lucas Tanure <tanureal@opensource.cirrus.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Daniel Mack <daniel@zonque.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
@@ -145,9 +122,9 @@ Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Antoniu Miclaus <antoniu.miclaus@analog.com>,
         Julia Lawall <Julia.Lawall@inria.fr>,
-        =?UTF-8?Q?Ronald_Tschal=c3=a4r?= <ronald@innovation.ch>,
+        Ronald =?UTF-8?B?VHNjaGFsw6Ry?= <ronald@innovation.ch>,
         Marco Felsch <m.felsch@pengutronix.de>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
         Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
         Jon Hunter <jonathanh@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -159,7 +136,7 @@ Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
         Matt Kline <matt@bitbashing.io>,
         Torin Cooper-Bennun <torin@maxiluxsystems.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
+        Stefan =?UTF-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
         Wei Yongjun <weiyongjun1@huawei.com>,
         Randy Dunlap <rdunlap@infradead.org>,
@@ -196,20 +173,24 @@ Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
         linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
         kernel@pengutronix.de
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
- <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-From:   Stefan Schmidt <stefan@datenfreihafen.org>
+Subject: Re: [PATCH 5/5] spi: make remove callback a void function
+Message-ID: <20220125111928.781d0bb3@xps13>
 In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
+        <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+Hi Uwe,
 
-Hello.
+u.kleine-koenig@pengutronix.de wrote on Sun, 23 Jan 2022 18:52:01 +0100:
 
-On 23.01.22 18:52, Uwe Kleine-König wrote:
 > The value returned by an spi driver's remove function is mostly ignored.
 > (Only an error message is printed if the value is non-zero that the
 > error is ignored.)
@@ -225,18 +206,13 @@ On 23.01.22 18:52, Uwe Kleine-König wrote:
 
 [...]
 
->   drivers/net/ieee802154/adf7242.c                      |  4 +---
->   drivers/net/ieee802154/at86rf230.c                    |  4 +---
->   drivers/net/ieee802154/ca8210.c                       |  6 ++----
->   drivers/net/ieee802154/cc2520.c                       |  4 +---
->   drivers/net/ieee802154/mcr20a.c                       |  4 +---
->   drivers/net/ieee802154/mrf24j40.c                     |  4 +---
+>  drivers/mtd/devices/mchp23k256.c                      |  4 +---
+>  drivers/mtd/devices/mchp48l640.c                      |  4 +---
+>  drivers/mtd/devices/mtd_dataflash.c                   |  4 +---
+>  drivers/mtd/devices/sst25l.c                          |  4 +---
 
-[...]
+For MTD devices:
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-For the ieee802154 drivers:
-
-Acked-by: Stefan Schmidt <stefan@datenfreihafen.org>
-
-regards
-Stefan Schmidt
+Thanks,
+Miquèl
