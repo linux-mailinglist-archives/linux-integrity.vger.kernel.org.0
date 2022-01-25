@@ -2,59 +2,49 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 730ED49B075
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jan 2022 10:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FDF49B104
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Jan 2022 11:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574851AbiAYJgt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 25 Jan 2022 04:36:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S237999AbiAYJ5c (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 25 Jan 2022 04:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573975AbiAYJa4 (ORCPT
+        with ESMTP id S237552AbiAYJzY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:30:56 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28395C0613EC
-        for <linux-integrity@vger.kernel.org>; Tue, 25 Jan 2022 01:30:55 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id w21so36192717uan.7
-        for <linux-integrity@vger.kernel.org>; Tue, 25 Jan 2022 01:30:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1mm7+Qmz3LImo4aFwbhXIFkzVEgm/HAOzd6fbdAVMrg=;
-        b=kCmCEgQ+xOVJqgvY6mIiDwGpng9RE64Ri/x5bVEJVgfKmrbder8yB0SJa9j3j/iO6u
-         VSlwxJi1GtMfRaX9rz0Fi8V70QZmpTm/yg+yqKEhFTP/kvAigM6NlkG016BHxBuEGBud
-         aKKG3vXyGKhkWECz7g02ij5pN8RBjRbfSAGJhF2s+s/E8Wzq61/RmUZzmkHINs6y38kj
-         8W/C1tUsfkR71I5xYVxyEgRhxjIz/FmTGO/CwLqL3papla/+aWUpb3kyrOT/GpbDGqeC
-         c1kCPdzAMoEjl9Ka3L/ozlubTR502/GpTZoRLS5kuqKqPkl9NQ2lJSPzTzJVIDppuhpp
-         EfLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1mm7+Qmz3LImo4aFwbhXIFkzVEgm/HAOzd6fbdAVMrg=;
-        b=NSI0eehDIKE1adDcjaWtcq8AUT/9VwRmdVpRAMD1spJwbcUVdlT/bctUGir/gzTORi
-         +6a3MdT/mz/UbEwOmxFf4HrPgCUtV0Ydn5AjkktwtSlZQmDKy3BriyO4a5SDgLXgOXe+
-         Ju8Bzt4eml6C7uuholMKdgdBJfwXvC+6q8ZNnkQIQ2hFRqRZD3SUeoBRU7X8alClURgH
-         6ZY7xqg+ME3gvnXaWWXtvVFgfXtTJAPIDXJKaKC7B44azjwRl/FtCKUTs3m8Xd6Uo117
-         ILWqPL9etwFylx9a4e9WU5uGko9J8hDdumO0XT/w1zrdK4/d5qs8BQw4fUfx1fwvQVmP
-         gqcg==
-X-Gm-Message-State: AOAM5333dGk+xVDoHmIlUjD35ZWm/DdrmRBSjU+YRIRWHP5z6xhon0M5
-        YMyfrRr/NN956THzaXkYw+x2rSLp8gxThg/mWBE95g==
-X-Google-Smtp-Source: ABdhPJwHGGkAwOnsd7qe0zHQAqHAUzi5PBqvJQ90yr1sdZ5zdG5wkLeKm2Z8HhNpFMDsTHL1nOGUCrWQS9pCXlyV9Y0=
-X-Received: by 2002:a67:8c2:: with SMTP id 185mr712613vsi.19.1643103053912;
- Tue, 25 Jan 2022 01:30:53 -0800 (PST)
+        Tue, 25 Jan 2022 04:55:24 -0500
+X-Greylist: delayed 644 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Jan 2022 01:55:22 PST
+Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC8AC06173D;
+        Tue, 25 Jan 2022 01:55:22 -0800 (PST)
+Received: from [IPV6:2003:e9:d71e:a9f7:7a7b:6f31:a637:f96b] (p200300e9d71ea9f77a7b6f31a637f96b.dip0.t-ipconnect.de [IPv6:2003:e9:d71e:a9f7:7a7b:6f31:a637:f96b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id F07DEC038E;
+        Tue, 25 Jan 2022 10:44:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1643103874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GoIG+75u1/C8Q0IQMWQkza+f14Geqz2ci3clcv5LbbA=;
+        b=sGVaqmb8ajP7SMAimYbwmLeoz3qwgAKJtXKJhVBI6LVnprU3zcENtw8CSuIVtlDP12Ftcg
+        omtJC4WBLS9wYTTYBNtwuVwIpt9p+QXLrBu2J5mSbkoUdwkk6Q2U+dEAkWJcH84zrQEyei
+        x733CU2siv1QufCl/+nKqBu3Gb9hr+Y2jwgbd/nGY+h+cGoJ1aMrkQ/Xr04xLClVQrb7Zb
+        TfJLM6l+udOvFgWOaiKtuRju9kT+LL2mscfBK+X4SZcr+cFkeecEEkxb8wgAwr3nuwM406
+        TQmICGSC57YvMB7lqOtVDQPqzsvnI2bxJ1XBFEpgEaxjDEmWG5ZeH7Hj87MfNg==
+Message-ID: <c82b8cc0-ef82-9e8a-525c-8d811376bfae@datenfreihafen.org>
+Date:   Tue, 25 Jan 2022 10:44:28 +0100
 MIME-Version: 1.0
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
-From:   Lee Jones <lee.jones@linaro.org>
-Date:   Tue, 25 Jan 2022 09:30:43 +0000
-Message-ID: <CAF2Aj3g0uxj7=m+USWz9QvmQ511DN83e9WsVDW-484aEdix4hg@mail.gmail.com>
-Subject: Re: [PATCH 0/5] spi: make remove callback a void function
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 5/5] spi: make remove callback a void function
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
         Peter Huewe <peterhuewe@gmx.de>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
@@ -70,13 +60,13 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Emma Anholt <emma@anholt.net>,
         David Lechner <david@lechnology.com>,
         Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Dan Robertson <dan@dlrobertson.com>,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <michael.hennerich@analog.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
         Marcus Folkesson <marcus.folkesson@gmail.com>,
         Kent Gustavsson <kent@minoris.se>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
@@ -86,6 +76,7 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
         Antti Palosaari <crope@iki.fi>,
+        Lee Jones <lee.jones@linaro.org>,
         Support Opensource <support.opensource@diasemi.com>,
         Charles Keepax <ckeepax@opensource.cirrus.com>,
         Richard Fitzgerald <rf@opensource.cirrus.com>,
@@ -110,9 +101,8 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Vladimir Oltean <olteanv@gmail.com>,
         Woojung Huh <woojung.huh@microchip.com>,
         UNGLinuxDriver@microchip.com,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
         Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
         Harry Morris <h.morris@cascoda.com>,
         Varka Bhadram <varkabhadram@gmail.com>,
         Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
@@ -121,7 +111,7 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Christian Lamparter <chunkeey@googlemail.com>,
         Kalle Valo <kvalo@kernel.org>,
         Ajay Singh <ajay.kathat@microchip.com>,
-        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
         Solomon Peachy <pizza@shaftnet.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Mark Greer <mgreer@animalcreek.com>,
@@ -141,7 +131,7 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Lucas Tanure <tanureal@opensource.cirrus.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Daniel Mack <daniel@zonque.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
@@ -154,10 +144,10 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Cai Huoqing <caihuoqing@baidu.com>,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        =?UTF-8?Q?Ronald_Tschal=C3=A4r?= <ronald@innovation.ch>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        =?UTF-8?Q?Ronald_Tschal=c3=a4r?= <ronald@innovation.ch>,
         Marco Felsch <m.felsch@pengutronix.de>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
         Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
         Jon Hunter <jonathanh@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -165,11 +155,11 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Fabio Estevam <festevam@gmail.com>,
         Colin Ian King <colin.king@intel.com>,
         Dan Carpenter <dan.carpenter@oracle.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
         Matt Kline <matt@bitbashing.io>,
         Torin Cooper-Bennun <torin@maxiluxsystems.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
         Wei Yongjun <weiyongjun1@huawei.com>,
         Randy Dunlap <rdunlap@infradead.org>,
@@ -205,60 +195,48 @@ Cc:     Mark Brown <broonie@kernel.org>,
         linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
         linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel@pengutronix.de, Noralf Tronnes <notro@tronnes.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Guenter Roeck <groeck@google.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        kernel@pengutronix.de
+References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
+ <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-My usual mailer won't let me reply to this many people, so I'm using Gmail.
 
-No idea what chaos this will cause, but here goes ...
+Hello.
 
+On 23.01.22 18:52, Uwe Kleine-König wrote:
 > The value returned by an spi driver's remove function is mostly ignored.
 > (Only an error message is printed if the value is non-zero that the
 > error is ignored.)
->
+> 
 > So change the prototype of the remove function to return no value. This
 > way driver authors are not tempted to assume that passing an error to
 > the upper layer is a good idea. All drivers are adapted accordingly.
 > There is no intended change of behaviour, all callbacks were prepared to
 > return 0 before.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > ---
 
 [...]
 
->  drivers/mfd/arizona-spi.c                             |  4 +---
->  drivers/mfd/da9052-spi.c                             |  3 +--
->  drivers/mfd/ezx-pcap.c                                |  4 +---
->  drivers/mfd/madera-spi.c                             |  4 +---
->  drivers/mfd/mc13xxx-spi.c                           |  3 +--
->  drivers/mfd/rsmu_spi.c                                |  4 +---
->  drivers/mfd/stmpe-spi.c                               |  4 +---
->  drivers/mfd/tps65912-spi.c                          |  4 +---
+>   drivers/net/ieee802154/adf7242.c                      |  4 +---
+>   drivers/net/ieee802154/at86rf230.c                    |  4 +---
+>   drivers/net/ieee802154/ca8210.c                       |  6 ++----
+>   drivers/net/ieee802154/cc2520.c                       |  4 +---
+>   drivers/net/ieee802154/mcr20a.c                       |  4 +---
+>   drivers/net/ieee802154/mrf24j40.c                     |  4 +---
 
->  drivers/video/backlight/ams369fg06.c         |  3 +--
->  drivers/video/backlight/corgi_lcd.c               |  3 +--
->  drivers/video/backlight/ili922x.c                    |  3 +--
->  drivers/video/backlight/l4f00242t03.c           |  3 +--
->  drivers/video/backlight/lms501kf03.c            |  3 +--
->  drivers/video/backlight/ltv350qv.c                 |  3 +--
->  drivers/video/backlight/tdo24m.c                  |  3 +--
->  drivers/video/backlight/tosa_lcd.c                |  4 +---
->  drivers/video/backlight/vgg2432a4.c            |  4 +---
+[...]
 
-If it's okay with Mark, it's okay with me.
+For the ieee802154 drivers:
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
+Acked-by: Stefan Schmidt <stefan@datenfreihafen.org>
 
---=20
-Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-Linaro Services Principle Technical Lead
-Linaro.org =E2=94=82 Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+regards
+Stefan Schmidt
