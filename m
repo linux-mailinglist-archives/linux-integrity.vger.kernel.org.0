@@ -2,262 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1204E49CC5D
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jan 2022 15:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E61749CC68
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jan 2022 15:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242168AbiAZOcA (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Jan 2022 09:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242164AbiAZObt (ORCPT
+        id S242132AbiAZOfL (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Jan 2022 09:35:11 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38294 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235539AbiAZOfK (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:31:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625A0C06161C;
-        Wed, 26 Jan 2022 06:31:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 018BB6177F;
-        Wed, 26 Jan 2022 14:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83FA1C340E6;
-        Wed, 26 Jan 2022 14:31:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643207508;
-        bh=3rjfrXEQI/WMd7z+IpGMnkqZQh7poK0zECzrGhslMLk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TmO/BYaiA0n0/TF2kn5cdLSgGwBx5ELgMeuj0J8iVkS9CHIDIkGDYpvqbf+Y/VDgN
-         /b1+cFSebZU6rDtivfkFj2HgR8UQwt8Lrgl/hwM0zCEcN+eXe9ulXcdNqcWU8VRGPG
-         jo80uWln3xaQLPFgOKLGtrb7VeD6TnzDMVtpghpds6Zo9/ybfLvZA5Q+1E+jW8VF1X
-         HzoZIn2CjDhSn7g/Zbnjy5GugpGrtJmPX0f2iVzdg+zKHMDI0b4m3Spakd2Fj0VDxw
-         IVMbr8xJbz9KWYD24p2dRwgcJJTJl+JNNYpkNGm3rKjy8KzO6t9MUO6yS8as9m8lZj
-         mEaCJCfyqVw7w==
-Date:   Wed, 26 Jan 2022 15:31:40 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v9 21/23] ima: Introduce securityfs file to activate an
- IMA namespace
-Message-ID: <20220126143140.awwlv3h2jqotng2n@wittgenstein>
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220125224645.79319-22-stefanb@linux.vnet.ibm.com>
+        Wed, 26 Jan 2022 09:35:10 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QE60PS015989;
+        Wed, 26 Jan 2022 14:35:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=+GObsJxIW/3TliXx0z3KPe4N/3vn48rMKUn+yBtYzE8=;
+ b=Pm9QBvpnxwowgyL8B2KVq/pkxNIM1T0IAEt++lm1U7PzZWczHHqdAWxhRQUORs/k7c0F
+ SWV0aZBnU6CuIRdJjg5hUejAb+Vna117n2G155jdY/+8lgx+VgMSuvWf58lcz+gHPBVz
+ f3rcP6zdlkJQ4wmwSDAoRnNCQgOkSAz4i0F3AEg5v54azb5HAAZs78jqsQHHL/zJIwi9
+ XqhbNZs/j5VC1OJ10+QqgrEe13IpzoWbHtKAnfzg4R4rJPfiRYQVwADQIAKd/B8p8ADb
+ 1p+pNOvUbNncSyH+l/CVfeRQ0P9Zmz5NasL4Ylw5Zy0cK616h23/xyRccEkesYhTYypi vw== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du6hf295g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 14:35:03 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QEVwaG029857;
+        Wed, 26 Jan 2022 14:35:01 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3dr9j9esyu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 14:35:01 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QEYxqA41615680
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 14:34:59 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D1B211C04A;
+        Wed, 26 Jan 2022 14:34:59 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2246111C05B;
+        Wed, 26 Jan 2022 14:34:58 +0000 (GMT)
+Received: from sig-9-65-92-33.ibm.com (unknown [9.65.92.33])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jan 2022 14:34:58 +0000 (GMT)
+Message-ID: <6f0890f135b61c41d81b03bf084ebab1b3e551e1.camel@linux.ibm.com>
+Subject: Re: [RESEND][PATCH] Documentation: added order requirement for
+ ima_hash=
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "Guozihua (Scott)" <guozihua@huawei.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        wangweiyang <wangweiyang2@huawei.com>,
+        Xiujianfeng <xiujianfeng@huawei.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Date:   Wed, 26 Jan 2022 09:34:57 -0500
+In-Reply-To: <173fffb6cde54ae4ac7676d18a84c79f@huawei.com>
+References: <20220125090237.120357-1-guozihua@huawei.com>
+         <36b6058f2cdf6bead917c06ecc6e8769bb88130c.camel@linux.ibm.com>
+         <3933adf5-4e9d-6b22-2e46-55643c504f52@huawei.com>
+         <71508a72b042da330d07a624cf499561c46195f0.camel@linux.ibm.com>
+         <97142483-d7e7-e310-0cb0-30a81414cb57@huawei.com>
+         <c1bfe53abaf24feacb676ce940edcb8899924ffc.camel@linux.ibm.com>
+         <173fffb6cde54ae4ac7676d18a84c79f@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Cx__iswed3ggtw-NR834h7GMmk2w5f-M
+X-Proofpoint-GUID: Cx__iswed3ggtw-NR834h7GMmk2w5f-M
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220125224645.79319-22-stefanb@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-26_04,2022-01-26_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ bulkscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 adultscore=0 mlxscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201260089
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:46:43PM -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
+On Wed, 2022-01-26 at 13:24 +0000, Roberto Sassu wrote:
+> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > Sent: Wednesday, January 26, 2022 1:48 PM
+> > On Wed, 2022-01-26 at 15:41 +0800, Guozihua (Scott) wrote:
+> > >
+> > >
+> > > The main issue lies in ima_template_desc_current called by hash_setup,
+> > > which does not just read ima_template global variable, but also tries to
+> > > set it if that hasn't been done already. Causing ima_template_setup to quit.
+> > 
+> > Right, which calls ima_init_template_list().  So part of the solution
+> > could be to conditionally call ima_init_template_list()
+> > in ima_template_setup().
+> > 
+> > -       if (ima_template)
+> > -               return 1;
+> > -
+> > -       ima_init_template_list();
+> > +       if (!ima_template
+> > +               ima_init_template_list();
+> > 
+> > Roberto, what do you think?
 > 
-> Introduce securityfs file 'active' that allows a user to activate an IMA
-> namespace by writing a "1" (precisely a '1\0' or '1\n') to it. When
-> reading from the file, it shows either '0' or '1'.
+> Hi Mimi
 > 
-> Also, introduce ns_is_active() to be used in those places where the
-> ima_namespace pointer may either be NULL or where the active field may not
-> have been set to '1', yet. An inactive IMA namespace should never be
-> accessed since it has not been initialized, yet.
+> I think we wanted to prevent to set a digest algorithm
+> incompatible with the chosen template.
 > 
-> Set the init_ima_ns's active field to '1' since it is considered active
-> right from the beginning.
+> If we have in the kernel command line:
 > 
-> The rationale for introducing a file to activate an IMA namespace is that
-> subsequent support for IMA-measurement and IMA-appraisal will add
-> configuration files for selecting for example the template that an IMA
-> namespace is supposed to use for logging measurements, which will add
-> an IMA namespace configuration stage (using securityfs files) before its
-> activation.
+> ima_template=ima ima_hash=sha256
 > 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  security/integrity/ima/ima.h             |  7 +++
->  security/integrity/ima/ima_fs.c          | 59 ++++++++++++++++++++++++
->  security/integrity/ima/ima_init_ima_ns.c |  1 +
->  security/integrity/ima/ima_main.c        |  2 +-
->  4 files changed, 68 insertions(+), 1 deletion(-)
+> ima_hash_algo would be set to HASH_ALGO_SHA1 despite
+> the user choice and the template would be set to 'ima'.
 > 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index a52b388b4157..cf2f63bb5bdf 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -123,6 +123,8 @@ struct ima_h_table {
->  };
->  
->  struct ima_namespace {
-> +	atomic_t active;		/* whether namespace is active */
-> +
->  	struct rb_root ns_status_tree;
->  	rwlock_t ns_tree_lock;
->  	struct kmem_cache *ns_status_cache;
-> @@ -154,6 +156,11 @@ struct ima_namespace {
->  } __randomize_layout;
->  extern struct ima_namespace init_ima_ns;
->  
-> +static inline bool ns_is_active(struct ima_namespace *ns)
-> +{
-> +	return (ns && atomic_read(&ns->active));
-> +}
-> +
->  extern const int read_idmap[];
->  
->  #ifdef CONFIG_HAVE_IMA_KEXEC
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 5dd0e759a470..79a786db79db 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -451,6 +451,62 @@ static const struct file_operations ima_measure_policy_ops = {
->  	.llseek = generic_file_llseek,
->  };
->  
-> +static ssize_t ima_show_active(struct file *filp,
-> +			       char __user *buf,
-> +			       size_t count, loff_t *ppos)
-> +{
-> +	struct ima_namespace *ns = &init_ima_ns;
-> +	char tmpbuf[2];
-> +	ssize_t len;
-> +
-> +	len = scnprintf(tmpbuf, sizeof(tmpbuf),
-> +			"%d\n", atomic_read(&ns->active));
-> +	return simple_read_from_buffer(buf, count, ppos, tmpbuf, len);
-> +}
-> +
-> +static ssize_t ima_write_active(struct file *filp,
-> +				const char __user *buf,
-> +				size_t count, loff_t *ppos)
-> +{
-> +	struct ima_namespace *ns = &init_ima_ns;
-> +	unsigned int active;
-> +	char tmpbuf[3];
-> +	ssize_t ret;
-> +
-> +	if (ns_is_active(ns))
-> +		return -EBUSY;
-> +
-> +	ret = simple_write_to_buffer(tmpbuf, sizeof(tmpbuf) - 1, ppos,
-> +				     buf, count);
-> +	if (ret < 0)
-> +		return ret;
-> +	tmpbuf[ret] = 0;
-> +
-> +	if (!kstrtouint(tmpbuf, 10, &active) && active == 1)
-> +		atomic_set(&ns->active, 1);
-> +
-> +	return count;
-> +}
-
-Hm, I'd rather do something like (uncompiled, untested):
-
-+static ssize_t ima_write_active(struct file *filp,
-				const char __user *buf,
-				size_t count, loff_t *ppos)
-{
-	struct ima_namespace *ns = &init_ima_ns;
-	int err;
-	unsigned int active;
-	char *kbuf = NULL;
-	ssize_t length;
-
-	if (count >= 3)
-		return -EINVAL;
-
-	/* No partial writes. */
-	if (*ppos != 0)
-		return -EINVAL;
-
-	if (ns_active(ns))
-		return -EBUSY;
-
-	kbuf = memdup_user_nul(buf, count);
-	if (IS_ERR(kbuf))
-		return PTR_ERR(kbuf);
-
-	err = kstrtouint(kbuf, 10, &active);
-	kfree(kbuf);
-	if (err)
-		return err;
-
-	if (active != 1)
-		return -EINVAL;
-
-	atomic_set(&ns->active, 1);
-	return count;
-}
-
-> +
-> +static const struct file_operations ima_active_ops = {
-> +	.read = ima_show_active,
-> +	.write = ima_write_active,
-> +};
-> +
-> +static int ima_fs_add_ns_files(struct dentry *ima_dir)
-> +{
-> +	struct dentry *active;
-> +
-> +	active =
-> +	    securityfs_create_file("active",
-> +				   S_IRUSR | S_IWUSR | S_IRGRP, ima_dir, NULL,
-> +				   &ima_active_ops);
-> +	if (IS_ERR(active))
-> +		return PTR_ERR(active);
-> +
-> +	return 0;
-> +}
-> +
->  int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
->  {
->  	struct ima_namespace *ns = ima_ns_from_user_ns(user_ns);
-> @@ -516,6 +572,9 @@ int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
->  			goto out;
->  	}
->  
-> +	if (ns != &init_ima_ns && ima_fs_add_ns_files(ima_dir))
-
-Wouldn't you want to catch the specific error from
-ima_fs_add_ns_files() and surface that?
-
-> +		goto out;
-> +
->  	return 0;
->  out:
->  	securityfs_remove(ns->ima_policy);
-> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
-> index d4ddfd1de60b..39ee0c2477a6 100644
-> --- a/security/integrity/ima/ima_init_ima_ns.c
-> +++ b/security/integrity/ima/ima_init_ima_ns.c
-> @@ -58,5 +58,6 @@ struct ima_namespace init_ima_ns = {
->  	.ima_lsm_policy_notifier = {
->  		.notifier_call = ima_lsm_policy_change,
->  	},
-> +	.active = ATOMIC_INIT(1),
->  };
->  EXPORT_SYMBOL(init_ima_ns);
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 8018e9aaad32..059917182960 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -441,7 +441,7 @@ static int process_measurement(struct user_namespace *user_ns,
->  
->  	while (user_ns) {
->  		ns = ima_ns_from_user_ns(user_ns);
-> -		if (ns) {
-> +		if (ns_is_active(ns)) {
->  			int rc;
->  
->  			rc = __process_measurement(ns, file, cred, secid, buf,
-> -- 
-> 2.31.1
+> In the opposite case:	
 > 
+> ima_hash=sha256 ima_template=ima
 > 
+> if the default template is 'ima', then ima_hash_algo would be
+> set to HASH_ALGO_SHA1. Otherwise, it would be
+> HASH_ALGO_SHA256. If we allow the template to be set after
+> the digest algorithm is evaluated, the template selection will
+> be rejected if the algorithm is incompatible with the template.
+
+The only time that would occur is in the unlikely case that the
+template is being set to "ima".   That sounds reasonable.  In fact we
+should consider preventing the template format being set to "ima".
+
+> 
+> I'm trying to remember why we still have the digest recalculation
+> in ima_eventdigest_init(). Maybe the only possibility is if we
+> set the template from the policy?
+
+The recalculation was relatively recently added in commit 6cc7c266e5b4
+("ima: Call ima_calc_boot_aggregate() in ima_eventdigest_init()").
+
+thanks,
+
+Mimi
+
