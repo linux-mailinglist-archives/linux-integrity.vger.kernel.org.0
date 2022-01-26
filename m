@@ -2,119 +2,129 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 601D849D3E6
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jan 2022 21:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C88149D4BA
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jan 2022 22:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiAZU47 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Jan 2022 15:56:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbiAZU44 (ORCPT
+        id S232784AbiAZVym (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Jan 2022 16:54:42 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51080 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230454AbiAZVyl (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:56:56 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB373C061748
-        for <linux-integrity@vger.kernel.org>; Wed, 26 Jan 2022 12:56:55 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id g14so2417104ybs.8
-        for <linux-integrity@vger.kernel.org>; Wed, 26 Jan 2022 12:56:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iRMR5V4vy0P4D7D6HxdHshjQs9Ym01noa/r6EwRPAu0=;
-        b=oes9XtJSyShtzx2CSBVGbMTDKHa0l4kalzCjnYYyxsVbTsQorvNCdxvHS6Xl+X54y6
-         pdqAiycUiIq6AAx0LYmnhXnSo2d0kn4xhNIlipzNVIZp8lwNer0tDWyJl3TEi4bQ4KB+
-         SWMAKF9ezNb6zBFz1hY7fyxFEA16hGRfz7WXTKbfSZ4V3alS9s6Ade6Ae20COXz5oZEq
-         Tu6C+RwPdefEiuexRtHqXilwQRvbmBRACea3Dz/nFO0uikBYQr0R2ZfWRUVWryW/S6KD
-         pq3FQ4xTzz1llkK2fKyrnFYmacEZ6JR1V6pXmNRd5hvwEUU69UFjfvmwQlr8TvF05+9c
-         dUcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iRMR5V4vy0P4D7D6HxdHshjQs9Ym01noa/r6EwRPAu0=;
-        b=fzqxMMdd65CK8AtD+VGqEPxGmrFWEmPNlilGnzHcD0QCyNbH1gezQZK1i5Ckhcb/H6
-         3WaxypO1Aur1fzOv5UE4z+uysWIMyD5MZYn6ydoClXrORQWGH1WWqmaEkBY1cH3RkfUa
-         m7kpZKcqUB3+AfoS/fVBi6is4iwd6zmaIHV/3RrcIbjemASk4Bm3dhbs3dtyzAUd0tVd
-         6fquMsOYyI8cv1pmkTEdt/wFJGz1vQ6c94Pi83yEayu97c/Hbm3Sa7T6CZu6biyBD57n
-         ymc0MnrKhKVXifUG4tR2CoutJuOHoxPbs0SdWNcEaiDDaOvKisA7uLi7RmS8fd52ompV
-         6icA==
-X-Gm-Message-State: AOAM533HYHc8/FFjHSpjWo6o6ToUejxU5ZEWOdzp3Y1iu0tg9OglGJRz
-        fGt4IowlMC+xoj+xQA64FdBxNnX83oKFb7mIAdss8oJLPdA=
-X-Google-Smtp-Source: ABdhPJz5X7xefsqfdpcr/O0hB6Yp3iMquc+kP8ciOakKuBqThWgY0V24etdk6Xb6ydBgpI8kSaTtR9k+jdyNoEDGFEo=
-X-Received: by 2002:a25:b11e:: with SMTP id g30mr1202035ybj.328.1643230614970;
- Wed, 26 Jan 2022 12:56:54 -0800 (PST)
+        Wed, 26 Jan 2022 16:54:41 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QLro09018925;
+        Wed, 26 Jan 2022 21:54:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=k5Qmzq3J+k6wRqHENCA+dE6q5ypLkR0KPfCSRPzq53M=;
+ b=To499lXgIh0TGd3l8FVHOBOyybrM+6VPJ4fih/acCqkchXu2LhbZ0aq3P7JGNGxfR4JE
+ hJndCbJoARZy71cIxa8XqhhisXC2PyNyQNSFAflU2aIBZnr70HQhJIPeTjaU+VCtDnsI
+ YudHgxNKyRc3rh+uLL6CDi2VyuFBim/jCGlc4PtZX6it1M5SPJIBC5qK/xQbIn+q11X8
+ 24GkzUepcm0F870UOr+e55X08ZFXvyPc61XxO0ZhK2JN4twpDU84nqOs5tRv/0pl97yK
+ Kp6LjqxVsGYxA2cPwZHHoiC6h5PLS8Wpo3+SFyXYk0CFvkcneKEvxFuBC935Gb08t3s3 Eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du9j67qkk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 21:54:22 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20QLsLtI020580;
+        Wed, 26 Jan 2022 21:54:21 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du9j67qka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 21:54:21 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QLm6nu024784;
+        Wed, 26 Jan 2022 21:54:20 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma01dal.us.ibm.com with ESMTP id 3dr9jc0vd9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 21:54:20 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QLsIbf35586546
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 21:54:18 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6BB8E112070;
+        Wed, 26 Jan 2022 21:54:18 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 26D6C112076;
+        Wed, 26 Jan 2022 21:54:18 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jan 2022 21:54:18 +0000 (GMT)
+Message-ID: <f9af66c8-955d-0788-3e70-3a1cd1e96267@linux.ibm.com>
+Date:   Wed, 26 Jan 2022 16:54:17 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 11/23] ima: Move ima_lsm_policy_notifier into
+ ima_namespace
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+ <20220125224645.79319-12-stefanb@linux.vnet.ibm.com>
+ <20220126130532.gvswwt333ojh5xae@wittgenstein>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220126130532.gvswwt333ojh5xae@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Wp2I7hmMkxpe4awLYjxRKq5-rGi53Ba6
+X-Proofpoint-ORIG-GUID: kc4HWy58GvpKCJlQKCXFyp7WZqEi1wXe
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <CA++MVV3Jse4WZ-zr-SUWQz3Gk_dByU6JduVfUkvQNW+jgm9O4Q@mail.gmail.com>
- <YfFe9+XDPDIdSqF1@iki.fi> <YfFf8fvsDm8lQJgJ@iki.fi>
-In-Reply-To: <YfFf8fvsDm8lQJgJ@iki.fi>
-From:   Yael Tiomkin <yaelt@google.com>
-Date:   Wed, 26 Jan 2022 15:56:44 -0500
-Message-ID: <CAKoutNsaHNriobnsQ1X0Qfs=K+YN3JvfhTBnQqPL01AvjRm5EA@mail.gmail.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Martin Ross <mross@pobox.com>, corbet@lwn.net, dhowells@redhat.com,
-        jejb@linux.ibm.com, jmorris@namei.org, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        serge@hallyn.com, Mimi Zohar <zohar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-26_08,2022-01-26_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 bulkscore=0 adultscore=0 suspectscore=0 clxscore=1015
+ impostorscore=0 priorityscore=1501 spamscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201260124
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 9:51 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Wed, Jan 26, 2022 at 04:47:22PM +0200, Jarkko Sakkinen wrote:
-> > On Tue, Jan 18, 2022 at 01:26:05PM -0500, Martin Ross wrote:
-> > > Hi Jarkko,
-> > >
-> > > I have been working with Yael on this project so I thought I might add
-> > > a bit of background here around the use case that this series of
-> > > patches is trying to address.
-> > >
-> > > At a high level we are trying to provide users of encryption that have
-> > > key management hierarchies a better tradeoff between security and
-> > > availability.  For available and performance reasons master keys often
-> > > need to be released (or derived/wrapped keys created) outside of a KMS
-> > > to clients (which may in turn further wrap those keys in a series of
-> > > levels).  What we are trying to do is provide a mechanism where the
-> > > wrapping/unwrapping of these keys is not dependent on a remote call at
-> > > runtime.  e.g.  To unwrap a key if you are using AWS KMS or Google
-> > > Service you need to make an RPC.  In practice to defend against
-> > > availability or performance issues, designers end up building their
-> > > own kms and effectively encrypting everything with a DEK.  The DEK
-> > > encrypts same set as the master key thereby eliminating the security
-> > > benefit of keeping the master key segregated in the first place.
->
-> Mainly this part (would be enough to explain why it is there).
->
-> BR, Jarkko
 
-Hi Jarkko,
-
-As for the commit message, WDYT about the following:
-
-KEYS: encrypted: Instantiate key with user-provided decrypted data
-
-For availability and performance reasons master keys often need to be
-released outside of a KMS to clients. It would be beneficial to provide a
-mechanism where the wrapping/unwrapping of DEKs is not dependent
-on a remote call at runtime yet security is not (or only minimally) compromised.
-Master keys could be securely stored in the Kernel and be used to wrap/unwrap
-keys from userspace.
-
-The encrypted.c class supports instantiation of encrypted keys with
-either an already-encrypted key material, or by generating new key
-material based on random numbers. This patch defines a new datablob
-format: [<format>] <master-key name> <decrypted data length>
-<decrypted data> that allows to inject and encrypt user-provided
-decrypted data.
+On 1/26/22 08:05, Christian Brauner wrote:
+> On Tue, Jan 25, 2022 at 05:46:33PM -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Move the ima_lsm_policy_notifier into the ima_namespace. Each IMA
+>> namespace can now register its own LSM policy change notifier callback.
+>> The policy change notifier for the init_ima_ns still remains in init_ima()
+>> and therefore handle the registration of the callback for all other
+>> namespaces in init_ima_namespace().
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+> I'd double-check that this cannot be used to cause rcu stalls when a lot
+> of ima namespace with a lot of rules are used leading to a dos situation
+> during LSM policy update. The good thing at least is that an LSM policy
+> update can only be triggered for selinux for the whole system.
 
 
-I want to make sure we're on the same page before publishing a new version.
+I just ran a test with up to 1920 IMA-namespaces each with 2 audit rules 
+with the vmtools_exec_t label. Disabling of the vmtools SELinux module 
+caused the rules to disappear in all IMA namespaces, as expected. 
+However, it also added many kernel log lines 'ima: rule for LSM 
+'vmtools_exec_t' is undefined' to the kernel log that should probably be 
+suppressed for ns != &init_ima_ns. Nothing bad happened otherwise. Also 
+re-enabling the vmtools module didn't cause any kernel errors.  So I 
+think we should be fine.
 
-Thanks,
-Yael
+https://github.com/stefanberger/ima-namespaces-tests/tree/master/audit-many-2
+
+
