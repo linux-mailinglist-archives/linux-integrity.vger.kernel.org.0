@@ -2,34 +2,37 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAE149C568
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jan 2022 09:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C23C49C57E
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jan 2022 09:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbiAZIiZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Wed, 26 Jan 2022 03:38:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42308 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiAZIiZ (ORCPT
+        id S230325AbiAZIr3 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Wed, 26 Jan 2022 03:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230222AbiAZIr3 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:38:25 -0500
+        Wed, 26 Jan 2022 03:47:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106DDC06161C;
+        Wed, 26 Jan 2022 00:47:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4A7CB81C0D;
-        Wed, 26 Jan 2022 08:38:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C61EC340E3;
-        Wed, 26 Jan 2022 08:38:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 807C760A51;
+        Wed, 26 Jan 2022 08:47:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8114C340E3;
+        Wed, 26 Jan 2022 08:47:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643186302;
-        bh=hql5taXDX4ZFmojFgMRXFkOGKx291CxE+GSNeSfAA2c=;
+        s=k20201202; t=1643186847;
+        bh=fYjYvin/ncOZkgLTguVdtStT4rh5GTFzqtSVTzTJ5zc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pNb+YTM6/mJuqAYTriG5zewRhHzjPggPybHpoW8TTb59Zd19gxWB+rotrC6gceiZI
-         aNYPvP5pSSYQKToxenZI6nFnIV7BbVqeXKHRsXl7cgtqYGdsk5Ww6saclUG/juZHhU
-         DRwmm4doPU4RrdV1ehlVGIrxpIkOuWVP7huqJsmNMl3eWUgsTBTLkR5Yrq4hUd427k
-         ljHiNHVKcLEGP8sirEGX0NJWHdtNZSW4Jy1GRWON4i9isvXo7vH0Ks+l4EEqwOFil4
-         pqiXmnpmZTP3AdsYYeSaU+mUeO+RysNjQR9OGFglrTSz6GT1PKmkYdn1Js7gEkKTFy
-         x+lyBwK1EV8uw==
-Date:   Wed, 26 Jan 2022 09:38:14 +0100
+        b=fz3RmuSXApVcPfd2W5IX7BNuEBYQ4d/CA4tiX/LmenrLmCpArMF2qcdlYLQqGghN4
+         kcz87olbwJ69uqNx2KuvfDqsGLid6phMh1y7QQ6ZDZkna1T3qDXoi3B54/PL4HxhAk
+         qjJsJKbt74o7ckNIdM5WXtP8wLuxGZmlqPPeZxACkgBgoxnPLDQBDsYvZlNZCeEMYg
+         r72iPq8g4MXzgih9XPna4tWSThd95NHiJg2TUilTWFMRaid5MshhbHKH9ve+Zx7u3i
+         PhGYuWoPHAEXHVLJnnqfliypniJ+DOQbrG9blbksF7BIhGznT10Mb5v+/tRN/MW5b7
+         Yn5BnOWWVQrcA==
+Date:   Wed, 26 Jan 2022 09:47:15 +0100
 From:   Christian Brauner <brauner@kernel.org>
 To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
 Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
@@ -42,34 +45,44 @@ Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
         paul@paul-moore.com, rgb@redhat.com,
         linux-security-module@vger.kernel.org, jmorris@namei.org,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v9 02/23] ima: Do not print policy rule with inactive LSM
- labels
-Message-ID: <20220126083814.3ndwkhivir573aok@wittgenstein>
+Subject: Re: [PATCH v9 05/23] ima: Define ima_namespace struct and start
+ moving variables into it
+Message-ID: <20220126084715.b2wtmlbzoaqtipbp@wittgenstein>
 References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220125224645.79319-3-stefanb@linux.vnet.ibm.com>
+ <20220125224645.79319-6-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220125224645.79319-3-stefanb@linux.vnet.ibm.com>
+In-Reply-To: <20220125224645.79319-6-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:46:24PM -0500, Stefan Berger wrote:
+On Tue, Jan 25, 2022 at 05:46:27PM -0500, Stefan Berger wrote:
 > From: Stefan Berger <stefanb@linux.ibm.com>
 > 
-> Before printing a policy rule scan for inactive LSM labels in the policy
-> rule. Inactive LSM labels are identified by args_p != NULL and
-> rule == NULL.
+> Define the ima_namespace structure and the ima_namespace variable
+> init_ima_ns for the host's IMA namespace. Implement basic functions for
+> namespacing support.
 > 
-> Fixes: b16942455193 ("ima: use the lsm policy update notifier")
+> Move variables related to the IMA policy into the ima_namespace. This way
+> the IMA policy of an IMA namespace can be set and displayed using a
+> front-end like securityfs.
+> 
+> Implement ima_ns_from_file() to get the IMA namespace via the user
+> namespace of the securityfs superblock that a file belongs to.
+> 
+> To get the current ima_namespace use &init_ima_ns when a function
+> that is related to a policy rule is called.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> ---
 
-That commit message of the referenced patch reads:
+For the approach of introducing struct ima_namespace and moving a bunch
+of variables in there at the same time to prepare subsequent further
+namespacing:
 
-"Don't do lazy policy updates while running the rule matching, run the
-updates as they happen."
+Acked-by: Christian Brauner <brauner@kernel.org>
 
-and given that we had a lengthy discussion how to update the rules I'd
-really would have liked an explanation why the update needs to run
-immediately. Not doing it lazily is the whole reason we have this
-notifier infra. Why can't this be done lazily?
+I can't speak to the actual ima changes.
