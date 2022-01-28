@@ -2,120 +2,109 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DF649FD07
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jan 2022 16:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9AF149FD73
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jan 2022 17:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349652AbiA1Poz (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Jan 2022 10:44:55 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9956 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232764AbiA1Poz (ORCPT
+        id S233037AbiA1QBc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Jan 2022 11:01:32 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17829 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230432AbiA1QBb (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Jan 2022 10:44:55 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20SFDpa3031444;
-        Fri, 28 Jan 2022 15:44:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=HIjjE1zlk9hEiC0Q3Em9Eron0a2ojY4ey5mwMzrssTA=;
- b=AZvXwxHFbpOJc300X4PkhvsvbRHQy77Oetru7vXXf4nDqBElZ2MQYkU6XP0Pw1IjCD2e
- LTMDatgqJGadvO/EIYXdnT2tTs26dmZOKRlDiJTq04LbFUa3eN8oj1oBpoUWcLJpDCD5
- ioGX+4wOEsGqBggksPVRoEYe0olwSIyV/CzlxwFqiNp8NSlHJlumgn+7mxWUC/sPCO+2
- zFgbzc5diPkPvPX/8iR92hbsLhfJSAeZdaVDMOWKG602MFXZBlvW9sdSMVUwObb0P7v3
- GXWJsDvYm3O+IFbWgUPOddnw8mLe/+1DPHKaWYb6U3Zww0/+CeIDbsANIYUzZpZbeYqe BA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvfuvvv2h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 15:44:36 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20SFE3Zo000696;
-        Fri, 28 Jan 2022 15:44:35 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvfuvvv21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 15:44:35 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20SFgk8q003430;
-        Fri, 28 Jan 2022 15:44:34 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma01wdc.us.ibm.com with ESMTP id 3dr9jcca2s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 15:44:34 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20SFiWRY13631844
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Jan 2022 15:44:33 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6555AE060;
-        Fri, 28 Jan 2022 15:44:32 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7F6F1AE05C;
-        Fri, 28 Jan 2022 15:44:32 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Jan 2022 15:44:32 +0000 (GMT)
-Message-ID: <be31137d-57d9-24f7-01f6-f33080dd4bba@linux.ibm.com>
-Date:   Fri, 28 Jan 2022 10:44:32 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 09/23] ima: Move some IMA policy and filesystem related
- variables into ima_namespace
-Content-Language: en-US
+        Fri, 28 Jan 2022 11:01:31 -0500
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JlhxM6DMnz9sVV;
+        Sat, 29 Jan 2022 00:00:07 +0800 (CST)
+Received: from dggpeml100024.china.huawei.com (7.185.36.115) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 29 Jan 2022 00:01:29 +0800
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ dggpeml100024.china.huawei.com (7.185.36.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 29 Jan 2022 00:01:28 +0800
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
+ Fri, 28 Jan 2022 17:01:26 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220125224645.79319-10-stefanb@linux.vnet.ibm.com>
- <1af8f2155730c38dcd510016fe82bc90e4acee39.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <1af8f2155730c38dcd510016fe82bc90e4acee39.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oNMoqWvway8KQY33qhrPQazP4sPzp6Oy
-X-Proofpoint-ORIG-GUID: rw6ih2xvEdCfMfu60-sFJd6gAZT630mO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-28_04,2022-01-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 clxscore=1015 priorityscore=1501 suspectscore=0 adultscore=0
- bulkscore=0 mlxscore=0 impostorscore=0 malwarescore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201280097
+        "Guozihua (Scott)" <guozihua@huawei.com>,
+        Jonathan Corbet <corbet@lwn.net>
+CC:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        wangweiyang <wangweiyang2@huawei.com>,
+        Xiujianfeng <xiujianfeng@huawei.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Subject: RE: [RESEND][PATCH] Documentation: added order requirement for
+ ima_hash=
+Thread-Topic: [RESEND][PATCH] Documentation: added order requirement for
+ ima_hash=
+Thread-Index: AQHYEcpHUD88EJ3n70C3otG2igs7kax0bcMAgAAWmYCAACQEgIAAM52AgABVhoCAAwr2kIAAN1aAgAAnvPA=
+Date:   Fri, 28 Jan 2022 16:01:26 +0000
+Message-ID: <0a2e84d1bed84733b81f3edd91403006@huawei.com>
+References: <20220125090237.120357-1-guozihua@huawei.com>
+         <36b6058f2cdf6bead917c06ecc6e8769bb88130c.camel@linux.ibm.com>
+         <3933adf5-4e9d-6b22-2e46-55643c504f52@huawei.com>
+         <71508a72b042da330d07a624cf499561c46195f0.camel@linux.ibm.com>
+         <97142483-d7e7-e310-0cb0-30a81414cb57@huawei.com>
+         <c1bfe53abaf24feacb676ce940edcb8899924ffc.camel@linux.ibm.com>
+         <ee116b29c27740119d98bc64e55f61e7@huawei.com>
+ <9714e2824b35d12ee2f8ad70d65d8c9230be86e4.camel@linux.ibm.com>
+In-Reply-To: <9714e2824b35d12ee2f8ad70d65d8c9230be86e4.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Friday, January 28, 2022 3:34 PM
+> On Fri, 2022-01-28 at 10:24 +0000, Roberto Sassu wrote:
+> > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > Sent: Wednesday, January 26, 2022 1:48 PM
+> > > On Wed, 2022-01-26 at 15:41 +0800, Guozihua (Scott) wrote:
+> > > >
+> > > >
+> > > > The main issue lies in ima_template_desc_current called by hash_setup,
+> > > > which does not just read ima_template global variable, but also tries to
+> > > > set it if that hasn't been done already. Causing ima_template_setup to quit.
+> > >
+> > > Right, which calls ima_init_template_list().  So part of the solution
+> > > could be to conditionally call ima_init_template_list()
+> > > in ima_template_setup().
+> > >
+> > > -       if (ima_template)
+> > > -               return 1;
+> > > -
+> > > -       ima_init_template_list();
+> > > +       if (!ima_template
+> > > +               ima_init_template_list();
+> >
+> >
+> > is it still necessary to call ima_init_template_list() in
+> > template_setup()? I saw it is called in init_ima().
+> 
+> All of these options are at __setup().
 
-On 1/27/22 17:30, Mimi Zohar wrote:
-> On Tue, 2022-01-25 at 17:46 -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Move the ima_write_mutex, ima_fs_flag, and valid_policy variables into
->> ima_namespace. This way each IMA namespace can set those variables
->> independently.
-> This patch description needs to be expanded a bit, indicating why
-> they're being moved together.  These flags are needed when loading a
-> policy. Please also update the "struct ima_namespace" comment.
+Yes. ima_init_template_list() should be called before
+lookup_template_desc().
 
-I'll extend the above sentence like this:
+Thanks
 
-... those variables independently in its instance of securityfs.
+Roberto
 
-    Stefan
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua
 
->
 > thanks,
->
+> 
 > Mimi
->
+
