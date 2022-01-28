@@ -2,150 +2,133 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FC04A0032
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jan 2022 19:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C7F4A01CD
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jan 2022 21:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232984AbiA1SfH (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 28 Jan 2022 13:35:07 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:24360 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229827AbiA1SfH (ORCPT
+        id S239372AbiA1UZ5 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 28 Jan 2022 15:25:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58708 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232469AbiA1UZ4 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 28 Jan 2022 13:35:07 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20SI8tLp020845;
-        Fri, 28 Jan 2022 18:34:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=/5fP2DHU2seuRk21lH1YPFXff69uyMGRoc4nJk9F9IU=;
- b=VnE1su6pXJ9R2rDFCPdhNJ4D/I90Hl6mrhT7HXGvsLrsvS97VObpx7kMvXBtsektPD38
- dZc2joWlXhC0pCiOZhixldT71AtQ1OzsaGGuwAYPBvo+QxJLqf/AJ0Ozfss/WVBAHr0c
- TJxTsghoMZJUSU1eK3Sx7By3yzeaceEYwE+Goj+EXMXCNThyZsDFIagc0y1BPAEOBOKL
- 8ufjpTFpMFxJfunGU8Jo/0j2WXxqS1MiNWbjQaeHvoVfyxqlKryZWXtTq6tV7e3iGve8
- ycqxeuTvUsnEhY/wrUC+cozaHx7tKllsWkZuoA7v03ozuFRXiGoUiNxhp+v1XA7YhtVG rg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvhm3p8su-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 18:34:53 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20SIGerh027059;
-        Fri, 28 Jan 2022 18:34:53 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dvhm3p8sc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 18:34:53 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20SIXHHP022432;
-        Fri, 28 Jan 2022 18:34:52 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma01dal.us.ibm.com with ESMTP id 3dr9jdnvv5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Jan 2022 18:34:51 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20SIYoPQ19136846
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Jan 2022 18:34:50 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 00779136053;
-        Fri, 28 Jan 2022 18:34:50 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C713136061;
-        Fri, 28 Jan 2022 18:34:47 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Jan 2022 18:34:47 +0000 (GMT)
-Message-ID: <02a1501c-bf7d-e572-e1c2-4e7eeed3cf15@linux.ibm.com>
-Date:   Fri, 28 Jan 2022 13:34:46 -0500
+        Fri, 28 Jan 2022 15:25:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FAD0B825E4;
+        Fri, 28 Jan 2022 20:25:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D38DC340E7;
+        Fri, 28 Jan 2022 20:25:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643401554;
+        bh=Ph1OyR1ecXlZ+Bdc35dZNoDYirpUuMYM5Ao7nVsb3XM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ly2c+WcC64vuUxS2yM7Ja9KzeZG3/gUJ1Me66weZMQ9tFKcHzxHs7/lLFpT77b8do
+         Ir05XW4W+FHR3B1mQY7Gd8MxBksc1AJAX+tvMO4CasGVPWPXsY5GWvzZ2ilV5abDN/
+         iuuNU3qDhYhTQhPH3AxCcGFSF3qNyNSGQe2Rk2PiRzvxmTeVzSEUCBVoZNtAYF/wGW
+         qG2q0AJWQJgSZbZA3ohuhCyltyY/t9lzl13gDj300WdUwZLDNW7ByoQi88vLJHCbrO
+         qUjnD+wlaAR4+lSUktSgQ7tAwfdPOqjJODrv0cW+KT9AFqOsPy/25wtcl6nF9Fu1z1
+         qaH2bknZ/h+8g==
+Date:   Fri, 28 Jan 2022 12:25:52 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "stefanb@linux.ibm.com" <stefanb@linux.ibm.com>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC][PATCH v3a 00/11] ima: support fs-verity digests and
+ signatures (alternative)
+Message-ID: <YfRRUBZpQv2Hi1sL@sol.localdomain>
+References: <20220127184614.2837938-1-roberto.sassu@huawei.com>
+ <YfLz8NftvbZtKvLT@sol.localdomain>
+ <YfL0+q/ekv4H8lZg@sol.localdomain>
+ <d122893c426f44aa95d5168773b60b9d@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 00/23] ima: Namespace IMA with audit support in IMA-ns
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220126131907.5fauajyjfbcnienp@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220126131907.5fauajyjfbcnienp@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1K_4N8kNdxFH7VYz7kzF5wMLSJacbMSR
-X-Proofpoint-ORIG-GUID: cvn8N21Gxy3SROjUVnFZP2smk6B2Kqci
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-28_05,2022-01-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- bulkscore=0 adultscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201280108
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d122893c426f44aa95d5168773b60b9d@huawei.com>
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+On Fri, Jan 28, 2022 at 09:05:01AM +0000, Roberto Sassu wrote:
+> > From: Eric Biggers [mailto:ebiggers@kernel.org]
+> > Sent: Thursday, January 27, 2022 8:40 PM
+> > On Thu, Jan 27, 2022 at 11:35:12AM -0800, Eric Biggers wrote:
+> > > On Thu, Jan 27, 2022 at 07:46:09PM +0100, Roberto Sassu wrote:
+> > > > I wanted to propose a different approach for handling fsverity digests and
+> > > > signatures, compared to:
+> > > >
+> > > > https://lore.kernel.org/linux-integrity/20220126000658.138345-1-
+> > zohar@linux.ibm.com/
+> > > >
+> > > > In the original proposal, a new signature version has been introduced (v3)
+> > > > to allow the possibility of signing the digest of a more flexible data
+> > > > structure, ima_file_id, which could also include the fsverity file digest.
+> > > >
+> > > > While the new signature type would be sufficient to handle fsverity file
+> > > > digests, the problem is that its format would not be compatible with the
+> > > > signature format supported by the built-in verification module in fsverity.
+> > > > The rpm package manager already has an extension to include fsverity
+> > > > signatures, with the existing format, in the RPM header.
+> > > >
+> > > > Given that the fsverity signature is in the PKCS#7 format, IMA has already
+> > > > the capability of handling it with the existing code, more specifically the
+> > > > modsig code. It would be sufficient to provide to modsig the correct data
+> > > > to avoid introducing a new signature format.
+> > >
+> > > I think it would be best to get people moved off of the fs-verity built-in
+> > > signatures, rather than further extend the use of it.  PKCS#7 is a pretty
+> > > terrible signature format.  The IMA one is better, though it's unfortunate that
+> > > IMA still relies on X.509 for keys.
+> > 
+> > Note, the only reason that support for fs-verity built-in signatures was added
+> > to RPM is that people didn't want to use IMA:
+> > https://lore.kernel.org/linux-fscrypt/b49b4367-51e7-f62a-6209-
+> > b46a6880824b@gmail.com
+> > 
+> > If people are going to use IMA anyway, then there would be no point.
+> 
+> Hi Eric
+> 
+> I thought that the solution I came with could satisfy multiple needs.
+> 
+> For people that don't want to use IMA, they could still continue
+> to use the existing signature format, and wait for an LSM that
+> satisfy their needs. They also have the option to migrate to the
+> new signature format you are defining. But will those people be
+> willing to switch to something IMA-specific?
+> 
+> For people that use IMA, they could benefit from the effort
+> of people creating packages with the original fsverity signature.
+> 
+> For people that are skeptical about IMA, they could be interested
+> in trying the full solution, which would probably be more easily
+> available if the efforts from both sides converge.
+> 
+> If, as you say, you have concerns about the existing signature
+> format, wouldn't it be better that you address them from the
+> fsverity side, so that all users of fsverity can benefit from it?
+> 
+> Currently, fsverity hashes the formatted digest whose format
+> is FSVerity<digest algo><digest size><digest>. Couldn't IMA
+> hash the same data as well?
+> 
+> An idea could be to always sign the formatted digest, and have
+> a selector for the signature format: IMA, PKCS#7 or PGP.
 
-On 1/26/22 08:19, Christian Brauner wrote:
-> On Tue, Jan 25, 2022 at 05:46:22PM -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> The goal of this series of patches is to start with the namespacing of
->> IMA and support auditing within an IMA namespace (IMA-ns) as the first
->> step.
->>
->> In this series the IMA namespace is piggy backing on the user namespace
->> and therefore an IMA namespace is created when a user namespace is
->> created, although this is done late when SecurityFS is mounted inside
->> a user namespace. The advantage of piggy backing on the user namespace
->> is that the user namespace can provide the keys infrastructure that IMA
->> appraisal support will need later on.
->>
->> We chose the goal of supporting auditing within an IMA namespace since it
->> requires the least changes to IMA. Following this series, auditing within
->> an IMA namespace can be activated by a user running the following lines
->> that rely on a statically linked busybox to be installed on the host for
->> execution within the minimal container environment:
->>
->> mkdir -p rootfs/{bin,mnt,proc}
->> cp /sbin/busybox rootfs/bin
->> cp /sbin/busybox rootfs/bin/busybox2
->> echo >> rootfs/bin/busybox2
->> PATH=/bin unshare --user --map-root-user --mount-proc --pid --fork \
->>    --root rootfs busybox sh -c \
->>   "busybox mount -t securityfs /mnt /mnt; \
->>    busybox echo 1 > /mnt/ima/active; \
->>    busybox echo 'audit func=BPRM_CHECK mask=MAY_EXEC' > /mnt/ima/policy; \
-> I think we need to limit the number of rules that can be added to an ima
-> namespace to prevent DOS attacks. The current implementation allows
-> users to write as many ima rules as they want.
->
-> My suggestion would be that you look at real-world data to figure out
-> what a fairly common number of rules is that people write. Then use this
-> as the hard-coded limit for a first implementation. If the use-case
+Adding support for the new IMA signature format to fsverity_verify_signature()
+*might* make sense.  (When I added this code, my understanding was that it was
+just verifying signatures the way the kernel usually verifies signatures.  I
+don't think I realized there was a more direct, PKCS#7-less way to do it and
+that IMA used that way.)  However, it would be better to use this as an
+opportunity to move people off of the built-in signatures entirely, either by
+switching to a full userspace solution or by switching to IMA.
 
+Part of the problem with IMA is that no one wants to use it because it has
+terrible documentation.  It sounds like it's really complicated, and tied to
+specific TCG standards and to TPMs.  I think if it was documented better, people
+would find it more attractive and wouldn't be trying to avoid it at all costs.
 
-I would now go with a hard-coded (generous) limit of 1024 rules for 
-non-init_ima_ns, and leave init_ima_ns unbounded.
-
-
-> arises you can later make this limit configurable by introducing a
-> ucount for ima rules via /proc/sys/user/max_ima_rules.
-
-Ok, let's defer this.
-
-
->
-> Additionally, you should probably switch a lot of ima allocations from
-> GFP_KERNEL to GFP_KERNEL_ACCOUNT as allocations triggerable from userns
-> should be treated as untrusted.
-Ok, done.
+- Eric
