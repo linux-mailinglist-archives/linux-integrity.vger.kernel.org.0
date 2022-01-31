@@ -2,67 +2,105 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 768DA4A33CA
-	for <lists+linux-integrity@lfdr.de>; Sun, 30 Jan 2022 05:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E564A45B7
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 Jan 2022 12:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354188AbiA3E2b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Sat, 29 Jan 2022 23:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
+        id S1376325AbiAaLqc (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 31 Jan 2022 06:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354166AbiA3E21 (ORCPT
+        with ESMTP id S1350915AbiAaLk2 (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Sat, 29 Jan 2022 23:28:27 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32E7C061760
-        for <linux-integrity@vger.kernel.org>; Sat, 29 Jan 2022 20:28:24 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id i10so30409901ybt.10
-        for <linux-integrity@vger.kernel.org>; Sat, 29 Jan 2022 20:28:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
-        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
-         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
-         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
-         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
-         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
-         5U2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
-        b=hh7flMNI5B3FMLNt+Tku3AH6/N1cxMW0rUMkHbxIG9oox+wL/QEX8xWLifXwPuHNWk
-         5wMPfHYzSA9YWBUdMI+k2/rJd4WumOQGH695ogZPliBSBBmz9bIDYLI0zSvpc4VGUM+y
-         J3fbg+C7hXHAyLum5DR2p+lpNxLeVA/WnKJEGE7rSJLFTXc6br7NGuYWHgsNvtJompRw
-         sGEfoxMHjqiNexlkhTHKDw+Hi+Lpe09YRodO1sY59V0vJEXsyWj+hnItPf8Ty6+6iXa4
-         5LqVuwOwLDF9xZOYB44CJPKRZbC2q1LRLd0gqrGLBJFeeBTvaX2M2YFTzcnhetmUgG+J
-         02jQ==
-X-Gm-Message-State: AOAM532amgzeV20ONwnpe7IhKuAnbuZBZYmYS0My7RzmJF2BHiytQFQU
-        qAtCN4VDrMpqyqRvOj0NrvlTjyrnvNlUzBj4BCSATNf4Vyk=
-X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
-X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
- Sat, 29 Jan 2022 20:28:13 -0800 (PST)
+        Mon, 31 Jan 2022 06:40:28 -0500
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ad])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE39C034629;
+        Mon, 31 Jan 2022 03:25:54 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4JnQjX476KzMqHf0;
+        Mon, 31 Jan 2022 12:25:52 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4JnQjT5rHWzljTg9;
+        Mon, 31 Jan 2022 12:25:49 +0100 (CET)
+Message-ID: <e4707df2-ecc2-0471-87fc-c54e774fe315@digikod.net>
+Date:   Mon, 31 Jan 2022 12:33:51 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
- 20:28:13 -0800 (PST)
-Reply-To: mrs.bill.chantalone01@gmail.com
-From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
-Date:   Sun, 30 Jan 2022 05:28:13 +0100
-Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
-Subject: Hello....
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: 
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>
+References: <20210712170313.884724-1-mic@digikod.net>
+ <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net> <YcGVZitNa23PCSFV@iki.fi>
+ <5030a9ff-a1d1-a9bd-902a-77c3d1d87446@digikod.net> <Ydc/E3S2vmtDOnpw@iki.fi>
+ <YddADJJNLDlQAYRW@iki.fi> <86c5010e-a926-023a-8915-d6605cfc4f0a@digikod.net>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
+In-Reply-To: <86c5010e-a926-023a-8915-d6605cfc4f0a@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-You have been compensated with the sum of 9.5 million dollars in this
-united nation the payment will be issue into atm visa  card and send
-to you from the santander bank we need your address and your
-Whatsapp number  + 1 6465853907  this my email.ID
-( mrs.bill.chantal.roland@gmail.com )  contact  me
 
-Thanks my
+On 07/01/2022 13:14, Mickaël Salaün wrote:
+> 
+> On 06/01/2022 20:16, Jarkko Sakkinen wrote:
+>> On Thu, Jan 06, 2022 at 09:12:22PM +0200, Jarkko Sakkinen wrote:
+>>> On Tue, Jan 04, 2022 at 04:56:36PM +0100, Mickaël Salaün wrote:
+>>>>
+>>>> On 21/12/2021 09:50, Jarkko Sakkinen wrote:
+>>>>> On Mon, Dec 13, 2021 at 04:30:29PM +0100, Mickaël Salaün wrote:
+>>>>>> Hi Jarkko,
+>>>>>>
+>>>>>> Since everyone seems OK with this and had plenty of time to 
+>>>>>> complain, could
+>>>>>> you please take this patch series in your tree? It still applies on
+>>>>>> v5.16-rc5 and it is really important to us. Please let me know if 
+>>>>>> you need
+>>>>>> something more.
+>>>>>>
+>>>>>> Regards,
+>>>>>>    Mickaël
+>>>>>
+>>>>> I'm off-work up until end of the year, i.e. I will address only 
+>>>>> important
+>>>>> bug fixes and v5.16 up until that.
+>>>>>
+>>>>> If any of the patches is yet missing my ack, feel free to
+>>>>>
+>>>>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>>>
+>>>> Thanks Jarkko. Can you please take it into your tree?
+>>>
+>>> I can yes, as I need to anyway do a revised PR for v5.17, as one commit
+>>> in my first trial had a truncated fixes tag.
+>>
+>> Please check:
+>>
+>> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+>>
+>> /Jarkko
+> 
+> Great, thanks!
 
-mrs bill chantal
+Hi Jarkko,
+
+I noticed your commits 
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=3ec9c3a0531ac868422be3b12fc17310ed8c07dc 
+are no more referenced in your tree. Is there an issue?
+
+Regards,
+  Mickaël
