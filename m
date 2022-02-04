@@ -2,115 +2,118 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAD74A93FD
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Feb 2022 07:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1E04AA0E0
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Feb 2022 21:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239060AbiBDG2b (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Fri, 4 Feb 2022 01:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S237920AbiBDUGe (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 4 Feb 2022 15:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234257AbiBDG2a (ORCPT
+        with ESMTP id S238347AbiBDUFm (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Fri, 4 Feb 2022 01:28:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEB8C061714;
-        Thu,  3 Feb 2022 22:28:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77903B82FF0;
-        Fri,  4 Feb 2022 06:28:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC95C004E1;
-        Fri,  4 Feb 2022 06:28:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643956107;
-        bh=QaFOZ+4F9bVAF26M1HaVC5kjbiVDzIfY69jkftb6Kao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b9ngHE683pVzCGLDEjg491rrD5f6vfgfZUE06M7/XMoPJEmYmGSHLSU9NmKeeAOtw
-         uyHttVx16YZbBlN9iAmOdfYLBCbstjpUytRpE6jy+BP8WAf6kzrDZKENykhFdNrFEM
-         j2xP2uhqLJyBld79JNy4sQzvZGhg4+h/uM8Jc9q56sHW7sSbd0SU/K+q5nBddJ19NE
-         aKCWCl7FrlSaqGYeC263P60on+RXOp9sRjfXBj5Egt7bMmrvn+Cch/R05SmqGuxGeL
-         joZglMI26btTOAKwxwTzpMfo5GmjefOEWnot7IusAJjMCei9lt6Peo1/BQ48k8dVou
-         PHMFm7gKDSSUg==
-Date:   Fri, 4 Feb 2022 08:27:59 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Yael Tiomkin <yaelt@google.com>
-Cc:     Martin Ross <mross@pobox.com>, corbet@lwn.net, dhowells@redhat.com,
-        jejb@linux.ibm.com, jmorris@namei.org, keyrings@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        serge@hallyn.com, Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-Message-ID: <YfzHb9K5wZciy5um@iki.fi>
-References: <CA++MVV3Jse4WZ-zr-SUWQz3Gk_dByU6JduVfUkvQNW+jgm9O4Q@mail.gmail.com>
- <YfFe9+XDPDIdSqF1@iki.fi>
- <YfFf8fvsDm8lQJgJ@iki.fi>
- <CAKoutNsaHNriobnsQ1X0Qfs=K+YN3JvfhTBnQqPL01AvjRm5EA@mail.gmail.com>
+        Fri, 4 Feb 2022 15:05:42 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E1C06136C;
+        Fri,  4 Feb 2022 12:03:59 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d1so6054481plh.10;
+        Fri, 04 Feb 2022 12:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+08pbFHIVqXtRgCRGwgS5N246tIcG+TXD3qRf9F36iw=;
+        b=bLChGjEp7XV+zCb/FoJ9GfumEeTQWfhFGQCoozOt3GnA1ZXGkTjabAXozjimyeJn1E
+         KN2x0h03YqXAJQmemhmLMK7okFXx4aG2gL5N6AWKYUDXP1Ib1G4nAU2XgE3FGJ+wsvjj
+         PGUfpzMeb1mb0aKI88uLnyw5CsZwBhyV0VrhBy5N1s0jJOHsPL2D2O8d7btnmdOFGqnB
+         fx6wlJdnJl1E7gOjFZ6GP52rdS/oQZQLapgi9XCzKIZnrA181p16a+chsTEUl9wSXTyx
+         ETGS8vKjjgZ8YX+HpnxaVfRPSf+gis1Dnajdx/0RKyGQUonpOIhQG957i7ifE5G+xoj1
+         gkHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+08pbFHIVqXtRgCRGwgS5N246tIcG+TXD3qRf9F36iw=;
+        b=DECZBPaF/I52tITQN8euI+K+lUzvWCmjwzOxaEpHL9Ivib970AUYGt385Ex6F+sFEH
+         XlPjB/3XPZ+KREes9/Bk1t4rArdyXQXjINXXF6SWJ5gxo6aErn4NMhT9aFt4yp0qTkUq
+         r8ybgR7fXFarN6dRWpEJgvfrkFVzLK9Bpo7JgGy/S01xduJdBInjpL+cswlAUQUBCxOV
+         GmAb6t1f1ptUJRFjM1vQSg2VWzthFoAJkU9Gy2RzNE+XTjOmbA3xYfeFORrQU+lzJ+FP
+         RELaCe4cdB3TQDdeQDyiBZI10OiMSjfckLKvxRmHE8+vmC0ZB0Y1WXocSQHZIC5Qe7no
+         sv+Q==
+X-Gm-Message-State: AOAM530RWTAaj9eJ8/44Z+J1JHw28QqeAcuK1+2W8ZLJO0E2HEgWClGs
+        5GtQSTT0rnLehFpsFDMlpbBFoJ1f5v8P5g==
+X-Google-Smtp-Source: ABdhPJxOMEo7JDvh78IhN7RDJ9a8jI4xihXjuwfJFEvaRs/On+QYsASo2DZPyYweZMIZSPRYqbB06A==
+X-Received: by 2002:a17:902:c209:: with SMTP id 9mr4714497pll.119.1644005039317;
+        Fri, 04 Feb 2022 12:03:59 -0800 (PST)
+Received: from tong-desktop.local (99-105-211-126.lightspeed.sntcca.sbcglobal.net. [99.105.211.126])
+        by smtp.googlemail.com with ESMTPSA id j18sm3782566pfj.13.2022.02.04.12.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 12:03:58 -0800 (PST)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tong Zhang <ztong0001@gmail.com>
+Subject: [PATCH] KEYS: trusted: fix crash when TPM/TEE are built as module
+Date:   Fri,  4 Feb 2022 12:03:42 -0800
+Message-Id: <20220204200342.48665-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKoutNsaHNriobnsQ1X0Qfs=K+YN3JvfhTBnQqPL01AvjRm5EA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 03:56:44PM -0500, Yael Tiomkin wrote:
-> On Wed, Jan 26, 2022 at 9:51 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Wed, Jan 26, 2022 at 04:47:22PM +0200, Jarkko Sakkinen wrote:
-> > > On Tue, Jan 18, 2022 at 01:26:05PM -0500, Martin Ross wrote:
-> > > > Hi Jarkko,
-> > > >
-> > > > I have been working with Yael on this project so I thought I might add
-> > > > a bit of background here around the use case that this series of
-> > > > patches is trying to address.
-> > > >
-> > > > At a high level we are trying to provide users of encryption that have
-> > > > key management hierarchies a better tradeoff between security and
-> > > > availability.  For available and performance reasons master keys often
-> > > > need to be released (or derived/wrapped keys created) outside of a KMS
-> > > > to clients (which may in turn further wrap those keys in a series of
-> > > > levels).  What we are trying to do is provide a mechanism where the
-> > > > wrapping/unwrapping of these keys is not dependent on a remote call at
-> > > > runtime.  e.g.  To unwrap a key if you are using AWS KMS or Google
-> > > > Service you need to make an RPC.  In practice to defend against
-> > > > availability or performance issues, designers end up building their
-> > > > own kms and effectively encrypting everything with a DEK.  The DEK
-> > > > encrypts same set as the master key thereby eliminating the security
-> > > > benefit of keeping the master key segregated in the first place.
-> >
-> > Mainly this part (would be enough to explain why it is there).
-> >
-> > BR, Jarkko
-> 
-> Hi Jarkko,
-> 
-> As for the commit message, WDYT about the following:
-> 
-> KEYS: encrypted: Instantiate key with user-provided decrypted data
-> 
-> For availability and performance reasons master keys often need to be
-> released outside of a KMS to clients. It would be beneficial to provide a
-> mechanism where the wrapping/unwrapping of DEKs is not dependent
-> on a remote call at runtime yet security is not (or only minimally) compromised.
-> Master keys could be securely stored in the Kernel and be used to wrap/unwrap
-> keys from userspace.
-> 
-> The encrypted.c class supports instantiation of encrypted keys with
-> either an already-encrypted key material, or by generating new key
-> material based on random numbers. This patch defines a new datablob
-> format: [<format>] <master-key name> <decrypted data length>
-> <decrypted data> that allows to inject and encrypt user-provided
-> decrypted data.
-> 
-> 
-> I want to make sure we're on the same page before publishing a new version.
-> 
-> Thanks,
-> Yael
+when TCG_TPM and TEE are built as module, trusted_key_sources will be an
+empty array, loading it won't do what it is supposed to do and unloading
+it will cause kernel crash.
 
-It looks really good.
+To reproduce:
+$ modprobe trusted
+$ modprobe -r trusted
 
-/Jarkko
+[  173.749423] Unable to handle kernel NULL pointer dereference at virtual address 00000000
+[  173.755268] Backtrace:
+[  173.755378]  cleanup_trusted [trusted] from sys_delete_module+0x15c/0x22c
+[  173.755589]  sys_delete_module from ret_fast_syscall+0x0/0x1c
+
+To fix this issue, we also need to check CONFIG_TCG_TPM_MODULE and
+CONFIG_TEE_MODULE.
+
+Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+ security/keys/trusted-keys/trusted_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index d5c891d8d353..b3a3b2f2d4a4 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+ MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+ 
+ static const struct trusted_key_source trusted_key_sources[] = {
+-#if defined(CONFIG_TCG_TPM)
++#if defined(CONFIG_TCG_TPM) || defined(CONFIG_TCG_TPM_MODULE)
+ 	{ "tpm", &trusted_key_tpm_ops },
+ #endif
+-#if defined(CONFIG_TEE)
++#if defined(CONFIG_TEE) || defined(CONFIG_TEE_MODULE)
+ 	{ "tee", &trusted_key_tee_ops },
+ #endif
+ };
+-- 
+2.25.1
+
