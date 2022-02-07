@@ -2,185 +2,154 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F264D4AC7F1
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Feb 2022 18:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D424AC8D8
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Feb 2022 19:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbiBGRuT (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Mon, 7 Feb 2022 12:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S231811AbiBGSr4 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Mon, 7 Feb 2022 13:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384405AbiBGRkn (ORCPT
+        with ESMTP id S231851AbiBGSpT (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Mon, 7 Feb 2022 12:40:43 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE79C0401D9;
-        Mon,  7 Feb 2022 09:40:41 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 217FZLAS020213;
-        Mon, 7 Feb 2022 17:40:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=NJxRHke/qyTl8W+YVEW0q2tvx5NXp9Qs8uL8SnGhFSQ=;
- b=CwzEKf/ZJ8BKv0inuYMRR/I4/QZrWRdhhg+TzswI44X1Pzamdd6W0rruXjHaoF9g+C0c
- FlMbQ5DJZabqLYoq1JUdmyA9YQ8s2cV2vezWmvG/X1dN10YSUbn7Pxl0imGvXW6Of6kx
- u8B7KIrmHhJXB+z65tsfKIXMWDsD/inVbPrXtUuPa5Kmif/89Kllrom2BqmO4ST/k4KI
- 7b8lAvY/yFegLcScDOFJSCMG2lO93xEUUxL1syDgTpVGe1Hp8b77VmOWv/MweqCMmJPU
- wRvOQl0c8/meqK4/xB5uGvVf26et2PGwAf7ySQnVGsyWDf1RiTcDRs2QrrlkZkzeMiJj 0g== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e366wrcat-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Feb 2022 17:40:27 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 217Ha1oX108372;
-        Mon, 7 Feb 2022 17:40:26 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
-        by aserp3030.oracle.com with ESMTP id 3e1f9dqusr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 07 Feb 2022 17:40:26 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JnylckqN0A/Dq8t7x6r3C1yskZkWejEFz/cswGES/GqVzpXNuyXu6upeV1e9+rT5jnoBZf/VWEi/wB/wXdSNd11E77ygKG/z5yruqyZ2zJjiAlxWS1lBoL3RFVSv07pzeFBYpj4GXKYzpu1rnZLT5boj2i/oy3GtZ5Bo64zXglwIbsfl66Y1Sc5GEOxYzJnwd1EPy+m1nc5AxUHHRY9c1Socwj5PAeAHc84liCuWchmKLRjl/PYY1zXfMOW1Q7nFZR4a8laMIjzNsfvxTPyavHD7au/wf5yuSfBEWxLliLj8YG+UK+yEvBF3yCaA7ocIyzcFmjLlYiS/uwr8d6ZFPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NJxRHke/qyTl8W+YVEW0q2tvx5NXp9Qs8uL8SnGhFSQ=;
- b=jZmcFGt5CB8y4RyqdyxwfzvqgCNLCoKhT2XuTHI2T4X3IWkyEGZg9bgZru/cnrZV7/qrA7P/jo/+Byv/xZ1TT6/OYQNya75jfI+lK4wzqYi2141O9Ti8V98Hl7haSfLHgoPH1434YV79xBmO+aeogauPDnhaOviyPthYEx7dqMQqfpWJWcmI/3Kkq3ATi73eKA6uYd9XC63uZqqnmnnQuq7WAWoba70Lac3YKywGrip5BmmQWWOEAMIv3OF9YnaflL/Mm0oX4xszObxvZL6oairG9vALJUV+g9kMlNtDIKcIcM6VpLtgk+7P7gbsHD89ZrGTVZuyvzyO1YKM4iKAXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NJxRHke/qyTl8W+YVEW0q2tvx5NXp9Qs8uL8SnGhFSQ=;
- b=SkzkEizUKev3aTT8dfKGDim/pZG3AEFcjvtClpjbEq5GSOy0nbpSEUyfAQFMX5aOW/iBuzprxbiODjpDT412A8j3/MkoG+rk4wSdABflftAi/rSi1WNgzffP2aC3k9YOT2uLeu4gjxInjWdDkN+Gj/lkHaioRh6DvrnN1pU3Fco=
-Received: from SA2PR10MB4665.namprd10.prod.outlook.com (2603:10b6:806:fb::17)
- by DS7PR10MB4880.namprd10.prod.outlook.com (2603:10b6:5:3ac::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Mon, 7 Feb
- 2022 17:40:25 +0000
-Received: from SA2PR10MB4665.namprd10.prod.outlook.com
- ([fe80::5c:9564:93b9:5654]) by SA2PR10MB4665.namprd10.prod.outlook.com
- ([fe80::5c:9564:93b9:5654%8]) with mapi id 15.20.4951.019; Mon, 7 Feb 2022
- 17:40:25 +0000
-Message-ID: <cda221fd-6481-598f-03ba-29d0b79af8b7@oracle.com>
-Date:   Mon, 7 Feb 2022 11:40:23 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] KEYS: trusted: Avoid calling null function
- trusted_key_exit
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Sumit Garg <sumit.garg@linaro.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, stable@vger.kernel.org
-References: <20220126184155.220814-1-dave.kleikamp@oracle.com>
- <YfGtVk/HQjgl1zSS@iki.fi>
-From:   Dave Kleikamp <dave.kleikamp@oracle.com>
-In-Reply-To: <YfGtVk/HQjgl1zSS@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA9PR13CA0053.namprd13.prod.outlook.com
- (2603:10b6:806:22::28) To SA2PR10MB4665.namprd10.prod.outlook.com
- (2603:10b6:806:fb::17)
+        Mon, 7 Feb 2022 13:45:19 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75603C0401DA;
+        Mon,  7 Feb 2022 10:45:18 -0800 (PST)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 217Iihkg030588;
+        Mon, 7 Feb 2022 18:44:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=JWobRtZJdiu1UFWJsYFo6dTuwFzOvnol71RgZ3pYM7g=;
+ b=gpE1Y5Zgrvtptli5BejmreD4vbWsxRhPyMSS8pHDCf6OyjaA/CkrTjHY7vvhOrNRY2xl
+ tkfvzQ9c+Bf7OaAo2iyppSFRkxb92F88ydGLqQ/Kkq7kZUOCZ5oR84x8cRf7mi9ep9gl
+ d0ogishXHp2mwSfHVjybBR4frK4176pkgXIopjpGxNNsS2m+P6+LeV54QOsGnhwFiWT0
+ j4FcHjPTHVM1cjXu/raSjaLHjg9H6YhyqUjqfh+cNVg/YbF6+Ts6RWUNva1ILG41aYGS
+ orgd3sk8vm0EviCeLDXap5Z9i3P2X1rpWVHnOztR7ITMh9VeEbGlsqolej1oOi55sgW0 Cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22whh05p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 18:44:48 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 217IikRK030861;
+        Mon, 7 Feb 2022 18:44:48 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22whgyuf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 18:44:48 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 217IXcXe016001;
+        Mon, 7 Feb 2022 18:43:33 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma03wdc.us.ibm.com with ESMTP id 3e1gvabkkj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Feb 2022 18:43:33 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 217IhWXr34013446
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Feb 2022 18:43:32 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E96BCB206B;
+        Mon,  7 Feb 2022 18:43:31 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 87758B2068;
+        Mon,  7 Feb 2022 18:43:31 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Feb 2022 18:43:31 +0000 (GMT)
+Message-ID: <cb94bd18-2d6c-772f-b16e-a4778480258b@linux.ibm.com>
+Date:   Mon, 7 Feb 2022 13:43:31 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7f7e8401-ee1a-4d30-51ad-08d9ea60ec45
-X-MS-TrafficTypeDiagnostic: DS7PR10MB4880:EE_
-X-Microsoft-Antispam-PRVS: <DS7PR10MB4880615E290081632527D726872C9@DS7PR10MB4880.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Wgyi20aEEauz1GUvCkMRLIsmIf/pM3V3yiTxtRyHpZDz3RAV8U+b+DqjHoaAWytYPSwYQ02Knu9+xyBxQorS3q4YRTE/WwJ+2TxXG1+2QHoqLuxtCvjq7WP3hCeL2U64skdcIOo8cmYcJKKwJqgW1BVc3f2L6yC4W6NOf48kbViQWUSgtD/K7mSLvkNFxlM4b/i6HewP5bm7oDHMsiId0lGXDC4QbmJVfRrcKRaxvDHgW/TeubazvjfxNUdao8MBu37I/5w5X7vs+gaelrFooeP+xNXLGzBDZ5p3n4E0emw+iIBrUpeFfGZRKfPBq30+xIRJKkwf3fibExxAlchseLmkfD0iOCUUo9MOo2M3tCtWqsh92/g4Hic0ci+lrxjeQh3/9S/nW8BU35aF7v7pERr/nBpchLSOK95CRL+UGJDG4Y5jWh3jYm11d6zbJriXnhMTLoxcnRynE32AwFIgwg44gt7BxaAPBruAuu37DTYrGPdd7XOlWkQxPPMnwta8jfJfDVOCtw8Zw0lwWEI9QwEgN494jKZ3W5MgdzN9zrZG+whBEGReWNYqw+a+VD09L6UGUBvfHgPV6dv812fzfC7+iAdwQEHaRgOnQkBD5YnoYYE+UiFFJaQmfAVg9hXOg/bFrPsp7oi//Rw8yHGRQosaUejQHnZDfGxF7gm8YCikTYlqchYiBZ9tSqNKJAObq80Wj7V2YxZlINfsc76QI2z8JsnU/bRCc2mUv0rzd24=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4665.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6486002)(6512007)(6506007)(508600001)(4744005)(7416002)(5660300002)(44832011)(2906002)(316002)(6916009)(54906003)(8676002)(4326008)(66476007)(66946007)(8936002)(66556008)(31686004)(38100700002)(31696002)(36756003)(86362001)(2616005)(26005)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S0tCV3JoNUlLakthU0kzZE14cnJrTU43WnV0RGhEZ0NPdEM4dTE3RkxBeVpm?=
- =?utf-8?B?OWIzdWxLRktzRW5wbkNBNE02cUFHUzdYbThCZUNOVnI4L1h1b0tsTGhmTmtK?=
- =?utf-8?B?enpYNUk5QlJsUmdmeFdYSDMrOVdZUHFLTzBMVEZCaWVEQTdWZ09iWnJxY2x3?=
- =?utf-8?B?dnVKUXNGd3VOZlkzaytUd3BNc0lGNVNLUTRzbko0elZ3RDluaXVIMDQyK3JD?=
- =?utf-8?B?MnUwQ2xkeTI1SEJCMGVqNnU2L1BUa3lYR25NT2JGWC9vYWFFV1NGdlF6MlN1?=
- =?utf-8?B?dndCMzl3dW4ybmJwVmFmSjV3NmlzSklNK3IxRFhiTU81VGJSWVc1TndpUEhV?=
- =?utf-8?B?ejQzN2NJbnBINFF6M3pZYkFoZ2dJMEJIbG1XdVhKdS9Ob3ljeGhXT3Z4cWZF?=
- =?utf-8?B?S3k4NmNQay9BK2RzUS9SOUd4eU9xdzJTNnpuTGI3cThhd1kvemk4UHZSRnE2?=
- =?utf-8?B?Z01lU29nWkxRYjFFc3A2RzM2WGtQZkxVR0xINWJBS1dMNW0wbDQ5RmVENmVv?=
- =?utf-8?B?VUJhQzlPaUZ3Vk83SmYvYlpHZ1llcG1ML3B5ZmNyckZ6dmZ2NTRjTnZKTVQ5?=
- =?utf-8?B?YlUrYTJBOHpjbW8wRE9ZMjU2SXBVSmVONFc3VW95NDlNVGxmRmxUWTA3d3h5?=
- =?utf-8?B?RE5lT3l6L1BsOUVlNURQWjgyN2swWnZTbTVMZWswajhUMzNqb1JJS2YyR3d2?=
- =?utf-8?B?dmYrUm1leWhoZnBRazNmVFU4cWswZXBtZUxXV2p3NjN1NXRJWkdRNHduUDBG?=
- =?utf-8?B?aTNKaGVUR2FEUnJ2K04xSnhQT1ZJSXBFWDdEdXBSUlJjZ3crMCtOWTUvdWMz?=
- =?utf-8?B?Q3lWQ2t0UGhZZ2JIQjkzcEtoa3pkWXRrdmpKU2ZTRzg1b2wzSWszaUpPdHNm?=
- =?utf-8?B?YkFWU3lqTGs5Y3g3STZLU2d2RTVNV2EyYzk0c1l0OXNJQ1JvUloreERBV3hX?=
- =?utf-8?B?UWlRYWVPZmRVY3dqMlNKNkZFa3JYcjJ0aVhJRnhBT1BtcittNlplSUxJM3dR?=
- =?utf-8?B?Zkljdy9JOVQ5N2podXJBWWI0cXhGYTVxQTRZMTZhYnhrQk5OVFBYaFAxRWVn?=
- =?utf-8?B?RUFiSjllbFE2cGM2L2k4blhkd0taaVhxZjhFNm9PbXBvWTRScjZQdTZMR05X?=
- =?utf-8?B?WXVmOHFmMHdUK2NaQWtxNmtDUkcwa3JGdE5ZWFlsY1FCd3hGS1dCc0xCWEpC?=
- =?utf-8?B?M3ByMWIvZHhPYS9qNHJ2a0o4aVM5VHg5UWxEMEtOTEZxbVdRVG96ZkM5WHVt?=
- =?utf-8?B?Tmh2YmplZmtmR0sySGZzbFBWemZ4ME5GdkxlUmVsSGlIKzJyTVowUE4zQ0hw?=
- =?utf-8?B?UmhEcDE2aG5aMkhYakFCZTdKTjN6YTE4eG9JQkJwaFRFRm44bnJldzVocjMw?=
- =?utf-8?B?UGZtQnUzUHdySGQrODliUXIwWWlLVE5xTXF1WlY0MFRQbEVUbGpwdTNkNUZF?=
- =?utf-8?B?SmpmNisxb0pXQlRlWjZqUEFETjBVQUsydHhyb00za2NEZmRpc2VveUNpT0t1?=
- =?utf-8?B?MjZRT2M0VnBMYWRHUmdPVldpQWo1WmdyNzZPVjUzSkNjQ2lJQzRpTEdGRVFX?=
- =?utf-8?B?bnVyMXNQTndTREkwOWh6b3NLVEQ3S21panZYeXdNbFpCZVNBcHI1VHA3MjhY?=
- =?utf-8?B?enZPckNEVFdqQ0U0cUNlK2k2d0ozLzdwTXRxY0dtdS9YY0lDQks0WklXUVRU?=
- =?utf-8?B?NkdNR1B4aXZLMiszT2t0ay9wUXdvTWdmcTU3a2xpTzFPb3FDNGc2SWZCRFo1?=
- =?utf-8?B?ODYra3U1L29mR2FzSllUWVdROEZPUWRHVHFKdmhFVGhOa21FMTh6MlVRR1l4?=
- =?utf-8?B?SExVK3M2YklZUHdQTlZvRXNEdXBFdllLT0hOdGVkV1pyYkRWZTMrUWRpc0hR?=
- =?utf-8?B?dGhsaE56RStVbHJNUTRNUm93emlMTnNyc2t0ZXlBMmpXNTNHQWYwQ2JzZnNa?=
- =?utf-8?B?cWJZMDk0c2RjZ0NqN00wSUFxSzNEcExRUytkVncxWEhXOExqTGhoV29RSnc5?=
- =?utf-8?B?cndyRytIRjZjWkE0U2dUVWxOeUNxRVpXMU1aQnNOVGpUM2o2ZW5LU1E1eG5X?=
- =?utf-8?B?QXkzMFdpa3FmVERla01wUk1sbEVBT0R2OSszNDFwMkZ3b01Jc0N1STQ4MVhp?=
- =?utf-8?B?bmVrcng5RnQ5SUkyTlVYM1JsMkkwNlRzNktlNVAzdlN3cXFIWFJBWXBnY3Fj?=
- =?utf-8?B?eGdmWEFKYVNiMjRudnIyMHdsWXR1TUsrQjl3N2wvcDRQL2xXMVdSYkUwS1d4?=
- =?utf-8?B?V1pMcHR4bFRJSkM3Snl6cXZGV2lnPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f7e8401-ee1a-4d30-51ad-08d9ea60ec45
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR10MB4665.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2022 17:40:25.2767
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AqjFOOilUc6yJ5TGQvrSLoeB/yZBqMt3CBMs6+w6o0xdsIVKIYcZN88s1apQCw/anm4Z3VJJKAiG5WX4/zdj02XMUvJt53nyzoHwrueHDHE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB4880
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10251 signatures=673430
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 adultscore=0
- mlxlogscore=999 suspectscore=0 mlxscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202070109
-X-Proofpoint-GUID: CIqGmtd4dp8OEfo7Q7ZJUgnRPTgKMDHh
-X-Proofpoint-ORIG-GUID: CIqGmtd4dp8OEfo7Q7ZJUgnRPTgKMDHh
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 12/27] ima: Define mac_admin_ns_capable() as a wrapper
+ for ns_capable()
+Content-Language: en-US
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Denis Semakin <denis.semakin@huawei.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+ <20220201203735.164593-13-stefanb@linux.ibm.com>
+ <20220205055826.GA15072@mail.hallyn.com>
+ <9c8a09d6-6373-c8c2-c8ff-2b4c3f92ddf1@linux.ibm.com>
+In-Reply-To: <9c8a09d6-6373-c8c2-c8ff-2b4c3f92ddf1@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Tcu-5Coy4UkbaOUi6lumKcgXTITFJmeT
+X-Proofpoint-ORIG-GUID: iFPtb5sqsV7f3jo0ECd3tQdAx54PcLLd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-07_06,2022-02-07_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ bulkscore=0 spamscore=0 adultscore=0 mlxscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202070113
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On 1/26/22 2:21PM, Jarkko Sakkinen wrote:
-> On Wed, Jan 26, 2022 at 12:41:55PM -0600, Dave Kleikamp wrote:
->> If one loads and unloads the trusted module, trusted_key_exit can be
->> NULL. Call it through static_call_cond() to avoid a kernel trap.
->>
->> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
->>
->> Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
-> 
-> Please re-send with cc stable and the empty line removed and I'll pick it.
 
-I re-sent a v2, but haven't seen any response from you.
+On 2/6/22 12:20, Stefan Berger wrote:
+>
+> On 2/5/22 00:58, Serge E. Hallyn wrote:
+>> On Tue, Feb 01, 2022 at 03:37:20PM -0500, Stefan Berger wrote:
+>>> Define mac_admin_ns_capable() as a wrapper for the combined 
+>>> ns_capable()
+>>> checks on CAP_MAC_ADMIN and CAP_SYS_ADMIN in a user namespace. Return
+>>> true on the check if either capability or both are available.
+>>>
+>>> Use mac_admin_ns_capable() in place of capable(SYS_ADMIN). This will 
+>>> allow
+>>> an IMA namespace to read the policy with only CAP_MAC_ADMIN, which has
+>>> less privileges than CAP_SYS_ADMIN.
+>>>
+>>> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>> ---
+>>>   include/linux/capability.h      | 6 ++++++
+>>>   security/integrity/ima/ima.h    | 6 ++++++
+>>>   security/integrity/ima/ima_fs.c | 5 ++++-
+>>>   3 files changed, 16 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/linux/capability.h b/include/linux/capability.h
+>>> index 65efb74c3585..991579178f32 100644
+>>> --- a/include/linux/capability.h
+>>> +++ b/include/linux/capability.h
+>>> @@ -270,6 +270,12 @@ static inline bool 
+>>> checkpoint_restore_ns_capable(struct user_namespace *ns)
+>>>           ns_capable(ns, CAP_SYS_ADMIN);
+>>>   }
+>>>   +static inline bool mac_admin_ns_capable(struct user_namespace *ns)
+>>> +{
+>>> +    return ns_capable(ns, CAP_MAC_ADMIN) ||
+>>> +        ns_capable(ns, CAP_SYS_ADMIN);
+>> Do you care about audit warnings?  If the task has CAP_SYS_ADMIN but
+>> not CAP_MAC_ADMIN, is it desirable that selinux_capable() will audit the
+>> CAP_MAC_ADMIN failure?
+>
+> Good point.  I will switch both to ns_capable_noaudit() so that the 
+> user cannot provoke unnecessary audit message.
 
-I can send it again, or feel free to clean up those lines yourself.
+Actually,  I will only change the MAC_ADMIN to not do auditing and not 
+change the auditing behavior related to SYS_ADMIN.
 
-Thanks,
-Shaggy
+    Stefan
 
-> 
-> BR, Jarkko
+
