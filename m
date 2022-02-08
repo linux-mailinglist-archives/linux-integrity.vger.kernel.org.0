@@ -2,104 +2,151 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8904AD3DB
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Feb 2022 09:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B03E4AD42D
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Feb 2022 09:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351493AbiBHIo1 (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Feb 2022 03:44:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S1352674AbiBHI6d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Feb 2022 03:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351928AbiBHIoC (ORCPT
+        with ESMTP id S1352625AbiBHI6c (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:44:02 -0500
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F033C03FEFA
-        for <linux-integrity@vger.kernel.org>; Tue,  8 Feb 2022 00:44:01 -0800 (PST)
-Received: by mail-ua1-x944.google.com with SMTP id u77so10896622uau.6
-        for <linux-integrity@vger.kernel.org>; Tue, 08 Feb 2022 00:44:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=edeevZ54MxyNr2ONaDsC9jI+UtdZjrCL/LCuSFC70Ao=;
-        b=qzcA3K52de9EhxIhzDkkmYbbQbKaihztEhpxunYq2GbraMA2FahupsNjdrEQdl+2Xo
-         x8jS+FGEUTCMk4tDTYOrkEiAnHXAkXcvH7RvY2aCKbp+IjLQ3Bp7h8T/UGTTv6cbvQJx
-         UDaJ+EExkU2Hp+cSSYRA9eBK9kaPiYVEdlhpEIKA2WBzvL9GDh4CBhV+D7H2jS5hbt2m
-         8LtLW4gnxvDWL+oX1Mu+PuIaS25Xny7KZOl+qnwzrY5EU6w8EDQE49bsI3Zvp3xnEqz9
-         DCUxVi2bJ97Z5XO1ifHRoy2QV3wbBOmeBX5qA9XMxLaJLZCuYBlb/QVcJLQKQ1TiYL1W
-         HBgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=edeevZ54MxyNr2ONaDsC9jI+UtdZjrCL/LCuSFC70Ao=;
-        b=ZGCXS/OJwFiNP75DrXBd3d4sXIprqlaQ9C83eDaG8Jkz9ZIET51HtZPYe6iFjRXsts
-         reUhsCpcJ4xPsH43HX4xyFUvSpQqWs4X2DT876/+50wK6GHed6DI4wAlTjL0zOEt70V0
-         4RS+M1jJREbyZB70sOJ2gEAkcqwQZof76Frt59I53rsHckPuYziRVaRP5Ce4fb6DYAP0
-         ig6OPY2+D9HgnjWgb2uWlfqLJmiHTTUvUOO6yaDEFuMOElUEpCWhcpA6O6E+eNIhtAuS
-         aEMk4oVCeCe89eT6/+UO9MzZL4iZl0z+lc6/K15DdVsqwDu/CxWOs8G5ok1w7E06ttQH
-         ApnQ==
-X-Gm-Message-State: AOAM533537a5h2vRvE1SBkf42N598ZmTa1vi6QnvWWBGrXPiLSL9gck0
-        wQtglX0+bv5CQIRashpSVhWNr6a8v4AT4UiXMdM=
-X-Google-Smtp-Source: ABdhPJwabOZCYr3WB5MAVlhPccZ8TF1Tp/Jgj7lvaHsfCshVug2Z/NGcswi/yGz08altCfIkGJhgE6VUV2eXkpdV8Qk=
-X-Received: by 2002:ab0:72c2:: with SMTP id g2mr1148800uap.15.1644309840067;
- Tue, 08 Feb 2022 00:44:00 -0800 (PST)
+        Tue, 8 Feb 2022 03:58:32 -0500
+X-Greylist: delayed 471 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 00:58:30 PST
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA3B7C03FEC1;
+        Tue,  8 Feb 2022 00:58:30 -0800 (PST)
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 1436A72C905;
+        Tue,  8 Feb 2022 11:50:38 +0300 (MSK)
+Received: from altlinux.org (sole.flsd.net [185.75.180.6])
+        by imap.altlinux.org (Postfix) with ESMTPSA id E823E4A46EA;
+        Tue,  8 Feb 2022 11:50:37 +0300 (MSK)
+Date:   Tue, 8 Feb 2022 11:50:37 +0300
+From:   Vitaly Chikunov <vt@altlinux.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     keyrings@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] KEYS: asymmetric: enforce that sig algo matches
+ key algo
+Message-ID: <20220208085037.lo53hi6ohjusr7pv@altlinux.org>
+References: <20220208052448.409152-1-ebiggers@kernel.org>
+ <20220208052448.409152-2-ebiggers@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:ab0:2bc5:0:0:0:0:0 with HTTP; Tue, 8 Feb 2022 00:43:59 -0800 (PST)
-Reply-To: saeedmohammedsaeed085@gmail.com
-From:   Mohammed Saeed <nzubewwwww@gmail.com>
-Date:   Tue, 8 Feb 2022 11:43:59 +0300
-Message-ID: <CAMj4HvQnWsfFGFOGV12hnhn1-7ggyDY5TkaLTvG3KD73KTrShQ@mail.gmail.com>
-Subject: Proposal
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:944 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
-        *  0.6 HK_RANDOM_FROM From username looks random
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [nzubewwwww[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [saeedmohammedsaeed085[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20220208052448.409152-2-ebiggers@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-Salam alaikum,
+On Mon, Feb 07, 2022 at 09:24:47PM -0800, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> Most callers of public_key_verify_signature(), including most indirect
+> callers via verify_signature() as well as pkcs7_verify_sig_chain(),
+> don't check that public_key_signature::pkey_algo matches
+> public_key::pkey_algo.  These should always match.  However, a malicious
+> signature could intentionally declare an unintended algorithm.  It is
+> essential that such signatures be rejected outright, or that the
+> algorithm of the *key* be used -- not the algorithm of the signature as
+> that would allow attackers to choose the algorithm used.
+> 
+> Currently, public_key_verify_signature() correctly uses the key's
+> algorithm when deciding which akcipher to allocate.  That's good.
+> However, it uses the signature's algorithm when deciding whether to do
+> the first step of SM2, which is incorrect.  Also, v4.19 and older
+> kernels used the signature's algorithm for the entire process.
+> 
+> Prevent such errors by making public_key_verify_signature() enforce that
+> the signature's algorithm (if given) matches the key's algorithm.
+> 
+> Also remove two checks of this done by callers, which are now redundant.
+> 
+> Cc: stable@vger.kernel.org
+> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+> Tested-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
 
-I am the investment officer of UAE based investment company who are
-ready to fund projects outside UAE, in the form of debt finance. We
-grant loan to both Corporate and private entities at a low interest
-rate of 2% ROI per annum. The terms are very flexible and
-interesting.Kindly revert back if you have projects that needs funding
-for further discussion and negotiation.
+Reviewed-by: Vitaly Chikunov <vt@altlinux.org>
 
-Thanks
+Thanks,
 
-investment officer
+> ---
+>  crypto/asymmetric_keys/pkcs7_verify.c    |  6 ------
+>  crypto/asymmetric_keys/public_key.c      | 15 +++++++++++++++
+>  crypto/asymmetric_keys/x509_public_key.c |  6 ------
+>  3 files changed, 15 insertions(+), 12 deletions(-)
+> 
+> diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_keys/pkcs7_verify.c
+> index 0b4d07aa8811..f94a1d1ad3a6 100644
+> --- a/crypto/asymmetric_keys/pkcs7_verify.c
+> +++ b/crypto/asymmetric_keys/pkcs7_verify.c
+> @@ -174,12 +174,6 @@ static int pkcs7_find_key(struct pkcs7_message *pkcs7,
+>  		pr_devel("Sig %u: Found cert serial match X.509[%u]\n",
+>  			 sinfo->index, certix);
+>  
+> -		if (strcmp(x509->pub->pkey_algo, sinfo->sig->pkey_algo) != 0) {
+> -			pr_warn("Sig %u: X.509 algo and PKCS#7 sig algo don't match\n",
+> -				sinfo->index);
+> -			continue;
+> -		}
+> -
+>  		sinfo->signer = x509;
+>  		return 0;
+>  	}
+> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
+> index 4fefb219bfdc..e36213945686 100644
+> --- a/crypto/asymmetric_keys/public_key.c
+> +++ b/crypto/asymmetric_keys/public_key.c
+> @@ -325,6 +325,21 @@ int public_key_verify_signature(const struct public_key *pkey,
+>  	BUG_ON(!sig);
+>  	BUG_ON(!sig->s);
+>  
+> +	/*
+> +	 * If the signature specifies a public key algorithm, it *must* match
+> +	 * the key's actual public key algorithm.
+> +	 *
+> +	 * Small exception: ECDSA signatures don't specify the curve, but ECDSA
+> +	 * keys do.  So the strings can mismatch slightly in that case:
+> +	 * "ecdsa-nist-*" for the key, but "ecdsa" for the signature.
+> +	 */
+> +	if (sig->pkey_algo) {
+> +		if (strcmp(pkey->pkey_algo, sig->pkey_algo) != 0 &&
+> +		    (strncmp(pkey->pkey_algo, "ecdsa-", 6) != 0 ||
+> +		     strcmp(sig->pkey_algo, "ecdsa") != 0))
+> +			return -EKEYREJECTED;
+> +	}
+> +
+>  	ret = software_key_determine_akcipher(sig->encoding,
+>  					      sig->hash_algo,
+>  					      pkey, alg_name);
+> diff --git a/crypto/asymmetric_keys/x509_public_key.c b/crypto/asymmetric_keys/x509_public_key.c
+> index fe14cae115b5..71cc1738fbfd 100644
+> --- a/crypto/asymmetric_keys/x509_public_key.c
+> +++ b/crypto/asymmetric_keys/x509_public_key.c
+> @@ -128,12 +128,6 @@ int x509_check_for_self_signed(struct x509_certificate *cert)
+>  			goto out;
+>  	}
+>  
+> -	ret = -EKEYREJECTED;
+> -	if (strcmp(cert->pub->pkey_algo, cert->sig->pkey_algo) != 0 &&
+> -	    (strncmp(cert->pub->pkey_algo, "ecdsa-", 6) != 0 ||
+> -	     strcmp(cert->sig->pkey_algo, "ecdsa") != 0))
+> -		goto out;
+> -
+>  	ret = public_key_verify_signature(cert->pub, cert->sig);
+>  	if (ret < 0) {
+>  		if (ret == -ENOPKG) {
+> -- 
+> 2.35.1
