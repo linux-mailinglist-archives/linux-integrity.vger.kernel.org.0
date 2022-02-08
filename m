@@ -2,151 +2,141 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B03E4AD42D
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Feb 2022 09:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71704AD408
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Feb 2022 09:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352674AbiBHI6d (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Tue, 8 Feb 2022 03:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S231946AbiBHIxZ (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Tue, 8 Feb 2022 03:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352625AbiBHI6c (ORCPT
+        with ESMTP id S231657AbiBHIxY (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Tue, 8 Feb 2022 03:58:32 -0500
-X-Greylist: delayed 471 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 00:58:30 PST
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA3B7C03FEC1;
-        Tue,  8 Feb 2022 00:58:30 -0800 (PST)
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 1436A72C905;
-        Tue,  8 Feb 2022 11:50:38 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-        by imap.altlinux.org (Postfix) with ESMTPSA id E823E4A46EA;
-        Tue,  8 Feb 2022 11:50:37 +0300 (MSK)
-Date:   Tue, 8 Feb 2022 11:50:37 +0300
-From:   Vitaly Chikunov <vt@altlinux.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     keyrings@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] KEYS: asymmetric: enforce that sig algo matches
- key algo
-Message-ID: <20220208085037.lo53hi6ohjusr7pv@altlinux.org>
-References: <20220208052448.409152-1-ebiggers@kernel.org>
- <20220208052448.409152-2-ebiggers@kernel.org>
+        Tue, 8 Feb 2022 03:53:24 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ED3C03FEC0;
+        Tue,  8 Feb 2022 00:53:23 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JtGwh4xFCzbkKJ;
+        Tue,  8 Feb 2022 16:52:20 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 16:53:20 +0800
+Message-ID: <e852660c-17fa-cd75-e361-45dd77b8884d@huawei.com>
+Date:   Tue, 8 Feb 2022 16:53:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <20220208052448.409152-2-ebiggers@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>
+CC:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        wangweiyang <wangweiyang2@huawei.com>,
+        "xiujianfeng@huawei.com" <xiujianfeng@huawei.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+Subject: Problem with commit ccf11dbaa07b ("evm: Fix memleak in init_desc")
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 09:24:47PM -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Most callers of public_key_verify_signature(), including most indirect
-> callers via verify_signature() as well as pkcs7_verify_sig_chain(),
-> don't check that public_key_signature::pkey_algo matches
-> public_key::pkey_algo.  These should always match.  However, a malicious
-> signature could intentionally declare an unintended algorithm.  It is
-> essential that such signatures be rejected outright, or that the
-> algorithm of the *key* be used -- not the algorithm of the signature as
-> that would allow attackers to choose the algorithm used.
-> 
-> Currently, public_key_verify_signature() correctly uses the key's
-> algorithm when deciding which akcipher to allocate.  That's good.
-> However, it uses the signature's algorithm when deciding whether to do
-> the first step of SM2, which is incorrect.  Also, v4.19 and older
-> kernels used the signature's algorithm for the entire process.
-> 
-> Prevent such errors by making public_key_verify_signature() enforce that
-> the signature's algorithm (if given) matches the key's algorithm.
-> 
-> Also remove two checks of this done by callers, which are now redundant.
-> 
-> Cc: stable@vger.kernel.org
-> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
-> Tested-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+Hi Mimi,
 
-Reviewed-by: Vitaly Chikunov <vt@altlinux.org>
+I found an issue with commit ccf11dbaa07b ("evm: Fix memleak in init_desc").
 
-Thanks,
+This commit tries to free variable "tmp_tfm" if something went wrong 
+after the "alloc" label in function init_desc, which would potentially 
+cause a user-after-free issue
 
-> ---
->  crypto/asymmetric_keys/pkcs7_verify.c    |  6 ------
->  crypto/asymmetric_keys/public_key.c      | 15 +++++++++++++++
->  crypto/asymmetric_keys/x509_public_key.c |  6 ------
->  3 files changed, 15 insertions(+), 12 deletions(-)
-> 
-> diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_keys/pkcs7_verify.c
-> index 0b4d07aa8811..f94a1d1ad3a6 100644
-> --- a/crypto/asymmetric_keys/pkcs7_verify.c
-> +++ b/crypto/asymmetric_keys/pkcs7_verify.c
-> @@ -174,12 +174,6 @@ static int pkcs7_find_key(struct pkcs7_message *pkcs7,
->  		pr_devel("Sig %u: Found cert serial match X.509[%u]\n",
->  			 sinfo->index, certix);
->  
-> -		if (strcmp(x509->pub->pkey_algo, sinfo->sig->pkey_algo) != 0) {
-> -			pr_warn("Sig %u: X.509 algo and PKCS#7 sig algo don't match\n",
-> -				sinfo->index);
-> -			continue;
-> -		}
-> -
->  		sinfo->signer = x509;
->  		return 0;
->  	}
-> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-> index 4fefb219bfdc..e36213945686 100644
-> --- a/crypto/asymmetric_keys/public_key.c
-> +++ b/crypto/asymmetric_keys/public_key.c
-> @@ -325,6 +325,21 @@ int public_key_verify_signature(const struct public_key *pkey,
->  	BUG_ON(!sig);
->  	BUG_ON(!sig->s);
->  
-> +	/*
-> +	 * If the signature specifies a public key algorithm, it *must* match
-> +	 * the key's actual public key algorithm.
-> +	 *
-> +	 * Small exception: ECDSA signatures don't specify the curve, but ECDSA
-> +	 * keys do.  So the strings can mismatch slightly in that case:
-> +	 * "ecdsa-nist-*" for the key, but "ecdsa" for the signature.
-> +	 */
-> +	if (sig->pkey_algo) {
-> +		if (strcmp(pkey->pkey_algo, sig->pkey_algo) != 0 &&
-> +		    (strncmp(pkey->pkey_algo, "ecdsa-", 6) != 0 ||
-> +		     strcmp(sig->pkey_algo, "ecdsa") != 0))
-> +			return -EKEYREJECTED;
-> +	}
-> +
->  	ret = software_key_determine_akcipher(sig->encoding,
->  					      sig->hash_algo,
->  					      pkey, alg_name);
-> diff --git a/crypto/asymmetric_keys/x509_public_key.c b/crypto/asymmetric_keys/x509_public_key.c
-> index fe14cae115b5..71cc1738fbfd 100644
-> --- a/crypto/asymmetric_keys/x509_public_key.c
-> +++ b/crypto/asymmetric_keys/x509_public_key.c
-> @@ -128,12 +128,6 @@ int x509_check_for_self_signed(struct x509_certificate *cert)
->  			goto out;
->  	}
->  
-> -	ret = -EKEYREJECTED;
-> -	if (strcmp(cert->pub->pkey_algo, cert->sig->pkey_algo) != 0 &&
-> -	    (strncmp(cert->pub->pkey_algo, "ecdsa-", 6) != 0 ||
-> -	     strcmp(cert->sig->pkey_algo, "ecdsa") != 0))
-> -		goto out;
-> -
->  	ret = public_key_verify_signature(cert->pub, cert->sig);
->  	if (ret < 0) {
->  		if (ret == -ENOPKG) {
-> -- 
-> 2.35.1
+The codes are as follows:
+
+   1 static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+   2 {
+   3 	long rc;
+   4 	const char *algo;
+   5 	struct crypto_shash **tfm, *tmp_tfm = NULL;
+   6 	struct shash_desc *desc;
+   7
+   8 	if (type == EVM_XATTR_HMAC) {
+   9 		if (!(evm_initialized & EVM_INIT_HMAC)) {
+  10 			pr_err_once("HMAC key is not set\n");
+  11 			return ERR_PTR(-ENOKEY);
+  12 		}
+  13 		tfm = &hmac_tfm;
+  14 		algo = evm_hmac;
+  15 	} else {
+  16 		if (hash_algo >= HASH_ALGO__LAST)
+  17 			return ERR_PTR(-EINVAL);
+  18
+  19 		tfm = &evm_tfm[hash_algo];
+  20 		algo = hash_algo_name[hash_algo];
+  21 	}
+  22
+  23 	if (*tfm)
+  24 		goto alloc;
+  25 	mutex_lock(&mutex);
+  26 	if (*tfm)
+  27 		goto unlock;
+  28
+  29 	tmp_tfm = crypto_alloc_shash(algo, 0, CRYPTO_NOLOAD);
+  30 	if (IS_ERR(tmp_tfm)) {
+  31 		pr_err("Can not allocate %s (reason: %ld)\n", algo,
+  32 		       PTR_ERR(tmp_tfm));
+  33 		mutex_unlock(&mutex);
+  34 		return ERR_CAST(tmp_tfm);
+  35 	}
+  36 	if (type == EVM_XATTR_HMAC) {
+  37 		rc = crypto_shash_setkey(tmp_tfm, evmkey, evmkey_len);
+  38 		if (rc) {
+  39 			crypto_free_shash(tmp_tfm);
+  40 			⋅mutex_unlock(&mutex);
+  41 			return ERR_PTR(rc);
+  42 		}
+  43 	}
+  44 	*tfm = tmp_tfm;
+  45 unlock:
+  46 	mutex_unlock(&mutex);
+  47 alloc:
+  48 	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
+  49 			GFP_KERNEL);
+  50 	if (!desc) {
+  51 		crypto_free_shash(tmp_tfm);
+  52 		return ERR_PTR(-ENOMEM);
+  53 	}
+  54
+  55 	desc->tfm = *tfm;
+  56
+  57 	rc = crypto_shash_init(desc);
+  58 	if (rc) {
+  59 		crypto_free_shash(tmp_tfm);
+  60 		kfree(desc);
+  61 		return ERR_PTR(rc);
+  62 	}
+  63 	return desc;
+  64 }
+
+As we can see, variable *tfm points to one of the two global variable 
+hmac_tfm or evm_tfm[hash_algo]. tmp_tfm is used as an intermediate 
+variable for initializing these global variables. Freeing tmp_tfm after 
+line 44 would invalidate these global variables and potentially cause a 
+user-after-free issue.
+
+I think this commit should be reverted.
+
+Reference: commit 843385694721 ("evm: Fix a small race in init_desc()")
+
+-- 
+Best
+GUO Zihua
