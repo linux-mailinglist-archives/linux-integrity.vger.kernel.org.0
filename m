@@ -2,122 +2,120 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925154B197F
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Feb 2022 00:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 304644B1A53
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Feb 2022 01:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345690AbiBJXae (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Feb 2022 18:30:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42398 "EHLO
+        id S244941AbiBKAUt (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Thu, 10 Feb 2022 19:20:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345643AbiBJXad (ORCPT
+        with ESMTP id S240966AbiBKAUs (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:30:33 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399925F4E;
-        Thu, 10 Feb 2022 15:30:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VDWZ1wyLkqnqT/23Ht0M/a/jxjSGdpdjwIwIjoTRRRI=; b=2qwKcjjD3mCCh/1mVgk1hdA+xC
-        o2mTeS3P/3a/J49I96p9n7gshQPUYwIog5WvpAFPL31pFS8p2fRNxgmU8mEX5RoaNTgPuZnXMDfLZ
-        JWZ1ZbigBEZevMhTDtYwDT28JH8nWX3HftkxCd5K7OmQ/7bRzk06Mhs+kn2Xh5QGjm6JwLn8Ik+Nn
-        z4536VqIxXodC18gOtdY4kjUl8LClWDdhQxHTG+8VLLoqNd7ENE89lRlK/bMSBVTPJwoy+TnOd1Iq
-        71uF/rfluUzxshhkFlCJzD8kq9rzIK5fF7MRS32xDLlMRMmy474AtN1n1zA+pqAb6gpeyqrHVfGv2
-        iKoIQMYg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIItQ-005Awh-D2; Thu, 10 Feb 2022 23:30:28 +0000
-Date:   Thu, 10 Feb 2022 15:30:28 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Michal Suchanek <msuchanek@suse.de>,
-        David Howells <dhowells@redhat.com>,
-        Aaron Tomlin <atomlin@redhat.com>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 0/6] KEXEC_SIG with appended signature
-Message-ID: <YgWgFMRdpLvBiht7@bombadil.infradead.org>
-References: <cover.1641900831.git.msuchanek@suse.de>
- <YfBd/EDGUx9UIHcb@bombadil.infradead.org>
- <87pmnwlkaa.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87pmnwlkaa.fsf@mpe.ellerman.id.au>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Feb 2022 19:20:48 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6962C7;
+        Thu, 10 Feb 2022 16:20:48 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21ALpFdd021812;
+        Fri, 11 Feb 2022 00:20:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=EBGSsOWS/PPAqu6i6+6YCHl6NifmZUaWgBhLauUDJzQ=;
+ b=URgRZOKIFcLRQ+oc//YKMpeWhHDcGUDXFubsZiF1dNaoA4nwPpVn6mPEC8Wg/lrRh1G5
+ NZGkEbrIR7a1S/veWIzqukctRnwLod2Py44S1/0C/REVmqevqsCjYgFQurDzujtEdOeq
+ 9yYKeypEsPahE4ZHAgwQVYw7yHI8XzF5M+D74kimK5hdw+xcxoaHT0Hng4FVFKZy1WzU
+ 5kC11a45TvJeqoqn0xXenszx+nBS9pM2FjC+Lg1wZeeAML+AsII/GuJcJMjd0qJ9Yj6q
+ /PViGTEwcxIwBneBLQO1mhH8j+icUa/TZQG5ECmyoeJg/njAS2Yk2cNkuNjT+ItQycUy Kg== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e50hj26vd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Feb 2022 00:20:45 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21B0DTu7008631;
+        Fri, 11 Feb 2022 00:20:44 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma01fra.de.ibm.com with ESMTP id 3e1gva32rc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Feb 2022 00:20:43 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21B0Kf6K29295052
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Feb 2022 00:20:41 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 313DC52051;
+        Fri, 11 Feb 2022 00:20:41 +0000 (GMT)
+Received: from sig-9-65-92-50.ibm.com (unknown [9.65.92.50])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 239C752050;
+        Fri, 11 Feb 2022 00:20:40 +0000 (GMT)
+Message-ID: <ea2a11b0b55ee34c7edc16f32928a81f21be461f.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 7/8] ima: support fs-verity file digest based version
+ 3 signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 10 Feb 2022 19:20:37 -0500
+In-Reply-To: <20220208014140.483447-8-zohar@linux.ibm.com>
+References: <20220208014140.483447-1-zohar@linux.ibm.com>
+         <20220208014140.483447-8-zohar@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9n7eW2Sk8_o682RKH0HAk_FiOKGmzI0T
+X-Proofpoint-ORIG-GUID: 9n7eW2Sk8_o682RKH0HAk_FiOKGmzI0T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_11,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 impostorscore=0 clxscore=1015 phishscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202100123
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 03:46:05PM +1100, Michael Ellerman wrote:
-> Luis Chamberlain <mcgrof@kernel.org> writes:
-> > On Tue, Jan 11, 2022 at 12:37:42PM +0100, Michal Suchanek wrote:
-> >> Hello,
-> >> 
-> >> This is a refresh of the KEXEC_SIG series.
-> >> 
-> >> This adds KEXEC_SIG support on powerpc and deduplicates the code dealing
-> >> with appended signatures in the kernel.
-> >> 
-> >> powerpc supports IMA_KEXEC but that's an exception rather than the norm.
-> >> On the other hand, KEXEC_SIG is portable across platforms.
-> >> 
-> >> For distributions to have uniform security features across platforms one
-> >> option should be used on all platforms.
-> >> 
-> >> Thanks
-> >> 
-> >> Michal
-> >> 
-> >> Previous revision: https://lore.kernel.org/linuxppc-dev/cover.1637862358.git.msuchanek@suse.de/
-> >> Patched kernel tree: https://github.com/hramrach/kernel/tree/kexec_sig
-> >> 
-> >> Michal Suchanek (6):
-> >>   s390/kexec_file: Don't opencode appended signature check.
-> >>   powerpc/kexec_file: Add KEXEC_SIG support.
-> >>   kexec_file: Don't opencode appended signature verification.
-> >>   module: strip the signature marker in the verification function.
-> >>   module: Use key_being_used_for for log messages in
-> >>     verify_appended_signature
-> >>   module: Move duplicate mod_check_sig users code to mod_parse_sig
-> >
-> > What tree should this go through? I'd prefer if over through modules
-> > tree as it can give a chance for Aaron Tomlin to work with this for his
-> > code refactoring of kernel/module*.c to kernel/module/
+On Mon, 2022-02-07 at 20:41 -0500, Mimi Zohar wrote:
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 28aca1f9633b..576cbe790e27 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -1728,10 +1728,13 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>                         break;
+>                 case Opt_digest_type:
+>                         ima_log_string(ab, "digest_type", args[0].from);
+> -                       if ((strcmp(args[0].from, "verity")) == 0)
+> +                       if ((strcmp(args[0].from, "verity")) == 0) {
+>                                 entry->flags |= IMA_VERITY_REQUIRED;
+> -                       else
+> +                               if (entry->action == APPRAISE)
+> +                                       entry->flags |= IMA_DIGSIG_REQUIRED;
+
+Instead of overloading the "digest_type=verity" to require a signature,
+extend the existing "appraise_type" to support signature v3 (e.g.
+appraise_type=sigv3).  This will simplify IMA signature v3 support in
+the future.
+
+> +                       } else {
+>                                 result = -EINVAL;
+> +                       }
+>                         break;
+>                 case Opt_appraise_type:
+>                         ima_log_string(ab, "appraise_type", args[0].from);
 > 
-> Yeah that's fine by me, the arch changes are pretty minimal and unlikely
-> to conflict much.
 
-Ok sounds good thanks.
+-- 
+thanks,
 
-  Luis
+Mimi
+
