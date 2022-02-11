@@ -2,158 +2,367 @@ Return-Path: <linux-integrity-owner@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC264B1D7B
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Feb 2022 05:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7E94B23B3
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Feb 2022 11:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242486AbiBKEve (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
-        Thu, 10 Feb 2022 23:51:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42444 "EHLO
+        id S1349188AbiBKKsq (ORCPT <rfc822;lists+linux-integrity@lfdr.de>);
+        Fri, 11 Feb 2022 05:48:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiBKEvc (ORCPT
+        with ESMTP id S238232AbiBKKsp (ORCPT
         <rfc822;linux-integrity@vger.kernel.org>);
-        Thu, 10 Feb 2022 23:51:32 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2067.outbound.protection.outlook.com [40.92.103.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0099725D7;
-        Thu, 10 Feb 2022 20:51:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Frp9qhuIDdDdaXzd0o+o3bWJEGfsu/kyGwi2+jggVIOnd/A9JOTPQ+1kfD4+NHFj6gA0n++I2tQfT/15NBpxZsQEqoWMhtQzO+bamFJpbDlyPdpRxmr+cuGKv37Ur5NWsF/uz4J+umXcAnMoSBVDfnAGhBs9EYrUOHR9sSELysQ2JgL028+KMf5RhxOs+lZjiChB0r/JRyfEYtrK1faV5wtpjQwxCl94ko8MTkIy738PP8hiYtrh9wBD1THZ90LmR79vPy4vh4R1fVJpx9q0uV/aUH09btnhFdfWmh9bx+ZcZRPIwJth0jOjXVxfdF/2eS2hTTEHbxbz6LFXuKJ8Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PHWL3RkOCaKZtr+FJDWPqHlV39WQXqBUx8ROmYfRmIA=;
- b=Ddw+GGoYsmhPpTjGEbgLp1h8xSS8KMYab3bWCUCwp4vwJw4e/hc/Ga9ZAjC0qvByD6iEz1ZhYI9W2Fa2F4o65lHeYHK9C498r+11mZCkPNHhPRF7YIT+bMdVOj311rSARU6AvDM1ITx65UFvQN4PDsohlMeJUJ3TgzS/CiDLNLeeijvJAoT/Lj35VL5XJb0HF1hPYhhVojnzOb7WOXgifzk3SXhJGGSXCny4tKY3ESkYfizXu6BDIjADlxNZ8L6ivPpfj9Meyg6tUwLOJ9g3E820WCRwYz5ilfLiwRjqxpscz60D+N2kTf3kiusJZU3FBNMj1A7TeEQ6sT/K8zXnwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PHWL3RkOCaKZtr+FJDWPqHlV39WQXqBUx8ROmYfRmIA=;
- b=f4oOS21U67OHSVtcBPWj3R5uX/FGgdyleJ66DY98y+4zTQwvJTNNogtfOCzrjWjiE0lpvq4tAZzPHireVB5Vgu6P3QB0SW55BP3LiiLa4dRPLcjISDW2lIN5lfBdMF8A7yng8o1y1d8FbaHK06FPehjjsiYkaj9VTNOz3s10naVou8hC0s90avedFOftEZ/2zxMLr7+ocnezg+58NWDrcjQkTRU4gTiy+LZYodPYtgtZ7aCvg1QBCjFqjUpspPRQJ634i509Bnd5decYox+LRdu2z5Vdctqj7x1zGPWc76puV7DFi59tpai7E+PWlL3OXkNj79I297f57HCU5QNTtg==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by PN2PR01MB4361.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4975.14; Fri, 11 Feb 2022 04:51:22 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4975.011; Fri, 11 Feb 2022
- 04:51:22 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-CC:     Ard Biesheuvel <ardb@kernel.org>, Jeremy Kerr <jk@ozlabs.org>,
-        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jlee@suse.com" <jlee@suse.com>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "mic@digikod.net" <mic@digikod.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
+        Fri, 11 Feb 2022 05:48:45 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822E5D64;
+        Fri, 11 Feb 2022 02:48:43 -0800 (PST)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jw9MM6swQz687Jc;
+        Fri, 11 Feb 2022 18:48:31 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 11 Feb 2022 11:48:40 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <shuah@kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>, <kpsingh@kernel.org>
+CC:     <linux-integrity@vger.kernel.org>,
         <linux-security-module@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-Subject: Re: [PATCH] efi: Do not import certificates from UEFI Secure Boot for
- T2 Macs
-Thread-Topic: [PATCH] efi: Do not import certificates from UEFI Secure Boot
- for T2 Macs
-Thread-Index: AQHYHcE4ht34Z1CESEaNjR8+yzmieayLbqGAgAAURwCAAAlIgIAAESOAgACrMQCAAM6NgIAAs3IA
-Date:   Fri, 11 Feb 2022 04:51:22 +0000
-Message-ID: <99BB011C-71DE-49FA-81CB-BE2AC9613030@live.com>
-References: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
- <20220209164957.GB12763@srcf.ucam.org>
- <5A3C2EBF-13FF-4C37-B2A0-1533A818109F@live.com>
- <20220209183545.GA14552@srcf.ucam.org> <20220209193705.GA15463@srcf.ucam.org>
- <2F1CC5DE-5A03-46D2-95E7-DD07A4EF2766@live.com>
- <20220210180905.GB18445@srcf.ucam.org>
-In-Reply-To: <20220210180905.GB18445@srcf.ucam.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [yZA/DGOyESbG5o3D8r1SuhFdfL3lA8xALCuWaamire3Xe+wG+tiI680FbAnCRFs+]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fe319675-92a0-48fc-8ea7-08d9ed1a2706
-x-ms-traffictypediagnostic: PN2PR01MB4361:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: P4Yi7ScuYmDjcqWAcLDPCvtIcwSKFGNWDGrc8qA4qG1pDji5HiEkspakdYZ6vmnGhO/3B3SYsiblb8hyLc9J84/z12e4pWCEp69506rgybMXG8uXX/4BL+noAVQkk10HkqBY1KwMSp4gIqHwKvVYnqQZ4pyEtlABR0EX36Fm5h6XqPh+4eoUIGWEPIMDMRVXSIneorZ8yS6wAHFndtxIVtVPgFyZ+6WCEXD/S58sJWe35xq8igsaJx2dPcv7cpWISsM4A7DcvdvaULYo/QZ6MxIrOyW57NrFFc3bqvjweafHDUq8cvTiKyPBurUezEwASjQKy9Su3su862YVUOUPcKUMmBUXOm5P8Wnu82Wqji8rMx6/4rsQ5Ur2WOZFWSsJzi6WU/DDj3xs/rBNsCJJXlDAIbget7EQToEbN/aF98GQ3EHs9gjoR07vgGH7UeKAz3q6l6k7C6dZMKN67oZOciElfkcEx9BJLBQPDUDr7oXQoxngqXY4GkG8HotEiScFv5JDtdlgBFiIJU73dpy6Q1v5cioE3uAgl3xR1vwMrZMzmKy30qDgGFUfaRQihd6xO9kbGfsxZTVJ6d4IQhHAKw4jEUANd8wyERhIeyu2fe2vz4CT5teMC2QH/6hwJuPM
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8r2JYH0jnBtJL4U0heP896Qmk59HA+lCNjujpOgpOg5Dta6Spulu7mF0izMg?=
- =?us-ascii?Q?K6dmMvXieRs48+zMElwsKoP0qpUDnE0J94IUDO/5LyOwkpwxxFFLZovwg0xY?=
- =?us-ascii?Q?M6pmfhzhZJIMYWuUU0pulJF0PlFZtxc3GOX85CPMo3OLhD2sVGswQCw8EWui?=
- =?us-ascii?Q?yLkFZ6EYSmJC1snQtumg89pAYZLMr/OsgUp/EDBqQI75V7APxNEUWjZaQbjP?=
- =?us-ascii?Q?i+uJxaGYQ7WDJeYEcEPIZ2dlzYdtP3HDSm0b9oUsitRDRMVlp2cVlSZgwCBL?=
- =?us-ascii?Q?6NakrWsxaIGvZMiCQvklR9wGuEwtGwZHqKmLDQWMAKvc7phfI/QyGqAtSbiy?=
- =?us-ascii?Q?OdPRgqcfhrvGa/z7U4VeCaXHjKoOubS/MBOTlrvtUjx5SfeUwSXJypCFeyXK?=
- =?us-ascii?Q?dygN9kq4gx00bUQNDR6fYKu/Fy6OZ9B4HJ1NglYOQh25f16q1DzvIgtueqnK?=
- =?us-ascii?Q?ntdKdMcexq7m+yVeKMBfF6SnAJ+VeJuQcabYSdReXKeSxyvFb5nn8wTCCGCv?=
- =?us-ascii?Q?QDNKLsjZpTSST5TTm4fwPlelb/qoVbJAaRFwpHIiivUEvZt5VRMdcU8XzGE3?=
- =?us-ascii?Q?zIhCKOdWeZ1LD4Xj/K80o9UYTGR9U8qWYun9Xksw7Ve4p5ksAlAcdgjtcRMQ?=
- =?us-ascii?Q?mtfa6uX5Wi+l8qOQUNAGZ6egYSluQ9w37Ox3+BC2MuCnm+oBI74HeFXgsQad?=
- =?us-ascii?Q?dKOhORGgkmznqtFxdMSQca6kd0fICFmoAdrqg6MJG9vlb8TTFseVqD7MTW9J?=
- =?us-ascii?Q?jAiIbnQaNVQ6Npv00vau+7YOsyc4bKtdjEEqd4QhVlzRbw5f/WZKR0Cg8pmQ?=
- =?us-ascii?Q?OZRSOVmTvpbjwf4UedG7CKbJefyC3B7w4sEvgqoAKA9bMYt7QNZF8tS8J6Ql?=
- =?us-ascii?Q?/dXTZVyZrnWXuBnK1C9B9d8oVV/nnGfLe/178O479GrmQ1dBQ+jUUyWoMJ7N?=
- =?us-ascii?Q?aMlaw0sanMbSnioRC+ETGNebv84nC5YqQp5XKAKT3tVqbSNGApztOfkSvZo0?=
- =?us-ascii?Q?cnhMSODtvP/zZSfhvuqT3qBnuA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C85B47D04F07CB43933C5B0A4CBB4230@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH] ima: Calculate digest in ima_inode_hash() if not available
+Date:   Fri, 11 Feb 2022 11:48:28 +0100
+Message-ID: <20220211104828.4061334-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe319675-92a0-48fc-8ea7-08d9ed1a2706
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2022 04:51:22.8528
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2PR01MB4361
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,TRACKER_ID,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-integrity.vger.kernel.org>
 X-Mailing-List: linux-integrity@vger.kernel.org
 
+__ima_inode_hash() checks if a digest has been already calculated by
+looking for the integrity_iint_cache structure associated to the passed
+inode.
 
+Users of ima_file_hash() and ima_inode_hash() (e.g. eBPF) might be
+interested in obtaining the information without having to setup an IMA
+policy so that the digest is always available at the time they call one of
+those functions.
 
->=20
-> I'm sorry, I'd build tested it here but clearly screwed that up. Try=20
-> this one?
->=20
->=20
-With this patch, I built 2 kernels, one with CONFIG_LOAD_UEFI_KEYS=3Dy and =
-other with CONFIG_LOAD_UEFI_KEYS=3Dn. I have got different variables causin=
-g panics in both cases. The logs couldn't get saved in journalctl so, I cli=
-cked a picture of the same. The kernel anyways was refusing to boot after t=
-hese logs.
+Open a new file descriptor in __ima_inode_hash(), so that this function
+could invoke ima_collect_measurement() to calculate the digest if it is not
+available. Still return -EOPNOTSUPP if the calculation failed.
 
-With CONFIG_LOAD_UEFI_KEYS=3Dy, this variable seems to be causing panics
+Instead of opening a new file descriptor, the one from ima_file_hash()
+could have been used. However, since ima_inode_hash() was created to obtain
+the digest when the file descriptor is not available, it could benefit from
+this change too. Also, the opened file descriptor might be not suitable for
+use (file descriptor opened not for reading).
 
-MokIgnoreDB-605dab50-e046-4300-abb6-3dd810dd8b23
+This change does not cause memory usage increase, due to using a temporary
+integrity_iint_cache structure for the digest calculation, and due to
+freeing the ima_digest_data structure inside integrity_iint_cache before
+exiting from __ima_inode_hash().
 
-The link of the logs :- https://gist.githubusercontent.com/AdityaGarg8/8e82=
-0c2724a65fb4bbb5deae2b358dc8/raw/2d3ef24c2b5025d500c5bebd418db5c185a47328/C=
-ONFIG_LOAD_UEFI_KEYS=3Dy.jpeg
+Finally, update the test by removing ima_setup.sh (it is not necessary
+anymore to set an IMA policy) and by directly executing /bin/true.
 
-With CONFIG_LOAD_UEFI_KEYS=3Dn, this variable seems to be causing panics
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima_main.c             |  46 ++++++-
+ tools/testing/selftests/bpf/Makefile          |   1 -
+ tools/testing/selftests/bpf/ima_setup.sh      | 123 ------------------
+ .../selftests/bpf/prog_tests/test_ima.c       |  25 +---
+ 4 files changed, 43 insertions(+), 152 deletions(-)
+ delete mode 100755 tools/testing/selftests/bpf/ima_setup.sh
 
-AppleSecureBootPolicy-94b73556-2197-4702-82a8-3e1337dafbfb
-
-The link of the logs :- https://gist.githubusercontent.com/AdityaGarg8/8e82=
-0c2724a65fb4bbb5deae2b358dc8/raw/2d3ef24c2b5025d500c5bebd418db5c185a47328/C=
-ONFIG_LOAD_UEFI_KEYS=3Dn.jpeg
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 8c6e4514d494..44df3f990950 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -26,6 +26,7 @@
+ #include <linux/ima.h>
+ #include <linux/iversion.h>
+ #include <linux/fs.h>
++#include <linux/fs_struct.h>
+ 
+ #include "ima.h"
+ 
+@@ -521,15 +522,43 @@ EXPORT_SYMBOL_GPL(ima_file_check);
+ 
+ static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+ {
+-	struct integrity_iint_cache *iint;
+-	int hash_algo;
++	struct integrity_iint_cache *iint = NULL, tmp_iint;
++	struct file *file;
++	struct path root, path;
++	int rc, hash_algo;
++
++	if (ima_policy_flag)
++		iint = integrity_iint_find(inode);
++
++	if (!iint) {
++		memset(&tmp_iint, 0, sizeof(tmp_iint));
++		tmp_iint.inode = inode;
++		iint = &tmp_iint;
++
++		path.dentry = d_find_alias(inode);
++		if (!path.dentry)
++			return -EOPNOTSUPP;
++
++		get_fs_root(current->fs, &root);
++		path.mnt = root.mnt;
++
++		file = dentry_open(&path, O_RDONLY, current_cred());
++		if (IS_ERR(file)) {
++			dput(path.dentry);
++			path_put(&root);
++			return -EOPNOTSUPP;
++		}
+ 
+-	if (!ima_policy_flag)
+-		return -EOPNOTSUPP;
++		rc = ima_collect_measurement(iint, file, NULL, 0, ima_hash_algo,
++					     NULL);
+ 
+-	iint = integrity_iint_find(inode);
+-	if (!iint)
+-		return -EOPNOTSUPP;
++		fput(file);
++		dput(path.dentry);
++		path_put(&root);
++
++		if (rc != 0)
++			return -EOPNOTSUPP;
++	}
+ 
+ 	mutex_lock(&iint->mutex);
+ 
+@@ -551,6 +580,9 @@ static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+ 	hash_algo = iint->ima_hash->algo;
+ 	mutex_unlock(&iint->mutex);
+ 
++	if (iint == &tmp_iint)
++		kfree(iint->ima_hash);
++
+ 	return hash_algo;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 42ffc24e9e71..f7f850b2cf26 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -480,7 +480,6 @@ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
+ 			 network_helpers.c testing_helpers.c		\
+ 			 btf_helpers.c flow_dissector_load.h
+ TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
+-		       ima_setup.sh					\
+ 		       $(wildcard progs/btf_dump_test_case_*.c)
+ TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
+ TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
+diff --git a/tools/testing/selftests/bpf/ima_setup.sh b/tools/testing/selftests/bpf/ima_setup.sh
+deleted file mode 100755
+index 8e62581113a3..000000000000
+--- a/tools/testing/selftests/bpf/ima_setup.sh
++++ /dev/null
+@@ -1,123 +0,0 @@
+-#!/bin/bash
+-# SPDX-License-Identifier: GPL-2.0
+-
+-set -e
+-set -u
+-set -o pipefail
+-
+-IMA_POLICY_FILE="/sys/kernel/security/ima/policy"
+-TEST_BINARY="/bin/true"
+-VERBOSE="${SELFTESTS_VERBOSE:=0}"
+-LOG_FILE="$(mktemp /tmp/ima_setup.XXXX.log)"
+-
+-usage()
+-{
+-	echo "Usage: $0 <setup|cleanup|run> <existing_tmp_dir>"
+-	exit 1
+-}
+-
+-ensure_mount_securityfs()
+-{
+-	local securityfs_dir=$(grep "securityfs" /proc/mounts | awk '{print $2}')
+-
+-	if [ -z "${securityfs_dir}" ]; then
+-		securityfs_dir=/sys/kernel/security
+-		mount -t securityfs security "${securityfs_dir}"
+-	fi
+-
+-	if [ ! -d "${securityfs_dir}" ]; then
+-		echo "${securityfs_dir}: securityfs is not mounted" && exit 1
+-	fi
+-}
+-
+-setup()
+-{
+-	local tmp_dir="$1"
+-	local mount_img="${tmp_dir}/test.img"
+-	local mount_dir="${tmp_dir}/mnt"
+-	local copied_bin_path="${mount_dir}/$(basename ${TEST_BINARY})"
+-	mkdir -p ${mount_dir}
+-
+-	dd if=/dev/zero of="${mount_img}" bs=1M count=10
+-
+-	losetup -f "${mount_img}"
+-	local loop_device=$(losetup -a | grep ${mount_img:?} | cut -d ":" -f1)
+-
+-	mkfs.ext2 "${loop_device:?}"
+-	mount "${loop_device}" "${mount_dir}"
+-
+-	cp "${TEST_BINARY}" "${mount_dir}"
+-	local mount_uuid="$(blkid ${loop_device} | sed 's/.*UUID="\([^"]*\)".*/\1/')"
+-
+-	ensure_mount_securityfs
+-	echo "measure func=BPRM_CHECK fsuuid=${mount_uuid}" > ${IMA_POLICY_FILE}
+-}
+-
+-cleanup() {
+-	local tmp_dir="$1"
+-	local mount_img="${tmp_dir}/test.img"
+-	local mount_dir="${tmp_dir}/mnt"
+-
+-	local loop_devices=$(losetup -a | grep ${mount_img:?} | cut -d ":" -f1)
+-
+-	for loop_dev in "${loop_devices}"; do
+-		losetup -d $loop_dev
+-	done
+-
+-	umount ${mount_dir}
+-	rm -rf ${tmp_dir}
+-}
+-
+-run()
+-{
+-	local tmp_dir="$1"
+-	local mount_dir="${tmp_dir}/mnt"
+-	local copied_bin_path="${mount_dir}/$(basename ${TEST_BINARY})"
+-
+-	exec "${copied_bin_path}"
+-}
+-
+-catch()
+-{
+-	local exit_code="$1"
+-	local log_file="$2"
+-
+-	if [[ "${exit_code}" -ne 0 ]]; then
+-		cat "${log_file}" >&3
+-	fi
+-
+-	rm -f "${log_file}"
+-	exit ${exit_code}
+-}
+-
+-main()
+-{
+-	[[ $# -ne 2 ]] && usage
+-
+-	local action="$1"
+-	local tmp_dir="$2"
+-
+-	[[ ! -d "${tmp_dir}" ]] && echo "Directory ${tmp_dir} doesn't exist" && exit 1
+-
+-	if [[ "${action}" == "setup" ]]; then
+-		setup "${tmp_dir}"
+-	elif [[ "${action}" == "cleanup" ]]; then
+-		cleanup "${tmp_dir}"
+-	elif [[ "${action}" == "run" ]]; then
+-		run "${tmp_dir}"
+-	else
+-		echo "Unknown action: ${action}"
+-		exit 1
+-	fi
+-}
+-
+-trap 'catch "$?" "${LOG_FILE}"' EXIT
+-
+-if [[ "${VERBOSE}" -eq 0 ]]; then
+-	# Save the stderr to 3 so that we can output back to
+-	# it incase of an error.
+-	exec 3>&2 1>"${LOG_FILE}" 2>&1
+-fi
+-
+-main "$@"
+-rm -f "${LOG_FILE}"
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
+index 97d8a6f84f4a..82427549f45a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
+@@ -13,15 +13,14 @@
+ 
+ #include "ima.skel.h"
+ 
+-static int run_measured_process(const char *measured_dir, u32 *monitored_pid)
++static int run_measured_process(u32 *monitored_pid)
+ {
+ 	int child_pid, child_status;
+ 
+ 	child_pid = fork();
+ 	if (child_pid == 0) {
+ 		*monitored_pid = getpid();
+-		execlp("./ima_setup.sh", "./ima_setup.sh", "run", measured_dir,
+-		       NULL);
++		execlp("/bin/true", "/bin/true", NULL);
+ 		exit(errno);
+ 
+ 	} else if (child_pid > 0) {
+@@ -42,10 +41,7 @@ static int process_sample(void *ctx, void *data, size_t len)
+ 
+ void test_test_ima(void)
+ {
+-	char measured_dir_template[] = "/tmp/ima_measuredXXXXXX";
+ 	struct ring_buffer *ringbuf = NULL;
+-	const char *measured_dir;
+-	char cmd[256];
+ 
+ 	int err, duration = 0;
+ 	struct ima *skel = NULL;
+@@ -63,27 +59,14 @@ void test_test_ima(void)
+ 	if (CHECK(err, "attach", "attach failed: %d\n", err))
+ 		goto close_prog;
+ 
+-	measured_dir = mkdtemp(measured_dir_template);
+-	if (CHECK(measured_dir == NULL, "mkdtemp", "err %d\n", errno))
+-		goto close_prog;
+-
+-	snprintf(cmd, sizeof(cmd), "./ima_setup.sh setup %s", measured_dir);
+-	err = system(cmd);
+-	if (CHECK(err, "failed to run command", "%s, errno = %d\n", cmd, errno))
+-		goto close_clean;
+-
+-	err = run_measured_process(measured_dir, &skel->bss->monitored_pid);
++	err = run_measured_process(&skel->bss->monitored_pid);
+ 	if (CHECK(err, "run_measured_process", "err = %d\n", err))
+-		goto close_clean;
++		goto close_prog;
+ 
+ 	err = ring_buffer__consume(ringbuf);
+ 	ASSERT_EQ(err, 1, "num_samples_or_err");
+ 	ASSERT_NEQ(ima_hash_from_bpf, 0, "ima_hash");
+ 
+-close_clean:
+-	snprintf(cmd, sizeof(cmd), "./ima_setup.sh cleanup %s", measured_dir);
+-	err = system(cmd);
+-	CHECK(err, "failed to run command", "%s, errno = %d\n", cmd, errno);
+ close_prog:
+ 	ring_buffer__free(ringbuf);
+ 	ima__destroy(skel);
+-- 
+2.32.0
 
